@@ -203,28 +203,6 @@ body {
       background-color: rgb(240, 240, 240);
     }
 
-    // Applies to all tooltips
-    .cm-tooltip-hover,
-    .cm-tooltip-autocomplete,
-    .cm-tooltip {
-      border: none;
-      padding: 5px;
-      border-radius: 4px;
-      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .25);
-      a {
-        color: inherit;
-        word-wrap: break-word;
-      }
-    }
-
-    // Preview windows and links should be restricted in their sizes, but
-    // anything that includes .cm-completionInfo elements should not be limited
-    // in their overflow, because unfortunately the completionInfo is mounted
-    // within that div and would otherwise be hidden.
-    .cm-tooltip:not(.cm-tooltip-autocomplete) {
-      max-width: 50vw;
-    }
-
     .cm-completionInfo { overflow: hidden; }
 
     // Formatting bar

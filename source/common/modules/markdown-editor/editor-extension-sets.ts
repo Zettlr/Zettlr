@@ -24,7 +24,7 @@ import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { search, searchKeymap } from '@codemirror/search'
 import { Compartment, EditorState, Extension, Prec } from '@codemirror/state'
-import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers, dropCursor } from '@codemirror/view'
+import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers, dropCursor, tooltips } from '@codemirror/view'
 import { autocomplete } from './autocomplete'
 import { customKeymap } from './commands/keymap'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './theme/syntax'
@@ -158,6 +158,13 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // The updateListener is a custom extension we're using in order to be
     // able to emit events from this main class based on change events.
     EditorView.updateListener.of(options.updateListener),
+
+    tooltips({
+      tooltipSpace (view) {
+        return view.dom.getBoundingClientRect()
+      },
+      position: 'absolute'
+    }),
 
     // Enables the editor to fetch updates to the document from main
     hookDocumentAuthority(

@@ -203,16 +203,6 @@ body.dark {
       background-color: @grey-6;
     }
 
-    .cm-tooltip-hover,
-    .cm-tooltip-autocomplete,
-    .cm-tooltip {
-      background-color: rgb(40, 40, 40);
-      // Because shadows look shitty on dark backgrounds (especially white
-      // "shadows"), we need to fall back to subtle borders here.
-      box-shadow: none;
-      border: 1px solid rgb(80, 80, 80);
-    }
-
     .cm-tooltip.cm-formatting-bar {
       button.formatting-toolbar-button {
         background-color: var(--grey-5);
@@ -221,18 +211,6 @@ body.dark {
         &:hover {
           background-color: var(--grey-3);
           color: var(--grey-1);
-        }
-      }
-
-      &.cm-tooltip-below {
-        .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
-          border-bottom-color: var(--grey-5);
-        }
-      }
-
-      &.cm-tooltip-above {
-        .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
-          border-top-color: var(--grey-5);
         }
       }
     }

@@ -342,16 +342,6 @@ body {
     .cm-tm-variable { color: @yellow; }
     .cm-tm-variable-placeholder { color: @violet; }
     .cm-tm-false-variable { color: @red; }
-
-    // Applies to all tooltips
-    .cm-tooltip-hover,
-    .cm-tooltip-autocomplete,
-    .cm-tooltip {
-      border: none;
-      padding: 5px;
-      border-radius: 4px;
-      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .25);
-    }
   }
 
   &.dark {
@@ -376,13 +366,6 @@ body {
       .cm-gutters {
         background-color: @base01;
         color: @base1;
-      }
-
-      .cm-tooltip-hover,
-      .cm-tooltip-autocomplete,
-      .cm-tooltip {
-        background-color: rgb(40, 40, 40);
-        border: 1px solid rgb(80, 80, 80);
       }
     }
   }
