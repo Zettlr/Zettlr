@@ -1,21 +1,6 @@
 <template>
   <div class="tag-cloud">
     <h3>{{ tagCloudTitle }}</h3>
-
-    <p v-if="suggestions.length > 0">
-      <TokenList
-        v-model="suggestions"
-        v-bind:label="tagSuggestionsLabel"
-      ></TokenList>
-
-      <ButtonControl
-        v-bind:label="addButtonLabel"
-        v-on:click="shouldAddSuggestions = true"
-      ></ButtonControl>
-    </p>
-
-    <hr v-if="suggestions.length > 0">
-
     <TabBar
       v-bind:tabs="tabs"
       v-bind:current-tab="sorting"
@@ -62,60 +47,19 @@
  */
 
 import TextControl from '@common/vue/form/elements/Text.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
-import TokenList from '@common/vue/form/elements/TokenList.vue'
 import TabBar from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import { TabbarControl } from '@dts/renderer/window'
 import { OpenDocument } from '@dts/common/documents'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import { MDFileDescriptor } from '@dts/common/fsal'
 import { TagRecord } from '@providers/tags'
 
 const ipcRenderer = window.ipc
-
-async function regenerateTagSuggestions (activeFile: null|OpenDocument): Promise<string[]> {
-  const suggestions: TagRecord[] = []
-  if (activeFile === null || !hasMarkdownExt(activeFile.path)) {
-    return [] // Nothing to do
-  }
-
-  const contents: string = await ipcRenderer.invoke('application', {
-    command: 'get-file-contents',
-    payload: activeFile.path
-  })
-
-  const descriptor: MDFileDescriptor = await ipcRenderer.invoke('application', {
-    command: 'get-descriptor',
-    payload: activeFile.path
-  })
-
-  if (contents == null || descriptor == null) {
-    throw new Error('Could not generate tag suggestions: Main did not return the file contents!')
-  }
-
-  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' }) as TagRecord[]
-
-  for (const tag of tags) {
-    if (String(contents).includes(tag.name) && !descriptor.tags.includes(tag.name)) {
-      suggestions.push(tag)
-    }
-  }
-
-  // Sort based on idf, and then return only the tag names. This sorts more
-  // informative tags to the beginning. NOTE: We only return the 10 most
-  // important tags to prevent the user being bombarded with hundreds of tags.
-  suggestions.sort((a, b) => b.idf - a.idf)
-  return suggestions.map(x => x.name).slice(0, Math.min(10, suggestions.length))
-}
 
 export default defineComponent({
   name: 'PopoverTags',
   components: {
     TextControl,
-    TokenList,
-    ButtonControl,
     TabBar
   },
   data: function () {
@@ -127,11 +71,6 @@ export default defineComponent({
         { id: 'idf', label: 'IDF' }
       ] as TabbarControl[],
       activeFile: null as OpenDocument|null,
-      // Super hacky way to get some tag suggestions. (Reminder to myself:
-      // Create a component for the popovers instead of having them float in the
-      // void of the app document.)
-      suggestionPromise: undefined as Promise<string[]>|undefined,
-      suggestions: [] as string[], // Tag suggestions for the currently active file
       query: '',
       searchForTag: '',
       sorting: 'name', // Can be "name" or "count"
@@ -142,9 +81,7 @@ export default defineComponent({
     popoverData: function () {
       return {
         // As soon as this is !== '', the app will begin a search for the tag
-        searchForTag: this.searchForTag,
-        addSuggestionsToFile: this.shouldAddSuggestions,
-        suggestions: this.suggestions
+        searchForTag: this.searchForTag
       }
     },
     filterPlaceholder: function () {
@@ -182,13 +119,6 @@ export default defineComponent({
     },
     filterInput: function () {
       return this.$refs.filter as typeof TextControl
-    }
-  },
-  watch: {
-    activeFile () {
-      regenerateTagSuggestions(this.activeFile)
-        .then(tags => { this.suggestions = tags })
-        .catch(err => console.error(err))
     }
   },
   mounted: function () {
