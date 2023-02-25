@@ -202,7 +202,7 @@ body .split-pane-container {
 
   .resizer {
     position: absolute;
-    z-index: 1000;
+    z-index: 1;
     transition: background-color 0.5s ease;
   }
 
