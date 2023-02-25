@@ -519,11 +519,17 @@ export default defineComponent({
           clipboard.write({ text, html, rtf })
         }, 10) // Why do a timeout? Because the paste event is asynchronous.
       } else if (shortcut === 'copy-current-id') {
-        const activeFile = this.$store.state.activeFile
-
-        if (activeFile !== null && activeFile.id !== '') {
-          clipboard.writeText(activeFile.id)
-        }
+        const activeFile = this.$store.getters.lastLeafActiveFile()
+        ipcRenderer.invoke('application', {
+          command: 'get-descriptor',
+          payload: activeFile.path
+        })
+          .then(descriptor => {
+            if (descriptor !== undefined && descriptor.id !== undefined && descriptor.id !== '') {
+              clipboard.writeText(descriptor.id)
+            }
+          })
+          .catch(err => console.error(err))
       } else if (shortcut === 'global-search') {
         this.fileManagerVisible = true
         this.mainSplitViewVisibleComponent = 'globalSearch'
