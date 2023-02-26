@@ -157,9 +157,6 @@ export default defineComponent({
       nextTick()
         .then(() => { this.scrollActiveFileIntoView() })
         .catch(err => console.error(err))
-    },
-    openFiles: function () {
-      this.maybeActivateScrollers()
     }
   },
   mounted: function () {
@@ -259,6 +256,13 @@ export default defineComponent({
   },
   unmounted () {
     this.resizeObserver.unobserve(this.container)
+  },
+  updated () {
+    // There are many things that could cause the amount of tabs to overflow the
+    // available width of the tabbar. With this single lifecycle hook, we can
+    // react to anything (except resizing of the window itself, which is handled
+    // by the resize observer).
+    this.maybeActivateScrollers()
   },
   methods: {
     maybeActivateScrollers () {
