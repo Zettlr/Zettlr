@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-25 02:40+0000\n"
+"POT-Creation-Date: 2023-02-26 02:45+0000\n"
 "PO-Revision-Date: 2022-12-29 23:16+0100\n"
 "Last-Translator: Marcel van den Brink <marcel.vandenbrink@gmail.com>\n"
 "Language-Team: \n"
@@ -1055,27 +1055,27 @@ msgstr "Opslaan ..."
 msgid "Saved!"
 msgstr "Opgeslagen!"
 
-#: source/tmp/PopoverTags.vue.ts:77
+#: source/tmp/PopoverTags.vue.ts:36
 msgid "Name"
 msgstr "Naam"
 
-#: source/tmp/PopoverTags.vue.ts:78
+#: source/tmp/PopoverTags.vue.ts:37
 msgid "Count"
 msgstr "Tellen"
 
-#: source/tmp/PopoverTags.vue.ts:103
+#: source/tmp/PopoverTags.vue.ts:55
 msgid "Filter tags…"
 msgstr "Filter labels…"
 
-#: source/tmp/PopoverTags.vue.ts:106
+#: source/tmp/PopoverTags.vue.ts:58
 msgid "Tag Cloud"
 msgstr "Wolk met labels"
 
-#: source/tmp/PopoverTags.vue.ts:109
+#: source/tmp/PopoverTags.vue.ts:61
 msgid "Suggested tags for the current file"
 msgstr "Voorgestelde tags voor het huidige bestand"
 
-#: source/tmp/PopoverTags.vue.ts:112
+#: source/tmp/PopoverTags.vue.ts:64
 msgid "Add to file"
 msgstr "Voeg toe aan bestand"
 
