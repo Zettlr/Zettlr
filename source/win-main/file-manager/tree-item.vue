@@ -13,7 +13,6 @@
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
-      v-bind:title="obj.path"
       v-on:click.stop="requestSelection"
       v-on:auxclick.stop="requestSelection"
       v-on:contextmenu="handleContextMenu"
@@ -65,6 +64,7 @@
         role="button"
         v-bind:aria-label="`Select ${obj.name}`"
         v-bind:draggable="!isRoot"
+        v-bind:title="obj.path"
         v-on:dragstart="beginDragging"
         v-on:drag="onDragHandler"
       >
