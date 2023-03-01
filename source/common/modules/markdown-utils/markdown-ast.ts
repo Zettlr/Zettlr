@@ -325,6 +325,17 @@ export interface ZettelkastenLink extends MDNode {
 }
 
 /**
+ * Represents a tag (`#some-tag`)
+ */
+export interface ZettelkastenTag extends MDNode {
+  type: 'ZettelkastenTag'
+  /**
+   * Contains the raw contents of the tag
+   */
+  value: TextNode
+}
+
+/**
  * A generic text node that can represent a string of content. Most nodes
  * contain at least one TextNode as its content (e.g. emphasis).
  */
@@ -352,7 +363,7 @@ export interface GenericNode extends MDNode {
 /**
  * Any node that can be part of the AST is an ASTNode.
  */
-export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | List | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink
+export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | List | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
 
 /**
  * Creates a generic text node; this is used to represent textual contents of
@@ -738,6 +749,16 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         value: genericTextNode(content.from, content.to, markdown.substring(content.from, content.to))
+      }
+      return astNode
+    }
+    case 'ZknTag': {
+      const astNode: ZettelkastenTag = {
+        type: 'ZettelkastenTag',
+        name: 'ZknTag',
+        from: node.from,
+        to: node.to,
+        value: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))
       }
       return astNode
     }

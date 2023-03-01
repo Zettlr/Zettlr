@@ -18,7 +18,7 @@ import { ASTNode } from '@common/modules/markdown-utils/markdown-ast'
  *
  * @var {string[]}
  */
-const ignoredNodes = [ 'ZettelkastenLink', 'Citation' ]
+const ignoredNodes = [ 'ZettelkastenLink', 'ZettelkastenTag', 'Citation' ]
 
 /**
  * This function can be used as a filter for `extractTextNodes` and ensures that

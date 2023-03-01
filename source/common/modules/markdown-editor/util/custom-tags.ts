@@ -37,6 +37,9 @@ export const customTags = {
   // Zettelkasten links
   ZknLink: Tag.define(),
   ZknLinkContent: Tag.define(),
+  // Zettelkasten tags
+  ZknTag: Tag.define(),
+  ZknTagContent: Tag.define(),
   // Pandoc attributes, like: `# Heading or Title {.unnumbered}`
   PandocAttribute: Tag.define(),
   Highlight: Tag.define(),

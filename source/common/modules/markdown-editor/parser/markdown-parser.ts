@@ -72,6 +72,7 @@ import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
 import { zknLinkParser } from './zkn-link-parser'
 import { pandocAttributesParser } from './pandoc-attributes-parser'
 import { highlightParser } from './highlight-parser'
+import { zknTagParser } from './zkn-tag-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[] }> = [
   {
@@ -175,6 +176,7 @@ export default function markdownParser (): LanguageSupport {
         plainLinkParser,
         sloppyParser,
         zknLinkParser,
+        zknTagParser,
         pandocAttributesParser,
         highlightParser
       ],
@@ -200,6 +202,8 @@ export default function markdownParser (): LanguageSupport {
         { name: 'FootnoteRefBody', style: customTags.FootnoteRefBody },
         { name: 'ZknLink', style: customTags.ZknLink },
         { name: 'ZknLinkContent', style: customTags.ZknLinkContent },
+        { name: 'ZknTag', style: customTags.ZknTag },
+        { name: 'ZknTagContent', style: customTags.ZknTagContent },
         { name: 'PandocAttribute', style: customTags.PandocAttribute }
       ]
     }

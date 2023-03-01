@@ -298,25 +298,8 @@ export default class MarkdownEditor extends EventEmitter {
 
           const nodeAt = syntaxTree(view.state).resolve(pos, 0)
 
-          // Now let's see if the user clicked on something useful. We have to
-          // check tags the hard way as they are not implemented as syntax nodes.
-          const lineInfo = view.lineBlockAt(pos)
-          const relativePos = pos - lineInfo.from
-          const lineText = view.state.sliceDoc(lineInfo.from, lineInfo.to)
-          for (const match of lineText.matchAll(/(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/g)) {
-            const idx = match.index as number
-            if (idx > pos) {
-              break // We're too far
-            } else if (idx <= relativePos && idx + match[0].length >= relativePos) {
-              // Got a tag
-              editorInstance.emit('zettelkasten-tag', match[0])
-              event.preventDefault()
-              return true
-            }
-          }
-
-          // Both plain URLs as well as Zettelkasten links are implemented on
-          // the syntax tree.
+          // Both plain URLs as well as Zettelkasten links and tags are
+          // implemented on the syntax tree.
           if (nodeAt.type.name === 'URL') {
             // We found a link!
             const url = view.state.sliceDoc(nodeAt.from, nodeAt.to)
@@ -329,6 +312,11 @@ export default class MarkdownEditor extends EventEmitter {
             editorInstance.emit('zettelkasten-link', linkContents)
             event.preventDefault()
             return true
+          } else if (nodeAt.type.name === 'ZknTagContent') {
+            // A tag!
+            const tagContents = view.state.sliceDoc(nodeAt.from, nodeAt.to)
+            editorInstance.emit('zettelkasten-tag', tagContents)
+            event.preventDefault()
           }
         },
         drop (event, view) {

@@ -15,37 +15,7 @@
 
 import { StateField, EditorState, Extension } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
-import { MatchDecorator, ViewPlugin, Decoration, DecorationSet, EditorView, ViewUpdate } from '@codemirror/view'
-
-/**
- * The inline decorator is a ViewPlugin that adds a few inline highlight styles
- * such as for tags, and highlights. It does so utilizing a
- * MatchDecorator.
- *
- * @return  {ViewPlugin}  The instantiated plugin
- */
-function getInlineDecorator (): Extension {
-  // First, we need to define the decorations we would like to add
-  const tagDeco = Decoration.mark({ class: 'cm-zkn-tag' })
-
-  const tagRe = /(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/gu
-
-  // Next, we need a so-called MatchDecorator that parses the code and returns a
-  // decoration that should apply to those matches
-  const decorator = new MatchDecorator({ regexp: tagRe, decoration: m => tagDeco })
-
-  // Lastly, we define a view plugin (because we're just messing with styles here)
-  // that binds our own decorator to the given view (decorator.createDeco) and then
-  // runs the decorator on every update.
-  return ViewPlugin.define(view => ({
-    decorations: decorator.createDeco(view),
-    update (u: ViewUpdate) {
-      this.decorations = decorator.updateDeco(u, this.decorations)
-    }
-  }), {
-    decorations: v => v.decorations
-  })
-}
+import { Decoration, DecorationSet, EditorView } from '@codemirror/view'
 
 /**
  * Creates a StateField that applies the class `code` to all code block lines.
@@ -168,7 +138,6 @@ function getHeadingLineHighlighter (): Extension {
  * @return  {Extension}  An extension for the markdown editor
  */
 export const syntaxExtensions = [
-  getInlineDecorator(),
   getCodeBlockLineHighlighter(),
   getHeadingLineHighlighter()
 ]
