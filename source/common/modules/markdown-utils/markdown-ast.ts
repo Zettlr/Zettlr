@@ -314,6 +314,17 @@ export interface Table extends MDNode {
 }
 
 /**
+ * Represents a ZettelkastenLink (`[[Some file.md]]`)
+ */
+export interface ZettelkastenLink extends MDNode {
+  type: 'ZettelkastenLink'
+  /**
+   * Contains the raw contents of the link
+   */
+  value: TextNode
+}
+
+/**
  * A generic text node that can represent a string of content. Most nodes
  * contain at least one TextNode as its content (e.g. emphasis).
  */
@@ -341,7 +352,7 @@ export interface GenericNode extends MDNode {
 /**
  * Any node that can be part of the AST is an ASTNode.
  */
-export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | List | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow
+export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | List | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink
 
 /**
  * Creates a generic text node; this is used to represent textual contents of
@@ -712,6 +723,21 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
           rowNode.cells.push(parseChildren(cellNode, cell, markdown))
         }
         astNode.rows.push(rowNode)
+      }
+      return astNode
+    }
+    case 'ZknLink': {
+      const content = node.getChild('ZknLinkContent')
+      if (content === null) {
+        throw new Error('Could not parse node ZknLink: No ZknLinkContent node found within children!')
+      }
+
+      const astNode: ZettelkastenLink = {
+        type: 'ZettelkastenLink',
+        name: 'ZknLink',
+        from: node.from,
+        to: node.to,
+        value: genericTextNode(content.from, content.to, markdown.substring(content.from, content.to))
       }
       return astNode
     }

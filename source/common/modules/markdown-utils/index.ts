@@ -36,13 +36,20 @@ export function markdownToAST (markdown: string): ASTNode {
 
 /**
  * Extracts all text nodes from a Markdown AST. Can be used for spellchecking,
- * for example.
+ * for example. An optional filter can be provided to exclude text nodes from
+ * those nodes that should not be extracted.
  *
- * @param   {ASTNode[]}   ast  The AST root.
+ * @param   {ASTNode[]}   ast     The AST root.
+ * @param   {Function}    filter  A function that receives an ASTNode and should
+ *                                return false if the node should be excluded.
  *
- * @return  {TextNode[]}       A list of all text nodes
+ * @return  {TextNode[]}          A list of all text nodes
  */
-export function extractTextnodes (ast: ASTNode): TextNode[] {
+export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => boolean): TextNode[] {
+  if (filter !== undefined && !filter(ast)) {
+    return []
+  }
+
   let textNodes: TextNode[] = []
   if (ast.type === 'Text') {
     textNodes.push(ast)
@@ -50,7 +57,7 @@ export function extractTextnodes (ast: ASTNode): TextNode[] {
     textNodes.push(ast.value)
   } else if (ast.type === 'FootnoteRef' || ast.type === 'Highlight' || ast.type === 'ListItem') {
     for (const child of ast.children) {
-      textNodes = textNodes.concat(extractTextnodes(child))
+      textNodes = textNodes.concat(extractTextnodes(child, filter))
     }
   } else if (ast.type === 'Image' || ast.type === 'Link') {
     textNodes.push(ast.alt)
@@ -60,16 +67,16 @@ export function extractTextnodes (ast: ASTNode): TextNode[] {
     }
   } else if (ast.type === 'List') {
     for (const item of ast.items) {
-      textNodes = textNodes.concat(extractTextnodes(item))
+      textNodes = textNodes.concat(extractTextnodes(item, filter))
     }
   } else if (ast.type === 'Generic' || ast.type === 'Emphasis') {
     for (const child of ast.children) {
-      textNodes = textNodes.concat(extractTextnodes(child))
+      textNodes = textNodes.concat(extractTextnodes(child, filter))
     }
   } else if (ast.type === 'Table') {
     for (const row of ast.rows) {
       for (const cell of row.cells) {
-        textNodes = textNodes.concat(extractTextnodes(cell))
+        textNodes = textNodes.concat(extractTextnodes(cell, filter))
       }
     }
   }

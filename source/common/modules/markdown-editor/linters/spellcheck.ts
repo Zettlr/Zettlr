@@ -17,6 +17,7 @@ import { linter, Diagnostic } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
+import { filterNodesForSpellchecking } from './util'
 
 const ipcRenderer = window.ipc
 
@@ -158,8 +159,8 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
 export const spellcheck = linter(async view => {
   const diagnostics: Diagnostic[] = []
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
-  const textNodes = extractTextnodes(markdownToAST(view.state.doc.toString()))
-    .filter(node => !node.value.startsWith('<!--') && !node.value.endsWith('-->'))
+  const ast = markdownToAST(view.state.doc.toString())
+  const textNodes = extractTextnodes(ast, filterNodesForSpellchecking)
 
   const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = textNodes
     // Then, extract all words from the node's value
