@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-26 02:45+0000\n"
+"POT-Creation-Date: 2023-03-02 02:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2502,7 +2502,7 @@ msgstr ""
 msgid "Open diagnostics panel"
 msgstr ""
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
 msgstr "Erro de grafia"
 
