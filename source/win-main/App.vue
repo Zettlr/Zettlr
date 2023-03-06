@@ -201,7 +201,7 @@ export default defineComponent({
       return this.$store.getters.lastLeafActiveFile()
     },
     readabilityActive: function (): boolean {
-      const lastLeaf = this.$store.state.lastLeafId
+      const lastLeaf = this.lastLeafId
       if (typeof lastLeaf !== 'string') {
         return false
       }
@@ -565,7 +565,7 @@ export default defineComponent({
           command: 'navigate-back',
           payload: {
             windowId: this.windowId,
-            leafId: this.$store.state.lastLeafId
+            leafId: this.lastLeafId
           }
         }).catch(err => console.error(err))
       } else if (shortcut === 'navigate-forward') {
@@ -573,7 +573,7 @@ export default defineComponent({
           command: 'navigate-forward',
           payload: {
             windowId: this.windowId,
-            leafId: this.$store.state.lastLeafId
+            leafId: this.lastLeafId
           }
         }).catch(err => console.error(err))
       }
@@ -654,7 +654,7 @@ export default defineComponent({
         payload: {
           path: filePath,
           windowId: this.windowId,
-          leafId: this.$store.state.lastLeafId,
+          leafId: this.lastLeafId,
           newTab
         }
       })
@@ -698,7 +698,7 @@ export default defineComponent({
           command: 'navigate-back',
           payload: {
             windowId: this.windowId,
-            leafId: this.$store.state.lastLeafId
+            leafId: this.lastLeafId
           }
         }).catch(err => console.error(err))
       } else if (clickedID === 'next-file') {
@@ -706,7 +706,7 @@ export default defineComponent({
           command: 'navigate-forward',
           payload: {
             windowId: this.windowId,
-            leafId: this.$store.state.lastLeafId
+            leafId: this.lastLeafId
           }
         }).catch(err => console.error(err))
       } else if (clickedID === 'export') {
