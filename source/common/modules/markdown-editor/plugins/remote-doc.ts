@@ -17,11 +17,19 @@
 // This plugin implements remote callbacks that keep the editor's document in
 // sync with a central authority
 import { Update, sendableUpdates, receiveUpdates, collab, getSyncedVersion } from '@codemirror/collab'
-import { ChangeSet, Extension } from '@codemirror/state'
+import { ChangeSet, Extension, StateEffect } from '@codemirror/state'
 import { EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view'
+import { configField } from '../util/configuration'
 
-type PullUpdateCallback = (filePath: string, version: number) => Promise<Update[]|false>
-type PushUpdateCallback = (filePath: string, version: number, updates: Update[]) => Promise<boolean>
+export type PullUpdateCallback = (filePath: string, version: number) => Promise<Update[]|false>
+export type PushUpdateCallback = (filePath: string, version: number, updates: Update[]) => Promise<boolean>
+
+/**
+ * NOTE: The caller MUST listen for this state effect. If this effect is being
+ * emitted, the document is irrepairably out of sync with the document authority
+ * and the entire state must be reinitialized.
+ */
+export const reloadStateEffect = StateEffect.define<boolean>()
 
 export function hookDocumentAuthority (
   editorId: string,
@@ -76,30 +84,11 @@ export function hookDocumentAuthority (
 
         pushUpdates(filePath, version, payload)
           .then(success => {
-            if (!success) {
-              // NOTE: When main returns false it's not THAT ideal, but the
-              // algorithm is capable of recovering. The reason pushing fails
-              // regularly is because of a race condition that the push and pull
-              // listeners are not tied to the same state, hence there will
-              // always be that instance where the editor instance is faster in
-              // pushing a second set of updates, but with a wrong version number.
-              // It will then just try to push updates AGAIN (hence we don't
-              // return).
-              // TODO: There must be a better solution. Like, don't push while
-              // pulling, or vice versa, idk.
-            }
-
-            // Allow another push
+            // Allow another push -> will break out of the loop if there are no
+            // new updates.
             this.isCurrentlyPushing = false
-            const pendingUpdates = sendableUpdates(this.view.state)
-            if (pendingUpdates.length > 0) {
-              // NOTE: We need to add a timeout here to give the return message from
-              // main some time for pull() to actually apply "our" updates and
-              // confirm them, because it may be that pendingUpdates === updates at
-              // this point
-              setTimeout(() => { this.push() }, 100)
-            }
-            resolve() // Resolve the promise
+            setTimeout(() => { this.push() }, 100)
+            resolve()
           })
           .catch(err => reject(err))
       })
@@ -116,17 +105,22 @@ export function hookDocumentAuthority (
         pullUpdates(filePath, version)
           .then(updates => {
             try {
-              if (this.pluginDestroyed) {
-                return
+              // These two conditions are equal: Either the plugin has been
+              // destroyed, or the file path has changed because the editor has
+              // loaded in a different document. In that case, the view may be
+              // still valid, but should not be overwritten
+              if (this.pluginDestroyed || filePath !== this.view.state.field(configField).metadata.path) {
+                return resolve()
               }
 
               if (updates === false) {
                 // By returning `false`, the authority told us that we've lost
                 // synchronization and there is no way to re-synchronize in this
-                // method. The `false` will be captured by the MainEditor
-                // instance (in the pullUpdates handler) and handled by simply
-                // reloading the full editor state. What we need to do here is
-                // break out of the pull-loop.
+                // method. This means that here we need to emit an effect that
+                // must be captured by the MainEditor instance to perform a full
+                // reload of the document state. After that, we break out of the
+                // pull loop and let the new plugin instance take over.
+                this.view.dispatch({ effects: reloadStateEffect.of(true) })
                 return resolve()
               }
 

@@ -34,7 +34,6 @@ import {
   Extension,
   SelectionRange
 } from '@codemirror/state'
-import { Update } from '@codemirror/collab'
 import { syntaxTree } from '@codemirror/language'
 
 // Keymaps/Input modes
@@ -91,6 +90,7 @@ import safeAssign from '@common/util/safe-assign'
 import countWords from '@common/util/count-words'
 import { DocumentType, DP_EVENTS } from '@dts/common/documents'
 import { TagRecord } from '@providers/tags'
+import { PullUpdateCallback, PushUpdateCallback, reloadStateEffect } from './plugins/remote-doc'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -125,12 +125,32 @@ export interface DocumentInfo {
   }>
 }
 
+export type FetchDoc = (filePath: string) => Promise<{ content: string, type: DocumentType, startVersion: number }>
+
+/**
+ * This interface is used to provide the editor with an API of where to fetch
+ * the documents from. The remote could be, e.g., either behind a websocket or
+ * an IPC bridge.
+ */
+export interface DocumentAuthorityAPI {
+  /**
+   * Used to fetch the document from the document authority
+   */
+  fetchDoc: FetchDoc
+  /**
+   * Used to pull new updates from the document authority
+   */
+  pullUpdates: PullUpdateCallback
+  /**
+   * Used to push updates to the document authority
+   */
+  pushUpdates: PushUpdateCallback
+}
+
 export default class MarkdownEditor extends EventEmitter {
   private readonly _instance: EditorView
   private readonly editorId: string
-  private readonly fetchDoc: (filePath: string) => Promise<{ content: string, type: DocumentType, startVersion: number }>
-  private readonly pullUpdates: (filePath: string, version: number) => Promise<Update[]|false>
-  private readonly pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
+  private readonly authority: DocumentAuthorityAPI
   private config: EditorConfiguration
 
   private readonly databaseCache: {
@@ -171,17 +191,13 @@ export default class MarkdownEditor extends EventEmitter {
   constructor (
     anchorElement: Element|DocumentFragment|undefined,
     editorId: string,
-    getDocument: (path: string) => Promise<{ content: string, type: DocumentType, startVersion: number }>,
-    pullUpdates: (filePath: string, version: number) => Promise<Update[]|false>,
-    pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
+    authorityAPI: DocumentAuthorityAPI
   ) {
     super() // Set up the event emitter
 
-    this.fetchDoc = getDocument
-    this.pullUpdates = pullUpdates
-    this.pushUpdates = pushUpdates
-
+    this.authority = authorityAPI
     this.editorId = editorId
+
     // Since the editor state needs to be rebuilt whenever the document changes,
     // we have to persist the databases (and feed them to the state) everytime
     // we have to rebuild it (during swapDoc).
@@ -246,8 +262,8 @@ export default class MarkdownEditor extends EventEmitter {
         filePath,
         startVersion,
         editorId: this.editorId,
-        pullUpdates: this.pullUpdates,
-        pushUpdates: this.pushUpdates
+        pullUpdates: this.authority.pullUpdates,
+        pushUpdates: this.authority.pushUpdates
       },
       updateListener: (update) => {
         // Listen for changes and emit events appropriately
@@ -270,6 +286,11 @@ export default class MarkdownEditor extends EventEmitter {
           for (const effect of transaction.effects) {
             if (effect.is(configUpdateEffect)) {
               this.onConfigUpdate(effect.value)
+            } else if (effect.is(reloadStateEffect)) {
+              // ATTENTION: The document state is out of sync with the document
+              // authority, so we must reload it.
+              this.reload().catch(err => console.error('Could not reload document state', err))
+              return
             }
           }
         }
@@ -434,7 +455,7 @@ export default class MarkdownEditor extends EventEmitter {
     // initial state update
     const cache = this.documentViewCache.get(documentPath)
 
-    const { content, type, startVersion } = await this.fetchDoc(documentPath)
+    const { content, type, startVersion } = await this.authority.fetchDoc(documentPath)
 
     // Now set the correct state, either from cache or create anew
     const stateToBeRestored = this.stateCache.get(documentPath)

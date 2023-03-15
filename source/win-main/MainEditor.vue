@@ -92,7 +92,6 @@
  */
 
 import MarkdownEditor from '@common/modules/markdown-editor'
-import { Update } from '@codemirror/collab'
 import objectToArray from '@common/util/object-to-array'
 // import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 // import YAML from 'yaml'
@@ -102,13 +101,14 @@ import { useStore } from 'vuex'
 import { key as storeKey } from './store'
 import { EditorCommands } from '@dts/renderer/editor'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import { DocumentType, DP_EVENTS } from '@dts/common/documents'
+import { DP_EVENTS } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
 import { TagRecord } from '@providers/tags'
+import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 
 const ipcRenderer = window.ipc
 const path = window.path
@@ -141,62 +141,6 @@ const editor = ref<HTMLDivElement|null>(null)
 
 // UNREFFED STUFF
 let mdEditor: MarkdownEditor|null = null
-
-// AUTHORITY CALLBACKS
-async function pullUpdates (filePath: string, version: number): Promise<false|Update[]> {
-  // Requests new updates from the authority. It may be that the returned
-  // promise pends for minutes or even hours -- until new changes are available.
-  // Notice how we're not returning the promise from the IPC channel. The reason
-  // is mainly to prevent pollution -- I don't want to try out what happens if
-  // a dozen IPC calls are hanging in the air with no resolution in sight.
-  return await new Promise((resolve, reject) => {
-    // Begin listening for the correct event
-    const stopListening = ipcRenderer.on('documents-update', (evt, payload) => {
-      const { event, context } = payload
-      if (event !== DP_EVENTS.CHANGE_FILE_STATUS || context.filePath !== filePath) {
-        return
-      }
-
-      ipcRenderer.invoke('documents-authority', {
-        command: 'pull-updates',
-        payload: { filePath, version }
-      })
-        .then((result: false|Update[]) => {
-          // Clean up to not pollute the event listener with millions of callbacks
-          stopListening()
-          if (result === false) {
-            // The leaf is completely out of sync (either because there was an
-            // issue with the IPC calls, or because we've reached
-            // MAX_SAFE_INTEGER and the main process was required to reset the
-            // version number). NOTE: We have to resolve in any case to allow
-            // the internal handler of the editor to break out of its infinite
-            // pull-loop!
-            console.warn(`Client ${props.leafId} is out of sync -- resynchronizing...`)
-            mdEditor?.reload().catch(e => console.error(e))
-            // mdEditor?.swapDoc(filePath).catch(e => console.error(e))
-          }
-          resolve(result)
-        })
-        .catch(err => reject(err))
-    })
-  })
-}
-
-async function pushUpdates (filePath: string, version: number, updates: any): Promise<boolean> {
-  // Submits new updates to the authority, returns true if successful
-  return await ipcRenderer.invoke('documents-authority', {
-    command: 'push-updates',
-    payload: { filePath, version, updates }
-  })
-}
-
-async function getDoc (filePath: string): Promise<{ content: string, type: DocumentType, startVersion: number }> {
-  // Fetches a fresh document
-  return await ipcRenderer.invoke('documents-authority', {
-    command: 'get-document',
-    payload: { filePath }
-  })
-}
 
 // EVENT LISTENERS
 ipcRenderer.on('citeproc-database-updated', (event, dbPath: string) => {
@@ -267,7 +211,7 @@ ipcRenderer.on('links', e => {
 // MOUNTED HOOK
 onMounted(() => {
   // As soon as the component is mounted, initiate the editor
-  mdEditor = new MarkdownEditor(undefined, props.leafId, getDoc, pullUpdates, pushUpdates)
+  mdEditor = new MarkdownEditor(undefined, props.leafId, documentAuthorityIPCAPI)
 
   const wrapper = document.getElementById(editorId.value)
 
