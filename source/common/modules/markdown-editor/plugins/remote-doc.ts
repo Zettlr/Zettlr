@@ -32,7 +32,7 @@ export type PushUpdateCallback = (filePath: string, version: number, updates: Up
 export const reloadStateEffect = StateEffect.define<boolean>()
 
 export function hookDocumentAuthority (
-  editorId: string,
+  clientID: string,
   filePath: string,
   startVersion: number,
   pullUpdates: PullUpdateCallback,
@@ -46,17 +46,21 @@ export function hookDocumentAuthority (
       this.isCurrentlyPushing = false
       this.pluginDestroyed = false
 
-      // Immediately enter a loop to pull updates to the document
-      this.pull()
+      // Immediately enter a loop to pull updates to the document. The pull
+      // method will create a Promise that links this plugin (and, by extension,
+      // the editor state) over the IPC or websocket bridge until there are any
+      // updates available.
+      this.pull().catch(err => { console.error(`Pulling updates for ${clientID} failed: ${String(err.message)}`, err) })
     }
 
     update (update: ViewUpdate): void {
+      // Whenever the doc changed, sync those changes with the document authority
       if (update.docChanged) {
-        this.push()
+        this.push().catch(err => { console.error(`Pushing updates for ${clientID} failed: ${String(err.message)}`, err) })
       }
     }
 
-    push (): void {
+    async push (): Promise<void> {
       if (this.isCurrentlyPushing) {
         return // There's another push going on atm
       }
@@ -67,82 +71,66 @@ export function hookDocumentAuthority (
       }
 
       this.isCurrentlyPushing = true
-      new Promise<void>((resolve, reject) => {
-        const version = getSyncedVersion(this.view.state)
-        const updates = sendableUpdates(this.view.state)
-        if (updates.length === 0) {
-          resolve() // Nothing to do
-          return
-        }
-
-        const payload: Update[] = updates.map(u => {
-          return {
-            clientID: u.clientID,
-            changes: u.changes.toJSON()
-          }
-        })
-
-        pushUpdates(filePath, version, payload)
-          .then(success => {
-            // Allow another push -> will break out of the loop if there are no
-            // new updates.
-            this.isCurrentlyPushing = false
-            setTimeout(() => { this.push() }, 100)
-            resolve()
-          })
-          .catch(err => reject(err))
+      const version = getSyncedVersion(this.view.state)
+      const serializedUpdates: Update[] = updates.map(u => {
+        return { clientID: u.clientID, changes: u.changes.toJSON() }
       })
-        .catch(err => console.error(err))
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const success = await pushUpdates(filePath, version, serializedUpdates)
+
+      // Allow another push, if new updates have amassed during the push
+      this.isCurrentlyPushing = false
+      setTimeout(() => {
+        this.push().catch(err => { console.error(`Pushing updates for ${clientID} failed: ${String(err.message)}`, err) })
+      }, 100)
     }
 
-    pull (): void {
+    async pull (): Promise<void> {
       if (this.pluginDestroyed) {
         return // Do not attempt a new pull
       }
 
-      new Promise<void>((resolve, reject) => {
-        const version = getSyncedVersion(this.view.state)
-        pullUpdates(filePath, version)
-          .then(updates => {
-            try {
-              // These two conditions are equal: Either the plugin has been
-              // destroyed, or the file path has changed because the editor has
-              // loaded in a different document. In that case, the view may be
-              // still valid, but should not be overwritten
-              if (this.pluginDestroyed || filePath !== this.view.state.field(configField).metadata.path) {
-                return resolve()
-              }
+      const version = getSyncedVersion(this.view.state)
+      const updates = await pullUpdates(filePath, version)
+      // NOTE: At this point, hours may have passed, so we have to re-check the
+      // current state, because the view will remain valid for as long as the
+      // editor leaf exists. *However* if the editor now shows a different file,
+      // the state will have a different remote-doc plugin that already takes
+      // care of communicating with the API, so we have to remove this "dangling
+      // promise".
+      const currentFilePath = this.view.state.field(configField).metadata.path
+      if (this.pluginDestroyed || filePath !== currentFilePath) {
+        return // These updates shall not be applied to the current state
+      }
 
-              if (updates === false) {
-                // By returning `false`, the authority told us that we've lost
-                // synchronization and there is no way to re-synchronize in this
-                // method. This means that here we need to emit an effect that
-                // must be captured by the MainEditor instance to perform a full
-                // reload of the document state. After that, we break out of the
-                // pull loop and let the new plugin instance take over.
-                this.view.dispatch({ effects: reloadStateEffect.of(true) })
-                return resolve()
-              }
+      if (updates === false) {
+        // By returning `false`, the authority told us that we've lost
+        // synchronization and there is no way to re-synchronize in this method.
+        // This means that here we need to emit an effect that must be captured
+        // by the MainEditor instance to perform a full reload of the document
+        // state. After that, we break out of the pull loop and let the new
+        // plugin instance take over.
+        this.view.dispatch({ effects: reloadStateEffect.of(true) })
+        return
+      }
 
-              // Revitalize the updates
-              updates = updates.map(u => {
-                return {
-                  clientID: u.clientID,
-                  changes: ChangeSet.fromJSON(u.changes)
-                }
-              })
-              this.view.dispatch(receiveUpdates(this.view.state, updates))
-            } catch (e: any) {
-              reject(e)
-            }
+      try {
+        // Deserialize & apply updates
+        const deserializedUpdates = updates.map(u => {
+          return {
+            clientID: u.clientID,
+            changes: ChangeSet.fromJSON(u.changes)
+          }
+        })
+        const transaction = receiveUpdates(this.view.state, deserializedUpdates)
+        this.view.dispatch(transaction)
+      } catch (err: any) {
+        console.error(`Pulling updates for ${clientID} failed (retrying): ${String(err.message)}`, err)
+      }
 
-            // Whether there was an error or not, schedule another pull
-            this.pull()
-            resolve() // Mark the promise as solved
-          })
-          .catch(err => reject(err))
-      })
-        .catch(err => console.error(err))
+      // Whether there was an error or not, schedule another pull
+      this.pull().catch(err => { console.error(`Pulling updates for ${clientID} failed: ${String(err.message)}`, err) })
     }
 
     destroy (): void {
@@ -153,5 +141,5 @@ export function hookDocumentAuthority (
     }
   })
 
-  return [ collab({ startVersion, clientID: editorId }), plugin ]
+  return [ collab({ startVersion, clientID }), plugin ]
 }

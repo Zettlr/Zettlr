@@ -441,29 +441,25 @@ export default class MarkdownEditor extends EventEmitter {
    *                                  reloading the same document again.
    */
   async swapDoc (documentPath: string, force: boolean = false): Promise<void> {
+    const { content, type, startVersion } = await this.authority.fetchDoc(documentPath)
+    const currentDoc = this._instance.state.doc.toString()
+    const isSameDoc = this.config.metadata.path === documentPath && content === currentDoc
+
     // Do not reload the document unless explicitly specified. The reason is
     // that sometimes we do need to programmatically reload the document, but in
     // 99% of the cases, this only leads to unnecessary flickering.
-    if (this.config.metadata.path === documentPath && !force) {
+    if (isSameDoc && !force) {
       return
     }
 
-    // Before exchanging anything, cache the current state
+    // Before exchanging anything, cache the current state and retrieve the view
+    // cache so that it is not overridden by the initial state update
     this.stateCache.set(this.config.metadata.path, this._instance.state)
-
-    // Get the scroll position cache before so it is not overridden by the
-    // initial state update
     const cache = this.documentViewCache.get(documentPath)
-
-    const { content, type, startVersion } = await this.authority.fetchDoc(documentPath)
-
-    // Now set the correct state, either from cache or create anew
     const stateToBeRestored = this.stateCache.get(documentPath)
-    if (stateToBeRestored !== undefined) {
-      this._instance.setState(stateToBeRestored)
-    } else {
-      // We need to set the file's path already here so that it's available on
-      // the initial rendering round for any extensions that need it
+
+    if (content !== currentDoc) {
+      // The documents contents have changed, so we must recreate a new state
       this.config.metadata.path = documentPath
 
       const state = EditorState.create({
@@ -472,6 +468,11 @@ export default class MarkdownEditor extends EventEmitter {
       })
 
       this._instance.setState(state)
+      // Re-cache the now correct new state
+      this.stateCache.set(this.config.metadata.path, this._instance.state)
+    } else if (stateToBeRestored !== undefined) {
+      // We already have a proper state that we can restore
+      this._instance.setState(stateToBeRestored)
     }
 
     // Provide the cached databases to the state (can be overridden by the
