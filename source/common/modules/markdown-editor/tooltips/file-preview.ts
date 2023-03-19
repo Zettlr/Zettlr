@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+import { syntaxTree } from '@codemirror/language'
 import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
@@ -24,28 +25,13 @@ type IpcResult = undefined|[string, string, number, number]
 
 // Previews files with tooltips
 async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1): Promise<Tooltip|null> {
-  const { from, text } = view.state.doc.lineAt(pos)
+  const nodeAt = syntaxTree(view.state).resolve(pos, 0)
 
-  // Ensure there is an internal link opening before pos, but not closing, and
-  // that there is an internal link closing after pos, but not opening.
-  const sliceBefore = text.substring(0, pos - from)
-  const sliceAfter = text.substring(pos - from)
-  const openLinkBeforePos = sliceBefore.includes('[[') && sliceBefore.lastIndexOf('[[') > sliceBefore.lastIndexOf(']]')
-  const closeLinkAfterPos = sliceAfter.includes(']]') && sliceAfter.indexOf(']]') < sliceAfter.indexOf('[[')
-
-  if (!openLinkBeforePos && !closeLinkAfterPos) {
+  if (nodeAt.type.name !== 'ZknLinkContent') {
     return null
   }
 
-  // Extract the relative start and end positions, and do a sanity test
-  const start = sliceBefore.lastIndexOf('[[') + 2
-  const end = text.indexOf(']]', pos - from)
-
-  if (pos > from + end || pos < from + start) {
-    return null
-  }
-
-  const fileToDisplay = text.substring(start, end)
+  const fileToDisplay = view.state.sliceDoc(nodeAt.from, nodeAt.to)
 
   const res: IpcResult = await ipcRenderer.invoke(
     'application',
@@ -55,8 +41,8 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
   // By annotating a range (providing `end`) the hover tooltip will stay as long
   // as the user is somewhere over the links
   return {
-    pos: from + start,
-    end: pos + end + 2,
+    pos: nodeAt.from,
+    end: nodeAt.to,
     above: true,
     create (view) {
       if (res !== undefined) {
