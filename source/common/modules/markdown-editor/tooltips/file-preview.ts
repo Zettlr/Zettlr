@@ -25,7 +25,7 @@ type IpcResult = undefined|[string, string, number, number]
 
 // Previews files with tooltips
 async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1): Promise<Tooltip|null> {
-  const nodeAt = syntaxTree(view.state).resolve(pos, 0)
+  const nodeAt = syntaxTree(view.state).resolve(pos, side)
 
   if (nodeAt.type.name !== 'ZknLinkContent') {
     return null
