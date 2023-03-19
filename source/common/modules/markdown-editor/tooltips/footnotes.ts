@@ -71,24 +71,12 @@ function findRefForFootnote (state: EditorState, fn: string): { from: number, to
  * to create a tooltip with the footnote ref's contents, else null.
  */
 function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|null {
-  let { from, text } = view.state.doc.lineAt(pos)
-  const fnRE = /\[\^.+?\](?!:)/g
-  const relativePos = pos - from
-
-  let footnoteMatch: RegExpMatchArray|null = null
-  for (const match of text.matchAll(fnRE)) {
-    if (match.index as number > relativePos || match.index as number + match[0].length < relativePos) {
-      continue
-    }
-    footnoteMatch = match
-    break
-  }
-
-  if (footnoteMatch === null) {
+  const nodeAt = syntaxTree(view.state).resolve(pos, side)
+  if (nodeAt.type.name !== 'Footnote') {
     return null
   }
 
-  const fn = footnoteMatch[0]
+  const fn = view.state.sliceDoc(nodeAt.from, nodeAt.to)
 
   if (fn.endsWith('^]')) {
     return null // It's an inline footnote
@@ -100,8 +88,8 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   const tooltipContent = md2html(fnBody?.text ?? trans('No footnote text found.'), library)
 
   return {
-    pos: from + (footnoteMatch.index as number),
-    end: from + (footnoteMatch.index as number) + footnoteMatch[0].length,
+    pos: nodeAt.from,
+    end: nodeAt.to,
     above: true,
     create (view) {
       const dom = document.createElement('div')
