@@ -492,7 +492,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     case 'Link': {
       const alt = node.getChild('LinkLabel')
       const url = node.getChild('URL')
-      if (alt === null || url === null) {
+      if (url === null) {
         return {
           type: 'Generic',
           name: node.name,
@@ -509,8 +509,18 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         to: node.to,
         // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
         url: genericTextNode(url.from, url.to, markdown.substring(url.from, url.to)),
-        alt: genericTextNode(alt.from, alt.to, markdown.substring(alt.from, alt.to))
+        alt: genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
       }
+
+      const marks = node.getChildren('LinkMark')
+
+      if (alt === null && marks.length >= 2) {
+        // The default Markdown parser doesn't apply "LinkLabel" unfortunately.
+        // So instead we have to get whatever is in between the first and second
+        // linkMark.
+        astNode.alt = genericTextNode(marks[0].to, marks[1].from, markdown.substring(marks[0].to, marks[1].from))
+      } // Else: Somewhat malformed link.
+
       return astNode
     }
     case 'URL': {
