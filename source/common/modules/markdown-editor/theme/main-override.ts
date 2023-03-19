@@ -55,6 +55,10 @@ export const mainOverride = EditorView.baseTheme({
   '.cm-panel.cm-search': {
     userSelect: 'none' // prevent search panel text elements from being selected
   },
+  // Tooltips
+  '.cm-tooltip': {
+    padding: '4px'
+  },
   // Define the readability classes. Red, orange, and yellow indicate bad scores
   // Purple and blue indicate average scores, and green indicates good scores
   '&light .cm-readability-0': { backgroundColor: '#ff0000aa', color: '#444' },

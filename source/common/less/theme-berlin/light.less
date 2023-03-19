@@ -208,10 +208,7 @@ body {
     // Formatting bar
     .cm-tooltip.cm-formatting-bar {
       border-radius: 8px;
-      padding: 0;
-      border: none;
       max-width: initial;
-      background-color: transparent;
 
       .button-wrapper {
         display: flex;
@@ -220,16 +217,10 @@ body {
       button.formatting-toolbar-button {
         border: none;
         margin: 0;
-        background-color: var(--grey-0);
+        background-color: transparent;
         border-radius: 0;
-        color: var(--grey-5);
-        transition: 0.3s background-color ease;
+        // color: var(--grey-5);
         line-height: 30px;
-
-        &:hover {
-          background-color: var(--grey-3);
-          color: var(--grey-1);
-        }
 
         &:first-child {
           border-top-left-radius: 8px;
