@@ -87,6 +87,11 @@ interface MDNode {
 export interface Footnote extends MDNode {
   type: 'Footnote'
   /**
+   * If this is true, this means that the label is actually the footnote's
+   * context, whereas label will be the footnote ref number if its false.
+   */
+  inline: boolean
+  /**
    * The label of the footnote (sans the formatting, i.e. [^1] -> 1)
    */
   label: string
@@ -485,6 +490,7 @@ function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNode: T, 
  * @return  {ASTNode}               The root node of a Markdown AST
  */
 export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
+  console.log(node.name)
   switch (node.name) {
     // NOTE: Most nodes are treated as generics (see default case); here we only
     // define nodes which we can "compress" a little bit or make accessible
@@ -579,12 +585,14 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       return astNode
     }
     case 'Footnote': {
+      const contents = markdown.substring(node.from + 2, node.to - 1) // [^1] --> 1
       const astNode: Footnote = {
         type: 'Footnote',
         name: 'Footnote',
         from: node.from,
+        inline: contents.endsWith('^'),
         to: node.to,
-        label: markdown.substring(node.from + 2, node.to - 1) // [^1] --> 1
+        label: contents.endsWith('^') ? contents.substring(0, contents.length - 1) : contents
       }
       return astNode
     }
