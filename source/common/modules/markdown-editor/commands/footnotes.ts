@@ -17,102 +17,119 @@
 // 2. Cmd-Click them to edit them in place
 // 3. And, obviously, add and remove them
 
+import { syntaxTree } from '@codemirror/language'
 import { ChangeSpec } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
-
-interface Footnote {
-  id: number
-  from: number
-  to: number
-  ref?: {
-    from: number
-    to: number
-  }
-}
+import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
+import { Footnote, FootnoteRef } from '@common/modules/markdown-utils/markdown-ast'
 
 export function addNewFootnote (target: EditorView): boolean {
-  const text = target.state.sliceDoc()
-
-  // First, collect all fn refs of the document, which we'll need in the next
-  // step.
-  const fnRefRE = /^\[\^(\d+?)\]:(?=\s)/gm
-  const refs = []
-  for (const match of text.matchAll(fnRefRE)) {
-    refs.push({
-      id: parseInt(match[1], 10),
-      from: match.index as number,
-      to: match.index as number + match[0].length
-    })
-  }
-
-  // Second, collect all footnotes, adding the corresponding ref if applicable.
-  const fnRE = /\[\^(\d+?)\](?!:)/g
-  const identifiers: Footnote[] = []
-  for (const match of text.matchAll(fnRE)) {
-    const id = parseInt(match[1], 10)
-    const newElem: Footnote = {
-      id,
-      from: match.index as number,
-      to: match.index as number + match[0].length
-    }
-
-    const ref = refs.find(ref => ref.id === id)
-    if (ref !== undefined) {
-      newElem.ref = { from: ref.from, to: ref.to }
-    }
-
-    identifiers.push(newElem)
-  }
+  const ast = markdownToAST(target.state.sliceDoc())
+  const identifiers = extractASTNodes(ast, 'Footnote') as Footnote[]
+  const refs = extractASTNodes(ast, 'FootnoteRef') as FootnoteRef[]
+  const changes: ChangeSpec[] = []
 
   // This is where our new footnote should be inserted
-  const where = target.state.selection.main.from
+  let where = target.state.selection.main.from
+
+  // Check that the user isn't accidentally within a footnote.
+  const nodeAt = syntaxTree(target.state).resolve(where, 0)
+  if (nodeAt.name === 'Footnote') {
+    where = nodeAt.to
+  }
 
   // Split up all identifiers into before and after. Before will be used to find
-  // the new identifier, after will need to be adapted during the insertion.
+  // the new identifier, after will need to be adapted afterwards.
   const fnBefore = identifiers.filter(i => i.to <= where)
-  const fnAfter = identifiers.filter(i => i.to > where)
+  const fnAfter = identifiers.filter(i => i.from > where)
 
-  // Now find the new identifier. It'll be the highest number+1 of the befores.
+  // Now find the new identifier. It'll be the highest number+1 of fnBefore.
   let newIdentifier = fnBefore.length + 1
-  for (const i of fnBefore) {
-    if (i.id >= newIdentifier) {
-      newIdentifier = i.id + 1
+  for (const fn of fnBefore) {
+    const id = parseInt(fn.label, 10)
+    if (!/^\d+$/.test(fn.label) || id < newIdentifier) {
+      continue // A text label, or smaller than our new Identifier
     }
+    newIdentifier = id + 1
   }
 
-  // Now that we have the new identifier, we can renumber the following fns
-  for (let i = 0, id = newIdentifier + 1; i < fnAfter.length; i++, id++) {
-    fnAfter[i].id = id
+  // We additionally need the position of where to put the corresponding ref.
+  let whereRef = target.state.doc.length // Default: end of document
+  for (const ref of refs) {
+    const id = parseInt(ref.label, 10)
+    if (!/^\d+$/.test(ref.label) || id < newIdentifier) {
+      continue // A text label, or smaller than our new Identifier
+    }
+
+    // This is the first ref which is not smaller than the new identifier
+    whereRef = ref.from
+    break
   }
 
-  // A final thing we have to do is find where we should put the new identifier.
-  let whereRef = target.state.doc.length
-  for (const i of fnAfter) {
-    if (i.ref !== undefined) {
-      whereRef = i.ref.from
-      break // First non-empty ref wins
-    }
-  }
+  const hasRefBefore = refs.filter(ref => ref.to < whereRef).length > 0
+  const prevLineNo = target.state.doc.lineAt(whereRef).number - 1
+  const emptyLineBefore = target.state.doc.line(prevLineNo).text.trim() === ''
+  const isBeginningOfLine = target.state.doc.lineAt(whereRef).from === whereRef
 
-  // Now we have to collect all changes that are about to happen:
-  // 1. Insertion of the new footnote
-  const changes: ChangeSpec[] = [
-    { from: where, insert: `[^${newIdentifier}]` },
-    { from: whereRef, insert: `\n[^${newIdentifier}]: \n` }
-  ]
-  // 2. Renumbering of all following footnotes
-  for (const i of fnAfter) {
-    changes.push({ from: i.from, to: i.to, insert: `[^${i.id}]` })
-    if (i.ref !== undefined) {
-      changes.push({ from: i.ref.from, to: i.ref.to, insert: `[^${i.id}]:` })
+  // We don't need to add another newline if there is already an empty line
+  // before, or if a ref ends just before this one. This keeps the footnote refs
+  // separate from the main text body with a double line break, but keeps the
+  // refs themselves tight.
+  const prefix = (emptyLineBefore || hasRefBefore) && isBeginningOfLine ? '' : '\n'
+
+  // Now we can add the first two changes that will insert the new footnote
+  changes.push({ from: where, insert: `[^${newIdentifier}]` })
+  changes.push({ from: whereRef, insert: `${prefix}[^${newIdentifier}]: \n` })
+
+  // We need to maintain a tally of how many more or less characters will be
+  // inserted AFTER the new footnote identifier and BEFORE the whereRef.
+  let offsetChars = 0
+
+  // Finally, we can renumber the following fns
+  let id = newIdentifier + 1
+  for (const fn of fnAfter) {
+    if (!/^\d+$/.test(fn.label)) {
+      continue // Exclude text-labels
     }
+
+    if (fn.label === `${id}`) {
+      // In this case, the footnote is already correct, but we have to increment
+      id++
+      continue
+    }
+
+    let from = fn.from + 2
+    let to = fn.from + 2 + fn.label.length
+
+    offsetChars += `${id}`.length - (to - from)
+
+    changes.push({ from, to, insert: `${id}` })
+    console.log(`Updating footnote ${fn.label} to ${id}`)
+
+    const ref = refs.find(ref => ref.label === fn.label)
+    if (ref !== undefined) {
+      if (ref.to < whereRef) {
+        // Since footnote refs do not have to be ordered, some refs may occur
+        // before whereRef, and thus need to be accounted for in the offset.
+        offsetChars += `${id}`.length - (to - from)
+      }
+
+      from = ref.from + 2
+      to = ref.from + 2 + ref.label.length
+      changes.push({ from, to, insert: `${id}` })
+    }
+    id++
   }
 
   // And go.
   target.dispatch({
     changes,
-    // Offset like this: 6 = \n[^]:\s\n // 3 = [^] // identifier = 2x the new number
-    selection: { anchor: whereRef + 6 + 3 + String(newIdentifier).length * 2 }
+    // Offset like this:
+    // 5 = [^]:\s\n (the ref, NOTE we exclude the newline)
+    // 3 = [^] (the identifier)
+    // 2x the new number length
+    // Any offset chars, since the selection must be in terms of characters AFTER the update
+    selection: { anchor: whereRef + 5 + prefix.length + 3 + String(newIdentifier).length * 2 + offsetChars }
   })
   return true
 }
