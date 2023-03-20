@@ -29,7 +29,6 @@ function render (view: EditorView): DecorationSet {
   // requestMeasure to accurately get the widths required. There is this plugin
   // I may be inspired from: https://gist.github.com/lishid/c10db431cb8a9e83905a3443cfdb53bb
   const charWidth = view.defaultCharacterWidth
-  const basePadding = 6
   const tabSize = view.state.tabSize
   const builder = new RangeSetBuilder<Decoration>()
 
@@ -59,7 +58,7 @@ function render (view: EditorView): DecorationSet {
     let offset = (tabs * tabSize + spaces) * charWidth
 
     // Here we additionally account for list markers and indent even further.
-    const match = /^\s*([+*>-]|\d+\.)\s/.exec(line.text)
+    const match = /^\s*((?:[+*>-]|\d+\.)\s)/.exec(line.text)
     if (match !== null) {
       offset += match[1].length * charWidth
     }
@@ -67,8 +66,6 @@ function render (view: EditorView): DecorationSet {
     if (offset === 0) {
       continue // Nothing to indent here
     }
-
-    offset += basePadding // Add some base padding which is necessary
 
     if (offset > 0) {
       const deco = Decoration.line({
