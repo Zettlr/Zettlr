@@ -369,6 +369,10 @@ export interface GenericNode extends MDNode {
  * Any node that can be part of the AST is an ASTNode.
  */
 export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | List | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
+/**
+ * Extract the "type" properties from the ASTNodes that can differentiate these.
+ */
+export type ASTNodeType = ASTNode['type']
 
 /**
  * Creates a generic text node; this is used to represent textual contents of
@@ -490,7 +494,6 @@ function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNode: T, 
  * @return  {ASTNode}               The root node of a Markdown AST
  */
 export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
-  console.log(node.name)
   switch (node.name) {
     // NOTE: Most nodes are treated as generics (see default case); here we only
     // define nodes which we can "compress" a little bit or make accessible
