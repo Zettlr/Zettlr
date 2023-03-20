@@ -32,7 +32,10 @@ export const citationParser: InlineParser = {
 
     // Ensure the character before is valid
     const charBefore = pos > 0 ? ctx.slice(pos - 1, pos) : ''
-    const validBefore = charBefore === '' || [ '(', ' ' ].includes(charBefore)
+    // NOTE: The Markdown mode will actually count a single inline context with
+    // single linebreaks in between (due to hard-wrapping), so we also have to
+    // check for newlines.
+    const validBefore = charBefore === '' || '( \n\r\t'.includes(charBefore)
     if (!validBefore) {
       return -1
     }
