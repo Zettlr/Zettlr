@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-16 02:33+0000\n"
+"POT-Creation-Date: 2023-03-20 02:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,7 @@ msgstr "否"
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
 #: source/app/service-providers/commands/rename-tag.ts:48
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:132
 #: source/tmp/CustomCSS.vue.ts:49
 msgid "Cancel"
 msgstr "取消"
@@ -330,6 +331,7 @@ msgstr "选择导出目的位置"
 #: source/app/service-providers/commands/export.ts:74
 #: source/app/service-providers/menu/menu.win32.ts:162
 #: source/app/service-providers/menu/menu.darwin.ts:197
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:117
 #: source/tmp/Defaults.vue.ts:112 source/tmp/CustomCSS.vue.ts:42
 #: source/tmp/CustomCSS.vue.ts:56 source/tmp/SnippetsTab.vue.ts:47
 msgid "Save"
@@ -439,7 +441,7 @@ msgstr "新目录…"
 
 #: source/app/service-providers/menu/menu.win32.ts:140
 #: source/app/service-providers/menu/menu.darwin.ts:166
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:102
 msgid "Open…"
 msgstr "打开…"
 
@@ -526,7 +528,7 @@ msgstr "退出"
 
 #: source/app/service-providers/menu/menu.win32.ts:318
 #: source/app/service-providers/menu/menu.darwin.ts:317
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:111
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:102
 msgid "Edit"
 msgstr "编辑"
 
@@ -1370,27 +1372,27 @@ msgstr "注释"
 msgid "Code"
 msgstr "代码"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "文件 %s 不存在。"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
 msgid "Word count"
 msgstr "词数"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
 #: source/tmp/PopoverFileProps.vue.ts:68 source/tmp/PopoverDirProps.vue.ts:150
 msgid "Modified"
 msgstr "已修改"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
 #: source/win-main/file-manager/util/file-item-context.ts:26
 #: source/tmp/GlobalSearch.vue.ts:40
 msgid "Open in a new tab"
 msgstr "在新标签页中打开"
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:88
 msgid "No footnote text found."
 msgstr "未找到脚注文本"
 
