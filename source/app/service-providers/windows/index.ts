@@ -319,7 +319,7 @@ export default class WindowProvider extends ProviderContract {
         return
       }
 
-      const nWindows = BrowserWindow.getAllWindows().length
+      const nWindows = Object.values(this._mainWindows).length // BrowserWindow.getAllWindows().length
       const leaveAppRunning = this._config.get().system.leaveAppRunning
 
       // If this is the last window open on Windows or Linux, the user intention

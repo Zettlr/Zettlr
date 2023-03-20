@@ -481,7 +481,15 @@ export default class DocumentManager extends ProviderContract {
       return // During shutdown only the WindowManager should close windows
     }
 
-    if (windowId in this._windows) {
+    const isLastWindow = Object.values(this._windows).length === 1
+
+    if (windowId in this._windows && !isLastWindow) {
+      // NOTE: By doing this, we always retain the window state of the last and
+      // only window that is open. This means that, while additional windows
+      // will be forgotten after closing, the last and final one will always
+      // retain its state.
+      // TODO: If we ever implement workspaces, etc., this safeguard won't be
+      // necessary anymore.
       this._app.log.info(`[Documents Manager] Closing window ${windowId}!`)
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this._windows[windowId]
