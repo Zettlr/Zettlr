@@ -14,7 +14,7 @@
  */
 
 import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
-import { ASTNode, parseNode, TextNode } from './markdown-ast'
+import { ASTNode, ASTNodeType, parseNode, TextNode } from './markdown-ast'
 
 export { md2html } from './markdown-to-html'
 
@@ -32,6 +32,38 @@ export function markdownToAST (markdown: string): ASTNode {
   const tree = parser.parse(markdown)
   const ast = parseNode(tree.topNode, markdown)
   return ast
+}
+
+/**
+ * Extracts arbitrary AST nodes. Providing a NodeType that is not used within
+ * the AST will return an empty array.
+ *
+ * @param   {ASTNode}      ast       The AST to extract nodes from
+ * @param   {ASTNodeType}  nodeType  The Node type to query
+ *
+ * @return  {ASTNode[]}              An array of all found nodes
+ */
+export function extractASTNodes (ast: ASTNode, nodeType: ASTNodeType): ASTNode[] {
+  let returnNodes: ASTNode[] = []
+
+  if (ast.type === nodeType) {
+    returnNodes.push(ast)
+  } else if (ast.type === 'FootnoteRef' || ast.type === 'Highlight' || ast.type === 'ListItem' || ast.type === 'Generic' || ast.type === 'Emphasis') {
+    for (const child of ast.children) {
+      returnNodes = returnNodes.concat(extractASTNodes(child, nodeType))
+    }
+  } else if (ast.type === 'List') {
+    for (const item of ast.items) {
+      returnNodes = returnNodes.concat(extractASTNodes(item, nodeType))
+    }
+  } else if (ast.type === 'Table') {
+    for (const row of ast.rows) {
+      for (const cell of row.cells) {
+        returnNodes = returnNodes.concat(extractASTNodes(cell, nodeType))
+      }
+    }
+  }
+  return returnNodes
 }
 
 /**
