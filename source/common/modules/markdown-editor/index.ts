@@ -92,7 +92,6 @@ import { DocumentType, DP_EVENTS } from '@dts/common/documents'
 import { TagRecord } from '@providers/tags'
 import { PullUpdateCallback, PushUpdateCallback, reloadStateEffect } from './plugins/remote-doc'
 
-const path = window.path
 const ipcRenderer = window.ipc
 
 export interface DocumentWrapper {
@@ -339,81 +338,6 @@ export default class MarkdownEditor extends EventEmitter {
             editorInstance.emit('zettelkasten-tag', tagContents)
             event.preventDefault()
           }
-        },
-        drop (event, view) {
-          const dataTransfer = event.dataTransfer
-
-          if (dataTransfer === null) {
-            return false
-          }
-
-          const zettlrFile = dataTransfer.getData('text/x-zettlr-file')
-          const docTab = dataTransfer.getData('zettlr/document-tab')
-
-          if (docTab !== '') {
-            return false // There's a document being dragged, let the MainEditor capture the event
-          }
-
-          const pos = view.posAtCoords({ x: event.clientX, y: event.clientY })
-          if (pos === null) {
-            return false
-          }
-
-          event.preventDefault()
-          event.stopPropagation()
-
-          const cwd = path.dirname(view.state.field(configField).metadata.path)
-
-          // First: Do we have a fileList of files to drop here?
-          if (dataTransfer.files.length > 0) {
-            const files: string[] = []
-            // We have a list of files being dropped onto the editor --> link them
-            for (let i = 0; i < dataTransfer.files.length; i++) {
-              const file = dataTransfer.files.item(i)
-              if (file !== null) {
-                files.push(file.path)
-              }
-            }
-
-            const toInsert = files.map(f => {
-              let pathToInsert = path.posix.relative(cwd, f)
-              if (!pathToInsert.startsWith('./') && !pathToInsert.startsWith('../')) {
-                pathToInsert = './' + pathToInsert
-              }
-
-              if (/\.(?:png|jpe?g|gif|bmp|svg|tiff?)$/i.test(f)) {
-                return `![${path.basename(f)}](${pathToInsert})`
-              } else {
-                return `[${path.basename(f)}](${pathToInsert})`
-              }
-            })
-
-            view.dispatch({ changes: { from: pos, insert: toInsert.join('\n') } })
-          } else if (zettlrFile !== '') {
-            // We have a Markdown/Code file to insert
-            const data = JSON.parse(zettlrFile) as { type: 'code'|'file'|'directory'|'other', path: string, id?: string }
-            const name = path.basename(data.path, path.extname(data.path))
-            let pathToInsert = path.posix.relative(cwd, data.path)
-            if (!pathToInsert.startsWith('./') && !pathToInsert.startsWith('../')) {
-              pathToInsert = './' + pathToInsert
-            }
-
-            if (data.type === 'file') {
-              // Insert as Zkn link
-              view.dispatch({ changes: { from: pos, insert: `[[${name}]]` } })
-            } else if (data.type === 'code') {
-              // Insert as Md link
-              view.dispatch({ changes: { from: pos, insert: `[${name}](${pathToInsert})` } })
-            } else if (data.type === 'other') {
-              const isImage = /\.(?:png|jpe?g|gif|bmp|svg|tiff?)$/i.test(data.path)
-              if (isImage) {
-                view.dispatch({ changes: { from: pos, insert: `![${name}](${pathToInsert})` } })
-              } else {
-                view.dispatch({ changes: { from: pos, insert: `[${name}](${pathToInsert})` } })
-              }
-            }
-          }
-          return false
         }
       },
       lint: {

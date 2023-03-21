@@ -54,6 +54,7 @@ import { languageTool } from './linters/language-tool'
 import { statusbar } from './statusbar'
 import { themeManager } from './theme'
 import { renderers } from './renderers'
+import { mdPasteDropHandlers } from './plugins/md-paste-drop-handlers'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -250,6 +251,10 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
 
   return [
     ...getCoreExtensions(options),
+    // These handlers deal with Markdown specific stuff, for example, pasting
+    // HTML should not add the verbatim HTML code, but rather convert it to
+    // Markdown prior. Additionally, images should get preferential treatment.
+    EditorView.domEventHandlers(mdPasteDropHandlers),
     // We need our custom keymaps first
     keymap.of(completionKeymap),
     Prec.highest(keymap.of(customKeymap)),

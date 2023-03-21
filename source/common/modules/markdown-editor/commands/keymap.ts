@@ -16,7 +16,7 @@ import { acceptCompletion, deleteBracketPair } from '@codemirror/autocomplete'
 import { copyLineDown, copyLineUp, indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'
-import { copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
+import { copyAsHTML, pasteAsPlain } from '../util/copy-paste-cut'
 import { handleReplacement, handleBackspace, handleQuote } from './autocorrect'
 import { addNewFootnote } from './footnotes'
 import { maybeIndentList, maybeUnindentList } from './lists'
@@ -45,7 +45,7 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Alt-Up', run: moveLineUp, shift: copyLineUp },
   { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown },
   { key: 'Mod-t', run: applyTaskList },
-  { key: 'Mod-v', run: view => { paste(view); return true }, shift: view => { pasteAsPlain(view); return true } },
+  { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
   { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
   { key: '"', run: handleQuote('"') },
   { key: "'", run: handleQuote("'") }
