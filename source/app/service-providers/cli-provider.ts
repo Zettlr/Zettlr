@@ -56,14 +56,14 @@ export function getCLIArgument (key: string): string | boolean | undefined {
 }
 
 /**
- * This function scans all available arguments passed to the zettlr-executable.
- * If fitting arguments are found, this function handles them and should exit zettlr after
- * doing the appropriate work.
+ * This function scans the provided arguments to see if there is an argument,
+ * such as `--help` or `--version`, after which the app should quit instead of
+ * continuing to boot.
  *
- * This function should run as soon as possible so that we do not hog resources.
- * It also should NOT be called when zettlr is running in windowed mode.
+ * NOTE: Ensure this function runs as early as possible, since the app will exit
+ * afterwards.
  */
-export function handleGeneralArguments (): void {
+export function handleExitArguments (): void {
   if (process.argv.includes('--help') || process.argv.includes('-h')) {
     showHelp()
     process.exit()
@@ -79,15 +79,14 @@ export function handleGeneralArguments (): void {
  * Print a small CLI help on stdout.
  */
 function showHelp (): void {
-  console.log('This is the Zettlr Help!')
-  console.log('')
-  console.log('Usage:')
-  console.log('-h | --help                            Show this help')
-  console.log('-v | --version                         Show the Version of Zettlr')
-  console.log('   | --clear-cache                     Removes all cached files')
-  console.log('   | --disable-hardware-acceleration   Disables Hardware Acceleration for systems that do not support it.')
-  console.log('   | --data-dir=FILEPATH               Set a custom directory for Zettlr\'s configuration files')
-  console.log('-m | --launch-minimized                Start Zettlr mimimized in the Systemtray')
+  console.log(`usage: ${app.getName()} [option] [files...]`)
+  console.log('Options and arguments:')
+  console.log('-h  --help                            Show this help and exit')
+  console.log('-v  --version                         Show the version string and exit')
+  console.log('    --clear-cache                     Clears the FSAL cache upon startup')
+  console.log('    --disable-hardware-acceleration   Disables hardware acceleration')
+  console.log('    --data-dir=FILEPATH               Use FILEPATH as the appData directory')
+  console.log('-m  --launch-minimized                Start Zettlr mimimized to the tray/menu bar')
 }
 
 /**
