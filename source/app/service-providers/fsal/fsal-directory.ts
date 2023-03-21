@@ -174,6 +174,8 @@ export async function parse (
     } else if (child === '.git' && isDir(absolutePath)) {
       dir.isGitRepository = true
       continue
+    } else if (child.startsWith('.')) {
+      continue // Ignore hidden files
     }
 
     if (isDir(absolutePath) && !ignoreDir(absolutePath)) {
