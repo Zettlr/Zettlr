@@ -169,6 +169,10 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       return false // There's a document being dragged, let the MainEditor capture the event
     }
 
+    if (dataTransfer.files.length === 0 || zettlrFile === '') {
+      return false
+    }
+
     const pos = view.posAtCoords({ x: event.clientX, y: event.clientY })
     if (pos === null) {
       return false
