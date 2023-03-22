@@ -152,14 +152,9 @@ ipcRenderer.on('citeproc-database-updated', (event, dbPath: string) => {
   }
 
   const library = getBibliographyForDescriptor(descriptor)
-
-  const usesMainLib = library === CITEPROC_MAIN_DB
-
-  if (dbPath === library || (usesMainLib && dbPath === CITEPROC_MAIN_DB)) {
-    updateCitationKeys(library).catch(e => {
-      console.error('Could not update citation keys', e)
-    })
-  }
+  updateCitationKeys(library).catch(e => {
+    console.error('Could not update citation keys', e)
+  })
 })
 
 ipcRenderer.on('shortcut', (event, command) => {
@@ -263,6 +258,20 @@ onMounted(() => {
 
   // Lastly, run the initial load cycle
   loadActiveFile().catch(err => console.error(err))
+
+  // Initial descriptor load
+  if (activeFile.value == null) {
+    activeFileDescriptor.value = undefined
+  } else {
+    ipcRenderer.invoke('application', {
+      command: 'get-descriptor',
+      payload: activeFile.value.path
+    })
+      .then(descriptor => {
+        activeFileDescriptor.value = descriptor
+      })
+      .catch(err => console.error(err))
+  }
 
   // Supply the configuration object once initially
   mdEditor.setOptions(editorConfiguration.value)
@@ -541,10 +550,15 @@ async function updateCitationKeys (library: string): Promise<void> {
     payload: { database: library }
   }))
     .map((item: any) => {
-      // Get a rudimentary author list
+      // Get a rudimentary author list. Precedence are authors, then editors.
+      // Fallback: Container title.
       let authors = ''
-      if (item.author !== undefined) {
-        authors = item.author.map((author: any) => {
+      const authorSrc = item.author !== undefined
+        ? item.author
+        : item.editor !== undefined ? item.editor : []
+
+      if (authorSrc.length > 0) {
+        authors = authorSrc.map((author: any) => {
           if (author.family !== undefined) {
             return author.family
           } else if (author.literal !== undefined) {
@@ -553,6 +567,8 @@ async function updateCitationKeys (library: string): Promise<void> {
             return undefined
           }
         }).filter((elem: any) => elem !== undefined).join(', ')
+      } else if (item['container-title'] !== undefined) {
+        authors = item['container-title']
       }
 
       let title = ''
@@ -562,10 +578,20 @@ async function updateCitationKeys (library: string): Promise<void> {
         title = item['container-title']
       }
 
+      let date = ''
+      if (item.issued !== undefined) {
+        if ('date-parts' in item.issued) {
+          const year = item.issued['date-parts'][0][0]
+          date = ` (${year})`
+        } else if ('literal' in item.issued) {
+          date = ` (${item.issued.literal})`
+        }
+      }
+
       // This is just a very crude representation of the citations.
       return {
         citekey: item.id,
-        displayText: `${item.id}: ${authors} - ${title}`
+        displayText: `${authors}${date} - ${title}`
       }
     })
 

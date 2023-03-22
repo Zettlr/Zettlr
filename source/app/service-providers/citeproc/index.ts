@@ -128,6 +128,7 @@ export default class CiteprocProvider extends ProviderContract {
       const db = this.databases.get(affectedPath)
 
       if (db === undefined && eventName === 'change') {
+        this._logger.info(`[Citeproc] Retrying to load ${affectedPath} ...`)
         // This indicates that the library had been loaded, but threw an error
         // on reload (happens frequently, e.g., with Zotero). In that case,
         // simply load it.
@@ -136,6 +137,7 @@ export default class CiteprocProvider extends ProviderContract {
       } else if (db === undefined) {
         this._logger.warning(`[Citeproc] Received an event ${eventName} for path ${affectedPath}: Could not handle.`)
       } else if (eventName === 'change') {
+        this._logger.info(`[Citeproc] Changes detected for ${affectedPath}. Reloading ...`)
         // NOTE: We have to ask the engine to not unwatch the database.
         // Sometimes, errors may be, and if we unwatch the database on change
         // events, this would lead any error to no more changes being detected.
@@ -354,6 +356,7 @@ export default class CiteprocProvider extends ProviderContract {
     if (watch) {
       this._watcher.add(databasePath)
     }
+    broadcastIpcMessage('citeproc-database-updated', databasePath)
   }
 
   /**
@@ -370,6 +373,7 @@ export default class CiteprocProvider extends ProviderContract {
       }
 
       this.databases.delete(dbPath)
+      broadcastIpcMessage('citeproc-database-updated', dbPath)
     }
   }
 
@@ -389,7 +393,7 @@ export default class CiteprocProvider extends ProviderContract {
       throw new Error(`Could not select database ${dbPath}: Not loaded.`)
     }
 
-    this._logger.info(`[Citeproc Provider] Selecting database ${dbPath}...`)
+    this._logger.verbose(`[Citeproc Provider] Selecting database ${dbPath}...`)
 
     this._items = database.cslData
 
