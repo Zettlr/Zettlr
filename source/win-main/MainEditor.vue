@@ -93,8 +93,6 @@
 
 import MarkdownEditor from '@common/modules/markdown-editor'
 import objectToArray from '@common/util/object-to-array'
-// import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
-// import YAML from 'yaml'
 
 import { ref, computed, onMounted, watch, toRef } from 'vue'
 import { useStore } from 'vuex'
@@ -381,13 +379,7 @@ watch(toRef(props, 'distractionFree'), (newValue) => {
     mdEditor.distractionFree = props.distractionFree
   }
 })
-watch(toRef(props.editorCommands, 'addKeywords'), () => {
-  if (lastLeafId.value !== props.leafId) {
-    return
-  }
-  const keywords: string[] = props.editorCommands.data
-  addKeywordsToFile(keywords)
-})
+
 watch(toRef(props.editorCommands, 'executeCommand'), () => {
   if (lastLeafId.value !== props.leafId) {
     return
@@ -734,42 +726,6 @@ function editorMouseup (event: MouseEvent) {
   anchor.value = null
   // Also, make sure the editor is focused.
   mdEditor.focus()
-}
-
-// TODO
-// eslint-disable-next-line no-unused-vars
-function addKeywordsToFile (keywords: string[]) {
-  // if (mdEditor === null || activeFile.value == null) {
-  //   return
-  // }
-
-  // // Split the contents of the editor into frontmatter and contents, then
-  // // add the keywords to the frontmatter, slice everything back together
-  // // and then overwrite the editor's contents.
-  // let { frontmatter, content } = extractYamlFrontmatter(mdEditor.value)
-
-  // let postFrontmatter = '\n'
-  // if (frontmatter !== null) {
-  //   if ('keywords' in frontmatter) {
-  //     frontmatter.keywords = frontmatter.keywords.concat(keywords)
-  //   } else if ('tags' in frontmatter) {
-  //     frontmatter.tags = frontmatter.tags.concat(keywords)
-  //   } else {
-  //     frontmatter.keywords = keywords
-  //   }
-  // } else {
-  //   // Frontmatter was null, so create one
-  //   frontmatter = {}
-  //   frontmatter.keywords = keywords
-  //   postFrontmatter += '\n' // Make sure if we're now ADDING a frontmatter to space it from the content
-  // }
-
-  // // Glue it back together and set it as content
-  // const activeDocument = openDocuments.find(doc => activeFile.value?.path === doc.path)
-  // if (activeDocument === undefined) {
-  //   return
-  // }
-  // activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
 }
 
 function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
