@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-20 02:36+0000\n"
+"POT-Creation-Date: 2023-03-23 02:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: source/app/service-providers/citeproc/index.ts:239
-#: source/app/service-providers/citeproc/index.ts:437
+#: source/app/service-providers/citeproc/index.ts:241
+#: source/app/service-providers/citeproc/index.ts:441
 msgid "The citation database could not be loaded"
 msgstr "Citations databasen kunne ikke indlæses"
 
-#: source/app/service-providers/citeproc/index.ts:425
+#: source/app/service-providers/citeproc/index.ts:429
 msgid "Changes to the library file detected. Reloading …"
 msgstr "Der er registreret ændringer i biblioteksfilen. Genindlæser ..."
 
