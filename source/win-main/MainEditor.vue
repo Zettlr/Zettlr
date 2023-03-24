@@ -15,7 +15,7 @@
     v-on:dragleave="handleDragLeave($event)"
     v-on:drop="handleDrop($event, 'editor')"
   >
-    <div v-bind:id="editorId">
+    <div v-bind:id="`cm-text-${props.leafId}`">
       <!-- This element will be replaced with Codemirror's wrapper element on mount -->
     </div>
 
@@ -206,7 +206,7 @@ onMounted(() => {
   // As soon as the component is mounted, initiate the editor
   mdEditor = new MarkdownEditor(undefined, props.leafId, documentAuthorityIPCAPI)
 
-  const wrapper = document.getElementById(editorId.value)
+  const wrapper = document.getElementById(`cm-text-${props.leafId}`)
 
   if (wrapper !== null) {
     wrapper.replaceWith(mdEditor.dom)
@@ -283,7 +283,6 @@ const documentTabDrag = ref(false)
 const documentTabDragWhere = ref<undefined|string>(undefined)
 
 // COMPUTED PROPERTIES
-const editorId = computed(() => `cm-text-${props.leafId}`)
 const useH1 = computed<boolean>(() => store.state.config.fileNameDisplay.includes('heading'))
 const useTitle = computed<boolean>(() => store.state.config.fileNameDisplay.includes('title'))
 const filenameOnly = computed<boolean>(() => store.state.config['zkn.linkFilenameOnly'])
