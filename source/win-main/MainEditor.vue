@@ -162,11 +162,7 @@ ipcRenderer.on('shortcut', (event, command) => {
     // Main is telling us to save, so tell main to save the current file.
     ipcRenderer.invoke('documents-provider', {
       command: 'save-file',
-      payload: {
-        windowId: props.windowId,
-        leafId: props.leafId,
-        path: file.path
-      }
+      payload: { path: file.path }
     })
       .then(result => {
         if (result !== true) {
