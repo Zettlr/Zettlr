@@ -7,10 +7,6 @@
       'code-file': !isMarkdown,
       'fullscreen': distractionFree
     }"
-    v-on:wheel="onEditorScroll($event)"
-    v-on:mousedown="editorMousedown($event)"
-    v-on:mouseup="editorMouseup($event)"
-    v-on:mousemove="editorMousemove($event)"
     v-on:dragenter="handleDragEnter($event, 'editor')"
     v-on:dragleave="handleDragLeave($event)"
     v-on:drop="handleDrop($event, 'editor')"
@@ -258,8 +254,6 @@ onMounted(() => {
 
   // Lastly, run the initial load cycle
   loadActiveFile().catch(err => console.error(err))
-
-  // Initial descriptor load
   if (activeFile.value == null) {
     activeFileDescriptor.value = undefined
   } else {
@@ -280,7 +274,6 @@ onMounted(() => {
 
 // DATA SETUP
 const showSearch = ref(false)
-const anchor = ref<number|null>(null)
 const documentTabDrag = ref(false)
 const documentTabDragWhere = ref<undefined|string>(undefined)
 
@@ -465,8 +458,7 @@ watch(snippets, (newValue) => {
 // METHODS
 async function loadActiveFile () {
   if (mdEditor === null) {
-    console.error('Received a file update but the editor was not yet initiated!')
-    return
+    throw new Error('Received a file update but the editor was not yet initiated!')
   }
 
   if (activeFile.value == null) {
@@ -654,79 +646,6 @@ function maybeHighlightSearchResults () {
     }
   }
   mdEditor.highlightRanges(rangesToHighlight)
-}
-
-/**
- * Scrolls the editor according to the value if the user scrolls left of the
- * .CodeMirror-scroll element
- *
- * @param   {WheelEvent}  event  The mousewheel event
- */
-function onEditorScroll (event: WheelEvent) {
-  if (event.target !== editor.value) {
-    return // Only handle if the event's target is the editor itself
-  }
-
-  const scroller = mdEditor?.instance.dom.querySelector('.cm-scroller')
-
-  if (scroller != null) {
-    scroller.scrollTop += event.deltaY
-  }
-}
-
-/**
- * Triggers when the user presses any mouse button
- *
- * @param   {MouseEvent}  event  The mouse event
- */
-function editorMousedown (event: MouseEvent) {
-  // start selecting lines only if we are on the left margin and the left mouse button is pressed
-  if (event.target !== editor.value || event.button !== 0 || mdEditor === null) {
-    return
-  }
-
-  // set the start point of the selection to be where the mouse was clicked
-  anchor.value = mdEditor.instance.posAtCoords({ x: event.pageX, y: event.pageY })
-  if (anchor.value === null) {
-    return
-  }
-
-  mdEditor.instance.dispatch({ selection: EditorSelection.cursor(anchor.value) })
-}
-
-function editorMousemove (event: MouseEvent) {
-  if (anchor.value === null || mdEditor === null) {
-    return
-  }
-
-  // get the point where the mouse has moved
-  const addPoint = mdEditor.instance.posAtCoords({ x: event.pageX, y: event.pageY })
-  if (addPoint === null) {
-    return
-  }
-
-  // use the original start point where the mouse first was clicked
-  // and change the end point to where the mouse has moved so far
-  mdEditor.instance.dispatch({ selection: EditorSelection.range(anchor.value, addPoint) })
-}
-
-/**
- * Triggers when the user releases any mouse button
- *
- * @param   {MouseEvent}  event  The mouse event
- */
-function editorMouseup (event: MouseEvent) {
-  if (anchor.value === null || mdEditor === null) {
-    // This event gets also fired when someone, e.g., wants to edit an image
-    // caption, so we must explicitly check if we are currently in a left-
-    // side selection event, and if we aren't, don't do anything.
-    return
-  }
-
-  // when the mouse is released, set anchor to undefined to stop adding lines
-  anchor.value = null
-  // Also, make sure the editor is focused.
-  mdEditor.focus()
 }
 
 function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
