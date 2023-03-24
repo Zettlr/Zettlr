@@ -208,9 +208,11 @@ onMounted(() => {
 
   const wrapper = document.getElementById(`cm-text-${props.leafId}`)
 
-  if (wrapper !== null) {
-    wrapper.replaceWith(mdEditor.dom)
+  if (wrapper === null) {
+    throw new Error('Could not mount editor: Target wrapper not found!')
   }
+
+  wrapper.replaceWith(mdEditor.dom)
 
   // Update the document info on corresponding events
   mdEditor.on('change', () => {
