@@ -143,12 +143,7 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       .then(() => {
         // After all promises have been resolved or rejected, the
         // insertions array will contain everything we have to paste.
-        const transaction = view.state.changeByRange(r => {
-          return {
-            range: r,
-            changes: { from: r.from, to: r.to, insert: insertions.join('\n') }
-          }
-        })
+        const transaction = view.state.replaceSelection(insertions.join('\n'))
         view.dispatch(transaction)
       })
       .catch(err => console.error(err))
