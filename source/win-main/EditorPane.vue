@@ -11,18 +11,20 @@
       v-bind:leaf-id="leafId"
       v-bind:window-id="windowId"
     ></DocumentTabs>
-    <MainEditor
-      v-if="activeFile !== null"
-      ref="editor"
-      v-bind:distraction-free="distractionFree"
-      v-bind:leaf-id="leafId"
-      v-bind:window-id="windowId"
-      v-bind:editor-commands="editorCommands"
-      v-on:global-search="$emit('globalSearch', $event)"
-    ></MainEditor>
-    <div v-else class="empty-pane"></div>
+    <template v-for="file in openFiles" v-bind:key="file.path">
+      <MainEditor
+        v-show="activeFile?.path === file.path"
+        v-bind:file="file"
+        v-bind:distraction-free="distractionFree"
+        v-bind:leaf-id="leafId"
+        v-bind:window-id="windowId"
+        v-bind:editor-commands="commandsForFile(file)"
+        v-on:global-search="$emit('globalSearch', $event)"
+      ></MainEditor>
+    </template>
+    <!-- Show a placeholder if there are no open files -->
+    <div v-if="openFiles.length === 0" class="empty-pane"></div>
   </div>
-  <!-- A single editor pane can either be a pane itself OR a MultiSplitView -->
 </template>
 
 <script lang="ts">
@@ -31,6 +33,24 @@ import { EditorCommands } from '@dts/renderer/editor'
 import { defineComponent } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'
+
+/**
+ * This variable will be passed to non-active editors. This will prevent them
+ * from accidentally performing some unintended action in the background. Only
+ * the active file will receive the "correct" editorCommands that are reactive
+ * and will tell the file to perform an action.
+ *
+ * @var {EditorCommands}
+ */
+const unreactiveCommands: EditorCommands = {
+  jumpToLine: false,
+  readabilityMode: false,
+  moveSection: false,
+  addKeywords: false,
+  replaceSelection: false,
+  executeCommand: false,
+  data: undefined
+}
 
 export default defineComponent({
   name: 'EditorPane',
@@ -80,6 +100,18 @@ export default defineComponent({
     },
     activeFile (): OpenDocument|null {
       return this.node?.activeFile ?? null
+    },
+    openFiles (): OpenDocument[] {
+      return this.node?.openFiles ?? []
+    }
+  },
+  methods: {
+    commandsForFile (file: OpenDocument): EditorCommands {
+      if (file.path === this.activeFile?.path) {
+        return this.editorCommands
+      } else {
+        return unreactiveCommands
+      }
     }
   }
 })

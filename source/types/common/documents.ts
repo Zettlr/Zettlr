@@ -88,7 +88,7 @@ export enum DP_EVENTS {
   FILES_SORTED = 'files-sorted',
   // File status (pinned, modified, ...)
   CHANGE_FILE_STATUS = 'file-status-changed',
-  // FILE_SAVED = 'file-saved',
+  FILE_SAVED = 'file-saved',
   ACTIVE_FILE = 'active-file-changed',
   // Leafs (editor panes)
   NEW_LEAF = 'leaf-created',

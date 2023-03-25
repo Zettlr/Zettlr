@@ -29,7 +29,6 @@ import EventEmitter from 'events'
 // CodeMirror imports
 import { EditorView } from '@codemirror/view'
 import {
-  EditorSelection,
   EditorState,
   Extension,
   SelectionRange
@@ -88,11 +87,9 @@ import { highlightRangesEffect } from './plugins/highlight-ranges'
 
 import safeAssign from '@common/util/safe-assign'
 import countWords from '@common/util/count-words'
-import { DocumentType, DP_EVENTS } from '@dts/common/documents'
+import { DocumentType } from '@dts/common/documents'
 import { TagRecord } from '@providers/tags'
 import { PullUpdateCallback, PushUpdateCallback, reloadStateEffect } from './plugins/remote-doc'
-
-const ipcRenderer = window.ipc
 
 export interface DocumentWrapper {
   path: string
@@ -147,37 +144,50 @@ export interface DocumentAuthorityAPI {
 }
 
 export default class MarkdownEditor extends EventEmitter {
+  /**
+   * The underlying CodeMirror view
+   *
+   * @var {EditorView}
+   */
   private readonly _instance: EditorView
+  /**
+   * The editor ID assigned to this editor. This is a concatenation of the leaf
+   * ID in which this editor resides plus the absolute path to the represented
+   * file.
+   *
+   * @var {string}
+   */
   private readonly editorId: string
+  /**
+   * The absolute path to the document represented by this MainEditor instance.
+   *
+   * @var {string}
+   */
+  private readonly representedDocument: string
+  /**
+   * The API method used to synchronize the document with an authority.
+   *
+   * @var {DocumentAuthorityAPI}
+   */
   private readonly authority: DocumentAuthorityAPI
+  /**
+   * The full editor configuration
+   *
+   * @var {EditorConfiguration}
+   */
   private config: EditorConfiguration
 
+  /**
+   * The database cache for the various autocompletes.
+   *
+   * @var {any}
+   */
   private readonly databaseCache: {
     tags: TagRecord[]
     citations: Array<{ citekey: string, displayText: string }>
     snippets: Array<{ name: string, content: string }>
     files: Array<{ filename: string, displayName: string, id: string }>
   }
-
-  /**
-   * Holds all documents that are still open as a cache so the sometimes quite
-   * large initial configuration doesn't always have to be re-added
-   *
-   * @var {Map<string, EditorState>}
-   */
-  private readonly stateCache: Map<string, EditorState>
-
-  // "What is this?", you may ask. This is a cache to remember anything important
-  // that has to be set for a document that is open but that is not saved inside
-  // the state in the main process. The scroll position is obvious (has nothing
-  // to do with the state), but the selection will also not be stored in the main
-  // process. This might look cool because you could literally remote-control
-  // other editor panes, but we don't really need this.
-  // Still TODO: Need to map the selection everytime through updates!
-  private readonly documentViewCache: Map<string, {
-    scrollPosition: number
-    selection: any
-  }>
 
   /**
    * Creates a new MarkdownEditor instance attached to the anchorElement
@@ -190,65 +200,42 @@ export default class MarkdownEditor extends EventEmitter {
   constructor (
     anchorElement: Element|DocumentFragment|undefined,
     editorId: string,
+    representedDocument: string,
     authorityAPI: DocumentAuthorityAPI
   ) {
     super() // Set up the event emitter
 
     this.authority = authorityAPI
-    this.editorId = editorId
+    this.representedDocument = representedDocument
+    this.editorId = `${editorId}-${representedDocument}`
 
-    // Since the editor state needs to be rebuilt whenever the document changes,
-    // we have to persist the databases (and feed them to the state) everytime
-    // we have to rebuild it (during swapDoc).
+    // Since the editor state needs to be rebuilt from scratch sometimes, we
+    // cache the autocomplete databases so that we don't have to re-fetch them
+    // everytime.
     this.databaseCache = { tags: [], citations: [], snippets: [], files: [] }
-    this.stateCache = new Map()
 
-    // This remembers the last seen scroll positions per document and restores them
-    // if possible.
-    this.documentViewCache = new Map()
-
-    // The following fields are used to cache certain values, especially since
-    // they aren't retained during document swaps
+    // Same goes for the config
     this.config = getDefaultConfig()
 
-    // Every CM6 editor consists of two parts: First, a view that can display the
-    // content (the equivalent of the former editor), and second a state, which
-    // basically binds a set of extensions to a document (something that Marijn
-    // has extracted from the main editor).
-    // Thus, we can basically immediately start the editor, but leave the state
-    // undefined. swapDoc() can then be achieved by calling setState.
+    // Create the editor ...
     this._instance = new EditorView({
       state: undefined,
       parent: anchorElement
     })
 
-    // Keep the scroll position for the current document always updated.
-    this._instance.scrollDOM.addEventListener('scroll', (event) => {
-      const documentPath = this._instance.state.field(configField, false)?.metadata.path
-      if (documentPath !== undefined) {
-        const cache = this.documentViewCache.get(documentPath)
-        if (cache !== undefined) {
-          const pos = this._instance.scrollDOM.scrollTop
-          cache.scrollPosition = pos
-          this.documentViewCache.set(documentPath, cache)
-        }
-      }
-    }, true)
+    // ... and immediately begin loading the document
+    this.loadDocument().catch(err => console.error(err))
+  }
 
-    // Listen to file close events so that we can keep the document cache clean
-    ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context?: any }) => {
-      const { event, context } = payload
-      if (
-        event === DP_EVENTS.CLOSE_FILE &&
-        context !== undefined &&
-        context.filePath !== undefined &&
-        this.stateCache.has(context.filePath)
-      ) {
-        this.stateCache.delete(context.filePath)
-      }
-    })
-  } // END CONSTRUCTOR
-
+  /**
+   * Returns the correct set of extensions for the given document
+   *
+   * @param   {string}        filePath      The file path
+   * @param   {DocumentType}  type          The type of file we're dealing with
+   * @param   {number}        startVersion  The initial synchronization number
+   *
+   * @return  {Extension[]}                 The extension set
+   */
   private _getExtensions (filePath: string, type: DocumentType, startVersion: number): Extension[] {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const editorInstance = this
@@ -292,15 +279,6 @@ export default class MarkdownEditor extends EventEmitter {
               return
             }
           }
-        }
-
-        // Update the selection in our cache
-        const cache = this.documentViewCache.get(filePath)
-        if (cache !== undefined) {
-          this.documentViewCache.set(filePath, {
-            scrollPosition: cache.scrollPosition,
-            selection: update.state.selection.toJSON()
-          })
         }
       },
       domEventsListeners: {
@@ -358,46 +336,28 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
-   * Swaps the current CodeMirror Document with a new one.
-   *
-   * @param  {string}   documentPath  The document to switch to
-   * @param  {boolean}  force         Optional. If not given or not true, prevents
-   *                                  reloading the same document again.
+   * Loads the document from main and sets up everything required to display and
+   * edit it.
    */
-  async swapDoc (documentPath: string, force: boolean = false): Promise<void> {
-    const { content, type, startVersion } = await this.authority.fetchDoc(documentPath)
+  async loadDocument (): Promise<void> {
+    const { content, type, startVersion } = await this.authority.fetchDoc(this.representedDocument)
     const currentDoc = this._instance.state.doc.toString()
-    const isSameDoc = this.config.metadata.path === documentPath && content === currentDoc
+    const isSameDoc = content === currentDoc
 
     // Do not reload the document unless explicitly specified. The reason is
     // that sometimes we do need to programmatically reload the document, but in
     // 99% of the cases, this only leads to unnecessary flickering.
-    if (isSameDoc && !force) {
+    if (isSameDoc) {
       return
     }
 
-    // Before exchanging anything, cache the current state and retrieve the view
-    // cache so that it is not overridden by the initial state update
-    this.stateCache.set(this.config.metadata.path, this._instance.state)
-    const cache = this.documentViewCache.get(documentPath)
-    const stateToBeRestored = this.stateCache.get(documentPath)
+    // The documents contents have changed, so we must recreate the state
+    const state = EditorState.create({
+      doc: content,
+      extensions: this._getExtensions(this.representedDocument, type, startVersion)
+    })
 
-    if (content !== currentDoc) {
-      // The documents contents have changed, so we must recreate a new state
-      this.config.metadata.path = documentPath
-
-      const state = EditorState.create({
-        doc: content,
-        extensions: this._getExtensions(documentPath, type, startVersion)
-      })
-
-      this._instance.setState(state)
-      // Re-cache the now correct new state
-      this.stateCache.set(this.config.metadata.path, this._instance.state)
-    } else if (stateToBeRestored !== undefined) {
-      // We already have a proper state that we can restore
-      this._instance.setState(stateToBeRestored)
-    }
+    this._instance.setState(state)
 
     // Provide the cached databases to the state (can be overridden by the
     // caller afterwards by calling setCompletionDatabase)
@@ -408,26 +368,11 @@ export default class MarkdownEditor extends EventEmitter {
 
     // Determine if this is a code doc and add the corresponding class to the
     // outer content DOM so that we can style it.
-    if (type === DocumentType.Markdown) {
-      this._instance.contentDOM.classList.remove('code')
-    } else {
+    if (type !== DocumentType.Markdown) {
       this._instance.contentDOM.classList.add('code')
     }
 
     this._instance.focus()
-
-    // Restore the old cached positions if applicable
-    if (cache !== undefined) {
-      this._instance.scrollDOM.scrollTop = cache.scrollPosition
-      this._instance.dispatch({ selection: EditorSelection.fromJSON(cache.selection) })
-    } else {
-      this._instance.scrollDOM.scrollTop = 0 // Scroll to top
-      // Selection will already be default
-      this.documentViewCache.set(documentPath, {
-        scrollPosition: 0,
-        selection: this._instance.state.selection.toJSON()
-      })
-    }
   }
 
   /**
@@ -435,14 +380,8 @@ export default class MarkdownEditor extends EventEmitter {
    * a setting has changed that requires extensions to be fully reloaded.
    */
   async reload (): Promise<void> {
-    await this.swapDoc(this.config.metadata.path, true)
-  }
-
-  /**
-   * Empties out the editor and replaces it with an empty state.
-   */
-  public emptyEditor (): void {
-    this._instance.setState(EditorState.create())
+    // TODO: Only reload the actual contents
+    await this.loadDocument()
   }
 
   /**
@@ -754,14 +693,6 @@ export default class MarkdownEditor extends EventEmitter {
     })
   }
 
-  get darkMode (): boolean {
-    return this.config.darkMode
-  }
-
-  set darkMode (newValue: boolean) {
-    this.setOptions({ darkMode: newValue })
-  }
-
   /**
    * Determines whether the editor is in distraction free mode
    *
@@ -850,5 +781,14 @@ export default class MarkdownEditor extends EventEmitter {
    */
   get instance (): EditorView {
     return this._instance
+  }
+
+  /**
+   * Retrieves the document represented by this editor instance.
+   *
+   * @return  {string}  the absolute path to the document.
+   */
+  get documentPath (): string {
+    return this.representedDocument
   }
 }

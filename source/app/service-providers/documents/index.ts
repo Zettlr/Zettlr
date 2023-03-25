@@ -1341,6 +1341,7 @@ export default class DocumentManager extends ProviderContract {
     doc.lastSavedVersion = doc.currentVersion
     this._app.log.info(`[DocumentManager] File ${filePath} saved.`)
     this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
+    this.broadcastEvent(DP_EVENTS.FILE_SAVED, { filePath })
 
     return true
   }
