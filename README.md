@@ -69,7 +69,7 @@ Thanks to our community, we can also offer you a variety of other installation o
 
 * [Chocolatey (Windows)](https://community.chocolatey.org/packages/zettlr/)
 * [Homebrew (macOS)](https://formulae.brew.sh/cask/zettlr)
-* [AUR (Arch Linux)](https://wiki.archlinux.org/title/Zettlr)
+* [Arch Linux](https://wiki.archlinux.org/title/Zettlr)
 * [FlatPack (Linux)](https://flathub.org/apps/details/com.zettlr.Zettlr)
 
 All other [platforms that Electron supports](https://www.electronjs.org/docs/latest/development/build-instructions-gn#platform-prerequisites) are supported as well, but you will need to build the app yourself for this to work.
