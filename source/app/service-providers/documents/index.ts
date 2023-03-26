@@ -1306,19 +1306,27 @@ export default class DocumentManager extends ProviderContract {
       return false
     }
 
-    this._ignoreChanges.push(filePath)
+    // If saveFile was called from a timeout, clearTimeout does nothing but the
+    // timeout is reset to undefined. However, implementing this check here
+    // ensures that we can programmatically call saveFile anywhere else and
+    // still have everything work as intended.
+    if (doc.saveTimeout !== undefined) {
+      clearTimeout(doc.saveTimeout)
+      doc.saveTimeout = undefined
+    }
+
+    // NOTE: Remember that we MUST under any circumstances adapt the document
+    // descriptor BEFORE attempting to save. The reason is that if we don't do
+    // that, we can run into the following race condition:
+    // 1. User changes the document
+    // 2. The save commences
+    // 3. The user adds more changes
+    // 4. The save finishes and undos the modifications
+    const content = doc.document.toString()
+    doc.lastSavedVersion = doc.currentVersion
 
     if (doc.descriptor.type === 'file') {
-      await FSALFile.save(
-        doc.descriptor,
-        doc.document.toString(),
-        this._app.fsal.getMarkdownFileParser(),
-        null
-      )
-      await this.synchronizeDatabases() // The file may have gotten a library
-
       // In case of an MD File increase the word or char count
-      const content = doc.document.toString()
       const newWordCount = countWords(content, false)
       const newCharCount = countWords(content, true)
 
@@ -1331,20 +1339,22 @@ export default class DocumentManager extends ProviderContract {
 
       doc.lastSavedWordCount = newWordCount
       doc.lastSavedCharCount = newCharCount
+    }
+
+    this._ignoreChanges.push(filePath)
+
+    if (doc.descriptor.type === 'file') {
+      await FSALFile.save(
+        doc.descriptor,
+        content,
+        this._app.fsal.getMarkdownFileParser(),
+        null
+      )
+      await this.synchronizeDatabases() // The file may have gotten a library
     } else {
-      await FSALCodeFile.save(doc.descriptor, doc.document.toString(), null)
+      await FSALCodeFile.save(doc.descriptor, content, null)
     }
 
-    // If saveFile was called from a timeout, clearTimeout does nothing but the
-    // timeout is reset to undefined. However, implementing this check here
-    // ensures that we can programmatically call saveFile anywhere else and
-    // still have everything work as intended.
-    if (doc.saveTimeout !== undefined) {
-      clearTimeout(doc.saveTimeout)
-      doc.saveTimeout = undefined
-    }
-
-    doc.lastSavedVersion = doc.currentVersion
     this._app.log.info(`[DocumentManager] File ${filePath} saved.`)
     this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
 
