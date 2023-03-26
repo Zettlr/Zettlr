@@ -592,9 +592,12 @@ export default class DocumentManager extends ProviderContract {
       return false
     }
 
-    if (clientVersion < doc.minimumVersion) {
-      // TODO: This means that the client is completely out of sync and needs to
-      // re-fetch the whole document.
+    if (clientVersion < doc.minimumVersion || clientVersion > doc.currentVersion) {
+      // The client is completely out of sync and has to reload the document.
+      // If this happens because clientVersion < doc.minimumVersion, this means
+      // that the lost connection somehow. If it happens because clientVersion
+      // > doc.currentVersion, it means that we had to roll over the version in
+      // pushUpdates below.
       return false
     } else if (clientVersion < doc.currentVersion) {
       return doc.updates.slice(clientVersion - doc.minimumVersion)
@@ -612,6 +615,12 @@ export default class DocumentManager extends ProviderContract {
     if (clientVersion !== doc.currentVersion) {
       return false
     }
+
+    // Before applying any updates, we have to clear any potential timeout so
+    // that it does not interfere with us updating the document. Otherwise, this
+    // can lead to a faulty state where the provider cannot save the file
+    // anymore.
+    clearTimeout(doc.saveTimeout)
 
     for (const update of clientUpdates) {
       const changes = ChangeSet.fromJSON(update.changes)
@@ -639,10 +648,9 @@ export default class DocumentManager extends ProviderContract {
     // Drop all updates that exceed the amount of updates we allow.
     while (doc.updates.length > MAX_VERSION_HISTORY) {
       doc.updates.shift()
-      doc.minimumVersion++
+      doc.minimumVersion += 1
     }
 
-    clearTimeout(doc.saveTimeout)
     const autoSave = this._app.config.get().editor.autoSave
 
     // No autosave
@@ -650,12 +658,10 @@ export default class DocumentManager extends ProviderContract {
       return true
     }
 
-    const timeout = autoSave === 'delayed' ? DELAYED_SAVE_TIMEOUT : IMMEDIATE_SAVE_TIMEOUT
-
     doc.saveTimeout = setTimeout(() => {
       this.saveFile(doc.filePath)
         .catch(err => this._app.log.error(`[Document Provider] Could not save file ${doc.filePath}: ${err.message as string}`, err))
-    }, timeout)
+    }, autoSave === 'delayed' ? DELAYED_SAVE_TIMEOUT : IMMEDIATE_SAVE_TIMEOUT)
 
     return true
   }
