@@ -193,6 +193,9 @@ there.
   and an API key to unlock premium features
 - **New Feature**: You can now activate a statusbar that shows some context-
   specific information for each editor pane you have open
+- **New Feature**: Changing a certain set of configuration options will make
+  Zettlr ask you whether you wish to restart the app for the changes to take
+  effect
 - Replaced the old Markdown-to-HTML and HTML-to-Markdown converter with more up-
   to-date modules. This should not change how pasting from HTML or copying as
   HTML work, but it could.
