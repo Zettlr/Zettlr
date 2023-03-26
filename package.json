@@ -145,7 +145,7 @@
     "eslint-config-standard": "^17.0.0",
     "eslint-config-standard-with-typescript": "26.x.x",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.4.0",
+    "eslint-plugin-n": "^15.6.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.7.0",
     "jsdom": "^20.0.2",
