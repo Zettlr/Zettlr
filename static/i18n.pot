@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.0-beta.2\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-26 02:32+0000\n"
+"POT-Creation-Date: 2023-03-27 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,6 +193,7 @@ msgstr ""
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/config/index.ts:433
 msgid "Confirm"
 msgstr ""
 
@@ -376,6 +377,18 @@ msgstr ""
 #: source/app/service-providers/commands/request-move.ts:71
 #, javascript-format
 msgid "The file/directory %s already exists in target."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:425
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:428
+msgid "Restart now"
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:429
+msgid "Restart later"
 msgstr ""
 
 #: source/app/service-providers/config/config-validation.ts:280
@@ -2059,7 +2072,7 @@ msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
 
 #: source/win-preferences/schema/general.ts:23
-msgid "Application language (<strong>Restart required!</strong>)"
+msgid "Application language"
 msgstr ""
 
 #: source/win-preferences/schema/general.ts:36

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-23 02:28+0000\n"
+"POT-Creation-Date: 2023-03-27 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,6 +194,7 @@ msgstr "无法打开工作区 %s."
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/config/index.ts:433
 msgid "Confirm"
 msgstr "确定"
 
@@ -379,6 +380,19 @@ msgstr "无法移动目录或文档"
 #, javascript-format
 msgid "The file/directory %s already exists in target."
 msgstr "文件/目录％s已存在。"
+
+#: source/app/service-providers/config/index.ts:425
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:428
+#, fuzzy
+msgid "Restart now"
+msgstr "刚才"
+
+#: source/app/service-providers/config/index.ts:429
+msgid "Restart later"
+msgstr ""
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -2105,8 +2119,8 @@ msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr "将自动创建的文件放入此目录（必须在Zettlr中已经加载）"
 
 #: source/win-preferences/schema/general.ts:23
-msgid "Application language (<strong>Restart required!</strong>)"
-msgstr "应用语言（<strong>需要重启！</strong>）"
+msgid "Application language"
+msgstr ""
 
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"
@@ -2471,6 +2485,9 @@ msgstr "用户字典。点击移除单词。"
 #: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "字典词条"
+
+#~ msgid "Application language (<strong>Restart required!</strong>)"
+#~ msgstr "应用语言（<strong>需要重启！</strong>）"
 
 #~ msgid "Find…"
 #~ msgstr "查找…"

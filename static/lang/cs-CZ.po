@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-23 02:28+0000\n"
+"POT-Creation-Date: 2023-03-27 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -199,6 +199,7 @@ msgstr ""
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/config/index.ts:433
 msgid "Confirm"
 msgstr ""
 
@@ -387,6 +388,19 @@ msgstr "Složku nebo soubor nelze přesunout."
 #, javascript-format
 msgid "The file/directory %s already exists in target."
 msgstr "Soubor nebo složka %s už existuje."
+
+#: source/app/service-providers/config/index.ts:425
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:428
+#, fuzzy
+msgid "Restart now"
+msgstr "právě teď"
+
+#: source/app/service-providers/config/index.ts:429
+msgid "Restart later"
+msgstr ""
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -2119,8 +2133,8 @@ msgstr ""
 "Automaticky vytvářené soubory ukládat do složky (musí být nahraná do Zettlr)"
 
 #: source/win-preferences/schema/general.ts:23
-msgid "Application language (<strong>Restart required!</strong>)"
-msgstr "Jazyk aplikace (<strong>Vyžaduje restart!</strong>)"
+msgid "Application language"
+msgstr ""
 
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"
@@ -2491,6 +2505,9 @@ msgstr "Uživatelský slovník. Slova odstraníte klepnutím na ně."
 #: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "Záznam ve slovníku"
+
+#~ msgid "Application language (<strong>Restart required!</strong>)"
+#~ msgstr "Jazyk aplikace (<strong>Vyžaduje restart!</strong>)"
 
 #~ msgid "Find…"
 #~ msgstr "Najít ..."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-23 02:28+0000\n"
+"POT-Creation-Date: 2023-03-27 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -206,6 +206,7 @@ msgstr "Impossible d'ouvrir l'espace de travail %s."
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/config/index.ts:433
 msgid "Confirm"
 msgstr "Confirmer"
 
@@ -395,6 +396,19 @@ msgstr "Impossible de déplacer le dossier ou le fichier"
 #, javascript-format
 msgid "The file/directory %s already exists in target."
 msgstr "Le fichier ou le dossier %s existe déjà."
+
+#: source/app/service-providers/config/index.ts:425
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:428
+#, fuzzy
+msgid "Restart now"
+msgstr "maintenant"
+
+#: source/app/service-providers/config/index.ts:429
+msgid "Restart later"
+msgstr ""
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -2148,8 +2162,8 @@ msgstr ""
 "êtrechargé dans Zettlr"
 
 #: source/win-preferences/schema/general.ts:23
-msgid "Application language (<strong>Restart required!</strong>)"
-msgstr "Langue de l'application (<strong>Nécessite un redémarrage</strong>)"
+msgid "Application language"
+msgstr ""
 
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"
@@ -2525,6 +2539,9 @@ msgstr "Dictionnaire personnalisé. Enlever des mots avec un clic."
 #: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "Entrée du dictionnaire"
+
+#~ msgid "Application language (<strong>Restart required!</strong>)"
+#~ msgstr "Langue de l'application (<strong>Nécessite un redémarrage</strong>)"
 
 #~ msgid "Find…"
 #~ msgstr "Trouver…"

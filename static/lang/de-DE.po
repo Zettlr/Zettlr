@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-23 02:28+0000\n"
+"POT-Creation-Date: 2023-03-27 02:30+0000\n"
 "PO-Revision-Date: 2023-01-29 17:55+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -198,6 +198,7 @@ msgstr "Konnte Arbeitsverzeichnis %s nicht öffnen."
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/config/index.ts:433
 msgid "Confirm"
 msgstr "Bestätigen"
 
@@ -388,6 +389,19 @@ msgstr "Kann Datei oder Verzeichnis nicht verschieben"
 #, javascript-format
 msgid "The file/directory %s already exists in target."
 msgstr "Die Datei bzw. das Verzeichnis %s existiert am Zielort bereits."
+
+#: source/app/service-providers/config/index.ts:425
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:428
+#, fuzzy
+msgid "Restart now"
+msgstr "gerade eben"
+
+#: source/app/service-providers/config/index.ts:429
+msgid "Restart later"
+msgstr ""
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -2112,8 +2126,8 @@ msgstr ""
 "sein)"
 
 #: source/win-preferences/schema/general.ts:23
-msgid "Application language (<strong>Restart required!</strong>)"
-msgstr "Anwendungssprache (<strong>Neustart erforderlich!</strong>)"
+msgid "Application language"
+msgstr ""
 
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"
@@ -2481,6 +2495,9 @@ msgstr "Benutzerdefiniertes Wörterbuch. Entferne Wörter mittels Klick."
 #: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "Wörterbucheintrag"
+
+#~ msgid "Application language (<strong>Restart required!</strong>)"
+#~ msgstr "Anwendungssprache (<strong>Neustart erforderlich!</strong>)"
 
 #~ msgid "Find…"
 #~ msgstr "Finden…"
