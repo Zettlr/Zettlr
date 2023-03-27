@@ -32,6 +32,8 @@ import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { EditorState } from '@codemirror/state'
 import { cssLanguage } from '@codemirror/lang-css'
 import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
+import { yamlLint } from '@common/modules/markdown-editor/linters/yaml-lint'
+import { lintGutter } from '@codemirror/lint'
 
 /**
  * We have to define the CodeMirror instance outside of Vue, since the Proxy-
@@ -185,6 +187,7 @@ function maybeOpenLink (event: MouseEvent, view: EditorView) {
 }
 
 const extensions = [
+  lintGutter(),
   lineNumbers(),
   closeBrackets(),
   bracketMatching(),
@@ -204,7 +207,8 @@ const extensions = [
 
 const yamlExtensions = [
   ...extensions,
-  StreamLanguage.define(yaml)
+  StreamLanguage.define(yaml),
+  yamlLint
 ]
 
 const cssExtensions = [
