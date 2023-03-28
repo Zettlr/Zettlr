@@ -236,7 +236,7 @@ function readabilityScores (view: EditorView): DecorationSet {
     decos = decos.concat(extractScores(text, from, readabilityAlgorithm))
   }
 
-  return Decoration.set(decos)
+  return Decoration.set(decos, true)
 }
 
 export const readabilityMode = ViewPlugin.fromClass(class {
