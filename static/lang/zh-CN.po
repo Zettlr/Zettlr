@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-27 02:30+0000\n"
+"POT-Creation-Date: 2023-03-28 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1544,11 +1544,9 @@ msgstr "这个配置档是受保护的。这意味着它将会在你移除或重
 
 #: source/tmp/Defaults.vue.ts:73
 msgid ""
-"This profile appears to be either missing the writer or reader property. "
-"Make sure to set both so that Zettlr can use this profile."
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
 msgstr ""
-"这个配置档似乎缺少编者或读者的属性。确保两者都设定以便 Zettlr 可以使用这个配"
-"置档。"
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
@@ -2485,6 +2483,13 @@ msgstr "用户字典。点击移除单词。"
 #: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "字典词条"
+
+#~ msgid ""
+#~ "This profile appears to be either missing the writer or reader property. "
+#~ "Make sure to set both so that Zettlr can use this profile."
+#~ msgstr ""
+#~ "这个配置档似乎缺少编者或读者的属性。确保两者都设定以便 Zettlr 可以使用这个"
+#~ "配置档。"
 
 #~ msgid "Application language (<strong>Restart required!</strong>)"
 #~ msgstr "应用语言（<strong>需要重启！</strong>）"

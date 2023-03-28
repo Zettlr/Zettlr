@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-27 02:30+0000\n"
+"POT-Creation-Date: 2023-03-28 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1567,11 +1567,9 @@ msgstr ""
 
 #: source/tmp/Defaults.vue.ts:73
 msgid ""
-"This profile appears to be either missing the writer or reader property. "
-"Make sure to set both so that Zettlr can use this profile."
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
 msgstr ""
-"Parece que a este perfil le falta la propiedad escritor o lector. Asegúrate "
-"de configurar ambos para que Zettlr pueda usar este perfil."
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
@@ -2533,6 +2531,13 @@ msgstr "Diccionario del usuario. Elimine las palabras haciendo clic en ellas."
 #: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "Entrada de diccionario"
+
+#~ msgid ""
+#~ "This profile appears to be either missing the writer or reader property. "
+#~ "Make sure to set both so that Zettlr can use this profile."
+#~ msgstr ""
+#~ "Parece que a este perfil le falta la propiedad escritor o lector. "
+#~ "Asegúrate de configurar ambos para que Zettlr pueda usar este perfil."
 
 #~ msgid "Application language (<strong>Restart required!</strong>)"
 #~ msgstr ""

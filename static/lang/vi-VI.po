@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-27 02:30+0000\n"
+"POT-Creation-Date: 2023-03-28 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1555,11 +1555,9 @@ msgstr ""
 
 #: source/tmp/Defaults.vue.ts:73
 msgid ""
-"This profile appears to be either missing the writer or reader property. "
-"Make sure to set both so that Zettlr can use this profile."
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
 msgstr ""
-"Hồ sơ người dùng (Profile) này dường như thiếu đi thuộc tính về người đọc "
-"hoặc người viết. Hãy điền các giá trị vào để Zettlr sử dụng được hồ sơ này."
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
@@ -2508,6 +2506,14 @@ msgstr "Từ điển người dùng. Xoá từ bằng cách nhấn vào chúng."
 #: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "Mục từ"
+
+#~ msgid ""
+#~ "This profile appears to be either missing the writer or reader property. "
+#~ "Make sure to set both so that Zettlr can use this profile."
+#~ msgstr ""
+#~ "Hồ sơ người dùng (Profile) này dường như thiếu đi thuộc tính về người đọc "
+#~ "hoặc người viết. Hãy điền các giá trị vào để Zettlr sử dụng được hồ sơ "
+#~ "này."
 
 #~ msgid "Application language (<strong>Restart required!</strong>)"
 #~ msgstr "Ngôn ngữ của ứng dụng (<strong>Cần khởi động lại!</strong>)"
