@@ -8187,11 +8187,12 @@ __metadata:
   linkType: hard
 
 "mdast-comment-marker@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "mdast-comment-marker@npm:2.1.0"
+  version: 2.1.2
+  resolution: "mdast-comment-marker@npm:2.1.2"
   dependencies:
+    "@types/mdast": ^3.0.0
     mdast-util-mdx-expression: ^1.1.0
-  checksum: 669e631af2089b3e9643d6b37356e0e1b871c377cd345dc629d32e4d191ccd528a7ed57ba01d54008d0215d5ec74467b54fb9fe7e7a072723689f7894d1d3465
+  checksum: 67a5f7117730df554834b14e71ef9044c530fcc380d138ad22abf5af2f2fa14afd80d89a9c9e21173b96fe14e7ca8756035d3576d5500ead41e3906f028963d0
   languageName: node
   linkType: hard
 
@@ -8245,15 +8246,15 @@ __metadata:
   linkType: hard
 
 "mdast-util-mdx-expression@npm:^1.1.0":
-  version: 1.3.1
-  resolution: "mdast-util-mdx-expression@npm:1.3.1"
+  version: 1.3.2
+  resolution: "mdast-util-mdx-expression@npm:1.3.2"
   dependencies:
     "@types/estree-jsx": ^1.0.0
     "@types/hast": ^2.0.0
     "@types/mdast": ^3.0.0
     mdast-util-from-markdown: ^1.0.0
     mdast-util-to-markdown: ^1.0.0
-  checksum: 456d59a616a274416f5b02bce64bf5245c4b7247927b4539f4db35bec5674352580fb91f51ed11f1a769d17330c44eec7ca481faf81ee839c2efe71309195225
+  checksum: e4c90f26deaa5eb6217b0a9af559a80de41da02ab3bcd864c56bed3304b056ae703896e9876bc6ded500f4aff59f4de5cbf6a4b109a5ba408f2342805fe6dc05
   languageName: node
   linkType: hard
 
@@ -10211,7 +10212,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-blockquote-indentation@npm:^3.0.0":
+"remark-lint-blockquote-indentation@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-blockquote-indentation@npm:3.1.1"
   dependencies:
@@ -10226,7 +10227,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-checkbox-character-style@npm:^4.0.0":
+"remark-lint-checkbox-character-style@npm:^4.1.1":
   version: 4.1.1
   resolution: "remark-lint-checkbox-character-style@npm:4.1.1"
   dependencies:
@@ -10239,7 +10240,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-code-block-style@npm:^3.0.0":
+"remark-lint-code-block-style@npm:^3.1.0":
   version: 3.1.0
   resolution: "remark-lint-code-block-style@npm:3.1.0"
   dependencies:
@@ -10253,7 +10254,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-emphasis-marker@npm:^3.0.0":
+"remark-lint-emphasis-marker@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-emphasis-marker@npm:3.1.1"
   dependencies:
@@ -10266,7 +10267,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-fenced-code-marker@npm:^3.0.0":
+"remark-lint-fenced-code-marker@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-fenced-code-marker@npm:3.1.1"
   dependencies:
@@ -10279,18 +10280,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-final-newline@npm:^2.0.0":
-  version: 2.1.1
-  resolution: "remark-lint-final-newline@npm:2.1.1"
-  dependencies:
-    "@types/mdast": ^3.0.0
-    unified: ^10.0.0
-    unified-lint-rule: ^2.0.0
-  checksum: d68291b1794dfa67d6b5cca1dd73ce3032dafd845efaf9e0514cf3361c9a495245fef975aaf72a987be8859bea22cd3b0b5b744cff7320d42ab1b67dae0cfe8d
-  languageName: node
-  linkType: hard
-
-"remark-lint-hard-break-spaces@npm:^3.0.0":
+"remark-lint-hard-break-spaces@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-hard-break-spaces@npm:3.1.1"
   dependencies:
@@ -10304,7 +10294,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-heading-style@npm:^3.0.0":
+"remark-lint-heading-style@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-heading-style@npm:3.1.1"
   dependencies:
@@ -10318,7 +10308,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-link-title-style@npm:^3.0.0":
+"remark-lint-link-title-style@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-link-title-style@npm:3.1.1"
   dependencies:
@@ -10332,7 +10322,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-list-item-bullet-indent@npm:^4.0.0":
+"remark-lint-list-item-bullet-indent@npm:^4.1.1":
   version: 4.1.1
   resolution: "remark-lint-list-item-bullet-indent@npm:4.1.1"
   dependencies:
@@ -10345,21 +10335,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-list-item-content-indent@npm:^3.0.0":
-  version: 3.1.1
-  resolution: "remark-lint-list-item-content-indent@npm:3.1.1"
-  dependencies:
-    "@types/mdast": ^3.0.0
-    pluralize: ^8.0.0
-    unified: ^10.0.0
-    unified-lint-rule: ^2.0.0
-    unist-util-position: ^4.0.0
-    unist-util-visit: ^4.0.0
-  checksum: ac1ea5f482af848050def5f550cbe0a42e610ce3cb200d54ab19d485fe923a80ee333e8cd005084ce0db5a834fce84b262547b43bb8f95f2c419ccee83ec7b0b
-  languageName: node
-  linkType: hard
-
-"remark-lint-list-item-indent@npm:^3.0.0":
+"remark-lint-list-item-indent@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-list-item-indent@npm:3.1.1"
   dependencies:
@@ -10374,7 +10350,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-no-blockquote-without-marker@npm:^5.0.0":
+"remark-lint-no-blockquote-without-marker@npm:^5.1.1":
   version: 5.1.1
   resolution: "remark-lint-no-blockquote-without-marker@npm:5.1.1"
   dependencies:
@@ -10405,7 +10381,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-no-duplicate-definitions@npm:^3.0.0":
+"remark-lint-no-duplicate-definitions@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-no-duplicate-definitions@npm:3.1.1"
   dependencies:
@@ -10420,7 +10396,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-no-heading-content-indent@npm:^4.0.0":
+"remark-lint-no-heading-content-indent@npm:^4.1.1":
   version: 4.1.1
   resolution: "remark-lint-no-heading-content-indent@npm:4.1.1"
   dependencies:
@@ -10436,7 +10412,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-no-inline-padding@npm:^4.0.0":
+"remark-lint-no-inline-padding@npm:^4.1.1":
   version: 4.1.1
   resolution: "remark-lint-no-inline-padding@npm:4.1.1"
   dependencies:
@@ -10450,22 +10426,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-no-literal-urls@npm:^3.0.0":
-  version: 3.1.1
-  resolution: "remark-lint-no-literal-urls@npm:3.1.1"
-  dependencies:
-    "@types/mdast": ^3.0.0
-    mdast-util-to-string: ^3.0.0
-    unified: ^10.0.0
-    unified-lint-rule: ^2.0.0
-    unist-util-generated: ^2.0.0
-    unist-util-position: ^4.0.0
-    unist-util-visit: ^4.0.0
-  checksum: 305d0d24dbd14c0bd4bc843f2298eda92861fb1ce77f3079a1b89a52e620f35b52b12510f09006cc2e02bd356e0d80dec92d2615b09c5f6ef940c9116f70f499
-  languageName: node
-  linkType: hard
-
-"remark-lint-no-shortcut-reference-image@npm:^3.0.0":
+"remark-lint-no-shortcut-reference-image@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-no-shortcut-reference-image@npm:3.1.1"
   dependencies:
@@ -10478,7 +10439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-no-shortcut-reference-link@npm:^3.0.0":
+"remark-lint-no-shortcut-reference-link@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-no-shortcut-reference-link@npm:3.1.1"
   dependencies:
@@ -10491,23 +10452,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-no-undefined-references@npm:^4.0.0, remark-lint-no-undefined-references@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "remark-lint-no-undefined-references@npm:4.2.0"
-  dependencies:
-    "@types/mdast": ^3.0.0
-    micromark-util-normalize-identifier: ^1.0.0
-    unified: ^10.0.0
-    unified-lint-rule: ^2.0.0
-    unist-util-generated: ^2.0.0
-    unist-util-position: ^4.0.0
-    unist-util-visit: ^4.0.0
-    vfile-location: ^4.0.0
-  checksum: effedeb3f06dab28f6d8e7dbb664d18215eff328b3ee2a29b6061d54f4a825b571003d976d6daa3d04df332c66755c31a78b62da61679c2cc164bb4cfcca2942
-  languageName: node
-  linkType: hard
-
-"remark-lint-no-unused-definitions@npm:^3.0.0":
+"remark-lint-no-unused-definitions@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-no-unused-definitions@npm:3.1.1"
   dependencies:
@@ -10520,7 +10465,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-ordered-list-marker-style@npm:^3.0.0":
+"remark-lint-ordered-list-marker-style@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-ordered-list-marker-style@npm:3.1.1"
   dependencies:
@@ -10534,7 +10479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-rule-style@npm:^3.0.0":
+"remark-lint-rule-style@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-rule-style@npm:3.1.1"
   dependencies:
@@ -10547,7 +10492,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-strong-marker@npm:^3.0.0":
+"remark-lint-strong-marker@npm:^3.1.1":
   version: 3.1.1
   resolution: "remark-lint-strong-marker@npm:3.1.1"
   dependencies:
@@ -10560,7 +10505,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-table-cell-padding@npm:^4.0.0":
+"remark-lint-table-cell-padding@npm:^4.1.2":
   version: 4.1.2
   resolution: "remark-lint-table-cell-padding@npm:4.1.2"
   dependencies:
@@ -10574,7 +10519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint@npm:^9.0.0":
+"remark-lint@npm:^9.1.1":
   version: 9.1.1
   resolution: "remark-lint@npm:9.1.1"
   dependencies:
@@ -10618,54 +10563,6 @@ __metadata:
     mdast-util-from-markdown: ^1.0.0
     unified: ^10.0.0
   checksum: 505088e564ab53ff054433368adbb7b551f69240c7d9768975529837a86f1d0f085e72d6211929c5c42db315273df4afc94f3d3a8662ffdb69468534c6643d29
-  languageName: node
-  linkType: hard
-
-"remark-preset-lint-consistent@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "remark-preset-lint-consistent@npm:5.1.1"
-  dependencies:
-    "@types/mdast": ^3.0.0
-    remark-lint: ^9.0.0
-    remark-lint-blockquote-indentation: ^3.0.0
-    remark-lint-checkbox-character-style: ^4.0.0
-    remark-lint-code-block-style: ^3.0.0
-    remark-lint-emphasis-marker: ^3.0.0
-    remark-lint-fenced-code-marker: ^3.0.0
-    remark-lint-heading-style: ^3.0.0
-    remark-lint-link-title-style: ^3.0.0
-    remark-lint-list-item-content-indent: ^3.0.0
-    remark-lint-ordered-list-marker-style: ^3.0.0
-    remark-lint-rule-style: ^3.0.0
-    remark-lint-strong-marker: ^3.0.0
-    remark-lint-table-cell-padding: ^4.0.0
-    unified: ^10.0.0
-  checksum: ee4b70662e7b6686a18940df6f3886bac58a94e80a048df2b9e79d4e155460556a5be16a6f211c72fd241fb8d081f17a0c04ab6628f1058166a62eb89a4ed3b4
-  languageName: node
-  linkType: hard
-
-"remark-preset-lint-recommended@npm:^6.1.2":
-  version: 6.1.2
-  resolution: "remark-preset-lint-recommended@npm:6.1.2"
-  dependencies:
-    "@types/mdast": ^3.0.0
-    remark-lint: ^9.0.0
-    remark-lint-final-newline: ^2.0.0
-    remark-lint-hard-break-spaces: ^3.0.0
-    remark-lint-list-item-bullet-indent: ^4.0.0
-    remark-lint-list-item-indent: ^3.0.0
-    remark-lint-no-blockquote-without-marker: ^5.0.0
-    remark-lint-no-duplicate-definitions: ^3.0.0
-    remark-lint-no-heading-content-indent: ^4.0.0
-    remark-lint-no-inline-padding: ^4.0.0
-    remark-lint-no-literal-urls: ^3.0.0
-    remark-lint-no-shortcut-reference-image: ^3.0.0
-    remark-lint-no-shortcut-reference-link: ^3.0.0
-    remark-lint-no-undefined-references: ^4.0.0
-    remark-lint-no-unused-definitions: ^3.0.0
-    remark-lint-ordered-list-marker-style: ^3.0.0
-    unified: ^10.0.0
-  checksum: 8f92dab9648ed8030b6fa9b855b849d6e95536535b24c5622185f8134bba2131d69e4e496f8ca60ff7ff38e4bc1d2e755973cf6f11bb78eb78e975fb3f91e6c6
   languageName: node
   linkType: hard
 
@@ -13075,11 +12972,30 @@ __metadata:
     rehype-remark: ^9.1.2
     remark: ^14.0.2
     remark-frontmatter: ^4.0.1
+    remark-lint: ^9.1.1
+    remark-lint-blockquote-indentation: ^3.1.1
+    remark-lint-checkbox-character-style: ^4.1.1
+    remark-lint-code-block-style: ^3.1.0
+    remark-lint-emphasis-marker: ^3.1.1
+    remark-lint-fenced-code-marker: ^3.1.1
+    remark-lint-hard-break-spaces: ^3.1.1
+    remark-lint-heading-style: ^3.1.1
+    remark-lint-link-title-style: ^3.1.1
+    remark-lint-list-item-bullet-indent: ^4.1.1
+    remark-lint-list-item-indent: ^3.1.1
+    remark-lint-no-blockquote-without-marker: ^5.1.1
     remark-lint-no-consecutive-blank-lines: ^4.1.2
-    remark-lint-no-undefined-references: ^4.2.0
+    remark-lint-no-duplicate-definitions: ^3.1.1
+    remark-lint-no-heading-content-indent: ^4.1.1
+    remark-lint-no-inline-padding: ^4.1.1
+    remark-lint-no-shortcut-reference-image: ^3.1.1
+    remark-lint-no-shortcut-reference-link: ^3.1.1
+    remark-lint-no-unused-definitions: ^3.1.1
+    remark-lint-ordered-list-marker-style: ^3.1.1
+    remark-lint-rule-style: ^3.1.1
+    remark-lint-strong-marker: ^3.1.1
+    remark-lint-table-cell-padding: ^4.1.2
     remark-math: ^5.1.1
-    remark-preset-lint-consistent: ^5.1.1
-    remark-preset-lint-recommended: ^6.1.2
     remark-stringify: ^10.0.2
     rimraf: ^3.0.2
     sanitize-filename: ^1.6.3
