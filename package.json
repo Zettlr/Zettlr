@@ -68,7 +68,7 @@
     "chokidar": "^3.5.3",
     "citeproc": "^2.4.62",
     "command-exists": "^1.2.9",
-    "d3": "^7.4.4",
+    "d3": "^7.8.3",
     "gettext-parser": "^6.0.0",
     "got": "^12.5.2",
     "katex": "^0.16.3",
