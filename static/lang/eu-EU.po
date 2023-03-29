@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-28 02:30+0000\n"
+"POT-Creation-Date: 2023-03-29 02:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1325,26 +1325,25 @@ msgstr "Aipua"
 msgid "Insert Table"
 msgstr "Txertatu taula"
 
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr ""
+
 #: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
 msgid "Image not found: %s"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:134
-msgid "Disabled"
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Open diagnostics panel"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:141
-#, fuzzy
-msgid "Custom"
-msgstr "CSS pertsonalizatua"
-
-#: source/common/modules/markdown-editor/statusbar/index.ts:207
-#, javascript-format
-msgid "Readability mode (%s)"
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
+msgid "Detect automatically"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:244
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
 #: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:134
 #: source/tmp/file-item.vue.ts:207
@@ -1352,20 +1351,21 @@ msgstr ""
 msgid "%s words"
 msgstr "%s hitz"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:263
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
 #: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
 #: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:407
-msgid "Detect automatically"
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
+msgid "Disabled"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:449
-msgid "Open diagnostics panel"
-msgstr ""
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
+#, fuzzy
+msgid "Custom"
+msgstr "CSS pertsonalizatua"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
