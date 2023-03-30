@@ -34,7 +34,7 @@ export const filesUpdateField = StateField.define<Completion[]>({
           return {
             label: entry.displayName,
             detail: entry.id !== '' ? entry.id : undefined,
-            apply: apply(entry.filename, entry.id)
+            apply: apply(entry.filename, entry.id, entry.displayName)
           }
         })
       }
@@ -49,7 +49,7 @@ export const filesUpdateField = StateField.define<Completion[]>({
  *
  * @param   {string}      infoString  The infostring to use
  */
-const apply = (filename: string, fileId: string) => function (view: EditorView, completion: Completion, from: number, to: number) {
+const apply = (filename: string, fileId: string, displayName: string) => function (view: EditorView, completion: Completion, from: number, to: number) {
   // Applies a filename insertion
   const { linkFilenameOnly, linkPreference } = view.state.field(configField)
 
@@ -63,7 +63,7 @@ const apply = (filename: string, fileId: string) => function (view: EditorView, 
   } else {
     const textToInsert = fileId === '' ? filename: fileId
     if (linkPreference === 'always' || (linkPreference === 'withID' && textToInsert === fileId)) {
-      insert = `${textToInsert}]] ${filename}` // NOTE: No postLink, but linkEnd
+      insert = `${textToInsert}]] ${displayName}` // NOTE: No postLink, but linkEnd
       if (linkEndAfterCursor) {
         to += 2 // Overwrite the linkEnd following the completion
       }
