@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.0-beta.2\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-24 02:30+0000\n"
+"POT-Creation-Date: 2023-03-30 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,6 +196,7 @@ msgstr "Could not open workspace %s."
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/config/index.ts:433
 msgid "Confirm"
 msgstr "Confirm"
 
@@ -384,6 +385,18 @@ msgstr "Cannot move directory or file"
 #, javascript-format
 msgid "The file/directory %s already exists in target."
 msgstr "The file/directory %s already exists in target."
+
+#: source/app/service-providers/config/index.ts:425
+msgid "Changing this option requires a restart to take effect."
+msgstr "Changing this option requires a restart to take effect."
+
+#: source/app/service-providers/config/index.ts:428
+msgid "Restart now"
+msgstr "Restart now"
+
+#: source/app/service-providers/config/index.ts:429
+msgid "Restart later"
+msgstr "Restart later"
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -1281,25 +1294,25 @@ msgstr "Blockquote"
 msgid "Insert Table"
 msgstr "Insert Table"
 
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr "Readability mode (%s)"
+
 #: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "Image not found: %s"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:134
-msgid "Disabled"
-msgstr "Disabled"
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Open diagnostics panel"
+msgstr "Open diagnostics panel"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:141
-msgid "Custom"
-msgstr "Custom"
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
+msgid "Detect automatically"
+msgstr "Detect automatically"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:207
-#, javascript-format
-msgid "Readability mode (%s)"
-msgstr "Readability mode (%s)"
-
-#: source/common/modules/markdown-editor/statusbar/index.ts:244
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
 #: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:134
 #: source/tmp/file-item.vue.ts:207
@@ -1307,20 +1320,20 @@ msgstr "Readability mode (%s)"
 msgid "%s words"
 msgstr "%s words"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:263
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
 #: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
 #: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
 msgstr "%s characters"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:407
-msgid "Detect automatically"
-msgstr "Detect automatically"
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
+msgid "Disabled"
+msgstr "Disabled"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:449
-msgid "Open diagnostics panel"
-msgstr "Open diagnostics panel"
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
+msgid "Custom"
+msgstr "Custom"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
@@ -1514,11 +1527,11 @@ msgstr ""
 
 #: source/tmp/Defaults.vue.ts:73
 msgid ""
-"This profile appears to be either missing the writer or reader property. "
-"Make sure to set both so that Zettlr can use this profile."
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
 msgstr ""
-"This profile appears to be either missing the writer or reader property. "
-"Make sure to set both so that Zettlr can use this profile."
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
@@ -2094,8 +2107,8 @@ msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr "Put auto-created files into this directory (must be loaded in Zettlr)"
 
 #: source/win-preferences/schema/general.ts:23
-msgid "Application language (<strong>Restart required!</strong>)"
-msgstr "Application language (<strong>Restart required!</strong>)"
+msgid "Application language"
+msgstr "Application language"
 
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-23 02:28+0000\n"
+"POT-Creation-Date: 2023-03-29 02:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -204,6 +204,7 @@ msgstr ""
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/config/index.ts:433
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -392,6 +393,19 @@ msgstr "Não é possível mover pasta ou arquivo"
 #, javascript-format
 msgid "The file/directory %s already exists in target."
 msgstr "O arquivo/pasta %s já existe no destino."
+
+#: source/app/service-providers/config/index.ts:425
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:428
+#, fuzzy
+msgid "Restart now"
+msgstr "agora mesmo"
+
+#: source/app/service-providers/config/index.ts:429
+msgid "Restart later"
+msgstr ""
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -1313,26 +1327,25 @@ msgstr "Bloco de citação"
 msgid "Insert Table"
 msgstr "Inserir Tabela"
 
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr ""
+
 #: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "Imagem não encontrada: %s"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:134
-msgid "Disabled"
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Open diagnostics panel"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:141
-#, fuzzy
-msgid "Custom"
-msgstr "CSS customizado"
-
-#: source/common/modules/markdown-editor/statusbar/index.ts:207
-#, javascript-format
-msgid "Readability mode (%s)"
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
+msgid "Detect automatically"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:244
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
 #: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:134
 #: source/tmp/file-item.vue.ts:207
@@ -1340,20 +1353,21 @@ msgstr ""
 msgid "%s words"
 msgstr "%s palavras"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:263
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
 #: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
 #: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
 msgstr "%s caracteres"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:407
-msgid "Detect automatically"
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
+msgid "Disabled"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:449
-msgid "Open diagnostics panel"
-msgstr ""
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
+#, fuzzy
+msgid "Custom"
+msgstr "CSS customizado"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
@@ -1547,11 +1561,9 @@ msgstr ""
 
 #: source/tmp/Defaults.vue.ts:73
 msgid ""
-"This profile appears to be either missing the writer or reader property. "
-"Make sure to set both so that Zettlr can use this profile."
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
 msgstr ""
-"Este perfil parece não ter propriedades de leitura e escrita. Certifique-se "
-"de definir ambos para que o Zettlr possa usar esse perfil."
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
@@ -2130,10 +2142,8 @@ msgstr ""
 "no Zettlr)"
 
 #: source/win-preferences/schema/general.ts:23
-msgid "Application language (<strong>Restart required!</strong>)"
+msgid "Application language"
 msgstr ""
-"Idioma do programa (<strong>Reinicialização do Zettlr é obrigatória!</"
-"strong>)"
 
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"
@@ -2508,6 +2518,18 @@ msgstr "Dicionário do usuário. Remova as palavras clicando nelas."
 #: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "Verbete do dicionário"
+
+#~ msgid ""
+#~ "This profile appears to be either missing the writer or reader property. "
+#~ "Make sure to set both so that Zettlr can use this profile."
+#~ msgstr ""
+#~ "Este perfil parece não ter propriedades de leitura e escrita. Certifique-"
+#~ "se de definir ambos para que o Zettlr possa usar esse perfil."
+
+#~ msgid "Application language (<strong>Restart required!</strong>)"
+#~ msgstr ""
+#~ "Idioma do programa (<strong>Reinicialização do Zettlr é obrigatória!</"
+#~ "strong>)"
 
 #~ msgid "Find…"
 #~ msgstr "Buscar ..."

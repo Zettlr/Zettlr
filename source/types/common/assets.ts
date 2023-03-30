@@ -4,11 +4,11 @@ export interface PandocProfileMetadata {
    */
   name: string
   /**
-   * The writer, can be undefined
+   * The writer, can be an empty string
    */
   writer: string
   /**
-   * The reader, can be undefined
+   * The reader, can be an empty string
    */
   reader: string
   /**

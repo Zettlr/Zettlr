@@ -55,8 +55,7 @@ export function pasteImage (view: EditorView): boolean {
         const sanitizedPath = relative.replace(/\\/g, '/')
         // We need to replace spaces, since the Markdown parser is strict here
         const tag = `![${path.basename(sanitizedPath)}](${sanitizedPath.replace(/ /g, '%20')})`
-        const { from, to } = view.state.selection.main
-        view.dispatch({ changes: { from, to, insert: tag } })
+        view.dispatch(view.state.replaceSelection(tag))
       }
     })
     .catch(err => console.error(err))

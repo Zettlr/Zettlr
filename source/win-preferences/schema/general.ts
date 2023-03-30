@@ -20,7 +20,7 @@ export default function (): any {
       [
         {
           type: 'select',
-          label: trans('Application language (<strong>Restart required!</strong>)'),
+          label: trans('Application language'),
           model: 'appLang',
           options: {} // Will be set dynamically
         }

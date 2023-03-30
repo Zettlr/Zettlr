@@ -17,7 +17,7 @@ import path from 'path'
 import EventEmitter from 'events'
 import { ValidationRule, VALIDATE_RULES, VALIDATE_PROPERTIES } from './config-validation'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
-import { app, ipcMain } from 'electron'
+import { app, dialog, ipcMain } from 'electron'
 import ignoreFile from '@common/util/ignore-file'
 import safeAssign from '@common/util/safe-assign'
 import isDir from '@common/util/is-dir'
@@ -27,9 +27,26 @@ import enumDictFiles from '@common/util/enum-dict-files'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
 import { ConfigOptions } from '@dts/main/config-provider'
-import { loadData } from '@common/i18n-main'
+import { loadData, trans } from '@common/i18n-main'
 
 const ZETTLR_VERSION = app.getVersion()
+
+/**
+ * The following options require a relaunch after being changed
+ */
+const guardOptions = {
+  relaunch: [
+    'appLang',
+    'window.nativeAppearance',
+    'watchdog.activatePolling',
+    'export.useBundledPandoc',
+    'zkn.idRE'
+  ],
+  // The following options additionally require a clearing of the cache
+  clearCache: [
+    'zkn.idRE'
+  ]
+}
 
 /**
  * This class represents the configuration of Zettlr, represented by the
@@ -113,13 +130,10 @@ export default class ConfigProvider extends ProviderContract {
       if (command === 'set-config') {
         // Sets the complete config object
         const { payload } = message
-        let ret = true
         for (const opt in payload) {
-          if (!this.set(opt, payload[opt])) {
-            ret = false
-          }
+          this.set(opt, payload[opt])
         }
-        return ret
+        return true
       }
     })
   }
@@ -343,33 +357,25 @@ export default class ConfigProvider extends ProviderContract {
 
   /**
     * Sets a configuration option
-    * @param {String} option The option to be set
-    * @param {Mixed} value  The value of the config variable.
-    * @return {Boolean} Whether or not the option was successfully set.
+    * @param  {string}  option  The option to be set
+    * @param  {any}     value   The value of the config variable.
     */
-  set (option: string, value: any): boolean {
+  set (option: string, value: any): void {
     // Don't add non-existent options
     if (option in this.config && this._validate(option, value)) {
       // Do not set the option if it already has the requested value
       if (this.config[option as keyof ConfigOptions] === value) {
-        return true
+        return
       }
 
       // Set the new value and inform the listeners
       // @ts-expect-error Since we're dynamically assigning a value here.
       this.config[option as keyof ConfigOptions] = value
-      this._emitter.emit('update', option) // Pass the option for info
-
-      // Broadcast to all open windows
-      broadcastIpcMessage('config-provider', {
-        command: 'update',
-        payload: option
-      })
       this._container.set(this.config)
-      return true
-    }
-
-    if (option.indexOf('.') > 0) {
+      this._emitter.emit('update', option)
+      broadcastIpcMessage('config-provider', { command: 'update', payload: option })
+      this.checkOptionForGuard(option)
+    } else if (option.indexOf('.') > 0) {
       // A nested argument was requested, so iterate until we find it
       let nested = option.split('.')
       // Last one must be set manually, b/c simple attributes aren't pointers
@@ -379,7 +385,7 @@ export default class ConfigProvider extends ProviderContract {
         if (arg in cfg) {
           cfg = cfg[arg as keyof ConfigOptions] as unknown as any
         } else {
-          return false // The config option must match exactly
+          return // The config option must match exactly
         }
       }
 
@@ -387,24 +393,58 @@ export default class ConfigProvider extends ProviderContract {
       if (prop in cfg && this._validate(option, value)) {
         // Do not set the option if it already has the requested value
         if (cfg[prop as keyof ConfigOptions] === value) {
-          return true
+          return
         }
 
         // Set the new value and inform the listeners
         // @ts-expect-error Since we're dynamically assigning a value here
         cfg[prop as keyof ConfigOptions] = value
-        this._emitter.emit('update', option) // Pass the option for info
-        // Broadcast to all open windows
-        broadcastIpcMessage('config-provider', {
-          command: 'update',
-          payload: option
-        })
         this._container.set(this.config)
-        return true
+        this._emitter.emit('update', option)
+        broadcastIpcMessage('config-provider', { command: 'update', payload: option })
+        this.checkOptionForGuard(option)
       }
     }
+  }
 
-    return false
+  /**
+   * After setting an option, this function can check if the option is guarded.
+   * In that case, the app will automatically ask the user if they want to
+   * restart now.
+   *
+   * @param   {string}  option  The option to check
+   */
+  private checkOptionForGuard (option: string): void {
+    if (!guardOptions.relaunch.includes(option)) {
+      return
+    }
+
+    console.log(process.argv)
+
+    dialog.showMessageBox({
+      message: trans('Changing this option requires a restart to take effect.'),
+      type: 'warning',
+      buttons: [
+        trans('Restart now'),
+        trans('Restart later')
+      ],
+      defaultId: 0,
+      cancelId: 1,
+      title: trans('Confirm')
+    })
+      .then(({ response }) => {
+        if (response === 0) {
+          // The user wants to restart now
+          if (guardOptions.clearCache.includes(option)) {
+            // Ensure the cache is cleared on relaunch
+            app.relaunch({ args: process.argv.slice(1).concat(['--clear-cache']) })
+          } else {
+            app.relaunch()
+          }
+          app.quit()
+        }
+      })
+      .catch(err => console.error(err))
   }
 
   /**

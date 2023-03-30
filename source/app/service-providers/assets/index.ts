@@ -298,6 +298,13 @@ export default class AssetsProvider extends ProviderContract {
         })
       } catch (err) {
         this._logger.warning(`[Assets Provider] Installed profile ${file} had an error and could not be parsed`)
+        profiles.push({
+          name: file,
+          writer: '',
+          reader: '',
+          isInvalid: true,
+          isProtected: this._protectedDefaults.includes(file)
+        })
       }
     }
 

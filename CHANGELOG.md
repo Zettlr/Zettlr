@@ -192,7 +192,13 @@ there.
   it on in the Spellchecker settings and even provide your LanguageTool username
   and an API key to unlock premium features
 - **New Feature**: You can now activate a statusbar that shows some context-
-  specific information for each editor pane you have open
+  specific information for each editor pane you have open; this statusbar also
+  shows you information for code editor panels, e.g., in the assets manager
+- **New Feature**: Changing a certain set of configuration options will make
+  Zettlr ask you whether you wish to restart the app for the changes to take
+  effect
+- **New Feature**: While modifying import and export profiles, Zettlr will now
+  check them for validity, and inform you of any potential errors
 - Replaced the old Markdown-to-HTML and HTML-to-Markdown converter with more up-
   to-date modules. This should not change how pasting from HTML or copying as
   HTML work, but it could.

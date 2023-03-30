@@ -37,7 +37,7 @@
         </span>
 
         <p v-if="visibleItems[currentItem]?.isInvalid" class="warning">
-          <cds-icon shape="warning"></cds-icon>
+          <cds-icon shape="warning-standard"></cds-icon>
           <span> <!-- NOTE: Wrapping in a span due to the flex -->
             {{ invalidProfileWarning }}
           </span>
@@ -136,7 +136,7 @@ export default defineComponent({
       return trans('This profile is protected. This means that it will be restored when you remove or rename it.')
     },
     invalidProfileWarning: function (): string {
-      return trans('This profile appears to be either missing the writer or reader property. Make sure to set both so that Zettlr can use this profile.')
+      return trans('This profile is invalid. It may contain errors, or it may be missing the writer or reader property.')
     },
     renameFileLabel: function (): string {
       return trans('Rename file')
@@ -355,9 +355,10 @@ export default defineComponent({
 
   p.warning {
     display: flex;
-    color: rgb(97, 97, 0);
-    background-color: rgb(209, 209, 23);
-    border: 1px solid rgb(170, 170, 0);
+    align-items: center;
+    color: rgb(135, 135, 0);
+    background-color: rgb(255, 255, 0);
+    border: 1px solid rgb(135, 135, 0);
     border-radius: 5px;
     padding: 5px;
     margin: 5px;

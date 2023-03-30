@@ -15,19 +15,48 @@
 
 import { linter, Diagnostic } from '@codemirror/lint'
 import { remark } from 'remark'
-import remarkPresentLintRecommended from 'remark-preset-lint-recommended'
-import remarkPresetLintConsistent from 'remark-preset-lint-consistent'
-import remarkLintListItemIndent from 'remark-lint-list-item-indent'
 import remarkFrontmatter from 'remark-frontmatter'
+import { configField } from '../util/configuration'
 
-// Individual rules we have to turn off/reconfigure
+// Rules we use
+import remarkLintBlockquoteIndentation from 'remark-lint-blockquote-indentation'
+import remarkLintCheckboxCharacterStyle from 'remark-lint-checkbox-character-style'
+import remarkLintCodeBlockStyle from 'remark-lint-code-block-style'
+import remarkLintEmphasisMarker from 'remark-lint-emphasis-marker'
+import remarkLintFencedCodeMarker from 'remark-lint-fenced-code-marker'
+import remarkLintHardBreakSpaces from 'remark-lint-hard-break-spaces'
+import remarkLintHeadingStyle from 'remark-lint-heading-style'
+import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
+import remarkLintListItemBulletIndent from 'remark-lint-list-item-bullet-indent'
+import remarkLintListItemIndent from 'remark-lint-list-item-indent'
+import remarkLintNoBlockquoteWithoutMarker from 'remark-lint-no-blockquote-without-marker'
 import remarkLintNoConsecutiveBlankLines from 'remark-lint-no-consecutive-blank-lines'
-import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references'
+import remarkLintNoDuplicateDefinitions from 'remark-lint-no-duplicate-definitions'
+import remarkLintNoHeadingContentIndent from 'remark-lint-no-heading-content-indent'
+import remarkLintNoInlinePadding from 'remark-lint-no-inline-padding'
+import remarkLintNoShortcutReferenceImage from 'remark-lint-no-shortcut-reference-image'
+import remarkLintNoShortcutReferenceLink from 'remark-lint-no-shortcut-reference-link'
+import remarkLintNoUnusedDefinitions from 'remark-lint-no-unused-definitions'
+import remarkLintOrderedListMarkerStyle from 'remark-lint-ordered-list-marker-style'
+import remarkLintRuleStyle from 'remark-lint-rule-style'
+import remarkLintStrongMarker from 'remark-lint-strong-marker'
+import remarkLintTableCellPadding from 'remark-lint-table-cell-padding'
+import remarkLint from 'remark-lint'
 
 export const mdLint = linter(async view => {
   // We're using a set since somehow the remark linter sometimes happily throws
   // the same warnings
   const diagnostics: Diagnostic[] = []
+
+  const config = view.state.field(configField, false)
+  const emphasisMarker = config?.italicFormatting
+  const boldMarker = config?.boldFormatting
+  let boldSetting: 'consistent'|'*'|'_' = 'consistent'
+  if (boldMarker !== undefined && boldMarker === '**') {
+    boldSetting = '*'
+  } else if (boldMarker !== undefined) {
+    boldSetting = '_'
+  }
 
   const result = await remark()
     .use(remarkFrontmatter, [
@@ -36,12 +65,50 @@ export const mdLint = linter(async view => {
       // ... or Jekyll/Static site generators-style frontmatters.
       { type: 'yaml', fence: { open: '---', close: '---' } }
     ])
-    // Some generic rules
-    .use(remarkPresetLintConsistent)
-    .use(remarkPresentLintRecommended)
-    // Now to specific rules
+    .use(remarkLint)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-blockquote-indentation
+    .use(remarkLintBlockquoteIndentation, 2)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-checkbox-character-style
+    .use(remarkLintCheckboxCharacterStyle, { checked: 'consistent', unchecked: ' ' })
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-code-block-style
+    .use(remarkLintCodeBlockStyle, 'consistent')
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-emphasis-marker
+    .use(remarkLintEmphasisMarker, emphasisMarker ?? 'consistent')
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-fenced-code-marker
+    .use(remarkLintFencedCodeMarker, 'consistent')
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-heading-style
+    .use(remarkLintHeadingStyle, 'consistent')
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-link-title-style
+    .use(remarkLintLinkTitleStyle, '"')
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-ordered-list-marker-style
+    .use(remarkLintOrderedListMarkerStyle, '.')
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-rule-style
+    .use(remarkLintRuleStyle, 'consistent')
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-strong-marker
+    .use(remarkLintStrongMarker, boldSetting)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-table-cell-padding
+    .use(remarkLintTableCellPadding, 'consistent')
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-list-item-bullet-indent
+    .use(remarkLintListItemBulletIndent)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-list-item-indent
     .use(remarkLintListItemIndent, 'space')
-    .use(remarkLintNoUndefinedReferences, false) // Turn off this rule to enable ellipses such as: […]
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-blockquote-without-marker
+    .use(remarkLintNoBlockquoteWithoutMarker)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-hard-break-spaces
+    .use(remarkLintHardBreakSpaces)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-duplicate-definitions
+    .use(remarkLintNoDuplicateDefinitions)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-heading-content-indent
+    .use(remarkLintNoHeadingContentIndent)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-inline-padding
+    .use(remarkLintNoInlinePadding)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-shortcut-reference-image
+    .use(remarkLintNoShortcutReferenceImage)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-shortcut-reference-link
+    .use(remarkLintNoShortcutReferenceLink)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-unused-definitions
+    .use(remarkLintNoUnusedDefinitions)
+    // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-consecutive-blank-lines
     .use(remarkLintNoConsecutiveBlankLines)
     .process(view.state.doc.toString())
 

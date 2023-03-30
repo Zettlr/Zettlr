@@ -23,15 +23,19 @@
 
 // import { trans } from '@common/i18n-renderer'
 
-import { Decoration, EditorView, lineNumbers, MatchDecorator, ViewPlugin, ViewUpdate } from '@codemirror/view'
+import { Decoration, EditorView, keymap, lineNumbers, MatchDecorator, ViewPlugin, ViewUpdate } from '@codemirror/view'
 import { onMounted, ref, toRef, watch } from 'vue'
 import { autocompletion, closeBrackets, CompletionContext } from '@codemirror/autocomplete'
 import { bracketMatching, indentOnInput, StreamLanguage } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
-import { EditorState } from '@codemirror/state'
+import { EditorState, Extension } from '@codemirror/state'
 import { cssLanguage } from '@codemirror/lang-css'
 import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
+import { yamlLint } from '@common/modules/markdown-editor/linters/yaml-lint'
+import { lintGutter } from '@codemirror/lint'
+import { showStatusbarEffect, statusbar } from '@common/modules/markdown-editor/statusbar'
+import { search, searchKeymap } from '@codemirror/search'
 
 /**
  * We have to define the CodeMirror instance outside of Vue, since the Proxy-
@@ -184,56 +188,68 @@ function maybeOpenLink (event: MouseEvent, view: EditorView) {
   }
 }
 
-const extensions = [
-  lineNumbers(),
-  closeBrackets(),
-  bracketMatching(),
-  indentOnInput(),
-  codeSyntaxHighlighter(), // This comes from the main editor component
-  EditorView.updateListener.of((update) => {
-    if (update.docChanged) {
-      // Tell the main component that the contents have changed
-      cleanFlag.value = false
-      emit('update:modelValue', cmInstance.state.doc.toString())
-    }
-  }),
-  EditorView.domEventHandlers({
-    mousedown: maybeOpenLink
-  })
-]
+function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
+  const extensions = [
+    keymap.of([...searchKeymap]),
+    search({ top: true }),
+    lintGutter(),
+    lineNumbers(),
+    closeBrackets(),
+    bracketMatching(),
+    indentOnInput(),
+    codeSyntaxHighlighter(), // This comes from the main editor component
+    EditorView.updateListener.of((update) => {
+      if (update.docChanged) {
+        // Tell the main component that the contents have changed
+        cleanFlag.value = false
+        emit('update:modelValue', cmInstance.state.doc.toString())
+      }
+    }),
+    EditorView.domEventHandlers({
+      mousedown: maybeOpenLink
+    }),
+    statusbar
+  ]
 
-const yamlExtensions = [
-  ...extensions,
-  StreamLanguage.define(yaml)
-]
-
-const cssExtensions = [
-  ...extensions,
-  cssLanguage
-]
-
-const mdExtensions = [
-  ...extensions,
-  // Enable the user to autocomplete the snippets
-  autocompletion({
-    activateOnTyping: true, // Always show immediately
-    selectOnOpen: false, // But never pre-select anything
-    closeOnBlur: true,
-    maxRenderedOptions: 20,
-    override: [snippetsAutocomplete]
-  }),
-  markdownParser(), // Comes from the main editor
-  markdownSyntaxHighlighter(), // Comes from the main editor
-  snippetsHighlight
-]
+  switch (mode) {
+    case 'yaml':
+      return [
+        ...extensions,
+        StreamLanguage.define(yaml),
+        yamlLint
+      ]
+    case 'css':
+      return [
+        ...extensions,
+        cssLanguage
+      ]
+    case 'markdown-snippets':
+      return [
+        ...extensions,
+        // Enable the user to autocomplete the snippets
+        autocompletion({
+          activateOnTyping: true, // Always show immediately
+          selectOnOpen: false, // But never pre-select anything
+          closeOnBlur: true,
+          maxRenderedOptions: 20,
+          override: [snippetsAutocomplete]
+        }),
+        markdownParser(), // Comes from the main editor
+        markdownSyntaxHighlighter(), // Comes from the main editor
+        snippetsHighlight
+      ]
+  }
+}
 
 function setContents (contents: string, mode: 'css'|'yaml'|'markdown-snippets'): void {
   const state = EditorState.create({
     doc: contents,
-    extensions: (mode === 'css') ? cssExtensions : (mode === 'yaml') ? yamlExtensions : mdExtensions
+    extensions: getExtensions(mode)
   })
 
   cmInstance.setState(state)
+  // Immediately show the statusbar
+  cmInstance.dispatch({ effects: showStatusbarEffect.of(true) })
 }
 
 interface Props {
