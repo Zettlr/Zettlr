@@ -80,6 +80,7 @@
     "fix-path": "^5.0.0",
     "gemoji": "^8.1.0",
     "gettext-parser": "^9.0.1",
+    "global-agent": "^3.0.0",
     "got": "^11.8.6",
     "katex": "^0.16.37",
     "ky": "^1.14.3",
