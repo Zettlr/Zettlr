@@ -341,15 +341,6 @@ export default class MarkdownEditor extends EventEmitter {
    */
   async loadDocument (): Promise<void> {
     const { content, type, startVersion } = await this.authority.fetchDoc(this.representedDocument)
-    const currentDoc = this._instance.state.doc.toString()
-    const isSameDoc = content === currentDoc
-
-    // Do not reload the document unless explicitly specified. The reason is
-    // that sometimes we do need to programmatically reload the document, but in
-    // 99% of the cases, this only leads to unnecessary flickering.
-    if (isSameDoc) {
-      return
-    }
 
     // The documents contents have changed, so we must recreate the state
     const state = EditorState.create({
@@ -380,7 +371,6 @@ export default class MarkdownEditor extends EventEmitter {
    * a setting has changed that requires extensions to be fully reloaded.
    */
   async reload (): Promise<void> {
-    // TODO: Only reload the actual contents
     await this.loadDocument()
   }
 

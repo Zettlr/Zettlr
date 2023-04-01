@@ -373,7 +373,6 @@ watch(snippets, (newValue) => {
  * @return  {MarkdownEditor}       The requested editor
  */
 async function getEditorFor (doc: string): Promise<MarkdownEditor> {
-  // No existing editor found -> let's create a new one
   const editor = new MarkdownEditor(undefined, props.leafId, doc, documentAuthorityIPCAPI)
 
   // Update the document info on corresponding events
