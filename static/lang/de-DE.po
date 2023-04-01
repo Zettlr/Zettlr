@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-29 02:35+0000\n"
+"POT-Creation-Date: 2023-03-31 02:31+0000\n"
 "PO-Revision-Date: 2023-03-29 10:07+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -2090,7 +2090,8 @@ msgid "Link with filename only"
 msgstr "Nur mit Dateinamen verlinken"
 
 #: source/win-preferences/schema/zettelkasten.ts:47
-msgid "When linking files, add the filename …"
+#, fuzzy
+msgid "When linking files, add the display name …"
 msgstr "Beim Verlinken von Dateien, füge den Dateinamen …"
 
 #: source/win-preferences/schema/zettelkasten.ts:50

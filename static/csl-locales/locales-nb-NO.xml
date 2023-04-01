@@ -307,7 +307,7 @@
     <term name="opus" form="short">op.</term>
     <term name="page" form="short">
       <single>s.</single>
-      <multiple>ss.</multiple>
+      <multiple>s.</multiple>
     </term>
     <term name="number-of-pages" form="short">
       <single>s.</single>

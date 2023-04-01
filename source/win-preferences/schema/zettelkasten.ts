@@ -44,7 +44,7 @@ export default function (): any {
         },
         {
           type: 'radio',
-          label: trans('When linking files, add the filename …'),
+          label: trans('When linking files, add the display name …'),
           model: 'zkn.linkWithFilename',
           options: {
             'always': trans('always'),
