@@ -15,6 +15,7 @@
 
 import { app } from 'electron'
 import path from 'path'
+import { bootstrap } from 'global-agent'
 import { bootApplication, shutdownApplication } from './app/lifecycle'
 
 // Helper function to extract files to open from process.argv
@@ -46,6 +47,9 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 // If we reach this point, we are now booting the first instance of Zettlr.
+
+// Use a proxy if one has been configured
+bootstrap()
 
 // To show notifications properly on Windows, we must manually set the appUserModelID
 // See https://www.electronjs.org/docs/tutorial/notifications#windows

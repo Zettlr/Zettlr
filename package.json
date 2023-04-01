@@ -74,6 +74,7 @@
     "fix-path": "^4.0.0",
     "gemoji": "^8.1.0",
     "gettext-parser": "^8.0.0",
+    "global-agent": "^3.0.0",
     "got": "11.x.x",
     "katex": "^0.16.11",
     "ky": "^1.7.2",
