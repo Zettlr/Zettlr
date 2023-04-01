@@ -162,7 +162,7 @@
     <term name="close-quote">’</term>
     <term name="open-inner-quote">“</term>
     <term name="close-inner-quote">”</term>
-    <term name="page-range-delimiter">–</term>
+    <term name="page-range-delimiter">-</term>
     <term name="colon">:</term>
     <term name="comma">,</term>
     <term name="semicolon">;</term>
@@ -614,7 +614,7 @@
     <!-- SEASONS -->
     <term name="season-01">lente</term>
     <term name="season-02">zomer</term>
-    <term name="season-03">herst</term>
+    <term name="season-03">herfst</term>
     <term name="season-04">winter</term>
   </terms>
 </locale>
