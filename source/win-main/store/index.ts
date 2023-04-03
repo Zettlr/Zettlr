@@ -18,7 +18,6 @@ import { StoreOptions, createStore as baseCreateStore, Store } from 'vuex'
 import { InjectionKey } from 'vue'
 import { ColoredTag } from '@providers/tags'
 import { SearchResultWrapper } from '@dts/common/search'
-import { RelatedFile } from '@dts/renderer/misc'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import configToArrayMapper from './config-to-array'
 import { BranchNodeJSON, LeafNodeJSON, OpenDocument } from '@dts/common/documents'
@@ -33,7 +32,6 @@ import documentTreeMutation from './mutations/document-tree'
 // Import Actions
 import filetreeUpdateAction from './actions/filetree-update'
 import updateOpenDirectoryAction from './actions/update-open-directory'
-import updateRelatedFilesAction from './actions/update-related-files'
 import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
 import { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
@@ -83,10 +81,6 @@ export interface ZettlrState {
    * currently active
    */
   readabilityModeActive: string[]
-  /**
-   * Files which are in some way related to the currently active file
-   */
-  relatedFiles: RelatedFile[]
   /**
    * Contains coloured tags that can be managed in the tag manager
    */
@@ -162,7 +156,6 @@ function getConfig (): StoreOptions<ZettlrState> {
         activeFile: null,
         uncollapsedDirectories: [],
         selectedDirectory: null,
-        relatedFiles: [],
         colouredTags: [],
         writingTargets: [],
         config: configToArrayMapper(window.config.get()),
@@ -250,12 +243,6 @@ function getConfig (): StoreOptions<ZettlrState> {
       lastFiletreeUpdate: function (state, payload) {
         state.lastFiletreeUpdate = payload
       },
-      updateRelatedFiles: function (state, relatedFiles: RelatedFile[]) {
-        // Make sure we're only updating if something has changed.
-        if (JSON.stringify(relatedFiles) !== JSON.stringify(state.relatedFiles)) {
-          state.relatedFiles = relatedFiles
-        }
-      },
       updateModifiedFiles: function (state, modifiedDocuments: string[]) {
         state.modifiedDocuments = modifiedDocuments
       },
@@ -299,10 +286,7 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateOpenDirectory: updateOpenDirectoryAction,
       lastLeafId: async function (ctx, lastLeafId: string) {
         ctx.commit('lastLeafId', lastLeafId)
-        // Update the related files
-        await ctx.dispatch('updateRelatedFiles')
       },
-      updateRelatedFiles: updateRelatedFilesAction,
       updateBibliography: updateBibliographyAction,
       documentTree: documentTreeUpdateAction,
       updateSnippets: updateSnippetsAction,
