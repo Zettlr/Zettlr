@@ -111,29 +111,6 @@ export default defineComponent({
       return this.$store.state.modifiedDocuments
     }
   },
-  watch: {
-    // TODO: MOVE THIS TO THE STORE
-    modifiedFiles: function () {
-      if (this.activeFile == null) {
-        return
-      }
-
-      // Update the related files when the current document is not modified to
-      // immediately account for any changes in the related files.
-      const activePath = this.activeFile.path
-      if (!(activePath in this.modifiedFiles)) {
-        this.$store.dispatch('updateRelatedFiles')
-          .catch(e => console.error('Could not update related files', e))
-      }
-    }
-  },
-  mounted: function () {
-    // TODO: MOVE THIS TO THE STORE
-    ipcRenderer.on('links', () => {
-      this.$store.dispatch('updateRelatedFiles')
-        .catch(e => console.error('Could not update related files', e))
-    })
-  },
   methods: {
     setCurrentTab: function (which: string) {
       (global as any).config.set('window.currentSidebarTab', which)
