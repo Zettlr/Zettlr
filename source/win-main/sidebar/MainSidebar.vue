@@ -45,8 +45,6 @@ import RelatedFilesTab from './RelatedFilesTab.vue'
 import OtherFilesTab from './OtherFilesTab.vue'
 import { OpenDocument } from '@dts/common/documents'
 
-const ipcRenderer = window.ipc
-
 export default defineComponent({
   name: 'MainSidebar',
   components: {
