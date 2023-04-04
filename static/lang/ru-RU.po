@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-03-31 02:31+0000\n"
+"POT-Creation-Date: 2023-04-04 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1499,7 +1499,7 @@ msgstr "Предложенные теги для текущего файла"
 msgid "Add to file"
 msgstr "Добавить к файлу"
 
-#: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:74
+#: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:72
 msgid "Other files"
 msgstr "Другие файлы"
 
@@ -1613,27 +1613,27 @@ msgstr "выбрано"
 msgid "click to select"
 msgstr "щелчок для выбора"
 
-#: source/tmp/RelatedFilesTab.vue.ts:23 source/tmp/MainSidebar.vue.ts:83
+#: source/tmp/RelatedFilesTab.vue.ts:27 source/tmp/MainSidebar.vue.ts:81
 msgid "Related files"
 msgstr "Связанные файлы"
 
-#: source/tmp/RelatedFilesTab.vue.ts:26
+#: source/tmp/RelatedFilesTab.vue.ts:30
 msgid "No related files"
 msgstr "Нет связанных файлов"
 
-#: source/tmp/RelatedFilesTab.vue.ts:29
+#: source/tmp/RelatedFilesTab.vue.ts:33
 msgid "This relation is based on a bidirectional link."
 msgstr "Это отношение основано на двунаправленной связи."
 
-#: source/tmp/RelatedFilesTab.vue.ts:32
+#: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on an outbound link."
 msgstr "Это отношение основано на исходящей ссылке."
 
-#: source/tmp/RelatedFilesTab.vue.ts:35
+#: source/tmp/RelatedFilesTab.vue.ts:39
 msgid "This relation is based on a backlink."
 msgstr "Это отношение основано на обратной ссылке."
 
-#: source/tmp/RelatedFilesTab.vue.ts:113
+#: source/tmp/RelatedFilesTab.vue.ts:228
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr "Это отношение основано на общих тегах %s: %s"
@@ -1670,7 +1670,7 @@ msgstr "Громкость"
 msgid "Zettlr also makes use of these projects:"
 msgstr "Zettlr использует следующие проекты:"
 
-#: source/tmp/ReferencesTab.vue.ts:20 source/tmp/MainSidebar.vue.ts:77
+#: source/tmp/ReferencesTab.vue.ts:20 source/tmp/MainSidebar.vue.ts:75
 msgid "References"
 msgstr "Ссылка"
 
@@ -1844,7 +1844,7 @@ msgstr "Рабочее окружение"
 msgid "No open files or folders"
 msgstr "Нет открытых файлов или каталогов"
 
-#: source/tmp/MainSidebar.vue.ts:80 source/tmp/ToCTab.vue.ts:53
+#: source/tmp/MainSidebar.vue.ts:78 source/tmp/ToCTab.vue.ts:53
 msgid "Table of Contents"
 msgstr "Оглавление"
 
