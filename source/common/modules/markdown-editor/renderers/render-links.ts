@@ -151,13 +151,14 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): LinkWidget|unde
     return new LinkWidget(url, url, node.node)
   }
 
-  const literalLink = state.sliceDoc(node.from, node.to)
-  const match = /(?!!)\[(?<title>.+)\]\((?<url>.+)\)/.exec(literalLink)
-  if (match === null) {
-    return undefined // Should not happen, but we never know.
+  const urlNode = node.node.getChild('URL')
+  if (urlNode === null) {
+    throw new Error('Could not render `Link`: urlNode was null!')
   }
 
-  const { title, url } = match.groups as any
+  const titleNode = node.node.getChild('LinkLabel')
+  const url = state.sliceDoc(urlNode.from, urlNode.to)
+  const title = titleNode !== null ? state.sliceDoc(titleNode.from, titleNode.to) : url
 
   return new LinkWidget(title, url, node.node)
 }
