@@ -1330,12 +1330,8 @@ export default class DocumentManager extends ProviderContract {
       const newWordCount = countWords(content, false)
       const newCharCount = countWords(content, true)
 
-      const countChars = this._app.config.get().editor.countChars
-      if (countChars) {
-        this._app.stats.updateWordCount(newCharCount - doc.lastSavedCharCount)
-      } else {
-        this._app.stats.updateWordCount(newWordCount - doc.lastSavedWordCount)
-      }
+      this._app.stats.updateWordCount(newWordCount - doc.lastSavedWordCount)
+      // TODO: Proper character counting
 
       doc.lastSavedWordCount = newWordCount
       doc.lastSavedCharCount = newCharCount
