@@ -308,11 +308,11 @@ export default {
         return this.modelValue.filter(element => {
           if (this.valueType === 'simpleArray') {
             // Return the string coerced index
-            return String(element).indexOf(query) > -1
+            return String(element).toLowerCase().includes(query)
           } else if (this.valueType === 'multiArray') {
             for (const column of element) {
               // Same, but for each column
-              if (String(column).indexOf(query) > -1) {
+              if (String(column).toLowerCase().includes(query)) {
                 return true
               }
             }
@@ -320,7 +320,7 @@ export default {
           } else {
             // We have an object, so the same as multiArray, but with Object.keys()
             for (const key of Object.keys(element)) {
-              if (String(element[key]).indexOf(query) > -1) {
+              if (String(element[key]).toLowerCase().includes(query)) {
                 return true
               }
             }
