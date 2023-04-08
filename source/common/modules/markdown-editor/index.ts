@@ -190,16 +190,31 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
-   * Creates a new MarkdownEditor instance attached to the anchorElement
+   * Creates a new MarkdownEditor instance associated with the given leafId and
+   * the representedDocument. Immediately after instantiation the editor will
+   * pull the document from the given authorityAPI and set it up.
    *
-   * @param   {Element|DocumentFragment|undefined}  anchorElement   The anchor element (either a DOM node or an ID to be used with document.getElementById)
-   * @param  {Function} getDocument Used to fetch initial document states from the document authority
-   * @param  {Function} pullUpdates Used to pull new updates from the document authority
-   * @param  {Function} pushUpdates Used to push new updates to the document authority
+   * NOTE that you will have to append the resulting editor DOM element onto the
+   * DOM tree yourself in order for the editor to actually show up. Example:
+   *
+   * ```ts
+   * const editor = new MarkdownEditor(leafId, filePath, api)
+   * const container = document.getElementById('container')
+   * container.appendChild(editor.dom)
+   * ```
+   *
+   * @param  {string}                leafId               The ID of the leaf
+   *                                                      this editor is part of
+   * @param  {string}                representedDocument  The absolute path to
+   *                                                      the file that will be
+   *                                                      loaded in this editor
+   * @param  {DocumentAuthorityAPI}  authorityAPI         The authority API this
+   *                                                      editor should use.
+   *                                                      Should normally be the
+   *                                                      IPC authority.
    */
   constructor (
-    anchorElement: Element|DocumentFragment|undefined,
-    editorId: string,
+    leafId: string,
     representedDocument: string,
     authorityAPI: DocumentAuthorityAPI
   ) {
@@ -207,7 +222,7 @@ export default class MarkdownEditor extends EventEmitter {
 
     this.authority = authorityAPI
     this.representedDocument = representedDocument
-    this.editorId = `${editorId}-${representedDocument}`
+    this.editorId = `${leafId}-${representedDocument}`
 
     // Since the editor state needs to be rebuilt from scratch sometimes, we
     // cache the autocomplete databases so that we don't have to re-fetch them
@@ -220,7 +235,7 @@ export default class MarkdownEditor extends EventEmitter {
     // Create the editor ...
     this._instance = new EditorView({
       state: undefined,
-      parent: anchorElement
+      parent: undefined
     })
 
     // ... and immediately begin loading the document
