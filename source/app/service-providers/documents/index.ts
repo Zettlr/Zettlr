@@ -926,10 +926,7 @@ export default class DocumentManager extends ProviderContract {
     await this.forEachLeaf(async (tabMan, windowId, leafId) => {
       const res = tabMan.replaceFilePath(oldPath, newPath)
       if (res) {
-        console.log('ADDING LEAF TO BE NOTIFIED')
         leafsToNotify.push([ windowId, leafId ])
-      } else {
-        console.log('Not adding leaf, nothing changed.')
       }
       return res
     })
@@ -938,7 +935,6 @@ export default class DocumentManager extends ProviderContract {
 
     // Emit the necessary events to each window
     for (const [ windowId, leafId ] of leafsToNotify) {
-      console.log('Emitting event for', windowId, leafId)
       this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { filePath: oldPath, windowId, leafId })
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { filePath: newPath, windowId, leafId })
     }
@@ -957,7 +953,7 @@ export default class DocumentManager extends ProviderContract {
     const docs = this.documents.filter(doc => doc.filePath.startsWith(oldPath))
 
     for (const doc of docs) {
-      console.log('Replacing file path for doc', doc.filePath, 'with', doc.filePath.replace(oldPath, newPath))
+      this._app.log.info('Replacing file path for doc ' + doc.filePath + ' with ' + doc.filePath.replace(oldPath, newPath))
       await this.hasMovedFile(doc.filePath, doc.filePath.replace(oldPath, newPath))
     }
   }
