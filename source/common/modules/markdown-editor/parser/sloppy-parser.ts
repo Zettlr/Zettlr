@@ -88,7 +88,7 @@ export const sloppyParser: InlineParser = {
     // Now, `to` points after the final bracket. The next check we have to do is
     // see if there's a title inside.
     let url = ctx.text.slice(from - ctx.offset, to - ctx.offset)
-    console.log(url)
+
     if (/".+"\)$/.test(url)) {
       // We have a title
       to = from + url.indexOf('"') - 1

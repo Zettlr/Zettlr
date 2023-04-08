@@ -856,25 +856,29 @@ function handleDragLeave (event: DragEvent) {
       color: @base01;
       font-family: 'Inconsolata', Consolas, Menlo, monospace;
 
-      .cm-string     { color: @green; }
-      .cm-keyword    { color: @green; }
-      .cm-atom       { color: @violet; }
-      .cm-tag-name, .cm-modifier { color: @cyan; }
-      .cm-qualifier  { color: @blue; }
-      .cm-builtin    { color: @blue; }
-      .cm-variable-name { color: @cyan; }
-      .cm-variable   { color: @cyan; }
-      .cm-comment    { color: @base1; }
-      .cm-attribute-name  { color: @orange; }
-      .cm-property   { color: @magenta; }
+      .cm-string         { color: @green; }
+      .cm-keyword        { color: @green; }
+      .cm-atom           { color: @violet; }
+      .cm-tag-name,
+      .cm-modifier       { color: @cyan; }
+      .cm-qualifier      { color: @blue; }
+      .cm-builtin        { color: @blue; }
+      .cm-variable-name  { color: @cyan; }
+      .cm-variable       { color: @cyan; }
+      .cm-comment        { color: @base1; }
+      .cm-attribute-name { color: @orange; }
+      .cm-property       { color: @magenta; }
       .cm-keyword,
       .cm-name,
-      .cm-type-name       { color: @yellow; }
-      .cm-number     { color: @violet; }
-      .cm-property-name { color: @blue; }
-
-      .cm-positive { color: @green; }
-      .cm-negative { color: @red; }
+      .cm-type-name      { color: @yellow; }
+      .cm-number         { color: @violet; }
+      .cm-property-name  { color: @blue; }
+      .cm-deleted        { color: @orange; }
+      .cm-changed        { color: @yellow; }
+      .cm-inserted       { color: @green; }
+      .cm-positive       { color: @green; }
+      .cm-negative       { color: @red; }
+      .cm-meta           { color: @violet; }
     } // END: Solarized code theme
   }
 
