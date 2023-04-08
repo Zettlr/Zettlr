@@ -11,18 +11,20 @@
       v-bind:leaf-id="leafId"
       v-bind:window-id="windowId"
     ></DocumentTabs>
-    <MainEditor
-      v-if="activeFile !== null"
-      ref="editor"
-      v-bind:distraction-free="distractionFree"
-      v-bind:leaf-id="leafId"
-      v-bind:window-id="windowId"
-      v-bind:editor-commands="editorCommands"
-      v-on:global-search="$emit('globalSearch', $event)"
-    ></MainEditor>
-    <div v-else class="empty-pane"></div>
+    <template v-for="file in openFiles" v-bind:key="file.path">
+      <MainEditor
+        v-show="activeFile?.path === file.path"
+        v-bind:file="file"
+        v-bind:distraction-free="distractionFree"
+        v-bind:leaf-id="leafId"
+        v-bind:active-file="activeFile"
+        v-bind:window-id="windowId"
+        v-bind:editor-commands="editorCommands"
+        v-on:global-search="$emit('globalSearch', $event)"
+      ></MainEditor>
+    </template>
+    <div v-if="hasNoOpenFiles" class="empty-pane"></div>
   </div>
-  <!-- A single editor pane can either be a pane itself OR a MultiSplitView -->
 </template>
 
 <script lang="ts">
@@ -80,6 +82,12 @@ export default defineComponent({
     },
     activeFile (): OpenDocument|null {
       return this.node?.activeFile ?? null
+    },
+    openFiles (): OpenDocument[] {
+      return this.node?.openFiles ?? []
+    },
+    hasNoOpenFiles (): boolean {
+      return this.openFiles.length === 0
     }
   }
 })
