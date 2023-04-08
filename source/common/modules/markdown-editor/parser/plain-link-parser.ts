@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { InlineParser } from '@lezer/markdown'
+import { type InlineParser } from '@lezer/markdown'
 
 // NOTE: The original URL regexp from the old Markdown mode may have looked
 // sophisticated, but for our purposes here it's way too slow to compute.

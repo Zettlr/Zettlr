@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-import { EditorView } from '@codemirror/view'
+import { type EditorView } from '@codemirror/view'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
+import { type AnyMenuItem } from '@dts/renderer/context'
 import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc

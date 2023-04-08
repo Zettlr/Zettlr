@@ -22,9 +22,9 @@ import path from 'path'
 import { app, ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
-import LogProvider from '../log'
+import type LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
-import FSAL from '@providers/fsal'
+import type FSAL from '@providers/fsal'
 
 /**
  * This interface describes a single tag within the files loaded in here.

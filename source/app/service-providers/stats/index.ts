@@ -16,8 +16,8 @@
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import ProviderContract from '../provider-contract'
-import LogProvider from '../log'
-import { Stats } from '@dts/main/stats-provider'
+import type LogProvider from '../log'
+import type { Stats } from '@dts/main/stats-provider'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 
 /**

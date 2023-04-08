@@ -19,7 +19,7 @@
  * END HEADER
  */
 
-import { InlineParser, Element } from '@lezer/markdown'
+import { type InlineParser, type Element } from '@lezer/markdown'
 
 /**
  * Parses Pandoc attribute strings (e.g. `{.unnumbered}`) in the code

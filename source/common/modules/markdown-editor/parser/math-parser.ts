@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { InlineParser, BlockParser } from '@lezer/markdown'
+import { type InlineParser, type BlockParser } from '@lezer/markdown'
 import { StreamLanguage } from '@codemirror/language'
 import { Tree } from '@lezer/common'
 import { stexMath } from '@codemirror/legacy-modes/mode/stex'

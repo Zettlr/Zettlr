@@ -14,8 +14,8 @@
 
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { AnyMenuItem } from '@dts/renderer/context'
+import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { AnyMenuItem } from '@dts/renderer/context'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard

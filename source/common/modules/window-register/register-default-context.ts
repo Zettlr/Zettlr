@@ -16,7 +16,7 @@
 
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem, Point } from '@dts/renderer/context'
+import type { AnyMenuItem, Point } from '@dts/renderer/context'
 const ipcRenderer = window.ipc
 
 const TEMPLATE: AnyMenuItem[] = [
@@ -65,7 +65,7 @@ const TEXT_INPUT_TYPES = [
 ]
 
 // Holds the current close callback
-let currentCallback: Function|null = null
+let currentCallback: null|(() => void) = null
 
 /**
  * Registers listeners for default context menus for anything text related

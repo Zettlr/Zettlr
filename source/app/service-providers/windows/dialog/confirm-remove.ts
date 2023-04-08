@@ -12,8 +12,13 @@
  * END HEADER
  */
 
-import { BrowserWindow, dialog, MessageBoxOptions, MessageBoxReturnValue } from 'electron'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import {
+  dialog,
+  type BrowserWindow,
+  type MessageBoxOptions,
+  type MessageBoxReturnValue
+} from 'electron'
+import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { trans } from '@common/i18n-main'
 
 /**

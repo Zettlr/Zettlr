@@ -20,7 +20,7 @@
  * END HEADER
  */
 
-import { InlineParser, Element } from '@lezer/markdown'
+import { type InlineParser, type Element } from '@lezer/markdown'
 
 export const sloppyParser: InlineParser = {
   name: 'sloppy-parser', // Could be a fancy restaurant name or a bad one for a photographer

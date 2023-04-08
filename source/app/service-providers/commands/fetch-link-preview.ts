@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { fetchLinkPreview, LinkPreviewResult } from '@common/util/fetch-link-preview'
+import { fetchLinkPreview, type LinkPreviewResult } from '@common/util/fetch-link-preview'
 import ZettlrCommand from './zettlr-command'
 import path from 'path'
 import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'

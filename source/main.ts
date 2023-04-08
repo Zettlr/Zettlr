@@ -19,7 +19,7 @@ import { bootApplication, shutdownApplication } from './app/lifecycle'
 
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './app/util/extract-files-from-argv'
-import AppServiceContainer from './app/app-service-container'
+import type AppServiceContainer from './app/app-service-container'
 import {
   DATA_DIR,
   DISABLE_HARDWARE_ACCELERATION,

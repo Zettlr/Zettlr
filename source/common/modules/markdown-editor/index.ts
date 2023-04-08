@@ -31,8 +31,8 @@ import { EditorView } from '@codemirror/view'
 import {
   EditorSelection,
   EditorState,
-  Extension,
-  SelectionRange
+  type Extension,
+  type SelectionRange
 } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 
@@ -46,7 +46,7 @@ import {
   wordCountField
 } from './plugins/statistics-fields'
 
-import { ToCEntry, tocField } from './plugins/toc-field'
+import { type ToCEntry, tocField } from './plugins/toc-field'
 import {
   citekeyUpdate,
   filesUpdate,
@@ -56,7 +56,7 @@ import {
 
 // Main configuration
 import {
-  CoreExtensionOptions,
+  type CoreExtensionOptions,
   getJSONExtensions,
   getMarkdownExtensions,
   getTexExtensions,
@@ -67,9 +67,9 @@ import {
 import {
   configField,
   configUpdateEffect,
-  EditorConfigOptions,
-  EditorConfiguration,
-  getDefaultConfig
+  getDefaultConfig,
+  type EditorConfigOptions,
+  type EditorConfiguration
 } from './util/configuration'
 
 // Custom commands
@@ -89,8 +89,12 @@ import { highlightRangesEffect } from './plugins/highlight-ranges'
 import safeAssign from '@common/util/safe-assign'
 import countWords from '@common/util/count-words'
 import { DocumentType, DP_EVENTS } from '@dts/common/documents'
-import { TagRecord } from '@providers/tags'
-import { PullUpdateCallback, PushUpdateCallback, reloadStateEffect } from './plugins/remote-doc'
+import { type TagRecord } from '@providers/tags'
+import {
+  reloadStateEffect,
+  type PullUpdateCallback,
+  type PushUpdateCallback
+} from './plugins/remote-doc'
 
 const ipcRenderer = window.ipc
 
@@ -717,23 +721,6 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
-   * Whether the editor is in fullscreen mode
-   *
-   * @return  {Boolean}  True if the editor option for fullScreen is set
-   */
-  get isFullscreen (): boolean {
-    return false // TODO
-  }
-
-  /**
-   * Enters or exits the editor fullscreen mode
-   *
-   * @param   {Boolean}  shouldBeFullscreen  Whether the editor should be in fullscreen
-   */
-  set isFullscreen (shouldBeFullscreen: boolean) {
-  }
-
-  /**
    * Whether the editor is currently in typewriter
    *
    * @return  {Boolean}  True if typewriter mode is active
@@ -768,7 +755,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @return  {boolean}  True or false
    */
   get distractionFree (): boolean {
-    return false // TODO
+    return this._instance.state.field(configField, false)?.distractionFree ?? false
   }
 
   /**

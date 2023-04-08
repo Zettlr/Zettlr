@@ -16,7 +16,7 @@
 import { getCodeBlockRE } from '@common/regular-expressions'
 import countWords from '@common/util/count-words'
 import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
-import { MDFileDescriptor } from '@dts/common/fsal'
+import type { MDFileDescriptor } from '@dts/common/fsal'
 import extractBOM from './extract-bom'
 import extractFileId from './extract-file-id'
 import extractLinks from './extract-links'

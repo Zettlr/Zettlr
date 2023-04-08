@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { linter, Diagnostic } from '@codemirror/lint'
+import { linter, type Diagnostic } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'

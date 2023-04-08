@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { Compartment, EditorState, Extension } from '@codemirror/state'
+import { Compartment, EditorState, type Extension } from '@codemirror/state'
 import { renderHeadings } from './render-headings'
 import { renderImages } from './render-images'
 import { renderLinks } from './render-links'
@@ -24,7 +24,7 @@ import { renderMermaid } from './render-mermaid'
 import { renderTables } from './render-tables'
 import { renderIframes } from './render-iframes'
 import { renderEmphasis } from './render-emphasis'
-import { configField, EditorConfiguration } from '../util/configuration'
+import { configField, type EditorConfiguration } from '../util/configuration'
 
 const renderCompartment = new Compartment()
 

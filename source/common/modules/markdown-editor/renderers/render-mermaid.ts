@@ -13,11 +13,11 @@
  */
 
 import { renderBlockWidgets } from './base-renderer'
-import { SyntaxNode, SyntaxNodeRef } from '@lezer/common'
-import { EditorView, WidgetType } from '@codemirror/view'
+import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
+import { WidgetType, type EditorView } from '@codemirror/view'
 
 import mermaid from 'mermaid'
-import { EditorState } from '@codemirror/state'
+import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 
 mermaid.initialize({ startOnLoad: false, theme: 'dark' as any })

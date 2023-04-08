@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { linter, Diagnostic } from '@codemirror/lint'
+import { linter, type Diagnostic } from '@codemirror/lint'
 import YAML from 'yaml'
 
 export const yamlLint = linter(async view => {

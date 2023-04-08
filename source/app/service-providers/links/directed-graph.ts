@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { GraphArc, GraphVertex, LinkGraph } from '@dts/common/graph'
+import type { GraphArc, GraphVertex, LinkGraph } from '@dts/common/graph'
 
 const NONE_COMPONENT = 'Files'
 

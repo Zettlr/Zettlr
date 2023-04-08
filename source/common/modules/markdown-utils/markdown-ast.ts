@@ -32,8 +32,8 @@
  * END HEADER
  */
 
-import extractCitations, { CitePosition } from '@common/util/extract-citations'
-import { SyntaxNode } from '@lezer/common'
+import extractCitations, { type CitePosition } from '@common/util/extract-citations'
+import { type SyntaxNode } from '@lezer/common'
 
 /**
  * This list contains all Node names that do not themselves have any content.
@@ -121,7 +121,7 @@ export interface LinkOrImage extends MDNode {
   /**
    * The URL of the link or image
    */
-  url: TextNode
+  url: string
   /**
    * ALT text of the link or image (i.e. what's written in square brackets)
    */
@@ -517,7 +517,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
-        url: genericTextNode(url.from, url.to, markdown.substring(url.from, url.to)),
+        url: markdown.substring(url.from, url.to),
         alt: genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
       }
 
@@ -539,7 +539,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
-        url: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)),
+        url: markdown.substring(node.from, node.to),
         alt: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))
       }
       return astNode

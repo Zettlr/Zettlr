@@ -18,10 +18,10 @@
 // 3. And, obviously, add and remove them
 
 import { syntaxTree } from '@codemirror/language'
-import { ChangeSpec } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type ChangeSpec } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
-import { Footnote, FootnoteRef } from '@common/modules/markdown-utils/markdown-ast'
+import { type Footnote, type FootnoteRef } from '@common/modules/markdown-utils/markdown-ast'
 
 export function addNewFootnote (target: EditorView): boolean {
   const ast = markdownToAST(target.state.sliceDoc())

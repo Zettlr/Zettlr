@@ -26,11 +26,11 @@ import { promises as fs } from 'fs'
 
 import { ipcMain, app } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import findLangCandidates, { Candidate } from '@common/util/find-lang-candidates'
-import enumDictFiles, { DictFileMetadata } from '@common/util/enum-dict-files'
+import findLangCandidates, { type Candidate } from '@common/util/find-lang-candidates'
+import enumDictFiles, { type DictFileMetadata } from '@common/util/enum-dict-files'
 import ProviderContract from '../provider-contract'
-import LogProvider from '../log'
-import ConfigProvider from '@providers/config'
+import type LogProvider from '../log'
+import type ConfigProvider from '@providers/config'
 
 /**
  * This class loads and unloads dictionaries according to the configuration set

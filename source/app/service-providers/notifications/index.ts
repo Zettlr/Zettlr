@@ -17,7 +17,7 @@ import {
   Notification
 } from 'electron'
 import path from 'path'
-import LogProvider from '../log'
+import type LogProvider from '../log'
 import ProviderContract from '../provider-contract'
 
 export default class NotificationProvider extends ProviderContract {
@@ -30,7 +30,7 @@ export default class NotificationProvider extends ProviderContract {
     this._icon = nativeImage.createFromPath(path.join(__dirname, '../../common/img/image-preview.png'))
   }
 
-  show (msg: string, title?: string, callback?: Function): boolean {
+  show (msg: string, title?: string, callback?: () => void): boolean {
     if (!this._osSupportsNotification) {
       return false
     }

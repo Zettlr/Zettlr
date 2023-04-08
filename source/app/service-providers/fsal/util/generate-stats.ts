@@ -14,7 +14,7 @@
  */
 
 import objectToArray from '@common/util/object-to-array'
-import { MaybeRootDescriptor, DirDescriptor, MDFileDescriptor, CodeFileDescriptor, FSALStats } from '@dts/common/fsal'
+import type { MaybeRootDescriptor, DirDescriptor, MDFileDescriptor, CodeFileDescriptor, FSALStats } from '@dts/common/fsal'
 
 export default function generateStats (filetree: MaybeRootDescriptor[]): FSALStats {
   // First, we need ALL of our loaded paths as an array

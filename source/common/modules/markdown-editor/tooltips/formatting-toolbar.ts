@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import { Tooltip, showTooltip } from '@codemirror/view'
-import { EditorState, StateField } from '@codemirror/state'
+import { showTooltip, type Tooltip } from '@codemirror/view'
+import { type EditorState, StateField } from '@codemirror/state'
 import { applyBold, applyCode, applyComment, applyItalic, insertImage, insertLink } from '../commands/markdown'
 import { trans } from '@common/i18n-renderer'
 

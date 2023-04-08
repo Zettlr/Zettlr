@@ -1,5 +1,23 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DocumentTreeLeaf
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Document Tree Leafs represent a single document pane within
+ *                  a window. Formally, they are a wrapper around a tab manager.
+ *                  We need to separate the tab manager from the leaf, since the
+ *                  leaf needs to handle splitting itself up into a branch with
+ *                  two leaves.
+ *
+ * END HEADER
+ */
+
 import isFile from '@common/util/is-file'
-import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
+import type { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
 import { v4 as uuid4 } from 'uuid'
 import { DocumentTree } from './document-tree'
 import { DTBranch } from './document-tree-branch'

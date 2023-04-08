@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import { EditorState, StateField } from '@codemirror/state'
-import { Decoration, DecorationSet, EditorView } from '@codemirror/view'
+import { StateField, type EditorState } from '@codemirror/state'
+import { Decoration, EditorView, type DecorationSet } from '@codemirror/view'
 import { configField } from '../util/configuration'
 
 /**

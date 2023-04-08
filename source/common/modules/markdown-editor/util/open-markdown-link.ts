@@ -15,7 +15,7 @@
 
 import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import makeValidUri from '@common/util/make-valid-uri'
-import { EditorState, Line } from '@codemirror/state'
+import { type EditorState, type Line } from '@codemirror/state'
 import { configField } from './configuration'
 import { EditorView } from '@codemirror/view'
 import { tocField } from '../plugins/toc-field'

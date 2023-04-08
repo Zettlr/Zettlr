@@ -15,13 +15,13 @@
 import {
   createWriteStream,
   promises as fs,
-  ReadStream,
-  WriteStream
+  type ReadStream,
+  type WriteStream
 } from 'fs'
 
 import path from 'path'
 import crypto from 'crypto'
-import got, { Response } from 'got'
+import got, { type Response } from 'got'
 import semver from 'semver'
 
 import { ipcMain, app, shell } from 'electron'
@@ -29,11 +29,11 @@ import { trans } from '@common/i18n-main'
 import isFile from '@common/util/is-file'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
-import NotificationProvider from '../notifications'
-import LogProvider from '../log'
-import CommandProvider from '../commands'
-import { ServerAPIResponse, UpdateState } from '@dts/main/update-provider'
-import ConfigProvider from '@providers/config'
+import type NotificationProvider from '../notifications'
+import type LogProvider from '../log'
+import type CommandProvider from '../commands'
+import type { ServerAPIResponse, UpdateState } from '@dts/main/update-provider'
+import type ConfigProvider from '@providers/config'
 import { md2html } from '@common/modules/markdown-utils'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 

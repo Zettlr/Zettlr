@@ -15,16 +15,16 @@
 import {
   Tray,
   Menu,
-  MenuItemConstructorOptions,
+  type MenuItemConstructorOptions,
   screen,
   app
 } from 'electron'
 import path from 'path'
 import { trans } from '@common/i18n-main'
 import ProviderContract from '../provider-contract'
-import WindowProvider from '../windows'
-import LogProvider from '../log'
-import ConfigProvider from '@providers/config'
+import type WindowProvider from '../windows'
+import type LogProvider from '../log'
+import type ConfigProvider from '@providers/config'
 import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
 
 /**

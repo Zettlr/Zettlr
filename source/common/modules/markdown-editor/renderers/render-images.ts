@@ -13,9 +13,9 @@
  */
 
 import { renderInlineWidgets } from './base-renderer'
-import { SyntaxNode, SyntaxNodeRef } from '@lezer/common'
-import { EditorView, WidgetType } from '@codemirror/view'
-import { EditorState } from '@codemirror/state'
+import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
+import { WidgetType, type EditorView } from '@codemirror/view'
+import { type EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
 import makeAbsoluteURL from '@common/util/make-absolute-url'
 import { linkImageMenu } from '../context-menu/link-image-menu'

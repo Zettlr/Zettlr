@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-import { AnyDescriptor, DirDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, DirDescriptor } from '@dts/common/fsal'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import getSorter from '@providers/fsal/util/sort'
-import { ZettlrState } from '..'
+import { type ZettlrState } from '..'
 
 export default function (state: ZettlrState, descriptor: AnyDescriptor): void {
   const ownDescriptor = locateByPath(state.fileTree, descriptor.path)

@@ -17,7 +17,7 @@
  * END HEADER
  */
 
-import { AnyDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor } from '@dts/common/fsal'
 
 /**
  * Returns a function that can be used as a filter (i.e. in Array.filter) to match

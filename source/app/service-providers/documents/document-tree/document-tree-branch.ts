@@ -1,4 +1,24 @@
-import { BranchNodeJSON } from '@dts/common/documents'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DocumentTreeBranch
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This class represents a branch of a document tree. A
+ *                  DTBranch can contain a theoretically unlimited number of
+ *                  branches and leafs, in either horizontal or vertical
+ *                  direction. A branch is used to split up the various editors
+ *                  within a main editor window. They manage anything required
+ *                  to customize and modify those branches, such as the relative
+ *                  sizes of all of its children.
+ *
+ * END HEADER
+ */
+
+import type { BranchNodeJSON } from '@dts/common/documents'
 import { DocumentTree } from './document-tree'
 import { DTLeaf } from './document-tree-leaf'
 import { v4 as uuid4 } from 'uuid'

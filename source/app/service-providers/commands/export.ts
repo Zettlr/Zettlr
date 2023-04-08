@@ -16,11 +16,11 @@ import ZettlrCommand from './zettlr-command'
 import { app, shell } from 'electron'
 import { makeExport } from './exporter'
 import { trans } from '@common/i18n-main'
-import { ExporterOptions } from './exporter/types'
+import type { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
-import { PandocProfileMetadata } from '@dts/common/assets'
+import { type PandocProfileMetadata } from '@dts/common/assets'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {

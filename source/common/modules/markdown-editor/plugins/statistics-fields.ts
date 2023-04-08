@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { EditorState, StateField, Transaction } from '@codemirror/state'
+import { StateField, type EditorState, type Transaction } from '@codemirror/state'
 import countWords from '@common/util/count-words'
 
 export const wordCountField = StateField.define<number>({

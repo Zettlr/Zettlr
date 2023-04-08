@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-import { DP_EVENTS, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
-import { ActionContext } from 'vuex'
-import { ZettlrState } from '..'
+import { DP_EVENTS, type BranchNodeJSON, type LeafNodeJSON } from '@dts/common/documents'
+import { type ActionContext } from 'vuex'
+import { type ZettlrState } from '..'
 
 const ipcRenderer = window.ipc
 

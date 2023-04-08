@@ -14,16 +14,16 @@
  * END HEADER
  */
 
-import { app, MenuItemConstructorOptions, shell } from 'electron'
+import { app, type MenuItemConstructorOptions, shell } from 'electron'
 import { trans } from '@common/i18n-main'
 import path from 'path'
-import RecentDocumentsProvider from '@providers/recent-docs'
-import WindowProvider from '@providers/windows'
-import CommandProvider from '@providers/commands'
-import LogProvider from '@providers/log'
+import type RecentDocumentsProvider from '@providers/recent-docs'
+import type WindowProvider from '@providers/windows'
+import type CommandProvider from '@providers/commands'
+import type LogProvider from '@providers/log'
 import { zoomIn, zoomOut } from './font-zoom'
-import ConfigProvider from '@providers/config'
-import DocumentManager from '@providers/documents'
+import type ConfigProvider from '@providers/config'
+import type DocumentManager from '@providers/documents'
 
 export default function getMenu (
   logger: LogProvider,

@@ -20,7 +20,7 @@ import commandExists from 'command-exists'
 import path from 'path'
 import { promises as fs } from 'fs'
 import { BrowserWindow } from 'electron'
-import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { trans } from '@common/i18n-main'
 import sanitize from 'sanitize-filename'
 

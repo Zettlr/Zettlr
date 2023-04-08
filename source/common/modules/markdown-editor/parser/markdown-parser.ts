@@ -15,7 +15,12 @@
  */
 
 import { customTags } from '../util/custom-tags'
-import { LanguageSupport, StreamLanguage, Language, LanguageDescription } from '@codemirror/language'
+import {
+  StreamLanguage,
+  type LanguageSupport,
+  type Language,
+  type LanguageDescription
+} from '@codemirror/language'
 
 // Import all the languages, first the "new" ones
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'

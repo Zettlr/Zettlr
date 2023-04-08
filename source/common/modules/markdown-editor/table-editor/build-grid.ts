@@ -14,7 +14,7 @@
  */
 
 import calculateColSizes from './calculate-col-sizes'
-import { ColAlignment } from './types'
+import type { ColAlignment } from './types'
 
 /**
  * Takes a set of AST columns and returns the number of lines they will span if

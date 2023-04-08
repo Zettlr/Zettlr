@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-import { BrowserWindow, dialog, MessageBoxOptions } from 'electron'
+import { dialog, type BrowserWindow, type MessageBoxOptions } from 'electron'
 import { trans } from '@common/i18n-main'
-import ConfigProvider from '@providers/config'
+import type ConfigProvider from '@providers/config'
 
 /**
  * Asks the user for confirmation, if the file identified by filename should

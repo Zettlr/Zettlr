@@ -14,7 +14,7 @@
  */
 
 import calculateColSizes from './calculate-col-sizes'
-import { ColAlignment } from './types'
+import type { ColAlignment } from './types'
 
 export default function buildSimpleTable (ast: string[][], colAlignment: ColAlignment[]): string {
   const colSizes = calculateColSizes(ast)

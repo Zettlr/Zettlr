@@ -15,16 +15,16 @@
  */
 
 import {
-  WidgetType,
   Decoration,
-  DecorationSet,
   EditorView,
   ViewPlugin,
-  ViewUpdate
+  type WidgetType,
+  type DecorationSet,
+  type ViewUpdate
 } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
-import { SyntaxNodeRef } from '@lezer/common'
-import { EditorState, StateField } from '@codemirror/state'
+import { type SyntaxNodeRef } from '@lezer/common'
+import { StateField, type EditorState } from '@codemirror/state'
 
 /**
  * Renders all widgets for the provided `visibleRanges`. The function traverses

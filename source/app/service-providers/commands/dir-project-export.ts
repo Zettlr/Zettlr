@@ -15,10 +15,10 @@
 import ZettlrCommand from './zettlr-command'
 import objectToArray from '@common/util/object-to-array'
 import { makeExport } from './exporter'
-import { filter as minimatch } from 'minimatch'
+import minimatch from 'minimatch'
 import { shell } from 'electron'
-import { ExporterOptions } from './exporter/types'
-import LogProvider from '@providers/log'
+import type { ExporterOptions } from './exporter/types'
+import type LogProvider from '@providers/log'
 import { trans } from '@common/i18n-main'
 
 export default class DirProjectExport extends ZettlrCommand {
@@ -54,12 +54,8 @@ export default class DirProjectExport extends ZettlrCommand {
     // Use minimatch to filter against the project's filter patterns
     for (const pattern of config.filters) {
       this._app.log.info(`[Project] Filtering fileset: Matching against "${pattern}"`)
-      // NOTE: minimatch is actually just the "filter" function
-      const match = minimatch(pattern, { matchBase: true })
-      // NOTE: Since we're dealing with descriptors, and not paths, we have to
-      // manually call the filter function providing the path-property rather
-      // than the full object.
-      files = files.filter((descriptor, index, arr) => match(descriptor.path, index, arr))
+      // cf. https://github.com/isaacs/minimatch#minimatchfilterpattern-options
+      files = files.filter(minimatch.filter(pattern, { matchBase: true }))
     }
 
     if (files.length === 0) {
