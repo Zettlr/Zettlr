@@ -22,8 +22,7 @@
         v-on:global-search="$emit('globalSearch', $event)"
       ></MainEditor>
     </template>
-    <!-- Show a placeholder if there are no open files -->
-    <div v-if="openFiles.length === 0" class="empty-pane"></div>
+    <div v-if="hasNoOpenFiles" class="empty-pane"></div>
   </div>
 </template>
 
@@ -103,6 +102,9 @@ export default defineComponent({
     },
     openFiles (): OpenDocument[] {
       return this.node?.openFiles ?? []
+    },
+    hasNoOpenFiles (): boolean {
+      return this.openFiles.length === 0
     }
   },
   methods: {
