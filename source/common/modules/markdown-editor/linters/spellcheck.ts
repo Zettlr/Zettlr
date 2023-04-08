@@ -14,10 +14,10 @@
  */
 
 import { linter, Diagnostic } from '@codemirror/lint'
-import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
+import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
-import { filterNodesForSpellchecking } from './util'
+import { TextNode } from '@common/modules/markdown-utils/markdown-ast'
 
 const ipcRenderer = window.ipc
 
@@ -160,7 +160,7 @@ export const spellcheck = linter(async view => {
   const diagnostics: Diagnostic[] = []
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
   const ast = markdownToAST(view.state.doc.toString())
-  const textNodes = extractTextnodes(ast, filterNodesForSpellchecking)
+  const textNodes = extractASTNodes(ast, 'Text') as TextNode[]
 
   const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = textNodes
     // Then, extract all words from the node's value
