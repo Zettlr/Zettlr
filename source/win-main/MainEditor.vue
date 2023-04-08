@@ -116,6 +116,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  activeFile: {
+    type: Object as () => OpenDocument|null,
+    required: true
+  },
   editorCommands: {
     type: Object as () => EditorCommands,
     required: true
@@ -294,34 +298,41 @@ watch(toRef(props.editorCommands, 'jumpToLine'), () => {
   }
 })
 watch(toRef(props.editorCommands, 'moveSection'), () => {
+  if (props.activeFile?.path !== props.file.path) {
+    return
+  }
+
   const { from, to } = props.editorCommands.data
   currentEditor?.moveSection(from, to)
 })
 watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
-  if (currentEditor === null) {
+  if (currentEditor === null || props.activeFile?.path !== props.file.path) {
     return
   }
 
   currentEditor.readabilityMode = !currentEditor.readabilityMode
-  if (currentEditor.readabilityMode) {
-    store.commit('addReadabilityActiveLeaf', props.leafId)
-  } else {
-    store.commit('removeReadabilityActiveLeaf', props.leafId)
-  }
 })
 
 watch(toRef(props, 'distractionFree'), (newValue) => {
-  if (currentEditor !== null) {
+  if (currentEditor !== null && props.activeFile?.path === props.file.path) {
     currentEditor.distractionFree = props.distractionFree
   }
 })
 
 watch(toRef(props.editorCommands, 'executeCommand'), () => {
+  if (props.activeFile?.path !== props.file.path) {
+    return
+  }
+
   const command: string = props.editorCommands.data
   currentEditor?.runCommand(command)
   currentEditor?.focus()
 })
 watch(toRef(props.editorCommands, 'replaceSelection'), () => {
+  if (props.activeFile?.path !== props.file.path) {
+    return
+  }
+
   const textToInsert: string = props.editorCommands.data
   currentEditor?.replaceSelection(textToInsert)
 })

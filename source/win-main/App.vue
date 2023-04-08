@@ -200,14 +200,6 @@ export default defineComponent({
     activeFile: function (): OpenDocument|null {
       return this.$store.getters.lastLeafActiveFile()
     },
-    readabilityActive: function (): boolean {
-      const lastLeaf = this.lastLeafId
-      if (typeof lastLeaf !== 'string') {
-        return false
-      }
-
-      return this.$store.state.readabilityModeActive.includes(lastLeaf)
-    },
     modifiedFiles: function (): string[] {
       return Array.from(this.$store.state.modifiedFiles.keys())
     },
@@ -338,12 +330,11 @@ export default defineComponent({
           icon: 'export'
         },
         {
-          type: 'toggle',
+          type: 'button',
           id: 'toggle-readability',
           title: trans('Toggle readability mode'),
           icon: 'eye',
-          visible: this.getToolbarButtonDisplay('showToggleReadabilityButton'),
-          initialState: this.readabilityActive
+          visible: this.getToolbarButtonDisplay('showToggleReadabilityButton')
         },
         {
           type: 'spacer',
@@ -684,7 +675,9 @@ export default defineComponent({
       (this.$refs['file-manager'] as any).toggleFileList()
     },
     handleClick: function (clickedID: string) {
-      if (clickedID === 'root-open-workspaces') {
+      if (clickedID === 'toggle-readability') {
+        this.editorCommands.readabilityMode = !this.editorCommands.readabilityMode
+      } else if (clickedID === 'root-open-workspaces') {
         ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
           .catch(e => console.error(e))
       } else if (clickedID === 'open-preferences') {
@@ -859,9 +852,7 @@ export default defineComponent({
     },
     handleToggle: function (controlState: { id: string, state: any }) {
       const { id, state } = controlState
-      if (id === 'toggle-readability') {
-        this.editorCommands.readabilityMode = !this.editorCommands.readabilityMode
-      } else if (id === 'toggle-sidebar') {
+      if (id === 'toggle-sidebar') {
         window.config.set('window.sidebarVisible', state)
       } else if (id === 'toggle-file-manager') {
         // Since this is a three-way-toggle, we have to inspect the state.

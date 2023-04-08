@@ -242,10 +242,6 @@ function applyRemoveLeafDelta (state: ZettlrState, treedata: DocumentTree, conte
   // Now, again, removing the leaf from the paneData is trivial
   const dataIdx = state.paneData.findIndex(leaf => leaf.id === removedLeafId)
   state.paneData.splice(dataIdx, 1)
-  const readabilityIdx = state.readabilityModeActive.indexOf(removedLeafId)
-  if (readabilityIdx > -1) {
-    state.readabilityModeActive.splice(readabilityIdx, 1)
-  }
 
   // Removing the node from the local branch is more difficult. We have three
   // options here: (a) localParent has more than one child. In that case, we can
