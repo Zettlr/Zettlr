@@ -1001,16 +1001,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replit/codemirror-emacs@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@replit/codemirror-emacs@npm:6.0.0"
+"@replit/codemirror-emacs@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@replit/codemirror-emacs@npm:6.0.1"
   peerDependencies:
     "@codemirror/autocomplete": ^6.0.2
     "@codemirror/commands": ^6.0.0
     "@codemirror/search": ^6.0.0
     "@codemirror/state": ^6.0.1
-    "@codemirror/view": ^6.0.2
-  checksum: 0cd1c69e3f0450e106dd0a8dc22de2d02740e8f1beb3e65fcc29fdfe8750c7e22e7c2ef9390e5209a58104a225344960ffeddfef2db0384dbb37318eb560be8c
+    "@codemirror/view": ^6.3.0
+  checksum: 991e77209887ed9078ac6e67b83d9ddfbbb4654367e8d36aa2e1197a03ff10aa59d811514f3e0f84d69d0b1da00ea40c57ccb348ea8cf0e7a6198459bb7d3506
   languageName: node
   linkType: hard
 
@@ -13315,7 +13315,7 @@ __metadata:
     "@electron/notarize": ^1.2.3
     "@lezer/common": ^1.0.1
     "@lezer/highlight": ^1.1.2
-    "@replit/codemirror-emacs": ^6.0.0
+    "@replit/codemirror-emacs": ^6.0.1
     "@replit/codemirror-vim": ^6.0.4
     "@types/adm-zip": ^0.5.0
     "@types/archiver": ^5.3.2
