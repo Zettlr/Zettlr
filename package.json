@@ -56,7 +56,7 @@
     "@codemirror/state": "^6.2.0",
     "@codemirror/view": "^6.9.1",
     "@lezer/common": "^1.0.1",
-    "@lezer/highlight": "^1.1.2",
+    "@lezer/highlight": "^1.1.4",
     "@replit/codemirror-emacs": "^6.0.0",
     "@replit/codemirror-vim": "^6.0.4",
     "adm-zip": "^0.5.10",
