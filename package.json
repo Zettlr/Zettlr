@@ -115,7 +115,7 @@
     "tippy.js": "^6.3.7",
     "unified": "^10.1.2",
     "uuid": "^9.0.0",
-    "vue": "^3.2.41",
+    "vue": "^3.2.47",
     "vue-virtual-scroller": "^2.0.0-beta.7",
     "vuex": "^4.0.2",
     "yaml": "^2.1.3"
