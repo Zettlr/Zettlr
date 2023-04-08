@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import ConfigProvider from '@providers/config'
+import type ConfigProvider from '@providers/config'
 
 /**
  * Depending on the direction given, increases or decreases the font size of the

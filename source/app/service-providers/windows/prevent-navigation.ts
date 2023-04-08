@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import LogProvider from '@providers/log'
-import { app, BrowserWindow, shell } from 'electron'
+import type LogProvider from '@providers/log'
+import { app, shell, type BrowserWindow } from 'electron'
 
 /**
  * Attaches an event listener to win's webContents that prevents any navigation

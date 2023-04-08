@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import { DP_EVENTS, LeafNodeJSON, BranchNodeJSON } from '@dts/common/documents'
-import { ZettlrState } from '..'
+import { DP_EVENTS, type LeafNodeJSON, type BranchNodeJSON } from '@dts/common/documents'
+import { type ZettlrState } from '..'
 
 type DocumentTree = BranchNodeJSON|LeafNodeJSON
 

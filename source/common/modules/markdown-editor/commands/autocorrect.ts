@@ -15,8 +15,8 @@
 
 // The autocorrect plugin is basically just a keymap that listens to spaces and enters
 import { syntaxTree } from '@codemirror/language'
-import { ChangeSpec, EditorSelection, EditorState } from '@codemirror/state'
-import { Command, EditorView } from '@codemirror/view'
+import { EditorSelection, type ChangeSpec, type EditorState } from '@codemirror/state'
+import { type Command, type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 
 // These characters can be directly followed by a starting magic quote

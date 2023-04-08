@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { DOMEventHandlers } from '@codemirror/view'
+import { type DOMEventHandlers } from '@codemirror/view'
 import html2md from '@common/util/html-to-md'
 import { configField } from '../util/configuration'
 

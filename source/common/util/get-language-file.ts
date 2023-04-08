@@ -14,8 +14,8 @@
  * END HEADER
  */
 
-import enumLangFiles, { LangFileMetadata } from './enum-lang-files'
-import findLangCandidates, { Candidate } from './find-lang-candidates'
+import enumLangFiles, { type LangFileMetadata } from './enum-lang-files'
+import findLangCandidates, { type Candidate } from './find-lang-candidates'
 import path from 'path'
 
 /**

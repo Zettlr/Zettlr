@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { linter, Diagnostic } from '@codemirror/lint'
+import { linter, type Diagnostic } from '@codemirror/lint'
 import { remark } from 'remark'
 import remarkFrontmatter from 'remark-frontmatter'
 import { configField } from '../util/configuration'

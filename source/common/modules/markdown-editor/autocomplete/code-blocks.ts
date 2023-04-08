@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-import { Completion } from '@codemirror/autocomplete'
-import { EditorView } from '@codemirror/view'
+import { type Completion } from '@codemirror/autocomplete'
+import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
-import { AutocompletePlugin } from '.'
+import { type AutocompletePlugin } from '.'
 
 /**
  * This utility function just takes an info-string that should be placed after

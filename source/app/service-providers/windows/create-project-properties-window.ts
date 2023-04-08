@@ -13,16 +13,16 @@
  * END HEADER
  */
 
-import ConfigProvider from '@providers/config'
-import LogProvider from '@providers/log'
+import type ConfigProvider from '@providers/config'
+import type LogProvider from '@providers/log'
 import {
   BrowserWindow,
-  BrowserWindowConstructorOptions
+  type BrowserWindowConstructorOptions
 } from 'electron'
 import attachLogger from './attach-logger'
 import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
-import { WindowPosition } from './types'
+import type { WindowPosition } from './types'
 
 /**
  * Creates a BrowserWindow with project properties configuration

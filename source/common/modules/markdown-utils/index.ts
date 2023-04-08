@@ -14,7 +14,7 @@
  */
 
 import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
-import { ASTNode, ASTNodeType, parseNode, TextNode } from './markdown-ast'
+import { parseNode, type ASTNode, type ASTNodeType, type TextNode } from './markdown-ast'
 
 export { md2html } from './markdown-to-html'
 

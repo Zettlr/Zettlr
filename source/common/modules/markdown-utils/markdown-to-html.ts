@@ -24,7 +24,7 @@
 import katex from 'katex'
 import 'katex/contrib/mhchem'
 import { markdownToAST } from '.'
-import { ASTNode, GenericNode } from './markdown-ast'
+import { type ASTNode, type GenericNode } from './markdown-ast'
 
 /**
  * Represents an HTML tag. This is a purposefully shallow representation
@@ -292,7 +292,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: numbe
   } else if (node.type === 'Citation') {
     const cb = window.getCitationCallback(citeLibrary)
     const rendered = cb(node.parsedCitation.citations, node.parsedCitation.composite)
-    return `<span class="citation">${rendered ?? htmlEntities(node.value.value)}</span>`
+    return `<span class="citation">${rendered ?? htmlEntities(node.value)}</span>`
   } else if (node.type === 'Footnote') {
     return `<a class="footnote" href="#fnref:${htmlEntities(node.label)}">${htmlEntities(node.label)}</a>`
   } else if (node.type === 'FootnoteRef') {
@@ -304,7 +304,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: numbe
   } else if (node.type === 'Image') {
     return `<img src="${node.url}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
   } else if (node.type === 'Link') {
-    return `<a href="${node.url}" title="${node.title?.value ?? htmlEntities(node.url.value)}">${htmlEntities(node.alt.value)}</a>`
+    return `<a href="${node.url}" title="${node.title?.value ?? htmlEntities(node.url)}">${htmlEntities(node.alt.value)}</a>`
   } else if (node.type === 'List') {
     if (node.ordered) {
       return `<ol>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ol>`

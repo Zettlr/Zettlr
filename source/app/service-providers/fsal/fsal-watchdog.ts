@@ -24,9 +24,9 @@ import isDir from '@common/util/is-dir'
 
 import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
 
-import LogProvider from '@providers/log'
+import type LogProvider from '@providers/log'
 import { hasMdOrCodeExt } from './util/is-md-or-code-file'
-import ConfigProvider from '@providers/config'
+import type ConfigProvider from '@providers/config'
 import path from 'path'
 
 /**

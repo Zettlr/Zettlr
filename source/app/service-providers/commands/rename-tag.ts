@@ -13,7 +13,7 @@
  */
 
 import replaceTags from '@common/util/replace-tags'
-import { MDFileDescriptor } from '@dts/common/fsal'
+import type { MDFileDescriptor } from '@dts/common/fsal'
 import { promises as fs } from 'fs'
 import ZettlrCommand from './zettlr-command'
 import { dialog } from 'electron'

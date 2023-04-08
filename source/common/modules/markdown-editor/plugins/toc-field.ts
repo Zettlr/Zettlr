@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { EditorState, StateField } from '@codemirror/state'
+import { StateField, type EditorState } from '@codemirror/state'
 import { ensureSyntaxTree, syntaxTree } from '@codemirror/language'
 
 /**

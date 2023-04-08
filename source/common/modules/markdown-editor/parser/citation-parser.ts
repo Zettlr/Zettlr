@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { InlineParser } from '@lezer/markdown'
+import { type InlineParser } from '@lezer/markdown'
 import extractCitations from '@common/util/extract-citations'
 
 // TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser

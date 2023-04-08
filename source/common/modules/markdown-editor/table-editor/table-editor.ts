@@ -20,7 +20,7 @@ import buildSimpleTable from './build-simple'
 import buildGridTable from './build-grid'
 
 import computeCSS from './compute-css'
-import { ColAlignment, TableEditorOptions } from './types'
+import type { ColAlignment, TableEditorOptions } from './types'
 
 import { diskIcon } from './save-icon'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'

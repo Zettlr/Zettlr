@@ -21,17 +21,17 @@ import { promises as fs, constants as FSConstants } from 'fs'
 import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import AppServiceContainer from 'source/app/app-service-container'
+import type AppServiceContainer from 'source/app/app-service-container'
 import { ipcMain, app } from 'electron'
-import { DocumentTree, DTLeaf } from './document-tree'
+import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
-import { TabManager } from '@providers/documents/document-tree/tab-manager'
-import { DP_EVENTS, OpenDocument, DocumentType } from '@dts/common/documents'
+import { type TabManager } from '@providers/documents/document-tree/tab-manager'
+import { DP_EVENTS, type OpenDocument, DocumentType } from '@dts/common/documents'
 import { v4 as uuid4 } from 'uuid'
 import chokidar from 'chokidar'
-import { Update } from '@codemirror/collab'
+import { type Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { countChars, countWords } from '@common/util/counter'
 import { markdownToAST } from '@common/modules/markdown-utils'
 
@@ -1279,7 +1279,7 @@ export default class DocumentManager extends ProviderContract {
       return
     }
 
-    await leaf.tabMan.forward()
+    leaf.tabMan.forward()
     this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId })
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
   }
@@ -1290,7 +1290,7 @@ export default class DocumentManager extends ProviderContract {
       return
     }
 
-    await leaf.tabMan.back()
+    leaf.tabMan.back()
     this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId })
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
   }

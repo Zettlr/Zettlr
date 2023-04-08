@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { EditorState, StateField, Transaction } from '@codemirror/state'
+import { StateField, type EditorState, type Transaction } from '@codemirror/state'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import { countAll } from '@common/util/counter'
 

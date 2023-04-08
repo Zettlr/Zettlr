@@ -19,8 +19,14 @@
  * END HEADER
  */
 
-import { Line, RangeSetBuilder } from '@codemirror/state'
-import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view'
+import { RangeSetBuilder, type Line } from '@codemirror/state'
+import {
+  Decoration,
+  ViewPlugin,
+  type DecorationSet,
+  type EditorView,
+  type ViewUpdate
+} from '@codemirror/view'
 
 function render (view: EditorView): DecorationSet {
   // TODO: The defaultCharacterWidth works perfect for monospaced text, but
@@ -32,7 +38,7 @@ function render (view: EditorView): DecorationSet {
   const tabSize = view.state.tabSize
   const builder = new RangeSetBuilder<Decoration>()
 
-  const visibleLines: Set<Line> = new Set()
+  const visibleLines = new Set<Line>()
   for (const { from, to } of view.visibleRanges) {
     const firstLine = view.state.doc.lineAt(from).number
     const lastLine = view.state.doc.lineAt(to).number

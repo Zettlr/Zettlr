@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-import { SearchTerm } from '@dts/common/search'
+import type { SearchTerm } from '@dts/common/search'
 
 export default function compileSearchTerms (term: string): SearchTerm[] {
   // First sanitize the terms

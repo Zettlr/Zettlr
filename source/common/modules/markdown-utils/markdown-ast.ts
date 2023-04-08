@@ -32,8 +32,8 @@
  * END HEADER
  */
 
-import extractCitations, { CitePosition } from '@common/util/extract-citations'
-import { SyntaxNode } from '@lezer/common'
+import extractCitations, { type CitePosition } from '@common/util/extract-citations'
+import { type SyntaxNode } from '@lezer/common'
 
 /**
  * This list contains all Node names that do not themselves have any content.

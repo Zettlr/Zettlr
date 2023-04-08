@@ -15,13 +15,13 @@
  */
 
 import {
-  Completion,
-  CompletionSource,
-  CompletionResult,
+  type Completion,
+  type CompletionSource,
+  type CompletionResult,
   autocompletion,
-  CompletionContext
+  type CompletionContext
 } from '@codemirror/autocomplete'
-import { StateField } from '@codemirror/state'
+import { type StateField } from '@codemirror/state'
 import { codeBlocks } from './code-blocks'
 import { citations } from './citations'
 import { snippets } from './snippets'

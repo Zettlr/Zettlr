@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
+import { type EditorView, hoverTooltip, type Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
-import { EditorState } from '@codemirror/state'
+import { type EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
 import { md2html } from '@common/modules/markdown-utils'

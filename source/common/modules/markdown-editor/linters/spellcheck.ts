@@ -13,11 +13,11 @@
  * END HEADER
  */
 
-import { linter, Diagnostic } from '@codemirror/lint'
+import { linter, type Diagnostic } from '@codemirror/lint'
 import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
-import { TextNode } from '@common/modules/markdown-utils/markdown-ast'
+import { type TextNode } from '@common/modules/markdown-utils/markdown-ast'
 
 const ipcRenderer = window.ipc
 

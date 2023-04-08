@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-import { BrowserWindow, dialog, MessageBoxOptions } from 'electron'
+import { dialog, type BrowserWindow, type MessageBoxOptions } from 'electron'
 import { trans } from '@common/i18n-main'
-import LogProvider from '@providers/log'
+import type LogProvider from '@providers/log'
 
 /**
  * Displays a prompt with information

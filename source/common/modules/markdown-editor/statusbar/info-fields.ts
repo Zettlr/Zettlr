@@ -12,11 +12,11 @@
  * END HEADER
  */
 
-import { EditorState } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type EditorState } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
-import { StatusbarItem } from '.'
+import { type StatusbarItem } from '.'
 import { countField } from '../plugins/statistics-fields'
 import { configField } from '../util/configuration'
 

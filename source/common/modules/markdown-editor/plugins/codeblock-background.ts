@@ -21,13 +21,22 @@ export const codeblockBackground = layer({
           return
         }
 
-        const localMarkers = RectangleMarker.forRange(
-          view,
-          'code code-block-line-background',
-          EditorSelection.range(node.from, node.to + 1)
-        )
+        try {
+          const localMarkers = RectangleMarker.forRange(
+            view,
+            'code code-block-line-background',
+            EditorSelection.range(node.from, node.to + 1)
+          )
 
-        markers.push(...localMarkers)
+          markers.push(...localMarkers)
+        } catch (err: any) {
+          // Sometimes, the RectangleMarker throws an error because it "cannot
+          // read properties of null (reading 'top')". The reason seems to be
+          // that the corresponding line DOM objects aren't drawn when the
+          // plugin attempts to draw the rectangle marker. This is noticeable in
+          // a slight flicker of the background. However, to me it seems
+          // negligible, and hence we're just swallowing the error.
+        }
         return false
       }
     })

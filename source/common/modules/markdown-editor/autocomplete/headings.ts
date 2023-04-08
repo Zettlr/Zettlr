@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { AutocompletePlugin } from '.'
+import { type AutocompletePlugin } from '.'
 import { tocField } from '../plugins/toc-field'
 
 export const headings: AutocompletePlugin = {

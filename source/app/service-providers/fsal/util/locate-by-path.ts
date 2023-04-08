@@ -12,7 +12,7 @@
  *
  * END HEADER
  */
-import { AnyDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor } from '@dts/common/fsal'
 
 const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
 

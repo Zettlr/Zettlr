@@ -14,7 +14,7 @@
  */
 
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { MDFileDescriptor } from '@dts/common/fsal'
+import type { MDFileDescriptor } from '@dts/common/fsal'
 
 /**
  * Takes a descriptor and returns the appropriate citation library for it. NOTE:

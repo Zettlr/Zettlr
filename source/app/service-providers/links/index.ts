@@ -15,8 +15,8 @@
 import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
-import FSAL from '@providers/fsal'
-import LogProvider from '@providers/log'
+import type FSAL from '@providers/fsal'
+import type LogProvider from '@providers/log'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each

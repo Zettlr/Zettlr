@@ -18,10 +18,16 @@
 // responsible for snippets in the old implementation, but now disentangled from
 // the other autocompletes thanks to the new plugin structure of Codemirror 6.
 
-import { Completion } from '@codemirror/autocomplete'
-import { StateEffect, StateField, SelectionRange, EditorSelection, EditorState } from '@codemirror/state'
+import { type Completion } from '@codemirror/autocomplete'
+import {
+  StateEffect,
+  StateField,
+  EditorSelection,
+  type SelectionRange,
+  type EditorState
+} from '@codemirror/state'
 import { Decoration, EditorView, WidgetType } from '@codemirror/view'
-import { AutocompletePlugin } from '.'
+import { type AutocompletePlugin } from '.'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
 import generateId from '@common/util/generate-id'

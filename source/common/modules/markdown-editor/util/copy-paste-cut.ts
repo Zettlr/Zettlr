@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-import { ChangeSpec } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type ChangeSpec } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import { md2html } from '@common/modules/markdown-utils'
 import html2md from '@common/util/html-to-md'
 import { configField } from './configuration'

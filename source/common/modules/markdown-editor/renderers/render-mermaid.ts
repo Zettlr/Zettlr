@@ -13,11 +13,11 @@
  */
 
 import { renderBlockWidgets } from './base-renderer'
-import { SyntaxNode, SyntaxNodeRef } from '@lezer/common'
-import { EditorView, WidgetType } from '@codemirror/view'
+import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
+import { WidgetType, type EditorView } from '@codemirror/view'
 
 import mermaid from 'mermaid'
-import { EditorState } from '@codemirror/state'
+import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 
 mermaid.initialize({ startOnLoad: false, theme: 'dark' as any })
@@ -36,16 +36,18 @@ class MermaidWidget extends WidgetType {
   toDOM (view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.classList.add('mermaid-chart')
-    try {
-      mermaid.render(`graphDiv${Date.now()}`, this.graph, (svg) => {
+    elem.onclick = clickAndSelect(view, this.node)
+
+    mermaid.render(`graphDiv${Date.now()}`, this.graph)
+      .then(({ svg, bindFunctions }) => {
         elem.innerHTML = svg
+        bindFunctions?.(elem)
       })
-      elem.onclick = clickAndSelect(view, this.node)
-    } catch (err: any) {
-      elem.classList.add('error')
-      // TODO: Localise!
-      elem.innerText = `Could not render Graph:\n\n${err.str as string}`
-    }
+      .catch(err => {
+        elem.classList.add('error')
+        // TODO: Localise!
+        elem.innerText = `Could not render Graph:\n\n${err.str as string}`
+      })
 
     elem.addEventListener('click', clickAndSelect(view, this.node))
     return elem

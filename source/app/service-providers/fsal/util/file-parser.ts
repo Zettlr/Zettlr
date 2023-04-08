@@ -14,7 +14,7 @@
  */
 
 import { countChars, countWords } from '@common/util/counter'
-import { MDFileDescriptor } from '@dts/common/fsal'
+import type { MDFileDescriptor } from '@dts/common/fsal'
 import extractBOM from './extract-bom'
 import extractFileId from './extract-file-id'
 import { parse as parseYAML } from 'yaml'
@@ -22,7 +22,7 @@ import {
   markdownToAST as md2ast,
   extractASTNodes
 } from '@common/modules/markdown-utils'
-import {
+import type {
   Heading,
   YAMLFrontmatter,
   ZettelkastenLink,

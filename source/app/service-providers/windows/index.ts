@@ -20,12 +20,12 @@ import {
   screen,
   BrowserWindow,
   ipcMain,
-  FileFilter,
-  shell
+  shell,
+  type FileFilter
 } from 'electron'
 import EventEmitter from 'events'
 import path from 'path'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createUpdateWindow from './create-update-window'
@@ -43,19 +43,19 @@ import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
 import askSaveChanges from './dialog/ask-save-changes'
 import promptDialog from './dialog/prompt'
-import { WindowPosition } from './types'
+import type { WindowPosition } from './types'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
 import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
 import ProviderContract from '@providers/provider-contract'
-import LogProvider from '@providers/log'
+import type LogProvider from '@providers/log'
 // import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import DocumentManager from '@providers/documents'
+import type DocumentManager from '@providers/documents'
 import { DP_EVENTS } from '@dts/common/documents'
 import { trans } from '@common/i18n-main'
-import ConfigProvider from '@providers/config'
+import type ConfigProvider from '@providers/config'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
 

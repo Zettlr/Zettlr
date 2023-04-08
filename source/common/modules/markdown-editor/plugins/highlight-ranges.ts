@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import { EditorState, SelectionRange, StateEffect, StateField } from '@codemirror/state'
-import { Decoration, DecorationSet, EditorView } from '@codemirror/view'
+import { StateEffect, StateField, type EditorState, type SelectionRange } from '@codemirror/state'
+import { Decoration, EditorView, type DecorationSet } from '@codemirror/view'
 
 // cm-selectionMatch is defined in the search plugin
 const highlightDeco = Decoration.mark({ class: 'cm-selectionMatch' })

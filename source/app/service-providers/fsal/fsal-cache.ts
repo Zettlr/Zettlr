@@ -21,7 +21,7 @@
  */
 
 import hash from '@common/util/hash'
-import LogProvider from '@providers/log'
+import type LogProvider from '@providers/log'
 import fs from 'fs'
 import path from 'path'
 

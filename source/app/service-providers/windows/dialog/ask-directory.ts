@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-import { app, BrowserWindow, dialog, OpenDialogOptions, OpenDialogReturnValue } from 'electron'
+import { app, type BrowserWindow, dialog, type OpenDialogOptions, type OpenDialogReturnValue } from 'electron'
 import isDir from '@common/util/is-dir'
-import ConfigProvider from '@providers/config'
+import type ConfigProvider from '@providers/config'
 
 /**
  * Asks the user for directory path(s)

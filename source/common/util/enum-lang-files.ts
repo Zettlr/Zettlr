@@ -15,7 +15,7 @@
  * END HEADER
  */
 
-import { Candidate } from './find-lang-candidates'
+import { type Candidate } from './find-lang-candidates'
 import path from 'path'
 import * as bcp47 from 'bcp-47/index.js'
 import fs from 'fs'

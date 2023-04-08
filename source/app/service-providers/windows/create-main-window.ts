@@ -16,15 +16,15 @@
 
 import {
   BrowserWindow,
-  BrowserWindowConstructorOptions
+  type BrowserWindowConstructorOptions
 } from 'electron'
-import { WindowPosition } from './types'
+import type { WindowPosition } from './types'
 import setWindowChrome from './set-window-chrome'
 import preventNavigation from './prevent-navigation'
 import attachLogger from './attach-logger'
-import LogProvider from '@providers/log'
-import ConfigProvider from '@providers/config'
-import DocumentManager from '@providers/documents'
+import type LogProvider from '@providers/log'
+import type ConfigProvider from '@providers/config'
+import type DocumentManager from '@providers/documents'
 
 /**
  * Creates a BrowserWindow with main window configuration and loads the main
