@@ -129,7 +129,7 @@ Similarly with [link](example.com#second-tag).`
 
 describe('Utility#replaceTags()', function () {
   for (const test of replaceTagsTesters) {
-    it(`should replace the tag ${test.oldTag} with ${test.newTag}`, function () {
+    it(`should replace the tag "${test.oldTag}" with "${test.newTag}"`, function () {
       strictEqual(replaceTags(testDocument, test.oldTag, test.newTag), test.expected)
     })
   }
