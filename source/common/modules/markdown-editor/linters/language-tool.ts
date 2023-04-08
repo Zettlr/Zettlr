@@ -47,7 +47,7 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
       if (e.is(updateLTState)) {
         value.running = e.value.running ?? value.running
         value.lastDetectedLanguage = e.value.lastDetectedLanguage ?? value.lastDetectedLanguage
-        value.lastError = e.value.lastError ?? value.lastError
+        value.lastError = e.value.lastError
         value.supportedLanguages = e.value.supportedLanguages ?? value.supportedLanguages
         value.overrideLanguage = e.value.overrideLanguage ?? value.overrideLanguage
       }
