@@ -167,16 +167,9 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
         })
       // Now we need to overwrite the targetFile with the pack name
       targetFile = packFile
-
-      // Afterwards remove the source file
-      rimraf(targetFile.replace('.textpack', '.textbundle'), (error) => {
-        if (error != null) {
-          error.message = `[Export] Could not remove the temporary textbundle: ${error.message}`
-          reject(error)
-        }
-        resolve()
-      })
     })
+    // Afterwards remove the source file
+    await rimraf(targetFile.replace('.textpack', '.textbundle'))
   }
 
   // After all is done, return the written file (folder, to be exact).
