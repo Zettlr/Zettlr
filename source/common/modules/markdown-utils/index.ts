@@ -93,7 +93,6 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
     }
   } else if (ast.type === 'Image' || ast.type === 'Link') {
     textNodes.push(ast.alt)
-    textNodes.push(ast.url)
     if (ast.title !== undefined) {
       textNodes.push(ast.title)
     }
