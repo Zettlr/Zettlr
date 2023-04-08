@@ -283,6 +283,9 @@ there.
   in one app should be picked up by the other
 - Zettlr can now detect changes to the status of a directory as a git repository
   during runtime
+- The "Characters without spaces" info is no longer present in the toolbar
+  counter widget; the "characters" count now represents always the count without
+  spaces across the app
 
 ## Under the Hood
 
