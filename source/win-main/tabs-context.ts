@@ -14,9 +14,9 @@
 
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { OpenDocument } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { AnyMenuItem } from '@dts/renderer/context'
+import type { OpenDocument } from '@dts/common/documents'
+import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { AnyMenuItem } from '@dts/renderer/context'
 
 export function displayTabbarContext (event: MouseEvent, callback: (clickedID: string) => void): void {
   const items: AnyMenuItem[] = [

@@ -12,14 +12,14 @@
  * END HEADER
  */
 
-import { EditorState } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type EditorState } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { resolveLangCode } from '@common/util/map-lang-code'
-import { AnyMenuItem } from '@dts/renderer/context'
+import { type AnyMenuItem } from '@dts/renderer/context'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import { StatusbarItem } from '.'
+import { type StatusbarItem } from '.'
 import { configField } from '../util/configuration'
 
 /**

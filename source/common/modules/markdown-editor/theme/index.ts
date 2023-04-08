@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import { Compartment, EditorState, Extension, StateEffect } from '@codemirror/state'
-import { CoreExtensionOptions } from '../editor-extension-sets'
+import { Compartment, EditorState, type Extension, type StateEffect } from '@codemirror/state'
+import { type CoreExtensionOptions } from '../editor-extension-sets'
 import { configUpdateEffect } from '../util/configuration'
 import { defaultDark, defaultLight, mainOverride } from './main-override'
 

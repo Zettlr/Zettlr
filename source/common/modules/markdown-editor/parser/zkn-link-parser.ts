@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { InlineParser } from '@lezer/markdown'
+import { type InlineParser } from '@lezer/markdown'
 
 // This parser adds Zettelkasten links to the syntax tree.
 export const zknLinkParser: InlineParser = {

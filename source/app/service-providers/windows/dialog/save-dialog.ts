@@ -12,12 +12,18 @@
  * END HEADER
  */
 
-import { app, BrowserWindow, dialog, SaveDialogOptions, SaveDialogReturnValue } from 'electron'
+import {
+  app,
+  dialog,
+  type BrowserWindow,
+  type SaveDialogOptions,
+  type SaveDialogReturnValue
+} from 'electron'
 import path from 'path'
 import isDir from '@common/util/is-dir'
 import { trans } from '@common/i18n-main'
-import LogProvider from '@providers/log'
-import ConfigProvider from '@providers/config'
+import type LogProvider from '@providers/log'
+import type ConfigProvider from '@providers/config'
 
 /**
 * Displays a dialog to prompt the user for a file path

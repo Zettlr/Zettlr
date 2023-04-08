@@ -13,12 +13,12 @@
  */
 
 import { renderBlockWidgets } from './base-renderer'
-import { SyntaxNode, SyntaxNodeRef } from '@lezer/common'
-import { EditorView, WidgetType } from '@codemirror/view'
+import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
+import { WidgetType, type EditorView } from '@codemirror/view'
 
 import katex from 'katex'
 import 'katex/contrib/mhchem'
-import { EditorState } from '@codemirror/state'
+import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 import { equationMenu } from '../context-menu/equation-menu'
 

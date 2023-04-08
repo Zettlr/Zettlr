@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import { ActionContext } from 'vuex'
-import { ZettlrState } from '..'
+import { type ActionContext } from 'vuex'
+import { type ZettlrState } from '..'
 
 const ipcRenderer = window.ipc
 

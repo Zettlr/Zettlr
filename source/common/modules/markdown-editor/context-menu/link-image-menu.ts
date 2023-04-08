@@ -12,12 +12,12 @@
  * END HEADER
  */
 
-import { EditorState } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type EditorState } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
-import { SyntaxNode } from '@lezer/common'
+import { type AnyMenuItem } from '@dts/renderer/context'
+import { type SyntaxNode } from '@lezer/common'
 import openMarkdownLink from '../util/open-markdown-link'
 
 const clipboard = window.clipboard

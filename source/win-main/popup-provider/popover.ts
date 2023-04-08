@@ -16,7 +16,12 @@
  * END HEADER
  */
 
-import { createApp, defineComponent, ComponentPublicInstance } from 'vue'
+import {
+  createApp,
+  type defineComponent,
+  type ComponentPublicInstance,
+  type WatchStopHandle
+} from 'vue'
 
 const ARROW_SIZE = 20 // in pixels
 
@@ -30,7 +35,7 @@ export default class ZettlrPopover {
   private _popup: HTMLElement|null
   private readonly _popover: ComponentPublicInstance
   private _arrow: HTMLElement|null
-  private readonly _watcher: Function
+  private readonly _watcher: WatchStopHandle
   private _isClosing: boolean
 
   /**

@@ -13,9 +13,9 @@
  * END HEADER
  */
 
-import { DocumentType, DP_EVENTS } from '@dts/common/documents'
-import { Update } from '@codemirror/collab'
-import { DocumentAuthorityAPI } from '..'
+import { DP_EVENTS, type DocumentType } from '@dts/common/documents'
+import { type Update } from '@codemirror/collab'
+import { type DocumentAuthorityAPI } from '..'
 
 const ipcRenderer = window.ipc
 

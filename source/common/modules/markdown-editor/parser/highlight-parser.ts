@@ -12,7 +12,8 @@
  * END HEADER
  */
 
-import { InlineParser } from '@lezer/markdown'
+import { type InlineParser } from '@lezer/markdown'
+
 export const highlightParser: InlineParser = {
   name: 'highlights',
   // before: 'Link',

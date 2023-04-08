@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-import { Parser, Tree } from '@lezer/common'
-import { BlockContext, InlineContext, Element } from '@lezer/markdown'
+import { type Parser, Tree } from '@lezer/common'
+import { type BlockContext, type InlineContext, type Element } from '@lezer/markdown'
 
 /**
  * This function parses the given `text` using a `parser` of your choice and

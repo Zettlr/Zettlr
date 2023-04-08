@@ -16,7 +16,7 @@
 import { tags } from '@lezer/highlight'
 import { HighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { customTags } from '../util/custom-tags'
-import { Extension } from '@codemirror/state'
+import { type Extension } from '@codemirror/state'
 
 // Instead of utilizing JS styling, we simply apply class names, in order to
 // retain our users' ability to apply custom CSS.

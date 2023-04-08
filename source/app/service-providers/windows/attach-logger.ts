@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-import LogProvider from '@providers/log'
-import { BrowserWindow } from 'electron'
+import type LogProvider from '@providers/log'
+import { type BrowserWindow } from 'electron'
 import path from 'path'
 
 /**

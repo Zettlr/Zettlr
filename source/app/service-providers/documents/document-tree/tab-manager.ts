@@ -1,4 +1,20 @@
-import { OpenDocument } from '@dts/common/documents'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TabManager
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The tab manager manages the open documents for a single
+ *                  editor pane. Tab managers aren't instantiated standalone but
+ *                  are meant to be contained within a document tree leaf.
+ *
+ * END HEADER
+ */
+
+import type { OpenDocument } from '@dts/common/documents'
 
 export class TabManager {
   private readonly _openFiles: OpenDocument[]

@@ -16,9 +16,15 @@
 
 // This plugin implements remote callbacks that keep the editor's document in
 // sync with a central authority
-import { Update, sendableUpdates, receiveUpdates, collab, getSyncedVersion } from '@codemirror/collab'
-import { ChangeSet, Extension, StateEffect } from '@codemirror/state'
-import { EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view'
+import {
+  type Update,
+  sendableUpdates,
+  receiveUpdates,
+  collab,
+  getSyncedVersion
+} from '@codemirror/collab'
+import { ChangeSet, StateEffect, type Extension } from '@codemirror/state'
+import { ViewPlugin, type EditorView, type ViewUpdate } from '@codemirror/view'
 import { configField } from '../util/configuration'
 
 export type PullUpdateCallback = (filePath: string, version: number) => Promise<Update[]|false>

@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import LogProvider from '@providers/log'
+import type LogProvider from '@providers/log'
 
 /**
  * Adds the given path to PATH.

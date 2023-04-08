@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { App, defineComponent } from 'vue'
+import type { App, defineComponent } from 'vue'
 import Popover from './popover'
 import './popover.less' // We need some generic base styles
 
@@ -47,7 +47,7 @@ function showFunction (
   element: HTMLElement,
   initialData: any,
   shouldToggle: boolean,
-  callback: Function|null = null
+  callback: null|((data: any) => void) = null
 ): Popover|undefined {
   // Do not re-open this popover, if the toggle flag is set, the current target
   // still points to the same element (indicating the same popover being opened)
@@ -92,7 +92,7 @@ export default {
       component: typeof defineComponent,
       element: HTMLElement,
       initialData: any,
-      callback: Function|null = null
+      callback: null|((data: any) => void) = null
     ): Popover => {
       // Note: Since we are not toggling, there *will* be a Popover returned.
       return showFunction(component, element, initialData, false, callback) as Popover
@@ -111,7 +111,7 @@ export default {
       component: typeof defineComponent,
       element: HTMLElement,
       initialData: any,
-      callback: Function|null = null
+      callback: null|((data: any) => void) = null
     ): Popover|undefined => {
       // May return undefined
       return showFunction(component, element, initialData, true, callback)

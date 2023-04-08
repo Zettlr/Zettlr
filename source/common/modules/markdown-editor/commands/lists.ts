@@ -14,11 +14,11 @@
 
 // This plugin handles everything with lists
 
-import { ChangeSpec, EditorState, Transaction } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type ChangeSpec, type EditorState, type Transaction } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
 import { indentLess, indentMore, insertTab } from '@codemirror/commands'
-import { SyntaxNode } from '@lezer/common'
+import { type SyntaxNode } from '@lezer/common'
 
 /**
  * Tests if there is any list affected by the current editor selection

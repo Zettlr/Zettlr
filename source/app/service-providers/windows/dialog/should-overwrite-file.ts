@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { BrowserWindow, dialog, MessageBoxReturnValue } from 'electron'
+import { dialog, type BrowserWindow, type MessageBoxReturnValue } from 'electron'
 import { trans } from '@common/i18n-main'
 
 /**

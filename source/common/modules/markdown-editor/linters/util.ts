@@ -11,7 +11,7 @@
  *
  * END HEADER
  */
-import { ASTNode } from '@common/modules/markdown-utils/markdown-ast'
+import { type ASTNode } from '@common/modules/markdown-utils/markdown-ast'
 
 /**
  * Nodes that should be ignored during spell checking

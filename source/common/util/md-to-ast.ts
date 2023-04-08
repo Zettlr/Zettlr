@@ -15,7 +15,7 @@
  */
 
 import { remark } from 'remark'
-import { Root, Parent, Text } from 'mdast' // NOTE: Dependency of remark, not in package.json
+import type { Root, Parent, Text } from 'mdast' // NOTE: Dependency of remark, not in package.json
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMath from 'remark-math'
 

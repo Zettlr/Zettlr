@@ -12,11 +12,11 @@
  * END HEADER
  */
 
-import { Completion } from '@codemirror/autocomplete'
+import { type Completion } from '@codemirror/autocomplete'
 import { StateEffect, StateField } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
-import { TagRecord } from '@providers/tags'
-import { AutocompletePlugin } from '.'
+import { type EditorView } from '@codemirror/view'
+import { type TagRecord } from '@providers/tags'
+import { type AutocompletePlugin } from '.'
 
 /**
  * Use this effect to provide the editor state with a set of new tags to autocomplete

@@ -1,4 +1,24 @@
-import { LeafNodeJSON, BranchNodeJSON } from '@dts/common/documents'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DocumentTree
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Ery
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains the DocumentTree class. It represents the
+ *                  editors within the main windows. There is one DocumentTree
+ *                  per main window open, and these trees are managed by the
+ *                  documents provider. The trees themselves support any
+ *                  operation that should be expected from them, such as
+ *                  splitting leafs horizontally and vertically, and moving
+ *                  stuff around.
+ *
+ * END HEADER
+ */
+
+import type { LeafNodeJSON, BranchNodeJSON } from '@dts/common/documents'
 import { DTBranch } from './document-tree-branch'
 import { DTLeaf } from './document-tree-leaf'
 

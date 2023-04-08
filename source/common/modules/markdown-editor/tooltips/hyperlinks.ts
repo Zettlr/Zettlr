@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
+import { hoverTooltip, type EditorView, type Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
 import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'

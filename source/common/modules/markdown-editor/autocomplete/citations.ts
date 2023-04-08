@@ -12,11 +12,11 @@
  * END HEADER
  */
 
-import { Completion } from '@codemirror/autocomplete'
-import { EditorState, StateEffect, StateField } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type Completion } from '@codemirror/autocomplete'
+import { type EditorState, StateEffect, StateField } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import extractCitations from '@common/util/extract-citations'
-import { AutocompletePlugin } from '.'
+import { type AutocompletePlugin } from '.'
 import { configField } from '../util/configuration'
 
 /**

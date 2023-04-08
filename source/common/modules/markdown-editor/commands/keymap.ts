@@ -14,7 +14,7 @@
 
 import { acceptCompletion, deleteBracketPair } from '@codemirror/autocomplete'
 import { copyLineDown, copyLineUp, indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/commands'
-import { KeyBinding } from '@codemirror/view'
+import { type KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'
 import { copyAsHTML, pasteAsPlain } from '../util/copy-paste-cut'
 import { handleReplacement, handleBackspace, handleQuote } from './autocorrect'

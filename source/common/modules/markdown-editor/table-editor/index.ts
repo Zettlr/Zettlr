@@ -17,7 +17,7 @@ import TableEditor from './table-editor'
 import parsePipeTable from './parse-pipe'
 import parseSimpleTable from './parse-simple'
 import parseGridTable from './parse-grid'
-import { TableEditorOptions } from './types'
+import type { TableEditorOptions } from './types'
 
 export default function fromMarkdown (markdownTable: string, hooks: TableEditorOptions = {}): TableEditor {
   // We support three types of tables: Grid tables, pipe tables, and simple tables.

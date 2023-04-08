@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { RequiredSortingProps } from './sort'
+import { type RequiredSortingProps } from './sort'
 
 /**
  * Helper function to sort files using a collator

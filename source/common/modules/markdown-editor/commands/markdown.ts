@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import { ChangeSpec, EditorSelection } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type ChangeSpec, EditorSelection } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 
 const clipboard = window.clipboard

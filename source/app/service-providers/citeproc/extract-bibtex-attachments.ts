@@ -14,9 +14,9 @@
 
 import path from 'path'
 import { bibtex } from 'astrocite'
-import { BracedComment } from 'astrocite-bibtex'
+import { type BracedComment } from 'astrocite-bibtex'
 import pdfSorter from '@common/util/sort-by-pdf'
-import LogProvider from '@providers/log'
+import type LogProvider from '@providers/log'
 
 const AstrociteAST = bibtex.AST
 

@@ -13,10 +13,10 @@
  * END HEADER
  */
 
-import { linter, Diagnostic, Action } from '@codemirror/lint'
+import { linter, type Diagnostic, type Action } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
-import { LanguageToolAPIResponse } from '@providers/commands/language-tool'
+import { type LanguageToolAPIResponse } from '@providers/commands/language-tool'
 import { StateEffect, StateField } from '@codemirror/state'
 import { filterNodesForSpellchecking } from './util'
 

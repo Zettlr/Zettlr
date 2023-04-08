@@ -81,12 +81,7 @@ async function getCSLLocales () {
   info('Cleaning up ...')
   try {
     await fs.unlink(localesZip)
-    await new Promise((resolve, reject) => {
-      rimraf(localesUnzip, (err) => {
-        if (err) reject(err)
-        else resolve()
-      })
-    })
+    await rimraf(localesUnzip)
   } catch (e) {
     error(`An error occurred during cleanup: ${e.message}. Please remove the files manually.`)
   }

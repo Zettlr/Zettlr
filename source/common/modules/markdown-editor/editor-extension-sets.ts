@@ -17,14 +17,22 @@
  */
 
 import { closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete'
-import { Update } from '@codemirror/collab'
+import { type Update } from '@codemirror/collab'
 import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { search, searchKeymap } from '@codemirror/search'
-import { Compartment, EditorState, Extension, Prec } from '@codemirror/state'
-import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers, dropCursor } from '@codemirror/view'
+import { Compartment, EditorState, Prec, type Extension } from '@codemirror/state'
+import {
+  keymap,
+  drawSelection,
+  EditorView,
+  lineNumbers,
+  dropCursor,
+  type ViewUpdate,
+  type DOMEventHandlers
+} from '@codemirror/view'
 import { autocomplete } from './autocomplete'
 import { customKeymap } from './commands/keymap'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './theme/syntax'
@@ -40,7 +48,7 @@ import { mdStatistics } from './plugins/statistics-fields'
 import { tocField } from './plugins/toc-field'
 import { typewriter } from './plugins/typewriter'
 import { formattingToolbar, footnoteHover, filePreview, urlHover } from './tooltips'
-import { EditorConfiguration, configField } from './util/configuration'
+import { type EditorConfiguration, configField } from './util/configuration'
 import { highlightRanges } from './plugins/highlight-ranges'
 import { jsonFolding } from './code-folding/json'
 import { markdownFolding } from './code-folding/markdown'

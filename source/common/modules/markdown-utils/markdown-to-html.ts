@@ -24,7 +24,7 @@
 import katex from 'katex'
 import 'katex/contrib/mhchem'
 import { markdownToAST } from '.'
-import { ASTNode, GenericNode } from './markdown-ast'
+import { type ASTNode, type GenericNode } from './markdown-ast'
 
 /**
  * Represents an HTML tag. This is a purposefully shallow representation
@@ -302,9 +302,9 @@ function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: numbe
   } else if (node.type === 'Highlight') {
     return `<mark>${nodeToHTML(node.children, citeLibrary, indent)}</mark>`
   } else if (node.type === 'Image') {
-    return `<img src="${node.url.value}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
+    return `<img src="${node.url}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
   } else if (node.type === 'Link') {
-    return `<a href="${node.url.value}" title="${node.title?.value ?? htmlEntities(node.url.value)}">${htmlEntities(node.alt.value)}</a>`
+    return `<a href="${node.url}" title="${node.title?.value ?? htmlEntities(node.url)}">${htmlEntities(node.alt.value)}</a>`
   } else if (node.type === 'List') {
     if (node.ordered) {
       return `<ol>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ol>`

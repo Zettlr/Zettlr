@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-import { EditorView } from '@codemirror/view'
-import { SyntaxNode } from '@lezer/common'
+import { type EditorView } from '@codemirror/view'
+import { type SyntaxNode } from '@lezer/common'
 
 /**
  * A helper function that returns a click-callback that can be used to set a

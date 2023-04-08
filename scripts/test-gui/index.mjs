@@ -56,12 +56,7 @@ async function prepareEnvironment (argv) {
   // First, remove the ./resources/test folder
   try {
     await fs.lstat(TEST_DIRECTORY)
-    await new Promise((resolve, reject) => {
-      rimraf(TEST_DIRECTORY, (err) => {
-        if (err) reject(err)
-        resolve()
-      })
-    })
+    await rimraf(TEST_DIRECTORY)
     success('Removed the old testing directory.')
   } catch (e) {
     // Nothing to do
@@ -71,12 +66,7 @@ async function prepareEnvironment (argv) {
   // Second, same but for the data directory
   try {
     await fs.lstat(CONF_DIRECTORY)
-    await new Promise((resolve, reject) => {
-      rimraf(CONF_DIRECTORY, (err) => {
-        if (err) reject(err)
-        resolve()
-      })
-    })
+    await rimraf(CONF_DIRECTORY)
     success('Removed the old data directory.')
   } catch (e) {
     // Nothing to do

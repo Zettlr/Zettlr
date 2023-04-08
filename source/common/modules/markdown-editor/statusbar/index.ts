@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import { showPanel, Panel, EditorView } from '@codemirror/view'
-import { EditorState, StateEffect, StateField } from '@codemirror/state'
+import { showPanel, EditorView, type Panel } from '@codemirror/view'
+import { StateEffect, StateField, type EditorState } from '@codemirror/state'
 import { configUpdateEffect } from '../util/configuration'
 import { magicQuotesStatus } from './magic-quotes'
 import { readabilityStatus } from '../renderers/readability'

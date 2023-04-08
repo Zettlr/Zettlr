@@ -16,7 +16,7 @@ import commandExists from 'command-exists'
 import path from 'path'
 import sanitize from 'sanitize-filename'
 import { trans } from '@common/i18n-main'
-import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { WRITER2EXT } from '@common/util/pandoc-maps'
 
 export const plugin: ExporterPlugin = {

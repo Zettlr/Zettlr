@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { PandocProfileMetadata } from '@dts/common/assets'
+import { type PandocProfileMetadata } from '@dts/common/assets'
 
 // The exporter only needs a few properties, so by defining a minimal type here
 // we can make the exporter more flexible to accept also objects that only

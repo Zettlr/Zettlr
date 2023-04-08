@@ -17,7 +17,7 @@
  * END HEADER
  */
 
-import { AnyDescriptor, DirDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, DirDescriptor } from '@dts/common/fsal'
 
 type FilterFunction = (item: AnyDescriptor) => boolean
 
