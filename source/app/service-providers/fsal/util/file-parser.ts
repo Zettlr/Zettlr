@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import countWords from '@common/util/count-words'
+import { countChars, countWords } from '@common/util/counter'
 import { MDFileDescriptor } from '@dts/common/fsal'
 import extractBOM from './extract-bom'
 import extractFileId from './extract-file-id'
@@ -24,7 +24,6 @@ import {
 } from '@common/modules/markdown-utils'
 import {
   Heading,
-  TextNode,
   YAMLFrontmatter,
   ZettelkastenLink,
   ZettelkastenTag
@@ -81,10 +80,8 @@ export default function getMarkdownFileParser (
     const firstH1 = headings.find(h => h.level === 1)
     file.firstHeading = firstH1 !== undefined ? firstH1.value.value : null
 
-    const textNodes = extractASTNodes(ast, 'Text') as TextNode[]
-    const plainText = textNodes.map(node => node.value)
-    file.wordCount = countWords(plainText.join(' '), false)
-    file.charCount = countWords(plainText.join(''), true)
+    file.wordCount = countWords(ast)
+    file.charCount = countChars(ast)
 
     // Reset frontmatter-related stuff
     file.yamlTitle = undefined

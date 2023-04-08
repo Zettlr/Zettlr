@@ -32,7 +32,8 @@ import chokidar from 'chokidar'
 import { Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import countWords from '@common/util/count-words'
+import { countChars, countWords } from '@common/util/counter'
+import { markdownToAST } from '@common/modules/markdown-utils'
 
 type DocumentWindows = Record<string, DocumentTree>
 
@@ -572,8 +573,8 @@ export default class DocumentManager extends ProviderContract {
       lastSavedVersion: 0,
       updates: [],
       document: Text.of(content.split(descriptor.linefeed)),
-      lastSavedWordCount: countWords(content, false),
-      lastSavedCharCount: countWords(content, true),
+      lastSavedCharCount: descriptor.type === 'file' ? descriptor.charCount : 0,
+      lastSavedWordCount: descriptor.type === 'file' ? descriptor.wordCount : 0,
       saveTimeout: undefined
     }
 
@@ -1327,8 +1328,9 @@ export default class DocumentManager extends ProviderContract {
 
     if (doc.descriptor.type === 'file') {
       // In case of an MD File increase the word or char count
-      const newWordCount = countWords(content, false)
-      const newCharCount = countWords(content, true)
+      const ast = markdownToAST(content)
+      const newWordCount = countWords(ast)
+      const newCharCount = countChars(ast)
 
       this._app.stats.updateWordCount(newWordCount - doc.lastSavedWordCount)
       // TODO: Proper character counting

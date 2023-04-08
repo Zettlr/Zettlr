@@ -17,7 +17,7 @@ import { EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import { StatusbarItem } from '.'
-import { wordCountField, charCountField } from '../plugins/statistics-fields'
+import { countField } from '../plugins/statistics-fields'
 import { configField } from '../util/configuration'
 
 /**
@@ -45,12 +45,12 @@ export function cursorStatus (state: EditorState, view: EditorView): StatusbarIt
  * @return  {StatusbarItem}         Returns the element or null
  */
 export function wordcountStatus (state: EditorState, view: EditorView): StatusbarItem|null {
-  const wordCount = state.field(wordCountField, false)
-  if (wordCount === undefined) {
+  const counter = state.field(countField, false)
+  if (counter === undefined) {
     return null
   } else {
     return {
-      content: trans('%s words', localiseNumber(wordCount))
+      content: trans('%s words', localiseNumber(counter.words))
     }
   }
 }
@@ -64,12 +64,12 @@ export function wordcountStatus (state: EditorState, view: EditorView): Statusba
  * @return  {StatusbarItem}         Returns the element or null
  */
 export function charcountStatus (state: EditorState, view: EditorView): StatusbarItem|null {
-  const charCount = state.field(charCountField, false)
-  if (charCount === undefined) {
+  const counter = state.field(countField, false)
+  if (counter === undefined) {
     return null
   } else {
     return {
-      content: trans('%s characters', localiseNumber(charCount))
+      content: trans('%s characters', localiseNumber(counter.chars))
     }
   }
 }
