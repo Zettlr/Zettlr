@@ -62,7 +62,8 @@ const EMPTY_NODES = [
  */
 interface MDNode {
   /**
-   * The node.name property (may differ; significant mainly for generics)
+   * The node.name property (may differ from the type; significant mainly for
+   * generics)
    */
   name: string
   /**
@@ -121,7 +122,7 @@ export interface LinkOrImage extends MDNode {
   /**
    * The URL of the link or image
    */
-  url: TextNode
+  url: string
   /**
    * ALT text of the link or image (i.e. what's written in square brackets)
    */
@@ -155,7 +156,7 @@ export interface Citation extends MDNode {
   /**
    * The unparsed, raw citation code
    */
-  value: TextNode
+  value: string
   /**
    * The parsed citation code that can be used to render the citation
    */
@@ -233,7 +234,7 @@ export interface FencedCode extends MDNode {
   info: string
   /**
    * The verbatim source code. (Not represented as a TextNode since whitespace
-   * is significant)
+   * is significant and it shouldn't count towards word counts, etc.)
    */
   source: string
 }
@@ -245,7 +246,7 @@ export interface InlineCode extends MDNode {
   type: 'InlineCode'
   /**
    * The verbatim source code. (Not represented as a TextNode since whitespace
-   * is significant)
+   * is significant and it shouldn't count towards word counts, etc.)
    */
   source: string
 }
@@ -326,7 +327,7 @@ export interface ZettelkastenLink extends MDNode {
   /**
    * Contains the raw contents of the link
    */
-  value: TextNode
+  value: string
 }
 
 /**
@@ -337,7 +338,15 @@ export interface ZettelkastenTag extends MDNode {
   /**
    * Contains the raw contents of the tag
    */
-  value: TextNode
+  value: string
+}
+
+export interface Comment extends MDNode {
+  type: 'Comment'
+  /**
+   * Contains the raw contents of the comment
+   */
+  value: string
 }
 
 /**
@@ -368,7 +377,7 @@ export interface GenericNode extends MDNode {
 /**
  * Any node that can be part of the AST is an ASTNode.
  */
-export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | List | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
+export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | Comment | List | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -517,7 +526,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
-        url: genericTextNode(url.from, url.to, markdown.substring(url.from, url.to)),
+        url: markdown.substring(url.from, url.to),
         alt: genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
       }
 
@@ -539,7 +548,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
-        url: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)),
+        url: markdown.substring(node.from, node.to),
         alt: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))
       }
       return astNode
@@ -580,7 +589,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: Citation = {
         name: 'Citation',
         type: 'Citation',
-        value: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)),
+        value: markdown.substring(node.from, node.to),
         parsedCitation: extractCitations(markdown.substring(node.from, node.to))[0],
         from: node.from,
         to: node.to
@@ -627,6 +636,17 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         children: []
       }
       return parseChildren(astNode, content ?? node, markdown)
+    }
+    case 'Comment':
+    case 'CommentBlock': {
+      const astNode: Comment = {
+        type: 'Comment',
+        name: node.name,
+        from: node.from,
+        to: node.to,
+        value: markdown.substring(node.from, node.to)
+      }
+      return astNode
     }
     case 'OrderedList':
     case 'BulletList': {
@@ -769,7 +789,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: 'ZknLink',
         from: node.from,
         to: node.to,
-        value: genericTextNode(content.from, content.to, markdown.substring(content.from, content.to))
+        value: markdown.substring(content.from, content.to)
       }
       return astNode
     }
@@ -779,7 +799,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: 'ZknTag',
         from: node.from,
         to: node.to,
-        value: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))
+        value: markdown.substring(node.from, node.to)
       }
       return astNode
     }
