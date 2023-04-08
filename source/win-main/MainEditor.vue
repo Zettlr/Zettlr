@@ -130,9 +130,6 @@ const props = defineProps({
   }
 })
 
-// TODO: Update the activeFileDescriptor as soon as the appropriate event is
-// fired from main!
-
 const emit = defineEmits<{(e: 'globalSearch', query: string): void}>()
 
 const store = useStore(storeKey)
