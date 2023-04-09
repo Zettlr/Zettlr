@@ -45,7 +45,7 @@ class CitationWidget extends WidgetType {
       elem.innerText = this.rawCitation
       elem.classList.add('error')
     }
-    elem.addEventListener('click', clickAndSelect(view, this.node))
+    elem.addEventListener('click', clickAndSelect(view))
 
     elem.addEventListener('contextmenu', (event) => {
       const keys = this.citation.citations.map(x => x.id)

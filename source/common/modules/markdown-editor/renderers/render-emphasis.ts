@@ -62,7 +62,7 @@ class EmphasisWidget extends WidgetType {
     }
 
     elem.textContent = contents
-    elem.addEventListener('mousedown', clickAndSelect(view, this.node))
+    elem.addEventListener('mousedown', clickAndSelect(view))
     return elem
   }
 

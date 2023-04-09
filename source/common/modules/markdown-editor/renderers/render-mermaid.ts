@@ -36,20 +36,18 @@ class MermaidWidget extends WidgetType {
   toDOM (view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.classList.add('mermaid-chart')
-    elem.onclick = clickAndSelect(view, this.node)
 
     try {
       mermaid.render(`graphDiv${Date.now()}`, this.graph, (svg) => {
         elem.innerHTML = svg
       })
-      elem.onclick = clickAndSelect(view, this.node)
     } catch (err: any) {
       elem.classList.add('error')
       // TODO: Localise!
       elem.innerText = `Could not render Graph:\n\n${err.str as string}`
     }
 
-    elem.addEventListener('click', clickAndSelect(view, this.node))
+    elem.addEventListener('click', clickAndSelect(view))
     return elem
   }
 

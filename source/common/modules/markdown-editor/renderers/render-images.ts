@@ -20,6 +20,7 @@ import { configField } from '../util/configuration'
 import makeAbsoluteURL from '@common/util/make-absolute-url'
 import { linkImageMenu } from '../context-menu/link-image-menu'
 import { trans } from '@common/i18n-renderer'
+import clickAndSelect from './click-and-select'
 
 const path = window.path
 
@@ -62,6 +63,7 @@ class ImageWidget extends WidgetType {
     openExternally.classList.add('open-externally-button')
     openExternally.textContent = 'Open image externally'
     openExternally.onclick = function (event) {
+      event.stopPropagation()
       // NOTE: We can only do this because the main process prevents any
       // navigation, and will open the "URL" using the shell.
       window.location.assign(actualURLToLoad)
@@ -134,6 +136,12 @@ class ImageWidget extends WidgetType {
       event.preventDefault()
       event.stopPropagation()
       linkImageMenu(view, this.node, { x: event.clientX, y: event.clientY })
+    })
+
+    container.addEventListener('click', event => {
+      if (event.target === img) {
+        clickAndSelect(view)(event)
+      }
     })
 
     return container

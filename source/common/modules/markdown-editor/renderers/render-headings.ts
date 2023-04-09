@@ -15,11 +15,12 @@
 import { renderInlineWidgets } from './base-renderer'
 import { type SyntaxNodeRef, type SyntaxNode } from '@lezer/common'
 import { WidgetType, type EditorView } from '@codemirror/view'
-import { EditorSelection, type EditorState } from '@codemirror/state'
+import { type EditorState } from '@codemirror/state'
 
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import type { AnyMenuItem } from '@dts/renderer/context'
 import { applyH1, applyH2, applyH3, applyH4, applyH5, applyH6 } from '../commands/markdown'
+import clickAndSelect from './click-and-select'
 
 /**
  * Displays a context menu at the given coordinates, for the given node inside
@@ -114,9 +115,7 @@ class HeadingTagWidget extends WidgetType {
     elem.addEventListener('contextmenu', e => {
       headingMenu(view, this.level, { x: e.clientX, y: e.clientY })
     })
-    elem.addEventListener('click', e => {
-      view.dispatch({ selection: EditorSelection.range(this.node.from, this.node.to) })
-    })
+    elem.addEventListener('click', clickAndSelect(view))
     return elem
   }
 

@@ -64,7 +64,7 @@ class LinkWidget extends WidgetType {
       if (cmd || ctrl) {
         openMarkdownLink(this.linkUrl, view)
       } else {
-        clickAndSelect(view, this.node)(event)
+        clickAndSelect(view)(event)
       }
     })
 

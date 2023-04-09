@@ -38,7 +38,7 @@ class MathWidget extends WidgetType {
     elem.classList.add('preview-math')
     elem.dataset.equation = this.equation
     katex.render(this.equation, elem, { throwOnError: false, displayMode: this.displayMode })
-    elem.addEventListener('click', clickAndSelect(view, this.node))
+    elem.addEventListener('click', clickAndSelect(view))
     elem.addEventListener('contextmenu', (event) => {
       equationMenu(view, this.equation, { x: event.clientX, y: event.clientY })
     })
