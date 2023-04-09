@@ -26,19 +26,16 @@ export default function replaceStringVariables (string: string, now?: DateTime):
     now = DateTime.now() // .setLocale('en-GB')
   }
 
-  // BUG: See Luxon issue https://github.com/moment/luxon/issues/1418
-  const second = now.toLocaleString({ second: '2-digit' })
-
   // Now generate the id by replacing all placeholders in the pattern
   return string
-    .replace(/%Y/g, now.toLocaleString({ year: 'numeric' }))
-    .replace(/%y/g, now.toLocaleString({ year: '2-digit' }))
-    .replace(/%M/g, now.toLocaleString({ month: '2-digit' }))
-    .replace(/%D/g, now.toLocaleString({ day: '2-digit' }))
-    .replace(/%W/g, String(now.weekNumber))
-    .replace(/%h/g, now.toLocaleString({ hour: '2-digit', hour12: false }))
-    .replace(/%m/g, now.toLocaleString({ minute: '2-digit' }))
-    .replace(/%s/g, second.length === 2 ? second : '0' + second)
-    .replace(/%X/g, String(now.toUnixInteger()))
+    .replace(/%Y/g, now.toFormat('y'))
+    .replace(/%y/g, now.toFormat('yy'))
+    .replace(/%M/g, now.toFormat('LL'))
+    .replace(/%D/g, now.toFormat('dd'))
+    .replace(/%W/g, now.toFormat('WW'))
+    .replace(/%h/g, now.toFormat('HH'))
+    .replace(/%m/g, now.toFormat('mm'))
+    .replace(/%s/g, now.toFormat('ss'))
+    .replace(/%X/g, now.toFormat('X'))
     .replace(/%uuid4/g, uuid4())
 }
