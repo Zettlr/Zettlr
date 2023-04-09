@@ -634,6 +634,7 @@ export default class MarkdownEditor extends EventEmitter {
     // a cursor position.
     const mainOffset = this._instance.state.selection.main.head
     const line = this._instance.state.doc.lineAt(mainOffset)
+    const ast = markdownToAST(this._instance.state.sliceDoc(), syntaxTree(this._instance.state))
     return {
       words: this.wordCount ?? 0,
       chars: this.charCount ?? 0,
@@ -647,9 +648,7 @@ export default class MarkdownEditor extends EventEmitter {
           // each selection present.
           const anchorLine = this._instance.state.doc.lineAt(sel.anchor)
           const headLine = this._instance.state.doc.lineAt(sel.head)
-          const selContent = this._instance.state.sliceDoc(sel.from, sel.to)
-          const ast = markdownToAST(selContent, syntaxTree(this._instance.state))
-          const { words, chars } = countAll(ast)
+          const { words, chars } = countAll(ast, sel.from, sel.to)
           return {
             anchor: { line: anchorLine.number, ch: sel.from - anchorLine.from + 1 },
             head: { line: headLine.number, ch: sel.to - headLine.from + 1 },
