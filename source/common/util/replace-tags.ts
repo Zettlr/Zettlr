@@ -15,7 +15,7 @@
 import { parseDocument, YAMLSeq } from 'yaml'
 import extractYamlFrontmatter from './extract-yaml-frontmatter'
 import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
-import { ZettelkastenTag } from '@common/modules/markdown-utils/markdown-ast'
+import type { ZettelkastenTag } from '@common/modules/markdown-utils/markdown-ast'
 
 /**
  * Takes a Markdown document and replaces all occurrences of oldTag with newTag.
