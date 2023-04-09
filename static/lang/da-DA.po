@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-07 02:28+0000\n"
+"POT-Creation-Date: 2023-04-09 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgstr "Du skal vælge en mappe at importere til."
 #. Prepare the list of file filters
 #. The "All Files" filter should be at the top
 #: source/app/service-providers/commands/import.ts:41
-#: source/app/service-providers/windows/dialog/ask-file.ts:40
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
 msgid "All Files"
 msgstr "Alle filer"
 
@@ -138,7 +138,7 @@ msgstr ""
 #: source/app/service-providers/commands/rename-tag.ts:48
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:132
 #: source/tmp/CustomCSS.vue.ts:49
@@ -268,11 +268,11 @@ msgstr "Eksporten fejlede"
 msgid "An error occurred on export: %s"
 msgstr "En fejl opstod under eksport: %s"
 
-#: source/app/service-providers/commands/dir-project-export.ts:121
+#: source/app/service-providers/commands/dir-project-export.ts:117
 msgid "Project successfully exported. Click to show."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:121
+#: source/app/service-providers/commands/dir-project-export.ts:117
 #, fuzzy
 msgid "Export"
 msgstr "Eksporter..."
@@ -773,15 +773,15 @@ msgstr "Indlæs altid eksterne ændringer til den aktuelle fil"
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:37
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
 msgid "Ok"
 msgstr "Ok"
 
-#: source/app/service-providers/windows/dialog/ask-file.ts:47
+#: source/app/service-providers/windows/dialog/ask-file.ts:54
 msgid "Open file"
 msgstr "Åben fil"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:52
+#: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
 msgstr ""
 
@@ -794,11 +794,11 @@ msgstr "Overskriv eksisterende fil"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "Filen %s eksisterer allerede i mappen. Vil du overskrive?"
 
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:33
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:38
 msgid "Really delete?"
 msgstr "Bekræft sletning"
 
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:34
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:39
 #, javascript-format
 msgid "Do you really want to remove %s?"
 msgstr "Vil du virkelig slette %s?"
