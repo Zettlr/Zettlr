@@ -292,7 +292,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: numbe
   } else if (node.type === 'Citation') {
     const cb = window.getCitationCallback(citeLibrary)
     const rendered = cb(node.parsedCitation.citations, node.parsedCitation.composite)
-    return `<span class="citation">${rendered ?? htmlEntities(node.value.value)}</span>`
+    return `<span class="citation">${rendered ?? htmlEntities(node.value)}</span>`
   } else if (node.type === 'Footnote') {
     return `<a class="footnote" href="#fnref:${htmlEntities(node.label)}">${htmlEntities(node.label)}</a>`
   } else if (node.type === 'FootnoteRef') {

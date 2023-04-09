@@ -13,12 +13,6 @@
         </td>
         <td>{{ charsLabel }}</td>
       </tr>
-      <tr>
-        <td colspan="3" style="text-align:right">
-          <strong>{{ selectedCharsWithout }}</strong>
-        </td>
-        <td>{{ withoutSpacesLabel }}</td>
-      </tr>
 
       <tr v-if="docInfo.selections.length > 0">
         <td colspan="4">
@@ -85,9 +79,6 @@ export default defineComponent({
     charsLabel: function () {
       return trans('characters')
     },
-    withoutSpacesLabel: function () {
-      return trans('characters (w/o spaces)')
-    },
     selectedWords: function (): string {
       if (this.docInfo === null) {
         return '0'
@@ -100,13 +91,6 @@ export default defineComponent({
         return '0'
       } else {
         return localiseNumber(this.docInfo.chars)
-      }
-    },
-    selectedCharsWithout: function () {
-      if (this.docInfo === null) {
-        return '0'
-      } else {
-        return localiseNumber(this.docInfo.chars_wo_spaces)
       }
     }
   },

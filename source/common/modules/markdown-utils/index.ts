@@ -95,7 +95,7 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
   let textNodes: TextNode[] = []
   if (ast.type === 'Text') {
     textNodes.push(ast)
-  } else if (ast.type === 'Heading' || ast.type === 'Citation') {
+  } else if (ast.type === 'Heading') {
     textNodes.push(ast.value)
   } else if (ast.type === 'FootnoteRef' || ast.type === 'Highlight' || ast.type === 'ListItem') {
     for (const child of ast.children) {

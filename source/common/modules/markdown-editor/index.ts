@@ -39,12 +39,6 @@ import { syntaxTree } from '@codemirror/language'
 import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
 
-import {
-  charCountField,
-  charCountNoSpacesField,
-  wordCountField
-} from './plugins/statistics-fields'
-
 import { type ToCEntry, tocField } from './plugins/toc-field'
 import {
   citekeyUpdate,
@@ -86,7 +80,7 @@ import openMarkdownLink from './util/open-markdown-link'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
 
 import safeAssign from '@common/util/safe-assign'
-import countWords from '@common/util/count-words'
+import { countAll } from '@common/util/counter'
 import { DocumentType } from '@dts/common/documents'
 import { type TagRecord } from '@providers/tags'
 import {
@@ -94,6 +88,8 @@ import {
   type PullUpdateCallback,
   type PushUpdateCallback
 } from './plugins/remote-doc'
+import { markdownToAST } from '../markdown-utils'
+import { countField } from './plugins/statistics-fields'
 
 export interface DocumentWrapper {
   path: string
@@ -115,7 +111,6 @@ export interface UserReadablePosition {
 export interface DocumentInfo {
   words: number
   chars: number
-  chars_wo_spaces: number
   cursor: UserReadablePosition
   selections: Array<{
     anchor: UserReadablePosition
@@ -639,10 +634,10 @@ export default class MarkdownEditor extends EventEmitter {
     // a cursor position.
     const mainOffset = this._instance.state.selection.main.head
     const line = this._instance.state.doc.lineAt(mainOffset)
+    const ast = markdownToAST(this._instance.state.sliceDoc(), syntaxTree(this._instance.state))
     return {
       words: this.wordCount ?? 0,
       chars: this.charCount ?? 0,
-      chars_wo_spaces: this.charCountWithoutSpaces ?? 0,
       cursor: { line: line.number, ch: mainOffset - line.from + 1 }, // Chars are still zero-based
       selections: this._instance.state.selection.ranges
       // Remove cursor-only positions
@@ -653,12 +648,12 @@ export default class MarkdownEditor extends EventEmitter {
           // each selection present.
           const anchorLine = this._instance.state.doc.lineAt(sel.anchor)
           const headLine = this._instance.state.doc.lineAt(sel.head)
-          const selContent = this._instance.state.sliceDoc(sel.from, sel.to)
+          const { words, chars } = countAll(ast, sel.from, sel.to)
           return {
             anchor: { line: anchorLine.number, ch: sel.from - anchorLine.from + 1 },
             head: { line: headLine.number, ch: sel.to - headLine.from + 1 },
-            words: countWords(selContent, false),
-            chars: countWords(selContent, true)
+            words,
+            chars
           }
         })
     }
@@ -745,7 +740,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @return  {Number}  The word count
    */
   get wordCount (): number|undefined {
-    return this._instance.state.field(wordCountField, false)
+    return this._instance.state.field(countField, false)?.words
   }
 
   /**
@@ -754,16 +749,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @return  {Number}  The number of characters
    */
   get charCount (): number|undefined {
-    return this._instance.state.field(charCountField, false)
-  }
-
-  /**
-   * Return the amount of characters without spaces
-   *
-   * @return  {Number}  The number of chars without spaces
-   */
-  get charCountWithoutSpaces (): number|undefined {
-    return this._instance.state.field(charCountNoSpacesField, false)
+    return this._instance.state.field(countField, false)?.chars
   }
 
   /**

@@ -32,7 +32,8 @@ import chokidar from 'chokidar'
 import { type Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
 import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import countWords from '@common/util/count-words'
+import { countChars, countWords } from '@common/util/counter'
+import { markdownToAST } from '@common/modules/markdown-utils'
 
 type DocumentWindows = Record<string, DocumentTree>
 
@@ -572,8 +573,8 @@ export default class DocumentManager extends ProviderContract {
       lastSavedVersion: 0,
       updates: [],
       document: Text.of(content.split(descriptor.linefeed)),
-      lastSavedWordCount: countWords(content, false),
-      lastSavedCharCount: countWords(content, true),
+      lastSavedCharCount: descriptor.type === 'file' ? descriptor.charCount : 0,
+      lastSavedWordCount: descriptor.type === 'file' ? descriptor.wordCount : 0,
       saveTimeout: undefined
     }
 
@@ -925,10 +926,7 @@ export default class DocumentManager extends ProviderContract {
     await this.forEachLeaf(async (tabMan, windowId, leafId) => {
       const res = tabMan.replaceFilePath(oldPath, newPath)
       if (res) {
-        console.log('ADDING LEAF TO BE NOTIFIED')
         leafsToNotify.push([ windowId, leafId ])
-      } else {
-        console.log('Not adding leaf, nothing changed.')
       }
       return res
     })
@@ -937,7 +935,6 @@ export default class DocumentManager extends ProviderContract {
 
     // Emit the necessary events to each window
     for (const [ windowId, leafId ] of leafsToNotify) {
-      console.log('Emitting event for', windowId, leafId)
       this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { filePath: oldPath, windowId, leafId })
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { filePath: newPath, windowId, leafId })
     }
@@ -956,7 +953,7 @@ export default class DocumentManager extends ProviderContract {
     const docs = this.documents.filter(doc => doc.filePath.startsWith(oldPath))
 
     for (const doc of docs) {
-      console.log('Replacing file path for doc', doc.filePath, 'with', doc.filePath.replace(oldPath, newPath))
+      this._app.log.info('Replacing file path for doc ' + doc.filePath + ' with ' + doc.filePath.replace(oldPath, newPath))
       await this.hasMovedFile(doc.filePath, doc.filePath.replace(oldPath, newPath))
     }
   }
@@ -1327,8 +1324,9 @@ export default class DocumentManager extends ProviderContract {
 
     if (doc.descriptor.type === 'file') {
       // In case of an MD File increase the word or char count
-      const newWordCount = countWords(content, false)
-      const newCharCount = countWords(content, true)
+      const ast = markdownToAST(content)
+      const newWordCount = countWords(ast)
+      const newCharCount = countChars(ast)
 
       this._app.stats.updateWordCount(newWordCount - doc.lastSavedWordCount)
       // TODO: Proper character counting
