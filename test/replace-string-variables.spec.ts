@@ -15,8 +15,12 @@
 
 import replaceStringVariables from '@common/util/replace-string-variables'
 import { strictEqual } from 'assert'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 
+// Below's date is in Europe/Stockholm, but since GitHub's servers often run in
+// UTC, they would substract the hour. By explicitly setting the defaultZone, we
+// ensure that 21 hours remain 21 hours, even in output.
+Settings.defaultZone = 'Europe/Stockholm'
 const myDate = DateTime.fromISO('2017-12-26T21:12:00.000+01:00')
 
 const replaceStringVariableTesters = [
