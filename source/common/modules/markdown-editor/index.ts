@@ -80,7 +80,7 @@ import openMarkdownLink from './util/open-markdown-link'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
 
 import safeAssign from '@common/util/safe-assign'
-import { countChars, countWords } from '@common/util/counter'
+import { countAll } from '@common/util/counter'
 import { DocumentType } from '@dts/common/documents'
 import { type TagRecord } from '@providers/tags'
 import {
@@ -648,12 +648,13 @@ export default class MarkdownEditor extends EventEmitter {
           const anchorLine = this._instance.state.doc.lineAt(sel.anchor)
           const headLine = this._instance.state.doc.lineAt(sel.head)
           const selContent = this._instance.state.sliceDoc(sel.from, sel.to)
-          const ast = markdownToAST(selContent)
+          const ast = markdownToAST(selContent, syntaxTree(this._instance.state))
+          const { words, chars } = countAll(ast)
           return {
             anchor: { line: anchorLine.number, ch: sel.from - anchorLine.from + 1 },
             head: { line: headLine.number, ch: sel.to - headLine.from + 1 },
-            words: countWords(ast),
-            chars: countChars(ast)
+            words,
+            chars
           }
         })
     }
