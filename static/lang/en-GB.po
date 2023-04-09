@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-04-09 02:30+0000\n"
-"PO-Revision-Date: 2023-01-29 17:55+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2023-04-09 15:39+0200\n"
+"Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
@@ -662,16 +662,15 @@ msgstr "Check for updates"
 
 #: source/app/service-providers/config/index.ts:425
 msgid "Changing this option requires a restart to take effect."
-msgstr ""
+msgstr "Changing this option requires a restart to take effect."
 
 #: source/app/service-providers/config/index.ts:428
-#, fuzzy
 msgid "Restart now"
-msgstr "just now"
+msgstr "Restart now"
 
 #: source/app/service-providers/config/index.ts:429
 msgid "Restart later"
-msgstr ""
+msgstr "Restart later"
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -1223,14 +1222,12 @@ msgid "Serbian"
 msgstr "Serbian"
 
 #: source/common/util/map-lang-code.ts:118
-#, fuzzy
 msgid "Albanian"
-msgstr "Romanian"
+msgstr "Albanian"
 
 #: source/common/util/map-lang-code.ts:119
-#, fuzzy
 msgid "Albanian (Albania)"
-msgstr "Malaysian (Malaysia)"
+msgstr "Albanian (Albania)"
 
 #: source/common/util/map-lang-code.ts:120
 msgid "Swedish"
@@ -1242,7 +1239,7 @@ msgstr "Tamil (India)"
 
 #: source/common/util/map-lang-code.ts:122
 msgid "Thai"
-msgstr ""
+msgstr "Thai"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
@@ -1267,9 +1264,8 @@ msgstr "Vietnamese"
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
 #: source/common/util/map-lang-code.ts:130
-#, fuzzy
 msgid "Sorbian"
-msgstr "Serbian"
+msgstr "Sorbian"
 
 #: source/common/util/map-lang-code.ts:131
 msgid "Chinese (China)"
@@ -1377,12 +1373,11 @@ msgstr "Detect automatically"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
 msgid "Disabled"
-msgstr ""
+msgstr "Disabled"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
-#, fuzzy
 msgid "Custom"
-msgstr "Custom CSS"
+msgstr "Custom"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
@@ -1599,9 +1594,8 @@ msgid "Link with filename only"
 msgstr "Link with filename only"
 
 #: source/win-preferences/schema/zettelkasten.ts:47
-#, fuzzy
 msgid "When linking files, add the display name …"
-msgstr "When linking files, add the filename …"
+msgstr "When linking files, add the display name …"
 
 #: source/win-preferences/schema/zettelkasten.ts:50
 msgid "always"
@@ -1813,7 +1807,7 @@ msgstr "Maximum height of images (percent)"
 
 #: source/win-preferences/schema/general.ts:23
 msgid "Application language"
-msgstr ""
+msgstr "Application language"
 
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"
@@ -2256,6 +2250,8 @@ msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
