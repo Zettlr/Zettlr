@@ -305,12 +305,11 @@ function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: numbe
     return `<img src="${node.url}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
   } else if (node.type === 'Link') {
     return `<a href="${node.url}" title="${node.title?.value ?? htmlEntities(node.url)}">${htmlEntities(node.alt.value)}</a>`
-  } else if (node.type === 'List') {
-    if (node.ordered) {
-      return `<ol>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ol>`
-    } else {
-      return `<ul>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ul>`
-    }
+  } else if (node.type === 'OrderedList') {
+    const startsAt = node.startsAt > 1 ? ` start="${node.startsAt}"` : ''
+    return `<ol${startsAt}>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ol>`
+  } else if (node.type === 'BulletList') {
+    return `<ul>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ul>`
   } else if (node.type === 'ListItem') {
     const task = node.checked !== undefined ? `<input type="checkbox" disabled="disabled" ${node.checked ? 'checked="checked"' : ''}>` : ''
     return `<li>${task}${nodeToHTML(node.children, citeLibrary, indent + 1)}</li>`
