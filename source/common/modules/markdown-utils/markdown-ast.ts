@@ -180,24 +180,26 @@ export interface Highlight extends MDNode {
 export interface ListItem extends MDNode {
   type: 'ListItem'
   /**
-   * An optional property. If it exists, it is a task item, and then the
-   * property dictates whether it was checked or not.
+   * An optional property. If it exists, it is a task item, and the property
+   * indicates whether it is checked or not.
    */
   checked?: boolean
+  /**
+   * An optional property. It is set on ordered list items and indicates the
+   * number that was used for this item in the Markdown source. Should be
+   * ignored by converters that transform the list into HTML.
+   */
+  number?: number
   /**
    * A property that includes information about the list item marker.
    */
   marker: {
     /**
-     * The symbol used for the list item. Only present for unordered lists.
-     */
-    symbol?: '*'|'-'|'+'
-    /**
-     * The start of the symbol.
+     * The start of the list marker.
      */
     from: number
     /**
-     * The end of the symbol.
+     * The end of the list marker.
      */
     to: number
   }
@@ -205,18 +207,44 @@ export interface ListItem extends MDNode {
    * A list item can contain an arbitrary amount of child nodes. Adding "List"
    * as an explicit child to signify that nested lists are children of an item.
    */
-  children: Array<List|ASTNode>
+  children: Array<OrderedList|BulletList|ASTNode>
 }
 
 /**
- * Represents a list.
+ * Represents an ordered list.
  */
-export interface List extends MDNode {
-  type: 'List'
+export interface OrderedList extends MDNode {
+  type: 'OrderedList'
   /**
-   * Whether the list is ordered (enumerated) or bulleted (itemized)
+   * At what number the list starts (default: 1)
    */
-  ordered: boolean
+  startsAt: number
+  /**
+   * The delimiter used by this list, can be either ) or .
+   */
+  delimiter: ')'|'.'
+  /**
+   * Whether this list is loose (in that case, HTML output should wrap the list
+   * item's contents in paragraphs)
+   */
+  loose: boolean
+  /**
+   * A set of list items
+   */
+  items: ListItem[]
+}
+
+export interface BulletList extends MDNode {
+  type: 'BulletList'
+  /**
+   * The symbol this list uses
+   */
+  symbol: '*'|'-'|'+'
+  /**
+   * Whether this list is loose (in that case, HTML output should wrap the list
+   * item's contents in paragraphs)
+   */
+  loose: boolean
   /**
    * A set of list items
    */
@@ -377,7 +405,7 @@ export interface GenericNode extends MDNode {
 /**
  * Any node that can be part of the AST is an ASTNode.
  */
-export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | Comment | List | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
+export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | OrderedList | BulletList | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -637,23 +665,13 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       }
       return parseChildren(astNode, content ?? node, markdown)
     }
-    case 'Comment':
-    case 'CommentBlock': {
-      const astNode: Comment = {
-        type: 'Comment',
+    case 'OrderedList': {
+      const astNode: OrderedList = {
+        type: 'OrderedList',
+        startsAt: 0,
+        delimiter: '.',
+        loose: false, // TODO
         name: node.name,
-        from: node.from,
-        to: node.to,
-        value: markdown.substring(node.from, node.to)
-      }
-      return astNode
-    }
-    case 'OrderedList':
-    case 'BulletList': {
-      const astNode: List = {
-        type: 'List',
-        name: node.name,
-        ordered: node.name === 'OrderedList',
         from: node.from,
         to: node.to,
         items: []
@@ -666,21 +684,67 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
           from: item.from,
           to: item.to,
           children: [],
-          marker: {
-            symbol: undefined,
-            from: item.from,
-            to: item.from
-          }
+          marker: { from: item.from, to: item.from }
         }
 
-        // Identify list marker properties
         const listMark = item.getChild('ListMark')
         if (listMark !== null) {
           listItem.marker.from = listMark.from
           listItem.marker.to = listMark.to
 
-          if (!astNode.ordered && listMark.to - listMark.from === 1) {
-            listItem.marker.symbol = markdown.substring(listMark.from, listMark.to) as '+'|'-'|'*'
+          const number = parseInt(markdown.substring(listMark.from, listMark.to - 1), 10)
+          const delim = markdown.substring(listMark.to - 1, listMark.to)
+          listItem.number = number
+          if (astNode.startsAt < 1) {
+            astNode.startsAt = number
+            if (delim === ')' || delim === '.') {
+              astNode.delimiter = delim
+            }
+          }
+        }
+
+        // Identify potential task item
+        const task = item.getChild('Task')
+        const taskMarker = task !== null ? task.getChild('TaskMarker') : null
+        if (taskMarker !== null) {
+          const text = markdown.substring(taskMarker.from, taskMarker.to)
+          listItem.checked = text === '[x]'
+        }
+
+        astNode.items.push(parseChildren(listItem, item, markdown))
+      }
+
+      return astNode
+    }
+    case 'BulletList': {
+      const astNode: BulletList = {
+        type: 'BulletList',
+        symbol: '-',
+        loose: false, // TODO
+        name: node.name,
+        from: node.from,
+        to: node.to,
+        items: []
+      }
+
+      for (const item of node.getChildren('ListItem')) {
+        const listItem: ListItem = {
+          type: 'ListItem',
+          name: 'ListItem',
+          from: item.from,
+          to: item.to,
+          children: [],
+          marker: { from: item.from, to: item.from }
+        }
+
+        const listMark = item.getChild('ListMark')
+        if (listMark !== null) {
+          listItem.marker.from = listMark.from
+          listItem.marker.to = listMark.to
+
+          const symbol = markdown.substring(listMark.from, listMark.to)
+          if (symbol === '-' || symbol === '+' || symbol === '*') {
+            astNode.symbol = symbol
           }
         }
 

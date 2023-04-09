@@ -38,16 +38,16 @@ class MermaidWidget extends WidgetType {
     elem.classList.add('mermaid-chart')
     elem.onclick = clickAndSelect(view, this.node)
 
-    mermaid.render(`graphDiv${Date.now()}`, this.graph)
-      .then(({ svg, bindFunctions }) => {
+    try {
+      mermaid.render(`graphDiv${Date.now()}`, this.graph, (svg) => {
         elem.innerHTML = svg
-        bindFunctions?.(elem)
       })
-      .catch(err => {
-        elem.classList.add('error')
-        // TODO: Localise!
-        elem.innerText = `Could not render Graph:\n\n${err.str as string}`
-      })
+      elem.onclick = clickAndSelect(view, this.node)
+    } catch (err: any) {
+      elem.classList.add('error')
+      // TODO: Localise!
+      elem.innerText = `Could not render Graph:\n\n${err.str as string}`
+    }
 
     elem.addEventListener('click', clickAndSelect(view, this.node))
     return elem
