@@ -18,11 +18,11 @@ msgstr ""
 
 #: source/app/service-providers/commands/language-tool.ts:180
 msgid "Document too long"
-msgstr ""
+msgstr "Documento muito longo"
 
 #: source/app/service-providers/commands/language-tool.ts:185
 msgid "offline"
-msgstr ""
+msgstr "offline"
 
 #: source/app/service-providers/commands/dir-new.ts:36
 #: source/app/service-providers/commands/dir-new.ts:37
@@ -210,7 +210,7 @@ msgstr "Arquivos"
 #: source/app/service-providers/commands/root-open.ts:73
 #: source/app/service-providers/windows/index.ts:220
 msgid "Open project folder"
-msgstr "Abrir projeto"
+msgstr "Abrir pasta do projeto"
 
 #: source/app/service-providers/commands/root-open.ts:83
 msgid "Cannot open directory"
@@ -229,12 +229,12 @@ msgstr "Abrir pasta raiz %s ..."
 #: source/app/service-providers/commands/root-open.ts:147
 #, javascript-format
 msgid "%s has been loaded."
-msgstr "%s carregado."
+msgstr "%s foi carregado."
 
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "Não foi possível abrir área de trabalho"
 
 #: source/app/service-providers/commands/set-open-directory.ts:40
 msgid "Directory not found"
@@ -477,7 +477,7 @@ msgstr "Selecionar tudo"
 #: source/app/service-providers/menu/menu.darwin.ts:379
 #: source/app/service-providers/menu/menu.win32.ts:380
 msgid "Find in file"
-msgstr "Localizar"
+msgstr "Localizar no arquivo"
 
 #: source/app/service-providers/menu/menu.darwin.ts:387
 #: source/app/service-providers/menu/menu.win32.ts:388
@@ -661,16 +661,16 @@ msgstr "Verifique se há atualizações"
 
 #: source/app/service-providers/config/index.ts:425
 msgid "Changing this option requires a restart to take effect."
-msgstr ""
+msgstr "Mudanças nesta opção precisam de reinício para serem aplicadas."
 
 #: source/app/service-providers/config/index.ts:428
 #, fuzzy
 msgid "Restart now"
-msgstr "agora mesmo"
+msgstr "Reiniciar agora"
 
 #: source/app/service-providers/config/index.ts:429
 msgid "Restart later"
-msgstr ""
+msgstr "Reiniciar depois"
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -774,7 +774,7 @@ msgstr ""
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 #: source/win-preferences/schema/general.ts:41
 msgid "Always load remote changes to the current file"
-msgstr "Sempre carregue alterações remotas no arquivo atual"
+msgstr "Sempre carregar alterações remotas no arquivo atual"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:37
 #: source/app/service-providers/windows/dialog/prompt.ts:32
@@ -793,7 +793,7 @@ msgstr "Salvar arquivo"
 
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
 msgid "Overwrite existing file"
-msgstr "Sobrescrevendo arquivo existente"
+msgstr "Sobrescrever arquivo existente"
 
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
 #, javascript-format
@@ -892,7 +892,7 @@ msgstr "Copiar localização do arquivo completa"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Africanês"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -900,7 +900,7 @@ msgstr "Árabe"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "Asturiano"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -912,7 +912,7 @@ msgstr "Búlgaro"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "Bretão"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
@@ -920,11 +920,11 @@ msgstr "Bósnio"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "Catalão"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Czech"
-msgstr ""
+msgstr "Tcheco"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Danish"
@@ -941,7 +941,7 @@ msgstr "Alemão (Suíça)"
 #: source/common/util/map-lang-code.ts:45
 #, fuzzy
 msgid "German (simple)"
-msgstr "Alemão (Austria)"
+msgstr "Alemão (simples)"
 
 #: source/common/util/map-lang-code.ts:46
 msgid "German (Germany)"
@@ -950,15 +950,15 @@ msgstr "Alemão (Alemanha)"
 #: source/common/util/map-lang-code.ts:47
 #, fuzzy
 msgid "German (Luxembourg)"
-msgstr "Alemão (Austria)"
+msgstr "Alemão (Luxemburgo)"
 
 #: source/common/util/map-lang-code.ts:48
 msgid "German"
-msgstr ""
+msgstr "Alemão"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "Greek"
-msgstr "Grécia"
+msgstr "Grego"
 
 #: source/common/util/map-lang-code.ts:50
 msgid "English (Australia)"
@@ -979,7 +979,7 @@ msgstr "Inglês (Índia)"
 #: source/common/util/map-lang-code.ts:54
 #, fuzzy
 msgid "English (New Zealand)"
-msgstr "Inglês (Canadá)"
+msgstr "Inglês (Nova Zelândia)"
 
 #: source/common/util/map-lang-code.ts:55
 msgid "English (United States)"
@@ -992,7 +992,7 @@ msgstr "Inglês (África do Sul)"
 #: source/common/util/map-lang-code.ts:57
 #, fuzzy
 msgid "English"
-msgstr "Inglês (Índia)"
+msgstr "Inglês"
 
 #: source/common/util/map-lang-code.ts:58
 msgid "Esperanto"
@@ -1001,7 +1001,7 @@ msgstr "Esperanto"
 #: source/common/util/map-lang-code.ts:59
 #, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "Espanhol (Espanha)"
+msgstr "Espanhol (Argentina)"
 
 #: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Spain)"
@@ -1010,7 +1010,7 @@ msgstr "Espanhol (Espanha)"
 #: source/common/util/map-lang-code.ts:61
 #, fuzzy
 msgid "Spanish"
-msgstr "Dinamarquês"
+msgstr "Espanhol"
 
 #: source/common/util/map-lang-code.ts:62
 msgid "Estonian"
@@ -1035,12 +1035,12 @@ msgstr "Feroês"
 #: source/common/util/map-lang-code.ts:67
 #, fuzzy
 msgid "French (Belgium)"
-msgstr "Neerlandês (Bélgica)"
+msgstr "Francês (Bélgica)"
 
 #: source/common/util/map-lang-code.ts:68
 #, fuzzy
 msgid "French (Switzerland)"
-msgstr "Alemão (Suíça)"
+msgstr "Francês (Suíça)"
 
 #: source/common/util/map-lang-code.ts:69
 msgid "French (France)"
@@ -1049,15 +1049,15 @@ msgstr "Francês (França)"
 #: source/common/util/map-lang-code.ts:70
 #, fuzzy
 msgid "French (Luxembourg)"
-msgstr "Luxemburguês"
+msgstr "Francês (Luxemburgo)"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Francês (Principado de Mônaco)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
-msgstr ""
+msgstr "Francês"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
@@ -1103,7 +1103,7 @@ msgstr "Islandês"
 #: source/common/util/map-lang-code.ts:83
 #, fuzzy
 msgid "Italian (Switzerland)"
-msgstr "Alemão (Suíça)"
+msgstr "Italiano (Suíça)"
 
 #: source/common/util/map-lang-code.ts:84
 msgid "Italian (Italy)"
@@ -1112,7 +1112,7 @@ msgstr "Italiano (Italia)"
 #: source/common/util/map-lang-code.ts:85
 #, fuzzy
 msgid "Italian"
-msgstr "Itálico"
+msgstr "Italiano"
 
 #: source/common/util/map-lang-code.ts:86
 msgid "Japanese"
@@ -1124,7 +1124,7 @@ msgstr "Georgiano"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Khmer (Cambodja)"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
@@ -1132,7 +1132,7 @@ msgstr "Coreano"
 
 #: source/common/util/map-lang-code.ts:90
 msgid "Latin"
-msgstr "Lanim"
+msgstr "Latim"
 
 #: source/common/util/map-lang-code.ts:91
 msgid "Luxembourgian"
@@ -1140,7 +1140,7 @@ msgstr "Luxemburguês"
 
 #: source/common/util/map-lang-code.ts:92
 msgid "Lithuanian"
-msgstr "Lithuanian"
+msgstr "Lituâno"
 
 #: source/common/util/map-lang-code.ts:93
 msgid "Latvian"
@@ -1157,7 +1157,7 @@ msgstr "Mongol"
 #: source/common/util/map-lang-code.ts:96
 #, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "Malaio (Malásia)"
+msgstr "Malaio (Brunei Darussalam)"
 
 #: source/common/util/map-lang-code.ts:97
 msgid "Malaysian (Malaysia)"
@@ -1166,7 +1166,7 @@ msgstr "Malaio (Malásia)"
 #: source/common/util/map-lang-code.ts:98
 #, fuzzy
 msgid "Malaysian"
-msgstr "Malaio (Malásia)"
+msgstr "Malaio"
 
 #: source/common/util/map-lang-code.ts:99
 msgid "Norwegian (Bokmål)"
@@ -1178,15 +1178,15 @@ msgstr "Nepalês"
 
 #: source/common/util/map-lang-code.ts:101
 msgid "Dutch (Belgium)"
-msgstr "Neerlandês (Bélgica)"
+msgstr "Holandês (Bélgica)"
 
 #: source/common/util/map-lang-code.ts:102
 msgid "Dutch (Netherlands)"
-msgstr "Neerlandês (Países Baixos)"
+msgstr "Holandês (Países Baixos)"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
-msgstr ""
+msgstr "Holandês"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
@@ -1204,7 +1204,7 @@ msgstr "Polonês"
 #: source/common/util/map-lang-code.ts:107
 #, fuzzy
 msgid "Portuguese (Angola)"
-msgstr "Português (Portugal)"
+msgstr "Português (Angola)"
 
 #: source/common/util/map-lang-code.ts:108
 msgid "Portuguese (Brazil)"
@@ -1213,7 +1213,7 @@ msgstr "Português (Brasil)"
 #: source/common/util/map-lang-code.ts:109
 #, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr "Português (Brasil)"
+msgstr "Português (Moçambique)"
 
 #: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Portugal)"
@@ -1222,7 +1222,7 @@ msgstr "Português (Portugal)"
 #: source/common/util/map-lang-code.ts:111
 #, fuzzy
 msgid "Portuguese"
-msgstr "Português (Brasil)"
+msgstr "Português"
 
 #: source/common/util/map-lang-code.ts:112
 msgid "Romanian"
@@ -1242,7 +1242,7 @@ msgstr "Eslovaco"
 
 #: source/common/util/map-lang-code.ts:116
 msgid "Slovenian"
-msgstr "Eslovênio"
+msgstr "Esloveno"
 
 #: source/common/util/map-lang-code.ts:117
 msgid "Serbian"
@@ -1251,12 +1251,12 @@ msgstr "Sérvio"
 #: source/common/util/map-lang-code.ts:118
 #, fuzzy
 msgid "Albanian"
-msgstr "Romeno"
+msgstr "Albanês"
 
 #: source/common/util/map-lang-code.ts:119
 #, fuzzy
 msgid "Albanian (Albania)"
-msgstr "Malaio (Malásia)"
+msgstr "Albanês (Albania)"
 
 #: source/common/util/map-lang-code.ts:120
 msgid "Swedish"
@@ -1265,15 +1265,15 @@ msgstr "Sueco"
 #: source/common/util/map-lang-code.ts:121
 #, fuzzy
 msgid "Tamil (India)"
-msgstr "Inglês (Índia)"
+msgstr "Tâmil (Índia)"
 
 #: source/common/util/map-lang-code.ts:122
 msgid "Thai"
-msgstr ""
+msgstr "Tailândes"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Tagalo (Filipino)"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Turkish"
@@ -1285,7 +1285,7 @@ msgstr "Ucraniano"
 
 #: source/common/util/map-lang-code.ts:126
 msgid "Urdu"
-msgstr ""
+msgstr "Urdu"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Vietnamese"
@@ -1305,12 +1305,12 @@ msgstr "Chinês (China)"
 #: source/common/util/map-lang-code.ts:132
 #, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "Chinês (China)"
+msgstr "Chinês (Taiwan)"
 
 #: source/common/util/map-lang-code.ts:133
 #, fuzzy
 msgid "Chinese"
-msgstr "Chinês (China)"
+msgstr "Chinês"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -1335,7 +1335,7 @@ msgstr "O arquivo %s não existe."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
 msgid "Word count"
-msgstr "Palavras"
+msgstr "Contagem de palavras"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
 #: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
@@ -1383,7 +1383,7 @@ msgstr "Imagem não encontrada: %s"
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Modo de legibilidade"
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
@@ -1402,11 +1402,11 @@ msgstr "%s caracteres"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "Detectar automaticamente"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
 msgid "Disabled"
-msgstr ""
+msgstr "Desabillitado"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
 #, fuzzy
@@ -1415,7 +1415,7 @@ msgstr "CSS customizado"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Abrir painel de diagnóstico"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
 msgid "Copy equation code"
@@ -1555,8 +1555,7 @@ msgstr "Usar aparência de janela nativa"
 
 #: source/win-preferences/schema/advanced.ts:52
 msgid "Delete items irreversibly, if moving them to trash fails"
-msgstr ""
-"Apaga os itens de maneira irreversível, se ocorrer uma falha ao mover para "
+msgstr "Apaga os itens de maneira irreversível, se ocorrer uma falha ao mover para "
 "lixeira"
 
 #: source/win-preferences/schema/advanced.ts:58
@@ -1652,8 +1651,7 @@ msgstr "Inicia uma busca ao percorrer links Zettelkasten"
 
 #: source/win-preferences/schema/zettelkasten.ts:65
 msgid "Automatically create non-existing files when following internal links"
-msgstr ""
-"Criar arquivos inexistentes automaticamente ao clicar em links internos"
+msgstr "Criar arquivos inexistentes automaticamente ao clicar em links internos"
 
 #: source/win-preferences/schema/zettelkasten.ts:70
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
@@ -1664,7 +1662,7 @@ msgstr ""
 #: source/win-preferences/schema/citations.ts:23
 msgid "How would you like autocomplete to insert your citations?"
 msgstr ""
-"Como você gostaria que o preenchimento automático para inserir suas citações?"
+"Como você gostaria que o preenchimento automático inserisse suas citações?"
 
 #: source/win-preferences/schema/citations.ts:35
 msgid "Citation Database (CSL JSON or BibTex)"
@@ -1685,7 +1683,7 @@ msgstr "Magic Quotes primário"
 #: source/win-preferences/schema/autocorrect.ts:35
 #: source/win-preferences/schema/autocorrect.ts:56
 msgid "Disable Magic Quotes"
-msgstr "Nenhum"
+msgstr "Desabilitar Magic Quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:53
 msgid "Secondary Magic Quotes"
@@ -1723,7 +1721,7 @@ msgstr "Imediatamente"
 
 #: source/win-preferences/schema/editor.ts:47
 msgid "After a short delay"
-msgstr "After a short delay"
+msgstr "Após um breve atraso"
 
 #: source/win-preferences/schema/editor.ts:54
 msgid "Default image path (relative or absolute)"
@@ -1756,7 +1754,7 @@ msgstr "Verifique problemas de estilo no Markdown"
 #: source/win-preferences/schema/editor.ts:102
 #, fuzzy
 msgid "Show statusbar"
-msgstr "Mostrar Zettlr"
+msgstr "Mostrar barra de status"
 
 #: source/win-preferences/schema/editor.ts:109
 msgid "Mute non-focused lines in distraction-free mode"
@@ -1776,7 +1774,7 @@ msgstr "Habilitar editor de tabela"
 
 #: source/win-preferences/schema/editor.ts:129
 msgid "Show link previews"
-msgstr ""
+msgstr "Mostrar previsão de links"
 
 #: source/win-preferences/schema/editor.ts:134
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -1822,7 +1820,7 @@ msgstr "Renderizar ênfase"
 
 #: source/win-preferences/schema/display.ts:71
 msgid "Here you can choose the theme for the app."
-msgstr "Aqui você pode escolher o tema para o aplicativo."
+msgstr "Aqui você pode escolher o tema do aplicativo."
 
 #: source/win-preferences/schema/display.ts:112
 msgid "Use the operating system's accent colour instead of the theme colour"
@@ -1852,7 +1850,7 @@ msgstr "Altura máxima das imagens (porcentagem)"
 
 #: source/win-preferences/schema/general.ts:23
 msgid "Application language"
-msgstr ""
+msgstr "Idioma do aplicativo"
 
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"
@@ -1872,7 +1870,7 @@ msgstr "Agendar"
 
 #: source/win-preferences/schema/general.ts:58
 msgid "Follow Operating System"
-msgstr "Seguir Sistema Operacionarl"
+msgstr "Seguir Sistema Operacional"
 
 #: source/win-preferences/schema/general.ts:63
 msgid "Start dark mode at"
@@ -1880,7 +1878,7 @@ msgstr "Iniciar o modo noturno às"
 
 #: source/win-preferences/schema/general.ts:69
 msgid "End dark mode at"
-msgstr "Encerrar o modo escuro às"
+msgstr "Encerrar o modo noturno às"
 
 #: source/win-preferences/schema/general.ts:77
 msgid "File manager mode"
@@ -1908,7 +1906,7 @@ msgstr "Apenas nome do arquivo"
 
 #: source/win-preferences/schema/general.ts:91
 msgid "Title if applicable"
-msgstr "Título de aplicável"
+msgstr "Título se aplicável"
 
 #: source/win-preferences/schema/general.ts:92
 msgid "First heading level 1 if applicable"
@@ -1916,7 +1914,7 @@ msgstr "Caso aplicável, primeiro título no nível 1"
 
 #: source/win-preferences/schema/general.ts:93
 msgid "Title or first heading level 1 if applicable"
-msgstr "Caso aplicável, título ou primeiro título no nível 1"
+msgstr "Caso aplicável, título ou primeiro título de nível 1"
 
 #: source/win-preferences/schema/general.ts:98
 msgid "Display Markdown file extensions"
@@ -2003,38 +2001,38 @@ msgstr "Pergunte qual a pasta de destino"
 
 #: source/win-preferences/schema/spellchecking.ts:23
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "Use a ferramente de idioma"
 
 #: source/win-preferences/schema/spellchecking.ts:28
 msgid "Strictness"
-msgstr ""
+msgstr "Rigor"
 
 #: source/win-preferences/schema/spellchecking.ts:30
 #, fuzzy
 msgid "Standard"
-msgstr "Calendário"
+msgstr "Padrão"
 
 #: source/win-preferences/schema/spellchecking.ts:31
 msgid "Picky"
-msgstr ""
+msgstr "Exigente"
 
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "Provedor de ferramenta de idioma"
 
 #: source/win-preferences/schema/spellchecking.ts:41
 #: source/win-preferences/schema/spellchecking.ts:48
 #, fuzzy
 msgid "Custom server"
-msgstr "CSS customizado"
+msgstr "Servidor personalilzado"
 
 #: source/win-preferences/schema/spellchecking.ts:55
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "Usuário da ferramenta de idioma"
 
 #: source/win-preferences/schema/spellchecking.ts:60
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "Chave API da ferramenta de idioma"
 
 #: source/win-preferences/schema/spellchecking.ts:67
 msgid ""
@@ -2151,7 +2149,7 @@ msgid ""
 "using their code, Zettlr is in no way affiliated with any of these projects. "
 "Node.js is a trademark of Joyent, Inc."
 msgstr ""
-"Todos os logotipos e marcas estão sujeitos a seus proprietários. Fora usar "
+"Todos os logotipos e marcas estão sujeitos a seus proprietários. Exceto usar "
 "seu código, o Zettlr não é afiliado a nenhum desses projetos. Node.js é uma "
 "marca comercial da Joyent, Inc."
 
@@ -2162,6 +2160,10 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr oferece uma integração com LanguageTool.org, um serviço fornecido por"
+"LanguageTooler GmbH. Usar este serviço requer uma conexão com a internet e "
+"está sujeito à política de privacidade da LanguageTooler GmbH ou o servidor "
+"correspondente que você utiliza."
 
 #: source/tmp/List.vue.ts:141
 msgid "Add"
@@ -2295,6 +2297,8 @@ msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"Este perfil é inválido. Ele pode conter erros ou pode estar faltando a "
+"propriedade de escrita ou leitura."
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
@@ -2497,11 +2501,11 @@ msgstr "Renomear snippet (fragmento)"
 
 #: source/tmp/SnippetsTab.vue.ts:53
 msgid "Snippets let you define reusable pieces of text with variables."
-msgstr "Snippets permitem que você definir trechos de texto com variáveis"
+msgstr "Snippets permitem que você defina trechos de texto com variáveis"
 
 #: source/tmp/CustomCSS.vue.ts:31
 msgid "Custom CSS"
-msgstr "CSS customizado"
+msgstr "CSS personalizado"
 
 #: source/tmp/CustomCSS.vue.ts:32
 msgid ""
@@ -2564,7 +2568,7 @@ msgstr "Falha ao salvar"
 #~ msgid "Afrikaans (South Africa)"
 #~ msgstr "Africâner (África do Sul)"
 
-#~ msgid "Catalan (Catalonia)"
+#~ msgid "Catalan (Catalunha)"
 #~ msgstr "Catalão"
 
 #~ msgid "Czech (Czech Republic)"
@@ -2589,10 +2593,10 @@ msgstr "Falha ao salvar"
 #~ msgstr "Usar ordem visual para o movimento das setas do teclado no modo DPE"
 
 #~ msgid "Word style (replace immediately without pressing Space/Enter)"
-#~ msgstr "Estilo Word"
+#~ msgstr "Estilo Word (substitui imediatamente sem pressionar a barra de espaços/enter)"
 
 #~ msgid "LibreOffice style (press Space or Enter to replace)"
-#~ msgstr "Estilo LibreOffice"
+#~ msgstr "Estilo LibreOffice (pressione a barra de espaços ou Enter para substituir)"
 
 #~ msgid "Check for updated translations on start"
 #~ msgstr "Buscar por traduções atualizadas ao iniciar"
