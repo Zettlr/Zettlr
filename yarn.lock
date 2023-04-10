@@ -12683,16 +12683,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-virtual-scroller@npm:^2.0.0-beta.7":
-  version: 2.0.0-beta.7
-  resolution: "vue-virtual-scroller@npm:2.0.0-beta.7"
+"vue-virtual-scroller@npm:^2.0.0-beta.8":
+  version: 2.0.0-beta.8
+  resolution: "vue-virtual-scroller@npm:2.0.0-beta.8"
   dependencies:
     mitt: ^2.1.0
     vue-observe-visibility: ^2.0.0-alpha.1
     vue-resize: ^2.0.0-alpha.1
   peerDependencies:
     vue: ^3.2.0
-  checksum: d387c467dea53bc772be41af59c54badfb1702d4c79f3c1ead473884da910345f0af814cc7051f14443e786747832c8acdfc7d2f6e3335741ed73a70e96bc8f0
+  checksum: 41e5a4b5e7736f8afd1c77983ce634b6cd3d5c703392a780bce71a9dac980ce6790ecfd0619d2e4dc926672fb9e547f152c48aa2b7e1ad0af52770a1d5c81b65
   languageName: node
   linkType: hard
 
@@ -13467,7 +13467,7 @@ __metadata:
     uuid: ^9.0.0
     vue: ^3.2.47
     vue-loader: ^17.0.1
-    vue-virtual-scroller: ^2.0.0-beta.7
+    vue-virtual-scroller: ^2.0.0-beta.8
     vuex: ^4.1.0
     webpack: ^5.78.0
     yaml: ^2.2.1
