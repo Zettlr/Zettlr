@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-09 02:30+0000\n"
+"POT-Creation-Date: 2023-04-10 02:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1376,7 +1376,7 @@ msgstr "コード"
 msgid "No footnote text found."
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:92
+#: source/common/modules/markdown-editor/renderers/render-images.ts:94
 #, javascript-format
 msgid "Image not found: %s"
 msgstr ""
@@ -1387,7 +1387,7 @@ msgid "Readability mode (%s)"
 msgstr ""
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
+#: source/tmp/PopoverDocInfo.vue.ts:63 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
 #: source/tmp/file-item.vue.ts:207
 #, javascript-format
@@ -1395,7 +1395,7 @@ msgid "%s words"
 msgstr "%s単語"
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
+#: source/tmp/PopoverDocInfo.vue.ts:61 source/tmp/file-item.vue.ts:132
 #: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
@@ -2057,10 +2057,6 @@ msgstr "単語"
 msgid "characters"
 msgstr "文字"
 
-#: source/tmp/PopoverDocInfo.vue.ts:44
-msgid "characters (w/o spaces)"
-msgstr "文字(空白除く)"
-
 #: source/tmp/PopoverTags.vue.ts:36
 msgid "Name"
 msgstr ""
@@ -2511,6 +2507,9 @@ msgstr ""
 #: source/tmp/CustomCSS.vue.ts:97
 msgid "Saving failed"
 msgstr "保存できませんでした"
+
+#~ msgid "characters (w/o spaces)"
+#~ msgstr "文字(空白除く)"
 
 #~ msgid ""
 #~ "This profile appears to be either missing the writer or reader property. "
