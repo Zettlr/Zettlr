@@ -9070,12 +9070,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^8.0.2, minimatch@npm:^8.0.3":
+"minimatch@npm:^8.0.2":
   version: 8.0.3
   resolution: "minimatch@npm:8.0.3"
   dependencies:
     brace-expansion: ^2.0.1
   checksum: 8957d8105be6729bf1d3af9c410b2a38ffcf3cd17d4ffaf715b2aa4841490aaa82f1ebff785e71b5b97747199ccc61027db597495941cf46243d9a64382e1560
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "minimatch@npm:9.0.0"
+  dependencies:
+    brace-expansion: ^2.0.1
+  checksum: 7bd57899edd1d1b0560f50b5b2d1ea4ad2a366c5a2c8e0a943372cf2f200b64c256bae45a87a80915adbce27fa36526264296ace0da57b600481fe5ea3e372e5
   languageName: node
   linkType: hard
 
@@ -13420,7 +13429,7 @@ __metadata:
     luxon: ^3.3.0
     md5: ^2.3.0
     mermaid: ^9.x.x
-    minimatch: ^8.0.3
+    minimatch: ^9.0.0
     mocha: ^10.2.0
     node-loader: ^2.0.0
     nodehun: ^3.0.2
