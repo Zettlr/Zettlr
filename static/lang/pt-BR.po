@@ -1383,7 +1383,7 @@ msgstr "Imagem não encontrada: %s"
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr "Modo de legibilidade"
+msgstr "Modo de legibilidade (%s)"
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
