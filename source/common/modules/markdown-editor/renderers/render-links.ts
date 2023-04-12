@@ -153,7 +153,7 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): LinkWidget|unde
 
   const urlNode = node.node.getChild('URL')
   if (urlNode === null) {
-    throw new Error('Could not render `Link`: urlNode was null!')
+    return undefined // This can happen for reference style links
   }
 
   const titleNode = node.node.getChild('LinkLabel')
