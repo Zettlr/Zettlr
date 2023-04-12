@@ -35,7 +35,6 @@ import type CommandProvider from '../commands'
 import type { ServerAPIResponse, UpdateState } from '@dts/main/update-provider'
 import type ConfigProvider from '@providers/config'
 import { md2html } from '@common/modules/markdown-utils'
-import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 
 const CUR_VER = app.getVersion()
 const REPO_URL = 'https://zettlr.com/api/releases/latest'
