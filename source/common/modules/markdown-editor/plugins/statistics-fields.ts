@@ -14,6 +14,7 @@
  * END HEADER
  */
 
+import { syntaxTree } from '@codemirror/language'
 import { StateField, type EditorState, type Transaction } from '@codemirror/state'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import { countAll } from '@common/util/counter'
@@ -32,7 +33,7 @@ export const countField = StateField.define<{ chars: number, words: number }>({
       return value
     }
 
-    const ast = markdownToAST(transaction.state.doc.toString())
+    const ast = markdownToAST(transaction.state.doc.toString(), syntaxTree(transaction.state))
     return countAll(ast)
   },
 
