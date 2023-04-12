@@ -211,7 +211,7 @@ export default class UpdateProvider extends ProviderContract {
 
     this._updateState.tagName = parsedResponse.tag_name
     this._updateState.updateAvailable = semver.lt(CUR_VER, parsedResponse.tag_name)
-    this._updateState.changelog = md2html(parsedResponse.body, CITEPROC_MAIN_DB)
+    this._updateState.changelog = md2html(parsedResponse.body, (c1, c2) => undefined)
     this._updateState.prerelease = parsedResponse.prerelease
     this._updateState.releasePage = parsedResponse.html_url
 

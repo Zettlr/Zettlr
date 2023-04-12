@@ -142,7 +142,7 @@ export default defineComponent({
      * @return  {string}             The safe HTML string
      */
     toc2html: function (entryText: string): string {
-      const html = md2html(entryText, this.library)
+      const html = md2html(entryText, window.getCitationCallback(this.library))
       return sanitizeHtml(html, {
         // Headings may be emphasised and contain code
         allowedTags: [ 'em', 'kbd', 'code' ]
