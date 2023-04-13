@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-10 02:28+0000\n"
+"POT-Creation-Date: 2023-04-13 02:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -702,21 +702,21 @@ msgstr "A opção %s deve ter pelo menos %s (caracteres)."
 msgid "Option %s is required."
 msgstr "A opção %s é necessária."
 
-#: source/app/service-providers/updates/index.ts:177
+#: source/app/service-providers/updates/index.ts:176
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr ""
 "Não foi possível verificar se há atualizações: Erro do Servidor (Código de "
 "status: %s)"
 
-#: source/app/service-providers/updates/index.ts:179
+#: source/app/service-providers/updates/index.ts:178
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr ""
 "Não foi possível verificar se há atualizações: Erro do cliente (código de "
 "status: %s)"
 
-#: source/app/service-providers/updates/index.ts:181
+#: source/app/service-providers/updates/index.ts:180
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -727,25 +727,25 @@ msgstr ""
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
 #. offline.
-#: source/app/service-providers/updates/index.ts:186
+#: source/app/service-providers/updates/index.ts:185
 msgid "Could not check for updates: Could not establish connection"
 msgstr ""
 "Não foi possível verificar se há atualizações: Não foi possível estabelecer "
 "conexão"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:189
+#: source/app/service-providers/updates/index.ts:188
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "Não foi possível buscar por atualizações. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:205
+#: source/app/service-providers/updates/index.ts:204
 msgid "Could not check for updates: Server hasn't sent any data"
 msgstr ""
 "Não foi possível verificar se há atualizações: o servidor não enviou nenhum "
 "dado"
 
-#: source/app/service-providers/updates/index.ts:462
+#: source/app/service-providers/updates/index.ts:461
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr "Uma atualização para a versão %s está disponível!"
@@ -1555,7 +1555,8 @@ msgstr "Usar aparência de janela nativa"
 
 #: source/win-preferences/schema/advanced.ts:52
 msgid "Delete items irreversibly, if moving them to trash fails"
-msgstr "Apaga os itens de maneira irreversível, se ocorrer uma falha ao mover para "
+msgstr ""
+"Apaga os itens de maneira irreversível, se ocorrer uma falha ao mover para "
 "lixeira"
 
 #: source/win-preferences/schema/advanced.ts:58
@@ -1651,7 +1652,8 @@ msgstr "Inicia uma busca ao percorrer links Zettelkasten"
 
 #: source/win-preferences/schema/zettelkasten.ts:65
 msgid "Automatically create non-existing files when following internal links"
-msgstr "Criar arquivos inexistentes automaticamente ao clicar em links internos"
+msgstr ""
+"Criar arquivos inexistentes automaticamente ao clicar em links internos"
 
 #: source/win-preferences/schema/zettelkasten.ts:70
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
@@ -2156,10 +2158,10 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
-"Zettlr oferece uma integração com LanguageTool.org, um serviço fornecido por"
-"LanguageTooler GmbH. Usar este serviço requer uma conexão com a internet e "
-"está sujeito à política de privacidade da LanguageTooler GmbH ou o servidor "
-"correspondente que você utiliza."
+"Zettlr oferece uma integração com LanguageTool.org, um serviço fornecido "
+"porLanguageTooler GmbH. Usar este serviço requer uma conexão com a internet "
+"e está sujeito à política de privacidade da LanguageTooler GmbH ou o "
+"servidor correspondente que você utiliza."
 
 #: source/tmp/List.vue.ts:141
 msgid "Add"
@@ -2592,10 +2594,13 @@ msgstr "Falha ao salvar"
 #~ msgstr "Usar ordem visual para o movimento das setas do teclado no modo DPE"
 
 #~ msgid "Word style (replace immediately without pressing Space/Enter)"
-#~ msgstr "Estilo Word (substitui imediatamente sem pressionar a barra de espaços/enter)"
+#~ msgstr ""
+#~ "Estilo Word (substitui imediatamente sem pressionar a barra de espaços/"
+#~ "enter)"
 
 #~ msgid "LibreOffice style (press Space or Enter to replace)"
-#~ msgstr "Estilo LibreOffice (pressione a barra de espaços ou Enter para substituir)"
+#~ msgstr ""
+#~ "Estilo LibreOffice (pressione a barra de espaços ou Enter para substituir)"
 
 #~ msgid "Check for updated translations on start"
 #~ msgstr "Buscar por traduções atualizadas ao iniciar"

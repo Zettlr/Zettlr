@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-10 02:28+0000\n"
+"POT-Creation-Date: 2023-04-13 02:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -702,17 +702,17 @@ msgstr "Значение %s должно быть не меньше %s симв�
 msgid "Option %s is required."
 msgstr "Значение %s должно быть установлено."
 
-#: source/app/service-providers/updates/index.ts:177
+#: source/app/service-providers/updates/index.ts:176
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "Ошибка проверки обновления: ошибка сервера (код статуса: %s)."
 
-#: source/app/service-providers/updates/index.ts:179
+#: source/app/service-providers/updates/index.ts:178
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr "Ошибка проверки обновления: ошибка клиента (код статуса: %s)."
 
-#: source/app/service-providers/updates/index.ts:181
+#: source/app/service-providers/updates/index.ts:180
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -723,21 +723,21 @@ msgstr ""
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
 #. offline.
-#: source/app/service-providers/updates/index.ts:186
+#: source/app/service-providers/updates/index.ts:185
 msgid "Could not check for updates: Could not establish connection"
 msgstr "Невозможно проверить наличие обновлений: ошибка подключения"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:189
+#: source/app/service-providers/updates/index.ts:188
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "Проверка обновлений не удалась. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:205
+#: source/app/service-providers/updates/index.ts:204
 msgid "Could not check for updates: Server hasn't sent any data"
 msgstr "Невозможно проверить наличие обновлений: не получен ответ от сервера"
 
-#: source/app/service-providers/updates/index.ts:462
+#: source/app/service-providers/updates/index.ts:461
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr "Доступно обновление до версии %s!"
