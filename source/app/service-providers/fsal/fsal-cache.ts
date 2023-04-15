@@ -74,7 +74,15 @@ export default class FSALCache {
       this._accessed.add(key)
     }
 
-    return shard.get(key)
+    // BUG: Somehow the revived JSON objects contain the actual descriptors in
+    // still stringified form; I don't know why, but see issue #4269
+    const val = shard.get(key)
+
+    if (typeof val === 'string') {
+      return JSON.parse(val)
+    } else {
+      return val
+    }
   }
 
   /**
