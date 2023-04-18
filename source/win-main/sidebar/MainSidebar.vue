@@ -131,11 +131,7 @@ body {
     overflow: hidden;
 
     #sidebar-tab-container {
-      position: absolute;
       top: 40px;
-      bottom: 0;
-      left: 0px;
-      right: 0px;
       padding: 0px 5px 5px 0px;
       overflow-y: auto;
     }

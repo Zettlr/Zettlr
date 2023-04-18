@@ -2,7 +2,6 @@
   <div
     id="toolbar"
     role="toolbar"
-    v-bind:style="{ top: marginTop }"
     v-bind:class="{
       'has-rtl-traffic-lights': hasRTLTrafficLights
     }"
@@ -101,10 +100,6 @@ export default defineComponent({
     TextControl
   },
   props: {
-    marginTop: {
-      type: String,
-      default: '0px'
-    },
     controls: {
       type: Array as PropType<ToolbarControl[]>,
       default: () => []
@@ -155,10 +150,8 @@ export default defineComponent({
 
 <style lang="less">
 body div#toolbar {
-  width: 100%;
   height: 40px;
   padding: 0px 10px;
-  position: fixed;
   display: flex;
   align-items: center;
   justify-content: space-around;

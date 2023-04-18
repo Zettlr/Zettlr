@@ -8,6 +8,7 @@
   >
     <!-- We have a leaf: Default DocumentTabs/Editor combo -->
     <DocumentTabs
+      v-show="!distractionFree"
       v-bind:leaf-id="leafId"
       v-bind:window-id="windowId"
     ></DocumentTabs>
@@ -98,23 +99,23 @@ body {
   .split-pane-container {
     .editor-pane {
       // Styles for the editor pane
-      flex-grow: 1;
-    }
-  }
+      height: 100%;
 
-  .editor-pane .empty-pane {
-    position: absolute;
-    top: 30px; // Space for the document tabbar
-    bottom: 0;
-    left: 0;
-    right: 0;
-    // If the editor is empty, display a nice background image
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-color: inherit;
-    background-image: url(../common/img/logo.svg);
-    padding-top: 5em;
+      .empty-pane {
+        position: absolute;
+        top: 30px; // Space for the document tabbar
+        bottom: 0;
+        left: 0;
+        right: 0;
+        // If the editor is empty, display a nice background image
+        background-position: center center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-color: inherit;
+        background-image: url(../common/img/logo.svg);
+        padding-top: 5em;
+      }
+    }
   }
 }
 </style>

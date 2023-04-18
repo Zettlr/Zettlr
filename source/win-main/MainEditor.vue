@@ -692,11 +692,7 @@ function handleDragLeave (event: DragEvent) {
   position: relative;
 
   &.fullscreen {
-    position: fixed;
     z-index: 100; // Ensure this editor instance is on top of any other pane
-    bottom: 0;
-    left: 0;
-    right: 0;
   }
 
   @keyframes caretup {

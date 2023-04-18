@@ -11,7 +11,6 @@
     <div
       v-if="hasHiddenView === 0"
       class="horizontal-resizer"
-      v-bind:style="{ left: `${view1Width - 5}px` }"
       v-on:mousedown="beginViewResizing"
     ></div> <!-- Enable resizing of the view -->
     <div
@@ -189,19 +188,18 @@ export default {
 
 <style lang="less">
 body div.split-view {
-  position: relative;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
   display: flex;
+  height: 100%;
 
   div.view {
-    position: relative; // Necessary so that the horizontal resizer sits correct
-
+    overflow: auto;
     &.view-border {
       border-left: 1px solid rgb(213, 213, 213);
+      margin-left: -6px; // Account for resizer
+    }
+
+    &:not(.view-border) {
+      margin-right: -5px; // Account for resizer
     }
   }
 
@@ -209,7 +207,6 @@ body div.split-view {
     cursor: col-resize;
     width: 11px; // 1px width plus 5px margin to either side
     z-index: 1; // Make sure the resizers are always on top
-    position: absolute;
     height: 100%;
   }
 }

@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="menubar"
-    v-bind:style="{ top: marginTop }"
-  >
+  <div id="menubar">
     <span
       v-for="(item, idx) in menu"
       v-bind:key="idx"
@@ -38,12 +35,6 @@ const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'WindowMenubar',
-  props: {
-    marginTop: {
-      type: String,
-      default: '0px'
-    }
-  },
   data: function () {
     return {
       menu: [] as SubmenuItem[],
@@ -150,9 +141,6 @@ export default defineComponent({
 <style lang="less">
 // Styles for the menubar (for Windows and Linux)
 #menubar {
-  position: absolute;
-  top: 0;
-  z-index: 2000; // Make sure it always stays on top (main enemy is the distraction free main editor)
   height: 31px;
   width: 100%;
   // Use the system font with a somewhat smaller font-size
