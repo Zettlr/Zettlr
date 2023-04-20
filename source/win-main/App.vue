@@ -41,8 +41,30 @@
         >
           <template #view1>
             <!-- First side: Editor -->
+            <!--
+              NOTE: The following contains a somewhat counterintuitive logic.
+              What we are effectively doing here is we overlay an editor pane
+              that directly gets passed the node configuration for the editor
+              pane that is currently in distraction free mode (if applicable).
+              The other logic below executes in every case, but if a distraction
+              free pane is shown, they only hide. The benefit is that, while the
+              distraction free pane effectively duplicates the pane and thus has
+              a loading time (especially for larger files), this retains
+              whatever state the other panes and branches were in so that the
+              user can - upon leaving distraction free - immediately continue
+              with their work.
+            -->
+            <EditorPane
+              v-if="distractionFreePaneConfig !== undefined"
+              v-bind:node="distractionFreePaneConfig"
+              v-bind:leaf-id="distractionFreePaneConfig.id"
+              v-bind:editor-commands="editorCommands"
+              v-bind:window-id="windowId"
+              v-on:global-search="startGlobalSearch($event)"
+            ></EditorPane>
             <EditorPane
               v-if="paneConfiguration.type === 'leaf'"
+              v-show="distractionFreePaneConfig === undefined"
               v-bind:node="paneConfiguration"
               v-bind:leaf-id="paneConfiguration.id"
               v-bind:editor-commands="editorCommands"
@@ -51,6 +73,7 @@
             ></EditorPane>
             <EditorBranch
               v-else
+              v-show="distractionFreePaneConfig === undefined"
               v-bind:node="paneConfiguration"
               v-bind:window-id="windowId"
               v-bind:editor-commands="editorCommands"
@@ -436,6 +459,9 @@ export default defineComponent({
     },
     distractionFree (): boolean {
       return this.$store.state.distractionFreeMode !== undefined
+    },
+    distractionFreePaneConfig (): LeafNodeJSON|undefined {
+      return this.$store.state.paneData.find((leaf: LeafNodeJSON) => leaf.id === this.$store.state.distractionFreeMode)
     }
   },
   watch: {
