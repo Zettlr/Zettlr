@@ -1709,10 +1709,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.11.26":
-  version: 16.18.3
-  resolution: "@types/node@npm:16.18.3"
-  checksum: 6b8ba2ea5d842f7986e366cb9184c54d273d492784dc62e08fd5afeae938d9b61aec6e4222d2541cd18f9b1412ba361bbcb3f4204fb003608af80a2a6af959f9
+"@types/node@npm:^18.11.18":
+  version: 18.15.13
+  resolution: "@types/node@npm:18.15.13"
+  checksum: 79cc5a2b5f98e8973061a4260a781425efd39161a0e117a69cd089603964816c1a14025e1387b4590c8e82d05133b7b4154fa53a7dffb3877890a66145e76515
   languageName: node
   linkType: hard
 
@@ -5213,16 +5213,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^22.x.x":
-  version: 22.3.4
-  resolution: "electron@npm:22.3.4"
+"electron@npm:^24.1.2":
+  version: 24.1.2
+  resolution: "electron@npm:24.1.2"
   dependencies:
     "@electron/get": ^2.0.0
-    "@types/node": ^16.11.26
+    "@types/node": ^18.11.18
     extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: b161a668a2438b7d1d48fedb42fc80ba19180e01b2fa5e35670528d9e897aab9d31c3815f490d625853dcd3d48dbed926b9737d9c27f62331ce1a06832a85b04
+  checksum: 54b012bed51c0cadcb8cc7bc2bdd9c46969214bc2532d57699da2c9ec6fbfeb8b5752c56c1c05c8d8ab46b3d6856db861a23a1124012024ae0131e5df9acc269
   languageName: node
   linkType: hard
 
@@ -9361,12 +9361,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-abi@npm:^3.0.0":
-  version: 3.30.0
-  resolution: "node-abi@npm:3.30.0"
+"node-abi@npm:^3.40.0":
+  version: 3.40.0
+  resolution: "node-abi@npm:3.40.0"
   dependencies:
     semver: ^7.3.5
-  checksum: f285efcea312e52d8763cfad7d434b31c11586e5efdf9f239c214a582557777453a8358d338442f02490d6c5289b0fc0eeed3056a740a3ebe6c79334af3b1739
+  checksum: 8f4ef0d9ac82352465e7e7a8ce3915dae49c0fd19d6cb49a93140ff587b612166443531111a60d25e479a18e6e6b9af09698c7870babe0f44aa54287aeaf5eef
   languageName: node
   linkType: hard
 
@@ -13398,7 +13398,7 @@ __metadata:
     css-loader: ^6.7.3
     csso: ^5.0.5
     d3: ^7.8.4
-    electron: ^22.x.x
+    electron: ^24.1.2
     electron-builder: ^23.6.0
     electron-devtools-installer: ^3.2.0
     eslint: ^8.38.0
