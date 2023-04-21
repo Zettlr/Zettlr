@@ -96,7 +96,8 @@ export default function (): any {
         {
           type: 'checkbox',
           label: trans('Display Markdown file extensions'),
-          model: 'display.markdownFileExtensions'
+          model: 'display.markdownFileExtensions',
+          disabled: window.config.get('fileNameDisplay') !== 'filename'
         }
       ],
       [
