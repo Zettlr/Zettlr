@@ -125,7 +125,8 @@
   },
   "resolutions": {
     "@codemirror/language": "^6.6.0",
-    "@lezer/highlight": "^1.1.4"
+    "@lezer/highlight": "^1.1.4",
+    "node-abi": "^3.40.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
@@ -155,7 +156,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.3",
     "csso": "^5.0.5",
-    "electron": "^22.x.x",
+    "electron": "^24.1.2",
     "electron-builder": "^23.6.0",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.38.0",
