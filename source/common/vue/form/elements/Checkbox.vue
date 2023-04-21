@@ -207,8 +207,14 @@ body.darwin {
       background-image: linear-gradient(transparent, #00000020);
     }
 
-    &.disabled .checkmark {
-      background-color: #ddd;
+    &.disabled {
+      .checkmark {
+        background-color: #ddd;
+      }
+
+      input:checked ~ .checkmark {
+        border-color: lightgrey;
+      }
     }
   }
 
@@ -223,12 +229,18 @@ body.darwin {
         }
       }
 
-      input:checked ~ .checkmark {
+      &:not(.disabled) input:checked ~ .checkmark {
         background-image: none;
       }
 
-      &.disabled .checkmark {
-        background-image: radial-gradient(circle at top, rgb(90, 90, 90), rgb(120, 120, 120));
+      &.disabled {
+        .checkmark {
+          background-image: radial-gradient(circle at top, rgb(90, 90, 90), rgb(120, 120, 120));
+        }
+
+        input:checked ~.checkmark {
+          border-color: #5a5a5a;
+        }
       }
     }
   }
