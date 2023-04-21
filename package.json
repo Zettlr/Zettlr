@@ -111,7 +111,7 @@
     "rimraf": "^4.4.1",
     "sanitize-filename": "^1.6.3",
     "sanitize-html": "^2.10.0",
-    "semver": "^7.3.8",
+    "semver": "^7.5.0",
     "tippy.js": "^6.3.7",
     "unified": "^10.1.2",
     "uuid": "^9.0.0",

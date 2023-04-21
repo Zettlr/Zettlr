@@ -11284,6 +11284,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"semver@npm:^7.5.0":
+  version: 7.5.0
+  resolution: "semver@npm:7.5.0"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: 2d266937756689a76f124ffb4c1ea3e1bbb2b263219f90ada8a11aebebe1280b13bb76cca2ca96bdee3dbc554cbc0b24752eb895b2a51577aa644427e9229f2b
+  languageName: node
+  linkType: hard
+
 "semver@npm:~7.0.0":
   version: 7.0.0
   resolution: "semver@npm:7.0.0"
@@ -13456,7 +13467,7 @@ __metadata:
     rimraf: ^4.4.1
     sanitize-filename: ^1.6.3
     sanitize-html: ^2.10.0
-    semver: ^7.3.8
+    semver: ^7.5.0
     style-loader: ^3.3.2
     tippy.js: ^6.3.7
     ts-loader: ^9.4.2
