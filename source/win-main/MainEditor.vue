@@ -844,11 +844,6 @@ body.dark .main-editor-wrapper {
   .CodeMirror .CodeMirror-gutters { background-color: rgba(20, 20, 30, 1); }
 }
 
-// Account for the tabbar
-.main-editor-wrapper:not(.fullscreen) {
-  height: calc(100% - 30px);
-}
-
 // CodeMirror fullscreen
 .main-editor-wrapper.fullscreen {
   .cm-scroller {
@@ -860,13 +855,6 @@ body.dark .main-editor-wrapper {
 
   }
 }
-
-// Ensure the editor ALWAYS stays below the menubar
-// On macOS, we have the traffic lights, therefore we can literally make the
-// editor take the full space of the window in distraction free
-body.win32 .main-editor-wrapper.fullscreen { top: 30px; }
-// TODO: Interferes on Linux with whether we have a menubar or not!
-body.linux .main-editor-wrapper.fullscreen { top: 41px; }
 
 body.darwin {
     .main-editor-wrapper.fullscreen {
