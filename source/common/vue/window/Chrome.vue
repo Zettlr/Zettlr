@@ -1,10 +1,7 @@
 <template>
   <div id="window-frame">
     <!-- This div contains all the bars we have -->
-    <div
-      id="window-chrome"
-      v-bind:style="{ height: windowChromeHeight }"
-    >
+    <div id="window-chrome">
       <!--
         These different window chrome parts can be displayed conditionally, in
         order to facilitate different kinds of windows (a preferences window,
@@ -19,11 +16,9 @@
       ></WindowTitlebar>
       <WindowMenubar
         v-if="showMenubar"
-        v-bind:margin-top="menubarMargin"
       ></WindowMenubar>
       <WindowToolbar
         v-if="showToolbar"
-        v-bind:margin-top="toolbarMargin"
         v-bind:controls="toolbarControls"
         v-bind:show-labels="toolbarLabels"
         v-on:search="$emit('toolbar-search', $event)"
@@ -33,7 +28,6 @@
       ></WindowToolbar>
       <WindowTabbar
         v-if="showTabbar"
-        v-bind:margin-top="tabbarMargin"
         v-bind:tabs="tabbarTabs"
         v-bind:label="tabbarLabel"
         v-on:tab="$emit('tab', $event)"
@@ -46,10 +40,6 @@
     </div>
     <div
       id="window-content"
-      v-bind:style="{
-        top: windowChromeHeight,
-        bottom: contentMarginBottom
-      }"
       v-bind:class="{
         'disable-vibrancy': disableVibrancy
       }"
@@ -93,27 +83,6 @@ import WindowControls from './WindowControls.vue'
 import './assets/generic.less'
 
 const ipcRenderer = window.ipc
-
-// First we need some general variables
-const TITLEBAR_MACOS_HEIGHT = 40
-const TITLEBAR_WIN32_HEIGHT = 30
-const TITLEBAR_LINUX_HEIGHT = 30
-
-const MENUBAR_MACOS_HEIGHT = 31 // No menubar on macOS
-const MENUBAR_WIN32_HEIGHT = 31
-const MENUBAR_LINUX_HEIGHT = 31
-
-const TOOLBAR_MACOS_HEIGHT = 40
-const TOOLBAR_WIN32_HEIGHT = 40
-const TOOLBAR_LINUX_HEIGHT = 40
-
-const TABBAR_MACOS_HEIGHT = 60
-const TABBAR_WIN32_HEIGHT = 40
-const TABBAR_LINUX_HEIGHT = 40
-
-const STATUSBAR_MACOS_HEIGHT = 60
-const STATUSBAR_WIN32_HEIGHT = 60
-const STATUSBAR_LINUX_HEIGHT = 60
 
 export default {
   name: 'WindowChrome',
@@ -235,117 +204,6 @@ export default {
       } else {
         return true
       }
-    },
-    platformTitlebarHeight: function () {
-      if (this.platform === 'darwin') {
-        return TITLEBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return TITLEBAR_WIN32_HEIGHT
-      } else {
-        return TITLEBAR_LINUX_HEIGHT // Default
-      }
-    },
-    platformMenubarHeight: function () {
-      if (this.platform === 'darwin') {
-        return MENUBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return MENUBAR_WIN32_HEIGHT
-      } else {
-        return MENUBAR_LINUX_HEIGHT // Default
-      }
-    },
-    platformToolbarHeight: function () {
-      if (this.platform === 'darwin') {
-        return TOOLBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return TOOLBAR_WIN32_HEIGHT
-      } else {
-        return TOOLBAR_LINUX_HEIGHT // Default
-      }
-    },
-    platformTabbarHeight: function () {
-      if (this.platform === 'darwin') {
-        return TABBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return TABBAR_WIN32_HEIGHT
-      } else {
-        return TABBAR_LINUX_HEIGHT // Default
-      }
-    },
-    platformStatusbarHeight: function () {
-      if (this.platform === 'darwin') {
-        return STATUSBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return STATUSBAR_WIN32_HEIGHT
-      } else {
-        return STATUSBAR_LINUX_HEIGHT // Default
-      }
-    },
-    windowChromeHeight: function () {
-      let margin = 0
-
-      if (this.showTitlebar === true) {
-        margin += this.platformTitlebarHeight
-      }
-
-      if (this.showMenubar === true) {
-        margin += this.platformMenubarHeight
-      }
-
-      if (this.showToolbar === true) {
-        margin += this.platformToolbarHeight
-      }
-
-      if (this.showTabbar === true) {
-        margin += this.platformTabbarHeight
-      }
-
-      return `${margin}px`
-    },
-    contentMarginBottom: function () {
-      if (this.showStatusbar === true) {
-        return `${this.platformStatusbarHeight}px`
-      } else {
-        return '0px'
-      }
-    },
-    menubarMargin: function () {
-      // Only a titlebar may be on top of the menubar
-      if (this.showTitlebar === true) {
-        return `${this.platformTitlebarHeight}px`
-      } else {
-        return '0px'
-      }
-    },
-    toolbarMargin: function () {
-      let margin = 0
-
-      if (this.showTitlebar === true) {
-        margin += this.platformTitlebarHeight
-      }
-
-      if (this.showMenubar === true) {
-        margin += this.platformMenubarHeight
-      }
-
-      return `${margin}px`
-    },
-    tabbarMargin: function () {
-      let margin = 0
-
-      if (this.showTitlebar === true) {
-        margin += this.platformTitlebarHeight
-      }
-
-      if (this.showMenubar === true) {
-        margin += this.platformMenubarHeight
-      }
-
-      if (this.showToolbar === true) {
-        margin += this.platformToolbarHeight
-      }
-
-      return `${margin}px`
     }
   },
   watch: {
@@ -410,19 +268,22 @@ body {
     }
   }
 
+  div#window-frame {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+  }
+
   div#window-chrome {
     // The window chrome gets the system font
     font-family: inherit;
+    display: flex;
+    flex-direction: column;
   }
 
   div#window-content {
-    // The top position will be computed dynamically based on the different
-    // bars that are shown in the window chrome content.
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    height: 100%;
     overflow: auto;
   }
 

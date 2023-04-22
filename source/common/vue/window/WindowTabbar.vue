@@ -3,7 +3,6 @@
     class="tab-list"
     role="tablist"
     v-bind:aria-label="label"
-    v-bind:style="{ top: marginTop }"
   >
     <button
       v-for="(tab, idx) in tabs"
@@ -57,10 +56,6 @@ import { WindowTab } from '@dts/renderer/window'
 export default defineComponent({
   name: 'WindowTabbar',
   props: {
-    marginTop: {
-      type: String,
-      default: '0px'
-    },
     tabs: {
       type: Array as PropType<WindowTab[]>,
       required: true
@@ -122,8 +117,6 @@ export default defineComponent({
 <style lang="less">
 // General styles
 body div.tab-list {
-  position: absolute;
-  width: 100%;
   font-family: inherit;
   display: flex;
   padding: 5px;

@@ -37,9 +37,6 @@ export default {
 <style lang="less">
 // General styles
 div#titlebar {
-  position: absolute;
-  top: 0;
-  width: 100vw;
   -webkit-app-region: drag;
 }
 

@@ -53,12 +53,14 @@ export default function (): any {
         {
           type: 'text',
           label: trans('LanguageTool Username'),
-          model: 'editor.lint.languageTool.username'
+          model: 'editor.lint.languageTool.username',
+          disabled: window.config.get('editor.lint.languageTool.active') === false || window.config.get('editor.lint.languageTool.provider') === 'custom'
         },
         {
           type: 'text',
           label: trans('LanguageTool API key'),
-          model: 'editor.lint.languageTool.apiKey'
+          model: 'editor.lint.languageTool.apiKey',
+          disabled: window.config.get('editor.lint.languageTool.active') === false || window.config.get('editor.lint.languageTool.provider') === 'custom'
         }
       ],
       [

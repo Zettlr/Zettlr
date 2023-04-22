@@ -62,16 +62,12 @@ export default {
 <style lang="less">
 div#statusbar {
   height: 60px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   padding: 0px 20px;
   line-height: 60px;
   background-color: rgb(235, 235, 235); // TODO: Enable the status bar to be "invisible" and visible
   display: flex;
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
 
   button {
     margin-right: 5px; // Increase spacing a little bit here
