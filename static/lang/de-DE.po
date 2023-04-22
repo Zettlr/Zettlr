@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-13 02:28+0000\n"
+"POT-Creation-Date: 2023-04-22 02:29+0000\n"
 "PO-Revision-Date: 2023-04-09 15:37+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -1888,37 +1888,37 @@ msgstr "Titel oder erste Überschrift falls vorhanden"
 msgid "Display Markdown file extensions"
 msgstr "Zeige Markdown Dateierweiterungen an"
 
-#: source/win-preferences/schema/general.ts:105
+#: source/win-preferences/schema/general.ts:106
 msgid "Sorting order for files (used for sorting by name)"
 msgstr "Sortierreihenfolge für Dateien (bei Sortierung nach Dateinamen)"
 
-#: source/win-preferences/schema/general.ts:108
+#: source/win-preferences/schema/general.ts:109
 msgid "Natural order (10 after 2)"
 msgstr "Natürliche Reihenfolge (10 kommt nach 2)"
 
-#: source/win-preferences/schema/general.ts:109
+#: source/win-preferences/schema/general.ts:110
 msgid "ASCII order (2 after 10)"
 msgstr "ASCII-Reihenfolge (2 kommt nach 10)"
 
-#: source/win-preferences/schema/general.ts:116
+#: source/win-preferences/schema/general.ts:117
 msgid "Show folders above files"
 msgstr "Zeige Ordner vor Dateien"
 
-#: source/win-preferences/schema/general.ts:123
+#: source/win-preferences/schema/general.ts:124
 msgid "When sorting by time, sort by"
 msgstr "Wenn nach Zeit sortiert wird, sortiere nach"
 
-#: source/win-preferences/schema/general.ts:126
-#: source/win-preferences/schema/general.ts:135
+#: source/win-preferences/schema/general.ts:127
+#: source/win-preferences/schema/general.ts:136
 msgid "Last modification time"
 msgstr "Letzter Bearbeitungszeitpunkt"
 
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
 msgid "File creation time"
 msgstr "Dateierstellungszeitpunkt"
 
-#: source/win-preferences/schema/general.ts:132
+#: source/win-preferences/schema/general.ts:133
 msgid "In the file metadata display"
 msgstr "Zeige folgende Zeit in den Dateiinformationen an"
 

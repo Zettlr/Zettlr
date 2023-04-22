@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-13 02:28+0000\n"
+"POT-Creation-Date: 2023-04-22 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1906,37 +1906,37 @@ msgstr ""
 msgid "Display Markdown file extensions"
 msgstr "마크다운 파일의 확장자를 표시"
 
-#: source/win-preferences/schema/general.ts:105
+#: source/win-preferences/schema/general.ts:106
 msgid "Sorting order for files (used for sorting by name)"
 msgstr "파일 정렬 순서 (이름으로 정렬할 때 사용됨)"
 
-#: source/win-preferences/schema/general.ts:108
+#: source/win-preferences/schema/general.ts:109
 msgid "Natural order (10 after 2)"
 msgstr "일반적인 순서 (2 다음에 10)"
 
-#: source/win-preferences/schema/general.ts:109
+#: source/win-preferences/schema/general.ts:110
 msgid "ASCII order (2 after 10)"
 msgstr "ASCII 순서(2가 10 다음에 옴)"
 
-#: source/win-preferences/schema/general.ts:116
+#: source/win-preferences/schema/general.ts:117
 msgid "Show folders above files"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:123
+#: source/win-preferences/schema/general.ts:124
 msgid "When sorting by time, sort by"
 msgstr "시간으로 정렬할 때, 정렬할 대상"
 
-#: source/win-preferences/schema/general.ts:126
-#: source/win-preferences/schema/general.ts:135
+#: source/win-preferences/schema/general.ts:127
+#: source/win-preferences/schema/general.ts:136
 msgid "Last modification time"
 msgstr "마지막 수정 시간"
 
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
 msgid "File creation time"
 msgstr "파일이 만들어진 시간"
 
-#: source/win-preferences/schema/general.ts:132
+#: source/win-preferences/schema/general.ts:133
 msgid "In the file metadata display"
 msgstr "파일 메타데이터 표시"
 
