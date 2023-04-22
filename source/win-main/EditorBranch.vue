@@ -35,7 +35,7 @@
       ></EditorPane>
       <!-- Here comes the resizing (for every but the last child) -->
       <div
-        v-if="index < node.nodes.length - 1 && !distractionFree"
+        v-if="index < node.nodes.length - 1"
         v-bind:class="`resizer ${node.direction}`"
         v-on:mousedown="beginResizing($event, index)"
       ></div>
@@ -112,9 +112,6 @@ export default defineComponent({
     },
     nodeSizes () {
       return this.node.sizes
-    },
-    distractionFree () {
-      return this.$store.state.distractionFreeMode !== undefined
     }
   },
   watch: {
