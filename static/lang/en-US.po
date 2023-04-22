@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.0-beta.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-21 02:29+0000\n"
+"POT-Creation-Date: 2023-04-22 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1877,37 +1877,37 @@ msgstr "Title or first heading level 1 if applicable"
 msgid "Display Markdown file extensions"
 msgstr "Display Markdown file extensions"
 
-#: source/win-preferences/schema/general.ts:105
+#: source/win-preferences/schema/general.ts:106
 msgid "Sorting order for files (used for sorting by name)"
 msgstr "Sorting order for files (used for sorting by name)"
 
-#: source/win-preferences/schema/general.ts:108
+#: source/win-preferences/schema/general.ts:109
 msgid "Natural order (10 after 2)"
 msgstr "Natural order (10 after 2)"
 
-#: source/win-preferences/schema/general.ts:109
+#: source/win-preferences/schema/general.ts:110
 msgid "ASCII order (2 after 10)"
 msgstr "ASCII order (2 after 10)"
 
-#: source/win-preferences/schema/general.ts:116
+#: source/win-preferences/schema/general.ts:117
 msgid "Show folders above files"
 msgstr "Show folders above files"
 
-#: source/win-preferences/schema/general.ts:123
+#: source/win-preferences/schema/general.ts:124
 msgid "When sorting by time, sort by"
 msgstr "When sorting by time, sort by"
 
-#: source/win-preferences/schema/general.ts:126
-#: source/win-preferences/schema/general.ts:135
+#: source/win-preferences/schema/general.ts:127
+#: source/win-preferences/schema/general.ts:136
 msgid "Last modification time"
 msgstr "Last modification time"
 
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
 msgid "File creation time"
 msgstr "File creation time"
 
-#: source/win-preferences/schema/general.ts:132
+#: source/win-preferences/schema/general.ts:133
 msgid "In the file metadata display"
 msgstr "In the file metadata display"
 

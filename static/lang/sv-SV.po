@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-13 02:28+0000\n"
+"POT-Creation-Date: 2023-04-22 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1914,37 +1914,37 @@ msgstr "Titel eller första rubrik nivå 1 om tillämpligt"
 msgid "Display Markdown file extensions"
 msgstr "Visa Markdown fil tillägg"
 
-#: source/win-preferences/schema/general.ts:105
+#: source/win-preferences/schema/general.ts:106
 msgid "Sorting order for files (used for sorting by name)"
 msgstr "sorteringsordning för filer (används för att sortera efter namn)"
 
-#: source/win-preferences/schema/general.ts:108
+#: source/win-preferences/schema/general.ts:109
 msgid "Natural order (10 after 2)"
 msgstr "Naturlig ordning (10 efter 2)"
 
-#: source/win-preferences/schema/general.ts:109
+#: source/win-preferences/schema/general.ts:110
 msgid "ASCII order (2 after 10)"
 msgstr "ASCII-ordning (2 efter 10)"
 
-#: source/win-preferences/schema/general.ts:116
+#: source/win-preferences/schema/general.ts:117
 msgid "Show folders above files"
 msgstr "Visa mappar ovanför filer"
 
-#: source/win-preferences/schema/general.ts:123
+#: source/win-preferences/schema/general.ts:124
 msgid "When sorting by time, sort by"
 msgstr "När du sorterar efter tid, sortera efter"
 
-#: source/win-preferences/schema/general.ts:126
-#: source/win-preferences/schema/general.ts:135
+#: source/win-preferences/schema/general.ts:127
+#: source/win-preferences/schema/general.ts:136
 msgid "Last modification time"
 msgstr "Senaste ändringstid"
 
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
 msgid "File creation time"
 msgstr "Tid för att skapa fil"
 
-#: source/win-preferences/schema/general.ts:132
+#: source/win-preferences/schema/general.ts:133
 msgid "In the file metadata display"
 msgstr "Visa filens metadata"
 

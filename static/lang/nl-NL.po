@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-13 02:28+0000\n"
+"POT-Creation-Date: 2023-04-22 02:29+0000\n"
 "PO-Revision-Date: 2022-12-29 23:16+0100\n"
 "Last-Translator: Marcel van den Brink <marcel.vandenbrink@gmail.com>\n"
 "Language-Team: \n"
@@ -1919,37 +1919,37 @@ msgstr "Titel of eerste kop (indien van toepassing)"
 msgid "Display Markdown file extensions"
 msgstr "Toon Markdown bestandsextensies"
 
-#: source/win-preferences/schema/general.ts:105
+#: source/win-preferences/schema/general.ts:106
 msgid "Sorting order for files (used for sorting by name)"
 msgstr "Manier van sorteren van bestanden (gebruikt bij sorteren op naam)"
 
-#: source/win-preferences/schema/general.ts:108
+#: source/win-preferences/schema/general.ts:109
 msgid "Natural order (10 after 2)"
 msgstr "Natuurlijke volgorde (10 na 2)"
 
-#: source/win-preferences/schema/general.ts:109
+#: source/win-preferences/schema/general.ts:110
 msgid "ASCII order (2 after 10)"
 msgstr "ASCII volgorde (2 na 10)"
 
-#: source/win-preferences/schema/general.ts:116
+#: source/win-preferences/schema/general.ts:117
 msgid "Show folders above files"
 msgstr "Toon mappen boven bestanden"
 
-#: source/win-preferences/schema/general.ts:123
+#: source/win-preferences/schema/general.ts:124
 msgid "When sorting by time, sort by"
 msgstr "Wanneer er gesorteerd wordt, sorteer dan op"
 
-#: source/win-preferences/schema/general.ts:126
-#: source/win-preferences/schema/general.ts:135
+#: source/win-preferences/schema/general.ts:127
+#: source/win-preferences/schema/general.ts:136
 msgid "Last modification time"
 msgstr "Tijdstip waarop de laatste aanpassingen zijn gemaakt."
 
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
 msgid "File creation time"
 msgstr "Tijdstip waarop het bestand is aangemaakt."
 
-#: source/win-preferences/schema/general.ts:132
+#: source/win-preferences/schema/general.ts:133
 msgid "In the file metadata display"
 msgstr "In de metadata van het bestand toon"
 
