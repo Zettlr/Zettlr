@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-22 02:29+0000\n"
+"POT-Creation-Date: 2023-04-23 02:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1599,7 +1599,7 @@ msgid "Hostname"
 msgstr "ホスト名"
 
 #: source/win-preferences/schema/advanced.ts:96
-#: source/win-preferences/schema/spellchecking.ts:81
+#: source/win-preferences/schema/spellchecking.ts:83
 msgid "Search for entries …"
 msgstr "エントリーを検索..."
 
@@ -2024,24 +2024,24 @@ msgstr "カスタムCSS"
 msgid "LanguageTool Username"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:60
+#: source/win-preferences/schema/spellchecking.ts:61
 msgid "LanguageTool API key"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:67
+#: source/win-preferences/schema/spellchecking.ts:69
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr "自動スペルチェックを有効にする言語を選択。"
 
-#: source/win-preferences/schema/spellchecking.ts:72
+#: source/win-preferences/schema/spellchecking.ts:74
 msgid "Search for dictionaries &hellip;"
 msgstr "辞書を検索..."
 
-#: source/win-preferences/schema/spellchecking.ts:76
+#: source/win-preferences/schema/spellchecking.ts:78
 msgid "User dictionary. Remove words by clicking them."
 msgstr "ユーザ辞書。クリックで単語を削除します。"
 
-#: source/win-preferences/schema/spellchecking.ts:78
+#: source/win-preferences/schema/spellchecking.ts:80
 msgid "Dictionary entry"
 msgstr "辞書エントリー"
 
