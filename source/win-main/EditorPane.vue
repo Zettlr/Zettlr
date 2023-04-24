@@ -99,21 +99,25 @@ body {
   .editor-pane {
     // Styles for the editor pane
     height: 100%;
+    display: flex;
+    flex-direction: column;
 
     .empty-pane {
-      position: absolute;
-      top: 30px; // Space for the document tabbar
-      bottom: 0;
-      left: 0;
-      right: 0;
+      width: 100%;
+      height: 100%;
       // If the editor is empty, display a nice background image
       background-position: center center;
       background-size: contain;
       background-repeat: no-repeat;
       background-color: inherit;
       background-image: url(../common/img/logo.svg);
+      background-color: white;
       padding-top: 5em;
     }
+  }
+
+  &.dark .editor-pane .empty-pane {
+    background-color: rgb(40, 40, 40);
   }
 }
 </style>
