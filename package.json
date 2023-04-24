@@ -139,7 +139,7 @@
     "@types/d3": "^7.4.0",
     "@types/gettext-parser": "^4.0.2",
     "@types/katex": "^0.16.0",
-    "@types/lodash": "^4.14.192",
+    "@types/lodash": "^4.14.194",
     "@types/luxon": "^3.3.0",
     "@types/md5": "^2.3.2",
     "@types/mermaid": "^9.2.0",
