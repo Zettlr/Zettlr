@@ -109,7 +109,6 @@ body {
       background-position: center center;
       background-size: contain;
       background-repeat: no-repeat;
-      background-color: inherit;
       background-image: url(../common/img/logo.svg);
       background-color: white;
       padding-top: 5em;
