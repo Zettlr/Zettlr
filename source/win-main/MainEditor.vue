@@ -183,7 +183,7 @@ ipcRenderer.on('shortcut', (event, command) => {
 })
 
 ipcRenderer.on('documents-update', (e, { event, context }) => {
-  if (event === DP_EVENTS.FILE_REMOTELY_CHANGED && context === props.file.path) {
+  if (event === DP_EVENTS.FILE_REMOTELY_CHANGED && context.filePath === props.file.path) {
     // The currently loaded document has been changed remotely. This event indicates
     // that the document provider has already reloaded the document and we only
     // need to tell the main editor to reload it as well.
