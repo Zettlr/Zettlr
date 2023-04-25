@@ -177,22 +177,17 @@ export class DTBranch {
     // If we're now left with just a single leaf, remove this branch and
     // attach the remaining node itself to the parent.
     if (this._nodes.length === 1 && this._nodes[0] instanceof DTLeaf) {
+      this._nodes[0].parent = this.parent
       if (this.parent instanceof DocumentTree) {
         this.parent.node = this._nodes[0]
       } else {
         this.parent.addNode(this._nodes[0], this, 'after')
         this.parent.removeNode(this)
       }
-      this._nodes[0].parent = this.parent
     } else if (this._nodes.length === 0) {
       // Similarly, if we've just dropped the last node, we can just remove
       // this thing from its parent.
-      if (this.parent instanceof DocumentTree) {
-        const newLeaf = new DTLeaf(this.parent)
-        this.parent.node = newLeaf
-      } else {
-        this.parent.removeNode(this)
-      }
+      this.parent.removeNode(this)
     }
 
     this.ensureProperSizes()
