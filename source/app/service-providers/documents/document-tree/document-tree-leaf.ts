@@ -107,21 +107,8 @@ export class DTLeaf {
    * @return  {DTLeaf}             Returns the newly created leaf
    */
   public split (direction: 'horizontal'|'vertical', insertion: 'before'|'after'): DTLeaf {
-    if (this._parent instanceof DocumentTree && this._parent.direction === direction) {
-      // this = leaf, parent = DocumentTree -> insert a branch
-      const newBranch = new DTBranch(this._parent, direction)
-      const newLeaf = new DTLeaf(newBranch)
-      if (insertion === 'before') {
-        newBranch.addNode(newLeaf)
-        newBranch.addNode(this)
-      } else {
-        newBranch.addNode(this)
-        newBranch.addNode(newLeaf)
-      }
-      this._parent.node = newBranch
-      this._parent = newBranch
-      return newLeaf
-    } else if (this._parent instanceof DocumentTree) {
+    if (this._parent instanceof DocumentTree) {
+      console.log('Replacing this leaf with a new branch as the tree node')
       const newBranch = new DTBranch(this._parent, direction)
       const newLeaf = new DTLeaf(newBranch)
 
