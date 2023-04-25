@@ -742,6 +742,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+// NOTE: If you change this value, adapt it in EditorPane.vue as well!
 @tabbar-height: 30px;
 
 body div.document-tablist-wrapper {

@@ -105,7 +105,6 @@ function afterRegister (): void {
       app.$store.dispatch('updateModifiedFiles')
         .catch(e => console.error(e))
     } else {
-      console.log(payload)
       app.$store.dispatch('documentTree', payload)
         .catch(err => console.error(err))
     }
