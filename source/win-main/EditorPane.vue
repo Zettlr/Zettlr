@@ -15,74 +15,76 @@
       v-bind:leaf-id="leafId"
       v-bind:window-id="windowId"
     ></DocumentTabs>
-    <template v-for="file in openFiles" v-bind:key="file.path">
-      <MainEditor
-        v-show="activeFile?.path === file.path"
-        v-bind:file="file"
-        v-bind:distraction-free="distractionFree"
-        v-bind:leaf-id="leafId"
-        v-bind:active-file="activeFile"
-        v-bind:window-id="windowId"
-        v-bind:editor-commands="editorCommands"
-        v-on:global-search="$emit('globalSearch', $event)"
-      ></MainEditor>
-    </template>
+    <div class="editor-container">
+      <template v-for="file in openFiles" v-bind:key="file.path">
+        <MainEditor
+          v-show="activeFile?.path === file.path"
+          v-bind:file="file"
+          v-bind:distraction-free="distractionFree"
+          v-bind:leaf-id="leafId"
+          v-bind:active-file="activeFile"
+          v-bind:window-id="windowId"
+          v-bind:editor-commands="editorCommands"
+          v-on:global-search="$emit('globalSearch', $event)"
+        ></MainEditor>
+      </template>
 
-    <!-- Show empty pane if there are no files -->
-    <div v-if="hasNoOpenFiles" class="empty-pane"></div>
+      <!-- Show empty pane if there are no files -->
+      <div v-if="hasNoOpenFiles" class="empty-pane"></div>
 
-    <!-- Implement dropzones for editor pane splitting -->
-    <div
-      v-if="documentTabDrag"
-      v-bind:class="{
-        dropzone: true,
-        top: true,
-        dragover: documentTabDragWhere === 'top'
-      }"
-      v-on:drop="handleDrop($event, 'top')"
-      v-on:dragenter="handleDragEnter($event, 'top')"
-      v-on:dragleave="handleDragLeave($event)"
-    >
-      <cds-icon v-if="documentTabDragWhere === 'top'" shape="angle" direction="up"></cds-icon>
-    </div>
-    <div
-      v-if="documentTabDrag"
-      v-bind:class="{
-        dropzone: true,
-        left: true,
-        dragover: documentTabDragWhere === 'left'
-      }"
-      v-on:drop="handleDrop($event, 'left')"
-      v-on:dragenter="handleDragEnter($event, 'left')"
-      v-on:dragleave="handleDragLeave($event)"
-    >
-      <cds-icon v-if="documentTabDragWhere === 'left'" shape="angle" direction="left"></cds-icon>
-    </div>
-    <div
-      v-if="documentTabDrag"
-      v-bind:class="{
-        dropzone: true,
-        bottom: true,
-        dragover: documentTabDragWhere === 'bottom'
-      }"
-      v-on:drop="handleDrop($event, 'bottom')"
-      v-on:dragenter="handleDragEnter($event, 'bottom')"
-      v-on:dragleave="handleDragLeave($event)"
-    >
-      <cds-icon v-if="documentTabDragWhere === 'bottom'" shape="angle" direction="down"></cds-icon>
-    </div>
-    <div
-      v-if="documentTabDrag"
-      v-bind:class="{
-        dropzone: true,
-        right: true,
-        dragover: documentTabDragWhere === 'right'
-      }"
-      v-on:drop="handleDrop($event, 'right')"
-      v-on:dragenter="handleDragEnter($event, 'right')"
-      v-on:dragleave="handleDragLeave($event)"
-    >
-      <cds-icon v-if="documentTabDragWhere === 'right'" shape="angle" direction="right"></cds-icon>
+      <!-- Implement dropzones for editor pane splitting -->
+      <div
+        v-if="documentTabDrag"
+        v-bind:class="{
+          dropzone: true,
+          top: true,
+          dragover: documentTabDragWhere === 'top'
+        }"
+        v-on:drop="handleDrop($event, 'top')"
+        v-on:dragenter="handleDragEnter($event, 'top')"
+        v-on:dragleave="handleDragLeave($event)"
+      >
+        <cds-icon v-if="documentTabDragWhere === 'top'" shape="angle" direction="up"></cds-icon>
+      </div>
+      <div
+        v-if="documentTabDrag"
+        v-bind:class="{
+          dropzone: true,
+          left: true,
+          dragover: documentTabDragWhere === 'left'
+        }"
+        v-on:drop="handleDrop($event, 'left')"
+        v-on:dragenter="handleDragEnter($event, 'left')"
+        v-on:dragleave="handleDragLeave($event)"
+      >
+        <cds-icon v-if="documentTabDragWhere === 'left'" shape="angle" direction="left"></cds-icon>
+      </div>
+      <div
+        v-if="documentTabDrag"
+        v-bind:class="{
+          dropzone: true,
+          bottom: true,
+          dragover: documentTabDragWhere === 'bottom'
+        }"
+        v-on:drop="handleDrop($event, 'bottom')"
+        v-on:dragenter="handleDragEnter($event, 'bottom')"
+        v-on:dragleave="handleDragLeave($event)"
+      >
+        <cds-icon v-if="documentTabDragWhere === 'bottom'" shape="angle" direction="down"></cds-icon>
+      </div>
+      <div
+        v-if="documentTabDrag"
+        v-bind:class="{
+          dropzone: true,
+          right: true,
+          dragover: documentTabDragWhere === 'right'
+        }"
+        v-on:drop="handleDrop($event, 'right')"
+        v-on:dragenter="handleDragEnter($event, 'right')"
+        v-on:dragleave="handleDragLeave($event)"
+      >
+        <cds-icon v-if="documentTabDragWhere === 'right'" shape="angle" direction="right"></cds-icon>
+      </div>
     </div>
   </div>
 </template>
@@ -238,7 +240,31 @@ export default defineComponent({
 <style lang="less">
 
 @dropzone-size: 60px;
-@tabbar-height: 30px; // NOTE: Look into DocumentTabs.vue for this value, do not change here!
+
+@keyframes caretup {
+  from { margin-bottom: 0; opacity: 1; }
+  50% { opacity: 0; }
+  75% { margin-bottom: @dropzone-size; opacity: 0; }
+  to { margin-bottom: @dropzone-size; opacity: 0; }
+}
+@keyframes caretdown {
+  from { margin-top: 0; opacity: 1; }
+  50% { opacity: 0; }
+  75% { margin-top: @dropzone-size; opacity: 0; }
+  to { margin-top: @dropzone-size; opacity: 0; }
+}
+@keyframes caretleft {
+  from { margin-right: 0; opacity: 1; }
+  50% { opacity: 0; }
+  75% { margin-right: @dropzone-size; opacity: 0; }
+  to { margin-right: @dropzone-size; opacity: 0; }
+}
+@keyframes caretright {
+  from { margin-left: 0; opacity: 1; }
+  50% { opacity: 0; }
+  75% { margin-left: @dropzone-size; opacity: 0; }
+  to { margin-left: @dropzone-size; opacity: 0; }
+}
 
 body {
   .editor-pane {
@@ -246,101 +272,80 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    position: relative;
 
-    @keyframes caretup {
-      from { margin-bottom: 0; opacity: 1; }
-      50% { opacity: 0; }
-      75% { margin-bottom: @dropzone-size; opacity: 0; }
-      to { margin-bottom: @dropzone-size; opacity: 0; }
-    }
-    @keyframes caretdown {
-      from { margin-top: 0; opacity: 1; }
-      50% { opacity: 0; }
-      75% { margin-top: @dropzone-size; opacity: 0; }
-      to { margin-top: @dropzone-size; opacity: 0; }
-    }
-    @keyframes caretleft {
-      from { margin-right: 0; opacity: 1; }
-      50% { opacity: 0; }
-      75% { margin-right: @dropzone-size; opacity: 0; }
-      to { margin-right: @dropzone-size; opacity: 0; }
-    }
-    @keyframes caretright {
-      from { margin-left: 0; opacity: 1; }
-      50% { opacity: 0; }
-      75% { margin-left: @dropzone-size; opacity: 0; }
-      to { margin-left: @dropzone-size; opacity: 0; }
-    }
-
-    div.dropzone {
-      position: absolute;
-      background-color: rgba(0, 0, 0, 0);
-      transition: all 0.3s ease;
-      // Display the direction caret centered ...
-      display: flex;
-      align-items: center;
-      // ... and in white (against the dragover background color)
-      color: white;
-
-      cds-icon { margin: 0; }
-
-      &.dragover {
-        background-color: rgba(21, 61, 107, 0.5);
-        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .2);
-        backdrop-filter: blur(2px);
-      }
-
-      &.top {
-        top: @tabbar-height;
-        width: 100%;
-        height: @dropzone-size;
-        flex-direction: column-reverse;
-        cds-icon { animation: 1s ease-out infinite running caretup; }
-      }
-
-      &.left {
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: @dropzone-size;
-        flex-direction: row-reverse;
-        cds-icon { animation: 1s ease-out infinite running caretleft; }
-      }
-
-      &.right {
-        top: 0;
-        right: 0;
-        height: 100%;
-        width: @dropzone-size;
-        flex-direction: row;
-        cds-icon { animation: 1s ease-out infinite running caretright; }
-      }
-
-      &.bottom {
-        bottom: 0;
-        width: 100%;
-        height: @dropzone-size;
-        justify-content: center;
-        align-items: flex-start;
-        cds-icon { animation: 1s ease-out infinite running caretdown; }
-      }
-    }
-
-    .empty-pane {
-      width: 100%;
+    .editor-container {
+      position: relative;
       height: 100%;
-      // If the editor is empty, display a nice background image
-      background-position: center center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-image: url(../common/img/logo.svg);
-      background-color: white;
-      padding-top: 5em;
+
+      div.dropzone {
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0);
+        transition: all 0.3s ease;
+        // Display the direction caret centered ...
+        display: flex;
+        align-items: center;
+        // ... and in white (against the dragover background color)
+        color: white;
+
+        cds-icon { margin: 0; }
+
+        &.dragover {
+          background-color: rgba(21, 61, 107, 0.5);
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .2);
+          backdrop-filter: blur(2px);
+        }
+
+        &.top {
+          top: 0;
+          width: 100%;
+          height: @dropzone-size;
+          flex-direction: column-reverse;
+          cds-icon { animation: 1s ease-out infinite running caretup; }
+        }
+
+        &.left {
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: @dropzone-size;
+          flex-direction: row-reverse;
+          cds-icon { animation: 1s ease-out infinite running caretleft; }
+        }
+
+        &.right {
+          top: 0;
+          right: 0;
+          height: 100%;
+          width: @dropzone-size;
+          flex-direction: row;
+          cds-icon { animation: 1s ease-out infinite running caretright; }
+        }
+
+        &.bottom {
+          bottom: 0;
+          width: 100%;
+          height: @dropzone-size;
+          justify-content: center;
+          align-items: flex-start;
+          cds-icon { animation: 1s ease-out infinite running caretdown; }
+        }
+      }
+
+      .empty-pane {
+        width: 100%;
+        height: 100%;
+        // If the editor is empty, display a nice background image
+        background-position: center center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url(../common/img/logo.svg);
+        background-color: white;
+        padding-top: 5em;
+      }
     }
   }
 
-  &.dark .editor-pane .empty-pane {
+  &.dark .editor-pane .editor-container .empty-pane {
     background-color: rgb(40, 40, 40);
   }
 }
