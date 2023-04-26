@@ -275,7 +275,7 @@ body {
 
     .editor-container {
       position: relative;
-      height: 100%;
+      overflow: auto;
 
       div.dropzone {
         position: absolute;
