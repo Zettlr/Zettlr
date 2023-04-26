@@ -1,9 +1,10 @@
-# Helpful Links
+# Liens utiles
 
-If you need any help, or want to dig in deeper into Zettlr, the following links will provide you with lots of information online. Follow them by holding `Command` (macOS) or `Control` (Windows/Linux) while clicking on them.
+Si vous avez besoin d'aide, ou si vous voulez approfondir votre connaissance de Zettlr, les liens suivants vous permettront de trouver beaucoup d'informations. Suivez ces liens en cliquant dessus tout en appuyant sur la touche `Commande` (macOs) ou `Contrôle` (Windows/Linux).
 
-- [View the documentation](https://docs.zettlr.com)
-- [Get help on Discord](https://discord.gg/PcfS3DM9Xj)
-- [Get help on Reddit](https://www.reddit.com/r/Zettlr)
-- [Follow us on Mastodon](https://fosstodon.org/@zettlr)
-- [View the source code](https://github.com/Zettlr/Zettlr)
+
+- [Voir la documentation](https://docs.zettlr.com)
+- [trouver de l'aide sur Discord](https://discord.gg/PcfS3DM9Xj)
+- [Trouver de l'aide sur Reddit](https://www.reddit.com/r/Zettlr)
+- [Suivez-nous sur Mastodon](https://fosstodon.org/@zettlr)
+- [Voir le code source](https://github.com/Zettlr/Zettlr)
