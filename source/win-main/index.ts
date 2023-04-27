@@ -100,7 +100,14 @@ function afterRegister (): void {
 
   // Listen for document state updates
   ipcRenderer.on('documents-update', (evt, payload) => {
-    app.$store.dispatch('documentTree', payload).catch(err => console.error(err))
+    // A file has been saved or modified
+    if (payload.event === DP_EVENTS.CHANGE_FILE_STATUS && payload.status === 'modification') {
+      app.$store.dispatch('updateModifiedFiles')
+        .catch(e => console.error(e))
+    } else {
+      app.$store.dispatch('documentTree', payload)
+        .catch(err => console.error(err))
+    }
   })
 
   // -----------------------------------------------------------------------------
@@ -127,14 +134,6 @@ function afterRegister (): void {
       app.$store.dispatch('updateOpenDirectory')
         .catch(e => console.error(e))
         .finally(() => { openDirectoryLock = false })
-    }
-  })
-
-  ipcRenderer.on('documents-update', (event, payload) => {
-    // A file has been saved or modified
-    if (payload.event === DP_EVENTS.CHANGE_FILE_STATUS && payload.status === 'modification') {
-      app.$store.dispatch('updateModifiedFiles')
-        .catch(e => console.error(e))
     }
   })
 

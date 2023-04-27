@@ -37,6 +37,7 @@ import documentTreeUpdateAction from './actions/document-tree-update'
 import type { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
 import { type WritingTarget } from '@providers/targets'
 import updateSnippetsAction from './actions/update-snippets'
+import { type DocumentInfo } from '@common/modules/markdown-editor'
 
 const ipcRenderer = window.ipc
 

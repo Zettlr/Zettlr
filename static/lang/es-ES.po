@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-23 02:33+0000\n"
+"POT-Creation-Date: 2023-04-27 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,297 +17,1128 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: source/app/service-providers/commands/language-tool.ts:180
-msgid "Document too long"
-msgstr ""
-
-#: source/app/service-providers/commands/language-tool.ts:185
-msgid "offline"
-msgstr ""
-
-#: source/app/service-providers/commands/dir-new.ts:36
-#: source/app/service-providers/commands/dir-new.ts:37
-#: source/app/service-providers/commands/dir-new.ts:48
-#: source/app/service-providers/commands/dir-new.ts:49
-#: source/app/service-providers/commands/dir-new.ts:59
-msgid "Could not create directory"
-msgstr "No se ha podido crear la carpeta"
-
-#. Else standard val for new dirs.
-#: source/app/service-providers/commands/dir-new.ts:42
-#: source/tmp/tree-item.vue.ts:262
-msgid "Untitled"
-msgstr "Sin título"
-
-#: source/app/service-providers/commands/file-new.ts:156
-#: source/app/service-providers/commands/file-duplicate.ts:43
-#: source/app/service-providers/commands/file-duplicate.ts:59
-msgid "Could not create file"
-msgstr "No se ha podido crear el archivo"
-
-#: source/app/service-providers/commands/request-move.ts:60
-msgid "Cannot move directory"
-msgstr "No se puede mover la carpeta"
-
-#: source/app/service-providers/commands/request-move.ts:61
-msgid "You cannot move a directory into one of its subdirectories."
-msgstr "No puede mover una carpeta a una de sus sub-carpetas."
-
-#: source/app/service-providers/commands/request-move.ts:70
-msgid "Cannot move directory or file"
-msgstr "No se puede mover la arpeta o el archivo"
-
-#: source/app/service-providers/commands/request-move.ts:71
-#, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "El archivo / la carpeta %s ya existe en el destino."
-
-#. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:92
-#, javascript-format
-msgid "The reference with key %s does not appear to have attachments."
-msgstr "La referencia %s no parece tener adjuntos"
-
-#: source/app/service-providers/commands/open-attachment.ts:97
-msgid "Could not open attachment. Is Zotero running?"
-msgstr "No se pudo abrir el adjunto ¿Está funcionando Zotero?"
-
-#: source/app/service-providers/commands/import.ts:35
-msgid "You have to select a directory to import to."
-msgstr "Debes seleccionar una carpeta para importar."
-
-#. Prepare the list of file filters
-#. The "All Files" filter should be at the top
-#: source/app/service-providers/commands/import.ts:41
-#: source/app/service-providers/windows/dialog/ask-file.ts:47
-msgid "All Files"
-msgstr "Todos los archivos"
-
-#. Now import.
-#: source/app/service-providers/commands/import.ts:58
-msgid "Importing. Please wait …"
-msgstr "Importando. Por favor, espera..."
-
-#. This callback gets called whenever there is an error while running pandoc.
-#: source/app/service-providers/commands/import.ts:63
-#, javascript-format
-msgid "Couldn't import %s."
-msgstr "No se ha podido importar %s."
-
-#. And this on each success!
-#: source/app/service-providers/commands/import.ts:66
-#, javascript-format
-msgid "%s imported successfully."
-msgstr "%s importadas con éxito."
-
-#. Some files failed to import.
-#: source/app/service-providers/commands/import.ts:71
-#: source/app/service-providers/commands/import.ts:77
-#, javascript-format
+#: source/win-preferences/schema/editor.ts:23
 msgid ""
-"The following %s files could not be imported, because their filetype is "
-"unknown: %s"
+"Choose the formatting characters that the bold/emphasis commands should use"
 msgstr ""
-"Los siguientes %s archivos no se han podido importar, porque su tipo de "
-"archivo es desconocido: %s"
+"Elige los carácteres de formato que indican el marcado de negrita/énfasis"
 
-#. We need to generate our own filename. First, attempt to just use 'copy of'
-#: source/app/service-providers/commands/file-duplicate.ts:71
-#, javascript-format
-msgid "Copy of %s"
+#: source/win-preferences/schema/editor.ts:26
+#: source/win-preferences/schema/editor.ts:27
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
+msgid "Bold"
+msgstr "Negrita"
+
+#: source/win-preferences/schema/editor.ts:34
+#: source/win-preferences/schema/editor.ts:35
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
+msgid "Italics"
+msgstr "Cursiva"
+
+#: source/win-preferences/schema/editor.ts:42
+msgid "Autosave"
+msgstr "Autoguardado"
+
+#: source/win-preferences/schema/editor.ts:45
+#: source/win-preferences/schema/general.ts:56
+msgid "Off"
+msgstr "Apagado"
+
+#: source/win-preferences/schema/editor.ts:46
+msgid "Immediately"
+msgstr "Inmediatamente"
+
+#: source/win-preferences/schema/editor.ts:47
+msgid "After a short delay"
+msgstr "Después de un breve retraso"
+
+#: source/win-preferences/schema/editor.ts:54
+msgid "Default image path (relative or absolute)"
+msgstr "Path(ruta) predeterminada para imagenes (relativa o absoluta)"
+
+#: source/win-preferences/schema/editor.ts:59
+msgid "Indent by the following number of spaces"
+msgstr "Sangrado por el siguiente número de espacios"
+
+#: source/win-preferences/schema/editor.ts:64
+msgid "Indent using tabs"
+msgstr "Sangrar utilizando la tecla de tabulación"
+
+#: source/win-preferences/schema/editor.ts:69
+msgid "Editor font size"
+msgstr "Tamaño de la fuente del editor"
+
+#: source/win-preferences/schema/editor.ts:74
+msgid "Algorithm to use for the readability mode"
+msgstr "Algoritmo a utilizar para el modo de legibilidad"
+
+#: source/win-preferences/schema/editor.ts:85
+msgid "Editor input mode"
+msgstr "Modo de entrada del editor"
+
+#: source/win-preferences/schema/editor.ts:97
+msgid "Check Markdown for style issues"
 msgstr ""
 
-#: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/commands/file-rename.ts:93
-#: source/app/service-providers/config/index.ts:433
-msgid "Confirm"
+#: source/win-preferences/schema/editor.ts:102
+#, fuzzy
+msgid "Show statusbar"
+msgstr "Muestra Zettlr"
+
+#: source/win-preferences/schema/editor.ts:109
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr "Reducir brillo de las líneas no enfocadas en modo sin distracción."
+
+#: source/win-preferences/schema/editor.ts:114
+msgid "Automatically close matching character pairs"
+msgstr "Cerrar automáticamente pares de caracteres coincidentes"
+
+#: source/win-preferences/schema/editor.ts:119
+msgid "Accept spaces during autocompletion"
+msgstr "Acepta espacios durante la autocorrección"
+
+#: source/win-preferences/schema/editor.ts:124
+msgid "Enable Table Editor"
+msgstr "Habilitar editir de tablas"
+
+#: source/win-preferences/schema/editor.ts:129
+msgid "Show link previews"
 msgstr ""
 
-#: source/app/service-providers/commands/rename-tag.ts:45
-#, javascript-format
-msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+#: source/win-preferences/schema/editor.ts:134
+msgid "Count characters instead of words (e.g., for Chinese)"
+msgstr "Contar caracteres en lugar de palabras (p. ej. para el chino)"
+
+#: source/win-preferences/schema/zettelkasten.ts:23
+msgid "ID regular expression"
+msgstr "Expresión regular de ID"
+
+#: source/win-preferences/schema/zettelkasten.ts:29
+msgid "Pattern used to generate new IDs"
+msgstr "Formato utilizado para generar nuevos IDs"
+
+#. TODO: Create this type
+#: source/win-preferences/schema/zettelkasten.ts:38
+msgid "Options for ZKN elements"
+msgstr "Opciones para elementos del Zettelkasten ZKN (fichero)"
+
+#: source/win-preferences/schema/zettelkasten.ts:42
+#, fuzzy
+msgid "Link with filename only"
+msgstr "Solo el nombre del archivo"
+
+#: source/win-preferences/schema/zettelkasten.ts:47
+#, fuzzy
+msgid "When linking files, add the display name …"
+msgstr "Al enlazar, usar el nombre de archivo..."
+
+#: source/win-preferences/schema/zettelkasten.ts:50
+msgid "always"
+msgstr "Siempre"
+
+#: source/win-preferences/schema/zettelkasten.ts:51
+msgid "only when linking using the ID"
+msgstr "solo usar ID al enlazar"
+
+#: source/win-preferences/schema/zettelkasten.ts:52
+msgid "never"
+msgstr "nunca"
+
+#: source/win-preferences/schema/zettelkasten.ts:60
+msgid "Start a search when following Zettelkasten-links"
+msgstr "Empieza la búsqueda cuando se sigan los enlaces Zettelkasten"
+
+#: source/win-preferences/schema/zettelkasten.ts:65
+msgid "Automatically create non-existing files when following internal links"
+msgstr ""
+"Crear automáticamente los ficheros inexistentes cuando se siguen vínculos "
+"internos"
+
+#: source/win-preferences/schema/zettelkasten.ts:70
+msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
+msgstr ""
+"Poner los archivos creados automáticamente en este directorio (debe ser "
+"cargado en Zettlr)"
+
+#: source/win-preferences/schema/general.ts:23
+msgid "Application language"
 msgstr ""
 
-#: source/app/service-providers/commands/rename-tag.ts:47
-#: source/app/service-providers/commands/file-rename.ts:96
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Yes"
+#: source/win-preferences/schema/general.ts:31
+#: source/app/service-providers/menu/menu.win32.ts:430
+#: source/app/service-providers/menu/menu.darwin.ts:448
+msgid "Dark mode"
+msgstr "Modo nocturno"
+
+#: source/win-preferences/schema/general.ts:36
+msgid "Show file information"
+msgstr "Mostrar información de archivo"
+
+#: source/win-preferences/schema/general.ts:41
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
+msgid "Always load remote changes to the current file"
+msgstr "Siempre recargar el archivo actual cuando hay cambios remotos"
+
+#: source/win-preferences/schema/general.ts:46
+msgid "Avoid opening files in new tabs if possible"
+msgstr "Evita, cuando sea posible, abrir archivos en nuevas pestañas"
+
+#: source/win-preferences/schema/general.ts:53
+msgid "Automatically switch to dark mode"
+msgstr "Cambiar automáticamente al modo oscuro"
+
+#: source/win-preferences/schema/general.ts:57
+msgid "Schedule"
+msgstr "Horario"
+
+#: source/win-preferences/schema/general.ts:58
+msgid "Follow Operating System"
+msgstr "Seguir el sistema operativo"
+
+#: source/win-preferences/schema/general.ts:63
+msgid "Start dark mode at"
+msgstr "Empieza el modo oscuro a las"
+
+#: source/win-preferences/schema/general.ts:69
+msgid "End dark mode at"
+msgstr "Termina el modo oscuro a las"
+
+#: source/win-preferences/schema/general.ts:77
+msgid "File manager mode"
+msgstr "Modo de gestión de archivos"
+
+#: source/win-preferences/schema/general.ts:80
+msgid "Thin &mdash; show either file tree or file list"
+msgstr "Comprimir &mdash; muestra el árbol de archivos o la lista de archivos"
+
+#: source/win-preferences/schema/general.ts:81
+msgid "Expanded &mdash; show both file tree and file list"
 msgstr ""
+"Expandir &mdash; muestra tanto el árbol de archivos como la lista de archivos"
+
+#: source/win-preferences/schema/general.ts:82
+msgid "Combined &mdash; show files and directories in the file tree"
+msgstr ""
+"Combinar &mdash; mostrar archivos y directorios en el árbol de archivos"
+
+#: source/win-preferences/schema/general.ts:87
+msgid "Display files using"
+msgstr "Mostrar los archivos con"
+
+#: source/win-preferences/schema/general.ts:90
+msgid "Filename only"
+msgstr "Solo el nombre del archivo"
+
+#: source/win-preferences/schema/general.ts:91
+msgid "Title if applicable"
+msgstr "Título, si procede"
+
+#: source/win-preferences/schema/general.ts:92
+msgid "First heading level 1 if applicable"
+msgstr "Primera cabecera de nivel 1, si procede"
+
+#: source/win-preferences/schema/general.ts:93
+msgid "Title or first heading level 1 if applicable"
+msgstr "Título o primera cabecera de nivel 1, si procede"
+
+#: source/win-preferences/schema/general.ts:98
+msgid "Display Markdown file extensions"
+msgstr "Mostrar las extensiones de los archivos Markdown"
+
+#: source/win-preferences/schema/general.ts:106
+msgid "Sorting order for files (used for sorting by name)"
+msgstr "Orden de archivos (se utiliza para ordenar por nombre)"
+
+#: source/win-preferences/schema/general.ts:109
+msgid "Natural order (10 after 2)"
+msgstr "Orden natural (10 después de 2)"
+
+#: source/win-preferences/schema/general.ts:110
+msgid "ASCII order (2 after 10)"
+msgstr "Orden ASCII (2 después de 10)"
+
+#: source/win-preferences/schema/general.ts:117
+msgid "Show folders above files"
+msgstr "Muestra carpetas encima de los archivos"
+
+#: source/win-preferences/schema/general.ts:124
+msgid "When sorting by time, sort by"
+msgstr "En ordenar por tiempo, ordena por"
+
+#: source/win-preferences/schema/general.ts:127
+#: source/win-preferences/schema/general.ts:136
+msgid "Last modification time"
+msgstr "Hora de la última modificación"
+
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
+msgid "File creation time"
+msgstr "Hora de creación del archivo"
+
+#: source/win-preferences/schema/general.ts:133
+msgid "In the file metadata display"
+msgstr "En la vista de metadatos del archivo"
+
+#: source/win-preferences/schema/export.ts:23
+msgid "Use the internal Pandoc for exports"
+msgstr "Utiliza el Pandoc interno para exportar"
+
+#: source/win-preferences/schema/export.ts:30
+msgid "Remove tags from files"
+msgstr "Eliminar tags de archivos"
+
+#: source/win-preferences/schema/export.ts:40
+msgid "Remove internal links completely"
+msgstr "Eliminar de manera completa los vínculos internos"
+
+#: source/win-preferences/schema/export.ts:41
+msgid "Unlink internal links"
+msgstr "Desvincular vínculos internos"
+
+#: source/win-preferences/schema/export.ts:42
+msgid "Don't touch internal links"
+msgstr "No manipular los vínculos internos"
+
+#: source/win-preferences/schema/export.ts:49
+msgid ""
+"Target directory for exported files. <em>Attention:</em> Selecting the "
+"current working directory will overwrite files without warning!"
+msgstr ""
+"Carpeta de destino de los archivos exportados. <em>Atención:</em> "
+"¡Seleccionar la carpeta de trabajo actual sobreescribirá los archivos sin "
+"previo aviso!"
+
+#: source/win-preferences/schema/export.ts:52
+msgid "Temporary directory: is regularly expunged"
+msgstr "Carpeta temporal: se borra regularmente"
+
+#: source/win-preferences/schema/export.ts:53
+msgid ""
+"Current working directory: exported files will be saved into the currently "
+"selected directory."
+msgstr ""
+"Carpeta de trabajo actual: los archivos exportados se guardarán en la "
+"carpeta que está seleccionada actualmente."
+
+#: source/win-preferences/schema/export.ts:54
+msgid "Ask for directory"
+msgstr "Pedir directorio"
+
+#: source/win-preferences/schema/citations.ts:23
+msgid "How would you like autocomplete to insert your citations?"
+msgstr "Al insterar una cita ¿cómo debe autocompletarse?"
+
+#: source/win-preferences/schema/citations.ts:35
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "Base de datos de citas (CSL JSON o BibTex)"
+
+#: source/win-preferences/schema/citations.ts:46
+msgid "CSL-Style (optional)"
+msgstr "Estilo CSL (opcional)"
+
+#: source/win-preferences/schema/autocorrect.ts:23
+msgid "Turn on AutoCorrect"
+msgstr "Activar Autocorrección"
+
+#: source/win-preferences/schema/autocorrect.ts:32
+msgid "Primary Magic Quotes"
+msgstr "Citas Mágicas Primarias"
+
+#: source/win-preferences/schema/autocorrect.ts:35
+#: source/win-preferences/schema/autocorrect.ts:56
+msgid "Disable Magic Quotes"
+msgstr "空"
+
+#: source/win-preferences/schema/autocorrect.ts:53
+msgid "Secondary Magic Quotes"
+msgstr "Citas Mágicas Secundarias"
+
+#: source/win-preferences/schema/autocorrect.ts:79
+msgid ""
+"Here you can define certain strings that will be replaced when AutoCorrect "
+"is on. The characters on the left side will be replaced with whatever comes "
+"on the right."
+msgstr ""
+"Aquí puedes definir ciertas cadenas que se reemplazarán cuando la "
+"Autocorrección esté activada. Los caracteres en el lado izquierdo serán "
+"reemplazados por los que están a la derecha."
+
+#: source/win-preferences/schema/spellchecking.ts:23
+msgid "Use LanguageTool"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:28
+msgid "Strictness"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:30
+#, fuzzy
+msgid "Standard"
+msgstr "Calendario"
+
+#: source/win-preferences/schema/spellchecking.ts:31
+msgid "Picky"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:38
+msgid "LanguageTool Provider"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:41
+#: source/win-preferences/schema/spellchecking.ts:48
+#, fuzzy
+msgid "Custom server"
+msgstr "CSS personalizado"
+
+#: source/win-preferences/schema/spellchecking.ts:55
+msgid "LanguageTool Username"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:61
+msgid "LanguageTool API key"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:69
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr ""
+"Elige los idiomas para los que deseas habilitar el corrector ortográfico "
+"automático."
+
+#: source/win-preferences/schema/spellchecking.ts:74
+msgid "Search for dictionaries &hellip;"
+msgstr "Buscar diccionarios &hellip;"
+
+#: source/win-preferences/schema/spellchecking.ts:78
+msgid "User dictionary. Remove words by clicking them."
+msgstr "Diccionario del usuario. Elimine las palabras haciendo clic en ellas."
+
+#: source/win-preferences/schema/spellchecking.ts:80
+msgid "Dictionary entry"
+msgstr "Entrada de diccionario"
+
+#: source/win-preferences/schema/spellchecking.ts:83
+#: source/win-preferences/schema/advanced.ts:96
+msgid "Search for entries …"
+msgstr "Buscando entradas..."
+
+#. TODO: Create this type
+#: source/win-preferences/schema/display.ts:24
+msgid "These options determine which elements are rendered in documents."
+msgstr ""
+"Estas opciones determinan qué elementos se renderizan en los documentos."
+
+#: source/win-preferences/schema/display.ts:28
+msgid "Render Citations"
+msgstr "Renderizar citas"
+
+#: source/win-preferences/schema/display.ts:33
+msgid "Render Iframes"
+msgstr "Renderizar Iframes"
+
+#: source/win-preferences/schema/display.ts:38
+msgid "Render Images"
+msgstr "Renderizar imagenes"
+
+#: source/win-preferences/schema/display.ts:43
+msgid "Render Links"
+msgstr "Renderizar vínculos"
+
+#: source/win-preferences/schema/display.ts:48
+msgid "Render Formulae"
+msgstr "Renderizar  fórmulas"
+
+#: source/win-preferences/schema/display.ts:53
+msgid "Render Tasks"
+msgstr "Renderizar tareas"
+
+#: source/win-preferences/schema/display.ts:58
+msgid "Hide heading characters"
+msgstr "Ocultar caracteres de cabecera"
+
+#: source/win-preferences/schema/display.ts:63
+msgid "Render emphasis"
+msgstr "Redneriza los énfasis"
+
+#: source/win-preferences/schema/display.ts:71
+msgid "Here you can choose the theme for the app."
+msgstr "Aquí puedes elegir el tema para la app."
+
+#: source/win-preferences/schema/display.ts:112
+msgid "Use the operating system's accent colour instead of the theme colour"
+msgstr ""
+"Utilice el color de acento del sistema operativo en lugar del color del tema"
+
+#: source/win-preferences/schema/display.ts:116
+msgid "This setting is only available on Windows and macOS"
+msgstr "Esta configuración solo está disponible en Windows y macOS"
+
+#: source/win-preferences/schema/display.ts:122
+msgid "Hide toolbar in distraction free mode"
+msgstr "Ocultar la barra de herramientas en el modo libre de distracción"
+
+#. TODO: Create this type
+#: source/win-preferences/schema/display.ts:129
+msgid "With these controls you can constrain the image previews."
+msgstr "Con estos controles puedes reducir las vistas previas de la imagen."
+
+#: source/win-preferences/schema/display.ts:133
+msgid "Maximum width of images (percent)"
+msgstr "Anchura máxima de las imágenes (en %)"
+
+#: source/win-preferences/schema/display.ts:141
+msgid "Maximum height of images (percent)"
+msgstr "Altura máxima de las imágenes (en %)"
+
+#: source/win-preferences/schema/advanced.ts:23
+msgid "Pattern for new filenames"
+msgstr "Patrón para nombres de archivo nuevos"
+
+#: source/win-preferences/schema/advanced.ts:29
+msgid "Do not prompt for filename when creating new files"
+msgstr "No pedir nombre al crear nuevos archivos"
+
+#: source/win-preferences/schema/advanced.ts:36
+msgid "Enable debug mode"
+msgstr "Activar el modo de depuración (debugging)"
+
+#: source/win-preferences/schema/advanced.ts:41
+msgid "Notify me about beta releases"
+msgstr "Notifiquame sobre las versiones beta"
+
+#: source/win-preferences/schema/advanced.ts:46
+msgid "Use native window appearance"
+msgstr "Utiliza la apariencia nativa de ventanas"
+
+#: source/win-preferences/schema/advanced.ts:52
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr "Eliminar elementos de forma irreversible si falla enviar a la papelera"
+
+#: source/win-preferences/schema/advanced.ts:58
+msgid "Show app in the notification area"
+msgstr "Muestra la aplicación en el área de notificación"
+
+#: source/win-preferences/schema/advanced.ts:59
+msgid "Leave app running in the notification area"
+msgstr "Deja la aplicación funcionando en el área de notificación"
+
+#: source/win-preferences/schema/advanced.ts:66
+msgid "Automatically check for updates"
+msgstr "Comprueba automáticamente si hay actualizaciones"
+
+#: source/win-preferences/schema/advanced.ts:73
+msgid ""
+"Enter all file extensions that you want to see in your attachment sidebar. "
+"Separate them with a comma. Changes are recognised after a restart."
+msgstr ""
+"Introduce todas las extensiones de archivo que quieras ver en la barra "
+"lateral de archivos adjuntos. Sepáralas con una coma. Los cambios se "
+"registran después de un reinicio."
+
+#: source/win-preferences/schema/advanced.ts:81
+msgid "Zoom behavior"
+msgstr "Comportamiento del zoom"
+
+#: source/win-preferences/schema/advanced.ts:83
+msgid "Zoom resizes the whole GUI"
+msgstr "El zoom se aplica a toda la ventana"
+
+#: source/win-preferences/schema/advanced.ts:84
+msgid "Zoom changes the editor font size"
+msgstr "El zoom se aplica sólo al tamaño de la letra"
+
+#: source/win-preferences/schema/advanced.ts:91
+msgid "iFrame rendering whitelist"
+msgstr "Lista blanca de renderización de iFrame"
+
+#: source/win-preferences/schema/advanced.ts:94
+msgid "Hostname"
+msgstr "Nombre de la máquina"
+
+#: source/win-preferences/schema/advanced.ts:102
+msgid "Activate Watchdog polling"
+msgstr "Activar la monitorización de encuesta"
+
+#: source/win-preferences/schema/advanced.ts:107
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr ""
+"Tiempo de espera (en ms), antes de que la escritura de un fichero se "
+"considere realizada."
+
+#: source/win-preferences/schema/toolbar.ts:23
+msgid "Display \"Open Preferences\" button"
+msgstr "Muestra el botón \"Abrir preferencias\""
+
+#: source/win-preferences/schema/toolbar.ts:28
+msgid "Display \"New File\" button"
+msgstr "Muestra el botón \"Archivo nuevo\""
+
+#: source/win-preferences/schema/toolbar.ts:33
+msgid "Display \"Previous File\" button"
+msgstr "Muestra el botón \"Archivo anterior\""
+
+#: source/win-preferences/schema/toolbar.ts:38
+msgid "Display \"Next File\" button"
+msgstr "Muestra el botón \"Próximo archivo\""
+
+#: source/win-preferences/schema/toolbar.ts:45
+msgid "Display readability button"
+msgstr "Muestra el botón \"Habilitar modo de legibilidad\""
+
+#: source/win-preferences/schema/toolbar.ts:50
+msgid "Display \"Insert Comment\" button"
+msgstr "Muestra el botón \"Insertar comentario\""
+
+#: source/win-preferences/schema/toolbar.ts:55
+msgid "Display link button"
+msgstr "Muestra el botón \"Enlace\""
+
+#: source/win-preferences/schema/toolbar.ts:60
+msgid "Display image button"
+msgstr "Muestra el botón \"Imagen\""
+
+#: source/win-preferences/schema/toolbar.ts:65
+msgid "Display task list button"
+msgstr "Muestra el botón \"Lista de tareas\""
+
+#: source/win-preferences/schema/toolbar.ts:70
+msgid "Display \"Insert Table\" button"
+msgstr "Muestra el botón \"Insertar tabla\""
+
+#: source/win-preferences/schema/toolbar.ts:75
+msgid "Display \"Insert Footnote\" button"
+msgstr "Muestra el botón \"Insertar nota a pie de página\""
+
+#: source/win-preferences/schema/toolbar.ts:82
+msgid "Display document info"
+msgstr "Muestra información del documento"
+
+#: source/win-preferences/schema/toolbar.ts:87
+msgid "Display Pomodoro-timer"
+msgstr "Muestra el temporizador Pomodoro"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:25
+#: source/win-main/file-manager/util/file-item-context.ts:32
+msgid "Properties"
+msgstr "Propiedades"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:31
+msgid "Rename directory"
+msgstr "Renombrar carpeta"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.win32.ts:299
+#: source/app/service-providers/menu/menu.darwin.ts:306
+msgid "Delete directory"
+msgstr "Eliminar carpeta"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/tmp/OtherFilesTab.vue.ts:16
+msgid "Open directory"
+msgstr "Abrir carpeta"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+#: source/app/service-providers/menu/menu.win32.ts:90
+#: source/app/service-providers/menu/menu.darwin.ts:116
+msgid "New File…"
+msgstr "Archivo nuevo..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/app/service-providers/menu/menu.win32.ts:129
+#: source/app/service-providers/menu/menu.darwin.ts:155
+msgid "New directory…"
+msgstr "Carpeta nueva..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:69
+msgid "Check for directory …"
+msgstr "Comprobar por la carpeta..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:86
+msgid "Export Project"
+msgstr "Exportar proyecto"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:98
+msgid "Close Workspace"
+msgstr "Cerrar área de trabajo"
+
+#: source/win-main/file-manager/util/file-item-context.ts:26
+#: source/tmp/GlobalSearch.vue.ts:40
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
+msgid "Open in a new tab"
+msgstr "Abrir en una pestaña nueva"
+
+#: source/win-main/file-manager/util/file-item-context.ts:41
+#: source/app/service-providers/menu/menu.win32.ts:281
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/tmp/Defaults.vue.ts:76
+msgid "Rename file"
+msgstr "Renombrar archivo"
+
+#: source/win-main/file-manager/util/file-item-context.ts:48
+#: source/app/service-providers/menu/menu.win32.ts:292
+#: source/app/service-providers/menu/menu.darwin.ts:298
+msgid "Delete file"
+msgstr "Eliminar archivo"
+
+#: source/win-main/file-manager/util/file-item-context.ts:55
+msgid "Duplicate file"
+msgstr "Archivo duplicado"
+
+#: source/win-main/file-manager/util/file-item-context.ts:64
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Copiar nombre de archivo"
+
+#: source/win-main/file-manager/util/file-item-context.ts:70
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.win32.ts:415
+#: source/app/service-providers/menu/menu.darwin.ts:414
+msgid "Copy ID"
+msgstr "Copiar ID"
+
+#: source/win-main/file-manager/util/file-item-context.ts:79
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+msgid "Show file"
+msgstr "Mostrar archivo"
+
+#: source/win-main/file-manager/util/file-item-context.ts:92
+msgid "Close file"
+msgstr "Cerrar archivo"
+
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.win32.ts:574
+#: source/app/service-providers/menu/menu.darwin.ts:601
+msgid "Close Tab"
+msgstr "Cerrar Pestaña"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "Cierra las otras pestañas"
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Cierra todas las pestañas"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr "Desanclar pestaña"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr "Anclar pestaña"
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "Copiar ruta completa"
+
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+msgid "Ok"
+msgstr "OK"
 
 #. 1: Omit all changes
-#: source/app/service-providers/commands/rename-tag.ts:48
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/confirm-remove.ts:35
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:132
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/app/service-providers/commands/rename-tag.ts:48
 #: source/tmp/CustomCSS.vue.ts:49
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:132
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: source/app/service-providers/commands/importer/import-textbundle.ts:63
-#: source/app/service-providers/commands/importer/import-textbundle.ts:69
-#, javascript-format
-msgid "Malformed Textbundle: %s"
-msgstr "Paquete de texto malformado: %s"
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:38
+msgid "Really delete?"
+msgstr "¿Seguro que quieres eliminar?"
 
-#: source/app/service-providers/commands/importer/index.ts:46
-#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
-#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:39
+#, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "¿Seguro que quieres eliminar %s?"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
+msgid "Replace file"
+msgstr "Sustituir Archivo"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#, javascript-format
 msgid ""
-"Pandoc has not been found on this system. Please install Pandoc prior to "
-"exporting or importing files."
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
 msgstr ""
-"No se ha encontrado Pandoc en este sistema. Por favor, instala Pandoc antes "
-"de exportar o importar archivos."
+"El archivo %s ha sido modificado remotamente. ¿Sustituir la version "
+"actualmente cargada con la nueva del disco?"
 
-#: source/app/service-providers/commands/import-lang-file.ts:59
-#, javascript-format
-msgid "Language file imported: %s"
-msgstr "Archivo de idioma importado: %s"
+#: source/app/service-providers/windows/dialog/save-dialog.ts:58
+msgid "Save file"
+msgstr "Guarda el archivo"
 
-#: source/app/service-providers/commands/import-lang-file.ts:61
-#: source/app/service-providers/commands/import-lang-file.ts:64
-#, javascript-format
-msgid "Could not import language file %s!"
-msgstr "No se ha podido importar el archivo de idioma %s!"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
-msgid "The requested file was not found."
-msgstr "No se ha encontrado el archivo solicitado."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
-msgid "The provided name did not contain any allowed letters."
-msgstr "El nombre proporcionado no contenía ninguna letra permitida."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
-#: source/app/service-providers/commands/set-open-directory.ts:41
-msgid "The requested directory was not found."
-msgstr "No se ha encontrado la carpeta solicitada."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
-msgid "Could not save image"
-msgstr "No se ha guardado la imagen"
-
-#: source/app/service-providers/commands/file-rename.ts:94
-#, javascript-format
-msgid "Update %s internal links to file %s?"
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+#: source/app/service-providers/commands/file-rename.ts:96
+#: source/app/service-providers/commands/rename-tag.ts:47
+msgid "Yes"
 msgstr ""
 
 #. 0: Save all changes
-#: source/app/service-providers/commands/file-rename.ts:97
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+#: source/app/service-providers/commands/file-rename.ts:97
 msgid "No"
 msgstr ""
 
-#: source/app/service-providers/commands/root-open.ts:60
-#: source/tmp/file-tree.vue.ts:26 source/tmp/PopoverDirProps.vue.ts:156
-#: source/tmp/file-item.vue.ts:119
-msgid "Files"
-msgstr "Archivos"
+#. If the user cancels, do not omit (the default) but actually cancel
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
+#: source/tmp/CustomCSS.vue.ts:65 source/tmp/Defaults.vue.ts:130
+#: source/tmp/SnippetsTab.vue.ts:65
+msgid "Unsaved changes"
+msgstr "Cambios no guardados"
+
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
+#, fuzzy
+msgid "There are unsaved changes. Do you want to save them first?"
+msgstr ""
+"Hay cambios no guardados en el archivo actual. ¿Deseas omitirlas o "
+"guardarlas?"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
+msgid "Overwrite existing file"
+msgstr "Sobrescribir el archivo existente"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#, javascript-format
+msgid "The file %s already exists in this directory. Overwrite?"
+msgstr "El archivo %s ya existe en este directorio. ¿Sobreescribir?"
+
+#. Prepare the list of file filters
+#. The "All Files" filter should be at the top
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
+#: source/app/service-providers/commands/import.ts:41
+msgid "All Files"
+msgstr "Todos los archivos"
+
+#: source/app/service-providers/windows/dialog/ask-file.ts:54
+msgid "Open file"
+msgstr "Abrir archivo"
 
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
-#: source/app/service-providers/commands/root-open.ts:73
 #: source/app/service-providers/windows/index.ts:220
+#: source/app/service-providers/commands/root-open.ts:73
 msgid "Open project folder"
 msgstr "Abrir carpeta de proyectos"
 
-#: source/app/service-providers/commands/root-open.ts:83
-msgid "Cannot open directory"
-msgstr "No se puede abrir la carpeta"
+#: source/app/service-providers/tray/index.ts:160
+msgid "Show Zettlr"
+msgstr "Muestra Zettlr"
 
-#: source/app/service-providers/commands/root-open.ts:84
-#, javascript-format
-msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
-msgstr "Directorio &quot;%s&quot; no se puede abrir por Zettlr."
+#: source/app/service-providers/tray/index.ts:166
+#: source/app/service-providers/menu/menu.win32.ts:308
+#: source/app/service-providers/menu/menu.darwin.ts:104
+msgid "Quit"
+msgstr "Salir"
 
-#: source/app/service-providers/commands/root-open.ts:136
-#, javascript-format
-msgid "Opening new root %s …"
-msgstr "Abriendo nueva raíz %s ..."
+#: source/app/service-providers/tray/index.ts:173
+msgid "Zettlr"
+msgstr "Zettlr"
 
-#: source/app/service-providers/commands/root-open.ts:147
-#, javascript-format
-msgid "%s has been loaded."
-msgstr "%s ha sido cargado."
+#: source/app/service-providers/menu/menu.win32.ts:44
+#: source/app/service-providers/menu/menu.win32.ts:56
+#: source/app/service-providers/menu/menu.darwin.ts:184
+msgid "Recent documents"
+msgstr "Documentos recientes"
 
-#: source/app/service-providers/commands/root-open.ts:159
-#, javascript-format
-msgid "Could not open workspace %s."
-msgstr ""
+#: source/app/service-providers/menu/menu.win32.ts:48
+#: source/app/service-providers/menu/menu.win32.ts:60
+#: source/app/service-providers/menu/menu.darwin.ts:188
+msgid "Empty"
+msgstr "Borrar lista documentos recientes"
 
-#: source/app/service-providers/commands/set-open-directory.ts:40
-msgid "Directory not found"
-msgstr "Carpeta no encontrada"
+#: source/app/service-providers/menu/menu.win32.ts:87
+#: source/app/service-providers/menu/menu.darwin.ts:113
+msgid "File"
+msgstr "Archivo"
 
-#: source/app/service-providers/commands/export.ts:74
-msgid "Choose export destination"
-msgstr "Elegir destino de exportación"
+#: source/app/service-providers/menu/menu.win32.ts:140
+#: source/app/service-providers/menu/menu.darwin.ts:166
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:102
+msgid "Open…"
+msgstr "Abrir..."
 
-#: source/app/service-providers/commands/export.ts:74
-#: source/app/service-providers/menu/menu.darwin.ts:197
+#: source/app/service-providers/menu/menu.win32.ts:149
+#: source/app/service-providers/menu/menu.darwin.ts:175
+msgid "Open Workspace …"
+msgstr "Abrir área de trabajo..."
+
 #: source/app/service-providers/menu/menu.win32.ts:162
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:117
-#: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
+#: source/app/service-providers/menu/menu.darwin.ts:197
+#: source/app/service-providers/commands/export.ts:74
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
+#: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:117
 msgid "Save"
 msgstr "Guardar"
 
-#: source/app/service-providers/commands/export.ts:105
-#, javascript-format
-msgid "Exporting to %s"
-msgstr "Exportando a %s"
+#: source/app/service-providers/menu/menu.win32.ts:173
+#: source/app/service-providers/menu/menu.darwin.ts:208
+msgid "Previous file"
+msgstr "Archivo anterior"
 
-#: source/app/service-providers/commands/export.ts:117
-msgid "Export failed"
-msgstr "Fallo de exportación"
+#: source/app/service-providers/menu/menu.win32.ts:184
+#: source/app/service-providers/menu/menu.darwin.ts:219
+msgid "Next file"
+msgstr "Siguiente archivo"
 
-#: source/app/service-providers/commands/export.ts:118
-#, javascript-format
-msgid "An error occurred on export: %s"
-msgstr "Se ha producido un error en la exportación: %s"
+#: source/app/service-providers/menu/menu.win32.ts:198
+#: source/app/service-providers/menu/menu.darwin.ts:233
+msgid "Import files…"
+msgstr "Importar archivos...."
 
-#: source/app/service-providers/commands/dir-project-export.ts:117
-msgid "Project successfully exported. Click to show."
-msgstr ""
-
-#: source/app/service-providers/commands/dir-project-export.ts:117
-#, fuzzy
-msgid "Export"
+#: source/app/service-providers/menu/menu.win32.ts:206
+#: source/app/service-providers/menu/menu.darwin.ts:241
+msgid "Export…"
 msgstr "Exportar..."
 
-#: source/app/service-providers/citeproc/index.ts:241
-#: source/app/service-providers/citeproc/index.ts:441
-msgid "The citation database could not be loaded"
-msgstr "La base de datos de citaciones no se ha podido cargar"
+#: source/app/service-providers/menu/menu.win32.ts:214
+#: source/app/service-providers/menu/menu.darwin.ts:249
+msgid "Print…"
+msgstr "Imprimir...."
 
-#: source/app/service-providers/citeproc/index.ts:429
-msgid "Changes to the library file detected. Reloading …"
-msgstr ""
-"Se han detectado cambios en el archivo de la biblioteca. Recargando...."
-
-#: source/app/service-providers/menu/menu.darwin.ts:46
-#: source/app/service-providers/menu/menu.darwin.ts:641
-#: source/app/service-providers/menu/menu.win32.ts:614
-msgid "About Zettlr"
-msgstr "Acerca de Zettlr"
-
-#: source/app/service-providers/menu/menu.darwin.ts:51
 #: source/app/service-providers/menu/menu.win32.ts:222
 #: source/app/service-providers/menu/menu.win32.ts:226
+#: source/app/service-providers/menu/menu.darwin.ts:51
 msgid "Preferences…"
 msgstr "Preferencias"
 
-#: source/app/service-providers/menu/menu.darwin.ts:59
 #: source/app/service-providers/menu/menu.win32.ts:234
+#: source/app/service-providers/menu/menu.darwin.ts:59
 msgid "Assets Manager"
 msgstr "Gestor de recursos"
 
-#: source/app/service-providers/menu/menu.darwin.ts:67
 #: source/app/service-providers/menu/menu.win32.ts:242
+#: source/app/service-providers/menu/menu.darwin.ts:67
 msgid "Manage Tags…"
 msgstr "Gestionar tags..."
+
+#: source/app/service-providers/menu/menu.win32.ts:254
+#: source/app/service-providers/menu/menu.darwin.ts:260
+msgid "Import translation…"
+msgstr "Importar archivo de localización de Zettlr (idioma)"
+
+#: source/app/service-providers/menu/menu.win32.ts:262
+#: source/app/service-providers/menu/menu.darwin.ts:268
+msgid "Import dictionary…"
+msgstr "Importar diccionario...."
+
+#: source/app/service-providers/menu/menu.win32.ts:318
+#: source/app/service-providers/menu/menu.darwin.ts:317
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:102
+msgid "Edit"
+msgstr "Editar"
+
+#: source/app/service-providers/menu/menu.win32.ts:323
+#: source/app/service-providers/menu/menu.darwin.ts:322
+msgid "Undo"
+msgstr "Deshacer"
+
+#: source/app/service-providers/menu/menu.win32.ts:329
+#: source/app/service-providers/menu/menu.darwin.ts:328
+msgid "Redo"
+msgstr "Rehacer"
+
+#: source/app/service-providers/menu/menu.win32.ts:338
+#: source/app/service-providers/menu/menu.darwin.ts:337
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+msgid "Cut"
+msgstr "Cortar"
+
+#: source/app/service-providers/menu/menu.win32.ts:344
+#: source/app/service-providers/menu/menu.darwin.ts:343
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
+msgid "Copy"
+msgstr "Copiar"
+
+#: source/app/service-providers/menu/menu.win32.ts:349
+#: source/app/service-providers/menu/menu.darwin.ts:348
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
+msgid "Copy as HTML"
+msgstr "Copiar como HTML"
+
+#: source/app/service-providers/menu/menu.win32.ts:358
+#: source/app/service-providers/menu/menu.darwin.ts:357
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+msgid "Paste"
+msgstr "Pegar"
+
+#: source/app/service-providers/menu/menu.win32.ts:363
+#: source/app/service-providers/menu/menu.darwin.ts:362
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
+msgid "Paste without style"
+msgstr "Pegar sin formatos"
+
+#: source/app/service-providers/menu/menu.win32.ts:372
+#: source/app/service-providers/menu/menu.darwin.ts:371
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+#: source/app/service-providers/menu/menu.win32.ts:380
+#: source/app/service-providers/menu/menu.darwin.ts:379
+msgid "Find in file"
+msgstr "Buscar en archivo"
+
+#: source/app/service-providers/menu/menu.win32.ts:388
+#: source/app/service-providers/menu/menu.darwin.ts:387
+msgid "Find in directory"
+msgstr "Buscar en carpeta"
+
+#: source/app/service-providers/menu/menu.win32.ts:396
+#: source/app/service-providers/menu/menu.darwin.ts:395
+msgid "Filter files"
+msgstr "Filtrar archivos"
+
+#: source/app/service-providers/menu/menu.win32.ts:407
+#: source/app/service-providers/menu/menu.darwin.ts:406
+msgid "Generate new ID"
+msgstr "Generar nueva ID"
+
+#: source/app/service-providers/menu/menu.win32.ts:426
+#: source/app/service-providers/menu/menu.darwin.ts:444
+msgid "View"
+msgstr "Ver"
+
+#: source/app/service-providers/menu/menu.win32.ts:440
+#: source/app/service-providers/menu/menu.darwin.ts:458
+msgid "Additional Information"
+msgstr "Información adicional"
+
+#: source/app/service-providers/menu/menu.win32.ts:450
+#: source/app/service-providers/menu/menu.darwin.ts:468
+msgid "Distraction free mode"
+msgstr "Modo libre de distracción"
+
+#: source/app/service-providers/menu/menu.win32.ts:458
+#: source/app/service-providers/menu/menu.darwin.ts:476
+msgid "Typewriter Mode"
+msgstr "Modo máquina de escribir"
+
+#: source/app/service-providers/menu/menu.win32.ts:469
+#: source/app/service-providers/menu/menu.darwin.ts:487
+msgid "Toggle file manager"
+msgstr "Cambiar gestor de archivo"
+
+#: source/app/service-providers/menu/menu.win32.ts:477
+#: source/app/service-providers/menu/menu.darwin.ts:495
+msgid "Toggle Sidebar"
+msgstr "Activar barra lateral"
+
+#: source/app/service-providers/menu/menu.win32.ts:488
+#: source/app/service-providers/menu/menu.darwin.ts:509
+msgid "Reset zoom"
+msgstr "Resetear el zoom"
+
+#: source/app/service-providers/menu/menu.win32.ts:497
+#: source/app/service-providers/menu/menu.darwin.ts:518
+msgid "Zoom in"
+msgstr "Ampliar"
+
+#: source/app/service-providers/menu/menu.win32.ts:504
+#: source/app/service-providers/menu/menu.darwin.ts:525
+msgid "Zoom out"
+msgstr "Alejar"
+
+#: source/app/service-providers/menu/menu.win32.ts:514
+#: source/app/service-providers/menu/menu.darwin.ts:535
+msgid "Toggle fullscreen"
+msgstr "Activar pantalla completa"
+
+#: source/app/service-providers/menu/menu.win32.ts:523
+#: source/app/service-providers/menu/menu.darwin.ts:543
+msgid "Develop"
+msgstr "Desarrollador"
+
+#: source/app/service-providers/menu/menu.win32.ts:527
+#: source/app/service-providers/menu/menu.darwin.ts:547
+msgid "Reload"
+msgstr "Recargar"
+
+#: source/app/service-providers/menu/menu.win32.ts:535
+#: source/app/service-providers/menu/menu.darwin.ts:555
+msgid "Toggle developer tools"
+msgstr "Activar las herramientas de desarrollo"
+
+#: source/app/service-providers/menu/menu.win32.ts:543
+#: source/app/service-providers/menu/menu.darwin.ts:563
+msgid "Open Logs"
+msgstr "Abrir Registros"
+
+#: source/app/service-providers/menu/menu.win32.ts:554
+#: source/app/service-providers/menu/menu.darwin.ts:574
+msgid "Window"
+msgstr "Ventana"
+
+#: source/app/service-providers/menu/menu.win32.ts:559
+#: source/app/service-providers/menu/menu.darwin.ts:579
+msgid "Minimize"
+msgstr "Minimizar"
+
+#: source/app/service-providers/menu/menu.win32.ts:565
+#: source/app/service-providers/menu/menu.darwin.ts:587
+msgid "Close"
+msgstr "Cerrar"
+
+#: source/app/service-providers/menu/menu.win32.ts:582
+#: source/app/service-providers/menu/menu.darwin.ts:609
+msgid "Previous Tab"
+msgstr "Pestaña Anterior"
+
+#: source/app/service-providers/menu/menu.win32.ts:590
+#: source/app/service-providers/menu/menu.darwin.ts:617
+msgid "Next Tab"
+msgstr "Siguiente pestaña"
+
+#: source/app/service-providers/menu/menu.win32.ts:609
+#: source/app/service-providers/menu/menu.darwin.ts:636
+msgid "Help"
+msgstr "Ayuda"
+
+#: source/app/service-providers/menu/menu.win32.ts:614
+#: source/app/service-providers/menu/menu.darwin.ts:46
+#: source/app/service-providers/menu/menu.darwin.ts:641
+msgid "About Zettlr"
+msgstr "Acerca de Zettlr"
+
+#: source/app/service-providers/menu/menu.win32.ts:621
+#: source/app/service-providers/menu/menu.darwin.ts:648
+msgid "Support Zettlr"
+msgstr "Soporta a Zettlr"
+
+#: source/app/service-providers/menu/menu.win32.ts:631
+#: source/app/service-providers/menu/menu.darwin.ts:658
+msgid "Go to website"
+msgstr "Ir a la página web"
+
+#: source/app/service-providers/menu/menu.win32.ts:641
+#: source/app/service-providers/menu/menu.darwin.ts:668
+msgid "Get LaTeX"
+msgstr "Instalar LaTeX"
+
+#: source/app/service-providers/menu/menu.win32.ts:651
+#: source/app/service-providers/menu/menu.darwin.ts:678
+msgid "Open user manual"
+msgstr "Abrir el manual del usuario"
+
+#: source/app/service-providers/menu/menu.win32.ts:662
+#: source/app/service-providers/menu/menu.darwin.ts:689
+msgid "Open Tutorial"
+msgstr "Abrir Tutorial"
+
+#: source/app/service-providers/menu/menu.win32.ts:670
+#: source/app/service-providers/menu/menu.darwin.ts:697
+#: source/tmp/App.vue.ts:93
+msgid "Check for updates"
+msgstr "Buscar actualizaciones"
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
@@ -325,185 +1156,6 @@ msgstr "Ocultar otros"
 msgid "Show"
 msgstr "Mostrar"
 
-#: source/app/service-providers/menu/menu.darwin.ts:104
-#: source/app/service-providers/menu/menu.win32.ts:308
-#: source/app/service-providers/tray/index.ts:166
-msgid "Quit"
-msgstr "Salir"
-
-#: source/app/service-providers/menu/menu.darwin.ts:113
-#: source/app/service-providers/menu/menu.win32.ts:87
-msgid "File"
-msgstr "Archivo"
-
-#: source/app/service-providers/menu/menu.darwin.ts:116
-#: source/app/service-providers/menu/menu.win32.ts:90
-#: source/win-main/file-manager/util/dir-item-context.ts:52
-msgid "New File…"
-msgstr "Archivo nuevo..."
-
-#: source/app/service-providers/menu/menu.darwin.ts:155
-#: source/app/service-providers/menu/menu.win32.ts:129
-#: source/win-main/file-manager/util/dir-item-context.ts:58
-msgid "New directory…"
-msgstr "Carpeta nueva..."
-
-#: source/app/service-providers/menu/menu.darwin.ts:166
-#: source/app/service-providers/menu/menu.win32.ts:140
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:102
-msgid "Open…"
-msgstr "Abrir..."
-
-#: source/app/service-providers/menu/menu.darwin.ts:175
-#: source/app/service-providers/menu/menu.win32.ts:149
-msgid "Open Workspace …"
-msgstr "Abrir área de trabajo..."
-
-#: source/app/service-providers/menu/menu.darwin.ts:184
-#: source/app/service-providers/menu/menu.win32.ts:44
-#: source/app/service-providers/menu/menu.win32.ts:56
-msgid "Recent documents"
-msgstr "Documentos recientes"
-
-#: source/app/service-providers/menu/menu.darwin.ts:188
-#: source/app/service-providers/menu/menu.win32.ts:48
-#: source/app/service-providers/menu/menu.win32.ts:60
-msgid "Empty"
-msgstr "Borrar lista documentos recientes"
-
-#: source/app/service-providers/menu/menu.darwin.ts:208
-#: source/app/service-providers/menu/menu.win32.ts:173
-msgid "Previous file"
-msgstr "Archivo anterior"
-
-#: source/app/service-providers/menu/menu.darwin.ts:219
-#: source/app/service-providers/menu/menu.win32.ts:184
-msgid "Next file"
-msgstr "Siguiente archivo"
-
-#: source/app/service-providers/menu/menu.darwin.ts:233
-#: source/app/service-providers/menu/menu.win32.ts:198
-msgid "Import files…"
-msgstr "Importar archivos...."
-
-#: source/app/service-providers/menu/menu.darwin.ts:241
-#: source/app/service-providers/menu/menu.win32.ts:206
-msgid "Export…"
-msgstr "Exportar..."
-
-#: source/app/service-providers/menu/menu.darwin.ts:249
-#: source/app/service-providers/menu/menu.win32.ts:214
-msgid "Print…"
-msgstr "Imprimir...."
-
-#: source/app/service-providers/menu/menu.darwin.ts:260
-#: source/app/service-providers/menu/menu.win32.ts:254
-msgid "Import translation…"
-msgstr "Importar archivo de localización de Zettlr (idioma)"
-
-#: source/app/service-providers/menu/menu.darwin.ts:268
-#: source/app/service-providers/menu/menu.win32.ts:262
-msgid "Import dictionary…"
-msgstr "Importar diccionario...."
-
-#: source/app/service-providers/menu/menu.darwin.ts:287
-#: source/app/service-providers/menu/menu.win32.ts:281
-#: source/win-main/file-manager/util/file-item-context.ts:41
-#: source/tmp/Defaults.vue.ts:76
-msgid "Rename file"
-msgstr "Renombrar archivo"
-
-#: source/app/service-providers/menu/menu.darwin.ts:298
-#: source/app/service-providers/menu/menu.win32.ts:292
-#: source/win-main/file-manager/util/file-item-context.ts:48
-msgid "Delete file"
-msgstr "Eliminar archivo"
-
-#: source/app/service-providers/menu/menu.darwin.ts:306
-#: source/app/service-providers/menu/menu.win32.ts:299
-#: source/win-main/file-manager/util/dir-item-context.ts:37
-msgid "Delete directory"
-msgstr "Eliminar carpeta"
-
-#: source/app/service-providers/menu/menu.darwin.ts:317
-#: source/app/service-providers/menu/menu.win32.ts:318
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:102
-msgid "Edit"
-msgstr "Editar"
-
-#: source/app/service-providers/menu/menu.darwin.ts:322
-#: source/app/service-providers/menu/menu.win32.ts:323
-msgid "Undo"
-msgstr "Deshacer"
-
-#: source/app/service-providers/menu/menu.darwin.ts:328
-#: source/app/service-providers/menu/menu.win32.ts:329
-msgid "Redo"
-msgstr "Rehacer"
-
-#: source/app/service-providers/menu/menu.darwin.ts:337
-#: source/app/service-providers/menu/menu.win32.ts:338
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
-msgid "Cut"
-msgstr "Cortar"
-
-#: source/app/service-providers/menu/menu.darwin.ts:343
-#: source/app/service-providers/menu/menu.win32.ts:344
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
-msgid "Copy"
-msgstr "Copiar"
-
-#: source/app/service-providers/menu/menu.darwin.ts:348
-#: source/app/service-providers/menu/menu.win32.ts:349
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
-msgid "Copy as HTML"
-msgstr "Copiar como HTML"
-
-#: source/app/service-providers/menu/menu.darwin.ts:357
-#: source/app/service-providers/menu/menu.win32.ts:358
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
-msgid "Paste"
-msgstr "Pegar"
-
-#: source/app/service-providers/menu/menu.darwin.ts:362
-#: source/app/service-providers/menu/menu.win32.ts:363
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
-msgid "Paste without style"
-msgstr "Pegar sin formatos"
-
-#: source/app/service-providers/menu/menu.darwin.ts:371
-#: source/app/service-providers/menu/menu.win32.ts:372
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
-msgid "Select all"
-msgstr "Seleccionar todo"
-
-#: source/app/service-providers/menu/menu.darwin.ts:379
-#: source/app/service-providers/menu/menu.win32.ts:380
-msgid "Find in file"
-msgstr "Buscar en archivo"
-
-#: source/app/service-providers/menu/menu.darwin.ts:387
-#: source/app/service-providers/menu/menu.win32.ts:388
-msgid "Find in directory"
-msgstr "Buscar en carpeta"
-
-#: source/app/service-providers/menu/menu.darwin.ts:395
-#: source/app/service-providers/menu/menu.win32.ts:396
-msgid "Filter files"
-msgstr "Filtrar archivos"
-
-#: source/app/service-providers/menu/menu.darwin.ts:406
-#: source/app/service-providers/menu/menu.win32.ts:407
-msgid "Generate new ID"
-msgstr "Generar nueva ID"
-
-#: source/app/service-providers/menu/menu.darwin.ts:414
-#: source/app/service-providers/menu/menu.win32.ts:415
-#: source/win-main/file-manager/util/file-item-context.ts:70
-#: source/win-main/tabs-context.ts:80
-msgid "Copy ID"
-msgstr "Copiar ID"
-
 #: source/app/service-providers/menu/menu.darwin.ts:425
 msgid "Speech"
 msgstr "Hablar"
@@ -516,194 +1168,9 @@ msgstr "Empieza a hablar"
 msgid "Stop speaking"
 msgstr "Deja de hablar"
 
-#: source/app/service-providers/menu/menu.darwin.ts:444
-#: source/app/service-providers/menu/menu.win32.ts:426
-msgid "View"
-msgstr "Ver"
-
-#: source/app/service-providers/menu/menu.darwin.ts:448
-#: source/app/service-providers/menu/menu.win32.ts:430
-#: source/win-preferences/schema/general.ts:31
-msgid "Dark mode"
-msgstr "Modo nocturno"
-
-#: source/app/service-providers/menu/menu.darwin.ts:458
-#: source/app/service-providers/menu/menu.win32.ts:440
-msgid "Additional Information"
-msgstr "Información adicional"
-
-#: source/app/service-providers/menu/menu.darwin.ts:468
-#: source/app/service-providers/menu/menu.win32.ts:450
-msgid "Distraction free mode"
-msgstr "Modo libre de distracción"
-
-#: source/app/service-providers/menu/menu.darwin.ts:476
-#: source/app/service-providers/menu/menu.win32.ts:458
-msgid "Typewriter Mode"
-msgstr "Modo máquina de escribir"
-
-#: source/app/service-providers/menu/menu.darwin.ts:487
-#: source/app/service-providers/menu/menu.win32.ts:469
-msgid "Toggle file manager"
-msgstr "Cambiar gestor de archivo"
-
-#: source/app/service-providers/menu/menu.darwin.ts:495
-#: source/app/service-providers/menu/menu.win32.ts:477
-msgid "Toggle Sidebar"
-msgstr "Activar barra lateral"
-
-#: source/app/service-providers/menu/menu.darwin.ts:509
-#: source/app/service-providers/menu/menu.win32.ts:488
-msgid "Reset zoom"
-msgstr "Resetear el zoom"
-
-#: source/app/service-providers/menu/menu.darwin.ts:518
-#: source/app/service-providers/menu/menu.win32.ts:497
-msgid "Zoom in"
-msgstr "Ampliar"
-
-#: source/app/service-providers/menu/menu.darwin.ts:525
-#: source/app/service-providers/menu/menu.win32.ts:504
-msgid "Zoom out"
-msgstr "Alejar"
-
-#: source/app/service-providers/menu/menu.darwin.ts:535
-#: source/app/service-providers/menu/menu.win32.ts:514
-msgid "Toggle fullscreen"
-msgstr "Activar pantalla completa"
-
-#: source/app/service-providers/menu/menu.darwin.ts:543
-#: source/app/service-providers/menu/menu.win32.ts:523
-msgid "Develop"
-msgstr "Desarrollador"
-
-#: source/app/service-providers/menu/menu.darwin.ts:547
-#: source/app/service-providers/menu/menu.win32.ts:527
-msgid "Reload"
-msgstr "Recargar"
-
-#: source/app/service-providers/menu/menu.darwin.ts:555
-#: source/app/service-providers/menu/menu.win32.ts:535
-msgid "Toggle developer tools"
-msgstr "Activar las herramientas de desarrollo"
-
-#: source/app/service-providers/menu/menu.darwin.ts:563
-#: source/app/service-providers/menu/menu.win32.ts:543
-msgid "Open Logs"
-msgstr "Abrir Registros"
-
-#: source/app/service-providers/menu/menu.darwin.ts:574
-#: source/app/service-providers/menu/menu.win32.ts:554
-msgid "Window"
-msgstr "Ventana"
-
-#: source/app/service-providers/menu/menu.darwin.ts:579
-#: source/app/service-providers/menu/menu.win32.ts:559
-msgid "Minimize"
-msgstr "Minimizar"
-
-#: source/app/service-providers/menu/menu.darwin.ts:587
-#: source/app/service-providers/menu/menu.win32.ts:565
-msgid "Close"
-msgstr "Cerrar"
-
 #: source/app/service-providers/menu/menu.darwin.ts:593
 msgid "Bring All to Front"
 msgstr "Traer todo al frente"
-
-#: source/app/service-providers/menu/menu.darwin.ts:601
-#: source/app/service-providers/menu/menu.win32.ts:574
-#: source/win-main/tabs-context.ts:38
-msgid "Close Tab"
-msgstr "Cerrar Pestaña"
-
-#: source/app/service-providers/menu/menu.darwin.ts:609
-#: source/app/service-providers/menu/menu.win32.ts:582
-msgid "Previous Tab"
-msgstr "Pestaña Anterior"
-
-#: source/app/service-providers/menu/menu.darwin.ts:617
-#: source/app/service-providers/menu/menu.win32.ts:590
-msgid "Next Tab"
-msgstr "Siguiente pestaña"
-
-#: source/app/service-providers/menu/menu.darwin.ts:636
-#: source/app/service-providers/menu/menu.win32.ts:609
-msgid "Help"
-msgstr "Ayuda"
-
-#: source/app/service-providers/menu/menu.darwin.ts:648
-#: source/app/service-providers/menu/menu.win32.ts:621
-msgid "Support Zettlr"
-msgstr "Soporta a Zettlr"
-
-#: source/app/service-providers/menu/menu.darwin.ts:658
-#: source/app/service-providers/menu/menu.win32.ts:631
-msgid "Go to website"
-msgstr "Ir a la página web"
-
-#: source/app/service-providers/menu/menu.darwin.ts:668
-#: source/app/service-providers/menu/menu.win32.ts:641
-msgid "Get LaTeX"
-msgstr "Instalar LaTeX"
-
-#: source/app/service-providers/menu/menu.darwin.ts:678
-#: source/app/service-providers/menu/menu.win32.ts:651
-msgid "Open user manual"
-msgstr "Abrir el manual del usuario"
-
-#: source/app/service-providers/menu/menu.darwin.ts:689
-#: source/app/service-providers/menu/menu.win32.ts:662
-msgid "Open Tutorial"
-msgstr "Abrir Tutorial"
-
-#: source/app/service-providers/menu/menu.darwin.ts:697
-#: source/app/service-providers/menu/menu.win32.ts:670 source/tmp/App.vue.ts:93
-msgid "Check for updates"
-msgstr "Buscar actualizaciones"
-
-#: source/app/service-providers/config/index.ts:425
-msgid "Changing this option requires a restart to take effect."
-msgstr ""
-
-#: source/app/service-providers/config/index.ts:428
-#, fuzzy
-msgid "Restart now"
-msgstr "ahora mismo"
-
-#: source/app/service-providers/config/index.ts:429
-msgid "Restart later"
-msgstr ""
-
-#: source/app/service-providers/config/config-validation.ts:280
-#, javascript-format
-msgid "Option %s has to be of type %s."
-msgstr "La opción %s tiene que ser del tipo %s."
-
-#: source/app/service-providers/config/config-validation.ts:283
-#, javascript-format
-msgid "Option %s must be one of: %s."
-msgstr "La opción %s debe ser una de: %s."
-
-#: source/app/service-providers/config/config-validation.ts:286
-#, javascript-format
-msgid "Option %s must be between %s and %s (characters long)."
-msgstr "La opción %s debe estar en el rango de %s y %s caracteres."
-
-#: source/app/service-providers/config/config-validation.ts:289
-#, javascript-format
-msgid "Option %s may not exceed %s (characters)."
-msgstr "Opción %s no puede exceder %s (caracteres)."
-
-#: source/app/service-providers/config/config-validation.ts:292
-#, javascript-format
-msgid "Option %s must be at least %s (characters long)."
-msgstr "La opcion %s tiene que tener al menos %s caracteres."
-
-#: source/app/service-providers/config/config-validation.ts:295
-#, javascript-format
-msgid "Option %s is required."
-msgstr "Opción %s es necesaria."
 
 #: source/app/service-providers/updates/index.ts:176
 #, javascript-format
@@ -753,148 +1220,892 @@ msgstr ""
 msgid "An update to version %s is available!"
 msgstr "¡Hay una actualización a la versión %s disponible!"
 
-#: source/app/service-providers/tray/index.ts:160
-msgid "Show Zettlr"
-msgstr "Muestra Zettlr"
+#: source/app/service-providers/config/config-validation.ts:280
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "La opción %s tiene que ser del tipo %s."
 
-#: source/app/service-providers/tray/index.ts:173
-msgid "Zettlr"
-msgstr "Zettlr"
+#: source/app/service-providers/config/config-validation.ts:283
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "La opción %s debe ser una de: %s."
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Sustituir Archivo"
+#: source/app/service-providers/config/config-validation.ts:286
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "La opción %s debe estar en el rango de %s y %s caracteres."
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/config/config-validation.ts:289
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "Opción %s no puede exceder %s (caracteres)."
+
+#: source/app/service-providers/config/config-validation.ts:292
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "La opcion %s tiene que tener al menos %s caracteres."
+
+#: source/app/service-providers/config/config-validation.ts:295
+#, javascript-format
+msgid "Option %s is required."
+msgstr "Opción %s es necesaria."
+
+#: source/app/service-providers/config/index.ts:425
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:428
+#, fuzzy
+msgid "Restart now"
+msgstr "ahora mismo"
+
+#: source/app/service-providers/config/index.ts:429
+msgid "Restart later"
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:433
+#: source/app/service-providers/commands/file-rename.ts:93
+#: source/app/service-providers/commands/rename-tag.ts:44
+msgid "Confirm"
+msgstr ""
+
+#: source/app/service-providers/commands/file-duplicate.ts:43
+#: source/app/service-providers/commands/file-duplicate.ts:59
+#: source/app/service-providers/commands/file-new.ts:156
+msgid "Could not create file"
+msgstr "No se ha podido crear el archivo"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
+msgstr ""
+
+#: source/app/service-providers/commands/importer/index.ts:46
+#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
+#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+msgid ""
+"Pandoc has not been found on this system. Please install Pandoc prior to "
+"exporting or importing files."
+msgstr ""
+"No se ha encontrado Pandoc en este sistema. Por favor, instala Pandoc antes "
+"de exportar o importar archivos."
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:63
+#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "Paquete de texto malformado: %s"
+
+#: source/app/service-providers/commands/set-open-directory.ts:40
+msgid "Directory not found"
+msgstr "Carpeta no encontrada"
+
+#: source/app/service-providers/commands/set-open-directory.ts:41
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+msgid "The requested directory was not found."
+msgstr "No se ha encontrado la carpeta solicitada."
+
+#: source/app/service-providers/commands/import-lang-file.ts:59
+#, javascript-format
+msgid "Language file imported: %s"
+msgstr "Archivo de idioma importado: %s"
+
+#: source/app/service-providers/commands/import-lang-file.ts:61
+#: source/app/service-providers/commands/import-lang-file.ts:64
+#, javascript-format
+msgid "Could not import language file %s!"
+msgstr "No se ha podido importar el archivo de idioma %s!"
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "You have to select a directory to import to."
+msgstr "Debes seleccionar una carpeta para importar."
+
+#. Now import.
+#: source/app/service-providers/commands/import.ts:58
+msgid "Importing. Please wait …"
+msgstr "Importando. Por favor, espera..."
+
+#. This callback gets called whenever there is an error while running pandoc.
+#: source/app/service-providers/commands/import.ts:63
+#, javascript-format
+msgid "Couldn't import %s."
+msgstr "No se ha podido importar %s."
+
+#. And this on each success!
+#: source/app/service-providers/commands/import.ts:66
+#, javascript-format
+msgid "%s imported successfully."
+msgstr "%s importadas con éxito."
+
+#. Some files failed to import.
+#: source/app/service-providers/commands/import.ts:71
+#: source/app/service-providers/commands/import.ts:77
 #, javascript-format
 msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
+"The following %s files could not be imported, because their filetype is "
+"unknown: %s"
 msgstr ""
-"El archivo %s ha sido modificado remotamente. ¿Sustituir la version "
-"actualmente cargada con la nueva del disco?"
+"Los siguientes %s archivos no se han podido importar, porque su tipo de "
+"archivo es desconocido: %s"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
-#: source/win-preferences/schema/general.ts:41
-msgid "Always load remote changes to the current file"
-msgstr "Siempre recargar el archivo actual cuando hay cambios remotos"
+#: source/app/service-providers/commands/dir-project-export.ts:117
+msgid "Project successfully exported. Click to show."
+msgstr ""
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
-#: source/app/service-providers/windows/dialog/prompt.ts:32
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
-msgid "Ok"
-msgstr "OK"
-
-#: source/app/service-providers/windows/dialog/ask-file.ts:54
-msgid "Open file"
-msgstr "Abrir archivo"
-
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "Guarda el archivo"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
-msgid "Overwrite existing file"
-msgstr "Sobrescribir el archivo existente"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
-#, javascript-format
-msgid "The file %s already exists in this directory. Overwrite?"
-msgstr "El archivo %s ya existe en este directorio. ¿Sobreescribir?"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:38
-msgid "Really delete?"
-msgstr "¿Seguro que quieres eliminar?"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:39
-#, javascript-format
-msgid "Do you really want to remove %s?"
-msgstr "¿Seguro que quieres eliminar %s?"
-
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-#: source/tmp/Defaults.vue.ts:130 source/tmp/SnippetsTab.vue.ts:65
-#: source/tmp/CustomCSS.vue.ts:65
-msgid "Unsaved changes"
-msgstr "Cambios no guardados"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
+#: source/app/service-providers/commands/dir-project-export.ts:117
 #, fuzzy
-msgid "There are unsaved changes. Do you want to save them first?"
+msgid "Export"
+msgstr "Exportar..."
+
+#: source/app/service-providers/commands/export.ts:74
+msgid "Choose export destination"
+msgstr "Elegir destino de exportación"
+
+#: source/app/service-providers/commands/export.ts:105
+#, javascript-format
+msgid "Exporting to %s"
+msgstr "Exportando a %s"
+
+#: source/app/service-providers/commands/export.ts:117
+msgid "Export failed"
+msgstr "Fallo de exportación"
+
+#: source/app/service-providers/commands/export.ts:118
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "Se ha producido un error en la exportación: %s"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "No se ha encontrado el archivo solicitado."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "El nombre proporcionado no contenía ninguna letra permitida."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "No se ha guardado la imagen"
+
+#: source/app/service-providers/commands/language-tool.ts:180
+msgid "Document too long"
 msgstr ""
-"Hay cambios no guardados en el archivo actual. ¿Deseas omitirlas o "
-"guardarlas?"
 
-#: source/win-main/file-manager/util/file-item-context.ts:26
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
-#: source/tmp/GlobalSearch.vue.ts:40
-msgid "Open in a new tab"
-msgstr "Abrir en una pestaña nueva"
+#: source/app/service-providers/commands/language-tool.ts:185
+msgid "offline"
+msgstr ""
 
-#: source/win-main/file-manager/util/file-item-context.ts:32
-#: source/win-main/file-manager/util/dir-item-context.ts:25
-msgid "Properties"
-msgstr "Propiedades"
+#: source/app/service-providers/commands/root-open.ts:60
+#: source/tmp/file-item.vue.ts:119 source/tmp/PopoverDirProps.vue.ts:156
+#: source/tmp/file-tree.vue.ts:26
+msgid "Files"
+msgstr "Archivos"
 
-#: source/win-main/file-manager/util/file-item-context.ts:55
-msgid "Duplicate file"
-msgstr "Archivo duplicado"
+#: source/app/service-providers/commands/root-open.ts:83
+msgid "Cannot open directory"
+msgstr "No se puede abrir la carpeta"
 
-#: source/win-main/file-manager/util/file-item-context.ts:64
-#: source/win-main/tabs-context.ts:68
-msgid "Copy filename"
-msgstr "Copiar nombre de archivo"
+#: source/app/service-providers/commands/root-open.ts:84
+#, javascript-format
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Directorio &quot;%s&quot; no se puede abrir por Zettlr."
 
-#: source/win-main/file-manager/util/file-item-context.ts:79
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
-msgid "Show file"
-msgstr "Mostrar archivo"
+#: source/app/service-providers/commands/root-open.ts:136
+#, javascript-format
+msgid "Opening new root %s …"
+msgstr "Abriendo nueva raíz %s ..."
 
-#: source/win-main/file-manager/util/file-item-context.ts:92
-msgid "Close file"
-msgstr "Cerrar archivo"
+#: source/app/service-providers/commands/root-open.ts:147
+#, javascript-format
+msgid "%s has been loaded."
+msgstr "%s ha sido cargado."
 
-#: source/win-main/file-manager/util/dir-item-context.ts:31
-msgid "Rename directory"
-msgstr "Renombrar carpeta"
+#: source/app/service-providers/commands/root-open.ts:159
+#, javascript-format
+msgid "Could not open workspace %s."
+msgstr ""
 
-#: source/win-main/file-manager/util/dir-item-context.ts:43
-#: source/tmp/OtherFilesTab.vue.ts:16
-msgid "Open directory"
-msgstr "Abrir carpeta"
+#: source/app/service-providers/commands/request-move.ts:60
+msgid "Cannot move directory"
+msgstr "No se puede mover la carpeta"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:69
-msgid "Check for directory …"
-msgstr "Comprobar por la carpeta..."
+#: source/app/service-providers/commands/request-move.ts:61
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "No puede mover una carpeta a una de sus sub-carpetas."
 
-#: source/win-main/file-manager/util/dir-item-context.ts:86
-msgid "Export Project"
-msgstr "Exportar proyecto"
+#: source/app/service-providers/commands/request-move.ts:70
+msgid "Cannot move directory or file"
+msgstr "No se puede mover la arpeta o el archivo"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:98
-msgid "Close Workspace"
-msgstr "Cerrar área de trabajo"
+#: source/app/service-providers/commands/request-move.ts:71
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "El archivo / la carpeta %s ya existe en el destino."
 
-#: source/win-main/tabs-context.ts:44
-msgid "Close other tabs"
-msgstr "Cierra las otras pestañas"
+#: source/app/service-providers/commands/dir-new.ts:36
+#: source/app/service-providers/commands/dir-new.ts:37
+#: source/app/service-providers/commands/dir-new.ts:48
+#: source/app/service-providers/commands/dir-new.ts:49
+#: source/app/service-providers/commands/dir-new.ts:59
+msgid "Could not create directory"
+msgstr "No se ha podido crear la carpeta"
 
-#: source/win-main/tabs-context.ts:50
-msgid "Close all tabs"
-msgstr "Cierra todas las pestañas"
+#. Else standard val for new dirs.
+#: source/app/service-providers/commands/dir-new.ts:42
+#: source/tmp/tree-item.vue.ts:262
+msgid "Untitled"
+msgstr "Sin título"
 
-#: source/win-main/tabs-context.ts:59
-msgid "Unpin tab"
-msgstr "Desanclar pestaña"
+#: source/app/service-providers/commands/file-rename.ts:94
+#, javascript-format
+msgid "Update %s internal links to file %s?"
+msgstr ""
 
-#: source/win-main/tabs-context.ts:59
-msgid "Pin tab"
-msgstr "Anclar pestaña"
+#: source/app/service-providers/commands/rename-tag.ts:45
+#, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr ""
 
-#: source/win-main/tabs-context.ts:74
-msgid "Copy full path"
-msgstr "Copiar ruta completa"
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:92
+#, javascript-format
+msgid "The reference with key %s does not appear to have attachments."
+msgstr "La referencia %s no parece tener adjuntos"
+
+#: source/app/service-providers/commands/open-attachment.ts:97
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "No se pudo abrir el adjunto ¿Está funcionando Zotero?"
+
+#: source/app/service-providers/citeproc/index.ts:241
+#: source/app/service-providers/citeproc/index.ts:441
+msgid "The citation database could not be loaded"
+msgstr "La base de datos de citaciones no se ha podido cargar"
+
+#: source/app/service-providers/citeproc/index.ts:429
+msgid "Changes to the library file detected. Reloading …"
+msgstr ""
+"Se han detectado cambios en el archivo de la biblioteca. Recargando...."
+
+#: source/tmp/App.vue.ts:34
+msgid "Updater"
+msgstr "Actualizador"
+
+#. True as soon as the update starts
+#: source/tmp/App.vue.ts:36
+msgid "Click to start update"
+msgstr "Clica para empezar la actualización"
+
+#: source/tmp/App.vue.ts:75
+msgid "New update available"
+msgstr "Nueva actualización disponible"
+
+#: source/tmp/App.vue.ts:78
+msgid "Your version"
+msgstr "Tu versión"
+
+#: source/tmp/App.vue.ts:81
+msgid ""
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr ""
+"Hay una nueva versión de Zettlr disponible para descargar. Por favor, lee el "
+"changelog (registro de cambios) a continuación."
+
+#: source/tmp/App.vue.ts:84
+msgid "Downloading your update"
+msgstr "Descargando la actualización"
+
+#: source/tmp/App.vue.ts:87
+msgid "No update available. You have the most recent version."
+msgstr "No hay actualizaciones disponibles. Esta es la versión más reciente"
+
+#: source/tmp/App.vue.ts:132
+msgid "Starting update …"
+msgstr "Empezando la actualización..."
+
+#: source/tmp/Projects-Tab.vue.ts:24
+msgid "Zettlr also makes use of these projects:"
+msgstr "Zettlr también hace uso de los siguientes proyectos:"
+
+#: source/tmp/List.vue.ts:141
+msgid "Add"
+msgstr "Añadir"
+
+#: source/tmp/List.vue.ts:144
+msgid "Actions"
+msgstr "Acciones"
+
+#: source/tmp/List.vue.ts:147
+#, fuzzy
+msgid "Delete"
+msgstr "Eliminar archivo"
+
+#. Apparently we have a simple array, so exactly one column
+#: source/tmp/List.vue.ts:169
+msgid "Item"
+msgstr "Ítem"
+
+#: source/tmp/PopoverFileProps.vue.ts:62 source/tmp/file-item.vue.ts:195
+msgid "Words"
+msgstr "Palabras"
+
+#: source/tmp/PopoverFileProps.vue.ts:65 source/tmp/PopoverDirProps.vue.ts:153
+msgid "Created"
+msgstr "Creado"
+
+#: source/tmp/PopoverFileProps.vue.ts:68 source/tmp/PopoverDirProps.vue.ts:150
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
+msgid "Modified"
+msgstr "Modificado"
+
+#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:50
+#: source/tmp/ShortcutChooser.vue.ts:61 source/tmp/Number.vue.ts:59
+#: source/tmp/File.vue.ts:59
+msgid "Reset"
+msgstr "Reinicia"
+
+#: source/tmp/PopoverFileProps.vue.ts:74
+msgid "Set writing target…"
+msgstr "Establece un objetivo de escritura...."
+
+#: source/tmp/PopoverFileProps.vue.ts:77 source/tmp/file-item.vue.ts:193
+msgid "Characters"
+msgstr "Caracteres"
+
+#: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
+#: source/tmp/file-item.vue.ts:207 source/tmp/PopoverDirProps.vue.ts:144
+#: source/tmp/PopoverDocInfo.vue.ts:63
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
+#, javascript-format
+msgid "%s words"
+msgstr "%s palabras"
+
+#: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
+msgid "No results"
+msgstr "Sin resultados"
+
+#: source/tmp/file-list.vue.ts:69
+msgid "No directory selected"
+msgstr "Ningún directorio seleccionado"
+
+#: source/tmp/file-list.vue.ts:72
+msgid "Empty directory"
+msgstr "Directorio vacío"
+
+#: source/tmp/General-Tab.vue.ts:23
+msgid ""
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
+msgstr ""
+"Zettlr es un proyecto de Hendrik Erz, licenciado bajo la licencia GNU GPL "
+"v3. Es de código abierto, gratuito y basado en el framework de Electron. "
+"Zettlr agradece a los desarrolladores de Electron, del framework Node.js y "
+"del editor CodeMirror por su trabajo. Sin ellos, Zettlr no sería posible. "
+"Abajo puedes encontrar todos los proyectos que Zettlr utiliza"
+
+#: source/tmp/General-Tab.vue.ts:24
+msgid ""
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
+msgstr ""
+"Zettlr utiliza citeproc para mostrar las citas directamente en el editor. "
+"Para ello, Zettlr utiliza los archivos de lenguaje y estilo "
+"CitationStyleLanguage (CSL). Los archivos se han enviado sin alterar con "
+"metadatos de autor. Más información:"
+
+#: source/tmp/General-Tab.vue.ts:25
+msgid ""
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
+msgstr ""
+"Todos los logotipos y marcas están sujetos a sus legítimos propietarios. "
+"Además de usar su código, Zettlr no está de ninguna manera afiliado a "
+"ninguno de estos proyectos. Node.js es una marca registrada de Joyent, Inc."
+
+#: source/tmp/General-Tab.vue.ts:26
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:27 source/tmp/MainSidebar.vue.ts:81
+msgid "Related files"
+msgstr "Archivos relacionados"
+
+#: source/tmp/RelatedFilesTab.vue.ts:30
+msgid "No related files"
+msgstr "Archivos no relacionados"
+
+#: source/tmp/RelatedFilesTab.vue.ts:33
+msgid "This relation is based on a bidirectional link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:36
+msgid "This relation is based on an outbound link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:39
+msgid "This relation is based on a backlink."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:228
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr ""
+
+#: source/tmp/file-item.vue.ts:113 source/tmp/PopoverDirProps.vue.ts:147
+msgid "Directories"
+msgstr "Directorios"
+
+#: source/tmp/file-item.vue.ts:132 source/tmp/file-item.vue.ts:205
+#: source/tmp/PopoverDocInfo.vue.ts:61
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
+#, javascript-format
+msgid "%s characters"
+msgstr "Caracteres %"
+
+#: source/tmp/PopoverPomodoro.vue.ts:72
+msgid "Start"
+msgstr "Iniciar"
+
+#: source/tmp/PopoverPomodoro.vue.ts:75
+msgid "Stop"
+msgstr "Parar"
+
+#: source/tmp/PopoverPomodoro.vue.ts:78
+msgid "Work"
+msgstr "Trabajo"
+
+#: source/tmp/PopoverPomodoro.vue.ts:81
+msgid "Short break"
+msgstr "Pausa breve"
+
+#: source/tmp/PopoverPomodoro.vue.ts:84
+msgid "Break"
+msgstr "Descanso"
+
+#: source/tmp/PopoverPomodoro.vue.ts:87
+msgid "Sound Effect"
+msgstr ""
+
+#: source/tmp/PopoverPomodoro.vue.ts:90
+msgid "Volume"
+msgstr ""
+
+#: source/tmp/PopoverDirProps.vue.ts:162
+msgid "Project Settings…"
+msgstr "Configuración del proyecto...."
+
+#: source/tmp/ReferencesTab.vue.ts:20 source/tmp/MainSidebar.vue.ts:75
+msgid "References"
+msgstr "Referencias"
+
+#: source/tmp/ReferencesTab.vue.ts:32
+msgid "There are no citations in this document."
+msgstr "No hay citas en este documento."
+
+#: source/tmp/PopoverDocInfo.vue.ts:35
+msgid "No open document"
+msgstr "No hay ningún documento abierto"
+
+#: source/tmp/PopoverDocInfo.vue.ts:38
+msgid "words"
+msgstr "palabras"
+
+#: source/tmp/PopoverDocInfo.vue.ts:41
+msgid "characters"
+msgstr "caracteres"
+
+#: source/tmp/CustomCSS.vue.ts:31
+msgid "Custom CSS"
+msgstr "CSS personalizado"
+
+#: source/tmp/CustomCSS.vue.ts:32
+msgid ""
+"Here you can override the styles of Zettlr to customise it even further. "
+"<strong>Attention: This file overrides all CSS directives! Never alter the "
+"geometry of elements, otherwise the app may expose unwanted behaviour!</"
+"strong>"
+msgstr ""
+"Aquí puedes sobrepasar los estilos de Zettlr para personalizarlo aún más. "
+"<strong>Atención: Este archivo sobrescribe todas las directivas CSS! Nunca "
+"altere la geometría de los elementos, de lo contrario la aplicación puede "
+"exponer comportamientos no deseados!</strong>"
+
+#: source/tmp/CustomCSS.vue.ts:88 source/tmp/Defaults.vue.ts:192
+#: source/tmp/SnippetsTab.vue.ts:124
+msgid "Saving …"
+msgstr "Guardando..."
+
+#: source/tmp/CustomCSS.vue.ts:97
+msgid "Saving failed"
+msgstr "Ha fallado el guardado"
+
+#: source/tmp/GlobalSearch.vue.ts:116
+msgid "Full-Text Search"
+msgstr "Búsqueda de texto completo"
+
+#: source/tmp/GlobalSearch.vue.ts:119
+msgid "Enter your search terms below"
+msgstr "Introduce tus términos de búsqueda a continuación"
+
+#: source/tmp/GlobalSearch.vue.ts:122
+msgid "Find …"
+msgstr "Buscar ..."
+
+#: source/tmp/GlobalSearch.vue.ts:125
+msgid "Filter …"
+msgstr "Filtra ..."
+
+#: source/tmp/GlobalSearch.vue.ts:128
+msgid "Filter search results"
+msgstr "Filtra los resultados"
+
+#: source/tmp/GlobalSearch.vue.ts:131
+msgid "Restrict search to directory"
+msgstr "Restringir búsqueda al directorio"
+
+#: source/tmp/GlobalSearch.vue.ts:134
+msgid "Restrict to directory …"
+msgstr "Restringir a directorio ..."
+
+#: source/tmp/GlobalSearch.vue.ts:137
+msgid "Search"
+msgstr "Búsqueda"
+
+#: source/tmp/GlobalSearch.vue.ts:140
+msgid "Clear search"
+msgstr "Limpiar búsqueda"
+
+#: source/tmp/GlobalSearch.vue.ts:143
+msgid "Toggle results"
+msgstr "Alternar resultados"
+
+#: source/tmp/Defaults.vue.ts:70
+msgid ""
+"This profile is protected. This means that it will be restored when you "
+"remove or rename it."
+msgstr ""
+"Este perfil está protegido. Esto significa que se restaurará cuando lo "
+"elimines o le cambies nombre."
+
+#: source/tmp/Defaults.vue.ts:73
+msgid ""
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
+msgstr ""
+
+#: source/tmp/Defaults.vue.ts:109
+msgid "Edit the default settings for imports or exports here."
+msgstr ""
+"Editar aquí la configuración por defecto para importaciones o exportaciones."
+
+#: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
+msgid "Saved!"
+msgstr "¡Guardado!"
+
+#: source/tmp/MainSidebar.vue.ts:72 source/tmp/OtherFilesTab.vue.ts:13
+msgid "Other files"
+msgstr "Otros archivos"
+
+#: source/tmp/MainSidebar.vue.ts:78 source/tmp/ToCTab.vue.ts:53
+msgid "Table of Contents"
+msgstr "Tabla de contenidos"
+
+#: source/tmp/ChartView.vue.ts:60
+msgid "Charts"
+msgstr "Gráficos"
+
+#: source/tmp/CalendarView.vue.ts:59
+msgid "Calendar"
+msgstr "Calendario"
+
+#: source/tmp/CalendarView.vue.ts:77
+msgid "January"
+msgstr "enero"
+
+#: source/tmp/CalendarView.vue.ts:78
+msgid "February"
+msgstr "febrero"
+
+#: source/tmp/CalendarView.vue.ts:79
+msgid "March"
+msgstr "marzo"
+
+#: source/tmp/CalendarView.vue.ts:80
+msgid "April"
+msgstr "abril"
+
+#: source/tmp/CalendarView.vue.ts:81
+msgid "May"
+msgstr "mayo"
+
+#: source/tmp/CalendarView.vue.ts:82
+msgid "June"
+msgstr "junio"
+
+#: source/tmp/CalendarView.vue.ts:83
+msgid "July"
+msgstr "julio"
+
+#: source/tmp/CalendarView.vue.ts:84
+msgid "August"
+msgstr "Agosto"
+
+#: source/tmp/CalendarView.vue.ts:85
+msgid "September"
+msgstr "septiembre"
+
+#: source/tmp/CalendarView.vue.ts:86
+msgid "October"
+msgstr "octubre"
+
+#: source/tmp/CalendarView.vue.ts:87
+msgid "November"
+msgstr "noviembre"
+
+#: source/tmp/CalendarView.vue.ts:88
+msgid "December"
+msgstr "diciembre"
+
+#: source/tmp/CalendarView.vue.ts:104
+msgid "Below the monthly average"
+msgstr "Por debajo de la media mensual"
+
+#: source/tmp/CalendarView.vue.ts:107
+msgid "Over the monthly average"
+msgstr "Por encima de la media mensual"
+
+#: source/tmp/CalendarView.vue.ts:110
+msgid "More than twice the monthly average"
+msgstr "Más del doble de la media mensual"
+
+#: source/tmp/SnippetsTab.vue.ts:50
+msgid "Rename snippet"
+msgstr "Renombrar fragmento"
+
+#: source/tmp/SnippetsTab.vue.ts:53
+msgid "Snippets let you define reusable pieces of text with variables."
+msgstr ""
+"Los fragmentos te permiten definir trozos de texto reutilizables con "
+"variables."
+
+#: source/tmp/file-tree.vue.ts:29
+msgid "Workspaces"
+msgstr "Áreas de trabajo"
+
+#: source/tmp/file-tree.vue.ts:32
+msgid "No open files or folders"
+msgstr "No hay archivos o carpetas abiertas"
+
+#: source/tmp/PopoverTags.vue.ts:36
+msgid "Name"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:37
+msgid "Count"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:55
+msgid "Filter tags…"
+msgstr "Filtrar tags..."
+
+#: source/tmp/PopoverTags.vue.ts:58
+msgid "Tag Cloud"
+msgstr "Nube de Tags (etiquetas)"
+
+#: source/tmp/PopoverTags.vue.ts:61
+msgid "Suggested tags for the current file"
+msgstr "Etiquetas sugeridas para el archivo actual"
+
+#: source/tmp/PopoverTags.vue.ts:64
+msgid "Add to file"
+msgstr "Añadir al archivo"
+
+#: source/tmp/OtherFilesTab.vue.ts:19
+msgid "No other files"
+msgstr "No hay otros archivos"
+
+#: source/tmp/Theme.vue.ts:37
+msgid "selected"
+msgstr "seleccionado"
+
+#: source/tmp/Theme.vue.ts:40
+msgid "click to select"
+msgstr "Clica para seleccionar"
+
+#: source/tmp/PopoverStats.vue.ts:111
+msgid "words last month"
+msgstr "palabras el mes pasado"
+
+#: source/tmp/PopoverStats.vue.ts:114
+msgid "daily average"
+msgstr "promedio diario"
+
+#: source/tmp/PopoverStats.vue.ts:117
+msgid "words today"
+msgstr "palabras hoy"
+
+#: source/tmp/PopoverStats.vue.ts:120
+msgid "🔥 You're on fire!"
+msgstr "🔥 ¡No hay quien te detenga!"
+
+#: source/tmp/PopoverStats.vue.ts:123
+msgid "💪 You're close to hitting your daily average!"
+msgstr "💪 ¡Estás cerca de llegar a tu promedio diario!"
+
+#: source/tmp/PopoverStats.vue.ts:126
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr "✍🏼 ¡A escribir para superar tu promedio diario!"
+
+#: source/tmp/PopoverStats.vue.ts:129
+msgid "More statistics …"
+msgstr "Más estadísticas..."
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
+msgid "Open Link"
+msgstr "Abrir enlace"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+msgid "Copy Mail Address"
+msgstr "Copiar dirección de correo"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+msgid "Copy Link"
+msgstr "Copiar enlace"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+msgid "Copy image to clipboard"
+msgstr "Copia la imagen en el porta-papeles"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
+msgid "Open in browser"
+msgstr "Abre en el navegador"
+
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
+msgid "Copy equation code"
+msgstr "Copia el código de la ecuación"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
+msgid "No suggestions"
+msgstr "Sin surgerencias"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
+msgid "Add to dictionary"
+msgstr "Añadir al diccionario"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
+msgid "Italic"
+msgstr "Cursiva"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
+msgid "Insert link"
+msgstr "Insertar enlace"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
+msgid "Insert numbered list"
+msgstr "Insertar lista numerada"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
+msgid "Insert unordered list"
+msgstr "Insertar lista no ordenada"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
+msgid "Insert tasklist"
+msgstr "Insertar lista de tareas"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+msgid "Blockquote"
+msgstr "Cita en bloque"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
+msgid "Insert Table"
+msgstr "Insertar tabla"
+
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+msgid "Spelling mistake"
+msgstr ""
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
+#, javascript-format
+msgid "File %s does not exist."
+msgstr ""
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
+msgid "Word count"
+msgstr "Recuento de palabras"
+
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:88
+msgid "No footnote text found."
+msgstr ""
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+msgid "Link"
+msgstr "Enlace"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
+msgid "Image"
+msgstr "Imagen"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+msgid "Comment"
+msgstr "Comentario"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+msgid "Code"
+msgstr "Code"
+
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/render-images.ts:94
+#, javascript-format
+msgid "Image not found: %s"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Open diagnostics panel"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
+msgid "Detect automatically"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
+msgid "Disabled"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
+#, fuzzy
+msgid "Custom"
+msgstr "CSS personalizado"
+
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr "ahora mismo"
+
+#: source/common/util/localise-number.ts:28
+msgid ","
+msgstr "."
+
+#: source/common/util/localise-number.ts:29
+msgid "."
+msgstr ","
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
@@ -1317,1216 +2528,6 @@ msgstr "Chino (China)"
 #, fuzzy
 msgid "Chinese"
 msgstr "Chino (China)"
-
-#: source/common/util/localise-number.ts:28
-msgid ","
-msgstr "."
-
-#: source/common/util/localise-number.ts:29
-msgid "."
-msgstr ","
-
-#: source/common/util/format-date.ts:33
-msgid "just now"
-msgstr "ahora mismo"
-
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
-msgid "Spelling mistake"
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
-#, javascript-format
-msgid "File %s does not exist."
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
-msgid "Word count"
-msgstr "Recuento de palabras"
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
-#: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
-msgid "Modified"
-msgstr "Modificado"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/win-preferences/schema/editor.ts:26
-#: source/win-preferences/schema/editor.ts:27
-msgid "Bold"
-msgstr "Negrita"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:34
-#: source/win-preferences/schema/editor.ts:35
-msgid "Italics"
-msgstr "Cursiva"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
-msgid "Link"
-msgstr "Enlace"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
-msgid "Image"
-msgstr "Imagen"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
-msgid "Comment"
-msgstr "Comentario"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
-msgid "Code"
-msgstr "Code"
-
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:88
-msgid "No footnote text found."
-msgstr ""
-
-#: source/common/modules/markdown-editor/renderers/render-images.ts:94
-#, javascript-format
-msgid "Image not found: %s"
-msgstr ""
-
-#: source/common/modules/markdown-editor/renderers/readability.ts:39
-#, javascript-format
-msgid "Readability mode (%s)"
-msgstr ""
-
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
-#: source/tmp/PopoverDocInfo.vue.ts:63 source/tmp/PopoverDirProps.vue.ts:144
-#: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
-#: source/tmp/file-item.vue.ts:207
-#, javascript-format
-msgid "%s words"
-msgstr "%s palabras"
-
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
-#: source/tmp/PopoverDocInfo.vue.ts:61 source/tmp/file-item.vue.ts:132
-#: source/tmp/file-item.vue.ts:205
-#, javascript-format
-msgid "%s characters"
-msgstr "Caracteres %"
-
-#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
-msgid "Detect automatically"
-msgstr ""
-
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
-msgid "Disabled"
-msgstr ""
-
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
-#, fuzzy
-msgid "Custom"
-msgstr "CSS personalizado"
-
-#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
-msgid "Open diagnostics panel"
-msgstr ""
-
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
-msgid "Copy equation code"
-msgstr "Copia el código de la ecuación"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
-msgid "Open Link"
-msgstr "Abrir enlace"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
-msgid "Copy Mail Address"
-msgstr "Copiar dirección de correo"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
-msgid "Copy Link"
-msgstr "Copiar enlace"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
-msgid "Copy image to clipboard"
-msgstr "Copia la imagen en el porta-papeles"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
-msgid "Open in browser"
-msgstr "Abre en el navegador"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
-msgid "No suggestions"
-msgstr "Sin surgerencias"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
-msgid "Add to dictionary"
-msgstr "Añadir al diccionario"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
-msgid "Italic"
-msgstr "Cursiva"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
-msgid "Insert link"
-msgstr "Insertar enlace"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
-msgid "Insert numbered list"
-msgstr "Insertar lista numerada"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
-msgid "Insert unordered list"
-msgstr "Insertar lista no ordenada"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
-msgid "Insert tasklist"
-msgstr "Insertar lista de tareas"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
-msgid "Blockquote"
-msgstr "Cita en bloque"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
-msgid "Insert Table"
-msgstr "Insertar tabla"
-
-#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
-msgid "No highlighting"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:23
-msgid "Display \"Open Preferences\" button"
-msgstr "Muestra el botón \"Abrir preferencias\""
-
-#: source/win-preferences/schema/toolbar.ts:28
-msgid "Display \"New File\" button"
-msgstr "Muestra el botón \"Archivo nuevo\""
-
-#: source/win-preferences/schema/toolbar.ts:33
-msgid "Display \"Previous File\" button"
-msgstr "Muestra el botón \"Archivo anterior\""
-
-#: source/win-preferences/schema/toolbar.ts:38
-msgid "Display \"Next File\" button"
-msgstr "Muestra el botón \"Próximo archivo\""
-
-#: source/win-preferences/schema/toolbar.ts:45
-msgid "Display readability button"
-msgstr "Muestra el botón \"Habilitar modo de legibilidad\""
-
-#: source/win-preferences/schema/toolbar.ts:50
-msgid "Display \"Insert Comment\" button"
-msgstr "Muestra el botón \"Insertar comentario\""
-
-#: source/win-preferences/schema/toolbar.ts:55
-msgid "Display link button"
-msgstr "Muestra el botón \"Enlace\""
-
-#: source/win-preferences/schema/toolbar.ts:60
-msgid "Display image button"
-msgstr "Muestra el botón \"Imagen\""
-
-#: source/win-preferences/schema/toolbar.ts:65
-msgid "Display task list button"
-msgstr "Muestra el botón \"Lista de tareas\""
-
-#: source/win-preferences/schema/toolbar.ts:70
-msgid "Display \"Insert Table\" button"
-msgstr "Muestra el botón \"Insertar tabla\""
-
-#: source/win-preferences/schema/toolbar.ts:75
-msgid "Display \"Insert Footnote\" button"
-msgstr "Muestra el botón \"Insertar nota a pie de página\""
-
-#: source/win-preferences/schema/toolbar.ts:82
-msgid "Display document info"
-msgstr "Muestra información del documento"
-
-#: source/win-preferences/schema/toolbar.ts:87
-msgid "Display Pomodoro-timer"
-msgstr "Muestra el temporizador Pomodoro"
-
-#: source/win-preferences/schema/advanced.ts:23
-msgid "Pattern for new filenames"
-msgstr "Patrón para nombres de archivo nuevos"
-
-#: source/win-preferences/schema/advanced.ts:29
-msgid "Do not prompt for filename when creating new files"
-msgstr "No pedir nombre al crear nuevos archivos"
-
-#: source/win-preferences/schema/advanced.ts:36
-msgid "Enable debug mode"
-msgstr "Activar el modo de depuración (debugging)"
-
-#: source/win-preferences/schema/advanced.ts:41
-msgid "Notify me about beta releases"
-msgstr "Notifiquame sobre las versiones beta"
-
-#: source/win-preferences/schema/advanced.ts:46
-msgid "Use native window appearance"
-msgstr "Utiliza la apariencia nativa de ventanas"
-
-#: source/win-preferences/schema/advanced.ts:52
-msgid "Delete items irreversibly, if moving them to trash fails"
-msgstr "Eliminar elementos de forma irreversible si falla enviar a la papelera"
-
-#: source/win-preferences/schema/advanced.ts:58
-msgid "Show app in the notification area"
-msgstr "Muestra la aplicación en el área de notificación"
-
-#: source/win-preferences/schema/advanced.ts:59
-msgid "Leave app running in the notification area"
-msgstr "Deja la aplicación funcionando en el área de notificación"
-
-#: source/win-preferences/schema/advanced.ts:66
-msgid "Automatically check for updates"
-msgstr "Comprueba automáticamente si hay actualizaciones"
-
-#: source/win-preferences/schema/advanced.ts:73
-msgid ""
-"Enter all file extensions that you want to see in your attachment sidebar. "
-"Separate them with a comma. Changes are recognised after a restart."
-msgstr ""
-"Introduce todas las extensiones de archivo que quieras ver en la barra "
-"lateral de archivos adjuntos. Sepáralas con una coma. Los cambios se "
-"registran después de un reinicio."
-
-#: source/win-preferences/schema/advanced.ts:81
-msgid "Zoom behavior"
-msgstr "Comportamiento del zoom"
-
-#: source/win-preferences/schema/advanced.ts:83
-msgid "Zoom resizes the whole GUI"
-msgstr "El zoom se aplica a toda la ventana"
-
-#: source/win-preferences/schema/advanced.ts:84
-msgid "Zoom changes the editor font size"
-msgstr "El zoom se aplica sólo al tamaño de la letra"
-
-#: source/win-preferences/schema/advanced.ts:91
-msgid "iFrame rendering whitelist"
-msgstr "Lista blanca de renderización de iFrame"
-
-#: source/win-preferences/schema/advanced.ts:94
-msgid "Hostname"
-msgstr "Nombre de la máquina"
-
-#: source/win-preferences/schema/advanced.ts:96
-#: source/win-preferences/schema/spellchecking.ts:83
-msgid "Search for entries …"
-msgstr "Buscando entradas..."
-
-#: source/win-preferences/schema/advanced.ts:102
-msgid "Activate Watchdog polling"
-msgstr "Activar la monitorización de encuesta"
-
-#: source/win-preferences/schema/advanced.ts:107
-msgid "Time to wait before writing a file is considered done (in ms)"
-msgstr ""
-"Tiempo de espera (en ms), antes de que la escritura de un fichero se "
-"considere realizada."
-
-#: source/win-preferences/schema/zettelkasten.ts:23
-msgid "ID regular expression"
-msgstr "Expresión regular de ID"
-
-#: source/win-preferences/schema/zettelkasten.ts:29
-msgid "Pattern used to generate new IDs"
-msgstr "Formato utilizado para generar nuevos IDs"
-
-#. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:38
-msgid "Options for ZKN elements"
-msgstr "Opciones para elementos del Zettelkasten ZKN (fichero)"
-
-#: source/win-preferences/schema/zettelkasten.ts:42
-#, fuzzy
-msgid "Link with filename only"
-msgstr "Solo el nombre del archivo"
-
-#: source/win-preferences/schema/zettelkasten.ts:47
-#, fuzzy
-msgid "When linking files, add the display name …"
-msgstr "Al enlazar, usar el nombre de archivo..."
-
-#: source/win-preferences/schema/zettelkasten.ts:50
-msgid "always"
-msgstr "Siempre"
-
-#: source/win-preferences/schema/zettelkasten.ts:51
-msgid "only when linking using the ID"
-msgstr "solo usar ID al enlazar"
-
-#: source/win-preferences/schema/zettelkasten.ts:52
-msgid "never"
-msgstr "nunca"
-
-#: source/win-preferences/schema/zettelkasten.ts:60
-msgid "Start a search when following Zettelkasten-links"
-msgstr "Empieza la búsqueda cuando se sigan los enlaces Zettelkasten"
-
-#: source/win-preferences/schema/zettelkasten.ts:65
-msgid "Automatically create non-existing files when following internal links"
-msgstr ""
-"Crear automáticamente los ficheros inexistentes cuando se siguen vínculos "
-"internos"
-
-#: source/win-preferences/schema/zettelkasten.ts:70
-msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
-msgstr ""
-"Poner los archivos creados automáticamente en este directorio (debe ser "
-"cargado en Zettlr)"
-
-#: source/win-preferences/schema/citations.ts:23
-msgid "How would you like autocomplete to insert your citations?"
-msgstr "Al insterar una cita ¿cómo debe autocompletarse?"
-
-#: source/win-preferences/schema/citations.ts:35
-msgid "Citation Database (CSL JSON or BibTex)"
-msgstr "Base de datos de citas (CSL JSON o BibTex)"
-
-#: source/win-preferences/schema/citations.ts:46
-msgid "CSL-Style (optional)"
-msgstr "Estilo CSL (opcional)"
-
-#: source/win-preferences/schema/autocorrect.ts:23
-msgid "Turn on AutoCorrect"
-msgstr "Activar Autocorrección"
-
-#: source/win-preferences/schema/autocorrect.ts:32
-msgid "Primary Magic Quotes"
-msgstr "Citas Mágicas Primarias"
-
-#: source/win-preferences/schema/autocorrect.ts:35
-#: source/win-preferences/schema/autocorrect.ts:56
-msgid "Disable Magic Quotes"
-msgstr "空"
-
-#: source/win-preferences/schema/autocorrect.ts:53
-msgid "Secondary Magic Quotes"
-msgstr "Citas Mágicas Secundarias"
-
-#: source/win-preferences/schema/autocorrect.ts:79
-msgid ""
-"Here you can define certain strings that will be replaced when AutoCorrect "
-"is on. The characters on the left side will be replaced with whatever comes "
-"on the right."
-msgstr ""
-"Aquí puedes definir ciertas cadenas que se reemplazarán cuando la "
-"Autocorrección esté activada. Los caracteres en el lado izquierdo serán "
-"reemplazados por los que están a la derecha."
-
-#: source/win-preferences/schema/editor.ts:23
-msgid ""
-"Choose the formatting characters that the bold/emphasis commands should use"
-msgstr ""
-"Elige los carácteres de formato que indican el marcado de negrita/énfasis"
-
-#: source/win-preferences/schema/editor.ts:42
-msgid "Autosave"
-msgstr "Autoguardado"
-
-#: source/win-preferences/schema/editor.ts:45
-#: source/win-preferences/schema/general.ts:56
-msgid "Off"
-msgstr "Apagado"
-
-#: source/win-preferences/schema/editor.ts:46
-msgid "Immediately"
-msgstr "Inmediatamente"
-
-#: source/win-preferences/schema/editor.ts:47
-msgid "After a short delay"
-msgstr "Después de un breve retraso"
-
-#: source/win-preferences/schema/editor.ts:54
-msgid "Default image path (relative or absolute)"
-msgstr "Path(ruta) predeterminada para imagenes (relativa o absoluta)"
-
-#: source/win-preferences/schema/editor.ts:59
-msgid "Indent by the following number of spaces"
-msgstr "Sangrado por el siguiente número de espacios"
-
-#: source/win-preferences/schema/editor.ts:64
-msgid "Indent using tabs"
-msgstr "Sangrar utilizando la tecla de tabulación"
-
-#: source/win-preferences/schema/editor.ts:69
-msgid "Editor font size"
-msgstr "Tamaño de la fuente del editor"
-
-#: source/win-preferences/schema/editor.ts:74
-msgid "Algorithm to use for the readability mode"
-msgstr "Algoritmo a utilizar para el modo de legibilidad"
-
-#: source/win-preferences/schema/editor.ts:85
-msgid "Editor input mode"
-msgstr "Modo de entrada del editor"
-
-#: source/win-preferences/schema/editor.ts:97
-msgid "Check Markdown for style issues"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:102
-#, fuzzy
-msgid "Show statusbar"
-msgstr "Muestra Zettlr"
-
-#: source/win-preferences/schema/editor.ts:109
-msgid "Mute non-focused lines in distraction-free mode"
-msgstr "Reducir brillo de las líneas no enfocadas en modo sin distracción."
-
-#: source/win-preferences/schema/editor.ts:114
-msgid "Automatically close matching character pairs"
-msgstr "Cerrar automáticamente pares de caracteres coincidentes"
-
-#: source/win-preferences/schema/editor.ts:119
-msgid "Accept spaces during autocompletion"
-msgstr "Acepta espacios durante la autocorrección"
-
-#: source/win-preferences/schema/editor.ts:124
-msgid "Enable Table Editor"
-msgstr "Habilitar editir de tablas"
-
-#: source/win-preferences/schema/editor.ts:129
-msgid "Show link previews"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:134
-msgid "Count characters instead of words (e.g., for Chinese)"
-msgstr "Contar caracteres en lugar de palabras (p. ej. para el chino)"
-
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:24
-msgid "These options determine which elements are rendered in documents."
-msgstr ""
-"Estas opciones determinan qué elementos se renderizan en los documentos."
-
-#: source/win-preferences/schema/display.ts:28
-msgid "Render Citations"
-msgstr "Renderizar citas"
-
-#: source/win-preferences/schema/display.ts:33
-msgid "Render Iframes"
-msgstr "Renderizar Iframes"
-
-#: source/win-preferences/schema/display.ts:38
-msgid "Render Images"
-msgstr "Renderizar imagenes"
-
-#: source/win-preferences/schema/display.ts:43
-msgid "Render Links"
-msgstr "Renderizar vínculos"
-
-#: source/win-preferences/schema/display.ts:48
-msgid "Render Formulae"
-msgstr "Renderizar  fórmulas"
-
-#: source/win-preferences/schema/display.ts:53
-msgid "Render Tasks"
-msgstr "Renderizar tareas"
-
-#: source/win-preferences/schema/display.ts:58
-msgid "Hide heading characters"
-msgstr "Ocultar caracteres de cabecera"
-
-#: source/win-preferences/schema/display.ts:63
-msgid "Render emphasis"
-msgstr "Redneriza los énfasis"
-
-#: source/win-preferences/schema/display.ts:71
-msgid "Here you can choose the theme for the app."
-msgstr "Aquí puedes elegir el tema para la app."
-
-#: source/win-preferences/schema/display.ts:112
-msgid "Use the operating system's accent colour instead of the theme colour"
-msgstr ""
-"Utilice el color de acento del sistema operativo en lugar del color del tema"
-
-#: source/win-preferences/schema/display.ts:116
-msgid "This setting is only available on Windows and macOS"
-msgstr "Esta configuración solo está disponible en Windows y macOS"
-
-#: source/win-preferences/schema/display.ts:122
-msgid "Hide toolbar in distraction free mode"
-msgstr "Ocultar la barra de herramientas en el modo libre de distracción"
-
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:129
-msgid "With these controls you can constrain the image previews."
-msgstr "Con estos controles puedes reducir las vistas previas de la imagen."
-
-#: source/win-preferences/schema/display.ts:133
-msgid "Maximum width of images (percent)"
-msgstr "Anchura máxima de las imágenes (en %)"
-
-#: source/win-preferences/schema/display.ts:141
-msgid "Maximum height of images (percent)"
-msgstr "Altura máxima de las imágenes (en %)"
-
-#: source/win-preferences/schema/general.ts:23
-msgid "Application language"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:36
-msgid "Show file information"
-msgstr "Mostrar información de archivo"
-
-#: source/win-preferences/schema/general.ts:46
-msgid "Avoid opening files in new tabs if possible"
-msgstr "Evita, cuando sea posible, abrir archivos en nuevas pestañas"
-
-#: source/win-preferences/schema/general.ts:53
-msgid "Automatically switch to dark mode"
-msgstr "Cambiar automáticamente al modo oscuro"
-
-#: source/win-preferences/schema/general.ts:57
-msgid "Schedule"
-msgstr "Horario"
-
-#: source/win-preferences/schema/general.ts:58
-msgid "Follow Operating System"
-msgstr "Seguir el sistema operativo"
-
-#: source/win-preferences/schema/general.ts:63
-msgid "Start dark mode at"
-msgstr "Empieza el modo oscuro a las"
-
-#: source/win-preferences/schema/general.ts:69
-msgid "End dark mode at"
-msgstr "Termina el modo oscuro a las"
-
-#: source/win-preferences/schema/general.ts:77
-msgid "File manager mode"
-msgstr "Modo de gestión de archivos"
-
-#: source/win-preferences/schema/general.ts:80
-msgid "Thin &mdash; show either file tree or file list"
-msgstr "Comprimir &mdash; muestra el árbol de archivos o la lista de archivos"
-
-#: source/win-preferences/schema/general.ts:81
-msgid "Expanded &mdash; show both file tree and file list"
-msgstr ""
-"Expandir &mdash; muestra tanto el árbol de archivos como la lista de archivos"
-
-#: source/win-preferences/schema/general.ts:82
-msgid "Combined &mdash; show files and directories in the file tree"
-msgstr ""
-"Combinar &mdash; mostrar archivos y directorios en el árbol de archivos"
-
-#: source/win-preferences/schema/general.ts:87
-msgid "Display files using"
-msgstr "Mostrar los archivos con"
-
-#: source/win-preferences/schema/general.ts:90
-msgid "Filename only"
-msgstr "Solo el nombre del archivo"
-
-#: source/win-preferences/schema/general.ts:91
-msgid "Title if applicable"
-msgstr "Título, si procede"
-
-#: source/win-preferences/schema/general.ts:92
-msgid "First heading level 1 if applicable"
-msgstr "Primera cabecera de nivel 1, si procede"
-
-#: source/win-preferences/schema/general.ts:93
-msgid "Title or first heading level 1 if applicable"
-msgstr "Título o primera cabecera de nivel 1, si procede"
-
-#: source/win-preferences/schema/general.ts:98
-msgid "Display Markdown file extensions"
-msgstr "Mostrar las extensiones de los archivos Markdown"
-
-#: source/win-preferences/schema/general.ts:106
-msgid "Sorting order for files (used for sorting by name)"
-msgstr "Orden de archivos (se utiliza para ordenar por nombre)"
-
-#: source/win-preferences/schema/general.ts:109
-msgid "Natural order (10 after 2)"
-msgstr "Orden natural (10 después de 2)"
-
-#: source/win-preferences/schema/general.ts:110
-msgid "ASCII order (2 after 10)"
-msgstr "Orden ASCII (2 después de 10)"
-
-#: source/win-preferences/schema/general.ts:117
-msgid "Show folders above files"
-msgstr "Muestra carpetas encima de los archivos"
-
-#: source/win-preferences/schema/general.ts:124
-msgid "When sorting by time, sort by"
-msgstr "En ordenar por tiempo, ordena por"
-
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
-msgid "Last modification time"
-msgstr "Hora de la última modificación"
-
-#: source/win-preferences/schema/general.ts:128
-#: source/win-preferences/schema/general.ts:137
-msgid "File creation time"
-msgstr "Hora de creación del archivo"
-
-#: source/win-preferences/schema/general.ts:133
-msgid "In the file metadata display"
-msgstr "En la vista de metadatos del archivo"
-
-#: source/win-preferences/schema/export.ts:23
-msgid "Use the internal Pandoc for exports"
-msgstr "Utiliza el Pandoc interno para exportar"
-
-#: source/win-preferences/schema/export.ts:30
-msgid "Remove tags from files"
-msgstr "Eliminar tags de archivos"
-
-#: source/win-preferences/schema/export.ts:40
-msgid "Remove internal links completely"
-msgstr "Eliminar de manera completa los vínculos internos"
-
-#: source/win-preferences/schema/export.ts:41
-msgid "Unlink internal links"
-msgstr "Desvincular vínculos internos"
-
-#: source/win-preferences/schema/export.ts:42
-msgid "Don't touch internal links"
-msgstr "No manipular los vínculos internos"
-
-#: source/win-preferences/schema/export.ts:49
-msgid ""
-"Target directory for exported files. <em>Attention:</em> Selecting the "
-"current working directory will overwrite files without warning!"
-msgstr ""
-"Carpeta de destino de los archivos exportados. <em>Atención:</em> "
-"¡Seleccionar la carpeta de trabajo actual sobreescribirá los archivos sin "
-"previo aviso!"
-
-#: source/win-preferences/schema/export.ts:52
-msgid "Temporary directory: is regularly expunged"
-msgstr "Carpeta temporal: se borra regularmente"
-
-#: source/win-preferences/schema/export.ts:53
-msgid ""
-"Current working directory: exported files will be saved into the currently "
-"selected directory."
-msgstr ""
-"Carpeta de trabajo actual: los archivos exportados se guardarán en la "
-"carpeta que está seleccionada actualmente."
-
-#: source/win-preferences/schema/export.ts:54
-msgid "Ask for directory"
-msgstr "Pedir directorio"
-
-#: source/win-preferences/schema/spellchecking.ts:23
-msgid "Use LanguageTool"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:28
-msgid "Strictness"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:30
-#, fuzzy
-msgid "Standard"
-msgstr "Calendario"
-
-#: source/win-preferences/schema/spellchecking.ts:31
-msgid "Picky"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:38
-msgid "LanguageTool Provider"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:41
-#: source/win-preferences/schema/spellchecking.ts:48
-#, fuzzy
-msgid "Custom server"
-msgstr "CSS personalizado"
-
-#: source/win-preferences/schema/spellchecking.ts:55
-msgid "LanguageTool Username"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:61
-msgid "LanguageTool API key"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:69
-msgid ""
-"Select the languages for which you want to enable automatic spell checking."
-msgstr ""
-"Elige los idiomas para los que deseas habilitar el corrector ortográfico "
-"automático."
-
-#: source/win-preferences/schema/spellchecking.ts:74
-msgid "Search for dictionaries &hellip;"
-msgstr "Buscar diccionarios &hellip;"
-
-#: source/win-preferences/schema/spellchecking.ts:78
-msgid "User dictionary. Remove words by clicking them."
-msgstr "Diccionario del usuario. Elimine las palabras haciendo clic en ellas."
-
-#: source/win-preferences/schema/spellchecking.ts:80
-msgid "Dictionary entry"
-msgstr "Entrada de diccionario"
-
-#: source/tmp/PopoverDocInfo.vue.ts:35
-msgid "No open document"
-msgstr "No hay ningún documento abierto"
-
-#: source/tmp/PopoverDocInfo.vue.ts:38
-msgid "words"
-msgstr "palabras"
-
-#: source/tmp/PopoverDocInfo.vue.ts:41
-msgid "characters"
-msgstr "caracteres"
-
-#: source/tmp/PopoverTags.vue.ts:36
-msgid "Name"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:37
-msgid "Count"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:55
-msgid "Filter tags…"
-msgstr "Filtrar tags..."
-
-#: source/tmp/PopoverTags.vue.ts:58
-msgid "Tag Cloud"
-msgstr "Nube de Tags (etiquetas)"
-
-#: source/tmp/PopoverTags.vue.ts:61
-msgid "Suggested tags for the current file"
-msgstr "Etiquetas sugeridas para el archivo actual"
-
-#: source/tmp/PopoverTags.vue.ts:64
-msgid "Add to file"
-msgstr "Añadir al archivo"
-
-#: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
-msgid "No results"
-msgstr "Sin resultados"
-
-#: source/tmp/file-list.vue.ts:69
-msgid "No directory selected"
-msgstr "Ningún directorio seleccionado"
-
-#: source/tmp/file-list.vue.ts:72
-msgid "Empty directory"
-msgstr "Directorio vacío"
-
-#: source/tmp/file-tree.vue.ts:29
-msgid "Workspaces"
-msgstr "Áreas de trabajo"
-
-#: source/tmp/file-tree.vue.ts:32
-msgid "No open files or folders"
-msgstr "No hay archivos o carpetas abiertas"
-
-#: source/tmp/ToCTab.vue.ts:53 source/tmp/MainSidebar.vue.ts:78
-msgid "Table of Contents"
-msgstr "Tabla de contenidos"
-
-#: source/tmp/General-Tab.vue.ts:23
-msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
-msgstr ""
-"Zettlr es un proyecto de Hendrik Erz, licenciado bajo la licencia GNU GPL "
-"v3. Es de código abierto, gratuito y basado en el framework de Electron. "
-"Zettlr agradece a los desarrolladores de Electron, del framework Node.js y "
-"del editor CodeMirror por su trabajo. Sin ellos, Zettlr no sería posible. "
-"Abajo puedes encontrar todos los proyectos que Zettlr utiliza"
-
-#: source/tmp/General-Tab.vue.ts:24
-msgid ""
-"Zettlr makes use of citeproc to display citations directly in the editor. To "
-"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
-msgstr ""
-"Zettlr utiliza citeproc para mostrar las citas directamente en el editor. "
-"Para ello, Zettlr utiliza los archivos de lenguaje y estilo "
-"CitationStyleLanguage (CSL). Los archivos se han enviado sin alterar con "
-"metadatos de autor. Más información:"
-
-#: source/tmp/General-Tab.vue.ts:25
-msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
-msgstr ""
-"Todos los logotipos y marcas están sujetos a sus legítimos propietarios. "
-"Además de usar su código, Zettlr no está de ninguna manera afiliado a "
-"ninguno de estos proyectos. Node.js es una marca registrada de Joyent, Inc."
-
-#: source/tmp/General-Tab.vue.ts:26
-msgid ""
-"Zettlr offers an integration with LanguageTool.org, a service provided by "
-"LanguageTooler GmbH. Using this service requires an internet connection and "
-"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
-"server that you use."
-msgstr ""
-
-#: source/tmp/List.vue.ts:141
-msgid "Add"
-msgstr "Añadir"
-
-#: source/tmp/List.vue.ts:144
-msgid "Actions"
-msgstr "Acciones"
-
-#: source/tmp/List.vue.ts:147
-#, fuzzy
-msgid "Delete"
-msgstr "Eliminar archivo"
-
-#. Apparently we have a simple array, so exactly one column
-#: source/tmp/List.vue.ts:169
-msgid "Item"
-msgstr "Ítem"
-
-#: source/tmp/PopoverDirProps.vue.ts:147 source/tmp/file-item.vue.ts:113
-msgid "Directories"
-msgstr "Directorios"
-
-#: source/tmp/PopoverDirProps.vue.ts:153 source/tmp/PopoverFileProps.vue.ts:65
-msgid "Created"
-msgstr "Creado"
-
-#: source/tmp/PopoverDirProps.vue.ts:162
-msgid "Project Settings…"
-msgstr "Configuración del proyecto...."
-
-#: source/tmp/MainSidebar.vue.ts:72 source/tmp/OtherFilesTab.vue.ts:13
-msgid "Other files"
-msgstr "Otros archivos"
-
-#: source/tmp/MainSidebar.vue.ts:75 source/tmp/ReferencesTab.vue.ts:20
-msgid "References"
-msgstr "Referencias"
-
-#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:27
-msgid "Related files"
-msgstr "Archivos relacionados"
-
-#: source/tmp/Theme.vue.ts:37
-msgid "selected"
-msgstr "seleccionado"
-
-#: source/tmp/Theme.vue.ts:40
-msgid "click to select"
-msgstr "Clica para seleccionar"
-
-#: source/tmp/PopoverFileProps.vue.ts:62 source/tmp/file-item.vue.ts:195
-msgid "Words"
-msgstr "Palabras"
-
-#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/ShortcutChooser.vue.ts:61
-#: source/tmp/Number.vue.ts:59 source/tmp/File.vue.ts:59
-#: source/tmp/Color.vue.ts:50
-msgid "Reset"
-msgstr "Reinicia"
-
-#: source/tmp/PopoverFileProps.vue.ts:74
-msgid "Set writing target…"
-msgstr "Establece un objetivo de escritura...."
-
-#: source/tmp/PopoverFileProps.vue.ts:77 source/tmp/file-item.vue.ts:193
-msgid "Characters"
-msgstr "Caracteres"
-
-#: source/tmp/OtherFilesTab.vue.ts:19
-msgid "No other files"
-msgstr "No hay otros archivos"
-
-#: source/tmp/ReferencesTab.vue.ts:32
-msgid "There are no citations in this document."
-msgstr "No hay citas en este documento."
-
-#: source/tmp/GlobalSearch.vue.ts:116
-msgid "Full-Text Search"
-msgstr "Búsqueda de texto completo"
-
-#: source/tmp/GlobalSearch.vue.ts:119
-msgid "Enter your search terms below"
-msgstr "Introduce tus términos de búsqueda a continuación"
-
-#: source/tmp/GlobalSearch.vue.ts:122
-msgid "Find …"
-msgstr "Buscar ..."
-
-#: source/tmp/GlobalSearch.vue.ts:125
-msgid "Filter …"
-msgstr "Filtra ..."
-
-#: source/tmp/GlobalSearch.vue.ts:128
-msgid "Filter search results"
-msgstr "Filtra los resultados"
-
-#: source/tmp/GlobalSearch.vue.ts:131
-msgid "Restrict search to directory"
-msgstr "Restringir búsqueda al directorio"
-
-#: source/tmp/GlobalSearch.vue.ts:134
-msgid "Restrict to directory …"
-msgstr "Restringir a directorio ..."
-
-#: source/tmp/GlobalSearch.vue.ts:137
-msgid "Search"
-msgstr "Búsqueda"
-
-#: source/tmp/GlobalSearch.vue.ts:140
-msgid "Clear search"
-msgstr "Limpiar búsqueda"
-
-#: source/tmp/GlobalSearch.vue.ts:143
-msgid "Toggle results"
-msgstr "Alternar resultados"
-
-#: source/tmp/ChartView.vue.ts:60
-msgid "Charts"
-msgstr "Gráficos"
-
-#: source/tmp/Defaults.vue.ts:70
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
-msgstr ""
-"Este perfil está protegido. Esto significa que se restaurará cuando lo "
-"elimines o le cambies nombre."
-
-#: source/tmp/Defaults.vue.ts:73
-msgid ""
-"This profile is invalid. It may contain errors, or it may be missing the "
-"writer or reader property."
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:109
-msgid "Edit the default settings for imports or exports here."
-msgstr ""
-"Editar aquí la configuración por defecto para importaciones o exportaciones."
-
-#: source/tmp/Defaults.vue.ts:192 source/tmp/SnippetsTab.vue.ts:124
-#: source/tmp/CustomCSS.vue.ts:88
-msgid "Saving …"
-msgstr "Guardando..."
-
-#: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
-msgid "Saved!"
-msgstr "¡Guardado!"
-
-#: source/tmp/CalendarView.vue.ts:59
-msgid "Calendar"
-msgstr "Calendario"
-
-#: source/tmp/CalendarView.vue.ts:77
-msgid "January"
-msgstr "enero"
-
-#: source/tmp/CalendarView.vue.ts:78
-msgid "February"
-msgstr "febrero"
-
-#: source/tmp/CalendarView.vue.ts:79
-msgid "March"
-msgstr "marzo"
-
-#: source/tmp/CalendarView.vue.ts:80
-msgid "April"
-msgstr "abril"
-
-#: source/tmp/CalendarView.vue.ts:81
-msgid "May"
-msgstr "mayo"
-
-#: source/tmp/CalendarView.vue.ts:82
-msgid "June"
-msgstr "junio"
-
-#: source/tmp/CalendarView.vue.ts:83
-msgid "July"
-msgstr "julio"
-
-#: source/tmp/CalendarView.vue.ts:84
-msgid "August"
-msgstr "Agosto"
-
-#: source/tmp/CalendarView.vue.ts:85
-msgid "September"
-msgstr "septiembre"
-
-#: source/tmp/CalendarView.vue.ts:86
-msgid "October"
-msgstr "octubre"
-
-#: source/tmp/CalendarView.vue.ts:87
-msgid "November"
-msgstr "noviembre"
-
-#: source/tmp/CalendarView.vue.ts:88
-msgid "December"
-msgstr "diciembre"
-
-#: source/tmp/CalendarView.vue.ts:104
-msgid "Below the monthly average"
-msgstr "Por debajo de la media mensual"
-
-#: source/tmp/CalendarView.vue.ts:107
-msgid "Over the monthly average"
-msgstr "Por encima de la media mensual"
-
-#: source/tmp/CalendarView.vue.ts:110
-msgid "More than twice the monthly average"
-msgstr "Más del doble de la media mensual"
-
-#: source/tmp/PopoverStats.vue.ts:111
-msgid "words last month"
-msgstr "palabras el mes pasado"
-
-#: source/tmp/PopoverStats.vue.ts:114
-msgid "daily average"
-msgstr "promedio diario"
-
-#: source/tmp/PopoverStats.vue.ts:117
-msgid "words today"
-msgstr "palabras hoy"
-
-#: source/tmp/PopoverStats.vue.ts:120
-msgid "🔥 You're on fire!"
-msgstr "🔥 ¡No hay quien te detenga!"
-
-#: source/tmp/PopoverStats.vue.ts:123
-msgid "💪 You're close to hitting your daily average!"
-msgstr "💪 ¡Estás cerca de llegar a tu promedio diario!"
-
-#: source/tmp/PopoverStats.vue.ts:126
-msgid "✍🏼 Get writing to surpass your daily average."
-msgstr "✍🏼 ¡A escribir para superar tu promedio diario!"
-
-#: source/tmp/PopoverStats.vue.ts:129
-msgid "More statistics …"
-msgstr "Más estadísticas..."
-
-#: source/tmp/RelatedFilesTab.vue.ts:30
-msgid "No related files"
-msgstr "Archivos no relacionados"
-
-#: source/tmp/RelatedFilesTab.vue.ts:33
-msgid "This relation is based on a bidirectional link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:36
-msgid "This relation is based on an outbound link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:39
-msgid "This relation is based on a backlink."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:228
-#, javascript-format
-msgid "This relation is based on %s shared tags: %s"
-msgstr ""
-
-#: source/tmp/PopoverPomodoro.vue.ts:72
-msgid "Start"
-msgstr "Iniciar"
-
-#: source/tmp/PopoverPomodoro.vue.ts:75
-msgid "Stop"
-msgstr "Parar"
-
-#: source/tmp/PopoverPomodoro.vue.ts:78
-msgid "Work"
-msgstr "Trabajo"
-
-#: source/tmp/PopoverPomodoro.vue.ts:81
-msgid "Short break"
-msgstr "Pausa breve"
-
-#: source/tmp/PopoverPomodoro.vue.ts:84
-msgid "Break"
-msgstr "Descanso"
-
-#: source/tmp/PopoverPomodoro.vue.ts:87
-msgid "Sound Effect"
-msgstr ""
-
-#: source/tmp/PopoverPomodoro.vue.ts:90
-msgid "Volume"
-msgstr ""
-
-#: source/tmp/Projects-Tab.vue.ts:24
-msgid "Zettlr also makes use of these projects:"
-msgstr "Zettlr también hace uso de los siguientes proyectos:"
-
-#: source/tmp/App.vue.ts:34
-msgid "Updater"
-msgstr "Actualizador"
-
-#. True as soon as the update starts
-#: source/tmp/App.vue.ts:36
-msgid "Click to start update"
-msgstr "Clica para empezar la actualización"
-
-#: source/tmp/App.vue.ts:75
-msgid "New update available"
-msgstr "Nueva actualización disponible"
-
-#: source/tmp/App.vue.ts:78
-msgid "Your version"
-msgstr "Tu versión"
-
-#: source/tmp/App.vue.ts:81
-msgid ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
-msgstr ""
-"Hay una nueva versión de Zettlr disponible para descargar. Por favor, lee el "
-"changelog (registro de cambios) a continuación."
-
-#: source/tmp/App.vue.ts:84
-msgid "Downloading your update"
-msgstr "Descargando la actualización"
-
-#: source/tmp/App.vue.ts:87
-msgid "No update available. You have the most recent version."
-msgstr "No hay actualizaciones disponibles. Esta es la versión más reciente"
-
-#: source/tmp/App.vue.ts:132
-msgid "Starting update …"
-msgstr "Empezando la actualización..."
-
-#: source/tmp/SnippetsTab.vue.ts:50
-msgid "Rename snippet"
-msgstr "Renombrar fragmento"
-
-#: source/tmp/SnippetsTab.vue.ts:53
-msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
-"Los fragmentos te permiten definir trozos de texto reutilizables con "
-"variables."
-
-#: source/tmp/CustomCSS.vue.ts:31
-msgid "Custom CSS"
-msgstr "CSS personalizado"
-
-#: source/tmp/CustomCSS.vue.ts:32
-msgid ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted behaviour!</"
-"strong>"
-msgstr ""
-"Aquí puedes sobrepasar los estilos de Zettlr para personalizarlo aún más. "
-"<strong>Atención: Este archivo sobrescribe todas las directivas CSS! Nunca "
-"altere la geometría de los elementos, de lo contrario la aplicación puede "
-"exponer comportamientos no deseados!</strong>"
-
-#: source/tmp/CustomCSS.vue.ts:97
-msgid "Saving failed"
-msgstr "Ha fallado el guardado"
 
 #~ msgid "characters (w/o spaces)"
 #~ msgstr "palabras (sin espacio)"

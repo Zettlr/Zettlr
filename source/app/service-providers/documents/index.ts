@@ -41,6 +41,18 @@ const MAX_VERSION_HISTORY = 100 // Keep no more than this many updates.
 const DELAYED_SAVE_TIMEOUT = 5000 // Delayed timeout means: Save after 5 seconds
 const IMMEDIATE_SAVE_TIMEOUT = 250 // Even "immediate" should not save immediate to save disk space
 
+export interface DocumentsUpdateContext {
+  windowId?: string
+  leafId?: string
+  filePath?: string
+  direction?: 'horizontal'|'vertical'
+  insertion?: 'after'|'before'
+  newLeaf?: string
+  originLeaf?: string
+  key?: string
+  status?: 'modification'|'pinned'
+}
+
 /**
  * Holds all information associated with a document that is currently loaded
  */
@@ -521,7 +533,7 @@ export default class DocumentManager extends ProviderContract {
     this._config.shutdown()
   }
 
-  private broadcastEvent (event: DP_EVENTS, context?: any): void {
+  private broadcastEvent (event: DP_EVENTS, context?: DocumentsUpdateContext): void {
     // Here we blast an event notification across every line of code of the app
     broadcastIpcMessage('documents-update', { event, context })
     this._emitter.emit(event, context)
@@ -1066,23 +1078,7 @@ export default class DocumentManager extends ProviderContract {
     const idx = this.documents.findIndex(file => file.filePath === filePath)
     this.documents.splice(idx, 1)
     // Indicate to all affected editors that they should reload the file
-    this.broadcastEvent(DP_EVENTS.FILE_REMOTELY_CHANGED, filePath)
-  }
-
-  /**
-   * Sets the given descriptor as active file.
-   *
-   * @param {MDFileDescriptor|CodeFileDescriptor|null} descriptorPath The descriptor to make active file
-   */
-  public setActiveFile (windowId: string, leafId: string, filePath: string|null): void {
-    const leaf = this._windows[windowId].findLeaf(leafId)
-    if (leaf === undefined) {
-      return
-    }
-
-    leaf.tabMan.activeFile = filePath
-    this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath })
-    this.syncToConfig()
+    this.broadcastEvent(DP_EVENTS.FILE_REMOTELY_CHANGED, { filePath })
   }
 
   public sortOpenFiles (windowId: string, leafId: string, newOrder: string[]): void {

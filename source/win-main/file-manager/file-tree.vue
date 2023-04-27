@@ -16,6 +16,7 @@
 
       <div v-show="getFiles.length > 0" id="directories-files-header">
         <cds-icon
+          v-if="platform !== 'darwin'"
           shape="file"
           role="presentation"
         ></cds-icon>{{ fileSectionHeading }}
@@ -32,6 +33,7 @@
       </TreeItem>
       <div v-show="getDirectories.length > 0" id="directories-dirs-header">
         <cds-icon
+          v-if="platform !== 'darwin'"
           shape="tree-view"
           role="presentation"
         ></cds-icon>{{ workspaceSectionHeading }}
@@ -137,6 +139,9 @@ export default defineComponent({
     }
   },
   computed: {
+    platform: function () {
+      return process.platform
+    },
     fileTree: function (): MaybeRootDescriptor[] {
       return this.$store.state.fileTree
     },

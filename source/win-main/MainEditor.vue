@@ -7,65 +7,9 @@
       'code-file': !isMarkdown,
       'fullscreen': distractionFree
     }"
-    v-on:dragenter="handleDragEnter($event, 'editor')"
-    v-on:dragleave="handleDragLeave($event)"
-    v-on:drop="handleDrop($event, 'editor')"
   >
     <div v-bind:id="`cm-text-${props.leafId}`">
       <!-- This element will be replaced with Codemirror's wrapper element on mount -->
-    </div>
-
-    <div
-      v-if="documentTabDrag"
-      v-bind:class="{
-        dropzone: true,
-        top: true,
-        dragover: documentTabDragWhere === 'top'
-      }"
-      v-on:drop="handleDrop($event, 'top')"
-      v-on:dragenter="handleDragEnter($event, 'top')"
-      v-on:dragleave="handleDragLeave($event)"
-    >
-      <cds-icon v-if="documentTabDragWhere === 'top'" shape="angle" direction="up"></cds-icon>
-    </div>
-    <div
-      v-if="documentTabDrag"
-      v-bind:class="{
-        dropzone: true,
-        left: true,
-        dragover: documentTabDragWhere === 'left'
-      }"
-      v-on:drop="handleDrop($event, 'left')"
-      v-on:dragenter="handleDragEnter($event, 'left')"
-      v-on:dragleave="handleDragLeave($event)"
-    >
-      <cds-icon v-if="documentTabDragWhere === 'left'" shape="angle" direction="left"></cds-icon>
-    </div>
-    <div
-      v-if="documentTabDrag"
-      v-bind:class="{
-        dropzone: true,
-        bottom: true,
-        dragover: documentTabDragWhere === 'bottom'
-      }"
-      v-on:drop="handleDrop($event, 'bottom')"
-      v-on:dragenter="handleDragEnter($event, 'bottom')"
-      v-on:dragleave="handleDragLeave($event)"
-    >
-      <cds-icon v-if="documentTabDragWhere === 'bottom'" shape="angle" direction="down"></cds-icon>
-    </div>
-    <div
-      v-if="documentTabDrag"
-      v-bind:class="{
-        dropzone: true,
-        right: true,
-        dragover: documentTabDragWhere === 'right'
-      }"
-      v-on:drop="handleDrop($event, 'right')"
-      v-on:dragenter="handleDragEnter($event, 'right')"
-      v-on:dragleave="handleDragLeave($event)"
-    >
-      <cds-icon v-if="documentTabDragWhere === 'right'" shape="angle" direction="right"></cds-icon>
     </div>
   </div>
 </template>
@@ -183,7 +127,7 @@ ipcRenderer.on('shortcut', (event, command) => {
 })
 
 ipcRenderer.on('documents-update', (e, { event, context }) => {
-  if (event === DP_EVENTS.FILE_REMOTELY_CHANGED && context === props.file.path) {
+  if (event === DP_EVENTS.FILE_REMOTELY_CHANGED && context.filePath === props.file.path) {
     // The currently loaded document has been changed remotely. This event indicates
     // that the document provider has already reloaded the document and we only
     // need to tell the main editor to reload it as well.
@@ -228,8 +172,6 @@ onMounted(() => {
 
 // DATA SETUP
 const showSearch = ref(false)
-const documentTabDrag = ref(false)
-const documentTabDragWhere = ref<undefined|string>(undefined)
 
 // COMPUTED PROPERTIES
 const useH1 = computed<boolean>(() => store.state.config.fileNameDisplay.includes('heading'))
@@ -591,82 +533,6 @@ function maybeHighlightSearchResults () {
   currentEditor.highlightRanges(rangesToHighlight)
 }
 
-function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
-  const DELIM = (process.platform === 'win32') ? ';' : ':'
-  const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
-  if (documentTab !== undefined && documentTab.includes(DELIM)) {
-    documentTabDrag.value = false
-    event.stopPropagation()
-    event.preventDefault()
-    // At this point, we have received a drop we need to handle it. There
-    // are two possibilities: Either the user has dropped the file onto the
-    // editor, which means the file should be moved from its origin here.
-    // Or, the user has dropped the file onto one of the four edges. In that
-    // case, we need to first split this specific leaf, and then move the
-    // dropped file there. The drag data contains both the origin and the
-    // path, separated by the $PATH delimiter -> window:leaf:absPath
-    const [ originWindow, originLeaf, filePath ] = documentTab.split(DELIM)
-    if (where === 'editor' && props.leafId === originLeaf) {
-      // Nothing to do, the user dropped the file on the origin
-      return false
-    }
-
-    // Now actually perform the act
-    if (where === 'editor') {
-      ipcRenderer.invoke('documents-provider', {
-        command: 'move-file',
-        payload: {
-          originWindow,
-          targetWindow: props.windowId,
-          originLeaf,
-          targetLeaf: props.leafId,
-          path: filePath
-        }
-      })
-        .catch(err => console.error(err))
-    } else {
-      const dir = ([ 'left', 'right' ].includes(where)) ? 'horizontal' : 'vertical'
-      const ins = ([ 'top', 'left' ].includes(where)) ? 'before' : 'after'
-      ipcRenderer.invoke('documents-provider', {
-        command: 'split-leaf',
-        payload: {
-          originWindow: props.windowId,
-          originLeaf: props.leafId,
-          direction: dir,
-          insertion: ins,
-          path: filePath,
-          fromWindow: originWindow,
-          fromLeaf: originLeaf
-        }
-      })
-        .catch(err => console.error(err))
-    }
-  }
-}
-
-function handleDragEnter (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
-  const hasDocumentTab = event.dataTransfer?.types.includes('zettlr/document-tab') ?? false
-  if (hasDocumentTab) {
-    event.stopPropagation()
-    documentTabDrag.value = true
-    documentTabDragWhere.value = where
-  }
-}
-
-function handleDragLeave (event: DragEvent) {
-  const hasDocumentTab = event.dataTransfer?.types.includes('zettlr/document-tab') ?? false
-  const editor = currentEditor?.instance.dom
-  if (hasDocumentTab && editor !== undefined) {
-    const bounds = editor.getBoundingClientRect()
-    const outX = event.clientX < bounds.left || event.clientX > bounds.right
-    const outY = event.clientY < bounds.top || event.clientY > bounds.bottom
-    if (outX || outY) {
-      documentTabDrag.value = false
-      documentTabDragWhere.value = undefined
-    }
-  }
-}
-
 </script>
 
 <style lang="less">
@@ -680,8 +546,6 @@ function handleDragLeave (event: DragEvent) {
 @editor-margin-fullscreen-xl:  20vw;
 @editor-margin-fullscreen-xxl: 30vw;
 
-@dropzone-size: 60px;
-
 .main-editor-wrapper {
   width: 100%;
   height: 100%;
@@ -693,85 +557,6 @@ function handleDragLeave (event: DragEvent) {
 
   &.fullscreen {
     z-index: 100; // Ensure this editor instance is on top of any other pane
-  }
-
-  @keyframes caretup {
-    from { margin-bottom: 0; opacity: 1; }
-    50% { opacity: 0; }
-    75% { margin-bottom: @dropzone-size; opacity: 0; }
-    to { margin-bottom: @dropzone-size; opacity: 0; }
-  }
-  @keyframes caretdown {
-    from { margin-top: 0; opacity: 1; }
-    50% { opacity: 0; }
-    75% { margin-top: @dropzone-size; opacity: 0; }
-    to { margin-top: @dropzone-size; opacity: 0; }
-  }
-  @keyframes caretleft {
-    from { margin-right: 0; opacity: 1; }
-    50% { opacity: 0; }
-    75% { margin-right: @dropzone-size; opacity: 0; }
-    to { margin-right: @dropzone-size; opacity: 0; }
-  }
-  @keyframes caretright {
-    from { margin-left: 0; opacity: 1; }
-    50% { opacity: 0; }
-    75% { margin-left: @dropzone-size; opacity: 0; }
-    to { margin-left: @dropzone-size; opacity: 0; }
-  }
-
-  div.dropzone {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0);
-    transition: all 0.3s ease;
-    // Display the direction caret centered ...
-    display: flex;
-    align-items: center;
-    // ... and in white (against the dragover background color)
-    color: white;
-
-    cds-icon { margin: 0; }
-
-    &.dragover {
-      background-color: rgba(21, 61, 107, 0.5);
-      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .2);
-      backdrop-filter: blur(2px);
-    }
-
-    &.top {
-      top: 0;
-      width: 100%;
-      height: @dropzone-size;
-      flex-direction: column-reverse;
-      cds-icon { animation: 1s ease-out infinite running caretup; }
-    }
-
-    &.left {
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: @dropzone-size;
-      flex-direction: row-reverse;
-      cds-icon { animation: 1s ease-out infinite running caretleft; }
-    }
-
-    &.right {
-      top: 0;
-      right: 0;
-      height: 100%;
-      width: @dropzone-size;
-      flex-direction: row;
-      cds-icon { animation: 1s ease-out infinite running caretright; }
-    }
-
-    &.bottom {
-      bottom: 0;
-      width: 100%;
-      height: @dropzone-size;
-      justify-content: center;
-      align-items: flex-start;
-      cds-icon { animation: 1s ease-out infinite running caretdown; }
-    }
   }
 
   .cm-editor {
@@ -858,7 +643,7 @@ body.dark .main-editor-wrapper {
 
 body.darwin {
     .main-editor-wrapper.fullscreen {
-     border-top: 1px solid #d5d5d5;
+      border-top: 1px solid #d5d5d5;
   }
 
   &.dark {
