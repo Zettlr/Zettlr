@@ -23,53 +23,56 @@ Mais, maintenant : Allons-y !
 
 ## À propos de ce tutoriel 🎬
 
-Tout d'abord, vous vous demandez peut-être en quoi consiste ce tutoriel. Certaines applications Markdown utilisent un tel tutoriel interactif en guise de guide pratique pour l'utilisateur. Dans le cas de Zettlr, nous avons créé un petit répertoire dans vos documents, appelé « Zettlr Tutorial » et l'avons chargé pour vous. Pour l'instant, vous voyez le contenu de ce répertoire dans la barre latérale gauche (appelée « liste de fichiers »), alors jetons d'abord un coup d'œil à l'arborescence des fichiers ! Si vous déplacez votre curseur dans la partie supérieure de la barre latérale gauche de Zettlr, une flèche entourée d'un cercle apparaîtra. Cliquez dessus maintenant.
+Certaines applications Markdown utilisent un tel tutoriel interactif en guise de guide pratique pour l'utilisateur. Dans le cas de Zettlr, nous avons créé un petit répertoire dans vos documents, appelé « Zettlr Tutorial » et l'avons chargé pour vous. Pour l'instant, vous voyez le contenu de ce répertoire dans la barre latérale gauche (appelée « liste de fichiers »), alors jetons d'abord un coup d'œil à l'arborescence des fichiers ! Si vous déplacez votre curseur dans la partie supérieure de la barre latérale gauche de Zettlr, une flèche entourée d'un cercle apparaîtra. Cliquez dessus maintenant.
 
 Ce que vous constaterez, c'est qu'un répertoire — le tutoriel — est chargé. Vous pouvez cliquer avec le bouton droit de la souris sur ce répertoire, et le « fermer » ou le « supprimer ». Lorsque vous _fermez_ un répertoire racine ou un fichier dans Zettlr, cela signifie que vous le retirez de l'application, mais il restera sur votre ordinateur. Si vous le _supprimez_, cela signifie que Zettlr le déplacera dans la corbeille. Mais ne faites pas cela maintenant, car il y a encore de nouvelles choses à apprendre ! ✍🏼
 
 > Remarque : sur certaines distributions Linux, cela peut ne pas fonctionner directement, car Zettlr dépend d'un paquet commun pour déplacer les fichiers dans la corbeille. Si vous rencontrez des problèmes pour supprimer des fichiers et des dossiers, veuillez [consulter notre FAQ](https://docs.zettlr.com/fr/faq/#jutilise-linux-et-la-suppression-de-fichiers-ne-les-met-pas-a-la-corbeille) pour vous en sortir !
 
 
-Zettlr est une application destinée à fonctionner en ayant toujours chargé au moins un répertoire racine où sont stockés vos fichiers Markdown. Imaginez ces répertoires racine comme des "espaces de travail". Ils sont toujours affichés dans l'arborescence des répertoires qui est visible en ce moment. Pour afficher la liste des fichiers d'un répertoire, il suffit de cliquer sur ce répertoire.
+Zettlr est une application destinée à fonctionner en ayant toujours chargé au moins un répertoire racine où sont stockés vos fichiers Markdown. Imaginez ces répertoires racine comme des « espaces de travail ». Ils sont toujours affichés dans l'arborescence des répertoires qui est visible en ce moment. Pour afficher la liste des fichiers d'un répertoire, il suffit de cliquer sur ce répertoire.
 
-> Notez que pour lister les fichiers, il existe trois modes que vous pouvez choisir dans les préférences. L'un affiche _soit_ l'arborescence _soit_ la liste des fichiers  (par défaut), un autre affiche les deux en même temps et le troisième mode affiche de manière combinée les fichiers et les dossiers dans l'arborescence.
+> Notez que pour lister les fichiers, il existe trois modes que vous pouvez choisir dans les préférences. L'un affiche _soit_ l'arborescence _soit_ la liste des fichiers  (par défaut), un autre affiche les deux l'un à côté de l'autre (il est appelé « mode développé ») et le troisième mode affiche de manière combinée les fichiers et les dossiers comme dans un navigateur de fichier. Vous pouvez changer ces modes plus tard dans les Paramètres.
 
 Cliquez maintenant sur « Zettlr Tutorial » pour revenir à sa liste de fichiers.
 
 ## Comment utiliser le Markdown 📝
 
-Zettlr est un éditeur Markdown, ce qui signifie qu'il fonctionne principalement comme des applications que vous connaissez déjà, comme Microsoft Word, LibreOffice ou OpenOffice. Mais au lieu de devoir cliquer sur une armada de boutons dans la barre d'outils, vous pouvez structurer vos éléments en utilisant uniquement des caractères, ce qui implique que vous n'avez jamais à quitter votre clavier ! C'est trop cool ! ✨
+Zettlr est un éditeur de texte, ce qui signifie qu'il fonctionne principalement comme les applications que vous connaissez déjà, comme Microsoft Word, LibreOffice ou OpenOffice. Mais au lieu de devoir cliquer sur une armada de boutons dans la barre d'outils, vous pouvez structurer vos éléments en utilisant uniquement des caractères, ce qui implique que vous n'avez jamais à quitter votre clavier ! ✨
 
 Passons rapidement en revue les aspects les plus importants :
 
 1. Vous pouvez mettre le texte en **gras** et _italique_ en l'entourant de traits de soulignement ou d'astérisques. Le choix de l'astérisque ou du soulignement dépend entièrement de vous. Un seul caractère rend le texte en italique, deux le rendent gras et — vous l'avez deviné — trois le rendent à la fois ***gras et italique*** !
-2. Les titres sont créés à la manière des hashtags —  il suffit d'écrire un croisillon « # » suivi d'une espace. Vous pouvez utiliser jusqu'à six croisillons « ### » pour créer des titres de niveau 1 à 6.
-3. Les listes sont littéralement composées — il suffit d'écrire « * », « - » ou « + » sur une nouvelle ligne. Les listes numérotées sont constituées d'un nombre suivi d'un point.
-4. Enfin, les blocs de citations sont écrits exactement comme on affiche le texte cité dans les courriels : il suffit de les distinguer en utilisant « > » !
+2. Les titres sont créés à la manière des hashtags —  il suffit d'écrire un croisillon `#` suivi d'une espace. Vous pouvez utiliser jusqu'à six croisillons `######` pour créer des titres de niveau 1 à 6.
+3. Les listes sont littéralement composées — il suffit d'écrire `*`, `-` ou `+` sur une nouvelle ligne. Les listes numérotées sont constituées d'un nombre suivi d'un point.
+4. Enfin, les blocs de citations sont écrits exactement comme on affiche le texte cité dans les courriels : il suffit de les distinguer en utilisant `>` !
 
 Bien sûr, il y a beaucoup d'autres éléments. Les notes de bas de page par exemple — survolez celui-ci avec votre curseur[^1]. Au cours de ce tutoriel, vous apprendrez également certains éléments spéciaux que Zettlr utilise pour permettre un travail véritablement académique, ainsi que la gestion des connaissances à l'aide des Zettelkästen !
 
 ## Liens ⛓
 
-Bien qu'ils ne soient pas très souvent utilisés dans les textes académiques, les liens constituent un outil puissant de Markdown, et Zettlr les fait passer au niveau supérieur. Zettlr agit de manière très intelligente en ce qui concerne les liens. Rapidement, créons-en un ! Sélectionnez le lien suivant vers notre compte Twitter, et copiez-le dans le presse-papiers : https://www.twitter.com/Zettlr
+Bien qu'ils ne soient pas très souvent utilisés dans les textes académiques, les liens constituent un outil puissant de Markdown, et Zettlr les fait passer au niveau supérieur. Zettlr agit de manière très intelligente en ce qui concerne les liens. Rapidement, créons-en un ! Sélectionnez le lien suivant vers notre compte Mastodon, et copiez-le dans le presse-papiers : https://fosstodon.org/@zettlr
 
-Maintenant, sélectionnez les mots « lien vers notre compte Twitter » et cliquez sur `Cmd/Ctrl+K` ! Zettlr voit que vous avez un lien internet valide dans votre presse-papiers et l'utilise automatiquement comme cible du lien. De plus, si vous éloignez le curseur du texte du lien, Zettlr masquera automatiquement la cible du lien et n'affichera que le texte lié afin de faciliter la lecture de votre texte. Si vous n'aimez pas certains des nombreux éléments que Zettlr interprète par défaut, vous pouvez les désactiver un par un dans les préférences « Affichage ».
+Maintenant, sélectionnez les mots « lien vers notre compte Mastodon » et cliquez sur `Cmd/Ctrl+K` ! Zettlr voit que vous avez un lien internet valide dans votre presse-papiers et l'utilise automatiquement comme cible du lien. De plus, si vous éloignez le curseur du texte du lien, Zettlr masquera automatiquement la cible du lien et n'affichera que le texte lié afin de faciliter la lecture de votre texte. Si vous n'aimez pas certains des nombreux éléments que Zettlr interprète par défaut, vous pouvez les désactiver un par un dans les préférences « Affichage ».
 
 Mais Zettlr ne prend pas seulement en charge les liens internet courants. Si vous vous liez un fichier qui se trouve quelque part sur votre ordinateur, Zettlr peut même ouvrir n'importe quel fichier si vous cliquez sur un tel lien ! En résumé, rappelez-vous que Zettlr vise à rendre votre expérience d'écriture aussi fluide que possible, et pas seulement en ce qui concerne les liens !
 
 ## La barre latérale 📎
 
-Maintenant que nous vous avons présenté les bases du Markdown, il est temps de vous montrer d'autres trucs que Zettlr peut faire ! Cliquez maintenant sur l'icône « trois-colonnes » dans le coin supérieur droit de la barre d'outils. Cela ouvrira la barre latérale, qui contient une section « Annexes ». Zettlr vous y montre tous les fichiers non Markdown que vous stockez dans le répertoire sélectionné. Vous pouvez aussi glisser et déposer des fichiers à partir de là vers l'éditeur pour les inclure dans vos documents.
+Maintenant que nous vous avons présenté les bases du Markdown, il est temps de vous montrer d'autres trucs que Zettlr peut faire ! Cliquez maintenant sur l'icône « trois-colonnes » dans le coin supérieur droit de la barre d'outils. Cela ouvrira la barre latérale, qui contient 4 onglets.
 
-En outre, vous pouvez voir le fichier « LaTeX Guide.pdf ». Vous vous demandez ce que c'est ? Voyons voir : maintenant, cliquez dessus pour ouvrir le fichier avec votre visionneuse PDF par défaut !
+Le premier onglet affiche une table des matières générée de manière dynamique. Vous pouvez cliquer sur les titres pour vous y rendre dans le texte.
 
-Mais la barre latérale ne vous montre pas seulement les fichiers. Dans les deuxième et troisième onglets, vous trouverez les références bibliographiques et une table des matières. La section bibliographie répertorie toutes les références citées du fichier actuellement ouvert — exactement comme la bibliographie d'un article.
+Le second onglet présente la liste des références (si toutefois vous en avez dans votre document). C'est un moyen efficace de vérifier ce que vous avez cité dans votre document.
 
-> Notez que les références sont formatées en utilisant le style de citation intégré. Lorsque vous exportez votre document, Zettlr veillera à utiliser le style de citation que vous avez choisi, si vous en avez défini un dans les préférences "Exporter".
+> Notez que les références sont formatées en utilisant le style de citation intégré. Lorsque vous exportez votre document, Zettlr veillera à utiliser le style de citation que vous avez choisi, si vous en avez défini un dans les préférences "Exporter" (nous y reviendrons plus loin).
 
-La table des matières du troisième onglet est une liste des liens vers chaque section de votre document actuel. Cliquez sur l'une des entrées pour passer immédiatement à la section correspondante. Vous pouvez également voir la même table des matières et même trier vos sections en cliquant sur le bouton correspondant de la barre d'outils. L'avantage de la barre latérale est que vous pouvez la garder ouverte pendant que vous travaillez dans votre document, juste avec l'onglet des références.
+Le troisième onglet contient les fichiers connexes, c'est-à-dire les fichiers dont Zettlr pense qu'ils sont liés à votre fichier actuel. Pour ce faire, il examine les mots-clés ainsi que les liens internes (nous y reviendrons) que vous utilisez dans tous les fichiers. En tête de liste figurent les fichiers qui ont un lien avec le fichier que vous êtes en train de consulter. Viennent ensuite les fichiers qui ont des balises communes avec le fichier en cours. Plus un fichier a de balises en commun avec votre fichier actuel, plus il sera en haut de la liste.
 
-## Éléments intéractifs ⏯
+Le dernier onglet vous contient tous les fichiers non Markdown que vous stockez dans le répertoire sélectionné. Vous pouvez voir un fichier « LaTeX Guide.pdf ». Vous vous demandez ce que c'est ? Voyons voir : maintenant, cliquez dessus pour ouvrir le fichier avec votre visionneuse PDF par défaut !
+
+
+## Éléments interactifs ⏯
 
 À présent, vous avez déjà appris beaucoup de choses sur Zettlr. Pouvez-vous cocher toutes les cases ?
 
@@ -77,7 +80,7 @@ La table des matières du troisième onglet est une liste des liens vers chaque 
 - [ ] apprendre les bases du Markdown,
 - [ ] installer LaTeX pour exporter mes fichiers.
 
-Certains éléments de l'éditeur sont interactifs, tout comme les cases à cocher. Une autre chose qui est très interactive, ce sont les tableaux. Il suffit de jeter un coup d'œil au tableau suivant : survolez-le avec votre souris pour voir apparaître quelques boutons qui vous permettent d'interagir avec !
+Certains éléments de l'éditeur sont interactifs, tout comme les cases à cocher. Une autre chose qui est très interactive, les tableaux. Jetez un coup d'œil au tableau suivant : survolez-le avec votre souris pour voir apparaître quelques boutons qui vous permettent d'interagir avec !
 
 
 
@@ -87,13 +90,13 @@ Certains éléments de l'éditeur sont interactifs, tout comme les cases à coch
 | Travailler avec les Zettelkästen | Introduction aux différentes caractéristiques des Zettelkästen dans Zettlr    | zettelkasten.md |
 | Les références avec Zettlr       | Souligne les potentialités du travail avec des bases de données de références | references.md   |
 
-Dans le tableau, vous modifier l'alignement ou ajouter et supprimer des lignes et des colonnes. L'éditeur de tableau fonctionnera toujours sur la colonne ou la ligne active. Ainsi, pour supprimer une ligne, assurez-vous qu'une cellule de cette ligne est sélectionnée. N'hésitez pas à jouer un peu avec le tableau pour vous habituer à son maniement !
+Vous pouvez modifier l'alignement ou ajouter et supprimer des lignes et des colonnes. L'éditeur de tableau fonctionnera toujours sur la colonne ou la ligne active. Ainsi, pour supprimer une ligne, assurez-vous qu'une cellule de cette ligne est sélectionnée. N'hésitez pas à jouer un peu avec le tableau pour vous habituer à son maniement !
 
 ## Ressources complémentaires 📚
 
-Vous y êtes arrivé ! La première partie de l'introduction est terminée. Nous n'avons pas abordé beaucoup de sujets ici, mais vous pouvez apprendre tout ce que vous voulez sur notre [documentation](https://docs.zettlr.com/) ! Ce qui pourrait vous intéresser, c'est [le puissant gestionnaire de balises](https://docs.zettlr.com/en/reference/settings/#manage-tags), ou les [options de recherche polyvalentes](https://docs.zettlr.com/en/core/search/).
+Vous y êtes arrivé ! La première partie de l'introduction est terminée. Nous n'avons pas abordé beaucoup de sujets ici, mais vous pouvez apprendre tout ce que vous voulez sur notre [documentation](https://docs.zettlr.com/) ! Ce qui pourrait vous intéresser, c'est [le puissant gestionnaire de mots-clés](https://docs.zettlr.com/fr/reference/settings/#manage-tags), ou les [options de recherche polyvalentes](https://docs.zettlr.com/fr/core/search/).
 
-Mais maintenant que les bases sont suffisantes, nous sommes prêts à faire le grand saut ! Passons maintenant au tutoriel des Zettelkästen ! Pour y aller, il suffit de cliquer sur le lien wiki suivant : [[zettelkasten]]
+Mais assez parlé des usages basiques ! nous sommes prêts à faire le grand saut. Passons maintenant au tutoriel des Zettelkästen ! Pour y aller, il suffit de cliquer sur le lien wiki suivant : [[zettelkasten]]
 
-[^1]: Ce texte se trouve en bas de ce fichier. Mais, en fait, vous pouvez les mettre où vous voulez. Vous connaissez le meilleur ? Si vous cliquez sur cette note de bas de page tout en maintenant la touche `Cmd/Ctrl` enfoncée, vous pouvez éditer le texte de là ! Essayez maintenant et enregistrez vos modifications en appuyant sur `Maj+Entrée`. Si vous voulez annuler vos modifications, cliquez simplement en dehors de la fenêtre popup !
+[^1]: Ce texte se trouve en bas de ce fichier. Mais vous pouvez vraiment placer des notes de bas de page où vous le souhaitez. Zettlr affichera le texte de la note de bas de page correspondante lorsque vous la survolerez avec votre souris, de sorte que vous n'aurez pas à faire défiler la page pour en lire le contenu.
 
