@@ -1,10 +1,10 @@
-# Split View
+# Vue scindée
 
-Zettlr supports split views to make your work more productive. We have provided you with a sample layout using three editor panes (one left and two vertically stacked on the right) to demonstrate this functionality. You can drag and drop files to create new splits. Here's how it works:
+Zettlr prend en charge les vues scindées pour rendre votre travail plus productif. Nous vous avons fourni un exemple de mise en page utilisant trois volets de l'éditeur (un à gauche et deux superposés verticalement à droite) pour démontrer cette fonctionnalité. Vous pouvez glisser et déposer des fichiers pour créer de nouvelles vues fractionnées. Voici comment cela fonctionne :
 
-* New files will always open in the last active pane (i.e. the one the cursor is in)
-* You can drag the document tabs outside of the tab bar to move files around
-* Moving tabs onto tab bars or into the central area of an editor will move the file to the corresponding pane
-* Moving tabs to the side of any editor pane (top, right, bottom, left) will split the given pane into that direction
-* Closing or moving away the last file of a pane will automatically close it
-* Zettlr also supports multiple windows. Press `Cmd/Ctrl+Shift+N` to open new windows
+* Les nouveaux fichiers s'ouvrent toujours dans le dernier volet actif (c'est-à-dire celui dans lequel se trouve le curseur).
+* Vous pouvez faire glisser les onglets du document en dehors de la barre d'onglets pour déplacer les fichiers.
+* Déplacer les onglets sur les barres d'onglets ou dans la zone centrale d'un éditeur déplacera le fichier dans le volet correspondant.
+* Déplacer les onglets sur le côté d'un panneau de l'éditeur (en haut, à droite, en bas, à gauche) divisera ce panneau dans cette direction.
+* Fermer ou déplacer le dernier fichier d'un volet le fermera automatiquement.
+* Zettlr supporte aussi les fenêtres multiples. Composez `Cmd/Ctrl+Shift+N` pour ouvrir une nouvelle fenêtre.
