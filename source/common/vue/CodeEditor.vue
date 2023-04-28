@@ -23,10 +23,10 @@
 
 // import { trans } from '@common/i18n-renderer'
 
-import { Decoration, EditorView, keymap, lineNumbers, MatchDecorator, ViewPlugin, ViewUpdate } from '@codemirror/view'
+import { drawSelection, dropCursor, EditorView, keymap, lineNumbers } from '@codemirror/view'
 import { onMounted, ref, toRef, watch } from 'vue'
-import { autocompletion, closeBrackets, CompletionContext } from '@codemirror/autocomplete'
-import { bracketMatching, indentOnInput, StreamLanguage } from '@codemirror/language'
+import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete'
+import { bracketMatching, codeFolding, foldGutter, indentOnInput, StreamLanguage } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { EditorState, Extension } from '@codemirror/state'
@@ -36,6 +36,8 @@ import { yamlLint } from '@common/modules/markdown-editor/linters/yaml-lint'
 import { lintGutter } from '@codemirror/lint'
 import { showStatusbarEffect, statusbar } from '@common/modules/markdown-editor/statusbar'
 import { search, searchKeymap } from '@codemirror/search'
+import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
+import { snippetSyntaxExtension } from '@common/modules/markdown-utils/snippets-syntax-extension'
 
 /**
  * We have to define the CodeMirror instance outside of Vue, since the Proxy-
@@ -50,82 +52,6 @@ const cmInstance = new EditorView()
 const wrapperId = ref<string>('code-editor')
 
 const cleanFlag = ref<boolean>(true)
-
-const tabstopDeco = Decoration.mark({ class: 'cm-tm-tabstop' })
-const placeholderDeco = Decoration.mark({ class: 'cm-tm-placeholder' })
-const varDeco = Decoration.mark({ class: 'cm-tm-variable' })
-const invalidVarDeco = Decoration.mark({ class: 'cm-tm-false-variable' })
-const varPlaceholderDeco = Decoration.mark({ class: 'cm-tm-variable-placeholder' })
-
-const SUPPORTED_VARIABLES = [
-  'CURRENT_YEAR',
-  'CURRENT_YEAR_SHORT',
-  'CURRENT_MONTH',
-  'CURRENT_MONTH_NAME',
-  'CURRENT_MONTH_NAME_SHORT',
-  'CURRENT_DATE',
-  'CURRENT_HOUR',
-  'CURRENT_MINUTE',
-  'CURRENT_SECOND',
-  'CURRENT_SECONDS_UNIX',
-  'UUID',
-  'CLIPBOARD',
-  'ZKN_ID',
-  'CURRENT_ID',
-  'FILENAME',
-  'DIRECTORY',
-  'EXTENSION'
-]
-
-const snippetsDecorator = new MatchDecorator({
-  // tabstops|tabstops with default|variables|variable with default
-  regexp: /(?<tabstop>\$\d+)|(?<tabstopDefault>\$\{\d+:.+?\})|\$(?<var>[A-Z_]+)|\$\{(?<varDefault>[A-Z_]+):.+?\}/g,
-  // tabstop and tabstopDefault -> valid tabstop
-  // var and varDefault --> check the corresponding group if variable is correct
-  decoration: m => {
-    if (m.groups?.tabstop !== undefined) {
-      return tabstopDeco
-    } else if (m.groups?.tabstopDefault !== undefined) {
-      return placeholderDeco
-    } else if (m.groups?.var !== undefined) {
-      if (SUPPORTED_VARIABLES.includes(m.groups.var)) {
-        return varDeco
-      } else {
-        return invalidVarDeco
-      }
-    } else if (m.groups?.varDefault !== undefined) {
-      if (SUPPORTED_VARIABLES.includes(m.groups.varDefault)) {
-        return varPlaceholderDeco
-      } else {
-        return invalidVarDeco
-      }
-    } else {
-      return invalidVarDeco // Default: invalid
-    }
-  }
-})
-
-const snippetsHighlight = ViewPlugin.define(view => ({
-  decorations: snippetsDecorator.createDeco(view),
-  update (u: ViewUpdate) {
-    this.decorations = snippetsDecorator.updateDeco(u, this.decorations)
-  }
-}), { decorations: v => v.decorations })
-
-function snippetsAutocomplete (context: CompletionContext) {
-  const match = context.matchBefore(/\$[\da-z_]*$/i)
-  if (match === null) {
-    return null
-  } else {
-    const existingVarContents = match.text.toLowerCase().substring(1) // Ignore the $
-    return {
-      from: match.from,
-      options: SUPPORTED_VARIABLES
-        .filter(variable => variable.toLowerCase().startsWith(existingVarContents))
-        .map(variable => { return { label: '$' + variable, type: 'keyword' } })
-    }
-  }
-}
 
 /**
  * Small drop-in plugin that assigns 'cm-link'-classes to everything that looks
@@ -190,8 +116,22 @@ function maybeOpenLink (event: MouseEvent, view: EditorView) {
 
 function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
   const extensions = [
-    keymap.of([...searchKeymap]),
+    keymap.of([
+      ...defaultKeymap, // Minimal default keymap
+      ...historyKeymap, // , // History commands (redo/undo)
+      ...closeBracketsKeymap, // Binds Backspace to deletion of matching brackets
+      ...searchKeymap // Search commands (Ctrl+F, etc.)
+    ]),
     search({ top: true }),
+    codeFolding(),
+    foldGutter(),
+    history(),
+    drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
+    dropCursor(),
+    statusbar,
+    EditorState.allowMultipleSelections.of(true),
+    // Ensure the cursor never completely sticks to the top or bottom of the editor
+    EditorView.scrollMargins.of(view => { return { top: 30, bottom: 30 } }),
     lintGutter(),
     lineNumbers(),
     closeBrackets(),
@@ -207,8 +147,7 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
     }),
     EditorView.domEventHandlers({
       mousedown: maybeOpenLink
-    }),
-    statusbar
+    })
   ]
 
   switch (mode) {
@@ -226,17 +165,9 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
     case 'markdown-snippets':
       return [
         ...extensions,
-        // Enable the user to autocomplete the snippets
-        autocompletion({
-          activateOnTyping: true, // Always show immediately
-          selectOnOpen: false, // But never pre-select anything
-          closeOnBlur: true,
-          maxRenderedOptions: 20,
-          override: [snippetsAutocomplete]
-        }),
+        snippetSyntaxExtension,
         markdownParser(), // Comes from the main editor
-        markdownSyntaxHighlighter(), // Comes from the main editor
-        snippetsHighlight
+        markdownSyntaxHighlighter() // Comes from the main editor
       ]
   }
 }
