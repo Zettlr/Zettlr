@@ -38,6 +38,22 @@ quick list:
    that nobody needs to configure this, and it makes many parts of our code
    easier.
 
+## New Icons on Windows and Linux
+
+For 3.0, we decided that it's time to give our app icons a facelift. For the
+past six years, Zettlr sported working, but relatively bland icons to convey its
+existence on the taskbar to its users. The new icons still convey the same
+message, but you will notice that they now integrate much better into the new
+Windows 11 Fluent UI.
+
+We decided to exchange the icons on Linux as well. They may not seamlessly
+integrate into your specific UI, but we feel they will definitely look more
+modern than the previous iteration of icons.
+
+With this move, the Windows and Linux experience of Zettlr finally moves on par
+to the macOS experience, which has received an updated icon with the release of
+Zettlr 2.0.
+
 ## Split-Panes and Multiple Windows
 
 A long awaited feature has made it into this version: Now you can open multiple
