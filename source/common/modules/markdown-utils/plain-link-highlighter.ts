@@ -14,11 +14,17 @@
  */
 
 import { Decoration, MatchDecorator, ViewPlugin, EditorView, type ViewUpdate } from '@codemirror/view'
+import { trans } from '@common/i18n-renderer'
 
 /**
  * The class to be applied
  */
-const linkDeco = Decoration.mark({ class: 'cm-clickable-link' })
+const linkDeco = Decoration.mark({
+  attributes: {
+    class: 'cm-clickable-link',
+    title: trans('Cmd/Ctrl-click to follow this link')
+  }
+})
 
 /**
  * A very basic regexp for very coarse (but hence fast) link matching
