@@ -38,6 +38,7 @@ import { showStatusbarEffect, statusbar } from '@common/modules/markdown-editor/
 import { search, searchKeymap } from '@codemirror/search'
 import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
 import { snippetSyntaxExtension } from '@common/modules/markdown-utils/snippets-syntax-extension'
+import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-highlighter'
 
 /**
  * We have to define the CodeMirror instance outside of Vue, since the Proxy-
@@ -52,67 +53,6 @@ const cmInstance = new EditorView()
 const wrapperId = ref<string>('code-editor')
 
 const cleanFlag = ref<boolean>(true)
-
-/**
- * Small drop-in plugin that assigns 'cm-link'-classes to everything that looks
- * like a link. Those links must have a protocol and only contain alphanumerics,
- * plus ., -, #, %, and /.
- *
- * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
- */
-// function markLinks (cm: CodeMirror.Editor) {
-//   // Very small drop in that marks URLs inside the code editor
-//   for (let i = 0; i < cm.lineCount(); i++) {
-//     const line = String(cm.getLine(i))
-//     // Can contain a-z0-9, ., -, /, %, and #, but must end
-//     // with an alphanumeric, a slash or a hashtag.
-//     const match = /[a-z0-9-]+:\/\/[a-z0-9.-/#%]+[a-z0-9/#]/i.exec(line)
-//     if (match === null) {
-//       continue
-//     }
-
-//     const from = { line: i, ch: match.index }
-//     const to = { line: i, ch: match.index + match[0].length }
-
-//     // We can only have one marker at any given position at any given time
-//     if (cm.findMarks(from, to).length > 0) {
-//       continue
-//     }
-
-//     cm.markText(
-//       from, to,
-//       {
-//         className: 'cm-link',
-//         inclusiveLeft: false,
-//         inclusiveRight: true,
-//         attributes: { title: trans('Cmd/Ctrl+Click to open %s', match[0]) }
-//       }
-//     )
-//   }
-// }
-
-/**
- * If applicable, follows a link from the editor.
- *
- * @param   {MouseEvent}  event  The triggering MouseEvent
- */
-function maybeOpenLink (event: MouseEvent, view: EditorView) {
-  const t = event.target
-  const cmd = process.platform === 'darwin' && event.metaKey
-  const ctrl = process.platform !== 'darwin' && event.ctrlKey
-
-  if (cmd === false && ctrl === false) {
-    return
-  }
-
-  if (t === null || !(t instanceof Element)) {
-    return
-  }
-
-  if (t.className.includes('cm-link') === true && t.textContent !== null) {
-    window.location.assign(t.textContent)
-  }
-}
 
 function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
   const extensions = [
@@ -138,15 +78,13 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
     bracketMatching(),
     indentOnInput(),
     codeSyntaxHighlighter(), // This comes from the main editor component
+    plainLinkHighlighter,
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {
         // Tell the main component that the contents have changed
         cleanFlag.value = false
         emit('update:modelValue', cmInstance.state.doc.toString())
       }
-    }),
-    EditorView.domEventHandlers({
-      mousedown: maybeOpenLink
     })
   ]
 
@@ -280,13 +218,6 @@ body {
       background-color: @base1;
       color: @base00;
     }
-
-    // Additional styles only for the GFM snippets editor
-    .cm-tm-tabstop { color: @cyan; }
-    .cm-tm-placeholder { color: @cyan; }
-    .cm-tm-variable { color: @yellow; }
-    .cm-tm-variable-placeholder { color: @violet; }
-    .cm-tm-false-variable { color: @red; }
   }
 
   &.dark {

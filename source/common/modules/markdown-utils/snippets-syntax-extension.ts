@@ -15,7 +15,7 @@
  */
 
 import { autocompletion, type CompletionContext, type CompletionResult } from '@codemirror/autocomplete'
-import { Decoration, MatchDecorator, ViewPlugin, type ViewUpdate } from '@codemirror/view'
+import { Decoration, EditorView, MatchDecorator, ViewPlugin, type ViewUpdate } from '@codemirror/view'
 
 const tabstopDeco = Decoration.mark({ class: 'cm-tm-tabstop' })
 const placeholderDeco = Decoration.mark({ class: 'cm-tm-placeholder' })
@@ -118,6 +118,18 @@ function snippetsAutocomplete (context: CompletionContext): CompletionResult|nul
 }
 
 /**
+ * The theme styles the additional decorators we inject here
+ */
+const snippetsTheme = EditorView.theme({
+  // We're using this solarized theme here: https://ethanschoonover.com/solarized/
+  '.cm-tm-tabstop': { color: '#2aa198' }, // cyan
+  '.cm-tm-placeholder': { color: '#2aa198' }, // cyan
+  '.cm-tm-variable': { color: '#b58900' }, // yellow
+  '.cm-tm-variable-placeholder': { color: '#6c71c4' }, // violet
+  '.cm-tm-false-variable': { color: '#dc322f' } // red
+})
+
+/**
  * The snippet syntax extension includes support for highlighting snippet
  * variables and autocompleting them.
  *
@@ -131,5 +143,6 @@ export const snippetSyntaxExtension = [
     maxRenderedOptions: 20,
     override: [snippetsAutocomplete]
   }),
-  snippetsHighlight
+  snippetsHighlight,
+  snippetsTheme
 ]
