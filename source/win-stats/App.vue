@@ -17,6 +17,7 @@
       v-bind:id="tabs[currentTab].controls"
       role="tabpanel"
       v-bind:aria-labelledby="tabs[currentTab].id"
+      style="height: 100%;"
     >
       <CalendarView
         v-if="currentTab === 0"
