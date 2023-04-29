@@ -118,6 +118,7 @@ class LinkWidget extends WidgetType {
         link.textContent = validURI.replace(/^safe-file:\/\//, '')
         link.style.fontSize = '80%'
         link.style.fontFamily = 'monospace'
+        link.style.wordBreak = 'break-word'
         dom.appendChild(link)
 
         tooltip.setContent(dom)
