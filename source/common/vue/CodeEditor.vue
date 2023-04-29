@@ -182,6 +182,7 @@ defineExpose({ markClean, isClean })
 body {
   .code-editor-wrapper {
     overflow: auto;
+    height: 100%;
     margin: 20px 0px;
     background-color: white;
     border: 1px solid rgb(173, 173, 173);
