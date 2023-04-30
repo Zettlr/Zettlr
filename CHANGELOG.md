@@ -302,6 +302,8 @@ there.
 - The "Characters without spaces" info is no longer present in the toolbar
   counter widget; the "characters" count now represents always the count without
   spaces across the app
+- Mermaid charts now dynamically switch themes between `default` and `dark`
+  depending on the app's display
 
 ## Under the Hood
 

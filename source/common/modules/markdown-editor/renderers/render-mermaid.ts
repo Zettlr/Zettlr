@@ -20,7 +20,7 @@ import mermaid from 'mermaid'
 import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 
-mermaid.initialize({ startOnLoad: false, theme: 'dark' as any })
+const ipcRenderer = window.ipc
 
 class MermaidWidget extends WidgetType {
   constructor (readonly graph: string, readonly node: SyntaxNode) {
@@ -38,8 +38,21 @@ class MermaidWidget extends WidgetType {
     elem.classList.add('mermaid-chart')
 
     try {
-      mermaid.render(`graphDiv${Date.now()}`, this.graph, (svg) => {
+      const id = `graphDiv${Date.now()}`
+      mermaid.render(id, this.graph, (svg) => {
         elem.innerHTML = svg
+      })
+
+      ipcRenderer.on('config-provider', (event, { command, payload }) => {
+        if (command === 'update' && payload === 'darkMode') {
+          setTimeout(() => {
+            // At this point, the window's theme manager will have re-initialized
+            // mermaid so that it will now render using the appropriate theme
+            mermaid.render(id, this.graph, (svg) => {
+              elem.innerHTML = svg
+            })
+          }, 500)
+        }
       })
     } catch (err: any) {
       elem.classList.add('error')

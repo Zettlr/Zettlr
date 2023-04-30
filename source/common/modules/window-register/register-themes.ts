@@ -17,6 +17,7 @@
 // the geometry for the application. This will be added to the HTML by Webpack
 // automatically
 import './assets/main.less'
+import mermaid from 'mermaid'
 
 const ipcRenderer = window.ipc
 
@@ -71,7 +72,7 @@ export default function registerThemes (): void {
         switchTheme(window.config.get('display.theme'))
       } else if (payload === 'darkMode') {
         // Switch to light/dark mode based on the configuration variable
-        document.body.classList.toggle('dark', window.config.get('darkMode'))
+        switchDarkLightTheme()
       } else if (payload === 'display.useSystemAccentColor') {
         // The accent color setting has been changed, so re-set the customCSS
         setSystemCss()
@@ -86,9 +87,10 @@ export default function registerThemes (): void {
     }
   })
 
-  // Initial theme change
+  // Initial theme change/setup
   switchTheme(window.config.get('display.theme'))
-  document.body.classList.toggle('dark', window.config.get('darkMode'))
+  mermaid.initialize({ startOnLoad: false, theme: 'default' })
+  switchDarkLightTheme()
 
   // Initial rendering of the Custom CSS
   ipcRenderer.invoke('css-provider', { command: 'get-custom-css-path' })
@@ -116,6 +118,15 @@ function switchTheme (newTheme: Theme): void {
     themeToSwitchTo.use()
     currentTheme = themeToSwitchTo
   }
+}
+
+/**
+ * Performs necessary actions when switching the theme to dark/light
+ */
+function switchDarkLightTheme (): void {
+  const isDarkMode: boolean = window.config.get('darkMode')
+  document.body.classList.toggle('dark', isDarkMode)
+  mermaid.initialize({ startOnLoad: false, theme: isDarkMode ? 'dark' : 'default' })
 }
 
 /**
