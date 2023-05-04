@@ -17,7 +17,6 @@
 // the geometry for the application. This will be added to the HTML by Webpack
 // automatically
 import './assets/main.less'
-import mermaid from 'mermaid'
 
 const ipcRenderer = window.ipc
 
@@ -89,7 +88,6 @@ export default function registerThemes (): void {
 
   // Initial theme change/setup
   switchTheme(window.config.get('display.theme'))
-  mermaid.initialize({ startOnLoad: false, theme: 'default' })
   switchDarkLightTheme()
 
   // Initial rendering of the Custom CSS
@@ -126,7 +124,6 @@ function switchTheme (newTheme: Theme): void {
 function switchDarkLightTheme (): void {
   const isDarkMode: boolean = window.config.get('darkMode')
   document.body.classList.toggle('dark', isDarkMode)
-  mermaid.initialize({ startOnLoad: false, theme: isDarkMode ? 'dark' : 'default' })
 }
 
 /**
