@@ -167,6 +167,7 @@ export default class TableEditor {
     this._mdTableType = tableType
     this._eventLock = false // See _rebuildDOMElement for details
     this._ast = ast
+    this._lastSeenTable = JSON.stringify(this._ast)
     this._colAlignment = alignments
     this._edgeButtonSize = 30 // Size in pixels
     this._isClean = true
@@ -458,8 +459,8 @@ export default class TableEditor {
     // Update the AST after the cells contents have been updated correctly.
     // This way we prevent glitches if someone edits a cell's contents and
     // immediately adds rows or columns.
-    const val = this._elem.rows[this._rowIndex].cells[this._cellIndex].textContent
-    this._ast[this._rowIndex][this._cellIndex] = val ?? ''
+    const newContent = this._elem.rows[this._rowIndex].cells[this._cellIndex].textContent
+    this._ast[this._rowIndex][this._cellIndex] = newContent ?? ''
     // After everything is done, and potentially new rows, cols and content has been
     // added, we need to notify some third actor that the table has been changed.
     // Why do this on a separate, keyup event? To include the last pressed character.
@@ -502,37 +503,19 @@ export default class TableEditor {
     }
 
     const target = event.target as HTMLElement
+    const cursorPosition = this._getCursorPositionInElement(target)
+    const isAtEnd = cursorPosition === target.textContent?.length
+    const isAtBegin = cursorPosition === 0
 
-    const isArrow = [
-      'ArrowUp',
-      'ArrowDown',
-      'ArrowLeft',
-      'ArrowRight'
-    ].includes(event.key)
-
-    if (isArrow) {
-      let cursorPosition = this._getCursorPositionInElement(target)
-      let isAtEnd = cursorPosition === target.textContent?.length
-      let isAtBegin = cursorPosition === 0
-
-      switch (event.key) {
-        case 'ArrowLeft': // Arrow Left
-          // Move to previous cell if isAtBegin
-          if (isAtBegin) this.previousCell()
-          break
-        case 'ArrowUp': // Arrow Up
-          // Move to previous row
-          this.previousRow()
-          break
-        case 'ArrowRight': // Arrow Right
-          // Move to next cell if isAtEnd (without adding new rows)
-          if (isAtEnd) this.nextCell(false)
-          break
-        case 'ArrowDown': // Arrow Down
-          // Move to next row (without adding new rows)
-          this.nextRow(false)
-          break
-      }
+    if (event.key === 'ArrowLeft' && isAtBegin) {
+      event.preventDefault()
+    } else if (event.key === 'ArrowRight' && isAtEnd) {
+      event.preventDefault()
+    } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      // TODO: Chrome somehow triggers an onBlur event when the input is only
+      // single-line. Instead of just preventingDefault we should implement a
+      // go-to-start and go-to-end behavior. I was just to lazy to do that here.
+      event.preventDefault()
     } else if (event.key === 'Enter') {
       event.preventDefault()
       this.nextRow()
