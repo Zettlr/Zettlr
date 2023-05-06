@@ -131,9 +131,9 @@ body {
     overflow: hidden;
 
     #sidebar-tab-container {
-      top: 40px;
       padding: 0px 5px 5px 0px;
       overflow-y: auto;
+      height: 100%;
     }
 
     #open-dir-external {
