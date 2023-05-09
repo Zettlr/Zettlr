@@ -127,6 +127,7 @@ export default function getConfigTemplate (): ConfigOptions {
         languageTool: {
           active: false, // Utilize languageTool?
           level: 'picky', // API: https://languagetool.org/http-api/#!/default/post_check
+          motherTongue: '', // Optional motherTongue property
           provider: 'official',
           customServer: '',
           username: '',

@@ -13,6 +13,7 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { mapLangCodeToName } from '@common/util/map-lang-code'
 
 export default function (): any {
   return {
@@ -32,6 +33,15 @@ export default function (): any {
           },
           model: 'editor.lint.languageTool.level',
           disabled: window.config.get('editor.lint.languageTool.active') === false
+        },
+        {
+          type: 'select',
+          label: trans('Mother tongue'),
+          options: {
+            '': trans('Not set'),
+            ...mapLangCodeToName()
+          },
+          model: 'editor.lint.languageTool.motherTongue'
         },
         {
           type: 'radio',

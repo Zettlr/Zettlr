@@ -73,6 +73,7 @@ export interface ConfigOptions {
       languageTool: {
         active: boolean
         level: 'picky'|'default'
+        motherTongue: string // e.g., en-US, de-DE
         provider: 'official'|'custom'
         customServer: string
         username: string

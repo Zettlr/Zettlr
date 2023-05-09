@@ -122,6 +122,7 @@ export default class LanguageTool extends ZettlrCommand {
     const {
       active,
       level,
+      motherTongue,
       username,
       apiKey,
       customServer,
@@ -134,6 +135,12 @@ export default class LanguageTool extends ZettlrCommand {
     }
 
     const searchParams = new URLSearchParams({ language, text, level })
+
+    // If the user has set the mother tongue, add it to the params
+    if (motherTongue.trim() !== '') {
+      searchParams.append('motherTongue', motherTongue)
+    }
+
     const useCredentials = username.trim() !== '' && apiKey.trim() !== ''
 
     let server = 'https://api.languagetool.org'
