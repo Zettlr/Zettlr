@@ -304,6 +304,8 @@ there.
   spaces across the app
 - Mermaid charts now dynamically switch themes between `default` and `dark`
   depending on the app's display
+- In various parts of the app, URLs will now be displayed in a shortened format
+  if they are long and the space is limited
 
 ## Under the Hood
 
