@@ -45,7 +45,6 @@ class ImageWidget extends WidgetType {
     let isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(decodedUrl)
     let actualURLToLoad = decodedUrl
     const basePath = path.dirname(view.state.field(configField).metadata.path)
-    console.log({ basePath, stateField: view.state.field(configField) })
 
     if (!isDataUrl) {
       actualURLToLoad = makeAbsoluteURL(basePath, actualURLToLoad)
