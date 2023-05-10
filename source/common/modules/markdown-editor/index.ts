@@ -215,7 +215,8 @@ export default class MarkdownEditor extends EventEmitter {
   constructor (
     leafId: string,
     representedDocument: string,
-    authorityAPI: DocumentAuthorityAPI
+    authorityAPI: DocumentAuthorityAPI,
+    configOverride?: Partial<EditorConfiguration>
   ) {
     super() // Set up the event emitter
 
@@ -230,6 +231,11 @@ export default class MarkdownEditor extends EventEmitter {
 
     // Same goes for the config
     this.config = getDefaultConfig()
+    // TODO: This is bad style imho
+    this.config.metadata.path = representedDocument
+    if (configOverride !== undefined) {
+      this.setOptions(configOverride)
+    }
 
     // Create the editor ...
     this._instance = new EditorView({
