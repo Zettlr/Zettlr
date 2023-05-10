@@ -126,7 +126,6 @@ class LinkWidget extends WidgetType {
         dom.appendChild(h4)
         dom.appendChild(imgParaWrapper)
         dom.appendChild(link)
-        console.log(dom)
         tooltip.setContent(dom)
       })
       .catch(err => { console.error(`Could not generate link preview for URL ${validURI}`, err) })

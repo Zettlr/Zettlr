@@ -724,7 +724,6 @@ export default defineComponent({
       if (hasDocumentTab) {
         this.documentTabDragOver = true
       } else {
-        console.log('Something else drag over.')
         this.documentTabDragOver = false
       }
     },

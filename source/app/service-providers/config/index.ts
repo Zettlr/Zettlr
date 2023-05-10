@@ -419,8 +419,6 @@ export default class ConfigProvider extends ProviderContract {
       return
     }
 
-    console.log(process.argv)
-
     dialog.showMessageBox({
       message: trans('Changing this option requires a restart to take effect.'),
       type: 'warning',

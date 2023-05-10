@@ -24,9 +24,7 @@ let i18nData: any
  * function produces a side-effect in that it sets the local module variable.
  */
 export async function loadData (): Promise<void> {
-  console.log('Loading i18n data ...')
   i18nData = await ipcRenderer.invoke('i18n')
-  console.log('i18n data loaded')
 }
 
 /**

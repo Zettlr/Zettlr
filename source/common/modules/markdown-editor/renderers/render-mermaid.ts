@@ -24,7 +24,6 @@ import clickAndSelect from './click-and-select'
 const ipcRenderer = window.ipc
 ipcRenderer.on('config-provider', (event, { command, payload }) => {
   if (command === 'update' && payload === 'darkMode') {
-    console.log('Mode switch, reinitializing')
     const isDarkMode = window.config.get('darkMode') as boolean
     const theme = isDarkMode ? 'dark' : 'default'
     mermaid.initialize({ startOnLoad: false, theme })
@@ -71,7 +70,6 @@ class MermaidWidget extends WidgetType {
 }
 
 function shouldHandleNode (node: SyntaxNodeRef): boolean {
-  // console.log(node.type.name)
   // This parser should look for InlineCode and FencedCode and then immediately
   // check its first CodeMark child to ensure its contents only include $ or $$.
   if (node.type.name !== 'FencedCode') {
