@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-29 02:28+0000\n"
+"POT-Creation-Date: 2023-05-10 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -357,59 +357,67 @@ msgstr ""
 "オートコレクトが有効な場合に置き換える文字列を定義します。左側の文字列が右側"
 "の文字列に置き換わります。"
 
-#: source/win-preferences/schema/spellchecking.ts:23
+#: source/win-preferences/schema/spellchecking.ts:24
 msgid "Use LanguageTool"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:28
+#: source/win-preferences/schema/spellchecking.ts:29
 msgid "Strictness"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:30
+#: source/win-preferences/schema/spellchecking.ts:31
 #, fuzzy
 msgid "Standard"
 msgstr "カレンダー"
 
-#: source/win-preferences/schema/spellchecking.ts:31
+#: source/win-preferences/schema/spellchecking.ts:32
 msgid "Picky"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:38
-msgid "LanguageTool Provider"
+#: source/win-preferences/schema/spellchecking.ts:39
+msgid "Mother tongue"
 msgstr ""
 
 #: source/win-preferences/schema/spellchecking.ts:41
+msgid "Not set"
+msgstr ""
+
 #: source/win-preferences/schema/spellchecking.ts:48
+msgid "LanguageTool Provider"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:51
+#: source/win-preferences/schema/spellchecking.ts:58
 #, fuzzy
 msgid "Custom server"
 msgstr "カスタムCSS"
 
-#: source/win-preferences/schema/spellchecking.ts:55
+#: source/win-preferences/schema/spellchecking.ts:65
 msgid "LanguageTool Username"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:61
+#: source/win-preferences/schema/spellchecking.ts:71
 msgid "LanguageTool API key"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:69
+#: source/win-preferences/schema/spellchecking.ts:79
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr "自動スペルチェックを有効にする言語を選択。"
 
-#: source/win-preferences/schema/spellchecking.ts:74
+#: source/win-preferences/schema/spellchecking.ts:84
 msgid "Search for dictionaries &hellip;"
 msgstr "辞書を検索..."
 
-#: source/win-preferences/schema/spellchecking.ts:78
+#: source/win-preferences/schema/spellchecking.ts:88
 msgid "User dictionary. Remove words by clicking them."
 msgstr "ユーザ辞書。クリックで単語を削除します。"
 
-#: source/win-preferences/schema/spellchecking.ts:80
+#: source/win-preferences/schema/spellchecking.ts:90
 msgid "Dictionary entry"
 msgstr "辞書エントリー"
 
-#: source/win-preferences/schema/spellchecking.ts:83
+#: source/win-preferences/schema/spellchecking.ts:93
 #: source/win-preferences/schema/advanced.ts:96
 msgid "Search for entries …"
 msgstr "エントリーを検索..."
@@ -684,7 +692,7 @@ msgid "Copy ID"
 msgstr "IDをコピー"
 
 #: source/win-main/file-manager/util/file-item-context.ts:79
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
 msgid "Show file"
 msgstr "ファイルを表示"
 
@@ -1368,11 +1376,11 @@ msgstr "提供された名前は使用可能な文字を含んでいません。
 msgid "Could not save image"
 msgstr "画像を保存できませんでした"
 
-#: source/app/service-providers/commands/language-tool.ts:180
+#: source/app/service-providers/commands/language-tool.ts:187
 msgid "Document too long"
 msgstr ""
 
-#: source/app/service-providers/commands/language-tool.ts:185
+#: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
 msgstr ""
 
@@ -1951,23 +1959,23 @@ msgstr "✍🏼一日当たりの平均値を超えました。"
 msgid "More statistics …"
 msgstr "統計情報の詳細..."
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
 msgid "Open Link"
 msgstr "リンクを開く"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
 msgid "Copy Mail Address"
 msgstr "メールアドレスをコピー"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
 msgid "Copy Link"
 msgstr "リンクをコピー"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:90
 msgid "Copy image to clipboard"
 msgstr "画像をクリップボードにコピー"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
 msgid "Open in browser"
 msgstr "ブラウザーで開く"
 

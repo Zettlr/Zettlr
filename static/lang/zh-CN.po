@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-29 02:28+0000\n"
+"POT-Creation-Date: 2023-05-10 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -352,59 +352,67 @@ msgstr ""
 "这里您可以定义特别的字符串，自动更正启用时可自动替换。左侧的字符将被右侧的字"
 "符所替换。"
 
-#: source/win-preferences/schema/spellchecking.ts:23
+#: source/win-preferences/schema/spellchecking.ts:24
 msgid "Use LanguageTool"
 msgstr "使用语言工具"
 
-#: source/win-preferences/schema/spellchecking.ts:28
+#: source/win-preferences/schema/spellchecking.ts:29
 msgid "Strictness"
 msgstr "严格"
 
-#: source/win-preferences/schema/spellchecking.ts:30
+#: source/win-preferences/schema/spellchecking.ts:31
 #, fuzzy
 msgid "Standard"
 msgstr "日历"
 
-#: source/win-preferences/schema/spellchecking.ts:31
+#: source/win-preferences/schema/spellchecking.ts:32
 msgid "Picky"
 msgstr "讲究"
 
-#: source/win-preferences/schema/spellchecking.ts:38
+#: source/win-preferences/schema/spellchecking.ts:39
+msgid "Mother tongue"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:41
+msgid "Not set"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:48
 msgid "LanguageTool Provider"
 msgstr "语言工具 提供程序"
 
-#: source/win-preferences/schema/spellchecking.ts:41
-#: source/win-preferences/schema/spellchecking.ts:48
+#: source/win-preferences/schema/spellchecking.ts:51
+#: source/win-preferences/schema/spellchecking.ts:58
 #, fuzzy
 msgid "Custom server"
 msgstr "自定义CSS"
 
-#: source/win-preferences/schema/spellchecking.ts:55
+#: source/win-preferences/schema/spellchecking.ts:65
 msgid "LanguageTool Username"
 msgstr "语言工具 用户名"
 
-#: source/win-preferences/schema/spellchecking.ts:61
+#: source/win-preferences/schema/spellchecking.ts:71
 msgid "LanguageTool API key"
 msgstr "语言工具 API密钥"
 
-#: source/win-preferences/schema/spellchecking.ts:69
+#: source/win-preferences/schema/spellchecking.ts:79
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr "选择要启用自动拼写检查的语言。"
 
-#: source/win-preferences/schema/spellchecking.ts:74
+#: source/win-preferences/schema/spellchecking.ts:84
 msgid "Search for dictionaries &hellip;"
 msgstr "搜索词典 &hellip；"
 
-#: source/win-preferences/schema/spellchecking.ts:78
+#: source/win-preferences/schema/spellchecking.ts:88
 msgid "User dictionary. Remove words by clicking them."
 msgstr "用户字典。点击移除单词。"
 
-#: source/win-preferences/schema/spellchecking.ts:80
+#: source/win-preferences/schema/spellchecking.ts:90
 msgid "Dictionary entry"
 msgstr "字典词条"
 
-#: source/win-preferences/schema/spellchecking.ts:83
+#: source/win-preferences/schema/spellchecking.ts:93
 #: source/win-preferences/schema/advanced.ts:96
 msgid "Search for entries …"
 msgstr "搜索内容 ..."
@@ -679,7 +687,7 @@ msgid "Copy ID"
 msgstr "复制ID"
 
 #: source/win-main/file-manager/util/file-item-context.ts:79
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
 msgid "Show file"
 msgstr "显示文件"
 
@@ -1351,11 +1359,11 @@ msgstr "提交的文件名包含不被允许的字符"
 msgid "Could not save image"
 msgstr "无法保持图像"
 
-#: source/app/service-providers/commands/language-tool.ts:180
+#: source/app/service-providers/commands/language-tool.ts:187
 msgid "Document too long"
 msgstr "文档太长了"
 
-#: source/app/service-providers/commands/language-tool.ts:185
+#: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
 msgstr "离线"
 
@@ -1923,23 +1931,23 @@ msgstr "✍🏼继续写作超过你的日平均字数。"
 msgid "More statistics …"
 msgstr "更多数据"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
 msgid "Open Link"
 msgstr "打开链接"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
 msgid "Copy Mail Address"
 msgstr "复制邮件地址"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
 msgid "Copy Link"
 msgstr "复制链接"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:90
 msgid "Copy image to clipboard"
 msgstr "复制图片到剪贴板"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
 msgid "Open in browser"
 msgstr "在浏览器中打开"
 

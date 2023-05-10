@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-04-29 02:28+0000\n"
+"POT-Creation-Date: 2023-05-10 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -352,58 +352,66 @@ msgstr ""
 "AutoCorret가 켜져있을 때 대체 될 특정 문자열을 정의 할 수 있습니다. 왼쪽에 있"
 "는 문자는 오른쪽에 있는 문자로 대체됩니다."
 
-#: source/win-preferences/schema/spellchecking.ts:23
+#: source/win-preferences/schema/spellchecking.ts:24
 msgid "Use LanguageTool"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:28
+#: source/win-preferences/schema/spellchecking.ts:29
 msgid "Strictness"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:30
+#: source/win-preferences/schema/spellchecking.ts:31
 msgid "Standard"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:31
+#: source/win-preferences/schema/spellchecking.ts:32
 msgid "Picky"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:38
-msgid "LanguageTool Provider"
+#: source/win-preferences/schema/spellchecking.ts:39
+msgid "Mother tongue"
 msgstr ""
 
 #: source/win-preferences/schema/spellchecking.ts:41
+msgid "Not set"
+msgstr ""
+
 #: source/win-preferences/schema/spellchecking.ts:48
+msgid "LanguageTool Provider"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:51
+#: source/win-preferences/schema/spellchecking.ts:58
 #, fuzzy
 msgid "Custom server"
 msgstr "커스텀 CSS"
 
-#: source/win-preferences/schema/spellchecking.ts:55
+#: source/win-preferences/schema/spellchecking.ts:65
 msgid "LanguageTool Username"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:61
+#: source/win-preferences/schema/spellchecking.ts:71
 msgid "LanguageTool API key"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:69
+#: source/win-preferences/schema/spellchecking.ts:79
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr "자동 맞춤법 ​​검사를 활성화할 언어를 선택하십시오."
 
-#: source/win-preferences/schema/spellchecking.ts:74
+#: source/win-preferences/schema/spellchecking.ts:84
 msgid "Search for dictionaries &hellip;"
 msgstr "사전 검색..."
 
-#: source/win-preferences/schema/spellchecking.ts:78
+#: source/win-preferences/schema/spellchecking.ts:88
 msgid "User dictionary. Remove words by clicking them."
 msgstr "사용자 사전. 단어를 클릭하여 제거할 수 있습니다."
 
-#: source/win-preferences/schema/spellchecking.ts:80
+#: source/win-preferences/schema/spellchecking.ts:90
 msgid "Dictionary entry"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:83
+#: source/win-preferences/schema/spellchecking.ts:93
 #: source/win-preferences/schema/advanced.ts:96
 msgid "Search for entries …"
 msgstr ""
@@ -678,7 +686,7 @@ msgid "Copy ID"
 msgstr "ID 복사"
 
 #: source/win-main/file-manager/util/file-item-context.ts:79
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
 msgid "Show file"
 msgstr "파일 보기"
 
@@ -1358,11 +1366,11 @@ msgstr "제공된 이름에는 허용된 문자가 없습니다."
 msgid "Could not save image"
 msgstr "이미지를 저장할 수 없습니다"
 
-#: source/app/service-providers/commands/language-tool.ts:180
+#: source/app/service-providers/commands/language-tool.ts:187
 msgid "Document too long"
 msgstr ""
 
-#: source/app/service-providers/commands/language-tool.ts:185
+#: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
 msgstr ""
 
@@ -1933,23 +1941,23 @@ msgstr "✍🏼 일일 평균을 능가하기 위해 글을 쓰자"
 msgid "More statistics …"
 msgstr "더 많은 통계 ..."
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
 msgid "Open Link"
 msgstr "링크 열기"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
 msgid "Copy Mail Address"
 msgstr "메일 주소 복사"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
 msgid "Copy Link"
 msgstr "링크 복사"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:90
 msgid "Copy image to clipboard"
 msgstr "이미지를 클립 보드에 복사"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
 msgid "Open in browser"
 msgstr "브라우저에서 열기"
 

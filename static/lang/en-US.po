@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.0-beta.4\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-05-09 02:29+0000\n"
+"POT-Creation-Date: 2023-05-10 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -354,58 +354,66 @@ msgstr ""
 "is on. The characters on the left side will be replaced with whatever comes "
 "on the right."
 
-#: source/win-preferences/schema/spellchecking.ts:23
+#: source/win-preferences/schema/spellchecking.ts:24
 msgid "Use LanguageTool"
 msgstr "Use LanguageTool"
 
-#: source/win-preferences/schema/spellchecking.ts:28
+#: source/win-preferences/schema/spellchecking.ts:29
 msgid "Strictness"
 msgstr "Strictness"
 
-#: source/win-preferences/schema/spellchecking.ts:30
+#: source/win-preferences/schema/spellchecking.ts:31
 msgid "Standard"
 msgstr "Standard"
 
-#: source/win-preferences/schema/spellchecking.ts:31
+#: source/win-preferences/schema/spellchecking.ts:32
 msgid "Picky"
 msgstr "Picky"
 
-#: source/win-preferences/schema/spellchecking.ts:38
+#: source/win-preferences/schema/spellchecking.ts:39
+msgid "Mother tongue"
+msgstr "Mother tongue"
+
+#: source/win-preferences/schema/spellchecking.ts:41
+msgid "Not set"
+msgstr "Not set"
+
+#: source/win-preferences/schema/spellchecking.ts:48
 msgid "LanguageTool Provider"
 msgstr "LanguageTool Provider"
 
-#: source/win-preferences/schema/spellchecking.ts:41
-#: source/win-preferences/schema/spellchecking.ts:48
+#: source/win-preferences/schema/spellchecking.ts:51
+#: source/win-preferences/schema/spellchecking.ts:58
 msgid "Custom server"
 msgstr "Custom server"
 
-#: source/win-preferences/schema/spellchecking.ts:55
+#: source/win-preferences/schema/spellchecking.ts:65
 msgid "LanguageTool Username"
 msgstr "LanguageTool Username"
 
-#: source/win-preferences/schema/spellchecking.ts:61
+#: source/win-preferences/schema/spellchecking.ts:71
 msgid "LanguageTool API key"
 msgstr "LanguageTool API key"
 
-#: source/win-preferences/schema/spellchecking.ts:69
+#: source/win-preferences/schema/spellchecking.ts:79
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr ""
 "Select the languages for which you want to enable automatic spell checking."
 
-#: source/win-preferences/schema/spellchecking.ts:74
+#: source/win-preferences/schema/spellchecking.ts:84
 msgid "Search for dictionaries &hellip;"
 msgstr "Search for dictionaries &hellip;"
 
-#: source/win-preferences/schema/spellchecking.ts:78
+#: source/win-preferences/schema/spellchecking.ts:88
 msgid "User dictionary. Remove words by clicking them."
 msgstr "User dictionary. Remove words by clicking them."
 
-#: source/win-preferences/schema/spellchecking.ts:80
+#: source/win-preferences/schema/spellchecking.ts:90
 msgid "Dictionary entry"
 msgstr "Dictionary entry"
 
-#: source/win-preferences/schema/spellchecking.ts:83
+#: source/win-preferences/schema/spellchecking.ts:93
 #: source/win-preferences/schema/advanced.ts:96
 msgid "Search for entries …"
 msgstr "Search for entries …"
@@ -680,7 +688,7 @@ msgid "Copy ID"
 msgstr "Copy ID"
 
 #: source/win-main/file-manager/util/file-item-context.ts:79
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
 msgid "Show file"
 msgstr "Show file"
 
@@ -1356,11 +1364,11 @@ msgstr "The provided name did not contain any allowed letters."
 msgid "Could not save image"
 msgstr "Could not save image"
 
-#: source/app/service-providers/commands/language-tool.ts:180
+#: source/app/service-providers/commands/language-tool.ts:187
 msgid "Document too long"
 msgstr "Document too long"
 
-#: source/app/service-providers/commands/language-tool.ts:185
+#: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
 msgstr "offline"
 
@@ -1940,23 +1948,23 @@ msgstr "✍🏼 Get writing to surpass your daily average."
 msgid "More statistics …"
 msgstr "More statistics …"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
 msgid "Open Link"
 msgstr "Open Link"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
 msgid "Copy Mail Address"
 msgstr "Copy Mail Address"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
 msgid "Copy Link"
 msgstr "Copy Link"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:90
 msgid "Copy image to clipboard"
 msgstr "Copy image to clipboard"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
 msgid "Open in browser"
 msgstr "Open in browser"
 
