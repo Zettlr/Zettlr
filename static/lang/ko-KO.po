@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-05-10 02:29+0000\n"
+"POT-Creation-Date: 2023-05-11 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1231,19 +1231,19 @@ msgstr "%s 옵션은 %s (문자 길이) 이상이어야 합니다."
 msgid "Option %s is required."
 msgstr "%s 옵션이 필요합니다."
 
-#: source/app/service-providers/config/index.ts:425
+#: source/app/service-providers/config/index.ts:423
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:428
+#: source/app/service-providers/config/index.ts:426
 msgid "Restart now"
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:429
+#: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:433
+#: source/app/service-providers/config/index.ts:431
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
 msgid "Confirm"
