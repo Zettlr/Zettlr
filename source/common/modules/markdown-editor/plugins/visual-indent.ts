@@ -78,9 +78,7 @@ function render (view: EditorView): DecorationSet {
       continue // Nothing to indent here
     }
 
-    offset += basePadding
-
-    const deco = Decoration.line({ attributes: { style: `text-indent: -${offset}px; padding-left: ${offset}px;` } })
+    const deco = Decoration.line({ attributes: { style: `text-indent: -${offset}px; padding-left: ${offset + basePadding}px;` } })
     builder.add(line.from, line.from, deco)
   }
 
