@@ -800,7 +800,7 @@ body div.tab-container {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 100px;
+      max-width: 160px;
     }
 
     .deduplicate {
