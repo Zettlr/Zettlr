@@ -349,7 +349,7 @@ export default defineComponent({
           type: 'button',
           class: 'share',
           id: 'export',
-          title: trans('Share the current file as HTML, DOCX, ODT or PDF'),
+          title: trans('Export the current file'),
           icon: 'export'
         },
         {
