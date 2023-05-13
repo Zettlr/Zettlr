@@ -37,6 +37,7 @@ export interface EditorConfiguration {
   renderHeadings: boolean
   renderTables: boolean
   renderEmphasis: boolean
+  renderCodeCopyButton: boolean
   imagePreviewWidth: number
   imagePreviewHeight: number
   idRE: string
@@ -111,7 +112,8 @@ export function getDefaultConfig (): EditorConfiguration {
     lintLanguageTool: false,
     showStatusbar: false,
     darkMode: false,
-    margins: 'M'
+    margins: 'M',
+    renderCodeCopyButton: true
   }
 }
 
