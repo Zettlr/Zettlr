@@ -18,7 +18,6 @@ import { SyntaxNodeRef, SyntaxNode } from '@lezer/common'
 import { EditorView, WidgetType } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
 import { sleep } from '@cds/core/internal'
-import editor from 'source/win-preferences/schema/editor'
 
 class CopyButtonWidget extends WidgetType {
   constructor (readonly nodeContents: string, readonly node: SyntaxNode) {
