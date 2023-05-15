@@ -14,9 +14,10 @@
 
 import clickAndSelect from './click-and-select'
 import { renderBlockWidgets } from './base-renderer'
-import { SyntaxNodeRef, SyntaxNode } from '@lezer/common'
-import { EditorView, WidgetType } from '@codemirror/view'
-import { EditorState } from '@codemirror/state'
+import type { SyntaxNodeRef, SyntaxNode } from '@lezer/common'
+import type { EditorView } from '@codemirror/view'
+import { WidgetType } from '@codemirror/view'
+import type { EditorState } from '@codemirror/state'
 import { sleep } from '@cds/core/internal'
 
 class CopyButtonWidget extends WidgetType {
