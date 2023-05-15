@@ -15,6 +15,11 @@ body {
     }
   }
 
+  // Main default styles
+  a {
+    color: rgb(60, 88, 201);
+  }
+
   // Gutters (for code files)
   .main-editor-wrapper.code-file .cm-gutters {
     border-right-color: var(--grey-2);
@@ -155,17 +160,6 @@ body {
 
     // Mermaid charts
     .mermaid-chart {
-
-      // THEMING
-      // For now, a simple background
-      // for easy recognition
-      svg {
-        background-color: var(--grey-4);
-        border-radius: 5px;
-      }
-
-      cursor: default; // No text cursor
-
       &.error {
         font-family: 'Inconsolata', Consolas, Menlo, monospace; // For the error messages
         color: var(--fg-error);

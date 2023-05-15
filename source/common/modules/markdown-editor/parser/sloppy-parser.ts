@@ -20,27 +20,32 @@
  * END HEADER
  */
 
-import { InlineParser, Element } from '@lezer/markdown'
+import { type InlineParser, type Element } from '@lezer/markdown'
 
 export const sloppyParser: InlineParser = {
   name: 'sloppy-parser', // Could be a fancy restaurant name or a bad one for a photographer
   before: 'Link',
   parse: (ctx, next, pos) => {
-    const imgOrLinkRE = /^!?\[(?<alt>[^\]]+?)\]\((?<url>.+)(?:(<whitespace>\s+)"(?<title>.+)")?\)/i
+    if (next !== 33 && next !== 91) { // 33 == !, 91 == [
+      return -1
+    }
+
+    const imgOrLinkRE = /^!?\[[^\]]+\]\(.+\)/i
     const relativeOffset = pos - ctx.offset
     const relativeSlice = ctx.text.slice(relativeOffset)
     const match = imgOrLinkRE.exec(relativeSlice)
-    const isLink = !relativeSlice.startsWith('!')
+    const isLink = next === 91
 
     if (match === null) {
       return -1
     }
 
-    // Every image consists of three to four elements:
-    const altText = match.groups?.alt ?? ''
-    const url = match.groups?.url ?? ''
-    const title = match.groups?.title ?? ''
-    const wsLength = (match.groups?.whitespace ?? '').length
+    // NOTE: Since Markdown links can contain brackets, we cannot do this with
+    // a RegExp-only solution (we could, but that might render us vulnerable to
+    // infinite loops in the RegExp engine if done improperly). Henceforth, we
+    // use RegExp only to detect whether there's an actually valid link at the
+    // current context position. Next, we literally go char by char to find all
+    // the elements we need
 
     const children: Element[] = []
     // Code Marks: ![
@@ -53,36 +58,61 @@ export const sloppyParser: InlineParser = {
 
     // Alt-text
     from = to
-    to = from + altText.length
+    to = from + ctx.text.slice(from - ctx.offset).indexOf(']')
     children.push(ctx.elt('LinkLabel', from, to))
+
     // Code Marks: ](
     from = to
     to = from + 1
     children.push(ctx.elt('LinkMark', from, to))
     children.push(ctx.elt('LinkMark', ++from, ++to))
+
+    // Perform our bracket matching magic ✨
     // URL
     from = to
-    to = from + url.length
-    children.push(ctx.elt('URL', from, to))
-    if (title !== undefined && title.length > 0) {
-      // Code Mark: quote
-      from = to + wsLength // Ignore the space(s)
-      to = from + 1
-      children.push(ctx.elt('LinkMark', from, to))
-      // Optional Title
-      from = to
-      to = from + title.length
-      children.push(ctx.elt('LinkTitle', from, to))
-      // Code Mark: "
-      from = to
-      to = from + 1
-      children.push(ctx.elt('LinkMark', from, to))
+    let brackets = 1 // Count the opening bracket
+    while (brackets > 0 && to < ctx.offset + ctx.text.length) {
+      const c = ctx.text.charAt(to - ctx.offset)
+      if (c === '(') {
+        brackets++
+      } else if (c === ')') {
+        brackets--
+      }
+      to++
     }
-    // The surrounding Image/Link tag
-    from = to
-    to = from + 1
-    children.push(ctx.elt('LinkMark', from, to))
-    const wrapper = ctx.elt(isLink ? 'Link' : 'Image', pos, pos + match[0].length, children)
+
+    if (brackets > 0) {
+      return -1 // The link didn't end until the end of the line
+    }
+
+    // Now, `to` points after the final bracket. The next check we have to do is
+    // see if there's a title inside.
+    let url = ctx.text.slice(from - ctx.offset, to - ctx.offset)
+
+    if (/".+"\)$/.test(url)) {
+      // We have a title
+      to = from + url.indexOf('"') - 1
+      children.push(ctx.elt('URL', from, to))
+
+      from = to + 1
+      to = from + 1
+      children.push(ctx.elt('LinkMark', from, to))
+
+      const titleLength = url.lastIndexOf('"') - url.indexOf('"') - 1
+      from = to
+      to = from + titleLength
+      children.push(ctx.elt('LinkTitle', from, to))
+
+      from = to
+      to = from + 1
+      children.push(ctx.elt('LinkMark', from, to))
+      children.push(ctx.elt('LinkMark', ++from, ++to))
+    } else {
+      children.push(ctx.elt('URL', from, to - 1))
+      children.push(ctx.elt('LinkMark', to - 1, to))
+    }
+
+    const wrapper = ctx.elt(isLink ? 'Link' : 'Image', pos, to, children)
     return ctx.addElement(wrapper)
   }
 }

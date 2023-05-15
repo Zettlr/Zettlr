@@ -25,8 +25,8 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import getConfigTemplate from './get-config-template'
 import enumDictFiles from '@common/util/enum-dict-files'
 import ProviderContract from '../provider-contract'
-import LogProvider from '../log'
-import { ConfigOptions } from '@dts/main/config-provider'
+import type LogProvider from '../log'
+import type { ConfigOptions } from '@dts/main/config-provider'
 import { loadData, trans } from '@common/i18n-main'
 
 const ZETTLR_VERSION = app.getVersion()
@@ -418,8 +418,6 @@ export default class ConfigProvider extends ProviderContract {
     if (!guardOptions.relaunch.includes(option)) {
       return
     }
-
-    console.log(process.argv)
 
     dialog.showMessageBox({
       message: trans('Changing this option requires a restart to take effect.'),

@@ -23,10 +23,10 @@
 
 // import { trans } from '@common/i18n-renderer'
 
-import { Decoration, EditorView, keymap, lineNumbers, MatchDecorator, ViewPlugin, ViewUpdate } from '@codemirror/view'
+import { drawSelection, dropCursor, EditorView, keymap, lineNumbers } from '@codemirror/view'
 import { onMounted, ref, toRef, watch } from 'vue'
-import { autocompletion, closeBrackets, CompletionContext } from '@codemirror/autocomplete'
-import { bracketMatching, indentOnInput, StreamLanguage } from '@codemirror/language'
+import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete'
+import { bracketMatching, codeFolding, foldGutter, indentOnInput, StreamLanguage } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { EditorState, Extension } from '@codemirror/state'
@@ -36,6 +36,9 @@ import { yamlLint } from '@common/modules/markdown-editor/linters/yaml-lint'
 import { lintGutter } from '@codemirror/lint'
 import { showStatusbarEffect, statusbar } from '@common/modules/markdown-editor/statusbar'
 import { search, searchKeymap } from '@codemirror/search'
+import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
+import { snippetSyntaxExtension } from '@common/modules/markdown-utils/snippets-syntax-extension'
+import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-highlighter'
 
 /**
  * We have to define the CodeMirror instance outside of Vue, since the Proxy-
@@ -51,164 +54,38 @@ const wrapperId = ref<string>('code-editor')
 
 const cleanFlag = ref<boolean>(true)
 
-const tabstopDeco = Decoration.mark({ class: 'cm-tm-tabstop' })
-const placeholderDeco = Decoration.mark({ class: 'cm-tm-placeholder' })
-const varDeco = Decoration.mark({ class: 'cm-tm-variable' })
-const invalidVarDeco = Decoration.mark({ class: 'cm-tm-false-variable' })
-const varPlaceholderDeco = Decoration.mark({ class: 'cm-tm-variable-placeholder' })
-
-const SUPPORTED_VARIABLES = [
-  'CURRENT_YEAR',
-  'CURRENT_YEAR_SHORT',
-  'CURRENT_MONTH',
-  'CURRENT_MONTH_NAME',
-  'CURRENT_MONTH_NAME_SHORT',
-  'CURRENT_DATE',
-  'CURRENT_HOUR',
-  'CURRENT_MINUTE',
-  'CURRENT_SECOND',
-  'CURRENT_SECONDS_UNIX',
-  'UUID',
-  'CLIPBOARD',
-  'ZKN_ID',
-  'CURRENT_ID',
-  'FILENAME',
-  'DIRECTORY',
-  'EXTENSION'
-]
-
-const snippetsDecorator = new MatchDecorator({
-  // tabstops|tabstops with default|variables|variable with default
-  regexp: /(?<tabstop>\$\d+)|(?<tabstopDefault>\$\{\d+:.+?\})|\$(?<var>[A-Z_]+)|\$\{(?<varDefault>[A-Z_]+):.+?\}/g,
-  // tabstop and tabstopDefault -> valid tabstop
-  // var and varDefault --> check the corresponding group if variable is correct
-  decoration: m => {
-    if (m.groups?.tabstop !== undefined) {
-      return tabstopDeco
-    } else if (m.groups?.tabstopDefault !== undefined) {
-      return placeholderDeco
-    } else if (m.groups?.var !== undefined) {
-      if (SUPPORTED_VARIABLES.includes(m.groups.var)) {
-        return varDeco
-      } else {
-        return invalidVarDeco
-      }
-    } else if (m.groups?.varDefault !== undefined) {
-      if (SUPPORTED_VARIABLES.includes(m.groups.varDefault)) {
-        return varPlaceholderDeco
-      } else {
-        return invalidVarDeco
-      }
-    } else {
-      return invalidVarDeco // Default: invalid
-    }
-  }
-})
-
-const snippetsHighlight = ViewPlugin.define(view => ({
-  decorations: snippetsDecorator.createDeco(view),
-  update (u: ViewUpdate) {
-    this.decorations = snippetsDecorator.updateDeco(u, this.decorations)
-  }
-}), { decorations: v => v.decorations })
-
-function snippetsAutocomplete (context: CompletionContext) {
-  const match = context.matchBefore(/\$[\da-z_]*$/i)
-  if (match === null) {
-    return null
-  } else {
-    const existingVarContents = match.text.toLowerCase().substring(1) // Ignore the $
-    return {
-      from: match.from,
-      options: SUPPORTED_VARIABLES
-        .filter(variable => variable.toLowerCase().startsWith(existingVarContents))
-        .map(variable => { return { label: '$' + variable, type: 'keyword' } })
-    }
-  }
-}
-
-/**
- * Small drop-in plugin that assigns 'cm-link'-classes to everything that looks
- * like a link. Those links must have a protocol and only contain alphanumerics,
- * plus ., -, #, %, and /.
- *
- * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
- */
-// function markLinks (cm: CodeMirror.Editor) {
-//   // Very small drop in that marks URLs inside the code editor
-//   for (let i = 0; i < cm.lineCount(); i++) {
-//     const line = String(cm.getLine(i))
-//     // Can contain a-z0-9, ., -, /, %, and #, but must end
-//     // with an alphanumeric, a slash or a hashtag.
-//     const match = /[a-z0-9-]+:\/\/[a-z0-9.-/#%]+[a-z0-9/#]/i.exec(line)
-//     if (match === null) {
-//       continue
-//     }
-
-//     const from = { line: i, ch: match.index }
-//     const to = { line: i, ch: match.index + match[0].length }
-
-//     // We can only have one marker at any given position at any given time
-//     if (cm.findMarks(from, to).length > 0) {
-//       continue
-//     }
-
-//     cm.markText(
-//       from, to,
-//       {
-//         className: 'cm-link',
-//         inclusiveLeft: false,
-//         inclusiveRight: true,
-//         attributes: { title: trans('Cmd/Ctrl+Click to open %s', match[0]) }
-//       }
-//     )
-//   }
-// }
-
-/**
- * If applicable, follows a link from the editor.
- *
- * @param   {MouseEvent}  event  The triggering MouseEvent
- */
-function maybeOpenLink (event: MouseEvent, view: EditorView) {
-  const t = event.target
-  const cmd = process.platform === 'darwin' && event.metaKey
-  const ctrl = process.platform !== 'darwin' && event.ctrlKey
-
-  if (cmd === false && ctrl === false) {
-    return
-  }
-
-  if (t === null || !(t instanceof Element)) {
-    return
-  }
-
-  if (t.className.includes('cm-link') === true && t.textContent !== null) {
-    window.location.assign(t.textContent)
-  }
-}
-
 function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
   const extensions = [
-    keymap.of([...searchKeymap]),
+    keymap.of([
+      ...defaultKeymap, // Minimal default keymap
+      ...historyKeymap, // , // History commands (redo/undo)
+      ...closeBracketsKeymap, // Binds Backspace to deletion of matching brackets
+      ...searchKeymap // Search commands (Ctrl+F, etc.)
+    ]),
     search({ top: true }),
+    codeFolding(),
+    foldGutter(),
+    history(),
+    drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
+    dropCursor(),
+    statusbar,
+    EditorState.allowMultipleSelections.of(true),
+    // Ensure the cursor never completely sticks to the top or bottom of the editor
+    EditorView.scrollMargins.of(view => { return { top: 30, bottom: 30 } }),
     lintGutter(),
     lineNumbers(),
     closeBrackets(),
     bracketMatching(),
     indentOnInput(),
     codeSyntaxHighlighter(), // This comes from the main editor component
+    plainLinkHighlighter,
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {
         // Tell the main component that the contents have changed
         cleanFlag.value = false
         emit('update:modelValue', cmInstance.state.doc.toString())
       }
-    }),
-    EditorView.domEventHandlers({
-      mousedown: maybeOpenLink
-    }),
-    statusbar
+    })
   ]
 
   switch (mode) {
@@ -226,17 +103,9 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
     case 'markdown-snippets':
       return [
         ...extensions,
-        // Enable the user to autocomplete the snippets
-        autocompletion({
-          activateOnTyping: true, // Always show immediately
-          selectOnOpen: false, // But never pre-select anything
-          closeOnBlur: true,
-          maxRenderedOptions: 20,
-          override: [snippetsAutocomplete]
-        }),
+        snippetSyntaxExtension,
         markdownParser(), // Comes from the main editor
-        markdownSyntaxHighlighter(), // Comes from the main editor
-        snippetsHighlight
+        markdownSyntaxHighlighter() // Comes from the main editor
       ]
   }
 }
@@ -312,9 +181,8 @@ defineExpose({ markClean, isClean })
 
 body {
   .code-editor-wrapper {
-    height: 100%;
-    position: relative;
     overflow: auto;
+    height: 100%;
     margin: 20px 0px;
     background-color: white;
     border: 1px solid rgb(173, 173, 173);
@@ -351,13 +219,6 @@ body {
       background-color: @base1;
       color: @base00;
     }
-
-    // Additional styles only for the GFM snippets editor
-    .cm-tm-tabstop { color: @cyan; }
-    .cm-tm-placeholder { color: @cyan; }
-    .cm-tm-variable { color: @yellow; }
-    .cm-tm-variable-placeholder { color: @violet; }
-    .cm-tm-false-variable { color: @red; }
   }
 
   &.dark {

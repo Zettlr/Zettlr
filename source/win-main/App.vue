@@ -41,8 +41,30 @@
         >
           <template #view1>
             <!-- First side: Editor -->
+            <!--
+              NOTE: The following contains a somewhat counterintuitive logic.
+              What we are effectively doing here is we overlay an editor pane
+              that directly gets passed the node configuration for the editor
+              pane that is currently in distraction free mode (if applicable).
+              The other logic below executes in every case, but if a distraction
+              free pane is shown, they only hide. The benefit is that, while the
+              distraction free pane effectively duplicates the pane and thus has
+              a loading time (especially for larger files), this retains
+              whatever state the other panes and branches were in so that the
+              user can - upon leaving distraction free - immediately continue
+              with their work.
+            -->
+            <EditorPane
+              v-if="distractionFreePaneConfig !== undefined"
+              v-bind:node="distractionFreePaneConfig"
+              v-bind:leaf-id="distractionFreePaneConfig.id"
+              v-bind:editor-commands="editorCommands"
+              v-bind:window-id="windowId"
+              v-on:global-search="startGlobalSearch($event)"
+            ></EditorPane>
             <EditorPane
               v-if="paneConfiguration.type === 'leaf'"
+              v-show="distractionFreePaneConfig === undefined"
               v-bind:node="paneConfiguration"
               v-bind:leaf-id="paneConfiguration.id"
               v-bind:editor-commands="editorCommands"
@@ -51,6 +73,7 @@
             ></EditorPane>
             <EditorBranch
               v-else
+              v-show="distractionFreePaneConfig === undefined"
               v-bind:node="paneConfiguration"
               v-bind:window-id="windowId"
               v-bind:editor-commands="editorCommands"
@@ -200,14 +223,6 @@ export default defineComponent({
     activeFile: function (): OpenDocument|null {
       return this.$store.getters.lastLeafActiveFile()
     },
-    readabilityActive: function (): boolean {
-      const lastLeaf = this.lastLeafId
-      if (typeof lastLeaf !== 'string') {
-        return false
-      }
-
-      return this.$store.state.readabilityModeActive.includes(lastLeaf)
-    },
     modifiedFiles: function (): string[] {
       return Array.from(this.$store.state.modifiedFiles.keys())
     },
@@ -334,16 +349,15 @@ export default defineComponent({
           type: 'button',
           class: 'share',
           id: 'export',
-          title: trans('Share the current file as HTML, DOCX, ODT or PDF'),
+          title: trans('Export the current file'),
           icon: 'export'
         },
         {
-          type: 'toggle',
+          type: 'button',
           id: 'toggle-readability',
           title: trans('Toggle readability mode'),
           icon: 'eye',
-          visible: this.getToolbarButtonDisplay('showToggleReadabilityButton'),
-          initialState: this.readabilityActive
+          visible: this.getToolbarButtonDisplay('showToggleReadabilityButton')
         },
         {
           type: 'spacer',
@@ -445,6 +459,9 @@ export default defineComponent({
     },
     distractionFree (): boolean {
       return this.$store.state.distractionFreeMode !== undefined
+    },
+    distractionFreePaneConfig (): LeafNodeJSON|undefined {
+      return this.$store.state.paneData.find((leaf: LeafNodeJSON) => leaf.id === this.$store.state.distractionFreeMode)
     }
   },
   watch: {
@@ -684,7 +701,9 @@ export default defineComponent({
       (this.$refs['file-manager'] as any).toggleFileList()
     },
     handleClick: function (clickedID: string) {
-      if (clickedID === 'root-open-workspaces') {
+      if (clickedID === 'toggle-readability') {
+        this.editorCommands.readabilityMode = !this.editorCommands.readabilityMode
+      } else if (clickedID === 'root-open-workspaces') {
         ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
           .catch(e => console.error(e))
       } else if (clickedID === 'open-preferences') {
@@ -859,9 +878,7 @@ export default defineComponent({
     },
     handleToggle: function (controlState: { id: string, state: any }) {
       const { id, state } = controlState
-      if (id === 'toggle-readability') {
-        this.editorCommands.readabilityMode = !this.editorCommands.readabilityMode
-      } else if (id === 'toggle-sidebar') {
+      if (id === 'toggle-sidebar') {
         window.config.set('window.sidebarVisible', state)
       } else if (id === 'toggle-file-manager') {
         // Since this is a three-way-toggle, we have to inspect the state.

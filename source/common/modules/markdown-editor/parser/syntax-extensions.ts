@@ -13,9 +13,9 @@
  * END HEADER
  */
 
-import { StateField, EditorState, Extension } from '@codemirror/state'
+import { StateField, type EditorState, type Extension } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
-import { Decoration, DecorationSet, EditorView } from '@codemirror/view'
+import { Decoration, type DecorationSet, EditorView } from '@codemirror/view'
 
 /**
  * Creates a StateField that applies the class `code` to all code block lines.

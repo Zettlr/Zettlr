@@ -35,9 +35,8 @@
       ></EditorPane>
       <!-- Here comes the resizing (for every but the last child) -->
       <div
-        v-if="index < node.nodes.length - 1 && !distractionFree"
-        v-bind:class="resizerClass"
-        v-bind:style="getResizerStyle(index)"
+        v-if="index < node.nodes.length - 1"
+        v-bind:class="`resizer ${node.direction}`"
         v-on:mousedown="beginResizing($event, index)"
       ></div>
     </template>
@@ -111,14 +110,8 @@ export default defineComponent({
       }
       return rules.join('; ')
     },
-    resizerClass () {
-      return `resizer ${this.node.direction}`
-    },
     nodeSizes () {
       return this.node.sizes
-    },
-    distractionFree () {
-      return this.$store.state.distractionFreeMode !== undefined
     }
   },
   watch: {
@@ -127,19 +120,6 @@ export default defineComponent({
     }
   },
   methods: {
-    getResizerStyle (index: number) {
-      // Every resizer has a different left/top offset
-      const dirProp = this.isHorizontalBranch ? 'left' : 'top'
-      let val = 0
-      for (let i = 0; i <= index; i++) {
-        val += this.sizes[i]
-      }
-
-      const extendProp = this.isHorizontalBranch ? 'height' : 'width'
-
-      // The calc is necessary to position the resizer exactly on top of the border
-      return `${dirProp}: calc(${val}% - 2.5px); ${extendProp}: 100%`
-    },
     beginResizing (event: MouseEvent, index: number) {
       this.currentResizerIndex = index
       this.lastOffset = this.isHorizontalBranch ? event.clientX : event.clientY
@@ -198,24 +178,24 @@ body .split-pane-container {
   display: flex;
   width: 100%;
   height: 100%;
-  position: relative;
 
   .resizer {
-    position: absolute;
     z-index: 1;
     transition: background-color 0.5s ease;
-  }
 
-  .resizer:hover { background-color: rgba(128, 128, 128, .5); }
+    &:hover { background-color: rgba(128, 128, 128, .5); }
+  }
 
   .resizer.horizontal {
     width: 5px;
+    margin: 0 -2.5px;
     height: 100%;
     cursor: ew-resize;
   }
 
   .resizer.vertical {
     width: 100%;
+    margin: -2.5px 0;
     height: 5px;
     cursor: ns-resize;
   }

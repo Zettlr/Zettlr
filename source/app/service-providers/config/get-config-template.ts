@@ -16,7 +16,7 @@ import { app } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
-import { ConfigOptions } from '@dts/main/config-provider'
+import type { ConfigOptions } from '@dts/main/config-provider'
 
 const ZETTLR_VERSION = app.getVersion()
 const ATTACHMENT_EXTENSIONS = [
@@ -127,6 +127,7 @@ export default function getConfigTemplate (): ConfigOptions {
         languageTool: {
           active: false, // Utilize languageTool?
           level: 'picky', // API: https://languagetool.org/http-api/#!/default/post_check
+          motherTongue: '', // Optional motherTongue property
           provider: 'official',
           customServer: '',
           username: '',

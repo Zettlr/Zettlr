@@ -25,10 +25,10 @@ import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
-import FSALWatchdog, { WatchdogEvent } from './fsal-watchdog'
+import FSALWatchdog, { type WatchdogEvent } from './fsal-watchdog'
 import FSALCache from './fsal-cache'
-import getSorter, { GenericSorter } from './util/sort'
-import {
+import getSorter, { type GenericSorter } from './util/sort'
+import type {
   AnyDescriptor,
   DirDescriptor,
   MDFileDescriptor,
@@ -38,20 +38,20 @@ import {
   SortMethod,
   FSALStats, FSALHistoryEvent
 } from '@dts/common/fsal'
-import { SearchTerm } from '@dts/common/search'
+import type { SearchTerm } from '@dts/common/search'
 import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
 import { app } from 'electron'
-import LogProvider from '@providers/log'
+import type LogProvider from '@providers/log'
 import { hasCodeExt, hasMarkdownExt, hasMdOrCodeExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import { mdFileExtensions } from './util/valid-file-extensions'
 import getMarkdownFileParser from './util/file-parser'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { getIDRE } from '@common/regular-expressions'
-import ConfigProvider from '@providers/config'
+import type ConfigProvider from '@providers/config'
 import { promises as fs } from 'fs'
 import { safeDelete } from './util/safe-delete'
-import DocumentManager from '@providers/documents'
+import type DocumentManager from '@providers/documents'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {

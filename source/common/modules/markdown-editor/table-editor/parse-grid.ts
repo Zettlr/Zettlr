@@ -15,7 +15,7 @@
 * END HEADER
 */
 
-import { ParsedTable, ColAlignment } from './types'
+import type { ParsedTable, ColAlignment } from './types'
 
 /**
  * Parses a grid table

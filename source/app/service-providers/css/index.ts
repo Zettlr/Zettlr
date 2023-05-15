@@ -19,7 +19,7 @@ import EventEmitter from 'events'
 
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
-import LogProvider from '@providers/log'
+import type LogProvider from '@providers/log'
 
 export default class CssProvider extends ProviderContract {
   private readonly _filePath: string

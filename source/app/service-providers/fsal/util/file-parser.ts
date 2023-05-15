@@ -13,14 +13,21 @@
  * END HEADER
  */
 
-import { getCodeBlockRE } from '@common/regular-expressions'
-import countWords from '@common/util/count-words'
-import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
-import { MDFileDescriptor } from '@dts/common/fsal'
+import { countChars, countWords } from '@common/util/counter'
+import type { MDFileDescriptor } from '@dts/common/fsal'
 import extractBOM from './extract-bom'
 import extractFileId from './extract-file-id'
-import extractLinks from './extract-links'
-import extractTags from './extract-tags'
+import { parse as parseYAML } from 'yaml'
+import {
+  markdownToAST as md2ast,
+  extractASTNodes
+} from '@common/modules/markdown-utils'
+import type {
+  Heading,
+  YAMLFrontmatter,
+  ZettelkastenLink,
+  ZettelkastenTag
+} from '@common/modules/markdown-utils/markdown-ast'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -52,50 +59,48 @@ export default function getMarkdownFileParser (
     file: MDFileDescriptor,
     content: string
   ): void {
-    // Prepare some necessary regular expressions and variables
-    const codeBlockRE = getCodeBlockRE(true)
-    const inlineCodeRE = /`[^`]+`/g
-    const h1HeadingRE = /^#{1}\s(.+)$/m
-
-    // Next, we have to prepare various forms of the Markdown document for the
-    // various extractors that, e.g., Python comments won't be detected as tags
-    const extracted = extractYamlFrontmatter(content)
-    const frontmatter = extracted.frontmatter
-    const contentWithoutYAML = extracted.content
-    const contentWithoutCode = contentWithoutYAML.replace(codeBlockRE, '').replace(inlineCodeRE, '')
-    const plainMarkdown = contentWithoutCode.replace(/<!--.+?-->/gs, '') // Note the dotall flag
-
     // First of all, determine all the things that have nothing to do with any
     // Markdown contents.
     file.bom = extractBOM(content)
     file.linefeed = '\n'
     if (content.includes('\r\n')) file.linefeed = '\r\n'
     if (content.includes('\n\r')) file.linefeed = '\n\r'
-
-    // Finally, reset all those properties which we will extract from the file's
-    // content so that they remain in their default if we don't find those in the
-    // file.
     file.id = extractFileId(file.name, content, idREPattern)
-    file.tags = extractTags(frontmatter, contentWithoutCode)
-    file.links = extractLinks(content)
-    file.firstHeading = null
+
+    // Parse the file into our AST
+    const ast = md2ast(content)
+
+    const tags = extractASTNodes(ast, 'ZettelkastenTag') as ZettelkastenTag[]
+    file.tags = tags.map(tag => tag.value)
+
+    const links = extractASTNodes(ast, 'ZettelkastenLink') as ZettelkastenLink[]
+    file.links = links.map(link => link.value)
+
+    const headings = extractASTNodes(ast, 'Heading') as Heading[]
+    const firstH1 = headings.find(h => h.level === 1)
+    file.firstHeading = firstH1 !== undefined ? firstH1.value.value : null
+
+    file.wordCount = countWords(ast)
+    file.charCount = countChars(ast)
+
+    // Reset frontmatter-related stuff
     file.yamlTitle = undefined
     file.frontmatter = null
 
-    // At this point, we don't need the full content anymore. The next parsing
-    // steps rely on a Markdown string that is stripped of a potential YAML
-    // frontmatter, any code -- inline and blocks -- as well as any comments.
-
-    file.wordCount = countWords(plainMarkdown, false)
-    file.charCount = countWords(plainMarkdown, true)
-
-    const h1Match = h1HeadingRE.exec(contentWithoutCode)
-    if (h1Match !== null) {
-      file.firstHeading = h1Match[1]
+    const frontmatterNodes = extractASTNodes(ast, 'YAMLFrontmatter') as YAMLFrontmatter[]
+    if (frontmatterNodes.length === 0) {
+      return // Nothing more to do
     }
 
-    if (frontmatter !== null) {
+    try {
+      const frontmatter = parseYAML(frontmatterNodes[0].source)
       file.frontmatter = {}
+      const isPrimitive = [ 'string', 'number', 'boolean' ].includes(typeof frontmatter)
+
+      if (!isPrimitive && !Array.isArray(frontmatter)) {
+        file.frontmatter = frontmatter
+      }
+
       for (const [ key, value ] of Object.entries(frontmatter)) {
         // Only keep those values which Zettlr can understand
         if (FRONTMATTER_VARS.includes(key)) {
@@ -110,6 +115,8 @@ export default function getMarkdownFileParser (
           file.yamlTitle = title
         }
       }
-    } // END: We got a frontmatter
+    } catch (err: any) {
+      // The frontmatter was invalid, but it's not of concern for us here
+    }
   }
 }

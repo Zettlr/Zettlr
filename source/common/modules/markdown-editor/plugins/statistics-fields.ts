@@ -14,19 +14,18 @@
  * END HEADER
  */
 
-import { EditorState, StateField, Transaction } from '@codemirror/state'
-import countWords from '@common/util/count-words'
+import { syntaxTree } from '@codemirror/language'
+import { StateField, type EditorState, type Transaction } from '@codemirror/state'
+import { markdownToAST } from '@common/modules/markdown-utils'
+import { countAll } from '@common/util/counter'
 
-export const wordCountField = StateField.define<number>({
-  create (state: EditorState): number {
-    let content = ''
-    for (const line of state.doc.iter()) {
-      content += line
-    }
-    return countWords(content, false)
+export const countField = StateField.define<{ chars: number, words: number }>({
+  create (state: EditorState): { chars: number, words: number } {
+    const ast = markdownToAST(state.doc.toString())
+    return countAll(ast)
   },
 
-  update (value: number, transaction: Transaction) {
+  update (value: { chars: number, words: number }, transaction: Transaction) {
     // If someone provided the markClean effect, we'll exchange the saved doc
     // so that, when comparing documents with cleanDoc.eq(state.doc), it will
     // return true.
@@ -34,78 +33,11 @@ export const wordCountField = StateField.define<number>({
       return value
     }
 
-    let content = ''
-    for (const line of transaction.newDoc.iter()) {
-      content += line
-    }
-    return countWords(content, false)
+    const ast = markdownToAST(transaction.state.doc.toString(), syntaxTree(transaction.state))
+    return countAll(ast)
   },
 
-  compare (a: number, b: number): boolean {
-    return a === b
+  compare (a: { chars: number, words: number }, b: { chars: number, words: number }): boolean {
+    return a.chars === b.chars && a.words === b.words
   }
 })
-
-export const charCountField = StateField.define<number>({
-  create (state: EditorState): number {
-    let content = ''
-    for (const line of state.doc.iter()) {
-      content += line
-    }
-    return countWords(content, true)
-  },
-
-  update (value: number, transaction: Transaction) {
-    // If someone provided the markClean effect, we'll exchange the saved doc
-    // so that, when comparing documents with cleanDoc.eq(state.doc), it will
-    // return true.
-    if (!transaction.docChanged) {
-      return value
-    }
-
-    let content = ''
-    for (const line of transaction.newDoc.iter()) {
-      content += line
-    }
-    return countWords(content, true)
-  },
-
-  compare (a: number, b: number): boolean {
-    return a === b
-  }
-})
-
-export const charCountNoSpacesField = StateField.define<number>({
-  create (state: EditorState): number {
-    let content = ''
-    for (const line of state.doc.iter()) {
-      content += line
-    }
-    return countWords(content, 'nospace')
-  },
-
-  update (value: number, transaction: Transaction) {
-    // If someone provided the markClean effect, we'll exchange the saved doc
-    // so that, when comparing documents with cleanDoc.eq(state.doc), it will
-    // return true.
-    if (!transaction.docChanged) {
-      return value
-    }
-
-    let content = ''
-    for (const line of transaction.newDoc.iter()) {
-      content += line
-    }
-    return countWords(content, 'nospace')
-  },
-
-  compare (a: number, b: number): boolean {
-    return a === b
-  }
-})
-
-export const mdStatistics = [
-  wordCountField,
-  charCountField,
-  charCountNoSpacesField
-]

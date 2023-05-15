@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-import { InlineParser } from '@lezer/markdown'
+import { type InlineParser } from '@lezer/markdown'
 
-// Any character allowed before a tag (the first are space, nbsp, and tab)
-const allowedCharsBefore = '   ({['.split('')
+// Any character allowed before a tag (the first are space and nbsp)
+const allowedCharsBefore = '  \t\n({['.split('')
 const tagRE = /^##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?/u
 
 export const zknTagParser: InlineParser = {

@@ -14,7 +14,7 @@
  */
 
 import { syntaxTree } from '@codemirror/language'
-import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
+import { hoverTooltip, type EditorView, type Tooltip } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
 

@@ -20,7 +20,7 @@ import path from 'path'
 import archiver from 'archiver'
 import rimraf from 'rimraf'
 import isFile from '@common/util/is-file'
-import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import sanitize from 'sanitize-filename'
 
 export const plugin: ExporterPlugin = {
@@ -167,16 +167,9 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
         })
       // Now we need to overwrite the targetFile with the pack name
       targetFile = packFile
-
-      // Afterwards remove the source file
-      rimraf(targetFile.replace('.textpack', '.textbundle'), (error) => {
-        if (error != null) {
-          error.message = `[Export] Could not remove the temporary textbundle: ${error.message}`
-          reject(error)
-        }
-        resolve()
-      })
     })
+    // Afterwards remove the source file
+    await rimraf(targetFile.replace('.textpack', '.textbundle'))
   }
 
   // After all is done, return the written file (folder, to be exact).

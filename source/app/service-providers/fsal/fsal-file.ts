@@ -17,9 +17,9 @@ import path from 'path'
 import searchFile from './util/search-file'
 import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
-import { MDFileDescriptor } from '@dts/common/fsal'
-import FSALCache from './fsal-cache'
-import { SearchTerm } from '@dts/common/search'
+import type { MDFileDescriptor } from '@dts/common/fsal'
+import type FSALCache from './fsal-cache'
+import type { SearchTerm } from '@dts/common/search'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.

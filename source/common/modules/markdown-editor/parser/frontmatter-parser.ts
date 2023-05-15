@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { BlockParser } from '@lezer/markdown'
+import { type BlockParser } from '@lezer/markdown'
 import { StreamLanguage } from '@codemirror/language'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { partialParse } from './partial-parse'

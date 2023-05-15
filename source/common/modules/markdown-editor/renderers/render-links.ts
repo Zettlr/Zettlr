@@ -13,15 +13,16 @@
  */
 
 import { renderInlineWidgets } from './base-renderer'
-import { SyntaxNodeRef, SyntaxNode } from '@lezer/common'
-import { EditorView, WidgetType } from '@codemirror/view'
-import { EditorState } from '@codemirror/state'
+import { type SyntaxNodeRef, type SyntaxNode } from '@lezer/common'
+import { WidgetType, type EditorView } from '@codemirror/view'
+import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 import openMarkdownLink from '../util/open-markdown-link'
 import { linkImageMenu } from '../context-menu/link-image-menu'
 import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'
 import tippy from 'tippy.js'
+import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -64,7 +65,7 @@ class LinkWidget extends WidgetType {
       if (cmd || ctrl) {
         openMarkdownLink(this.linkUrl, view)
       } else {
-        clickAndSelect(view, this.node)(event)
+        clickAndSelect(view)(event)
       }
     })
 
@@ -92,34 +93,39 @@ class LinkWidget extends WidgetType {
 
         const h4 = document.createElement('h4')
         h4.textContent = res.title
-        dom.appendChild(h4)
+
+        const imgParaWrapper = document.createElement('div')
+        imgParaWrapper.style.display = 'flex'
+        imgParaWrapper.style.flexDirection = 'row'
 
         if (res.image !== undefined) {
           const img = document.createElement('img')
           img.src = res.image
           img.style.maxWidth = '100px'
           img.style.maxHeight = '100px'
-          img.style.float = 'left'
           img.style.marginRight = '10px'
           img.style.marginBottom = '10px'
-          dom.appendChild(img)
+          imgParaWrapper.appendChild(img)
         }
 
         if (res.summary !== undefined) {
           const para = document.createElement('p')
           para.style.whiteSpace = 'pre-wrap'
           para.textContent = res.summary
-          dom.appendChild(para)
+          imgParaWrapper.appendChild(para)
         }
 
         const link = document.createElement('span')
         // We can remove the "safe file" as this is a protocol only intended for
         // local files
-        link.textContent = validURI.replace(/^safe-file:\/\//, '')
+        link.textContent = shortenUrlVisually(validURI.replace(/^safe-file:\/\//, ''))
         link.style.fontSize = '80%'
         link.style.fontFamily = 'monospace'
-        dom.appendChild(link)
+        link.style.wordBreak = 'break-word'
 
+        dom.appendChild(h4)
+        dom.appendChild(imgParaWrapper)
+        dom.appendChild(link)
         tooltip.setContent(dom)
       })
       .catch(err => { console.error(`Could not generate link preview for URL ${validURI}`, err) })
@@ -151,13 +157,14 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): LinkWidget|unde
     return new LinkWidget(url, url, node.node)
   }
 
-  const literalLink = state.sliceDoc(node.from, node.to)
-  const match = /(?!!)\[(?<title>.+)\]\((?<url>.+)\)/.exec(literalLink)
-  if (match === null) {
-    return undefined // Should not happen, but we never know.
+  const urlNode = node.node.getChild('URL')
+  if (urlNode === null) {
+    return undefined // This can happen for reference style links
   }
 
-  const { title, url } = match.groups as any
+  const titleNode = node.node.getChild('LinkLabel')
+  const url = state.sliceDoc(urlNode.from, urlNode.to)
+  const title = titleNode !== null ? state.sliceDoc(titleNode.from, titleNode.to) : url
 
   return new LinkWidget(title, url, node.node)
 }

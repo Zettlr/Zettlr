@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
+import { type EditorView, hoverTooltip, type Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
-import { EditorState } from '@codemirror/state'
+import { type EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
 import { md2html } from '@common/modules/markdown-utils'
@@ -85,7 +85,7 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   const fnBody = findRefForFootnote(view.state, fn)
 
   const { library } = view.state.field(configField).metadata
-  const tooltipContent = md2html(fnBody?.text ?? trans('No footnote text found.'), library)
+  const tooltipContent = md2html(fnBody?.text ?? trans('No footnote text found.'), window.getCitationCallback(library))
 
   return {
     pos: nodeAt.from,
@@ -124,7 +124,7 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
               from: fnBody.from, to: fnBody.to, insert: textarea.value
             }
           })
-          dom.innerHTML = md2html(textarea.value, library)
+          dom.innerHTML = md2html(textarea.value, window.getCitationCallback(library))
           dom.appendChild(editButton)
         })
 

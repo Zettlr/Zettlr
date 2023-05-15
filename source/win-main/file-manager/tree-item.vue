@@ -574,16 +574,16 @@ body {
       .display-text {
         overflow: hidden;
         text-overflow: ellipsis;
-      }
 
-      // These inputs should be more or less "invisible"
-      input {
-        border: none;
-        color: inherit;
-        font-family: inherit;
-        font-size: inherit;
-        background-color: transparent;
-        padding: 0;
+        // These inputs should be more or less "invisible"
+        input {
+          border: none;
+          color: inherit;
+          font-family: inherit;
+          font-size: inherit;
+          background-color: transparent;
+          padding: 0;
+        }
       }
 
       &.project {

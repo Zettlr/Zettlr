@@ -15,7 +15,12 @@
  */
 
 import { customTags } from '../util/custom-tags'
-import { LanguageSupport, StreamLanguage, Language, LanguageDescription } from '@codemirror/language'
+import {
+  StreamLanguage,
+  type LanguageSupport,
+  type Language,
+  type LanguageDescription
+} from '@codemirror/language'
 
 // Import all the languages, first the "new" ones
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
@@ -93,14 +98,14 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(clojure), selectors: ['clojure'] },
   { mode: StreamLanguage.define(cobol), selectors: ['cobol'] },
   { mode: StreamLanguage.define(commonLisp), selectors: [ 'clisp', 'commonlisp' ] },
-  { mode: StreamLanguage.define(cpp), selectors: [ 'c\\+\\+', 'cpp' ] },
-  { mode: StreamLanguage.define(csharp), selectors: [ 'c\\#', 'csharp', 'cs' ] },
+  { mode: StreamLanguage.define(cpp), selectors: [ 'c++', 'cpp' ] },
+  { mode: StreamLanguage.define(csharp), selectors: [ 'c#', 'csharp', 'cs' ] },
   { mode: StreamLanguage.define(dart), selectors: [ 'dart', 'dt' ] },
   { mode: StreamLanguage.define(diff), selectors: ['diff'] },
   { mode: StreamLanguage.define(dockerFile), selectors: [ 'docker', 'dockerfile' ] },
   { mode: StreamLanguage.define(elm), selectors: ['elm'] },
   { mode: StreamLanguage.define(fortran), selectors: ['fortran'] },
-  { mode: StreamLanguage.define(fSharp), selectors: [ 'f\\#', 'fsharp' ] },
+  { mode: StreamLanguage.define(fSharp), selectors: [ 'f#', 'fsharp' ] },
   { mode: StreamLanguage.define(go), selectors: ['go'] },
   { mode: StreamLanguage.define(haskell), selectors: [ 'haskell', 'hs' ] },
   { mode: StreamLanguage.define(html), selectors: ['html'] },
@@ -128,17 +133,17 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(tcl), selectors: ['tcl'] },
   { mode: StreamLanguage.define(toml), selectors: [ 'toml', 'ini' ] },
   { mode: StreamLanguage.define(turtle), selectors: [ 'turtle', 'ttl' ] },
-  { mode: StreamLanguage.define(vb), selectors: [ 'vb\\.net', 'vb', 'visualbasic' ] },
+  { mode: StreamLanguage.define(vb), selectors: [ 'vb.net', 'vb', 'visualbasic' ] },
   { mode: StreamLanguage.define(verilog), selectors: [ 'verilog', 'v' ] },
   { mode: StreamLanguage.define(vhdl), selectors: [ 'vhdl', 'vhd' ] },
   { mode: StreamLanguage.define(xml), selectors: ['xml'] },
   { mode: StreamLanguage.define(yaml), selectors: [ 'yaml', 'yml' ] },
   { mode: typescriptLanguage, selectors: [ 'typescript', 'ts' ] }
-  // {
-  //   mode: 'verilog',
-  //   selectors: [ 'systemverilog', 'sv' ]
-  // },
 ]
+
+// TIP: Uncomment the following line to get a full list of all unique characters
+// that are capable of belonging to a selector
+// console.log([...new Set(codeLanguages.map(x => x.selectors).flat().join('').split(''))])
 
 // This file returns a syntax extension that provides parsing and syntax
 // capabilities
@@ -146,12 +151,17 @@ export default function markdownParser (): LanguageSupport {
   return markdown({
     base: markdownLanguage,
     codeLanguages: (infoString) => {
-      // First, remove potential curly braces from the info string and split it
-      infoString = infoString.replace(/^\{(.+)\}$/, '$1')
-      infoString = infoString.split(' ')[0] // First entry must be the language
+      // infostrings must start with the language and can be surrounded by curly
+      // brackets. We just extract everything from the beginning that is an
+      // allowed selector-part
+      const match = /^{?([a-z.#+-]+)/.exec(infoString.toLowerCase())
+      if (match === null) {
+        return null
+      }
+
       // Return an adequate language
       for (const entry of codeLanguages) {
-        if (entry.selectors.includes(infoString)) {
+        if (entry.selectors.includes(match[1])) {
           return entry.mode
         }
       }

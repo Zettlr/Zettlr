@@ -18,7 +18,12 @@
  * END HEADER
  */
 
-import { BlockParser, Element, BlockContext, LeafBlockParser } from '@lezer/markdown'
+import {
+  type BlockParser,
+  type Element,
+  type BlockContext,
+  type LeafBlockParser
+} from '@lezer/markdown'
 
 // Group 1: ^| table contents |$; Group 2: some text | with pipes in between
 const pipeRE = /^(\|.+?\|)$|(.+?\|.+?)/

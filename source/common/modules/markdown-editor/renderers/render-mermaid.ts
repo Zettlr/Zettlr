@@ -13,41 +13,54 @@
  */
 
 import { renderBlockWidgets } from './base-renderer'
-import { SyntaxNode, SyntaxNodeRef } from '@lezer/common'
-import { EditorView, WidgetType } from '@codemirror/view'
+import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
+import { WidgetType, type EditorView } from '@codemirror/view'
 
 import mermaid from 'mermaid'
-import { EditorState } from '@codemirror/state'
+import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 
-mermaid.initialize({ startOnLoad: false, theme: 'dark' as any })
+// Always re-initialize mermaid as soon as the darkMode changes
+const ipcRenderer = window.ipc
+ipcRenderer.on('config-provider', (event, { command, payload }) => {
+  if (command === 'update' && payload === 'darkMode') {
+    const isDarkMode = window.config.get('darkMode') as boolean
+    const theme = isDarkMode ? 'dark' : 'default'
+    mermaid.initialize({ startOnLoad: false, theme })
+  }
+})
+
+// Initially, set the dark theme
+mermaid.initialize({ startOnLoad: false, theme: 'default' })
 
 class MermaidWidget extends WidgetType {
-  constructor (readonly graph: string, readonly node: SyntaxNode) {
+  constructor (readonly graph: string, readonly node: SyntaxNode, readonly darkMode: boolean) {
     super()
   }
 
   eq (other: MermaidWidget): boolean {
     return other.graph === this.graph &&
       other.node.from === this.node.from &&
-      other.node.to === this.node.to
+      other.node.to === this.node.to &&
+      this.darkMode === other.darkMode
   }
 
   toDOM (view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.classList.add('mermaid-chart')
+
     try {
-      mermaid.render(`graphDiv${Date.now()}`, this.graph, (svg) => {
+      const id = `graphDiv${Date.now()}`
+      mermaid.render(id, this.graph, (svg) => {
         elem.innerHTML = svg
       })
-      elem.onclick = clickAndSelect(view, this.node)
     } catch (err: any) {
       elem.classList.add('error')
       // TODO: Localise!
       elem.innerText = `Could not render Graph:\n\n${err.str as string}`
     }
 
-    elem.addEventListener('click', clickAndSelect(view, this.node))
+    elem.addEventListener('click', clickAndSelect(view))
     return elem
   }
 
@@ -57,7 +70,6 @@ class MermaidWidget extends WidgetType {
 }
 
 function shouldHandleNode (node: SyntaxNodeRef): boolean {
-  // console.log(node.type.name)
   // This parser should look for InlineCode and FencedCode and then immediately
   // check its first CodeMark child to ensure its contents only include $ or $$.
   if (node.type.name !== 'FencedCode') {
@@ -91,7 +103,10 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): MermaidWidget|u
   }
 
   const graph = nodeText.replace(/^[`~]{1,3}mermaid\n(.+?)\n[`~]{1,3}$/s, '$1') // NOTE the s flag
-  return new MermaidWidget(graph, node.node)
+  // NOTE: We have to pass the current value of the darkMode config value to
+  // see in what mode the mermaid graph has actually been rendered to re-render
+  // the graph if necessary
+  return new MermaidWidget(graph, node.node, window.config.get('darkMode') as boolean)
 }
 
 export const renderMermaid = renderBlockWidgets(shouldHandleNode, createWidget)

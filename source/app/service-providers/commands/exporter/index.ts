@@ -23,14 +23,14 @@ import { promises as fs } from 'fs'
 import isFile from '@common/util/is-file'
 
 // Exporters
-import { DefaultsOverride, ExporterAPI, ExporterOptions, ExporterOutput, PandocRunnerOutput } from './types'
+import type { DefaultsOverride, ExporterAPI, ExporterOptions, ExporterOutput, PandocRunnerOutput } from './types'
 import { plugin as DefaultExporter } from './default-exporter'
 import { plugin as PDFExporter } from './pdf-exporter'
 import { plugin as TextbundleExporter } from './textbundle-exporter'
-import AssetsProvider from '@providers/assets'
-import LogProvider from '@providers/log'
-import { PandocProfileMetadata } from '@dts/common/assets'
-import ConfigProvider from '@providers/config'
+import type AssetsProvider from '@providers/assets'
+import type LogProvider from '@providers/log'
+import { type PandocProfileMetadata } from '@dts/common/assets'
+import type ConfigProvider from '@providers/config'
 
 /**
  * This function returns faux metadata for the custom export formats the

@@ -119,19 +119,10 @@ export default defineComponent({
 <style lang="less">
 body .selectable-list-wrapper {
   padding: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
 
   &.has-footer { padding-bottom: 40px; }
 
   .selectable-list-footer {
-    position: absolute;
-    bottom: 18px;
-    left: 20px;
-    right: 20px;
     height: 22px;
     display: flex;
     justify-content: flex-start;

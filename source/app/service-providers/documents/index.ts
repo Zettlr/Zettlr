@@ -21,24 +21,37 @@ import { promises as fs, constants as FSConstants } from 'fs'
 import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import AppServiceContainer from 'source/app/app-service-container'
+import type AppServiceContainer from 'source/app/app-service-container'
 import { ipcMain, app } from 'electron'
-import { DocumentTree, DTLeaf } from './document-tree'
+import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
-import { TabManager } from '@providers/documents/document-tree/tab-manager'
-import { DP_EVENTS, OpenDocument, DocumentType } from '@dts/common/documents'
+import { type TabManager } from '@providers/documents/document-tree/tab-manager'
+import { DP_EVENTS, type OpenDocument, DocumentType } from '@dts/common/documents'
 import { v4 as uuid4 } from 'uuid'
 import chokidar from 'chokidar'
-import { Update } from '@codemirror/collab'
+import { type Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import countWords from '@common/util/count-words'
+import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { countChars, countWords } from '@common/util/counter'
+import { markdownToAST } from '@common/modules/markdown-utils'
 
 type DocumentWindows = Record<string, DocumentTree>
 
 const MAX_VERSION_HISTORY = 100 // Keep no more than this many updates.
 const DELAYED_SAVE_TIMEOUT = 5000 // Delayed timeout means: Save after 5 seconds
 const IMMEDIATE_SAVE_TIMEOUT = 250 // Even "immediate" should not save immediate to save disk space
+
+export interface DocumentsUpdateContext {
+  windowId?: string
+  leafId?: string
+  filePath?: string
+  direction?: 'horizontal'|'vertical'
+  insertion?: 'after'|'before'
+  newLeaf?: string
+  originLeaf?: string
+  key?: string
+  status?: 'modification'|'pinned'
+}
 
 /**
  * Holds all information associated with a document that is currently loaded
@@ -520,7 +533,7 @@ export default class DocumentManager extends ProviderContract {
     this._config.shutdown()
   }
 
-  private broadcastEvent (event: DP_EVENTS, context?: any): void {
+  private broadcastEvent (event: DP_EVENTS, context?: DocumentsUpdateContext): void {
     // Here we blast an event notification across every line of code of the app
     broadcastIpcMessage('documents-update', { event, context })
     this._emitter.emit(event, context)
@@ -572,8 +585,8 @@ export default class DocumentManager extends ProviderContract {
       lastSavedVersion: 0,
       updates: [],
       document: Text.of(content.split(descriptor.linefeed)),
-      lastSavedWordCount: countWords(content, false),
-      lastSavedCharCount: countWords(content, true),
+      lastSavedCharCount: descriptor.type === 'file' ? descriptor.charCount : 0,
+      lastSavedWordCount: descriptor.type === 'file' ? descriptor.wordCount : 0,
       saveTimeout: undefined
     }
 
@@ -925,10 +938,7 @@ export default class DocumentManager extends ProviderContract {
     await this.forEachLeaf(async (tabMan, windowId, leafId) => {
       const res = tabMan.replaceFilePath(oldPath, newPath)
       if (res) {
-        console.log('ADDING LEAF TO BE NOTIFIED')
         leafsToNotify.push([ windowId, leafId ])
-      } else {
-        console.log('Not adding leaf, nothing changed.')
       }
       return res
     })
@@ -937,7 +947,6 @@ export default class DocumentManager extends ProviderContract {
 
     // Emit the necessary events to each window
     for (const [ windowId, leafId ] of leafsToNotify) {
-      console.log('Emitting event for', windowId, leafId)
       this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { filePath: oldPath, windowId, leafId })
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { filePath: newPath, windowId, leafId })
     }
@@ -956,7 +965,7 @@ export default class DocumentManager extends ProviderContract {
     const docs = this.documents.filter(doc => doc.filePath.startsWith(oldPath))
 
     for (const doc of docs) {
-      console.log('Replacing file path for doc', doc.filePath, 'with', doc.filePath.replace(oldPath, newPath))
+      this._app.log.info('Replacing file path for doc ' + doc.filePath + ' with ' + doc.filePath.replace(oldPath, newPath))
       await this.hasMovedFile(doc.filePath, doc.filePath.replace(oldPath, newPath))
     }
   }
@@ -1069,23 +1078,7 @@ export default class DocumentManager extends ProviderContract {
     const idx = this.documents.findIndex(file => file.filePath === filePath)
     this.documents.splice(idx, 1)
     // Indicate to all affected editors that they should reload the file
-    this.broadcastEvent(DP_EVENTS.FILE_REMOTELY_CHANGED, filePath)
-  }
-
-  /**
-   * Sets the given descriptor as active file.
-   *
-   * @param {MDFileDescriptor|CodeFileDescriptor|null} descriptorPath The descriptor to make active file
-   */
-  public setActiveFile (windowId: string, leafId: string, filePath: string|null): void {
-    const leaf = this._windows[windowId].findLeaf(leafId)
-    if (leaf === undefined) {
-      return
-    }
-
-    leaf.tabMan.activeFile = filePath
-    this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath })
-    this.syncToConfig()
+    this.broadcastEvent(DP_EVENTS.FILE_REMOTELY_CHANGED, { filePath })
   }
 
   public sortOpenFiles (windowId: string, leafId: string, newOrder: string[]): void {
@@ -1282,7 +1275,7 @@ export default class DocumentManager extends ProviderContract {
       return
     }
 
-    await leaf.tabMan.forward()
+    leaf.tabMan.forward()
     this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId })
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
   }
@@ -1293,7 +1286,7 @@ export default class DocumentManager extends ProviderContract {
       return
     }
 
-    await leaf.tabMan.back()
+    leaf.tabMan.back()
     this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId })
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
   }
@@ -1327,15 +1320,12 @@ export default class DocumentManager extends ProviderContract {
 
     if (doc.descriptor.type === 'file') {
       // In case of an MD File increase the word or char count
-      const newWordCount = countWords(content, false)
-      const newCharCount = countWords(content, true)
+      const ast = markdownToAST(content)
+      const newWordCount = countWords(ast)
+      const newCharCount = countChars(ast)
 
-      const countChars = this._app.config.get().editor.countChars
-      if (countChars) {
-        this._app.stats.updateWordCount(newCharCount - doc.lastSavedCharCount)
-      } else {
-        this._app.stats.updateWordCount(newWordCount - doc.lastSavedWordCount)
-      }
+      this._app.stats.updateWordCount(newWordCount - doc.lastSavedWordCount)
+      // TODO: Proper character counting
 
       doc.lastSavedWordCount = newWordCount
       doc.lastSavedCharCount = newCharCount

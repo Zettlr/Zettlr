@@ -21,19 +21,19 @@ import YAML from 'yaml'
 // Module utilities
 import checkImportIntegrity from './check-import-integrity'
 import importTextbundle from './import-textbundle'
-import { DirDescriptor } from '@dts/common/fsal'
+import type { DirDescriptor } from '@dts/common/fsal'
 import { app } from 'electron'
 import { trans } from '@common/i18n-main'
-import AssetsProvider from '@providers/assets'
-import { PandocProfileMetadata } from '@dts/common/assets'
+import type AssetsProvider from '@providers/assets'
+import type { PandocProfileMetadata } from '@dts/common/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
 
 export default async function makeImport (
   fileList: string[],
   dirToImport: DirDescriptor,
   assetsProvider: AssetsProvider,
-  errorCallback: Function|null = null,
-  successCallback: Function|null = null
+  errorCallback: null|((filePath: string, errorMessage: string) => void) = null,
+  successCallback: null|((filePath: string) => void) = null
 ): Promise<string[]> {
   // Determine the availability of Pandoc. As the Pandoc path is added to
   // process.env.PATH during the environment check, this should always work

@@ -14,7 +14,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { MDFileDescriptor } from '@dts/common/fsal'
+import type { MDFileDescriptor } from '@dts/common/fsal'
 
 const MAX_FILE_PREVIEW_LENGTH = 300
 

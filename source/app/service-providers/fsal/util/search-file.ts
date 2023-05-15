@@ -17,8 +17,8 @@
  * END HEADER
  */
 
-import { SearchResult, SearchTerm } from '@dts/common/search'
-import { MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
+import type { SearchResult, SearchTerm } from '@dts/common/search'
+import type { MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
 
 /**
  * Performs a full text search on the given fileObject, using terms. Returns a
@@ -64,7 +64,7 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
 
   // First try to match the title and tags
   for (const t of termsToSearch) {
-    const matchedWords: Set<string> = new Set()
+    const matchedWords = new Set<string>()
     for (const wd of t.words) {
       if (fileObject.name.toLowerCase().includes(wd.toLowerCase()) || (fileObject.type === 'file' && fileObject.tags.includes(wd.toLowerCase()))) {
         matchedWords.add(wd)
@@ -107,7 +107,7 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
 
   // Now begin to search the full text
   const fileMatches: SearchResult[] = []
-  const resultLines: Set<number> = new Set() // Necessary for combining results later
+  const resultLines = new Set<number>() // Necessary for combining results later
 
   // Initialise the rest of the necessary variables
   const lines = cnt.split('\n')
@@ -115,7 +115,7 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
   termsMatched = 0 // Reset since we're doing the same search a second time
 
   for (const t of termsToSearch) {
-    const matchedWords: Set<string> = new Set()
+    const matchedWords = new Set<string>()
     for (const wd of t.words) {
       for (let index = 0; index < lines.length; index++) {
         // Try both normal and lowercase

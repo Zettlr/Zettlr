@@ -12,13 +12,14 @@
  * END HEADER
  */
 
-import { EditorState } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type EditorState } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
-import { SyntaxNode } from '@lezer/common'
+import { type AnyMenuItem } from '@dts/renderer/context'
+import { type SyntaxNode } from '@lezer/common'
 import openMarkdownLink from '../util/open-markdown-link'
+import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 
 const clipboard = window.clipboard
 const ipcRenderer = window.ipc
@@ -59,7 +60,7 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
   const linkTpl: AnyMenuItem[] = [
     {
       id: 'none',
-      label: url,
+      label: shortenUrlVisually(url, 60),
       enabled: false,
       type: 'normal'
     },

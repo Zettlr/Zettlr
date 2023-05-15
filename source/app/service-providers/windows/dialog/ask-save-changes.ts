@@ -13,10 +13,10 @@
  */
 
 import {
-  BrowserWindow,
   dialog,
-  MessageBoxOptions,
-  MessageBoxReturnValue
+  type BrowserWindow,
+  type MessageBoxOptions,
+  type MessageBoxReturnValue
 } from 'electron'
 import { trans } from '@common/i18n-main'
 

@@ -12,9 +12,10 @@
  * END HEADER
  */
 
-import { getZknTagRE } from '@common/regular-expressions'
 import { parseDocument, YAMLSeq } from 'yaml'
 import extractYamlFrontmatter from './extract-yaml-frontmatter'
+import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
+import type { ZettelkastenTag } from '@common/modules/markdown-utils/markdown-ast'
 
 /**
  * Takes a Markdown document and replaces all occurrences of oldTag with newTag.
@@ -62,26 +63,21 @@ export default function replaceTags (markdown: string, oldTag: string, newTag: s
 
   // Now, we can do a much simpler approach to replacing the tag in the rest of
   // the content with simple RegEx.
-  const tagRE = getZknTagRE(true)
-  const newTagHasSpaces = /\s/.test(newTag)
-  let match
-  while ((match = tagRE.exec(markdown)) !== null) {
-    if (match[1] === oldTag) {
-      // Ensure that the tag is not an in-document link ([Title](#tag))
-      const beforeMatch = markdown.slice(match.index - 2, match.index)
-      if (beforeMatch === '](') {
-        tagRE.lastIndex = match.index + match[0].length
-        continue
-      }
+  const ast = markdownToAST(markdown)
+  const tagNodes = extractASTNodes(ast, 'ZettelkastenTag') as ZettelkastenTag[]
 
-      const before = markdown.slice(0, match.index)
-      // Account for two spaces before and after: If the character after the tag
-      // is a space, "eat" that.
-      const after = markdown.slice(match.index + match[0].length)
-      // If the new tag contains spaces, we have to remove the tag here
-      markdown = before + (newTagHasSpaces ? '' : `#${newTag}`) + after
-      tagRE.lastIndex = match.index + newTag.length + 1
+  // Please NOTE that we are reversing the tagNodes array so that the positions
+  // of the tags in the new document remain valid, even after replacing the tags
+  const newTagHasSpaces = /\s/.test(newTag)
+  for (const tagNode of tagNodes.reverse()) {
+    if (tagNode.value.substring(1) !== oldTag) {
+      continue
     }
+
+    const before = markdown.slice(0, tagNode.from)
+    const after = markdown.slice(tagNode.to)
+    // If the new tag contains spaces, we have to remove the tag here
+    markdown = before + (newTagHasSpaces ? '' : `#${newTag}`) + after
   }
 
   return markdown

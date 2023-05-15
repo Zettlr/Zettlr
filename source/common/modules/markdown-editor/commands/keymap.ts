@@ -14,7 +14,7 @@
 
 import { acceptCompletion, deleteBracketPair } from '@codemirror/autocomplete'
 import { copyLineDown, copyLineUp, indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/commands'
-import { KeyBinding } from '@codemirror/view'
+import { type KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'
 import { copyAsHTML, pasteAsPlain } from '../util/copy-paste-cut'
 import { handleReplacement, handleBackspace, handleQuote } from './autocorrect'
@@ -25,7 +25,9 @@ import { insertLink, insertImage, applyBold, applyItalic, applyComment, applyTas
 // Custom keymap implementing less complex keyboard shortcuts
 export const customKeymap: KeyBinding[] = [
   { key: 'Mod-k', run: insertLink },
-  { key: 'Mod-Alt-i', run: insertImage },
+  // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
+  // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
+  { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
   { key: 'Mod-b', run: applyBold },
   { key: 'Mod-i', run: applyItalic },
   { key: 'Mod-Shift-c', run: applyComment },

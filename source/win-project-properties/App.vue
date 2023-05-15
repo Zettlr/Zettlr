@@ -271,7 +271,6 @@ export default defineComponent({
         .then((descriptor: DirDescriptor) => {
           // Save the actually used formats.
           if (descriptor.settings.project !== null) {
-            console.log(descriptor)
             this.selectedExportProfiles = descriptor.settings.project.profiles
             this.patterns = descriptor.settings.project.filters
             this.cslStyle = descriptor.settings.project.cslStyle

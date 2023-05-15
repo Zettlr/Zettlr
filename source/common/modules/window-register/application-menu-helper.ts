@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-import { Rect, Point, AnyMenuItem, NormalItem } from '@dts/renderer/context'
+import type { Rect, Point, AnyMenuItem, NormalItem } from '@dts/renderer/context'
 
 const ipcRenderer = window.ipc
 
@@ -87,7 +87,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
       })
     } else if (item.type === 'submenu' && item.enabled) {
       // Enable displaying the sub menu
-      let closeSubmenu: Function|null = null
+      let closeSubmenu: null|(() => void) = null
 
       appMenu.addEventListener('mousemove', (event: MouseEvent) => {
         const point = { x: event.clientX, y: event.clientY }

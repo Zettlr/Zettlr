@@ -19,8 +19,14 @@
  * END HEADER
  */
 
-import { Line, RangeSetBuilder } from '@codemirror/state'
-import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view'
+import { RangeSetBuilder, type Line } from '@codemirror/state'
+import {
+  Decoration,
+  ViewPlugin,
+  type DecorationSet,
+  type EditorView,
+  type ViewUpdate
+} from '@codemirror/view'
 
 function render (view: EditorView): DecorationSet {
   // TODO: The defaultCharacterWidth works perfect for monospaced text, but
@@ -32,7 +38,11 @@ function render (view: EditorView): DecorationSet {
   const tabSize = view.state.tabSize
   const builder = new RangeSetBuilder<Decoration>()
 
-  const visibleLines: Set<Line> = new Set()
+  // The CM editor styles apply a basic 6px padding. NOTE: This may change in
+  // the future, in that case look this up and adapt it again!
+  const basePadding = 6
+
+  const visibleLines = new Set<Line>()
   for (const { from, to } of view.visibleRanges) {
     const firstLine = view.state.doc.lineAt(from).number
     const lastLine = view.state.doc.lineAt(to).number
@@ -58,6 +68,7 @@ function render (view: EditorView): DecorationSet {
     let offset = (tabs * tabSize + spaces) * charWidth
 
     // Here we additionally account for list markers and indent even further.
+    // BUG: Currently this applies even to code files, which is not desirable.
     const match = /^\s*((?:[+*>-]|\d+\.)\s)/.exec(line.text)
     if (match !== null) {
       offset += match[1].length * charWidth
@@ -67,15 +78,8 @@ function render (view: EditorView): DecorationSet {
       continue // Nothing to indent here
     }
 
-    if (offset > 0) {
-      const deco = Decoration.line({
-        attributes: {
-          style: `text-indent: -${offset}px; padding-left: ${offset}px;`
-        }
-      })
-
-      builder.add(line.from, line.from, deco)
-    }
+    const deco = Decoration.line({ attributes: { style: `text-indent: -${offset}px; padding-left: ${offset + basePadding}px;` } })
+    builder.add(line.from, line.from, deco)
   }
 
   return builder.finish()

@@ -14,13 +14,13 @@
  * END HEADER
  */
 
-import { StoreOptions, createStore as baseCreateStore, Store } from 'vuex'
-import { InjectionKey } from 'vue'
-import { ColoredTag } from '@providers/tags'
-import { SearchResultWrapper } from '@dts/common/search'
+import { createStore as baseCreateStore, type StoreOptions, type Store } from 'vuex'
+import { type InjectionKey } from 'vue'
+import { type ColoredTag } from '@providers/tags'
+import type { SearchResultWrapper } from '@dts/common/search'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import configToArrayMapper from './config-to-array'
-import { BranchNodeJSON, LeafNodeJSON, OpenDocument } from '@dts/common/documents'
+import type { BranchNodeJSON, LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 
 // Import Mutations
 import addToFiletreeMutation from './mutations/add-to-filetree'
@@ -34,9 +34,10 @@ import filetreeUpdateAction from './actions/filetree-update'
 import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
-import { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
-import { WritingTarget } from '@providers/targets'
+import type { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
+import { type WritingTarget } from '@providers/targets'
 import updateSnippetsAction from './actions/update-snippets'
+import { type DocumentInfo } from '@common/modules/markdown-editor'
 
 const ipcRenderer = window.ipc
 
@@ -76,11 +77,6 @@ export interface ZettlrState {
    */
   selectedDirectory: DirDescriptor|null
   activeFile: null
-  /**
-   * This property contains all leaf IDs on which the readability mode is
-   * currently active
-   */
-  readabilityModeActive: string[]
   /**
    * Contains coloured tags that can be managed in the tag manager
    */
@@ -152,7 +148,6 @@ function getConfig (): StoreOptions<ZettlrState> {
         paneData: [],
         fileTree: [],
         lastFiletreeUpdate: 0,
-        readabilityModeActive: [],
         activeFile: null,
         uncollapsedDirectories: [],
         selectedDirectory: null,
@@ -224,17 +219,6 @@ function getConfig (): StoreOptions<ZettlrState> {
           const oldUncollapsed = state.uncollapsedDirectories.map(e => e)
           oldUncollapsed.splice(idx, 1)
           state.uncollapsedDirectories = oldUncollapsed
-        }
-      },
-      addReadabilityActiveLeaf (state, leaf) {
-        if (!state.readabilityModeActive.includes(leaf)) {
-          state.readabilityModeActive.push(leaf)
-        }
-      },
-      removeReadabilityActiveLeaf (state, leaf) {
-        const idx = state.readabilityModeActive.indexOf(leaf)
-        if (idx > -1) {
-          state.readabilityModeActive.splice(idx, 1)
         }
       },
       updateConfig: function (state, option) {

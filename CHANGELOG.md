@@ -38,6 +38,22 @@ quick list:
    that nobody needs to configure this, and it makes many parts of our code
    easier.
 
+## New Icons on Windows and Linux
+
+For 3.0, we decided that it's time to give our app icons a facelift. For the
+past six years, Zettlr sported working, but relatively bland icons to convey its
+existence on the taskbar to its users. The new icons still convey the same
+message, but you will notice that they now integrate much better into the new
+Windows 11 Fluent UI.
+
+We decided to exchange the icons on Linux as well. They may not seamlessly
+integrate into your specific UI, but we feel they will definitely look more
+modern than the previous iteration of icons.
+
+With this move, the Windows and Linux experience of Zettlr finally moves on par
+to the macOS experience, which has received an updated icon with the release of
+Zettlr 2.0.
+
 ## Split-Panes and Multiple Windows
 
 A long awaited feature has made it into this version: Now you can open multiple
@@ -283,12 +299,19 @@ there.
   in one app should be picked up by the other
 - Zettlr can now detect changes to the status of a directory as a git repository
   during runtime
+- The "Characters without spaces" info is no longer present in the toolbar
+  counter widget; the "characters" count now represents always the count without
+  spaces across the app
+- Mermaid charts now dynamically switch themes between `default` and `dark`
+  depending on the app's display
+- In various parts of the app, URLs will now be displayed in a shortened format
+  if they are long and the space is limited
 
 ## Under the Hood
 
 - Refactored the main editor component further
 - Refactored the Sidebar panels into their own respective components
-- Upgrade Electron to `22.x.x`
+- Upgrade Electron to `24.x.x`
 - Upgrade Pandoc to `3.1.1`
 - Upgrade Chart.js to `4.x.x`
 - Upgrade CodeMirror to version 6

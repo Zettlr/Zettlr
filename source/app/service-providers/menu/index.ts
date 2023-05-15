@@ -16,7 +16,7 @@ import {
   Menu,
   ipcMain,
   BrowserWindow,
-  MenuItemConstructorOptions,
+  type MenuItemConstructorOptions,
   app
 } from 'electron'
 
@@ -26,12 +26,12 @@ import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
 import win32Menu from './menu.win32'
 import macOSMenu from './menu.darwin'
 import ProviderContract from '../provider-contract'
-import RecentDocumentsProvider from '../recent-docs'
-import CommandProvider from '../commands'
-import LogProvider from '../log'
-import ConfigProvider from '@providers/config'
-import DocumentManager from '@providers/documents'
-import WindowProvider from '@providers/windows'
+import type RecentDocumentsProvider from '../recent-docs'
+import type CommandProvider from '../commands'
+import type LogProvider from '../log'
+import type ConfigProvider from '@providers/config'
+import type DocumentManager from '@providers/documents'
+import type WindowProvider from '@providers/windows'
 
 // Types from the global.d.ts of the window-register module
 interface CheckboxRadioItem {

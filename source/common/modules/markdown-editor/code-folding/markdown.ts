@@ -13,7 +13,7 @@
  */
 
 import { foldService, syntaxTree } from '@codemirror/language'
-import { SyntaxNode } from '@lezer/common'
+import { type SyntaxNode } from '@lezer/common'
 
 // Code folding for Markdown documents, as the regular code folding service
 // doesn't completely do what we need it to. NOTE: Most folding is already

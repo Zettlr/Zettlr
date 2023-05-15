@@ -15,7 +15,7 @@
 import EventEmitter from 'events'
 import { app } from 'electron'
 import ProviderContract from '../provider-contract'
-import LogProvider from '../log'
+import type LogProvider from '../log'
 
 /**
 * This class manages the coloured tags of the app. It reads the tags on each

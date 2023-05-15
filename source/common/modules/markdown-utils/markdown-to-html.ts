@@ -24,7 +24,7 @@
 import katex from 'katex'
 import 'katex/contrib/mhchem'
 import { markdownToAST } from '.'
-import { ASTNode, GenericNode } from './markdown-ast'
+import { type ASTNode, type GenericNode } from './markdown-ast'
 
 /**
  * Represents an HTML tag. This is a purposefully shallow representation
@@ -271,51 +271,49 @@ function getTagInfo (node: GenericNode): HTMLTag {
  * Takes a Markdown AST node and turns it to an HTML string
  *
  * @param   {ASTNode}  node         The node
- * @param   {string}   citeLibrary  The citation library to use
+ * @param   {Function} getCitation  The callback for the citations
  * @param   {number}   indent       The indentation for this node
  *
  * @return  {string}                The HTML string
  */
-function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: number = 0): string {
+function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[], composite: boolean) => string|undefined, indent: number = 0): string {
   // Convenience to convert a list of child nodes to HTML
   if (Array.isArray(node)) {
     const body: string[] = []
     for (const child of node) {
-      body.push(nodeToHTML(child, citeLibrary, indent))
+      body.push(nodeToHTML(child, getCitation, indent))
     }
     return body.join('\n')
   } else if (node.type === 'Generic' && node.name === 'Document') {
     // This ensures there's no outer div class=Document
-    return nodeToHTML(node.children, citeLibrary, indent)
+    return nodeToHTML(node.children, getCitation, indent)
   } else if (node.type === 'YAMLFrontmatter') {
     return '' // Frontmatters must be removed upon HTML export
   } else if (node.type === 'Citation') {
-    const cb = window.getCitationCallback(citeLibrary)
-    const rendered = cb(node.parsedCitation.citations, node.parsedCitation.composite)
-    return `<span class="citation">${rendered ?? htmlEntities(node.value.value)}</span>`
+    const rendered = getCitation(node.parsedCitation.citations, node.parsedCitation.composite)
+    return `<span class="citation">${rendered ?? htmlEntities(node.value)}</span>`
   } else if (node.type === 'Footnote') {
     return `<a class="footnote" href="#fnref:${htmlEntities(node.label)}">${htmlEntities(node.label)}</a>`
   } else if (node.type === 'FootnoteRef') {
-    return `<div class="footnote-ref"><a name="fnref:${htmlEntities(node.label)}"></a>${nodeToHTML(node.children, citeLibrary, indent)}</div>`
+    return `<div class="footnote-ref"><a name="fnref:${htmlEntities(node.label)}"></a>${nodeToHTML(node.children, getCitation, indent)}</div>`
   } else if (node.type === 'Heading') {
     return `<h${node.level}>${htmlEntities(node.value.value)}</h${node.level}>`
   } else if (node.type === 'Highlight') {
-    return `<mark>${nodeToHTML(node.children, citeLibrary, indent)}</mark>`
+    return `<mark>${nodeToHTML(node.children, getCitation, indent)}</mark>`
   } else if (node.type === 'Image') {
-    return `<img src="${node.url.value}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
+    return `<img src="${node.url}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
   } else if (node.type === 'Link') {
-    return `<a href="${node.url.value}" title="${node.title?.value ?? htmlEntities(node.url.value)}">${htmlEntities(node.alt.value)}</a>`
-  } else if (node.type === 'List') {
-    if (node.ordered) {
-      return `<ol>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ol>`
-    } else {
-      return `<ul>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ul>`
-    }
+    return `<a href="${node.url}" title="${node.title?.value ?? htmlEntities(node.url)}">${htmlEntities(node.alt.value)}</a>`
+  } else if (node.type === 'OrderedList') {
+    const startsAt = node.startsAt > 1 ? ` start="${node.startsAt}"` : ''
+    return `<ol${startsAt}>\n${nodeToHTML(node.items, getCitation, indent)}\n</ol>`
+  } else if (node.type === 'BulletList') {
+    return `<ul>\n${nodeToHTML(node.items, getCitation, indent)}\n</ul>`
   } else if (node.type === 'ListItem') {
     const task = node.checked !== undefined ? `<input type="checkbox" disabled="disabled" ${node.checked ? 'checked="checked"' : ''}>` : ''
-    return `<li>${task}${nodeToHTML(node.children, citeLibrary, indent + 1)}</li>`
+    return `<li>${task}${nodeToHTML(node.children, getCitation, indent + 1)}</li>`
   } else if (node.type === 'Emphasis') {
-    const body = nodeToHTML(node.children, citeLibrary, indent)
+    const body = nodeToHTML(node.children, getCitation, indent)
 
     switch (node.which) {
       case 'bold':
@@ -328,7 +326,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: numbe
     for (const row of node.rows) {
       const cells: string[] = []
       for (const cell of row.cells) {
-        cells.push(nodeToHTML(cell.children, citeLibrary, indent))
+        cells.push(nodeToHTML(cell.children, getCitation, indent))
       }
       const tag = row.isHeaderOrFooter ? 'th' : 'td'
       const content = cells.map(c => `<${tag}>${c}</${tag}>`).join('\n')
@@ -364,7 +362,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: numbe
 
     const open = `<${tagInfo.tagName}${attr}${tagInfo.selfClosing ? '/' : ''}>`
     const close = tagInfo.selfClosing ? '' : `</${tagInfo.tagName}>`
-    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, citeLibrary)
+    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, getCitation)
     return `${open}${body}${close}`
   }
 
@@ -375,12 +373,12 @@ function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: numbe
  * Takes Markdown source and turns it into a valid HTML fragment. The citeLibrary
  * will be used to resolve citations.
  *
- * @param   {string}  markdown     The Markdown source
- * @param   {string}  citeLibrary  The citation library
+ * @param   {string}  markdown       The Markdown source
+ * @param   {Function}  getCitation  The citation callback to use
  *
- * @return  {string}               The resulting HTML
+ * @return  {string}                 The resulting HTML
  */
-export function md2html (markdown: string, citeLibrary: string): string {
+export function md2html (markdown: string, getCitation: (citations: CiteItem[], composite: boolean) => string|undefined): string {
   const ast = markdownToAST(markdown)
-  return nodeToHTML(ast, citeLibrary)
+  return nodeToHTML(ast, getCitation)
 }

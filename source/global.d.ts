@@ -208,16 +208,3 @@ declare interface Window {
     getSelectionClipboard: () => { text: string, html: string }
   }
 }
-
-// This interface is being produced by the MarkdownEditor module in source/common
-interface DocumentInfo {
-  words: number
-  chars: number
-  chars_wo_spaces: number
-  cursor: { ch: number, line: number }
-  selections: Array<{
-    selectionLength: number
-    start: { ch: number, line: number }
-    end: { ch: number, line: number }
-  }>
-}

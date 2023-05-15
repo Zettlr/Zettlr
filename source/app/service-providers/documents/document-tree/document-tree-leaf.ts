@@ -1,5 +1,23 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DocumentTreeLeaf
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Document Tree Leafs represent a single document pane within
+ *                  a window. Formally, they are a wrapper around a tab manager.
+ *                  We need to separate the tab manager from the leaf, since the
+ *                  leaf needs to handle splitting itself up into a branch with
+ *                  two leaves.
+ *
+ * END HEADER
+ */
+
 import isFile from '@common/util/is-file'
-import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
+import type { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
 import { v4 as uuid4 } from 'uuid'
 import { DocumentTree } from './document-tree'
 import { DTBranch } from './document-tree-branch'
@@ -89,21 +107,8 @@ export class DTLeaf {
    * @return  {DTLeaf}             Returns the newly created leaf
    */
   public split (direction: 'horizontal'|'vertical', insertion: 'before'|'after'): DTLeaf {
-    if (this._parent instanceof DocumentTree && this._parent.direction === direction) {
-      // this = leaf, parent = DocumentTree -> insert a branch
-      const newBranch = new DTBranch(this._parent, direction)
-      const newLeaf = new DTLeaf(newBranch)
-      if (insertion === 'before') {
-        newBranch.addNode(newLeaf)
-        newBranch.addNode(this)
-      } else {
-        newBranch.addNode(this)
-        newBranch.addNode(newLeaf)
-      }
-      this._parent.node = newBranch
-      this._parent = newBranch
-      return newLeaf
-    } else if (this._parent instanceof DocumentTree) {
+    if (this._parent instanceof DocumentTree) {
+      console.log('Replacing this leaf with a new branch as the tree node')
       const newBranch = new DTBranch(this._parent, direction)
       const newLeaf = new DTLeaf(newBranch)
 

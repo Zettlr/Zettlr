@@ -13,10 +13,8 @@
  * END HEADER
  */
 
-import ConfigProvider from '@providers/config'
-import {
-  BrowserWindowConstructorOptions
-} from 'electron'
+import type ConfigProvider from '@providers/config'
+import { type BrowserWindowConstructorOptions } from 'electron'
 import path from 'path'
 
 /**

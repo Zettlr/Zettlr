@@ -13,12 +13,12 @@
  * END HEADER
  */
 
-import { EditorView } from '@codemirror/view'
+import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
-import { SyntaxNode } from '@lezer/common'
-import { forEachDiagnostic, Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
+import { type AnyMenuItem } from '@dts/renderer/context'
+import { type SyntaxNode } from '@lezer/common'
+import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
 

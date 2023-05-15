@@ -12,7 +12,7 @@
  */
 
 import { v4 as uuid4 } from 'uuid'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 /**
  * A utility function that can replace a bunch of variables in strings, used
@@ -20,20 +20,22 @@ import moment from 'moment'
  * @param       {string} string The input string
  * @return      {string}        The output string, with all %-variables replaced
  */
-export default function replaceStringVariables (string: string): string {
+export default function replaceStringVariables (string: string, now?: DateTime): string {
   // Get the current date
-  const d = moment()
+  if (now === undefined) {
+    now = DateTime.now() // .setLocale('en-GB')
+  }
 
   // Now generate the id by replacing all placeholders in the pattern
   return string
-    .replace(/%Y/g, d.format('YYYY'))
-    .replace(/%y/g, d.format('YY'))
-    .replace(/%M/g, d.format('MM'))
-    .replace(/%D/g, d.format('DD'))
-    .replace(/%W/g, d.format('WW'))
-    .replace(/%h/g, d.format('HH'))
-    .replace(/%m/g, d.format('mm'))
-    .replace(/%s/g, d.format('ss'))
-    .replace(/%X/g, d.format('X'))
+    .replace(/%Y/g, now.toFormat('y'))
+    .replace(/%y/g, now.toFormat('yy'))
+    .replace(/%M/g, now.toFormat('LL'))
+    .replace(/%D/g, now.toFormat('dd'))
+    .replace(/%W/g, now.toFormat('WW'))
+    .replace(/%h/g, now.toFormat('HH'))
+    .replace(/%m/g, now.toFormat('mm'))
+    .replace(/%s/g, now.toFormat('ss'))
+    .replace(/%X/g, now.toFormat('X'))
     .replace(/%uuid4/g, uuid4())
 }

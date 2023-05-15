@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { InlineParser, BlockParser } from '@lezer/markdown'
+import { type InlineParser, type BlockParser } from '@lezer/markdown'
 import { partialParse } from './partial-parse'
 
 // TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser

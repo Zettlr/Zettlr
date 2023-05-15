@@ -13,8 +13,7 @@
  * END HEADER
  */
 
-import { EditorView } from '@codemirror/view'
-import { SyntaxNode } from '@lezer/common'
+import { type EditorView } from '@codemirror/view'
 
 /**
  * A helper function that returns a click-callback that can be used to set a
@@ -22,18 +21,26 @@ import { SyntaxNode } from '@lezer/common'
  * selecting all of its replaced text).
  *
  * @param   {EditorView}  view   The editor view
- * @param   {SyntaxNode}  node   The node whose text to select
  *
  * @return  {Function}           A callback compatible with mouse events
  */
-export default function clickAndSelect (view: EditorView, node: SyntaxNode): (event: MouseEvent) => void {
+export default function clickAndSelect (view: EditorView): (event: MouseEvent) => void {
   return function (event: MouseEvent) {
-    if (!(event.target instanceof HTMLElement)) {
+    const { target } = event
+    if (!(target instanceof HTMLElement)) {
+      return
+    }
+
+    const { top, left, bottom, right } = target.getBoundingClientRect()
+    const fromPos = view.posAtCoords({ x: left, y: top })
+    const toPos = view.posAtCoords({ x: right, y: bottom })
+
+    if (fromPos === null || toPos === null) {
       return
     }
 
     event.stopPropagation()
     event.preventDefault()
-    view.dispatch({ selection: { anchor: node.from, head: node.to } })
+    view.dispatch({ selection: { anchor: fromPos, head: toPos } })
   }
 }

@@ -15,7 +15,7 @@
 import ZettlrCommand from './zettlr-command'
 import { app } from 'electron'
 import { makeExport } from './exporter'
-import { ExporterOptions } from './exporter/types'
+import type { ExporterOptions } from './exporter/types'
 import { EXT2READER } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 

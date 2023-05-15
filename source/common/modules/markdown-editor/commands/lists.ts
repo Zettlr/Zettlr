@@ -14,11 +14,13 @@
 
 // This plugin handles everything with lists
 
-import { ChangeSpec, EditorState, Transaction } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { type ChangeSpec, type EditorState, type Transaction } from '@codemirror/state'
+import { type EditorView } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
 import { indentLess, indentMore, insertTab } from '@codemirror/commands'
-import { SyntaxNode } from '@lezer/common'
+import { type SyntaxNode } from '@lezer/common'
+import { markdownToAST } from '@common/modules/markdown-utils'
+import type { BulletList, OrderedList } from '@common/modules/markdown-utils/markdown-ast'
 
 /**
  * Tests if there is any list affected by the current editor selection
@@ -66,106 +68,95 @@ function isListTouchedBySelection (state: EditorState): boolean {
 
 /**
  * Returns a set of changes required in order to sanitize the given list node.
- * NOTE: It is your responsibility to ensure only OrderedList nodes are passed
- * into this function!
  *
- * @param   {EditorState}   state  The state for the editor
- * @param   {SyntaxNode}    list   The SyntaxNode of type OrderedList
+ * @param   {OrderedList}    listNode  The corresponding AST node
+ * @param   {number}         offset    The offset from where this fragment node
+ *                                     starts in the full Markdown source
  *
- * @return  {ChangeSpec[]}         A set of changes
+ * @return  {ChangeSpec[]}             A set of changes
  */
-function correctOrderedList (state: EditorState, list: SyntaxNode): ChangeSpec[] {
+function correctOrderedList (listNode: OrderedList, offset: number): ChangeSpec[] {
   const changes: ChangeSpec[] = []
 
-  // The current list item's number
-  let current = 1
+  let idx = listNode.startsAt
+  for (const item of listNode.items) {
+    if (item.number !== idx) {
+      changes.push({ from: offset + item.marker.from, to: offset + item.marker.to - 1, insert: `${idx}` })
+    }
 
-  let currentChild: SyntaxNode|null = list.firstChild
+    idx++
 
-  if (currentChild === null) {
-    return []
-  }
+    const subLists = item.children.filter(item => item.type === 'OrderedList') as OrderedList[]
 
-  do {
-    // Handle the list item
-    const marker = currentChild.firstChild
-    if (marker?.name === 'ListMark') {
-      const mark = state.sliceDoc(marker.from, marker.to)
-      const sign = mark.endsWith('.') ? '.' : ')'
-      if (parseInt(mark, 10) !== current) {
-        changes.push({ from: marker.from, to: marker.to, insert: `${current}${sign}` })
+    if (subLists.length >= 2) {
+      // We have multiple same-level lists, so there is a change in list markers.
+      // THE FIRST ITEM DETERMINES THE LIST MARKER!
+      const mainList = subLists.shift() as OrderedList
+      for (const list of subLists) {
+        if (list.delimiter === mainList.delimiter) {
+          continue
+        }
+
+        for (const item of list.items) {
+          changes.push({ from: offset + item.marker.from, to: offset + item.marker.to, insert: `${idx}${mainList.delimiter}` })
+          idx++
+        }
       }
-      current++ // Only list items mean we should increment the number.
     }
 
-    // Handle nested lists. These will be children to the current list item
-    for (const child of currentChild.getChildren('BulletList')) {
-      changes.push(...correctBulletList(state, child))
+    // Check for nested lists
+    for (const child of item.children) {
+      if (child.type === 'BulletList') {
+        changes.push(...correctBulletList(child, offset))
+      } else if (child.type === 'OrderedList') {
+        changes.push(...correctOrderedList(child, offset))
+      }
     }
-
-    for (const child of currentChild.getChildren('OrderedList')) {
-      changes.push(...correctOrderedList(state, child))
-    }
-
-    currentChild = currentChild.nextSibling
-  } while (currentChild !== null)
-
+  }
   return changes
 }
 
 /**
  * Returns a set of changes required in order to sanitize the given list node.
- * NOTE: It is your responsibility to ensure only BulletList nodes are passed
- * into this function!
  *
- * @param   {EditorState}   state  The state for the editor
- * @param   {SyntaxNode}    list   The SyntaxNode of type BulletList
+ * @param   {BulletList}    listNode  The corresponding AST node
+ * @param   {number}        offset    The offset from where this fragment node
+ *                                    starts in the full Markdown source
  *
- * @return  {ChangeSpec[]}         A set of changes
+ * @return  {ChangeSpec[]}            A set of changes
  */
-function correctBulletList (state: EditorState, list: SyntaxNode): ChangeSpec[] {
+function correctBulletList (listNode: BulletList, offset: number): ChangeSpec[] {
   const changes: ChangeSpec[] = []
 
-  // First, get the single indentation for this list. Nested lists are a
-  // recursive problem, and we have everything we need right here.
-  // TODO: There is an indentation service, soooo ... maybe I can use that one?!
-  const line = state.doc.lineAt(list.from).text
-  const match = /^\s*/.exec(line)
-  const indentation = Math.floor((match ?? [''])[0].replace('\t', ' ').length / 4)
-  // Indentation determines bullet:
-  // * First level gets asterisks
-  //     - Second level gets hyphens
-  //         + Third level gets plus
-  //             * Rinse and repeat
-  const which = '*-+'[indentation % 3] // 0 1 2 // TODO: Make user-configurable!
+  // The first list item of the same order determines the overall marker style
 
-  let currentChild: SyntaxNode|null = list.firstChild
+  for (const item of listNode.items) {
+    const subLists = item.children.filter(item => item.type === 'BulletList') as BulletList[]
 
-  if (currentChild === null) {
-    return []
-  }
+    if (subLists.length >= 2) {
+      // We have multiple same-level lists, so there is a change in list markers.
+      // THE FIRST ITEM DETERMINES THE LIST MARKER!
+      const mainList = subLists.shift() as BulletList
+      for (const list of subLists) {
+        if (list.symbol === mainList.symbol) {
+          continue
+        }
 
-  do {
-    // Handle the next list item
-    const marker = currentChild.firstChild
-    if (marker?.name === 'ListMark') {
-      const mark = state.sliceDoc(marker.from, marker.to)
-      if (mark !== which) {
-        changes.push({ from: marker.from, to: marker.to, insert: which })
+        for (const item of list.items) {
+          changes.push({ from: offset + item.marker.from, to: offset + item.marker.to, insert: mainList.symbol })
+        }
       }
     }
 
-    // Handle nested lists. These will be children to the current list item
-    for (const child of currentChild.getChildren('BulletList')) {
-      changes.push(...correctBulletList(state, child))
+    // Check for nested lists
+    for (const child of item.children) {
+      if (child.type === 'BulletList') {
+        changes.push(...correctBulletList(child, offset))
+      } else if (child.type === 'OrderedList') {
+        changes.push(...correctOrderedList(child, offset))
+      }
     }
-
-    for (const child of currentChild.getChildren('OrderedList')) {
-      changes.push(...correctOrderedList(state, child))
-    }
-
-    currentChild = currentChild.nextSibling
-  } while (currentChild !== null)
+  }
 
   return changes
 }
@@ -218,15 +209,15 @@ function correctListMarkers (state: EditorState): Transaction {
   // So what this function needs to do is go over the ranges. We know that this
   // function will only be called after the user either indented or unindented
   // anything that has a list in it.
-  // const lines = getSelectedLines(state)
   const lists = fetchLists(state)
   const changes: ChangeSpec[] = []
 
   for (const list of lists) {
-    if (list.name === 'OrderedList') {
-      changes.push(...correctOrderedList(state, list))
-    } else if (list.name === 'BulletList') {
-      changes.push(...correctBulletList(state, list))
+    const fragment = markdownToAST(state.sliceDoc(list.from, list.to), list.toTree())
+    if (fragment.type === 'OrderedList') {
+      changes.push(...correctOrderedList(fragment, list.from))
+    } else if (fragment.type === 'BulletList') {
+      changes.push(...correctBulletList(fragment, list.from))
     }
   }
 

@@ -12,10 +12,17 @@
  * END HEADER
  */
 
-import { DP_EVENTS, LeafNodeJSON, BranchNodeJSON } from '@dts/common/documents'
-import { ZettlrState } from '..'
+import { DP_EVENTS, type LeafNodeJSON, type BranchNodeJSON } from '@dts/common/documents'
+import { type ZettlrState } from '..'
+import { type DocumentsUpdateContext } from '@providers/documents'
 
 type DocumentTree = BranchNodeJSON|LeafNodeJSON
+
+interface ActionContext {
+  event: DP_EVENTS|'init'
+  context: DocumentsUpdateContext
+  treedata: LeafNodeJSON|BranchNodeJSON
+}
 
 /**
  * Finds a leaf within a document tree
@@ -33,60 +40,6 @@ function findLeaf (tree: DocumentTree, leafId: string): LeafNodeJSON|undefined {
       const found = findLeaf(node, leafId)
       if (found !== undefined) {
         return found
-      }
-    }
-  }
-}
-
-/**
- * Finds a branch within the document tree
- *
- * @param   {DocumentTree}    tree      The tree to search
- * @param   {string}          branchId  The branch ID to search for
- *
- * @return  {BranchNodeJSON}            The branch, or undefined
- */
-function findBranch (tree: DocumentTree, branchId: string): BranchNodeJSON|undefined {
-  if (tree.type === 'leaf') {
-    return undefined
-  } else if (tree.id === branchId) {
-    return tree
-  } else {
-    for (const node of tree.nodes) {
-      if (node.type === 'branch') {
-        const found = findBranch(node, branchId)
-        if (found !== undefined) {
-          return found
-        }
-      }
-    }
-  }
-}
-
-/**
- * Finds the parent branch of the given leaf
- *
- * @param   {DocumentTree}              tree        The tree to search
- * @param   {string}                    idOrBranch  The leaf ID whose parent to search for
- *
- * @return  {BranchNodeJSON|undefined}              The parent branch, or undefined
- */
-function findParentBranch (tree: DocumentTree, idOrBranch: string|BranchNodeJSON): BranchNodeJSON|undefined {
-  if (tree.type === 'leaf') {
-    return undefined
-  }
-
-  for (const node of tree.nodes) {
-    if (node.type === 'leaf' && node.id === idOrBranch) {
-      return tree
-    } else if (node.type === 'branch') {
-      if (node === idOrBranch) {
-        return tree
-      } else {
-        const found = findParentBranch(node, idOrBranch)
-        if (found !== undefined) {
-          return found
-        }
       }
     }
   }
@@ -119,7 +72,7 @@ function extractLeafs (tree: DocumentTree): LeafNodeJSON[] {
 
 /**
  * Clones an arbitrary object. May throw errors in case of data that the JSON
- * parser cannot handle
+ * parser cannot handle.
  *
  * @param   {T}  input  The input data
  *
@@ -130,9 +83,10 @@ function clone<T> (input: T): T {
 }
 
 /**
- * Recovers the full pane data and structure. ATTENTION: Only use to recover from
- * an otherwise unrecoverable option, since this will trigger a complete re-render
- * of the GUI, and may lead to data loss!
+ * Recovers the full pane data and structure. NOTE: Since any state update can
+ * remove and/or add multiple branches and leaves, we always have to recover the
+ * full state, which may lead to visible flickering. However, because we store
+ * all document content in the main process, this will not lead to data loss.
  *
  * @param   {ZettlrState}   state     The store state
  * @param   {DocumentTree}  treedata  The new treedata to apply
@@ -142,153 +96,17 @@ function recoverState (state: ZettlrState, treedata: DocumentTree): void {
   // never share any pointers and hence cannot influence the respective other.
   state.paneData = extractLeafs(clone(treedata))
   state.paneStructure = treedata
-}
-
-/**
- * Applies a delta update on the smallest possible sub-tree in order to insert a
- * new leaf into the pane structure.
- *
- * @param   {ZettlrState}   state     The store state
- * @param   {DocumentTree}  treedata  The new tree data
- * @param   {any}           context   Context information associated with the event
- */
-function applyNewLeafDelta (state: ZettlrState, treedata: DocumentTree, context: any): void {
-  // Extract the information from the context
-  const originLeaf = context.originLeaf as string
-  const newLeaf = context.newLeaf as string
-  const direction = context.direction as 'horizontal'|'vertical'
-  const insertion = context.insertion as 'before'|'after'
-  // Get the necessary objects
-  const localOriginLeaf = findLeaf(state.paneStructure, originLeaf)
-  const newRemoteLeaf = findLeaf(clone(treedata), newLeaf)
-
-  if (localOriginLeaf === undefined || newRemoteLeaf === undefined) {
-    console.error(`Could not apply delta update for new leaf: Origin leaf ${originLeaf} or new remote leaf ${newLeaf} not found! Recovering full state.`)
-    recoverState(state, treedata)
-    return
-  }
-
-  // The data structure itself is very basic, fortunately. Since its just an
-  // array containing all the actual data points, we can simply add it to the
-  // paneData list. This won't yet trigger a re-render since the information is
-  // not used directly in any template.
-  state.paneData.push(newRemoteLeaf)
-
-  // We have three options of what could've happened: (a) The root was a leaf,
-  // then it will have been split; (b) the direction of the local parent is
-  // the same, then we can splice the new leaf in; (c) the direction is
-  // different, then we have to replace the local leaf with the new parent branch
-  if (state.paneStructure.type === 'leaf' && originLeaf === state.paneStructure.id) {
-    state.paneStructure = treedata // The whole tree is the smallest subtree here
-  } else {
-    const localBranch = findParentBranch(state.paneStructure, originLeaf)
-    if (localBranch === undefined) {
-      console.error('Could not apply delta update for new leaf: local parent not found! Recovering full tree.')
-      recoverState(state, treedata)
-      return
-    }
-
-    const idx = localBranch.nodes.indexOf(localOriginLeaf)
-    if (localBranch.direction === direction) {
-      // Insert according to `insertion`
-      if (insertion === 'after') {
-        localBranch.nodes.splice(idx + 1, 0, newRemoteLeaf)
-      } else {
-        localBranch.nodes.splice(idx, 0, newRemoteLeaf)
-      }
-    } else {
-      // Replace old node
-      const newRemoteParent = findParentBranch(clone(treedata), newLeaf)
-      if (newRemoteParent === undefined) {
-        console.error('Could not apply delta update for new leaf: remote parent not found! Recovering full tree.')
-        recoverState(state, treedata)
-        return
-      }
-      localBranch.nodes[idx] = newRemoteParent
-    }
-
-    // Copy over new sizes
-    const remoteBranch = findBranch(treedata, localBranch.id)
-    if (remoteBranch !== undefined) {
-      localBranch.sizes = clone(remoteBranch.sizes)
-    }
-  }
-}
-
-/**
- * Applies a delta update on the smallest possible sub-tree in order to remove a
- * leaf from the pane structure.
- *
- * @param   {ZettlrState}   state     The store state
- * @param   {DocumentTree}  treedata  The new tree data
- * @param   {any}           context   Context information associated with the event
- */
-function applyRemoveLeafDelta (state: ZettlrState, treedata: DocumentTree, context: any): void {
-  const removedLeafId = context.leafId as string
-  const localLeaf = findLeaf(state.paneStructure, removedLeafId)
-  // The removed leaf can never be the root node itself, so it will have a parent
-  const localParent = findParentBranch(state.paneStructure, removedLeafId)
-
-  if (state.lastLeafId === removedLeafId) {
+  const lastLeafExists = state.paneData.find(pane => pane.id === state.lastLeafId) !== undefined
+  if (!lastLeafExists) {
     state.lastLeafId = undefined
   }
 
-  if (localLeaf === undefined || localParent === undefined) {
-    console.error(`Could not find removed leaf ${removedLeafId} or its local parent. Recovering full state.`)
-    recoverState(state, treedata)
-    return
-  }
-
-  // Now, again, removing the leaf from the paneData is trivial
-  const dataIdx = state.paneData.findIndex(leaf => leaf.id === removedLeafId)
-  state.paneData.splice(dataIdx, 1)
-  const readabilityIdx = state.readabilityModeActive.indexOf(removedLeafId)
-  if (readabilityIdx > -1) {
-    state.readabilityModeActive.splice(readabilityIdx, 1)
-  }
-
-  // Removing the node from the local branch is more difficult. We have three
-  // options here: (a) localParent has more than one child. In that case, we can
-  // simply remove it. (b) the localParent is the root and localLeaf is its only
-  // child. In that case, we need to "recover" the full state. (c) localParent
-  // has only one child, in which case localParent itself has been removed. This
-  // is a recursive problem.
-  if (localParent.nodes.length > 1) {
-    // (a) There were enough children so we can just remove the leaf.
-    const structureIdx = localParent.nodes.indexOf(localLeaf)
-    localParent.nodes.splice(structureIdx, 1)
-    const remoteParent = findBranch(treedata, localParent.id)
-    if (remoteParent !== undefined) {
-      localParent.sizes = clone(remoteParent.sizes)
-    }
-  } else if (localParent === state.paneStructure) {
-    // localParent has only one child and it's the root. This is the only time
-    // where a full recovery is adequate.
-    recoverState(state, treedata)
-  } else if (localParent.nodes.length === 1) {
-    // Removing the leaf has left zero children, i.e. the parent itself has been
-    // removed. However, this is a recursive problem since this process could be
-    // repeated up until the root.
-    let smallestSubtree: BranchNodeJSON|undefined = localParent
-    let subtreeBranch: BranchNodeJSON|undefined
-    do {
-      subtreeBranch = smallestSubtree
-      smallestSubtree = findParentBranch(state.paneStructure, smallestSubtree)
-    } while (smallestSubtree !== undefined && smallestSubtree.nodes.length === 1)
-
-    if (smallestSubtree === undefined || subtreeBranch === undefined) {
-      console.error(`Could not remove leaf ${removedLeafId} since no smallest subtree was found. Recovering full state.`)
-      recoverState(state, treedata)
-      return
-    }
-
-    smallestSubtree.nodes.splice(smallestSubtree.nodes.indexOf(subtreeBranch), 1)
-    // Finally, there will now be new sizes, and the smallest subtree will also
-    // be present on the remote data
-    const remoteBranch = findBranch(treedata, smallestSubtree.id)
-    if (remoteBranch !== undefined) {
-      smallestSubtree.sizes = clone(remoteBranch.sizes)
-    }
+  // Here we also need to set the last leaf ID so that the user can
+  // immediately begin opening files. If this is not set, the user must first
+  // focus any of the leafs before clicking on a file does something, which
+  // is unwanted behavior.
+  if (state.paneData.length > 0 && state.lastLeafId === undefined) {
+    state.lastLeafId = state.paneData[0].id
   }
 }
 
@@ -299,7 +117,13 @@ function applyRemoveLeafDelta (state: ZettlrState, treedata: DocumentTree, conte
  * @param   {DocumentTree}  treedata  The new tree data
  * @param   {string}        leafId    The leaf in question
  */
-function copyDelta (state: ZettlrState, treedata: DocumentTree, leafId: string): void {
+function copyDelta (state: ZettlrState, treedata: DocumentTree, context: DocumentsUpdateContext): void {
+  const { leafId } = context
+  if (leafId === undefined) {
+    console.warn('Could not apply delta: leafId was not given')
+    return
+  }
+
   const localLeaf = state.paneData.find(leaf => leaf.id === leafId)
   const remoteLeaf = findLeaf(clone(treedata), leafId)
   if (localLeaf === undefined || remoteLeaf === undefined) {
@@ -317,15 +141,6 @@ function copyDelta (state: ZettlrState, treedata: DocumentTree, leafId: string):
   localLeaf.openFiles = remoteLeaf.openFiles
 }
 
-function ensureAllLeafsExist (state: ZettlrState, treedata: DocumentTree): void {
-  const remoteLeafs = extractLeafs(clone(treedata))
-
-  if (remoteLeafs.length !== state.paneData.length) {
-    console.error(`Length differential found: ${remoteLeafs.length} remote leafs; ${state.paneData.length} local leafs. Recovering...`)
-    state.paneData = remoteLeafs
-  }
-}
-
 /**
  * Applies a delta update to the structure and/or data of the editor panes. The
  * function attempts to apply the update to the smallest possible subtree in
@@ -334,48 +149,33 @@ function ensureAllLeafsExist (state: ZettlrState, treedata: DocumentTree): void 
  * @param   {ZettlrState}  state    The store state
  * @param   {any}          payload  The payload that's coming from main
  */
-export default function (state: ZettlrState, payload: any): void {
+export default function (state: ZettlrState, payload: ActionContext): void {
   // The task for this function is to apply the minimum necessary delta update
   // for the document tree. Due to Vue's happy reactivity, we have to maintain
   // two states: One for only the structure, and one only for the data. Since
   // the tree that's coming from main has both structure and data, we have to
   // disentangle both here and apply delta updates to each structure based on
   // the events the document provider is emitting here.
-  const event: DP_EVENTS|'init' = payload.event
-  const context: any = payload.context
-  const treedata: DocumentTree = payload.treedata
+  const { event, context, treedata } = payload
 
   switch (event) {
-    // This event is not emitted by the document provider. Rather, it happens
-    // once after the window has been created to apply the initial "update" that
-    // fills the state.
-    case 'init': {
+    // At the beginning, and whenever the structure of the tree changes, we have
+    // to apply a full update.
+    case 'init':
+    case DP_EVENTS.LEAF_CLOSED:
+    case DP_EVENTS.NEW_LEAF:
       recoverState(state, treedata)
-      // Here we also need to set the last leaf ID so that the user can
-      // immediately begin opening files. If this is not set, the user must first
-      // focus any of the leafs before clicking on a file does something, which
-      // is unwanted behavior.
-      const leafs = extractLeafs(treedata)
-      if (leafs.length > 0) {
-        state.lastLeafId = leafs[0].id
-      }
       break
-    }
     // Events that pertain only to one leaf: no structural change
     case DP_EVENTS.ACTIVE_FILE:
     case DP_EVENTS.CHANGE_FILE_STATUS:
     case DP_EVENTS.OPEN_FILE:
     case DP_EVENTS.CLOSE_FILE:
     case DP_EVENTS.FILES_SORTED:
-      copyDelta(state, treedata, context.leafId)
+      copyDelta(state, treedata, context)
       break
-    case DP_EVENTS.LEAF_CLOSED: // One leaf removed
-      applyRemoveLeafDelta(state, treedata, context)
-      ensureAllLeafsExist(state, treedata)
-      break
-    case DP_EVENTS.NEW_LEAF: // New leaf
-      applyNewLeafDelta(state, treedata, context)
-      ensureAllLeafsExist(state, treedata)
-      break
+    // This default action may come in handy
+    default:
+      console.warn(`[Vuex::documentTreeUpdate] Could not update document tree: Undefined event ${event}`)
   }
 }

@@ -30,7 +30,6 @@ export const defaultContextMenu = EditorView.domEventHandlers({
     }
 
     const node = syntaxTree(view.state).resolveInner(pos)
-    console.log(`Context menu at node ${node.type.name}.`)
 
     switch (node.type.name) {
       case 'Link':

@@ -3,7 +3,6 @@
     class="tab-list"
     role="tablist"
     v-bind:aria-label="label"
-    v-bind:style="{ top: marginTop }"
   >
     <button
       v-for="(tab, idx) in tabs"
@@ -12,7 +11,7 @@
       role="tab"
       v-bind:aria-selected="currentTab === idx" v-bind:aria-controls="tab.controls"
       v-bind:class="{ 'active': currentTab === idx }"
-      v-on:click="currentTab = idx"
+      v-on:click="onTabClick($event, tab.id)"
     >
       <div class="toolbar-icon">
         <cds-icon
@@ -57,10 +56,6 @@ import { WindowTab } from '@dts/renderer/window'
 export default defineComponent({
   name: 'WindowTabbar',
   props: {
-    marginTop: {
-      type: String,
-      default: '0px'
-    },
     tabs: {
       type: Array as PropType<WindowTab[]>,
       required: true
@@ -86,6 +81,19 @@ export default defineComponent({
   },
   mounted () {
     window.addEventListener('resize', this.onWindowResize)
+    // On mount, if the URL contains a fragment that matches a tab ID, emit an
+    // event to ensure the app actually switches to that.
+    const url = new URL(location.href)
+    const fragment = url.hash
+    if (fragment === '') {
+      return
+    }
+
+    const tabId = fragment.substring(1)
+    const idx = this.tabs.findIndex(tab => tab.id === tabId)
+    if (idx > -1) {
+      this.currentTab = idx
+    }
   },
   destroyed () {
     window.removeEventListener('resize', this.onWindowResize)
@@ -93,6 +101,14 @@ export default defineComponent({
   methods: {
     onWindowResize (event: UIEvent) {
       this.currentWindowWidth = window.innerWidth
+    },
+    onTabClick (event: MouseEvent, id: string) {
+      // Modify history to retain active tab across reloads
+      const idx = this.tabs.findIndex(tab => tab.id === id)
+      const url = new URL(location.href)
+      url.hash = '#' + id
+      location.href = url.toString()
+      this.currentTab = idx
     }
   }
 })
@@ -101,8 +117,6 @@ export default defineComponent({
 <style lang="less">
 // General styles
 body div.tab-list {
-  position: absolute;
-  width: 100%;
   font-family: inherit;
   display: flex;
   padding: 5px;

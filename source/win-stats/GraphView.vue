@@ -451,10 +451,11 @@ export default defineComponent({
               .attr('r', 5)
               .attr('fill', (vertex, value) => (vertex.isolate) ? color(ISOLATES_CLASS) : color(vertex.component))
               .on('click', (event, vertex) => {
-                ipcRenderer.invoke('documents-provider', {
-                  command: 'open-file',
-                  payload: { path: vertex.id }
-                }).catch(err => console.error(err))
+                // BUG: This call requires a windowId and a leafId, which we don't have
+                // ipcRenderer.invoke('documents-provider', {
+                //   command: 'open-file',
+                //   payload: { path: vertex.id }
+                // }).catch(err => console.error(err))
               })
               .attr('data-tippy-content', (vertex) => {
                 let cnt = ''
@@ -617,7 +618,7 @@ body {
 
 div#graph-container {
   padding: 10px;
-  // We need a fixed width so that the SVG is displayed full size
+  height: 100%;
 
   p {
     // Reset the default removed margin on simple p-elements etc., which is
@@ -632,9 +633,7 @@ div#graph-container {
   .fade-leave-to { opacity: 0; }
 
   div#graph {
-    position: absolute;
-    bottom: 0;
-    width: calc(100% - 20px);
+    height: 100%;
 
     // This pulsates nodes if this class is applied
     .highlight { animation: pulsate-highlight 3s infinite; }

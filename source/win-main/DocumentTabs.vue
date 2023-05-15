@@ -47,8 +47,8 @@
         >
           <cds-icon v-if="file.pinned" shape="pin"></cds-icon>
           {{ getTabText(file) }}
-          <span v-if="hasDuplicate(file)" class="deduplicate">{{ getDirBasename(file) }}</span>
         </span>
+        <span v-if="hasDuplicate(file)" class="deduplicate">{{ getDirBasename(file) }}</span>
         <span
           v-if="!file.pinned"
           class="close"
@@ -724,7 +724,6 @@ export default defineComponent({
       if (hasDocumentTab) {
         this.documentTabDragOver = true
       } else {
-        console.log('Something else drag over.')
         this.documentTabDragOver = false
       }
     },
@@ -790,7 +789,7 @@ body div.tab-container {
     display: flex;
     position: relative;
     min-width: fit-content;
-    max-width: 250px;
+    max-width: 150px;
     line-height: @tabbar-height;
     padding: 0 10px; // Give the filenames a little more spacing
 
@@ -799,12 +798,15 @@ body div.tab-container {
     .filename {
       line-height: 30px;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
 
-      .deduplicate {
-        font-style: italic;
-        font-size: 80%;
-        opacity: 0.8;
-      }
+    .deduplicate {
+      font-style: italic;
+      font-size: 80%;
+      opacity: 0.8;
     }
 
     // Mark modification status classically
@@ -854,8 +856,11 @@ body.darwin {
 
       .filename {
         padding: 0 5px;
-        margin: 0 (@tabbar-height / 3 * 1.9);
-        overflow: hidden;
+        margin: 0 10px;
+      }
+
+      .deduplicate {
+        margin-right: 10px;
       }
 
       &.pinned .filename { margin: 0; }

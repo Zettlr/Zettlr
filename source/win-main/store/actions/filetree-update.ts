@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-import { FSALHistoryEvent } from '@dts/common/fsal'
-import { ActionContext } from 'vuex'
-import { ZettlrState } from '..'
+import type { FSALHistoryEvent } from '@dts/common/fsal'
+import { type ActionContext } from 'vuex'
+import { type ZettlrState } from '..'
 
 const ipcRenderer = window.ipc
 
@@ -75,7 +75,6 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   const saneEvents = sanitizeFiletreeUpdates(events)
 
   for (const event of saneEvents) {
-    // console.log(`Processing event ${event.event}:${event.path}`)
     if (event.timestamp <= context.state.lastFiletreeUpdate) {
       console.warn(`FSAL event had an outdated timestamp (${event.timestamp}, current: ${context.state.lastFiletreeUpdate}) -- skipping (${event.event}:${event.path})`)
       continue

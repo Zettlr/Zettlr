@@ -13,12 +13,12 @@
  */
 
 import sanitizeHtml from 'sanitize-html'
-import { GetTextTranslations, po } from 'gettext-parser'
+import { po, type GetTextTranslations } from 'gettext-parser'
 import getLanguageFile from './util/get-language-file'
 import { promises as fs } from 'fs'
 import { ipcMain } from 'electron'
-import { Candidate } from './util/find-lang-candidates'
-import { LangFileMetadata } from './util/enum-lang-files'
+import { type Candidate } from './util/find-lang-candidates'
+import { type LangFileMetadata } from './util/enum-lang-files'
 
 let i18nData: GetTextTranslations|undefined
 

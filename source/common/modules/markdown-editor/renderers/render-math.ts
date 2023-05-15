@@ -13,12 +13,12 @@
  */
 
 import { renderBlockWidgets } from './base-renderer'
-import { SyntaxNode, SyntaxNodeRef } from '@lezer/common'
-import { EditorView, WidgetType } from '@codemirror/view'
+import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
+import { WidgetType, type EditorView } from '@codemirror/view'
 
 import katex from 'katex'
 import 'katex/contrib/mhchem'
-import { EditorState } from '@codemirror/state'
+import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 import { equationMenu } from '../context-menu/equation-menu'
 
@@ -38,7 +38,7 @@ class MathWidget extends WidgetType {
     elem.classList.add('preview-math')
     elem.dataset.equation = this.equation
     katex.render(this.equation, elem, { throwOnError: false, displayMode: this.displayMode })
-    elem.addEventListener('click', clickAndSelect(view, this.node))
+    elem.addEventListener('click', clickAndSelect(view))
     elem.addEventListener('contextmenu', (event) => {
       equationMenu(view, this.equation, { x: event.clientX, y: event.clientY })
     })

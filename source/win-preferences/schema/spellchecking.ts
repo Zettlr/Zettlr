@@ -13,6 +13,7 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { mapLangCodeToName } from '@common/util/map-lang-code'
 
 export default function (): any {
   return {
@@ -34,6 +35,15 @@ export default function (): any {
           disabled: window.config.get('editor.lint.languageTool.active') === false
         },
         {
+          type: 'select',
+          label: trans('Mother tongue'),
+          options: {
+            '': trans('Not set'),
+            ...mapLangCodeToName()
+          },
+          model: 'editor.lint.languageTool.motherTongue'
+        },
+        {
           type: 'radio',
           label: trans('LanguageTool Provider'),
           options: {
@@ -53,12 +63,14 @@ export default function (): any {
         {
           type: 'text',
           label: trans('LanguageTool Username'),
-          model: 'editor.lint.languageTool.username'
+          model: 'editor.lint.languageTool.username',
+          disabled: window.config.get('editor.lint.languageTool.active') === false || window.config.get('editor.lint.languageTool.provider') === 'custom'
         },
         {
           type: 'text',
           label: trans('LanguageTool API key'),
-          model: 'editor.lint.languageTool.apiKey'
+          model: 'editor.lint.languageTool.apiKey',
+          disabled: window.config.get('editor.lint.languageTool.active') === false || window.config.get('editor.lint.languageTool.provider') === 'custom'
         }
       ],
       [

@@ -12,10 +12,11 @@
  * END HEADER
  */
 
-import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
+import { hoverTooltip, type EditorView, type Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
 import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'
+import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -59,29 +60,35 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
 
           const h4 = document.createElement('h4')
           h4.textContent = res.title
-          dom.appendChild(h4)
+
+          const imgParaWrapper = document.createElement('div')
+          imgParaWrapper.style.display = 'flex'
+          imgParaWrapper.style.flexDirection = 'row'
 
           if (res.image !== undefined) {
             const img = document.createElement('img')
             img.src = res.image
             img.style.maxWidth = '100px'
             img.style.maxHeight = '100px'
-            img.style.float = 'left'
             img.style.marginRight = '10px'
             img.style.marginBottom = '10px'
-            dom.appendChild(img)
+            imgParaWrapper.appendChild(img)
           }
 
           if (res.summary !== undefined) {
             const para = document.createElement('p')
             para.textContent = res.summary
-            dom.appendChild(para)
+            imgParaWrapper.appendChild(para)
           }
 
           const link = document.createElement('span')
-          link.textContent = validURI
+          // We can remove the "safe file" as this is a protocol only intended for
+          // local files
+          link.textContent = shortenUrlVisually(validURI.replace(/^safe-file:\/\//, ''))
           link.style.fontSize = '80%'
           link.style.fontFamily = 'monospace'
+          dom.appendChild(h4)
+          dom.appendChild(imgParaWrapper)
           dom.appendChild(link)
         })
         .catch(err => { console.error(`Could not generate link preview for URL ${validURI}`, err) })

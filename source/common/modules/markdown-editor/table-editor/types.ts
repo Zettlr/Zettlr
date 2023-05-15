@@ -1,4 +1,19 @@
-import TableEditor from './index'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Table Editor types
+ * CVM-Role:        Types
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains the types used by the TableEditor
+ *                  components.
+ *
+ * END HEADER
+ */
+
+import type TableEditor from './index'
 
 export type ColAlignment = 'center'|'left'|'right'
 

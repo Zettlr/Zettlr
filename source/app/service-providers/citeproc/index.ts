@@ -24,10 +24,10 @@ import extractBibTexAttachments from './extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
 import YAML from 'yaml'
 import ProviderContract from '../provider-contract'
-import NotificationProvider from '../notifications'
-import WindowProvider from '../windows'
-import LogProvider from '../log'
-import ConfigProvider from '@providers/config'
+import type NotificationProvider from '../notifications'
+import type WindowProvider from '../windows'
+import type LogProvider from '../log'
+import type ConfigProvider from '@providers/config'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 
@@ -451,7 +451,7 @@ export default class CiteprocProvider extends ProviderContract {
    * @param   {string}          lang  The language to be loaded.
    * @return  {string|boolean}        Either the contents of the XML file, or false.
    */
-  private getLocale (lang: string): string|boolean {
+  private getLocale (lang: string): string|false {
     // Takes a lang in the format xx-XX and has to return the corresponding XML
     // file. Let's do just that!
 

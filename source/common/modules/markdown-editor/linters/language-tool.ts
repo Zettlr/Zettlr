@@ -13,12 +13,12 @@
  * END HEADER
  */
 
-import { linter, Diagnostic, Action } from '@codemirror/lint'
-import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
+import { linter, type Diagnostic, type Action } from '@codemirror/lint'
+import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
-import { LanguageToolAPIResponse } from '@providers/commands/language-tool'
+import { type LanguageToolAPIResponse } from '@providers/commands/language-tool'
 import { StateEffect, StateField } from '@codemirror/state'
-import { filterNodesForSpellchecking } from './util'
+import { type TextNode } from '@common/modules/markdown-utils/markdown-ast'
 
 const ipcRenderer = window.ipc
 
@@ -47,7 +47,7 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
       if (e.is(updateLTState)) {
         value.running = e.value.running ?? value.running
         value.lastDetectedLanguage = e.value.lastDetectedLanguage ?? value.lastDetectedLanguage
-        value.lastError = e.value.lastError ?? value.lastError
+        value.lastError = e.value.lastError
         value.supportedLanguages = e.value.supportedLanguages ?? value.supportedLanguages
         value.overrideLanguage = e.value.overrideLanguage ?? value.overrideLanguage
       }
@@ -71,7 +71,7 @@ const ltLinter = linter(async view => {
 
   const document = view.state.doc.toString()
   const ast = markdownToAST(document)
-  const textNodes = extractTextnodes(ast, filterNodesForSpellchecking)
+  const textNodes = extractASTNodes(ast, 'Text') as TextNode[]
 
   // To avoid too high loads, we have to send a "pseudo-plain text" document.
   // That will generate a few warnings that relate towards the Markdown syntax,

@@ -13,9 +13,9 @@
  */
 
 import { renderInlineWidgets } from './base-renderer'
-import { SyntaxNodeRef, SyntaxNode } from '@lezer/common'
-import { EditorView, WidgetType } from '@codemirror/view'
-import { EditorState } from '@codemirror/state'
+import { type SyntaxNodeRef, type SyntaxNode } from '@lezer/common'
+import { WidgetType, type EditorView } from '@codemirror/view'
+import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 
 // A list of emphasis nodes
@@ -62,7 +62,7 @@ class EmphasisWidget extends WidgetType {
     }
 
     elem.textContent = contents
-    elem.addEventListener('mousedown', clickAndSelect(view, this.node))
+    elem.addEventListener('mousedown', clickAndSelect(view))
     return elem
   }
 
