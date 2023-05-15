@@ -411,7 +411,7 @@ export async function renameChild (
     throw new Error(`Cannot rename ${oldName}: Not found in ${dirObject.path}.`)
   }
 
-  const foundName = dirObject.children.find(child => child.name.toLowerCase() === newName.toLowerCase())
+  const foundName = dirObject.children.find(child => child.name === newName)
   if (foundName !== undefined) {
     throw new Error(`Directory ${newName} already exists!`)
   }
