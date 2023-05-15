@@ -221,7 +221,7 @@ Additionally, have a look at our [full development documentation](https://docs.z
 ### Directory Structure
 
 Zettlr is a mature app that has amassed hundreds of directories over the course of its development. Since it is hard to contribute to an application without any guidance, we have compiled a short description of the directories with how they interrelate.
-
+<!-- 
 ```
 .
 ├── resources                      # Contains resource files
@@ -266,6 +266,48 @@ Zettlr is a mature app that has amassed hundreds of directories over the course 
 │   └── win-update                 # The dedicated update window
 ├── static                         # Contains static files, cf. the README-file in there
 └── test                           # Unit tests
+``` -->
+
+```
+.
+├── resources                               # Contains resource files
+│   ├── icons                               # Icons used to build the application
+│   ├── NSIS                                # Images for the Windows installer
+│   ├── screenshots                         # The screenshots used in this README file
+├── scripts                                 # Scripts that are run by the CI and some YARN commands
+│   ├── assets                              # Asset files used by some scripts
+│   └── test-gui                            # Test files used by `yarn test-gui`
+├── source                                  # Contains the actual source code for the app
+│   ├── app                                 # Contains service providers and the boot/shutdown routines
+│   ├── common                              # Common files used by several or all renderer processes
+│   │   ├── img                             # Currently unused image files
+│   │   ├── less                            # Contains the themes (note: location will likely change)
+│   │   ├── modules                         # Contains renderer modules
+│   │   │   ├── markdown-editor             # The central CodeMirror markdown editor
+│   │   │   ├── markdown-utils              # Contains the various markdown utilities needed throughout the app
+│   │   │   ├── persistent-data-container   # Simple class that continuously persists some data to the disk
+│   │   │   ├── preload                     # Electron preload files
+│   │   │   └── window-register             # Run by every renderer during setup
+│   │   ├── util                            # A collection of utility functions
+│   │   └── vue                             # Contains Vue components used by the graphical interface
+│   ├── types                               # Object types that are used by other areas of the project
+│   │   ├── common                          # Contains common types that are used on both the renderer and main process
+│   │   ├── main                            # Contains types that configure the application on the main process
+│   │   └── renderer                        # Contains types that render different parts of the application
+│   ├── win-about                           # Code for the About window
+│   ├── win-assests                         # Code for the paste image modal
+│   ├── win-error                           # The error modal window
+│   ├── win-log-viewer                      # Displays the running logs from the app
+│   ├── win-main                            # The main window
+│   ├── win-paste-image                     # The modal displayed when pasting an image
+│   ├── win-preferences                     # The preferences window
+│   ├── win-print                           # Code for the print and preview window
+│   ├── win-project-properties              # Code for the project properties window
+│   ├── win-stats                           # Code for the general statistics window
+│   ├── win-tag-manager                     # Code for the tag manager
+│   └── win-update                          # The dedicated update window
+├── static                                  # Contains static files, cf. the README-file in there
+└── test                                    # Unit tests
 ```
 
 ### On the Distinction between Modules and Service Providers
@@ -279,7 +321,7 @@ Whenever you run Zettlr, the following steps will be executed:
 0. Execute `source/main.ts`
 1. Environment check (`source/app/lifecycle.ts::bootApplication`)
 2. Boot service providers (`source/app/lifecycle.ts::bootApplication`)
-3. Boot main application (`source/main/zettlr.ts`)
+3. Boot main application (`source/main/zettlr.ts`) - depreciated
 4. Load the file tree and the documents
 5. Show the main window
 
