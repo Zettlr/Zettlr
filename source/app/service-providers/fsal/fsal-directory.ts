@@ -420,7 +420,7 @@ export async function renameChild (
   }
 
   // Stops renaming if the new file will overwrite an old file and we don't want it to
-  if (newName.toLowerCase() !== oldName.toLowerCase() || allowOverwrite) {
+  if (newName.toLowerCase() !== oldName.toLowerCase() || !allowOverwrite) {
     const foundName = dirObject.children.find(child => child.name.toLowerCase() === newName.toLowerCase())
     if (foundName !== undefined) {
       throw new Error(`Cannot rename ${oldName} to ${newName}: A file with the same name already exists!`)
