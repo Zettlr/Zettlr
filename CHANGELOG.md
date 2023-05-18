@@ -239,6 +239,7 @@ there.
   - `DIRECTORY`: Holds the directory path for the current file
   - `EXTENSION`: Holds the file extension for the current file
 - Fixed inability to move the text cursor while renaming files in the file tree
+- Fixed ability to case-sensitively rename files
 - Fixed an incredibly dangerous bug that would lead to data loss if the app was
   being shut down before the statistics provider has been booted up; in which
   case the provider would overwrite sometimes several years worth of statistics
