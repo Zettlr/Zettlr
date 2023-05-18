@@ -354,6 +354,7 @@ there.
   command hub
 - Removed the `Zettlr` class; the last remnant of the old, class-based system
 - Remove deprecated modules `svg-inline-loader`, `raw-loader`, and `file-loader`
+- Upgraded Mermaid to 10.1.0
 
 # 2.3.0
 
