@@ -49,21 +49,15 @@ class MermaidWidget extends WidgetType {
     const elem = document.createElement('span')
     elem.classList.add('mermaid-chart')
 
-    const onFailure = (err: any): void => {
+    const id = `graphDiv${Date.now()}`
+    mermaid.render(id, this.graph).then(({ svg, bindFunctions }) => {
+      elem.innerHTML = svg
+      bindFunctions?.(elem)
+    }).catch((err: any): void => {
       elem.classList.add('error')
       // TODO: Localise!
       elem.innerText = `Could not render Graph:\n\n${err.str as string}`
-    }
-
-    try {
-      const id = `graphDiv${Date.now()}`
-      mermaid.render(id, this.graph).then(({ svg, bindFunctions }) => {
-        elem.innerHTML = svg
-        bindFunctions?.(elem)
-      }).catch(onFailure)
-    } catch (err: any) {
-      onFailure(err)
-    }
+    })
 
     elem.addEventListener('click', clickAndSelect(view))
     return elem
