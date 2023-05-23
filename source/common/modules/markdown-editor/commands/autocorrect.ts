@@ -37,7 +37,7 @@ function posInProtectedNode (state: EditorState, pos: number): boolean {
   const node = syntaxTree(state).resolve(pos, 0)
   return [
     'InlineCode', // `code`
-    'CommentBlock', // <!-- comment -->
+    'Comment', 'CommentBlock', // <!-- comment -->
     'FencedCode', // Code block
     'CodeText', // Code block
     'HorizontalRule'

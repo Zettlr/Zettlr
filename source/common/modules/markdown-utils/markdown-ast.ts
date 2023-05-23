@@ -531,7 +531,6 @@ function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNode: T, 
  * @return  {ASTNode}               The root node of a Markdown AST
  */
 export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
-  console.log(node.name)
   switch (node.name) {
     // NOTE: Most nodes are treated as generics (see default case); here we only
     // define nodes which we can "compress" a little bit or make accessible
@@ -797,6 +796,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       }
       return astNode
     }
+    case 'Comment':
     case 'CommentBlock': {
       const astNode: Comment = {
         type: 'Comment',
