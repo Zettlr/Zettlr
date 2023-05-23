@@ -405,7 +405,7 @@ export interface GenericNode extends MDNode {
 /**
  * Any node that can be part of the AST is an ASTNode.
  */
-export type ASTNode = Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | OrderedList | BulletList | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
+export type ASTNode = Comment | Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | OrderedList | BulletList | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -531,6 +531,7 @@ function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNode: T, 
  * @return  {ASTNode}               The root node of a Markdown AST
  */
 export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
+  console.log(node.name)
   switch (node.name) {
     // NOTE: Most nodes are treated as generics (see default case); here we only
     // define nodes which we can "compress" a little bit or make accessible
@@ -793,6 +794,16 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         source: markdown.substring(start.to, end.from)
+      }
+      return astNode
+    }
+    case 'CommentBlock': {
+      const astNode: Comment = {
+        type: 'Comment',
+        name: node.name,
+        from: node.from,
+        to: node.to,
+        value: markdown.slice(node.from + 4, node.to - 3).trim() // <!-- and -->
       }
       return astNode
     }
