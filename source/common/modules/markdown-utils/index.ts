@@ -50,30 +50,42 @@ export function markdownToAST (markdown: string, tree?: Tree): ASTNode {
  *
  * @param   {ASTNode}      ast       The AST to extract nodes from
  * @param   {ASTNodeType}  nodeType  The Node type to query
+ * @param   {Function}     filter    An optional filter. Receives a node and
+ *                                   returns a boolean indicating if the node
+ *                                   should be visited.
  *
  * @return  {ASTNode[]}              An array of all found nodes
  */
-export function extractASTNodes (ast: ASTNode, nodeType: ASTNodeType): ASTNode[] {
-  let returnNodes: ASTNode[] = []
+export function extractASTNodes (ast: ASTNode, nodeType: ASTNodeType, filter?: (node: ASTNode) => boolean): ASTNode[] {
+  if (filter !== undefined && !filter(ast)) {
+    return []
+  }
 
   if (ast.type === nodeType) {
-    returnNodes.push(ast)
+    return [ast]
   } else if (ast.type === 'FootnoteRef' || ast.type === 'Highlight' || ast.type === 'ListItem' || ast.type === 'Generic' || ast.type === 'Emphasis') {
+    let returnNodes: ASTNode[] = []
     for (const child of ast.children) {
-      returnNodes = returnNodes.concat(extractASTNodes(child, nodeType))
+      returnNodes = returnNodes.concat(extractASTNodes(child, nodeType, filter))
     }
+    return returnNodes
   } else if (ast.type === 'OrderedList' || ast.type === 'BulletList') {
+    let returnNodes: ASTNode[] = []
     for (const item of ast.items) {
-      returnNodes = returnNodes.concat(extractASTNodes(item, nodeType))
+      returnNodes = returnNodes.concat(extractASTNodes(item, nodeType, filter))
     }
+    return returnNodes
   } else if (ast.type === 'Table') {
+    let returnNodes: ASTNode[] = []
     for (const row of ast.rows) {
       for (const cell of row.cells) {
-        returnNodes = returnNodes.concat(extractASTNodes(cell, nodeType))
+        returnNodes = returnNodes.concat(extractASTNodes(cell, nodeType, filter))
       }
     }
+    return returnNodes
+  } else {
+    return []
   }
-  return returnNodes
 }
 
 /**
