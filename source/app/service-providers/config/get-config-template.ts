@@ -195,7 +195,7 @@ export default function getConfigTemplate (): ConfigOptions {
           { key: '(r)', value: '®' },
           // Interpunctation
           { key: '...', value: '…' },
-          { key: '--', value: '–' },
+          { key: '/(?<!<!)--/', value: '–' },
           { key: '---', value: '—' }
         ]
       } // END autoCorrect options
