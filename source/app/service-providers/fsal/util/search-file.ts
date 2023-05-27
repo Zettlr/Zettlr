@@ -72,7 +72,7 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
           // Break because only one match necessary
           break
         }
-      } else if (wd[0] === '#' && fileObject.type === 'file' && fileObject.tags.includes(wd.toLowerCase().substring(1))) {
+      } else if (wd[0] === '#' && fileObject.type === 'file' && fileObject.tags.map((each) => each.toLowerCase()).includes(wd.toLowerCase().substring(1))) {
         // Account for a potential # in front of the tag
         matchedWords.add(wd)
         if (t.operator === 'OR') {

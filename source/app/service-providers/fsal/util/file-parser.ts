@@ -71,7 +71,7 @@ export default function getMarkdownFileParser (
     const ast = md2ast(content)
 
     const tags = extractASTNodes(ast, 'ZettelkastenTag') as ZettelkastenTag[]
-    file.tags = tags.map(tag => tag.value)
+    file.tags = tags.map(tag => tag.value.substring(1))
 
     const links = extractASTNodes(ast, 'ZettelkastenLink') as ZettelkastenLink[]
     file.links = links.map(link => link.value)
@@ -113,6 +113,21 @@ export default function getMarkdownFileParser (
         const title = frontmatter.title.trim()
         if (title !== '') {
           file.yamlTitle = title
+        }
+      }
+
+      const tagsFromFrontmatter = []
+      if (file.frontmatter.tags) {
+        tagsFromFrontmatter.push(...file.frontmatter.tags)
+      }
+      if (file.frontmatter.keywords) {
+        tagsFromFrontmatter.push(...file.frontmatter.keywords)
+      }
+      if (tagsFromFrontmatter.length > 0) {
+        for (let i = 0; i < tagsFromFrontmatter.length; i++) {
+          if (!file.tags.includes(tagsFromFrontmatter[i])) {
+            file.tags.push(tagsFromFrontmatter[i])
+          }
         }
       }
     } catch (err: any) {
