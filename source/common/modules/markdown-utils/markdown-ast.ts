@@ -863,7 +863,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: 'ZknTag',
         from: node.from,
         to: node.to,
-        value: markdown.substring(node.from, node.to).slice(1)
+        value: markdown.substring(node.from + 1, node.to)
       }
       return astNode
     }
