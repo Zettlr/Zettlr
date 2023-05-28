@@ -21,6 +21,7 @@ import { renderMath } from './render-math'
 import { renderTasks } from './render-tasks'
 import { renderCitations } from './render-citations'
 import { renderMermaid } from './render-mermaid'
+import { renderKroki } from './render-kroki'
 import { renderTables } from '../table-editor'
 import { renderIframes } from './render-iframes'
 import { renderEmphasis } from './render-emphasis'
@@ -59,6 +60,7 @@ function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extensi
 
   if (config.renderingMode === 'preview') {
     updateExtension(renderMermaid, true, ext)
+    updateExtension(renderKroki, true, ext)
     updateExtension(renderCode, true, ext)
     updateExtension(renderImages, config.renderImages, ext)
     updateExtension(renderLinks, config.renderLinks, ext)

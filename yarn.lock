@@ -2601,6 +2601,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pako@npm:^2.0.0":
+  version: 2.0.4
+  resolution: "@types/pako@npm:2.0.4"
+  checksum: 10/9be5167f5cb45d405d92e8b320219e6d26f244880893425abb16b998cde0386185f048d60de609672f1e8654c44b77344e754138da3784460f4543fe8576fa62
+  languageName: node
+  linkType: hard
+
 "@types/plist@npm:^3.0.1":
   version: 3.0.5
   resolution: "@types/plist@npm:3.0.5"
@@ -11062,6 +11069,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pako@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "pako@npm:2.1.0"
+  checksum: 10/38a04991d0ec4f4b92794a68b8c92bf7340692c5d980255c92148da96eb3e550df7a86a7128b5ac0c65ecddfe5ef3bbe9c6dab13e1bc315086e759b18f7c1401
+  languageName: node
+  linkType: hard
+
 "pako@npm:~1.0.2":
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
@@ -15057,6 +15071,7 @@ __metadata:
     "@types/md5": "npm:^2.3.6"
     "@types/mocha": "npm:^10.0.10"
     "@types/node": "npm:^22.19.15"
+    "@types/pako": "npm:^2.0.0"
     "@types/sanitize-html": "npm:^2.16.1"
     "@types/semver": "npm:^7.7.1"
     "@types/showdown": "npm:^2.0.6"
@@ -15102,6 +15117,7 @@ __metadata:
     mocha: "npm:^11.7.5"
     node-loader: "npm:^2.1.0"
     nodehun: "npm:^3.0.2"
+    pako: "npm:^2.1.0"
     pinia: "npm:^3.0.4"
     rehype-parse: "npm:^9.0.1"
     rehype-remark: "npm:^10.0.1"
