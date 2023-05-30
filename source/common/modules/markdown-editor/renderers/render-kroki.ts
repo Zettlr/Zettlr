@@ -29,7 +29,7 @@ const DIAGRAM_TYPES = [
 const DIAGRAM_SYNONYMNS = { 'dot': 'graphviz', 'c4': 'c4plantuml' }
 
 class KrokiWidget extends WidgetType {
-  constructor (readonly type: string, readonly graph: string, readonly node: SyntaxNode, readonly darkMode: boolean, readonly caption: string|undefined, readonly width: string|undefined) {
+  constructor (readonly type: string, readonly graph: string, readonly node: SyntaxNode, readonly darkMode: boolean) {
     super()
   }
 
@@ -38,9 +38,7 @@ class KrokiWidget extends WidgetType {
       other.type === this.type &&
       other.node.from === this.node.from &&
       other.node.to === this.node.to &&
-      other.darkMode === this.darkMode &&
-      other.caption === this.caption &&
-      other.width === this.width
+      other.darkMode === this.darkMode
   }
 
   toDOM (view: EditorView): HTMLElement {
@@ -55,26 +53,11 @@ class KrokiWidget extends WidgetType {
     const result = window.btoa(String.fromCharCode.apply(null, compressed))
       .replace(/\+/g, '-').replace(/\//g, '_')
 
-    const figure = document.createElement('figure')
-    figure.addEventListener('click', clickAndSelect(view))
+    const svg = document.createElement('img')
+    svg.setAttribute('src', `https://kroki.io/${this.type}/svg/${result}`)
+    svg.addEventListener('click', clickAndSelect(view))
 
-    const svg = document.createElement('object')
-    svg.setAttribute('type', 'image/svg+xml')
-    svg.setAttribute('data', `https://kroki.io/${this.type}/svg/${result}`)
-    if (this.width) {
-      svg.setAttribute('width', this.width)
-    }
-    figure.appendChild(svg)
-
-    // caption
-    if (this.caption) {
-      const caption = document.createElement('figcaption')
-      caption.textContent = this.caption
-      caption.contentEditable = 'false'
-      figure.appendChild(caption)
-    }
-
-    return figure
+    return svg
   }
 
   ignoreEvent (event: Event): boolean {
@@ -113,7 +96,7 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): KrokiWidget|und
   const nodeText = state.sliceDoc(node.from, node.to)
   let detectedDiagramType: string|undefined
   for (const type of [ ...DIAGRAM_TYPES, ...Object.keys(DIAGRAM_SYNONYMNS) ]) {
-    if (nodeText.startsWith('```' + type) || nodeText.startsWith('~~~' + type) || nodeText.startsWith('```{.' + type)) {
+    if (nodeText.startsWith('```' + type) || nodeText.startsWith('~~~' + type)) {
       detectedDiagramType = type
       break
     }
@@ -127,18 +110,10 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): KrokiWidget|und
   }
 
   const graph = nodeText.replace(/^[`~]{1,3}[^\n]*\n(.+?)\n[`~]{1,3}$/s, '$1') // NOTE the s flag
-  const firstLine = nodeText.match(/^[`~]{1,3}\{.[a-zA-Z]*\s([^}]+)/)?.[1]
-
-  let caption: string|undefined
-  let width: string|undefined
-  if (firstLine) {
-    caption = firstLine.match(/caption="([^"]+)"/)?.[1]
-    width = firstLine.match(/width="?([^"]+)"?/)?.[1]
-  }
   // NOTE: We have to pass the current value of the darkMode config value to
   // see in what mode the kroki graph has actually been rendered to re-render
   // the graph if necessary
-  return new KrokiWidget(detectedDiagramType, graph, node.node, window.config.get('darkMode') as boolean, caption, width)
+  return new KrokiWidget(detectedDiagramType, graph, node.node, window.config.get('darkMode') as boolean)
 }
 
 export const renderKroki = renderBlockWidgets(shouldHandleNode, createWidget)
