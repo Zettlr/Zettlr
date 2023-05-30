@@ -21,11 +21,13 @@ import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 
 const DIAGRAM_TYPES = [
-  'blockdiag', 'bpmn', 'bytefield', 'seqdiag', 'actdiag',
-  'nwdiag', 'packetdiag', 'rackdiag', 'c4plantuml', 'ditaa',
-  'erd', 'excalidraw', 'graphviz', 'mermaid', 'nomnoml',
-  'plantuml', 'svgbob', 'umlet', 'vega', 'vegalite', 'wavedrom'
-]
+  'vegalite', 'blockdiag', 'bpmn', 'bytefield', 'seqdiag',
+  'actdiag', 'nwdiag', 'packetdiag', 'rackdiag', 'c4plantuml',
+  'd2', 'dbml', 'ditaa', 'erd', 'excalidraw', 'graphviz',
+  'mermaid', 'nomnoml', 'pikchr', 'plantuml', 'structurizr',
+  'svgbob', 'tikz', 'vega', 'wavedrom', 'wireviz'
+
+] // vegalite must be before vega, because otherwise vegalite diagrams will be rendered as vega diagrams
 const DIAGRAM_SYNONYMNS = { 'dot': 'graphviz', 'c4': 'c4plantuml' }
 
 class KrokiWidget extends WidgetType {
