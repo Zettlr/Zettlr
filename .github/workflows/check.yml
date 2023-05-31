@@ -1,7 +1,7 @@
 name: Unit Tests / Lint
 
-# On every push, and whenever another workflow calls this one
-on: [push, workflow_call]
+# On every push, for every pull-request and whenever another workflow calls this one
+on: [push, pull_request, workflow_call]
 
 permissions:
   contents: read
