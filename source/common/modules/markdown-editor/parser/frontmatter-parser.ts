@@ -32,9 +32,6 @@ export const frontmatterParser: BlockParser = {
     // This parser is inspired by the BlockParsers defined in
     // @lezer/markdown/src/markdown.ts
     if (line.text !== '---' || ctx.lineStart !== 0) {
-      console.log('Before HorizontalRule')
-      console.log(line.text)
-      console.log(ctx.lineStart)
       return false
     }
 
