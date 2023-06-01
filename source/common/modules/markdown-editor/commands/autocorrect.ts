@@ -38,10 +38,10 @@ function posInProtectedNode (state: EditorState, pos: number): boolean {
 
   // Having the cursor at the end of the HorizontalRule '---' is not considered inside the HorizontalRule node
   // So we check the previous position to see if it is in a HorizontalRule node
-  const checkHorizontalRuleNode = syntaxTree(state).resolve(pos - 1, 0)
-  const checkHorizontalRule = [ 'YAMLFrontmatterStart', 'YAMLFrontmatterEnd' ].includes(checkHorizontalRuleNode.type.name)
-  if (checkHorizontalRule) {
-    return checkHorizontalRule
+  const checkYAMLFrontmatterNode = syntaxTree(state).resolve(pos - 1, 0)
+  const checkYAMLFrontmatter = [ 'YAMLFrontmatterStart', 'YAMLFrontmatterEnd' ].includes(checkYAMLFrontmatterNode.type.name)
+  if (checkYAMLFrontmatter) {
+    return checkYAMLFrontmatter
   }
   return [
     'InlineCode', // `code`
