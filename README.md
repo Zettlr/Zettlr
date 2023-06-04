@@ -116,10 +116,10 @@ Then, simply clone the repository and install the dependencies on your local com
 ```bash
 $ git clone https://github.com/Zettlr/Zettlr.git
 $ cd Zettlr
-$ yarn install --frozen-lockfile
+$ yarn install --immutable
 ```
 
-The `--frozen-lockfile` flag ensures that yarn will stick to the versions as listed in the `yarn.lock` and not attempt to update them.
+The `--immutable` flag ensures that yarn will stick to the versions as listed in the `yarn.lock` and not attempt to update them.
 
 During development, hot module reloading (HMR) is active so that you can edit the renderer's code easily and hit `F5` after the changes have been compiled by `electron-forge`. You can keep the developer tools open to see when HMR has finished loading your changes.
 
