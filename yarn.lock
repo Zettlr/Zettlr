@@ -46,7 +46,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@braintree/sanitize-url@npm:^6.0.0":
+"@braintree/sanitize-url@npm:^6.0.0, @braintree/sanitize-url@npm:^6.0.2":
   version: 6.0.2
   resolution: "@braintree/sanitize-url@npm:6.0.2"
   checksum: 6a9dfd4081cc96516eeb281d1a83d3b5f1ad3d2837adf968fcc2ba18889ee833554f9c641b4083c36d3360a932e4504ddf25b0b51e9933c3742622df82cf7c9a
@@ -4610,13 +4610,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dagre-d3-es@npm:7.0.9":
-  version: 7.0.9
-  resolution: "dagre-d3-es@npm:7.0.9"
+"dagre-d3-es@npm:7.0.10":
+  version: 7.0.10
+  resolution: "dagre-d3-es@npm:7.0.10"
   dependencies:
     d3: ^7.8.2
     lodash-es: ^4.17.21
-  checksum: 5f24ad9558e84066e70cfa6979320d93079979ac8b0a3b033e5330742aeeba74e205f66794ab6e0a82354b061a4e29c10a291590d7b2cf82b5780fab5443f5ba
+  checksum: 25194e80dfad48db0dc2e0a273a7c9fcbfdc4cf993b219eaa1e0e0ce0cbb8c63be42fa2aa0c5f9bf9b324c34b8b2e300bb2a1606d5ae35c2de00f9c4ac317d8e
   languageName: node
   linkType: hard
 
@@ -5039,10 +5039,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:2.4.3":
-  version: 2.4.3
-  resolution: "dompurify@npm:2.4.3"
-  checksum: b440981f2a38cada2085759cc3d1e2f94571afc34343d011a8a6aa1ad91ae6abf651adbfa4994b0e2283f0ce81f7891cdb04b67d0b234c8d190cb70e9691f026
+"dompurify@npm:3.0.3":
+  version: 3.0.3
+  resolution: "dompurify@npm:3.0.3"
+  checksum: 02242f2fe6a5c078fd0cb04efc93079d73a2fe886bebb5e33100b7e52f4b9bfe5f2afb0b69cae39d9a13d7bbf54435df41494890c4abe7740429828b2dbb94d9
   languageName: node
   linkType: hard
 
@@ -8502,6 +8502,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mdast-util-from-markdown@npm:^1.3.0":
+  version: 1.3.1
+  resolution: "mdast-util-from-markdown@npm:1.3.1"
+  dependencies:
+    "@types/mdast": ^3.0.0
+    "@types/unist": ^2.0.0
+    decode-named-character-reference: ^1.0.0
+    mdast-util-to-string: ^3.1.0
+    micromark: ^3.0.0
+    micromark-util-decode-numeric-character-reference: ^1.0.0
+    micromark-util-decode-string: ^1.0.0
+    micromark-util-normalize-identifier: ^1.0.0
+    micromark-util-symbol: ^1.0.0
+    micromark-util-types: ^1.0.0
+    unist-util-stringify-position: ^3.0.0
+    uvu: ^0.5.0
+  checksum: c2fac225167e248d394332a4ea39596e04cbde07d8cdb3889e91e48972c4c3462a02b39fda3855345d90231eb17a90ac6e082fb4f012a77c1d0ddfb9c7446940
+  languageName: node
+  linkType: hard
+
 "mdast-util-frontmatter@npm:^1.0.0":
   version: 1.0.0
   resolution: "mdast-util-frontmatter@npm:1.0.0"
@@ -8652,27 +8672,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:^9.x.x":
-  version: 9.4.3
-  resolution: "mermaid@npm:9.4.3"
+"mermaid@npm:^10.x.x":
+  version: 10.2.2
+  resolution: "mermaid@npm:10.2.2"
   dependencies:
-    "@braintree/sanitize-url": ^6.0.0
+    "@braintree/sanitize-url": ^6.0.2
     cytoscape: ^3.23.0
     cytoscape-cose-bilkent: ^4.1.0
     cytoscape-fcose: ^2.1.0
     d3: ^7.4.0
-    dagre-d3-es: 7.0.9
+    dagre-d3-es: 7.0.10
     dayjs: ^1.11.7
-    dompurify: 2.4.3
+    dompurify: 3.0.3
     elkjs: ^0.8.2
     khroma: ^2.0.0
     lodash-es: ^4.17.21
+    mdast-util-from-markdown: ^1.3.0
     non-layered-tidy-tree-layout: ^2.0.2
-    stylis: ^4.1.2
+    stylis: ^4.1.3
     ts-dedent: ^2.2.0
     uuid: ^9.0.0
     web-worker: ^1.2.0
-  checksum: 9e29177f289cc268ea4a2ca7a45ec0ca06f678007eae15a7cd54c682148a71367e861d2c9c0afa9f7474da154d9920524e59722186820e9bc0d79989305a7064
+  checksum: 8893951f56081c420202cbb54cc50885a5a360fade46f400bf0ba91d6e6c9003a4c0219ca952b41958486a97f8216725a7e91c2478a2d5cbcccc587e49796618
   languageName: node
   linkType: hard
 
@@ -11819,6 +11840,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"stylis@npm:^4.1.3":
+  version: 4.2.0
+  resolution: "stylis@npm:4.2.0"
+  checksum: 0eb6cc1b866dc17a6037d0a82ac7fa877eba6a757443e79e7c4f35bacedbf6421fadcab4363b39667b43355cbaaa570a3cde850f776498e5450f32ed2f9b7584
+  languageName: node
+  linkType: hard
+
 "sudo-prompt@npm:^9.1.1":
   version: 9.2.1
   resolution: "sudo-prompt@npm:9.2.1"
@@ -13419,7 +13447,7 @@ __metadata:
     lodash: ^4.17.21
     luxon: ^3.3.0
     md5: ^2.3.0
-    mermaid: ^9.x.x
+    mermaid: ^10.x.x
     minimatch: ^8.0.3
     mocha: ^10.2.0
     node-loader: ^2.0.0
