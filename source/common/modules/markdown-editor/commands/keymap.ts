@@ -13,13 +13,13 @@
  */
 
 import { acceptCompletion, deleteBracketPair } from '@codemirror/autocomplete'
-import { copyLineDown, copyLineUp, indentLess, indentMore } from '@codemirror/commands';
+import { copyLineDown, copyLineUp, indentLess, indentMore } from '@codemirror/commands'
 import { type KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'
 import { copyAsHTML, pasteAsPlain } from '../util/copy-paste-cut'
 import { handleReplacement, handleBackspace, handleQuote } from './autocorrect'
 import { addNewFootnote } from './footnotes'
-import { maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown} from './lists'
+import { maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown } from './lists'
 import { insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList } from './markdown'
 
 // Custom keymap implementing less complex keyboard shortcuts

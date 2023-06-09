@@ -273,7 +273,7 @@ export function maybeUnindentList (target: EditorView): boolean {
 }
 
 /**
- * A command that removes a tab, and subsequently corrects the list markers for
+ * A command that moves a line down, and subsequently corrects the list markers for
  * every list affected by this change, if a list was touched by a selection.
  *
  * @param   {EditorView}  target  The view in question
@@ -285,7 +285,7 @@ export function customMoveLineDown (target: EditorView): boolean {
     state: target.state,
     dispatch: (transaction) => target.dispatch(transaction)
   })
-  
+
   if (isListTouchedBySelection(target.state)) {
     target.dispatch(correctListMarkers(target.state))
     hasHandled = true
@@ -295,7 +295,7 @@ export function customMoveLineDown (target: EditorView): boolean {
 }
 
 /**
- * A command that removes a tab, and subsequently corrects the list markers for
+ * A command that moves a line up, and subsequently corrects the list markers for
  * every list affected by this change, if a list was touched by a selection.
  *
  * @param   {EditorView}  target  The view in question
@@ -307,7 +307,7 @@ export function customMoveLineUp (target: EditorView): boolean {
     state: target.state,
     dispatch: (transaction) => target.dispatch(transaction)
   })
-  
+
   if (isListTouchedBySelection(target.state)) {
     target.dispatch(correctListMarkers(target.state))
     hasHandled = true
