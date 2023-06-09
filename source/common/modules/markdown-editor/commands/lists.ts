@@ -17,7 +17,7 @@
 import { type ChangeSpec, type EditorState, type Transaction } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
-import { indentLess, indentMore, insertTab } from '@codemirror/commands'
+import { indentLess, indentMore, insertTab, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { type SyntaxNode } from '@lezer/common'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import type { BulletList, OrderedList } from '@common/modules/markdown-utils/markdown-ast'
@@ -209,6 +209,7 @@ function correctListMarkers (state: EditorState): Transaction {
   // So what this function needs to do is go over the ranges. We know that this
   // function will only be called after the user either indented or unindented
   // anything that has a list in it.
+
   const lists = fetchLists(state)
   const changes: ChangeSpec[] = []
 
@@ -263,6 +264,50 @@ export function maybeUnindentList (target: EditorView): boolean {
     dispatch: (transaction) => target.dispatch(transaction)
   })
 
+  if (isListTouchedBySelection(target.state)) {
+    target.dispatch(correctListMarkers(target.state))
+    hasHandled = true
+  }
+
+  return hasHandled
+}
+
+/**
+ * A command that removes a tab, and subsequently corrects the list markers for
+ * every list affected by this change, if a list was touched by a selection.
+ *
+ * @param   {EditorView}  target  The view in question
+ *
+ * @return  {boolean}             Whether the command has handled the keypress
+ */
+export function customMoveLineDown (target: EditorView): boolean {
+  let hasHandled = moveLineDown({
+    state: target.state,
+    dispatch: (transaction) => target.dispatch(transaction)
+  })
+  
+  if (isListTouchedBySelection(target.state)) {
+    target.dispatch(correctListMarkers(target.state))
+    hasHandled = true
+  }
+
+  return hasHandled
+}
+
+/**
+ * A command that removes a tab, and subsequently corrects the list markers for
+ * every list affected by this change, if a list was touched by a selection.
+ *
+ * @param   {EditorView}  target  The view in question
+ *
+ * @return  {boolean}             Whether the command has handled the keypress
+ */
+export function customMoveLineUp (target: EditorView): boolean {
+  let hasHandled = moveLineUp({
+    state: target.state,
+    dispatch: (transaction) => target.dispatch(transaction)
+  })
+  
   if (isListTouchedBySelection(target.state)) {
     target.dispatch(correctListMarkers(target.state))
     hasHandled = true
