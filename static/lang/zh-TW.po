@@ -326,6 +326,9 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr 提供了與 LanguageTool.org 的整合，LanguageTool.org 是由 "
+"LanguageTooler GmbH 提供的服務。使用此服務需要網絡連接，並受到 "
+"LanguageTooler GmbH 或您使用的相應伺服器的隱私政策約束。"
 
 #: source/tmp/PopoverDocInfo.vue.ts:35
 msgid "No open document"
