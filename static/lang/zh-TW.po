@@ -515,13 +515,13 @@ msgstr ""
 msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
-msgstr ""
+msgstr "此個人資料受到保護。這意味著當您刪除或重新命名它時，它將被恢復。"
 
 #: source/tmp/Defaults.vue.ts:73
 msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
-msgstr ""
+msgstr "此個人資料無效。可能包含錯誤，或缺少作者或讀者屬性。"
 
 #: source/tmp/Defaults.vue.ts:76
 #: source/win-main/file-manager/util/file-item-context.ts:41
@@ -570,11 +570,11 @@ msgstr "關閉全部分頁"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Unpin tab"
-msgstr ""
+msgstr "取消固定分頁"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Pin tab"
-msgstr ""
+msgstr "固定分頁"
 
 #: source/win-main/tabs-context.ts:68
 #: source/win-main/file-manager/util/file-item-context.ts:64
@@ -583,7 +583,7 @@ msgstr "複製檔案名稱"
 
 #: source/win-main/tabs-context.ts:74
 msgid "Copy full path"
-msgstr ""
+msgstr "複製完整路徑"
 
 #: source/win-main/tabs-context.ts:80
 #: source/win-main/file-manager/util/file-item-context.ts:70
@@ -733,12 +733,12 @@ msgstr "空"
 #: source/app/service-providers/menu/menu.darwin.ts:208
 #: source/app/service-providers/menu/menu.win32.ts:173
 msgid "Previous file"
-msgstr ""
+msgstr "上一個檔案"
 
 #: source/app/service-providers/menu/menu.darwin.ts:219
 #: source/app/service-providers/menu/menu.win32.ts:184
 msgid "Next file"
-msgstr ""
+msgstr "下一個檔案"
 
 #: source/app/service-providers/menu/menu.darwin.ts:233
 #: source/app/service-providers/menu/menu.win32.ts:198
