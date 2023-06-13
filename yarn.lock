@@ -303,7 +303,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.2.2, @codemirror/view@npm:^6.6.0, @codemirror/view@npm:^6.9.3":
+"@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.2.2, @codemirror/view@npm:^6.6.0":
   version: 6.9.3
   resolution: "@codemirror/view@npm:6.9.3"
   dependencies:
@@ -311,6 +311,17 @@ __metadata:
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
   checksum: 718ecbb021ca75eb89003f73c846a07d36a708dcfec8345f0f0dbcfc0d0df5ea6f114918694b2730a6d49e5e50502bcce79ce7ff94ce55748e068e5a35073755
+  languageName: node
+  linkType: hard
+
+"@codemirror/view@npm:^6.13.1":
+  version: 6.13.1
+  resolution: "@codemirror/view@npm:6.13.1"
+  dependencies:
+    "@codemirror/state": ^6.1.4
+    style-mod: ^4.0.0
+    w3c-keyname: ^2.2.4
+  checksum: 665a885a406692392a103f0f1a7afe62ec390f8e580d02116778c1e90ab22fd71e378d3861e4c875302832beebd61eca80ecdc0d187c31b865fdba5302e3ce7b
   languageName: node
   linkType: hard
 
@@ -13356,7 +13367,7 @@ __metadata:
     "@codemirror/legacy-modes": ^6.3.2
     "@codemirror/search": ^6.3.0
     "@codemirror/state": ^6.2.0
-    "@codemirror/view": ^6.9.3
+    "@codemirror/view": ^6.13.1
     "@electron-forge/cli": ^6.1.1
     "@electron-forge/maker-zip": ^6.1.1
     "@electron-forge/plugin-webpack": ^6.1.1
