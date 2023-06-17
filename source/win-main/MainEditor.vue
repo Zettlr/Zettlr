@@ -240,7 +240,7 @@ watch(toRef(props.editorCommands, 'jumpToLine'), () => {
   }
 })
 watch(toRef(props.editorCommands, 'moveSection'), () => {
-  if (props.activeFile?.path !== props.file.path) {
+  if (props.activeFile?.path !== props.file.path || store.state.lastLeafId !== props.leafId) {
     return
   }
 
@@ -256,22 +256,34 @@ watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
 })
 
 watch(toRef(props, 'distractionFree'), (newValue) => {
-  if (currentEditor !== null && props.activeFile?.path === props.file.path) {
+  if (currentEditor !== null && props.activeFile?.path === props.file.path && store.state.lastLeafId === props.leafId) {
     currentEditor.distractionFree = props.distractionFree
   }
 })
 
 watch(toRef(props.editorCommands, 'executeCommand'), () => {
-  if (props.activeFile?.path !== props.file.path) {
+  if (props.activeFile?.path !== props.file.path || currentEditor === null) {
+    return
+  }
+
+  if (store.state.lastLeafId !== props.leafId) {
+    // This editor, even though it may be focused, was not the last focused
+    // See https://github.com/Zettlr/Zettlr/issues/4361
     return
   }
 
   const command: string = props.editorCommands.data
-  currentEditor?.runCommand(command)
-  currentEditor?.focus()
+  currentEditor.runCommand(command)
+  currentEditor.focus()
 })
 watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   if (props.activeFile?.path !== props.file.path) {
+    return
+  }
+
+  if (store.state.lastLeafId !== props.leafId) {
+    // This editor, even though it may be focused, was not the last focused
+    // See https://github.com/Zettlr/Zettlr/issues/4361
     return
   }
 
