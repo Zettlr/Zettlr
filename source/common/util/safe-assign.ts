@@ -20,13 +20,12 @@
 /**
  * Overwrites properties on the referenceObject, if they also occur in obj.
  * @param {any} obj The new object to be safe assigned
- * @param {any} referenceObject The reference to use the props from (without props with undefined as value)
- * @param {any} keyReferenceObject The original reference to check whether a key occurs
+ * @param {any} referenceObject The reference to use the props from
  */
-function safeAssign (obj: any, referenceObject: any, keyReferenceObject: any): void {
+function safeAssign (obj: any, referenceObject: any): void {
   // Overwrite all given attributes (and leave the not given in place)
   // This will ensure sane defaults.
-  for (const prop in keyReferenceObject) {
+  for (const prop in referenceObject) {
     if (prop in obj) {
       // safeAssign updates even nested objects, which we'll
       // do here. The "else" is for primitives. "Why do you
@@ -37,7 +36,7 @@ function safeAssign (obj: any, referenceObject: any, keyReferenceObject: any): v
         !Array.isArray(referenceObject[prop]) &&
         referenceObject[prop] !== null) {
         // Update the sub-object
-        safeAssign(obj[prop], referenceObject[prop], keyReferenceObject[prop])
+        safeAssign(obj[prop], referenceObject[prop])
       } else {
         // Assign the primitive
         referenceObject[prop] = obj[prop]
@@ -58,8 +57,8 @@ function safeAssign (obj: any, referenceObject: any, keyReferenceObject: any): v
 export default function <A, B> (obj: A, reference: B): B {
   // Make sure to clone the reference object, so that users
   // do not have to worry about doing this themselves.
-  const clone = JSON.parse(JSON.stringify(reference))
+  const clone = structuredClone(reference)
   // After cloning, safely assign the object to the reference
-  safeAssign(obj, clone, reference)
+  safeAssign(obj, clone)
   return clone
 }
