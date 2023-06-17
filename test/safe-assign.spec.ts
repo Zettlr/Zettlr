@@ -44,6 +44,10 @@ const inputs = [
   // Based on a true story, as safeAssign apparently doesn't overwrite values
   {
     'fullScreen': true
+  },
+  // A safeAssign will use values even if the reference has an undefined value
+  {
+    a: 'foo'
   }
 ]
 const referenceObjects = [
@@ -74,6 +78,9 @@ const referenceObjects = [
   {
     'fullScreen': false,
     someOtherVar: 'Hello World'
+  },
+  {
+    a: undefined
   }
 ]
 const expectedOutputs = [
@@ -105,6 +112,10 @@ const expectedOutputs = [
   {
     'fullScreen': true,
     someOtherVar: 'Hello World'
+  },
+  // Expected output file
+  {
+    a: 'foo'
   }
 ]
 
