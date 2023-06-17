@@ -56,6 +56,14 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
 
 export const tags: AutocompletePlugin = {
   applies (ctx) {
+    if (ctx.pos === 0) {
+      return false
+    }
+
+    if (ctx.state.sliceDoc(ctx.pos - 1, ctx.pos) === '#') {
+      return ctx.pos
+    }
+
     const match = ctx.matchBefore(/(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/)
     if (match === null || match.to < ctx.pos) {
       return false
