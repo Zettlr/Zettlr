@@ -50,7 +50,7 @@ export const tagsUpdateField = StateField.define<Completion[]>({
 const apply = function (view: EditorView, completion: Completion, from: number, to: number): void {
   view.dispatch({
     changes: [{ from, to, insert: completion.label }],
-    selection: { anchor: to }
+    selection: { anchor: from + completion.label.length }
   })
 }
 
@@ -60,7 +60,7 @@ export const tags: AutocompletePlugin = {
     if (match === null || match.to < ctx.pos) {
       return false
     } else if (match.to === ctx.pos) {
-      return match.from + 1
+      return match.from
     }
 
     return false
