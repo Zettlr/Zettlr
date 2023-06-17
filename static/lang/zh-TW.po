@@ -326,6 +326,9 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr 提供了與 LanguageTool.org 的整合，LanguageTool.org 是由 "
+"LanguageTooler GmbH 提供的服務。使用此服務需要網絡連接，並受到 "
+"LanguageTooler GmbH 或您使用的相應伺服器的隱私政策約束。"
 
 #: source/tmp/PopoverDocInfo.vue.ts:35
 msgid "No open document"
@@ -415,11 +418,11 @@ msgstr "相關檔案"
 
 #: source/tmp/PopoverTags.vue.ts:36
 msgid "Name"
-msgstr ""
+msgstr "名稱"
 
 #: source/tmp/PopoverTags.vue.ts:37
 msgid "Count"
-msgstr ""
+msgstr "數量"
 
 #: source/tmp/PopoverTags.vue.ts:55
 msgid "Filter tags…"
@@ -461,20 +464,20 @@ msgstr "沒有相關檔案"
 
 #: source/tmp/RelatedFilesTab.vue.ts:33
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "此關聯基於雙向連結。"
 
 #: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "此關聯基於外部連結。"
 
 #: source/tmp/RelatedFilesTab.vue.ts:39
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "此關聯基於反向連結。"
 
 #: source/tmp/RelatedFilesTab.vue.ts:228
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "此關聯基於 %s 個共用標籤： %s"
 
 #: source/tmp/Projects-Tab.vue.ts:24
 msgid "Zettlr also makes use of these projects:"
@@ -502,23 +505,23 @@ msgstr "長休息"
 
 #: source/tmp/PopoverPomodoro.vue.ts:87
 msgid "Sound Effect"
-msgstr ""
+msgstr "音效"
 
 #: source/tmp/PopoverPomodoro.vue.ts:90
 msgid "Volume"
-msgstr ""
+msgstr "音量"
 
 #: source/tmp/Defaults.vue.ts:70
 msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
-msgstr ""
+msgstr "此個人資料受到保護。這意味著當您刪除或重新命名它時，它將被恢復。"
 
 #: source/tmp/Defaults.vue.ts:73
 msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
-msgstr ""
+msgstr "此個人資料無效。可能包含錯誤，或缺少作者或讀者屬性。"
 
 #: source/tmp/Defaults.vue.ts:76
 #: source/win-main/file-manager/util/file-item-context.ts:41
@@ -567,11 +570,11 @@ msgstr "關閉全部分頁"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Unpin tab"
-msgstr ""
+msgstr "取消固定分頁"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Pin tab"
-msgstr ""
+msgstr "固定分頁"
 
 #: source/win-main/tabs-context.ts:68
 #: source/win-main/file-manager/util/file-item-context.ts:64
@@ -580,7 +583,7 @@ msgstr "複製檔案名稱"
 
 #: source/win-main/tabs-context.ts:74
 msgid "Copy full path"
-msgstr ""
+msgstr "複製完整路徑"
 
 #: source/win-main/tabs-context.ts:80
 #: source/win-main/file-manager/util/file-item-context.ts:70
@@ -730,12 +733,12 @@ msgstr "空"
 #: source/app/service-providers/menu/menu.darwin.ts:208
 #: source/app/service-providers/menu/menu.win32.ts:173
 msgid "Previous file"
-msgstr ""
+msgstr "上一個檔案"
 
 #: source/app/service-providers/menu/menu.darwin.ts:219
 #: source/app/service-providers/menu/menu.win32.ts:184
 msgid "Next file"
-msgstr ""
+msgstr "下一個檔案"
 
 #: source/app/service-providers/menu/menu.darwin.ts:233
 #: source/app/service-providers/menu/menu.win32.ts:198
@@ -996,13 +999,13 @@ msgstr "開啟檔案"
 #: source/app/service-providers/commands/file-rename.ts:96
 #: source/app/service-providers/commands/rename-tag.ts:47
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #. 0: Save all changes
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 #: source/app/service-providers/commands/file-rename.ts:97
 msgid "No"
-msgstr ""
+msgstr "否"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
 #, fuzzy
@@ -1093,22 +1096,22 @@ msgstr "選項 %s 是必需的。"
 
 #: source/app/service-providers/config/index.ts:423
 msgid "Changing this option requires a restart to take effect."
-msgstr ""
+msgstr "更改此選項需要重新啟動才能生效。"
 
 #: source/app/service-providers/config/index.ts:426
 #, fuzzy
 msgid "Restart now"
-msgstr "剛剛"
+msgstr "立即重新啟動"
 
 #: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
-msgstr ""
+msgstr "稍後重新啟動"
 
 #: source/app/service-providers/config/index.ts:431
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
 msgid "Confirm"
-msgstr ""
+msgstr "確認"
 
 #: source/app/service-providers/citeproc/index.ts:241
 #: source/app/service-providers/citeproc/index.ts:441
@@ -1141,7 +1144,7 @@ msgstr "「%s」已經讀取好了！"
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "無法開啟工作區 %s。"
 
 #: source/app/service-providers/commands/dir-new.ts:36
 #: source/app/service-providers/commands/dir-new.ts:37
@@ -1160,15 +1163,15 @@ msgstr "無法建立檔案"
 #: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "更新 %s 個指向檔案 %s 的內部連結？"
 
 #: source/app/service-providers/commands/language-tool.ts:187
 msgid "Document too long"
-msgstr ""
+msgstr "文件過長"
 
 #: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
-msgstr ""
+msgstr "離線"
 
 #: source/app/service-providers/commands/request-move.ts:60
 msgid "Cannot move directory"
@@ -1211,7 +1214,7 @@ msgstr "無法匯入語言包 %s！"
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "在 %s 個檔案中將標籤 \"%s\" 替換為 \"%s\"？"
 
 #: source/app/service-providers/commands/set-open-directory.ts:40
 msgid "Directory not found"
@@ -1220,11 +1223,11 @@ msgstr "找不到目錄"
 #: source/app/service-providers/commands/set-open-directory.ts:41
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:75
 msgid "The requested directory was not found."
-msgstr "找不到你要求的目錄。"
+msgstr "找不到所請求的目錄。"
 
 #: source/app/service-providers/commands/export.ts:74
 msgid "Choose export destination"
-msgstr ""
+msgstr "選擇匯出目的地"
 
 #: source/app/service-providers/commands/export.ts:105
 #, javascript-format
@@ -1244,7 +1247,7 @@ msgstr "匯出時發生錯誤：%s"
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "副本：%s"
 
 #: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
 #: source/app/service-providers/commands/exporter/default-exporter.ts:32
@@ -1304,7 +1307,7 @@ msgstr "以下文件 %s 無法被匯入，因為檔案類型未知：%s"
 
 #: source/app/service-providers/commands/dir-project-export.ts:117
 msgid "Project successfully exported. Click to show."
-msgstr ""
+msgstr "專案成功匯出。點擊以顯示。"
 
 #: source/app/service-providers/commands/dir-project-export.ts:117
 #, fuzzy
@@ -1351,46 +1354,46 @@ msgstr "最新版本 %s 出爐啦！"
 
 #: source/win-preferences/schema/spellchecking.ts:24
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "使用語言工具"
 
 #: source/win-preferences/schema/spellchecking.ts:29
 msgid "Strictness"
-msgstr ""
+msgstr "嚴格"
 
 #: source/win-preferences/schema/spellchecking.ts:31
 #, fuzzy
 msgid "Standard"
-msgstr "日曆"
+msgstr "標準"
 
 #: source/win-preferences/schema/spellchecking.ts:32
 msgid "Picky"
-msgstr ""
+msgstr "挑剔"
 
 #: source/win-preferences/schema/spellchecking.ts:39
 msgid "Mother tongue"
-msgstr ""
+msgstr "母語"
 
 #: source/win-preferences/schema/spellchecking.ts:41
 msgid "Not set"
-msgstr ""
+msgstr "未設定"
 
 #: source/win-preferences/schema/spellchecking.ts:48
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "語言工具 提供者"
 
 #: source/win-preferences/schema/spellchecking.ts:51
 #: source/win-preferences/schema/spellchecking.ts:58
 #, fuzzy
 msgid "Custom server"
-msgstr "自訂 CSS"
+msgstr "自訂伺服器"
 
 #: source/win-preferences/schema/spellchecking.ts:65
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "語言工具 使用者名稱"
 
 #: source/win-preferences/schema/spellchecking.ts:71
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "語言工具 API 金鑰"
 
 #: source/win-preferences/schema/spellchecking.ts:79
 msgid ""
@@ -1571,7 +1574,7 @@ msgstr "編輯器輸入模式"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "檢查 Markdown 的樣式問題"
 
 #: source/win-preferences/schema/editor.ts:102
 #, fuzzy
@@ -1596,7 +1599,7 @@ msgstr "啟用表格編輯器"
 
 #: source/win-preferences/schema/editor.ts:129
 msgid "Show link previews"
-msgstr ""
+msgstr "顯示連結預覽"
 
 #: source/win-preferences/schema/editor.ts:134
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -1604,7 +1607,7 @@ msgstr "統計字元數，而非字數（如果你用中文，大概會想要這
 
 #: source/win-preferences/schema/general.ts:23
 msgid "Application language"
-msgstr ""
+msgstr "應用程式語言"
 
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"
@@ -1748,59 +1751,59 @@ msgstr "目前工作目錄：匯出的檔案將保存到選定的目錄中。"
 
 #: source/win-preferences/schema/export.ts:54
 msgid "Ask for directory"
-msgstr ""
+msgstr "詢問目錄"
 
 #: source/win-preferences/schema/toolbar.ts:23
 msgid "Display \"Open Preferences\" button"
-msgstr ""
+msgstr "顯示「開啟偏好設定」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:28
 msgid "Display \"New File\" button"
-msgstr ""
+msgstr "顯示「新增檔案」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:33
 msgid "Display \"Previous File\" button"
-msgstr ""
+msgstr "顯示「上一個檔案」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:38
 msgid "Display \"Next File\" button"
-msgstr ""
+msgstr "顯示「下一個檔案」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:45
 msgid "Display readability button"
-msgstr ""
+msgstr "顯示「可讀性」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:50
 msgid "Display \"Insert Comment\" button"
-msgstr ""
+msgstr "顯示「插入註解」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:55
 msgid "Display link button"
-msgstr ""
+msgstr "顯示「連結」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:60
 msgid "Display image button"
-msgstr ""
+msgstr "顯示「插入圖片」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:65
 msgid "Display task list button"
-msgstr ""
+msgstr "顯示「任務清單」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:70
 msgid "Display \"Insert Table\" button"
-msgstr ""
+msgstr "顯示「插入表格」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:75
 msgid "Display \"Insert Footnote\" button"
-msgstr ""
+msgstr "顯示「插入註腳」按鈕"
 
 #: source/win-preferences/schema/toolbar.ts:82
 msgid "Display document info"
-msgstr ""
+msgstr "顯示文件資訊"
 
 #: source/win-preferences/schema/toolbar.ts:87
 msgid "Display Pomodoro-timer"
-msgstr ""
+msgstr "顯示番茄鐘計時器"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "ID regular expression"
@@ -1930,28 +1933,28 @@ msgstr "最大圖片高度（%）"
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "可讀性模式（%s）"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:94
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "找不到圖片：%s"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "無醒目標示"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "自動偵測"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "開啟診斷面板"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
 msgid "Disabled"
-msgstr ""
+msgstr "已停用"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
 #, fuzzy
@@ -2021,7 +2024,7 @@ msgstr "複製方程式程式碼"
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "檔案 %s 不存在。"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
 msgid "Word count"
@@ -2029,7 +2032,7 @@ msgstr "字數統計"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:88
 msgid "No footnote text found."
-msgstr ""
+msgstr "找不到註腳文字。"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
 msgid "Link"
@@ -2049,11 +2052,11 @@ msgstr "程式碼"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "拼字錯誤"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "按下 Cmd/Ctrl 鍵並點擊以跟隨連結"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -2069,7 +2072,7 @@ msgstr "剛剛"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "南非荷蘭語"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -2077,7 +2080,7 @@ msgstr "阿拉伯語"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "阿斯圖里亞斯語"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -2089,19 +2092,19 @@ msgstr "保加利亞語"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "布列塔尼語"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
-msgstr "波斯語"
+msgstr "波斯尼亞語"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "加泰羅尼亞語"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Czech"
-msgstr ""
+msgstr "捷克語"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Danish"
@@ -2131,7 +2134,7 @@ msgstr "德語（奧地利）"
 
 #: source/common/util/map-lang-code.ts:48
 msgid "German"
-msgstr ""
+msgstr "德語"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "Greek"
@@ -2230,11 +2233,11 @@ msgstr "盧森堡語"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "法語（摩納哥公國）"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
-msgstr ""
+msgstr "法語"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
@@ -2301,7 +2304,7 @@ msgstr "格魯吉亞語"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "高棉語（柬埔寨）"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
@@ -2363,7 +2366,7 @@ msgstr "荷蘭語（荷蘭）"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
-msgstr ""
+msgstr "荷蘭語"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
@@ -2446,11 +2449,11 @@ msgstr "英語（印度）"
 
 #: source/common/util/map-lang-code.ts:122
 msgid "Thai"
-msgstr ""
+msgstr "泰語"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "塔加路語（菲律賓語）"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Turkish"
@@ -2462,7 +2465,7 @@ msgstr "烏克蘭語"
 
 #: source/common/util/map-lang-code.ts:126
 msgid "Urdu"
-msgstr ""
+msgstr "烏爾都語"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Vietnamese"
