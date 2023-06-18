@@ -391,7 +391,7 @@ export async function createFile (
  * @param   {string}         oldName        The directory's old name
  * @param   {string}         newName        The directory's new name
  * @param   {FSALCache}      cache          The FSAL cache object
- * @param   {boolean}        allowOverwrite Whether to allow overwriting existing files
+ * @param   {boolean}        forceOverwrite Whether to force overwriting of existing files when renaming to an existant filename
  *
  * @return  {Promise<DirDescriptor>}    Resolves with the new directory descriptor.
  */
@@ -402,7 +402,7 @@ export async function renameChild (
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache,
-  allowOverwrite: boolean = false
+  forceOverwrite: boolean = false
 ): Promise<void> {
   // If old and new name are the same, no need to rename
   if (newName === oldName) {
@@ -420,7 +420,7 @@ export async function renameChild (
   }
 
   // Stops renaming if the new file will overwrite an old file and we don't want it to
-  if (newName.toLowerCase() !== oldName.toLowerCase() || !allowOverwrite) {
+  if (newName.toLowerCase() !== oldName.toLowerCase() || !forceOverwrite) {
     const foundName = dirObject.children.find(child => child.name.toLowerCase() === newName.toLowerCase())
     if (foundName !== undefined) {
       throw new Error(`Cannot rename ${oldName} to ${newName}: A file with the same name already exists!`)
