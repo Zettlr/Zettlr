@@ -72,14 +72,26 @@ function sortChildren (
 }
 
 /**
+ * This function checks if a directory has the default settings. This can be
+ * useful to determine, if, e.g., the corresponding dotfile will be removed
+ * after removing its project settings.
+ *
+ * @param   {DirDescriptor}  dir  The directory to check
+ *
+ * @return  {boolean}             Returns true if the settings are the same as default.
+ */
+export function hasDefaultSettings (dir: DirDescriptor): boolean {
+  return JSON.stringify(dir.settings) === JSON.stringify(SETTINGS_TEMPLATE)
+}
+
+/**
  * Persists the settings of a directory to disk.
  *
  * @param   {DirDescriptor}  dir  The directory descriptor
  */
 async function persistSettings (dir: DirDescriptor): Promise<void> {
   const settingsFile = path.join(dir.path, '.ztr-directory')
-  const hasDefaultSettings = JSON.stringify(dir.settings) === JSON.stringify(SETTINGS_TEMPLATE)
-  if (hasDefaultSettings && isFile(settingsFile)) {
+  if (hasDefaultSettings(dir) && isFile(settingsFile)) {
     // Only persist the settings if they are not default. If they are default,
     // remove a possible .ztr-directory-file
     try {
