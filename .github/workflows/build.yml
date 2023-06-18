@@ -67,7 +67,7 @@ defaults:
 
 # Global environment variables
 env:
-  NODE_VERSION: '16'
+  NODE_VERSION: '18'
 
 # Ensure only a single build workflow runs at any one time
 concurrency:
