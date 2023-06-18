@@ -977,7 +977,14 @@ export default class FSAL extends ProviderContract {
    */
   public async createProject (src: DirDescriptor, initialProps: any): Promise<void> {
     this._fsalIsBusy = true
-    // NOTE: Generates no events as dotfiles are not watched
+
+    const dotfilePath = path.join(src.path, '.ztr-directory')
+    if (isFile(dotfilePath)) {
+      this._watchdog.ignoreEvents([{ event: 'change', path: dotfilePath }])
+    } else {
+      this._watchdog.ignoreEvents([{ event: 'add', path: dotfilePath }])
+    }
+
     await FSALDir.makeProject(src, initialProps)
 
     this._recordFiletreeChange('change', src.path)
@@ -994,7 +1001,10 @@ export default class FSAL extends ProviderContract {
    */
   public async updateProject (src: DirDescriptor, options: any): Promise<void> {
     this._fsalIsBusy = true
-    // NOTE: Generates no events as dotfiles are not watched
+
+    const dotfilePath = path.join(src.path, '.ztr-directory')
+    this._watchdog.ignoreEvents([{ event: 'change', path: dotfilePath }])
+
     // Updates the project properties on a directory.
     const hasChanged = await FSALDir.updateProjectProperties(src, options)
 
@@ -1013,7 +1023,14 @@ export default class FSAL extends ProviderContract {
    */
   public async removeProject (src: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
-    // NOTE: Generates no events as dotfiles are not watched
+
+    const dotfilePath = path.join(src.path, '.ztr-directory')
+    if (FSALDir.hasDefaultSettings(src)) {
+      this._watchdog.ignoreEvents([{ event: 'unlink', path: dotfilePath }])
+    } else {
+      this._watchdog.ignoreEvents([{ event: 'change', path: dotfilePath }])
+    }
+
     await FSALDir.removeProject(src)
 
     this._recordFiletreeChange('change', src.path)
