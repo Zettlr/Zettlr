@@ -57,7 +57,7 @@ function safeAssign (obj: any, referenceObject: any): void {
 export default function <A, B> (obj: A, reference: B): B {
   // Make sure to clone the reference object, so that users
   // do not have to worry about doing this themselves.
-  const clone = JSON.parse(JSON.stringify(reference))
+  const clone = structuredClone(reference)
   // After cloning, safely assign the object to the reference
   safeAssign(obj, clone)
   return clone
