@@ -60,7 +60,7 @@ export default class FileRename extends ZettlrCommand {
     }
 
     // If the new name equals the old one, don't do anything, see #1942
-    if (file.name.toLowerCase() === newName.toLowerCase()) {
+    if (file.name === newName) {
       this._app.log.info(`[App] Didn't rename file to ${newName} since it's the same name`)
       return
     }

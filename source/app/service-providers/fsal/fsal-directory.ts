@@ -387,9 +387,11 @@ export async function createFile (
  * new descriptor. Due to every single child changing their paths, it is
  * computationally less expensive to simply re-build the tree from scratch.
  *
- * @param   {DirDescriptor}  dirObject  The directory descriptor
- * @param   {string}         newName    The directory's new name
- * @param   {FSALCache}      cache      The FSAL cache object
+ * @param   {DirDescriptor}  dirObject      The directory descriptor
+ * @param   {string}         oldName        The directory's old name
+ * @param   {string}         newName        The directory's new name
+ * @param   {FSALCache}      cache          The FSAL cache object
+ * @param   {boolean}        forceOverwrite Whether to force overwriting of existing files when renaming to an existant filename
  *
  * @return  {Promise<DirDescriptor>}    Resolves with the new directory descriptor.
  */
@@ -399,8 +401,14 @@ export async function renameChild (
   newName: string,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
-  cache: FSALCache
+  cache: FSALCache,
+  forceOverwrite: boolean = false
 ): Promise<void> {
+  // If old and new name are the same, no need to rename
+  if (newName === oldName) {
+    return
+  }
+
   // Check some things beforehand
   if (newName.trim() === '') {
     throw new Error('Invalid name provided!')
@@ -411,9 +419,12 @@ export async function renameChild (
     throw new Error(`Cannot rename ${oldName}: Not found in ${dirObject.path}.`)
   }
 
-  const foundName = dirObject.children.find(child => child.name.toLowerCase() === newName.toLowerCase())
-  if (foundName !== undefined) {
-    throw new Error(`Directory ${newName} already exists!`)
+  // Stops renaming if the new file will overwrite an old file and we don't want it to
+  if (newName.toLowerCase() !== oldName.toLowerCase() || !forceOverwrite) {
+    const foundName = dirObject.children.find(child => child.name.toLowerCase() === newName.toLowerCase())
+    if (foundName !== undefined) {
+      throw new Error(`Cannot rename ${oldName} to ${newName}: A file with the same name already exists!`)
+    }
   }
 
   const newPath = path.join(dirObject.path, newName)
