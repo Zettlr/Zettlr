@@ -10960,7 +10960,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-stringify@npm:^10.0.0, remark-stringify@npm:^10.0.2":
+"remark-stringify@npm:^10.0.0":
   version: 10.0.2
   resolution: "remark-stringify@npm:10.0.2"
   dependencies:
@@ -10968,6 +10968,17 @@ __metadata:
     mdast-util-to-markdown: ^1.0.0
     unified: ^10.0.0
   checksum: 25424201e698353f6c0afc9ec29a8cac1dac8c06750d92214e3216bd76ac37902a0ba3702ac2a11c1040938a667b3bc22d6949af1d35e8fc81a3572643cdc263
+  languageName: node
+  linkType: hard
+
+"remark-stringify@npm:^10.0.3":
+  version: 10.0.3
+  resolution: "remark-stringify@npm:10.0.3"
+  dependencies:
+    "@types/mdast": ^3.0.0
+    mdast-util-to-markdown: ^1.0.0
+    unified: ^10.0.0
+  checksum: 6004e204fba672ee322c3cf0bef090e95802feedf7ef875f88b120c5e6208f1eb09c014486d5ca42a1e199c0a17ce0ed165fb248c66608458afed4bdca51dd3a
   languageName: node
   linkType: hard
 
@@ -13541,7 +13552,7 @@ __metadata:
     remark-lint-strong-marker: ^3.1.1
     remark-lint-table-cell-padding: ^4.1.2
     remark-math: ^5.1.1
-    remark-stringify: ^10.0.2
+    remark-stringify: ^10.0.3
     rimraf: ^4.4.1
     sanitize-filename: ^1.6.3
     sanitize-html: ^2.10.0

@@ -107,7 +107,7 @@
     "remark-lint-strong-marker": "^3.1.1",
     "remark-lint-table-cell-padding": "^4.1.2",
     "remark-math": "^5.1.1",
-    "remark-stringify": "^10.0.2",
+    "remark-stringify": "^10.0.3",
     "rimraf": "^4.4.1",
     "sanitize-filename": "^1.6.3",
     "sanitize-html": "^2.10.0",
