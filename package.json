@@ -83,7 +83,7 @@
     "rehype-remark": "^9.1.2",
     "remark": "^14.0.2",
     "remark-frontmatter": "^4.0.1",
-    "remark-lint": "^9.1.1",
+    "remark-lint": "^9.1.2",
     "remark-lint-blockquote-indentation": "^3.1.1",
     "remark-lint-checkbox-character-style": "^4.1.1",
     "remark-lint-code-block-style": "^3.1.0",

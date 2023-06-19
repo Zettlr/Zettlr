@@ -10913,14 +10913,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint@npm:^9.1.1":
-  version: 9.1.1
-  resolution: "remark-lint@npm:9.1.1"
+"remark-lint@npm:^9.1.2":
+  version: 9.1.2
+  resolution: "remark-lint@npm:9.1.2"
   dependencies:
     "@types/mdast": ^3.0.0
     remark-message-control: ^7.0.0
     unified: ^10.1.0
-  checksum: c5a2ca78fd9fca028cfd178b07782c4be543b56572e60bdc66032485ef5f043f7090a6026d1e4c7f56001af3783fde4d4c93e2f0035ba2e2dc60ecb51d898b17
+  checksum: 067e110ba7272563dbcda9d7be99ce3ac1deb75083d6fd9cbc688b73bc09f138b3934b720e53c175de85cdd3a643e01b2454ee38115fe8afc23c44a90d2c95ce
   languageName: node
   linkType: hard
 
@@ -13517,7 +13517,7 @@ __metadata:
     rehype-remark: ^9.1.2
     remark: ^14.0.2
     remark-frontmatter: ^4.0.1
-    remark-lint: ^9.1.1
+    remark-lint: ^9.1.2
     remark-lint-blockquote-indentation: ^3.1.1
     remark-lint-checkbox-character-style: ^4.1.1
     remark-lint-code-block-style: ^3.1.0
