@@ -188,9 +188,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-javascript@npm:^6.1.5":
-  version: 6.1.5
-  resolution: "@codemirror/lang-javascript@npm:6.1.5"
+"@codemirror/lang-javascript@npm:^6.1.9":
+  version: 6.1.9
+  resolution: "@codemirror/lang-javascript@npm:6.1.9"
   dependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/language": ^6.6.0
@@ -199,7 +199,7 @@ __metadata:
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
     "@lezer/javascript": ^1.0.0
-  checksum: f0355f9577fac03437137356b5c8826ec073480d9b0efc62289eac483172d47dafe569f31bf788e4228e8b789197e50a0768cf10b0cde5f600e89b6b469f52cc
+  checksum: 6c79b51c61d37b3f4dde6312df02183045c31f055e5cf8550b497f39798b823b4e380a641a2cfc97f3f26fd4e89194258d8ef741c42acd72b3f2e18257b427a5
   languageName: node
   linkType: hard
 
@@ -13436,7 +13436,7 @@ __metadata:
     "@codemirror/collab": ^6.0.0
     "@codemirror/commands": ^6.2.2
     "@codemirror/lang-css": ^6.1.1
-    "@codemirror/lang-javascript": ^6.1.5
+    "@codemirror/lang-javascript": ^6.1.9
     "@codemirror/lang-json": ^6.0.1
     "@codemirror/lang-markdown": ^6.1.0
     "@codemirror/lang-php": ^6.0.1
