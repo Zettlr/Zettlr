@@ -303,6 +303,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/state@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@codemirror/state@npm:6.2.1"
+  checksum: d12a321d0471b264b9d3259042bff913a8b939e8d28d408ff452004538a71ca9d5329df3f8a1d8a9183f5b42a7ef5b200737bcab1065714f5ae8e0a5ba9d59d3
+  languageName: node
+  linkType: hard
+
 "@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.2.2, @codemirror/view@npm:^6.6.0, @codemirror/view@npm:^6.9.3":
   version: 6.9.3
   resolution: "@codemirror/view@npm:6.9.3"
@@ -13444,7 +13451,7 @@ __metadata:
     "@codemirror/language": ^6.6.0
     "@codemirror/legacy-modes": ^6.3.2
     "@codemirror/search": ^6.3.0
-    "@codemirror/state": ^6.2.0
+    "@codemirror/state": ^6.2.1
     "@codemirror/view": ^6.9.3
     "@electron-forge/cli": ^6.1.1
     "@electron-forge/maker-zip": ^6.1.1
