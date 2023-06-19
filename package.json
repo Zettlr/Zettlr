@@ -103,7 +103,7 @@
     "remark-lint-no-shortcut-reference-link": "^3.1.1",
     "remark-lint-no-unused-definitions": "^3.1.1",
     "remark-lint-ordered-list-marker-style": "^3.1.1",
-    "remark-lint-rule-style": "^3.1.1",
+    "remark-lint-rule-style": "^3.1.2",
     "remark-lint-strong-marker": "^3.1.1",
     "remark-lint-table-cell-padding": "^4.1.2",
     "remark-math": "^5.1.1",

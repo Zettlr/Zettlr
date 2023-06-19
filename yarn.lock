@@ -10873,16 +10873,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-rule-style@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "remark-lint-rule-style@npm:3.1.1"
+"remark-lint-rule-style@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "remark-lint-rule-style@npm:3.1.2"
   dependencies:
     "@types/mdast": ^3.0.0
     unified: ^10.0.0
     unified-lint-rule: ^2.0.0
     unist-util-position: ^4.0.0
     unist-util-visit: ^4.0.0
-  checksum: e2899cfd21c530043e31eb52154eacc1a7f046945848fe227b5061a959ed896c48d108a567d85aefb2b0b8b9613c35aff2ce7cbd0e3c63774f3a924bcdd11e37
+  checksum: 0ce46bc17ce764a58c1ada5e8ae0e27b76c682dc8cba676d6325d6cbc29d27766d9071b7e33da13bd53cca807405190efdd3b4516cb3668144abea255fc12f2e
   languageName: node
   linkType: hard
 
@@ -13537,7 +13537,7 @@ __metadata:
     remark-lint-no-shortcut-reference-link: ^3.1.1
     remark-lint-no-unused-definitions: ^3.1.1
     remark-lint-ordered-list-marker-style: ^3.1.1
-    remark-lint-rule-style: ^3.1.1
+    remark-lint-rule-style: ^3.1.2
     remark-lint-strong-marker: ^3.1.1
     remark-lint-table-cell-padding: ^4.1.2
     remark-math: ^5.1.1
