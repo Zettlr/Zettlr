@@ -16,7 +16,6 @@ import { type BlockParser } from '@lezer/markdown'
 import { StreamLanguage } from '@codemirror/language'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { partialParse } from './partial-parse'
-// import { log } from 'console'
 
 const yamlLang = StreamLanguage.define(yaml)
 
@@ -50,7 +49,7 @@ export const frontmatterParser: BlockParser = {
       // The parser has collected the full rest of the document. This means
       // the frontmatter never stopped. In order to maintain readability, we
       // simply abort parsing.
-      const node = ctx.elt('YAMLFrontmatterStart', 0, 3)
+      const node = ctx.elt('HorizontalRule', 0, 3)
       ctx.nextLine()
       ctx.addElement(node)
       return false

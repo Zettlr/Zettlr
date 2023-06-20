@@ -34,21 +34,15 @@ const startChars = ' ([{-–—\n\r\t\v\f'
  * @return  {boolean}             True if the position touches a protected node.
  */
 function posInProtectedNode (state: EditorState, pos: number): boolean {
-  const node = syntaxTree(state).resolve(pos, 0)
-
-  // Having the cursor at the end of the HorizontalRule '---' is not considered inside the HorizontalRule node
-  // So we check the previous position to see if it is in a HorizontalRule node
-  const checkYAMLFrontmatterNode = syntaxTree(state).resolve(pos - 1, 0)
-  const checkYAMLFrontmatter = [ 'YAMLFrontmatterStart', 'YAMLFrontmatterEnd', 'HorizontalRule' ].includes(checkYAMLFrontmatterNode.type.name)
-  if (checkYAMLFrontmatter) {
-    return checkYAMLFrontmatter
-  }
+  const node = syntaxTree(state).resolve(pos, -1)
   return [
     'InlineCode', // `code`
     'Comment', 'CommentBlock', // <!-- comment -->
     'FencedCode', // Code block
     'CodeText', // Code block
-    'HorizontalRule' // ---
+    'HorizontalRule', // --- & ***
+    'YAMLFrontmatterStart',
+    'YAMLFrontmatterEnd'
   ].includes(node.type.name)
 }
 
