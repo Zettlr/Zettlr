@@ -13499,6 +13499,7 @@ __metadata:
     eslint-plugin-vue: ^9.10.0
     fsevents: ^2.3.2
     gettext-parser: ^6.0.0
+    global-agent: ^3.0.0
     got: ^12.6.0
     jsdom: ^21.1.1
     katex: ^0.16.4

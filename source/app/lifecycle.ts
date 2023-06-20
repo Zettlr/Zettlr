@@ -21,6 +21,7 @@ import resolveTimespanMs from './util/resolve-timespan-ms'
 import path from 'path'
 import commandExists from 'command-exists'
 import { getProgramVersion } from './util/get-program-version'
+import { bootstrap } from 'global-agent'
 
 // Developer tools
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
@@ -68,6 +69,9 @@ export async function bootApplication (): Promise<AppServiceContainer> {
   }
 
   registerCustomProtocols(log)
+
+  // Use a proxy if one has been configured
+  bootstrap()
 
   // Now boot up the service container
   await appServiceContainer.boot()
