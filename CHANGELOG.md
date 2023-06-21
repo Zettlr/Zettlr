@@ -307,6 +307,11 @@ there.
   depending on the app's display
 - In various parts of the app, URLs will now be displayed in a shortened format
   if they are long and the space is limited
+- If you make use of glob-patterns to filter which files will be exported during
+  project exports, you will now get a visible error message if your glob-
+  patterns have removed all files so that none remain to be exported
+- Clicking on the "Project Properties" button in a directory properties popup
+  with activated project functionality now closes the popup
 
 ## Under the Hood
 
