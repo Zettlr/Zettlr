@@ -15,8 +15,8 @@
 import ZettlrCommand from './zettlr-command'
 import objectToArray from '@common/util/object-to-array'
 import { makeExport } from './exporter'
-import minimatch from 'minimatch'
-import { shell } from 'electron'
+import { minimatch } from 'minimatch'
+import { shell, dialog } from 'electron'
 import type { ExporterOptions } from './exporter/types'
 import type LogProvider from '@providers/log'
 import { trans } from '@common/i18n-main'
@@ -51,15 +51,27 @@ export default class DirProjectExport extends ZettlrCommand {
     // directories as well as any non-code/MD file
     let files = objectToArray(dir, 'children').filter(e => e.type !== 'directory' && e.type !== 'other')
 
+    if (files.length === 0) {
+      return false // Cannot export, but this should be obvious to the user
+    }
+
     // Use minimatch to filter against the project's filter patterns
     for (const pattern of config.filters) {
       this._app.log.info(`[Project] Filtering fileset: Matching against "${pattern}"`)
-      // cf. https://github.com/isaacs/minimatch#minimatchfilterpattern-options
-      files = files.filter(minimatch.filter(pattern, { matchBase: true }))
+      // NOTE: We cannot use the `array.filter(minimatch.filter()) pattern because
+      // we have an array of objects, not strings!
+      const filter = minimatch.filter(pattern, { matchBase: true })
+      files = files.filter(fileDescriptor => filter(fileDescriptor.name))
     }
 
     if (files.length === 0) {
       this._app.log.warning('[Project] Aborting export: No files remained after filtering.')
+      // Cannot export, but this time we must inform the user that their patterns
+      // have filtered out every file.
+      dialog.showErrorBox(
+        trans('Cannot export project'),
+        trans('After applying your glob-filters, no files remained to export. Please adjust them in the project settings.')
+      )
       return false
     }
 
