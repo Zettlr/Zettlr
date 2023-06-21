@@ -188,7 +188,8 @@ export default {
       sortingDirection: 'up',
       isProject: false,
       isGitRepository: false,
-      icon: null as string|null
+      icon: null as string|null,
+      closePopover: false // As soon as this is true, the dir popover wants to request a close command
     }
   },
   computed: {
@@ -198,7 +199,8 @@ export default {
       return {
         sorting: `${this.sortingType}-${this.sortingDirection}`,
         isProject: this.isProject,
-        icon: this.icon
+        icon: this.icon,
+        closePopover: this.closePopover
       }
     },
     creationTime: function () {
@@ -244,6 +246,8 @@ export default {
         payload: this.fullPath
       })
         .catch(err => console.error(err))
+
+      this.closePopover = true
     }
   }
 }

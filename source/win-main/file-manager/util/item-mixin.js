@@ -208,6 +208,10 @@ export default {
             const elem = (treeItem) ? this.$refs['display-text'] : this.$el
 
             this.$showPopover(PopoverDirProps, elem, data, (data) => {
+              if (data.closePopover === true) {
+                this.$closePopover()
+              }
+
               // Apply new sorting if applicable
               if (data.sorting !== this.obj.settings.sorting) {
                 ipcRenderer.invoke('application', {
