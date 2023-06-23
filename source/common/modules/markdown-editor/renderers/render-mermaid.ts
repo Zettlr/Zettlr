@@ -50,17 +50,15 @@ class MermaidWidget extends WidgetType {
     const elem = document.createElement('span')
     elem.classList.add('mermaid-chart')
 
-    try {
-      const id = `graphDiv${Date.now()}`
-      elem.innerText = trans('Rendering mermaid graph …')
-      mermaid.render(id, this.graph).then(result => {
-        elem.innerHTML = result.svg
+    const id = `graphDiv${Date.now()}`
+    elem.innerText = trans('Rendering mermaid graph …')
+    mermaid.render(id, this.graph)
+      .then(result => { elem.innerHTML = result.svg })
+      .catch(err => {
+        elem.classList.add('error')
+        const msg = trans('Could not render Graph:')
+        elem.innerText = `${msg}\n\n${err.str as string}`
       })
-    } catch (err: any) {
-      elem.classList.add('error')
-      const msg = trans('Could not render Graph:')
-      elem.innerText = `${msg}\n\n${err.str as string}`
-    }
 
     elem.addEventListener('click', clickAndSelect(view))
     return elem
