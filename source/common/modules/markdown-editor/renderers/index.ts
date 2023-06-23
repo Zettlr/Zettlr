@@ -25,6 +25,7 @@ import { renderTables } from './render-tables'
 import { renderIframes } from './render-iframes'
 import { renderEmphasis } from './render-emphasis'
 import { configField, type EditorConfiguration } from '../util/configuration'
+import { renderCodeCopyButton } from './render-copy-button'
 
 const renderCompartment = new Compartment()
 
@@ -39,6 +40,7 @@ const transactionExtender = EditorState.transactionExtender.from(configField, co
   if (config.renderTables) ext.push(renderTables)
   if (config.renderIframes) ext.push(renderIframes)
   if (config.renderEmphasis) ext.push(renderEmphasis)
+  if (config.renderCodeCopyButton) ext.push(renderCodeCopyButton)
 
   const currentState = renderCompartment.get(transaction.state) as Extension[]|undefined
   if (currentState === undefined) {
@@ -73,5 +75,7 @@ export function renderers (config?: Partial<EditorConfiguration>): Extension {
   if (config?.renderTables === true) ext.push(renderTables)
   if (config?.renderIframes === true) ext.push(renderIframes)
   if (config?.renderEmphasis === true) ext.push(renderEmphasis)
+  if (config?.renderCodeCopyButton === true) ext.push(renderCodeCopyButton)
+
   return [ transactionExtender, renderCompartment.of(ext) ]
 }
