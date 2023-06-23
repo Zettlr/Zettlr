@@ -76,7 +76,7 @@
     "lodash": "^4.17.21",
     "luxon": "^3.3.0",
     "md5": "^2.3.0",
-    "mermaid": "^9.x.x",
+    "mermaid": "^10.2.3",
     "minimatch": "^9.0.1",
     "nodehun": "^3.0.2",
     "rehype-parse": "^8.0.4",
