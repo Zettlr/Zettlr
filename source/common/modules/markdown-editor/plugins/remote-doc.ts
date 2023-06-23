@@ -37,8 +37,21 @@ export type PushUpdateCallback = (filePath: string, version: number, updates: Up
  */
 export const reloadStateEffect = StateEffect.define<boolean>()
 
+/**
+ * Call this function to retrieve an Extension that can be used to synchronize
+ * an editor with a central document authority.
+ * @param   {string}              filePath      The file's path to be requested
+ * @param   {number}              startVersion  Retrieve this when you retrieve
+ *                                              the document initially.
+ * @param   {PullUpdateCallback}  pullUpdates   The callback to request new
+ *                                              updates from the document
+ *                                              authority.
+ * @param   {PushUpdateCallback}  pushUpdates   The callback to send updates to
+ *                                              the document authority.
+ *
+ * @return  {Extension}                         A CodeMirror v6 extension
+ */
 export function hookDocumentAuthority (
-  clientID: string,
   filePath: string,
   startVersion: number,
   pullUpdates: PullUpdateCallback,
@@ -56,13 +69,13 @@ export function hookDocumentAuthority (
       // method will create a Promise that links this plugin (and, by extension,
       // the editor state) over the IPC or websocket bridge until there are any
       // updates available.
-      this.pull().catch(err => { console.error(`Pulling updates for ${clientID} failed: ${String(err.message)}`, err) })
+      this.pull().catch(err => { console.error(`Pulling updates failed: ${String(err.message)}`, err) })
     }
 
     update (update: ViewUpdate): void {
       // Whenever the doc changed, sync those changes with the document authority
       if (update.docChanged) {
-        this.push().catch(err => { console.error(`Pushing updates for ${clientID} failed: ${String(err.message)}`, err) })
+        this.push().catch(err => { console.error(`Pushing updates failed: ${String(err.message)}`, err) })
       }
     }
 
@@ -88,7 +101,7 @@ export function hookDocumentAuthority (
       // Allow another push, if new updates have amassed during the push
       this.isCurrentlyPushing = false
       setTimeout(() => {
-        this.push().catch(err => { console.error(`Pushing updates for ${clientID} failed: ${String(err.message)}`, err) })
+        this.push().catch(err => { console.error(`Pushing updates failed: ${String(err.message)}`, err) })
       }, 100)
     }
 
@@ -132,11 +145,11 @@ export function hookDocumentAuthority (
         const transaction = receiveUpdates(this.view.state, deserializedUpdates)
         this.view.dispatch(transaction)
       } catch (err: any) {
-        console.error(`Pulling updates for ${clientID} failed (retrying): ${String(err.message)}`, err)
+        console.error(`Pulling updates for failed (retrying): ${String(err.message)}`, err)
       }
 
       // Whether there was an error or not, schedule another pull
-      this.pull().catch(err => { console.error(`Pulling updates for ${clientID} failed: ${String(err.message)}`, err) })
+      this.pull().catch(err => { console.error(`Pulling updates failed: ${String(err.message)}`, err) })
     }
 
     destroy (): void {
@@ -147,5 +160,5 @@ export function hookDocumentAuthority (
     }
   })
 
-  return [ collab({ startVersion, clientID }), plugin ]
+  return [ collab({ startVersion }), plugin ]
 }
