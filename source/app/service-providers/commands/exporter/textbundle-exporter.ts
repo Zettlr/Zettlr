@@ -18,7 +18,7 @@ import {
 } from 'fs'
 import path from 'path'
 import archiver from 'archiver'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 import isFile from '@common/util/is-file'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import sanitize from 'sanitize-filename'
