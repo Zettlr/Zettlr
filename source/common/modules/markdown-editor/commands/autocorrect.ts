@@ -34,13 +34,15 @@ const startChars = ' ([{-–—\n\r\t\v\f'
  * @return  {boolean}             True if the position touches a protected node.
  */
 function posInProtectedNode (state: EditorState, pos: number): boolean {
-  const node = syntaxTree(state).resolve(pos, 0)
+  const node = syntaxTree(state).resolve(pos, -1)
   return [
     'InlineCode', // `code`
     'Comment', 'CommentBlock', // <!-- comment -->
     'FencedCode', // Code block
     'CodeText', // Code block
-    'HorizontalRule'
+    'HorizontalRule', // --- and ***
+    'YAMLFrontmatterStart',
+    'YAMLFrontmatterEnd'
   ].includes(node.type.name)
 }
 
@@ -78,6 +80,8 @@ export function handleReplacement (view: EditorView): boolean {
     }
 
     // Leave --- and ... lines (YAML frontmatter as well as horizontal rules)
+    // We have investigated finding these as protected nodes however '---' in the first line is not parsed as any type
+    // Therefore, this is still required until this parsing from Lezer changes.
     const line = view.state.doc.lineAt(range.from)
     if ([ '---', '...' ].includes(line.text)) {
       continue
