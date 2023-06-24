@@ -79,6 +79,14 @@ export function handleReplacement (view: EditorView): boolean {
       continue
     }
 
+    // Leave --- and ... lines (YAML frontmatter as well as horizontal rules)
+    // Has been investigated removing this, but currently Lezer does not parse '---' as a horizontal rule if it is on the first line
+    // While this behaviour persists, we require this check
+    const line = view.state.doc.lineAt(range.from)
+    if ([ '---', '...' ].includes(line.text)) {
+      continue
+    }
+
     const from = Math.max(range.from - maxKeyLength, 0)
     const slice = view.state.sliceDoc(from, range.from)
     for (const { key, value } of replacements) {
