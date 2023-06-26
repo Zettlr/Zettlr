@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-06-17 15:22+0000\n"
+"POT-Creation-Date: 2023-06-26 02:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,44 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: source/win-main/tabs-context.ts:38
-#: source/app/service-providers/menu/menu.darwin.ts:601
-#: source/app/service-providers/menu/menu.win32.ts:574
-msgid "Close Tab"
-msgstr "Zavřít panel"
-
-#: source/win-main/tabs-context.ts:44
-msgid "Close other tabs"
-msgstr "Zavřít ostatní karty"
-
-#: source/win-main/tabs-context.ts:50
-msgid "Close all tabs"
-msgstr "Zavřít všechny karty"
-
-#: source/win-main/tabs-context.ts:59
-msgid "Unpin tab"
-msgstr "Odepnout"
-
-#: source/win-main/tabs-context.ts:59
-msgid "Pin tab"
-msgstr "Připnout"
-
-#: source/win-main/tabs-context.ts:68
-#: source/win-main/file-manager/util/file-item-context.ts:64
-msgid "Copy filename"
-msgstr "Kopírovat název souboru"
-
-#: source/win-main/tabs-context.ts:74
-msgid "Copy full path"
-msgstr "Zkopírovat plnou cestu"
-
-#: source/win-main/tabs-context.ts:80
-#: source/win-main/file-manager/util/file-item-context.ts:70
-#: source/app/service-providers/menu/menu.darwin.ts:414
-#: source/app/service-providers/menu/menu.win32.ts:415
-msgid "Copy ID"
-msgstr "Kopírovat ID"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:25
 #: source/win-main/file-manager/util/file-item-context.ts:32
@@ -100,8 +62,8 @@ msgid "Close Workspace"
 msgstr "Zavřít pracovní prostor"
 
 #: source/win-main/file-manager/util/file-item-context.ts:26
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
 #: source/tmp/GlobalSearch.vue.ts:40
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
 msgid "Open in a new tab"
 msgstr "Otevřít na nové záložce"
 
@@ -122,6 +84,18 @@ msgstr "Smazat soubor"
 msgid "Duplicate file"
 msgstr "Duplikovat soubor"
 
+#: source/win-main/file-manager/util/file-item-context.ts:64
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Kopírovat název souboru"
+
+#: source/win-main/file-manager/util/file-item-context.ts:70
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
+msgid "Copy ID"
+msgstr "Kopírovat ID"
+
 #: source/win-main/file-manager/util/file-item-context.ts:79
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
 msgid "Show file"
@@ -131,221 +105,31 @@ msgstr "Zobrazit soubor"
 msgid "Close file"
 msgstr "Zavřít soubor"
 
-#: source/win-preferences/schema/advanced.ts:23
-msgid "Pattern for new filenames"
-msgstr "Šablona pro nové názvy souborů"
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
+msgid "Close Tab"
+msgstr "Zavřít panel"
 
-#: source/win-preferences/schema/advanced.ts:29
-msgid "Do not prompt for filename when creating new files"
-msgstr "Nepožadovat zadání názvu souboru při vytváření nových souborů"
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "Zavřít ostatní karty"
 
-#: source/win-preferences/schema/advanced.ts:36
-msgid "Enable debug mode"
-msgstr "Povolit vývojářský režim"
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Zavřít všechny karty"
 
-#: source/win-preferences/schema/advanced.ts:41
-msgid "Notify me about beta releases"
-msgstr "Informovat o beta vydáních"
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr "Odepnout"
 
-#: source/win-preferences/schema/advanced.ts:46
-msgid "Use native window appearance"
-msgstr "Použít nativní vzhled oken"
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr "Připnout"
 
-#: source/win-preferences/schema/advanced.ts:52
-msgid "Delete items irreversibly, if moving them to trash fails"
-msgstr "Položku, kterou nelze přesunout do koše, smazat trvale"
-
-#: source/win-preferences/schema/advanced.ts:58
-msgid "Show app in the notification area"
-msgstr "Zobrazit aplikaci v oznamovací oblasti"
-
-#: source/win-preferences/schema/advanced.ts:59
-msgid "Leave app running in the notification area"
-msgstr "Nechat aplikaci běžet v oznamovací oblasti"
-
-#: source/win-preferences/schema/advanced.ts:66
-msgid "Automatically check for updates"
-msgstr "Automaticky zjišťovat aktualizace"
-
-#: source/win-preferences/schema/advanced.ts:73
-msgid ""
-"Enter all file extensions that you want to see in your attachment sidebar. "
-"Separate them with a comma. Changes are recognised after a restart."
-msgstr ""
-"Zapište všechny přípony souborů, které chcete vidět v liště příloh. "
-"Oddělujte čárkami. Změny se projeví po restartu."
-
-#: source/win-preferences/schema/advanced.ts:81
-msgid "Zoom behavior"
-msgstr "Chování zvětšování"
-
-#: source/win-preferences/schema/advanced.ts:83
-msgid "Zoom resizes the whole GUI"
-msgstr "Zvětšování mění velikost celého GUI"
-
-#: source/win-preferences/schema/advanced.ts:84
-msgid "Zoom changes the editor font size"
-msgstr "Zvětšování mění velikost písma editoru"
-
-#: source/win-preferences/schema/advanced.ts:91
-msgid "iFrame rendering whitelist"
-msgstr "Whitelist pro vykreslení iFrame"
-
-#: source/win-preferences/schema/advanced.ts:94
-msgid "Hostname"
-msgstr "Hostname"
-
-#: source/win-preferences/schema/advanced.ts:96
-#: source/win-preferences/schema/spellchecking.ts:93
-msgid "Search for entries …"
-msgstr "Hledat položky ..."
-
-#: source/win-preferences/schema/advanced.ts:102
-msgid "Activate Watchdog polling"
-msgstr "Aktivovat hlídání změn"
-
-#: source/win-preferences/schema/advanced.ts:107
-msgid "Time to wait before writing a file is considered done (in ms)"
-msgstr "Jak dlouho čekat než je zápis souboru považován za ukončený (v ms)"
-
-#: source/win-preferences/schema/spellchecking.ts:24
-msgid "Use LanguageTool"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:29
-msgid "Strictness"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:31
-#, fuzzy
-msgid "Standard"
-msgstr "Kalendář"
-
-#: source/win-preferences/schema/spellchecking.ts:32
-msgid "Picky"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:39
-msgid "Mother tongue"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:41
-msgid "Not set"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:48
-msgid "LanguageTool Provider"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:51
-#: source/win-preferences/schema/spellchecking.ts:58
-#, fuzzy
-msgid "Custom server"
-msgstr "Vlastní CSS"
-
-#: source/win-preferences/schema/spellchecking.ts:65
-msgid "LanguageTool Username"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:71
-msgid "LanguageTool API key"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:79
-msgid ""
-"Select the languages for which you want to enable automatic spell checking."
-msgstr ""
-"Vyberte jazyky, pro které chcete zapnout automatickou kontrolu pravopisu."
-
-#: source/win-preferences/schema/spellchecking.ts:84
-msgid "Search for dictionaries &hellip;"
-msgstr "Hledat slovníky &hellip;"
-
-#: source/win-preferences/schema/spellchecking.ts:88
-msgid "User dictionary. Remove words by clicking them."
-msgstr "Uživatelský slovník. Slova odstraníte klepnutím na ně."
-
-#: source/win-preferences/schema/spellchecking.ts:90
-msgid "Dictionary entry"
-msgstr "Záznam ve slovníku"
-
-#: source/win-preferences/schema/toolbar.ts:23
-msgid "Display \"Open Preferences\" button"
-msgstr "Zobrazit tlačítko \"Otevřít dialog nastavení\""
-
-#: source/win-preferences/schema/toolbar.ts:28
-msgid "Display \"New File\" button"
-msgstr "Zobrazit tlačítko \"Nový soubor\""
-
-#: source/win-preferences/schema/toolbar.ts:33
-msgid "Display \"Previous File\" button"
-msgstr "Zobrazit tlačítko \"Předchozí soubor\""
-
-#: source/win-preferences/schema/toolbar.ts:38
-msgid "Display \"Next File\" button"
-msgstr "Zobrazit tlačítko \"Další soubor\""
-
-#: source/win-preferences/schema/toolbar.ts:45
-msgid "Display readability button"
-msgstr "Zobrazit tlačítko ověření čitelnosti"
-
-#: source/win-preferences/schema/toolbar.ts:50
-msgid "Display \"Insert Comment\" button"
-msgstr "Zobrazit tlačítko \"Vložit komentář\""
-
-#: source/win-preferences/schema/toolbar.ts:55
-msgid "Display link button"
-msgstr "Zobrazit tlačítko \"Odkaz\""
-
-#: source/win-preferences/schema/toolbar.ts:60
-msgid "Display image button"
-msgstr "Zobrazit tlačítko \"Obrázek\""
-
-#: source/win-preferences/schema/toolbar.ts:65
-msgid "Display task list button"
-msgstr "Zobrazit tlačítko \"Seznam úloh\""
-
-#: source/win-preferences/schema/toolbar.ts:70
-msgid "Display \"Insert Table\" button"
-msgstr "Zobrazit tlačítko \"Vložit tabulku\""
-
-#: source/win-preferences/schema/toolbar.ts:75
-msgid "Display \"Insert Footnote\" button"
-msgstr "Zobrazit tlačítko \"Vložit poznámku pod čarou\""
-
-#: source/win-preferences/schema/toolbar.ts:82
-msgid "Display document info"
-msgstr "Zobrazit informace o dokumentu"
-
-#: source/win-preferences/schema/toolbar.ts:87
-msgid "Display Pomodoro-timer"
-msgstr "Zobrazit Pomodoro časovač"
-
-#: source/win-preferences/schema/autocorrect.ts:23
-msgid "Turn on AutoCorrect"
-msgstr "Zapnout automatické opravy"
-
-#: source/win-preferences/schema/autocorrect.ts:32
-msgid "Primary Magic Quotes"
-msgstr "Primární kouzelné citace"
-
-#: source/win-preferences/schema/autocorrect.ts:35
-#: source/win-preferences/schema/autocorrect.ts:56
-msgid "Disable Magic Quotes"
-msgstr "Žádný"
-
-#: source/win-preferences/schema/autocorrect.ts:53
-msgid "Secondary Magic Quotes"
-msgstr "Sekundární kouzelné citace"
-
-#: source/win-preferences/schema/autocorrect.ts:79
-msgid ""
-"Here you can define certain strings that will be replaced when AutoCorrect "
-"is on. The characters on the left side will be replaced with whatever comes "
-"on the right."
-msgstr ""
-"Zde můžete definovat řetězce, které budou nahrazeny při zapnutých "
-"automatických opravách. Znaky vlevo budou nahrazené tím co je vpravo."
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "Zkopírovat plnou cestu"
 
 #: source/win-preferences/schema/editor.ts:23
 msgid ""
@@ -441,6 +225,32 @@ msgstr ""
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "Počítat znaky místo slov (např. pro čínštinu)"
 
+#: source/win-preferences/schema/autocorrect.ts:23
+msgid "Turn on AutoCorrect"
+msgstr "Zapnout automatické opravy"
+
+#: source/win-preferences/schema/autocorrect.ts:32
+msgid "Primary Magic Quotes"
+msgstr "Primární kouzelné citace"
+
+#: source/win-preferences/schema/autocorrect.ts:35
+#: source/win-preferences/schema/autocorrect.ts:56
+msgid "Disable Magic Quotes"
+msgstr "Žádný"
+
+#: source/win-preferences/schema/autocorrect.ts:53
+msgid "Secondary Magic Quotes"
+msgstr "Sekundární kouzelné citace"
+
+#: source/win-preferences/schema/autocorrect.ts:79
+msgid ""
+"Here you can define certain strings that will be replaced when AutoCorrect "
+"is on. The characters on the left side will be replaced with whatever comes "
+"on the right."
+msgstr ""
+"Zde můžete definovat řetězce, které budou nahrazeny při zapnutých "
+"automatických opravách. Znaky vlevo budou nahrazené tím co je vpravo."
+
 #. TODO: Create this type
 #: source/win-preferences/schema/display.ts:24
 msgid "These options determine which elements are rendered in documents."
@@ -507,6 +317,50 @@ msgstr "Maximální šířka obrázků (procenta)"
 msgid "Maximum height of images (percent)"
 msgstr "Maximální výška obrázků (procenta)"
 
+#: source/win-preferences/schema/export.ts:23
+msgid "Use the internal Pandoc for exports"
+msgstr "Použít pro export interní pandoc"
+
+#: source/win-preferences/schema/export.ts:30
+msgid "Remove tags from files"
+msgstr "Odstranit ze souborů štítky"
+
+#: source/win-preferences/schema/export.ts:40
+msgid "Remove internal links completely"
+msgstr "Zcela odstranit interní odkazy"
+
+#: source/win-preferences/schema/export.ts:41
+msgid "Unlink internal links"
+msgstr "Odpojit interní odkazy"
+
+#: source/win-preferences/schema/export.ts:42
+msgid "Don't touch internal links"
+msgstr "Interní odkazy nechat být"
+
+#: source/win-preferences/schema/export.ts:49
+msgid ""
+"Target directory for exported files. <em>Attention:</em> Selecting the "
+"current working directory will overwrite files without warning!"
+msgstr ""
+"Cílová složka pro export souborů. <em>Pozor:</em> Výběr aktuální pracovní "
+"složky přepíše soubory v ní bez varování!"
+
+#: source/win-preferences/schema/export.ts:52
+msgid "Temporary directory: is regularly expunged"
+msgstr "Dočasný adresář: pravidelně se promazává"
+
+#: source/win-preferences/schema/export.ts:53
+msgid ""
+"Current working directory: exported files will be saved into the currently "
+"selected directory."
+msgstr ""
+"Aktuální pracovní složka: exportované soubory se uloží do aktuálně vybrané "
+"složky."
+
+#: source/win-preferences/schema/export.ts:54
+msgid "Ask for directory"
+msgstr ""
+
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "ID regular expression"
 msgstr "Regulární výraz ID"
@@ -556,61 +410,195 @@ msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
 "Automaticky vytvářené soubory ukládat do složky (musí být nahraná do Zettlr)"
 
-#: source/win-preferences/schema/citations.ts:23
-msgid "How would you like autocomplete to insert your citations?"
-msgstr "Jak má automatické dokončování vkládat citace?"
+#: source/win-preferences/schema/toolbar.ts:23
+msgid "Display \"Open Preferences\" button"
+msgstr "Zobrazit tlačítko \"Otevřít dialog nastavení\""
 
-#: source/win-preferences/schema/citations.ts:35
-msgid "Citation Database (CSL JSON or BibTex)"
-msgstr "Databáze citací (CSL JSON nebo BibTex)"
+#: source/win-preferences/schema/toolbar.ts:28
+msgid "Display \"New File\" button"
+msgstr "Zobrazit tlačítko \"Nový soubor\""
 
-#: source/win-preferences/schema/citations.ts:46
-msgid "CSL-Style (optional)"
-msgstr "CSL style (volitelné)"
+#: source/win-preferences/schema/toolbar.ts:33
+msgid "Display \"Previous File\" button"
+msgstr "Zobrazit tlačítko \"Předchozí soubor\""
 
-#: source/win-preferences/schema/export.ts:23
-msgid "Use the internal Pandoc for exports"
-msgstr "Použít pro export interní pandoc"
+#: source/win-preferences/schema/toolbar.ts:38
+msgid "Display \"Next File\" button"
+msgstr "Zobrazit tlačítko \"Další soubor\""
 
-#: source/win-preferences/schema/export.ts:30
-msgid "Remove tags from files"
-msgstr "Odstranit ze souborů štítky"
+#: source/win-preferences/schema/toolbar.ts:45
+msgid "Display readability button"
+msgstr "Zobrazit tlačítko ověření čitelnosti"
 
-#: source/win-preferences/schema/export.ts:40
-msgid "Remove internal links completely"
-msgstr "Zcela odstranit interní odkazy"
+#: source/win-preferences/schema/toolbar.ts:50
+msgid "Display \"Insert Comment\" button"
+msgstr "Zobrazit tlačítko \"Vložit komentář\""
 
-#: source/win-preferences/schema/export.ts:41
-msgid "Unlink internal links"
-msgstr "Odpojit interní odkazy"
+#: source/win-preferences/schema/toolbar.ts:55
+msgid "Display link button"
+msgstr "Zobrazit tlačítko \"Odkaz\""
 
-#: source/win-preferences/schema/export.ts:42
-msgid "Don't touch internal links"
-msgstr "Interní odkazy nechat být"
+#: source/win-preferences/schema/toolbar.ts:60
+msgid "Display image button"
+msgstr "Zobrazit tlačítko \"Obrázek\""
 
-#: source/win-preferences/schema/export.ts:49
+#: source/win-preferences/schema/toolbar.ts:65
+msgid "Display task list button"
+msgstr "Zobrazit tlačítko \"Seznam úloh\""
+
+#: source/win-preferences/schema/toolbar.ts:70
+msgid "Display \"Insert Table\" button"
+msgstr "Zobrazit tlačítko \"Vložit tabulku\""
+
+#: source/win-preferences/schema/toolbar.ts:75
+msgid "Display \"Insert Footnote\" button"
+msgstr "Zobrazit tlačítko \"Vložit poznámku pod čarou\""
+
+#: source/win-preferences/schema/toolbar.ts:82
+msgid "Display document info"
+msgstr "Zobrazit informace o dokumentu"
+
+#: source/win-preferences/schema/toolbar.ts:87
+msgid "Display Pomodoro-timer"
+msgstr "Zobrazit Pomodoro časovač"
+
+#: source/win-preferences/schema/spellchecking.ts:24
+msgid "Use LanguageTool"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:29
+msgid "Strictness"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:31
+#, fuzzy
+msgid "Standard"
+msgstr "Kalendář"
+
+#: source/win-preferences/schema/spellchecking.ts:32
+msgid "Picky"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:39
+msgid "Mother tongue"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:41
+msgid "Not set"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:48
+msgid "LanguageTool Provider"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:51
+#: source/win-preferences/schema/spellchecking.ts:58
+#, fuzzy
+msgid "Custom server"
+msgstr "Vlastní CSS"
+
+#: source/win-preferences/schema/spellchecking.ts:65
+msgid "LanguageTool Username"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:71
+msgid "LanguageTool API key"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:79
 msgid ""
-"Target directory for exported files. <em>Attention:</em> Selecting the "
-"current working directory will overwrite files without warning!"
+"Select the languages for which you want to enable automatic spell checking."
 msgstr ""
-"Cílová složka pro export souborů. <em>Pozor:</em> Výběr aktuální pracovní "
-"složky přepíše soubory v ní bez varování!"
+"Vyberte jazyky, pro které chcete zapnout automatickou kontrolu pravopisu."
 
-#: source/win-preferences/schema/export.ts:52
-msgid "Temporary directory: is regularly expunged"
-msgstr "Dočasný adresář: pravidelně se promazává"
+#: source/win-preferences/schema/spellchecking.ts:84
+msgid "Search for dictionaries &hellip;"
+msgstr "Hledat slovníky &hellip;"
 
-#: source/win-preferences/schema/export.ts:53
+#: source/win-preferences/schema/spellchecking.ts:88
+msgid "User dictionary. Remove words by clicking them."
+msgstr "Uživatelský slovník. Slova odstraníte klepnutím na ně."
+
+#: source/win-preferences/schema/spellchecking.ts:90
+msgid "Dictionary entry"
+msgstr "Záznam ve slovníku"
+
+#: source/win-preferences/schema/spellchecking.ts:93
+#: source/win-preferences/schema/advanced.ts:96
+msgid "Search for entries …"
+msgstr "Hledat položky ..."
+
+#: source/win-preferences/schema/advanced.ts:23
+msgid "Pattern for new filenames"
+msgstr "Šablona pro nové názvy souborů"
+
+#: source/win-preferences/schema/advanced.ts:29
+msgid "Do not prompt for filename when creating new files"
+msgstr "Nepožadovat zadání názvu souboru při vytváření nových souborů"
+
+#: source/win-preferences/schema/advanced.ts:36
+msgid "Enable debug mode"
+msgstr "Povolit vývojářský režim"
+
+#: source/win-preferences/schema/advanced.ts:41
+msgid "Notify me about beta releases"
+msgstr "Informovat o beta vydáních"
+
+#: source/win-preferences/schema/advanced.ts:46
+msgid "Use native window appearance"
+msgstr "Použít nativní vzhled oken"
+
+#: source/win-preferences/schema/advanced.ts:52
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr "Položku, kterou nelze přesunout do koše, smazat trvale"
+
+#: source/win-preferences/schema/advanced.ts:58
+msgid "Show app in the notification area"
+msgstr "Zobrazit aplikaci v oznamovací oblasti"
+
+#: source/win-preferences/schema/advanced.ts:59
+msgid "Leave app running in the notification area"
+msgstr "Nechat aplikaci běžet v oznamovací oblasti"
+
+#: source/win-preferences/schema/advanced.ts:66
+msgid "Automatically check for updates"
+msgstr "Automaticky zjišťovat aktualizace"
+
+#: source/win-preferences/schema/advanced.ts:73
 msgid ""
-"Current working directory: exported files will be saved into the currently "
-"selected directory."
+"Enter all file extensions that you want to see in your attachment sidebar. "
+"Separate them with a comma. Changes are recognised after a restart."
 msgstr ""
-"Aktuální pracovní složka: exportované soubory se uloží do aktuálně vybrané "
-"složky."
+"Zapište všechny přípony souborů, které chcete vidět v liště příloh. "
+"Oddělujte čárkami. Změny se projeví po restartu."
 
-#: source/win-preferences/schema/export.ts:54
-msgid "Ask for directory"
-msgstr ""
+#: source/win-preferences/schema/advanced.ts:81
+msgid "Zoom behavior"
+msgstr "Chování zvětšování"
+
+#: source/win-preferences/schema/advanced.ts:83
+msgid "Zoom resizes the whole GUI"
+msgstr "Zvětšování mění velikost celého GUI"
+
+#: source/win-preferences/schema/advanced.ts:84
+msgid "Zoom changes the editor font size"
+msgstr "Zvětšování mění velikost písma editoru"
+
+#: source/win-preferences/schema/advanced.ts:91
+msgid "iFrame rendering whitelist"
+msgstr "Whitelist pro vykreslení iFrame"
+
+#: source/win-preferences/schema/advanced.ts:94
+msgid "Hostname"
+msgstr "Hostname"
+
+#: source/win-preferences/schema/advanced.ts:102
+msgid "Activate Watchdog polling"
+msgstr "Aktivovat hlídání změn"
+
+#: source/win-preferences/schema/advanced.ts:107
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr "Jak dlouho čekat než je zápis souboru považován za ukončený (v ms)"
 
 #: source/win-preferences/schema/general.ts:23
 msgid "Application language"
@@ -729,6 +717,113 @@ msgstr "Čas vytvoření souboru"
 msgid "In the file metadata display"
 msgstr "Zobrazit metadata souboru"
 
+#: source/win-preferences/schema/citations.ts:23
+msgid "How would you like autocomplete to insert your citations?"
+msgstr "Jak má automatické dokončování vkládat citace?"
+
+#: source/win-preferences/schema/citations.ts:35
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "Databáze citací (CSL JSON nebo BibTex)"
+
+#: source/win-preferences/schema/citations.ts:46
+msgid "CSL-Style (optional)"
+msgstr "CSL style (volitelné)"
+
+#. TODO: Move this to a command
+#. The user wants to open another file or directory.
+#: source/app/service-providers/windows/index.ts:220
+#: source/app/service-providers/commands/root-open.ts:73
+msgid "Open project folder"
+msgstr "Otevřít složku projektu"
+
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+msgid "Ok"
+msgstr "OK"
+
+#. 1: Omit all changes
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/app/service-providers/commands/rename-tag.ts:48
+#: source/tmp/CustomCSS.vue.ts:49
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:132
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:38
+msgid "Really delete?"
+msgstr "Opravdu smazat?"
+
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:39
+#, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "Opravdu chcete odstranit %s?"
+
+#: source/app/service-providers/windows/dialog/save-dialog.ts:58
+msgid "Save file"
+msgstr "Uložit soubor"
+
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+#: source/app/service-providers/commands/file-rename.ts:96
+#: source/app/service-providers/commands/rename-tag.ts:47
+msgid "Yes"
+msgstr ""
+
+#. 0: Save all changes
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+#: source/app/service-providers/commands/file-rename.ts:97
+msgid "No"
+msgstr ""
+
+#. If the user cancels, do not omit (the default) but actually cancel
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
+#: source/tmp/Defaults.vue.ts:130 source/tmp/SnippetsTab.vue.ts:65
+#: source/tmp/CustomCSS.vue.ts:65
+msgid "Unsaved changes"
+msgstr "Neuložené změny"
+
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
+#, fuzzy
+msgid "There are unsaved changes. Do you want to save them first?"
+msgstr ""
+"V aktuálním souboru jsou neuložené změny. Chcete je zahodit nebo uložit?"
+
+#. Prepare the list of file filters
+#. The "All Files" filter should be at the top
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
+#: source/app/service-providers/commands/import.ts:41
+msgid "All Files"
+msgstr "Všechny soubory"
+
+#: source/app/service-providers/windows/dialog/ask-file.ts:54
+msgid "Open file"
+msgstr "Otevřít soubor"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
+msgid "Replace file"
+msgstr "Nahradit soubor"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#, javascript-format
+msgid ""
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
+msgstr ""
+"Soubor %s byl změněn vzdáleně. Chcete ho nahradit novější verzí z disku?"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
+msgid "Overwrite existing file"
+msgstr "Přepsat existující soubor"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#, javascript-format
+msgid "The file %s already exists in this directory. Overwrite?"
+msgstr "Soubor %s ve složce již existuje. Přepsat?"
+
 #: source/app/service-providers/updates/index.ts:176
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
@@ -770,332 +865,6 @@ msgstr "Nelze zkontrolovat aktualizace: Server neodeslal žádná data"
 msgid "An update to version %s is available!"
 msgstr "Je dostupná novější verze %s."
 
-#: source/app/service-providers/commands/set-open-directory.ts:40
-msgid "Directory not found"
-msgstr "Složka nebyla nalezena"
-
-#: source/app/service-providers/commands/set-open-directory.ts:41
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
-msgid "The requested directory was not found."
-msgstr "Požadovaná složka nebyla nalezena"
-
-#: source/app/service-providers/commands/importer/index.ts:46
-#: source/app/service-providers/commands/exporter/default-exporter.ts:32
-#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
-msgid ""
-"Pandoc has not been found on this system. Please install Pandoc prior to "
-"exporting or importing files."
-msgstr ""
-"Nebyl nalezen pandoc. Před importem nebo exportem souborů prosím "
-"nainstalujte pandoc."
-
-#: source/app/service-providers/commands/importer/import-textbundle.ts:63
-#: source/app/service-providers/commands/importer/import-textbundle.ts:69
-#, javascript-format
-msgid "Malformed Textbundle: %s"
-msgstr "Chybný Textbundle: %s"
-
-#: source/app/service-providers/commands/request-move.ts:60
-msgid "Cannot move directory"
-msgstr "Složku nelze přesunout"
-
-#: source/app/service-providers/commands/request-move.ts:61
-msgid "You cannot move a directory into one of its subdirectories."
-msgstr "Složku nelze přesunout do její podsložky."
-
-#: source/app/service-providers/commands/request-move.ts:70
-msgid "Cannot move directory or file"
-msgstr "Složku nebo soubor nelze přesunout."
-
-#: source/app/service-providers/commands/request-move.ts:71
-#, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "Soubor nebo složka %s už existuje."
-
-#: source/app/service-providers/commands/file-duplicate.ts:43
-#: source/app/service-providers/commands/file-duplicate.ts:59
-#: source/app/service-providers/commands/file-new.ts:156
-msgid "Could not create file"
-msgstr "Nelze vytvořit soubor"
-
-#. We need to generate our own filename. First, attempt to just use 'copy of'
-#: source/app/service-providers/commands/file-duplicate.ts:71
-#, javascript-format
-msgid "Copy of %s"
-msgstr ""
-
-#: source/app/service-providers/commands/dir-project-export.ts:117
-msgid "Project successfully exported. Click to show."
-msgstr ""
-
-#: source/app/service-providers/commands/dir-project-export.ts:117
-#, fuzzy
-msgid "Export"
-msgstr "Exportovat"
-
-#. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:92
-#, javascript-format
-msgid "The reference with key %s does not appear to have attachments."
-msgstr "Odkaz s klíčem %s zřejmě nemá přílohy."
-
-#: source/app/service-providers/commands/open-attachment.ts:97
-msgid "Could not open attachment. Is Zotero running?"
-msgstr "Přílohu nejde otevřít. Běží aplikace Zotero?"
-
-#: source/app/service-providers/commands/root-open.ts:60
-#: source/tmp/file-tree.vue.ts:26 source/tmp/PopoverDirProps.vue.ts:156
-#: source/tmp/file-item.vue.ts:119
-msgid "Files"
-msgstr "Soubory"
-
-#. TODO: Move this to a command
-#. The user wants to open another file or directory.
-#: source/app/service-providers/commands/root-open.ts:73
-#: source/app/service-providers/windows/index.ts:220
-msgid "Open project folder"
-msgstr "Otevřít složku projektu"
-
-#: source/app/service-providers/commands/root-open.ts:83
-msgid "Cannot open directory"
-msgstr "Složku nelze otevřít"
-
-#: source/app/service-providers/commands/root-open.ts:84
-#, javascript-format
-msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
-msgstr "Aplikace nemůže otevřít složku &quot;%s&quot;."
-
-#: source/app/service-providers/commands/root-open.ts:136
-#, javascript-format
-msgid "Opening new root %s …"
-msgstr "Otevírá se nový kořen %s ..."
-
-#: source/app/service-providers/commands/root-open.ts:147
-#, javascript-format
-msgid "%s has been loaded."
-msgstr "%s byl nahrán."
-
-#: source/app/service-providers/commands/root-open.ts:159
-#, javascript-format
-msgid "Could not open workspace %s."
-msgstr ""
-
-#: source/app/service-providers/commands/language-tool.ts:187
-msgid "Document too long"
-msgstr ""
-
-#: source/app/service-providers/commands/language-tool.ts:192
-msgid "offline"
-msgstr ""
-
-#: source/app/service-providers/commands/file-rename.ts:93
-#: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:431
-msgid "Confirm"
-msgstr ""
-
-#: source/app/service-providers/commands/file-rename.ts:94
-#, javascript-format
-msgid "Update %s internal links to file %s?"
-msgstr ""
-
-#: source/app/service-providers/commands/file-rename.ts:96
-#: source/app/service-providers/commands/rename-tag.ts:47
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Yes"
-msgstr ""
-
-#. 0: Save all changes
-#: source/app/service-providers/commands/file-rename.ts:97
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
-msgid "No"
-msgstr ""
-
-#: source/app/service-providers/commands/export.ts:74
-msgid "Choose export destination"
-msgstr "Vyberte místo exportu"
-
-#: source/app/service-providers/commands/export.ts:74
-#: source/app/service-providers/menu/menu.darwin.ts:197
-#: source/app/service-providers/menu/menu.win32.ts:162
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:117
-#: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
-#: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
-msgid "Save"
-msgstr "Uložit"
-
-#: source/app/service-providers/commands/export.ts:105
-#, javascript-format
-msgid "Exporting to %s"
-msgstr "Probíhá export do %s"
-
-#: source/app/service-providers/commands/export.ts:117
-msgid "Export failed"
-msgstr "Export selhal"
-
-#: source/app/service-providers/commands/export.ts:118
-#, javascript-format
-msgid "An error occurred on export: %s"
-msgstr "Během exportu se objevila chyba: %s"
-
-#: source/app/service-providers/commands/rename-tag.ts:45
-#, javascript-format
-msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
-
-#. 1: Omit all changes
-#: source/app/service-providers/commands/rename-tag.ts:48
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:132
-#: source/tmp/CustomCSS.vue.ts:49
-msgid "Cancel"
-msgstr "Zrušit"
-
-#: source/app/service-providers/commands/import-lang-file.ts:59
-#, javascript-format
-msgid "Language file imported: %s"
-msgstr "Importován jazykový soubor: %s"
-
-#: source/app/service-providers/commands/import-lang-file.ts:61
-#: source/app/service-providers/commands/import-lang-file.ts:64
-#, javascript-format
-msgid "Could not import language file %s!"
-msgstr "Nelze importovat jazykový soubor %s!"
-
-#: source/app/service-providers/commands/import.ts:35
-msgid "You have to select a directory to import to."
-msgstr "Musíte vybrat složku, do které import proběhne."
-
-#. Prepare the list of file filters
-#. The "All Files" filter should be at the top
-#: source/app/service-providers/commands/import.ts:41
-#: source/app/service-providers/windows/dialog/ask-file.ts:47
-msgid "All Files"
-msgstr "Všechny soubory"
-
-#. Now import.
-#: source/app/service-providers/commands/import.ts:58
-msgid "Importing. Please wait …"
-msgstr "Čekejte, probíhá import ..."
-
-#. This callback gets called whenever there is an error while running pandoc.
-#: source/app/service-providers/commands/import.ts:63
-#, javascript-format
-msgid "Couldn't import %s."
-msgstr "%s nelze importovat."
-
-#. And this on each success!
-#: source/app/service-providers/commands/import.ts:66
-#, javascript-format
-msgid "%s imported successfully."
-msgstr "%s úspěšně importován."
-
-#. Some files failed to import.
-#: source/app/service-providers/commands/import.ts:71
-#: source/app/service-providers/commands/import.ts:77
-#, javascript-format
-msgid ""
-"The following %s files could not be imported, because their filetype is "
-"unknown: %s"
-msgstr ""
-"Následujících %s souborů nelze importovat, protože není známý jejich typ: %s"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
-msgid "The requested file was not found."
-msgstr "Požadovaný soubor nebyl nalezen"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
-msgid "The provided name did not contain any allowed letters."
-msgstr "Dodaný název neobsahuje žádná povolené písmena."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
-msgid "Could not save image"
-msgstr "Nelze uložit obrázek"
-
-#: source/app/service-providers/commands/dir-new.ts:36
-#: source/app/service-providers/commands/dir-new.ts:37
-#: source/app/service-providers/commands/dir-new.ts:48
-#: source/app/service-providers/commands/dir-new.ts:49
-#: source/app/service-providers/commands/dir-new.ts:59
-msgid "Could not create directory"
-msgstr "Nelze vytvořit složku"
-
-#. Else standard val for new dirs.
-#: source/app/service-providers/commands/dir-new.ts:42
-#: source/tmp/tree-item.vue.ts:262
-msgid "Untitled"
-msgstr "Bez názvu"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
-#: source/app/service-providers/windows/dialog/prompt.ts:32
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
-msgid "Ok"
-msgstr "OK"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:38
-msgid "Really delete?"
-msgstr "Opravdu smazat?"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:39
-#, javascript-format
-msgid "Do you really want to remove %s?"
-msgstr "Opravdu chcete odstranit %s?"
-
-#: source/app/service-providers/windows/dialog/ask-file.ts:54
-msgid "Open file"
-msgstr "Otevřít soubor"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Nahradit soubor"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
-#, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"Soubor %s byl změněn vzdáleně. Chcete ho nahradit novější verzí z disku?"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
-msgid "Overwrite existing file"
-msgstr "Přepsat existující soubor"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
-#, javascript-format
-msgid "The file %s already exists in this directory. Overwrite?"
-msgstr "Soubor %s ve složce již existuje. Přepsat?"
-
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "Uložit soubor"
-
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-#: source/tmp/Defaults.vue.ts:130 source/tmp/SnippetsTab.vue.ts:65
-#: source/tmp/CustomCSS.vue.ts:65
-msgid "Unsaved changes"
-msgstr "Neuložené změny"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
-msgid "There are unsaved changes. Do you want to save them first?"
-msgstr ""
-"V aktuálním souboru jsou neuložené změny. Chcete je zahodit nebo uložit?"
-
-#: source/app/service-providers/citeproc/index.ts:241
-#: source/app/service-providers/citeproc/index.ts:441
-msgid "The citation database could not be loaded"
-msgstr "Databázi citací nelze nahrát"
-
-#: source/app/service-providers/citeproc/index.ts:429
-msgid "Changes to the library file detected. Reloading …"
-msgstr "Zjištěna změna souboru knihovny. Načítá se znovu..."
-
 #: source/app/service-providers/tray/index.ts:160
 msgid "Show Zettlr"
 msgstr "Zobrazit Zettlr"
@@ -1109,6 +878,64 @@ msgstr "Ukončit"
 #: source/app/service-providers/tray/index.ts:173
 msgid "Zettlr"
 msgstr "Zettlr"
+
+#: source/app/service-providers/config/config-validation.ts:280
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "Možnost %s musí být typu %s."
+
+#: source/app/service-providers/config/config-validation.ts:283
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "Možnost %s musí být jednou z: %s."
+
+#: source/app/service-providers/config/config-validation.ts:286
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "Možnost %s musí mít délku %s až %s (znaků)."
+
+#: source/app/service-providers/config/config-validation.ts:289
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "Možnost %s nesmí být delší než %s (znaků)."
+
+#: source/app/service-providers/config/config-validation.ts:292
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "Možnost %s musí být nejméně %s (znaků dlouhá)."
+
+#: source/app/service-providers/config/config-validation.ts:295
+#, javascript-format
+msgid "Option %s is required."
+msgstr "Možnost %s je vyžadována."
+
+#: source/app/service-providers/config/index.ts:423
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:426
+#, fuzzy
+msgid "Restart now"
+msgstr "právě teď"
+
+#: source/app/service-providers/config/index.ts:427
+msgid "Restart later"
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:431
+#: source/app/service-providers/commands/file-rename.ts:93
+#: source/app/service-providers/commands/rename-tag.ts:44
+msgid "Confirm"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:241
+#: source/app/service-providers/citeproc/index.ts:441
+msgid "The citation database could not be loaded"
+msgstr "Databázi citací nelze nahrát"
+
+#: source/app/service-providers/citeproc/index.ts:429
+msgid "Changes to the library file detected. Reloading …"
+msgstr "Zjištěna změna souboru knihovny. Načítá se znovu..."
 
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
@@ -1175,6 +1002,15 @@ msgstr "Nedávné dokumenty"
 #: source/app/service-providers/menu/menu.win32.ts:60
 msgid "Empty"
 msgstr "Vymazat seznam"
+
+#: source/app/service-providers/menu/menu.darwin.ts:197
+#: source/app/service-providers/menu/menu.win32.ts:162
+#: source/app/service-providers/commands/export.ts:74
+#: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
+#: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:117
+msgid "Save"
+msgstr "Uložit"
 
 #: source/app/service-providers/menu/menu.darwin.ts:208
 #: source/app/service-providers/menu/menu.win32.ts:173
@@ -1429,84 +1265,701 @@ msgstr "Otevřít Tutoriál"
 msgid "Check for updates"
 msgstr "Zkontrolovat aktualizace"
 
-#: source/app/service-providers/config/index.ts:423
-msgid "Changing this option requires a restart to take effect."
+#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
+#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+#: source/app/service-providers/commands/importer/index.ts:46
+msgid ""
+"Pandoc has not been found on this system. Please install Pandoc prior to "
+"exporting or importing files."
+msgstr ""
+"Nebyl nalezen pandoc. Před importem nebo exportem souborů prosím "
+"nainstalujte pandoc."
+
+#: source/app/service-providers/commands/language-tool.ts:187
+msgid "Document too long"
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:426
+#: source/app/service-providers/commands/language-tool.ts:192
+msgid "offline"
+msgstr ""
+
+#: source/app/service-providers/commands/file-rename.ts:94
+#, javascript-format
+msgid "Update %s internal links to file %s?"
+msgstr ""
+
+#: source/app/service-providers/commands/export.ts:74
+msgid "Choose export destination"
+msgstr "Vyberte místo exportu"
+
+#: source/app/service-providers/commands/export.ts:105
+#, javascript-format
+msgid "Exporting to %s"
+msgstr "Probíhá export do %s"
+
+#: source/app/service-providers/commands/export.ts:117
+msgid "Export failed"
+msgstr "Export selhal"
+
+#: source/app/service-providers/commands/export.ts:118
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "Během exportu se objevila chyba: %s"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "Požadovaný soubor nebyl nalezen"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "Dodaný název neobsahuje žádná povolené písmena."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+#: source/app/service-providers/commands/set-open-directory.ts:41
+msgid "The requested directory was not found."
+msgstr "Požadovaná složka nebyla nalezena"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "Nelze uložit obrázek"
+
+#: source/app/service-providers/commands/root-open.ts:60
+#: source/tmp/PopoverDirProps.vue.ts:158 source/tmp/file-tree.vue.ts:26
+#: source/tmp/file-item.vue.ts:119
+msgid "Files"
+msgstr "Soubory"
+
+#: source/app/service-providers/commands/root-open.ts:83
+msgid "Cannot open directory"
+msgstr "Složku nelze otevřít"
+
+#: source/app/service-providers/commands/root-open.ts:84
+#, javascript-format
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Aplikace nemůže otevřít složku &quot;%s&quot;."
+
+#: source/app/service-providers/commands/root-open.ts:136
+#, javascript-format
+msgid "Opening new root %s …"
+msgstr "Otevírá se nový kořen %s ..."
+
+#: source/app/service-providers/commands/root-open.ts:147
+#, javascript-format
+msgid "%s has been loaded."
+msgstr "%s byl nahrán."
+
+#: source/app/service-providers/commands/root-open.ts:159
+#, javascript-format
+msgid "Could not open workspace %s."
+msgstr ""
+
+#: source/app/service-providers/commands/file-new.ts:156
+#: source/app/service-providers/commands/file-duplicate.ts:43
+#: source/app/service-providers/commands/file-duplicate.ts:59
+msgid "Could not create file"
+msgstr "Nelze vytvořit soubor"
+
+#: source/app/service-providers/commands/request-move.ts:60
+msgid "Cannot move directory"
+msgstr "Složku nelze přesunout"
+
+#: source/app/service-providers/commands/request-move.ts:61
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Složku nelze přesunout do její podsložky."
+
+#: source/app/service-providers/commands/request-move.ts:70
+msgid "Cannot move directory or file"
+msgstr "Složku nebo soubor nelze přesunout."
+
+#: source/app/service-providers/commands/request-move.ts:71
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "Soubor nebo složka %s už existuje."
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "You have to select a directory to import to."
+msgstr "Musíte vybrat složku, do které import proběhne."
+
+#. Now import.
+#: source/app/service-providers/commands/import.ts:58
+msgid "Importing. Please wait …"
+msgstr "Čekejte, probíhá import ..."
+
+#. This callback gets called whenever there is an error while running pandoc.
+#: source/app/service-providers/commands/import.ts:63
+#, javascript-format
+msgid "Couldn't import %s."
+msgstr "%s nelze importovat."
+
+#. And this on each success!
+#: source/app/service-providers/commands/import.ts:66
+#, javascript-format
+msgid "%s imported successfully."
+msgstr "%s úspěšně importován."
+
+#. Some files failed to import.
+#: source/app/service-providers/commands/import.ts:71
+#: source/app/service-providers/commands/import.ts:77
+#, javascript-format
+msgid ""
+"The following %s files could not be imported, because their filetype is "
+"unknown: %s"
+msgstr ""
+"Následujících %s souborů nelze importovat, protože není známý jejich typ: %s"
+
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:92
+#, javascript-format
+msgid "The reference with key %s does not appear to have attachments."
+msgstr "Odkaz s klíčem %s zřejmě nemá přílohy."
+
+#: source/app/service-providers/commands/open-attachment.ts:97
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "Přílohu nejde otevřít. Běží aplikace Zotero?"
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:63
+#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "Chybný Textbundle: %s"
+
+#: source/app/service-providers/commands/dir-project-export.ts:72
 #, fuzzy
-msgid "Restart now"
-msgstr "právě teď"
+msgid "Cannot export project"
+msgstr "Exportovat projekt"
 
-#: source/app/service-providers/config/index.ts:427
-msgid "Restart later"
+#: source/app/service-providers/commands/dir-project-export.ts:73
+msgid ""
+"After applying your glob-filters, no files remained to export. Please adjust "
+"them in the project settings."
 msgstr ""
 
-#: source/app/service-providers/config/config-validation.ts:280
-#, javascript-format
-msgid "Option %s has to be of type %s."
-msgstr "Možnost %s musí být typu %s."
-
-#: source/app/service-providers/config/config-validation.ts:283
-#, javascript-format
-msgid "Option %s must be one of: %s."
-msgstr "Možnost %s musí být jednou z: %s."
-
-#: source/app/service-providers/config/config-validation.ts:286
-#, javascript-format
-msgid "Option %s must be between %s and %s (characters long)."
-msgstr "Možnost %s musí mít délku %s až %s (znaků)."
-
-#: source/app/service-providers/config/config-validation.ts:289
-#, javascript-format
-msgid "Option %s may not exceed %s (characters)."
-msgstr "Možnost %s nesmí být delší než %s (znaků)."
-
-#: source/app/service-providers/config/config-validation.ts:292
-#, javascript-format
-msgid "Option %s must be at least %s (characters long)."
-msgstr "Možnost %s musí být nejméně %s (znaků dlouhá)."
-
-#: source/app/service-providers/config/config-validation.ts:295
-#, javascript-format
-msgid "Option %s is required."
-msgstr "Možnost %s je vyžadována."
-
-#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
-msgid "No highlighting"
+#: source/app/service-providers/commands/dir-project-export.ts:129
+msgid "Project successfully exported. Click to show."
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
-msgid "Disabled"
-msgstr ""
-
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
+#: source/app/service-providers/commands/dir-project-export.ts:129
 #, fuzzy
-msgid "Custom"
-msgstr "Vlastní CSS"
+msgid "Export"
+msgstr "Exportovat"
 
-#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
-msgid "Detect automatically"
+#: source/app/service-providers/commands/rename-tag.ts:45
+#, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
-#: source/tmp/PopoverDocInfo.vue.ts:63 source/tmp/PopoverFileProps.vue.ts:89
-#: source/tmp/PopoverDirProps.vue.ts:144 source/tmp/file-item.vue.ts:134
-#: source/tmp/file-item.vue.ts:207
+#: source/app/service-providers/commands/import-lang-file.ts:59
 #, javascript-format
-msgid "%s words"
-msgstr "%s slov"
+msgid "Language file imported: %s"
+msgstr "Importován jazykový soubor: %s"
 
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
+#: source/app/service-providers/commands/import-lang-file.ts:61
+#: source/app/service-providers/commands/import-lang-file.ts:64
+#, javascript-format
+msgid "Could not import language file %s!"
+msgstr "Nelze importovat jazykový soubor %s!"
+
+#: source/app/service-providers/commands/dir-new.ts:36
+#: source/app/service-providers/commands/dir-new.ts:37
+#: source/app/service-providers/commands/dir-new.ts:48
+#: source/app/service-providers/commands/dir-new.ts:49
+#: source/app/service-providers/commands/dir-new.ts:59
+msgid "Could not create directory"
+msgstr "Nelze vytvořit složku"
+
+#. Else standard val for new dirs.
+#: source/app/service-providers/commands/dir-new.ts:42
+#: source/tmp/tree-item.vue.ts:262
+msgid "Untitled"
+msgstr "Bez názvu"
+
+#: source/app/service-providers/commands/set-open-directory.ts:40
+msgid "Directory not found"
+msgstr "Složka nebyla nalezena"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:36
+msgid "Name"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:37
+msgid "Count"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:55
+msgid "Filter tags…"
+msgstr "Filtrovat štítky..."
+
+#: source/tmp/PopoverTags.vue.ts:58
+msgid "Tag Cloud"
+msgstr "Tag cloud"
+
+#: source/tmp/PopoverTags.vue.ts:61
+msgid "Suggested tags for the current file"
+msgstr "Navrhované štítky pro aktuální soubor"
+
+#: source/tmp/PopoverTags.vue.ts:64
+msgid "Add to file"
+msgstr "Přidat do souboru"
+
+#: source/tmp/PopoverDocInfo.vue.ts:35
+msgid "No open document"
+msgstr "Žádný otevřený dokument"
+
+#: source/tmp/PopoverDocInfo.vue.ts:38
+msgid "words"
+msgstr "slov"
+
+#: source/tmp/PopoverDocInfo.vue.ts:41
+msgid "characters"
+msgstr "znaků"
+
 #: source/tmp/PopoverDocInfo.vue.ts:61 source/tmp/file-item.vue.ts:132
 #: source/tmp/file-item.vue.ts:205
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
 #, javascript-format
 msgid "%s characters"
 msgstr "%s znaků"
 
-#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
-msgid "Open diagnostics panel"
+#: source/tmp/PopoverDocInfo.vue.ts:63 source/tmp/PopoverDirProps.vue.ts:146
+#: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
+#: source/tmp/file-item.vue.ts:207
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
+#, javascript-format
+msgid "%s words"
+msgstr "%s slov"
+
+#: source/tmp/GlobalSearch.vue.ts:116
+msgid "Full-Text Search"
+msgstr "Fulltextové hledání"
+
+#: source/tmp/GlobalSearch.vue.ts:119
+msgid "Enter your search terms below"
+msgstr "Níže zadejte hledané výrazy"
+
+#: source/tmp/GlobalSearch.vue.ts:122
+msgid "Find …"
+msgstr "Najít ..."
+
+#: source/tmp/GlobalSearch.vue.ts:125
+msgid "Filter …"
+msgstr "Filtrovat ..."
+
+#: source/tmp/GlobalSearch.vue.ts:128
+msgid "Filter search results"
+msgstr "Filtrovat výsledky hledání"
+
+#: source/tmp/GlobalSearch.vue.ts:131
+msgid "Restrict search to directory"
+msgstr "Hledat pouze ve složce"
+
+#: source/tmp/GlobalSearch.vue.ts:134
+msgid "Restrict to directory …"
+msgstr "Hledat ve složce ..."
+
+#: source/tmp/GlobalSearch.vue.ts:137
+msgid "Search"
+msgstr "Hledat"
+
+#: source/tmp/GlobalSearch.vue.ts:140
+msgid "Clear search"
+msgstr "Vyčistit pole"
+
+#: source/tmp/GlobalSearch.vue.ts:143
+msgid "Toggle results"
+msgstr "Rozbalit výsledky"
+
+#: source/tmp/Number.vue.ts:59 source/tmp/File.vue.ts:59
+#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:50
+#: source/tmp/ShortcutChooser.vue.ts:61
+msgid "Reset"
+msgstr "Reset"
+
+#: source/tmp/Theme.vue.ts:37
+msgid "selected"
+msgstr "vybráno"
+
+#: source/tmp/Theme.vue.ts:40
+msgid "click to select"
+msgstr "klepněte pro výběr"
+
+#: source/tmp/ToCTab.vue.ts:53 source/tmp/MainSidebar.vue.ts:78
+msgid "Table of Contents"
+msgstr "Obsah"
+
+#: source/tmp/PopoverDirProps.vue.ts:149 source/tmp/file-item.vue.ts:113
+msgid "Directories"
+msgstr "Složky"
+
+#: source/tmp/PopoverDirProps.vue.ts:152 source/tmp/PopoverFileProps.vue.ts:68
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
+msgid "Modified"
+msgstr "Upraveno"
+
+#: source/tmp/PopoverDirProps.vue.ts:155 source/tmp/PopoverFileProps.vue.ts:65
+msgid "Created"
+msgstr "Vytvořeno"
+
+#: source/tmp/PopoverDirProps.vue.ts:164
+msgid "Project Settings…"
+msgstr "Nastavení projektu..."
+
+#: source/tmp/file-tree.vue.ts:29
+msgid "Workspaces"
+msgstr "Pracovní plochy"
+
+#: source/tmp/file-tree.vue.ts:32
+msgid "No open files or folders"
+msgstr "Žádné otevřené soubory nebo složky"
+
+#: source/tmp/file-tree.vue.ts:35 source/tmp/file-list.vue.ts:66
+msgid "No results"
+msgstr "Žádné výsledky"
+
+#: source/tmp/Defaults.vue.ts:70
+msgid ""
+"This profile is protected. This means that it will be restored when you "
+"remove or rename it."
 msgstr ""
+"Tento profil je chráněný. To znamená, že bude obnoven, pokud ho odstraníte "
+"nebo přejmenujete."
+
+#: source/tmp/Defaults.vue.ts:73
+msgid ""
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
+msgstr ""
+
+#: source/tmp/Defaults.vue.ts:109
+msgid "Edit the default settings for imports or exports here."
+msgstr "Zde upravíte výchozí nastavení pro import a export."
+
+#: source/tmp/Defaults.vue.ts:192 source/tmp/SnippetsTab.vue.ts:124
+#: source/tmp/CustomCSS.vue.ts:88
+msgid "Saving …"
+msgstr "Ukládá se ..."
+
+#: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
+msgid "Saved!"
+msgstr "Uloženo!"
+
+#: source/tmp/General-Tab.vue.ts:23
+msgid ""
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
+msgstr ""
+"Zettlr vyvíjí Hendrik Erz pod licencí GNU GPL v3. Jedná se o svobodný "
+"software šířený zdarma založený na frameworku Electron. Zettlr děkuje "
+"vývojářům frameworku Electron, Node.js a editoru CodeMirror za jejich práci. "
+"Bez nich by Zettlr nemohl existovat. Níže jsou uvedené všechny projekty, "
+"které Zettlr používá."
+
+#: source/tmp/General-Tab.vue.ts:24
+msgid ""
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
+msgstr ""
+"Zettlr pro korektní zobrazení citací v editoru používá citeproc. K tomuto "
+"účelu Zettlr používá jazyk CSL (CitationStyleLanguage) a soubory stylů. "
+"Soubory jsou dodány beze změn. Další informace:"
+
+#: source/tmp/General-Tab.vue.ts:25
+msgid ""
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
+msgstr ""
+"Všechna loga a značky patří jejich právoplatným majitelům. Zettlr nemá jiné "
+"vazby s kterýmkoli z těchto projektů, kromě používání jejich kódu. Node.js "
+"je ochranná známka společnosti Joyent, Inc."
+
+#: source/tmp/General-Tab.vue.ts:26
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
+
+#: source/tmp/PopoverStats.vue.ts:111
+msgid "words last month"
+msgstr "slov minulý měsíc"
+
+#: source/tmp/PopoverStats.vue.ts:114
+msgid "daily average"
+msgstr "denní průměr"
+
+#: source/tmp/PopoverStats.vue.ts:117
+msgid "words today"
+msgstr "slov dnes"
+
+#: source/tmp/PopoverStats.vue.ts:120
+msgid "🔥 You're on fire!"
+msgstr "🥇 Jste šampión!"
+
+#: source/tmp/PopoverStats.vue.ts:123
+msgid "💪 You're close to hitting your daily average!"
+msgstr "💪 Jste blízko dosažení svého denního průměru!"
+
+#: source/tmp/PopoverStats.vue.ts:126
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr "✍🏼 Pište, a překonáte svůj denní průměr."
+
+#: source/tmp/PopoverStats.vue.ts:129
+msgid "More statistics …"
+msgstr "Další statistiky ..."
+
+#: source/tmp/Projects-Tab.vue.ts:24
+msgid "Zettlr also makes use of these projects:"
+msgstr "Zettlr používá také tyto projekty:"
+
+#: source/tmp/PopoverFileProps.vue.ts:62 source/tmp/file-item.vue.ts:195
+msgid "Words"
+msgstr "Slov"
+
+#: source/tmp/PopoverFileProps.vue.ts:74
+msgid "Set writing target…"
+msgstr "Nastavit autorský cíl..."
+
+#: source/tmp/PopoverFileProps.vue.ts:77 source/tmp/file-item.vue.ts:193
+msgid "Characters"
+msgstr "Znaků"
+
+#: source/tmp/PopoverPomodoro.vue.ts:72
+msgid "Start"
+msgstr "Spustit"
+
+#: source/tmp/PopoverPomodoro.vue.ts:75
+msgid "Stop"
+msgstr "Zastavit"
+
+#: source/tmp/PopoverPomodoro.vue.ts:78
+msgid "Work"
+msgstr "Práce"
+
+#: source/tmp/PopoverPomodoro.vue.ts:81
+msgid "Short break"
+msgstr "Krátká pauza"
+
+#: source/tmp/PopoverPomodoro.vue.ts:84
+msgid "Break"
+msgstr "Pauza"
+
+#: source/tmp/PopoverPomodoro.vue.ts:87
+msgid "Sound Effect"
+msgstr ""
+
+#: source/tmp/PopoverPomodoro.vue.ts:90
+msgid "Volume"
+msgstr ""
+
+#: source/tmp/ChartView.vue.ts:60
+msgid "Charts"
+msgstr "Grafy"
+
+#: source/tmp/CalendarView.vue.ts:59
+msgid "Calendar"
+msgstr "Kalendář"
+
+#: source/tmp/CalendarView.vue.ts:77
+msgid "January"
+msgstr "Leden"
+
+#: source/tmp/CalendarView.vue.ts:78
+msgid "February"
+msgstr "Únor"
+
+#: source/tmp/CalendarView.vue.ts:79
+msgid "March"
+msgstr "Březen"
+
+#: source/tmp/CalendarView.vue.ts:80
+msgid "April"
+msgstr "Duben"
+
+#: source/tmp/CalendarView.vue.ts:81
+msgid "May"
+msgstr "Květen"
+
+#: source/tmp/CalendarView.vue.ts:82
+msgid "June"
+msgstr "Červen"
+
+#: source/tmp/CalendarView.vue.ts:83
+msgid "July"
+msgstr "Červenec"
+
+#: source/tmp/CalendarView.vue.ts:84
+msgid "August"
+msgstr "Srpen"
+
+#: source/tmp/CalendarView.vue.ts:85
+msgid "September"
+msgstr "Září"
+
+#: source/tmp/CalendarView.vue.ts:86
+msgid "October"
+msgstr "Říjen"
+
+#: source/tmp/CalendarView.vue.ts:87
+msgid "November"
+msgstr "Listopad"
+
+#: source/tmp/CalendarView.vue.ts:88
+msgid "December"
+msgstr "Prosinec"
+
+#: source/tmp/CalendarView.vue.ts:104
+msgid "Below the monthly average"
+msgstr "Méně než měsíční průměr"
+
+#: source/tmp/CalendarView.vue.ts:107
+msgid "Over the monthly average"
+msgstr "Více než měsíční průměr"
+
+#: source/tmp/CalendarView.vue.ts:110
+msgid "More than twice the monthly average"
+msgstr "Více než dvojnásobek měsíčního průměru"
+
+#: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:72
+msgid "Other files"
+msgstr "Další soubory"
+
+#: source/tmp/OtherFilesTab.vue.ts:19
+msgid "No other files"
+msgstr "Žádné další soubory"
+
+#: source/tmp/file-list.vue.ts:69
+msgid "No directory selected"
+msgstr "Není vybrána žádná složka"
+
+#: source/tmp/file-list.vue.ts:72
+msgid "Empty directory"
+msgstr "Prázdná složka"
+
+#: source/tmp/MainSidebar.vue.ts:75 source/tmp/ReferencesTab.vue.ts:20
+msgid "References"
+msgstr "Odkazy"
+
+#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:27
+msgid "Related files"
+msgstr "Související soubory"
+
+#: source/tmp/SnippetsTab.vue.ts:50
+msgid "Rename snippet"
+msgstr "Přejmenovat útržek"
+
+#: source/tmp/SnippetsTab.vue.ts:53
+msgid "Snippets let you define reusable pieces of text with variables."
+msgstr ""
+"Útržky vám umožňují definovat opakovaně použitelné části textu s proměnnými."
+
+#: source/tmp/App.vue.ts:34
+msgid "Updater"
+msgstr "Aktualizace"
+
+#. True as soon as the update starts
+#: source/tmp/App.vue.ts:36
+msgid "Click to start update"
+msgstr "Klepnutím spustíte aktualizaci"
+
+#: source/tmp/App.vue.ts:75
+msgid "New update available"
+msgstr "Je dostupná aktualizace"
+
+#: source/tmp/App.vue.ts:78
+msgid "Your version"
+msgstr "Vaše verze"
+
+#: source/tmp/App.vue.ts:81
+msgid ""
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr "Zettlr je k dispozici v novější verzi. Přečtěte si changelog níže."
+
+#: source/tmp/App.vue.ts:84
+msgid "Downloading your update"
+msgstr "Aktualizace se stahuje"
+
+#: source/tmp/App.vue.ts:87
+msgid "No update available. You have the most recent version."
+msgstr "Máte nejnovější verzi."
+
+#: source/tmp/App.vue.ts:132
+msgid "Starting update …"
+msgstr "Spouští se aktualizace ..."
+
+#: source/tmp/CustomCSS.vue.ts:31
+msgid "Custom CSS"
+msgstr "Vlastní CSS"
+
+#: source/tmp/CustomCSS.vue.ts:32
+msgid ""
+"Here you can override the styles of Zettlr to customise it even further. "
+"<strong>Attention: This file overrides all CSS directives! Never alter the "
+"geometry of elements, otherwise the app may expose unwanted behaviour!</"
+"strong>"
+msgstr ""
+"Zde si můžete přizpůsobit styly, které Zettlr používá. <strong>Pozor: Tento "
+"soubor přepíše všechny CSS direktivy! Nikdy neměňte geometrii prvků, jinak "
+"se může aplikace chovat nepředvídatelně!</strong>"
+
+#: source/tmp/CustomCSS.vue.ts:97
+msgid "Saving failed"
+msgstr "Ukládání selhalo"
+
+#: source/tmp/List.vue.ts:141
+msgid "Add"
+msgstr "Přidat"
+
+#: source/tmp/List.vue.ts:144
+msgid "Actions"
+msgstr "Akce"
+
+#: source/tmp/List.vue.ts:147
+#, fuzzy
+msgid "Delete"
+msgstr "Smazat soubor"
+
+#. Apparently we have a simple array, so exactly one column
+#: source/tmp/List.vue.ts:169
+msgid "Item"
+msgstr "Položka"
+
+#: source/tmp/RelatedFilesTab.vue.ts:30
+msgid "No related files"
+msgstr "Žádné související soubory"
+
+#: source/tmp/RelatedFilesTab.vue.ts:33
+msgid "This relation is based on a bidirectional link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:36
+msgid "This relation is based on an outbound link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:39
+msgid "This relation is based on a backlink."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:228
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr ""
+
+#: source/tmp/ReferencesTab.vue.ts:32
+msgid "There are no citations in this document."
+msgstr "V dokumentu nejsou žádné citace."
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
 msgid "Open Link"
@@ -1568,30 +2021,6 @@ msgstr "Bloková citace"
 msgid "Insert Table"
 msgstr "Vložit tabulku"
 
-#: source/common/modules/markdown-editor/renderers/readability.ts:39
-#, javascript-format
-msgid "Readability mode (%s)"
-msgstr ""
-
-#: source/common/modules/markdown-editor/renderers/render-images.ts:94
-#, javascript-format
-msgid "Image not found: %s"
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
-#, javascript-format
-msgid "File %s does not exist."
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
-msgid "Word count"
-msgstr "Počet slov"
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
-#: source/tmp/PopoverFileProps.vue.ts:68 source/tmp/PopoverDirProps.vue.ts:150
-msgid "Modified"
-msgstr "Upraveno"
-
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
 msgid "Link"
 msgstr "Odkaz"
@@ -1612,6 +2041,55 @@ msgstr "Kód"
 msgid "No footnote text found."
 msgstr ""
 
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
+#, javascript-format
+msgid "File %s does not exist."
+msgstr ""
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
+msgid "Word count"
+msgstr "Počet slov"
+
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
+msgid "Detect automatically"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
+msgid "Disabled"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
+#, fuzzy
+msgid "Custom"
+msgstr "Vlastní CSS"
+
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Open diagnostics panel"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
+msgid "Rendering mermaid graph …"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
+#, fuzzy
+msgid "Could not render Graph:"
+msgstr "Nelze vytvořit soubor"
+
+#: source/common/modules/markdown-editor/renderers/render-images.ts:94
+#, javascript-format
+msgid "Image not found: %s"
+msgstr ""
+
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
 msgstr ""
@@ -1619,6 +2097,10 @@ msgstr ""
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
 msgstr ""
+
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr "právě teď"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -2049,468 +2531,6 @@ msgstr "čínština (Čína)"
 #, fuzzy
 msgid "Chinese"
 msgstr "čínština (Čína)"
-
-#: source/common/util/format-date.ts:33
-msgid "just now"
-msgstr "právě teď"
-
-#: source/tmp/Defaults.vue.ts:70
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
-msgstr ""
-"Tento profil je chráněný. To znamená, že bude obnoven, pokud ho odstraníte "
-"nebo přejmenujete."
-
-#: source/tmp/Defaults.vue.ts:73
-msgid ""
-"This profile is invalid. It may contain errors, or it may be missing the "
-"writer or reader property."
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:109
-msgid "Edit the default settings for imports or exports here."
-msgstr "Zde upravíte výchozí nastavení pro import a export."
-
-#: source/tmp/Defaults.vue.ts:192 source/tmp/SnippetsTab.vue.ts:124
-#: source/tmp/CustomCSS.vue.ts:88
-msgid "Saving …"
-msgstr "Ukládá se ..."
-
-#: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
-msgid "Saved!"
-msgstr "Uloženo!"
-
-#: source/tmp/CalendarView.vue.ts:59
-msgid "Calendar"
-msgstr "Kalendář"
-
-#: source/tmp/CalendarView.vue.ts:77
-msgid "January"
-msgstr "Leden"
-
-#: source/tmp/CalendarView.vue.ts:78
-msgid "February"
-msgstr "Únor"
-
-#: source/tmp/CalendarView.vue.ts:79
-msgid "March"
-msgstr "Březen"
-
-#: source/tmp/CalendarView.vue.ts:80
-msgid "April"
-msgstr "Duben"
-
-#: source/tmp/CalendarView.vue.ts:81
-msgid "May"
-msgstr "Květen"
-
-#: source/tmp/CalendarView.vue.ts:82
-msgid "June"
-msgstr "Červen"
-
-#: source/tmp/CalendarView.vue.ts:83
-msgid "July"
-msgstr "Červenec"
-
-#: source/tmp/CalendarView.vue.ts:84
-msgid "August"
-msgstr "Srpen"
-
-#: source/tmp/CalendarView.vue.ts:85
-msgid "September"
-msgstr "Září"
-
-#: source/tmp/CalendarView.vue.ts:86
-msgid "October"
-msgstr "Říjen"
-
-#: source/tmp/CalendarView.vue.ts:87
-msgid "November"
-msgstr "Listopad"
-
-#: source/tmp/CalendarView.vue.ts:88
-msgid "December"
-msgstr "Prosinec"
-
-#: source/tmp/CalendarView.vue.ts:104
-msgid "Below the monthly average"
-msgstr "Méně než měsíční průměr"
-
-#: source/tmp/CalendarView.vue.ts:107
-msgid "Over the monthly average"
-msgstr "Více než měsíční průměr"
-
-#: source/tmp/CalendarView.vue.ts:110
-msgid "More than twice the monthly average"
-msgstr "Více než dvojnásobek měsíčního průměru"
-
-#: source/tmp/PopoverDocInfo.vue.ts:35
-msgid "No open document"
-msgstr "Žádný otevřený dokument"
-
-#: source/tmp/PopoverDocInfo.vue.ts:38
-msgid "words"
-msgstr "slov"
-
-#: source/tmp/PopoverDocInfo.vue.ts:41
-msgid "characters"
-msgstr "znaků"
-
-#: source/tmp/File.vue.ts:59 source/tmp/PopoverFileProps.vue.ts:71
-#: source/tmp/Number.vue.ts:59 source/tmp/Color.vue.ts:50
-#: source/tmp/ShortcutChooser.vue.ts:61
-msgid "Reset"
-msgstr "Reset"
-
-#: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:72
-msgid "Other files"
-msgstr "Další soubory"
-
-#: source/tmp/OtherFilesTab.vue.ts:19
-msgid "No other files"
-msgstr "Žádné další soubory"
-
-#: source/tmp/PopoverTags.vue.ts:36
-msgid "Name"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:37
-msgid "Count"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:55
-msgid "Filter tags…"
-msgstr "Filtrovat štítky..."
-
-#: source/tmp/PopoverTags.vue.ts:58
-msgid "Tag Cloud"
-msgstr "Tag cloud"
-
-#: source/tmp/PopoverTags.vue.ts:61
-msgid "Suggested tags for the current file"
-msgstr "Navrhované štítky pro aktuální soubor"
-
-#: source/tmp/PopoverTags.vue.ts:64
-msgid "Add to file"
-msgstr "Přidat do souboru"
-
-#: source/tmp/SnippetsTab.vue.ts:50
-msgid "Rename snippet"
-msgstr "Přejmenovat útržek"
-
-#: source/tmp/SnippetsTab.vue.ts:53
-msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
-"Útržky vám umožňují definovat opakovaně použitelné části textu s proměnnými."
-
-#: source/tmp/ReferencesTab.vue.ts:20 source/tmp/MainSidebar.vue.ts:75
-msgid "References"
-msgstr "Odkazy"
-
-#: source/tmp/ReferencesTab.vue.ts:32
-msgid "There are no citations in this document."
-msgstr "V dokumentu nejsou žádné citace."
-
-#: source/tmp/RelatedFilesTab.vue.ts:27 source/tmp/MainSidebar.vue.ts:81
-msgid "Related files"
-msgstr "Související soubory"
-
-#: source/tmp/RelatedFilesTab.vue.ts:30
-msgid "No related files"
-msgstr "Žádné související soubory"
-
-#: source/tmp/RelatedFilesTab.vue.ts:33
-msgid "This relation is based on a bidirectional link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:36
-msgid "This relation is based on an outbound link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:39
-msgid "This relation is based on a backlink."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:228
-#, javascript-format
-msgid "This relation is based on %s shared tags: %s"
-msgstr ""
-
-#: source/tmp/file-tree.vue.ts:29
-msgid "Workspaces"
-msgstr "Pracovní plochy"
-
-#: source/tmp/file-tree.vue.ts:32
-msgid "No open files or folders"
-msgstr "Žádné otevřené soubory nebo složky"
-
-#: source/tmp/file-tree.vue.ts:35 source/tmp/file-list.vue.ts:66
-msgid "No results"
-msgstr "Žádné výsledky"
-
-#: source/tmp/PopoverFileProps.vue.ts:62 source/tmp/file-item.vue.ts:195
-msgid "Words"
-msgstr "Slov"
-
-#: source/tmp/PopoverFileProps.vue.ts:65 source/tmp/PopoverDirProps.vue.ts:153
-msgid "Created"
-msgstr "Vytvořeno"
-
-#: source/tmp/PopoverFileProps.vue.ts:74
-msgid "Set writing target…"
-msgstr "Nastavit autorský cíl..."
-
-#: source/tmp/PopoverFileProps.vue.ts:77 source/tmp/file-item.vue.ts:193
-msgid "Characters"
-msgstr "Znaků"
-
-#: source/tmp/ChartView.vue.ts:60
-msgid "Charts"
-msgstr "Grafy"
-
-#: source/tmp/PopoverDirProps.vue.ts:147 source/tmp/file-item.vue.ts:113
-msgid "Directories"
-msgstr "Složky"
-
-#: source/tmp/PopoverDirProps.vue.ts:162
-msgid "Project Settings…"
-msgstr "Nastavení projektu..."
-
-#: source/tmp/file-list.vue.ts:69
-msgid "No directory selected"
-msgstr "Není vybrána žádná složka"
-
-#: source/tmp/file-list.vue.ts:72
-msgid "Empty directory"
-msgstr "Prázdná složka"
-
-#: source/tmp/CustomCSS.vue.ts:31
-msgid "Custom CSS"
-msgstr "Vlastní CSS"
-
-#: source/tmp/CustomCSS.vue.ts:32
-msgid ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted behaviour!</"
-"strong>"
-msgstr ""
-"Zde si můžete přizpůsobit styly, které Zettlr používá. <strong>Pozor: Tento "
-"soubor přepíše všechny CSS direktivy! Nikdy neměňte geometrii prvků, jinak "
-"se může aplikace chovat nepředvídatelně!</strong>"
-
-#: source/tmp/CustomCSS.vue.ts:97
-msgid "Saving failed"
-msgstr "Ukládání selhalo"
-
-#: source/tmp/Theme.vue.ts:37
-msgid "selected"
-msgstr "vybráno"
-
-#: source/tmp/Theme.vue.ts:40
-msgid "click to select"
-msgstr "klepněte pro výběr"
-
-#: source/tmp/PopoverPomodoro.vue.ts:72
-msgid "Start"
-msgstr "Spustit"
-
-#: source/tmp/PopoverPomodoro.vue.ts:75
-msgid "Stop"
-msgstr "Zastavit"
-
-#: source/tmp/PopoverPomodoro.vue.ts:78
-msgid "Work"
-msgstr "Práce"
-
-#: source/tmp/PopoverPomodoro.vue.ts:81
-msgid "Short break"
-msgstr "Krátká pauza"
-
-#: source/tmp/PopoverPomodoro.vue.ts:84
-msgid "Break"
-msgstr "Pauza"
-
-#: source/tmp/PopoverPomodoro.vue.ts:87
-msgid "Sound Effect"
-msgstr ""
-
-#: source/tmp/PopoverPomodoro.vue.ts:90
-msgid "Volume"
-msgstr ""
-
-#: source/tmp/ToCTab.vue.ts:53 source/tmp/MainSidebar.vue.ts:78
-msgid "Table of Contents"
-msgstr "Obsah"
-
-#: source/tmp/List.vue.ts:141
-msgid "Add"
-msgstr "Přidat"
-
-#: source/tmp/List.vue.ts:144
-msgid "Actions"
-msgstr "Akce"
-
-#: source/tmp/List.vue.ts:147
-#, fuzzy
-msgid "Delete"
-msgstr "Smazat soubor"
-
-#. Apparently we have a simple array, so exactly one column
-#: source/tmp/List.vue.ts:169
-msgid "Item"
-msgstr "Položka"
-
-#: source/tmp/PopoverStats.vue.ts:111
-msgid "words last month"
-msgstr "slov minulý měsíc"
-
-#: source/tmp/PopoverStats.vue.ts:114
-msgid "daily average"
-msgstr "denní průměr"
-
-#: source/tmp/PopoverStats.vue.ts:117
-msgid "words today"
-msgstr "slov dnes"
-
-#: source/tmp/PopoverStats.vue.ts:120
-msgid "🔥 You're on fire!"
-msgstr "🥇 Jste šampión!"
-
-#: source/tmp/PopoverStats.vue.ts:123
-msgid "💪 You're close to hitting your daily average!"
-msgstr "💪 Jste blízko dosažení svého denního průměru!"
-
-#: source/tmp/PopoverStats.vue.ts:126
-msgid "✍🏼 Get writing to surpass your daily average."
-msgstr "✍🏼 Pište, a překonáte svůj denní průměr."
-
-#: source/tmp/PopoverStats.vue.ts:129
-msgid "More statistics …"
-msgstr "Další statistiky ..."
-
-#: source/tmp/App.vue.ts:34
-msgid "Updater"
-msgstr "Aktualizace"
-
-#. True as soon as the update starts
-#: source/tmp/App.vue.ts:36
-msgid "Click to start update"
-msgstr "Klepnutím spustíte aktualizaci"
-
-#: source/tmp/App.vue.ts:75
-msgid "New update available"
-msgstr "Je dostupná aktualizace"
-
-#: source/tmp/App.vue.ts:78
-msgid "Your version"
-msgstr "Vaše verze"
-
-#: source/tmp/App.vue.ts:81
-msgid ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
-msgstr "Zettlr je k dispozici v novější verzi. Přečtěte si changelog níže."
-
-#: source/tmp/App.vue.ts:84
-msgid "Downloading your update"
-msgstr "Aktualizace se stahuje"
-
-#: source/tmp/App.vue.ts:87
-msgid "No update available. You have the most recent version."
-msgstr "Máte nejnovější verzi."
-
-#: source/tmp/App.vue.ts:132
-msgid "Starting update …"
-msgstr "Spouští se aktualizace ..."
-
-#: source/tmp/GlobalSearch.vue.ts:116
-msgid "Full-Text Search"
-msgstr "Fulltextové hledání"
-
-#: source/tmp/GlobalSearch.vue.ts:119
-msgid "Enter your search terms below"
-msgstr "Níže zadejte hledané výrazy"
-
-#: source/tmp/GlobalSearch.vue.ts:122
-msgid "Find …"
-msgstr "Najít ..."
-
-#: source/tmp/GlobalSearch.vue.ts:125
-msgid "Filter …"
-msgstr "Filtrovat ..."
-
-#: source/tmp/GlobalSearch.vue.ts:128
-msgid "Filter search results"
-msgstr "Filtrovat výsledky hledání"
-
-#: source/tmp/GlobalSearch.vue.ts:131
-msgid "Restrict search to directory"
-msgstr "Hledat pouze ve složce"
-
-#: source/tmp/GlobalSearch.vue.ts:134
-msgid "Restrict to directory …"
-msgstr "Hledat ve složce ..."
-
-#: source/tmp/GlobalSearch.vue.ts:137
-msgid "Search"
-msgstr "Hledat"
-
-#: source/tmp/GlobalSearch.vue.ts:140
-msgid "Clear search"
-msgstr "Vyčistit pole"
-
-#: source/tmp/GlobalSearch.vue.ts:143
-msgid "Toggle results"
-msgstr "Rozbalit výsledky"
-
-#: source/tmp/General-Tab.vue.ts:23
-msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
-msgstr ""
-"Zettlr vyvíjí Hendrik Erz pod licencí GNU GPL v3. Jedná se o svobodný "
-"software šířený zdarma založený na frameworku Electron. Zettlr děkuje "
-"vývojářům frameworku Electron, Node.js a editoru CodeMirror za jejich práci. "
-"Bez nich by Zettlr nemohl existovat. Níže jsou uvedené všechny projekty, "
-"které Zettlr používá."
-
-#: source/tmp/General-Tab.vue.ts:24
-msgid ""
-"Zettlr makes use of citeproc to display citations directly in the editor. To "
-"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
-msgstr ""
-"Zettlr pro korektní zobrazení citací v editoru používá citeproc. K tomuto "
-"účelu Zettlr používá jazyk CSL (CitationStyleLanguage) a soubory stylů. "
-"Soubory jsou dodány beze změn. Další informace:"
-
-#: source/tmp/General-Tab.vue.ts:25
-msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
-msgstr ""
-"Všechna loga a značky patří jejich právoplatným majitelům. Zettlr nemá jiné "
-"vazby s kterýmkoli z těchto projektů, kromě používání jejich kódu. Node.js "
-"je ochranná známka společnosti Joyent, Inc."
-
-#: source/tmp/General-Tab.vue.ts:26
-msgid ""
-"Zettlr offers an integration with LanguageTool.org, a service provided by "
-"LanguageTooler GmbH. Using this service requires an internet connection and "
-"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
-"server that you use."
-msgstr ""
-
-#: source/tmp/Projects-Tab.vue.ts:24
-msgid "Zettlr also makes use of these projects:"
-msgstr "Zettlr používá také tyto projekty:"
 
 #~ msgid "characters (w/o spaces)"
 #~ msgstr "znaků (bez mezer)"
