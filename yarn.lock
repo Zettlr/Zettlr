@@ -592,13 +592,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/notarize@npm:^1.2.4":
-  version: 1.2.4
-  resolution: "@electron/notarize@npm:1.2.4"
+"@electron/notarize@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@electron/notarize@npm:2.0.0"
   dependencies:
     debug: ^4.1.1
     fs-extra: ^9.0.1
-  checksum: 3aa19fb247f9297b96a25f1a082f552e0c78a726ddfc98de9cdd4e4b092fc36fe07d680b762dd5a2bceda97b1044d3a0e6d9eadc5022f7c329a1fcf081133c9b
+  checksum: e6a144b8cb1c355bce7515876da559c9f607b45eaa88e9f268887295243ea1ede3efbf572efa7af8abf734d30fc7cb1a5b88c14de4187ebc4cfa62d8bfc1bb70
   languageName: node
   linkType: hard
 
@@ -13411,7 +13411,7 @@ __metadata:
     "@electron-forge/cli": ^6.2.1
     "@electron-forge/maker-zip": ^6.2.1
     "@electron-forge/plugin-webpack": ^6.2.1
-    "@electron/notarize": ^1.2.4
+    "@electron/notarize": ^2.0.0
     "@lezer/common": ^1.0.3
     "@lezer/highlight": ^1.1.6
     "@replit/codemirror-emacs": ^6.0.1

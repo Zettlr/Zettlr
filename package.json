@@ -135,7 +135,7 @@
     "@electron-forge/cli": "^6.2.1",
     "@electron-forge/maker-zip": "^6.2.1",
     "@electron-forge/plugin-webpack": "^6.2.1",
-    "@electron/notarize": "^1.2.4",
+    "@electron/notarize": "^2.0.0",
     "@types/adm-zip": "^0.5.0",
     "@types/archiver": "^5.3.2",
     "@types/command-exists": "^1.2.0",
