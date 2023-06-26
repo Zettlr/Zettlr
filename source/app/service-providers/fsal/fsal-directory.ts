@@ -536,7 +536,12 @@ export async function addChild (
 export async function removeChild (dirObject: DirDescriptor, childPath: string, deleteOnFail: boolean): Promise<void> {
   const idx = dirObject.children.findIndex(element => element.path === childPath)
   if (idx > -1) {
-    await safeDelete(childPath, deleteOnFail)
+    // NOTE: This function may be called after a file has been deleted. In that
+    // case the function only needs to remove the file from the list of children
+    // to avoid safeDelete throwing an error as the file does no longer exist.
+    if (isFile(childPath)) {
+      await safeDelete(childPath, deleteOnFail)
+    }
     dirObject.children.splice(idx, 1)
   }
 }
