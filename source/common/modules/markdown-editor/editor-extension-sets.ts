@@ -79,11 +79,6 @@ export interface CoreExtensionOptions {
   }
   updateListener: (update: ViewUpdate) => void
   domEventsListeners: DOMEventHandlers<any>
-  // Linter configuration
-  lint: {
-    // Should Markdown documents be linted?
-    markdown: boolean
-  }
 }
 
 /**
@@ -117,11 +112,16 @@ export const inputModeCompartment = new Compartment()
  * @return  {Extension[]}                    An array of core extensions
  */
 function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
-  let inputMode: Extension = []
+  const inputMode: Extension[] = []
   if (options.initialConfig.inputMode === 'vim') {
-    inputMode = vim()
+    inputMode.push(vim())
   } else if (options.initialConfig.inputMode === 'emacs') {
-    inputMode = emacs()
+    inputMode.push(emacs())
+  }
+
+  const autoCloseBracketsConfig: Extension[] = []
+  if (options.initialConfig.autoCloseBrackets) {
+    autoCloseBracketsConfig.push(closeBrackets())
   }
 
   return [
@@ -154,7 +154,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     EditorState.tabSize.from(configField, (val) => val.indentUnit),
     indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
     EditorView.lineWrapping, // Enable line wrapping,
-    closeBrackets(),
+    autoCloseBracketsConfig,
 
     // Add the statusbar
     statusbar,
@@ -233,7 +233,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
 
   let hasLinters = false
 
-  if (options.lint.markdown) {
+  if (options.initialConfig.lintMarkdown) {
     hasLinters = true
     mdLinterExtensions.push(mdLint)
   }

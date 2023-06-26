@@ -251,8 +251,6 @@ export default class MarkdownEditor extends EventEmitter {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const editorInstance = this
 
-    const mdLint = window.config.get('editor.lint.markdown') as boolean
-
     const options: CoreExtensionOptions = {
       initialConfig: JSON.parse(JSON.stringify(this.config)),
       remoteConfig: {
@@ -327,9 +325,6 @@ export default class MarkdownEditor extends EventEmitter {
             event.preventDefault()
           }
         }
-      },
-      lint: {
-        markdown: mdLint
       }
     }
 

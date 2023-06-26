@@ -28,6 +28,7 @@ export interface AutocorrectOptions {
 
 export interface EditorConfiguration {
   autocorrect: AutocorrectOptions
+  autoCloseBrackets: boolean
   renderCitations: boolean
   renderIframes: boolean
   renderImages: boolean
@@ -76,6 +77,7 @@ export function getDefaultConfig (): EditorConfiguration {
       },
       replacements: []
     },
+    autoCloseBrackets: true,
     renderCitations: true,
     renderIframes: true,
     renderImages: true,
