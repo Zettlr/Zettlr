@@ -1770,10 +1770,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.16.18":
-  version: 18.16.18
-  resolution: "@types/node@npm:18.16.18"
-  checksum: d32d8a0a04cd3f5ecb361bcb42f3a07623881ac90d680e06bf626defb3c663a94860d11690babe607cfe67265eceeb8a59ba5fe40c0e49f5a1b01e0088640469
+"@types/node@npm:^20.3.2":
+  version: 20.3.2
+  resolution: "@types/node@npm:20.3.2"
+  checksum: 5929ce2b9b12b1e2a2304a0921a953c72a81f5753ad39ac43b99ce6312fbb2b4fb5bc6b60d64a2550704e3223cd5de1299467d36085ac69888899db978f2653a
   languageName: node
   linkType: hard
 
@@ -13427,7 +13427,7 @@ __metadata:
     "@types/md5": ^2.3.2
     "@types/mermaid": ^9.2.0
     "@types/mocha": ^10.0.1
-    "@types/node": ^18.16.18
+    "@types/node": ^20.3.2
     "@types/sanitize-html": ^2.9.0
     "@types/semver": ^7.5.0
     "@types/showdown": ^2.0.1
