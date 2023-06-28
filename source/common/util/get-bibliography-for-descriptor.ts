@@ -30,6 +30,13 @@ export function getBibliographyForDescriptor (descriptor: MDFileDescriptor): str
 
   if (descriptor.frontmatter != null && 'bibliography' in descriptor.frontmatter) {
     library = descriptor.frontmatter.bibliography
+
+    if (Array.isArray(library)) {
+      // While multiple bibliography libraries are supported by Pandoc, Zettlr
+      // cannot properly merge multiple libraries together, so we'll simply use
+      // the first found.
+      library = library[0]
+    }
   }
 
   if (typeof library === 'string') {
