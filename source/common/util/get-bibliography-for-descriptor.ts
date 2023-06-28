@@ -25,7 +25,7 @@ import type { MDFileDescriptor } from '@dts/common/fsal'
  *
  * @return  {string}                        The appropriate library
  */
-export default function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
+export function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
   let library = CITEPROC_MAIN_DB
 
   if (descriptor.frontmatter != null && 'bibliography' in descriptor.frontmatter) {
