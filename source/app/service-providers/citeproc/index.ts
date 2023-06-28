@@ -183,12 +183,19 @@ export default class CiteprocProvider extends ProviderContract {
     /**
      * Listen to renderer requests
      */
-    ipcMain.handle('citeproc-provider', (event, { command, payload }) => {
+    ipcMain.handle('citeproc-provider', async (event, { command, payload }) => {
+      const { database } = payload
+      // Ensure the database is loaded in any case (will throw a visible error
+      // if the database cannot be loaded)
+      try {
+        await this.loadDatabase(database)
+      } catch (err: any) {
+        this._logger.error(`[Citeproc Provider] Could not load database ${String(database)}: ${err.message as string}`, err)
+        // Proper early return based on the command
+        return command === 'get-items' ? [] : undefined
+      }
+
       if (command === 'get-items') {
-        let { database } = payload
-        if (database === CITEPROC_MAIN_DB) {
-          database = this.mainLibrary
-        }
         const db = this.databases.get(database)
         if (db === undefined) {
           return []
@@ -196,10 +203,10 @@ export default class CiteprocProvider extends ProviderContract {
           return Object.values(db.cslData)
         }
       } else if (command === 'get-citation') {
-        const { database, citations, composite } = payload
+        const { citations, composite } = payload
         return this.getCitation(database, citations, composite)
       } else if (command === 'get-bibliography') {
-        const { database, citations } = payload
+        const { citations } = payload
         // The Payload contains the items the renderer wants to have
         return this.makeBibliography(database, citations)
       }
@@ -297,6 +304,13 @@ export default class CiteprocProvider extends ProviderContract {
    * @return  {Promise<DatabaseRecord>}                Resolves with the DatabaseRecord
    */
   private async loadDatabase (databasePath: string, watch = true): Promise<void> {
+    if (databasePath === CITEPROC_MAIN_DB && !this.hasMainLibrary()) {
+      this._logger.verbose('[Citeproc Provider] Could not load main database: No main database available.')
+      return
+    } else if (databasePath === CITEPROC_MAIN_DB) {
+      databasePath = this.mainLibrary
+    }
+
     if (this.databases.has(databasePath)) {
       return // No need to load the database again
     }
