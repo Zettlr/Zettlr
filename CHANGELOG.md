@@ -318,7 +318,8 @@ there.
 - Refactored the main editor component further
 - Refactored the Sidebar panels into their own respective components
 - Upgrade Electron to `24.x.x`
-- Upgrade Pandoc to `3.1.1`
+- Upgrade Pandoc to `3.1.4`
+- Pandoc is now also available natively for Apple Silicon (darwin arm64)
 - Upgrade Chart.js to `4.x.x`
 - Upgrade CodeMirror to version 6
 - Upgrade to Yarn v2

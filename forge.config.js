@@ -82,9 +82,9 @@ module.exports = {
         forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc.exe'))
       } else if (supportsPandoc && (isMacOS || isLinux)) {
         // Download Pandoc either for macOS or Linux ...
-        const platform = (isMacOS) ? 'darwin' : 'linux'
-        // ... and the ARM version if we're downloading for Linux ARM, else x64.
-        const arch = (isLinux && isArm64) ? 'arm' : 'x64'
+        const platform = isMacOS ? 'darwin' : 'linux'
+        // ... and the ARM or x64 version.
+        const arch = isArm64 ? 'arm' : 'x64'
         try {
           await fs.lstat(path.join(__dirname, `./resources/pandoc-${platform}-${arch}`))
         } catch (err) {
