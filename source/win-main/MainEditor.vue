@@ -43,13 +43,27 @@ import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
+import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
 import { TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 
 const ipcRenderer = window.ipc
 const path = window.path
+
+// This function overwrites the getBibliographyForDescriptor function to ensure
+// the library is always absolute. We have to do it this ridiculously since the
+// function is called in both main and renderer processes, and we still have the
+// issue that path-browserify is entirely unusable.
+function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
+  const library = getBibliography(descriptor)
+
+  if (library !== CITEPROC_MAIN_DB && !path.isAbsolute(library)) {
+    return path.resolve(descriptor.dir, library)
+  } else {
+    return library
+  }
+}
 
 const props = defineProps({
   leafId: {
@@ -144,6 +158,7 @@ ipcRenderer.on('documents-update', (e, { event, context }) => {
         activeFileDescriptor.value = descriptor
         const library = descriptor.type === 'file' ? getBibliographyForDescriptor(descriptor) : undefined
         if (library !== undefined) {
+          console.log('New library detected!', library)
           updateCitationKeys(library).catch(e => console.error('Could not update citation keys', e))
         }
 
