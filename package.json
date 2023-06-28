@@ -129,7 +129,8 @@
     "@codemirror/state": "^6.2.1",
     "@lezer/highlight": "^1.1.6",
     "@lezer/common": "^1.0.3",
-    "node-abi": "^3.40.0"
+    "node-abi": "^3.40.0",
+    "got": "11.x.x"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.2.1",
