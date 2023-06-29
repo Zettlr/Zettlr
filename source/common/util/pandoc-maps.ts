@@ -18,7 +18,7 @@
  * This map maps supported Pandoc readers to readable strings that can be
  * displayed to the user in various places around the app.
  *
- * @var {{[reader: string]: string}}
+ * @var {Record<string, string>}
  */
 export const PANDOC_READERS: Record<string, string> = {
   'commonmark': 'CommonMark',
@@ -59,7 +59,7 @@ export const PANDOC_READERS: Record<string, string> = {
  * This map maps supported Pandoc writers to readable strings that can be
  * displayed to the user in various places around the app.
  *
- * @var {{[writer: string]: string}}
+ * @var {Record<string, string>}
  */
 export const PANDOC_WRITERS: Record<string, string> = {
   'asciidoc': 'AsciiDoc',
@@ -133,7 +133,7 @@ export const SUPPORTED_READERS = [
 /**
  * This map maps writers to their most common extension
  *
- * @var {{[writer: string]: string }}
+ * @var {Record<string, string>}
  */
 export const WRITER2EXT: Record<string, string> = {
   'asciidoc': 'adoc', // See https://asciidoctor.org/docs/asciidoc-recommended-practices/#document-extension
@@ -191,7 +191,7 @@ export const WRITER2EXT: Record<string, string> = {
  * This map maps extensions that one can import into Zettlr to the corresponding
  * writers. Each extension can be supported by more than one reader.
  *
- * @var {{[extension: string]: string[]}}
+ * @var {Record<string, string[]>}
  */
 export const EXT2READER: Record<string, string[]> = {
   'md': [ 'commonmark', 'commonmark_x', 'markdown', 'markdown_mmd', 'markdown_phpextra', 'markdown_strict', 'gfm' ],
