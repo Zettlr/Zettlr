@@ -7,76 +7,92 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     An emphasis renderer
+ * Description:     An emphasis renderer. NOTE that this renderer is DIFFERENT
+ *                  from the others, in that it will only hide certain ranges.
  *
  * END HEADER
  */
 
-import { renderInlineWidgets } from './base-renderer'
-import { type SyntaxNodeRef, type SyntaxNode } from '@lezer/common'
-import { WidgetType, type EditorView } from '@codemirror/view'
-import { type EditorState } from '@codemirror/state'
-import clickAndSelect from './click-and-select'
+import { syntaxTree } from '@codemirror/language'
+import { type RangeSet, type Range } from '@codemirror/state'
+import { type ViewUpdate, type EditorView, ViewPlugin, Decoration, type DecorationSet } from '@codemirror/view'
+import { rangeInSelection } from '../util/range-in-selection'
 
-// A list of emphasis nodes
-// const EMPHASIS_NODES = [
-//   // Base Markdown
-//   'Escape', // Escape character
-//   'Entity', // HTML color codes (?)
-//   'HardBreak', // Enforced line breaks (\\)
-//   'Emphasis', // Italic
-//   'StrongEmphasis', // Strong
-//   'Link',
-//   'Image',
-//   'InlineCode',
-//   'HTMLTag',
-//   'Comment',
-//   'URL',
-//   // GFM
-//   'Strikethrough'
-// ]
+function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
+  const ranges: Array<Range<Decoration>> = []
+  const hiddenDeco = Decoration.replace({})
 
-class EmphasisWidget extends WidgetType {
-  constructor (readonly nodeContents: string, readonly node: SyntaxNode) {
-    super()
+  for (const { from, to } of view.visibleRanges) {
+    syntaxTree(view.state).iterate({
+      from,
+      to,
+      enter (node) {
+        // Do not hide any characters if a selection is inside here
+        if (rangeInSelection(view.state, node.from, node.to)) {
+          return
+        }
+
+        switch (node.name) {
+          case 'Escape':
+            // Only hide the actual backslash
+            ranges.push(hiddenDeco.range(node.from, node.from + 1))
+            break
+          // Hide various marks
+          case 'Strikethrough': {
+            const marks = node.node.getChildren('StrikethroughMark')
+            for (const mark of marks) {
+              ranges.push(hiddenDeco.range(mark.from, mark.to))
+            }
+            break
+          }
+          case 'StrongEmphasis':
+          case 'Emphasis': {
+            const marks = node.node.getChildren('EmphasisMark')
+            for (const mark of marks) {
+              ranges.push(hiddenDeco.range(mark.from, mark.to))
+            }
+            break
+          }
+          case 'Highlight': {
+            ranges.push(hiddenDeco.range(node.from, node.from + 2))
+            ranges.push(hiddenDeco.range(node.to - 2, node.to))
+            break
+          }
+          // For fenced code, also hide the CodeInfo
+          case 'InlineCode':
+          case 'FencedCode': {
+            const marks = node.node.getChildren('CodeMark')
+            const infos = node.node.getChildren('CodeInfo')
+            for (const mark of marks.concat(infos)) {
+              ranges.push(hiddenDeco.range(mark.from, mark.to))
+            }
+            break
+          }
+          // Hide the square brackets of inline footnotes (keep footnote refs for
+          // easier identification)
+          case 'Footnote': {
+            ranges.push(hiddenDeco.range(node.from, node.from + 2))
+            ranges.push(hiddenDeco.range(node.to - 1, node.to))
+            break
+          }
+        }
+      }
+    })
   }
 
-  eq (other: EmphasisWidget): boolean {
-    return other.nodeContents === this.nodeContents &&
-      other.node.from === this.node.from &&
-      other.node.to === this.node.to
-  }
-
-  toDOM (view: EditorView): HTMLElement {
-    let elem = document.createElement('span')
-    let contents = this.nodeContents
-    switch (this.node.type.name) {
-      case 'Emphasis':
-        elem = document.createElement('em')
-        contents = contents.replace(/[*_]{1}(.+?)[*_]{1}/, '$1')
-        break
-      case 'StrongEmphasis':
-        elem = document.createElement('strong')
-        contents = contents.replace(/[*_]{2}(.+?)[*_]{2}/, '$1')
-        break
-    }
-
-    elem.textContent = contents
-    elem.addEventListener('mousedown', clickAndSelect(view))
-    return elem
-  }
-
-  ignoreEvent (event: Event): boolean {
-    return event instanceof MouseEvent
-  }
+  return Decoration.set(ranges, true)
 }
 
-function shouldHandleNode (node: SyntaxNodeRef): boolean {
-  return [ 'Emphasis', 'StrongEmphasis', 'Strikethrough' ].includes(node.type.name)
-}
+export const renderEmphasis = ViewPlugin.fromClass(class {
+  decorations: DecorationSet
 
-function createWidget (state: EditorState, node: SyntaxNodeRef): EmphasisWidget|undefined {
-  return new EmphasisWidget(state.sliceDoc(node.from, node.to), node.node)
-}
+  constructor (view: EditorView) {
+    this.decorations = hideFormattingCharacters(view)
+  }
 
-export const renderEmphasis = renderInlineWidgets(shouldHandleNode, createWidget)
+  update (update: ViewUpdate): void {
+    this.decorations = hideFormattingCharacters(update.view)
+  }
+}, {
+  decorations: v => v.decorations
+})

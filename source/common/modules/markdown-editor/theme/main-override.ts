@@ -58,6 +58,15 @@ export const mainOverride = EditorView.baseTheme({
   '.cm-tooltip': {
     padding: '4px'
   },
+  // Footnotes
+  '.footnote': {
+    verticalAlign: 'super',
+    fontSize: '80%'
+  },
+  '.footnote-ref-label': {
+    verticalAlign: 'super',
+    fontSize: '80%'
+  },
   // Define the readability classes. Red, orange, and yellow indicate bad scores
   // Purple and blue indicate average scores, and green indicates good scores
   '&light .cm-readability-0': { backgroundColor: '#ff0000aa', color: '#444' },

@@ -312,6 +312,8 @@ there.
   patterns have removed all files so that none remain to be exported
 - Clicking on the "Project Properties" button in a directory properties popup
   with activated project functionality now closes the popup
+- Redid the emphasis renderer to work on the SyntaxTree directly, which makes
+  the emphasis render more properly and now works much faster than before
 
 ## Under the Hood
 
