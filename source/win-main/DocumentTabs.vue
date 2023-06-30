@@ -93,7 +93,6 @@ import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
 import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { tabFlowSelectors } from '@cds/core/internal'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
