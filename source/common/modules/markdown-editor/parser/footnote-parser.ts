@@ -63,6 +63,13 @@ export const footnoteRefParser: BlockParser = {
       bodyTo = bodyTo - lastline.length - 1
     }
 
+    // Since footnotes can be empty, the above while loop will substract one too
+    // much from empty footnotes (so that bodyTo = from - 1). Here we correct
+    // for that.
+    if (bodyTo < from) {
+      bodyTo = from
+    }
+
     const treeElem = partialParse(ctx, ctx.parser, footnoteBody.join('\n'), from)
     const body = ctx.elt('FootnoteRefBody', from, bodyTo, [treeElem])
 
