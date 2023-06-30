@@ -325,6 +325,8 @@ there.
 - Upgrade Chart.js to `4.x.x`
 - Upgrade CodeMirror to version 6
 - Upgrade to Yarn v2
+- Exchange `electron-devtools-installer` with `electron-devtools-assembler`, as
+  the former appears to be unmaintained
 - Switch from deprecated `@clr/icons` to `@cds/core`
 - Pandoc logs are now logged in every case
 - Improve the display and functionality of log messages

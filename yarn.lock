@@ -5119,15 +5119,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-devtools-installer@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "electron-devtools-installer@npm:3.2.0"
+"electron-devtools-assembler@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "electron-devtools-assembler@npm:1.2.0"
   dependencies:
     rimraf: ^3.0.2
     semver: ^7.2.1
     tslib: ^2.1.0
     unzip-crx-3: ^0.2.0
-  checksum: e87d4c9283f84ac610e9ee37d72677f18feed05174e9d5bf0415a56c3daac717e3f34a5a763499aff7fc2e565660d2ad66beb95d960e8176ed148acf1c3a416b
+  checksum: 2f107d5c2ab3c5579cae8e7a8ecdcc66b571ddca4c99a0b4aea2baf86124bd3d307f4e65e7d473ec25b3beede5f5882e0f96999511756c8bf4f5182dabe2a88f
   languageName: node
   linkType: hard
 
@@ -10290,7 +10290,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^2.0.0, readable-stream@npm:^2.0.1, readable-stream@npm:^2.0.5, readable-stream@npm:~2.3.6":
+"readable-stream@npm:^2.0.0, readable-stream@npm:^2.0.1, readable-stream@npm:^2.0.5":
   version: 2.3.7
   resolution: "readable-stream@npm:2.3.7"
   dependencies:
@@ -10325,6 +10325,21 @@ __metadata:
     events: ^3.3.0
     process: ^0.11.10
   checksum: cc1630c2de134aee92646e77b1770019633000c408fd48609babf2caa53f00ca794928023aa9ad3d435a1044cec87d2ce7e2b7389dd1caf948b65c175edb7f52
+  languageName: node
+  linkType: hard
+
+"readable-stream@npm:~2.3.6":
+  version: 2.3.8
+  resolution: "readable-stream@npm:2.3.8"
+  dependencies:
+    core-util-is: ~1.0.0
+    inherits: ~2.0.3
+    isarray: ~1.0.0
+    process-nextick-args: ~2.0.0
+    safe-buffer: ~5.1.1
+    string_decoder: ~1.1.1
+    util-deprecate: ~1.0.1
+  checksum: 65645467038704f0c8aaf026a72fbb588a9e2ef7a75cd57a01702ee9db1c4a1e4b03aaad36861a6a0926546a74d174149c8c207527963e0c2d3eee2f37678a42
   languageName: node
   linkType: hard
 
@@ -13340,7 +13355,7 @@ __metadata:
     d3: ^7.8.5
     electron: ^25.2.0
     electron-builder: ^24.5.0
-    electron-devtools-installer: ^3.2.0
+    electron-devtools-assembler: ^1.2.0
     eslint: ^8.43.0
     eslint-config-standard: ^17.1.0
     eslint-config-standard-with-typescript: ^35.0.0
