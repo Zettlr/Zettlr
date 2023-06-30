@@ -93,6 +93,7 @@ import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
 import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { tabFlowSelectors } from '@cds/core/internal'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -311,15 +312,17 @@ export default defineComponent({
       // an array manually. Also, we know every element will be a DIV.
       const tabs = [...this.container.querySelectorAll('[role="tab"]')] as HTMLDivElement[]
 
-      // Then, get the first one for which the left edge is less than the scrollLeft
-      // property, but the right edge is bigger.
+      // Test this from the back
+      tabs.reverse()
+
+      // Find the first tab whose left border is hidden behind the left edge of
+      // the container
       for (const tab of tabs) {
         const left = tab.offsetLeft
-        const right = left + tab.getBoundingClientRect().width
         const leftEdge = this.container.scrollLeft
 
-        if (left < leftEdge && right >= leftEdge) {
-          tab.scrollIntoView()
+        if (left < leftEdge) {
+          tab.scrollIntoView({ inline: 'start' })
           break
         }
       }
@@ -328,15 +331,15 @@ export default defineComponent({
       // Similar to scrollLeft, this does the same for the right hand side
       const tabs = [...this.container.querySelectorAll('[role="tab"]')] as HTMLDivElement[]
 
-      // Then, get the first one for which the right edge is less than the scrollLeft
-      // property, but the right edge is bigger.
-      const rightEdge = this.container.scrollLeft + this.container.getBoundingClientRect().width + 1
+      // Find the first tab whose right border is hidden behind the right edge
+      // of the container
+      const rightEdge = this.container.scrollLeft + this.container.getBoundingClientRect().width
       for (const tab of tabs) {
-        const left = tab.offsetLeft
-        const right = left + tab.getBoundingClientRect().width
+        const right = tab.offsetLeft + tab.getBoundingClientRect().width
 
-        if (left <= rightEdge && right > rightEdge) {
-          tab.scrollIntoView()
+        // NOTE: This is the width of the arrow buttons; TODO: Make dynamic!
+        if (right > rightEdge + 40) {
+          tab.scrollIntoView({ inline: 'end' })
           break
         }
       }
