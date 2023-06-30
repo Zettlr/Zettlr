@@ -196,7 +196,8 @@ export default class CiteprocProvider extends ProviderContract {
       }
 
       if (command === 'get-items') {
-        const db = this.databases.get(database)
+        const dbPath = database === CITEPROC_MAIN_DB ? this.mainLibrary : database
+        const db = this.databases.get(dbPath)
         if (db === undefined) {
           return []
         } else {
@@ -397,6 +398,7 @@ export default class CiteprocProvider extends ProviderContract {
    * @param   {string}  dbPath  The database to select
    */
   private selectDatabase (dbPath: string): void {
+    console.log(dbPath)
     if (dbPath === CITEPROC_MAIN_DB) {
       dbPath = this.mainLibrary // No specific database requested
     }
