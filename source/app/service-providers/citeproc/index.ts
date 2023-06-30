@@ -398,7 +398,6 @@ export default class CiteprocProvider extends ProviderContract {
    * @param   {string}  dbPath  The database to select
    */
   private selectDatabase (dbPath: string): void {
-    console.log(dbPath)
     if (dbPath === CITEPROC_MAIN_DB) {
       dbPath = this.mainLibrary // No specific database requested
     }
