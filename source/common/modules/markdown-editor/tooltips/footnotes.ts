@@ -85,7 +85,12 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   const fnBody = findRefForFootnote(view.state, fn)
 
   const { library } = view.state.field(configField).metadata
-  const tooltipContent = md2html(fnBody?.text ?? trans('No footnote text found.'), window.getCitationCallback(library))
+  const tooltipContent = md2html(
+    (fnBody === undefined || fnBody.text === '')
+      ? trans('No footnote text found.')
+      : fnBody.text,
+    window.getCitationCallback(library)
+  )
 
   return {
     pos: nodeAt.from,
