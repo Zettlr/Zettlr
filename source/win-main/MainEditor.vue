@@ -158,7 +158,6 @@ ipcRenderer.on('documents-update', (e, { event, context }) => {
         activeFileDescriptor.value = descriptor
         const library = descriptor.type === 'file' ? getBibliographyForDescriptor(descriptor) : undefined
         if (library !== undefined) {
-          console.log('New library detected!', library)
           updateCitationKeys(library).catch(e => console.error('Could not update citation keys', e))
         }
 

@@ -23,7 +23,7 @@ import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, St
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { search, searchKeymap } from '@codemirror/search'
-import { Compartment, EditorState, Prec, type Extension } from '@codemirror/state'
+import { Compartment, EditorState, type Extension } from '@codemirror/state'
 import {
   keymap,
   drawSelection,
@@ -263,7 +263,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     EditorView.domEventHandlers(mdPasteDropHandlers),
     // We need our custom keymaps first
     keymap.of(completionKeymap),
-    Prec.highest(keymap.of(customKeymap)),
+    keymap.of(customKeymap),
     // The parser generates the AST for the document ...
     markdownParser(),
     // ... which can then be styled with a highlighter
