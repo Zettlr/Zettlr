@@ -215,6 +215,9 @@ there.
   effect
 - **New Feature**: While modifying import and export profiles, Zettlr will now
   check them for validity, and inform you of any potential errors
+- **New Feature**: You can now specify the Pandoc working directory in a file's
+  frontmatter with the property `pandoc_working_dir` within the `zettlr`
+  object
 - Replaced the old Markdown-to-HTML and HTML-to-Markdown converter with more up-
   to-date modules. This should not change how pasting from HTML or copying as
   HTML work, but it could.

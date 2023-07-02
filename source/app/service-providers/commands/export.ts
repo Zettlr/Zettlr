@@ -21,6 +21,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
 import { type PandocProfileMetadata } from '@dts/common/assets'
+import isDir from '@common/util/is-dir'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
@@ -69,6 +70,13 @@ export default class Export extends ZettlrCommand {
 
       // The cwd, however, is the source file one's
       exporterOptions.cwd = fileDescriptor.dir
+
+      // A user can override this default by providing in a frontmatter the
+      // key zettlr.pandoc_working_dir: /path/to/directory
+      if (fileDescriptor.type === 'file' && typeof fileDescriptor.frontmatter?.zettlr?.pandoc_working_dir === 'string' && isDir(fileDescriptor.frontmatter.zettlr.pandoc_working_dir)) {
+        exporterOptions.cwd = fileDescriptor.frontmatter.zettlr.pandoc_working_dir
+      }
+
       switch (exportTo) {
         case 'ask': {
           const folderSelection = await this._app.windows.askDir(trans('Choose export destination'), null, trans('Save'))
