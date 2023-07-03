@@ -23,7 +23,8 @@ export const mainOverride = EditorView.baseTheme({
     backgroundColor: 'transparent'
   },
   '.cm-scroller': {
-    flexGrow: '1' // Ensure the content pushes possible panels towards the edge
+    flexGrow: '1', // Ensure the content pushes possible panels towards the edge
+    outline: '0' // Remove the outline
   },
   '.cm-scroller .muted': {
     opacity: '0.2'
