@@ -494,8 +494,12 @@ export async function move (
   let newSource
   if (sourceObject.type === 'directory') {
     newSource = await parse(targetPath, cache, parser, sorter, false)
-  } else {
+  } else if (sourceObject.type === 'file') {
     newSource = await FSALFile.parse(targetPath, cache, parser, false)
+  } else if (sourceObject.type === 'code') {
+    newSource = await FSALCodeFile.parse(targetPath, cache, false)
+  } else {
+    newSource = await FSALAttachment.parse(targetPath)
   }
 
   // Add it to the new target
