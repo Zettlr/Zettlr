@@ -21,6 +21,9 @@ const ipcRenderer = window.ipc
 const clipboard = window.clipboard
 
 export default function displayFileContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor, el: HTMLElement, callback: any): void {
+  const isMac = process.platform === 'darwin'
+  const isWin = process.platform === 'win32'
+
   const template: AnyMenuItem[] = [
     {
       label: trans('Open in a new tab'),
@@ -61,6 +64,12 @@ export default function displayFileContext (event: MouseEvent, fileObject: MDFil
       type: 'separator'
     },
     {
+      label: trans('Copy path'),
+      id: 'menu.copy_path',
+      type: 'normal',
+      enabled: true
+    },
+    {
       label: trans('Copy filename'),
       id: 'menu.copy_filename',
       type: 'normal',
@@ -76,7 +85,7 @@ export default function displayFileContext (event: MouseEvent, fileObject: MDFil
       type: 'separator'
     },
     {
-      label: trans('Show file'),
+      label: isMac ? trans('Reveal in Finder') : isWin ? trans('Reveal in Explorer') : trans('Reveal in File Browser'),
       id: 'menu.show_file',
       type: 'normal',
       enabled: true
@@ -100,6 +109,9 @@ export default function displayFileContext (event: MouseEvent, fileObject: MDFil
     switch (clickedID) {
       case 'menu.copy_filename':
         clipboard.writeText(fileObject.name)
+        break
+      case 'menu.copy_path':
+        clipboard.writeText(fileObject.path)
         break
       case 'menu.copy_id':
         if (fileObject.type === 'file') {

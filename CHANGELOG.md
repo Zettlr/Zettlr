@@ -218,6 +218,8 @@ there.
 - **New Feature**: You can now specify the Pandoc working directory in a file's
   frontmatter with the property `pandoc_working_dir` within the `zettlr`
   object
+- **New Feature**: Right-clicking on a file or directory now also gives you the
+  option to copy the absolute file or folder path to the clipboard
 - Replaced the old Markdown-to-HTML and HTML-to-Markdown converter with more up-
   to-date modules. This should not change how pasting from HTML or copying as
   HTML work, but it could.
