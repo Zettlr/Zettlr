@@ -220,6 +220,10 @@ there.
   object
 - **New Feature**: Right-clicking on a file or directory now also gives you the
   option to copy the absolute file or folder path to the clipboard
+- **New Feature**: There is now a new menu item that allows you to conveniently
+  clear the FSAL cache in case of some errors
+- Removed the "Get LaTeX" menu item since (hopefully) now the advice in the docs
+  and in the tutorial are sufficient
 - Replaced the old Markdown-to-HTML and HTML-to-Markdown converter with more up-
   to-date modules. This should not change how pasting from HTML or copying as
   HTML work, but it could.
