@@ -842,24 +842,29 @@ export default class FSAL extends ProviderContract {
    */
   public async createFile (src: DirDescriptor, options: { name: string, content: string, type: 'code'|'file' }): Promise<void> {
     this._fsalIsBusy = true
+    const fullPath = path.join(src.path, options.name)
     // This action needs the cache because it'll parse a file
     // NOTE: Generates an add-event
-    this._watchdog.ignoreEvents([{
-      event: 'add',
-      path: path.join(src.path, options.name)
-    }])
+    this._watchdog.ignoreEvents([{ event: 'add', path: fullPath }])
 
-    const sorter = this.getDirectorySorter()
+    const isOutsideOfFSAL = this.findDir(src.path) === undefined
 
-    await FSALDir.createFile(
-      src,
-      options,
-      this._cache,
-      this.getMarkdownFileParser(),
-      sorter
-    )
-    await this.sortDirectory(src)
-    this._recordFiletreeChange('add', path.join(src.path, options.name))
+    if (isOutsideOfFSAL) {
+      // The user wants a file outside of the FSAL
+      await fs.writeFile(fullPath, '')
+      await this.loadPath(fullPath)
+    } else {
+      // The file will be created inside the FSAL
+      await FSALDir.createFile(
+        src,
+        options,
+        this._cache,
+        this.getMarkdownFileParser(),
+        this.getDirectorySorter()
+      )
+      await this.sortDirectory(src)
+      this._recordFiletreeChange('add', fullPath)
+    }
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
