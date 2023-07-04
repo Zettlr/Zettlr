@@ -25,6 +25,9 @@ import type { ColAlignment, TableEditorOptions } from './types'
 import { diskIcon } from './save-icon'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { md2html } from '@common/modules/markdown-utils'
+import { keyboardShortcut } from './util/keyboard-shortcut'
+import { getCursorPosition } from './util/cursor-position'
+import { selectElementContents } from './util/select-in-element'
 
 // Look what I found: https://www.w3schools.com/jsref/dom_obj_table.asp
 
@@ -391,7 +394,7 @@ export default class TableEditor {
       }
     }
 
-    this.selectCell()
+    this.selectCell('start')
   }
 
   /**
@@ -475,9 +478,6 @@ export default class TableEditor {
    * @param   {KeyboardEvent}  evt  The keyboard event
    */
   _onKeyDown (event: KeyboardEvent): void {
-    const cmd = process.platform === 'darwin' && event.metaKey
-    const ctrl = process.platform !== 'darwin' && event.ctrlKey
-
     // If the user types Cmd/Ctrl+S, this means that the user wants to save the
     // table. Here we intercept that command and trigger a saveIntent, which
     // writes the table to the document. NOTE: Because there is the possibility
@@ -485,51 +485,37 @@ export default class TableEditor {
     // changes have been applied, we "preventDefault" here. This means that the
     // user has to press Cmd/Ctrl+S twice to actually save the document contents
     // but this way it prevents data loss much better.
-    if (event.key === 's' && (cmd || ctrl)) {
+    const target = event.target as HTMLElement
+    const cursorPosition = getCursorPosition(target)
+    const isAtEnd = cursorPosition === target.textContent?.length
+    const isAtBegin = cursorPosition === 0
+
+    if (keyboardShortcut('CmdOrCtrl+S', event)) {
       if (!this._isClean) {
         if (this._options.saveIntent !== undefined) {
-          event.preventDefault()
           this._options.saveIntent(this)
-          return
         }
       }
+    } else if (keyboardShortcut('Shift+Tab', event)) {
+      this.previousCell()
+    } else if (keyboardShortcut('Tab', event)) {
+      this.nextCell()
+    } else if (keyboardShortcut('Enter', event)) {
+      this.nextRow()
+    } else if (isAtBegin && keyboardShortcut('ArrowLeft', event)) {
+      this.previousCell()
+    } else if (isAtEnd && keyboardShortcut('ArrowRight', event)) {
+      this.nextCell()
+    } else if (keyboardShortcut('CmdOrCtrl+B', event)) {
+      // TODO: Implement bold
+    } else if (keyboardShortcut('CmdOrCtrl+I', event)) {
+      // TODO: Implement italics
+    } else if (keyboardShortcut('CmdOrCtrl+U', event)) {
+      // Markdown doesn't know underline, so here we prevent this to apply
     }
 
     // Also recalculate the button positions as the table's size may have changed.
     this._recalculateEdgeButtonPositions()
-
-    if (event.target === null) {
-      return
-    }
-
-    const target = event.target as HTMLElement
-    const cursorPosition = this._getCursorPositionInElement(target)
-    const isAtEnd = cursorPosition === target.textContent?.length
-    const isAtBegin = cursorPosition === 0
-
-    if (event.key === 'ArrowLeft' && isAtBegin) {
-      event.preventDefault()
-    } else if (event.key === 'ArrowRight' && isAtEnd) {
-      event.preventDefault()
-    } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-      // TODO: Chrome somehow triggers an onBlur event when the input is only
-      // single-line. Instead of just preventingDefault we should implement a
-      // go-to-start and go-to-end behavior. I was just to lazy to do that here.
-      event.preventDefault()
-    } else if (event.key === 'Enter') {
-      event.preventDefault()
-      this.nextRow()
-      // In this case, also select the full text content
-      // this._selectElementContents(evt.target)
-    } else if (event.key === 'Tab') {
-      event.preventDefault()
-      // Move to next column, or to previous if shift was pressed.
-      if (event.shiftKey) {
-        this.previousCell()
-      } else {
-        this.nextCell()
-      }
-    }
   }
 
   /**
@@ -784,7 +770,7 @@ export default class TableEditor {
       this._cellIndex = this._cols - 1 // Zero-based indexing
     }
 
-    this.selectCell()
+    this.selectCell('end')
     this._options.onCellChange?.(this)
   }
 
@@ -816,7 +802,7 @@ export default class TableEditor {
     this._cellIndex = newCellIndex
     this._rowIndex = newRowIndex
 
-    this.selectCell()
+    this.selectCell('start')
     this._options.onCellChange?.(this)
   }
 
@@ -832,7 +818,7 @@ export default class TableEditor {
 
     this._rowIndex--
 
-    this.selectCell()
+    this.selectCell('end')
     this._options.onCellChange?.(this)
   }
 
@@ -856,7 +842,7 @@ export default class TableEditor {
 
     // Set the new index and select the cell
     this._rowIndex = newRowIndex
-    this.selectCell()
+    this.selectCell('start')
     this._options.onCellChange?.(this)
   }
 
@@ -953,7 +939,7 @@ export default class TableEditor {
     } else {
       this._rowIndex--
     }
-    this.selectCell()
+    this.selectCell('start')
 
     // Now pluck the row.
     this._ast.splice(rowToRemove, 1)
@@ -963,7 +949,7 @@ export default class TableEditor {
 
     if (firstRow) {
       this._rowIndex = 0
-      this.selectCell()
+      this.selectCell('start')
     }
 
     this._signalContentChange() // Notify the caller
@@ -989,7 +975,7 @@ export default class TableEditor {
     } else {
       this._cellIndex--
     }
-    this.selectCell()
+    this.selectCell('start')
 
     // Now pluck the column.
     for (let i = 0; i < this._ast.length; i++) {
@@ -1002,7 +988,7 @@ export default class TableEditor {
 
     if (firstCol) {
       this._cellIndex = 0
-      this.selectCell()
+      this.selectCell('start')
     }
 
     this._signalContentChange() // Notify the caller
@@ -1036,10 +1022,24 @@ export default class TableEditor {
   }
 
   /**
-  * Selects the current cell
-  */
-  selectCell (): void {
-    this._elem.rows[this._rowIndex].cells[this._cellIndex].focus()
+   * Selects the current cell. The parameter controls where the cursor ends up.
+   *
+   * @param  {any}  where  If "start" or "end", puts a cursor there. Passing an
+   *                       object with `from` and `to` properties allows to
+   *                       select actual ranges.
+   */
+  selectCell (where: 'start'|'end'|{ from: number, to: number }): void {
+    const currentCell = this._elem.rows[this._rowIndex].cells[this._cellIndex]
+    currentCell.focus()
+    const textLength = currentCell.textContent?.length ?? 0
+
+    if (where === 'start') {
+      selectElementContents(currentCell)
+    } else if (where === 'end') {
+      selectElementContents(currentCell, textLength, textLength)
+    } else {
+      selectElementContents(currentCell, where.from, where.to)
+    }
     this._recalculateEdgeButtonPositions()
   }
 
@@ -1056,41 +1056,5 @@ export default class TableEditor {
     // Create the styles
     const styleElement = computeCSS(this._edgeButtonSize)
     document.head.prepend(styleElement)
-  }
-
-  /**
-   * Selects the complete text contents of a given element.
-   * @param {DOMNode} el The element which contents should be selected.
-   */
-  _selectElementContents (el: Node): void {
-    // Selects the text contents of a given element.
-    const range = document.createRange()
-    range.selectNodeContents(el)
-    const sel = window.getSelection()
-
-    if (sel !== null) {
-      sel.removeAllRanges()
-      sel.addRange(range)
-    }
-  }
-
-  /**
-   * Calculates the position of the caret in the given DOM element.
-   * @param {DOMNode} elem The element in which we should compute the caret position
-   */
-  _getCursorPositionInElement (elem: ParentNode): number {
-    let caretPos = 0
-    let sel
-    let range
-
-    sel = window.getSelection()
-    if (sel !== null && sel.rangeCount > 0) {
-      range = sel.getRangeAt(0)
-      if (range.commonAncestorContainer.parentNode === elem) {
-        caretPos = range.endOffset
-      }
-    }
-
-    return caretPos
   }
 }
