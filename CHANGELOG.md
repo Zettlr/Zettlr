@@ -242,6 +242,7 @@ there.
   up within a long list just to see the tabbar
 - Lists (especially in the assets manager) now also allow you to remove entries
   with a right click
+- Fixed the Simple PDF, Textbundle, and Textpack exporters
 - Added new variables for snippets:
   - `CURRENT_ID`: Holds the currently assigned Zettelkasten ID to the file
   - `FILENAME`: Holds the filename of the current file
