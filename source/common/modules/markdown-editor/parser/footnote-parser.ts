@@ -22,7 +22,8 @@ export const footnoteParser: InlineParser = {
   before: 'Link', // [^1] will otherwise be detected as a link
   parse (ctx, next, pos) {
     const relativePosition = pos - ctx.offset
-    const match = /\[\^[^\s]+\]|\[\^.+\^\]/.exec(ctx.text.slice(relativePosition))
+    // Matches [^identifier] (alternative 1) and ^[inline] (alternative 2)
+    const match = /\[\^[^\s]+?\]|\^\[.+?\]/.exec(ctx.text.slice(relativePosition))
 
     if (match === null || match.index > 0) {
       return -1
