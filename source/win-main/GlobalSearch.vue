@@ -560,6 +560,7 @@ body div#global-search-pane {
 
       div.overflow-hidden {
         overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 
