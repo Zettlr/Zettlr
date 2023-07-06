@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-07-03 02:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Ander Romero <anderromeroaldana@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ca-CA\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr ","
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Afrikaans"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -35,7 +35,7 @@ msgstr "Àrab"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "Asturià"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -47,7 +47,7 @@ msgstr "Búlgar"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "Bretó"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
@@ -55,11 +55,11 @@ msgstr "Bosnià"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "Català"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Czech"
-msgstr ""
+msgstr "Txec"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Danish"
@@ -74,22 +74,20 @@ msgid "German (Switzerland)"
 msgstr "Alemany (Suïssa)"
 
 #: source/common/util/map-lang-code.ts:45
-#, fuzzy
 msgid "German (simple)"
-msgstr "Alemany (Àustria)"
+msgstr "Alemany (simple)"
 
 #: source/common/util/map-lang-code.ts:46
 msgid "German (Germany)"
 msgstr "Alemany (Alemanya)"
 
 #: source/common/util/map-lang-code.ts:47
-#, fuzzy
 msgid "German (Luxembourg)"
-msgstr "Alemany (Àustria)"
+msgstr "Alemany (Luxembourg)"
 
 #: source/common/util/map-lang-code.ts:48
 msgid "German"
-msgstr ""
+msgstr "Alemany"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "Greek"
@@ -112,9 +110,8 @@ msgid "English (India)"
 msgstr "Anglès (Índia)"
 
 #: source/common/util/map-lang-code.ts:54
-#, fuzzy
 msgid "English (New Zealand)"
-msgstr "Anglès (Canada)"
+msgstr "Anglès (Nova Zelanda)"
 
 #: source/common/util/map-lang-code.ts:55
 msgid "English (United States)"
@@ -125,27 +122,24 @@ msgid "English (South Africa)"
 msgstr "Anglès (Sud-àfrica)"
 
 #: source/common/util/map-lang-code.ts:57
-#, fuzzy
 msgid "English"
-msgstr "Anglès (Índia)"
+msgstr "Anglès"
 
 #: source/common/util/map-lang-code.ts:58
 msgid "Esperanto"
 msgstr "Esperanto"
 
 #: source/common/util/map-lang-code.ts:59
-#, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "Espanyol (Espanya)"
+msgstr "Espanyol (Argentina)"
 
 #: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Spain)"
 msgstr "Espanyol (Espanya)"
 
 #: source/common/util/map-lang-code.ts:61
-#, fuzzy
 msgid "Spanish"
-msgstr "Danès"
+msgstr "Espanyol"
 
 #: source/common/util/map-lang-code.ts:62
 msgid "Estonian"
@@ -168,31 +162,28 @@ msgid "Faroese"
 msgstr "Feroès"
 
 #: source/common/util/map-lang-code.ts:67
-#, fuzzy
 msgid "French (Belgium)"
-msgstr "Neerlandès (Bèlgica)"
+msgstr "Francès (Bèlgica)"
 
 #: source/common/util/map-lang-code.ts:68
-#, fuzzy
 msgid "French (Switzerland)"
-msgstr "Alemany (Suïssa)"
+msgstr "Francès (Suïssa)"
 
 #: source/common/util/map-lang-code.ts:69
 msgid "French (France)"
 msgstr "Francès (França)"
 
 #: source/common/util/map-lang-code.ts:70
-#, fuzzy
 msgid "French (Luxembourg)"
-msgstr "Luxemburguès"
+msgstr "Francès (Luxemburg)"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Francès (Principat de Mònaco)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
-msgstr ""
+msgstr "Francès"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
@@ -203,9 +194,8 @@ msgid "Scottish (Gaelic)"
 msgstr "Escocès (Gaèlic)"
 
 #: source/common/util/map-lang-code.ts:75
-#, fuzzy
 msgid "Galician"
-msgstr "Gallec (Espanya)"
+msgstr "Gallec"
 
 #: source/common/util/map-lang-code.ts:76
 msgid "Hebrew"
@@ -236,18 +226,16 @@ msgid "Icelandic"
 msgstr "Islandès"
 
 #: source/common/util/map-lang-code.ts:83
-#, fuzzy
 msgid "Italian (Switzerland)"
-msgstr "Alemany (Suïssa)"
+msgstr "Italià (Suïssa)"
 
 #: source/common/util/map-lang-code.ts:84
 msgid "Italian (Italy)"
 msgstr "Italià (Itàlia)"
 
 #: source/common/util/map-lang-code.ts:85
-#, fuzzy
 msgid "Italian"
-msgstr "Cursiva"
+msgstr "Italià"
 
 #: source/common/util/map-lang-code.ts:86
 msgid "Japanese"
@@ -259,7 +247,7 @@ msgstr "Georgià"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Khmer (Cambodja)"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
@@ -290,16 +278,14 @@ msgid "Mongolian"
 msgstr "Mongol"
 
 #: source/common/util/map-lang-code.ts:96
-#, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "Malai"
+msgstr "Malai (Brunei)"
 
 #: source/common/util/map-lang-code.ts:97
 msgid "Malaysian (Malaysia)"
-msgstr "Malai"
+msgstr "Malai (Malàsia)"
 
 #: source/common/util/map-lang-code.ts:98
-#, fuzzy
 msgid "Malaysian"
 msgstr "Malai"
 
@@ -321,43 +307,39 @@ msgstr "Neerlandès (Països Baixos)"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
-msgstr ""
+msgstr "Neerlandès"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
 msgstr "Norueg (Nyorsk)"
 
 #: source/common/util/map-lang-code.ts:105
-#, fuzzy
 msgid "Norwegian"
-msgstr "Georgià"
+msgstr "Norueg"
 
 #: source/common/util/map-lang-code.ts:106
 msgid "Polish"
 msgstr "Polonès"
 
 #: source/common/util/map-lang-code.ts:107
-#, fuzzy
 msgid "Portuguese (Angola)"
-msgstr "Portuguès (Portual)"
+msgstr "Portuguès (Angola)"
 
 #: source/common/util/map-lang-code.ts:108
 msgid "Portuguese (Brazil)"
 msgstr "Portuguès (Brasil)"
 
 #: source/common/util/map-lang-code.ts:109
-#, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr "Portuguès (Brasil)"
+msgstr "Portuguès (Moçambic)"
 
 #: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Portugal)"
 msgstr "Portuguès (Portual)"
 
 #: source/common/util/map-lang-code.ts:111
-#, fuzzy
 msgid "Portuguese"
-msgstr "Portuguès (Brasil)"
+msgstr "Portuguès"
 
 #: source/common/util/map-lang-code.ts:112
 msgid "Romanian"
@@ -384,31 +366,28 @@ msgid "Serbian"
 msgstr "Serbi"
 
 #: source/common/util/map-lang-code.ts:118
-#, fuzzy
 msgid "Albanian"
-msgstr "Romanès"
+msgstr "Albanès"
 
 #: source/common/util/map-lang-code.ts:119
-#, fuzzy
 msgid "Albanian (Albania)"
-msgstr "Malai"
+msgstr "Albanès (Albània)"
 
 #: source/common/util/map-lang-code.ts:120
 msgid "Swedish"
 msgstr "Suec"
 
 #: source/common/util/map-lang-code.ts:121
-#, fuzzy
 msgid "Tamil (India)"
-msgstr "Anglès (Índia)"
+msgstr "Tàmit (Índia)"
 
 #: source/common/util/map-lang-code.ts:122
 msgid "Thai"
-msgstr ""
+msgstr "Tailandès"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Tagalog (Filipí)"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Turkish"
@@ -420,7 +399,7 @@ msgstr "Ucraïnès"
 
 #: source/common/util/map-lang-code.ts:126
 msgid "Urdu"
-msgstr ""
+msgstr "Urdú"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Vietnamese"
@@ -438,14 +417,12 @@ msgid "Chinese (China)"
 msgstr "Xinès (Xina)"
 
 #: source/common/util/map-lang-code.ts:132
-#, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "Xinès (Xina)"
+msgstr "Xinès (Taiwan)"
 
 #: source/common/util/map-lang-code.ts:133
-#, fuzzy
 msgid "Chinese"
-msgstr "Xinès (Xina)"
+msgstr "Xinès"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
@@ -453,12 +430,12 @@ msgstr "ara mateix"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Cmd/Ctrl-clic per seguir aquest enllaç"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "El fitxer %s no existeix."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
 msgid "Word count"
@@ -473,7 +450,7 @@ msgstr "Modificat"
 #: source/app/service-providers/menu/menu.win32.ts:140
 #: source/app/service-providers/menu/menu.darwin.ts:166
 msgid "Open…"
-msgstr "Obre..."
+msgstr "Obre…"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
 #: source/win-main/file-manager/util/file-item-context.ts:26
@@ -543,7 +520,7 @@ msgstr "Cancel·lar"
 #: source/common/modules/markdown-editor/renderers/render-images.ts:94
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Imatge no trobada: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
@@ -565,7 +542,7 @@ msgstr ""
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Obre el panell de diagnòstic"
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
 #: source/tmp/PopoverDocInfo.vue.ts:63 source/tmp/PopoverFileProps.vue.ts:89
@@ -584,16 +561,16 @@ msgstr "%s caràcters"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivat"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
 #, fuzzy
 msgid "Custom"
-msgstr "CSS personalitzat"
+msgstr "Personalitzat"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "Detecta automàticament"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
@@ -724,17 +701,17 @@ msgstr "Obre la carpeta"
 #: source/app/service-providers/menu/menu.win32.ts:90
 #: source/app/service-providers/menu/menu.darwin.ts:116
 msgid "New File…"
-msgstr "Nou fitxer..."
+msgstr "Nou fitxer…"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:58
 #: source/app/service-providers/menu/menu.win32.ts:129
 #: source/app/service-providers/menu/menu.darwin.ts:155
 msgid "New directory…"
-msgstr "Nova carpeta..."
+msgstr "Nova carpeta…"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:69
 msgid "Check for directory …"
-msgstr "Revisa la carpeta..."
+msgstr "Revisa la carpeta …"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:86
 msgid "Export Project"
@@ -874,7 +851,7 @@ msgstr "Màxima alçada de les imatges (en %)"
 
 #: source/win-preferences/schema/general.ts:23
 msgid "Application language"
-msgstr ""
+msgstr "Idioma de l'aplicació"
 
 #: source/win-preferences/schema/general.ts:31
 #: source/app/service-providers/menu/menu.win32.ts:430
@@ -1086,7 +1063,7 @@ msgid ""
 "selected directory."
 msgstr ""
 "Carpeta actual de treball: els fitxers exportats es desaran en aquesta "
-"carpeta"
+"carpeta."
 
 #: source/win-preferences/schema/export.ts:54
 msgid "Ask for directory"
@@ -1226,9 +1203,8 @@ msgid "Check Markdown for style issues"
 msgstr ""
 
 #: source/win-preferences/schema/editor.ts:102
-#, fuzzy
 msgid "Show statusbar"
-msgstr "Mostra el Zettlr"
+msgstr "Mostra la barra d'estat"
 
 #: source/win-preferences/schema/editor.ts:109
 msgid "Mute non-focused lines in distraction-free mode"
@@ -1250,7 +1226,7 @@ msgstr "Activa l'editor de taules"
 
 #: source/win-preferences/schema/editor.ts:129
 msgid "Show link previews"
-msgstr ""
+msgstr "Mostra previsualitzacions dels enllaços"
 
 #: source/win-preferences/schema/editor.ts:134
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -1258,46 +1234,44 @@ msgstr "Compta caràcters en lloc de paraules (per exemple, per al xinès)"
 
 #: source/win-preferences/schema/spellchecking.ts:24
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "Fes servir LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:29
 msgid "Strictness"
-msgstr ""
+msgstr "Rigor"
 
 #: source/win-preferences/schema/spellchecking.ts:31
-#, fuzzy
 msgid "Standard"
-msgstr "Calendari"
+msgstr "Estàndard"
 
 #: source/win-preferences/schema/spellchecking.ts:32
 msgid "Picky"
-msgstr ""
+msgstr "Minuciós"
 
 #: source/win-preferences/schema/spellchecking.ts:39
 msgid "Mother tongue"
-msgstr ""
+msgstr "Llengua materna"
 
 #: source/win-preferences/schema/spellchecking.ts:41
 msgid "Not set"
-msgstr ""
+msgstr "No definida"
 
 #: source/win-preferences/schema/spellchecking.ts:48
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "Proveïdor de LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:51
 #: source/win-preferences/schema/spellchecking.ts:58
-#, fuzzy
 msgid "Custom server"
-msgstr "CSS personalitzat"
+msgstr "Servidor personalitzat"
 
 #: source/win-preferences/schema/spellchecking.ts:65
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "Nom d'usuari de LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:71
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "Clau d'API de LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:79
 msgid ""
@@ -1306,7 +1280,7 @@ msgstr "Seleccioneu les llengües de la verificació ortogràfica automàtica"
 
 #: source/win-preferences/schema/spellchecking.ts:84
 msgid "Search for dictionaries &hellip;"
-msgstr "Busca diccionaris &hellip;"
+msgstr "Cerca diccionaris &hellip;"
 
 #: source/win-preferences/schema/spellchecking.ts:88
 msgid "User dictionary. Remove words by clicking them."
@@ -1319,7 +1293,7 @@ msgstr "Entrada de diccionari"
 #: source/win-preferences/schema/spellchecking.ts:93
 #: source/win-preferences/schema/advanced.ts:96
 msgid "Search for entries …"
-msgstr "Cerca les entrades..."
+msgstr "Cerca les entrades …"
 
 #: source/win-preferences/schema/advanced.ts:23
 msgid "Pattern for new filenames"
@@ -1407,9 +1381,8 @@ msgid "The requested directory was not found."
 msgstr "No s'ha trobat la carpeta sol·licitada"
 
 #: source/app/service-providers/commands/dir-project-export.ts:72
-#, fuzzy
 msgid "Cannot export project"
-msgstr "Exporta el projecte"
+msgstr "No s'ha pogut exportar el projecte"
 
 #: source/app/service-providers/commands/dir-project-export.ts:73
 msgid ""
@@ -1419,12 +1392,11 @@ msgstr ""
 
 #: source/app/service-providers/commands/dir-project-export.ts:129
 msgid "Project successfully exported. Click to show."
-msgstr ""
+msgstr "Projecte exportat satisfactòriament. Feu clic per mostrar."
 
 #: source/app/service-providers/commands/dir-project-export.ts:129
-#, fuzzy
 msgid "Export"
-msgstr "Exporta..."
+msgstr "Exporta"
 
 #: source/app/service-providers/commands/file-new.ts:156
 #: source/app/service-providers/commands/file-duplicate.ts:43
@@ -1436,7 +1408,7 @@ msgstr "No s'ha pogut crear el fitxer"
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Còpia de %s"
 
 #: source/app/service-providers/commands/request-move.ts:60
 msgid "Cannot move directory"
@@ -1514,18 +1486,18 @@ msgstr "Hi ha hagut un problema a l'exportar: %s"
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/config/index.ts:431
 msgid "Confirm"
-msgstr ""
+msgstr "Confimra"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Reemplaça l'etiqueta \"%s\" per \"%s\" a %s fitxers?"
 
 #: source/app/service-providers/commands/rename-tag.ts:47
 #: source/app/service-providers/commands/file-rename.ts:96
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: source/app/service-providers/commands/dir-new.ts:36
 #: source/app/service-providers/commands/dir-new.ts:37
@@ -1592,11 +1564,11 @@ msgstr "Paquet de text amb malformacions: %s"
 
 #: source/app/service-providers/commands/language-tool.ts:187
 msgid "Document too long"
-msgstr ""
+msgstr "Document massa llarg"
 
 #: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
-msgstr ""
+msgstr "sense connexió"
 
 #: source/app/service-providers/commands/import.ts:35
 msgid "You have to select a directory to import to."
@@ -1646,7 +1618,7 @@ msgstr ""
 #: source/app/service-providers/commands/file-rename.ts:97
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: source/app/service-providers/updates/index.ts:176
 #, javascript-format
@@ -1698,16 +1670,15 @@ msgstr "Hi ha una actualització a la versió %s disponible!"
 
 #: source/app/service-providers/config/index.ts:423
 msgid "Changing this option requires a restart to take effect."
-msgstr ""
+msgstr "Un canvi en aquesta opció necessita un reinici per veure's reflectit."
 
 #: source/app/service-providers/config/index.ts:426
-#, fuzzy
 msgid "Restart now"
-msgstr "ara mateix"
+msgstr "Reinicia ara mateix"
 
 #: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
-msgstr ""
+msgstr "Reinicia més tard"
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -1754,9 +1725,8 @@ msgid "Unsaved changes"
 msgstr "Canvis no desats"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr "Hi ha canvis no desats al fitxer actual. Voleu desar-los o ometre'ls?"
+msgstr "Hi ha canvis no desats. Voleu desar-los primer?"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
@@ -1817,7 +1787,7 @@ msgstr "Fitxer"
 #: source/app/service-providers/menu/menu.win32.ts:149
 #: source/app/service-providers/menu/menu.darwin.ts:175
 msgid "Open Workspace …"
-msgstr "Obre l'espai de treball"
+msgstr "Obre l'espai de treball …"
 
 #: source/app/service-providers/menu/menu.win32.ts:173
 #: source/app/service-providers/menu/menu.darwin.ts:208
@@ -1832,23 +1802,23 @@ msgstr "Fitxer anterior"
 #: source/app/service-providers/menu/menu.win32.ts:198
 #: source/app/service-providers/menu/menu.darwin.ts:233
 msgid "Import files…"
-msgstr "Importa fitxers..."
+msgstr "Importa fitxers…"
 
 #: source/app/service-providers/menu/menu.win32.ts:206
 #: source/app/service-providers/menu/menu.darwin.ts:241
 msgid "Export…"
-msgstr "Exporta..."
+msgstr "Exporta…"
 
 #: source/app/service-providers/menu/menu.win32.ts:214
 #: source/app/service-providers/menu/menu.darwin.ts:249
 msgid "Print…"
-msgstr "Imprimeix..."
+msgstr "Imprimeix…"
 
 #: source/app/service-providers/menu/menu.win32.ts:222
 #: source/app/service-providers/menu/menu.win32.ts:226
 #: source/app/service-providers/menu/menu.darwin.ts:51
 msgid "Preferences…"
-msgstr "Preferències..."
+msgstr "Preferències…"
 
 #: source/app/service-providers/menu/menu.win32.ts:234
 #: source/app/service-providers/menu/menu.darwin.ts:59
@@ -1858,17 +1828,17 @@ msgstr "Gestor de recursos"
 #: source/app/service-providers/menu/menu.win32.ts:242
 #: source/app/service-providers/menu/menu.darwin.ts:67
 msgid "Manage Tags…"
-msgstr "Gestiona les etiquetes..."
+msgstr "Gestiona les etiquetes…"
 
 #: source/app/service-providers/menu/menu.win32.ts:254
 #: source/app/service-providers/menu/menu.darwin.ts:260
 msgid "Import translation…"
-msgstr "Importa la traducció..."
+msgstr "Importa la traducció…"
 
 #: source/app/service-providers/menu/menu.win32.ts:262
 #: source/app/service-providers/menu/menu.darwin.ts:268
 msgid "Import dictionary…"
-msgstr "Importa el diccionari..."
+msgstr "Importa el diccionari…"
 
 #: source/app/service-providers/menu/menu.win32.ts:308
 #: source/app/service-providers/menu/menu.darwin.ts:104
@@ -1914,7 +1884,7 @@ msgstr "Mostra"
 #: source/app/service-providers/menu/menu.win32.ts:440
 #: source/app/service-providers/menu/menu.darwin.ts:458
 msgid "Additional Information"
-msgstr "Informació adicional"
+msgstr "Informació addicional"
 
 #: source/app/service-providers/menu/menu.win32.ts:450
 #: source/app/service-providers/menu/menu.darwin.ts:468
@@ -2015,7 +1985,7 @@ msgstr "Sobre el Zettlr"
 #: source/app/service-providers/menu/menu.win32.ts:621
 #: source/app/service-providers/menu/menu.darwin.ts:648
 msgid "Support Zettlr"
-msgstr "Dóna suport a Zettlr"
+msgstr "Dona suport a Zettlr"
 
 #: source/app/service-providers/menu/menu.win32.ts:631
 #: source/app/service-providers/menu/menu.darwin.ts:658
@@ -2065,11 +2035,11 @@ msgstr "Parleu"
 
 #: source/app/service-providers/menu/menu.darwin.ts:429
 msgid "Start speaking"
-msgstr "Comença a parlar"
+msgstr "Comenceu a parlar"
 
 #: source/app/service-providers/menu/menu.darwin.ts:434
 msgid "Stop speaking"
-msgstr "Deixa de parlar"
+msgstr "Deixeu de parlar"
 
 #: source/app/service-providers/menu/menu.darwin.ts:593
 msgid "Bring All to Front"
@@ -2201,7 +2171,7 @@ msgstr "Creat"
 
 #: source/tmp/PopoverFileProps.vue.ts:74
 msgid "Set writing target…"
-msgstr "Estableix un objectiu d'escriptura"
+msgstr "Estableix un objectiu d'escriptura…"
 
 #: source/tmp/PopoverFileProps.vue.ts:77 source/tmp/file-item.vue.ts:193
 msgid "Characters"
@@ -2242,7 +2212,7 @@ msgstr "No hi ha actualitzacions disponibles. Ja tens la versió més recent."
 
 #: source/tmp/App.vue.ts:132
 msgid "Starting update …"
-msgstr "Començant l'actualització..."
+msgstr "Començant l'actualització …"
 
 #: source/tmp/RelatedFilesTab.vue.ts:30
 msgid "No related files"
@@ -2250,15 +2220,15 @@ msgstr "No hi ha fitxers relacionats"
 
 #: source/tmp/RelatedFilesTab.vue.ts:33
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Aquesta relació està basada en un enllaç bidireccional."
 
 #: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Aquesta relació està basada en un enllaç de sortida."
 
 #: source/tmp/RelatedFilesTab.vue.ts:39
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Aquesta relació està basada en un retroenllaç."
 
 #: source/tmp/RelatedFilesTab.vue.ts:228
 #, javascript-format
@@ -2267,15 +2237,15 @@ msgstr ""
 
 #: source/tmp/PopoverTags.vue.ts:36
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: source/tmp/PopoverTags.vue.ts:37
 msgid "Count"
-msgstr ""
+msgstr "Recompte"
 
 #: source/tmp/PopoverTags.vue.ts:55
 msgid "Filter tags…"
-msgstr "Filtrar etiquetes..."
+msgstr "Filtrar etiquetes…"
 
 #: source/tmp/PopoverTags.vue.ts:58
 msgid "Tag Cloud"
@@ -2316,11 +2286,11 @@ msgstr ""
 #: source/tmp/CustomCSS.vue.ts:88 source/tmp/Defaults.vue.ts:192
 #: source/tmp/SnippetsTab.vue.ts:124
 msgid "Saving …"
-msgstr "Desant..."
+msgstr "Desant …"
 
 #: source/tmp/CustomCSS.vue.ts:97
 msgid "Saving failed"
-msgstr "Vaja! No s'ha pogut desar"
+msgstr "No s'ha pogut desar"
 
 #: source/tmp/file-list.vue.ts:69
 msgid "No directory selected"
@@ -2342,6 +2312,8 @@ msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"Aquest perfil no és vàlid. Deu contenir errors o li deu faltar la "
+"propietat d'escriptor o lector."
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
@@ -2364,9 +2336,8 @@ msgid "Actions"
 msgstr "Accions"
 
 #: source/tmp/List.vue.ts:147
-#, fuzzy
 msgid "Delete"
-msgstr "Elimina el fitxer"
+msgstr "Suprimeix"
 
 #. Apparently we have a simple array, so exactly one column
 #: source/tmp/List.vue.ts:169
@@ -2399,7 +2370,7 @@ msgstr "✍🏼 Segueix escrivint per a superar la mitjana diària"
 
 #: source/tmp/PopoverStats.vue.ts:129
 msgid "More statistics …"
-msgstr "Més estadístiques..."
+msgstr "Més estadístiques …"
 
 #: source/tmp/PopoverPomodoro.vue.ts:72
 msgid "Start"
@@ -2423,11 +2394,11 @@ msgstr "Pausa"
 
 #: source/tmp/PopoverPomodoro.vue.ts:87
 msgid "Sound Effect"
-msgstr ""
+msgstr "Efecte de so"
 
 #: source/tmp/PopoverPomodoro.vue.ts:90
 msgid "Volume"
-msgstr ""
+msgstr "Volum"
 
 #: source/tmp/Theme.vue.ts:37
 msgid "selected"
@@ -2491,7 +2462,7 @@ msgstr "Desembre"
 
 #: source/tmp/CalendarView.vue.ts:104
 msgid "Below the monthly average"
-msgstr "Sota la mitjana mensual"
+msgstr "Per sota de la mitjana mensual"
 
 #: source/tmp/CalendarView.vue.ts:107
 msgid "Over the monthly average"
@@ -2520,7 +2491,7 @@ msgstr "Escorcoll general"
 #: source/tmp/GlobalSearch.vue.ts:120
 #, javascript-format
 msgid "%s matches"
-msgstr ""
+msgstr "%s coincidències"
 
 #: source/tmp/GlobalSearch.vue.ts:123
 msgid "Enter your search terms below"
@@ -2528,11 +2499,11 @@ msgstr "Paraules a cercar:"
 
 #: source/tmp/GlobalSearch.vue.ts:126
 msgid "Find …"
-msgstr "Troba ..."
+msgstr "Troba …"
 
 #: source/tmp/GlobalSearch.vue.ts:129
 msgid "Filter …"
-msgstr "Filtre ..."
+msgstr "Filtre …"
 
 #: source/tmp/GlobalSearch.vue.ts:132
 msgid "Filter search results"
@@ -2548,7 +2519,7 @@ msgstr "Restringeix la cerca a la carpeta..."
 
 #: source/tmp/GlobalSearch.vue.ts:141
 msgid "Search"
-msgstr "Busca"
+msgstr "Cerca"
 
 #: source/tmp/GlobalSearch.vue.ts:144
 msgid "Clear search"
@@ -2572,7 +2543,7 @@ msgstr "Més / Menys detalls"
 #~ msgstr "Llenguatge de l'aplicació (<strong>Reinici requerit!</strong>)"
 
 #~ msgid "Find…"
-#~ msgstr "Trobar..."
+#~ msgstr "Trobar…"
 
 #~ msgid "Replace with"
 #~ msgstr "Substituir amb"
