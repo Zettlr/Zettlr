@@ -40,7 +40,7 @@ class CitationWidget extends WidgetType {
     const elem = document.createElement('span')
     elem.classList.add('citeproc-citation')
     if (renderedCitation !== undefined) {
-      elem.innerText = renderedCitation
+      elem.innerHTML = renderedCitation
     } else {
       elem.innerText = this.rawCitation
       elem.classList.add('error')
