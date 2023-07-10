@@ -82,10 +82,10 @@ export default class OpenAttachment extends ZettlrCommand {
     // Thanks to @retorquere, we can query the better bibtex JSON RPC
     // api to retrieve a full list of all attachments.
     try {
-      // BUG: Right now, this will always throw a ECONNREFUSED error. Trying
-      // this out with cURL will give a slightly different error message
-      // regarding not accepted content types.
-      const res: any = await got.post('http://localhost:23119/better-bibtex/json-rpc', {
+      // NOTE: We have replaced localhost with 127.0.0.1 since at some point
+      // either got or Electron stopped resolving localhost there, resulting in
+      // ECONNREFUSED errors. I have no idea how that happened, but it works now.
+      const res: any = await got.post('http://127.0.0.1:23119/better-bibtex/json-rpc', {
         json: {
           jsonrpc: '2.0',
           method: 'item.attachments',
