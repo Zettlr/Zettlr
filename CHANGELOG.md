@@ -222,6 +222,8 @@ there.
   option to copy the absolute file or folder path to the clipboard
 - **New Feature**: There is now a new menu item that allows you to conveniently
   clear the FSAL cache in case of some errors
+- Note preview tooltips now display a sanitized HTML version of the note's
+  Markdown contents
 - Removed the "Get LaTeX" menu item since (hopefully) now the advice in the docs
   and in the tutorial are sufficient
 - Replaced the old Markdown-to-HTML and HTML-to-Markdown converter with more up-

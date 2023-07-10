@@ -59,6 +59,26 @@ export const mainOverride = EditorView.baseTheme({
   '.cm-tooltip': {
     padding: '4px'
   },
+  // File preview tooltips
+  '.editor-note-preview': {
+    maxWidth: '300px',
+    padding: '5px',
+    fontSize: '100%'
+  },
+  '.editor-note-preview h1': { fontSize: '140%' },
+  '.editor-note-preview h2': { fontSize: '130%' },
+  '.editor-note-preview h3': { fontSize: '120%' },
+  '.editor-note-preview h4': { fontSize: '110%' },
+  '.editor-note-preview h5': { fontSize: '100%' },
+  '.editor-note-preview h6': { fontSize: '100%' },
+  '.editor-note-preview .note-content': { margin: '10px 0' },
+  '.editor-note-preview .metadata': {
+    color: 'rgb(200, 200, 200)',
+    fontSize: '80%'
+  },
+  '.editor-note-preview .actions': {
+    margin: '5px 0'
+  },
   // Footnotes
   '.footnote': {
     verticalAlign: 'super',
