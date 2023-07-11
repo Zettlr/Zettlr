@@ -12,6 +12,7 @@ export interface ConfigOptions {
   }
   window: {
     nativeAppearance: boolean
+    vibrancy: boolean
     sidebarVisible: boolean
     currentSidebarTab: 'toc'|'references'|'relatedFiles'|'attachments'
     recentGlobalSearches: string[]

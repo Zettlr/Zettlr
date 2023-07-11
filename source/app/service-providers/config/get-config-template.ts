@@ -59,7 +59,8 @@ export default function getConfigTemplate (): ConfigOptions {
       // Only use native window appearance by default on macOS. If this value
       // is false, this means that Zettlr will display the menu bar and window
       // controls as defined in the HTML.
-      nativeAppearance: process.platform === 'darwin',
+      nativeAppearance: process.platform === 'darwin', // Linux only
+      vibrancy: process.platform === 'darwin', // macOS only
       // Store a few GUI related settings here as well
       sidebarVisible: false,
       currentSidebarTab: 'toc',

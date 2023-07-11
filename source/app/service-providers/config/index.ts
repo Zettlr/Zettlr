@@ -38,6 +38,7 @@ const guardOptions = {
   relaunch: [
     'appLang',
     'window.nativeAppearance',
+    'window.vibrancy',
     'watchdog.activatePolling',
     'export.useBundledPandoc',
     'zkn.idRE'

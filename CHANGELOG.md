@@ -326,6 +326,7 @@ there.
   with activated project functionality now closes the popup
 - Redid the emphasis renderer to work on the SyntaxTree directly, which makes
   the emphasis render more properly and now works much faster than before
+- Users on macOS can now disable window vibrancy
 
 ## Under the Hood
 

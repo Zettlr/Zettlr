@@ -6,6 +6,7 @@
     v-bind:show-toolbar="shouldShowToolbar"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
+    v-bind:disable-vibrancy="!vibrancyEnabled"
     v-on:toolbar-toggle="handleToggle($event)"
     v-on:toolbar-click="handleClick($event)"
   >
@@ -174,6 +175,7 @@ export default defineComponent({
       fileManagerVisible: true,
       mainSplitViewVisibleComponent: 'fileManager',
       isUpdateAvailable: false,
+      vibrancyEnabled: window.config.get('window.vibrancy') as boolean,
       // Pomodoro state
       pomodoro: {
         currentEffectFile: glassFile,

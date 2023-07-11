@@ -49,6 +49,12 @@ export default function (): any {
         },
         {
           type: 'checkbox',
+          label: trans('Enable window vibrancy'),
+          model: 'window.vibrancy',
+          disabled: process.platform !== 'darwin'
+        },
+        {
+          type: 'checkbox',
           label: trans('Delete items irreversibly, if moving them to trash fails'),
           model: 'system.deleteOnFail'
         },
