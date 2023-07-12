@@ -559,12 +559,8 @@ export default class CiteprocProvider extends ProviderContract {
 
     try {
       this.selectDatabase(database)
-      if (!this.ensureCitekeysExist(citekeys)) {
-        this._logger.verbose(`[CiteprocProvider] Cannot render bibliography with citekeys ${citekeys.join(', ')}: At least one key does not exist in database ${database}`)
-        return undefined
-      }
-
-      this.engine.updateItems(citekeys)
+      const sanitizedCitekeys = this.filterNonExistingCitekeys(citekeys)
+      this.engine.updateItems(sanitizedCitekeys)
       return this.engine.makeBibliography()
     } catch (err: any) {
       this._logger.error(`[citeproc] makeBibliography: Could not create bibliography: ${String(err)}`, err)
@@ -600,5 +596,18 @@ export default class CiteprocProvider extends ProviderContract {
     }
 
     return true
+  }
+
+  /**
+   * In instances where a few undefined citekeys are allowed, such as generating
+   * the bibliography, this function simply removes those that don't exist
+   * instead of requiring all of them to exist.
+   *
+   * @param   {string[][]}  citekeys  The unfiltered citekeys
+   *
+   * @return  {string[]}              The list of keys that exist in the database
+   */
+  private filterNonExistingCitekeys (citekeys: string[]): string[] {
+    return citekeys.filter(key => key in this._items)
   }
 }

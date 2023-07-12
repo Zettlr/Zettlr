@@ -327,6 +327,8 @@ there.
 - Redid the emphasis renderer to work on the SyntaxTree directly, which makes
   the emphasis render more properly and now works much faster than before
 - Users on macOS can now disable window vibrancy
+- Non-existing citekeys in the document no longer cause the list of references
+  to be empty
 
 ## Under the Hood
 
