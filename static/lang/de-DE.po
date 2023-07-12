@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-07-10 02:46+0000\n"
-"PO-Revision-Date: 2023-04-09 15:37+0200\n"
+"PO-Revision-Date: 2023-07-12 10:07+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Dem Link mit Cmd/Strg+Klick folgen"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
@@ -64,12 +64,11 @@ msgstr "Bild konnte nicht geladen werden: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Erzeuge Mermaid-Graph …"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
-#, fuzzy
 msgid "Could not render Graph:"
-msgstr "Konnte Datei nicht erstellen"
+msgstr "Konnte Graph nicht darstellen:"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
@@ -965,11 +964,11 @@ msgstr "Akribisch"
 
 #: source/win-preferences/schema/spellchecking.ts:39
 msgid "Mother tongue"
-msgstr ""
+msgstr "Muttersprache"
 
 #: source/win-preferences/schema/spellchecking.ts:41
 msgid "Not set"
-msgstr ""
+msgstr "Nicht eingestellt"
 
 #: source/win-preferences/schema/spellchecking.ts:48
 msgid "LanguageTool Provider"
@@ -1329,24 +1328,23 @@ msgstr "Verzeichnis löschen"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:68
 #: source/win-main/file-manager/util/file-item-context.ts:67
-#, fuzzy
 msgid "Copy path"
 msgstr "Dateipfad kopieren"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 #: source/win-main/file-manager/util/file-item-context.ts:88
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "In Finder zeigen"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 #: source/win-main/file-manager/util/file-item-context.ts:88
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "In Explorer zeigen"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 #: source/win-main/file-manager/util/file-item-context.ts:88
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "In Dateibrowser zeigen"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:88
 msgid "Check for directory …"
@@ -1663,15 +1661,16 @@ msgid "Could not import language file %s!"
 msgstr "Die Sprachdatei %s konnte nicht importiert werden!"
 
 #: source/app/service-providers/commands/dir-project-export.ts:72
-#, fuzzy
 msgid "Cannot export project"
-msgstr "Projekt exportieren"
+msgstr "Kann Projekt nicht exportieren"
 
 #: source/app/service-providers/commands/dir-project-export.ts:73
 msgid ""
 "After applying your glob-filters, no files remained to export. Please adjust "
 "them in the project settings."
 msgstr ""
+"Nach Anwendung der glob-Filter sind keine Dateien für den Export übrig "
+"geblieben. Bitte passe sie in den Projekteinstellungen an."
 
 #: source/app/service-providers/commands/dir-project-export.ts:129
 msgid "Project successfully exported. Click to show."
@@ -2012,9 +2011,8 @@ msgstr "Unterstützen"
 
 #: source/app/service-providers/menu/menu.win32.ts:643
 #: source/app/service-providers/menu/menu.darwin.ts:670
-#, fuzzy
 msgid "Visit website"
-msgstr "Zettlr im Web"
+msgstr "Website öffnen"
 
 #: source/app/service-providers/menu/menu.win32.ts:653
 #: source/app/service-providers/menu/menu.darwin.ts:680
@@ -2029,18 +2027,17 @@ msgstr "Tutorial öffnen"
 #: source/app/service-providers/menu/menu.win32.ts:675
 #: source/app/service-providers/menu/menu.darwin.ts:702
 msgid "Clear FSAL cache …"
-msgstr ""
+msgstr "FSAL-Cache leeren …"
 
 #: source/app/service-providers/menu/menu.win32.ts:679
 #: source/app/service-providers/menu/menu.darwin.ts:706
-#, fuzzy
 msgid "Clear FSAL Cache"
-msgstr "Neue Suche"
+msgstr "FSAL-Cache leeren"
 
 #: source/app/service-providers/menu/menu.win32.ts:680
 #: source/app/service-providers/menu/menu.darwin.ts:707
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "Das Leeren des FSAL-Cache erfordert einen Neustart."
 
 #: source/app/service-providers/menu/menu.win32.ts:681
 #: source/app/service-providers/menu/menu.darwin.ts:708
@@ -2049,6 +2046,10 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
+"Nach dem Neustart wird Zettlr den Cache neu erzeugen, was einen Moment "
+"dauern kann. Die Geschwindigkeit hängt von der Anzahl geladener Dateien "
+"sowie der Geschwindigkeit der Festplatte ab. Die Fenster werden im Anschluss "
+"geöffnet."
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
@@ -2513,7 +2514,7 @@ msgstr "Volltextsuche"
 #: source/tmp/GlobalSearch.vue.ts:120
 #, javascript-format
 msgid "%s matches"
-msgstr ""
+msgstr "%s Treffer"
 
 #: source/tmp/GlobalSearch.vue.ts:123
 msgid "Enter your search terms below"
