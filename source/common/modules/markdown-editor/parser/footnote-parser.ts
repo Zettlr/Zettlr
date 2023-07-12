@@ -37,7 +37,7 @@ export const footnoteParser: InlineParser = {
 export const footnoteRefParser: BlockParser = {
   name: 'footnote-refs',
   parse (ctx, line) {
-    const match = /^\[\^[^\s]\]:\s/.exec(line.text)
+    const match = /^\[\^[^\s]+\]:\s/.exec(line.text)
     if (match === null) {
       return false
     }
