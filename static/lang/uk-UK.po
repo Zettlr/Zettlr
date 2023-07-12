@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-07-10 02:46+0000\n"
+"POT-Creation-Date: 2023-07-12 08:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,27 +112,27 @@ msgstr "Зберегти"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
 #, javascript-format
 msgid "File %s does not exist."
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
 #: source/tmp/PopoverDirProps.vue.ts:152 source/tmp/PopoverFileProps.vue.ts:68
 msgid "Modified"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:102
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 #: source/app/service-providers/menu/menu.win32.ts:140
 #: source/app/service-providers/menu/menu.darwin.ts:166
 msgid "Open…"
 msgstr "Відкрити..."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/win-main/file-manager/util/file-item-context.ts:29
 #: source/tmp/GlobalSearch.vue.ts:41
 msgid "Open in a new tab"
@@ -789,23 +789,28 @@ msgid "Use native window appearance"
 msgstr "Використовувати нативний зовнішній вигляд вікна"
 
 #: source/win-preferences/schema/advanced.ts:52
+#, fuzzy
+msgid "Enable window vibrancy"
+msgstr "Використовувати нативний зовнішній вигляд вікна"
+
+#: source/win-preferences/schema/advanced.ts:58
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr ""
 "Видаляти елементи безповоротно, якщо переміщення їх у смітник не вдається"
 
-#: source/win-preferences/schema/advanced.ts:58
+#: source/win-preferences/schema/advanced.ts:64
 msgid "Show app in the notification area"
 msgstr "Показати сповіщення"
 
-#: source/win-preferences/schema/advanced.ts:59
+#: source/win-preferences/schema/advanced.ts:65
 msgid "Leave app running in the notification area"
 msgstr "Залиште програму запущеною в області сповіщень"
 
-#: source/win-preferences/schema/advanced.ts:66
+#: source/win-preferences/schema/advanced.ts:72
 msgid "Automatically check for updates"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:73
+#: source/win-preferences/schema/advanced.ts:79
 msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
@@ -813,36 +818,36 @@ msgstr ""
 "Уведіть усі розширення файлів, які будуть відображатися на бічній панелі. "
 "Розділяйте їх комами. Зміни працюватимуть після перезавантаження."
 
-#: source/win-preferences/schema/advanced.ts:81
+#: source/win-preferences/schema/advanced.ts:87
 msgid "Zoom behavior"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:83
+#: source/win-preferences/schema/advanced.ts:89
 msgid "Zoom resizes the whole GUI"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:84
+#: source/win-preferences/schema/advanced.ts:90
 msgid "Zoom changes the editor font size"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:91
+#: source/win-preferences/schema/advanced.ts:97
 msgid "iFrame rendering whitelist"
 msgstr "Список візуалізації iFrame"
 
-#: source/win-preferences/schema/advanced.ts:94
+#: source/win-preferences/schema/advanced.ts:100
 msgid "Hostname"
 msgstr "Hostname"
 
-#: source/win-preferences/schema/advanced.ts:96
+#: source/win-preferences/schema/advanced.ts:102
 #: source/win-preferences/schema/spellchecking.ts:93
 msgid "Search for entries …"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:102
+#: source/win-preferences/schema/advanced.ts:108
 msgid "Activate Watchdog polling"
 msgstr "Активувати спостереження за файлами"
 
-#: source/win-preferences/schema/advanced.ts:107
+#: source/win-preferences/schema/advanced.ts:113
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "Час очікування перед тим, як запис файлу вважається виконаним (в мс)"
 
@@ -1530,7 +1535,7 @@ msgstr ""
 
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:93
-#: source/app/service-providers/config/index.ts:431
+#: source/app/service-providers/config/index.ts:432
 msgid "Confirm"
 msgstr ""
 
@@ -1762,17 +1767,17 @@ msgstr "Неможливо перевірити на оновлення: Сер�
 msgid "An update to version %s is available!"
 msgstr "Доступне оновлення до версії %s!"
 
-#: source/app/service-providers/config/index.ts:423
+#: source/app/service-providers/config/index.ts:424
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:426
+#: source/app/service-providers/config/index.ts:427
 #: source/app/service-providers/menu/menu.win32.ts:684
 #: source/app/service-providers/menu/menu.darwin.ts:711
 msgid "Restart now"
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:427
+#: source/app/service-providers/config/index.ts:428
 msgid "Restart later"
 msgstr ""
 
@@ -2023,7 +2028,7 @@ msgstr "Про програму"
 
 #: source/app/service-providers/menu/menu.win32.ts:621
 #: source/app/service-providers/menu/menu.darwin.ts:648
-#: source/tmp/App.vue.ts:93
+#: source/tmp/App.vue.ts:94
 msgid "Check for updates"
 msgstr "Перевірити наявність оновлень"
 
@@ -2144,29 +2149,29 @@ msgstr "Програма оновлення"
 msgid "Click to start update"
 msgstr "Натисніть, щоб почати оновлення"
 
-#: source/tmp/App.vue.ts:75
+#: source/tmp/App.vue.ts:76
 msgid "New update available"
 msgstr "Доступне нове оновлення"
 
-#: source/tmp/App.vue.ts:78
+#: source/tmp/App.vue.ts:79
 msgid "Your version"
 msgstr "Поточна версія"
 
-#: source/tmp/App.vue.ts:81
+#: source/tmp/App.vue.ts:82
 msgid ""
 "There is a new version of Zettlr available to download. Please read the "
 "changelog below."
 msgstr "Нова версія Zettlr готова до завантаження. Прочитайте опис змін нижче."
 
-#: source/tmp/App.vue.ts:84
+#: source/tmp/App.vue.ts:85
 msgid "Downloading your update"
 msgstr "Завантаження оновлення"
 
-#: source/tmp/App.vue.ts:87
+#: source/tmp/App.vue.ts:88
 msgid "No update available. You have the most recent version."
 msgstr "Оновлень немає. У вас остання версія програми."
 
-#: source/tmp/App.vue.ts:132
+#: source/tmp/App.vue.ts:133
 msgid "Starting update …"
 msgstr "Початок оновлення…"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-07-10 02:46+0000\n"
+"POT-Creation-Date: 2023-07-12 08:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,27 +112,27 @@ msgstr "Uložit"
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
 #, javascript-format
 msgid "File %s does not exist."
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
 msgstr "Počet slov"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
 #: source/tmp/PopoverDirProps.vue.ts:152 source/tmp/PopoverFileProps.vue.ts:68
 msgid "Modified"
 msgstr "Upraveno"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:102
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 #: source/app/service-providers/menu/menu.win32.ts:140
 #: source/app/service-providers/menu/menu.darwin.ts:166
 msgid "Open…"
 msgstr "Otevřít ..."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/win-main/file-manager/util/file-item-context.ts:29
 #: source/tmp/GlobalSearch.vue.ts:41
 msgid "Open in a new tab"
@@ -788,22 +788,27 @@ msgid "Use native window appearance"
 msgstr "Použít nativní vzhled oken"
 
 #: source/win-preferences/schema/advanced.ts:52
+#, fuzzy
+msgid "Enable window vibrancy"
+msgstr "Použít nativní vzhled oken"
+
+#: source/win-preferences/schema/advanced.ts:58
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr "Položku, kterou nelze přesunout do koše, smazat trvale"
 
-#: source/win-preferences/schema/advanced.ts:58
+#: source/win-preferences/schema/advanced.ts:64
 msgid "Show app in the notification area"
 msgstr "Zobrazit aplikaci v oznamovací oblasti"
 
-#: source/win-preferences/schema/advanced.ts:59
+#: source/win-preferences/schema/advanced.ts:65
 msgid "Leave app running in the notification area"
 msgstr "Nechat aplikaci běžet v oznamovací oblasti"
 
-#: source/win-preferences/schema/advanced.ts:66
+#: source/win-preferences/schema/advanced.ts:72
 msgid "Automatically check for updates"
 msgstr "Automaticky zjišťovat aktualizace"
 
-#: source/win-preferences/schema/advanced.ts:73
+#: source/win-preferences/schema/advanced.ts:79
 msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
@@ -811,36 +816,36 @@ msgstr ""
 "Zapište všechny přípony souborů, které chcete vidět v liště příloh. "
 "Oddělujte čárkami. Změny se projeví po restartu."
 
-#: source/win-preferences/schema/advanced.ts:81
+#: source/win-preferences/schema/advanced.ts:87
 msgid "Zoom behavior"
 msgstr "Chování zvětšování"
 
-#: source/win-preferences/schema/advanced.ts:83
+#: source/win-preferences/schema/advanced.ts:89
 msgid "Zoom resizes the whole GUI"
 msgstr "Zvětšování mění velikost celého GUI"
 
-#: source/win-preferences/schema/advanced.ts:84
+#: source/win-preferences/schema/advanced.ts:90
 msgid "Zoom changes the editor font size"
 msgstr "Zvětšování mění velikost písma editoru"
 
-#: source/win-preferences/schema/advanced.ts:91
+#: source/win-preferences/schema/advanced.ts:97
 msgid "iFrame rendering whitelist"
 msgstr "Whitelist pro vykreslení iFrame"
 
-#: source/win-preferences/schema/advanced.ts:94
+#: source/win-preferences/schema/advanced.ts:100
 msgid "Hostname"
 msgstr "Hostname"
 
-#: source/win-preferences/schema/advanced.ts:96
+#: source/win-preferences/schema/advanced.ts:102
 #: source/win-preferences/schema/spellchecking.ts:93
 msgid "Search for entries …"
 msgstr "Hledat položky ..."
 
-#: source/win-preferences/schema/advanced.ts:102
+#: source/win-preferences/schema/advanced.ts:108
 msgid "Activate Watchdog polling"
 msgstr "Aktivovat hlídání změn"
 
-#: source/win-preferences/schema/advanced.ts:107
+#: source/win-preferences/schema/advanced.ts:113
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "Jak dlouho čekat než je zápis souboru považován za ukončený (v ms)"
 
@@ -1530,7 +1535,7 @@ msgstr ""
 
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:93
-#: source/app/service-providers/config/index.ts:431
+#: source/app/service-providers/config/index.ts:432
 msgid "Confirm"
 msgstr ""
 
@@ -1763,18 +1768,18 @@ msgstr "Nelze zkontrolovat aktualizace: Server neodeslal žádná data"
 msgid "An update to version %s is available!"
 msgstr "Je dostupná novější verze %s."
 
-#: source/app/service-providers/config/index.ts:423
+#: source/app/service-providers/config/index.ts:424
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:426
+#: source/app/service-providers/config/index.ts:427
 #: source/app/service-providers/menu/menu.win32.ts:684
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #, fuzzy
 msgid "Restart now"
 msgstr "právě teď"
 
-#: source/app/service-providers/config/index.ts:427
+#: source/app/service-providers/config/index.ts:428
 msgid "Restart later"
 msgstr ""
 
@@ -2025,7 +2030,7 @@ msgstr "O aplikaci"
 
 #: source/app/service-providers/menu/menu.win32.ts:621
 #: source/app/service-providers/menu/menu.darwin.ts:648
-#: source/tmp/App.vue.ts:93
+#: source/tmp/App.vue.ts:94
 msgid "Check for updates"
 msgstr "Zkontrolovat aktualizace"
 
@@ -2147,29 +2152,29 @@ msgstr "Aktualizace"
 msgid "Click to start update"
 msgstr "Klepnutím spustíte aktualizaci"
 
-#: source/tmp/App.vue.ts:75
+#: source/tmp/App.vue.ts:76
 msgid "New update available"
 msgstr "Je dostupná aktualizace"
 
-#: source/tmp/App.vue.ts:78
+#: source/tmp/App.vue.ts:79
 msgid "Your version"
 msgstr "Vaše verze"
 
-#: source/tmp/App.vue.ts:81
+#: source/tmp/App.vue.ts:82
 msgid ""
 "There is a new version of Zettlr available to download. Please read the "
 "changelog below."
 msgstr "Zettlr je k dispozici v novější verzi. Přečtěte si changelog níže."
 
-#: source/tmp/App.vue.ts:84
+#: source/tmp/App.vue.ts:85
 msgid "Downloading your update"
 msgstr "Aktualizace se stahuje"
 
-#: source/tmp/App.vue.ts:87
+#: source/tmp/App.vue.ts:88
 msgid "No update available. You have the most recent version."
 msgstr "Máte nejnovější verzi."
 
-#: source/tmp/App.vue.ts:132
+#: source/tmp/App.vue.ts:133
 msgid "Starting update …"
 msgstr "Spouští se aktualizace ..."
 

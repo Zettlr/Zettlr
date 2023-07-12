@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-07-10 02:46+0000\n"
+"POT-Creation-Date: 2023-07-12 08:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,27 +112,27 @@ msgstr "保存"
 msgid "Cancel"
 msgstr "取消"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "文件 %s 不存在。"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
 msgstr "词数"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
 #: source/tmp/PopoverDirProps.vue.ts:152 source/tmp/PopoverFileProps.vue.ts:68
 msgid "Modified"
 msgstr "已修改"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:102
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 #: source/app/service-providers/menu/menu.win32.ts:140
 #: source/app/service-providers/menu/menu.darwin.ts:166
 msgid "Open…"
 msgstr "打开…"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/win-main/file-manager/util/file-item-context.ts:29
 #: source/tmp/GlobalSearch.vue.ts:41
 msgid "Open in a new tab"
@@ -788,22 +788,27 @@ msgid "Use native window appearance"
 msgstr "使用本机窗口外观"
 
 #: source/win-preferences/schema/advanced.ts:52
+#, fuzzy
+msgid "Enable window vibrancy"
+msgstr "使用本机窗口外观"
+
+#: source/win-preferences/schema/advanced.ts:58
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr "如果移到回收站失败，则永久性地删除它们"
 
-#: source/win-preferences/schema/advanced.ts:58
+#: source/win-preferences/schema/advanced.ts:64
 msgid "Show app in the notification area"
 msgstr "在消息区显示应用"
 
-#: source/win-preferences/schema/advanced.ts:59
+#: source/win-preferences/schema/advanced.ts:65
 msgid "Leave app running in the notification area"
 msgstr "使应用在通知区运行"
 
-#: source/win-preferences/schema/advanced.ts:66
+#: source/win-preferences/schema/advanced.ts:72
 msgid "Automatically check for updates"
 msgstr "自动检查更新"
 
-#: source/win-preferences/schema/advanced.ts:73
+#: source/win-preferences/schema/advanced.ts:79
 msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
@@ -811,36 +816,36 @@ msgstr ""
 "在侧边栏中输入你想要查看的附件拓展名，并用逗号（英文）隔开。重启后会识别修"
 "改。"
 
-#: source/win-preferences/schema/advanced.ts:81
+#: source/win-preferences/schema/advanced.ts:87
 msgid "Zoom behavior"
 msgstr "缩放行为"
 
-#: source/win-preferences/schema/advanced.ts:83
+#: source/win-preferences/schema/advanced.ts:89
 msgid "Zoom resizes the whole GUI"
 msgstr "缩放可以调整整个图形用户界面的大小"
 
-#: source/win-preferences/schema/advanced.ts:84
+#: source/win-preferences/schema/advanced.ts:90
 msgid "Zoom changes the editor font size"
 msgstr "缩放可以改变编辑器的字体大小"
 
-#: source/win-preferences/schema/advanced.ts:91
+#: source/win-preferences/schema/advanced.ts:97
 msgid "iFrame rendering whitelist"
 msgstr "iFrame 渲染白名单"
 
-#: source/win-preferences/schema/advanced.ts:94
+#: source/win-preferences/schema/advanced.ts:100
 msgid "Hostname"
 msgstr "主机名"
 
-#: source/win-preferences/schema/advanced.ts:96
+#: source/win-preferences/schema/advanced.ts:102
 #: source/win-preferences/schema/spellchecking.ts:93
 msgid "Search for entries …"
 msgstr "搜索内容 ..."
 
-#: source/win-preferences/schema/advanced.ts:102
+#: source/win-preferences/schema/advanced.ts:108
 msgid "Activate Watchdog polling"
 msgstr "激活看门狗轮询"
 
-#: source/win-preferences/schema/advanced.ts:107
+#: source/win-preferences/schema/advanced.ts:113
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "判断一个文件写入完成前的等待时间"
 
@@ -1519,7 +1524,7 @@ msgstr "离线"
 
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:93
-#: source/app/service-providers/config/index.ts:431
+#: source/app/service-providers/config/index.ts:432
 msgid "Confirm"
 msgstr "确定"
 
@@ -1747,18 +1752,18 @@ msgstr "无法检查更新：服务器尚未发送任何数据"
 msgid "An update to version %s is available!"
 msgstr "可以更新到最新版本  %s ！"
 
-#: source/app/service-providers/config/index.ts:423
+#: source/app/service-providers/config/index.ts:424
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:426
+#: source/app/service-providers/config/index.ts:427
 #: source/app/service-providers/menu/menu.win32.ts:684
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #, fuzzy
 msgid "Restart now"
 msgstr "刚才"
 
-#: source/app/service-providers/config/index.ts:427
+#: source/app/service-providers/config/index.ts:428
 msgid "Restart later"
 msgstr ""
 
@@ -2009,7 +2014,7 @@ msgstr "关于 Zettlr"
 
 #: source/app/service-providers/menu/menu.win32.ts:621
 #: source/app/service-providers/menu/menu.darwin.ts:648
-#: source/tmp/App.vue.ts:93
+#: source/tmp/App.vue.ts:94
 msgid "Check for updates"
 msgstr "检查更新"
 
@@ -2131,29 +2136,29 @@ msgstr "更新管理"
 msgid "Click to start update"
 msgstr "点击更新"
 
-#: source/tmp/App.vue.ts:75
+#: source/tmp/App.vue.ts:76
 msgid "New update available"
 msgstr "可用更新"
 
-#: source/tmp/App.vue.ts:78
+#: source/tmp/App.vue.ts:79
 msgid "Your version"
 msgstr "当前版本"
 
-#: source/tmp/App.vue.ts:81
+#: source/tmp/App.vue.ts:82
 msgid ""
 "There is a new version of Zettlr available to download. Please read the "
 "changelog below."
 msgstr "有新版本 Zettlr 可供下载。请阅读下方的更新说明。"
 
-#: source/tmp/App.vue.ts:84
+#: source/tmp/App.vue.ts:85
 msgid "Downloading your update"
 msgstr "正在下载更新数据"
 
-#: source/tmp/App.vue.ts:87
+#: source/tmp/App.vue.ts:88
 msgid "No update available. You have the most recent version."
 msgstr "无需更新，当前已是最新版本。"
 
-#: source/tmp/App.vue.ts:132
+#: source/tmp/App.vue.ts:133
 msgid "Starting update …"
 msgstr "开始更新中"
 

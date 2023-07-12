@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-07-10 02:46+0000\n"
+"POT-Creation-Date: 2023-07-12 08:10+0000\n"
 "PO-Revision-Date: 2022-12-29 23:16+0100\n"
 "Last-Translator: Marcel van den Brink <marcel.vandenbrink@gmail.com>\n"
 "Language-Team: \n"
@@ -112,27 +112,27 @@ msgstr "Opslaan"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:52
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "Bestand %s bestaat niet."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:82
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
 msgstr "Aantal woorden"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:84
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
 #: source/tmp/PopoverDirProps.vue.ts:152 source/tmp/PopoverFileProps.vue.ts:68
 msgid "Modified"
 msgstr "Gewijzigd"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:102
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 #: source/app/service-providers/menu/menu.win32.ts:140
 #: source/app/service-providers/menu/menu.darwin.ts:166
 msgid "Open…"
 msgstr "Open…"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:123
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/win-main/file-manager/util/file-item-context.ts:29
 #: source/tmp/GlobalSearch.vue.ts:41
 msgid "Open in a new tab"
@@ -792,24 +792,29 @@ msgid "Use native window appearance"
 msgstr "Gebruik het systeemeigen vensteruiterlijk"
 
 #: source/win-preferences/schema/advanced.ts:52
+#, fuzzy
+msgid "Enable window vibrancy"
+msgstr "Gebruik het systeemeigen vensteruiterlijk"
+
+#: source/win-preferences/schema/advanced.ts:58
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr ""
 "Verwijder items definitief als ze niet in de prullenbak geworpen kunnen "
 "worden"
 
-#: source/win-preferences/schema/advanced.ts:58
+#: source/win-preferences/schema/advanced.ts:64
 msgid "Show app in the notification area"
 msgstr "Toon app in het systeemvak"
 
-#: source/win-preferences/schema/advanced.ts:59
+#: source/win-preferences/schema/advanced.ts:65
 msgid "Leave app running in the notification area"
 msgstr "Laat de app draaien in het systeemvak"
 
-#: source/win-preferences/schema/advanced.ts:66
+#: source/win-preferences/schema/advanced.ts:72
 msgid "Automatically check for updates"
 msgstr "Controleer automatisch op updates"
 
-#: source/win-preferences/schema/advanced.ts:73
+#: source/win-preferences/schema/advanced.ts:79
 msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
@@ -817,36 +822,36 @@ msgstr ""
 "Voer alle bestandsextensies in die je in de zijbalk wil zien. Scheid ze met "
 "een komma. Veranderingen zullen pas na een herstart zichtbaar worden."
 
-#: source/win-preferences/schema/advanced.ts:81
+#: source/win-preferences/schema/advanced.ts:87
 msgid "Zoom behavior"
 msgstr "Zoomgedrag"
 
-#: source/win-preferences/schema/advanced.ts:83
+#: source/win-preferences/schema/advanced.ts:89
 msgid "Zoom resizes the whole GUI"
 msgstr "Zoom verandert de hele gebruiksinterface"
 
-#: source/win-preferences/schema/advanced.ts:84
+#: source/win-preferences/schema/advanced.ts:90
 msgid "Zoom changes the editor font size"
 msgstr "Zoomen verandert de tekengrootte in de editor"
 
-#: source/win-preferences/schema/advanced.ts:91
+#: source/win-preferences/schema/advanced.ts:97
 msgid "iFrame rendering whitelist"
 msgstr "Witte lijst voor iFrame-weergave"
 
-#: source/win-preferences/schema/advanced.ts:94
+#: source/win-preferences/schema/advanced.ts:100
 msgid "Hostname"
 msgstr "Hostnaam"
 
-#: source/win-preferences/schema/advanced.ts:96
+#: source/win-preferences/schema/advanced.ts:102
 #: source/win-preferences/schema/spellchecking.ts:93
 msgid "Search for entries …"
 msgstr "Zoeken naar invoer …"
 
-#: source/win-preferences/schema/advanced.ts:102
+#: source/win-preferences/schema/advanced.ts:108
 msgid "Activate Watchdog polling"
 msgstr "Activeer Watchdog polling"
 
-#: source/win-preferences/schema/advanced.ts:107
+#: source/win-preferences/schema/advanced.ts:113
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr ""
 "Tijdsduur om te wachten voordat er wordt aangenomen dat het schrijven naar "
@@ -1539,7 +1544,7 @@ msgstr ""
 
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:93
-#: source/app/service-providers/config/index.ts:431
+#: source/app/service-providers/config/index.ts:432
 msgid "Confirm"
 msgstr "Bevestigen"
 
@@ -1771,18 +1776,18 @@ msgstr "Kon niet controleren op updates: Server heeft geen data gestuurd"
 msgid "An update to version %s is available!"
 msgstr "Er is een update naar versie %s beschikbaar!"
 
-#: source/app/service-providers/config/index.ts:423
+#: source/app/service-providers/config/index.ts:424
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:426
+#: source/app/service-providers/config/index.ts:427
 #: source/app/service-providers/menu/menu.win32.ts:684
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #, fuzzy
 msgid "Restart now"
 msgstr "zonet"
 
-#: source/app/service-providers/config/index.ts:427
+#: source/app/service-providers/config/index.ts:428
 msgid "Restart later"
 msgstr ""
 
@@ -2034,7 +2039,7 @@ msgstr "Over Zettlr"
 
 #: source/app/service-providers/menu/menu.win32.ts:621
 #: source/app/service-providers/menu/menu.darwin.ts:648
-#: source/tmp/App.vue.ts:93
+#: source/tmp/App.vue.ts:94
 msgid "Check for updates"
 msgstr "Controleer op updates"
 
@@ -2156,15 +2161,15 @@ msgstr "Bijwerker"
 msgid "Click to start update"
 msgstr "Klik om update te starten"
 
-#: source/tmp/App.vue.ts:75
+#: source/tmp/App.vue.ts:76
 msgid "New update available"
 msgstr "Nieuwe updates beschikbaar"
 
-#: source/tmp/App.vue.ts:78
+#: source/tmp/App.vue.ts:79
 msgid "Your version"
 msgstr "Jouw versie"
 
-#: source/tmp/App.vue.ts:81
+#: source/tmp/App.vue.ts:82
 msgid ""
 "There is a new version of Zettlr available to download. Please read the "
 "changelog below."
@@ -2172,15 +2177,15 @@ msgstr ""
 "Er is een nieuwe versie van Zettlr beschikbaar om te downloaden. Lees de "
 "wijzigingen hieronder."
 
-#: source/tmp/App.vue.ts:84
+#: source/tmp/App.vue.ts:85
 msgid "Downloading your update"
 msgstr "Update downloaden ..."
 
-#: source/tmp/App.vue.ts:87
+#: source/tmp/App.vue.ts:88
 msgid "No update available. You have the most recent version."
 msgstr "Geen update beschikbaar, u heeft de meest recente versie."
 
-#: source/tmp/App.vue.ts:132
+#: source/tmp/App.vue.ts:133
 msgid "Starting update …"
 msgstr "Update starten ..."
 
