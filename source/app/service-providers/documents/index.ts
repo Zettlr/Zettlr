@@ -34,6 +34,7 @@ import { ChangeSet, Text } from '@codemirror/state'
 import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { countChars, countWords } from '@common/util/counter'
 import { markdownToAST } from '@common/modules/markdown-utils'
+import isFile from '@common/util/is-file'
 
 type DocumentWindows = Record<string, DocumentTree>
 
@@ -715,6 +716,10 @@ export default class DocumentManager extends ProviderContract {
    * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
    */
   public async openFile (windowId: string, leafId: string|undefined, filePath: string, newTab?: boolean, modifyHistory?: boolean): Promise<boolean> {
+    if (!isFile(filePath)) {
+      throw new Error(`Could not open file ${filePath}: Not an existing file.`)
+    }
+
     const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
     let leaf: DTLeaf|undefined
     if (leafId === undefined) {
