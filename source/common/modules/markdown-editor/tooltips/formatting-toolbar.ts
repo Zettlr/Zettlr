@@ -90,10 +90,6 @@ export const formattingToolbar = StateField.define<readonly Tooltip[]>({
   },
 
   update (tooltips, transaction) {
-    if (transaction.selection === undefined) {
-      return tooltips
-    }
-
     return getToolbar(transaction.state)
   },
 
