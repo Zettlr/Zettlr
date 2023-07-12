@@ -17,7 +17,7 @@ import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
 import { WidgetType, type EditorView } from '@codemirror/view'
 import { type EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
-import makeAbsoluteURL from '@common/util/make-absolute-url'
+import makeValidUri from '@common/util/make-valid-uri'
 import { linkImageMenu } from '../context-menu/link-image-menu'
 import { trans } from '@common/i18n-renderer'
 import clickAndSelect from './click-and-select'
@@ -47,7 +47,7 @@ class ImageWidget extends WidgetType {
     const basePath = path.dirname(view.state.field(configField).metadata.path)
 
     if (!isDataUrl) {
-      actualURLToLoad = makeAbsoluteURL(basePath, actualURLToLoad)
+      actualURLToLoad = makeValidUri(actualURLToLoad, basePath)
     }
 
     img.src = actualURLToLoad
