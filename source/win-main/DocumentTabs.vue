@@ -766,7 +766,7 @@ body div.document-tablist-wrapper {
 
 body div.tab-container {
   width: 100%;
-  height: 30px;
+  height: 31px;
   background-color: rgb(215, 215, 215);
   border-bottom: 1px solid grey;
   display: flex;
