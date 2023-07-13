@@ -15,8 +15,26 @@
 
 import { syntaxTree } from '@codemirror/language'
 import { type RangeSet, type Range } from '@codemirror/state'
-import { type ViewUpdate, type EditorView, ViewPlugin, Decoration, type DecorationSet } from '@codemirror/view'
+import { type ViewUpdate, type EditorView, ViewPlugin, Decoration, type DecorationSet, WidgetType } from '@codemirror/view'
 import { rangeInSelection } from '../util/range-in-selection'
+import type { SyntaxNode } from '@lezer/common'
+
+class BulletWidget extends WidgetType {
+  constructor (readonly node: SyntaxNode) {
+    super()
+  }
+
+  eq (other: BulletWidget): boolean {
+    return other.node.from === this.node.from && other.node.to === this.node.from
+  }
+
+  toDOM (view: EditorView): HTMLElement {
+    const elem = document.createElement('span')
+    elem.innerHTML = '&bull;'
+    elem.classList.add('rendered-bullet')
+    return elem
+  }
+}
 
 function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
   const ranges: Array<Range<Decoration>> = []
@@ -73,6 +91,16 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
           case 'Footnote': {
             ranges.push(hiddenDeco.range(node.from, node.from + 2))
             ranges.push(hiddenDeco.range(node.to - 1, node.to))
+            break
+          }
+          case 'ListItem': {
+            if (node.node.parent?.name === 'OrderedList') {
+              break // We only do this with bullet lists
+            }
+            const marks = node.node.getChildren('ListMark')
+            for (const mark of marks) {
+              ranges.push(Decoration.replace({ widget: new BulletWidget(mark.node) }).range(mark.from, mark.to))
+            }
             break
           }
         }
