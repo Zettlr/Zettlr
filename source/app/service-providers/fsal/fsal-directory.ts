@@ -291,7 +291,7 @@ export async function makeProject (dirObject: DirDescriptor, properties: any): P
  *
  * @return {boolean}                     Returns false if no properties changed
  */
-export async function updateProjectProperties (dirObject: DirDescriptor, properties: any): Promise<boolean> {
+export async function updateProjectProperties (dirObject: DirDescriptor, properties: ProjectSettings): Promise<boolean> {
   if (dirObject.settings.project === null) {
     throw new Error(`[FSAL Dir] Attempted to update project settings on dir ${dirObject.path}, but it is not a project!`)
   }
