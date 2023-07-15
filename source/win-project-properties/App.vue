@@ -109,8 +109,10 @@ export default defineComponent({
     TextControl
   },
   data: function () {
+    const searchParams = new URLSearchParams(window.location.search)
     return {
-      dirPath: '',
+      dirPath: searchParams.get('directory') ?? '',
+      updateLock: true, // To ensure these defaults aren't written before the properties have been loaded
       profiles: [] as PandocProfileMetadata[],
       selectedExportProfiles: [] as string[], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [] as string[],
@@ -246,6 +248,10 @@ export default defineComponent({
       return name.substring(0, name.lastIndexOf('.'))
     },
     updateProperties: function () {
+      if (this.updateLock) {
+        return
+      }
+
       ipcRenderer.invoke('application', {
         command: 'update-project-properties',
         payload: {
@@ -282,6 +288,8 @@ export default defineComponent({
             // state on this project. So let's close this window silently.
             ipcRenderer.send('window-controls', { command: 'win-close' })
           }
+          this.updateLock = false // Now the properties are fetched, so the
+          // handlers can overwrite them.
         })
         .catch(err => console.error(err))
     }
