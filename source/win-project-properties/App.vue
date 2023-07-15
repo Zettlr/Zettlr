@@ -92,7 +92,7 @@ import ListControl from '@common/vue/form/elements/List.vue'
 import FileControl from '@common/vue/form/elements/File.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import { defineComponent } from 'vue'
-import { DirDescriptor, ProjectSettings } from '@dts/common/fsal'
+import { DirDescriptor } from '@dts/common/fsal'
 import { WindowTab } from '@dts/renderer/window'
 import { PandocProfileMetadata } from '@dts/common/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
@@ -252,22 +252,35 @@ export default defineComponent({
         return
       }
 
+      this.updateLock = true
+
       ipcRenderer.invoke('application', {
-        command: 'update-project-properties',
-        payload: {
-          properties: {
-            profiles: this.selectedExportProfiles.map(e => e), // De-proxy
-            filters: this.patterns.map(e => e), // De-proxy
-            cslStyle: this.cslStyle,
-            title: this.projectTitle,
-            templates: {
-              tex: this.texTemplate,
-              html: this.htmlTemplate
-            }
-          } as ProjectSettings,
-          path: this.dirPath
-        }
-      }).catch(err => console.error(err))
+        command: 'get-descriptor',
+        payload: this.dirPath
+      })
+        .then(descriptor => {
+          if (descriptor.settings.project == null) {
+            throw new Error('Could not update project settings: Project was null!')
+          }
+
+          const settings = descriptor.settings.project
+          settings.profiles = this.selectedExportProfiles.map(e => e) // De-proxy
+          settings.filters = this.patterns.map(e => e) // De-proxy
+          settings.cslStyle = this.cslStyle
+          settings.title = this.projectTitle
+          settings.templates.tex = this.texTemplate
+          settings.templates.html = this.htmlTemplate
+
+          ipcRenderer.invoke('application', {
+            command: 'update-project-properties',
+            payload: { properties: settings, path: this.dirPath }
+          })
+            .then(() => {
+              this.updateLock = false
+            })
+            .catch(err => console.error(err))
+        })
+        .catch(err => console.error(err))
     },
     fetchProperties: function () {
       ipcRenderer.invoke('application', {

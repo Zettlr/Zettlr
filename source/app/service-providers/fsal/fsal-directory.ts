@@ -101,7 +101,7 @@ async function persistSettings (dir: DirDescriptor): Promise<void> {
       throw err
     }
   }
-  await fs.writeFile(path.join(dir.path, '.ztr-directory'), JSON.stringify(dir.settings))
+  await fs.writeFile(settingsFile, JSON.stringify(dir.settings))
 }
 
 /**
@@ -291,25 +291,14 @@ export async function makeProject (dirObject: DirDescriptor, properties: any): P
  *
  * @return {boolean}                     Returns false if no properties changed
  */
-export async function updateProjectProperties (dirObject: DirDescriptor, properties: ProjectSettings): Promise<boolean> {
+export async function updateProjectProperties (dirObject: DirDescriptor, properties: ProjectSettings): Promise<void> {
   if (dirObject.settings.project === null) {
     throw new Error(`[FSAL Dir] Attempted to update project settings on dir ${dirObject.path}, but it is not a project!`)
-  }
-
-  const titleUnchanged = dirObject.settings.project.title === properties.title
-  const cslUnchanged = dirObject.settings.project.cslStyle === properties.cslStyle
-  const formatsUnchanged = JSON.stringify(dirObject.settings.project.profiles) === JSON.stringify(properties.profiles)
-  const filtersUnchanged = JSON.stringify(dirObject.settings.project.filters) === JSON.stringify(properties.filters)
-  const templatesUnchanged = JSON.stringify(dirObject.settings.project.templates) === JSON.stringify(properties.templates)
-
-  if (titleUnchanged && cslUnchanged && formatsUnchanged && filtersUnchanged && templatesUnchanged) {
-    return false
   }
 
   dirObject.settings.project = safeAssign(properties, dirObject.settings.project)
   // Immediately reflect on disk
   await persistSettings(dirObject)
-  return true
 }
 
 // Removes a project

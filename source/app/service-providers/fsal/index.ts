@@ -36,7 +36,7 @@ import type {
   OtherFileDescriptor,
   MaybeRootDescriptor,
   SortMethod,
-  FSALStats, FSALHistoryEvent
+  FSALStats, FSALHistoryEvent, ProjectSettings
 } from '@dts/common/fsal'
 import type { SearchTerm } from '@dts/common/search'
 import generateStats from './util/generate-stats'
@@ -1001,21 +1001,23 @@ export default class FSAL extends ProviderContract {
   /**
    * Updates the given properties for this project
    *
-   * @param   {DirDescriptor}  src      The project dir
-   * @param   {any}            options  New options
+   * @param   {DirDescriptor}    src      The project dir
+   * @param   {ProjectSettings}  options  New options
    */
-  public async updateProject (src: DirDescriptor, options: any): Promise<void> {
+  public async updateProject (src: DirDescriptor, options: ProjectSettings): Promise<void> {
+    if (JSON.stringify(src.settings.project) === JSON.stringify(options)) {
+      return
+    }
+
     this._fsalIsBusy = true
 
     const dotfilePath = path.join(src.path, '.ztr-directory')
     this._watchdog.ignoreEvents([{ event: 'change', path: dotfilePath }])
 
     // Updates the project properties on a directory.
-    const hasChanged = await FSALDir.updateProjectProperties(src, options)
+    await FSALDir.updateProjectProperties(src, options)
 
-    if (hasChanged) {
-      this._recordFiletreeChange('change', src.path)
-    }
+    this._recordFiletreeChange('change', src.path)
 
     this._fsalIsBusy = false
     this._afterRemoteChange()
