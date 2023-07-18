@@ -13311,7 +13311,7 @@ __metadata:
     "@codemirror/legacy-modes": ^6.3.2
     "@codemirror/search": ^6.5.0
     "@codemirror/state": ^6.2.1
-    "@codemirror/view": ^6.13.2
+    "@codemirror/view": ^6.15.0
     "@electron-forge/cli": ^6.2.1
     "@electron-forge/maker-zip": ^6.2.1
     "@electron-forge/plugin-webpack": ^6.2.1
