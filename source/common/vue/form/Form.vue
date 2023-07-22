@@ -188,7 +188,7 @@ import SelectInput from './elements/Select.vue'
 import SliderInput from './elements/Slider.vue'
 import ListControl from './elements/ListControl.vue'
 import TokenInput from './elements/TokenList.vue'
-import ThemeInput from './elements/Theme.vue'
+import ThemeInput, { ThemeDescriptor } from './elements/Theme.vue'
 import { defineComponent } from 'vue'
 
 interface RequiredInfo {
@@ -281,7 +281,7 @@ interface SliderField extends RequiredInfo {
 interface ThemeField extends RequiredInfo {
   type: 'theme'
   label?: string
-  options: any // TODO
+  options: ThemeDescriptor
 }
 
 type Fields = TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField

@@ -10,10 +10,10 @@
         v-bind:class="{ 'inline': inline }"
         v-bind:placeholder="placeholder"
         v-bind:disabled="disabled"
-        v-on:input="$emit('update:modelValue', $event.target.value)"
-        v-on:keyup.enter="$emit('confirm', $event.target.value)"
-        v-on:keyup.esc="$emit('escape', $event.target.value)"
-        v-on:blur="$emit('blur', $event.target.value)"
+        v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+        v-on:keyup.enter="$emit('confirm', ($event.target as HTMLInputElement).value)"
+        v-on:keyup.esc="$emit('escape', ($event.target as HTMLInputElement).value)"
+        v-on:blur="$emit('blur', ($event.target as HTMLInputElement).value)"
       >
       <button
         type="button"
@@ -33,16 +33,16 @@
       v-bind:class="{ 'inline': inline }"
       v-bind:placeholder="placeholder"
       v-bind:disabled="disabled"
-      v-on:input="$emit('update:modelValue', $event.target.value)"
-      v-on:keyup.enter="$emit('confirm', $event.target.value)"
-      v-on:keyup.esc="$emit('escape', $event.target.value)"
-      v-on:blur="$emit('blur', $event.target.value)"
+      v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      v-on:keyup.enter="$emit('confirm', ($event.target as HTMLInputElement).value)"
+      v-on:keyup.esc="$emit('escape', ($event.target as HTMLInputElement).value)"
+      v-on:blur="$emit('blur', ($event.target as HTMLInputElement).value)"
     >
     <p v-if="info !== ''" class="info" v-html="info"></p>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -57,8 +57,9 @@
  * END HEADER
  */
 import { trans } from '@common/i18n-renderer'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'FieldText',
   props: {
     modelValue: {
@@ -101,21 +102,24 @@ export default {
     },
     resetLabel: function () {
       return trans('Reset')
+    },
+    inputRef (): HTMLInputElement {
+      return this.$refs.input as HTMLInputElement
     }
   },
   methods: {
     resetValue: function () {
-      this.$refs.input.value = this.reset
+      this.inputRef.value = typeof this.reset === 'string' ? this.reset : ''
       this.$emit('update:modelValue', this.reset)
     },
     focus: function () {
-      this.$refs.input.focus()
+      this.inputRef.focus()
     },
     select: function () {
-      this.$refs.input.select()
+      this.inputRef.select()
     }
   }
-}
+})
 </script>
 
 <style lang="less">
