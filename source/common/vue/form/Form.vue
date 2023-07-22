@@ -208,7 +208,7 @@ interface TextField extends RequiredInfo {
 interface NumberField extends RequiredInfo {
   type: 'number'
   label?: string
-  reset?: string|boolean
+  reset?: number
   inline?: boolean
   disabled?: boolean
 }

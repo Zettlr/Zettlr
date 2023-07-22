@@ -9,7 +9,7 @@
         v-bind:class="{ 'inline': inline }"
         v-bind:placeholder="placeholder"
         type="color"
-        v-on:input="$emit('update:modelValue', $event.target.value)"
+        v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       >
       <button
         type="button"
@@ -28,12 +28,12 @@
       v-bind:class="{ 'inline': inline }"
       v-bind:placeholder="placeholder"
       type="color"
-      v-on:input="$emit('update:modelValue', $event.target.value)"
+      v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -48,8 +48,9 @@
  * END HEADER
  */
 import { trans } from '@common/i18n-renderer'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'FieldColor',
   props: {
     modelValue: {
@@ -83,15 +84,18 @@ export default {
     },
     resetLabel: function () {
       return trans('Reset')
+    },
+    inputRef (): HTMLInputElement {
+      return this.$refs.input as HTMLInputElement
     }
   },
   methods: {
     resetValue: function () {
-      this.$refs.input.value = this.reset
+      this.inputRef.value = this.reset
       this.$emit('update:modelValue', this.reset)
     }
   }
-}
+})
 </script>
 
 <style lang="less">
