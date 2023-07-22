@@ -61,7 +61,7 @@ export default defineComponent({
     },
     name: {
       type: String,
-      required: true
+      default: ''
     },
     disabled: {
       type: Boolean,
