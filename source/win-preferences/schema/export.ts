@@ -54,6 +54,20 @@ export default function (): any {
             'ask': trans('Ask for directory')
           }
         }
+      ],
+      [
+        {
+          type: 'list',
+          valueType: 'object',
+          keyNames: [ 'displayName', 'command' ],
+          label: trans('Enter custom commands to run the exporter with. Each command receives as its first argument the file or project folder to be exported.'),
+          model: 'export.customCommands',
+          labels: [ 'Display name', 'Command' ],
+          deletable: true,
+          searchable: true,
+          addable: true,
+          editable: true
+        }
       ]
     ]
   }

@@ -76,6 +76,8 @@ export default function (): any {
       [
         {
           type: 'list',
+          valueType: 'object',
+          keyNames: [ 'key', 'value' ],
           label: trans('Here you can define certain strings that will be replaced when AutoCorrect is on. The characters on the left side will be replaced with whatever comes on the right.'),
           model: 'editor.autoCorrect.replacements',
           deletable: true,

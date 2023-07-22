@@ -76,6 +76,8 @@ export default function (): any {
       [
         {
           type: 'list',
+          valueType: 'object',
+          keyNames: [ 'selected', 'key', 'value' ],
           label: trans('Select the languages for which you want to enable automatic spell checking.'),
           model: 'availableDictionaries',
           deletable: false,
@@ -85,6 +87,7 @@ export default function (): any {
         },
         {
           type: 'list',
+          valueType: 'simpleArray',
           label: trans('User dictionary. Remove words by clicking them.'),
           model: 'userDictionaryContents',
           labels: [trans('Dictionary entry')],

@@ -26,6 +26,7 @@
       </p>
       <ListControl
         v-bind:label="exportFormatLabel"
+        v-bind:value-type="'object'"
         v-bind:model-value="exportFormatList"
         v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel, conversionLabel]"
         v-bind:editable="[0]"
@@ -40,6 +41,7 @@
       <!-- First the glob patterns -->
       <ListControl
         v-model="patterns"
+        v-bind:value-type="'simpleArray'"
         v-bind:label="exportPatternLabel"
         v-bind:labels="[exportPatternNameLabel]"
         v-bind:editable="[0]"
@@ -100,6 +102,7 @@ import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/
 const ipcRenderer = window.ipc
 
 interface ExportProfile { selected: boolean, name: string, conversion: string }
+interface CustomCommand { displayName: string, command: string }
 
 export default defineComponent({
   components: {
@@ -114,6 +117,7 @@ export default defineComponent({
       dirPath: searchParams.get('directory') ?? '',
       updateLock: true, // To ensure these defaults aren't written before the properties have been loaded
       profiles: [] as PandocProfileMetadata[],
+      customCommands: window.config.get('export.customCommands') as Array<{ displayName: string, command: string }>,
       selectedExportProfiles: [] as string[], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [] as string[],
       cslStyle: '',
@@ -153,7 +157,15 @@ export default defineComponent({
           name: this.getDisplayText(e.name),
           conversion: conversionString
         }
-      })
+      }).concat(
+        this.customCommands.map(c => {
+          return {
+            selected: this.selectedExportProfiles.includes(c.command),
+            name: c.displayName,
+            conversion: c.command
+          }
+        })
+      )
     },
     exportFormatLabel: function (): string {
       return trans('Export project to:')
@@ -238,10 +250,16 @@ export default defineComponent({
   },
   methods: {
     selectExportProfile: function (newListVal: ExportProfile[]) {
-      const newProfiles = newListVal.filter(e => e.selected).map(e => {
-        return this.profiles.find(x => this.getDisplayText(x.name) === e.name)
-      }).filter(x => x !== undefined) as PandocProfileMetadata[]
-      this.selectedExportProfiles = newProfiles.map(x => x.name)
+      const newProfiles = newListVal
+        .filter(e => e.selected)
+        .map(e => {
+          return this.profiles.find(x => this.getDisplayText(x.name) === e.name) ?? this.customCommands.find(c => c.displayName === e.name)
+        })
+        .filter(x => x !== undefined) as Array<PandocProfileMetadata|CustomCommand>
+
+      this.selectedExportProfiles = newProfiles.map(x => {
+        return ('name' in x) ? x.name : x.command
+      })
       this.updateProperties()
     },
     getDisplayText: function (name: string): string {

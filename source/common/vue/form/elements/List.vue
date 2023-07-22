@@ -160,7 +160,21 @@ export default {
     // Hence, all objects must have the same properties.
     modelValue: {
       type: Array,
-      default: function () { return [] }
+      required: true
+    },
+    /**
+     * Indicates the data type: Must be simpleArray, multiArray, or object
+     */
+    valueType: {
+      type: String,
+      required: true
+    },
+    /**
+     * Provide the key names if your value type is object
+     */
+    keyNames: {
+      type: Array,
+      default: () => []
     },
     label: {
       type: String,
@@ -235,32 +249,6 @@ export default {
     }
   },
   computed: {
-    /**
-     * Returns the type of the value to be displayed.
-     *
-     * @return  {string}  Can be simpleArray, multiArray, or object.
-     */
-    valueType: function () {
-      if (this.modelValue.length === 0) {
-        return 'simpleArray'
-      }
-
-      const testElement = this.modelValue[0]
-      const isPrimitive = [ 'number', 'boolean', 'string' ].includes(typeof testElement)
-      const isNone = testElement === undefined || testElement === null
-
-      if (Array.isArray(testElement)) {
-        // We have a multidimensional array
-        return 'multiArray'
-      } else if (isPrimitive || isNone) {
-        // We have a one-dimensional array of primitives
-        return 'simpleArray'
-      } else {
-        // It only can be an object. Errors may be thrown if the user
-        // (that's you!) passes a false value.
-        return 'object'
-      }
-    },
     addButtonLabel: function () {
       return trans('Add')
     },
@@ -270,15 +258,28 @@ export default {
     deleteLabel: function () {
       return trans('Delete')
     },
+    objectKeys: function () {
+      if (this.valueType !== 'object') {
+        return undefined
+      }
+
+      if (this.keyNames.length > 0) {
+        return this.keyNames
+      } else if (this.modelValue.length > 0) {
+        return Object.keys(this.modelValue[0])
+      } else {
+        return undefined
+      }
+    },
     columnLabels: function () {
-      if (this.labels.length !== 0) {
+      if (this.labels.length > 0) {
         return this.labels // The user provided labels for us
       }
 
       // Else: We have to find the labels by looking at the value
       if (this.valueType === 'object' && this.modelValue.length > 0) {
         // We can infer the values from the object keys
-        return Object.keys(this.modelValue[0])
+        return this.objectKeys
       } else if (this.valueType === 'multiArray' && this.modelValue.length > 0) {
         // We have a multi-array so there are no column names -> return a list
         // of numbers
@@ -319,7 +320,7 @@ export default {
             return false
           } else {
             // We have an object, so the same as multiArray, but with Object.keys()
-            for (const key of Object.keys(element)) {
+            for (const key of this.objectKeys) {
               if (String(element[key]).toLowerCase().includes(query)) {
                 return true
               }
@@ -364,8 +365,7 @@ export default {
       } else if (this.valueType === 'multiArray') {
         return typeof this.modelValue[0][idx]
       } else if (this.valueType === 'object') {
-        const keys = Object.keys(this.modelValue[0])
-        return typeof this.modelValue[0][keys[idx]]
+        return typeof this.modelValue[0][this.objectKeys[idx]]
       }
     },
     handleInput: function (row, col, newValue) {
@@ -392,7 +392,7 @@ export default {
         } else if (this.valueType === 'object') {
           // Set the correct key to the new value
           const newObj = Object.assign({}, this.modelValue[i])
-          newObj[Object.keys(newObj)[col]] = newValue
+          newObj[this.objectKeys[col]] = newValue
           emitValue.push(newObj)
         }
       }
@@ -429,7 +429,7 @@ export default {
         this.$emit('update:modelValue', newValue)
       } else if (this.valueType === 'object') {
         const newValue = this.modelValue.map(elem => Object.assign({}, elem))
-        const keys = Object.keys(newValue[0])
+        const keys = this.objectKeys
         const newObject = {}
         for (let i = 0; i < keys.length; i++) {
           newObject[keys[i]] = newValues[i]

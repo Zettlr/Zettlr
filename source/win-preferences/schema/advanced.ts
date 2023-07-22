@@ -94,6 +94,7 @@ export default function (): any {
       [
         {
           type: 'list',
+          valueType: 'simpleArray',
           label: trans('iFrame rendering whitelist'),
           model: 'system.iframeWhitelist',
           deletable: true,
