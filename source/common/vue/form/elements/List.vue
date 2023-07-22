@@ -4,13 +4,11 @@
   -->
   <div class="table-view form-control">
     <label v-if="label !== ''" v-html="label"></label>
-    <input
+    <TextControl
       v-if="searchable"
       v-model="query"
-      class="filter"
-      type="search"
       v-bind:placeholder="searchLabel"
-    >
+    ></TextControl>
     <table v-bind:class="{ 'striped': striped }">
       <!-- Head row -->
       <thead>
@@ -26,39 +24,39 @@
       <!-- Table body -->
       <tbody>
         <tr
-          v-for="(item, idx) in filteredValue"
-          v-bind:key="idx"
+          v-for="(item, rowIdx) in filteredValue"
+          v-bind:key="rowIdx"
           class="list-input-item"
         >
           <!-- Here we output the actual contents -->
           <td
             v-for="(column, colIdx) in columnValues(item)"
             v-bind:key="colIdx"
-            v-on:dblclick="handleDoubleClick(idx, colIdx)"
+            v-on:dblclick="handleDoubleClick(rowIdx, colIdx)"
           >
-            <template v-if="editing.row === idx && editing.col === colIdx">
+            <template v-if="editing.row === rowIdx && editing.col === colIdx">
               <!-- We are currently editing this cell -->
               <Checkbox
                 v-if="typeof column === 'boolean'"
                 v-bind:model-value="column"
-                v-bind:name="`${name}-checkbox-${idx}-${colIdx}`"
-                v-on:update:model-value="handleInput(idx, colIdx, $event)"
+                v-bind:name="`${name}-checkbox-${rowIdx}-${colIdx}`"
+                v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
               >
               </Checkbox>
               <NumberControl
                 v-else-if="typeof column === 'number'"
                 v-bind:model-value="column"
                 v-on:escape="finishEditing()"
-                v-on:blur="handleInput(idx, colIdx, $event)"
-                v-on:confirm="handleInput(idx, colIdx, $event)"
+                v-on:blur="handleInput(rowIdx, colIdx, $event)"
+                v-on:confirm="handleInput(rowIdx, colIdx, $event)"
               >
               </NumberControl>
               <TextControl
                 v-else
                 v-bind:model-value="column"
                 v-on:escape="finishEditing()"
-                v-on:blur="handleInput(idx, colIdx, $event)"
-                v-on:confirm="handleInput(idx, colIdx, $event)"
+                v-on:blur="handleInput(rowIdx, colIdx, $event)"
+                v-on:confirm="handleInput(rowIdx, colIdx, $event)"
               >
               </TextControl>
             </template>
@@ -67,9 +65,9 @@
               <Checkbox
                 v-if="typeof column === 'boolean'"
                 v-bind:model-value="column"
-                v-bind:disabled="isColumnEditable(colIdx) === false"
-                v-bind:name="`${name}-action-${idx}-${colIdx}`"
-                v-on:update:model-value="handleInput(idx, colIdx, $event)"
+                v-bind:disabled="!isColumnEditable(colIdx)"
+                v-bind:name="`${name}-action-${rowIdx}-${colIdx}`"
+                v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
               >
               </Checkbox>
               <!-- ... and everything else as normal text -->
@@ -78,7 +76,7 @@
           </td>
           <!-- The list items are deletable -->
           <td v-if="deletable" style="text-align: center">
-            <button v-on:click="handleDeletion(idx)">
+            <button v-on:click="handleDeletion(rowIdx)">
               {{ deleteLabel }}
             </button>
           </td>
@@ -87,32 +85,39 @@
           </td>
         </tr>
         <!-- If users may add something, allow them to do so here -->
-        <tr v-if="addable">
-          <td v-for="(colLabel, idx) in columnLabels" v-bind:key="idx">
+        <tr v-if="addable && isAdding">
+          <td v-for="(colLabel, colIdx) in columnLabels" v-bind:key="colIdx">
             <Checkbox
-              v-if="columnType(idx) === 'boolean'"
+              v-if="columnType(colIdx) === 'boolean'"
               v-bind:placeholder="colLabel"
-              v-on:update:model-value="valuesToAdd[idx] = $event"
+              v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
             </Checkbox>
             <NumberControl
-              v-else-if="columnType(idx) === 'number'"
+              v-else-if="columnType(colIdx) === 'number'"
               v-bind:placeholder="colLabel"
-              v-on:update:model-value="valuesToAdd[idx] = $event"
+              v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
             </NumberControl>
             <TextControl
               v-else
               v-bind:placeholder="colLabel"
-              v-on:update:model-value="valuesToAdd[idx] = $event"
+              v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
             </TextControl>
           </td>
           <td style="text-align: center">
             <button v-on:click="handleAddition()">
+              {{ addButtonLabel }}
+            </button>
+          </td>
+        </tr>
+        <tr v-else>
+          <td v-bind:colspan="numColumns">
+            <button v-on:click="isAdding = true">
               {{ addButtonLabel }}
             </button>
           </td>
@@ -152,12 +157,9 @@ export default {
   },
   props: {
     // Value must contain an array with elements to be displayed. These can come
-    // in three flavours: 1.) a simple, one-dimensional array. Then the table
-    // will only contain a single column. 2.) A two-dimensional array. Then the
-    // first index contains the rows, and the second index the columns. Thus,
-    // all inner array must be of the same length. 3.) An object-array. Then,
-    // all enumerable properties (returned by Object.keys()) contain the columns.
-    // Hence, all objects must have the same properties.
+    // in three flavours: 1.) a simple list (1d array). 2.) A two-dimensional
+    // array. Then the first index contains the rows, and the second index the
+    // columns. 3.) An object-array. In that case you must provide the keynames
     modelValue: {
       type: Array,
       required: true
@@ -174,7 +176,9 @@ export default {
      */
     keyNames: {
       type: Array,
-      default: () => []
+      default: function () {
+        return Object.keys(this.modelValue)
+      }
     },
     label: {
       type: String,
@@ -236,7 +240,7 @@ export default {
      */
     searchLabel: {
       type: String,
-      default: ''
+      default: trans('Find…')
     }
   },
   emits: ['update:modelValue'],
@@ -245,6 +249,7 @@ export default {
       query: '', // Optional filter
       // Contains the pointer to the currently editing cell
       editing: { row: -1, col: -1 },
+      isAdding: false, // True as long as the bottom adding-row is displayed
       valuesToAdd: [] // Contains values to add
     }
   },
@@ -257,6 +262,9 @@ export default {
     },
     deleteLabel: function () {
       return trans('Delete')
+    },
+    numColumns: function () {
+      return this.columnLabels.length + (this.addable || this.deletable ? 1 : 0)
     },
     objectKeys: function () {
       if (this.valueType !== 'object') {
@@ -302,33 +310,32 @@ export default {
       // list. In that case, we'll spit out the value.
       const query = this.query.trim().toLowerCase()
       if (query === '') {
-        // No filtering
         return this.modelValue
-      } else {
-        // Filtered values
-        return this.modelValue.filter(element => {
-          if (this.valueType === 'simpleArray') {
-            // Return the string coerced index
-            return String(element).toLowerCase().includes(query)
-          } else if (this.valueType === 'multiArray') {
-            for (const column of element) {
-              // Same, but for each column
-              if (String(column).toLowerCase().includes(query)) {
-                return true
-              }
-            }
-            return false
-          } else {
-            // We have an object, so the same as multiArray, but with Object.keys()
-            for (const key of this.objectKeys) {
-              if (String(element[key]).toLowerCase().includes(query)) {
-                return true
-              }
-            }
-            return false
-          }
-        })
       }
+
+      // Filtered values
+      return this.modelValue.filter(element => {
+        if (this.valueType === 'simpleArray') {
+          // Return the string coerced index
+          return String(element).toLowerCase().includes(query)
+        } else if (this.valueType === 'multiArray') {
+          for (const column of element) {
+            // Same, but for each column
+            if (String(column).toLowerCase().includes(query)) {
+              return true
+            }
+          }
+          return false
+        } else {
+          // We have an object, so the same as multiArray, but with Object.keys()
+          for (const key of this.objectKeys) {
+            if (String(element[key]).toLowerCase().includes(query)) {
+              return true
+            }
+          }
+          return false
+        }
+      })
     }
   },
   beforeUpdate: function () {
@@ -348,14 +355,14 @@ export default {
         return Object.values(element)
       }
     },
-    isColumnEditable: function (idx) {
+    isColumnEditable: function (columnIndex) {
       if (typeof this.editable === 'boolean') {
         return this.editable // All or nothing
       }
 
-      return this.editable.includes(idx)
+      return this.editable.includes(columnIndex)
     },
-    columnType: function (idx) {
+    columnType: function (columnIndex) {
       if (this.modelValue.length === 0) {
         return 'string' // ¯\_(ツ)_/¯
       }
@@ -363,9 +370,9 @@ export default {
       if (this.valueType === 'simpleArray') {
         return typeof this.modelValue[0]
       } else if (this.valueType === 'multiArray') {
-        return typeof this.modelValue[0][idx]
+        return typeof this.modelValue[0][columnIndex]
       } else if (this.valueType === 'object') {
-        return typeof this.modelValue[0][this.objectKeys[idx]]
+        return typeof this.modelValue[0][this.objectKeys[columnIndex]]
       }
     },
     handleInput: function (row, col, newValue) {
@@ -376,7 +383,7 @@ export default {
           // Nothing changed here, so retain the old value
           emitValue.push(this.modelValue[i])
         } else if (this.valueType === 'simpleArray') {
-          // Simply push the new value instead
+          // Simply push the new value instead of the old one
           emitValue.push(newValue)
         } else if (this.valueType === 'multiArray') {
           // Exchange the correct column with the new value
@@ -438,8 +445,7 @@ export default {
         this.$emit('update:modelValue', newValue)
       }
 
-      // TODO: Reset the values
-      // this.$refs['add_row'].forEach(elem => { elem.$refs['input'].value = '' })
+      this.isAdding = false
     },
     handleDoubleClick: function (row, col) {
       if (this.isColumnEditable(col) === true) {
