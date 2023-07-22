@@ -13,8 +13,9 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { type FormSchema } from '@common/vue/form/Form.vue'
 
-export default function (): any {
+export default function (): FormSchema {
   return {
     fieldsets: [
       [
@@ -58,11 +59,11 @@ export default function (): any {
       [
         {
           type: 'list',
-          valueType: 'object',
+          valueType: 'record',
           keyNames: [ 'displayName', 'command' ],
+          columnLabels: [ trans('Display name'), trans('Command') ],
           label: trans('Enter custom commands to run the exporter with. Each command receives as its first argument the file or project folder to be exported.'),
           model: 'export.customCommands',
-          labels: [ 'Display name', 'Command' ],
           deletable: true,
           searchable: true,
           addable: true,
@@ -70,5 +71,5 @@ export default function (): any {
         }
       ]
     ]
-  }
+  } satisfies FormSchema
 }

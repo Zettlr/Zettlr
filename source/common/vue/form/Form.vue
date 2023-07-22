@@ -1,7 +1,7 @@
 <template>
   <div ref="component-container">
     <fieldset
-      v-for="(item, idx) in schema.fieldsets"
+      v-for="(item, idx) in typedSchema.fieldsets"
       v-bind:key="idx"
     >
       <template v-for="(field, f_idx) in item">
@@ -105,22 +105,23 @@
           v-bind:options="field.options"
           v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></SelectInput>
-        <ListInput
+        <ListControl
           v-if="field.type === 'list'"
           v-bind:key="f_idx"
           v-bind:model-value="getModelValue(field.model)"
           v-bind:value-type="field.valueType"
           v-bind:label="field.label"
-          v-bind:labels="field.labels"
+          v-bind:column-labels="field.columnLabels"
           v-bind:key-names="field.keyNames"
           v-bind:name="field.model"
           v-bind:deletable="field.deletable"
           v-bind:editable="field.editable"
+          v-bind:striped="field.striped"
           v-bind:addable="field.addable"
           v-bind:searchable="field.searchable"
           v-bind:search-label="field.searchLabel"
           v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></ListInput>
+        ></ListControl>
         <TokenInput
           v-if="field.type === 'token'"
           v-bind:key="f_idx"
@@ -134,6 +135,8 @@
           v-if="field.type === 'slider'"
           v-bind:key="f_idx"
           v-bind:model-value="getModelValue(field.model)"
+          v-bind:min="field.min"
+          v-bind:max="field.max"
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-on:change="$emit('update:modelValue', field.model, $event)"
@@ -152,7 +155,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -183,11 +186,111 @@ import SwitchInput from './elements/Switch.vue'
 import RadioInput from './elements/Radio.vue'
 import SelectInput from './elements/Select.vue'
 import SliderInput from './elements/Slider.vue'
-import ListInput from './elements/List.vue'
+import ListControl from './elements/ListControl.vue'
 import TokenInput from './elements/TokenList.vue'
 import ThemeInput from './elements/Theme.vue'
+import { defineComponent } from 'vue'
 
-export default {
+interface RequiredInfo {
+  model: string
+}
+
+interface TextField extends RequiredInfo {
+  type: 'text'
+  placeholder?: string
+  label?: string
+  reset?: string|boolean
+  info?: string
+  inline?: boolean
+  disabled?: boolean
+}
+
+interface NumberField extends RequiredInfo {
+  type: 'number'
+  label?: string
+  reset?: string|boolean
+  inline?: boolean
+  disabled?: boolean
+}
+
+interface TimeField extends RequiredInfo {
+  type: 'time'
+  label?: string
+  inline?: boolean
+}
+
+interface ColorField extends RequiredInfo {
+  type: 'color'
+  label?: string
+  inline?: boolean
+}
+
+interface FileField extends RequiredInfo {
+  type: 'file'|'directory'
+  label?: string
+  reset?: string|boolean
+  filter?: Record<string, string>
+}
+
+interface CheckboxField extends RequiredInfo {
+  type: 'checkbox'|'switch'
+  label?: string
+  info?: string
+  disabled?: boolean
+}
+
+interface RadioField extends RequiredInfo {
+  type: 'radio'
+  label?: string
+  disabled?: boolean
+  options: Record<string, string>
+}
+
+interface SelectField extends RequiredInfo {
+  type: 'select'
+  label?: string
+  options: Record<string, string>
+}
+
+interface ListField extends RequiredInfo {
+  type: 'list'
+  valueType: 'simpleArray'|'multiArray'|'record'
+  keyNames?: string[]
+  label?: string
+  columnLabels: string[]
+  striped?: boolean
+  addable?: boolean
+  editable?: boolean | number[]
+  deletable?: boolean
+  searchable?: boolean
+  searchLabel?: string
+}
+
+interface TokenField extends RequiredInfo {
+  type: 'token'
+  label?: string
+}
+
+interface SliderField extends RequiredInfo {
+  type: 'slider'
+  label?: string
+  min?: number
+  max?: number
+}
+
+interface ThemeField extends RequiredInfo {
+  type: 'theme'
+  label?: string
+  options: any // TODO
+}
+
+type Fields = TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField
+
+export interface FormSchema {
+  fieldsets: Fields[][]
+}
+
+export default defineComponent({
   name: 'FormBuilder',
   components: {
     TextInput,
@@ -200,7 +303,7 @@ export default {
     RadioInput,
     SelectInput,
     SliderInput,
-    ListInput,
+    ListControl,
     TokenInput,
     ThemeInput
   },
@@ -215,8 +318,13 @@ export default {
     }
   },
   emits: ['update:modelValue'],
+  computed: {
+    typedSchema (): FormSchema {
+      return this.schema as FormSchema
+    }
+  },
   methods: {
-    getModelValue: function (model) {
+    getModelValue: function (model: string): any {
       const modelProps = model.split('.')
       let modelValue = this.model
       for (const key of modelProps) {
@@ -226,7 +334,7 @@ export default {
       return modelValue
     }
   }
-}
+})
 </script>
 
 <style lang="less">

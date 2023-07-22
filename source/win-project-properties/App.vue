@@ -26,9 +26,9 @@
       </p>
       <ListControl
         v-bind:label="exportFormatLabel"
-        v-bind:value-type="'object'"
-        v-bind:model-value="exportFormatList"
-        v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel, conversionLabel]"
+        v-bind:value-type="'record'"
+        v-bind:model-value="(exportFormatList as any[])"
+        v-bind:column-labels="[exportFormatUseLabel, exportFormatNameLabel, conversionLabel]"
         v-bind:editable="[0]"
         v-on:update:model-value="selectExportProfile($event)"
       ></ListControl>
@@ -43,7 +43,7 @@
         v-model="patterns"
         v-bind:value-type="'simpleArray'"
         v-bind:label="exportPatternLabel"
-        v-bind:labels="[exportPatternNameLabel]"
+        v-bind:column-labels="[exportPatternNameLabel]"
         v-bind:editable="[0]"
         v-bind:addable="true"
         v-bind:deletable="true"
@@ -90,7 +90,7 @@
 
 import { trans } from '@common/i18n-renderer'
 import WindowChrome from '@common/vue/window/Chrome.vue'
-import ListControl from '@common/vue/form/elements/List.vue'
+import ListControl from '@common/vue/form/elements/ListControl.vue'
 import FileControl from '@common/vue/form/elements/File.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import { defineComponent } from 'vue'
