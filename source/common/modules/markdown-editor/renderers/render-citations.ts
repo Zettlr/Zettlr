@@ -57,7 +57,7 @@ class CitationWidget extends WidgetType {
   }
 
   ignoreEvent (event: Event): boolean {
-    return false // By default ignore all events
+    return event instanceof MouseEvent
   }
 }
 
