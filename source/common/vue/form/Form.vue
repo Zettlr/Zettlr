@@ -191,72 +191,85 @@ import TokenInput from './elements/TokenList.vue'
 import ThemeInput, { ThemeDescriptor } from './elements/Theme.vue'
 import { defineComponent } from 'vue'
 
-interface RequiredInfo {
+interface BasicInfo {
+  /**
+   * The model in the underlying data structure this form element should update.
+   */
   model: string
+  /**
+   * Optional label to put before the input
+   */
+  label?: string
 }
 
-interface TextField extends RequiredInfo {
+interface TextField extends BasicInfo {
   type: 'text'
+  /**
+   * Optional placeholder text
+   */
   placeholder?: string
-  label?: string
+  /**
+   * Optional resettability; if true will reset to empty, otherwise to the string
+   */
   reset?: string|boolean
+  /**
+   * Optional info string to put below the field
+   */
   info?: string
+  /**
+   * Whether the field should be displayed inline
+   */
   inline?: boolean
+  /**
+   * Whether the field is disabled
+   */
   disabled?: boolean
 }
 
-interface NumberField extends RequiredInfo {
+interface NumberField extends BasicInfo {
   type: 'number'
-  label?: string
   reset?: number
   inline?: boolean
   disabled?: boolean
 }
 
-interface TimeField extends RequiredInfo {
+interface TimeField extends BasicInfo {
   type: 'time'
-  label?: string
   inline?: boolean
 }
 
-interface ColorField extends RequiredInfo {
+interface ColorField extends BasicInfo {
   type: 'color'
-  label?: string
   inline?: boolean
 }
 
-interface FileField extends RequiredInfo {
+interface FileField extends BasicInfo {
   type: 'file'|'directory'
-  label?: string
   reset?: string|boolean
   filter?: Record<string, string>
 }
 
-interface CheckboxField extends RequiredInfo {
+interface CheckboxField extends BasicInfo {
   type: 'checkbox'|'switch'
-  label?: string
   info?: string
   disabled?: boolean
 }
 
-interface RadioField extends RequiredInfo {
+interface RadioField extends BasicInfo {
   type: 'radio'
-  label?: string
   disabled?: boolean
   options: Record<string, string>
 }
 
-interface SelectField extends RequiredInfo {
+interface SelectField extends BasicInfo {
   type: 'select'
-  label?: string
   options: Record<string, string>
 }
 
-interface ListField extends RequiredInfo {
+interface ListField extends BasicInfo {
   type: 'list'
   valueType: 'simpleArray'|'multiArray'|'record'
   keyNames?: string[]
-  label?: string
   columnLabels: string[]
   striped?: boolean
   addable?: boolean
@@ -266,21 +279,18 @@ interface ListField extends RequiredInfo {
   searchLabel?: string
 }
 
-interface TokenField extends RequiredInfo {
+interface TokenField extends BasicInfo {
   type: 'token'
-  label?: string
 }
 
-interface SliderField extends RequiredInfo {
+interface SliderField extends BasicInfo {
   type: 'slider'
-  label?: string
   min?: number
   max?: number
 }
 
-interface ThemeField extends RequiredInfo {
+interface ThemeField extends BasicInfo {
   type: 'theme'
-  label?: string
   options: ThemeDescriptor
 }
 
