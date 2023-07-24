@@ -6,7 +6,7 @@
   Zettlr [<em>ˈset·lər</em>]
 </h1>
 
-<p align="center"><strong>A Markdown Editor for the 21<sup>st</sup> century</strong>.</p>
+<p align="center"><strong>Your One-Stop Publication Workbench</strong>.</p>
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.2580173">
@@ -35,20 +35,24 @@
 
 ![screenshot](/resources/screenshots/zettlr_view.png)
 
-With Zettlr, writing professional texts is easy and motivating: Whether you are a college student, a researcher, a journalist, or an author — Zettlr has the right tools for you. [Watch the video](https://www.youtube.com/watch?v=BJ27r6YGpAs) or continue reading to see what they are!
+Zettlr brings simplicity back to your texts. Open-minded writing that adapts to your style. Fast information retrieval that finds what matters to you. Versatile exporting that enables you to adapt to whatever publication pipeline your employer or school uses.
 
-[Visit our Website](https://zettlr.com/).
+Focus on what matters to you.
+
+**Publish, not perish.**
+
+> [Learn more on our website](https://zettlr.com/).
 
 ## Features
 
-- Available in over a dozen languages
-- Tight and ever-growing **integration with your favourite reference manager** (such as Zotero or JabRef)
-- **Cite with Zettlr** using `citeproc` and your existing literature database
-- Five **themes and dark mode support**
-- File-agnostic writing: Enjoy **full control over your own files**
-- Keep all your notes and texts **in one place** — searchable and accessible
+- Your Notes are your notes: Zettlr is **privacy-first**
+- **Citations** made easy: Tight and ever-growing integration with your favourite reference manager (Zotero, JabRef, and many others)
+- Available in over a **dozen languages**
+- Draft your publications in a professional environment, with **LaTeX and Word template support**
+- Simple and beautiful exports with [Pandoc](https://pandoc.org/), [LaTeX](https://www.latex-project.org/), and [Textbundle](http://textbundle.org/)
+- **Snippets** allow you to automate insertion of boilerplate code
+- Themes, dark modes, and full flexibility with **custom CSS**
 - **Code highlighting** for many languages
-- Simple and beautiful **exports** with [Pandoc](https://pandoc.org/), [LaTeX](https://www.latex-project.org/), and [Textbundle](http://textbundle.org/)
 - Support for state of the art knowledge management techniques (**Zettelkasten**)
 - A powerful **full text search** that helps you find anything, anywhere
 
@@ -60,7 +64,7 @@ To install Zettlr, just [download the latest release](https://www.zettlr.com/dow
 
 On our website and here on GitHub, we provide a set of installers for the most common use-cases. We provide both 64-bit installers as well as installers for ARM systems (called "Apple Silicon" in the macOS ecosystem). 32-bit is not supported. We offer the following binaries directly:
 
-* Windows (x64 and ARM)
+* Windows (x64)
 * macOS (Intel and Apple Silicon)
 * Debian and Fedora (x64 and ARM)
 * AppImage (x64 and ARM)
