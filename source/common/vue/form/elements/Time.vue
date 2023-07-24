@@ -7,12 +7,12 @@
       v-bind:value="modelValue"
       v-bind:class="{ 'inline': inline }"
       type="time"
-      v-on:input="validateInput($event.target.value)"
+      v-on:input="validateInput(($event.target as HTMLInputElement).value)"
     >
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -27,7 +27,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'FieldText',
   props: {
     modelValue: {
@@ -51,20 +53,23 @@ export default {
   computed: {
     fieldID: function () {
       return 'field-input-' + this.name
+    },
+    inputRef (): HTMLInputElement {
+      return this.$refs.input as HTMLInputElement
     }
   },
   methods: {
-    validateInput: function (value) {
+    validateInput: function (value: string) {
       // Make sure it's a time
-      if (!/\d{2}:\d{2}/.test(value)) {
-        this.$refs.input.classList.add('error')
+      if (!/^\d{2}:\d{2}$/.test(value)) {
+        this.inputRef.classList.add('error')
       } else {
         // All good, emit!
         this.$emit('update:modelValue', value)
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

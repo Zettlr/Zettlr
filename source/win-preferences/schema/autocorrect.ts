@@ -13,8 +13,9 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { type FormSchema } from '@common/vue/form/Form.vue'
 
-export default function (): any {
+export default function (): FormSchema {
   return {
     fieldsets: [
       [
@@ -76,6 +77,9 @@ export default function (): any {
       [
         {
           type: 'list',
+          valueType: 'record',
+          keyNames: [ 'key', 'value' ],
+          columnLabels: [ trans('String'), trans('Replacement') ],
           label: trans('Here you can define certain strings that will be replaced when AutoCorrect is on. The characters on the left side will be replaced with whatever comes on the right.'),
           model: 'editor.autoCorrect.replacements',
           deletable: true,
@@ -85,5 +89,5 @@ export default function (): any {
         }
       ]
     ]
-  }
+  } satisfies FormSchema
 }

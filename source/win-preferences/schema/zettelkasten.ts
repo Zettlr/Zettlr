@@ -13,8 +13,9 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { type FormSchema } from '@common/vue/form/Form.vue'
 
-export default function (): any {
+export default function (): FormSchema {
   return {
     fieldsets: [
       [
@@ -33,10 +34,6 @@ export default function (): any {
         }
       ],
       [
-        {
-          type: 'fieldset-label', // TODO: Create this type
-          text: trans('Options for ZKN elements')
-        },
         {
           type: 'checkbox',
           label: trans('Link with filename only'),
@@ -73,5 +70,5 @@ export default function (): any {
         }
       ]
     ]
-  }
+  } satisfies FormSchema
 }

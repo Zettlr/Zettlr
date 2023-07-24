@@ -14,7 +14,7 @@
           value="yes"
           v-bind:checked="modelValue"
           v-bind:disabled="disabled"
-          v-on:input="$emit('update:modelValue', $event.target.checked)"
+          v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
         >
         <span class="checkmark"></span>
       </label>
@@ -31,7 +31,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -46,7 +46,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'CheckboxField',
   props: {
     modelValue: {
@@ -59,7 +61,7 @@ export default {
     },
     name: {
       type: String,
-      required: true
+      default: ''
     },
     disabled: {
       type: Boolean,
@@ -75,11 +77,11 @@ export default {
     }
   },
   computed: {
-    fieldID: function () {
+    fieldID: function (): string {
       return 'form-input-' + this.name
     }
   }
-}
+})
 </script>
 
 <style lang="less">

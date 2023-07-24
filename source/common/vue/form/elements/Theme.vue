@@ -66,7 +66,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -82,8 +82,15 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { defineComponent } from 'vue'
 
-export default {
+export interface ThemeDescriptor {
+  textColor: string
+  backgroundColor: string
+  fontFamily: string
+}
+
+export default defineComponent({
   name: 'ThemeField',
   props: {
     label: {
@@ -109,14 +116,14 @@ export default {
     }
   },
   methods: {
-    style: function (themeObject) {
+    style: function (themeObject: ThemeDescriptor) {
       return `color: ${themeObject.textColor}; border-color: ${themeObject.textColor}; background-color: ${themeObject.backgroundColor}; font-family: ${themeObject.fontFamily}`
     },
-    selectTheme: function (themeName) {
+    selectTheme: function (themeName: string) {
       this.$emit('update:modelValue', themeName)
     }
   }
-}
+})
 </script>
 
 <style lang="less">

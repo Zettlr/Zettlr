@@ -3,7 +3,7 @@
   <div class="form-control">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
     <!-- Else: Normal input w/o reset button -->
-    <div class="token-list" v-on:click="$refs.input.focus()">
+    <div class="token-list" v-on:click="($refs.input as HTMLInputElement).focus()">
       <span
         v-for="(token, idx) in modelValue"
         v-bind:key="idx"
@@ -24,7 +24,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -67,7 +67,7 @@ export default {
     }
   },
   methods: {
-    handleKey: function (event) {
+    handleKey: function (event: KeyboardEvent) {
       if (this.inputValue.trim() === '') {
         return
       }
@@ -86,7 +86,7 @@ export default {
       }
       this.inputValue = ''
     },
-    removeToken: function (idx) {
+    removeToken: function (idx: number) {
       const arr = this.modelValue.map(token => token)
       arr.splice(idx, 1)
       this.$emit('update:modelValue', arr)

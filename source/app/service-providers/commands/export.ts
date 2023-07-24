@@ -22,10 +22,11 @@ import path from 'path'
 import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
 import { type PandocProfileMetadata } from '@dts/common/assets'
 import isDir from '@common/util/is-dir'
+import { runShellCommand } from './exporter/run-shell-command'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
-    super(app, ['export'])
+    super(app, [ 'export', 'custom-export' ])
   }
 
   /**
@@ -36,6 +37,31 @@ export default class Export extends ZettlrCommand {
     * @return {Boolean}     Whether or not the call succeeded.
     */
   async run (evt: string, arg: any): Promise<void> {
+    // Custom export
+    if (evt === 'custom-export') {
+      const { displayName, file } = arg as { displayName: string, file: string }
+      const commands = this._app.config.get().export.customCommands
+      const foundCommand = commands.find(c => c.displayName === displayName)
+      if (foundCommand === undefined) {
+        throw new Error(`Cannot run custom command ${displayName}: Not found`)
+      }
+
+      this._app.log.info(`[Export] Running custom export command ${displayName} on file ${file} ...`)
+      const cwd = path.dirname(file)
+      const output = await runShellCommand(foundCommand.command, [`"${file}"`], cwd)
+
+      if (output.code !== 0) {
+        this._app.log.error(`[Export] Custom export ${displayName} failed with code ${output.code}`, output.stderr)
+        const title = trans('Export failed')
+        const message = trans('An error occurred during export: %s', `Custom Command exited with code ${output.code}`)
+        this._app.windows.showErrorMessage(title, message, output.stderr)
+      } else {
+        this._app.log.info(`[Export] File ${path.basename(file)} exported successfully.`)
+      }
+      return // Done
+    }
+
+    // Regular export
     const { file, profile, exportTo } = arg as { file: string, profile: PandocProfileMetadata, exportTo: string }
 
     const exporterOptions: ExporterOptions = {

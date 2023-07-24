@@ -20,6 +20,7 @@ import { shell, dialog } from 'electron'
 import type { ExporterOptions } from './exporter/types'
 import type LogProvider from '@providers/log'
 import { trans } from '@common/i18n-main'
+import { runShellCommand } from './exporter/run-shell-command'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -77,13 +78,28 @@ export default class DirProjectExport extends ZettlrCommand {
 
     const allDefaults = await this._app.assets.listDefaults()
 
-    for (const profilePath of config.profiles) {
+    for (const profilePathOrCommand of config.profiles) {
       // Spin up one exporter per format.
-      const profile = allDefaults.find(e => e.name === profilePath)
+      const profile = allDefaults.find(e => e.name === profilePathOrCommand)
+      const command = this._app.config.get().export.customCommands.find(c => c.command === profilePathOrCommand)
 
-      if (profile === undefined) {
-        this._app.log.warning(`Could not export project ${dir.name} using profile ${profilePath}: Not found`)
+      if (profile === undefined && command === undefined) {
+        this._app.log.warning(`Could not export project ${dir.name} using profile or command ${profilePathOrCommand}: Not found`)
         continue
+      }
+
+      // Now check if it's actually a custom export because that will be pretty
+      // much easier than the regular exports.
+      if (command !== undefined) {
+        this._app.log.info(`[Project] Exporting ${dir.name} using custom command ${command.displayName}.`)
+        const output = await runShellCommand(command.command, [`"${dir.path}"`], dir.path)
+        if (output.code !== 0) {
+          // We got an error!
+          throw new Error(`Export failed: ${output.stderr}`)
+        }
+        continue
+      } else if (profile === undefined) {
+        continue // We cannot reach this point, but we need the else if for TypeScript
       }
 
       this._app.log.info(`[Project] Exporting ${dir.name} as ${profile.writer} (Profile: ${profile.name}).`)

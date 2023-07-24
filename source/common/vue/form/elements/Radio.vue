@@ -17,7 +17,7 @@
           type="radio" v-bind:name="name" v-bind:value="key"
           v-bind:checked="modelValue === key"
           v-bind:disabled="disabled"
-          v-on:input="$emit('update:modelValue', $event.target.value)"
+          v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         >
         <div class="toggle"></div>
       </label>
@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -41,7 +41,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'RadioControl',
   props: {
     modelValue: {
@@ -67,11 +69,11 @@ export default {
   },
   emits: ['update:modelValue'],
   methods: {
-    fieldID: function (key) {
-      return 'form-input-' + this.name + '-' + key
+    fieldID: function (key: string) {
+      return `form-input-${this.name}-${key}`
     }
   }
-}
+})
 </script>
 
 <style lang="less">

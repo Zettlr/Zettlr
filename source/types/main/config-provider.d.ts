@@ -42,6 +42,7 @@ export interface ConfigOptions {
     useBundledPandoc: boolean
     singleFileLastExporter: string
     exportQmdWithQuarto: boolean
+    customCommands: Array<{ displayName: string, command: string }>
   }
   zkn: {
     idRE: string

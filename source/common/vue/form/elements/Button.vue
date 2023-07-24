@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -32,7 +32,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'ButtonControl',
   props: {
     label: {
@@ -65,11 +67,11 @@ export default {
     }
   },
   computed: {
-    fieldID: function () {
+    fieldID: function (): string {
       return 'form-button-' + this.name
     }
   }
-}
+})
 </script>
 
 <style lang="less">

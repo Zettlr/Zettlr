@@ -92,7 +92,8 @@ export default function getConfigTemplate (): ConfigOptions {
       cslStyle: '', // Path to a CSL Style file
       useBundledPandoc: true, // Whether to use the bundled Pandoc
       exportQmdWithQuarto: false, // Whether .qmd-files should be exported with Quarto
-      singleFileLastExporter: 'html' // Remembers the last chosen exporter for easy re-exporting
+      singleFileLastExporter: 'html', // Remembers the last chosen exporter for easy re-exporting
+      customCommands: [] // Custom commands that the user can use to run arbitrary exports
     },
     // Zettelkasten stuff (IDs, as well as link matchers)
     zkn: {

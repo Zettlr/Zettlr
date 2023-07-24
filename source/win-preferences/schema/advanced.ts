@@ -13,8 +13,9 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { type FormSchema } from '@common/vue/form/Form.vue'
 
-export default function (): any {
+export default function (): FormSchema {
   return {
     fieldsets: [
       [
@@ -94,10 +95,11 @@ export default function (): any {
       [
         {
           type: 'list',
+          valueType: 'simpleArray',
           label: trans('iFrame rendering whitelist'),
           model: 'system.iframeWhitelist',
           deletable: true,
-          labels: [trans('Hostname')],
+          columnLabels: [trans('Hostname')],
           searchable: true,
           searchLabel: trans('Search for entries …')
         }
@@ -116,5 +118,5 @@ export default function (): any {
         }
       ]
     ]
-  }
+  } satisfies FormSchema
 }

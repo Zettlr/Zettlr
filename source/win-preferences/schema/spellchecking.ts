@@ -14,8 +14,9 @@
 
 import { trans } from '@common/i18n-renderer'
 import { mapLangCodeToName } from '@common/util/map-lang-code'
+import { type FormSchema } from '@common/vue/form/Form.vue'
 
-export default function (): any {
+export default function (): FormSchema {
   return {
     fieldsets: [
       [
@@ -76,23 +77,29 @@ export default function (): any {
       [
         {
           type: 'list',
+          valueType: 'record',
+          keyNames: [ 'selected', 'key', 'value' ],
+          columnLabels: [ trans('Active'), trans('Language Code'), trans('Name') ],
           label: trans('Select the languages for which you want to enable automatic spell checking.'),
           model: 'availableDictionaries',
           deletable: false,
           editable: [0], // Only the "selectable" column may be edited
           searchable: true,
-          searchLabel: trans('Search for dictionaries &hellip;')
+          searchLabel: trans('Search for dictionaries…'),
+          striped: true
         },
         {
           type: 'list',
+          valueType: 'simpleArray',
           label: trans('User dictionary. Remove words by clicking them.'),
           model: 'userDictionaryContents',
-          labels: [trans('Dictionary entry')],
+          columnLabels: [trans('Dictionary entry')],
           deletable: true,
           searchable: true,
-          searchLabel: trans('Search for entries …')
+          searchLabel: trans('Search for entries …'),
+          striped: true
         }
       ]
     ]
-  }
+  } satisfies FormSchema
 }
