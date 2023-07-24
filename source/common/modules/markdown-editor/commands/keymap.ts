@@ -21,6 +21,7 @@ import { handleReplacement, handleBackspace, handleQuote } from './autocorrect'
 import { addNewFootnote } from './footnotes'
 import { maybeIndentList, maybeUnindentList } from './lists'
 import { insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList } from './markdown'
+import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
 
 /**
  * Zettlr's custom keymap. It defines many of the default key bindings
@@ -44,6 +45,7 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Space', run: handleReplacement },
   { key: 'Enter', run: handleReplacement },
   // If no replacement can be handled, the default should be newlineAndIndent
+  { key: 'Enter', run: insertNewlineContinueMarkup },
   { key: 'Enter', run: insertNewlineAndIndent },
   // TODO: We're including the pre-made keymap that defines the next line
   // already in our core extensions (see editor-extension-sets.ts), but somehow
