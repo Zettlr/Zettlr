@@ -85,7 +85,7 @@ export default class AppearanceProvider extends ProviderContract {
         this._recalculateSchedule()
       } else if (option === 'darkMode' && process.platform === 'darwin') {
         const shouldBeDark = nativeTheme.shouldUseDarkColors
-        const isDark = Boolean(this._config.get('darkMode'))
+        const isDark = this._config.get().darkMode
         if (shouldBeDark !== isDark) {
           // Explicitly set the appLevelAppearance in case the internal theme
           // differs from the operating system.

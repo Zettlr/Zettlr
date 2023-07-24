@@ -329,6 +329,8 @@ there.
 - Users on macOS can now disable window vibrancy
 - Non-existing citekeys in the document no longer cause the list of references
   to be empty
+- Dark mode is now set to `system` by default for all operating systems, not
+  just macOS/Windows
 
 ## Under the Hood
 

@@ -71,7 +71,7 @@ export default function getConfigTemplate (): ConfigOptions {
     // UI related options
     darkMode: false,
     alwaysReloadFiles: true, // Should Zettlr automatically load remote changes?
-    autoDarkMode: [ 'win32', 'darwin' ].includes(process.platform) ? 'system' : 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
+    autoDarkMode: 'system', // Possible values: 'off', 'system', 'schedule', 'auto'
     autoDarkModeStart: '21:00', // Switch into dark mode at this time
     autoDarkModeEnd: '06:00', // Switch to light mode at this time
     fileMeta: true,
