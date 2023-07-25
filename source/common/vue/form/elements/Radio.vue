@@ -21,7 +21,15 @@
         >
         <div class="toggle"></div>
       </label>
-      <label v-bind:for="fieldID(key)" v-bind:class="{ disabled: disabled }">{{ optionLabel }}</label>
+      <label
+        v-bind:for="fieldID(key)"
+        v-bind:class="{
+          'cb-group-label': true,
+          disabled: disabled
+        }"
+      >
+        {{ optionLabel }}
+      </label>
     </div>
   </div>
 </template>
@@ -91,14 +99,12 @@ body {
 
   .cb-group {
     display: grid;
-    grid-template-columns: @input-size * 2 auto;
+    grid-template-columns: @input-size * 2 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
     margin: 6px 0px;
-  }
 
-  .cb-group, .radio-group {
-    label:not(.radio):not(.checkbox) { grid-area: label; }
+    .cb-group-label { grid-area: label; }
   }
 
   label.radio {
@@ -107,11 +113,8 @@ body {
     width: @input-size * 2;
     height: @input-size;
     grid-area: input;
-    //flex: 0.05; // Basically 5% width
 
-    input {
-      display: none !important;
-    }
+    input { display: none !important; }
 
     .toggle {
       position: absolute;

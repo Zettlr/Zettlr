@@ -19,14 +19,18 @@
         <span class="checkmark"></span>
       </label>
       <label
-        v-if="label" v-bind:for="fieldID"
-        v-bind:class="{ 'disabled': disabled }"
-        v-html="label"
+        v-if="label || info"
+        v-bind:for="fieldID"
+        v-bind:class="{
+          'cb-group-label': true,
+          disabled: disabled
+        }"
       >
+        <span v-html="label"></span>
+        <div v-if="info" class="info">
+          {{ info }}
+        </div>
       </label>
-    </div>
-    <div v-if="info" class="form-control info">
-      {{ info }}
     </div>
   </div>
 </template>
@@ -95,11 +99,15 @@ body {
 
   .cb-group {
     display: grid;
-    grid-template-columns: @input-size * 2 auto;
+    // Some space for the checkbox itself, and then only as much as necessary to
+    // fit in the label (this prevents checking/unchecking the checkbox if the
+    // user clicks far beyond the label string)
+    grid-template-columns: @input-size * 2 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
+    align-items: center;
 
-    label:not(.checkbox):not(.radio) { grid-area: label; }
+    .cb-group-label { grid-area: label; }
   }
 
   label.checkbox {
@@ -110,11 +118,8 @@ body {
     padding: 0;
     margin-right: 5px;
     grid-area: input;
-    // flex: 0.05; // 5% of available width. NOTE: The label's width is defined in Radio.vue!
 
-    input {
-      display: none !important;
-    }
+    input { display: none !important; }
 
     .checkmark {
       position: absolute;
