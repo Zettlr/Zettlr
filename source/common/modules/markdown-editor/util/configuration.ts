@@ -22,6 +22,7 @@ import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 
 export interface AutocorrectOptions {
   active: boolean
+  matchWholeWords: boolean
   magicQuotes: { primary: string, secondary: string }
   replacements: Array<{ key: string, value: string }>
 }
@@ -71,6 +72,7 @@ export function getDefaultConfig (): EditorConfiguration {
   return {
     autocorrect: {
       active: true,
+      matchWholeWords: false,
       magicQuotes: {
         primary: '"…"',
         secondary: "'…'"

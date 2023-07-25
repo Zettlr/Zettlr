@@ -199,7 +199,8 @@ export default function getConfigTemplate (): ConfigOptions {
           { key: '...', value: '…' },
           { key: '--', value: '–' },
           { key: '---', value: '—' }
-        ]
+        ],
+        matchWholeWords: false // Whether to only autocorrect entire words, not parts
       } // END autoCorrect options
     },
     display: {

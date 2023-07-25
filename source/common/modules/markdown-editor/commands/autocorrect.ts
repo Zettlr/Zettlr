@@ -55,7 +55,7 @@ function posInProtectedNode (state: EditorState, pos: number): boolean {
  * @return  {boolean}           Always returns false to make Codemirror add the Space/Enter
  */
 export function handleReplacement (view: EditorView): boolean {
-  const autocorrect = view.state.field(configField).autocorrect
+  const { autocorrect } = view.state.field(configField)
   if (!autocorrect.active || autocorrect.replacements.length === 0) {
     return false
   }
@@ -80,8 +80,8 @@ export function handleReplacement (view: EditorView): boolean {
     }
 
     // Leave --- and ... lines (YAML frontmatter as well as horizontal rules)
-    // We have investigated finding these as protected nodes however '---' in the first line is not parsed as any type
-    // Therefore, this is still required until this parsing from Lezer changes.
+    // We have investigated finding these as protected nodes. However, '---' in
+    // the first line is not parsed as any type.
     const line = view.state.doc.lineAt(range.from)
     if ([ '---', '...' ].includes(line.text)) {
       continue
@@ -93,7 +93,17 @@ export function handleReplacement (view: EditorView): boolean {
       if (slice.endsWith(key)) {
         const startOfReplacement = range.from - key.length
         if (posInProtectedNode(view.state, startOfReplacement)) {
-          break // `range.from` may not be in a protected area, but start is.
+          break // `range.from` is not in a protected area, but start is.
+        }
+
+        const charBefore = startOfReplacement === 0
+          ? ' ' // Assume a space which makes below's code simpler
+          : view.state.sliceDoc(startOfReplacement - 1, startOfReplacement)
+
+        if (autocorrect.matchWholeWords && !/\s/.test(charBefore)) {
+          // We should match whole words, but the replacement is
+          // not preceeded by a space.
+          break
         }
 
         changes.push({ from: startOfReplacement, to: range.from, insert: value })

@@ -331,6 +331,8 @@ there.
   to be empty
 - Dark mode is now set to `system` by default for all operating systems, not
   just macOS/Windows
+- A new "match whole word" setting allows to control whether AutoCorrect can
+  also correct partial words
 
 ## Under the Hood
 

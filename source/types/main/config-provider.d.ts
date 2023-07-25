@@ -89,6 +89,7 @@ export interface ConfigOptions {
         secondary: string
       }
       replacements: Array<{ key: string, value: string }>
+      matchWholeWords: boolean
     }
   }
   display: {

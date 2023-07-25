@@ -76,6 +76,14 @@ export default function (): FormSchema {
       ],
       [
         {
+          type: 'checkbox',
+          label: trans('Match whole words'),
+          info: trans('When checked, AutoCorrect will never replace parts of words'),
+          model: 'editor.autoCorrect.matchWholeWords'
+        }
+      ],
+      [
+        {
           type: 'list',
           valueType: 'record',
           keyNames: [ 'key', 'value' ],

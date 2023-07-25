@@ -208,6 +208,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     autoCloseBrackets: store.state.config['editor.autoCloseBrackets'],
     autocorrect: {
       active: store.state.config['editor.autoCorrect.active'],
+      matchWholeWords: store.state.config['editor.autoCorrect.matchWholeWords'],
       style: store.state.config['editor.autoCorrect.style'],
       magicQuotes: {
         primary: store.state.config['editor.autoCorrect.magicQuotes.primary'],
