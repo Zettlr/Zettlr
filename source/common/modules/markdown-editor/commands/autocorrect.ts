@@ -100,9 +100,9 @@ export function handleReplacement (view: EditorView): boolean {
           ? ' ' // Assume a space which makes below's code simpler
           : view.state.sliceDoc(startOfReplacement - 1, startOfReplacement)
 
-        if (autocorrect.matchWholeWords && !/\s/.test(charBefore)) {
+        if (autocorrect.matchWholeWords && !/\W/.test(charBefore)) {
           // We should match whole words, but the replacement is
-          // not preceeded by a space.
+          // not preceeded by a non-word character.
           break
         }
 
