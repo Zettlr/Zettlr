@@ -17,6 +17,7 @@ import { StateEffect, StateField } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { type TagRecord } from '@providers/tags'
 import { type AutocompletePlugin } from '.'
+import { syntaxTree } from '@codemirror/language'
 
 /**
  * Use this effect to provide the editor state with a set of new tags to autocomplete
@@ -59,6 +60,22 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
 
 export const tags: AutocompletePlugin = {
   applies (ctx) {
+    const nodeAt = syntaxTree(ctx.state).resolve(ctx.pos, 0)
+    if ((nodeAt.name === 'CodeText' && nodeAt.prevSibling?.name === 'YAMLFrontmatterStart') ||
+        (nodeAt.name === 'string' && nodeAt.matchContext(['CodeText']) && nodeAt.parent?.prevSibling?.name === 'YAMLFrontmatterStart')
+    ) {
+      const match = ctx.matchBefore(/(?<=^(?:keywords|tags):\s*\[(?:\s*\w+,\s*)*\s*)\w*/m)
+      if (match !== null && match.to >= ctx.pos) {
+        return match.from
+      }
+      const docBefore = ctx.state.sliceDoc(0, ctx.pos)
+      const docMatch = docBefore.match(/(?<=\n(?:keywords|tags):[\s|\n]*-\s*)(\w)*$/)
+      if (docMatch !== null) {
+        return ctx.pos - docMatch[0].length
+      }
+      return false
+    }
+
     if (ctx.pos === 0) {
       return false
     }
