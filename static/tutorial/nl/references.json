@@ -1,0 +1,29 @@
+[
+  {
+    "id": "Marx1962",
+    "author": [
+      {
+        "family": "Marx",
+        "given": "Karl"
+      }
+    ],
+    "collection-title": "Marx Engels Werke",
+    "edition": "4",
+    "event-place": "Berlin",
+    "issued": {
+      "date-parts": [
+        [ 1962 ]
+      ]
+    },
+    "language": "de",
+    "number-of-pages": "956",
+    "number-of-volumes": "43",
+    "publisher": "Dietz",
+    "publisher-place": "Berlin",
+    "source": "Zotero",
+    "title": "Das Kapital. Kritik der politischen Ökonomie. Erster Band: Der Produktionsprozeß des Kapitals",
+    "title-short": "Das Kapital. Erster Band",
+    "type": "book",
+    "volume": "23"
+  }
+]
