@@ -333,6 +333,7 @@ there.
   just macOS/Windows
 - A new "match whole word" setting allows to control whether AutoCorrect can
   also correct partial words
+- The tutorial is now available in Dutch as well.
 
 ## Under the Hood
 

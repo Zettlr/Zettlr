@@ -47,7 +47,7 @@ Er zijn natuurlijk veel andere elementen. Voetnoten, bijvoorbeeld – beweeg je 
 
 Hoewel links niet dikwijls worden gebruikt in wetenschappelijke teksten zijn ze een krachtig instrument van Markdown. Zettlr doet daar nog een schepje bovenop en behandelt links op een slimme manier. Laten we er snel één maken! Kopieer de volgende link naar het klembord: https://fosstodon.org/@zettlr
 
-Selecteer nu de volgende woorden: "link naar ons Mastodonaccount" en druk `Cmd/Ctrl+K`! Zettlr ziet dat je een geldige weblink in je clipboard hebt en gebruikt dit automatisch als het doel van de koppeling. Zettlr zal het koppelingsdoel ook automatisch verbergen en alleen de verlinkte tekst weergeven zodat je tekst makkelijker leesbaar is. Als je niet houdt van sommige elementen die Zettlr standaard rendert, kan je dat aanpassen in de "Display" voorkeuren.
+Selecteer nu de volgende woorden: "link naar ons Mastodonaccount" en druk `Cmd/Ctrl+K`! Zettlr ziet dat je een geldige weblink in je clipboard hebt en gebruikt dit automatisch als het doel van de koppeling. Zettlr zal het koppelingsdoel ook automatisch verbergen en alleen de verlinkte tekst weergeven, zodat je tekst makkelijker leesbaar is. Als je niet houdt van sommige elementen die Zettlr standaard rendert, kan je dat aanpassen in de "Display" voorkeuren.
 
 Zettlr ondersteunt niet alleen gewone weblinks. Als je een bestand op je computer verlinkt kan Zettlr het openen wanneer je op zo'n koppeling klikt. Zettlr probeert je schrijfervaring zo soepel als mogelijk te maken, niet alleen op vlak van links.
 
@@ -63,7 +63,7 @@ Het tweede tabblad toont verwijzingen – als je er hebt in je huidige document.
 
 Het derde tabblad bevat gerelateerde bestanden, met andere woorden bestanden waarvan Zettlr denkt dat ze aan je huidige bestand gerelateerd zijn. Daarvoor kijkt Zettlr naar tags en interne links (waarover later meer) die je in al je bestanden gebruikt. Bovenaan de lijst staan bestanden die een koppeling naar je huidige bestand bevatten. Daarna volgen bestanden die tags gemeenschappelijk hebben met je huidige bestand, waarbij degene die de meeste tags gemeenschappelijk hebben hoger in de lijst staan.
 
-Het laatste tabblad toont alle niet-markdown bestanden in je huidige map. Je zal er een bestand zien dat "LaTeX Guide.pdf" heet. Benieuwd naar wat het is? Klik erop om het in je standaard PDF-programma te bekijken!
+Het laatste tabblad toont alle bestanden in je huidige map die geen Markdownbestanden zijn. Je zal er een bestand zien dat "LaTeX Guide.pdf" heet. Benieuwd naar wat het is? Klik erop om het in je standaard PDF-programma te bekijken!
 
 ## Interactieve elementen ⏯
 
@@ -75,11 +75,11 @@ Je hebt al veel over Zettlr geleerd. Kan je alle vakjes afvinken?
 
 Sommige elementen in de editor zijn interactief, net als de aankruisvakjes. Een ander voorbeeld zijn tabellen. Bekijk de onderstaande tabel: beweeg je muisaanwijzer erover en kijk welke knoppen verschijnen die je laten werken met de tabel!
 
-|  |  |  |
-|--|--|--|
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Bestand                 | Doel                                                                   | Bestandsnaam    |
+|-------------------------|------------------------------------------------------------------------|-----------------|
+| Welkom bij Zettlr!      | Geeft een kort overzicht van wat Zettlr kan                            | welcome.md      |
+| Werken met Zettelkästen | Laat je kennismaken met de veelzijdige Zettelkastenfuncties van Zettlr | zettelkasten.md |
+| Citeren met Zettlr      | Belicht de mogelijkheden van werken met referentiedatabases            | citing.md       |
 
 Je kan kolommen uitlijnen en rijen of kolommen toevoegen of verwijderen. De tabeleditor werkt altijd met de rij of kolom die op dit moment actief is. Om een bepaalde rij te verwijderen moet je dus eerst een tabelcel in die rij selecteren. Neem je tijd om met de tabel te spelen en aan de werking te wennen!
 
@@ -87,7 +87,7 @@ Je kan kolommen uitlijnen en rijen of kolommen toevoegen of verwijderen. De tabe
 
 Je bent er geraakt! Het eerste deel van de introductie is voorbij. Veel bestreek deze inleiding nog niet, maar je kan alles leren in onze [gebruikershandleiding](https://docs.zettlr.com/)! Misschien ben je wel geïnteresseerd in onze [krachtige tag manager](https://docs.zettlr.com/en/reference/settings/#manage-tags), of de [veelzijdige zoekopties](https://docs.zettlr.com/en/core/search/).
 
-Genoeg inleiding nu! Laten we naar de Zettelkasten-tutorial gaan. Druk `Cmd/Ctrl` en klik op de volgende koppeling: [[zettelkasten]]
+Genoeg basics nu! Laten we naar de Zettelkasten-tutorial gaan. Druk `Cmd/Ctrl` en klik op de volgende koppeling: [[zettelkasten]]
 
 [^1]: Deze tekst staat onderaan dit bestand, maar in principe kan je voetnoten plaatsen waar je maar wilt. Zettlr zal de bijhorende voetnoottekst weergeven wanneer je je muisaanwijzer over een voetnoot beweegt, zodat je niet hoeft te scrollen om te lezen wat erin staat.
 
