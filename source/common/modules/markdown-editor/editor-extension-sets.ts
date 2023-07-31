@@ -63,6 +63,7 @@ import { statusbar } from './statusbar'
 import { themeManager } from './theme'
 import { renderers } from './renderers'
 import { mdPasteDropHandlers } from './plugins/md-paste-drop-handlers'
+import { footnoteGutter } from './plugins/footnote-gutter'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -279,11 +280,12 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     typewriter,
     distractionFree,
     tocField,
-    markdownFolding,
+    markdownFolding, // Should be before footnoteGutter
     autocomplete,
     readabilityMode,
     formattingToolbar,
     footnoteHover,
+    footnoteGutter, // Should be after markdownFolding
     urlHover,
     filePreview,
     codeblockBackground, // Add a background behind codeblocks
