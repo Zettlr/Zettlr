@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-07-12 08:10+0000\n"
+"POT-Creation-Date: 2023-07-31 02:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,7 +91,7 @@ msgid "Edit"
 msgstr "Muokkaa"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:122
-#: source/app/service-providers/commands/export.ts:82
+#: source/app/service-providers/commands/export.ts:108
 #: source/app/service-providers/menu/menu.win32.ts:162
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/tmp/Defaults.vue.ts:112 source/tmp/CustomCSS.vue.ts:42
@@ -140,14 +140,14 @@ msgstr "Avaa uudessa välilehdessä"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/win-preferences/schema/editor.ts:26
 #: source/win-preferences/schema/editor.ts:27
+#: source/win-preferences/schema/editor.ts:28
 msgid "Bold"
 msgstr "Lihavoitu"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:34
 #: source/win-preferences/schema/editor.ts:35
+#: source/win-preferences/schema/editor.ts:36
 msgid "Italics"
 msgstr "Kursivoitu"
 
@@ -701,116 +701,106 @@ msgstr "kiina [汉语]"
 msgid "Chinese"
 msgstr "kiina [汉语]"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:24
-msgid "These options determine which elements are rendered in documents."
-msgstr "Seuraavassa määritellään, mitkä elementit näytetään dokumenteissa."
-
-#: source/win-preferences/schema/display.ts:28
+#: source/win-preferences/schema/display.ts:25
 msgid "Render Citations"
 msgstr "Näytä lainaukset"
 
-#: source/win-preferences/schema/display.ts:33
+#: source/win-preferences/schema/display.ts:30
 msgid "Render Iframes"
 msgstr "Näytä HTML-iframet"
 
-#: source/win-preferences/schema/display.ts:38
+#: source/win-preferences/schema/display.ts:35
 msgid "Render Images"
 msgstr "Näytä kuvat"
 
-#: source/win-preferences/schema/display.ts:43
+#: source/win-preferences/schema/display.ts:40
 msgid "Render Links"
 msgstr "Näytä linkit"
 
-#: source/win-preferences/schema/display.ts:48
+#: source/win-preferences/schema/display.ts:45
 msgid "Render Formulae"
 msgstr "Näytä matemaattiset lausekkeet"
 
-#: source/win-preferences/schema/display.ts:53
+#: source/win-preferences/schema/display.ts:50
 msgid "Render Tasks"
 msgstr "Näytä tehtävät"
 
-#: source/win-preferences/schema/display.ts:58
+#: source/win-preferences/schema/display.ts:55
 msgid "Hide heading characters"
 msgstr "Piilota otsakemerkit"
 
-#: source/win-preferences/schema/display.ts:63
+#: source/win-preferences/schema/display.ts:60
 msgid "Render emphasis"
 msgstr "Hahmonna korostukset"
 
-#: source/win-preferences/schema/display.ts:71
+#: source/win-preferences/schema/display.ts:68
 msgid "Here you can choose the theme for the app."
 msgstr "Tässä voit valita ohjelmassa käytetyn teeman."
 
-#: source/win-preferences/schema/display.ts:112
+#: source/win-preferences/schema/display.ts:109
 msgid "Use the operating system's accent colour instead of the theme colour"
 msgstr "Käytä käyttöjärjestelmän korostusväriä teemavärin sijaan"
 
-#: source/win-preferences/schema/display.ts:116
+#: source/win-preferences/schema/display.ts:113
 msgid "This setting is only available on Windows and macOS"
 msgstr "Tämä asetus on käytössä vain Windows ja macOS -käyttöjärjestelmissä"
 
-#: source/win-preferences/schema/display.ts:122
+#: source/win-preferences/schema/display.ts:119
 msgid "Hide toolbar in distraction free mode"
 msgstr "Piilota työkalurivi häiriöttömässä tilassa"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:129
-msgid "With these controls you can constrain the image previews."
-msgstr "Tässä voit määrittää kuvien esikatselulle maksimikoon."
-
-#: source/win-preferences/schema/display.ts:133
+#: source/win-preferences/schema/display.ts:126
 msgid "Maximum width of images (percent)"
 msgstr "Kuvien maksimileveys (prosenttia)"
 
-#: source/win-preferences/schema/display.ts:141
+#: source/win-preferences/schema/display.ts:133
 msgid "Maximum height of images (percent)"
 msgstr "Kuvien maksimikorkeus (prosenttia)"
 
-#: source/win-preferences/schema/advanced.ts:23
+#: source/win-preferences/schema/advanced.ts:24
 msgid "Pattern for new filenames"
 msgstr "Uusien tiedostonimien muoto"
 
-#: source/win-preferences/schema/advanced.ts:29
+#: source/win-preferences/schema/advanced.ts:30
 msgid "Do not prompt for filename when creating new files"
 msgstr "Älä kysy tiedostonimeä uusia tiedostoja luotaessa"
 
-#: source/win-preferences/schema/advanced.ts:36
+#: source/win-preferences/schema/advanced.ts:37
 msgid "Enable debug mode"
 msgstr "Vianmääritystila (debug)"
 
-#: source/win-preferences/schema/advanced.ts:41
+#: source/win-preferences/schema/advanced.ts:42
 msgid "Notify me about beta releases"
 msgstr "Ilmoita betaversioista"
 
-#: source/win-preferences/schema/advanced.ts:46
+#: source/win-preferences/schema/advanced.ts:47
 msgid "Use native window appearance"
 msgstr "Käytä alkuperäistä ikkunoiden ulkonäköä"
 
-#: source/win-preferences/schema/advanced.ts:52
+#: source/win-preferences/schema/advanced.ts:53
 #, fuzzy
 msgid "Enable window vibrancy"
 msgstr "Käytä alkuperäistä ikkunoiden ulkonäköä"
 
-#: source/win-preferences/schema/advanced.ts:58
+#: source/win-preferences/schema/advanced.ts:59
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr ""
 "Poista nimikkeet peruuttamattomasti, jos niiden siirto roskakoriin "
 "epäonnistuu"
 
-#: source/win-preferences/schema/advanced.ts:64
+#: source/win-preferences/schema/advanced.ts:65
 msgid "Show app in the notification area"
 msgstr "Näytä sovellus ilmoitusalueella"
 
-#: source/win-preferences/schema/advanced.ts:65
+#: source/win-preferences/schema/advanced.ts:66
 msgid "Leave app running in the notification area"
 msgstr "Jätä sovellus päälle ilmoitusalueelle"
 
-#: source/win-preferences/schema/advanced.ts:72
+#: source/win-preferences/schema/advanced.ts:73
 msgid "Automatically check for updates"
 msgstr "Tarkista päivitykset automaattisesti"
 
-#: source/win-preferences/schema/advanced.ts:79
+#: source/win-preferences/schema/advanced.ts:80
 msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
@@ -818,58 +808,75 @@ msgstr ""
 "Tiedostotyypit, joiden halutaan näkyvän liitteet-sivupalkissa. Muutokset "
 "vaativat uudelleenkäynnistyksen."
 
-#: source/win-preferences/schema/advanced.ts:87
+#: source/win-preferences/schema/advanced.ts:88
 msgid "Zoom behavior"
 msgstr "Zoomaus-käyttäytyminen"
 
-#: source/win-preferences/schema/advanced.ts:89
+#: source/win-preferences/schema/advanced.ts:90
 msgid "Zoom resizes the whole GUI"
 msgstr "Zoom muuttaa koko käyttöliittymän kokoa"
 
-#: source/win-preferences/schema/advanced.ts:90
+#: source/win-preferences/schema/advanced.ts:91
 msgid "Zoom changes the editor font size"
 msgstr "Zoom muuttaa editorin fonttikokoa"
 
-#: source/win-preferences/schema/advanced.ts:97
+#: source/win-preferences/schema/advanced.ts:99
 msgid "iFrame rendering whitelist"
 msgstr "iFrame-renderöinti valkoinen lista"
 
-#: source/win-preferences/schema/advanced.ts:100
+#: source/win-preferences/schema/advanced.ts:102
 msgid "Hostname"
 msgstr "Isäntänimi"
 
-#: source/win-preferences/schema/advanced.ts:102
-#: source/win-preferences/schema/spellchecking.ts:93
+#: source/win-preferences/schema/advanced.ts:104
+#: source/win-preferences/schema/spellchecking.ts:99
 msgid "Search for entries …"
 msgstr "Etsi..."
 
-#: source/win-preferences/schema/advanced.ts:108
+#: source/win-preferences/schema/advanced.ts:110
 msgid "Activate Watchdog polling"
 msgstr "Aktivoi Watchdog kysely"
 
-#: source/win-preferences/schema/advanced.ts:113
+#: source/win-preferences/schema/advanced.ts:115
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr ""
 "Odotusaika ennen kuin tiedoston kirjoittaminen on todettu valmiiksi (ms)"
 
-#: source/win-preferences/schema/autocorrect.ts:23
+#: source/win-preferences/schema/autocorrect.ts:24
 msgid "Turn on AutoCorrect"
 msgstr "Laita AutoCorrect päälle"
 
-#: source/win-preferences/schema/autocorrect.ts:32
+#: source/win-preferences/schema/autocorrect.ts:33
 msgid "Primary Magic Quotes"
 msgstr "Ensisijaiset Magic Quotes"
 
-#: source/win-preferences/schema/autocorrect.ts:35
-#: source/win-preferences/schema/autocorrect.ts:56
+#: source/win-preferences/schema/autocorrect.ts:36
+#: source/win-preferences/schema/autocorrect.ts:57
 msgid "Disable Magic Quotes"
 msgstr "Ei mikään"
 
-#: source/win-preferences/schema/autocorrect.ts:53
+#: source/win-preferences/schema/autocorrect.ts:54
 msgid "Secondary Magic Quotes"
 msgstr "Toissijaiset Magic Quotes"
 
-#: source/win-preferences/schema/autocorrect.ts:79
+#: source/win-preferences/schema/autocorrect.ts:80
+msgid "Match whole words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:81
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:90
+msgid "String"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:90
+#, fuzzy
+msgid "Replacement"
+msgstr "Korvaa tiedosto"
+
+#: source/win-preferences/schema/autocorrect.ts:91
 msgid ""
 "Here you can define certain strings that will be replaced when AutoCorrect "
 "is on. The characters on the left side will be replaced with whatever comes "
@@ -878,27 +885,27 @@ msgstr ""
 "Tässä voit määritellä merkkijonoja jotka korvataan, kun AutoCorrect on "
 "päällä. Vasemmalla oleva merkki korvataan oikealla olevalla merkkijonolla."
 
-#: source/win-preferences/schema/export.ts:23
+#: source/win-preferences/schema/export.ts:24
 msgid "Use the internal Pandoc for exports"
 msgstr "Käytä sisäistä Pandoc-asennusta dokumenttien vientiin"
 
-#: source/win-preferences/schema/export.ts:30
+#: source/win-preferences/schema/export.ts:31
 msgid "Remove tags from files"
 msgstr "Poista tunnisteet tiedostoista"
 
-#: source/win-preferences/schema/export.ts:40
+#: source/win-preferences/schema/export.ts:41
 msgid "Remove internal links completely"
 msgstr "Poista sisäiset linkit (myös linkkitekstit) kokonaan"
 
-#: source/win-preferences/schema/export.ts:41
+#: source/win-preferences/schema/export.ts:42
 msgid "Unlink internal links"
 msgstr "Poista linkitys (ei kuitenkaan linkkitekstejä) sisäisiin tiedostoihin"
 
-#: source/win-preferences/schema/export.ts:42
+#: source/win-preferences/schema/export.ts:43
 msgid "Don't touch internal links"
 msgstr "Älä kajoa sisäisiin linkkeihin"
 
-#: source/win-preferences/schema/export.ts:49
+#: source/win-preferences/schema/export.ts:50
 msgid ""
 "Target directory for exported files. <em>Attention:</em> Selecting the "
 "current working directory will overwrite files without warning!"
@@ -906,11 +913,11 @@ msgstr ""
 "Viennin kohdehakemisto. <em>Huomio:</em>Nykyisen hakemiston valitseminen "
 "korvaa tiedostoja kysymättä vahvistusta!"
 
-#: source/win-preferences/schema/export.ts:52
+#: source/win-preferences/schema/export.ts:53
 msgid "Temporary directory: is regularly expunged"
 msgstr "Tilapäinen hakemisto; tyhjennetään määräajoin"
 
-#: source/win-preferences/schema/export.ts:53
+#: source/win-preferences/schema/export.ts:54
 msgid ""
 "Current working directory: exported files will be saved into the currently "
 "selected directory."
@@ -918,379 +925,405 @@ msgstr ""
 "Nykyinen työskentelyhakemisto; viedyt tiedostot tallennetaan nyt valittuun "
 "hakemistoon"
 
-#: source/win-preferences/schema/export.ts:54
+#: source/win-preferences/schema/export.ts:55
 msgid "Ask for directory"
 msgstr "Kysy hakemistoa"
 
-#: source/win-preferences/schema/toolbar.ts:23
+#: source/win-preferences/schema/export.ts:64
+#, fuzzy
+msgid "Display name"
+msgstr "Näytä kuvapainike"
+
+#: source/win-preferences/schema/export.ts:64
+#, fuzzy
+msgid "Command"
+msgstr "Kommentti"
+
+#: source/win-preferences/schema/export.ts:65
+msgid ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:24
 msgid "Display \"Open Preferences\" button"
 msgstr "Näytä \"Avaa asetukset\" -painike"
 
-#: source/win-preferences/schema/toolbar.ts:28
+#: source/win-preferences/schema/toolbar.ts:29
 msgid "Display \"New File\" button"
 msgstr "Näytä \"Uusi tiedosto\" -painike"
 
-#: source/win-preferences/schema/toolbar.ts:33
+#: source/win-preferences/schema/toolbar.ts:34
 msgid "Display \"Previous File\" button"
 msgstr "Näytä \"Edellinen tiedosto\" -painike"
 
-#: source/win-preferences/schema/toolbar.ts:38
+#: source/win-preferences/schema/toolbar.ts:39
 msgid "Display \"Next File\" button"
 msgstr "Näytä \"Seuraava tiedosto\" -painike"
 
-#: source/win-preferences/schema/toolbar.ts:45
+#: source/win-preferences/schema/toolbar.ts:46
 msgid "Display readability button"
 msgstr "Näytä luettavuus-painike"
 
-#: source/win-preferences/schema/toolbar.ts:50
+#: source/win-preferences/schema/toolbar.ts:51
 msgid "Display \"Insert Comment\" button"
 msgstr "Näytä \"Lisää kommentti\" -painike"
 
-#: source/win-preferences/schema/toolbar.ts:55
+#: source/win-preferences/schema/toolbar.ts:56
 msgid "Display link button"
 msgstr "Näytä linkkipainike"
 
-#: source/win-preferences/schema/toolbar.ts:60
+#: source/win-preferences/schema/toolbar.ts:61
 msgid "Display image button"
 msgstr "Näytä kuvapainike"
 
-#: source/win-preferences/schema/toolbar.ts:65
+#: source/win-preferences/schema/toolbar.ts:66
 msgid "Display task list button"
 msgstr "Näytä tehtävälistapainike"
 
-#: source/win-preferences/schema/toolbar.ts:70
+#: source/win-preferences/schema/toolbar.ts:71
 msgid "Display \"Insert Table\" button"
 msgstr "Näytä \"Lisää taulukko\" -painike"
 
-#: source/win-preferences/schema/toolbar.ts:75
+#: source/win-preferences/schema/toolbar.ts:76
 msgid "Display \"Insert Footnote\" button"
 msgstr "Näytä \"Lisää alaviite\" -painike"
 
-#: source/win-preferences/schema/toolbar.ts:82
+#: source/win-preferences/schema/toolbar.ts:83
 msgid "Display document info"
 msgstr "Näytä tiedoston tiedot"
 
-#: source/win-preferences/schema/toolbar.ts:87
+#: source/win-preferences/schema/toolbar.ts:88
 msgid "Display Pomodoro-timer"
 msgstr "Näytä Pomodoro-ajastin"
 
-#: source/win-preferences/schema/spellchecking.ts:24
+#: source/win-preferences/schema/spellchecking.ts:25
 msgid "Use LanguageTool"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:29
+#: source/win-preferences/schema/spellchecking.ts:30
 msgid "Strictness"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:31
+#: source/win-preferences/schema/spellchecking.ts:32
 #, fuzzy
 msgid "Standard"
 msgstr "Kalenteri"
 
-#: source/win-preferences/schema/spellchecking.ts:32
+#: source/win-preferences/schema/spellchecking.ts:33
 msgid "Picky"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:39
+#: source/win-preferences/schema/spellchecking.ts:40
 msgid "Mother tongue"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:41
+#: source/win-preferences/schema/spellchecking.ts:42
 msgid "Not set"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:48
+#: source/win-preferences/schema/spellchecking.ts:49
 msgid "LanguageTool Provider"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:51
-#: source/win-preferences/schema/spellchecking.ts:58
+#: source/win-preferences/schema/spellchecking.ts:52
+#: source/win-preferences/schema/spellchecking.ts:59
 #, fuzzy
 msgid "Custom server"
 msgstr "Mukautettu CSS"
 
-#: source/win-preferences/schema/spellchecking.ts:65
+#: source/win-preferences/schema/spellchecking.ts:66
 msgid "LanguageTool Username"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:71
+#: source/win-preferences/schema/spellchecking.ts:72
 msgid "LanguageTool API key"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:79
+#: source/win-preferences/schema/spellchecking.ts:82
+#, fuzzy
+msgid "Active"
+msgstr "Toiminnot"
+
+#: source/win-preferences/schema/spellchecking.ts:82
+msgid "Language Code"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:82
+#: source/tmp/PopoverTags.vue.ts:36
+msgid "Name"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:83
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr ""
 "Valitse kielet, joille automaattinen oikeinkirjoituksen tarkistus otetaan "
 "käyttöön."
 
-#: source/win-preferences/schema/spellchecking.ts:84
-msgid "Search for dictionaries &hellip;"
+#: source/win-preferences/schema/spellchecking.ts:88
+#, fuzzy
+msgid "Search for dictionaries…"
 msgstr "Etsi sanakirjaa&hellip;"
 
-#: source/win-preferences/schema/spellchecking.ts:88
+#: source/win-preferences/schema/spellchecking.ts:94
 msgid "User dictionary. Remove words by clicking them."
 msgstr "Mukautettu sanakirja. Poista sanoja klikkaamalla."
 
-#: source/win-preferences/schema/spellchecking.ts:90
+#: source/win-preferences/schema/spellchecking.ts:96
 msgid "Dictionary entry"
 msgstr "Sanakirjan merkintä"
 
-#: source/win-preferences/schema/general.ts:23
+#: source/win-preferences/schema/general.ts:24
 msgid "Application language"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:31
+#: source/win-preferences/schema/general.ts:32
 #: source/app/service-providers/menu/menu.win32.ts:430
 #: source/app/service-providers/menu/menu.darwin.ts:448
 msgid "Dark mode"
 msgstr "Tumma tila"
 
-#: source/win-preferences/schema/general.ts:36
+#: source/win-preferences/schema/general.ts:37
 msgid "Show file information"
 msgstr "Näytä sivupalkissa tiedostojen lisätiedot"
 
-#: source/win-preferences/schema/general.ts:41
+#: source/win-preferences/schema/general.ts:42
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 msgid "Always load remote changes to the current file"
 msgstr ""
 "Päivitä tiedosto aina, jos ulkoisia muutoksia nykyiseen tiedostoon havaitaan"
 
-#: source/win-preferences/schema/general.ts:46
+#: source/win-preferences/schema/general.ts:47
 msgid "Avoid opening files in new tabs if possible"
 msgstr "Vältä tiedostojen avaamista uusissa välilehdissä, jos mahdollista"
 
-#: source/win-preferences/schema/general.ts:53
+#: source/win-preferences/schema/general.ts:54
 msgid "Automatically switch to dark mode"
 msgstr "Automaattinen yötila"
 
-#: source/win-preferences/schema/general.ts:56
-#: source/win-preferences/schema/editor.ts:45
+#: source/win-preferences/schema/general.ts:57
+#: source/win-preferences/schema/editor.ts:46
 msgid "Off"
 msgstr "Pois päältä"
 
-#: source/win-preferences/schema/general.ts:57
+#: source/win-preferences/schema/general.ts:58
 msgid "Schedule"
 msgstr "Aikataulun mukaan, kello&nbsp;"
 
-#: source/win-preferences/schema/general.ts:58
+#: source/win-preferences/schema/general.ts:59
 msgid "Follow Operating System"
 msgstr "Käyttöjärjestelmän mukaan"
 
-#: source/win-preferences/schema/general.ts:63
+#: source/win-preferences/schema/general.ts:64
 msgid "Start dark mode at"
 msgstr "Aloita tumma tila klo"
 
-#: source/win-preferences/schema/general.ts:69
+#: source/win-preferences/schema/general.ts:70
 msgid "End dark mode at"
 msgstr "Päätä tumma tila klo"
 
-#: source/win-preferences/schema/general.ts:77
+#: source/win-preferences/schema/general.ts:78
 msgid "File manager mode"
 msgstr "Tiedostoselaimen muoto"
 
-#: source/win-preferences/schema/general.ts:80
+#: source/win-preferences/schema/general.ts:81
 msgid "Thin &mdash; show either file tree or file list"
 msgstr "Kapea &mdash; näytä joko tiedostopuu tai tiedostolista"
 
-#: source/win-preferences/schema/general.ts:81
+#: source/win-preferences/schema/general.ts:82
 msgid "Expanded &mdash; show both file tree and file list"
 msgstr "Laajennettu &mdash; näytä sekä tiedostopuu että tiedostolista"
 
-#: source/win-preferences/schema/general.ts:82
+#: source/win-preferences/schema/general.ts:83
 msgid "Combined &mdash; show files and directories in the file tree"
 msgstr "Yhdistetty &mdash; näytä tiedostot ja hakemistot tiedostopuussa"
 
-#: source/win-preferences/schema/general.ts:87
+#: source/win-preferences/schema/general.ts:88
 msgid "Display files using"
 msgstr "Näytä tiedostot käyttäen"
 
-#: source/win-preferences/schema/general.ts:90
+#: source/win-preferences/schema/general.ts:91
 msgid "Filename only"
 msgstr "Vain tiedostonimeä"
 
-#: source/win-preferences/schema/general.ts:91
+#: source/win-preferences/schema/general.ts:92
 msgid "Title if applicable"
 msgstr "Otsikkoa (jos saatavilla)"
 
-#: source/win-preferences/schema/general.ts:92
+#: source/win-preferences/schema/general.ts:93
 msgid "First heading level 1 if applicable"
 msgstr "1. tason otsikkoa (jos saatavilla)"
 
-#: source/win-preferences/schema/general.ts:93
+#: source/win-preferences/schema/general.ts:94
 msgid "Title or first heading level 1 if applicable"
 msgstr "Otsikkoa tai 1. tason otsikkoa (jos saatavilla)"
 
-#: source/win-preferences/schema/general.ts:98
+#: source/win-preferences/schema/general.ts:99
 msgid "Display Markdown file extensions"
 msgstr "Näytä Markdown-tiedostopääte"
 
-#: source/win-preferences/schema/general.ts:106
+#: source/win-preferences/schema/general.ts:107
 msgid "Sorting order for files (used for sorting by name)"
 msgstr "Tiedostojen järjestys"
 
-#: source/win-preferences/schema/general.ts:109
+#: source/win-preferences/schema/general.ts:110
 msgid "Natural order (10 after 2)"
 msgstr "Luonnollinen järjestys (10 näytetään 2:n jälkeen)"
 
-#: source/win-preferences/schema/general.ts:110
+#: source/win-preferences/schema/general.ts:111
 msgid "ASCII order (2 after 10)"
 msgstr "ASCII:n mukainen järjestys (2 näytetään 10:n jälkeen)"
 
-#: source/win-preferences/schema/general.ts:117
+#: source/win-preferences/schema/general.ts:118
 msgid "Show folders above files"
 msgstr "Näytä kansiot ennen tiedostoja"
 
-#: source/win-preferences/schema/general.ts:124
+#: source/win-preferences/schema/general.ts:125
 msgid "When sorting by time, sort by"
 msgstr "Lajiteltaessa ajan mukaan, lajittele"
 
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
 msgid "Last modification time"
 msgstr "Viimeksi muokattu"
 
-#: source/win-preferences/schema/general.ts:128
-#: source/win-preferences/schema/general.ts:137
+#: source/win-preferences/schema/general.ts:129
+#: source/win-preferences/schema/general.ts:138
 msgid "File creation time"
 msgstr "Tiedoston luontiaika"
 
-#: source/win-preferences/schema/general.ts:133
+#: source/win-preferences/schema/general.ts:134
 msgid "In the file metadata display"
 msgstr "(In the file metadata display)"
 
-#: source/win-preferences/schema/citations.ts:23
+#: source/win-preferences/schema/citations.ts:24
 msgid "How would you like autocomplete to insert your citations?"
 msgstr "Kuinka haluat automaattisen täydennyksen lisäävän viitteesi?"
 
-#: source/win-preferences/schema/citations.ts:35
+#: source/win-preferences/schema/citations.ts:36
 msgid "Citation Database (CSL JSON or BibTex)"
 msgstr "Viittaustietokanta (CSL JSON tai BibTex)"
 
-#: source/win-preferences/schema/citations.ts:46
+#: source/win-preferences/schema/citations.ts:47
 msgid "CSL-Style (optional)"
 msgstr "CSL-tyyli (valinnainen)"
 
-#: source/win-preferences/schema/zettelkasten.ts:23
+#: source/win-preferences/schema/zettelkasten.ts:24
 msgid "ID regular expression"
 msgstr "ID-numeron säännöllinen lauseke (regex)"
 
-#: source/win-preferences/schema/zettelkasten.ts:29
+#: source/win-preferences/schema/zettelkasten.ts:30
 msgid "Pattern used to generate new IDs"
 msgstr "Generoitavien ID-numeroiden muoto"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:38
-msgid "Options for ZKN elements"
-msgstr "Zettelkasten (ZKN) -elementtien valinnat"
-
-#: source/win-preferences/schema/zettelkasten.ts:42
+#: source/win-preferences/schema/zettelkasten.ts:39
 #, fuzzy
 msgid "Link with filename only"
 msgstr "Vain tiedostonimeä"
 
-#: source/win-preferences/schema/zettelkasten.ts:47
+#: source/win-preferences/schema/zettelkasten.ts:44
 #, fuzzy
 msgid "When linking files, add the display name …"
 msgstr "Linkitettäessä tiedostoja lisää tiedostonimi..."
 
-#: source/win-preferences/schema/zettelkasten.ts:50
+#: source/win-preferences/schema/zettelkasten.ts:47
 msgid "always"
 msgstr "aina"
 
-#: source/win-preferences/schema/zettelkasten.ts:51
+#: source/win-preferences/schema/zettelkasten.ts:48
 msgid "only when linking using the ID"
 msgstr "vain linkitettäessä ID:n avulla"
 
-#: source/win-preferences/schema/zettelkasten.ts:52
+#: source/win-preferences/schema/zettelkasten.ts:49
 msgid "never"
 msgstr "ei koskaan"
 
-#: source/win-preferences/schema/zettelkasten.ts:60
+#: source/win-preferences/schema/zettelkasten.ts:57
 msgid "Start a search when following Zettelkasten-links"
 msgstr "Aloita haku Zettelkasten-linkkejä seurattaessa"
 
-#: source/win-preferences/schema/zettelkasten.ts:65
+#: source/win-preferences/schema/zettelkasten.ts:62
 msgid "Automatically create non-existing files when following internal links"
 msgstr "Luo puuttuvat tiedostot automaattisesti sisäisiä linkkejä luotaessa"
 
-#: source/win-preferences/schema/zettelkasten.ts:70
+#: source/win-preferences/schema/zettelkasten.ts:67
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
 "Laita automaattisesti luodut tiedostot tähän hakemistoon (pitää olla "
 "ladattuna Zettlr:issä)"
 
-#: source/win-preferences/schema/editor.ts:23
+#: source/win-preferences/schema/editor.ts:24
 msgid ""
 "Choose the formatting characters that the bold/emphasis commands should use"
 msgstr "Kirjaimet, jotka korostuskomento tuottaa"
 
-#: source/win-preferences/schema/editor.ts:42
+#: source/win-preferences/schema/editor.ts:43
 msgid "Autosave"
 msgstr "Automaattinen tallennus"
 
-#: source/win-preferences/schema/editor.ts:46
+#: source/win-preferences/schema/editor.ts:47
 msgid "Immediately"
 msgstr "Välittömästi"
 
-#: source/win-preferences/schema/editor.ts:47
+#: source/win-preferences/schema/editor.ts:48
 msgid "After a short delay"
 msgstr "Lyhyen viiveen jälkeen"
 
-#: source/win-preferences/schema/editor.ts:54
+#: source/win-preferences/schema/editor.ts:55
 msgid "Default image path (relative or absolute)"
 msgstr "Kuvien oletustallennuspolku (suhteellinen tai absoluuttinen)"
 
-#: source/win-preferences/schema/editor.ts:59
+#: source/win-preferences/schema/editor.ts:60
 msgid "Indent by the following number of spaces"
 msgstr "Sisennyksessä käytettävien välilyöntien määrä"
 
-#: source/win-preferences/schema/editor.ts:64
+#: source/win-preferences/schema/editor.ts:65
 msgid "Indent using tabs"
 msgstr "Sisennä käyttämällä sarkainta"
 
-#: source/win-preferences/schema/editor.ts:69
+#: source/win-preferences/schema/editor.ts:70
 msgid "Editor font size"
 msgstr "Editorin fonttikoko"
 
-#: source/win-preferences/schema/editor.ts:74
+#: source/win-preferences/schema/editor.ts:75
 msgid "Algorithm to use for the readability mode"
 msgstr "Helppolukuisessa tilassa käytettävä algoritmi"
 
-#: source/win-preferences/schema/editor.ts:85
+#: source/win-preferences/schema/editor.ts:86
 msgid "Editor input mode"
 msgstr "Tekstieditorin syöttötila"
 
-#: source/win-preferences/schema/editor.ts:97
+#: source/win-preferences/schema/editor.ts:98
 msgid "Check Markdown for style issues"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:102
+#: source/win-preferences/schema/editor.ts:103
 #, fuzzy
 msgid "Show statusbar"
 msgstr "Näytä Zettlr"
 
-#: source/win-preferences/schema/editor.ts:109
+#: source/win-preferences/schema/editor.ts:110
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "Häiriöttömän tilan ollessa käytössä, mykistä muut rivit"
 
-#: source/win-preferences/schema/editor.ts:114
+#: source/win-preferences/schema/editor.ts:115
 msgid "Automatically close matching character pairs"
 msgstr "Sulje automaattisesti yhtenevät merkkiparit"
 
-#: source/win-preferences/schema/editor.ts:119
+#: source/win-preferences/schema/editor.ts:120
 msgid "Accept spaces during autocompletion"
 msgstr "Hyväksy välilyöntejä automaattisen täydennyksen aikana"
 
-#: source/win-preferences/schema/editor.ts:124
+#: source/win-preferences/schema/editor.ts:125
 msgid "Enable Table Editor"
 msgstr "Käytä taulukkomuokkainta"
 
-#: source/win-preferences/schema/editor.ts:129
+#: source/win-preferences/schema/editor.ts:130
 msgid "Show link previews"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:134
+#: source/win-preferences/schema/editor.ts:135
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "Laske merkkejä sanojen sijaan (esim. kiinalle)"
 
@@ -1549,20 +1582,26 @@ msgstr ""
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:82
+#: source/app/service-providers/commands/export.ts:55
+#: source/app/service-providers/commands/export.ts:151
+msgid "Export failed"
+msgstr "Vienti epäonnistui"
+
+#: source/app/service-providers/commands/export.ts:56
+#, fuzzy, javascript-format
+msgid "An error occurred during export: %s"
+msgstr "Viennissä tapahtui virhe: %s"
+
+#: source/app/service-providers/commands/export.ts:108
 msgid "Choose export destination"
 msgstr "Valitse vientikohde"
 
-#: source/app/service-providers/commands/export.ts:113
+#: source/app/service-providers/commands/export.ts:139
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "Viedään: %s"
 
-#: source/app/service-providers/commands/export.ts:125
-msgid "Export failed"
-msgstr "Vienti epäonnistui"
-
-#: source/app/service-providers/commands/export.ts:126
+#: source/app/service-providers/commands/export.ts:152
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "Viennissä tapahtui virhe: %s"
@@ -1694,22 +1733,23 @@ msgstr "Käännöstiedosto tuotu: %s"
 msgid "Could not import language file %s!"
 msgstr "Ei voitu tuoda käännöstiedostoa %s!"
 
-#: source/app/service-providers/commands/dir-project-export.ts:72
+#: source/app/service-providers/commands/dir-project-export.ts:73
 #, fuzzy
 msgid "Cannot export project"
 msgstr "Vie projekti"
 
-#: source/app/service-providers/commands/dir-project-export.ts:73
+#: source/app/service-providers/commands/dir-project-export.ts:74
 msgid ""
 "After applying your glob-filters, no files remained to export. Please adjust "
 "them in the project settings."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:129
+#: source/app/service-providers/commands/dir-project-export.ts:145
 msgid "Project successfully exported. Click to show."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:129
+#: source/app/service-providers/commands/dir-project-export.ts:145
+#: source/tmp/PopoverExport.vue.ts:6
 #, fuzzy
 msgid "Export"
 msgstr "Vie…"
@@ -2142,6 +2182,15 @@ msgstr "Luotu"
 msgid "Project Settings…"
 msgstr "Projektin asetukset…"
 
+#: source/tmp/PopoverExport.vue.ts:6
+#, fuzzy
+msgid "Exporting…"
+msgstr "Vie…"
+
+#: source/tmp/PopoverExport.vue.ts:27
+msgid "command"
+msgstr ""
+
 #: source/tmp/file-item.vue.ts:193 source/tmp/PopoverFileProps.vue.ts:77
 msgid "Characters"
 msgstr "merkkiä"
@@ -2212,33 +2261,15 @@ msgstr "Tallennetaan..."
 msgid "Saved!"
 msgstr "Tallennettu!"
 
-#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:50
-#: source/tmp/Number.vue.ts:59 source/tmp/ShortcutChooser.vue.ts:61
-#: source/tmp/File.vue.ts:59
+#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:51
+#: source/tmp/Number.vue.ts:60 source/tmp/ShortcutChooser.vue.ts:61
+#: source/tmp/File.vue.ts:60
 msgid "Reset"
 msgstr "Nollaa"
 
 #: source/tmp/PopoverFileProps.vue.ts:74
 msgid "Set writing target…"
 msgstr "Aseta kirjoitustavoite…"
-
-#: source/tmp/List.vue.ts:141
-msgid "Add"
-msgstr "Lisää"
-
-#: source/tmp/List.vue.ts:144
-msgid "Actions"
-msgstr "Toiminnot"
-
-#: source/tmp/List.vue.ts:147
-#, fuzzy
-msgid "Delete"
-msgstr "Poista tiedosto"
-
-#. Apparently we have a simple array, so exactly one column
-#: source/tmp/List.vue.ts:169
-msgid "Item"
-msgstr "Nimike"
 
 #: source/tmp/General-Tab.vue.ts:23
 msgid ""
@@ -2298,17 +2329,13 @@ msgstr "Ei muita tiedostoja"
 msgid "Charts"
 msgstr "Kaaviot"
 
-#: source/tmp/Theme.vue.ts:37
+#: source/tmp/Theme.vue.ts:44
 msgid "selected"
 msgstr "valittu"
 
-#: source/tmp/Theme.vue.ts:40
+#: source/tmp/Theme.vue.ts:47
 msgid "click to select"
 msgstr "klikkaa valitaksesi"
-
-#: source/tmp/PopoverTags.vue.ts:36
-msgid "Name"
-msgstr ""
 
 #: source/tmp/PopoverTags.vue.ts:37
 msgid "Count"
@@ -2589,9 +2616,34 @@ msgstr "sanaa"
 msgid "characters"
 msgstr "merkkiä"
 
+#: source/tmp/ListControl.vue.ts:81
+msgid "Add"
+msgstr "Lisää"
+
+#: source/tmp/ListControl.vue.ts:82
+msgid "Actions"
+msgstr "Toiminnot"
+
+#: source/tmp/ListControl.vue.ts:83
+#, fuzzy
+msgid "Delete"
+msgstr "Poista tiedosto"
+
 #: source/tmp/ReferencesTab.vue.ts:48
 msgid "There are no citations in this document."
 msgstr "Tässä tiedostossa ei ole viitteitä"
+
+#~ msgid "These options determine which elements are rendered in documents."
+#~ msgstr "Seuraavassa määritellään, mitkä elementit näytetään dokumenteissa."
+
+#~ msgid "With these controls you can constrain the image previews."
+#~ msgstr "Tässä voit määrittää kuvien esikatselulle maksimikoon."
+
+#~ msgid "Options for ZKN elements"
+#~ msgstr "Zettelkasten (ZKN) -elementtien valinnat"
+
+#~ msgid "Item"
+#~ msgstr "Nimike"
 
 #~ msgid "Get LaTeX"
 #~ msgstr "Asenna LaTeX"
