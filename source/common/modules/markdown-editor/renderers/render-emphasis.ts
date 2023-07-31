@@ -36,6 +36,23 @@ class BulletWidget extends WidgetType {
   }
 }
 
+class SpaceWidget extends WidgetType {
+  constructor (readonly node: SyntaxNode, readonly numChars: number) {
+    super()
+  }
+
+  eq (other: BulletWidget): boolean {
+    return other.node.from === this.node.from && other.node.to === this.node.from
+  }
+
+  toDOM (view: EditorView): HTMLElement {
+    const elem = document.createElement('span')
+    elem.innerHTML = '&nbsp;'.repeat(this.numChars)
+    elem.style.fontFamily = 'monospace'
+    return elem
+  }
+}
+
 function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
   const ranges: Array<Range<Decoration>> = []
   const hiddenDeco = Decoration.replace({})
@@ -49,6 +66,7 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
         if (rangeInSelection(view.state, node.from, node.to)) {
           return
         }
+        console.log(node.name)
 
         switch (node.name) {
           case 'Escape':
@@ -91,6 +109,13 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
           case 'Footnote': {
             ranges.push(hiddenDeco.range(node.from, node.from + 2))
             ranges.push(hiddenDeco.range(node.to - 1, node.to))
+            break
+          }
+          case 'Blockquote': {
+            const mark = node.node.getChild('QuoteMark')
+            if (mark !== null) {
+              ranges.push(Decoration.replace({ widget: new SpaceWidget(mark.node, mark.to - mark.from) }).range(mark.from, mark.to))
+            }
             break
           }
           case 'ListItem': {
