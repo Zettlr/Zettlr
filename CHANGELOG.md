@@ -222,6 +222,9 @@ there.
   option to copy the absolute file or folder path to the clipboard
 - **New Feature**: There is now a new menu item that allows you to conveniently
   clear the FSAL cache in case of some errors
+- **New Feature**: A new gutter to the left side of the editor will now display
+  arrow buttons next to footnote reference bodies that will select the
+  corresponding footnote reference up in the text upon click
 - Note preview tooltips now display a sanitized HTML version of the note's
   Markdown contents
 - Removed the "Get LaTeX" menu item since (hopefully) now the advice in the docs

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-07-12 08:10+0000\n"
+"POT-Creation-Date: 2023-07-31 02:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,7 +91,7 @@ msgid "Edit"
 msgstr "编辑"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:122
-#: source/app/service-providers/commands/export.ts:82
+#: source/app/service-providers/commands/export.ts:108
 #: source/app/service-providers/menu/menu.win32.ts:162
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/tmp/Defaults.vue.ts:112 source/tmp/CustomCSS.vue.ts:42
@@ -140,14 +140,14 @@ msgstr "在新标签页中打开"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/win-preferences/schema/editor.ts:26
 #: source/win-preferences/schema/editor.ts:27
+#: source/win-preferences/schema/editor.ts:28
 msgid "Bold"
 msgstr "黑体"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:34
 #: source/win-preferences/schema/editor.ts:35
+#: source/win-preferences/schema/editor.ts:36
 msgid "Italics"
 msgstr "斜体"
 
@@ -701,114 +701,104 @@ msgstr "繁体中文（中国）"
 msgid "Chinese"
 msgstr "中文简体（中国）"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:24
-msgid "These options determine which elements are rendered in documents."
-msgstr "你可以勾选这些选项决定在文档中呈现哪些元素。"
-
-#: source/win-preferences/schema/display.ts:28
+#: source/win-preferences/schema/display.ts:25
 msgid "Render Citations"
 msgstr "渲染引用段落"
 
-#: source/win-preferences/schema/display.ts:33
+#: source/win-preferences/schema/display.ts:30
 msgid "Render Iframes"
 msgstr "渲染内嵌框架"
 
-#: source/win-preferences/schema/display.ts:38
+#: source/win-preferences/schema/display.ts:35
 msgid "Render Images"
 msgstr "渲染图片"
 
-#: source/win-preferences/schema/display.ts:43
+#: source/win-preferences/schema/display.ts:40
 msgid "Render Links"
 msgstr "渲染链接"
 
-#: source/win-preferences/schema/display.ts:48
+#: source/win-preferences/schema/display.ts:45
 msgid "Render Formulae"
 msgstr "渲染公式"
 
-#: source/win-preferences/schema/display.ts:53
+#: source/win-preferences/schema/display.ts:50
 msgid "Render Tasks"
 msgstr "渲染任务"
 
-#: source/win-preferences/schema/display.ts:58
+#: source/win-preferences/schema/display.ts:55
 msgid "Hide heading characters"
 msgstr "隐藏标题字符"
 
-#: source/win-preferences/schema/display.ts:63
+#: source/win-preferences/schema/display.ts:60
 msgid "Render emphasis"
 msgstr "渲染强调"
 
-#: source/win-preferences/schema/display.ts:71
+#: source/win-preferences/schema/display.ts:68
 msgid "Here you can choose the theme for the app."
 msgstr "你可以在此选择应用的主题。"
 
-#: source/win-preferences/schema/display.ts:112
+#: source/win-preferences/schema/display.ts:109
 msgid "Use the operating system's accent colour instead of the theme colour"
 msgstr "使用系统字体颜色而非主题色"
 
-#: source/win-preferences/schema/display.ts:116
+#: source/win-preferences/schema/display.ts:113
 msgid "This setting is only available on Windows and macOS"
 msgstr "该设置仅在Windows和MacOS可用"
 
-#: source/win-preferences/schema/display.ts:122
+#: source/win-preferences/schema/display.ts:119
 msgid "Hide toolbar in distraction free mode"
 msgstr "在专注模式下隐藏工具条"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:129
-msgid "With these controls you can constrain the image previews."
-msgstr "你可以通过以下指令限制图像预览。"
-
-#: source/win-preferences/schema/display.ts:133
+#: source/win-preferences/schema/display.ts:126
 msgid "Maximum width of images (percent)"
 msgstr "最大图片宽度（%）"
 
-#: source/win-preferences/schema/display.ts:141
+#: source/win-preferences/schema/display.ts:133
 msgid "Maximum height of images (percent)"
 msgstr "最大图片高度（%）"
 
-#: source/win-preferences/schema/advanced.ts:23
+#: source/win-preferences/schema/advanced.ts:24
 msgid "Pattern for new filenames"
 msgstr "新文件名的模式"
 
-#: source/win-preferences/schema/advanced.ts:29
+#: source/win-preferences/schema/advanced.ts:30
 msgid "Do not prompt for filename when creating new files"
 msgstr "在创建新文件时不要提示文件名"
 
-#: source/win-preferences/schema/advanced.ts:36
+#: source/win-preferences/schema/advanced.ts:37
 msgid "Enable debug mode"
 msgstr "启用调试模式"
 
-#: source/win-preferences/schema/advanced.ts:41
+#: source/win-preferences/schema/advanced.ts:42
 msgid "Notify me about beta releases"
 msgstr "当有新Beta版本发布时通知我"
 
-#: source/win-preferences/schema/advanced.ts:46
+#: source/win-preferences/schema/advanced.ts:47
 msgid "Use native window appearance"
 msgstr "使用本机窗口外观"
 
-#: source/win-preferences/schema/advanced.ts:52
+#: source/win-preferences/schema/advanced.ts:53
 #, fuzzy
 msgid "Enable window vibrancy"
 msgstr "使用本机窗口外观"
 
-#: source/win-preferences/schema/advanced.ts:58
+#: source/win-preferences/schema/advanced.ts:59
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr "如果移到回收站失败，则永久性地删除它们"
 
-#: source/win-preferences/schema/advanced.ts:64
+#: source/win-preferences/schema/advanced.ts:65
 msgid "Show app in the notification area"
 msgstr "在消息区显示应用"
 
-#: source/win-preferences/schema/advanced.ts:65
+#: source/win-preferences/schema/advanced.ts:66
 msgid "Leave app running in the notification area"
 msgstr "使应用在通知区运行"
 
-#: source/win-preferences/schema/advanced.ts:72
+#: source/win-preferences/schema/advanced.ts:73
 msgid "Automatically check for updates"
 msgstr "自动检查更新"
 
-#: source/win-preferences/schema/advanced.ts:79
+#: source/win-preferences/schema/advanced.ts:80
 msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
@@ -816,57 +806,75 @@ msgstr ""
 "在侧边栏中输入你想要查看的附件拓展名，并用逗号（英文）隔开。重启后会识别修"
 "改。"
 
-#: source/win-preferences/schema/advanced.ts:87
+#: source/win-preferences/schema/advanced.ts:88
 msgid "Zoom behavior"
 msgstr "缩放行为"
 
-#: source/win-preferences/schema/advanced.ts:89
+#: source/win-preferences/schema/advanced.ts:90
 msgid "Zoom resizes the whole GUI"
 msgstr "缩放可以调整整个图形用户界面的大小"
 
-#: source/win-preferences/schema/advanced.ts:90
+#: source/win-preferences/schema/advanced.ts:91
 msgid "Zoom changes the editor font size"
 msgstr "缩放可以改变编辑器的字体大小"
 
-#: source/win-preferences/schema/advanced.ts:97
+#: source/win-preferences/schema/advanced.ts:99
 msgid "iFrame rendering whitelist"
 msgstr "iFrame 渲染白名单"
 
-#: source/win-preferences/schema/advanced.ts:100
+#: source/win-preferences/schema/advanced.ts:102
 msgid "Hostname"
 msgstr "主机名"
 
-#: source/win-preferences/schema/advanced.ts:102
-#: source/win-preferences/schema/spellchecking.ts:93
+#: source/win-preferences/schema/advanced.ts:104
+#: source/win-preferences/schema/spellchecking.ts:99
 msgid "Search for entries …"
 msgstr "搜索内容 ..."
 
-#: source/win-preferences/schema/advanced.ts:108
+#: source/win-preferences/schema/advanced.ts:110
 msgid "Activate Watchdog polling"
 msgstr "激活看门狗轮询"
 
-#: source/win-preferences/schema/advanced.ts:113
+#: source/win-preferences/schema/advanced.ts:115
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "判断一个文件写入完成前的等待时间"
 
-#: source/win-preferences/schema/autocorrect.ts:23
+#: source/win-preferences/schema/autocorrect.ts:24
 msgid "Turn on AutoCorrect"
 msgstr "开启自动纠正"
 
-#: source/win-preferences/schema/autocorrect.ts:32
+#: source/win-preferences/schema/autocorrect.ts:33
 msgid "Primary Magic Quotes"
 msgstr "首选的神奇引号"
 
-#: source/win-preferences/schema/autocorrect.ts:35
-#: source/win-preferences/schema/autocorrect.ts:56
+#: source/win-preferences/schema/autocorrect.ts:36
+#: source/win-preferences/schema/autocorrect.ts:57
 msgid "Disable Magic Quotes"
 msgstr "无"
 
-#: source/win-preferences/schema/autocorrect.ts:53
+#: source/win-preferences/schema/autocorrect.ts:54
 msgid "Secondary Magic Quotes"
 msgstr "次选的神奇引号"
 
-#: source/win-preferences/schema/autocorrect.ts:79
+#: source/win-preferences/schema/autocorrect.ts:80
+msgid "Match whole words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:81
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:90
+#, fuzzy
+msgid "String"
+msgstr "严格"
+
+#: source/win-preferences/schema/autocorrect.ts:90
+#, fuzzy
+msgid "Replacement"
+msgstr "替换文件"
+
+#: source/win-preferences/schema/autocorrect.ts:91
 msgid ""
 "Here you can define certain strings that will be replaced when AutoCorrect "
 "is on. The characters on the left side will be replaced with whatever comes "
@@ -875,411 +883,438 @@ msgstr ""
 "这里您可以定义特别的字符串，自动更正启用时可自动替换。左侧的字符将被右侧的字"
 "符所替换。"
 
-#: source/win-preferences/schema/export.ts:23
+#: source/win-preferences/schema/export.ts:24
 msgid "Use the internal Pandoc for exports"
 msgstr "使用内置的Pandoc导出"
 
-#: source/win-preferences/schema/export.ts:30
+#: source/win-preferences/schema/export.ts:31
 msgid "Remove tags from files"
 msgstr "删除文档中的标签"
 
-#: source/win-preferences/schema/export.ts:40
+#: source/win-preferences/schema/export.ts:41
 msgid "Remove internal links completely"
 msgstr "彻底删除内部链接"
 
-#: source/win-preferences/schema/export.ts:41
+#: source/win-preferences/schema/export.ts:42
 msgid "Unlink internal links"
 msgstr "取消内部链接"
 
-#: source/win-preferences/schema/export.ts:42
+#: source/win-preferences/schema/export.ts:43
 msgid "Don't touch internal links"
 msgstr "不改变内部链接"
 
-#: source/win-preferences/schema/export.ts:49
+#: source/win-preferences/schema/export.ts:50
 msgid ""
 "Target directory for exported files. <em>Attention:</em> Selecting the "
 "current working directory will overwrite files without warning!"
 msgstr ""
 "导出文件的目标目录。 <em>注意：</ em>选择当前工作目录将覆盖文档而不发出警告！"
 
-#: source/win-preferences/schema/export.ts:52
+#: source/win-preferences/schema/export.ts:53
 msgid "Temporary directory: is regularly expunged"
 msgstr "临时目录：定期清除"
 
-#: source/win-preferences/schema/export.ts:53
+#: source/win-preferences/schema/export.ts:54
 msgid ""
 "Current working directory: exported files will be saved into the currently "
 "selected directory."
 msgstr "当前工作目录：导出的文档将保存到当前选定的目录中。"
 
-#: source/win-preferences/schema/export.ts:54
+#: source/win-preferences/schema/export.ts:55
 msgid "Ask for directory"
 msgstr "询问目录"
 
-#: source/win-preferences/schema/toolbar.ts:23
+#: source/win-preferences/schema/export.ts:64
+#, fuzzy
+msgid "Display name"
+msgstr "显示图像按钮"
+
+#: source/win-preferences/schema/export.ts:64
+#, fuzzy
+msgid "Command"
+msgstr "注释"
+
+#: source/win-preferences/schema/export.ts:65
+msgid ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:24
 msgid "Display \"Open Preferences\" button"
 msgstr "显示打开偏好设置按钮"
 
-#: source/win-preferences/schema/toolbar.ts:28
+#: source/win-preferences/schema/toolbar.ts:29
 msgid "Display \"New File\" button"
 msgstr "显示新文件按钮"
 
-#: source/win-preferences/schema/toolbar.ts:33
+#: source/win-preferences/schema/toolbar.ts:34
 msgid "Display \"Previous File\" button"
 msgstr "显示打开前一个文件按钮"
 
-#: source/win-preferences/schema/toolbar.ts:38
+#: source/win-preferences/schema/toolbar.ts:39
 msgid "Display \"Next File\" button"
 msgstr "显示下一个文件按钮"
 
-#: source/win-preferences/schema/toolbar.ts:45
+#: source/win-preferences/schema/toolbar.ts:46
 msgid "Display readability button"
 msgstr "显示可读性按钮"
 
-#: source/win-preferences/schema/toolbar.ts:50
+#: source/win-preferences/schema/toolbar.ts:51
 msgid "Display \"Insert Comment\" button"
 msgstr "显示插入备注按钮"
 
-#: source/win-preferences/schema/toolbar.ts:55
+#: source/win-preferences/schema/toolbar.ts:56
 msgid "Display link button"
 msgstr "显示链接按钮"
 
-#: source/win-preferences/schema/toolbar.ts:60
+#: source/win-preferences/schema/toolbar.ts:61
 msgid "Display image button"
 msgstr "显示图像按钮"
 
-#: source/win-preferences/schema/toolbar.ts:65
+#: source/win-preferences/schema/toolbar.ts:66
 msgid "Display task list button"
 msgstr "显示任务清单按钮"
 
-#: source/win-preferences/schema/toolbar.ts:70
+#: source/win-preferences/schema/toolbar.ts:71
 msgid "Display \"Insert Table\" button"
 msgstr "显示插入表格按钮"
 
-#: source/win-preferences/schema/toolbar.ts:75
+#: source/win-preferences/schema/toolbar.ts:76
 msgid "Display \"Insert Footnote\" button"
 msgstr "显示注脚按钮"
 
-#: source/win-preferences/schema/toolbar.ts:82
+#: source/win-preferences/schema/toolbar.ts:83
 msgid "Display document info"
 msgstr "显示文件信息"
 
-#: source/win-preferences/schema/toolbar.ts:87
+#: source/win-preferences/schema/toolbar.ts:88
 msgid "Display Pomodoro-timer"
 msgstr "显示番茄钟按钮"
 
-#: source/win-preferences/schema/spellchecking.ts:24
+#: source/win-preferences/schema/spellchecking.ts:25
 msgid "Use LanguageTool"
 msgstr "使用语言工具"
 
-#: source/win-preferences/schema/spellchecking.ts:29
+#: source/win-preferences/schema/spellchecking.ts:30
 msgid "Strictness"
 msgstr "严格"
 
-#: source/win-preferences/schema/spellchecking.ts:31
+#: source/win-preferences/schema/spellchecking.ts:32
 #, fuzzy
 msgid "Standard"
 msgstr "日历"
 
-#: source/win-preferences/schema/spellchecking.ts:32
+#: source/win-preferences/schema/spellchecking.ts:33
 msgid "Picky"
 msgstr "讲究"
 
-#: source/win-preferences/schema/spellchecking.ts:39
+#: source/win-preferences/schema/spellchecking.ts:40
 msgid "Mother tongue"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:41
+#: source/win-preferences/schema/spellchecking.ts:42
 msgid "Not set"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:48
+#: source/win-preferences/schema/spellchecking.ts:49
 msgid "LanguageTool Provider"
 msgstr "语言工具 提供程序"
 
-#: source/win-preferences/schema/spellchecking.ts:51
-#: source/win-preferences/schema/spellchecking.ts:58
+#: source/win-preferences/schema/spellchecking.ts:52
+#: source/win-preferences/schema/spellchecking.ts:59
 #, fuzzy
 msgid "Custom server"
 msgstr "自定义CSS"
 
-#: source/win-preferences/schema/spellchecking.ts:65
+#: source/win-preferences/schema/spellchecking.ts:66
 msgid "LanguageTool Username"
 msgstr "语言工具 用户名"
 
-#: source/win-preferences/schema/spellchecking.ts:71
+#: source/win-preferences/schema/spellchecking.ts:72
 msgid "LanguageTool API key"
 msgstr "语言工具 API密钥"
 
-#: source/win-preferences/schema/spellchecking.ts:79
+#: source/win-preferences/schema/spellchecking.ts:82
+#, fuzzy
+msgid "Active"
+msgstr "Actions"
+
+#: source/win-preferences/schema/spellchecking.ts:82
+#, fuzzy
+msgid "Language Code"
+msgstr "语言工具 提供程序"
+
+#: source/win-preferences/schema/spellchecking.ts:82
+#: source/tmp/PopoverTags.vue.ts:36
+msgid "Name"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:83
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr "选择要启用自动拼写检查的语言。"
 
-#: source/win-preferences/schema/spellchecking.ts:84
-msgid "Search for dictionaries &hellip;"
+#: source/win-preferences/schema/spellchecking.ts:88
+#, fuzzy
+msgid "Search for dictionaries…"
 msgstr "搜索词典 &hellip；"
 
-#: source/win-preferences/schema/spellchecking.ts:88
+#: source/win-preferences/schema/spellchecking.ts:94
 msgid "User dictionary. Remove words by clicking them."
 msgstr "用户字典。点击移除单词。"
 
-#: source/win-preferences/schema/spellchecking.ts:90
+#: source/win-preferences/schema/spellchecking.ts:96
 msgid "Dictionary entry"
 msgstr "字典词条"
 
-#: source/win-preferences/schema/general.ts:23
+#: source/win-preferences/schema/general.ts:24
 msgid "Application language"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:31
+#: source/win-preferences/schema/general.ts:32
 #: source/app/service-providers/menu/menu.win32.ts:430
 #: source/app/service-providers/menu/menu.darwin.ts:448
 msgid "Dark mode"
 msgstr "夜间模式"
 
-#: source/win-preferences/schema/general.ts:36
+#: source/win-preferences/schema/general.ts:37
 msgid "Show file information"
 msgstr "显示文件信息"
 
-#: source/win-preferences/schema/general.ts:41
+#: source/win-preferences/schema/general.ts:42
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 msgid "Always load remote changes to the current file"
 msgstr "始终将远程更改加载到当前文件"
 
-#: source/win-preferences/schema/general.ts:46
+#: source/win-preferences/schema/general.ts:47
 msgid "Avoid opening files in new tabs if possible"
 msgstr "尽量避免在新标签页打开文件"
 
-#: source/win-preferences/schema/general.ts:53
+#: source/win-preferences/schema/general.ts:54
 msgid "Automatically switch to dark mode"
 msgstr "自动切换夜间模式"
 
-#: source/win-preferences/schema/general.ts:56
-#: source/win-preferences/schema/editor.ts:45
+#: source/win-preferences/schema/general.ts:57
+#: source/win-preferences/schema/editor.ts:46
 msgid "Off"
 msgstr "关闭"
 
-#: source/win-preferences/schema/general.ts:57
+#: source/win-preferences/schema/general.ts:58
 msgid "Schedule"
 msgstr "计划"
 
-#: source/win-preferences/schema/general.ts:58
+#: source/win-preferences/schema/general.ts:59
 msgid "Follow Operating System"
 msgstr "跟随系统设置"
 
-#: source/win-preferences/schema/general.ts:63
+#: source/win-preferences/schema/general.ts:64
 msgid "Start dark mode at"
 msgstr "深色模式开始时间"
 
-#: source/win-preferences/schema/general.ts:69
+#: source/win-preferences/schema/general.ts:70
 msgid "End dark mode at"
 msgstr "深色模式结束时间"
 
-#: source/win-preferences/schema/general.ts:77
+#: source/win-preferences/schema/general.ts:78
 msgid "File manager mode"
 msgstr "文件管理器模式"
 
-#: source/win-preferences/schema/general.ts:80
+#: source/win-preferences/schema/general.ts:81
 msgid "Thin &mdash; show either file tree or file list"
 msgstr "切换 &mdash; 显示目录树或者文件列表"
 
-#: source/win-preferences/schema/general.ts:81
+#: source/win-preferences/schema/general.ts:82
 msgid "Expanded &mdash; show both file tree and file list"
 msgstr "分栏 &mdash; 左右栏分别显示目录树和文件列表"
 
-#: source/win-preferences/schema/general.ts:82
+#: source/win-preferences/schema/general.ts:83
 msgid "Combined &mdash; show files and directories in the file tree"
 msgstr "合并 &mdash; 在树中同时显示文件和目录"
 
-#: source/win-preferences/schema/general.ts:87
+#: source/win-preferences/schema/general.ts:88
 msgid "Display files using"
 msgstr "显示文件的方式"
 
-#: source/win-preferences/schema/general.ts:90
+#: source/win-preferences/schema/general.ts:91
 msgid "Filename only"
 msgstr "只显示文件名"
 
-#: source/win-preferences/schema/general.ts:91
+#: source/win-preferences/schema/general.ts:92
 msgid "Title if applicable"
 msgstr "标题（如适用）"
 
-#: source/win-preferences/schema/general.ts:92
+#: source/win-preferences/schema/general.ts:93
 msgid "First heading level 1 if applicable"
 msgstr "第一个1级标题（如适用）"
 
-#: source/win-preferences/schema/general.ts:93
+#: source/win-preferences/schema/general.ts:94
 msgid "Title or first heading level 1 if applicable"
 msgstr "标题或第一个1级标题（如适用）"
 
-#: source/win-preferences/schema/general.ts:98
+#: source/win-preferences/schema/general.ts:99
 msgid "Display Markdown file extensions"
 msgstr "显示Markdown文件扩展名"
 
-#: source/win-preferences/schema/general.ts:106
+#: source/win-preferences/schema/general.ts:107
 msgid "Sorting order for files (used for sorting by name)"
 msgstr "文件的排序顺序（用于按名称排序）"
 
-#: source/win-preferences/schema/general.ts:109
+#: source/win-preferences/schema/general.ts:110
 msgid "Natural order (10 after 2)"
 msgstr "自然顺序（10在2之后）"
 
-#: source/win-preferences/schema/general.ts:110
+#: source/win-preferences/schema/general.ts:111
 msgid "ASCII order (2 after 10)"
 msgstr "ASCII顺序（2在10之后）"
 
-#: source/win-preferences/schema/general.ts:117
+#: source/win-preferences/schema/general.ts:118
 msgid "Show folders above files"
 msgstr "在文档上方显示文件夹"
 
-#: source/win-preferences/schema/general.ts:124
+#: source/win-preferences/schema/general.ts:125
 msgid "When sorting by time, sort by"
 msgstr "按时间排序时使用的排序方法"
 
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
 msgid "Last modification time"
 msgstr "最后修改时间"
 
-#: source/win-preferences/schema/general.ts:128
-#: source/win-preferences/schema/general.ts:137
+#: source/win-preferences/schema/general.ts:129
+#: source/win-preferences/schema/general.ts:138
 msgid "File creation time"
 msgstr "文件创建时间"
 
-#: source/win-preferences/schema/general.ts:133
+#: source/win-preferences/schema/general.ts:134
 msgid "In the file metadata display"
 msgstr "在文件中显示元数据"
 
-#: source/win-preferences/schema/citations.ts:23
+#: source/win-preferences/schema/citations.ts:24
 msgid "How would you like autocomplete to insert your citations?"
 msgstr "自动完成功能如何插入引文？"
 
-#: source/win-preferences/schema/citations.ts:35
+#: source/win-preferences/schema/citations.ts:36
 msgid "Citation Database (CSL JSON or BibTex)"
 msgstr "引文数据库（CSL JSON 或 BibTex 格式）"
 
-#: source/win-preferences/schema/citations.ts:46
+#: source/win-preferences/schema/citations.ts:47
 msgid "CSL-Style (optional)"
 msgstr "CSL风格（可选）"
 
-#: source/win-preferences/schema/zettelkasten.ts:23
+#: source/win-preferences/schema/zettelkasten.ts:24
 msgid "ID regular expression"
 msgstr "ID正则表达式"
 
-#: source/win-preferences/schema/zettelkasten.ts:29
+#: source/win-preferences/schema/zettelkasten.ts:30
 msgid "Pattern used to generate new IDs"
 msgstr "用于生成新ID的模式"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:38
-msgid "Options for ZKN elements"
-msgstr "ZKN元素的选项"
-
-#: source/win-preferences/schema/zettelkasten.ts:42
+#: source/win-preferences/schema/zettelkasten.ts:39
 #, fuzzy
 msgid "Link with filename only"
 msgstr "只显示文件名"
 
-#: source/win-preferences/schema/zettelkasten.ts:47
+#: source/win-preferences/schema/zettelkasten.ts:44
 #, fuzzy
 msgid "When linking files, add the display name …"
 msgstr "当链接文件时，添加文件名"
 
-#: source/win-preferences/schema/zettelkasten.ts:50
+#: source/win-preferences/schema/zettelkasten.ts:47
 msgid "always"
 msgstr "总是"
 
-#: source/win-preferences/schema/zettelkasten.ts:51
+#: source/win-preferences/schema/zettelkasten.ts:48
 msgid "only when linking using the ID"
 msgstr "只在链接时使用 ID"
 
-#: source/win-preferences/schema/zettelkasten.ts:52
+#: source/win-preferences/schema/zettelkasten.ts:49
 msgid "never"
 msgstr "从不"
 
-#: source/win-preferences/schema/zettelkasten.ts:60
+#: source/win-preferences/schema/zettelkasten.ts:57
 msgid "Start a search when following Zettelkasten-links"
 msgstr "跟踪Zettelkasten-links时搜索"
 
-#: source/win-preferences/schema/zettelkasten.ts:65
+#: source/win-preferences/schema/zettelkasten.ts:62
 msgid "Automatically create non-existing files when following internal links"
 msgstr "追踪内部链接时自动创建不存在的文件"
 
-#: source/win-preferences/schema/zettelkasten.ts:70
+#: source/win-preferences/schema/zettelkasten.ts:67
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr "将自动创建的文件放入此目录（必须在Zettlr中已经加载）"
 
-#: source/win-preferences/schema/editor.ts:23
+#: source/win-preferences/schema/editor.ts:24
 msgid ""
 "Choose the formatting characters that the bold/emphasis commands should use"
 msgstr "选择要被粗体或强调命令使用的格式字符"
 
-#: source/win-preferences/schema/editor.ts:42
+#: source/win-preferences/schema/editor.ts:43
 msgid "Autosave"
 msgstr "自动保存"
 
-#: source/win-preferences/schema/editor.ts:46
+#: source/win-preferences/schema/editor.ts:47
 msgid "Immediately"
 msgstr "马上"
 
-#: source/win-preferences/schema/editor.ts:47
+#: source/win-preferences/schema/editor.ts:48
 msgid "After a short delay"
 msgstr "短暂延迟后"
 
-#: source/win-preferences/schema/editor.ts:54
+#: source/win-preferences/schema/editor.ts:55
 msgid "Default image path (relative or absolute)"
 msgstr "默认图片路径（相对或绝对）"
 
-#: source/win-preferences/schema/editor.ts:59
+#: source/win-preferences/schema/editor.ts:60
 msgid "Indent by the following number of spaces"
 msgstr "使用以下数量的空格来缩进"
 
-#: source/win-preferences/schema/editor.ts:64
+#: source/win-preferences/schema/editor.ts:65
 msgid "Indent using tabs"
 msgstr "使用制表符缩进"
 
-#: source/win-preferences/schema/editor.ts:69
+#: source/win-preferences/schema/editor.ts:70
 msgid "Editor font size"
 msgstr "编辑器字体大小"
 
-#: source/win-preferences/schema/editor.ts:74
+#: source/win-preferences/schema/editor.ts:75
 msgid "Algorithm to use for the readability mode"
 msgstr "在阅读模式中使用的算法"
 
-#: source/win-preferences/schema/editor.ts:85
+#: source/win-preferences/schema/editor.ts:86
 msgid "Editor input mode"
 msgstr "编辑器输入模式"
 
-#: source/win-preferences/schema/editor.ts:97
+#: source/win-preferences/schema/editor.ts:98
 msgid "Check Markdown for style issues"
 msgstr "检查 Markdown 是否存在样式问题"
 
-#: source/win-preferences/schema/editor.ts:102
+#: source/win-preferences/schema/editor.ts:103
 #, fuzzy
 msgid "Show statusbar"
 msgstr "在托盘中显示Zettlr"
 
-#: source/win-preferences/schema/editor.ts:109
+#: source/win-preferences/schema/editor.ts:110
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "隐藏所有非当前行"
 
-#: source/win-preferences/schema/editor.ts:114
+#: source/win-preferences/schema/editor.ts:115
 msgid "Automatically close matching character pairs"
 msgstr "括号自动配对"
 
-#: source/win-preferences/schema/editor.ts:119
+#: source/win-preferences/schema/editor.ts:120
 msgid "Accept spaces during autocompletion"
 msgstr "允许自动完成生成空格"
 
-#: source/win-preferences/schema/editor.ts:124
+#: source/win-preferences/schema/editor.ts:125
 msgid "Enable Table Editor"
 msgstr "启用表格编辑器"
 
-#: source/win-preferences/schema/editor.ts:129
+#: source/win-preferences/schema/editor.ts:130
 msgid "Show link previews"
 msgstr "显示链接预览"
 
-#: source/win-preferences/schema/editor.ts:134
+#: source/win-preferences/schema/editor.ts:135
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "统计字的数量而不是词语的数量（例如，中文）"
 
@@ -1533,20 +1568,26 @@ msgstr "确定"
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:82
+#: source/app/service-providers/commands/export.ts:55
+#: source/app/service-providers/commands/export.ts:151
+msgid "Export failed"
+msgstr "导出失败"
+
+#: source/app/service-providers/commands/export.ts:56
+#, fuzzy, javascript-format
+msgid "An error occurred during export: %s"
+msgstr "错误输出: %s"
+
+#: source/app/service-providers/commands/export.ts:108
 msgid "Choose export destination"
 msgstr "选择导出目的位置"
 
-#: source/app/service-providers/commands/export.ts:113
+#: source/app/service-providers/commands/export.ts:139
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "成功导出到％s！"
 
-#: source/app/service-providers/commands/export.ts:125
-msgid "Export failed"
-msgstr "导出失败"
-
-#: source/app/service-providers/commands/export.ts:126
+#: source/app/service-providers/commands/export.ts:152
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "错误输出: %s"
@@ -1676,22 +1717,23 @@ msgstr "语言包文件已导入：%s"
 msgid "Could not import language file %s!"
 msgstr "无法导入语言包文件 %s！"
 
-#: source/app/service-providers/commands/dir-project-export.ts:72
+#: source/app/service-providers/commands/dir-project-export.ts:73
 #, fuzzy
 msgid "Cannot export project"
 msgstr "导出项目"
 
-#: source/app/service-providers/commands/dir-project-export.ts:73
+#: source/app/service-providers/commands/dir-project-export.ts:74
 msgid ""
 "After applying your glob-filters, no files remained to export. Please adjust "
 "them in the project settings."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:129
+#: source/app/service-providers/commands/dir-project-export.ts:145
 msgid "Project successfully exported. Click to show."
 msgstr "项目已成功导出。点击显示。"
 
-#: source/app/service-providers/commands/dir-project-export.ts:129
+#: source/app/service-providers/commands/dir-project-export.ts:145
+#: source/tmp/PopoverExport.vue.ts:6
 #, fuzzy
 msgid "Export"
 msgstr "导出…"
@@ -2119,6 +2161,15 @@ msgstr "创建"
 msgid "Project Settings…"
 msgstr "项目设置…"
 
+#: source/tmp/PopoverExport.vue.ts:6
+#, fuzzy
+msgid "Exporting…"
+msgstr "导出…"
+
+#: source/tmp/PopoverExport.vue.ts:27
+msgid "command"
+msgstr ""
+
 #: source/tmp/file-item.vue.ts:193 source/tmp/PopoverFileProps.vue.ts:77
 msgid "Characters"
 msgstr "字符"
@@ -2187,33 +2238,15 @@ msgstr "保存中…"
 msgid "Saved!"
 msgstr "已保存！"
 
-#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:50
-#: source/tmp/Number.vue.ts:59 source/tmp/ShortcutChooser.vue.ts:61
-#: source/tmp/File.vue.ts:59
+#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:51
+#: source/tmp/Number.vue.ts:60 source/tmp/ShortcutChooser.vue.ts:61
+#: source/tmp/File.vue.ts:60
 msgid "Reset"
 msgstr "重置"
 
 #: source/tmp/PopoverFileProps.vue.ts:74
 msgid "Set writing target…"
 msgstr "设置写作目标…"
-
-#: source/tmp/List.vue.ts:141
-msgid "Add"
-msgstr "添加"
-
-#: source/tmp/List.vue.ts:144
-msgid "Actions"
-msgstr "Actions"
-
-#: source/tmp/List.vue.ts:147
-#, fuzzy
-msgid "Delete"
-msgstr "删除文档"
-
-#. Apparently we have a simple array, so exactly one column
-#: source/tmp/List.vue.ts:169
-msgid "Item"
-msgstr "条目"
 
 #: source/tmp/General-Tab.vue.ts:23
 msgid ""
@@ -2274,17 +2307,13 @@ msgstr "其他文件不存在"
 msgid "Charts"
 msgstr "图表"
 
-#: source/tmp/Theme.vue.ts:37
+#: source/tmp/Theme.vue.ts:44
 msgid "selected"
 msgstr "已选择"
 
-#: source/tmp/Theme.vue.ts:40
+#: source/tmp/Theme.vue.ts:47
 msgid "click to select"
 msgstr "点击选择"
-
-#: source/tmp/PopoverTags.vue.ts:36
-msgid "Name"
-msgstr ""
 
 #: source/tmp/PopoverTags.vue.ts:37
 msgid "Count"
@@ -2562,9 +2591,34 @@ msgstr "字数"
 msgid "characters"
 msgstr "字符"
 
+#: source/tmp/ListControl.vue.ts:81
+msgid "Add"
+msgstr "添加"
+
+#: source/tmp/ListControl.vue.ts:82
+msgid "Actions"
+msgstr "Actions"
+
+#: source/tmp/ListControl.vue.ts:83
+#, fuzzy
+msgid "Delete"
+msgstr "删除文档"
+
 #: source/tmp/ReferencesTab.vue.ts:48
 msgid "There are no citations in this document."
 msgstr "文件中不存在参考文献"
+
+#~ msgid "These options determine which elements are rendered in documents."
+#~ msgstr "你可以勾选这些选项决定在文档中呈现哪些元素。"
+
+#~ msgid "With these controls you can constrain the image previews."
+#~ msgstr "你可以通过以下指令限制图像预览。"
+
+#~ msgid "Options for ZKN elements"
+#~ msgstr "ZKN元素的选项"
+
+#~ msgid "Item"
+#~ msgstr "条目"
 
 #~ msgid "Get LaTeX"
 #~ msgstr "安装 LaTeX"

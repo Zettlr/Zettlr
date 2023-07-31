@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-07-12 08:10+0000\n"
+"POT-Creation-Date: 2023-07-31 02:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,7 +91,7 @@ msgid "Edit"
 msgstr "編集"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:122
-#: source/app/service-providers/commands/export.ts:82
+#: source/app/service-providers/commands/export.ts:108
 #: source/app/service-providers/menu/menu.win32.ts:162
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/tmp/Defaults.vue.ts:112 source/tmp/CustomCSS.vue.ts:42
@@ -140,14 +140,14 @@ msgstr "新しいタブで開く"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/win-preferences/schema/editor.ts:26
 #: source/win-preferences/schema/editor.ts:27
+#: source/win-preferences/schema/editor.ts:28
 msgid "Bold"
 msgstr "太字"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:34
 #: source/win-preferences/schema/editor.ts:35
+#: source/win-preferences/schema/editor.ts:36
 msgid "Italics"
 msgstr "斜体"
 
@@ -701,114 +701,104 @@ msgstr "Chinese (China)"
 msgid "Chinese"
 msgstr "Chinese (China)"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:24
-msgid "These options determine which elements are rendered in documents."
-msgstr "ドキュメント中にどの要素を表示するかを指定します。"
-
-#: source/win-preferences/schema/display.ts:28
+#: source/win-preferences/schema/display.ts:25
 msgid "Render Citations"
 msgstr "引用を表示"
 
-#: source/win-preferences/schema/display.ts:33
+#: source/win-preferences/schema/display.ts:30
 msgid "Render Iframes"
 msgstr "iframeを表示"
 
-#: source/win-preferences/schema/display.ts:38
+#: source/win-preferences/schema/display.ts:35
 msgid "Render Images"
 msgstr "画像を表示"
 
-#: source/win-preferences/schema/display.ts:43
+#: source/win-preferences/schema/display.ts:40
 msgid "Render Links"
 msgstr "リンクを表示"
 
-#: source/win-preferences/schema/display.ts:48
+#: source/win-preferences/schema/display.ts:45
 msgid "Render Formulae"
 msgstr "数式を表示"
 
-#: source/win-preferences/schema/display.ts:53
+#: source/win-preferences/schema/display.ts:50
 msgid "Render Tasks"
 msgstr "タスクを表示"
 
-#: source/win-preferences/schema/display.ts:58
+#: source/win-preferences/schema/display.ts:55
 msgid "Hide heading characters"
 msgstr "見出し文字を隠す"
 
-#: source/win-preferences/schema/display.ts:63
+#: source/win-preferences/schema/display.ts:60
 msgid "Render emphasis"
 msgstr "強調を表示"
 
-#: source/win-preferences/schema/display.ts:71
+#: source/win-preferences/schema/display.ts:68
 msgid "Here you can choose the theme for the app."
 msgstr "アプリケーションのテーマを選択します。"
 
-#: source/win-preferences/schema/display.ts:112
+#: source/win-preferences/schema/display.ts:109
 msgid "Use the operating system's accent colour instead of the theme colour"
 msgstr "テーマの色の代わりにOSのアクセントカラーを使用する"
 
-#: source/win-preferences/schema/display.ts:116
+#: source/win-preferences/schema/display.ts:113
 msgid "This setting is only available on Windows and macOS"
 msgstr "この設定はWindowsとmacOSでのみ利用可能です"
 
-#: source/win-preferences/schema/display.ts:122
+#: source/win-preferences/schema/display.ts:119
 msgid "Hide toolbar in distraction free mode"
 msgstr "集中モードでツールバーを隠す"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:129
-msgid "With these controls you can constrain the image previews."
-msgstr "以下のコントロールで画像プレビューを制限することができます。"
-
-#: source/win-preferences/schema/display.ts:133
+#: source/win-preferences/schema/display.ts:126
 msgid "Maximum width of images (percent)"
 msgstr "画像の最大幅（パーセント）"
 
-#: source/win-preferences/schema/display.ts:141
+#: source/win-preferences/schema/display.ts:133
 msgid "Maximum height of images (percent)"
 msgstr "画像の最大高さ（パーセント）"
 
-#: source/win-preferences/schema/advanced.ts:23
+#: source/win-preferences/schema/advanced.ts:24
 msgid "Pattern for new filenames"
 msgstr "新規ファイル名のパターン"
 
-#: source/win-preferences/schema/advanced.ts:29
+#: source/win-preferences/schema/advanced.ts:30
 msgid "Do not prompt for filename when creating new files"
 msgstr "新規ファイル作成時にファイル名を確認しない"
 
-#: source/win-preferences/schema/advanced.ts:36
+#: source/win-preferences/schema/advanced.ts:37
 msgid "Enable debug mode"
 msgstr "デバッグ モードを有効化"
 
-#: source/win-preferences/schema/advanced.ts:41
+#: source/win-preferences/schema/advanced.ts:42
 msgid "Notify me about beta releases"
 msgstr "ベータ版のリリースを通知する"
 
-#: source/win-preferences/schema/advanced.ts:46
+#: source/win-preferences/schema/advanced.ts:47
 msgid "Use native window appearance"
 msgstr "ネイティブのウィンドウ外観を使用する"
 
-#: source/win-preferences/schema/advanced.ts:52
+#: source/win-preferences/schema/advanced.ts:53
 #, fuzzy
 msgid "Enable window vibrancy"
 msgstr "ネイティブのウィンドウ外観を使用する"
 
-#: source/win-preferences/schema/advanced.ts:58
+#: source/win-preferences/schema/advanced.ts:59
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr "ゴミ箱への移動に失敗した場合は完全に削除する"
 
-#: source/win-preferences/schema/advanced.ts:64
+#: source/win-preferences/schema/advanced.ts:65
 msgid "Show app in the notification area"
 msgstr "通知領域にアプリケーションを表示する"
 
-#: source/win-preferences/schema/advanced.ts:65
+#: source/win-preferences/schema/advanced.ts:66
 msgid "Leave app running in the notification area"
 msgstr "通知領域にアプリケーションを残す"
 
-#: source/win-preferences/schema/advanced.ts:72
+#: source/win-preferences/schema/advanced.ts:73
 msgid "Automatically check for updates"
 msgstr "更新を自動的にチェックする"
 
-#: source/win-preferences/schema/advanced.ts:79
+#: source/win-preferences/schema/advanced.ts:80
 msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
@@ -816,57 +806,74 @@ msgstr ""
 "添付ファイル サイドバーに表示するファイルの拡張子を、カンマ区切りで入力してく"
 "ださい。変更は再起動後に反映されます。"
 
-#: source/win-preferences/schema/advanced.ts:87
+#: source/win-preferences/schema/advanced.ts:88
 msgid "Zoom behavior"
 msgstr "ズーム操作"
 
-#: source/win-preferences/schema/advanced.ts:89
+#: source/win-preferences/schema/advanced.ts:90
 msgid "Zoom resizes the whole GUI"
 msgstr "ズームでGUI全体の拡大率を変更する"
 
-#: source/win-preferences/schema/advanced.ts:90
+#: source/win-preferences/schema/advanced.ts:91
 msgid "Zoom changes the editor font size"
 msgstr "ズームでエディタのフォントサイズを変更する"
 
-#: source/win-preferences/schema/advanced.ts:97
+#: source/win-preferences/schema/advanced.ts:99
 msgid "iFrame rendering whitelist"
 msgstr "iframe描画ホワイトリスト"
 
-#: source/win-preferences/schema/advanced.ts:100
+#: source/win-preferences/schema/advanced.ts:102
 msgid "Hostname"
 msgstr "ホスト名"
 
-#: source/win-preferences/schema/advanced.ts:102
-#: source/win-preferences/schema/spellchecking.ts:93
+#: source/win-preferences/schema/advanced.ts:104
+#: source/win-preferences/schema/spellchecking.ts:99
 msgid "Search for entries …"
 msgstr "エントリーを検索..."
 
-#: source/win-preferences/schema/advanced.ts:108
+#: source/win-preferences/schema/advanced.ts:110
 msgid "Activate Watchdog polling"
 msgstr "ウォッチドッグ監視を有効化する"
 
-#: source/win-preferences/schema/advanced.ts:113
+#: source/win-preferences/schema/advanced.ts:115
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "ファイルの書き込みが完了したとみなせるまでの待機時間（ミリ秒）"
 
-#: source/win-preferences/schema/autocorrect.ts:23
+#: source/win-preferences/schema/autocorrect.ts:24
 msgid "Turn on AutoCorrect"
 msgstr "オートコレクトを有効化"
 
-#: source/win-preferences/schema/autocorrect.ts:32
+#: source/win-preferences/schema/autocorrect.ts:33
 msgid "Primary Magic Quotes"
 msgstr "一次マジッククォート"
 
-#: source/win-preferences/schema/autocorrect.ts:35
-#: source/win-preferences/schema/autocorrect.ts:56
+#: source/win-preferences/schema/autocorrect.ts:36
+#: source/win-preferences/schema/autocorrect.ts:57
 msgid "Disable Magic Quotes"
 msgstr "無し"
 
-#: source/win-preferences/schema/autocorrect.ts:53
+#: source/win-preferences/schema/autocorrect.ts:54
 msgid "Secondary Magic Quotes"
 msgstr "二次マジッククォート"
 
-#: source/win-preferences/schema/autocorrect.ts:79
+#: source/win-preferences/schema/autocorrect.ts:80
+msgid "Match whole words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:81
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:90
+msgid "String"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:90
+#, fuzzy
+msgid "Replacement"
+msgstr "ファイル再読み込み"
+
+#: source/win-preferences/schema/autocorrect.ts:91
 msgid ""
 "Here you can define certain strings that will be replaced when AutoCorrect "
 "is on. The characters on the left side will be replaced with whatever comes "
@@ -875,27 +882,27 @@ msgstr ""
 "オートコレクトが有効な場合に置き換える文字列を定義します。左側の文字列が右側"
 "の文字列に置き換わります。"
 
-#: source/win-preferences/schema/export.ts:23
+#: source/win-preferences/schema/export.ts:24
 msgid "Use the internal Pandoc for exports"
 msgstr "内蔵のPandocを使用してエクスポートする"
 
-#: source/win-preferences/schema/export.ts:30
+#: source/win-preferences/schema/export.ts:31
 msgid "Remove tags from files"
 msgstr "ファイルからタグを取り除く"
 
-#: source/win-preferences/schema/export.ts:40
+#: source/win-preferences/schema/export.ts:41
 msgid "Remove internal links completely"
 msgstr "すべての内部リンクを取り除く"
 
-#: source/win-preferences/schema/export.ts:41
+#: source/win-preferences/schema/export.ts:42
 msgid "Unlink internal links"
 msgstr "内部リンクをリンク解除する"
 
-#: source/win-preferences/schema/export.ts:42
+#: source/win-preferences/schema/export.ts:43
 msgid "Don't touch internal links"
 msgstr "内部リンクを保持する"
 
-#: source/win-preferences/schema/export.ts:49
+#: source/win-preferences/schema/export.ts:50
 msgid ""
 "Target directory for exported files. <em>Attention:</em> Selecting the "
 "current working directory will overwrite files without warning!"
@@ -903,11 +910,11 @@ msgstr ""
 "ファイルのエクスポート先ディレクトリ。<em>注意：現在の作業ディレクトリを指定"
 "すると、警告なしにファイルが上書きされてしまいます。</em>"
 
-#: source/win-preferences/schema/export.ts:52
+#: source/win-preferences/schema/export.ts:53
 msgid "Temporary directory: is regularly expunged"
 msgstr "一時ディレクトリ：定期的に削除されます。"
 
-#: source/win-preferences/schema/export.ts:53
+#: source/win-preferences/schema/export.ts:54
 msgid ""
 "Current working directory: exported files will be saved into the currently "
 "selected directory."
@@ -915,376 +922,402 @@ msgstr ""
 "現在の作業ディレクトリ：エクスポートされたファイルは現在選択中のディレクトリ"
 "に保存されます。"
 
-#: source/win-preferences/schema/export.ts:54
+#: source/win-preferences/schema/export.ts:55
 msgid "Ask for directory"
 msgstr "ディレクトリを選択する。"
 
-#: source/win-preferences/schema/toolbar.ts:23
+#: source/win-preferences/schema/export.ts:64
+#, fuzzy
+msgid "Display name"
+msgstr "「画像」ボタンを表示"
+
+#: source/win-preferences/schema/export.ts:64
+#, fuzzy
+msgid "Command"
+msgstr "コメント"
+
+#: source/win-preferences/schema/export.ts:65
+msgid ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:24
 msgid "Display \"Open Preferences\" button"
 msgstr "「設定ダイアログを開く」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:28
+#: source/win-preferences/schema/toolbar.ts:29
 msgid "Display \"New File\" button"
 msgstr "「新規ファイル」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:33
+#: source/win-preferences/schema/toolbar.ts:34
 msgid "Display \"Previous File\" button"
 msgstr "「前のファイル」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:38
+#: source/win-preferences/schema/toolbar.ts:39
 msgid "Display \"Next File\" button"
 msgstr "「次のファイル」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:45
+#: source/win-preferences/schema/toolbar.ts:46
 msgid "Display readability button"
 msgstr "可読性モードボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:50
+#: source/win-preferences/schema/toolbar.ts:51
 msgid "Display \"Insert Comment\" button"
 msgstr "「コメント」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:55
+#: source/win-preferences/schema/toolbar.ts:56
 msgid "Display link button"
 msgstr "「リンク」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:60
+#: source/win-preferences/schema/toolbar.ts:61
 msgid "Display image button"
 msgstr "「画像」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:65
+#: source/win-preferences/schema/toolbar.ts:66
 msgid "Display task list button"
 msgstr "「タスクリスト」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:70
+#: source/win-preferences/schema/toolbar.ts:71
 msgid "Display \"Insert Table\" button"
 msgstr "「表を挿入」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:75
+#: source/win-preferences/schema/toolbar.ts:76
 msgid "Display \"Insert Footnote\" button"
 msgstr "「脚注」ボタンを表示"
 
-#: source/win-preferences/schema/toolbar.ts:82
+#: source/win-preferences/schema/toolbar.ts:83
 msgid "Display document info"
 msgstr "ドキュメントの情報を表示"
 
-#: source/win-preferences/schema/toolbar.ts:87
+#: source/win-preferences/schema/toolbar.ts:88
 msgid "Display Pomodoro-timer"
 msgstr "ポモドーロタイマーを表示"
 
-#: source/win-preferences/schema/spellchecking.ts:24
+#: source/win-preferences/schema/spellchecking.ts:25
 msgid "Use LanguageTool"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:29
+#: source/win-preferences/schema/spellchecking.ts:30
 msgid "Strictness"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:31
+#: source/win-preferences/schema/spellchecking.ts:32
 #, fuzzy
 msgid "Standard"
 msgstr "カレンダー"
 
-#: source/win-preferences/schema/spellchecking.ts:32
+#: source/win-preferences/schema/spellchecking.ts:33
 msgid "Picky"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:39
+#: source/win-preferences/schema/spellchecking.ts:40
 msgid "Mother tongue"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:41
+#: source/win-preferences/schema/spellchecking.ts:42
 msgid "Not set"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:48
+#: source/win-preferences/schema/spellchecking.ts:49
 msgid "LanguageTool Provider"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:51
-#: source/win-preferences/schema/spellchecking.ts:58
+#: source/win-preferences/schema/spellchecking.ts:52
+#: source/win-preferences/schema/spellchecking.ts:59
 #, fuzzy
 msgid "Custom server"
 msgstr "カスタムCSS"
 
-#: source/win-preferences/schema/spellchecking.ts:65
+#: source/win-preferences/schema/spellchecking.ts:66
 msgid "LanguageTool Username"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:71
+#: source/win-preferences/schema/spellchecking.ts:72
 msgid "LanguageTool API key"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:79
+#: source/win-preferences/schema/spellchecking.ts:82
+#, fuzzy
+msgid "Active"
+msgstr "アクション"
+
+#: source/win-preferences/schema/spellchecking.ts:82
+msgid "Language Code"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:82
+#: source/tmp/PopoverTags.vue.ts:36
+msgid "Name"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:83
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr "自動スペルチェックを有効にする言語を選択。"
 
-#: source/win-preferences/schema/spellchecking.ts:84
-msgid "Search for dictionaries &hellip;"
+#: source/win-preferences/schema/spellchecking.ts:88
+#, fuzzy
+msgid "Search for dictionaries…"
 msgstr "辞書を検索..."
 
-#: source/win-preferences/schema/spellchecking.ts:88
+#: source/win-preferences/schema/spellchecking.ts:94
 msgid "User dictionary. Remove words by clicking them."
 msgstr "ユーザ辞書。クリックで単語を削除します。"
 
-#: source/win-preferences/schema/spellchecking.ts:90
+#: source/win-preferences/schema/spellchecking.ts:96
 msgid "Dictionary entry"
 msgstr "辞書エントリー"
 
-#: source/win-preferences/schema/general.ts:23
+#: source/win-preferences/schema/general.ts:24
 msgid "Application language"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:31
+#: source/win-preferences/schema/general.ts:32
 #: source/app/service-providers/menu/menu.win32.ts:430
 #: source/app/service-providers/menu/menu.darwin.ts:448
 msgid "Dark mode"
 msgstr "ダークモード"
 
-#: source/win-preferences/schema/general.ts:36
+#: source/win-preferences/schema/general.ts:37
 msgid "Show file information"
 msgstr "ファイル情報を表示"
 
-#: source/win-preferences/schema/general.ts:41
+#: source/win-preferences/schema/general.ts:42
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 msgid "Always load remote changes to the current file"
 msgstr "現在のファイルに対する外部での変更を常に読み込む"
 
-#: source/win-preferences/schema/general.ts:46
+#: source/win-preferences/schema/general.ts:47
 msgid "Avoid opening files in new tabs if possible"
 msgstr "ファイルを新しいタブで開くことを可能な限り避ける"
 
-#: source/win-preferences/schema/general.ts:53
+#: source/win-preferences/schema/general.ts:54
 msgid "Automatically switch to dark mode"
 msgstr "自動的にダーク モードに切り替える"
 
-#: source/win-preferences/schema/general.ts:56
-#: source/win-preferences/schema/editor.ts:45
+#: source/win-preferences/schema/general.ts:57
+#: source/win-preferences/schema/editor.ts:46
 msgid "Off"
 msgstr "オフ"
 
-#: source/win-preferences/schema/general.ts:57
+#: source/win-preferences/schema/general.ts:58
 msgid "Schedule"
 msgstr "スケジュール"
 
-#: source/win-preferences/schema/general.ts:58
+#: source/win-preferences/schema/general.ts:59
 msgid "Follow Operating System"
 msgstr "OSの設定に従う"
 
-#: source/win-preferences/schema/general.ts:63
+#: source/win-preferences/schema/general.ts:64
 msgid "Start dark mode at"
 msgstr "ダークモード開始時刻"
 
-#: source/win-preferences/schema/general.ts:69
+#: source/win-preferences/schema/general.ts:70
 msgid "End dark mode at"
 msgstr "ダークモード終了時刻"
 
-#: source/win-preferences/schema/general.ts:77
+#: source/win-preferences/schema/general.ts:78
 msgid "File manager mode"
 msgstr "ファイルマネージャーモード"
 
-#: source/win-preferences/schema/general.ts:80
+#: source/win-preferences/schema/general.ts:81
 msgid "Thin &mdash; show either file tree or file list"
 msgstr "Thin &mdash; ファイルツリーとファイルリストのいずれかを表示する"
 
-#: source/win-preferences/schema/general.ts:81
+#: source/win-preferences/schema/general.ts:82
 msgid "Expanded &mdash; show both file tree and file list"
 msgstr "Expanded &mdash; ファイルツリーとファイルリストを両方表示する"
 
-#: source/win-preferences/schema/general.ts:82
+#: source/win-preferences/schema/general.ts:83
 msgid "Combined &mdash; show files and directories in the file tree"
 msgstr "Combined &mdash; ファイルツリーにファイルとディレクトリを表示する"
 
-#: source/win-preferences/schema/general.ts:87
+#: source/win-preferences/schema/general.ts:88
 msgid "Display files using"
 msgstr "ファイルの表示方法"
 
-#: source/win-preferences/schema/general.ts:90
+#: source/win-preferences/schema/general.ts:91
 msgid "Filename only"
 msgstr "ファイル名のみ"
 
-#: source/win-preferences/schema/general.ts:91
+#: source/win-preferences/schema/general.ts:92
 msgid "Title if applicable"
 msgstr "タイトル(存在する場合)"
 
-#: source/win-preferences/schema/general.ts:92
+#: source/win-preferences/schema/general.ts:93
 msgid "First heading level 1 if applicable"
 msgstr "最初のレベル1の見出し(存在する場合)"
 
-#: source/win-preferences/schema/general.ts:93
+#: source/win-preferences/schema/general.ts:94
 msgid "Title or first heading level 1 if applicable"
 msgstr "タイトルまたは最初のレベル1の見出し(存在する場合)"
 
-#: source/win-preferences/schema/general.ts:98
+#: source/win-preferences/schema/general.ts:99
 msgid "Display Markdown file extensions"
 msgstr "Markdownファイルの拡張子を表示する"
 
-#: source/win-preferences/schema/general.ts:106
+#: source/win-preferences/schema/general.ts:107
 msgid "Sorting order for files (used for sorting by name)"
 msgstr "ファイルの並び順(名前で並べ替える際に使用)"
 
-#: source/win-preferences/schema/general.ts:109
+#: source/win-preferences/schema/general.ts:110
 msgid "Natural order (10 after 2)"
 msgstr "数値順(2→10の順番)"
 
-#: source/win-preferences/schema/general.ts:110
+#: source/win-preferences/schema/general.ts:111
 msgid "ASCII order (2 after 10)"
 msgstr "ASCII順(10→2の順番)"
 
-#: source/win-preferences/schema/general.ts:117
+#: source/win-preferences/schema/general.ts:118
 msgid "Show folders above files"
 msgstr "フォルダをファイルより上に表示する"
 
-#: source/win-preferences/schema/general.ts:124
+#: source/win-preferences/schema/general.ts:125
 msgid "When sorting by time, sort by"
 msgstr "時刻で並べ替える際に使用する項目"
 
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
 msgid "Last modification time"
 msgstr "最終更新日時"
 
-#: source/win-preferences/schema/general.ts:128
-#: source/win-preferences/schema/general.ts:137
+#: source/win-preferences/schema/general.ts:129
+#: source/win-preferences/schema/general.ts:138
 msgid "File creation time"
 msgstr "ファイル作成日時"
 
-#: source/win-preferences/schema/general.ts:133
+#: source/win-preferences/schema/general.ts:134
 msgid "In the file metadata display"
 msgstr "ファイルメタデータの表示に使用する日時"
 
-#: source/win-preferences/schema/citations.ts:23
+#: source/win-preferences/schema/citations.ts:24
 msgid "How would you like autocomplete to insert your citations?"
 msgstr "オートコンプリートで引用を挿入する方法を選択してください"
 
-#: source/win-preferences/schema/citations.ts:35
+#: source/win-preferences/schema/citations.ts:36
 msgid "Citation Database (CSL JSON or BibTex)"
 msgstr "参考文献データベース(CSL JSON または BibTeX)"
 
-#: source/win-preferences/schema/citations.ts:46
+#: source/win-preferences/schema/citations.ts:47
 msgid "CSL-Style (optional)"
 msgstr "CSLスタイル(オプション)"
 
-#: source/win-preferences/schema/zettelkasten.ts:23
+#: source/win-preferences/schema/zettelkasten.ts:24
 msgid "ID regular expression"
 msgstr "IDの正規表現"
 
-#: source/win-preferences/schema/zettelkasten.ts:29
+#: source/win-preferences/schema/zettelkasten.ts:30
 msgid "Pattern used to generate new IDs"
 msgstr "新規IDを生成するためのパターン"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:38
-msgid "Options for ZKN elements"
-msgstr "ZKN要素の設定"
-
-#: source/win-preferences/schema/zettelkasten.ts:42
+#: source/win-preferences/schema/zettelkasten.ts:39
 #, fuzzy
 msgid "Link with filename only"
 msgstr "ファイル名のみ"
 
-#: source/win-preferences/schema/zettelkasten.ts:47
+#: source/win-preferences/schema/zettelkasten.ts:44
 #, fuzzy
 msgid "When linking files, add the display name …"
 msgstr "ファイルをリンクする際にファイル名を追加するかどうか"
 
-#: source/win-preferences/schema/zettelkasten.ts:50
+#: source/win-preferences/schema/zettelkasten.ts:47
 msgid "always"
 msgstr "常にする"
 
-#: source/win-preferences/schema/zettelkasten.ts:51
+#: source/win-preferences/schema/zettelkasten.ts:48
 msgid "only when linking using the ID"
 msgstr "IDを使ってリンクした場合のみ"
 
-#: source/win-preferences/schema/zettelkasten.ts:52
+#: source/win-preferences/schema/zettelkasten.ts:49
 msgid "never"
 msgstr "常にしない"
 
-#: source/win-preferences/schema/zettelkasten.ts:60
+#: source/win-preferences/schema/zettelkasten.ts:57
 msgid "Start a search when following Zettelkasten-links"
 msgstr "Zettelkastenリンクで検索を開始できるようにする"
 
-#: source/win-preferences/schema/zettelkasten.ts:65
+#: source/win-preferences/schema/zettelkasten.ts:62
 msgid "Automatically create non-existing files when following internal links"
 msgstr "内部リンクを開く際にファイルが存在しなければ自動的に作成する"
 
-#: source/win-preferences/schema/zettelkasten.ts:70
+#: source/win-preferences/schema/zettelkasten.ts:67
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
 "自動的に作られたファイルの格納先ディレクトリ（Zettlrに読み込まれている必要が"
 "あります）"
 
-#: source/win-preferences/schema/editor.ts:23
+#: source/win-preferences/schema/editor.ts:24
 msgid ""
 "Choose the formatting characters that the bold/emphasis commands should use"
 msgstr "太字および強調コマンドで使用するフォーマット文字を選択してください"
 
-#: source/win-preferences/schema/editor.ts:42
+#: source/win-preferences/schema/editor.ts:43
 msgid "Autosave"
 msgstr "自動保存"
 
-#: source/win-preferences/schema/editor.ts:46
+#: source/win-preferences/schema/editor.ts:47
 msgid "Immediately"
 msgstr "即時"
 
-#: source/win-preferences/schema/editor.ts:47
+#: source/win-preferences/schema/editor.ts:48
 msgid "After a short delay"
 msgstr "遅延有り"
 
-#: source/win-preferences/schema/editor.ts:54
+#: source/win-preferences/schema/editor.ts:55
 msgid "Default image path (relative or absolute)"
 msgstr "規定の画像パス(相対もしくは絶対)"
 
-#: source/win-preferences/schema/editor.ts:59
+#: source/win-preferences/schema/editor.ts:60
 msgid "Indent by the following number of spaces"
 msgstr "インデントに使用する空白の数"
 
-#: source/win-preferences/schema/editor.ts:64
+#: source/win-preferences/schema/editor.ts:65
 msgid "Indent using tabs"
 msgstr "インデントにタブ文字を使用"
 
-#: source/win-preferences/schema/editor.ts:69
+#: source/win-preferences/schema/editor.ts:70
 msgid "Editor font size"
 msgstr "エディタのフォントサイズ"
 
-#: source/win-preferences/schema/editor.ts:74
+#: source/win-preferences/schema/editor.ts:75
 msgid "Algorithm to use for the readability mode"
 msgstr "可読性モードで使用するアルゴリズム"
 
-#: source/win-preferences/schema/editor.ts:85
+#: source/win-preferences/schema/editor.ts:86
 msgid "Editor input mode"
 msgstr "エディタ入力モード"
 
-#: source/win-preferences/schema/editor.ts:97
+#: source/win-preferences/schema/editor.ts:98
 msgid "Check Markdown for style issues"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:102
+#: source/win-preferences/schema/editor.ts:103
 #, fuzzy
 msgid "Show statusbar"
 msgstr "Zettlrを表示する"
 
-#: source/win-preferences/schema/editor.ts:109
+#: source/win-preferences/schema/editor.ts:110
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "集中モード時にフォーカスされていない行の表示を薄くする"
 
-#: source/win-preferences/schema/editor.ts:114
+#: source/win-preferences/schema/editor.ts:115
 msgid "Automatically close matching character pairs"
 msgstr "対応する括弧を自動的に入力する"
 
-#: source/win-preferences/schema/editor.ts:119
+#: source/win-preferences/schema/editor.ts:120
 msgid "Accept spaces during autocompletion"
 msgstr "補完中に空白を受け付ける"
 
-#: source/win-preferences/schema/editor.ts:124
+#: source/win-preferences/schema/editor.ts:125
 msgid "Enable Table Editor"
 msgstr "テーブルエディタを有効化"
 
-#: source/win-preferences/schema/editor.ts:129
+#: source/win-preferences/schema/editor.ts:130
 msgid "Show link previews"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:134
+#: source/win-preferences/schema/editor.ts:135
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "単語の代わりに文字を数える"
 
@@ -1542,20 +1575,26 @@ msgstr ""
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:82
+#: source/app/service-providers/commands/export.ts:55
+#: source/app/service-providers/commands/export.ts:151
+msgid "Export failed"
+msgstr "エクスポート失敗"
+
+#: source/app/service-providers/commands/export.ts:56
+#, fuzzy, javascript-format
+msgid "An error occurred during export: %s"
+msgstr "エクスポート中にエラーが発生しました：%s"
+
+#: source/app/service-providers/commands/export.ts:108
 msgid "Choose export destination"
 msgstr "保存先を選択"
 
-#: source/app/service-providers/commands/export.ts:113
+#: source/app/service-providers/commands/export.ts:139
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "%sにエクスポートします。"
 
-#: source/app/service-providers/commands/export.ts:125
-msgid "Export failed"
-msgstr "エクスポート失敗"
-
-#: source/app/service-providers/commands/export.ts:126
+#: source/app/service-providers/commands/export.ts:152
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "エクスポート中にエラーが発生しました：%s"
@@ -1689,22 +1728,23 @@ msgstr "言語ファイルがインポートされました：%s"
 msgid "Could not import language file %s!"
 msgstr "言語ファイル%sをインポートすることができませんでした。"
 
-#: source/app/service-providers/commands/dir-project-export.ts:72
+#: source/app/service-providers/commands/dir-project-export.ts:73
 #, fuzzy
 msgid "Cannot export project"
 msgstr "プロジェクトをエクスポート"
 
-#: source/app/service-providers/commands/dir-project-export.ts:73
+#: source/app/service-providers/commands/dir-project-export.ts:74
 msgid ""
 "After applying your glob-filters, no files remained to export. Please adjust "
 "them in the project settings."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:129
+#: source/app/service-providers/commands/dir-project-export.ts:145
 msgid "Project successfully exported. Click to show."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:129
+#: source/app/service-providers/commands/dir-project-export.ts:145
+#: source/tmp/PopoverExport.vue.ts:6
 #, fuzzy
 msgid "Export"
 msgstr "エクスポート..."
@@ -2138,6 +2178,15 @@ msgstr "作成"
 msgid "Project Settings…"
 msgstr "プロジェクト設定..."
 
+#: source/tmp/PopoverExport.vue.ts:6
+#, fuzzy
+msgid "Exporting…"
+msgstr "エクスポート..."
+
+#: source/tmp/PopoverExport.vue.ts:27
+msgid "command"
+msgstr ""
+
 #: source/tmp/file-item.vue.ts:193 source/tmp/PopoverFileProps.vue.ts:77
 msgid "Characters"
 msgstr "文字"
@@ -2210,33 +2259,15 @@ msgstr "保存中"
 msgid "Saved!"
 msgstr "保存しました"
 
-#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:50
-#: source/tmp/Number.vue.ts:59 source/tmp/ShortcutChooser.vue.ts:61
-#: source/tmp/File.vue.ts:59
+#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:51
+#: source/tmp/Number.vue.ts:60 source/tmp/ShortcutChooser.vue.ts:61
+#: source/tmp/File.vue.ts:60
 msgid "Reset"
 msgstr "リセット"
 
 #: source/tmp/PopoverFileProps.vue.ts:74
 msgid "Set writing target…"
 msgstr "執筆目標を設定..."
-
-#: source/tmp/List.vue.ts:141
-msgid "Add"
-msgstr "追加"
-
-#: source/tmp/List.vue.ts:144
-msgid "Actions"
-msgstr "アクション"
-
-#: source/tmp/List.vue.ts:147
-#, fuzzy
-msgid "Delete"
-msgstr "ファイルを削除"
-
-#. Apparently we have a simple array, so exactly one column
-#: source/tmp/List.vue.ts:169
-msgid "Item"
-msgstr "項目"
 
 #: source/tmp/General-Tab.vue.ts:23
 msgid ""
@@ -2298,17 +2329,13 @@ msgstr "その他のファイルはありません"
 msgid "Charts"
 msgstr "図"
 
-#: source/tmp/Theme.vue.ts:37
+#: source/tmp/Theme.vue.ts:44
 msgid "selected"
 msgstr "選択中"
 
-#: source/tmp/Theme.vue.ts:40
+#: source/tmp/Theme.vue.ts:47
 msgid "click to select"
 msgstr "クリックして選択"
-
-#: source/tmp/PopoverTags.vue.ts:36
-msgid "Name"
-msgstr ""
 
 #: source/tmp/PopoverTags.vue.ts:37
 msgid "Count"
@@ -2590,9 +2617,34 @@ msgstr "単語"
 msgid "characters"
 msgstr "文字"
 
+#: source/tmp/ListControl.vue.ts:81
+msgid "Add"
+msgstr "追加"
+
+#: source/tmp/ListControl.vue.ts:82
+msgid "Actions"
+msgstr "アクション"
+
+#: source/tmp/ListControl.vue.ts:83
+#, fuzzy
+msgid "Delete"
+msgstr "ファイルを削除"
+
 #: source/tmp/ReferencesTab.vue.ts:48
 msgid "There are no citations in this document."
 msgstr "このドキュメントには参考文献が存在しません。"
+
+#~ msgid "These options determine which elements are rendered in documents."
+#~ msgstr "ドキュメント中にどの要素を表示するかを指定します。"
+
+#~ msgid "With these controls you can constrain the image previews."
+#~ msgstr "以下のコントロールで画像プレビューを制限することができます。"
+
+#~ msgid "Options for ZKN elements"
+#~ msgstr "ZKN要素の設定"
+
+#~ msgid "Item"
+#~ msgstr "項目"
 
 #~ msgid "Get LaTeX"
 #~ msgstr "LaTeXを入手"

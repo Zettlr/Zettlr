@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-07-12 08:10+0000\n"
+"POT-Creation-Date: 2023-07-31 02:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,7 +91,7 @@ msgid "Edit"
 msgstr "Modifica"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:122
-#: source/app/service-providers/commands/export.ts:82
+#: source/app/service-providers/commands/export.ts:108
 #: source/app/service-providers/menu/menu.win32.ts:162
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/tmp/Defaults.vue.ts:112 source/tmp/CustomCSS.vue.ts:42
@@ -140,14 +140,14 @@ msgstr "Apri in una nuova scheda"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/win-preferences/schema/editor.ts:26
 #: source/win-preferences/schema/editor.ts:27
+#: source/win-preferences/schema/editor.ts:28
 msgid "Bold"
 msgstr "Grassetto"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:34
 #: source/win-preferences/schema/editor.ts:35
+#: source/win-preferences/schema/editor.ts:36
 msgid "Italics"
 msgstr "Corsivo"
 
@@ -701,119 +701,106 @@ msgstr "Cinese (Cina)"
 msgid "Chinese"
 msgstr "Cinese (Cina)"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:24
-msgid "These options determine which elements are rendered in documents."
-msgstr ""
-"Queste opzioni determinano come visualizzare alcuni elementi nei documenti."
-
-#: source/win-preferences/schema/display.ts:28
+#: source/win-preferences/schema/display.ts:25
 msgid "Render Citations"
 msgstr "Interpreta le citazioni"
 
-#: source/win-preferences/schema/display.ts:33
+#: source/win-preferences/schema/display.ts:30
 msgid "Render Iframes"
 msgstr "Interpreta i tag iframe di HTML"
 
-#: source/win-preferences/schema/display.ts:38
+#: source/win-preferences/schema/display.ts:35
 msgid "Render Images"
 msgstr "Interpreta le immagini"
 
-#: source/win-preferences/schema/display.ts:43
+#: source/win-preferences/schema/display.ts:40
 msgid "Render Links"
 msgstr "Interpreta i link"
 
-#: source/win-preferences/schema/display.ts:48
+#: source/win-preferences/schema/display.ts:45
 msgid "Render Formulae"
 msgstr "Interpreta le formule"
 
-#: source/win-preferences/schema/display.ts:53
+#: source/win-preferences/schema/display.ts:50
 msgid "Render Tasks"
 msgstr "Interpreta le caselle di controllo"
 
-#: source/win-preferences/schema/display.ts:58
+#: source/win-preferences/schema/display.ts:55
 msgid "Hide heading characters"
 msgstr "Nascondi i cancelletti dalle intestazioni"
 
-#: source/win-preferences/schema/display.ts:63
+#: source/win-preferences/schema/display.ts:60
 msgid "Render emphasis"
 msgstr ""
 
-#: source/win-preferences/schema/display.ts:71
+#: source/win-preferences/schema/display.ts:68
 msgid "Here you can choose the theme for the app."
 msgstr "Qui puoi scegliere il tempa dell'app."
 
-#: source/win-preferences/schema/display.ts:112
+#: source/win-preferences/schema/display.ts:109
 msgid "Use the operating system's accent colour instead of the theme colour"
 msgstr "Usa il colore di rifinitura del sistema invece del colore del tema"
 
-#: source/win-preferences/schema/display.ts:116
+#: source/win-preferences/schema/display.ts:113
 msgid "This setting is only available on Windows and macOS"
 msgstr "Questa impostazione è disponibile solo per Windows e macOS"
 
-#: source/win-preferences/schema/display.ts:122
+#: source/win-preferences/schema/display.ts:119
 msgid "Hide toolbar in distraction free mode"
 msgstr "Nascondi la barra degli strumenti in modalità senza-distrazioni"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:129
-msgid "With these controls you can constrain the image previews."
-msgstr ""
-"Con questi controlli puoi vincolare la dimensione delle anteprime delle "
-"immagini"
-
-#: source/win-preferences/schema/display.ts:133
+#: source/win-preferences/schema/display.ts:126
 msgid "Maximum width of images (percent)"
 msgstr "Larghezza massima delle immagini (percentuale)"
 
-#: source/win-preferences/schema/display.ts:141
+#: source/win-preferences/schema/display.ts:133
 msgid "Maximum height of images (percent)"
 msgstr "Altezza massima delle immagini (percentuale)"
 
-#: source/win-preferences/schema/advanced.ts:23
+#: source/win-preferences/schema/advanced.ts:24
 msgid "Pattern for new filenames"
 msgstr "Struttura dei nomi per i nuovi file"
 
-#: source/win-preferences/schema/advanced.ts:29
+#: source/win-preferences/schema/advanced.ts:30
 msgid "Do not prompt for filename when creating new files"
 msgstr "Non suggerire un nome quando si crea un nuovo file"
 
-#: source/win-preferences/schema/advanced.ts:36
+#: source/win-preferences/schema/advanced.ts:37
 msgid "Enable debug mode"
 msgstr "Attiva la modalità debug"
 
-#: source/win-preferences/schema/advanced.ts:41
+#: source/win-preferences/schema/advanced.ts:42
 msgid "Notify me about beta releases"
 msgstr "Segnalami il rilascio di versioni beta"
 
-#: source/win-preferences/schema/advanced.ts:46
+#: source/win-preferences/schema/advanced.ts:47
 msgid "Use native window appearance"
 msgstr "Usa l'aspetto di default per le finestre"
 
-#: source/win-preferences/schema/advanced.ts:52
+#: source/win-preferences/schema/advanced.ts:53
 #, fuzzy
 msgid "Enable window vibrancy"
 msgstr "Usa l'aspetto di default per le finestre"
 
-#: source/win-preferences/schema/advanced.ts:58
+#: source/win-preferences/schema/advanced.ts:59
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr ""
 "Cancella gli oggetti irreversibilmente, se non è possibile spostarli nel "
 "cestino"
 
-#: source/win-preferences/schema/advanced.ts:64
+#: source/win-preferences/schema/advanced.ts:65
 msgid "Show app in the notification area"
 msgstr "Mostra l'app nella barra delle notifiche"
 
-#: source/win-preferences/schema/advanced.ts:65
+#: source/win-preferences/schema/advanced.ts:66
 msgid "Leave app running in the notification area"
 msgstr "Lascia l'app in esecuzione nella barra delle notifiche"
 
-#: source/win-preferences/schema/advanced.ts:72
+#: source/win-preferences/schema/advanced.ts:73
 msgid "Automatically check for updates"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:79
+#: source/win-preferences/schema/advanced.ts:80
 msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
@@ -822,59 +809,76 @@ msgstr ""
 "degli allegati. Separale con una virgola. Le modifiche vengono applicate "
 "dopo il riavvio."
 
-#: source/win-preferences/schema/advanced.ts:87
+#: source/win-preferences/schema/advanced.ts:88
 msgid "Zoom behavior"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:89
+#: source/win-preferences/schema/advanced.ts:90
 msgid "Zoom resizes the whole GUI"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:90
+#: source/win-preferences/schema/advanced.ts:91
 msgid "Zoom changes the editor font size"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:97
+#: source/win-preferences/schema/advanced.ts:99
 msgid "iFrame rendering whitelist"
 msgstr "Whitelist del rendering iFrame"
 
-#: source/win-preferences/schema/advanced.ts:100
+#: source/win-preferences/schema/advanced.ts:102
 msgid "Hostname"
 msgstr "Nome host"
 
-#: source/win-preferences/schema/advanced.ts:102
-#: source/win-preferences/schema/spellchecking.ts:93
+#: source/win-preferences/schema/advanced.ts:104
+#: source/win-preferences/schema/spellchecking.ts:99
 msgid "Search for entries …"
 msgstr "Ricerca voci..."
 
-#: source/win-preferences/schema/advanced.ts:108
+#: source/win-preferences/schema/advanced.ts:110
 msgid "Activate Watchdog polling"
 msgstr "Attiva watchdog polling"
 
-#: source/win-preferences/schema/advanced.ts:113
+#: source/win-preferences/schema/advanced.ts:115
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr ""
 "Tempo limite entro il quale si considera terminata la scrittura di un file "
 "(in ms)"
 
-#: source/win-preferences/schema/autocorrect.ts:23
+#: source/win-preferences/schema/autocorrect.ts:24
 msgid "Turn on AutoCorrect"
 msgstr "Attiva Correzione automatica"
 
-#: source/win-preferences/schema/autocorrect.ts:32
+#: source/win-preferences/schema/autocorrect.ts:33
 msgid "Primary Magic Quotes"
 msgstr "Citazioni Magiche Primarie"
 
-#: source/win-preferences/schema/autocorrect.ts:35
-#: source/win-preferences/schema/autocorrect.ts:56
+#: source/win-preferences/schema/autocorrect.ts:36
+#: source/win-preferences/schema/autocorrect.ts:57
 msgid "Disable Magic Quotes"
 msgstr "Nessuna"
 
-#: source/win-preferences/schema/autocorrect.ts:53
+#: source/win-preferences/schema/autocorrect.ts:54
 msgid "Secondary Magic Quotes"
 msgstr "Citazioni Magiche Secondarie"
 
-#: source/win-preferences/schema/autocorrect.ts:79
+#: source/win-preferences/schema/autocorrect.ts:80
+msgid "Match whole words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:81
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:90
+msgid "String"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:90
+#, fuzzy
+msgid "Replacement"
+msgstr "Sostituisci file"
+
+#: source/win-preferences/schema/autocorrect.ts:91
 msgid ""
 "Here you can define certain strings that will be replaced when AutoCorrect "
 "is on. The characters on the left side will be replaced with whatever comes "
@@ -884,27 +888,27 @@ msgstr ""
 "Correzione Automatica è attiva. I personaggi sul lato sinistro verranno "
 "sostituiti con qualsiasi cosa arrivi sulla destra."
 
-#: source/win-preferences/schema/export.ts:23
+#: source/win-preferences/schema/export.ts:24
 msgid "Use the internal Pandoc for exports"
 msgstr "Usa Pandoc interno per le esportazioni"
 
-#: source/win-preferences/schema/export.ts:30
+#: source/win-preferences/schema/export.ts:31
 msgid "Remove tags from files"
 msgstr "Rimuovi i tag dai file"
 
-#: source/win-preferences/schema/export.ts:40
+#: source/win-preferences/schema/export.ts:41
 msgid "Remove internal links completely"
 msgstr "Rimuovi completamente i collegamenti interni"
 
-#: source/win-preferences/schema/export.ts:41
+#: source/win-preferences/schema/export.ts:42
 msgid "Unlink internal links"
 msgstr "Scollega  i collegamenti interni"
 
-#: source/win-preferences/schema/export.ts:42
+#: source/win-preferences/schema/export.ts:43
 msgid "Don't touch internal links"
 msgstr "Non toccare i collegamenti interni"
 
-#: source/win-preferences/schema/export.ts:49
+#: source/win-preferences/schema/export.ts:50
 msgid ""
 "Target directory for exported files. <em>Attention:</em> Selecting the "
 "current working directory will overwrite files without warning!"
@@ -912,11 +916,11 @@ msgstr ""
 "Cartella di destinazione per i file esportati. <em>Attenzione:</em> "
 "Selezionando la directory corrente si sovrascriveranno i file senza avviso!"
 
-#: source/win-preferences/schema/export.ts:52
+#: source/win-preferences/schema/export.ts:53
 msgid "Temporary directory: is regularly expunged"
 msgstr "Directory temporanea:"
 
-#: source/win-preferences/schema/export.ts:53
+#: source/win-preferences/schema/export.ts:54
 msgid ""
 "Current working directory: exported files will be saved into the currently "
 "selected directory."
@@ -924,380 +928,405 @@ msgstr ""
 "Directory corrente: i file esportati verrano salvati all'interno della "
 "cartella attualmente selezionata."
 
-#: source/win-preferences/schema/export.ts:54
+#: source/win-preferences/schema/export.ts:55
 msgid "Ask for directory"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:23
+#: source/win-preferences/schema/export.ts:64
+msgid "Display name"
+msgstr ""
+
+#: source/win-preferences/schema/export.ts:64
+#, fuzzy
+msgid "Command"
+msgstr "Commento"
+
+#: source/win-preferences/schema/export.ts:65
+msgid ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:24
 msgid "Display \"Open Preferences\" button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:28
+#: source/win-preferences/schema/toolbar.ts:29
 msgid "Display \"New File\" button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:33
+#: source/win-preferences/schema/toolbar.ts:34
 msgid "Display \"Previous File\" button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:38
+#: source/win-preferences/schema/toolbar.ts:39
 msgid "Display \"Next File\" button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:45
+#: source/win-preferences/schema/toolbar.ts:46
 msgid "Display readability button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:50
+#: source/win-preferences/schema/toolbar.ts:51
 msgid "Display \"Insert Comment\" button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:55
+#: source/win-preferences/schema/toolbar.ts:56
 msgid "Display link button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:60
+#: source/win-preferences/schema/toolbar.ts:61
 msgid "Display image button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:65
+#: source/win-preferences/schema/toolbar.ts:66
 msgid "Display task list button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:70
+#: source/win-preferences/schema/toolbar.ts:71
 msgid "Display \"Insert Table\" button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:75
+#: source/win-preferences/schema/toolbar.ts:76
 msgid "Display \"Insert Footnote\" button"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:82
+#: source/win-preferences/schema/toolbar.ts:83
 msgid "Display document info"
 msgstr ""
 
-#: source/win-preferences/schema/toolbar.ts:87
+#: source/win-preferences/schema/toolbar.ts:88
 msgid "Display Pomodoro-timer"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:24
+#: source/win-preferences/schema/spellchecking.ts:25
 msgid "Use LanguageTool"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:29
+#: source/win-preferences/schema/spellchecking.ts:30
 msgid "Strictness"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:31
+#: source/win-preferences/schema/spellchecking.ts:32
 #, fuzzy
 msgid "Standard"
 msgstr "Calendario"
 
-#: source/win-preferences/schema/spellchecking.ts:32
+#: source/win-preferences/schema/spellchecking.ts:33
 msgid "Picky"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:39
+#: source/win-preferences/schema/spellchecking.ts:40
 msgid "Mother tongue"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:41
+#: source/win-preferences/schema/spellchecking.ts:42
 msgid "Not set"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:48
+#: source/win-preferences/schema/spellchecking.ts:49
 msgid "LanguageTool Provider"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:51
-#: source/win-preferences/schema/spellchecking.ts:58
+#: source/win-preferences/schema/spellchecking.ts:52
+#: source/win-preferences/schema/spellchecking.ts:59
 #, fuzzy
 msgid "Custom server"
 msgstr "CSS Personalizzato"
 
-#: source/win-preferences/schema/spellchecking.ts:65
+#: source/win-preferences/schema/spellchecking.ts:66
 msgid "LanguageTool Username"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:71
+#: source/win-preferences/schema/spellchecking.ts:72
 msgid "LanguageTool API key"
 msgstr ""
 
-#: source/win-preferences/schema/spellchecking.ts:79
+#: source/win-preferences/schema/spellchecking.ts:82
+#, fuzzy
+msgid "Active"
+msgstr "Azioni"
+
+#: source/win-preferences/schema/spellchecking.ts:82
+msgid "Language Code"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:82
+#: source/tmp/PopoverTags.vue.ts:36
+msgid "Name"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:83
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr ""
 "Seleziona le lingue per cui vuoi attivare il controllo ortografico "
 "automatico."
 
-#: source/win-preferences/schema/spellchecking.ts:84
-msgid "Search for dictionaries &hellip;"
+#: source/win-preferences/schema/spellchecking.ts:88
+#, fuzzy
+msgid "Search for dictionaries…"
 msgstr "Ricerca tra i dizionari &hellip;"
 
-#: source/win-preferences/schema/spellchecking.ts:88
+#: source/win-preferences/schema/spellchecking.ts:94
 msgid "User dictionary. Remove words by clicking them."
 msgstr "Dizionario dell'utente. Rimuovi le parole cliccando su di esse."
 
-#: source/win-preferences/schema/spellchecking.ts:90
+#: source/win-preferences/schema/spellchecking.ts:96
 msgid "Dictionary entry"
 msgstr "Voce del dizionario"
 
-#: source/win-preferences/schema/general.ts:23
+#: source/win-preferences/schema/general.ts:24
 msgid "Application language"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:31
+#: source/win-preferences/schema/general.ts:32
 #: source/app/service-providers/menu/menu.win32.ts:430
 #: source/app/service-providers/menu/menu.darwin.ts:448
 msgid "Dark mode"
 msgstr "Modalità scura"
 
-#: source/win-preferences/schema/general.ts:36
+#: source/win-preferences/schema/general.ts:37
 msgid "Show file information"
 msgstr "Mostra le informazioni dei file"
 
-#: source/win-preferences/schema/general.ts:41
+#: source/win-preferences/schema/general.ts:42
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 msgid "Always load remote changes to the current file"
 msgstr "Carica sempre le modifiche di app terze al file aperto"
 
-#: source/win-preferences/schema/general.ts:46
+#: source/win-preferences/schema/general.ts:47
 msgid "Avoid opening files in new tabs if possible"
 msgstr "Evita di aprire i documenti in nuove schede se possibile"
 
-#: source/win-preferences/schema/general.ts:53
+#: source/win-preferences/schema/general.ts:54
 msgid "Automatically switch to dark mode"
 msgstr "Passa automaticamente alla modalità scura"
 
-#: source/win-preferences/schema/general.ts:56
-#: source/win-preferences/schema/editor.ts:45
+#: source/win-preferences/schema/general.ts:57
+#: source/win-preferences/schema/editor.ts:46
 msgid "Off"
 msgstr "No"
 
-#: source/win-preferences/schema/general.ts:57
+#: source/win-preferences/schema/general.ts:58
 msgid "Schedule"
 msgstr "Orario"
 
-#: source/win-preferences/schema/general.ts:58
+#: source/win-preferences/schema/general.ts:59
 msgid "Follow Operating System"
 msgstr "Segui il Sistema Operativo"
 
-#: source/win-preferences/schema/general.ts:63
+#: source/win-preferences/schema/general.ts:64
 msgid "Start dark mode at"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:69
+#: source/win-preferences/schema/general.ts:70
 msgid "End dark mode at"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:77
+#: source/win-preferences/schema/general.ts:78
 msgid "File manager mode"
 msgstr "Modalità del gestore dei file"
 
-#: source/win-preferences/schema/general.ts:80
+#: source/win-preferences/schema/general.ts:81
 msgid "Thin &mdash; show either file tree or file list"
 msgstr ""
 "Sottile &mdash; mostra sia l'albero dei file sia la lista delle cartelle"
 
-#: source/win-preferences/schema/general.ts:81
+#: source/win-preferences/schema/general.ts:82
 msgid "Expanded &mdash; show both file tree and file list"
 msgstr ""
 "Espanso &mdash; mostra sia l'albero dei file sia la lista delle cartelle"
 
-#: source/win-preferences/schema/general.ts:82
+#: source/win-preferences/schema/general.ts:83
 msgid "Combined &mdash; show files and directories in the file tree"
 msgstr "Combinato &mdash; mostra files e cartelle nell'albero dei file"
 
-#: source/win-preferences/schema/general.ts:87
+#: source/win-preferences/schema/general.ts:88
 msgid "Display files using"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:90
+#: source/win-preferences/schema/general.ts:91
 msgid "Filename only"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:91
+#: source/win-preferences/schema/general.ts:92
 msgid "Title if applicable"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:92
+#: source/win-preferences/schema/general.ts:93
 msgid "First heading level 1 if applicable"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:93
+#: source/win-preferences/schema/general.ts:94
 msgid "Title or first heading level 1 if applicable"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:98
+#: source/win-preferences/schema/general.ts:99
 msgid "Display Markdown file extensions"
 msgstr ""
 
-#: source/win-preferences/schema/general.ts:106
+#: source/win-preferences/schema/general.ts:107
 msgid "Sorting order for files (used for sorting by name)"
 msgstr "Criterio di ordinamento dei file (usato per ordinare per nome):"
 
-#: source/win-preferences/schema/general.ts:109
+#: source/win-preferences/schema/general.ts:110
 msgid "Natural order (10 after 2)"
 msgstr "Ordine naturale (il 10 dopo il 2)"
 
-#: source/win-preferences/schema/general.ts:110
+#: source/win-preferences/schema/general.ts:111
 msgid "ASCII order (2 after 10)"
 msgstr "Ordine ASCII (il 2 dopo il 10)"
 
-#: source/win-preferences/schema/general.ts:117
+#: source/win-preferences/schema/general.ts:118
 msgid "Show folders above files"
 msgstr "Mostra le cartelle sopra i file"
 
-#: source/win-preferences/schema/general.ts:124
+#: source/win-preferences/schema/general.ts:125
 msgid "When sorting by time, sort by"
 msgstr "Nell'ordinamento per tempo, utilizza:"
 
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
+#: source/win-preferences/schema/general.ts:128
+#: source/win-preferences/schema/general.ts:137
 msgid "Last modification time"
 msgstr "Data dell'ultima modifica"
 
-#: source/win-preferences/schema/general.ts:128
-#: source/win-preferences/schema/general.ts:137
+#: source/win-preferences/schema/general.ts:129
+#: source/win-preferences/schema/general.ts:138
 msgid "File creation time"
 msgstr "Data di creazione"
 
-#: source/win-preferences/schema/general.ts:133
+#: source/win-preferences/schema/general.ts:134
 msgid "In the file metadata display"
 msgstr "Come metadati dei file mostra:"
 
-#: source/win-preferences/schema/citations.ts:23
+#: source/win-preferences/schema/citations.ts:24
 msgid "How would you like autocomplete to insert your citations?"
 msgstr "Come vorresti l'autocompletamento per inserire le tue citazioni?"
 
-#: source/win-preferences/schema/citations.ts:35
+#: source/win-preferences/schema/citations.ts:36
 msgid "Citation Database (CSL JSON or BibTex)"
 msgstr "Database di Citazioni (CSL JSON o BibTex)"
 
-#: source/win-preferences/schema/citations.ts:46
+#: source/win-preferences/schema/citations.ts:47
 msgid "CSL-Style (optional)"
 msgstr "Stile CSL (opzionale)"
 
-#: source/win-preferences/schema/zettelkasten.ts:23
+#: source/win-preferences/schema/zettelkasten.ts:24
 msgid "ID regular expression"
 msgstr "Espressione regolare degli ID"
 
-#: source/win-preferences/schema/zettelkasten.ts:29
+#: source/win-preferences/schema/zettelkasten.ts:30
 msgid "Pattern used to generate new IDs"
 msgstr "Struttura utilizzata per genereare nuovi ID"
 
-#. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:38
-msgid "Options for ZKN elements"
-msgstr "Opzioni degli elementi ZKN"
-
-#: source/win-preferences/schema/zettelkasten.ts:42
+#: source/win-preferences/schema/zettelkasten.ts:39
 msgid "Link with filename only"
 msgstr ""
 
-#: source/win-preferences/schema/zettelkasten.ts:47
+#: source/win-preferences/schema/zettelkasten.ts:44
 #, fuzzy
 msgid "When linking files, add the display name …"
 msgstr "Quando si collegano i file, aggiungere il nome file ..."
 
-#: source/win-preferences/schema/zettelkasten.ts:50
+#: source/win-preferences/schema/zettelkasten.ts:47
 msgid "always"
 msgstr "sempre"
 
-#: source/win-preferences/schema/zettelkasten.ts:51
+#: source/win-preferences/schema/zettelkasten.ts:48
 msgid "only when linking using the ID"
 msgstr "solo quando si collega utilizzando l'ID"
 
-#: source/win-preferences/schema/zettelkasten.ts:52
+#: source/win-preferences/schema/zettelkasten.ts:49
 msgid "never"
 msgstr "mai"
 
-#: source/win-preferences/schema/zettelkasten.ts:60
+#: source/win-preferences/schema/zettelkasten.ts:57
 msgid "Start a search when following Zettelkasten-links"
 msgstr "Inizia una ricerca quando vengono seguiti i links Zettelkasten"
 
-#: source/win-preferences/schema/zettelkasten.ts:65
+#: source/win-preferences/schema/zettelkasten.ts:62
 msgid "Automatically create non-existing files when following internal links"
 msgstr ""
 "Crea automaticamente nuovi file da un collegamento interno non esistente"
 
-#: source/win-preferences/schema/zettelkasten.ts:70
+#: source/win-preferences/schema/zettelkasten.ts:67
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:23
+#: source/win-preferences/schema/editor.ts:24
 msgid ""
 "Choose the formatting characters that the bold/emphasis commands should use"
 msgstr ""
 "Scegli la formattazioni di caratteri che dovrebbero usare i comandi di "
 "grassetto/enfasi"
 
-#: source/win-preferences/schema/editor.ts:42
+#: source/win-preferences/schema/editor.ts:43
 msgid "Autosave"
 msgstr "Autosalvataggio"
 
-#: source/win-preferences/schema/editor.ts:46
+#: source/win-preferences/schema/editor.ts:47
 msgid "Immediately"
 msgstr "Immediatamente"
 
-#: source/win-preferences/schema/editor.ts:47
+#: source/win-preferences/schema/editor.ts:48
 msgid "After a short delay"
 msgstr "Dopo un breve ritardo"
 
-#: source/win-preferences/schema/editor.ts:54
+#: source/win-preferences/schema/editor.ts:55
 msgid "Default image path (relative or absolute)"
 msgstr "Percorso predefinito delle immagini (relativo o assoluto)"
 
-#: source/win-preferences/schema/editor.ts:59
+#: source/win-preferences/schema/editor.ts:60
 msgid "Indent by the following number of spaces"
 msgstr "Indenta per il seguente numero di spazi"
 
-#: source/win-preferences/schema/editor.ts:64
+#: source/win-preferences/schema/editor.ts:65
 msgid "Indent using tabs"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:69
+#: source/win-preferences/schema/editor.ts:70
 msgid "Editor font size"
 msgstr "Modifica la dimensione del testo"
 
-#: source/win-preferences/schema/editor.ts:74
+#: source/win-preferences/schema/editor.ts:75
 msgid "Algorithm to use for the readability mode"
 msgstr "Algoritmo da utilizzare per i livelli di leggibilità"
 
-#: source/win-preferences/schema/editor.ts:85
+#: source/win-preferences/schema/editor.ts:86
 msgid "Editor input mode"
 msgstr "Modalità di input dell'editor"
 
-#: source/win-preferences/schema/editor.ts:97
+#: source/win-preferences/schema/editor.ts:98
 msgid "Check Markdown for style issues"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:102
+#: source/win-preferences/schema/editor.ts:103
 #, fuzzy
 msgid "Show statusbar"
 msgstr "Mostra Zettlr"
 
-#: source/win-preferences/schema/editor.ts:109
+#: source/win-preferences/schema/editor.ts:110
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "In modalità senza-distrazioni muta le righe non selezionate"
 
-#: source/win-preferences/schema/editor.ts:114
+#: source/win-preferences/schema/editor.ts:115
 msgid "Automatically close matching character pairs"
 msgstr "Chiudi automaticamente le coppie di caratteri corrispondenti"
 
-#: source/win-preferences/schema/editor.ts:119
+#: source/win-preferences/schema/editor.ts:120
 msgid "Accept spaces during autocompletion"
 msgstr "Accetta gli spazi durante l'autocompletamento"
 
-#: source/win-preferences/schema/editor.ts:124
+#: source/win-preferences/schema/editor.ts:125
 msgid "Enable Table Editor"
 msgstr "Attiva l'Editor di Tabelle"
 
-#: source/win-preferences/schema/editor.ts:129
+#: source/win-preferences/schema/editor.ts:130
 msgid "Show link previews"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:134
+#: source/win-preferences/schema/editor.ts:135
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "Conta i caratteri invece che le parole (ad es., per Cinese)"
 
@@ -1555,20 +1584,26 @@ msgstr ""
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:82
+#: source/app/service-providers/commands/export.ts:55
+#: source/app/service-providers/commands/export.ts:151
+msgid "Export failed"
+msgstr "Esportazione non riuscita"
+
+#: source/app/service-providers/commands/export.ts:56
+#, fuzzy, javascript-format
+msgid "An error occurred during export: %s"
+msgstr "Si è verificato un errore durante l'esportazione"
+
+#: source/app/service-providers/commands/export.ts:108
 msgid "Choose export destination"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:113
+#: source/app/service-providers/commands/export.ts:139
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "Esportazione in %s"
 
-#: source/app/service-providers/commands/export.ts:125
-msgid "Export failed"
-msgstr "Esportazione non riuscita"
-
-#: source/app/service-providers/commands/export.ts:126
+#: source/app/service-providers/commands/export.ts:152
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "Si è verificato un errore durante l'esportazione"
@@ -1701,22 +1736,23 @@ msgstr "File di lingua importato: %s"
 msgid "Could not import language file %s!"
 msgstr "Impossibile importare il file di lingua %s!"
 
-#: source/app/service-providers/commands/dir-project-export.ts:72
+#: source/app/service-providers/commands/dir-project-export.ts:73
 #, fuzzy
 msgid "Cannot export project"
 msgstr "Esporta progetto"
 
-#: source/app/service-providers/commands/dir-project-export.ts:73
+#: source/app/service-providers/commands/dir-project-export.ts:74
 msgid ""
 "After applying your glob-filters, no files remained to export. Please adjust "
 "them in the project settings."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:129
+#: source/app/service-providers/commands/dir-project-export.ts:145
 msgid "Project successfully exported. Click to show."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:129
+#: source/app/service-providers/commands/dir-project-export.ts:145
+#: source/tmp/PopoverExport.vue.ts:6
 #, fuzzy
 msgid "Export"
 msgstr "Esporta..."
@@ -2153,6 +2189,15 @@ msgstr "Creato"
 msgid "Project Settings…"
 msgstr "Impostazioni progetto..."
 
+#: source/tmp/PopoverExport.vue.ts:6
+#, fuzzy
+msgid "Exporting…"
+msgstr "Esporta..."
+
+#: source/tmp/PopoverExport.vue.ts:27
+msgid "command"
+msgstr ""
+
 #: source/tmp/file-item.vue.ts:193 source/tmp/PopoverFileProps.vue.ts:77
 msgid "Characters"
 msgstr "Caratteri"
@@ -2224,33 +2269,15 @@ msgstr "Salvando..."
 msgid "Saved!"
 msgstr "Salvato!"
 
-#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:50
-#: source/tmp/Number.vue.ts:59 source/tmp/ShortcutChooser.vue.ts:61
-#: source/tmp/File.vue.ts:59
+#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/Color.vue.ts:51
+#: source/tmp/Number.vue.ts:60 source/tmp/ShortcutChooser.vue.ts:61
+#: source/tmp/File.vue.ts:60
 msgid "Reset"
 msgstr "Reset"
 
 #: source/tmp/PopoverFileProps.vue.ts:74
 msgid "Set writing target…"
 msgstr "Imposta un traguardo di scrittura..."
-
-#: source/tmp/List.vue.ts:141
-msgid "Add"
-msgstr "Aggiungi"
-
-#: source/tmp/List.vue.ts:144
-msgid "Actions"
-msgstr "Azioni"
-
-#: source/tmp/List.vue.ts:147
-#, fuzzy
-msgid "Delete"
-msgstr "Elimina file"
-
-#. Apparently we have a simple array, so exactly one column
-#: source/tmp/List.vue.ts:169
-msgid "Item"
-msgstr "Oggetto"
 
 #: source/tmp/General-Tab.vue.ts:23
 msgid ""
@@ -2312,17 +2339,13 @@ msgstr "Nessun altro file"
 msgid "Charts"
 msgstr "Grafici"
 
-#: source/tmp/Theme.vue.ts:37
+#: source/tmp/Theme.vue.ts:44
 msgid "selected"
 msgstr "Selezionato"
 
-#: source/tmp/Theme.vue.ts:40
+#: source/tmp/Theme.vue.ts:47
 msgid "click to select"
 msgstr "Clicca per selezionare"
-
-#: source/tmp/PopoverTags.vue.ts:36
-msgid "Name"
-msgstr ""
 
 #: source/tmp/PopoverTags.vue.ts:37
 msgid "Count"
@@ -2604,9 +2627,38 @@ msgstr "parole"
 msgid "characters"
 msgstr "caratteri"
 
+#: source/tmp/ListControl.vue.ts:81
+msgid "Add"
+msgstr "Aggiungi"
+
+#: source/tmp/ListControl.vue.ts:82
+msgid "Actions"
+msgstr "Azioni"
+
+#: source/tmp/ListControl.vue.ts:83
+#, fuzzy
+msgid "Delete"
+msgstr "Elimina file"
+
 #: source/tmp/ReferencesTab.vue.ts:48
 msgid "There are no citations in this document."
 msgstr "Non ci sono fonti in questo documento."
+
+#~ msgid "These options determine which elements are rendered in documents."
+#~ msgstr ""
+#~ "Queste opzioni determinano come visualizzare alcuni elementi nei "
+#~ "documenti."
+
+#~ msgid "With these controls you can constrain the image previews."
+#~ msgstr ""
+#~ "Con questi controlli puoi vincolare la dimensione delle anteprime delle "
+#~ "immagini"
+
+#~ msgid "Options for ZKN elements"
+#~ msgstr "Opzioni degli elementi ZKN"
+
+#~ msgid "Item"
+#~ msgstr "Oggetto"
 
 #~ msgid "Get LaTeX"
 #~ msgstr "Ottieni LaTeX"
