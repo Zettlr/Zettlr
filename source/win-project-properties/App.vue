@@ -29,7 +29,9 @@
         v-bind:value-type="'record'"
         v-bind:model-value="(exportFormatList as any[])"
         v-bind:column-labels="[exportFormatUseLabel, exportFormatNameLabel, conversionLabel]"
+        v-bind:key-names="['selected', 'name', 'conversion']"
         v-bind:editable="[0]"
+        v-bind:striped="true"
         v-on:update:model-value="selectExportProfile($event)"
       ></ListControl>
     </div>
@@ -250,6 +252,7 @@ export default defineComponent({
   },
   methods: {
     selectExportProfile: function (newListVal: ExportProfile[]) {
+      console.log(newListVal)
       const newProfiles = newListVal
         .filter(e => e.selected)
         .map(e => {
