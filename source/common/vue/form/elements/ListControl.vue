@@ -115,7 +115,7 @@
             </button>
           </td>
         </tr>
-        <tr v-else>
+        <tr v-else-if="addable">
           <td v-bind:colspan="numColumns">
             <button v-on:click="isAdding = true">
               {{ addButtonLabel }}
