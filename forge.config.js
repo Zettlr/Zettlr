@@ -275,5 +275,28 @@ module.exports = {
         }
       }
     }
+  ],
+  makers: [
+    {
+      name: '@electron-forge/maker-deb',
+      config: {
+        options: {
+          name: 'zettlr',
+          bin: 'Zettlr', // See packagerConfig.name property,
+          categories: [ 'Office', 'Education', 'Science' ],
+          section: 'editors',
+          // size: 500, // NOTE: Estimate, need to refine
+          description: 'Your one-stop publication workbench.',
+          productDescription: 'Your one-stop publication workbench.',
+          recommends: [ 'quarto', 'pandoc', 'tex-live' ],
+          genericName: 'Markdown Editor',
+          icon: './resources/icons/png/96x96.png',
+          priority: 'optional',
+          mimeType: [ 'text/markdown', 'application/x-tex', 'application/json', 'application/yaml' ],
+          maintainer: 'Hendrik Erz',
+          homepage: 'https://www.zettlr.com'
+        }
+      }
+    }
   ]
 }
