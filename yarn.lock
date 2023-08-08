@@ -439,6 +439,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electron-forge/maker-rpm@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@electron-forge/maker-rpm@npm:6.2.1"
+  dependencies:
+    "@electron-forge/maker-base": 6.2.1
+    "@electron-forge/shared-types": 6.2.1
+    electron-installer-redhat: ^3.2.0
+  dependenciesMeta:
+    electron-installer-redhat:
+      optional: true
+  checksum: 47d5b1f3b94075dc9e7d5e4b73a9bad5411c97c287688b1416fe4982612395500f4fdac164fefe96b4293fa7b49bf41c7211a69c4dddefb61f20f3a345a3d29a
+  languageName: node
+  linkType: hard
+
 "@electron-forge/maker-zip@npm:^6.2.1":
   version: 6.2.1
   resolution: "@electron-forge/maker-zip@npm:6.2.1"
@@ -5223,6 +5237,23 @@ __metadata:
     yargs: ^15.0.1
   bin:
     electron-installer-debian: src/cli.js
+  conditions: (os=darwin | os=linux)
+  languageName: node
+  linkType: hard
+
+"electron-installer-redhat@npm:^3.2.0":
+  version: 3.4.0
+  resolution: "electron-installer-redhat@npm:3.4.0"
+  dependencies:
+    "@malept/cross-spawn-promise": ^1.0.0
+    debug: ^4.1.1
+    electron-installer-common: ^0.10.2
+    fs-extra: ^9.0.0
+    lodash: ^4.17.15
+    word-wrap: ^1.2.3
+    yargs: ^16.0.2
+  bin:
+    electron-installer-redhat: src/cli.js
   conditions: (os=darwin | os=linux)
   languageName: node
   linkType: hard
@@ -13375,7 +13406,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:16.2.0":
+"yargs@npm:16.2.0, yargs@npm:^16.0.2":
   version: 16.2.0
   resolution: "yargs@npm:16.2.0"
   dependencies:
@@ -13497,6 +13528,7 @@ __metadata:
     "@codemirror/view": ^6.13.2
     "@electron-forge/cli": ^6.2.1
     "@electron-forge/maker-deb": ^6.2.1
+    "@electron-forge/maker-rpm": ^6.2.1
     "@electron-forge/maker-zip": ^6.2.1
     "@electron-forge/plugin-webpack": ^6.2.1
     "@electron/notarize": ^1.2.4

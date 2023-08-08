@@ -297,6 +297,27 @@ module.exports = {
           homepage: 'https://www.zettlr.com'
         }
       }
+    },
+    {
+      name: '@electron-forge/maker-rpm',
+      config: {
+        options: {
+          name: 'zettlr',
+          bin: 'Zettlr', // See packagerConfig.name property,
+          categories: [ 'Office', 'Education', 'Science' ],
+          description: 'Your one-stop publication workbench.',
+          productDescription: 'Your one-stop publication workbench.',
+          productName: 'Zettlr',
+          genericName: 'Markdown Editor',
+          icon: './resources/icons/png/96x96.png',
+          license: 'GPL-3.0',
+          mimeType: [ 'text/markdown', 'application/x-tex', 'application/json', 'application/yaml' ],
+          homepage: 'https://www.zettlr.com'
+        }
+      }
+    },
+    {
+      name: '@electron-forge/maker-zip'
     }
   ]
 }
