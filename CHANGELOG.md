@@ -350,6 +350,9 @@ there.
 - Upgrade to Yarn v2
 - Exchange `electron-devtools-installer` with `electron-devtools-assembler`, as
   the former appears to be unmaintained
+- Moved from Electron Builder to Electron Forge for building Debian and RPM-
+  packages, since Electron Builder seems to produce a few errors which Forge
+  doesn't
 - Switch from deprecated `@clr/icons` to `@cds/core`
 - Pandoc logs are now logged in every case
 - Improve the display and functionality of log messages

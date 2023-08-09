@@ -290,7 +290,8 @@ module.exports = {
           productDescription: 'Your one-stop publication workbench.',
           recommends: [ 'quarto', 'pandoc', 'tex-live' ],
           genericName: 'Markdown Editor',
-          icon: './resources/icons/png/96x96.png',
+          // Electron forge recommends 512px
+          icon: './resources/icons/png/512x512.png',
           priority: 'optional',
           mimeType: [ 'text/markdown', 'application/x-tex', 'application/json', 'application/yaml' ],
           maintainer: 'Hendrik Erz',
@@ -309,7 +310,8 @@ module.exports = {
           productDescription: 'Your one-stop publication workbench.',
           productName: 'Zettlr',
           genericName: 'Markdown Editor',
-          icon: './resources/icons/png/96x96.png',
+          // Electron forge recommends 512px
+          icon: './resources/icons/png/512x512.png',
           license: 'GPL-3.0',
           mimeType: [ 'text/markdown', 'application/x-tex', 'application/json', 'application/yaml' ],
           homepage: 'https://www.zettlr.com'
