@@ -91,6 +91,6 @@ Du kannst neue Zeilen und Spalten hinzufügen und entfernen sowie Spalten anordn
 
 Dies war der erste Teil der Einführung. Wir haben nicht allzu viel behandelt, aber alles weitere kannst du [in unserer Dokumentation nachschlagen](https://docs.zettlr.com/). Vielleicht interessiert dich ja der [Tag-Manager](https://docs.zettlr.com/en/reference/settings/#manage-tags) oder die [vielfältigen Suchoptionen](https://docs.zettlr.com/en/core/search/)?
 
-Wenn du bereit bist, klicke mit gedrückter `Cmd/Strg`-Taste auf den folgenden Wiki-Link: [[Zettelkasten]]
+Wenn du bereit bist, klicke mit gedrückter `Cmd/Strg`-Taste auf den folgenden Wiki-Link: [[zettelkasten]]
 
-[^1]: Der Text dieser Fußnote befindet sich am Ende des Dokuments. Prinzipiell kannst du den Text allerdings positionieren, wo immer du willst. Das beste? Du musst nicht nach unten scrollen, um die Fußnote zu bearbeiten – klicke einfach mit gedrückter `Cmd/Strg`-Taste auf sie. Änderungen übernimmst du mit `Shift+Enter`, während du die Bearbeitung abbrichst, indem du einfach irgendwo außerhalb des Popups klickst.
+[^1]: Der Text dieser Fußnote befindet sich am Ende des Dokuments. Prinzipiell kannst du den Text allerdings positionieren, wo immer du willst. Das beste? Du musst nicht nach unten scrollen, um die Fußnote zu bearbeiten – klicke einfach auf den "Bearbeiten"-Knopf im Popup. An der Seite unten an der Fußnote findest du einen kleinen Knopf, mit dem du wieder zur Fußnote im Text zurück springen kannst.
