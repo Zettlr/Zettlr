@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-08-07 02:27+0000\n"
-"PO-Revision-Date: 2023-07-12 10:07+0200\n"
+"PO-Revision-Date: 2023-08-09 21:30+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -186,20 +186,21 @@ msgid "Ask for directory"
 msgstr "Verzeichnis auswählen"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Display name"
-msgstr "Zeige \"Bild einfügen\""
+msgstr "Anzeiogename"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Command"
-msgstr "Kommentar"
+msgstr "Befehl"
 
 #: source/win-preferences/schema/export.ts:65
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
 msgstr ""
+"Definiere benutzerdefinierte Befehle für den Exporter. Jeder Befehl erhält "
+"als erstes Argument die Datei oder den Projektordner, welche(r) exportiert "
+"werden soll."
 
 #: source/win-preferences/schema/zettelkasten.ts:24
 msgid "ID regular expression"
@@ -263,21 +264,20 @@ msgstr "Sekundäre Anführungszeichen"
 
 #: source/win-preferences/schema/autocorrect.ts:80
 msgid "Match whole words"
-msgstr ""
+msgstr "Ersetze nur ganze Wörter"
 
 #: source/win-preferences/schema/autocorrect.ts:81
 msgid "When checked, AutoCorrect will never replace parts of words"
 msgstr ""
+"AutoCorrect ersetzt niemals Teile von Wörtern, wenn diese Option aktiv ist"
 
 #: source/win-preferences/schema/autocorrect.ts:90
-#, fuzzy
 msgid "String"
-msgstr "Strenge der Empfehlungen"
+msgstr "Zeichenkette"
 
 #: source/win-preferences/schema/autocorrect.ts:90
-#, fuzzy
 msgid "Replacement"
-msgstr "Datei ersetzen"
+msgstr "Ersatz"
 
 #: source/win-preferences/schema/autocorrect.ts:91
 msgid ""
@@ -310,9 +310,8 @@ msgid "Use native window appearance"
 msgstr "Nutze natives Fensterdesign"
 
 #: source/win-preferences/schema/advanced.ts:53
-#, fuzzy
 msgid "Enable window vibrancy"
-msgstr "Nutze natives Fensterdesign"
+msgstr "Aktiviere Fenster-vibrancy"
 
 #: source/win-preferences/schema/advanced.ts:59
 msgid "Delete items irreversibly, if moving them to trash fails"
@@ -734,14 +733,12 @@ msgid "LanguageTool API key"
 msgstr "LanguageTool API key"
 
 #: source/win-preferences/schema/spellchecking.ts:82
-#, fuzzy
 msgid "Active"
-msgstr "Aktionen"
+msgstr "Aktiv"
 
 #: source/win-preferences/schema/spellchecking.ts:82
-#, fuzzy
 msgid "Language Code"
-msgstr "LanguageTool-Anbieter"
+msgstr "Sprachcode"
 
 #: source/win-preferences/schema/spellchecking.ts:82
 #: source/tmp/PopoverTags.vue.ts:36
@@ -756,9 +753,8 @@ msgstr ""
 "möchtest."
 
 #: source/win-preferences/schema/spellchecking.ts:88
-#, fuzzy
 msgid "Search for dictionaries…"
-msgstr "Suche nach Wörterbüchern &hellip;"
+msgstr "Suche nach Wörterbüchern…"
 
 #: source/win-preferences/schema/spellchecking.ts:94
 msgid "User dictionary. Remove words by clicking them."
@@ -1002,9 +998,8 @@ msgid "%s characters"
 msgstr "%s Zeichen"
 
 #: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
 msgid "Exporting…"
-msgstr "Exportieren…"
+msgstr "Exportiere…"
 
 #: source/tmp/PopoverExport.vue.ts:6
 #: source/app/service-providers/commands/dir-project-export.ts:145
@@ -1013,7 +1008,7 @@ msgstr "Exportieren"
 
 #: source/tmp/PopoverExport.vue.ts:27
 msgid "command"
-msgstr ""
+msgstr "Befehl"
 
 #: source/tmp/PopoverDirProps.vue.ts:164
 msgid "Project Settings…"
@@ -1475,7 +1470,7 @@ msgstr "Alles auswählen"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "Gehe zu Fußnotendefinition"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
 msgid "Link"
@@ -2319,9 +2314,9 @@ msgid "Export failed"
 msgstr "Export fehlgeschlagen"
 
 #: source/app/service-providers/commands/export.ts:56
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "An error occurred during export: %s"
-msgstr "Ein Fehler ist beim Export aufgetreten: %s"
+msgstr "Beim Export ist ein Fehler aufgetreten: %s"
 
 #: source/app/service-providers/commands/export.ts:108
 msgid "Choose export destination"

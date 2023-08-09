@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-08-07 02:27+0000\n"
-"PO-Revision-Date: 2023-04-09 15:39+0200\n"
+"PO-Revision-Date: 2023-08-09 21:26+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: source/win-main/tabs-context.ts:38
 #: source/app/service-providers/menu/menu.darwin.ts:601
@@ -85,24 +85,23 @@ msgstr "Duplicate file"
 
 #: source/win-main/file-manager/util/file-item-context.ts:67
 #: source/win-main/file-manager/util/dir-item-context.ts:68
-#, fuzzy
 msgid "Copy path"
-msgstr "Copy full path"
+msgstr "Copy path"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Reveal in Finder"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "Reveal in Explorer"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "Reveal in File Browser"
 
 #: source/win-main/file-manager/util/file-item-context.ts:101
 msgid "Close file"
@@ -187,20 +186,20 @@ msgid "Ask for directory"
 msgstr "Ask for directory"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Display name"
-msgstr "Display image button"
+msgstr "Display name"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Command"
-msgstr "Comment"
+msgstr "Command"
 
 #: source/win-preferences/schema/export.ts:65
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
 msgstr ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
 
 #: source/win-preferences/schema/zettelkasten.ts:24
 msgid "ID regular expression"
@@ -261,21 +260,19 @@ msgstr "Secondary Magic Quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:80
 msgid "Match whole words"
-msgstr ""
+msgstr "Match whole words"
 
 #: source/win-preferences/schema/autocorrect.ts:81
 msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
+msgstr "When checked, AutoCorrect will never replace parts of words"
 
 #: source/win-preferences/schema/autocorrect.ts:90
-#, fuzzy
 msgid "String"
-msgstr "Strictness"
+msgstr "String"
 
 #: source/win-preferences/schema/autocorrect.ts:90
-#, fuzzy
 msgid "Replacement"
-msgstr "Replace file"
+msgstr "Replacement"
 
 #: source/win-preferences/schema/autocorrect.ts:91
 msgid ""
@@ -308,9 +305,8 @@ msgid "Use native window appearance"
 msgstr "Use native window appearance"
 
 #: source/win-preferences/schema/advanced.ts:53
-#, fuzzy
 msgid "Enable window vibrancy"
-msgstr "Use native window appearance"
+msgstr "Enable window vibrancy"
 
 #: source/win-preferences/schema/advanced.ts:59
 msgid "Delete items irreversibly, if moving them to trash fails"
@@ -704,11 +700,11 @@ msgstr "Picky"
 
 #: source/win-preferences/schema/spellchecking.ts:40
 msgid "Mother tongue"
-msgstr ""
+msgstr "Mother tongue"
 
 #: source/win-preferences/schema/spellchecking.ts:42
 msgid "Not set"
-msgstr ""
+msgstr "Not set"
 
 #: source/win-preferences/schema/spellchecking.ts:49
 msgid "LanguageTool Provider"
@@ -728,14 +724,12 @@ msgid "LanguageTool API key"
 msgstr "LanguageTool API key"
 
 #: source/win-preferences/schema/spellchecking.ts:82
-#, fuzzy
 msgid "Active"
-msgstr "Actions"
+msgstr "Active"
 
 #: source/win-preferences/schema/spellchecking.ts:82
-#, fuzzy
 msgid "Language Code"
-msgstr "LanguageTool Provider"
+msgstr "Language Code"
 
 #: source/win-preferences/schema/spellchecking.ts:82
 #: source/tmp/PopoverTags.vue.ts:36
@@ -749,9 +743,8 @@ msgstr ""
 "Select the languages for which you want to enable automatic spell checking."
 
 #: source/win-preferences/schema/spellchecking.ts:88
-#, fuzzy
 msgid "Search for dictionaries…"
-msgstr "Search for dictionaries &hellip;"
+msgstr "Search for dictionaries…"
 
 #: source/win-preferences/schema/spellchecking.ts:94
 msgid "User dictionary. Remove words by clicking them."
@@ -995,9 +988,8 @@ msgid "%s characters"
 msgstr "%s characters"
 
 #: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
 msgid "Exporting…"
-msgstr "Export…"
+msgstr "Exporting…"
 
 #: source/tmp/PopoverExport.vue.ts:6
 #: source/app/service-providers/commands/dir-project-export.ts:145
@@ -1006,7 +998,7 @@ msgstr "Export"
 
 #: source/tmp/PopoverExport.vue.ts:27
 msgid "command"
-msgstr ""
+msgstr "command"
 
 #: source/tmp/PopoverDirProps.vue.ts:164
 msgid "Project Settings…"
@@ -1019,7 +1011,7 @@ msgstr "Full-Text Search"
 #: source/tmp/GlobalSearch.vue.ts:120
 #, javascript-format
 msgid "%s matches"
-msgstr ""
+msgstr "%s matches"
 
 #: source/tmp/GlobalSearch.vue.ts:123
 msgid "Enter your search terms below"
@@ -1320,7 +1312,7 @@ msgstr "Zettlr also makes use of these projects:"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Cmd/Ctrl-click to follow this link"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
@@ -1349,12 +1341,11 @@ msgstr "Readability mode (%s)"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Rendering mermaid graph …"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
-#, fuzzy
 msgid "Could not render Graph:"
-msgstr "Could not create file"
+msgstr "Could not render Graph:"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:94
 #, javascript-format
@@ -1467,7 +1458,7 @@ msgstr "Select all"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "Go to footnote reference"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
 msgid "Link"
@@ -2174,9 +2165,8 @@ msgstr "Support Zettlr"
 
 #: source/app/service-providers/menu/menu.darwin.ts:670
 #: source/app/service-providers/menu/menu.win32.ts:643
-#, fuzzy
 msgid "Visit website"
-msgstr "Go to website"
+msgstr "Visit website"
 
 #: source/app/service-providers/menu/menu.darwin.ts:680
 #: source/app/service-providers/menu/menu.win32.ts:653
@@ -2191,18 +2181,17 @@ msgstr "Open Tutorial"
 #: source/app/service-providers/menu/menu.darwin.ts:702
 #: source/app/service-providers/menu/menu.win32.ts:675
 msgid "Clear FSAL cache …"
-msgstr ""
+msgstr "Clear FSAL cache …"
 
 #: source/app/service-providers/menu/menu.darwin.ts:706
 #: source/app/service-providers/menu/menu.win32.ts:679
-#, fuzzy
 msgid "Clear FSAL Cache"
-msgstr "Clear search"
+msgstr "Clear FSAL Cache"
 
 #: source/app/service-providers/menu/menu.darwin.ts:707
 #: source/app/service-providers/menu/menu.win32.ts:680
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "Clearing the FSAL cache requires a restart."
 
 #: source/app/service-providers/menu/menu.darwin.ts:708
 #: source/app/service-providers/menu/menu.win32.ts:681
@@ -2211,6 +2200,9 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
+"After the restart, Zettlr will recreate the entire cache, which may take a "
+"few moments, depending on the amount of files you have loaded and the speed "
+"of your disk. The window(s) will show afterward."
 
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
@@ -2309,9 +2301,9 @@ msgid "Export failed"
 msgstr "Export failed"
 
 #: source/app/service-providers/commands/export.ts:56
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "An error occurred during export: %s"
-msgstr "An error occurred on export: %s"
+msgstr "An error occurred during export: %s"
 
 #: source/app/service-providers/commands/export.ts:108
 msgid "Choose export destination"
@@ -2490,15 +2482,16 @@ msgid "Directory not found"
 msgstr "Directory not found"
 
 #: source/app/service-providers/commands/dir-project-export.ts:73
-#, fuzzy
 msgid "Cannot export project"
-msgstr "Export Project"
+msgstr "Cannot export project"
 
 #: source/app/service-providers/commands/dir-project-export.ts:74
 msgid ""
 "After applying your glob-filters, no files remained to export. Please adjust "
 "them in the project settings."
 msgstr ""
+"After applying your glob-filters, no files remained to export. Please adjust "
+"them in the project settings."
 
 #: source/app/service-providers/commands/dir-project-export.ts:145
 msgid "Project successfully exported. Click to show."
