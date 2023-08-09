@@ -351,14 +351,18 @@ jobs:
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
       - name: Package & Release
-        run: yarn package:linux-x64 && yarn release:linux-x64
+        run: |
+          yarn package:linux-x64
+          yarn release:linux-x64
+          mv ./out/make/deb/x64/zettlr_${{env.version}}_amd64.deb ./release/zettlr_${{env.version}}_amd64.deb
+          mv ./out/make/rpm/x64/zettlr-${{env.version}}-1.x86_64.rpm ./release/zettlr-${{env.version}}-1.x86_64.rpm
       - name: Cache installers
         uses: actions/upload-artifact@v3
         with:
           name: linux_x64
           path: |
-            ./out/make/deb/x64/zettlr_${{env.version}}_amd64.deb
-            ./out/make/rpm/x64/zettlr-${{env.version}}-1.x86_64.rpm
+            ./release/zettlr_${{env.version}}_amd64.deb
+            ./release/zettlr-${{env.version}}-1.x86_64.rpm
             ./release/Zettlr-${{env.version}}-x86_64.AppImage
 
   build_linux_arm64:
@@ -386,14 +390,18 @@ jobs:
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
       - name: Package & Release
-        run: yarn package:linux-arm && yarn release:linux-arm
+        run: |
+          yarn package:linux-arm
+          yarn release:linux-arm
+          mv ./out/make/deb/arm64/zettlr_${{env.version}}_arm64.deb ./release/zettlr_${{env.version}}_arm64.deb
+          mv ./out/make/rpm/arm64/zettlr-${{env.version}}-1.arm64.rpm ./release/zettlr-${{env.version}}-1.arm64.rpm
       - name: Cache installers
         uses: actions/upload-artifact@v3
         with:
           name: linux_arm64
           path: |
-            ./out/make/deb/arm64/zettlr_${{env.version}}_arm64.deb
-            ./out/make/rpm/arm64/zettlr-${{env.version}}-1.arm64.rpm
+            ./release/zettlr_${{env.version}}_arm64.deb
+            ./release/zettlr-${{env.version}}-1.arm64.rpm
             ./release/Zettlr-${{env.version}}-arm64.AppImage
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -474,12 +482,12 @@ jobs:
           sha256sum "Zettlr-${{env.version}}-x64.exe" > "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-x64.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-arm64.dmg" >> "SHA256SUMS.txt"
-          sha256sum "zettlr_${{env.version}}_amd64.deb" >> "SHA256SUMS.txt"
-          sha256sum "zettlr-${{env.version}}-1.x86_64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
-          sha256sum "zettlr_${{env.version}}_arm64.deb" >> "SHA256SUMS.txt"
-          sha256sum "zettlr-${{env.version}}-1.arm64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-arm64.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "zettlr_${{env.version}}_amd64.deb" >> "SHA256SUMS.txt"
+          sha256sum "zettlr_${{env.version}}_arm64.deb" >> "SHA256SUMS.txt"
+          sha256sum "zettlr-${{env.version}}-1.x86_64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "zettlr-${{env.version}}-1.arm64.rpm" >> "SHA256SUMS.txt"
           cd ..
       - name: Verify checksums
         run: |
