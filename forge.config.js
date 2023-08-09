@@ -1,6 +1,7 @@
 const { spawn } = require('child_process')
 const fs = require('fs').promises
 const path = require('path')
+const pkgVersion = require('package.json').version
 
 /**
  * This function runs the get-pandoc script in order to download the requested
@@ -312,7 +313,8 @@ module.exports = {
           icon: './resources/icons/png/96x96.png',
           license: 'GPL-3.0',
           mimeType: [ 'text/markdown', 'application/x-tex', 'application/json', 'application/yaml' ],
-          homepage: 'https://www.zettlr.com'
+          homepage: 'https://www.zettlr.com',
+          version: pkgVersion // Necessary because somehow the RPM maker replaces "3.0.0-beta.7.nightly" with "3.0.0.beta.7.nightly"
         }
       }
     },
