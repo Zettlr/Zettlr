@@ -354,10 +354,13 @@ jobs:
         run: |
           yarn package:linux-x64
           yarn release:linux-x64
-      - name: DEBUG
+      - name: Move assets into place
+        # NOTE that the rpm maker somehow tampers with the version string and
+        # replaces hyphens with dots. We have to account for that here.
         run: |
+          export rpmver=$(echo '${{env.version}}' | tr '-' '.')
           mv ./out/make/deb/x64/zettlr_${{env.version}}_amd64.deb ./release/zettlr_${{env.version}}_amd64.deb
-          mv ./out/make/rpm/x64/zettlr-${{env.version}}-1.x86_64.rpm ./release/zettlr-${{env.version}}-1.x86_64.rpm
+          mv ./out/make/rpm/x64/zettlr-$rpmver-1.x86_64.rpm ./release/zettlr-${{env.version}}-1.x86_64.rpm
       - name: Cache installers
         uses: actions/upload-artifact@v3
         with:
@@ -395,10 +398,13 @@ jobs:
         run: |
           yarn package:linux-arm
           yarn release:linux-arm
-      - name: DEBUG
+      - name: Move assets into place
+        # NOTE that the rpm maker somehow tampers with the version string and
+        # replaces hyphens with dots. We have to account for that here.
         run: |
+          export rpmver=$(echo '${{env.version}}' | tr '-' '.')
           mv ./out/make/deb/arm64/zettlr_${{env.version}}_arm64.deb ./release/zettlr_${{env.version}}_arm64.deb
-          mv ./out/make/rpm/arm64/zettlr-${{env.version}}-1.arm64.rpm ./release/zettlr-${{env.version}}-1.arm64.rpm
+          mv ./out/make/rpm/arm64/zettlr-$rpmver-1.arm64.rpm ./release/zettlr-${{env.version}}-1.arm64.rpm
       - name: Cache installers
         uses: actions/upload-artifact@v3
         with:
