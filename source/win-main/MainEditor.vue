@@ -43,13 +43,27 @@ import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
+import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
 import { TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 
 const ipcRenderer = window.ipc
 const path = window.path
+
+// This function overwrites the getBibliographyForDescriptor function to ensure
+// the library is always absolute. We have to do it this ridiculously since the
+// function is called in both main and renderer processes, and we still have the
+// issue that path-browserify is entirely unusable.
+function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
+  const library = getBibliography(descriptor)
+
+  if (library !== CITEPROC_MAIN_DB && !path.isAbsolute(library)) {
+    return path.resolve(descriptor.dir, library)
+  } else {
+    return library
+  }
+}
 
 const props = defineProps({
   leafId: {
@@ -194,6 +208,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     autoCloseBrackets: store.state.config['editor.autoCloseBrackets'],
     autocorrect: {
       active: store.state.config['editor.autoCorrect.active'],
+      matchWholeWords: store.state.config['editor.autoCorrect.matchWholeWords'],
       style: store.state.config['editor.autoCorrect.style'],
       magicQuotes: {
         primary: store.state.config['editor.autoCorrect.magicQuotes.primary'],
@@ -240,7 +255,7 @@ watch(toRef(props.editorCommands, 'jumpToLine'), () => {
   }
 })
 watch(toRef(props.editorCommands, 'moveSection'), () => {
-  if (props.activeFile?.path !== props.file.path) {
+  if (props.activeFile?.path !== props.file.path || store.state.lastLeafId !== props.leafId) {
     return
   }
 
@@ -256,22 +271,34 @@ watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
 })
 
 watch(toRef(props, 'distractionFree'), (newValue) => {
-  if (currentEditor !== null && props.activeFile?.path === props.file.path) {
+  if (currentEditor !== null && props.activeFile?.path === props.file.path && store.state.lastLeafId === props.leafId) {
     currentEditor.distractionFree = props.distractionFree
   }
 })
 
 watch(toRef(props.editorCommands, 'executeCommand'), () => {
-  if (props.activeFile?.path !== props.file.path) {
+  if (props.activeFile?.path !== props.file.path || currentEditor === null) {
+    return
+  }
+
+  if (store.state.lastLeafId !== props.leafId) {
+    // This editor, even though it may be focused, was not the last focused
+    // See https://github.com/Zettlr/Zettlr/issues/4361
     return
   }
 
   const command: string = props.editorCommands.data
-  currentEditor?.runCommand(command)
-  currentEditor?.focus()
+  currentEditor.runCommand(command)
+  currentEditor.focus()
 })
 watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   if (props.activeFile?.path !== props.file.path) {
+    return
+  }
+
+  if (store.state.lastLeafId !== props.leafId) {
+    // This editor, even though it may be focused, was not the last focused
+    // See https://github.com/Zettlr/Zettlr/issues/4361
     return
   }
 

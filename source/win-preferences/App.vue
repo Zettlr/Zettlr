@@ -60,6 +60,7 @@ import toolbarSchema from './schema/toolbar'
 import { defineComponent } from 'vue'
 import { WindowTab } from '@dts/renderer/window'
 import { resolveLangCode } from '@common/util/map-lang-code'
+import { type FormSchema } from '@common/vue/form/Form.vue'
 
 const ipcRenderer = window.ipc
 
@@ -189,7 +190,7 @@ export default defineComponent({
       appLangOptions: {} as any,
       // This will return the full object
       config: (global as any).config.get(),
-      schema: {}
+      schema: {} as FormSchema
     }
   },
   computed: {

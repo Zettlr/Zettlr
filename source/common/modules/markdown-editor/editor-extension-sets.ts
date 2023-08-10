@@ -18,7 +18,7 @@
 
 import { closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete'
 import { type Update } from '@codemirror/collab'
-import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
+import { defaultKeymap, history, undo, redo, undoSelection, redoSelection } from '@codemirror/commands'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
@@ -63,6 +63,7 @@ import { statusbar } from './statusbar'
 import { themeManager } from './theme'
 import { renderers } from './renderers'
 import { mdPasteDropHandlers } from './plugins/md-paste-drop-handlers'
+import { footnoteGutter } from './plugins/footnote-gutter'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -74,17 +75,11 @@ export interface CoreExtensionOptions {
   remoteConfig: {
     filePath: string
     startVersion: number
-    editorId: string
     pullUpdates: (filePath: string, version: number) => Promise<Update[]|false>
     pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
   }
   updateListener: (update: ViewUpdate) => void
   domEventsListeners: DOMEventHandlers<any>
-  // Linter configuration
-  lint: {
-    // Should Markdown documents be linted?
-    markdown: boolean
-  }
 }
 
 /**
@@ -118,11 +113,16 @@ export const inputModeCompartment = new Compartment()
  * @return  {Extension[]}                    An array of core extensions
  */
 function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
-  let inputMode: Extension = []
+  const inputMode: Extension[] = []
   if (options.initialConfig.inputMode === 'vim') {
-    inputMode = vim()
+    inputMode.push(vim())
   } else if (options.initialConfig.inputMode === 'emacs') {
-    inputMode = emacs()
+    inputMode.push(emacs())
+  }
+
+  const autoCloseBracketsConfig: Extension[] = []
+  if (options.initialConfig.autoCloseBrackets) {
+    autoCloseBracketsConfig.push(closeBrackets())
   }
 
   return [
@@ -132,7 +132,12 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // KEYMAPS
     keymap.of([
       ...defaultKeymap, // Minimal default keymap
-      ...historyKeymap, // , // History commands (redo/undo)
+      // NOTE: We had to add the history commands here since the default
+      // keybindings were ... unexpected.
+      { key: 'Mod-z', run: undo, preventDefault: true },
+      { key: 'Mod-Shift-z', run: redo, preventDefault: true },
+      { key: 'Mod-u', run: undoSelection, preventDefault: true },
+      { key: 'Alt-u', mac: 'Mod-Shift-u', run: redoSelection, preventDefault: true },
       ...closeBracketsKeymap, // Binds Backspace to deletion of matching brackets
       ...searchKeymap // Search commands (Ctrl+F, etc.)
     ]),
@@ -155,7 +160,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     EditorState.tabSize.from(configField, (val) => val.indentUnit),
     indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
     EditorView.lineWrapping, // Enable line wrapping,
-    closeBrackets(),
+    autoCloseBracketsConfig,
 
     // Add the statusbar
     statusbar,
@@ -170,7 +175,6 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
 
     // Enables the editor to fetch updates to the document from main
     hookDocumentAuthority(
-      options.remoteConfig.editorId,
       options.remoteConfig.filePath,
       options.remoteConfig.startVersion,
       options.remoteConfig.pullUpdates,
@@ -235,7 +239,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
 
   let hasLinters = false
 
-  if (options.lint.markdown) {
+  if (options.initialConfig.lintMarkdown) {
     hasLinters = true
     mdLinterExtensions.push(mdLint)
   }
@@ -264,8 +268,10 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     // Markdown prior. Additionally, images should get preferential treatment.
     EditorView.domEventHandlers(mdPasteDropHandlers),
     // We need our custom keymaps first
-    keymap.of(completionKeymap),
-    Prec.highest(keymap.of(customKeymap)),
+    Prec.high(keymap.of([
+      ...completionKeymap,
+      ...customKeymap
+    ])),
     // The parser generates the AST for the document ...
     markdownParser(),
     // ... which can then be styled with a highlighter
@@ -279,11 +285,12 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     typewriter,
     distractionFree,
     tocField,
-    markdownFolding,
+    markdownFolding, // Should be before footnoteGutter
     autocomplete,
     readabilityMode,
     formattingToolbar,
     footnoteHover,
+    footnoteGutter, // Should be after markdownFolding
     urlHover,
     filePreview,
     codeblockBackground, // Add a background behind codeblocks

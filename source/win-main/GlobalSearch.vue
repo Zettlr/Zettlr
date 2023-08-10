@@ -21,36 +21,50 @@
       v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
     <!-- Then an always-visible search button ... -->
-    <ButtonControl
-      v-bind:label="searchButtonLabel"
-      v-bind:inline="true"
-      v-on:click="startSearch()"
-    ></ButtonControl>
+    <p>
+      <ButtonControl
+        v-bind:label="searchButtonLabel"
+        v-bind:inline="true"
+        v-on:click="startSearch()"
+      ></ButtonControl>
+    </p>
+    <hr>
     <!-- ... as well as two buttons to clear the results or toggle them. -->
-    <ButtonControl
-      v-if="searchResults.length > 0 && filesToSearch.length === 0"
-      v-bind:label="clearButtonLabel"
-      v-bind:inline="true"
-      v-on:click="emptySearchResults()"
-    ></ButtonControl>
-    <ButtonControl
-      v-if="searchResults.length > 0 && filesToSearch.length === 0"
-      v-bind:label="toggleButtonLabel"
-      v-bind:inline="true"
-      v-on:click="toggleIndividualResults()"
-    ></ButtonControl>
+    <template v-if="searchResults.length > 0">
+      <p style="text-align: center;">
+        <ButtonControl
+          v-if="filesToSearch.length === 0"
+          v-bind:label="clearButtonLabel"
+          v-bind:inline="true"
+          v-on:click="emptySearchResults()"
+        ></ButtonControl>
+        <ButtonControl
+          v-if="filesToSearch.length === 0"
+          v-bind:label="toggleButtonLabel"
+          v-bind:inline="true"
+          v-on:click="toggleIndividualResults()"
+        ></ButtonControl>
+      </p>
+      <p style="font-size: 14px; padding: 5px 0; text-align: center;">
+        <span v-html="resultsMessage"></span>
+      </p>
+      <hr>
+    </template>
     <!--
       During searching, display a progress bar that indicates how far we are and
       that allows to interrupt the search, if it takes too long.
     -->
-    <div v-if="filesToSearch.length > 0">
-      <ProgressControl
-        v-bind:max="sumFilesToSearch"
-        v-bind:value="sumFilesToSearch - filesToSearch.length"
-        v-bind:interruptible="true"
-        v-on:interrupt="filesToSearch = []"
-      ></ProgressControl>
-    </div>
+    <template v-if="filesToSearch.length > 0">
+      <div>
+        <ProgressControl
+          v-bind:max="sumFilesToSearch"
+          v-bind:value="sumFilesToSearch - filesToSearch.length"
+          v-bind:interruptible="true"
+          v-on:interrupt="filesToSearch = []"
+        ></ProgressControl>
+      </div>
+      <hr>
+    </template>
     <!-- Finally, display all search results, per file and line. -->
     <template v-if="searchResults.length > 0">
       <!-- First, display a filter ... -->
@@ -131,6 +145,7 @@ import { SearchResult, SearchResultWrapper, SearchTerm } from '@dts/common/searc
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
+import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -220,6 +235,9 @@ export default defineComponent({
     },
     searchTitle: function () {
       return trans('Full-Text Search')
+    },
+    resultsMessage: function () {
+      return trans('%s matches', this.searchResults.length)
     },
     queryInputLabel: function () {
       return trans('Enter your search terms below')
@@ -373,6 +391,9 @@ export default defineComponent({
         }
       }
 
+      // Filter out non-searchable files
+      fileList = fileList.filter(file => hasMdOrCodeExt(file.path))
+
       // And also all files that are not within the selected directory
       if (this.restrictToDir.trim() !== '') {
         fileList = fileList.filter(item => item.relativeDirectoryPath.startsWith(this.restrictToDir))
@@ -523,6 +544,8 @@ body div#global-search-pane {
   overflow: auto;
   height: 100%;
 
+  hr { margin: 5px 0; }
+
   div.search-result-container {
     border-bottom: 1px solid rgb(180, 180, 180);
     padding: 10px;
@@ -537,6 +560,7 @@ body div#global-search-pane {
 
       div.overflow-hidden {
         overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 

@@ -23,7 +23,7 @@ import commandExists from 'command-exists'
 import { getProgramVersion } from './util/get-program-version'
 
 // Developer tools
-import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-assembler'
 import AppServiceContainer from './app-service-container'
 import { app } from 'electron'
 
@@ -60,7 +60,7 @@ export async function bootApplication (): Promise<AppServiceContainer> {
     try {
       // Load Vue developer extension
       log.info('Installing VueJS3 DevTools extension ...')
-      const name = await installExtension(VUEJS3_DEVTOOLS)
+      const name = await installExtension(VUEJS_DEVTOOLS)
       log.info(`Added DevTools extension: ${name}`)
     } catch (err: any) {
       log.error(`Could not install DevTools extension: ${String(err.message)}`, err)

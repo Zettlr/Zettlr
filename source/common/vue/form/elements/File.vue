@@ -6,7 +6,7 @@
         v-bind:id="fieldID"
         ref="input"
         type="text"
-        readonly="readonly"
+        readonly
         v-bind:name="name"
         v-bind:value="modelValue"
         v-bind:placeholder="placeholder"
@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -48,10 +48,11 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
 
-export default {
+export default defineComponent({
   name: 'FileControl',
   props: {
     modelValue: {
@@ -91,17 +92,20 @@ export default {
     },
     resetLabel: function () {
       return trans('Reset')
+    },
+    inputRef (): HTMLInputElement {
+      return this.$refs.input as HTMLInputElement
     }
   },
   methods: {
     resetValue: function () {
       const newVal = (typeof this.reset === 'string') ? this.reset : ''
-      this.$refs.input.value = newVal
+      this.inputRef.value = newVal
       this.$emit('update:modelValue', newVal)
     },
     requestFile: function () {
       const payload = {
-        filters: [],
+        filters: [] as Array<{ name: string, extensions: string[] }>,
         multiSel: false
       }
 
@@ -121,7 +125,7 @@ export default {
 
           // Write the return value into the data-request-target of the clicked
           // button, because each button has a designated text field.
-          this.$refs.input.value = result[0]
+          this.inputRef.value = result[0]
           this.$emit('update:modelValue', result[0])
         })
         .catch(e => console.error(e))
@@ -134,13 +138,13 @@ export default {
             return
           }
 
-          this.$refs.input.value = result[0]
+          this.inputRef.value = result[0]
           this.$emit('update:modelValue', result[0])
         })
         .catch(e => console.error(e))
     }
   }
-}
+})
 </script>
 
 <style lang="less">

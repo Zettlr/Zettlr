@@ -4,7 +4,7 @@
     v-bind:titlebar="true"
     v-bind:menubar="false"
     v-bind:show-statusbar="false"
-    v-bind:disable-vibrancy="false"
+    v-bind:disable-vibrancy="!vibrancyEnabled"
   >
     <div id="update">
       <!-- First state: There is an error -->
@@ -110,6 +110,7 @@ export default defineComponent({
       windowTitle: trans('Updater'),
       disableStartButton: false, // True as soon as the update starts
       startButtonLabel: trans('Click to start update'),
+      vibrancyEnabled: window.config.get('window.vibrancy') as boolean,
       updateState: {
         lastErrorMessage: undefined,
         lastErrorCode: undefined,

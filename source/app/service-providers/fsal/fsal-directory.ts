@@ -72,14 +72,26 @@ function sortChildren (
 }
 
 /**
+ * This function checks if a directory has the default settings. This can be
+ * useful to determine, if, e.g., the corresponding dotfile will be removed
+ * after removing its project settings.
+ *
+ * @param   {DirDescriptor}  dir  The directory to check
+ *
+ * @return  {boolean}             Returns true if the settings are the same as default.
+ */
+export function hasDefaultSettings (dir: DirDescriptor): boolean {
+  return JSON.stringify(dir.settings) === JSON.stringify(SETTINGS_TEMPLATE)
+}
+
+/**
  * Persists the settings of a directory to disk.
  *
  * @param   {DirDescriptor}  dir  The directory descriptor
  */
 async function persistSettings (dir: DirDescriptor): Promise<void> {
   const settingsFile = path.join(dir.path, '.ztr-directory')
-  const hasDefaultSettings = JSON.stringify(dir.settings) === JSON.stringify(SETTINGS_TEMPLATE)
-  if (hasDefaultSettings && isFile(settingsFile)) {
+  if (hasDefaultSettings(dir) && isFile(settingsFile)) {
     // Only persist the settings if they are not default. If they are default,
     // remove a possible .ztr-directory-file
     try {
@@ -89,7 +101,7 @@ async function persistSettings (dir: DirDescriptor): Promise<void> {
       throw err
     }
   }
-  await fs.writeFile(path.join(dir.path, '.ztr-directory'), JSON.stringify(dir.settings))
+  await fs.writeFile(settingsFile, JSON.stringify(dir.settings))
 }
 
 /**
@@ -279,25 +291,14 @@ export async function makeProject (dirObject: DirDescriptor, properties: any): P
  *
  * @return {boolean}                     Returns false if no properties changed
  */
-export async function updateProjectProperties (dirObject: DirDescriptor, properties: any): Promise<boolean> {
+export async function updateProjectProperties (dirObject: DirDescriptor, properties: ProjectSettings): Promise<void> {
   if (dirObject.settings.project === null) {
     throw new Error(`[FSAL Dir] Attempted to update project settings on dir ${dirObject.path}, but it is not a project!`)
-  }
-
-  const titleUnchanged = dirObject.settings.project.title === properties.title
-  const cslUnchanged = dirObject.settings.project.cslStyle === properties.cslStyle
-  const formatsUnchanged = JSON.stringify(dirObject.settings.project.profiles) === JSON.stringify(properties.profiles)
-  const filtersUnchanged = JSON.stringify(dirObject.settings.project.filters) === JSON.stringify(properties.filters)
-  const templatesUnchanged = JSON.stringify(dirObject.settings.project.templates) === JSON.stringify(properties.templates)
-
-  if (titleUnchanged && cslUnchanged && formatsUnchanged && filtersUnchanged && templatesUnchanged) {
-    return false
   }
 
   dirObject.settings.project = safeAssign(properties, dirObject.settings.project)
   // Immediately reflect on disk
   await persistSettings(dirObject)
-  return true
 }
 
 // Removes a project
@@ -387,9 +388,11 @@ export async function createFile (
  * new descriptor. Due to every single child changing their paths, it is
  * computationally less expensive to simply re-build the tree from scratch.
  *
- * @param   {DirDescriptor}  dirObject  The directory descriptor
- * @param   {string}         newName    The directory's new name
- * @param   {FSALCache}      cache      The FSAL cache object
+ * @param   {DirDescriptor}  dirObject      The directory descriptor
+ * @param   {string}         oldName        The directory's old name
+ * @param   {string}         newName        The directory's new name
+ * @param   {FSALCache}      cache          The FSAL cache object
+ * @param   {boolean}        forceOverwrite Whether to force overwriting of existing files when renaming to an existant filename
  *
  * @return  {Promise<DirDescriptor>}    Resolves with the new directory descriptor.
  */
@@ -399,8 +402,14 @@ export async function renameChild (
   newName: string,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
-  cache: FSALCache
+  cache: FSALCache,
+  forceOverwrite: boolean = false
 ): Promise<void> {
+  // If old and new name are the same, no need to rename
+  if (newName === oldName) {
+    return
+  }
+
   // Check some things beforehand
   if (newName.trim() === '') {
     throw new Error('Invalid name provided!')
@@ -411,9 +420,12 @@ export async function renameChild (
     throw new Error(`Cannot rename ${oldName}: Not found in ${dirObject.path}.`)
   }
 
-  const foundName = dirObject.children.find(child => child.name.toLowerCase() === newName.toLowerCase())
-  if (foundName !== undefined) {
-    throw new Error(`Directory ${newName} already exists!`)
+  // Stops renaming if the new file will overwrite an old file and we don't want it to
+  if (newName.toLowerCase() !== oldName.toLowerCase() || !forceOverwrite) {
+    const foundName = dirObject.children.find(child => child.name.toLowerCase() === newName.toLowerCase())
+    if (foundName !== undefined) {
+      throw new Error(`Cannot rename ${oldName} to ${newName}: A file with the same name already exists!`)
+    }
   }
 
   const newPath = path.join(dirObject.path, newName)
@@ -471,8 +483,12 @@ export async function move (
   let newSource
   if (sourceObject.type === 'directory') {
     newSource = await parse(targetPath, cache, parser, sorter, false)
-  } else {
+  } else if (sourceObject.type === 'file') {
     newSource = await FSALFile.parse(targetPath, cache, parser, false)
+  } else if (sourceObject.type === 'code') {
+    newSource = await FSALCodeFile.parse(targetPath, cache, false)
+  } else {
+    newSource = await FSALAttachment.parse(targetPath)
   }
 
   // Add it to the new target
@@ -513,7 +529,12 @@ export async function addChild (
 export async function removeChild (dirObject: DirDescriptor, childPath: string, deleteOnFail: boolean): Promise<void> {
   const idx = dirObject.children.findIndex(element => element.path === childPath)
   if (idx > -1) {
-    await safeDelete(childPath, deleteOnFail)
+    // NOTE: This function may be called after a file has been deleted. In that
+    // case the function only needs to remove the file from the list of children
+    // to avoid safeDelete throwing an error as the file does no longer exist.
+    if (isFile(childPath)) {
+      await safeDelete(childPath, deleteOnFail)
+    }
     dirObject.children.splice(idx, 1)
   }
 }

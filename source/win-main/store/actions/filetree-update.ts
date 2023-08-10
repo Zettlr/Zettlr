@@ -23,29 +23,25 @@ function sanitizeFiletreeUpdates (events: FSALHistoryEvent[]): FSALHistoryEvent[
 
   for (const event of events) {
     if (event.event === 'remove') {
-      // First: Check, if we have a corresponding add-event in history, and
-      // remove that one.
+      // First: Find all other events prior to the remove that operate in the
+      // now defunct path and remove those as well because we won't find the
+      // descriptors for them.
+      for (let i = 0; i < ret.length; i++) {
+        if (ret[i].path.startsWith(event.path)) {
+          ret.splice(i, 1)
+          i-- // Important to not jump over events
+        }
+      }
+
+      // Second: Check, if we have a corresponding add-event in history, and
+      // remove that one. In this case the path has been added during runtime,
+      // which also indicates that we do not have to even consider the removal
       const addEvent = ret.findIndex(e => e.event === 'add' && e.path === event.path)
       if (addEvent > -1) {
         ret.splice(addEvent, 1)
-        // Find all other events in between and splice them as well
-        for (let i = 0; i < ret.length; i++) {
-          if (ret[i].path.startsWith(event.path)) {
-            ret.splice(i, 1)
-            i-- // Important to not jump over events
-          }
-        }
-
-        continue // Done here
+        continue // Do not add the remove event to the sanitized list
       }
     }
-
-    // Second: Check if we have events for some files/dirs that reside within
-    // files/dirs that do not exist anymore -- we won't get any descriptor
-    // for these anyway, so we can save some computational power here.
-    // TODO: Is this even necessary ...?
-
-    // In the very end, add the event to our return array
     ret.push(event)
   }
 
@@ -62,7 +58,9 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   // since we last checked (we initialise the "lastChecked" property with
   // 0 so that we will initially get all events), and then, for each event,
   // first retrieve the necessary information, and finally apply this locally.
-  const events: FSALHistoryEvent[] = await ipcRenderer.invoke('application', { command: 'get-filetree-events', payload: context.state.lastFiletreeUpdate })
+  const events: FSALHistoryEvent[] = await ipcRenderer.invoke('application', {
+    command: 'get-filetree-events', payload: context.state.lastFiletreeUpdate
+  })
 
   if (events.length === 0) {
     return // Nothing to do
@@ -70,8 +68,7 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
 
   // A first problem we might encounter is that there has been an addition
   // and subsequently a removal of the same file/directory. We need to
-  // account for this. We do so by first sanitizing the events that need
-  // to be processed.
+  // account for this. Similarly, if a directory has been removed
   const saneEvents = sanitizeFiletreeUpdates(events)
 
   for (const event of saneEvents) {

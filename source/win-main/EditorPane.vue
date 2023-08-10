@@ -163,6 +163,13 @@ export default defineComponent({
       return this.openFiles.length === 0
     }
   },
+  created () {
+    // Global drag end listener to ensure the split-view indicators always disappear
+    document.addEventListener('dragend', this.finishDrag, true)
+  },
+  beforeUnmount () {
+    document.removeEventListener('dragend', this.finishDrag)
+  },
   methods: {
     handleDrop: function (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
       const DELIM = (process.platform === 'win32') ? ';' : ':'
@@ -229,9 +236,13 @@ export default defineComponent({
       const outX = event.clientX < bounds.left || event.clientX > bounds.right
       const outY = event.clientY < bounds.top || event.clientY > bounds.bottom
       if (outX || outY) {
-        this.documentTabDrag = false
-        this.documentTabDragWhere = undefined
+        this.finishDrag()
       }
+    },
+    finishDrag () {
+      console.log('Finishing drag', this.leafId)
+      this.documentTabDrag = false
+      this.documentTabDragWhere = undefined
     }
   }
 })

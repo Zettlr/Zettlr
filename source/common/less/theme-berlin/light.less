@@ -75,16 +75,13 @@ body {
       font-family: Consolas, 'Inconsolata', Menlo, monospace;
     }
 
-    // TYPOGRAPHY
-    .cm-header-1.cm-code-mark,
-    .cm-header-2.cm-code-mark,
-    .cm-header-3.cm-code-mark,
-    .cm-header-4.cm-code-mark,
-    .cm-header-5.cm-code-mark,
-    .cm-header-6.cm-code-mark,
-    .cm-url {
-      color: var(--c-primary);
+    .cm-quote {
+      font-style: italic;
     }
+
+    // TYPOGRAPHY
+    .cm-url,
+    .cm-code-mark { color: var(--c-primary); }
 
     .size-header-1,
     .size-header-2,
@@ -95,9 +92,15 @@ body {
       font-weight: bold;
     }
 
-    // Style the code block line wrapper classes
-    .code-block-line-background {
+    // Style the code block line wrapper classes; monospace is for inline code
+    .code-block-line-background,
+    .cm-monospace {
       background-color: #eee;
+    }
+
+    .cm-monospace {
+      border-radius: 2px;
+      padding: 0 2px;
     }
 
     // NOTE: Our codeblock layer creates THREE blocks per codeblock:
@@ -114,7 +117,7 @@ body {
     }
 
     /* LISTS */
-    .cm-list.cm-code-mark:not(.cm-emphasis):not(.cm-strong) {
+    .cm-list.cm-code-mark:not(.cm-emphasis):not(.cm-strong):not(.cm-meta) {
       color: var(--c-primary);
     }
 
@@ -262,8 +265,8 @@ body {
     }
   }
 
-  .cm-editor.cm-focused .cm-selectionBackground,
-  .cm-editor .cm-selectionBackground {
+  .cm-editor.cm-focused .cm-layer.cm-selectionLayer .cm-selectionBackground,
+  .cm-editor .cm-layer.cm-selectionLayer .cm-selectionBackground {
     background-color: var(--selection-light);
   }
 

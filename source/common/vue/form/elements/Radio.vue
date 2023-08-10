@@ -17,16 +17,24 @@
           type="radio" v-bind:name="name" v-bind:value="key"
           v-bind:checked="modelValue === key"
           v-bind:disabled="disabled"
-          v-on:input="$emit('update:modelValue', $event.target.value)"
+          v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         >
         <div class="toggle"></div>
       </label>
-      <label v-bind:for="fieldID(key)" v-bind:class="{ disabled: disabled }">{{ optionLabel }}</label>
+      <label
+        v-bind:for="fieldID(key)"
+        v-bind:class="{
+          'cb-group-label': true,
+          disabled: disabled
+        }"
+      >
+        {{ optionLabel }}
+      </label>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -41,7 +49,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'RadioControl',
   props: {
     modelValue: {
@@ -67,11 +77,11 @@ export default {
   },
   emits: ['update:modelValue'],
   methods: {
-    fieldID: function (key) {
-      return 'form-input-' + this.name + '-' + key
+    fieldID: function (key: string) {
+      return `form-input-${this.name}-${key}`
     }
   }
-}
+})
 </script>
 
 <style lang="less">
@@ -89,14 +99,12 @@ body {
 
   .cb-group {
     display: grid;
-    grid-template-columns: @input-size * 2 auto;
+    grid-template-columns: @input-size * 2 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
     margin: 6px 0px;
-  }
 
-  .cb-group, .radio-group {
-    label:not(.radio):not(.checkbox) { grid-area: label; }
+    .cb-group-label { grid-area: label; }
   }
 
   label.radio {
@@ -105,11 +113,8 @@ body {
     width: @input-size * 2;
     height: @input-size;
     grid-area: input;
-    //flex: 0.05; // Basically 5% width
 
-    input {
-      display: none !important;
-    }
+    input { display: none !important; }
 
     .toggle {
       position: absolute;

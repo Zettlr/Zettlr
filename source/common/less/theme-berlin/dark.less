@@ -117,7 +117,8 @@ body.dark {
     }
 
     // Style the code block line wrapper classes
-    .code-block-line-background {
+    .code-block-line-background,
+    .cm-monospace {
       background-color: #333;
     }
 
@@ -208,8 +209,8 @@ body.dark {
     }
   } // END: All the editor-wrapper shenanigans
 
-  .cm-editor.cm-focused .cm-selectionBackground,
-  .cm-editor .cm-selectionBackground {
+  .cm-editor.cm-focused .cm-layer.cm-selectionLayer .cm-selectionBackground,
+  .cm-editor .cm-layer.cm-selectionLayer .cm-selectionBackground {
     background-color: var(--selection-dark);
   }
 

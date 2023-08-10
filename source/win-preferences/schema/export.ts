@@ -13,8 +13,9 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { type FormSchema } from '@common/vue/form/Form.vue'
 
-export default function (): any {
+export default function (): FormSchema {
   return {
     fieldsets: [
       [
@@ -54,7 +55,21 @@ export default function (): any {
             'ask': trans('Ask for directory')
           }
         }
+      ],
+      [
+        {
+          type: 'list',
+          valueType: 'record',
+          keyNames: [ 'displayName', 'command' ],
+          columnLabels: [ trans('Display name'), trans('Command') ],
+          label: trans('Enter custom commands to run the exporter with. Each command receives as its first argument the file or project folder to be exported.'),
+          model: 'export.customCommands',
+          deletable: true,
+          searchable: true,
+          addable: true,
+          editable: true
+        }
       ]
     ]
-  }
+  } satisfies FormSchema
 }

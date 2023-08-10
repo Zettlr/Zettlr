@@ -29,16 +29,6 @@ windowRegister()
       }
     })
 
-    const app = createApp(App).mount('#app')
-
-    // Finally, pass the correct directory
-    const searchParams = new URLSearchParams(window.location.search)
-    const dirPath = searchParams.get('directory')
-
-    if (dirPath === null) {
-      console.error('Could not load properties, since the passed directory was null!')
-    } else {
-      app.$data.dirPath = dirPath
-    }
+    createApp(App).mount('#app')
   })
   .catch(e => console.error(e))

@@ -59,7 +59,8 @@ export default function getConfigTemplate (): ConfigOptions {
       // Only use native window appearance by default on macOS. If this value
       // is false, this means that Zettlr will display the menu bar and window
       // controls as defined in the HTML.
-      nativeAppearance: process.platform === 'darwin',
+      nativeAppearance: process.platform === 'darwin', // Linux only
+      vibrancy: process.platform === 'darwin', // macOS only
       // Store a few GUI related settings here as well
       sidebarVisible: false,
       currentSidebarTab: 'toc',
@@ -70,17 +71,17 @@ export default function getConfigTemplate (): ConfigOptions {
     // UI related options
     darkMode: false,
     alwaysReloadFiles: true, // Should Zettlr automatically load remote changes?
-    autoDarkMode: 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
-    autoDarkModeStart: '22:00', // Switch into dark mode at this time
+    autoDarkMode: 'system', // Possible values: 'off', 'system', 'schedule', 'auto'
+    autoDarkModeStart: '21:00', // Switch into dark mode at this time
     autoDarkModeEnd: '06:00', // Switch to light mode at this time
     fileMeta: true,
     fileMetaTime: 'modtime', // The time to be displayed in file meta
     sorting: 'natural', // Can be natural or based on ASCII values
-    sortFoldersFirst: false, // should folders be shown first in combined fileview
+    sortFoldersFirst: true, // should folders be shown first in combined fileview
     sortingTime: 'modtime', // can be modtime or creationtime
     muteLines: true, // Should the editor mute lines in distraction free mode?
-    fileManagerMode: 'thin', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
-    fileNameDisplay: 'title', // Controls what info is displayed as filenames
+    fileManagerMode: 'combined', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
+    fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files
     export: {
@@ -91,7 +92,8 @@ export default function getConfigTemplate (): ConfigOptions {
       cslStyle: '', // Path to a CSL Style file
       useBundledPandoc: true, // Whether to use the bundled Pandoc
       exportQmdWithQuarto: false, // Whether .qmd-files should be exported with Quarto
-      singleFileLastExporter: 'html' // Remembers the last chosen exporter for easy re-exporting
+      singleFileLastExporter: 'html', // Remembers the last chosen exporter for easy re-exporting
+      customCommands: [] // Custom commands that the user can use to run arbitrary exports
     },
     // Zettelkasten stuff (IDs, as well as link matchers)
     zkn: {
@@ -106,7 +108,7 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     // Editor related stuff
     editor: {
-      autoSave: 'delayed',
+      autoSave: 'off',
       autocompleteAcceptSpace: false, // Whether you can type spaces in autocorrect
       autoCloseBrackets: true,
       showLinkPreviews: true, // Whether to fetch link previews in the editor
@@ -115,13 +117,13 @@ export default function getConfigTemplate (): ConfigOptions {
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
       indentWithTabs: false,
-      fontSize: 16, // The editor's font size in pixels
+      fontSize: 18, // The editor's font size in pixels
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs
       boldFormatting: '**', // Can be ** or __
       italicFormatting: '_', // Can be * or _
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
-      showStatusbar: false,
+      showStatusbar: true,
       lint: {
         markdown: true, // Should Markdown be linted?
         languageTool: {
@@ -197,7 +199,8 @@ export default function getConfigTemplate (): ConfigOptions {
           { key: '...', value: '…' },
           { key: '--', value: '–' },
           { key: '---', value: '—' }
-        ]
+        ],
+        matchWholeWords: false // Whether to only autocorrect entire words, not parts
       } // END autoCorrect options
     },
     display: {

@@ -555,7 +555,9 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         to: node.to,
         // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
         url: markdown.substring(url.from, url.to),
-        alt: genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
+        alt: alt !== null
+          ? genericTextNode(alt.from, alt.to, markdown.substring(alt.from, alt.to))
+          : genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
       }
 
       const marks = node.getChildren('LinkMark')

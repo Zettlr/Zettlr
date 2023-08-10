@@ -6,6 +6,7 @@
     v-bind:show-toolbar="shouldShowToolbar"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
+    v-bind:disable-vibrancy="!vibrancyEnabled"
     v-on:toolbar-toggle="handleToggle($event)"
     v-on:toolbar-click="handleClick($event)"
   >
@@ -174,6 +175,7 @@ export default defineComponent({
       fileManagerVisible: true,
       mainSplitViewVisibleComponent: 'fileManager',
       isUpdateAvailable: false,
+      vibrancyEnabled: window.config.get('window.vibrancy') as boolean,
       // Pomodoro state
       pomodoro: {
         currentEffectFile: glassFile,
@@ -957,22 +959,9 @@ export default defineComponent({
         document.getElementById('toolbar-export') as HTMLElement,
         { filePath: this.activeFile.path },
         (data: any) => {
-          if (data.shouldExport !== true || this.activeFile === null) {
-            return
+          if (data.closePopover === true) {
+            this.$closePopover()
           }
-          // If the file is modified, export the current contents of the editor
-          // rather than what is saved on disk
-          // Run the exporter
-          ipcRenderer.invoke('application', {
-            command: 'export',
-            payload: {
-              profile: JSON.parse(JSON.stringify(data.profile)),
-              exportTo: data.exportTo,
-              file: this.activeFile.path
-            }
-          })
-            .catch(e => console.error(e))
-          this.$closePopover()
         })
     },
     getToolbarButtonDisplay: function (configName: string): boolean {

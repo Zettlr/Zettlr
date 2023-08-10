@@ -55,7 +55,7 @@ export const plugin: ExporterPlugin = {
       .filter(e => e.writer === 'html')
 
     if (allDefaults.length > 1) {
-      console.warn('More than one suitable format for exporting to HTML found - using first one!')
+      console.warn(`[SimplePDF Export] More than one suitable format for exporting to HTML found - using first one: ${allDefaults[0].name}`)
     }
 
     // Write to an intermediary HTML file which we will convert to PDF below.

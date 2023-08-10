@@ -18,8 +18,8 @@
       }"
     ></RadioControl>
     <!-- Add the exporting button -->
-    <button v-on:click="doExport">
-      Export
+    <button v-bind:disabled="isExporting" v-on:click="doExport">
+      {{ exportButtonLabel }}
     </button>
   </div>
 </template>
@@ -45,6 +45,7 @@ import { defineComponent } from 'vue'
 import { PandocProfileMetadata } from '@dts/common/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
+import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 const config = window.config
@@ -58,25 +59,26 @@ export default defineComponent({
   },
   data: function () {
     return {
-      shouldExport: false, // As soon as this becomes true, we can export
+      closePopover: false,
+      isExporting: false,
       format: '',
       filePath: '',
       exportDirectory: 'temp',
-      profileMetadata: [] as PandocProfileMetadata[]
+      profileMetadata: [] as PandocProfileMetadata[],
+      customCommands: window.config.get('export.customCommands') as Array<{ displayName: string, command: string }>
     }
   },
   computed: {
+    exportButtonLabel (): string {
+      return this.isExporting ? trans('Exporting…') : trans('Export')
+    },
     filename (): string {
       return path.basename(this.filePath)
     },
     popoverData: function (): any {
-      const data: any = {
-        shouldExport: this.shouldExport,
-        profile: this.profileMetadata.find(e => e.name === this.format),
-        exportTo: this.exportDirectory
+      return {
+        closePopover: this.closePopover
       }
-
-      return data
     },
     availableFormats: function () {
       const selectOptions: { [key: string]: string } = {}
@@ -86,8 +88,13 @@ export default defineComponent({
         .filter(e => {
           return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(e.reader))
         })
-        // ... and add them to the available options
+        // ... and add the others to the available options
         .forEach(elem => { selectOptions[elem.name] = this.getDisplayText(elem) })
+
+      const cmdTitle = trans('command')
+      for (const command of this.customCommands) {
+        selectOptions[command.command] = `${command.displayName} (${cmdTitle})`
+      }
 
       return selectOptions
     }
@@ -100,7 +107,8 @@ export default defineComponent({
     format: function () {
       // Remember the last choice
       const prof = this.profileMetadata.find(e => e.name === this.format)
-      config.set('export.singleFileLastExporter', (prof === undefined) ? '' : prof.name)
+      const cmd = this.customCommands.find(x => x.command === this.format)
+      config.set('export.singleFileLastExporter', (prof !== undefined) ? prof.name : (cmd !== undefined) ? cmd.command : '')
     }
   },
   created: function () {
@@ -126,7 +134,40 @@ export default defineComponent({
   },
   methods: {
     doExport: function () {
-      this.shouldExport = true
+      const customCommand = this.customCommands.find(x => x.command === this.format)
+      const profile = this.profileMetadata.find(e => e.name === this.format)
+      this.isExporting = true
+
+      if (customCommand !== undefined) {
+        // Run the custom command exporter
+        ipcRenderer.invoke('application', {
+          command: 'custom-export',
+          payload: {
+            displayName: customCommand.displayName,
+            file: this.filePath
+          }
+        })
+          .finally(() => {
+            this.isExporting = false
+            this.closePopover = true
+          })
+          .catch(e => console.error(e))
+      } else {
+        // Run the regular exporter
+        ipcRenderer.invoke('application', {
+          command: 'export',
+          payload: {
+            profile: JSON.parse(JSON.stringify(profile)),
+            exportTo: this.exportDirectory,
+            file: this.filePath
+          }
+        })
+          .finally(() => {
+            this.isExporting = false
+            this.closePopover = true
+          })
+          .catch(e => console.error(e))
+      }
     },
     getDisplayText: function (item: PandocProfileMetadata): string {
       const name = item.name.substring(0, item.name.lastIndexOf('.'))

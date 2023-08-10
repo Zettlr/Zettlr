@@ -21,14 +21,17 @@
       ></TextControl>
 
       <p v-if="selectedExportProfiles.length === 0" class="warning">
-        <cds-icon shape="warning"></cds-icon>
+        <cds-icon shape="warning-standard"></cds-icon>
         <span>{{ projectBuildWarning }}</span>
       </p>
       <ListControl
         v-bind:label="exportFormatLabel"
-        v-bind:model-value="exportFormatList"
-        v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel, conversionLabel]"
+        v-bind:value-type="'record'"
+        v-bind:model-value="(exportFormatList as any[])"
+        v-bind:column-labels="[exportFormatUseLabel, exportFormatNameLabel, conversionLabel]"
+        v-bind:key-names="['selected', 'name', 'conversion']"
         v-bind:editable="[0]"
+        v-bind:striped="true"
         v-on:update:model-value="selectExportProfile($event)"
       ></ListControl>
     </div>
@@ -40,8 +43,9 @@
       <!-- First the glob patterns -->
       <ListControl
         v-model="patterns"
+        v-bind:value-type="'simpleArray'"
         v-bind:label="exportPatternLabel"
-        v-bind:labels="[exportPatternNameLabel]"
+        v-bind:column-labels="[exportPatternNameLabel]"
         v-bind:editable="[0]"
         v-bind:addable="true"
         v-bind:deletable="true"
@@ -88,11 +92,11 @@
 
 import { trans } from '@common/i18n-renderer'
 import WindowChrome from '@common/vue/window/Chrome.vue'
-import ListControl from '@common/vue/form/elements/List.vue'
+import ListControl from '@common/vue/form/elements/ListControl.vue'
 import FileControl from '@common/vue/form/elements/File.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import { defineComponent } from 'vue'
-import { DirDescriptor, ProjectSettings } from '@dts/common/fsal'
+import { DirDescriptor } from '@dts/common/fsal'
 import { WindowTab } from '@dts/renderer/window'
 import { PandocProfileMetadata } from '@dts/common/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
@@ -100,6 +104,7 @@ import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/
 const ipcRenderer = window.ipc
 
 interface ExportProfile { selected: boolean, name: string, conversion: string }
+interface CustomCommand { displayName: string, command: string }
 
 export default defineComponent({
   components: {
@@ -109,9 +114,12 @@ export default defineComponent({
     TextControl
   },
   data: function () {
+    const searchParams = new URLSearchParams(window.location.search)
     return {
-      dirPath: '',
+      dirPath: searchParams.get('directory') ?? '',
+      updateLock: true, // To ensure these defaults aren't written before the properties have been loaded
       profiles: [] as PandocProfileMetadata[],
+      customCommands: window.config.get('export.customCommands') as Array<{ displayName: string, command: string }>,
       selectedExportProfiles: [] as string[], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [] as string[],
       cslStyle: '',
@@ -151,7 +159,15 @@ export default defineComponent({
           name: this.getDisplayText(e.name),
           conversion: conversionString
         }
-      })
+      }).concat(
+        this.customCommands.map(c => {
+          return {
+            selected: this.selectedExportProfiles.includes(c.command),
+            name: c.displayName,
+            conversion: c.command
+          }
+        })
+      )
     },
     exportFormatLabel: function (): string {
       return trans('Export project to:')
@@ -236,32 +252,56 @@ export default defineComponent({
   },
   methods: {
     selectExportProfile: function (newListVal: ExportProfile[]) {
-      const newProfiles = newListVal.filter(e => e.selected).map(e => {
-        return this.profiles.find(x => this.getDisplayText(x.name) === e.name)
-      }).filter(x => x !== undefined) as PandocProfileMetadata[]
-      this.selectedExportProfiles = newProfiles.map(x => x.name)
+      console.log(newListVal)
+      const newProfiles = newListVal
+        .filter(e => e.selected)
+        .map(e => {
+          return this.profiles.find(x => this.getDisplayText(x.name) === e.name) ?? this.customCommands.find(c => c.displayName === e.name)
+        })
+        .filter(x => x !== undefined) as Array<PandocProfileMetadata|CustomCommand>
+
+      this.selectedExportProfiles = newProfiles.map(x => {
+        return ('name' in x) ? x.name : x.command
+      })
       this.updateProperties()
     },
     getDisplayText: function (name: string): string {
       return name.substring(0, name.lastIndexOf('.'))
     },
     updateProperties: function () {
+      if (this.updateLock) {
+        return
+      }
+
+      this.updateLock = true
+
       ipcRenderer.invoke('application', {
-        command: 'update-project-properties',
-        payload: {
-          properties: {
-            profiles: this.selectedExportProfiles.map(e => e), // De-proxy
-            filters: this.patterns.map(e => e), // De-proxy
-            cslStyle: this.cslStyle,
-            title: this.projectTitle,
-            templates: {
-              tex: this.texTemplate,
-              html: this.htmlTemplate
-            }
-          } as ProjectSettings,
-          path: this.dirPath
-        }
-      }).catch(err => console.error(err))
+        command: 'get-descriptor',
+        payload: this.dirPath
+      })
+        .then(descriptor => {
+          if (descriptor.settings.project == null) {
+            throw new Error('Could not update project settings: Project was null!')
+          }
+
+          const settings = descriptor.settings.project
+          settings.profiles = this.selectedExportProfiles.map(e => e) // De-proxy
+          settings.filters = this.patterns.map(e => e) // De-proxy
+          settings.cslStyle = this.cslStyle
+          settings.title = this.projectTitle
+          settings.templates.tex = this.texTemplate
+          settings.templates.html = this.htmlTemplate
+
+          ipcRenderer.invoke('application', {
+            command: 'update-project-properties',
+            payload: { properties: settings, path: this.dirPath }
+          })
+            .then(() => {
+              this.updateLock = false
+            })
+            .catch(err => console.error(err))
+        })
+        .catch(err => console.error(err))
     },
     fetchProperties: function () {
       ipcRenderer.invoke('application', {
@@ -282,6 +322,8 @@ export default defineComponent({
             // state on this project. So let's close this window silently.
             ipcRenderer.send('window-controls', { command: 'win-close' })
           }
+          this.updateLock = false // Now the properties are fetched, so the
+          // handlers can overwrite them.
         })
         .catch(err => console.error(err))
     }

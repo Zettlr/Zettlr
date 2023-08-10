@@ -150,14 +150,6 @@ export default class MarkdownEditor extends EventEmitter {
    */
   private readonly _instance: EditorView
   /**
-   * The editor ID assigned to this editor. This is a concatenation of the leaf
-   * ID in which this editor resides plus the absolute path to the represented
-   * file.
-   *
-   * @var {string}
-   */
-  private readonly editorId: string
-  /**
    * The absolute path to the document represented by this MainEditor instance.
    *
    * @var {string}
@@ -222,7 +214,6 @@ export default class MarkdownEditor extends EventEmitter {
 
     this.authority = authorityAPI
     this.representedDocument = representedDocument
-    this.editorId = `${leafId}-${representedDocument}`
 
     // Since the editor state needs to be rebuilt from scratch sometimes, we
     // cache the autocomplete databases so that we don't have to re-fetch them
@@ -260,14 +251,11 @@ export default class MarkdownEditor extends EventEmitter {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const editorInstance = this
 
-    const mdLint = window.config.get('editor.lint.markdown') as boolean
-
     const options: CoreExtensionOptions = {
       initialConfig: JSON.parse(JSON.stringify(this.config)),
       remoteConfig: {
         filePath,
         startVersion,
-        editorId: this.editorId,
         pullUpdates: this.authority.pullUpdates,
         pushUpdates: this.authority.pushUpdates
       },
@@ -337,9 +325,6 @@ export default class MarkdownEditor extends EventEmitter {
             event.preventDefault()
           }
         }
-      },
-      lint: {
-        markdown: mdLint
       }
     }
 

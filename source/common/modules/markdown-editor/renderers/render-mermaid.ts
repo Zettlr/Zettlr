@@ -19,6 +19,7 @@ import { WidgetType, type EditorView } from '@codemirror/view'
 import mermaid from 'mermaid'
 import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
+import { trans } from '@common/i18n-renderer'
 
 // Always re-initialize mermaid as soon as the darkMode changes
 const ipcRenderer = window.ipc
@@ -49,16 +50,15 @@ class MermaidWidget extends WidgetType {
     const elem = document.createElement('span')
     elem.classList.add('mermaid-chart')
 
-    try {
-      const id = `graphDiv${Date.now()}`
-      mermaid.render(id, this.graph, (svg) => {
-        elem.innerHTML = svg
+    const id = `graphDiv${Date.now()}`
+    elem.innerText = trans('Rendering mermaid graph …')
+    mermaid.render(id, this.graph)
+      .then(result => { elem.innerHTML = result.svg })
+      .catch(err => {
+        elem.classList.add('error')
+        const msg = trans('Could not render Graph:')
+        elem.innerText = `${msg}\n\n${err.str as string}`
       })
-    } catch (err: any) {
-      elem.classList.add('error')
-      // TODO: Localise!
-      elem.innerText = `Could not render Graph:\n\n${err.str as string}`
-    }
 
     elem.addEventListener('click', clickAndSelect(view))
     return elem

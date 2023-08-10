@@ -23,7 +23,8 @@ export const mainOverride = EditorView.baseTheme({
     backgroundColor: 'transparent'
   },
   '.cm-scroller': {
-    flexGrow: '1' // Ensure the content pushes possible panels towards the edge
+    flexGrow: '1', // Ensure the content pushes possible panels towards the edge
+    outline: '0' // Remove the outline
   },
   '.cm-scroller .muted': {
     opacity: '0.2'
@@ -57,6 +58,35 @@ export const mainOverride = EditorView.baseTheme({
   // Tooltips
   '.cm-tooltip': {
     padding: '4px'
+  },
+  // File preview tooltips
+  '.editor-note-preview': {
+    maxWidth: '300px',
+    padding: '5px',
+    fontSize: '100%'
+  },
+  '.editor-note-preview h1': { fontSize: '140%' },
+  '.editor-note-preview h2': { fontSize: '130%' },
+  '.editor-note-preview h3': { fontSize: '120%' },
+  '.editor-note-preview h4': { fontSize: '110%' },
+  '.editor-note-preview h5': { fontSize: '100%' },
+  '.editor-note-preview h6': { fontSize: '100%' },
+  '.editor-note-preview .note-content': { margin: '10px 0' },
+  '.editor-note-preview .metadata': {
+    color: 'rgb(200, 200, 200)',
+    fontSize: '80%'
+  },
+  '.editor-note-preview .actions': {
+    margin: '5px 0'
+  },
+  // Footnotes
+  '.footnote': {
+    verticalAlign: 'super',
+    fontSize: '80%'
+  },
+  '.footnote-ref-label': {
+    verticalAlign: 'super',
+    fontSize: '80%'
   },
   // Define the readability classes. Red, orange, and yellow indicate bad scores
   // Purple and blue indicate average scores, and green indicates good scores

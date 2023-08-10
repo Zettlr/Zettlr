@@ -10,12 +10,28 @@
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
 import extractCitations from '@common/util/extract-citations'
-import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
+import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
-import { AnyDescriptor } from '@dts/common/fsal'
+import { AnyDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
+const path = window.path
+
+// This function overwrites the getBibliographyForDescriptor function to ensure
+// the library is always absolute. We have to do it this ridiculously since the
+// function is called in both main and renderer processes, and we still have the
+// issue that path-browserify is entirely unusable.
+function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
+  const library = getBibliography(descriptor)
+
+  if (library !== CITEPROC_MAIN_DB && !path.isAbsolute(library)) {
+    return path.resolve(descriptor.dir, library)
+  } else {
+    return library
+  }
+}
 
 export default defineComponent({
   name: 'ReferencesTab',

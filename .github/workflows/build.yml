@@ -67,7 +67,7 @@ defaults:
 
 # Global environment variables
 env:
-  NODE_VERSION: '16'
+  NODE_VERSION: '18'
 
 # Ensure only a single build workflow runs at any one time
 concurrency:
@@ -351,7 +351,9 @@ jobs:
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
       - name: Package & Release
-        run: yarn package:linux-x64 && yarn release:linux-x64
+        run: |
+          yarn package:linux-x64
+          yarn release:linux-x64
       - name: Cache installers
         uses: actions/upload-artifact@v3
         with:
@@ -386,7 +388,9 @@ jobs:
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
       - name: Package & Release
-        run: yarn package:linux-arm && yarn release:linux-arm
+        run: |
+          yarn package:linux-arm
+          yarn release:linux-arm
       - name: Cache installers
         uses: actions/upload-artifact@v3
         with:
@@ -474,12 +478,12 @@ jobs:
           sha256sum "Zettlr-${{env.version}}-x64.exe" > "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-x64.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-arm64.dmg" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-amd64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-arm64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-aarch64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-arm64.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-amd64" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-arm64.deb" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-aarch64.rpm" >> "SHA256SUMS.txt"
           cd ..
       - name: Verify checksums
         run: |
@@ -524,10 +528,10 @@ jobs:
             ./release/Zettlr-${{env.version}}-arm64.exe
             ./release/Zettlr-${{env.version}}-x64.dmg
             ./release/Zettlr-${{env.version}}-arm64.dmg
-            ./release/Zettlr-${{env.version}}-amd64.deb
-            ./release/Zettlr-${{env.version}}-x86_64.rpm
+            ./release/zettlr_${{env.version}}_amd64.deb
+            ./release/zettlr-${{env.version}}-1.x86_64.rpm
             ./release/Zettlr-${{env.version}}-x86_64.AppImage
-            ./release/Zettlr-${{env.version}}-arm64.deb
-            ./release/Zettlr-${{env.version}}-aarch64.rpm
+            ./release/zettlr_${{env.version}}_arm64.deb
+            ./release/zettlr-${{env.version}}-1.arm64.rpm
             ./release/Zettlr-${{env.version}}-arm64.AppImage
             ./release/SHA256SUMS.txt

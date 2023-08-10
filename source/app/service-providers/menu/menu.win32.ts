@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { app, type MenuItemConstructorOptions, shell } from 'electron'
+import { app, type MenuItemConstructorOptions, shell, dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import type RecentDocumentsProvider from '@providers/recent-docs'
@@ -617,6 +617,18 @@ export default function getMenu (
           }
         },
         {
+          id: 'menu.update',
+          label: trans('Check for updates'),
+          click: function (menuitem, focusedWindow) {
+            // Immediately open the window instead of first checking
+            commands.run('open-update-window', undefined)
+              .catch(e => logger.error(String(e.message), e))
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
           id: 'menu.donate',
           label: trans('Support Zettlr'),
           click: function (menuitem, focusedWindow) {
@@ -628,19 +640,9 @@ export default function getMenu (
         },
         {
           id: 'menu.learn_more',
-          label: trans('Go to website'),
+          label: trans('Visit website'),
           click: function (menuitem, focusedWindow) {
             const target = 'https://www.zettlr.com/'
-            shell.openExternal(target).catch(e => {
-              logger.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
-            })
-          }
-        },
-        {
-          id: 'menu.latex',
-          label: trans('Get LaTeX'),
-          click: function (menuitem, focusedWindow) {
-            const target = 'https://www.latex-project.org/get/#tex-distributions'
             shell.openExternal(target).catch(e => {
               logger.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
             })
@@ -658,6 +660,9 @@ export default function getMenu (
           }
         },
         {
+          type: 'separator'
+        },
+        {
           id: 'menu.open_tutorial',
           label: trans('Open Tutorial'),
           click: function (menuitem, focusedWindow) {
@@ -666,12 +671,31 @@ export default function getMenu (
           }
         },
         {
-          id: 'menu.update',
-          label: trans('Check for updates'),
+          id: 'menu.clear_fsal_cache',
+          label: trans('Clear FSAL cache …'),
           click: function (menuitem, focusedWindow) {
-            // Immediately open the window instead of first checking
-            commands.run('open-update-window', undefined)
-              .catch(e => logger.error(String(e.message), e))
+            // Clearing the FSAL cache requires a restart -> prompt the user
+            dialog.showMessageBox({
+              title: trans('Clear FSAL Cache'),
+              message: trans('Clearing the FSAL cache requires a restart.'),
+              detail: trans('After the restart, Zettlr will recreate the entire cache, which may take a few moments, depending on the amount of files you have loaded and the speed of your disk. The window(s) will show afterward.'),
+              type: 'question',
+              buttons: [
+                trans('Restart now'),
+                trans('Cancel')
+              ],
+              defaultId: 0,
+              cancelId: 1
+            })
+              .then(result => {
+                if (result.response === 1) {
+                  return
+                }
+
+                app.relaunch({ args: process.argv.slice(1).concat(['--clear-cache']) })
+                app.quit()
+              })
+              .catch(err => logger.error(err.message, err))
           }
         }
       ]

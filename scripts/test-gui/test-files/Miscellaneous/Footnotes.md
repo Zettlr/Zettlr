@@ -2,7 +2,7 @@
 
 This file is meant as a way to test the rendering of footnotes. Footnotes are not a part of original Markdown[^1], but have since been introduced in a variety of flavours, such as Pandoc Markdown[^2], PHP Markdown Extra[^3], or RStudio's RMarkdown[^4], which is basically just Pandoc Markdown, because that's the engine RStudio is using under the hood to compile output documents.
 
-Footnotes, in a way, are simply reference-style links[^5], which is also why they aren't yet part of the CommonMark specification[^6]. In fact, the _only_ difference between footnotes and reference style links are that footnotes are always prepended with a `^`. You can also use inline-footnotes[^such as this^], which save you some space. Nevertheless, this file's purpose is to mainly exhibit problems within footnotes per se[^7]
+Footnotes, in a way, are simply reference-style links[^5], which is also why they aren't yet part of the CommonMark specification[^6]. In fact, the _only_ difference between footnotes and reference style links are that footnotes are always prepended with a `^`. You can also use inline-footnotes^[such as this], which save you some space. Nevertheless, this file's purpose is to mainly exhibit problems within footnotes per se[^7]
 
 [^1]: See https://daringfireball.net/projects/markdown/
 [^2]: See https://pandoc.org/MANUAL.html#footnotes

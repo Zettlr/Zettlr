@@ -12,7 +12,7 @@ keywords:
 
 In dieser letzten Einführung wollen wir dir zeigen, wie du deine Literatur mit Zettlr verwalten kannst. Wenn du bereits Erfahrung mit dem Zotero- oder Citavi-Plugin für Word gemacht hast: Zettlr funktioniert sehr ähnlich, aber wesentlich effizienter.
 
-Um mit Zettlr zu zitieren, sind einige wenige Vorarbeiten nötig, wie das aufsetzen einer Literaturdatenbank. Das haben wir aber [im Zettlr-Handbuch ausführlich beschrieben](https://docs.zettlr.com/de/academic/citations/). Für dieses Tutorial haben wir dir bereits eine kleine Literaturdatenbank erstellt, sodass du das jetzt noch nicht machen musst. Lass uns diese nun erst laden!
+Um mit Zettlr zu zitieren, sind einige wenige Vorarbeiten nötig, wie das Aufsetzen einer Literaturdatenbank. Das haben wir aber [im Zettlr-Handbuch ausführlich beschrieben](https://docs.zettlr.com/de/academic/citations/). Für dieses Tutorial haben wir dir bereits eine kleine Literaturdatenbank erstellt, sodass du das jetzt noch nicht machen musst. Lass uns diese nun erst laden!
 
 Öffne die Einstellungen und wechsle zum „Zitieren“-Reiter. Dort kannst du eine „CSL-Datenbank“ auswählen. Die Datenbank ist im Tutorial-Ordner. Wenn du sie gefunden hast, speichere die Einstellungen. Zettlr wird die Datenbank nun automatisch laden.
 
@@ -36,7 +36,7 @@ Sobald du längere Artikel, oder gar eine Abschlussarbeit mit Zettlr schreibst, 
 
 Das war es mit unserer kurzen Einführung zu Zettlr – Jetzt bist du bereit, zu starten!
 
-Eine letzte Sache, auf die wir hier noch aufmerksam machen wollen, ist die großartige Gemeinschaft um Zettlr herum. Wir könnten ein so großes, mächtiges Programm nicht ohne die Hilfe zahlreicher Unterstützer\*innen weltweit realisieren. Die Community hilft sich gegenseitig im Forum und auf Reddit, hilft mit, Übersetzungen für Zettlr (wie diese Einführung) zu realisieren und testet neue Versionen auf Fehler.
+Eine letzte Sache, auf die wir hier noch aufmerksam machen wollen, ist die großartige Gemeinschaft um Zettlr herum. Wir könnten ein so großes, mächtiges Programm nicht ohne die Hilfe zahlreicher Unterstützer\*innen weltweit realisieren. Die Community hilft sich gegenseitig auf Discord und auf Reddit, hilft mit, Übersetzungen für Zettlr (wie diese Einführung) zu realisieren und testet neue Versionen auf Fehler.
 
 Wenn auch du Zettlr unterstützen möchtest, werde Teil der Community! Auch wenn du gerade erst neu in der Community bist, ist dein Input sehr wichtig. Eine Sache, die du in wenigen Stunden schon verlässlich einschätzen kannst, ist beispielsweise, wie gut diese Einführung ist! Wenn du denkst, dass einige Sachen in der Einführung verbessert werden können, öffne einfach ein neues Thema!
 

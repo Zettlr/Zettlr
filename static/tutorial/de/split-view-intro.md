@@ -6,5 +6,5 @@ Zettlr unterstützt deine Produktivität mit der Möglichkeit, mehrere Editoren 
 * Du kannst Dokumenten-Tabs außerhalb ihrer Tabbar bewegen, um sie zu anderen Editoren zu bewegen
 * Wenn du Tabs auf andere Tabbars oder einen anderen Editor ziehst, bewegst du das Dokument dorthin
 * Wenn du Tabs an die Ränder eines anderen Editors ziehst (oben, rechts, unten, links), teilst du den Editor in diese Richtung auf
-* Das Schließen oder wegbewegen der letzten offenen Datei aus einem offenen Editor schließt ihn komplett
+* Das Schließen oder Wegbewegen der letzten offenen Datei aus einem offenen Editor schließt ihn komplett
 * Zettlr unterstützt auch mehrere Fenster. Mit dem Shortcut `Cmd/Ctrl+Shift+N` kannst du ein neues Fenster erstellen

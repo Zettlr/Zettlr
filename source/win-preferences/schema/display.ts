@@ -13,16 +13,13 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { type FormSchema } from '@common/vue/form/Form.vue'
 
-export default function (): any {
+export default function (): FormSchema {
   const isWinOrMac = [ 'darwin', 'win32' ].includes(process.platform)
   return {
     fieldsets: [
       [
-        {
-          type: 'fieldset-label', // TODO: Create this type
-          text: trans('These options determine which elements are rendered in documents.')
-        },
         {
           type: 'checkbox',
           label: trans('Render Citations'),
@@ -125,13 +122,8 @@ export default function (): any {
       ],
       [
         {
-          type: 'fieldset-label', // TODO: Create this type
-          text: trans('With these controls you can constrain the image previews.')
-        },
-        {
           type: 'slider',
           label: trans('Maximum width of images (percent)'),
-          name: 'slider-image-width',
           min: 0,
           max: 100,
           model: 'display.imageWidth'
@@ -139,12 +131,11 @@ export default function (): any {
         {
           type: 'slider',
           label: trans('Maximum height of images (percent)'),
-          name: 'slider-image-height',
           min: 0,
           max: 100,
           model: 'display.imageHeight'
         }
       ]
     ]
-  }
+  } satisfies FormSchema
 }

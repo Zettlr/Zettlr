@@ -208,6 +208,10 @@ export default {
             const elem = (treeItem) ? this.$refs['display-text'] : this.$el
 
             this.$showPopover(PopoverDirProps, elem, data, (data) => {
+              if (data.closePopover === true) {
+                this.$closePopover()
+              }
+
               // Apply new sorting if applicable
               if (data.sorting !== this.obj.settings.sorting) {
                 ipcRenderer.invoke('application', {
@@ -220,13 +224,13 @@ export default {
               }
 
               // Set the project flag if applicable
-              const projectChanged = data.isProject !== this.isProject
-              if (projectChanged && data.isProject === true) {
+              const hasProject = this.obj.settings.project != null
+              if (!hasProject && data.isProject === true) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-new-project',
                   payload: { path: this.obj.path }
                 }).catch(e => console.error(e))
-              } else if (projectChanged && data.isProject === false) {
+              } else if (hasProject && data.isProject === false) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-remove-project',
                   payload: { path: this.obj.path }
