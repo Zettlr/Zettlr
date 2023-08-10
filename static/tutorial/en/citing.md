@@ -12,7 +12,7 @@ keywords:
 
 In this final guide, we will dive into how you can automatically cite using Zettlr! If you have been using the Zotero plugin for Word before (or even the Citavi plugin), rest assured: It works almost the same, but you have much more freedom to adapt the citations to your needs.
 
-To begin citing with Zettlr, you’ll need to set up a references database, [which we describe in our documentation](https://docs.zettlr.com/en/academic/citations/). For the purposes of this tutorial, we have already prepared a small database which’ll cover everything you need to know. Let’s load it! In the tutorial directory, there is a small file called “references.json”. It contains some references that Zettlr can cite. To load it, first head over into the preferences and into the tab “Citations”. Once there, navigate to the file using the file browser of the references database-field.
+To begin citing with Zettlr, you’ll need to set up a references database, [which we describe in our documentation](https://docs.zettlr.com/en/core/citations/). For the purposes of this tutorial, we have already prepared a small database which’ll cover everything you need to know. Let’s load it! In the tutorial directory, there is a small file called “references.json”. It contains some references that Zettlr can cite. To load it, first head over into the preferences and into the tab “Citations”. Once there, navigate to the file using the file browser of the references database-field.
 
 ## Your First Citation 🎓
 
@@ -36,7 +36,7 @@ At the core of Zettlr, there is a mighty engine that is capable of untangling wh
 
 As soon as you write longer papers and even books, you may lose oversight over what you’ve already quoted, and which things still need to find their way into your paper. Zettlr is capable of displaying the full list of your references in the sidebar. Open it now by clicking the sidebar icon again, and have a look at the “References”-section. You will notice that the book is visible there — and as you continue to include references, this list will grow!
 
-> If you export a file using Zettlr, it will automatically add a list of references below the file's contents. You can prevent it from doing so using a [YAML frontmatter](https://docs.zettlr.com/en/core/yaml-frontmatter/). Just add the property `suppress-bibliography: true`. You can also [customize this list of references](https://docs.zettlr.com/en/academic/citations/#customizing-the-list-of-references).
+> If you export a file using Zettlr, it will automatically add a list of references below the file's contents. You can prevent it from doing so using a [YAML frontmatter](https://docs.zettlr.com/en/advanced/yaml-frontmatter/). Just add the property `suppress-bibliography: true`. You can also [customize this list of references](https://docs.zettlr.com/en/core/citations/#customizing-the-list-of-references).
 
 ## Final Thoughts 🔥
 
