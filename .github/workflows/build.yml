@@ -480,7 +480,7 @@ jobs:
           sha256sum "Zettlr-${{env.version}}-arm64.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-arm64.AppImage" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-amd64" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-amd64.deb" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-arm64.deb" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-aarch64.rpm" >> "SHA256SUMS.txt"
@@ -528,10 +528,10 @@ jobs:
             ./release/Zettlr-${{env.version}}-arm64.exe
             ./release/Zettlr-${{env.version}}-x64.dmg
             ./release/Zettlr-${{env.version}}-arm64.dmg
-            ./release/zettlr_${{env.version}}_amd64.deb
-            ./release/zettlr-${{env.version}}-1.x86_64.rpm
+            ./release/Zettlr-${{env.version}}-amd64.deb
+            ./release/Zettlr-${{env.version}}-arm64.deb
+            ./release/Zettlr-${{env.version}}-x86_64.rpm
+            ./release/Zettlr-${{env.version}}-aarch64.rpm
             ./release/Zettlr-${{env.version}}-x86_64.AppImage
-            ./release/zettlr_${{env.version}}_arm64.deb
-            ./release/zettlr-${{env.version}}-1.arm64.rpm
             ./release/Zettlr-${{env.version}}-arm64.AppImage
             ./release/SHA256SUMS.txt
