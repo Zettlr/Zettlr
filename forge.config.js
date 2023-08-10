@@ -98,6 +98,49 @@ module.exports = {
         // If someone is building this on an unsupported platform, drop a warning.
         console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)
       }
+    },
+    postMake: async (forgeConfig, makeResults) => {
+      const basePath = __dirname
+      const releaseDir = path.join(basePath, 'release')
+
+      // Ensure the output dir exists
+      try {
+        await fs.stat(releaseDir)
+      } catch (err) {
+        await fs.mkdir(releaseDir, { recursive: true })
+      }
+
+      // makeResults is an array for each maker that has the keys `artifacts`,
+      // `packageJSON`, `platform`, and `arch`.
+      for (const result of makeResults) {
+        // Get the necessary information from the object
+        const { version, productName } = result.packageJSON
+
+        // NOTE: Other makers may produce more than one artifact, but I'll have
+        // to hardcode what to do in those cases.
+        if (result.artifacts.length > 1) {
+          throw new Error(`More than one artifact generated -- please resolve ambiguity for ${result.platform} ${result.arch} in build script.`)
+        }
+
+        const sourceFile = result.artifacts[0]
+        const ext = path.extname(sourceFile)
+
+        // NOTE: Arch needs to vary depending on the target platform
+        let arch = result.arch
+        if (arch === 'x64' && ext === '.deb') {
+          arch = 'amd64' // Debian x64
+        } else if (arch === 'x64' && [ '.rpm', '.AppImage' ].includes(ext)) {
+          arch = 'x86_64' // Fedora x64 and AppImage x64
+        } else if (arch === 'arm64' && ext === '.rpm') {
+          arch = 'aarch64' // Fedora ARM
+        } // Else: Keep it at either x64 or arm64
+
+        // Now we can finally build the correct file name
+        const baseName = `${productName}-${version}-${arch}${ext}`
+
+        // Move the file
+        await fs.rename(sourceFile, path.join(releaseDir, baseName))
+      }
     }
   },
   rebuildConfig: {
