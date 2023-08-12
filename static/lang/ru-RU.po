@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-08-07 02:27+0000\n"
-"PO-Revision-Date: 2023-06-26 10:45+0500\n"
+"PO-Revision-Date: 2023-08-10 16:49+0500\n"
 "Last-Translator: Dmitriy K <dmitry@atsip.ru>\n"
 "Language-Team: \n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: source/win-main/tabs-context.ts:38
 #: source/app/service-providers/menu/menu.darwin.ts:601
@@ -85,24 +85,23 @@ msgstr "Создать дубликат файла"
 
 #: source/win-main/file-manager/util/file-item-context.ts:67
 #: source/win-main/file-manager/util/dir-item-context.ts:68
-#, fuzzy
 msgid "Copy path"
-msgstr "Скопировать полный путь"
+msgstr "Путь копирования"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Раскрыть в Finder"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "Раскрыть в проводнике"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "Раскрыть в файловом браузере"
 
 #: source/win-main/file-manager/util/file-item-context.ts:101
 msgid "Close file"
@@ -188,20 +187,21 @@ msgid "Ask for directory"
 msgstr "Спросите каталог"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Display name"
-msgstr "Кнопка отображения изображения"
+msgstr "Отображаемое имя"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Command"
-msgstr "Комментарий"
+msgstr "Комманда"
 
 #: source/win-preferences/schema/export.ts:65
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
 msgstr ""
+"Введите пользовательские команды для запуска экспортера. Каждая команда "
+"получает в качестве первого аргумента файл или каталог проекта, который "
+"необходимо экспортировать."
 
 #: source/win-preferences/schema/zettelkasten.ts:24
 msgid "ID regular expression"
@@ -266,21 +266,19 @@ msgstr "Вторичная Magic Quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:80
 msgid "Match whole words"
-msgstr ""
+msgstr "Сопоставить целые слова"
 
 #: source/win-preferences/schema/autocorrect.ts:81
 msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
+msgstr "Если выбрано - автокоррекция никогда не будет заменять части слов"
 
 #: source/win-preferences/schema/autocorrect.ts:90
-#, fuzzy
 msgid "String"
-msgstr "Строгость"
+msgstr "Строка"
 
 #: source/win-preferences/schema/autocorrect.ts:90
-#, fuzzy
 msgid "Replacement"
-msgstr "Заменить файл"
+msgstr "Замена"
 
 #: source/win-preferences/schema/autocorrect.ts:91
 msgid ""
@@ -312,9 +310,9 @@ msgid "Use native window appearance"
 msgstr "Использовать вид окна по умолчанию"
 
 #: source/win-preferences/schema/advanced.ts:53
-#, fuzzy
 msgid "Enable window vibrancy"
-msgstr "Использовать вид окна по умолчанию"
+msgstr "Обеспечение вибрации окон"
+
 
 #: source/win-preferences/schema/advanced.ts:59
 msgid "Delete items irreversibly, if moving them to trash fails"
@@ -667,6 +665,1960 @@ msgstr "Показать кнопку \"Вставить комментарий\
 #: source/win-preferences/schema/toolbar.ts:56
 msgid "Display link button"
 msgstr "Показать кнопку ссылки"
+
+#: source/win-preferences/schema/toolbar.ts:61
+msgid "Display image button"
+msgstr "Кнопка отображения изображения"
+
+#: source/win-preferences/schema/toolbar.ts:66
+msgid "Display task list button"
+msgstr "Кнопка отображения списка задач"
+
+#: source/win-preferences/schema/toolbar.ts:71
+msgid "Display \"Insert Table\" button"
+msgstr "Показать кнопку \"Вставить таблицу\""
+
+#: source/win-preferences/schema/toolbar.ts:76
+msgid "Display \"Insert Footnote\" button"
+msgstr "Показать кнопку \"Вставить сноску\""
+
+#: source/win-preferences/schema/toolbar.ts:83
+msgid "Display document info"
+msgstr "Показать информацию о документе"
+
+#: source/win-preferences/schema/toolbar.ts:88
+msgid "Display Pomodoro-timer"
+msgstr "Показать Pomodoro-таймер"
+
+#: source/win-preferences/schema/spellchecking.ts:25
+msgid "Use LanguageTool"
+msgstr "Используйте LanguageTool"
+
+#: source/win-preferences/schema/spellchecking.ts:30
+msgid "Strictness"
+msgstr "Строгость"
+
+#: source/win-preferences/schema/spellchecking.ts:32
+msgid "Standard"
+msgstr "Стандартный"
+
+#: source/win-preferences/schema/spellchecking.ts:33
+msgid "Picky"
+msgstr "Придирчивый"
+
+#: source/win-preferences/schema/spellchecking.ts:40
+msgid "Mother tongue"
+msgstr "Родной язык"
+
+#: source/win-preferences/schema/spellchecking.ts:42
+msgid "Not set"
+msgstr "Не установлено"
+
+#: source/win-preferences/schema/spellchecking.ts:49
+msgid "LanguageTool Provider"
+msgstr "Поставщик LanguageTool"
+
+#: source/win-preferences/schema/spellchecking.ts:52
+#: source/win-preferences/schema/spellchecking.ts:59
+msgid "Custom server"
+msgstr "Пользовательский сервер"
+
+#: source/win-preferences/schema/spellchecking.ts:66
+msgid "LanguageTool Username"
+msgstr "Имя пользователя LanguageTool"
+
+#: source/win-preferences/schema/spellchecking.ts:72
+msgid "LanguageTool API key"
+msgstr "Ключ API LanguageTool"
+
+#: source/win-preferences/schema/spellchecking.ts:82
+msgid "Active"
+msgstr "Действие"
+
+#: source/win-preferences/schema/spellchecking.ts:82
+msgid "Language Code"
+msgstr "Код языка"
+
+#: source/win-preferences/schema/spellchecking.ts:82
+#: source/tmp/PopoverTags.vue.ts:36
+msgid "Name"
+msgstr "Имя"
+
+#: source/win-preferences/schema/spellchecking.ts:83
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr "Выберите языки для проверки орфорграфии."
+
+#: source/win-preferences/schema/spellchecking.ts:88
+msgid "Search for dictionaries…"
+msgstr "Поиск по словарям…"
+
+#: source/win-preferences/schema/spellchecking.ts:94
+msgid "User dictionary. Remove words by clicking them."
+msgstr "Словарь пользователя (слова можно удалять, кликая по ним)."
+
+#: source/win-preferences/schema/spellchecking.ts:96
+msgid "Dictionary entry"
+msgstr "Элемент словаря"
+
+#: source/win-preferences/schema/citations.ts:24
+msgid "How would you like autocomplete to insert your citations?"
+msgstr "Как автозавершение должно вставлять цитаты?"
+
+#: source/win-preferences/schema/citations.ts:36
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "База цитат (CSL JSON или BibTex)"
+
+#: source/win-preferences/schema/citations.ts:47
+msgid "CSL-Style (optional)"
+msgstr "Стиль CSL (необязательно)"
+
+#: source/tmp/file-tree.vue.ts:26 source/tmp/file-item.vue.ts:119
+#: source/tmp/PopoverDirProps.vue.ts:158
+#: source/app/service-providers/commands/root-open.ts:60
+msgid "Files"
+msgstr "Файлы"
+
+#: source/tmp/file-tree.vue.ts:29
+msgid "Workspaces"
+msgstr "Рабочее окружение"
+
+#: source/tmp/file-tree.vue.ts:32
+msgid "No open files or folders"
+msgstr "Нет открытых файлов или каталогов"
+
+#: source/tmp/file-tree.vue.ts:35 source/tmp/file-list.vue.ts:66
+msgid "No results"
+msgstr "Нет результатов"
+
+#: source/tmp/file-list.vue.ts:69
+msgid "No directory selected"
+msgstr "Не выбраны директории"
+
+#: source/tmp/file-list.vue.ts:72
+msgid "Empty directory"
+msgstr "Пустая директория"
+
+#: source/tmp/Theme.vue.ts:44
+msgid "selected"
+msgstr "выбрано"
+
+#: source/tmp/Theme.vue.ts:47
+msgid "click to select"
+msgstr "щелчок для выбора"
+
+#: source/tmp/ChartView.vue.ts:60
+msgid "Charts"
+msgstr "Диаграммы"
+
+#: source/tmp/ListControl.vue.ts:81
+msgid "Add"
+msgstr "Добавить"
+
+#: source/tmp/ListControl.vue.ts:82
+msgid "Actions"
+msgstr "Действия"
+
+#: source/tmp/ListControl.vue.ts:83
+msgid "Delete"
+msgstr "Удалить"
+
+#: source/tmp/MainSidebar.vue.ts:72 source/tmp/OtherFilesTab.vue.ts:13
+msgid "Other files"
+msgstr "Другие файлы"
+
+#: source/tmp/MainSidebar.vue.ts:75 source/tmp/ReferencesTab.vue.ts:36
+msgid "References"
+msgstr "Ссылка"
+
+#: source/tmp/MainSidebar.vue.ts:78 source/tmp/ToCTab.vue.ts:53
+msgid "Table of Contents"
+msgstr "Оглавление"
+
+#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:27
+msgid "Related files"
+msgstr "Связанные файлы"
+
+#: source/tmp/Defaults.vue.ts:70
+msgid ""
+"This profile is protected. This means that it will be restored when you "
+"remove or rename it."
+msgstr ""
+"Этот профиль защищен. Это означает, что он будет восстановлен при удалении "
+"или переименовании."
+
+#: source/tmp/Defaults.vue.ts:73
+msgid ""
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
+msgstr ""
+"Этот профиль недействителен. Он может содержать ошибки, или в нем может "
+"отсутствовать свойство записи или чтения."
+
+#: source/tmp/Defaults.vue.ts:109
+msgid "Edit the default settings for imports or exports here."
+msgstr "Здесь можно изменить настройки по умолчанию для импорта или экспорта."
+
+#: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
+#: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
+#: source/app/service-providers/menu/menu.darwin.ts:197
+#: source/app/service-providers/menu/menu.win32.ts:162
+#: source/app/service-providers/commands/export.ts:108
+msgid "Save"
+msgstr "Сохранить изменения"
+
+#. If the user cancels, do not omit (the default) but actually cancel
+#: source/tmp/Defaults.vue.ts:130 source/tmp/SnippetsTab.vue.ts:65
+#: source/tmp/CustomCSS.vue.ts:65
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
+msgid "Unsaved changes"
+msgstr "Несохраненные изменения"
+
+#: source/tmp/Defaults.vue.ts:192 source/tmp/SnippetsTab.vue.ts:124
+#: source/tmp/CustomCSS.vue.ts:88
+msgid "Saving …"
+msgstr "Сохранение …"
+
+#: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
+msgid "Saved!"
+msgstr "Сохранено!"
+
+#: source/tmp/RelatedFilesTab.vue.ts:30
+msgid "No related files"
+msgstr "Нет связанных файлов"
+
+#: source/tmp/RelatedFilesTab.vue.ts:33
+msgid "This relation is based on a bidirectional link."
+msgstr "Это отношение основано на двунаправленной связи."
+
+#: source/tmp/RelatedFilesTab.vue.ts:36
+msgid "This relation is based on an outbound link."
+msgstr "Это отношение основано на исходящей ссылке."
+
+#: source/tmp/RelatedFilesTab.vue.ts:39
+msgid "This relation is based on a backlink."
+msgstr "Это отношение основано на обратной ссылке."
+
+#: source/tmp/RelatedFilesTab.vue.ts:228
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr "Это отношение основано на общих тегах %s: %s"
+
+#: source/tmp/SnippetsTab.vue.ts:50
+msgid "Rename snippet"
+msgstr "Переименовать фрагмент"
+
+#: source/tmp/SnippetsTab.vue.ts:53
+msgid "Snippets let you define reusable pieces of text with variables."
+msgstr ""
+"Фрагменты позволяют вам определять многократно используемые фрагменты текста "
+"с переменными."
+
+#: source/tmp/PopoverFileProps.vue.ts:62 source/tmp/file-item.vue.ts:195
+msgid "Words"
+msgstr "Слова"
+
+#: source/tmp/PopoverFileProps.vue.ts:65 source/tmp/PopoverDirProps.vue.ts:155
+msgid "Created"
+msgstr "Создано"
+
+#: source/tmp/PopoverFileProps.vue.ts:68 source/tmp/PopoverDirProps.vue.ts:152
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
+msgid "Modified"
+msgstr "Изменен"
+
+#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/ShortcutChooser.vue.ts:61
+#: source/tmp/Number.vue.ts:60 source/tmp/Color.vue.ts:51
+#: source/tmp/File.vue.ts:60
+msgid "Reset"
+msgstr "Сброс"
+
+#: source/tmp/PopoverFileProps.vue.ts:74
+msgid "Set writing target…"
+msgstr "Установить цель записи…"
+
+#: source/tmp/PopoverFileProps.vue.ts:77 source/tmp/file-item.vue.ts:193
+msgid "Characters"
+msgstr "Символы"
+
+#: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
+#: source/tmp/file-item.vue.ts:207 source/tmp/PopoverDirProps.vue.ts:146
+#: source/tmp/PopoverDocInfo.vue.ts:63
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
+#, javascript-format
+msgid "%s words"
+msgstr "%s слов"
+
+#: source/tmp/OtherFilesTab.vue.ts:16
+msgid "Open directory"
+msgstr "Открыть директорию"
+
+#: source/tmp/OtherFilesTab.vue.ts:19
+msgid "No other files"
+msgstr "Нет прочих файлов"
+
+#: source/tmp/PopoverPomodoro.vue.ts:72
+msgid "Start"
+msgstr "Пуск"
+
+#: source/tmp/PopoverPomodoro.vue.ts:75
+msgid "Stop"
+msgstr "Остановить"
+
+#: source/tmp/PopoverPomodoro.vue.ts:78
+msgid "Work"
+msgstr "Работа"
+
+#: source/tmp/PopoverPomodoro.vue.ts:81
+msgid "Short break"
+msgstr "Короткий перерыв"
+
+#: source/tmp/PopoverPomodoro.vue.ts:84
+msgid "Break"
+msgstr "Перерыв"
+
+#: source/tmp/PopoverPomodoro.vue.ts:87
+msgid "Sound Effect"
+msgstr "Звуковой эффект"
+
+#: source/tmp/PopoverPomodoro.vue.ts:90
+msgid "Volume"
+msgstr "Громкость"
+
+#: source/tmp/file-item.vue.ts:113 source/tmp/PopoverDirProps.vue.ts:149
+msgid "Directories"
+msgstr "Директории"
+
+#: source/tmp/file-item.vue.ts:132 source/tmp/file-item.vue.ts:205
+#: source/tmp/PopoverDocInfo.vue.ts:61
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
+#, javascript-format
+msgid "%s characters"
+msgstr "%s символов"
+
+#: source/tmp/PopoverExport.vue.ts:6
+msgid "Exporting…"
+msgstr "Экспортирование…"
+
+#: source/tmp/PopoverExport.vue.ts:6
+#: source/app/service-providers/commands/dir-project-export.ts:145
+msgid "Export"
+msgstr "Экспорт"
+
+#: source/tmp/PopoverExport.vue.ts:27
+msgid "command"
+msgstr "комманда"
+
+#: source/tmp/PopoverDirProps.vue.ts:164
+msgid "Project Settings…"
+msgstr "Настройки проекта…"
+
+#: source/tmp/GlobalSearch.vue.ts:117
+msgid "Full-Text Search"
+msgstr "Полнотекстовый поиск"
+
+#: source/tmp/GlobalSearch.vue.ts:120
+#, javascript-format
+msgid "%s matches"
+msgstr "%s совпадений"
+
+#: source/tmp/GlobalSearch.vue.ts:123
+msgid "Enter your search terms below"
+msgstr "Введите слова для поиска"
+
+#: source/tmp/GlobalSearch.vue.ts:126
+msgid "Find …"
+msgstr "Поиск …"
+
+#: source/tmp/GlobalSearch.vue.ts:129
+msgid "Filter …"
+msgstr "Фильтр …"
+
+#: source/tmp/GlobalSearch.vue.ts:132
+msgid "Filter search results"
+msgstr "Фильтрация результатов"
+
+#: source/tmp/GlobalSearch.vue.ts:135
+msgid "Restrict search to directory"
+msgstr "Ограничить поиск каталогом"
+
+#: source/tmp/GlobalSearch.vue.ts:138
+msgid "Restrict to directory …"
+msgstr "Ограничение на каталог …"
+
+#: source/tmp/GlobalSearch.vue.ts:141
+msgid "Search"
+msgstr "Поиск"
+
+#: source/tmp/GlobalSearch.vue.ts:144
+msgid "Clear search"
+msgstr "Очистить поиск"
+
+#: source/tmp/GlobalSearch.vue.ts:147
+msgid "Toggle results"
+msgstr "Переключить результаты"
+
+#. Else standard val for new dirs.
+#: source/tmp/tree-item.vue.ts:262
+#: source/app/service-providers/commands/dir-new.ts:42
+msgid "Untitled"
+msgstr "Без названия"
+
+#: source/tmp/App.vue.ts:34
+msgid "Updater"
+msgstr "Программа обновления"
+
+#. True as soon as the update starts
+#: source/tmp/App.vue.ts:36
+msgid "Click to start update"
+msgstr "Щелкните для начала обновления"
+
+#: source/tmp/App.vue.ts:76
+msgid "New update available"
+msgstr "Доступно обновление"
+
+#: source/tmp/App.vue.ts:79
+msgid "Your version"
+msgstr "Ваша версия"
+
+#: source/tmp/App.vue.ts:82
+msgid ""
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr ""
+"Новая версия приложении доступна для скачивания. Ниже представлен список "
+"изменений."
+
+#: source/tmp/App.vue.ts:85
+msgid "Downloading your update"
+msgstr "Загрузка обновления"
+
+#: source/tmp/App.vue.ts:88
+msgid "No update available. You have the most recent version."
+msgstr "Обновлений нет. Используется новейшая версия."
+
+#: source/tmp/App.vue.ts:94
+#: source/app/service-providers/menu/menu.darwin.ts:648
+#: source/app/service-providers/menu/menu.win32.ts:621
+msgid "Check for updates"
+msgstr "Проверить на обновления"
+
+#: source/tmp/App.vue.ts:133
+msgid "Starting update …"
+msgstr "Запуск обновления …"
+
+#: source/tmp/CustomCSS.vue.ts:31
+msgid "Custom CSS"
+msgstr "Собственная CSS"
+
+#: source/tmp/CustomCSS.vue.ts:32
+msgid ""
+"Here you can override the styles of Zettlr to customise it even further. "
+"<strong>Attention: This file overrides all CSS directives! Never alter the "
+"geometry of elements, otherwise the app may expose unwanted behaviour!</"
+"strong>"
+msgstr ""
+"Здесь Вы можете переопределить стили Zettlr и настроить их по своему "
+"желанию. <strong>Внимание! Этот файл переопределяет все директивы CSS. "
+"Никогда не изменяйте геометрию элементов, в противном случае приложение "
+"может вести себя не предсказуемо.</strong>"
+
+#. 1: Omit all changes
+#: source/tmp/CustomCSS.vue.ts:49
+#: source/app/service-providers/menu/menu.darwin.ts:712
+#: source/app/service-providers/menu/menu.win32.ts:685
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
+#: source/app/service-providers/commands/rename-tag.ts:48
+msgid "Cancel"
+msgstr "Отменить"
+
+#: source/tmp/CustomCSS.vue.ts:97
+msgid "Saving failed"
+msgstr "Сохранение не удалось"
+
+#: source/tmp/PopoverStats.vue.ts:111
+msgid "words last month"
+msgstr "слов за последний месяц"
+
+#: source/tmp/PopoverStats.vue.ts:114
+msgid "daily average"
+msgstr "среднее за день"
+
+#: source/tmp/PopoverStats.vue.ts:117
+msgid "words today"
+msgstr "слов сегодня"
+
+#: source/tmp/PopoverStats.vue.ts:120
+msgid "🔥 You're on fire!"
+msgstr "🔥 Потрясающе!"
+
+#: source/tmp/PopoverStats.vue.ts:123
+msgid "💪 You're close to hitting your daily average!"
+msgstr "💪 Дневная цель почти достигнута!"
+
+#: source/tmp/PopoverStats.vue.ts:126
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr "✍🏼 Пишите больше, дневная цель ещё не достигнута."
+
+#: source/tmp/PopoverStats.vue.ts:129
+msgid "More statistics …"
+msgstr "Больше статистики …"
+
+#: source/tmp/ReferencesTab.vue.ts:48
+msgid "There are no citations in this document."
+msgstr "Документ не содержит цитат."
+
+#: source/tmp/CalendarView.vue.ts:59
+msgid "Calendar"
+msgstr "Календарь"
+
+#: source/tmp/CalendarView.vue.ts:77
+msgid "January"
+msgstr "Январь"
+
+#: source/tmp/CalendarView.vue.ts:78
+msgid "February"
+msgstr "Февраль"
+
+#: source/tmp/CalendarView.vue.ts:79
+msgid "March"
+msgstr "Март"
+
+#: source/tmp/CalendarView.vue.ts:80
+msgid "April"
+msgstr "Апрель"
+
+#: source/tmp/CalendarView.vue.ts:81
+msgid "May"
+msgstr "Май"
+
+#: source/tmp/CalendarView.vue.ts:82
+msgid "June"
+msgstr "Июнь"
+
+#: source/tmp/CalendarView.vue.ts:83
+msgid "July"
+msgstr "Июль"
+
+#: source/tmp/CalendarView.vue.ts:84
+msgid "August"
+msgstr "Август"
+
+#: source/tmp/CalendarView.vue.ts:85
+msgid "September"
+msgstr "Сентябрь"
+
+#: source/tmp/CalendarView.vue.ts:86
+msgid "October"
+msgstr "Октябрь"
+
+#: source/tmp/CalendarView.vue.ts:87
+msgid "November"
+msgstr "Ноябрь"
+
+#: source/tmp/CalendarView.vue.ts:88
+msgid "December"
+msgstr "Декабрь"
+
+#: source/tmp/CalendarView.vue.ts:104
+msgid "Below the monthly average"
+msgstr "Меньше среднего за месяц"
+
+#: source/tmp/CalendarView.vue.ts:107
+msgid "Over the monthly average"
+msgstr "Больше среднего за месяц"
+
+#: source/tmp/CalendarView.vue.ts:110
+msgid "More than twice the monthly average"
+msgstr "В два раза больше среднего за месяц"
+
+#: source/tmp/General-Tab.vue.ts:23
+msgid ""
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
+msgstr ""
+"Zettlr -- это созданный Хендриком Эрцем проект с лицензией GNU GPL v3. "
+"Проект соответствует концепции Open Source и построен на основе библиотеки "
+"Electron. Участники проекта выражают благодарность разработчикам библиотек "
+"Electron, Node.js и редактора CodeMirror за их работу, без которой проект "
+"Zettlr был бы неосуществим. Ниже перечислены проекты, которые используются в "
+"Zettlr."
+
+#: source/tmp/General-Tab.vue.ts:24
+msgid ""
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
+msgstr ""
+"Zettlr может использовать citeproc для отображения цитат непосредственно в "
+"редакторе. Для этого используются файлы в формате CitationStyleLanguage "
+"(CSL). Файлы предоставляются в неизменном виде в метаданых. Подробности:"
+
+#: source/tmp/General-Tab.vue.ts:25
+msgid ""
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
+msgstr ""
+"Все права на логотипы и имя брендов пренадлежат их собственникам. Кроме "
+"использованного кода, Zettlr никак не связан с этими проектами. Торговая "
+"марка Node.js принадлежит Joyent, Inc."
+
+#: source/tmp/General-Tab.vue.ts:26
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
+"Zettlr предлагает интеграцию с LanguageTool.org, услугой, предоставляемой "
+"LanguageTooler GmbH. Использование этой услуги требует подключения к "
+"Интернету и регулируется политикой конфиденциальности LanguageTooler GmbH "
+"или соответствующего сервера, который вы используете."
+
+#: source/tmp/PopoverDocInfo.vue.ts:35
+msgid "No open document"
+msgstr "Нет открытых документов"
+
+#: source/tmp/PopoverDocInfo.vue.ts:38
+msgid "words"
+msgstr "слов(а)"
+
+#: source/tmp/PopoverDocInfo.vue.ts:41
+msgid "characters"
+msgstr "символов"
+
+#: source/tmp/PopoverTags.vue.ts:37
+msgid "Count"
+msgstr "Количество"
+
+#: source/tmp/PopoverTags.vue.ts:55
+msgid "Filter tags…"
+msgstr "Фильтр по тегам…"
+
+#: source/tmp/PopoverTags.vue.ts:58
+msgid "Tag Cloud"
+msgstr "Облако тегов"
+
+#: source/tmp/PopoverTags.vue.ts:61
+msgid "Suggested tags for the current file"
+msgstr "Предложенные теги для текущего файла"
+
+#: source/tmp/PopoverTags.vue.ts:64
+msgid "Add to file"
+msgstr "Добавить к файлу"
+
+#: source/tmp/Projects-Tab.vue.ts:24
+msgid "Zettlr also makes use of these projects:"
+msgstr "Zettlr использует следующие проекты:"
+
+#: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
+msgid "Cmd/Ctrl-click to follow this link"
+msgstr "Зажмите Cmd/Ctrl для перехода по этой ссылке"
+
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
+msgstr "Без выделения"
+
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Open diagnostics panel"
+msgstr "Открыть панель диагностики"
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
+msgid "Disabled"
+msgstr "Отключено"
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
+msgid "Custom"
+msgstr "Пользовательский"
+
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
+msgid "Detect automatically"
+msgstr "Обнаружить автоматически"
+
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr "Режим удобочитаемости (%s)"
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
+msgid "Rendering mermaid graph …"
+msgstr "Отображение русалочьего графа …"
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
+msgid "Could not render Graph:"
+msgstr "Не удалось отобразить график:"
+
+#: source/common/modules/markdown-editor/renderers/render-images.ts:94
+#, javascript-format
+msgid "Image not found: %s"
+msgstr "Изображение не найдено: %s"
+
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+msgid "Spelling mistake"
+msgstr "Орфографическая ошибка"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
+msgid "Open Link"
+msgstr "Открыть ссылку"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
+msgid "Copy Mail Address"
+msgstr "Скопировать адрес e-mail"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
+msgid "Copy Link"
+msgstr "Скопировать ссылку"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:90
+msgid "Copy image to clipboard"
+msgstr "Копирование изображения в буфер обмена"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
+msgid "Open in browser"
+msgstr "Открыть в браузере"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
+msgid "Show file"
+msgstr "Показать файл"
+
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
+msgid "Copy equation code"
+msgstr "Копировать код формулы"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
+msgid "No suggestions"
+msgstr "Без предложений"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
+msgid "Add to dictionary"
+msgstr "Добавить в словарь"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
+msgid "Italic"
+msgstr "Курсив"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
+msgid "Insert link"
+msgstr "Вставить ссылку"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
+msgid "Insert numbered list"
+msgstr "Вставить нумерованный список"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
+msgid "Insert unordered list"
+msgstr "Вставить ненумерованный список"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
+msgid "Insert tasklist"
+msgstr "Вставить список задач"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+msgid "Blockquote"
+msgstr "Цитата"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
+msgid "Insert Table"
+msgstr "Вставить таблицу"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/app/service-providers/menu/menu.darwin.ts:337
+#: source/app/service-providers/menu/menu.win32.ts:338
+msgid "Cut"
+msgstr "Вырезать"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
+#: source/app/service-providers/menu/menu.darwin.ts:343
+#: source/app/service-providers/menu/menu.win32.ts:344
+msgid "Copy"
+msgstr "Скопировать"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
+#: source/app/service-providers/menu/menu.darwin.ts:348
+#: source/app/service-providers/menu/menu.win32.ts:349
+msgid "Copy as HTML"
+msgstr "Копировать как HTML"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/app/service-providers/menu/menu.darwin.ts:357
+#: source/app/service-providers/menu/menu.win32.ts:358
+msgid "Paste"
+msgstr "Вставить"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
+#: source/app/service-providers/menu/menu.darwin.ts:362
+#: source/app/service-providers/menu/menu.win32.ts:363
+msgid "Paste without style"
+msgstr "Вставить только текст"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
+#: source/app/service-providers/menu/menu.darwin.ts:371
+#: source/app/service-providers/menu/menu.win32.ts:372
+msgid "Select all"
+msgstr "Выделить всё"
+
+#: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
+msgid "Go to footnote reference"
+msgstr "Перейти к ссылке на сноску"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+msgid "Link"
+msgstr "Ссылка"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
+msgid "Image"
+msgstr "Изображение"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+msgid "Comment"
+msgstr "Комментарий"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+msgid "Code"
+msgstr "Код"
+
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:90
+msgid "No footnote text found."
+msgstr "Текст сноски не найден."
+
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:107
+#: source/app/service-providers/menu/menu.darwin.ts:317
+#: source/app/service-providers/menu/menu.win32.ts:318
+msgid "Edit"
+msgstr "Редактировать"
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
+#, javascript-format
+msgid "File %s does not exist."
+msgstr "Файл %s не существует."
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
+msgid "Word count"
+msgstr "Количество слов"
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
+#: source/app/service-providers/menu/menu.darwin.ts:166
+#: source/app/service-providers/menu/menu.win32.ts:140
+msgid "Open…"
+msgstr "Открыть…"
+
+#: source/common/util/localise-number.ts:28
+msgid ","
+msgstr ","
+
+#: source/common/util/localise-number.ts:29
+msgid "."
+msgstr "."
+
+#: source/common/util/map-lang-code.ts:33
+msgid "Afrikaans"
+msgstr "Африканский"
+
+#: source/common/util/map-lang-code.ts:34
+msgid "Arabic"
+msgstr "Арабский"
+
+#: source/common/util/map-lang-code.ts:35
+msgid "Asturian"
+msgstr "Астурийский"
+
+#: source/common/util/map-lang-code.ts:36
+msgid "Belarus"
+msgstr "Беларусский"
+
+#: source/common/util/map-lang-code.ts:37
+msgid "Bulgarian"
+msgstr "Болгарский"
+
+#: source/common/util/map-lang-code.ts:38
+msgid "Breton"
+msgstr "Бретонский"
+
+#: source/common/util/map-lang-code.ts:39
+msgid "Bosnian"
+msgstr "Боснийский"
+
+#: source/common/util/map-lang-code.ts:40
+msgid "Catalan"
+msgstr "Каталонский"
+
+#: source/common/util/map-lang-code.ts:41
+msgid "Czech"
+msgstr "Чешский"
+
+#: source/common/util/map-lang-code.ts:42
+msgid "Danish"
+msgstr "Датский"
+
+#: source/common/util/map-lang-code.ts:43
+msgid "German (Austria)"
+msgstr "Немецкий (Австрия)"
+
+#: source/common/util/map-lang-code.ts:44
+msgid "German (Switzerland)"
+msgstr "Немецкий (Швейцария)"
+
+#: source/common/util/map-lang-code.ts:45
+msgid "German (simple)"
+msgstr "Немецкий (простой)"
+
+#: source/common/util/map-lang-code.ts:46
+msgid "German (Germany)"
+msgstr "Немецкий"
+
+#: source/common/util/map-lang-code.ts:47
+msgid "German (Luxembourg)"
+msgstr "Немецкий (Люксембург)"
+
+#: source/common/util/map-lang-code.ts:48
+msgid "German"
+msgstr "Немецкий"
+
+#: source/common/util/map-lang-code.ts:49
+msgid "Greek"
+msgstr "Греческий"
+
+#: source/common/util/map-lang-code.ts:50
+msgid "English (Australia)"
+msgstr "Английский (Австралия)"
+
+#: source/common/util/map-lang-code.ts:51
+msgid "English (Canada)"
+msgstr "Английский (Канада)"
+
+#: source/common/util/map-lang-code.ts:52
+msgid "English (United Kingdom)"
+msgstr "Английский (Великобритания)"
+
+#: source/common/util/map-lang-code.ts:53
+msgid "English (India)"
+msgstr "Английский (Индия)"
+
+#: source/common/util/map-lang-code.ts:54
+msgid "English (New Zealand)"
+msgstr "Английский (Новая Зеландия)"
+
+#: source/common/util/map-lang-code.ts:55
+msgid "English (United States)"
+msgstr "Английский (США)"
+
+#: source/common/util/map-lang-code.ts:56
+msgid "English (South Africa)"
+msgstr "Английский (Южная Африка)"
+
+#: source/common/util/map-lang-code.ts:57
+msgid "English"
+msgstr "Английский"
+
+#: source/common/util/map-lang-code.ts:58
+msgid "Esperanto"
+msgstr "Эсперанто"
+
+#: source/common/util/map-lang-code.ts:59
+msgid "Spanish (Argentina)"
+msgstr "Испанский (Аргентина)"
+
+#: source/common/util/map-lang-code.ts:60
+msgid "Spanish (Spain)"
+msgstr "Испанский"
+
+#: source/common/util/map-lang-code.ts:61
+msgid "Spanish"
+msgstr "Испанский"
+
+#: source/common/util/map-lang-code.ts:62
+msgid "Estonian"
+msgstr "Эстонский"
+
+#: source/common/util/map-lang-code.ts:63
+msgid "Basque"
+msgstr "Баскский"
+
+#: source/common/util/map-lang-code.ts:64
+msgid "Persian (Farsi)"
+msgstr "Фарси"
+
+#: source/common/util/map-lang-code.ts:65
+msgid "Finnish"
+msgstr "Финский"
+
+#: source/common/util/map-lang-code.ts:66
+msgid "Faroese"
+msgstr "Фарерский"
+
+#: source/common/util/map-lang-code.ts:67
+msgid "French (Belgium)"
+msgstr "Французский (Бельгия)"
+
+#: source/common/util/map-lang-code.ts:68
+msgid "French (Switzerland)"
+msgstr "Французский (Швейцария)"
+
+#: source/common/util/map-lang-code.ts:69
+msgid "French (France)"
+msgstr "Французский"
+
+#: source/common/util/map-lang-code.ts:70
+msgid "French (Luxembourg)"
+msgstr "Французский (Люксембург)"
+
+#: source/common/util/map-lang-code.ts:71
+msgid "French (Principality of Monaco)"
+msgstr "Французский (Княжество Монако)"
+
+#: source/common/util/map-lang-code.ts:72
+msgid "French"
+msgstr "Французский"
+
+#: source/common/util/map-lang-code.ts:73
+msgid "Irish"
+msgstr "Ирландский"
+
+#: source/common/util/map-lang-code.ts:74
+msgid "Scottish (Gaelic)"
+msgstr "Шотландский"
+
+#: source/common/util/map-lang-code.ts:75
+msgid "Galician"
+msgstr "Галисийский"
+
+#: source/common/util/map-lang-code.ts:76
+msgid "Hebrew"
+msgstr "Иврит"
+
+#: source/common/util/map-lang-code.ts:77
+msgid "Hindi"
+msgstr "Хинди"
+
+#: source/common/util/map-lang-code.ts:78
+msgid "Croatian"
+msgstr "Хорватский"
+
+#: source/common/util/map-lang-code.ts:79
+msgid "Hungarian"
+msgstr "Венгерский"
+
+#: source/common/util/map-lang-code.ts:80
+msgid "Armenian"
+msgstr "Армянский"
+
+#: source/common/util/map-lang-code.ts:81
+msgid "Indonesian"
+msgstr "Индонезийский"
+
+#: source/common/util/map-lang-code.ts:82
+msgid "Icelandic"
+msgstr "Исландский"
+
+#: source/common/util/map-lang-code.ts:83
+msgid "Italian (Switzerland)"
+msgstr "Итальянский (Швейцария)"
+
+#: source/common/util/map-lang-code.ts:84
+msgid "Italian (Italy)"
+msgstr "Итальянский"
+
+#: source/common/util/map-lang-code.ts:85
+msgid "Italian"
+msgstr "Итальянский"
+
+#: source/common/util/map-lang-code.ts:86
+msgid "Japanese"
+msgstr "Японский"
+
+#: source/common/util/map-lang-code.ts:87
+msgid "Georgian"
+msgstr "Грузинский"
+
+#: source/common/util/map-lang-code.ts:88
+msgid "Khmer (Cambodia)"
+msgstr "Кхмер (Камбоджа)"
+
+#: source/common/util/map-lang-code.ts:89
+msgid "Korean"
+msgstr "Корейский"
+
+#: source/common/util/map-lang-code.ts:90
+msgid "Latin"
+msgstr "Латинский"
+
+#: source/common/util/map-lang-code.ts:91
+msgid "Luxembourgian"
+msgstr "Люксембургский"
+
+#: source/common/util/map-lang-code.ts:92
+msgid "Lithuanian"
+msgstr "Литовский"
+
+#: source/common/util/map-lang-code.ts:93
+msgid "Latvian"
+msgstr "Латвийский"
+
+#: source/common/util/map-lang-code.ts:94
+msgid "Macedonian"
+msgstr "Македонский"
+
+#: source/common/util/map-lang-code.ts:95
+msgid "Mongolian"
+msgstr "Монгольский"
+
+#: source/common/util/map-lang-code.ts:96
+msgid "Malaysian (Brunei Darussalam)"
+msgstr "Малазийский (Бруней-Даруссалам)"
+
+#: source/common/util/map-lang-code.ts:97
+msgid "Malaysian (Malaysia)"
+msgstr "Малазийский"
+
+#: source/common/util/map-lang-code.ts:98
+msgid "Malaysian"
+msgstr "Малазийский"
+
+#: source/common/util/map-lang-code.ts:99
+msgid "Norwegian (Bokmål)"
+msgstr "Норвежский"
+
+#: source/common/util/map-lang-code.ts:100
+msgid "Nepalese"
+msgstr "Непальский"
+
+#: source/common/util/map-lang-code.ts:101
+msgid "Dutch (Belgium)"
+msgstr "Голандский (Бельгия)"
+
+#: source/common/util/map-lang-code.ts:102
+msgid "Dutch (Netherlands)"
+msgstr "Голландский (Нидерланды)"
+
+#: source/common/util/map-lang-code.ts:103
+msgid "Dutch"
+msgstr "Голландский"
+
+#: source/common/util/map-lang-code.ts:104
+msgid "Norwegian (Nyorsk)"
+msgstr "Норвежский (Нюрск)"
+
+#: source/common/util/map-lang-code.ts:105
+msgid "Norwegian"
+msgstr "Норвежский"
+
+#: source/common/util/map-lang-code.ts:106
+msgid "Polish"
+msgstr "Польский"
+
+#: source/common/util/map-lang-code.ts:107
+msgid "Portuguese (Angola)"
+msgstr "Португальский (Ангола)"
+
+#: source/common/util/map-lang-code.ts:108
+msgid "Portuguese (Brazil)"
+msgstr "Португальский (Бразилия)"
+
+#: source/common/util/map-lang-code.ts:109
+msgid "Portuguese (Mozambique)"
+msgstr "Португальский (Мозамбик)"
+
+#: source/common/util/map-lang-code.ts:110
+msgid "Portuguese (Portugal)"
+msgstr "Португальский (Португалия)"
+
+#: source/common/util/map-lang-code.ts:111
+msgid "Portuguese"
+msgstr "Португальский"
+
+#: source/common/util/map-lang-code.ts:112
+msgid "Romanian"
+msgstr "Румынский"
+
+#: source/common/util/map-lang-code.ts:113
+msgid "Russian"
+msgstr "Русский"
+
+#: source/common/util/map-lang-code.ts:114
+msgid "Rwandan (Kinyarwanda)"
+msgstr "Руандский"
+
+#: source/common/util/map-lang-code.ts:115
+msgid "Slovakian"
+msgstr "Словакский"
+
+#: source/common/util/map-lang-code.ts:116
+msgid "Slovenian"
+msgstr "Словенский"
+
+#: source/common/util/map-lang-code.ts:117
+msgid "Serbian"
+msgstr "Сербский"
+
+#: source/common/util/map-lang-code.ts:118
+msgid "Albanian"
+msgstr "Албанский"
+
+#: source/common/util/map-lang-code.ts:119
+msgid "Albanian (Albania)"
+msgstr "Албанский (Албания)"
+
+#: source/common/util/map-lang-code.ts:120
+msgid "Swedish"
+msgstr "Шведский"
+
+#: source/common/util/map-lang-code.ts:121
+msgid "Tamil (India)"
+msgstr "Тамильский (Индия)"
+
+#: source/common/util/map-lang-code.ts:122
+msgid "Thai"
+msgstr "Тайский"
+
+#: source/common/util/map-lang-code.ts:123
+msgid "Tagalog (Filipino)"
+msgstr "Тагальский язык (Филиппинский)"
+
+#: source/common/util/map-lang-code.ts:124
+msgid "Turkish"
+msgstr "Турецкий"
+
+#: source/common/util/map-lang-code.ts:125
+msgid "Ukrainian"
+msgstr "Украинский"
+
+#: source/common/util/map-lang-code.ts:126
+msgid "Urdu"
+msgstr "Урду"
+
+#: source/common/util/map-lang-code.ts:127
+msgid "Vietnamese"
+msgstr "Вьетнамский"
+
+#. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
+#. Sorbian, wen denotes the language family as such
+#: source/common/util/map-lang-code.ts:130
+msgid "Sorbian"
+msgstr "Сербский"
+
+#: source/common/util/map-lang-code.ts:131
+msgid "Chinese (China)"
+msgstr "Китайский (Китай)"
+
+#: source/common/util/map-lang-code.ts:132
+msgid "Chinese (Taiwan)"
+msgstr "Китайский (Тайвань)"
+
+#: source/common/util/map-lang-code.ts:133
+msgid "Chinese"
+msgstr "Китайский"
+
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr "сейчас"
+
+#: source/app/service-providers/menu/menu.darwin.ts:46
+#: source/app/service-providers/menu/menu.darwin.ts:641
+#: source/app/service-providers/menu/menu.win32.ts:614
+msgid "About Zettlr"
+msgstr "О Zettlr"
+
+#: source/app/service-providers/menu/menu.darwin.ts:51
+#: source/app/service-providers/menu/menu.win32.ts:222
+#: source/app/service-providers/menu/menu.win32.ts:226
+msgid "Preferences…"
+msgstr "Настройки…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:59
+#: source/app/service-providers/menu/menu.win32.ts:234
+msgid "Assets Manager"
+msgstr "Управление ресурсами"
+
+#: source/app/service-providers/menu/menu.darwin.ts:67
+#: source/app/service-providers/menu/menu.win32.ts:242
+msgid "Manage Tags…"
+msgstr "Управление тегами…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:77
+msgid "Services"
+msgstr "Сервисы"
+
+#: source/app/service-providers/menu/menu.darwin.ts:86
+msgid "Hide"
+msgstr "Скрыть"
+
+#: source/app/service-providers/menu/menu.darwin.ts:91
+msgid "Hide others"
+msgstr "Скрыть прочих"
+
+#: source/app/service-providers/menu/menu.darwin.ts:96
+msgid "Show"
+msgstr "Показать"
+
+#: source/app/service-providers/menu/menu.darwin.ts:104
+#: source/app/service-providers/menu/menu.win32.ts:308
+#: source/app/service-providers/tray/index.ts:166
+msgid "Quit"
+msgstr "Выход"
+
+#: source/app/service-providers/menu/menu.darwin.ts:113
+#: source/app/service-providers/menu/menu.win32.ts:87
+msgid "File"
+msgstr "Файл"
+
+#: source/app/service-providers/menu/menu.darwin.ts:175
+#: source/app/service-providers/menu/menu.win32.ts:149
+msgid "Open Workspace …"
+msgstr "Открыть рабочее окружение …"
+
+#: source/app/service-providers/menu/menu.darwin.ts:184
+#: source/app/service-providers/menu/menu.win32.ts:44
+#: source/app/service-providers/menu/menu.win32.ts:56
+msgid "Recent documents"
+msgstr "Недавние документы"
+
+#: source/app/service-providers/menu/menu.darwin.ts:188
+#: source/app/service-providers/menu/menu.win32.ts:48
+#: source/app/service-providers/menu/menu.win32.ts:60
+msgid "Empty"
+msgstr "Очистить"
+
+#: source/app/service-providers/menu/menu.darwin.ts:208
+#: source/app/service-providers/menu/menu.win32.ts:173
+msgid "Previous file"
+msgstr "Предыдущий файл"
+
+#: source/app/service-providers/menu/menu.darwin.ts:219
+#: source/app/service-providers/menu/menu.win32.ts:184
+msgid "Next file"
+msgstr "Следующий файл"
+
+#: source/app/service-providers/menu/menu.darwin.ts:233
+#: source/app/service-providers/menu/menu.win32.ts:198
+msgid "Import files…"
+msgstr "Импорт файлов…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:241
+#: source/app/service-providers/menu/menu.win32.ts:206
+msgid "Export…"
+msgstr "Экспорт…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:249
+#: source/app/service-providers/menu/menu.win32.ts:214
+msgid "Print…"
+msgstr "Печать…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:260
+#: source/app/service-providers/menu/menu.win32.ts:254
+msgid "Import translation…"
+msgstr "Импорт переводов…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:268
+#: source/app/service-providers/menu/menu.win32.ts:262
+msgid "Import dictionary…"
+msgstr "Импорт словаря…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:322
+#: source/app/service-providers/menu/menu.win32.ts:323
+msgid "Undo"
+msgstr "Отмена"
+
+#: source/app/service-providers/menu/menu.darwin.ts:328
+#: source/app/service-providers/menu/menu.win32.ts:329
+msgid "Redo"
+msgstr "Повтор"
+
+#: source/app/service-providers/menu/menu.darwin.ts:379
+#: source/app/service-providers/menu/menu.win32.ts:380
+msgid "Find in file"
+msgstr "Поиск в файле"
+
+#: source/app/service-providers/menu/menu.darwin.ts:387
+#: source/app/service-providers/menu/menu.win32.ts:388
+msgid "Find in directory"
+msgstr "Найти в директории"
+
+#: source/app/service-providers/menu/menu.darwin.ts:395
+#: source/app/service-providers/menu/menu.win32.ts:396
+msgid "Filter files"
+msgstr "Фильтр файлов"
+
+#: source/app/service-providers/menu/menu.darwin.ts:406
+#: source/app/service-providers/menu/menu.win32.ts:407
+msgid "Generate new ID"
+msgstr "Сгенерировать новый ID"
+
+#: source/app/service-providers/menu/menu.darwin.ts:425
+msgid "Speech"
+msgstr "Речь"
+
+#: source/app/service-providers/menu/menu.darwin.ts:429
+msgid "Start speaking"
+msgstr "Начать речь"
+
+#: source/app/service-providers/menu/menu.darwin.ts:434
+msgid "Stop speaking"
+msgstr "Остановить речь"
+
+#: source/app/service-providers/menu/menu.darwin.ts:444
+#: source/app/service-providers/menu/menu.win32.ts:426
+msgid "View"
+msgstr "Вид"
+
+#: source/app/service-providers/menu/menu.darwin.ts:458
+#: source/app/service-providers/menu/menu.win32.ts:440
+msgid "Additional Information"
+msgstr "Дополнительная информация"
+
+#: source/app/service-providers/menu/menu.darwin.ts:468
+#: source/app/service-providers/menu/menu.win32.ts:450
+msgid "Distraction free mode"
+msgstr "Рассеять свободный режим"
+
+#: source/app/service-providers/menu/menu.darwin.ts:476
+#: source/app/service-providers/menu/menu.win32.ts:458
+msgid "Typewriter Mode"
+msgstr "Режим пишущей машинки"
+
+#: source/app/service-providers/menu/menu.darwin.ts:487
+#: source/app/service-providers/menu/menu.win32.ts:469
+msgid "Toggle file manager"
+msgstr "Переключить вид менеджера: директория/файлы"
+
+#: source/app/service-providers/menu/menu.darwin.ts:495
+#: source/app/service-providers/menu/menu.win32.ts:477
+msgid "Toggle Sidebar"
+msgstr "Включить боковую панель"
+
+#: source/app/service-providers/menu/menu.darwin.ts:509
+#: source/app/service-providers/menu/menu.win32.ts:488
+msgid "Reset zoom"
+msgstr "Сбросить масштаб"
+
+#: source/app/service-providers/menu/menu.darwin.ts:518
+#: source/app/service-providers/menu/menu.win32.ts:497
+msgid "Zoom in"
+msgstr "Увеличить"
+
+#: source/app/service-providers/menu/menu.darwin.ts:525
+#: source/app/service-providers/menu/menu.win32.ts:504
+msgid "Zoom out"
+msgstr "Уменьшить"
+
+#: source/app/service-providers/menu/menu.darwin.ts:535
+#: source/app/service-providers/menu/menu.win32.ts:514
+msgid "Toggle fullscreen"
+msgstr "Полноэкранный режим"
+
+#: source/app/service-providers/menu/menu.darwin.ts:543
+#: source/app/service-providers/menu/menu.win32.ts:523
+msgid "Develop"
+msgstr "Разработка"
+
+#: source/app/service-providers/menu/menu.darwin.ts:547
+#: source/app/service-providers/menu/menu.win32.ts:527
+msgid "Reload"
+msgstr "Перегрузить"
+
+#: source/app/service-providers/menu/menu.darwin.ts:555
+#: source/app/service-providers/menu/menu.win32.ts:535
+msgid "Toggle developer tools"
+msgstr "Средства разработки"
+
+#: source/app/service-providers/menu/menu.darwin.ts:563
+#: source/app/service-providers/menu/menu.win32.ts:543
+msgid "Open Logs"
+msgstr "Открыть логи"
+
+#: source/app/service-providers/menu/menu.darwin.ts:574
+#: source/app/service-providers/menu/menu.win32.ts:554
+msgid "Window"
+msgstr "Окно"
+
+#: source/app/service-providers/menu/menu.darwin.ts:579
+#: source/app/service-providers/menu/menu.win32.ts:559
+msgid "Minimize"
+msgstr "Свернуть"
+
+#: source/app/service-providers/menu/menu.darwin.ts:587
+#: source/app/service-providers/menu/menu.win32.ts:565
+msgid "Close"
+msgstr "Закрыть"
+
+#: source/app/service-providers/menu/menu.darwin.ts:593
+msgid "Bring All to Front"
+msgstr "На передний план"
+
+#: source/app/service-providers/menu/menu.darwin.ts:609
+#: source/app/service-providers/menu/menu.win32.ts:582
+msgid "Previous Tab"
+msgstr "Предыдущая вкладка"
+
+#: source/app/service-providers/menu/menu.darwin.ts:617
+#: source/app/service-providers/menu/menu.win32.ts:590
+msgid "Next Tab"
+msgstr "Следующая вкладка"
+
+#: source/app/service-providers/menu/menu.darwin.ts:636
+#: source/app/service-providers/menu/menu.win32.ts:609
+msgid "Help"
+msgstr "Помощь"
+
+#: source/app/service-providers/menu/menu.darwin.ts:660
+#: source/app/service-providers/menu/menu.win32.ts:633
+msgid "Support Zettlr"
+msgstr "Поддержать Zettlr"
+
+#: source/app/service-providers/menu/menu.darwin.ts:670
+#: source/app/service-providers/menu/menu.win32.ts:643
+msgid "Visit website"
+msgstr "Перейти на сайт"
+
+#: source/app/service-providers/menu/menu.darwin.ts:680
+#: source/app/service-providers/menu/menu.win32.ts:653
+msgid "Open user manual"
+msgstr "Документация"
+
+#: source/app/service-providers/menu/menu.darwin.ts:694
+#: source/app/service-providers/menu/menu.win32.ts:667
+msgid "Open Tutorial"
+msgstr "Открыть учебник"
+
+#: source/app/service-providers/menu/menu.darwin.ts:702
+#: source/app/service-providers/menu/menu.win32.ts:675
+msgid "Clear FSAL cache …"
+msgstr "Очистить кэш FSAL …"
+
+#: source/app/service-providers/menu/menu.darwin.ts:706
+#: source/app/service-providers/menu/menu.win32.ts:679
+msgid "Clear FSAL Cache"
+msgstr "Очистка кэша FSAL"
+
+#: source/app/service-providers/menu/menu.darwin.ts:707
+#: source/app/service-providers/menu/menu.win32.ts:680
+msgid "Clearing the FSAL cache requires a restart."
+msgstr "Очистка кэша FSAL требует перезапуска."
+
+#: source/app/service-providers/menu/menu.darwin.ts:708
+#: source/app/service-providers/menu/menu.win32.ts:681
+msgid ""
+"After the restart, Zettlr will recreate the entire cache, which may take a "
+"few moments, depending on the amount of files you have loaded and the speed "
+"of your disk. The window(s) will show afterward."
+msgstr ""
+"После перезапуска Zettlr пересоздаст весь кэш, что может занять несколько "
+"мгновений, в зависимости от объема загруженных файлов и скорости работы "
+"диска. После этого появится окно(-а)."
+
+#: source/app/service-providers/menu/menu.darwin.ts:711
+#: source/app/service-providers/menu/menu.win32.ts:684
+#: source/app/service-providers/config/index.ts:427
+msgid "Restart now"
+msgstr "Перезагрузить сейчас"
+
+#. TODO: Move this to a command
+#. The user wants to open another file or directory.
+#: source/app/service-providers/windows/index.ts:220
+#: source/app/service-providers/commands/root-open.ts:73
+msgid "Open project folder"
+msgstr "Открыть папку проекта"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
+msgid "Replace file"
+msgstr "Заменить файл"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#, javascript-format
+msgid ""
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
+msgstr ""
+"Файл %s был изменен удаленно. Заменить загруженную версию на более новую с "
+"диска?"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
+msgid "Ok"
+msgstr "Принять"
+
+#. Prepare the list of file filters
+#. The "All Files" filter should be at the top
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
+#: source/app/service-providers/commands/import.ts:41
+msgid "All Files"
+msgstr "Все файлы"
+
+#: source/app/service-providers/windows/dialog/ask-file.ts:54
+msgid "Open file"
+msgstr "Открыть файл"
+
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+#: source/app/service-providers/commands/file-rename.ts:96
+#: source/app/service-providers/commands/rename-tag.ts:47
+msgid "Yes"
+msgstr "Да"
+
+#. 0: Save all changes
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+#: source/app/service-providers/commands/file-rename.ts:97
+msgid "No"
+msgstr "Нет"
+
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
+msgid "There are unsaved changes. Do you want to save them first?"
+msgstr ""
+"Текущий файл содержит несохранённые изменения. Хотите сперва сохранить их?"
+
+#: source/app/service-providers/windows/dialog/save-dialog.ts:58
+msgid "Save file"
+msgstr "Сохранить файл"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
+msgid "Overwrite existing file"
+msgstr "Заменить существующий файл"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#, javascript-format
+msgid "The file %s already exists in this directory. Overwrite?"
+msgstr "Файл %s уже существует в этой директории. Заменить файл?"
+
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:38
+msgid "Really delete?"
+msgstr "Действительно удалить?"
+
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:39
+#, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "Вы действительно хотите удалить %s?"
+
+#: source/app/service-providers/citeproc/index.ts:249
+#: source/app/service-providers/citeproc/index.ts:456
+msgid "The citation database could not be loaded"
+msgstr "База данных цитат не может быть загружена"
+
+#: source/app/service-providers/citeproc/index.ts:444
+msgid "Changes to the library file detected. Reloading …"
+msgstr "Обнаружены изменения в файле библиотеки. Обновление …"
+
+#: source/app/service-providers/commands/export.ts:55
+#: source/app/service-providers/commands/export.ts:151
+msgid "Export failed"
+msgstr "Экспорт не удался"
+
+#: source/app/service-providers/commands/export.ts:56
+#, javascript-format
+msgid "An error occurred during export: %s"
+msgstr "Во время экспорта произошла ошибка: %s"
+
+#: source/app/service-providers/commands/export.ts:108
+msgid "Choose export destination"
+msgstr "Выберите назначение экспорта"
+
+#: source/app/service-providers/commands/export.ts:139
+#, javascript-format
+msgid "Exporting to %s"
+msgstr "Экспорт в %s"
+
+#: source/app/service-providers/commands/export.ts:152
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "Во время экспорта произошла ошибка: %s"
+
+#: source/app/service-providers/commands/import-lang-file.ts:59
+#, javascript-format
+msgid "Language file imported: %s"
+msgstr "Языковой файл %s импортирован"
+
+#: source/app/service-providers/commands/import-lang-file.ts:61
+#: source/app/service-providers/commands/import-lang-file.ts:64
+#, javascript-format
+msgid "Could not import language file %s!"
+msgstr "Ошибка импорта файла перевода %s!"
+
+#: source/app/service-providers/commands/file-rename.ts:93
+#: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/config/index.ts:432
+msgid "Confirm"
+msgstr "Подтвердить"
+
+#: source/app/service-providers/commands/file-rename.ts:94
+#, javascript-format
+msgid "Update %s internal links to file %s?"
+msgstr "Обновить %s внутренни ссылки файла %s?"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "Запрашиваемый файл не найден."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "Указанное имя не содержит разрешенных символов."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+#: source/app/service-providers/commands/set-open-directory.ts:41
+msgid "The requested directory was not found."
+msgstr "Запрашиваемый каталог не найден."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "Невозможно создать изображение"
+
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:112
+#, javascript-format
+msgid "The reference with key %s does not appear to have attachments."
+msgstr "Ссылка с ключом %s не имеет вложений."
+
+#: source/app/service-providers/commands/open-attachment.ts:117
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "Не удалось открыть вложение. Запущен ли Zotero?"
+
+#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
+#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+#: source/app/service-providers/commands/importer/index.ts:46
+msgid ""
+"Pandoc has not been found on this system. Please install Pandoc prior to "
+"exporting or importing files."
+msgstr ""
+"Не удалось найти pandoc на компьютере. Необходимо сначала установить pandoc "
+"для возможности экспорта/импорта файлов."
+
+#: source/app/service-providers/commands/request-move.ts:60
+msgid "Cannot move directory"
+msgstr "Невозможно переместить директорию"
+
+#: source/app/service-providers/commands/request-move.ts:61
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Нельзя перемещать родительскую директорию в дочернюю."
+
+#: source/app/service-providers/commands/request-move.ts:70
+msgid "Cannot move directory or file"
+msgstr "Ошибка перемещения"
+
+#: source/app/service-providers/commands/request-move.ts:71
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "Файл/директория %s уже существует."
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "You have to select a directory to import to."
+msgstr "Не указана директория для импорта."
+
+#. Now import.
+#: source/app/service-providers/commands/import.ts:58
+msgid "Importing. Please wait …"
+msgstr "Импорт. Пожалуйста, подождите …"
+
+#. This callback gets called whenever there is an error while running pandoc.
+#: source/app/service-providers/commands/import.ts:63
+#, javascript-format
+msgid "Couldn't import %s."
+msgstr "Ошибка импорта &quot;%s&quot;."
+
+#. And this on each success!
+#: source/app/service-providers/commands/import.ts:66
+#, javascript-format
+msgid "%s imported successfully."
+msgstr "%s успешно импортирован."
+
+#. Some files failed to import.
+#: source/app/service-providers/commands/import.ts:71
+#: source/app/service-providers/commands/import.ts:77
+#, javascript-format
+msgid ""
+"The following %s files could not be imported, because their filetype is "
+"unknown: %s"
+msgstr "Файл %s не может быть импортирован, так как имеет неизвестный тип: %s"
+
+#: source/app/service-providers/commands/file-new.ts:156
+#: source/app/service-providers/commands/file-duplicate.ts:43
+#: source/app/service-providers/commands/file-duplicate.ts:59
+msgid "Could not create file"
+msgstr "Невозможно создать файл"
+
+#: source/app/service-providers/commands/dir-new.ts:36
+#: source/app/service-providers/commands/dir-new.ts:37
+#: source/app/service-providers/commands/dir-new.ts:48
+#: source/app/service-providers/commands/dir-new.ts:49
+#: source/app/service-providers/commands/dir-new.ts:59
+msgid "Could not create directory"
+msgstr "Невозможно создать директорию"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
+msgstr "Скопировать из %s"
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:63
+#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "Некорректная текстовая связка: %s"
+
+#: source/app/service-providers/commands/root-open.ts:83
+msgid "Cannot open directory"
+msgstr "Невозможно открыть директорию"
+
+#: source/app/service-providers/commands/root-open.ts:84
+#, javascript-format
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Директория  &quot;%s&quot; не может быть открыта в Zettlr."
+
+#: source/app/service-providers/commands/root-open.ts:136
+#, javascript-format
+msgid "Opening new root %s …"
+msgstr "Открытие новой корневой директории %s …"
+
+#: source/app/service-providers/commands/root-open.ts:147
+#, javascript-format
+msgid "%s has been loaded."
+msgstr "%s было загружено."
+
+#: source/app/service-providers/commands/root-open.ts:159
+#, javascript-format
+msgid "Could not open workspace %s."
+msgstr "Невозможно открыть рабочепространство %s."
+
+#: source/app/service-providers/commands/set-open-directory.ts:40
+msgid "Directory not found"
+msgstr "Директория не найдена"
+
+#: source/app/service-providers/commands/dir-project-export.ts:73
+msgid "Cannot export project"
+msgstr "Невозможно экспортировать проект"
+
+#: source/app/service-providers/commands/dir-project-export.ts:74
+msgid ""
+"After applying your glob-filters, no files remained to export. Please adjust "
+"them in the project settings."
+msgstr ""
+"После применения ваших glob-фильтров не осталось файлов для экспорта. "
+"Пожалуйста, настройте их в настройках проекта."
+
+#: source/app/service-providers/commands/dir-project-export.ts:145
+msgid "Project successfully exported. Click to show."
+msgstr "Проект успешно экспортирован. Нажмите чтобы показать."
+
+#: source/app/service-providers/commands/language-tool.ts:187
+msgid "Document too long"
+msgstr "Слишком длинный документ"
+
+#: source/app/service-providers/commands/language-tool.ts:192
+msgid "offline"
+msgstr "оффлайн"
+
+#: source/app/service-providers/commands/rename-tag.ts:45
+#, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr "Заменить тег \"%s\" на \"%s\" в %s файлах?"
+
+#: source/app/service-providers/config/config-validation.ts:280
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "Значение %s недопустимого типа %s."
+
+#: source/app/service-providers/config/config-validation.ts:283
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "Значение %s может принимать следующие значения: %s."
+
+#: source/app/service-providers/config/config-validation.ts:286
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "Значение %s должно быть в диапазоне от %s до %s символов."
+
+#: source/app/service-providers/config/config-validation.ts:289
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "Значение %s не может быть больше %s символов."
+
+#: source/app/service-providers/config/config-validation.ts:292
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "Значение %s должно быть не меньше %s символов."
+
+#: source/app/service-providers/config/config-validation.ts:295
+#, javascript-format
+msgid "Option %s is required."
+msgstr "Значение %s должно быть установлено."
+
+#: source/app/service-providers/config/index.ts:424
+msgid "Changing this option requires a restart to take effect."
+msgstr "Требуется перезагрузка для применения этого параметра."
+
+#: source/app/service-providers/config/index.ts:428
+msgid "Restart later"
+msgstr "Перезапустить позже"
+
+#: source/app/service-providers/tray/index.ts:160
+msgid "Show Zettlr"
+msgstr "Показать Zettlr"
+
+#: source/app/service-providers/tray/index.ts:173
+msgid "Zettlr"
+msgstr "Zettlr"
+
+#: source/app/service-providers/updates/index.ts:176
+#, javascript-format
+msgid "Could not check for updates: Server Error (Status code: %s)"
+msgstr "Ошибка проверки обновления: ошибка сервера (код статуса: %s)."
+
+#: source/app/service-providers/updates/index.ts:178
+#, javascript-format
+msgid "Could not check for updates: Client Error (Status code: %s)"
+msgstr "Ошибка проверки обновления: ошибка клиента (код статуса: %s)."
+
+#: source/app/service-providers/updates/index.ts:180
+#, javascript-format
+msgid ""
+"Could not check for updates: The server tried to redirect (Status code: %s)"
+msgstr ""
+"Невозможно проверить наличие обновлений: попытка перенаправления соединения "
+"(код ошибки: %s)"
+
+#. getaddrinfo has reported that the host has not been found.
+#. This normally only happens if the networking interface is
+#. offline.
+#: source/app/service-providers/updates/index.ts:185
+msgid "Could not check for updates: Could not establish connection"
+msgstr "Невозможно проверить наличие обновлений: ошибка подключения"
+
+#. Something else has occurred. GotError objects have a name property.
+#: source/app/service-providers/updates/index.ts:188
+#, javascript-format
+msgid "Could not check for updates. %s: %s"
+msgstr "Проверка обновлений не удалась. %s: %s"
+
+#: source/app/service-providers/updates/index.ts:204
+msgid "Could not check for updates: Server hasn't sent any data"
+msgstr "Невозможно проверить наличие обновлений: не получен ответ от сервера"
+
+#: source/app/service-providers/updates/index.ts:461
+#, javascript-format
+msgid "An update to version %s is available!"
+msgstr "Доступно обновление до версии %s!"
+
+#~ msgid "These options determine which elements are rendered in documents."
+#~ msgstr "Определяет какие элементы будут отображаться в документах."
+
+#~ msgid "With these controls you can constrain the image previews."
+#~ msgstr ""
+#~ "С помощью этих элементов управления можно ограничить предварительный "
+#~ "просмотр изображений."
+
+#~ msgid "Options for ZKN elements"
+#~ msgstr "Настройки ZKN элементов"
+
+#~ msgid "Item"
+#~ msgstr "Элемент"
+
+=======
 
 #: source/win-preferences/schema/toolbar.ts:61
 msgid "Display image button"
