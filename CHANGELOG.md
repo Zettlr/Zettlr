@@ -130,6 +130,15 @@ assigned colors for tags.
 Additionally, you now have a better way to consolidate your tags: Within the
 tag manager, you can now rename tags in order to clean up your tagging system.
 
+### Splash Screen
+
+As more and more users have increasingly large workspaces, we receive an
+increasing amount of feedback that the app start seems sluggish. To indicate
+that nothing is wrong and Zettlr simply needs time to recreate the cache, we
+have implemented a splash screen that shows if the file loading isn't finished
+after one second and displays the boot process to show what is happening behind
+the hood.
+
 ### Migration Guide
 
 There are two instances where you will want to migrate something.
@@ -225,6 +234,7 @@ there.
 - **New Feature**: A new gutter to the left side of the editor will now display
   arrow buttons next to footnote reference bodies that will select the
   corresponding footnote reference up in the text upon click
+- **New Feature**: Add splash screen to indicate FSAL loading progress
 - Note preview tooltips now display a sanitized HTML version of the note's
   Markdown contents
 - Removed the "Get LaTeX" menu item since (hopefully) now the advice in the docs

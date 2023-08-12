@@ -52,6 +52,8 @@ import type ConfigProvider from '@providers/config'
 import { promises as fs } from 'fs'
 import { safeDelete } from './util/safe-delete'
 import type DocumentManager from '@providers/documents'
+import { closeSplashScreen, showSplashScreen, updateSplashScreen } from './util/splash-screen'
+import { trans } from '@common/i18n-main'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -119,11 +121,23 @@ export default class FSAL extends ProviderContract {
       this.clearCache()
     }
 
+    // If the FSAL isn't done loading after 1 second, begin displaying a splash
+    // screen to indicate to the user that things are happening, even if the
+    // main window(s) don't yet show.
+    const timeout = setTimeout(() => {
+      showSplashScreen(this._logger)
+    }, 1000)
+
     // Start a timer to measure how long the roots take to load.
     const start = performance.now()
 
     // Next, load every path we should be loading from the config
-    for (const root of this._config.get('openPaths') as string[]) {
+    const openPaths = this._config.get().openPaths
+    let currentPercent = 0
+    for (const root of openPaths) {
+      updateSplashScreen(trans('Loading workspace %s', path.basename(root)), currentPercent)
+      currentPercent += Math.round(1 / openPaths.length * 100)
+
       try {
         await this.loadPath(root)
       } catch (err: any) {
@@ -132,7 +146,11 @@ export default class FSAL extends ProviderContract {
       }
     }
 
-    const duration = (performance.now() - start) / 1000
+    clearTimeout(timeout)
+    closeSplashScreen()
+
+    // Round to max. two positions after the period
+    const duration = Math.floor((performance.now() - start) / 1000 * 100) / 100
     this._logger.info(`[FSAL] Loaded all files and workspaces in ${duration} seconds`)
 
     // Afterwards we can set our pointers accordingly

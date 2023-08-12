@@ -313,6 +313,14 @@ module.exports = {
               preload: {
                 js: './source/common/modules/preload/index.ts'
               }
+            },
+            {
+              html: './static/index.htm',
+              js: './source/win-splash-screen/index.ts',
+              name: 'splash_screen',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             }
           ]
         }
