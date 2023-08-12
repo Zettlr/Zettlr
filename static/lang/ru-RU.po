@@ -2618,8 +2618,6 @@ msgstr "Доступно обновление до версии %s!"
 #~ msgid "Item"
 #~ msgstr "Элемент"
 
-=======
-
 #: source/win-preferences/schema/toolbar.ts:61
 msgid "Display image button"
 msgstr "Кнопка отображения изображения"
