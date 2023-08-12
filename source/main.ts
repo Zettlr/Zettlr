@@ -122,7 +122,7 @@ app.whenReady().then(() => {
   // up the providers.
   bootApplication().then((container) => {
     serviceContainer = container
-    serviceContainer.commands.run('roots-add', filesBeforeOpen)
+    serviceContainer.commands.run('roots-add', filesBeforeOpen.concat(extractFilesFromArgv(process.argv)))
       .catch(err => console.error(err))
   }).catch(err => {
     console.error(err)
