@@ -30,7 +30,7 @@ function getToolbar (state: EditorState): Tooltip[] {
     above: mainSel.head < mainSel.anchor,
     strictSide: false,
     arrow: true,
-    create: () => {
+    create: (view) => {
       const dom = document.createElement('div')
       dom.className = 'cm-formatting-bar'
 
@@ -69,17 +69,18 @@ function getToolbar (state: EditorState): Tooltip[] {
 
       buttonWrapper.append(bold, italic, link, image, comment, code)
       dom.append(buttonWrapper)
-      return {
-        dom,
-        mount (view) {
-          bold.onclick = function (event) { applyBold(view) }
-          italic.onclick = function (event) { applyItalic(view) }
-          link.onclick = function (event) { insertLink(view) }
-          image.onclick = function (event) { insertImage(view) }
-          comment.onclick = function (event) { applyComment(view) }
-          code.onclick = function (event) { applyCode(view) }
-        }
-      }
+
+      // NOTE: We need to use the onmousedown event here, since the click only
+      // triggers after onmouseup, and by that time the editor has gone through
+      // a transaction cycle that has re-rendered the tooltip.
+      bold.onmousedown = function (event) { applyBold(view) }
+      italic.onmousedown = function (event) { applyItalic(view) }
+      link.onmousedown = function (event) { insertLink(view) }
+      image.onmousedown = function (event) { insertImage(view) }
+      comment.onmousedown = function (event) { applyComment(view) }
+      code.onmousedown = function (event) { applyCode(view) }
+
+      return { dom }
     }
   }]
 }
