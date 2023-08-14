@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-08-07 02:27+0000\n"
+"POT-Creation-Date: 2023-08-14 02:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -922,7 +922,7 @@ msgstr "Cette relation est basée sur un lien sortant"
 msgid "This relation is based on a backlink."
 msgstr "Cette relation est basée sur un lien entrant"
 
-#: source/tmp/RelatedFilesTab.vue.ts:228
+#: source/tmp/RelatedFilesTab.vue.ts:227
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr "Cette relation est basée sur des tags partagés"
@@ -1971,6 +1971,11 @@ msgstr "Chinois (Chine)"
 #: source/common/util/format-date.ts:33
 msgid "just now"
 msgstr "maintenant"
+
+#: source/app/service-providers/fsal/index.ts:138
+#, fuzzy, javascript-format
+msgid "Loading workspace %s"
+msgstr "Impossible d'ouvrir l'espace de travail %s."
 
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641

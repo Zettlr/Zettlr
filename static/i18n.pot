@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.0-beta.8\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-08-10 10:09+0000\n"
+"POT-Creation-Date: 2023-08-14 02:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -875,7 +875,7 @@ msgstr ""
 msgid "This relation is based on a backlink."
 msgstr ""
 
-#: source/tmp/RelatedFilesTab.vue.ts:228
+#: source/tmp/RelatedFilesTab.vue.ts:227
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr ""
@@ -1870,6 +1870,11 @@ msgstr ""
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
+msgstr ""
+
+#: source/app/service-providers/fsal/index.ts:138
+#, javascript-format
+msgid "Loading workspace %s"
 msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:46
