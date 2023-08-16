@@ -58,6 +58,10 @@ export default class Export extends ZettlrCommand {
       } else {
         this._app.log.info(`[Export] File ${path.basename(file)} exported successfully.`)
       }
+
+      if (output.stdout.length > 0) {
+        this._app.log.info('This custom export run produced additional output.', output.stdout)
+      }
       return // Done
     }
 
