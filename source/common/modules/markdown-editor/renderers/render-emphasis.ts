@@ -66,7 +66,6 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
         if (rangeInSelection(view.state, node.from, node.to)) {
           return
         }
-        console.log(node.name)
 
         switch (node.name) {
           case 'Escape':

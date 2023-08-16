@@ -240,7 +240,6 @@ export default defineComponent({
       }
     },
     finishDrag () {
-      console.log('Finishing drag', this.leafId)
       this.documentTabDrag = false
       this.documentTabDragWhere = undefined
     }

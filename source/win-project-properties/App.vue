@@ -252,7 +252,6 @@ export default defineComponent({
   },
   methods: {
     selectExportProfile: function (newListVal: ExportProfile[]) {
-      console.log(newListVal)
       const newProfiles = newListVal
         .filter(e => e.selected)
         .map(e => {
