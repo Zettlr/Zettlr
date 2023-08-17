@@ -164,7 +164,7 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       return false // There's a document being dragged, let the MainEditor capture the event
     }
 
-    if (dataTransfer.files.length === 0 || zettlrFile === '') {
+    if (dataTransfer.files.length === 0 && zettlrFile === '') {
       return false
     }
 
@@ -199,6 +199,7 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       })
 
       view.dispatch({ changes: { from: pos, insert: toInsert.join('\n') } })
+      return true
     } else if (zettlrFile !== '') {
       // We have a Markdown/Code file to insert
       const data = JSON.parse(zettlrFile) as { type: 'code'|'file'|'directory'|'other', path: string, id?: string }
@@ -217,7 +218,9 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
           view.dispatch({ changes: { from: pos, insert: `[${name}](${pathToInsert})` } })
         }
       }
+      return true
     }
+
     return false
   }
 }
