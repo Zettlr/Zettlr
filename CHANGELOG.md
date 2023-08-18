@@ -352,7 +352,7 @@ there.
 
 - Refactored the main editor component further
 - Refactored the Sidebar panels into their own respective components
-- Upgrade Electron to `24.x.x`
+- Upgrade Electron to `25.x.x`
 - Upgrade Pandoc to `3.1.5`
 - Pandoc is now also available natively for Apple Silicon (darwin arm64)
 - Upgrade Chart.js to `4.x.x`
