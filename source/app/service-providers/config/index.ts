@@ -22,11 +22,10 @@ import ignoreFile from '@common/util/ignore-file'
 import safeAssign from '@common/util/safe-assign'
 import isDir from '@common/util/is-dir'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import getConfigTemplate from './get-config-template'
+import { getConfigTemplate, type ConfigOptions } from './get-config-template'
 import enumDictFiles from '@common/util/enum-dict-files'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
-import type { ConfigOptions } from '@dts/main/config-provider'
 import { loadData, trans } from '@common/i18n-main'
 
 const ZETTLR_VERSION = app.getVersion()

@@ -135,7 +135,7 @@ import { ToolbarControl } from '@dts/renderer/window'
 import { OpenDocument, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
 import { EditorCommands } from '@dts/renderer/editor'
 import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-pipe'
-import { UpdateState } from '@dts/main/update-provider'
+import { UpdateState } from '@providers/updates'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard

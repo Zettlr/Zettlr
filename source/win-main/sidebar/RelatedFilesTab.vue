@@ -62,12 +62,18 @@
 
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { RelatedFile } from '@dts/renderer/misc'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { defineComponent } from 'vue'
 import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { TagRecord } from '@providers/tags'
+
+export interface RelatedFile {
+  file: string
+  path: string
+  tags: string[]
+  link: 'inbound'|'outbound'|'bidirectional'|'none'
+}
 
 const ipcRenderer = window.ipc
 const path = window.path

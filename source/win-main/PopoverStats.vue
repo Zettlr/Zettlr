@@ -61,7 +61,7 @@
 
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
-import { Stats } from '@dts/main/stats-provider'
+import { Stats } from '@providers/stats'
 import { DateTime } from 'luxon'
 
 const ipcRenderer = window.ipc
@@ -96,7 +96,7 @@ export default {
       const today = DateTime.now()
       const year = today.year
       const month = today.month
-      const numDays = today.daysInMonth
+      const numDays = today.daysInMonth ?? 0
       const allKeys = Object.keys(this.wordCounts)
       const dailyCounts = []
       for (let i = 1; i <= numDays; i++) {

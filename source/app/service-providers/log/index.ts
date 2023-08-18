@@ -17,7 +17,6 @@ import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import chalk from 'chalk'
 import ProviderContract from '../provider-contract'
-import type { LogMessage } from '@dts/main/log-provider'
 const hasProp = Object.prototype.hasOwnProperty
 
 /**
@@ -36,6 +35,16 @@ enum LogLevel {
   info = 2,
   warning = 3,
   error = 4
+}
+
+/**
+ * A single log message
+ */
+export interface LogMessage {
+  time: string
+  level: LogLevel
+  message: string
+  details: any
 }
 
 const debugConsole = {
