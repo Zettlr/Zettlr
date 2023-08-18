@@ -69,6 +69,7 @@
     "citeproc": "^2.4.63",
     "command-exists": "^1.2.9",
     "d3": "^7.8.5",
+    "fix-path": "^4.0.0",
     "gettext-parser": "^7.0.1",
     "got": "^13.0.0",
     "katex": "^0.16.7",

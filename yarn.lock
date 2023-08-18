@@ -4810,6 +4810,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"default-shell@npm:^2.0.0":
+  version: 2.2.0
+  resolution: "default-shell@npm:2.2.0"
+  checksum: 64e4f03bcf3bd8daacce3212535b6c3a8a28b3cc718db26446c5839c74098eea986446252f4a68714bfcea887155f3b523cf25792069ed7d735abe38faa2c778
+  languageName: node
+  linkType: hard
+
 "defaults@npm:^1.0.3":
   version: 1.0.4
   resolution: "defaults@npm:1.0.4"
@@ -5938,7 +5945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"execa@npm:^5.0.0":
+"execa@npm:^5.0.0, execa@npm:^5.1.1":
   version: 5.1.1
   resolution: "execa@npm:5.1.1"
   dependencies:
@@ -6208,6 +6215,15 @@ __metadata:
     locate-path: ^5.0.0
     path-exists: ^4.0.0
   checksum: 4c172680e8f8c1f78839486e14a43ef82e9decd0e74145f40707cc42e7420506d5ec92d9a11c22bd2c48fb0c384ea05dd30e10dd152fefeec6f2f75282a8b844
+  languageName: node
+  linkType: hard
+
+"fix-path@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "fix-path@npm:4.0.0"
+  dependencies:
+    shell-path: ^3.0.0
+  checksum: 9a295b1bc1329ce626a098b550d577c68a5110e37a836797cd63af461cbd8ac4ec0c1aba56d2c643e52d0dd6e380904391e851ae5b7956449c209f73c885fa95
   languageName: node
   linkType: hard
 
@@ -11541,6 +11557,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"shell-env@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "shell-env@npm:4.0.1"
+  dependencies:
+    default-shell: ^2.0.0
+    execa: ^5.1.1
+    strip-ansi: ^7.0.1
+  checksum: d5911ced33e8fde64d0f3b92497dc5e8fc1078eab5fba3f7bb5b07cbdd6ea5cd03830d9dc1326251cc6ad6f9dee7ca930a8b6308ab5ce6957498adc0bd8b4729
+  languageName: node
+  linkType: hard
+
+"shell-path@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "shell-path@npm:3.0.0"
+  dependencies:
+    shell-env: ^4.0.0
+  checksum: fd9a363bfd00d2c99cc40187e25527d005e8a59fc812ea7c89cecb0592b13c0757146d63152a65e245c573f97eda7e3c974c1d87fd4059d5389cb3a3478e2239
+  languageName: node
+  linkType: hard
+
 "side-channel@npm:^1.0.4":
   version: 1.0.4
   resolution: "side-channel@npm:1.0.4"
@@ -13579,6 +13615,7 @@ __metadata:
     eslint-plugin-n: ^16.0.0
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-vue: ^9.15.0
+    fix-path: ^4.0.0
     fsevents: ^2.3.2
     gettext-parser: ^7.0.1
     got: ^13.0.0
