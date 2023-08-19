@@ -124,7 +124,7 @@ body.dark {
     // NOTE: Our codeblock layer creates THREE blocks per codeblock:
     // First line, rest of the block, and an empty block at the end.
     // Therefore we have to style elements 1, 4, 7, etc. and 2, 5, 8, etc.
-    .code-line-background:nth-child(3n+1) {
+    .code-line-background:nth-child(3n+1), .inline-code-background {
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
     }
