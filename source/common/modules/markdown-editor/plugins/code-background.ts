@@ -33,7 +33,7 @@ if (node.type.name === 'CodeText') {
           const localMarkers = RectangleMarker.forRange(
             view,
             (node.type.name === 'CodeText') ? 'code code-line-background' : 'code inline-code-background',
-            EditorSelection.range(node.from, node.to + 1)
+            EditorSelection.range(from, to)
           )
 
           markers.push(...localMarkers)
