@@ -2,9 +2,9 @@ import { syntaxTree } from '@codemirror/language'
 import { EditorSelection } from '@codemirror/state'
 import { layer, RectangleMarker } from '@codemirror/view'
 
-export const codeblockBackground = layer({
+export const codeBackground = layer({
   above: false, // Render below text
-  class: 'cm-codeblockBackgroundLayer',
+  class: 'cm-codeBackgroundLayer',
   update (update, layer) {
     return update.docChanged || update.viewportChanged // Return true to redraw markers
   },
@@ -17,14 +17,15 @@ export const codeblockBackground = layer({
       to: view.state.doc.length,
       enter: (node) => {
         // CodeText contains a single node that has all the code's contents
-        if (node.type.name !== 'CodeText') {
+        // We also want InlineCode to be handled here.
+        if (node.type.name !== 'CodeText' && node.type.name !== 'InlineCode') {
           return
         }
 
         try {
           const localMarkers = RectangleMarker.forRange(
             view,
-            'code code-block-line-background',
+            'code code-line-background',
             EditorSelection.range(node.from, node.to + 1)
           )
 
