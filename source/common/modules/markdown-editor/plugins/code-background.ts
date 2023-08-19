@@ -25,7 +25,7 @@ export const codeBackground = layer({
         try {
           const localMarkers = RectangleMarker.forRange(
             view,
-            'code code-line-background',
+            (node.type.name === 'CodeText') ? 'code code-line-background' : 'code inline-code-background',
             EditorSelection.range(node.from, node.to + 1)
           )
 
