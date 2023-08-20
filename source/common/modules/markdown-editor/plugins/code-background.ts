@@ -21,14 +21,14 @@ export const codeBackground = layer({
         if (node.type.name !== 'CodeText' && node.type.name !== 'InlineCode') {
           return
         }
-// Default config for inline code
-let from = node.from + 1
-let to = node.to - 1
-if (node.type.name === 'CodeText') {
-  // Branch for Code Block
-  from = node.from
-  to = node.to + 1 // Necessary to draw a background behind the entire last line
-}
+        // Default config for inline code
+        let from = node.from + 1
+        let to = node.to - 1
+        if (node.type.name === 'CodeText') {
+          // Branch for Code Block
+          from = node.from
+          to = node.to + 1 // Necessary to draw a background behind the entire last line
+        }
         try {
           const localMarkers = RectangleMarker.forRange(
             view,
