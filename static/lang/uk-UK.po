@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-08-14 02:23+0000\n"
+"POT-Creation-Date: 2023-08-21 02:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -839,7 +839,7 @@ msgstr "Примітки"
 msgid "Table of Contents"
 msgstr "Зміст"
 
-#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:27
+#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:33
 msgid "Related files"
 msgstr ""
 
@@ -863,7 +863,7 @@ msgstr "Змінити налаштування за замовчуванням 
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/app/service-providers/menu/menu.win32.ts:162
-#: source/app/service-providers/commands/export.ts:108
+#: source/app/service-providers/commands/export.ts:112
 msgid "Save"
 msgstr "Зберегти"
 
@@ -883,23 +883,23 @@ msgstr "Збереження…"
 msgid "Saved!"
 msgstr "Збережено!"
 
-#: source/tmp/RelatedFilesTab.vue.ts:30
+#: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "No related files"
 msgstr ""
 
-#: source/tmp/RelatedFilesTab.vue.ts:33
+#: source/tmp/RelatedFilesTab.vue.ts:39
 msgid "This relation is based on a bidirectional link."
 msgstr ""
 
-#: source/tmp/RelatedFilesTab.vue.ts:36
+#: source/tmp/RelatedFilesTab.vue.ts:42
 msgid "This relation is based on an outbound link."
 msgstr ""
 
-#: source/tmp/RelatedFilesTab.vue.ts:39
+#: source/tmp/RelatedFilesTab.vue.ts:45
 msgid "This relation is based on a backlink."
 msgstr ""
 
-#: source/tmp/RelatedFilesTab.vue.ts:227
+#: source/tmp/RelatedFilesTab.vue.ts:235
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr ""
@@ -2239,7 +2239,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
-#: source/app/service-providers/config/index.ts:427
+#: source/app/service-providers/config/index.ts:426
 msgid "Restart now"
 msgstr ""
 
@@ -2330,7 +2330,7 @@ msgid "Changes to the library file detected. Reloading …"
 msgstr "Зміни у файлі бібліотеки. Перезавантаження ..."
 
 #: source/app/service-providers/commands/export.ts:55
-#: source/app/service-providers/commands/export.ts:151
+#: source/app/service-providers/commands/export.ts:155
 msgid "Export failed"
 msgstr "Помилка експорту"
 
@@ -2339,16 +2339,16 @@ msgstr "Помилка експорту"
 msgid "An error occurred during export: %s"
 msgstr "Виникла помилка під час експортування: %s"
 
-#: source/app/service-providers/commands/export.ts:108
+#: source/app/service-providers/commands/export.ts:112
 msgid "Choose export destination"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:139
+#: source/app/service-providers/commands/export.ts:143
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "Експортування в %s"
 
-#: source/app/service-providers/commands/export.ts:152
+#: source/app/service-providers/commands/export.ts:156
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "Виникла помилка під час експортування: %s"
@@ -2366,7 +2366,7 @@ msgstr "Не вдалося імпортувати мовний файл %s!"
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:432
+#: source/app/service-providers/config/index.ts:431
 msgid "Confirm"
 msgstr ""
 
@@ -2572,11 +2572,11 @@ msgstr "Опція %s повинна бути щонайменше %s (кіль�
 msgid "Option %s is required."
 msgstr "Опція %s обов'язкова."
 
-#: source/app/service-providers/config/index.ts:424
+#: source/app/service-providers/config/index.ts:423
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:428
+#: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
 msgstr ""
 
@@ -2588,17 +2588,17 @@ msgstr ""
 msgid "Zettlr"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:176
+#: source/app/service-providers/updates/index.ts:292
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "Неможливо перевірити на оновлення: Помилка сервера (Код помилки: %s)"
 
-#: source/app/service-providers/updates/index.ts:178
+#: source/app/service-providers/updates/index.ts:294
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr "Неможливо перевірити на оновлення: Помилка клієнта (Код помилки: %s)"
 
-#: source/app/service-providers/updates/index.ts:180
+#: source/app/service-providers/updates/index.ts:296
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -2609,21 +2609,21 @@ msgstr ""
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
 #. offline.
-#: source/app/service-providers/updates/index.ts:185
+#: source/app/service-providers/updates/index.ts:301
 msgid "Could not check for updates: Could not establish connection"
 msgstr "Неможливо перевірити на оновлення: Не вдалося встановити з'єднання"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:188
+#: source/app/service-providers/updates/index.ts:304
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "Не вдалося перевірити оновлення. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:204
+#: source/app/service-providers/updates/index.ts:320
 msgid "Could not check for updates: Server hasn't sent any data"
 msgstr "Неможливо перевірити на оновлення: Сервер не надсилає даних"
 
-#: source/app/service-providers/updates/index.ts:461
+#: source/app/service-providers/updates/index.ts:577
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr "Доступне оновлення до версії %s!"

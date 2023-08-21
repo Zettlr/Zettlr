@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-08-14 02:23+0000\n"
+"POT-Creation-Date: 2023-08-21 02:23+0000\n"
 "PO-Revision-Date: 2023-08-19 17:46+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -828,7 +828,7 @@ msgstr "References"
 msgid "Table of Contents"
 msgstr "Table of Contents"
 
-#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:27
+#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:33
 msgid "Related files"
 msgstr "Related files"
 
@@ -856,7 +856,7 @@ msgstr "Edit the default settings for imports or exports here."
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/app/service-providers/menu/menu.win32.ts:162
-#: source/app/service-providers/commands/export.ts:108
+#: source/app/service-providers/commands/export.ts:112
 msgid "Save"
 msgstr "Save"
 
@@ -876,23 +876,23 @@ msgstr "Saving …"
 msgid "Saved!"
 msgstr "Saved!"
 
-#: source/tmp/RelatedFilesTab.vue.ts:30
+#: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "No related files"
 msgstr "No related files"
 
-#: source/tmp/RelatedFilesTab.vue.ts:33
+#: source/tmp/RelatedFilesTab.vue.ts:39
 msgid "This relation is based on a bidirectional link."
 msgstr "This relation is based on a bidirectional link."
 
-#: source/tmp/RelatedFilesTab.vue.ts:36
+#: source/tmp/RelatedFilesTab.vue.ts:42
 msgid "This relation is based on an outbound link."
 msgstr "This relation is based on an outbound link."
 
-#: source/tmp/RelatedFilesTab.vue.ts:39
+#: source/tmp/RelatedFilesTab.vue.ts:45
 msgid "This relation is based on a backlink."
 msgstr "This relation is based on a backlink."
 
-#: source/tmp/RelatedFilesTab.vue.ts:227
+#: source/tmp/RelatedFilesTab.vue.ts:235
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr "This relation is based on %s shared tags: %s"
@@ -2211,7 +2211,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
-#: source/app/service-providers/config/index.ts:427
+#: source/app/service-providers/config/index.ts:426
 msgid "Restart now"
 msgstr "Restart now"
 
@@ -2301,7 +2301,7 @@ msgid "Changes to the library file detected. Reloading …"
 msgstr "Changes to the library file detected. Reloading …"
 
 #: source/app/service-providers/commands/export.ts:55
-#: source/app/service-providers/commands/export.ts:151
+#: source/app/service-providers/commands/export.ts:155
 msgid "Export failed"
 msgstr "Export failed"
 
@@ -2310,16 +2310,16 @@ msgstr "Export failed"
 msgid "An error occurred during export: %s"
 msgstr "An error occurred during export: %s"
 
-#: source/app/service-providers/commands/export.ts:108
+#: source/app/service-providers/commands/export.ts:112
 msgid "Choose export destination"
 msgstr "Choose export destination"
 
-#: source/app/service-providers/commands/export.ts:139
+#: source/app/service-providers/commands/export.ts:143
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "Exporting to %s"
 
-#: source/app/service-providers/commands/export.ts:152
+#: source/app/service-providers/commands/export.ts:156
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "An error occurred on export: %s"
@@ -2337,7 +2337,7 @@ msgstr "Could not import language file %s!"
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:432
+#: source/app/service-providers/config/index.ts:431
 msgid "Confirm"
 msgstr "Confirm"
 
@@ -2545,11 +2545,11 @@ msgstr "Option %s must be at least %s (characters long)."
 msgid "Option %s is required."
 msgstr "Option %s is required."
 
-#: source/app/service-providers/config/index.ts:424
+#: source/app/service-providers/config/index.ts:423
 msgid "Changing this option requires a restart to take effect."
 msgstr "Changing this option requires a restart to take effect."
 
-#: source/app/service-providers/config/index.ts:428
+#: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
 msgstr "Restart later"
 
@@ -2561,17 +2561,17 @@ msgstr "Show Zettlr"
 msgid "Zettlr"
 msgstr "Zettlr"
 
-#: source/app/service-providers/updates/index.ts:176
+#: source/app/service-providers/updates/index.ts:292
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "Could not check for updates: Server Error (Status code: %s)"
 
-#: source/app/service-providers/updates/index.ts:178
+#: source/app/service-providers/updates/index.ts:294
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr "Could not check for updates: Client Error (Status code: %s)"
 
-#: source/app/service-providers/updates/index.ts:180
+#: source/app/service-providers/updates/index.ts:296
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -2581,21 +2581,21 @@ msgstr ""
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
 #. offline.
-#: source/app/service-providers/updates/index.ts:185
+#: source/app/service-providers/updates/index.ts:301
 msgid "Could not check for updates: Could not establish connection"
 msgstr "Could not check for updates: Could not establish connection"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:188
+#: source/app/service-providers/updates/index.ts:304
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "Could not check for updates. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:204
+#: source/app/service-providers/updates/index.ts:320
 msgid "Could not check for updates: Server hasn't sent any data"
 msgstr "Could not check for updates: Server hasn't sent any data"
 
-#: source/app/service-providers/updates/index.ts:461
+#: source/app/service-providers/updates/index.ts:577
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr "An update to version %s is available!"

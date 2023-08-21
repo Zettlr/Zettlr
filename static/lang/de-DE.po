@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-08-14 02:23+0000\n"
+"POT-Creation-Date: 2023-08-21 02:23+0000\n"
 "PO-Revision-Date: 2023-08-19 17:47+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -838,7 +838,7 @@ msgstr "Literatur"
 msgid "Table of Contents"
 msgstr "Inhaltsverzeichnis"
 
-#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:27
+#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:33
 msgid "Related files"
 msgstr "Verwandte Dateien"
 
@@ -866,7 +866,7 @@ msgstr "Bearbeite die Standardeinstellungen für Importe oder Exporte hier."
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/app/service-providers/menu/menu.win32.ts:162
-#: source/app/service-providers/commands/export.ts:108
+#: source/app/service-providers/commands/export.ts:112
 msgid "Save"
 msgstr "Speichern"
 
@@ -886,23 +886,23 @@ msgstr "Speichere …"
 msgid "Saved!"
 msgstr "Gespeichert!"
 
-#: source/tmp/RelatedFilesTab.vue.ts:30
+#: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "No related files"
 msgstr "Keine verwandten Dateien"
 
-#: source/tmp/RelatedFilesTab.vue.ts:33
+#: source/tmp/RelatedFilesTab.vue.ts:39
 msgid "This relation is based on a bidirectional link."
 msgstr "Verwandt aufgrund gegenseitiger Verlinkung."
 
-#: source/tmp/RelatedFilesTab.vue.ts:36
+#: source/tmp/RelatedFilesTab.vue.ts:42
 msgid "This relation is based on an outbound link."
 msgstr "Verwandt aufgrund ausgehendem Link."
 
-#: source/tmp/RelatedFilesTab.vue.ts:39
+#: source/tmp/RelatedFilesTab.vue.ts:45
 msgid "This relation is based on a backlink."
 msgstr "Verwandt aufgrund eingehendem Link."
 
-#: source/tmp/RelatedFilesTab.vue.ts:227
+#: source/tmp/RelatedFilesTab.vue.ts:235
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr "Verwandt basierend auf %s gemeinsamen Schlagworten: %s"
@@ -2224,7 +2224,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
-#: source/app/service-providers/config/index.ts:427
+#: source/app/service-providers/config/index.ts:426
 msgid "Restart now"
 msgstr "Jetzt neustarten"
 
@@ -2314,7 +2314,7 @@ msgid "Changes to the library file detected. Reloading …"
 msgstr "Änderung in der Bibliothek entdeckt. Lade neu …"
 
 #: source/app/service-providers/commands/export.ts:55
-#: source/app/service-providers/commands/export.ts:151
+#: source/app/service-providers/commands/export.ts:155
 msgid "Export failed"
 msgstr "Export fehlgeschlagen"
 
@@ -2323,16 +2323,16 @@ msgstr "Export fehlgeschlagen"
 msgid "An error occurred during export: %s"
 msgstr "Beim Export ist ein Fehler aufgetreten: %s"
 
-#: source/app/service-providers/commands/export.ts:108
+#: source/app/service-providers/commands/export.ts:112
 msgid "Choose export destination"
 msgstr "Exportieren nach"
 
-#: source/app/service-providers/commands/export.ts:139
+#: source/app/service-providers/commands/export.ts:143
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "Exportiere nach %s"
 
-#: source/app/service-providers/commands/export.ts:152
+#: source/app/service-providers/commands/export.ts:156
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "Ein Fehler ist beim Export aufgetreten: %s"
@@ -2350,7 +2350,7 @@ msgstr "Die Sprachdatei %s konnte nicht importiert werden!"
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:432
+#: source/app/service-providers/config/index.ts:431
 msgid "Confirm"
 msgstr "Bestätigen"
 
@@ -2560,11 +2560,11 @@ msgstr "Option %s muss mindestens %s Zeichen lang bzw. groß sein."
 msgid "Option %s is required."
 msgstr "Option %s ist erforderlich."
 
-#: source/app/service-providers/config/index.ts:424
+#: source/app/service-providers/config/index.ts:423
 msgid "Changing this option requires a restart to take effect."
 msgstr "Diese Änderung wird erst nach einem Neustart wirksam."
 
-#: source/app/service-providers/config/index.ts:428
+#: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
 msgstr "Später neustarten"
 
@@ -2576,17 +2576,17 @@ msgstr "Zettlr anzeigen"
 msgid "Zettlr"
 msgstr "Zettlr"
 
-#: source/app/service-providers/updates/index.ts:176
+#: source/app/service-providers/updates/index.ts:292
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "Konnte nicht nach Updates suchen: Server Error (Statuscode: %s)"
 
-#: source/app/service-providers/updates/index.ts:178
+#: source/app/service-providers/updates/index.ts:294
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr "Konnte nicht nach Updates suchen: Clientfehler (Statuscode: %s)"
 
-#: source/app/service-providers/updates/index.ts:180
+#: source/app/service-providers/updates/index.ts:296
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -2597,22 +2597,22 @@ msgstr ""
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
 #. offline.
-#: source/app/service-providers/updates/index.ts:185
+#: source/app/service-providers/updates/index.ts:301
 msgid "Could not check for updates: Could not establish connection"
 msgstr ""
 "Konnte nicht nach Updates suchen: Verbindung konnte nicht hergestellt werden"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:188
+#: source/app/service-providers/updates/index.ts:304
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "Konnte nicht auf Aktualisierungen prüfen. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:204
+#: source/app/service-providers/updates/index.ts:320
 msgid "Could not check for updates: Server hasn't sent any data"
 msgstr "Konnte nicht nach Updates suchen: Server hat keine Daten gesendet"
 
-#: source/app/service-providers/updates/index.ts:461
+#: source/app/service-providers/updates/index.ts:577
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr "Eine Aktualisierung auf Version %s ist verfügbar!"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-08-14 02:23+0000\n"
+"POT-Creation-Date: 2023-08-21 02:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -835,7 +835,7 @@ msgstr "参考文献"
 msgid "Table of Contents"
 msgstr "目录"
 
-#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:27
+#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:33
 msgid "Related files"
 msgstr "相关文件"
 
@@ -859,7 +859,7 @@ msgstr "编辑导入或导出的默认设置"
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/app/service-providers/menu/menu.win32.ts:162
-#: source/app/service-providers/commands/export.ts:108
+#: source/app/service-providers/commands/export.ts:112
 msgid "Save"
 msgstr "保存"
 
@@ -879,23 +879,23 @@ msgstr "保存中…"
 msgid "Saved!"
 msgstr "已保存！"
 
-#: source/tmp/RelatedFilesTab.vue.ts:30
+#: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "No related files"
 msgstr "相关文件不存在"
 
-#: source/tmp/RelatedFilesTab.vue.ts:33
+#: source/tmp/RelatedFilesTab.vue.ts:39
 msgid "This relation is based on a bidirectional link."
 msgstr "这种联系基于双向链接"
 
-#: source/tmp/RelatedFilesTab.vue.ts:36
+#: source/tmp/RelatedFilesTab.vue.ts:42
 msgid "This relation is based on an outbound link."
 msgstr "此联系基于出站链接。"
 
-#: source/tmp/RelatedFilesTab.vue.ts:39
+#: source/tmp/RelatedFilesTab.vue.ts:45
 msgid "This relation is based on a backlink."
 msgstr "这种联系基于反向链接。"
 
-#: source/tmp/RelatedFilesTab.vue.ts:227
+#: source/tmp/RelatedFilesTab.vue.ts:235
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr "此联系基于 %s 共享标签: %s"
@@ -2232,7 +2232,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
-#: source/app/service-providers/config/index.ts:427
+#: source/app/service-providers/config/index.ts:426
 #, fuzzy
 msgid "Restart now"
 msgstr "刚才"
@@ -2322,7 +2322,7 @@ msgid "Changes to the library file detected. Reloading …"
 msgstr "检测到库文件更改，重新加载中…"
 
 #: source/app/service-providers/commands/export.ts:55
-#: source/app/service-providers/commands/export.ts:151
+#: source/app/service-providers/commands/export.ts:155
 msgid "Export failed"
 msgstr "导出失败"
 
@@ -2331,16 +2331,16 @@ msgstr "导出失败"
 msgid "An error occurred during export: %s"
 msgstr "错误输出: %s"
 
-#: source/app/service-providers/commands/export.ts:108
+#: source/app/service-providers/commands/export.ts:112
 msgid "Choose export destination"
 msgstr "选择导出目的位置"
 
-#: source/app/service-providers/commands/export.ts:139
+#: source/app/service-providers/commands/export.ts:143
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "成功导出到％s！"
 
-#: source/app/service-providers/commands/export.ts:152
+#: source/app/service-providers/commands/export.ts:156
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "错误输出: %s"
@@ -2358,7 +2358,7 @@ msgstr "无法导入语言包文件 %s！"
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:432
+#: source/app/service-providers/config/index.ts:431
 msgid "Confirm"
 msgstr "确定"
 
@@ -2561,11 +2561,11 @@ msgstr "选项％s必须至少为％s（字符长）。"
 msgid "Option %s is required."
 msgstr "选项％s是必需的。"
 
-#: source/app/service-providers/config/index.ts:424
+#: source/app/service-providers/config/index.ts:423
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:428
+#: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
 msgstr ""
 
@@ -2577,17 +2577,17 @@ msgstr "在托盘中显示Zettlr"
 msgid "Zettlr"
 msgstr "Zettlr"
 
-#: source/app/service-providers/updates/index.ts:176
+#: source/app/service-providers/updates/index.ts:292
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "无法检查更新：服务器错误（状态代码：％s）"
 
-#: source/app/service-providers/updates/index.ts:178
+#: source/app/service-providers/updates/index.ts:294
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr "无法检查更新：客户端错误（状态代码：％s）"
 
-#: source/app/service-providers/updates/index.ts:180
+#: source/app/service-providers/updates/index.ts:296
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -2596,21 +2596,21 @@ msgstr "无法检查更新：服务器尝试重定向（状态代码：％s）"
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
 #. offline.
-#: source/app/service-providers/updates/index.ts:185
+#: source/app/service-providers/updates/index.ts:301
 msgid "Could not check for updates: Could not establish connection"
 msgstr "无法检查更新：无法建立连接"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:188
+#: source/app/service-providers/updates/index.ts:304
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "无法检查最新版本 %s: %s"
 
-#: source/app/service-providers/updates/index.ts:204
+#: source/app/service-providers/updates/index.ts:320
 msgid "Could not check for updates: Server hasn't sent any data"
 msgstr "无法检查更新：服务器尚未发送任何数据"
 
-#: source/app/service-providers/updates/index.ts:461
+#: source/app/service-providers/updates/index.ts:577
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr "可以更新到最新版本  %s ！"
