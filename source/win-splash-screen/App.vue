@@ -61,11 +61,23 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #333;
+  // The entire window should be draggable so that users can move it to the side
+  // if booting the app takes an excruciating amount of time
+  -webkit-app-region: drag;
+
+  &.dark {
+    background-color: #333;
+    color: white;
+  }
+}
+
 #splash-screen-wrapper {
   text-align: center;
   width: 500px;
   margin: 20px auto;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color: #333;
 }
 </style>
