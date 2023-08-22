@@ -54,7 +54,7 @@ import { jsonFolding } from './code-folding/json'
 import { markdownFolding } from './code-folding/markdown'
 import { jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
 import { softwrapVisualIndent } from './plugins/visual-indent'
-import { codeBackground } from './plugins/code-background'
+import { codeblockBackground, inlineCodeBackground } from './plugins/code-background'
 import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
 import { distractionFree } from './plugins/distraction-free'
@@ -293,7 +293,8 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     footnoteGutter, // Should be after markdownFolding
     urlHover,
     filePreview,
-    codeBackground, // Add a background behind codeblocks
+    codeblockBackground, // Add a background behind codeblocks
+    inlineCodeBackground, // Add a background behind inline code
     defaultContextMenu, // A default context menu
     EditorView.domEventHandlers(options.domEventsListeners)
   ]
