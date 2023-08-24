@@ -1,5 +1,5 @@
 import { syntaxTree } from '@codemirror/language'
-import { EditorSelection } from '@codemirror/state'
+import { EditorSelection, type Extension } from '@codemirror/state'
 import { layer, RectangleMarker } from '@codemirror/view'
 
 export const codeblockBackground = layer({
@@ -87,3 +87,8 @@ export const inlineCodeBackground = layer({
     return markers
   }
 })
+
+export const backgroundLayers: Extension[] = [
+  codeblockBackground,
+  inlineCodeBackground
+]
