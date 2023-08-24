@@ -12,10 +12,6 @@
  *                  lists, etc. are correctly indented so that the list marker
  *                  is placed outside of the text block.
  *
- *                  See further:
- *                    * https://discuss.codemirror.net/t/making-codemirror-6-respect-indent-for-wrapped-lines/2881
- *                    * https://discuss.codemirror.net/t/updates-not-synchronised-with-requestmeasure-and-viewplugin/4720
- *
  * END HEADER
  */
 
@@ -28,12 +24,11 @@ import {
   type ViewUpdate
 } from '@codemirror/view'
 
-function render (view: EditorView): DecorationSet {
-  // TODO: The defaultCharacterWidth works perfect for monospaced text, but
-  // horrible in combination of deep indentation (list level 2 and above) with
-  // flexible-width fonts. For that, we possibly have to fall back to
-  // requestMeasure to accurately get the widths required. There is this plugin
-  // I may be inspired from: https://gist.github.com/lishid/c10db431cb8a9e83905a3443cfdb53bb
+function render (view: EditorView, measurements?: Map<string, number>): DecorationSet {
+  // Original inspiration came from this plugin:
+  // https://gist.github.com/lishid/c10db431cb8a9e83905a3443cfdb53bb
+  // HOWEVER, that didn't quite do the job. After months of thinking, I finally
+  // had a good idea, which is what the below shows:
   const charWidth = view.defaultCharacterWidth
   const tabSize = view.state.tabSize
   const builder = new RangeSetBuilder<Decoration>()
@@ -65,21 +60,52 @@ function render (view: EditorView): DecorationSet {
       }
     }
 
-    let offset = (tabs * tabSize + spaces) * charWidth
+    let offset = tabs * tabSize + spaces
 
     // Here we additionally account for list markers and indent even further.
     // BUG: Currently this applies even to code files, which is not desirable.
-    const match = /^\s*((?:[+*>-]|\d+\.)\s)/.exec(line.text)
-    if (match !== null) {
-      offset += match[1].length * charWidth
-    }
+    const match = /^\s*((?:[+*>-](?:\s\[[x\s]\])?|\d+\.)\s)/.exec(line.text)
+    offset += match !== null ? match[1].length : 0
 
     if (offset === 0) {
       continue // Nothing to indent here
     }
 
-    const deco = Decoration.line({ attributes: { style: `text-indent: -${offset}px; padding-left: ${offset + basePadding}px;` } })
-    builder.add(line.from, line.from, deco)
+    // We must use ONLY what the measurement is based on, because otherwise we're
+    // going to have "jumpy" text when the user adds new characters to the line
+    // which result in a cache miss and thus a very small flicker when the plugin
+    // switches from the estimate to the measurement. The upshot of this is that
+    // we save a ton of resources, because only one of such measurements will be
+    // taken per render (see key: measurementKey)
+    const measurementKey = line.text.slice(0, offset)
+
+    view.requestMeasure({
+      read (view) {
+        const base = view.contentDOM.getBoundingClientRect().left
+        const after = view.coordsAtPos(line.from + offset)?.left ?? 0
+        if (after === 0) {
+          return // Could not retrieve coordinates
+        }
+        measurements?.set(measurementKey, after - base)
+      },
+      key: measurementKey
+    })
+
+    const indent = measurements?.get(measurementKey)
+    if (indent !== undefined) {
+      // Shortcut if we have measured this indent the last time around
+      // NOTE: This time we do not need the basePadding, as the measurement
+      // comes straight from the DOM and thus already includes that.
+      const deco = Decoration.line({ attributes: { style: `text-indent: -${indent}px; padding-left: ${indent}px;` } })
+      builder.add(line.from, line.from, deco)
+    } else {
+      // There is not yet a measurement, so use an estimate (which will be fine
+      // for monospace, and off for other fonts). NOTE that we have to include
+      // the base padding that CodeMirror itself adds.
+      const pxOffset = offset * charWidth
+      const deco = Decoration.line({ attributes: { style: `text-indent: -${pxOffset}px; padding-left: ${pxOffset + basePadding}px;` } })
+      builder.add(line.from, line.from, deco)
+    }
   }
 
   return builder.finish()
@@ -87,9 +113,16 @@ function render (view: EditorView): DecorationSet {
 
 export const softwrapVisualIndent = ViewPlugin.define(view => ({
   decorations: render(view),
+  // This is an additional property, required to ensure that different editors
+  // in the same renderer processes have their own measurements (i.e. if you
+  // have a JSON and a Markdown file with monospace vs. sans-serif open at the
+  // same time)
+  measurements: new Map<string, number>(),
   update (u: ViewUpdate) {
-    this.decorations = render(u.view)
+    this.decorations = render(u.view, this.measurements)
   }
 }), {
-  decorations: v => v.decorations
+  decorations (value) {
+    return value.decorations
+  }
 })
