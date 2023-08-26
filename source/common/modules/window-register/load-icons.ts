@@ -32,6 +32,7 @@ import FileExtIcon from './icons/clarity-custom/file-ext.svg'
 import IndentedViewListIcon from './icons/clarity-custom/indented-view-list.svg'
 import RegExpIcon from './icons/clarity-custom/regexp.svg'
 import GitIcon from './icons/clarity-custom/git.svg'
+import MarkdownIcon from './icons/clarity-custom/markdown.svg'
 
 export default async function loadIcons (): Promise<void> {
   // I don't know why they decided to not export an "all" collection, but so be it.
@@ -59,6 +60,7 @@ export default async function loadIcons (): Promise<void> {
     [ 'indented-view-list', { outline: IndentedViewListIcon }],
     [ 'regexp', { outline: RegExpIcon }],
     [ 'footnote', { outline: FootnoteIcon }],
+    [ 'markdown', { outline: MarkdownIcon }],
     [ 'git', {
       outline: GitIcon,
       solid: GitIcon

@@ -347,6 +347,9 @@ there.
 - A new "match whole word" setting allows to control whether AutoCorrect can
   also correct partial words
 - The tutorial is now available in Dutch as well.
+- The combined file tree is now more verbose when it comes to icons: Folders
+  now always have icons to indicate that they're folders (can be overridden with
+  a project icon or a custom icon), and Markdown files have a more distinct icon
 
 ## Under the Hood
 
