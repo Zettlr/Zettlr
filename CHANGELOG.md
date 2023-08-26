@@ -237,6 +237,11 @@ there.
 - **New Feature**: Add splash screen to indicate FSAL loading progress
 - Note preview tooltips now display a sanitized HTML version of the note's
   Markdown contents
+- **New Feature**: Both entire YAML documents (including both profiles and
+  regular files) as well as YAML frontmatter sections in Markdown documents are
+  now linted, providing a visual indication that a piece of YAML code contains
+  syntax errors that prevents, e.g., Zettlr from detecting the file's title or
+  Pandoc from properly reading the metadata of the document
 - Removed the "Get LaTeX" menu item since (hopefully) now the advice in the docs
   and in the tutorial are sufficient
 - Replaced the old Markdown-to-HTML and HTML-to-Markdown converter with more up-
