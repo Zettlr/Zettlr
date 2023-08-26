@@ -15,6 +15,7 @@
  * END HEADER
  */
 
+import { syntaxTree } from '@codemirror/language'
 import { RangeSetBuilder, type Line } from '@codemirror/state'
 import {
   Decoration,
@@ -28,26 +29,41 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
   // Original inspiration came from this plugin:
   // https://gist.github.com/lishid/c10db431cb8a9e83905a3443cfdb53bb
   // HOWEVER, that didn't quite do the job. After months of thinking, I finally
-  // had a good idea, which is what the below shows:
+  // had a good idea, which is what the below shows.
+
+  // First, get some basics that we need.
   const charWidth = view.defaultCharacterWidth
   const tabSize = view.state.tabSize
   const builder = new RangeSetBuilder<Decoration>()
-
   // The CM editor styles apply a basic 6px padding. NOTE: This may change in
   // the future, in that case look this up and adapt it again!
   const basePadding = 6
 
-  const visibleLines = new Set<Line>()
+  // Then, retrieve all lines that are indentable via this plugin. These are:
+  // All lines that are part of the current viewport and that are not part of a
+  // code block. Why no code block? First, code blocks will always be in
+  // monospace. (If you use Custom CSS to make them non-monospaced, you are a
+  // cruel human being and deserve to be punished.) Second, if we mess with the
+  // indentation and padding of lines within code blocks, we mess up the
+  // calculations that happen to apply the gray background to our code blocks,
+  // which will make it look like a visual bug.
+  const indentableLines = new Set<Line>()
   for (const { from, to } of view.visibleRanges) {
     const firstLine = view.state.doc.lineAt(from).number
     const lastLine = view.state.doc.lineAt(to).number
     for (let i = firstLine; i <= lastLine; i++) {
-      visibleLines.add(view.state.doc.line(i))
+      const currentLine = view.state.doc.line(i)
+      const nodeAtPos = syntaxTree(view.state).resolve(currentLine.from, 1)
+      if (nodeAtPos.name !== 'CodeText') {
+        indentableLines.add(currentLine)
+      }
     }
   }
 
-  for (const line of [...visibleLines]) {
-    // First determine how much we're actually offset
+  // Now that we know which lines need to be potentially indented, let's go
+  // through them one by one.
+  for (const line of [...indentableLines]) {
+    // First determine how much we're offset based purely on whitespace.
     let tabs = 0
     let spaces = 0
     for (const char of line.text) {
@@ -62,21 +78,22 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
 
     let offset = tabs * tabSize + spaces
 
-    // Here we additionally account for list markers and indent even further.
+    // Second, determine the offset based on list elements.
     // BUG: Currently this applies even to code files, which is not desirable.
     const match = /^\s*((?:[+*>-](?:\s\[[x\s]\])?|\d+\.)\s)/.exec(line.text)
     offset += match !== null ? match[1].length : 0
 
     if (offset === 0) {
-      continue // Nothing to indent here
+      continue // Neither whitespace nor list elements on that line.
     }
 
-    // We must use ONLY what the measurement is based on, because otherwise we're
-    // going to have "jumpy" text when the user adds new characters to the line
-    // which result in a cache miss and thus a very small flicker when the plugin
-    // switches from the estimate to the measurement. The upshot of this is that
-    // we save a ton of resources, because only one of such measurements will be
-    // taken per render (see key: measurementKey)
+    // Now that we know we need to indent this line, schedule a measurement so
+    // that in the next round of this code running we have an accurate
+    // indentation even for non-monospaced text. What we want to measure is
+    // exclusively what we are basing our indentation on. If we use the entire
+    // line as a key, we cause (a) duplicated measurements (`* One` and `* Two`
+    // require the same indentation) and (b) cause cache misses which results in
+    // jumpy behavior when the user adds novel characters to the line.
     const measurementKey = line.text.slice(0, offset)
 
     view.requestMeasure({
@@ -86,6 +103,8 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
         if (after === 0) {
           return // Could not retrieve coordinates
         }
+        // Note that this continuously updates our measurements after any layout
+        // changes
         measurements?.set(measurementKey, after - base)
       },
       key: measurementKey
@@ -93,7 +112,6 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
 
     const indent = measurements?.get(measurementKey)
     if (indent !== undefined) {
-      // Shortcut if we have measured this indent the last time around
       // NOTE: This time we do not need the basePadding, as the measurement
       // comes straight from the DOM and thus already includes that.
       const deco = Decoration.line({ attributes: { style: `text-indent: -${indent}px; padding-left: ${indent}px;` } })
@@ -113,10 +131,8 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
 
 export const softwrapVisualIndent = ViewPlugin.define(view => ({
   decorations: render(view),
-  // This is an additional property, required to ensure that different editors
-  // in the same renderer processes have their own measurements (i.e. if you
-  // have a JSON and a Markdown file with monospace vs. sans-serif open at the
-  // same time)
+  // This is an additional property, required to ensure that each editor
+  // instance has its own map, preventing any potential interference.
   measurements: new Map<string, number>(),
   update (u: ViewUpdate) {
     this.decorations = render(u.view, this.measurements)
