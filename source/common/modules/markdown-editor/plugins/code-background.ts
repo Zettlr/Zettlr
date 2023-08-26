@@ -17,7 +17,6 @@ export const codeblockBackground = layer({
       to: view.state.doc.length,
       enter: (node) => {
         // CodeText contains a single node that has all the code's contents
-        // We also want InlineCode to be handled here.
         if (node.type.name !== 'CodeText') {
           return
         }
@@ -59,11 +58,17 @@ export const inlineCodeBackground = layer({
       from: 0,
       to: view.state.doc.length,
       enter: (node) => {
-        // CodeText contains a single node that has all the code's contents
-        // We also want InlineCode to be handled here.
         if (node.type.name !== 'InlineCode') {
           return
         }
+
+        // Additional check: Rendering of anything messes with the code
+        // backgrounds, so we want to disable them in those cases. Here: inline
+        // math.
+        if (view.state.sliceDoc(node.from, node.from + 1) === '$') {
+          return
+        }
+
         try {
           const localMarkers = RectangleMarker.forRange(
             view,
