@@ -111,8 +111,8 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
             break
           }
           case 'Blockquote': {
-            const mark = node.node.getChild('QuoteMark')
-            if (mark !== null) {
+            const marks = node.node.getChildren('QuoteMark')
+            for (const mark of marks) {
               ranges.push(Decoration.replace({ widget: new SpaceWidget(mark.node, mark.to - mark.from) }).range(mark.from, mark.to))
             }
             break
