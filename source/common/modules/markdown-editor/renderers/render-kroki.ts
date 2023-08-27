@@ -28,7 +28,7 @@ const DIAGRAM_TYPES = [
   'svgbob', 'tikz', 'vega', 'wavedrom', 'wireviz'
 
 ] // vegalite must be before vega, because otherwise vegalite diagrams will be rendered as vega diagrams
-const DIAGRAM_SYNONYMNS = { 'dot': 'graphviz', 'c4': 'c4plantuml' }
+const DIAGRAM_SYNONYMS = { 'dot': 'graphviz', 'c4': 'c4plantuml' }
 
 class KrokiWidget extends WidgetType {
   constructor (readonly type: string, readonly graph: string, readonly node: SyntaxNode, readonly darkMode: boolean) {
@@ -68,53 +68,48 @@ class KrokiWidget extends WidgetType {
 }
 
 function shouldHandleNode (node: SyntaxNodeRef): boolean {
-  // This parser should look for InlineCode and FencedCode and then immediately
-  // check its first CodeMark child to ensure its contents only include $ or $$.
   if (node.type.name !== 'FencedCode') {
     return false
   }
 
-  // We've got some code. Ensure we have an info string that happens to be 7
-  // chars long (= `mermaid`)
+  // We've got some code but we cannot do anything with it if it does not have a CodeInfo
   const firstChild = node.node.getChildren('CodeInfo')[0]
   if (firstChild === undefined) {
     return false
   }
 
+  // The shortest Code Info has 2 signs (d2)
   const markSpan = firstChild.to - firstChild.from
-
   if (markSpan < 2) {
     return false
   }
 
-  return true // There's reason to assume we are indeed dealing with a math equation
+  return true
 }
 
 function createWidget (state: EditorState, node: SyntaxNodeRef): KrokiWidget|undefined {
-  // Get the node's text contents, determine if this is a displayMode equation,
-  // and then remove the leading and trailing dollars. Also, pass a stable node
-  // reference (SyntaxNodeRef will be dropped, but the SyntaxNode itself will
-  // stay, and keep its position updated depending on what happens in the doc)
+  // We need to test whether the CodeInfo is one of the supported diagram types
   const nodeText = state.sliceDoc(node.from, node.to)
+  const allDiagramIdentifiers = [ ...DIAGRAM_TYPES, ...Object.keys(DIAGRAM_SYNONYMS) ]
   let detectedDiagramType: string|undefined
-  for (const type of [ ...DIAGRAM_TYPES, ...Object.keys(DIAGRAM_SYNONYMNS) ]) {
+  for (const type of allDiagramIdentifiers) {
     if (nodeText.startsWith('```' + type) || nodeText.startsWith('~~~' + type)) {
       detectedDiagramType = type
       break
     }
   }
+
+  // If it is no supported diagram type, we can stop here
   if (typeof detectedDiagramType === 'undefined') {
     return undefined
   }
 
-  if (Object.prototype.hasOwnProperty.call(DIAGRAM_SYNONYMNS, detectedDiagramType)) {
-    detectedDiagramType = DIAGRAM_SYNONYMNS[detectedDiagramType as keyof typeof DIAGRAM_SYNONYMNS]
+  // If it is a alias, we can replace the alias with the actual type
+  if (Object.prototype.hasOwnProperty.call(DIAGRAM_SYNONYMS, detectedDiagramType)) {
+    detectedDiagramType = DIAGRAM_SYNONYMS[detectedDiagramType as keyof typeof DIAGRAM_SYNONYMS]
   }
 
   const graph = nodeText.replace(/^[`~]{1,3}[^\n]*\n(.+?)\n[`~]{1,3}$/s, '$1') // NOTE the s flag
-  // NOTE: We have to pass the current value of the darkMode config value to
-  // see in what mode the kroki graph has actually been rendered to re-render
-  // the graph if necessary
   return new KrokiWidget(detectedDiagramType, graph, node.node, window.config.get('darkMode') as boolean)
 }
 
