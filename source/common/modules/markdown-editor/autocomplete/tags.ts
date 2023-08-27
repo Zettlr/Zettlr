@@ -62,14 +62,15 @@ export const tags: AutocompletePlugin = {
   applies (ctx) {
     const nodeAt = syntaxTree(ctx.state).resolve(ctx.pos, 0)
     if ((nodeAt.name === 'CodeText' && nodeAt.prevSibling?.name === 'YAMLFrontmatterStart') ||
-        (nodeAt.name === 'string' && nodeAt.matchContext(['CodeText']) && nodeAt.parent?.prevSibling?.name === 'YAMLFrontmatterStart')
+        (nodeAt.name === 'string' && nodeAt.matchContext(['CodeText']) && nodeAt.parent?.prevSibling?.name === 'YAMLFrontmatterStart') ||
+        (nodeAt.name === 'FencedCode' && nodeAt.firstChild?.name === 'YAMLFrontmatterStart')
     ) {
       const match = ctx.matchBefore(/(?<=^(?:keywords|tags):\s*\[(?:\s*\w+,\s*)*\s*)\w*/m)
       if (match !== null && match.to >= ctx.pos) {
         return match.from
       }
       const docBefore = ctx.state.sliceDoc(0, ctx.pos)
-      const docMatch = docBefore.match(/(?<=\n(?:keywords|tags):[\s|\n]*-\s*)(\w)*$/)
+      const docMatch = docBefore.match(/(?<=\n(?:keywords|tags):(\s*-\s*\w+)*\s*-\s*)(\w)*$/)
       if (docMatch !== null) {
         return ctx.pos - docMatch[0].length
       }
