@@ -85,24 +85,23 @@ msgstr "Duplica el fitxer"
 
 #: source/win-main/file-manager/util/file-item-context.ts:67
 #: source/win-main/file-manager/util/dir-item-context.ts:68
-#, fuzzy
 msgid "Copy path"
-msgstr "Copia tot el camí"
+msgstr "Copia el camí"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Mostra al Finder"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "Mostra a l'Explorador"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "Mostra al Navegador d'arxius"
 
 #: source/win-main/file-manager/util/file-item-context.ts:101
 msgid "Close file"
@@ -188,14 +187,12 @@ msgid "Ask for directory"
 msgstr "Pregunta per la carpeta"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Display name"
-msgstr "Mostra el botó d'inserir imatges"
+msgstr "Nom de visualització"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Command"
-msgstr "Comentari"
+msgstr "Ordre"
 
 #: source/win-preferences/schema/export.ts:65
 msgid ""
@@ -212,14 +209,12 @@ msgid "Pattern used to generate new IDs"
 msgstr "Patró utilitzat per a generar noves IDs"
 
 #: source/win-preferences/schema/zettelkasten.ts:39
-#, fuzzy
 msgid "Link with filename only"
-msgstr "Només nom del fitxer"
+msgstr "Enllaç amb només el nom del fitxer"
 
 #: source/win-preferences/schema/zettelkasten.ts:44
-#, fuzzy
 msgid "When linking files, add the display name …"
-msgstr "Quan s'enllacin fitxers, afegeix el nom del fitxer ..."
+msgstr "Quan s'enllacin fitxers, afegeix el nom de visualització del fitxer …"
 
 #: source/win-preferences/schema/zettelkasten.ts:47
 msgid "always"
@@ -275,7 +270,7 @@ msgstr ""
 #: source/win-preferences/schema/autocorrect.ts:90
 #, fuzzy
 msgid "String"
-msgstr "Rigor"
+msgstr "Cadena"
 
 #: source/win-preferences/schema/autocorrect.ts:90
 #, fuzzy
@@ -412,7 +407,7 @@ msgstr "Renderitza els èmfasi"
 
 #: source/win-preferences/schema/display.ts:68
 msgid "Here you can choose the theme for the app."
-msgstr "Aquí pots triar l'aparença de l'aplicació"
+msgstr "Aquí potdeu triar un tema per a l'aplicació."
 
 #: source/win-preferences/schema/display.ts:109
 msgid "Use the operating system's accent colour instead of the theme colour"
@@ -613,7 +608,7 @@ msgstr "Mode d'input de l'editor"
 
 #: source/win-preferences/schema/editor.ts:98
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Comprova si hi ha errades d'estil de Markdown"
 
 #: source/win-preferences/schema/editor.ts:103
 msgid "Show statusbar"
@@ -744,9 +739,8 @@ msgid "Active"
 msgstr "Accions"
 
 #: source/win-preferences/schema/spellchecking.ts:82
-#, fuzzy
 msgid "Language Code"
-msgstr "Proveïdor de LanguageTool"
+msgstr "Codi de la llengua"
 
 #: source/win-preferences/schema/spellchecking.ts:82
 #: source/tmp/PopoverTags.vue.ts:36
@@ -759,9 +753,8 @@ msgid ""
 msgstr "Seleccioneu les llengües de la verificació ortogràfica automàtica"
 
 #: source/win-preferences/schema/spellchecking.ts:88
-#, fuzzy
 msgid "Search for dictionaries…"
-msgstr "Cerca diccionaris &hellip;"
+msgstr "Cerca diccionaris…"
 
 #: source/win-preferences/schema/spellchecking.ts:94
 msgid "User dictionary. Remove words by clicking them."
@@ -811,7 +804,7 @@ msgstr "Carpeta buida"
 
 #: source/tmp/Theme.vue.ts:44
 msgid "selected"
-msgstr "Seleccionat"
+msgstr "seleccionat"
 
 #: source/tmp/Theme.vue.ts:47
 msgid "click to select"
@@ -886,7 +879,7 @@ msgstr "Canvis no desats"
 #: source/tmp/Defaults.vue.ts:192 source/tmp/SnippetsTab.vue.ts:124
 #: source/tmp/CustomCSS.vue.ts:88
 msgid "Saving …"
-msgstr "Desant …"
+msgstr "S'està desant …"
 
 #: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
 msgid "Saved!"
@@ -911,7 +904,7 @@ msgstr "Aquesta relació està basada en un retroenllaç."
 #: source/tmp/RelatedFilesTab.vue.ts:235
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Aquesta relació es basa en %s etiquetes compartides: %s"
 
 #: source/tmp/SnippetsTab.vue.ts:50
 msgid "Rename snippet"
@@ -1004,9 +997,8 @@ msgid "%s characters"
 msgstr "%s caràcters"
 
 #: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
 msgid "Exporting…"
-msgstr "Exporta…"
+msgstr "S'està exportant…"
 
 #: source/tmp/PopoverExport.vue.ts:6
 #: source/app/service-providers/commands/dir-project-export.ts:145
@@ -1019,7 +1011,7 @@ msgstr ""
 
 #: source/tmp/PopoverDirProps.vue.ts:164
 msgid "Project Settings…"
-msgstr "Configuració del projecte..."
+msgstr "Configuració del projecte…"
 
 #: source/tmp/GlobalSearch.vue.ts:117
 msgid "Full-Text Search"
@@ -1169,7 +1161,7 @@ msgstr "💪 Estàs a punt de superar la mitjana diària!"
 
 #: source/tmp/PopoverStats.vue.ts:126
 msgid "✍🏼 Get writing to surpass your daily average."
-msgstr "✍🏼 Segueix escrivint per a superar la mitjana diària"
+msgstr "✍🏼 Segueix escrivint per a superar la mitjana diària."
 
 #: source/tmp/PopoverStats.vue.ts:129
 msgid "More statistics …"
@@ -1287,6 +1279,10 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr ofereix una integració amb LanguageTool.org, un servei proveït per "
+"LanguageTooler GmbH. Per fer servir aquest servei és necessària una connexió "
+"a internet i és subjecte a la política de privadesa de LanguageTooler GmbH "
+"o el corresponent servidor que feu servir."
 
 #: source/tmp/PopoverDocInfo.vue.ts:35
 msgid "No open document"
@@ -1370,7 +1366,7 @@ msgstr "Imatge no trobada: %s"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Falta ortogràfica"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
 msgid "Open Link"
@@ -1929,15 +1925,15 @@ msgid "just now"
 msgstr "ara mateix"
 
 #: source/app/service-providers/fsal/index.ts:138
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Loading workspace %s"
-msgstr "Espais de treball"
+msgstr "S'està carregant l'espai de treball %s"
 
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
 #: source/app/service-providers/menu/menu.win32.ts:614
 msgid "About Zettlr"
-msgstr "Sobre el Zettlr"
+msgstr "Sobre Zettlr"
 
 #: source/app/service-providers/menu/menu.darwin.ts:51
 #: source/app/service-providers/menu/menu.win32.ts:222
@@ -2187,9 +2183,8 @@ msgstr "Dona suport a Zettlr"
 
 #: source/app/service-providers/menu/menu.darwin.ts:670
 #: source/app/service-providers/menu/menu.win32.ts:643
-#, fuzzy
 msgid "Visit website"
-msgstr "Ves a la pàgina web"
+msgstr "Visita la pàgina web"
 
 #: source/app/service-providers/menu/menu.darwin.ts:680
 #: source/app/service-providers/menu/menu.win32.ts:653
@@ -2204,13 +2199,12 @@ msgstr "Obre el tutorial"
 #: source/app/service-providers/menu/menu.darwin.ts:702
 #: source/app/service-providers/menu/menu.win32.ts:675
 msgid "Clear FSAL cache …"
-msgstr ""
+msgstr "Neteja la memòria cau FSAL …"
 
 #: source/app/service-providers/menu/menu.darwin.ts:706
 #: source/app/service-providers/menu/menu.win32.ts:679
-#, fuzzy
 msgid "Clear FSAL Cache"
-msgstr "Neteja la cerca"
+msgstr "Neteja la memòria cau FSAL"
 
 #: source/app/service-providers/menu/menu.darwin.ts:707
 #: source/app/service-providers/menu/menu.win32.ts:680
@@ -2496,7 +2490,7 @@ msgstr "S'ha carregat %s"
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "No s'ha pogut obrir l'espai de treball %s."
 
 #: source/app/service-providers/commands/set-open-directory.ts:40
 msgid "Directory not found"
