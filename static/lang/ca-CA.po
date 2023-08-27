@@ -407,7 +407,7 @@ msgstr "Renderitza els èmfasi"
 
 #: source/win-preferences/schema/display.ts:68
 msgid "Here you can choose the theme for the app."
-msgstr "Aquí potdeu triar un tema per a l'aplicació."
+msgstr "Aquí podeu triar un tema per a l'aplicació."
 
 #: source/win-preferences/schema/display.ts:109
 msgid "Use the operating system's accent colour instead of the theme colour"
