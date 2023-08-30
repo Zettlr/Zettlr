@@ -62,6 +62,8 @@ export default class RenameTag extends ZettlrCommand {
       if (newContent !== content) {
         await fs.writeFile(file.path, newContent, 'utf-8')
         this._app.log.info(`[Application] Replaced tag "${oldName}" with "${newName}" in file ${file.path}`)
+      } else {
+        this._app.log.warning(`[Application] Could not replace "${oldName}" with "${newName}" in file ${file.path}. Note that the tag replacer does not yet work with comma-separated keyword lists.`)
       }
     }
 
