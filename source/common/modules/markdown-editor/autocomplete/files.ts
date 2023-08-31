@@ -62,7 +62,7 @@ const apply = (filename: string, fileId: string, displayName: string) => functio
   } else {
     const textToInsert = fileId === '' ? filename: fileId
     if (linkPreference === 'always' || (linkPreference === 'withID' && textToInsert === fileId)) {
-      insert = `${textToInsert}]] ${displayName}` // NOTE: No postLink, but linkEnd
+      insert = `${textToInsert}]] ${displayName}`
     } else {
       insert = `${textToInsert}]]`
     }
