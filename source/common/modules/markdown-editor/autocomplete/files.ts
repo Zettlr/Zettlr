@@ -54,22 +54,22 @@ const apply = (filename: string, fileId: string, displayName: string) => functio
   const { linkFilenameOnly, linkPreference } = view.state.field(configField)
 
   const linkEndAfterCursor = view.state.sliceDoc(to, to + 2) === ']]'
-  const postLink = (linkEndAfterCursor) ? '' : ']]'
 
   let insert = ''
   if (linkFilenameOnly) {
     // Just dump the filename in there
-    insert = `${filename}${postLink}`
+    insert = `${filename}]]`
   } else {
     const textToInsert = fileId === '' ? filename: fileId
     if (linkPreference === 'always' || (linkPreference === 'withID' && textToInsert === fileId)) {
       insert = `${textToInsert}]] ${displayName}` // NOTE: No postLink, but linkEnd
-      if (linkEndAfterCursor) {
-        to += 2 // Overwrite the linkEnd following the completion
-      }
     } else {
-      insert = `${textToInsert}${postLink}`
+      insert = `${textToInsert}]]`
     }
+  }
+
+  if (linkEndAfterCursor) {
+    to += 2 // Overwrite the linkEnd following the completion
   }
 
   view.dispatch({
