@@ -15,7 +15,10 @@
       v-bind:leaf-id="leafId"
       v-bind:window-id="windowId"
     ></DocumentTabs>
-    <div class="editor-container">
+    <div
+      class="editor-container"
+      v-on:drop="handleDrop($event, 'editor')"
+    >
       <template v-for="file in openFiles" v-bind:key="file.path">
         <MainEditor
           v-show="activeFile?.path === file.path"
