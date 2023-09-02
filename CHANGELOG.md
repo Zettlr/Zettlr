@@ -4,6 +4,8 @@
 
 - Monospaced elements such as inline code elements are now rendered in monospace
   font again
+- Fixed a bug preventing assigning colors and descriptions to tags in the tag
+  manager
 
 ## Under the Hood
 
