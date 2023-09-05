@@ -40,7 +40,7 @@
             Actions <!-- TODO: Translate -->
           </th>
         </tr>
-        <tr v-for="(tag, index) in filteredTags" v-bind:key="index" class="tag-flex">
+        <tr v-for="tag in filteredTags" v-bind:key="tag.name" class="tag-flex">
           <td style="text-align: left;">
             <span style="flex-shrink: 1;">{{ tag.name }}</span>
           </td>
@@ -65,13 +65,13 @@
               v-if="tag.color !== undefined"
               v-bind:label="removeColorLabel"
               v-bind:inline="true"
-              v-on:click="removeColor(index)"
+              v-on:click="removeColor(tag.name)"
             ></ButtonControl>
             <ButtonControl
               v-else
               v-bind:label="assignColorLabel"
               v-bind:inline="true"
-              v-on:click="assignColor(index)"
+              v-on:click="assignColor(tag.name)"
             ></ButtonControl>
           </td>
 
@@ -86,12 +86,12 @@
 
           <td>
             <TextControl
-              v-if="renameActiveFor === index"
+              v-if="renameActiveFor === tag.name"
               v-model="newTag"
               v-bind:placeholder="'New tag'"
             ></TextControl>
             <ButtonControl
-              v-if="renameActiveFor === index"
+              v-if="renameActiveFor === tag.name"
               v-bind:label="'Rename'"
               v-on:click="renameTag(tag.name)"
             ></ButtonControl>
@@ -99,7 +99,7 @@
             <ButtonControl
               v-else
               v-bind:label="'Rename tag...'"
-              v-on:click="renameActiveFor = index"
+              v-on:click="renameActiveFor = tag.name"
             ></ButtonControl>
           </td>
         </tr>
@@ -144,7 +144,7 @@ export default defineComponent({
     return {
       tags: [] as TagRecord[],
       hasUnsavedChanges: false,
-      renameActiveFor: -1,
+      renameActiveFor: '',
       sortBy: 'name' as 'name'|'idf'|'count'|'color',
       descending: false,
       query: '',
@@ -252,15 +252,25 @@ export default defineComponent({
         ipcRenderer.send('window-controls', { command: 'win-close' })
       }
     },
-    removeColor: function (tagIndex: number) {
-      this.tags[tagIndex].color = undefined
-      this.tags[tagIndex].desc = undefined
-      this.hasUnsavedChanges = true
+    removeColor: function (tagName: string) {
+      const found = this.tags.find(tag => tag.name === tagName)
+      if (found !== undefined) {
+        found.color = undefined
+        found.desc = undefined
+        this.hasUnsavedChanges = true
+      } else {
+        console.error(`Could not remove color for tag ${tagName}: Tag not found`)
+      }
     },
-    assignColor: function (tagIndex: number) {
-      this.tags[tagIndex].color = '#1cb27e'
-      this.tags[tagIndex].desc = ''
-      this.hasUnsavedChanges = true
+    assignColor: function (tagName: string) {
+      const found = this.tags.find(tag => tag.name === tagName)
+      if (found !== undefined) {
+        found.color = '#1cb27e'
+        found.desc = ''
+        this.hasUnsavedChanges = true
+      } else {
+        console.error(`Could not assign color to tag ${tagName}: Tag not found`)
+      }
     },
     retrieveTags: async function () {
       this.tags = await ipcRenderer.invoke('tag-provider', {
@@ -274,7 +284,7 @@ export default defineComponent({
       })
 
       this.newTag = ''
-      this.renameActiveFor = -1
+      this.renameActiveFor = tagName
 
       // Afterwards, fetch the new set of tags
       await this.retrieveTags()
