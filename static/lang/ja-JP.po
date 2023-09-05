@@ -3,19 +3,19 @@
 # This file is distributed under the same license as the Zettlr package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Zettlr 2.3.0\n"
+"Project-Id-Version: Zettlr 3.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-08-28 02:24+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: ja-JP\n"
+"PO-Revision-Date: 2023-09-05 22:51+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: source/win-main/file-manager/util/file-item-context.ts:29
 #: source/tmp/GlobalSearch.vue.ts:41
@@ -47,7 +47,6 @@ msgstr "ファイルを複製"
 
 #: source/win-main/file-manager/util/file-item-context.ts:67
 #: source/win-main/file-manager/util/dir-item-context.ts:68
-#, fuzzy
 msgid "Copy path"
 msgstr "フルパスをコピー"
 
@@ -66,17 +65,17 @@ msgstr "IDをコピー"
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Finderで表示"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "エクスプローラーで表示"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "File Browserで表示"
 
 #: source/win-main/file-manager/util/file-item-context.ts:101
 msgid "Close file"
@@ -86,13 +85,13 @@ msgstr "ファイルを閉じる"
 #: source/app/service-providers/menu/menu.win32.ts:90
 #: source/app/service-providers/menu/menu.darwin.ts:116
 msgid "New File…"
-msgstr "新規ファイル..."
+msgstr "新規ファイル…"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:44
 #: source/app/service-providers/menu/menu.win32.ts:129
 #: source/app/service-providers/menu/menu.darwin.ts:155
 msgid "New directory…"
-msgstr "新規ディレクトリ..."
+msgstr "新規ディレクトリ…"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:53
 msgid "Rename directory"
@@ -106,7 +105,7 @@ msgstr "ディレクトリを削除"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:88
 msgid "Check for directory …"
-msgstr "ディレクトリをチェック..."
+msgstr "ディレクトリをチェック…"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:105
 msgid "Export Project"
@@ -145,11 +144,11 @@ msgstr "フルパスをコピー"
 #: source/app/service-providers/citeproc/index.ts:249
 #: source/app/service-providers/citeproc/index.ts:456
 msgid "The citation database could not be loaded"
-msgstr "参考文献データベースを読み込むことができませんでした"
+msgstr "参考文献データベースを読み込めませんでした"
 
 #: source/app/service-providers/citeproc/index.ts:444
 msgid "Changes to the library file detected. Reloading …"
-msgstr "ライブラリ ファイルの更新が検出されました。再読み込み中です..."
+msgstr "ライブラリ ファイルの更新が検出されました。再読み込み中です…"
 
 #: source/app/service-providers/commands/export.ts:55
 #: source/app/service-providers/commands/export.ts:155
@@ -176,7 +175,7 @@ msgstr "保存"
 #: source/app/service-providers/commands/export.ts:143
 #, javascript-format
 msgid "Exporting to %s"
-msgstr "%sにエクスポートします。"
+msgstr "%sにエクスポートします"
 
 #: source/app/service-providers/commands/export.ts:156
 #, javascript-format
@@ -206,7 +205,7 @@ msgstr "言語ファイルがインポートされました：%s"
 #: source/app/service-providers/commands/import-lang-file.ts:64
 #, javascript-format
 msgid "Could not import language file %s!"
-msgstr "言語ファイル%sをインポートすることができませんでした。"
+msgstr "言語ファイル%sをインポートできませんでした。"
 
 #. Better error message
 #: source/app/service-providers/commands/open-attachment.ts:112
@@ -217,8 +216,7 @@ msgstr "キー%sの参照には添付ファイルがないようです。"
 #: source/app/service-providers/commands/open-attachment.ts:117
 msgid "Could not open attachment. Is Zotero running?"
 msgstr ""
-"添付ファイルを開くことができませんでした。Zoteroが起動していることを確認して"
-"ください。"
+"添付ファイルを開けませんでした。Zoteroが起動していることを確認してください。"
 
 #: source/app/service-providers/commands/request-move.ts:60
 msgid "Cannot move directory"
@@ -226,20 +224,20 @@ msgstr "ディレクトリを移動できません"
 
 #: source/app/service-providers/commands/request-move.ts:61
 msgid "You cannot move a directory into one of its subdirectories."
-msgstr "ディレクトリをサブディレクトリに移動することはできません。"
+msgstr "ディレクトリをサブディレクトリに移動できません。"
 
 #: source/app/service-providers/commands/request-move.ts:70
 msgid "Cannot move directory or file"
-msgstr "ディレクトリまたはファイルを移動することができません"
+msgstr "ディレクトリまたはファイルを移動できません"
 
 #: source/app/service-providers/commands/request-move.ts:71
 #, javascript-format
 msgid "The file/directory %s already exists in target."
-msgstr "対象のファイルまたはディレクトリは既に存在します。"
+msgstr "%s という名称のファイルまたはディレクトリは既に存在します。"
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:37
 msgid "The requested file was not found."
-msgstr "要求されたファイルは見つかりませんでした。"
+msgstr "要求されたファイルが見つかりません。"
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:54
 msgid "The provided name did not contain any allowed letters."
@@ -248,7 +246,7 @@ msgstr "提供された名前は使用可能な文字を含んでいません。
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:75
 #: source/app/service-providers/commands/set-open-directory.ts:41
 msgid "The requested directory was not found."
-msgstr "要求されたディレクトリは見つかりませんでした。"
+msgstr "要求されたディレクトリが見つかりません。"
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:86
 msgid "Could not save image"
@@ -259,25 +257,25 @@ msgid "Directory not found"
 msgstr "ディレクトリが見つかりません"
 
 #: source/app/service-providers/commands/dir-project-export.ts:73
-#, fuzzy
 msgid "Cannot export project"
-msgstr "プロジェクトをエクスポート"
+msgstr "プロジェクトをエクスポートできません"
 
 #: source/app/service-providers/commands/dir-project-export.ts:74
 msgid ""
 "After applying your glob-filters, no files remained to export. Please adjust "
 "them in the project settings."
 msgstr ""
+"globを適用した結果、エクスポートするファイルが残りませんでした。プロジェクト"
+"設定で調整してください。"
 
 #: source/app/service-providers/commands/dir-project-export.ts:145
 msgid "Project successfully exported. Click to show."
-msgstr ""
+msgstr "プロジェクトは正常にエクスポートされました。クリックして表示します。"
 
 #: source/app/service-providers/commands/dir-project-export.ts:145
 #: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
 msgid "Export"
-msgstr "エクスポート..."
+msgstr "Export"
 
 #: source/app/service-providers/commands/import.ts:35
 msgid "You have to select a directory to import to."
@@ -293,13 +291,13 @@ msgstr "すべてのファイル"
 #. Now import.
 #: source/app/service-providers/commands/import.ts:58
 msgid "Importing. Please wait …"
-msgstr "インポート中。しばらくお待ちください..."
+msgstr "インポート中。しばらくお待ちください…"
 
 #. This callback gets called whenever there is an error while running pandoc.
 #: source/app/service-providers/commands/import.ts:63
 #, javascript-format
 msgid "Couldn't import %s."
-msgstr "%sをインポートすることができませんでした。"
+msgstr "%sをインポートできませんでした。"
 
 #. And this on each success!
 #: source/app/service-providers/commands/import.ts:66
@@ -320,18 +318,18 @@ msgstr "次の%sファイルはファイル種別が不明なためインポー�
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/config/index.ts:431
 msgid "Confirm"
-msgstr ""
+msgstr "確認"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "タグ \"%s\" を \"%s\" に置き換えますか？ 対象：%s ファイル"
 
 #: source/app/service-providers/commands/rename-tag.ts:47
 #: source/app/service-providers/commands/file-rename.ts:96
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 #. 1: Omit all changes
 #: source/app/service-providers/commands/rename-tag.ts:48
@@ -359,24 +357,24 @@ msgstr ""
 #: source/app/service-providers/commands/file-duplicate.ts:59
 #: source/app/service-providers/commands/file-new.ts:156
 msgid "Could not create file"
-msgstr "ファイルを作成できませんでした"
+msgstr "ファイルを作成できません"
 
 #. We need to generate our own filename. First, attempt to just use 'copy of'
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "%s をコピー"
 
 #: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "%s 箇所の内部リンクを「%s」に更新しますか?"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:97
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "いいえ"
 
 #: source/app/service-providers/commands/importer/import-textbundle.ts:63
 #: source/app/service-providers/commands/importer/import-textbundle.ts:69
@@ -404,12 +402,12 @@ msgstr "ディレクトリを開けません"
 #: source/app/service-providers/commands/root-open.ts:84
 #, javascript-format
 msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
-msgstr "ディレクトリ&quot;%s&quot;をZettlrで開くことができません。"
+msgstr "ディレクトリ&quot;%s&quot;をZettlrで開けません。"
 
 #: source/app/service-providers/commands/root-open.ts:136
 #, javascript-format
 msgid "Opening new root %s …"
-msgstr "新しいルートディレクトリ %s を開いています..."
+msgstr "新しいルートディレクトリ %s を開いています…"
 
 #: source/app/service-providers/commands/root-open.ts:147
 #, javascript-format
@@ -419,19 +417,19 @@ msgstr "%s が読み込まれました。"
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "%s のワークスペースを開けません。"
 
 #: source/app/service-providers/commands/language-tool.ts:187
 msgid "Document too long"
-msgstr ""
+msgstr "ドキュメントが長すぎます"
 
 #: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
-msgstr ""
+msgstr "オフライン"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:31
 msgid "Replace file"
-msgstr "ファイル再読み込み"
+msgstr "ファイルの再読み込み"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:32
 #, javascript-format
@@ -462,11 +460,8 @@ msgid "Unsaved changes"
 msgstr "未保存の変更"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr ""
-"現在のファイルには未保存の変更があります。破棄しますか、それとも保存します"
-"か？"
+msgstr "現在のファイルには未保存の変更があります。閉じる前に保存しますか？"
 
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
 msgid "Overwrite existing file"
@@ -514,7 +509,7 @@ msgid "Option %s has to be of type %s."
 msgstr "オプション%sは%s型である必要があります。"
 
 #: source/app/service-providers/config/config-validation.ts:283
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Option %s must be one of: %s."
 msgstr "オプション%sは次から設定する必要があります。：%s"
 
@@ -540,23 +535,23 @@ msgstr "オプション%sは必須です。"
 
 #: source/app/service-providers/config/index.ts:423
 msgid "Changing this option requires a restart to take effect."
-msgstr ""
+msgstr "このオプションを有効にするには再起動が必要です。"
 
 #: source/app/service-providers/config/index.ts:426
 #: source/app/service-providers/menu/menu.win32.ts:684
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #, fuzzy
 msgid "Restart now"
-msgstr "たった今"
+msgstr "今すぐ再起動"
 
 #: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
-msgstr ""
+msgstr "あとで再起動"
 
 #: source/app/service-providers/fsal/index.ts:138
 #, fuzzy, javascript-format
 msgid "Loading workspace %s"
-msgstr "ワークスペース"
+msgstr "%s ワークスペースを読み込んでいます"
 
 #: source/app/service-providers/updates/index.ts:292
 #, javascript-format
@@ -600,7 +595,7 @@ msgstr ""
 #: source/app/service-providers/updates/index.ts:577
 #, javascript-format
 msgid "An update to version %s is available!"
-msgstr "バージョン%sへのアップデートが利用可能です。"
+msgstr "バージョン%sへのアップデートが利用可能です！"
 
 #: source/app/service-providers/menu/menu.win32.ts:44
 #: source/app/service-providers/menu/menu.win32.ts:56
@@ -612,7 +607,7 @@ msgstr "最近使ったドキュメント"
 #: source/app/service-providers/menu/menu.win32.ts:60
 #: source/app/service-providers/menu/menu.darwin.ts:188
 msgid "Empty"
-msgstr "空にする"
+msgstr "Empty"
 
 #: source/app/service-providers/menu/menu.win32.ts:87
 #: source/app/service-providers/menu/menu.darwin.ts:113
@@ -623,12 +618,12 @@ msgstr "ファイル"
 #: source/app/service-providers/menu/menu.darwin.ts:166
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 msgid "Open…"
-msgstr "開く..."
+msgstr "開く…"
 
 #: source/app/service-providers/menu/menu.win32.ts:149
 #: source/app/service-providers/menu/menu.darwin.ts:175
 msgid "Open Workspace …"
-msgstr "ワークスペースを開く..."
+msgstr "ワークスペースを開く…"
 
 #: source/app/service-providers/menu/menu.win32.ts:173
 #: source/app/service-providers/menu/menu.darwin.ts:208
@@ -643,43 +638,43 @@ msgstr "次のファイル"
 #: source/app/service-providers/menu/menu.win32.ts:198
 #: source/app/service-providers/menu/menu.darwin.ts:233
 msgid "Import files…"
-msgstr "ファイルをインポート..."
+msgstr "ファイルをインポート…"
 
 #: source/app/service-providers/menu/menu.win32.ts:206
 #: source/app/service-providers/menu/menu.darwin.ts:241
 msgid "Export…"
-msgstr "エクスポート..."
+msgstr "エクスポート…"
 
 #: source/app/service-providers/menu/menu.win32.ts:214
 #: source/app/service-providers/menu/menu.darwin.ts:249
 msgid "Print…"
-msgstr "印刷..."
+msgstr "印刷…"
 
 #: source/app/service-providers/menu/menu.win32.ts:222
 #: source/app/service-providers/menu/menu.win32.ts:226
 #: source/app/service-providers/menu/menu.darwin.ts:51
 msgid "Preferences…"
-msgstr "設定"
+msgstr "設定…"
 
 #: source/app/service-providers/menu/menu.win32.ts:234
 #: source/app/service-providers/menu/menu.darwin.ts:59
 msgid "Assets Manager"
-msgstr "アセットマネージャー"
+msgstr "アセットマネージャ"
 
 #: source/app/service-providers/menu/menu.win32.ts:242
 #: source/app/service-providers/menu/menu.darwin.ts:67
 msgid "Manage Tags…"
-msgstr "タグ"
+msgstr "タグ管理…"
 
 #: source/app/service-providers/menu/menu.win32.ts:254
 #: source/app/service-providers/menu/menu.darwin.ts:260
 msgid "Import translation…"
-msgstr "翻訳をインポート..."
+msgstr "翻訳をインポート…"
 
 #: source/app/service-providers/menu/menu.win32.ts:262
 #: source/app/service-providers/menu/menu.darwin.ts:268
 msgid "Import dictionary…"
-msgstr "辞書をインポート..."
+msgstr "辞書をインポート…"
 
 #: source/app/service-providers/menu/menu.win32.ts:318
 #: source/app/service-providers/menu/menu.darwin.ts:317
@@ -895,18 +890,18 @@ msgstr "チュートリアルを開く"
 #: source/app/service-providers/menu/menu.win32.ts:675
 #: source/app/service-providers/menu/menu.darwin.ts:702
 msgid "Clear FSAL cache …"
-msgstr ""
+msgstr "FSALキャッシュをクリアする…"
 
 #: source/app/service-providers/menu/menu.win32.ts:679
 #: source/app/service-providers/menu/menu.darwin.ts:706
 #, fuzzy
 msgid "Clear FSAL Cache"
-msgstr "検索をクリア"
+msgstr "FSALキャッシュをクリアする"
 
 #: source/app/service-providers/menu/menu.win32.ts:680
 #: source/app/service-providers/menu/menu.darwin.ts:707
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "FSALキャッシュをクリアするには再起動が必要です。"
 
 #: source/app/service-providers/menu/menu.win32.ts:681
 #: source/app/service-providers/menu/menu.darwin.ts:708
@@ -915,6 +910,9 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
+"再起動後、Zettlr はキャッシュ全体を再作成します。ロードしたファイルの量とディ"
+"スクの速度によっては、少し時間がかかる場合があります。その後ウィンドウが表示"
+"されます。"
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
@@ -963,9 +961,8 @@ msgid "Actions"
 msgstr "アクション"
 
 #: source/tmp/ListControl.vue.ts:83
-#, fuzzy
 msgid "Delete"
-msgstr "ファイルを削除"
+msgstr "削除"
 
 #: source/tmp/CustomCSS.vue.ts:31
 msgid "Custom CSS"
@@ -986,7 +983,7 @@ msgstr ""
 #: source/tmp/CustomCSS.vue.ts:88 source/tmp/Defaults.vue.ts:192
 #: source/tmp/SnippetsTab.vue.ts:124
 msgid "Saving …"
-msgstr "保存中"
+msgstr "保存中…"
 
 #: source/tmp/CustomCSS.vue.ts:97
 msgid "Saving failed"
@@ -1046,7 +1043,7 @@ msgstr "全文検索"
 #: source/tmp/GlobalSearch.vue.ts:120
 #, javascript-format
 msgid "%s matches"
-msgstr ""
+msgstr "%s件一致"
 
 #: source/tmp/GlobalSearch.vue.ts:123
 msgid "Enter your search terms below"
@@ -1054,11 +1051,11 @@ msgstr "検索文字列を入力してください"
 
 #: source/tmp/GlobalSearch.vue.ts:126
 msgid "Find …"
-msgstr "検索..."
+msgstr "検索…"
 
 #: source/tmp/GlobalSearch.vue.ts:129
 msgid "Filter …"
-msgstr "フィルタ..."
+msgstr "フィルタ…"
 
 #: source/tmp/GlobalSearch.vue.ts:132
 msgid "Filter search results"
@@ -1070,7 +1067,7 @@ msgstr "検索対象のディレクトリ"
 
 #: source/tmp/GlobalSearch.vue.ts:138
 msgid "Restrict to directory …"
-msgstr "ディレクトリ..."
+msgstr "ディレクトリ…"
 
 #: source/tmp/GlobalSearch.vue.ts:141
 msgid "Search"
@@ -1090,7 +1087,7 @@ msgstr "ワークスペース"
 
 #: source/tmp/file-tree.vue.ts:32
 msgid "No open files or folders"
-msgstr "開いているファイルやディレクトリはありません"
+msgstr "開いているファイルまたはディレクトリはありません"
 
 #: source/tmp/file-tree.vue.ts:35 source/tmp/file-list.vue.ts:66
 msgid "No results"
@@ -1114,7 +1111,7 @@ msgstr "関連ファイル"
 
 #: source/tmp/Projects-Tab.vue.ts:24
 msgid "Zettlr also makes use of these projects:"
-msgstr "Zettlrは以下のプロジェクトを利用しています"
+msgstr "Zettlrは以下のプロジェクトを利用しています："
 
 #: source/tmp/Defaults.vue.ts:70
 msgid ""
@@ -1129,14 +1126,16 @@ msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"このプロファイルは無効です。エラーが含まれているか、ライターまたはリーダーの"
+"プロパティが欠落している可能性があります。"
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
-msgstr "インポート、エクスポートのデフォルト設定を変更できます。"
+msgstr "インポートまたはエクスポートのデフォルト設定を変更できます。"
 
 #: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
 msgid "Saved!"
-msgstr "保存しました"
+msgstr "保存しました。"
 
 #: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "No related files"
@@ -1144,20 +1143,20 @@ msgstr "関連ファイルがありません"
 
 #: source/tmp/RelatedFilesTab.vue.ts:39
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "このリレーションは双方向リンクです。"
 
 #: source/tmp/RelatedFilesTab.vue.ts:42
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "このリレーションはアウトバウンドリンクです。"
 
 #: source/tmp/RelatedFilesTab.vue.ts:45
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "このリレーションはバックリンクです。"
 
 #: source/tmp/RelatedFilesTab.vue.ts:235
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "このリレーションは%s個のタグを共有しています：%s"
 
 #: source/tmp/PopoverPomodoro.vue.ts:72
 msgid "Start"
@@ -1181,11 +1180,11 @@ msgstr "大休憩"
 
 #: source/tmp/PopoverPomodoro.vue.ts:87
 msgid "Sound Effect"
-msgstr ""
+msgstr "効果音"
 
 #: source/tmp/PopoverPomodoro.vue.ts:90
 msgid "Volume"
-msgstr ""
+msgstr "ボリューム"
 
 #: source/tmp/ReferencesTab.vue.ts:48
 msgid "There are no citations in this document."
@@ -1298,15 +1297,19 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr は、LanguageTooler GmbH が提供するサービスである LanguageTool.org との"
+"統合を提供します。このサービスを使用するにはインターネット接続が必要であり、"
+"LanguageTooler GmbH または使用する対応するサーバーのプライバシーポリシーが適"
+"用されます。"
 
 #: source/tmp/PopoverExport.vue.ts:6
 #, fuzzy
 msgid "Exporting…"
-msgstr "エクスポート..."
+msgstr "Exporting…"
 
 #: source/tmp/PopoverExport.vue.ts:27
 msgid "command"
-msgstr ""
+msgstr "コマンド"
 
 #: source/tmp/PopoverStats.vue.ts:111
 msgid "words last month"
@@ -1322,11 +1325,11 @@ msgstr "単語(本日)"
 
 #: source/tmp/PopoverStats.vue.ts:120
 msgid "🔥 You're on fire!"
-msgstr "🔥燃えてますね。"
+msgstr "🔥燃えてますね！"
 
 #: source/tmp/PopoverStats.vue.ts:123
 msgid "💪 You're close to hitting your daily average!"
-msgstr "💪もう少しで一日当たりの平均値に到達します。"
+msgstr "💪もう少しで一日当たりの平均値に到達します！"
 
 #: source/tmp/PopoverStats.vue.ts:126
 msgid "✍🏼 Get writing to surpass your daily average."
@@ -1334,7 +1337,7 @@ msgstr "✍🏼一日当たりの平均値を超えました。"
 
 #: source/tmp/PopoverStats.vue.ts:129
 msgid "More statistics …"
-msgstr "統計情報の詳細..."
+msgstr "統計情報の詳細…"
 
 #: source/tmp/PopoverDirProps.vue.ts:152 source/tmp/PopoverFileProps.vue.ts:68
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
@@ -1347,7 +1350,7 @@ msgstr "作成"
 
 #: source/tmp/PopoverDirProps.vue.ts:164
 msgid "Project Settings…"
-msgstr "プロジェクト設定..."
+msgstr "プロジェクト設定…"
 
 #: source/tmp/ChartView.vue.ts:60
 msgid "Charts"
@@ -1388,11 +1391,11 @@ msgstr "アップデートはありません。最新バージョンを利用中
 
 #: source/tmp/App.vue.ts:133
 msgid "Starting update …"
-msgstr "アップデートを開始..."
+msgstr "アップデートを開始…"
 
 #: source/tmp/PopoverFileProps.vue.ts:74
 msgid "Set writing target…"
-msgstr "執筆目標を設定..."
+msgstr "執筆目標を設定…"
 
 #: source/tmp/OtherFilesTab.vue.ts:16
 msgid "Open directory"
@@ -1415,15 +1418,15 @@ msgstr ""
 #: source/tmp/PopoverTags.vue.ts:36
 #: source/win-preferences/schema/spellchecking.ts:82
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: source/tmp/PopoverTags.vue.ts:37
 msgid "Count"
-msgstr ""
+msgstr "カウント"
 
 #: source/tmp/PopoverTags.vue.ts:55
 msgid "Filter tags…"
-msgstr "タグを絞り込む..."
+msgstr "タグを絞り込む…"
 
 #: source/tmp/PopoverTags.vue.ts:58
 msgid "Tag Cloud"
@@ -1451,425 +1454,402 @@ msgstr "たった今"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "アフリカーンス語"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
-msgstr "Arabic"
+msgstr "アラビア語"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "アストゥリアス語"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
-msgstr "Belarus"
+msgstr "ベラルーシ語"
 
 #: source/common/util/map-lang-code.ts:37
 msgid "Bulgarian"
-msgstr "Bulgarian"
+msgstr "ブルガリア語"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "ブルトン語"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
-msgstr "Bosnian"
+msgstr "ボスニア語"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "カタルーニャ語"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Czech"
-msgstr ""
+msgstr "チェコ語"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Danish"
-msgstr "Danish"
+msgstr "デンマーク語"
 
 #: source/common/util/map-lang-code.ts:43
 msgid "German (Austria)"
-msgstr "German (Austria)"
+msgstr "ドイツ語 (オーストリア)"
 
 #: source/common/util/map-lang-code.ts:44
 msgid "German (Switzerland)"
-msgstr "German (Switzerland)"
+msgstr "ドイツ語 (スイス)"
 
 #: source/common/util/map-lang-code.ts:45
 #, fuzzy
 msgid "German (simple)"
-msgstr "German (Austria)"
+msgstr "ドイツ語 (シンプル)"
 
 #: source/common/util/map-lang-code.ts:46
 msgid "German (Germany)"
-msgstr "German (Germany)"
+msgstr "ドイツ語 (ドイツ)"
 
 #: source/common/util/map-lang-code.ts:47
-#, fuzzy
 msgid "German (Luxembourg)"
-msgstr "German (Austria)"
+msgstr "ドイツ語 (ルクセンブルク)"
 
 #: source/common/util/map-lang-code.ts:48
 msgid "German"
-msgstr ""
+msgstr "ドイツ語"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "Greek"
-msgstr "Greek"
+msgstr "ギリシャ語"
 
 #: source/common/util/map-lang-code.ts:50
 msgid "English (Australia)"
-msgstr "English (Australia)"
+msgstr "英語 (オーストラリア)"
 
 #: source/common/util/map-lang-code.ts:51
 msgid "English (Canada)"
-msgstr "English (Canada)"
+msgstr "英語 (カナダ)"
 
 #: source/common/util/map-lang-code.ts:52
 msgid "English (United Kingdom)"
-msgstr "English (United Kingdom)"
+msgstr "英語 (イギリス)"
 
 #: source/common/util/map-lang-code.ts:53
 msgid "English (India)"
-msgstr "English (India)"
+msgstr "英語 (インド)"
 
 #: source/common/util/map-lang-code.ts:54
-#, fuzzy
 msgid "English (New Zealand)"
-msgstr "English (Canada)"
+msgstr "英語 (ニュージーランド)"
 
 #: source/common/util/map-lang-code.ts:55
 msgid "English (United States)"
-msgstr "English (United States)"
+msgstr "英語 (米国)"
 
 #: source/common/util/map-lang-code.ts:56
 msgid "English (South Africa)"
-msgstr "English (South Africa)"
+msgstr "英語 (南アフリカ)"
 
 #: source/common/util/map-lang-code.ts:57
-#, fuzzy
 msgid "English"
-msgstr "English (India)"
+msgstr "英語"
 
 #: source/common/util/map-lang-code.ts:58
 msgid "Esperanto"
-msgstr "Esperanto"
+msgstr "エスペラント"
 
 #: source/common/util/map-lang-code.ts:59
-#, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "Spanish (Spain)"
+msgstr "スペイン語 (アルゼンチン)"
 
 #: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Spain)"
-msgstr "Spanish (Spain)"
+msgstr "スペイン語 (スペイン)"
 
 #: source/common/util/map-lang-code.ts:61
-#, fuzzy
 msgid "Spanish"
-msgstr "Danish"
+msgstr "スペイン語"
 
 #: source/common/util/map-lang-code.ts:62
 msgid "Estonian"
-msgstr "Estonian"
+msgstr "エストニア語"
 
 #: source/common/util/map-lang-code.ts:63
 msgid "Basque"
-msgstr "Basque"
+msgstr "バスク語"
 
 #: source/common/util/map-lang-code.ts:64
 msgid "Persian (Farsi)"
-msgstr "Persian (Farsi)"
+msgstr "ペルシア語 (ファールシー語)"
 
 #: source/common/util/map-lang-code.ts:65
 msgid "Finnish"
-msgstr "Finnish"
+msgstr "フィンランド語"
 
 #: source/common/util/map-lang-code.ts:66
 msgid "Faroese"
-msgstr "Faroese"
+msgstr "フェロー語"
 
 #: source/common/util/map-lang-code.ts:67
-#, fuzzy
 msgid "French (Belgium)"
-msgstr "Dutch (Belgium)"
+msgstr "フランス語 (ベルギー)"
 
 #: source/common/util/map-lang-code.ts:68
-#, fuzzy
 msgid "French (Switzerland)"
-msgstr "German (Switzerland)"
+msgstr "フランス語 (スイス)"
 
 #: source/common/util/map-lang-code.ts:69
 msgid "French (France)"
-msgstr "French (France)"
+msgstr "フランス語 (フランス)"
 
 #: source/common/util/map-lang-code.ts:70
-#, fuzzy
 msgid "French (Luxembourg)"
-msgstr "Luxembourgian"
+msgstr "フランス語 (ルクセンブルク)"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "フランス語 (モナコ公国)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
-msgstr ""
+msgstr "フランス語"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
-msgstr "Irish"
+msgstr "アイルランド語"
 
 #: source/common/util/map-lang-code.ts:74
 msgid "Scottish (Gaelic)"
-msgstr "Scottish (Gaelic)"
+msgstr "スコットランド語 (ゲール語)"
 
 #: source/common/util/map-lang-code.ts:75
-#, fuzzy
 msgid "Galician"
-msgstr "Galician (Spain)"
+msgstr "ガリシア語"
 
 #: source/common/util/map-lang-code.ts:76
 msgid "Hebrew"
-msgstr "Hebrew"
+msgstr "ヘブライ語"
 
 #: source/common/util/map-lang-code.ts:77
 msgid "Hindi"
-msgstr "Hindi"
+msgstr "ヒンディー語"
 
 #: source/common/util/map-lang-code.ts:78
 msgid "Croatian"
-msgstr "Croatian"
+msgstr "クロアチア語"
 
 #: source/common/util/map-lang-code.ts:79
 msgid "Hungarian"
-msgstr "Hungarian"
+msgstr "ハンガリー語"
 
 #: source/common/util/map-lang-code.ts:80
 msgid "Armenian"
-msgstr "Armenian"
+msgstr "アルメニア語"
 
 #: source/common/util/map-lang-code.ts:81
 msgid "Indonesian"
-msgstr "Indonesian"
+msgstr "インドネシア語"
 
 #: source/common/util/map-lang-code.ts:82
 msgid "Icelandic"
-msgstr "Icelandic"
+msgstr "アイスランド語"
 
 #: source/common/util/map-lang-code.ts:83
-#, fuzzy
 msgid "Italian (Switzerland)"
-msgstr "German (Switzerland)"
+msgstr "イタリア語 (スイス)"
 
 #: source/common/util/map-lang-code.ts:84
 msgid "Italian (Italy)"
-msgstr "Italian (Italy)"
+msgstr "イタリア語 (イタリア)"
 
 #: source/common/util/map-lang-code.ts:85
-#, fuzzy
 msgid "Italian"
-msgstr "斜体"
+msgstr "イタリア語"
 
 #: source/common/util/map-lang-code.ts:86
 msgid "Japanese"
-msgstr "Japanese"
+msgstr "日本語"
 
 #: source/common/util/map-lang-code.ts:87
 msgid "Georgian"
-msgstr "Georgian"
+msgstr "ジョージア語"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "クメール語 (カンボジア)"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
-msgstr "Korean"
+msgstr "韓国語"
 
 #: source/common/util/map-lang-code.ts:90
 msgid "Latin"
-msgstr "Latin"
+msgstr "ラテン語"
 
 #: source/common/util/map-lang-code.ts:91
 msgid "Luxembourgian"
-msgstr "Luxembourgian"
+msgstr "ルクセンブルク語"
 
 #: source/common/util/map-lang-code.ts:92
 msgid "Lithuanian"
-msgstr "Lithuanian"
+msgstr "リトアニア語"
 
 #: source/common/util/map-lang-code.ts:93
 msgid "Latvian"
-msgstr "Latvian"
+msgstr "ラトビア語"
 
 #: source/common/util/map-lang-code.ts:94
 msgid "Macedonian"
-msgstr "Macedonian"
+msgstr "マケドニア語"
 
 #: source/common/util/map-lang-code.ts:95
 msgid "Mongolian"
-msgstr "Mongolian"
+msgstr "モンゴル語"
 
 #: source/common/util/map-lang-code.ts:96
-#, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "Malaysian (Malaysia)"
+msgstr "マレーシア語 (ブルネイ ダルサラーム)"
 
 #: source/common/util/map-lang-code.ts:97
 msgid "Malaysian (Malaysia)"
-msgstr "Malaysian (Malaysia)"
+msgstr "マレーシア語 (マレーシア)"
 
 #: source/common/util/map-lang-code.ts:98
-#, fuzzy
 msgid "Malaysian"
-msgstr "Malaysian (Malaysia)"
+msgstr "マレーシア語"
 
 #: source/common/util/map-lang-code.ts:99
 msgid "Norwegian (Bokmål)"
-msgstr "Norwegian (Bokmål)"
+msgstr "ノルウェー語 (ブークモール)"
 
 #: source/common/util/map-lang-code.ts:100
 msgid "Nepalese"
-msgstr "Nepalese"
+msgstr "ネパール語"
 
 #: source/common/util/map-lang-code.ts:101
 msgid "Dutch (Belgium)"
-msgstr "Dutch (Belgium)"
+msgstr "オランダ語 (ベルギー)"
 
 #: source/common/util/map-lang-code.ts:102
 msgid "Dutch (Netherlands)"
-msgstr "Dutch (Netherlands)"
+msgstr "オランダ語 (オランダ)"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
-msgstr ""
+msgstr "オランダ語"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
-msgstr "Norwegian (Nynorsk)"
+msgstr "ノルウェー語 (ニーノシュク)"
 
 #: source/common/util/map-lang-code.ts:105
-#, fuzzy
 msgid "Norwegian"
-msgstr "Georgian"
+msgstr "ノルウェー語"
 
 #: source/common/util/map-lang-code.ts:106
 msgid "Polish"
-msgstr "Polish"
+msgstr "ポーランド語"
 
 #: source/common/util/map-lang-code.ts:107
-#, fuzzy
 msgid "Portuguese (Angola)"
-msgstr "Portuguese (Portugal)"
+msgstr "ポルトガル語 (アンゴラ)"
 
 #: source/common/util/map-lang-code.ts:108
 msgid "Portuguese (Brazil)"
-msgstr "Portuguese (Brazil)"
+msgstr "ポルトガル語 (ブラジル)"
 
 #: source/common/util/map-lang-code.ts:109
-#, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr "Portuguese (Brazil)"
+msgstr "ポルトガル語 (モザンビーク)"
 
 #: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Portugal)"
-msgstr "Portuguese (Portugal)"
+msgstr "ポルトガル語 (ポルトガル)"
 
 #: source/common/util/map-lang-code.ts:111
-#, fuzzy
 msgid "Portuguese"
-msgstr "Portuguese (Brazil)"
+msgstr "ポルトガル語"
 
 #: source/common/util/map-lang-code.ts:112
 msgid "Romanian"
-msgstr "Romanian"
+msgstr "ルーマニア語"
 
 #: source/common/util/map-lang-code.ts:113
 msgid "Russian"
-msgstr "Russian"
+msgstr "ロシア語"
 
 #: source/common/util/map-lang-code.ts:114
 msgid "Rwandan (Kinyarwanda)"
-msgstr "Rwandan (Kinyarwanda)"
+msgstr "ルワンダ語 (ルワンダ)"
 
 #: source/common/util/map-lang-code.ts:115
 msgid "Slovakian"
-msgstr "Slovakian"
+msgstr "スロバキア語"
 
 #: source/common/util/map-lang-code.ts:116
 msgid "Slovenian"
-msgstr "Slovenian"
+msgstr "スロベニア語"
 
 #: source/common/util/map-lang-code.ts:117
 msgid "Serbian"
-msgstr "Serbian"
+msgstr "セルビア語"
 
 #: source/common/util/map-lang-code.ts:118
-#, fuzzy
 msgid "Albanian"
-msgstr "Romanian"
+msgstr "アルバニア語"
 
 #: source/common/util/map-lang-code.ts:119
-#, fuzzy
 msgid "Albanian (Albania)"
-msgstr "Malaysian (Malaysia)"
+msgstr "アルバニア語 (アルバニア)"
 
 #: source/common/util/map-lang-code.ts:120
 msgid "Swedish"
-msgstr "Swedish"
+msgstr "スウェーデン語"
 
 #: source/common/util/map-lang-code.ts:121
-#, fuzzy
 msgid "Tamil (India)"
-msgstr "English (India)"
+msgstr "タミル語 (インド)"
 
 #: source/common/util/map-lang-code.ts:122
 msgid "Thai"
-msgstr ""
+msgstr "タイ語"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "タガログ語 (フィリピン語)"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Turkish"
-msgstr "Turkish"
+msgstr "トルコ語"
 
 #: source/common/util/map-lang-code.ts:125
 msgid "Ukrainian"
-msgstr "Ukrainian"
+msgstr "ウクライナ語"
 
 #: source/common/util/map-lang-code.ts:126
 msgid "Urdu"
-msgstr ""
+msgstr "ウルドゥー語"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Vietnamese"
-msgstr "Vietnamese"
+msgstr "ベトナム語"
 
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
 #: source/common/util/map-lang-code.ts:130
-#, fuzzy
 msgid "Sorbian"
-msgstr "Serbian"
+msgstr "ソルブ語"
 
 #: source/common/util/map-lang-code.ts:131
 msgid "Chinese (China)"
-msgstr "Chinese (China)"
+msgstr "中国語 (簡体字)"
 
 #: source/common/util/map-lang-code.ts:132
-#, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "Chinese (China)"
+msgstr "中国語 (繁体字)"
 
 #: source/common/util/map-lang-code.ts:133
-#, fuzzy
 msgid "Chinese"
-msgstr "Chinese (China)"
+msgstr "中国語"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -1881,11 +1861,11 @@ msgstr "."
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Cmd/Ctrl キーを押しながらクリックして、このリンクをたどります"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "脚注参照に移動"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
 msgid "No suggestions"
@@ -1916,7 +1896,7 @@ msgstr "番号付きリストを挿入"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
 msgid "Insert unordered list"
-msgstr "番号無しリストを挿入"
+msgstr "箇条書きリストを挿入"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
 msgid "Insert tasklist"
@@ -1961,7 +1941,7 @@ msgstr "ファイルを表示"
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "ファイル %s は存在しません。"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
@@ -1991,51 +1971,50 @@ msgstr "コード"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:90
 msgid "No footnote text found."
-msgstr ""
+msgstr "脚注テキストが見つかりません。"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:94
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "画像が見つかりません: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Mermaidをレンダリング中 …"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
 #, fuzzy
 msgid "Could not render Graph:"
-msgstr "ファイルを作成できませんでした"
+msgstr "レンダリングできませんでした。"
 
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "可読性モード (%s)"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "スペルミス"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "ハイライトなし"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
 msgid "Disabled"
-msgstr ""
+msgstr "無効"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
-#, fuzzy
 msgid "Custom"
-msgstr "カスタムCSS"
+msgstr "カスタム"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "診断パネルを開く"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "自動検出"
 
 #: source/win-preferences/schema/export.ts:24
 msgid "Use the internal Pandoc for exports"
@@ -2063,11 +2042,11 @@ msgid ""
 "current working directory will overwrite files without warning!"
 msgstr ""
 "ファイルのエクスポート先ディレクトリ。<em>注意：現在の作業ディレクトリを指定"
-"すると、警告なしにファイルが上書きされてしまいます。</em>"
+"すると、警告なしにファイルが上書きされます！</em>"
 
 #: source/win-preferences/schema/export.ts:53
 msgid "Temporary directory: is regularly expunged"
-msgstr "一時ディレクトリ：定期的に削除されます。"
+msgstr "一時ディレクトリ：定期的に削除されます"
 
 #: source/win-preferences/schema/export.ts:54
 msgid ""
@@ -2079,23 +2058,24 @@ msgstr ""
 
 #: source/win-preferences/schema/export.ts:55
 msgid "Ask for directory"
-msgstr "ディレクトリを選択する。"
+msgstr "ディレクトリを選択する"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Display name"
-msgstr "「画像」ボタンを表示"
+msgstr "表示名"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Command"
-msgstr "コメント"
+msgstr "コマンド"
 
 #: source/win-preferences/schema/export.ts:65
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
 msgstr ""
+"エクスポーターを実行するカスタム コマンドを入力します。 各コマンドは、最初の"
+"引数として、エクスポートするファイルまたはプロジェクトフォルダーを受け取りま"
+"す。"
 
 #: source/win-preferences/schema/citations.ts:24
 msgid "How would you like autocomplete to insert your citations?"
@@ -2174,9 +2154,8 @@ msgid "Use native window appearance"
 msgstr "ネイティブのウィンドウ外観を使用する"
 
 #: source/win-preferences/schema/advanced.ts:53
-#, fuzzy
 msgid "Enable window vibrancy"
-msgstr "ネイティブのウィンドウ外観を使用する"
+msgstr "ウィンドウのVibrancyを有効化"
 
 #: source/win-preferences/schema/advanced.ts:59
 msgid "Delete items irreversibly, if moving them to trash fails"
@@ -2225,7 +2204,7 @@ msgstr "ホスト名"
 #: source/win-preferences/schema/advanced.ts:104
 #: source/win-preferences/schema/spellchecking.ts:99
 msgid "Search for entries …"
-msgstr "エントリーを検索..."
+msgstr "エントリーを検索…"
 
 #: source/win-preferences/schema/advanced.ts:110
 msgid "Activate Watchdog polling"
@@ -2311,7 +2290,7 @@ msgstr "遅延有り"
 
 #: source/win-preferences/schema/editor.ts:55
 msgid "Default image path (relative or absolute)"
-msgstr "規定の画像パス(相対もしくは絶対)"
+msgstr "既定の画像パス(相対もしくは絶対)"
 
 #: source/win-preferences/schema/editor.ts:60
 msgid "Indent by the following number of spaces"
@@ -2335,12 +2314,11 @@ msgstr "エディタ入力モード"
 
 #: source/win-preferences/schema/editor.ts:98
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Markdown記法の問題をチェック"
 
 #: source/win-preferences/schema/editor.ts:103
-#, fuzzy
 msgid "Show statusbar"
-msgstr "Zettlrを表示する"
+msgstr "ステータスバーを表示する"
 
 #: source/win-preferences/schema/editor.ts:110
 msgid "Mute non-focused lines in distraction-free mode"
@@ -2360,7 +2338,7 @@ msgstr "テーブルエディタを有効化"
 
 #: source/win-preferences/schema/editor.ts:130
 msgid "Show link previews"
-msgstr ""
+msgstr "リンク先のプレビューを表示する"
 
 #: source/win-preferences/schema/editor.ts:135
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -2424,7 +2402,7 @@ msgstr "画像の最大高さ（パーセント）"
 
 #: source/win-preferences/schema/general.ts:24
 msgid "Application language"
-msgstr ""
+msgstr "アプリケーション言語"
 
 #: source/win-preferences/schema/general.ts:37
 msgid "Show file information"
@@ -2436,7 +2414,7 @@ msgstr "ファイルを新しいタブで開くことを可能な限り避ける
 
 #: source/win-preferences/schema/general.ts:54
 msgid "Automatically switch to dark mode"
-msgstr "自動的にダーク モードに切り替える"
+msgstr "自動的にダークモードに切り替える"
 
 #: source/win-preferences/schema/general.ts:58
 msgid "Schedule"
@@ -2530,55 +2508,55 @@ msgstr "ファイルメタデータの表示に使用する日時"
 
 #: source/win-preferences/schema/spellchecking.ts:25
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "LanguageToolを使用する"
 
 #: source/win-preferences/schema/spellchecking.ts:30
 msgid "Strictness"
-msgstr ""
+msgstr "厳密性"
 
 #: source/win-preferences/schema/spellchecking.ts:32
 #, fuzzy
 msgid "Standard"
-msgstr "カレンダー"
+msgstr "通常"
 
 #: source/win-preferences/schema/spellchecking.ts:33
+#, fuzzy
 msgid "Picky"
-msgstr ""
+msgstr "より厳密"
 
 #: source/win-preferences/schema/spellchecking.ts:40
 msgid "Mother tongue"
-msgstr ""
+msgstr "母国語"
 
 #: source/win-preferences/schema/spellchecking.ts:42
 msgid "Not set"
-msgstr ""
+msgstr "設定しない"
 
 #: source/win-preferences/schema/spellchecking.ts:49
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "LanguageToolプロバイダー"
 
 #: source/win-preferences/schema/spellchecking.ts:52
 #: source/win-preferences/schema/spellchecking.ts:59
-#, fuzzy
 msgid "Custom server"
-msgstr "カスタムCSS"
+msgstr "カスタムサーバー"
 
 #: source/win-preferences/schema/spellchecking.ts:66
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "LanguageTool ユーザー名"
 
 #: source/win-preferences/schema/spellchecking.ts:72
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "LanguageTool APIキー"
 
 #: source/win-preferences/schema/spellchecking.ts:82
 #, fuzzy
 msgid "Active"
-msgstr "アクション"
+msgstr "有効"
 
 #: source/win-preferences/schema/spellchecking.ts:82
 msgid "Language Code"
-msgstr ""
+msgstr "言語コード"
 
 #: source/win-preferences/schema/spellchecking.ts:83
 msgid ""
@@ -2596,7 +2574,7 @@ msgstr "ユーザ辞書。クリックで単語を削除します。"
 
 #: source/win-preferences/schema/spellchecking.ts:96
 msgid "Dictionary entry"
-msgstr "辞書エントリー"
+msgstr "辞書エントリ"
 
 #: source/win-preferences/schema/autocorrect.ts:24
 msgid "Turn on AutoCorrect"
@@ -2609,7 +2587,7 @@ msgstr "一次マジッククォート"
 #: source/win-preferences/schema/autocorrect.ts:36
 #: source/win-preferences/schema/autocorrect.ts:57
 msgid "Disable Magic Quotes"
-msgstr "無し"
+msgstr "マジッククォートを無効にする"
 
 #: source/win-preferences/schema/autocorrect.ts:54
 msgid "Secondary Magic Quotes"
@@ -2617,20 +2595,20 @@ msgstr "二次マジッククォート"
 
 #: source/win-preferences/schema/autocorrect.ts:80
 msgid "Match whole words"
-msgstr ""
+msgstr "単語全体と一致する"
 
 #: source/win-preferences/schema/autocorrect.ts:81
 msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
+msgstr "チェックすると、オートコレクトは単語の一部を置換しません"
 
 #: source/win-preferences/schema/autocorrect.ts:90
 msgid "String"
-msgstr ""
+msgstr "元の文字列"
 
 #: source/win-preferences/schema/autocorrect.ts:90
 #, fuzzy
 msgid "Replacement"
-msgstr "ファイル再読み込み"
+msgstr "置き換え後"
 
 #: source/win-preferences/schema/autocorrect.ts:91
 msgid ""
