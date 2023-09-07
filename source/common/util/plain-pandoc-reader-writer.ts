@@ -22,11 +22,8 @@
  * @return  {string}         The plain specification without any extensions
  */
 export default function getPlainPandocReaderWriter (input: string): string {
-  if (input.includes('+')) {
-    input = input.substring(0, input.indexOf('+'))
-  }
-  if (input.includes('-')) {
-    input = input.substring(0, input.indexOf('-'))
+  if (input.includes('+') || input.includes('-')) {
+    return input.split(/[+-]/g)[0]
   }
 
   return input

@@ -8,8 +8,13 @@
   manager
 - Magic Quotes detect forward and backward slashes (/ and \\) as non-word
   characters, behind which a starting Magic Quote can begin
+- Zettlr now properly uses a proper filename extension on export even when using
+  extensions
 
 ## Under the Hood
+
+- Fixed the `plainPandocReaderWriter` utility function to properly extract the
+  plain reader/writer in all possible configurations
 
 (nothing here)
 

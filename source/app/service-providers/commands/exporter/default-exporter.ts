@@ -18,6 +18,7 @@ import sanitize from 'sanitize-filename'
 import { trans } from '@common/i18n-main'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { WRITER2EXT } from '@common/util/pandoc-maps'
+import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 
 export const plugin: ExporterPlugin = {
   run: async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
@@ -37,7 +38,8 @@ export const plugin: ExporterPlugin = {
     }
 
     // Get the correct file extension
-    const extension = WRITER2EXT[options.profile.writer]
+    const plainWriter = getPlainPandocReaderWriter(options.profile.writer)
+    const extension = WRITER2EXT[plainWriter] ?? plainWriter
 
     // First file determines the name of the exported file.
     const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
