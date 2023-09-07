@@ -6,6 +6,8 @@
   font again
 - Fixed a bug preventing assigning colors and descriptions to tags in the tag
   manager
+- Magic Quotes detect forward and backward slashes (/ and \\) as non-word
+  characters, behind which a starting Magic Quote can begin
 
 ## Under the Hood
 
