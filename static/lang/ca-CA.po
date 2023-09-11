@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-08-28 02:24+0000\n"
+"POT-Creation-Date: 2023-09-11 02:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ander Romero <anderromeroaldana@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -343,7 +343,7 @@ msgid "Cancel"
 msgstr "Cancel·lar"
 
 #: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
-#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+#: source/app/service-providers/commands/exporter/default-exporter.ts:33
 #: source/app/service-providers/commands/importer/index.ts:46
 msgid ""
 "Pandoc has not been found on this system. Please install Pandoc prior to "
@@ -1296,8 +1296,8 @@ msgid ""
 msgstr ""
 "Zettlr ofereix una integració amb LanguageTool.org, un servei proveït per "
 "LanguageTooler GmbH. Per fer servir aquest servei és necessària una connexió "
-"a internet i és subjecte a la política de privadesa de LanguageTooler GmbH "
-"o el corresponent servidor que feu servir."
+"a internet i és subjecte a la política de privadesa de LanguageTooler GmbH o "
+"el corresponent servidor que feu servir."
 
 #: source/tmp/PopoverExport.vue.ts:6
 msgid "Exporting…"
@@ -2175,8 +2175,8 @@ msgid ""
 "Separate them with a comma. Changes are recognised after a restart."
 msgstr ""
 "Introduïu totes les extensions de fitxer que vulgueu veure a la barra "
-"lateral d'adjunts. Separeu-los amb una coma. Els canvis s'apliquen "
-"després de reiniciar-se."
+"lateral d'adjunts. Separeu-los amb una coma. Els canvis s'apliquen després "
+"de reiniciar-se."
 
 #: source/win-preferences/schema/advanced.ts:88
 msgid "Zoom behavior"
