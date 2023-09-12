@@ -16,8 +16,6 @@
 - Fixed the `plainPandocReaderWriter` utility function to properly extract the
   plain reader/writer in all possible configurations
 
-(nothing here)
-
 # 3.0.0
 
 ## READ THIS FIRST!
