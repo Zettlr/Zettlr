@@ -550,7 +550,7 @@ msgstr ""
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #, fuzzy
 msgid "Restart now"
-msgstr "maintenant"
+msgstr "Maintenant"
 
 #: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
