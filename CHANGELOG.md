@@ -10,6 +10,8 @@
   characters, behind which a starting Magic Quote can begin
 - Zettlr now properly uses a proper filename extension on export even when using
   extensions
+- Fixed a bug that would sometimes cause the autocomplete pop-up not showing
+  when editing an existing Zettelkasten link
 
 ## Under the Hood
 
