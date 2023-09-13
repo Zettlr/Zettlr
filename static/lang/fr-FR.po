@@ -550,11 +550,11 @@ msgstr ""
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #, fuzzy
 msgid "Restart now"
-msgstr "maintenant"
+msgstr "Redémarrez maintenant"
 
 #: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
-msgstr ""
+msgstr "Redémarrez ultérieurement"
 
 #: source/app/service-providers/fsal/index.ts:138
 #, fuzzy, javascript-format
