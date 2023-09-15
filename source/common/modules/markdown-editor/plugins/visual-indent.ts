@@ -101,7 +101,6 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
         }
         // Note that this continuously updates our measurements after any layout
         // changes
-        console.log({ text: measurementKey, after, base, sum: after - base })
         measurements?.set(measurementKey, after - base)
       },
       key: measurementKey
