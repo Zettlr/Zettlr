@@ -95,20 +95,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:^6.8.0":
-  version: 6.8.0
-  resolution: "@codemirror/autocomplete@npm:6.8.0"
+"@codemirror/autocomplete@npm:^6.9.1":
+  version: 6.9.1
+  resolution: "@codemirror/autocomplete@npm:6.9.1"
   dependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
-    "@codemirror/view": ^6.6.0
+    "@codemirror/view": ^6.17.0
     "@lezer/common": ^1.0.0
   peerDependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
-  checksum: b251a21065a954be7a4a9cf6fd1dce6027bd79ac7006728c0fde364b50c75ee4079bd53acf9890fdfdca78453c863f0c010010c26010cd9acdede3480273ad23
+  checksum: 96dad7a12429bf61e6f1bf75da731bf0dcbfeb56c33400b60a0de22049226e0926a53a174e84701812a235f8f144595ce53f0928054481bdf9cdc2ed3b8be20f
   languageName: node
   linkType: hard
 
@@ -13548,7 +13548,7 @@ __metadata:
   resolution: "zettlr@workspace:."
   dependencies:
     "@cds/core": ^6.5.0
-    "@codemirror/autocomplete": ^6.8.0
+    "@codemirror/autocomplete": ^6.9.1
     "@codemirror/collab": ^6.0.0
     "@codemirror/commands": ^6.2.4
     "@codemirror/lang-css": ^6.2.0
