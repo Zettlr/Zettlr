@@ -10,11 +10,16 @@
   characters, behind which a starting Magic Quote can begin
 - Zettlr now properly uses a proper filename extension on export even when using
   extensions
+- The generic text input context menu shows proper labels (#4655)
+- Improved the French translation
 
 ## Under the Hood
 
 - Fixed the `plainPandocReaderWriter` utility function to properly extract the
   plain reader/writer in all possible configurations
+- Improved performance of the math equation parser
+- Improved performance of the footnote parser
+- Improved performance of the plain link parser
 
 # 3.0.0
 
