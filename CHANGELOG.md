@@ -17,6 +17,7 @@
 - Fixed the `plainPandocReaderWriter` utility function to properly extract the
   plain reader/writer in all possible configurations
 - Improved performance of the math equation parser
+- Improved performance of the footnote parser
 
 # 3.0.0
 
