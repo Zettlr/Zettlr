@@ -18,6 +18,7 @@
   plain reader/writer in all possible configurations
 - Improved performance of the math equation parser
 - Improved performance of the footnote parser
+- Improved performance of the plain link parser
 
 # 3.0.0
 
