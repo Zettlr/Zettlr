@@ -15,32 +15,36 @@
 
 import { type InlineParser } from '@lezer/markdown'
 
-// NOTE: The original URL regexp from the old Markdown mode may have looked
-// sophisticated, but for our purposes here it's way too slow to compute.
-// Instead of being exact, we're using heuristics here. If a slice of text looks
-// even remotely like a link, we're gonna assume it's a link.
-
+// Very basic heuristic for detecting links. For this parser, every microsecond
+// counts.
 const plainLinkRe = /^(?:[a-z]+:\/\/)?(?:[a-z0-9-]+\.)?[a-z0-9-]+\.[a-z]+[/a-z0-9#&=*+_~.%:?[\]@!$()-]+/i
 
 // A small parser that can parse plain text links
 export const plainLinkParser: InlineParser = {
   name: 'plain-links',
   parse: (ctx, next, pos) => {
-    const abc = next >= 97 && next <= 122 // Lowercase letters
-    const ABC = next >= 65 && next <= 90 // Uppercase letters
-    if (!abc && !ABC) {
+    // NOTE: Because this parser has to look at basically everything, we have to
+    // include a ruthless amount of shortcuts to return early wherever we can.
+    // First check the current character -> must be [a-zA-Z].
+    if ((next < 97 || next > 122) && (next < 65 || next > 90)) {
+      return -1
+    }
+
+    // Next, minimum length: x.y.zz -> 6; also has to include a dot.
+    if (ctx.text.length < 6 || !ctx.text.includes('.')) {
       return -1
     }
 
     const relativeOffset = pos - ctx.offset
-    const sliceBefore = ctx.text.slice(0, relativeOffset)
     // There cannot be a space in a plain link, so immediately account for that
     const slice = ctx.text.slice(relativeOffset, ctx.text.indexOf(' ', relativeOffset))
 
-    if (!slice.includes('.')) { // There must be a dot in there
+    // Same check as above, now with the actual slice
+    if (slice.length < 6 || !slice.includes('.')) {
       return -1
     }
 
+    const sliceBefore = ctx.text.slice(0, relativeOffset)
     const openBracketBefore = sliceBefore.lastIndexOf('[') > sliceBefore.lastIndexOf(']')
     const closeBracketAfter = slice.includes(']') && (slice.includes('[') ? slice.indexOf(']') < slice.indexOf('[') : true)
     if (openBracketBefore && closeBracketAfter) {
