@@ -10,6 +10,7 @@
   characters, behind which a starting Magic Quote can begin
 - Zettlr now properly uses a proper filename extension on export even when using
   extensions
+- The generic text input context menu shows proper labels (#4655)
 
 ## Under the Hood
 
