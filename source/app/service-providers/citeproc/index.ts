@@ -24,12 +24,12 @@ import extractBibTexAttachments from './extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
 import YAML from 'yaml'
 import ProviderContract from '../provider-contract'
-import type NotificationProvider from '../notifications'
 import type WindowProvider from '../windows'
 import type LogProvider from '../log'
 import type ConfigProvider from '@providers/config'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import { showNativeNotification } from '@common/util/show-notification'
 
 interface DatabaseRecord {
   path: string
@@ -101,7 +101,6 @@ export default class CiteprocProvider extends ProviderContract {
   constructor (
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider,
-    private readonly _notifications: NotificationProvider,
     private readonly _windows: WindowProvider
   ) {
     super()
@@ -441,7 +440,7 @@ export default class CiteprocProvider extends ProviderContract {
       const newValue = this._config.get('export.cslLibrary')
 
       if (newValue !== this.mainLibrary) {
-        this._notifications.show(trans('Changes to the library file detected. Reloading …'))
+        showNativeNotification(trans('Changes to the library file detected. Reloading …'))
         this.unloadDatabase(this.mainLibrary)
         broadcastIpcMessage('citeproc-database-updated', CITEPROC_MAIN_DB)
         this.mainLibrary = newValue

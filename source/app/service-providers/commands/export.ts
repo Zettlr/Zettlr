@@ -23,6 +23,7 @@ import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
 import { type PandocProfileMetadata } from '@dts/common/assets'
 import isDir from '@common/util/is-dir'
 import { runShellCommand } from './exporter/run-shell-command'
+import { showNativeNotification } from '@common/util/show-notification'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
@@ -140,7 +141,7 @@ export default class Export extends ZettlrCommand {
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
         const readableFormat = (profile.writer in PANDOC_WRITERS) ? PANDOC_WRITERS[profile.writer] : profile.writer
-        this._app.notifications.show(trans('Exporting to %s', readableFormat))
+        showNativeNotification(trans('Exporting to %s', readableFormat))
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {

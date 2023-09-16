@@ -25,6 +25,10 @@ export const inlineMathParser: InlineParser = {
   // This parser should only match inline-math (we have to divide that here)
   name: 'inlineMath',
   parse: (ctx, next, pos) => {
+    if (next !== 36) { // $
+      return -1
+    }
+
     const inlineMathRE = /(?<![\\$])(?<dollar>\${1,2})(?![\s$])(?<eq>.+?)(?<![\s\\])\k<dollar>(?!\d)/g
     // Set the lastIndex to the relative position where we're currently parsing ...
     const relativePosition = pos - ctx.offset

@@ -16,26 +16,26 @@
     <template v-else>
       <!-- Display set up -->
       <NumberControl
-        v-model="taskDuration"
+        v-model="internalTaskDuration"
         v-bind:label="taskLabel"
         v-bind:min="1"
         v-bind:max="120"
       ></NumberControl>
       <NumberControl
-        v-model="shortDuration"
+        v-model="internalShortDuration"
         v-bind:label="shortLabel"
         v-bind:min="1"
         v-bind:max="120"
       ></NumberControl>
       <NumberControl
-        v-model="longDuration"
+        v-model="internalLongDuration"
         v-bind:label="longLabel"
         v-bind:min="1"
         v-bind:max="120"
       ></NumberControl>
       <hr>
       <SelectControl
-        v-model="effect"
+        v-model="internalEffect"
         v-bind:label="soundEffectsLabel"
         v-bind:options="soundEffects"
       ></SelectControl>
@@ -46,11 +46,11 @@
         custom elements yet. See: https://github.com/vuejs/vue/issues/6914
       -->
       <SliderControl
-        v-bind:model-value="volume"
+        v-bind:model-value="internalVolume"
         v-bind:label="volumeLabel"
         v-bind:min="0"
         v-bind:max="100"
-        v-on:change="volume = $event"
+        v-on:change="internalVolume = $event"
       ></SliderControl>
       <hr>
       <button v-on:click="startPomodoro">
@@ -60,7 +60,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -75,10 +75,11 @@
  * END HEADER
  */
 
-import NumberControl from '@common/vue/form/elements/Number'
-import SelectControl from '@common/vue/form/elements/Select'
-import SliderControl from '@common/vue/form/elements/Slider'
+import NumberControl from '@common/vue/form/elements/Number.vue'
+import SelectControl from '@common/vue/form/elements/Select.vue'
+import SliderControl from '@common/vue/form/elements/Slider.vue'
 import { trans } from '@common/i18n-renderer'
+import { PropType } from 'vue'
 
 export default {
   name: 'PopoverExport',
@@ -87,41 +88,78 @@ export default {
     SelectControl,
     SliderControl
   },
+  props: {
+    taskDuration: {
+      type: Number,
+      default: 1500 / 60
+    },
+    shortDuration: {
+      type: Number,
+      default: 300 / 60
+    },
+    longDuration: {
+      type: Number,
+      default: 1200 / 60
+    },
+    currentPhase: {
+      type: String,
+      default: 'task'
+    },
+    elapsed: {
+      type: Number,
+      default: 0
+    },
+    isRunning: {
+      type: Boolean,
+      default: false
+    },
+    soundEffects: {
+      type: Object as PropType<Record<string, string>>,
+      default: () => { return {} }
+    },
+    effect: {
+      type: String,
+      default: ''
+    },
+    volume: {
+      type: Number,
+      default: 100
+    }
+  },
   data: function () {
     return {
-      taskDuration: 1500 / 60,
-      shortDuration: 300 / 60,
-      longDuration: 1200 / 60,
-      currentPhase: 'task',
-      elapsed: 0,
-      isRunning: false,
-      soundEffects: {},
-      effect: '',
-      volume: 100
+      shouldBeRunning: this.isRunning,
+      internalVolume: this.volume,
+      internalEffect: this.effect,
+      internalShortDuration: this.shortDuration,
+      internalTaskDuration: this.taskDuration,
+      internalLongDuration: this.longDuration,
+      internalElapsed: this.elapsed,
+      internalCurrentPhase: this.currentPhase
     }
   },
   computed: {
     popoverData: function () {
       return {
-        taskDuration: this.taskDuration * 60,
-        shortDuration: this.shortDuration * 60,
-        longDuration: this.longDuration * 60,
-        isRunning: this.isRunning,
-        effect: this.effect,
-        volume: this.volume / 100
+        taskDuration: this.internalTaskDuration * 60,
+        shortDuration: this.internalShortDuration * 60,
+        longDuration: this.internalLongDuration * 60,
+        effect: this.internalEffect,
+        volume: this.internalVolume / 100,
+        shouldBeRunning: this.shouldBeRunning
       }
     },
     remainingTimeFormatted: function () {
-      let timeRemaining = this.elapsed
+      let timeRemaining = this.internalElapsed
       switch (this.currentPhase) {
         case 'task':
-          timeRemaining = this.taskDuration * 60 - this.elapsed
+          timeRemaining = this.internalTaskDuration * 60 - this.internalElapsed
           break
         case 'short':
-          timeRemaining = this.shortDuration * 60 - this.elapsed
+          timeRemaining = this.internalShortDuration * 60 - this.internalElapsed
           break
         case 'long':
-          timeRemaining = this.longDuration * 60 - this.elapsed
+          timeRemaining = this.internalLongDuration * 60 - this.internalElapsed
       }
 
       const minutes = Math.floor(timeRemaining / 60)
@@ -152,9 +190,9 @@ export default {
       return trans('Volume')
     },
     currentPhaseLabel: function () {
-      if (this.currentPhase === 'task') {
+      if (this.internalCurrentPhase === 'task') {
         return this.taskLabel
-      } else if (this.currentPhase === 'long') {
+      } else if (this.internalCurrentPhase === 'long') {
         return this.longLabel
       } else {
         return this.shortLabel
@@ -163,10 +201,10 @@ export default {
   },
   methods: {
     startPomodoro: function () {
-      this.isRunning = true
+      this.shouldBeRunning = true
     },
     stopPomodoro: function () {
-      this.isRunning = false
+      this.shouldBeRunning = false
     }
   }
 }

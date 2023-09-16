@@ -29,16 +29,16 @@
       v-model="sortingType"
       v-bind:inline="true"
       v-bind:options="{
-        'name': 'Sort by name',
-        'time': 'Sort by time'
+        name: 'Sort by name',
+        time: 'Sort by time'
       }"
     ></SelectControl>
     <SelectControl
       v-model="sortingDirection"
       v-bind:inline="true"
       v-bind:options="{
-        'up': 'ascending',
-        'down': 'descending'
+        up: 'ascending',
+        down: 'descending'
       }"
     ></SelectControl>
     <hr>
@@ -58,9 +58,9 @@
       <div
         v-for="iconElement, idx in icons"
         v-bind:key="idx"
-        v-bind:class="{ 'active': iconElement.shape === icon }"
+        v-bind:class="{ active: iconElement.shape === icon }"
         v-bind:title="iconElement.title"
-        v-on:click="icon = iconElement.shape"
+        v-on:click="updateIcon(iconElement.shape)"
       >
         <cds-icon
           v-if="iconElement.shape !== null"
@@ -92,6 +92,7 @@ import SelectControl from '@common/vue/form/elements/Select.vue'
 import SwitchControl from '@common/vue/form/elements/Switch.vue'
 import ButtonControl from '@common/vue/form/elements/Button.vue'
 import { trans } from '@common/i18n-renderer'
+import { DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -175,20 +176,18 @@ export default {
     SwitchControl,
     ButtonControl
   },
+  props: {
+    directoryPath: {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
-      dirname: '',
-      fullPath: '',
-      creationtime: 0,
-      modtime: 0,
-      files: 0,
-      dirs: 0,
-      totalWords: 0,
+      descriptor: undefined as DirDescriptor|undefined,
       sortingType: 'name',
       sortingDirection: 'up',
       isProject: false,
-      isGitRepository: false,
-      icon: null as string|null,
       closePopover: false // As soon as this is true, the dir popover wants to request a close command
     }
   },
@@ -197,26 +196,48 @@ export default {
     // return the data that will then be reported back to the caller.
     popoverData: function () {
       return {
-        sorting: `${this.sortingType}-${this.sortingDirection}`,
-        isProject: this.isProject,
-        icon: this.icon,
         closePopover: this.closePopover
       }
     },
+    dirname: function () {
+      return this.descriptor?.name ?? ''
+    },
+    isGitRepository: function () {
+      return this.descriptor?.isGitRepository ?? false
+    },
+    icon: function () {
+      if (this.descriptor === undefined) {
+        return null
+      }
+
+      return this.descriptor.settings.icon
+    },
+    children: function () {
+      return this.descriptor?.children ?? []
+    },
     creationTime: function () {
-      return formatDate(new Date(this.creationtime), window.config.get('appLang'), true)
+      return formatDate(new Date(this.descriptor?.creationtime ?? 0), window.config.get('appLang'), true)
     },
     modificationTime: function () {
-      return formatDate(new Date(this.modtime), window.config.get('appLang'), true)
+      return formatDate(new Date(this.descriptor?.modtime ?? 0), window.config.get('appLang'), true)
     },
     formattedFiles: function () {
-      return localiseNumber(this.files)
+      return localiseNumber(this.children.filter(x => x.type !== 'directory').length)
     },
     formattedDirs: function () {
-      return localiseNumber(this.dirs)
+      return localiseNumber(this.children.filter(x => x.type === 'directory').length)
     },
     formattedWordCount: function () {
-      return trans('%s words', localiseNumber(this.totalWords))
+      if (this.descriptor === undefined) {
+        return trans('%s words', 0)
+      }
+
+      const totalWords = this.descriptor.children
+        .filter((x): x is MDFileDescriptor => x.type === 'file')
+        .map(x => x.wordCount)
+        .reduce((prev, cur) => { return prev + cur }, 0)
+
+      return trans('%s words', localiseNumber(totalWords))
     },
     foldersLabel: function () {
       return trans('Directories')
@@ -235,19 +256,111 @@ export default {
     },
     projectPropertiesLabel: function () {
       return trans('Project Settings…')
+    },
+    descriptorIsProject () {
+      if (this.descriptor === undefined) {
+        return false
+      } else {
+        return this.descriptor.settings.project !== null
+      }
     }
   },
-  created: function () {
+  watch: {
+    sortingType () {
+      this.updateSorting()
+    },
+    sortingDirection () {
+      this.updateSorting()
+    },
+    isProject () {
+      this.updateProject()
+    }
+  },
+  created: async function () {
+    await this.fetchDescriptor()
   },
   methods: {
+    async fetchDescriptor () {
+      const descriptor: DirDescriptor|undefined = await ipcRenderer.invoke('application', {
+        command: 'get-descriptor',
+        payload: this.directoryPath
+      })
+
+      if (descriptor === undefined) {
+        console.error('Could not open directory properties: Not found')
+        this.closePopover = true
+        return
+      }
+
+      this.descriptor = descriptor
+
+      this.isProject = this.descriptor.settings.project !== null
+
+      ;[
+        this.sortingType,
+        this.sortingDirection
+      ] = this.descriptor.settings.sorting.split('-')
+    },
     openProjectPreferences: function () {
       ipcRenderer.invoke('application', {
         command: 'open-project-preferences',
-        payload: this.fullPath
+        payload: this.directoryPath
       })
         .catch(err => console.error(err))
 
       this.closePopover = true
+    },
+    updateIcon (iconShape: string|null) {
+      ipcRenderer.invoke('application', {
+        command: 'dir-set-icon',
+        payload: {
+          path: this.directoryPath,
+          icon: iconShape
+        }
+      })
+        .then(() => {
+          this.fetchDescriptor().catch(e => console.error(e))
+        })
+        .catch(e => console.error(e))
+    },
+    updateSorting () {
+      ipcRenderer.invoke('application', {
+        command: 'dir-sort',
+        payload: {
+          path: this.directoryPath,
+          sorting: `${this.sortingType}-${this.sortingDirection}`
+        }
+      })
+        .then(() => {
+          this.fetchDescriptor().catch(e => console.error(e))
+        })
+        .catch(e => console.error(e))
+    },
+    updateProject () {
+      if (this.isProject === this.descriptorIsProject) {
+        return
+      }
+
+      // NOTE: The toggle describes *wanted* behavior
+      if (this.isProject) {
+        ipcRenderer.invoke('application', {
+          command: 'dir-new-project',
+          payload: { path: this.directoryPath }
+        })
+          .then(() => {
+            this.fetchDescriptor().catch(e => console.error(e))
+          })
+          .catch(e => console.error(e))
+      } else {
+        ipcRenderer.invoke('application', {
+          command: 'dir-remove-project',
+          payload: { path: this.directoryPath }
+        })
+          .then(() => {
+            this.fetchDescriptor().catch(e => console.error(e))
+          })
+          .catch(e => console.error(e))
+      }
     }
   }
 }

@@ -18,6 +18,7 @@ import { makeExport } from './exporter'
 import type { ExporterOptions } from './exporter/types'
 import { EXT2READER } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
+import { showNativeNotification } from '@common/util/show-notification'
 
 export default class Print extends ZettlrCommand {
   constructor (app: any) {
@@ -80,7 +81,7 @@ export default class Print extends ZettlrCommand {
       this._app.windows.showPrintWindow(output.targetFile)
     } catch (err: any) {
       this._app.log.error(`[Print] Could not export document: ${err.message as string}`, err)
-      this._app.notifications.show(`${err.name as string}: ${err.message as string}`)
+      showNativeNotification(`${err.name as string}: ${err.message as string}`)
     }
   }
 }

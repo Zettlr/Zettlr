@@ -20,6 +20,7 @@ import isFile from '@common/util/is-file'
 import { app } from 'electron'
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
+import { showNativeNotification } from '@common/util/show-notification'
 
 export default class RootOpen extends ZettlrCommand {
   constructor (app: any) {
@@ -133,7 +134,7 @@ export default class RootOpen extends ZettlrCommand {
       } else if (this._app.config.addPath(absPath)) {
         try {
           if (isDir(absPath)) {
-            this._app.notifications.show(trans('Opening new root %s …', path.basename(absPath)))
+            showNativeNotification(trans('Opening new root %s …', path.basename(absPath)))
           }
           const loaded = await this._app.fsal.loadPath(absPath)
           if (loaded) {
@@ -144,7 +145,7 @@ export default class RootOpen extends ZettlrCommand {
             }
 
             if (isDir(absPath)) {
-              this._app.notifications.show(trans('%s has been loaded.', path.basename(absPath)))
+              showNativeNotification(trans('%s has been loaded.', path.basename(absPath)))
             }
           } else {
             this._app.config.removePath(absPath)
@@ -156,7 +157,7 @@ export default class RootOpen extends ZettlrCommand {
           this._app.windows.reportFSError('Could not open new root', err)
         }
       } else {
-        this._app.notifications.show(trans('Could not open workspace %s.', path.basename(absPath)))
+        showNativeNotification(trans('Could not open workspace %s.', path.basename(absPath)))
         this._app.log.error(`Could not open new root ${absPath}!`)
       }
     }

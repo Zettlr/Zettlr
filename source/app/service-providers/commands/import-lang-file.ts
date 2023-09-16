@@ -18,6 +18,7 @@ import fs from 'fs'
 import * as bcp47 from 'bcp-47'
 import { trans } from '@common/i18n-main'
 import { app } from 'electron'
+import { showNativeNotification } from '@common/util/show-notification'
 
 export default class ImportLangFile extends ZettlrCommand {
   constructor (app: any) {
@@ -56,12 +57,12 @@ export default class ImportLangFile extends ZettlrCommand {
         // It's a language file!
         try {
           fs.copyFileSync(f, path.join(langDir, path.basename(f)))
-          this._app.notifications.show(trans('Language file imported: %s', path.basename(f)))
+          showNativeNotification(trans('Language file imported: %s', path.basename(f)))
         } catch (err) {
-          this._app.notifications.show(trans('Could not import language file %s!', path.basename(f)))
+          showNativeNotification(trans('Could not import language file %s!', path.basename(f)))
         }
       } else {
-        this._app.notifications.show(trans('Could not import language file %s!', path.basename(f)))
+        showNativeNotification(trans('Could not import language file %s!', path.basename(f)))
       }
     }
 

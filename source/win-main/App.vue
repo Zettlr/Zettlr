@@ -819,26 +819,29 @@ export default defineComponent({
               })
             }
 
-            const shouldStart = this.pomodoro.intervalHandle === undefined && data.isRunning === true
-            const shouldStop = this.pomodoro.intervalHandle !== undefined && data.isRunning === false
+            const shouldStart = this.pomodoro.intervalHandle === undefined && data.shouldBeRunning === true
+            const shouldStop = this.pomodoro.intervalHandle !== undefined && data.shouldBeRunning === false
 
             if (shouldStart) {
+              console.log('Starting pomodoro')
               this.pomodoro.soundEffect.pause()
               this.pomodoro.soundEffect.currentTime = 0
               this.startPomodoro()
               this.$closePopover()
             } else if (shouldStop) {
+              console.log('Stopping pomodoro')
               this.pomodoro.soundEffect.pause()
               this.pomodoro.soundEffect.currentTime = 0
               this.stopPomodoro()
               this.$closePopover()
+            } else {
+              console.log('Doing nothing')
             }
           })
       } else if (clickedID === 'insert-table') {
         // Display the insertion popover
-        const data = {}
         const elem = document.getElementById('toolbar-insert-table')
-        this.$togglePopover(PopoverTable, elem as HTMLElement, data, (data: any) => {
+        this.$togglePopover(PopoverTable, elem as HTMLElement, {}, (data: any) => {
           // Generate a simple table based on the info, and insert it.
           const ast: string[][] = []
           const align: any[] = []
@@ -929,8 +932,8 @@ export default defineComponent({
         // only really need to update two things: The current task, and the
         // elapsed time.
         this.pomodoro.popover.updateData({
-          currentPhase: this.pomodoro.phase.type,
-          elapsed: this.pomodoro.phase.elapsed
+          internalCurrentPhase: this.pomodoro.phase.type,
+          internalElapsed: this.pomodoro.phase.elapsed
         })
       } else if (this.pomodoro.popover !== undefined && this.pomodoro.popover.isClosed() === true) {
         this.pomodoro.popover = undefined // Cleanup

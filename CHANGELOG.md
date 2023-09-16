@@ -10,13 +10,28 @@
   characters, behind which a starting Magic Quote can begin
 - Zettlr now properly uses a proper filename extension on export even when using
   extensions
+
+- The generic text input context menu shows proper labels (#4655)
+- Improved the French translation
+- Improved the Japanese translation
+- Fixed link previews for short notes
+- Updated the notification and menubar (Windows/Linux) icons to the new logo
+- Fixed a bug that would prevent changing the directory sorting order (#4654)
 - Fixed a bug that would sometimes cause the autocomplete pop-up not showing
-  when editing an existing Zettelkasten link
+  when editing an existing Zettelkasten link (#4653)
 
 ## Under the Hood
 
 - Fixed the `plainPandocReaderWriter` utility function to properly extract the
   plain reader/writer in all possible configurations
+- Improved performance of the math equation parser
+- Improved performance of the footnote parser
+- Improved performance of the plain link parser
+- Renamed the Catalan translation file from `ca-CA` to `ca-ES`
+- Moved the notification provider to a utility function
+- Refactored Popover logic to use props instead of data for initialization to
+  ensure the data is available upon component instantiation, making the logic
+  less brittle
 
 # 3.0.0
 

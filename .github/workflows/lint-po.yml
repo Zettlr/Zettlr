@@ -6,6 +6,9 @@ on:
   push:
     paths:
       - static/lang/**
+  pull_request:
+    paths:
+      - static/lang/**
 
 permissions:
   contents: read
