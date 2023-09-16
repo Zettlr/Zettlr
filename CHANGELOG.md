@@ -15,6 +15,7 @@
 - Improved the Japanese translation
 - Fixed link previews for short notes
 - Updated the notification and menubar (Windows/Linux) icons to the new logo
+- Fixed a bug that would prevent changing the directory sorting order (#4654)
 
 ## Under the Hood
 
@@ -25,6 +26,9 @@
 - Improved performance of the plain link parser
 - Renamed the Catalan translation file from `ca-CA` to `ca-ES`
 - Moved the notification provider to a utility function
+- Refactored Popover logic to use props instead of data for initialization to
+  ensure the data is available upon component instantiation, making the logic
+  less brittle
 
 # 3.0.0
 

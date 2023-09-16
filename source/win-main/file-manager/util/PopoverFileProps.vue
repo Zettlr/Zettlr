@@ -35,15 +35,15 @@
         {{ writingTargetTitle }}
       </p>
       <NumberControl
-        v-model="targetValue"
+        v-model="internalTargetValue"
         v-bind:inline="true"
       ></NumberControl>
       <SelectControl
-        v-model="targetMode"
+        v-model="internalTargetMode"
         v-bind:inline="true"
         v-bind:options="{
-          'words': wordsLabel,
-          'chars': charactersLabel
+          words: wordsLabel,
+          chars: charactersLabel
         }"
       ></SelectControl>
       <button v-on:click="reset">
@@ -75,6 +75,7 @@ import formatDate from '@common/util/format-date'
 import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
 import { ColoredTag } from '@providers/tags'
+import { PropType } from 'vue'
 
 const ipcRenderer = window.ipc
 
@@ -84,20 +85,60 @@ export default {
     NumberControl,
     SelectControl
   },
+  props: {
+    filepath: {
+      type: String,
+      default: ''
+    },
+    filename: {
+      type: String,
+      default: ''
+    },
+    creationtime: {
+      type: Number,
+      default: 0
+    },
+    modtime: {
+      type: Number,
+      default: 0
+    },
+    tags: {
+      type: Object as PropType<Array<string>>,
+      default: () => { return {} }
+    },
+    colouredTags: {
+      type: Object as PropType<Array<ColoredTag>>,
+      default: () => { return {} }
+    },
+    targetValue: {
+      type: Number,
+      default: 0
+    },
+    targetMode: {
+      type: String,
+      default: 'words'
+    },
+    words: {
+      type: Number,
+      default: 0
+    },
+    fileSize: {
+      type: Number,
+      default: 0
+    },
+    type: {
+      type: String,
+      default: 'file'
+    },
+    ext: {
+      type: String,
+      default: '.md'
+    }
+  },
   data: function () {
     return {
-      filepath: '',
-      filename: '',
-      creationtime: 0,
-      modtime: 0,
-      tags: [],
-      colouredTags: [] as ColoredTag[],
-      targetValue: 0,
-      targetMode: 'words',
-      words: 0,
-      fileSize: 0,
-      type: 'file',
-      ext: '.md'
+      internalTargetMode: this.targetMode,
+      internalTargetValue: this.targetValue
     }
   },
   computed: {
@@ -145,10 +186,10 @@ export default {
     }
   },
   watch: {
-    targetValue () {
+    internalTargetValue () {
       this.updateWritingTarget()
     },
-    targetMode () {
+    internalTargetMode () {
       this.updateWritingTarget()
     }
   },
@@ -157,15 +198,15 @@ export default {
      * Resets the data, a.k.a. removes the writing target
      */
     reset: function () {
-      this.targetValue = 0
-      this.targetMode = 'words'
+      this.internalTargetValue = 0
+      this.internalTargetMode = 'words'
     },
     updateWritingTarget () {
       ipcRenderer.invoke('targets-provider', {
         command: 'set-writing-target',
         payload: {
-          mode: this.targetMode,
-          count: this.targetValue,
+          mode: this.internalTargetMode,
+          count: this.internalTargetValue,
           path: this.filepath
         }
       }).catch(e => console.error(e))

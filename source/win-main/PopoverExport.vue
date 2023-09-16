@@ -57,12 +57,17 @@ export default defineComponent({
     SelectControl,
     RadioControl
   },
+  props: {
+    filePath: {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       closePopover: false,
       isExporting: false,
       format: '',
-      filePath: '',
       exportDirectory: 'temp',
       profileMetadata: [] as PandocProfileMetadata[],
       customCommands: window.config.get('export.customCommands') as Array<{ displayName: string, command: string }>

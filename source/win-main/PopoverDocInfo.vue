@@ -53,17 +53,25 @@
  */
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
-import { defineComponent } from 'vue'
+import { PropType, defineComponent } from 'vue'
 import { DocumentInfo } from '@common/modules/markdown-editor'
 
 export default defineComponent({
   name: 'PopoverDocInfo',
   components: {
   },
+  props: {
+    docInfo: {
+      type: Object as PropType<null|DocumentInfo>,
+      default: () => null
+    },
+    shouldCountChars: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: function () {
     return {
-      docInfo: null as null|DocumentInfo,
-      shouldCountChars: false
     }
   },
   computed: {

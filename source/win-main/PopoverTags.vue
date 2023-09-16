@@ -49,7 +49,7 @@
 import TextControl from '@common/vue/form/elements/Text.vue'
 import TabBar from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
+import { PropType, defineComponent } from 'vue'
 import { TabbarControl } from '@dts/renderer/window'
 import { OpenDocument } from '@dts/common/documents'
 import { TagRecord } from '@providers/tags'
@@ -62,6 +62,12 @@ export default defineComponent({
     TextControl,
     TabBar
   },
+  props: {
+    activeFile: {
+      type: Object as PropType<OpenDocument|null>,
+      default: null
+    }
+  },
   data: function () {
     return {
       tags: [] as TagRecord[],
@@ -70,7 +76,7 @@ export default defineComponent({
         { id: 'count', label: trans('Count') },
         { id: 'idf', label: 'IDF' }
       ] as TabbarControl[],
-      activeFile: null as OpenDocument|null,
+      // activeFile: null as OpenDocument|null,
       query: '',
       searchForTag: '',
       sorting: 'name', // Can be "name" or "count"
