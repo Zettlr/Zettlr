@@ -25,6 +25,7 @@ import { getBibliographyForDescriptor as getBibliography } from '@common/util/ge
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import path from 'path'
 import type { MDFileDescriptor } from '@dts/common/fsal'
+import { showNativeNotification } from '@common/util/show-notification'
 
 // This function overwrites the getBibliographyForDescriptor function to ensure
 // the library is always absolute. We have to do it this ridiculously since the
@@ -111,10 +112,10 @@ export default class OpenAttachment extends ZettlrCommand {
         // Better error message
         let msg = trans('The reference with key %s does not appear to have attachments.', arg.citekey)
         this._app.log.info(msg)
-        this._app.notifications.show(msg)
+        showNativeNotification(msg)
       } else {
         this._app.log.error(`Could not open attachment: ${err.message as string}`, err)
-        this._app.notifications.show(trans('Could not open attachment. Is Zotero running?'))
+        showNativeNotification(trans('Could not open attachment. Is Zotero running?'))
       }
       return false
     }

@@ -17,6 +17,7 @@ import { trans } from '@common/i18n-main'
 import makeImport from './importer'
 import path from 'path'
 import { import_files as FORMATS } from '@common/data.json'
+import { showNativeNotification } from '@common/util/show-notification'
 
 export default class ImportFiles extends ZettlrCommand {
   constructor (app: any) {
@@ -32,7 +33,7 @@ export default class ImportFiles extends ZettlrCommand {
   async run (evt: string, arg: any): Promise<boolean> {
     const openDirectory = this._app.fsal.openDirectory
     if (openDirectory === null) {
-      this._app.notifications.show(trans('You have to select a directory to import to.'))
+      showNativeNotification(trans('You have to select a directory to import to.'))
       return false
     }
 
@@ -55,26 +56,26 @@ export default class ImportFiles extends ZettlrCommand {
     }
 
     // Now import.
-    this._app.notifications.show(trans('Importing. Please wait …'))
+    showNativeNotification(trans('Importing. Please wait …'))
     try {
       let ret = await makeImport(fileList, openDirectory, this._app.assets, (file: string, error: string) => {
         this._app.log.error(`[Importer] Could not import file ${file}: ${error}`)
         // This callback gets called whenever there is an error while running pandoc.
-        this._app.notifications.show(trans('Couldn\'t import %s.', path.basename(file)))
+        showNativeNotification(trans('Couldn\'t import %s.', path.basename(file)))
       }, (file: string) => {
         // And this on each success!
-        this._app.notifications.show(trans('%s imported successfully.', path.basename(file)))
+        showNativeNotification(trans('%s imported successfully.', path.basename(file)))
       })
 
       if (ret.length > 0) {
         // Some files failed to import.
-        this._app.notifications.show(trans('The following %s files could not be imported, because their filetype is unknown: %s', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
+        showNativeNotification(trans('The following %s files could not be imported, because their filetype is unknown: %s', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
       }
     } catch (err: any) {
       // There has been an error on importing (e.g. Pandoc was not found)
       // This catches this and displays it.
       this._app.log.error(`[Importer] Could not import files: ${String(err.message)}`, err)
-      this._app.notifications.show(trans('The following %s files could not be imported, because their filetype is unknown: %s', fileList.length, ''))
+      showNativeNotification(trans('The following %s files could not be imported, because their filetype is unknown: %s', fileList.length, ''))
     }
 
     return true
