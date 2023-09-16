@@ -12,6 +12,7 @@
   extensions
 - The generic text input context menu shows proper labels (#4655)
 - Improved the French translation
+- Improved the Japanese translation
 - Fixed link previews for short notes
 
 ## Under the Hood
