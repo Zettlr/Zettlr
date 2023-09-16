@@ -20,6 +20,7 @@
 - Improved performance of the math equation parser
 - Improved performance of the footnote parser
 - Improved performance of the plain link parser
+- Renamed the Catalan translation file from `ca-CA` to `ca-ES`
 
 # 3.0.0
 
