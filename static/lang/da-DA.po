@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-08-28 02:24+0000\n"
+"POT-Creation-Date: 2023-09-11 02:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -346,7 +346,7 @@ msgid "Cancel"
 msgstr "Annullér"
 
 #: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
-#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+#: source/app/service-providers/commands/exporter/default-exporter.ts:33
 #: source/app/service-providers/commands/importer/index.ts:46
 msgid ""
 "Pandoc has not been found on this system. Please install Pandoc prior to "

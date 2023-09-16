@@ -17,6 +17,7 @@ import ZettlrCommand from './zettlr-command'
 import type { MDFileDescriptor } from '@dts/common/fsal'
 
 const MAX_FILE_PREVIEW_LENGTH = 300
+const MAX_FILE_PREVIEW_LINES = 10
 
 export default class FilePathFindMetaData extends ZettlrCommand {
   constructor (app: any) {
@@ -49,7 +50,8 @@ export default class FilePathFindMetaData extends ZettlrCommand {
 
     let preview = ''
     let i = 0
-    while (preview.length <= MAX_FILE_PREVIEW_LENGTH && i < 10) {
+    const maxPreviewLines = Math.min(lines.length, MAX_FILE_PREVIEW_LINES)
+    while (preview.length <= MAX_FILE_PREVIEW_LENGTH && i < maxPreviewLines) {
       const remainingChars = MAX_FILE_PREVIEW_LENGTH - preview.length
       if (lines[i].length <= remainingChars) {
         preview += lines[i] + '\n'

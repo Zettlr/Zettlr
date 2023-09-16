@@ -31,13 +31,8 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
   // HOWEVER, that didn't quite do the job. After months of thinking, I finally
   // had a good idea, which is what the below shows.
 
-  // First, get some basics that we need.
-  const charWidth = view.defaultCharacterWidth
   const tabSize = view.state.tabSize
   const builder = new RangeSetBuilder<Decoration>()
-  // The CM editor styles apply a basic 6px padding. NOTE: This may change in
-  // the future, in that case look this up and adapt it again!
-  const basePadding = 6
 
   // Then, retrieve all lines that are indentable via this plugin. These are:
   // All lines that are part of the current viewport and that are not part of a
@@ -76,14 +71,15 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
       }
     }
 
-    let offset = tabs * tabSize + spaces
-
     // Second, determine the offset based on list elements.
     // BUG: Currently this applies even to code files, which is not desirable.
     const match = /^\s*((?:[+*>-](?:\s\[[x\s]\])?|\d+\.)\s)/.exec(line.text)
-    offset += match !== null ? match[1].length : 0
+    const listMarker = match !== null ? match[1].length : 0
 
-    if (offset === 0) {
+    const columnLineTextStart = spaces + tabs + listMarker
+    // const visualLineTextStart = spaces + tabs * tabSize + listMarker
+
+    if (columnLineTextStart === 0) {
       continue // Neither whitespace nor list elements on that line.
     }
 
@@ -94,12 +90,12 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
     // line as a key, we cause (a) duplicated measurements (`* One` and `* Two`
     // require the same indentation) and (b) cause cache misses which results in
     // jumpy behavior when the user adds novel characters to the line.
-    const measurementKey = line.text.slice(0, offset)
+    const measurementKey = line.text.slice(0, columnLineTextStart).replace('\t', ' '.repeat(tabSize))
 
     view.requestMeasure({
       read (view) {
         const base = view.contentDOM.getBoundingClientRect().left
-        const after = view.coordsAtPos(line.from + offset)?.left ?? 0
+        const after = view.coordsAtPos(line.from + columnLineTextStart)?.left ?? 0
         if (after === 0) {
           return // Could not retrieve coordinates
         }
@@ -115,13 +111,6 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
       // NOTE: This time we do not need the basePadding, as the measurement
       // comes straight from the DOM and thus already includes that.
       const deco = Decoration.line({ attributes: { style: `text-indent: -${indent}px; padding-left: ${indent}px;` } })
-      builder.add(line.from, line.from, deco)
-    } else {
-      // There is not yet a measurement, so use an estimate (which will be fine
-      // for monospace, and off for other fonts). NOTE that we have to include
-      // the base padding that CodeMirror itself adds.
-      const pxOffset = offset * charWidth
-      const deco = Decoration.line({ attributes: { style: `text-indent: -${pxOffset}px; padding-left: ${pxOffset + basePadding}px;` } })
       builder.add(line.from, line.from, deco)
     }
   }

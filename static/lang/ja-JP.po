@@ -344,7 +344,7 @@ msgid "Cancel"
 msgstr "キャンセル"
 
 #: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
-#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+#: source/app/service-providers/commands/exporter/default-exporter.ts:33
 #: source/app/service-providers/commands/importer/index.ts:46
 msgid ""
 "Pandoc has not been found on this system. Please install Pandoc prior to "

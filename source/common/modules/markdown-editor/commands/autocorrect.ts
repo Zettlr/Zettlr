@@ -20,7 +20,7 @@ import { type Command, type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 
 // These characters can be directly followed by a starting magic quote
-const startChars = ' ([{-–—\n\r\t\v\f'
+const startChars = ' ([{-–—\n\r\t\v\f/\\'
 
 /**
  * Given the editor state and a position, this function returns whether the
