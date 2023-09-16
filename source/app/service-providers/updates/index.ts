@@ -29,11 +29,11 @@ import { trans } from '@common/i18n-main'
 import isFile from '@common/util/is-file'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
-import type NotificationProvider from '../notifications'
 import type LogProvider from '../log'
 import type CommandProvider from '../commands'
 import type ConfigProvider from '@providers/config'
 import { md2html } from '@common/modules/markdown-utils'
+import { showNativeNotification } from '@common/util/show-notification'
 
 /**
  * Struct which represents a single asset provided for by the updater
@@ -101,6 +101,9 @@ export interface UpdateState {
    * corresponds to the got error classes
    */
   lastErrorMessage: string|undefined
+  /**
+   * Contains the last error code
+   */
   lastErrorCode: string|undefined
   /**
    * Whether or not an update is available
@@ -164,7 +167,6 @@ export default class UpdateProvider extends ProviderContract {
   constructor (
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider,
-    private readonly _notifications: NotificationProvider,
     private readonly _commands: CommandProvider
   ) {
     super()
@@ -456,7 +458,7 @@ export default class UpdateProvider extends ProviderContract {
       // still in use.
       this._downloadWriteStream?.end()
       this._logger.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
-      this._notifications.show(`Download of ${this._updateState.name} successful!`, 'Update', () => {
+      showNativeNotification(`Download of ${this._updateState.name} successful!`, 'Update', () => {
         // The user has clicked the notification, so we can show the update window here
         this._commands.run('open-update-window', undefined)
           .catch(e => this._logger.error(String(e.message), e))
@@ -484,12 +486,12 @@ export default class UpdateProvider extends ProviderContract {
     // 2. Check that the file is correct
     // 3. Launch the file
     // 4. Quit the app
-    this._notifications.show('Verifying update ...')
+    showNativeNotification('Verifying update ...')
 
     const correctSHA = this._sha256Data.get(this._updateState.name)
 
     if (correctSHA === undefined) {
-      this._notifications.show('Could not verify update. Please retry or download manually.')
+      showNativeNotification('Could not verify update. Please retry or download manually.')
       this._cleanup(true)
       this._reportError('EVERIFY', 'Could not verify the download! Please retry or download manually.')
       return
@@ -501,7 +503,7 @@ export default class UpdateProvider extends ProviderContract {
     const downloadSHA = sha256sum.digest('hex')
 
     if (downloadSHA !== correctSHA) {
-      this._notifications.show('Could not verify update. Please retry or download manually.')
+      showNativeNotification('Could not verify update. Please retry or download manually.')
       this._cleanup(true)
       this._reportError('EVERIFY', 'Could not verify the download! Please retry or download manually.')
       return
@@ -520,7 +522,7 @@ export default class UpdateProvider extends ProviderContract {
       }
       app.quit()
     } catch (err: any) {
-      this._notifications.show('Could not start update. Please install manually.')
+      showNativeNotification('Could not start update. Please install manually.')
       this._reportError('EOPEN', `Could not start update: ${err.message as string}.`)
     }
   }
@@ -574,7 +576,7 @@ export default class UpdateProvider extends ProviderContract {
           if (this.applicationUpdateAvailable()) {
             const { tagName } = this.getUpdateState()
             this._logger.info(`Update available: ${tagName}`)
-            this._notifications.show(trans('An update to version %s is available!', tagName))
+            showNativeNotification(trans('An update to version %s is available!', tagName))
           }
         })
         .catch(err => this._logger.error('[Update Provider] Could not check for updates: Unexpected error', err))

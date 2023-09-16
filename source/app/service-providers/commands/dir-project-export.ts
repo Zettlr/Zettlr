@@ -21,6 +21,7 @@ import type { ExporterOptions } from './exporter/types'
 import type LogProvider from '@providers/log'
 import { trans } from '@common/i18n-main'
 import { runShellCommand } from './exporter/run-shell-command'
+import { showNativeNotification } from '@common/util/show-notification'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -142,9 +143,13 @@ export default class DirProjectExport extends ZettlrCommand {
       }
     }
 
-    const notificationShown = this._app.notifications.show(trans('Project successfully exported. Click to show.'), trans('Export'), () => {
-      openDirectory(this._app.log, dir.path)
-    })
+    const notificationShown = showNativeNotification(
+      trans('Project "%s" successfully exported. Click to show.', config.title),
+      trans('Project Export'),
+      () => {
+        openDirectory(this._app.log, dir.path)
+      }
+    )
 
     if (!notificationShown) {
       openDirectory(this._app.log, dir.path)

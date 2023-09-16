@@ -26,7 +26,6 @@ import FSAL from '@providers/fsal'
 import LinkProvider from '@providers/links'
 import LogProvider from '@providers/log'
 import MenuProvider from '@providers/menu'
-import NotificationProvider from '@providers/notifications'
 import type ProviderContract from '@providers/provider-contract'
 import RecentDocumentsProvider from '@providers/recent-docs'
 import StatsProvider from '@providers/stats'
@@ -48,7 +47,6 @@ export default class AppServiceContainer {
   private readonly _linkProvider: LinkProvider
   private readonly _logProvider: LogProvider
   private readonly _menuProvider: MenuProvider
-  private readonly _notificationProvider: NotificationProvider
   private readonly _recentDocsProvider: RecentDocumentsProvider
   private readonly _statsProvider: StatsProvider
   private readonly _tagProvider: TagProvider
@@ -67,7 +65,6 @@ export default class AppServiceContainer {
     this._commandProvider = new CommandProvider(this)
     this._assetsProvider = new AssetsProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
-    this._notificationProvider = new NotificationProvider(this._logProvider)
     this._statsProvider = new StatsProvider(this._logProvider)
     this._recentDocsProvider = new RecentDocumentsProvider(this._logProvider)
     this._appearanceProvider = new AppearanceProvider(this._logProvider, this._configProvider)
@@ -79,10 +76,10 @@ export default class AppServiceContainer {
     this._tagProvider = new TagProvider(this._logProvider, this._fsal)
     this._linkProvider = new LinkProvider(this._logProvider, this._fsal)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
-    this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
+    this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider, this._documentManager)
-    this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider, this._commandProvider)
+    this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._commandProvider)
   }
 
   /**
@@ -97,7 +94,6 @@ export default class AppServiceContainer {
     await this._informativeBoot(this._tagProvider, 'TagProvider')
     await this._informativeBoot(this._targetProvider, 'TargetProvider')
     await this._informativeBoot(this._cssProvider, 'CSSProvider')
-    await this._informativeBoot(this._notificationProvider, 'NotificationProvider')
     await this._informativeBoot(this._statsProvider, 'StatsProvider')
     await this._informativeBoot(this._recentDocsProvider, 'RecentDocsProvider')
     await this._informativeBoot(this._appearanceProvider, 'AppearanceProvider')
@@ -176,11 +172,6 @@ export default class AppServiceContainer {
   public get menu (): MenuProvider { return this._menuProvider }
 
   /**
-   * Returns the notifications provider
-   */
-  public get notifications (): NotificationProvider { return this._notificationProvider }
-
-  /**
    * Returns the recent docs provider
    */
   public get recentDocs (): RecentDocumentsProvider { return this._recentDocsProvider }
@@ -241,7 +232,6 @@ export default class AppServiceContainer {
     await this._safeShutdown(this._windowProvider, 'WindowManager')
     await this._safeShutdown(this._trayProvider, 'TrayProvider')
     await this._safeShutdown(this._statsProvider, 'StatsProvider')
-    await this._safeShutdown(this._notificationProvider, 'NotificationProvider')
     await this._safeShutdown(this._updateProvider, 'UpdateProvider')
     await this._safeShutdown(this._cssProvider, 'CSSProvider')
     await this._safeShutdown(this._targetProvider, 'TargetProvider')

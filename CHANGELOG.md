@@ -14,6 +14,7 @@
 - Improved the French translation
 - Improved the Japanese translation
 - Fixed link previews for short notes
+- Updated the notification and menubar (Windows/Linux) icons to the new logo
 
 ## Under the Hood
 
@@ -23,6 +24,7 @@
 - Improved performance of the footnote parser
 - Improved performance of the plain link parser
 - Renamed the Catalan translation file from `ca-CA` to `ca-ES`
+- Moved the notification provider to a utility function
 
 # 3.0.0
 
