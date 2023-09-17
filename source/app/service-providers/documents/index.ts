@@ -22,7 +22,7 @@ import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import type AppServiceContainer from 'source/app/app-service-container'
-import { ipcMain, app } from 'electron'
+import { ipcMain, app, type BrowserWindow } from 'electron'
 import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { type TabManager } from '@providers/documents/document-tree/tab-manager'
@@ -718,6 +718,18 @@ export default class DocumentManager extends ProviderContract {
   public async openFile (windowId: string, leafId: string|undefined, filePath: string, newTab?: boolean, modifyHistory?: boolean): Promise<boolean> {
     if (!isFile(filePath)) {
       throw new Error(`Could not open file ${filePath}: Not an existing file.`)
+    }
+
+    if (windowId === undefined) {
+      const mainWindow: BrowserWindow|undefined = this._app.windows.getFirstMainWindow()
+      const key = (mainWindow !== undefined) ? this._app.windows.getMainWindowKey(mainWindow) : undefined
+      if (key !== undefined) {
+        windowId = key
+      }
+    }
+
+    if (windowId === undefined) {
+      return false
     }
 
     const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
