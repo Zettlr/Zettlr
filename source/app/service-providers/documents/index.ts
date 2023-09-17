@@ -743,6 +743,7 @@ export default class DocumentManager extends ProviderContract {
       // leaf.tabMan.activeFile = filePath
       leaf.tabMan.openFile(filePath)
       this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath })
+      this.syncToConfig()
       return true
     }
 
