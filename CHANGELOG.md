@@ -13,6 +13,7 @@
 - The generic text input context menu shows proper labels (#4655)
 - Improved the French translation
 - Improved the Japanese translation
+- Improved the Catalan translation
 - Fixed link previews for short notes
 - Updated the notification and menubar (Windows/Linux) icons to the new logo
 - Fixed a bug that would prevent changing the directory sorting order (#4654)
