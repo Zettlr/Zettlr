@@ -21,6 +21,7 @@
   when editing an existing Zettelkasten link (#4653)
 - Fixed a bug that would sometimes cause the last active tab(s) to not be
   remembered correctly on launch
+- Improved calendar view layout
 
 ## Under the Hood
 
