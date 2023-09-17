@@ -13,11 +13,14 @@
 - The generic text input context menu shows proper labels (#4655)
 - Improved the French translation
 - Improved the Japanese translation
+- Improved the Catalan translation
 - Fixed link previews for short notes
 - Updated the notification and menubar (Windows/Linux) icons to the new logo
 - Fixed a bug that would prevent changing the directory sorting order (#4654)
 - Fixed a bug that would sometimes cause the autocomplete pop-up not showing
   when editing an existing Zettelkasten link (#4653)
+- Fixed a bug that would sometimes cause the last active tab(s) to not be
+  remembered correctly on launch
 
 ## Under the Hood
 
