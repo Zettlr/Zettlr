@@ -16,6 +16,12 @@
 - Fixed link previews for short notes
 - Updated the notification and menubar (Windows/Linux) icons to the new logo
 - Fixed a bug that would prevent changing the directory sorting order (#4654)
+- GraphView's labels are now rendered filled instead of stroked, to make it
+  easier to read the labels. 
+- The GraphView does now support multi-window, so clicking a link will open it in
+  the last focused window. If the file is already open in a leaf, that file will
+  be in that leaf, otherwise it will open the file in the last focused leaf.
+- Shift+Click in GraphView will force the document to be opened in a new tab.
 
 ## Under the Hood
 
@@ -29,6 +35,10 @@
 - Refactored Popover logic to use props instead of data for initialization to
   ensure the data is available upon component instantiation, making the logic
   less brittle
+- DocumentManager's `openFile` does now handle the case when windowId is undefined
+- The WindowProvider keeps now track of the latest focus window, to support
+  DocumentManager's behavior. `getFirstMainWindow` will first go through the
+  focus order, before falling back to it's previous behavior.
 
 # 3.0.0
 

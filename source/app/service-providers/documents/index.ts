@@ -163,6 +163,8 @@ export default class DocumentManager extends ProviderContract {
 
   private _shuttingDown: boolean
 
+  private readonly _windowLeafMap: Map<string, string[]>
+
   constructor (private readonly _app: AppServiceContainer) {
     super()
 
@@ -175,6 +177,7 @@ export default class DocumentManager extends ProviderContract {
     this._remoteChangeDialogShownFor = []
     this.documents = []
     this._shuttingDown = false
+    this._windowLeafMap = new Map<string, string[]>()
 
     const options: chokidar.WatchOptions = {
       persistent: true,
@@ -295,6 +298,9 @@ export default class DocumentManager extends ProviderContract {
         }
         case 'close-leaf': {
           return this.closeLeaf(payload.windowId, payload.leafId)
+        }
+        case 'focus-leaf': {
+          return this._updateFocusLeaf(payload.windowId, payload.leafId)
         }
         case 'set-branch-sizes': {
           // NOTE that in this particular instance we do not emit an event. The
@@ -494,6 +500,8 @@ export default class DocumentManager extends ProviderContract {
     if (this._shuttingDown) {
       return // During shutdown only the WindowManager should close windows
     }
+
+    this._windowLeafMap.delete(windowId)
 
     const isLastWindow = Object.values(this._windows).length === 1
 
@@ -735,8 +743,7 @@ export default class DocumentManager extends ProviderContract {
     const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
     let leaf: DTLeaf|undefined
     if (leafId === undefined) {
-      // Take the first leaf of the given window
-      leaf = this._windows[windowId].getAllLeafs()[0]
+      leaf = this._getLeafForFile(windowId, filePath)
     } else {
       leaf = this._windows[windowId].findLeaf(leafId)
     }
@@ -749,6 +756,8 @@ export default class DocumentManager extends ProviderContract {
     if (leafId === undefined) {
       leafId = leaf.id
     }
+
+    this._updateFocusLeaf(windowId, leafId)
 
     if (leaf.tabMan.openFiles.map(x => x.path).includes(filePath)) {
       // File is already open -> simply set it as active
@@ -778,6 +787,33 @@ export default class DocumentManager extends ProviderContract {
     await this.synchronizeDatabases()
     this.syncToConfig()
     return ret
+  }
+
+  /**
+   * If the filePath is opened in the windowId, return that leaf, otherwise return
+   * the last leaf in focus. If it is not possible to identify that, it will fallback
+   * to the first leaf.
+   *
+   * @param   {string}  windowId  the window to look for the file in
+   * @param   {string}  filePath  path of the file
+   *
+   * @return  {DTLeaf}            The leaf which shall be used to open the file within.
+   */
+  private _getLeafForFile (windowId: string, filePath: string): DTLeaf|undefined {
+    let leaf: DTLeaf|undefined = this._windows[windowId].getAllLeafs().find((value) => {
+      return value.tabMan.openFiles.map(x => x.path).includes(filePath)
+    })
+
+    if (leaf === undefined) {
+      const leafArray = this._windowLeafMap.get(windowId)
+
+      if (leafArray !== undefined && leafArray.length > 0) {
+        leaf = this._windows[windowId].findLeaf(leafArray[0])
+      } else {
+        leaf = this._windows[windowId].getAllLeafs()[0]
+      }
+    }
+    return leaf
   }
 
   /**
@@ -1216,6 +1252,14 @@ export default class DocumentManager extends ProviderContract {
   public closeLeaf (windowId: string, leafId: string): void {
     const leaf = this._windows[windowId].findLeaf(leafId)
 
+    const leafArray = this._windowLeafMap.get(windowId)
+    if (leafArray !== undefined) {
+      const index = leafArray.indexOf(leafId)
+      if (index > -1) {
+        leafArray.splice(index, 1)
+      }
+    }
+
     if (leaf !== undefined) {
       leaf.parent.removeNode(leaf)
       this.broadcastEvent(DP_EVENTS.LEAF_CLOSED, { windowId, leafId })
@@ -1367,5 +1411,19 @@ export default class DocumentManager extends ProviderContract {
     this.broadcastEvent(DP_EVENTS.FILE_SAVED, { filePath })
 
     return true
+  }
+
+  private _updateFocusLeaf (windowId: string, leafId: string): void {
+    let leafArray = this._windowLeafMap.get(windowId)
+    if (leafArray === undefined) {
+      leafArray = [leafId]
+    } else {
+      const index = leafArray.indexOf(leafId)
+      if (index > -1) {
+        leafArray.splice(index, 1)
+      }
+      leafArray.splice(0, 0, leafId)
+    }
+    this._windowLeafMap.set(windowId, leafArray)
   }
 }
