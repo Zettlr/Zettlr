@@ -41,6 +41,8 @@
 - Refactored Popover logic to use props instead of data for initialization to
   ensure the data is available upon component instantiation, making the logic
   less brittle
+- Refactored a hacky solution that would not remember the previous editor state
+  when entering distraction free mode and led to various other issues and bugs
 
 # 3.0.0
 

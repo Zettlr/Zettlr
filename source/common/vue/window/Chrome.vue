@@ -285,6 +285,9 @@ body {
   div#window-content {
     height: 100%;
     overflow: auto;
+    // Allow child components to make "easier" full screen content by using a
+    // position: absolute without having to delve into weird hacks.
+    position: relative;
   }
 
   &:not(.darwin) {

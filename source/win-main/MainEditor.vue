@@ -654,6 +654,11 @@ body.dark .main-editor-wrapper {
 
 // CodeMirror fullscreen
 .main-editor-wrapper.fullscreen {
+  // This makes the editor pane show "fullscreen" on top over the rest of the UI
+  // except the toolbar (due to a position: relative on the window content div).
+  position: absolute;
+  top: 0;
+
   .cm-scroller {
     @media(min-width: 1301px) { padding: 0 @editor-margin-fullscreen-xxl; }
     @media(max-width: 1300px) { padding: 0 @editor-margin-fullscreen-xl; }

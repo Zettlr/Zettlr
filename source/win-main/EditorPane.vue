@@ -20,16 +20,22 @@
       v-on:drop="handleDrop($event, 'editor')"
     >
       <template v-for="file in openFiles" v-bind:key="file.path">
-        <MainEditor
-          v-show="activeFile?.path === file.path"
-          v-bind:file="file"
-          v-bind:distraction-free="distractionFree"
-          v-bind:leaf-id="leafId"
-          v-bind:active-file="activeFile"
-          v-bind:window-id="windowId"
-          v-bind:editor-commands="editorCommands"
-          v-on:global-search="$emit('globalSearch', $event)"
-        ></MainEditor>
+        <!--
+          Teleport the correct editor that needs to be in distraction free
+          outside the DOM structure to have it render on top of everything else.
+        -->
+        <Teleport to="div#window-content" v-bind:disabled="!distractionFree || activeFile?.path !== file.path">
+          <MainEditor
+            v-show="activeFile?.path === file.path"
+            v-bind:file="file"
+            v-bind:distraction-free="distractionFree && activeFile?.path === file.path"
+            v-bind:leaf-id="leafId"
+            v-bind:active-file="activeFile"
+            v-bind:window-id="windowId"
+            v-bind:editor-commands="editorCommands"
+            v-on:global-search="$emit('globalSearch', $event)"
+          ></MainEditor>
+        </Teleport>
       </template>
 
       <!-- Show empty pane if there are no files -->
