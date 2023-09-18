@@ -24,6 +24,8 @@
 - Improved calendar view layout
 - Fixed a visual bug that would make a distraction-free editor overlay even
   pop-overs
+- Fixed a small glitch that would prevent proper visual indented alignment of
+  images when inside of list items
 
 ## Under the Hood
 
