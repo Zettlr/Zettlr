@@ -61,13 +61,17 @@ class ImageWidget extends WidgetType {
 
     const openExternally = document.createElement('span')
     openExternally.classList.add('open-externally-button')
-    openExternally.textContent = 'Open image externally'
+    openExternally.setAttribute('title', trans('Open image externally'))
     openExternally.onclick = function (event) {
       event.stopPropagation()
       // NOTE: We can only do this because the main process prevents any
       // navigation, and will open the "URL" using the shell.
       window.location.assign(actualURLToLoad)
     }
+
+    const openIcon = document.createElement('cds-icon')
+    openIcon.setAttribute('shape', 'pop-out')
+    openExternally.appendChild(openIcon)
 
     const figure = document.createElement('figure')
     figure.appendChild(img)
@@ -98,7 +102,7 @@ class ImageWidget extends WidgetType {
     // Update the image title on load to retrieve the real image size.
     img.onload = () => {
       img.title = `${this.imageTitle} (${img.naturalWidth}x${img.naturalHeight}px)`
-      size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}px`
+      size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}`
 
       if (!isDataUrl) {
         figure.appendChild(openExternally)

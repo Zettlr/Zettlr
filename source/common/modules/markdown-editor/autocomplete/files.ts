@@ -83,13 +83,13 @@ export const files: AutocompletePlugin = {
     // File autocompletion triggers as soon as we detect the start of a link
     const { text, from } = ctx.state.doc.lineAt(ctx.pos)
     const lineTextUntilPos = text.slice(0, ctx.pos - from)
-    const linkStartBefore = lineTextUntilPos.indexOf('[[') > lineTextUntilPos.indexOf(']]')
+    const linkStartBefore = lineTextUntilPos.lastIndexOf('[[') > lineTextUntilPos.lastIndexOf(']]')
     const linkStartRange = ctx.state.sliceDoc(ctx.pos - 2, ctx.pos)
 
     if (linkStartRange === '[[') {
       return ctx.pos
     } else if (linkStartBefore) {
-      return from + text.indexOf('[[') + 2
+      return from + lineTextUntilPos.lastIndexOf('[[') + 2
     } else {
       return false
     }

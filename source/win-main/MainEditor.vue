@@ -5,7 +5,7 @@
     v-bind:style="{ 'font-size': `${fontSize}px` }"
     v-bind:class="{
       'code-file': !isMarkdown,
-      'fullscreen': distractionFree
+      fullscreen: distractionFree
     }"
   >
     <div v-bind:id="`cm-text-${props.leafId}`">
@@ -582,10 +582,6 @@ function maybeHighlightSearchResults () {
   transition: 0.2s background-color ease;
   position: relative;
 
-  &.fullscreen {
-    z-index: 100; // Ensure this editor instance is on top of any other pane
-  }
-
   .cm-editor {
     .cm-scroller { padding: 50px 50px; }
 
@@ -658,6 +654,11 @@ body.dark .main-editor-wrapper {
 
 // CodeMirror fullscreen
 .main-editor-wrapper.fullscreen {
+  // This makes the editor pane show "fullscreen" on top over the rest of the UI
+  // except the toolbar (due to a position: relative on the window content div).
+  position: absolute;
+  top: 0;
+
   .cm-scroller {
     @media(min-width: 1301px) { padding: 0 @editor-margin-fullscreen-xxl; }
     @media(max-width: 1300px) { padding: 0 @editor-margin-fullscreen-xl; }
