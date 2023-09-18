@@ -20,6 +20,13 @@
         v-on:click="yearPlus()"
       >
       </ButtonControl>
+
+      <div id="calendar-legend">
+        Legend:
+        <span class="low-mid-activity" v-bind:title="lowMidLegend">&lt; &mu;</span>
+        <span class="high-mid-activity" v-bind:title="highMidLegend">&gt; &mu;</span>
+        <span class="high-activity" v-bind:title="highLegend">&gt; 2 &times; &mu;</span>
+      </div>
     </div>
 
     <!--
@@ -60,11 +67,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div id="calendar-legend">
-      <span class="low-mid-activity">{{ lowMidLegend }}</span><br>
-      <span class="high-mid-activity">{{ highMidLegend }}</span><br>
-      <span class="high-activity">{{ highLegend }}</span>
     </div>
   </div>
 </template>
@@ -143,7 +145,7 @@ export default defineComponent({
       return this.now.year === min
     },
     months: function (): Array<{ name: string, padding: number, daysInMonth: number }> {
-      const ret = []
+      const ret: Array<{ name: string, padding: number, daysInMonth: number }> = []
       const MONTHS = [
         trans('January'),
         trans('February'),
@@ -165,7 +167,7 @@ export default defineComponent({
         ret.push({
           name: MONTHS[i - 1],
           padding: beginning.weekday - 1,
-          daysInMonth: month.daysInMonth
+          daysInMonth: month.daysInMonth ?? 0
         })
       }
 
@@ -260,17 +262,22 @@ body div#calendar-container {
 
   div#calendar {
     margin-top: 20px;
-    display: inline-grid;
+    width: calc(100vw - 20px);
+    overflow: auto;
+    display: grid;
     // We have four month per quartile ...
-    grid-template-columns: repeat(4, 195px); // 10px padding left and right
+    grid-template-columns: repeat(4, auto);
     // ... and three quartiles per year.
-    grid-template-rows: repeat(3, 160px); // 10px padding top and bottom + 20px heading-size
+    grid-template-rows: repeat(3, auto);
+    grid-gap: auto;
 
-    div.month h2 {
-      font-size: 20px;
-      line-height: 20px;
-      margin: 0;
-      padding: 0;
+    div.month {
+      h2 {
+        font-size: 20px;
+        line-height: 20px;
+        margin: 0;
+        padding: 0;
+      }
     }
 
     div.day-grid {
@@ -313,13 +320,13 @@ body div#calendar-container {
   }
 
   div#calendar-legend {
-
+    font-size: 60%;
     span {
       display: inline-block;
-      font-size: 12px;
-      padding: 6px;
-      margin: 6px 0;
+      padding: 4px 8px;
+      margin: 0 6px;
       border-radius: 6px;
+      cursor: help;
 
       &.low-mid-activity {
         background-color: @low-mid-bg;
