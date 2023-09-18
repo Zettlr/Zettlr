@@ -728,6 +728,7 @@ export default class DocumentManager extends ProviderContract {
       throw new Error(`Could not open file ${filePath}: Not an existing file.`)
     }
 
+    // If windowId is not provided, then use the last focused window
     if (windowId === undefined) {
       const mainWindow: BrowserWindow|undefined = this._app.windows.getFirstMainWindow()
       const key = (mainWindow !== undefined) ? this._app.windows.getMainWindowKey(mainWindow) : undefined
