@@ -5,7 +5,7 @@
     v-bind:style="{ 'font-size': `${fontSize}px` }"
     v-bind:class="{
       'code-file': !isMarkdown,
-      'fullscreen': distractionFree
+      fullscreen: distractionFree
     }"
   >
     <div v-bind:id="`cm-text-${props.leafId}`">
@@ -581,10 +581,6 @@ function maybeHighlightSearchResults () {
   background-color: #ffffff;
   transition: 0.2s background-color ease;
   position: relative;
-
-  &.fullscreen {
-    z-index: 100; // Ensure this editor instance is on top of any other pane
-  }
 
   .cm-editor {
     .cm-scroller { padding: 50px 50px; }

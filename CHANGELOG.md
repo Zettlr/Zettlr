@@ -22,6 +22,8 @@
 - Fixed a bug that would sometimes cause the last active tab(s) to not be
   remembered correctly on launch
 - Improved calendar view layout
+- Fixed a visual bug that would make a distraction-free editor overlay even
+  pop-overs
 
 ## Under the Hood
 
