@@ -26,6 +26,8 @@
   pop-overs
 - Fixed a small glitch that would prevent proper visual indented alignment of
   images when inside of list items
+- Replace the long "Open image externally" message with an icon on prerendered
+  images and move it to the title; also make the message translatable
 
 ## Under the Hood
 
