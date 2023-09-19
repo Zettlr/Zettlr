@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.0.1
+
+## GUI and Functionality
+
 - Monospaced elements such as inline code elements are now rendered in monospace
   font again
 - Fixed a bug preventing assigning colors and descriptions to tags in the tag
