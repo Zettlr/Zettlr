@@ -43,6 +43,7 @@
   less brittle
 - Refactored a hacky solution that would not remember the previous editor state
   when entering distraction free mode and led to various other issues and bugs
+- Update Electron to v25.8.1 to mitigate CVE-2023-4863
 
 # 3.0.0
 
