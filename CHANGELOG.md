@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.0.1
+
+## GUI and Functionality
+
 - Monospaced elements such as inline code elements are now rendered in monospace
   font again
 - Fixed a bug preventing assigning colors and descriptions to tags in the tag
@@ -49,6 +59,7 @@
   less brittle
 - Refactored a hacky solution that would not remember the previous editor state
   when entering distraction free mode and led to various other issues and bugs
+- Update Electron to v25.8.1 to mitigate CVE-2023-4863
 - DocumentManager's `openFile` does now handle the case when windowId is undefined
 - The WindowProvider keeps now track of the latest focus window, to support
   DocumentManager's behavior. `getFirstMainWindow` will first go through the
