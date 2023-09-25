@@ -1782,10 +1782,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.17.5":
-  version: 18.17.5
-  resolution: "@types/node@npm:18.17.5"
-  checksum: b8c658a99234b99425243c324b641ed7b9ceb6bee6b06421fdc9bb7c58f9a5552e353225cc549e6982462ac384abe1985022ed76e2e4728797f59b21f659ca2b
+"@types/node@npm:^20.6.5":
+  version: 20.6.5
+  resolution: "@types/node@npm:20.6.5"
+  checksum: b849e849cf7631458a65c5019c81962028e306d8c4455a48422277b240f5a7eb8a1f1dafa60306bd4c773b77263bb8b05c074b1026e868bd137bb2022cf63ea2
   languageName: node
   linkType: hard
 
@@ -13583,7 +13583,7 @@ __metadata:
     "@types/md5": ^2.3.2
     "@types/mermaid": ^9.2.0
     "@types/mocha": ^10.0.1
-    "@types/node": ^18.17.5
+    "@types/node": ^20.6.5
     "@types/sanitize-html": ^2.9.0
     "@types/semver": ^7.5.0
     "@types/showdown": ^2.0.1
