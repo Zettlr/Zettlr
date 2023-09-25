@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-09-18 02:24+0000\n"
+"POT-Creation-Date: 2023-09-25 02:25+0000\n"
 "PO-Revision-Date: 2023-09-05 22:51+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -650,7 +650,7 @@ msgstr "レンダリングできませんでした。"
 msgid "Readability mode (%s)"
 msgstr "可読性モード (%s)"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:94
+#: source/common/modules/markdown-editor/renderers/render-images.ts:98
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "画像が見つかりません: %s"
