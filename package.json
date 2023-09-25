@@ -54,7 +54,7 @@
     "@codemirror/legacy-modes": "^6.3.2",
     "@codemirror/search": "^6.5.0",
     "@codemirror/state": "^6.2.1",
-    "@codemirror/view": "^6.13.2",
+    "@codemirror/view": "^6.20.1",
     "@lezer/common": "^1.0.3",
     "@lezer/highlight": "^1.1.6",
     "@replit/codemirror-emacs": "^6.0.1",
