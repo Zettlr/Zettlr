@@ -648,7 +648,7 @@ msgstr "Nelze vytvořit graf:"
 msgid "Readability mode (%s)"
 msgstr "Režim čitelnosti (%s)"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:94
+#: source/common/modules/markdown-editor/renderers/render-images.ts:98
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "Obrázek nenalezen: %s"

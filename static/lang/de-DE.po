@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-09-18 02:24+0000\n"
+"POT-Creation-Date: 2023-09-25 02:25+0000\n"
 "PO-Revision-Date: 2023-08-19 17:47+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -648,7 +648,7 @@ msgstr "Konnte Graph nicht darstellen:"
 msgid "Readability mode (%s)"
 msgstr "Lesbarkeitsmodus (%s)"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:94
+#: source/common/modules/markdown-editor/renderers/render-images.ts:98
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "Bild konnte nicht geladen werden: %s"
