@@ -3,19 +3,19 @@
 # This file is distributed under the same license as the Zettlr package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-09-18 02:24+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: cs-CZ\n"
+"PO-Revision-Date: 2023-09-23 23:15+0200\n"
+"Last-Translator: Ales Nehyba <neal.cz@gmail.com>\n"
+"Language-Team: \n"
+"Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -27,429 +27,405 @@ msgstr ","
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Afrikánština"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
-msgstr "arabština"
+msgstr "Arabština"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "Asturština"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
-msgstr "běloruština"
+msgstr "Běloruština"
 
 #: source/common/util/map-lang-code.ts:37
 msgid "Bulgarian"
-msgstr "bulharština"
+msgstr "Bulharština"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "Bretonština"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
-msgstr "bosenština"
+msgstr "Bosenština"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "Katalánština"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Czech"
-msgstr ""
+msgstr "Čeština"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Danish"
-msgstr "dánština"
+msgstr "Dánština"
 
 #: source/common/util/map-lang-code.ts:43
 msgid "German (Austria)"
-msgstr "němčina (Rakousko)"
+msgstr "Němčina (Rakousko)"
 
 #: source/common/util/map-lang-code.ts:44
 msgid "German (Switzerland)"
-msgstr "němčina (Švýcarsko)"
+msgstr "Němčina (Švýcarsko)"
 
 #: source/common/util/map-lang-code.ts:45
-#, fuzzy
 msgid "German (simple)"
-msgstr "němčina (Rakousko)"
+msgstr "Němčina (jednoduchá)"
 
 #: source/common/util/map-lang-code.ts:46
 msgid "German (Germany)"
-msgstr "němčina (Německo)"
+msgstr "Němčina (Německo)"
 
 #: source/common/util/map-lang-code.ts:47
-#, fuzzy
 msgid "German (Luxembourg)"
-msgstr "němčina (Rakousko)"
+msgstr "Němčina (Lucembursko)"
 
 #: source/common/util/map-lang-code.ts:48
 msgid "German"
-msgstr ""
+msgstr "Němčina"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "Greek"
-msgstr "řečtina"
+msgstr "Řečtina"
 
 #: source/common/util/map-lang-code.ts:50
 msgid "English (Australia)"
-msgstr "angličtina (Austrálie)"
+msgstr "Angličtina (Austrálie)"
 
 #: source/common/util/map-lang-code.ts:51
 msgid "English (Canada)"
-msgstr "angličtina (Kanada)"
+msgstr "Angličtina (Kanada)"
 
 #: source/common/util/map-lang-code.ts:52
 msgid "English (United Kingdom)"
-msgstr "angličtina (Spojené království)"
+msgstr "Angličtina (Spojené království)"
 
 #: source/common/util/map-lang-code.ts:53
 msgid "English (India)"
-msgstr "angličtina (Indie)"
+msgstr "Angličtina (Indie)"
 
 #: source/common/util/map-lang-code.ts:54
-#, fuzzy
 msgid "English (New Zealand)"
-msgstr "angličtina (Kanada)"
+msgstr "Angličtina (Nový Zéland)"
 
 #: source/common/util/map-lang-code.ts:55
 msgid "English (United States)"
-msgstr "angličtina (Spojené státy)"
+msgstr "Angličtina (Spojené státy)"
 
 #: source/common/util/map-lang-code.ts:56
 msgid "English (South Africa)"
-msgstr "angličtina (Jižní Afrika)"
+msgstr "Angličtina (Jižní Afrika)"
 
 #: source/common/util/map-lang-code.ts:57
-#, fuzzy
 msgid "English"
-msgstr "angličtina (Indie)"
+msgstr "Angličtina"
 
 #: source/common/util/map-lang-code.ts:58
 msgid "Esperanto"
-msgstr "esperanto"
+msgstr "Esperanto"
 
 #: source/common/util/map-lang-code.ts:59
-#, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "španělština (Španělsko)"
+msgstr "Španělština (Argentina)"
 
 #: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Spain)"
-msgstr "španělština (Španělsko)"
+msgstr "Španělština (Španělsko)"
 
 #: source/common/util/map-lang-code.ts:61
-#, fuzzy
 msgid "Spanish"
-msgstr "dánština"
+msgstr "Španělština"
 
 #: source/common/util/map-lang-code.ts:62
 msgid "Estonian"
-msgstr "estonština"
+msgstr "Estonština"
 
 #: source/common/util/map-lang-code.ts:63
 msgid "Basque"
-msgstr "baskičtina"
+msgstr "Baskičtina"
 
 #: source/common/util/map-lang-code.ts:64
 msgid "Persian (Farsi)"
-msgstr "perština (Farsi)"
+msgstr "Perština (Farsi)"
 
 #: source/common/util/map-lang-code.ts:65
 msgid "Finnish"
-msgstr "finština"
+msgstr "Finština"
 
 #: source/common/util/map-lang-code.ts:66
 msgid "Faroese"
-msgstr "faerština"
+msgstr "Faerština"
 
 #: source/common/util/map-lang-code.ts:67
-#, fuzzy
 msgid "French (Belgium)"
-msgstr "nizozemština (Belgie)"
+msgstr "Francouzština (Belgie)"
 
 #: source/common/util/map-lang-code.ts:68
-#, fuzzy
 msgid "French (Switzerland)"
-msgstr "němčina (Švýcarsko)"
+msgstr "Francouzština (Švýcarsko)"
 
 #: source/common/util/map-lang-code.ts:69
 msgid "French (France)"
-msgstr "francouzština (Francie)"
+msgstr "Francouzština (Francie)"
 
 #: source/common/util/map-lang-code.ts:70
-#, fuzzy
 msgid "French (Luxembourg)"
-msgstr "lucemburština"
+msgstr "Francouzština (Lucembursko)"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Francouzština (Monako)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
-msgstr ""
+msgstr "Francouzština"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
-msgstr "irština"
+msgstr "Irština"
 
 #: source/common/util/map-lang-code.ts:74
 msgid "Scottish (Gaelic)"
-msgstr "skotská gaelština"
+msgstr "Skotská gaelština"
 
 #: source/common/util/map-lang-code.ts:75
-#, fuzzy
 msgid "Galician"
-msgstr "galicijština (Španělsko)"
+msgstr "Galicijština (Španělsko)"
 
 #: source/common/util/map-lang-code.ts:76
 msgid "Hebrew"
-msgstr "hebrejština"
+msgstr "Hebrejština"
 
 #: source/common/util/map-lang-code.ts:77
 msgid "Hindi"
-msgstr "hindština"
+msgstr "Hindština"
 
 #: source/common/util/map-lang-code.ts:78
 msgid "Croatian"
-msgstr "chorvatština"
+msgstr "Chorvatština"
 
 #: source/common/util/map-lang-code.ts:79
 msgid "Hungarian"
-msgstr "maďarština"
+msgstr "Maďarština"
 
 #: source/common/util/map-lang-code.ts:80
 msgid "Armenian"
-msgstr "arménština"
+msgstr "Arménština"
 
 #: source/common/util/map-lang-code.ts:81
 msgid "Indonesian"
-msgstr "indonéština"
+msgstr "Indonéština"
 
 #: source/common/util/map-lang-code.ts:82
 msgid "Icelandic"
-msgstr "islandština"
+msgstr "Islandština"
 
 #: source/common/util/map-lang-code.ts:83
-#, fuzzy
 msgid "Italian (Switzerland)"
-msgstr "němčina (Švýcarsko)"
+msgstr "Italština (Švýcarsko)"
 
 #: source/common/util/map-lang-code.ts:84
 msgid "Italian (Italy)"
-msgstr "italština (Itálie)"
+msgstr "Italština (Itálie)"
 
 #: source/common/util/map-lang-code.ts:85
-#, fuzzy
 msgid "Italian"
-msgstr "Kurzíva"
+msgstr "Italština"
 
 #: source/common/util/map-lang-code.ts:86
 msgid "Japanese"
-msgstr "japonština"
+msgstr "Japonština"
 
 #: source/common/util/map-lang-code.ts:87
 msgid "Georgian"
-msgstr "gruzínština"
+msgstr "Gruzínština"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Khmerština"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
-msgstr "korejština"
+msgstr "Korejština"
 
 #: source/common/util/map-lang-code.ts:90
 msgid "Latin"
-msgstr "latina"
+msgstr "Latina"
 
 #: source/common/util/map-lang-code.ts:91
 msgid "Luxembourgian"
-msgstr "lucemburština"
+msgstr "Lucemburština"
 
 #: source/common/util/map-lang-code.ts:92
 msgid "Lithuanian"
-msgstr "litevština"
+msgstr "Litevština"
 
 #: source/common/util/map-lang-code.ts:93
 msgid "Latvian"
-msgstr "lotyština"
+msgstr "Lotyština"
 
 #: source/common/util/map-lang-code.ts:94
 msgid "Macedonian"
-msgstr "makedonština"
+msgstr "Makedonština"
 
 #: source/common/util/map-lang-code.ts:95
 msgid "Mongolian"
-msgstr "mongolština"
+msgstr "Mongolština"
 
 #: source/common/util/map-lang-code.ts:96
-#, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "malajština (Malajsie)"
+msgstr "Malajština (Brunej)"
 
 #: source/common/util/map-lang-code.ts:97
 msgid "Malaysian (Malaysia)"
-msgstr "malajština (Malajsie)"
+msgstr "Malajština (Malajsie)"
 
 #: source/common/util/map-lang-code.ts:98
-#, fuzzy
 msgid "Malaysian"
-msgstr "malajština (Malajsie)"
+msgstr "Malajština (Malajsie)"
 
 #: source/common/util/map-lang-code.ts:99
 msgid "Norwegian (Bokmål)"
-msgstr "norština (Bokmål)"
+msgstr "Norština (Bokmål)"
 
 #: source/common/util/map-lang-code.ts:100
 msgid "Nepalese"
-msgstr "nepálština"
+msgstr "Nepálština"
 
 #: source/common/util/map-lang-code.ts:101
 msgid "Dutch (Belgium)"
-msgstr "nizozemština (Belgie)"
+msgstr "Nizozemština (Belgie)"
 
 #: source/common/util/map-lang-code.ts:102
 msgid "Dutch (Netherlands)"
-msgstr "nizozemština (Nizozemí)"
+msgstr "Nizozemština (Nizozemí)"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
-msgstr ""
+msgstr "Nizozemština"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
-msgstr "norština (Nyorsk)"
+msgstr "Norština (Nyorsk)"
 
 #: source/common/util/map-lang-code.ts:105
-#, fuzzy
 msgid "Norwegian"
-msgstr "gruzínština"
+msgstr "Norština"
 
 #: source/common/util/map-lang-code.ts:106
 msgid "Polish"
-msgstr "polština"
+msgstr "Polština"
 
 #: source/common/util/map-lang-code.ts:107
-#, fuzzy
 msgid "Portuguese (Angola)"
-msgstr "portugalština (Portugalsko)"
+msgstr "Portugalština (Angola)"
 
 #: source/common/util/map-lang-code.ts:108
 msgid "Portuguese (Brazil)"
-msgstr "portugalština (Brazílie)"
+msgstr "Portugalština (Brazílie)"
 
 #: source/common/util/map-lang-code.ts:109
-#, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr "portugalština (Brazílie)"
+msgstr "Portugalština (Mozambik)"
 
 #: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Portugal)"
-msgstr "portugalština (Portugalsko)"
+msgstr "Portugalština (Portugalsko)"
 
 #: source/common/util/map-lang-code.ts:111
-#, fuzzy
 msgid "Portuguese"
-msgstr "portugalština (Brazílie)"
+msgstr "Portugalština"
 
 #: source/common/util/map-lang-code.ts:112
 msgid "Romanian"
-msgstr "rumunština"
+msgstr "Rumunština"
 
 #: source/common/util/map-lang-code.ts:113
 msgid "Russian"
-msgstr "ruština"
+msgstr "Ruština"
 
 #: source/common/util/map-lang-code.ts:114
 msgid "Rwandan (Kinyarwanda)"
-msgstr "rwandština (Kinyarwanda)"
+msgstr "Rwandština (Kinyarwanda)"
 
 #: source/common/util/map-lang-code.ts:115
 msgid "Slovakian"
-msgstr "slovenština"
+msgstr "Slovenština"
 
 #: source/common/util/map-lang-code.ts:116
 msgid "Slovenian"
-msgstr "slovinština"
+msgstr "Slovinština"
 
 #: source/common/util/map-lang-code.ts:117
 msgid "Serbian"
-msgstr "srbština"
+msgstr "Srbština"
 
 #: source/common/util/map-lang-code.ts:118
-#, fuzzy
 msgid "Albanian"
-msgstr "rumunština"
+msgstr "Albánština"
 
 #: source/common/util/map-lang-code.ts:119
-#, fuzzy
 msgid "Albanian (Albania)"
-msgstr "malajština (Malajsie)"
+msgstr "Albánština (Albánie)"
 
 #: source/common/util/map-lang-code.ts:120
 msgid "Swedish"
-msgstr "švédština"
+msgstr "Švédština"
 
 #: source/common/util/map-lang-code.ts:121
-#, fuzzy
 msgid "Tamil (India)"
-msgstr "angličtina (Indie)"
+msgstr "Tamilština (Indie)"
 
 #: source/common/util/map-lang-code.ts:122
 msgid "Thai"
-msgstr ""
+msgstr "Thajština"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Tagalština (Filipíny)"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Turkish"
-msgstr "turečtina"
+msgstr "Turečtina"
 
 #: source/common/util/map-lang-code.ts:125
 msgid "Ukrainian"
-msgstr "ukrajinština"
+msgstr "Ukrajinština"
 
 #: source/common/util/map-lang-code.ts:126
 msgid "Urdu"
-msgstr ""
+msgstr "Urdština"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Vietnamese"
-msgstr "vietnamština"
+msgstr "Vietnamština"
 
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
 #: source/common/util/map-lang-code.ts:130
-#, fuzzy
 msgid "Sorbian"
-msgstr "srbština"
+msgstr "Lužická srbština"
 
 #: source/common/util/map-lang-code.ts:131
 msgid "Chinese (China)"
-msgstr "čínština (Čína)"
+msgstr "Čínština (Čína)"
 
 #: source/common/util/map-lang-code.ts:132
-#, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "čínština (Čína)"
+msgstr "Čínština (Taiwan)"
 
 #: source/common/util/map-lang-code.ts:133
-#, fuzzy
 msgid "Chinese"
-msgstr "čínština (Čína)"
+msgstr "Čínština"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
-msgstr "právě teď"
+msgstr "Ihned"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
@@ -483,7 +459,7 @@ msgstr "Kód"
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "Soubor %s neexistuje."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
@@ -498,7 +474,7 @@ msgstr "Upraveno"
 #: source/app/service-providers/menu/menu.darwin.ts:166
 #: source/app/service-providers/menu/menu.win32.ts:140
 msgid "Open…"
-msgstr "Otevřít ..."
+msgstr "Otevřít …"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/win-main/file-manager/util/file-item-context.ts:29
@@ -508,7 +484,7 @@ msgstr "Otevřít na nové záložce"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:90
 msgid "No footnote text found."
-msgstr ""
+msgstr "Nebyl nalezen text poznámky pod čarou."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:107
 #: source/app/service-providers/menu/menu.darwin.ts:317
@@ -518,7 +494,7 @@ msgstr "Úpravy"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "Žádné zvýraznění"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
 msgid "Open Link"
@@ -641,51 +617,49 @@ msgstr "%s znaků"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
 msgid "Disabled"
-msgstr ""
+msgstr "Zakázáno"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
-#, fuzzy
 msgid "Custom"
-msgstr "Vlastní CSS"
+msgstr "Vlastní"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "Automatická detekce"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Otevřít panel diagnostiky"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "Přejít na poznámku pod čarou"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Mermaid vytváří graf…"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
-#, fuzzy
 msgid "Could not render Graph:"
-msgstr "Nelze vytvořit soubor"
+msgstr "Nelze vytvořit graf:"
 
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Režim čitelnosti (%s)"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:94
+#: source/common/modules/markdown-editor/renderers/render-images.ts:98
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Obrázek nenalezen: %s"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Pravopisná chyba"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Pro otevření odkazu klepněte se stisknutou klávesou Cmd/Ctrl"
 
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
@@ -697,7 +671,7 @@ msgstr "O aplikaci"
 #: source/app/service-providers/menu/menu.win32.ts:222
 #: source/app/service-providers/menu/menu.win32.ts:226
 msgid "Preferences…"
-msgstr "Možnosti"
+msgstr "Možnosti…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:59
 #: source/app/service-providers/menu/menu.win32.ts:234
@@ -707,7 +681,7 @@ msgstr "Správce prostředků"
 #: source/app/service-providers/menu/menu.darwin.ts:67
 #: source/app/service-providers/menu/menu.win32.ts:242
 msgid "Manage Tags…"
-msgstr "Správa štítků..."
+msgstr "Správa štítků…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
@@ -740,18 +714,18 @@ msgstr "Soubor"
 #: source/app/service-providers/menu/menu.win32.ts:90
 #: source/win-main/file-manager/util/dir-item-context.ts:38
 msgid "New File…"
-msgstr "Nový soubor ..."
+msgstr "Nový soubor…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:155
 #: source/app/service-providers/menu/menu.win32.ts:129
 #: source/win-main/file-manager/util/dir-item-context.ts:44
 msgid "New directory…"
-msgstr "Nová složka..."
+msgstr "Nová složka…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:175
 #: source/app/service-providers/menu/menu.win32.ts:149
 msgid "Open Workspace …"
-msgstr "Otevřít pracovní prostor..."
+msgstr "Otevřít pracovní prostor…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:184
 #: source/app/service-providers/menu/menu.win32.ts:44
@@ -786,27 +760,27 @@ msgstr "Další soubor"
 #: source/app/service-providers/menu/menu.darwin.ts:233
 #: source/app/service-providers/menu/menu.win32.ts:198
 msgid "Import files…"
-msgstr "Importovat soubory..."
+msgstr "Importovat soubory…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:241
 #: source/app/service-providers/menu/menu.win32.ts:206
 msgid "Export…"
-msgstr "Exportovat"
+msgstr "Exportovat…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:249
 #: source/app/service-providers/menu/menu.win32.ts:214
 msgid "Print…"
-msgstr "Tisk..."
+msgstr "Tisk…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:260
 #: source/app/service-providers/menu/menu.win32.ts:254
 msgid "Import translation…"
-msgstr "Importovat překlad..."
+msgstr "Importovat překlad…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:268
 #: source/app/service-providers/menu/menu.win32.ts:262
 msgid "Import dictionary…"
-msgstr "Importovat slovník..."
+msgstr "Importovat slovník…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:287
 #: source/app/service-providers/menu/menu.win32.ts:281
@@ -1004,7 +978,6 @@ msgstr "Podpořte Zettlr"
 
 #: source/app/service-providers/menu/menu.darwin.ts:670
 #: source/app/service-providers/menu/menu.win32.ts:643
-#, fuzzy
 msgid "Visit website"
 msgstr "Přejít na web"
 
@@ -1021,18 +994,17 @@ msgstr "Otevřít Tutoriál"
 #: source/app/service-providers/menu/menu.darwin.ts:702
 #: source/app/service-providers/menu/menu.win32.ts:675
 msgid "Clear FSAL cache …"
-msgstr ""
+msgstr "Vymazat FSAL cache…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:706
 #: source/app/service-providers/menu/menu.win32.ts:679
-#, fuzzy
 msgid "Clear FSAL Cache"
-msgstr "Vyčistit pole"
+msgstr "Vymazat FSAL cache"
 
 #: source/app/service-providers/menu/menu.darwin.ts:707
 #: source/app/service-providers/menu/menu.win32.ts:680
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "Pro vymazání FSAL cache je nutný restart."
 
 #: source/app/service-providers/menu/menu.darwin.ts:708
 #: source/app/service-providers/menu/menu.win32.ts:681
@@ -1041,13 +1013,15 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
+"Po restartu Zettlr znovu vytvoří celou cache. V závislosti na množství "
+"vašich souborů a rychlosti disku to může chvíli trvat. Okno aplikace se "
+"zobrazí po obnovení cache."
 
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
 #: source/app/service-providers/config/index.ts:426
-#, fuzzy
 msgid "Restart now"
-msgstr "právě teď"
+msgstr "Restartovat"
 
 #. 1: Omit all changes
 #: source/app/service-providers/menu/menu.darwin.ts:712
@@ -1112,7 +1086,7 @@ msgstr "Složku nelze přesunout do její podsložky."
 
 #: source/app/service-providers/commands/request-move.ts:70
 msgid "Cannot move directory or file"
-msgstr "Složku nebo soubor nelze přesunout."
+msgstr "Složku nebo soubor nelze přesunout"
 
 #: source/app/service-providers/commands/request-move.ts:71
 #, javascript-format
@@ -1121,7 +1095,7 @@ msgstr "Soubor nebo složka %s už existuje."
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:38
 msgid "The requested file was not found."
-msgstr "Požadovaný soubor nebyl nalezen"
+msgstr "Požadovaný soubor nebyl nalezen."
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:55
 msgid "The provided name did not contain any allowed letters."
@@ -1130,7 +1104,7 @@ msgstr "Dodaný název neobsahuje žádná povolené písmena."
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:76
 #: source/app/service-providers/commands/set-open-directory.ts:41
 msgid "The requested directory was not found."
-msgstr "Požadovaná složka nebyla nalezena"
+msgstr "Požadovaná složka nebyla nalezena."
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:87
 msgid "Could not save image"
@@ -1153,48 +1127,48 @@ msgid "Could not create file"
 msgstr "Nelze vytvořit soubor"
 
 #: source/app/service-providers/commands/dir-project-export.ts:74
-#, fuzzy
 msgid "Cannot export project"
-msgstr "Exportovat projekt"
+msgstr "Projekt nelze exportovat"
 
 #: source/app/service-providers/commands/dir-project-export.ts:75
 msgid ""
 "After applying your glob-filters, no files remained to export. Please adjust "
 "them in the project settings."
 msgstr ""
+"Po použití vašich filtrů není co exportovat. Upravte prosím filtry v "
+"nastavení projektu."
 
 #: source/app/service-providers/commands/dir-project-export.ts:147
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
-msgstr ""
+msgstr "Projekt „%s“ byl úspěšně exportován. Klikněte pro zobrazení."
 
 #: source/app/service-providers/commands/dir-project-export.ts:148
-#, fuzzy
 msgid "Project Export"
-msgstr "Exportovat"
+msgstr "Exportovat projekt"
 
 #: source/app/service-providers/commands/file-rename.ts:93
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/config/index.ts:431
 msgid "Confirm"
-msgstr ""
+msgstr "Potvrdit"
 
 #: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Aktualizovat interní odkazy %s do souboru %s?"
 
 #: source/app/service-providers/commands/file-rename.ts:96
 #: source/app/service-providers/commands/rename-tag.ts:47
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Ano"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:97
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: source/app/service-providers/commands/importer/import-textbundle.ts:63
 #: source/app/service-providers/commands/importer/import-textbundle.ts:69
@@ -1218,7 +1192,7 @@ msgid "Export failed"
 msgstr "Export selhal"
 
 #: source/app/service-providers/commands/export.ts:57
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "An error occurred during export: %s"
 msgstr "Během exportu se objevila chyba: %s"
 
@@ -1261,7 +1235,7 @@ msgstr "Aplikace nemůže otevřít složku &quot;%s&quot;."
 #: source/app/service-providers/commands/root-open.ts:137
 #, javascript-format
 msgid "Opening new root %s …"
-msgstr "Otevírá se nový kořen %s ..."
+msgstr "Otevírá se nový kořen %s …"
 
 #: source/app/service-providers/commands/root-open.ts:148
 #, javascript-format
@@ -1271,7 +1245,7 @@ msgstr "%s byl nahrán."
 #: source/app/service-providers/commands/root-open.ts:160
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "Nelze otevřít pracovní prostor %s."
 
 #: source/app/service-providers/commands/import.ts:36
 msgid "You have to select a directory to import to."
@@ -1287,7 +1261,7 @@ msgstr "Všechny soubory"
 #. Now import.
 #: source/app/service-providers/commands/import.ts:59
 msgid "Importing. Please wait …"
-msgstr "Čekejte, probíhá import ..."
+msgstr "Čekejte, probíhá import …"
 
 #. This callback gets called whenever there is an error while running pandoc.
 #: source/app/service-providers/commands/import.ts:64
@@ -1315,20 +1289,20 @@ msgstr ""
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Kopie %s"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Nahradit štítek „%s“ za „%s“ v %s souborech?"
 
 #: source/app/service-providers/commands/language-tool.ts:187
 msgid "Document too long"
-msgstr ""
+msgstr "Dokument je příliš dlouhý"
 
 #: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
-msgstr ""
+msgstr "offline"
 
 #: source/app/service-providers/commands/dir-new.ts:36
 #: source/app/service-providers/commands/dir-new.ts:37
@@ -1367,10 +1341,8 @@ msgid "Unsaved changes"
 msgstr "Neuložené změny"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr ""
-"V aktuálním souboru jsou neuložené změny. Chcete je zahodit nebo uložit?"
+msgstr "V aktuálním souboru jsou neuložené změny. Chcete je nejprve uložit?"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:31
 msgid "Replace file"
@@ -1431,9 +1403,9 @@ msgid "Zettlr"
 msgstr "Zettlr"
 
 #: source/app/service-providers/fsal/index.ts:138
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Loading workspace %s"
-msgstr "Pracovní plochy"
+msgstr "Nahrává se pracovní prostor %s"
 
 #: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
@@ -1467,11 +1439,11 @@ msgstr "Možnost %s je vyžadována."
 
 #: source/app/service-providers/config/index.ts:423
 msgid "Changing this option requires a restart to take effect."
-msgstr ""
+msgstr "Aby se změna projevila, je nutný restart."
 
 #: source/app/service-providers/config/index.ts:427
 msgid "Restart later"
-msgstr ""
+msgstr "Restartovat později"
 
 #: source/app/service-providers/citeproc/index.ts:248
 #: source/app/service-providers/citeproc/index.ts:455
@@ -1480,7 +1452,7 @@ msgstr "Databázi citací nelze nahrát"
 
 #: source/app/service-providers/citeproc/index.ts:443
 msgid "Changes to the library file detected. Reloading …"
-msgstr "Zjištěna změna souboru knihovny. Načítá se znovu..."
+msgstr "Zjištěna změna souboru knihovny. Načítá se znovu…"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:29
 #: source/win-main/file-manager/util/file-item-context.ts:35
@@ -1493,28 +1465,27 @@ msgstr "Přejmenovat složku"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:68
 #: source/win-main/file-manager/util/file-item-context.ts:67
-#, fuzzy
 msgid "Copy path"
-msgstr "Zkopírovat plnou cestu"
+msgstr "Zkopírovat cestu"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 #: source/win-main/file-manager/util/file-item-context.ts:88
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Otevřít ve Finderu"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 #: source/win-main/file-manager/util/file-item-context.ts:88
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "Otevřít v Průzkumníku"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 #: source/win-main/file-manager/util/file-item-context.ts:88
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "Otevřít v prohlížeči souborů"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:88
 msgid "Check for directory …"
-msgstr "Hledat složku..."
+msgstr "Hledat složku…"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:105
 msgid "Export Project"
@@ -1589,7 +1560,7 @@ msgstr ""
 #: source/tmp/CustomCSS.vue.ts:88 source/tmp/SnippetsTab.vue.ts:124
 #: source/tmp/Defaults.vue.ts:192
 msgid "Saving …"
-msgstr "Ukládá se ..."
+msgstr "Ukládá se …"
 
 #: source/tmp/CustomCSS.vue.ts:97
 msgid "Saving failed"
@@ -1598,15 +1569,15 @@ msgstr "Ukládání selhalo"
 #: source/tmp/PopoverTags.vue.ts:42
 #: source/win-preferences/schema/spellchecking.ts:82
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: source/tmp/PopoverTags.vue.ts:43
 msgid "Count"
-msgstr ""
+msgstr "Počet"
 
 #: source/tmp/PopoverTags.vue.ts:61
 msgid "Filter tags…"
-msgstr "Filtrovat štítky..."
+msgstr "Filtrovat štítky…"
 
 #: source/tmp/PopoverTags.vue.ts:64
 msgid "Tag Cloud"
@@ -1634,7 +1605,7 @@ msgstr "Vytvořeno"
 
 #: source/tmp/PopoverDirProps.vue.ts:185
 msgid "Project Settings…"
-msgstr "Nastavení projektu..."
+msgstr "Nastavení projektu…"
 
 #: source/tmp/SnippetsTab.vue.ts:50
 msgid "Rename snippet"
@@ -1671,11 +1642,11 @@ msgstr "Pauza"
 
 #: source/tmp/PopoverPomodoro.vue.ts:125
 msgid "Sound Effect"
-msgstr ""
+msgstr "Zvukový efekt"
 
 #: source/tmp/PopoverPomodoro.vue.ts:128
 msgid "Volume"
-msgstr ""
+msgstr "Hlasitost"
 
 #: source/tmp/CalendarView.vue.ts:59
 msgid "Calendar"
@@ -1768,7 +1739,7 @@ msgstr "Fulltextové hledání"
 #: source/tmp/GlobalSearch.vue.ts:120
 #, javascript-format
 msgid "%s matches"
-msgstr ""
+msgstr "%s shod"
 
 #: source/tmp/GlobalSearch.vue.ts:123
 msgid "Enter your search terms below"
@@ -1776,11 +1747,11 @@ msgstr "Níže zadejte hledané výrazy"
 
 #: source/tmp/GlobalSearch.vue.ts:126
 msgid "Find …"
-msgstr "Najít ..."
+msgstr "Najít …"
 
 #: source/tmp/GlobalSearch.vue.ts:129
 msgid "Filter …"
-msgstr "Filtrovat ..."
+msgstr "Filtrovat …"
 
 #: source/tmp/GlobalSearch.vue.ts:132
 msgid "Filter search results"
@@ -1792,7 +1763,7 @@ msgstr "Hledat pouze ve složce"
 
 #: source/tmp/GlobalSearch.vue.ts:138
 msgid "Restrict to directory …"
-msgstr "Hledat ve složce ..."
+msgstr "Hledat ve složce …"
 
 #: source/tmp/GlobalSearch.vue.ts:141
 msgid "Search"
@@ -1860,21 +1831,19 @@ msgstr "✍🏼 Pište, a překonáte svůj denní průměr."
 
 #: source/tmp/PopoverStats.vue.ts:129
 msgid "More statistics …"
-msgstr "Další statistiky ..."
+msgstr "Další statistiky …"
 
 #: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
 msgid "Exporting…"
-msgstr "Exportovat"
+msgstr "Probíhá export…"
 
 #: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
 msgid "Export"
 msgstr "Exportovat"
 
 #: source/tmp/PopoverExport.vue.ts:27
 msgid "command"
-msgstr ""
+msgstr "příkaz"
 
 #: source/tmp/file-item.vue.ts:193 source/tmp/PopoverFileProps.vue.ts:118
 msgid "Characters"
@@ -1926,6 +1895,10 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr nabízí možnost integrace s LanguageTool.org. Jde o službu, kterou "
+"poskytuje LanguageTooler GmbH. Použití této služby vyžaduje internetové "
+"připojení a vztahují se na něj zásady ochrany osobních údajů společnosti "
+"LanguageTooler GmbH nebo odpovídajícího serveru, který použijete."
 
 #: source/tmp/Defaults.vue.ts:70
 msgid ""
@@ -1940,6 +1913,8 @@ msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"Tento profil je neplatný. Buď obsahuje chyby, nebo není nastavená vlastnost "
+"writer nebo reader."
 
 #: source/tmp/Defaults.vue.ts:109
 msgid "Edit the default settings for imports or exports here."
@@ -1947,7 +1922,7 @@ msgstr "Zde upravíte výchozí nastavení pro import a export."
 
 #: source/tmp/PopoverFileProps.vue.ts:115
 msgid "Set writing target…"
-msgstr "Nastavit autorský cíl..."
+msgstr "Nastavit autorský cíl …"
 
 #: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "No related files"
@@ -1955,20 +1930,20 @@ msgstr "Žádné související soubory"
 
 #: source/tmp/RelatedFilesTab.vue.ts:39
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Tento vztah je založen na obousměrném odkazu."
 
 #: source/tmp/RelatedFilesTab.vue.ts:42
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Tento vztah je založen na odchozím odkazu."
 
 #: source/tmp/RelatedFilesTab.vue.ts:45
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Tento vztah je založen na zpětném odkazu."
 
 #: source/tmp/RelatedFilesTab.vue.ts:235
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Tento vztah je založen na %s sdílených štítků: %s"
 
 #: source/tmp/App.vue.ts:34
 msgid "Updater"
@@ -2003,7 +1978,7 @@ msgstr "Máte nejnovější verzi."
 
 #: source/tmp/App.vue.ts:133
 msgid "Starting update …"
-msgstr "Spouští se aktualizace ..."
+msgstr "Spouští se aktualizace …"
 
 #: source/tmp/Theme.vue.ts:44
 msgid "selected"
@@ -2022,9 +1997,8 @@ msgid "Actions"
 msgstr "Akce"
 
 #: source/tmp/ListControl.vue.ts:83
-#, fuzzy
 msgid "Delete"
-msgstr "Smazat soubor"
+msgstr "Smazat"
 
 #: source/tmp/file-list.vue.ts:69
 msgid "No directory selected"
@@ -2109,20 +2083,19 @@ msgstr "Sekundární kouzelné citace"
 
 #: source/win-preferences/schema/autocorrect.ts:80
 msgid "Match whole words"
-msgstr ""
+msgstr "Shoda v celých slovech"
 
 #: source/win-preferences/schema/autocorrect.ts:81
 msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
+msgstr "Pokud je vybráno, AutoCorrect nikdy nenahrazuje části slov"
 
 #: source/win-preferences/schema/autocorrect.ts:90
 msgid "String"
-msgstr ""
+msgstr "Řetězec"
 
 #: source/win-preferences/schema/autocorrect.ts:90
-#, fuzzy
 msgid "Replacement"
-msgstr "Nahradit soubor"
+msgstr "Náhrada"
 
 #: source/win-preferences/schema/autocorrect.ts:91
 msgid ""
@@ -2195,12 +2168,11 @@ msgstr "Režim editoru"
 
 #: source/win-preferences/schema/editor.ts:98
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Zkontrolovat stylové problémy v Markdown"
 
 #: source/win-preferences/schema/editor.ts:103
-#, fuzzy
 msgid "Show statusbar"
-msgstr "Zobrazit Zettlr"
+msgstr "Zobrazit stavovou lištu"
 
 #: source/win-preferences/schema/editor.ts:110
 msgid "Mute non-focused lines in distraction-free mode"
@@ -2220,7 +2192,7 @@ msgstr "Povolit Editor tabulek"
 
 #: source/win-preferences/schema/editor.ts:130
 msgid "Show link previews"
-msgstr ""
+msgstr "Zobrazit náhled odkazu"
 
 #: source/win-preferences/schema/editor.ts:135
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -2228,55 +2200,52 @@ msgstr "Počítat znaky místo slov (např. pro čínštinu)"
 
 #: source/win-preferences/schema/spellchecking.ts:25
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "Použít LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:30
 msgid "Strictness"
-msgstr ""
+msgstr "Přesnost"
 
 #: source/win-preferences/schema/spellchecking.ts:32
-#, fuzzy
 msgid "Standard"
-msgstr "Kalendář"
+msgstr "Běžná"
 
 #: source/win-preferences/schema/spellchecking.ts:33
 msgid "Picky"
-msgstr ""
+msgstr "Přísná"
 
 #: source/win-preferences/schema/spellchecking.ts:40
 msgid "Mother tongue"
-msgstr ""
+msgstr "Mateřský jazyk"
 
 #: source/win-preferences/schema/spellchecking.ts:42
 msgid "Not set"
-msgstr ""
+msgstr "Není nastaveno"
 
 #: source/win-preferences/schema/spellchecking.ts:49
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "Poskytovatel LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:52
 #: source/win-preferences/schema/spellchecking.ts:59
-#, fuzzy
 msgid "Custom server"
-msgstr "Vlastní CSS"
+msgstr "Vlastní server"
 
 #: source/win-preferences/schema/spellchecking.ts:66
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "Uživatelské jméno LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:72
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "API klíč LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:82
-#, fuzzy
 msgid "Active"
-msgstr "Akce"
+msgstr "Aktivní"
 
 #: source/win-preferences/schema/spellchecking.ts:82
 msgid "Language Code"
-msgstr ""
+msgstr "Kód jazyka"
 
 #: source/win-preferences/schema/spellchecking.ts:83
 msgid ""
@@ -2285,9 +2254,8 @@ msgstr ""
 "Vyberte jazyky, pro které chcete zapnout automatickou kontrolu pravopisu."
 
 #: source/win-preferences/schema/spellchecking.ts:88
-#, fuzzy
 msgid "Search for dictionaries…"
-msgstr "Hledat slovníky &hellip;"
+msgstr "Hledat slovníky…"
 
 #: source/win-preferences/schema/spellchecking.ts:94
 msgid "User dictionary. Remove words by clicking them."
@@ -2300,7 +2268,7 @@ msgstr "Záznam ve slovníku"
 #: source/win-preferences/schema/spellchecking.ts:99
 #: source/win-preferences/schema/advanced.ts:104
 msgid "Search for entries …"
-msgstr "Hledat položky ..."
+msgstr "Hledat položky …"
 
 #: source/win-preferences/schema/export.ts:24
 msgid "Use the internal Pandoc for exports"
@@ -2344,27 +2312,27 @@ msgstr ""
 
 #: source/win-preferences/schema/export.ts:55
 msgid "Ask for directory"
-msgstr ""
+msgstr "Vyžádat adresář"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Display name"
-msgstr "Zobrazit tlačítko \"Obrázek\""
+msgstr "Zobrazit název"
 
 #: source/win-preferences/schema/export.ts:64
-#, fuzzy
 msgid "Command"
-msgstr "Komentář"
+msgstr "Příkaz"
 
 #: source/win-preferences/schema/export.ts:65
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
 msgstr ""
+"Vložte vlastní příkazy, se kterými proběhne export. Každý příkaz obdrží jako "
+"první argument soubor nebo adresář projektu, který se exportuje."
 
 #: source/win-preferences/schema/general.ts:24
 msgid "Application language"
-msgstr ""
+msgstr "Jazyk aplikace"
 
 #: source/win-preferences/schema/general.ts:37
 msgid "Show file information"
@@ -2489,9 +2457,8 @@ msgid "Use native window appearance"
 msgstr "Použít nativní vzhled oken"
 
 #: source/win-preferences/schema/advanced.ts:53
-#, fuzzy
 msgid "Enable window vibrancy"
-msgstr "Použít nativní vzhled oken"
+msgstr ""
 
 #: source/win-preferences/schema/advanced.ts:59
 msgid "Delete items irreversibly, if moving them to trash fails"
@@ -2551,17 +2518,15 @@ msgstr "Regulární výraz ID"
 
 #: source/win-preferences/schema/zettelkasten.ts:30
 msgid "Pattern used to generate new IDs"
-msgstr "Vzor pro generování nových ID."
+msgstr "Vzor pro generování nových ID"
 
 #: source/win-preferences/schema/zettelkasten.ts:39
-#, fuzzy
 msgid "Link with filename only"
-msgstr "Pouze názvy souborů"
+msgstr "Vytvářet odkaz jen z názvu souboru"
 
 #: source/win-preferences/schema/zettelkasten.ts:44
-#, fuzzy
 msgid "When linking files, add the display name …"
-msgstr "Při propojování souborů, vložit název souboru ..."
+msgstr "Při vytváření odkazů mezi soubory, zobrazovat název …"
 
 #: source/win-preferences/schema/zettelkasten.ts:47
 msgid "always"
