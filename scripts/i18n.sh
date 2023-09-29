@@ -21,7 +21,7 @@ node ./scripts/split-vue-sfc.js
 # Extract all messages from any JS and TS file within source into the template
 # file static/i18n.pot. (NOTE: this includes the previously transformed SFCs.)
 FILES=$(find ./source -type f -name "*.ts" -o -name "*.js")
-PKGVER=$(node ./scripts/get-pkg-version.js)
+PKGVER=$(cat package.json | jq -r '.version')
 
 echo "Running xgettext ..."
 xgettext \
