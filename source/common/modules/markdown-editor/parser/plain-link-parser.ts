@@ -55,7 +55,32 @@ export const plainLinkParser: InlineParser = {
     const match = plainLinkRe.exec(slice)
 
     if (match !== null) {
-      return ctx.addElement(ctx.elt('URL', pos, pos + match[0].length))
+      const link = match[0]
+      if (link.endsWith('.')) {
+        // Exclude trailing dots
+        return ctx.addElement(ctx.elt('URL', pos, pos + link.length - 1))
+      } else if (link.endsWith(')')) {
+        // Exclude trailing ) if the number of brackets inside is balanced
+        let open = 0
+        let close = 0
+        for (const char of link) {
+          if (char === ')') {
+            close++
+          } else if (char === '(') {
+            open++
+          }
+        }
+
+        if (open === close) {
+          // The trailing bracket is required
+          return ctx.addElement(ctx.elt('URL', pos, pos + link.length))
+        } else {
+          return ctx.addElement(ctx.elt('URL', pos, pos + link.length - 1))
+        }
+      } else {
+        // The entire match contains the link
+        return ctx.addElement(ctx.elt('URL', pos, pos + link.length))
+      }
     } else {
       // Definitely not a link
       return -1

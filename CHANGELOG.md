@@ -4,6 +4,11 @@
 
 - Fixed a bug that would not parse plain-text links at the end of a line
   completely
+- Added two heuristics to plain link parser: (a) if the matched link ends with a
+  period, exclude the period; (b) if the matched link ends with a closing
+  bracket that does not match an open bracket, exclude the closing bracket
+  (remember that you can explicitly define the start and end of plain links by
+  wrapping them in `<` and `>`)
 - Improved the Czech translation (#4688) 
 
 ## Under the Hood
