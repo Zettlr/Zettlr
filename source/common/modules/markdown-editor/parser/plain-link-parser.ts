@@ -37,7 +37,8 @@ export const plainLinkParser: InlineParser = {
 
     const relativeOffset = pos - ctx.offset
     // There cannot be a space in a plain link, so immediately account for that
-    const slice = ctx.text.slice(relativeOffset, ctx.text.indexOf(' ', relativeOffset))
+    const firstSpace = ctx.text.indexOf(' ', relativeOffset)
+    const slice = ctx.text.slice(relativeOffset, firstSpace >= 0 ? firstSpace : undefined)
 
     // Same check as above, now with the actual slice
     if (slice.length < 6 || !slice.includes('.')) {

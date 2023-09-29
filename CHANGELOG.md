@@ -2,7 +2,9 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fixed a bug that would not parse plain-text links at the end of a line
+  completely
+- Improved the Czech translation (#4688) 
 
 ## Under the Hood
 
