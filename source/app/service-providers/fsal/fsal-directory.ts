@@ -30,6 +30,7 @@ import {
 } from '@providers/fsal/util/valid-file-extensions'
 import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import { safeDelete } from './util/safe-delete'
+import { getFilesystemMetadata } from './util/get-fs-metadata'
 
 /**
  * Determines what will be written to file (.ztr-directory)
@@ -165,9 +166,9 @@ export async function parse (
 
   // Retrieve the metadata
   try {
-    const stats = await fs.lstat(dir.path)
-    dir.modtime = stats.ctimeMs
-    dir.creationtime = stats.birthtimeMs
+    const metadata = await getFilesystemMetadata(dir.path)
+    dir.modtime = metadata.modtime
+    dir.creationtime = metadata.birthtime
   } catch (err: any) {
     err.message = `Error reading metadata for directory ${dir.path}!`
     // Re-throw so that the caller knows something's afoul
@@ -335,14 +336,14 @@ export async function createDirectory (
 
   const newPath = path.join(dirObject.path, newName)
   await fs.mkdir(newPath)
-  const stat = await fs.lstat(newPath)
+  const metadata = await getFilesystemMetadata(newPath)
 
   const newDir: DirDescriptor = {
     root: false,
     type: 'directory',
     isGitRepository: false,
-    modtime: stat.mtime.getTime(),
-    creationtime: stat.ctime.getTime(),
+    modtime: metadata.modtime,
+    creationtime: metadata.birthtime,
     size: 0,
     children: [],
     path: newPath,
