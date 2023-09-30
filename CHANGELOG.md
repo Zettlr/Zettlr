@@ -9,7 +9,11 @@
   bracket that does not match an open bracket, exclude the closing bracket
   (remember that you can explicitly define the start and end of plain links by
   wrapping them in `<` and `>`)
-- Improved the Czech translation (#4688) 
+- Improved the Czech translation (#4688)
+- Fixed an issue that would import Markdown files as LaTeX instead of simply
+  copying the file
+- If multiple candidate profiles to import files are found, the user can now
+  choose the correct one
 
 ## Under the Hood
 
