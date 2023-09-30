@@ -29,7 +29,7 @@
   of directories
 - `fsal-directory::removeChild` now calls `pathExists` instead of `isFile` to make
   sure directories also are removed in removeChild
-- `pathExists` wraps `fs.existSync` as the pattern with `isFile` etc.
+- `pathExists` wraps `fs.existsSync` as the pattern with `isFile` etc.
 
 # 3.0.1
 
