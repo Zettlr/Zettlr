@@ -12,6 +12,11 @@
 - Fixed an issue that could lead to data loss if "Always load remote changes"
   was checked in the settings
 - Improved the Czech translation (#4688) 
+- Improved the Czech translation (#4688)
+- Fixed an issue that would import Markdown files as LaTeX instead of simply
+  copying the file
+- If multiple candidate profiles to import files are found, the user can now
+  choose the correct one
 
 ## Under the Hood
 
