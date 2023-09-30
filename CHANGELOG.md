@@ -9,11 +9,14 @@
   bracket that does not match an open bracket, exclude the closing bracket
   (remember that you can explicitly define the start and end of plain links by
   wrapping them in `<` and `>`)
+- Fixed an issue that could lead to data loss if "Always load remote changes"
+  was checked in the settings
 - Improved the Czech translation (#4688) 
 
 ## Under the Hood
 
-(nothing here)
+- Increased the "immediate" save delay from 250 to 500ms to give slower systems
+  more time to persist changes to disk
 
 # 3.0.1
 

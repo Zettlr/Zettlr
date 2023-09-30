@@ -22,7 +22,7 @@ import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import type AppServiceContainer from 'source/app/app-service-container'
-import { ipcMain, app } from 'electron'
+import { ipcMain, app, dialog } from 'electron'
 import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { type TabManager } from '@providers/documents/document-tree/tab-manager'
@@ -35,12 +35,16 @@ import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { countChars, countWords } from '@common/util/counter'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import isFile from '@common/util/is-file'
+import { trans } from '@common/i18n-main'
 
 type DocumentWindows = Record<string, DocumentTree>
 
-const MAX_VERSION_HISTORY = 100 // Keep no more than this many updates.
-const DELAYED_SAVE_TIMEOUT = 5000 // Delayed timeout means: Save after 5 seconds
-const IMMEDIATE_SAVE_TIMEOUT = 250 // Even "immediate" should not save immediate to save disk space
+// Keep no more than this many updates.
+const MAX_VERSION_HISTORY = 100
+// Delayed timeout means: Save after 5 seconds
+const DELAYED_SAVE_TIMEOUT = 5000
+// Even "immediate" should not save immediately to prevent race conditions on slower systems
+const IMMEDIATE_SAVE_TIMEOUT = 500
 
 export interface DocumentsUpdateContext {
   windowId?: string
@@ -81,7 +85,10 @@ interface Document {
   minimumVersion: number
   /**
    * The last version number that has been saved to disk. If lastSavedVersion
-   * === currentVersion, the file is not modified.
+   * === currentVersion, the file is not modified. NOTE: DO NOT ASSUME THIS
+   * VARIABLE TO ACCURATELY REFLECT THE PRECISE VERSION THAT HAS BEEN SAVED;
+   * THIS VARIABLE MAY DIFFER, AND EVEN GET NEGATIVE! ONLY USE THIS TO COMPARE
+   * AGAINST CURRENTVERSION!
    */
   lastSavedVersion: number
   /**
@@ -205,11 +212,13 @@ export default class DocumentManager extends ProviderContract {
     // Start up the chokidar process
     this._watcher = new chokidar.FSWatcher(options)
 
-    this._watcher.on('all', (event: string, filePath: string) => {
-      this._app.log.info(`[DocumentManager] Processing ${event} for ${filePath}`)
-      if (this._ignoreChanges.includes(filePath)) {
+    this._watcher.on('all', (event, filePath) => {
+      if (this._ignoreChanges.includes(filePath) && event === 'change') {
+        this._app.log.info(`[DocumentManager] Ignoring change for ${filePath}`)
         this._ignoreChanges.splice(this._ignoreChanges.indexOf(filePath), 1)
         return
+      } else {
+        this._app.log.info(`[DocumentManager] Processing ${event} for ${filePath}`)
       }
 
       if (event === 'unlink') {
@@ -887,34 +896,60 @@ export default class DocumentManager extends ProviderContract {
     const stat = await fs.lstat(filePath)
     const modtime = stat.mtime.getTime()
     const ourModtime = doc.descriptor.modtime
+
     // In response to issue #1621: We will not check for equal modtime but only
     // for newer modtime to prevent sluggish cloud synchronization services
     // (e.g. OneDrive and Box) from having text appear to "jump" from time to time.
-    if (modtime > ourModtime) {
-      // Notify the caller, that the file has actually changed on disk.
-      // The contents of one of the open files have changed.
-      // What follows looks a bit ugly, welcome to callback hell.
-      if (this._app.config.get('alwaysReloadFiles') === true) {
-        await this.notifyRemoteChange(filePath)
+    if (modtime <= ourModtime) {
+      return // Nothing to do
+    }
+
+    const isModified = doc.lastSavedVersion !== doc.currentVersion
+    const { alwaysReloadFiles } = this._app.config.get()
+    if (isModified || !alwaysReloadFiles) {
+      // The file is modified in buffer, or the user does not want to simply
+      // reload changes, so we cannot just overwrite anything
+      // Prevent multiple instances of the dialog, just ask once. The logic
+      // always retrieves the most recent version either way
+      if (this._remoteChangeDialogShownFor.includes(filePath)) {
+        return
+      }
+
+      this._remoteChangeDialogShownFor.push(filePath)
+      const filename = doc.descriptor.name
+
+      // Ask the user if we should replace the file
+      const response = await dialog.showMessageBox({
+        title: trans('File changed on disk'),
+        message: trans('%s changed on disk', filename),
+        detail: isModified
+          ? trans('%s has changed on disk, but the editor contains unsaved changes. Do you want to keep the current editor contents or load the file from disk?', filename)
+          : trans('Do you want to keep the current editor contents or load the file from disk?'),
+        type: 'question',
+        buttons: [
+          trans('Keep editor contents'),
+          trans('Load changes from disk')
+        ],
+        defaultId: 0,
+        checkboxLabel: trans('Always load changes from disk if there are no unsaved changes in the editor'),
+        checkboxChecked: alwaysReloadFiles
+      })
+
+      this._remoteChangeDialogShownFor.splice(this._remoteChangeDialogShownFor.indexOf(filePath), 1)
+
+      this._app.config.set('alwaysReloadFiles', response.checkboxChecked)
+
+      if (response.response === 0) {
+        // User does not want to load the disk contents. To ensure that the
+        // proper status is indicated, set the "lastSavedVersion" to one minus.
+        doc.lastSavedVersion--
+        this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
       } else {
-        // Prevent multiple instances of the dialog, just ask once. The logic
-        // always retrieves the most recent version either way
-        if (this._remoteChangeDialogShownFor.includes(filePath)) {
-          return
-        }
-        this._remoteChangeDialogShownFor.push(filePath)
-
-        // Ask the user if we should replace the file
-        const shouldReplace = await this._app.windows.shouldReplaceFile(filePath)
-        // In any case remove the isShownFor for this file.
-        this._remoteChangeDialogShownFor.splice(this._remoteChangeDialogShownFor.indexOf(filePath), 1)
-        if (!shouldReplace) {
-          this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
-          return
-        }
-
         await this.notifyRemoteChange(filePath)
       }
+    } else {
+      // The user has activated the setting to alwaysReloadFiles.
+      await this.notifyRemoteChange(filePath)
     }
   }
 
