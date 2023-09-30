@@ -28,6 +28,8 @@
 - Fixed a potentially (?) horrible bug where directory modification times were
   accidentally set to `ctime` instead of `mtime`, leaving any changes to the
   directory that do not also update `ctime` hidden from the FSAL
+- Fixed a misalignment of the `InlineCode` element for the Pandoc attribute
+  parser
 
 # 3.0.1
 

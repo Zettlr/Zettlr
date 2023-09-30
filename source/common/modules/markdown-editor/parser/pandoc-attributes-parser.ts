@@ -19,7 +19,7 @@
  * END HEADER
  */
 
-import { type InlineParser, type Element } from '@lezer/markdown'
+import { type InlineParser } from '@lezer/markdown'
 
 /**
  * Parses Pandoc attribute strings (e.g. `{.unnumbered}`) in the code
@@ -51,12 +51,11 @@ export const pandocAttributesParser: InlineParser = {
       return -1
     }
 
-    const children: Element[] = [
+    const inlineCode = ctx.elt('InlineCode', pos, end, [
       ctx.elt('CodeMark', pos, pos + 1),
-      ctx.elt('InlineCode', pos + 1, end - 1),
       ctx.elt('CodeMark', end - 1, end)
-    ]
-    const wrapper = ctx.elt('PandocAttribute', pos, end, children)
-    return ctx.addElement(wrapper)
+    ])
+
+    return ctx.addElement(ctx.elt('PandocAttribute', pos, end, [inlineCode]))
   }
 }
