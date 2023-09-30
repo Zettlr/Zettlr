@@ -54,13 +54,16 @@ import { safeDelete } from './util/safe-delete'
 import type DocumentManager from '@providers/documents'
 import { closeSplashScreen, showSplashScreen, updateSplashScreen } from './util/splash-screen'
 import { trans } from '@common/i18n-main'
+import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
   FSALFile,
   FSALCodeFile,
   FSALDir,
-  FSALAttachment
+  FSALAttachment,
+  type FilesystemMetadata,
+  getFilesystemMetadata
 }
 
 interface FSALState {

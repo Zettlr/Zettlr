@@ -17,6 +17,12 @@
 
 - Increased the "immediate" save delay from 250 to 500ms to give slower systems
   more time to persist changes to disk
+- Replaced direct `access` and `stat` calls for files and directories in the
+  FSAL with a wrapper that will later on allow us to keep different file systems
+  (e.g., WebDav versus local filesystem) opaque to the user
+- Fixed a potentially (?) horrible bug where directory modification times were
+  accidentally set to `ctime` instead of `mtime`, leaving any changes to the
+  directory that do not also update `ctime` hidden from the FSAL
 
 # 3.0.1
 
