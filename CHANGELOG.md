@@ -25,6 +25,11 @@
   directory that do not also update `ctime` hidden from the FSAL
 - Fixed a misalignment of the `InlineCode` element for the Pandoc attribute
   parser
+- Replaced `fs.unlink` with `fs.rm` in `safeDelete` to support recursive removal
+  of directories
+- `fsal-directory::removeChild` now calls `pathExists` instead of `isFile` to make
+  sure directories also are removed in removeChild
+- `pathExists` wraps `fs.existSync` as the pattern with `isFile` etc.
 
 # 3.0.1
 
