@@ -7,7 +7,12 @@ export async function safeDelete (absPath: string, deleteOnFail: boolean): Promi
   } catch (err: any) {
     if (deleteOnFail) {
       // If this function throws, there's really something off and we shouldn't recover.
-      await fs.rm(absPath, { recursive: true, force: true })
+      const stat = await fs.stat(absPath)
+      if (stat.isSymbolicLink()) {
+        await fs.unlink(absPath)
+      } else {
+        await fs.rm(absPath, { recursive: true, force: true })
+      }
     } else {
       err.message = `[FSAL File] Could not remove file ${absPath}: ${String(err.message)}`
       throw err

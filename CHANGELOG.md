@@ -26,7 +26,7 @@
 - Fixed a misalignment of the `InlineCode` element for the Pandoc attribute
   parser
 - Replaced `fs.unlink` with `fs.rm` in `safeDelete` to support recursive removal
-  of directories
+  of directories when the path is not pointing to a symbolink link
 - `fsal-directory::removeChild` now calls `pathExists` instead of `isFile` to make
   sure directories also are removed in removeChild
 - `pathExists` wraps `fs.existsSync` as the pattern with `isFile` etc.
