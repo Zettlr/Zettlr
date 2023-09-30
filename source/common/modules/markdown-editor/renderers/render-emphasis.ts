@@ -67,6 +67,10 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
           return
         }
 
+        if (node.name === 'PandocAttribute') {
+          return false // Do not hide the "CodeMarks" of Pandoc attributes
+        }
+
         switch (node.name) {
           case 'Escape':
             // Only hide the actual backslash

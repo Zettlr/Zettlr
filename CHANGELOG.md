@@ -9,11 +9,22 @@
   bracket that does not match an open bracket, exclude the closing bracket
   (remember that you can explicitly define the start and end of plain links by
   wrapping them in `<` and `>`)
-- Improved the Czech translation (#4688) 
+- Improved the Czech translation (#4688)
+- Fixed an issue that would import Markdown files as LaTeX instead of simply
+  copying the file
+- If multiple candidate profiles to import files are found, the user can now
+  choose the correct one
 
 ## Under the Hood
 
-(nothing here)
+- Replaced direct `access` and `stat` calls for files and directories in the
+  FSAL with a wrapper that will later on allow us to keep different file systems
+  (e.g., WebDav versus local filesystem) opaque to the user
+- Fixed a potentially (?) horrible bug where directory modification times were
+  accidentally set to `ctime` instead of `mtime`, leaving any changes to the
+  directory that do not also update `ctime` hidden from the FSAL
+- Fixed a misalignment of the `InlineCode` element for the Pandoc attribute
+  parser
 
 # 3.0.1
 
