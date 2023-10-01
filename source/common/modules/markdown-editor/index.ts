@@ -90,6 +90,7 @@ import {
 } from './plugins/remote-doc'
 import { markdownToAST } from '../markdown-utils'
 import { countField } from './plugins/statistics-fields'
+import type { SyntaxNode } from '@lezer/common'
 
 export interface DocumentWrapper {
   path: string
@@ -307,7 +308,7 @@ export default class MarkdownEditor extends EventEmitter {
           // Both plain URLs as well as Zettelkasten links and tags are
           // implemented on the syntax tree.
           if (nodeAt.type.name === 'URL') {
-            // We found a link!
+            // We found a plain link!
             const url = view.state.sliceDoc(nodeAt.from, nodeAt.to)
             openMarkdownLink(url, view)
             event.preventDefault()
@@ -323,6 +324,26 @@ export default class MarkdownEditor extends EventEmitter {
             const tagContents = view.state.sliceDoc(nodeAt.from, nodeAt.to)
             editorInstance.emit('zettelkasten-tag', tagContents)
             event.preventDefault()
+          }
+
+          // Lastly, the user may have clicked somewhere in a link. However,
+          // since the link description can take various inline elements, we
+          // have to recursively move up the tree until we find a 'Link' element
+          // or abort if we reach the top
+          let currentNode: SyntaxNode|null = nodeAt
+          while (currentNode !== null && currentNode.name !== 'Link') {
+            currentNode = currentNode.parent
+          }
+
+          if (currentNode !== null) {
+            // We have a link
+            const urlNode = currentNode.getChild('URL')
+            if (urlNode !== null) {
+              const url = view.state.sliceDoc(urlNode.from, urlNode.to)
+              openMarkdownLink(url, view)
+              event.preventDefault()
+              return true
+            }
           }
         }
       }
