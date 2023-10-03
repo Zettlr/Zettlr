@@ -2406,12 +2406,12 @@ msgstr "簡體中文"
 #: source/common/util/map-lang-code.ts:132
 #, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "簡體中文"
+msgstr "正體中文(台灣)"
 
 #: source/common/util/map-lang-code.ts:133
 #, fuzzy
 msgid "Chinese"
-msgstr "簡體中文"
+msgstr "中文"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
