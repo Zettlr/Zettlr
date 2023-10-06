@@ -25,6 +25,7 @@
   directory that do not also update `ctime` hidden from the FSAL
 - Fixed a misalignment of the `InlineCode` element for the Pandoc attribute
   parser
+- Upgrade Electron to v25.8.4, mitigating CVE-2023-5217
 
 # 3.0.1
 
