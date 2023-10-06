@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.0.2
+
+## GUI and Functionality
+
 - Fixed a bug that would not parse plain-text links at the end of a line
   completely
 - Added two heuristics to plain link parser: (a) if the matched link ends with a
