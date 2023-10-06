@@ -9,7 +9,9 @@
   bracket that does not match an open bracket, exclude the closing bracket
   (remember that you can explicitly define the start and end of plain links by
   wrapping them in `<` and `>`)
-- Improved the Czech translation (#4688)
+- Fixed an issue that could lead to data loss if "Always load remote changes"
+  was checked in the settings
+- Improved the Czech translation (#4688) 
 - Fixed an issue that would import Markdown files as LaTeX instead of simply
   copying the file
 - If multiple candidate profiles to import files are found, the user can now
@@ -17,6 +19,8 @@
 
 ## Under the Hood
 
+- Increased the "immediate" save delay from 250 to 500ms to give slower systems
+  more time to persist changes to disk
 - Replaced direct `access` and `stat` calls for files and directories in the
   FSAL with a wrapper that will later on allow us to keep different file systems
   (e.g., WebDav versus local filesystem) opaque to the user
