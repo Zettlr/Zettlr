@@ -3,6 +3,8 @@
 ## GUI and Functionality
 
 - Fixed a visual issue that would handle overly long window titles improperly
+- Fixed `Tab` not indenting/unindenting code in the CodeEditors (snippets,
+  profiles, etc.)
 
 ## Under the Hood
 
