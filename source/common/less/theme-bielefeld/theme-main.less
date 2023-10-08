@@ -71,13 +71,13 @@
 @c-primary-shade: @orange-1;
 
 body {
-  .main-editor-wrapper {
+  .main-editor-wrapper .cm-editor {
     // In light mode, use a beige background colour
     background-color: var(--beige-0);
 
     .cm-scroller {
       // We only need to change the editor's font
-      font-family: 'Liberation Mono', Consolas, Menlo, monospace !important;
+      font-family: 'Liberation Mono', Consolas, Menlo, monospace;
 
       .CodeMirror-gutters { background-color: var(--beige-0); }
     }

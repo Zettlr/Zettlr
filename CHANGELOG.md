@@ -6,7 +6,10 @@
 
 ## Under the Hood
 
-(nothing here)
+- Remove unused color variable definitions
+- Move gray color palette to the Window Chrome component
+- Fixed an issue where the font definitions were borked and required usage of
+  `!important` to make them work (#4719)
 
 # 3.0.2
 
