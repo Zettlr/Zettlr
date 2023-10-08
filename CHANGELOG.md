@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fixed a visual issue that would handle overly long window titles improperly
 
 ## Under the Hood
 
