@@ -38,6 +38,10 @@ export default {
 // General styles
 div#titlebar {
   -webkit-app-region: drag;
+  // Ensure always only a single line of text, appropriately cut off
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 // macOS styles
@@ -45,6 +49,7 @@ body.darwin {
   div#titlebar {
     height: 40px;
     line-height: 40px;
+    padding: 0 80px; // Ensure padding for the traffic lights
     background-color: rgb(240, 240, 240);
     color: var(--grey-4);
     text-align: center;
@@ -61,7 +66,8 @@ body.win32 {
   div#titlebar {
     height: 30px;
     line-height: 30px;
-    padding-left: 20px;
+    padding-left: 20px; // Some padding left
+    padding-right: 138px; // Sufficient padding for the window controls right
     background-color: var(--system-accent-color, --c-primary);
     color: var(--system-accent-color-contrast, white);
   }
