@@ -16,6 +16,7 @@
 - Move gray color palette to the Window Chrome component
 - Fixed an issue where the font definitions were borked and required usage of
   `!important` to make them work (#4719)
+- Upgraded all available CodeMirror components to the most recent version
 
 # 3.0.2
 
