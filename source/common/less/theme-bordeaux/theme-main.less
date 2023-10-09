@@ -45,17 +45,11 @@ body {
   }
 
   // GENERAL EDITOR STYLES
-  .main-editor-wrapper {
+  .main-editor-wrapper .cm-editor {
     background-color: #fffff8;
 
-    .cm-scroller,
-    .cm-scroller .cm-comment,
-    .cm-scroller .cm-fenced-code,
-    .cm-scroller .cm-formatting-task,
-    .cm-scroller .cm-formatting-code-block,
-    .cm-scroller .cm-formatting-list-ol,
-    .cm-scroller .cm-formatting-list-ul {
-      font-family: 'Inconsolata', Consolas, Menlo, monospace !important;
+    .cm-scroller {
+      font-family: 'Inconsolata', Consolas, Menlo, monospace;
     }
 
     .cm-editor.cm-focused .cm-layer.cm-selectionLayer .cm-selectionBackground,
@@ -63,54 +57,51 @@ body {
       background-color: fade(@c-primary, 20%);
     }
 
-    .cm-editor {
+    .cm-gutters { background-color: #fffff8; }
 
-      .cm-gutters { background-color: #fffff8; }
+    // EDITOR SPECIFIC
+    // Formattings
+    .cm-hr,
+    .cm-emphasis,
+    .cm-strong,
+    .cm-formatting-list-ul,
+    .cm-formatting-list-ol {
+      color: inherit;
+    }
 
-      // EDITOR SPECIFIC
-      // Formattings
-      .cm-hr,
-      .cm-emphasis,
-      .cm-strong,
-      .cm-formatting-list-ul,
-      .cm-formatting-list-ol {
-        color: inherit;
-      }
+    .cm-quote,
+    .cm-quote.cm-emphasis,
+    .cm-quote.cm-strong {
+      color: #555;
+    }
 
-      .cm-quote,
-      .cm-quote.cm-emphasis,
-      .cm-quote.cm-strong {
-        color: #555;
-      }
+    .cm-fenced-code.cm-link,
+    .cm-fenced-code.cm-comment,
+    .cm-string {
+      color: #999999;
+    }
 
-      .cm-fenced-code.cm-link,
-      .cm-fenced-code.cm-comment,
-      .cm-string {
-        color: #999999;
-      }
+    .cm-fenced-code.cm-atom,
+    .cm-formatting-header-1,
+    .cm-formatting-header-2,
+    .cm-formatting-header-3,
+    .cm-formatting-header-4,
+    .cm-formatting-header-5,
+    .cm-formatting-header-6,
+    .citeproc-citation {
+      background-color: inherit; // Should be fine with the other styles
+      color: #d02325;
+    }
 
-      .cm-fenced-code.cm-atom,
-      .cm-formatting-header-1,
-      .cm-formatting-header-2,
-      .cm-formatting-header-3,
-      .cm-formatting-header-4,
-      .cm-formatting-header-5,
-      .cm-formatting-header-6,
-      .citeproc-citation {
-        background-color: inherit; // Should be fine with the other styles
-        color: #d02325;
-      }
+    .cm-link,
+    .cma {
+      color: inherit;
+      text-decoration: underline;
+    }
 
-      .cm-link,
-      .cma {
-        color: inherit;
-        text-decoration: underline;
-      }
-
-      .cm-table {
-        font-family: 'Inconsolata', Consolas, Menlo, monospace;
-        font-weight: 400;
-      }
+    .cm-table {
+      font-family: 'Inconsolata', Consolas, Menlo, monospace;
+      font-weight: 400;
     }
   }
 
