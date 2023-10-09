@@ -1203,10 +1203,10 @@ export default class FSAL extends ProviderContract {
 
     if (parent === undefined) {
       this.unloadPath(src.path)
-      await safeDelete(src.path, deleteOnFail)
+      await safeDelete(src.path, deleteOnFail, this._logger)
       this._config.removePath(src.path)
     } else {
-      await FSALDir.removeChild(parent, src.path, deleteOnFail)
+      await FSALDir.removeChild(parent, src.path, deleteOnFail, this._logger)
     }
 
     if (this.openDirectory === src) {
