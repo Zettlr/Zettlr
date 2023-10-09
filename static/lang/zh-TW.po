@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-10-02 02:25+0000\n"
+"POT-Creation-Date: 2023-10-09 02:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1289,6 +1289,41 @@ msgstr "無法檢查更新：伺服器沒有發送任何數據"
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr "最新版本 %s 出爐啦！"
+
+#: source/app/service-providers/documents/index.ts:923
+#, fuzzy
+msgid "File changed on disk"
+msgstr "檔案管理器模式"
+
+#: source/app/service-providers/documents/index.ts:924
+#, javascript-format
+msgid "%s changed on disk"
+msgstr ""
+
+#: source/app/service-providers/documents/index.ts:926
+#, javascript-format
+msgid ""
+"%s has changed on disk, but the editor contains unsaved changes. Do you want "
+"to keep the current editor contents or load the file from disk?"
+msgstr ""
+
+#: source/app/service-providers/documents/index.ts:927
+msgid ""
+"Do you want to keep the current editor contents or load the file from disk?"
+msgstr ""
+
+#: source/app/service-providers/documents/index.ts:930
+msgid "Keep editor contents"
+msgstr ""
+
+#: source/app/service-providers/documents/index.ts:931
+msgid "Load changes from disk"
+msgstr ""
+
+#: source/app/service-providers/documents/index.ts:934
+msgid ""
+"Always load changes from disk if there are no unsaved changes in the editor"
+msgstr ""
 
 #: source/app/service-providers/fsal/index.ts:141
 #, fuzzy, javascript-format
