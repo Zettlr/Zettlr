@@ -8,7 +8,7 @@ export async function safeDelete (absPath: string, deleteOnFail: boolean, logger
   } catch (err: any) {
     if (deleteOnFail) {
       // If this function throws, there's really something off and we shouldn't recover.
-      logger.error(`[FSAL File]: Forcing deletion of "${absPath}"!`)
+      logger.error(`[FSAL File] Forcing deletion of "${absPath}"!`)
       await fs.rm(absPath, { recursive: true, force: true })
     } else {
       err.message = `[FSAL File] Could not remove file ${absPath}: ${String(err.message)}`
