@@ -32,7 +32,7 @@ import {
 import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import { safeDelete } from './util/safe-delete'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
-import LogProvider from '@providers/log'
+import type LogProvider from '@providers/log'
 
 /**
  * Determines what will be written to file (.ztr-directory)
