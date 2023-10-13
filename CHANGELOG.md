@@ -17,6 +17,11 @@
 - Fixed an issue where the font definitions were borked and required usage of
   `!important` to make them work (#4719)
 - Upgraded all available CodeMirror components to the most recent version
+- Replaced `fs.unlink` with `fs.rm` in `safeDelete` to support recursive removal
+  of directories
+- `fsal-directory::removeChild` now calls `pathExists` instead of `isFile` to make
+  sure directories also are removed in removeChild
+- `pathExists` wraps `fs.promises.access`.
 
 # 3.0.2
 
