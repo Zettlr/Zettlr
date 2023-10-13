@@ -2,6 +2,26 @@
 
 ## GUI and Functionality
 
+- Fixed a visual issue that would handle overly long window titles improperly
+- Fixed `Tab` not indenting/unindenting code in the CodeEditors (snippets,
+  profiles, etc.)
+- Fixed a precedence issue that would make it impossible to use autocomplete
+  while filling in a snippet; now, accepting a potential autocomplete has a
+  higher precedence than moving to the next tabstop of a snippet, making working
+  with snippets more ergonomic
+
+## Under the Hood
+
+- Remove unused color variable definitions
+- Move gray color palette to the Window Chrome component
+- Fixed an issue where the font definitions were borked and required usage of
+  `!important` to make them work (#4719)
+- Upgraded all available CodeMirror components to the most recent version
+
+# 3.0.2
+
+## GUI and Functionality
+
 - Fixed a bug that would not parse plain-text links at the end of a line
   completely
 - Added two heuristics to plain link parser: (a) if the matched link ends with a
@@ -9,7 +29,9 @@
   bracket that does not match an open bracket, exclude the closing bracket
   (remember that you can explicitly define the start and end of plain links by
   wrapping them in `<` and `>`)
-- Improved the Czech translation (#4688)
+- Fixed an issue that could lead to data loss if "Always load remote changes"
+  was checked in the settings
+- Improved the Czech translation (#4688) 
 - Fixed an issue that would import Markdown files as LaTeX instead of simply
   copying the file
 - If multiple candidate profiles to import files are found, the user can now
@@ -17,6 +39,8 @@
 
 ## Under the Hood
 
+- Increased the "immediate" save delay from 250 to 500ms to give slower systems
+  more time to persist changes to disk
 - Replaced direct `access` and `stat` calls for files and directories in the
   FSAL with a wrapper that will later on allow us to keep different file systems
   (e.g., WebDav versus local filesystem) opaque to the user
@@ -25,6 +49,7 @@
   directory that do not also update `ctime` hidden from the FSAL
 - Fixed a misalignment of the `InlineCode` element for the Pandoc attribute
   parser
+- Upgrade Electron to v25.8.4, mitigating CVE-2023-5217
 
 # 3.0.1
 

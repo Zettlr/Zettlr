@@ -36,7 +36,7 @@ import { yamlLint } from '@common/modules/markdown-editor/linters/yaml-lint'
 import { lintGutter } from '@codemirror/lint'
 import { showStatusbarEffect, statusbar } from '@common/modules/markdown-editor/statusbar'
 import { search, searchKeymap } from '@codemirror/search'
-import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
+import { defaultKeymap, historyKeymap, history, indentLess, indentMore } from '@codemirror/commands'
 import { snippetSyntaxExtension } from '@common/modules/markdown-utils/snippets-syntax-extension'
 import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-highlighter'
 
@@ -60,7 +60,8 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
       ...defaultKeymap, // Minimal default keymap
       ...historyKeymap, // , // History commands (redo/undo)
       ...closeBracketsKeymap, // Binds Backspace to deletion of matching brackets
-      ...searchKeymap // Search commands (Ctrl+F, etc.)
+      ...searchKeymap, // Search commands (Ctrl+F, etc.)
+      { key: 'Tab', run: indentMore, shift: indentLess }
     ]),
     search({ top: true }),
     codeFolding(),

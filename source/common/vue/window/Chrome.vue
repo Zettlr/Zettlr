@@ -248,6 +248,18 @@ export default {
 </script>
 
 <style lang="less">
+// Define app-wide overarching color variable names
+:root {
+  --grey-0: rgba(240, 240, 240, 1);
+  --grey-1: rgba(220, 220, 220, 1);
+  --grey-2: rgba(200, 200, 200, 1);
+  --grey-3: rgba(120, 120, 130, 1);
+  --grey-4: rgba(100, 100, 110, 1);
+  --grey-5: rgba( 80,  80,  90, 1);
+  --grey-6: rgba( 70,  70,  80, 1);
+  --grey-7: rgba( 40,  40,  50, 1);
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
   // macOS OPERATING SYSTEM STYLES
