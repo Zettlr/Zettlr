@@ -725,14 +725,17 @@ export default class DocumentManager extends ProviderContract {
   }
 
   /**
-   * Returns a file's metadata including the contents.
+   * Opens a file in a specific leaf in a given window. If windowId or leafId is not specified
+   * it will open the file in the last focused leaf, in the last focused window.
    *
-   * @param  {string}  file   The absolute file path
+   * @param  {string|undefined} windowId  The windowId to open the document in
+   * @param  {string|undefined} leafId    The leafId of the window to open the document in
+   * @param  {string}  filePath   The absolute file path
    * @param  {boolean} newTab Optional. If true, will always prevent exchanging the currently active file.
    *
-   * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
+   * @return {Promise<boolean>} True if it successfully opens the file
    */
-  public async openFile (windowId: string, leafId: string|undefined, filePath: string, newTab?: boolean, modifyHistory?: boolean): Promise<boolean> {
+  public async openFile (windowId: string|undefined, leafId: string|undefined, filePath: string, newTab?: boolean): Promise<boolean> {
     if (!isFile(filePath)) {
       throw new Error(`Could not open file ${filePath}: Not an existing file.`)
     }
@@ -753,7 +756,7 @@ export default class DocumentManager extends ProviderContract {
     const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
     let leaf: DTLeaf|undefined
     if (leafId === undefined) {
-      leaf = this._getLeafForFile(windowId, filePath)
+      leaf = this._getFocusedLeaf(windowId)
     } else {
       leaf = this._windows[windowId].findLeaf(leafId)
     }
@@ -801,30 +804,21 @@ export default class DocumentManager extends ProviderContract {
   }
 
   /**
-   * If the filePath is opened in the windowId, return that leaf, otherwise return
-   * the last leaf in focus. If it is not possible to identify that, it will fallback
-   * to the first leaf.
+   * Return the last leaf in focus for a specific window. If it is not possible to identify that,
+   * it will return the the first leaf.
    *
-   * @param   {string}  windowId  the window to look for the file in
-   * @param   {string}  filePath  path of the file
+   * @param   {string}  windowId  the window to to find the leaf in
    *
    * @return  {DTLeaf}            The leaf which shall be used to open the file within.
    */
-  private _getLeafForFile (windowId: string, filePath: string): DTLeaf|undefined {
-    let leaf: DTLeaf|undefined = this._windows[windowId].getAllLeafs().find((value) => {
-      return value.tabMan.openFiles.map(x => x.path).includes(filePath)
-    })
+  private _getFocusedLeaf (windowId: string): DTLeaf|undefined {
+    const leafArray = this._windowLeafMap.get(windowId)
 
-    if (leaf === undefined) {
-      const leafArray = this._windowLeafMap.get(windowId)
-
-      if (leafArray !== undefined && leafArray.length > 0) {
-        leaf = this._windows[windowId].findLeaf(leafArray[0])
-      } else {
-        leaf = this._windows[windowId].getAllLeafs()[0]
-      }
+    if (leafArray !== undefined && leafArray.length > 0) {
+      return this._windows[windowId].findLeaf(leafArray[0])
+    } else {
+      return this._windows[windowId].getAllLeafs()[0]
     }
-    return leaf
   }
 
   /**

@@ -9,6 +9,12 @@
   while filling in a snippet; now, accepting a potential autocomplete has a
   higher precedence than moving to the next tabstop of a snippet, making working
   with snippets more ergonomic
+- GraphView's labels are now rendered filled instead of stroked, to make it
+  easier to read the labels.
+- The GraphView does now support multi-window, so clicking a link will open it in
+  the last focused window. If the file is already open in a leaf, that file will
+  be in that leaf, otherwise it will open the file in the last focused leaf.
+- Shift+Click in GraphView will force the document to be opened in a new tab.
 
 ## Under the Hood
 
@@ -17,6 +23,11 @@
 - Fixed an issue where the font definitions were borked and required usage of
   `!important` to make them work (#4719)
 - Upgraded all available CodeMirror components to the most recent version
+- DocumentManager's `openFile` does now handle the case when windowId and leafId
+  is undefined
+- The WindowProvider keeps now track of the latest focus window, to support
+  DocumentManager's behavior. `getFirstMainWindow` will first go through the
+  focus order, before falling back to it's previous behavior.
 
 # 3.0.2
 
@@ -31,7 +42,7 @@
   wrapping them in `<` and `>`)
 - Fixed an issue that could lead to data loss if "Always load remote changes"
   was checked in the settings
-- Improved the Czech translation (#4688) 
+- Improved the Czech translation (#4688)
 - Fixed an issue that would import Markdown files as LaTeX instead of simply
   copying the file
 - If multiple candidate profiles to import files are found, the user can now
@@ -81,12 +92,6 @@
   images when inside of list items
 - Replace the long "Open image externally" message with an icon on prerendered
   images and move it to the title; also make the message translatable
-- GraphView's labels are now rendered filled instead of stroked, to make it
-  easier to read the labels. 
-- The GraphView does now support multi-window, so clicking a link will open it in
-  the last focused window. If the file is already open in a leaf, that file will
-  be in that leaf, otherwise it will open the file in the last focused leaf.
-- Shift+Click in GraphView will force the document to be opened in a new tab.
 
 ## Under the Hood
 
@@ -103,10 +108,6 @@
 - Refactored a hacky solution that would not remember the previous editor state
   when entering distraction free mode and led to various other issues and bugs
 - Update Electron to v25.8.1 to mitigate CVE-2023-4863
-- DocumentManager's `openFile` does now handle the case when windowId is undefined
-- The WindowProvider keeps now track of the latest focus window, to support
-  DocumentManager's behavior. `getFirstMainWindow` will first go through the
-  focus order, before falling back to it's previous behavior.
 
 # 3.0.0
 
