@@ -18,6 +18,7 @@ import isDir from '@common/util/is-dir'
 import isFile from '@common/util/is-file'
 import ignoreDir from '@common/util/ignore-dir'
 import safeAssign from '@common/util/safe-assign'
+import pathExists from '@common/util/path-exists'
 
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
@@ -31,6 +32,7 @@ import {
 import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import { safeDelete } from './util/safe-delete'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
+import type LogProvider from '@providers/log'
 
 /**
  * Determines what will be written to file (.ztr-directory)
@@ -527,15 +529,16 @@ export async function addChild (
   sortChildren(dirObject, sorter)
 }
 
-export async function removeChild (dirObject: DirDescriptor, childPath: string, deleteOnFail: boolean): Promise<void> {
+export async function removeChild (dirObject: DirDescriptor, childPath: string, deleteOnFail: boolean, logger: LogProvider): Promise<void> {
   const idx = dirObject.children.findIndex(element => element.path === childPath)
   if (idx > -1) {
-    // NOTE: This function may be called after a file has been deleted. In that
-    // case the function only needs to remove the file from the list of children
-    // to avoid safeDelete throwing an error as the file does no longer exist.
-    if (isFile(childPath)) {
-      await safeDelete(childPath, deleteOnFail)
+    // NOTE: This function may be called after a file or folder has been deleted. In that
+    // case the function only needs to remove the file or folder from the list of children
+    // to avoid safeDelete throwing an error as the file or folder does no longer exist.
+    if (await pathExists(childPath)) {
+      await safeDelete(childPath, deleteOnFail, logger)
     }
+
     dirObject.children.splice(idx, 1)
   }
 }

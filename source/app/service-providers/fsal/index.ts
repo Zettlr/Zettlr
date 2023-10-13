@@ -277,7 +277,7 @@ export default class FSAL extends ProviderContract {
         if (parent === undefined) {
           this._logger.error(`[FSAL] Could not remove path ${descriptor.path}: Could not find its parent!`)
         } else {
-          await FSALDir.removeChild(parent, changedPath, true)
+          await FSALDir.removeChild(parent, changedPath, true, this._logger)
         }
       }
 
@@ -951,7 +951,7 @@ export default class FSAL extends ProviderContract {
       this.unloadPath(src.path)
       await fs.unlink(src.path)
     } else if (parent !== undefined) {
-      await FSALDir.removeChild(parent, src.path, deleteOnFail)
+      await FSALDir.removeChild(parent, src.path, deleteOnFail, this._logger)
       this._config.removePath(src.path)
     }
 
@@ -1203,10 +1203,10 @@ export default class FSAL extends ProviderContract {
 
     if (parent === undefined) {
       this.unloadPath(src.path)
-      await safeDelete(src.path, deleteOnFail)
+      await safeDelete(src.path, deleteOnFail, this._logger)
       this._config.removePath(src.path)
     } else {
-      await FSALDir.removeChild(parent, src.path, deleteOnFail)
+      await FSALDir.removeChild(parent, src.path, deleteOnFail, this._logger)
     }
 
     if (this.openDirectory === src) {
