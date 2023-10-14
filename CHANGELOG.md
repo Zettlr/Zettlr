@@ -9,6 +9,7 @@
   while filling in a snippet; now, accepting a potential autocomplete has a
   higher precedence than moving to the next tabstop of a snippet, making working
   with snippets more ergonomic
+- Images now render more appropriately in inline-contexts
 
 ## Under the Hood
 
