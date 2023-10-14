@@ -10,6 +10,7 @@
   higher precedence than moving to the next tabstop of a snippet, making working
   with snippets more ergonomic
 - Images now render more appropriately in inline-contexts
+- Updated the German translation
 
 ## Under the Hood
 

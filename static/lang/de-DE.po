@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-10-09 02:25+0000\n"
-"PO-Revision-Date: 2023-08-19 17:47+0200\n"
+"PO-Revision-Date: 2023-10-14 21:49+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: source/tmp/GlobalSearch.vue.ts:41
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
@@ -1083,14 +1083,13 @@ msgstr ""
 "geblieben. Bitte passe sie in den Projekteinstellungen an."
 
 #: source/app/service-providers/commands/dir-project-export.ts:147
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
-msgstr "Projekt erfolgreich exportiert. Klicke zum Anzeigen."
+msgstr "Projekt “%s” wurde erfolgreich exportiert. Zum Anzeigen klicken."
 
 #: source/app/service-providers/commands/dir-project-export.ts:148
-#, fuzzy
 msgid "Project Export"
-msgstr "Exportieren"
+msgstr "Projektexport"
 
 #: source/app/service-providers/commands/dir-new.ts:36
 #: source/app/service-providers/commands/dir-new.ts:37
@@ -1183,12 +1182,12 @@ msgstr ""
 #: source/app/service-providers/commands/importer/index.ts:104
 #: source/app/service-providers/commands/importer/index.ts:105
 msgid "Select import profile"
-msgstr ""
+msgstr "Import-Profil auswählen"
 
 #: source/app/service-providers/commands/importer/index.ts:106
 #, javascript-format
 msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr ""
+msgstr "Mehrere Profile können %s importieren. Bitte eines Auswählen."
 
 #: source/app/service-providers/commands/importer/import-textbundle.ts:63
 #: source/app/service-providers/commands/importer/import-textbundle.ts:69
@@ -1314,14 +1313,13 @@ msgid "An update to version %s is available!"
 msgstr "Eine Aktualisierung auf Version %s ist verfügbar!"
 
 #: source/app/service-providers/documents/index.ts:923
-#, fuzzy
 msgid "File changed on disk"
-msgstr "Dateimanager-Modus"
+msgstr "Datei auf der Festplatte verändert"
 
 #: source/app/service-providers/documents/index.ts:924
 #, javascript-format
 msgid "%s changed on disk"
-msgstr ""
+msgstr "%s wurde verändert"
 
 #: source/app/service-providers/documents/index.ts:926
 #, javascript-format
@@ -1329,24 +1327,31 @@ msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
+"%s wurde auf der Festplatte verändert, aber der Editor enthält "
+"ungespeicherte Änderungen. Sollen die Änderungen im Editor erhalten werden, "
+"oder die Datei neu geladen werden?"
 
 #: source/app/service-providers/documents/index.ts:927
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
+"Sollen die aktuellen Änderungen im Editor erhalten bleiben, oder die Datei "
+"neu geladen werden?"
 
 #: source/app/service-providers/documents/index.ts:930
 msgid "Keep editor contents"
-msgstr ""
+msgstr "Änderungen im Editor behalten"
 
 #: source/app/service-providers/documents/index.ts:931
 msgid "Load changes from disk"
-msgstr ""
+msgstr "Datei neu laden"
 
 #: source/app/service-providers/documents/index.ts:934
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
+"Änderungen an Dateien automatisch laden, wenn der Editor keine "
+"ungespeicherten Änderungen enthält"
 
 #: source/app/service-providers/fsal/index.ts:141
 #, javascript-format
