@@ -515,9 +515,6 @@ export default class DocumentManager extends ProviderContract {
       return // During shutdown only the WindowManager should close windows
     }
 
-    this._lastEditor.leafId = undefined
-    this._lastEditor.windowId = undefined
-
     const isLastWindow = Object.values(this._windows).length === 1
 
     if (windowId in this._windows && !isLastWindow) {
