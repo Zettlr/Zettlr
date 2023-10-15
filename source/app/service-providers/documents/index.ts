@@ -117,6 +117,11 @@ interface Document {
   saveTimeout: undefined|NodeJS.Timeout
 }
 
+class DocumentEditor {
+  windowId: string|undefined
+  leafId: string|undefined
+}
+
 export default class DocumentManager extends ProviderContract {
   /**
    * This array holds all open windows, here represented as document trees
@@ -170,7 +175,7 @@ export default class DocumentManager extends ProviderContract {
 
   private _shuttingDown: boolean
 
-  private readonly _windowLeafMap: Map<string, string[]>
+  private readonly _lastEditor: DocumentEditor
 
   constructor (private readonly _app: AppServiceContainer) {
     super()
@@ -184,7 +189,7 @@ export default class DocumentManager extends ProviderContract {
     this._remoteChangeDialogShownFor = []
     this.documents = []
     this._shuttingDown = false
-    this._windowLeafMap = new Map<string, string[]>()
+    this._lastEditor = new DocumentEditor()
 
     const options: chokidar.WatchOptions = {
       persistent: true,
@@ -510,7 +515,8 @@ export default class DocumentManager extends ProviderContract {
       return // During shutdown only the WindowManager should close windows
     }
 
-    this._windowLeafMap.delete(windowId)
+    this._lastEditor.leafId = undefined
+    this._lastEditor.windowId = undefined
 
     const isLastWindow = Object.values(this._windows).length === 1
 
@@ -742,10 +748,14 @@ export default class DocumentManager extends ProviderContract {
 
     // If windowId is not provided, then use the last focused window
     if (windowId === undefined) {
-      const mainWindow: BrowserWindow|undefined = this._app.windows.getFirstMainWindow()
-      const key = (mainWindow !== undefined) ? this._app.windows.getMainWindowKey(mainWindow) : undefined
-      if (key !== undefined) {
-        windowId = key
+      if (this._lastEditor.windowId !== undefined && this.windowKeys().includes(this._lastEditor.windowId)) {
+        windowId = this._lastEditor.windowId
+      } else {
+        const mainWindow: BrowserWindow|undefined = this._app.windows.getFirstMainWindow()
+        const key = (mainWindow !== undefined) ? this._app.windows.getMainWindowKey(mainWindow) : undefined
+        if (key !== undefined) {
+          windowId = key
+        }
       }
     }
 
@@ -756,7 +766,12 @@ export default class DocumentManager extends ProviderContract {
     const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
     let leaf: DTLeaf|undefined
     if (leafId === undefined) {
-      leaf = this._getFocusedLeaf(windowId)
+      if (this._lastEditor.leafId !== undefined) {
+        leaf = this._windows[windowId].findLeaf(this._lastEditor.leafId)
+      }
+      if (leaf === undefined) {
+        leaf = this._windows[windowId].getAllLeafs()[0]
+      }
     } else {
       leaf = this._windows[windowId].findLeaf(leafId)
     }
@@ -801,24 +816,6 @@ export default class DocumentManager extends ProviderContract {
     await this.synchronizeDatabases()
     this.syncToConfig()
     return ret
-  }
-
-  /**
-   * Return the last leaf in focus for a specific window. If it is not possible to identify that,
-   * it will return the the first leaf.
-   *
-   * @param   {string}  windowId  the window to to find the leaf in
-   *
-   * @return  {DTLeaf}            The leaf which shall be used to open the file within.
-   */
-  private _getFocusedLeaf (windowId: string): DTLeaf|undefined {
-    const leafArray = this._windowLeafMap.get(windowId)
-
-    if (leafArray !== undefined && leafArray.length > 0) {
-      return this._windows[windowId].findLeaf(leafArray[0])
-    } else {
-      return this._windows[windowId].getAllLeafs()[0]
-    }
   }
 
   /**
@@ -1283,17 +1280,11 @@ export default class DocumentManager extends ProviderContract {
   public closeLeaf (windowId: string, leafId: string): void {
     const leaf = this._windows[windowId].findLeaf(leafId)
 
-    const leafArray = this._windowLeafMap.get(windowId)
-    if (leafArray !== undefined) {
-      const index = leafArray.indexOf(leafId)
-      if (index > -1) {
-        leafArray.splice(index, 1)
-      }
-    }
-
     if (leaf !== undefined) {
       leaf.parent.removeNode(leaf)
       this.broadcastEvent(DP_EVENTS.LEAF_CLOSED, { windowId, leafId })
+      this._lastEditor.windowId = windowId
+      this._lastEditor.leafId = this._windows[windowId].getAllLeafs()[0].id
     }
   }
 
@@ -1445,16 +1436,7 @@ export default class DocumentManager extends ProviderContract {
   }
 
   private _updateFocusLeaf (windowId: string, leafId: string): void {
-    let leafArray = this._windowLeafMap.get(windowId)
-    if (leafArray === undefined) {
-      leafArray = [leafId]
-    } else {
-      const index = leafArray.indexOf(leafId)
-      if (index > -1) {
-        leafArray.splice(index, 1)
-      }
-      leafArray.splice(0, 0, leafId)
-    }
-    this._windowLeafMap.set(windowId, leafArray)
+    this._lastEditor.windowId = windowId
+    this._lastEditor.leafId = leafId
   }
 }

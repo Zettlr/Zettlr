@@ -29,10 +29,7 @@
   sure directories also are removed in removeChild
 - `pathExists` wraps `fs.promises.access`.
 - DocumentManager's `openFile` does now handle the case when windowId and leafId
-  is undefined
-- The WindowProvider keeps now track of the latest focus window, to support
-  DocumentManager's behavior. `getFirstMainWindow` will first go through the
-  focus order, before falling back to it's previous behavior.
+  is undefined, by keeping track on the last used editor.
 
 # 3.0.2
 
