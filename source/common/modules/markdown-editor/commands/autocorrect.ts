@@ -34,16 +34,27 @@ const startChars = ' ([{-–—\n\r\t\v\f/\\'
  * @return  {boolean}             True if the position touches a protected node.
  */
 function posInProtectedNode (state: EditorState, pos: number): boolean {
-  const node = syntaxTree(state).resolve(pos, -1)
-  return [
+  const PROTECTED_NODES = [
     'InlineCode', // `code`
     'Comment', 'CommentBlock', // <!-- comment -->
-    'FencedCode', // Code block
-    'CodeText', // Code block
+    'FencedCode', 'CodeText', // Code block
     'HorizontalRule', // --- and ***
-    'YAMLFrontmatterStart',
-    'YAMLFrontmatterEnd'
-  ].includes(node.type.name)
+    'YAMLFrontmatterStart', 'YAMLFrontmatterEnd',
+    'HTMLTag', 'HTMLBlock' // HTML elements
+  ]
+
+  let node = syntaxTree(state).resolveInner(pos, -1)
+
+  while (node.parent !== null) {
+    if (PROTECTED_NODES.includes(node.type.name)) {
+      return true
+    }
+
+    node = node.parent
+  }
+
+  // Neither the node itself, nor any of its parents, are protected.
+  return false
 }
 
 /**
