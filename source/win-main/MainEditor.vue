@@ -606,7 +606,7 @@ function maybeHighlightSearchResults () {
       @green:     #859900;
 
       color: @base01;
-      font-family: 'Inconsolata', Consolas, Menlo, monospace;
+      font-family: Inconsolata, monospace;
 
       .cm-string         { color: @green; }
       .cm-keyword        { color: @green; }
@@ -636,7 +636,7 @@ function maybeHighlightSearchResults () {
 
   // If a code file is loaded, we need to display the editor contents in monospace.
   &.code-file .cm-editor {
-    font-family: 'Inconsolata', Consolas, Menlo, monospace;
+    font-family: Inconsolata, monospace;
 
     // Reset the margins for code files
     .cm-scroller { padding: 0px; }
