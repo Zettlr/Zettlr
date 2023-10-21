@@ -83,15 +83,6 @@ body {
     .cm-url,
     .cm-code-mark { color: var(--c-primary); }
 
-    .size-header-1,
-    .size-header-2,
-    .size-header-3,
-    .size-header-4,
-    .size-header-5,
-    .size-header-6 {
-      font-weight: bold;
-    }
-
     // Style the code line wrapper classes
     .code-block-line-background, .inline-code-background {
       background-color: #eee;
@@ -118,13 +109,6 @@ body {
     /* LISTS */
     .cm-list.cm-code-mark:not(.cm-emphasis):not(.cm-strong):not(.cm-meta) {
       color: var(--c-primary);
-    }
-
-    .cm-spell-error {
-      text-decoration: dashed underline;
-      text-decoration-color: var(--orange-2);
-      // Prevent skipping of low-baseline chars to prevent strange artefacts
-      text-decoration-skip-ink: none;
     }
 
     .cm-zkn-tag,
@@ -242,36 +226,6 @@ body {
 
   .cm-cursor-secondary {
     background: var(--red-2);
-  }
-
-  // Hint related stuff. Hints mustn't be scoped by .CodeMirror as they are
-  // attached to document.body, not the editor
-  .CodeMirror-hints {
-    -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-    -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-    box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
-    border-radius: @border-radius;
-    border: 1px solid var(--grey-1);
-
-    background: white;
-    font-size: 90%;
-
-    li.CodeMirror-hint {
-      color: var(--grey-7);
-
-      &:hover {
-        background-color: var(--grey-0);
-      }
-    }
-
-    li.CodeMirror-hint-active {
-      background: var(--c-primary);
-      color: var(--grey-0);
-
-      &:hover {
-        background-color: var(--c-primary-shade);
-      }
-    }
   }
 
   // Custom styling for the various editors across the app

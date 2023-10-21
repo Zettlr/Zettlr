@@ -139,5 +139,13 @@ function getHeadingLineHighlighter (): Extension {
  */
 export const syntaxExtensions = [
   getCodeBlockLineHighlighter(),
-  getHeadingLineHighlighter()
+  getHeadingLineHighlighter(),
+  EditorView.baseTheme({
+    '.size-header-1': { fontWeight: 'bold' },
+    '.size-header-2': { fontWeight: 'bold' },
+    '.size-header-3': { fontWeight: 'bold' },
+    '.size-header-4': { fontWeight: 'bold' },
+    '.size-header-5': { fontWeight: 'bold' },
+    '.size-header-6': { fontWeight: 'bold' }
+  })
 ]
