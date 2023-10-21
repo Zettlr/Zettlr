@@ -17,8 +17,7 @@ import {
   ViewPlugin,
   Decoration,
   type ViewUpdate,
-  type DecorationSet,
-  type EditorView
+  type DecorationSet, EditorView
 } from '@codemirror/view'
 import { configField } from '../util/configuration'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
@@ -245,7 +244,7 @@ function readabilityScores (view: EditorView): DecorationSet {
   return Decoration.set(decos, true)
 }
 
-export const readabilityMode = ViewPlugin.fromClass(class {
+const readabilityModePlugin = ViewPlugin.fromClass(class {
   decorations: DecorationSet
 
   constructor (view: EditorView) {
@@ -258,3 +257,34 @@ export const readabilityMode = ViewPlugin.fromClass(class {
 }, {
   decorations: v => v.decorations
 })
+
+export const readabilityMode = [
+  readabilityModePlugin,
+  EditorView.baseTheme({
+    // Define the readability classes. Red, orange, and yellow indicate bad scores
+    // Purple and blue indicate average scores, and green indicates good scores
+    '&light .cm-readability-0': { backgroundColor: '#ff0000aa', color: '#444' },
+    '&light .cm-readability-1': { backgroundColor: '#f67b2baa', color: '#444' },
+    '&light .cm-readability-2': { backgroundColor: '#e5a14faa', color: '#444' },
+    '&light .cm-readability-3': { backgroundColor: '#e3e532aa', color: '#444' },
+    '&light .cm-readability-4': { backgroundColor: '#d4c1fdaa', color: '#444' },
+    '&light .cm-readability-5': { backgroundColor: '#538fe9aa', color: '#444' },
+    '&light .cm-readability-6': { backgroundColor: '#53bce9aa', color: '#444' },
+    '&light .cm-readability-7': { backgroundColor: '#53e7e9aa', color: '#444' },
+    '&light .cm-readability-8': { backgroundColor: '#4ad14caa', color: '#444' },
+    '&light .cm-readability-9': { backgroundColor: '#53e955aa', color: '#444' },
+    '&light .cm-readability-10': { backgroundColor: '#7cf87eaa', color: '#444' },
+    // Dark styles
+    '&dark .cm-readability-0': { backgroundColor: '#ff0000aa', color: '#ccc' },
+    '&dark .cm-readability-1': { backgroundColor: '#f67b2baa', color: '#ccc' },
+    '&dark .cm-readability-2': { backgroundColor: '#e5a14faa', color: '#ccc' },
+    '&dark .cm-readability-3': { backgroundColor: '#e3e532aa', color: '#ccc' },
+    '&dark .cm-readability-4': { backgroundColor: '#d4c1fdaa', color: '#ccc' },
+    '&dark .cm-readability-5': { backgroundColor: '#538fe9aa', color: '#ccc' },
+    '&dark .cm-readability-6': { backgroundColor: '#53bce9aa', color: '#ccc' },
+    '&dark .cm-readability-7': { backgroundColor: '#53e7e9aa', color: '#ccc' },
+    '&dark .cm-readability-8': { backgroundColor: '#4ad14caa', color: '#ccc' },
+    '&dark .cm-readability-9': { backgroundColor: '#53e955aa', color: '#ccc' },
+    '&dark .cm-readability-10': { backgroundColor: '#7cf87eaa', color: '#ccc' }
+  })
+]
