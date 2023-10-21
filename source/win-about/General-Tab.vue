@@ -117,7 +117,7 @@ div#about-general {
   }
 
   p#uuid {
-    font-family: Menlo, Monaco, 'Liberation Mono', 'Courier New', monospace;
+    font-family: Inconsolata, monospace;
     color: rgb(80, 80, 80);
     font-size: 80%;
     margin-top: 0px;
