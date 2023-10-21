@@ -26,9 +26,9 @@ export const mainOverride = EditorView.baseTheme({
     flexGrow: '1', // Ensure the content pushes possible panels towards the edge
     outline: '0' // Remove the outline
   },
-  '.cm-scroller .muted': {
-    opacity: '0.2'
-  },
+  '.cm-scroller .muted': { opacity: '0.2' },
+  // Hide overflowing text in autocompletion info panels
+  '.cm-completionInfo': { overflow: 'hidden' },
   // PANELS
   '.cm-panels .cm-button': {
     backgroundImage: 'none',
@@ -47,9 +47,7 @@ export const mainOverride = EditorView.baseTheme({
     userSelect: 'none' // prevent search panel text elements from being selected
   },
   // TOOLTIPS
-  '.cm-tooltip': {
-    padding: '4px'
-  },
+  '.cm-tooltip': { padding: '4px' },
   // Footnotes
   '.footnote, .footnote-ref-label': {
     verticalAlign: 'super',

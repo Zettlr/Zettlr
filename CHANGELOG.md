@@ -26,6 +26,7 @@
 - `pathExists` wraps `fs.promises.access`.
 - Move plugin-specific base styles from the main override to the respective
   plugin files
+- Moved the formatting bar styling to its plugin
 
 # 3.0.2
 
