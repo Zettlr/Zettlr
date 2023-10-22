@@ -30,6 +30,9 @@
 - `fsal-directory::removeChild` now calls `pathExists` instead of `isFile` to
   make sure directories also are removed in removeChild
 - `pathExists` wraps `fs.promises.access`.
+- Move plugin-specific base styles from the main override to the respective
+  plugin files
+- Moved formatting bar; heading sizes; and iframe styling to their plugins
 - DocumentManager's `openFile` does now handle the case when windowId and leafId
   is undefined, by keeping track on the last used editor.
 

@@ -14,7 +14,7 @@
  */
 
 import { syntaxTree } from '@codemirror/language'
-import { hoverTooltip, type EditorView, type Tooltip } from '@codemirror/view'
+import { hoverTooltip, EditorView, type Tooltip } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import { md2html } from '@common/modules/markdown-utils/markdown-to-html'
 import formatDate from '@common/util/format-date'
@@ -150,4 +150,28 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   return wrapper
 }
 
-export const filePreview = hoverTooltip(filePreviewTooltip, { hoverTime: 100 })
+export const filePreview = [
+  hoverTooltip(filePreviewTooltip, { hoverTime: 100 }),
+  // Provide basic styles for these tooltips
+  EditorView.baseTheme({
+    '.editor-note-preview': {
+      maxWidth: '300px',
+      padding: '5px',
+      fontSize: '80%'
+    },
+    '.editor-note-preview h1': { fontSize: '100%' },
+    '.editor-note-preview h2': { fontSize: '95%' },
+    '.editor-note-preview h3': { fontSize: '90%' },
+    '.editor-note-preview h4': { fontSize: '80%' },
+    '.editor-note-preview h5': { fontSize: '70%' },
+    '.editor-note-preview h6': { fontSize: '70%' },
+    '.editor-note-preview .note-content': { margin: '10px 0' },
+    '.editor-note-preview .metadata': {
+      color: 'rgb(200, 200, 200)',
+      fontSize: '80%'
+    },
+    '.editor-note-preview .actions': {
+      margin: '5px 0'
+    }
+  })
+]

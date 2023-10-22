@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { showTooltip, type Tooltip } from '@codemirror/view'
+import { EditorView, showTooltip, type Tooltip } from '@codemirror/view'
 import { type EditorState, StateField } from '@codemirror/state'
 import { applyBold, applyCode, applyComment, applyItalic, insertImage, insertLink } from '../commands/markdown'
 import { trans } from '@common/i18n-renderer'
@@ -85,7 +85,7 @@ function getToolbar (state: EditorState): Tooltip[] {
   }]
 }
 
-export const formattingToolbar = StateField.define<readonly Tooltip[]>({
+const formattingToolbarPlugin = StateField.define<readonly Tooltip[]>({
   create (state) {
     return getToolbar(state)
   },
@@ -96,3 +96,35 @@ export const formattingToolbar = StateField.define<readonly Tooltip[]>({
 
   provide: f => showTooltip.computeN([f], state => state.field(f))
 })
+
+export const formattingToolbar = [
+  formattingToolbarPlugin,
+  EditorView.baseTheme({
+    // Formatting bar
+    '.cm-tooltip.cm-formatting-bar': {
+      borderRadius: '8px',
+      maxWidth: 'initial'
+    },
+    '.cm-tooltip.cm-formatting-bar .button-wrapper': {
+      display: 'flex'
+    },
+    '.cm-tooltip.cm-formatting-bar button.formatting-toolbar-button': {
+      border: 'none',
+      margin: '0',
+      backgroundColor: 'transparent',
+      borderRadius: '0',
+      lineHeight: '30px'
+    },
+    '&dark .cm-tooltip.cm-formatting-bar button.formatting-toolbar-button': {
+      color: 'rgb(200, 200, 200)'
+    },
+    '.cm-tooltip.cm-formatting-bar button.formatting-toolbar-button:first-child': {
+      borderTopLeftRadius: '8px',
+      borderBottomLeftRadius: '8px'
+    },
+    '.cm-tooltip.cm-formatting-bar button.formatting-toolbar-button:last-child': {
+      borderTopRightRadius: '8px',
+      borderBottomRightRadius: '8px'
+    }
+  })
+]
