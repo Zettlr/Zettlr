@@ -724,7 +724,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint-community/eslint-utils@npm:^4.1.2, @eslint-community/eslint-utils@npm:^4.2.0, @eslint-community/eslint-utils@npm:^4.3.0, @eslint-community/eslint-utils@npm:^4.4.0":
+"@eslint-community/eslint-utils@npm:^4.1.2, @eslint-community/eslint-utils@npm:^4.2.0, @eslint-community/eslint-utils@npm:^4.4.0":
   version: 4.4.0
   resolution: "@eslint-community/eslint-utils@npm:4.4.0"
   dependencies:
@@ -5730,20 +5730,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^9.15.0":
-  version: 9.15.0
-  resolution: "eslint-plugin-vue@npm:9.15.0"
+"eslint-plugin-vue@npm:^9.18.0":
+  version: 9.18.0
+  resolution: "eslint-plugin-vue@npm:9.18.0"
   dependencies:
-    "@eslint-community/eslint-utils": ^4.3.0
+    "@eslint-community/eslint-utils": ^4.4.0
     natural-compare: ^1.4.0
-    nth-check: ^2.0.1
-    postcss-selector-parser: ^6.0.9
-    semver: ^7.3.5
-    vue-eslint-parser: ^9.3.0
+    nth-check: ^2.1.1
+    postcss-selector-parser: ^6.0.13
+    semver: ^7.5.4
+    vue-eslint-parser: ^9.3.1
     xml-name-validator: ^4.0.0
   peerDependencies:
     eslint: ^6.2.0 || ^7.0.0 || ^8.0.0
-  checksum: e2f135712e186c878240447a2292277a2339a374c1960b6044de5860f277de6af09587df52d559e87b795b07f23c764ccd44a7e1ab4ca65d835546b689fa25b8
+  checksum: c5c1b1f6a430428abd22f65372942289bbcce7f860862da5f76e3f6772c45de0606c0c985f4f5eb2703961a462f93fecfdc170d9dea4175034732db00cf0f6c5
   languageName: node
   linkType: hard
 
@@ -9662,7 +9662,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nth-check@npm:^2.0.1":
+"nth-check@npm:^2.0.1, nth-check@npm:^2.1.1":
   version: 2.1.1
   resolution: "nth-check@npm:2.1.1"
   dependencies:
@@ -10198,7 +10198,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4, postcss-selector-parser@npm:^6.0.9":
+"postcss-selector-parser@npm:^6.0.13":
+  version: 6.0.13
+  resolution: "postcss-selector-parser@npm:6.0.13"
+  dependencies:
+    cssesc: ^3.0.0
+    util-deprecate: ^1.0.2
+  checksum: f89163338a1ce3b8ece8e9055cd5a3165e79a15e1c408e18de5ad8f87796b61ec2d48a2902d179ae0c4b5de10fccd3a325a4e660596549b040bc5ad1b465f096
+  languageName: node
+  linkType: hard
+
+"postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4":
   version: 6.0.11
   resolution: "postcss-selector-parser@npm:6.0.11"
   dependencies:
@@ -11406,7 +11416,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.1.1":
+"semver@npm:^7.1.1, semver@npm:^7.5.4":
   version: 7.5.4
   resolution: "semver@npm:7.5.4"
   dependencies:
@@ -12840,9 +12850,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-eslint-parser@npm:^9.3.0":
-  version: 9.3.1
-  resolution: "vue-eslint-parser@npm:9.3.1"
+"vue-eslint-parser@npm:^9.3.1":
+  version: 9.3.2
+  resolution: "vue-eslint-parser@npm:9.3.2"
   dependencies:
     debug: ^4.3.4
     eslint-scope: ^7.1.1
@@ -12853,7 +12863,7 @@ __metadata:
     semver: ^7.3.6
   peerDependencies:
     eslint: ">=6.0.0"
-  checksum: 6d1476b45fcc5b456a1e5c0f33ec695cf1d392ca6113250d5e3441e6cf3b2a0ec28a9455699363641dfb7c48358f215db07856c98385a31ace9bc58196f4156e
+  checksum: f55056fcd94b6c9d4e940616294f72fb20ae9561a23bc2d7f32499307db7af128dc84d8c43cb8c1a267e0c5d34fc61a9215656a5ea7413df4f58eec81175c6ad
   languageName: node
   linkType: hard
 
@@ -13636,7 +13646,7 @@ __metadata:
     eslint-plugin-import: ^2.27.5
     eslint-plugin-n: ^16.0.0
     eslint-plugin-promise: ^6.1.1
-    eslint-plugin-vue: ^9.15.0
+    eslint-plugin-vue: ^9.18.0
     fix-path: ^4.0.0
     fsevents: ^2.3.2
     gettext-parser: ^7.0.1
