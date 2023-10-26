@@ -36,7 +36,7 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Mod-b', run: applyBold },
   { key: 'Mod-i', run: applyItalic },
   { key: 'Mod-Shift-c', run: applyComment },
-  { key: 'Mod-Alt-r', run: addNewFootnote },
+  { key: 'Mod-Alt-f', mac: 'Mod-Alt-r', run: addNewFootnote },
   { key: 'Tab', run: acceptCompletion },
   { key: 'Tab', run: nextSnippet },
   { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
