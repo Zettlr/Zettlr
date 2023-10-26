@@ -11,6 +11,7 @@
   with snippets more ergonomic
 - Images now render more appropriately in inline-contexts
 - Updated the German translation
+- Fixed the keyboard shortcut for inserting footnotes on Windows and Linux
 
 ## Under the Hood
 
