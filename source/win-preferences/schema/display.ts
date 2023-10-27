@@ -103,14 +103,6 @@ export default function (): FormSchema {
               description: 'Design made in France: Enjoy writing with this theme\'s unagitated colors and beautiful monospaced font.'
             }
           }
-        },
-        {
-          type: 'checkbox',
-          label: trans('Use the operating system\'s accent colour instead of the theme colour'),
-          model: 'display.useSystemAccentColor',
-          // Disable on anything except macOS and Windows
-          disabled: !isWinOrMac,
-          info: (!isWinOrMac) ? trans('This setting is only available on Windows and macOS') : undefined
         }
       ],
       [
