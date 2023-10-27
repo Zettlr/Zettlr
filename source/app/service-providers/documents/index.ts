@@ -117,11 +117,6 @@ interface Document {
   saveTimeout: undefined|NodeJS.Timeout
 }
 
-class DocumentEditor {
-  windowId: string|undefined
-  leafId: string|undefined
-}
-
 export default class DocumentManager extends ProviderContract {
   /**
    * This array holds all open windows, here represented as document trees
@@ -175,7 +170,10 @@ export default class DocumentManager extends ProviderContract {
 
   private _shuttingDown: boolean
 
-  private readonly _lastEditor: DocumentEditor
+  private readonly _lastEditor: {
+    windowId: string|undefined
+    leafId: string|undefined
+  }
 
   constructor (private readonly _app: AppServiceContainer) {
     super()
@@ -189,7 +187,10 @@ export default class DocumentManager extends ProviderContract {
     this._remoteChangeDialogShownFor = []
     this.documents = []
     this._shuttingDown = false
-    this._lastEditor = new DocumentEditor()
+    this._lastEditor = {
+      windowId: undefined,
+      leafId: undefined
+    }
 
     const options: chokidar.WatchOptions = {
       persistent: true,
@@ -745,14 +746,10 @@ export default class DocumentManager extends ProviderContract {
 
     // If windowId is not provided, then use the last focused window
     if (windowId === undefined) {
-      if (this._lastEditor.windowId !== undefined && this.windowKeys().includes(this._lastEditor.windowId)) {
-        windowId = this._lastEditor.windowId
-      } else {
-        const mainWindow: BrowserWindow|undefined = this._app.windows.getFirstMainWindow()
-        const key = (mainWindow !== undefined) ? this._app.windows.getMainWindowKey(mainWindow) : undefined
-        if (key !== undefined) {
-          windowId = key
-        }
+      const mainWindow: BrowserWindow|undefined = this._app.windows.getFirstMainWindow()
+      const key = (mainWindow !== undefined) ? this._app.windows.getMainWindowKey(mainWindow) : undefined
+      if (key !== undefined) {
+        windowId = key
       }
     }
 
@@ -760,7 +757,6 @@ export default class DocumentManager extends ProviderContract {
       return false
     }
 
-    const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
     let leaf: DTLeaf|undefined
     if (leafId === undefined) {
       if (this._lastEditor.leafId !== undefined) {
@@ -798,6 +794,7 @@ export default class DocumentManager extends ProviderContract {
     // gotten a specific request to open it in a *new* tab
     const activeFile = leaf.tabMan.activeFile
     const ret = leaf.tabMan.openFile(filePath)
+    const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs')) || newTab === undefined
 
     if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)
