@@ -16,7 +16,6 @@ import { trans } from '@common/i18n-renderer'
 import { type FormSchema } from '@common/vue/form/Form.vue'
 
 export default function (): FormSchema {
-  const isWinOrMac = [ 'darwin', 'win32' ].includes(process.platform)
   return {
     fieldsets: [
       [
