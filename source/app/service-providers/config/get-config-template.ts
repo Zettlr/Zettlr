@@ -17,6 +17,8 @@ import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
 
+export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
+
 export interface ConfigOptions {
   version: string
   openPaths: string[]
@@ -109,7 +111,7 @@ export interface ConfigOptions {
     }
   }
   display: {
-    theme: 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
+    theme: MarkdownTheme
     useSystemAccentColor: boolean
     hideToolbarInDistractionFree: boolean
     markdownFileExtensions: boolean
