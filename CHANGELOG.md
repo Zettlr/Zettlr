@@ -27,7 +27,8 @@
 - `pathExists` wraps `fs.promises.access`.
 - Move plugin-specific base styles from the main override to the respective
   plugin files
-- Moved formatting bar; heading sizes; and iframe styling to their plugins
+- Moved formatting bar; heading sizes; code background; typewriter; heading
+  indicator; frontmatter; and iframe styling to their plugins
 - Bump Pandoc to version `3.1.8`
 
 # 3.0.2

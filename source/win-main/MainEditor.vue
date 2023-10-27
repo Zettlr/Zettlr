@@ -242,7 +242,8 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     lintLanguageTool: store.state.config['editor.lint.languageTool.active'],
     distractionFree: props.distractionFree.valueOf(),
     showStatusbar: store.state.config['editor.showStatusbar'],
-    darkMode: store.state.config.darkMode
+    darkMode: store.state.config.darkMode,
+    theme: store.state.config['display.theme']
   } as EditorConfigOptions
 })
 
