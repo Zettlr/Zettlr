@@ -52,6 +52,23 @@ export const mainOverride = EditorView.baseTheme({
   '.footnote, .footnote-ref-label': {
     verticalAlign: 'super',
     fontSize: '80%'
+  },
+  '.cm-emphasis': { fontStyle: 'italic' },
+  // Provide the default YAML frontmatter indicator
+  '.cm-yaml-frontmatter-start::after': {
+    content: '"YAML Frontmatter"',
+    display: 'inline-block',
+    marginLeft: '10px',
+    padding: '0px 5px',
+    fontSize: '60%',
+    fontWeight: 'normal',
+    verticalAlign: 'middle',
+    color: 'var(--grey-2)',
+    backgroundColor: 'var(--grey-0)'
+  },
+  '&dark .cm-yaml-frontmatter-start::after': {
+    color: 'var(--grey-0)',
+    backgroundColor: 'var(--grey-4)'
   }
 })
 
