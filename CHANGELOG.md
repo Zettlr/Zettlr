@@ -11,6 +11,7 @@
   with snippets more ergonomic
 - Images now render more appropriately in inline-contexts
 - Updated the German translation
+- Fixed the keyboard shortcut for inserting footnotes on Windows and Linux
 - GraphView's labels are now rendered filled instead of stroked, to make it
   easier to read the labels.
 - The GraphView does now support multi-window, so clicking a link will open it in
@@ -32,7 +33,9 @@
 - `pathExists` wraps `fs.promises.access`.
 - Move plugin-specific base styles from the main override to the respective
   plugin files
-- Moved formatting bar; heading sizes; and iframe styling to their plugins
+- Moved formatting bar; heading sizes; code background; typewriter; heading
+  indicator; frontmatter; and iframe styling to their plugins
+- Bump Pandoc to version `3.1.8`
 - DocumentManager's `openFile` does now handle the case when windowId and leafId
   is undefined, by keeping track on the last used editor.
 

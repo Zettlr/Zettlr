@@ -242,7 +242,8 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     lintLanguageTool: store.state.config['editor.lint.languageTool.active'],
     distractionFree: props.distractionFree.valueOf(),
     showStatusbar: store.state.config['editor.showStatusbar'],
-    darkMode: store.state.config.darkMode
+    darkMode: store.state.config.darkMode,
+    theme: store.state.config['display.theme']
   } as EditorConfigOptions
 })
 
@@ -614,7 +615,7 @@ function maybeHighlightSearchResults () {
       @green:     #859900;
 
       color: @base01;
-      font-family: 'Inconsolata', Consolas, Menlo, monospace;
+      font-family: Inconsolata, monospace;
 
       .cm-string         { color: @green; }
       .cm-keyword        { color: @green; }
@@ -644,7 +645,7 @@ function maybeHighlightSearchResults () {
 
   // If a code file is loaded, we need to display the editor contents in monospace.
   &.code-file .cm-editor {
-    font-family: 'Inconsolata', Consolas, Menlo, monospace;
+    font-family: Inconsolata, monospace;
 
     // Reset the margins for code files
     .cm-scroller { padding: 0px; }
