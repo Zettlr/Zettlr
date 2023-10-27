@@ -19,6 +19,7 @@
 import { StateEffect, StateField } from '@codemirror/state'
 import safeAssign from '@common/util/safe-assign'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import { type MarkdownTheme } from '@providers/config/get-config-template'
 
 export interface AutocorrectOptions {
   active: boolean
@@ -65,6 +66,7 @@ export interface EditorConfiguration {
   lintLanguageTool: boolean
   showStatusbar: boolean
   darkMode: boolean
+  theme: MarkdownTheme
   margins: 'S'|'M'|'L'
 }
 
@@ -115,6 +117,7 @@ export function getDefaultConfig (): EditorConfiguration {
     lintLanguageTool: false,
     showStatusbar: false,
     darkMode: false,
+    theme: 'berlin',
     margins: 'M'
   }
 }
