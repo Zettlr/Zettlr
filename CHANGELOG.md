@@ -24,6 +24,7 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
 - Removed the accent color setting: now the accent color will always be the
   system accent color on macOS and Windows, and Zettlr's brand green on Linux;
   themes do not provide an accent color anymore
+- Restored syntax highlighting for inline math code
 
 ## Under the Hood
 
@@ -48,6 +49,7 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
 - Moved formatting bar; heading sizes; code background; typewriter; heading
   indicator; frontmatter; distraction free; and iframe styling to their plugins
 - Bump Pandoc to version `3.1.8`
+- Fixed a weird layouting issue with the code block backgrounds
 
 # 3.0.2
 

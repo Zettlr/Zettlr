@@ -32,7 +32,37 @@ export const codeblockBackground = layer({
             EditorSelection.range(node.from, node.to + 1)
           )
 
-          markers.push(...localMarkers)
+          // Unfortunately, `RectangleMarker.forRange` has some quirks. In order
+          // to get a proper styling, we have to do two things: First, remove
+          // zero-width markers (that happen since we include the trailing
+          // newline character to ensure that the last marker spans the entire
+          // line, and the next line has zero characters to draw a marker for).
+          // Then, in a second step, we have to re-create the markers once,
+          // passing 'top' and 'bottom' respectively for the first and last
+          // marker. This ensures that the borders are properly rounded
+          // regardless of how many actual markers this thing produces (which
+          // can be either two, for single-line code blocks, or three, for multi
+          // line code blocks).
+          const markersToAdd: RectangleMarker[] = localMarkers
+            .filter(marker => {
+              return marker.width !== null && marker.width > 0
+            })
+            .map((marker, i, arr) => {
+              const { top, left, width, height } = marker
+              const classes = [ 'code', 'code-block-line-background' ]
+
+              if (i === 0) {
+                classes.push('top')
+              }
+
+              if (i === arr.length - 1) {
+                classes.push('bottom')
+              }
+
+              return new RectangleMarker(classes.join(' '), left, top, width, height)
+            })
+
+          markers.push(...markersToAdd)
         } catch (err: any) {
           // Sometimes, the RectangleMarker throws an error because it "cannot
           // read properties of null (reading 'top')". The reason seems to be
@@ -114,11 +144,13 @@ export const backgroundLayers: Extension[] = [
     // NOTE: Our codeblock layer creates THREE blocks per codeblock:
     // First line, rest of the block, and an empty block at the end.
     // Therefore we have to style elements 1, 4, 7, etc. and 2, 5, 8, etc.
-    '.code-block-line-background:nth-child(3n+1)': {
+    // '.code-block-line-background:nth-child(3n+1)': {
+    '.code-block-line-background.top': {
       borderTopLeftRadius: '4px',
       borderTopRightRadius: '4px'
     },
-    '.code-block-line-background:nth-child(3n+2)': {
+    // '.code-block-line-background:nth-child(3n+2)': {
+    '.code-block-line-background.bottom': {
       borderBottomLeftRadius: '4px',
       borderBottomRightRadius: '4px'
     },
