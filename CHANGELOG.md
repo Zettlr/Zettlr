@@ -28,7 +28,7 @@
 - Move plugin-specific base styles from the main override to the respective
   plugin files
 - Moved formatting bar; heading sizes; code background; typewriter; heading
-  indicator; frontmatter; and iframe styling to their plugins
+  indicator; frontmatter; distraction free; and iframe styling to their plugins
 - Bump Pandoc to version `3.1.8`
 
 # 3.0.2
