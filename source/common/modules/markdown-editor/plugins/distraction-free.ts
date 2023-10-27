@@ -52,4 +52,9 @@ const mutedLines = StateField.define<DecorationSet>({
   provide: f => EditorView.decorations.from(f)
 })
 
-export const distractionFree = [mutedLines]
+export const distractionFree = [
+  mutedLines,
+  EditorView.baseTheme({
+    '.muted': { opacity: '0.2' }
+  })
+]
