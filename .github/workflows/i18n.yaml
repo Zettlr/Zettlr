@@ -5,14 +5,19 @@ on:
     paths:
       - '.github/workflows/i18n.yaml'
   workflow_dispatch: {} # Enable manual triggers
-  schedule:
-    - cron: '17 2 * * 1' # Run every night at 02:17 (random minute to avoid high loads)
+  workflow_call: {} # Enable other workflows to call this one
+  # schedule:
+    # - cron: '17 2 * * 1' # Run every night at 02:17 (random minute to avoid high loads)
 
 permissions:
   contents: write
 
 env:
   NODE_VERSION: '18'
+
+# Ensure only a single build workflow runs at any one time
+concurrency:
+  group: ${{ github.workflow }}
 
 jobs:
   refresh:

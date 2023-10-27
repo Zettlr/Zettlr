@@ -78,6 +78,11 @@ concurrency:
 # releases on all three supported platforms, and a last one, which will
 # create the release draft.
 jobs:
+  # Trigger a refresh of the translations before every *proper* build.
+  i18n:
+    if: github.ref_name == 'master'
+    name: 'Preflight: Update translations'
+    uses: ./.github/workflows/i18n.yml
   # First, ensure that nothing breaks before attempting to build
   preflight:
     name: 'Preflight: Lint/Unit tests'
