@@ -34,6 +34,7 @@ import TargetProvider from '@providers/targets'
 import TrayProvider from '@providers/tray'
 import UpdateProvider from '@providers/updates'
 import WindowProvider from '@providers/windows'
+import WorkspaceProvider from '@providers/workspaces'
 import { dialog } from 'electron'
 
 export default class AppServiceContainer {
@@ -56,12 +57,14 @@ export default class AppServiceContainer {
   private readonly _windowProvider: WindowProvider
   private readonly _fsal: FSAL
   private readonly _documentManager: DocumentManager
+  private readonly _workspaces: WorkspaceProvider
 
   constructor () {
     // NOTE: The log and config providers need to be instantiated first. The
     // rest can be instantiated afterwards.
     this._logProvider = new LogProvider()
     this._configProvider = new ConfigProvider(this._logProvider)
+    this._workspaces = new WorkspaceProvider(this._logProvider, this._configProvider)
     this._commandProvider = new CommandProvider(this)
     this._assetsProvider = new AssetsProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
@@ -89,6 +92,7 @@ export default class AppServiceContainer {
   async boot (): Promise<void> {
     await this._informativeBoot(this._logProvider, 'LogProvider')
     await this._informativeBoot(this._configProvider, 'ConfigProvider')
+    await this._informativeBoot(this._workspaces, 'WorkspaceProvider')
     await this._informativeBoot(this._assetsProvider, 'AssetsProvider')
     await this._informativeBoot(this._linkProvider, 'LinkProvider')
     await this._informativeBoot(this._tagProvider, 'TagProvider')
@@ -222,6 +226,11 @@ export default class AppServiceContainer {
   public get commands (): CommandProvider { return this._commandProvider }
 
   /**
+   * Returns the WorkspaceProvider
+   */
+  public get workspaces (): WorkspaceProvider { return this._workspaces }
+
+  /**
    * Prepares quitting the app by shutting down the service providers
    */
   async shutdown (): Promise<void> {
@@ -243,6 +252,7 @@ export default class AppServiceContainer {
     await this._safeShutdown(this._citeprocProvider, 'CiteprocProvider')
     await this._safeShutdown(this._assetsProvider, 'AssetsProvider')
     await this._safeShutdown(this._appearanceProvider, 'AppearanceProvider')
+    await this._safeShutdown(this._workspaces, 'WorkspaceProvider')
     await this._safeShutdown(this._configProvider, 'ConfigProvider')
     await this._safeShutdown(this._logProvider, 'LogProvider')
   }
