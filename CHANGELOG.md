@@ -48,7 +48,7 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
   plugin files
 - Moved formatting bar; heading sizes; code background; typewriter; heading
   indicator; frontmatter; distraction free; and iframe styling to their plugins
-- Bump Pandoc to version `3.1.8`
+- Bump Pandoc to version `3.1.9`
 - Fixed a weird layouting issue with the code block backgrounds
 
 # 3.0.2
