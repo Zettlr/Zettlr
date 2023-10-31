@@ -65,7 +65,7 @@ To install Zettlr, just [download the latest release](https://www.zettlr.com/dow
 On our website and here on GitHub, we provide a set of installers for the most common use-cases. We provide both 64-bit installers as well as installers for ARM systems (called "Apple Silicon" in the macOS ecosystem). 32-bit is not supported. We offer the following binaries directly:
 
 * Windows (x64)
-* macOS (Intel and Apple Silicon)
+* MacOS (Intel and Apple Silicon)
 * Debian and Fedora (x64 and ARM)
 * AppImage (x64 and ARM)
 

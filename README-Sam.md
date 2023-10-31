@@ -1,3 +1,9 @@
+# Repo website
+
+https://github.com/Zettlr/Zettlr
+
+https://github.com/lewallen/Zettlr
+
 # 1. Info for building
 
 ```bash
@@ -5,6 +11,8 @@ conda activate zettlr-dev
 cd /Users/brain/No_Dropbox/Repos/zettlr-fork
 yarn install --immutable
 ```
+
+# Info for packaging
 
 # 2. Info for folding + keymap stuff
 

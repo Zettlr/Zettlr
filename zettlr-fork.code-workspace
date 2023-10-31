@@ -21,7 +21,17 @@
             "titleBar.inactiveBackground": "#9c9ca399",
             "titleBar.inactiveForeground": "#15202b99"
         },
-        "peacock.color": "#9c9ca3"
+        "peacock.color": "#9c9ca3",
+        "favorites.resources": [
+            {
+                "filePath": "README-Sam.md",
+                "group": "Default"
+            },
+            {
+                "filePath": "README.md",
+                "group": "Default"
+            }
+        ]
         // "peacock.color": "#036043",
     }
 }
