@@ -1,18 +1,24 @@
-# Repo website
+- https://github.com/Zettlr/Zettlr
+- My fork:
+  - https://github.com/lewallen/Zettlr
 
-https://github.com/Zettlr/Zettlr
+# 1. Shell commands
 
-https://github.com/lewallen/Zettlr
+## 1.1. Packaging
 
-# 1. Info for building
+```bash
+conda activate zettlr-dev
+cd /Users/brain/No_Dropbox/Repos/zettlr-fork
+yarn package
+```
+
+## 1.2. Building
 
 ```bash
 conda activate zettlr-dev
 cd /Users/brain/No_Dropbox/Repos/zettlr-fork
 yarn install --immutable
 ```
-
-# Info for packaging
 
 # 2. Info for folding + keymap stuff
 
@@ -37,6 +43,6 @@ yarn install --immutable
         Ctrl-Alt-]: [unfoldAll](https://codemirror.net/docs/ref/#language.unfoldAll).
 ```
 
-## 2.4.
+## 2.4. 2.4.
 
 > I think I did patch ZettlrDir\app\node_modules\codemirror*keymap\sublime.js*
