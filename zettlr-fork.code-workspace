@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+    ],
+    "settings": {
+        "files.associations": {
+            ".ztr-directory": "json"
+        },
+        "workbench.colorCustomizations": {
+            "activityBar.activeBackground": "#b6b6bc",
+            "activityBar.background": "#b6b6bc",
+            "activityBar.foreground": "#15202b",
+            "activityBar.inactiveForeground": "#15202b99",
+            "activityBarBadge.background": "#c75858",
+            "activityBarBadge.foreground": "#e7e7e7",
+            "commandCenter.border": "#15202b99",
+            "titleBar.activeBackground": "#9c9ca3",
+            "titleBar.activeForeground": "#15202b",
+            "titleBar.inactiveBackground": "#9c9ca399",
+            "titleBar.inactiveForeground": "#15202b99"
+        },
+        "peacock.color": "#9c9ca3"
+        // "peacock.color": "#036043",
+    }
+}

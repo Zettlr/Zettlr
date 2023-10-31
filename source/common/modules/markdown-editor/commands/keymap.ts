@@ -12,6 +12,7 @@
  * END HEADER
  */
 
+import { foldAll, unfoldAll, unfoldCode, foldCode, toggleFold } from '@codemirror/language'
 import { acceptCompletion, deleteBracketPair } from '@codemirror/autocomplete'
 import { copyLineDown, copyLineUp, indentLess, indentMore, insertNewlineAndIndent, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { type KeyBinding } from '@codemirror/view'
@@ -29,34 +30,39 @@ import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
  * @var {KeyBinding[]}
  */
 export const customKeymap: KeyBinding[] = [
-  { key: 'Mod-k', run: insertLink },
-  // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
-  // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
-  { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
-  { key: 'Mod-b', run: applyBold },
-  { key: 'Mod-i', run: applyItalic },
-  { key: 'Mod-Shift-c', run: applyComment },
-  { key: 'Mod-Alt-f', mac: 'Mod-Alt-r', run: addNewFootnote },
-  { key: 'Tab', run: acceptCompletion },
-  { key: 'Tab', run: nextSnippet },
-  { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
-  { key: 'Tab', run: indentMore, shift: indentLess },
-  { key: 'Esc', run: abortSnippet },
-  { key: 'Space', run: handleReplacement },
-  { key: 'Enter', run: handleReplacement },
-  // If no replacement can be handled, the default should be newlineAndIndent
-  { key: 'Enter', run: insertNewlineContinueMarkup },
-  { key: 'Enter', run: insertNewlineAndIndent },
-  // TODO: We're including the pre-made keymap that defines the next line
-  // already in our core extensions (see editor-extension-sets.ts), but somehow
-  // it never gets called if we don't also define it here. Double check why.
-  { key: 'Backspace', run: deleteBracketPair },
-  { key: 'Backspace', run: handleBackspace },
-  { key: 'Alt-Up', run: moveLineUp, shift: copyLineUp },
-  { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown },
-  { key: 'Mod-t', run: applyTaskList },
-  { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
-  { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
-  { key: '"', run: handleQuote('"') },
-  { key: "'", run: handleQuote("'") }
+    // folding keybindings added by sam   
+    { key: 'Mod-[', run: foldCode },
+    { key: 'Mod-]', run: unfoldCode },
+    { key: 'Mod-Shift-,', run: foldAll },
+    { key: 'Mod-Shift-.', run: unfoldAll },
+    { key: 'Mod-k', run: insertLink },
+    // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
+    // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
+    { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
+    { key: 'Mod-b', run: applyBold },
+    { key: 'Mod-i', run: applyItalic },
+    { key: 'Mod-Shift-c', run: applyComment },
+    { key: 'Mod-Alt-r', run: addNewFootnote },
+    { key: 'Tab', run: nextSnippet },
+    { key: 'Tab', run: acceptCompletion },
+    { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
+    { key: 'Tab', run: indentMore, shift: indentLess },
+    { key: 'Esc', run: abortSnippet },
+    { key: 'Space', run: handleReplacement },
+    { key: 'Enter', run: handleReplacement },
+    // If no replacement can be handled, the default should be newlineAndIndent
+    { key: 'Enter', run: insertNewlineContinueMarkup },
+    { key: 'Enter', run: insertNewlineAndIndent },
+    // TODO: We're including the pre-made keymap that defines the next line
+    // already in our core extensions (see editor-extension-sets.ts), but somehow
+    // it never gets called if we don't also define it here. Double check why.
+    { key: 'Backspace', run: deleteBracketPair },
+    { key: 'Backspace', run: handleBackspace },
+    { key: 'Alt-Up', run: moveLineUp, shift: copyLineUp },
+    { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown },
+    { key: 'Mod-t', run: applyTaskList },
+    { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
+    { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
+    { key: '"', run: handleQuote('"') },
+    { key: "'", run: handleQuote("'") }
 ]
