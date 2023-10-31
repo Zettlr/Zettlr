@@ -1,5 +1,11 @@
 # 1. Info for building
 
+```bash
+conda activate zettlr-dev
+cd /Users/brain/No_Dropbox/Repos/zettlr-fork
+yarn install --immutable
+```
+
 # 2. Info for folding + keymap stuff
 
 ## 2.1. Links
