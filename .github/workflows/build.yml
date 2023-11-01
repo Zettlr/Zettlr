@@ -82,7 +82,7 @@ jobs:
   i18n:
     if: github.ref_name == 'master'
     name: 'Preflight: Update translations'
-    uses: ./.github/workflows/i18n.yml
+    uses: ./.github/workflows/i18n.yaml
   # First, ensure that nothing breaks before attempting to build
   preflight:
     name: 'Preflight: Lint/Unit tests'
