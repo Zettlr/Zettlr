@@ -1,5 +1,14 @@
 # Upcoming
 
+## A Note on Custom CSS
+
+This update includes a full refactor of the theming: The editor themes (Berlin,
+Frankfurt, Bielefeld, Karl-Marx-Stadt, and Bordeaux) have now moved to their own
+theme files and do not come with standard CSS anymore. This heavily un-clutters
+the codebase, but it may impact your Custom CSS, should you use this feature. We
+have ensured that no class names change and that the styling is mostly the same,
+but the possibility of having to adapt the Custom CSS may arise for some of you.
+
 ## GUI and Functionality
 
 - Fixed a visual issue that would handle overly long window titles improperly
@@ -12,6 +21,10 @@
 - Images now render more appropriately in inline-contexts
 - Updated the German translation
 - Fixed the keyboard shortcut for inserting footnotes on Windows and Linux
+- Removed the accent color setting: now the accent color will always be the
+  system accent color on macOS and Windows, and Zettlr's brand green on Linux;
+  themes do not provide an accent color anymore
+- Restored syntax highlighting for inline math code
 - GraphView's labels are now rendered filled instead of stroked, to make it
   easier to read the labels.
 - The GraphView does now support multi-window, so clicking a link will open it in
@@ -19,8 +32,15 @@
   be in that leaf, otherwise it will open the file in the last focused leaf.
 - Shift+Click in GraphView will force the document to be opened in a new tab.
 
+
 ## Under the Hood
 
+- **Potentially Breaking Refactor**: Moved all themes from the `*.less`-files
+  into proper theme plugins for CodeMirror v6; this means that they will not
+  provide any global styles anymore; any applicable styling has been moved to
+  more appropriate places (CodeMirror plugins as well as the WindowChrome and
+  the various remaining `*.less` files) -- this should not influence any
+  existing Custom CSS, but it may
 - Remove unused color variable definitions
 - Move gray color palette to the Window Chrome component
 - Fixed an issue where the font definitions were borked and required usage of
@@ -34,8 +54,9 @@
 - Move plugin-specific base styles from the main override to the respective
   plugin files
 - Moved formatting bar; heading sizes; code background; typewriter; heading
-  indicator; frontmatter; and iframe styling to their plugins
-- Bump Pandoc to version `3.1.8`
+  indicator; frontmatter; distraction free; and iframe styling to their plugins
+- Bump Pandoc to version `3.1.9`
+- Fixed a weird layouting issue with the code block backgrounds
 - DocumentManager's `openFile` does now handle the case when windowId and leafId
   is undefined, by keeping track on the last used editor.
 

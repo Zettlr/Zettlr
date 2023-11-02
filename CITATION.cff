@@ -16,4 +16,5 @@ keywords:
 version: v3.0.2
 doi: 10.5281/zenodo.2580173
 date-released: 2023-10-07
+license: gpl-3.0
 repository-code: https://github.com/Zettlr/Zettlr

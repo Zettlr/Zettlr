@@ -291,7 +291,7 @@ interface SliderField extends BasicInfo {
 
 interface ThemeField extends BasicInfo {
   type: 'theme'
-  options: ThemeDescriptor
+  options: Record<string, ThemeDescriptor>
 }
 
 type Fields = TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField

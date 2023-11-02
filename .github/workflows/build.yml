@@ -78,6 +78,11 @@ concurrency:
 # releases on all three supported platforms, and a last one, which will
 # create the release draft.
 jobs:
+  # Trigger a refresh of the translations before every *proper* build.
+  i18n:
+    if: github.ref_name == 'master'
+    name: 'Preflight: Update translations'
+    uses: ./.github/workflows/i18n.yaml
   # First, ensure that nothing breaks before attempting to build
   preflight:
     name: 'Preflight: Lint/Unit tests'
@@ -121,7 +126,7 @@ jobs:
     name: Windows (x86_64)
     env:
       npm_config_arch: x64
-    needs: [preflight, verify_version]
+    needs: [preflight, verify_version, i18n]
     runs-on: windows-latest
     steps:
       - name: Checkout branch ${{ github.ref_name }}
@@ -158,7 +163,7 @@ jobs:
   #   env:
   #     npm_config_arch: arm64
   #     TARGET_ARCH: arm64 # Seen at https://github.com/hydraulic-software/github-desktop/blob/conveyorize/.github/workflows/ci.yml
-  #   needs: [preflight, verify_version]
+  #   needs: [preflight, verify_version, i18n]
   #   runs-on: windows-latest
   #   steps:
   #     - name: Checkout branch ${{ github.ref_name }}
@@ -232,7 +237,7 @@ jobs:
     name: macOS (x86_64)
     env:
       npm_config_arch: x64
-    needs: [preflight, verify_version]
+    needs: [preflight, verify_version, i18n]
     runs-on: macos-latest
     steps:
       # Check out master for a regular release, or develop branch for a nightly
@@ -278,7 +283,7 @@ jobs:
     name: macOS (arm64)
     env:
       npm_config_arch: arm64
-    needs: [preflight, verify_version]
+    needs: [preflight, verify_version, i18n]
     runs-on: macos-latest
     steps:
       - name: Checkout branch ${{ github.ref_name }}
@@ -328,7 +333,7 @@ jobs:
     name: Linux (x86_64)
     env:
       npm_config_arch: x64
-    needs: [preflight, verify_version]
+    needs: [preflight, verify_version, i18n]
     runs-on: ubuntu-20.04
     steps:
       # Check out master for a regular release, or develop branch for a nightly
@@ -367,7 +372,7 @@ jobs:
     name: Linux (arm64)
     env:
       npm_config_arch: arm64
-    needs: [preflight, verify_version]
+    needs: [preflight, verify_version, i18n]
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout branch ${{ github.ref_name }}

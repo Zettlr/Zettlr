@@ -112,7 +112,6 @@ export interface ConfigOptions {
   }
   display: {
     theme: MarkdownTheme
-    useSystemAccentColor: boolean
     hideToolbarInDistractionFree: boolean
     markdownFileExtensions: boolean
     imageWidth: number
@@ -347,8 +346,6 @@ export function getConfigTemplate (): ConfigOptions {
     },
     display: {
       theme: 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux
-      // By default, macOS computers use the system accent color instead of the theme's one
-      useSystemAccentColor: process.platform === 'darwin',
       hideToolbarInDistractionFree: false,
       markdownFileExtensions: false,
       imageWidth: 100, // Maximum preview image width

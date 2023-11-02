@@ -85,6 +85,8 @@ import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 
 export interface ThemeDescriptor {
+  name: string
+  description: string
   textColor: string
   backgroundColor: string
   fontFamily: string
