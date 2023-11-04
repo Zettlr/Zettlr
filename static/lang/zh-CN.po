@@ -2661,6 +2661,7 @@ msgid "Project Settings…"
 msgstr "项目设置…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:617
+#: source/app/service-providers/menu/menu.win32.ts:598
 msgid "New window"
 msgstr "打开新窗口"
 
