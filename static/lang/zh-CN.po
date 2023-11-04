@@ -2660,6 +2660,10 @@ msgstr "点击选择"
 msgid "Project Settings…"
 msgstr "项目设置…"
 
+#: source/app/service-providers/menu/menu.darwin.ts:617
+msgid "New window"
+msgstr "打开新窗口"
+
 #~ msgid "Use the operating system's accent colour instead of the theme colour"
 #~ msgstr "使用系统字体颜色而非主题色"
 
