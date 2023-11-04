@@ -595,7 +595,7 @@ msgstr "统计字的数量而不是词语的数量（例如，中文）"
 
 #: source/win-preferences/schema/general.ts:24
 msgid "Application language"
-msgstr ""
+msgstr "应用语言"
 
 #: source/win-preferences/schema/general.ts:32
 #: source/app/service-providers/menu/menu.darwin.ts:448
