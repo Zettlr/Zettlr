@@ -129,7 +129,7 @@ export default defineComponent({
       tabs: [
         {
           id: 'formats-control',
-          label: 'General',
+          label: trans('General'),
           icon: 'cog',
           controls: 'formats-panel'
         },
