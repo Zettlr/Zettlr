@@ -25,6 +25,7 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
   system accent color on macOS and Windows, and Zettlr's brand green on Linux;
   themes do not provide an accent color anymore
 - Restored syntax highlighting for inline math code
+- Added some translations
 
 ## Under the Hood
 
