@@ -1359,6 +1359,21 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
+   * Loads any given path (if it exists) into the FSAL descriptor format.
+   *
+   * @param   {string}   absPath  The path to load
+   *
+   * @return  {Promise}           Promise resolved with any descriptor
+   */
+  public async loadAnyPath (absPath: string): Promise<DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    if (isDir(absPath)) {
+      return await this.getAnyDirectoryDescriptor(absPath)
+    } else {
+      return await this.getDescriptorForAnySupportedFile(absPath)
+    }
+  }
+
+  /**
    * Returns any directory descriptor
    *
    * @param   {string}                  absPath  The path to the directory

@@ -76,6 +76,7 @@ export default class AppServiceContainer {
     this._targetProvider = new TargetProvider(this._logProvider)
     this._documentManager = new DocumentManager(this)
     this._fsal = new FSAL(this._logProvider, this._configProvider, this._documentManager)
+    this._workspaces = new WorkspaceProvider(this._logProvider, this._configProvider, this._fsal)
     this._tagProvider = new TagProvider(this._logProvider, this._fsal)
     this._linkProvider = new LinkProvider(this._logProvider, this._fsal)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
