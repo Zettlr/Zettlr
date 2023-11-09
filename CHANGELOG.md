@@ -32,6 +32,9 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
   content is not preview-able
 - Improved layout of link previews
 - Overly long summaries of link previews are now shortened
+- Project properties now adequately resolve the readers and writers of the
+  existing profiles, enabling the usage of profiles with extended
+  readers/writers (#4699)
 
 ## Under the Hood
 
