@@ -595,7 +595,7 @@ msgstr "统计字的数量而不是词语的数量（例如，中文）"
 
 #: source/win-preferences/schema/general.ts:24
 msgid "Application language"
-msgstr ""
+msgstr "应用语言"
 
 #: source/win-preferences/schema/general.ts:32
 #: source/app/service-providers/menu/menu.darwin.ts:448
@@ -2659,6 +2659,44 @@ msgstr "点击选择"
 #: source/tmp/PopoverDirProps.vue.ts:185
 msgid "Project Settings…"
 msgstr "项目设置…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:617
+#: source/app/service-providers/menu/menu.win32.ts:598
+msgid "New window"
+msgstr "打开新窗口"
+
+#: source/win-project-properties/App.vue:132
+#: source/win-preferences/App.vue:125
+msgid "General"
+msgstr "全局"
+
+#: source/win-preferences/App.vue:131
+msgid "Editor"
+msgstr "编辑"
+
+#: source/win-preferences/App.vue:143
+msgid "Citations"
+msgstr "引用"
+
+#: source/win-preferences/App.vue:155
+msgid "Display"
+msgstr "显示"
+
+#: source/win-preferences/App.vue:161
+msgid "Spellchecking"
+msgstr "拼写检查"
+
+#: source/win-preferences/App.vue:167
+msgid "AutoCorrect"
+msgstr "自动修正"
+
+#: source/win-preferences/App.vue:173
+msgid "Advanced"
+msgstr "高级"
+
+#: source/win-preferences/App.vue:179
+msgid "Toolbar"
+msgstr "工具栏"
 
 #~ msgid "Use the operating system's accent colour instead of the theme colour"
 #~ msgstr "使用系统字体颜色而非主题色"

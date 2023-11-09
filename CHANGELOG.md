@@ -27,6 +27,7 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
 - Restored syntax highlighting for inline math code
 - Fixes an issue that would frequently may make the cursor appear to jump or a
   dialog appearing warning of external changes (#4729; #4732)
+- Added some translations
 
 ## Under the Hood
 

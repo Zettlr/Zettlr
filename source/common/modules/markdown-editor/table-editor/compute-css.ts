@@ -59,15 +59,21 @@ export default function computeCSS (edgeButtonSize: number): Element {
     z-index: 3;
   }
 
+  .table-helper-align-button-container,
+  .table-helper-remove-button-container,
+  .table-helper-add-button {
+    background-color: #fff;
+    color: #4d5d75;
+  }
+
   .table-helper-align-button-container {
+    color: #4d5d75;
     opacity: 0.25;
     transition: 0.2s opacity ease;
     width: ${edgeButtonSize * 3}px;
     height: ${edgeButtonSize}px;
     border-radius: ${edgeButtonSize * 0.25}px;
     overflow: hidden;
-    background-color: #fff;
-    color: #4d5d75;
     position: absolute;
     box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, .25);
   }
@@ -119,8 +125,6 @@ export default function computeCSS (edgeButtonSize: number): Element {
     height: ${edgeButtonSize}px;
     border-radius: ${edgeButtonSize * 0.25}px;
     overflow: hidden;
-    background-color: #fff;
-    color: #4d5d75;
     position: absolute;
     box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, .25);
   }

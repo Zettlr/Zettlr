@@ -595,7 +595,7 @@ export default function getMenu (
         },
         {
           id: 'menu.new_window',
-          label: 'New window',
+          label: trans('New window'),
           accelerator: 'CmdOrCtrl+Shift+N',
           click: function (menuItem, focusedWindow) {
             documents.newWindow()
