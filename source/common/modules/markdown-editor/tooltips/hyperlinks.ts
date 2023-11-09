@@ -72,8 +72,7 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
           h4.textContent = res.title
 
           const imgParaWrapper = document.createElement('div')
-          imgParaWrapper.style.display = 'flex'
-          imgParaWrapper.style.flexDirection = 'row'
+          imgParaWrapper.style.margin = '10px 0'
 
           if (res.image !== undefined) {
             const img = document.createElement('img')
@@ -82,11 +81,14 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
             img.style.maxHeight = '100px'
             img.style.marginRight = '10px'
             img.style.marginBottom = '10px'
+            img.style.float = 'left'
             imgParaWrapper.appendChild(img)
           }
 
           if (res.summary !== undefined) {
             const para = document.createElement('p')
+            para.style.margin = '0'
+            para.style.whiteSpace = 'pre-wrap'
             para.textContent = res.summary
             imgParaWrapper.appendChild(para)
           }
@@ -97,6 +99,8 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
           link.textContent = shortUrl
           link.style.fontSize = '80%'
           link.style.fontFamily = 'monospace'
+          link.style.wordBreak = 'break-word'
+
           dom.appendChild(h4)
           dom.appendChild(imgParaWrapper)
           dom.appendChild(link)
