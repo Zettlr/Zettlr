@@ -22,6 +22,7 @@ import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
 import type ConfigProvider from '@providers/config'
 import type FSAL from '@providers/fsal'
+import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
 
 /**
  * This class generates the Tray in the system notification area
@@ -39,8 +40,32 @@ export default class WorkspaceProvider extends ProviderContract {
     super()
     this.roots = []
 
-    ipcMain.handle('workspace-provider', (event, args) => {
+    ipcMain.handle('workspace-provider', (event, { command, payload }) => {
       // A renderer has asked for updates
+      if (command === 'get-initial-tree-data') {
+        console.log('RECEIVED REQUEST TO RETRIEVE WORKSPACES')
+        for (const root of this.roots) {
+          if (root.rootPath === payload) {
+            return root.getInitialTreeData()
+          }
+        }
+
+        // TODO: Remove this piece of code once we have the ability to only
+        // request select workspaces
+        if (payload === '') {
+          return this.roots.map(root => root.getInitialTreeData())
+        }
+      } else if (command === 'get-changes-since') {
+        console.log('RECEIVED REQUEST TO RETRIEVE CHANGES')
+        const { rootPath, version } = payload
+        for (const root of this.roots) {
+          if (root.rootPath === rootPath) {
+            return root.getChangesSince(version)
+          }
+        }
+
+        throw new Error(`Could not retrieve changes for root ${rootPath as string}: Not loaded`)
+      }
     })
   }
 
@@ -54,6 +79,7 @@ export default class WorkspaceProvider extends ProviderContract {
       onChange: (rootPath: string) => {
         // TODO: Announce via IPC broadcast
         this._logger.info(`[WorkspaceManager] Root ${rootPath} has changed`)
+        broadcastIPCMessage('workspace-changed', rootPath)
       },
       onUnlink: (rootPath: string) => {
         // TODO: Remove and announce!
