@@ -136,20 +136,28 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
 }
 
 /**
- * Reads in a file tree recursively, returning the directory descriptor object.
+ * Reads in a directory, returning a corresponding descriptor object. By default
+ * this function reads in the entire directory tree recursively which may take
+ * some time. If you only need the actual directory descriptor, pass `shallow`
+ * as true to prevent it from recursively parsing the tree.
  *
  * @param   {string}              currentPath  The directory's path
  * @param   {FSALCache}           cache        The FSAL cache object
- * @param   {DirDescriptor|null}  parent       An optional parent
+ * @param   {Function}            parser       A MD file parser
+ * @param   {Function}            sorter       A directory child sorter function
+ * @param   {boolean}             isRoot       Whether this descriptor is a root
+ * @param   {boolean}             shallow      If false, children list will not
+ *                                             be parsed
  *
- * @return  {Promise<DirDescriptor>}           Resolves with the directory descriptor
+ * @return  {Promise<DirDescriptor>}           Resolves with the descriptor
  */
 export async function parse (
   currentPath: string,
   cache: FSALCache,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
-  isRoot: boolean
+  isRoot: boolean,
+  shallow: boolean = false
 ): Promise<DirDescriptor> {
   // Prepopulate
   const dir: DirDescriptor = {
@@ -191,6 +199,14 @@ export async function parse (
       continue
     } else if (child.startsWith('.')) {
       continue // Ignore hidden files
+    }
+
+    // The `shallow` flag indicates that the directory should not be parsed
+    // recursively, so we will simply continue here. The reason we do parse the
+    // rest of the list here is that the directory file or git may show up at a
+    // later point.
+    if (shallow) {
+      continue
     }
 
     if (isDir(absolutePath) && !ignoreDir(absolutePath)) {

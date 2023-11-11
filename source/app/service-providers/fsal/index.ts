@@ -511,6 +511,19 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
+   * Ever in need for a descriptor mocking a non existing directory? Call this
+   * function.
+   *
+   * @param   {string}         dirPath  The directory path this descriptor
+   *                                    should represent
+   *
+   * @return  {DirDescriptor}           The descriptor
+   */
+  public loadDummyDirectoryDescriptor (dirPath: string): DirDescriptor {
+    return FSALDir.getDirNotFoundDescriptor(dirPath)
+  }
+
+  /**
    * Returns an instance with a new file parser. Should be used to retrieve
    * updated versions of the parser whenever the configuration changes
    *
@@ -1361,26 +1374,34 @@ export default class FSAL extends ProviderContract {
   /**
    * Loads any given path (if it exists) into the FSAL descriptor format.
    *
-   * @param   {string}   absPath  The path to load
+   * @param   {string}   absPath     The path to load
+   * @param   {boolean}  shallowDir  If loading a directory, instructs to not
+   *                                 recursively parse the entire tree.
    *
-   * @return  {Promise}           Promise resolved with any descriptor
+   * @return  {Promise}              Promise resolves with any descriptor
    */
-  public async loadAnyPath (absPath: string): Promise<DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+  public async loadAnyPath (absPath: string, shallowDir: boolean = false): Promise<DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
     if (isDir(absPath)) {
-      return await this.getAnyDirectoryDescriptor(absPath)
+      return await this.getAnyDirectoryDescriptor(absPath, shallowDir)
     } else {
       return await this.getDescriptorForAnySupportedFile(absPath)
     }
   }
 
   /**
-   * Returns any directory descriptor
+   * Returns any directory descriptor. NOTE: If you pass `shallow` as true, do
+   * not assume that the `children`-list of the directory is always empty!
    *
    * @param   {string}                  absPath  The path to the directory
+   * @param   {boolean}                 shallow  Pass true to prevent the parser
+   *                                             from recursively reading in the
+   *                                             entire file tree if the
+   *                                             directory has not yet been
+   *                                             loaded.
    *
    * @return  {Promise<DirDescriptor>}           The dir descriptor
    */
-  public async getAnyDirectoryDescriptor (absPath: string): Promise<DirDescriptor> {
+  public async getAnyDirectoryDescriptor (absPath: string, shallow: boolean = false): Promise<DirDescriptor> {
     const descriptor = this.findDir(absPath)
     if (descriptor !== undefined) {
       return descriptor
@@ -1390,6 +1411,6 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
     }
 
-    return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), this.getDirectorySorter(), false)
+    return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), this.getDirectorySorter(), false, shallow)
   }
 }
