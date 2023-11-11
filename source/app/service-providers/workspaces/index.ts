@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-import {} from 'electron'
+import { ipcMain } from 'electron'
 import { Root } from './root'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
@@ -38,6 +38,10 @@ export default class WorkspaceProvider extends ProviderContract {
   ) {
     super()
     this.roots = []
+
+    ipcMain.handle('workspace-provider', (event, args) => {
+      // A renderer has asked for updates
+    })
   }
 
   /**
@@ -45,30 +49,42 @@ export default class WorkspaceProvider extends ProviderContract {
    */
   async boot (): Promise<void> {
     this._logger.verbose('Workspace provider booting up ...')
+
+    const callbacks = {
+      onChange: (rootPath: string) => {
+        // TODO: Announce via IPC broadcast
+        this._logger.info(`[WorkspaceManager] Root ${rootPath} has changed`)
+      },
+      onUnlink: (rootPath: string) => {
+        // TODO: Remove and announce!
+        this._logger.warning(`[WorkspaceManager] Root ${rootPath} has been removed`)
+      }
+    }
+
     const { openPaths } = this._config.get()
     for (const rootPath of openPaths) {
       try {
         const descriptor = await this._fsal.loadAnyPath(rootPath)
         if (descriptor === undefined) {
-          throw new Error(`Could not load root ${rootPath}`)
+          // Mount a "dummy" workspace indicating an unlinked root
+          this._logger.error(`Could not load root ${rootPath}. Mounting dummy...`)
+          const root = new Root(
+            this._fsal.loadDummyDirectoryDescriptor(rootPath),
+            this._logger,
+            this._fsal,
+            callbacks
+          )
+          this.roots.push(root)
+        } else {
+          // Mount a managing root
+          const root = new Root(
+            descriptor,
+            this._logger,
+            this._fsal,
+            callbacks
+          )
+          this.roots.push(root)
         }
-
-        const root = new Root(
-          descriptor,
-          this._logger,
-          this._fsal,
-          {
-            onChange: (rootPath) => {
-              // TODO: Announce via IPC broadcast
-              this._logger.info(`[WorkspaceManager] Root ${rootPath} has changed`)
-            },
-            onUnlink: (rootPath) => {
-              // TODO: Remove and announce!
-              this._logger.warning(`[WorkspaceManager] Root ${rootPath} has been removed`)
-            }
-          }
-        )
-        this.roots.push(root)
       } catch (err: any) {
         // TODO
       }

@@ -4,6 +4,7 @@ import type { DirDescriptor, MDFileDescriptor, CodeFileDescriptor, OtherFileDesc
 import { FSWatcher, type WatchOptions } from 'chokidar'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import path from 'path'
+import _ from 'lodash'
 
 /**
  * This function takes a series of change events for the file trees and merges
@@ -188,7 +189,7 @@ export class Root {
     }
 
     const { eventName, eventPath } = nextEvent
-    console.log('PROCESSING EVENT:', eventName, eventPath)
+    console.log('PROCESSING EVENT:', eventName, eventPath) // DEBUG
 
     const isUnlink = eventName === 'unlink' || eventName === 'unlinkDir'
 
@@ -202,7 +203,10 @@ export class Root {
     } else {
       // Change or add
       try {
-        const descriptor = await this.fsal.loadAnyPath(eventPath)
+        // Load directories "shallow", no recursive parsing here
+        // DEBUG/TODO: Since the FSAL may return a descriptor from its cache,
+        // we have to decouple that here. REMOVE WHEN LOGIC CHANGE IS DONE IN FSAL
+        const descriptor = _.cloneDeep(await this.fsal.loadAnyPath(eventPath, true))
         if (descriptor.type === 'directory') {
           descriptor.children = [] // Keep the change queue shallow; the merger accounts for that
         }
@@ -220,10 +224,11 @@ export class Root {
     // Now we either have a new root or a change in the queue.
     this.isProcessingEvent = false
 
+    // Notify that one change has just been processed
+    this.onChangeCallback(this.rootPath)
+
     // Immediately process the next event if new events have been added in the meantime.
     if (this.eventQueue.length > 0) {
-      // TODO: While we call this callback, somehow it is not logged in the provider
-      this.onChangeCallback(this.rootPath)
       await this.processNextEvent()
     } else {
       // After all events have been accounted for, clean up the changeQueue to
@@ -239,9 +244,9 @@ export class Root {
   afterProcessEvent (): void {
     if (this.changeQueue.length > MAX_CHANGE_QUEUE) {
       const eventsToMerge = this.changeQueue.splice(0, this.changeQueue.length - MAX_CHANGE_QUEUE)
-      console.log('MERGING EVENTS INTO TREE:', eventsToMerge)
+      // console.log('MERGING EVENTS INTO TREE:', eventsToMerge)
       mergeEventsIntoTree(eventsToMerge, this.rootDescriptor)
-      console.log(this.rootDescriptor)
+      // console.log(this.rootDescriptor)
     }
   }
 }
