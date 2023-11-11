@@ -64,7 +64,6 @@ export default class AppServiceContainer {
     // rest can be instantiated afterwards.
     this._logProvider = new LogProvider()
     this._configProvider = new ConfigProvider(this._logProvider)
-    this._workspaces = new WorkspaceProvider(this._logProvider, this._configProvider)
     this._commandProvider = new CommandProvider(this)
     this._assetsProvider = new AssetsProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
