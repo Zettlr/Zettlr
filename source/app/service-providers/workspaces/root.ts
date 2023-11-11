@@ -2,66 +2,8 @@ import type LogProvider from '@providers/log'
 import type FSAL from '@providers/fsal'
 import type { DirDescriptor, MDFileDescriptor, CodeFileDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
 import { FSWatcher, type WatchOptions } from 'chokidar'
-import locateByPath from '@providers/fsal/util/locate-by-path'
-import path from 'path'
 import _ from 'lodash'
-
-/**
- * This function takes a series of change events for the file trees and merges
- * those one after another into the provided tree, modifying it in place. NOTE:
- * This requires that the events are actually accumulated for this tree;
- * providing another tree will lead to errors and inconsistencies.
- *
- * @param   {ChangeDescriptor[]}  events  The list of changes
- * @param   {AnyDescriptor}       tree    The tree to merge the changes into
- */
-function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescriptor): void {
-  for (const event of events) {
-    if (event.type === 'add') {
-      // Find the parent, and add the given descriptor to its children
-      const parent = locateByPath(tree, event.descriptor.dir)
-      if (parent === undefined || parent.type !== 'directory') {
-        throw new Error('Received an add event, but the tree descriptor did not contain its parent!')
-      }
-
-      // TODO: Sort the parent properly!!!
-      parent.children.push(event.descriptor)
-    } else if (event.type === 'change') {
-      const parent = locateByPath(tree, event.descriptor.dir)
-
-      if (parent === undefined || parent.type !== 'directory') {
-        throw new Error('Received a change event, but the tree descriptor did not contain its parent!')
-      }
-
-      const idx = parent.children.findIndex(desc => desc.path === event.path)
-
-      if (idx < 0) {
-        throw new Error('Received a change event but could not find the old descriptor in the parent!')
-      }
-
-      if (event.descriptor.type === 'directory') {
-        // Ensure to carry over the recursive children array
-        event.descriptor.children = (parent.children[idx] as DirDescriptor).children
-      }
-
-      parent.children.splice(idx, 1, event.descriptor)
-    } else {
-      // Unlink event
-      const parent = locateByPath(tree, path.dirname(event.path))
-      if (parent === undefined || parent.type !== 'directory') {
-        throw new Error('Received an unlink event but could not find its parent!')
-      }
-
-      const idx = parent.children.findIndex(desc => desc.path === event.path)
-
-      if (idx < 0) {
-        throw new Error('Could not remove descriptor from tree!')
-      }
-
-      parent.children.splice(idx, 1)
-    }
-  }
-}
+import { mergeEventsIntoTree } from './merge-events-into-tree'
 
 // How many events do we keep in the change queue before merging them into the
 // file tree?
@@ -96,7 +38,7 @@ interface UnlinkEvent {
   path: string
 }
 
-type ChangeDescriptor = AddEvent | ChangeEvent | UnlinkEvent
+export type ChangeDescriptor = AddEvent | ChangeEvent | UnlinkEvent
 type AnyDescriptor = DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor
 type ChokidarEvents = 'add'|'addDir'|'change'|'unlink'|'unlinkDir'
 
@@ -105,10 +47,17 @@ interface RootCallbacks {
   onUnlink: (rootPath: string) => void
 }
 
+export interface InitialTreeData {
+  descriptor: AnyDescriptor
+  changes: ChangeDescriptor[]
+  currentVersion: number
+  lastSupportedVersion: number
+}
+
 export class Root {
   private readonly log: LogProvider
   private readonly fsal: FSAL
-  private readonly rootPath: string
+  public readonly rootPath: string
   private readonly rootDescriptor: AnyDescriptor
   private readonly _process: FSWatcher
   private readonly eventQueue: Array<{ eventName: ChokidarEvents, eventPath: string }>
@@ -116,6 +65,8 @@ export class Root {
   private readonly onChangeCallback: (rootPath: string) => void
   private readonly onUnlinkCallback: (rootPath: string) => void
   private isProcessingEvent: boolean
+  private currentVersion: number
+  private lastSupportedVersion: number
 
   constructor (
     descriptor: AnyDescriptor,
@@ -133,6 +84,16 @@ export class Root {
     this.onChangeCallback = callbacks.onChange
     this.onUnlinkCallback = callbacks.onUnlink
 
+    this.currentVersion = 0
+    this.lastSupportedVersion = 0
+
+    if (descriptor.type === 'directory' && descriptor.dirNotFoundFlag === true) {
+      // This root exclusively represents an "empty" directory, so attempting to
+      // "watch" its path will lead to errors, since the path does not exist.
+      return
+    }
+
+    // Now set up the watcher
     const options: WatchOptions = {
       useFsEvents: process.platform === 'darwin',
       ignored: ignoreDirs,
@@ -200,6 +161,7 @@ export class Root {
     } else if (isUnlink) {
       // Some file within the root (directory) has been removed
       this.changeQueue.push({ type: 'unlink', path: eventPath })
+      this.currentVersion++
     } else {
       // Change or add
       try {
@@ -216,6 +178,7 @@ export class Root {
           path: eventPath,
           descriptor
         })
+        this.currentVersion++
       } catch (err: any) {
         this.log.error(`[Workspace Provider] Could not process event ${eventName}:${eventPath}`, err)
       }
@@ -238,6 +201,53 @@ export class Root {
   }
 
   /**
+   * This function returns the required information to set up a listener that
+   * can sync the filetree represented by this root with any additional changes.
+   *
+   * @return  {InitialTreeData}  The initial tree data
+   */
+  public getInitialTreeData (): InitialTreeData {
+    return {
+      descriptor: this.rootDescriptor,
+      changes: this.changeQueue,
+      currentVersion: this.currentVersion,
+      lastSupportedVersion: this.lastSupportedVersion
+    }
+  }
+
+  /**
+   * Call this function with a version number to receive the changes that can be
+   * applied to a remote tree in order to bring it up to date with the current
+   * state of the file system. NOTE: If version indicates the receiver is so out
+   * of date that we do not have the necessary change set anymore to synchronize
+   * their remove state, this function will automatically return a set of
+   * initial tree data, making it simple for the receiver to re-initialize
+   * itself. This can happen if (a) the IPC channel is clogged (unlikely), or if
+   * (b) so many changes have happened that we had to roll over the version
+   * number (may happen with larger file trees).
+   *
+   * @param   {number}                              version  The version of the
+   *                                                         remote receiver
+   *
+   * @return  {ChangeDescriptor[]|InitialTreeData}           Either a set of
+   *                                                         changes (if the
+   *                                                         receiver is up-to-
+   *                                                         date), or an entire
+   *                                                         set of tree data,
+   *                                                         if the receiver is
+   *                                                         too outdated
+   */
+  public getChangesSince (version: number): ChangeDescriptor[]|InitialTreeData {
+    if (version < this.lastSupportedVersion || version > this.currentVersion) {
+      // The renderer is completely outdated, or the version string has rolled
+      // over. In both cases, the renderer has to re-initialize.
+      return this.getInitialTreeData()
+    } else {
+      return this.changeQueue.slice(0, version - this.lastSupportedVersion)
+    }
+  }
+
+  /**
    * This function ensures that the changeQueue does not exceed MAX_CHANGE_QUEUE
    * and merges the surplus events into the root descriptor tree.
    */
@@ -246,6 +256,7 @@ export class Root {
       const eventsToMerge = this.changeQueue.splice(0, this.changeQueue.length - MAX_CHANGE_QUEUE)
       // console.log('MERGING EVENTS INTO TREE:', eventsToMerge)
       mergeEventsIntoTree(eventsToMerge, this.rootDescriptor)
+      this.lastSupportedVersion = this.currentVersion - MAX_CHANGE_QUEUE
       // console.log(this.rootDescriptor)
     }
   }

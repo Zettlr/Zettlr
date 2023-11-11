@@ -113,6 +113,8 @@ import { OpenDocument, BranchNodeJSON, LeafNodeJSON } from '@dts/common/document
 import { EditorCommands } from '@dts/renderer/editor'
 import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-pipe'
 import { UpdateState } from '@providers/updates'
+import { useWorkspacesStore } from './pinia/index'
+import { mapStores } from 'pinia'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -196,6 +198,8 @@ export default defineComponent({
     }
   },
   computed: {
+    // Mount the store
+    ...mapStores(useWorkspacesStore),
     sidebarVisible: function (): boolean {
       return this.$store.state.config['window.sidebarVisible'] as boolean
     },
