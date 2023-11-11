@@ -14,6 +14,7 @@
 
 import windowRegister from '@common/modules/window-register'
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 // import { createStore } from 'vuex'
 import App from './App.vue'
 import createStore, { key as storeKey } from './store'
@@ -34,10 +35,15 @@ windowRegister()
 
 function afterRegister (): void {
   const appStore = createStore()
+  const pinia = createPinia()
 
   // Create the Vue app. We additionally use appStore, which exposes $store, and
   // PopupProvider, which exposes $showPopover, $togglePopover, and $closePopover
-  const app = createApp(App).use(appStore, storeKey).use(PopupProvider).mount('#app')
+  const app = createApp(App)
+    .use(appStore, storeKey)
+    .use(pinia)
+    .use(PopupProvider)
+    .mount('#app')
 
   document.addEventListener('dragover', function (event) {
     event.preventDefault()
