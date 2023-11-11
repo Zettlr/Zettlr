@@ -80,6 +80,7 @@
     "mermaid": "^10.2.3",
     "minimatch": "^9.0.1",
     "nodehun": "^3.0.2",
+    "pinia": "^2.1.7",
     "rehype-parse": "^8.0.4",
     "rehype-remark": "^9.1.2",
     "remark": "^14.0.3",
