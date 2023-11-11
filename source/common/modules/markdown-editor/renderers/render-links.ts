@@ -95,8 +95,7 @@ class LinkWidget extends WidgetType {
         h4.textContent = res.title
 
         const imgParaWrapper = document.createElement('div')
-        imgParaWrapper.style.display = 'flex'
-        imgParaWrapper.style.flexDirection = 'row'
+        imgParaWrapper.style.margin = '10px 0'
 
         if (res.image !== undefined) {
           const img = document.createElement('img')
@@ -105,11 +104,13 @@ class LinkWidget extends WidgetType {
           img.style.maxHeight = '100px'
           img.style.marginRight = '10px'
           img.style.marginBottom = '10px'
+          img.style.float = 'left'
           imgParaWrapper.appendChild(img)
         }
 
         if (res.summary !== undefined) {
           const para = document.createElement('p')
+          para.style.margin = '0'
           para.style.whiteSpace = 'pre-wrap'
           para.textContent = res.summary
           imgParaWrapper.appendChild(para)

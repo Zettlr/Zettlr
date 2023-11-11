@@ -25,6 +25,16 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
   system accent color on macOS and Windows, and Zettlr's brand green on Linux;
   themes do not provide an accent color anymore
 - Restored syntax highlighting for inline math code
+- Fixes an issue that would frequently may make the cursor appear to jump or a
+  dialog appearing warning of external changes (#4729; #4732)
+- Added some translations
+- Generating link previews no longer downloads the entire link target if the
+  content is not preview-able
+- Improved layout of link previews
+- Overly long summaries of link previews are now shortened
+- Project properties now adequately resolve the readers and writers of the
+  existing profiles, enabling the usage of profiles with extended
+  readers/writers (#4699)
 
 ## Under the Hood
 
