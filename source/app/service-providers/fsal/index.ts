@@ -1342,11 +1342,12 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<MDFileDescriptor>}           Resolves with the descriptor
    */
   public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    // DEBUG: DISABLED THIS AS IT NEEDS TO BE REMOVED DURING THE REFACTOR AT SOME POINT!
     // If we have the given file already loaded we don't have to load it again
-    const descriptor = this.find(absPath)
-    if (descriptor !== undefined && descriptor.type !== 'directory') {
-      return descriptor
-    }
+    // const descriptor = this.find(absPath)
+    // if (descriptor !== undefined && descriptor.type !== 'directory') {
+    //   return descriptor
+    // }
 
     if (isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
@@ -1402,10 +1403,11 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<DirDescriptor>}           The dir descriptor
    */
   public async getAnyDirectoryDescriptor (absPath: string, shallow: boolean = false): Promise<DirDescriptor> {
-    const descriptor = this.findDir(absPath)
-    if (descriptor !== undefined) {
-      return descriptor
-    }
+    // DEBUG: DISABLED THIS AS IT NEEDS TO BE REMOVED DURING THE REFACTOR AT SOME POINT!
+    // const descriptor = this.findDir(absPath)
+    // if (descriptor !== undefined) {
+    //   return descriptor
+    // }
 
     if (!isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
