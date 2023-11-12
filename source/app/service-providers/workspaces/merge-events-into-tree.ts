@@ -7,7 +7,7 @@ const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
 
 /**
  * This function takes a series of change events for the file trees and merges
- * those one after another into the provided tree, modifying it in place. NOTE:
+ * those one after another into the provided tree, returning the new tree. NOTE:
  * This requires that the events are actually accumulated for this tree;
  * providing another tree will lead to errors and inconsistencies. NOTE: This
  * function will also be imported by the renderer so DO NOT USE ANY MAIN PROCESS
@@ -15,20 +15,33 @@ const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
  *
  * @param   {ChangeDescriptor[]}  events  The list of changes
  * @param   {AnyDescriptor}       tree    The tree to merge the changes into
+ *
+ * @return  {AnyDescriptor}               The modified tree
  */
-export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescriptor): void {
+export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescriptor): AnyDescriptor {
+  let descriptorToReturn = tree
+
   for (const event of events) {
     if (event.type === 'add') {
       // Find the parent, and add the given descriptor to its children
-      const parent = locateByPath(tree, event.descriptor.dir)
+      const parent = locateByPath(descriptorToReturn, event.descriptor.dir)
       if (parent === undefined || parent.type !== 'directory') {
         throw new Error('Received an add event, but the tree descriptor did not contain its parent!')
       }
 
       // TODO: Sort the parent properly!!!
       parent.children.push(event.descriptor)
+    } else if (event.type === 'change' && event.path === descriptorToReturn.path) {
+      // The descriptor itself has changed (NOTE: We are checking both descriptors for type reasons)
+      if (event.descriptor.type === 'directory' && descriptorToReturn.type === 'directory') {
+        const existingChildren = descriptorToReturn.children
+        descriptorToReturn = event.descriptor
+        descriptorToReturn.children = existingChildren
+      } else {
+        descriptorToReturn = event.descriptor
+      }
     } else if (event.type === 'change') {
-      const parent = locateByPath(tree, event.descriptor.dir)
+      const parent = locateByPath(descriptorToReturn, event.descriptor.dir)
 
       if (parent === undefined || parent.type !== 'directory') {
         throw new Error('Received a change event, but the tree descriptor did not contain its parent!')
@@ -51,7 +64,7 @@ export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescri
       // NOTE: We cannot use path here since this function is also required in
       // renderer processes
       const dirname = event.path.substring(0, event.path.lastIndexOf(PATH_SEP))
-      const parent = locateByPath(tree, dirname)
+      const parent = locateByPath(descriptorToReturn, dirname)
       if (parent === undefined || parent.type !== 'directory') {
         throw new Error('Received an unlink event but could not find its parent!')
       }
@@ -65,4 +78,6 @@ export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescri
       parent.children.splice(idx, 1)
     }
   }
+
+  return descriptorToReturn
 }
