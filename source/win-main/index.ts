@@ -40,8 +40,8 @@ function afterRegister (): void {
   // Create the Vue app. We additionally use appStore, which exposes $store, and
   // PopupProvider, which exposes $showPopover, $togglePopover, and $closePopover
   const app = createApp(App)
-    .use(appStore, storeKey)
     .use(pinia)
+    .use(appStore, storeKey)
     .use(PopupProvider)
     .mount('#app')
 
