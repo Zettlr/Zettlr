@@ -80,7 +80,9 @@ import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
-import { MDFileDescriptor, CodeFileDescriptor, DirDescriptor, AnyDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
+import { MDFileDescriptor, CodeFileDescriptor, DirDescriptor, AnyDescriptor } from '@dts/common/fsal'
+import { useWorkspacesStore } from '../pinia'
+import { mapStores } from 'pinia'
 
 const ipcRenderer = window.ipc
 
@@ -139,11 +141,14 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useWorkspacesStore),
     platform: function () {
       return process.platform
     },
-    fileTree: function (): MaybeRootDescriptor[] {
-      return this.$store.state.fileTree
+    fileTree: function (): AnyDescriptor[] {
+      console.error('Workspace state has updated!')
+      return this.workspacesStore.roots.map(root => root.descriptor)
+      // return this.$store.state.fileTree
     },
     useH1: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('heading')
@@ -154,7 +159,7 @@ export default defineComponent({
     lastLeafId: function (): string {
       return this.$store.state.lastLeafId
     },
-    getFilteredTree: function (): MaybeRootDescriptor[] {
+    getFilteredTree: function (): AnyDescriptor[] {
       const q = String(this.filterQuery).trim().toLowerCase() // Easy access
 
       if (q === '') {
