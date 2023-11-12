@@ -6,8 +6,11 @@ import _ from 'lodash'
 import { mergeEventsIntoTree } from './merge-events-into-tree'
 
 // How many events do we keep in the change queue before merging them into the
-// file tree?
-const MAX_CHANGE_QUEUE = 10 // DEBUG
+// file tree? This number dictates how much memory a root will use up. The root
+// descriptor works as a "sink" where we can dump extraneous events into, so the
+// overall memory consumption will always be size of root + MAX_CHANGE_QUEUE
+// events x size of a single event
+const MAX_CHANGE_QUEUE = 100
 
 // chokidar's ignored-setting is compatible to anymatch, so we can
 // pass an array containing the standard dotted directory-indicators,
@@ -51,14 +54,13 @@ export interface InitialTreeData {
   descriptor: AnyDescriptor
   changes: ChangeDescriptor[]
   currentVersion: number
-  lastSupportedVersion: number
 }
 
 export class Root {
   private readonly log: LogProvider
   private readonly fsal: FSAL
   public readonly rootPath: string
-  private readonly rootDescriptor: AnyDescriptor
+  private rootDescriptor: AnyDescriptor
   private readonly _process: FSWatcher
   private readonly eventQueue: Array<{ eventName: ChokidarEvents, eventPath: string }>
   private readonly changeQueue: ChangeDescriptor[]
@@ -66,7 +68,6 @@ export class Root {
   private readonly onUnlinkCallback: (rootPath: string) => void
   private isProcessingEvent: boolean
   private currentVersion: number
-  private lastSupportedVersion: number
 
   constructor (
     descriptor: AnyDescriptor,
@@ -85,7 +86,6 @@ export class Root {
     this.onUnlinkCallback = callbacks.onUnlink
 
     this.currentVersion = 0
-    this.lastSupportedVersion = 0
 
     if (descriptor.type === 'directory' && descriptor.dirNotFoundFlag === true) {
       // This root exclusively represents an "empty" directory, so attempting to
@@ -133,12 +133,10 @@ export class Root {
     await this._process.close()
   }
 
-  async processNextEvent (): Promise<void> {
+  private async processNextEvent (): Promise<void> {
     if (this.isProcessingEvent) {
       return // Work sequentially through the event queue
     }
-
-    console.log('PROCESS')
 
     // Immediately lock the function
     this.isProcessingEvent = true
@@ -163,6 +161,7 @@ export class Root {
       this.changeQueue.push({ type: 'unlink', path: eventPath })
       this.currentVersion++
     } else {
+      console.log('Add or change event')
       // Change or add
       try {
         // Load directories "shallow", no recursive parsing here
@@ -210,8 +209,7 @@ export class Root {
     return {
       descriptor: this.rootDescriptor,
       changes: this.changeQueue,
-      currentVersion: this.currentVersion,
-      lastSupportedVersion: this.lastSupportedVersion
+      currentVersion: this.currentVersion
     }
   }
 
@@ -238,12 +236,13 @@ export class Root {
    *                                                         too outdated
    */
   public getChangesSince (version: number): ChangeDescriptor[]|InitialTreeData {
-    if (version < this.lastSupportedVersion || version > this.currentVersion) {
+    const lastSupportedVersion = this.currentVersion - this.changeQueue.length
+    if (version < lastSupportedVersion || version > this.currentVersion) {
       // The renderer is completely outdated, or the version string has rolled
       // over. In both cases, the renderer has to re-initialize.
       return this.getInitialTreeData()
     } else {
-      return this.changeQueue.slice(0, version - this.lastSupportedVersion)
+      return this.changeQueue.slice(version - lastSupportedVersion)
     }
   }
 
@@ -254,10 +253,7 @@ export class Root {
   afterProcessEvent (): void {
     if (this.changeQueue.length > MAX_CHANGE_QUEUE) {
       const eventsToMerge = this.changeQueue.splice(0, this.changeQueue.length - MAX_CHANGE_QUEUE)
-      // console.log('MERGING EVENTS INTO TREE:', eventsToMerge)
-      mergeEventsIntoTree(eventsToMerge, this.rootDescriptor)
-      this.lastSupportedVersion = this.currentVersion - MAX_CHANGE_QUEUE
-      // console.log(this.rootDescriptor)
+      this.rootDescriptor = mergeEventsIntoTree(eventsToMerge, this.rootDescriptor)
     }
   }
 }
