@@ -42,7 +42,6 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
   })
     .then((response: InitialTreeData[]) => {
       for (const data of response) {
-        console.log('Processing workspace', data.descriptor.path)
         const { descriptor, changes, currentVersion } = data
         mergeEventsIntoTree(changes, descriptor)
         roots.value.push({ descriptor, version: currentVersion })
@@ -51,6 +50,7 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
     .catch(err => console.error(`Could not initialize workspacesStore: ${err.message as string}`))
 
   ipcRenderer.on('workspace-changed', (event, rootPath: string) => {
+    console.log('Received workspace-changed event')
     if (!rootPaths.value.includes(rootPath)) {
       return // Root not loaded, uninteresting for us.
     }
@@ -62,6 +62,8 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
       return
     }
 
+    const idx = roots.value.indexOf(root)
+
     ipcRenderer.invoke('workspace-provider', {
       command: 'get-changes-since',
       payload: { rootPath, version: root.version }
@@ -69,14 +71,19 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
       .then((response: InitialTreeData|ChangeDescriptor[]) => {
         if (Array.isArray(response)) {
           // We have received a regular amount of updates
-          root.version = root.version + response.length
           console.log('Merging events...!')
-          mergeEventsIntoTree(response, root.descriptor)
+          console.log('Current version:', root.version, 'New version:', root.version + response.length)
+          roots.value.splice(idx, 1, {
+            descriptor: mergeEventsIntoTree(response, root.descriptor),
+            version: root.version + response.length
+          })
         } else {
+          console.log('Descriptor was outdated', response)
           // We have been outdated -> replace the root
-          root.descriptor = response.descriptor
-          root.version = response.currentVersion
-          mergeEventsIntoTree(response.changes, root.descriptor)
+          roots.value.splice(idx, 1, {
+            descriptor: mergeEventsIntoTree(response.changes, response.descriptor),
+            version: response.currentVersion
+          })
         }
       })
       .catch(err => console.error(`Could not fetch updates for root path ${rootPath}: ${err.message as string}`))
