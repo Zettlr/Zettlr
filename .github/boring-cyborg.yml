@@ -29,12 +29,19 @@ firstPRMergeComment: >
   There we go, your PR got merged! Welcome to the party! 🔥
 
 # Comment to be posted to on first time issues
-firstIssueWelcomeComment: >
+firstIssueWelcomeComment: |
   Thanks so much for opening up your first issue here on the repository! 🎉
   We would like to warmly welcome you to the community behind the app! ☺️
   We'll check in soon and have a look at your issue. In the meantime, you can
   check your issue and make sure it aligns with our contribution guidelines!
   Here's the comprehensive list:
+
+  > NOTE: Please do not share screen captures of buggy behavior on YouTube.
+  > The recent, predatory anti-adblock behavior of YouTube effectively locks
+  > people that do not use an adblocker out of the platform, which includes
+  > maintainers. In addition, bug report videos on YouTube appear in searches
+  > on the platform even after the bug has been fixed, discouraging potential
+  > users from giving the app a try.
 
   ## Enhancements
 
