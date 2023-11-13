@@ -90,6 +90,8 @@ import FileTree from './file-tree.vue'
 import FileList from './file-list.vue'
 import { trans } from '@common/i18n-renderer'
 import { nextTick, defineComponent } from 'vue'
+import { mapStores } from 'pinia'
+import { useOpenDirectoryStore } from '../pinia'
 
 const ipcRenderer = window.ipc
 
@@ -117,11 +119,13 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useOpenDirectoryStore),
     /**
      * Mapper functions to map state properties onto the file manager.
      */
     selectedDirectory: function () {
-      return this.$store.state.selectedDirectory
+      return this['open-directoryStore'].openDirectory
+      // return this.$store.state.selectedDirectory
     },
     filterPlaceholder: function () {
       return trans('Filter …')

@@ -22,8 +22,9 @@ import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
 import PopoverFileProps from './PopoverFileProps.vue'
 import PopoverDirProps from './PopoverDirProps.vue'
-
+import { mapStores } from 'pinia'
 import { nextTick } from 'vue'
+import { useOpenDirectoryStore } from '../../pinia'
 
 const ipcRenderer = window.ipc
 
@@ -44,6 +45,7 @@ export default {
     }
   },
   computed: {
+    ...mapStores(useOpenDirectoryStore),
     isDirectory: function () {
       return this.obj.type === 'directory'
     },
@@ -51,7 +53,8 @@ export default {
       return this.$store.getters.lastLeafActiveFile()
     },
     selectedDir: function () {
-      return this.$store.state.selectedDirectory
+      return this['open-directoryStore'].openDirectory
+      // return this.$store.state.selectedDirectory
     }
   },
   watch: {

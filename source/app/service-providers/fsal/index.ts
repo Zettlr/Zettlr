@@ -831,6 +831,7 @@ export default class FSAL extends ProviderContract {
     return false
   }
 
+  // TODO: Move the open directory management to the documents provider!
   public set openDirectory (dirObject: DirDescriptor | null) {
     this._state.openDirectory = dirObject
     this._emitter.emit('fsal-state-changed', 'openDirectory')
@@ -842,6 +843,7 @@ export default class FSAL extends ProviderContract {
     broadcastIpcMessage('fsal-state-changed', 'openDirectory')
   }
 
+  // TODO: Move the open directory management to the documents provider!
   public get openDirectory (): DirDescriptor|null {
     return this._state.openDirectory
   }
