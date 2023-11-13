@@ -37,11 +37,10 @@ firstIssueWelcomeComment: |
   Here's the comprehensive list:
 
   > NOTE: Please do not share screen captures of buggy behavior on YouTube.
-  > The recent, predatory anti-adblock behavior of YouTube effectively locks
-  > people that do not use an adblocker out of the platform, which includes
-  > maintainers. In addition, bug report videos on YouTube appear in searches
-  > on the platform even after the bug has been fixed, discouraging potential
-  > users from giving the app a try.
+  > If you have uploaded a video on YouTube and linked it already, don't
+  > worry! But, we would like to ask you to remove the video from YouTube
+  > and upload it directly to GitHub instead, by editing your comment.
+  > [Read more here](https://github.com/Zettlr/Zettlr/discussions/4783).
 
   ## Enhancements
 
