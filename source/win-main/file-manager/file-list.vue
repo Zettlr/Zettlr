@@ -6,7 +6,6 @@
     aria-label="File List"
     v-bind:class="{ hidden: !isVisible }"
     v-bind:aria-hidden="!isVisible"
-    v-bind:data-hash="selectedDirectoryHash"
     v-on:focus="onFocusHandler"
     v-on:blur="activeDescriptor = null"
   >
@@ -99,6 +98,8 @@ import matchQuery from './util/match-query'
 
 import { nextTick, defineComponent } from 'vue'
 import { MaybeRootDescriptor, AnyDescriptor } from '@dts/common/fsal'
+import { useOpenDirectoryStore } from '../pinia'
+import { mapStores } from 'pinia'
 
 const ipcRenderer = window.ipc
 
@@ -128,15 +129,10 @@ export default defineComponent({
     }
   },
   computed: {
-    selectedDirectory: function (): any {
-      return this.$store.state.selectedDirectory
-    },
-    selectedDirectoryHash: function (): string {
-      if (this.selectedDirectory === null) {
-        return ''
-      } else {
-        return this.selectedDirectory.hash
-      }
+    ...mapStores(useOpenDirectoryStore),
+    selectedDirectory: function () {
+      return this['open-directoryStore'].openDirectory
+      // return this.$store.state.selectedDirectory
     },
     noResultsMessage: function (): string {
       return trans('No results')
@@ -158,12 +154,12 @@ export default defineComponent({
       }
     },
     getDirectoryContents: function (): Array<{ id: number, props: MaybeRootDescriptor}> {
-      if (this.$store.state.selectedDirectory === null) {
+      if (this.selectedDirectory === null) {
         return []
       }
 
       const ret: Array<{ id: number, props: MaybeRootDescriptor}> = []
-      const items = objectToArray(this.$store.state.selectedDirectory, 'children') as AnyDescriptor[]
+      const items = objectToArray(this.selectedDirectory, 'children') as AnyDescriptor[]
       for (let i = 0; i < items.length; i++) {
         if (items[i].type !== 'other') {
           ret.push({

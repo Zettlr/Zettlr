@@ -20,6 +20,7 @@ import App from './App.vue'
 import createStore, { key as storeKey } from './store'
 import PopupProvider from './popup-provider'
 import { DP_EVENTS } from '@dts/common/documents'
+import { useOpenDirectoryStore } from './pinia'
 
 const ipcRenderer = window.ipc
 
@@ -180,7 +181,7 @@ function afterRegister (): void {
   // Further shortcuts we have to listen to
   ipcRenderer.on('shortcut', (event, command) => {
     // Retrieve the correct contexts first
-    const dirDescriptor = app.$store.state.selectedDirectory
+    const dirDescriptor = useOpenDirectoryStore().openDirectory
     const fileDescriptor = app.$store.state.activeFile
 
     if (command === 'new-dir') {
