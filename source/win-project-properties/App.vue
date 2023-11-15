@@ -100,6 +100,7 @@ import { DirDescriptor } from '@dts/common/fsal'
 import { WindowTab } from '@dts/renderer/window'
 import { PandocProfileMetadata } from '@dts/common/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
+import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 
 const ipcRenderer = window.ipc
 
@@ -129,7 +130,7 @@ export default defineComponent({
       tabs: [
         {
           id: 'formats-control',
-          label: 'General',
+          label: trans('General'),
           icon: 'cog',
           controls: 'formats-panel'
         },
@@ -149,10 +150,22 @@ export default defineComponent({
     },
     exportFormatList: function (): ExportProfile[] {
       // We need to return a list of { selected: boolean, name: string, conversion: string }
-      return this.profiles.filter(e => SUPPORTED_READERS.includes(e.reader)).map(e => {
-        const reader = e.reader in PANDOC_READERS ? PANDOC_READERS[e.reader] : e.reader
-        const writer = e.writer in PANDOC_WRITERS ? PANDOC_WRITERS[e.writer] : e.writer
-        const conversionString = (e.isInvalid) ? 'Invalid' : [ reader, writer ].join(' → ')
+      return this.profiles.filter(e => {
+        return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(e.reader))
+      }).map(e => {
+        const plainReader = getPlainPandocReaderWriter(e.reader)
+        const plainWriter = getPlainPandocReaderWriter(e.writer)
+
+        const hasReaderExtensions = plainReader !== e.reader
+        const hasWriterExtensions = plainWriter !== e.writer
+
+        const reader = plainReader in PANDOC_READERS ? PANDOC_READERS[plainReader] : plainReader
+        const writer = plainWriter in PANDOC_WRITERS ? PANDOC_WRITERS[plainWriter] : plainWriter
+
+        const readerFull = hasReaderExtensions ? reader + ` (${e.reader})` : reader
+        const writerFull = hasWriterExtensions ? writer + ` (${e.writer})` : writer
+
+        const conversionString = (e.isInvalid) ? 'Invalid' : [ readerFull, writerFull ].join(' → ')
 
         return {
           selected: this.selectedExportProfiles.includes(e.name),

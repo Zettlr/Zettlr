@@ -92,6 +92,12 @@ interface Document {
    */
   lastSavedVersion: number
   /**
+   * This is a duplicate of whatever has been last written to disk. It is used
+   * to double check whether a change event actually changed the content of a
+   * file or if the file remains the same on disk as in buffer.
+   */
+  lastSavedContent: string
+  /**
    * Holds all updates between minimumVersion and currentVersion in a granular
    * form.
    */
@@ -605,6 +611,7 @@ export default class DocumentManager extends ProviderContract {
       currentVersion: 0,
       minimumVersion: 0,
       lastSavedVersion: 0,
+      lastSavedContent: content,
       updates: [],
       document: Text.of(content.split(descriptor.linefeed)),
       lastSavedCharCount: descriptor.type === 'file' ? descriptor.charCount : 0,
@@ -936,6 +943,15 @@ export default class DocumentManager extends ProviderContract {
     // (e.g. OneDrive and Box) from having text appear to "jump" from time to time.
     if (modtime <= ourModtime) {
       return // Nothing to do
+    }
+
+    // ... however, some cloud services may still emit additional change events
+    // that merely change attributes, but not the content. We handle this case
+    // next
+    const diskContents = await this._app.fsal.loadAnySupportedFile(doc.descriptor.path)
+
+    if (diskContents === doc.lastSavedContent) {
+      return
     }
 
     const isModified = doc.lastSavedVersion !== doc.currentVersion
@@ -1394,6 +1410,7 @@ export default class DocumentManager extends ProviderContract {
     // 4. The save finishes and undos the modifications
     const content = doc.document.toString()
     doc.lastSavedVersion = doc.currentVersion
+    doc.lastSavedContent = content
 
     if (doc.descriptor.type === 'file') {
       // In case of an MD File increase the word or char count
