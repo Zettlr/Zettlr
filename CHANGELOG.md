@@ -30,7 +30,7 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
 - The GraphView does now support multi-window, so clicking a link will open it in
   the last focused window. If the file is already open in a leaf, that file will
   be in that leaf, otherwise it will open the file in the last focused leaf.
-- Shift+Click in GraphView will force the document to be opened in a new tab.
+- Alt+Click in GraphView will force the document to be opened in a new tab.
 
 
 ## Under the Hood

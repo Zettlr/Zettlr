@@ -794,7 +794,7 @@ export default class DocumentManager extends ProviderContract {
     // gotten a specific request to open it in a *new* tab
     const activeFile = leaf.tabMan.activeFile
     const ret = leaf.tabMan.openFile(filePath)
-    const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs')) || newTab === undefined
+    const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
 
     if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)

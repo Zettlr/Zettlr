@@ -455,7 +455,7 @@ export default defineComponent({
                   command: 'open-file',
                   payload: {
                     path: vertex.id,
-                    newTab: (event.shiftKey === true) ? true : undefined
+                    newTab: (event.altKey === true) ? true : undefined
                   }
                 }).catch(err => console.error(err))
               })
