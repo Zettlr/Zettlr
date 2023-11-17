@@ -92,7 +92,8 @@ import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
 import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { mapStores } from 'pinia'
+import { useWorkspacesStore } from './pinia'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -124,6 +125,7 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useWorkspacesStore),
     useH1: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('heading')
     },
@@ -345,7 +347,7 @@ export default defineComponent({
     },
     getTabText: function (doc: OpenDocument) {
       // Returns a more appropriate tab text based on the user settings
-      const file = this.$store.getters.file(doc.path) as MDFileDescriptor|CodeFileDescriptor|undefined
+      const file = this.workspacesStore.getFile(doc.path)
       if (file === undefined) {
         return path.basename(doc.path)
       }
@@ -460,8 +462,8 @@ export default defineComponent({
       })
     },
     handleContextMenu: function (event: MouseEvent, doc: OpenDocument) {
-      const file = this.$store.getters.file(doc.path) as MDFileDescriptor|CodeFileDescriptor|undefined
-      if (file === undefined) {
+      const file = this.workspacesStore.getFile(doc.path)
+      if (file === undefined || file.type === 'other') {
         return
       }
 

@@ -17,6 +17,7 @@ import type { ChangeDescriptor, InitialTreeData } from '@providers/workspaces/ro
 import { mergeEventsIntoTree } from '@providers/workspaces/merge-events-into-tree'
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import locateByPath from '@providers/fsal/util/locate-by-path'
 
 const ipcRenderer = window.ipc
 
@@ -24,6 +25,15 @@ type AnyDescriptor = DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFile
 export const useWorkspacesStore = defineStore('workspaces', () => {
   const roots = ref<Array<{ descriptor: AnyDescriptor, version: number }>>([])
   const rootPaths = computed<string[]>(() => { return roots.value.map(root => root.descriptor.path) })
+  const rootDescriptors = computed<AnyDescriptor[]>(() => { return roots.value.map(root => root.descriptor) })
+  const getFile = (targetPath: string): MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor|undefined => {
+    const descriptor = locateByPath(rootDescriptors.value, targetPath)
+    if (descriptor !== undefined && descriptor.type === 'directory') {
+      return undefined
+    } else {
+      return descriptor
+    }
+  }
 
   // TODO: In the future, to only get a select set of workspaces, use the window
   // ID to query the document provider to provide us here with the actual root
@@ -82,5 +92,5 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
       .catch(err => console.error(`Could not fetch updates for root path ${rootPath}: ${err.message as string}`))
   })
 
-  return { roots, rootPaths }
+  return { roots, rootPaths, rootDescriptors, getFile }
 })

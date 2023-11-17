@@ -67,6 +67,8 @@ import { defineComponent } from 'vue'
 import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { TagRecord } from '@providers/tags'
+import { mapStores } from 'pinia'
+import { useWorkspacesStore } from '../pinia'
 
 export interface RelatedFile {
   file: string
@@ -91,6 +93,7 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useWorkspacesStore),
     relatedFilesLabel: function (): string {
       return trans('Related files')
     },
@@ -257,12 +260,17 @@ export default defineComponent({
       ]
     },
     beginDragRelatedFile: function (event: DragEvent, filePath: string) {
-      const descriptor = this.$store.getters.file(filePath)
+      const descriptor = this.workspacesStore.getFile(filePath)
+
+      if (descriptor === undefined) {
+        console.error('Cannot begin dragging related file: Descriptor not found')
+        return
+      }
 
       event.dataTransfer?.setData('text/x-zettlr-file', JSON.stringify({
         type: descriptor.type, // Can be file, code, or directory
         path: descriptor.path,
-        id: descriptor.id // Convenience
+        id: descriptor.type === 'file' ? descriptor.id : '' // Convenience
       }))
     },
     requestFile: function (event: MouseEvent, filePath: string) {
@@ -278,8 +286,8 @@ export default defineComponent({
         .catch(e => console.error(e))
     },
     getRelatedFileName: function (filePath: string) {
-      const descriptor = this.$store.getters.file(filePath)
-      if (descriptor === undefined) {
+      const descriptor = this.workspacesStore.getFile(filePath)
+      if (descriptor === undefined || descriptor.type !== 'file') {
         return filePath
       }
 

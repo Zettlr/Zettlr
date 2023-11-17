@@ -118,21 +118,6 @@ function afterRegister (): void {
   })
 
   // -----------------------------------------------------------------------------
-  let openDirectoryLock = false
-
-  // Listen for broadcasts from main in order to update the filetree
-  ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
-    if (kind === 'openDirectory') {
-      if (openDirectoryLock) {
-        return
-      }
-
-      openDirectoryLock = true
-      app.$store.dispatch('updateOpenDirectory')
-        .catch(e => console.error(e))
-        .finally(() => { openDirectoryLock = false })
-    }
-  })
 
   ipcRenderer.on('targets-provider', (event, what: string) => {
     if (what === 'writing-targets-updated') {
@@ -149,10 +134,6 @@ function afterRegister (): void {
   })
 
   // Initial update
-  openDirectoryLock = true
-  app.$store.dispatch('updateOpenDirectory')
-    .catch(e => console.error(e))
-    .finally(() => { openDirectoryLock = false })
   app.$store.dispatch('documentTree', { event: 'init', context: { windowId } })
     .catch(err => console.error(err))
   app.$store.dispatch('updateModifiedFiles')

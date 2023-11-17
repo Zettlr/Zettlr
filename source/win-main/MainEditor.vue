@@ -47,6 +47,7 @@ import { getBibliographyForDescriptor as getBibliography } from '@common/util/ge
 import { EditorSelection } from '@codemirror/state'
 import { TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
+import { useWorkspacesStore } from './pinia'
 
 const ipcRenderer = window.ipc
 const path = window.path
@@ -307,8 +308,10 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   currentEditor?.replaceSelection(textToInsert)
 })
 
+const workspacesStore = useWorkspacesStore()
+
 const fsalFiles = computed<MDFileDescriptor[]>(() => {
-  const tree = store.state.fileTree
+  const tree = workspacesStore.rootDescriptors
   const files = []
 
   for (const item of tree) {
