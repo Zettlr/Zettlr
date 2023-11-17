@@ -10,6 +10,7 @@
         'root': isRoot
       }"
       v-bind:data-id="obj.type === 'file' ? obj.id : ''"
+      v-bind:data-path="obj.path"
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"

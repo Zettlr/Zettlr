@@ -146,7 +146,6 @@ export default defineComponent({
       return process.platform
     },
     fileTree: function (): AnyDescriptor[] {
-      console.error('Workspace state has updated!')
       return this.workspacesStore.roots.map(root => root.descriptor)
       // return this.$store.state.fileTree
     },
