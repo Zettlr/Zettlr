@@ -30,7 +30,6 @@ import updateOpenDirectoryMutation from './mutations/update-open-directory'
 import documentTreeMutation from './mutations/document-tree'
 
 // Import Actions
-import filetreeUpdateAction from './actions/filetree-update'
 import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
@@ -55,10 +54,6 @@ export interface ZettlrState {
    * Contains the full file tree that is loaded into the app
    */
   fileTree: MaybeRootDescriptor[]
-  /**
-   * Contains the last update timestamp from main
-   */
-  lastFiletreeUpdate: number
   /**
    * Contains a full document tree managed by this window
    */
@@ -147,7 +142,6 @@ function getConfig (): StoreOptions<ZettlrState> {
         paneStructure: { type: 'leaf', id: '', openFiles: [], activeFile: null },
         paneData: [],
         fileTree: [],
-        lastFiletreeUpdate: 0,
         activeFile: null,
         uncollapsedDirectories: [],
         selectedDirectory: null,
@@ -224,9 +218,6 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateConfig: function (state, option) {
         state.config[option] = window.config.get(option)
       },
-      lastFiletreeUpdate: function (state, payload) {
-        state.lastFiletreeUpdate = payload
-      },
       updateModifiedFiles: function (state, modifiedDocuments: string[]) {
         state.modifiedDocuments = modifiedDocuments
       },
@@ -266,7 +257,6 @@ function getConfig (): StoreOptions<ZettlrState> {
       removeFromFiletree: removeFromFiletreeMutation
     },
     actions: {
-      filetreeUpdate: filetreeUpdateAction,
       updateOpenDirectory: updateOpenDirectoryAction,
       lastLeafId: async function (ctx, lastLeafId: string) {
         ctx.commit('lastLeafId', lastLeafId)

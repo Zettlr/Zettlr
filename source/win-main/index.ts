@@ -118,21 +118,11 @@ function afterRegister (): void {
   })
 
   // -----------------------------------------------------------------------------
-  let filetreeUpdateLock = false
   let openDirectoryLock = false
 
   // Listen for broadcasts from main in order to update the filetree
   ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
-    if (kind === 'filetree') {
-      if (filetreeUpdateLock) {
-        return
-      }
-
-      filetreeUpdateLock = true
-      app.$store.dispatch('filetreeUpdate')
-        .catch(e => console.error(e))
-        .finally(() => { filetreeUpdateLock = false })
-    } else if (kind === 'openDirectory') {
+    if (kind === 'openDirectory') {
       if (openDirectoryLock) {
         return
       }
@@ -159,11 +149,7 @@ function afterRegister (): void {
   })
 
   // Initial update
-  filetreeUpdateLock = true
   openDirectoryLock = true
-  app.$store.dispatch('filetreeUpdate')
-    .catch(e => console.error(e))
-    .finally(() => { filetreeUpdateLock = false })
   app.$store.dispatch('updateOpenDirectory')
     .catch(e => console.error(e))
     .finally(() => { openDirectoryLock = false })
