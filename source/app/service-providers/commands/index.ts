@@ -121,8 +121,6 @@ export default class CommandProvider extends ProviderContract {
     // wouldn't make sense.
     if (command === 'get-statistics-data') {
       return this._app.fsal.statistics
-    } else if (command === 'get-filetree-events') {
-      return this._app.fsal.filetreeHistorySince(payload)
     } else if (command === 'get-descriptor') {
       if (isFile(payload)) {
         return await this._app.fsal.getDescriptorForAnySupportedFile(payload)

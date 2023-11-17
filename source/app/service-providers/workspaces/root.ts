@@ -1,9 +1,9 @@
 import type LogProvider from '@providers/log'
 import type FSAL from '@providers/fsal'
 import type { DirDescriptor, MDFileDescriptor, CodeFileDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
-import { FSWatcher, type WatchOptions } from 'chokidar'
 import _ from 'lodash'
 import { mergeEventsIntoTree } from './merge-events-into-tree'
+import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
 
 // How many events do we keep in the change queue before merging them into the
 // file tree? This number dictates how much memory a root will use up. The root
@@ -11,18 +11,6 @@ import { mergeEventsIntoTree } from './merge-events-into-tree'
 // overall memory consumption will always be size of root + MAX_CHANGE_QUEUE
 // events x size of a single event
 const MAX_CHANGE_QUEUE = 100
-
-// chokidar's ignored-setting is compatible to anymatch, so we can
-// pass an array containing the standard dotted directory-indicators,
-// directories that should be ignored and a function that returns true
-// for all files that are _not_ in the filetypes list (whitelisting)
-// Further reading: https://github.com/micromatch/anymatch
-const ignoreDirs = [
-  // Ignore dot-dirs/files, except .git (to detect changes to possible
-  // git-repos) and .ztr-files (which contain, e.g., directory settings)
-  // /(?:^|[/\\])\.(?!git|ztr-.+).+/ // /(^|[/\\])\../
-  /(?:^|[/\\])\.(?!git$|ztr-[^\\/]+$).+/
-]
 
 interface AddEvent {
   type: 'add'
@@ -61,7 +49,7 @@ export class Root {
   private readonly fsal: FSAL
   public readonly rootPath: string
   private rootDescriptor: AnyDescriptor
-  private readonly _process: FSWatcher
+  private readonly _process: FSALWatchdog
   private readonly eventQueue: Array<{ eventName: ChokidarEvents, eventPath: string }>
   private readonly changeQueue: ChangeDescriptor[]
   private readonly onChangeCallback: (rootPath: string) => void
@@ -93,25 +81,9 @@ export class Root {
       return
     }
 
-    // Now set up the watcher
-    const options: WatchOptions = {
-      useFsEvents: process.platform === 'darwin',
-      ignored: ignoreDirs,
-      persistent: true,
-      ignoreInitial: true, // Do not track the initial watch as changes
-      followSymlinks: true, // Follow symlinks
-      ignorePermissionErrors: true, // In the worst case one has to reboot the software, but so it looks nicer.
+    this._process = this.fsal.watchPath(this.rootPath)
 
-      // Chokidar should always be using fsevents, but we will be leaving this
-      // in here both in case something happens in the future, and for nostalgic
-      // reasons.
-      interval: 5000,
-      binaryInterval: 5000
-    }
-
-    this._process = new FSWatcher(options)
-
-    this._process.on('all', (eventName, eventPath) => {
+    this._process.on('change', (eventName, eventPath) => {
       this.eventQueue.push({ eventName, eventPath })
 
       if (this.isProcessingEvent) {
@@ -123,14 +95,10 @@ export class Root {
           this.log.error(`[Workspace Provider] Could not handle event ${eventName}:${eventPath}`, err)
         })
     })
-
-    // Watch this root
-    this._process.add(this.rootPath)
   }
 
   async prepareShutdown (): Promise<void> {
-    this._process.unwatch(this.rootPath)
-    await this._process.close()
+    await this._process.shutdown()
   }
 
   private async processNextEvent (): Promise<void> {
