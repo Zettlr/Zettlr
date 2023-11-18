@@ -20,6 +20,7 @@ import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
 
 import type LogProvider from '@providers/log'
 import type ConfigProvider from '@providers/config'
+import path from 'path'
 
 type ChokidarEvents = 'add'|'addDir'|'change'|'unlink'|'unlinkDir'
 
@@ -105,14 +106,32 @@ export default class FSALWatchdog {
   /**
    * Listens to events from the watcher process.
    *
-   * @param   {change}          channel     The change channel
-   * @param   {ChokidarEvents}  eventName   The event type
-   * @param   {string}          eventPath   The triggering path
+   * @param   {change}    channel  The change channel
+   * @param   {Function}  report   A reporter that gets called with eventName and eventPath
    */
-  public on (channel: 'change', callback: (eventName: ChokidarEvents, eventPath: string) => void): any {
+  public on (channel: 'change', report: (eventName: ChokidarEvents, eventPath: string) => void): any {
     this.process.on('all', (event: ChokidarEvents, p: string) => {
-      this._logger.info(`[WATCHDOG] Emitting event: ${event}:${p}`)
-      callback(event, p)
+      const basename = path.basename(p)
+      const dirname = path.dirname(p)
+
+      if (basename !== '.git' && dirname.includes('.git')) {
+        this._logger.verbose(`Ignoring changes within a .git directory: ${p}`)
+        return
+      }
+
+      // Specials: .git and .ztr-directory
+      if (basename === '.git') {
+        // We basically treat .git as a file, not a directory (see above).
+        this._logger.info(`[WATCHDOG] Emitting event (.git): change:${dirname}`)
+        report('change', dirname)
+      } else if (basename === '.ztr-directory') {
+        // Even on add or unlink, it's strictly speaking a change for the dir
+        this._logger.info(`[WATCHDOG] Emitting event (.ztr-directory): change:${dirname}`)
+        report('change', dirname)
+      } else {
+        this._logger.info(`[WATCHDOG] Emitting event: ${event}:${p}`)
+        report(event, p)
+      }
     })
   }
 
