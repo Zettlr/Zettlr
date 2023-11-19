@@ -32,7 +32,7 @@ export default class SetOpenDirectory extends ZettlrCommand {
 
     // Now send it back (the GUI should by itself filter out the files)
     if (dir !== undefined) {
-      this._app.fsal.openDirectory = dir
+      this._app.documents.setOpenDirectory(dir.path)
     } else {
       this._app.log.error('Could not find directory', dirPath)
       this._app.windows.prompt({

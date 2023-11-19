@@ -381,25 +381,8 @@ export async function createDirectory (
  * @param   {any}            options    Options, containing a name and content property
  * @param   {FSALCache}      cache      The FSAL cache to cache the resulting file
  */
-export async function createFile (
-  dirObject: DirDescriptor,
-  options: { name: string, content: string, type: 'code'|'file' },
-  cache: FSALCache,
-  parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[]
-): Promise<void> {
-  const filename = options.name
-  const content = options.content
-  const fullPath = path.join(dirObject.path, filename)
-  await fs.writeFile(fullPath, content)
-  if (hasCodeExt(fullPath)) {
-    const file = await FSALCodeFile.parse(fullPath, cache, false)
-    dirObject.children.push(file)
-  } else {
-    const file = await FSALFile.parse(fullPath, cache, parser, false)
-    dirObject.children.push(file)
-  }
-  sortChildren(dirObject, sorter)
+export async function createFile (filePath: string, content: string): Promise<void> {
+  await fs.writeFile(filePath, content)
 }
 
 /**

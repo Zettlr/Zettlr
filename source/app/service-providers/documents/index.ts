@@ -176,6 +176,8 @@ export default class DocumentManager extends ProviderContract {
 
   private _shuttingDown: boolean
 
+  private openDirectory: string|null
+
   constructor (private readonly _app: AppServiceContainer) {
     super()
 
@@ -188,6 +190,7 @@ export default class DocumentManager extends ProviderContract {
     this._remoteChangeDialogShownFor = []
     this.documents = []
     this._shuttingDown = false
+    this.openDirectory = null
 
     const options: chokidar.WatchOptions = {
       persistent: true,
@@ -547,6 +550,21 @@ export default class DocumentManager extends ProviderContract {
     // which will result in a crash report appearing on macOS.
     await this._watcher.close()
     this._config.shutdown()
+  }
+
+  public setOpenDirectory (directory: string | null): void {
+    this.openDirectory = directory
+    this._emitter.emit('documents-provider', 'openDirectory')
+    if (this.openDirectory === null) {
+      this._app.config.set('openDirectory', null)
+    } else {
+      this._app.config.set('openDirectory', this.openDirectory)
+    }
+    broadcastIpcMessage('documents-provider', 'openDirectory')
+  }
+
+  public getOpenDirectory (): string|null {
+    return this.openDirectory
   }
 
   private broadcastEvent (event: DP_EVENTS, context?: DocumentsUpdateContext): void {

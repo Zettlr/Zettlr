@@ -66,7 +66,8 @@ export default class DirNew extends ZettlrCommand {
     // application of the changes, so all we have to do is set the directory
     // as the new current directory.
     let newDirPath = path.join(sourceDir.path, sanitizedName)
-    this._app.fsal.openDirectory = this._app.fsal.findDir(newDirPath) ?? null
+    // TODO: Make sure the directory actually exists
+    this._app.documents.setOpenDirectory(newDirPath) // = this._app.fsal.findDir(newDirPath) ?? null
 
     return true
   }

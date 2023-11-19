@@ -63,20 +63,19 @@ export default class FileNew extends ZettlrCommand {
       return
     }
 
-    let dir = this._app.fsal.openDirectory ?? undefined
-
-    if (arg?.path !== undefined) {
-      dir = this._app.fsal.findDir(arg.path)
-    }
-
+    let dirpath = this._app.documents.getOpenDirectory()
     let isFallbackDir = false
-    if (dir === undefined) {
+    if (dirpath === null && arg?.path !== undefined) {
+      dirpath = arg.path
+    } else if (dirpath === null) {
       // There is no directory we could salvage, so choose a default one: the
       // documents directory. Displaying the file choosing dialog should never
       // fail because we can't decide on a directory.
-      dir = await this._app.fsal.getAnyDirectoryDescriptor(app.getPath('documents'))
       isFallbackDir = true
+      dirpath = app.getPath('documents')
     }
+
+    let dir = await this._app.fsal.getAnyDirectoryDescriptor(dirpath)
 
     // Make sure we have a filename and have the user confirm this if applicable
     // Also, if the user does not want to be prompted BUT we had to use the

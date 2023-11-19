@@ -44,11 +44,39 @@ export interface InitialTreeData {
   currentVersion: number
 }
 
+/**
+ * Small utility function that extracts the given property from all the file
+ * descriptors. `prop` must be a key on MDFileDescriptor.
+ *
+ * @param   {AnyDescriptor}            root  The tree root
+ * @param   {Key}                      prop  The property to extract
+ *
+ * @return  {Array<string, Type>}        A list of filename->property mappings
+ */
+function extractFromFileDescriptors<Key extends keyof MDFileDescriptor, Type = MDFileDescriptor[Key]> (root: AnyDescriptor, prop: Key): Array<[string, Type]> {
+  if (root.type === 'directory') {
+    const links = []
+    for (const child of root.children) {
+      links.push(...extractFromFileDescriptors(child, prop))
+    }
+    return links
+  } else if (root.type === 'file') {
+    return [[ root.path, root[prop] ]]
+  } else {
+    return []
+  }
+}
+
 export class Root {
+  // Dependencies
   private readonly log: LogProvider
   private readonly fsal: FSAL
+
+  // The root this instance represents
   public readonly rootPath: string
-  private rootDescriptor: AnyDescriptor
+  public rootDescriptor: AnyDescriptor
+
+  // State for listening to changes
   private readonly _process: FSALWatchdog
   private readonly eventQueue: Array<{ eventName: ChokidarEvents, eventPath: string }>
   private readonly changeQueue: ChangeDescriptor[]
@@ -56,6 +84,13 @@ export class Root {
   private readonly onUnlinkCallback: (rootPath: string) => void
   private isProcessingEvent: boolean
   private currentVersion: number
+
+  // Additional state that we keep track of here because it's more efficient.
+  // The linkMap and tagMap can be kept insanely efficient by simple hooking
+  // into the event processor to grab any changing links or tags.
+  private readonly linkMap: Map<string, string[]>
+  private readonly tagMap: Map<string, string[]>
+  private readonly idMap: Map<string, string>
 
   constructor (
     descriptor: AnyDescriptor,
@@ -74,6 +109,10 @@ export class Root {
     this.onUnlinkCallback = callbacks.onUnlink
 
     this.currentVersion = 0
+
+    this.linkMap = new Map(extractFromFileDescriptors(this.rootDescriptor, 'links'))
+    this.tagMap = new Map(extractFromFileDescriptors(this.rootDescriptor, 'tags'))
+    this.idMap = new Map(extractFromFileDescriptors(this.rootDescriptor, 'id'))
 
     if (descriptor.type === 'directory' && descriptor.dirNotFoundFlag === true) {
       // This root exclusively represents an "empty" directory, so attempting to
@@ -116,7 +155,7 @@ export class Root {
     }
 
     const { eventName, eventPath } = nextEvent
-    console.log('PROCESSING EVENT:', eventName, eventPath) // DEBUG
+    // console.log('PROCESSING EVENT:', eventName, eventPath) // DEBUG
 
     const isUnlink = eventName === 'unlink' || eventName === 'unlinkDir'
 
@@ -126,10 +165,15 @@ export class Root {
       return
     } else if (isUnlink) {
       // Some file within the root (directory) has been removed
-      this.changeQueue.push({ type: 'unlink', path: eventPath })
+      const change: ChangeDescriptor = { type: 'unlink', path: eventPath }
+      this.rootDescriptor = mergeEventsIntoTree([change], this.rootDescriptor)
+      this.changeQueue.push(change)
+      this.linkMap.delete(eventPath)
+      this.tagMap.delete(eventPath)
+      this.idMap.delete(eventPath)
       this.currentVersion++
     } else {
-      console.log('Add or change event')
+      // console.log('Add or change event') // DEBUG
       // Change or add
       try {
         // Load directories "shallow", no recursive parsing here
@@ -140,11 +184,21 @@ export class Root {
           descriptor.children = [] // Keep the change queue shallow; the merger accounts for that
         }
 
-        this.changeQueue.push({
+        const change: ChangeDescriptor = {
           type: eventName === 'change' ? 'change' : 'add',
           path: eventPath,
           descriptor
-        })
+        }
+
+        this.rootDescriptor = mergeEventsIntoTree([change], this.rootDescriptor)
+        this.changeQueue.push(change)
+
+        if (descriptor.type === 'file') {
+          this.linkMap.set(descriptor.path, descriptor.links)
+          this.tagMap.set(descriptor.path, descriptor.tags)
+          this.idMap.set(descriptor.path, descriptor.id)
+        }
+
         this.currentVersion++
       } catch (err: any) {
         this.log.error(`[Workspace Provider] Could not process event ${eventName}:${eventPath}`, err)
@@ -182,11 +236,39 @@ export class Root {
   }
 
   /**
+   * Returns all internal links back and forth between all the files within this
+   * workspace.
+   *
+   * @return  {Map<string, string[]>}  A map of links in the form filepath -> link[]
+   */
+  public getLinks (): Map<string, string[]> {
+    return this.linkMap
+  }
+
+  /**
+   * Returns all tags/keywords of files within this workspace.
+   *
+   * @return  {Map<string, string[]>}  A map of tags in the form filepath -> tag[]
+   */
+  public getTags (): Map<string, string[]> {
+    return this.tagMap
+  }
+
+  /**
+   * Returns all file IDs within this workspace.
+   *
+   * @return  {Map<string, string>}  A Map of filepaths to IDs.
+   */
+  public getIds (): Map<string, string> {
+    return this.idMap
+  }
+
+  /**
    * Call this function with a version number to receive the changes that can be
    * applied to a remote tree in order to bring it up to date with the current
    * state of the file system. NOTE: If version indicates the receiver is so out
    * of date that we do not have the necessary change set anymore to synchronize
-   * their remove state, this function will automatically return a set of
+   * their remote state, this function will automatically return a set of
    * initial tree data, making it simple for the receiver to re-initialize
    * itself. This can happen if (a) the IPC channel is clogged (unlikely), or if
    * (b) so many changes have happened that we had to roll over the version
@@ -220,8 +302,9 @@ export class Root {
    */
   afterProcessEvent (): void {
     if (this.changeQueue.length > MAX_CHANGE_QUEUE) {
-      const eventsToMerge = this.changeQueue.splice(0, this.changeQueue.length - MAX_CHANGE_QUEUE)
-      this.rootDescriptor = mergeEventsIntoTree(eventsToMerge, this.rootDescriptor)
+      // NOTE: We do not have to merge these events since they will be merged
+      // immediately at the source.
+      this.changeQueue.splice(0, this.changeQueue.length - MAX_CHANGE_QUEUE)
     }
   }
 }

@@ -40,7 +40,7 @@ export default class ForceOpen extends ZettlrCommand {
     const autoCreate: boolean = this._app.config.get('zkn.autoCreateLinkedFiles')
     const customDir: string = this._app.config.get('zkn.customDirectory')
 
-    const file = this._app.fsal.findExact(linkContents)
+    const file = this._app.workspaces.findExact(linkContents)
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file !== undefined) {

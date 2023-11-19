@@ -130,12 +130,16 @@ export default class CommandProvider extends ProviderContract {
         this._app.log.error(`[Application] Could not return descriptor for ${String(payload)}: Neither file nor directory.`)
       }
     } else if (command === 'get-open-directory') {
-      const openDir = this._app.fsal.openDirectory
+      const openDir = this._app.documents.getOpenDirectory()
       if (openDir === null) {
         return null
       }
 
-      return openDir
+      try {
+        return await this._app.fsal.getAnyDirectoryDescriptor(openDir)
+      } catch (err: any) {
+        return null
+      }
     } else if (command === 'next-file') {
       // Trigger a "forward" command on the document manager
       // await this._app.documents.forward()

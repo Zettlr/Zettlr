@@ -57,6 +57,7 @@ export default class RenameTag extends ZettlrCommand {
     // Lastly, do the replacing file by file. NOTE: This rests on the fact that
     // the FSAL will pick up those changes via the file system itself.
     for (const file of relevantFiles) {
+      // TODO: No fs-calls outside the FSAL.
       const content = await fs.readFile(file.path, 'utf-8')
       const newContent = replaceTags(content, oldName, newName)
       if (newContent !== content) {

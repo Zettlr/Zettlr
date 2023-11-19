@@ -24,7 +24,7 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
-import type FSAL from '@providers/fsal'
+import type WorkspaceProvider from '@providers/workspaces'
 
 /**
  * This interface describes a single tag within the files loaded in here.
@@ -69,7 +69,7 @@ export default class TagProvider extends ProviderContract {
   /**
    * Create the instance on program start and initially load the tags.
    */
-  constructor (private readonly _logger: LogProvider, private readonly _fsal: FSAL) {
+  constructor (private readonly _logger: LogProvider, private readonly _workspaces: WorkspaceProvider) {
     super()
     this._file = path.join(app.getPath('userData'), 'tags.json')
     this._coloredTags = []
@@ -145,7 +145,21 @@ export default class TagProvider extends ProviderContract {
    */
   getAllTags (): TagRecord[] {
     const ret: TagRecord[] = []
-    for (const [ name, files ] of this._fsal.collectTags()) {
+    const tagDb = this._workspaces.getTags()
+
+    const tagToFileMap = new Map()
+    for (const [ file, tags ] of [...tagDb]) {
+      for (const tag of tags) {
+        const entry = tagToFileMap.get(tag)
+        if (entry === undefined) {
+          tagToFileMap.set(tag, [file])
+        } else {
+          tagToFileMap.set(tag, [ ...entry, file ])
+        }
+      }
+    }
+
+    for (const [ name, files ] of tagToFileMap) {
       const tagColor = this._coloredTags.find(c => c.name === name)
       ret.push({ name, files, color: tagColor?.color, desc: tagColor?.desc, idf: 0 })
     }

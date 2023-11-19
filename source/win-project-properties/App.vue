@@ -257,11 +257,12 @@ export default defineComponent({
     // We listen to filetree changes -- in case one of these means that our
     // dir is no longer a project, fetchProperties will automatically close this
     // window.
-    ipcRenderer.on('fsal-state-changed', (event, kind) => {
-      if (kind === 'filetree') {
-        this.fetchProperties()
-      }
-    })
+    // ipcRenderer.on('fsal-state-changed', (event, kind) => {
+    //   if (kind === 'filetree') {
+    //     this.fetchProperties()
+    //   }
+    // })
+    // TODO: RE-IMPLEMENT!!!
   },
   methods: {
     selectExportProfile: function (newListVal: ExportProfile[]) {

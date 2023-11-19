@@ -34,7 +34,7 @@ export const useOpenDirectoryStore = defineStore('open-directory', () => {
   updateOpenDirectory(openDirectory)
 
   // Listen to subsequent changes
-  ipcRenderer.on('fsal-state-changed', (event, data) => {
+  ipcRenderer.on('documents-provider', (event, data) => {
     if (data === 'openDirectory') {
       updateOpenDirectory(openDirectory)
     }
