@@ -64,7 +64,7 @@
 import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { defineComponent } from 'vue'
-import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
+import { OpenDocument } from '@dts/common/documents'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { TagRecord } from '@providers/tags'
 import { mapStores } from 'pinia'
@@ -146,10 +146,8 @@ export default defineComponent({
   },
   mounted () {
     this.recomputeRelatedFiles().catch(err => console.log('Could not recompute related files:', err))
-    ipcRenderer.on('documents-update', (e, { event, context }) => {
-      if (event === DP_EVENTS.FILE_SAVED) {
-        this.recomputeRelatedFiles().catch(err => console.log('Could not recompute related files:', err))
-      }
+    ipcRenderer.on('workspace-changed', (e, _) => {
+      this.recomputeRelatedFiles().catch(err => console.log('Could not recompute related files:', err))
     })
   },
   methods: {

@@ -66,6 +66,10 @@ export default class LinkProvider extends ProviderContract {
       // i.e., we don't have to emit this here!
       broadcastIpcMessage('links')
     })
+
+    // Pull in the initial update
+    this._fileLinkDatabase = this._workspaces.getLinks()
+    this._idDatabase = this._workspaces.getIds()
   }
 
   /**
