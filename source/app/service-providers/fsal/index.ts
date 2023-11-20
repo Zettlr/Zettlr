@@ -353,7 +353,7 @@ export default class FSAL extends ProviderContract {
    * @param   {MDFileDescriptor}  src          The file to search
    * @param   {SearchTerm[]}      searchTerms  The search terms
    *
-   * @return {Promise<any>}                    Returns the results
+   * @return  {Promise<any>}                   Returns the results
    */
   public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<any> { // TODO: Implement search results type
     // NOTE: Generates no events
