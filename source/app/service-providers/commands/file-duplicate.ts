@@ -35,7 +35,7 @@ export default class FileDuplicate extends ZettlrCommand {
    */
   async run (evt: string, arg: any): Promise<void> {
     // First, retrieve our source file
-    let file = this._app.fsal.findFile(arg.path)
+    let file = this._app.workspaces.findFile(arg.path)
     if (file === undefined) {
       this._app.log.error('Could not duplicate source file, because the source file was not found')
       this._app.windows.prompt({
@@ -47,7 +47,7 @@ export default class FileDuplicate extends ZettlrCommand {
     }
 
     // Then, the target directory.
-    let dir = this._app.fsal.findDir(file.dir) // (1) A specified directory
+    let dir = this._app.workspaces.findDir(file.dir) // (1) A specified directory
     const openDir = this._app.documents.getOpenDirectory()
     if (dir === undefined && openDir !== null) {
       dir = await this._app.fsal.getAnyDirectoryDescriptor(openDir)
@@ -97,11 +97,7 @@ export default class FileDuplicate extends ZettlrCommand {
 
     // Retrieve the file's content and create a new file with the same content
     const contents = await this._app.fsal.loadAnySupportedFile(file.path)
-    await this._app.fsal.createFile(dir, {
-      name: filename,
-      content: contents,
-      type: file.type
-    })
+    await this._app.fsal.createFile(path.join(dir.path, filename), contents)
 
     // And directly thereafter, open the file
     await this._app.documents.openFile(arg.windowNumber, arg.leafId, path.join(dir.path, filename))

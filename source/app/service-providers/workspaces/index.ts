@@ -26,7 +26,7 @@ import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
 import EventEmitter from 'events'
 import { getIDRE } from '@common/regular-expressions'
 import findObject from '@common/util/find-object'
-import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, CodeFileDescriptor, DirDescriptor, MDFileDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import locateByPath from '@providers/fsal/util/locate-by-path'
@@ -34,9 +34,12 @@ import { showSplashScreen, closeSplashScreen, updateSplashScreen } from '@provid
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import { performance } from 'perf_hooks'
+import objectToArray from '@common/util/object-to-array'
 
 export enum WORKSPACE_PROVIDER_EVENTS {
-  WorkspaceChanged = 'workspace-changed'
+  WorkspaceAdded = 'workspace-added',
+  WorkspaceChanged = 'workspace-changed',
+  WorkspaceRemoved = 'workspace-removed'
 }
 
 /**
@@ -60,7 +63,6 @@ export default class WorkspaceProvider extends ProviderContract {
     ipcMain.handle('workspace-provider', (event, { command, payload }) => {
       // A renderer has asked for updates
       if (command === 'get-initial-tree-data') {
-        // console.log('RECEIVED REQUEST TO RETRIEVE WORKSPACES') // DEBUG
         for (const root of this.roots) {
           if (root.rootPath === payload) {
             return root.getInitialTreeData()
@@ -73,7 +75,6 @@ export default class WorkspaceProvider extends ProviderContract {
           return this.roots.map(root => root.getInitialTreeData())
         }
       } else if (command === 'get-changes-since') {
-        // console.log('RECEIVED REQUEST TO RETRIEVE CHANGES') // DEBUG
         const { rootPath, version } = payload
         for (const root of this.roots) {
           if (root.rootPath === rootPath) {
@@ -91,8 +92,15 @@ export default class WorkspaceProvider extends ProviderContract {
    */
   async boot (): Promise<void> {
     this._logger.verbose('Workspace provider booting up ...')
-    this.consolidateRootPaths()
     await this.syncLoadedRoots()
+
+    this._config.on('update', (which: string) => {
+      if (which === 'openPaths') {
+        this.syncLoadedRoots().catch(err => {
+          this._logger.error(`[WorkspaceProvider] Could not synchronize paths: ${err.message as string}`, err)
+        })
+      }
+    })
   }
 
   /**
@@ -103,38 +111,28 @@ export default class WorkspaceProvider extends ProviderContract {
   }
 
   /**
-   * This function ensures that all root paths are consolidated, i.e., have no
-   * overlaps. In other words, this function will remove any root paths that are
-   * contained by any of the other roots. This will help prevent any
-   * inconsistencies when a root file is part of a loaded workspace, or some
-   * workspace is loaded as part of another workspace.
+   * Synchronizes the loaded roots with the configuration's openPaths property.
    */
-  private consolidateRootPaths (): void {
-    // First, retrieve all root files
-    const paths = this._config.get().openPaths
-    for (const thisRoot of paths) {
-      for (const otherRoot of paths) {
-        if (otherRoot.startsWith(thisRoot) && otherRoot !== thisRoot) {
-          paths.splice(paths.indexOf(thisRoot), 1)
-          break
-        }
-      }
-    }
-
-    this._config.set('openPaths', paths)
-  }
-
   private async syncLoadedRoots (): Promise<void> {
     const callbacks = {
       onChange: (rootPath: string) => {
-        // TODO: Announce via IPC broadcast
         this._logger.info(`[WorkspaceManager] Root ${rootPath} has changed`)
         broadcastIPCMessage(WORKSPACE_PROVIDER_EVENTS.WorkspaceChanged, rootPath)
         this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceChanged)
       },
       onUnlink: (rootPath: string) => {
-        // TODO: Remove and announce!
         this._logger.warning(`[WorkspaceManager] Root ${rootPath} has been removed`)
+        const affectedRoot = this.roots.find(r => r.rootPath === rootPath)
+        if (affectedRoot !== undefined && affectedRoot.rootDescriptor.type === 'directory') {
+          // Manually splice out the descriptor and call synchronizePaths, which
+          // will notice that the descriptor is missing, cannot find it, and instead
+          // replace it with a "not found" directory.
+          this.roots.splice(this.roots.indexOf(affectedRoot), 1)
+          this.syncLoadedRoots().catch(err => this._logger.error('[WorkspaceProvider] ' + String(err.message), err))
+        } else {
+          // This will, via event emmission, remove the root from here as well
+          this._config.removePath(rootPath)
+        }
       }
     }
 
@@ -154,6 +152,10 @@ export default class WorkspaceProvider extends ProviderContract {
     for (const rootPath of openPaths) {
       updateSplashScreen(trans('Loading workspace %s', path.basename(rootPath)), currentPercent)
       currentPercent += Math.round(1 / openPaths.length * 100)
+      if (this.roots.find(root => root.rootPath === rootPath) !== undefined) {
+        continue // This path has already been loaded
+      }
+
       try {
         const descriptor = await this._fsal.loadAnyPath(rootPath)
         if (descriptor === undefined) {
@@ -176,6 +178,9 @@ export default class WorkspaceProvider extends ProviderContract {
           )
           this.roots.push(root)
         }
+
+        broadcastIPCMessage(WORKSPACE_PROVIDER_EVENTS.WorkspaceAdded, rootPath)
+        this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceAdded)
       } catch (err: any) {
         // TODO
       }
@@ -186,6 +191,16 @@ export default class WorkspaceProvider extends ProviderContract {
     this._logger.info(`[Workspace Provider] Synchronized roots in ${duration} seconds`)
     clearTimeout(timeout)
     closeSplashScreen()
+
+    // Before finishing up, unload all roots that are no longer part of the
+    // config
+    for (const rootPath of this.roots.map(r => r.rootPath)) {
+      if (!openPaths.includes(rootPath)) {
+        this.roots.splice(this.roots.findIndex(r => r.rootPath === rootPath), 1)
+        broadcastIPCMessage(WORKSPACE_PROVIDER_EVENTS.WorkspaceRemoved, rootPath)
+        this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceRemoved)
+      }
+    }
   }
 
   // Enable global event listening to updates of the config
@@ -200,6 +215,31 @@ export default class WorkspaceProvider extends ProviderContract {
   // Also do the same for the removal of listeners
   off (evt: WORKSPACE_PROVIDER_EVENTS, callback: (...args: any[]) => void): void {
     this.emitter.off(evt, callback)
+  }
+
+  /**
+   * Attempts to find a previously missing directory and load it
+   *
+   * @param  {string}  dirPath  The path to search for
+   */
+  public async rescanForDirectory (dirPath: string): Promise<void> {
+    const affectedRoot = this.roots.find(r => r.rootPath === dirPath)
+    if (affectedRoot === undefined) {
+      this._logger.warning(`[WorkspaceProvider] Not trying to reload directory ${dirPath}: Not loaded`)
+      return
+    }
+
+    try {
+      const descriptor = await this._fsal.loadAnyPath(dirPath)
+      if (descriptor !== undefined) {
+        // The root is now available, so we can splice the fake descriptor and
+        // re-synchronize
+        this.roots.splice(this.roots.indexOf(affectedRoot), 1)
+        await this.syncLoadedRoots()
+      }
+    } catch (err: any) {
+      this._logger.info(`[WorkspaceProvider] Could not locate directory ${dirPath}: Still missing`)
+    }
   }
 
   /**
@@ -247,6 +287,32 @@ export default class WorkspaceProvider extends ProviderContract {
     }
 
     return new Map(idList)
+  }
+
+  /**
+   * Returns an array of all files currently loaded into the Workspace Provider.
+   *
+   * @return  {Array<AnyFileDescriptor>}  An array of every file
+   */
+  public getAllFiles (): Array<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    return objectToArray(this.roots.map(root => root.rootDescriptor), 'children')
+      .filter(descriptor => descriptor.type !== 'directory')
+  }
+
+  /**
+   * Attempts to find a given descriptor in the loaded trees.
+   *
+   * @param   {string}         absPath  The absolute path
+   *
+   * @return  {AnyDescriptor}           Any descriptor, or undefined.
+   */
+  public find (absPath: string): AnyDescriptor|undefined {
+    const maybeFile = this.findFile(absPath)
+    if (maybeFile !== undefined) {
+      return maybeFile
+    }
+
+    return this.findDir(absPath)
   }
 
   /**

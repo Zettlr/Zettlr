@@ -261,7 +261,7 @@ export default class ConfigProvider extends ProviderContract {
     this.config.openPaths = [...new Set(this.config.openPaths)]
 
     // Now sort the paths.
-    this._sortPaths()
+    this.sortPaths()
 
     const dicts = enumDictFiles().map(item => item.tag)
 
@@ -276,6 +276,53 @@ export default class ConfigProvider extends ProviderContract {
   }
 
   /**
+   * This function ensures that all root paths are consolidated, i.e., have no
+   * overlaps. In other words, this function will remove any root paths that are
+   * contained by any of the other roots. This will help prevent any
+   * inconsistencies when a root file is part of a loaded workspace, or some
+   * workspace is loaded as part of another workspace.
+   */
+  private consolidateRootPaths (): void {
+    // First, retrieve all root files
+    for (const thisRoot of this.config.openPaths) {
+      for (const otherRoot of this.config.openPaths) {
+        if (otherRoot.startsWith(thisRoot) && otherRoot !== thisRoot) {
+          this.config.openPaths.splice(this.config.openPaths.indexOf(thisRoot), 1)
+          break
+        }
+      }
+    }
+  }
+
+  /**
+    * Sorts the paths prior to using them alphabetically and by type.
+    * @return {ZettlrConfig} Chainability.
+    */
+  private sortPaths (): void {
+    let f = []
+    let d = []
+    for (let p of this.config.openPaths) {
+      if (isDir(p)) {
+        d.push(p)
+      } else {
+        f.push(p)
+      }
+    }
+
+    // We only want to sort the paths based on rudimentary, natural order.
+    let coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
+    f.sort((a, b) => {
+      return coll.compare(path.basename(a), path.basename(b))
+    })
+    d.sort((a, b) => {
+      return coll.compare(path.basename(a), path.basename(b))
+    })
+
+    this.config.openPaths = f.concat(d)
+    this._container.set(this.config)
+  }
+
+  /**
     * Adds a path to be opened on startup
     * @param {String} p The path to be added
     * @return {Boolean} True, if the path was successfully added, else false.
@@ -284,8 +331,10 @@ export default class ConfigProvider extends ProviderContract {
     // Only add valid and unique paths
     if ((!ignoreFile(p) || isDir(p)) && !this.config.openPaths.includes(p)) {
       this.config.openPaths.push(p)
-      this._sortPaths()
+      this.consolidateRootPaths()
+      this.sortPaths()
       this._container.set(this.config)
+      this._emitter.emit('update', 'openPaths')
       return true
     }
 
@@ -459,36 +508,6 @@ export default class ConfigProvider extends ProviderContract {
     // Broadcast to all open windows
     broadcastIpcMessage('config-provider', { command: 'update', payload: undefined })
     this._container.set(this.config)
-  }
-
-  /**
-    * Sorts the paths prior to using them alphabetically and by type.
-    * @return {ZettlrConfig} Chainability.
-    */
-  _sortPaths (): this {
-    let f = []
-    let d = []
-    for (let p of this.config.openPaths) {
-      if (isDir(p)) {
-        d.push(p)
-      } else {
-        f.push(p)
-      }
-    }
-
-    // We only want to sort the paths based on rudimentary, natural order.
-    let coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
-    f.sort((a, b) => {
-      return coll.compare(path.basename(a), path.basename(b))
-    })
-    d.sort((a, b) => {
-      return coll.compare(path.basename(a), path.basename(b))
-    })
-
-    this.config.openPaths = f.concat(d)
-    this._container.set(this.config)
-
-    return this
   }
 
   /**

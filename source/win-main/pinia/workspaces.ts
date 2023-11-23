@@ -40,9 +40,6 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
   // paths that we should load, and then use the payload of the initial tree
   // data receiver to specify only specific workspaces to be loaded.
 
-  // TODO: Fetch the initial set of roots from main, then set up a listener to
-  // update them whenever changes happen.
-
   ipcRenderer.invoke('workspace-provider', {
     command: 'get-initial-tree-data',
     payload: '' // TODO: Use this property to specify a specific root later on.
@@ -89,6 +86,13 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
         }
       })
       .catch(err => console.error(`Could not fetch updates for root path ${rootPath}: ${err.message as string}`))
+  })
+
+  ipcRenderer.on('workspace-removed', (event, rootPath: string) => {
+    const idx = roots.value.findIndex(r => r.descriptor.path === rootPath)
+    if (idx > -1) {
+      roots.value.splice(idx, 1)
+    }
   })
 
   return { roots, rootPaths, rootDescriptors, getFile }

@@ -25,7 +25,7 @@ export default class DirNewProject extends ZettlrCommand {
     * @param  {Object} arg The hash of a directory.
     */
   async run (evt: string, arg: any): Promise<void> {
-    let dir = this._app.fsal.findDir(arg.path)
+    let dir = this._app.workspaces.findDir(arg.path)
     if (dir !== undefined) {
       // Create a new project, presetting the title with the directory name
       await this._app.fsal.createProject(dir, { 'title': dir.name })

@@ -46,7 +46,7 @@ export default class FileRename extends ZettlrCommand {
       newName += '.md'
     }
 
-    const file = this._app.fsal.findFile(arg.path)
+    const file = this._app.workspaces.findFile(arg.path)
     if (file === undefined) {
       return this._app.log.error(`Could not find file ${String(arg.path)}`)
     }
@@ -66,7 +66,7 @@ export default class FileRename extends ZettlrCommand {
     }
 
     // Test if we are about to override a file
-    const dir = this._app.fsal.findDir(file.dir)
+    const dir = this._app.workspaces.findDir(file.dir)
     let found = dir?.children.find(e => e.name.toLowerCase() === newName.toLowerCase())
     if (found !== undefined && found.type !== 'directory' && file !== found) {
       // Ask for override
@@ -74,7 +74,7 @@ export default class FileRename extends ZettlrCommand {
         return // No override wanted
       } else {
         // Remove the file to be overwritten prior
-        await this._app.fsal.removeFile(found)
+        await this._app.fsal.removeFile(found.path)
       }
     }
 
@@ -85,7 +85,7 @@ export default class FileRename extends ZettlrCommand {
       const inboundLinks = this._app.links.retrieveInbound(file.path)
 
       // Now, rename the file.
-      await this._app.fsal.renameFile(file, newName)
+      await this._app.fsal.rename(file.path, path.join(file.dir, newName))
 
       // Finally, let's check if we can update some internal links to that file.
       if (inboundLinks.length > 0) {

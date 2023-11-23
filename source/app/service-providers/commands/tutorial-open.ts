@@ -64,9 +64,9 @@ export default class TutorialOpen extends ZettlrCommand {
 
     // Now the last thing to do is set it as open
     await this._app.commands.run('roots-add', [targetPath])
-    const tutorialDirectory = this._app.fsal.findDir(targetPath)
+    const tutorialDirectory = this._app.workspaces.findDir(targetPath)
     if (tutorialDirectory === undefined) {
-      this._app.log.error('[Application] Could not open tutorial files: Directory has not been added to FSAL')
+      this._app.log.error('[Application] Could not open tutorial files: Directory has not been added to Workspaces')
       return
     }
 

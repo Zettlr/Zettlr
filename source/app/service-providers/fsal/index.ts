@@ -17,8 +17,6 @@ import path from 'path'
 import EventEmitter from 'events'
 import isFile from '@common/util/is-file'
 import isDir from '@common/util/is-dir'
-import objectToArray from '@common/util/object-to-array'
-import locateByPath from './util/locate-by-path'
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALDir from './fsal-directory'
@@ -27,7 +25,6 @@ import FSALWatchdog, { type WatchdogEvent } from './fsal-watchdog'
 import FSALCache from './fsal-cache'
 import getSorter, { type GenericSorter } from './util/sort'
 import type {
-  AnyDescriptor,
   DirDescriptor,
   MDFileDescriptor,
   CodeFileDescriptor,
@@ -175,91 +172,6 @@ export default class FSAL extends ProviderContract {
       this._config.get('appLang'),
       this._config.get('sortingTime')
     )
-  }
-
-  /**
-   * Returns the directory tree, ready to be stringyfied for IPC calls.
-   */
-  public getTreeMeta (): MaybeRootDescriptor[] {
-    // DEBUG DEPRECATED
-    return this._state.filetree
-  }
-
-  /**
-   * Collects all tags loaded with any of the files in the filetree. Returns a
-   * list of [ tag, files[] ].
-   *
-   * @return  {Array<[ string, string[] ]>}  The list of tags with the files
-   */
-  public collectTags (): Array<[ tag: string, files: string[] ]> {
-    // DEBUG DEPRECATED; MOVE TO ROOTS/WORKSPACE PROVIDER
-    // NOTE: Did a small performance check, on my full directory with >1,000
-    // tags and several hundred files this takes 23ms. Memory is indeed fast.
-    const tags: Array<[ string, string[] ]> = []
-
-    const allFiles = objectToArray(this._state.filetree, 'children')
-      .filter(descriptor => descriptor.type === 'file') as MDFileDescriptor[]
-
-    for (const descriptor of allFiles) {
-      for (const tag of descriptor.tags) {
-        const found = tags.find(elem => elem[0] === tag)
-        if (found !== undefined) {
-          found[1].push(descriptor.path)
-        } else {
-          tags.push([ tag, [descriptor.path] ])
-        }
-      }
-    }
-
-    return tags
-  }
-
-  /**
-   * Returns all files that are loaded somewhere in the app
-   *
-   * @return  {Array<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor>}  A list of all files
-   */
-  public getAllFiles (): Array<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
-    // DEBUG DEPRECATED
-    const allFiles = objectToArray(this._state.filetree, 'children')
-      .filter(descriptor => descriptor.type !== 'directory')
-    return allFiles
-  }
-
-  /**
-   * Finds a non-markdown file within the filetree
-   *
-   * @param {string} val An absolute path to search for.
-   *
-   * @return  {OtherFileDescriptor|undefined}  Either the corresponding file, or undefined
-   */
-  public findOther (val: string, baseTree: MaybeRootDescriptor[]|MaybeRootDescriptor = this._state.filetree): OtherFileDescriptor|undefined {
-    // DEBUG DEPRECATED
-    const descriptor = locateByPath(baseTree, val)
-
-    if (descriptor === undefined || descriptor.type !== 'other') {
-      return undefined
-    }
-
-    return descriptor
-  }
-
-  /**
-   * Finds a descriptor that is loaded.
-   *
-   * @param   {string}       absPath  The absolute path to the file or directory
-   *
-   * @return  {AnyDescriptor|undefined}  Returns either the descriptor, or undefined.
-   */
-  public find (absPath: string): AnyDescriptor|undefined {
-    // DEBUG DEPRECATED
-    const descriptor = locateByPath(this._state.filetree, absPath)
-
-    if (descriptor === undefined) {
-      return undefined
-    } else {
-      return descriptor
-    }
   }
 
   /**

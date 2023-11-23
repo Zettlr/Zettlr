@@ -89,7 +89,7 @@ export default class Export extends ZettlrCommand {
     }
 
     // We must have an absolute path given in file
-    const fileDescriptor = this._app.fsal.findFile(file)
+    const fileDescriptor = this._app.workspaces.findFile(file)
     if (fileDescriptor !== undefined) {
       // If we have a cached version, we already have a file to export.
       // Otherwise, use the regular one from disk.
