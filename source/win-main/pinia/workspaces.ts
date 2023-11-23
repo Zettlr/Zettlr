@@ -49,8 +49,7 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
   })
     .then((response: InitialTreeData[]) => {
       for (const data of response) {
-        const { descriptor, changes, currentVersion } = data
-        mergeEventsIntoTree(changes, descriptor)
+        const { descriptor, currentVersion } = data
         roots.value.push({ descriptor, version: currentVersion })
       }
     })
