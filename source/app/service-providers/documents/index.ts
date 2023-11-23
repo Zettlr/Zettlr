@@ -892,6 +892,12 @@ export default class DocumentManager extends ProviderContract {
       }
     }
 
+    // We also must splice the document out of our provider
+    const idx = this.documents.findIndex(doc => doc.filePath === filePath)
+    if (idx > -1) {
+      this.documents.splice(idx, 1)
+    }
+
     this.syncWatchedFilePaths()
   }
 
