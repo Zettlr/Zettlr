@@ -44,11 +44,10 @@ import type LogProvider from '@providers/log'
 import { hasCodeExt, hasMarkdownExt, hasMdOrCodeExt } from './util/is-md-or-code-file'
 import getMarkdownFileParser from './util/file-parser'
 import type ConfigProvider from '@providers/config'
-import { promises as fs } from 'fs'
+import { promises as fs, constants as FS_CONSTANTS } from 'fs'
 import { safeDelete } from './util/safe-delete'
 import type DocumentManager from '@providers/documents'
 import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
-import pathExists from '@common/util/path-exists'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -341,7 +340,7 @@ export default class FSAL extends ProviderContract {
     // NOTE: This function may be called after a file or folder has been deleted. In that
     // case the function only needs to remove the file or folder from the list of children
     // to avoid safeDelete throwing an error as the file or folder does no longer exist.
-    if (await pathExists(filePath)) {
+    if (await this.pathExists(filePath)) {
       await safeDelete(filePath, deleteOnFail, this._logger)
     }
     this._fsalIsBusy = false
@@ -451,7 +450,7 @@ export default class FSAL extends ProviderContract {
   public async removeDir (dirPath: string): Promise<void> {
     this._fsalIsBusy = true
     const deleteOnFail: boolean = this._config.get('system.deleteOnFail')
-    if (await pathExists(dirPath)) {
+    if (await this.pathExists(dirPath)) {
       await safeDelete(dirPath, deleteOnFail, this._logger)
     }
     this._fsalIsBusy = false
@@ -589,5 +588,25 @@ export default class FSAL extends ProviderContract {
     const isRoot = this._config.get().openPaths.includes(absPath)
 
     return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), this.getDirectorySorter(), isRoot, shallow)
+  }
+
+  /**
+   * Checks if a given path exists on the file system. Optional flags can be
+   * passed to check specific access rights. By default, will check for general
+   * access (i.e., the process can see the file), and read access, but not write
+   * access. Use fs.constants as flags.
+   *
+   * @param   {string}            absPath  The path to check
+   * @param   {number|undefined}  flags    Optional mode check flags
+   *
+   * @return  {Promise<boolean>}           Resolves to true or false
+   */
+  public async pathExists (absPath: string, flags: number = FS_CONSTANTS.F_OK|FS_CONSTANTS.R_OK): Promise<boolean> {
+    try {
+      await fs.access(absPath, flags)
+      return true
+    } catch (err: any) {
+      return false
+    }
   }
 }

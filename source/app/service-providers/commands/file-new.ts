@@ -75,15 +75,13 @@ export default class FileNew extends ZettlrCommand {
       dirpath = app.getPath('documents')
     }
 
-    let dir = await this._app.fsal.getAnyDirectoryDescriptor(dirpath)
-
     // Make sure we have a filename and have the user confirm this if applicable
     // Also, if the user does not want to be prompted BUT we had to use the
     // fallback directory, we should also prompt the user as otherwise it would
     // be opaque to the user where the notes end up in.
     if ((arg.name === undefined && shouldPromptUser) || (!shouldPromptUser && isFallbackDir)) {
       // The user wishes to confirm the filename
-      const chosenPath = await this._app.windows.saveFile(path.join(dir.path, generatedName))
+      const chosenPath = await this._app.windows.saveFile(path.join(dirpath, generatedName))
       if (chosenPath === undefined) {
         this._app.log.info('Did not create new file since the dialog was aborted.')
         return
@@ -92,8 +90,8 @@ export default class FileNew extends ZettlrCommand {
       arg.name = path.basename(chosenPath)
       // The user may also have selected a different directory altogether. If
       // that directory exists and is loaded by the FSAL, overwrite the dir.
-      if (path.dirname(chosenPath) !== dir.path) {
-        dir = await this._app.fsal.getAnyDirectoryDescriptor(path.dirname(chosenPath))
+      if (path.dirname(chosenPath) !== dirpath) {
+        dirpath = path.dirname(chosenPath)
       }
     } else if (arg.name === undefined) {
       // Just generate a name.
@@ -125,29 +123,27 @@ export default class FileNew extends ZettlrCommand {
         }
       }
 
+      const absPath = path.join(dirpath, filename)
+
       // Check if there's already a file with this name in the directory
       // NOTE: There are case-sensitive file systems, but we'll disallow this
-      let found = dir.children.find(e => e.name.toLowerCase() === filename.toLowerCase())
-      if (found !== undefined && found.type !== 'directory') {
+      if (await this._app.fsal.pathExists(absPath)) {
         // Ask before overwriting
         if (!await this._app.windows.shouldOverwriteFile(filename)) {
           return
         } else {
           // Remove the file before creating it anew. We'll use the
           // corresponding command for that.
-          await this._app.fsal.removeFile(found)
+          this._app.documents.closeFileEverywhere(absPath)
+          await this._app.fsal.removeFile(absPath)
         }
       }
 
       // First create the file
-      await this._app.fsal.createFile(dir, {
-        name: filename,
-        content: '',
-        type: (type === 'md') ? 'file' : 'code'
-      })
+      await this._app.fsal.createFile(absPath, '')
 
       // And directly thereafter, open the file
-      await this._app.documents.openFile(windowId, leafId, path.join(dir.path, filename), true)
+      await this._app.documents.openFile(windowId, leafId, absPath, true)
     } catch (err: any) {
       this._app.log.error(`Could not create file: ${err.message as string}`)
       this._app.windows.prompt({
