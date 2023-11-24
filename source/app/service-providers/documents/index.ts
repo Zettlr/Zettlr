@@ -1293,8 +1293,7 @@ export default class DocumentManager extends ProviderContract {
     if (leaf !== undefined) {
       leaf.parent.removeNode(leaf)
       this.broadcastEvent(DP_EVENTS.LEAF_CLOSED, { windowId, leafId })
-      this._lastEditor.windowId = windowId
-      this._lastEditor.leafId = this._windows[windowId].getAllLeafs()[0].id
+      this._updateFocusLeaf(windowId, this._windows[windowId].getAllLeafs()[0].id)
     }
   }
 
