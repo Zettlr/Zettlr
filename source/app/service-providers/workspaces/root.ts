@@ -5,6 +5,7 @@ import { mergeEventsIntoTree } from './merge-events-into-tree'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
 import { getSorter } from '@providers/fsal/util/directory-sorter'
 import type ConfigProvider from '@providers/config'
+import { sortDirectory } from './sort-all-directories'
 
 // How many events do we keep in the change queue before merging them into the
 // file tree? This number dictates how much memory a root will use up. The root
@@ -142,6 +143,20 @@ export class Root {
           this.log.error(`[Workspace Provider] Could not handle event ${eventName}:${eventPath}`, err)
         })
     })
+
+    if (this.rootDescriptor.type === 'directory') {
+      this.config.on('update', (option: string) => {
+        // The config has changed, so sort all our directories according to the
+        // new settings.
+        if (![ 'sorting', 'sortFoldersFirst', 'fileNameDisplay', 'appLang', 'sortingTime' ].includes(option)) {
+          return
+        }
+
+        const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = this.config.get()
+        const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
+        sortDirectory(this.rootDescriptor as DirDescriptor, sorter)
+      })
+    }
   }
 
   async prepareShutdown (): Promise<void> {

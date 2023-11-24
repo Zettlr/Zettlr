@@ -16,10 +16,11 @@ import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor, OtherFileDesc
 import type { ChangeDescriptor, InitialTreeData } from '@providers/workspaces/root'
 import { mergeEventsIntoTree } from '@providers/workspaces/merge-events-into-tree'
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import { useConfigStore } from './config'
 import { getSorter } from '@providers/fsal/util/directory-sorter'
+import { sortDirectory } from '@providers/workspaces/sort-all-directories'
 
 const ipcRenderer = window.ipc
 
@@ -29,9 +30,20 @@ type AnyDescriptor = DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFile
 // directory sorting has changed! --> subscribe to the config events
 export const useWorkspacesStore = defineStore('workspaces', () => {
   const configStore = useConfigStore()
+  const sortingOptions = computed(() => {
+    const sorting = configStore.config.sorting
+    const sortFoldersFirst = configStore.config.sortFoldersFirst
+    const fileNameDisplay = configStore.config.fileNameDisplay
+    const appLang = configStore.config.appLang
+    const sortingTime = configStore.config.sortingTime
+    return { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime }
+  })
+
   const roots = ref<Array<{ descriptor: AnyDescriptor, version: number }>>([])
+
   const rootPaths = computed<string[]>(() => { return roots.value.map(root => root.descriptor.path) })
   const rootDescriptors = computed<AnyDescriptor[]>(() => { return roots.value.map(root => root.descriptor) })
+
   const getFile = (targetPath: string): MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor|undefined => {
     const descriptor = locateByPath(rootDescriptors.value, targetPath)
     if (descriptor !== undefined && descriptor.type === 'directory') {
@@ -40,6 +52,19 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
       return descriptor
     }
   }
+
+  watch(sortingOptions, () => {
+    // Config has changed, so sort all children depending on the new config
+    // parameters
+    const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = sortingOptions.value
+    const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
+
+    for (const root of roots.value) {
+      if (root.descriptor.type === 'directory') {
+        sortDirectory(root.descriptor, sorter)
+      }
+    }
+  })
 
   // TODO: In the future, to only get a select set of workspaces, use the window
   // ID to query the document provider to provide us here with the actual root
@@ -77,7 +102,7 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
       payload: { rootPath, version: root.version }
     })
       .then((response: InitialTreeData|ChangeDescriptor[]) => {
-        const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = configStore.config
+        const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = sortingOptions.value
         const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
 
         if (Array.isArray(response)) {

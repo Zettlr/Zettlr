@@ -22,7 +22,7 @@ export const useConfigStore = defineStore('config', () => {
   const config = ref<ConfigOptions>(window.config.get())
 
   // Listen to subsequent changes
-  ipcRenderer.on('config-provider', (event, command) => {
+  ipcRenderer.on('config-provider', (event, { command, payload }) => {
     if (command === 'update') {
       config.value = window.config.get()
     }
