@@ -63,6 +63,7 @@ export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescri
 
       parent.children.splice(idx, 1, event.descriptor)
     } else {
+      console.log('unlink', event.path)
       // Unlink event
       // NOTE: We cannot use path here since this function is also required in
       // renderer processes
