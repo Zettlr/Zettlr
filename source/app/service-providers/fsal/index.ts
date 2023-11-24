@@ -21,7 +21,7 @@ import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
-import FSALWatchdog, { type WatchdogEvent } from './fsal-watchdog'
+import FSALWatchdog from './fsal-watchdog'
 import FSALCache from './fsal-cache'
 import { type GenericSorter, getSorter } from './util/directory-sorter'
 import type {
@@ -63,8 +63,6 @@ interface FSALState {
 
 export default class FSAL extends ProviderContract {
   private readonly _cache: FSALCache
-  private _fsalIsBusy: boolean
-  private readonly _remoteChangeBuffer: WatchdogEvent[]
   private readonly _state: FSALState
   private readonly _emitter: EventEmitter
 
@@ -77,8 +75,6 @@ export default class FSAL extends ProviderContract {
 
     const cachedir = app.getPath('userData')
     this._cache = new FSALCache(this._logger, path.join(cachedir, 'fsal/cache'))
-    this._fsalIsBusy = false // Locks certain functionality during running of actions
-    this._remoteChangeBuffer = [] // Holds events for later processing
     this._emitter = new EventEmitter()
 
     this._state = {
@@ -209,12 +205,8 @@ export default class FSAL extends ProviderContract {
 
   // TODO/DEBUG: MOVE TO WORKSPACES PROVIDER OR ROOT
   public async sortDirectory (src: DirDescriptor, sorting?: SortMethod): Promise<void> {
-    this._fsalIsBusy = true
-
     const sorter = this.getDirectorySorter()
     await FSALDir.sort(src, sorter, sorting)
-
-    this._fsalIsBusy = false
   }
 
   /**
@@ -294,7 +286,6 @@ export default class FSAL extends ProviderContract {
    * @param   {MDFileDescriptor}  src   The source file
    */
   public async removeFile (filePath: string): Promise<void> {
-    this._fsalIsBusy = true
     const deleteOnFail = this._config.get('system.deleteOnFail') as boolean
     // NOTE: This function may be called after a file or folder has been deleted. In that
     // case the function only needs to remove the file or folder from the list of children
@@ -302,7 +293,6 @@ export default class FSAL extends ProviderContract {
     if (await this.pathExists(filePath)) {
       await safeDelete(filePath, deleteOnFail, this._logger)
     }
-    this._fsalIsBusy = false
   }
 
   /**
@@ -340,11 +330,7 @@ export default class FSAL extends ProviderContract {
    * @param   {DirDescriptor}  src       The target directory
    */
   public async setDirectorySetting (src: DirDescriptor, settings: any): Promise<void> {
-    this._fsalIsBusy = true
-    // Sets a setting on the directory
     await FSALDir.setSetting(src, settings)
-
-    this._fsalIsBusy = false
   }
 
   /**
@@ -354,11 +340,7 @@ export default class FSAL extends ProviderContract {
    * @param   {any}            initialProps  Any initial settings
    */
   public async createProject (src: DirDescriptor, initialProps: any): Promise<void> {
-    this._fsalIsBusy = true
-
     await FSALDir.makeProject(src, initialProps)
-
-    this._fsalIsBusy = false
   }
 
   /**
@@ -371,11 +353,8 @@ export default class FSAL extends ProviderContract {
     if (JSON.stringify(src.settings.project) === JSON.stringify(options)) {
       return
     }
-
-    this._fsalIsBusy = true
     // Updates the project properties on a directory.
     await FSALDir.updateProjectProperties(src, options)
-    this._fsalIsBusy = false
   }
 
   /**
@@ -384,9 +363,7 @@ export default class FSAL extends ProviderContract {
    * @param   {DirDescriptor}  src  The target directory
    */
   public async removeProject (src: DirDescriptor): Promise<void> {
-    this._fsalIsBusy = true
     await FSALDir.removeProject(src)
-    this._fsalIsBusy = false
   }
 
   /**
@@ -396,9 +373,7 @@ export default class FSAL extends ProviderContract {
    * @param   {string}         newName  How to name it
    */
   public async createDir (dirPath: string): Promise<void> {
-    this._fsalIsBusy = true
     await fs.mkdir(dirPath)
-    this._fsalIsBusy = false
   }
 
   /**
@@ -418,12 +393,10 @@ export default class FSAL extends ProviderContract {
    * @param   {DirDescriptor}  src  The dir to remove
    */
   public async removeDir (dirPath: string): Promise<void> {
-    this._fsalIsBusy = true
     const deleteOnFail: boolean = this._config.get('system.deleteOnFail')
     if (await this.pathExists(dirPath)) {
       await safeDelete(dirPath, deleteOnFail, this._logger)
     }
-    this._fsalIsBusy = false
   }
 
   /**
@@ -433,7 +406,6 @@ export default class FSAL extends ProviderContract {
    * @param  {string}  newPath  The wanted new path
    */
   public async rename (oldPath: string, newPath: string): Promise<void> {
-    this._fsalIsBusy = true
     await fs.rename(oldPath, newPath)
     // Notify the documents provider so it can exchange any files if necessary
     if (isFile(newPath)) {
@@ -441,7 +413,6 @@ export default class FSAL extends ProviderContract {
     } else {
       await this._docs.hasMovedDir(oldPath, newPath)
     }
-    this._fsalIsBusy = false
   }
 
   /**
