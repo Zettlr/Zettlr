@@ -17,7 +17,7 @@
 
 import EventEmitter from 'events'
 import path from 'path'
-import { promises as fs, constants as FSConstants } from 'fs'
+import { constants as FSConstants } from 'fs'
 import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
@@ -447,9 +447,7 @@ export default class DocumentManager extends ProviderContract {
         const tree = DocumentTree.fromJSON(treedata[key])
         for (const leaf of tree.getAllLeafs()) {
           for (const file of leaf.tabMan.openFiles.map(x => x.path)) {
-            try {
-              await fs.access(file, FSConstants.F_OK|FSConstants.W_OK|FSConstants.R_OK)
-            } catch (err: any) {
+            if (!await this._app.fsal.testAccess(file, FSConstants.F_OK|FSConstants.W_OK|FSConstants.R_OK)) {
               leaf.tabMan.closeFile(file)
             }
           }
@@ -924,8 +922,8 @@ export default class DocumentManager extends ProviderContract {
       throw new Error(`Could not handle remote change for file ${filePath}: Could not find corresponding file!`)
     }
 
-    const stat = await fs.lstat(filePath)
-    const modtime = stat.mtime.getTime()
+    const metadata = await this._app.fsal.getFilesystemMetadata(filePath)
+    const modtime = metadata.modtime
     const ourModtime = doc.descriptor.modtime
 
     // In response to issue #1621: We will not check for equal modtime but only

@@ -13,7 +13,6 @@
  */
 
 import path from 'path'
-import { promises as fs } from 'fs'
 import ZettlrCommand from './zettlr-command'
 import { app } from 'electron'
 import isDir from '@common/util/is-dir'
@@ -32,7 +31,7 @@ export default class TutorialOpen extends ZettlrCommand {
   async run (evt: string, arg: any): Promise<any> {
     const tutorialPath = path.join(__dirname, 'tutorial')
     const targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
-    const availableLanguages = await fs.readdir(tutorialPath, 'utf8')
+    const availableLanguages = await this._app.fsal.readdir(tutorialPath)
 
     const candidates = availableLanguages
       .map(e => { return { tag: e, path: path.join(tutorialPath, e) } })
@@ -48,16 +47,14 @@ export default class TutorialOpen extends ZettlrCommand {
     }
 
     // Now we have both a target and a language candidate, let's copy over the files!
-    try {
-      await fs.lstat(targetPath)
+    if (await this._app.fsal.pathExists(targetPath)) {
       this._app.log.info(`The directory ${targetPath} already exists. Not overwriting any files.`)
-    } catch (err) {
-      await fs.mkdir(targetPath)
-
+    } else {
+      await this._app.fsal.createDir(targetPath)
       // Now copy over every file from the directory
-      const tutorialFiles = await fs.readdir(tutorial, { 'encoding': 'utf8' })
+      const tutorialFiles = await this._app.fsal.readdir(tutorial)
       for (const file of tutorialFiles) {
-        await fs.copyFile(path.join(tutorial, file), path.join(targetPath, file))
+        await this._app.fsal.copyFile(path.join(tutorial, file), path.join(targetPath, file))
       }
       this._app.log.info('Successfully copied the tutorial files', tutorialFiles)
     }

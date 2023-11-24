@@ -17,7 +17,6 @@ import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
 import { codeFileExtensions, mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import { dialog } from 'electron'
-import { promises as fs } from 'fs'
 import { trans } from '@common/i18n-main'
 import replaceLinks from '@common/util/replace-links'
 
@@ -105,10 +104,10 @@ export default class FileRename extends ZettlrCommand {
 
         // So ... update. We'll basically take the rename-tag command as a template.
         for (const file of inboundLinks) {
-          const content = await fs.readFile(file, 'utf-8')
+          const content = await this._app.fsal.readTextFile(file)
           const newContent = replaceLinks(content, oldName, newName)
           if (newContent !== content) {
-            await fs.writeFile(file, newContent, 'utf-8')
+            await this._app.fsal.writeTextFile(file, newContent)
             this._app.log.info(`[Application] Replaced link to ${oldName} with ${newName} in file ${file}`)
           }
         }

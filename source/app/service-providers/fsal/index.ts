@@ -218,16 +218,63 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
+   * Loads a given file as a string. May throw an error if the file does not
+   * exist or if it is not a text file.
+   *
+   * @param   {string}           filePath  The file to load
+   *
+   * @return  {Promise<string>}            Resolves with UTF-8 encoded content.
+   */
+  public async readTextFile (filePath: string): Promise<string> {
+    return await fs.readFile(filePath, 'utf-8')
+  }
+
+  /**
+   * Writes a given file using the provided contents. May throw an error if the
+   * FSAL cannot write to the given path.
+   *
+   * @param  {string}  filePath  The file to write
+   * @param  {string}  contents  The file contents to put in the file.
+   */
+  public async writeTextFile (filePath: string, contents: string): Promise<void> {
+    await fs.writeFile(filePath, contents, 'utf-8')
+  }
+
+  /**
+   * Tests the access to a given path. Provide the flags as provided in
+   * `fs.constants`. By default, this function checks for visibility and whether
+   * we can actually read in the node.
+   *
+   * @return  {Promise<boolean>}  Returns true if the file fulfills the criteria.
+   */
+  public async testAccess (absPath: string, flags: number = FS_CONSTANTS.F_OK|FS_CONSTANTS.R_OK): Promise<boolean> {
+    try {
+      await fs.access(absPath, flags)
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+
+  /**
    * Creates a new file in the given directory
    *
    * @param  {DirDescriptor}                                           src      The source directory
    * @param  {{ name: string, content: string, type: 'code'|'file' }}  options  Options
+   * @deprecated  Use `writeTextFile` instead
    */
   public async createFile (filePath: string, content: string): Promise<void> {
-    this._fsalIsBusy = true
-    // TODO: Implement loading mechanism in the corresponding command!
-    await fs.writeFile(filePath, content)
-    this._fsalIsBusy = false
+    return await this.writeTextFile(filePath, content)
+  }
+
+  /**
+   * Copies the given source file to the target location.
+   *
+   * @param  {string}  sourceFile  The source file
+   * @param  {string}  targetFile  The target path
+   */
+  public async copyFile (sourceFile: string, targetFile: string): Promise<void> {
+    return await fs.copyFile(sourceFile, targetFile)
   }
 
   /**
@@ -267,13 +314,24 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<any>}                   Returns the results
    */
   public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<any> { // TODO: Implement search results type
-    // NOTE: Generates no events
     // Searches a file and returns the result
     if (src.type === 'file') {
       return await FSALFile.search(src, searchTerms)
     } else {
       return await FSALCodeFile.search(src, searchTerms)
     }
+  }
+
+  /**
+   * Reads in the filenames of the provided directory. May throw an error if the
+   * directory cannot be read.
+   *
+   * @param   {string}             dirPath  The directory to read in
+   *
+   * @return  {Promise<string[]>}           The files in the directory.
+   */
+  public async readdir (dirPath: string): Promise<string[]> {
+    return await fs.readdir(dirPath, 'utf-8')
   }
 
   /**
@@ -520,5 +578,18 @@ export default class FSAL extends ProviderContract {
     } catch (err: any) {
       return false
     }
+  }
+
+  /**
+   * Returns an object with fundamental file system metadata for the provided
+   * absPath. May throw on error.
+   *
+   * @param   {string}                       absPath  The path to access.
+   *
+   * @return  {Promise<FilesystemMetadata>}           Returns the metadata.
+   * @throws
+   */
+  public async getFilesystemMetadata (absPath: string): Promise<FilesystemMetadata> {
+    return await getFilesystemMetadata(absPath)
   }
 }
