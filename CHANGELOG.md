@@ -35,6 +35,13 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
 - Project properties now adequately resolve the readers and writers of the
   existing profiles, enabling the usage of profiles with extended
   readers/writers (#4699)
+- GraphView's labels are now rendered filled instead of stroked, to make it
+  easier to read the labels.
+- The GraphView does now support multi-window, so clicking a link will open it in
+  the last focused window. If the file is already open in a leaf, that file will
+  be in that leaf, otherwise it will open the file in the last focused leaf.
+- Alt+Click in GraphView will force the document to be opened in a new tab.
+
 
 ## Under the Hood
 
@@ -60,6 +67,8 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
   indicator; frontmatter; distraction free; and iframe styling to their plugins
 - Bump Pandoc to version `3.1.9`
 - Fixed a weird layouting issue with the code block backgrounds
+- DocumentManager's `openFile` does now handle the case when windowId and leafId
+  is undefined, by keeping track on the last used editor.
 
 # 3.0.2
 
@@ -74,7 +83,7 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
   wrapping them in `<` and `>`)
 - Fixed an issue that could lead to data loss if "Always load remote changes"
   was checked in the settings
-- Improved the Czech translation (#4688) 
+- Improved the Czech translation (#4688)
 - Fixed an issue that would import Markdown files as LaTeX instead of simply
   copying the file
 - If multiple candidate profiles to import files are found, the user can now

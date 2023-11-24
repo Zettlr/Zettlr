@@ -79,6 +79,7 @@ export default class WindowProvider extends ProviderContract {
   private readonly _hasRTLLocale: boolean
   private suppressWindowOpening: boolean
   private readonly _emitter: EventEmitter
+  private readonly _lastMainWindow: { windowId: string|undefined }
 
   constructor (
     private readonly _logger: LogProvider,
@@ -103,6 +104,7 @@ export default class WindowProvider extends ProviderContract {
     this._windowState = new Map()
     this._configFile = path.join(app.getPath('userData'), 'window_state.yml')
     this._stateContainer = new PersistentDataContainer(this._configFile, 'yaml', 1000)
+    this._lastMainWindow = { windowId: undefined }
 
     // If the corresponding CLI flag is passed, we should suppress opening of
     // any windows until the user has manually activated the app by utilizing
@@ -311,6 +313,13 @@ export default class WindowProvider extends ProviderContract {
    */
   private _hookMainWindow (window: BrowserWindow): void {
     // Listens to events from the window
+    window.on('focus', () => {
+      const key = this.getMainWindowKey(window)
+      if (key !== undefined) {
+        this._lastMainWindow.windowId = key
+      }
+    })
+
     window.on('close', (event) => {
       const key = this.getMainWindowKey(window)
 
@@ -361,6 +370,10 @@ export default class WindowProvider extends ProviderContract {
       if (key === undefined) {
         this._logger.error('[Window Manager] Could not dereference a main window since its key was not found!')
         return
+      } else {
+        if (this._lastMainWindow.windowId === key) {
+          this._lastMainWindow.windowId = undefined
+        }
       }
 
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -616,9 +629,11 @@ export default class WindowProvider extends ProviderContract {
    * @return  {BrowserWindow|undefined}  The window, or undefined
    */
   getFirstMainWindow (): BrowserWindow|undefined {
-    const focusedWindow = BrowserWindow.getFocusedWindow()
-    if (focusedWindow !== null && this.getMainWindowKey(focusedWindow) !== undefined) {
-      return focusedWindow
+    if (this._lastMainWindow.windowId !== undefined) {
+      const window = this._mainWindows[this._lastMainWindow.windowId]
+      if (window !== undefined) {
+        return window
+      }
     }
 
     const allWindows = BrowserWindow.getAllWindows()

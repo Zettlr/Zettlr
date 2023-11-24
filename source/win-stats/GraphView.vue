@@ -451,11 +451,13 @@ export default defineComponent({
               .attr('r', 5)
               .attr('fill', (vertex, value) => (vertex.isolate) ? color(ISOLATES_CLASS) : color(vertex.component))
               .on('click', (event, vertex) => {
-                // BUG: This call requires a windowId and a leafId, which we don't have
-                // ipcRenderer.invoke('documents-provider', {
-                //   command: 'open-file',
-                //   payload: { path: vertex.id }
-                // }).catch(err => console.error(err))
+                ipcRenderer.invoke('documents-provider', {
+                  command: 'open-file',
+                  payload: {
+                    path: vertex.id,
+                    newTab: (event.altKey === true) ? true : undefined
+                  }
+                }).catch(err => console.error(err))
               })
               .attr('data-tippy-content', (vertex) => {
                 let cnt = ''
@@ -475,7 +477,8 @@ export default defineComponent({
                 .append('text')
                 .attr('font-size', '8px')
                 .attr('font-weight', '100')
-                .attr('stroke', '#666')
+                .attr('fill', '#666')
+                .attr('stroke-width', '0')
                 .text((d: any) => { return d.label ?? d.id })
             }
 
@@ -489,7 +492,8 @@ export default defineComponent({
                 .append('text')
                 .attr('font-size', '8px')
                 .attr('font-weight', '100')
-                .attr('stroke', '#666')
+                .attr('fill', '#666')
+                .attr('stroke-width', '0')
                 .text((d: any) => { return d.label ?? d.id })
             }
 
