@@ -18,6 +18,7 @@ import { mergeEventsIntoTree } from '@providers/workspaces/merge-events-into-tre
 import type { DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import type { ChangeDescriptor } from '@providers/workspaces/root'
 import _ from 'lodash'
+import { getSorter } from '@providers/fsal/util/directory-sorter'
 
 const infile: MDFileDescriptor = {
   path: '/path/file.md',
@@ -173,9 +174,10 @@ const tests = [
 ]
 
 describe('mergeEventsIntoTree()', function () {
+  const sorter = getSorter('ascii', true, 'filename', 'en-US', 'modtime')
   for (const test of tests) {
     it(test.it, function () {
-      assert.deepStrictEqual(mergeEventsIntoTree(test.changes, test.input), test.output)
+      assert.deepStrictEqual(mergeEventsIntoTree(test.changes, test.input, sorter), test.output)
     })
   }
 })
