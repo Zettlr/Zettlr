@@ -164,6 +164,7 @@ export default class WorkspaceProvider extends ProviderContract {
           const root = new Root(
             this._fsal.loadDummyDirectoryDescriptor(rootPath),
             this._logger,
+            this._config,
             this._fsal,
             callbacks
           )
@@ -173,6 +174,7 @@ export default class WorkspaceProvider extends ProviderContract {
           const root = new Root(
             descriptor,
             this._logger,
+            this._config,
             this._fsal,
             callbacks
           )

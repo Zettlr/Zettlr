@@ -26,7 +26,6 @@ function updateOpenDirectory (openDirectoryRef: Ref<DirDescriptor|null>): void {
     .catch(err => { console.error(`[Pinia] Could not fetch open directory: ${err.message as string}`) })
 }
 
-// TODO: Move the open directory management to the documents provider!
 export const useOpenDirectoryStore = defineStore('open-directory', () => {
   const openDirectory = ref<DirDescriptor|null>(null)
 

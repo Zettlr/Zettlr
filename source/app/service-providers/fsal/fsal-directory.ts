@@ -69,7 +69,7 @@ const PROJECT_TEMPLATE: ProjectSettings = {
  */
 function sortChildren (
   dir: DirDescriptor,
-  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[]
+  sorter: (arr: AnyDescriptor[], sortingType?: SortMethod) => AnyDescriptor[]
 ): void {
   dir.children = sorter(dir.children, dir.settings.sorting)
 }
@@ -155,7 +155,7 @@ export async function parse (
   currentPath: string,
   cache: FSALCache,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
+  sorter: (arr: AnyDescriptor[], sortingType?: SortMethod) => AnyDescriptor[],
   isRoot: boolean,
   shallow: boolean = false
 ): Promise<DirDescriptor> {
@@ -276,7 +276,7 @@ export async function setSetting (dirObject: DirDescriptor, settings: any): Prom
  */
 export async function sort (
   dirObject: DirDescriptor,
-  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
+  sorter: (arr: AnyDescriptor[], sortingType?: SortMethod) => AnyDescriptor[],
   method?: SortMethod
 ): Promise<void> {
   // If the caller omits the method, it should remain unchanged

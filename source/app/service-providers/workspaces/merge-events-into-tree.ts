@@ -2,6 +2,7 @@
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import type { AnyDescriptor, DirDescriptor } from '@dts/common/fsal'
 import type { ChangeDescriptor } from './root'
+import { type GenericSorter } from '@providers/fsal/util/directory-sorter'
 
 const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
 
@@ -18,7 +19,7 @@ const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
  *
  * @return  {AnyDescriptor}               The modified tree
  */
-export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescriptor): AnyDescriptor {
+export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescriptor, sortFunction: GenericSorter): AnyDescriptor {
   let descriptorToReturn = tree
 
   for (const event of events) {
@@ -29,14 +30,16 @@ export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescri
         throw new Error('Received an add event, but the tree descriptor did not contain its parent!')
       }
 
-      // TODO: Sort the parent properly!!!
       parent.children.push(event.descriptor)
+      parent.children = sortFunction(parent.children, parent.settings.sorting)
     } else if (event.type === 'change' && event.path === descriptorToReturn.path) {
       // The descriptor itself has changed (NOTE: We are checking both descriptors for type reasons)
       if (event.descriptor.type === 'directory' && descriptorToReturn.type === 'directory') {
         const existingChildren = descriptorToReturn.children
         descriptorToReturn = event.descriptor
         descriptorToReturn.children = existingChildren
+        // A "change" is also when the sorting has changed.
+        descriptorToReturn.children = sortFunction(descriptorToReturn.children, descriptorToReturn.settings.sorting)
       } else {
         descriptorToReturn = event.descriptor
       }

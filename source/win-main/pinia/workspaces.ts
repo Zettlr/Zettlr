@@ -18,11 +18,17 @@ import { mergeEventsIntoTree } from '@providers/workspaces/merge-events-into-tre
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import locateByPath from '@providers/fsal/util/locate-by-path'
+import { useConfigStore } from './config'
+import { getSorter } from '@providers/fsal/util/directory-sorter'
 
 const ipcRenderer = window.ipc
 
 type AnyDescriptor = DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor
+
+// TODO: Sort the workspaces AGAIN when the configuration pertaining to the
+// directory sorting has changed! --> subscribe to the config events
 export const useWorkspacesStore = defineStore('workspaces', () => {
+  const configStore = useConfigStore()
   const roots = ref<Array<{ descriptor: AnyDescriptor, version: number }>>([])
   const rootPaths = computed<string[]>(() => { return roots.value.map(root => root.descriptor.path) })
   const rootDescriptors = computed<AnyDescriptor[]>(() => { return roots.value.map(root => root.descriptor) })
@@ -71,16 +77,19 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
       payload: { rootPath, version: root.version }
     })
       .then((response: InitialTreeData|ChangeDescriptor[]) => {
+        const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = configStore.config
+        const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
+
         if (Array.isArray(response)) {
           // We have received a regular amount of updates
           roots.value.splice(idx, 1, {
-            descriptor: mergeEventsIntoTree(response, root.descriptor),
+            descriptor: mergeEventsIntoTree(response, root.descriptor, sorter),
             version: root.version + response.length
           })
         } else {
           // We have been outdated -> replace the root
           roots.value.splice(idx, 1, {
-            descriptor: mergeEventsIntoTree(response.changes, response.descriptor),
+            descriptor: mergeEventsIntoTree(response.changes, response.descriptor, sorter),
             version: response.currentVersion
           })
         }

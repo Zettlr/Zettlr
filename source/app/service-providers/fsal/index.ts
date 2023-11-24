@@ -23,7 +23,7 @@ import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
 import FSALWatchdog, { type WatchdogEvent } from './fsal-watchdog'
 import FSALCache from './fsal-cache'
-import getSorter, { type GenericSorter } from './util/sort'
+import { type GenericSorter, getSorter } from './util/directory-sorter'
 import type {
   DirDescriptor,
   MDFileDescriptor,

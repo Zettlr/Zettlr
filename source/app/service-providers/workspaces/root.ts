@@ -1,9 +1,10 @@
 import type LogProvider from '@providers/log'
 import type FSAL from '@providers/fsal'
 import type { DirDescriptor, MDFileDescriptor, CodeFileDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
-import _ from 'lodash'
 import { mergeEventsIntoTree } from './merge-events-into-tree'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
+import { getSorter } from '@providers/fsal/util/directory-sorter'
+import type ConfigProvider from '@providers/config'
 
 // How many events do we keep in the change queue before merging them into the
 // file tree? This number dictates how much memory a root will use up. The root
@@ -71,6 +72,7 @@ export class Root {
   // Dependencies
   private readonly log: LogProvider
   private readonly fsal: FSAL
+  private readonly config: ConfigProvider
 
   // The root this instance represents
   public readonly rootPath: string
@@ -95,11 +97,17 @@ export class Root {
   constructor (
     descriptor: AnyDescriptor,
     logger: LogProvider,
+    config: ConfigProvider,
     fsal: FSAL,
     callbacks: RootCallbacks
   ) {
     this.log = logger
+    this.config = config
     this.fsal = fsal
+
+    // TODO: Sort the workspaces AGAIN when the configuration pertaining to the
+    // directory sorting has changed! --> subscribe to the config events
+
     this.rootPath = descriptor.path
     this.rootDescriptor = descriptor
     this.eventQueue= []
@@ -159,6 +167,9 @@ export class Root {
 
     const isUnlink = eventName === 'unlink' || eventName === 'unlinkDir'
 
+    const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = this.config.get()
+    const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
+
     if (isUnlink && eventPath === this.rootPath) {
       // The root itself has been removed from disk
       this.onUnlinkCallback(this.rootPath)
@@ -166,20 +177,17 @@ export class Root {
     } else if (isUnlink) {
       // Some file within the root (directory) has been removed
       const change: ChangeDescriptor = { type: 'unlink', path: eventPath }
-      this.rootDescriptor = mergeEventsIntoTree([change], this.rootDescriptor)
+      this.rootDescriptor = mergeEventsIntoTree([change], this.rootDescriptor, sorter)
       this.changeQueue.push(change)
       this.linkMap.delete(eventPath)
       this.tagMap.delete(eventPath)
       this.idMap.delete(eventPath)
       this.currentVersion++
     } else {
-      // console.log('Add or change event') // DEBUG
       // Change or add
       try {
         // Load directories "shallow", no recursive parsing here
-        // DEBUG/TODO: Since the FSAL may return a descriptor from its cache,
-        // we have to decouple that here. REMOVE WHEN LOGIC CHANGE IS DONE IN FSAL
-        const descriptor = _.cloneDeep(await this.fsal.loadAnyPath(eventPath, true))
+        const descriptor = await this.fsal.loadAnyPath(eventPath, true)
         if (descriptor.type === 'directory') {
           descriptor.children = [] // Keep the change queue shallow; the merger accounts for that
         }
@@ -190,7 +198,7 @@ export class Root {
           descriptor
         }
 
-        this.rootDescriptor = mergeEventsIntoTree([change], this.rootDescriptor)
+        this.rootDescriptor = mergeEventsIntoTree([change], this.rootDescriptor, sorter)
         this.changeQueue.push(change)
 
         if (descriptor.type === 'file') {
