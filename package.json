@@ -126,7 +126,8 @@
   },
   "resolutions": {
     "node-abi": "^3.40.0",
-    "got": "11.x.x"
+    "got": "11.x.x",
+    "node-gyp": "10.x.x"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.3.0",
