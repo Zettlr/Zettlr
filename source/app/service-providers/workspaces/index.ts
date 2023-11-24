@@ -128,7 +128,10 @@ export default class WorkspaceProvider extends ProviderContract {
           // will notice that the descriptor is missing, cannot find it, and instead
           // replace it with a "not found" directory.
           this.roots.splice(this.roots.indexOf(affectedRoot), 1)
-          this.syncLoadedRoots().catch(err => this._logger.error('[WorkspaceProvider] ' + String(err.message), err))
+          affectedRoot.prepareShutdown()
+            .catch(err => this._logger.error('[WorkspaceProvider] ' + String(err.message), err))
+          this.syncLoadedRoots()
+            .catch(err => this._logger.error('[WorkspaceProvider] ' + String(err.message), err))
         } else {
           // This will, via event emmission, remove the root from here as well
           this._config.removePath(rootPath)
@@ -198,7 +201,12 @@ export default class WorkspaceProvider extends ProviderContract {
     // config
     for (const rootPath of this.roots.map(r => r.rootPath)) {
       if (!openPaths.includes(rootPath)) {
-        this.roots.splice(this.roots.findIndex(r => r.rootPath === rootPath), 1)
+        const affectedRoot = this.roots.find(r => r.rootPath === rootPath)
+        if (affectedRoot === undefined) {
+          continue
+        }
+        await affectedRoot.prepareShutdown()
+        this.roots.splice(this.roots.indexOf(affectedRoot), 1)
         broadcastIPCMessage(WORKSPACE_PROVIDER_EVENTS.WorkspaceRemoved, rootPath)
         this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceRemoved)
       }
@@ -236,6 +244,7 @@ export default class WorkspaceProvider extends ProviderContract {
       if (descriptor !== undefined) {
         // The root is now available, so we can splice the fake descriptor and
         // re-synchronize
+        await affectedRoot.prepareShutdown()
         this.roots.splice(this.roots.indexOf(affectedRoot), 1)
         await this.syncLoadedRoots()
       }
