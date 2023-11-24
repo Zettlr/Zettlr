@@ -22,7 +22,7 @@ import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import type AppServiceContainer from 'source/app/app-service-container'
-import { ipcMain, app, dialog } from 'electron'
+import { ipcMain, app, dialog, type BrowserWindow } from 'electron'
 import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { type TabManager } from '@providers/documents/document-tree/tab-manager'
@@ -177,6 +177,10 @@ export default class DocumentManager extends ProviderContract {
   private _shuttingDown: boolean
 
   private openDirectory: string|null
+  private readonly _lastEditor: {
+    windowId: string|undefined
+    leafId: string|undefined
+  }
 
   constructor (private readonly _app: AppServiceContainer) {
     super()
@@ -191,6 +195,10 @@ export default class DocumentManager extends ProviderContract {
     this.documents = []
     this._shuttingDown = false
     this.openDirectory = null
+    this._lastEditor = {
+      windowId: undefined,
+      leafId: undefined
+    }
 
     const options: chokidar.WatchOptions = {
       persistent: true,
@@ -313,6 +321,9 @@ export default class DocumentManager extends ProviderContract {
         }
         case 'close-leaf': {
           return this.closeLeaf(payload.windowId, payload.leafId)
+        }
+        case 'focus-leaf': {
+          return this._updateFocusLeaf(payload.windowId, payload.leafId)
         }
         case 'set-branch-sizes': {
           // NOTE that in this particular instance we do not emit an event. The
@@ -740,23 +751,42 @@ export default class DocumentManager extends ProviderContract {
   }
 
   /**
-   * Returns a file's metadata including the contents.
+   * Opens a file in a specific leaf in a given window. If windowId or leafId is not specified
+   * it will open the file in the last focused leaf, in the last focused window.
    *
-   * @param  {string}  file   The absolute file path
+   * @param  {string|undefined} windowId  The windowId to open the document in
+   * @param  {string|undefined} leafId    The leafId of the window to open the document in
+   * @param  {string}  filePath   The absolute file path
    * @param  {boolean} newTab Optional. If true, will always prevent exchanging the currently active file.
    *
-   * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
+   * @return {Promise<boolean>} True if it successfully opens the file
    */
-  public async openFile (windowId: string, leafId: string|undefined, filePath: string, newTab?: boolean, modifyHistory?: boolean): Promise<boolean> {
+  public async openFile (windowId: string|undefined, leafId: string|undefined, filePath: string, newTab?: boolean): Promise<boolean> {
     if (!isFile(filePath)) {
       throw new Error(`Could not open file ${filePath}: Not an existing file.`)
     }
 
-    const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
+    // If windowId is not provided, then use the last focused window
+    if (windowId === undefined) {
+      const mainWindow: BrowserWindow|undefined = this._app.windows.getFirstMainWindow()
+      const key = (mainWindow !== undefined) ? this._app.windows.getMainWindowKey(mainWindow) : undefined
+      if (key !== undefined) {
+        windowId = key
+      }
+    }
+
+    if (windowId === undefined) {
+      return false
+    }
+
     let leaf: DTLeaf|undefined
     if (leafId === undefined) {
-      // Take the first leaf of the given window
-      leaf = this._windows[windowId].getAllLeafs()[0]
+      if (this._lastEditor.leafId !== undefined) {
+        leaf = this._windows[windowId].findLeaf(this._lastEditor.leafId)
+      }
+      if (leaf === undefined) {
+        leaf = this._windows[windowId].getAllLeafs()[0]
+      }
     } else {
       leaf = this._windows[windowId].findLeaf(leafId)
     }
@@ -769,6 +799,8 @@ export default class DocumentManager extends ProviderContract {
     if (leafId === undefined) {
       leafId = leaf.id
     }
+
+    this._updateFocusLeaf(windowId, leafId)
 
     if (leaf.tabMan.openFiles.map(x => x.path).includes(filePath)) {
       // File is already open -> simply set it as active
@@ -784,6 +816,7 @@ export default class DocumentManager extends ProviderContract {
     // gotten a specific request to open it in a *new* tab
     const activeFile = leaf.tabMan.activeFile
     const ret = leaf.tabMan.openFile(filePath)
+    const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
 
     if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)
@@ -1281,6 +1314,7 @@ export default class DocumentManager extends ProviderContract {
     if (leaf !== undefined) {
       leaf.parent.removeNode(leaf)
       this.broadcastEvent(DP_EVENTS.LEAF_CLOSED, { windowId, leafId })
+      this._updateFocusLeaf(windowId, this._windows[windowId].getAllLeafs()[0].id)
     }
   }
 
@@ -1430,5 +1464,10 @@ export default class DocumentManager extends ProviderContract {
     this.broadcastEvent(DP_EVENTS.FILE_SAVED, { filePath })
 
     return true
+  }
+
+  private _updateFocusLeaf (windowId: string, leafId: string): void {
+    this._lastEditor.windowId = windowId
+    this._lastEditor.leafId = leafId
   }
 }
