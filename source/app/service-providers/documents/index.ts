@@ -1093,8 +1093,6 @@ export default class DocumentManager extends ProviderContract {
         this._watcher.watchPath(openFile)
       }
     }
-
-    console.log(this._watcher.getWatched())
   }
 
   /**

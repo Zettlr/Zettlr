@@ -162,8 +162,10 @@
         Sum of words in all files: <strong>{{ sumWords }}</strong><br>
         Standard deviation: <strong>{{ sdChars }} characters / {{ sdWords }} words</strong><br>
         <br>
-        Your smallest file: <strong>{{ minChars }} characters / {{ minWords }} words</strong><br>
-        Your largest file: <strong>{{ maxChars }} characters / {{ maxWords }} words</strong><br>
+        Your smallest file: <strong>{{ minChars }} characters / {{ minWords }} words</strong>
+        (<a href="#" v-on:click="openFile(minCharsFile)">{{ basename(minCharsFile) }}</a>)<br>
+        Your largest file: <strong>{{ maxChars }} characters / {{ maxWords }} words</strong>
+        (<a href="#" v-on:click="openFile(maxCharsFile)">{{ basename(maxCharsFile) }}</a>)<br>
         The average file: <strong>{{ meanChars }} characters / {{ meanWords }} words</strong><br>
       </div>
       <div class="box-right">
@@ -187,6 +189,7 @@ import type { WorkspacesStatistics } from '@providers/workspaces/generate-stats'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
+const path = window.path
 
 export default defineComponent({
   name: 'FSALView',
@@ -225,7 +228,11 @@ export default defineComponent({
 
       mdFileCount: localiseNumber(0),
       codeFileCount: localiseNumber(0),
-      dirCount: localiseNumber(0)
+      dirCount: localiseNumber(0),
+      minCharsFile: '',
+      maxCharsFile: '',
+      minWordsFile: '',
+      maxWordsFile: ''
     }
   },
   created: function () {
@@ -269,12 +276,16 @@ export default defineComponent({
       this.maxWords = localiseNumber(data.maxWords)
       this.sumWords = localiseNumber(data.sumWords)
       this.sdWords = localiseNumber(data.sdWords)
+      this.minWordsFile = data.minWordsFile
+      this.maxWordsFile = data.maxWordsFile
 
       this.minChars = localiseNumber(data.minChars)
       this.meanChars = localiseNumber(data.meanChars)
       this.maxChars = localiseNumber(data.maxChars)
       this.sumChars = localiseNumber(data.sumChars)
       this.sdChars = localiseNumber(data.sdChars)
+      this.minCharsFile = data.minCharsFile
+      this.maxCharsFile = data.maxCharsFile
 
       this.words68PercentLower = localiseNumber(data.words68PercentLower)
       this.words68PercentUpper = localiseNumber(data.words68PercentUpper)
@@ -289,6 +300,15 @@ export default defineComponent({
       this.mdFileCount = localiseNumber(data.mdFileCount)
       this.codeFileCount = localiseNumber(data.codeFileCount)
       this.dirCount = localiseNumber(data.dirCount)
+    },
+    basename: function (absPath: string) {
+      return path.basename(absPath)
+    },
+    openFile: function (absPath: string) {
+      ipcRenderer.invoke('documents-provider', {
+        command: 'open-file',
+        payload: { path: absPath, newTab: true }
+      }).catch(err => console.error(err))
     }
   }
 })

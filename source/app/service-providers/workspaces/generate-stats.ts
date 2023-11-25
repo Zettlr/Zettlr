@@ -35,6 +35,10 @@ export interface WorkspacesStatistics {
   words68PercentUpper: number
   words95PercentLower: number
   words95PercentUpper: number
+  minCharsFile: string
+  maxCharsFile: string
+  minWordsFile: string
+  maxWordsFile: string
   mdFileCount: number
   codeFileCount: number
   dirCount: number
@@ -57,22 +61,30 @@ export default function generateStats (filetree: AnyDescriptor[]): WorkspacesSta
   let maxWords = -Infinity
   let sumChars = 0
   let sumWords = 0
+  let minWordsFile = ''
+  let maxWordsFile = ''
+  let minCharsFile = ''
+  let maxCharsFile = ''
 
   for (const descriptor of mdArray) {
     if (descriptor.charCount < minChars) {
       minChars = descriptor.charCount
+      minCharsFile = descriptor.path
     }
 
     if (descriptor.charCount > maxChars) {
       maxChars = descriptor.charCount
+      maxCharsFile = descriptor.path
     }
 
     if (descriptor.wordCount < minWords) {
       minWords = descriptor.wordCount
+      minWordsFile = descriptor.path
     }
 
     if (descriptor.wordCount > maxWords) {
       maxWords = descriptor.wordCount
+      maxWordsFile = descriptor.path
     }
 
     sumChars += descriptor.charCount
@@ -128,6 +140,10 @@ export default function generateStats (filetree: AnyDescriptor[]): WorkspacesSta
     words68PercentUpper: (words68PercentUpper > maxWords) ? maxWords : words68PercentUpper,
     words95PercentLower: (words95PercentLower < minWords) ? minWords : words95PercentLower,
     words95PercentUpper: (words95PercentUpper > maxWords) ? maxWords : words95PercentUpper,
+    minCharsFile,
+    maxCharsFile,
+    minWordsFile,
+    maxWordsFile,
     mdFileCount: pathsArray.filter(d => d.type === 'file').length,
     codeFileCount: pathsArray.filter(d => d.type === 'code').length,
     dirCount: pathsArray.filter(d => d.type === 'directory').length
