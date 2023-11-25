@@ -6,7 +6,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
 
 # 3.0.5
 

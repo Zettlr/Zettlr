@@ -167,6 +167,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['begin-dragging'],
   computed: {
     shouldCountChars: function (): boolean {
       return this.$store.state.config['editor.countChars']

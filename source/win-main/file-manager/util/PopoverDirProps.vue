@@ -342,7 +342,7 @@ export default {
       }
 
       // NOTE: The toggle describes *wanted* behavior
-      if (this.isProject) {
+      if (this.isProject === true) {
         ipcRenderer.invoke('application', {
           command: 'dir-new-project',
           payload: { path: this.directoryPath }
