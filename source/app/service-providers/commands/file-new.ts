@@ -100,7 +100,7 @@ export default class FileNew extends ZettlrCommand {
 
     try {
       // Then, make sure the name is correct.
-      let filename = sanitize(arg.name.trim(), { 'replacement': '-' })
+      let filename = sanitize(arg.name.trim(), { replacement: '-' })
       if (filename === '') {
         throw new Error('Could not create file: Filename was not valid')
       }

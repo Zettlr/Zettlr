@@ -19,16 +19,6 @@ import path from 'path'
 import { import_files as FORMATS } from '@common/data.json'
 import { showNativeNotification } from '@common/util/show-notification'
 
-// Prepare the list of file filters
-// The "All Files" filter should be at the top
-const fltr = [{ 'name': trans('All Files'), 'extensions': ['*'] }]
-for (const f of FORMATS) {
-  // The import_files array has the structure "readable format" "extensions"...
-  // Here we set index 1 as readable name and all following elements (without leading dots)
-  // as extensions
-  fltr.push({ 'name': f[0], 'extensions': f.slice(1) })
-}
-
 export default class ImportFiles extends ZettlrCommand {
   constructor (app: any) {
     super(app, 'import-files')
@@ -45,6 +35,16 @@ export default class ImportFiles extends ZettlrCommand {
     if (openDirectory === null) {
       showNativeNotification(trans('You have to select a directory to import to.'))
       return false
+    }
+
+    // Prepare the list of file filters
+    // The "All Files" filter should be at the top
+    let fltr = [{ name: trans('All Files'), extensions: ['*'] }]
+    for (let f of FORMATS) {
+      // The import_files array has the structure "readable format" "extensions"...
+      // Here we set index 1 as readable name and all following elements (without leading dots)
+      // as extensions
+      fltr.push({ name: f[0], extensions: f.slice(1) })
     }
 
     // First ask the user for a fileList

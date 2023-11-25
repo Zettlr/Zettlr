@@ -54,9 +54,9 @@ export default function (): FormSchema {
           label: trans('Automatically switch to dark mode'),
           model: 'autoDarkMode',
           options: {
-            'off': trans('Off'),
-            'schedule': trans('Schedule'),
-            'system': trans('Follow Operating System')
+            off: trans('Off'),
+            schedule: trans('Schedule'),
+            system: trans('Follow Operating System')
           }
         },
         {
@@ -78,9 +78,9 @@ export default function (): FormSchema {
           label: trans('File manager mode'),
           model: 'fileManagerMode',
           options: {
-            'thin': trans('Thin &mdash; show either file tree or file list'),
-            'expanded': trans('Expanded &mdash; show both file tree and file list'),
-            'combined': trans('Combined &mdash; show files and directories in the file tree')
+            thin: trans('Thin &mdash; show either file tree or file list'),
+            expanded: trans('Expanded &mdash; show both file tree and file list'),
+            combined: trans('Combined &mdash; show files and directories in the file tree')
           }
         },
         {
@@ -88,9 +88,9 @@ export default function (): FormSchema {
           label: trans('Display files using'),
           model: 'fileNameDisplay',
           options: {
-            'filename': trans('Filename only'),
-            'title': trans('Title if applicable'),
-            'heading': trans('First heading level 1 if applicable'),
+            filename: trans('Filename only'),
+            title: trans('Title if applicable'),
+            heading: trans('First heading level 1 if applicable'),
             'title+heading': trans('Title or first heading level 1 if applicable')
           }
         },
@@ -107,8 +107,8 @@ export default function (): FormSchema {
           label: trans('Sorting order for files (used for sorting by name)'),
           model: 'sorting',
           options: {
-            'natural': trans('Natural order (10 after 2)'),
-            'ascii': trans('ASCII order (2 after 10)')
+            natural: trans('Natural order (10 after 2)'),
+            ascii: trans('ASCII order (2 after 10)')
           }
         }
       ],
@@ -125,8 +125,8 @@ export default function (): FormSchema {
           label: trans('When sorting by time, sort by'),
           model: 'sortingTime',
           options: {
-            'modtime': trans('Last modification time'),
-            'creationtime': trans('File creation time')
+            modtime: trans('Last modification time'),
+            creationtime: trans('File creation time')
           }
         },
         {
@@ -134,8 +134,8 @@ export default function (): FormSchema {
           label: trans('In the file metadata display'),
           model: 'fileMetaTime',
           options: {
-            'modtime': trans('Last modification time'),
-            'creationtime': trans('File creation time')
+            modtime: trans('Last modification time'),
+            creationtime: trans('File creation time')
           }
         }
       ]

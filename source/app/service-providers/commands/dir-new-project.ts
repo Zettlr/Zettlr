@@ -28,7 +28,7 @@ export default class DirNewProject extends ZettlrCommand {
     let dir = this._app.workspaces.findDir(arg.path)
     if (dir !== undefined) {
       // Create a new project, presetting the title with the directory name
-      await this._app.fsal.createProject(dir, { 'title': dir.name })
+      await this._app.fsal.createProject(dir, { title: dir.name })
     }
   }
 }
