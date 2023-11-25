@@ -30,7 +30,7 @@ import type { AnyDescriptor, CodeFileDescriptor, DirDescriptor, MDFileDescriptor
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import locateByPath from '@providers/fsal/util/locate-by-path'
-import { showSplashScreen, closeSplashScreen, updateSplashScreen } from '@providers/fsal/util/splash-screen'
+import { showSplashScreen, closeSplashScreen, updateSplashScreen } from '@providers/workspaces/splash-screen'
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import { performance } from 'perf_hooks'
@@ -156,6 +156,7 @@ export default class WorkspaceProvider extends ProviderContract {
     for (const rootPath of openPaths) {
       updateSplashScreen(trans('Loading workspace %s', path.basename(rootPath)), currentPercent)
       currentPercent += Math.round(1 / openPaths.length * 100)
+
       if (this.roots.find(root => root.rootPath === rootPath) !== undefined) {
         continue // This path has already been loaded
       }
