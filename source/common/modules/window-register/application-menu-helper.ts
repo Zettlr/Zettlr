@@ -39,12 +39,12 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     height: 0
   }
 
-  if (position.hasOwnProperty('width') && position.hasOwnProperty('height')) {
-    targetRect = position as Rect
+  if ('width' in position && 'height' in position) {
+    targetRect = position
   } else {
     // A point is basically a rect with no width or height
-    targetRect.top = (position as Point).y
-    targetRect.left = (position as Point).x
+    targetRect.top = position.y
+    targetRect.left = position.x
   }
 
   if (process.platform === 'darwin') {
@@ -204,8 +204,8 @@ function renderMenuItem (item: AnyMenuItem, elementClass?: string): HTMLElement 
   }
 
   menuItem.classList.add(item.type)
-  if (item.hasOwnProperty('id')) {
-    menuItem.dataset.id = (item as NormalItem).id
+  if ('id' in item) {
+    menuItem.dataset.id = item.id
   }
 
   // In case the caller wants an additional class on the item
