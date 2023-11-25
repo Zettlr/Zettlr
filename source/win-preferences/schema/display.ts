@@ -66,21 +66,21 @@ export default function (): FormSchema {
           model: 'display.theme',
           label: trans('Here you can choose the theme for the app.'),
           options: {
-            'berlin': {
+            berlin: {
               textColor: 'white',
               backgroundColor: '#1cb27e',
               name: 'Berlin',
               fontFamily: 'inherit',
               description: 'An all-time classic: This theme has been part of Zettlr since the very beginning. A modern theme featuring the signatory green color and a sans-serif font.'
             },
-            'frankfurt': {
+            frankfurt: {
               textColor: 'white',
               backgroundColor: '#1d75b3',
               name: 'Frankfurt',
               fontFamily: 'Crimson',
               description: 'In line with the spirit of the time-honoured Frankfurt School, this theme features a mature serif font paired with royal blue.'
             },
-            'bielefeld': {
+            bielefeld: {
               textColor: 'black',
               backgroundColor: '#ffffdc',
               name: 'Bielefeld',
@@ -94,7 +94,7 @@ export default function (): FormSchema {
               fontFamily: 'inherit',
               description: 'City names change, but their spirit remains: A forceful red complements this theme\'s progressive appeal and sans-serif font.'
             },
-            'bordeaux': {
+            bordeaux: {
               textColor: '#dc2d2d',
               backgroundColor: '#fffff8',
               name: 'Bordeaux',

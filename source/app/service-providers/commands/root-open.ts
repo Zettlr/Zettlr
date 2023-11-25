@@ -80,9 +80,9 @@ export default class RootOpen extends ZettlrCommand {
         // We cannot add this dir, because it is in the list of ignored directories.
         this._app.log.error(`The chosen workspace "${workspace}" is on the ignore list.`)
         this._app.windows.prompt({
-          'type': 'error',
-          'title': trans('Cannot open directory'),
-          'message': trans('Directory &quot;%s&quot; cannot be opened by Zettlr.', path.basename(workspace))
+          type: 'error',
+          title: trans('Cannot open directory'),
+          message: trans('Directory &quot;%s&quot; cannot be opened by Zettlr.', path.basename(workspace))
         })
       }
     }
