@@ -37,20 +37,23 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
   readers/writers (#4699)
 - GraphView's labels are now rendered filled instead of stroked, to make it
   easier to read the labels.
-- The GraphView does now support multi-window, so clicking a link will open it in
-  the last focused window. If the file is already open in a leaf, that file will
-  be in that leaf, otherwise it will open the file in the last focused leaf.
-- Alt+Click in GraphView will force the document to be opened in a new tab.
+- The GraphView does now support multi-window, so clicking a link will open it
+  in the last focused window. If the file is already open in a leaf, that file
+  will be in that leaf, otherwise it will open the file in the last focused
+  leaf.
+- `Alt+Click` in GraphView will force the document to be opened in a new tab.
+- Zettelkasten links and tags will now be output by our custom Markdown-to-HTML
+  parser (i.e., in various places in the app as well as on Copy with Style)
 
 
 ## Under the Hood
 
-- **Potentially Breaking Refactor**: Moved all themes from the `*.less`-files
-  into proper theme plugins for CodeMirror v6; this means that they will not
-  provide any global styles anymore; any applicable styling has been moved to
-  more appropriate places (CodeMirror plugins as well as the WindowChrome and
-  the various remaining `*.less` files) -- this should not influence any
-  existing Custom CSS, but it may
+- Moved all themes from the `*.less`-files into proper theme plugins for
+  CodeMirror v6; this means that they will not provide any global styles
+  anymore; any applicable styling has been moved to more appropriate places
+  (CodeMirror plugins as well as the WindowChrome and the various remaining
+  `*.less` files). We tested the changes out and in our settings, no changes
+  were necessary; sometimes you may need to adapt class definitions
 - Remove unused color variable definitions
 - Move gray color palette to the Window Chrome component
 - Fixed an issue where the font definitions were borked and required usage of
@@ -61,10 +64,8 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
 - `fsal-directory::removeChild` now calls `pathExists` instead of `isFile` to
   make sure directories also are removed in removeChild
 - `pathExists` wraps `fs.promises.access`.
-- Move plugin-specific base styles from the main override to the respective
-  plugin files
-- Moved formatting bar; heading sizes; code background; typewriter; heading
-  indicator; frontmatter; distraction free; and iframe styling to their plugins
+- (CodeMirror) Move plugin-specific base styles from the main override as well
+  as from the themes to the respective plugin files
 - Bump Pandoc to version `3.1.9`
 - Fixed a weird layouting issue with the code block backgrounds
 - DocumentManager's `openFile` does now handle the case when windowId and leafId
