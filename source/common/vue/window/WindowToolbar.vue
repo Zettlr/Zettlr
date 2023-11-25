@@ -44,7 +44,7 @@
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"
-        v-on:update:modelValue="$emit('search', $event)"
+        v-on:update:model-value="$emit('search', $event)"
       ></SearchControl>
       <SpacerControl
         v-if="item.type === 'spacer'"
