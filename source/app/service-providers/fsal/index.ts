@@ -15,8 +15,6 @@
 
 import path from 'path'
 import EventEmitter from 'events'
-import isFile from '@common/util/is-file'
-import isDir from '@common/util/is-dir'
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALDir from './fsal-directory'
@@ -243,6 +241,38 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
+   * Checks if the provided absolute path is a directory
+   *
+   * @param   {string}            absPath  The absolute path to the FS node
+   *
+   * @return  {Promise<boolean>}           Returns true, if absPath is a dir
+   */
+  public async isDir (absPath: string): Promise<boolean> {
+    if (!await this.pathExists(absPath)) {
+      return false
+    }
+
+    const metadata = await getFilesystemMetadata(absPath)
+    return metadata.isDirectory
+  }
+
+  /**
+   * Checks if the provided absolute path is a file
+   *
+   * @param   {string}            absPath  The absolute path to the FS node
+   *
+   * @return  {Promise<boolean>}           Returns true, if absPath is a file
+   */
+  public async isFile (absPath: string): Promise<boolean> {
+    if (!await this.pathExists(absPath)) {
+      return false
+    }
+
+    const metadata = await getFilesystemMetadata(absPath)
+    return metadata.isFile
+  }
+
+  /**
    * Creates a new file in the given directory
    *
    * @param  {DirDescriptor}                                           src      The source directory
@@ -402,7 +432,7 @@ export default class FSAL extends ProviderContract {
   public async rename (oldPath: string, newPath: string): Promise<void> {
     await fs.rename(oldPath, newPath)
     // Notify the documents provider so it can exchange any files if necessary
-    if (isFile(newPath)) {
+    if (await this.isFile(newPath)) {
       await this._docs.hasMovedFile(oldPath, newPath)
     } else {
       await this._docs.hasMovedDir(oldPath, newPath)
@@ -434,11 +464,11 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string>}           Resolves with a string
    */
   public async loadAnySupportedFile (absPath: string): Promise<string> {
-    if (isDir(absPath)) {
+    if (await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
     }
 
-    if (!isFile(absPath)) {
+    if (!await this.isFile(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
     }
 
@@ -462,11 +492,11 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<MDFileDescriptor>}           Resolves with the descriptor
    */
   public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
-    if (isDir(absPath)) {
+    if (await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
     }
 
-    if (!isFile(absPath)) {
+    if (!await this.isFile(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
     }
 
@@ -495,7 +525,7 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise}              Promise resolves with any descriptor
    */
   public async loadAnyPath (absPath: string, shallowDir: boolean = false): Promise<DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
-    if (isDir(absPath)) {
+    if (await this.isDir(absPath)) {
       return await this.getAnyDirectoryDescriptor(absPath, shallowDir)
     } else {
       return await this.getDescriptorForAnySupportedFile(absPath)
@@ -516,7 +546,7 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<DirDescriptor>}           The dir descriptor
    */
   public async getAnyDirectoryDescriptor (absPath: string, shallow: boolean = false): Promise<DirDescriptor> {
-    if (!isDir(absPath)) {
+    if (!await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
     }
 

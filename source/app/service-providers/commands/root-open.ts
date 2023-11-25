@@ -15,8 +15,6 @@
 import { trans } from '@common/i18n-main'
 import ignoreDir from '@common/util/ignore-dir'
 import ignoreFile from '@common/util/ignore-file'
-import isDir from '@common/util/is-dir'
-import isFile from '@common/util/is-file'
 import { app } from 'electron'
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
@@ -75,8 +73,8 @@ export default class RootOpen extends ZettlrCommand {
     const ret = await this._app.windows.askDir(trans('Open project folder'), null)
 
     for (const workspace of ret) {
-      const ignoredDir = isDir(workspace) && ignoreDir(workspace)
-      const ignoredFile = isFile(workspace) && ignoreFile(workspace)
+      const ignoredDir = await this._app.fsal.isDir(workspace) && ignoreDir(workspace)
+      const ignoredFile = await this._app.fsal.isFile(workspace) && ignoreFile(workspace)
       if (ignoredDir || ignoredFile || workspace === app.getPath('home')) {
         // We cannot add this dir, because it is in the list of ignored directories.
         this._app.log.error(`The chosen workspace "${workspace}" is on the ignore list.`)
@@ -134,7 +132,7 @@ export default class RootOpen extends ZettlrCommand {
         // Do nothing
       } else if (this._app.config.addPath(absPath)) {
         try {
-          if (isDir(absPath)) {
+          if (await this._app.fsal.isDir(absPath)) {
             showNativeNotification(trans('Opening new root %s …', path.basename(absPath)))
           }
           // If it was a file and not a directory, immediately open it.
@@ -143,7 +141,7 @@ export default class RootOpen extends ZettlrCommand {
             await this._app.documents.openFile(winKey, leafId, file.path, true)
           }
 
-          if (isDir(absPath)) {
+          if (await this._app.fsal.isDir(absPath)) {
             showNativeNotification(trans('%s has been loaded.', path.basename(absPath)))
           }
         } catch (err: any) {

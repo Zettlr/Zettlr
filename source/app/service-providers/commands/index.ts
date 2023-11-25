@@ -49,8 +49,6 @@ import type AppServiceContainer from 'source/app/app-service-container'
 import type ZettlrCommand from './zettlr-command'
 import SetOpenDirectory from './set-open-directory'
 import { clipboard, ipcMain, nativeImage } from 'electron'
-import isFile from '@common/util/is-file'
-import isDir from '@common/util/is-dir'
 import enumLangFiles from '@common/util/enum-lang-files'
 import enumDictFiles from '@common/util/enum-dict-files'
 import RenameTag from './rename-tag'
@@ -122,9 +120,9 @@ export default class CommandProvider extends ProviderContract {
     if (command === 'get-statistics-data') {
       return this._app.workspaces.getStatistics()
     } else if (command === 'get-descriptor') {
-      if (isFile(payload)) {
+      if (await this._app.fsal.isFile(payload)) {
         return await this._app.fsal.getDescriptorForAnySupportedFile(payload)
-      } else if (isDir(payload)) {
+      } else if (await this._app.fsal.isDir(payload)) {
         return await this._app.fsal.getAnyDirectoryDescriptor(payload)
       } else {
         this._app.log.error(`[Application] Could not return descriptor for ${String(payload)}: Neither file nor directory.`)

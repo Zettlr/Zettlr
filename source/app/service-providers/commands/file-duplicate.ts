@@ -17,7 +17,6 @@ import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
 import { codeFileExtensions, mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
-import isFile from '@common/util/is-file'
 
 const CODEFILE_TYPES = codeFileExtensions(true)
 const ALLOWED_FILETYPES = mdFileExtensions(true)
@@ -71,10 +70,10 @@ export default class FileDuplicate extends ZettlrCommand {
       // We need to generate our own filename. First, attempt to just use 'copy of'
       filename = trans('Copy of %s', file.name)
       // See if it's a file
-      if (isFile(path.join(dir.path, filename))) {
+      if (await this._app.fsal.isFile(path.join(dir.path, filename))) {
         // Filename is already given, so we need to add increasing numbers
         let duplicateNumber = 1
-        while (isFile(path.join(dir.path, `Copy (${duplicateNumber}) of ${file.name}`))) {
+        while (await this._app.fsal.isFile(path.join(dir.path, `Copy (${duplicateNumber}) of ${file.name}`))) {
           duplicateNumber++
         }
         // Now we have a unique filename
