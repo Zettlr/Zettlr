@@ -7,16 +7,40 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This function takes the filetree of the FSAL and generates
- *                  some statistics based off that.
+ * Description:     This function generates some statistics based on the loaded
+ *                  workspaces in the application.
  *
  * END HEADER
  */
 
 import objectToArray from '@common/util/object-to-array'
-import type { MaybeRootDescriptor, DirDescriptor, MDFileDescriptor, CodeFileDescriptor, FSALStats } from '@dts/common/fsal'
+import type { DirDescriptor, MDFileDescriptor, CodeFileDescriptor, AnyDescriptor } from '@dts/common/fsal'
 
-export default function generateStats (filetree: MaybeRootDescriptor[]): FSALStats {
+export interface WorkspacesStatistics {
+  minChars: number
+  maxChars: number
+  minWords: number
+  maxWords: number
+  sumChars: number
+  sumWords: number
+  meanChars: number
+  meanWords: number
+  sdChars: number
+  sdWords: number
+  chars68PercentLower: number
+  chars68PercentUpper: number
+  chars95PercentLower: number
+  chars95PercentUpper: number
+  words68PercentLower: number
+  words68PercentUpper: number
+  words95PercentLower: number
+  words95PercentUpper: number
+  mdFileCount: number
+  codeFileCount: number
+  dirCount: number
+}
+
+export default function generateStats (filetree: AnyDescriptor[]): WorkspacesStatistics {
   // First, we need ALL of our loaded paths as an array
   let pathsArray: Array<DirDescriptor|MDFileDescriptor|CodeFileDescriptor> = []
   for (const descriptor of filetree) {

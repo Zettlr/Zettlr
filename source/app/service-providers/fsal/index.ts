@@ -31,10 +31,9 @@ import type {
   OtherFileDescriptor,
   MaybeRootDescriptor,
   SortMethod,
-  FSALStats, ProjectSettings
+  ProjectSettings
 } from '@dts/common/fsal'
 import type { SearchTerm } from '@dts/common/search'
-import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
 import { app } from 'electron'
 import type LogProvider from '@providers/log'
@@ -189,11 +188,6 @@ export default class FSAL extends ProviderContract {
     }
 
     return false
-  }
-
-  // DEBUG: MOVE TO WORKSPACES PROVIDER
-  public get statistics (): FSALStats {
-    return generateStats(this._state.filetree)
   }
 
   /**

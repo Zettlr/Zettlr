@@ -35,6 +35,7 @@ import { trans } from '@common/i18n-main'
 import path from 'path'
 import { performance } from 'perf_hooks'
 import objectToArray from '@common/util/object-to-array'
+import generateStats, { type WorkspacesStatistics } from './generate-stats'
 
 export enum WORKSPACE_PROVIDER_EVENTS {
   WorkspaceAdded = 'workspace-added',
@@ -308,6 +309,11 @@ export default class WorkspaceProvider extends ProviderContract {
   public getAllFiles (): Array<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
     return objectToArray(this.roots.map(root => root.rootDescriptor), 'children')
       .filter(descriptor => descriptor.type !== 'directory')
+  }
+
+  // DEBUG: MOVE TO WORKSPACES PROVIDER
+  public getStatistics (): WorkspacesStatistics {
+    return generateStats(this.roots.map(root => root.rootDescriptor))
   }
 
   /**

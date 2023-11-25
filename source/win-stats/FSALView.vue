@@ -183,7 +183,7 @@
 
 <script lang="ts">
 import localiseNumber from '@common/util/localise-number'
-import { FSALStats } from '@dts/common/fsal'
+import type { WorkspacesStatistics } from '@providers/workspaces/generate-stats'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
@@ -236,7 +236,7 @@ export default defineComponent({
       .catch(e => console.error(e))
   },
   methods: {
-    recalculateStats: function (data: FSALStats) {
+    recalculateStats: function (data: WorkspacesStatistics) {
       // Approximately aspect ratio 8:1. This will be stretched and squeezed on
       // non standard compliant window sizes, but alas. We assume Zettlr will
       // -- most of the time -- be run in default maximized/full screen state on

@@ -120,7 +120,7 @@ export default class CommandProvider extends ProviderContract {
     // FIRST: Try to run a minimal command for which its own custom function
     // wouldn't make sense.
     if (command === 'get-statistics-data') {
-      return this._app.fsal.statistics
+      return this._app.workspaces.getStatistics()
     } else if (command === 'get-descriptor') {
       if (isFile(payload)) {
         return await this._app.fsal.getDescriptorForAnySupportedFile(payload)
