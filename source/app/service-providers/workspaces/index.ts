@@ -119,7 +119,7 @@ export default class WorkspaceProvider extends ProviderContract {
       onChange: (rootPath: string) => {
         this._logger.info(`[WorkspaceManager] Root ${rootPath} has changed`)
         broadcastIPCMessage(WORKSPACE_PROVIDER_EVENTS.WorkspaceChanged, rootPath)
-        this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceChanged)
+        this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceChanged, rootPath)
       },
       onUnlink: (rootPath: string) => {
         this._logger.warning(`[WorkspaceManager] Root ${rootPath} has been removed`)
@@ -187,7 +187,7 @@ export default class WorkspaceProvider extends ProviderContract {
         }
 
         broadcastIPCMessage(WORKSPACE_PROVIDER_EVENTS.WorkspaceAdded, rootPath)
-        this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceAdded)
+        this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceAdded, rootPath)
       } catch (err: any) {
         // TODO
       }
@@ -210,7 +210,7 @@ export default class WorkspaceProvider extends ProviderContract {
         await affectedRoot.prepareShutdown()
         this.roots.splice(this.roots.indexOf(affectedRoot), 1)
         broadcastIPCMessage(WORKSPACE_PROVIDER_EVENTS.WorkspaceRemoved, rootPath)
-        this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceRemoved)
+        this.emitter.emit(WORKSPACE_PROVIDER_EVENTS.WorkspaceRemoved, rootPath)
       }
     }
   }

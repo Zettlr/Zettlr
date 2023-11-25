@@ -299,9 +299,9 @@ export default class ConfigProvider extends ProviderContract {
     * @return {ZettlrConfig} Chainability.
     */
   private sortPaths (): void {
-    let f = []
-    let d = []
-    for (let p of this.config.openPaths) {
+    const f = []
+    const d = []
+    for (const p of this.config.openPaths) {
       if (isDir(p)) {
         d.push(p)
       } else {
@@ -310,7 +310,7 @@ export default class ConfigProvider extends ProviderContract {
     }
 
     // We only want to sort the paths based on rudimentary, natural order.
-    let coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
+    const coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
     f.sort((a, b) => {
       return coll.compare(path.basename(a), path.basename(b))
     })
@@ -350,6 +350,7 @@ export default class ConfigProvider extends ProviderContract {
     if (this.config.openPaths.includes(p)) {
       this.config.openPaths.splice(this.config.openPaths.indexOf(p), 1)
       this._container.set(this.config)
+      this._emitter.emit('update', 'openPaths')
       return true
     }
     return false

@@ -59,10 +59,27 @@ async function processNextRootUpdateRequest (): Promise<void> {
  * @param   {Ref<RootRefValue>}              roots         The reactive roots
  */
 async function updateRoot (rootPath: string, roots: Ref<RootRefValue>): Promise<void> {
+  const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = useConfigStore().config
+  const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
   const root = roots.value.find(root => root.descriptor.path === rootPath)
 
   if (root === undefined) {
-    console.error('Could not fetch root descriptor, despite being in rootPaths:', rootPath)
+    // If the root is undefined, then we are reacting to a workspace-added event.
+    try {
+      const response: InitialTreeData = await ipcRenderer.invoke('workspace-provider', {
+        command: 'get-changes-since',
+        // version: -1 ensures that main will send us back InitialTreeData
+        payload: { rootPath, version: -1 }
+      })
+      // We have been outdated -> replace the root
+      roots.value.push({
+        descriptor: mergeEventsIntoTree(response.changes, response.descriptor, sorter),
+        version: response.currentVersion
+      })
+      sortRoots(roots)
+    } catch (err: any) {
+      console.error(`Could not fetch root descriptor ${rootPath}:`, err)
+    }
     return
   }
 
@@ -72,9 +89,6 @@ async function updateRoot (rootPath: string, roots: Ref<RootRefValue>): Promise<
     command: 'get-changes-since',
     payload: { rootPath, version: root.version }
   })
-
-  const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = useConfigStore().config
-  const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
 
   if (Array.isArray(response)) {
     // We have received a regular amount of updates
@@ -89,6 +103,26 @@ async function updateRoot (rootPath: string, roots: Ref<RootRefValue>): Promise<
       version: response.currentVersion
     })
   }
+}
+
+/**
+ * Sorts the roots in an appropriate order for display: files first, then folders.
+ *
+ * @param  {Ref<RootRefValue>}  roots  The roots reference
+ */
+function sortRoots (roots: Ref<RootRefValue>): void {
+  const { appLang } = useConfigStore().config
+  // We only want to sort the paths based on rudimentary, natural order.
+  const coll = new Intl.Collator([ appLang, 'en' ], { numeric: true })
+  // First, sort based on a collator to have them in proper order.
+  roots.value.sort((a, b) => {
+    return coll.compare(a.descriptor.name, b.descriptor.name)
+  })
+
+  // And second, separate root files from root dirs.
+  roots.value.sort((a, b) => {
+    return Number(a.descriptor.type === 'directory') - Number(b.descriptor.type === 'directory')
+  })
 }
 
 /**
@@ -145,6 +179,7 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
       for (const data of response) {
         const { descriptor, currentVersion } = data
         roots.value.push({ descriptor, version: currentVersion })
+        sortRoots(roots)
       }
     })
     .catch(err => console.error(`Could not initialize workspacesStore: ${err.message as string}`))
@@ -172,6 +207,19 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
     if (idx > -1) {
       roots.value.splice(idx, 1)
     }
+  })
+
+  ipcRenderer.on('workspace-added', (event, rootPath) => {
+    updateRequests.push(async () => {
+      await updateRoot(rootPath, roots)
+    })
+
+    if (rootUpdaterWorking) {
+      return // Once the updater is working, it will automatically fetch the new request
+    }
+
+    processNextRootUpdateRequest()
+      .catch(err => console.error(`Could not process root update request: ${err.message as string}`))
   })
 
   return { roots, rootPaths, rootDescriptors, getFile }
