@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-11-25 09:50+0000\n"
+"POT-Creation-Date: 2023-11-25 10:38+0000\n"
 "PO-Revision-Date: 2022-12-29 23:16+0100\n"
 "Last-Translator: Marcel van den Brink <marcel.vandenbrink@gmail.com>\n"
 "Language-Team: \n"
@@ -641,7 +641,7 @@ msgid "Detect automatically"
 msgstr ""
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
-#: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
+#: source/tmp/file-item.vue.ts:135 source/tmp/file-item.vue.ts:208
 #: source/tmp/PopoverFileProps.vue.ts:130 source/tmp/PopoverDocInfo.vue.ts:71
 #: source/tmp/PopoverDirProps.vue.ts:159 source/tmp/PopoverDirProps.vue.ts:167
 #, javascript-format
@@ -649,7 +649,7 @@ msgid "%s words"
 msgstr "%s woorden"
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
-#: source/tmp/file-item.vue.ts:132 source/tmp/file-item.vue.ts:205
+#: source/tmp/file-item.vue.ts:133 source/tmp/file-item.vue.ts:206
 #: source/tmp/PopoverDocInfo.vue.ts:69
 #, javascript-format
 msgid "%s characters"
@@ -955,7 +955,7 @@ msgid "Project Export"
 msgstr "Exporteren"
 
 #: source/app/service-providers/commands/root-open.ts:61
-#: source/tmp/file-item.vue.ts:119 source/tmp/file-tree.vue.ts:26
+#: source/tmp/file-item.vue.ts:120 source/tmp/file-tree.vue.ts:26
 #: source/tmp/PopoverDirProps.vue.ts:179
 msgid "Files"
 msgstr "Bestanden"
@@ -1605,7 +1605,7 @@ msgstr "Geluidseffect"
 msgid "Volume"
 msgstr "Volume"
 
-#: source/tmp/File.vue.ts:60 source/tmp/Color.vue.ts:51
+#: source/tmp/File.vue.ts:61 source/tmp/Color.vue.ts:52
 #: source/tmp/PopoverFileProps.vue.ts:112 source/tmp/Number.vue.ts:60
 #: source/tmp/ShortcutChooser.vue.ts:61
 msgid "Reset"
@@ -1738,15 +1738,15 @@ msgstr "Inhoudsopgave"
 msgid "Related files"
 msgstr "Gerelateerde bestanden"
 
-#: source/tmp/file-item.vue.ts:113 source/tmp/PopoverDirProps.vue.ts:170
+#: source/tmp/file-item.vue.ts:114 source/tmp/PopoverDirProps.vue.ts:170
 msgid "Directories"
 msgstr "Mappen"
 
-#: source/tmp/file-item.vue.ts:193 source/tmp/PopoverFileProps.vue.ts:118
+#: source/tmp/file-item.vue.ts:194 source/tmp/PopoverFileProps.vue.ts:118
 msgid "Characters"
 msgstr "Karakters"
 
-#: source/tmp/file-item.vue.ts:195 source/tmp/PopoverFileProps.vue.ts:103
+#: source/tmp/file-item.vue.ts:196 source/tmp/PopoverFileProps.vue.ts:103
 msgid "Words"
 msgstr "Woorden"
 
@@ -1795,15 +1795,15 @@ msgstr "geselecteerd"
 msgid "click to select"
 msgstr "klik om te selecteren"
 
-#: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
+#: source/tmp/file-list.vue.ts:67 source/tmp/file-tree.vue.ts:35
 msgid "No results"
 msgstr "Geen resultaten"
 
-#: source/tmp/file-list.vue.ts:69
+#: source/tmp/file-list.vue.ts:70
 msgid "No directory selected"
 msgstr "Geen map geselecteerd"
 
-#: source/tmp/file-list.vue.ts:72
+#: source/tmp/file-list.vue.ts:73
 msgid "Empty directory"
 msgstr "Lege map"
 
