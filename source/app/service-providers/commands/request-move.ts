@@ -75,7 +75,15 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Now we can move the source to the target.
-    await this._app.fsal.rename(from.path, path.join(to.path, from.name))
+    const newPath = path.join(to.path, from.name)
+    await this._app.fsal.rename(from.path, newPath)
+    // Notify the documents provider so it can exchange any files if necessary
+    if (await this._app.fsal.isFile(newPath)) {
+      await this._app.documents.hasMovedFile(from.path, newPath)
+    } else {
+      await this._app.documents.hasMovedDir(from.path, newPath)
+    }
+
     return true
   }
 }

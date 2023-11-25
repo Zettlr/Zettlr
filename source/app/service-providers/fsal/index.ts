@@ -27,7 +27,6 @@ import type {
   MDFileDescriptor,
   CodeFileDescriptor,
   OtherFileDescriptor,
-  MaybeRootDescriptor,
   SortMethod,
   ProjectSettings
 } from '@dts/common/fsal'
@@ -40,7 +39,6 @@ import getMarkdownFileParser from './util/file-parser'
 import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
 import { safeDelete } from './util/safe-delete'
-import type DocumentManager from '@providers/documents'
 import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
@@ -53,32 +51,19 @@ export {
   getFilesystemMetadata
 }
 
-interface FSALState {
-  openDirectory: DirDescriptor|null
-  filetree: MaybeRootDescriptor[]
-}
-
 export default class FSAL extends ProviderContract {
   private readonly _cache: FSALCache
-  private readonly _state: FSALState
   private readonly _emitter: EventEmitter
 
   constructor (
     private readonly _logger: LogProvider,
-    private readonly _config: ConfigProvider,
-    private readonly _docs: DocumentManager
+    private readonly _config: ConfigProvider
   ) {
     super()
 
     const cachedir = app.getPath('userData')
     this._cache = new FSALCache(this._logger, path.join(cachedir, 'fsal/cache'))
     this._emitter = new EventEmitter()
-
-    this._state = {
-      // The app supports one open directory and (in theory) unlimited open files
-      openDirectory: null,
-      filetree: [] // Contains the full filetree
-    }
   } // END constructor
 
   async boot (): Promise<void> {
@@ -115,7 +100,21 @@ export default class FSAL extends ProviderContract {
    * @return  {FSALWatchdog}     A new watchdog
    */
   public watchPath (p: string): FSALWatchdog {
-    return new FSALWatchdog(p, this._logger, this._config)
+    const watcher = new FSALWatchdog(this._logger, this._config)
+    watcher.watchPath(p)
+    return watcher
+  }
+
+  /**
+   * Returns a new, empty FSAL watchdog. Add additional paths to watch by
+   * calling `watchPath`. NOTE: Try to avoid instantiating empty watchers to
+   * avoid conflicts while adding/removing intersecting watched paths, and use
+   * `fsal.watchPath` instead!
+   *
+   * @return  {FSALWatchdog}  A new watchdog
+   */
+  public getWatchdog (): FSALWatchdog {
+    return new FSALWatchdog(this._logger, this._config)
   }
 
   /**
@@ -431,12 +430,6 @@ export default class FSAL extends ProviderContract {
    */
   public async rename (oldPath: string, newPath: string): Promise<void> {
     await fs.rename(oldPath, newPath)
-    // Notify the documents provider so it can exchange any files if necessary
-    if (await this.isFile(newPath)) {
-      await this._docs.hasMovedFile(oldPath, newPath)
-    } else {
-      await this._docs.hasMovedDir(oldPath, newPath)
-    }
   }
 
   /**

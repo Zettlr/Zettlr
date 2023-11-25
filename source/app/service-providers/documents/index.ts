@@ -28,7 +28,6 @@ import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { type TabManager } from '@providers/documents/document-tree/tab-manager'
 import { DP_EVENTS, type OpenDocument, DocumentType } from '@dts/common/documents'
 import { v4 as uuid4 } from 'uuid'
-import chokidar from 'chokidar'
 import { type Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
 import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
@@ -36,6 +35,7 @@ import { countChars, countWords } from '@common/util/counter'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import isFile from '@common/util/is-file'
 import { trans } from '@common/i18n-main'
+import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
 
 type DocumentWindows = Record<string, DocumentTree>
 
@@ -148,7 +148,7 @@ export default class DocumentManager extends ProviderContract {
    *
    * @var {chokidar.FSWatcher}
    */
-  private readonly _watcher: chokidar.FSWatcher
+  private readonly _watcher: FSALWatchdog
 
   /**
    * Holds a list of strings for files that have recently been saved by the
@@ -200,36 +200,10 @@ export default class DocumentManager extends ProviderContract {
       leafId: undefined
     }
 
-    const options: chokidar.WatchOptions = {
-      persistent: true,
-      ignoreInitial: true, // Do not track the initial watch as changes
-      followSymlinks: true, // Follow symlinks
-      ignorePermissionErrors: true, // In the worst case one has to reboot the software, but so it looks nicer.
-      // See the description for the next vars in the fsal-watchdog.ts
-      interval: 5000,
-      binaryInterval: 5000
-    }
-
-    if (this._app.config.get('watchdog.activatePolling') as boolean) {
-      let threshold: number = this._app.config.get('watchdog.stabilityThreshold')
-      if (typeof threshold !== 'number' || threshold < 0) {
-        threshold = 1000
-      }
-
-      // From chokidar docs: "[...] in some cases some change events will be
-      // emitted while the file is being written." --> hence activate this.
-      options.awaitWriteFinish = {
-        stabilityThreshold: threshold,
-        pollInterval: 100
-      }
-
-      this._app.log.info(`[DocumentManager] Activating file polling with a threshold of ${threshold}ms.`)
-    }
-
     // Start up the chokidar process
-    this._watcher = new chokidar.FSWatcher(options)
+    this._watcher = this._app.fsal.getWatchdog()
 
-    this._watcher.on('all', (event, filePath) => {
+    this._watcher.on('change', (event, filePath) => {
       if (this._ignoreChanges.includes(filePath) && event === 'change') {
         this._app.log.info(`[DocumentManager] Ignoring change for ${filePath}`)
         this._ignoreChanges.splice(this._ignoreChanges.indexOf(filePath), 1)
@@ -557,7 +531,7 @@ export default class DocumentManager extends ProviderContract {
     // every chokidar process we utilize. Otherwise, the fsevents dylib will
     // still hold on to some memory after the Electron process itself shuts down
     // which will result in a crash report appearing on macOS.
-    await this._watcher.close()
+    await this._watcher.shutdown()
     this._config.shutdown()
   }
 
@@ -1109,16 +1083,18 @@ export default class DocumentManager extends ProviderContract {
     // Third, remove those watched files which are no longer open
     for (const watchedFile of watchedFiles) {
       if (!openFiles.includes(watchedFile)) {
-        this._watcher.unwatch(watchedFile)
+        this._watcher.unwatchPath(watchedFile)
       }
     }
 
     // Fourth, add those open files not yet watched
     for (const openFile of openFiles) {
       if (!watchedFiles.includes(openFile)) {
-        this._watcher.add(openFile)
+        this._watcher.watchPath(openFile)
       }
     }
+
+    console.log(this._watcher.getWatched())
   }
 
   /**

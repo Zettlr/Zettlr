@@ -57,7 +57,7 @@ export default class FSALWatchdog {
   /**
    * Create a new watcher instance
    */
-  constructor (watchedPath: string, logger: LogProvider, config: ConfigProvider) {
+  constructor (logger: LogProvider, config: ConfigProvider) {
     this._logger = logger
     this._config = config
 
@@ -92,7 +92,7 @@ export default class FSALWatchdog {
       this._logger.info(`[FSAL Watchdog] Activating file polling with a threshold of ${threshold}ms.`)
     }
 
-    this.process = (new FSWatcher(options)).add(watchedPath)
+    this.process = new FSWatcher(options)
 
     this.process.on('ready', () => {
       if (process.platform === 'darwin' && this.process.options.useFsEvents === false) {
@@ -146,5 +146,33 @@ export default class FSALWatchdog {
     // still hold on to some memory after the Electron process itself shuts down
     // which will result in a crash report appearing on macOS.
     await this.process.close()
+  }
+
+  /**
+   * Add one or more additional paths to watch
+   *
+   * @param  {string|readonly string[]}  paths  One or more paths to watch
+   */
+  public watchPath (paths: string | readonly string[]): void {
+    this.process.add(paths)
+  }
+
+  /**
+   * Remove one or more paths from the watcher
+   *
+   * @param  {string|readonly string[]}  paths  One or more paths to unwatch
+   */
+  public unwatchPath (paths: string | readonly string[]): void {
+    this.process.unwatch(paths)
+  }
+
+  /**
+   * Return all currently watched paths; the return value maps diretories to
+   * filenames.
+   *
+   * @return  {Record<string, string[]>}  The watched paths
+   */
+  public getWatched (): Record<string, string[]> {
+    return this.process.getWatched()
   }
 }

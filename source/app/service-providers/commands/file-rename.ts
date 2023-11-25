@@ -85,6 +85,8 @@ export default class FileRename extends ZettlrCommand {
 
       // Now, rename the file.
       await this._app.fsal.rename(file.path, path.join(file.dir, newName))
+      // Notify the documents provider so it can exchange any files if necessary
+      await this._app.documents.hasMovedFile(file.path, path.join(file.dir, newName))
 
       // Finally, let's check if we can update some internal links to that file.
       if (inboundLinks.length > 0) {

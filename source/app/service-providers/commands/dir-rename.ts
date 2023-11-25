@@ -40,6 +40,8 @@ export default class DirRename extends ZettlrCommand {
     // rename the directory. The FSAL will reflect the changes.
     try {
       await this._app.fsal.rename(arg.path, newPath)
+      // Notify the documents provider so it can exchange any files if necessary
+      await this._app.documents.hasMovedDir(arg.path, newPath)
     } catch (err: any) {
       console.error(err)
       this._app.windows.prompt({
