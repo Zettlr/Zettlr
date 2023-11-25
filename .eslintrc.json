@@ -34,6 +34,8 @@
     // as they were included with the default configuration of Atom's ESLint
     // plugin, so we'll keep them here for the time being.
     "prefer-const": "off",
+    // Sometimes, it makes sense to return a void to save a line of code, so we
+    // keep this rule off.
     "@typescript-eslint/no-confusing-void-expression": "off",
     "array-bracket-spacing": [
       2,
