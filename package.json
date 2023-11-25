@@ -109,7 +109,7 @@
     "remark-lint-table-cell-padding": "^4.1.3",
     "remark-math": "^5.1.1",
     "remark-stringify": "^10.0.3",
-    "rimraf": "^5.0.1",
+    "rimraf": "^5.0.5",
     "sanitize-filename": "^1.6.3",
     "sanitize-html": "^2.11.0",
     "semver": "^7.5.3",
