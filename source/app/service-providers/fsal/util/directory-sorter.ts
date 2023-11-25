@@ -94,7 +94,7 @@ function getNaturalSorter (fileNameDisplay: FilenameDisplay, appLang: string): (
       bSort = b.frontmatter.title
     }
 
-    const coll = new Intl.Collator([ appLang, 'en' ], { 'numeric': true })
+    const coll = new Intl.Collator([ appLang, 'en' ], { numeric: true })
 
     return coll.compare(aSort, bSort)
   }
