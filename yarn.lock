@@ -8081,14 +8081,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:^0.16.7":
-  version: 0.16.7
-  resolution: "katex@npm:0.16.7"
+"katex@npm:^0.16.9":
+  version: 0.16.9
+  resolution: "katex@npm:0.16.9"
   dependencies:
     commander: ^8.3.0
   bin:
     katex: cli.js
-  checksum: 6c3f61e28820ecba074a149d17be6d731d8a950cdd7826851e16f2b0f3627c4119acd8c6e4fb86950063c4e99a6e478720ea6cca3dc82e59bbca81001ee00b70
+  checksum: 861194dfd4d86505e657f688fb73048d46ac498edafce71199502a35b03c0ecc35ba930c631be79c4a09d90a0d23476673cd52f6bc367c7a161854d64005fa95
   languageName: node
   linkType: hard
 
@@ -13679,7 +13679,7 @@ __metadata:
     gettext-parser: ^7.0.1
     got: ^13.0.0
     jsdom: ^22.1.0
-    katex: ^0.16.7
+    katex: ^0.16.9
     ky: ^0.33.3
     less: ^4.1.3
     less-loader: ^11.1.3
