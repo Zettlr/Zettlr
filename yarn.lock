@@ -722,16 +722,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/notarize@npm:^1.2.4":
-  version: 1.2.4
-  resolution: "@electron/notarize@npm:1.2.4"
-  dependencies:
-    debug: ^4.1.1
-    fs-extra: ^9.0.1
-  checksum: 3aa19fb247f9297b96a25f1a082f552e0c78a726ddfc98de9cdd4e4b092fc36fe07d680b762dd5a2bceda97b1044d3a0e6d9eadc5022f7c329a1fcf081133c9b
-  languageName: node
-  linkType: hard
-
 "@electron/notarize@npm:^2.1.0":
   version: 2.2.1
   resolution: "@electron/notarize@npm:2.2.1"
@@ -740,6 +730,17 @@ __metadata:
     fs-extra: ^9.0.1
     promise-retry: ^2.0.1
   checksum: c791a631acb397ec7ad6fa7966e878bbf147c29afae29844276bfcde36509fcd326ac0ad0a3e477ed2aa01abcb3001816311a2d002f6e7e7b81e4fe678915a8b
+  languageName: node
+  linkType: hard
+
+"@electron/notarize@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@electron/notarize@npm:2.2.0"
+  dependencies:
+    debug: ^4.1.1
+    fs-extra: ^9.0.1
+    promise-retry: ^2.0.1
+  checksum: 14a983b65443ce681363ef8562dbb3cf12ef817fefe6a3041eca7d05854faaeaf3d474b0d08d206a3e07606da6b68b63563565e89c682a78a69893e5b3bece06
   languageName: node
   linkType: hard
 
@@ -13903,7 +13904,7 @@ __metadata:
     "@electron-forge/plugin-fuses": ^7.2.0
     "@electron-forge/plugin-webpack": ^6.3.0
     "@electron/fuses": ^1.7.0
-    "@electron/notarize": ^1.2.4
+    "@electron/notarize": ^2.2.0
     "@lezer/common": ^1.1.0
     "@lezer/highlight": ^1.1.6
     "@replit/codemirror-emacs": ^6.0.1
