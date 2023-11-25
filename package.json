@@ -78,7 +78,7 @@
     "luxon": "^3.3.0",
     "md5": "^2.3.0",
     "mermaid": "^10.2.3",
-    "minimatch": "^9.0.1",
+    "minimatch": "^9.0.3",
     "nodehun": "^3.0.2",
     "rehype-parse": "^8.0.4",
     "rehype-remark": "^9.1.2",
