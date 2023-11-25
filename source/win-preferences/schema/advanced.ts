@@ -87,8 +87,8 @@ export default function (): FormSchema {
           model: 'system.zoomBehavior',
           label: trans('Zoom behavior'),
           options: {
-            'gui': trans('Zoom resizes the whole GUI'),
-            'editor': trans('Zoom changes the editor font size')
+            gui: trans('Zoom resizes the whole GUI'),
+            editor: trans('Zoom changes the editor font size')
           }
         }
       ],

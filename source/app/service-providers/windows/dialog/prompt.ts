@@ -24,7 +24,7 @@ import type LogProvider from '@providers/log'
  */
 export default function promptDialog (logger: LogProvider, win: BrowserWindow|null, options: any): void {
   if (typeof options === 'string') {
-    options = { 'message': options }
+    options = { message: options }
   }
 
   const boxOptions: MessageBoxOptions = {

@@ -65,7 +65,7 @@ export default class FileDuplicate extends ZettlrCommand {
     let filename = ''
     if (arg.name !== undefined) {
       // We have a user-provided filename
-      filename = sanitize(arg.name.trim(), { 'replacement': '-' })
+      filename = sanitize(arg.name.trim(), { replacement: '-' })
     } else {
       // We need to generate our own filename. First, attempt to just use 'copy of'
       filename = trans('Copy of %s', file.name)

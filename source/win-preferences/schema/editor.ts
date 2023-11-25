@@ -25,7 +25,7 @@ export default function (): FormSchema {
           model: 'editor.boldFormatting',
           options: {
             '**': '**' + trans('Bold') + '**',
-            '__': '__' + trans('Bold') + '__'
+            __: '__' + trans('Bold') + '__'
           }
         },
         {
@@ -33,7 +33,7 @@ export default function (): FormSchema {
           model: 'editor.italicFormatting',
           options: {
             '*': '*' + trans('Italics') + '*',
-            '_': '_' + trans('Italics') + '_'
+            _: '_' + trans('Italics') + '_'
           }
         }
       ],
@@ -43,9 +43,9 @@ export default function (): FormSchema {
           label: trans('Autosave'),
           model: 'editor.autoSave',
           options: {
-            'off': trans('Off'),
-            'immediately': trans('Immediately'),
-            'delayed': trans('After a short delay')
+            off: trans('Off'),
+            immediately: trans('Immediately'),
+            delayed: trans('After a short delay')
           }
         }
       ],
@@ -86,9 +86,9 @@ export default function (): FormSchema {
           label: trans('Editor input mode'),
           model: 'editor.inputMode',
           options: {
-            'default': 'Normal',
-            'emacs': 'Emacs',
-            'vim': 'Vim'
+            default: 'Normal',
+            emacs: 'Emacs',
+            vim: 'Vim'
           }
         }
       ],

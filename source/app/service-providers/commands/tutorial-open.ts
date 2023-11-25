@@ -55,7 +55,7 @@ export default class TutorialOpen extends ZettlrCommand {
       await fs.mkdir(targetPath)
 
       // Now copy over every file from the directory
-      const tutorialFiles = await fs.readdir(tutorial, { 'encoding': 'utf8' })
+      const tutorialFiles = await fs.readdir(tutorial, { encoding: 'utf8' })
       for (const file of tutorialFiles) {
         await fs.copyFile(path.join(tutorial, file), path.join(targetPath, file))
       }

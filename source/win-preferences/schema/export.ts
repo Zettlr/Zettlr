@@ -38,9 +38,9 @@ export default function (): FormSchema {
           label: '', // TODO
           model: 'export.stripLinks',
           options: {
-            'full': trans('Remove internal links completely'),
-            'unlink': trans('Unlink internal links'),
-            'no': trans('Don\'t touch internal links')
+            full: trans('Remove internal links completely'),
+            unlink: trans('Unlink internal links'),
+            no: trans('Don\'t touch internal links')
           }
         }
       ],
@@ -50,9 +50,9 @@ export default function (): FormSchema {
           label: trans('Target directory for exported files. <em>Attention:</em> Selecting the current working directory will overwrite files without warning!'),
           model: 'export.dir',
           options: {
-            'temp': trans('Temporary directory: is regularly expunged'),
-            'cwd': trans('Current working directory: exported files will be saved into the currently selected directory.'),
-            'ask': trans('Ask for directory')
+            temp: trans('Temporary directory: is regularly expunged'),
+            cwd: trans('Current working directory: exported files will be saved into the currently selected directory.'),
+            ask: trans('Ask for directory')
           }
         }
       ],
