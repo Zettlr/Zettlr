@@ -21,7 +21,8 @@ import {
   BrowserWindow,
   ipcMain,
   shell,
-  type FileFilter
+  type FileFilter,
+  type MessageBoxOptions
 } from 'electron'
 import EventEmitter from 'events'
 import path from 'path'
@@ -1031,7 +1032,7 @@ export default class WindowProvider extends ProviderContract {
     * This function prompts the user with information.
     * @param  {any} options Necessary information for displaying the prompt
     */
-  prompt (options: any): void {
+  prompt (options: Partial<MessageBoxOptions> & { message: string }|string): void {
     const firstMainWin = this.getFirstMainWindow()
     if (firstMainWin === undefined) {
       return
