@@ -95,7 +95,7 @@ export default defineComponent({
       this.currentTab = idx
     }
   },
-  destroyed () {
+  unmounted () {
     window.removeEventListener('resize', this.onWindowResize)
   },
   methods: {
