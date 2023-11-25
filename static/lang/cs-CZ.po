@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-11-25 10:38+0000\n"
+"POT-Creation-Date: 2023-11-25 11:29+0000\n"
 "PO-Revision-Date: 2023-09-23 23:15+0200\n"
 "Last-Translator: Ales Nehyba <neal.cz@gmail.com>\n"
 "Language-Team: \n"
@@ -935,7 +935,7 @@ msgstr "Soubory"
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:74
-#: source/app/service-providers/windows/index.ts:222
+#: source/app/service-providers/windows/index.ts:223
 msgid "Open project folder"
 msgstr "Otevřít složku projektu"
 
