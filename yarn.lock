@@ -13905,7 +13905,7 @@ __metadata:
     luxon: ^3.3.0
     md5: ^2.3.0
     mermaid: ^10.2.3
-    minimatch: ^9.0.1
+    minimatch: ^9.0.3
     mocha: ^10.2.0
     node-loader: ^2.0.0
     nodehun: ^3.0.2
