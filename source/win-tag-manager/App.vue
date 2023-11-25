@@ -184,7 +184,7 @@ export default defineComponent({
       const copy = this.tags.map(x => x).filter(x => x.name.toLowerCase().includes(q))
 
       const languagePreferences = [ window.config.get('appLang'), 'en' ]
-      const coll = new Intl.Collator(languagePreferences, { 'numeric': true })
+      const coll = new Intl.Collator(languagePreferences, { numeric: true })
       copy.sort((a, b) => {
         if (this.sortBy === 'name') {
           return coll.compare(a.name, b.name)

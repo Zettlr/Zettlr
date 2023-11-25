@@ -34,7 +34,6 @@
     // as they were included with the default configuration of Atom's ESLint
     // plugin, so we'll keep them here for the time being.
     "prefer-const": "off",
-    "quote-props": "off",
     "@typescript-eslint/no-confusing-void-expression": "off",
     "array-bracket-spacing": [
       2,

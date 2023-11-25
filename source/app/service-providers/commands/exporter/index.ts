@@ -64,9 +64,9 @@ export function getCustomProfiles (): PandocProfileMetadata[] {
 }
 
 const PLUGINS = {
-  'pandoc': DefaultExporter,
+  pandoc: DefaultExporter,
   'simple-pdf': PDFExporter,
-  'textbundle': TextbundleExporter
+  textbundle: TextbundleExporter
 }
 
 /**

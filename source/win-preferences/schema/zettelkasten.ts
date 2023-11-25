@@ -44,9 +44,9 @@ export default function (): FormSchema {
           label: trans('When linking files, add the display name …'),
           model: 'zkn.linkWithFilename',
           options: {
-            'always': trans('always'),
-            'withID': trans('only when linking using the ID'),
-            'never': trans('never')
+            always: trans('always'),
+            withID: trans('only when linking using the ID'),
+            never: trans('never')
           },
           disabled: window.config.get('zkn.linkFilenameOnly') === true
         }
