@@ -89,10 +89,9 @@ export default class AppearanceProvider extends ProviderContract {
         if (shouldBeDark !== isDark) {
           // Explicitly set the appLevelAppearance in case the internal theme
           // differs from the operating system.
-          systemPreferences.appLevelAppearance = (isDark) ? 'dark' : 'light'
+          nativeTheme.themeSource = (isDark) ? 'dark' : 'light'
         } else {
-          // @ts-expect-error: See issue https://github.com/electron/electron/issues/30413
-          systemPreferences.appLevelAppearance = null
+          nativeTheme.themeSource = 'system'
         }
       }
     })
@@ -153,7 +152,7 @@ export default class AppearanceProvider extends ProviderContract {
       this._config.set('darkMode', nativeTheme.shouldUseDarkColors)
     } else if (process.platform === 'darwin') {
       // Override the app level appearance immediately
-      systemPreferences.appLevelAppearance = this._config.get().darkMode ? 'dark' : 'light'
+      nativeTheme.themeSource = this._config.get().darkMode ? 'dark' : 'light'
     }
 
     // It may be that it was already dark when the user started the app, but the
