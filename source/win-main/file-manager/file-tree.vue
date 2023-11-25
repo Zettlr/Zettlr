@@ -134,6 +134,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['selection'],
   data: function () {
     return {
       // Can contain the path to a tree item that is focused

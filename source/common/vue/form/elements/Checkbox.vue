@@ -80,6 +80,7 @@ export default defineComponent({
       default: ''
     }
   },
+  emits: ['update:modelValue'],
   computed: {
     fieldID: function (): string {
       return 'form-input-' + this.name

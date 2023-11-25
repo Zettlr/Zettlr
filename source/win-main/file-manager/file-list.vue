@@ -123,6 +123,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['lock-file-tree'],
   data: function () {
     return {
       activeDescriptor: null as any|null // Can contain the active ("focused") item

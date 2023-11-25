@@ -57,7 +57,8 @@ export default defineComponent({
       type: Boolean,
       default: false
     }
-  }
+  },
+  emits: ['interrupt']
 })
 </script>
 
