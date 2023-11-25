@@ -136,7 +136,7 @@
     "@electron-forge/maker-rpm": "^6.3.0",
     "@electron-forge/maker-zip": "^6.3.0",
     "@electron-forge/plugin-webpack": "^6.3.0",
-    "@electron/notarize": "^1.2.4",
+    "@electron/notarize": "^2.2.0",
     "@types/adm-zip": "^0.5.0",
     "@types/archiver": "^5.3.2",
     "@types/command-exists": "^1.2.0",
