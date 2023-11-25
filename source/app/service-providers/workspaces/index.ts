@@ -109,6 +109,9 @@ export default class WorkspaceProvider extends ProviderContract {
    */
   async shutdown (): Promise<void> {
     this._logger.verbose('Workspace provider shutting down ...')
+    for (const root of this.roots) {
+      await root.prepareShutdown()
+    }
   }
 
   /**
