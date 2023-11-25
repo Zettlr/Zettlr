@@ -339,7 +339,7 @@ module.exports = {
           // size: 500, // NOTE: Estimate, need to refine
           description: 'Your one-stop publication workbench.',
           productDescription: 'Your one-stop publication workbench.',
-          recommends: [ 'quarto', 'pandoc', 'tex-live' ],
+          recommends: [ 'quarto', 'pandoc', 'texlive | texlive-base | texlive-full' ],
           genericName: 'Markdown Editor',
           // Electron forge recommends 512px
           icon: './resources/icons/png/512x512.png',
