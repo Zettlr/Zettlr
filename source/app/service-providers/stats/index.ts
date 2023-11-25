@@ -159,7 +159,7 @@ export default class StatsProvider extends ProviderContract {
     }
 
     // For now we only need a word count
-    if (!this.stats.wordCount.hasOwnProperty(this.today)) {
+    if (!(this.today in this.stats.wordCount)) {
       this.stats.wordCount[this.today] = val
     } else {
       this.stats.wordCount[this.today] = this.stats.wordCount[this.today] + val
@@ -174,7 +174,7 @@ export default class StatsProvider extends ProviderContract {
    * @return {ZettlrStats} This for chainability.
    */
   increasePomodoros (): void {
-    if (!this.stats.pomodoros.hasOwnProperty(this.today)) {
+    if (!(this.today in this.stats.pomodoros)) {
       this.stats.pomodoros[this.today] = 1
     } else {
       this.stats.pomodoros[this.today] = this.stats.pomodoros[this.today] + 1
