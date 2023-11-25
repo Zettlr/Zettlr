@@ -1,5 +1,15 @@
 # Upcoming
 
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.0.3
+
 ## A Note on Custom CSS
 
 This update includes a full refactor of the theming: The editor themes (Berlin,
