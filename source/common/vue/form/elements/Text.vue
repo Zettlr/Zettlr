@@ -1,7 +1,8 @@
 <template>
   <div v-bind:class="{ 'inline': inline, 'form-control': true }">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
-    <div v-if="reset !== false" class="input-button-group">
+    <div class="input-text-button-group">
+      <cds-icon v-if="searchIcon" shape="search"></cds-icon>
       <input
         v-bind:id="fieldID"
         ref="input"
@@ -16,28 +17,15 @@
         v-on:blur="$emit('blur', ($event.target as HTMLInputElement).value)"
       >
       <button
+        v-if="reset"
         type="button"
+        class="input-reset-button"
         v-bind:title="resetLabel"
         v-on:click="resetValue"
       >
-        <cds-icon shape="refresh"></cds-icon>
+        <cds-icon shape="times" size="s"></cds-icon>
       </button>
     </div>
-    <!-- Else: Normal input w/o reset button -->
-    <input
-      v-else
-      v-bind:id="fieldID"
-      ref="input"
-      type="text"
-      v-bind:value="modelValue"
-      v-bind:class="{ 'inline': inline }"
-      v-bind:placeholder="placeholder"
-      v-bind:disabled="disabled"
-      v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-      v-on:keyup.enter="$emit('confirm', ($event.target as HTMLInputElement).value)"
-      v-on:keyup.esc="$emit('escape', ($event.target as HTMLInputElement).value)"
-      v-on:blur="$emit('blur', ($event.target as HTMLInputElement).value)"
-    >
     <p v-if="info !== ''" class="info" v-html="info"></p>
   </div>
 </template>
@@ -93,6 +81,10 @@ export default defineComponent({
     info: {
       type: String,
       default: ''
+    },
+    searchIcon: {
+      type: Boolean,
+      default: false
     }
   },
   emits: [ 'update:modelValue', 'confirm', 'escape', 'blur' ],
@@ -108,9 +100,11 @@ export default defineComponent({
     }
   },
   methods: {
-    resetValue: function () {
-      this.inputRef.value = typeof this.reset === 'string' ? this.reset : ''
-      this.$emit('update:modelValue', this.reset)
+    resetValue: function (event: MouseEvent) {
+      const resetVal = typeof this.reset === 'string' ? this.reset : ''
+      this.inputRef.value = resetVal
+      this.focus()
+      this.$emit('update:modelValue', resetVal)
     },
     focus: function () {
       this.inputRef.focus()
@@ -123,8 +117,81 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-body div.form-control p.info {
-  font-size: 70%;
-  opacity: 0.8;
+body div.form-control {
+  .input-text-button-group {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+
+    input {
+      background-color: transparent;
+      border-radius: 0px;
+      border: none;
+    }
+
+    button.input-reset-button {
+      display: flex;
+      width: 14px;
+      height: 14px;
+      min-width: auto;
+      flex: none;
+      border: none;
+      padding: 0;
+      align-items: center;
+      justify-items: center;
+      background-color: rgb(225, 225, 225);
+      color: rgb(50, 50, 50);
+      border-radius: 7px;
+    }
+  }
+
+  p.info {
+    font-size: 70%;
+    opacity: 0.8;
+  }
+}
+
+body.darwin {
+  div.form-control .input-text-button-group {
+    font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    background-color: white;
+    border: 1px solid rgb(210, 210, 210);
+    border-bottom-color: rgb(180, 180, 180);
+    border-radius: 6px;
+    padding: 2px 4px;
+    transition: 0.1s outline;
+
+    &:focus-within {
+      outline: var(--system-accent-color) solid 3px;
+    }
+  }
+
+  &.dark {
+    div.form-control .input-text-button-group {
+      color: rgb(215, 215, 215);
+      border-color: transparent;
+      background-color: rgb(85, 85, 85);
+      border-top-color: rgb(100, 100, 100);
+    }
+  }
+}
+
+body.win32 {
+  div.form-control .input-text-button-group {
+    background-color: white;
+    border: 2px solid rgb(90, 90, 90);
+    border-radius: 0px;
+    min-width: 50px;
+    padding: 8px 8px;
+  }
+
+  &.dark {
+    div.form-control .input-text-button-group {
+      background-color: rgb(90, 90, 90);
+      color: white;
+      border-color: rgb(120, 120, 120);
+    }
+  }
 }
 </style>

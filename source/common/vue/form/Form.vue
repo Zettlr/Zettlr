@@ -401,7 +401,11 @@ export default defineComponent({
       font-size: 10px;
     }
 
-    hr { margin: 20px 40px; }
+    hr {
+      margin: 20px 40px;
+      border-width: 0px;
+      border-top-width: 1px;
+    }
   }
 }
 
@@ -411,5 +415,9 @@ body.dark .form-container {
     color: inherit;
     border-color: rgb(30, 30, 30);
   }
+}
+
+body.win32 .form-container {
+  fieldset { border-radius: 0px; }
 }
 </style>

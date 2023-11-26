@@ -20,7 +20,9 @@
         <TextControl
           v-model="query"
           v-bind:placeholder="'Find…'"
-          style="padding: 0 10px"
+          v-bind:search-icon="true"
+          v-bind:reset="true"
+          style="padding: 5px 10px"
         ></TextControl>
         <SelectableList
           v-bind:items="items"
@@ -204,7 +206,7 @@ export default defineComponent({
           id: PreferencesGroups.Snippets
         },
         {
-          displayText: trans('Import & Export'),
+          displayText: trans('Import and Export'),
           icon: 'two-way-arrows',
           id: PreferencesGroups.ImportExport
         },
