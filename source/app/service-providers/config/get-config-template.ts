@@ -73,6 +73,7 @@ export interface ConfigOptions {
   }
   editor: {
     autocompleteAcceptSpace: boolean
+    autocompleteSuggestEmojis: boolean
     autoSave: 'off'|'immediately'|'delayed'
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
     autoCloseBrackets: boolean
@@ -251,6 +252,7 @@ export function getConfigTemplate (): ConfigOptions {
     editor: {
       autoSave: 'off',
       autocompleteAcceptSpace: false, // Whether you can type spaces in autocorrect
+      autocompleteSuggestEmojis: true,
       autoCloseBrackets: true,
       showLinkPreviews: true, // Whether to fetch link previews in the editor
       defaultSaveImagePath: '',
