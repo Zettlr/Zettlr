@@ -13,24 +13,26 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { type FormSchema } from '@common/vue/form/Form.vue'
+import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
 
-export default function (): FormSchema {
-  return {
-    fieldsets: [
-      [
+export function getAutocorrectFields (): PreferencesFieldset[] {
+  return [
+    {
+      title: trans('Autocorrect'),
+      group: PreferencesGroups.Autocorrect,
+      help: '', // TODO
+      fields: [
         {
-          type: 'switch',
+          type: 'switch', // TODO: Move this switch to the title area!
           label: trans('Turn on AutoCorrect'),
           model: 'editor.autoCorrect.active'
-        }
-      ],
-      [
+        },
         // Taken from: https://de.wikipedia.org/wiki/Anf%C3%BChrungszeichen
         // ATTENTION when adding new pairs: They will be SPLIT using the hyphen character!
         {
+          // TODO: Add a general title
           type: 'select',
-          label: trans('Primary Magic Quotes'),
+          label: trans('Double Quotes'),
           model: 'editor.autoCorrect.magicQuotes.primary',
           options: {
             '"…"': trans('Disable Magic Quotes'),
@@ -51,7 +53,7 @@ export default function (): FormSchema {
         },
         {
           type: 'select',
-          label: trans('Secondary Magic Quotes'),
+          label: trans('Single Quotes'),
           model: 'editor.autoCorrect.magicQuotes.secondary',
           options: {
             '\'…\'': trans('Disable Magic Quotes'),
@@ -72,19 +74,10 @@ export default function (): FormSchema {
             '『…』': '『…』 (Japanese secondary)',
             '「…」': '「…」 (Korean secondary alternative)'
           }
-        }
-      ],
-      [
+        },
+        { type: 'separator' },
         {
-          type: 'checkbox',
-          label: trans('Match whole words'),
-          info: trans('When checked, AutoCorrect will never replace parts of words'),
-          model: 'editor.autoCorrect.matchWholeWords'
-        }
-      ],
-      [
-        {
-          type: 'list',
+          type: 'list', // TODO: Set title
           valueType: 'record',
           keyNames: [ 'key', 'value' ],
           columnLabels: [ trans('String'), trans('Replacement') ],
@@ -94,8 +87,14 @@ export default function (): FormSchema {
           searchable: true,
           addable: true,
           editable: true // All columns may be edited
+        },
+        {
+          type: 'checkbox',
+          label: trans('Match whole words'),
+          info: trans('When checked, AutoCorrect will never replace parts of words'),
+          model: 'editor.autoCorrect.matchWholeWords'
         }
       ]
-    ]
-  } satisfies FormSchema
+    }
+  ]
 }

@@ -13,50 +13,62 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { type FormSchema } from '@common/vue/form/Form.vue'
+import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
 
-export default function (): FormSchema {
-  return {
-    fieldsets: [
-      [
+export function getImportExportFields (): PreferencesFieldset[] {
+  return [
+    {
+      title: trans('Import and export profiles'),
+      group: PreferencesGroups.ImportExport,
+      help: '', // TODO
+      fields: [] // TODO: Add two buttons "Open import profiles editor" and "Open export profiles editor"
+    },
+    {
+      title: trans('Export settings'),
+      group: PreferencesGroups.ImportExport,
+      help: '', // TODO
+      fields: [
         {
-          type: 'checkbox',
+          type: 'checkbox', // TODO: Must be radio
           label: trans('Use the internal Pandoc for exports'),
           model: 'export.useBundledPandoc'
-        }
-      ],
-      [
+        },
+        { type: 'separator' },
         {
           type: 'checkbox',
           label: trans('Remove tags from files'),
           model: 'export.stripTags'
-        }
-      ],
-      [
+        },
+        { type: 'separator' },
         {
           type: 'radio',
-          label: '', // TODO
+          label: trans('Internal links'),
           model: 'export.stripLinks',
           options: {
             full: trans('Remove internal links completely'),
             unlink: trans('Unlink internal links'),
             no: trans('Don\'t touch internal links')
           }
-        }
-      ],
-      [
+        },
+        { type: 'separator' },
         {
           type: 'radio',
-          label: trans('Target directory for exported files. <em>Attention:</em> Selecting the current working directory will overwrite files without warning!'),
+          label: trans('Destination folder for exported files'),
           model: 'export.dir',
           options: {
+            // TODO: Add info-strings
             temp: trans('Temporary directory: is regularly expunged'),
             cwd: trans('Current working directory: exported files will be saved into the currently selected directory.'),
             ask: trans('Ask for directory')
           }
         }
-      ],
-      [
+      ]
+    },
+    {
+      title: trans('Custom export commands'),
+      group: PreferencesGroups.ImportExport,
+      help: '', // TODO
+      fields: [
         {
           type: 'list',
           valueType: 'record',
@@ -70,6 +82,6 @@ export default function (): FormSchema {
           editable: true
         }
       ]
-    ]
-  } satisfies FormSchema
+    }
+  ]
 }

@@ -14,13 +14,17 @@
 
 import { trans } from '@common/i18n-renderer'
 import { mapLangCodeToName } from '@common/util/map-lang-code'
-import { type FormSchema } from '@common/vue/form/Form.vue'
+import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
 
-export default function (): FormSchema {
-  return {
-    fieldsets: [
-      [
+export function getSpellcheckingFields (): PreferencesFieldset[] {
+  return [
+    {
+      title: trans('LanguageTool'),
+      group: PreferencesGroups.Spellchecking,
+      help: '', // TODO
+      fields: [
         {
+          // TODO: Move to title area!
           type: 'switch',
           label: trans('Use LanguageTool'),
           model: 'editor.lint.languageTool.active'
@@ -35,6 +39,7 @@ export default function (): FormSchema {
           model: 'editor.lint.languageTool.level',
           disabled: window.config.get('editor.lint.languageTool.active') === false
         },
+        { type: 'separator' },
         {
           type: 'select',
           label: trans('Mother tongue'),
@@ -44,6 +49,7 @@ export default function (): FormSchema {
           },
           model: 'editor.lint.languageTool.motherTongue'
         },
+        { type: 'separator' },
         {
           type: 'radio',
           label: trans('LanguageTool Provider'),
@@ -61,6 +67,7 @@ export default function (): FormSchema {
           model: 'editor.lint.languageTool.customServer',
           disabled: window.config.get('editor.lint.languageTool.provider') !== 'custom'
         },
+        { type: 'separator' },
         {
           type: 'text',
           label: trans('LanguageTool Username'),
@@ -73,8 +80,14 @@ export default function (): FormSchema {
           model: 'editor.lint.languageTool.apiKey',
           disabled: window.config.get('editor.lint.languageTool.active') === false || window.config.get('editor.lint.languageTool.provider') === 'custom'
         }
-      ],
-      [
+      ]
+    },
+    {
+      title: trans('Spellchecking'),
+      group: PreferencesGroups.Spellchecking,
+      help: '', // TODO
+      fields: [
+        // TODO: Add switch to title area later on that doesn#t exist yet
         {
           type: 'list',
           valueType: 'record',
@@ -88,6 +101,7 @@ export default function (): FormSchema {
           searchLabel: trans('Search for dictionaries…'),
           striped: true
         },
+        { type: 'separator' },
         {
           type: 'list',
           valueType: 'simpleArray',
@@ -100,6 +114,6 @@ export default function (): FormSchema {
           striped: true
         }
       ]
-    ]
-  } satisfies FormSchema
+    }
+  ]
 }

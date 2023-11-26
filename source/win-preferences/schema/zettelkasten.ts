@@ -13,12 +13,15 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { type FormSchema } from '@common/vue/form/Form.vue'
+import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
 
-export default function (): FormSchema {
-  return {
-    fieldsets: [
-      [
+export function getZettelkastenFields (): PreferencesFieldset[] {
+  return [
+    {
+      title: trans('Zettelkasten IDs'),
+      group: PreferencesGroups.Zettelkasten,
+      help: '', // TODO
+      fields: [
         {
           type: 'text',
           label: trans('ID regular expression'),
@@ -32,8 +35,13 @@ export default function (): FormSchema {
           reset: '%Y%M%D%h%m%s',
           info: 'Variables: %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'
         }
-      ],
-      [
+      ]
+    },
+    {
+      title: trans('Internal links'),
+      group: PreferencesGroups.Zettelkasten,
+      help: '', // TODO
+      fields: [
         {
           type: 'checkbox',
           label: trans('Link with filename only'),
@@ -49,9 +57,8 @@ export default function (): FormSchema {
             never: trans('never')
           },
           disabled: window.config.get('zkn.linkFilenameOnly') === true
-        }
-      ],
-      [
+        },
+        { type: 'separator' },
         {
           type: 'checkbox',
           label: trans('Start a search when following Zettelkasten-links'),
@@ -60,7 +67,7 @@ export default function (): FormSchema {
         {
           type: 'checkbox',
           label: trans('Automatically create non-existing files when following internal links'),
-          model: 'zkn.autoCreateLinkedFiles'
+          model: 'zkn.autoCreateLinkedFiles' // TODO: Remove this option, infer from zkn.customDirectory!
         },
         {
           type: 'directory',
@@ -69,6 +76,6 @@ export default function (): FormSchema {
           reset: ''
         }
       ]
-    ]
-  } satisfies FormSchema
+    }
+  ]
 }

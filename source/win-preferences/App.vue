@@ -3,28 +3,41 @@
     v-bind:title="windowTitle"
     v-bind:titlebar="true"
     v-bind:menubar="false"
-    v-bind:show-tabbar="true"
-    v-bind:tabbar-tabs="tabs"
     v-bind:tabbar-label="'Preferences'"
     v-bind:disable-vibrancy="true"
-    v-on:tab="currentTab = $event"
   >
     <!--
       To comply with ARIA, we have to wrap the form in a tab container because
       we make use of the tabbar on the window chrome.
     -->
-    <div
-      v-bind:id="tabs[currentTab].controls"
-      role="tabpanel"
-      v-bind:aria-labelledby="tabs[currentTab].id"
+    <SplitView
+      v-bind:initial-size-percent="[ 20, 80 ]"
+      v-bind:minimum-size-percent="[ 20, 20 ]"
+      v-bind:split="'horizontal'"
+      v-bind:initial-total-width="100"
     >
-      <FormBuilder
-        ref="form"
-        v-bind:model="model"
-        v-bind:schema="schema"
-        v-on:update:model-value="handleInput"
-      ></FormBuilder>
-    </div>
+      <template #view1>
+        <TextControl
+          v-model="query"
+          v-bind:placeholder="'Find…'"
+          style="padding: 0 10px"
+        ></TextControl>
+        <SelectableList
+          v-bind:items="items"
+          v-bind:editable="false"
+          v-bind:selected-item="currentGroup"
+          v-on:select="currentGroup = $event"
+        ></SelectableList>
+      </template>
+      <template #view2>
+        <FormBuilder
+          ref="form"
+          v-bind:model="model"
+          v-bind:schema="schema"
+          v-on:update:model-value="handleInput"
+        ></FormBuilder>
+      </template>
+    </SplitView>
   </WindowChrome>
 </template>
 
@@ -43,26 +56,46 @@
  * END HEADER
  */
 
-import FormBuilder from '@common/vue/form/Form.vue'
+import FormBuilder, { Fieldset } from '@common/vue/form/Form.vue'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { trans } from '@common/i18n-renderer'
 
-import generalSchema from './schema/general'
-import editorSchema from './schema/editor'
-import exportSchema from './schema/export'
-import citationSchema from './schema/citations'
-import zettelkastenSchema from './schema/zettelkasten'
-import displaySchema from './schema/display'
-import spellcheckingSchema from './schema/spellchecking'
-import autocorrectSchema from './schema/autocorrect'
-import advancedSchema from './schema/advanced'
-import toolbarSchema from './schema/toolbar'
+import { getGeneralFields } from './schema/general'
+import { getEditorFields } from './schema/editor'
+import { getCitationFields } from './schema/citations'
+import { getZettelkastenFields } from './schema/zettelkasten'
+import { getSpellcheckingFields } from './schema/spellchecking'
+import { getAutocorrectFields } from './schema/autocorrect'
+import { getAdvancedFields } from './schema/advanced'
 import { defineComponent } from 'vue'
-import { WindowTab } from '@dts/renderer/window'
 import { resolveLangCode } from '@common/util/map-lang-code'
 import { type FormSchema } from '@common/vue/form/Form.vue'
+import SplitView from '@common/vue/window/SplitView.vue'
+import SelectableList, { type SelectableListItem } from '@common/vue/form/elements/SelectableList.vue'
+import TextControl from '@common/vue/form/elements/Text.vue'
+import { getAppearanceFields } from './schema/appearance'
+import { getFileManagerFields } from './schema/file-manager'
+import { getImportExportFields } from './schema/import-export'
+import { getSnippetsFields } from './schema/snippets'
+
+export enum PreferencesGroups {
+  Advanced,
+  Appearance,
+  Autocorrect,
+  Citations,
+  Editor,
+  FileManager,
+  General,
+  ImportExport,
+  Snippets,
+  Spellchecking,
+  Zettelkasten
+}
+
+export type PreferencesFieldset = Fieldset & { group: PreferencesGroups }
 
 const ipcRenderer = window.ipc
+const config = window.config
 
 /**
  * Searches the tree for a given model, traversing as necessary. Uses a depth-
@@ -73,115 +106,114 @@ const ipcRenderer = window.ipc
  *
  * @return  {Field|undefined}          The corresponding field or undefined
  */
-function modelToField (model: string, tree: any): any {
-  if (tree === undefined) {
-    throw new Error('Could not map model: tree not defined!')
-  }
+// function modelToField (model: string, tree: any): any {
+//   if (tree === undefined) {
+//     throw new Error('Could not map model: tree not defined!')
+//   }
 
-  if (tree.model !== undefined && tree.model === model) {
-    return tree
-  }
+//   if (tree.model !== undefined && tree.model === model) {
+//     return tree
+//   }
 
-  if (tree.fieldsets !== undefined) {
-    for (const fieldset of tree.fieldsets) {
-      let field = modelToField(model, fieldset)
-      if (field !== undefined) {
-        return field
-      }
-    }
-  }
+//   if (tree.fieldsets !== undefined) {
+//     for (const fieldset of tree.fieldsets) {
+//       let field = modelToField(model, fieldset)
+//       if (field !== undefined) {
+//         return field
+//       }
+//     }
+//   }
 
-  if (tree.fields !== undefined) {
-    for (const fieldElement of tree.fields) {
-      let field = modelToField(model, fieldElement)
-      if (field !== undefined) {
-        return field
-      }
-    }
-  }
+//   if (tree.fields !== undefined) {
+//     for (const fieldElement of tree.fields) {
+//       let field = modelToField(model, fieldElement)
+//       if (field !== undefined) {
+//         return field
+//       }
+//     }
+//   }
 
-  if (Array.isArray(tree)) {
-    for (const element of tree) {
-      let field = modelToField(model, element)
-      if (field !== undefined) {
-        return field
-      }
-    }
-  }
+//   if (Array.isArray(tree)) {
+//     for (const element of tree) {
+//       let field = modelToField(model, element)
+//       if (field !== undefined) {
+//         return field
+//       }
+//     }
+//   }
 
-  return undefined
-}
+//   return undefined
+// }
 
 export default defineComponent({
   components: {
     FormBuilder,
-    WindowChrome
+    WindowChrome,
+    SplitView,
+    SelectableList,
+    TextControl
   },
   data () {
     return {
-      currentTab: 0,
-      tabs: [
+      currentGroup: 0,
+      query: '',
+      items: [
         {
-          label: trans('General'),
-          controls: 'tab-general',
-          id: 'tab-general-control',
-          icon: 'cog'
+          displayText: trans('General'),
+          icon: 'cog',
+          id: PreferencesGroups.General
         },
         {
-          label: trans('Editor'),
-          controls: 'tab-editor',
-          id: 'tab-editor-control',
-          icon: 'note'
+          displayText: trans('Appearance'),
+          icon: 'paint-roller',
+          id: PreferencesGroups.Appearance
         },
         {
-          label: trans('Export'),
-          controls: 'tab-export',
-          id: 'tab-export-control',
-          icon: 'share'
+          displayText: trans('File Manager'),
+          icon: 'folder-open',
+          id: PreferencesGroups.FileManager
         },
         {
-          label: trans('Citations'),
-          controls: 'tab-citations',
-          id: 'tab-citations-control',
-          icon: 'block-quote'
+          displayText: trans('Editor'),
+          icon: 'align-left-text',
+          id: PreferencesGroups.Editor
         },
         {
-          label: trans('Zettelkasten'),
-          controls: 'tab-zettelkasten',
-          id: 'tab-zettelkasten-control',
-          icon: 'details'
+          displayText: trans('Spellchecking'),
+          icon: 'text',
+          id: PreferencesGroups.Spellchecking
         },
         {
-          label: trans('Display'),
-          controls: 'tab-display',
-          id: 'tab-display-control',
-          icon: 'display'
+          displayText: trans('AutoCorrect'),
+          icon: 'wand', // 'block-quote'
+          id: PreferencesGroups.Autocorrect
         },
         {
-          label: trans('Spellchecking'),
-          controls: 'tab-spellchecking',
-          id: 'tab-spellchecking-control',
-          icon: 'text'
+          displayText: trans('Citations'),
+          icon: 'chat-bubble',
+          id: PreferencesGroups.Citations
         },
         {
-          label: trans('AutoCorrect'),
-          controls: 'tab-autocorrect',
-          id: 'tab-autocorrect-control',
-          icon: 'wand' // 'block-quote'
+          displayText: trans('Zettelkasten'),
+          icon: 'details',
+          id: PreferencesGroups.Zettelkasten
         },
         {
-          label: trans('Advanced'),
-          controls: 'tab-advanced',
-          id: 'tab-advanced-control',
-          icon: 'tools'
+          displayText: trans('Snippets'),
+          icon: 'add-text',
+          id: PreferencesGroups.Snippets
         },
         {
-          label: trans('Toolbar'),
-          controls: 'tab-toolbar',
-          id: 'tab-toolbar-control',
-          icon: 'container'
+          displayText: trans('Import & Export'),
+          icon: 'two-way-arrows',
+          id: PreferencesGroups.ImportExport
+        },
+        {
+          displayText: trans('Advanced'),
+          icon: 'cpu',
+          id: PreferencesGroups.Advanced
         }
-      ] as WindowTab[],
+      ] as Array<SelectableListItem & { id: PreferencesGroups }>,
       // Will be populated afterwards, contains the user dict
       userDictionaryContents: [],
       // Will be populated afterwards, contains all dictionaries
@@ -189,21 +221,77 @@ export default defineComponent({
       // Will be populated afterwards, contains the available languages
       appLangOptions: {} as any,
       // This will return the full object
-      config: (global as any).config.get(),
-      schema: {} as FormSchema
+      config: config.get()
     }
   },
   computed: {
+    schema (): FormSchema {
+      return {
+        fieldsets: this.filteredFieldsets
+      }
+    },
+    fieldsets (): Fieldset[] {
+      return [
+        ...getAdvancedFields(),
+        ...getAppearanceFields(),
+        ...getAutocorrectFields(),
+        ...getCitationFields(),
+        ...getEditorFields(),
+        ...getFileManagerFields(),
+        ...getGeneralFields(this.appLangOptions),
+        ...getImportExportFields(),
+        ...getSnippetsFields(),
+        ...getSpellcheckingFields(),
+        ...getZettelkastenFields()
+      ]
+    },
+    filteredFieldsets (): Fieldset[] {
+      if (this.query !== '') {
+        const q = this.query.toLowerCase().trim()
+        return this.fieldsets.filter(f => {
+          // Match relevancy:
+          // 1. Search term is in card title
+          if (f.title.toLowerCase().includes(q)) {
+            return true
+          }
+
+          if (f.help?.toLowerCase().includes(q)) {
+            return true
+          }
+
+          for (const field of f.fields) {
+            if (field.label?.toLowerCase().includes(q)) {
+              return true
+            } else if ('info' in field && field.info?.toLowerCase().includes(q)) {
+              return true
+            } else if (field.type === 'radio' || field.type === 'select') {
+              for (const option in field.options) {
+                if (option.toLowerCase().includes(q)) {
+                  return true
+                }
+              }
+            }
+          }
+          return false
+        })
+      } else {
+        // No active search, so simply return the currently active group
+        const activeGroup = this.items[this.currentGroup].id
+        return this.fieldsets.filter(f => f.group === activeGroup)
+      }
+    },
     windowTitle: function (): string {
-      if (process.platform === 'darwin') {
-        return this.tabs[this.currentTab].label
+      if (this.query !== '') {
+        return trans('Searching: %s', this.query)
+      } else if (process.platform === 'darwin') {
+        return this.items[this.currentGroup].displayText
       } else {
         return trans('Preferences')
       }
     },
     showTitlebar: function (): boolean {
       const isDarwin = document.body.classList.contains('darwin')
-      return isDarwin || (global as any).config.get('nativeAppearance') === false
+      return isDarwin || config.get('nativeAppearance') === false
     },
     model: function (): any {
       // The model to be passed on will simply be a merger of custom values
@@ -245,7 +333,7 @@ export default defineComponent({
         // Don't waste boilerplate, just overwrite that whole thing
         // and let's hope the Vue algorithm of finding out what has
         // to be re-rendered is good!
-        this.config = (global as any).config.get()
+        this.config = config.get()
         this.populateDynamicValues()
         this.recreateSchema()
       }
@@ -277,7 +365,7 @@ export default defineComponent({
       } else if (prop === 'availableDictionaries') {
         // We have to extract the selected dictionaries and send their keys only
         const enabled = val.filter((elem: any) => elem.selected).map((elem: any) => elem.key)
-        ;(global as any).config.set('selectedDicts', enabled)
+        config.set('selectedDicts', enabled)
         // Additionally, we have to backpropagate the new stuff down the pipe
         // so that the list view has them again
       } else {
@@ -289,7 +377,7 @@ export default defineComponent({
         // do it the brute-force-way and stringify it. This will basically read
         // out every value from the proxy and store it in vanilla objects/arrays
         // again.
-        (global as any).config.set(prop, JSON.parse(JSON.stringify(val)))
+        config.set(prop, JSON.parse(JSON.stringify(val)))
       }
     },
     /**
@@ -299,7 +387,7 @@ export default defineComponent({
       if (process.platform === 'darwin') {
         // Apple's Human Interface Guidelines state the window title should be
         // the current tab.
-        document.title = this.tabs[this.currentTab].label
+        document.title = this.items[this.currentGroup].displayText
       }
     },
     /**
@@ -353,46 +441,46 @@ export default defineComponent({
         .catch(err => console.error(err))
     },
     recreateSchema: function () {
-      const currentTab = this.tabs[this.currentTab].controls
+      // const currentTab = this.items[this.currentGroup].displayText
 
-      switch (currentTab) {
-        case 'tab-general':
-          this.schema = generalSchema()
-          break
-        case 'tab-editor':
-          this.schema = editorSchema()
-          break
-        case 'tab-export':
-          this.schema = exportSchema()
-          break
-        case 'tab-citations':
-          this.schema = citationSchema()
-          break
-        case 'tab-zettelkasten':
-          this.schema = zettelkastenSchema()
-          break
-        case 'tab-display':
-          this.schema = displaySchema()
-          break
-        case 'tab-spellchecking':
-          this.schema = spellcheckingSchema()
-          break
-        case 'tab-autocorrect':
-          this.schema = autocorrectSchema()
-          break
-        case 'tab-advanced':
-          this.schema = advancedSchema()
-          break
-        case 'tab-toolbar':
-          this.schema = toolbarSchema()
-          break
-      }
+      // switch (currentTab) {
+      //   case 'tab-general':
+      //     this.schema = generalSchema()
+      //     break
+      //   case 'tab-editor':
+      //     this.schema = editorSchema()
+      //     break
+      //   case 'tab-export':
+      //     this.schema = exportSchema()
+      //     break
+      //   case 'tab-citations':
+      //     this.schema = citationSchema()
+      //     break
+      //   case 'tab-zettelkasten':
+      //     this.schema = zettelkastenSchema()
+      //     break
+      //   case 'tab-display':
+      //     this.schema = displaySchema()
+      //     break
+      //   case 'tab-spellchecking':
+      //     this.schema = spellcheckingSchema()
+      //     break
+      //   case 'tab-autocorrect':
+      //     this.schema = autocorrectSchema()
+      //     break
+      //   case 'tab-advanced':
+      //     this.schema = advancedSchema()
+      //     break
+      //   case 'tab-toolbar':
+      //     this.schema = toolbarSchema()
+      //     break
+      // }
 
-      // Populate the appLang field with available options
-      if (this.tabs[this.currentTab].controls === 'tab-general') {
-        const field = modelToField('appLang', this.schema)
-        field.options = this.appLangOptions
-      }
+      // // Populate the appLang field with available options
+      // if (this.items[this.currentGroup].displayText === 'tab-general') {
+      //   const field = modelToField('appLang', this.schema)
+      //   field.options = this.appLangOptions
+      // }
     }
   }
 })

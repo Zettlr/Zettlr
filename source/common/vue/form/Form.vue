@@ -1,10 +1,21 @@
 <template>
-  <div ref="component-container">
+  <div ref="component-container" class="form-container">
     <fieldset
-      v-for="(item, idx) in typedSchema.fieldsets"
+      v-for="(fieldset, idx) in typedSchema.fieldsets"
       v-bind:key="idx"
     >
-      <template v-for="(field, f_idx) in item">
+      <!-- First, let's do some setup of the fieldset -->
+      <h4>
+        {{ fieldset.title }}
+      </h4>
+      <div
+        v-if="fieldset.help !== undefined" class="form-help"
+      >
+        ?
+      </div>
+      <!-- Now to the contents of the fieldset -->
+      <template v-for="(field, f_idx) in fieldset.fields">
+        <hr v-if="field.type === 'separator'" v-bind:key="f_idx">
         <TextInput
           v-if="field.type === 'text'"
           v-bind:key="f_idx"
@@ -200,6 +211,14 @@ interface BasicInfo {
    * Optional label to put before the input
    */
   label?: string
+  /**
+   * An optional group that can be used to sort items into various groups
+   */
+  group?: string
+}
+
+interface Separator {
+  type: 'separator'
 }
 
 interface TextField extends BasicInfo {
@@ -294,10 +313,17 @@ interface ThemeField extends BasicInfo {
   options: Record<string, ThemeDescriptor>
 }
 
-type Fields = TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField
+export type FormField = Separator|TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField
+
+export interface Fieldset {
+  title: string
+  help?: string
+  fields: FormField[]
+  [key: string]: any // Allow arbitrary additional fields
+}
 
 export interface FormSchema {
-  fieldsets: Fields[][]
+  fieldsets: Fieldset[]
 }
 
 export default defineComponent({
@@ -348,5 +374,42 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+.form-container {
+  fieldset {
+    background-color: rgb(236, 236, 236);
+    border: 1px solid rgb(230, 230, 230);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    position: relative;
+    color: #333;
 
+    .form-help {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 18px;
+      cursor: help;
+      height: 18px;
+      line-height: 16px;
+      vertical-align: middle;
+      text-align: center;
+      background-color: rgb(222, 222, 222);
+      border: 1px solid rgb(124, 124, 124);
+      color: rgb(124, 124, 124);
+      border-radius: 10px;
+      font-size: 10px;
+    }
+
+    hr { margin: 20px 40px; }
+  }
+}
+
+body.dark .form-container {
+  fieldset {
+    background-color: rgb(60, 60, 60);
+    color: inherit;
+    border-color: rgb(30, 30, 30);
+  }
+}
 </style>

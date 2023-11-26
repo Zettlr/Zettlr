@@ -310,7 +310,7 @@ body {
   // preferences window).
   &.darwin {
     div#window-content.disable-vibrancy {
-      background-color: rgb(235, 235, 235);
+      background-color: rgb(245, 245, 245);
     }
 
     &.dark {
