@@ -6,6 +6,7 @@
   use the same trigger character as the snippets autocomplete, a colon (`:`);
   and Emojis will always be sorted below your snippets -- you can turn this off
   in the editor settings
+- Fixed a bug where recent documents would not turn up in the menu
 
 ## Under the Hood
 
