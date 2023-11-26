@@ -348,7 +348,7 @@ export default defineComponent({
     }
   },
   watch: {
-    selectedFile: function (newVal, oldVal) {
+    selectedFile: function () {
       this.uncollapseIfApplicable()
     },
     collapsed: function () {
@@ -358,10 +358,10 @@ export default defineComponent({
         this.$store.commit('addUncollapsedDirectory', this.obj.path)
       }
     },
-    selectedDir: function (newVal, oldVal) {
+    selectedDir: function () {
       // this.uncollapseIfApplicable() TODO: As of now this would also uncollapse the containing file's directory
     },
-    operationType: function (newVal, oldVal) {
+    operationType: function (newVal) {
       if (newVal !== undefined) {
         nextTick().then(() => {
           const input = this.$refs['new-object-input'] as HTMLInputElement
@@ -422,7 +422,7 @@ export default defineComponent({
     /**
      * Called when a drag operation enters this item; adds a highlight class
      */
-    enterDragging: function (event: DragEvent) {
+    enterDragging: function (_event: DragEvent) {
       if (this.isDirectory === false) {
         return
       }
@@ -441,7 +441,7 @@ export default defineComponent({
     /**
      * The oppossite of enterDragging; removes the highlight class
      */
-    leaveDragging: function (event: DragEvent) {
+    leaveDragging: function (_event: DragEvent) {
       if (this.isDirectory === false) {
         return
       }

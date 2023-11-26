@@ -441,7 +441,7 @@ export default defineComponent({
     }
   },
   watch: {
-    sidebarVisible: function (newValue, oldValue) {
+    sidebarVisible: function (newValue, _oldValue) {
       if (newValue === true) {
         if (this.distractionFree === true) {
           this.$store.commit('leaveDistractionFree')
@@ -452,7 +452,7 @@ export default defineComponent({
         this.editorSidebarSplitComponent.hideView(2)
       }
     },
-    fileManagerVisible: function (newValue, oldValue) {
+    fileManagerVisible: function (newValue) {
       if (newValue === true) {
         if (this.distractionFree === true) {
           this.$store.commit('leaveDistractionFree')
@@ -463,7 +463,7 @@ export default defineComponent({
         this.fileManagerSplitComponent.hideView(1)
       }
     },
-    mainSplitViewVisibleComponent: function (newValue, oldValue) {
+    mainSplitViewVisibleComponent: function (newValue) {
       if (newValue === 'globalSearch') {
         // The global search just became visible, so focus the query input
         nextTick().then(() => {
@@ -471,7 +471,7 @@ export default defineComponent({
         }).catch(e => console.error(e))
       }
     },
-    distractionFree: function (newValue, oldValue) {
+    distractionFree: function (newValue) {
       if (newValue === true) {
         // Enter distraction free mode
         this.sidebarsBeforeDistractionfree = {
@@ -489,7 +489,7 @@ export default defineComponent({
     }
   },
   mounted: function () {
-    ipcRenderer.on('shortcut', (event, shortcut, state) => {
+    ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'toggle-sidebar') {
         window.config.set('window.sidebarVisible', this.sidebarVisible === false)
       } else if (shortcut === 'insert-id') {
@@ -788,7 +788,7 @@ export default defineComponent({
             if (effectChanged || volumeChanged) {
               this.pomodoro.soundEffect.pause()
               this.pomodoro.soundEffect.currentTime = 0
-              this.pomodoro.soundEffect.play().catch(e => {
+              this.pomodoro.soundEffect.play().catch(_e => {
                 /* We will be getting errors when pausing quickly */
               })
             }
@@ -838,7 +838,7 @@ export default defineComponent({
           shouldCountChars: this.shouldCountChars
         }
         const elem = document.getElementById('toolbar-document-info')
-        this.$togglePopover(PopoverDocInfo, elem as HTMLElement, data, (data: any) => {
+        this.$togglePopover(PopoverDocInfo, elem as HTMLElement, data, (_data: any) => {
           // Do nothing
         })
       } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
@@ -897,7 +897,7 @@ export default defineComponent({
           this.pomodoro.phase.type = 'task'
         }
 
-        this.pomodoro.soundEffect.play().catch(e => { /* We will be getting errors when pausing quickly */ })
+        this.pomodoro.soundEffect.play().catch(_e => { /* We will be getting errors when pausing quickly */ })
       }
 
       // Finally handle the popover logic

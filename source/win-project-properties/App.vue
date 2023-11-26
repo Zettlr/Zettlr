@@ -223,19 +223,19 @@ export default defineComponent({
     projectTitle: function () {
       this.updateProperties()
     },
-    patterns: function (newValue, oldValue) {
+    patterns: function () {
       this.updateProperties()
     },
-    cslStyle: function (newValue, oldValue) {
+    cslStyle: function () {
       this.updateProperties()
     },
-    texTemplate: function (newValue, oldValue) {
+    texTemplate: function () {
       this.updateProperties()
     },
-    htmlTemplate: function (newValue, oldValue) {
+    htmlTemplate: function () {
       this.updateProperties()
     },
-    dirPath: function (newValue, oldValue) {
+    dirPath: function () {
       this.fetchProperties()
     }
   },

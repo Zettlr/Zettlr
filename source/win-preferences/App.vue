@@ -260,7 +260,7 @@ export default defineComponent({
           }
 
           for (const field of f.fields) {
-            if (field.label?.toLowerCase().includes(q)) {
+            if ('label' in field && field.label?.toLowerCase().includes(q)) {
               return true
             } else if ('info' in field && field.info?.toLowerCase().includes(q)) {
               return true

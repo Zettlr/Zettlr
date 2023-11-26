@@ -181,13 +181,13 @@ export default defineComponent({
     }
   },
   watch: {
-    which: function (newValue, oldValue) {
+    which: function () {
       // Reset to the beginning of the list. The watcher right below will pick
       // that change up and re-load the defaults.
       this.currentItem = -1
       this.loadDefaultsForState().catch(e => console.error(e))
     },
-    currentItem: function (newValue, oldValue) {
+    currentItem: function () {
       this.loadDefaultsForState().catch(e => console.error(e))
     },
     editorContents: function () {

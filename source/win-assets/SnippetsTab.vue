@@ -110,7 +110,7 @@ export default defineComponent({
     }
   },
   watch: {
-    currentItem: function (newValue, oldValue) {
+    currentItem: function () {
       this.loadState()
     },
     editorContents: function () {

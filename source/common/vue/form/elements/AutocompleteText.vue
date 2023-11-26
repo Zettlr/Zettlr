@@ -106,7 +106,7 @@ export default {
     }
   },
   watch: {
-    modelValue: function (newVal, oldVal) {
+    modelValue: function () {
       // Whenever the value changes, update the list of matches
       this.updateMatches()
     }
@@ -184,7 +184,7 @@ export default {
         this.selectedMatch = this.matches.length - 1
       }
     },
-    onFocusHandler: function (event) {
+    onFocusHandler: function (_event) {
       this.inputHasFocus = true
     },
     onBlurHandler: function (event) {

@@ -29,6 +29,13 @@
   },
   // Now, overwrite any rules where we differ
   "rules": {
+    "no-unused-vars": "off", // We need to turn off the vanilla option ...
+    // ... and turn on the TypeScript one. HOWEVER, we also need to use the
+    // appropriate option that allows us to declare variables as unused by
+    // prefixing it with an underscore.
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_|^event$" }],
+    // See https://typescript-eslint.io/rules/no-unused-vars/
+
     "space-before-function-paren": [2, "always"],
     // The following rule-changes to JSStandard Coding Style are tradition,
     // as they were included with the default configuration of Atom's ESLint

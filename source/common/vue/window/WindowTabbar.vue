@@ -99,7 +99,7 @@ export default defineComponent({
     window.removeEventListener('resize', this.onWindowResize)
   },
   methods: {
-    onWindowResize (event: UIEvent) {
+    onWindowResize (_event: UIEvent) {
       this.currentWindowWidth = window.innerWidth
     },
     onTabClick (event: MouseEvent, id: string) {
