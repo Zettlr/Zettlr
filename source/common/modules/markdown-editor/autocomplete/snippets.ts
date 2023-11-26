@@ -32,8 +32,29 @@ import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
 import generateId from '@common/util/generate-id'
 import { configField } from '../util/configuration'
+import { gemoji } from 'gemoji'
 
 const path = window.path
+
+/**
+ * This utility function inserts an emoji
+ */
+const applyEmoji = function (view: EditorView, completion: Completion, from: number, to: number): void {
+  view.dispatch({
+    changes: [{ from: from - 1, to, insert: completion.label }],
+    selection: { anchor: from - 1 + completion.label.length }
+  })
+}
+
+const emojis: Completion[] = gemoji.map(g => {
+  return {
+    label: g.emoji,
+    detail: g.names.join(', '),
+    section: g.category,
+    info: g.tags.join(', '),
+    apply: applyEmoji
+  }
+})
 
 // Define a class to highlight active tabstops
 const tabstopDeco = Decoration.mark({ class: 'tabstop' })
@@ -64,7 +85,7 @@ class SnippetWidget extends WidgetType {
 /**
  * This utility function inserts a snippet
  */
-function apply (view: EditorView, completion: Completion, from: number, to: number): void {
+function applySnippet (view: EditorView, completion: Completion, from: number, to: number): void {
   const [ textToInsert, selections ] = template2snippet(view.state, completion.info as string, from - 1)
   // We can immediately take the first rangeset and set it as a selection, whilst
   // committing the rest into our StateField as an effect
@@ -109,8 +130,13 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
     for (const effect of transaction.effects) {
       if (effect.is(snippetsUpdate)) {
         val.availableSnippets = effect.value.map(entry => {
-          return { label: entry.name, info: entry.content, apply }
+          return {
+            label: entry.name,
+            info: entry.content,
+            apply: applySnippet
+          }
         })
+
         return { ...val }
       } else if (effect.is(snippetTabsEffect)) {
         val.activeSelections = effect.value
@@ -325,9 +351,26 @@ export const snippets: AutocompletePlugin = {
   },
   entries (ctx, query) {
     query = query.toLowerCase()
-    const entries = ctx.state.field(snippetsUpdateField).availableSnippets
+    // NOTE: We need to create a new array, otherwise we're going to have an
+    // emoji party after ten characters typed
+    const entries = [...ctx.state.field(snippetsUpdateField).availableSnippets]
+    if (ctx.state.field(configField).autocompleteSuggestEmojis) {
+      entries.push(...emojis)
+    }
+
     return entries.filter(entry => {
-      return entry.label.toLowerCase().includes(query)
+      if (entry.section === undefined) { // Snippets don't have a section
+        return entry.label.toLowerCase().includes(query)
+      }
+
+      const inDetail = entry.detail?.toLowerCase().includes(query) ?? false
+
+      if (typeof entry.info === 'string') {
+        // Allow to search the tags as well that are part of the info
+        return entry.info.toLowerCase().includes(query) || inDetail
+      } else {
+        return inDetail
+      }
     })
   },
   fields: [snippetsUpdateField]

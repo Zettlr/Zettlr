@@ -2,7 +2,10 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- **Feature**: Zettlr can now suggest you emojis during autocompletion. Emojis
+  use the same trigger character as the snippets autocomplete, a colon (`:`);
+  and Emojis will always be sorted below your snippets -- you can turn this off
+  in the editor settings
 
 ## Under the Hood
 
