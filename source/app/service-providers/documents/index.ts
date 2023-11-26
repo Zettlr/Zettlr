@@ -776,6 +776,9 @@ export default class DocumentManager extends ProviderContract {
 
     this._updateFocusLeaf(windowId, leafId)
 
+    // After here, the document will in some way be opened.
+    this._app.recentDocs.add(filePath)
+
     if (leaf.tabMan.openFiles.map(x => x.path).includes(filePath)) {
       // File is already open -> simply set it as active
       // leaf.tabMan.activeFile = filePath
@@ -790,7 +793,7 @@ export default class DocumentManager extends ProviderContract {
     // gotten a specific request to open it in a *new* tab
     const activeFile = leaf.tabMan.activeFile
     const ret = leaf.tabMan.openFile(filePath)
-    const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
+    const { avoidNewTabs } = this._app.config.get().system
 
     if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)

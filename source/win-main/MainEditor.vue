@@ -217,6 +217,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
       },
       replacements: store.state.config['editor.autoCorrect.replacements']
     },
+    autocompleteSuggestEmojis: store.state.config['editor.autocompleteSuggestEmojis'],
     imagePreviewWidth: store.state.config['display.imageWidth'],
     imagePreviewHeight: store.state.config['display.imageHeight'],
     boldFormatting: store.state.config['editor.boldFormatting'],
