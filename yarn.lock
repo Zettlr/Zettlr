@@ -6468,6 +6468,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gemoji@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "gemoji@npm:8.1.0"
+  checksum: 89ef0708e77bbb938c3f87af8263e9e42891fb15b0f5d78e5d3b204a3430e82f8931a2459c912562f46cacb2addc9e8570857f1a3304d4307ebff7c32b126373
+  languageName: node
+  linkType: hard
+
 "get-caller-file@npm:^2.0.1, get-caller-file@npm:^2.0.5":
   version: 2.0.5
   resolution: "get-caller-file@npm:2.0.5"
@@ -13603,6 +13610,7 @@ __metadata:
     eslint-plugin-vue: ^9.18.1
     fix-path: ^4.0.0
     fsevents: ^2.3.2
+    gemoji: ^8.1.0
     gettext-parser: ^7.0.1
     got: ^13.0.0
     jsdom: ^22.1.0

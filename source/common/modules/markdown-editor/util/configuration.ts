@@ -29,6 +29,7 @@ export interface AutocorrectOptions {
 }
 
 export interface EditorConfiguration {
+  autocompleteSuggestEmojis: boolean
   autocorrect: AutocorrectOptions
   autoCloseBrackets: boolean
   renderCitations: boolean
@@ -81,6 +82,7 @@ export function getDefaultConfig (): EditorConfiguration {
       },
       replacements: []
     },
+    autocompleteSuggestEmojis: false,
     autoCloseBrackets: true,
     renderCitations: true,
     renderIframes: true,

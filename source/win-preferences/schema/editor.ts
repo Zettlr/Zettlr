@@ -122,6 +122,11 @@ export default function (): FormSchema {
         },
         {
           type: 'checkbox',
+          label: trans('Suggest emojis during autocompletion'),
+          model: 'editor.autocompleteSuggestEmojis'
+        },
+        {
+          type: 'checkbox',
           label: trans('Enable Table Editor'),
           model: 'editor.enableTableHelper'
         },
