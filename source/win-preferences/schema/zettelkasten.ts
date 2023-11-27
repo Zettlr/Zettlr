@@ -24,7 +24,8 @@ export function getZettelkastenFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'text',
-          label: trans('ID regular expression'),
+          label: trans('Pattern for Zettelkasten IDs'),
+          info: trans('Uses ECMAScript regular expressions'),
           model: 'zkn.idRE',
           reset: '(\\d{14})' // Default enables the reset button
         },
@@ -33,7 +34,7 @@ export function getZettelkastenFields (): PreferencesFieldset[] {
           label: trans('Pattern used to generate new IDs'),
           model: 'zkn.idGen',
           reset: '%Y%M%D%h%m%s',
-          info: 'Variables: %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'
+          info: trans('Available Variables: %s', '%Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4')
         }
       ]
     },
@@ -49,20 +50,24 @@ export function getZettelkastenFields (): PreferencesFieldset[] {
         },
         {
           type: 'radio',
-          label: trans('When linking files, add the display name …'),
+          label: trans('When linking files, add the document name …'),
           model: 'zkn.linkWithFilename',
           options: {
-            always: trans('always'),
-            withID: trans('only when linking using the ID'),
-            never: trans('never')
+            always: trans('Always'),
+            withID: trans('Only when linking using the ID'),
+            never: trans('Never')
           },
           disabled: window.config.get('zkn.linkFilenameOnly') === true
         },
         { type: 'separator' },
         {
           type: 'checkbox',
-          label: trans('Start a search when following Zettelkasten-links'),
+          label: trans('Start a full-text search when following internal links'),
+          info: trans('The search string will match the content between the brackets: [[ ]].'),
           model: 'zkn.autoSearch'
+        },
+        {
+          type: 'separator'
         },
         {
           type: 'checkbox',
@@ -71,9 +76,13 @@ export function getZettelkastenFields (): PreferencesFieldset[] {
         },
         {
           type: 'directory',
-          label: trans('Put auto-created files into this directory (must be loaded in Zettlr)'),
+          label: trans('Automatically create non-existing files in this folder when following internal links'),
           model: 'zkn.customDirectory',
           reset: ''
+        },
+        {
+          type: 'info-text',
+          contents: trans('For this to work, the folder must be open as a Workspace in Zettlr.')
         }
       ]
     }

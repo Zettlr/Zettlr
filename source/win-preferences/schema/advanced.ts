@@ -31,9 +31,9 @@ export function getAdvancedFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'text',
-          label: trans('Pattern for new filenames'),
+          label: trans('Define a pattern for new file names'),
           model: 'newFileNamePattern',
-          info: 'Variables: %id, %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4',
+          info: trans('Available variables: %s', '%id, %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'),
           group: 'advanced'
         },
         {
@@ -52,12 +52,14 @@ export function getAdvancedFields (): PreferencesFieldset[] {
         {
           type: 'checkbox',
           label: trans('Use native window appearance'),
+          info: trans('Only available on Linux; this is the default for macOS and Windows.'),
           model: 'window.nativeAppearance',
           disabled: process.platform !== 'linux'
         },
         {
           type: 'checkbox',
           label: trans('Enable window vibrancy'),
+          info: trans('Only available on macOS; makes the window background opaque.'),
           model: 'window.vibrancy',
           disabled: process.platform !== 'darwin'
         },
@@ -70,13 +72,15 @@ export function getAdvancedFields (): PreferencesFieldset[] {
           disabled: process.env.ZETTLR_IS_TRAY_SUPPORTED === '0',
           info: process.env.ZETTLR_TRAY_ERROR
         },
+        { type: 'separator' },
         {
           type: 'radio',
           model: 'system.zoomBehavior',
           label: trans('Zoom behavior'),
+          inline: true,
           options: {
-            gui: trans('Zoom resizes the whole GUI'),
-            editor: trans('Zoom changes the editor font size')
+            gui: trans('Resizes the whole GUI'),
+            editor: trans('Changes the editor font size')
           }
         }
       ]
@@ -88,7 +92,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'token',
-          label: trans('Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognised after a restart.'),
+          label: trans('File extensions to be visible in the Attachments sidebar'),
           model: 'attachmentExtensions'
         }
       ]
@@ -101,12 +105,11 @@ export function getAdvancedFields (): PreferencesFieldset[] {
         {
           type: 'list',
           valueType: 'simpleArray',
-          label: trans('iFrame rendering whitelist'),
           model: 'system.iframeWhitelist',
           deletable: true,
           columnLabels: [trans('Hostname')],
           searchable: true,
-          searchLabel: trans('Search for entries …')
+          searchLabel: trans('Filter')
         }
       ]
     },

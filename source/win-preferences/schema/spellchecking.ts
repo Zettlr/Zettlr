@@ -21,17 +21,16 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
     {
       title: trans('LanguageTool'),
       group: PreferencesGroups.Spellchecking,
+      titleField: {
+        type: 'switch',
+        model: 'editor.lint.languageTool.active'
+      },
       help: '', // TODO
       fields: [
         {
-          // TODO: Move to title area!
-          type: 'switch',
-          label: trans('Use LanguageTool'),
-          model: 'editor.lint.languageTool.active'
-        },
-        {
           type: 'radio',
           label: trans('Strictness'),
+          inline: true,
           options: {
             default: trans('Standard'),
             picky: trans('Picky')
@@ -42,7 +41,7 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
         { type: 'separator' },
         {
           type: 'select',
-          label: trans('Mother tongue'),
+          label: trans('Mother language'),
           options: {
             '': trans('Not set'),
             ...mapLangCodeToName()
@@ -53,6 +52,7 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
         {
           type: 'radio',
           label: trans('LanguageTool Provider'),
+          inline: true,
           options: {
             official: 'LanguageTool.org',
             custom: trans('Custom server')
@@ -62,22 +62,28 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
         },
         {
           type: 'text',
-          label: trans('Custom server'),
+          label: trans('Custom server address'),
           placeholder: 'https://api.languagetoolplus.com',
           model: 'editor.lint.languageTool.customServer',
           disabled: window.config.get('editor.lint.languageTool.provider') !== 'custom'
         },
         { type: 'separator' },
         {
+          type: 'info-text',
+          contents: trans('Zettlr will ignore the "LanguageTool provider" settings if you enter any credentials here.')
+        },
+        {
           type: 'text',
           label: trans('LanguageTool Username'),
           model: 'editor.lint.languageTool.username',
+          placeholder: 'Username',
           disabled: window.config.get('editor.lint.languageTool.active') === false || window.config.get('editor.lint.languageTool.provider') === 'custom'
         },
         {
           type: 'text',
           label: trans('LanguageTool API key'),
           model: 'editor.lint.languageTool.apiKey',
+          placeholder: 'API key',
           disabled: window.config.get('editor.lint.languageTool.active') === false || window.config.get('editor.lint.languageTool.provider') === 'custom'
         }
       ]
@@ -98,7 +104,7 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
           deletable: false,
           editable: [0], // Only the "selectable" column may be edited
           searchable: true,
-          searchLabel: trans('Search for dictionaries…'),
+          searchLabel: trans('Filter'),
           striped: true
         },
         { type: 'separator' },

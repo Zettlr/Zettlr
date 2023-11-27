@@ -20,19 +20,17 @@ export function getEditorFields (): PreferencesFieldset[] {
     {
       title: trans('Input mode'),
       group: PreferencesGroups.Editor,
+      titleField: {
+        type: 'select',
+        model: 'editor.inputMode',
+        options: {
+          default: 'Normal',
+          emacs: 'Emacs',
+          vim: 'Vim'
+        }
+      },
       help: '', // TODO
       fields: [
-        // TODO: Move select in the title area
-        {
-          type: 'select',
-          label: trans('Editor input mode'),
-          model: 'editor.inputMode',
-          options: {
-            default: 'Normal',
-            emacs: 'Emacs',
-            vim: 'Vim'
-          }
-        }
       ]
     },
     {
@@ -48,6 +46,10 @@ export function getEditorFields (): PreferencesFieldset[] {
       group: PreferencesGroups.Editor,
       help: '', // TODO
       fields: [
+        {
+          type: 'info-text',
+          contents: trans('Check to enable live rendering of various Markdown elements to formatted appearance. This hides formatting characters (such as **) or renders images instead of their link.')
+        },
         {
           type: 'checkbox',
           label: trans('Render Citations'),
@@ -92,7 +94,7 @@ export function getEditorFields (): PreferencesFieldset[] {
         {
           // TODO: Single element
           type: 'radio',
-          label: trans('Choose the formatting characters that the bold/emphasis commands should use'),
+          label: trans('Formatting characters for bold and italic'),
           model: 'editor.boldFormatting',
           options: {
             '**': '**' + trans('Bold') + '**',
@@ -118,13 +120,16 @@ export function getEditorFields (): PreferencesFieldset[] {
     {
       title: trans('Table Editor'),
       group: PreferencesGroups.Editor,
+      titleField: {
+        // TODO: Add switch to title area
+        type: 'switch',
+        model: 'editor.enableTableHelper'
+      },
       help: '', // TODO
       fields: [
         {
-          // TODO: Add switch to title area
-          type: 'checkbox',
-          label: trans('Enable Table Editor'),
-          model: 'editor.enableTableHelper'
+          type: 'info-text',
+          contents: trans('The Table Editor is an interactive interface that simplifies creation and editing of tables. It provides buttons for common functionality, and takes care of Markdown formatting.')
         }
       ]
     },
@@ -204,19 +209,21 @@ export function getEditorFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'number',
-          label: trans('Editor font size'),
+          label: trans('Font size'),
+          inline: true,
           model: 'editor.fontSize'
         },
         { type: 'separator' },
         {
           type: 'number',
-          label: trans('Indent by the following number of spaces'),
+          label: trans('Indentation size (number of spaces)'),
+          inline: true,
           model: 'editor.indentUnit'
         },
         {
           // TODO: number+checkbox on the same line
           type: 'checkbox',
-          label: trans('Indent using tabs'),
+          label: trans('Indent using tabs instead of spaces'),
           model: 'editor.indentWithTabs'
         },
         { type: 'separator' },

@@ -29,14 +29,14 @@ export function getImportExportFields (): PreferencesFieldset[] {
       help: '', // TODO
       fields: [
         {
-          type: 'checkbox', // TODO: Must be radio
-          label: trans('Use the internal Pandoc for exports'),
+          type: 'checkbox', // TODO: Must be radio; second option "Use system-wide Pandoc for exports"
+          label: trans('Use Zettlr\'s internal Pandoc for exports'),
           model: 'export.useBundledPandoc'
         },
         { type: 'separator' },
         {
           type: 'checkbox',
-          label: trans('Remove tags from files'),
+          label: trans('Remove tags from files when exporting'),
           model: 'export.stripTags'
         },
         { type: 'separator' },
@@ -57,10 +57,14 @@ export function getImportExportFields (): PreferencesFieldset[] {
           model: 'export.dir',
           options: {
             // TODO: Add info-strings
-            temp: trans('Temporary directory: is regularly expunged'),
-            cwd: trans('Current working directory: exported files will be saved into the currently selected directory.'),
-            ask: trans('Ask for directory')
+            temp: trans('Temporary folder'),
+            cwd: trans('Same as file location'),
+            ask: trans('Ask for folder when exporting')
           }
+        },
+        {
+          type: 'info-text',
+          contents: trans('Warning! Files in the temporary folder are regularly deleted. Choosing the same location as the file overwrites files with identical filenames if they already exist.')
         }
       ]
     },

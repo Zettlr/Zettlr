@@ -6,36 +6,38 @@ export function getAppearanceFields (): PreferencesFieldset[] {
     {
       title: trans('Dark mode'),
       group: PreferencesGroups.Appearance,
+      titleField: {
+        type: 'switch',
+        model: 'darkMode'
+      },
       help: '', // TODO,
       fields: [
-        {
-          // TODO: Move to title bar
-          type: 'checkbox',
-          label: trans('Dark mode'),
-          model: 'darkMode'
-        },
+        { type: 'separator' },
         {
           type: 'radio',
-          label: trans('Automatically switch to dark mode'),
+          label: trans('Schedule'),
           model: 'autoDarkMode',
+          inline: true,
           options: {
             off: trans('Off'),
-            schedule: trans('Schedule'),
-            system: trans('Follow Operating System')
+            system: trans('Follow system'),
+            schedule: trans('On')
           }
         },
         {
           // TODO: All of this one line
           type: 'time',
-          label: trans('Start dark mode at'),
+          label: trans('Start'),
           model: 'autoDarkModeStart',
-          inline: true
+          inline: true,
+          disabled: window.config.get('autoDarkMode') !== 'schedule'
         },
         {
           type: 'time',
-          label: trans('End dark mode at'),
+          label: trans('End'),
           model: 'autoDarkModeEnd',
-          inline: true
+          inline: true,
+          disabled: window.config.get('autoDarkMode') !== 'schedule'
         }
       ]
     },

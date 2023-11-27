@@ -10,13 +10,17 @@ export function getFileManagerFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'radio',
-          label: trans('File manager mode'),
           model: 'fileManagerMode',
+          inline: true,
           options: {
-            thin: trans('Thin &mdash; show either file tree or file list'),
-            expanded: trans('Expanded &mdash; show both file tree and file list'),
-            combined: trans('Combined &mdash; show files and directories in the file tree')
+            thin: trans('Thin'),
+            expanded: trans('Expanded'),
+            combined: trans('Combined')
           }
+        },
+        {
+          type: 'info-text',
+          contents: trans('The Thin mode shows your directories and files separately. Select a directory to have its contents displayed in the file list. Switch between file list and directory tree by clicking on directories or the arrow button which appears at the top left corner of the file list.')
         },
         { type: 'separator' },
         {
@@ -38,7 +42,6 @@ export function getFileManagerFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'radio',
-          label: trans('Display files using'),
           model: 'fileNameDisplay',
           options: {
             filename: trans('Filename only'),
@@ -63,7 +66,6 @@ export function getFileManagerFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'radio',
-          label: trans('In the file metadata display'),
           model: 'fileMetaTime',
           options: {
             modtime: trans('Last modification time'),
@@ -79,11 +81,11 @@ export function getFileManagerFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'radio',
-          label: trans('Sorting order for files (used for sorting by name)'),
+          label: trans('When sorting documents…'),
           model: 'sorting',
           options: {
-            natural: trans('Natural order (10 after 2)'),
-            ascii: trans('ASCII order (2 after 10)')
+            natural: trans('Use natural order (2 comes before 10)'),
+            ascii: trans('Use ASCII order (2 comes after 10)')
           }
         },
         // TODO: This option can be inferred from the Time display setting (fileMetaTime), so TO BE REMOVED

@@ -20,15 +20,13 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
     {
       title: trans('Application language'),
       group: PreferencesGroups.General,
+      titleField: {
+        type: 'select',
+        model: 'appLang',
+        options: appLangOptions
+      },
       help: '', // TODO
       fields: [
-        {
-          // TODO: Move to title area
-          type: 'select',
-          label: trans('Application language'),
-          model: 'appLang',
-          options: appLangOptions
-        }
       ]
     },
     {
@@ -37,10 +35,14 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
       help: '', // TODO
       fields: [
         {
+          type: 'separator'
+        },
+        {
           // TODO: Move off to switch in title
           type: 'radio',
-          label: trans('Autosave'),
+          label: trans('Save modifications'),
           model: 'editor.autoSave',
+          inline: true,
           options: {
             off: trans('Off'),
             immediately: trans('Immediately'),

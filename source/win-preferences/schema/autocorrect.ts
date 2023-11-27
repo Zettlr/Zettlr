@@ -20,13 +20,12 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
     {
       title: trans('Autocorrect'),
       group: PreferencesGroups.Autocorrect,
+      titleField: {
+        type: 'switch',
+        model: 'editor.autoCorrect.active'
+      },
       help: '', // TODO
       fields: [
-        {
-          type: 'switch', // TODO: Move this switch to the title area!
-          label: trans('Turn on AutoCorrect'),
-          model: 'editor.autoCorrect.active'
-        },
         // Taken from: https://de.wikipedia.org/wiki/Anf%C3%BChrungszeichen
         // ATTENTION when adding new pairs: They will be SPLIT using the hyphen character!
         {
@@ -76,23 +75,24 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
           }
         },
         { type: 'separator' },
-        {
-          type: 'list', // TODO: Set title
-          valueType: 'record',
-          keyNames: [ 'key', 'value' ],
-          columnLabels: [ trans('String'), trans('Replacement') ],
-          label: trans('Here you can define certain strings that will be replaced when AutoCorrect is on. The characters on the left side will be replaced with whatever comes on the right.'),
-          model: 'editor.autoCorrect.replacements',
-          deletable: true,
-          searchable: true,
-          addable: true,
-          editable: true // All columns may be edited
-        },
+        // TODO: Add a sub-heading with text "Text-replacement patterns"
         {
           type: 'checkbox',
           label: trans('Match whole words'),
           info: trans('When checked, AutoCorrect will never replace parts of words'),
           model: 'editor.autoCorrect.matchWholeWords'
+        },
+        {
+          type: 'list', // TODO: Set title
+          valueType: 'record',
+          keyNames: [ 'key', 'value' ],
+          columnLabels: [ trans('String'), trans('Replacement') ],
+          model: 'editor.autoCorrect.replacements',
+          deletable: true,
+          searchable: true,
+          addable: true,
+          searchLabel: trans('Filter'),
+          editable: true // All columns may be edited
         }
       ]
     }
