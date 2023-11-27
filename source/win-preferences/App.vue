@@ -25,19 +25,23 @@
           style="padding: 5px 10px"
         ></TextControl>
         <SelectableList
-          v-bind:items="items"
+          v-bind:items="groups"
           v-bind:editable="false"
-          v-bind:selected-item="currentGroup"
-          v-on:select="currentGroup = $event"
+          v-bind:selected-item="selectedItem"
+          v-on:select="selectGroup($event)"
         ></SelectableList>
       </template>
       <template #view2>
         <FormBuilder
+          v-if="schema.fieldsets.length > 0"
           ref="form"
           v-bind:model="model"
           v-bind:schema="schema"
           v-on:update:model-value="handleInput"
         ></FormBuilder>
+        <div v-else id="no-results-message">
+          {{ noResultsMessage }}
+        </div>
       </template>
     </SplitView>
   </WindowChrome>
@@ -159,7 +163,84 @@ export default defineComponent({
     return {
       currentGroup: 0,
       query: '',
-      items: [
+      // Will be populated afterwards, contains the user dict
+      userDictionaryContents: [],
+      // Will be populated afterwards, contains all dictionaries
+      availableDictionaries: [],
+      // Will be populated afterwards, contains the available languages
+      appLangOptions: {} as any,
+      // This will return the full object
+      config: config.get()
+    }
+  },
+  computed: {
+    noResultsMessage () {
+      return trans('No results for "%s"', this.query)
+    },
+    schema (): FormSchema {
+      return {
+        fieldsets: this.filteredFieldsets
+      }
+    },
+    selectedItem () {
+      if (this.query === '') {
+        return this.currentGroup
+      } else {
+        return -1
+      }
+    },
+    fieldsets (): Fieldset[] {
+      return [
+        ...getAdvancedFields(),
+        ...getAppearanceFields(),
+        ...getAutocorrectFields(),
+        ...getCitationFields(),
+        ...getEditorFields(),
+        ...getFileManagerFields(),
+        ...getGeneralFields(this.appLangOptions),
+        ...getImportExportFields(),
+        ...getSnippetsFields(),
+        ...getSpellcheckingFields(),
+        ...getZettelkastenFields()
+      ]
+    },
+    filteredFieldsets (): Fieldset[] {
+      if (this.query !== '') {
+        const q = this.query.toLowerCase().trim()
+        return this.fieldsets.filter(f => {
+          // Match relevancy:
+          // 1. Search term is in card title
+          if (f.title.toLowerCase().includes(q)) {
+            return true
+          }
+
+          if (f.help?.toLowerCase().includes(q)) {
+            return true
+          }
+
+          for (const field of f.fields) {
+            if ('label' in field && field.label?.toLowerCase().includes(q)) {
+              return true
+            } else if ('info' in field && field.info?.toLowerCase().includes(q)) {
+              return true
+            } else if (field.type === 'radio' || field.type === 'select') {
+              for (const option in field.options) {
+                if (option.toLowerCase().includes(q)) {
+                  return true
+                }
+              }
+            }
+          }
+          return false
+        })
+      } else {
+        // No active search, so simply return the currently active group
+        const activeGroup = this.groups[this.currentGroup].id
+        return this.fieldsets.filter(f => f.group === activeGroup)
+      }
+    },
+    groups (): Array<SelectableListItem & { id: PreferencesGroups }> {
+      return [
         {
           displayText: trans('General'),
           icon: 'cog',
@@ -215,78 +296,13 @@ export default defineComponent({
           icon: 'cpu',
           id: PreferencesGroups.Advanced
         }
-      ] as Array<SelectableListItem & { id: PreferencesGroups }>,
-      // Will be populated afterwards, contains the user dict
-      userDictionaryContents: [],
-      // Will be populated afterwards, contains all dictionaries
-      availableDictionaries: [],
-      // Will be populated afterwards, contains the available languages
-      appLangOptions: {} as any,
-      // This will return the full object
-      config: config.get()
-    }
-  },
-  computed: {
-    schema (): FormSchema {
-      return {
-        fieldsets: this.filteredFieldsets
-      }
-    },
-    fieldsets (): Fieldset[] {
-      return [
-        ...getAdvancedFields(),
-        ...getAppearanceFields(),
-        ...getAutocorrectFields(),
-        ...getCitationFields(),
-        ...getEditorFields(),
-        ...getFileManagerFields(),
-        ...getGeneralFields(this.appLangOptions),
-        ...getImportExportFields(),
-        ...getSnippetsFields(),
-        ...getSpellcheckingFields(),
-        ...getZettelkastenFields()
       ]
-    },
-    filteredFieldsets (): Fieldset[] {
-      if (this.query !== '') {
-        const q = this.query.toLowerCase().trim()
-        return this.fieldsets.filter(f => {
-          // Match relevancy:
-          // 1. Search term is in card title
-          if (f.title.toLowerCase().includes(q)) {
-            return true
-          }
-
-          if (f.help?.toLowerCase().includes(q)) {
-            return true
-          }
-
-          for (const field of f.fields) {
-            if ('label' in field && field.label?.toLowerCase().includes(q)) {
-              return true
-            } else if ('info' in field && field.info?.toLowerCase().includes(q)) {
-              return true
-            } else if (field.type === 'radio' || field.type === 'select') {
-              for (const option in field.options) {
-                if (option.toLowerCase().includes(q)) {
-                  return true
-                }
-              }
-            }
-          }
-          return false
-        })
-      } else {
-        // No active search, so simply return the currently active group
-        const activeGroup = this.items[this.currentGroup].id
-        return this.fieldsets.filter(f => f.group === activeGroup)
-      }
     },
     windowTitle: function (): string {
       if (this.query !== '') {
         return trans('Searching: %s', this.query)
       } else if (process.platform === 'darwin') {
-        return this.items[this.currentGroup].displayText
+        return this.groups[this.currentGroup].displayText
       } else {
         return trans('Preferences')
       }
@@ -313,7 +329,6 @@ export default defineComponent({
      */
     currentTab: function () {
       this.setTitle()
-      this.recreateSchema()
     }
   },
   /**
@@ -322,7 +337,6 @@ export default defineComponent({
   mounted: function () {
     this.setTitle()
     this.populateDynamicValues()
-    this.recreateSchema()
   },
   /**
    * Listen to events in order to adapt display.
@@ -337,7 +351,6 @@ export default defineComponent({
         // to be re-rendered is good!
         this.config = config.get()
         this.populateDynamicValues()
-        this.recreateSchema()
       }
     })
 
@@ -389,7 +402,7 @@ export default defineComponent({
       if (process.platform === 'darwin') {
         // Apple's Human Interface Guidelines state the window title should be
         // the current tab.
-        document.title = this.items[this.currentGroup].displayText
+        document.title = this.groups[this.currentGroup].displayText
       }
     },
     /**
@@ -408,9 +421,6 @@ export default defineComponent({
             return null
           })
           this.appLangOptions = options
-          // Since we're setting something on the schema-side of things, we must
-          // regenerate the form here.
-          this.recreateSchema()
         })
         .catch(err => console.error(err))
 
@@ -442,47 +452,10 @@ export default defineComponent({
         })
         .catch(err => console.error(err))
     },
-    recreateSchema: function () {
-      // const currentTab = this.items[this.currentGroup].displayText
-
-      // switch (currentTab) {
-      //   case 'tab-general':
-      //     this.schema = generalSchema()
-      //     break
-      //   case 'tab-editor':
-      //     this.schema = editorSchema()
-      //     break
-      //   case 'tab-export':
-      //     this.schema = exportSchema()
-      //     break
-      //   case 'tab-citations':
-      //     this.schema = citationSchema()
-      //     break
-      //   case 'tab-zettelkasten':
-      //     this.schema = zettelkastenSchema()
-      //     break
-      //   case 'tab-display':
-      //     this.schema = displaySchema()
-      //     break
-      //   case 'tab-spellchecking':
-      //     this.schema = spellcheckingSchema()
-      //     break
-      //   case 'tab-autocorrect':
-      //     this.schema = autocorrectSchema()
-      //     break
-      //   case 'tab-advanced':
-      //     this.schema = advancedSchema()
-      //     break
-      //   case 'tab-toolbar':
-      //     this.schema = toolbarSchema()
-      //     break
-      // }
-
-      // // Populate the appLang field with available options
-      // if (this.items[this.currentGroup].displayText === 'tab-general') {
-      //   const field = modelToField('appLang', this.schema)
-      //   field.options = this.appLangOptions
-      // }
+    selectGroup (which: number) {
+      if (this.query === '') {
+        this.currentGroup = which
+      }
     }
   }
 })
@@ -493,5 +466,12 @@ div[role="tabpanel"] {
   overflow: auto; // Enable scrolling, if necessary
   padding: 10px;
   width: 100%;
+}
+
+#no-results-message {
+  font-size: 200%;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 20vh;
 }
 </style>

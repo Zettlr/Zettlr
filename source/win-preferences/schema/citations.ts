@@ -37,6 +37,7 @@ export function getCitationFields (): PreferencesFieldset[] {
           type: 'file',
           label: trans('Citation Database (CSL JSON or BibTex)'),
           model: 'export.cslLibrary',
+          placeholder: trans('Path to file'),
           reset: '',
           filter: {
             'json, yaml, yml, bib': 'CSL JSON or BibTeX',
@@ -48,6 +49,7 @@ export function getCitationFields (): PreferencesFieldset[] {
           type: 'file',
           label: trans('CSL-Style (optional)'),
           model: 'export.cslStyle',
+          placeholder: trans('Path to file'),
           reset: '',
           filter: {
             csl: 'CSL Style'

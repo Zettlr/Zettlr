@@ -63,7 +63,8 @@ export function getImportExportFields (): PreferencesFieldset[] {
           }
         },
         {
-          type: 'info-text',
+          type: 'form-text',
+          display: 'info',
           contents: trans('Warning! Files in the temporary folder are regularly deleted. Choosing the same location as the file overwrites files with identical filenames if they already exist.')
         }
       ]

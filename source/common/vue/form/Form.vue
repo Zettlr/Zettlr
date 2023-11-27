@@ -97,8 +97,9 @@ interface Separator {
   type: 'separator'
 }
 
-interface FormInfoText {
-  type: 'info-text'
+interface FormText {
+  type: 'form-text'
+  display: 'info'|'sub-heading'
   contents: string
 }
 
@@ -141,6 +142,7 @@ interface ColorField extends BasicInfo {
 interface FileField extends BasicInfo {
   type: 'file'|'directory'
   reset?: string|boolean
+  placeholder?: string
   filter?: Record<string, string>
 }
 
@@ -189,7 +191,7 @@ interface ThemeField extends BasicInfo {
   options: Record<string, ThemeDescriptor>
 }
 
-export type FormField = Separator|FormInfoText|TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField
+export type FormField = Separator|FormText|TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField
 export type TitleFormField = TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField
 
 export interface Fieldset {
@@ -273,6 +275,7 @@ export default defineComponent({
         flex-grow: 1;
         font-weight: bolder;
         font-size: 15px;
+        padding: 0;
       }
 
       // .form-header-field {}

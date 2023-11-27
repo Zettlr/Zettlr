@@ -31,6 +31,7 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
         {
           // TODO: Add a general title
           type: 'select',
+          inline: false,
           label: trans('Double Quotes'),
           model: 'editor.autoCorrect.magicQuotes.primary',
           options: {
@@ -52,6 +53,7 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
         },
         {
           type: 'select',
+          inline: false,
           label: trans('Single Quotes'),
           model: 'editor.autoCorrect.magicQuotes.secondary',
           options: {

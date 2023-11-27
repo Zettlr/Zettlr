@@ -40,8 +40,13 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
         },
         { type: 'separator' },
         {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Mother language')
+        },
+        {
           type: 'select',
-          label: trans('Mother language'),
+          inline: true,
           options: {
             '': trans('Not set'),
             ...mapLangCodeToName()
@@ -69,7 +74,13 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
         },
         { type: 'separator' },
         {
-          type: 'info-text',
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('LanguageTool Premium')
+        },
+        {
+          type: 'form-text',
+          display: 'info',
           contents: trans('Zettlr will ignore the "LanguageTool provider" settings if you enter any credentials here.')
         },
         {

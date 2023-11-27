@@ -1,8 +1,11 @@
 <template>
   <hr v-if="field.type === 'separator'">
-  <p v-if="field.type === 'info-text'" class="form-field-info-text">
+  <p v-if="field.type === 'form-text' && field.display === 'info'" class="form-field-info-text">
     {{ field.contents }}
   </p>
+  <h4 v-if="field.type === 'form-text' && field.display === 'sub-heading'" class="form-field-sub-heading">
+    {{ field.contents }}
+  </h4>
   <TextInput
     v-if="field.type === 'text'"
     v-bind:model-value="model"
@@ -48,6 +51,7 @@
     v-bind:label="field.label"
     v-bind:reset="field.reset"
     v-bind:name="field.model"
+    v-bind:placeholder="field.placeholder"
     v-bind:directory="false"
     v-bind:filter="field.filter"
     v-on:update:model-value="$emit('update:modelValue', $event)"
@@ -58,6 +62,7 @@
     v-bind:label="field.label"
     v-bind:reset="field.reset"
     v-bind:name="field.model"
+    v-bind:placeholder="field.placeholder"
     v-bind:directory="true"
     v-on:update:model-value="$emit('update:modelValue', $event)"
   ></FileInput>
@@ -93,6 +98,7 @@
     v-bind:label="field.label"
     v-bind:name="field.model"
     v-bind:options="field.options"
+    v-bind:inline="field.inline"
     v-on:update:model-value="$emit('update:modelValue', $event)"
   ></SelectInput>
   <ListControl
@@ -188,5 +194,10 @@ defineEmits<Emits>()
   // This is some faint hint text
   font-size: 11px;
   color: rgb(150, 150, 150);
+}
+
+.form-field-sub-heading {
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 </style>

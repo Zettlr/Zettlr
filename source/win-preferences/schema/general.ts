@@ -57,9 +57,14 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
       help: '', // TODO
       fields: [
         {
-          type: 'text',
-          label: trans('Default image path (relative or absolute)'),
+          type: 'directory',
+          reset: true,
           model: 'editor.defaultSaveImagePath'
+        },
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('Click "Select folder…" or type an absolute or relative path directly into the input field.')
         }
       ]
     },

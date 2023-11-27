@@ -120,7 +120,8 @@ body {
     grid-template-columns: @input-size * 2 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
-    margin: 6px 0px;
+    align-items: center;
+    margin: 10px 0px;
 
     .radio-group-label { grid-area: label; }
 

@@ -6,11 +6,9 @@
         v-bind:id="fieldID"
         ref="input"
         type="text"
-        readonly
         v-bind:name="name"
         v-bind:value="modelValue"
         v-bind:placeholder="placeholder"
-        v-on:click="(directory) ? requestDir() : requestFile()"
       >
       <button
         type="button"
@@ -18,15 +16,14 @@
         data-tippy-content="dialog.preferences.choose_file"
         v-on:click="(directory) ? requestDir() : requestFile()"
       >
-        <cds-icon shape="file"></cds-icon>
+        {{ selectButtonLabel }}
       </button>
       <button
         v-if="reset !== false"
         type="button"
-        v-bind:title="resetLabel"
         v-on:click="resetValue"
       >
-        <cds-icon shape="refresh"></cds-icon>
+        {{ resetLabel }}
       </button>
     </div>
   </div>
@@ -92,7 +89,10 @@ export default defineComponent({
       return 'field-input-' + this.name
     },
     resetLabel: function () {
-      return trans('Reset')
+      return trans('Reset to default')
+    },
+    selectButtonLabel () {
+      return this.directory ? trans('Select folder…') : trans('Select file…')
     },
     inputRef (): HTMLInputElement {
       return this.$refs.input as HTMLInputElement
@@ -149,6 +149,18 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+body {
+  .form-control .input-button-group {
+    display: flex;
+    column-gap: 10px;
+    margin: 10px 0;
+
+    input, button { white-space: nowrap; }
+
+    input { flex-grow: 2; }
+    button { flex-grow: 1; }
+  }
+}
 body.darwin {
   label {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;

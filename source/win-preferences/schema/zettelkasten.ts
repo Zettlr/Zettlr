@@ -70,18 +70,23 @@ export function getZettelkastenFields (): PreferencesFieldset[] {
           type: 'separator'
         },
         {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Automatically create non-existing files in this folder when following internal links')
+        },
+        {
           type: 'checkbox',
           label: trans('Automatically create non-existing files when following internal links'),
           model: 'zkn.autoCreateLinkedFiles' // TODO: Remove this option, infer from zkn.customDirectory!
         },
         {
           type: 'directory',
-          label: trans('Automatically create non-existing files in this folder when following internal links'),
           model: 'zkn.customDirectory',
-          reset: ''
+          placeholder: trans('Path to folder')
         },
         {
-          type: 'info-text',
+          type: 'form-text',
+          display: 'info',
           contents: trans('For this to work, the folder must be open as a Workspace in Zettlr.')
         }
       ]

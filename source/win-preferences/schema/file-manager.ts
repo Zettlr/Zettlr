@@ -19,7 +19,8 @@ export function getFileManagerFields (): PreferencesFieldset[] {
           }
         },
         {
-          type: 'info-text',
+          type: 'form-text',
+          display: 'info',
           contents: trans('The Thin mode shows your directories and files separately. Select a directory to have its contents displayed in the file list. Switch between file list and directory tree by clicking on directories or the arrow button which appears at the top left corner of the file list.')
         },
         { type: 'separator' },

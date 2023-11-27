@@ -31,6 +31,11 @@ export function getEditorFields (): PreferencesFieldset[] {
       },
       help: '', // TODO
       fields: [
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('The input mode determines how you interact with the editor. We recommend keeping this setting at "Normal". Only choose "Vim" or "Emacs" if you know what this implies.')
+        }
       ]
     },
     {
@@ -47,8 +52,9 @@ export function getEditorFields (): PreferencesFieldset[] {
       help: '', // TODO
       fields: [
         {
-          type: 'info-text',
-          contents: trans('Check to enable live rendering of various Markdown elements to formatted appearance. This hides formatting characters (such as **) or renders images instead of their link.')
+          type: 'form-text',
+          display: 'info',
+          contents: trans('Check to enable live rendering of various Markdown elements to formatted appearance. This hides formatting characters (such as **text**) or renders images instead of their link.')
         },
         {
           type: 'checkbox',
@@ -92,9 +98,13 @@ export function getEditorFields (): PreferencesFieldset[] {
         },
         { type: 'separator' },
         {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Formatting characters for bold and italic')
+        },
+        {
           // TODO: Single element
           type: 'radio',
-          label: trans('Formatting characters for bold and italic'),
           model: 'editor.boldFormatting',
           options: {
             '**': '**' + trans('Bold') + '**',
@@ -128,7 +138,8 @@ export function getEditorFields (): PreferencesFieldset[] {
       help: '', // TODO
       fields: [
         {
-          type: 'info-text',
+          type: 'form-text',
+          display: 'info',
           contents: trans('The Table Editor is an interactive interface that simplifies creation and editing of tables. It provides buttons for common functionality, and takes care of Markdown formatting.')
         }
       ]
@@ -170,7 +181,8 @@ export function getEditorFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'select',
-          label: trans('Algorithm to use for the readability mode'),
+          inline: true,
+          label: trans('Algorithm'),
           model: 'editor.readabilityAlgorithm',
           options: {
             'dale-chall': 'Dale-Chall',

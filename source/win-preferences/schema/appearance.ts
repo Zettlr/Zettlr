@@ -95,7 +95,11 @@ export function getAppearanceFields (): PreferencesFieldset[] {
       group: PreferencesGroups.Appearance,
       help: '', // TODO
       fields: [
-        // TODO: Label: Left section buttons
+        {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Left section buttons')
+        },
         {
           type: 'checkbox',
           label: trans('Display "Open Preferences" button'),
@@ -116,7 +120,12 @@ export function getAppearanceFields (): PreferencesFieldset[] {
           label: trans('Display "Next File" button'),
           model: 'displayToolbarButtons.showNextFileButton'
         },
-        // TODO: Label: Center section buttons
+        { type: 'separator' },
+        {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Center section buttons')
+        },
         {
           type: 'checkbox',
           label: trans('Display readability button'),
@@ -152,7 +161,12 @@ export function getAppearanceFields (): PreferencesFieldset[] {
           label: trans('Display "Insert Footnote" button'),
           model: 'displayToolbarButtons.showInsertFootnoteButton'
         },
-        // TODO: Label: Right section buttons
+        { type: 'separator' },
+        {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Right section buttons')
+        },
         {
           type: 'checkbox',
           label: trans('Display document info'),
