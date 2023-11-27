@@ -312,10 +312,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.1.4, @codemirror/state@npm:^6.2.0, @codemirror/state@npm:^6.2.1":
+"@codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.1.4, @codemirror/state@npm:^6.2.0":
   version: 6.2.1
   resolution: "@codemirror/state@npm:6.2.1"
   checksum: d12a321d0471b264b9d3259042bff913a8b939e8d28d408ff452004538a71ca9d5329df3f8a1d8a9183f5b42a7ef5b200737bcab1065714f5ae8e0a5ba9d59d3
+  languageName: node
+  linkType: hard
+
+"@codemirror/state@npm:^6.3.1":
+  version: 6.3.1
+  resolution: "@codemirror/state@npm:6.3.1"
+  checksum: 8e7e55b3824653936606b31f146737459cb6654c935d668e7f36113ad523e1951966640f647c1286ae4ef22e3f0c7e37a6dfcbbcdb7bbeacca43c17c80fcc918
   languageName: node
   linkType: hard
 
@@ -13553,7 +13560,7 @@ __metadata:
     "@codemirror/language": ^6.9.1
     "@codemirror/legacy-modes": ^6.3.3
     "@codemirror/search": ^6.5.4
-    "@codemirror/state": ^6.2.1
+    "@codemirror/state": ^6.3.1
     "@codemirror/view": ^6.21.3
     "@electron-forge/cli": ^6.3.0
     "@electron-forge/maker-deb": ^6.3.0

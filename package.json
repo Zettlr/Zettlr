@@ -53,7 +53,7 @@
     "@codemirror/language": "^6.9.1",
     "@codemirror/legacy-modes": "^6.3.3",
     "@codemirror/search": "^6.5.4",
-    "@codemirror/state": "^6.2.1",
+    "@codemirror/state": "^6.3.1",
     "@codemirror/view": "^6.21.3",
     "@lezer/common": "^1.1.0",
     "@lezer/highlight": "^1.1.6",
