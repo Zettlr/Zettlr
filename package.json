@@ -163,7 +163,7 @@
     "electron": "^25.8.4",
     "electron-builder": "^24.5.0",
     "electron-devtools-assembler": "^1.2.0",
-    "eslint": "^8.43.0",
+    "eslint": "^8.54.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-config-standard-with-typescript": "^35.0.0",
     "eslint-plugin-import": "^2.27.5",
