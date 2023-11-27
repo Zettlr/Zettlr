@@ -84,7 +84,7 @@
     "rehype-parse": "^8.0.4",
     "rehype-remark": "^9.1.2",
     "remark": "^14.0.3",
-    "remark-frontmatter": "^4.0.1",
+    "remark-frontmatter": "^5.0.0",
     "remark-lint": "^9.1.2",
     "remark-lint-blockquote-indentation": "^3.1.2",
     "remark-lint-checkbox-character-style": "^4.1.2",
