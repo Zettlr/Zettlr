@@ -88,16 +88,6 @@ export function getFileManagerFields (): PreferencesFieldset[] {
             natural: trans('Use natural order (2 comes before 10)'),
             ascii: trans('Use ASCII order (2 comes after 10)')
           }
-        },
-        // TODO: This option can be inferred from the Time display setting (fileMetaTime), so TO BE REMOVED
-        {
-          type: 'radio',
-          label: trans('When sorting by time, sort by'),
-          model: 'sortingTime',
-          options: {
-            modtime: trans('Last modification time'),
-            creationtime: trans('File creation time')
-          }
         }
       ]
     }

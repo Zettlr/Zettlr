@@ -6,11 +6,19 @@
   use the same trigger character as the snippets autocomplete, a colon (`:`);
   and Emojis will always be sorted below your snippets -- you can turn this off
   in the editor settings
+- **Feature**: We've completely redesigned the preferences dialog; now it is
+  more aligned with the system preferences on macOS and Windows, allows
+  searching and follows a more stringent structure
+- Removed the option for choosing to sort by either file creation or last
+  modification time, since that can also be inferred from whichever time you
+  choose to display
 - Fixed a bug where recent documents would not turn up in the menu
 
 ## Under the Hood
 
 - Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
+- Removed the config option `sortingTime` since that can be inferred from the
+  option `fileMetaTime`
 
 # 3.0.3
 

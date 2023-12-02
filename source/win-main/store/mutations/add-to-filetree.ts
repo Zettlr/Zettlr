@@ -23,7 +23,7 @@ export default function (state: ZettlrState, descriptor: MaybeRootDescriptor): v
     state.config.sortFoldersFirst,
     state.config.fileNameDisplay,
     state.config.appLang,
-    state.config.sortingTime
+    state.config.fileMetaTime
   )
 
   if (descriptor.root && !state.fileTree.includes(descriptor)) {

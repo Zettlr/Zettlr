@@ -24,7 +24,7 @@ export default function (state: ZettlrState, descriptor: AnyDescriptor): void {
     state.config.sortFoldersFirst,
     state.config.fileNameDisplay,
     state.config.appLang,
-    state.config.sortingTime
+    state.config.fileMetaTime
   )
 
   if (ownDescriptor === undefined) {

@@ -45,7 +45,6 @@ export interface ConfigOptions {
   fileMetaTime: 'modtime'|'creationtime'
   sorting: 'natural'|'ascii'
   sortFoldersFirst: boolean
-  sortingTime: 'modtime'|'creationtime'
   muteLines: boolean
   fileManagerMode: 'thin'|'combined'|'expanded'
   fileNameDisplay: 'filename'|'title'|'heading'|'title+heading'
@@ -220,7 +219,6 @@ export function getConfigTemplate (): ConfigOptions {
     fileMetaTime: 'modtime', // The time to be displayed in file meta
     sorting: 'natural', // Can be natural or based on ASCII values
     sortFoldersFirst: true, // should folders be shown first in combined fileview
-    sortingTime: 'modtime', // can be modtime or creationtime
     muteLines: true, // Should the editor mute lines in distraction free mode?
     fileManagerMode: 'combined', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
     fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
