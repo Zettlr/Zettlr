@@ -6,6 +6,12 @@
   <h4 v-if="field.type === 'form-text' && field.display === 'sub-heading'" class="form-field-sub-heading">
     {{ field.contents }}
   </h4>
+  <Button
+    v-if="field.type === 'button'"
+    v-bind:label="field.label"
+    v-bind:inline="true"
+    v-on:click="field.onClick()"
+  ></Button>
   <TextInput
     v-if="field.type === 'text'"
     v-bind:model-value="model"
@@ -147,6 +153,7 @@
 <script lang="ts" setup>
 import { FormField } from './Form.vue'
 import TextInput from './elements/Text.vue'
+import Button from './elements/Button.vue'
 import NumberInput from './elements/Number.vue'
 import TimeInput from './elements/Time.vue'
 import ColorInput from './elements/Color.vue'

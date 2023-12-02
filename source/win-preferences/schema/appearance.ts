@@ -1,5 +1,8 @@
 import { trans } from '@common/i18n-renderer'
 import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
+import { ProgrammaticallyOpenableWindows } from '@providers/commands/open-aux-window'
+
+const ipcRenderer = window.ipc
 
 export function getAppearanceFields (): PreferencesFieldset[] {
   return [
@@ -190,6 +193,26 @@ export function getAppearanceFields (): PreferencesFieldset[] {
           model: 'editor.showStatusbar'
         }
         // TODO: Add field for single Button, label "Custom CSS", button "Open CSS editor"
+      ]
+    },
+    {
+      title: trans('Custom CSS'),
+      group: PreferencesGroups.Appearance,
+      fields: [
+        {
+          type: 'button',
+          label: trans('Open CSS editor'),
+          onClick: () => {
+            ipcRenderer.invoke('application', {
+              command: 'open-aux-window',
+              payload: {
+                window: ProgrammaticallyOpenableWindows.AssetsWindow,
+                hash: 'tab-custom-css-control'
+              }
+            })
+              .catch(err => console.error(err))
+          }
+        }
       ]
     }
   ]

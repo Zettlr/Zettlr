@@ -14,6 +14,8 @@
 
 import { trans } from '@common/i18n-renderer'
 import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
+import { ProgrammaticallyOpenableWindows } from '@providers/commands/open-aux-window'
+const ipcRenderer = window.ipc
 
 export function getImportExportFields (): PreferencesFieldset[] {
   return [
@@ -21,7 +23,36 @@ export function getImportExportFields (): PreferencesFieldset[] {
       title: trans('Import and export profiles'),
       group: PreferencesGroups.ImportExport,
       help: '', // TODO
-      fields: [] // TODO: Add two buttons "Open import profiles editor" and "Open export profiles editor"
+      fields: [
+        {
+          type: 'button',
+          label: trans('Open import profiles editor'),
+          onClick: () => {
+            ipcRenderer.invoke('application', {
+              command: 'open-aux-window',
+              payload: {
+                window: ProgrammaticallyOpenableWindows.AssetsWindow,
+                hash: 'tab-import-control'
+              }
+            })
+              .catch(err => console.error(err))
+          }
+        },
+        {
+          type: 'button',
+          label: trans('Open export profiles editor'),
+          onClick: () => {
+            ipcRenderer.invoke('application', {
+              command: 'open-aux-window',
+              payload: {
+                window: ProgrammaticallyOpenableWindows.AssetsWindow,
+                hash: 'tab-export-control'
+              }
+            })
+              .catch(err => console.error(err))
+          }
+        }
+      ] // TODO: Add two buttons "Open import profiles editor" and "Open export profiles editor"
     },
     {
       title: trans('Export settings'),

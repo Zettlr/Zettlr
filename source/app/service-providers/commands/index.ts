@@ -36,6 +36,7 @@ import ImportFiles from './import'
 import IncreasePomodoro from './increase-pomodoro'
 import LanguageTool from './language-tool'
 import OpenAttachment from './open-attachment'
+import OpenAuxWindow from './open-aux-window'
 import Print from './print'
 import RequestMove from './request-move'
 import RootClose from './root-close'
@@ -79,6 +80,7 @@ export const commands = [
   IncreasePomodoro,
   LanguageTool,
   OpenAttachment,
+  OpenAuxWindow,
   Print,
   RenameTag,
   RequestMove,

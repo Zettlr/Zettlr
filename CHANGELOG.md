@@ -26,6 +26,7 @@
 - Removed the config option `zkn.autoCreateLinkedFiles`, since that can be
   inferred from the option `zkn.customDir`
 - Simplified tab bar tab retention logic across reloads
+- Add the ability to programmatically open the assets window with specified tab
 
 # 3.0.3
 

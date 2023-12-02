@@ -103,6 +103,12 @@ interface FormText {
   contents: string
 }
 
+interface FormButton {
+  type: 'button'
+  label: string
+  onClick: () => void
+}
+
 interface TextField extends BasicInfo {
   type: 'text'
   /**
@@ -191,7 +197,7 @@ interface ThemeField extends BasicInfo {
   options: Record<string, ThemeDescriptor>
 }
 
-export type FormField = Separator|FormText|TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField
+export type FormField = Separator|FormText|FormButton|TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField
 export type TitleFormField = TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField
 
 export interface Fieldset {

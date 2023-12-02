@@ -14,6 +14,8 @@
 
 import { trans } from '@common/i18n-renderer'
 import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
+import { ProgrammaticallyOpenableWindows } from '@providers/commands/open-aux-window'
+const ipcRenderer = window.ipc
 
 export function getSnippetsFields (): PreferencesFieldset[] {
   return [
@@ -21,7 +23,22 @@ export function getSnippetsFields (): PreferencesFieldset[] {
       title: trans('Snippets'),
       group: PreferencesGroups.Snippets,
       help: '', // TODO
-      fields: [] // TODO: Add one button "Open snippets editor"
+      fields: [
+        {
+          type: 'button',
+          label: trans('Open snippets editor'),
+          onClick: () => {
+            ipcRenderer.invoke('application', {
+              command: 'open-aux-window',
+              payload: {
+                window: ProgrammaticallyOpenableWindows.AssetsWindow,
+                hash: 'tab-snippets-control'
+              }
+            })
+              .catch(err => console.error(err))
+          }
+        }
+      ]
     }
   ]
 }
