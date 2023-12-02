@@ -25,6 +25,7 @@
   option `fileMetaTime`
 - Removed the config option `zkn.autoCreateLinkedFiles`, since that can be
   inferred from the option `zkn.customDir`
+- Simplified tab bar tab retention logic across reloads
 
 # 3.0.3
 

@@ -83,8 +83,7 @@ export default defineComponent({
     window.addEventListener('resize', this.onWindowResize)
     // On mount, if the URL contains a fragment that matches a tab ID, emit an
     // event to ensure the app actually switches to that.
-    const url = new URL(location.href)
-    const fragment = url.hash
+    const fragment = location.hash
     if (fragment === '') {
       return
     }
@@ -105,9 +104,7 @@ export default defineComponent({
     onTabClick (event: MouseEvent, id: string) {
       // Modify history to retain active tab across reloads
       const idx = this.tabs.findIndex(tab => tab.id === id)
-      const url = new URL(location.href)
-      url.hash = '#' + id
-      location.href = url.toString()
+      location.hash = '#' + id
       this.currentTab = idx
     }
   }
