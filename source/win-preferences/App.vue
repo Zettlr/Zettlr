@@ -327,8 +327,9 @@ export default defineComponent({
     /**
      * Switches out the preferences tab based on the value of currentTab.
      */
-    currentTab: function () {
+    currentGroup: function () {
       this.setTitle()
+      location.hash = '#' + this.currentGroup
     }
   },
   /**
@@ -337,6 +338,12 @@ export default defineComponent({
   mounted: function () {
     this.setTitle()
     this.populateDynamicValues()
+    if (location.hash !== '') {
+      const groupId = parseInt(location.hash.substring(1), 10)
+      if (Object.values(PreferencesGroups).includes(groupId)) {
+        this.currentGroup = groupId
+      }
+    }
   },
   /**
    * Listen to events in order to adapt display.
