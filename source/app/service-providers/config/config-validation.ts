@@ -28,7 +28,6 @@ const RULES = {
   'export.stripLinks': 'required|string|in:full,unlink,no|default:full',
   'zkn.idRE': 'required|string|default:',
   'zkn.idGen': 'required|string|min:2|default:',
-  'zkn.autoCreateLinkedFiles': 'required|boolean|default:false',
   attachmentExtensions: 'optional|array',
   debug: 'required|boolean|default:false',
   title: 'required|string|default:',

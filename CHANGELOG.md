@@ -12,6 +12,10 @@
 - Removed the option for choosing to sort by either file creation or last
   modification time, since that can also be inferred from whichever time you
   choose to display
+- Removed the option for activating or disabling automatic file creation upon
+  following internal links; now this will happen automatically as long as the
+  "custom folder" option points to an existing folder; to disable this
+  functionality simply remove the folder path
 - Fixed a bug where recent documents would not turn up in the menu
 
 ## Under the Hood
@@ -19,6 +23,8 @@
 - Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
 - Removed the config option `sortingTime` since that can be inferred from the
   option `fileMetaTime`
+- Removed the config option `zkn.autoCreateLinkedFiles`, since that can be
+  inferred from the option `zkn.customDir`
 
 # 3.0.3
 

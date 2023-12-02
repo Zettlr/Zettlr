@@ -66,7 +66,6 @@ export interface ConfigOptions {
     idGen: string
     linkFilenameOnly: boolean
     linkWithFilename: 'always'|'never'|'withID'
-    autoCreateLinkedFiles: boolean
     autoSearch: boolean
     customDirectory: string
   }
@@ -241,8 +240,6 @@ export function getConfigTemplate (): ConfigOptions {
       idGen: '%Y%M%D%h%m%s',
       linkFilenameOnly: false,
       linkWithFilename: 'always', // can be always|never|withID
-      // If true, create files that are not found, if forceOpen is called
-      autoCreateLinkedFiles: false,
       autoSearch: true, // Automatically start a search upon following a link?
       customDirectory: '' // If present, saves auto-created files here
     },
