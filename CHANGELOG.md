@@ -9,11 +9,8 @@
 - Fixed a bug where recent documents would not turn up in the menu
 - Fixed the sidebar shortcut: It is now `Cmd/Ctrl+Shift+0` (to align with the
   file manager shortcut, `Cmd/Ctrl+Shift+1`)
-<<<<<<< HEAD
 - Custom protocols should now be opened without problems by Zettlr (#3853)
 - Added Tamil (India) translation (#4848)
-=======
->>>>>>> 6a0315b6 (fix: Sidebar menu shortcut)
 
 ## Under the Hood
 
