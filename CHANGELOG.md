@@ -7,6 +7,8 @@
   and Emojis will always be sorted below your snippets -- you can turn this off
   in the editor settings
 - Fixed a bug where recent documents would not turn up in the menu
+- Fixed the sidebar shortcut: It is now `Cmd/Ctrl+Shift+0` (to align with the
+  file manager shortcut, `Cmd/Ctrl+Shift+1`)
 
 ## Under the Hood
 
