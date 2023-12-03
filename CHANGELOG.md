@@ -17,6 +17,8 @@
   "custom folder" option points to an existing folder; to disable this
   functionality simply remove the folder path
 - Fixed a bug where recent documents would not turn up in the menu
+- Fixed the sidebar shortcut: It is now `Cmd/Ctrl+Shift+0` (to align with the
+  file manager shortcut, `Cmd/Ctrl+Shift+1`)
 
 ## Under the Hood
 
