@@ -41,7 +41,9 @@ const makeUriTesters = [
   { input: 'gov.md/', expected: 'https://gov.md/' },
   // Alleviation: Simply make it explicitly relative, either by adding the protocol or with a full stop
   { input: 'file://folder.bundle/file.md', expected: 'safe-file:///home/foo/documents/folder.bundle/file.md' },
-  { input: './folder.bundle/file.md', expected: 'safe-file:///home/foo/documents/folder.bundle/file.md' }
+  { input: './folder.bundle/file.md', expected: 'safe-file:///home/foo/documents/folder.bundle/file.md' },
+  // Finally, our utility should also leave existing, but non-standard protocols alone (see #3853)
+  { input: 'test-proto://www.example.com', expected: 'test-proto://www.example.com' }
 ]
 
 describe('Utility#makeValidUri()', function () {
