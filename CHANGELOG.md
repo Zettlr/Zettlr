@@ -9,6 +9,7 @@
 - Fixed a bug where recent documents would not turn up in the menu
 - Fixed the sidebar shortcut: It is now `Cmd/Ctrl+Shift+0` (to align with the
   file manager shortcut, `Cmd/Ctrl+Shift+1`)
+- Custom protocols should now be opened without problems by Zettlr (#3853)
 
 ## Under the Hood
 
