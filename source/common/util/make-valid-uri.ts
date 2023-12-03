@@ -69,6 +69,22 @@ export default function makeValidUri (uri: string, base: string = ''): string {
     return 'mailto:' + uri
   }
 
+  try {
+    const parsed = new URL(uri)
+    console.log(parsed.protocol)
+    if (parsed.protocol === 'file:') {
+      // "file" links could be relative, and we need to tend to that possibility
+      // below, so even if this is a proper URL, we have to let the rest of the
+      // functionality take over.
+      throw new Error('Look at my smart programming lol')
+    }
+    return uri
+  } catch (err) {
+    // We can trust the URL constructor to throw an error if it is not something
+    // that a web browser can *immediately* open. So if new URL() doesn't throw,
+    // we have a proper URL and can save us these shenanigans.
+  }
+
   // Set the isFile var to undefined
   let isFile
 
