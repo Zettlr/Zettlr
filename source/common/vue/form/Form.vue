@@ -319,6 +319,8 @@ body.dark .form-container {
 }
 
 body.win32 .form-container {
-  fieldset { border-radius: 0px; }
+  fieldset {
+    border-radius: 0px;
+  }
 }
 </style>

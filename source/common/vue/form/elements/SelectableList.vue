@@ -250,11 +250,20 @@ body.darwin {
       line-height: 20px;
       padding: 5px;
     }
+  }
 
+  .selectable-list-wrapper {
     .selectable-list-footer {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
       .add, .remove {
         border-right: 1px solid rgb(230, 230, 230);
       }
+    }
+
+    &.has-footer > .selectable-list-container {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
     }
   }
 
@@ -278,7 +287,6 @@ body.darwin {
         border-color: #505050;
 
         &.selected {
-          // background-color: rgb(230, 230, 230);
           background-color: var(--system-accent-color);
           color: var(--system-accent-color-contrast);
           .info-string { color: inherit; }
@@ -294,9 +302,16 @@ body.win32, body.linux {
     .selectable-list-container {
       div.item {
         border: none;
-        // height: 30px;
+        font-size: 12px;
+        grid-template-rows: 20px 20px;
+        height: 40px;
         line-height: 20px;
-        padding: 0 5px;
+
+        &.no-info {
+          grid-template-rows: 15px 15px;
+          height: 30px;
+          line-height: 30px;
+        }
       }
     }
   }
@@ -312,6 +327,12 @@ body.win32, body.linux {
         div.item {
           background-color: rgb(70, 70, 70);
           color: white;
+
+          &.selected {
+            background-color: var(--system-accent-color);
+            color: var(--system-accent-color-contrast);
+            .info-string { color: inherit; }
+          }
         }
       }
     }

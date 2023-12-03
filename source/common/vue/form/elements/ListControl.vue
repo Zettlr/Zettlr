@@ -8,6 +8,8 @@
       v-if="searchable"
       v-model="query"
       v-bind:placeholder="searchLabel"
+      v-bind:search-icon="true"
+      v-bind:reset="true"
     ></TextControl>
     <table v-bind:class="{ striped: isStriped }">
       <!-- Head row -->

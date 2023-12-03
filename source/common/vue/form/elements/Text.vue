@@ -1,8 +1,14 @@
 <template>
   <div v-bind:class="{ 'inline': inline, 'form-control': true }">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
-    <div class="input-text-button-group">
-      <cds-icon v-if="searchIcon" shape="search"></cds-icon>
+    <div
+      v-bind:class="{
+        'input-text-button-group': true,
+        'has-icon': searchIcon,
+        'has-reset': reset
+      }"
+    >
+      <cds-icon v-if="searchIcon" shape="search" class="input-text-button-group-icon"></cds-icon>
       <input
         v-bind:id="fieldID"
         ref="input"
@@ -23,7 +29,7 @@
         v-bind:title="resetLabel"
         v-on:click="resetValue"
       >
-        <cds-icon shape="times" size="s"></cds-icon>
+        &times;
       </button>
     </div>
     <p v-if="info !== ''" class="info" v-html="info"></p>
@@ -119,26 +125,37 @@ export default defineComponent({
 <style lang="less">
 body div.form-control {
   .input-text-button-group {
-    display: flex;
+    display: grid;
+    grid-template-columns: 20px auto 20px;
+    grid-template-areas: "text text text";
     justify-items: center;
     align-items: center;
 
+    &.has-icon:not(.has-reset) { grid-template-areas: "icon text text"; }
+    &.has-reset:not(.has-icon) { grid-template-areas: "text text reset"; }
+    &.has-reset.has-icon { grid-template-areas: "icon text reset"; }
+
+    .input-text-button-group-icon { grid-area: icon; }
+
     input {
       background-color: transparent;
+      grid-area: text;
       border-radius: 0px;
       border: none;
     }
 
     button.input-reset-button {
+      grid-area: reset;
       display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 100%;
       width: 14px;
       height: 14px;
       min-width: auto;
       flex: none;
       border: none;
       padding: 0;
-      align-items: center;
-      justify-items: center;
       background-color: rgb(225, 225, 225);
       color: rgb(50, 50, 50);
       border-radius: 7px;
