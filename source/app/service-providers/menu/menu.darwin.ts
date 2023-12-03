@@ -493,7 +493,7 @@ export default function getMenu (
         {
           id: 'menu.toggle_sidebar',
           label: trans('Toggle Sidebar'),
-          accelerator: 'Cmd+?',
+          accelerator: 'Cmd+Shift+0',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'toggle-sidebar')
           }
