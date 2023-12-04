@@ -1793,10 +1793,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.17.5":
-  version: 18.17.5
-  resolution: "@types/node@npm:18.17.5"
-  checksum: b8c658a99234b99425243c324b641ed7b9ceb6bee6b06421fdc9bb7c58f9a5552e353225cc549e6982462ac384abe1985022ed76e2e4728797f59b21f659ca2b
+"@types/node@npm:^20.10.3":
+  version: 20.10.3
+  resolution: "@types/node@npm:20.10.3"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: 34a329494f0ea239af05eeb6f00f396963725b3eb9a2f79c5e6a6d37e823f2ab85e1079c2ee56723a37d8b89e7bbe2bd050c97144e5bb06dab93fd1cace65c97
   languageName: node
   linkType: hard
 
@@ -12457,6 +12459,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 3192ef6f3fd5df652f2dc1cd782b49d6ff14dc98e5dced492aa8a8c65425227da5da6aafe22523c67f035a272c599bb89cfe803c1db6311e44bed3042fc25487
+  languageName: node
+  linkType: hard
+
 "unified-lint-rule@npm:^2.0.0":
   version: 2.1.1
   resolution: "unified-lint-rule@npm:2.1.1"
@@ -13576,7 +13585,7 @@ __metadata:
     "@types/md5": ^2.3.2
     "@types/mermaid": ^9.2.0
     "@types/mocha": ^10.0.1
-    "@types/node": ^18.17.5
+    "@types/node": ^20.10.3
     "@types/sanitize-html": ^2.9.0
     "@types/semver": ^7.5.0
     "@types/showdown": ^2.0.1
