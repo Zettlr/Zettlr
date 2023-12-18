@@ -5,7 +5,7 @@
 # because this gives us more control over the built-in pandoc binary.
 
 # Retrieve the versions from https://github.com/jgm/pandoc/releases/latest
-VERSION="3.1.9"
+VERSION="3.1.11"
 
 BASE_PATH="https://github.com/jgm/pandoc/releases/download/$VERSION"
 
