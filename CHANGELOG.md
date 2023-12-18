@@ -20,6 +20,7 @@
 - Fixed the sidebar shortcut: It is now `Cmd/Ctrl+Shift+0` (to align with the
   file manager shortcut, `Cmd/Ctrl+Shift+1`)
 - Custom protocols should now be opened without problems by Zettlr (#3853)
+- Added Tamil (India) translation (#4848)
 
 ## Under the Hood
 
