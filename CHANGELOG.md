@@ -31,6 +31,7 @@
   inferred from the option `zkn.customDir`
 - Simplified tab bar tab retention logic across reloads
 - Add the ability to programmatically open the assets window with specified tab
+- Bump the bundled Pandoc to version `3.1.11`
 
 # 3.0.3
 
