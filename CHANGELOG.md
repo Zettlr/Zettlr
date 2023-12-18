@@ -15,6 +15,7 @@
 ## Under the Hood
 
 - Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
+- Bump the bundled Pandoc to version `3.1.11`
 
 # 3.0.3
 
