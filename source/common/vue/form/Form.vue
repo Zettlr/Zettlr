@@ -306,7 +306,8 @@ export default defineComponent({
     background-color: rgb(236, 236, 236);
     border: 1px solid rgb(230, 230, 230);
     margin: 10px;
-    padding: 10px;
+    padding: 24px;
+    padding-top: 18px;
     border-radius: 6px;
     position: relative;
     color: #333;
@@ -321,6 +322,7 @@ export default defineComponent({
         flex-grow: 1;
         font-weight: bolder;
         font-size: 15px;
+        margin-top: 2px;
         padding: 0;
       }
 

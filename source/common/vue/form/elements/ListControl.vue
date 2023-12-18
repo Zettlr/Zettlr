@@ -11,7 +11,12 @@
       v-bind:search-icon="true"
       v-bind:reset="true"
     ></TextControl>
-    <table v-bind:class="{ striped: isStriped }">
+    <table
+      v-bind:class="{
+        striped: isStriped,
+        'margin-top': searchable
+      }"
+    >
       <!-- Head row -->
       <thead>
         <tr>
@@ -87,7 +92,7 @@
           </td>
         </tr>
         <!-- If users may add something, allow them to do so here -->
-        <tr v-if="addable && isAdding">
+        <tr v-if="addable">
           <td v-for="(colLabel, colIdx) in columnLabels" v-bind:key="colIdx">
             <Checkbox
               v-if="columnType(colIdx) === 'boolean'"
@@ -113,13 +118,6 @@
           </td>
           <td style="text-align: center">
             <button v-on:click="handleAddition()">
-              {{ addButtonLabel }}
-            </button>
-          </td>
-        </tr>
-        <tr v-else-if="addable">
-          <td v-bind:colspan="numColumns">
-            <button v-on:click="isAdding = true">
               {{ addButtonLabel }}
             </button>
           </td>
@@ -227,11 +225,6 @@ const query = ref<string>('')
  * A record of the currently edited row and col (-1 if not editing)
  */
 const editing = ref<{ row: number, col: number }>({ row: -1, col: -1 })
-
-/**
- * Whether the user is currently seeing the add form
- */
-const isAdding = ref<boolean>(false)
 
 /**
  * An array that contains the values to be added if the user confirms the
@@ -557,8 +550,6 @@ function handleAddition () {
     newValue.push(newObject)
     emit('update:modelValue', newValue)
   }
-
-  isAdding.value = false
 }
 
 </script>
@@ -573,6 +564,7 @@ body {
 
     table {
       border: 1px solid rgb(220, 220, 220);
+      background-color: white;
       border-collapse: collapse;
       line-height: 100%;
       overflow: auto;
@@ -581,19 +573,24 @@ body {
       &.striped {
         border: none;
         tr:nth-child(2n) {
-          background-color: rgb(220, 220, 220);
+          background-color: rgb(249, 249, 249);
         }
       }
 
+      &.margin-top { margin-top: 8px; }
+
       thead{
         tr {
-          border-bottom: 1px solid rgb(180, 180, 180);
+          border-bottom: 1px solid rgb(220, 220, 220);
           th {
             padding: 4px;
             font-size: small;
             font-weight: normal;
             text-align: left;
-            border-right: 1px solid rgb(180, 180, 180);
+
+            &:not(:last-child) {
+              border-right: 1px solid rgb(220, 220, 220);
+            }
           }
         }
       }

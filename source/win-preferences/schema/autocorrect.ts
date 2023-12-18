@@ -26,58 +26,73 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
       },
       help: '', // TODO
       fields: [
-        // Taken from: https://de.wikipedia.org/wiki/Anf%C3%BChrungszeichen
-        // ATTENTION when adding new pairs: They will be SPLIT using the hyphen character!
         {
-          // TODO: Add a general title
-          type: 'select',
-          inline: false,
-          label: trans('Double Quotes'),
-          model: 'editor.autoCorrect.magicQuotes.primary',
-          options: {
-            '"…"': trans('Disable Magic Quotes'),
-            '“…”': '“…” (US primary)',
-            '‘…’': '‘…’ (UK primary)',
-            '”…”': '”…” (Finnish/Swedish primary)',
-            '»…»': '»…» (Finnish/Swedish primary alternative)',
-            '„…“': '„…“ (German primary)',
-            '»…«': '»…« (German primary alternative)',
-            '« … »': '« … » (French primary)',
-            '“ … ”': '“ … ” (French primary alternative)',
-            '„…”': '„…” (Hungarian/Croatian primary)',
-            '“…„': '“…„ (Hebrew/Albanian primary alternative)',
-            '«…»': '«…» (Most used primary/Esperanto and Georgian primary alternative)',
-            '「…」': '「…」 (Japanese/Taiwanese primary)',
-            '『…』': '『…』 (Japanese/Taiwanese primary alternative)'
-          }
+          type: 'form-text',
+          contents: trans('Smart quotes'),
+          display: 'sub-heading'
         },
         {
-          type: 'select',
-          inline: false,
-          label: trans('Single Quotes'),
-          model: 'editor.autoCorrect.magicQuotes.secondary',
-          options: {
-            '\'…\'': trans('Disable Magic Quotes'),
-            '‘…’': '‘…’ (US secondary)',
-            '“…”': '“…” (UK secondary)',
-            '’…’': '’…’ (Finnish/Swedish secondary)',
-            '›…›': '›…› (Swedish secondary alternative)',
-            '‚…‘': '‚…‘ (German secondary)',
-            '›…‹': '›…‹ (German secondary alternative)',
-            '‹ … ›': '‹ … › (French secondary)',
-            '‘ … ’': '‘ … ’ (French secondary alternative',
-            '‚…’': '‚…’ (Serbian secondary/Dutch secondary alternative)',
-            '‹…›': '‹…› (Albanian/Arabic/Swiss Secondary)',
-            '‘…‚': '‘…‚ (Albanian secondary alternative)',
-            '«…»': '«…» (Rumanian secondary)',
-            '„…“': '„…“ (Armenian/Belarussian/Russian/Ukrainian secondary)',
-            '„…”': '„…” (Estonian secondary)',
-            '『…』': '『…』 (Japanese secondary)',
-            '「…」': '「…」 (Korean secondary alternative)'
-          }
+          type: 'style-group',
+          style: 'columns',
+          fields: [
+            // Taken from: https://de.wikipedia.org/wiki/Anf%C3%BChrungszeichen
+            // ATTENTION when adding new pairs: They will be SPLIT using the hyphen character!
+            {
+              // TODO: Add a general title
+              type: 'select',
+              inline: false,
+              label: trans('Double Quotes'),
+              model: 'editor.autoCorrect.magicQuotes.primary',
+              options: {
+                '"…"': trans('Disable Magic Quotes'),
+                '“…”': '“…” (US primary)',
+                '‘…’': '‘…’ (UK primary)',
+                '”…”': '”…” (Finnish/Swedish primary)',
+                '»…»': '»…» (Finnish/Swedish primary alternative)',
+                '„…“': '„…“ (German primary)',
+                '»…«': '»…« (German primary alternative)',
+                '« … »': '« … » (French primary)',
+                '“ … ”': '“ … ” (French primary alternative)',
+                '„…”': '„…” (Hungarian/Croatian primary)',
+                '“…„': '“…„ (Hebrew/Albanian primary alternative)',
+                '«…»': '«…» (Most used primary/Esperanto and Georgian primary alternative)',
+                '「…」': '「…」 (Japanese/Taiwanese primary)',
+                '『…』': '『…』 (Japanese/Taiwanese primary alternative)'
+              }
+            },
+            {
+              type: 'select',
+              inline: false,
+              label: trans('Single Quotes'),
+              model: 'editor.autoCorrect.magicQuotes.secondary',
+              options: {
+                '\'…\'': trans('Disable Magic Quotes'),
+                '‘…’': '‘…’ (US secondary)',
+                '“…”': '“…” (UK secondary)',
+                '’…’': '’…’ (Finnish/Swedish secondary)',
+                '›…›': '›…› (Swedish secondary alternative)',
+                '‚…‘': '‚…‘ (German secondary)',
+                '›…‹': '›…‹ (German secondary alternative)',
+                '‹ … ›': '‹ … › (French secondary)',
+                '‘ … ’': '‘ … ’ (French secondary alternative',
+                '‚…’': '‚…’ (Serbian secondary/Dutch secondary alternative)',
+                '‹…›': '‹…› (Albanian/Arabic/Swiss Secondary)',
+                '‘…‚': '‘…‚ (Albanian secondary alternative)',
+                '«…»': '«…» (Rumanian secondary)',
+                '„…“': '„…“ (Armenian/Belarussian/Russian/Ukrainian secondary)',
+                '„…”': '„…” (Estonian secondary)',
+                '『…』': '『…』 (Japanese secondary)',
+                '「…」': '「…」 (Korean secondary alternative)'
+              }
+            }
+          ]
         },
         { type: 'separator' },
-        // TODO: Add a sub-heading with text "Text-replacement patterns"
+        {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Text-replacement patterns')
+        },
         {
           type: 'checkbox',
           label: trans('Match whole words'),
@@ -85,10 +100,10 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
           model: 'editor.autoCorrect.matchWholeWords'
         },
         {
-          type: 'list', // TODO: Set title
+          type: 'list',
           valueType: 'record',
           keyNames: [ 'key', 'value' ],
-          columnLabels: [ trans('String'), trans('Replacement') ],
+          columnLabels: [ trans('Replace'), trans('With') ],
           model: 'editor.autoCorrect.replacements',
           deletable: true,
           searchable: true,
