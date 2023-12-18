@@ -16,6 +16,7 @@
         v-bind:value="modelValue"
         v-bind:class="{ 'inline': inline }"
         v-bind:placeholder="placeholder"
+        v-bind:autofocus="autofocus"
         v-bind:disabled="disabled"
         v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         v-on:keyup.enter="$emit('confirm', ($event.target as HTMLInputElement).value)"
@@ -56,6 +57,10 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'FieldText',
   props: {
+    autofocus: {
+      type: Boolean,
+      default: false
+    },
     modelValue: {
       type: String,
       default: ''

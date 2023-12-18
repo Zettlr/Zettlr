@@ -21,6 +21,7 @@
           v-model="query"
           v-bind:placeholder="'Find…'"
           v-bind:search-icon="true"
+          v-bind:autofocus="true"
           v-bind:reset="true"
           style="padding: 5px 10px"
         ></TextControl>
