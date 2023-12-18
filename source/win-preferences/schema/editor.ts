@@ -57,44 +57,50 @@ export function getEditorFields (): PreferencesFieldset[] {
           contents: trans('Check to enable live rendering of various Markdown elements to formatted appearance. This hides formatting characters (such as **text**) or renders images instead of their link.')
         },
         {
-          type: 'checkbox',
-          label: trans('Render Citations'),
-          model: 'display.renderCitations'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Render Iframes'),
-          model: 'display.renderIframes'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Render Images'),
-          model: 'display.renderImages'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Render Links'),
-          model: 'display.renderLinks'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Render Formulae'),
-          model: 'display.renderMath'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Render Tasks'),
-          model: 'display.renderTasks'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Hide heading characters'),
-          model: 'display.renderHTags'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Render emphasis'),
-          model: 'display.renderEmphasis'
+          type: 'style-group',
+          style: 'columns',
+          fields: [
+            {
+              type: 'checkbox',
+              label: trans('Render Citations'),
+              model: 'display.renderCitations'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Iframes'),
+              model: 'display.renderIframes'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Images'),
+              model: 'display.renderImages'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Links'),
+              model: 'display.renderLinks'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Formulae'),
+              model: 'display.renderMath'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Tasks'),
+              model: 'display.renderTasks'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Hide heading characters'),
+              model: 'display.renderHTags'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render emphasis'),
+              model: 'display.renderEmphasis'
+            }
+          ]
         },
         { type: 'separator' },
         {
@@ -103,21 +109,26 @@ export function getEditorFields (): PreferencesFieldset[] {
           contents: trans('Formatting characters for bold and italic')
         },
         {
-          // TODO: Single element
-          type: 'radio',
-          model: 'editor.boldFormatting',
-          options: {
-            '**': '**' + trans('Bold') + '**',
-            __: '__' + trans('Bold') + '__'
-          }
-        },
-        {
-          type: 'radio',
-          model: 'editor.italicFormatting',
-          options: {
-            '*': '*' + trans('Italics') + '*',
-            _: '_' + trans('Italics') + '_'
-          }
+          type: 'style-group',
+          style: 'columns',
+          fields: [
+            {
+              type: 'radio',
+              model: 'editor.boldFormatting',
+              options: {
+                '**': '**' + trans('Bold') + '**',
+                __: '__' + trans('Bold') + '__'
+              }
+            },
+            {
+              type: 'radio',
+              model: 'editor.italicFormatting',
+              options: {
+                '*': '*' + trans('Italics') + '*',
+                _: '_' + trans('Italics') + '_'
+              }
+            }
+          ]
         },
         { type: 'separator' },
         {
@@ -200,14 +211,14 @@ export function getEditorFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'slider',
-          label: trans('Maximum width of images (percent)'),
+          label: trans('Maximum width of images (%s %)', window.config.get('display.imageWidth')),
           min: 0,
           max: 100,
           model: 'display.imageWidth'
         },
         {
           type: 'slider',
-          label: trans('Maximum height of images (percent)'),
+          label: trans('Maximum height of images (%s %)', window.config.get('display.imageHeight')),
           min: 0,
           max: 100,
           model: 'display.imageHeight'

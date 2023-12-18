@@ -28,19 +28,24 @@ export function getAppearanceFields (): PreferencesFieldset[] {
           }
         },
         {
-          // TODO: All of this one line
-          type: 'time',
-          label: trans('Start'),
-          model: 'autoDarkModeStart',
-          inline: true,
-          disabled: window.config.get('autoDarkMode') !== 'schedule'
-        },
-        {
-          type: 'time',
-          label: trans('End'),
-          model: 'autoDarkModeEnd',
-          inline: true,
-          disabled: window.config.get('autoDarkMode') !== 'schedule'
+          type: 'style-group',
+          style: 'columns',
+          fields: [
+            {
+              type: 'time',
+              label: trans('Start'),
+              model: 'autoDarkModeStart',
+              inline: true,
+              disabled: window.config.get('autoDarkMode') !== 'schedule'
+            },
+            {
+              type: 'time',
+              label: trans('End'),
+              model: 'autoDarkModeEnd',
+              inline: true,
+              disabled: window.config.get('autoDarkMode') !== 'schedule'
+            }
+          ]
         }
       ]
     },

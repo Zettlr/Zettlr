@@ -31,13 +31,34 @@
         style="height: 10px;"
       ></div>
       <!-- Now to the contents of the fieldset -->
-      <template v-for="(field, f_idx) in fieldset.fields" v-bind:key="f_idx">
+      <template v-for="(field, fieldIdx) in fieldset.fields" v-bind:key="fieldIdx">
         <FormFieldControl
           v-if="'model' in field"
           v-bind:field="field"
           v-bind:model="getModelValue(field.model)"
           v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></FormFieldControl>
+        <div
+          v-else-if="field.type === 'style-group'"
+          v-bind:class="{
+            'style-group': true,
+            columns: field.style === 'columns'
+          }"
+        >
+          <template v-for="(subField, subfieldIdx) in field.fields" v-bind:key="subfieldIdx">
+            <FormFieldControl
+              v-if="'model' in subField"
+              v-bind:field="subField"
+              v-bind:model="getModelValue(subField.model)"
+              v-on:update:model-value="$emit('update:modelValue', subField.model, $event)"
+            ></FormFieldControl>
+            <FormFieldControl
+              v-else
+              v-bind:field="subField"
+              v-bind:model="undefined"
+            ></FormFieldControl>
+          </template>
+        </div>
         <!-- Else for all elements that don't have a model (i.e., the separator) -->
         <FormFieldControl
           v-else
@@ -91,6 +112,10 @@ interface BasicInfo {
    * An optional group that can be used to sort items into various groups
    */
   group?: string
+  /**
+   * Whether the field is disabled
+   */
+  disabled?: boolean
 }
 
 interface Separator {
@@ -132,35 +157,29 @@ interface TextField extends BasicInfo {
 interface NumberField extends BasicInfo {
   type: 'number'
   reset?: number
-  disabled?: boolean
 }
 
 interface TimeField extends BasicInfo {
   type: 'time'
-  disabled?: boolean
 }
 
 interface ColorField extends BasicInfo {
   type: 'color'
-  disabled?: boolean
 }
 
 interface FileField extends BasicInfo {
   type: 'file'|'directory'
   reset?: string|boolean
-  placeholder?: string
   filter?: Record<string, string>
 }
 
 interface CheckboxField extends BasicInfo {
   type: 'checkbox'|'switch'
   info?: string
-  disabled?: boolean
 }
 
 interface RadioField extends BasicInfo {
   type: 'radio'
-  disabled?: boolean
   options: Record<string, string>
 }
 
@@ -197,8 +216,29 @@ interface ThemeField extends BasicInfo {
   options: Record<string, ThemeDescriptor>
 }
 
-export type FormField = Separator|FormText|FormButton|TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField
-export type TitleFormField = TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField
+/**
+ * Fields that can occur within the form field list
+ */
+export type FormField = Separator|FormText|FormButton|TextField|NumberField|
+TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|
+TokenField|SliderField|ThemeField
+
+/**
+ * Fields that can only occur within the title area of a fieldset
+ */
+export type TitleFormField = TextField|NumberField|TimeField|ColorField|
+  FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|
+  SliderField
+
+/**
+ * This field can be used to apply styles to various groups of fields. Only
+ * available directly as children of fieldsets
+ */
+interface StyleGroup {
+  type: 'style-group'
+  style: 'columns'
+  fields: FormField[]
+}
 
 export interface Fieldset {
   /**
@@ -217,7 +257,7 @@ export interface Fieldset {
   /**
    * The fields which are part of this formfield
    */
-  fields: FormField[]
+  fields: Array<FormField|StyleGroup>
   [key: string]: any // Allow arbitrary additional fields
 }
 
@@ -306,6 +346,13 @@ export default defineComponent({
       margin: 20px 0px;
       border: none;
       border-top: 1px solid rgb(211, 211, 211);
+    }
+
+    .style-group {
+      .columns {
+        column-count: 2;
+        column-fill: balance;
+      }
     }
   }
 }
