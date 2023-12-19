@@ -6,7 +6,7 @@ export function getFileManagerFields (): PreferencesFieldset[] {
     {
       title: trans('Display mode'),
       group: PreferencesGroups.FileManager,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'radio',
@@ -39,7 +39,7 @@ export function getFileManagerFields (): PreferencesFieldset[] {
     {
       title: trans('Markdown document name display'),
       group: PreferencesGroups.FileManager,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'radio',
@@ -63,7 +63,7 @@ export function getFileManagerFields (): PreferencesFieldset[] {
     {
       title: trans('Time display'),
       group: PreferencesGroups.FileManager,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'radio',
@@ -78,7 +78,7 @@ export function getFileManagerFields (): PreferencesFieldset[] {
     {
       title: trans('Sorting'),
       group: PreferencesGroups.FileManager,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'radio',

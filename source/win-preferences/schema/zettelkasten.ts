@@ -20,7 +20,7 @@ export function getZettelkastenFields (): PreferencesFieldset[] {
     {
       title: trans('Zettelkasten IDs'),
       group: PreferencesGroups.Zettelkasten,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'text',
@@ -41,7 +41,7 @@ export function getZettelkastenFields (): PreferencesFieldset[] {
     {
       title: trans('Internal links'),
       group: PreferencesGroups.Zettelkasten,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',

@@ -20,7 +20,7 @@ export function getCitationFields (): PreferencesFieldset[] {
     {
       title: trans('Citations'),
       group: PreferencesGroups.Citations,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'radio',

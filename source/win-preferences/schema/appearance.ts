@@ -13,7 +13,7 @@ export function getAppearanceFields (): PreferencesFieldset[] {
         type: 'switch',
         model: 'darkMode'
       },
-      help: '', // TODO,
+      help: undefined, // TODO,
       fields: [
         { type: 'separator' },
         {
@@ -52,7 +52,7 @@ export function getAppearanceFields (): PreferencesFieldset[] {
     {
       title: trans('Theme'),
       group: PreferencesGroups.Appearance,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'theme',
@@ -101,7 +101,7 @@ export function getAppearanceFields (): PreferencesFieldset[] {
     {
       title: trans('Toolbar options'),
       group: PreferencesGroups.Appearance,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'form-text',
@@ -190,14 +190,13 @@ export function getAppearanceFields (): PreferencesFieldset[] {
     {
       title: trans('Status bar'),
       group: PreferencesGroups.Appearance,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',
           label: trans('Show statusbar'),
           model: 'editor.showStatusbar'
         }
-        // TODO: Add field for single Button, label "Custom CSS", button "Open CSS editor"
       ]
     },
     {

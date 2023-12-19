@@ -24,7 +24,7 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
         type: 'switch',
         model: 'editor.autoCorrect.active'
       },
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'form-text',

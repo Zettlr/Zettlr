@@ -25,14 +25,13 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
         model: 'appLang',
         options: appLangOptions
       },
-      help: '', // TODO
-      fields: [
-      ]
+      help: undefined, // TODO
+      fields: []
     },
     {
       title: trans('Autosave'),
       group: PreferencesGroups.General,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'separator'
@@ -54,7 +53,7 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
     {
       title: trans('Default image folder'),
       group: PreferencesGroups.General,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'directory',
@@ -71,7 +70,7 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
     {
       title: trans('Behavior'),
       group: PreferencesGroups.General,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',
@@ -88,7 +87,7 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
     {
       title: trans('Updates'),
       group: PreferencesGroups.General,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',

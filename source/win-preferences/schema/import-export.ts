@@ -22,7 +22,7 @@ export function getImportExportFields (): PreferencesFieldset[] {
     {
       title: trans('Import and export profiles'),
       group: PreferencesGroups.ImportExport,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'button',
@@ -57,7 +57,7 @@ export function getImportExportFields (): PreferencesFieldset[] {
     {
       title: trans('Export settings'),
       group: PreferencesGroups.ImportExport,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox', // TODO: Must be radio; second option "Use system-wide Pandoc for exports"
@@ -103,7 +103,7 @@ export function getImportExportFields (): PreferencesFieldset[] {
     {
       title: trans('Custom export commands'),
       group: PreferencesGroups.ImportExport,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'list',

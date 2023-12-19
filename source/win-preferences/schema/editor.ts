@@ -29,7 +29,7 @@ export function getEditorFields (): PreferencesFieldset[] {
           vim: 'Vim'
         }
       },
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'form-text',
@@ -41,7 +41,7 @@ export function getEditorFields (): PreferencesFieldset[] {
     {
       title: trans('Writing direction'),
       group: PreferencesGroups.Editor,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         // TODO: Add field for LTR/RTL
       ]
@@ -49,7 +49,7 @@ export function getEditorFields (): PreferencesFieldset[] {
     {
       title: trans('Markdown rendering'),
       group: PreferencesGroups.Editor,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'form-text',
@@ -142,11 +142,10 @@ export function getEditorFields (): PreferencesFieldset[] {
       title: trans('Table Editor'),
       group: PreferencesGroups.Editor,
       titleField: {
-        // TODO: Add switch to title area
         type: 'switch',
         model: 'editor.enableTableHelper'
       },
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'form-text',
@@ -158,7 +157,7 @@ export function getEditorFields (): PreferencesFieldset[] {
     {
       title: trans('Distraction-free mode'),
       group: PreferencesGroups.Editor,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',
@@ -175,7 +174,7 @@ export function getEditorFields (): PreferencesFieldset[] {
     {
       title: trans('Word counter'),
       group: PreferencesGroups.Editor,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           // TODO: Must be radio (Count words/Count characters)
@@ -188,7 +187,7 @@ export function getEditorFields (): PreferencesFieldset[] {
     {
       title: trans('Readability mode'),
       group: PreferencesGroups.Editor,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'select',
@@ -207,7 +206,7 @@ export function getEditorFields (): PreferencesFieldset[] {
     {
       title: trans('Image size'),
       group: PreferencesGroups.Editor,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'slider',
@@ -228,7 +227,7 @@ export function getEditorFields (): PreferencesFieldset[] {
     {
       title: trans('Other settings'),
       group: PreferencesGroups.Editor,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'number',

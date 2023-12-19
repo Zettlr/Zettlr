@@ -22,7 +22,7 @@ export function getSnippetsFields (): PreferencesFieldset[] {
     {
       title: trans('Snippets'),
       group: PreferencesGroups.Snippets,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'button',

@@ -27,7 +27,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
     {
       title: trans('Pattern for new file names'),
       group: PreferencesGroups.Advanced,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'text',
@@ -48,7 +48,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
     {
       title: trans('Appearance'),
       group: PreferencesGroups.Advanced,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',
@@ -89,7 +89,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
     {
       title: trans('Attachments sidebar'),
       group: PreferencesGroups.Advanced,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'token',
@@ -101,7 +101,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
     {
       title: trans('Iframe rendering whitelist'),
       group: PreferencesGroups.Advanced,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'list',
@@ -117,7 +117,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
     {
       title: trans('Watchdog polling'),
       group: PreferencesGroups.Advanced,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',
@@ -135,7 +135,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
     {
       title: trans('Deleting items'),
       group: PreferencesGroups.Advanced,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',
@@ -147,7 +147,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
     {
       title: trans('Debug mode'),
       group: PreferencesGroups.Advanced,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',
@@ -160,7 +160,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
     {
       title: trans('Beta releases'),
       group: PreferencesGroups.Advanced,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',

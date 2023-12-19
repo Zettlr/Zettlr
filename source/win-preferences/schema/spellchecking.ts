@@ -25,7 +25,7 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
         type: 'switch',
         model: 'editor.lint.languageTool.active'
       },
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         {
           type: 'radio',
@@ -102,7 +102,7 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
     {
       title: trans('Spellchecking'),
       group: PreferencesGroups.Spellchecking,
-      help: '', // TODO
+      help: undefined, // TODO
       fields: [
         // TODO: Add switch to title area later on that doesn#t exist yet
         {

@@ -116,6 +116,10 @@ interface BasicInfo {
    * Whether the field is disabled
    */
   disabled?: boolean
+  /**
+   * An optional placeholder, not supported everywhere
+   */
+  placeholder?: string
 }
 
 interface Separator {
