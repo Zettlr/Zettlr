@@ -46,6 +46,7 @@
               <Checkbox
                 v-if="typeof column === 'boolean'"
                 v-bind:model-value="column"
+                v-bind:inline="true"
                 v-bind:name="`${name}-checkbox-${rowIdx}-${colIdx}`"
                 v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
               >
@@ -53,6 +54,7 @@
               <NumberControl
                 v-else-if="typeof column === 'number'"
                 v-bind:model-value="column"
+                v-bind:inline="true"
                 v-on:escape="finishEditing()"
                 v-on:blur="handleInput(rowIdx, colIdx, $event)"
                 v-on:confirm="handleInput(rowIdx, colIdx, $event)"
@@ -61,6 +63,7 @@
               <TextControl
                 v-else
                 v-bind:model-value="column"
+                v-bind:inline="true"
                 v-on:escape="finishEditing()"
                 v-on:blur="handleInput(rowIdx, colIdx, $event)"
                 v-on:confirm="handleInput(rowIdx, colIdx, $event)"
@@ -72,6 +75,7 @@
               <Checkbox
                 v-if="typeof column === 'boolean'"
                 v-bind:model-value="column"
+                v-bind:inline="true"
                 v-bind:disabled="!isColumnEditable(colIdx)"
                 v-bind:name="`${name}-action-${rowIdx}-${colIdx}`"
                 v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
@@ -97,6 +101,7 @@
             <Checkbox
               v-if="columnType(colIdx) === 'boolean'"
               v-bind:placeholder="colLabel"
+              v-bind:inline="true"
               v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
@@ -104,6 +109,7 @@
             <NumberControl
               v-else-if="columnType(colIdx) === 'number'"
               v-bind:placeholder="colLabel"
+              v-bind:inline="true"
               v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
@@ -111,6 +117,7 @@
             <TextControl
               v-else
               v-bind:placeholder="colLabel"
+              v-bind:inline="true"
               v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >

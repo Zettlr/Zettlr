@@ -75,7 +75,4 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-body .form-control button {
-  margin: 5px;
-}
 </style>

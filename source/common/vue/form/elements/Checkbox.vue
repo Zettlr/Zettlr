@@ -111,7 +111,10 @@ body {
     grid-template-rows: 100%;
     grid-template-areas: "input label";
     align-items: center;
-    margin: 10px 0;
+
+    &:not(.checkbox-outer-div-inline) {
+      margin: 10px 0;
+    }
 
     .cb-group-label { grid-area: label; }
   }
