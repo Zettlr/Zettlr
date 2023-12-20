@@ -1,72 +1,83 @@
 <template>
   <div ref="component-container" class="form-container">
-    <fieldset
+    <template
       v-for="(fieldset, idx) in typedSchema.fieldsets"
       v-bind:key="idx"
     >
-      <!-- First, let's do some setup of the fieldset -->
-      <div class="form-header">
-        <!-- First the fieldset legend: Required -->
-        <legend>
-          {{ fieldset.title }}
-        </legend>
-        <!-- Then an optional title area form field -->
-        <div v-if="fieldset.titleField !== undefined" class="form-header-field">
-          <FormFieldControl
-            v-bind:field="fieldset.titleField"
-            v-bind:model="getModelValue(fieldset.titleField.model)"
-            v-on:update:model-value="$emit('update:modelValue', fieldset.titleField.model, $event)"
-          ></FormFieldControl>
-        </div>
-        <!-- Finally the optional help tooltip -->
-        <div
-          v-if="fieldset.help !== undefined" class="form-help"
-        >
-          ?
-        </div>
-      </div>
-      <!-- If the first fieldset field is not a separator and we have following fields, add a small gap -->
       <div
-        v-if="fieldset.fields.length > 0 && fieldset.fields[0].type !== 'separator'"
-        style="height: 10px;"
-      ></div>
-      <!-- Now to the contents of the fieldset -->
-      <template v-for="(field, fieldIdx) in fieldset.fields" v-bind:key="fieldIdx">
-        <FormFieldControl
-          v-if="'model' in field"
-          v-bind:field="field"
-          v-bind:model="getModelValue(field.model)"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></FormFieldControl>
-        <div
-          v-else-if="field.type === 'style-group'"
-          v-bind:class="{
-            'style-group': true,
-            columns: field.style === 'columns'
-          }"
-        >
-          <template v-for="(subField, subfieldIdx) in field.fields" v-bind:key="subfieldIdx">
+        v-if="typedSchema.getFieldsetCategory(fieldset) !== undefined"
+        class="fieldset-category"
+      >
+        <cds-icon v-bind:shape="typedSchema.getFieldsetCategory(fieldset)?.icon"></cds-icon>
+        <span>
+          {{ typedSchema.getFieldsetCategory(fieldset)?.title }}
+        </span>
+      </div>
+      <fieldset>
+        <!-- First, let's do some setup of the fieldset -->
+        <div class="form-header">
+          <!-- First the fieldset legend: Required -->
+          <legend>
+            {{ fieldset.title }}
+          </legend>
+          <!-- Then an optional title area form field -->
+          <div v-if="fieldset.titleField !== undefined" class="form-header-field">
             <FormFieldControl
-              v-if="'model' in subField"
-              v-bind:field="subField"
-              v-bind:model="getModelValue(subField.model)"
-              v-on:update:model-value="$emit('update:modelValue', subField.model, $event)"
+              v-bind:field="fieldset.titleField"
+              v-bind:model="getModelValue(fieldset.titleField.model)"
+              v-on:update:model-value="$emit('update:modelValue', fieldset.titleField.model, $event)"
             ></FormFieldControl>
-            <FormFieldControl
-              v-else
-              v-bind:field="subField"
-              v-bind:model="undefined"
-            ></FormFieldControl>
-          </template>
+          </div>
+          <!-- Finally the optional help tooltip -->
+          <div
+            v-if="fieldset.help !== undefined" class="form-help"
+          >
+            ?
+          </div>
         </div>
-        <!-- Else for all elements that don't have a model (i.e., the separator) -->
-        <FormFieldControl
-          v-else
-          v-bind:field="field"
-          v-bind:model="undefined"
-        ></FormFieldControl>
-      </template>
-    </fieldset>
+        <!-- If the first fieldset field is not a separator and we have following fields, add a small gap -->
+        <div
+          v-if="fieldset.fields.length > 0 && fieldset.fields[0].type !== 'separator'"
+          style="height: 10px;"
+        ></div>
+        <!-- Now to the contents of the fieldset -->
+        <template v-for="(field, fieldIdx) in fieldset.fields" v-bind:key="fieldIdx">
+          <FormFieldControl
+            v-if="'model' in field"
+            v-bind:field="field"
+            v-bind:model="getModelValue(field.model)"
+            v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
+          ></FormFieldControl>
+          <div
+            v-else-if="field.type === 'style-group'"
+            v-bind:class="{
+              'style-group': true,
+              columns: field.style === 'columns'
+            }"
+          >
+            <template v-for="(subField, subfieldIdx) in field.fields" v-bind:key="subfieldIdx">
+              <FormFieldControl
+                v-if="'model' in subField"
+                v-bind:field="subField"
+                v-bind:model="getModelValue(subField.model)"
+                v-on:update:model-value="$emit('update:modelValue', subField.model, $event)"
+              ></FormFieldControl>
+              <FormFieldControl
+                v-else
+                v-bind:field="subField"
+                v-bind:model="undefined"
+              ></FormFieldControl>
+            </template>
+          </div>
+          <!-- Else for all elements that don't have a model (i.e., the separator) -->
+          <FormFieldControl
+            v-else
+            v-bind:field="field"
+            v-bind:model="undefined"
+          ></FormFieldControl>
+        </template>
+      </fieldset>
+    </template>
   </div>
 </template>
 
@@ -267,6 +278,7 @@ export interface Fieldset {
 
 export interface FormSchema {
   fieldsets: Fieldset[]
+  getFieldsetCategory: (fieldset: Fieldset) => { title: string, icon: string }|undefined
 }
 
 export default defineComponent({
@@ -306,6 +318,16 @@ export default defineComponent({
 
 <style lang="less">
 .form-container {
+  .fieldset-category {
+    color: rgb(114, 114, 114);
+    font-size: 13px;
+    margin: 10px;
+
+    cds-icon {
+      margin-right: 10px;
+    }
+  }
+
   fieldset {
     background-color: rgb(236, 236, 236);
     border: 1px solid rgb(230, 230, 230);

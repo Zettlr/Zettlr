@@ -180,7 +180,20 @@ export default defineComponent({
     },
     schema (): FormSchema {
       return {
-        fieldsets: this.filteredFieldsets
+        fieldsets: this.filteredFieldsets,
+        getFieldsetCategory: (fieldset) => {
+          if (this.query === '') {
+            return undefined
+          }
+
+          const group = this.groups.find(g => g.id === fieldset.group)
+
+          if (group !== undefined && group.icon !== undefined) {
+            return { icon: group.icon, title: group.displayText }
+          } else {
+            return undefined
+          }
+        }
       }
     },
     selectedItem () {
