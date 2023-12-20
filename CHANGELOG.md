@@ -32,6 +32,8 @@
 - Simplified tab bar tab retention logic across reloads
 - Add the ability to programmatically open the assets window with specified tab
 - Bump the bundled Pandoc to version `3.1.11`
+- Failure to fetch a link preview will now simply log a verbose message instead
+  of an error
 
 # 3.0.3
 
