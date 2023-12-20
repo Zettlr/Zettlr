@@ -158,8 +158,12 @@ body {
 
     input, button { white-space: nowrap; }
 
-    input { flex-grow: 2; }
-    button { flex-grow: 0; }
+    input { flex-grow: 4; }
+    button {
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }
 body.darwin {

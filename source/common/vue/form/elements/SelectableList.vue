@@ -240,6 +240,14 @@ body .selectable-list-wrapper {
   }
 }
 
+body.dark .selectable-list-wrapper {
+  --selectable-list-border-color-dark: rgb(120, 120, 120);
+  .selectable-list-footer, .selectable-list-container, div.item {
+    border-color: var(--selectable-list-border-color-dark);
+  }
+
+}
+
 body.darwin {
   .selectable-list-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -337,5 +345,9 @@ body.win32, body.linux {
       }
     }
   }
+}
+
+body.linux .selectable-list-wrapper .selectable-list-container {
+  border-radius: 4px;
 }
 </style>

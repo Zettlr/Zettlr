@@ -567,7 +567,6 @@ function handleAddition () {
 body {
   div.table-view {
     break-inside: avoid; // Avoid breaking table views when inside column views
-    margin: 5px;
 
     table {
       border: 1px solid rgb(220, 220, 220);
@@ -586,7 +585,7 @@ body {
 
       &.margin-top { margin-top: 8px; }
 
-      thead{
+      thead {
         tr {
           border-bottom: 1px solid rgb(220, 220, 220);
           th {
@@ -620,6 +619,7 @@ body {
   &.dark {
     div.table-view {
       table {
+        background-color: transparent;
         &.striped {
           tr:nth-child(2n) {
             background-color: rgb(50, 50, 50);
@@ -630,7 +630,7 @@ body {
   }
 }
 
-body.darwin{
+body.darwin {
   &.dark {
     div.table-view {
       table {

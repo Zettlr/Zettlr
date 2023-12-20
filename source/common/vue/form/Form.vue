@@ -396,6 +396,14 @@ body.dark .form-container {
 body.win32 .form-container {
   fieldset {
     border-radius: 0px;
+    background-color: rgb(245, 245, 245);
+  }
+}
+
+body.linux:not(.dark) .form-container {
+  fieldset {
+    border-radius: 4px;
+    background-color: rgb(245, 245, 245);
   }
 }
 </style>

@@ -166,8 +166,8 @@ export default {
       // Change the value in the Vue dev tools if you want to see how
       // Zettlr looks on other platforms. Please also note that this
       // does not affect the native window chrome.
-      // platform: 'win32',
-      platform: process.platform,
+      platform: 'darwin',
+      // platform: process.platform,
       useNativeAppearance: window.config.get('window.nativeAppearance')
     }
   },
@@ -318,6 +318,10 @@ body {
         background-color: rgb(30, 30, 30);
       }
     }
+  }
+
+  &.win32 {
+    font-size: 13px;
   }
 
   div#window-frame {
