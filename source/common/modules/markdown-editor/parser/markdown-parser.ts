@@ -69,7 +69,6 @@ import { lua } from '@codemirror/legacy-modes/mode/lua'
 // Additional parser
 import { citationParser } from './citation-parser'
 import { footnoteParser, footnoteRefParser } from './footnote-parser'
-import { plainLinkParser } from './plain-link-parser'
 import { frontmatterParser } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
 import { sloppyParser } from './sloppy-parser'
@@ -183,7 +182,6 @@ export default function markdownParser (): LanguageSupport {
         inlineMathParser,
         footnoteParser,
         citationParser,
-        plainLinkParser,
         sloppyParser,
         zknLinkParser,
         zknTagParser,
