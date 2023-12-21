@@ -49,6 +49,8 @@ links as well.
   aggressive, detecting links even where none were wanted; (2) Pandoc doesn't
   support auto-links in such a way as we have implemented it, leading to
   inconsistencies in exports
+- The YAML frontmatter is now ignored for the purposes of previewing files,
+  showing a more meaningful preview of its contents (#4598)
 
 ## Under the Hood
 
