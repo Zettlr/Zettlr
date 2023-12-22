@@ -53,6 +53,8 @@ links as well.
   showing a more meaningful preview of its contents (#4598)
 - Improve pasting behavior: Now text from Microsoft Word or Excel will be pasted
   as text, instead of offering to insert an image of the selection
+- Fix pasting behavior: Now Zettlr should properly paste most formatted text
+  without too much noise (in the form of comments, styles, and other additions)
 
 ## Under the Hood
 
