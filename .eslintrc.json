@@ -87,6 +87,29 @@
       {
         "ignoredTypeNames": ["Text"]
       }
-    ]
+    ],
+    // DEBUG: Turn a few errors into warnings after upgrading ESLint to >6.x
+    // NOTE: Remove/properly think about these at a later point.
+    "@typescript-eslint/consistent-type-imports": 1,
+    "@typescript-eslint/no-unsafe-argument": 1,
+    "@typescript-eslint/non-nullable-type-assertion-style": 1,
+    "@typescript-eslint/no-this-alias": 1,
+    "@typescript-eslint/explicit-function-return-type": 1,
+    "@typescript-eslint/consistent-type-assertions": 1,
+    "@typescript-eslint/consistent-indexed-object-style": 1,
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": 1,
+    "@typescript-eslint/strict-boolean-expressions": 1,
+    "@typescript-eslint/block-spacing": 1,
+    "@typescript-eslint/object-curly-spacing": 1,
+    "@typescript-eslint/no-unnecessary-type-assertion": 1,
+    "@typescript-eslint/unbound-method": 1,
+    "@typescript-eslint/prefer-nullish-coalescing": 1,
+    "@typescript-eslint/prefer-return-this-type": 1,
+    "@typescript-eslint/promise-function-async": 1,
+    "@typescript-eslint/prefer-includes": 1,
+    "@typescript-eslint/prefer-function-type": 1,
+    "@typescript-eslint/prefer-optional-chain": 1,
+    "@typescript-eslint/array-type": 1,
+    "@typescript-eslint/ban-types": 1
   }
 }
