@@ -72,70 +72,76 @@ async function saveImageFromClipboard (basePath: string): Promise<string|undefin
 export const mdPasteDropHandlers: DOMEventHandlers<any> = {
   paste (event, view) {
     const data = event.clipboardData
-    if (data === null || (data.files.length === 0 && !data.types.includes('text/html'))) {
+    if (data === null || (data.types.length === 1 && data.types[0] === 'text/plain')) {
       return false // Let the default handler take over
     }
 
-    const hasFiles = data.files.length > 0
-    const basePath = path.dirname(view.state.field(configField).metadata.path)
+    // Now that we have proper clipboardData to access, we have to determine if
+    // this is an image or a text call. Here, we have a set of problems.
+    //
+    // 1. OS images (and other files) will be represented as file items, so
+    //    data.types only includes "Files"
+    // 2. Firefox and Chrome will, if the user copies an image, have both the
+    //    type "Files" and "text/html", the latter of which often includes the
+    //    URL or the image data as a string.
+    // 3. Microsoft Office is a POS and will just write EVERYTHING to the
+    //    clipboard, i.e. "text/plain", "text/html", "text/rtf", and "image/png"
+    // 4. LibreOffice will also write plain, HTML, and RTF, but no image.
+    //
+    // In effect, we cannot rely on the presence of a "Files" type in the
+    // clipboard data to tell us whether we should initiate a paste image or
+    // paste text action.
+    //
+    // BUT, what I found out is that whenever the intention is to paste text,
+    // and an image only serves as a fallback, there will be "text/plain" in the
+    // clipboard. In other words, as long as there is "text/plain" in the
+    // clipboard, the user intends to paste text, not an image.
 
-    // Now, there are two instances which we have to intercept. The first
-    // one is if there are any files in the buffer. In that case, we need
-    // to link them properly. The second one is if there is HTML code in
-    // the clipboard. In that case, we need to insert it using its
-    // Markdown representation instead (basically "paste with style").
+    const textIntention = data.types.includes('text/plain')
+    const basePath = path.dirname(view.state.field(configField).metadata.path)
 
     const insertions: string[] = []
     const allPromises: Array<Promise<void>> = []
-    for (let i = 0; i < data.files.length; i++) {
-      const file = data.files.item(i)
-      if (file === null) {
-        continue
-      }
-
-      if (imageRE.test(file.name)) {
-        if (file.path === '') {
-          // This image resides only within the clipboard
-          allPromises.push(new Promise((resolve, reject) => {
-            saveImageFromClipboard(basePath)
-              .then(tag => {
-                if (tag !== undefined) {
-                  insertions.push(tag)
+    if (textIntention && data.types.includes('text/html')) {
+      // The user intends to paste text, and there is formatted HTML in the
+      // clipboard that we need to turn into HTML.
+      const html = data.getData('text/html')
+      const promise = html2md(html)
+        .then(md => {
+          insertions.push(md)
+        })
+      allPromises.push(promise)
+    } else if (textIntention) {
+      // The user intends to paste text, but there's only plain text in the
+      // clipboard.
+      const text = data.getData('text/plain')
+      insertions.push(text)
+    } else {
+      // The user intends to paste an image or a series of files
+      for (const file of data.files) {
+        if (imageRE.test(file.name)) {
+          if (file.path === '') {
+            // This image resides only within the clipboard, so prompt the user
+            // to save it down. The command will already wrap everything into
+            // `![]()`.
+            allPromises.push(new Promise((resolve, reject) => {
+              saveImageFromClipboard(basePath)
+                .then(tag => {
+                  if (tag !== undefined) {
+                    insertions.push(tag)
+                  }
                   resolve()
-                }
-              })
-              .catch(err => reject(err))
-          }))
+                })
+                .catch(err => reject(err))
+            }))
+          } else {
+            // There is a path in the file item
+            insertions.push(`![${file.name}](${normalizePathForInsertion(file.path, basePath)})`)
+          }
         } else {
-          insertions.push(`![${file.name}](${normalizePathForInsertion(file.path, basePath)})`)
+          // Not an image, so simply link it.
+          insertions.push(`[${file.name}](${normalizePathForInsertion(file.path, basePath)})`)
         }
-      } else {
-        insertions.push(`[${file.name}](${normalizePathForInsertion(file.path, basePath)})`)
-      }
-    }
-
-    // If there were no files, we can deal with any text in the clipboard.
-    if (!hasFiles) {
-      for (let i = 0; i < data.items.length; i++) {
-        const datum = data.items[i]
-        if (datum.kind === 'file') {
-          continue // Chromium also adds basic file descriptions here
-        }
-
-        if (datum.type !== 'text/html') {
-          continue // We only deal with HTML here (for the rest, the default handler can take over)
-        }
-
-        allPromises.push(new Promise((resolve, reject) => {
-          datum.getAsString(text => {
-            html2md(text)
-              .then(md => {
-                insertions.push(md)
-                resolve()
-              })
-              .catch(err => reject(err))
-          })
-        }))
       }
     }
 
@@ -182,11 +188,8 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
     if (dataTransfer.files.length > 0) {
       const files: string[] = []
       // We have a list of files being dropped onto the editor --> link them
-      for (let i = 0; i < dataTransfer.files.length; i++) {
-        const file = dataTransfer.files.item(i)
-        if (file !== null) {
-          files.push(file.path)
-        }
+      for (const file of dataTransfer.files) {
+        files.push(file.path)
       }
 
       const toInsert = files.map(f => {
