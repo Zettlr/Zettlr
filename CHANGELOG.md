@@ -41,6 +41,8 @@ links as well.
   inconsistencies in exports
 - The YAML frontmatter is now ignored for the purposes of previewing files,
   showing a more meaningful preview of its contents (#4598)
+- Improve pasting behavior: Now text from Microsoft Word or Excel will be pasted
+  as text, instead of offering to insert an image of the selection
 
 ## Under the Hood
 
