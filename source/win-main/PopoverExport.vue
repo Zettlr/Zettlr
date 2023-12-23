@@ -86,7 +86,7 @@ export default defineComponent({
       }
     },
     availableFormats: function () {
-      const selectOptions: { [key: string]: string } = {}
+      const selectOptions: Record<string, string> = {}
 
       this.profileMetadata
         // Remove files that cannot read any of Zettlr's internal formats ...
