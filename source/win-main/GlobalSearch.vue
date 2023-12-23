@@ -435,7 +435,7 @@ export default defineComponent({
       // Take the file to be searched ...
       const terms = compileSearchTerms(this.query)
       while (this.filesToSearch.length > 0) {
-        const fileToSearch = this.filesToSearch.shift() as any
+        const fileToSearch = this.filesToSearch.shift()
         // Now start the search
         const result: SearchResult[] = await ipcRenderer.invoke('application', {
           command: 'file-search',

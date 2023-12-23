@@ -283,8 +283,8 @@ export default defineComponent({
     },
     scrollActiveFileIntoView: function () {
       // First, we need to find the tab displaying the active file
-      const elem = this.container.querySelector('.active') as HTMLDivElement|null
-      if (elem === null) {
+      const elem = this.container.querySelector('.active')
+      if (elem === null || !(elem instanceof HTMLDivElement)) {
         return // The container is not yet present
       }
       // Then, find out where the element is ...

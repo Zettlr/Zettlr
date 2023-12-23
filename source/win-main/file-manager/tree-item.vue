@@ -400,7 +400,7 @@ export default defineComponent({
       }
 
       // If a directory within this has been selected, open up, lads!
-      if ((this.obj.path as string).startsWith(dirPath)) {
+      if (this.obj.path.startsWith(dirPath)) {
         this.collapsed = false
       }
     },
