@@ -76,7 +76,7 @@ export default {
       averageMonth: 0,
       sumToday: 0,
       showMoreStats: false,
-      wordCounts: {} as { [key: string]: number }
+      wordCounts: {} satisfies { [key: string]: number }
     }
   },
   computed: {
