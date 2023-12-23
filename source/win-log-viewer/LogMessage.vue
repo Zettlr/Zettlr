@@ -149,7 +149,7 @@ ${stack}`
      * Toggles display of this message's details on or off
      */
     toggleDetails: function () {
-      if (this.hasDetails === false) {
+      if (!this.hasDetails) {
         return
       }
 
