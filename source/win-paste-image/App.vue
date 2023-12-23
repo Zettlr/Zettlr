@@ -179,7 +179,7 @@ export default defineComponent({
   },
   methods: {
     recalculateDimensions: function (type: 'width'|'height') {
-      if (this.retainAspect === false) {
+      if (!this.retainAspect) {
         return
       }
 
