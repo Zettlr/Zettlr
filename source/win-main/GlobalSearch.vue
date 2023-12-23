@@ -290,19 +290,19 @@ export default defineComponent({
       return this.searchResults.filter(result => {
         // First check the actual results in the files
         for (const lineResult of result.result) {
-          if (lineResult.restext.toLowerCase().includes(lowercase) === true) {
+          if (lineResult.restext.toLowerCase().includes(lowercase)) {
             return true
           }
         }
 
         // Next, try the different variations on filename and displayName
-        if (result.file.filename.toLowerCase().includes(lowercase) === true) {
+        if (result.file.filename.toLowerCase().includes(lowercase)) {
           return true
         }
-        if (result.file.displayName.toLowerCase().includes(lowercase) === true) {
+        if (result.file.displayName.toLowerCase().includes(lowercase)) {
           return true
         }
-        if (result.file.path.toLowerCase().includes(lowercase) === true) {
+        if (result.file.path.toLowerCase().includes(lowercase)) {
           return true
         }
 
@@ -387,7 +387,7 @@ export default defineComponent({
           }
         })
 
-        if (this.selectedDir !== null && this.selectedDir.path.startsWith(treeItem.path) === true) {
+        if (this.selectedDir !== null && this.selectedDir.path.startsWith(treeItem.path)) {
           // Append the selected directory's contents BEFORE any other items
           // since that's probably something the user sees as more relevant.
           fileList = dirContents.concat(fileList)

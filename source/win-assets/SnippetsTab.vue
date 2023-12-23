@@ -137,7 +137,7 @@ export default defineComponent({
       ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
         .then(data => {
           this.availableSnippets = data
-          if (typeof selectAfterUpdate === 'string' && this.availableSnippets.includes(selectAfterUpdate) === true) {
+          if (typeof selectAfterUpdate === 'string' && this.availableSnippets.includes(selectAfterUpdate)) {
             this.currentItem = this.availableSnippets.indexOf(selectAfterUpdate)
           }
           this.loadState()
@@ -260,7 +260,7 @@ export default defineComponent({
         candidate = candidate.substring(0, candidate.length - match[1].length - 1)
       }
 
-      while (this.availableSnippets.includes(candidate + '-' + String(count)) === true) {
+      while (this.availableSnippets.includes(candidate + '-' + String(count))) {
         count++
       }
 

@@ -304,7 +304,7 @@ export default defineComponent({
       if (this.obj.type !== 'directory') {
         return []
       }
-      if (this.combined === true) {
+      if (this.combined) {
         return this.obj.children.filter(child => child.type !== 'other') as MaybeRootDescriptor[]
       } else {
         return this.obj.children.filter(child => child.type === 'directory') as DirDescriptor[]
@@ -430,7 +430,7 @@ export default defineComponent({
 
       this.canAcceptDraggable = true
 
-      if (this.collapsed === false) {
+      if (!this.collapsed) {
         return
       }
 
@@ -537,8 +537,8 @@ export default defineComponent({
       this.operationType = undefined
     },
     handlePrimaryIconClick: function () {
-      if (this.hasChildren === true) {
-        this.collapsed = this.collapsed === false
+      if (this.hasChildren) {
+        this.collapsed = !this.collapsed
       }
     }
   }

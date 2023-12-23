@@ -210,13 +210,13 @@ export default defineComponent({
       return this.$store.state.config['editor.countChars']
     },
     shouldShowToolbar: function (): boolean {
-      return this.distractionFree === false || this.$store.state.config['display.hideToolbarInDistractionFree'] === false
+      return !this.distractionFree || this.$store.state.config['display.hideToolbarInDistractionFree'] === false
     },
     shouldShowTitlebar: function (): boolean {
       // We need to display the titlebar in case the user decides to hide the
       // toolbar. The titlebar is much less distracting, but this way the user
       // can at least drag the window around.
-      return this.shouldShowToolbar === false
+      return !this.shouldShowToolbar
     },
     parsedDocumentInfo: function (): any {
       const info = this.$store.state.activeDocumentInfo
@@ -270,7 +270,7 @@ export default defineComponent({
             title: trans('Global search'),
             icon: 'search'
           },
-          initialState: (this.fileManagerVisible === true) ? this.mainSplitViewVisibleComponent : undefined
+          initialState: (this.fileManagerVisible) ? this.mainSplitViewVisibleComponent : undefined
         },
         {
           type: 'button',
@@ -444,7 +444,7 @@ export default defineComponent({
   watch: {
     sidebarVisible: function (newValue, oldValue) {
       if (newValue === true) {
-        if (this.distractionFree === true) {
+        if (this.distractionFree) {
           this.$store.commit('leaveDistractionFree')
         }
 
@@ -455,7 +455,7 @@ export default defineComponent({
     },
     fileManagerVisible: function (newValue, oldValue) {
       if (newValue === true) {
-        if (this.distractionFree === true) {
+        if (this.distractionFree) {
           this.$store.commit('leaveDistractionFree')
         }
 
@@ -492,7 +492,7 @@ export default defineComponent({
   mounted: function () {
     ipcRenderer.on('shortcut', (event, shortcut, state) => {
       if (shortcut === 'toggle-sidebar') {
-        window.config.set('window.sidebarVisible', this.sidebarVisible === false)
+        window.config.set('window.sidebarVisible', !this.sidebarVisible)
       } else if (shortcut === 'insert-id') {
         // Generates an ID based upon the configured pattern, writes it into the
         // clipboard and then triggers the paste command on these webcontents.
@@ -534,9 +534,9 @@ export default defineComponent({
             .catch(err => console.error(err))
         }
       } else if (shortcut === 'toggle-file-manager') {
-        if (this.fileManagerVisible === true && this.mainSplitViewVisibleComponent === 'fileManager') {
+        if (this.fileManagerVisible && this.mainSplitViewVisibleComponent === 'fileManager') {
           this.fileManagerVisible = false
-        } else if (this.fileManagerVisible === false) {
+        } else if (!this.fileManagerVisible) {
           this.fileManagerVisible = true
           this.mainSplitViewVisibleComponent = 'fileManager'
         } else if (this.mainSplitViewVisibleComponent === 'globalSearch') {
@@ -575,7 +575,7 @@ export default defineComponent({
 
     // Initially, we need to hide the sidebar, since the view will be visible
     // by default.
-    if (this.sidebarVisible === false) {
+    if (!this.sidebarVisible) {
       this.editorSidebarSplitComponent.hideView(2)
     }
 
@@ -842,7 +842,7 @@ export default defineComponent({
         this.$togglePopover(PopoverDocInfo, elem as HTMLElement, data, (data: any) => {
           // Do nothing
         })
-      } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
+      } else if (clickedID.startsWith('markdown') && clickedID.length > 8) {
         // The user clicked a command button, so we just have to run that.
         this.editorCommands.data = clickedID
         this.editorCommands.executeCommand = !this.editorCommands.executeCommand
