@@ -159,7 +159,7 @@ contextBridge.exposeInMainWorld('process', {
   version: process.version,
   versions: process.versions,
   arch: process.arch,
-  uptime: process.uptime,
+  uptime: () => process.uptime(),
   getSystemVersion: process.getSystemVersion(),
   env: Object.assign({}, process.env),
   argv: process.argv
