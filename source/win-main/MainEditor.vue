@@ -92,7 +92,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits<{ (e: 'globalSearch', query: string): void }>()
+const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 const store = useStore(storeKey)
 
