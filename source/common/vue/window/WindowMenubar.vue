@@ -28,7 +28,7 @@
  */
 
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem, SubmenuItem } from '@dts/renderer/context'
+import { type AnyMenuItem, type SubmenuItem } from '@dts/renderer/context'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc

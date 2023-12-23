@@ -98,7 +98,7 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, defineComponent } from 'vue'
-import { MaybeRootDescriptor, AnyDescriptor } from '@dts/common/fsal'
+import { type MaybeRootDescriptor, type AnyDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 

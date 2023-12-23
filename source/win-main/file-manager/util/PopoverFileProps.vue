@@ -74,8 +74,8 @@ import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
 import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
-import { ColoredTag } from '@providers/tags'
-import { PropType } from 'vue'
+import { type ColoredTag } from '@providers/tags'
+import { type PropType } from 'vue'
 
 const ipcRenderer = window.ipc
 

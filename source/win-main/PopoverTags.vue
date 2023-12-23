@@ -49,10 +49,10 @@
 import TextControl from '@common/vue/form/elements/Text.vue'
 import TabBar from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
-import { PropType, defineComponent } from 'vue'
-import { TabbarControl } from '@dts/renderer/window'
-import { OpenDocument } from '@dts/common/documents'
-import { TagRecord } from '@providers/tags'
+import { type PropType, defineComponent } from 'vue'
+import { type TabbarControl } from '@dts/renderer/window'
+import { type OpenDocument } from '@dts/common/documents'
+import { type TagRecord } from '@providers/tags'
 
 const ipcRenderer = window.ipc
 

@@ -92,7 +92,7 @@ import SelectControl from '@common/vue/form/elements/Select.vue'
 import SwitchControl from '@common/vue/form/elements/Switch.vue'
 import ButtonControl from '@common/vue/form/elements/Button.vue'
 import { trans } from '@common/i18n-renderer'
-import { DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 
