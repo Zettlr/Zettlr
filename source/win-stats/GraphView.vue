@@ -237,33 +237,32 @@ export default defineComponent({
 
     // Hook into the zoom behavior, and misuse the wheel-event emitted by it in
     // order to reposition the center of the viewport
-    const graphComponent = this
     this.graphElement.call(d3.zoom<SVGSVGElement, any>())
-      .on('wheel.zoom', function (event: WheelEvent) {
+      .on('wheel.zoom', (event: WheelEvent) => {
         // What we do here is take the cursor offset from the container center
         // as well as the SVG offset and also move the SVG based on where the
         // cursor is. This mimics somewhat the Google Maps approach to always
         // also move the map ever so slightly towards wherever the cursor is
         // pointing. But the behavior can certainly be improved I guess.
-        const containerRect = graphComponent.containerElement.getBoundingClientRect()
+        const containerRect = this.containerElement.getBoundingClientRect()
         const cursorY = event.clientY - containerRect.y
         const cursorX = event.clientX - containerRect.x
         const centerContainerX = containerRect.width / 2
         const centerContainerY = containerRect.height / 2
-        const centerSVGX = graphComponent.offsetX
-        const centerSVGY = graphComponent.offsetY
+        const centerSVGX = this.offsetX
+        const centerSVGY = this.offsetY
         const cursorOffsetX = cursorX - centerContainerX
         const cursorOffsetY = cursorY - centerContainerY
-        const scalingFactor = 0.1 / graphComponent.zoomFactor
+        const scalingFactor = 0.1 / this.zoomFactor
 
         if (event.deltaY < 0) {
-          graphComponent.offsetX += (cursorOffsetX - centerSVGX) * scalingFactor
-          graphComponent.offsetY += (cursorOffsetY - centerSVGY) * scalingFactor
+          this.offsetX += (cursorOffsetX - centerSVGX) * scalingFactor
+          this.offsetY += (cursorOffsetY - centerSVGY) * scalingFactor
         }
 
-        graphComponent.zoomFactor += (event.deltaY > 0) ? 0.1 : -0.1
-        if (graphComponent.zoomFactor < 0.1) {
-          graphComponent.zoomFactor = 0.1
+        this.zoomFactor += (event.deltaY > 0) ? 0.1 : -0.1
+        if (this.zoomFactor < 0.1) {
+          this.zoomFactor = 0.1
         }
       })
 
