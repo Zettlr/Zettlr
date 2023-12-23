@@ -210,7 +210,6 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     autocorrect: {
       active: store.state.config['editor.autoCorrect.active'],
       matchWholeWords: store.state.config['editor.autoCorrect.matchWholeWords'],
-      style: store.state.config['editor.autoCorrect.style'],
       magicQuotes: {
         primary: store.state.config['editor.autoCorrect.magicQuotes.primary'],
         secondary: store.state.config['editor.autoCorrect.magicQuotes.secondary']
@@ -246,7 +245,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     showStatusbar: store.state.config['editor.showStatusbar'],
     darkMode: store.state.config.darkMode,
     theme: store.state.config['display.theme']
-  } as EditorConfigOptions
+  } satisfies EditorConfigOptions
 })
 
 // External commands/"event" system
