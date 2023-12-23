@@ -102,7 +102,13 @@ export default defineComponent({
           icon: 'network-globe'
         }
       ] as WindowTab[],
-      statisticsData: {} as Stats
+      statisticsData: {
+        wordCount: {},
+        pomodoros: {},
+        avgMonth: 0,
+        today: 0,
+        sumMonth: 0
+      } satisfies Stats
     }
   },
   computed: {
