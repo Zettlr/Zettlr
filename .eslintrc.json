@@ -89,27 +89,15 @@
       }
     ],
     // DEBUG: Turn a few errors into warnings after upgrading ESLint to >6.x
-    // NOTE: Remove/properly think about these at a later point.
-    "@typescript-eslint/consistent-type-imports": 1,
-    "@typescript-eslint/no-unsafe-argument": 1,
+    // This rule is difficult to disable right now; it interferes with the
+    // "no-null-assertion" rule, and it won't be an easy fix. We'll have to
+    // think about it.
     "@typescript-eslint/non-nullable-type-assertion-style": 1,
-    "@typescript-eslint/no-this-alias": 1,
-    "@typescript-eslint/explicit-function-return-type": 1,
-    "@typescript-eslint/consistent-type-assertions": 1,
-    "@typescript-eslint/consistent-indexed-object-style": 1,
+    // The following two rules conflict with each other in a few edge cases, so
+    // we'll keep both on "warning" severity for now.
     "@typescript-eslint/no-unnecessary-boolean-literal-compare": 1,
     "@typescript-eslint/strict-boolean-expressions": 1,
-    "@typescript-eslint/block-spacing": 1,
-    "@typescript-eslint/object-curly-spacing": 1,
-    "@typescript-eslint/no-unnecessary-type-assertion": 1,
-    "@typescript-eslint/unbound-method": 1,
-    "@typescript-eslint/prefer-nullish-coalescing": 1,
-    "@typescript-eslint/prefer-return-this-type": 1,
-    "@typescript-eslint/promise-function-async": 1,
-    "@typescript-eslint/prefer-includes": 1,
-    "@typescript-eslint/prefer-function-type": 1,
-    "@typescript-eslint/prefer-optional-chain": 1,
-    "@typescript-eslint/array-type": 1,
-    "@typescript-eslint/ban-types": 1
+    // The following rule basically disallows use of `any`
+    "@typescript-eslint/no-unsafe-argument": 1
   }
 }
