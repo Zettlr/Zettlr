@@ -144,7 +144,7 @@ export default defineComponent({
      * @returns {Boolean}  Whether the file list is visible.
      */
     isFileListVisible: function () {
-      return this.isExpanded === true || this.fileListVisible
+      return this.isExpanded || this.fileListVisible
     },
     getDirectoryContents: function () {
       return this.$store.getters.directoryContents
@@ -160,9 +160,9 @@ export default defineComponent({
 
       // If the directory just got de-selected and the fileList
       // is visible, switch to the directories.
-      if (this.selectedDirectory === null && this.isFileListVisible === true) {
+      if (this.selectedDirectory === null && this.isFileListVisible) {
         this.toggleFileList()
-      } else if (this.isFileListVisible === false) {
+      } else if (!this.isFileListVisible) {
         // Otherwise make sure the fileList is visible (toggleFileList
         // will return if the mode is combined or expanded)
         this.toggleFileList()
@@ -184,11 +184,11 @@ export default defineComponent({
       this.fileListVisible = false
       // Then we want to do some additional
       // failsafes for the different modes
-      if (this.isExpanded === true) {
+      if (this.isExpanded) {
         this.fileListVisible = true
       }
       // Enlargen the file manager, if applicable
-      if (this.isExpanded === true && this.$el.offsetWidth < 100) {
+      if (this.isExpanded && this.$el.offsetWidth < 100) {
         this.$el.style.width = '100px'
       }
     }
@@ -210,23 +210,23 @@ export default defineComponent({
      * Toggles the fileList's visibility, if applicable.
      */
     toggleFileList: function () {
-      if (this.isThin === false) {
+      if (!this.isThin) {
         return // Do not toggle if we're not in thin mode.
       }
 
-      if (this.lockedTree === true) {
+      if (this.lockedTree) {
         return // Don't toggle in case of a lockdown
       }
 
       // Switch back to directories in case of fileManagerMode changes
-      if (!this.isThin && this.isFileListVisible === true) {
+      if (!this.isThin && this.isFileListVisible) {
         this.fileTreeVisible = true
         this.fileListVisible = false
         ;(this.$refs.arrowButton as HTMLElement).classList.add('hidden') // Hide the arrow button
         return
       }
 
-      if (this.isFileListVisible === true) {
+      if (this.isFileListVisible) {
         // Display directories
         this.fileTreeVisible = true
         this.fileListVisible = false
@@ -260,7 +260,7 @@ export default defineComponent({
     },
     maybeNavigate: function (evt: KeyboardEvent) {
       // If the file list is visible we can navigate
-      if (this.isFileListVisible === true) {
+      if (this.isFileListVisible) {
         (this.$refs.fileList as any).navigate(evt)
       } else {
         // Try to navigate the file tree
@@ -269,7 +269,7 @@ export default defineComponent({
     },
     handleQuickFilterBlur: function (evt: Event) {
       // Stop navigating on blur
-      if (this.isFileListVisible === true) {
+      if (this.isFileListVisible) {
         (this.$refs.fileList as any).stopNavigate()
       } else {
         (this.$refs.directories as any).stopNavigate()
@@ -314,12 +314,12 @@ export default defineComponent({
       // will make sure to catch things such as whether we are in combined mode
       if (event.deltaX > 0) {
         // Switch to the file list
-        if (this.isFileListVisible === false) {
+        if (!this.isFileListVisible) {
           event.preventDefault()
           event.stopPropagation()
           this.toggleFileList()
         }
-      } else if (event.deltaX < 0 && this.isFileListVisible === true) {
+      } else if (event.deltaX < 0 && this.isFileListVisible) {
         // Switch to the tree view
         event.preventDefault()
         event.stopPropagation()
@@ -341,7 +341,7 @@ export default defineComponent({
       const obj = findObject(this.$store.state.fileTree, 'hash', parseInt(target.dataset.hash), 'children')
       // Nothing found/type is a file? Return.
       if (obj != null || obj.type === 'file') return
-      if (this.isFileListVisible === false) {
+      if (!this.isFileListVisible) {
         this.toggleFileList()
       }
     },
@@ -349,14 +349,14 @@ export default defineComponent({
      * Locks the directory tree (mostly in preparation for a drag operation)
      */
     lockDirectoryTree: function () {
-      if (this.isThin === false) {
+      if (!this.isThin) {
         return // Don't lock the file tree if we aren't in a thin mode
       }
 
       // This function is called whenever the file list
       // should be hidden and only the file tree should
       // be visible
-      if (this.isFileListVisible === true) {
+      if (this.isFileListVisible) {
         this.previous = 'file-list'
         this.toggleFileList()
       }
@@ -367,7 +367,7 @@ export default defineComponent({
      * Unlocks the directory tree (mostly after a completed drag and drop operation)
      */
     unlockDirectoryTree: function () {
-      if (this.isThin === false) {
+      if (!this.isThin) {
         return // Don't unlock the file tree if we aren't in a thin mode
       }
 
@@ -393,7 +393,7 @@ export default defineComponent({
      * @param {MouseEvent} evt The associated event.
      */
     fileManagerInnerResize: function (evt: MouseEvent) {
-      if (this.fileManagerInnerResizing === false) {
+      if (!this.fileManagerInnerResizing) {
         return
       }
 
@@ -404,7 +404,7 @@ export default defineComponent({
       // x < 0 means: Direction <--
       let x = evt.clientX - this.fileManagerInnerResizeX
       // Make sure both the fileList and the tree view are at least 50 px in width
-      if (this.isThin === false && fileTree.offsetWidth <= 50 && x !== 0) {
+      if (!this.isThin && fileTree.offsetWidth <= 50 && x !== 0) {
         x = 0
       }
 
