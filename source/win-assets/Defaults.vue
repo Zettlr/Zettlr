@@ -199,7 +199,9 @@ export default defineComponent({
   },
   mounted: function () {
     this.retrieveDefaultsFiles()
-      .then(() => this.loadDefaultsForState().catch(e => console.error(e)))
+      .then(() => {
+        this.loadDefaultsForState().catch(e => console.error(e))
+      })
       .catch(e => console.error(e))
 
     ipcRenderer.on('shortcut', (event, shortcut) => {
