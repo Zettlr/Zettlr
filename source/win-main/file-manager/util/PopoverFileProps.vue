@@ -103,11 +103,11 @@ export default {
       default: 0
     },
     tags: {
-      type: Object as PropType<Array<string>>,
+      type: Object as PropType<string[]>,
       default: () => { return {} }
     },
     colouredTags: {
-      type: Object as PropType<Array<ColoredTag>>,
+      type: Object as PropType<ColoredTag[]>,
       default: () => { return {} }
     },
     targetValue: {
