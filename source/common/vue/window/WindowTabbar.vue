@@ -50,8 +50,8 @@
  * END HEADER
  */
 
-import { defineComponent, PropType } from 'vue'
-import { WindowTab } from '@dts/renderer/window'
+import { defineComponent, type PropType } from 'vue'
+import { type WindowTab } from '@dts/renderer/window'
 
 export default defineComponent({
   name: 'WindowTabbar',

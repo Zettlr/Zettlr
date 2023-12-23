@@ -63,7 +63,7 @@
  * END HEADER
  */
 
-import FormBuilder, { Fieldset } from '@common/vue/form/Form.vue'
+import FormBuilder from '@common/vue/form/Form.vue'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { trans } from '@common/i18n-renderer'
 
@@ -76,7 +76,7 @@ import { getAutocorrectFields } from './schema/autocorrect'
 import { getAdvancedFields } from './schema/advanced'
 import { defineComponent } from 'vue'
 import { resolveLangCode } from '@common/util/map-lang-code'
-import { type FormSchema } from '@common/vue/form/Form.vue'
+import { type FormSchema, type Fieldset } from '@common/vue/form/Form.vue'
 import SplitView from '@common/vue/window/SplitView.vue'
 import SelectableList, { type SelectableListItem } from '@common/vue/form/elements/SelectableList.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'

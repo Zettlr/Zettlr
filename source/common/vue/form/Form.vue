@@ -102,7 +102,7 @@
 // Reference for how to do all this stuff dynamically:
 // https://css-tricks.com/creating-vue-js-component-instances-programmatically/
 
-import { ThemeDescriptor } from './elements/Theme.vue'
+import type { ThemeDescriptor } from './elements/Theme.vue'
 import FormFieldControl from './FormField.vue'
 import { defineComponent } from 'vue'
 
@@ -242,8 +242,8 @@ TokenField|SliderField|ThemeField
  * Fields that can only occur within the title area of a fieldset
  */
 export type TitleFormField = TextField|NumberField|TimeField|ColorField|
-  FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|
-  SliderField
+FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|
+SliderField
 
 /**
  * This field can be used to apply styles to various groups of fields. Only
