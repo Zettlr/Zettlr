@@ -80,9 +80,9 @@ import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
-import { MDFileDescriptor, CodeFileDescriptor, DirDescriptor, AnyDescriptor } from '@dts/common/fsal'
 import { useWorkspacesStore } from '../pinia'
 import { mapStores } from 'pinia'
+import { type MDFileDescriptor, type CodeFileDescriptor, type DirDescriptor, type AnyDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 

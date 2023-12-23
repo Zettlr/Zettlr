@@ -99,8 +99,8 @@
 </template>
 
 <script lang="ts">
-import { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
-import { EditorCommands } from '@dts/renderer/editor'
+import { type LeafNodeJSON, type OpenDocument } from '@dts/common/documents'
+import { type EditorCommands } from '@dts/renderer/editor'
 import { defineComponent } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'

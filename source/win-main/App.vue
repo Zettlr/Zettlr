@@ -108,11 +108,11 @@ import { nextTick, defineComponent } from 'vue'
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
-import { ToolbarControl } from '@dts/renderer/window'
-import { OpenDocument, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
-import { EditorCommands } from '@dts/renderer/editor'
+import { type ToolbarControl } from '@dts/renderer/window'
+import { type OpenDocument, type BranchNodeJSON, type LeafNodeJSON } from '@dts/common/documents'
+import { type EditorCommands } from '@dts/renderer/editor'
 import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-pipe'
-import { UpdateState } from '@providers/updates'
+import { type UpdateState } from '@providers/updates'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard

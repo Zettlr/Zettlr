@@ -145,7 +145,7 @@ import { trans } from '@common/i18n-renderer'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, defineComponent } from 'vue'
-import { DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
+import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 
 const path = window.path
 const ipcRenderer = window.ipc

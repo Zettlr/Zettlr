@@ -64,11 +64,11 @@
 import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { defineComponent } from 'vue'
-import { OpenDocument } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { TagRecord } from '@providers/tags'
 import { mapStores } from 'pinia'
 import { useWorkspacesStore } from '../pinia'
+import { type OpenDocument } from '@dts/common/documents'
+import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { type TagRecord } from '@providers/tags'
 
 export interface RelatedFile {
   file: string

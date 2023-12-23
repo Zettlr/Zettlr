@@ -55,7 +55,7 @@
  */
 
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
+import { type AnyMenuItem } from '@dts/renderer/context'
 import { defineComponent } from 'vue'
 
 interface SelectableListItem {

@@ -42,7 +42,7 @@
 import RadioControl from '@common/vue/form/elements/Radio.vue'
 import SelectControl from '@common/vue/form/elements/Select.vue'
 import { defineComponent } from 'vue'
-import { PandocProfileMetadata } from '@dts/common/assets'
+import { type PandocProfileMetadata } from '@dts/common/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { trans } from '@common/i18n-renderer'

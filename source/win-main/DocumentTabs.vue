@@ -91,9 +91,9 @@
 import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
-import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
 import { mapStores } from 'pinia'
 import { useWorkspacesStore } from './pinia'
+import { type OpenDocument, type LeafNodeJSON } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
