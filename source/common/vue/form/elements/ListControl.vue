@@ -467,7 +467,7 @@ function handleInput (row: number, col: number, newValue: SupportedValues): void
     } else if (simple !== undefined) {
       // Simply push the new value instead of the old one
       emitValue.push(newValue)
-    } else if (multi) {
+    } else if (multi !== undefined) {
       // Exchange the correct column with the new value
       const newRow = []
       for (let j = 0; j < multi[i].length; j++) {

@@ -232,15 +232,15 @@ export default defineComponent({
     },
     countDirs: function () {
       if (this.obj.type !== 'directory') {
-        return 0
+        return '0 ' + trans('Directories')
       }
-      return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('Directories') || 0
+      return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('Directories')
     },
     countFiles: function () {
       if (this.obj.type !== 'directory') {
-        return 0
+        return '0 ' + trans('Files')
       }
-      return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('Files') || 0
+      return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('Files')
     },
     countWordsOrCharsOfDirectory: function () {
       if (this.obj.type !== 'directory') {

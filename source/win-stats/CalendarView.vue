@@ -232,7 +232,7 @@ export default defineComponent({
       }
 
       const wordCount = this.wordCounts[`${year}-${parsedMonth}-${parsedDate}`]
-      return localiseNumber(wordCount || 0)
+      return localiseNumber(wordCount)
     },
     yearMinus: function (): void {
       this.now = this.now.minus({ years: 1 })
