@@ -334,7 +334,7 @@ export default defineComponent({
     selectionListener: function (evt: MouseEvent) {
       const target = evt.target as null|HTMLElement
       // No hash property? Nothing to do.
-      if (target === null || target.dataset.hash === undefined) {
+      if (target?.dataset.hash === undefined) {
         return
       }
 
