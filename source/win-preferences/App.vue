@@ -190,7 +190,7 @@ export default defineComponent({
       appLangOptions: {} as any,
       // This will return the full object
       config: (global as any).config.get(),
-      schema: {} as FormSchema
+      schema: { fieldsets: [] } satisfies FormSchema
     }
   },
   computed: {

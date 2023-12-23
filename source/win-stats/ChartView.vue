@@ -345,14 +345,15 @@ export default defineComponent({
                 text: 'Words',
                 display: true
               },
-              gridLines: {
-                display: true, // Whether to display them at all
-                drawOnChartArea: true, // Gridlines on the chart
-                drawTicks: true // Gridlines off the charts, so to speak
-              },
+              // DEBUG: Type incompatible, so apparently something changed
+              // gridLines: {
+              //   display: true, // Whether to display them at all
+              //   drawOnChartArea: true, // Gridlines on the chart
+              //   drawTicks: true // Gridlines off the charts, so to speak
+              // },
               ticks: {
-                display: true,
-                beginAtZero: false
+                display: true // ,
+                // beginAtZero: false
               }
             },
             x: {
@@ -360,11 +361,12 @@ export default defineComponent({
                 text: 'Time',
                 display: true
               },
-              gridLines: {
-                display: true, // Whether to display them at all
-                drawOnChartArea: false, // Gridlines on the chart
-                drawTicks: true // Gridlines off the charts, so to speak
-              },
+              // DEBUG: Type incompatible, so apparently something changed
+              // gridLines: {
+              //   display: true, // Whether to display them at all
+              //   drawOnChartArea: false, // Gridlines on the chart
+              //   drawTicks: true // Gridlines off the charts, so to speak
+              // },
               ticks: {
                 display: true
               }
@@ -378,14 +380,15 @@ export default defineComponent({
             tooltip: {
               mode: 'index',
               intersect: false
-            },
-            hover: {
-              mode: 'index',
-              intersect: false
-            }
+            } // ,
+            // DEBUG: Type incompatible, so apparently something changed
+            // hover: {
+            //   mode: 'index',
+            //   intersect: false
+            // }
           }
         }
-      } as ChartConfiguration) // END chart instantiation
+      } satisfies ChartConfiguration) // END chart instantiation
     },
     prevYear: function (): void {
       // Decrease the unit by one if possible

@@ -188,7 +188,7 @@ export default defineComponent({
         replaceSelection: false,
         executeCommand: false,
         data: undefined
-      } as EditorCommands,
+      } satisfies EditorCommands,
       sidebarsBeforeDistractionfree: {
         fileManager: true,
         sidebar: false
