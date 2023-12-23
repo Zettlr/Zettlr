@@ -40,7 +40,7 @@ export default class FileNew extends ZettlrCommand {
     // be asked for a filename, but if it's missing, a new name will be
     // generated and the user is asked to confirm the name.
     const shouldPromptUser = this._app.config.get('newFileDontPrompt') === false
-    const type = (arg.type !== undefined) ? arg.type : 'md'
+    const type = arg.type ?? 'md'
     const filenamePattern = this._app.config.get('newFileNamePattern')
     const idGenPattern = this._app.config.get('zkn.idGen')
     const generatedName = generateFilename(filenamePattern, idGenPattern)

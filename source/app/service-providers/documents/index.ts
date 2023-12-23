@@ -1279,8 +1279,8 @@ export default class DocumentManager extends ProviderContract {
     this.syncToConfig()
 
     if (filePath !== undefined) {
-      const win = (fromWindow !== undefined) ? fromWindow : originWindow
-      const leaf = (fromLeaf !== undefined) ? fromLeaf : originLeaf
+      const win = fromWindow ?? originWindow
+      const leaf = fromLeaf ?? originLeaf
       await this.moveFile(win, originWindow, leaf, target.id, filePath)
     }
   }
