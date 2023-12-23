@@ -183,7 +183,7 @@
 
 <script lang="ts">
 import localiseNumber from '@common/util/localise-number'
-import { FSALStats } from '@dts/common/fsal'
+import { type FSALStats } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc

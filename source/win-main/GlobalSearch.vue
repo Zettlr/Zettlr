@@ -142,10 +142,10 @@ import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { SearchResult, SearchResultWrapper, SearchTerm } from '@dts/common/search'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { type SearchResult, type SearchResultWrapper, type SearchTerm } from '@dts/common/search'
+import { type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
+import { type AnyMenuItem } from '@dts/renderer/context'
 import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
 
 const path = window.path

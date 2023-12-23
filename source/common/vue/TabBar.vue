@@ -42,8 +42,8 @@
  * END HEADER
  */
 
-import { TabbarControl } from '@dts/renderer/window'
-import { defineComponent, PropType } from 'vue'
+import { type TabbarControl } from '@dts/renderer/window'
+import { defineComponent, type PropType } from 'vue'
 
 export default defineComponent({
   name: 'TabBar',
