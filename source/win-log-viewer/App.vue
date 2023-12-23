@@ -140,9 +140,8 @@ export default defineComponent({
     }
   },
   mounted: function () {
-    const self = this
-    setInterval(function () {
-      self.fetchData().catch(e => console.error('Could not fetch new log data', e))
+    setInterval(() => {
+      this.fetchData().catch(e => console.error('Could not fetch new log data', e))
     }, 1000)
   },
   methods: {
