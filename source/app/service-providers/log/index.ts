@@ -17,7 +17,6 @@ import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import chalk from 'chalk'
 import ProviderContract from '../provider-contract'
-const hasProp = Object.prototype.hasOwnProperty
 
 /**
  * How many logfiles should the app keep at most?
@@ -269,7 +268,7 @@ export default class LogProvider extends ProviderContract {
       details = ` | Details: ${JSON.stringify(message.details)}`
     }
 
-    let timestamp = (hasProp.call(message, 'time')) ? `[${message.time}] ` : ''
+    let timestamp = ('time' in message) ? `[${message.time}] ` : ''
 
     return `${timestamp}[${level}] ${message.message}${details}`
   }
