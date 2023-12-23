@@ -105,7 +105,7 @@ export default defineComponent({
   },
   props: {
     wordCounts: {
-      type: Object as PropType<{ [key: string]: number }>,
+      type: Object as PropType<Record<string, number>>,
       required: true
     }
   },
