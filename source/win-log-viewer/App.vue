@@ -85,7 +85,7 @@ export default defineComponent({
 
       if (filter !== '') {
         return preFiltered.filter(message => {
-          return message.message.toLowerCase().indexOf(filter) >= 0
+          return message.message.toLowerCase().includes(filter)
         })
       } else {
         return preFiltered
