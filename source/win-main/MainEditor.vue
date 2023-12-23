@@ -411,7 +411,7 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
 /**
  * Loads the document for this editor instance.
  */
-async function loadDocument () {
+async function loadDocument (): Promise<void> {
   const newEditor = await getEditorFor(props.file.path)
 
   const wrapper = document.getElementById(`cm-text-${props.leafId}`)
@@ -453,7 +453,7 @@ async function loadDocument () {
   })
 }
 
-function jtl (lineNumber: number) {
+function jtl (lineNumber: number): void {
   currentEditor?.jtl(lineNumber)
 }
 
@@ -511,7 +511,7 @@ async function updateCitationKeys (library: string): Promise<void> {
   currentEditor?.setCompletionDatabase('citations', items)
 }
 
-async function updateFileDatabase () {
+async function updateFileDatabase (): Promise<void> {
   // Get all our files ...
   const fileDatabase: Array<{ filename: string, displayName: string, id: string }> = []
 
@@ -546,7 +546,7 @@ async function updateFileDatabase () {
   currentEditor?.setCompletionDatabase('files', fileDatabase)
 }
 
-function maybeHighlightSearchResults () {
+function maybeHighlightSearchResults (): void {
   if (currentEditor === null) {
     return
   }

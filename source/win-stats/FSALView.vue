@@ -243,7 +243,7 @@ export default defineComponent({
       // landscape displays.
 
       // Helper function
-      const zTransform = (val: number) => {
+      const zTransform = (val: number): number => {
         const percent = val / (data.maxWords - data.minWords)
         return this.boxPlotData.width * percent
       }
