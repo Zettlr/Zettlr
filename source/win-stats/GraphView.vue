@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { GraphArc, GraphVertex, LinkGraph } from '@dts/common/graph'
+import { type GraphArc, type GraphVertex, type LinkGraph } from '@dts/common/graph'
 import * as d3 from 'd3'
 import Checkbox from '@common/vue/form/elements/Checkbox.vue'
 import ButtonElement from '@common/vue/form/elements/Button.vue'
@@ -55,9 +55,9 @@ import ProgressElement from '@common/vue/form/elements/Progress.vue'
 import SelectElement from '@common/vue/form/elements/Select.vue'
 import TextElement from '@common/vue/form/elements/Text.vue'
 import tippy from 'tippy.js'
-import { SimulationNodeDatum } from 'd3'
+import { type SimulationNodeDatum } from 'd3'
 import DirectedGraph from '@providers/links/directed-graph'
-import { MDFileDescriptor } from '@dts/common/fsal'
+import { type MDFileDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 

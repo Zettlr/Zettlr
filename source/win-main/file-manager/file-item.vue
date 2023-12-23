@@ -143,8 +143,8 @@ import formatSize from '@common/util/format-size'
 import itemMixin from './util/item-mixin'
 
 import { defineComponent } from 'vue'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { WritingTarget } from '@providers/targets'
+import { type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { type WritingTarget } from '@providers/targets'
 
 export default defineComponent({
   name: 'FileItem',

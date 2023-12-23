@@ -53,8 +53,8 @@
  */
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
-import { PropType, defineComponent } from 'vue'
-import { DocumentInfo } from '@common/modules/markdown-editor'
+import { type PropType, defineComponent } from 'vue'
+import { type DocumentInfo } from '@common/modules/markdown-editor'
 
 export default defineComponent({
   name: 'PopoverDocInfo',

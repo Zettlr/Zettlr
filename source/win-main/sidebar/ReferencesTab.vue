@@ -12,8 +12,8 @@ import { trans } from '@common/i18n-renderer'
 import extractCitations from '@common/util/extract-citations'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
-import { AnyDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
+import { type AnyDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc

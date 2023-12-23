@@ -129,7 +129,7 @@ import ColorControl from '@common/vue/form/elements/Color.vue'
 import ButtonControl from '@common/vue/form/elements/Button.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { TagRecord } from '@providers/tags'
+import { type TagRecord } from '@providers/tags'
 
 const ipcRenderer = window.ipc
 

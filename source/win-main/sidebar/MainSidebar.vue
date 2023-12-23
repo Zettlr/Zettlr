@@ -38,12 +38,12 @@
 import { trans } from '@common/i18n-renderer'
 import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
-import { TabbarControl } from '@dts/renderer/window'
+import { type TabbarControl } from '@dts/renderer/window'
 import ToCTab from './ToCTab.vue'
 import ReferencesTab from './ReferencesTab.vue'
 import RelatedFilesTab from './RelatedFilesTab.vue'
 import OtherFilesTab from './OtherFilesTab.vue'
-import { OpenDocument } from '@dts/common/documents'
+import { type OpenDocument } from '@dts/common/documents'
 
 export default defineComponent({
   name: 'MainSidebar',

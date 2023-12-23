@@ -91,8 +91,8 @@
 import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
-import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { type OpenDocument, type LeafNodeJSON } from '@dts/common/documents'
+import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard

@@ -188,7 +188,7 @@ import SelectInput from './elements/Select.vue'
 import SliderInput from './elements/Slider.vue'
 import ListControl from './elements/ListControl.vue'
 import TokenInput from './elements/TokenList.vue'
-import ThemeInput, { ThemeDescriptor } from './elements/Theme.vue'
+import ThemeInput, { type ThemeDescriptor } from './elements/Theme.vue'
 import { defineComponent } from 'vue'
 
 interface BasicInfo {
