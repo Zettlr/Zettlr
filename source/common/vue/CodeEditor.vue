@@ -130,7 +130,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const emit = defineEmits<{ (e: 'update:modelValue', newContents: string): void }>()
+const emit = defineEmits<(e: 'update:modelValue', newContents: string) => void>()
 
 watch(toRef(props, 'modelValue'), () => {
   // Assign new contents, but only if not the same as the current contents
