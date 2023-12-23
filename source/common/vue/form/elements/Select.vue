@@ -57,7 +57,7 @@ export default defineComponent({
       default: ''
     },
     options: {
-      type: Object as () => { [key: string]: string },
+      type: Object as () => Record<string, string>,
       default: function () { return {} }
     }
   },
