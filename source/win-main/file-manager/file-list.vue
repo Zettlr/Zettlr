@@ -246,9 +246,9 @@ export default defineComponent({
       evt.stopPropagation()
       evt.preventDefault()
 
-      const shift = evt.shiftKey === true
-      const cmd = evt.metaKey === true && process.platform === 'darwin'
-      const ctrl = evt.ctrlKey === true && process.platform !== 'darwin'
+      const shift = evt.shiftKey
+      const cmd = evt.metaKey && process.platform === 'darwin'
+      const ctrl = evt.ctrlKey && process.platform !== 'darwin'
       const cmdOrCtrl = cmd || ctrl
 
       // getDirectoryContents accommodates the virtual scroller
