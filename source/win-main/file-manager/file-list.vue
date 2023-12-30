@@ -154,12 +154,12 @@ export default defineComponent({
         return 30
       }
     },
-    getDirectoryContents: function (): Array<{ id: number, props: MaybeRootDescriptor}> {
+    getDirectoryContents: function (): Array<{ id: number, props: MaybeRootDescriptor }> {
       if (this.selectedDirectory === null) {
         return []
       }
 
-      const ret: Array<{ id: number, props: MaybeRootDescriptor}> = []
+      const ret: Array<{ id: number, props: MaybeRootDescriptor }> = []
       const items = objectToArray(this.selectedDirectory, 'children') as AnyDescriptor[]
       for (let i = 0; i < items.length; i++) {
         if (items[i].type !== 'other') {
