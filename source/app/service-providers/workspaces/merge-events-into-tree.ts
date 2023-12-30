@@ -1,4 +1,3 @@
-
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import type { AnyDescriptor, DirDescriptor } from '@dts/common/fsal'
 import type { ChangeDescriptor } from './root'

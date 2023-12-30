@@ -353,7 +353,7 @@ export default defineComponent({
         return
       }
 
-      if (this.isFileListVisible === false) {
+      if (!this.isFileListVisible) {
         this.toggleFileList()
       }
     },
