@@ -338,6 +338,7 @@ export default defineComponent({
      * Registers a click event on an item and toggles
      * the file list, if it's not visible.
      * @param {MouseEvent} evt The bubbled event.
+     * TODO This function is a no-op right now
      */
     selectionListener: function (evt: MouseEvent) {
       const target = evt.target as null|HTMLElement
