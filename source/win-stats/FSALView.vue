@@ -183,7 +183,7 @@
 
 <script lang="ts">
 import localiseNumber from '@common/util/localise-number'
-import { FSALStats } from '@dts/common/fsal'
+import { type FSALStats } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
@@ -230,7 +230,7 @@ export default defineComponent({
   },
   created: function () {
     ipcRenderer.invoke('application', { command: 'get-statistics-data' })
-      .then(data => {
+      .then((data: FSALStats) => {
         this.recalculateStats(data)
       })
       .catch(e => console.error(e))
@@ -243,7 +243,7 @@ export default defineComponent({
       // landscape displays.
 
       // Helper function
-      const zTransform = (val: number) => {
+      const zTransform = (val: number): number => {
         const percent = val / (data.maxWords - data.minWords)
         return this.boxPlotData.width * percent
       }

@@ -98,7 +98,7 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, defineComponent } from 'vue'
-import { MaybeRootDescriptor, AnyDescriptor } from '@dts/common/fsal'
+import { type MaybeRootDescriptor, type AnyDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -158,12 +158,12 @@ export default defineComponent({
         return 30
       }
     },
-    getDirectoryContents: function (): Array<{ id: number, props: MaybeRootDescriptor}> {
+    getDirectoryContents: function (): Array<{ id: number, props: MaybeRootDescriptor }> {
       if (this.$store.state.selectedDirectory === null) {
         return []
       }
 
-      const ret: Array<{ id: number, props: MaybeRootDescriptor}> = []
+      const ret: Array<{ id: number, props: MaybeRootDescriptor }> = []
       const items = objectToArray(this.$store.state.selectedDirectory, 'children') as AnyDescriptor[]
       for (let i = 0; i < items.length; i++) {
         if (items[i].type !== 'other') {
@@ -246,9 +246,9 @@ export default defineComponent({
       evt.stopPropagation()
       evt.preventDefault()
 
-      const shift = evt.shiftKey === true
-      const cmd = evt.metaKey === true && process.platform === 'darwin'
-      const ctrl = evt.ctrlKey === true && process.platform !== 'darwin'
+      const shift = evt.shiftKey
+      const cmd = evt.metaKey && process.platform === 'darwin'
+      const ctrl = evt.ctrlKey && process.platform !== 'darwin'
       const cmdOrCtrl = cmd || ctrl
 
       // getDirectoryContents accommodates the virtual scroller

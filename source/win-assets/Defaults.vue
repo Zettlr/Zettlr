@@ -87,7 +87,7 @@ import ButtonControl from '@common/vue/form/elements/Button.vue'
 import CodeEditor from '@common/vue/CodeEditor.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { PandocProfileMetadata } from '@dts/common/assets'
+import { type PandocProfileMetadata } from '@dts/common/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import sanitizeFilename from 'sanitize-filename'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
@@ -199,7 +199,9 @@ export default defineComponent({
   },
   mounted: function () {
     this.retrieveDefaultsFiles()
-      .then(() => this.loadDefaultsForState().catch(e => console.error(e)))
+      .then(() => {
+        this.loadDefaultsForState().catch(e => console.error(e))
+      })
       .catch(e => console.error(e))
 
     ipcRenderer.on('shortcut', (event, shortcut) => {

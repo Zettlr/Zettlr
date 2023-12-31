@@ -80,7 +80,7 @@ import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
-import { MDFileDescriptor, CodeFileDescriptor, DirDescriptor, AnyDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
+import { type MDFileDescriptor, type CodeFileDescriptor, type DirDescriptor, type AnyDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 

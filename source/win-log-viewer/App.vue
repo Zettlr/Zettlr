@@ -38,8 +38,8 @@
 import LogMessage from './LogMessage.vue'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { nextTick, defineComponent } from 'vue'
-import { ToolbarControl } from '@dts/renderer/window'
-import { LogMessage as LM } from '@providers/log'
+import { type ToolbarControl } from '@dts/renderer/window'
+import { type LogMessage as LM } from '@providers/log'
 
 const ipcRenderer = window.ipc
 
@@ -85,7 +85,7 @@ export default defineComponent({
 
       if (filter !== '') {
         return preFiltered.filter(message => {
-          return message.message.toLowerCase().indexOf(filter) >= 0
+          return message.message.toLowerCase().includes(filter)
         })
       } else {
         return preFiltered
@@ -140,9 +140,8 @@ export default defineComponent({
     }
   },
   mounted: function () {
-    const self = this
-    setInterval(function () {
-      self.fetchData().catch(e => console.error('Could not fetch new log data', e))
+    setInterval(() => {
+      this.fetchData().catch(e => console.error('Could not fetch new log data', e))
     }, 1000)
   },
   methods: {

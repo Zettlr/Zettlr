@@ -59,9 +59,9 @@ import ChartView from './ChartView.vue'
 import FSALView from './FSALView.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { WindowTab } from '@dts/renderer/window'
+import { type WindowTab } from '@dts/renderer/window'
 import GraphView from './GraphView.vue'
-import { Stats } from '@providers/stats'
+import { type Stats } from '@providers/stats'
 
 const ipcRenderer = window.ipc
 
@@ -102,7 +102,13 @@ export default defineComponent({
           icon: 'network-globe'
         }
       ] as WindowTab[],
-      statisticsData: {} as Stats
+      statisticsData: {
+        wordCount: {},
+        pomodoros: {},
+        avgMonth: 0,
+        today: 0,
+        sumMonth: 0
+      } satisfies Stats
     }
   },
   computed: {

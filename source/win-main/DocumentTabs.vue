@@ -91,8 +91,8 @@
 import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
-import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { type OpenDocument, type LeafNodeJSON } from '@dts/common/documents'
+import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -281,8 +281,8 @@ export default defineComponent({
     },
     scrollActiveFileIntoView: function () {
       // First, we need to find the tab displaying the active file
-      const elem = this.container.querySelector('.active') as HTMLDivElement|null
-      if (elem === null) {
+      const elem = this.container.querySelector('.active')
+      if (elem === null || !(elem instanceof HTMLDivElement)) {
         return // The container is not yet present
       }
       // Then, find out where the element is ...

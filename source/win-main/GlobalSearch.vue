@@ -142,10 +142,10 @@ import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { SearchResult, SearchResultWrapper, SearchTerm } from '@dts/common/search'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { type SearchResult, type SearchResultWrapper, type SearchTerm } from '@dts/common/search'
+import { type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
+import { type AnyMenuItem } from '@dts/renderer/context'
 import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
 
 const path = window.path
@@ -286,19 +286,19 @@ export default defineComponent({
       return this.searchResults.filter(result => {
         // First check the actual results in the files
         for (const lineResult of result.result) {
-          if (lineResult.restext.toLowerCase().includes(lowercase) === true) {
+          if (lineResult.restext.toLowerCase().includes(lowercase)) {
             return true
           }
         }
 
         // Next, try the different variations on filename and displayName
-        if (result.file.filename.toLowerCase().includes(lowercase) === true) {
+        if (result.file.filename.toLowerCase().includes(lowercase)) {
           return true
         }
-        if (result.file.displayName.toLowerCase().includes(lowercase) === true) {
+        if (result.file.displayName.toLowerCase().includes(lowercase)) {
           return true
         }
-        if (result.file.path.toLowerCase().includes(lowercase) === true) {
+        if (result.file.path.toLowerCase().includes(lowercase)) {
           return true
         }
 
@@ -383,7 +383,7 @@ export default defineComponent({
           }
         })
 
-        if (this.selectedDir !== null && this.selectedDir.path.startsWith(treeItem.path) === true) {
+        if (this.selectedDir !== null && this.selectedDir.path.startsWith(treeItem.path)) {
           // Append the selected directory's contents BEFORE any other items
           // since that's probably something the user sees as more relevant.
           fileList = dirContents.concat(fileList)
@@ -431,7 +431,7 @@ export default defineComponent({
       // Take the file to be searched ...
       const terms = compileSearchTerms(this.query)
       while (this.filesToSearch.length > 0) {
-        const fileToSearch = this.filesToSearch.shift() as any
+        const fileToSearch = this.filesToSearch.shift()
         // Now start the search
         const result: SearchResult[] = await ipcRenderer.invoke('application', {
           command: 'file-search',

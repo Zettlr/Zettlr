@@ -144,7 +144,7 @@ import { trans } from '@common/i18n-renderer'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, defineComponent } from 'vue'
-import { DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
+import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -303,7 +303,7 @@ export default defineComponent({
       if (this.obj.type !== 'directory') {
         return []
       }
-      if (this.combined === true) {
+      if (this.combined) {
         return this.obj.children.filter(child => child.type !== 'other') as MaybeRootDescriptor[]
       } else {
         return this.obj.children.filter(child => child.type === 'directory') as DirDescriptor[]
@@ -399,7 +399,7 @@ export default defineComponent({
       }
 
       // If a directory within this has been selected, open up, lads!
-      if ((this.obj.path as string).startsWith(dirPath)) {
+      if (this.obj.path.startsWith(dirPath)) {
         this.collapsed = false
       }
     },
@@ -429,7 +429,7 @@ export default defineComponent({
 
       this.canAcceptDraggable = true
 
-      if (this.collapsed === false) {
+      if (!this.collapsed) {
         return
       }
 
@@ -536,8 +536,8 @@ export default defineComponent({
       this.operationType = undefined
     },
     handlePrimaryIconClick: function () {
-      if (this.hasChildren === true) {
-        this.collapsed = this.collapsed === false
+      if (this.hasChildren) {
+        this.collapsed = !this.collapsed
       }
     }
   }

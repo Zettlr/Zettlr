@@ -99,8 +99,8 @@
 </template>
 
 <script lang="ts">
-import { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
-import { EditorCommands } from '@dts/renderer/editor'
+import { type LeafNodeJSON, type OpenDocument } from '@dts/common/documents'
+import { type EditorCommands } from '@dts/renderer/editor'
 import { defineComponent } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'
@@ -139,7 +139,8 @@ export default defineComponent({
   data () {
     return {
       documentTabDrag: false,
-      documentTabDragWhere: undefined as undefined|string
+      documentTabDragWhere: undefined as undefined|string,
+      boundFinishDrag: this.finishDrag.bind(this)
     }
   },
   computed: {
@@ -174,10 +175,10 @@ export default defineComponent({
   },
   created () {
     // Global drag end listener to ensure the split-view indicators always disappear
-    document.addEventListener('dragend', this.finishDrag, true)
+    document.addEventListener('dragend', this.boundFinishDrag, true)
   },
   beforeUnmount () {
-    document.removeEventListener('dragend', this.finishDrag)
+    document.removeEventListener('dragend', this.boundFinishDrag)
   },
   methods: {
     handleDrop: function (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {

@@ -143,8 +143,8 @@ import formatSize from '@common/util/format-size'
 import itemMixin from './util/item-mixin'
 
 import { defineComponent } from 'vue'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { WritingTarget } from '@providers/targets'
+import { type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { type WritingTarget } from '@providers/targets'
 
 export default defineComponent({
   name: 'FileItem',
@@ -232,15 +232,15 @@ export default defineComponent({
     },
     countDirs: function () {
       if (this.obj.type !== 'directory') {
-        return 0
+        return '0 ' + trans('Directories')
       }
-      return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('Directories') || 0
+      return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('Directories')
     },
     countFiles: function () {
       if (this.obj.type !== 'directory') {
-        return 0
+        return '0 ' + trans('Files')
       }
-      return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('Files') || 0
+      return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('Files')
     },
     countWordsOrCharsOfDirectory: function () {
       if (this.obj.type !== 'directory') {

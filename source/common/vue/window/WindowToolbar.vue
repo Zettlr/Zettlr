@@ -83,8 +83,8 @@ import ThreeWayToggle from './toolbar-controls/ThreeWayToggle.vue'
 import SearchControl from './toolbar-controls/Search.vue'
 import SpacerControl from './toolbar-controls/Spacer.vue'
 import TextControl from './toolbar-controls/Text.vue'
-import { defineComponent, PropType } from 'vue'
-import { ToolbarControl } from '@dts/renderer/window'
+import { defineComponent, type PropType } from 'vue'
+import { type ToolbarControl } from '@dts/renderer/window'
 
 const ipcRenderer = window.ipc
 
@@ -140,7 +140,7 @@ export default defineComponent({
       // Only emit a double click event if the user double clicked on the
       // _toolbar_ or on a spacer, and not just on any button.
       const t = event.target as HTMLElement|null
-      if (t === this.$el || (t !== null && t.className.includes('spacer') === true)) {
+      if (t === this.$el || (t !== null && t.className.includes('spacer'))) {
         this.$emit('dblclick')
       }
     }

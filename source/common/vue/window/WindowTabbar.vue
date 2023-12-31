@@ -50,8 +50,8 @@
  * END HEADER
  */
 
-import { defineComponent, PropType } from 'vue'
-import { WindowTab } from '@dts/renderer/window'
+import { defineComponent, type PropType } from 'vue'
+import { type WindowTab } from '@dts/renderer/window'
 
 export default defineComponent({
   name: 'WindowTabbar',
@@ -71,7 +71,8 @@ export default defineComponent({
       currentTab: 0,
       // The following are required to hide tab labels on win32 w/ narrow windows
       currentWindowWidth: window.innerWidth,
-      platform: process.platform
+      platform: process.platform,
+      boundWindowResize: this.onWindowResize.bind(this)
     }
   },
   watch: {
@@ -80,7 +81,7 @@ export default defineComponent({
     }
   },
   mounted () {
-    window.addEventListener('resize', this.onWindowResize)
+    window.addEventListener('resize', this.boundWindowResize)
     // On mount, if the URL contains a fragment that matches a tab ID, emit an
     // event to ensure the app actually switches to that.
     const url = new URL(location.href)
@@ -96,7 +97,7 @@ export default defineComponent({
     }
   },
   unmounted () {
-    window.removeEventListener('resize', this.onWindowResize)
+    window.removeEventListener('resize', this.boundWindowResize)
   },
   methods: {
     onWindowResize (event: UIEvent) {

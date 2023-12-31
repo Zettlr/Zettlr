@@ -89,7 +89,7 @@
 import { DateTime } from 'luxon'
 import { trans } from '@common/i18n-renderer'
 import ButtonControl from '@common/vue/form/elements/Button.vue'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, type PropType } from 'vue'
 import localiseNumber from '@common/util/localise-number'
 
 export default defineComponent({
@@ -99,7 +99,7 @@ export default defineComponent({
   },
   props: {
     wordCounts: {
-      type: Object as PropType<{ [key: string]: number }>,
+      type: Object as PropType<Record<string, number>>,
       required: true
     },
     monthlyAverage: {
@@ -232,7 +232,7 @@ export default defineComponent({
       }
 
       const wordCount = this.wordCounts[`${year}-${parsedMonth}-${parsedDate}`]
-      return localiseNumber(wordCount || 0)
+      return localiseNumber(wordCount)
     },
     yearMinus: function (): void {
       this.now = this.now.minus({ years: 1 })

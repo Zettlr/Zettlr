@@ -1,5 +1,29 @@
 # Upcoming
 
+## Changes to the link detection
+
+For a long time now, Zettlr would (sometimes aggressively so) detect plain links
+and display them in a rendered state. In some cases, this was nice as it would
+relieve you from having to surround such links with pointy or angled brackets.
+
+However, especially in the latest evolution of this parser plugin, the link
+detection was a bit too aggressive and interfered, e.g., with emphasis
+highlighting. In this version, we have entirely removed our custom link
+detection and rely upon the more straight-forward way of detecting links.
+
+Regarding your exporting experience, this should not have any impact, since the
+auto-link-detection feature wasn't supported by Pandoc anyhow, but depending on
+how you have been writing, you may notice less detected links in your documents.
+
+To add "plain" links (without using the full `[]()`-syntax) from now on, simply
+surround them with angled brackets: `<https://www.google.com>` or
+`<mail@example.com>`. Note that the protocol (`https://`) is required, so
+`<www.google.com>` will not work.
+
+This changes brings Zettlr's link functionality much more into alignment with
+other editors as well, since this is the way that many other applications handle
+links as well.
+
 ## GUI and Functionality
 
 - **Feature**: Zettlr can now suggest you emojis during autocompletion. Emojis
@@ -11,11 +35,23 @@
   file manager shortcut, `Cmd/Ctrl+Shift+1`)
 - Custom protocols should now be opened without problems by Zettlr (#3853)
 - Added Tamil (India) translation (#4848)
+- Removed the custom plain link parser out of two reasons: (1) It was a tad too
+  aggressive, detecting links even where none were wanted; (2) Pandoc doesn't
+  support auto-links in such a way as we have implemented it, leading to
+  inconsistencies in exports
+- The YAML frontmatter is now ignored for the purposes of previewing files,
+  showing a more meaningful preview of its contents (#4598)
+- Improve pasting behavior: Now text from Microsoft Word or Excel will be pasted
+  as text, instead of offering to insert an image of the selection
+- Fix pasting behavior: Now Zettlr should properly paste most formatted text
+  without too much noise (in the form of comments, styles, and other additions)
 
 ## Under the Hood
 
 - Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
 - Bump the bundled Pandoc to version `3.1.11`
+- Failure to fetch a link preview will now simply log a verbose message instead
+  of an error
 
 # 3.0.3
 

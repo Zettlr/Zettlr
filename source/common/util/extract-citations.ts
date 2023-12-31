@@ -281,7 +281,7 @@ export default function extractCitations (markdown: string): CitePosition[] {
           suffixToParse = rawSuffix
           containsLocator = false
         } else if (explicitLocatorInSuffix !== undefined || explicitLocator !== undefined) {
-          suffixToParse = (explicitLocator !== undefined) ? explicitLocator : explicitLocatorInSuffix
+          suffixToParse = explicitLocator ?? explicitLocatorInSuffix
           thisCitation.suffix = rawSuffix?.trim()
         }
 

@@ -367,7 +367,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
   } else if (node.type === 'ZettelkastenLink') {
     return `[[${node.value}]]`
   } else if (node.type === 'ZettelkastenTag') {
-    return `${node.value}`
+    return `#${node.value}`
   }
 
   return ''

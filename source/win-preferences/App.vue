@@ -58,7 +58,7 @@ import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
 import toolbarSchema from './schema/toolbar'
 import { defineComponent } from 'vue'
-import { WindowTab } from '@dts/renderer/window'
+import { type WindowTab } from '@dts/renderer/window'
 import { resolveLangCode } from '@common/util/map-lang-code'
 import { type FormSchema } from '@common/vue/form/Form.vue'
 
@@ -190,7 +190,7 @@ export default defineComponent({
       appLangOptions: {} as any,
       // This will return the full object
       config: (global as any).config.get(),
-      schema: {} as FormSchema
+      schema: { fieldsets: [] } satisfies FormSchema
     }
   },
   computed: {

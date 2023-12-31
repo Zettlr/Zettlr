@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { DirDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
+import { type DirDescriptor, type OtherFileDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@cds/core/icon'
 import { defineComponent } from 'vue'
 

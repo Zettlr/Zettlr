@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 import ZettlrCommand from './zettlr-command'
 import type { MDFileDescriptor } from '@dts/common/fsal'
 
@@ -45,8 +46,9 @@ export default class FilePathFindMetaData extends ZettlrCommand {
       return descriptor
     }
 
-    const contents = await this._app.fsal.loadAnySupportedFile(descriptor.path)
-    const lines = contents.split('\n')
+    const markdown = await this._app.fsal.loadAnySupportedFile(descriptor.path)
+    const { content } = extractYamlFrontmatter(markdown)
+    const lines = content.split('\n')
 
     let preview = ''
     let i = 0

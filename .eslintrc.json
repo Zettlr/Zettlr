@@ -87,6 +87,17 @@
       {
         "ignoredTypeNames": ["Text"]
       }
-    ]
+    ],
+    // DEBUG: Turn a few errors into warnings after upgrading ESLint to >6.x
+    // This rule is difficult to disable right now; it interferes with the
+    // "no-null-assertion" rule, and it won't be an easy fix. We'll have to
+    // think about it.
+    "@typescript-eslint/non-nullable-type-assertion-style": 1,
+    // The following two rules conflict with each other in a few edge cases, so
+    // we'll keep both on "warning" severity for now.
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": 1,
+    "@typescript-eslint/strict-boolean-expressions": 1,
+    // The following rule basically disallows use of `any`
+    "@typescript-eslint/no-unsafe-argument": 1
   }
 }

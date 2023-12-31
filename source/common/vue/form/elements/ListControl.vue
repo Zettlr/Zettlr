@@ -429,7 +429,7 @@ function columnType (columnIndex: number): 'string'|'number'|'bigint'|'boolean'|
  * @param   {number}  row  The row index
  * @param   {number}  col  The column index
  */
-function handleDoubleClick (row: number, col: number) {
+function handleDoubleClick (row: number, col: number): void {
   if (isColumnEditable(col)) {
     editing.value.row = row
     editing.value.col = col
@@ -439,7 +439,7 @@ function handleDoubleClick (row: number, col: number) {
 /**
  * Should be called after editing a cell to reset it to an uneditable state.
  */
-function finishEditing () {
+function finishEditing (): void {
   editing.value.row = -1
   editing.value.col = -1
 }
@@ -451,7 +451,7 @@ function finishEditing () {
  * @param   {number}           col       The column index
  * @param   {SupportedValues}  newValue  The new value
  */
-function handleInput (row: number, col: number, newValue: SupportedValues) {
+function handleInput (row: number, col: number, newValue: SupportedValues): void {
   const emitValue = []
 
   const simple = asSimpleArray.value
@@ -465,7 +465,7 @@ function handleInput (row: number, col: number, newValue: SupportedValues) {
     } else if (simple !== undefined) {
       // Simply push the new value instead of the old one
       emitValue.push(newValue)
-    } else if (multi) {
+    } else if (multi !== undefined) {
       // Exchange the correct column with the new value
       const newRow = []
       for (let j = 0; j < multi[i].length; j++) {
@@ -497,7 +497,7 @@ function handleInput (row: number, col: number, newValue: SupportedValues) {
  *
  * @param   {number}  key  The row to be deleted
  */
-function handleDeletion (key: number) {
+function handleDeletion (key: number): void {
   // This function deletes elements
   const simple = asSimpleArray.value
   const multi = asMultiArray.value
@@ -530,7 +530,7 @@ function handleDeletion (key: number) {
  * Allows the user to add a new entry -- is called after the user finishes the
  * addition workflow
  */
-function handleAddition () {
+function handleAddition (): void {
   const simple = asSimpleArray.value
   const multi = asMultiArray.value
   const record = asRecord.value

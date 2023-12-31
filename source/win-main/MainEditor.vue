@@ -37,15 +37,15 @@ import objectToArray from '@common/util/object-to-array'
 import { ref, computed, onMounted, watch, toRef } from 'vue'
 import { useStore } from 'vuex'
 import { key as storeKey } from './store'
-import { EditorCommands } from '@dts/renderer/editor'
+import { type EditorCommands } from '@dts/renderer/editor'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
+import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
+import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
-import { TagRecord } from '@providers/tags'
+import { type TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 
 const ipcRenderer = window.ipc
@@ -92,7 +92,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits<{(e: 'globalSearch', query: string): void}>()
+const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 const store = useStore(storeKey)
 
@@ -209,7 +209,6 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     autocorrect: {
       active: store.state.config['editor.autoCorrect.active'],
       matchWholeWords: store.state.config['editor.autoCorrect.matchWholeWords'],
-      style: store.state.config['editor.autoCorrect.style'],
       magicQuotes: {
         primary: store.state.config['editor.autoCorrect.magicQuotes.primary'],
         secondary: store.state.config['editor.autoCorrect.magicQuotes.secondary']
@@ -245,7 +244,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     showStatusbar: store.state.config['editor.showStatusbar'],
     darkMode: store.state.config.darkMode,
     theme: store.state.config['display.theme']
-  } as EditorConfigOptions
+  } satisfies EditorConfigOptions
 })
 
 // External commands/"event" system
@@ -411,7 +410,7 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
 /**
  * Loads the document for this editor instance.
  */
-async function loadDocument () {
+async function loadDocument (): Promise<void> {
   const newEditor = await getEditorFor(props.file.path)
 
   const wrapper = document.getElementById(`cm-text-${props.leafId}`)
@@ -453,7 +452,7 @@ async function loadDocument () {
   })
 }
 
-function jtl (lineNumber: number) {
+function jtl (lineNumber: number): void {
   currentEditor?.jtl(lineNumber)
 }
 
@@ -511,7 +510,7 @@ async function updateCitationKeys (library: string): Promise<void> {
   currentEditor?.setCompletionDatabase('citations', items)
 }
 
-async function updateFileDatabase () {
+async function updateFileDatabase (): Promise<void> {
   // Get all our files ...
   const fileDatabase: Array<{ filename: string, displayName: string, id: string }> = []
 
@@ -546,7 +545,7 @@ async function updateFileDatabase () {
   currentEditor?.setCompletionDatabase('files', fileDatabase)
 }
 
-function maybeHighlightSearchResults () {
+function maybeHighlightSearchResults (): void {
   if (currentEditor === null) {
     return
   }

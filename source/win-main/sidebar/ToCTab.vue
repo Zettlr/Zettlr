@@ -33,10 +33,10 @@
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import sanitizeHtml from 'sanitize-html'
-import { ToCEntry } from '@common/modules/markdown-editor/plugins/toc-field'
+import { type ToCEntry } from '@common/modules/markdown-editor/plugins/toc-field'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { OpenDocument } from '@dts/common/documents'
-import { AnyDescriptor, MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
+import { type OpenDocument } from '@dts/common/documents'
+import { type AnyDescriptor, type MDFileDescriptor, type CodeFileDescriptor } from '@dts/common/fsal'
 import { md2html } from '@common/modules/markdown-utils'
 
 const ipcRenderer = window.ipc

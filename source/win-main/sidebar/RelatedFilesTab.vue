@@ -64,9 +64,9 @@
 import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { defineComponent } from 'vue'
-import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { TagRecord } from '@providers/tags'
+import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
+import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { type TagRecord } from '@providers/tags'
 
 export interface RelatedFile {
   file: string
