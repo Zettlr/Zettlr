@@ -468,12 +468,15 @@
             <date-part name="year"/>
           </date>
         </group>
+        <text variable="year-suffix"/>
       </if>
       <else-if variable="status">
         <text variable="status" text-case="capitalize-first"/>
+        <text variable="year-suffix" prefix="-"/>
       </else-if>
       <else>
         <text term="no date" form="short"/>
+        <text variable="year-suffix" prefix="-"/>
       </else>
     </choose>
   </macro>
@@ -486,12 +489,15 @@
             <date-part name="year"/>
           </date>
         </group>
+        <text variable="year-suffix"/>
       </if>
       <else-if variable="status">
         <text variable="status"/>
+        <text variable="year-suffix" prefix="-"/>
       </else-if>
       <else>
         <text term="no date" form="short"/>
+        <text variable="year-suffix" prefix="-"/>
       </else>
     </choose>
   </macro>
@@ -631,7 +637,7 @@
     <layout prefix="(" suffix=")" delimiter="; ">
       <group delimiter=", ">
         <choose>
-          <if variable="issued accessed" match="any">
+          <if variable="issued" match="any">
             <group delimiter=" ">
               <text macro="contributors-short"/>
               <text macro="date-in-text"/>
