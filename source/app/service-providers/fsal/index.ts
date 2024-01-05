@@ -100,7 +100,7 @@ export default class FSAL extends ProviderContract {
    * @return  {FSALWatchdog}     A new watchdog
    */
   public watchPath (p: string): FSALWatchdog {
-    const watcher = new FSALWatchdog(this._logger, this._config)
+    const watcher = this.getWatchdog()
     watcher.watchPath(p)
     return watcher
   }
