@@ -44,7 +44,10 @@ export enum WORKSPACE_PROVIDER_EVENTS {
 }
 
 /**
- * This class generates the Tray in the system notification area
+ * This class manages all workspaces that are loaded within the app and provides
+ * functionality to access all files and folders within there. In addition, this
+ * class provides the required functionality to keep the renderers (i.e., the
+ * file managers) in sync.
  */
 export default class WorkspaceProvider extends ProviderContract {
   private readonly roots: Root[]
