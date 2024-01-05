@@ -7,16 +7,44 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This function takes the filetree of the FSAL and generates
- *                  some statistics based off that.
+ * Description:     This function generates some statistics based on the loaded
+ *                  workspaces in the application.
  *
  * END HEADER
  */
 
 import objectToArray from '@common/util/object-to-array'
-import type { MaybeRootDescriptor, DirDescriptor, MDFileDescriptor, CodeFileDescriptor, FSALStats } from '@dts/common/fsal'
+import type { DirDescriptor, MDFileDescriptor, CodeFileDescriptor, AnyDescriptor } from '@dts/common/fsal'
 
-export default function generateStats (filetree: MaybeRootDescriptor[]): FSALStats {
+export interface WorkspacesStatistics {
+  minChars: number
+  maxChars: number
+  minWords: number
+  maxWords: number
+  sumChars: number
+  sumWords: number
+  meanChars: number
+  meanWords: number
+  sdChars: number
+  sdWords: number
+  chars68PercentLower: number
+  chars68PercentUpper: number
+  chars95PercentLower: number
+  chars95PercentUpper: number
+  words68PercentLower: number
+  words68PercentUpper: number
+  words95PercentLower: number
+  words95PercentUpper: number
+  minCharsFile: string
+  maxCharsFile: string
+  minWordsFile: string
+  maxWordsFile: string
+  mdFileCount: number
+  codeFileCount: number
+  dirCount: number
+}
+
+export default function generateStats (filetree: AnyDescriptor[]): WorkspacesStatistics {
   // First, we need ALL of our loaded paths as an array
   let pathsArray: Array<DirDescriptor|MDFileDescriptor|CodeFileDescriptor> = []
   for (const descriptor of filetree) {
@@ -33,22 +61,30 @@ export default function generateStats (filetree: MaybeRootDescriptor[]): FSALSta
   let maxWords = -Infinity
   let sumChars = 0
   let sumWords = 0
+  let minWordsFile = ''
+  let maxWordsFile = ''
+  let minCharsFile = ''
+  let maxCharsFile = ''
 
   for (const descriptor of mdArray) {
     if (descriptor.charCount < minChars) {
       minChars = descriptor.charCount
+      minCharsFile = descriptor.path
     }
 
     if (descriptor.charCount > maxChars) {
       maxChars = descriptor.charCount
+      maxCharsFile = descriptor.path
     }
 
     if (descriptor.wordCount < minWords) {
       minWords = descriptor.wordCount
+      minWordsFile = descriptor.path
     }
 
     if (descriptor.wordCount > maxWords) {
       maxWords = descriptor.wordCount
+      maxWordsFile = descriptor.path
     }
 
     sumChars += descriptor.charCount
@@ -104,6 +140,10 @@ export default function generateStats (filetree: MaybeRootDescriptor[]): FSALSta
     words68PercentUpper: (words68PercentUpper > maxWords) ? maxWords : words68PercentUpper,
     words95PercentLower: (words95PercentLower < minWords) ? minWords : words95PercentLower,
     words95PercentUpper: (words95PercentUpper > maxWords) ? maxWords : words95PercentUpper,
+    minCharsFile,
+    maxCharsFile,
+    minWordsFile,
+    maxWordsFile,
     mdFileCount: pathsArray.filter(d => d.type === 'file').length,
     codeFileCount: pathsArray.filter(d => d.type === 'code').length,
     dirCount: pathsArray.filter(d => d.type === 'directory').length

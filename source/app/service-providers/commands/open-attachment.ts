@@ -56,7 +56,7 @@ export default class OpenAttachment extends ZettlrCommand {
       return false
     }
 
-    const descriptor = this._app.fsal.find(arg.filePath)
+    const descriptor = this._app.workspaces.find(arg.filePath)
     if (descriptor === undefined || descriptor.type !== 'file') {
       return false
     }

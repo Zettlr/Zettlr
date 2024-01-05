@@ -26,7 +26,6 @@ import {
 } from 'electron'
 import EventEmitter from 'events'
 import path from 'path'
-import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createUpdateWindow from './create-update-window'
@@ -47,7 +46,6 @@ import promptDialog from './dialog/prompt'
 import type { WindowPosition } from './types'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
-import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
 import ProviderContract from '@providers/provider-contract'
@@ -1041,18 +1039,5 @@ export default class WindowProvider extends ProviderContract {
       return
     }
     promptDialog(this._logger, firstMainWin, options)
-  }
-
-  /**
-    * Ask to remove the associated path for the descriptor
-    * @param  {MDFileDescriptor|DirDescriptor} descriptor The corresponding descriptor
-    * @return {boolean}                                   True if user wishes to remove it.
-    */
-  async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
-    const firstMainWin = this.getFirstMainWindow()
-    if (firstMainWin === undefined) {
-      return true
-    }
-    return await confirmRemove(firstMainWin, descriptor)
   }
 }

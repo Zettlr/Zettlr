@@ -14,7 +14,7 @@
 
 import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
-import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import path from 'path'
 
 export default class RequestMove extends ZettlrCommand {
   constructor (app: any) {
@@ -29,15 +29,8 @@ export default class RequestMove extends ZettlrCommand {
    */
   async run (evt: string, arg: { from: string, to: string }): Promise<boolean> {
     // arg contains from and to. Prepare the necessary variables
-    const fsal = this._app.fsal // We need this quite often here
-
-    let from: DirDescriptor|MDFileDescriptor|CodeFileDescriptor|undefined = fsal.findDir(arg.from)
-    // Obviously a file!
-    if (from === undefined) {
-      from = fsal.findFile(arg.from)
-    }
-
-    const to = fsal.findDir(arg.to)
+    const from = this._app.workspaces.find(arg.from)
+    const to = this._app.workspaces.findDir(arg.to)
 
     if (to === undefined || from === undefined) {
       // If findDir doesn't return anything then it's a file
@@ -54,7 +47,7 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Let's check if the destination is a child of the source:
-    if (from.type === 'directory' && fsal.findDir(from.path, [to]) !== undefined) {
+    if (from.type === 'directory' && to.path.startsWith(from.path)) {
       this._app.windows.prompt({
         type: 'error',
         title: trans('Cannot move directory'),
@@ -64,7 +57,7 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Now check if there already is a directory/file with the same name
-    if (fsal.hasChild(to, from)) {
+    if (to.children.find(c => c.name === path.basename(from.name)) !== undefined) {
       this._app.windows.prompt({
         type: 'error',
         title: trans('Cannot move directory or file'),
@@ -82,7 +75,15 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Now we can move the source to the target.
-    await fsal.move(from, to)
+    const newPath = path.join(to.path, from.name)
+    await this._app.fsal.rename(from.path, newPath)
+    // Notify the documents provider so it can exchange any files if necessary
+    if (await this._app.fsal.isFile(newPath)) {
+      await this._app.documents.hasMovedFile(from.path, newPath)
+    } else {
+      await this._app.documents.hasMovedDir(from.path, newPath)
+    }
+
     return true
   }
 }

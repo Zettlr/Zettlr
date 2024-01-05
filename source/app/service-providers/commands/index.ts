@@ -50,8 +50,6 @@ import type AppServiceContainer from 'source/app/app-service-container'
 import type ZettlrCommand from './zettlr-command'
 import SetOpenDirectory from './set-open-directory'
 import { clipboard, ipcMain, nativeImage } from 'electron'
-import isFile from '@common/util/is-file'
-import isDir from '@common/util/is-dir'
 import enumLangFiles from '@common/util/enum-lang-files'
 import enumDictFiles from '@common/util/enum-dict-files'
 import RenameTag from './rename-tag'
@@ -122,24 +120,26 @@ export default class CommandProvider extends ProviderContract {
     // FIRST: Try to run a minimal command for which its own custom function
     // wouldn't make sense.
     if (command === 'get-statistics-data') {
-      return this._app.fsal.statistics
-    } else if (command === 'get-filetree-events') {
-      return this._app.fsal.filetreeHistorySince(payload)
+      return this._app.workspaces.getStatistics()
     } else if (command === 'get-descriptor') {
-      if (isFile(payload)) {
+      if (await this._app.fsal.isFile(payload)) {
         return await this._app.fsal.getDescriptorForAnySupportedFile(payload)
-      } else if (isDir(payload)) {
+      } else if (await this._app.fsal.isDir(payload)) {
         return await this._app.fsal.getAnyDirectoryDescriptor(payload)
       } else {
         this._app.log.error(`[Application] Could not return descriptor for ${String(payload)}: Neither file nor directory.`)
       }
     } else if (command === 'get-open-directory') {
-      const openDir = this._app.fsal.openDirectory
+      const openDir = this._app.documents.getOpenDirectory()
       if (openDir === null) {
         return null
       }
 
-      return openDir
+      try {
+        return await this._app.fsal.getAnyDirectoryDescriptor(openDir)
+      } catch (err: any) {
+        return null
+      }
     } else if (command === 'next-file') {
       // Trigger a "forward" command on the document manager
       // await this._app.documents.forward()

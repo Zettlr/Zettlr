@@ -196,6 +196,7 @@ export default defineComponent({
     }
   },
   computed: {
+    // Mount the store
     sidebarVisible: function (): boolean {
       return this.$store.state.config['window.sidebarVisible'] as boolean
     },
