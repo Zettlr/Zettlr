@@ -14,7 +14,7 @@
 
 import { Compartment, EditorState, StateField, type Extension, type StateEffect } from '@codemirror/state'
 import { type CoreExtensionOptions } from '../editor-extension-sets'
-import { configUpdateEffect } from '../util/configuration'
+import { configField, configUpdateEffect } from '../util/configuration'
 import { defaultDark, defaultLight, mainOverride } from './main-override'
 import { themeBerlinLight, themeBerlinDark } from './berlin'
 import { type MarkdownTheme } from '@providers/config/get-config-template'
@@ -28,7 +28,7 @@ const themeCompartment = new Compartment()
 const markdownThemeField = StateField.define<{ theme: MarkdownTheme, darkMode: boolean }>({
   create (state) {
     return {
-      theme: 'berlin',
+      theme: state.field(configField).theme,
       darkMode: false
     }
   },

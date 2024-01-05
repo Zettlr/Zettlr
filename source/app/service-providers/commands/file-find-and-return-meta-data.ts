@@ -37,7 +37,7 @@ export default class FilePathFindMetaData extends ZettlrCommand {
    */
   async run (evt: string, arg: any): Promise<MDFileDescriptor|undefined|any[]> {
     // Quick'n'dirty command to return the Meta descriptor for the given query
-    const descriptor = this._app.fsal.findExact(arg)
+    const descriptor = this._app.workspaces.findExact(arg)
     if (descriptor === undefined) {
       return undefined
     }

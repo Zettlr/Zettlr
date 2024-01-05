@@ -14,7 +14,6 @@
 
 import replaceTags from '@common/util/replace-tags'
 import type { MDFileDescriptor } from '@dts/common/fsal'
-import { promises as fs } from 'fs'
 import ZettlrCommand from './zettlr-command'
 import { dialog } from 'electron'
 import { trans } from '@common/i18n-main'
@@ -34,7 +33,7 @@ export default class RenameTag extends ZettlrCommand {
     const newName: string = arg.newName
 
     // First, retrieve all files from the FSAL
-    const allFiles = this._app.fsal.getAllFiles()
+    const allFiles = this._app.workspaces.getAllFiles()
       .filter(d => d.type === 'file') as MDFileDescriptor[]
 
     // Then, retain only the relevant files
@@ -57,10 +56,10 @@ export default class RenameTag extends ZettlrCommand {
     // Lastly, do the replacing file by file. NOTE: This rests on the fact that
     // the FSAL will pick up those changes via the file system itself.
     for (const file of relevantFiles) {
-      const content = await fs.readFile(file.path, 'utf-8')
+      const content = await this._app.fsal.readTextFile(file.path)
       const newContent = replaceTags(content, oldName, newName)
       if (newContent !== content) {
-        await fs.writeFile(file.path, newContent, 'utf-8')
+        await this._app.fsal.writeTextFile(file.path, newContent)
         this._app.log.info(`[Application] Replaced tag "${oldName}" with "${newName}" in file ${file.path}`)
       } else {
         this._app.log.warning(`[Application] Could not replace "${oldName}" with "${newName}" in file ${file.path}. Note that the tag replacer does not yet work with comma-separated keyword lists.`)

@@ -90,6 +90,8 @@ import FileTree from './file-tree.vue'
 import FileList from './file-list.vue'
 import { trans } from '@common/i18n-renderer'
 import { nextTick, defineComponent } from 'vue'
+import { mapStores } from 'pinia'
+import { useOpenDirectoryStore, useWorkspacesStore } from '../pinia'
 
 const ipcRenderer = window.ipc
 
@@ -117,11 +119,16 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useOpenDirectoryStore),
+    ...mapStores(useWorkspacesStore),
     /**
      * Mapper functions to map state properties onto the file manager.
      */
+    fileTree: function () {
+      return this.workspacesStore.roots.map(root => root.descriptor)
+    },
     selectedDirectory: function () {
-      return this.$store.state.selectedDirectory
+      return this['open-directoryStore'].openDirectory
     },
     filterPlaceholder: function () {
       return trans('Filter …')
@@ -335,13 +342,16 @@ export default defineComponent({
     selectionListener: function (evt: MouseEvent) {
       const target = evt.target as null|HTMLElement
       // No hash property? Nothing to do.
-      if (target?.dataset.hash === undefined) {
+      if (target?.dataset.path === undefined) {
         return
       }
 
-      const obj = findObject(this.$store.state.fileTree, 'hash', parseInt(target.dataset.hash), 'children')
+      const obj = findObject(this.fileTree, 'path', parseInt(target.dataset.path), 'children')
       // Nothing found/type is a file? Return.
-      if (obj != null || obj.type === 'file') return
+      if (obj != null || obj.type === 'file') {
+        return
+      }
+
       if (!this.isFileListVisible) {
         this.toggleFileList()
       }

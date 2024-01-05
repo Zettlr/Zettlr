@@ -375,6 +375,9 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     this._instance.setState(state)
+    // Ensure the theme switcher picks the state change up; this somehow doesn't
+    // properly work after the document has been mounted to the DOM.
+    this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
 
     // Provide the cached databases to the state (can be overridden by the
     // caller afterwards by calling setCompletionDatabase)

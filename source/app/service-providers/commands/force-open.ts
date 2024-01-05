@@ -14,7 +14,6 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import isDir from '@common/util/is-dir'
 
 export default class ForceOpen extends ZettlrCommand {
   constructor (app: any) {
@@ -40,16 +39,16 @@ export default class ForceOpen extends ZettlrCommand {
     const autoCreate: boolean = this._app.config.get('zkn.autoCreateLinkedFiles')
     const customDir: string = this._app.config.get('zkn.customDirectory')
 
-    const file = this._app.fsal.findExact(linkContents)
+    const file = this._app.workspaces.findExact(linkContents)
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file !== undefined) {
       await this._app.documents.openFile(windowId, leafId, file.path, newTab)
-    } else if (autoCreate && isDir(customDir)) {
+    } else if (autoCreate && await this._app.fsal.isDir(customDir)) {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.
       await this._app.commands.run('file-new', { windowId, leafId, name: linkContents, path: customDir })
-    } else if (autoCreate && !isDir(customDir)) {
+    } else if (autoCreate && !await this._app.fsal.isDir(customDir)) {
       await this._app.commands.run('file-new', { windowId, leafId, name: linkContents })
     }
   }
