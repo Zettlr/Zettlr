@@ -21,7 +21,6 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
 import { type PandocProfileMetadata } from '@dts/common/assets'
-import isDir from '@common/util/is-dir'
 import { runShellCommand } from './exporter/run-shell-command'
 import { showNativeNotification } from '@common/util/show-notification'
 
@@ -89,7 +88,7 @@ export default class Export extends ZettlrCommand {
     }
 
     // We must have an absolute path given in file
-    const fileDescriptor = this._app.fsal.findFile(file)
+    const fileDescriptor = this._app.workspaces.findFile(file)
     if (fileDescriptor !== undefined) {
       // If we have a cached version, we already have a file to export.
       // Otherwise, use the regular one from disk.
@@ -104,7 +103,9 @@ export default class Export extends ZettlrCommand {
 
       // A user can override this default by providing in a frontmatter the
       // key zettlr.pandoc_working_dir: /path/to/directory
-      if (fileDescriptor.type === 'file' && typeof fileDescriptor.frontmatter?.zettlr?.pandoc_working_dir === 'string' && isDir(fileDescriptor.frontmatter.zettlr.pandoc_working_dir)) {
+      if (fileDescriptor.type === 'file' &&
+      typeof fileDescriptor.frontmatter?.zettlr?.pandoc_working_dir === 'string' &&
+      await this._app.fsal.isDir(fileDescriptor.frontmatter.zettlr.pandoc_working_dir)) {
         exporterOptions.cwd = fileDescriptor.frontmatter.zettlr.pandoc_working_dir
       }
 

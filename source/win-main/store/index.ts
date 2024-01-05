@@ -18,23 +18,15 @@ import { createStore as baseCreateStore, type StoreOptions, type Store } from 'v
 import { type InjectionKey } from 'vue'
 import { type ColoredTag } from '@providers/tags'
 import type { SearchResultWrapper } from '@dts/common/search'
-import locateByPath from '@providers/fsal/util/locate-by-path'
 import configToArrayMapper from './config-to-array'
 import type { BranchNodeJSON, LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 
 // Import Mutations
-import addToFiletreeMutation from './mutations/add-to-filetree'
-import removeFromFiletreeMutation from './mutations/remove-from-filetree'
-import patchInFiletreeMutation from './mutations/patch-in-filetree'
-import updateOpenDirectoryMutation from './mutations/update-open-directory'
 import documentTreeMutation from './mutations/document-tree'
 
 // Import Actions
-import filetreeUpdateAction from './actions/filetree-update'
-import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
-import type { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
 import { type WritingTarget } from '@providers/targets'
 import updateSnippetsAction from './actions/update-snippets'
 import { type DocumentInfo } from '@common/modules/markdown-editor'
@@ -52,14 +44,6 @@ export const key: InjectionKey<Store<ZettlrState>> = Symbol('store key')
  */
 export interface ZettlrState {
   /**
-   * Contains the full file tree that is loaded into the app
-   */
-  fileTree: MaybeRootDescriptor[]
-  /**
-   * Contains the last update timestamp from main
-   */
-  lastFiletreeUpdate: number
-  /**
    * Contains a full document tree managed by this window
    */
   paneStructure: BranchNodeJSON|LeafNodeJSON
@@ -72,10 +56,6 @@ export interface ZettlrState {
    * keep the state during filtering, etc.)
    */
   uncollapsedDirectories: string[]
-  /**
-   * Contains the currently selected directory
-   */
-  selectedDirectory: DirDescriptor|null
   activeFile: null
   /**
    * Contains coloured tags that can be managed in the tag manager
@@ -146,11 +126,8 @@ function getConfig (): StoreOptions<ZettlrState> {
       return {
         paneStructure: { type: 'leaf', id: '', openFiles: [], activeFile: null },
         paneData: [],
-        fileTree: [],
-        lastFiletreeUpdate: 0,
         activeFile: null,
         uncollapsedDirectories: [],
-        selectedDirectory: null,
         colouredTags: [],
         writingTargets: [],
         config: configToArrayMapper(window.config.get()),
@@ -167,9 +144,6 @@ function getConfig (): StoreOptions<ZettlrState> {
       }
     },
     getters: {
-      file: state => (filePath: string): AnyDescriptor|undefined => {
-        return locateByPath(state.fileTree, filePath) as any
-      },
       lastLeafActiveFile: state => (): OpenDocument|null => {
         const leaf = state.paneData.find(leaf => leaf.id === state.lastLeafId)
         if (leaf !== undefined) {
@@ -224,9 +198,6 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateConfig: function (state, option) {
         state.config[option] = window.config.get(option)
       },
-      lastFiletreeUpdate: function (state, payload) {
-        state.lastFiletreeUpdate = payload
-      },
       updateModifiedFiles: function (state, modifiedDocuments: string[]) {
         state.modifiedDocuments = modifiedDocuments
       },
@@ -258,16 +229,9 @@ function getConfig (): StoreOptions<ZettlrState> {
       snippets: function (state, snippets) {
         state.snippets = snippets
       },
-      documentTree: documentTreeMutation,
-      // Longer mutations that require more code are defined externally
-      updateOpenDirectory: updateOpenDirectoryMutation,
-      addToFiletree: addToFiletreeMutation,
-      patchInFiletree: patchInFiletreeMutation,
-      removeFromFiletree: removeFromFiletreeMutation
+      documentTree: documentTreeMutation
     },
     actions: {
-      filetreeUpdate: filetreeUpdateAction,
-      updateOpenDirectory: updateOpenDirectoryAction,
       lastLeafId: async function (ctx, lastLeafId: string) {
         ctx.commit('lastLeafId', lastLeafId)
       },

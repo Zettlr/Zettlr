@@ -15,12 +15,11 @@
 import { trans } from '@common/i18n-main'
 import ignoreDir from '@common/util/ignore-dir'
 import ignoreFile from '@common/util/ignore-file'
-import isDir from '@common/util/is-dir'
-import isFile from '@common/util/is-file'
 import { app } from 'electron'
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import { showNativeNotification } from '@common/util/show-notification'
+import { type DirDescriptor } from '@dts/common/fsal'
 
 export default class RootOpen extends ZettlrCommand {
   constructor (app: any) {
@@ -74,8 +73,8 @@ export default class RootOpen extends ZettlrCommand {
     const ret = await this._app.windows.askDir(trans('Open project folder'), null)
 
     for (const workspace of ret) {
-      const ignoredDir = isDir(workspace) && ignoreDir(workspace)
-      const ignoredFile = isFile(workspace) && ignoreFile(workspace)
+      const ignoredDir = await this._app.fsal.isDir(workspace) && ignoreDir(workspace)
+      const ignoredFile = await this._app.fsal.isFile(workspace) && ignoreFile(workspace)
       if (ignoredDir || ignoredFile || workspace === app.getPath('home')) {
         // We cannot add this dir, because it is in the list of ignored directories.
         this._app.log.error(`The chosen workspace "${workspace}" is on the ignore list.`)
@@ -103,7 +102,7 @@ export default class RootOpen extends ZettlrCommand {
     }
 
     let newFile = null
-    let newDir = null
+    let newDir: undefined|DirDescriptor
 
     // Make sure there's at least one window
     if (this._app.documents.windowCount() === 0) {
@@ -122,33 +121,28 @@ export default class RootOpen extends ZettlrCommand {
       // First check if this thing is already added. If so, simply write
       // the existing file/dir into the newFile/newDir vars. They will be
       // opened accordingly.
-      if ((newFile = this._app.fsal.findFile(absPath)) !== undefined) {
+      if ((newFile = this._app.workspaces.findFile(absPath)) !== undefined) {
         // Open the file immediately
         await this._app.documents.openFile(winKey, leafId, newFile.path, true)
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
-        newDir = this._app.fsal.findDir(newFile.dir)
-      } else if ((newDir = this._app.fsal.findDir(absPath)) != null) {
+        newDir = this._app.workspaces.findDir(newFile.dir)
+      } else if ((newDir = this._app.workspaces.findDir(absPath)) != null) {
         // Do nothing
       } else if (this._app.config.addPath(absPath)) {
         try {
-          if (isDir(absPath)) {
+          if (await this._app.fsal.isDir(absPath)) {
             showNativeNotification(trans('Opening new root %s …', path.basename(absPath)))
           }
-          const loaded = await this._app.fsal.loadPath(absPath)
-          if (loaded) {
-            // If it was a file and not a directory, immediately open it.
-            const file = this._app.fsal.findFile(absPath)
-            if (file !== undefined) {
-              await this._app.documents.openFile(winKey, leafId, file.path, true)
-            }
+          // If it was a file and not a directory, immediately open it.
+          const file = await this._app.fsal.getDescriptorForAnySupportedFile(absPath)
+          if (file !== undefined && file.type !== 'other') {
+            await this._app.documents.openFile(winKey, leafId, file.path, true)
+          }
 
-            if (isDir(absPath)) {
-              showNativeNotification(trans('%s has been loaded.', path.basename(absPath)))
-            }
-          } else {
-            this._app.config.removePath(absPath)
+          if (await this._app.fsal.isDir(absPath)) {
+            showNativeNotification(trans('%s has been loaded.', path.basename(absPath)))
           }
         } catch (err: any) {
           // Something went wrong, so remove the path again.
@@ -164,7 +158,7 @@ export default class RootOpen extends ZettlrCommand {
 
     // Open the newly added path(s) directly.
     if (newDir !== undefined) {
-      this._app.fsal.openDirectory = newDir
+      this._app.documents.setOpenDirectory(newDir.path)
     }
   }
 }
