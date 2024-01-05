@@ -53,10 +53,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@braintree/sanitize-url@npm:^6.0.0, @braintree/sanitize-url@npm:^6.0.2":
+"@braintree/sanitize-url@npm:^6.0.0":
   version: 6.0.2
   resolution: "@braintree/sanitize-url@npm:6.0.2"
   checksum: 6a9dfd4081cc96516eeb281d1a83d3b5f1ad3d2837adf968fcc2ba18889ee833554f9c641b4083c36d3360a932e4504ddf25b0b51e9933c3742622df82cf7c9a
+  languageName: node
+  linkType: hard
+
+"@braintree/sanitize-url@npm:^6.0.1":
+  version: 6.0.4
+  resolution: "@braintree/sanitize-url@npm:6.0.4"
+  checksum: f5ec6048973722ea1c46ae555d2e9eb848d7fa258994f8ea7d6db9514ee754ea3ef344ef71b3696d486776bcb839f3124e79f67c6b5b2814ed2da220b340627c
   languageName: node
   linkType: hard
 
@@ -1422,12 +1429,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/d3-scale-chromatic@npm:^3.0.0":
+  version: 3.0.3
+  resolution: "@types/d3-scale-chromatic@npm:3.0.3"
+  checksum: a465d126a00a71d3824957283580b4b404fe6f6bb52eb2b7303047fffed2bec6e31aeb34bfb30313e72ee1d75243c50ec5a45824eaf547f9c0849a1379527662
+  languageName: node
+  linkType: hard
+
 "@types/d3-scale@npm:*":
   version: 4.0.2
   resolution: "@types/d3-scale@npm:4.0.2"
   dependencies:
     "@types/d3-time": "*"
   checksum: 6b3c0337f38f82b582d9f3190fde82edfce7ffafb371e5b2464c443137c2660bac644099d259f1f5cc829085eb5688bed0bea2b336a957d0845433bd07bf2ddd
+  languageName: node
+  linkType: hard
+
+"@types/d3-scale@npm:^4.0.3":
+  version: 4.0.8
+  resolution: "@types/d3-scale@npm:4.0.8"
+  dependencies:
+    "@types/d3-time": "*"
+  checksum: 3b1906da895564f73bb3d0415033d9a8aefe7c4f516f970176d5b2ff7a417bd27ae98486e9a9aa0472001dc9885a9204279a1973a985553bdb3ee9bbc1b94018
   languageName: node
   linkType: hard
 
@@ -4036,6 +4059,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-array@npm:1 - 2":
+  version: 2.12.1
+  resolution: "d3-array@npm:2.12.1"
+  dependencies:
+    internmap: ^1.0.0
+  checksum: 97853b7b523aded17078f37c67742f45d81e88dda2107ae9994c31b9e36c5fa5556c4c4cf39650436f247813602dfe31bf7ad067ff80f127a16903827f10c6eb
+  languageName: node
+  linkType: hard
+
 "d3-array@npm:1, d3-array@npm:^1.1.1, d3-array@npm:^1.2.0":
   version: 1.2.4
   resolution: "d3-array@npm:1.2.4"
@@ -4410,6 +4442,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-sankey@npm:^0.12.3":
+  version: 0.12.3
+  resolution: "d3-sankey@npm:0.12.3"
+  dependencies:
+    d3-array: 1 - 2
+    d3-shape: ^1.2.0
+  checksum: df1cb9c9d02dd8fd14040e89f112f0da58c03bd7529fa001572a6925a51496d1d82ff25d9fedb6c429a91645fbd2476c19891e535ac90c8bc28337c33ee21c87
+  languageName: node
+  linkType: hard
+
 "d3-scale-chromatic@npm:1":
   version: 1.5.0
   resolution: "d3-scale-chromatic@npm:1.5.0"
@@ -4471,7 +4513,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-shape@npm:1":
+"d3-shape@npm:1, d3-shape@npm:^1.2.0":
   version: 1.3.7
   resolution: "d3-shape@npm:1.3.7"
   dependencies:
@@ -5205,10 +5247,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:3.0.3":
-  version: 3.0.3
-  resolution: "dompurify@npm:3.0.3"
-  checksum: 02242f2fe6a5c078fd0cb04efc93079d73a2fe886bebb5e33100b7e52f4b9bfe5f2afb0b69cae39d9a13d7bbf54435df41494890c4abe7740429828b2dbb94d9
+"dompurify@npm:^3.0.5":
+  version: 3.0.7
+  resolution: "dompurify@npm:3.0.7"
+  checksum: 4c1381d4c5d28a42ff3b09238e44fdd88078015ab7c451b532305f9c8c45d85cf8e4529767502ff3eac1b6127b5e39cc1506ba0ea1ec17b02cc1d8f73b71a1b1
   languageName: node
   linkType: hard
 
@@ -7637,6 +7679,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"internmap@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "internmap@npm:1.0.1"
+  checksum: 9d00f8c0cf873a24a53a5a937120dab634c41f383105e066bb318a61864e6292d24eb9516e8e7dccfb4420ec42ca474a0f28ac9a6cc82536898fa09bbbe53813
+  languageName: node
+  linkType: hard
+
 "interpret@npm:^3.1.1":
   version: 3.1.1
   resolution: "interpret@npm:3.1.1"
@@ -8989,18 +9038,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:^10.2.3":
-  version: 10.2.3
-  resolution: "mermaid@npm:10.2.3"
+"mermaid@npm:^10.6.1":
+  version: 10.6.1
+  resolution: "mermaid@npm:10.6.1"
   dependencies:
-    "@braintree/sanitize-url": ^6.0.2
+    "@braintree/sanitize-url": ^6.0.1
+    "@types/d3-scale": ^4.0.3
+    "@types/d3-scale-chromatic": ^3.0.0
     cytoscape: ^3.23.0
     cytoscape-cose-bilkent: ^4.1.0
     cytoscape-fcose: ^2.1.0
     d3: ^7.4.0
+    d3-sankey: ^0.12.3
     dagre-d3-es: 7.0.10
     dayjs: ^1.11.7
-    dompurify: 3.0.3
+    dompurify: ^3.0.5
     elkjs: ^0.8.2
     khroma: ^2.0.0
     lodash-es: ^4.17.21
@@ -9010,7 +9062,7 @@ __metadata:
     ts-dedent: ^2.2.0
     uuid: ^9.0.0
     web-worker: ^1.2.0
-  checksum: 656d1807fd8994a9a2fa38bd9ddf0783c0e805b32fa28519b3739d81a9f083a5844fadd32812b54c13085b4533aaf8c094afac2b339f2debfaee2f40e3622515
+  checksum: 60cf621ab811ba112919c867697dbd547df8ad0cf31e4d69044c3d96ac2dac4fa21ebba1936e1b72a060a4aa102924a6b396824a58fae176f48b42d993bbdb0b
   languageName: node
   linkType: hard
 
@@ -14378,7 +14430,7 @@ __metadata:
     lodash: ^4.17.21
     luxon: ^3.3.0
     md5: ^2.3.0
-    mermaid: ^10.2.3
+    mermaid: ^10.6.1
     minimatch: ^9.0.3
     mocha: ^10.2.0
     node-loader: ^2.0.0
