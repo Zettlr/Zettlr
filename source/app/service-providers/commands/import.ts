@@ -60,12 +60,14 @@ export default class ImportFiles extends ZettlrCommand {
 
     try {
       const openDirDescriptor = await this._app.fsal.getAnyDirectoryDescriptor(openDirectory)
+      this._app.log.info(`[Importer] Importing ${fileList.length} files: ${fileList.join(', ')} ...`)
       let ret = await makeImport(fileList, openDirDescriptor, this._app.assets, (file: string, error: string) => {
         this._app.log.error(`[Importer] Could not import file ${file}: ${error}`)
         // This callback gets called whenever there is an error while running pandoc.
         showNativeNotification(trans('Couldn\'t import %s.', path.basename(file)))
       }, (file: string) => {
         // And this on each success!
+        this._app.log.info(`[Importer] File ${file} imported successfully.`)
         showNativeNotification(trans('%s imported successfully.', path.basename(file)))
       })
 
