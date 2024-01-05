@@ -16,13 +16,21 @@
 import { promises as fs } from 'fs'
 
 /**
- * Filesystem Metadata struct that contains info on basic data of a given file.
+ * Filesystem Metadata struct that contains info on basic data of a given FS node.
  */
 export interface FilesystemMetadata {
   /**
-   * The absolute path to the file
+   * The absolute path to the object
    */
   path: string
+  /**
+   * Whether this object is a directory
+   */
+  isDirectory: boolean
+  /**
+   * Whether this object is a file
+   */
+  isFile: boolean
   /**
    * The time at which the file or directory has been created (UNIX timestamp
    * milliseconds)
@@ -63,6 +71,8 @@ export async function getFilesystemMetadata (fileOrDirPath: string): Promise<Fil
 
   const metadata: FilesystemMetadata = {
     path: fileOrDirPath,
+    isDirectory: false,
+    isFile: false,
     birthtime: 0,
     modtime: 0,
     size: 0,
@@ -70,11 +80,14 @@ export async function getFilesystemMetadata (fileOrDirPath: string): Promise<Fil
     writeable: false
   }
 
-  // Read the modification times from disk
-  const stat = await fs.lstat(fileOrDirPath)
+  // Access the info we require
+  const stat = await fs.stat(fileOrDirPath)
+
   metadata.birthtime = stat.birthtimeMs
   metadata.modtime = stat.mtimeMs
   metadata.size = stat.size
+  metadata.isDirectory = stat.isDirectory()
+  metadata.isFile = stat.isFile()
 
   // Determine read/write status
   try {

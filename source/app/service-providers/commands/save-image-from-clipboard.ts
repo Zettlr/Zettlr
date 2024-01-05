@@ -18,7 +18,6 @@ import sanitize from 'sanitize-filename'
 import path from 'path'
 import { promises as fs } from 'fs'
 import { clipboard } from 'electron'
-import isDir from '@common/util/is-dir'
 import { showNativeNotification } from '@common/util/show-notification'
 
 export default class SaveImage extends ZettlrCommand {
@@ -72,7 +71,7 @@ export default class SaveImage extends ZettlrCommand {
     }
 
     // If something went wrong or the user did not provide a directory, abort
-    if (!isDir(target.targetDir)) {
+    if (!await this._app.fsal.isDir(target.targetDir)) {
       showNativeNotification(trans('The requested directory was not found.'))
     }
 

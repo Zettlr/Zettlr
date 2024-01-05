@@ -95,27 +95,3 @@ export interface OtherFileDescriptor extends FSMetaInfo {
 
 export type AnyDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor | OtherFileDescriptor
 export type MaybeRootDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor
-
-export interface FSALStats {
-  minChars: number
-  maxChars: number
-  minWords: number
-  maxWords: number
-  sumChars: number
-  sumWords: number
-  meanChars: number
-  meanWords: number
-  sdChars: number
-  sdWords: number
-  chars68PercentLower: number
-  chars68PercentUpper: number
-  chars95PercentLower: number
-  chars95PercentUpper: number
-  words68PercentLower: number
-  words68PercentUpper: number
-  words95PercentLower: number
-  words95PercentUpper: number
-  mdFileCount: number
-  codeFileCount: number
-  dirCount: number
-}

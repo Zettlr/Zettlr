@@ -143,10 +143,12 @@ import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import { type SearchResult, type SearchResultWrapper, type SearchTerm } from '@dts/common/search'
-import { type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { type AnyMenuItem } from '@dts/renderer/context'
 import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
+import { useOpenDirectoryStore, useWorkspacesStore } from './pinia'
+import { mapStores } from 'pinia'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -210,14 +212,16 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useWorkspacesStore),
+    ...mapStores(useOpenDirectoryStore),
     recentGlobalSearches: function (): string[] {
       return this.$store.state.config['window.recentGlobalSearches']
     },
     selectedDir: function (): DirDescriptor|null {
-      return this.$store.state.selectedDirectory
+      return this['open-directoryStore'].openDirectory
     },
-    fileTree: function (): Array<MDFileDescriptor|CodeFileDescriptor|DirDescriptor> {
-      return this.$store.state.fileTree
+    fileTree: function () {
+      return this.workspacesStore.rootDescriptors
     },
     activeFile: function (): MDFileDescriptor|null {
       return this.$store.state.activeFile

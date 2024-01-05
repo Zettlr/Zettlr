@@ -14,11 +14,12 @@
 
 import windowRegister from '@common/modules/window-register'
 import { createApp } from 'vue'
-// import { createStore } from 'vuex'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import createStore, { key as storeKey } from './store'
 import PopupProvider from './popup-provider'
 import { DP_EVENTS } from '@dts/common/documents'
+import { useOpenDirectoryStore } from './pinia'
 
 const ipcRenderer = window.ipc
 
@@ -34,10 +35,15 @@ windowRegister()
 
 function afterRegister (): void {
   const appStore = createStore()
+  const pinia = createPinia()
 
   // Create the Vue app. We additionally use appStore, which exposes $store, and
   // PopupProvider, which exposes $showPopover, $togglePopover, and $closePopover
-  const app = createApp(App).use(appStore, storeKey).use(PopupProvider).mount('#app')
+  const app = createApp(App)
+    .use(pinia)
+    .use(appStore, storeKey)
+    .use(PopupProvider)
+    .mount('#app')
 
   document.addEventListener('dragover', function (event) {
     event.preventDefault()
@@ -111,31 +117,6 @@ function afterRegister (): void {
   })
 
   // -----------------------------------------------------------------------------
-  let filetreeUpdateLock = false
-  let openDirectoryLock = false
-
-  // Listen for broadcasts from main in order to update the filetree
-  ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
-    if (kind === 'filetree') {
-      if (filetreeUpdateLock) {
-        return
-      }
-
-      filetreeUpdateLock = true
-      app.$store.dispatch('filetreeUpdate')
-        .catch(e => console.error(e))
-        .finally(() => { filetreeUpdateLock = false })
-    } else if (kind === 'openDirectory') {
-      if (openDirectoryLock) {
-        return
-      }
-
-      openDirectoryLock = true
-      app.$store.dispatch('updateOpenDirectory')
-        .catch(e => console.error(e))
-        .finally(() => { openDirectoryLock = false })
-    }
-  })
 
   ipcRenderer.on('targets-provider', (event, what: string) => {
     if (what === 'writing-targets-updated') {
@@ -152,14 +133,6 @@ function afterRegister (): void {
   })
 
   // Initial update
-  filetreeUpdateLock = true
-  openDirectoryLock = true
-  app.$store.dispatch('filetreeUpdate')
-    .catch(e => console.error(e))
-    .finally(() => { filetreeUpdateLock = false })
-  app.$store.dispatch('updateOpenDirectory')
-    .catch(e => console.error(e))
-    .finally(() => { openDirectoryLock = false })
   app.$store.dispatch('documentTree', { event: 'init', context: { windowId } })
     .catch(err => console.error(err))
   app.$store.dispatch('updateModifiedFiles')
@@ -174,7 +147,7 @@ function afterRegister (): void {
   // Further shortcuts we have to listen to
   ipcRenderer.on('shortcut', (event, command) => {
     // Retrieve the correct contexts first
-    const dirDescriptor = app.$store.state.selectedDirectory
+    const dirDescriptor = useOpenDirectoryStore().openDirectory
     const fileDescriptor = app.$store.state.activeFile
 
     if (command === 'new-dir') {

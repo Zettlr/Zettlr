@@ -12,7 +12,6 @@
  * END HEADER
  */
 
-import { trans } from '@common/i18n-main'
 import ZettlrCommand from './zettlr-command'
 
 export default class SetOpenDirectory extends ZettlrCommand {
@@ -27,19 +26,6 @@ export default class SetOpenDirectory extends ZettlrCommand {
    * @param {string} dirPath  Must be the directory path
    */
   async run (evt: string, dirPath: string): Promise<void> {
-    // arg contains a hash for a directory.
-    const dir = this._app.fsal.findDir(dirPath)
-
-    // Now send it back (the GUI should by itself filter out the files)
-    if (dir !== undefined) {
-      this._app.fsal.openDirectory = dir
-    } else {
-      this._app.log.error('Could not find directory', dirPath)
-      this._app.windows.prompt({
-        type: 'error',
-        title: trans('Directory not found'),
-        message: trans('The requested directory was not found.')
-      })
-    }
+    this._app.documents.setOpenDirectory(dirPath)
   }
 }

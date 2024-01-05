@@ -31,7 +31,7 @@ export default class ImportFiles extends ZettlrCommand {
     * @return {void} Does not return.
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    const openDirectory = this._app.fsal.openDirectory
+    const openDirectory = this._app.documents.getOpenDirectory()
     if (openDirectory === null) {
       showNativeNotification(trans('You have to select a directory to import to.'))
       return false
@@ -48,7 +48,7 @@ export default class ImportFiles extends ZettlrCommand {
     }
 
     // First ask the user for a fileList
-    let fileList = await this._app.windows.askFile(fltr, true)
+    const fileList = await this._app.windows.askFile(fltr, true)
     if (fileList.length === 0) {
       // The user seems to have decided not to import anything. Gracefully
       // fail. Not like the German SPD.
@@ -57,8 +57,10 @@ export default class ImportFiles extends ZettlrCommand {
 
     // Now import.
     showNativeNotification(trans('Importing. Please wait …'))
+
     try {
-      let ret = await makeImport(fileList, openDirectory, this._app.assets, (file: string, error: string) => {
+      const openDirDescriptor = await this._app.fsal.getAnyDirectoryDescriptor(openDirectory)
+      let ret = await makeImport(fileList, openDirDescriptor, this._app.assets, (file: string, error: string) => {
         this._app.log.error(`[Importer] Could not import file ${file}: ${error}`)
         // This callback gets called whenever there is an error while running pandoc.
         showNativeNotification(trans('Couldn\'t import %s.', path.basename(file)))
@@ -75,7 +77,7 @@ export default class ImportFiles extends ZettlrCommand {
       // There has been an error on importing (e.g. Pandoc was not found)
       // This catches this and displays it.
       this._app.log.error(`[Importer] Could not import files: ${String(err.message)}`, err)
-      showNativeNotification(trans('The following %s files could not be imported, because their filetype is unknown: %s', fileList.length, ''))
+      showNativeNotification(trans(`Could not import files due to an error: ${err.message as string}`), trans('Import failed'))
     }
 
     return true

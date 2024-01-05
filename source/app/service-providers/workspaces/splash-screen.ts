@@ -75,7 +75,7 @@ export function showSplashScreen (logger: LogProvider): void {
     updateSplashScreen(initSplashScreenMessage, initSplashScreenPercent)
   })
 
-  splashScreen.on('closed', () => {
+  splashScreen.once('closed', () => {
     splashScreen = undefined
   })
 }
@@ -101,4 +101,5 @@ export function closeSplashScreen (): void {
   // NOTE: We must "destroy" the window, because otherwise 'closable: false'
   // will prevent programmatic closing.
   splashScreen?.destroy()
+  splashScreen = undefined
 }
