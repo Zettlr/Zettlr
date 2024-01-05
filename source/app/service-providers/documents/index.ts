@@ -893,8 +893,14 @@ export default class DocumentManager extends ProviderContract {
         if (leaf.tabMan.openFiles.map(x => x.path).includes(filePath)) {
           leaf.tabMan.setPinnedStatus(filePath, false)
           const success = leaf.tabMan.closeFile(filePath)
-          if (success) {
-            this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId: key, leafId: leaf.id, filePath })
+          if (!success) {
+            continue
+          }
+
+          this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId: key, leafId: leaf.id, filePath })
+
+          if (leaf.tabMan.openFiles.length === 0) {
+            this.closeLeaf(key, leaf.id)
           }
         }
       }
