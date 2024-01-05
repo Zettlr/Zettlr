@@ -133,7 +133,6 @@ export default defineComponent({
     ...mapStores(useOpenDirectoryStore),
     selectedDirectory: function () {
       return this['open-directoryStore'].openDirectory
-      // return this.$store.state.selectedDirectory
     },
     noResultsMessage: function (): string {
       return trans('No results')

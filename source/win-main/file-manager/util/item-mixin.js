@@ -54,7 +54,6 @@ export default {
     },
     selectedDir: function () {
       return this['open-directoryStore'].openDirectory
-      // return this.$store.state.selectedDirectory
     }
   },
   watch: {

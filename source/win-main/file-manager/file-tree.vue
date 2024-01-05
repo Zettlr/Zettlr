@@ -148,7 +148,6 @@ export default defineComponent({
     },
     fileTree: function (): AnyDescriptor[] {
       return this.workspacesStore.roots.map(root => root.descriptor)
-      // return this.$store.state.fileTree
     },
     useH1: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('heading')

@@ -129,7 +129,6 @@ export default defineComponent({
     },
     selectedDirectory: function () {
       return this['open-directoryStore'].openDirectory
-      // return this.$store.state.selectedDirectory
     },
     filterPlaceholder: function () {
       return trans('Filter …')
