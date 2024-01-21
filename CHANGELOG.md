@@ -24,6 +24,13 @@ This changes brings Zettlr's link functionality much more into alignment with
 other editors as well, since this is the way that many other applications handle
 links as well.
 
+## Linux ARM builds functionally again
+
+Since Zettlr v3.0.0, Linux users on ARM-machines had the issue that they could
+not run the app, as a dependency has been compiled for the wrong architecture.
+Thanks to efforts by @LaPingvino, this has now been finally fixed and you should
+be able to run the app again just fine on ARM computers with Linux.
+
 ## GUI and Functionality
 
 - **Feature**: Zettlr can now suggest you emojis during autocompletion. Emojis
@@ -45,6 +52,7 @@ links as well.
   as text, instead of offering to insert an image of the selection
 - Fix pasting behavior: Now Zettlr should properly paste most formatted text
   without too much noise (in the form of comments, styles, and other additions)
+- Fix Linux ARM builds
 
 ## Under the Hood
 
