@@ -151,7 +151,7 @@
 </template>
 
 <script lang="ts" setup>
-import { FormField } from './Form.vue'
+import type { FormField } from './Form.vue'
 import TextInput from './elements/Text.vue'
 import Button from './elements/Button.vue'
 import NumberInput from './elements/Number.vue'
@@ -188,9 +188,7 @@ interface Props {
   model: any
 }
 
-interface Emits {
-  (e: 'update:modelValue', newValue: any): void
-}
+type Emits = (e: 'update:modelValue', newValue: any) => void
 
 defineProps<Props>()
 defineEmits<Emits>()
