@@ -604,7 +604,7 @@ body {
       tbody {
         tr {
           td {
-            padding: 1px 4px;
+            padding: 4px;
             margin: 0;
             &:focus {
               outline: 0;

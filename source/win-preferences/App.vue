@@ -454,8 +454,8 @@ export default defineComponent({
           dictionaries.map((dict: string) => {
             values.push({
               selected: this.model.selectedDicts.includes(dict),
-              key: dict,
-              value: resolveLangCode(dict, 'name')
+              value: resolveLangCode(dict, 'name'),
+              key: dict
             })
             return null
           })

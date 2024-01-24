@@ -109,7 +109,7 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
           type: 'list',
           valueType: 'record',
           keyNames: [ 'selected', 'key', 'value' ],
-          columnLabels: [ trans('Active'), trans('Language Code'), trans('Name') ],
+          columnLabels: [ trans('Active'), trans('Language'), trans('Code') ],
           label: trans('Select the languages for which you want to enable automatic spell checking.'),
           model: 'availableDictionaries',
           deletable: false,
