@@ -137,7 +137,7 @@
 import objectToArray from '@common/util/object-to-array'
 import compileSearchTerms from '@common/util/compile-search-terms'
 import TextControl from '@common/vue/form/elements/Text.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
