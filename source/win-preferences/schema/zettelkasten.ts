@@ -13,15 +13,19 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { type FormSchema } from '@common/vue/form/Form.vue'
+import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
 
-export default function (): FormSchema {
-  return {
-    fieldsets: [
-      [
+export function getZettelkastenFields (): PreferencesFieldset[] {
+  return [
+    {
+      title: trans('Zettelkasten IDs'),
+      group: PreferencesGroups.Zettelkasten,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'text',
-          label: trans('ID regular expression'),
+          label: trans('Pattern for Zettelkasten IDs'),
+          info: trans('Uses ECMAScript regular expressions'),
           model: 'zkn.idRE',
           reset: '(\\d{14})' // Default enables the reset button
         },
@@ -30,10 +34,15 @@ export default function (): FormSchema {
           label: trans('Pattern used to generate new IDs'),
           model: 'zkn.idGen',
           reset: '%Y%M%D%h%m%s',
-          info: 'Variables: %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'
+          info: trans('Available Variables: %s', '%Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4')
         }
-      ],
-      [
+      ]
+    },
+    {
+      title: trans('Internal links'),
+      group: PreferencesGroups.Zettelkasten,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'checkbox',
           label: trans('Link with filename only'),
@@ -41,34 +50,42 @@ export default function (): FormSchema {
         },
         {
           type: 'radio',
-          label: trans('When linking files, add the display name …'),
+          label: trans('When linking files, add the document name …'),
           model: 'zkn.linkWithFilename',
           options: {
-            always: trans('always'),
-            withID: trans('only when linking using the ID'),
-            never: trans('never')
+            always: trans('Always'),
+            withID: trans('Only when linking using the ID'),
+            never: trans('Never')
           },
           disabled: window.config.get('zkn.linkFilenameOnly') === true
-        }
-      ],
-      [
+        },
+        { type: 'separator' },
         {
           type: 'checkbox',
-          label: trans('Start a search when following Zettelkasten-links'),
+          label: trans('Start a full-text search when following internal links'),
+          info: trans('The search string will match the content between the brackets: [[ ]].'),
           model: 'zkn.autoSearch'
         },
         {
-          type: 'checkbox',
-          label: trans('Automatically create non-existing files when following internal links'),
-          model: 'zkn.autoCreateLinkedFiles'
+          type: 'separator'
+        },
+        {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Automatically create non-existing files in this folder when following internal links')
+        },
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('For this to work, the folder must be open as a Workspace in Zettlr.')
         },
         {
           type: 'directory',
-          label: trans('Put auto-created files into this directory (must be loaded in Zettlr)'),
           model: 'zkn.customDirectory',
+          placeholder: trans('Path to folder'),
           reset: ''
         }
       ]
-    ]
-  } satisfies FormSchema
+    }
+  ]
 }

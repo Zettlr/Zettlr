@@ -13,12 +13,15 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { type FormSchema } from '@common/vue/form/Form.vue'
+import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
 
-export default function (): FormSchema {
-  return {
-    fieldsets: [
-      [
+export function getCitationFields (): PreferencesFieldset[] {
+  return [
+    {
+      title: trans('Citations'),
+      group: PreferencesGroups.Citations,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'radio',
           label: trans('How would you like autocomplete to insert your citations?'),
@@ -28,13 +31,13 @@ export default function (): FormSchema {
             'in-text': '@Author2015 → Author (2015)',
             'in-text-suffix': '@Author2015 [p. 123] → Author (2015, 123)'
           }
-        }
-      ],
-      [
+        },
+        { type: 'separator' },
         {
           type: 'file',
           label: trans('Citation Database (CSL JSON or BibTex)'),
           model: 'export.cslLibrary',
+          placeholder: trans('Path to file'),
           reset: '',
           filter: {
             'json, yaml, yml, bib': 'CSL JSON or BibTeX',
@@ -46,12 +49,13 @@ export default function (): FormSchema {
           type: 'file',
           label: trans('CSL-Style (optional)'),
           model: 'export.cslStyle',
+          placeholder: trans('Path to file'),
           reset: '',
           filter: {
             csl: 'CSL Style'
           }
         }
       ]
-    ]
-  } satisfies FormSchema
+    }
+  ]
 }

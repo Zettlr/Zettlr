@@ -5,19 +5,19 @@
     <AutocompleteText
       ref="query-input"
       v-model="query"
+      name="query-input"
       v-bind:label="queryInputLabel"
       v-bind:autocomplete-values="recentGlobalSearches"
       v-bind:placeholder="queryInputPlaceholder"
       v-on:keydown.enter="startSearch()"
-      v-on:keydown.tab="($refs['restrict-to-dir-input'] as any).focus()"
     ></AutocompleteText>
     <AutocompleteText
       ref="restrict-to-dir-input"
       v-model="restrictToDir"
+      name="restrict-to-dir-input"
       v-bind:label="restrictDirLabel"
       v-bind:autocomplete-values="directorySuggestions"
       v-bind:placeholder="restrictDirPlaceholder"
-      v-on:confirm="restrictToDir = $event"
       v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
     <!-- Then an always-visible search button ... -->
@@ -137,7 +137,7 @@
 import objectToArray from '@common/util/object-to-array'
 import compileSearchTerms from '@common/util/compile-search-terms'
 import TextControl from '@common/vue/form/elements/Text.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
@@ -314,6 +314,9 @@ export default defineComponent({
   watch: {
     fileTree: function () {
       this.recomputeDirectorySuggestions()
+    },
+    directorySuggestions: function () {
+      console.log(this.directorySuggestions)
     }
   },
   mounted: function () {

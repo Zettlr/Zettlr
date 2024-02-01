@@ -1,37 +1,41 @@
 <template>
-  <div v-bind:class="{ 'checkbox-outer-div-inline': inline }">
-    <div class="form-control cb-group">
-      <label
-        v-bind:class="{
-          checkbox: true,
-          disabled: disabled
-        }"
+  <div
+    v-bind:class="{
+      'form-control': true,
+      'cb-group': true,
+      'checkbox-outer-div-inline': inline
+    }"
+  >
+    <label
+      v-bind:class="{
+        checkbox: true,
+        disabled: disabled
+      }"
+    >
+      <input
+        v-bind:id="fieldID"
+        type="checkbox"
+        v-bind:name="name"
+        value="yes"
+        v-bind:checked="modelValue"
+        v-bind:disabled="disabled"
+        v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
       >
-        <input
-          v-bind:id="fieldID"
-          type="checkbox"
-          v-bind:name="name"
-          value="yes"
-          v-bind:checked="modelValue"
-          v-bind:disabled="disabled"
-          v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
-        >
-        <span class="checkmark"></span>
-      </label>
-      <label
-        v-if="label || info"
-        v-bind:for="fieldID"
-        v-bind:class="{
-          'cb-group-label': true,
-          disabled: disabled
-        }"
-      >
-        <span v-html="label"></span>
-        <div v-if="info" class="info">
-          {{ info }}
-        </div>
-      </label>
-    </div>
+      <span class="checkmark"></span>
+    </label>
+    <label
+      v-if="label || info"
+      v-bind:for="fieldID"
+      v-bind:class="{
+        'cb-group-label': true,
+        disabled: disabled
+      }"
+    >
+      <span v-html="label"></span>
+      <div v-if="info" class="info">
+        {{ info }}
+      </div>
+    </label>
   </div>
 </template>
 
@@ -107,6 +111,10 @@ body {
     grid-template-rows: 100%;
     grid-template-areas: "input label";
     align-items: center;
+
+    &:not(.checkbox-outer-div-inline) {
+      margin: 10px 0;
+    }
 
     .cb-group-label { grid-area: label; }
   }

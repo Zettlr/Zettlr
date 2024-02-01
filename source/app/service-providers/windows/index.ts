@@ -663,11 +663,14 @@ export default class WindowProvider extends ProviderContract {
 
   /**
    * Displays the defaults window
+   *
+   * @param  {string}  preselectTab  Whether to preselect one of the tabs; this
+   *                                 is effectively the URL hash fragment.
    */
-  showDefaultsWindow (): void {
+  showDefaultsWindow (preselectTab?: string): void {
     if (this._assetsWindow === null) {
       const conf = this._retrieveWindowPosition('assets', null)
-      this._assetsWindow = createAssetsWindow(this._logger, this._config, conf)
+      this._assetsWindow = createAssetsWindow(this._logger, this._config, conf, preselectTab)
       this._hookWindowResize(this._assetsWindow, 'assets')
 
       // Dereference the window as soon as it is closed

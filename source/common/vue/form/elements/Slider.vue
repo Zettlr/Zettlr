@@ -74,7 +74,7 @@ body.darwin {
     margin: 6px 0px;
 
     input[type=range] {
-      -webkit-appearance: none;
+      appearance: none;
       width: 100%;
       background-color: transparent;
       border: none;
@@ -90,11 +90,11 @@ body.darwin {
       }
 
       &::-webkit-slider-thumb {
+        appearance: none;
         height: 20px;
-        width: 8px;
+        width: 20px;
         margin-top: -10px;
-        border-radius: 5px;
-        -webkit-appearance: none;
+        border-radius: 10px;
         background-color: white;
         border: 1px solid rgb(195, 195, 195);
         border-top-color: rgb(218, 218, 218);

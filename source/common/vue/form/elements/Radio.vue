@@ -1,10 +1,18 @@
 <template>
-  <div class="radio-group">
-    <p v-html="label"></p>
+  <p class="radio-group-outside-label" v-html="label"></p>
+  <div
+    v-bind:class="{
+      'radio-group-container': true,
+      inline: inline
+    }"
+  >
     <div
       v-for="(optionLabel, key) in options"
       v-bind:key="key"
-      class="cb-group"
+      v-bind:class="{
+        'radio-group': true,
+        inline: inline
+      }"
     >
       <label
         v-bind:class="{
@@ -24,7 +32,7 @@
       <label
         v-bind:for="fieldID(key)"
         v-bind:class="{
-          'cb-group-label': true,
+          'radio-group-label': true,
           disabled: disabled
         }"
       >
@@ -70,6 +78,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    inline: {
+      type: Boolean,
+      default: false
+    },
     options: {
       type: Object,
       default: function () { return {} }
@@ -88,23 +100,34 @@ export default defineComponent({
 @input-size: 14px;
 
 body {
-  .radio-group {
+  .radio-group-container {
     break-inside: avoid;
     margin: 10px 0;
 
     p { font-size: 13px; }
 
     label:not(.radio).disabled { color: grey; }
+
+    &.inline {
+      display: flex;
+      flex-direction: row;
+      column-gap: 40px;
+    }
   }
 
-  .cb-group {
+  .radio-group {
     display: grid;
     grid-template-columns: @input-size * 2 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
-    margin: 6px 0px;
+    align-items: center;
+    margin: 10px 0px;
 
-    .cb-group-label { grid-area: label; }
+    .radio-group-label { grid-area: label; }
+
+    &.inline {
+      display: inline-grid;
+    }
   }
 
   label.radio {
@@ -157,6 +180,8 @@ body.darwin {
   label {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
+
+  .radio-group-outside-label { font-size: 13px; }
 
   label.radio {
     width: @input-size;

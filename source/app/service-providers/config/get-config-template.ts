@@ -45,7 +45,6 @@ export interface ConfigOptions {
   fileMetaTime: 'modtime'|'creationtime'
   sorting: 'natural'|'ascii'
   sortFoldersFirst: boolean
-  sortingTime: 'modtime'|'creationtime'
   muteLines: boolean
   fileManagerMode: 'thin'|'combined'|'expanded'
   fileNameDisplay: 'filename'|'title'|'heading'|'title+heading'
@@ -67,12 +66,11 @@ export interface ConfigOptions {
     idGen: string
     linkFilenameOnly: boolean
     linkWithFilename: 'always'|'never'|'withID'
-    autoCreateLinkedFiles: boolean
     autoSearch: boolean
     customDirectory: string
   }
   editor: {
-    autocompleteAcceptSpace: boolean
+    autocompleteAcceptSpace: boolean // TODO: DEPRECATED
     autocompleteSuggestEmojis: boolean
     autoSave: 'off'|'immediately'|'delayed'
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
@@ -220,7 +218,6 @@ export function getConfigTemplate (): ConfigOptions {
     fileMetaTime: 'modtime', // The time to be displayed in file meta
     sorting: 'natural', // Can be natural or based on ASCII values
     sortFoldersFirst: true, // should folders be shown first in combined fileview
-    sortingTime: 'modtime', // can be modtime or creationtime
     muteLines: true, // Should the editor mute lines in distraction free mode?
     fileManagerMode: 'combined', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
     fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
@@ -243,8 +240,6 @@ export function getConfigTemplate (): ConfigOptions {
       idGen: '%Y%M%D%h%m%s',
       linkFilenameOnly: false,
       linkWithFilename: 'always', // can be always|never|withID
-      // If true, create files that are not found, if forceOpen is called
-      autoCreateLinkedFiles: false,
       autoSearch: true, // Automatically start a search upon following a link?
       customDirectory: '' // If present, saves auto-created files here
     },

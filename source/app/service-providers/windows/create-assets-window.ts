@@ -30,7 +30,7 @@ import type { WindowPosition } from './types'
  * @param   {WindowPosition}  conf  The configuration to load
  * @return  {BrowserWindow}         The loaded log window
  */
-export default function createAssetsWindow (logger: LogProvider, config: ConfigProvider, conf: WindowPosition): BrowserWindow {
+export default function createAssetsWindow (logger: LogProvider, config: ConfigProvider, conf: WindowPosition, preselectTab?: string): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
@@ -55,7 +55,11 @@ export default function createAssetsWindow (logger: LogProvider, config: ConfigP
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
-  window.loadURL(ASSETS_WEBPACK_ENTRY)
+  const effectiveUrl = new URL(ASSETS_WEBPACK_ENTRY)
+  if (preselectTab !== undefined) {
+    effectiveUrl.hash = '#' + preselectTab
+  }
+  window.loadURL(effectiveUrl.toString())
     .catch(e => {
       logger.error(`Could not load URL ${ASSETS_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
@@ -74,7 +78,7 @@ export default function createAssetsWindow (logger: LogProvider, config: ConfigP
   })
 
   // Emitted when the user wants to close the window.
-  window.on('close', (event) => {
+  window.on('close', (_event) => {
     let ses = window.webContents.session
     // Do not "clearCache" because that would only delete my own index files
     ses.clearStorageData({
