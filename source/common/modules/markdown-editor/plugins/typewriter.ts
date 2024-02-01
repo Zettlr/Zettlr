@@ -29,6 +29,10 @@ const typewriterTheme = EditorView.theme({
   '.cm-content': {
     marginTop: '50vh',
     marginBottom: '50vh'
+  },
+  '.cm-gutters': {
+    marginTop: '50vh',
+    marginBottom: '50vh'
   }
 })
 
@@ -106,6 +110,9 @@ export const typewriter = [
       backgroundColor: 'var(--grey-1)',
       marginTop: '-2px',
       marginBottom: '-2px'
+    },
+    '&dark .cm-content .typewriter-active-line': {
+      backgroundColor: 'var(--grey-7)'
     }
   })
 ]
