@@ -31,21 +31,23 @@ import { loadData, trans } from '@common/i18n-main'
 const ZETTLR_VERSION = app.getVersion()
 
 /**
- * The following options require a relaunch after being changed
+ * The following options require a relaunch after being changed. NOTE: These are
+ * implemented as a Map that we can access and save the state whether a dialog
+ * has already been shown for this option so that we don't pesker users.
  */
 const guardOptions = {
-  relaunch: [
-    'appLang',
-    'window.nativeAppearance',
-    'window.vibrancy',
-    'watchdog.activatePolling',
-    'export.useBundledPandoc',
-    'zkn.idRE'
-  ],
+  relaunch: new Map<string, boolean>([
+    [ 'appLang', false ],
+    [ 'window.nativeAppearance', false ],
+    [ 'window.vibrancy', false ],
+    [ 'watchdog.activatePolling', false ],
+    [ 'export.useBundledPandoc', false ],
+    [ 'zkn.idRE', false ]
+  ]),
   // The following options additionally require a clearing of the cache
-  clearCache: [
-    'zkn.idRE'
-  ]
+  clearCache: new Map<string, boolean>([
+    [ 'zkn.idRE', false ]
+  ])
 }
 
 /**
@@ -465,9 +467,14 @@ export default class ConfigProvider extends ProviderContract {
    * @param   {string}  option  The option to check
    */
   private checkOptionForGuard (option: string): void {
-    if (!guardOptions.relaunch.includes(option)) {
+    // If the option is not guarded or the dialog has already been asked,
+    // quietly return.
+    const opt = guardOptions.relaunch.get(option)
+    if (opt === undefined || opt) {
       return
     }
+
+    guardOptions.relaunch.set(option, true)
 
     dialog.showMessageBox({
       message: trans('Changing this option requires a restart to take effect.'),
@@ -483,7 +490,7 @@ export default class ConfigProvider extends ProviderContract {
       .then(({ response }) => {
         if (response === 0) {
           // The user wants to restart now
-          if (guardOptions.clearCache.includes(option)) {
+          if (guardOptions.clearCache.has(option)) {
             // Ensure the cache is cleared on relaunch
             app.relaunch({ args: process.argv.slice(1).concat(['--clear-cache']) })
           } else {

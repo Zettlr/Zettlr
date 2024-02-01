@@ -63,6 +63,7 @@ be able to run the app again just fine on ARM computers with Linux.
 - Fix pasting behavior: Now Zettlr should properly paste most formatted text
   without too much noise (in the form of comments, styles, and other additions)
 - Fix Linux ARM builds
+- Fix restart-dialog showing multiple times for the same options (#4768)
 
 ## Under the Hood
 
@@ -76,6 +77,7 @@ be able to run the app again just fine on ARM computers with Linux.
 - Bump the bundled Pandoc to version `3.1.11`
 - Failure to fetch a link preview will now simply log a verbose message instead
   of an error
+- Reimplement configuration guard options as Maps to allow for volatile state
 
 # 3.0.5
 
