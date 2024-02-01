@@ -18,7 +18,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import createStore, { key as storeKey } from './store'
 import PopupProvider from './popup-provider'
-import { DP_EVENTS } from '@dts/common/documents'
+import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { useOpenDirectoryStore } from './pinia'
 
 const ipcRenderer = window.ipc
@@ -148,7 +148,7 @@ function afterRegister (): void {
   ipcRenderer.on('shortcut', (event, command) => {
     // Retrieve the correct contexts first
     const dirDescriptor = useOpenDirectoryStore().openDirectory
-    const fileDescriptor = app.$store.state.activeFile
+    const fileDescriptor: OpenDocument|null = app.$store.getters.lastLeafActiveFile()
 
     if (command === 'new-dir') {
       if (dirDescriptor === null) {

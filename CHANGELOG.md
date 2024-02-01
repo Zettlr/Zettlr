@@ -67,6 +67,7 @@ be able to run the app again just fine on ARM computers with Linux.
 - Fix the active typewriter line background color in dark mode
 - Fixed an issue where gutter markers were not equally offset when typewriter
   mode was active (#4918)
+- Fixed non-working file deletion menu item (#3894)
 
 ## Under the Hood
 
