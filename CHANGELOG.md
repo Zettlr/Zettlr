@@ -64,6 +64,9 @@ be able to run the app again just fine on ARM computers with Linux.
   without too much noise (in the form of comments, styles, and other additions)
 - Fix Linux ARM builds
 - Fix restart-dialog showing multiple times for the same options (#4768)
+- Fix the active typewriter line background color in dark mode
+- Fixed an issue where gutter markers were not equally offset when typewriter
+  mode was active (#4918)
 
 ## Under the Hood
 
