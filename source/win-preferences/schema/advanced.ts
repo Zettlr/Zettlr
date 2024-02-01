@@ -13,51 +13,56 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { type FormSchema } from '@common/vue/form/Form.vue'
+import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
 
-export default function (): FormSchema {
-  return {
-    fieldsets: [
-      [
+/**
+ * Returns all available advanced preferences settings as a two-dimensional
+ * array where the first index denotes fieldsets, and the second are the
+ * individual controls in there.
+ *
+ * @return  {Fieldset[]}  The fields
+ */
+export function getAdvancedFields (): PreferencesFieldset[] {
+  return [
+    {
+      title: trans('Pattern for new file names'),
+      group: PreferencesGroups.Advanced,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'text',
-          label: trans('Pattern for new filenames'),
+          label: trans('Define a pattern for new file names'),
           model: 'newFileNamePattern',
-          info: 'Variables: %id, %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'
+          info: trans('Available variables: %s', '%id, %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'),
+          reset: '%id.md',
+          group: 'advanced'
         },
         {
           type: 'checkbox',
           label: trans('Do not prompt for filename when creating new files'),
-          model: 'newFileDontPrompt'
+          model: 'newFileDontPrompt',
+          group: 'advanced'
         }
-      ],
-      [
-        {
-          type: 'checkbox',
-          label: trans('Enable debug mode'),
-          model: 'debug'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Notify me about beta releases'),
-          model: 'checkForBeta'
-        },
+      ]
+    },
+    {
+      title: trans('Appearance'),
+      group: PreferencesGroups.Advanced,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'checkbox',
           label: trans('Use native window appearance'),
+          info: trans('Only available on Linux; this is the default for macOS and Windows.'),
           model: 'window.nativeAppearance',
           disabled: process.platform !== 'linux'
         },
         {
           type: 'checkbox',
           label: trans('Enable window vibrancy'),
+          info: trans('Only available on macOS; makes the window background opaque.'),
           model: 'window.vibrancy',
           disabled: process.platform !== 'darwin'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Delete items irreversibly, if moving them to trash fails'),
-          model: 'system.deleteOnFail'
         },
         {
           type: 'checkbox',
@@ -68,43 +73,52 @@ export default function (): FormSchema {
           disabled: process.env.ZETTLR_IS_TRAY_SUPPORTED === '0',
           info: process.env.ZETTLR_TRAY_ERROR
         },
-        {
-          type: 'checkbox',
-          label: trans('Automatically check for updates'),
-          model: 'system.checkForUpdates'
-        }
-      ],
-      [
-        {
-          type: 'token',
-          label: trans('Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognised after a restart.'),
-          model: 'attachmentExtensions'
-        }
-      ],
-      [
+        { type: 'separator' },
         {
           type: 'radio',
           model: 'system.zoomBehavior',
           label: trans('Zoom behavior'),
+          inline: true,
           options: {
-            gui: trans('Zoom resizes the whole GUI'),
-            editor: trans('Zoom changes the editor font size')
+            gui: trans('Resizes the whole GUI'),
+            editor: trans('Changes the editor font size')
           }
         }
-      ],
-      [
+      ]
+    },
+    {
+      title: trans('Attachments sidebar'),
+      group: PreferencesGroups.Advanced,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'token',
+          label: trans('File extensions to be visible in the Attachments sidebar'),
+          model: 'attachmentExtensions'
+        }
+      ]
+    },
+    {
+      title: trans('Iframe rendering whitelist'),
+      group: PreferencesGroups.Advanced,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'list',
           valueType: 'simpleArray',
-          label: trans('iFrame rendering whitelist'),
           model: 'system.iframeWhitelist',
           deletable: true,
           columnLabels: [trans('Hostname')],
           searchable: true,
-          searchLabel: trans('Search for entries …')
+          searchLabel: trans('Filter')
         }
-      ],
-      [
+      ]
+    },
+    {
+      title: trans('Watchdog polling'),
+      group: PreferencesGroups.Advanced,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'checkbox',
           label: trans('Activate Watchdog polling'),
@@ -117,6 +131,43 @@ export default function (): FormSchema {
           disabled: window.config.get('watchdog.activatePolling') === false
         }
       ]
-    ]
-  } satisfies FormSchema
+    },
+    {
+      title: trans('Deleting items'),
+      group: PreferencesGroups.Advanced,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'checkbox',
+          label: trans('Delete items irreversibly, if moving them to trash fails'),
+          model: 'system.deleteOnFail'
+        }
+      ]
+    },
+    {
+      title: trans('Debug mode'),
+      group: PreferencesGroups.Advanced,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'checkbox',
+          label: trans('Enable debug mode'),
+          model: 'debug',
+          group: 'advanced'
+        }
+      ]
+    },
+    {
+      title: trans('Beta releases'),
+      group: PreferencesGroups.Advanced,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'checkbox',
+          label: trans('Notify me about beta releases'),
+          model: 'checkForBeta'
+        }
+      ]
+    }
+  ]
 }

@@ -36,7 +36,6 @@ export default class ForceOpen extends ZettlrCommand {
     // Determine if the file should be created, if it can't be found. For this
     // we need both the respective preferences setting and an auto-search
     // command.
-    const autoCreate: boolean = this._app.config.get('zkn.autoCreateLinkedFiles')
     const customDir: string = this._app.config.get('zkn.customDirectory')
 
     const file = this._app.workspaces.findExact(linkContents)

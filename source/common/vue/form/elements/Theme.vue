@@ -5,7 +5,10 @@
       <div
         v-for="(theme, index) in options"
         v-bind:key="index"
-        class="theme-container-item"
+        v-bind:class="{
+          'theme-container-item': true,
+          selected: modelValue === index
+        }"
       >
         <!-- NOTE: "index" here is not actually an index number but the theme's name -->
         <div
@@ -38,28 +41,14 @@
             <div class="file-list-item"></div>
           </div>
           <div class="editor">
-            <p>{{ theme.name }}</p>
+            <p>Aa</p>
           </div>
         </div>
         <!-- Now, add some metadata -->
         <div class="theme-metadata">
           <p class="theme-name">
-            {{ theme.name }}:
+            {{ theme.name }}
           </p>
-          <div
-            v-if="index === modelValue"
-            class="selected-button"
-          >
-            {{ selectedLabel }}
-          </div>
-          <div
-            v-else
-            class="not-selected-button"
-            v-on:click="selectTheme(index)"
-          >
-            {{ selectLabel }}
-          </div>
-          <p>{{ theme.description }}</p>
         </div>
       </div>
     </div>
@@ -81,7 +70,6 @@
  * END HEADER
  */
 
-import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 
 export interface ThemeDescriptor {
@@ -109,14 +97,6 @@ export default defineComponent({
     }
   },
   emits: ['update:modelValue'],
-  computed: {
-    selectedLabel: function () {
-      return trans('selected')
-    },
-    selectLabel: function () {
-      return trans('click to select')
-    }
-  },
   methods: {
     style: function (themeObject: ThemeDescriptor) {
       return `color: ${themeObject.textColor}; border-color: ${themeObject.textColor}; background-color: ${themeObject.backgroundColor}; font-family: ${themeObject.fontFamily}`
@@ -139,22 +119,29 @@ p#theme-selection-label { font-size: 13px; }
 
 div#theme-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
   font-size: 13px;
+  justify-content: center;
+  align-items: center;
+  width:100%;
 
   div.theme-container-item {
     padding: 20px;
-    display: grid;
-    grid-template-columns: 200px auto;
-    grid-template-areas: "mockup description";
+    flex: 0;
+    text-align: center;
+    opacity: 0.5;
+    transition: 0.3s opacity ease;
+
+    &:hover, &.selected {
+      opacity: 1;
+    }
 
     div.theme-mockup {
-      width: 200px;
-      height: 150px;
+      width: 150px;
+      height: 100px;
+      aspect-ratio: 1 / 1;
       position: relative;
-      grid-area: "mockup";
       overflow: hidden;
       border-radius: 5px;
       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .1);
@@ -163,7 +150,7 @@ div#theme-container {
 
       // On hover scale them up
       &:hover {
-        transform: scale(1.2);
+        // transform: scale(1.2);
         box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, .4);
       }
 
@@ -173,14 +160,13 @@ div#theme-container {
         top: 3px;
         left: 3px;
         display: flex;
-        width: 30%;
-        height: 12px;
+        height: 8px;
 
         div.traffic-light-close,
         div.traffic-light-min,
         div.traffic-light-full {
-          width: 10px;
-          height: 10px;
+          width: 6px;
+          height: 6px;
           border-radius: 100%;
           margin: 2px;
         }
@@ -197,14 +183,14 @@ div#theme-container {
         top: 0;
         left: 0;
         right: 0;
-        height: 20px;
+        height: 14px;
         background-color: rgba(240, 240, 240, 1);
       }
 
       // File list
       div.file-list {
         position: absolute;
-        top: 20px;
+        top: 14px;
         bottom:0px;
         left: 0px;
         width: 30%;
@@ -243,10 +229,10 @@ div#theme-container {
 
     div.theme-metadata {
       padding: 20px;
-      grid-area: "description";
 
       p.theme-name {
         display: inline-block;
+        white-space: nowrap;
         font-weight: bold;
         margin-right: 5px;
       }

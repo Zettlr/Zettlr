@@ -162,7 +162,7 @@ export default class FSAL extends ProviderContract {
       this._config.get('sortFoldersFirst'),
       this._config.get('fileNameDisplay'),
       this._config.get('appLang'),
-      this._config.get('sortingTime')
+      this._config.get('fileMetaTime')
     )
   }
 

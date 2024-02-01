@@ -140,7 +140,7 @@ export default defineComponent({
     }
   },
   watch: {
-    lastActiveFile (oldval, newval) {
+    lastActiveFile () {
       this.recomputeRelatedFiles().catch(err => console.error('Could not recompute related files:', err))
     }
   },

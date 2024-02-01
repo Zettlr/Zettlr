@@ -83,7 +83,7 @@
 import SplitView from '@common/vue/window/SplitView.vue'
 import SelectableList from '@common/vue/form/elements/SelectableList.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import CodeEditor from '@common/vue/CodeEditor.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
@@ -165,7 +165,9 @@ export default defineComponent({
           const infoString = (file.isInvalid) ? 'Invalid' : [ reader, writer ].join(' → ')
 
           return {
-            displayText: this.getDisplayText(file),
+            displayText: file.name.substring(0, file.name.lastIndexOf('.')),
+            icon: file.isProtected === true ? 'lock' : undefined,
+            solidIcon: true,
             infoString,
             infoStringClass: file.isInvalid ? 'error' : undefined
           }
@@ -179,13 +181,13 @@ export default defineComponent({
     }
   },
   watch: {
-    which: function (newValue, oldValue) {
+    which: function () {
       // Reset to the beginning of the list. The watcher right below will pick
       // that change up and re-load the defaults.
       this.currentItem = -1
       this.loadDefaultsForState().catch(e => console.error(e))
     },
-    currentItem: function (newValue, oldValue) {
+    currentItem: function () {
       this.loadDefaultsForState().catch(e => console.error(e))
     },
     editorContents: function () {
@@ -326,19 +328,6 @@ export default defineComponent({
           await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
         })
         .catch(err => console.error(err))
-    },
-    getDisplayText: function (profile: PandocProfileMetadata): string {
-      let name = profile.name
-      // First, strip off the extension
-      name = name.substring(0, name.lastIndexOf('.'))
-      // If the file is protected, indicate this in the list, using a lock emoji
-      // To get the lock symbol's JS representation you have to do weird tricks:
-      // Get the char code (! not codePoint) at the first (0) and second (1)
-      // position and prepend that with \u
-      if (profile.isProtected === true) {
-        name = '\ud83d\udd12 ' + name
-      }
-      return name
     }
   }
 })
