@@ -311,19 +311,8 @@ export default defineComponent({
           icon: 'cpu',
           id: PreferencesGroups.Advanced
         }
-      ] as WindowTab[],
-      // Will be populated afterwards, contains the user dict
-      userDictionaryContents: [],
-      // Will be populated afterwards, contains all dictionaries
-      availableDictionaries: [],
-      // Will be populated afterwards, contains the available languages
-      appLangOptions: {} as any,
-      // This will return the full object
-      config: (global as any).config.get(),
-      schema: { fieldsets: [] } satisfies FormSchema
-    }
-  },
-  computed: {
+      ]
+    },
     windowTitle: function (): string {
       if (this.query !== '') {
         return trans('Searching: %s', this.query)
