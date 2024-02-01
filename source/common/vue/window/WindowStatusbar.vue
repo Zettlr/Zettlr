@@ -38,7 +38,7 @@
  */
 
 // Regular form button, but a static text display
-import ButtonControl from '../form/elements/Button.vue'
+import ButtonControl from '../form/elements/ButtonControl.vue'
 
 export default {
   name: 'WindowStatusbar',

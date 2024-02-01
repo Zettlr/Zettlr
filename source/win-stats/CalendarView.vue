@@ -88,7 +88,7 @@
 
 import { DateTime } from 'luxon'
 import { trans } from '@common/i18n-renderer'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import { defineComponent, type PropType } from 'vue'
 import localiseNumber from '@common/util/localise-number'
 

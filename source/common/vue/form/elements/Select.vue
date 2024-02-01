@@ -1,10 +1,11 @@
 <template>
-  <div v-bind:class="{ 'inline': inline, 'form-control': true }">
+  <div v-bind:class="{ inline: inline, 'form-control': true }">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
     <select
       v-bind:id="fieldID"
       ref="input"
       v-bind:name="name"
+      v-bind:class="{ inline: inline }"
       v-on:input="$emit('update:modelValue', selectInput.value)"
     >
       <option

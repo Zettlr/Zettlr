@@ -89,7 +89,7 @@ import {
   type ChartConfiguration
 } from 'chart.js'
 import SelectControl from '@common/vue/form/elements/Select.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import { defineComponent, type PropType } from 'vue'
 
 // Register the components of Chart.js which we need
