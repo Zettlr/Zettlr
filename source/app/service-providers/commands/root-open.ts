@@ -20,6 +20,8 @@ import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import { showNativeNotification } from '@common/util/show-notification'
 import { type DirDescriptor } from '@dts/common/fsal'
+import isFile from '@common/util/is-file'
+import isDir from '@common/util/is-dir'
 
 export default class RootOpen extends ZettlrCommand {
   constructor (app: any) {
@@ -118,31 +120,38 @@ export default class RootOpen extends ZettlrCommand {
     const leafId = this._app.documents.leafIds(winKey)[0]
 
     for (const absPath of pathlist) {
+      const isFile = await this._app.fsal.isFile(absPath)
+      const isDir = await this._app.fsal.isDir(absPath)
       // First check if this thing is already added. If so, simply write
       // the existing file/dir into the newFile/newDir vars. They will be
       // opened accordingly.
-      if ((newFile = this._app.workspaces.findFile(absPath)) !== undefined) {
+      if (isFile && (newFile = this._app.workspaces.findFile(absPath)) !== undefined) {
         // Open the file immediately
         await this._app.documents.openFile(winKey, leafId, newFile.path, true)
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
         newDir = this._app.workspaces.findDir(newFile.dir)
-      } else if ((newDir = this._app.workspaces.findDir(absPath)) != null) {
+      } else if (isDir && (newDir = this._app.workspaces.findDir(absPath)) != null) {
         // Do nothing
-      } else if (this._app.config.addPath(absPath)) {
+      } else {
+        // The path is not yet loaded -> load it now. NOTE: Adding a path will
+        // automatically load it if it was a directory.
+        const addedToConfig = this._app.config.addPath(absPath)
+        if (!addedToConfig) {
+          this._app.log.error(`Could not open root ${absPath} because it was an ignored directory/file.`)
+          continue
+        }
+
+        if (!isFile) {
+          continue // We are done here
+        }
+
         try {
-          if (await this._app.fsal.isDir(absPath)) {
-            showNativeNotification(trans('Opening new root %s …', path.basename(absPath)))
-          }
           // If it was a file and not a directory, immediately open it.
           const file = await this._app.fsal.getDescriptorForAnySupportedFile(absPath)
           if (file !== undefined && file.type !== 'other') {
             await this._app.documents.openFile(winKey, leafId, file.path, true)
-          }
-
-          if (await this._app.fsal.isDir(absPath)) {
-            showNativeNotification(trans('%s has been loaded.', path.basename(absPath)))
           }
         } catch (err: any) {
           // Something went wrong, so remove the path again.
@@ -150,9 +159,6 @@ export default class RootOpen extends ZettlrCommand {
           this._app.log.error(`Could not open root ${absPath}: ${err.message as string}`, err)
           this._app.windows.reportFSError('Could not open new root', err)
         }
-      } else {
-        showNativeNotification(trans('Could not open workspace %s.', path.basename(absPath)))
-        this._app.log.error(`Could not open new root ${absPath}!`)
       }
     }
 
