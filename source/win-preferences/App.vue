@@ -75,6 +75,7 @@ import { getSpellcheckingFields } from './schema/spellchecking'
 import { getAutocorrectFields } from './schema/autocorrect'
 import { getAdvancedFields } from './schema/advanced'
 import { defineComponent } from 'vue'
+import { type WindowTab } from '@dts/renderer/window'
 import { resolveLangCode } from '@common/util/map-lang-code'
 import { type FormSchema, type Fieldset } from '@common/vue/form/Form.vue'
 import SplitView from '@common/vue/window/SplitView.vue'
@@ -310,8 +311,19 @@ export default defineComponent({
           icon: 'cpu',
           id: PreferencesGroups.Advanced
         }
-      ]
-    },
+      ] as WindowTab[],
+      // Will be populated afterwards, contains the user dict
+      userDictionaryContents: [],
+      // Will be populated afterwards, contains all dictionaries
+      availableDictionaries: [],
+      // Will be populated afterwards, contains the available languages
+      appLangOptions: {} as any,
+      // This will return the full object
+      config: (global as any).config.get(),
+      schema: { fieldsets: [] } satisfies FormSchema
+    }
+  },
+  computed: {
     windowTitle: function (): string {
       if (this.query !== '') {
         return trans('Searching: %s', this.query)
