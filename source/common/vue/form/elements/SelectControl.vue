@@ -34,7 +34,7 @@
  * END HEADER
  */
 
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, toRef } from 'vue'
 
 const props = defineProps<{
   modelValue: string
@@ -47,6 +47,10 @@ const props = defineProps<{
 const inputValue = ref<string>(props.modelValue)
 
 const emit = defineEmits<(e: 'update:modelValue', val: string) => void>()
+
+watch(toRef(props, 'modelValue'), () => {
+  inputValue.value = props.modelValue
+})
 
 watch(inputValue, () => {
   emit('update:modelValue', inputValue.value)
