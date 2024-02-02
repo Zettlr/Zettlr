@@ -111,6 +111,7 @@
               v-else-if="columnType(colIdx) === 'number'"
               v-bind:placeholder="colLabel"
               v-bind:inline="true"
+              v-bind:model-value="0"
               v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
@@ -152,7 +153,7 @@
 
 import Checkbox from './CheckboxControl.vue'
 import TextControl from './Text.vue'
-import NumberControl from './Number.vue'
+import NumberControl from './NumberControl.vue'
 
 import { trans } from '@common/i18n-renderer'
 import { computed, onBeforeUpdate, ref } from 'vue'
@@ -160,12 +161,12 @@ import { computed, onBeforeUpdate, ref } from 'vue'
 /**
  * What types of values can our cells have?
  */
-export type SupportedValues = boolean|string
+export type SupportedValues = boolean|string|number
 
 /**
  * If the user passes a record, we need a Record of our SupportedValues
  */
-export type SupportedRecord = Record<string, string|boolean>
+export type SupportedRecord = Record<string, SupportedValues>
 
 const props = defineProps<{
   /**
@@ -301,13 +302,6 @@ const objectKeys = computed<string[]|undefined>(() => {
   } else {
     return undefined
   }
-})
-
-/**
- * The amount of columns for the datatable
- */
-const numColumns = computed<number>(() => {
-  return props.columnLabels.length + (props.addable || props.deletable ? 1 : 0)
 })
 
 /**

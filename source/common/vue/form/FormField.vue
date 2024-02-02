@@ -154,7 +154,7 @@
 import type { FormField } from './Form.vue'
 import TextInput from './elements/Text.vue'
 import Button from './elements/ButtonControl.vue'
-import NumberInput from './elements/Number.vue'
+import NumberInput from './elements/NumberControl.vue'
 import TimeInput from './elements/Time.vue'
 import ColorInput from './elements/ColorControl.vue'
 import FileInput from './elements/FileControl.vue'
