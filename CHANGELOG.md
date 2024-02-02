@@ -90,6 +90,8 @@ be able to run the app again just fine on ARM computers with Linux.
 - Failure to fetch a link preview will now simply log a verbose message instead
   of an error
 - Reimplement configuration guard options as Maps to allow for volatile state
+- Begin migrating application state to Pinia
+- Upgrade Electron to v26
 
 # 3.0.5
 

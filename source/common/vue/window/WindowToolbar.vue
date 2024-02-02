@@ -82,7 +82,7 @@ import ToggleControl from './toolbar-controls/Toggle.vue'
 import ThreeWayToggle from './toolbar-controls/ThreeWayToggle.vue'
 import SearchControl from './toolbar-controls/Search.vue'
 import SpacerControl from './toolbar-controls/Spacer.vue'
-import TextControl from './toolbar-controls/TextControl.vue'
+import TextControl from './toolbar-controls/Text.vue'
 import { defineComponent, type PropType } from 'vue'
 import { type ToolbarControl } from '@dts/renderer/window'
 
