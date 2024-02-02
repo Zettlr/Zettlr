@@ -72,6 +72,8 @@ be able to run the app again just fine on ARM computers with Linux.
   last main window on Windows or Linux (#4898)
 - Fixed a bug that would not properly restore the open directory on application
   boot (#3797)
+- Fixed an issue that would break drag & drop behavior of editor panes when the
+  pathname contained a colon on non-Windows systems (#4822)
 
 ## Under the Hood
 
