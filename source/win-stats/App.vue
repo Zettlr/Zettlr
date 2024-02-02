@@ -19,15 +19,8 @@
       v-bind:aria-labelledby="tabs[currentTab].id"
       style="height: 100%;"
     >
-      <CalendarView
-        v-if="currentTab === 0"
-        v-bind:word-counts="wordCounts"
-        v-bind:monthly-average="avgMonth"
-      ></CalendarView>
-      <ChartView
-        v-if="currentTab === 1"
-        v-bind:word-counts="wordCounts"
-      ></ChartView>
+      <CalendarView v-if="currentTab === 0"></CalendarView>
+      <ChartView v-if="currentTab === 1"></ChartView>
       <FSALView
         v-if="currentTab === 2"
       ></FSALView>
@@ -58,12 +51,9 @@ import CalendarView from './CalendarView.vue'
 import ChartView from './ChartView.vue'
 import FSALView from './FSALView.vue'
 import { trans } from '@common/i18n-renderer'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { type WindowTab } from '@dts/renderer/window'
 import GraphView from './GraphView.vue'
-import { type Stats } from '@providers/stats'
-
-const ipcRenderer = window.ipc
 
 const tabs: WindowTab[] = [
   {
@@ -94,34 +84,12 @@ const tabs: WindowTab[] = [
 
 const currentTab = ref<number>(0)
 
-const statisticsData = ref<Stats>({
-  wordCount: {},
-  pomodoros: {},
-  avgMonth: 0,
-  today: 0,
-  sumMonth: 0
-})
-
 const windowTitle = computed<string>(() => {
   if (process.platform === 'darwin') {
     return tabs[currentTab.value].label
   } else {
     return trans('Writing statistics')
   }
-})
-
-const wordCounts = computed<Record<string, number>>(() => {
-  return statisticsData.value.wordCount ?? {}
-})
-
-const avgMonth = computed<number>(() => {
-  return statisticsData.value.avgMonth
-})
-
-onMounted(() => {
-  ipcRenderer.invoke('stats-provider', { command: 'get-data' })
-    .then(data => { statisticsData.value = data })
-    .catch(err => console.error(err))
 })
 </script>
 

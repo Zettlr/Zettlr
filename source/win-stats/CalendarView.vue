@@ -91,11 +91,9 @@ import { trans } from '@common/i18n-renderer'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import { ref, computed } from 'vue'
 import localiseNumber from '@common/util/localise-number'
+import { useStatisticsStore } from '../pinia/statistics-store'
 
-const props = defineProps<{
-  wordCounts: Record<string, number>
-  monthlyAverage: number
-}>()
+const statisticsStore = useStatisticsStore()
 
 // STATIC VARIABLES
 const calendarLabel = trans('Calendar')
@@ -132,7 +130,7 @@ const year = computed<number>(() => now.value.year)
 const isCurrentYear = computed<boolean>(() => DateTime.local().year === now.value.year)
 const isMinimumYear = computed<boolean>(() => {
   // Returns true if `now` holds the minimum year for which there is data
-  const years = Object.keys(props.wordCounts).map(k => parseInt(k.substring(0, 4), 10))
+  const years = Object.keys(statisticsStore.stats.wordCount).map(k => parseInt(k.substring(0, 4), 10))
   let min = +Infinity
   for (const year of years) {
     if (min > year) {
@@ -179,15 +177,15 @@ function getActivityScore (year: number, month: number, date: number): number {
     parsedDate = `0${date}`
   }
 
-  const wordCount = props.wordCounts[`${year}-${parsedMonth}-${parsedDate}`]
+  const wordCount = statisticsStore.stats.wordCount[`${year}-${parsedMonth}-${parsedDate}`]
 
   if (wordCount === undefined || wordCount === 0) {
     return -1
-  } else if (wordCount < props.monthlyAverage / 2) {
+  } else if (wordCount < statisticsStore.stats.avgMonth / 2) {
     return 0
-  } else if (wordCount < props.monthlyAverage) {
+  } else if (wordCount < statisticsStore.stats.avgMonth) {
     return 1
-  } else if (wordCount < props.monthlyAverage * 2) {
+  } else if (wordCount < statisticsStore.stats.avgMonth * 2) {
     return 2 // Less than twice the monthly average
   } else {
     return 3 // More than twice the monthly average
@@ -206,7 +204,7 @@ function getLocalizedWordCount (year: number, month: number, date: number): stri
     parsedDate = `0${date}`
   }
 
-  const wordCount = props.wordCounts[`${year}-${parsedMonth}-${parsedDate}`]
+  const wordCount = statisticsStore.stats.wordCount[`${year}-${parsedMonth}-${parsedDate}`]
   return wordCount !== undefined ? localiseNumber(wordCount) : ''
 }
 
