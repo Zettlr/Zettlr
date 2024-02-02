@@ -152,7 +152,7 @@
  */
 
 import Checkbox from './CheckboxControl.vue'
-import TextControl from './Text.vue'
+import TextControl from './TextControl.vue'
 import NumberControl from './NumberControl.vue'
 
 import { trans } from '@common/i18n-renderer'

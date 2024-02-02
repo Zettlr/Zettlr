@@ -75,7 +75,7 @@
 
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import Checkbox from '@common/vue/form/elements/CheckboxControl.vue'
-import TextControl from '@common/vue/form/elements/Text.vue'
+import TextControl from '@common/vue/form/elements/TextControl.vue'
 import NumberControl from '@common/vue/form/elements/NumberControl.vue'
 import File from '@common/vue/form/elements/FileControl.vue'
 import { trans } from '@common/i18n-renderer'

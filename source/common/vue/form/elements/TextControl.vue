@@ -1,34 +1,34 @@
 <template>
-  <div v-bind:class="{ 'inline': inline, 'form-control': true }">
+  <div v-bind:class="{ inline: inline === true, 'form-control': true }">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
     <div
       v-bind:class="{
         'input-text-button-group': true,
-        'has-icon': searchIcon,
+        'has-icon': searchIcon === true,
         'has-reset': reset
       }"
     >
-      <cds-icon v-if="searchIcon" shape="search" class="input-text-button-group-icon"></cds-icon>
+      <cds-icon v-if="searchIcon === true" shape="search" class="input-text-button-group-icon"></cds-icon>
       <input
         v-bind:id="fieldID"
-        ref="input"
+        ref="textField"
+        v-model="inputValue"
         type="text"
-        v-bind:value="modelValue"
-        v-bind:class="{ 'inline': inline }"
+        v-bind:class="{ inline: inline === true }"
         v-bind:placeholder="placeholder"
         v-bind:autofocus="autofocus"
         v-bind:disabled="disabled"
-        v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-        v-on:keyup.enter="$emit('confirm', ($event.target as HTMLInputElement).value)"
-        v-on:keyup.esc="$emit('escape', ($event.target as HTMLInputElement).value)"
-        v-on:blur="$emit('blur', ($event.target as HTMLInputElement).value)"
+        v-on:input="emit('update:modelValue', inputValue)"
+        v-on:keyup.enter="emit('confirm', inputValue)"
+        v-on:keyup.esc="emit('escape', inputValue)"
+        v-on:blur="emit('blur', inputValue)"
       >
       <button
-        v-if="reset"
+        v-if="props.reset !== undefined"
         type="button"
         class="input-reset-button"
         v-bind:title="resetLabel"
-        v-on:click="resetValue"
+        v-on:click="emit('update:modelValue', typeof props.reset === 'boolean' ? '' : props.reset)"
       >
         &times;
       </button>
@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -52,79 +52,48 @@
  * END HEADER
  */
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
+import { computed, ref, watch, toRef } from 'vue'
 
-export default defineComponent({
-  name: 'FieldText',
-  props: {
-    autofocus: {
-      type: Boolean,
-      default: false
-    },
-    modelValue: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    placeholder: {
-      type: String,
-      default: ''
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    name: {
-      type: String,
-      default: ''
-    },
-    reset: {
-      type: [ String, Boolean ],
-      default: false
-    },
-    inline: {
-      type: Boolean,
-      default: false
-    },
-    info: {
-      type: String,
-      default: ''
-    },
-    searchIcon: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: [ 'update:modelValue', 'confirm', 'escape', 'blur' ],
-  computed: {
-    fieldID: function () {
-      return 'field-input-' + this.name
-    },
-    resetLabel: function () {
-      return trans('Reset')
-    },
-    inputRef (): HTMLInputElement {
-      return this.$refs.input as HTMLInputElement
-    }
-  },
-  methods: {
-    resetValue: function (event: MouseEvent) {
-      const resetVal = typeof this.reset === 'string' ? this.reset : ''
-      this.inputRef.value = resetVal
-      this.focus()
-      this.$emit('update:modelValue', resetVal)
-    },
-    focus: function () {
-      this.inputRef.focus()
-    },
-    select: function () {
-      this.inputRef.select()
-    }
-  }
+const props = defineProps<{
+  autofocus?: boolean
+  modelValue: string
+  disabled?: boolean
+  placeholder?: string
+  label?: string
+  name?: string
+  reset?: string|boolean
+  inline?: boolean
+  info?: string
+  searchIcon?: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+  (e: 'confirm', value: string): void
+  (e: 'escape', value: string): void
+  (e: 'blur', value: string): void
+}>()
+
+const fieldID = computed<string>(() => 'field-input-' + props.name ?? '')
+const textField = ref<HTMLInputElement|null>(null)
+
+const inputValue = ref<string>(props.modelValue)
+
+watch(toRef(props, 'modelValue'), () => {
+  inputValue.value = props.modelValue
 })
+
+const resetLabel = trans('Reset')
+
+function focus (): void {
+  textField.value?.focus()
+}
+
+function select (): void {
+  textField.value?.select()
+}
+
+defineExpose({ select, focus })
 </script>
 
 <style lang="less">
