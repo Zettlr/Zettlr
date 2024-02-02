@@ -16,14 +16,15 @@
 
 import windowRegister from '../common/modules/window-register'
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 
 const ipcRenderer = window.ipc
 
 windowRegister()
   .then(() => {
-    const app = createApp(App)
-    app.mount('#app')
+    const pinia = createPinia()
+    const app = createApp(App).use(pinia).mount('#app')
 
     // This window will be closed immediately on a window-close command
     ipcRenderer.on('shortcut', (event, shortcut) => {

@@ -18,6 +18,7 @@ import { app, ipcMain } from 'electron'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
+import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
 
 export interface Stats {
   wordCount: Record<string, number> // All words for the graph
@@ -111,6 +112,7 @@ export default class StatsProvider extends ProviderContract {
     // Trigger a save. _recompute is being called from all the different setters
     // after anything changes. NOTE: Remember this for future stuff!
     this.container.set(this.stats)
+    broadcastIPCMessage('stats-updated', this.stats)
   }
 
   /**
