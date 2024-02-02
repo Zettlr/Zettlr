@@ -1,5 +1,12 @@
 # Upcoming
 
+## Dropping Support for macOS 10.13 and 10.14
+
+Due to Zettlr's underlying Electron framework dropping support for macOS 10.13
+(High Sierra) and 10.14 (Mojave), Zettlr drops support for these operating
+systems as well. To continue to use Zettlr on a Mac, ensure to update to at
+least macOS 10.15 (Catalina).
+
 ## Changes to the link detection
 
 For a long time now, Zettlr would (sometimes aggressively so) detect plain links
@@ -91,7 +98,7 @@ be able to run the app again just fine on ARM computers with Linux.
   of an error
 - Reimplement configuration guard options as Maps to allow for volatile state
 - Begin migrating application state to Pinia
-- Upgrade Electron to v26
+- Upgrade Electron to v27
 
 # 3.0.3
 
