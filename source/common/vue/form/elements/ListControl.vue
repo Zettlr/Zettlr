@@ -100,6 +100,7 @@
           <td v-for="(colLabel, colIdx) in columnLabels" v-bind:key="colIdx">
             <Checkbox
               v-if="columnType(colIdx) === 'boolean'"
+              v-bind:model-value="true"
               v-bind:placeholder="colLabel"
               v-bind:inline="true"
               v-on:update:model-value="valuesToAdd[colIdx] = $event"
@@ -149,7 +150,7 @@
  * END HEADER
  */
 
-import Checkbox from './Checkbox.vue'
+import Checkbox from './CheckboxControl.vue'
 import TextControl from './Text.vue'
 import NumberControl from './Number.vue'
 
