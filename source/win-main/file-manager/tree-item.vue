@@ -149,7 +149,6 @@ import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 import { mapStores } from 'pinia'
 import { useOpenDirectoryStore } from '../pinia'
 
-const path = window.path
 const ipcRenderer = window.ipc
 
 export default defineComponent({
@@ -298,7 +297,8 @@ export default defineComponent({
      * Returns the (containing) directory name.
      */
     dirname: function (): string {
-      return path.basename(this.obj.dir)
+      const DELIM = process.platform === 'win32' ? '\\' : '/'
+      return this.obj.dir.split(DELIM).reverse()[0]
     },
     /**
      * Returns a list of children that can be displayed inside the tree view
