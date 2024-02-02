@@ -40,7 +40,7 @@
  */
 
 import RadioControl from '@common/vue/form/elements/RadioControl.vue'
-import SelectControl from '@common/vue/form/elements/Select.vue'
+import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { defineComponent } from 'vue'
 import { type PandocProfileMetadata } from '@dts/common/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
