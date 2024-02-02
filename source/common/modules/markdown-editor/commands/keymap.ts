@@ -13,7 +13,7 @@
  */
 
 import { acceptCompletion, deleteBracketPair } from '@codemirror/autocomplete'
-import { copyLineDown, copyLineUp, indentLess, indentMore } from '@codemirror/commands'
+import { copyLineDown, copyLineUp, indentLess, indentMore, insertNewlineAndIndent } from '@codemirror/commands'
 import { type KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'
 import { copyAsHTML, pasteAsPlain } from '../util/copy-paste-cut'
@@ -21,8 +21,13 @@ import { handleReplacement, handleBackspace, handleQuote } from './autocorrect'
 import { addNewFootnote } from './footnotes'
 import { maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown } from './lists'
 import { insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList } from './markdown'
+import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
 
-// Custom keymap implementing less complex keyboard shortcuts
+/**
+ * Zettlr's custom keymap. It defines many of the default key bindings
+ *
+ * @var {KeyBinding[]}
+ */
 export const customKeymap: KeyBinding[] = [
   { key: 'Mod-k', run: insertLink },
   // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
@@ -31,14 +36,17 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Mod-b', run: applyBold },
   { key: 'Mod-i', run: applyItalic },
   { key: 'Mod-Shift-c', run: applyComment },
-  { key: 'Mod-Alt-r', run: addNewFootnote },
-  { key: 'Tab', run: nextSnippet },
+  { key: 'Mod-Alt-f', mac: 'Mod-Alt-r', run: addNewFootnote },
   { key: 'Tab', run: acceptCompletion },
+  { key: 'Tab', run: nextSnippet },
   { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
   { key: 'Tab', run: indentMore, shift: indentLess },
   { key: 'Esc', run: abortSnippet },
   { key: 'Space', run: handleReplacement },
   { key: 'Enter', run: handleReplacement },
+  // If no replacement can be handled, the default should be newlineAndIndent
+  { key: 'Enter', run: insertNewlineContinueMarkup },
+  { key: 'Enter', run: insertNewlineAndIndent },
   // TODO: We're including the pre-made keymap that defines the next line
   // already in our core extensions (see editor-extension-sets.ts), but somehow
   // it never gets called if we don't also define it here. Double check why.

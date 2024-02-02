@@ -14,9 +14,12 @@
  */
 
 import { syntaxTree } from '@codemirror/language'
-import { hoverTooltip, type EditorView, type Tooltip } from '@codemirror/view'
+import { hoverTooltip, EditorView, type Tooltip } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
+import { md2html } from '@common/modules/markdown-utils/markdown-to-html'
 import formatDate from '@common/util/format-date'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import sanitizeHtml from 'sanitize-html'
 
 const ipcRenderer = window.ipc
 
@@ -69,13 +72,24 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   const wrapper = document.createElement('div')
   wrapper.classList.add('editor-note-preview')
 
-  const title = document.createElement('h4')
+  const title = document.createElement('p')
   title.classList.add('filename')
   title.textContent = metadata[0]
 
   const content = document.createElement('div')
   content.classList.add('note-content')
-  content.textContent = metadata[1]
+  const html = md2html(metadata[1], window.getCitationCallback(CITEPROC_MAIN_DB))
+  content.innerHTML = sanitizeHtml(html, {
+    // These options basically translate into: Allow nothing but bare metal tags
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+    disallowedTagsMode: 'escape',
+    allowedIframeDomains: [],
+    allowedIframeHostnames: [],
+    allowedScriptDomains: [],
+    allowedSchemes: [],
+    allowedScriptHostnames: [],
+    allowVulnerableTags: false
+  })
 
   const meta = document.createElement('div')
   meta.classList.add('metadata')
@@ -127,11 +141,37 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   }
 
   wrapper.appendChild(title)
+  wrapper.appendChild(document.createElement('hr'))
   wrapper.appendChild(content)
+  wrapper.appendChild(document.createElement('hr'))
   wrapper.appendChild(meta)
   wrapper.appendChild(actions)
 
   return wrapper
 }
 
-export const filePreview = hoverTooltip(filePreviewTooltip, { hoverTime: 100 })
+export const filePreview = [
+  hoverTooltip(filePreviewTooltip, { hoverTime: 100 }),
+  // Provide basic styles for these tooltips
+  EditorView.baseTheme({
+    '.editor-note-preview': {
+      maxWidth: '300px',
+      padding: '5px',
+      fontSize: '80%'
+    },
+    '.editor-note-preview h1': { fontSize: '100%' },
+    '.editor-note-preview h2': { fontSize: '95%' },
+    '.editor-note-preview h3': { fontSize: '90%' },
+    '.editor-note-preview h4': { fontSize: '80%' },
+    '.editor-note-preview h5': { fontSize: '70%' },
+    '.editor-note-preview h6': { fontSize: '70%' },
+    '.editor-note-preview .note-content': { margin: '10px 0' },
+    '.editor-note-preview .metadata': {
+      color: 'rgb(200, 200, 200)',
+      fontSize: '80%'
+    },
+    '.editor-note-preview .actions': {
+      margin: '5px 0'
+    }
+  })
+]

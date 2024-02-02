@@ -15,11 +15,13 @@
 import ZettlrCommand from './zettlr-command'
 import objectToArray from '@common/util/object-to-array'
 import { makeExport } from './exporter'
-import minimatch from 'minimatch'
-import { shell } from 'electron'
+import { minimatch } from 'minimatch'
+import { shell, dialog } from 'electron'
 import type { ExporterOptions } from './exporter/types'
 import type LogProvider from '@providers/log'
 import { trans } from '@common/i18n-main'
+import { runShellCommand } from './exporter/run-shell-command'
+import { showNativeNotification } from '@common/util/show-notification'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -33,7 +35,7 @@ export default class DirProjectExport extends ZettlrCommand {
     */
   async run (evt: string, arg: any): Promise<boolean> {
     // First get the directory
-    const dir = this._app.fsal.findDir(arg)
+    const dir = this._app.workspaces.findDir(arg)
 
     if (dir === undefined) {
       this._app.log.error('Could not export project: Directory not found.')
@@ -51,27 +53,54 @@ export default class DirProjectExport extends ZettlrCommand {
     // directories as well as any non-code/MD file
     let files = objectToArray(dir, 'children').filter(e => e.type !== 'directory' && e.type !== 'other')
 
+    if (files.length === 0) {
+      return false // Cannot export, but this should be obvious to the user
+    }
+
     // Use minimatch to filter against the project's filter patterns
     for (const pattern of config.filters) {
       this._app.log.info(`[Project] Filtering fileset: Matching against "${pattern}"`)
-      // cf. https://github.com/isaacs/minimatch#minimatchfilterpattern-options
-      files = files.filter(minimatch.filter(pattern, { matchBase: true }))
+      // NOTE: We cannot use the `array.filter(minimatch.filter()) pattern because
+      // we have an array of objects, not strings!
+      const filter = minimatch.filter(pattern, { matchBase: true })
+      files = files.filter(fileDescriptor => filter(fileDescriptor.name))
     }
 
     if (files.length === 0) {
       this._app.log.warning('[Project] Aborting export: No files remained after filtering.')
+      // Cannot export, but this time we must inform the user that their patterns
+      // have filtered out every file.
+      dialog.showErrorBox(
+        trans('Cannot export project'),
+        trans('After applying your glob-filters, no files remained to export. Please adjust them in the project settings.')
+      )
       return false
     }
 
     const allDefaults = await this._app.assets.listDefaults()
 
-    for (const profilePath of config.profiles) {
+    for (const profilePathOrCommand of config.profiles) {
       // Spin up one exporter per format.
-      const profile = allDefaults.find(e => e.name === profilePath)
+      const profile = allDefaults.find(e => e.name === profilePathOrCommand)
+      const command = this._app.config.get().export.customCommands.find(c => c.command === profilePathOrCommand)
 
-      if (profile === undefined) {
-        this._app.log.warning(`Could not export project ${dir.name} using profile ${profilePath}: Not found`)
+      if (profile === undefined && command === undefined) {
+        this._app.log.warning(`Could not export project ${dir.name} using profile or command ${profilePathOrCommand}: Not found`)
         continue
+      }
+
+      // Now check if it's actually a custom export because that will be pretty
+      // much easier than the regular exports.
+      if (command !== undefined) {
+        this._app.log.info(`[Project] Exporting ${dir.name} using custom command ${command.displayName}.`)
+        const output = await runShellCommand(command.command, [`"${dir.path}"`], dir.path)
+        if (output.code !== 0) {
+          // We got an error!
+          throw new Error(`Export failed: ${output.stderr}`)
+        }
+        continue
+      } else if (profile === undefined) {
+        continue // We cannot reach this point, but we need the else if for TypeScript
       }
 
       this._app.log.info(`[Project] Exporting ${dir.name} as ${profile.writer} (Profile: ${profile.name}).`)
@@ -114,9 +143,13 @@ export default class DirProjectExport extends ZettlrCommand {
       }
     }
 
-    const notificationShown = this._app.notifications.show(trans('Project successfully exported. Click to show.'), trans('Export'), () => {
-      openDirectory(this._app.log, dir.path)
-    })
+    const notificationShown = showNativeNotification(
+      trans('Project "%s" successfully exported. Click to show.', config.title),
+      trans('Project Export'),
+      () => {
+        openDirectory(this._app.log, dir.path)
+      }
+    )
 
     if (!notificationShown) {
       openDirectory(this._app.log, dir.path)

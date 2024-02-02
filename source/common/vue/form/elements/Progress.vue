@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -31,7 +31,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'ProgressBar',
   props: {
     /**
@@ -55,8 +57,9 @@ export default {
       type: Boolean,
       default: false
     }
-  }
-}
+  },
+  emits: ['interrupt']
+})
 </script>
 
 <style lang="less">

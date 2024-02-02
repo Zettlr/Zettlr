@@ -26,7 +26,6 @@ import FSAL from '@providers/fsal'
 import LinkProvider from '@providers/links'
 import LogProvider from '@providers/log'
 import MenuProvider from '@providers/menu'
-import NotificationProvider from '@providers/notifications'
 import type ProviderContract from '@providers/provider-contract'
 import RecentDocumentsProvider from '@providers/recent-docs'
 import StatsProvider from '@providers/stats'
@@ -35,6 +34,7 @@ import TargetProvider from '@providers/targets'
 import TrayProvider from '@providers/tray'
 import UpdateProvider from '@providers/updates'
 import WindowProvider from '@providers/windows'
+import WorkspaceProvider from '@providers/workspaces'
 import { dialog } from 'electron'
 
 export default class AppServiceContainer {
@@ -48,7 +48,6 @@ export default class AppServiceContainer {
   private readonly _linkProvider: LinkProvider
   private readonly _logProvider: LogProvider
   private readonly _menuProvider: MenuProvider
-  private readonly _notificationProvider: NotificationProvider
   private readonly _recentDocsProvider: RecentDocumentsProvider
   private readonly _statsProvider: StatsProvider
   private readonly _tagProvider: TagProvider
@@ -58,16 +57,17 @@ export default class AppServiceContainer {
   private readonly _windowProvider: WindowProvider
   private readonly _fsal: FSAL
   private readonly _documentManager: DocumentManager
+  private readonly _workspaces: WorkspaceProvider
 
   constructor () {
     // NOTE: The log and config providers need to be instantiated first. The
     // rest can be instantiated afterwards.
     this._logProvider = new LogProvider()
     this._configProvider = new ConfigProvider(this._logProvider)
+    this._fsal = new FSAL(this._logProvider, this._configProvider)
     this._commandProvider = new CommandProvider(this)
     this._assetsProvider = new AssetsProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
-    this._notificationProvider = new NotificationProvider(this._logProvider)
     this._statsProvider = new StatsProvider(this._logProvider)
     this._recentDocsProvider = new RecentDocumentsProvider(this._logProvider)
     this._appearanceProvider = new AppearanceProvider(this._logProvider, this._configProvider)
@@ -75,14 +75,14 @@ export default class AppServiceContainer {
 
     this._targetProvider = new TargetProvider(this._logProvider)
     this._documentManager = new DocumentManager(this)
-    this._fsal = new FSAL(this._logProvider, this._configProvider, this._documentManager)
-    this._tagProvider = new TagProvider(this._logProvider, this._fsal)
-    this._linkProvider = new LinkProvider(this._logProvider, this._fsal)
+    this._workspaces = new WorkspaceProvider(this._logProvider, this._configProvider, this._fsal)
+    this._tagProvider = new TagProvider(this._logProvider, this._workspaces)
+    this._linkProvider = new LinkProvider(this._logProvider, this._workspaces)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
-    this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
+    this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider, this._documentManager)
-    this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider, this._commandProvider)
+    this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._commandProvider)
   }
 
   /**
@@ -92,12 +92,12 @@ export default class AppServiceContainer {
   async boot (): Promise<void> {
     await this._informativeBoot(this._logProvider, 'LogProvider')
     await this._informativeBoot(this._configProvider, 'ConfigProvider')
+    await this._informativeBoot(this._workspaces, 'WorkspaceProvider')
     await this._informativeBoot(this._assetsProvider, 'AssetsProvider')
     await this._informativeBoot(this._linkProvider, 'LinkProvider')
     await this._informativeBoot(this._tagProvider, 'TagProvider')
     await this._informativeBoot(this._targetProvider, 'TargetProvider')
     await this._informativeBoot(this._cssProvider, 'CSSProvider')
-    await this._informativeBoot(this._notificationProvider, 'NotificationProvider')
     await this._informativeBoot(this._statsProvider, 'StatsProvider')
     await this._informativeBoot(this._recentDocsProvider, 'RecentDocsProvider')
     await this._informativeBoot(this._appearanceProvider, 'AppearanceProvider')
@@ -176,11 +176,6 @@ export default class AppServiceContainer {
   public get menu (): MenuProvider { return this._menuProvider }
 
   /**
-   * Returns the notifications provider
-   */
-  public get notifications (): NotificationProvider { return this._notificationProvider }
-
-  /**
    * Returns the recent docs provider
    */
   public get recentDocs (): RecentDocumentsProvider { return this._recentDocsProvider }
@@ -231,6 +226,11 @@ export default class AppServiceContainer {
   public get commands (): CommandProvider { return this._commandProvider }
 
   /**
+   * Returns the WorkspaceProvider
+   */
+  public get workspaces (): WorkspaceProvider { return this._workspaces }
+
+  /**
    * Prepares quitting the app by shutting down the service providers
    */
   async shutdown (): Promise<void> {
@@ -241,7 +241,6 @@ export default class AppServiceContainer {
     await this._safeShutdown(this._windowProvider, 'WindowManager')
     await this._safeShutdown(this._trayProvider, 'TrayProvider')
     await this._safeShutdown(this._statsProvider, 'StatsProvider')
-    await this._safeShutdown(this._notificationProvider, 'NotificationProvider')
     await this._safeShutdown(this._updateProvider, 'UpdateProvider')
     await this._safeShutdown(this._cssProvider, 'CSSProvider')
     await this._safeShutdown(this._targetProvider, 'TargetProvider')
@@ -253,6 +252,7 @@ export default class AppServiceContainer {
     await this._safeShutdown(this._citeprocProvider, 'CiteprocProvider')
     await this._safeShutdown(this._assetsProvider, 'AssetsProvider')
     await this._safeShutdown(this._appearanceProvider, 'AppearanceProvider')
+    await this._safeShutdown(this._workspaces, 'WorkspaceProvider')
     await this._safeShutdown(this._configProvider, 'ConfigProvider')
     await this._safeShutdown(this._logProvider, 'LogProvider')
   }

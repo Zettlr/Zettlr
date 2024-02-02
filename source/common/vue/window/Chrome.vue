@@ -166,8 +166,8 @@ export default {
       // Change the value in the Vue dev tools if you want to see how
       // Zettlr looks on other platforms. Please also note that this
       // does not affect the native window chrome.
-      // platform: 'win32',
-      platform: process.platform,
+      platform: 'darwin',
+      // platform: process.platform,
       useNativeAppearance: window.config.get('window.nativeAppearance')
     }
   },
@@ -248,6 +248,58 @@ export default {
 </script>
 
 <style lang="less">
+// Define app-wide overarching color variable names
+:root {
+  --grey-0: rgb(240, 240, 240);
+  --grey-1: rgb(220, 220, 220);
+  --grey-2: rgb(200, 200, 200);
+  --grey-3: rgb(120, 120, 130);
+  --grey-4: rgb(100, 100, 110);
+  --grey-5: rgb( 80,  80,  90);
+  --grey-6: rgb( 70,  70,  80);
+  --grey-7: rgb( 40,  40,  50);
+
+  // Other colors
+  --green-selection:       rgba(180, 240, 170, 0.8);
+  --green-selection-dark:  rgba( 90, 170,  80, 0.8);
+
+  --blue-selection:        rgba(200, 220, 240, 0.8);
+  --blue-selection-dark:   rgba( 29,  55, 134, 0.8);
+
+  --purple-selection:      rgba(216, 171, 241, 1);
+
+  --gold-selection:        rgba(247, 235, 159, 1);
+  --gold-selection-dark:   rgba(167, 145,   2, 1);
+
+  --fg-error:              rgba(148,  16,  16, 1);
+  --bg-error:              rgba(255, 176, 176, 1);
+
+  /*
+   * COLOUR PALETTES
+   */
+
+  --blue-0:                rgba( 29, 117, 179, 1);
+  --blue-1:                rgba( 37,  53, 146, 1);
+  --blue-3:                rgba( 50,  70,  90, 1);
+
+  --orange-0:              rgba(255, 180, 108, 1);
+  --orange-1:              rgba(255, 124,  69, 1);
+  --orange-2:              rgba(240,  87,  52, 1);
+
+  --beige-0:               rgba(243, 243, 232, 1);
+  --beige-2:               rgba(205, 205, 170, 1);
+
+  --red-0:                 rgba(240,  50,  50, 1);
+  --red-1:                 rgba(220,  45,  45, 1);
+  --red-2:                 rgba(200,  40,  40, 1);
+  --red-7:                 rgba( 80,  15,  15, 1);
+
+  --green-0:               rgba( 28, 178, 126, 1);
+  --green-1:               rgba(  4, 125, 101, 1);
+
+  --apricot:               rgba(251, 206, 177, 1);
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
   // macOS OPERATING SYSTEM STYLES
@@ -258,7 +310,7 @@ body {
   // preferences window).
   &.darwin {
     div#window-content.disable-vibrancy {
-      background-color: rgb(235, 235, 235);
+      background-color: rgb(245, 245, 245);
     }
 
     &.dark {
@@ -266,6 +318,10 @@ body {
         background-color: rgb(30, 30, 30);
       }
     }
+  }
+
+  &.win32 {
+    font-size: 13px;
   }
 
   div#window-frame {
@@ -285,6 +341,9 @@ body {
   div#window-content {
     height: 100%;
     overflow: auto;
+    // Allow child components to make "easier" full screen content by using a
+    // position: absolute without having to delve into weird hacks.
+    position: relative;
   }
 
   &:not(.darwin) {

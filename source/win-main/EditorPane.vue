@@ -15,18 +15,27 @@
       v-bind:leaf-id="leafId"
       v-bind:window-id="windowId"
     ></DocumentTabs>
-    <div class="editor-container">
+    <div
+      class="editor-container"
+      v-on:drop="handleDrop($event, 'editor')"
+    >
       <template v-for="file in openFiles" v-bind:key="file.path">
-        <MainEditor
-          v-show="activeFile?.path === file.path"
-          v-bind:file="file"
-          v-bind:distraction-free="distractionFree"
-          v-bind:leaf-id="leafId"
-          v-bind:active-file="activeFile"
-          v-bind:window-id="windowId"
-          v-bind:editor-commands="editorCommands"
-          v-on:global-search="$emit('globalSearch', $event)"
-        ></MainEditor>
+        <!--
+          Teleport the correct editor that needs to be in distraction free
+          outside the DOM structure to have it render on top of everything else.
+        -->
+        <Teleport to="div#window-content" v-bind:disabled="!distractionFree || activeFile?.path !== file.path">
+          <MainEditor
+            v-show="activeFile?.path === file.path"
+            v-bind:file="file"
+            v-bind:distraction-free="distractionFree && activeFile?.path === file.path"
+            v-bind:leaf-id="leafId"
+            v-bind:active-file="activeFile"
+            v-bind:window-id="windowId"
+            v-bind:editor-commands="editorCommands"
+            v-on:global-search="$emit('globalSearch', $event)"
+          ></MainEditor>
+        </Teleport>
       </template>
 
       <!-- Show empty pane if there are no files -->
@@ -90,8 +99,8 @@
 </template>
 
 <script lang="ts">
-import { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
-import { EditorCommands } from '@dts/renderer/editor'
+import { type LeafNodeJSON, type OpenDocument } from '@dts/common/documents'
+import { type EditorCommands } from '@dts/renderer/editor'
 import { defineComponent } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'
@@ -130,7 +139,8 @@ export default defineComponent({
   data () {
     return {
       documentTabDrag: false,
-      documentTabDragWhere: undefined as undefined|string
+      documentTabDragWhere: undefined as undefined|string,
+      boundFinishDrag: this.finishDrag.bind(this)
     }
   },
   computed: {
@@ -163,6 +173,13 @@ export default defineComponent({
       return this.openFiles.length === 0
     }
   },
+  created () {
+    // Global drag end listener to ensure the split-view indicators always disappear
+    document.addEventListener('dragend', this.boundFinishDrag, true)
+  },
+  beforeUnmount () {
+    document.removeEventListener('dragend', this.boundFinishDrag)
+  },
   methods: {
     handleDrop: function (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
       const DELIM = (process.platform === 'win32') ? ';' : ':'
@@ -178,7 +195,7 @@ export default defineComponent({
         // case, we need to first split this specific leaf, and then move the
         // dropped file there. The drag data contains both the origin and the
         // path, separated by the $PATH delimiter -> window:leaf:absPath
-        const [ originWindow, originLeaf, filePath ] = documentTab.split(DELIM)
+        const [ originWindow, originLeaf, ...filePath ] = documentTab.split(DELIM)
         if (where === 'editor' && this.leafId === originLeaf) {
           // Nothing to do, the user dropped the file on the origin
           return false
@@ -193,7 +210,7 @@ export default defineComponent({
               targetWindow: this.windowId,
               originLeaf,
               targetLeaf: this.leafId,
-              path: filePath
+              path: filePath.join(DELIM)
             }
           })
             .catch(err => console.error(err))
@@ -207,7 +224,7 @@ export default defineComponent({
               originLeaf: this.leafId,
               direction: dir,
               insertion: ins,
-              path: filePath,
+              path: filePath.join(DELIM),
               fromWindow: originWindow,
               fromLeaf: originLeaf
             }
@@ -229,9 +246,12 @@ export default defineComponent({
       const outX = event.clientX < bounds.left || event.clientX > bounds.right
       const outY = event.clientY < bounds.top || event.clientY > bounds.bottom
       if (outX || outY) {
-        this.documentTabDrag = false
-        this.documentTabDragWhere = undefined
+        this.finishDrag()
       }
+    },
+    finishDrag () {
+      this.documentTabDrag = false
+      this.documentTabDragWhere = undefined
     }
   }
 })

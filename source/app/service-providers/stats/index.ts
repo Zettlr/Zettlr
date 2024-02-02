@@ -17,8 +17,15 @@ import path from 'path'
 import { app, ipcMain } from 'electron'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
-import type { Stats } from '@dts/main/stats-provider'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
+
+export interface Stats {
+  wordCount: Record<string, number> // All words for the graph
+  pomodoros: Record<string, number> // All pomodoros ever completed
+  avgMonth: number // Monthly average
+  today: number // Today's word count
+  sumMonth: number // Overall sum for the past month
+}
 
 /**
  * ZettlrStats works like the ZettlrConfig object, only with a different file.
@@ -152,7 +159,7 @@ export default class StatsProvider extends ProviderContract {
     }
 
     // For now we only need a word count
-    if (!this.stats.wordCount.hasOwnProperty(this.today)) {
+    if (!(this.today in this.stats.wordCount)) {
       this.stats.wordCount[this.today] = val
     } else {
       this.stats.wordCount[this.today] = this.stats.wordCount[this.today] + val
@@ -167,7 +174,7 @@ export default class StatsProvider extends ProviderContract {
    * @return {ZettlrStats} This for chainability.
    */
   increasePomodoros (): void {
-    if (!this.stats.pomodoros.hasOwnProperty(this.today)) {
+    if (!(this.today in this.stats.pomodoros)) {
       this.stats.pomodoros[this.today] = 1
     } else {
       this.stats.pomodoros[this.today] = this.stats.pomodoros[this.today] + 1

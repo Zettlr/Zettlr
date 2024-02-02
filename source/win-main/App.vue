@@ -6,6 +6,7 @@
     v-bind:show-toolbar="shouldShowToolbar"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
+    v-bind:disable-vibrancy="!vibrancyEnabled"
     v-on:toolbar-toggle="handleToggle($event)"
     v-on:toolbar-click="handleClick($event)"
   >
@@ -41,30 +42,8 @@
         >
           <template #view1>
             <!-- First side: Editor -->
-            <!--
-              NOTE: The following contains a somewhat counterintuitive logic.
-              What we are effectively doing here is we overlay an editor pane
-              that directly gets passed the node configuration for the editor
-              pane that is currently in distraction free mode (if applicable).
-              The other logic below executes in every case, but if a distraction
-              free pane is shown, they only hide. The benefit is that, while the
-              distraction free pane effectively duplicates the pane and thus has
-              a loading time (especially for larger files), this retains
-              whatever state the other panes and branches were in so that the
-              user can - upon leaving distraction free - immediately continue
-              with their work.
-            -->
-            <EditorPane
-              v-if="distractionFreePaneConfig !== undefined"
-              v-bind:node="distractionFreePaneConfig"
-              v-bind:leaf-id="distractionFreePaneConfig.id"
-              v-bind:editor-commands="editorCommands"
-              v-bind:window-id="windowId"
-              v-on:global-search="startGlobalSearch($event)"
-            ></EditorPane>
             <EditorPane
               v-if="paneConfiguration.type === 'leaf'"
-              v-show="distractionFreePaneConfig === undefined"
               v-bind:node="paneConfiguration"
               v-bind:leaf-id="paneConfiguration.id"
               v-bind:editor-commands="editorCommands"
@@ -73,7 +52,6 @@
             ></EditorPane>
             <EditorBranch
               v-else
-              v-show="distractionFreePaneConfig === undefined"
               v-bind:node="paneConfiguration"
               v-bind:window-id="windowId"
               v-bind:editor-commands="editorCommands"
@@ -130,11 +108,11 @@ import { nextTick, defineComponent } from 'vue'
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
-import { ToolbarControl } from '@dts/renderer/window'
-import { OpenDocument, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
-import { EditorCommands } from '@dts/renderer/editor'
+import { type ToolbarControl } from '@dts/renderer/window'
+import { type OpenDocument, type BranchNodeJSON, type LeafNodeJSON } from '@dts/common/documents'
+import { type EditorCommands } from '@dts/renderer/editor'
 import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-pipe'
-import { UpdateState } from '@dts/main/update-provider'
+import { type UpdateState } from '@providers/updates'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -174,6 +152,7 @@ export default defineComponent({
       fileManagerVisible: true,
       mainSplitViewVisibleComponent: 'fileManager',
       isUpdateAvailable: false,
+      vibrancyEnabled: window.config.get('window.vibrancy') as boolean,
       // Pomodoro state
       pomodoro: {
         currentEffectFile: glassFile,
@@ -209,7 +188,7 @@ export default defineComponent({
         replaceSelection: false,
         executeCommand: false,
         data: undefined
-      } as EditorCommands,
+      } satisfies EditorCommands,
       sidebarsBeforeDistractionfree: {
         fileManager: true,
         sidebar: false
@@ -217,6 +196,7 @@ export default defineComponent({
     }
   },
   computed: {
+    // Mount the store
     sidebarVisible: function (): boolean {
       return this.$store.state.config['window.sidebarVisible'] as boolean
     },
@@ -230,13 +210,13 @@ export default defineComponent({
       return this.$store.state.config['editor.countChars']
     },
     shouldShowToolbar: function (): boolean {
-      return this.distractionFree === false || this.$store.state.config['display.hideToolbarInDistractionFree'] === false
+      return !this.distractionFree || this.$store.state.config['display.hideToolbarInDistractionFree'] === false
     },
     shouldShowTitlebar: function (): boolean {
       // We need to display the titlebar in case the user decides to hide the
       // toolbar. The titlebar is much less distracting, but this way the user
       // can at least drag the window around.
-      return this.shouldShowToolbar === false
+      return !this.shouldShowToolbar
     },
     parsedDocumentInfo: function (): any {
       const info = this.$store.state.activeDocumentInfo
@@ -290,7 +270,7 @@ export default defineComponent({
             title: trans('Global search'),
             icon: 'search'
           },
-          initialState: (this.fileManagerVisible === true) ? this.mainSplitViewVisibleComponent : undefined
+          initialState: (this.fileManagerVisible) ? this.mainSplitViewVisibleComponent : undefined
         },
         {
           type: 'button',
@@ -459,15 +439,12 @@ export default defineComponent({
     },
     distractionFree (): boolean {
       return this.$store.state.distractionFreeMode !== undefined
-    },
-    distractionFreePaneConfig (): LeafNodeJSON|undefined {
-      return this.$store.state.paneData.find((leaf: LeafNodeJSON) => leaf.id === this.$store.state.distractionFreeMode)
     }
   },
   watch: {
-    sidebarVisible: function (newValue, oldValue) {
+    sidebarVisible: function (newValue, _oldValue) {
       if (newValue === true) {
-        if (this.distractionFree === true) {
+        if (this.distractionFree) {
           this.$store.commit('leaveDistractionFree')
         }
 
@@ -476,9 +453,9 @@ export default defineComponent({
         this.editorSidebarSplitComponent.hideView(2)
       }
     },
-    fileManagerVisible: function (newValue, oldValue) {
+    fileManagerVisible: function (newValue) {
       if (newValue === true) {
-        if (this.distractionFree === true) {
+        if (this.distractionFree) {
           this.$store.commit('leaveDistractionFree')
         }
 
@@ -487,7 +464,7 @@ export default defineComponent({
         this.fileManagerSplitComponent.hideView(1)
       }
     },
-    mainSplitViewVisibleComponent: function (newValue, oldValue) {
+    mainSplitViewVisibleComponent: function (newValue) {
       if (newValue === 'globalSearch') {
         // The global search just became visible, so focus the query input
         nextTick().then(() => {
@@ -495,7 +472,7 @@ export default defineComponent({
         }).catch(e => console.error(e))
       }
     },
-    distractionFree: function (newValue, oldValue) {
+    distractionFree: function (newValue) {
       if (newValue === true) {
         // Enter distraction free mode
         this.sidebarsBeforeDistractionfree = {
@@ -513,9 +490,9 @@ export default defineComponent({
     }
   },
   mounted: function () {
-    ipcRenderer.on('shortcut', (event, shortcut, state) => {
+    ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'toggle-sidebar') {
-        window.config.set('window.sidebarVisible', this.sidebarVisible === false)
+        window.config.set('window.sidebarVisible', !this.sidebarVisible)
       } else if (shortcut === 'insert-id') {
         // Generates an ID based upon the configured pattern, writes it into the
         // clipboard and then triggers the paste command on these webcontents.
@@ -557,9 +534,9 @@ export default defineComponent({
             .catch(err => console.error(err))
         }
       } else if (shortcut === 'toggle-file-manager') {
-        if (this.fileManagerVisible === true && this.mainSplitViewVisibleComponent === 'fileManager') {
+        if (this.fileManagerVisible && this.mainSplitViewVisibleComponent === 'fileManager') {
           this.fileManagerVisible = false
-        } else if (this.fileManagerVisible === false) {
+        } else if (!this.fileManagerVisible) {
           this.fileManagerVisible = true
           this.mainSplitViewVisibleComponent = 'fileManager'
         } else if (this.mainSplitViewVisibleComponent === 'globalSearch') {
@@ -598,7 +575,7 @@ export default defineComponent({
 
     // Initially, we need to hide the sidebar, since the view will be visible
     // by default.
-    if (this.sidebarVisible === false) {
+    if (!this.sidebarVisible) {
       this.editorSidebarSplitComponent.hideView(2)
     }
 
@@ -812,31 +789,34 @@ export default defineComponent({
             if (effectChanged || volumeChanged) {
               this.pomodoro.soundEffect.pause()
               this.pomodoro.soundEffect.currentTime = 0
-              this.pomodoro.soundEffect.play().catch(e => {
+              this.pomodoro.soundEffect.play().catch(_e => {
                 /* We will be getting errors when pausing quickly */
               })
             }
 
-            const shouldStart = this.pomodoro.intervalHandle === undefined && data.isRunning === true
-            const shouldStop = this.pomodoro.intervalHandle !== undefined && data.isRunning === false
+            const shouldStart = this.pomodoro.intervalHandle === undefined && data.shouldBeRunning === true
+            const shouldStop = this.pomodoro.intervalHandle !== undefined && data.shouldBeRunning === false
 
             if (shouldStart) {
+              console.log('Starting pomodoro')
               this.pomodoro.soundEffect.pause()
               this.pomodoro.soundEffect.currentTime = 0
               this.startPomodoro()
               this.$closePopover()
             } else if (shouldStop) {
+              console.log('Stopping pomodoro')
               this.pomodoro.soundEffect.pause()
               this.pomodoro.soundEffect.currentTime = 0
               this.stopPomodoro()
               this.$closePopover()
+            } else {
+              console.log('Doing nothing')
             }
           })
       } else if (clickedID === 'insert-table') {
         // Display the insertion popover
-        const data = {}
         const elem = document.getElementById('toolbar-insert-table')
-        this.$togglePopover(PopoverTable, elem as HTMLElement, data, (data: any) => {
+        this.$togglePopover(PopoverTable, elem as HTMLElement, {}, (data: any) => {
           // Generate a simple table based on the info, and insert it.
           const ast: string[][] = []
           const align: any[] = []
@@ -859,10 +839,10 @@ export default defineComponent({
           shouldCountChars: this.shouldCountChars
         }
         const elem = document.getElementById('toolbar-document-info')
-        this.$togglePopover(PopoverDocInfo, elem as HTMLElement, data, (data: any) => {
+        this.$togglePopover(PopoverDocInfo, elem as HTMLElement, data, (_data: any) => {
           // Do nothing
         })
-      } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
+      } else if (clickedID.startsWith('markdown') && clickedID.length > 8) {
         // The user clicked a command button, so we just have to run that.
         this.editorCommands.data = clickedID
         this.editorCommands.executeCommand = !this.editorCommands.executeCommand
@@ -918,7 +898,7 @@ export default defineComponent({
           this.pomodoro.phase.type = 'task'
         }
 
-        this.pomodoro.soundEffect.play().catch(e => { /* We will be getting errors when pausing quickly */ })
+        this.pomodoro.soundEffect.play().catch(_e => { /* We will be getting errors when pausing quickly */ })
       }
 
       // Finally handle the popover logic
@@ -927,8 +907,8 @@ export default defineComponent({
         // only really need to update two things: The current task, and the
         // elapsed time.
         this.pomodoro.popover.updateData({
-          currentPhase: this.pomodoro.phase.type,
-          elapsed: this.pomodoro.phase.elapsed
+          internalCurrentPhase: this.pomodoro.phase.type,
+          internalElapsed: this.pomodoro.phase.elapsed
         })
       } else if (this.pomodoro.popover !== undefined && this.pomodoro.popover.isClosed() === true) {
         this.pomodoro.popover = undefined // Cleanup
@@ -957,22 +937,9 @@ export default defineComponent({
         document.getElementById('toolbar-export') as HTMLElement,
         { filePath: this.activeFile.path },
         (data: any) => {
-          if (data.shouldExport !== true || this.activeFile === null) {
-            return
+          if (data.closePopover === true) {
+            this.$closePopover()
           }
-          // If the file is modified, export the current contents of the editor
-          // rather than what is saved on disk
-          // Run the exporter
-          ipcRenderer.invoke('application', {
-            command: 'export',
-            payload: {
-              profile: JSON.parse(JSON.stringify(data.profile)),
-              exportTo: data.exportTo,
-              file: this.activeFile.path
-            }
-          })
-            .catch(e => console.error(e))
-          this.$closePopover()
         })
     },
     getToolbarButtonDisplay: function (configName: string): boolean {

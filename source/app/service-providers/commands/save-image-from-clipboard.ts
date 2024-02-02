@@ -18,7 +18,7 @@ import sanitize from 'sanitize-filename'
 import path from 'path'
 import { promises as fs } from 'fs'
 import { clipboard } from 'electron'
-import isDir from '@common/util/is-dir'
+import { showNativeNotification } from '@common/util/show-notification'
 
 export default class SaveImage extends ZettlrCommand {
   constructor (app: any) {
@@ -34,7 +34,7 @@ export default class SaveImage extends ZettlrCommand {
    */
   async run (evt: string, arg: any): Promise<any> {
     if (!('startPath' in arg)) {
-      return this._app.notifications.show(trans('The requested file was not found.'))
+      showNativeNotification(trans('The requested file was not found.'))
     }
 
     const defaultPath = this._app.config.get('editor.defaultSaveImagePath')
@@ -51,7 +51,7 @@ export default class SaveImage extends ZettlrCommand {
 
     // A file must be opened and active, and the name valid
     if (targetFile === '') {
-      return this._app.notifications.show(trans('The provided name did not contain any allowed letters.'))
+      showNativeNotification(trans('The provided name did not contain any allowed letters.'))
     }
 
     // Now check the extension of the name (some users may
@@ -71,8 +71,8 @@ export default class SaveImage extends ZettlrCommand {
     }
 
     // If something went wrong or the user did not provide a directory, abort
-    if (!isDir(target.targetDir)) {
-      return this._app.notifications.show(trans('The requested directory was not found.'))
+    if (!await this._app.fsal.isDir(target.targetDir)) {
+      showNativeNotification(trans('The requested directory was not found.'))
     }
 
     // Build the correct path
@@ -83,7 +83,7 @@ export default class SaveImage extends ZettlrCommand {
 
     // Somebody may have remotely overwritten the clipboard in the meantime
     if (image.isEmpty()) {
-      return this._app.notifications.show(trans('Could not save image'))
+      showNativeNotification(trans('Could not save image'))
     }
 
     let size = image.getSize()

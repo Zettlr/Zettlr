@@ -22,11 +22,12 @@ import YAML from 'yaml'
 import checkImportIntegrity from './check-import-integrity'
 import importTextbundle from './import-textbundle'
 import type { DirDescriptor } from '@dts/common/fsal'
-import { app } from 'electron'
+import { app, dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import type AssetsProvider from '@providers/assets'
 import type { PandocProfileMetadata } from '@dts/common/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
+import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 
 export default async function makeImport (
   fileList: string[],
@@ -66,7 +67,7 @@ export default async function makeImport (
           errorCallback(file.path, err.message)
         }
       }
-    } else if ([ '.markdown', '.txt' ].includes(path.extname(file.path))) {
+    } else if (hasMarkdownExt(file.path)) {
       // In this case we should just copy it over
       try {
         const newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
@@ -88,17 +89,31 @@ export default async function makeImport (
       const allDefaults = (await assetsProvider.listDefaults()).filter(e => SUPPORTED_READERS.includes(e.writer))
       const potentialProfiles: PandocProfileMetadata[] = []
       for (const profile of allDefaults) {
+        if (profile.isInvalid) {
+          continue // There's an error with this profile
+        }
         if (file.availableReaders.includes(profile.reader)) {
           potentialProfiles.push(profile)
         }
       }
 
-      // TODO If more than one profile are found, ask the user!
+      let profileToUse = potentialProfiles[0]
       if (potentialProfiles.length > 1) {
-        console.warn(`More than one applicable profile found! Using first one: ${potentialProfiles[0].name}`)
+        const fileName = path.basename(file.path)
+        const response = await dialog.showMessageBox({
+          title: trans('Select import profile'),
+          message: trans('Select import profile'),
+          detail: trans('There are multiple profiles that can import %s. Please choose one.', fileName),
+          buttons: potentialProfiles.map(profile => {
+            return `${profile.name} (${profile.writer})`
+          }),
+          defaultId: 0
+        })
+
+        profileToUse = potentialProfiles[response.response]
       }
 
-      const defaults = await assetsProvider.getDefaultsFile(potentialProfiles[0].name)
+      const defaults = await assetsProvider.getDefaultsFile(profileToUse.name)
 
       // ... supply our file paths ...
       defaults['input-files'] = [file.path]

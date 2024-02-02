@@ -31,8 +31,8 @@
  * END HEADER
  */
 
-import { ToolbarControl } from '@dts/renderer/window'
-import { defineComponent, PropType } from 'vue'
+import { type ToolbarControl } from '@dts/renderer/window'
+import { defineComponent, type PropType } from 'vue'
 
 export default defineComponent({
   name: 'ToggleControl',

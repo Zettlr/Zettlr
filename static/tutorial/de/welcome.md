@@ -18,17 +18,17 @@ Doch nun: Los geht's!
 
 ## Über diese Einführung 🎬
 
-Viele Markdown-Editoren nutzen solche interaktiven Tutorials, um einen schnellen Einstieg in die Benutzung zu liefern. Im Fall von Zettlr haben wir dir ein Verzeichnis in deinen „Dokumente“-Ordner kopiert und ihn für dich geöffnet. Im Moment siehst du in der linken Seitenleiste den Inhalt dieses Ordners, und eines der darin enthaltenen Dokumente – `Willkommen.md` – liest du gerade durch. Wenn du mit der Maus in den oberen Bereich der linken Seitenleiste bewegst, erscheint ein kleiner Pfeil, mit welchem du zu den Arbeitsbereichen wechseln kannst. Klicke diesen nun.
+Viele Markdown-Editoren nutzen solche interaktiven Tutorials, um einen schnellen Einstieg in die Benutzung zu liefern. Im Fall von Zettlr haben wir dir ein Verzeichnis in deinen „Dokumente“-Ordner kopiert und ihn für dich geöffnet. Im Moment siehst du in der linken Seitenleiste – dem Dateimanager – den Inhalt dieses Ordners, und eines der darin enthaltenen Dokumente – `Willkommen.md` – liest du gerade durch.
 
 Wie du sehen kannst, ist derzeit genau ein Ordner – nämlich das Tutorial - geladen. Solche Top-Level-Verzeichnisse heißen bei Zettlr „Arbeitsbereiche“ (engl. „Workspaces“). Zettlr ist um das Konzept solcher Arbeitsbereiche herum entwickelt worden, sodass du das beste Erlebnis erhältst, wenn du ein oder mehrere solcher Ordner verwendest, um deine Dokumente zu verwalten. Diese Arbeitsbereiche werden bei jedem Start der App wieder geladen, sodass du direkt dort weiter arbeiten kannst, wo du aufgehört hast.
 
 Solche Arbeitsbereiche (sowie alleinstehende Dateien, welche, sobald du sie öffnest, über den Arbeitsbereichen angezeigt werden) kannst du sowohl schließen als auch löschen, indem du mit der rechten Maustaste auf sie klickst. Wenn du sie schließt, heißt das, dass sie aus der App entfernt werden, aber weiterhin auf deinem Computer bleiben. Löschen bedeutet (wie im Übrigen bei allen anderen Dateien und Ordnern ebenfalls), dass sie in den Papierkorb verschoben werden.
 
-Die Dateiliste, welche du zunächst gesehen hast, und den Verzeichnisbaum, der dir jetzt gerade angezeigt wird, heißen zusammen übrigens Dateimanager. In den Einstellungen kannst du zwischen drei verschiedenen Modi wählen: Entweder zeigt dir der Dateimanager entweder nur die Dateiliste _oder_ den Verzeichnisbaum an; oder er zeigt dir beide nebeneinander an; oder er zeigt sowohl Dateien wie auch Verzeichnisse ineinander verwoben an.
+In den Einstellungen kannst du zwischen drei verschiedenen Modi des Dateimanagers wählen: Entweder zeigt dir der Dateimanager entweder nur die Dateiliste _oder_ den Verzeichnisbaum an; oder er zeigt dir beide nebeneinander an; oder er zeigt sowohl Dateien wie auch Verzeichnisse ineinander verwoben an.
 
 > Auf einigen Linux-Distributionen kann es passieren, dass das Löschen nicht direkt funktioniert. Das liegt daran, dass Zettlr dazu auf Linux-Betriebssystemen eine bestimmte Bibliothek benötigt, die nicht immer installiert ist. Weitere Informationen findest du [in unseren häufig gestellten Fragen](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash).
 
-Klicke nun aber wieder auf den Arbeitsbereich, um die Dateiliste wieder anzuzeigen.
+Wenn du schon einen Ordner angelegt hast, in welchem du deine Notizen speichern möchtest, oder gar schon Notizen hast, kannst du den Ordner nun als Arbeitsverzeichnis öffnen – entweder mittels des Toolbar-Buttons oder dem Tastaturkürzel `Cmd/Strg+O`.
 
 ## Wie du Markdown nutzt 📝
 
@@ -91,6 +91,6 @@ Du kannst neue Zeilen und Spalten hinzufügen und entfernen sowie Spalten anordn
 
 Dies war der erste Teil der Einführung. Wir haben nicht allzu viel behandelt, aber alles weitere kannst du [in unserer Dokumentation nachschlagen](https://docs.zettlr.com/). Vielleicht interessiert dich ja der [Tag-Manager](https://docs.zettlr.com/en/reference/settings/#manage-tags) oder die [vielfältigen Suchoptionen](https://docs.zettlr.com/en/core/search/)?
 
-Wenn du bereit bist, klicke mit gedrückter `Cmd/Strg`-Taste auf den folgenden Wiki-Link: [[Zettelkasten]]
+Wenn du bereit bist, klicke mit gedrückter `Cmd/Strg`-Taste auf den folgenden Wiki-Link: [[zettelkasten]]
 
-[^1]: Der Text dieser Fußnote befindet sich am Ende des Dokuments. Prinzipiell kannst du den Text allerdings positionieren, wo immer du willst. Das beste? Du musst nicht nach unten scrollen, um die Fußnote zu bearbeiten – klicke einfach mit gedrückter `Cmd/Strg`-Taste auf sie. Änderungen übernimmst du mit `Shift+Enter`, während du die Bearbeitung abbrichst, indem du einfach irgendwo außerhalb des Popups klickst.
+[^1]: Der Text dieser Fußnote befindet sich am Ende des Dokuments. Prinzipiell kannst du den Text allerdings positionieren, wo immer du willst. Das beste? Du musst nicht nach unten scrollen, um die Fußnote zu bearbeiten – klicke einfach auf den "Bearbeiten"-Knopf im Popup. An der Seite unten an der Fußnote findest du einen kleinen Knopf, mit dem du wieder zur Fußnote im Text zurück springen kannst.

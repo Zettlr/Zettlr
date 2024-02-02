@@ -364,6 +364,10 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
     const close = tagInfo.selfClosing ? '' : `</${tagInfo.tagName}>`
     const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, getCitation)
     return `${open}${body}${close}`
+  } else if (node.type === 'ZettelkastenLink') {
+    return `[[${node.value}]]`
+  } else if (node.type === 'ZettelkastenTag') {
+    return `#${node.value}`
   }
 
   return ''

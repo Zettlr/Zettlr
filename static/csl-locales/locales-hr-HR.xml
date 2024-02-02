@@ -48,7 +48,7 @@
     <term name="working-paper">working paper</term>
     <term name="accessed">pristupljeno</term>
     <term name="and">i</term>
-    <term name="and others">i ostali</term>
+    <term name="and others">i dr.</term>
     <term name="anonymous">anonimno</term>
     <term name="anonymous" form="short">anon.</term>
     <term name="at">na</term>
@@ -62,7 +62,7 @@
       <multiple>izdanja</multiple>
     </term>
     <term name="edition" form="short">izd.</term>
-    <term name="et-al">i ostali</term>
+    <term name="et-al">i sur.</term>
     <term name="forthcoming">u pripremi</term>
     <term name="from">od</term>
     <term name="ibid">ibid.</term>

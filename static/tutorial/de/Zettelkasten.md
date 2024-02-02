@@ -11,7 +11,7 @@ keywords:
 
 Was du soeben angeklickt hast ist ein „interner Link“ innerhalb von Zettlr. Diese erinnern stark an Wiki-Links, sind aber eigentlich ein mächtiges Feature von Zettlr, welches der App hilft, die Organisation deines Wissens nachzuvollziehen. Lass uns zunächst nachverfolgen, was passiert ist, nachdem du auf den Link geklickt hast.
 
-Immer wenn du einem solchen internen Link folgst, passieren zwei Dinge: Zettlr startet eine Volltextsuche nach dem Inhalt des Links und versucht gleichzeitig, eine Datei gemäß der Link-Inhalte zu öffnen. Wie du sehen kannst, hat sich die Datei-Liste verändert und zeigt jetzt Suchergebnisse nach dem Wort „Zettelkasten“ an und Zettlr hat die Datei „Zettelkasten.md“ geöffnet.
+Immer wenn du einem solchen internen Link folgst, passieren zwei Dinge: Zettlr startet eine Volltextsuche nach dem Inhalt des Links und versucht gleichzeitig, eine Datei gemäß der Link-Inhalte zu öffnen. Wie du sehen kannst, hat sich die Datei-Liste verändert und zeigt jetzt Suchergebnisse nach dem Wort „zettelkasten“ an und Zettlr hat die Datei „zettelkasten.md“ geöffnet.
 
 Die Volltextsuche und der Dateimanager teilen sich die linke Seitenleiste. Du kannst zwischen beiden mit dem Dreiwege-Schalter oben links in der Werkzeugleiste wechseln.
 
@@ -49,4 +49,4 @@ Jetzt weißt du die grundlegenden Dinge, die du benötigst, um dein Wissen mithi
 - [Auf zettelkasten.de findest du zahlreiche Tipps (englischsprachig)](https://zettelkasten.de/)
 - [Auf Reddit gibt es einen ganzen Subreddit zum Thema](https://www.reddit.com/r/Zettelkasten)
 
-**Bereit für mehr?** Dann schaue dir die finale Einführung zum [[Zitieren]] mit Zettlr an!
+**Bereit für mehr?** Dann schaue dir die finale Einführung zum Zitieren ([[citing]]) mit Zettlr an!

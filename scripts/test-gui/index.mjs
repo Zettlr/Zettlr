@@ -11,7 +11,7 @@
 
 import { promises as fs } from 'fs'
 import path from 'path'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 import { spawn } from 'child_process'
 
 import makeConfig from './make-config.mjs'

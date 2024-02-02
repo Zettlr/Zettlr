@@ -61,7 +61,7 @@
 
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
-import { Stats } from '@dts/main/stats-provider'
+import { type Stats } from '@providers/stats'
 import { DateTime } from 'luxon'
 
 const ipcRenderer = window.ipc
@@ -76,7 +76,7 @@ export default {
       averageMonth: 0,
       sumToday: 0,
       showMoreStats: false,
-      wordCounts: {} as { [key: string]: number }
+      wordCounts: {} satisfies Record<string, number>
     }
   },
   computed: {
@@ -96,7 +96,7 @@ export default {
       const today = DateTime.now()
       const year = today.year
       const month = today.month
-      const numDays = today.daysInMonth
+      const numDays = today.daysInMonth ?? 0
       const allKeys = Object.keys(this.wordCounts)
       const dailyCounts = []
       for (let i = 1; i <= numDays; i++) {
@@ -111,7 +111,7 @@ export default {
         }
 
         const currentKey = `${year}-${m}-${day}`
-        if (allKeys.includes(currentKey) === true) {
+        if (allKeys.includes(currentKey)) {
           dailyCounts.push(this.wordCounts[currentKey])
         } else {
           dailyCounts.push(0)

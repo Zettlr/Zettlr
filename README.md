@@ -6,7 +6,7 @@
   Zettlr [<em>ˈset·lər</em>]
 </h1>
 
-<p align="center"><strong>A Markdown Editor for the 21<sup>st</sup> century</strong>.</p>
+<p align="center"><strong>Your One-Stop Publication Workbench</strong>.</p>
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.2580173">
@@ -35,20 +35,24 @@
 
 ![screenshot](/resources/screenshots/zettlr_view.png)
 
-With Zettlr, writing professional texts is easy and motivating: Whether you are a college student, a researcher, a journalist, or an author — Zettlr has the right tools for you. [Watch the video](https://www.youtube.com/watch?v=BJ27r6YGpAs) or continue reading to see what they are!
+Zettlr brings simplicity back to your texts. Open-minded writing that adapts to your style. Fast information retrieval that finds what matters to you. Versatile exporting that enables you to adapt to whatever publication pipeline your employer or school uses.
 
-[Visit our Website](https://zettlr.com/).
+Focus on what matters to you.
+
+**Publish, not perish.**
+
+> [Learn more on our website](https://zettlr.com/).
 
 ## Features
 
-- Available in over a dozen languages
-- Tight and ever-growing **integration with your favourite reference manager** (such as Zotero or JabRef)
-- **Cite with Zettlr** using `citeproc` and your existing literature database
-- Five **themes and dark mode support**
-- File-agnostic writing: Enjoy **full control over your own files**
-- Keep all your notes and texts **in one place** — searchable and accessible
+- Your Notes are your notes: Zettlr is **privacy-first**
+- **Citations** made easy: Tight and ever-growing integration with your favourite reference manager (Zotero, JabRef, and many others)
+- Available in over a **dozen languages**
+- Draft your publications in a professional environment, with **LaTeX and Word template support**
+- Simple and beautiful exports with [Pandoc](https://pandoc.org/), [LaTeX](https://www.latex-project.org/), and [Textbundle](http://textbundle.org/)
+- **Snippets** allow you to automate insertion of boilerplate code
+- Themes, dark modes, and full flexibility with **custom CSS**
 - **Code highlighting** for many languages
-- Simple and beautiful **exports** with [Pandoc](https://pandoc.org/), [LaTeX](https://www.latex-project.org/), and [Textbundle](http://textbundle.org/)
 - Support for state of the art knowledge management techniques (**Zettelkasten**)
 - A powerful **full text search** that helps you find anything, anywhere
 
@@ -60,7 +64,7 @@ To install Zettlr, just [download the latest release](https://www.zettlr.com/dow
 
 On our website and here on GitHub, we provide a set of installers for the most common use-cases. We provide both 64-bit installers as well as installers for ARM systems (called "Apple Silicon" in the macOS ecosystem). 32-bit is not supported. We offer the following binaries directly:
 
-* Windows (x64 and ARM)
+* Windows (x64)
 * macOS (Intel and Apple Silicon)
 * Debian and Fedora (x64 and ARM)
 * AppImage (x64 and ARM)
@@ -100,12 +104,13 @@ As soon as you are happy with your changes, open a Pull Request here that update
 
 Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have the following installed on your computer:
 
-1. A [NodeJS](https://nodejs.org/)-stack. Make sure it's at least Node 14 (`lts/fermium`). To test what version you have, run `node -v`.
+1. [NodeJS](https://nodejs.org/). Make sure it's at least Node 18 (`lts/hydrogen`). To test what version you have, run `node -v`.
 2. [Yarn](https://yarnpkg.com/en/). This is the package manager for the project, as we do not commit `package-lock.json`-files and many commands require yarn. You can install this globally using `npm install -g yarn` or Homebrew, if you are on macOS.
 3. On Windows, we recommend to [install the Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install), which will make many of the next steps easier.
-4. A few command-line utilities that the build script requires to download Pandoc to your development setup:
-    * [`cURL`](https://curl.se/download.html)
-    * `unzip`
+4. A few command-line utilities that various scripts require for running the development builds:
+    * [`cURL`](https://curl.se/download.html) (required by the Pandoc download script)
+    * `unzip` (required by the Pandoc download script)
+    * [`jq`](https://jqlang.github.io/jq/) (required by the i18n script)
 5. An appropriate build toolchain for your operating system, since Zettlr requires a few native C++-modules that must be compiled before running the app:
     * **macOS**: On macOS, installing the XCode command-line tools via `xcode-select --install` suffices
     * **Windows**: On Windows, you'll need the [free Visual Studio development tools](https://visualstudio.microsoft.com/free-developer-offers/) that include the required tools
@@ -189,12 +194,6 @@ This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) 
 This simply runs [ESLint](https://eslint.org/). Apps such as [Atom](https://atom.io/) or [Visual Studio Code](https://code.visualstudio.com/) will automatically run ESLint in the background, but if you want to be extra-safe, make sure to run this command prior to submitting a Pull Request.
 
 > This command will run automatically on each Pull Request to check your code for inconsistencies.
-
-#### `reveal:build`
-
-This re-compiles the source-files needed by the exporter for building [reveal.js](https://revealjs.com/)-presentations. Due to the nature of how [Pandoc](https://pandoc.org/) creates such presentations, Zettlr needs to modify the output by Pandoc, which is why these files need to be pre-compiled.
-
-> Please note, that this command is intended for an automated workflow that runs from time to time on the repository to perform this action. This means: Do **not** commit updated files to the repository. Instead, the updated files will be downloaded whenever you `git fetch`.
 
 #### `test`
 

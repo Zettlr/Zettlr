@@ -5,52 +5,66 @@
     <AutocompleteText
       ref="query-input"
       v-model="query"
+      name="query-input"
       v-bind:label="queryInputLabel"
       v-bind:autocomplete-values="recentGlobalSearches"
       v-bind:placeholder="queryInputPlaceholder"
       v-on:keydown.enter="startSearch()"
-      v-on:keydown.tab="($refs['restrict-to-dir-input'] as any).focus()"
     ></AutocompleteText>
     <AutocompleteText
       ref="restrict-to-dir-input"
       v-model="restrictToDir"
+      name="restrict-to-dir-input"
       v-bind:label="restrictDirLabel"
       v-bind:autocomplete-values="directorySuggestions"
       v-bind:placeholder="restrictDirPlaceholder"
-      v-on:confirm="restrictToDir = $event"
       v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
     <!-- Then an always-visible search button ... -->
-    <ButtonControl
-      v-bind:label="searchButtonLabel"
-      v-bind:inline="true"
-      v-on:click="startSearch()"
-    ></ButtonControl>
+    <p>
+      <ButtonControl
+        v-bind:label="searchButtonLabel"
+        v-bind:inline="true"
+        v-on:click="startSearch()"
+      ></ButtonControl>
+    </p>
+    <hr>
     <!-- ... as well as two buttons to clear the results or toggle them. -->
-    <ButtonControl
-      v-if="searchResults.length > 0 && filesToSearch.length === 0"
-      v-bind:label="clearButtonLabel"
-      v-bind:inline="true"
-      v-on:click="emptySearchResults()"
-    ></ButtonControl>
-    <ButtonControl
-      v-if="searchResults.length > 0 && filesToSearch.length === 0"
-      v-bind:label="toggleButtonLabel"
-      v-bind:inline="true"
-      v-on:click="toggleIndividualResults()"
-    ></ButtonControl>
+    <template v-if="searchResults.length > 0">
+      <p style="text-align: center;">
+        <ButtonControl
+          v-if="filesToSearch.length === 0"
+          v-bind:label="clearButtonLabel"
+          v-bind:inline="true"
+          v-on:click="emptySearchResults()"
+        ></ButtonControl>
+        <ButtonControl
+          v-if="filesToSearch.length === 0"
+          v-bind:label="toggleButtonLabel"
+          v-bind:inline="true"
+          v-on:click="toggleIndividualResults()"
+        ></ButtonControl>
+      </p>
+      <p style="font-size: 14px; padding: 5px 0; text-align: center;">
+        <span v-html="resultsMessage"></span>
+      </p>
+      <hr>
+    </template>
     <!--
       During searching, display a progress bar that indicates how far we are and
       that allows to interrupt the search, if it takes too long.
     -->
-    <div v-if="filesToSearch.length > 0">
-      <ProgressControl
-        v-bind:max="sumFilesToSearch"
-        v-bind:value="sumFilesToSearch - filesToSearch.length"
-        v-bind:interruptible="true"
-        v-on:interrupt="filesToSearch = []"
-      ></ProgressControl>
-    </div>
+    <template v-if="filesToSearch.length > 0">
+      <div>
+        <ProgressControl
+          v-bind:max="sumFilesToSearch"
+          v-bind:value="sumFilesToSearch - filesToSearch.length"
+          v-bind:interruptible="true"
+          v-on:interrupt="filesToSearch = []"
+        ></ProgressControl>
+      </div>
+      <hr>
+    </template>
     <!-- Finally, display all search results, per file and line. -->
     <template v-if="searchResults.length > 0">
       <!-- First, display a filter ... -->
@@ -95,7 +109,8 @@
             v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
             v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
           >
-            <span v-if="singleRes.line !== -1"><strong>{{ singleRes.line }}</strong>: </span>
+            <!-- NOTE how we have to increase the line number from zero-based to 1-based -->
+            <span v-if="singleRes.line !== -1"><strong>{{ singleRes.line + 1 }}</strong>: </span>
             <span v-html="markText(singleRes)"></span>
           </div>
         </div>
@@ -122,15 +137,18 @@
 import objectToArray from '@common/util/object-to-array'
 import compileSearchTerms from '@common/util/compile-search-terms'
 import TextControl from '@common/vue/form/elements/Text.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { SearchResult, SearchResultWrapper, SearchTerm } from '@dts/common/search'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { type SearchResult, type SearchResultWrapper, type SearchTerm } from '@dts/common/search'
+import { type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
+import { type AnyMenuItem } from '@dts/renderer/context'
+import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
+import { useOpenDirectoryStore, useWorkspacesStore } from './pinia'
+import { mapStores } from 'pinia'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -194,14 +212,16 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useWorkspacesStore),
+    ...mapStores(useOpenDirectoryStore),
     recentGlobalSearches: function (): string[] {
       return this.$store.state.config['window.recentGlobalSearches']
     },
     selectedDir: function (): DirDescriptor|null {
-      return this.$store.state.selectedDirectory
+      return this['open-directoryStore'].openDirectory
     },
-    fileTree: function (): Array<MDFileDescriptor|CodeFileDescriptor|DirDescriptor> {
-      return this.$store.state.fileTree
+    fileTree: function () {
+      return this.workspacesStore.rootDescriptors
     },
     activeFile: function (): MDFileDescriptor|null {
       return this.$store.state.activeFile
@@ -220,6 +240,9 @@ export default defineComponent({
     },
     searchTitle: function () {
       return trans('Full-Text Search')
+    },
+    resultsMessage: function () {
+      return trans('%s matches', this.searchResults.length)
     },
     queryInputLabel: function () {
       return trans('Enter your search terms below')
@@ -267,19 +290,19 @@ export default defineComponent({
       return this.searchResults.filter(result => {
         // First check the actual results in the files
         for (const lineResult of result.result) {
-          if (lineResult.restext.toLowerCase().includes(lowercase) === true) {
+          if (lineResult.restext.toLowerCase().includes(lowercase)) {
             return true
           }
         }
 
         // Next, try the different variations on filename and displayName
-        if (result.file.filename.toLowerCase().includes(lowercase) === true) {
+        if (result.file.filename.toLowerCase().includes(lowercase)) {
           return true
         }
-        if (result.file.displayName.toLowerCase().includes(lowercase) === true) {
+        if (result.file.displayName.toLowerCase().includes(lowercase)) {
           return true
         }
-        if (result.file.path.toLowerCase().includes(lowercase) === true) {
+        if (result.file.path.toLowerCase().includes(lowercase)) {
           return true
         }
 
@@ -291,6 +314,9 @@ export default defineComponent({
   watch: {
     fileTree: function () {
       this.recomputeDirectorySuggestions()
+    },
+    directorySuggestions: function () {
+      console.log(this.directorySuggestions)
     }
   },
   mounted: function () {
@@ -364,7 +390,7 @@ export default defineComponent({
           }
         })
 
-        if (this.selectedDir !== null && this.selectedDir.path.startsWith(treeItem.path) === true) {
+        if (this.selectedDir !== null && this.selectedDir.path.startsWith(treeItem.path)) {
           // Append the selected directory's contents BEFORE any other items
           // since that's probably something the user sees as more relevant.
           fileList = dirContents.concat(fileList)
@@ -372,6 +398,9 @@ export default defineComponent({
           fileList = fileList.concat(dirContents)
         }
       }
+
+      // Filter out non-searchable files
+      fileList = fileList.filter(file => hasMdOrCodeExt(file.path))
 
       // And also all files that are not within the selected directory
       if (this.restrictToDir.trim() !== '') {
@@ -409,7 +438,7 @@ export default defineComponent({
       // Take the file to be searched ...
       const terms = compileSearchTerms(this.query)
       while (this.filesToSearch.length > 0) {
-        const fileToSearch = this.filesToSearch.shift() as any
+        const fileToSearch = this.filesToSearch.shift()
         // Now start the search
         const result: SearchResult[] = await ipcRenderer.invoke('application', {
           command: 'file-search',
@@ -418,6 +447,7 @@ export default defineComponent({
             terms
           }
         })
+
         if (result.length > 0) {
           const newResult: SearchResultWrapper = {
             file: fileToSearch,
@@ -483,7 +513,8 @@ export default defineComponent({
       this.jumpToLine(filePath, lineNumber, isMiddleClick)
     },
     jumpToLine: function (filePath: string, lineNumber: number, openInNewTab: boolean = false) {
-      this.$emit('jtl', filePath, lineNumber, openInNewTab)
+      // NOTE that we have to increase the line number for the JTL command
+      this.$emit('jtl', filePath, lineNumber + 1, openInNewTab)
     },
     markText: function (resultObject: SearchResult) {
       const startTag = '<span class="search-result-highlight">'
@@ -523,6 +554,8 @@ body div#global-search-pane {
   overflow: auto;
   height: 100%;
 
+  hr { margin: 5px 0; }
+
   div.search-result-container {
     border-bottom: 1px solid rgb(180, 180, 180);
     padding: 10px;
@@ -537,6 +570,7 @@ body div#global-search-pane {
 
       div.overflow-hidden {
         overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 

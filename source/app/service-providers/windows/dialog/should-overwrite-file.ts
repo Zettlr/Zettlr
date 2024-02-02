@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { dialog, type BrowserWindow, type MessageBoxReturnValue } from 'electron'
+import { dialog, type BrowserWindow, type MessageBoxReturnValue, type MessageBoxOptions } from 'electron'
 import { trans } from '@common/i18n-main'
 
 /**
@@ -24,7 +24,7 @@ import { trans } from '@common/i18n-main'
  * @return  {Promise<boolean>}              Returns to true if the user agrees
  */
 export default async function shouldOverwriteFileDialog (win: BrowserWindow|null, filename: string): Promise<boolean> {
-  let options = {
+  const options: MessageBoxOptions = {
     type: 'question',
     title: trans('Overwrite existing file'),
     message: trans('The file %s already exists in this directory. Overwrite?', filename),

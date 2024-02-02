@@ -72,7 +72,7 @@
 
 import SplitView from '@common/vue/window/SplitView.vue'
 import SelectableList from '@common/vue/form/elements/SelectableList.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import CodeEditor from '@common/vue/CodeEditor.vue'
 import { trans } from '@common/i18n-renderer'
@@ -110,7 +110,7 @@ export default defineComponent({
     }
   },
   watch: {
-    currentItem: function (newValue, oldValue) {
+    currentItem: function () {
       this.loadState()
     },
     editorContents: function () {
@@ -137,7 +137,7 @@ export default defineComponent({
       ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
         .then(data => {
           this.availableSnippets = data
-          if (typeof selectAfterUpdate === 'string' && this.availableSnippets.includes(selectAfterUpdate) === true) {
+          if (typeof selectAfterUpdate === 'string' && this.availableSnippets.includes(selectAfterUpdate)) {
             this.currentItem = this.availableSnippets.indexOf(selectAfterUpdate)
           }
           this.loadState()
@@ -260,7 +260,7 @@ export default defineComponent({
         candidate = candidate.substring(0, candidate.length - match[1].length - 1)
       }
 
-      while (this.availableSnippets.includes(candidate + '-' + String(count)) === true) {
+      while (this.availableSnippets.includes(candidate + '-' + String(count))) {
         count++
       }
 

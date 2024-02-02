@@ -17,8 +17,6 @@ import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import chalk from 'chalk'
 import ProviderContract from '../provider-contract'
-import type { LogMessage } from '@dts/main/log-provider'
-const hasProp = Object.prototype.hasOwnProperty
 
 /**
  * How many logfiles should the app keep at most?
@@ -36,6 +34,16 @@ enum LogLevel {
   info = 2,
   warning = 3,
   error = 4
+}
+
+/**
+ * A single log message
+ */
+export interface LogMessage {
+  time: string
+  level: LogLevel
+  message: string
+  details: any
 }
 
 const debugConsole = {
@@ -260,7 +268,7 @@ export default class LogProvider extends ProviderContract {
       details = ` | Details: ${JSON.stringify(message.details)}`
     }
 
-    let timestamp = (hasProp.call(message, 'time')) ? `[${message.time}] ` : ''
+    let timestamp = ('time' in message) ? `[${message.time}] ` : ''
 
     return `${timestamp}[${level}] ${message.message}${details}`
   }

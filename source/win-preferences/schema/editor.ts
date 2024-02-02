@@ -13,97 +13,152 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
 
-export default function (): any {
-  return {
-    fieldsets: [
-      [
-        {
-          type: 'radio',
-          label: trans('Choose the formatting characters that the bold/emphasis commands should use'),
-          model: 'editor.boldFormatting',
-          options: {
-            '**': '**' + trans('Bold') + '**',
-            '__': '__' + trans('Bold') + '__'
-          }
-        },
-        {
-          type: 'radio',
-          model: 'editor.italicFormatting',
-          options: {
-            '*': '*' + trans('Italics') + '*',
-            '_': '_' + trans('Italics') + '_'
-          }
+export function getEditorFields (): PreferencesFieldset[] {
+  return [
+    {
+      title: trans('Input mode'),
+      group: PreferencesGroups.Editor,
+      titleField: {
+        type: 'select',
+        model: 'editor.inputMode',
+        options: {
+          default: 'Normal',
+          emacs: 'Emacs',
+          vim: 'Vim'
         }
-      ],
-      [
+      },
+      help: undefined, // TODO
+      fields: [
         {
-          type: 'radio',
-          label: trans('Autosave'),
-          model: 'editor.autoSave',
-          options: {
-            'off': trans('Off'),
-            'immediately': trans('Immediately'),
-            'delayed': trans('After a short delay')
-          }
+          type: 'form-text',
+          display: 'info',
+          contents: trans('The input mode determines how you interact with the editor. We recommend keeping this setting at "Normal". Only choose "Vim" or "Emacs" if you know what this implies.')
         }
-      ],
-      [
+      ]
+    },
+    {
+      title: trans('Writing direction'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      fields: [
+        // TODO: Add field for LTR/RTL
+      ]
+    },
+    {
+      title: trans('Markdown rendering'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      fields: [
         {
-          type: 'text',
-          label: trans('Default image path (relative or absolute)'),
-          model: 'editor.defaultSaveImagePath'
+          type: 'form-text',
+          display: 'info',
+          contents: trans('Check to enable live rendering of various Markdown elements to formatted appearance. This hides formatting characters (such as **text**) or renders images instead of their link.')
         },
         {
-          type: 'number',
-          label: trans('Indent by the following number of spaces'),
-          model: 'editor.indentUnit'
+          type: 'style-group',
+          style: 'columns',
+          fields: [
+            {
+              type: 'checkbox',
+              label: trans('Render Citations'),
+              model: 'display.renderCitations'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Iframes'),
+              model: 'display.renderIframes'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Images'),
+              model: 'display.renderImages'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Links'),
+              model: 'display.renderLinks'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Formulae'),
+              model: 'display.renderMath'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render Tasks'),
+              model: 'display.renderTasks'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Hide heading characters'),
+              model: 'display.renderHTags'
+            },
+            {
+              type: 'checkbox',
+              label: trans('Render emphasis'),
+              model: 'display.renderEmphasis'
+            }
+          ]
+        },
+        { type: 'separator' },
+        {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Formatting characters for bold and italic')
         },
         {
-          type: 'checkbox',
-          label: trans('Indent using tabs'),
-          model: 'editor.indentWithTabs'
+          type: 'style-group',
+          style: 'columns',
+          fields: [
+            {
+              type: 'radio',
+              model: 'editor.boldFormatting',
+              options: {
+                '**': '**' + trans('Bold') + '**',
+                __: '__' + trans('Bold') + '__'
+              }
+            },
+            {
+              type: 'radio',
+              model: 'editor.italicFormatting',
+              options: {
+                '*': '*' + trans('Italics') + '*',
+                _: '_' + trans('Italics') + '_'
+              }
+            }
+          ]
         },
-        {
-          type: 'number',
-          label: trans('Editor font size'),
-          model: 'editor.fontSize'
-        },
-        {
-          type: 'select',
-          label: trans('Algorithm to use for the readability mode'),
-          model: 'editor.readabilityAlgorithm',
-          options: {
-            'dale-chall': 'Dale-Chall',
-            'gunning-fog': 'Gunning-Fog',
-            'coleman-liau': 'Coleman/Liau',
-            'automated-readability': 'Automated Readability Index (ARI)'
-          }
-        },
-        {
-          type: 'select',
-          label: trans('Editor input mode'),
-          model: 'editor.inputMode',
-          options: {
-            'default': 'Normal',
-            'emacs': 'Emacs',
-            'vim': 'Vim'
-          }
-        }
-      ],
-      [
+        { type: 'separator' },
         {
           type: 'checkbox',
           label: trans('Check Markdown for style issues'),
           model: 'editor.lint.markdown'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Show statusbar'),
-          model: 'editor.showStatusbar'
         }
-      ],
-      [
+      ]
+    },
+    {
+      title: trans('Table Editor'),
+      group: PreferencesGroups.Editor,
+      titleField: {
+        type: 'switch',
+        model: 'editor.enableTableHelper'
+      },
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('The Table Editor is an interactive interface that simplifies creation and editing of tables. It provides buttons for common functionality, and takes care of Markdown formatting.')
+        }
+      ]
+    },
+    {
+      title: trans('Distraction-free mode'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'checkbox',
           label: trans('Mute non-focused lines in distraction-free mode'),
@@ -111,18 +166,94 @@ export default function (): any {
         },
         {
           type: 'checkbox',
-          label: trans('Automatically close matching character pairs'),
-          model: 'editor.autoCloseBrackets'
+          label: trans('Hide toolbar in distraction free mode'),
+          model: 'display.hideToolbarInDistractionFree'
+        }
+      ]
+    },
+    {
+      title: trans('Word counter'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      fields: [
+        {
+          // TODO: Must be radio (Count words/Count characters)
+          type: 'checkbox',
+          label: trans('Count characters instead of words (e.g., for Chinese)'),
+          model: 'editor.countChars'
+        }
+      ]
+    },
+    {
+      title: trans('Readability mode'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'select',
+          inline: true,
+          label: trans('Algorithm'),
+          model: 'editor.readabilityAlgorithm',
+          options: {
+            'dale-chall': 'Dale-Chall',
+            'gunning-fog': 'Gunning-Fog',
+            'coleman-liau': 'Coleman/Liau',
+            'automated-readability': 'Automated Readability Index (ARI)'
+          }
+        }
+      ]
+    },
+    {
+      title: trans('Image size'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'slider',
+          label: trans('Maximum width of images (%s %)', window.config.get('display.imageWidth')),
+          min: 0,
+          max: 100,
+          model: 'display.imageWidth'
         },
         {
-          type: 'checkbox',
-          label: trans('Accept spaces during autocompletion'),
-          model: 'editor.autocompleteAcceptSpace'
+          type: 'slider',
+          label: trans('Maximum height of images (%s %)', window.config.get('display.imageHeight')),
+          min: 0,
+          max: 100,
+          model: 'display.imageHeight'
+        }
+      ]
+    },
+    {
+      title: trans('Other settings'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'number',
+          label: trans('Font size'),
+          inline: true,
+          model: 'editor.fontSize'
+        },
+        { type: 'separator' },
+        {
+          type: 'number',
+          label: trans('Indentation size (number of spaces)'),
+          inline: true,
+          model: 'editor.indentUnit'
         },
         {
+          // TODO: number+checkbox on the same line
           type: 'checkbox',
-          label: trans('Enable Table Editor'),
-          model: 'editor.enableTableHelper'
+          label: trans('Indent using tabs instead of spaces'),
+          model: 'editor.indentWithTabs'
+        },
+        { type: 'separator' },
+        {
+          // TODO: Where to move this new setting???
+          type: 'checkbox',
+          label: trans('Suggest emojis during autocompletion'),
+          model: 'editor.autocompleteSuggestEmojis'
         },
         {
           type: 'checkbox',
@@ -130,11 +261,12 @@ export default function (): any {
           model: 'editor.showLinkPreviews'
         },
         {
+          // TODO: Where should this setting go?
           type: 'checkbox',
-          label: trans('Count characters instead of words (e.g., for Chinese)'),
-          model: 'editor.countChars'
+          label: trans('Automatically close matching character pairs'),
+          model: 'editor.autoCloseBrackets'
         }
       ]
-    ]
-  }
+    }
+  ]
 }

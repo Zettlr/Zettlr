@@ -25,22 +25,22 @@
  * @var {{ [key: string]: string[] }}}
  */
 const locatorLabels: Record<string, string[]> = {
-  'book': [ 'Buch', 'Bücher', 'B.', 'book', 'books', 'bk.', 'bks.', 'livre', 'livres', 'liv.' ],
-  'chapter': [ 'Kapitel', 'Kap.', 'chapter', 'chapters', 'chap.', 'chaps', 'chapitre', 'chapitres' ],
-  'column': [ 'Spalte', 'Spalten', 'Sp.', 'column', 'columns', 'col.', 'cols', 'colonne', 'colonnes' ],
-  'figure': [ 'Abbildung', 'Abbildungen', 'Abb.', 'figure', 'figures', 'fig.', 'figs' ],
-  'folio': [ 'Blatt', 'Blätter', 'Fol.', 'folio', 'folios', 'fol.', 'fols', 'fᵒ', 'fᵒˢ' ],
-  'issue': [ 'Nummer', 'Nummern', 'Nr.', 'number', 'numbers', 'no.', 'nos.', 'numéro', 'numéros', 'nᵒ', 'nᵒˢ' ],
-  'line': [ 'Zeile', 'Zeilen', 'Z', 'line', 'lines', 'l.', 'll.', 'ligne', 'lignes' ],
-  'note': [ 'Note', 'Noten', 'N.', 'note', 'notes', 'n.', 'nn.' ],
-  'opus': [ 'Opus', 'Opera', 'op.', 'opus', 'opera', 'opp.' ],
-  'page': [ 'Seite', 'Seiten', 'S.', 'page', 'pages', 'p.', 'pp.' ],
-  'paragraph': [ 'Absatz', 'Absätze', 'Abs.', '¶', '¶¶', 'paragraph', 'paragraphs', 'para.', 'paras', 'paragraphe', 'paragraphes', 'paragr.' ],
-  'part': [ 'Teil', 'Teile', 'part', 'parts', 'pt.', 'pts', 'partie', 'parties', 'part.' ],
-  'section': [ 'Abschnitt', 'Abschnitte', 'Abschn.', '§', '§§', 'section', 'sections', 'sec.', 'secs', 'sect.' ],
+  book: [ 'Buch', 'Bücher', 'B.', 'book', 'books', 'bk.', 'bks.', 'livre', 'livres', 'liv.' ],
+  chapter: [ 'Kapitel', 'Kap.', 'chapter', 'chapters', 'chap.', 'chaps', 'chapitre', 'chapitres' ],
+  column: [ 'Spalte', 'Spalten', 'Sp.', 'column', 'columns', 'col.', 'cols', 'colonne', 'colonnes' ],
+  figure: [ 'Abbildung', 'Abbildungen', 'Abb.', 'figure', 'figures', 'fig.', 'figs' ],
+  folio: [ 'Blatt', 'Blätter', 'Fol.', 'folio', 'folios', 'fol.', 'fols', 'fᵒ', 'fᵒˢ' ],
+  issue: [ 'Nummer', 'Nummern', 'Nr.', 'number', 'numbers', 'no.', 'nos.', 'numéro', 'numéros', 'nᵒ', 'nᵒˢ' ],
+  line: [ 'Zeile', 'Zeilen', 'Z', 'line', 'lines', 'l.', 'll.', 'ligne', 'lignes' ],
+  note: [ 'Note', 'Noten', 'N.', 'note', 'notes', 'n.', 'nn.' ],
+  opus: [ 'Opus', 'Opera', 'op.', 'opus', 'opera', 'opp.' ],
+  page: [ 'Seite', 'Seiten', 'S.', 'page', 'pages', 'p.', 'pp.' ],
+  paragraph: [ 'Absatz', 'Absätze', 'Abs.', '¶', '¶¶', 'paragraph', 'paragraphs', 'para.', 'paras', 'paragraphe', 'paragraphes', 'paragr.' ],
+  part: [ 'Teil', 'Teile', 'part', 'parts', 'pt.', 'pts', 'partie', 'parties', 'part.' ],
+  section: [ 'Abschnitt', 'Abschnitte', 'Abschn.', '§', '§§', 'section', 'sections', 'sec.', 'secs', 'sect.' ],
   'sub verbo': [ 'sub verbo', 'sub verbis', 's.&#160;v.', 's.&#160;vv.', 's.v.', 's.vv.' ],
-  'verse': [ 'Vers', 'Verse', 'V.', 'verse', 'verses', 'v.', 'vv.', 'verset', 'versets' ],
-  'volume': [ 'Band', 'Bände', 'Bd.', 'Bde.', 'volume', 'volumes', 'vol.', 'vols.' ]
+  verse: [ 'Vers', 'Verse', 'V.', 'verse', 'verses', 'v.', 'vv.', 'verset', 'versets' ],
+  volume: [ 'Band', 'Bände', 'Bd.', 'Bde.', 'volume', 'volumes', 'vol.', 'vols.' ]
 }
 
 /**
@@ -281,7 +281,7 @@ export default function extractCitations (markdown: string): CitePosition[] {
           suffixToParse = rawSuffix
           containsLocator = false
         } else if (explicitLocatorInSuffix !== undefined || explicitLocator !== undefined) {
-          suffixToParse = (explicitLocator !== undefined) ? explicitLocator : explicitLocatorInSuffix
+          suffixToParse = explicitLocator ?? explicitLocatorInSuffix
           thisCitation.suffix = rawSuffix?.trim()
         }
 

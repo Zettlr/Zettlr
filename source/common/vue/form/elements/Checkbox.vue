@@ -1,37 +1,45 @@
 <template>
-  <div v-bind:class="{ 'checkbox-outer-div-inline': inline }">
-    <div class="form-control cb-group">
-      <label
-        v-bind:class="{
-          checkbox: true,
-          disabled: disabled
-        }"
+  <div
+    v-bind:class="{
+      'form-control': true,
+      'cb-group': true,
+      'checkbox-outer-div-inline': inline
+    }"
+  >
+    <label
+      v-bind:class="{
+        checkbox: true,
+        disabled: disabled
+      }"
+    >
+      <input
+        v-bind:id="fieldID"
+        type="checkbox"
+        v-bind:name="name"
+        value="yes"
+        v-bind:checked="modelValue"
+        v-bind:disabled="disabled"
+        v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
       >
-        <input
-          v-bind:id="fieldID"
-          type="checkbox"
-          v-bind:name="name"
-          value="yes"
-          v-bind:checked="modelValue"
-          v-bind:disabled="disabled"
-          v-on:input="$emit('update:modelValue', $event.target.checked)"
-        >
-        <span class="checkmark"></span>
-      </label>
-      <label
-        v-if="label" v-bind:for="fieldID"
-        v-bind:class="{ 'disabled': disabled }"
-        v-html="label"
-      >
-      </label>
-    </div>
-    <div v-if="info" class="form-control info">
-      {{ info }}
-    </div>
+      <span class="checkmark"></span>
+    </label>
+    <label
+      v-if="label || info"
+      v-bind:for="fieldID"
+      v-bind:class="{
+        'cb-group-label': true,
+        disabled: disabled
+      }"
+    >
+      <span v-html="label"></span>
+      <div v-if="info" class="info">
+        {{ info }}
+      </div>
+    </label>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -46,7 +54,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'CheckboxField',
   props: {
     modelValue: {
@@ -59,7 +69,7 @@ export default {
     },
     name: {
       type: String,
-      required: true
+      default: ''
     },
     disabled: {
       type: Boolean,
@@ -74,12 +84,13 @@ export default {
       default: ''
     }
   },
+  emits: ['update:modelValue'],
   computed: {
-    fieldID: function () {
+    fieldID: function (): string {
       return 'form-input-' + this.name
     }
   }
-}
+})
 </script>
 
 <style lang="less">
@@ -93,11 +104,19 @@ body {
 
   .cb-group {
     display: grid;
-    grid-template-columns: @input-size * 2 auto;
+    // Some space for the checkbox itself, and then only as much as necessary to
+    // fit in the label (this prevents checking/unchecking the checkbox if the
+    // user clicks far beyond the label string)
+    grid-template-columns: @input-size * 2 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
+    align-items: center;
 
-    label:not(.checkbox):not(.radio) { grid-area: label; }
+    &:not(.checkbox-outer-div-inline) {
+      margin: 10px 0;
+    }
+
+    .cb-group-label { grid-area: label; }
   }
 
   label.checkbox {
@@ -108,11 +127,8 @@ body {
     padding: 0;
     margin-right: 5px;
     grid-area: input;
-    // flex: 0.05; // 5% of available width. NOTE: The label's width is defined in Radio.vue!
 
-    input {
-      display: none !important;
-    }
+    input { display: none !important; }
 
     .checkmark {
       position: absolute;

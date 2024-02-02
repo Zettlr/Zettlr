@@ -13,10 +13,12 @@
  * END HEADER
  */
 
+import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 import ZettlrCommand from './zettlr-command'
 import type { MDFileDescriptor } from '@dts/common/fsal'
 
 const MAX_FILE_PREVIEW_LENGTH = 300
+const MAX_FILE_PREVIEW_LINES = 10
 
 export default class FilePathFindMetaData extends ZettlrCommand {
   constructor (app: any) {
@@ -35,7 +37,7 @@ export default class FilePathFindMetaData extends ZettlrCommand {
    */
   async run (evt: string, arg: any): Promise<MDFileDescriptor|undefined|any[]> {
     // Quick'n'dirty command to return the Meta descriptor for the given query
-    const descriptor = this._app.fsal.findExact(arg)
+    const descriptor = this._app.workspaces.findExact(arg)
     if (descriptor === undefined) {
       return undefined
     }
@@ -44,12 +46,14 @@ export default class FilePathFindMetaData extends ZettlrCommand {
       return descriptor
     }
 
-    const contents = await this._app.fsal.loadAnySupportedFile(descriptor.path)
-    const lines = contents.split('\n')
+    const markdown = await this._app.fsal.loadAnySupportedFile(descriptor.path)
+    const { content } = extractYamlFrontmatter(markdown)
+    const lines = content.split('\n')
 
     let preview = ''
     let i = 0
-    while (preview.length <= MAX_FILE_PREVIEW_LENGTH && i < 10) {
+    const maxPreviewLines = Math.min(lines.length, MAX_FILE_PREVIEW_LINES)
+    while (preview.length <= MAX_FILE_PREVIEW_LENGTH && i < maxPreviewLines) {
       const remainingChars = MAX_FILE_PREVIEW_LENGTH - preview.length
       if (lines[i].length <= remainingChars) {
         preview += lines[i] + '\n'

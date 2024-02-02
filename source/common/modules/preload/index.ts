@@ -98,7 +98,7 @@ contextBridge.exposeInMainWorld('clipboard', {
     const image = clipboard.readImage()
     const size = image.getSize() // First get the original size
     const aspect = image.getAspectRatio() // Then the aspect
-    const dataUrl = image.resize({ 'height': 200 }).toDataURL()
+    const dataUrl = image.resize({ height: 200 }).toDataURL()
 
     return {
       size,
@@ -159,7 +159,7 @@ contextBridge.exposeInMainWorld('process', {
   version: process.version,
   versions: process.versions,
   arch: process.arch,
-  uptime: process.uptime,
+  uptime: () => process.uptime(),
   getSystemVersion: process.getSystemVersion(),
   env: Object.assign({}, process.env),
   argv: process.argv

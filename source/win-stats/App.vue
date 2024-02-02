@@ -59,18 +59,11 @@ import ChartView from './ChartView.vue'
 import FSALView from './FSALView.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { WindowTab } from '@dts/renderer/window'
+import { type WindowTab } from '@dts/renderer/window'
 import GraphView from './GraphView.vue'
+import { type Stats } from '@providers/stats'
 
 const ipcRenderer = window.ipc
-
-interface Stats {
-  wordCount: {[day: string]: number} // All words for the graph
-  pomodoros: {[day: string]: number} // All pomodoros ever completed
-  avgMonth: number // Monthly average
-  today: number // Today's word count
-  sumMonth: number // Overall sum for the past month
-}
 
 export default defineComponent({
   components: {
@@ -109,7 +102,13 @@ export default defineComponent({
           icon: 'network-globe'
         }
       ] as WindowTab[],
-      statisticsData: {} as Stats
+      statisticsData: {
+        wordCount: {},
+        pomodoros: {},
+        avgMonth: 0,
+        today: 0,
+        sumMonth: 0
+      } satisfies Stats
     }
   },
   computed: {

@@ -38,12 +38,12 @@
 import { trans } from '@common/i18n-renderer'
 import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
-import { TabbarControl } from '@dts/renderer/window'
+import { type TabbarControl } from '@dts/renderer/window'
 import ToCTab from './ToCTab.vue'
 import ReferencesTab from './ReferencesTab.vue'
 import RelatedFilesTab from './RelatedFilesTab.vue'
 import OtherFilesTab from './OtherFilesTab.vue'
-import { OpenDocument } from '@dts/common/documents'
+import { type OpenDocument } from '@dts/common/documents'
 
 export default defineComponent({
   name: 'MainSidebar',
@@ -129,11 +129,12 @@ body {
     height: 100%;
     width: 100%;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     #sidebar-tab-container {
       padding: 0px 5px 5px 0px;
       overflow-y: auto;
-      height: 100%;
     }
 
     #open-dir-external {
@@ -276,9 +277,6 @@ body {
 
 body.darwin {
   div#sidebar {
-    // On macOS the toolbar is 40px high and the documents titlebar is 30px high,
-    // so we want to offset the sidebar by that.
-    top: calc(40px + 30px);
     background-color: transparent;
 
     div.related-files-container {

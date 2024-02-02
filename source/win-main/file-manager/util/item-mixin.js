@@ -22,8 +22,9 @@ import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
 import PopoverFileProps from './PopoverFileProps.vue'
 import PopoverDirProps from './PopoverDirProps.vue'
-
+import { mapStores } from 'pinia'
 import { nextTick } from 'vue'
+import { useOpenDirectoryStore } from '../../pinia'
 
 const ipcRenderer = window.ipc
 
@@ -44,6 +45,7 @@ export default {
     }
   },
   computed: {
+    ...mapStores(useOpenDirectoryStore),
     isDirectory: function () {
       return this.obj.type === 'directory'
     },
@@ -51,7 +53,7 @@ export default {
       return this.$store.getters.lastLeafActiveFile()
     },
     selectedDir: function () {
-      return this.$store.state.selectedDirectory
+      return this['open-directoryStore'].openDirectory
     }
   },
   watch: {
@@ -187,61 +189,13 @@ export default {
             })
               .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
-            const data = {
-              dirname: this.obj.name,
-              creationtime: this.obj.creationtime,
-              modtime: this.obj.modtime,
-              files: this.obj.children.filter(e => e.type !== 'directory').length,
-              dirs: this.obj.children.filter(e => e.type === 'directory').length,
-              totalWords: this.obj.children
-                .filter(file => file.type === 'file')
-                .map(file => file.wordCount)
-                .reduce((prev, cur) => prev + cur, 0),
-              isProject: this.obj.type === 'directory' && this.obj.settings.project !== null,
-              fullPath: this.obj.path,
-              isGitRepository: this.obj.isGitRepository,
-              icon: this.obj.icon
-            }
-
-            ;[ data.sortingType, data.sortingDirection ] = this.obj.settings.sorting.split('-')
+            const data = { directoryPath: this.obj.path }
 
             const elem = (treeItem) ? this.$refs['display-text'] : this.$el
 
             this.$showPopover(PopoverDirProps, elem, data, (data) => {
-              // Apply new sorting if applicable
-              if (data.sorting !== this.obj.settings.sorting) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-sort',
-                  payload: {
-                    path: this.obj.path,
-                    sorting: data.sorting
-                  }
-                }).catch(e => console.error(e))
-              }
-
-              // Set the project flag if applicable
-              const projectChanged = data.isProject !== this.isProject
-              if (projectChanged && data.isProject === true) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-new-project',
-                  payload: { path: this.obj.path }
-                }).catch(e => console.error(e))
-              } else if (projectChanged && data.isProject === false) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-remove-project',
-                  payload: { path: this.obj.path }
-                }).catch(e => console.error(e))
-              }
-
-              // Set the icon if it has changed
-              if (data.icon !== this.obj.settings.icon) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-set-icon',
-                  payload: {
-                    path: this.obj.path,
-                    icon: data.icon
-                  }
-                }).catch(e => console.error(e))
+              if (data.closePopover === true) {
+                this.$closePopover()
               }
             })
           }

@@ -16,6 +16,7 @@
         "fa": "fa-IR",
         "fi": "fi-FI",
         "fr": "fr-FR",
+        "gl": "gl-GL",
         "he": "he-IL",
         "hi": "hi-IN",
         "hr": "hr-HR",
@@ -135,6 +136,10 @@
         "fr-FR": [
             "Français (France)",
             "French (France)"
+        ],
+        "gl-ES": [
+            "Galego (Spain)",
+            "Galician (Spain)"
         ],
         "he-IL": [
             "עברית",

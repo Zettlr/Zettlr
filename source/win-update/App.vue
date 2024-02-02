@@ -4,7 +4,7 @@
     v-bind:titlebar="true"
     v-bind:menubar="false"
     v-bind:show-statusbar="false"
-    v-bind:disable-vibrancy="false"
+    v-bind:disable-vibrancy="!vibrancyEnabled"
   >
     <div id="update">
       <!-- First state: There is an error -->
@@ -90,7 +90,7 @@
  */
 
 import WindowChrome from '@common/vue/window/Chrome.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import { trans } from '@common/i18n-renderer'
 import formatSize from '@common/util/format-size'
@@ -110,6 +110,7 @@ export default defineComponent({
       windowTitle: trans('Updater'),
       disableStartButton: false, // True as soon as the update starts
       startButtonLabel: trans('Click to start update'),
+      vibrancyEnabled: window.config.get('window.vibrancy') as boolean,
       updateState: {
         lastErrorMessage: undefined,
         lastErrorCode: undefined,

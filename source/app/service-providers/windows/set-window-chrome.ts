@@ -27,6 +27,7 @@ import path from 'path'
  */
 export default function setWindowChrome (config: ConfigProvider, winConf: BrowserWindowConstructorOptions, modal: boolean = false): void {
   const shouldUseNativeAppearance: boolean = config.get('window.nativeAppearance')
+  const shouldUseVibrancy: boolean = config.get('window.vibrancy')
 
   if (process.platform !== 'darwin' || modal) {
     // It is recommended to set a background color for the windows, however, on
@@ -39,9 +40,12 @@ export default function setWindowChrome (config: ConfigProvider, winConf: Browse
     // chrome. Additionally, we'll be setting the window's vibrancy so that the
     // app looks even more native.
     winConf.titleBarStyle = 'hiddenInset'
-    winConf.vibrancy = 'under-window' // See https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/translucency/
-    winConf.visualEffectState = 'followWindow'
-    winConf.transparent = true
+    if (shouldUseVibrancy) {
+      // See https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/translucency/
+      winConf.vibrancy = 'under-window'
+      winConf.visualEffectState = 'followWindow'
+      winConf.transparent = true
+    }
   } else if ((process.platform === 'linux' && !shouldUseNativeAppearance) || process.platform === 'win32') {
     // On Windows, we need a frameless window. On Linux, only if the
     // shouldUseNativeAppearance flag is set to false.

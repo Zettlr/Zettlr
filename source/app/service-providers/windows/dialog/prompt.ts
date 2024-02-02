@@ -22,35 +22,27 @@ import type LogProvider from '@providers/log'
  * @param   {BrowserWindow|null}  win      The window to attach to
  * @param   {any}            options  Options for the message box
  */
-export default function promptDialog (logger: LogProvider, win: BrowserWindow|null, options: any): void {
+export default function promptDialog (logger: LogProvider, win: BrowserWindow|null, options: Partial<MessageBoxOptions> & { message: string }|string): void {
   if (typeof options === 'string') {
-    options = { 'message': options }
+    options = { message: options }
   }
 
   const boxOptions: MessageBoxOptions = {
-    type: 'info',
+    type: options.type ?? 'info',
     buttons: [trans('Ok')],
     defaultId: 0,
-    title: 'Zettlr',
+    title: options.title ?? 'Zettlr',
     message: options.message
-  }
-
-  if (options.type !== undefined) {
-    boxOptions.type = options.type as string
-  }
-
-  if (options.title !== undefined) {
-    boxOptions.title = options.title as string
   }
 
   // The showmessageBox-function returns a promise,
   // nevertheless, we don't need a return.
   // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
   if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
-    dialog.showMessageBox(win, options)
+    dialog.showMessageBox(win, boxOptions)
       .catch(e => logger.error('[Window Manager] Prompt threw an error', e))
   } else {
-    dialog.showMessageBox(options)
+    dialog.showMessageBox(boxOptions)
       .catch(e => logger.error('[Window Manager] Prompt threw an error', e))
   }
 }

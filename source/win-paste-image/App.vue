@@ -122,7 +122,7 @@ export default defineComponent({
       originalHeight: size.height,
       aspectRatio: aspect,
       retainAspect: true,
-      targetPath: (startPath !== null) ? startPath : '',
+      targetPath: startPath ?? '',
       fileName: name
     }
   },
@@ -179,7 +179,7 @@ export default defineComponent({
   },
   methods: {
     recalculateDimensions: function (type: 'width'|'height') {
-      if (this.retainAspect === false) {
+      if (!this.retainAspect) {
         return
       }
 

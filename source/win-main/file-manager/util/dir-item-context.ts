@@ -18,31 +18,17 @@ import type { DirDescriptor } from '@dts/common/fsal'
 import type { AnyMenuItem } from '@dts/renderer/context'
 
 const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 export default function displayFileContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: any): void {
+  const isMac = process.platform === 'darwin'
+  const isWin = process.platform === 'win32'
+
   const TEMPLATE: AnyMenuItem[] = [
     {
       label: trans('Properties'),
       id: 'menu.properties',
       type: 'normal',
-      enabled: true
-    },
-    {
-      label: trans('Rename directory'),
-      type: 'normal',
-      id: 'menu.rename_dir',
-      enabled: true
-    },
-    {
-      label: trans('Delete directory'),
-      type: 'normal',
-      id: 'menu.delete_dir',
-      enabled: true
-    },
-    {
-      label: trans('Open directory'),
-      type: 'normal',
-      id: 'gui.attachments_open_dir',
       enabled: true
     },
     {
@@ -58,6 +44,39 @@ export default function displayFileContext (event: MouseEvent, dirObject: DirDes
       label: trans('New directory…'),
       type: 'normal',
       id: 'menu.new_dir',
+      enabled: true
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: trans('Rename directory'),
+      type: 'normal',
+      id: 'menu.rename_dir',
+      enabled: true
+    },
+    {
+      label: trans('Delete directory'),
+      type: 'normal',
+      id: 'menu.delete_dir',
+      enabled: true
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: trans('Copy path'),
+      id: 'menu.copy_path',
+      type: 'normal',
+      enabled: true
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: isMac ? trans('Reveal in Finder') : isWin ? trans('Reveal in Explorer') : trans('Reveal in File Browser'),
+      type: 'normal',
+      id: 'gui.attachments_open_dir',
       enabled: true
     }
   ]
@@ -104,6 +123,9 @@ export default function displayFileContext (event: MouseEvent, dirObject: DirDes
   showPopupMenu(point, template, (clickedID) => {
     callback(clickedID) // TODO
     switch (clickedID) {
+      case 'menu.copy_path':
+        clipboard.writeText(dirObject.path)
+        break
       case 'gui.attachments_open_dir':
         ipcRenderer.send('window-controls', {
           command: 'show-item-in-folder',

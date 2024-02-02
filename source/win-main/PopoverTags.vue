@@ -49,10 +49,10 @@
 import TextControl from '@common/vue/form/elements/Text.vue'
 import TabBar from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
-import { TabbarControl } from '@dts/renderer/window'
-import { OpenDocument } from '@dts/common/documents'
-import { TagRecord } from '@providers/tags'
+import { type PropType, defineComponent } from 'vue'
+import { type TabbarControl } from '@dts/renderer/window'
+import { type OpenDocument } from '@dts/common/documents'
+import { type TagRecord } from '@providers/tags'
 
 const ipcRenderer = window.ipc
 
@@ -62,6 +62,12 @@ export default defineComponent({
     TextControl,
     TabBar
   },
+  props: {
+    activeFile: {
+      type: Object as PropType<OpenDocument|null>,
+      default: null
+    }
+  },
   data: function () {
     return {
       tags: [] as TagRecord[],
@@ -70,7 +76,7 @@ export default defineComponent({
         { id: 'count', label: trans('Count') },
         { id: 'idf', label: 'IDF' }
       ] as TabbarControl[],
-      activeFile: null as OpenDocument|null,
+      // activeFile: null as OpenDocument|null,
       query: '',
       searchForTag: '',
       sorting: 'name', // Can be "name" or "count"
@@ -100,7 +106,7 @@ export default defineComponent({
       // Sorts the tags based on either name or count
       const sorted = this.tags.map(elem => elem)
       const languagePreferences = [ window.config.get('appLang'), 'en' ]
-      const coll = new Intl.Collator(languagePreferences, { 'numeric': true })
+      const coll = new Intl.Collator(languagePreferences, { numeric: true })
       sorted.sort((a, b) => {
         if (this.sorting === 'name') {
           return coll.compare(a.name, b.name)

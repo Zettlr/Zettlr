@@ -156,7 +156,7 @@ export class DTLeaf {
    *
    * @return  {DTLeaf}      This, or undefined
    */
-  public findLeaf (id: string): DTLeaf|undefined {
+  public findLeaf (id: string): this|undefined {
     if (id === this._id) {
       return this
     }

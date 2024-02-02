@@ -5,7 +5,7 @@
     v-bind:style="{ 'font-size': `${fontSize}px` }"
     v-bind:class="{
       'code-file': !isMarkdown,
-      'fullscreen': distractionFree
+      fullscreen: distractionFree
     }"
   >
     <div v-bind:id="`cm-text-${props.leafId}`">
@@ -37,19 +37,34 @@ import objectToArray from '@common/util/object-to-array'
 import { ref, computed, onMounted, watch, toRef } from 'vue'
 import { useStore } from 'vuex'
 import { key as storeKey } from './store'
-import { EditorCommands } from '@dts/renderer/editor'
+import { type EditorCommands } from '@dts/renderer/editor'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
+import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
+import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
+import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
-import { TagRecord } from '@providers/tags'
+import { type TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
+import { useWorkspacesStore } from './pinia'
 
 const ipcRenderer = window.ipc
 const path = window.path
+
+// This function overwrites the getBibliographyForDescriptor function to ensure
+// the library is always absolute. We have to do it this ridiculously since the
+// function is called in both main and renderer processes, and we still have the
+// issue that path-browserify is entirely unusable.
+function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
+  const library = getBibliography(descriptor)
+
+  if (library !== CITEPROC_MAIN_DB && !path.isAbsolute(library)) {
+    return path.resolve(descriptor.dir, library)
+  } else {
+    return library
+  }
+}
 
 const props = defineProps({
   leafId: {
@@ -78,7 +93,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits<{(e: 'globalSearch', query: string): void}>()
+const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 const store = useStore(storeKey)
 
@@ -87,7 +102,7 @@ let currentEditor: MarkdownEditor|null = null
 const isMarkdown = hasMarkdownExt(props.file.path)
 
 // EVENT LISTENERS
-ipcRenderer.on('citeproc-database-updated', (event, dbPath: string) => {
+ipcRenderer.on('citeproc-database-updated', (_event, _dbPath: string) => {
   const descriptor = activeFileDescriptor.value
 
   if (descriptor === undefined || descriptor.type !== 'file') {
@@ -161,7 +176,7 @@ ipcRenderer.on('documents-update', (e, { event, context }) => {
 })
 
 // Update the file database whenever links have been updated
-ipcRenderer.on('links', e => {
+ipcRenderer.on('links', _e => {
   updateFileDatabase().catch(err => console.error('Could not update file database', err))
 })
 
@@ -194,13 +209,14 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     autoCloseBrackets: store.state.config['editor.autoCloseBrackets'],
     autocorrect: {
       active: store.state.config['editor.autoCorrect.active'],
-      style: store.state.config['editor.autoCorrect.style'],
+      matchWholeWords: store.state.config['editor.autoCorrect.matchWholeWords'],
       magicQuotes: {
         primary: store.state.config['editor.autoCorrect.magicQuotes.primary'],
         secondary: store.state.config['editor.autoCorrect.magicQuotes.secondary']
       },
       replacements: store.state.config['editor.autoCorrect.replacements']
     },
+    autocompleteSuggestEmojis: store.state.config['editor.autocompleteSuggestEmojis'],
     imagePreviewWidth: store.state.config['display.imageWidth'],
     imagePreviewHeight: store.state.config['display.imageHeight'],
     boldFormatting: store.state.config['editor.boldFormatting'],
@@ -227,8 +243,9 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     lintLanguageTool: store.state.config['editor.lint.languageTool.active'],
     distractionFree: props.distractionFree.valueOf(),
     showStatusbar: store.state.config['editor.showStatusbar'],
-    darkMode: store.state.config.darkMode
-  } as EditorConfigOptions
+    darkMode: store.state.config.darkMode,
+    theme: store.state.config['display.theme']
+  } satisfies EditorConfigOptions
 })
 
 // External commands/"event" system
@@ -240,14 +257,14 @@ watch(toRef(props.editorCommands, 'jumpToLine'), () => {
   }
 })
 watch(toRef(props.editorCommands, 'moveSection'), () => {
-  if (props.activeFile?.path !== props.file.path) {
+  if (props.activeFile?.path !== props.file.path || store.state.lastLeafId !== props.leafId) {
     return
   }
 
   const { from, to } = props.editorCommands.data
   currentEditor?.moveSection(from, to)
 })
-watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
+watch(toRef(props.editorCommands, 'readabilityMode'), () => {
   if (currentEditor === null || props.activeFile?.path !== props.file.path) {
     return
   }
@@ -255,23 +272,35 @@ watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
   currentEditor.readabilityMode = !currentEditor.readabilityMode
 })
 
-watch(toRef(props, 'distractionFree'), (newValue) => {
-  if (currentEditor !== null && props.activeFile?.path === props.file.path) {
+watch(toRef(props, 'distractionFree'), () => {
+  if (currentEditor !== null && props.activeFile?.path === props.file.path && store.state.lastLeafId === props.leafId) {
     currentEditor.distractionFree = props.distractionFree
   }
 })
 
 watch(toRef(props.editorCommands, 'executeCommand'), () => {
-  if (props.activeFile?.path !== props.file.path) {
+  if (props.activeFile?.path !== props.file.path || currentEditor === null) {
+    return
+  }
+
+  if (store.state.lastLeafId !== props.leafId) {
+    // This editor, even though it may be focused, was not the last focused
+    // See https://github.com/Zettlr/Zettlr/issues/4361
     return
   }
 
   const command: string = props.editorCommands.data
-  currentEditor?.runCommand(command)
-  currentEditor?.focus()
+  currentEditor.runCommand(command)
+  currentEditor.focus()
 })
 watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   if (props.activeFile?.path !== props.file.path) {
+    return
+  }
+
+  if (store.state.lastLeafId !== props.leafId) {
+    // This editor, even though it may be focused, was not the last focused
+    // See https://github.com/Zettlr/Zettlr/issues/4361
     return
   }
 
@@ -279,8 +308,10 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   currentEditor?.replaceSelection(textToInsert)
 })
 
+const workspacesStore = useWorkspacesStore()
+
 const fsalFiles = computed<MDFileDescriptor[]>(() => {
-  const tree = store.state.fileTree
+  const tree = workspacesStore.rootDescriptors
   const files = []
 
   for (const item of tree) {
@@ -339,6 +370,14 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
   })
 
   editor.on('focus', () => {
+    ipcRenderer.invoke('documents-provider', {
+      command: 'focus-leaf',
+      payload: {
+        leafId: props.leafId,
+        windowId: props.windowId
+      }
+    }).catch(err => console.error(err))
+
     store.dispatch('lastLeafId', props.leafId).catch(err => console.error(err))
     if (currentEditor === editor) {
       store.commit('updateTableOfContents', currentEditor.tableOfContents)
@@ -374,7 +413,7 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
 /**
  * Loads the document for this editor instance.
  */
-async function loadDocument () {
+async function loadDocument (): Promise<void> {
   const newEditor = await getEditorFor(props.file.path)
 
   const wrapper = document.getElementById(`cm-text-${props.leafId}`)
@@ -416,7 +455,7 @@ async function loadDocument () {
   })
 }
 
-function jtl (lineNumber: number) {
+function jtl (lineNumber: number): void {
   currentEditor?.jtl(lineNumber)
 }
 
@@ -474,7 +513,7 @@ async function updateCitationKeys (library: string): Promise<void> {
   currentEditor?.setCompletionDatabase('citations', items)
 }
 
-async function updateFileDatabase () {
+async function updateFileDatabase (): Promise<void> {
   // Get all our files ...
   const fileDatabase: Array<{ filename: string, displayName: string, id: string }> = []
 
@@ -509,7 +548,7 @@ async function updateFileDatabase () {
   currentEditor?.setCompletionDatabase('files', fileDatabase)
 }
 
-function maybeHighlightSearchResults () {
+function maybeHighlightSearchResults (): void {
   if (currentEditor === null) {
     return
   }
@@ -555,10 +594,6 @@ function maybeHighlightSearchResults () {
   transition: 0.2s background-color ease;
   position: relative;
 
-  &.fullscreen {
-    z-index: 100; // Ensure this editor instance is on top of any other pane
-  }
-
   .cm-editor {
     .cm-scroller { padding: 50px 50px; }
 
@@ -583,7 +618,7 @@ function maybeHighlightSearchResults () {
       @green:     #859900;
 
       color: @base01;
-      font-family: 'Inconsolata', Consolas, Menlo, monospace;
+      font-family: Inconsolata, monospace;
 
       .cm-string         { color: @green; }
       .cm-keyword        { color: @green; }
@@ -613,7 +648,7 @@ function maybeHighlightSearchResults () {
 
   // If a code file is loaded, we need to display the editor contents in monospace.
   &.code-file .cm-editor {
-    font-family: 'Inconsolata', Consolas, Menlo, monospace;
+    font-family: Inconsolata, monospace;
 
     // Reset the margins for code files
     .cm-scroller { padding: 0px; }
@@ -631,6 +666,11 @@ body.dark .main-editor-wrapper {
 
 // CodeMirror fullscreen
 .main-editor-wrapper.fullscreen {
+  // This makes the editor pane show "fullscreen" on top over the rest of the UI
+  // except the toolbar (due to a position: relative on the window content div).
+  position: absolute;
+  top: 0;
+
   .cm-scroller {
     @media(min-width: 1301px) { padding: 0 @editor-margin-fullscreen-xxl; }
     @media(max-width: 1300px) { padding: 0 @editor-margin-fullscreen-xl; }

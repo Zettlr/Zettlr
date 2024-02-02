@@ -67,7 +67,7 @@ defaults:
 
 # Global environment variables
 env:
-  NODE_VERSION: '16'
+  NODE_VERSION: '18'
 
 # Ensure only a single build workflow runs at any one time
 concurrency:
@@ -137,7 +137,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: github.ref_name == 'develop'
-        run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -202,7 +202,7 @@ jobs:
   #         npm_config_dist_url: https://unofficial-builds.nodejs.org/download/release
   #     - name: Set tag version to nightly
   #       if: github.ref_name == 'develop'
-  #       run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
+  #       run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
   #     - name: Retrieve tag version
   #       id: ref
   #       run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -249,7 +249,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: github.ref_name == 'develop'
-        run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -294,7 +294,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: github.ref_name == 'develop'
-        run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -346,12 +346,14 @@ jobs:
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
         if: github.ref_name == 'develop'
-        run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
       - name: Package & Release
-        run: yarn package:linux-x64 && yarn release:linux-x64
+        run: |
+          yarn package:linux-x64
+          yarn release:linux-x64
       - name: Cache installers
         uses: actions/upload-artifact@v3
         with:
@@ -365,6 +367,8 @@ jobs:
     name: Linux (arm64)
     env:
       npm_config_arch: arm64
+      CC: zig cc -target aarch64-linux-gnu
+      CXX: zig c++ -target aarch64-linux-gnu
     needs: [preflight, verify_version]
     runs-on: ubuntu-20.04
     steps:
@@ -377,16 +381,20 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      - name: Install Zig
+        uses: goto-bus-stop/setup-zig@v2
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: github.ref_name == 'develop'
-        run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
       - name: Package & Release
-        run: yarn package:linux-arm && yarn release:linux-arm
+        run: |
+          yarn package:linux-arm
+          yarn release:linux-arm
       - name: Cache installers
         uses: actions/upload-artifact@v3
         with:
@@ -429,7 +437,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: github.ref_name == 'develop'
-        run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -474,12 +482,12 @@ jobs:
           sha256sum "Zettlr-${{env.version}}-x64.exe" > "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-x64.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-arm64.dmg" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-amd64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-arm64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-aarch64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-arm64.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-amd64.deb" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-arm64.deb" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-aarch64.rpm" >> "SHA256SUMS.txt"
           cd ..
       - name: Verify checksums
         run: |
@@ -525,9 +533,9 @@ jobs:
             ./release/Zettlr-${{env.version}}-x64.dmg
             ./release/Zettlr-${{env.version}}-arm64.dmg
             ./release/Zettlr-${{env.version}}-amd64.deb
-            ./release/Zettlr-${{env.version}}-x86_64.rpm
-            ./release/Zettlr-${{env.version}}-x86_64.AppImage
             ./release/Zettlr-${{env.version}}-arm64.deb
+            ./release/Zettlr-${{env.version}}-x86_64.rpm
             ./release/Zettlr-${{env.version}}-aarch64.rpm
+            ./release/Zettlr-${{env.version}}-x86_64.AppImage
             ./release/Zettlr-${{env.version}}-arm64.AppImage
             ./release/SHA256SUMS.txt

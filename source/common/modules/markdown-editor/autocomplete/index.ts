@@ -89,6 +89,7 @@ const autocompleteSource: CompletionSource = function (ctx): CompletionResult|nu
     if (res !== false) {
       plugin = p
       startpos = res
+      break
     }
   }
 

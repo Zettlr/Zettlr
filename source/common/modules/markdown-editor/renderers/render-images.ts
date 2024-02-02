@@ -17,7 +17,7 @@ import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
 import { WidgetType, type EditorView } from '@codemirror/view'
 import { type EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
-import makeAbsoluteURL from '@common/util/make-absolute-url'
+import makeValidUri from '@common/util/make-valid-uri'
 import { linkImageMenu } from '../context-menu/link-image-menu'
 import { trans } from '@common/i18n-renderer'
 import clickAndSelect from './click-and-select'
@@ -47,7 +47,7 @@ class ImageWidget extends WidgetType {
     const basePath = path.dirname(view.state.field(configField).metadata.path)
 
     if (!isDataUrl) {
-      actualURLToLoad = makeAbsoluteURL(basePath, actualURLToLoad)
+      actualURLToLoad = makeValidUri(actualURLToLoad, basePath)
     }
 
     img.src = actualURLToLoad
@@ -61,13 +61,17 @@ class ImageWidget extends WidgetType {
 
     const openExternally = document.createElement('span')
     openExternally.classList.add('open-externally-button')
-    openExternally.textContent = 'Open image externally'
+    openExternally.setAttribute('title', trans('Open image externally'))
     openExternally.onclick = function (event) {
       event.stopPropagation()
       // NOTE: We can only do this because the main process prevents any
       // navigation, and will open the "URL" using the shell.
       window.location.assign(actualURLToLoad)
     }
+
+    const openIcon = document.createElement('cds-icon')
+    openIcon.setAttribute('shape', 'pop-out')
+    openExternally.appendChild(openIcon)
 
     const figure = document.createElement('figure')
     figure.appendChild(img)
@@ -98,7 +102,7 @@ class ImageWidget extends WidgetType {
     // Update the image title on load to retrieve the real image size.
     img.onload = () => {
       img.title = `${this.imageTitle} (${img.naturalWidth}x${img.naturalHeight}px)`
-      size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}px`
+      size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}`
 
       if (!isDataUrl) {
         figure.appendChild(openExternally)

@@ -39,16 +39,17 @@ export default class ZettlrPopover {
   private _isClosing: boolean
 
   /**
-    * Creates and mounts a new popup
-    *
-    * @param  {string}         content          The content of the popup (a HTML string)
-    * @param  {HTMLElement}    elem             The target element
-    * @param  {Function|null}  [callback=null]  A callback to which the popover data will be sent
-    */
+   * Creates and mounts a new popup
+   *
+   * @param {string} component The content of the popup (a HTML string)
+   * @param {HTMLElement} elem The target element
+   * @param {Record<string, any>|null|undefined} props The initial properties for the popover
+   * @param {Function | null} [callback] A callback to which the popover data will be sent
+   */
   constructor (
     component: ReturnType<typeof defineComponent>,
     elem: HTMLElement,
-    initialData: any,
+    props: Record<string, any> | null | undefined,
     callback: (data: any) => void
   ) {
     this._elem = elem
@@ -79,10 +80,9 @@ export default class ZettlrPopover {
     document.body.appendChild(this._popup)
     document.body.appendChild(this._arrow)
 
-    // Create the Vue instance and mount it into the popover container
-    this._popover = createApp(component).mount('#popoverMount')
-    // Preset the data with initial values
-    this.updateData(initialData)
+    // Create the Vue instance and mount it into the popover container, passing
+    // the initial data as properties
+    this._popover = createApp(component, props).mount('#popoverMount')
     // We need to mount it onto a div inside our container because the Vue component will replace the mount point
 
     // Notify the caller whenever the result-property changes. NOTE that each
@@ -264,9 +264,9 @@ export default class ZettlrPopover {
   /**
    * Updates the data on the Vue instance
    *
-   * @param   {any}   data  The data to be set
+   * @param   {Record<string, any>} data The data to be updated
    */
-  updateData (data: any): void {
+  updateData (data: Record<string, any>): void {
     for (const key in data) {
       this._popover.$data[key] = data[key]
     }

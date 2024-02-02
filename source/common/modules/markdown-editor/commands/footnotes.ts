@@ -104,7 +104,6 @@ export function addNewFootnote (target: EditorView): boolean {
     offsetChars += `${id}`.length - (to - from)
 
     changes.push({ from, to, insert: `${id}` })
-    console.log(`Updating footnote ${fn.label} to ${id}`)
 
     const ref = refs.find(ref => ref.label === fn.label)
     if (ref !== undefined) {

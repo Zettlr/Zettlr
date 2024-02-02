@@ -62,12 +62,20 @@
 
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { RelatedFile } from '@dts/renderer/misc'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { defineComponent } from 'vue'
-import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { TagRecord } from '@providers/tags'
+import { mapStores } from 'pinia'
+import { useWorkspacesStore } from '../pinia'
+import { type OpenDocument } from '@dts/common/documents'
+import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { type TagRecord } from '@providers/tags'
+
+export interface RelatedFile {
+  file: string
+  path: string
+  tags: string[]
+  link: 'inbound'|'outbound'|'bidirectional'|'none'
+}
 
 const ipcRenderer = window.ipc
 const path = window.path
@@ -85,6 +93,7 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useWorkspacesStore),
     relatedFilesLabel: function (): string {
       return trans('Related files')
     },
@@ -131,15 +140,14 @@ export default defineComponent({
     }
   },
   watch: {
-    lastActiveFile (oldval, newval) {
+    lastActiveFile () {
       this.recomputeRelatedFiles().catch(err => console.error('Could not recompute related files:', err))
     }
   },
   mounted () {
-    ipcRenderer.on('documents-update', (e, { event, context }) => {
-      if (event === DP_EVENTS.FILE_SAVED && context.filePath === this.lastActiveFile?.path) {
-        this.recomputeRelatedFiles().catch(err => console.log('Could not recompute related files:', err))
-      }
+    this.recomputeRelatedFiles().catch(err => console.log('Could not recompute related files:', err))
+    ipcRenderer.on('workspace-changed', (e, _) => {
+      this.recomputeRelatedFiles().catch(err => console.log('Could not recompute related files:', err))
     })
   },
   methods: {
@@ -250,12 +258,17 @@ export default defineComponent({
       ]
     },
     beginDragRelatedFile: function (event: DragEvent, filePath: string) {
-      const descriptor = this.$store.getters.file(filePath)
+      const descriptor = this.workspacesStore.getFile(filePath)
+
+      if (descriptor === undefined) {
+        console.error('Cannot begin dragging related file: Descriptor not found')
+        return
+      }
 
       event.dataTransfer?.setData('text/x-zettlr-file', JSON.stringify({
         type: descriptor.type, // Can be file, code, or directory
         path: descriptor.path,
-        id: descriptor.id // Convenience
+        id: descriptor.type === 'file' ? descriptor.id : '' // Convenience
       }))
     },
     requestFile: function (event: MouseEvent, filePath: string) {
@@ -271,8 +284,8 @@ export default defineComponent({
         .catch(e => console.error(e))
     },
     getRelatedFileName: function (filePath: string) {
-      const descriptor = this.$store.getters.file(filePath)
-      if (descriptor === undefined) {
+      const descriptor = this.workspacesStore.getFile(filePath)
+      if (descriptor === undefined || descriptor.type !== 'file') {
         return filePath
       }
 

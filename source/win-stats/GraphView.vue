@@ -47,17 +47,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { GraphArc, GraphVertex, LinkGraph } from '@dts/common/graph'
+import { type GraphArc, type GraphVertex, type LinkGraph } from '@dts/common/graph'
 import * as d3 from 'd3'
 import Checkbox from '@common/vue/form/elements/Checkbox.vue'
-import ButtonElement from '@common/vue/form/elements/Button.vue'
+import ButtonElement from '@common/vue/form/elements/ButtonControl.vue'
 import ProgressElement from '@common/vue/form/elements/Progress.vue'
 import SelectElement from '@common/vue/form/elements/Select.vue'
 import TextElement from '@common/vue/form/elements/Text.vue'
 import tippy from 'tippy.js'
-import { SimulationNodeDatum } from 'd3'
+import { type SimulationNodeDatum } from 'd3'
 import DirectedGraph from '@providers/links/directed-graph'
-import { MDFileDescriptor } from '@dts/common/fsal'
+import { type MDFileDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -237,33 +237,32 @@ export default defineComponent({
 
     // Hook into the zoom behavior, and misuse the wheel-event emitted by it in
     // order to reposition the center of the viewport
-    const graphComponent = this
     this.graphElement.call(d3.zoom<SVGSVGElement, any>())
-      .on('wheel.zoom', function (event: WheelEvent) {
+      .on('wheel.zoom', (event: WheelEvent) => {
         // What we do here is take the cursor offset from the container center
         // as well as the SVG offset and also move the SVG based on where the
         // cursor is. This mimics somewhat the Google Maps approach to always
         // also move the map ever so slightly towards wherever the cursor is
         // pointing. But the behavior can certainly be improved I guess.
-        const containerRect = graphComponent.containerElement.getBoundingClientRect()
+        const containerRect = this.containerElement.getBoundingClientRect()
         const cursorY = event.clientY - containerRect.y
         const cursorX = event.clientX - containerRect.x
         const centerContainerX = containerRect.width / 2
         const centerContainerY = containerRect.height / 2
-        const centerSVGX = graphComponent.offsetX
-        const centerSVGY = graphComponent.offsetY
+        const centerSVGX = this.offsetX
+        const centerSVGY = this.offsetY
         const cursorOffsetX = cursorX - centerContainerX
         const cursorOffsetY = cursorY - centerContainerY
-        const scalingFactor = 0.1 / graphComponent.zoomFactor
+        const scalingFactor = 0.1 / this.zoomFactor
 
         if (event.deltaY < 0) {
-          graphComponent.offsetX += (cursorOffsetX - centerSVGX) * scalingFactor
-          graphComponent.offsetY += (cursorOffsetY - centerSVGY) * scalingFactor
+          this.offsetX += (cursorOffsetX - centerSVGX) * scalingFactor
+          this.offsetY += (cursorOffsetY - centerSVGY) * scalingFactor
         }
 
-        graphComponent.zoomFactor += (event.deltaY > 0) ? 0.1 : -0.1
-        if (graphComponent.zoomFactor < 0.1) {
-          graphComponent.zoomFactor = 0.1
+        this.zoomFactor += (event.deltaY > 0) ? 0.1 : -0.1
+        if (this.zoomFactor < 0.1) {
+          this.zoomFactor = 0.1
         }
       })
 
@@ -395,7 +394,7 @@ export default defineComponent({
       const svg = this.graphElement
 
       if (this.simulation === null) {
-        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(includedLinks).id((node, i, nodesData) => node.id).strength((link, i) => link.weight * 2)
+        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(includedLinks).id((node, _i, _nodesData) => node.id).strength((link, _i) => link.weight * 2)
         this.simulation = d3.forceSimulation(includedNodes as any)
           .force('link', forceLink)
           .force('charge', d3.forceManyBody())
@@ -449,13 +448,15 @@ export default defineComponent({
             groupSelection
               .append('circle')
               .attr('r', 5)
-              .attr('fill', (vertex, value) => (vertex.isolate) ? color(ISOLATES_CLASS) : color(vertex.component))
+              .attr('fill', (vertex, _value) => (vertex.isolate) ? color(ISOLATES_CLASS) : color(vertex.component))
               .on('click', (event, vertex) => {
-                // BUG: This call requires a windowId and a leafId, which we don't have
-                // ipcRenderer.invoke('documents-provider', {
-                //   command: 'open-file',
-                //   payload: { path: vertex.id }
-                // }).catch(err => console.error(err))
+                ipcRenderer.invoke('documents-provider', {
+                  command: 'open-file',
+                  payload: {
+                    path: vertex.id,
+                    newTab: (event.altKey === true) ? true : undefined
+                  }
+                }).catch(err => console.error(err))
               })
               .attr('data-tippy-content', (vertex) => {
                 let cnt = ''
@@ -475,7 +476,8 @@ export default defineComponent({
                 .append('text')
                 .attr('font-size', '8px')
                 .attr('font-weight', '100')
-                .attr('stroke', '#666')
+                .attr('fill', '#666')
+                .attr('stroke-width', '0')
                 .text((d: any) => { return d.label ?? d.id })
             }
 
@@ -489,7 +491,8 @@ export default defineComponent({
                 .append('text')
                 .attr('font-size', '8px')
                 .attr('font-weight', '100')
-                .attr('stroke', '#666')
+                .attr('fill', '#666')
+                .attr('stroke-width', '0')
                 .text((d: any) => { return d.label ?? d.id })
             }
 

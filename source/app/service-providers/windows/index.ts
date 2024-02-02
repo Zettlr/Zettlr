@@ -21,11 +21,11 @@ import {
   BrowserWindow,
   ipcMain,
   shell,
-  type FileFilter
+  type FileFilter,
+  type MessageBoxOptions
 } from 'electron'
 import EventEmitter from 'events'
 import path from 'path'
-import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createUpdateWindow from './create-update-window'
@@ -46,7 +46,6 @@ import promptDialog from './dialog/prompt'
 import type { WindowPosition } from './types'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
-import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
 import ProviderContract from '@providers/provider-contract'
@@ -66,7 +65,7 @@ export default class WindowProvider extends ProviderContract {
   private _logWindow: BrowserWindow|null
   private _statsWindow: BrowserWindow|null
   private _assetsWindow: BrowserWindow|null
-  private _projectProperties: BrowserWindow|null
+  private readonly _projectProperties: Map<string, BrowserWindow>
   private _preferences: BrowserWindow|null
   private _aboutWindow: BrowserWindow|null
   private _tagManager: BrowserWindow|null
@@ -79,6 +78,7 @@ export default class WindowProvider extends ProviderContract {
   private readonly _hasRTLLocale: boolean
   private suppressWindowOpening: boolean
   private readonly _emitter: EventEmitter
+  private readonly _lastMainWindow: { windowId: string|undefined }
 
   constructor (
     private readonly _logger: LogProvider,
@@ -99,10 +99,11 @@ export default class WindowProvider extends ProviderContract {
     this._logWindow = null
     this._statsWindow = null
     this._assetsWindow = null
-    this._projectProperties = null
+    this._projectProperties = new Map()
     this._windowState = new Map()
     this._configFile = path.join(app.getPath('userData'), 'window_state.yml')
     this._stateContainer = new PersistentDataContainer(this._configFile, 'yaml', 1000)
+    this._lastMainWindow = { windowId: undefined }
 
     // If the corresponding CLI flag is passed, we should suppress opening of
     // any windows until the user has manually activated the app by utilizing
@@ -311,6 +312,13 @@ export default class WindowProvider extends ProviderContract {
    */
   private _hookMainWindow (window: BrowserWindow): void {
     // Listens to events from the window
+    window.on('focus', () => {
+      const key = this.getMainWindowKey(window)
+      if (key !== undefined) {
+        this._lastMainWindow.windowId = key
+      }
+    })
+
     window.on('close', (event) => {
       const key = this.getMainWindowKey(window)
 
@@ -361,6 +369,10 @@ export default class WindowProvider extends ProviderContract {
       if (key === undefined) {
         this._logger.error('[Window Manager] Could not dereference a main window since its key was not found!')
         return
+      } else {
+        if (this._lastMainWindow.windowId === key) {
+          this._lastMainWindow.windowId = undefined
+        }
       }
 
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -616,9 +628,11 @@ export default class WindowProvider extends ProviderContract {
    * @return  {BrowserWindow|undefined}  The window, or undefined
    */
   getFirstMainWindow (): BrowserWindow|undefined {
-    const focusedWindow = BrowserWindow.getFocusedWindow()
-    if (focusedWindow !== null && this.getMainWindowKey(focusedWindow) !== undefined) {
-      return focusedWindow
+    if (this._lastMainWindow.windowId !== undefined) {
+      const window = this._mainWindows[this._lastMainWindow.windowId]
+      if (window !== undefined) {
+        return window
+      }
     }
 
     const allWindows = BrowserWindow.getAllWindows()
@@ -649,11 +663,14 @@ export default class WindowProvider extends ProviderContract {
 
   /**
    * Displays the defaults window
+   *
+   * @param  {string}  preselectTab  Whether to preselect one of the tabs; this
+   *                                 is effectively the URL hash fragment.
    */
-  showDefaultsWindow (): void {
+  showDefaultsWindow (preselectTab?: string): void {
     if (this._assetsWindow === null) {
       const conf = this._retrieveWindowPosition('assets', null)
-      this._assetsWindow = createAssetsWindow(this._logger, this._config, conf)
+      this._assetsWindow = createAssetsWindow(this._logger, this._config, conf, preselectTab)
       this._hookWindowResize(this._assetsWindow, 'assets')
 
       // Dereference the window as soon as it is closed
@@ -847,20 +864,19 @@ export default class WindowProvider extends ProviderContract {
    * @param   {string}  dirPath  The directory to load
    */
   showProjectPropertiesWindow (dirPath: string): void {
-    if (this._projectProperties === null) {
-      const conf = this._retrieveWindowPosition('print', null)
-      this._projectProperties = createProjectPropertiesWindow(this._logger, this._config, conf, dirPath)
-      this._hookWindowResize(this._projectProperties, 'project-properties')
+    const existingWindow = this._projectProperties.get(dirPath)
+    if (existingWindow === undefined) {
+      const conf = this._retrieveWindowPosition('project-properties', null)
+      const newWindow = createProjectPropertiesWindow(this._logger, this._config, conf, dirPath)
+      this._projectProperties.set(dirPath, newWindow)
+      this._hookWindowResize(newWindow, 'project-properties')
 
       // Dereference the window as soon as it is closed
-      this._projectProperties.on('closed', () => {
-        this._projectProperties = null
+      newWindow.on('closed', () => {
+        this._projectProperties.delete(dirPath)
       })
     } else {
-      // We do not re-open the window with a (possibly changed) directory
-      // because it might contain unsaved changes. The user has to manually
-      // close it.
-      this._makeVisible(this._projectProperties)
+      this._makeVisible(existingWindow)
     }
   }
 
@@ -1017,24 +1033,11 @@ export default class WindowProvider extends ProviderContract {
     * This function prompts the user with information.
     * @param  {any} options Necessary information for displaying the prompt
     */
-  prompt (options: any): void {
+  prompt (options: Partial<MessageBoxOptions> & { message: string }|string): void {
     const firstMainWin = this.getFirstMainWindow()
     if (firstMainWin === undefined) {
       return
     }
     promptDialog(this._logger, firstMainWin, options)
-  }
-
-  /**
-    * Ask to remove the associated path for the descriptor
-    * @param  {MDFileDescriptor|DirDescriptor} descriptor The corresponding descriptor
-    * @return {boolean}                                   True if user wishes to remove it.
-    */
-  async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
-    const firstMainWin = this.getFirstMainWindow()
-    if (firstMainWin === undefined) {
-      return true
-    }
-    return await confirmRemove(firstMainWin, descriptor)
   }
 }

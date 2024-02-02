@@ -1,10 +1,18 @@
 <template>
-  <div class="radio-group">
-    <p v-html="label"></p>
+  <p class="radio-group-outside-label" v-html="label"></p>
+  <div
+    v-bind:class="{
+      'radio-group-container': true,
+      inline: inline
+    }"
+  >
     <div
       v-for="(optionLabel, key) in options"
       v-bind:key="key"
-      class="cb-group"
+      v-bind:class="{
+        'radio-group': true,
+        inline: inline
+      }"
     >
       <label
         v-bind:class="{
@@ -17,16 +25,24 @@
           type="radio" v-bind:name="name" v-bind:value="key"
           v-bind:checked="modelValue === key"
           v-bind:disabled="disabled"
-          v-on:input="$emit('update:modelValue', $event.target.value)"
+          v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         >
         <div class="toggle"></div>
       </label>
-      <label v-bind:for="fieldID(key)" v-bind:class="{ disabled: disabled }">{{ optionLabel }}</label>
+      <label
+        v-bind:for="fieldID(key)"
+        v-bind:class="{
+          'radio-group-label': true,
+          disabled: disabled
+        }"
+      >
+        {{ optionLabel }}
+      </label>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -41,7 +57,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'RadioControl',
   props: {
     modelValue: {
@@ -60,6 +78,10 @@ export default {
       type: Boolean,
       default: false
     },
+    inline: {
+      type: Boolean,
+      default: false
+    },
     options: {
       type: Object,
       default: function () { return {} }
@@ -67,36 +89,45 @@ export default {
   },
   emits: ['update:modelValue'],
   methods: {
-    fieldID: function (key) {
-      return 'form-input-' + this.name + '-' + key
+    fieldID: function (key: string) {
+      return `form-input-${this.name}-${key}`
     }
   }
-}
+})
 </script>
 
 <style lang="less">
 @input-size: 14px;
 
 body {
-  .radio-group {
+  .radio-group-container {
     break-inside: avoid;
     margin: 10px 0;
 
     p { font-size: 13px; }
 
     label:not(.radio).disabled { color: grey; }
+
+    &.inline {
+      display: flex;
+      flex-direction: row;
+      column-gap: 40px;
+    }
   }
 
-  .cb-group {
+  .radio-group {
     display: grid;
-    grid-template-columns: @input-size * 2 auto;
+    grid-template-columns: @input-size * 2 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
-    margin: 6px 0px;
-  }
+    align-items: center;
+    margin: 10px 0px;
 
-  .cb-group, .radio-group {
-    label:not(.radio):not(.checkbox) { grid-area: label; }
+    .radio-group-label { grid-area: label; }
+
+    &.inline {
+      display: inline-grid;
+    }
   }
 
   label.radio {
@@ -105,11 +136,8 @@ body {
     width: @input-size * 2;
     height: @input-size;
     grid-area: input;
-    //flex: 0.05; // Basically 5% width
 
-    input {
-      display: none !important;
-    }
+    input { display: none !important; }
 
     .toggle {
       position: absolute;
@@ -152,6 +180,8 @@ body.darwin {
   label {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
+
+  .radio-group-outside-label { font-size: 13px; }
 
   label.radio {
     width: @input-size;

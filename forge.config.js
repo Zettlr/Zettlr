@@ -82,9 +82,9 @@ module.exports = {
         forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc.exe'))
       } else if (supportsPandoc && (isMacOS || isLinux)) {
         // Download Pandoc either for macOS or Linux ...
-        const platform = (isMacOS) ? 'darwin' : 'linux'
-        // ... and the ARM version if we're downloading for Linux ARM, else x64.
-        const arch = (isLinux && isArm64) ? 'arm' : 'x64'
+        const platform = isMacOS ? 'darwin' : 'linux'
+        // ... and the ARM or x64 version.
+        const arch = isArm64 ? 'arm' : 'x64'
         try {
           await fs.lstat(path.join(__dirname, `./resources/pandoc-${platform}-${arch}`))
         } catch (err) {
@@ -97,6 +97,49 @@ module.exports = {
       } else {
         // If someone is building this on an unsupported platform, drop a warning.
         console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)
+      }
+    },
+    postMake: async (forgeConfig, makeResults) => {
+      const basePath = __dirname
+      const releaseDir = path.join(basePath, 'release')
+
+      // Ensure the output dir exists
+      try {
+        await fs.stat(releaseDir)
+      } catch (err) {
+        await fs.mkdir(releaseDir, { recursive: true })
+      }
+
+      // makeResults is an array for each maker that has the keys `artifacts`,
+      // `packageJSON`, `platform`, and `arch`.
+      for (const result of makeResults) {
+        // Get the necessary information from the object
+        const { version, productName } = result.packageJSON
+
+        // NOTE: Other makers may produce more than one artifact, but I'll have
+        // to hardcode what to do in those cases.
+        if (result.artifacts.length > 1) {
+          throw new Error(`More than one artifact generated -- please resolve ambiguity for ${result.platform} ${result.arch} in build script.`)
+        }
+
+        const sourceFile = result.artifacts[0]
+        const ext = path.extname(sourceFile)
+
+        // NOTE: Arch needs to vary depending on the target platform
+        let arch = result.arch
+        if (arch === 'x64' && ext === '.deb') {
+          arch = 'amd64' // Debian x64
+        } else if (arch === 'x64' && [ '.rpm', '.AppImage' ].includes(ext)) {
+          arch = 'x86_64' // Fedora x64 and AppImage x64
+        } else if (arch === 'arm64' && ext === '.rpm') {
+          arch = 'aarch64' // Fedora ARM
+        } // Else: Keep it at either x64 or arm64
+
+        // Now we can finally build the correct file name
+        const baseName = `${productName}-${version}-${arch}${ext}`
+
+        // Move the file
+        await fs.rename(sourceFile, path.join(releaseDir, baseName))
       }
     }
   },
@@ -270,10 +313,64 @@ module.exports = {
               preload: {
                 js: './source/common/modules/preload/index.ts'
               }
+            },
+            {
+              html: './static/index.htm',
+              js: './source/win-splash-screen/index.ts',
+              name: 'splash_screen',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             }
           ]
         }
       }
+    }
+  ],
+  makers: [
+    {
+      name: '@electron-forge/maker-deb',
+      config: {
+        options: {
+          name: 'zettlr',
+          bin: 'Zettlr', // See packagerConfig.name property,
+          categories: [ 'Office', 'Education', 'Science' ],
+          section: 'editors',
+          // size: 500, // NOTE: Estimate, need to refine
+          description: 'Your one-stop publication workbench.',
+          productDescription: 'Your one-stop publication workbench.',
+          recommends: [ 'quarto', 'pandoc', 'texlive | texlive-base | texlive-full' ],
+          genericName: 'Markdown Editor',
+          // Electron forge recommends 512px
+          icon: './resources/icons/png/512x512.png',
+          priority: 'optional',
+          mimeType: [ 'text/markdown', 'application/x-tex', 'application/json', 'application/yaml' ],
+          maintainer: 'Hendrik Erz',
+          homepage: 'https://www.zettlr.com'
+        }
+      }
+    },
+    {
+      name: '@electron-forge/maker-rpm',
+      config: {
+        options: {
+          name: 'zettlr',
+          bin: 'Zettlr', // See packagerConfig.name property,
+          categories: [ 'Office', 'Education', 'Science' ],
+          description: 'Your one-stop publication workbench.',
+          productDescription: 'Your one-stop publication workbench.',
+          productName: 'Zettlr',
+          genericName: 'Markdown Editor',
+          // Electron forge recommends 512px
+          icon: './resources/icons/png/512x512.png',
+          license: 'GPL-3.0',
+          mimeType: [ 'text/markdown', 'application/x-tex', 'application/json', 'application/yaml' ],
+          homepage: 'https://www.zettlr.com'
+        }
+      }
+    },
+    {
+      name: '@electron-forge/maker-zip'
     }
   ]
 }

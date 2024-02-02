@@ -19,7 +19,6 @@
     </contributor>
     <contributor>
       <name>Andrew Dunning</name>
-      <email>andrew.dunning@utoronto.ca</email>
       <uri>https://orcid.org/0000-0003-0464-5036</uri>
     </contributor>
     <contributor>
@@ -217,7 +216,7 @@
     <choose>
       <if variable="title" match="none">
         <choose>
-          <if type="personal_communication" match="none">
+          <if type="personal_communication speech thesis" match="none">
             <text variable="genre" text-case="capitalize-first"/>
           </if>
         </choose>
@@ -469,12 +468,15 @@
             <date-part name="year"/>
           </date>
         </group>
+        <text variable="year-suffix"/>
       </if>
       <else-if variable="status">
         <text variable="status" text-case="capitalize-first"/>
+        <text variable="year-suffix" prefix="-"/>
       </else-if>
       <else>
         <text term="no date" form="short"/>
+        <text variable="year-suffix" prefix="-"/>
       </else>
     </choose>
   </macro>
@@ -487,12 +489,15 @@
             <date-part name="year"/>
           </date>
         </group>
+        <text variable="year-suffix"/>
       </if>
       <else-if variable="status">
         <text variable="status"/>
+        <text variable="year-suffix" prefix="-"/>
       </else-if>
       <else>
         <text term="no date" form="short"/>
+        <text variable="year-suffix" prefix="-"/>
       </else>
     </choose>
   </macro>
@@ -632,7 +637,7 @@
     <layout prefix="(" suffix=")" delimiter="; ">
       <group delimiter=", ">
         <choose>
-          <if variable="issued accessed" match="any">
+          <if variable="issued" match="any">
             <group delimiter=" ">
               <text macro="contributors-short"/>
               <text macro="date-in-text"/>

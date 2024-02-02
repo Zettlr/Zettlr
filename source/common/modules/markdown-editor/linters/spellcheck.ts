@@ -175,7 +175,7 @@ export const spellcheck = linter(async view => {
             word = word.slice(1)
           }
           while (nonLetters.includes(word[word.length - 1])) {
-            word = word.slice(0, word.length - 2)
+            word = word.slice(0, word.length - 1)
           }
           words.push(word)
         }

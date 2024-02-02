@@ -103,9 +103,6 @@
     text-decoration: line-through;
   }
 
-  .cm-tab { display: inline; }
-  .cm-url, .cm-link { text-decoration: none; }
-
   // Make the formatting characters and escape sequences nearly invisible
   .cm-formatting-code,
   .cm-formatting-code-block,
@@ -125,7 +122,7 @@
   .cm-formatting-quote,
   .cm-formatting-list-ul,
   .cm-formatting-list-ol {
-    font-family: Consolas, 'Inconsolata', Menlo, monospace;
+    font-family: Inconsolata, monospace;
   }
 
   // ZETTLR-SPECIFIC CLASSES
@@ -201,14 +198,12 @@
 
   // Deliver a much more fancy UX for images inserted into the editor
   .editor-image-container {
-    display: inline-block;
     position: relative;
+    display: inline-block;
     text-align: center;
     cursor: default;
 
     figure {
-      display: inline-block;
-
       img { display: inherit; }
 
       &:hover, &:focus-within {
@@ -285,32 +280,6 @@
     width: 480px;
     height: 270px;
     margin: 0 auto;
-  }
-
-  .editor-note-preview {
-    max-width: 300px;
-    padding: 5px;
-
-    // Style the little preview note tooltips better
-    h4.filename {
-      font-size: 120%; // Not that much larger than the rest of the text
-    }
-
-    .note-content {
-      font-family: monospace; // TODO: Better font list for all operating systems
-      line-height: 100%;
-      margin: 10px 0;
-      white-space: pre-wrap;
-    }
-
-    .metadata {
-      color: rgb(200, 200, 200);
-      font-size: 80%;
-    }
-
-    .actions {
-      margin: 5px 0;
-    }
   }
 }
 

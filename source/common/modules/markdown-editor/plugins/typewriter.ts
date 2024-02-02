@@ -29,6 +29,10 @@ const typewriterTheme = EditorView.theme({
   '.cm-content': {
     marginTop: '50vh',
     marginBottom: '50vh'
+  },
+  '.cm-gutters': {
+    marginTop: '50vh',
+    marginBottom: '50vh'
   }
 })
 
@@ -98,5 +102,17 @@ const typewriterLine = StateField.define<DecorationSet>({
 export const typewriter = [
   scrollAndTheme,
   typewriterLine,
-  typewriterThemeCompartment.of([])
+  typewriterThemeCompartment.of([]),
+  EditorView.baseTheme({
+    '.cm-content .typewriter-active-line': {
+      borderTop: '2px solid var(--grey-3)',
+      borderBottom: '2px solid var(--grey-3)',
+      backgroundColor: 'var(--grey-1)',
+      marginTop: '-2px',
+      marginBottom: '-2px'
+    },
+    '&dark .cm-content .typewriter-active-line': {
+      backgroundColor: 'var(--grey-7)'
+    }
+  })
 ]

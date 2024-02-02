@@ -29,12 +29,131 @@ import { trans } from '@common/i18n-main'
 import isFile from '@common/util/is-file'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
-import type NotificationProvider from '../notifications'
 import type LogProvider from '../log'
 import type CommandProvider from '../commands'
-import type { ServerAPIResponse, UpdateState } from '@dts/main/update-provider'
 import type ConfigProvider from '@providers/config'
 import { md2html } from '@common/modules/markdown-utils'
+import { showNativeNotification } from '@common/util/show-notification'
+
+/**
+ * Struct which represents a single asset provided for by the updater
+ */
+export interface UpdateAsset {
+  /**
+   * The filename of the asset
+   */
+  name: string
+  /**
+   * The total file size in bytes
+   */
+  size: number
+  /**
+   * The URL to download this asset
+   */
+  browser_download_url: string
+}
+
+/**
+ * This struct contains the information returned by the Update API
+ */
+export interface ServerAPIResponse {
+  /**
+   * GitHub's internal ID
+   */
+  id: number
+  /**
+   * The tag name of the new version
+   */
+  tag_name: string
+  /**
+   * The name of the new version
+   */
+  name: string
+  /**
+   * Whether the new version is a beta
+   */
+  prerelease: boolean
+  /**
+   * A link to the release page (currently unused)
+   */
+  html_url: string
+  /**
+   * The changelog (raw Markdown string)
+   */
+  body: string
+  /**
+   * The publication date (currently unused)
+   */
+  published_at: string
+  /**
+   * All assets available in this update
+   */
+  assets: UpdateAsset[]
+}
+
+/**
+ * This struct holds all information necessary to guide a user through the
+ * complete update process
+ */
+export interface UpdateState {
+  /**
+   * If lastErrorMessage is not undefined, an error occurred. The error
+   * corresponds to the got error classes
+   */
+  lastErrorMessage: string|undefined
+  /**
+   * Contains the last error code
+   */
+  lastErrorCode: string|undefined
+  /**
+   * Whether or not an update is available
+   */
+  updateAvailable: boolean
+  /**
+   * Is this release a beta version?
+   */
+  prerelease: boolean
+  /**
+   * The tag name of the new version
+   */
+  tagName: string
+  /**
+   * Contains a link to the GitHub release page, used if there is no compatible asset
+   */
+  releasePage: string
+  /**
+   * The changelog of this update
+   */
+  changelog: string
+  /**
+   * A list of assets available for this specific computer
+   */
+  compatibleAssets: UpdateAsset[]
+  /**
+   * The release's name
+   */
+  name: string
+  /**
+   * The full path to the downloaded file
+   */
+  full_path: string
+  /**
+   * The total size in bytes
+   */
+  size_total: number
+  /**
+   * The size of the already downloaded chunk
+   */
+  size_downloaded: number
+  /**
+   * When the download has started
+   */
+  start_time: number
+  /**
+   * How long the update will approximately still need
+   */
+  eta_seconds: number
+}
 
 const CUR_VER = app.getVersion()
 const REPO_URL = 'https://zettlr.com/api/releases/latest'
@@ -48,7 +167,6 @@ export default class UpdateProvider extends ProviderContract {
   constructor (
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider,
-    private readonly _notifications: NotificationProvider,
     private readonly _commands: CommandProvider
   ) {
     super()
@@ -210,7 +328,7 @@ export default class UpdateProvider extends ProviderContract {
 
     this._updateState.tagName = parsedResponse.tag_name
     this._updateState.updateAvailable = semver.lt(CUR_VER, parsedResponse.tag_name)
-    this._updateState.changelog = md2html(parsedResponse.body, (c1, c2) => undefined)
+    this._updateState.changelog = md2html(parsedResponse.body, (_c1, _c2) => undefined)
     this._updateState.prerelease = parsedResponse.prerelease
     this._updateState.releasePage = parsedResponse.html_url
 
@@ -340,7 +458,7 @@ export default class UpdateProvider extends ProviderContract {
       // still in use.
       this._downloadWriteStream?.end()
       this._logger.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
-      this._notifications.show(`Download of ${this._updateState.name} successful!`, 'Update', () => {
+      showNativeNotification(`Download of ${this._updateState.name} successful!`, 'Update', () => {
         // The user has clicked the notification, so we can show the update window here
         this._commands.run('open-update-window', undefined)
           .catch(e => this._logger.error(String(e.message), e))
@@ -368,12 +486,12 @@ export default class UpdateProvider extends ProviderContract {
     // 2. Check that the file is correct
     // 3. Launch the file
     // 4. Quit the app
-    this._notifications.show('Verifying update ...')
+    showNativeNotification('Verifying update ...')
 
     const correctSHA = this._sha256Data.get(this._updateState.name)
 
     if (correctSHA === undefined) {
-      this._notifications.show('Could not verify update. Please retry or download manually.')
+      showNativeNotification('Could not verify update. Please retry or download manually.')
       this._cleanup(true)
       this._reportError('EVERIFY', 'Could not verify the download! Please retry or download manually.')
       return
@@ -385,7 +503,7 @@ export default class UpdateProvider extends ProviderContract {
     const downloadSHA = sha256sum.digest('hex')
 
     if (downloadSHA !== correctSHA) {
-      this._notifications.show('Could not verify update. Please retry or download manually.')
+      showNativeNotification('Could not verify update. Please retry or download manually.')
       this._cleanup(true)
       this._reportError('EVERIFY', 'Could not verify the download! Please retry or download manually.')
       return
@@ -404,7 +522,7 @@ export default class UpdateProvider extends ProviderContract {
       }
       app.quit()
     } catch (err: any) {
-      this._notifications.show('Could not start update. Please install manually.')
+      showNativeNotification('Could not start update. Please install manually.')
       this._reportError('EOPEN', `Could not start update: ${err.message as string}.`)
     }
   }
@@ -458,7 +576,7 @@ export default class UpdateProvider extends ProviderContract {
           if (this.applicationUpdateAvailable()) {
             const { tagName } = this.getUpdateState()
             this._logger.info(`Update available: ${tagName}`)
-            this._notifications.show(trans('An update to version %s is available!', tagName))
+            showNativeNotification(trans('An update to version %s is available!', tagName))
           }
         })
         .catch(err => this._logger.error('[Update Provider] Could not check for updates: Unexpected error', err))

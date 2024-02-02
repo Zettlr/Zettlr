@@ -21,6 +21,7 @@ import safeAssign from '@common/util/safe-assign'
 import type { CodeFileDescriptor } from '@dts/common/fsal'
 import type FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
+import { getFilesystemMetadata } from './util/get-fs-metadata'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -49,9 +50,9 @@ function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache): void
  */
 async function updateFileMetadata (fileObject: CodeFileDescriptor): Promise<void> {
   try {
-    let stat = await fs.lstat(fileObject.path)
-    fileObject.modtime = stat.mtime.getTime()
-    fileObject.size = stat.size
+    const metadata = await getFilesystemMetadata(fileObject.path)
+    fileObject.modtime = metadata.modtime
+    fileObject.size = metadata.size
   } catch (err: any) {
     err.message = `Could not update the metadata for file ${fileObject.name}: ${String(err.message)}`
     throw err
@@ -90,11 +91,10 @@ export async function parse (
 
   // In any case, we need the most recent times.
   try {
-    // Get lstat
-    let stat = await fs.lstat(filePath)
-    file.modtime = stat.mtime.getTime()
-    file.size = stat.size
-    file.creationtime = stat.birthtime.getTime()
+    const metadata = await getFilesystemMetadata(filePath)
+    file.modtime = metadata.modtime
+    file.size = metadata.size
+    file.creationtime = metadata.birthtime
   } catch (err: any) {
     err.message = 'Error reading file ' + filePath
     throw err // Re-throw

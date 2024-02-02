@@ -28,7 +28,7 @@ export default function registerCustomProtocols (logger: LogProvider): void {
       return callback({
         path: decodeURIComponent(url),
         // Prevent that local files are cached
-        headers: { 'Cache-control': 'no-store', 'pragma': 'no-cache' }
+        headers: { 'Cache-control': 'no-store', pragma: 'no-cache' }
       })
     } catch (err: any) {
       logger.error(`Error loading external file: ${err.message as string}`, err)

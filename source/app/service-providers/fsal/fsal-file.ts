@@ -20,6 +20,7 @@ import safeAssign from '@common/util/safe-assign'
 import type { MDFileDescriptor } from '@dts/common/fsal'
 import type FSALCache from './fsal-cache'
 import type { SearchTerm } from '@dts/common/search'
+import { getFilesystemMetadata } from './util/get-fs-metadata'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -48,9 +49,9 @@ function cacheFile (origFile: MDFileDescriptor, cacheAdapter: FSALCache): void {
  */
 async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> {
   try {
-    const stat = await fs.lstat(fileObject.path)
-    fileObject.modtime = stat.mtime.getTime()
-    fileObject.size = stat.size
+    const metadata = await getFilesystemMetadata(fileObject.path)
+    fileObject.modtime = metadata.modtime
+    fileObject.size = metadata.size
   } catch (err: any) {
     err.message = `Could not update the metadata for file ${fileObject.name}: ${err.message as string}`
     throw err
@@ -99,10 +100,10 @@ export async function parse (
   // In any case, we need the most recent times.
   try {
     // Get lstat
-    const stat = await fs.lstat(filePath)
-    file.modtime = stat.mtime.getTime()
-    file.creationtime = stat.birthtime.getTime()
-    file.size = stat.size
+    const metadata = await getFilesystemMetadata(filePath)
+    file.modtime = metadata.modtime
+    file.creationtime = metadata.birthtime
+    file.size = metadata.size
   } catch (err: any) {
     err.message = 'Error reading file ' + filePath
     throw err // Re-throw

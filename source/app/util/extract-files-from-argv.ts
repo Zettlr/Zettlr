@@ -27,10 +27,8 @@ export default function extractFilesFromArgv (argv = process.argv): string[] {
     return []
   }
 
-  const filesToOpen = argv.filter((arg) => {
+  return argv.filter((arg) => {
     // Filter out CLI arguments, non-files, and non-supported files
     return !arg.startsWith('--') && isMdOrCodeFile(arg)
   })
-
-  return filesToOpen
 }

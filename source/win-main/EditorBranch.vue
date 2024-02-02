@@ -45,9 +45,9 @@
 
 <script lang="ts">
 import EditorPane from './EditorPane.vue'
-import { BranchNodeJSON } from '@dts/common/documents'
+import { type BranchNodeJSON } from '@dts/common/documents'
 import { defineComponent } from 'vue'
-import { EditorCommands } from '@dts/renderer/editor'
+import { type EditorCommands } from '@dts/renderer/editor'
 
 const ipcRenderer = window.ipc
 
@@ -87,7 +87,9 @@ export default defineComponent({
     return {
       sizes: this.node.sizes.map(s => s), // Holds the sizes of the child nodes
       currentResizerIndex: -1, // Holds the index of the resizer during resizing
-      lastOffset: 0
+      lastOffset: 0,
+      boundOnResizing: this.onResizing.bind(this),
+      boundEndResizing: this.endResizing.bind(this)
     }
   },
   computed: {
@@ -123,8 +125,8 @@ export default defineComponent({
     beginResizing (event: MouseEvent, index: number) {
       this.currentResizerIndex = index
       this.lastOffset = this.isHorizontalBranch ? event.clientX : event.clientY
-      this.rootElem.addEventListener('mousemove', this.onResizing)
-      this.rootElem.addEventListener('mouseup', this.endResizing)
+      this.rootElem.addEventListener('mousemove', this.boundOnResizing)
+      this.rootElem.addEventListener('mouseup', this.boundEndResizing)
     },
     onResizing (event: MouseEvent) {
       if (this.currentResizerIndex < 0) {
@@ -156,8 +158,8 @@ export default defineComponent({
     endResizing (event: MouseEvent) {
       this.currentResizerIndex = -1
       this.lastOffset = 0
-      this.rootElem.removeEventListener('mousemove', this.onResizing)
-      this.rootElem.removeEventListener('mouseup', this.endResizing)
+      this.rootElem.removeEventListener('mousemove', this.boundOnResizing)
+      this.rootElem.removeEventListener('mouseup', this.boundEndResizing)
       // Inform main about the new sizes
       ipcRenderer.invoke('documents-provider', {
         command: 'set-branch-sizes',

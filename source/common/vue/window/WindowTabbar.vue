@@ -50,8 +50,8 @@
  * END HEADER
  */
 
-import { defineComponent, PropType } from 'vue'
-import { WindowTab } from '@dts/renderer/window'
+import { defineComponent, type PropType } from 'vue'
+import { type WindowTab } from '@dts/renderer/window'
 
 export default defineComponent({
   name: 'WindowTabbar',
@@ -71,7 +71,8 @@ export default defineComponent({
       currentTab: 0,
       // The following are required to hide tab labels on win32 w/ narrow windows
       currentWindowWidth: window.innerWidth,
-      platform: process.platform
+      platform: process.platform,
+      boundWindowResize: this.onWindowResize.bind(this)
     }
   },
   watch: {
@@ -80,11 +81,10 @@ export default defineComponent({
     }
   },
   mounted () {
-    window.addEventListener('resize', this.onWindowResize)
+    window.addEventListener('resize', this.boundWindowResize)
     // On mount, if the URL contains a fragment that matches a tab ID, emit an
     // event to ensure the app actually switches to that.
-    const url = new URL(location.href)
-    const fragment = url.hash
+    const fragment = location.hash
     if (fragment === '') {
       return
     }
@@ -95,19 +95,17 @@ export default defineComponent({
       this.currentTab = idx
     }
   },
-  destroyed () {
-    window.removeEventListener('resize', this.onWindowResize)
+  unmounted () {
+    window.removeEventListener('resize', this.boundWindowResize)
   },
   methods: {
-    onWindowResize (event: UIEvent) {
+    onWindowResize (_event: UIEvent) {
       this.currentWindowWidth = window.innerWidth
     },
     onTabClick (event: MouseEvent, id: string) {
       // Modify history to retain active tab across reloads
       const idx = this.tabs.findIndex(tab => tab.id === id)
-      const url = new URL(location.href)
-      url.hash = '#' + id
-      location.href = url.toString()
+      location.hash = '#' + id
       this.currentTab = idx
     }
   }

@@ -10,6 +10,7 @@
         'root': isRoot
       }"
       v-bind:data-id="obj.type === 'file' ? obj.id : ''"
+      v-bind:data-path="obj.path"
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
@@ -27,6 +28,7 @@
           v-if="secondaryIcon !== false"
           v-bind:shape="secondaryIcon"
           role="presentation"
+          v-bind:direction="angleDirection"
           v-bind:class="{
             'is-solid': typeof secondaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(secondaryIcon),
             'special': typeof secondaryIcon !== 'boolean'
@@ -43,13 +45,12 @@
         ></RingProgress>
         <!-- Otherwise, display whatever the secondary Icon is -->
         <cds-icon
-          v-else-if="primaryIcon !== false"
+          v-else
           v-bind:shape="primaryIcon"
           role="presentation"
           v-bind:class="{
             'special': typeof primaryIcon !== 'boolean' && ![ 'right', 'down' ].includes(primaryIcon)
           }"
-          v-bind:direction="angleDirection"
           v-bind:solid="typeof primaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(primaryIcon)"
           v-on:click.stop="handlePrimaryIconClick"
           v-on:auxclick.stop.prevent="handlePrimaryIconClick"
@@ -144,7 +145,9 @@ import { trans } from '@common/i18n-renderer'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, defineComponent } from 'vue'
-import { DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
+import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
+import { mapStores } from 'pinia'
+import { useOpenDirectoryStore } from '../pinia'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -189,6 +192,7 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useOpenDirectoryStore),
     shouldBeCollapsed: function (): boolean {
       if (this.isCurrentlyFiltering) {
         // If the application is currently running a filter, uncollapse everything
@@ -199,50 +203,26 @@ export default defineComponent({
       }
     },
     /**
-     * The secondary icon's shape -- this is the visually FIRST icon to be displayed
+     * The secondary icon's shape -- this is the visually FIRST icon to be
+     * displayed. Displays either an angle (for directories with children), or
+     * nothing.
      *
      * @return  {string|boolean}  False if no secondary icon
      */
     secondaryIcon: function (): string|boolean {
-      if (!this.hasChildren) {
-        // If whatever the object we're representing has no children, we do not
-        // need the secondary icon, since the primary icon will display whatever
-        // is necessary.
-        return false
-      } else {
-        // Otherwise, the primaryIcon will display the chevron and we need to
-        // transfer the customIcon to this position.
-        return this.customIcon
-      }
+      return this.hasChildren ? 'angle' : false
     },
     /**
-     * The primary icon's shape -- this is the visually SECOND icon to be displayed
+     * The primary icon's shape -- this is the visually SECOND icon to be
+     * displayed. Returns an icon appropriate to the item we are representing.
      *
-     * @return  {string|boolean}  False if no primary icon
+     * @return  {string}  The icon name (as in: cds-shape)
      */
-    primaryIcon: function (): string|boolean {
-      // The primary icon is _always_ the chevron if we're dealing with a
-      // directory and it has children. Otherwise, it will display the custom icon.
-      return this.hasChildren ? 'angle' : this.customIcon
-    },
-    angleDirection: function (): string|undefined {
-      if (!this.hasChildren) {
-        return undefined
-      } else {
-        return this.shouldBeCollapsed ? 'right' : 'down'
-      }
-    },
-    /**
-     * Returns an icon appropriate to the item we are representing, or false if
-     * there is no icon available.
-     *
-     * @return  {string|boolean}  False if no custom icon.
-     */
-    customIcon: function (): string|boolean {
+    primaryIcon: function (): string {
       if (this.obj.type === 'file' && this.writingTarget !== undefined) {
         return 'writing-target'
       } else if (this.obj.type === 'file') {
-        return 'file'
+        return 'markdown'
       } else if (this.obj.type === 'code') {
         return 'code'
       } else if (this.obj.dirNotFoundFlag === true) {
@@ -253,10 +233,22 @@ export default defineComponent({
       } else if (this.obj.settings.icon != null) {
         // Display the custom icon
         return this.obj.settings.icon
+      } else {
+        return this.shouldBeCollapsed ? 'folder' : 'folder-open'
       }
-
-      // No icon available
-      return false
+    },
+    /**
+     * The direction of the folder's angle icon: Right if collapsed, down if
+     * uncollapsed. Can be undefined.
+     *
+     * @return  {string}  Either 'right' or 'down'
+     */
+    angleDirection: function (): string|undefined {
+      if (!this.hasChildren) {
+        return undefined
+      } else {
+        return this.shouldBeCollapsed ? 'right' : 'down'
+      }
     },
     writingTarget: function (): undefined|{ path: string, mode: 'words'|'chars', count: number } {
       if (this.obj.type !== 'file') {
@@ -315,7 +307,7 @@ export default defineComponent({
       if (this.obj.type !== 'directory') {
         return []
       }
-      if (this.combined === true) {
+      if (this.combined) {
         return this.obj.children.filter(child => child.type !== 'other') as MaybeRootDescriptor[]
       } else {
         return this.obj.children.filter(child => child.type === 'directory') as DirDescriptor[]
@@ -347,20 +339,14 @@ export default defineComponent({
     },
     isSelected: function (): boolean {
       if (this.obj.type === 'directory') {
-        if (this.selectedDir === null) {
-          return false
-        }
-        return this.selectedDir.path === this.obj.path
+        return this.selectedDir?.path === this.obj.path
       } else {
-        if (this.selectedFile === null) {
-          return false
-        }
-        return this.selectedFile.path === this.obj.path
+        return this.selectedFile?.path === this.obj.path
       }
     }
   },
   watch: {
-    selectedFile: function (newVal, oldVal) {
+    selectedFile: function () {
       this.uncollapseIfApplicable()
     },
     collapsed: function () {
@@ -370,10 +356,10 @@ export default defineComponent({
         this.$store.commit('addUncollapsedDirectory', this.obj.path)
       }
     },
-    selectedDir: function (newVal, oldVal) {
+    selectedDir: function () {
       // this.uncollapseIfApplicable() TODO: As of now this would also uncollapse the containing file's directory
     },
-    operationType: function (newVal, oldVal) {
+    operationType: function (newVal) {
       if (newVal !== undefined) {
         nextTick().then(() => {
           const input = this.$refs['new-object-input'] as HTMLInputElement
@@ -402,6 +388,10 @@ export default defineComponent({
       const filePath = (this.selectedFile !== null) ? String(this.selectedFile.path) : ''
       const dirPath = (this.selectedDir !== null) ? String(this.selectedDir.path) : ''
 
+      if (this.obj.path === this['open-directoryStore'].openDirectory?.path) {
+        this.collapsed = false
+      }
+
       // Open the tree, if the selected file is contained in this dir somewhere
       if (filePath.startsWith(this.obj.path)) {
         this.collapsed = false
@@ -411,7 +401,7 @@ export default defineComponent({
       }
 
       // If a directory within this has been selected, open up, lads!
-      if ((this.obj.path as string).startsWith(dirPath)) {
+      if (this.obj.path.startsWith(dirPath)) {
         this.collapsed = false
       }
     },
@@ -434,14 +424,14 @@ export default defineComponent({
     /**
      * Called when a drag operation enters this item; adds a highlight class
      */
-    enterDragging: function (event: DragEvent) {
+    enterDragging: function (_event: DragEvent) {
       if (this.isDirectory === false) {
         return
       }
 
       this.canAcceptDraggable = true
 
-      if (this.collapsed === false) {
+      if (!this.collapsed) {
         return
       }
 
@@ -453,7 +443,7 @@ export default defineComponent({
     /**
      * The oppossite of enterDragging; removes the highlight class
      */
-    leaveDragging: function (event: DragEvent) {
+    leaveDragging: function (_event: DragEvent) {
       if (this.isDirectory === false) {
         return
       }
@@ -548,8 +538,8 @@ export default defineComponent({
       this.operationType = undefined
     },
     handlePrimaryIconClick: function () {
-      if (this.hasChildren === true) {
-        this.collapsed = this.collapsed === false
+      if (this.hasChildren) {
+        this.collapsed = !this.collapsed
       }
     }
   }

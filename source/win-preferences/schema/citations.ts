@@ -13,44 +13,49 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
 
-export default function (): any {
-  return {
-    fieldsets: [
-      [
+export function getCitationFields (): PreferencesFieldset[] {
+  return [
+    {
+      title: trans('Citations'),
+      group: PreferencesGroups.Citations,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'radio',
           label: trans('How would you like autocomplete to insert your citations?'),
           model: 'editor.citeStyle',
           options: {
-            'regular': '[@Author2015, p. 123] → (Author 2015, 123)',
+            regular: '[@Author2015, p. 123] → (Author 2015, 123)',
             'in-text': '@Author2015 → Author (2015)',
             'in-text-suffix': '@Author2015 [p. 123] → Author (2015, 123)'
           }
-        }
-      ],
-      [
+        },
+        { type: 'separator' },
         {
           type: 'file',
           label: trans('Citation Database (CSL JSON or BibTex)'),
           model: 'export.cslLibrary',
+          placeholder: trans('Path to file'),
           reset: '',
           filter: {
             'json, yaml, yml, bib': 'CSL JSON or BibTeX',
             'json, yaml, yml': 'CSL JSON',
-            'bib': 'BibTeX'
+            bib: 'BibTeX'
           }
         },
         {
           type: 'file',
           label: trans('CSL-Style (optional)'),
           model: 'export.cslStyle',
+          placeholder: trans('Path to file'),
           reset: '',
           filter: {
-            'csl': 'CSL Style'
+            csl: 'CSL Style'
           }
         }
       ]
-    ]
-  }
+    }
+  ]
 }

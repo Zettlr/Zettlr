@@ -28,7 +28,7 @@
  */
 
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem, SubmenuItem } from '@dts/renderer/context'
+import { type AnyMenuItem, type SubmenuItem } from '@dts/renderer/context'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
@@ -38,9 +38,9 @@ export default defineComponent({
   data: function () {
     return {
       menu: [] as SubmenuItem[],
-      currentSubMenu: null as string|null, // string|null = null
-      applicationMenu: null as SubmenuItem[]|null, // SubmenuItem[]|null = null
-      menuCloseCallback: null as Function|null, // Function|null = null
+      currentSubMenu: null as string|null,
+      applicationMenu: null as SubmenuItem[]|null,
+      menuCloseCallback: null as (() => void)|null,
       targetElement: null as HTMLElement|null // Can contain a target if a submenu is right now being requested
     }
   },
@@ -62,7 +62,7 @@ export default defineComponent({
     ipcRenderer.send('menu-provider', { command: 'get-application-menu' })
 
     // Also make sure to reset the internal state if necessary
-    window.addEventListener('mousedown', (event) => {
+    window.addEventListener('mousedown', (_event) => {
       // The closing will be handled automatically by the menu handler
       if (this.menuCloseCallback !== null) {
         this.menuCloseCallback = null

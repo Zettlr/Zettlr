@@ -62,6 +62,8 @@ declare const UPDATE_PRELOAD_WEBPACK_ENTRY: string
 declare const UPDATE_WEBPACK_ENTRY: string
 declare const PROJECT_PROPERTIES_PRELOAD_WEBPACK_ENTRY: string
 declare const PROJECT_PROPERTIES_WEBPACK_ENTRY: string
+declare const SPLASH_SCREEN_WEBPACK_ENTRY: string
+declare const SPLASH_SCREEN_PRELOAD_WEBPACK_ENTRY: string
 
 /**
  * Declare and extend the global NodeJS object to enable the globals

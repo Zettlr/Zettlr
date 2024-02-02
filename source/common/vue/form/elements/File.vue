@@ -2,37 +2,27 @@
   <div class="form-control">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
     <div class="input-button-group">
-      <input
+      <TextControl
         v-bind:id="fieldID"
-        ref="input"
+        v-model="textValue"
         type="text"
-        readonly="readonly"
         v-bind:name="name"
-        v-bind:value="modelValue"
         v-bind:placeholder="placeholder"
-        v-on:click="(directory) ? requestDir() : requestFile()"
-      >
+        v-bind:reset="reset"
+        v-bind:style="'flex-grow: 1;'"
+      ></TextControl>
       <button
         type="button"
         class="request-file"
-        data-tippy-content="dialog.preferences.choose_file"
         v-on:click="(directory) ? requestDir() : requestFile()"
       >
-        <cds-icon shape="file"></cds-icon>
-      </button>
-      <button
-        v-if="reset !== false"
-        type="button"
-        v-bind:title="resetLabel"
-        v-on:click="resetValue"
-      >
-        <cds-icon shape="refresh"></cds-icon>
+        {{ selectButtonLabel }}
       </button>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -48,11 +38,14 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import { defineComponent } from 'vue'
+import TextControl from './Text.vue'
 
 const ipcRenderer = window.ipc
 
-export default {
+export default defineComponent({
   name: 'FileControl',
+  components: { TextControl },
   props: {
     modelValue: {
       type: String,
@@ -85,23 +78,38 @@ export default {
       }
     }
   },
+  emits: ['update:modelValue'],
+  data () {
+    return {
+      textValue: this.modelValue
+    }
+  },
   computed: {
     fieldID: function () {
       return 'field-input-' + this.name
     },
-    resetLabel: function () {
-      return trans('Reset')
+    selectButtonLabel () {
+      return this.directory ? trans('Select folder…') : trans('Select file…')
+    },
+    inputRef (): HTMLInputElement {
+      return this.$refs.input as HTMLInputElement
+    }
+  },
+  watch: {
+    modelValue (newValue) {
+      if (newValue !== this.textValue) {
+        this.textValue = newValue
+      }
+    },
+    textValue () {
+      console.log('Text value changed', this.textValue)
+      this.$emit('update:modelValue', this.textValue)
     }
   },
   methods: {
-    resetValue: function () {
-      const newVal = (typeof this.reset === 'string') ? this.reset : ''
-      this.$refs.input.value = newVal
-      this.$emit('update:modelValue', newVal)
-    },
     requestFile: function () {
       const payload = {
-        filters: [],
+        filters: [] as Array<{ name: string, extensions: string[] }>,
         multiSel: false
       }
 
@@ -121,8 +129,7 @@ export default {
 
           // Write the return value into the data-request-target of the clicked
           // button, because each button has a designated text field.
-          this.$refs.input.value = result[0]
-          this.$emit('update:modelValue', result[0])
+          this.textValue = result[0]
         })
         .catch(e => console.error(e))
     },
@@ -134,16 +141,31 @@ export default {
             return
           }
 
-          this.$refs.input.value = result[0]
-          this.$emit('update:modelValue', result[0])
+          this.textValue = result[0]
         })
         .catch(e => console.error(e))
     }
   }
-}
+})
 </script>
 
 <style lang="less">
+body {
+  .form-control .input-button-group {
+    display: flex;
+    column-gap: 10px;
+    margin: 10px 0;
+
+    input, button { white-space: nowrap; }
+
+    input { flex-grow: 4; }
+    button {
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
 body.darwin {
   label {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;

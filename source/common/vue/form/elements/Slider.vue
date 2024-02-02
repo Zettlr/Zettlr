@@ -7,13 +7,13 @@
       v-bind:max="max"
       v-bind:value="modelValue"
       v-bind:name="name"
-      v-on:input="$emit('update:modelValue', parseInt($event.target.value, 10))"
-      v-on:change="$emit('change', parseInt($event.target.value, 10))"
+      v-on:input="$emit('update:modelValue', parseInt(($event.target as HTMLInputElement).value, 10))"
+      v-on:change="$emit('change', parseInt(($event.target as HTMLInputElement).value, 10))"
     >
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -28,7 +28,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'SliderControl',
   props: {
     modelValue: {
@@ -52,13 +54,8 @@ export default {
       default: ''
     }
   },
-  emits: [ 'update:modelValue', 'change' ],
-  methods: {
-    fieldID: function (key) {
-      return 'form-input-' + this.name + '-' + key
-    }
-  }
-}
+  emits: [ 'update:modelValue', 'change' ]
+})
 </script>
 
 <style lang="less">
@@ -77,10 +74,10 @@ body.darwin {
     margin: 6px 0px;
 
     input[type=range] {
-     -webkit-appearance: none;
-     width: 100%;
-     background-color: transparent;
-     border: none;
+      appearance: none;
+      width: 100%;
+      background-color: transparent;
+      border: none;
 
       &:focus {
         outline: none;
@@ -93,11 +90,11 @@ body.darwin {
       }
 
       &::-webkit-slider-thumb {
+        appearance: none;
         height: 20px;
-        width: 8px;
+        width: 20px;
         margin-top: -10px;
-        border-radius: 5px;
-        -webkit-appearance: none;
+        border-radius: 10px;
         background-color: white;
         border: 1px solid rgb(195, 195, 195);
         border-top-color: rgb(218, 218, 218);
@@ -127,10 +124,10 @@ body.win32 {
     margin: 6px 0px;
 
     input[type=range] {
-     -webkit-appearance: none;
-     width: 100%;
-     background-color: transparent;
-     border: none;
+      -webkit-appearance: none;
+      width: 100%;
+      background-color: transparent;
+      border: none;
 
       &:focus {
         outline: none;
@@ -171,10 +168,10 @@ body.linux {
     margin: 6px 0px;
 
     input[type=range] {
-     -webkit-appearance: none;
-     width: 100%;
-     background-color: transparent;
-     border: none;
+      -webkit-appearance: none;
+      width: 100%;
+      background-color: transparent;
+      border: none;
 
       &:focus {
         outline: none;
