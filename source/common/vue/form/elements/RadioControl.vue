@@ -1,9 +1,9 @@
 <template>
-  <p class="radio-group-outside-label" v-html="label"></p>
+  <p v-if="label !== undefined" class="radio-group-outside-label" v-html="label"></p>
   <div
     v-bind:class="{
       'radio-group-container': true,
-      inline: inline
+      inline: inline === true
     }"
   >
     <div
@@ -11,7 +11,7 @@
       v-bind:key="key"
       v-bind:class="{
         'radio-group': true,
-        inline: inline
+        inline: inline === true
       }"
     >
       <label
@@ -25,7 +25,7 @@
           type="radio" v-bind:name="name" v-bind:value="key"
           v-bind:checked="modelValue === key"
           v-bind:disabled="disabled"
-          v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+          v-on:change="emit('update:modelValue', key)"
         >
         <div class="toggle"></div>
       </label>
@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -57,43 +57,21 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
+const props = defineProps<{
+  modelValue: string
+  label?: string
+  name?: string
+  disabled?: boolean
+  inline?: boolean
+  options: Record<string, string>
+}>()
 
-export default defineComponent({
-  name: 'RadioControl',
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    name: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    inline: {
-      type: Boolean,
-      default: false
-    },
-    options: {
-      type: Object,
-      default: function () { return {} }
-    }
-  },
-  emits: ['update:modelValue'],
-  methods: {
-    fieldID: function (key: string) {
-      return `form-input-${this.name}-${key}`
-    }
-  }
-})
+const emit = defineEmits<(e: 'update:modelValue', val: string) => void>()
+
+function fieldID (key: string): string {
+  return `form-input-${props.name ?? ''}-${key}`
+}
+
 </script>
 
 <style lang="less">
