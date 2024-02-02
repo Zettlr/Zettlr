@@ -5,7 +5,7 @@
         v-bind:id="fieldID"
         type="checkbox" v-bind:name="name" value="yes"
         v-bind:checked="modelValue"
-        v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
+        v-on:input="emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
       >
       <div class="toggle"></div>
     </label>
@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -29,31 +29,18 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
+import { computed } from 'vue'
 
-export default defineComponent({
-  name: 'SwitchField',
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    name: {
-      type: String,
-      default: ''
-    }
-  },
-  emits: ['update:modelValue'],
-  computed: {
-    fieldID: function () {
-      return 'form-input-' + this.name
-    }
-  }
-})
+const props = defineProps<{
+  modelValue: boolean
+  label?: string
+  name?: string
+}>()
+
+const fieldID = computed<string>(() => 'form-input-' + props.name ?? '')
+
+const emit = defineEmits<(e: 'update:modelValue', value: boolean) => void>()
+
 </script>
 
 <style lang="less">
