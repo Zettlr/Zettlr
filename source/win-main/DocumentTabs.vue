@@ -97,7 +97,6 @@ import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
-const path = window.path
 
 export default defineComponent({
   name: 'DocumentTabs',
@@ -215,7 +214,9 @@ export default defineComponent({
         input.style.backgroundColor = 'transparent'
         input.style.border = 'none'
         input.style.color = 'white'
-        input.value = path.basename(this.openFiles[currentIdx].path)
+        const DELIM = process.platform === 'win32' ? '\\': '/'
+        const openFile = this.openFiles[currentIdx].path
+        input.value = openFile.substring(openFile.lastIndexOf(DELIM) + 1)
 
         wrapper.appendChild(input)
 
@@ -349,7 +350,8 @@ export default defineComponent({
       // Returns a more appropriate tab text based on the user settings
       const file = this.workspacesStore.getFile(doc.path)
       if (file === undefined) {
-        return path.basename(doc.path)
+        const DELIM = process.platform === 'win32' ? '\\' : '/'
+        return doc.path.substring(doc.path.lastIndexOf(DELIM) + 1)
       }
 
       if (file.type !== 'file') {
@@ -374,7 +376,8 @@ export default defineComponent({
       return duplicates.length !== 1
     },
     getDirBasename (doc: OpenDocument) {
-      return path.basename(path.dirname(doc.path))
+      const DELIM = process.platform === 'win32' ? '\\' : '/'
+      return doc.path.split(DELIM).reverse()[1]
     },
     /**
      * Handles a click on the close button
