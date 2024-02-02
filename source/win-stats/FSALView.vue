@@ -189,7 +189,6 @@ import type { WorkspacesStatistics } from '@providers/workspaces/generate-stats'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
-const path = window.path
 
 export default defineComponent({
   name: 'FSALView',
@@ -302,7 +301,8 @@ export default defineComponent({
       this.dirCount = localiseNumber(data.dirCount)
     },
     basename: function (absPath: string) {
-      return path.basename(absPath)
+      const DELIM = process.platform === 'win32' ? '\\' : '/'
+      return absPath.substring(absPath.lastIndexOf(DELIM) + 1)
     },
     openFile: function (absPath: string) {
       ipcRenderer.invoke('documents-provider', {

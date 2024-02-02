@@ -78,7 +78,6 @@ export interface RelatedFile {
 }
 
 const ipcRenderer = window.ipc
-const path = window.path
 
 export default defineComponent({
   name: 'RelatedFilesTab',
@@ -172,8 +171,10 @@ export default defineComponent({
           continue
         }
 
+        const DELIM = process.platform === 'win32' ? '\\' : '/'
+
         const related: RelatedFile = {
-          file: path.basename(absPath),
+          file: absPath.substring(absPath.lastIndexOf(DELIM) + 1),
           path: absPath,
           tags: [],
           link: 'none'
@@ -218,8 +219,9 @@ export default defineComponent({
             existingFile.tags.push(tagRecord.name)
           } else {
             // This file doesn't explicitly link here but it shares tags
+            const DELIM = process.platform === 'win32' ? '\\' : '/'
             unreactiveList.push({
-              file: path.basename(filePath),
+              file: filePath.substring(filePath.lastIndexOf(DELIM) + 1),
               path: filePath,
               tags: [tagRecord.name],
               link: 'none'

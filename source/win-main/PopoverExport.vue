@@ -49,7 +49,6 @@ import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 const config = window.config
-const path = window.path
 
 export default defineComponent({
   name: 'PopoverExport',
@@ -78,7 +77,8 @@ export default defineComponent({
       return this.isExporting ? trans('Exporting…') : trans('Export')
     },
     filename (): string {
-      return path.basename(this.filePath)
+      const DELIM = process.platform === 'win32' ? '\\' : '/'
+      return this.filePath.substring(this.filePath.lastIndexOf(DELIM) + 1)
     },
     popoverData: function (): any {
       return {
