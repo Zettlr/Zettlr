@@ -538,7 +538,10 @@ export default defineComponent({
      */
     handleDragStart: function (event: DragEvent, filePath: string) {
       const DELIM = (process.platform === 'win32') ? ';' : ':'
-      const data = `${this.windowId}${DELIM}${this.leafId}${DELIM}${filePath}`
+      // NOTE: When retrieving this data, destructure as an array and capture
+      // any remaining parts with `...filePath` and re-join with DELIM to
+      // account for the fact that Unixoid systems allow colons in paths.
+      const data = [ this.windowId, this.leafId, filePath ].join(DELIM)
       event.dataTransfer?.setData('zettlr/document-tab', data)
       this.documentTabDragOverOrigin = true
     },
@@ -697,7 +700,7 @@ export default defineComponent({
       // At this point, we have received a drop we need to handle it. The drag
       // data contains both the origin and the path, separated by the $PATH
       // delimiter -> window:leaf:absPath
-      const [ originWindow, originLeaf, filePath ] = documentTab.split(DELIM)
+      const [ originWindow, originLeaf, ...filePath ] = documentTab.split(DELIM)
       // Now actually perform the act
       ipcRenderer.invoke('documents-provider', {
         command: 'move-file',
@@ -706,7 +709,7 @@ export default defineComponent({
           targetWindow: this.windowId,
           originLeaf,
           targetLeaf: this.leafId,
-          path: filePath
+          path: filePath.join(DELIM)
         }
       })
         .catch(err => console.error(err))
