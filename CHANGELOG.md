@@ -68,6 +68,8 @@ be able to run the app again just fine on ARM computers with Linux.
 - Fixed an issue where gutter markers were not equally offset when typewriter
   mode was active (#4918)
 - Fixed non-working file deletion menu item (#3894)
+- Fixed a bug that would not ask users to save their changes when closing the
+  last main window on Windows or Linux (#4898)
 
 ## Under the Hood
 
