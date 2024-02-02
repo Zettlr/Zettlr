@@ -93,6 +93,7 @@ import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
 import { mapStores } from 'pinia'
 import { useWorkspacesStore } from './pinia'
+import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
