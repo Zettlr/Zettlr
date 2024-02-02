@@ -22,7 +22,7 @@ import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import type AppServiceContainer from 'source/app/app-service-container'
-import { ipcMain, app, dialog, type BrowserWindow } from 'electron'
+import { ipcMain, app, dialog, type BrowserWindow, type MessageBoxOptions } from 'electron'
 import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { type TabManager } from '@providers/documents/document-tree/tab-manager'
@@ -334,22 +334,36 @@ export default class DocumentManager extends ProviderContract {
       if (!this.isClean()) {
         event.preventDefault()
 
-        this._app.windows.askSaveChanges()
+        // NOTE: We are re-implementing `askSaveChanges` here since we cannot
+        // give the user the choice to cancel.
+        // TODO: Once the window management logic is put here, we have better
+        // control over the windows and can ask this question *before* the
+        // window is being closed.
+        const opt: MessageBoxOptions = {
+          type: 'question',
+          buttons: [
+            trans('Save changes'),
+            trans('Discard changes')
+          ],
+          defaultId: 0,
+          title: trans('Unsaved changes'),
+          message: trans('There are unsaved changes. Do you want to save or discard them?')
+        }
+
+        dialog.showMessageBox(opt)
           .then(async result => {
             // 0 = Save, 1 = Don't save, 2 = Cancel
-            if (result.response < 2) {
-              for (const document of this.documents) {
-                if (result.response === 1) {
-                  document.lastSavedVersion = document.currentVersion
-                } else {
-                  await this.saveFile(document.filePath)
-                }
+            for (const document of this.documents) {
+              if (result.response === 0) {
+                await this.saveFile(document.filePath)
+              } else {
+                document.lastSavedVersion = document.currentVersion
               }
 
               // TODO: Emit events that the documents are now clean, same below
 
               app.quit()
-            } // Else: Don't quit
+            }
           })
           .catch(err => {
             this._app.log.error('[DocumentManager] Cannot ask user to save or omit changes!', err)
