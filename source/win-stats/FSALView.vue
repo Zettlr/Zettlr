@@ -237,7 +237,7 @@ export default defineComponent({
   },
   created: function () {
     ipcRenderer.invoke('application', { command: 'get-statistics-data' })
-      .then((data: FSALStats) => {
+      .then((data: WorkspacesStatistics) => {
         this.recalculateStats(data)
       })
       .catch(e => console.error(e))
