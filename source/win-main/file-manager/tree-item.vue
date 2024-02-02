@@ -146,6 +146,8 @@ import { trans } from '@common/i18n-renderer'
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, defineComponent } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
+import { mapStores } from 'pinia'
+import { useOpenDirectoryStore } from '../pinia'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -190,6 +192,7 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useOpenDirectoryStore),
     shouldBeCollapsed: function (): boolean {
       if (this.isCurrentlyFiltering) {
         // If the application is currently running a filter, uncollapse everything
@@ -336,15 +339,9 @@ export default defineComponent({
     },
     isSelected: function (): boolean {
       if (this.obj.type === 'directory') {
-        if (this.selectedDir === null) {
-          return false
-        }
-        return this.selectedDir.path === this.obj.path
+        return this.selectedDir?.path === this.obj.path
       } else {
-        if (this.selectedFile === null) {
-          return false
-        }
-        return this.selectedFile.path === this.obj.path
+        return this.selectedFile?.path === this.obj.path
       }
     }
   },
@@ -390,6 +387,10 @@ export default defineComponent({
     uncollapseIfApplicable: function () {
       const filePath = (this.selectedFile !== null) ? String(this.selectedFile.path) : ''
       const dirPath = (this.selectedDir !== null) ? String(this.selectedDir.path) : ''
+
+      if (this.obj.path === this['open-directoryStore'].openDirectory?.path) {
+        this.collapsed = false
+      }
 
       // Open the tree, if the selected file is contained in this dir somewhere
       if (filePath.startsWith(this.obj.path)) {
