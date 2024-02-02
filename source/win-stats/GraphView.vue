@@ -49,7 +49,7 @@
 import { defineComponent } from 'vue'
 import { type GraphArc, type GraphVertex, type LinkGraph } from '@dts/common/graph'
 import * as d3 from 'd3'
-import Checkbox from '@common/vue/form/elements/Checkbox.vue'
+import Checkbox from '@common/vue/form/elements/CheckboxControl.vue'
 import ButtonElement from '@common/vue/form/elements/ButtonControl.vue'
 import ProgressElement from '@common/vue/form/elements/Progress.vue'
 import SelectElement from '@common/vue/form/elements/Select.vue'
