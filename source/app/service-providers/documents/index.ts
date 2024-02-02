@@ -431,6 +431,11 @@ export default class DocumentManager extends ProviderContract {
     // Loads in all openFiles
     this._app.log.verbose('Document Manager starting up ...')
 
+    // BUG: This is a weird solution; the openDirectory shouldn't even be
+    // managed by the documents provider. Also, didn't I want to get rid of this
+    // altogether in the future ...?
+    this.openDirectory = this._app.config.get().openDirectory
+
     // Check if the data store is initialized
     if (!await this._config.isInitialized()) {
       this._app.log.info('[Document Manager] Initializing document storage ...')
