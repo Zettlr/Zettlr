@@ -46,7 +46,7 @@
  * END HEADER
  */
 
-import TextControl from '@common/vue/form/elements/Text.vue'
+import TextControl from '@common/vue/form/elements/TextControl.vue'
 import TabBar from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
 import { type PropType, defineComponent } from 'vue'

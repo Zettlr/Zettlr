@@ -152,7 +152,7 @@
 
 <script lang="ts" setup>
 import type { FormField } from './Form.vue'
-import TextInput from './elements/Text.vue'
+import TextInput from './elements/TextControl.vue'
 import Button from './elements/ButtonControl.vue'
 import NumberInput from './elements/NumberControl.vue'
 import TimeInput from './elements/Time.vue'

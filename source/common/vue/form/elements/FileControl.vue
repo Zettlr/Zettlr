@@ -39,7 +39,7 @@
 
 import { trans } from '@common/i18n-renderer'
 import { ref, computed, watch, toRef } from 'vue'
-import TextControl from './Text.vue'
+import TextControl from './TextControl.vue'
 import type { FileFilter } from 'electron'
 
 const ipcRenderer = window.ipc
