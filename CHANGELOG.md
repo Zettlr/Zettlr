@@ -98,7 +98,7 @@ be able to run the app again just fine on ARM computers with Linux.
   of an error
 - Reimplement configuration guard options as Maps to allow for volatile state
 - Begin migrating application state to Pinia
-- Upgrade Electron to v27
+- Upgrade Electron to v28
 
 # 3.0.5
 
