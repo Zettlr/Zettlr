@@ -105,6 +105,7 @@
 import type { ThemeDescriptor } from './elements/Theme.vue'
 import FormFieldControl from './FormField.vue'
 import { defineComponent } from 'vue'
+import type { FileFilter } from 'electron'
 
 interface BasicInfo {
   /**
@@ -185,7 +186,7 @@ interface ColorField extends BasicInfo {
 interface FileField extends BasicInfo {
   type: 'file'|'directory'
   reset?: string|boolean
-  filter?: Record<string, string>
+  filter?: FileFilter[]
 }
 
 interface CheckboxField extends BasicInfo {
