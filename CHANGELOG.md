@@ -288,6 +288,11 @@ quick list:
    that nobody needs to configure this, and it makes many parts of our code
    easier.
 
+## Correcting Ordered List Numbers on Move
+
+Moving lines that are part of an ordered list using 'Alt-UpArrow'/'Alt-DownArrow' 
+will now also correct the list numbers of any affected lists after the move.
+
 ## New Icons on Windows and Linux
 
 For 3.0, we decided that it's time to give our app icons a facelift. For the
