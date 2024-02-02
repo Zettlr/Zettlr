@@ -74,6 +74,8 @@ be able to run the app again just fine on ARM computers with Linux.
   boot (#3797)
 - Fixed an issue that would break drag & drop behavior of editor panes when the
   pathname contained a colon on non-Windows systems (#4822)
+- Fixes an issue where the re-ordering of list item numbers would not ensure
+  that lists start at 1
 
 ## Under the Hood
 

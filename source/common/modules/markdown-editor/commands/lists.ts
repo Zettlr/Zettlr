@@ -78,7 +78,14 @@ function isListTouchedBySelection (state: EditorState): boolean {
 function correctOrderedList (listNode: OrderedList, offset: number): ChangeSpec[] {
   const changes: ChangeSpec[] = []
 
-  let idx = listNode.startsAt
+  // NOTE: This code deliberately changes the starting number to 1, regardless
+  // of what it was, since this function can also be called from a swap-line
+  // command, which may yield a 2 in front of a 1. But I honestly can't think of
+  // a way where anyone would want a list to start at something other than 1,
+  // and on export the order would be restored anyhow. Should someone complain,
+  // we can replace the line below with the commented line at any time.
+  // let idx = listNode.startsAt
+  let idx = 1
   for (const item of listNode.items) {
     if (item.number !== idx) {
       changes.push({ from: offset + item.marker.from, to: offset + item.marker.to - 1, insert: `${idx}` })
