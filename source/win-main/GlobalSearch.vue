@@ -150,7 +150,6 @@ import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
 import { useOpenDirectoryStore, useWorkspacesStore } from './pinia'
 import { mapStores } from 'pinia'
 
-const path = window.path
 const ipcRenderer = window.ipc
 
 // Again: We have a side effect that trans() cannot be executed during import
@@ -272,7 +271,7 @@ export default defineComponent({
       return trans('Toggle results')
     },
     sep: function (): string {
-      return path.sep
+      return process.platform === 'win32' ? '\\': '/'
     },
     searchResults: function (): SearchResultWrapper[] {
       return this.$store.state.searchResults
