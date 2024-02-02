@@ -76,7 +76,7 @@
  */
 
 import NumberControl from '@common/vue/form/elements/NumberControl.vue'
-import SelectControl from '@common/vue/form/elements/Select.vue'
+import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import SliderControl from '@common/vue/form/elements/Slider.vue'
 import { trans } from '@common/i18n-renderer'
 import { type PropType } from 'vue'

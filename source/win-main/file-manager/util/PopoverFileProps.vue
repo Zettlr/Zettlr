@@ -69,7 +69,7 @@
  */
 
 import NumberControl from '@common/vue/form/elements/NumberControl.vue'
-import SelectControl from '@common/vue/form/elements/Select.vue'
+import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
 import formatSize from '@common/util/format-size'
