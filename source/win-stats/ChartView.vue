@@ -88,7 +88,7 @@ import {
   PointElement,
   LineElement
 } from 'chart.js'
-import SelectControl from '@common/vue/form/elements/Select.vue'
+import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useStatisticsStore } from '../pinia/statistics-store'
