@@ -201,6 +201,9 @@ export default defineComponent({
     }
   },
   mounted: function () {
+    if (this['open-directoryStore'].openDirectory !== null) {
+      this.$store.state.uncollapsedDirectories.push(this['open-directoryStore'].openDirectory)
+    }
     ipcRenderer.on('shortcut', (event, message) => {
       if (message === 'filter-files') {
         // Focus the filter on the next tick. Why? Because it might be that
