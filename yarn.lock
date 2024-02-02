@@ -5424,16 +5424,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^25.9.8":
-  version: 25.9.8
-  resolution: "electron@npm:25.9.8"
+"electron@npm:26.x.x":
+  version: 26.6.8
+  resolution: "electron@npm:26.6.8"
   dependencies:
     "@electron/get": ^2.0.0
     "@types/node": ^18.11.18
     extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: 7435a23eaff549aa1b3a0556edd9fe39dd32b5b417e2ce7a43a33735a97e328a60f3e682151b608139dc7eaa80e0ec3f21ed5950a0e196e1d43c4a19606b1314
+  checksum: 4dbb55247af6df4687938b7deecd5c6b36372b045810643c5135893fff781134afa542b3fbe072e3643193aa92a52efca8e46da0f0e9d32ed53e6beb0436a268
   languageName: node
   linkType: hard
 
@@ -9938,12 +9938,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-abi@npm:^3.40.0":
-  version: 3.40.0
-  resolution: "node-abi@npm:3.40.0"
+"node-abi@npm:^3.54.0":
+  version: 3.54.0
+  resolution: "node-abi@npm:3.54.0"
   dependencies:
     semver: ^7.3.5
-  checksum: 8f4ef0d9ac82352465e7e7a8ce3915dae49c0fd19d6cb49a93140ff587b612166443531111a60d25e479a18e6e6b9af09698c7870babe0f44aa54287aeaf5eef
+  checksum: 260caae87299bb2fac6a269ba5dd378dbe1d99030396832fca7199b6cb5fd46556d2ec0d431f4a76ab2d53e49948047543afe3f1d70d0e6ebad04d33139650da
   languageName: node
   linkType: hard
 
@@ -14355,7 +14355,7 @@ __metadata:
     css-loader: ^6.8.1
     csso: ^5.0.5
     d3: ^7.8.5
-    electron: ^25.9.8
+    electron: 26.x.x
     electron-builder: ^24.5.0
     electron-devtools-assembler: ^1.2.0
     eslint: ^8.56.0

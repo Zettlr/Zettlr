@@ -128,7 +128,7 @@
     "fsevents": "^2.3.2"
   },
   "resolutions": {
-    "node-abi": "^3.40.0",
+    "node-abi": "^3.54.0",
     "got": "11.x.x",
     "node-gyp": "10.x.x"
   },
@@ -162,7 +162,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "csso": "^5.0.5",
-    "electron": "^25.9.8",
+    "electron": "26.x.x",
     "electron-builder": "^24.5.0",
     "electron-devtools-assembler": "^1.2.0",
     "eslint": "^8.56.0",
