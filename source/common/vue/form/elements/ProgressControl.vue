@@ -1,22 +1,22 @@
 <template>
   <div class="progress-bar-container">
     <progress
-      v-bind:max="max"
-      v-bind:value="value"
+      v-bind:max="max ?? 100"
+      v-bind:value="value ?? 0"
     >
-      Progress: {{ value }} of {{ max }}
+      Progress: {{ value ?? 0 }} of {{ max ?? 100 }}
     </progress>
     <button
-      v-if="interruptible"
+      v-if="interruptible === true"
       class="interrupt-button"
-      v-on:click="$emit('interrupt')"
+      v-on:click="emit('interrupt')"
     >
       <cds-icon shape="times" size="14"></cds-icon>
     </button>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -31,35 +31,13 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
+const props = defineProps<{
+  max?: number
+  value?: number
+  interruptible?: boolean
+}>()
 
-export default defineComponent({
-  name: 'ProgressBar',
-  props: {
-    /**
-     * The target for this progress element
-     */
-    max: {
-      type: Number,
-      default: 1
-    },
-    /**
-     * The current value of this progress element
-     */
-    value: {
-      type: Number,
-      default: 0
-    },
-    /**
-     * Can the process displayed be interrupted?
-     */
-    interruptible: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['interrupt']
-})
+const emit = defineEmits<(e: 'interrupt') => void>()
 </script>
 
 <style lang="less">

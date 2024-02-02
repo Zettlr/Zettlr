@@ -91,7 +91,7 @@
 
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
-import ProgressControl from '@common/vue/form/elements/Progress.vue'
+import ProgressControl from '@common/vue/form/elements/ProgressControl.vue'
 import { trans } from '@common/i18n-renderer'
 import formatSize from '@common/util/format-size'
 import PACKAGE_JSON from '../../package.json'
