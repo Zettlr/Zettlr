@@ -118,6 +118,7 @@
             </NumberControl>
             <TextControl
               v-else
+              v-bind:model-value="''"
               v-bind:placeholder="colLabel"
               v-bind:inline="true"
               v-on:update:model-value="valuesToAdd[colIdx] = $event"
