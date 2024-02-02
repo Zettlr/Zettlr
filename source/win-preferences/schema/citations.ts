@@ -39,11 +39,11 @@ export function getCitationFields (): PreferencesFieldset[] {
           model: 'export.cslLibrary',
           placeholder: trans('Path to file'),
           reset: '',
-          filter: {
-            'json, yaml, yml, bib': 'CSL JSON or BibTeX',
-            'json, yaml, yml': 'CSL JSON',
-            bib: 'BibTeX'
-          }
+          filter: [
+            { extensions: [ 'json', 'yaml', 'yml', 'bib' ], name: 'CSL JSON or BibTeX' },
+            { extensions: [ 'json', 'yaml', 'yml' ], name: 'CSL JSON' },
+            { extensions: ['bib'], name: 'BibTeX' }
+          ]
         },
         {
           type: 'file',
@@ -51,9 +51,7 @@ export function getCitationFields (): PreferencesFieldset[] {
           model: 'export.cslStyle',
           placeholder: trans('Path to file'),
           reset: '',
-          filter: {
-            csl: 'CSL Style'
-          }
+          filter: [{ extensions: ['csl'], name: 'CSL Style' }]
         }
       ]
     }

@@ -56,20 +56,20 @@
         v-model="cslStyle"
         v-bind:label="cslStyleLabel"
         v-bind:reset="true"
-        v-bind:filter="{'csl': 'CSL Stylesheet'}"
+        v-bind:filter="[{ extensions: ['csl'], name: 'CSL Stylesheet' }]"
       ></FileControl>
       <!-- Also, the other possible files users can override -->
       <FileControl
         v-model="texTemplate"
         v-bind:label="texTemplateLabel"
         v-bind:reset="true"
-        v-bind:filter="{'tex': 'LaTeX Source'}"
+        v-bind:filter="[{ extensions: ['tex'], name: 'LaTeX Source' }]"
       ></FileControl>
       <FileControl
         v-model="htmlTemplate"
         v-bind:label="htmlTemplateLabel"
         v-bind:reset="true"
-        v-bind:filter="{'html,htm': 'HTML Template'}"
+        v-bind:filter="[{ extensions: [ 'html', 'htm' ], name: 'HTML Template' }]"
       ></FileControl>
     </div>
   </WindowChrome>
@@ -93,7 +93,7 @@
 import { trans } from '@common/i18n-renderer'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import ListControl from '@common/vue/form/elements/ListControl.vue'
-import FileControl from '@common/vue/form/elements/File.vue'
+import FileControl from '@common/vue/form/elements/FileControl.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import { defineComponent } from 'vue'
 import { type DirDescriptor } from '@dts/common/fsal'
