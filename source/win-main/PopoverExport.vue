@@ -39,7 +39,7 @@
  * END HEADER
  */
 
-import RadioControl from '@common/vue/form/elements/Radio.vue'
+import RadioControl from '@common/vue/form/elements/RadioControl.vue'
 import SelectControl from '@common/vue/form/elements/Select.vue'
 import { defineComponent } from 'vue'
 import { type PandocProfileMetadata } from '@dts/common/assets'
