@@ -51,7 +51,7 @@ import { type GraphArc, type GraphVertex, type LinkGraph } from '@dts/common/gra
 import * as d3 from 'd3'
 import Checkbox from '@common/vue/form/elements/CheckboxControl.vue'
 import ButtonElement from '@common/vue/form/elements/ButtonControl.vue'
-import ProgressElement from '@common/vue/form/elements/Progress.vue'
+import ProgressElement from '@common/vue/form/elements/ProgressControl.vue'
 import SelectElement from '@common/vue/form/elements/Select.vue'
 import TextElement from '@common/vue/form/elements/Text.vue'
 import tippy from 'tippy.js'
