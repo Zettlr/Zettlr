@@ -41,8 +41,6 @@ import { defineComponent } from 'vue'
 import { useOpenDirectoryStore } from '../pinia'
 import { mapStores } from 'pinia'
 
-const path = window.path
-
 export default defineComponent({
   name: 'OtherFilesTab',
   computed: {
@@ -82,7 +80,8 @@ export default defineComponent({
     getIcon: function (attachmentPath: string) {
       const fileExtIcon = ClarityIcons.registry?.['file-ext'] // ClarityIcons.get('file-ext')
       if (typeof fileExtIcon === 'string') {
-        return fileExtIcon.replace('EXT', path.extname(attachmentPath).slice(1, 4))
+        const ext = attachmentPath.substring(attachmentPath.lastIndexOf('.') + 1)
+        return fileExtIcon.replace('EXT', ext)
       } else {
         return ''
       }
