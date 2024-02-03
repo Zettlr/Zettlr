@@ -47,7 +47,7 @@ import { getBibliographyForDescriptor as getBibliography } from '@common/util/ge
 import { EditorSelection } from '@codemirror/state'
 import { type TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
-import { useWorkspacesStore } from './pinia'
+import { useWorkspacesStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
@@ -695,3 +695,4 @@ body.darwin {
 
 </style>
 @common/util/renderer-path-polyfill
+../pinia

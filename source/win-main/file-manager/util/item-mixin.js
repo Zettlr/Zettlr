@@ -22,7 +22,7 @@ import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
 import { mapStores } from 'pinia'
 import { nextTick } from 'vue'
-import { useOpenDirectoryStore } from '../../pinia'
+import { useOpenDirectoryStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 

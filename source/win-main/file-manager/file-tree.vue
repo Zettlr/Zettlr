@@ -80,7 +80,7 @@ import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
-import { useWorkspacesStore } from '../pinia'
+import { useWorkspacesStore } from 'source/pinia'
 import { mapStores } from 'pinia'
 import { type MDFileDescriptor, type CodeFileDescriptor, type DirDescriptor, type AnyDescriptor } from '@dts/common/fsal'
 
@@ -425,3 +425,4 @@ body.linux {
   }
 }
 </style>
+../../pinia

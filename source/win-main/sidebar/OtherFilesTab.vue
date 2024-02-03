@@ -38,7 +38,7 @@ import { trans } from '@common/i18n-renderer'
 import { type OtherFileDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@cds/core/icon'
 import { defineComponent } from 'vue'
-import { useOpenDirectoryStore } from '../pinia'
+import { useOpenDirectoryStore } from 'source/pinia'
 import { mapStores } from 'pinia'
 
 export default defineComponent({
@@ -89,3 +89,4 @@ export default defineComponent({
   }
 })
 </script>
+../../pinia

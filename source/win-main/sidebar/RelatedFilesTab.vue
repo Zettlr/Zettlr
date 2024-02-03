@@ -65,7 +65,7 @@ import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { defineComponent } from 'vue'
 import { mapStores } from 'pinia'
-import { useWorkspacesStore } from '../pinia'
+import { useWorkspacesStore } from 'source/pinia'
 import { type OpenDocument } from '@dts/common/documents'
 import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { type TagRecord } from '@providers/tags'
@@ -306,3 +306,4 @@ export default defineComponent({
 })
 </script>
 @common/util/renderer-path-polyfill
+../../pinia

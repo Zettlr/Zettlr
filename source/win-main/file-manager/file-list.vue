@@ -97,7 +97,7 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, defineComponent } from 'vue'
-import { useOpenDirectoryStore } from '../pinia'
+import { useOpenDirectoryStore } from 'source/pinia'
 import { mapStores } from 'pinia'
 import { type MaybeRootDescriptor, type AnyDescriptor } from '@dts/common/fsal'
 
@@ -444,3 +444,4 @@ body.win32 {
   }
 }
 </style>
+../../pinia
