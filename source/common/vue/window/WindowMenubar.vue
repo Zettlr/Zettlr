@@ -35,7 +35,6 @@ const ipcRenderer = window.ipc
 
 const menu = ref<SubmenuItem[]>([])
 const currentSubmenu = ref<string|null>(null)
-const applicationMenu = ref<SubmenuItem[]|null>(null)
 const menuCloseCallback = ref<null|(() => void)|null>(null)
 
 // Can contain a target if a submenu is right now being requested
