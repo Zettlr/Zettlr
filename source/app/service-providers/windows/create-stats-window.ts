@@ -42,10 +42,7 @@ export default function createStatsWindow (logger: LogProvider, config: ConfigPr
     show: false,
     fullscreenable: false,
     webPreferences: {
-      // contextIsolation and sandbox mean: Preload scripts have access to
-      // Node modules, the renderers not
-      contextIsolation: true,
-      sandbox: false,
+      sandbox: true,
       preload: STATS_PRELOAD_WEBPACK_ENTRY
     }
   }

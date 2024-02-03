@@ -41,10 +41,7 @@ export default function createAssetsWindow (logger: LogProvider, config: ConfigP
     y: conf.y,
     show: false,
     webPreferences: {
-      // contextIsolation and sandbox mean: Preload scripts have access to
-      // Node modules, the renderers not
-      contextIsolation: true,
-      sandbox: false,
+      sandbox: true,
       preload: ASSETS_PRELOAD_WEBPACK_ENTRY
     }
   }
