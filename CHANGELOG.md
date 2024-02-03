@@ -103,6 +103,8 @@ be able to run the app again just fine on ARM computers with Linux.
   for fully sandboxing the window code; instead polyfill the required functions,
   testing them against the module's behavior
 - Completely sandbox renderers
+- Switched the popover logic away from deprecated plugin syntax to child
+  components with `Teleport` (#4663)
 
 # 3.0.3
 
