@@ -102,6 +102,7 @@ be able to run the app again just fine on ARM computers with Linux.
 - Fully remove the renderers's dependency on Node.js's path module to prepare
   for fully sandboxing the window code; instead polyfill the required functions,
   testing them against the module's behavior
+- Completely sandbox renderers
 
 # 3.0.5
 

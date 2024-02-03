@@ -43,10 +43,7 @@ export default function createAboutWindow (logger: LogProvider, config: ConfigPr
     show: false,
     fullscreenable: false,
     webPreferences: {
-      // contextIsolation and sandbox mean: Preload scripts have access to
-      // Node modules, the renderers not
-      contextIsolation: true,
-      sandbox: false,
+      sandbox: true,
       preload: ABOUT_PRELOAD_WEBPACK_ENTRY
     }
   }
