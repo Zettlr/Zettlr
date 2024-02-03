@@ -6,8 +6,8 @@
     <svg
       class="progress-ring"
       v-bind:style="{
-        width: circleSize,
-        height: circleSize
+        width: circleSize ?? 20,
+        height: circleSize ?? 20
       }"
     >
       <!-- Always-on circle -->
