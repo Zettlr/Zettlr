@@ -7,6 +7,7 @@
     }"
   >
     <div
+      ref="display-text"
       v-bind:class="{
         'list-item': true,
         project: obj.type === 'directory' && obj.settings.project !== null,
@@ -119,6 +120,31 @@
       </div>
     </div>
   </div>
+
+  <!-- Popovers -->
+  <PopoverDirProps
+    v-if="showPopover && obj.type === 'directory'"
+    v-bind:target="target"
+    v-bind:directory-path="obj.path"
+    v-on:close="showPopover = false"
+  ></PopoverDirProps>
+  <PopoverFileProps
+    v-if="showPopover && obj.type !== 'directory'"
+    v-bind:target="target"
+    v-bind:filepath="obj.path"
+    v-bind:filename="obj.name"
+    v-bind:creationtime="obj.creationtime"
+    v-bind:modtime="obj.modtime"
+    v-bind:tags="obj.tags ?? []"
+    v-bind:coloured-tags="$store.state.colouredTags"
+    v-bind:target-value="0"
+    v-bind:target-mode="'words'"
+    v-bind:file-size="obj.size"
+    v-bind:type="obj.type"
+    v-bind:words="obj.wordCount ?? 0"
+    v-bind:ext="obj.ext"
+    v-on:close="showPopover = false"
+  ></PopoverFileProps>
 </template>
 
 <script lang="ts">
@@ -141,6 +167,8 @@ import formatDate from '@common/util/format-date'
 import localiseNumber from '@common/util/localise-number'
 import formatSize from '@common/util/format-size'
 import itemMixin from './util/item-mixin'
+import PopoverDirProps from './util/PopoverDirProps.vue'
+import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import { defineComponent } from 'vue'
 import { type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
@@ -148,6 +176,10 @@ import { type WritingTarget } from '@providers/targets'
 
 export default defineComponent({
   name: 'FileItem',
+  components: {
+    PopoverDirProps,
+    PopoverFileProps
+  },
   mixins: [itemMixin],
   props: {
     activeFile: {
@@ -167,8 +199,16 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['begin-dragging'],
+  emits: [ 'begin-dragging', 'create-file', 'create-dir' ],
+  data () {
+    return {
+      showPopover: false
+    }
+  },
   computed: {
+    target (): HTMLElement {
+      return this.$refs['display-text'] as HTMLElement
+    },
     shouldCountChars: function (): boolean {
       return this.$store.state.config['editor.countChars']
     },

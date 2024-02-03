@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
     <h4>{{ dirname }}</h4>
     <div class="properties-info-container">
       <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
@@ -68,7 +68,7 @@
         ></cds-icon>
       </div>
     </div>
-  </div>
+  </PopoverWrapper>
 </template>
 
 <script lang="ts">
@@ -88,6 +88,7 @@
 
 import formatDate from '@common/util/format-date'
 import localiseNumber from '@common/util/localise-number'
+import PopoverWrapper from 'source/win-main/PopoverWrapper.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import SwitchControl from '@common/vue/form/elements/SwitchControl.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
@@ -174,31 +175,29 @@ export default {
   components: {
     SelectControl,
     SwitchControl,
-    ButtonControl
+    ButtonControl,
+    PopoverWrapper
   },
   props: {
+    target: {
+      type: HTMLElement,
+      required: true
+    },
     directoryPath: {
       type: String,
       default: ''
     }
   },
+  emits: ['close'],
   data: function () {
     return {
       descriptor: undefined as DirDescriptor|undefined,
       sortingType: 'name',
       sortingDirection: 'up',
-      isProject: false,
-      closePopover: false // As soon as this is true, the dir popover wants to request a close command
+      isProject: false
     }
   },
   computed: {
-    // This property needs to be exposed on every Popover. The popover needs to
-    // return the data that will then be reported back to the caller.
-    popoverData: function () {
-      return {
-        closePopover: this.closePopover
-      }
-    },
     dirname: function () {
       return this.descriptor?.name ?? ''
     },
@@ -288,7 +287,7 @@ export default {
 
       if (descriptor === undefined) {
         console.error('Could not open directory properties: Not found')
-        this.closePopover = true
+        this.$emit('close')
         return
       }
 
@@ -307,8 +306,7 @@ export default {
         payload: this.directoryPath
       })
         .catch(err => console.error(err))
-
-      this.closePopover = true
+      this.$emit('close')
     },
     updateIcon (iconShape: string|null) {
       ipcRenderer.invoke('application', {
