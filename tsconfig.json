@@ -20,6 +20,7 @@
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
+      "source/*": ["source/*"],
       "@common/*": ["source/common/*"],
       "@providers/*": ["source/app/service-providers/*"],
       "@dts/*": ["source/types/*"]
