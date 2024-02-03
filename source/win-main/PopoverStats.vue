@@ -1,47 +1,49 @@
 <template>
-  <div id="stats-popover">
-    <table>
-      <tr>
-        <td style="text-align: right;">
-          <strong>{{ displaySumMonth }}</strong>
-        </td>
-        <td>{{ lastMonthLabel }}</td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">
-          <strong>{{ displayAvgMonth }}</strong>
-        </td>
-        <td>{{ averageLabel }}</td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">
-          <strong>{{ displaySumToday }}</strong>
-        </td>
-        <td>{{ todayLabel }}</td>
-      </tr>
-    </table>
-    <p v-if="sumToday > averageMonth">
-      {{ surpassedMessage }}
-    </p>
-    <p v-else-if="sumToday > averageMonth / 2">
-      {{ closeToMessage }}
-    </p>
-    <p v-else>
-      {{ notReachedMessage }}
-    </p>
-    <div id="stats-counter-container">
-      <svg
-        v-bind:width="svgWidth"
-        v-bind:height="svgHeight"
-        title="These are the current month's word counts"
-      >
-        <path v-bind:d="getDailyCountsSVGPath"></path>
-      </svg>
-      <button v-on:click="buttonClick">
-        {{ buttonLabel }}
-      </button>
+  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
+    <div id="stats-popover">
+      <table>
+        <tr>
+          <td style="text-align: right;">
+            <strong>{{ displaySumMonth }}</strong>
+          </td>
+          <td>{{ lastMonthLabel }}</td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">
+            <strong>{{ displayAvgMonth }}</strong>
+          </td>
+          <td>{{ averageLabel }}</td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">
+            <strong>{{ displaySumToday }}</strong>
+          </td>
+          <td>{{ todayLabel }}</td>
+        </tr>
+      </table>
+      <p v-if="sumToday > averageMonth">
+        {{ surpassedMessage }}
+      </p>
+      <p v-else-if="sumToday > averageMonth / 2">
+        {{ closeToMessage }}
+      </p>
+      <p v-else>
+        {{ notReachedMessage }}
+      </p>
+      <div id="stats-counter-container">
+        <svg
+          v-bind:width="svgWidth"
+          v-bind:height="svgHeight"
+          title="These are the current month's word counts"
+        >
+          <path v-bind:d="getDailyCountsSVGPath"></path>
+        </svg>
+        <button v-on:click="buttonClick">
+          {{ buttonLabel }}
+        </button>
+      </div>
     </div>
-  </div>
+  </PopoverWrapper>
 </template>
 
 <script lang="ts">
@@ -59,6 +61,7 @@
  * END HEADER
  */
 
+import PopoverWrapper from './PopoverWrapper.vue'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import { type Stats } from '@providers/stats'
@@ -69,7 +72,15 @@ const ipcRenderer = window.ipc
 export default {
   name: 'PopoverExport',
   components: {
+    PopoverWrapper
   },
+  props: {
+    target: {
+      type: HTMLElement,
+      required: true
+    }
+  },
+  emits: ['close'],
   data: function () {
     return {
       sumMonth: 0,
@@ -176,6 +187,7 @@ export default {
     }
   },
   created: function () {
+    console.log('Creating stats window')
     // Asynchronously pull in the data
     ipcRenderer.invoke('stats-provider', { command: 'get-data' }).then((stats: Stats) => {
       this.sumMonth = stats.sumMonth
@@ -186,7 +198,9 @@ export default {
   },
   methods: {
     buttonClick: function () {
-      this.showMoreStats = true
+      ipcRenderer.invoke('application', { command: 'open-stats-window' })
+        .catch(err => console.error(err))
+      this.$emit('close')
     }
   }
 }

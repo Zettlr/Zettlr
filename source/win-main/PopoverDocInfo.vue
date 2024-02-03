@@ -1,40 +1,39 @@
 <template>
-  <div class="document-info">
-    <table v-if="docInfo">
-      <tr>
-        <td colspan="3" style="text-align:right">
-          <strong>{{ selectedWords }}</strong>
-        </td>
-        <td>{{ wordsLabel }}</td>
-      </tr>
-      <tr>
-        <td colspan="3" style="text-align:right">
-          <strong>{{ selectedChars }}</strong>
-        </td>
-        <td>{{ charsLabel }}</td>
-      </tr>
+  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
+    <div class="document-info">
+      <table>
+        <tr>
+          <td colspan="3" style="text-align:right">
+            <strong>{{ selectedWords }}</strong>
+          </td>
+          <td>{{ wordsLabel }}</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align:right">
+            <strong>{{ selectedChars }}</strong>
+          </td>
+          <td>{{ charsLabel }}</td>
+        </tr>
 
-      <tr v-if="docInfo.selections.length > 0">
-        <td colspan="4">
-          &nbsp;
-        </td>
-      </tr>
+        <tr v-if="docInfo.selections.length > 0">
+          <td colspan="4">
+            &nbsp;
+          </td>
+        </tr>
 
-      <tr v-for="sel, idx in docInfo.selections" v-bind:key="idx">
-        <td style="text-align:right">
-          <strong>{{ sel.anchor.line }}:{{ sel.anchor.ch }}</strong>
-        </td>
-        <td><strong>&ndash;</strong></td>
-        <td>
-          <strong>{{ sel.head.line }}:{{ sel.head.ch }}</strong>
-        </td>
-        <td>{{ getWdSelectedLabel(shouldCountChars ? sel.chars : sel.words) }}</td>
-      </tr>
-    </table>
-    <p v-else>
-      {{ noDocumentLabel }}
-    </p>
-  </div>
+        <tr v-for="sel, idx in docInfo.selections" v-bind:key="idx">
+          <td style="text-align:right">
+            <strong>{{ sel.anchor.line }}:{{ sel.anchor.ch }}</strong>
+          </td>
+          <td><strong>&ndash;</strong></td>
+          <td>
+            <strong>{{ sel.head.line }}:{{ sel.head.ch }}</strong>
+          </td>
+          <td>{{ getWdSelectedLabel(shouldCountChars ? sel.chars : sel.words) }}</td>
+        </tr>
+      </table>
+    </div>
+  </PopoverWrapper>
 </template>
 
 <script lang="ts">
@@ -53,25 +52,27 @@
  */
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
+import PopoverWrapper from './PopoverWrapper.vue'
 import { type PropType, defineComponent } from 'vue'
 import { type DocumentInfo } from '@common/modules/markdown-editor'
 
 export default defineComponent({
   name: 'PopoverDocInfo',
   components: {
+    PopoverWrapper
   },
   props: {
+    target: {
+      type: HTMLElement,
+      required: true
+    },
     docInfo: {
-      type: Object as PropType<null|DocumentInfo>,
-      default: () => null
+      type: Object as PropType<DocumentInfo>,
+      required: true
     },
     shouldCountChars: {
       type: Boolean,
       default: false
-    }
-  },
-  data: function () {
-    return {
     }
   },
   computed: {

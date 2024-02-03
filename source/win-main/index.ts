@@ -20,6 +20,7 @@ import createStore, { key as storeKey } from './store'
 import PopupProvider from './popup-provider'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { useOpenDirectoryStore } from './pinia'
+import { useStore } from 'vuex'
 
 const ipcRenderer = window.ipc
 
@@ -43,7 +44,8 @@ function afterRegister (): void {
     .use(pinia)
     .use(appStore, storeKey)
     .use(PopupProvider)
-    .mount('#app')
+
+  app.mount('#app')
 
   document.addEventListener('dragover', function (event) {
     event.preventDefault()
@@ -82,7 +84,7 @@ function afterRegister (): void {
       command: 'get-colored-tags'
     })
       .then(tags => {
-        app.$store.commit('colouredTags', tags)
+        app.config.globalProperties.$store.commit('colouredTags', tags)
       })
       .catch(e => console.error(e))
   }
@@ -100,7 +102,7 @@ function afterRegister (): void {
   // Update the configuration if some value changes
   ipcRenderer.on('config-provider', (event, { command, payload }) => {
     if (command === 'update') {
-      app.$store.commit('updateConfig', payload)
+      app.config.globalProperties.$store.commit('updateConfig', payload)
     }
   })
 
@@ -108,10 +110,10 @@ function afterRegister (): void {
   ipcRenderer.on('documents-update', (evt, payload) => {
     // A file has been saved or modified
     if (payload.event === DP_EVENTS.CHANGE_FILE_STATUS && payload.status === 'modification') {
-      app.$store.dispatch('updateModifiedFiles')
+      app.config.globalProperties.$store.dispatch('updateModifiedFiles')
         .catch(e => console.error(e))
     } else {
-      app.$store.dispatch('documentTree', payload)
+      app.config.globalProperties.$store.dispatch('documentTree', payload)
         .catch(err => console.error(err))
     }
   })
@@ -120,26 +122,26 @@ function afterRegister (): void {
 
   ipcRenderer.on('targets-provider', (event, what: string) => {
     if (what === 'writing-targets-updated') {
-      app.$store.dispatch('updateWritingTargets')
+      app.config.globalProperties.$store.dispatch('updateWritingTargets')
         .catch(e => console.error(e))
     }
   })
 
   ipcRenderer.on('assets-provider', (event, what: string) => {
     if (what === 'snippets-updated') {
-      app.$store.dispatch('updateSnippets')
+      app.config.globalProperties.$store.dispatch('updateSnippets')
         .catch(e => console.error(e))
     }
   })
 
   // Initial update
-  app.$store.dispatch('documentTree', { event: 'init', context: { windowId } })
+  app.config.globalProperties.$store.dispatch('documentTree', { event: 'init', context: { windowId } })
     .catch(err => console.error(err))
-  app.$store.dispatch('updateModifiedFiles')
+  app.config.globalProperties.$store.dispatch('updateModifiedFiles')
     .catch(e => console.error(e))
-  app.$store.dispatch('updateSnippets')
+  app.config.globalProperties.$store.dispatch('updateSnippets')
     .catch(e => console.error(e))
-  app.$store.dispatch('updateWritingTargets')
+  app.config.globalProperties.$store.dispatch('updateWritingTargets')
     .catch(e => console.error(e))
 
   // -----------------------------------------------
@@ -148,7 +150,7 @@ function afterRegister (): void {
   ipcRenderer.on('shortcut', (event, command) => {
     // Retrieve the correct contexts first
     const dirDescriptor = useOpenDirectoryStore().openDirectory
-    const fileDescriptor: OpenDocument|null = app.$store.getters.lastLeafActiveFile()
+    const fileDescriptor: OpenDocument|null = app.config.globalProperties.$store.getters.lastLeafActiveFile()
 
     if (command === 'new-dir') {
       if (dirDescriptor === null) {
@@ -181,7 +183,7 @@ function afterRegister (): void {
       })
         .catch(err => console.error(err))
     } else if (command === 'toggle-distraction-free') {
-      app.$store.commit('toggleDistractionFree')
+      app.config.globalProperties.$store.commit('toggleDistractionFree')
     }
   })
 }
