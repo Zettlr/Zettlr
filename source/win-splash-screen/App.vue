@@ -30,7 +30,7 @@
  */
 
 import { defineComponent } from 'vue'
-import ProgressControl from '@common/vue/form/elements/Progress.vue'
+import ProgressControl from '@common/vue/form/elements/ProgressControl.vue'
 import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc

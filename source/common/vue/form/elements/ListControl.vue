@@ -8,8 +8,15 @@
       v-if="searchable"
       v-model="query"
       v-bind:placeholder="searchLabel"
+      v-bind:search-icon="true"
+      v-bind:reset="true"
     ></TextControl>
-    <table v-bind:class="{ striped: isStriped }">
+    <table
+      v-bind:class="{
+        striped: isStriped,
+        'margin-top': searchable
+      }"
+    >
       <!-- Head row -->
       <thead>
         <tr>
@@ -39,6 +46,7 @@
               <Checkbox
                 v-if="typeof column === 'boolean'"
                 v-bind:model-value="column"
+                v-bind:inline="true"
                 v-bind:name="`${name}-checkbox-${rowIdx}-${colIdx}`"
                 v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
               >
@@ -46,6 +54,7 @@
               <NumberControl
                 v-else-if="typeof column === 'number'"
                 v-bind:model-value="column"
+                v-bind:inline="true"
                 v-on:escape="finishEditing()"
                 v-on:blur="handleInput(rowIdx, colIdx, $event)"
                 v-on:confirm="handleInput(rowIdx, colIdx, $event)"
@@ -54,6 +63,7 @@
               <TextControl
                 v-else
                 v-bind:model-value="column"
+                v-bind:inline="true"
                 v-on:escape="finishEditing()"
                 v-on:blur="handleInput(rowIdx, colIdx, $event)"
                 v-on:confirm="handleInput(rowIdx, colIdx, $event)"
@@ -65,6 +75,7 @@
               <Checkbox
                 v-if="typeof column === 'boolean'"
                 v-bind:model-value="column"
+                v-bind:inline="true"
                 v-bind:disabled="!isColumnEditable(colIdx)"
                 v-bind:name="`${name}-action-${rowIdx}-${colIdx}`"
                 v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
@@ -85,11 +96,13 @@
           </td>
         </tr>
         <!-- If users may add something, allow them to do so here -->
-        <tr v-if="addable && isAdding">
+        <tr v-if="addable">
           <td v-for="(colLabel, colIdx) in columnLabels" v-bind:key="colIdx">
             <Checkbox
               v-if="columnType(colIdx) === 'boolean'"
+              v-bind:model-value="true"
               v-bind:placeholder="colLabel"
+              v-bind:inline="true"
               v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
@@ -97,13 +110,17 @@
             <NumberControl
               v-else-if="columnType(colIdx) === 'number'"
               v-bind:placeholder="colLabel"
+              v-bind:inline="true"
+              v-bind:model-value="0"
               v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
             </NumberControl>
             <TextControl
               v-else
+              v-bind:model-value="''"
               v-bind:placeholder="colLabel"
+              v-bind:inline="true"
               v-on:update:model-value="valuesToAdd[colIdx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
@@ -111,13 +128,6 @@
           </td>
           <td style="text-align: center">
             <button v-on:click="handleAddition()">
-              {{ addButtonLabel }}
-            </button>
-          </td>
-        </tr>
-        <tr v-else-if="addable">
-          <td v-bind:colspan="numColumns">
-            <button v-on:click="isAdding = true">
               {{ addButtonLabel }}
             </button>
           </td>
@@ -142,9 +152,9 @@
  * END HEADER
  */
 
-import Checkbox from './Checkbox.vue'
-import TextControl from './Text.vue'
-import NumberControl from './Number.vue'
+import Checkbox from './CheckboxControl.vue'
+import TextControl from './TextControl.vue'
+import NumberControl from './NumberControl.vue'
 
 import { trans } from '@common/i18n-renderer'
 import { computed, onBeforeUpdate, ref } from 'vue'
@@ -152,12 +162,12 @@ import { computed, onBeforeUpdate, ref } from 'vue'
 /**
  * What types of values can our cells have?
  */
-export type SupportedValues = boolean|string
+export type SupportedValues = boolean|string|number
 
 /**
  * If the user passes a record, we need a Record of our SupportedValues
  */
-export type SupportedRecord = Record<string, string|boolean>
+export type SupportedRecord = Record<string, SupportedValues>
 
 const props = defineProps<{
   /**
@@ -227,11 +237,6 @@ const query = ref<string>('')
 const editing = ref<{ row: number, col: number }>({ row: -1, col: -1 })
 
 /**
- * Whether the user is currently seeing the add form
- */
-const isAdding = ref<boolean>(false)
-
-/**
  * An array that contains the values to be added if the user confirms the
  * addition.
  */
@@ -298,13 +303,6 @@ const objectKeys = computed<string[]|undefined>(() => {
   } else {
     return undefined
   }
-})
-
-/**
- * The amount of columns for the datatable
- */
-const numColumns = computed<number>(() => {
-  return props.columnLabels.length + (props.addable || props.deletable ? 1 : 0)
 })
 
 /**
@@ -555,8 +553,6 @@ function handleAddition (): void {
     newValue.push(newObject)
     emit('update:modelValue', newValue)
   }
-
-  isAdding.value = false
 }
 
 </script>
@@ -567,10 +563,10 @@ function handleAddition (): void {
 body {
   div.table-view {
     break-inside: avoid; // Avoid breaking table views when inside column views
-    margin: 5px;
 
     table {
       border: 1px solid rgb(220, 220, 220);
+      background-color: white;
       border-collapse: collapse;
       line-height: 100%;
       overflow: auto;
@@ -579,19 +575,24 @@ body {
       &.striped {
         border: none;
         tr:nth-child(2n) {
-          background-color: rgb(220, 220, 220);
+          background-color: rgb(249, 249, 249);
         }
       }
 
-      thead{
+      &.margin-top { margin-top: 8px; }
+
+      thead {
         tr {
-          border-bottom: 1px solid rgb(180, 180, 180);
+          border-bottom: 1px solid rgb(220, 220, 220);
           th {
             padding: 4px;
             font-size: small;
             font-weight: normal;
             text-align: left;
-            border-right: 1px solid rgb(180, 180, 180);
+
+            &:not(:last-child) {
+              border-right: 1px solid rgb(220, 220, 220);
+            }
           }
         }
       }
@@ -599,7 +600,7 @@ body {
       tbody {
         tr {
           td {
-            padding: 1px 4px;
+            padding: 4px;
             margin: 0;
             &:focus {
               outline: 0;
@@ -614,6 +615,7 @@ body {
   &.dark {
     div.table-view {
       table {
+        background-color: transparent;
         &.striped {
           tr:nth-child(2n) {
             background-color: rgb(50, 50, 50);
@@ -624,7 +626,7 @@ body {
   }
 }
 
-body.darwin{
+body.darwin {
   &.dark {
     div.table-view {
       table {

@@ -10,6 +10,7 @@
         'root': isRoot
       }"
       v-bind:data-id="obj.type === 'file' ? obj.id : ''"
+      v-bind:data-path="obj.path"
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
@@ -145,8 +146,9 @@ import { trans } from '@common/i18n-renderer'
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, defineComponent } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
+import { mapStores } from 'pinia'
+import { useOpenDirectoryStore } from '../pinia'
 
-const path = window.path
 const ipcRenderer = window.ipc
 
 export default defineComponent({
@@ -189,6 +191,7 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useOpenDirectoryStore),
     shouldBeCollapsed: function (): boolean {
       if (this.isCurrentlyFiltering) {
         // If the application is currently running a filter, uncollapse everything
@@ -294,7 +297,8 @@ export default defineComponent({
      * Returns the (containing) directory name.
      */
     dirname: function (): string {
-      return path.basename(this.obj.dir)
+      const DELIM = process.platform === 'win32' ? '\\' : '/'
+      return this.obj.dir.split(DELIM).reverse()[0]
     },
     /**
      * Returns a list of children that can be displayed inside the tree view
@@ -335,20 +339,14 @@ export default defineComponent({
     },
     isSelected: function (): boolean {
       if (this.obj.type === 'directory') {
-        if (this.selectedDir === null) {
-          return false
-        }
-        return this.selectedDir.path === this.obj.path
+        return this.selectedDir?.path === this.obj.path
       } else {
-        if (this.selectedFile === null) {
-          return false
-        }
-        return this.selectedFile.path === this.obj.path
+        return this.selectedFile?.path === this.obj.path
       }
     }
   },
   watch: {
-    selectedFile: function (newVal, oldVal) {
+    selectedFile: function () {
       this.uncollapseIfApplicable()
     },
     collapsed: function () {
@@ -358,10 +356,10 @@ export default defineComponent({
         this.$store.commit('addUncollapsedDirectory', this.obj.path)
       }
     },
-    selectedDir: function (newVal, oldVal) {
+    selectedDir: function () {
       // this.uncollapseIfApplicable() TODO: As of now this would also uncollapse the containing file's directory
     },
-    operationType: function (newVal, oldVal) {
+    operationType: function (newVal) {
       if (newVal !== undefined) {
         nextTick().then(() => {
           const input = this.$refs['new-object-input'] as HTMLInputElement
@@ -389,6 +387,10 @@ export default defineComponent({
     uncollapseIfApplicable: function () {
       const filePath = (this.selectedFile !== null) ? String(this.selectedFile.path) : ''
       const dirPath = (this.selectedDir !== null) ? String(this.selectedDir.path) : ''
+
+      if (this.obj.path === this['open-directoryStore'].openDirectory?.path) {
+        this.collapsed = false
+      }
 
       // Open the tree, if the selected file is contained in this dir somewhere
       if (filePath.startsWith(this.obj.path)) {
@@ -422,7 +424,7 @@ export default defineComponent({
     /**
      * Called when a drag operation enters this item; adds a highlight class
      */
-    enterDragging: function (event: DragEvent) {
+    enterDragging: function (_event: DragEvent) {
       if (this.isDirectory === false) {
         return
       }
@@ -441,7 +443,7 @@ export default defineComponent({
     /**
      * The oppossite of enterDragging; removes the highlight class
      */
-    leaveDragging: function (event: DragEvent) {
+    leaveDragging: function (_event: DragEvent) {
       if (this.isDirectory === false) {
         return
       }

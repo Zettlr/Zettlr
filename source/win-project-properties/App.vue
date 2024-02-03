@@ -56,20 +56,20 @@
         v-model="cslStyle"
         v-bind:label="cslStyleLabel"
         v-bind:reset="true"
-        v-bind:filter="{'csl': 'CSL Stylesheet'}"
+        v-bind:filter="[{ extensions: ['csl'], name: 'CSL Stylesheet' }]"
       ></FileControl>
       <!-- Also, the other possible files users can override -->
       <FileControl
         v-model="texTemplate"
         v-bind:label="texTemplateLabel"
         v-bind:reset="true"
-        v-bind:filter="{'tex': 'LaTeX Source'}"
+        v-bind:filter="[{ extensions: ['tex'], name: 'LaTeX Source' }]"
       ></FileControl>
       <FileControl
         v-model="htmlTemplate"
         v-bind:label="htmlTemplateLabel"
         v-bind:reset="true"
-        v-bind:filter="{'html,htm': 'HTML Template'}"
+        v-bind:filter="[{ extensions: [ 'html', 'htm' ], name: 'HTML Template' }]"
       ></FileControl>
     </div>
   </WindowChrome>
@@ -93,8 +93,8 @@
 import { trans } from '@common/i18n-renderer'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import ListControl from '@common/vue/form/elements/ListControl.vue'
-import FileControl from '@common/vue/form/elements/File.vue'
-import TextControl from '@common/vue/form/elements/Text.vue'
+import FileControl from '@common/vue/form/elements/FileControl.vue'
+import TextControl from '@common/vue/form/elements/TextControl.vue'
 import { defineComponent } from 'vue'
 import { type DirDescriptor } from '@dts/common/fsal'
 import { type WindowTab } from '@dts/renderer/window'
@@ -223,19 +223,19 @@ export default defineComponent({
     projectTitle: function () {
       this.updateProperties()
     },
-    patterns: function (newValue, oldValue) {
+    patterns: function () {
       this.updateProperties()
     },
-    cslStyle: function (newValue, oldValue) {
+    cslStyle: function () {
       this.updateProperties()
     },
-    texTemplate: function (newValue, oldValue) {
+    texTemplate: function () {
       this.updateProperties()
     },
-    htmlTemplate: function (newValue, oldValue) {
+    htmlTemplate: function () {
       this.updateProperties()
     },
-    dirPath: function (newValue, oldValue) {
+    dirPath: function () {
       this.fetchProperties()
     }
   },
@@ -257,11 +257,12 @@ export default defineComponent({
     // We listen to filetree changes -- in case one of these means that our
     // dir is no longer a project, fetchProperties will automatically close this
     // window.
-    ipcRenderer.on('fsal-state-changed', (event, kind) => {
-      if (kind === 'filetree') {
-        this.fetchProperties()
-      }
-    })
+    // ipcRenderer.on('fsal-state-changed', (event, kind) => {
+    //   if (kind === 'filetree') {
+    //     this.fetchProperties()
+    //   }
+    // })
+    // TODO: RE-IMPLEMENT!!!
   },
   methods: {
     selectExportProfile: function (newListVal: ExportProfile[]) {

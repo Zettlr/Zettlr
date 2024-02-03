@@ -145,7 +145,7 @@ export default {
      * Stops resizing of the inner elements on release of the mouse button.
      * @param {MouseEvent} evt The associated event
      */
-    endViewResizing: function (event) {
+    endViewResizing: function (_event) {
       this.viewResizing = false
       this.viewResizeX = 0
       this.$el.removeEventListener('mousemove', this.onViewResizing)

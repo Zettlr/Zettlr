@@ -171,9 +171,8 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
     }
 
     const zettlrFile = dataTransfer.getData('text/x-zettlr-file')
-    const docTab = dataTransfer.getData('zettlr/document-tab')
 
-    if (docTab !== '') {
+    if (dataTransfer.getData('zettlr/document-tab') !== '') {
       return false // There's a document being dragged, let the MainEditor capture the event
     }
 

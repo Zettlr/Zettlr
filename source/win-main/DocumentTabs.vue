@@ -91,12 +91,12 @@
 import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
-import { type OpenDocument, type LeafNodeJSON } from '@dts/common/documents'
-import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { mapStores } from 'pinia'
+import { useWorkspacesStore } from './pinia'
+import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
-const path = window.path
 
 export default defineComponent({
   name: 'DocumentTabs',
@@ -124,6 +124,7 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapStores(useWorkspacesStore),
     useH1: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('heading')
     },
@@ -213,7 +214,9 @@ export default defineComponent({
         input.style.backgroundColor = 'transparent'
         input.style.border = 'none'
         input.style.color = 'white'
-        input.value = path.basename(this.openFiles[currentIdx].path)
+        const DELIM = process.platform === 'win32' ? '\\': '/'
+        const openFile = this.openFiles[currentIdx].path
+        input.value = openFile.substring(openFile.lastIndexOf(DELIM) + 1)
 
         wrapper.appendChild(input)
 
@@ -345,9 +348,10 @@ export default defineComponent({
     },
     getTabText: function (doc: OpenDocument) {
       // Returns a more appropriate tab text based on the user settings
-      const file = this.$store.getters.file(doc.path) as MDFileDescriptor|CodeFileDescriptor|undefined
+      const file = this.workspacesStore.getFile(doc.path)
       if (file === undefined) {
-        return path.basename(doc.path)
+        const DELIM = process.platform === 'win32' ? '\\' : '/'
+        return doc.path.substring(doc.path.lastIndexOf(DELIM) + 1)
       }
 
       if (file.type !== 'file') {
@@ -372,7 +376,8 @@ export default defineComponent({
       return duplicates.length !== 1
     },
     getDirBasename (doc: OpenDocument) {
-      return path.basename(path.dirname(doc.path))
+      const DELIM = process.platform === 'win32' ? '\\' : '/'
+      return doc.path.split(DELIM).reverse()[1]
     },
     /**
      * Handles a click on the close button
@@ -460,8 +465,8 @@ export default defineComponent({
       })
     },
     handleContextMenu: function (event: MouseEvent, doc: OpenDocument) {
-      const file = this.$store.getters.file(doc.path) as MDFileDescriptor|CodeFileDescriptor|undefined
-      if (file === undefined) {
+      const file = this.workspacesStore.getFile(doc.path)
+      if (file === undefined || file.type === 'other') {
         return
       }
 
@@ -536,7 +541,10 @@ export default defineComponent({
      */
     handleDragStart: function (event: DragEvent, filePath: string) {
       const DELIM = (process.platform === 'win32') ? ';' : ':'
-      const data = `${this.windowId}${DELIM}${this.leafId}${DELIM}${filePath}`
+      // NOTE: When retrieving this data, destructure as an array and capture
+      // any remaining parts with `...filePath` and re-join with DELIM to
+      // account for the fact that Unixoid systems allow colons in paths.
+      const data = [ this.windowId, this.leafId, filePath ].join(DELIM)
       event.dataTransfer?.setData('zettlr/document-tab', data)
       this.documentTabDragOverOrigin = true
     },
@@ -695,7 +703,7 @@ export default defineComponent({
       // At this point, we have received a drop we need to handle it. The drag
       // data contains both the origin and the path, separated by the $PATH
       // delimiter -> window:leaf:absPath
-      const [ originWindow, originLeaf, filePath ] = documentTab.split(DELIM)
+      const [ originWindow, originLeaf, ...filePath ] = documentTab.split(DELIM)
       // Now actually perform the act
       ipcRenderer.invoke('documents-provider', {
         command: 'move-file',
@@ -704,7 +712,7 @@ export default defineComponent({
           targetWindow: this.windowId,
           originLeaf,
           targetLeaf: this.leafId,
-          path: filePath
+          path: filePath.join(DELIM)
         }
       })
         .catch(err => console.error(err))

@@ -1,41 +1,45 @@
 <template>
-  <div v-bind:class="{ 'checkbox-outer-div-inline': inline }">
-    <div class="form-control cb-group">
-      <label
-        v-bind:class="{
-          checkbox: true,
-          disabled: disabled
-        }"
+  <div
+    v-bind:class="{
+      'form-control': true,
+      'cb-group': true,
+      'checkbox-outer-div-inline': inline
+    }"
+  >
+    <label
+      v-bind:class="{
+        checkbox: true,
+        disabled: disabled === true
+      }"
+    >
+      <input
+        v-bind:id="fieldID"
+        v-model="isChecked"
+        type="checkbox"
+        v-bind:name="name"
+        value="yes"
+        v-bind:disabled="disabled === true"
+        v-on:change="emit('update:modelValue', isChecked)"
       >
-        <input
-          v-bind:id="fieldID"
-          type="checkbox"
-          v-bind:name="name"
-          value="yes"
-          v-bind:checked="modelValue"
-          v-bind:disabled="disabled"
-          v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
-        >
-        <span class="checkmark"></span>
-      </label>
-      <label
-        v-if="label || info"
-        v-bind:for="fieldID"
-        v-bind:class="{
-          'cb-group-label': true,
-          disabled: disabled
-        }"
-      >
-        <span v-html="label"></span>
-        <div v-if="info" class="info">
-          {{ info }}
-        </div>
-      </label>
-    </div>
+      <span class="checkmark"></span>
+    </label>
+    <label
+      v-if="label || info"
+      v-bind:for="fieldID"
+      v-bind:class="{
+        'cb-group-label': true,
+        disabled: disabled === true
+      }"
+    >
+      <span v-html="label"></span>
+      <div v-if="info" class="info">
+        {{ info }}
+      </div>
+    </label>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -50,42 +54,23 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
+import { ref, computed } from 'vue'
 
-export default defineComponent({
-  name: 'CheckboxField',
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    name: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    inline: {
-      type: Boolean,
-      default: false
-    },
-    info: {
-      type: String,
-      default: ''
-    }
-  },
-  emits: ['update:modelValue'],
-  computed: {
-    fieldID: function (): string {
-      return 'form-input-' + this.name
-    }
-  }
+const props = defineProps<{
+  modelValue: boolean
+  label?: string
+  name?: string
+  disabled?: boolean
+  inline?: boolean
+  info?: string
+}>()
+
+const isChecked = ref<boolean>(props.modelValue)
+
+const emit = defineEmits<(e: 'update:modelValue', val: boolean) => void>()
+
+const fieldID = computed<string>(() => {
+  return props.name !== undefined ? 'form-input-' + props.name : ''
 })
 </script>
 
@@ -107,6 +92,10 @@ body {
     grid-template-rows: 100%;
     grid-template-areas: "input label";
     align-items: center;
+
+    &:not(.checkbox-outer-div-inline) {
+      margin: 10px 0;
+    }
 
     .cb-group-label { grid-area: label; }
   }

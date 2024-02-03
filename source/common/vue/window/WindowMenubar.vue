@@ -62,7 +62,7 @@ export default defineComponent({
     ipcRenderer.send('menu-provider', { command: 'get-application-menu' })
 
     // Also make sure to reset the internal state if necessary
-    window.addEventListener('mousedown', (event) => {
+    window.addEventListener('mousedown', (_event) => {
       // The closing will be handled automatically by the menu handler
       if (this.menuCloseCallback !== null) {
         this.menuCloseCallback = null

@@ -1,5 +1,12 @@
 # Upcoming
 
+## Dropping Support for macOS 10.13 and 10.14
+
+Due to Zettlr's underlying Electron framework dropping support for macOS 10.13
+(High Sierra) and 10.14 (Mojave), Zettlr drops support for these operating
+systems as well. To continue to use Zettlr on a Mac, ensure to update to at
+least macOS 10.15 (Catalina).
+
 ## Changes to the link detection
 
 For a long time now, Zettlr would (sometimes aggressively so) detect plain links
@@ -24,12 +31,29 @@ This changes brings Zettlr's link functionality much more into alignment with
 other editors as well, since this is the way that many other applications handle
 links as well.
 
+## Linux ARM builds functionally again
+
+Since Zettlr v3.0.0, Linux users on ARM-machines had the issue that they could
+not run the app, as a dependency has been compiled for the wrong architecture.
+Thanks to efforts by @LaPingvino, this has now been finally fixed and you should
+be able to run the app again just fine on ARM computers with Linux.
+
 ## GUI and Functionality
 
 - **Feature**: Zettlr can now suggest you emojis during autocompletion. Emojis
   use the same trigger character as the snippets autocomplete, a colon (`:`);
   and Emojis will always be sorted below your snippets -- you can turn this off
   in the editor settings
+- **Feature**: We've completely redesigned the preferences dialog; now it is
+  more aligned with the system preferences on macOS and Windows, allows
+  searching and follows a more stringent structure
+- Removed the option for choosing to sort by either file creation or last
+  modification time, since that can also be inferred from whichever time you
+  choose to display
+- Removed the option for activating or disabling automatic file creation upon
+  following internal links; now this will happen automatically as long as the
+  "custom folder" option points to an existing folder; to disable this
+  functionality simply remove the folder path
 - Fixed a bug where recent documents would not turn up in the menu
 - Fixed the sidebar shortcut: It is now `Cmd/Ctrl+Shift+0` (to align with the
   file manager shortcut, `Cmd/Ctrl+Shift+1`)
@@ -45,13 +69,36 @@ links as well.
   as text, instead of offering to insert an image of the selection
 - Fix pasting behavior: Now Zettlr should properly paste most formatted text
   without too much noise (in the form of comments, styles, and other additions)
+- Fix Linux ARM builds
+- Fix restart-dialog showing multiple times for the same options (#4768)
+- Fix the active typewriter line background color in dark mode
+- Fixed an issue where gutter markers were not equally offset when typewriter
+  mode was active (#4918)
+- Fixed non-working file deletion menu item (#3894)
+- Fixed a bug that would not ask users to save their changes when closing the
+  last main window on Windows or Linux (#4898)
+- Fixed a bug that would not properly restore the open directory on application
+  boot (#3797)
+- Fixed an issue that would break drag & drop behavior of editor panes when the
+  pathname contained a colon on non-Windows systems (#4822)
+- Fixes an issue where the re-ordering of list item numbers would not ensure
+  that lists start at 1
 
 ## Under the Hood
 
 - Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
+- Removed the config option `sortingTime` since that can be inferred from the
+  option `fileMetaTime`
+- Removed the config option `zkn.autoCreateLinkedFiles`, since that can be
+  inferred from the option `zkn.customDir`
+- Simplified tab bar tab retention logic across reloads
+- Add the ability to programmatically open the assets window with specified tab
 - Bump the bundled Pandoc to version `3.1.11`
 - Failure to fetch a link preview will now simply log a verbose message instead
   of an error
+- Reimplement configuration guard options as Maps to allow for volatile state
+- Begin migrating application state to Pinia
+- Upgrade Electron to v28
 
 # 3.0.3
 
@@ -245,6 +292,11 @@ quick list:
    settings. Both are now fixed to `[[` and `]]` respectively. We have figured
    that nobody needs to configure this, and it makes many parts of our code
    easier.
+
+## Correcting Ordered List Numbers on Move
+
+Moving lines that are part of an ordered list using 'Alt-UpArrow'/'Alt-DownArrow' 
+will now also correct the list numbers of any affected lists after the move.
 
 ## New Icons on Windows and Linux
 

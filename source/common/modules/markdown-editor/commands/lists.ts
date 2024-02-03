@@ -17,7 +17,7 @@
 import { type ChangeSpec, type EditorState, type Transaction } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
-import { indentLess, indentMore, insertTab } from '@codemirror/commands'
+import { indentLess, indentMore, insertTab, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { type SyntaxNode } from '@lezer/common'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import type { BulletList, OrderedList } from '@common/modules/markdown-utils/markdown-ast'
@@ -78,7 +78,14 @@ function isListTouchedBySelection (state: EditorState): boolean {
 function correctOrderedList (listNode: OrderedList, offset: number): ChangeSpec[] {
   const changes: ChangeSpec[] = []
 
-  let idx = listNode.startsAt
+  // NOTE: This code deliberately changes the starting number to 1, regardless
+  // of what it was, since this function can also be called from a swap-line
+  // command, which may yield a 2 in front of a 1. But I honestly can't think of
+  // a way where anyone would want a list to start at something other than 1,
+  // and on export the order would be restored anyhow. Should someone complain,
+  // we can replace the line below with the commented line at any time.
+  // let idx = listNode.startsAt
+  let idx = 1
   for (const item of listNode.items) {
     if (item.number !== idx) {
       changes.push({ from: offset + item.marker.from, to: offset + item.marker.to - 1, insert: `${idx}` })
@@ -209,6 +216,7 @@ function correctListMarkers (state: EditorState): Transaction {
   // So what this function needs to do is go over the ranges. We know that this
   // function will only be called after the user either indented or unindented
   // anything that has a list in it.
+
   const lists = fetchLists(state)
   const changes: ChangeSpec[] = []
 
@@ -259,6 +267,50 @@ export function maybeIndentList (target: EditorView): boolean {
  */
 export function maybeUnindentList (target: EditorView): boolean {
   let hasHandled = indentLess({
+    state: target.state,
+    dispatch: (transaction) => target.dispatch(transaction)
+  })
+
+  if (isListTouchedBySelection(target.state)) {
+    target.dispatch(correctListMarkers(target.state))
+    hasHandled = true
+  }
+
+  return hasHandled
+}
+
+/**
+ * A command that moves a line down, and subsequently corrects the list markers for
+ * every list affected by this change, if a list was touched by a selection.
+ *
+ * @param   {EditorView}  target  The view in question
+ *
+ * @return  {boolean}             Whether the command has handled the keypress
+ */
+export function customMoveLineDown (target: EditorView): boolean {
+  let hasHandled = moveLineDown({
+    state: target.state,
+    dispatch: (transaction) => target.dispatch(transaction)
+  })
+
+  if (isListTouchedBySelection(target.state)) {
+    target.dispatch(correctListMarkers(target.state))
+    hasHandled = true
+  }
+
+  return hasHandled
+}
+
+/**
+ * A command that moves a line up, and subsequently corrects the list markers for
+ * every list affected by this change, if a list was touched by a selection.
+ *
+ * @param   {EditorView}  target  The view in question
+ *
+ * @return  {boolean}             Whether the command has handled the keypress
+ */
+export function customMoveLineUp (target: EditorView): boolean {
+  let hasHandled = moveLineUp({
     state: target.state,
     dispatch: (transaction) => target.dispatch(transaction)
   })

@@ -76,7 +76,7 @@ export default function createAboutWindow (logger: LogProvider, config: ConfigPr
   })
 
   // Emitted when the user wants to close the window.
-  window.on('close', (event) => {
+  window.on('close', (_event) => {
     let ses = window.webContents.session
     // Do not "clearCache" because that would only delete my own index files
     ses.clearStorageData({

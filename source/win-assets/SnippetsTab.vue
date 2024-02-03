@@ -72,8 +72,8 @@
 
 import SplitView from '@common/vue/window/SplitView.vue'
 import SelectableList from '@common/vue/form/elements/SelectableList.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
-import TextControl from '@common/vue/form/elements/Text.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
+import TextControl from '@common/vue/form/elements/TextControl.vue'
 import CodeEditor from '@common/vue/CodeEditor.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
@@ -110,7 +110,7 @@ export default defineComponent({
     }
   },
   watch: {
-    currentItem: function (newValue, oldValue) {
+    currentItem: function () {
       this.loadState()
     },
     editorContents: function () {

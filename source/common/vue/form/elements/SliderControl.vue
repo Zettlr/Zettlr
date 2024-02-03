@@ -7,13 +7,13 @@
       v-bind:max="max"
       v-bind:value="modelValue"
       v-bind:name="name"
-      v-on:input="$emit('update:modelValue', parseInt(($event.target as HTMLInputElement).value, 10))"
-      v-on:change="$emit('change', parseInt(($event.target as HTMLInputElement).value, 10))"
+      v-on:input="emit('update:modelValue', parseInt(($event.target as HTMLInputElement).value, 10))"
+      v-on:change="emit('update:modelValue', parseInt(($event.target as HTMLInputElement).value, 10))"
     >
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -28,34 +28,15 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
+const props = defineProps<{
+  modelValue: number
+  min?: number
+  max?: number
+  label?: string
+  name?: string
+}>()
 
-export default defineComponent({
-  name: 'SliderControl',
-  props: {
-    modelValue: {
-      type: Number,
-      default: 0
-    },
-    min: {
-      type: Number,
-      default: 0
-    },
-    max: {
-      type: Number,
-      default: 100
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    name: {
-      type: String,
-      default: ''
-    }
-  },
-  emits: [ 'update:modelValue', 'change' ]
-})
+const emit = defineEmits<(e: 'update:modelValue', value: number) => void>()
 </script>
 
 <style lang="less">
@@ -74,7 +55,7 @@ body.darwin {
     margin: 6px 0px;
 
     input[type=range] {
-      -webkit-appearance: none;
+      appearance: none;
       width: 100%;
       background-color: transparent;
       border: none;
@@ -90,11 +71,11 @@ body.darwin {
       }
 
       &::-webkit-slider-thumb {
+        appearance: none;
         height: 20px;
-        width: 8px;
+        width: 20px;
         margin-top: -10px;
-        border-radius: 5px;
-        -webkit-appearance: none;
+        border-radius: 10px;
         background-color: white;
         border: 1px solid rgb(195, 195, 195);
         border-top-color: rgb(218, 218, 218);

@@ -1,10 +1,16 @@
 <template>
   <div class="form-control">
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <label
+      v-if="label"
+      v-bind:for="fieldID"
+      v-bind:class="{ disabled: disabled }"
+      v-html="label"
+    ></label>
     <input
       v-bind:id="fieldID"
       ref="input"
       v-bind:value="modelValue"
+      v-bind:disabled="disabled"
       v-bind:class="{ 'inline': inline }"
       type="time"
       v-on:input="validateInput(($event.target as HTMLInputElement).value)"
@@ -47,6 +53,10 @@ export default defineComponent({
     inline: {
       type: Boolean,
       default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:modelValue'],
@@ -80,6 +90,10 @@ input[type="time"] {
 body.darwin {
   label {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+    &.disabled {
+      color: rgb(190, 190, 190);
+    }
   }
 }
 </style>

@@ -124,9 +124,9 @@
  */
 
 import WindowChrome from '@common/vue/window/Chrome.vue'
-import TextControl from '@common/vue/form/elements/Text.vue'
-import ColorControl from '@common/vue/form/elements/Color.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
+import TextControl from '@common/vue/form/elements/TextControl.vue'
+import ColorControl from '@common/vue/form/elements/ColorControl.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import { type TagRecord } from '@providers/tags'

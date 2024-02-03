@@ -1,157 +1,83 @@
 <template>
-  <div ref="component-container">
-    <fieldset
-      v-for="(item, idx) in typedSchema.fieldsets"
+  <div ref="component-container" class="form-container">
+    <template
+      v-for="(fieldset, idx) in typedSchema.fieldsets"
       v-bind:key="idx"
     >
-      <template v-for="(field, f_idx) in item">
-        <TextInput
-          v-if="field.type === 'text'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:disabled="field.disabled"
-          v-bind:placeholder="field.placeholder"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-bind:reset="field.reset"
-          v-bind:info="field.info"
-          v-bind:inline="field.inline"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></TextInput>
-        <NumberInput
-          v-if="field.type === 'number'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-bind:reset="field.reset"
-          v-bind:inline="field.inline"
-          v-bind:disabled="field.disabled"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></NumberInput>
-        <TimeInput
-          v-if="field.type === 'time'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-bind:inline="field.inline"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></TimeInput>
-        <ColorInput
-          v-if="field.type === 'color'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-bind:inline="field.inline"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></ColorInput>
-        <FileInput
-          v-if="field.type === 'file'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:reset="field.reset"
-          v-bind:name="field.model"
-          v-bind:directory="false"
-          v-bind:filter="field.filter"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></FileInput>
-        <FileInput
-          v-if="field.type === 'directory'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:reset="field.reset"
-          v-bind:name="field.model"
-          v-bind:directory="true"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></FileInput>
-        <CheckboxInput
-          v-if="field.type === 'checkbox'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-bind:disabled="field.disabled"
-          v-bind:info="field.info"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></CheckboxInput>
-        <SwitchInput
-          v-if="field.type === 'switch'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></SwitchInput>
-        <RadioInput
-          v-if="field.type === 'radio'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-bind:disabled="field.disabled"
-          v-bind:options="field.options"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></RadioInput>
-        <SelectInput
-          v-if="field.type === 'select'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-bind:options="field.options"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></SelectInput>
-        <ListControl
-          v-if="field.type === 'list'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:value-type="field.valueType"
-          v-bind:label="field.label"
-          v-bind:column-labels="field.columnLabels"
-          v-bind:key-names="field.keyNames"
-          v-bind:name="field.model"
-          v-bind:deletable="field.deletable"
-          v-bind:editable="field.editable"
-          v-bind:striped="field.striped"
-          v-bind:addable="field.addable"
-          v-bind:searchable="field.searchable"
-          v-bind:search-label="field.searchLabel"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></ListControl>
-        <TokenInput
-          v-if="field.type === 'token'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></TokenInput>
-        <!-- NOTE: For sliders we only listen to change events -->
-        <SliderInput
-          v-if="field.type === 'slider'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:min="field.min"
-          v-bind:max="field.max"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-on:change="$emit('update:modelValue', field.model, $event)"
-        ></SliderInput>
-        <ThemeInput
-          v-if="field.type === 'theme'"
-          v-bind:key="f_idx"
-          v-bind:model-value="getModelValue(field.model)"
-          v-bind:options="field.options"
-          v-bind:label="field.label"
-          v-bind:name="field.model"
-          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
-        ></ThemeInput>
-      </template>
-    </fieldset>
+      <div
+        v-if="typedSchema.getFieldsetCategory(fieldset) !== undefined"
+        class="fieldset-category"
+      >
+        <cds-icon v-bind:shape="typedSchema.getFieldsetCategory(fieldset)?.icon"></cds-icon>
+        <span>
+          {{ typedSchema.getFieldsetCategory(fieldset)?.title }}
+        </span>
+      </div>
+      <fieldset>
+        <!-- First, let's do some setup of the fieldset -->
+        <div class="form-header">
+          <!-- First the fieldset legend: Required -->
+          <legend>
+            {{ fieldset.title }}
+          </legend>
+          <!-- Then an optional title area form field -->
+          <div v-if="fieldset.titleField !== undefined" class="form-header-field">
+            <FormFieldControl
+              v-bind:field="fieldset.titleField"
+              v-bind:model="getModelValue(fieldset.titleField.model)"
+              v-on:update:model-value="$emit('update:modelValue', fieldset.titleField.model, $event)"
+            ></FormFieldControl>
+          </div>
+          <!-- Finally the optional help tooltip -->
+          <div
+            v-if="fieldset.help !== undefined" class="form-help"
+          >
+            ?
+          </div>
+        </div>
+        <!-- If the first fieldset field is not a separator and we have following fields, add a small gap -->
+        <div
+          v-if="fieldset.fields.length > 0 && fieldset.fields[0].type !== 'separator'"
+          style="height: 10px;"
+        ></div>
+        <!-- Now to the contents of the fieldset -->
+        <template v-for="(field, fieldIdx) in fieldset.fields" v-bind:key="fieldIdx">
+          <FormFieldControl
+            v-if="'model' in field"
+            v-bind:field="field"
+            v-bind:model="getModelValue(field.model)"
+            v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
+          ></FormFieldControl>
+          <div
+            v-else-if="field.type === 'style-group'"
+            v-bind:class="{
+              'style-group': true,
+              columns: field.style === 'columns'
+            }"
+          >
+            <template v-for="(subField, subfieldIdx) in field.fields" v-bind:key="subfieldIdx">
+              <FormFieldControl
+                v-if="'model' in subField"
+                v-bind:field="subField"
+                v-bind:model="getModelValue(subField.model)"
+                v-on:update:model-value="$emit('update:modelValue', subField.model, $event)"
+              ></FormFieldControl>
+              <FormFieldControl
+                v-else
+                v-bind:field="subField"
+                v-bind:model="undefined"
+              ></FormFieldControl>
+            </template>
+          </div>
+          <!-- Else for all elements that don't have a model (i.e., the separator) -->
+          <FormFieldControl
+            v-else
+            v-bind:field="field"
+            v-bind:model="undefined"
+          ></FormFieldControl>
+        </template>
+      </fieldset>
+    </template>
   </div>
 </template>
 
@@ -176,20 +102,10 @@
 // Reference for how to do all this stuff dynamically:
 // https://css-tricks.com/creating-vue-js-component-instances-programmatically/
 
-import TextInput from './elements/Text.vue'
-import NumberInput from './elements/Number.vue'
-import TimeInput from './elements/Time.vue'
-import ColorInput from './elements/Color.vue'
-import FileInput from './elements/File.vue'
-import CheckboxInput from './elements/Checkbox.vue'
-import SwitchInput from './elements/Switch.vue'
-import RadioInput from './elements/Radio.vue'
-import SelectInput from './elements/Select.vue'
-import SliderInput from './elements/Slider.vue'
-import ListControl from './elements/ListControl.vue'
-import TokenInput from './elements/TokenList.vue'
-import ThemeInput, { type ThemeDescriptor } from './elements/Theme.vue'
+import type { ThemeDescriptor } from './elements/Theme.vue'
+import FormFieldControl from './FormField.vue'
 import { defineComponent } from 'vue'
+import type { FileFilter } from 'electron'
 
 interface BasicInfo {
   /**
@@ -200,6 +116,38 @@ interface BasicInfo {
    * Optional label to put before the input
    */
   label?: string
+  /**
+   * Whether the field should be displayed inline
+   */
+  inline?: boolean
+  /**
+   * An optional group that can be used to sort items into various groups
+   */
+  group?: string
+  /**
+   * Whether the field is disabled
+   */
+  disabled?: boolean
+  /**
+   * An optional placeholder, not supported everywhere
+   */
+  placeholder?: string
+}
+
+interface Separator {
+  type: 'separator'
+}
+
+interface FormText {
+  type: 'form-text'
+  display: 'info'|'sub-heading'
+  contents: string
+}
+
+interface FormButton {
+  type: 'button'
+  label: string
+  onClick: () => void
 }
 
 interface TextField extends BasicInfo {
@@ -217,10 +165,6 @@ interface TextField extends BasicInfo {
    */
   info?: string
   /**
-   * Whether the field should be displayed inline
-   */
-  inline?: boolean
-  /**
    * Whether the field is disabled
    */
   disabled?: boolean
@@ -229,35 +173,29 @@ interface TextField extends BasicInfo {
 interface NumberField extends BasicInfo {
   type: 'number'
   reset?: number
-  inline?: boolean
-  disabled?: boolean
 }
 
 interface TimeField extends BasicInfo {
   type: 'time'
-  inline?: boolean
 }
 
 interface ColorField extends BasicInfo {
   type: 'color'
-  inline?: boolean
 }
 
 interface FileField extends BasicInfo {
   type: 'file'|'directory'
   reset?: string|boolean
-  filter?: Record<string, string>
+  filter?: FileFilter[]
 }
 
 interface CheckboxField extends BasicInfo {
   type: 'checkbox'|'switch'
   info?: string
-  disabled?: boolean
 }
 
 interface RadioField extends BasicInfo {
   type: 'radio'
-  disabled?: boolean
   options: Record<string, string>
 }
 
@@ -294,28 +232,60 @@ interface ThemeField extends BasicInfo {
   options: Record<string, ThemeDescriptor>
 }
 
-type Fields = TextField|NumberField|TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|SliderField|ThemeField
+/**
+ * Fields that can occur within the form field list
+ */
+export type FormField = Separator|FormText|FormButton|TextField|NumberField|
+TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|
+TokenField|SliderField|ThemeField
+
+/**
+ * Fields that can only occur within the title area of a fieldset
+ */
+export type TitleFormField = TextField|NumberField|TimeField|ColorField|
+FileField|CheckboxField|RadioField|SelectField|ListField|TokenField|
+SliderField
+
+/**
+ * This field can be used to apply styles to various groups of fields. Only
+ * available directly as children of fieldsets
+ */
+interface StyleGroup {
+  type: 'style-group'
+  style: 'columns'
+  fields: FormField[]
+}
+
+export interface Fieldset {
+  /**
+   * The section heading for the fieldset
+   */
+  title: string
+  /**
+   * An optional help string that can be shown in a questionmark tooltip
+   */
+  help?: string
+  /**
+   * Each fieldset can have a single FormField within its title area. Thus, a
+   * fieldset can kind of "represent" an entire toggle.
+   */
+  titleField?: TitleFormField
+  /**
+   * The fields which are part of this formfield
+   */
+  fields: Array<FormField|StyleGroup>
+  [key: string]: any // Allow arbitrary additional fields
+}
 
 export interface FormSchema {
-  fieldsets: Fields[][]
+  fieldsets: Fieldset[]
+  getFieldsetCategory: (fieldset: Fieldset) => { title: string, icon: string }|undefined
 }
 
 export default defineComponent({
   name: 'FormBuilder',
   components: {
-    TextInput,
-    NumberInput,
-    TimeInput,
-    ColorInput,
-    FileInput,
-    CheckboxInput,
-    SwitchInput,
-    RadioInput,
-    SelectInput,
-    SliderInput,
-    ListControl,
-    TokenInput,
-    ThemeInput
+    FormFieldControl
   },
   props: {
     model: {
@@ -348,5 +318,93 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+.form-container {
+  .fieldset-category {
+    color: rgb(114, 114, 114);
+    font-size: 13px;
+    margin: 10px;
 
+    cds-icon {
+      margin-right: 10px;
+    }
+  }
+
+  fieldset {
+    background-color: rgb(236, 236, 236);
+    border: 1px solid rgb(230, 230, 230);
+    margin: 10px;
+    padding: 24px;
+    padding-top: 18px;
+    border-radius: 6px;
+    position: relative;
+    color: #333;
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+
+      legend {
+        flex-grow: 1;
+        font-weight: bolder;
+        font-size: 15px;
+        margin-top: 2px;
+        padding: 0;
+      }
+
+      // .form-header-field {}
+    }
+
+    .form-help {
+      display: block;
+      width: 18px;
+      min-width: 18px;
+      cursor: help;
+      height: 18px;
+      line-height: 16px;
+      text-align: center;
+      background-color: rgb(222, 222, 222);
+      border: 1px solid rgb(124, 124, 124);
+      color: rgb(124, 124, 124);
+      border-radius: 10px;
+      font-size: 10px;
+    }
+
+    hr {
+      margin: 20px 0px;
+      border: none;
+      border-top: 1px solid rgb(211, 211, 211);
+    }
+
+    .style-group {
+      .columns {
+        column-count: 2;
+        column-fill: balance;
+      }
+    }
+  }
+}
+
+body.dark .form-container {
+  fieldset {
+    background-color: rgb(60, 60, 60);
+    color: inherit;
+    border-color: rgb(30, 30, 30);
+  }
+}
+
+body.win32 .form-container {
+  fieldset {
+    border-radius: 0px;
+    background-color: rgb(245, 245, 245);
+  }
+}
+
+body.linux:not(.dark) .form-container {
+  fieldset {
+    border-radius: 4px;
+    background-color: rgb(245, 245, 245);
+  }
+}
 </style>

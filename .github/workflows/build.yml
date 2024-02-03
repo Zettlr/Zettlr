@@ -367,6 +367,8 @@ jobs:
     name: Linux (arm64)
     env:
       npm_config_arch: arm64
+      CC: zig cc -target aarch64-linux-gnu
+      CXX: zig c++ -target aarch64-linux-gnu
     needs: [preflight, verify_version]
     runs-on: ubuntu-20.04
     steps:
@@ -379,6 +381,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      - name: Install Zig
+        uses: goto-bus-stop/setup-zig@v2
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly

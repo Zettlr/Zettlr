@@ -49,11 +49,11 @@
 import { defineComponent } from 'vue'
 import { type GraphArc, type GraphVertex, type LinkGraph } from '@dts/common/graph'
 import * as d3 from 'd3'
-import Checkbox from '@common/vue/form/elements/Checkbox.vue'
-import ButtonElement from '@common/vue/form/elements/Button.vue'
-import ProgressElement from '@common/vue/form/elements/Progress.vue'
-import SelectElement from '@common/vue/form/elements/Select.vue'
-import TextElement from '@common/vue/form/elements/Text.vue'
+import Checkbox from '@common/vue/form/elements/CheckboxControl.vue'
+import ButtonElement from '@common/vue/form/elements/ButtonControl.vue'
+import ProgressElement from '@common/vue/form/elements/ProgressControl.vue'
+import SelectElement from '@common/vue/form/elements/SelectControl.vue'
+import TextElement from '@common/vue/form/elements/TextControl.vue'
 import tippy from 'tippy.js'
 import { type SimulationNodeDatum } from 'd3'
 import DirectedGraph from '@providers/links/directed-graph'
@@ -394,7 +394,7 @@ export default defineComponent({
       const svg = this.graphElement
 
       if (this.simulation === null) {
-        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(includedLinks).id((node, i, nodesData) => node.id).strength((link, i) => link.weight * 2)
+        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(includedLinks).id((node, _i, _nodesData) => node.id).strength((link, _i) => link.weight * 2)
         this.simulation = d3.forceSimulation(includedNodes as any)
           .force('link', forceLink)
           .force('charge', d3.forceManyBody())
@@ -448,7 +448,7 @@ export default defineComponent({
             groupSelection
               .append('circle')
               .attr('r', 5)
-              .attr('fill', (vertex, value) => (vertex.isolate) ? color(ISOLATES_CLASS) : color(vertex.component))
+              .attr('fill', (vertex, _value) => (vertex.isolate) ? color(ISOLATES_CLASS) : color(vertex.component))
               .on('click', (event, vertex) => {
                 ipcRenderer.invoke('documents-provider', {
                   command: 'open-file',

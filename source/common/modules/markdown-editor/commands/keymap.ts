@@ -13,13 +13,13 @@
  */
 
 import { acceptCompletion, deleteBracketPair } from '@codemirror/autocomplete'
-import { copyLineDown, copyLineUp, indentLess, indentMore, insertNewlineAndIndent, moveLineDown, moveLineUp } from '@codemirror/commands'
+import { copyLineDown, copyLineUp, indentLess, indentMore, insertNewlineAndIndent } from '@codemirror/commands'
 import { type KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'
 import { copyAsHTML, pasteAsPlain } from '../util/copy-paste-cut'
 import { handleReplacement, handleBackspace, handleQuote } from './autocorrect'
 import { addNewFootnote } from './footnotes'
-import { maybeIndentList, maybeUnindentList } from './lists'
+import { maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown } from './lists'
 import { insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList } from './markdown'
 import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
 
@@ -52,8 +52,8 @@ export const customKeymap: KeyBinding[] = [
   // it never gets called if we don't also define it here. Double check why.
   { key: 'Backspace', run: deleteBracketPair },
   { key: 'Backspace', run: handleBackspace },
-  { key: 'Alt-Up', run: moveLineUp, shift: copyLineUp },
-  { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown },
+  { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
+  { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
   { key: 'Mod-t', run: applyTaskList },
   { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
   { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },

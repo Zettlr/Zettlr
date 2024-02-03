@@ -47,6 +47,7 @@ import { getBibliographyForDescriptor as getBibliography } from '@common/util/ge
 import { EditorSelection } from '@codemirror/state'
 import { type TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
+import { useWorkspacesStore } from './pinia'
 
 const ipcRenderer = window.ipc
 const path = window.path
@@ -101,7 +102,7 @@ let currentEditor: MarkdownEditor|null = null
 const isMarkdown = hasMarkdownExt(props.file.path)
 
 // EVENT LISTENERS
-ipcRenderer.on('citeproc-database-updated', (event, dbPath: string) => {
+ipcRenderer.on('citeproc-database-updated', (_event, _dbPath: string) => {
   const descriptor = activeFileDescriptor.value
 
   if (descriptor === undefined || descriptor.type !== 'file') {
@@ -175,7 +176,7 @@ ipcRenderer.on('documents-update', (e, { event, context }) => {
 })
 
 // Update the file database whenever links have been updated
-ipcRenderer.on('links', e => {
+ipcRenderer.on('links', _e => {
   updateFileDatabase().catch(err => console.error('Could not update file database', err))
 })
 
@@ -263,7 +264,7 @@ watch(toRef(props.editorCommands, 'moveSection'), () => {
   const { from, to } = props.editorCommands.data
   currentEditor?.moveSection(from, to)
 })
-watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
+watch(toRef(props.editorCommands, 'readabilityMode'), () => {
   if (currentEditor === null || props.activeFile?.path !== props.file.path) {
     return
   }
@@ -271,7 +272,7 @@ watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
   currentEditor.readabilityMode = !currentEditor.readabilityMode
 })
 
-watch(toRef(props, 'distractionFree'), (newValue) => {
+watch(toRef(props, 'distractionFree'), () => {
   if (currentEditor !== null && props.activeFile?.path === props.file.path && store.state.lastLeafId === props.leafId) {
     currentEditor.distractionFree = props.distractionFree
   }
@@ -307,8 +308,10 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   currentEditor?.replaceSelection(textToInsert)
 })
 
+const workspacesStore = useWorkspacesStore()
+
 const fsalFiles = computed<MDFileDescriptor[]>(() => {
-  const tree = store.state.fileTree
+  const tree = workspacesStore.rootDescriptors
   const files = []
 
   for (const item of tree) {

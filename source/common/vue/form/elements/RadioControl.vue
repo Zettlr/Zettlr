@@ -1,10 +1,18 @@
 <template>
-  <div class="radio-group">
-    <p v-html="label"></p>
+  <p v-if="label !== undefined" class="radio-group-outside-label" v-html="label"></p>
+  <div
+    v-bind:class="{
+      'radio-group-container': true,
+      inline: inline === true
+    }"
+  >
     <div
       v-for="(optionLabel, key) in options"
       v-bind:key="key"
-      class="cb-group"
+      v-bind:class="{
+        'radio-group': true,
+        inline: inline === true
+      }"
     >
       <label
         v-bind:class="{
@@ -17,14 +25,14 @@
           type="radio" v-bind:name="name" v-bind:value="key"
           v-bind:checked="modelValue === key"
           v-bind:disabled="disabled"
-          v-on:input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+          v-on:change="emit('update:modelValue', key)"
         >
         <div class="toggle"></div>
       </label>
       <label
         v-bind:for="fieldID(key)"
         v-bind:class="{
-          'cb-group-label': true,
+          'radio-group-label': true,
           disabled: disabled
         }"
       >
@@ -34,7 +42,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -49,62 +57,55 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
+const props = defineProps<{
+  modelValue: string
+  label?: string
+  name?: string
+  disabled?: boolean
+  inline?: boolean
+  options: Record<string, string>
+}>()
 
-export default defineComponent({
-  name: 'RadioControl',
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    name: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    options: {
-      type: Object,
-      default: function () { return {} }
-    }
-  },
-  emits: ['update:modelValue'],
-  methods: {
-    fieldID: function (key: string) {
-      return `form-input-${this.name}-${key}`
-    }
-  }
-})
+const emit = defineEmits<(e: 'update:modelValue', val: string) => void>()
+
+function fieldID (key: string): string {
+  return `form-input-${props.name ?? ''}-${key}`
+}
+
 </script>
 
 <style lang="less">
 @input-size: 14px;
 
 body {
-  .radio-group {
+  .radio-group-container {
     break-inside: avoid;
     margin: 10px 0;
 
     p { font-size: 13px; }
 
     label:not(.radio).disabled { color: grey; }
+
+    &.inline {
+      display: flex;
+      flex-direction: row;
+      column-gap: 40px;
+    }
   }
 
-  .cb-group {
+  .radio-group {
     display: grid;
     grid-template-columns: @input-size * 2 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
-    margin: 6px 0px;
+    align-items: center;
+    margin: 10px 0px;
 
-    .cb-group-label { grid-area: label; }
+    .radio-group-label { grid-area: label; }
+
+    &.inline {
+      display: inline-grid;
+    }
   }
 
   label.radio {
@@ -157,6 +158,8 @@ body.darwin {
   label {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
+
+  .radio-group-outside-label { font-size: 13px; }
 
   label.radio {
     width: @input-size;

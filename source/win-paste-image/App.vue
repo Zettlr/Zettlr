@@ -74,15 +74,14 @@
  */
 
 import WindowChrome from '@common/vue/window/Chrome.vue'
-import Checkbox from '@common/vue/form/elements/Checkbox.vue'
-import TextControl from '@common/vue/form/elements/Text.vue'
-import NumberControl from '@common/vue/form/elements/Number.vue'
-import File from '@common/vue/form/elements/File.vue'
+import Checkbox from '@common/vue/form/elements/CheckboxControl.vue'
+import TextControl from '@common/vue/form/elements/TextControl.vue'
+import NumberControl from '@common/vue/form/elements/NumberControl.vue'
+import File from '@common/vue/form/elements/FileControl.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import md5 from 'md5'
 
-const path = window.path
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
 
@@ -105,7 +104,10 @@ export default defineComponent({
       // If you copy an image from the web, the browser sometimes inserts
       // the original URL to it as text into the clipboard. In this case
       // we've already got a good image name!
-      name = path.basename(clipboard.readText(), path.extname(clipboard.readText())) + '.png'
+      const DELIM = process.platform === 'win32' ? '\\' : '/'
+      const clipboardText = clipboard.readText()
+      const basename = clipboardText.substring(clipboardText.lastIndexOf(DELIM) + 1, clipboardText.lastIndexOf('.'))
+      name = basename + '.png'
     } else {
       // In case there is no potential basename we could extract, simply
       // hash the dataURL. This way we can magically also prevent the same

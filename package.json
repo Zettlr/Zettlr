@@ -81,6 +81,7 @@
     "mermaid": "^10.2.3",
     "minimatch": "^9.0.3",
     "nodehun": "^3.0.2",
+    "pinia": "^2.1.7",
     "rehype-parse": "^9.0.0",
     "rehype-remark": "^10.0.0",
     "rehype-remove-comments": "^6.0.0",
@@ -121,13 +122,13 @@
     "vue": "^3.3.4",
     "vue-virtual-scroller": "^2.0.0-beta.8",
     "vuex": "^4.1.0",
-    "yaml": "^2.3.1"
+    "yaml": "^2.3.4"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.2"
   },
   "resolutions": {
-    "node-abi": "^3.40.0",
+    "node-abi": "^3.54.0",
     "got": "11.x.x",
     "node-gyp": "10.x.x"
   },
@@ -161,7 +162,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "csso": "^5.0.5",
-    "electron": "^25.9.8",
+    "electron": "28.x.x",
     "electron-builder": "^24.5.0",
     "electron-devtools-assembler": "^1.2.0",
     "eslint": "^8.56.0",

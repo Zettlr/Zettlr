@@ -37,8 +37,6 @@ import WindowChrome from '@common/vue/window/Chrome.vue'
 import { defineComponent } from 'vue'
 import { type ToolbarControl } from '@dts/renderer/window'
 
-const path = window.path
-
 export default defineComponent({
   components: {
     WindowChrome
@@ -50,9 +48,10 @@ export default defineComponent({
   },
   computed: {
     windowTitle: function (): string {
+      const DELIM = process.platform === 'win32' ? '\\' : '/'
       if (this.filePath !== '') {
-        document.title = path.basename(this.filePath)
-        return path.basename(this.filePath)
+        document.title = this.filePath.substring(this.filePath.lastIndexOf(DELIM) + 1)
+        return this.filePath.substring(this.filePath.lastIndexOf(DELIM) + 1)
       } else {
         document.title = trans('Print…')
         return trans('Print…')

@@ -39,8 +39,8 @@
  * END HEADER
  */
 
-import RadioControl from '@common/vue/form/elements/Radio.vue'
-import SelectControl from '@common/vue/form/elements/Select.vue'
+import RadioControl from '@common/vue/form/elements/RadioControl.vue'
+import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { defineComponent } from 'vue'
 import { type PandocProfileMetadata } from '@dts/common/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
@@ -49,7 +49,6 @@ import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 const config = window.config
-const path = window.path
 
 export default defineComponent({
   name: 'PopoverExport',
@@ -78,7 +77,8 @@ export default defineComponent({
       return this.isExporting ? trans('Exporting…') : trans('Export')
     },
     filename (): string {
-      return path.basename(this.filePath)
+      const DELIM = process.platform === 'win32' ? '\\' : '/'
+      return this.filePath.substring(this.filePath.lastIndexOf(DELIM) + 1)
     },
     popoverData: function (): any {
       return {

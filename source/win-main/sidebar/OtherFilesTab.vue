@@ -35,15 +35,16 @@
 
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { type DirDescriptor, type OtherFileDescriptor } from '@dts/common/fsal'
+import { type OtherFileDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@cds/core/icon'
 import { defineComponent } from 'vue'
-
-const path = window.path
+import { useOpenDirectoryStore } from '../pinia'
+import { mapStores } from 'pinia'
 
 export default defineComponent({
   name: 'OtherFilesTab',
   computed: {
+    ...mapStores(useOpenDirectoryStore),
     otherFilesLabel: function (): string {
       return trans('Other files')
     },
@@ -54,7 +55,7 @@ export default defineComponent({
       return trans('No other files')
     },
     attachments: function (): OtherFileDescriptor[] {
-      const currentDir = this.$store.state.selectedDirectory as DirDescriptor|null
+      const currentDir = this['open-directoryStore'].openDirectory
       if (currentDir === null) {
         return []
       } else {
@@ -79,7 +80,8 @@ export default defineComponent({
     getIcon: function (attachmentPath: string) {
       const fileExtIcon = ClarityIcons.registry?.['file-ext'] // ClarityIcons.get('file-ext')
       if (typeof fileExtIcon === 'string') {
-        return fileExtIcon.replace('EXT', path.extname(attachmentPath).slice(1, 4))
+        const ext = attachmentPath.substring(attachmentPath.lastIndexOf('.') + 1)
+        return fileExtIcon.replace('EXT', ext)
       } else {
         return ''
       }

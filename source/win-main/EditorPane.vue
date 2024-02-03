@@ -195,7 +195,7 @@ export default defineComponent({
         // case, we need to first split this specific leaf, and then move the
         // dropped file there. The drag data contains both the origin and the
         // path, separated by the $PATH delimiter -> window:leaf:absPath
-        const [ originWindow, originLeaf, filePath ] = documentTab.split(DELIM)
+        const [ originWindow, originLeaf, ...filePath ] = documentTab.split(DELIM)
         if (where === 'editor' && this.leafId === originLeaf) {
           // Nothing to do, the user dropped the file on the origin
           return false
@@ -210,7 +210,7 @@ export default defineComponent({
               targetWindow: this.windowId,
               originLeaf,
               targetLeaf: this.leafId,
-              path: filePath
+              path: filePath.join(DELIM)
             }
           })
             .catch(err => console.error(err))
@@ -224,7 +224,7 @@ export default defineComponent({
               originLeaf: this.leafId,
               direction: dir,
               insertion: ins,
-              path: filePath,
+              path: filePath.join(DELIM),
               fromWindow: originWindow,
               fromLeaf: originLeaf
             }

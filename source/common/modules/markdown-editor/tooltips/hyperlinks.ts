@@ -18,7 +18,6 @@ import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 
-const path = window.path
 const ipcRenderer = window.ipc
 
 /**
@@ -40,8 +39,10 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
   }
 
   // We got an URL.
+  const DELIM = process.platform === 'win32' ? '\\' : '/'
+  const absPath = view.state.field(configField).metadata.path
   const url = view.state.sliceDoc(nodeAt.from, nodeAt.to)
-  const base = path.dirname(view.state.field(configField).metadata.path)
+  const base = absPath.substring(0, absPath.lastIndexOf(DELIM))
   const validURI = makeValidUri(url, base)
 
   return {
