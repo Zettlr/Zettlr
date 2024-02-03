@@ -11,13 +11,13 @@
 import { trans } from '@common/i18n-renderer'
 import extractCitations from '@common/util/extract-citations'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
+import { isAbsolutePath, resolvePath } from '@common/util/renderer-path-polyfill'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { type AnyDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
-const path = window.path
 
 // This function overwrites the getBibliographyForDescriptor function to ensure
 // the library is always absolute. We have to do it this ridiculously since the
@@ -26,8 +26,8 @@ const path = window.path
 function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
   const library = getBibliography(descriptor)
 
-  if (library !== CITEPROC_MAIN_DB && !path.isAbsolute(library)) {
-    return path.resolve(descriptor.dir, library)
+  if (library !== CITEPROC_MAIN_DB && !isAbsolutePath(library)) {
+    return resolvePath(descriptor.dir, library)
   } else {
     return library
   }
@@ -149,3 +149,4 @@ export default defineComponent({
   }
 })
 </script>
+@common/util/renderer-path-polyfill

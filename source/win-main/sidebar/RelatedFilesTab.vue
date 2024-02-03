@@ -69,6 +69,7 @@ import { useWorkspacesStore } from '../pinia'
 import { type OpenDocument } from '@dts/common/documents'
 import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { type TagRecord } from '@providers/tags'
+import { pathBasename } from '@common/util/renderer-path-polyfill'
 
 export interface RelatedFile {
   file: string
@@ -171,10 +172,8 @@ export default defineComponent({
           continue
         }
 
-        const DELIM = process.platform === 'win32' ? '\\' : '/'
-
         const related: RelatedFile = {
-          file: absPath.substring(absPath.lastIndexOf(DELIM) + 1),
+          file: pathBasename(absPath),
           path: absPath,
           tags: [],
           link: 'none'
@@ -219,9 +218,8 @@ export default defineComponent({
             existingFile.tags.push(tagRecord.name)
           } else {
             // This file doesn't explicitly link here but it shares tags
-            const DELIM = process.platform === 'win32' ? '\\' : '/'
             unreactiveList.push({
-              file: filePath.substring(filePath.lastIndexOf(DELIM) + 1),
+              file: pathBasename(filePath),
               path: filePath,
               tags: [tagRecord.name],
               link: 'none'
@@ -307,3 +305,4 @@ export default defineComponent({
   }
 })
 </script>
+@common/util/renderer-path-polyfill

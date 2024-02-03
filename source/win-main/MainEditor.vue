@@ -48,9 +48,9 @@ import { EditorSelection } from '@codemirror/state'
 import { type TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 import { useWorkspacesStore } from './pinia'
+import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
-const path = window.path
 
 // This function overwrites the getBibliographyForDescriptor function to ensure
 // the library is always absolute. We have to do it this ridiculously since the
@@ -59,8 +59,8 @@ const path = window.path
 function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
   const library = getBibliography(descriptor)
 
-  if (library !== CITEPROC_MAIN_DB && !path.isAbsolute(library)) {
-    return path.resolve(descriptor.dir, library)
+  if (library !== CITEPROC_MAIN_DB && !isAbsolutePath(library)) {
+    return resolvePath(descriptor.dir, library)
   } else {
     return library
   }
@@ -523,14 +523,14 @@ async function updateFileDatabase (): Promise<void> {
 
   // First, add all existing files to the database ...
   for (const file of fsalFiles.value) {
-    let displayName = path.basename(file.name, file.ext)
+    let displayName = pathBasename(file.name, file.ext)
     if (useTitle.value && file.yamlTitle !== undefined) {
       displayName = file.yamlTitle
     } else if (useH1.value && file.firstHeading !== null) {
       displayName = file.firstHeading
     }
     fileDatabase.push({
-      filename: path.basename(file.name, file.ext),
+      filename: pathBasename(file.name, file.ext),
       displayName,
       id: file.id
     })
@@ -694,3 +694,4 @@ body.darwin {
 }
 
 </style>
+@common/util/renderer-path-polyfill

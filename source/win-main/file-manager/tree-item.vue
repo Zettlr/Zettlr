@@ -148,6 +148,7 @@ import { nextTick, defineComponent } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 import { mapStores } from 'pinia'
 import { useOpenDirectoryStore } from '../pinia'
+import { pathBasename } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
 
@@ -297,8 +298,7 @@ export default defineComponent({
      * Returns the (containing) directory name.
      */
     dirname: function (): string {
-      const DELIM = process.platform === 'win32' ? '\\' : '/'
-      return this.obj.dir.split(DELIM).reverse()[0]
+      return pathBasename(this.obj.dir)
     },
     /**
      * Returns a list of children that can be displayed inside the tree view
@@ -675,3 +675,4 @@ body.linux {
   }
 }
 </style>
+@common/util/renderer-path-polyfill
