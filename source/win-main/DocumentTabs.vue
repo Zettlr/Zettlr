@@ -92,7 +92,7 @@ import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
 import { mapStores } from 'pinia'
-import { useWorkspacesStore } from './pinia'
+import { useWorkspacesStore } from 'source/pinia'
 import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
 
@@ -1051,3 +1051,4 @@ body.linux {
 }
 </style>
 @common/util/renderer-path-polyfill
+../pinia

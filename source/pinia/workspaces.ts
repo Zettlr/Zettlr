@@ -18,7 +18,7 @@ import { mergeEventsIntoTree } from '@providers/workspaces/merge-events-into-tre
 import { defineStore } from 'pinia'
 import { ref, computed, watch, type Ref } from 'vue'
 import locateByPath from '@providers/fsal/util/locate-by-path'
-import { useConfigStore } from 'source/pinia/config'
+import { useConfigStore } from '.'
 import { getSorter } from '@providers/fsal/util/directory-sorter'
 import { sortDirectory } from '@providers/workspaces/sort-all-directories'
 

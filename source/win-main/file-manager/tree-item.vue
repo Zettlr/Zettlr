@@ -174,7 +174,7 @@ import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, defineComponent } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 import { mapStores } from 'pinia'
-import { useOpenDirectoryStore } from '../pinia'
+import { useOpenDirectoryStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
@@ -711,3 +711,4 @@ body.linux {
 }
 </style>
 @common/util/renderer-path-polyfill
+../../pinia

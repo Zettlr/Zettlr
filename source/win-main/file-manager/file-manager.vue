@@ -91,7 +91,7 @@ import FileList from './file-list.vue'
 import { trans } from '@common/i18n-renderer'
 import { nextTick, defineComponent } from 'vue'
 import { mapStores } from 'pinia'
-import { useOpenDirectoryStore, useWorkspacesStore } from '../pinia'
+import { useOpenDirectoryStore, useWorkspacesStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
@@ -565,3 +565,4 @@ body.win32 {
   }
 }
 </style>
+../../pinia
