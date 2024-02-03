@@ -160,7 +160,6 @@ export default function makeValidUri (uri: string, base: string = ''): string {
 
     // We've got a relative path
     if (!isAbsolutePath(uri)) {
-      console.log({ base, uri })
       uri = resolvePath(base, uri)
     }
 
