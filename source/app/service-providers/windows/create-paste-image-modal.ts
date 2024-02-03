@@ -39,10 +39,7 @@ export default function createPasteImageModal (logger: LogProvider, config: Conf
     show: false,
     fullscreenable: false,
     webPreferences: {
-      // contextIsolation and sandbox mean: Preload scripts have access to
-      // Node modules, the renderers not
-      contextIsolation: true,
-      sandbox: false,
+      sandbox: true,
       preload: PASTE_IMAGE_PRELOAD_WEBPACK_ENTRY
     }
   }
