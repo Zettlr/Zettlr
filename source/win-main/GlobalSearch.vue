@@ -341,7 +341,11 @@ export default defineComponent({
       // Remove duplicates
       this.directorySuggestions = [...new Set(dirList)]
     },
-    startSearch: function () {
+    startSearch: function (query?: string) {
+      // This allows other components to inject a new query when starting a search
+      if (query !== undefined) {
+        this.query = query
+      }
       // We should start a search. We need two types of information for that:
       // 1. A list of files to be searched
       // 2. The compiled search terms.
