@@ -36,10 +36,10 @@
  */
 
 import LogMessage from './LogMessage.vue'
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import { nextTick, defineComponent } from 'vue'
-import { type ToolbarControl } from '@dts/renderer/window'
 import { type LogMessage as LM } from '@providers/log'
+import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 
 const ipcRenderer = window.ipc
 

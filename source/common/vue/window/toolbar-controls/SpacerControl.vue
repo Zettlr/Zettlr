@@ -9,7 +9,7 @@
   ></div>
 </template>
 
-<script>
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -24,22 +24,14 @@
  * END HEADER
  */
 
-export default {
-  name: 'SpacerControl',
-  props: {
-    control: {
-      type: Object,
-      default: function () { return {} }
-    }
-  },
-  computed: {
-    spacerClass: function () {
-      let c = ['spacer']
-      c.push('spacer-' + this.control.size)
-      return c.join(' ')
-    }
-  }
+export interface ToolbarSpacerControl {
+  type: 'spacer'
+  size: '5x'|'3x'|'1x'
+  // Allow arbitrary properties that we ignore
+  [key: string]: any
 }
+
+const props = defineProps<{ control: ToolbarSpacerControl }>()
 </script>
 
 <style lang="less">

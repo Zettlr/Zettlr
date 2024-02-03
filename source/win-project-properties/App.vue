@@ -91,16 +91,16 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import ListControl from '@common/vue/form/elements/ListControl.vue'
 import FileControl from '@common/vue/form/elements/FileControl.vue'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import { defineComponent } from 'vue'
 import { type DirDescriptor } from '@dts/common/fsal'
-import { type WindowTab } from '@dts/renderer/window'
 import { type PandocProfileMetadata } from '@dts/common/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
+import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
 
 const ipcRenderer = window.ipc
 

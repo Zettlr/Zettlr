@@ -86,7 +86,7 @@
  * END HEADER
  */
 
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import FileManager from './file-manager/file-manager.vue'
 import MainSidebar from './sidebar/MainSidebar.vue'
 import EditorPane from './EditorPane.vue'
@@ -108,11 +108,11 @@ import { nextTick, defineComponent } from 'vue'
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
-import { type ToolbarControl } from '@dts/renderer/window'
 import { type OpenDocument, type BranchNodeJSON, type LeafNodeJSON } from '@dts/common/documents'
 import { type EditorCommands } from '@dts/renderer/editor'
 import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-pipe'
 import { type UpdateState } from '@providers/updates'
+import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -323,7 +323,7 @@ export default defineComponent({
         },
         {
           type: 'spacer',
-          id: 'spacer-one'
+          size: '3x'
         },
         {
           type: 'button',
@@ -388,7 +388,7 @@ export default defineComponent({
         },
         {
           type: 'spacer',
-          id: 'spacer-three'
+          size: '3x'
         },
         {
           type: 'text',
