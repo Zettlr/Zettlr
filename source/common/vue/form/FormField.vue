@@ -155,7 +155,7 @@ import type { FormField } from './Form.vue'
 import TextInput from './elements/TextControl.vue'
 import Button from './elements/ButtonControl.vue'
 import NumberInput from './elements/NumberControl.vue'
-import TimeInput from './elements/Time.vue'
+import TimeInput from './elements/TimeControl.vue'
 import ColorInput from './elements/ColorControl.vue'
 import FileInput from './elements/FileControl.vue'
 import CheckboxInput from './elements/CheckboxControl.vue'
@@ -165,7 +165,7 @@ import SelectInput from './elements/SelectControl.vue'
 import SliderInput from './elements/SliderControl.vue'
 import ListControl from './elements/ListControl.vue'
 import TokenInput from './elements/TokenList.vue'
-import ThemeInput from './elements/Theme.vue'
+import ThemeInput from './elements/ThemeSelector.vue'
 
 /**
  * @ignore
