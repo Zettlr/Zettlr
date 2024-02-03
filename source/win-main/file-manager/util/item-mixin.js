@@ -20,8 +20,6 @@
 // logic, since both represent the same data structures.
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
-import PopoverFileProps from './PopoverFileProps.vue'
-import PopoverDirProps from './PopoverDirProps.vue'
 import { mapStores } from 'pinia'
 import { nextTick } from 'vue'
 import { useOpenDirectoryStore } from '../../pinia'
@@ -189,15 +187,7 @@ export default {
             })
               .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
-            const data = { directoryPath: this.obj.path }
-
-            const elem = (treeItem) ? this.$refs['display-text'] : this.$el
-
-            this.$showPopover(PopoverDirProps, elem, data, (data) => {
-              if (data.closePopover === true) {
-                this.$closePopover()
-              }
-            })
+            this.showPopover = true
           }
         })
       } else {
@@ -232,37 +222,7 @@ export default {
             })
               .catch(err => console.error(err))
           } else if (clickedID === 'properties') {
-            const data = {
-              filepath: this.obj.path,
-              filename: this.obj.name,
-              creationtime: this.obj.creationtime,
-              modtime: this.obj.modtime,
-              tags: this.obj.tags,
-              // We need to provide the coloured tags so
-              // the popover can render them correctly
-              colouredTags: this.$store.state.colouredTags,
-              targetValue: 0,
-              targetMode: 'words',
-              fileSize: this.obj.size,
-              type: this.obj.type,
-              words: 0,
-              ext: this.obj.ext
-            }
-
-            const target = this.getWritingTarget(this.obj.path)
-            if (target !== undefined) {
-              data.targetValue = target.count
-              data.targetMode = target.mode
-            }
-
-            if (this.obj.type === 'file') {
-              data.words = this.obj.wordCount
-            }
-
-            const elem = (treeItem) ? this.$refs['display-text'] : this.$el
-
-            this.$showPopover(PopoverFileProps, elem, data, (data) => {
-            })
+            this.showPopover = true
           } else if (clickedID === 'menu.close_file') {
             // The close_file item is only shown in the tree view on root files
             ipcRenderer.invoke('application', {
