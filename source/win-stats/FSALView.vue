@@ -185,6 +185,7 @@
 
 <script lang="ts">
 import localiseNumber from '@common/util/localise-number'
+import { pathBasename } from '@common/util/renderer-path-polyfill'
 import type { WorkspacesStatistics } from '@providers/workspaces/generate-stats'
 import { defineComponent } from 'vue'
 
@@ -301,8 +302,7 @@ export default defineComponent({
       this.dirCount = localiseNumber(data.dirCount)
     },
     basename: function (absPath: string) {
-      const DELIM = process.platform === 'win32' ? '\\' : '/'
-      return absPath.substring(absPath.lastIndexOf(DELIM) + 1)
+      return pathBasename(absPath)
     },
     openFile: function (absPath: string) {
       ipcRenderer.invoke('documents-provider', {
@@ -371,3 +371,4 @@ div#fsal-container {
   .magenta { fill: #ff00ff; }
 }
 </style>
+@common/util/renderer-path-polyfill

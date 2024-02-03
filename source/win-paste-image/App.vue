@@ -81,6 +81,7 @@ import File from '@common/vue/form/elements/FileControl.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import md5 from 'md5'
+import { pathBasename, pathExtname } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -104,9 +105,8 @@ export default defineComponent({
       // If you copy an image from the web, the browser sometimes inserts
       // the original URL to it as text into the clipboard. In this case
       // we've already got a good image name!
-      const DELIM = process.platform === 'win32' ? '\\' : '/'
       const clipboardText = clipboard.readText()
-      const basename = clipboardText.substring(clipboardText.lastIndexOf(DELIM) + 1, clipboardText.lastIndexOf('.'))
+      const basename = pathBasename(clipboardText, pathExtname(clipboardText))
       name = basename + '.png'
     } else {
       // In case there is no potential basename we could extract, simply
@@ -223,3 +223,4 @@ img.image-preview {
   max-height: 100%;
 }
 </style>
+@common/util/renderer-path-polyfill

@@ -151,7 +151,6 @@ declare interface Window {
      */
     on: (channel: string, listener: (event: undefined, ...args: any) => void) => () => void
   }
-  path: RendererPath
   clipboard: {
     /**
      * Returns whatever text is currently in the clipboard

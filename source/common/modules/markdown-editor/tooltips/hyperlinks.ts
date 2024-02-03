@@ -18,8 +18,7 @@ import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 import { trans } from '@common/i18n-renderer'
-
-const ipcRenderer = window.ipc
+import { pathBasename } from '@common/util/renderer-path-polyfill'
 
 /**
  * Displays a tooltip for URLs and Links across a document
@@ -47,10 +46,9 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
   }
 
   // We got an URL.
-  const DELIM = process.platform === 'win32' ? '\\' : '/'
   const absPath = view.state.field(configField).metadata.path
   const url = view.state.sliceDoc(nodeAt.from, nodeAt.to)
-  const base = absPath.substring(0, absPath.lastIndexOf(DELIM))
+  const base = pathBasename(absPath)
   const validURI = makeValidUri(url, base)
 
   return {

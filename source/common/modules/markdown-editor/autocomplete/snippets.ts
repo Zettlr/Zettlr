@@ -33,6 +33,7 @@ import { v4 as uuid } from 'uuid'
 import generateId from '@common/util/generate-id'
 import { configField } from '../util/configuration'
 import { gemoji } from 'gemoji'
+import { pathBasename, pathDirname, pathExtname } from '@common/util/renderer-path-polyfill'
 
 /**
  * This utility function inserts an emoji
@@ -285,8 +286,6 @@ function replaceSnippetVariables (state: EditorState, text: string): string {
   const config = state.field(configField)
   const absPath = config.metadata.path
 
-  const DELIM = process.platform === 'win32' ? '\\' : '/'
-
   const REPLACEMENTS = {
     CURRENT_YEAR: now.year,
     CURRENT_YEAR_SHORT: now.year.toString().substring(2),
@@ -302,9 +301,9 @@ function replaceSnippetVariables (state: EditorState, text: string): string {
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
     ZKN_ID: generateId(window.config.get('zkn.idGen')),
     CURRENT_ID: config.metadata.id,
-    FILENAME: absPath.substring(absPath.lastIndexOf(DELIM) + 1),
-    DIRECTORY: absPath.substring(0, absPath.lastIndexOf(DELIM)),
-    EXTENSION: absPath.substring(absPath.lastIndexOf('.'))
+    FILENAME: pathBasename(absPath),
+    DIRECTORY: pathDirname(absPath),
+    EXTENSION: pathExtname(absPath)
   }
 
   // Second: Replace those variables, and return the text. NOTE we're adding a

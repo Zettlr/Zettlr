@@ -19,8 +19,8 @@ import { configField } from './configuration'
 import { EditorView } from '@codemirror/view'
 import { tocField } from '../plugins/toc-field'
 import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
+import { isAbsolutePath, pathDirname } from '@common/util/renderer-path-polyfill'
 
-const path = window.path
 const ipcRenderer = window.ipc
 
 /**
@@ -61,7 +61,7 @@ export default function (url: string, view: EditorView): void {
   } else {
     const searchParams = new URLSearchParams(window.location.search)
     const windowId = searchParams.get('window_id') as string
-    const base = path.dirname(view.state.field(configField).metadata.path)
+    const base = pathDirname(view.state.field(configField).metadata.path)
     const validURI = makeValidUri(url, base)
 
     // Create a path from the URL by stripping the protocol and decoding any
@@ -70,7 +70,7 @@ export default function (url: string, view: EditorView): void {
 
     // It's a valid file we can open if it's an absolute path to a Markdown or
     // code file
-    if (validURI.startsWith('safe-file://') && path.isAbsolute(localPath) && hasMdOrCodeExt(localPath)) {
+    if (validURI.startsWith('safe-file://') && isAbsolutePath(localPath) && hasMdOrCodeExt(localPath)) {
       ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
         payload: { path: localPath, newTab: false, windowId }
