@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
     <h4>{{ filename }}</h4>
     <div class="properties-info-container">
       <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
@@ -50,7 +50,7 @@
         {{ resetLabel }}
       </button>
     </template>
-  </div>
+  </PopoverWrapper>
 </template>
 
 <script lang="ts">
@@ -68,6 +68,7 @@
  * END HEADER
  */
 
+import PopoverWrapper from 'source/win-main/PopoverWrapper.vue'
 import NumberControl from '@common/vue/form/elements/NumberControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { trans } from '@common/i18n-renderer'
@@ -83,9 +84,14 @@ export default {
   name: 'PopoverFileProps',
   components: {
     NumberControl,
-    SelectControl
+    SelectControl,
+    PopoverWrapper
   },
   props: {
+    target: {
+      type: HTMLElement,
+      required: true
+    },
     filepath: {
       type: String,
       default: ''
@@ -135,6 +141,7 @@ export default {
       default: '.md'
     }
   },
+  emits: ['close'],
   data: function () {
     return {
       internalTargetMode: this.targetMode,
@@ -142,18 +149,6 @@ export default {
     }
   },
   computed: {
-    // This property needs to be exposed on every Popover. The popover needs to
-    // return the data that will then be reported back to the caller.
-    popoverData: function () {
-      const data: any = {}
-      if (this.type === 'file') {
-        data.target = {
-          value: this.targetValue,
-          mode: this.targetMode
-        }
-      }
-      return data
-    },
     wordsLabel: function () {
       return trans('Words')
     },
