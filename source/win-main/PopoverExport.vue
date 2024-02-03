@@ -46,6 +46,7 @@ import { type PandocProfileMetadata } from '@dts/common/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { trans } from '@common/i18n-renderer'
+import { pathBasename } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
 const config = window.config
@@ -77,8 +78,7 @@ export default defineComponent({
       return this.isExporting ? trans('Exporting…') : trans('Export')
     },
     filename (): string {
-      const DELIM = process.platform === 'win32' ? '\\' : '/'
-      return this.filePath.substring(this.filePath.lastIndexOf(DELIM) + 1)
+      return pathBasename(this.filePath)
     },
     popoverData: function (): any {
       return {
@@ -185,3 +185,4 @@ export default defineComponent({
 <style lang="less">
 //
 </style>
+@common/util/renderer-path-polyfill

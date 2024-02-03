@@ -17,8 +17,8 @@
 import { type DOMEventHandlers } from '@codemirror/view'
 import html2md from '@common/util/html-to-md'
 import { configField } from '../util/configuration'
+import { pathBasename, pathDirname, pathExtname, relativePath } from '@common/util/renderer-path-polyfill'
 
-const path = window.path
 const ipcRenderer = window.ipc
 
 const imageRE = /\.(?:png|jpe?g|gif|bmp|svg|tiff?)$/i
@@ -34,7 +34,7 @@ const imageRE = /\.(?:png|jpe?g|gif|bmp|svg|tiff?)$/i
  * @return  {string}            The normalized path.
  */
 function normalizePathForInsertion (p: string, basePath: string): string {
-  const relative = path.relative(basePath, p)
+  const relative = relativePath(basePath, p)
   let sanitizedPath = relative.replace(/\\/g, '/')
   if (!sanitizedPath.startsWith('./') && !sanitizedPath.startsWith('../')) {
     sanitizedPath = './' + sanitizedPath
@@ -60,7 +60,7 @@ async function saveImageFromClipboard (basePath: string): Promise<string|undefin
   // undefined, so we have to check for this.
   if (pathToInsert !== undefined) {
     const p = normalizePathForInsertion(pathToInsert, basePath)
-    const tag = `![${path.basename(p)}](${p})`
+    const tag = `![${pathBasename(p)}](${p})`
     return tag
   }
 }
@@ -98,7 +98,7 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
     // clipboard, the user intends to paste text, not an image.
 
     const textIntention = data.types.includes('text/plain')
-    const basePath = path.dirname(view.state.field(configField).metadata.path)
+    const basePath = pathDirname(view.state.field(configField).metadata.path)
 
     const insertions: string[] = []
     const allPromises: Array<Promise<void>> = []
@@ -188,7 +188,7 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
     event.preventDefault()
     event.stopPropagation()
 
-    const cwd = path.dirname(view.state.field(configField).metadata.path)
+    const cwd = pathDirname(view.state.field(configField).metadata.path)
 
     // First: Do we have a fileList of files to drop here?
     if (dataTransfer.files.length > 0) {
@@ -201,9 +201,9 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       const toInsert = files.map(f => {
         const pathToInsert = normalizePathForInsertion(f, cwd)
         if (imageRE.test(f)) {
-          return `![${path.basename(f)}](${pathToInsert})`
+          return `![${pathBasename(f)}](${pathToInsert})`
         } else {
-          return `[${path.basename(f)}](${pathToInsert})`
+          return `[${pathBasename(f)}](${pathToInsert})`
         }
       })
 
@@ -212,7 +212,7 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
     } else if (zettlrFile !== '') {
       // We have a Markdown/Code file to insert
       const data = JSON.parse(zettlrFile) as { type: 'code'|'file'|'directory'|'other', path: string, id?: string }
-      const name = path.basename(data.path, path.extname(data.path))
+      const name = pathBasename(data.path, pathExtname(data.path))
       const pathToInsert = normalizePathForInsertion(data.path, cwd)
       if (data.type === 'file') {
         // Insert as Zkn link

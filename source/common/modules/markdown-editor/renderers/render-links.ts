@@ -23,6 +23,7 @@ import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'
 import tippy from 'tippy.js'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
+import { pathDirname } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
 
@@ -37,8 +38,7 @@ class LinkWidget extends WidgetType {
 
   toDOM (view: EditorView): HTMLElement {
     const absPath = view.state.field(configField).metadata.path
-    const DELIM = process.platform === 'win32' ? '\\' : '/'
-    const base = absPath.substring(0, absPath.lastIndexOf(DELIM))
+    const base = pathDirname(absPath)
     const validURI = makeValidUri(this.linkUrl, base)
 
     const elem = document.createElement('a')

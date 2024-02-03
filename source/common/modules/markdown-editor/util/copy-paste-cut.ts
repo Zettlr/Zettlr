@@ -18,10 +18,10 @@ import { type EditorView } from '@codemirror/view'
 import { md2html } from '@common/modules/markdown-utils'
 import html2md from '@common/util/html-to-md'
 import { configField } from './configuration'
+import { pathBasename, pathDirname, relativePath } from '@common/util/renderer-path-polyfill'
 
 const clipboard = window.clipboard
 const ipcRenderer = window.ipc
-const path = window.path
 
 /**
  * This function attempts to paste an image into the editor. Should be called by
@@ -38,7 +38,7 @@ export function pasteImage (view: EditorView): boolean {
     return false
   }
 
-  const basePath = path.dirname(view.state.field(configField).metadata.path)
+  const basePath = pathDirname(view.state.field(configField).metadata.path)
 
   // We've got an image. So we need to handle it.
   ipcRenderer.invoke('application', {
@@ -51,10 +51,10 @@ export function pasteImage (view: EditorView): boolean {
       if (pathToInsert !== undefined) {
         // Replace backward slashes with forward slashes to make Windows
         // paths cross-platform compatible
-        const relative = path.relative(basePath, pathToInsert)
+        const relative = relativePath(basePath, pathToInsert)
         const sanitizedPath = relative.replace(/\\/g, '/')
         // We need to replace spaces, since the Markdown parser is strict here
-        const tag = `![${path.basename(sanitizedPath)}](${sanitizedPath.replace(/ /g, '%20')})`
+        const tag = `![${pathBasename(sanitizedPath)}](${sanitizedPath.replace(/ /g, '%20')})`
         view.dispatch(view.state.replaceSelection(tag))
       }
     })
