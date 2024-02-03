@@ -33,7 +33,7 @@
         &times;
       </button>
     </div>
-    <p v-if="info !== ''" class="info" v-html="info"></p>
+    <p v-if="info !== undefined" class="info" v-html="info"></p>
   </div>
 </template>
 
