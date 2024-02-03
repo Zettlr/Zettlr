@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
     <template v-if="isRunning">
       <!-- Display running time -->
       <p class="pomodoro-big">
@@ -37,7 +37,7 @@
       <SelectControl
         v-model="internalEffect"
         v-bind:label="soundEffectsLabel"
-        v-bind:options="soundEffects"
+        v-bind:options="optionizedEffects"
       ></SelectControl>
       <!--
         NOTE: In below's component we are not using model, since we only want to
@@ -46,18 +46,17 @@
         custom elements yet. See: https://github.com/vuejs/vue/issues/6914
       -->
       <SliderControl
-        v-bind:model-value="internalVolume"
+        v-model="internalVolume"
         v-bind:label="volumeLabel"
         v-bind:min="0"
         v-bind:max="100"
-        v-on:change="internalVolume = $event"
       ></SliderControl>
       <hr>
       <button v-on:click="startPomodoro">
         {{ startLabel }}
       </button>
     </template>
-  </div>
+  </PopoverWrapper>
 </template>
 
 <script lang="ts">
@@ -78,90 +77,57 @@
 import NumberControl from '@common/vue/form/elements/NumberControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import SliderControl from '@common/vue/form/elements/SliderControl.vue'
+import PopoverWrapper from './PopoverWrapper.vue'
 import { trans } from '@common/i18n-renderer'
 import { type PropType } from 'vue'
+import type { PomodoroConfig } from './App.vue'
 
 export default {
   name: 'PopoverExport',
   components: {
     NumberControl,
     SelectControl,
-    SliderControl
+    SliderControl,
+    PopoverWrapper
   },
   props: {
-    taskDuration: {
-      type: Number,
-      default: 1500 / 60
+    target: {
+      type: HTMLElement,
+      required: true
     },
-    shortDuration: {
-      type: Number,
-      default: 300 / 60
-    },
-    longDuration: {
-      type: Number,
-      default: 1200 / 60
-    },
-    currentPhase: {
-      type: String,
-      default: 'task'
-    },
-    elapsed: {
-      type: Number,
-      default: 0
-    },
-    isRunning: {
-      type: Boolean,
-      default: false
+    pomodoro: {
+      type: Object as PropType<PomodoroConfig>,
+      required: true
     },
     soundEffects: {
-      type: Object as PropType<Record<string, string>>,
-      default: () => { return {} }
-    },
-    effect: {
-      type: String,
-      default: ''
-    },
-    volume: {
-      type: Number,
-      default: 100
+      type: Object as PropType<Array<{ label: string, file: string }>>,
+      required: true
     }
   },
+  emits: [ 'close', 'start', 'stop', 'config' ],
   data: function () {
     return {
-      shouldBeRunning: this.isRunning,
-      internalVolume: this.volume,
-      internalEffect: this.effect,
-      internalShortDuration: this.shortDuration,
-      internalTaskDuration: this.taskDuration,
-      internalLongDuration: this.longDuration,
-      internalElapsed: this.elapsed,
-      internalCurrentPhase: this.currentPhase
+      internalVolume: this.pomodoro.soundEffect.volume * 100,
+      internalEffect: this.pomodoro.currentEffectFile,
+      internalShortDuration: this.pomodoro.durations.short / 60,
+      internalTaskDuration: this.pomodoro.durations.task / 60,
+      internalLongDuration: this.pomodoro.durations.long / 60
     }
   },
   computed: {
-    popoverData: function () {
-      return {
-        taskDuration: this.internalTaskDuration * 60,
-        shortDuration: this.internalShortDuration * 60,
-        longDuration: this.internalLongDuration * 60,
-        effect: this.internalEffect,
-        volume: this.internalVolume / 100,
-        shouldBeRunning: this.shouldBeRunning
+    optionizedEffects () {
+      const opt: Record<string, string> = {}
+      for (const effect of this.soundEffects) {
+        opt[effect.file] = effect.label
       }
+      return opt
+    },
+    isRunning () {
+      return this.pomodoro.intervalHandle !== undefined
     },
     remainingTimeFormatted: function () {
-      let timeRemaining = this.internalElapsed
-      switch (this.currentPhase) {
-        case 'task':
-          timeRemaining = this.internalTaskDuration * 60 - this.internalElapsed
-          break
-        case 'short':
-          timeRemaining = this.internalShortDuration * 60 - this.internalElapsed
-          break
-        case 'long':
-          timeRemaining = this.internalLongDuration * 60 - this.internalElapsed
-      }
-
+      const currentDuration = this.pomodoro.durations[this.pomodoro.phase.type]
+      const timeRemaining = currentDuration - this.pomodoro.phase.elapsed
       const minutes = Math.floor(timeRemaining / 60)
       const seconds = timeRemaining % 60
       const minStr = (minutes < 10) ? `0${minutes}` : String(minutes)
@@ -190,21 +156,45 @@ export default {
       return trans('Volume')
     },
     currentPhaseLabel: function () {
-      if (this.internalCurrentPhase === 'task') {
+      if (this.pomodoro.phase.type === 'task') {
         return this.taskLabel
-      } else if (this.internalCurrentPhase === 'long') {
+      } else if (this.pomodoro.phase.type === 'long') {
         return this.longLabel
       } else {
         return this.shortLabel
       }
     }
   },
+  watch: {
+    internalTaskDuration () { this.updateConfig() },
+    internalShortDuration () { this.updateConfig() },
+    internalLongDuration () { this.updateConfig() },
+    internalVolume () { this.updateConfig() },
+    internalEffect () { this.updateConfig() }
+  },
   methods: {
+    updateConfig () {
+      // TODO This is bad style
+      // eslint-disable-next-line vue/no-mutating-props
+      const effect = new Audio(this.internalEffect)
+      effect.volume = this.internalVolume / 100
+      const newConfig = {
+        ...this.pomodoro,
+        durations: {
+          task: this.internalTaskDuration * 60,
+          short: this.internalShortDuration * 60,
+          long: this.internalLongDuration * 60
+        },
+        soundEffect: effect,
+        currentEffectFile: this.internalEffect
+      }
+      this.$emit('config', newConfig)
+    },
     startPomodoro: function () {
-      this.shouldBeRunning = true
+      this.$emit('start')
     },
     stopPomodoro: function () {
-      this.shouldBeRunning = false
+      this.$emit('stop')
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
     <h4>Export</h4>
     <p><strong>{{ filename }}</strong></p>
     <SelectControl
@@ -21,7 +21,7 @@
     <button v-bind:disabled="isExporting" v-on:click="doExport">
       {{ exportButtonLabel }}
     </button>
-  </div>
+  </PopoverWrapper>
 </template>
 
 <script lang="ts">
@@ -39,6 +39,7 @@
  * END HEADER
  */
 
+import PopoverWrapper from './PopoverWrapper.vue'
 import RadioControl from '@common/vue/form/elements/RadioControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { defineComponent } from 'vue'
@@ -55,9 +56,14 @@ export default defineComponent({
   name: 'PopoverExport',
   components: {
     SelectControl,
-    RadioControl
+    RadioControl,
+    PopoverWrapper
   },
   props: {
+    target: {
+      type: HTMLElement,
+      required: true
+    },
     filePath: {
       type: String,
       default: ''
