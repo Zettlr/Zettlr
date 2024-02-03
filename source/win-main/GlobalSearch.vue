@@ -147,7 +147,7 @@ import { type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { type AnyMenuItem } from '@dts/renderer/context'
 import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
-import { useOpenDirectoryStore, useWorkspacesStore } from './pinia'
+import { useOpenDirectoryStore, useWorkspacesStore } from 'source/pinia'
 import { mapStores } from 'pinia'
 
 const ipcRenderer = window.ipc

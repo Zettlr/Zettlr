@@ -18,7 +18,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import createStore, { key as storeKey } from './store'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
-import { useOpenDirectoryStore } from './pinia'
+import { useOpenDirectoryStore } from '../pinia'
 
 const ipcRenderer = window.ipc
 
