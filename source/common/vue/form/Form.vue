@@ -102,7 +102,7 @@
 // Reference for how to do all this stuff dynamically:
 // https://css-tricks.com/creating-vue-js-component-instances-programmatically/
 
-import type { ThemeDescriptor } from './elements/Theme.vue'
+import type { ThemeDescriptor } from './elements/ThemeSelector.vue'
 import FormFieldControl from './FormField.vue'
 import { defineComponent } from 'vue'
 import type { FileFilter } from 'electron'

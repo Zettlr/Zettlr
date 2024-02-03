@@ -55,7 +55,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -70,8 +70,6 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
-
 export interface ThemeDescriptor {
   name: string
   description: string
@@ -80,32 +78,17 @@ export interface ThemeDescriptor {
   fontFamily: string
 }
 
-export default defineComponent({
-  name: 'ThemeField',
-  props: {
-    label: {
-      type: String,
-      default: ''
-    },
-    modelValue: {
-      type: String,
-      required: true
-    },
-    options: {
-      type: Object,
-      required: true
-    }
-  },
-  emits: ['update:modelValue'],
-  methods: {
-    style: function (themeObject: ThemeDescriptor) {
-      return `color: ${themeObject.textColor}; border-color: ${themeObject.textColor}; background-color: ${themeObject.backgroundColor}; font-family: ${themeObject.fontFamily}`
-    },
-    selectTheme: function (themeName: string) {
-      this.$emit('update:modelValue', themeName)
-    }
-  }
-})
+const props = defineProps<{
+  modelValue: string
+  options: Record<string, ThemeDescriptor>
+  label?: string
+}>()
+
+const emit = defineEmits<(e: 'update:modelValue', value: string) => void>()
+
+function selectTheme (themeName: string): void {
+  emit('update:modelValue', themeName)
+}
 </script>
 
 <style lang="less">
