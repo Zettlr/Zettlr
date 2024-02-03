@@ -17,10 +17,8 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import createStore, { key as storeKey } from './store'
-import PopupProvider from './popup-provider'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { useOpenDirectoryStore } from './pinia'
-import { useStore } from 'vuex'
 
 const ipcRenderer = window.ipc
 
@@ -43,7 +41,6 @@ function afterRegister (): void {
   const app = createApp(App)
     .use(pinia)
     .use(appStore, storeKey)
-    .use(PopupProvider)
 
   app.mount('#app')
 
