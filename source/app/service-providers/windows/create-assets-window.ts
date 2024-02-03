@@ -83,7 +83,6 @@ export default function createAssetsWindow (logger: LogProvider, config: ConfigP
     // Do not "clearCache" because that would only delete my own index files
     ses.clearStorageData({
       storages: [
-        'appcache',
         'cookies', // Nobody needs cookies except for downloading pandoc etc
         'localstorage',
         'shadercache', // Should never contain anything
