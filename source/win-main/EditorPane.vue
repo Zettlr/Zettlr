@@ -100,7 +100,7 @@
 
 <script lang="ts">
 import { type LeafNodeJSON, type OpenDocument } from '@dts/common/documents'
-import { type EditorCommands } from '@dts/renderer/editor'
+import { type EditorCommands } from './App.vue'
 import { defineComponent } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'

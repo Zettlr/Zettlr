@@ -47,7 +47,7 @@
 import EditorPane from './EditorPane.vue'
 import { type BranchNodeJSON } from '@dts/common/documents'
 import { defineComponent } from 'vue'
-import { type EditorCommands } from '@dts/renderer/editor'
+import { type EditorCommands } from './App.vue'
 
 const ipcRenderer = window.ipc
 
