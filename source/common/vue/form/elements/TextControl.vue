@@ -5,7 +5,7 @@
       v-bind:class="{
         'input-text-button-group': true,
         'has-icon': searchIcon === true,
-        'has-reset': reset
+        'has-reset': reset !== undefined
       }"
     >
       <cds-icon v-if="searchIcon === true" shape="search" class="input-text-button-group-icon"></cds-icon>
@@ -24,11 +24,11 @@
         v-on:blur="emit('blur', inputValue)"
       >
       <button
-        v-if="props.reset !== undefined"
+        v-if="reset !== undefined"
         type="button"
         class="input-reset-button"
         v-bind:title="resetLabel"
-        v-on:click="emit('update:modelValue', typeof props.reset === 'boolean' ? '' : props.reset)"
+        v-on:click="emit('update:modelValue', typeof reset === 'boolean' ? '' : reset)"
       >
         &times;
       </button>
