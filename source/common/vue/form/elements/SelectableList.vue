@@ -35,17 +35,17 @@
     </div>
     <!-- Add an optional footer -->
     <div v-if="editable" class="selectable-list-footer">
-      <div class="add" v-on:click="$emit('add')">
+      <div class="add" v-on:click="emit('add')">
         <cds-icon shape="plus"></cds-icon>
       </div>
-      <div class="remove" v-on:click="$emit('remove', selectedItem)">
+      <div v-if="selectedItem !== undefined" class="remove" v-on:click="emit('remove', selectedItem)">
         <cds-icon shape="minus"></cds-icon>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -64,7 +64,7 @@
 
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { type AnyMenuItem } from '@dts/renderer/context'
-import { defineComponent } from 'vue'
+import { computed } from 'vue'
 
 export interface SelectableListItem {
   displayText: string
@@ -75,72 +75,60 @@ export interface SelectableListItem {
   [key: string]: any // Allow arbitrary items
 }
 
-export default defineComponent({
-  name: 'SelectableList',
-  props: {
-    items: {
-      type: Object as () => Array<string|SelectableListItem>,
-      required: true
-    },
-    selectedItem: {
-      type: Number,
-      default: 0
-    },
-    // If set to true, the user can add and remove items
-    editable: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: [ 'select', 'add', 'remove' ],
-  computed: {
-    /**
-     * If there is at least one icon in the list of elements, we need the icon
-     * column.
-     *
-     * @return  {boolean}  Whether we need an icon column
-     */
-    needsIconColumn (): boolean {
-      return this.items
-        .find(i => typeof i !== 'string' && i.icon !== undefined) !== undefined
-    }
-  },
-  methods: {
-    getDisplayText: function (listItem: string|SelectableListItem): string {
-      if (typeof listItem === 'string') {
-        return listItem
-      } else {
-        return listItem.displayText
-      }
-    },
-    hasInfoString: function (listItem: string|SelectableListItem): boolean {
-      return typeof listItem !== 'string' && listItem.infoString !== undefined
-    },
-    hasInfoStringError: function (listItem: string|SelectableListItem): boolean {
-      return typeof listItem !== 'string' && listItem.infoStringClass === 'error'
-    },
-    handleContextMenu: function (event: MouseEvent, idx: number) {
-      if (!this.editable) {
-        return // No action possible
-      }
+const props = defineProps<{
+  items: Array<string|SelectableListItem>
+  selectedItem?: number
+  editable?: boolean
+}>()
 
-      const menu: AnyMenuItem[] = [
-        {
-          label: 'Remove',
-          id: 'remove-item',
-          type: 'normal',
-          enabled: true
-        }
-      ]
+const emit = defineEmits<{
+  (e: 'select', value: number): void
+  (e: 'add'): void
+  (e: 'remove', value: number): void
+}>()
 
-      showPopupMenu({ x: event.clientX, y: event.clientY }, menu, (clickedID) => {
-        if (clickedID === 'remove-item') {
-          this.$emit('remove', idx)
-        }
-      })
-    }
-  }
+// If there is at least one icon, we need the icon column for the entire list
+const needsIconColumn = computed<boolean>(() => {
+  return props.items
+    .find(i => typeof i !== 'string' && i.icon !== undefined) !== undefined
 })
+
+function getDisplayText (listItem: string|SelectableListItem): string {
+  if (typeof listItem === 'string') {
+    return listItem
+  } else {
+    return listItem.displayText
+  }
+}
+
+function hasInfoString (listItem: string|SelectableListItem): boolean {
+  return typeof listItem !== 'string' && listItem.infoString !== undefined
+}
+
+function hasInfoStringError (listItem: string|SelectableListItem): boolean {
+  return typeof listItem !== 'string' && listItem.infoStringClass === 'error'
+}
+
+function handleContextMenu (event: MouseEvent, idx: number): void {
+  if (!props.editable) {
+    return // No action possible
+  }
+
+  const menu: AnyMenuItem[] = [
+    {
+      label: 'Remove',
+      id: 'remove-item',
+      type: 'normal',
+      enabled: true
+    }
+  ]
+
+  showPopupMenu({ x: event.clientX, y: event.clientY }, menu, (clickedID) => {
+    if (clickedID === 'remove-item') {
+      emit('remove', idx)
+    }
+  })
+}
 </script>
 
 <style lang="less">

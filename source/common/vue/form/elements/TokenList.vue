@@ -1,9 +1,9 @@
 <template>
   <!-- Token lists cannot be inline -->
   <div class="form-control">
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="label !== undefined" v-bind:for="fieldID" v-html="label"></label>
     <!-- Else: Normal input w/o reset button -->
-    <div class="token-list" v-on:click="($refs.input as HTMLInputElement).focus()">
+    <div class="token-list" v-on:click="input?.focus()">
       <span
         v-for="(token, idx) in modelValue"
         v-bind:key="idx"
@@ -24,7 +24,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -38,60 +38,44 @@
  *
  * END HEADER
  */
+import { computed, ref } from 'vue'
 
-export default {
-  name: 'TokenList',
-  props: {
-    modelValue: {
-      type: Array,
-      default: function () { return [] }
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    name: {
-      type: String,
-      default: ''
-    }
-  },
-  emits: ['update:modelValue'],
-  data: function () {
-    return {
-      inputValue: ''
-    }
-  },
-  computed: {
-    fieldID: function () {
-      return 'field-input-' + this.name
-    }
-  },
-  methods: {
-    handleKey: function (event: KeyboardEvent) {
-      if (this.inputValue.trim() === '') {
-        return
-      }
+const props = defineProps<{
+  modelValue: string[]
+  label?: string
+  name?: string
+}>()
 
-      if (![ 'Space', 'Enter', 'Comma', 'Tab' ].includes(event.code)) {
-        return
-      }
+const emit = defineEmits<(e: 'update:modelValue', value: string[]) => void>()
 
-      event.preventDefault()
+const inputValue = ref<string>('')
+const input = ref<HTMLInputElement|null>(null)
+const fieldID = computed<string>(() => 'field-input-' + props.name ?? '')
 
-      const arr = this.modelValue.map(token => token)
-      // Don't add duplicates
-      if (arr.includes(this.inputValue.trim()) === false) {
-        arr.push(this.inputValue.trim())
-        this.$emit('update:modelValue', arr)
-      }
-      this.inputValue = ''
-    },
-    removeToken: function (idx: number) {
-      const arr = this.modelValue.map(token => token)
-      arr.splice(idx, 1)
-      this.$emit('update:modelValue', arr)
-    }
+function handleKey (event: KeyboardEvent): void {
+  if (inputValue.value.trim() === '') {
+    return
   }
+
+  if (![ 'Space', 'Enter', 'Comma', 'Tab' ].includes(event.code)) {
+    return
+  }
+
+  event.preventDefault()
+
+  const arr = props.modelValue.map(token => token)
+  // Don't add duplicates
+  if (!arr.includes(inputValue.value.trim())) {
+    arr.push(inputValue.value.trim())
+    emit('update:modelValue', arr)
+  }
+  inputValue.value = ''
+}
+
+function removeToken (idx: number): void {
+  const arr = props.modelValue.map(token => token)
+  arr.splice(idx, 1)
+  emit('update:modelValue', arr)
 }
 </script>
 
