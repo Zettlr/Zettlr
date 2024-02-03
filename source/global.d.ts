@@ -23,10 +23,22 @@
  * These filetypes can be "imported" but their resolved value will be a string
  * pointing to wherever the file-loader has put these files.
  */
-declare module '*.png'
-declare module '*.svg'
-declare module '*.mp3'
-declare module '*.wav'
+declare module '*.png' {
+  const filePath: string
+  export default filePath
+}
+declare module '*.svg' {
+  const filePath: string
+  export default filePath
+}
+declare module '*.mp3' {
+  const filePath: string
+  export default filePath
+}
+declare module '*.wav' {
+  const filePath: string
+  export default filePath
+}
 
 declare module 'vue-virtual-scroller'
 declare module '@joplin/turndown'
