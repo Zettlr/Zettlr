@@ -41,8 +41,7 @@
  *
  * END HEADER
  */
-
-import { type TabbarControl } from '@dts/renderer/window'
+import type { TabbarControl } from './window/WindowTabbar.vue'
 
 const props = defineProps<{
   tabs: TabbarControl[]
