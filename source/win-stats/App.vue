@@ -46,14 +46,14 @@
  * END HEADER
  */
 
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import CalendarView from './CalendarView.vue'
 import ChartView from './ChartView.vue'
 import FSALView from './FSALView.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, computed } from 'vue'
-import { type WindowTab } from '@dts/renderer/window'
 import GraphView from './GraphView.vue'
+import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
 
 const tabs: WindowTab[] = [
   {
