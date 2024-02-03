@@ -1,23 +1,25 @@
 <template>
-  <div class="table-generator">
-    <!-- Display a 12x12 grid -->
-    <div
-      v-for="row in 12"
-      v-bind:key="row"
-      class="row"
-    >
+  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
+    <div class="table-generator">
+      <!-- Display a 12x12 grid -->
       <div
-        v-for="col in 12"
-        v-bind:key="col"
-        v-bind:class="{
-          'cell': true,
-          'active': intermediaryTableSize.rows >= row && intermediaryTableSize.cols >= col
-        }"
-        v-on:mouseover="setIntermediarySize(row, col)"
-        v-on:click="handleClick()"
-      ></div>
+        v-for="row in 12"
+        v-bind:key="row"
+        class="row"
+      >
+        <div
+          v-for="col in 12"
+          v-bind:key="col"
+          v-bind:class="{
+            cell: true,
+            active: intermediaryTableSize.rows >= row && intermediaryTableSize.cols >= col
+          }"
+          v-on:mouseover="setIntermediarySize(row, col)"
+          v-on:click="handleClick()"
+        ></div>
+      </div>
     </div>
-  </div>
+  </PopoverWrapper>
 </template>
 
 <script>
@@ -35,31 +37,32 @@
  *
  * END HEADER
  */
+import PopoverWrapper from './PopoverWrapper.vue'
+
 export default {
   name: 'PopoverTable',
   components: {
+    PopoverWrapper
   },
+  props: {
+    target: {
+      type: HTMLElement,
+      required: true
+    }
+  },
+  emits: [ 'close', 'insert-table' ],
   data: function () {
     return {
-      tableSize: undefined,
       intermediaryTableSize: {
         rows: 0,
         cols: 0
       }
     }
   },
-  computed: {
-    popoverData: function () {
-      return {
-        tableSize: this.tableSize
-      }
-    }
-  },
   methods: {
     handleClick: function () {
-      // Write the intermediary size into our returned variable to result in a
-      // table being generated.
-      this.tableSize = this.intermediaryTableSize
+      this.$emit('insert-table', this.intermediaryTableSize)
+      this.$emit('close')
     },
     setIntermediarySize: function (row, col) {
       this.intermediaryTableSize = {

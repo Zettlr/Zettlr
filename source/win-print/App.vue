@@ -33,9 +33,10 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import { defineComponent } from 'vue'
-import { type ToolbarControl } from '@dts/renderer/window'
+import { pathBasename } from '@common/util/renderer-path-polyfill'
+import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 
 export default defineComponent({
   components: {
@@ -48,10 +49,9 @@ export default defineComponent({
   },
   computed: {
     windowTitle: function (): string {
-      const DELIM = process.platform === 'win32' ? '\\' : '/'
       if (this.filePath !== '') {
-        document.title = this.filePath.substring(this.filePath.lastIndexOf(DELIM) + 1)
-        return this.filePath.substring(this.filePath.lastIndexOf(DELIM) + 1)
+        document.title = pathBasename(this.filePath)
+        return pathBasename(this.filePath)
       } else {
         document.title = trans('Print…')
         return trans('Print…')
@@ -93,3 +93,4 @@ export default defineComponent({
 <style lang="less">
 //
 </style>
+@common/util/renderer-path-polyfill

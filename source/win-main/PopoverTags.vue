@@ -1,34 +1,36 @@
 <template>
-  <div class="tag-cloud">
-    <h3>{{ tagCloudTitle }}</h3>
-    <TabBar
-      v-bind:tabs="tabs"
-      v-bind:current-tab="sorting"
-      v-on:tab="sorting = $event"
-    ></TabBar>
+  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
+    <div class="tag-cloud">
+      <h3>{{ tagCloudTitle }}</h3>
+      <TabBar
+        v-bind:tabs="tabs"
+        v-bind:current-tab="sorting"
+        v-on:tab="sorting = $event"
+      ></TabBar>
 
-    <TextControl
-      ref="filter"
-      v-model="query"
-      v-bind:placeholder="filterPlaceholder"
-    ></TextControl>
+      <TextControl
+        ref="filter"
+        v-model="query"
+        v-bind:placeholder="filterPlaceholder"
+      ></TextControl>
 
-    <div
-      v-for="tag, idx in filteredTags"
-      v-bind:key="idx"
-      class="tag"
-      v-bind:title="tag.desc"
-      v-on:click="handleClick(tag.name)"
-    >
-      <!-- Tags have a name, a count, and optionally a color -->
-      <span
-        v-if="tag.color !== undefined"
-        class="color-circle"
-        v-bind:style="`background-color: ${tag.color};`"
-      ></span>
-      {{ tag.name }} ({{ tag.files.length }}x)
+      <div
+        v-for="tag, idx in filteredTags"
+        v-bind:key="idx"
+        class="tag"
+        v-bind:title="tag.desc"
+        v-on:click="handleClick(tag.name)"
+      >
+        <!-- Tags have a name, a count, and optionally a color -->
+        <span
+          v-if="tag.color !== undefined"
+          class="color-circle"
+          v-bind:style="`background-color: ${tag.color};`"
+        ></span>
+        {{ tag.name }} ({{ tag.files.length }}x)
+      </div>
     </div>
-  </div>
+  </PopoverWrapper>
 </template>
 
 <script lang="ts">
@@ -46,13 +48,14 @@
  * END HEADER
  */
 
+import PopoverWrapper from './PopoverWrapper.vue'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import TabBar from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
 import { type PropType, defineComponent } from 'vue'
-import { type TabbarControl } from '@dts/renderer/window'
 import { type OpenDocument } from '@dts/common/documents'
 import { type TagRecord } from '@providers/tags'
+import { type TabbarControl } from '@common/vue/window/WindowTabbar.vue'
 
 const ipcRenderer = window.ipc
 
@@ -60,9 +63,14 @@ export default defineComponent({
   name: 'PopoverTags',
   components: {
     TextControl,
-    TabBar
+    TabBar,
+    PopoverWrapper
   },
   props: {
+    target: {
+      type: HTMLElement,
+      required: true
+    },
     activeFile: {
       type: Object as PropType<OpenDocument|null>,
       default: null

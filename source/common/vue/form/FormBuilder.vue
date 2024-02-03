@@ -1,16 +1,16 @@
 <template>
   <div ref="component-container" class="form-container">
     <template
-      v-for="(fieldset, idx) in typedSchema.fieldsets"
+      v-for="(fieldset, idx) in schema.fieldsets"
       v-bind:key="idx"
     >
       <div
-        v-if="typedSchema.getFieldsetCategory(fieldset) !== undefined"
+        v-if="schema.getFieldsetCategory(fieldset) !== undefined"
         class="fieldset-category"
       >
-        <cds-icon v-bind:shape="typedSchema.getFieldsetCategory(fieldset)?.icon"></cds-icon>
+        <cds-icon v-bind:shape="schema.getFieldsetCategory(fieldset)?.icon"></cds-icon>
         <span>
-          {{ typedSchema.getFieldsetCategory(fieldset)?.title }}
+          {{ schema.getFieldsetCategory(fieldset)?.title }}
         </span>
       </div>
       <fieldset>
@@ -46,7 +46,7 @@
             v-if="'model' in field"
             v-bind:field="field"
             v-bind:model="getModelValue(field.model)"
-            v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
+            v-on:update:model-value="emit('update:modelValue', field.model, $event)"
           ></FormFieldControl>
           <div
             v-else-if="field.type === 'style-group'"
@@ -60,7 +60,7 @@
                 v-if="'model' in subField"
                 v-bind:field="subField"
                 v-bind:model="getModelValue(subField.model)"
-                v-on:update:model-value="$emit('update:modelValue', subField.model, $event)"
+                v-on:update:model-value="emit('update:modelValue', subField.model, $event)"
               ></FormFieldControl>
               <FormFieldControl
                 v-else
@@ -81,7 +81,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -102,9 +102,8 @@
 // Reference for how to do all this stuff dynamically:
 // https://css-tricks.com/creating-vue-js-component-instances-programmatically/
 
-import type { ThemeDescriptor } from './elements/Theme.vue'
+import type { ThemeDescriptor } from './elements/ThemeSelector.vue'
 import FormFieldControl from './FormField.vue'
-import { defineComponent } from 'vue'
 import type { FileFilter } from 'electron'
 
 interface BasicInfo {
@@ -282,39 +281,23 @@ export interface FormSchema {
   getFieldsetCategory: (fieldset: Fieldset) => { title: string, icon: string }|undefined
 }
 
-export default defineComponent({
-  name: 'FormBuilder',
-  components: {
-    FormFieldControl
-  },
-  props: {
-    model: {
-      type: Object,
-      required: true
-    },
-    schema: {
-      type: Object,
-      required: true
-    }
-  },
-  emits: ['update:modelValue'],
-  computed: {
-    typedSchema (): FormSchema {
-      return this.schema as FormSchema
-    }
-  },
-  methods: {
-    getModelValue: function (model: string): any {
-      const modelProps = model.split('.')
-      let modelValue = this.model
-      for (const key of modelProps) {
-        modelValue = modelValue[key]
-      }
+// END: INTERFACES
+const props = defineProps<{
+  model: any
+  schema: FormSchema
+}>()
 
-      return modelValue
-    }
+const emit = defineEmits<(e: 'update:modelValue', key: string, value: any) => void>()
+
+function getModelValue (model: string): any {
+  const modelProps = model.split('.')
+  let modelValue = props.model
+  for (const key of modelProps) {
+    modelValue = modelValue[key]
   }
-})
+
+  return modelValue
+}
 </script>
 
 <style lang="less">

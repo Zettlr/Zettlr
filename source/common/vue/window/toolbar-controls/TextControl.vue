@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -29,15 +29,16 @@
  * END HEADER
  */
 
-export default {
-  name: 'TextControl',
-  props: {
-    control: {
-      type: Object,
-      default: function () { return {} }
-    }
-  }
+export interface ToolbarTextControl {
+  type: 'text'
+  style?: 'strong'|'emphasis'
+  align: 'left'|'center'|'right'
+  content: string
+  // Allow arbitrary properties that we ignore
+  [key: string]: any
 }
+
+const props = defineProps<{ control: ToolbarTextControl }>()
 </script>
 
 <style lang="less">

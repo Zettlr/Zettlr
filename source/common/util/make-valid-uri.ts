@@ -16,8 +16,7 @@
 // NOTE: fileExists is called "isFile" everywhere else, we have just renamed
 // it because of a naming conflict in the function.
 import { getProtocolRE, getLinkRE } from '../regular-expressions'
-
-const path = window.path
+import { isAbsolutePath, resolvePath } from './renderer-path-polyfill'
 
 const protocolRE = getProtocolRE()
 const linkRE = getLinkRE()
@@ -102,7 +101,7 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   } else if (uri.startsWith('//') || uri.startsWith('./') || uri.startsWith('../')) {
     // We know it's a file (shared drive, or relative to this directory)
     isFile = true
-  } else if (path.isAbsolute(uri)) {
+  } else if (isAbsolutePath(uri)) {
     // The link is already absolute
     isFile = true
   }
@@ -160,8 +159,8 @@ export default function makeValidUri (uri: string, base: string = ''): string {
     }
 
     // We've got a relative path
-    if (!path.isAbsolute(uri)) {
-      uri = path.resolve(base, uri)
+    if (!isAbsolutePath(uri)) {
+      uri = resolvePath(base, uri)
     }
 
     protocol = 'safe-file'

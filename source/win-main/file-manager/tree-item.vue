@@ -122,6 +122,31 @@
       </TreeItem>
     </div>
   </div>
+
+  <!-- Popovers -->
+  <PopoverDirProps
+    v-if="showPopover && obj.type === 'directory'"
+    v-bind:target="target"
+    v-bind:directory-path="obj.path"
+    v-on:close="showPopover = false"
+  ></PopoverDirProps>
+  <PopoverFileProps
+    v-if="showPopover && obj.type !== 'directory'"
+    v-bind:target="target"
+    v-bind:filepath="obj.path"
+    v-bind:filename="obj.name"
+    v-bind:creationtime="obj.creationtime"
+    v-bind:modtime="obj.modtime"
+    v-bind:tags="obj.tags ?? []"
+    v-bind:coloured-tags="$store.state.colouredTags"
+    v-bind:target-value="0"
+    v-bind:target-mode="'words'"
+    v-bind:file-size="obj.size"
+    v-bind:type="obj.type"
+    v-bind:words="obj.wordCount ?? 0"
+    v-bind:ext="obj.ext"
+    v-on:close="showPopover = false"
+  ></PopoverFileProps>
 </template>
 
 <script lang="ts">
@@ -142,18 +167,25 @@
 import itemMixin from './util/item-mixin'
 import generateFilename from '@common/util/generate-filename'
 import { trans } from '@common/i18n-renderer'
+import PopoverDirProps from './util/PopoverDirProps.vue'
+import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, defineComponent } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 import { mapStores } from 'pinia'
 import { useOpenDirectoryStore } from '../pinia'
+import { pathBasename } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'TreeItem',
-  components: { RingProgress },
+  components: {
+    RingProgress,
+    PopoverDirProps,
+    PopoverFileProps
+  },
   mixins: [itemMixin],
   props: {
     // How deep is this tree item nested?
@@ -184,6 +216,7 @@ export default defineComponent({
   },
   data: () => {
     return {
+      showPopover: false,
       collapsed: true, // Initial: collapsed list (if there are children)
       operationType: undefined, // Can be createFile or createDir
       canAcceptDraggable: false, // Helper var set to true while something hovers over this element
@@ -192,6 +225,9 @@ export default defineComponent({
   },
   computed: {
     ...mapStores(useOpenDirectoryStore),
+    target (): HTMLElement {
+      return this.$refs['display-text'] as HTMLElement
+    },
     shouldBeCollapsed: function (): boolean {
       if (this.isCurrentlyFiltering) {
         // If the application is currently running a filter, uncollapse everything
@@ -297,8 +333,7 @@ export default defineComponent({
      * Returns the (containing) directory name.
      */
     dirname: function (): string {
-      const DELIM = process.platform === 'win32' ? '\\' : '/'
-      return this.obj.dir.split(DELIM).reverse()[0]
+      return pathBasename(this.obj.dir)
     },
     /**
      * Returns a list of children that can be displayed inside the tree view
@@ -675,3 +710,4 @@ body.linux {
   }
 }
 </style>
+@common/util/renderer-path-polyfill

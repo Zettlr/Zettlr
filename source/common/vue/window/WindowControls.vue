@@ -78,7 +78,7 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -94,49 +94,41 @@
  *
  * END HEADER
  */
+import { onMounted, ref } from 'vue'
 
 const ipcRenderer = window.ipc
 
-export default {
-  name: 'WindowControls',
-  props: {
-    platform: {
-      type: String,
-      default: process.platform
-    }
-  },
-  data: function () {
-    return {
-      isMaximised: false
-    }
-  },
-  mounted: function () {
-    // Sometimes, the main process fires back a message with regard to the status
-    ipcRenderer.on('window-controls', (event, message) => {
-      const { command } = message
-      // win-size-changed is emitted by main, whereas get-maximised-status is
-      // sent from this module to initially get the status
-      if (command === 'get-maximised-status') {
-        const { payload } = message
-        // Reflect the window status (payload is true if the window is maximised)
-        this.isMaximised = payload
-      }
-    })
+const props = defineProps<{ platform?: typeof process.platform }>()
 
-    // Get the initial windowed/maximised-status
-    ipcRenderer.send('window-controls', { command: 'get-maximised-status' })
-  },
-  methods: {
-    requestMinimise: function () {
-      ipcRenderer.send('window-controls', { command: 'win-minimise' })
-    },
-    requestResize: function () {
-      ipcRenderer.send('window-controls', { command: 'win-maximise' })
-    },
-    requestClose: function () {
-      ipcRenderer.send('window-controls', { command: 'win-close' })
+const isMaximised = ref<boolean>(false)
+
+onMounted(() => {
+  // Sometimes, the main process fires back a message with regard to the status
+  ipcRenderer.on('window-controls', (event, message) => {
+    const { command } = message
+    // win-size-changed is emitted by main, whereas get-maximised-status is
+    // sent from this module to initially get the status
+    if (command === 'get-maximised-status') {
+      const { payload } = message
+      // Reflect the window status (payload is true if the window is maximised)
+      isMaximised.value = payload
     }
-  }
+  })
+
+  // Get the initial windowed/maximised-status
+  ipcRenderer.send('window-controls', { command: 'get-maximised-status' })
+})
+
+function requestMinimise (): void {
+  ipcRenderer.send('window-controls', { command: 'win-minimise' })
+}
+
+function requestResize (): void {
+  ipcRenderer.send('window-controls', { command: 'win-maximise' })
+}
+
+function requestClose (): void {
+  ipcRenderer.send('window-controls', { command: 'win-close' })
 }
 </script>
 

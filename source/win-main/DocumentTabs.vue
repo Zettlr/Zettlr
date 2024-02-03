@@ -94,6 +94,7 @@ import { nextTick, defineComponent } from 'vue'
 import { mapStores } from 'pinia'
 import { useWorkspacesStore } from './pinia'
 import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
+import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -214,9 +215,7 @@ export default defineComponent({
         input.style.backgroundColor = 'transparent'
         input.style.border = 'none'
         input.style.color = 'white'
-        const DELIM = process.platform === 'win32' ? '\\': '/'
-        const openFile = this.openFiles[currentIdx].path
-        input.value = openFile.substring(openFile.lastIndexOf(DELIM) + 1)
+        input.value = pathBasename(this.openFiles[currentIdx].path)
 
         wrapper.appendChild(input)
 
@@ -350,8 +349,7 @@ export default defineComponent({
       // Returns a more appropriate tab text based on the user settings
       const file = this.workspacesStore.getFile(doc.path)
       if (file === undefined) {
-        const DELIM = process.platform === 'win32' ? '\\' : '/'
-        return doc.path.substring(doc.path.lastIndexOf(DELIM) + 1)
+        return pathBasename(doc.path)
       }
 
       if (file.type !== 'file') {
@@ -376,8 +374,7 @@ export default defineComponent({
       return duplicates.length !== 1
     },
     getDirBasename (doc: OpenDocument) {
-      const DELIM = process.platform === 'win32' ? '\\' : '/'
-      return doc.path.split(DELIM).reverse()[1]
+      return pathBasename(pathDirname(doc.path))
     },
     /**
      * Handles a click on the close button
@@ -1053,3 +1050,4 @@ body.linux {
   }
 }
 </style>
+@common/util/renderer-path-polyfill

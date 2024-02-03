@@ -11,7 +11,7 @@
         'active': currentTab === tab.id
       }"
       v-bind:title="tab.label"
-      v-on:click="$emit('tab', tab.id)"
+      v-on:click="emit('tab', tab.id)"
     >
       <!-- Display either an icon, or the title -->
       <cds-icon
@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -41,30 +41,14 @@
  *
  * END HEADER
  */
+import type { TabbarControl } from './window/WindowTabbar.vue'
 
-import { type TabbarControl } from '@dts/renderer/window'
-import { defineComponent, type PropType } from 'vue'
+const props = defineProps<{
+  tabs: TabbarControl[]
+  currentTab: string
+}>()
 
-export default defineComponent({
-  name: 'TabBar',
-  props: {
-    // Each tab must have the following properties:
-    // * icon (matches cds-icons, if not set, title will become the content)
-    // * id (a unique string)
-    // * target (a CSS ID string)
-    // * label (a title string)
-    tabs: {
-      type: Array as PropType<TabbarControl[]>,
-      required: true
-    },
-    // This must be equal to an ID from the tabs array
-    currentTab: {
-      type: String,
-      default: ''
-    }
-  },
-  emits: ['tab']
-})
+const emit = defineEmits<(e: 'tab', value: string) => void>()
 </script>
 
 <style lang="less">

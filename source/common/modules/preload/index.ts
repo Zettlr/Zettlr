@@ -15,9 +15,6 @@
  */
 
 import { contextBridge, ipcRenderer, clipboard } from 'electron'
-import path from 'path'
-
-contextBridge.exposeInMainWorld('path', path)
 
 // PREPARATION: Since we have multiple editor panes and all of them need to
 // listen to a few events, we need to ramp up some of the channels' max

@@ -49,7 +49,7 @@
  * END HEADER
  */
 
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 
@@ -60,7 +60,7 @@ import SponsorsTab from './Sponsors-Tab.vue'
 import LicenseTab from './License-Tab.vue'
 import FontLicenseTab from './Font-License-Tab.vue'
 import DebugTab from './Debug-Tab.vue'
-import { type WindowTab } from '@dts/renderer/window'
+import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
 
 export default defineComponent({
   components: {

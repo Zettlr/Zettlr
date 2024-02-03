@@ -11,7 +11,7 @@
       -->
       <WindowTitlebar
         v-if="showTitlebar"
-        v-bind:title-content="title"
+        v-bind:title-content="title ?? 'Zettlr'"
         v-on:dblclick="handleDoubleClick('titlebar')"
       ></WindowTitlebar>
       <WindowMenubar
@@ -21,16 +21,16 @@
         v-if="showToolbar"
         v-bind:controls="toolbarControls"
         v-bind:show-labels="toolbarLabels"
-        v-on:search="$emit('toolbar-search', $event)"
-        v-on:toggle="$emit('toolbar-toggle', $event)"
-        v-on:click="$emit('toolbar-click', $event)"
+        v-on:search="emit('toolbar-search', $event)"
+        v-on:toggle="emit('toolbar-toggle', $event)"
+        v-on:click="emit('toolbar-click', $event)"
         v-on:dblclick="handleDoubleClick('toolbar')"
       ></WindowToolbar>
       <WindowTabbar
-        v-if="showTabbar"
+        v-if="showTabbar && tabbarTabs !== undefined"
         v-bind:tabs="tabbarTabs"
         v-bind:label="tabbarLabel"
-        v-on:tab="$emit('tab', $event)"
+        v-on:tab="emit('tab', $event)"
       ></WindowTabbar>
       <!-- Last but not least, the window controls -->
       <WindowControls
@@ -49,13 +49,13 @@
     </div>
     <WindowStatusbar
       v-if="showStatusbar"
-      v-bind:controls="statusbarControls"
+      v-bind:controls="statusbarControls ?? []"
       v-on:click="$emit('statusbar-click', $event)"
     ></WindowStatusbar>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -74,174 +74,132 @@
 
 import WindowTitlebar from './WindowTitlebar.vue'
 import WindowMenubar from './WindowMenubar.vue'
-import WindowToolbar from './WindowToolbar.vue'
-import WindowTabbar from './WindowTabbar.vue'
-import WindowStatusbar from './WindowStatusbar.vue'
+import WindowToolbar, { type ToolbarControl } from './WindowToolbar.vue'
+import WindowTabbar, { type WindowTab } from './WindowTabbar.vue'
+import WindowStatusbar, { type StatusbarControl } from './WindowStatusbar.vue'
 import WindowControls from './WindowControls.vue'
 
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.less'
+import { ref, computed, watch, toRef, onBeforeMount } from 'vue'
 
 const ipcRenderer = window.ipc
 
-export default {
-  name: 'WindowChrome',
-  components: {
-    WindowTitlebar,
-    WindowMenubar,
-    WindowToolbar,
-    WindowTabbar,
-    WindowStatusbar,
-    WindowControls
-  },
-  props: {
-    // Window title
-    title: {
-      type: String,
-      default: 'Zettlr'
-    },
-    // Tabbar tabs
-    tabbarTabs: {
-      type: Array,
-      default: function () { return [] }
-    },
-    // Tabbar ARIA label
-    tabbarLabel: {
-      type: String,
-      default: ''
-    },
-    // Toolbar controls
-    toolbarControls: {
-      type: Array,
-      default: function () { return [] }
-    },
-    // Should show a titlebar if adequate?
-    titlebar: {
-      type: Boolean,
-      default: true
-    },
-    // Should show a menubar if adequate?
-    menubar: {
-      type: Boolean,
-      default: process.platform !== 'darwin'
-    },
-    // Show the toolbar?
-    showToolbar: {
-      type: Boolean,
-      default: false
-    },
-    // Show labels under the toolbar icons?
-    toolbarLabels: {
-      type: Boolean,
-      default: false
-    },
-    // Show the tabbar?
-    showTabbar: {
-      type: Boolean,
-      default: false
-    },
-    showStatusbar: {
-      type: Boolean,
-      default: false
-    },
-    statusbarControls: {
-      type: Array,
-      default: function () { return [] }
-    },
-    // If this is set to true, the window contents will disable vibrancy for
-    // this window on macOS. Doesn't have an effect on any other operating
-    // system.
-    disableVibrancy: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: [ 'toolbar-search', 'toolbar-click', 'toolbar-toggle', 'tab', 'statusbar-click' ],
-  data: function () {
-    return {
-      // NOTE: This is solely for debug purposes so that we can adapt
-      // any styles for the correct platform. In production, this will
-      // ensure "linux" styles are shown on Linux, "darwin" styles are
-      // shown on macOS and "win32" styles are shown on Windows.
-      // Change the value in the Vue dev tools if you want to see how
-      // Zettlr looks on other platforms. Please also note that this
-      // does not affect the native window chrome.
-      platform: 'darwin',
-      // platform: process.platform,
-      useNativeAppearance: window.config.get('window.nativeAppearance')
-    }
-  },
-  computed: {
-    showTitlebar: function () {
-      // Shows a titlebar if one is requested and we are on macOS or on Windows
-      // or on Linux with not native appearance.
-      if (this.platform === 'linux' && this.useNativeAppearance === true) {
-        return false
-      }
+const props = defineProps<{
+  // Window title
+  title?: string
+  // Tabbar tabs
+  tabbarTabs?: WindowTab[]
+  // Tabbar ARIA label
+  tabbarLabel?: string
+  // Toolbar controls
+  toolbarControls?: ToolbarControl[]
+  // Should show a titlebar if adequate?
+  titlebar?: boolean
+  // Should show a menubar if adequate?
+  menubar?: boolean
+  // Show the toolbar?
+  showToolbar?: boolean
+  // Show labels under the toolbar icons?
+  toolbarLabels?: boolean
+  // Show the tabbar?
+  showTabbar?: boolean
+  showStatusbar?: boolean
+  statusbarControls?: StatusbarControl[]
+  // If this is set to true, the window contents will disable vibrancy for
+  // this window on macOS. Doesn't have an effect on any other operating
+  // system.
+  disableVibrancy?: boolean
+}>()
 
-      return this.titlebar
-    },
-    showMenubar: function () {
-      // Shows a menubar if one is requested and we are on Windows or on Linux
-      // with not native appearance.
-      if (this.platform === 'darwin') {
-        return false
-      }
+const emit = defineEmits<{
+  (e: 'toolbar-search', value: string): void
+  (e: 'toolbar-click', value: string): void
+  (e: 'toolbar-toggle', value: { id: string, state: any }): void // TODO
+  (e: 'tab', value: number): void
+  (e: 'statusbar-click', value: any): void // TODO
+}>()
 
-      if (this.platform === 'linux' && this.useNativeAppearance === true) {
-        return false
-      }
+// NOTE: This is solely for debug purposes so that we can adapt any styles for
+// the correct platform. In production, this will ensure "linux" styles are
+// shown on Linux, "darwin" styles are shown on macOS and "win32" styles are
+// shown on Windows. Change the value in the Vue dev tools if you want to see
+// how Zettlr looks on other platforms. Please also note that this does not
+// affect the native window chrome.
+const platform = ref<typeof process.platform>(process.platform)
+// const platform = ref<typeof process.platform>('win32')
 
-      return this.menubar
-    },
-    showWindowControls: function () {
-      // Shows the window control buttons only if we are on Windows
-      // or on Linux without native appearance.
-      if (this.platform === 'linux' && this.useNativeAppearance === true) {
-        return false
-      } else if (this.platform === 'darwin') {
-        return false
-      } else {
-        return true
-      }
+const useNativeAppearance = ref<boolean>(Boolean(window.config.get('window.nativeAppearance')))
+
+const showTitlebar = computed<boolean>(() => {
+  // Shows a titlebar if one is requested and we are on macOS or on Windows
+  // or on Linux with not native appearance.
+  if (platform.value === 'linux' && useNativeAppearance.value) {
+    return false
+  }
+
+  return props.titlebar
+})
+
+const showMenubar = computed<boolean>(() => {
+  // Shows a menubar if one is requested and we are on Windows or on Linux
+  // with not native appearance.
+  if (platform.value === 'darwin') {
+    return false
+  }
+
+  if (platform.value === 'linux' && useNativeAppearance.value) {
+    return false
+  }
+
+  return props.menubar
+})
+
+const showWindowControls = computed<boolean>(() => {
+  // Shows the window control buttons only if we are on Windows
+  // or on Linux without native appearance.
+  if (platform.value === 'linux' && useNativeAppearance.value) {
+    return false
+  } else if (platform.value === 'darwin') {
+    return false
+  } else {
+    return true
+  }
+})
+
+watch(platform, () => {
+  // When the platform changes (only happens during debug) make sure to adapt
+  // the body class
+  document.body.classList.remove('darwin', 'win32', 'linux')
+  document.body.classList.add(platform.value)
+})
+
+watch(toRef(props, 'title'), () => {
+  document.title = props.title ?? 'Zettlr'
+})
+
+onBeforeMount(() => {
+  ipcRenderer.on('config-provider', (event, { command, payload }) => {
+    if (command === 'update' && payload === 'window.nativeAppearance') {
+      useNativeAppearance.value = window.config.get('window.nativeAppearance')
     }
-  },
-  watch: {
-    platform: function () {
-      // When the platform changes (only happens during debug) make sure to
-      // adapt the body class
-      document.body.classList.remove('darwin', 'win32', 'linux')
-      document.body.classList.add(this.platform)
-    },
-    title: function () {
-      document.title = this.title
-    }
-  },
-  created: function () {
-    // Oh, we can destructure stuff directly in the method signature?! Uuuuh
-    ipcRenderer.on('config-provider', (event, { command, payload }) => {
-      if (command === 'update' && payload === 'window.nativeAppearance') {
-        this.useNativeAppearance = window.config.get('window.nativeAppearance')
-      }
-    })
+  })
 
-    // Apply the body class immediately and also set the title
-    document.body.classList.add(this.platform)
-    document.title = this.title
-  },
-  methods: {
-    handleDoubleClick: function (origin) {
-      if (origin === 'titlebar') {
-        // A doubleclick on the titlebar is pretty universally recognised as
-        // an action that should maximise the window.
-        ipcRenderer.send('window-controls', { command: 'win-maximise' })
-      } else if (origin === 'toolbar') {
-        // A doubleclick on the toolbar should trigger a maximisation if there
-        // is no titlebar on darwin
-        if (this.platform === 'darwin' && this.titlebar === false) {
-          ipcRenderer.send('window-controls', { command: 'win-maximise' })
-        }
-      }
+  // Apply the body class immediately and also set the title
+  document.body.classList.add(platform.value)
+  document.title = props.title ?? 'Zettlr'
+})
+
+function handleDoubleClick (origin: 'titlebar'|'toolbar'): void {
+  if (origin === 'titlebar') {
+    // A doubleclick on the titlebar is pretty universally recognised as
+    // an action that should maximise the window.
+    ipcRenderer.send('window-controls', { command: 'win-maximise' })
+  } else if (origin === 'toolbar') {
+    // A doubleclick on the toolbar should trigger a maximisation if there
+    // is no titlebar on darwin
+    if (platform.value === 'darwin' && !props.titlebar) {
+      ipcRenderer.send('window-controls', { command: 'win-maximise' })
     }
   }
 }
