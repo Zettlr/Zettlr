@@ -64,7 +64,7 @@
  */
 
 import FormBuilder, { type FormSchema, type Fieldset } from '@common/vue/form/FormBuilder.vue'
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import { trans } from '@common/i18n-renderer'
 
 import { getGeneralFields } from './schema/general'

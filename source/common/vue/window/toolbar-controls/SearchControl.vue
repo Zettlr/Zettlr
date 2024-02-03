@@ -2,7 +2,7 @@
   <div
     class="toolbar-search-container"
     role="search"
-    v-on:click="$refs.input.focus()"
+    v-on:click="input?.focus()"
   >
     <cds-icon shape="search" role="presentation"></cds-icon>
     <input
@@ -11,13 +11,13 @@
       type="search"
       class="toolbar-search"
       v-bind:placeholder="control.placeholder"
-      v-on:input="$emit('update:modelValue', $event.target.value)"
-      v-on:keypress.enter="$emit('update:modelValue', $event.target.value)"
+      v-on:input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      v-on:keypress.enter="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -32,31 +32,27 @@
  *
  * END HEADER
  */
+import { ref } from 'vue'
 
 const ipcRenderer = window.ipc
 
-export default {
-  name: 'SearchControl',
-  props: {
-    control: {
-      type: Object,
-      default: function () { return {} }
-    }
-  },
-  emits: ['update:modelValue'],
-  created: function () {
-    /**
-     * Listen to shortcuts from the menu provider
-     *
-     * @param   {string}  shortcut  The shortcut to be triggered
-     */
-    ipcRenderer.on('shortcut', (event, shortcut) => {
-      if (shortcut === 'search') {
-        this.$refs.input.focus()
-      }
-    })
-  }
+export interface ToolbarSearchControl {
+  type: 'search'
+  id?: string
+  // Allow arbitrary properties that we ignore
+  [key: string]: any
 }
+
+const props = defineProps<{ control: ToolbarSearchControl }>()
+
+const emit = defineEmits<(e: 'update:modelValue', value: string) => void>()
+const input = ref<HTMLInputElement|null>(null)
+
+ipcRenderer.on('shortcut', (event, shortcut) => {
+  if (shortcut === 'search') {
+    input.value?.focus()
+  }
+})
 </script>
 
 <style lang="less">

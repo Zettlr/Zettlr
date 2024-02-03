@@ -73,7 +73,7 @@
  * END HEADER
  */
 
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import Checkbox from '@common/vue/form/elements/CheckboxControl.vue'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import NumberControl from '@common/vue/form/elements/NumberControl.vue'
@@ -82,6 +82,7 @@ import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import md5 from 'md5'
 import { pathBasename, pathExtname } from '@common/util/renderer-path-polyfill'
+import { type StatusbarControl } from '@common/vue/window/WindowStatusbar.vue'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -150,20 +151,18 @@ export default defineComponent({
     filenameLabel: function () {
       return trans('A unique filename')
     },
-    statusbarControls: function () {
+    statusbarControls: function (): StatusbarControl[] {
       return [
         {
           type: 'button',
           label: trans('Save'),
           id: 'save',
-          icon: '',
           primary: true // It's a primary button
         },
         {
           type: 'button',
           label: trans('Cancel'),
-          id: 'cancel',
-          icon: ''
+          id: 'cancel'
         }
       ]
     }

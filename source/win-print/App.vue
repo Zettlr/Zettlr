@@ -33,10 +33,10 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import { defineComponent } from 'vue'
-import { type ToolbarControl } from '@dts/renderer/window'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
+import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 
 export default defineComponent({
   components: {

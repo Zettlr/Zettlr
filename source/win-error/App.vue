@@ -32,9 +32,10 @@
  * END HEADER
  */
 
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
+import { type StatusbarControl } from '@common/vue/window/WindowStatusbar.vue'
 
 const ipcRenderer = window.ipc
 
@@ -53,13 +54,13 @@ export default defineComponent({
       // Because they HAVE to provide both title AND message, those two
       // variables might be the same for a few error messages. In this
       // case, fall back to "error".
-      title: (title === message) ? 'Error' : title,
+      title: (title === message || title === null) ? 'Error' : title,
       message,
       additionalInfo: (contents === '<no-contents>') ? '' : contents
     }
   },
   computed: {
-    statusbarControls: function () {
+    statusbarControls: function (): StatusbarControl[] {
       return [
         {
           type: 'button',

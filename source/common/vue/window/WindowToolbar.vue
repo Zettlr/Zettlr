@@ -76,15 +76,18 @@
  * END HEADER
  */
 
-import ButtonControl from './toolbar-controls/Button.vue'
-import RingControl from './toolbar-controls/RingProgressButton.vue'
-import ToggleControl from './toolbar-controls/Toggle.vue'
-import ThreeWayToggle from './toolbar-controls/ThreeWayToggle.vue'
-import SearchControl from './toolbar-controls/Search.vue'
-import SpacerControl from './toolbar-controls/Spacer.vue'
-import TextControl from './toolbar-controls/Text.vue'
+import ButtonControl, { type ToolbarButtonControl } from './toolbar-controls/ButtonControl.vue'
+import RingControl, { type RingProgressButtonControl } from './toolbar-controls/RingProgressButton.vue'
+import ToggleControl, { type ToolbarToggleControl } from './toolbar-controls/ToggleControl.vue'
+import ThreeWayToggle, { type ToolbarThreeWayControl } from './toolbar-controls/ThreeWayToggle.vue'
+import SearchControl, { type ToolbarSearchControl } from './toolbar-controls/SearchControl.vue'
+import SpacerControl, { type ToolbarSpacerControl } from './toolbar-controls/SpacerControl.vue'
+import TextControl, { type ToolbarTextControl } from './toolbar-controls/TextControl.vue'
 import { defineComponent, type PropType } from 'vue'
-import { type ToolbarControl } from '@dts/renderer/window'
+
+export type ToolbarControl = ToolbarButtonControl|RingProgressButtonControl|
+ToolbarSearchControl|ToolbarSpacerControl|ToolbarTextControl|
+ToolbarThreeWayControl|ToolbarToggleControl
 
 const ipcRenderer = window.ipc
 
