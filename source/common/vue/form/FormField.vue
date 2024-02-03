@@ -150,8 +150,8 @@
   ></ThemeInput>
 </template>
 
-<script lang="ts" setup>
-import type { FormField } from './Form.vue'
+<script setup lang="ts">
+import type { FormField } from './FormBuilder.vue'
 import TextInput from './elements/TextControl.vue'
 import Button from './elements/ButtonControl.vue'
 import NumberInput from './elements/NumberControl.vue'
