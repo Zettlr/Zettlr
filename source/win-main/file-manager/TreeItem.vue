@@ -114,7 +114,7 @@
         v-for="child in filteredChildren"
         v-bind:key="child.path"
         v-bind:obj="child"
-        v-bind:has-duplicate-name="filteredChildren.filter(x => x.name === child.name)?.length !== 0"
+        v-bind:has-duplicate-name="false"
         v-bind:is-currently-filtering="isCurrentlyFiltering"
         v-bind:depth="depth + 1"
         v-bind:active-item="activeItem"
