@@ -86,8 +86,8 @@
  * END HEADER
  */
 import findObject from '@common/util/find-object'
-import FileTree from './file-tree.vue'
-import FileList from './file-list.vue'
+import FileTree from './FileTree.vue'
+import FileList from './FileList.vue'
 import { trans } from '@common/i18n-renderer'
 import { nextTick, defineComponent } from 'vue'
 import { mapStores } from 'pinia'
