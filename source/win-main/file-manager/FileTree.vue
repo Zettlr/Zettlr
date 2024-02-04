@@ -27,6 +27,7 @@
         v-bind:obj="item"
         v-bind:depth="0"
         v-bind:active-item="activeTreeItem?.[0]"
+        v-bind:is-currently-filtering="filterQuery.trim() !== ''"
         v-bind:has-duplicate-name="getFiles.filter(i => i.name === item.name).length > 1"
         v-bind:window-id="windowId"
       >
@@ -60,7 +61,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -79,10 +80,11 @@ import { trans } from '@common/i18n-renderer'
 import TreeItem from './TreeItem.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
-import { defineComponent } from 'vue'
-import { useWorkspacesStore } from 'source/pinia'
-import { mapStores } from 'pinia'
+import { ref, computed } from 'vue'
+import { useConfigStore, useWorkspacesStore } from 'source/pinia'
 import { type MDFileDescriptor, type CodeFileDescriptor, type DirDescriptor, type AnyDescriptor } from '@dts/common/fsal'
+import { useStore } from 'vuex'
+import { key } from '../store'
 
 const ipcRenderer = window.ipc
 
@@ -115,209 +117,186 @@ function getFlattenedVisibleFileTree (elem: AnyDescriptor, uncollapsed: string[]
   return arr
 }
 
-export default defineComponent({
-  name: 'FileTree',
-  components: {
-    TreeItem
-  },
-  props: {
-    isVisible: {
-      type: Boolean,
-      required: true
-    },
-    filterQuery: {
-      type: String,
-      required: true
-    },
-    windowId: {
-      type: String,
-      required: true
-    }
-  },
-  emits: ['selection'],
-  data: function () {
-    return {
-      // Can contain the path to a tree item that is focused
-      activeTreeItem: undefined as undefined|[string, string]
-    }
-  },
-  computed: {
-    ...mapStores(useWorkspacesStore),
-    platform: function () {
-      return process.platform
-    },
-    fileTree: function (): AnyDescriptor[] {
-      return this.workspacesStore.roots.map(root => root.descriptor)
-    },
-    useH1: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('heading')
-    },
-    useTitle: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('title')
-    },
-    lastLeafId: function (): string {
-      return this.$store.state.lastLeafId
-    },
-    getFilteredTree: function (): AnyDescriptor[] {
-      const q = String(this.filterQuery).trim().toLowerCase() // Easy access
+const props = defineProps<{
+  isVisible: boolean
+  filterQuery: string
+  windowId: string
+}>()
 
-      if (q === '') {
-        return this.fileTree
+const emit = defineEmits<(e: 'selection', event: MouseEvent) => void>()
+
+// Can contain the path to a tree item that is focused
+const activeTreeItem = ref<undefined|[string, string]>(undefined)
+
+const workSpacesStore = useWorkspacesStore()
+const configStore = useConfigStore()
+const store = useStore(key)
+
+const platform = process.platform
+const fileSectionHeading = trans('Files')
+const workspaceSectionHeading = trans('Workspaces')
+const noRootsMessage = trans('No open files or folders')
+const noResultsMessage = trans('No results')
+
+const fileTree = computed<AnyDescriptor[]>(() => workSpacesStore.roots.map(root => root.descriptor))
+const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
+const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
+const lastLeafId = computed(() => store.state.lastLeafId)
+
+const getFilteredTree = computed<AnyDescriptor[]>(() => {
+  const q = props.filterQuery.trim().toLowerCase()
+
+  if (q === '') {
+    return fileTree.value
+  }
+
+  const filter = matchQuery(q, useTitle.value, useH1.value)
+  // Now we can actually filter out the file tree. We have to do this recursively.
+  // We will perform a depth-first search and keep every directory which either
+  // (a) matches directly or (b) has an amount of filtered children > 0
+  const filteredTree = []
+  for (const item of fileTree.value) {
+    if (item.type === 'directory') {
+      // Recursively match the directory
+      const result = matchTree(item, filter)
+      if (result !== undefined) {
+        filteredTree.push(result)
       }
-
-      const filter = matchQuery(q, this.useTitle, this.useH1)
-      // Now we can actually filter out the file tree. We have to do this recursively.
-      // We will perform a depth-first search and keep every directory which either
-      // (a) matches directly or (b) has an amount of filtered children > 0
-      const filteredTree = []
-      for (const item of this.fileTree) {
-        if (item.type === 'directory') {
-          // Recursively match the directory
-          const result = matchTree(item, filter)
-          if (result !== undefined) {
-            filteredTree.push(result)
-          }
-        } else if (filter(item)) {
-          // Add the file, since it matches
-          filteredTree.push(item)
-        }
-      }
-      return filteredTree
-    },
-    getFiles: function (): Array<MDFileDescriptor|CodeFileDescriptor> {
-      return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileDescriptor|CodeFileDescriptor>
-    },
-    getDirectories: function (): DirDescriptor[] {
-      return this.getFilteredTree.filter(item => item.type === 'directory') as DirDescriptor[]
-    },
-    uncollapsedDirectories: function (): string[] {
-      return this.$store.state.uncollapsedDirectories
-    },
-    flattenedSimpleFileTree: function (): Array<[string, string]> {
-      // First, take the filtered tree and flatten it
-      let list: AnyDescriptor[] = []
-      const uncollapsedDirs: string[]|undefined = (this.filterQuery.length === 0) ? this.uncollapsedDirectories : undefined
-
-      this.getFilteredTree.forEach(elem => {
-        list = list.concat(getFlattenedVisibleFileTree(elem, uncollapsedDirs))
-      })
-
-      const flatArray: Array<[string, string]> = []
-      for (const elem of list) {
-        // We need the type to check if we can uncollapse/collapse a directory
-        flatArray.push([ elem.path, elem.type ])
-      }
-      return flatArray
-    },
-    fileSectionHeading: function (): string {
-      return trans('Files')
-    },
-    workspaceSectionHeading: function (): string {
-      return trans('Workspaces')
-    },
-    noRootsMessage: function (): string {
-      return trans('No open files or folders')
-    },
-    noResultsMessage: function () {
-      return trans('No results')
-    }
-  },
-  methods: {
-    /**
-     * Called whenever the user clicks on the "No open files or folders"
-     * message -- it requests to open a new folder from the main process.
-     * @param  {MouseEvent} evt The click event.
-     * @return {void}     Does not return.
-     */
-    requestOpenRoot: function (evt: MouseEvent) {
-      ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
-        .catch(err => console.error(err))
-    },
-    clickHandler: function (event: MouseEvent) {
-      // We need to bubble this event upwards so that the file manager is informed of the selection
-      this.$emit('selection', event)
-    },
-    navigate: function (event: KeyboardEvent) {
-      // The user requested to navigate into the file tree with the keyboard
-      // Only capture arrow movements
-      if (![ 'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'Escape' ].includes(event.key)) {
-        return
-      }
-
-      event.stopPropagation()
-      event.preventDefault()
-
-      if (event.key === 'Escape') {
-        this.activeTreeItem = undefined
-        return
-      }
-
-      if (this.flattenedSimpleFileTree.length === 0) {
-        return // Nothing to navigate
-      }
-
-      if (event.key === 'Enter' && this.activeTreeItem !== undefined) {
-        // Open the currently active item
-        if (this.activeTreeItem[1] === 'directory') {
-          ipcRenderer.invoke('application', {
-            command: 'set-open-directory',
-            payload: this.activeTreeItem[0]
-          })
-            .catch(e => console.error(e))
-        } else {
-          // Select the active file (if there is one)
-          ipcRenderer.invoke('documents-provider', {
-            command: 'open-file',
-            payload: {
-              path: this.activeTreeItem[0],
-              windowId: this.windowId,
-              leafId: this.lastLeafId,
-              newTab: false
-            }
-          })
-            .catch(e => console.error(e))
-        }
-      }
-
-      // Get the current index of the current active file
-      let currentIndex = this.flattenedSimpleFileTree.findIndex(val => val[0] === this.activeTreeItem?.[0])
-
-      switch (event.key) {
-        case 'ArrowDown':
-          currentIndex++
-          break
-        case 'ArrowUp':
-          currentIndex--
-          break
-        case 'ArrowLeft':
-          // Close a directory if applicable
-          if (currentIndex > -1 && this.flattenedSimpleFileTree[currentIndex][1] === 'directory') {
-            this.$store.commit('removeUncollapsedDirectory', this.flattenedSimpleFileTree[currentIndex][0])
-          }
-          return
-        case 'ArrowRight':
-          // Open a directory if applicable
-          if (currentIndex > -1 && this.flattenedSimpleFileTree[currentIndex][1] === 'directory') {
-            this.$store.commit('addUncollapsedDirectory', this.flattenedSimpleFileTree[currentIndex][0])
-          }
-          return
-      }
-
-      // Sanitize the index
-      if (currentIndex > this.flattenedSimpleFileTree.length - 1) {
-        currentIndex = this.flattenedSimpleFileTree.length - 1
-      } else if (currentIndex < 0) {
-        currentIndex = 0
-      }
-
-      // Set the active tree item
-      this.activeTreeItem = this.flattenedSimpleFileTree[currentIndex]
-    },
-    stopNavigate: function () {
-      this.activeTreeItem = undefined
+    } else if (filter(item)) {
+      // Add the file, since it matches
+      filteredTree.push(item)
     }
   }
+  return filteredTree
 })
+
+const getFiles = computed<Array<MDFileDescriptor|CodeFileDescriptor>>(() => {
+  return getFilteredTree.value.filter(item => item.type !== 'directory') as Array<MDFileDescriptor|CodeFileDescriptor>
+})
+
+const getDirectories = computed<DirDescriptor[]>(() => {
+  return getFilteredTree.value.filter(item => item.type === 'directory') as DirDescriptor[]
+})
+
+const uncollapsedDirectories = computed<string[]>(() => {
+  return store.state.uncollapsedDirectories
+})
+
+const flattenedSimpleFileTree = computed<Array<[string, string]>>(() => {
+  // First, take the filtered tree and flatten it
+  let list: AnyDescriptor[] = []
+  const uncollapsedDirs: string[]|undefined = (props.filterQuery.length === 0) ? uncollapsedDirectories.value : undefined
+
+  getFilteredTree.value.forEach(elem => {
+    list = list.concat(getFlattenedVisibleFileTree(elem, uncollapsedDirs))
+  })
+
+  const flatArray: Array<[string, string]> = []
+  for (const elem of list) {
+    // We need the type to check if we can uncollapse/collapse a directory
+    flatArray.push([ elem.path, elem.type ])
+  }
+  return flatArray
+})
+
+/**
+ * Called whenever the user clicks on the "No open files or folders"
+ * message -- it requests to open a new folder from the main process.
+ * @param  {MouseEvent} evt The click event.
+ * @return {void}     Does not return.
+ */
+function requestOpenRoot (_event: MouseEvent): void {
+  ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
+    .catch(err => console.error(err))
+}
+
+function clickHandler (event: MouseEvent): void {
+  // We need to bubble this event upwards so that the file manager is informed of the selection
+  emit('selection', event)
+}
+
+function navigate (event: KeyboardEvent): void {
+  // The user requested to navigate into the file tree with the keyboard
+  // Only capture arrow movements
+  if (![ 'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'Escape' ].includes(event.key)) {
+    return
+  }
+
+  event.stopPropagation()
+  event.preventDefault()
+
+  if (event.key === 'Escape') {
+    activeTreeItem.value = undefined
+    return
+  }
+
+  if (flattenedSimpleFileTree.value.length === 0) {
+    return // Nothing to navigate
+  }
+
+  if (event.key === 'Enter' && activeTreeItem.value !== undefined) {
+    // Open the currently active item
+    if (activeTreeItem.value[1] === 'directory') {
+      ipcRenderer.invoke('application', {
+        command: 'set-open-directory',
+        payload: activeTreeItem.value[0]
+      })
+        .catch(e => console.error(e))
+    } else {
+      // Select the active file (if there is one)
+      ipcRenderer.invoke('documents-provider', {
+        command: 'open-file',
+        payload: {
+          path: activeTreeItem.value[0],
+          windowId: props.windowId,
+          leafId: lastLeafId.value,
+          newTab: false
+        }
+      })
+        .catch(e => console.error(e))
+    }
+  }
+
+  // Get the current index of the current active file
+  let currentIndex = flattenedSimpleFileTree.value.findIndex(val => val[0] === activeTreeItem.value?.[0])
+
+  switch (event.key) {
+    case 'ArrowDown':
+      currentIndex++
+      break
+    case 'ArrowUp':
+      currentIndex--
+      break
+    case 'ArrowLeft':
+      // Close a directory if applicable
+      if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
+        store.commit('removeUncollapsedDirectory', flattenedSimpleFileTree.value[currentIndex][0])
+      }
+      return
+    case 'ArrowRight':
+      // Open a directory if applicable
+      if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
+        store.commit('addUncollapsedDirectory', flattenedSimpleFileTree.value[currentIndex][0])
+      }
+      return
+  }
+
+  // Sanitize the index
+  if (currentIndex > flattenedSimpleFileTree.value.length - 1) {
+    currentIndex = flattenedSimpleFileTree.value.length - 1
+  } else if (currentIndex < 0) {
+    currentIndex = 0
+  }
+
+  // Set the active tree item
+  activeTreeItem.value = flattenedSimpleFileTree.value[currentIndex]
+}
+
+function stopNavigate (): void {
+  activeTreeItem.value = undefined
+}
+
+defineExpose({ navigate, stopNavigate })
 </script>
 
 <style lang="less">

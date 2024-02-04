@@ -57,7 +57,7 @@
         ></cds-icon>
       </span>
       <span
-        ref="display-text"
+        ref="displayText"
         v-bind:class="{
           'display-text': true,
           'highlight': canAcceptDraggable
@@ -74,7 +74,7 @@
         </template>
         <template v-else>
           <input
-            ref="name-editing-input"
+            ref="nameEditingInput"
             type="text"
             v-bind:value="obj.name"
             v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
@@ -100,7 +100,7 @@
     >
       <input
         v-if="operationType !== undefined"
-        ref="new-object-input"
+        ref="newObjectInput"
         type="text"
         v-on:keyup.enter="handleOperationFinish(($event.target as HTMLInputElement).value)"
         v-on:keyup.esc="operationType = undefined"
@@ -114,6 +114,7 @@
         v-for="child in filteredChildren"
         v-bind:key="child.path"
         v-bind:obj="child"
+        v-bind:has-duplicate-name="filteredChildren.filter(x => x.name === child.name)?.length !== 0"
         v-bind:is-currently-filtering="isCurrentlyFiltering"
         v-bind:depth="depth + 1"
         v-bind:active-item="activeItem"
@@ -125,31 +126,31 @@
 
   <!-- Popovers -->
   <PopoverDirProps
-    v-if="showPopover && obj.type === 'directory'"
-    v-bind:target="target"
+    v-if="showPopover && displayText !== null && obj.type === 'directory'"
+    v-bind:target="displayText"
     v-bind:directory-path="obj.path"
     v-on:close="showPopover = false"
   ></PopoverDirProps>
   <PopoverFileProps
-    v-if="showPopover && obj.type !== 'directory'"
-    v-bind:target="target"
+    v-if="showPopover && displayText !== null && obj.type !== 'directory'"
+    v-bind:target="displayText"
     v-bind:filepath="obj.path"
     v-bind:filename="obj.name"
     v-bind:creationtime="obj.creationtime"
     v-bind:modtime="obj.modtime"
-    v-bind:tags="obj.tags ?? []"
+    v-bind:tags="obj.type === 'file' ? obj.tags : []"
     v-bind:coloured-tags="$store.state.colouredTags"
     v-bind:target-value="0"
     v-bind:target-mode="'words'"
     v-bind:file-size="obj.size"
     v-bind:type="obj.type"
-    v-bind:words="obj.wordCount ?? 0"
+    v-bind:words="obj.type === 'file' ? obj.wordCount : 0"
     v-bind:ext="obj.ext"
     v-on:close="showPopover = false"
   ></PopoverFileProps>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -164,421 +165,403 @@
  * END HEADER
  */
 
-import itemMixin from './util/item-mixin'
 import generateFilename from '@common/util/generate-filename'
 import { trans } from '@common/i18n-renderer'
 import PopoverDirProps from './util/PopoverDirProps.vue'
 import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
-import { nextTick, defineComponent } from 'vue'
+import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
-import { mapStores } from 'pinia'
-import { useOpenDirectoryStore } from 'source/pinia'
+import { useConfigStore, useOpenDirectoryStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
+import { useStore } from 'vuex'
+import { key } from '../store'
+import { useItemComposable } from './util/item-composable'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  name: 'TreeItem',
-  components: {
-    RingProgress,
-    PopoverDirProps,
-    PopoverFileProps
-  },
-  mixins: [itemMixin],
-  props: {
-    // How deep is this tree item nested?
-    depth: {
-      type: Number,
-      default: 0
-    },
-    hasDuplicateName: {
-      type: Boolean,
-      default: false // Can only be true if root and actually has a duplicate name
-    },
-    obj: {
-      type: Object as () => MaybeRootDescriptor,
-      required: true
-    },
-    isCurrentlyFiltering: {
-      type: Boolean,
-      default: false
-    },
-    activeItem: {
-      type: String,
-      default: undefined
-    },
-    windowId: {
-      type: String,
-      required: true
-    }
-  },
-  data: () => {
-    return {
-      showPopover: false,
-      collapsed: true, // Initial: collapsed list (if there are children)
-      operationType: undefined, // Can be createFile or createDir
-      canAcceptDraggable: false, // Helper var set to true while something hovers over this element
-      uncollapseTimeout: undefined as undefined|ReturnType<typeof setTimeout> // Used to uncollapse directories during drag&drop ops
-    }
-  },
-  computed: {
-    ...mapStores(useOpenDirectoryStore),
-    target (): HTMLElement {
-      return this.$refs['display-text'] as HTMLElement
-    },
-    shouldBeCollapsed: function (): boolean {
-      if (this.isCurrentlyFiltering) {
-        // If the application is currently running a filter, uncollapse everything
-        return false
-      } else {
-        // Else, just uncollapse if the user wishes so
-        return this.$store.state.uncollapsedDirectories.includes(this.obj.path) === false
-      }
-    },
-    /**
-     * The secondary icon's shape -- this is the visually FIRST icon to be
-     * displayed. Displays either an angle (for directories with children), or
-     * nothing.
-     *
-     * @return  {string|boolean}  False if no secondary icon
-     */
-    secondaryIcon: function (): string|boolean {
-      return this.hasChildren ? 'angle' : false
-    },
-    /**
-     * The primary icon's shape -- this is the visually SECOND icon to be
-     * displayed. Returns an icon appropriate to the item we are representing.
-     *
-     * @return  {string}  The icon name (as in: cds-shape)
-     */
-    primaryIcon: function (): string {
-      if (this.obj.type === 'file' && this.writingTarget !== undefined) {
-        return 'writing-target'
-      } else if (this.obj.type === 'file') {
-        return 'markdown'
-      } else if (this.obj.type === 'code') {
-        return 'code'
-      } else if (this.obj.dirNotFoundFlag === true) {
-        return 'disconnect'
-      } else if (this.obj.settings.project !== null) {
-        // Indicate that this directory has a project.
-        return 'blocks-group'
-      } else if (this.obj.settings.icon != null) {
-        // Display the custom icon
-        return this.obj.settings.icon
-      } else {
-        return this.shouldBeCollapsed ? 'folder' : 'folder-open'
-      }
-    },
-    /**
-     * The direction of the folder's angle icon: Right if collapsed, down if
-     * uncollapsed. Can be undefined.
-     *
-     * @return  {string}  Either 'right' or 'down'
-     */
-    angleDirection: function (): string|undefined {
-      if (!this.hasChildren) {
-        return undefined
-      } else {
-        return this.shouldBeCollapsed ? 'right' : 'down'
-      }
-    },
-    writingTarget: function (): undefined|{ path: string, mode: 'words'|'chars', count: number } {
-      if (this.obj.type !== 'file') {
-        return undefined
-      } else {
-        return this.$store.state.writingTargets.find((x: any) => x.path === this.obj.path)
-      }
-    },
-    writingTargetPercent: function (): number {
-      if (this.writingTarget !== undefined && this.obj.type === 'file') {
-        const count = this.writingTarget.mode === 'words'
-          ? this.obj.wordCount
-          : this.obj.charCount
+const props = defineProps<{
+  // How deep is this tree item nested?
+  depth: number
+  hasDuplicateName: boolean
+  obj: MaybeRootDescriptor
+  isCurrentlyFiltering: boolean
+  activeItem?: string
+  windowId: string
+}>()
 
-        let ratio = count / this.writingTarget.count
-        return Math.min(1, ratio)
-      } else {
-        return 0.0
-      }
-    },
-    /**
-     * Returns true if this item is a root item
-     */
-    isRoot: function (): boolean {
-      return this.obj.root
-    },
-    /**
-     * Returns true if the file manager mode is set to "combined"
-     */
-    combined: function (): boolean {
-      return this.$store.state.config.fileManagerMode === 'combined'
-    },
-    /**
-     * Returns true if there are children that can be displayed
-     *
-     * @return {boolean} Whether or not this object has children.
-     */
-    hasChildren: function (): boolean {
-      // Return true if it's a directory, with at least one directory as children
-      if (this.obj.type !== 'directory') {
-        return false
-      }
+const collapsed = ref<boolean>(true) // Initial: collapsed list (if there are children)
+const canAcceptDraggable = ref<boolean>(false) // Helper var set to true while something hovers over this element
+const uncollapseTimeout = ref<undefined|ReturnType<typeof setTimeout>>(undefined) // Used to uncollapse directories during drag&drop ops
+const nameEditingInput = ref<HTMLInputElement|null>(null)
+const displayText = ref<HTMLDivElement|null>(null)
+const newObjectInput = ref<HTMLInputElement|null>(null)
 
-      return this.isDirectory === true && this.filteredChildren.length > 0
-    },
-    /**
-     * Returns the (containing) directory name.
-     */
-    dirname: function (): string {
-      return pathBasename(this.obj.dir)
-    },
-    /**
-     * Returns a list of children that can be displayed inside the tree view
-     */
-    filteredChildren: function (): MaybeRootDescriptor[] {
-      if (this.obj.type !== 'directory') {
-        return []
-      }
-      if (this.combined) {
-        return this.obj.children.filter(child => child.type !== 'other') as MaybeRootDescriptor[]
-      } else {
-        return this.obj.children.filter(child => child.type === 'directory') as DirDescriptor[]
-      }
-    },
-    useH1: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('heading')
-    },
-    useTitle: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('title')
-    },
-    displayMdExtensions: function (): boolean {
-      return this.$store.state.config['display.markdownFileExtensions']
-    },
-    basename: function (): string {
-      if (this.obj.type !== 'file') {
-        return this.obj.name
-      }
+const openDirectoryStore = useOpenDirectoryStore()
+const configStore = useConfigStore()
+const store = useStore(key)
 
-      if (this.useTitle && this.obj.yamlTitle !== undefined) {
-        return this.obj.yamlTitle
-      } else if (this.useH1 && this.obj.firstHeading !== null) {
-        return this.obj.firstHeading
-      } else if (this.displayMdExtensions) {
-        return this.obj.name
-      } else {
-        return this.obj.name.replace(this.obj.ext, '')
-      }
-    },
-    isSelected: function (): boolean {
-      if (this.obj.type === 'directory') {
-        return this.selectedDir?.path === this.obj.path
-      } else {
-        return this.selectedFile?.path === this.obj.path
-      }
-    }
-  },
-  watch: {
-    selectedFile: function () {
-      this.uncollapseIfApplicable()
-    },
-    collapsed: function () {
-      if (this.collapsed) {
-        this.$store.commit('removeUncollapsedDirectory', this.obj.path)
-      } else {
-        this.$store.commit('addUncollapsedDirectory', this.obj.path)
-      }
-    },
-    selectedDir: function () {
-      // this.uncollapseIfApplicable() TODO: As of now this would also uncollapse the containing file's directory
-    },
-    operationType: function (newVal) {
-      if (newVal !== undefined) {
-        nextTick().then(() => {
-          const input = this.$refs['new-object-input'] as HTMLInputElement
-          if (this.operationType === 'createFile') {
-            // If we're generating a file, generate a filename
-            const filenamePattern = this.$store.state.config.newFileNamePattern
-            const idGenPattern = this.$store.state.config['zkn.idGen']
-            input.value = generateFilename(filenamePattern, idGenPattern)
-          } else if (this.operationType === 'createDir') {
-            // Else standard val for new dirs.
-            input.value = trans('Untitled')
-          }
-          input.focus()
-          // Select from the beginning until the last dot
-          input.setSelectionRange(0, input.value.lastIndexOf('.'))
-        })
-          .catch(err => console.error(err))
-      }
-    }
-  },
-  mounted: function () {
-    this.uncollapseIfApplicable()
-  },
-  methods: {
-    uncollapseIfApplicable: function () {
-      const filePath = (this.selectedFile !== null) ? String(this.selectedFile.path) : ''
-      const dirPath = (this.selectedDir !== null) ? String(this.selectedDir.path) : ''
+const {
+  nameEditing,
+  showPopover,
+  operationType,
+  onDragHandler,
+  handleContextMenu,
+  requestSelection,
+  finishNameEditing,
+  isDirectory,
+  selectedFile,
+  selectedDir
+} = useItemComposable(toRef(props.obj), displayText, props.windowId, nameEditingInput)
 
-      if (this.obj.path === this['open-directoryStore'].openDirectory?.path) {
-        this.collapsed = false
-      }
-
-      // Open the tree, if the selected file is contained in this dir somewhere
-      if (filePath.startsWith(this.obj.path)) {
-        this.collapsed = false
-      } else {
-        // we are not in the filepath of the currently open note, do not change the state!
-        return
-      }
-
-      // If a directory within this has been selected, open up, lads!
-      if (this.obj.path.startsWith(dirPath)) {
-        this.collapsed = false
-      }
-    },
-    /**
-     * Initiates a drag movement and inserts the correct data
-     * @param {DragEvent} event The drag event
-     */
-    beginDragging: function (event: DragEvent) {
-      if (event.dataTransfer === null) {
-        return
-      }
-
-      event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-        type: this.obj.type,
-        path: this.obj.path,
-        id: (this.obj.type === 'file') ? this.obj.id : ''
-      }))
-    },
-    /**
-     * Called when a drag operation enters this item; adds a highlight class
-     */
-    enterDragging: function (_event: DragEvent) {
-      if (this.isDirectory === false) {
-        return
-      }
-
-      this.canAcceptDraggable = true
-
-      if (!this.collapsed) {
-        return
-      }
-
-      this.uncollapseTimeout = setTimeout(() => {
-        this.collapsed = false
-        this.uncollapseTimeout = undefined
-      }, 2000)
-    },
-    /**
-     * The oppossite of enterDragging; removes the highlight class
-     */
-    leaveDragging: function (_event: DragEvent) {
-      if (this.isDirectory === false) {
-        return
-      }
-
-      this.canAcceptDraggable = false
-
-      if (this.uncollapseTimeout !== undefined) {
-        clearTimeout(this.uncollapseTimeout)
-        this.uncollapseTimeout = undefined
-      }
-    },
-    /**
-     * Called whenever something is dropped onto the element.
-     * Only executes if it's a valid tree-item/file-list object.
-     */
-    handleDrop: function (event: DragEvent) {
-      this.canAcceptDraggable = false
-      event.preventDefault()
-
-      if (this.isDirectory === false) {
-        return
-      }
-
-      if (this.uncollapseTimeout !== undefined) {
-        clearTimeout(this.uncollapseTimeout)
-        this.uncollapseTimeout = undefined
-      }
-
-      if (event.dataTransfer === null) {
-        return
-      }
-
-      // Now we have to be careful. The user can now ALSO
-      // drag and drop files right onto the list. So we need
-      // to make sure it's really an element from in here and
-      // NOT a file, because these need to be handled by the
-      // app itself.
-      let data
-
-      try {
-        const eventData = event.dataTransfer.getData('text/x-zettlr-file')
-        data = JSON.parse(eventData) // Throws error if eventData === ''
-      } catch (err) {
-        // Error in JSON stringifying (either b/c malformed or no text)
-        return
-      }
-
-      // The user dropped the file onto itself
-      if (data.path === this.obj.path) {
-        return
-      }
-
-      // Finally, request the move!
-      ipcRenderer.invoke('application', {
-        command: 'request-move',
-        payload: {
-          from: data.path,
-          to: this.obj.path
-        }
-      })
-        .catch(err => console.error(err))
-    },
-    /**
-     * Makes sure the browser doesn't do unexpected stuff when dragging, e.g., external files.
-     * @param {DragEvent} event The drag event
-     */
-    acceptDrags: function (event: DragEvent) {
-      // We need to constantly preventDefault to ensure
-      // that, e.g., a Python or other script file doesn't
-      // override the location.href to display.
-      event.preventDefault()
-    },
-    handleOperationFinish: function (newName: string) {
-      if (this.operationType === 'createFile' && newName.trim() !== '') {
-        ipcRenderer.invoke('application', {
-          command: 'file-new',
-          payload: {
-            path: this.obj.path,
-            name: newName.trim()
-          }
-        }).catch(e => console.error(e))
-      } else if (this.operationType === 'createDir' && newName.trim() !== '') {
-        ipcRenderer.invoke('application', {
-          command: 'dir-new',
-          payload: {
-            path: this.obj.path,
-            name: newName.trim()
-          }
-        }).catch(e => console.error(e))
-      }
-
-      this.operationType = undefined
-    },
-    handlePrimaryIconClick: function () {
-      if (this.hasChildren) {
-        this.collapsed = !this.collapsed
-      }
-    }
+const shouldBeCollapsed = computed<boolean>(() => {
+  if (props.isCurrentlyFiltering) {
+    // If the application is currently running a filter, uncollapse everything
+    return false
+  } else {
+    // Else, just uncollapse if the user wishes so
+    return !store.state.uncollapsedDirectories.includes(props.obj.path)
   }
 })
+
+/**
+ * The secondary icon's shape -- this is the visually FIRST icon to be
+ * displayed. Displays either an angle (for directories with children), or
+ * nothing.
+ *
+ * @return  {string|boolean}  False if no secondary icon
+ */
+const secondaryIcon = computed(() => hasChildren.value ? 'angle' : false)
+
+/**
+ * The primary icon's shape -- this is the visually SECOND icon to be
+ * displayed. Returns an icon appropriate to the item we are representing.
+ *
+ * @return  {string}  The icon name (as in: cds-shape)
+ */
+const primaryIcon = computed(() => {
+  if (props.obj.type === 'file' && writingTarget.value !== undefined) {
+    return 'writing-target'
+  } else if (props.obj.type === 'file') {
+    return 'markdown'
+  } else if (props.obj.type === 'code') {
+    return 'code'
+  } else if (props.obj.dirNotFoundFlag === true) {
+    return 'disconnect'
+  } else if (props.obj.settings.project !== null) {
+    // Indicate that this directory has a project.
+    return 'blocks-group'
+  } else if (props.obj.settings.icon != null) {
+    // Display the custom icon
+    return props.obj.settings.icon
+  } else {
+    return shouldBeCollapsed.value ? 'folder' : 'folder-open'
+  }
+})
+
+/**
+ * The direction of the folder's angle icon: Right if collapsed, down if
+ * uncollapsed. Can be undefined.
+ *
+ * @return  {string}  Either 'right' or 'down'
+ */
+const angleDirection = computed(() => {
+  if (!hasChildren.value) {
+    return undefined
+  } else {
+    return shouldBeCollapsed.value ? 'right' : 'down'
+  }
+})
+
+// TODO
+const writingTarget = computed<undefined|{ path: string, mode: 'words'|'chars', count: number }>(() => {
+  if (props.obj.type !== 'file') {
+    return undefined
+  } else {
+    return store.state.writingTargets.find((x: any) => x.path === props.obj.path)
+  }
+})
+
+const writingTargetPercent = computed(() => {
+  if (writingTarget.value !== undefined && props.obj.type === 'file') {
+    const count = writingTarget.value.mode === 'words'
+      ? props.obj.wordCount
+      : props.obj.charCount
+
+    let ratio = count / writingTarget.value.count
+    return Math.min(1, ratio)
+  } else {
+    return 0.0
+  }
+})
+
+/**
+ * Returns true if this item is a root item
+ */
+const isRoot = computed(() => props.obj.root)
+
+/**
+ * Returns true if the file manager mode is set to "combined"
+ */
+const combined = computed(() => configStore.config.fileManagerMode === 'combined')
+
+/**
+ * Returns true if there are children that can be displayed
+ *
+ * @return {boolean} Whether or not this object has children.
+ */
+const hasChildren = computed(() => props.obj.type === 'directory' && filteredChildren.value.length > 0)
+
+/**
+ * Returns the (containing) directory name.
+ */
+const dirname = computed(() => pathBasename(props.obj.dir))
+
+/**
+ * Returns a list of children that can be displayed inside the tree view
+ */
+const filteredChildren = computed(() => {
+  if (props.obj.type !== 'directory') {
+    return []
+  }
+  if (combined.value) {
+    return props.obj.children.filter(child => child.type !== 'other') as MaybeRootDescriptor[]
+  } else {
+    return props.obj.children.filter(child => child.type === 'directory') as DirDescriptor[]
+  }
+})
+
+const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
+const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
+const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
+
+const basename = computed(() => {
+  if (props.obj.type !== 'file') {
+    return props.obj.name
+  }
+
+  if (useTitle.value && props.obj.yamlTitle !== undefined) {
+    return props.obj.yamlTitle
+  } else if (useH1.value && props.obj.firstHeading !== null) {
+    return props.obj.firstHeading
+  } else if (displayMdExtensions.value) {
+    return props.obj.name
+  } else {
+    return props.obj.name.replace(props.obj.ext, '')
+  }
+})
+
+const isSelected = computed(() => {
+  if (props.obj.type === 'directory') {
+    return selectedDir.value?.path === props.obj.path
+  } else {
+    return selectedFile.value?.path === props.obj.path
+  }
+})
+
+watch(selectedFile, uncollapseIfApplicable)
+watch(collapsed, () => {
+  if (collapsed.value) {
+    store.commit('removeUncollapsedDirectory', props.obj.path)
+  } else {
+    store.commit('addUncollapsedDirectory', props.obj.path)
+  }
+})
+
+// watch(selectedDir, uncollapseIfApplicable)  TODO: As of now this would also uncollapse the containing file's directory
+
+watch(operationType, (newVal) => {
+  if (newVal !== undefined) {
+    nextTick().then(() => {
+      if (newObjectInput.value === null) {
+        return
+      }
+
+      if (operationType.value === 'createFile') {
+        // If we're generating a file, generate a filename
+        const filenamePattern = configStore.config.newFileNamePattern
+        const idGenPattern = configStore.config.zkn.idGen
+        newObjectInput.value.value = generateFilename(filenamePattern, idGenPattern)
+      } else if (operationType.value === 'createDir') {
+        // Else standard val for new dirs.
+        newObjectInput.value.value = trans('Untitled')
+      }
+      newObjectInput.value.focus()
+      // Select from the beginning until the last dot
+      newObjectInput.value.setSelectionRange(0, newObjectInput.value.value.lastIndexOf('.'))
+    })
+      .catch(err => console.error(err))
+  }
+})
+
+onMounted(uncollapseIfApplicable)
+
+function uncollapseIfApplicable (): void {
+  const filePath = selectedFile.value?.path ?? ''
+  const dirPath = (selectedDir.value !== null) ? selectedDir.value.path : ''
+
+  if (props.obj.path === openDirectoryStore.openDirectory?.path) {
+    collapsed.value = false
+  }
+
+  // Open the tree, if the selected file is contained in this dir somewhere
+  if (filePath.startsWith(props.obj.path)) {
+    collapsed.value = false
+  } else {
+    // we are not in the filepath of the currently open note, do not change the state!
+    return
+  }
+
+  // If a directory within this has been selected, open up, lads!
+  if (props.obj.path.startsWith(dirPath)) {
+    collapsed.value = false
+  }
+}
+
+/**
+ * Initiates a drag movement and inserts the correct data
+ * @param {DragEvent} event The drag event
+ */
+function beginDragging (event: DragEvent): void {
+  if (event.dataTransfer === null) {
+    return
+  }
+
+  event.dataTransfer.dropEffect = 'move'
+  event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
+    type: props.obj.type,
+    path: props.obj.path,
+    id: (props.obj.type === 'file') ? props.obj.id : ''
+  }))
+}
+
+/**
+ * Called when a drag operation enters this item; adds a highlight class
+ */
+function enterDragging (_event: DragEvent): void {
+  if (!isDirectory.value) {
+    return
+  }
+
+  canAcceptDraggable.value = true
+
+  if (!collapsed.value) {
+    return
+  }
+
+  uncollapseTimeout.value = setTimeout(() => {
+    collapsed.value = false
+    uncollapseTimeout.value = undefined
+  }, 2000)
+}
+
+/**
+ * The oppossite of enterDragging; removes the highlight class
+ */
+function leaveDragging (_event: DragEvent): void {
+  if (!isDirectory.value) {
+    return
+  }
+
+  canAcceptDraggable.value = false
+
+  if (uncollapseTimeout.value !== undefined) {
+    clearTimeout(uncollapseTimeout.value)
+    uncollapseTimeout.value = undefined
+  }
+}
+
+/**
+ * Called whenever something is dropped onto the element.
+ * Only executes if it's a valid tree-item/file-list object.
+ */
+function handleDrop (event: DragEvent): void {
+  canAcceptDraggable.value = false
+  event.preventDefault()
+
+  if (!isDirectory.value) {
+    return
+  }
+
+  if (uncollapseTimeout.value !== undefined) {
+    clearTimeout(uncollapseTimeout.value)
+    uncollapseTimeout.value = undefined
+  }
+
+  if (event.dataTransfer === null) {
+    return
+  }
+
+  // Now we have to be careful. The user can now ALSO
+  // drag and drop files right onto the list. So we need
+  // to make sure it's really an element from in here and
+  // NOT a file, because these need to be handled by the
+  // app itself.
+  let data
+
+  try {
+    const eventData = event.dataTransfer.getData('text/x-zettlr-file')
+    data = JSON.parse(eventData) // Throws error if eventData === ''
+  } catch (err) {
+    // Error in JSON stringifying (either b/c malformed or no text)
+    return
+  }
+
+  // The user dropped the file onto itself
+  if (data.path === props.obj.path) {
+    return
+  }
+
+  // Finally, request the move!
+  ipcRenderer.invoke('application', {
+    command: 'request-move',
+    payload: {
+      from: data.path,
+      to: props.obj.path
+    }
+  })
+    .catch(err => console.error(err))
+}
+
+/**
+ * Makes sure the browser doesn't do unexpected stuff when dragging, e.g., external files.
+ * @param {DragEvent} event The drag event
+ */
+function acceptDrags (event: DragEvent): void {
+  // We need to constantly preventDefault to ensure
+  // that, e.g., a Python or other script file doesn't
+  // override the location.href to display.
+  event.preventDefault()
+}
+
+function handleOperationFinish (newName: string): void {
+  if (operationType.value === 'createFile' && newName.trim() !== '') {
+    ipcRenderer.invoke('application', {
+      command: 'file-new',
+      payload: {
+        path: props.obj.path,
+        name: newName.trim()
+      }
+    }).catch(e => console.error(e))
+  } else if (operationType.value === 'createDir' && newName.trim() !== '') {
+    ipcRenderer.invoke('application', {
+      command: 'dir-new',
+      payload: {
+        path: props.obj.path,
+        name: newName.trim()
+      }
+    }).catch(e => console.error(e))
+  }
+
+  operationType.value = undefined
+}
+
+function handlePrimaryIconClick (): void {
+  if (hasChildren.value) {
+    collapsed.value = !collapsed.value
+  }
+}
 </script>
 
 <style lang="less">
@@ -710,5 +693,3 @@ body.linux {
   }
 }
 </style>
-@common/util/renderer-path-polyfill
-../../pinia

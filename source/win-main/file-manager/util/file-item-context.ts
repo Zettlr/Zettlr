@@ -20,7 +20,7 @@ import type { AnyMenuItem } from '@dts/renderer/context'
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
 
-export default function displayFileContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor, el: HTMLElement, callback: any): void {
+export default function displayFileContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
   const isMac = process.platform === 'darwin'
   const isWin = process.platform === 'win32'
 

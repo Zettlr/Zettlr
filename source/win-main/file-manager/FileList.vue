@@ -1,6 +1,7 @@
 <template>
   <div
     id="file-list"
+    ref="rootElement"
     tabindex="1"
     role="region"
     aria-label="File List"
@@ -23,7 +24,7 @@
         performance incredibly!
         -->
         <RecycleScroller
-          v-slot="{ item, index }"
+          v-slot="{ item }"
           v-bind:items="getFilteredDirectoryContents"
           v-bind:item-size="itemHeight"
           v-bind:emit-update="true"
@@ -33,7 +34,7 @@
           <FileItem
             v-bind:obj="item.props"
             v-bind:active-file="activeDescriptor"
-            v-bind:index="index"
+            v-bind:index="0"
             v-bind:window-id="windowId"
             v-on:create-file="handleOperation('file-new', item.id)"
             v-on:create-dir="handleOperation('dir-new', item.id)"
@@ -53,6 +54,7 @@
         v-bind:index="0"
         v-bind:obj="item.props"
         v-bind:window-id="windowId"
+        v-bind:active-file="activeDescriptor"
         v-on:create-file="handleOperation('file-new', item.id)"
         v-on:create-dir="handleOperation('dir-new', item.id)"
       >
@@ -73,7 +75,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -96,301 +98,280 @@ import { RecycleScroller } from 'vue-virtual-scroller'
 import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
-import { nextTick, defineComponent } from 'vue'
-import { useOpenDirectoryStore } from 'source/pinia'
-import { mapStores } from 'pinia'
+import { nextTick, ref, computed, watch, onUpdated } from 'vue'
+import { useConfigStore, useOpenDirectoryStore } from 'source/pinia'
 import { type MaybeRootDescriptor, type AnyDescriptor } from '@dts/common/fsal'
+import { useStore } from 'vuex'
+import { key } from '../store'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  name: 'FileList',
-  components: {
-    FileItem,
-    RecycleScroller
-  },
-  props: {
-    isVisible: {
-      type: Boolean,
-      required: true
-    },
-    filterQuery: {
-      type: String,
-      required: true
-    },
-    windowId: {
-      type: String,
-      required: true
-    }
-  },
-  emits: ['lock-file-tree'],
-  data: function () {
-    return {
-      activeDescriptor: null as any|null // Can contain the active ("focused") item
-    }
-  },
-  computed: {
-    ...mapStores(useOpenDirectoryStore),
-    selectedDirectory: function () {
-      return this['open-directoryStore'].openDirectory
-    },
-    noResultsMessage: function (): string {
-      return trans('No results')
-    },
-    emptyFileListMessage: function (): string {
-      return trans('No directory selected')
-    },
-    emptyDirectoryMessage: function (): string {
-      return trans('Empty directory')
-    },
-    selectedFile: function (): string {
-      return this.$store.state.activeFile
-    },
-    itemHeight: function (): number {
-      if (this.$store.state.config.fileMeta === true) {
-        return 70
-      } else {
-        return 30
-      }
-    },
-    getDirectoryContents: function (): Array<{ id: number, props: MaybeRootDescriptor }> {
-      if (this.selectedDirectory === null) {
-        return []
-      }
+const props = defineProps<{
+  isVisible: boolean
+  filterQuery: string
+  windowId: string
+}>()
 
-      const ret: Array<{ id: number, props: MaybeRootDescriptor }> = []
-      const items = objectToArray(this.selectedDirectory, 'children') as AnyDescriptor[]
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].type !== 'other') {
-          ret.push({
-            id: i, // This helps the virtual scroller to adequately position the items
-            props: items[i] as MaybeRootDescriptor // The actual item
-          })
-        }
-      }
-      return ret
-    },
-    useH1: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('heading')
-    },
-    useTitle: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('title')
-    },
-    getFilteredDirectoryContents: function (): any[] {
-      // Returns a list of directory contents, filtered
-      const originalContents = this.getDirectoryContents
+const emit = defineEmits<(e: 'lock-file-tree') => void>()
 
-      const q = String(this.filterQuery).trim().toLowerCase() // Easy access
+const activeDescriptor = ref<AnyDescriptor|null>(null) // Can contain the active ("focused") item
 
-      if (q === '') {
-        return originalContents
-      }
+const openDirectoryStore = useOpenDirectoryStore()
+const configStore = useConfigStore()
+const store = useStore(key)
 
-      const filter = matchQuery(q, this.useTitle, this.useH1)
+const selectedDirectory = computed(() => openDirectoryStore.openDirectory)
 
-      // Filter based on the query (remember: there's an ID and a "props" property)
-      return originalContents.filter(element => {
-        return filter(element.props)
-      })
-    }
-  },
-  watch: {
-    getFilteredDirectoryContents: function () {
-      // Whenever the directory contents change, reset the active file if it's
-      // no longer in the list
-      const foundDescriptor = this.getFilteredDirectoryContents.find((elem) => {
-        return elem.props === this.activeDescriptor
-      })
+const noResultsMessage = trans('No results')
+const emptyFileListMessage = trans('No directory selected')
+const emptyDirectoryMessage = trans('Empty directory')
+const selectedFile = computed(() => store.getters.lastLeafActiveFile())
+const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
+const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
+const itemHeight = computed(() => configStore.config.fileMeta ? 70 : 30)
+const rootElement = ref<HTMLDivElement|null>(null)
 
-      if (foundDescriptor === undefined) {
-        this.activeDescriptor = null
-      }
-    },
-    selectedFile: function () {
-      this.scrollIntoView()
-    },
-    getDirectoryContents: function () {
-      nextTick()
-        .then(() => { this.scrollIntoView() })
-        .catch(err => console.error(err))
-    }
-  },
-  mounted: function () {
-  },
-  /**
-   * Updates associated stuff whenever an update operation on the file manager
-   * has finished (such as tippy).
-   */
-  updated: function () {
-    nextTick()
-      .then(() => { this.updateDynamics() })
-      .catch(err => console.error(err))
-  },
-  methods: {
-    /**
-     * Navigates the filelist to the next/prev file or directory.
-     * Hold Shift for moving by 10 files, Command or Control to
-     * jump to the very end.
-     */
-    navigate: function (evt: KeyboardEvent) {
-      // Only capture arrow movements
-      if (![ 'ArrowDown', 'ArrowUp', 'Enter' ].includes(evt.key)) {
-        return
-      }
+const getDirectoryContents = computed<Array<{ id: number, props: MaybeRootDescriptor }>>(() => {
+  if (selectedDirectory.value === null) {
+    return []
+  }
 
-      evt.stopPropagation()
-      evt.preventDefault()
-
-      const shift = evt.shiftKey
-      const cmd = evt.metaKey && process.platform === 'darwin'
-      const ctrl = evt.ctrlKey && process.platform !== 'darwin'
-      const cmdOrCtrl = cmd || ctrl
-
-      // getDirectoryContents accommodates the virtual scroller
-      // by packing the actual items in a props property.
-      const list = this.getFilteredDirectoryContents.map(e => e.props)
-      const descriptor = list.find(e => {
-        if (this.activeDescriptor !== null) {
-          return e === this.activeDescriptor
-        } else {
-          return e === this.selectedFile
-        }
-      })
-
-      // On pressing enter, that's the same as clicking
-      if (evt.key === 'Enter' && this.activeDescriptor !== null) {
-        if (descriptor.type === 'directory') {
-          ipcRenderer.invoke('application', {
-            command: 'set-open-directory',
-            payload: descriptor.path
-          })
-            .catch(e => console.error(e))
-        } else {
-          // Select the active file (if there is one)
-          ipcRenderer.invoke('documents-provider', {
-            command: 'open-file',
-            payload: {
-              path: descriptor.path,
-              newTab: false
-            }
-          })
-            .catch(e => console.error(e))
-        }
-        return // Stop handling
-      }
-
-      let index = list.indexOf(descriptor)
-
-      switch (evt.key) {
-        case 'ArrowDown':
-          index++
-          if (shift) {
-            index += 9 // Fast-scrolling
-          }
-          if (index >= list.length) {
-            index = list.length - 1
-          }
-          if (cmdOrCtrl) {
-            // Select the last file
-            this.activeDescriptor = list[list.length - 1]
-          } else if (index < list.length) {
-            this.activeDescriptor = list[index]
-          }
-          break
-        case 'ArrowUp':
-          index--
-          if (shift) {
-            index -= 9 // Fast-scrolling
-          }
-          if (index < 0) {
-            index = 0
-          }
-          if (cmdOrCtrl) {
-            // Select the first file
-            this.activeDescriptor = list[0]
-          } else if (index >= 0) {
-            this.activeDescriptor = list[index]
-          }
-          break
-      }
-      this.scrollIntoView()
-    },
-    stopNavigate: function () {
-      this.activeDescriptor = null
-    },
-    scrollIntoView: function () {
-      // In case the file changed, make sure it's in view.
-      let scrollTop = this.$el.scrollTop
-      let index = this.getFilteredDirectoryContents.find(e => {
-        if (this.activeDescriptor !== null) {
-          return e.props === this.activeDescriptor
-        } else {
-          return e.props === this.selectedFile
-        }
-      })
-
-      if (index === undefined) {
-        return
-      }
-
-      index = this.getFilteredDirectoryContents.indexOf(index)
-
-      let modifier = this.itemHeight
-      let position = index * modifier
-      const quickFilterModifier = 40 // Height of the quick filter
-
-      if (position < scrollTop) {
-        this.$el.scrollTop = position
-      } else if (position > scrollTop + this.$el.offsetHeight - modifier) {
-        this.$el.scrollTop = position - this.$el.offsetHeight + modifier + quickFilterModifier
-      }
-    },
-    /**
-     * Called everytime when there is an update to the DOM, so that we can
-     * dynamically enable all newly rendered tippy instances.
-     * @return {void}     Does not return.
-     */
-    updateDynamics: function () {
-      // Tippy.js cannot observe changes within attributes, so because
-      // the instances are all created in advance, we have to update
-      // the content so that it reflects the current content of
-      // the data-tippy-content-property.
-      let elements = this.$el.querySelectorAll('[data-tippy-content]')
-      for (let elem of elements) {
-        // Either there's already an instance on the element,
-        // then only update its contents ...
-        if ('_tippy' in elem) {
-          elem._tippy.setContent(elem.dataset.tippyContent)
-        } else {
-          // ... or there is none, so let's add a tippy instance.
-          tippy(elem, {
-            delay: 100,
-            arrow: true,
-            duration: 100
-          })
-        }
-      }
-    },
-    onFocusHandler: function (event: any) {
-      this.activeDescriptor = this.selectedFile
-    },
-    focusFilter: function () {
-      (this.$refs.quickFilter as HTMLInputElement).focus()
-    },
-    handleOperation: async function (type: string, idx: number) {
-      // Creates files and directories, or duplicates a file.
-      const source = this.getDirectoryContents.find(item => item.id === idx)?.props
-      if (source === undefined) {
-        throw new Error('Could not handle file list operation: Source was undefined')
-      }
-
-      await ipcRenderer.invoke('application', {
-        command: type,
-        payload: { path: source.path }
+  const ret: Array<{ id: number, props: MaybeRootDescriptor }> = []
+  const items = objectToArray(selectedDirectory.value, 'children') as AnyDescriptor[]
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type !== 'other') {
+      ret.push({
+        id: i, // This helps the virtual scroller to adequately position the items
+        props: items[i] as MaybeRootDescriptor // The actual item
       })
     }
   }
+  return ret
 })
+
+const getFilteredDirectoryContents = computed(() => {
+  // Returns a list of directory contents, filtered
+  const originalContents = getDirectoryContents.value
+
+  const q = props.filterQuery.trim().toLowerCase() // Easy access
+
+  if (q === '') {
+    return originalContents
+  }
+
+  const filter = matchQuery(q, useTitle.value, useH1.value)
+
+  // Filter based on the query (remember: there's an ID and a "props" property)
+  return originalContents.filter(element => {
+    return filter(element.props)
+  })
+})
+
+onUpdated(() => {
+  nextTick()
+    .then(updateDynamics)
+    .catch(err => console.error(err))
+})
+
+watch(getFilteredDirectoryContents, () => {
+  // Whenever the directory contents change, reset the active file if it's
+  // no longer in the list
+  const foundDescriptor = getFilteredDirectoryContents.value.find((elem) => {
+    return elem.props === activeDescriptor.value
+  })
+
+  if (foundDescriptor === undefined) {
+    activeDescriptor.value = null
+  }
+})
+
+watch(selectedFile, scrollIntoView)
+
+watch(getDirectoryContents, () => {
+  nextTick()
+    .then(() => { scrollIntoView() })
+    .catch(err => console.error(err))
+})
+
+/**
+ * Navigates the filelist to the next/prev file or directory.
+ * Hold Shift for moving by 10 files, Command or Control to
+ * jump to the very end.
+ */
+function navigate (evt: KeyboardEvent): void {
+  // Only capture arrow movements
+  if (![ 'ArrowDown', 'ArrowUp', 'Enter' ].includes(evt.key)) {
+    return
+  }
+
+  evt.stopPropagation()
+  evt.preventDefault()
+
+  const shift = evt.shiftKey
+  const cmd = evt.metaKey && process.platform === 'darwin'
+  const ctrl = evt.ctrlKey && process.platform !== 'darwin'
+  const cmdOrCtrl = cmd || ctrl
+
+  // On pressing enter, that's the same as clicking
+  if (evt.key === 'Enter' && activeDescriptor.value !== null) {
+    if (activeDescriptor.value.type === 'directory') {
+      ipcRenderer.invoke('application', {
+        command: 'set-open-directory',
+        payload: activeDescriptor.value.path
+      })
+        .catch(e => console.error(e))
+    } else {
+      // Select the active file (if there is one)
+      ipcRenderer.invoke('documents-provider', {
+        command: 'open-file',
+        payload: {
+          path: activeDescriptor.value.path,
+          newTab: false
+        }
+      })
+        .catch(e => console.error(e))
+    }
+    return // Stop handling
+  }
+
+  const list = getFilteredDirectoryContents.value.map(e => e.props)
+  const descriptor = list.find(e => {
+    if (activeDescriptor.value !== null) {
+      return e.path === activeDescriptor.value.path
+    } else {
+      return e.path === selectedFile.value.path
+    }
+  })
+
+  switch (evt.key) {
+    case 'ArrowDown': {
+      let index = descriptor !== undefined ? list.indexOf(descriptor) : 0
+      index++
+      if (shift) {
+        index += 9 // Fast-scrolling
+      }
+      if (index >= list.length) {
+        index = list.length - 1
+      }
+      if (cmdOrCtrl) {
+        // Select the last file
+        activeDescriptor.value = list[list.length - 1]
+      } else if (index < list.length) {
+        activeDescriptor.value = list[index]
+      }
+      break
+    }
+    case 'ArrowUp': {
+      let index = descriptor !== undefined ? list.indexOf(descriptor) : list.length
+      index--
+      if (shift) {
+        index -= 9 // Fast-scrolling
+      }
+      if (index < 0) {
+        index = 0
+      }
+      if (cmdOrCtrl) {
+        // Select the first file
+        activeDescriptor.value = list[0]
+      } else if (index >= 0) {
+        activeDescriptor.value = list[index]
+      }
+      break
+    }
+  }
+
+  scrollIntoView()
+}
+
+function stopNavigate (): void {
+  activeDescriptor.value = null
+}
+
+function scrollIntoView (): void {
+  if (rootElement.value === null) {
+    return
+  }
+
+  // In case the file changed, make sure it's in view.
+  let scrollTop = rootElement.value.scrollTop
+  const activeDescriptorOrFile = getFilteredDirectoryContents.value.find(e => {
+    if (activeDescriptor.value !== null) {
+      return e.props === activeDescriptor.value
+    } else {
+      return e.props === selectedFile.value
+    }
+  })
+
+  if (activeDescriptorOrFile === undefined) {
+    return
+  }
+
+  const index = getFilteredDirectoryContents.value.indexOf(activeDescriptorOrFile)
+
+  let modifier = itemHeight.value
+  let position = index * modifier
+  const quickFilterModifier = 40 // Height of the quick filter
+
+  if (position < scrollTop) {
+    rootElement.value.scrollTop = position
+  } else if (position > scrollTop + rootElement.value.offsetHeight - modifier) {
+    rootElement.value.scrollTop = position - rootElement.value.offsetHeight + modifier + quickFilterModifier
+  }
+}
+
+/**
+ * Called everytime when there is an update to the DOM, so that we can
+ * dynamically enable all newly rendered tippy instances.
+ * @return {void}     Does not return.
+ */
+function updateDynamics (): void {
+  if (rootElement.value === null) {
+    return
+  }
+
+  // Tippy.js cannot observe changes within attributes, so because
+  // the instances are all created in advance, we have to update
+  // the content so that it reflects the current content of
+  // the data-tippy-content-property.
+  const elements = rootElement.value.querySelectorAll('[data-tippy-content]')
+  for (const elem of elements) {
+    if (!(elem instanceof HTMLElement)) {
+      continue
+    }
+
+    // Either there's already an instance on the element,
+    // then only update its contents ...
+    if ('_tippy' in elem) {
+      (elem._tippy as any).setContent(elem.dataset.tippyContent)
+    } else {
+      // ... or there is none, so let's add a tippy instance.
+      tippy(elem, {
+        delay: 100,
+        arrow: true,
+        duration: 100
+      })
+    }
+  }
+}
+
+function onFocusHandler (event: any): void {
+  activeDescriptor.value = selectedFile.value
+}
+
+async function handleOperation (type: string, idx: number): Promise<void> {
+  // Creates files and directories, or duplicates a file.
+  const source = getDirectoryContents.value.find(item => item.id === idx)?.props
+  if (source === undefined) {
+    throw new Error('Could not handle file list operation: Source was undefined')
+  }
+
+  await ipcRenderer.invoke('application', {
+    command: type,
+    payload: { path: source.path }
+  })
+}
+
+defineExpose({ navigate, stopNavigate })
 </script>
 
 <style lang="less">
