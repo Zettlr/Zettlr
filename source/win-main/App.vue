@@ -148,9 +148,7 @@ import {
   ref,
   computed,
   watch,
-  onMounted,
-  getCurrentInstance,
-  type ComponentCustomProperties
+  onMounted
 } from 'vue'
 import { useStore } from 'vuex'
 
@@ -163,9 +161,9 @@ import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-p
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 import { key as storeKey } from './store'
+import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
-const clipboard = window.clipboard
 
 const store = useStore(storeKey)
 
@@ -520,7 +518,8 @@ const globalSearchComponent = ref<typeof GlobalSearch|null>(null)
 const paneConfiguration = computed<BranchNodeJSON|LeafNodeJSON>(() => store.state.paneStructure)
 const lastLeafId = computed<string|undefined>(() => store.state.lastLeafId)
 const distractionFree = computed<boolean>(() => store.state.distractionFreeMode !== undefined)
-const appInstance = computed<(ComponentCustomProperties & Record<string, any>) | undefined>(() => getCurrentInstance()?.appContext.app.config.globalProperties)
+
+const configStore = useConfigStore()
 
 watch(sidebarVisible, (newValue) => {
   if (newValue) {
@@ -583,24 +582,8 @@ onMounted(() => {
     if (shortcut === 'toggle-sidebar') {
       window.config.set('window.sidebarVisible', !sidebarVisible.value)
     } else if (shortcut === 'insert-id') {
-      // Generates an ID based upon the configured pattern, writes it into the
-      // clipboard and then triggers the paste command on these webcontents.
-
-      // First we need to backup the existing clipboard contents
-      // so that they are not lost during the operation.
-      let text = clipboard.readText()
-      let html = clipboard.readHTML()
-      let rtf = clipboard.readRTF()
-
-      // Write an ID to the clipboard
-      clipboard.writeText(generateId(String(window.config.get('zkn.idGen'))))
-      // Paste the ID
-      ipcRenderer.send('window-controls', { command: 'paste' })
-
-      // Now restore the clipboard's original contents
-      setTimeout(() => {
-        clipboard.write({ text, html, rtf })
-      }, 10) // Why do a timeout? Because the paste event is asynchronous.
+      editorCommands.value.data = generateId(configStore.config.zkn.idGen)
+      editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
     } else if (shortcut === 'copy-current-id') {
       const activeFile = store.getters.lastLeafActiveFile()
       ipcRenderer.invoke('application', {
@@ -609,7 +592,7 @@ onMounted(() => {
       })
         .then(descriptor => {
           if (descriptor !== undefined && descriptor.id !== undefined && descriptor.id !== '') {
-            clipboard.writeText(descriptor.id)
+            navigator.clipboard.writeText(descriptor.id).catch(err => console.error(err))
           }
         })
         .catch(err => console.error(err))
