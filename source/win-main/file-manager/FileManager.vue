@@ -1,6 +1,7 @@
 <template>
   <div
     id="file-manager"
+    ref="rootElement"
     role="region"
     aria-label="File Manager"
     v-bind:class="{ expanded: isExpanded }"
@@ -45,7 +46,7 @@
     <div id="component-container">
       <!-- Render a the file-tree -->
       <FileTree
-        ref="directories"
+        ref="fileTreeComponent"
         v-bind:is-visible="fileTreeVisible"
         v-bind:filter-query="filterQuery"
         v-bind:window-id="windowId"
@@ -61,7 +62,7 @@
       -->
       <FileList
         v-show="!isCombined"
-        ref="fileList"
+        ref="fileListComponent"
         v-bind:is-visible="isFileListVisible"
         v-bind:filter-query="filterQuery"
         v-bind:window-id="windowId"
@@ -71,7 +72,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -89,360 +90,290 @@ import findObject from '@common/util/find-object'
 import FileTree from './FileTree.vue'
 import FileList from './FileList.vue'
 import { trans } from '@common/i18n-renderer'
-import { nextTick, defineComponent } from 'vue'
-import { mapStores } from 'pinia'
-import { useOpenDirectoryStore, useWorkspacesStore } from 'source/pinia'
+import { nextTick, ref, computed, watch, onMounted } from 'vue'
+import { useConfigStore, useOpenDirectoryStore, useWorkspacesStore } from 'source/pinia'
+import type { AnyDescriptor, DirDescriptor } from 'source/types/common/fsal'
+import { key } from '../store'
+import { useStore } from 'vuex'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  components: {
-    FileTree,
-    FileList
-  },
-  props: {
-    windowId: {
-      type: String,
-      required: true
-    }
-  },
-  data: () => {
-    return {
-      previous: '', // Can be "file-list" or "directories"
-      lockedTree: false, // Is the file tree locked in?
-      fileManagerInnerResizing: false,
-      fileManagerInnerResizeX: 0,
-      // Whether file tree and list are visible
-      fileTreeVisible: true,
-      fileListVisible: false,
-      filterQuery: ''
-    }
-  },
-  computed: {
-    ...mapStores(useOpenDirectoryStore),
-    ...mapStores(useWorkspacesStore),
-    /**
-     * Mapper functions to map state properties onto the file manager.
-     */
-    fileTree: function () {
-      return this.workspacesStore.roots.map(root => root.descriptor)
-    },
-    selectedDirectory: function () {
-      return this['open-directoryStore'].openDirectory
-    },
-    filterPlaceholder: function () {
-      return trans('Filter …')
-    },
-    isThin: function () {
-      return this.fileManagerMode === 'thin'
-    },
-    isCombined: function () {
-      return this.fileManagerMode === 'combined'
-    },
-    isExpanded: function () {
-      return this.fileManagerMode === 'expanded'
-    },
-    // We need the fileManagerMode separately to watch the property
-    fileManagerMode: function () {
-      return this.$store.state.config.fileManagerMode
-    },
-    /**
-     * Determines whether the file list is currently visible
-     * @returns {Boolean}  Whether the file list is visible.
-     */
-    isFileListVisible: function () {
-      return this.isExpanded || this.fileListVisible
-    },
-    getDirectoryContents: function () {
-      return this.$store.getters.directoryContents
-    }
-  },
-  watch: {
-    /**
-     * Switches to the fileList, if applicable.
-     */
-    selectedDirectory: function () {
-      // Reset the local search when a new directory has been selected
-      this.filterQuery = ''
+const props = defineProps<{ windowId: string }>()
 
-      // If the directory just got de-selected and the fileList
-      // is visible, switch to the directories.
-      if (this.selectedDirectory === null && this.isFileListVisible) {
-        this.toggleFileList()
-      } else if (!this.isFileListVisible) {
-        // Otherwise make sure the fileList is visible (toggleFileList
-        // will return if the mode is combined or expanded)
-        this.toggleFileList()
-      }
-    },
-    /**
-     * Listens to changes of the fileManagerMode to reset
-     * all styles to default for preventing display glitches.
-     */
-    fileManagerMode: function () {
-      // Reset all properties from the resize operations.
-      const fileTree = (this.$refs.directories as any).$el as HTMLElement
-      const fileList = (this.$refs.fileList as any).$el as HTMLElement
-      fileTree.style.removeProperty('width')
-      fileTree.style.removeProperty('left')
-      fileList.style.removeProperty('width')
-      fileList.style.removeProperty('left')
-      this.fileTreeVisible = true
-      this.fileListVisible = false
-      // Then we want to do some additional
-      // failsafes for the different modes
-      if (this.isExpanded) {
-        this.fileListVisible = true
-      }
-      // Enlargen the file manager, if applicable
-      if (this.isExpanded && this.$el.offsetWidth < 100) {
-        this.$el.style.width = '100px'
-      }
-    }
-  },
-  mounted: function () {
-    if (this['open-directoryStore'].openDirectory !== null) {
-      this.$store.state.uncollapsedDirectories.push(this['open-directoryStore'].openDirectory)
-    }
-    ipcRenderer.on('shortcut', (event, message) => {
-      if (message === 'filter-files') {
-        // Focus the filter on the next tick. Why? Because it might be that
-        // the file manager is hidden, or the global search is visible. In both
-        // cases we need to wait for the app to display the file manager.
-        nextTick()
-          .then(() => { (this.$refs.quickFilter as any).focus() })
-          .catch(err => console.error(err))
-      }
-    })
-  },
-  methods: {
-    /**
-     * Toggles the fileList's visibility, if applicable.
-     */
-    toggleFileList: function () {
-      if (!this.isThin) {
-        return // Do not toggle if we're not in thin mode.
-      }
+const previous = ref<'file-list'|'directories'|undefined>(undefined) // Can be "file-list" or "directories"
+const lockedTree = ref<boolean>(false)
+const fileTreeVisible = ref<boolean>(true)
+const fileListVisible = ref<boolean>(false)
+const filterQuery = ref<string>('')
 
-      if (this.lockedTree) {
-        return // Don't toggle in case of a lockdown
-      }
+// Element refs
+const arrowButton = ref<HTMLDivElement|null>(null)
+const quickFilter = ref<HTMLInputElement|null>(null)
+const rootElement = ref<HTMLDivElement|null>(null)
+const fileTreeComponent = ref<typeof FileTree|null>(null)
+const fileListComponent = ref<typeof FileList|null>(null)
 
-      // Switch back to directories in case of fileManagerMode changes
-      if (!this.isThin && this.isFileListVisible) {
-        this.fileTreeVisible = true
-        this.fileListVisible = false
-        ;(this.$refs.arrowButton as HTMLElement).classList.add('hidden') // Hide the arrow button
-        return
-      }
+const openDirectoryStore = useOpenDirectoryStore()
+const workspacesStore = useWorkspacesStore()
+const configStore = useConfigStore()
+const store = useStore(key)
 
-      if (this.isFileListVisible) {
-        // Display directories
-        this.fileTreeVisible = true
-        this.fileListVisible = false
-        ;(this.$refs.arrowButton as HTMLElement).classList.add('hidden') // Hide the arrow button
-      } else {
-        // Display the file list
-        this.fileTreeVisible = false
-        this.fileListVisible = true
-      }
-    },
-    /**
-     * Display the arrow button for navigation, if applicable.
-     * @param {MouseEvent} evt The associated event.
-     */
-    maybeShowArrowButton: function (evt: MouseEvent) {
-      const canShowFileTree = this.isFileListVisible && this.isThin
+const fileTree = computed<AnyDescriptor[]>(() => workspacesStore.roots.map(root => root.descriptor))
+const selectedDirectory = computed<DirDescriptor|null>(() => openDirectoryStore.openDirectory)
 
-      // Only show the button if the mouse is in the top of the file manager.
-      // We're adding 10px padding to make sure we have some leeway in case of
-      // sudden mouse movements.
-      const { top, left, right } = this.$el.getBoundingClientRect()
-      if (
-        canShowFileTree &&
-        evt.clientX >= left && evt.clientX <= right - 10 &&
-        evt.clientY >= top + 10 && evt.clientY <= top + 200
-      ) {
-        (this.$refs.arrowButton as HTMLElement).classList.remove('hidden')
-      } else {
-        (this.$refs.arrowButton as HTMLElement).classList.add('hidden')
-      }
-    },
-    maybeNavigate: function (evt: KeyboardEvent) {
-      // If the file list is visible we can navigate
-      if (this.isFileListVisible) {
-        (this.$refs.fileList as any).navigate(evt)
-      } else {
-        // Try to navigate the file tree
-        (this.$refs.directories as any).navigate(evt)
-      }
-    },
-    handleQuickFilterBlur: function (evt: Event) {
-      // Stop navigating on blur
-      if (this.isFileListVisible) {
-        (this.$refs.fileList as any).stopNavigate()
-      } else {
-        (this.$refs.directories as any).stopNavigate()
-      }
-    },
-    /**
-     * Scrolls the directory tree if necessary to enable dropping of
-     * elements onto elements currently out of viewport.
-     * @param {DragEvent} evt The associated event.
-     */
-    handleDragOver: function (evt: DragEvent) {
-      // We have to handle the dragging functionality manually, as all other
-      // mouse and keyboard events are suppressed during a drag operation.
-      // We need to scroll the tree container probably, and have to check it.
-      let y = evt.clientY
-      let elem = (this.$refs.directories as any).$el as HTMLElement
-      let scroll = elem.scrollTop
-      let distanceBottom = elem.offsetHeight - y // The less the value, the closer
-      let distanceTop = (scroll > 0) ? y - elem.offsetTop : 0
-      if (elem.scrollHeight - scroll === elem.clientHeight) distanceBottom = 0
-      // Now scroll if applicable. The calculations take care that
-      // the scrolling is faster the closer to the edge the object
-      // is
-      if (distanceBottom > 0 && distanceBottom < 100) {
-        elem.scrollTop += 10 - distanceBottom / 10
-      }
-      if (distanceTop > 0 && distanceTop < 100) {
-        elem.scrollTop -= 10 - distanceTop / 10
-      }
-    },
-    handleWheel: function (event: WheelEvent) {
-      // Determine if we can scroll back & forth
-      if (process.platform !== 'darwin') {
-        return // macOS only
-      }
+const filterPlaceholder = trans('Filter …')
+const fileManagerMode = computed(() => configStore.config.fileManagerMode)
+const isThin = computed<boolean>(() => fileManagerMode.value === 'thin')
+const isCombined = computed<boolean>(() => fileManagerMode.value === 'combined')
+const isExpanded = computed<boolean>(() => fileManagerMode.value === 'expanded')
 
-      if (event.deltaY !== 0) {
-        return // Don't interfere with vertical scrolling
-      }
+const isFileListVisible = computed<boolean>(() => isExpanded.value || fileListVisible.value)
 
-      // Toggle back and forth depending on the current state. toggleFileList
-      // will make sure to catch things such as whether we are in combined mode
-      if (event.deltaX > 0) {
-        // Switch to the file list
-        if (!this.isFileListVisible) {
-          event.preventDefault()
-          event.stopPropagation()
-          this.toggleFileList()
-        }
-      } else if (event.deltaX < 0 && this.isFileListVisible) {
-        // Switch to the tree view
-        event.preventDefault()
-        event.stopPropagation()
-        this.toggleFileList()
-      }
-    },
-    /**
-     * Registers a click event on an item and toggles
-     * the file list, if it's not visible.
-     * @param {MouseEvent} evt The bubbled event.
-     * TODO This function is a no-op right now
-     */
-    selectionListener: function (evt: MouseEvent) {
-      const target = evt.target as null|HTMLElement
-      // No hash property? Nothing to do.
-      if (target?.dataset.path === undefined) {
-        return
-      }
-
-      const obj = findObject(this.fileTree, 'path', parseInt(target.dataset.path), 'children')
-      // Nothing found/type is a file? Return.
-      if (obj != null || obj.type === 'file') {
-        return
-      }
-
-      if (!this.isFileListVisible) {
-        this.toggleFileList()
-      }
-    },
-    /**
-     * Locks the directory tree (mostly in preparation for a drag operation)
-     */
-    lockDirectoryTree: function () {
-      if (!this.isThin) {
-        return // Don't lock the file tree if we aren't in a thin mode
-      }
-
-      // This function is called whenever the file list
-      // should be hidden and only the file tree should
-      // be visible
-      if (this.isFileListVisible) {
-        this.previous = 'file-list'
-        this.toggleFileList()
-      }
-
-      this.lockedTree = true
-    },
-    /**
-     * Unlocks the directory tree (mostly after a completed drag and drop operation)
-     */
-    unlockDirectoryTree: function () {
-      if (!this.isThin) {
-        return // Don't unlock the file tree if we aren't in a thin mode
-      }
-
-      this.lockedTree = false
-      if (this.previous === 'file-list') {
-        this.toggleFileList()
-        this.previous = ''
-      }
-    },
-    /**
-     * Begins a resize of the inner file manager components.
-     * @param {MouseEvent} evt The associated event.
-     */
-    fileManagerStartInnerResize: function (evt: MouseEvent) {
-      // Begin to resize the inner file manager
-      this.fileManagerInnerResizing = true
-      this.fileManagerInnerResizeX = evt.clientX
-      this.$el.addEventListener('mousemove', this.fileManagerInnerResize)
-      this.$el.addEventListener('mouseup', this.fileManagerStopInnerResize)
-    },
-    /**
-     * Resizes the inner components according to the drag direction.
-     * @param {MouseEvent} evt The associated event.
-     */
-    fileManagerInnerResize: function (evt: MouseEvent) {
-      if (!this.fileManagerInnerResizing) {
-        return
-      }
-
-      const fileTree = (this.$refs.directories as any).$el as HTMLElement
-      const fileList = (this.$refs.fileList as any).$el as HTMLElement
-
-      // x > 0 means: Direction -->
-      // x < 0 means: Direction <--
-      let x = evt.clientX - this.fileManagerInnerResizeX
-      // Make sure both the fileList and the tree view are at least 50 px in width
-      if (!this.isThin && fileTree.offsetWidth <= 50 && x !== 0) {
-        x = 0
-      }
-
-      this.fileManagerInnerResizeX = evt.clientX
-      // Now resize everything accordingly
-      fileTree.style.width = (fileTree.offsetWidth + x) + 'px'
-      fileList.style.left = (fileTree.offsetWidth + x) + 'px'
-      fileList.style.width = (this.$el.offsetWidth - fileTree.offsetWidth + x) + 'px'
-      // Reposition the resizer handle exactly on top of the divider, hence
-      // substract the half width
-      ;(this.$refs.fileManagerInnerResizer as HTMLElement).style.left = (fileTree.offsetWidth + x - 5) + 'px'
-    },
-    /**
-     * Stops resizing of the inner elements on release of the mouse button.
-     * @param {MouseEvent} evt The associated event
-     */
-    fileManagerStopInnerResize: function (evt: MouseEvent) {
-      this.fileManagerInnerResizing = false
-      this.fileManagerInnerResizeX = 0
-      this.$el.removeEventListener('mousemove', this.fileManagerInnerResize)
-      this.$el.removeEventListener('mouseup', this.fileManagerStopInnerResize)
-    }
+watch(selectedDirectory, () => {
+  // Reset the local search when a new directory has been selected
+  filterQuery.value = ''
+  // If the directory just got de-selected and the fileList
+  // is visible, switch to the directories.
+  if (selectedDirectory.value === null && isFileListVisible.value) {
+    toggleFileList()
+  } else if (!isFileListVisible.value) {
+    // Otherwise make sure the fileList is visible (toggleFileList
+    // will return if the mode is combined or expanded)
+    toggleFileList()
   }
 })
+
+watch(fileManagerMode, () => {
+  // Reset all properties from the resize operations.
+  const fileTree = fileTreeComponent.value?.$el
+  const fileList = fileListComponent.value?.$el
+  fileTree.style.removeProperty('width')
+  fileTree.style.removeProperty('left')
+  fileList.style.removeProperty('width')
+  fileList.style.removeProperty('left')
+  fileTreeVisible.value = true
+  fileListVisible.value = false
+  // Then we want to do some additional
+  // failsafes for the different modes
+  if (isExpanded.value) {
+    fileListVisible.value = true
+  }
+
+  // Enlargen the file manager, if applicable
+  if (rootElement.value == null) {
+    return
+  }
+
+  if (isExpanded.value && rootElement.value.offsetWidth < 100) {
+    rootElement.value.style.width = '100px'
+  }
+})
+
+onMounted(() => {
+  if (openDirectoryStore.openDirectory !== null) {
+    // TODO: Logical bug: Apparently I was always just pushing entire descriptors in there!
+    store.state.uncollapsedDirectories.push(openDirectoryStore.openDirectory.path)
+  }
+
+  ipcRenderer.on('shortcut', (event, message) => {
+    if (message === 'filter-files') {
+      // Focus the filter on the next tick. Why? Because it might be that
+      // the file manager is hidden, or the global search is visible. In both
+      // cases we need to wait for the app to display the file manager.
+      nextTick()
+        .then(() => { quickFilter.value?.focus() })
+        .catch(err => console.error(err))
+    }
+  })
+})
+
+/**
+ * Toggles the fileList's visibility, if applicable.
+ */
+function toggleFileList (): void {
+  if (!isThin.value) {
+    return // Do not toggle if we're not in thin mode.
+  }
+
+  if (lockedTree.value) {
+    return // Don't toggle in case of a lockdown
+  }
+
+  // Switch back to directories in case of fileManagerMode changes
+  if (!isThin.value && isFileListVisible.value) {
+    fileTreeVisible.value = true
+    fileListVisible.value = false
+    arrowButton.value?.classList.add('hidden') // Hide the arrow button
+    return
+  }
+
+  if (isFileListVisible.value) {
+    // Display directories
+    fileTreeVisible.value = true
+    fileListVisible.value = false
+    arrowButton.value?.classList.add('hidden') // Hide the arrow button
+  } else {
+    // Display the file list
+    fileTreeVisible.value = false
+    fileListVisible.value = true
+  }
+}
+
+/**
+ * Display the arrow button for navigation, if applicable.
+ * @param {MouseEvent} evt The associated event.
+ */
+function maybeShowArrowButton (evt: MouseEvent): void {
+  const canShowFileTree = isFileListVisible.value && isThin.value
+
+  // Only show the button if the mouse is in the top of the file manager.
+  // We're adding 10px padding to make sure we have some leeway in case of
+  // sudden mouse movements.
+  if (rootElement.value === null) {
+    return
+  }
+
+  const { top, left, right } = rootElement.value.getBoundingClientRect()
+  if (
+    canShowFileTree &&
+    evt.clientX >= left && evt.clientX <= right - 10 &&
+    evt.clientY >= top + 10 && evt.clientY <= top + 200
+  ) {
+    arrowButton.value?.classList.remove('hidden')
+  } else {
+    arrowButton.value?.classList.add('hidden')
+  }
+}
+
+function maybeNavigate (evt: KeyboardEvent): void {
+  // If the file list is visible we can navigate
+  if (isFileListVisible.value) {
+    fileListComponent.value?.navigate(evt)
+  } else {
+    // Try to navigate the file tree
+    fileTreeComponent.value?.navigate(evt)
+  }
+}
+
+function handleQuickFilterBlur (_event: Event): void {
+  // Stop navigating on blur
+  if (isFileListVisible.value) {
+    fileListComponent.value?.stopNavigate()
+  } else {
+    fileTreeComponent.value?.stopNavigate()
+  }
+}
+
+/**
+ * Scrolls the directory tree if necessary to enable dropping of
+ * elements onto elements currently out of viewport.
+ * @param {DragEvent} evt The associated event.
+ */
+function handleDragOver (evt: DragEvent): void {
+  // We have to handle the dragging functionality manually, as all other
+  // mouse and keyboard events are suppressed during a drag operation.
+  // We need to scroll the tree container probably, and have to check it.
+  let y = evt.clientY
+  let elem = fileTreeComponent.value?.$el
+  let scroll = elem.scrollTop
+  let distanceBottom = elem.offsetHeight - y // The less the value, the closer
+  let distanceTop = (scroll > 0) ? y - elem.offsetTop : 0
+  if (elem.scrollHeight - scroll === elem.clientHeight) distanceBottom = 0
+  // Now scroll if applicable. The calculations take care that
+  // the scrolling is faster the closer to the edge the object
+  // is
+  if (distanceBottom > 0 && distanceBottom < 100) {
+    elem.scrollTop += 10 - distanceBottom / 10
+  }
+  if (distanceTop > 0 && distanceTop < 100) {
+    elem.scrollTop -= 10 - distanceTop / 10
+  }
+}
+
+function handleWheel (event: WheelEvent): void {
+  // Determine if we can scroll back & forth
+  if (process.platform !== 'darwin') {
+    return // macOS only
+  }
+
+  if (event.deltaY !== 0) {
+    return // Don't interfere with vertical scrolling
+  }
+
+  // Toggle back and forth depending on the current state. toggleFileList
+  // will make sure to catch things such as whether we are in combined mode
+  if (event.deltaX > 0) {
+    // Switch to the file list
+    if (!isFileListVisible.value) {
+      event.preventDefault()
+      event.stopPropagation()
+      toggleFileList()
+    }
+  } else if (event.deltaX < 0 && isFileListVisible.value) {
+    // Switch to the tree view
+    event.preventDefault()
+    event.stopPropagation()
+    toggleFileList()
+  }
+}
+
+/**
+ * Registers a click event on an item and toggles
+ * the file list, if it's not visible.
+ * @param {MouseEvent} evt The bubbled event.
+ * TODO This function is a no-op right now
+ */
+function selectionListener (evt: MouseEvent): void {
+  const target = evt.target as null|HTMLElement
+  // No hash property? Nothing to do.
+  if (target?.dataset.path === undefined) {
+    return
+  }
+
+  const obj = findObject(fileTree.value, 'path', parseInt(target.dataset.path), 'children')
+  // Nothing found/type is a file? Return.
+  if (obj != null || obj.type === 'file') {
+    return
+  }
+
+  if (!isFileListVisible.value) {
+    toggleFileList()
+  }
+}
+
+/**
+ * Locks the directory tree (mostly in preparation for a drag operation)
+ */
+function lockDirectoryTree (): void {
+  if (!isThin.value) {
+    return // Don't lock the file tree if we aren't in a thin mode
+  }
+
+  // This function is called whenever the file list
+  // should be hidden and only the file tree should
+  // be visible
+  if (isFileListVisible.value) {
+    previous.value = 'file-list'
+    toggleFileList()
+  }
+
+  lockedTree.value = true
+}
+
+/**
+ * Unlocks the directory tree (mostly after a completed drag and drop operation)
+ */
+function unlockDirectoryTree (): void {
+  if (!isThin.value) {
+    return // Don't unlock the file tree if we aren't in a thin mode
+  }
+
+  lockedTree.value = false
+  if (previous.value === 'file-list') {
+    toggleFileList()
+    previous.value = undefined
+  }
+}
 </script>
 
 <style lang="less">
