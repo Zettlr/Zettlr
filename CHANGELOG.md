@@ -107,6 +107,7 @@ be able to run the app again just fine on ARM computers with Linux.
   components with `Teleport` (#4663)
 - No more JavaScript: With this update, the entire code base (sans build
   scripts) is written in TypeScript.
+- Migrated from Electron's deprecated clipboard API to the native Browser API
 
 # 3.0.5
 

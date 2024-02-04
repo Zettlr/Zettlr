@@ -85,15 +85,18 @@ class SnippetWidget extends WidgetType {
  * This utility function inserts a snippet
  */
 function applySnippet (view: EditorView, completion: Completion, from: number, to: number): void {
-  const [ textToInsert, selections ] = template2snippet(view.state, completion.info as string, from - 1)
-  // We can immediately take the first rangeset and set it as a selection, whilst
-  // committing the rest into our StateField as an effect
-  const firstSelection = selections.shift()
-  view.dispatch({
-    changes: [{ from: from - 1, to, insert: textToInsert }],
-    selection: firstSelection,
-    effects: snippetTabsEffect.of(selections)
-  })
+  template2snippet(view.state, completion.info as string, from - 1)
+    .then(([ textToInsert, selections ]) => {
+      // We can immediately take the first rangeset and set it as a selection, whilst
+      // committing the rest into our StateField as an effect
+      const firstSelection = selections.shift()
+      view.dispatch({
+        changes: [{ from: from - 1, to, insert: textToInsert }],
+        selection: firstSelection,
+        effects: snippetTabsEffect.of(selections)
+      })
+    })
+    .catch(err => console.error(err))
 }
 
 /**
@@ -207,9 +210,9 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
  * @return  {[string, EditorSelection[]]}  The final text as well as tabstop
  *                                          ranges (if any)
  */
-function template2snippet (state: EditorState, template: string, rangeOffset: number): [string, EditorSelection[]] {
+async function template2snippet (state: EditorState, template: string, rangeOffset: number): Promise<[string, EditorSelection[]]> {
   const rawRanges: Array<{ position: number, ranges: SelectionRange[] }> = []
-  let finalText = replaceSnippetVariables(state, template)
+  let finalText = await replaceSnippetVariables(state, template)
 
   // Matches $[0-9] as well as ${[0-9]:default string}
   const tabStopRE = /(?<!\\)\$(\d+)|(?<!\\)\$\{(\d+):(.+?)\}/ // NOTE: No g flag
@@ -273,7 +276,7 @@ function template2snippet (state: EditorState, template: string, rangeOffset: nu
    *
    * @return  {string}                   The text with all variables replaced accordingly.
    */
-function replaceSnippetVariables (state: EditorState, text: string): string {
+async function replaceSnippetVariables (state: EditorState, text: string): Promise<string> {
   // First, prepare our replacement table
   const now = DateTime.now()
   const month = now.month
@@ -281,7 +284,7 @@ function replaceSnippetVariables (state: EditorState, text: string): string {
   const hour = now.hour
   const minute = now.minute
   const second = now.second
-  const clipboard = window.clipboard.readText()
+  const clipboard = await navigator.clipboard.readText()
 
   const config = state.field(configField)
   const absPath = config.metadata.path
@@ -299,7 +302,7 @@ function replaceSnippetVariables (state: EditorState, text: string): string {
     CURRENT_SECONDS_UNIX: now.toSeconds(),
     UUID: uuid(),
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
-    ZKN_ID: generateId(window.config.get('zkn.idGen')),
+    ZKN_ID: generateId(String(window.config.get('zkn.idGen'))),
     CURRENT_ID: config.metadata.id,
     FILENAME: pathBasename(absPath),
     DIRECTORY: pathDirname(absPath),
