@@ -7,7 +7,7 @@
     }"
   >
     <div
-      ref="display-text"
+      ref="displayText"
       v-bind:class="{
         'list-item': true,
         project: obj.type === 'directory' && obj.settings.project !== null,
@@ -38,7 +38,7 @@
         ></cds-icon>
         <input
           v-if="nameEditing"
-          ref="name-editing-input"
+          ref="nameEditingInput"
           type="text"
           v-bind:value="obj.name"
           v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
@@ -57,28 +57,28 @@
           <span class="badge">{{ countWordsOrCharsOfDirectory }}</span>
         </div>
         <template v-else>
-          <div v-if="hasTags">
+          <div v-if="obj.type === 'file' && obj.tags.length > 0">
             <!-- First line -->
-            <div v-for="(tag, idx) in (obj as any).tags" v-bind:key="idx" class="tag badge">
+            <div v-for="(tag, idx) in tagsWithColor" v-bind:key="idx" class="tag badge">
               <span
-                v-if="retrieveTagColour(tag)"
+                v-if="tag.color !== undefined"
                 class="color-circle"
                 v-bind:style="{
-                  'background-color': retrieveTagColour(tag)
+                  backgroundColor: tag.color
                 }"
               ></span>
-              <span>#{{ tag }}</span>
+              <span>#{{ tag.name }}</span>
             </div>
           </div>
           <div>
             <!-- Second line -->
             <!-- Is this a code file? -->
             <span
-              v-if="isCode"
+              v-if="obj.type === 'code'"
               aria-label="Code-file"
               class="code-indicator badge"
             >
-              {{ (obj as any).ext.substr(1) }}
+              {{ obj.ext.substring(1) }}
             </span>
             <!-- Display the ID, if there is one -->
             <span v-if="obj.type === 'file' && obj.id !== ''" class="id badge">{{ obj.id }}</span>
@@ -123,31 +123,31 @@
 
   <!-- Popovers -->
   <PopoverDirProps
-    v-if="showPopover && obj.type === 'directory'"
-    v-bind:target="target"
+    v-if="showPopover && displayText !== null && obj.type === 'directory'"
+    v-bind:target="displayText"
     v-bind:directory-path="obj.path"
     v-on:close="showPopover = false"
   ></PopoverDirProps>
   <PopoverFileProps
-    v-if="showPopover && obj.type !== 'directory'"
-    v-bind:target="target"
+    v-if="showPopover && displayText !== null && obj.type !== 'directory'"
+    v-bind:target="displayText"
     v-bind:filepath="obj.path"
     v-bind:filename="obj.name"
     v-bind:creationtime="obj.creationtime"
     v-bind:modtime="obj.modtime"
-    v-bind:tags="obj.tags ?? []"
+    v-bind:tags="obj.type === 'file' ? obj.tags : []"
     v-bind:coloured-tags="$store.state.colouredTags"
     v-bind:target-value="0"
     v-bind:target-mode="'words'"
     v-bind:file-size="obj.size"
     v-bind:type="obj.type"
-    v-bind:words="obj.wordCount ?? 0"
+    v-bind:words="obj.type === 'file' ? obj.wordCount : 0"
     v-bind:ext="obj.ext"
     v-on:close="showPopover = false"
   ></PopoverFileProps>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -166,242 +166,220 @@ import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
 import localiseNumber from '@common/util/localise-number'
 import formatSize from '@common/util/format-size'
-import itemMixin from './util/item-mixin'
 import PopoverDirProps from './util/PopoverDirProps.vue'
 import PopoverFileProps from './util/PopoverFileProps.vue'
 
-import { defineComponent } from 'vue'
-import { type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
-import { type WritingTarget } from '@providers/targets'
+import { ref, computed, toRef, watch } from 'vue'
+import { type AnyDescriptor, type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { useConfigStore } from 'source/pinia'
+import { useStore } from 'vuex'
+import { key } from '../store'
+import { useItemComposable } from './util/item-composable'
 
-export default defineComponent({
-  name: 'FileItem',
-  components: {
-    PopoverDirProps,
-    PopoverFileProps
-  },
-  mixins: [itemMixin],
-  props: {
-    activeFile: {
-      type: Object,
-      default: function () { return {} }
-    },
-    index: {
-      type: Number,
-      required: true
-    },
-    obj: {
-      type: Object as () => MDFileDescriptor|CodeFileDescriptor|DirDescriptor,
-      required: true
-    },
-    windowId: {
-      type: String,
-      required: true
-    }
-  },
-  emits: [ 'begin-dragging', 'create-file', 'create-dir' ],
-  data () {
-    return {
-      showPopover: false
-    }
-  },
-  computed: {
-    target (): HTMLElement {
-      return this.$refs['display-text'] as HTMLElement
-    },
-    shouldCountChars: function (): boolean {
-      return this.$store.state.config['editor.countChars']
-    },
-    useH1: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('heading')
-    },
-    useTitle: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('title')
-    },
-    writingTargets: function (): WritingTarget[] {
-      return this.$store.state.writingTargets
-    },
-    displayMdExtensions: function (): boolean {
-      return this.$store.state.config['display.markdownFileExtensions']
-    },
-    // We have to explicitly transform ALL properties to computed ones for
-    // the reactivity in conjunction with the recycle-scroller.
-    basename: function () {
-      if (this.obj.type !== 'file') {
-        return this.obj.name
-      }
+const props = defineProps<{
+  activeFile: AnyDescriptor|null
+  index: number
+  obj: MDFileDescriptor|CodeFileDescriptor|DirDescriptor
+  windowId: string
+}>()
 
-      if (this.useTitle && this.obj.yamlTitle !== undefined) {
-        return this.obj.yamlTitle
-      } else if (this.useH1 && this.obj.firstHeading !== null) {
-        return this.obj.firstHeading
-      } else if (this.displayMdExtensions) {
-        return this.obj.name
-      } else {
-        return this.obj.name.replace(this.obj.ext, '')
-      }
-    },
-    getFilename: function () {
-      return this.obj.name
-    },
-    hasTags: function () {
-      if (this.obj.type !== 'file') {
-        return false
-      }
+const emit = defineEmits<{
+  (e: 'begin-dragging'): void
+  (e: 'create-file'): void
+  (e: 'create-dir'): void
+}>()
 
-      return this.obj.tags !== undefined && this.obj.tags.length > 0
-    },
-    isProject: function () {
-      return this.obj.type === 'directory' && this.obj.settings.project !== null
-    },
-    isDraggable: function () {
-      return this.isDirectory === false
-    },
-    fileMeta: function () {
-      return this.$store.state.config.fileMeta
-    },
-    isCode: function () {
-      return this.obj.type === 'code'
-    },
-    getDate: function () {
-      if (this.$store.state.config.fileMetaTime === 'modtime') {
-        return formatDate(this.obj.modtime, window.config.get('appLang'), true)
-      } else {
-        return formatDate(this.obj.creationtime, window.config.get('appLang'), true)
-      }
-    },
-    countDirs: function () {
-      if (this.obj.type !== 'directory') {
-        return '0 ' + trans('Directories')
-      }
-      return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('Directories')
-    },
-    countFiles: function () {
-      if (this.obj.type !== 'directory') {
-        return '0 ' + trans('Files')
-      }
-      return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('Files')
-    },
-    countWordsOrCharsOfDirectory: function () {
-      if (this.obj.type !== 'directory') {
-        return ''
-      }
+const configStore = useConfigStore()
+const store = useStore(key)
 
-      const wordOrCharCount = this.obj.children
-        .filter((file: any) => file.type === 'file')
-        .map((file: any) => this.shouldCountChars ? file.charCount : file.wordCount)
-        .reduce((prev: number, cur: number) => prev + cur, 0)
+const shouldCountChars = computed(() => configStore.config.editor.countChars)
+const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
+const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
+const writingTargets = computed(() => store.state.writingTargets)
+const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
 
-      if (this.shouldCountChars) {
-        return trans('%s characters', localiseNumber(wordOrCharCount))
-      } else {
-        return trans('%s words', localiseNumber(wordOrCharCount))
-      }
-    },
-    countTags: function () {
-      if (this.obj.type !== 'file') {
-        return 0
-      }
-      return this.obj.tags.length
-    },
-    hasWritingTarget: function () {
-      // TODO: REIMPLEMENT WRITING TARGETS APPROPRIATELY!
-      if (this.obj.type !== 'file') {
-        return false
-      }
+const displayText = ref<HTMLDivElement|null>(null)
+const nameEditingInput = ref<HTMLInputElement|null>(null)
 
-      const targetPaths = this.writingTargets.map(x => x.path)
-      return targetPaths.includes(this.obj.path)
-    },
-    writingTargetPath: function () {
-      if (this.obj.type !== 'file') {
-        throw new Error('Could not compute writingTargetPath: Was called on non-file object')
-      }
+const {
+  nameEditing,
+  showPopover,
+  operationType,
+  onDragHandler,
+  handleContextMenu,
+  requestSelection,
+  finishNameEditing,
+  isDirectory,
+  selectedFile
+} = useItemComposable(toRef(props.obj), displayText, props.windowId, nameEditingInput)
 
-      const target = this.writingTargets.find(x => x.path === this.obj.path)
+// We have to explicitly transform ALL properties to computed ones for
+// the reactivity in conjunction with the recycle-scroller.
+const basename = computed(() => {
+  if (props.obj.type !== 'file') {
+    return props.obj.name
+  }
 
-      if (target === undefined) {
-        throw new Error('Could not compute writingTargetPath: No target found')
-      }
-
-      let current = this.obj.charCount
-      if (target.mode === 'words') current = this.obj.wordCount
-      let progress = current / target.count
-      let large = (progress > 0.5) ? 1 : 0
-      if (progress > 1) progress = 1 // Never exceed 100 %
-      let x = Math.cos(2 * Math.PI * progress)
-      let y = Math.sin(2 * Math.PI * progress)
-      return `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`
-    },
-    writingTargetInfo: function () {
-      if (this.obj.type !== 'file') {
-        throw new Error('Could not compute writingTargetInfo: Was called on non-file object')
-      }
-
-      const target = this.writingTargets.find(x => x.path === this.obj.path)
-
-      if (target === undefined) {
-        throw new Error('Could not compute writingTargetInfo: No target found')
-      }
-
-      let current = this.obj.charCount
-      if (target.mode === 'words') {
-        current = this.obj.wordCount
-      }
-
-      let progress = Math.round(current / target.count * 100)
-      if (progress > 100) {
-        progress = 100 // Never exceed 100 %
-      }
-
-      let label = trans('Characters')
-      if (target.mode === 'words') {
-        label = trans('Words')
-      }
-
-      return `${localiseNumber(current)} / ${localiseNumber(target.count)} ${label} (${progress} %)`
-    },
-    formattedWordCharCountOfFile: function () {
-      if (this.obj.type !== 'file') {
-        return '' // Failsafe because code files don't have a word count.
-      }
-      if (this.shouldCountChars) {
-        return trans('%s characters', localiseNumber(this.obj.charCount))
-      } else {
-        return trans('%s words', localiseNumber(this.obj.wordCount))
-      }
-    },
-    formattedSize: function () {
-      return formatSize(this.obj.size)
-    }
-  },
-  methods: {
-    retrieveTagColour: function (tagName: string) {
-      const colouredTags: any[] = this.$store.state.colouredTags
-      const foundTag = colouredTags.find((tag) => tag.name === tagName)
-      if (foundTag !== undefined) {
-        return foundTag.color
-      } else {
-        return false
-      }
-    },
-    beginDragging: function (event: DragEvent) {
-      if (event.dataTransfer === null) {
-        return
-      }
-
-      event.dataTransfer.dropEffect = 'move'
-      // Tell the file manager component to lock the directory tree
-      // (only necessary for thin mode)
-      this.$emit('begin-dragging')
-      event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-        type: this.obj.type, // Can be file, code, or directory
-        path: this.obj.path,
-        id: this.obj.type === 'file' ? this.obj.id : '' // Convenience
-      }))
-    }
+  if (useTitle.value && props.obj.yamlTitle !== undefined) {
+    return props.obj.yamlTitle
+  } else if (useH1.value && props.obj.firstHeading !== null) {
+    return props.obj.firstHeading
+  } else if (displayMdExtensions.value) {
+    return props.obj.name
+  } else {
+    return props.obj.name.replace(props.obj.ext, '')
   }
 })
+
+const getFilename = computed(() => props.obj.name)
+const isProject = computed(() => props.obj.type === 'directory' && props.obj.settings.project !== null)
+const isDraggable = computed(() => !isDirectory.value)
+const fileMeta = computed(() => configStore.config.fileMeta)
+const isCode = computed(() => props.obj.type === 'code')
+const getDate = computed(() => {
+  if (configStore.config.fileMetaTime === 'modtime') {
+    return formatDate(props.obj.modtime, configStore.config.appLang, true)
+  } else {
+    return formatDate(props.obj.creationtime, configStore.config.appLang, true)
+  }
+})
+
+const countDirs = computed(() => {
+  if (props.obj.type !== 'directory') {
+    return '0 ' + trans('Directories')
+  }
+  return props.obj.children.filter(e => e.type === 'directory').length + ' ' + trans('Directories')
+})
+
+const countFiles = computed(() => {
+  if (props.obj.type !== 'directory') {
+    return '0 ' + trans('Files')
+  }
+  return props.obj.children.filter(e => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('Files')
+})
+
+const countWordsOrCharsOfDirectory = computed(() => {
+  if (props.obj.type !== 'directory') {
+    return ''
+  }
+
+  const wordOrCharCount = props.obj.children
+    .filter((file): file is MDFileDescriptor => file.type === 'file')
+    .map(file => shouldCountChars.value ? file.charCount : file.wordCount)
+    .reduce((prev: number, cur: number) => prev + cur, 0)
+
+  if (shouldCountChars.value) {
+    return trans('%s characters', localiseNumber(wordOrCharCount))
+  } else {
+    return trans('%s words', localiseNumber(wordOrCharCount))
+  }
+})
+
+const hasWritingTarget = computed(() => props.obj.type === 'file' && writingTargets.value.map(x => x.path).includes(props.obj.path))
+
+const writingTargetPath = computed(() => {
+  if (props.obj.type !== 'file') {
+    throw new Error('Could not compute writingTargetPath: Was called on non-file object')
+  }
+
+  const target = writingTargets.value.find(x => x.path === props.obj.path)
+
+  if (target === undefined) {
+    throw new Error('Could not compute writingTargetPath: No target found')
+  }
+
+  let current = props.obj.charCount
+  if (target.mode === 'words') current = props.obj.wordCount
+  let progress = current / target.count
+  let large = (progress > 0.5) ? 1 : 0
+  if (progress > 1) progress = 1 // Never exceed 100 %
+  let x = Math.cos(2 * Math.PI * progress)
+  let y = Math.sin(2 * Math.PI * progress)
+  return `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`
+})
+
+const writingTargetInfo = computed(() => {
+  if (props.obj.type !== 'file') {
+    throw new Error('Could not compute writingTargetInfo: Was called on non-file object')
+  }
+
+  const target = writingTargets.value.find(x => x.path === props.obj.path)
+
+  if (target === undefined) {
+    throw new Error('Could not compute writingTargetInfo: No target found')
+  }
+
+  let current = props.obj.charCount
+  if (target.mode === 'words') {
+    current = props.obj.wordCount
+  }
+
+  let progress = Math.round(current / target.count * 100)
+  if (progress > 100) {
+    progress = 100 // Never exceed 100 %
+  }
+
+  let label = trans('Characters')
+  if (target.mode === 'words') {
+    label = trans('Words')
+  }
+
+  return `${localiseNumber(current)} / ${localiseNumber(target.count)} ${label} (${progress} %)`
+})
+
+const formattedWordCharCountOfFile = computed(() => {
+  if (props.obj.type !== 'file') {
+    return '' // Failsafe because code files don't have a word count.
+  }
+  if (shouldCountChars.value) {
+    return trans('%s characters', localiseNumber(props.obj.charCount))
+  } else {
+    return trans('%s words', localiseNumber(props.obj.wordCount))
+  }
+})
+
+const formattedSize = computed(() => formatSize(props.obj.size))
+
+const tagsWithColor = computed<Array<{ name: string, color: string|undefined }>>(() => {
+  if (props.obj.type !== 'file') {
+    return []
+  }
+
+  const coloredTags = store.state.colouredTags
+
+  return props.obj.tags.map(tag => {
+    return {
+      name: tag,
+      color: coloredTags.find(t => t.name === tag)?.color
+    }
+  })
+})
+
+watch(operationType, () => {
+  if (operationType.value === 'createFile') {
+    emit('create-file')
+    operationType.value = undefined
+  } else if (operationType.value === 'createDir') {
+    emit('create-dir')
+    operationType.value = undefined
+  }
+})
+
+function beginDragging (event: DragEvent): void {
+  if (event.dataTransfer === null) {
+    return
+  }
+
+  event.dataTransfer.dropEffect = 'move'
+  // Tell the file manager component to lock the directory tree
+  // (only necessary for thin mode)
+  emit('begin-dragging')
+  event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
+    type: props.obj.type, // Can be file, code, or directory
+    path: props.obj.path,
+    id: props.obj.type === 'file' ? props.obj.id : '' // Convenience
+  }))
+}
 </script>
 
 <style lang="less">

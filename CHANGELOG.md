@@ -105,6 +105,8 @@ be able to run the app again just fine on ARM computers with Linux.
 - Completely sandbox renderers
 - Switched the popover logic away from deprecated plugin syntax to child
   components with `Teleport` (#4663)
+- No more JavaScript: With this update, the entire code base (sans build
+  scripts) is written in TypeScript.
 
 # 3.0.3
 
