@@ -21,7 +21,6 @@ import { type SyntaxNode } from '@lezer/common'
 import openMarkdownLink from '../util/open-markdown-link'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 
-const clipboard = window.clipboard
 const ipcRenderer = window.ipc
 
 /**
@@ -108,7 +107,7 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
 
   showPopupMenu(coords, isLink ? linkTpl : imgTpl, (clickedID) => {
     if (clickedID === 'menu.copy_link') {
-      clipboard.writeText(url)
+      navigator.clipboard.writeText(url).catch(err => console.error(err))
     } else if (clickedID === 'menu.open_link') {
       openMarkdownLink(url, view)
     } else if (clickedID === 'show-img-in-folder') {
