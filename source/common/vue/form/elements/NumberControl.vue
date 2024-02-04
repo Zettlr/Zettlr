@@ -62,7 +62,7 @@
  * END HEADER
  */
 import { trans } from '@common/i18n-renderer'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, toRef, watch } from 'vue'
 
 const props = defineProps<{
   modelValue: number
@@ -100,6 +100,10 @@ watch(value, (newValue) => {
   if (newValue === '') {
     value.value = props.reset ?? props.min ?? 0
   }
+})
+
+watch(toRef(props, 'modelValue'), () => {
+  value.value = props.modelValue
 })
 
 function sanitizeValue (newValue: number|''): number {
