@@ -98,7 +98,6 @@ import { useStore } from 'vuex'
 import { key } from './store'
 
 const ipcRenderer = window.ipc
-const clipboard = window.clipboard
 
 const props = defineProps<{
   leafId: string
@@ -512,13 +511,13 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
       }
     } else if (clickedID === 'copy-filename') {
       // Copy the filename to the clipboard
-      clipboard.writeText(file.name)
+      navigator.clipboard.writeText(file.name).catch(err => console.error(err))
     } else if (clickedID === 'copy-path') {
       // Copy path to the clipboard
-      clipboard.writeText(file.path)
+      navigator.clipboard.writeText(file.path).catch(err => console.error(err))
     } else if (clickedID === 'copy-id' && file.type === 'file') {
       // Copy the ID to the clipboard
-      clipboard.writeText(file.id)
+      navigator.clipboard.writeText(file.id).catch(err => console.error(err))
     } else if (clickedID === 'pin-tab') {
       // Toggle the pin status
       ipcRenderer.invoke('documents-provider', {
