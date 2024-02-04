@@ -128,7 +128,7 @@
  */
 
 import WindowChrome from '@common/vue/window/WindowChrome.vue'
-import FileManager from './file-manager/file-manager.vue'
+import FileManager from './file-manager/FileManager.vue'
 import MainSidebar from './sidebar/MainSidebar.vue'
 import EditorPane from './EditorPane.vue'
 import EditorBranch from './EditorBranch.vue'

@@ -91,7 +91,7 @@
 
 import { trans } from '@common/i18n-renderer'
 import tippy from 'tippy.js'
-import FileItem from './file-item.vue'
+import FileItem from './FileItem.vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
