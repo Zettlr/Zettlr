@@ -179,7 +179,7 @@
     "node-loader": "^2.0.0",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^4.9.5",
     "vue-loader": "^17.2.2"
