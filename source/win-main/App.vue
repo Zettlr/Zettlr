@@ -162,10 +162,12 @@ import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 import { key as storeKey } from './store'
 import { useConfigStore } from 'source/pinia'
+import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
 const ipcRenderer = window.ipc
 
 const store = useStore(storeKey)
+const configStore = useConfigStore()
 
 const SOUND_EFFECTS = [
   {
@@ -298,10 +300,10 @@ const sidebarsBeforeDistractionfree = ref<{ fileManager: boolean, sidebar: boole
   sidebar: false
 })
 
-const sidebarVisible = computed<boolean>(() => store.state.config['window.sidebarVisible'])
+const sidebarVisible = computed<boolean>(() => configStore.config.window.sidebarVisible)
 const activeFile = computed<OpenDocument|null>(() => store.getters.lastLeafActiveFile())
-const shouldCountChars = computed<boolean>(() => store.state.config['editor.countChars'])
-const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || store.state.config['display.hideToolbarInDistractionFree'] === false)
+const shouldCountChars = computed<boolean>(() => configStore.config.editor.countChars)
+const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || !configStore.config.display.hideToolbarInDistractionFree)
 // We need to display the titlebar in case the user decides to hide the toolbar.
 // The titlebar is much less distracting, but this way the user can at least
 // drag the window around.
@@ -518,8 +520,6 @@ const globalSearchComponent = ref<typeof GlobalSearch|null>(null)
 const paneConfiguration = computed<BranchNodeJSON|LeafNodeJSON>(() => store.state.paneStructure)
 const lastLeafId = computed<string|undefined>(() => store.state.lastLeafId)
 const distractionFree = computed<boolean>(() => store.state.distractionFreeMode !== undefined)
-
-const configStore = useConfigStore()
 
 watch(sidebarVisible, (newValue) => {
   if (newValue) {
@@ -934,8 +934,8 @@ function stopPomodoro (): void {
   }
 }
 
-function getToolbarButtonDisplay (configName: string): boolean {
-  return store.state.config['displayToolbarButtons.' + configName] === true
+function getToolbarButtonDisplay (configName: keyof ConfigOptions['displayToolbarButtons']): boolean {
+  return configStore.config.displayToolbarButtons[configName]
 }
 </script>
 

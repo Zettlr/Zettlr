@@ -47,7 +47,7 @@ import { getBibliographyForDescriptor as getBibliography } from '@common/util/ge
 import { EditorSelection } from '@codemirror/state'
 import { type TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
-import { useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useWorkspacesStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
@@ -96,6 +96,7 @@ const props = defineProps({
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 const store = useStore(storeKey)
+const configStore = useConfigStore()
 
 // UNREFFED STUFF
 let currentEditor: MarkdownEditor|null = null
@@ -189,10 +190,10 @@ onMounted(() => {
 const showSearch = ref(false)
 
 // COMPUTED PROPERTIES
-const useH1 = computed<boolean>(() => store.state.config.fileNameDisplay.includes('heading'))
-const useTitle = computed<boolean>(() => store.state.config.fileNameDisplay.includes('title'))
-const filenameOnly = computed<boolean>(() => store.state.config['zkn.linkFilenameOnly'])
-const fontSize = computed<number>(() => store.state.config['editor.fontSize'])
+const useH1 = computed<boolean>(() => configStore.config.fileNameDisplay.includes('heading'))
+const useTitle = computed<boolean>(() => configStore.config.fileNameDisplay.includes('title'))
+const filenameOnly = computed<boolean>(() => configStore.config.zkn.linkFilenameOnly)
+const fontSize = computed<number>(() => configStore.config.editor.fontSize)
 const globalSearchResults = computed(() => store.state.searchResults)
 const snippets = computed(() => store.state.snippets)
 
@@ -203,48 +204,49 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   // right after setting the new configurations. Plus, the user won't update
   // everything all the time, but rather do one initial configuration, so
   // even if we incur a performance penalty, it won't be noticed that much.
+  const { editor, display, zkn, darkMode } = configStore.config
   return {
-    indentUnit: store.state.config['editor.indentUnit'],
-    indentWithTabs: store.state.config['editor.indentWithTabs'],
-    autoCloseBrackets: store.state.config['editor.autoCloseBrackets'],
+    indentUnit: editor.indentUnit,
+    indentWithTabs: editor.indentWithTabs,
+    autoCloseBrackets: editor.autoCloseBrackets,
     autocorrect: {
-      active: store.state.config['editor.autoCorrect.active'],
-      matchWholeWords: store.state.config['editor.autoCorrect.matchWholeWords'],
+      active: editor.autoCorrect.active,
+      matchWholeWords: editor.autoCorrect.matchWholeWords,
       magicQuotes: {
-        primary: store.state.config['editor.autoCorrect.magicQuotes.primary'],
-        secondary: store.state.config['editor.autoCorrect.magicQuotes.secondary']
+        primary: editor.autoCorrect.magicQuotes.primary,
+        secondary: editor.autoCorrect.magicQuotes.secondary
       },
-      replacements: store.state.config['editor.autoCorrect.replacements']
+      replacements: editor.autoCorrect.replacements
     },
-    autocompleteSuggestEmojis: store.state.config['editor.autocompleteSuggestEmojis'],
-    imagePreviewWidth: store.state.config['display.imageWidth'],
-    imagePreviewHeight: store.state.config['display.imageHeight'],
-    boldFormatting: store.state.config['editor.boldFormatting'],
-    italicFormatting: store.state.config['editor.italicFormatting'],
-    muteLines: store.state.config.muteLines,
-    citeStyle: store.state.config['editor.citeStyle'],
-    readabilityAlgorithm: store.state.config['editor.readabilityAlgorithm'],
-    idRE: store.state.config['zkn.idRE'],
-    idGen: store.state.config['zkn.idGen'],
-    renderCitations: store.state.config['display.renderCitations'],
-    renderIframes: store.state.config['display.renderIframes'],
-    renderImages: store.state.config['display.renderImages'],
-    renderLinks: store.state.config['display.renderLinks'],
-    renderMath: store.state.config['display.renderMath'],
-    renderTasks: store.state.config['display.renderTasks'],
-    renderHeadings: store.state.config['display.renderHTags'],
-    renderTables: store.state.config['editor.enableTableHelper'],
-    renderEmphasis: store.state.config['display.renderEmphasis'],
-    linkPreference: store.state.config['zkn.linkWithFilename'],
-    linkFilenameOnly: store.state.config['zkn.linkFilenameOnly'],
-    inputMode: store.state.config['editor.inputMode'],
-    lintMarkdown: store.state.config['editor.lint.markdown'],
+    autocompleteSuggestEmojis: editor.autocompleteSuggestEmojis,
+    imagePreviewWidth: display.imageWidth,
+    imagePreviewHeight: display.imageHeight,
+    boldFormatting: editor.boldFormatting,
+    italicFormatting: editor.italicFormatting,
+    muteLines: configStore.config.muteLines,
+    citeStyle: editor.citeStyle,
+    readabilityAlgorithm: editor.readabilityAlgorithm,
+    idRE: zkn.idRE,
+    idGen: zkn.idGen,
+    renderCitations: display.renderCitations,
+    renderIframes: display.renderIframes,
+    renderImages: display.renderImages,
+    renderLinks: display.renderLinks,
+    renderMath: display.renderMath,
+    renderTasks: display.renderTasks,
+    renderHeadings: display.renderHTags,
+    renderTables: editor.enableTableHelper,
+    renderEmphasis: display.renderEmphasis,
+    linkPreference: zkn.linkWithFilename,
+    linkFilenameOnly: zkn.linkFilenameOnly,
+    inputMode: editor.inputMode,
+    lintMarkdown: editor.lint.markdown,
     // The editor only needs to know if it should use languageTool
-    lintLanguageTool: store.state.config['editor.lint.languageTool.active'],
+    lintLanguageTool: editor.lint.languageTool.active,
     distractionFree: props.distractionFree.valueOf(),
-    showStatusbar: store.state.config['editor.showStatusbar'],
-    darkMode: store.state.config.darkMode,
-    theme: store.state.config['display.theme']
+    showStatusbar: editor.showStatusbar,
+    darkMode,
+    theme: display.theme
   } satisfies EditorConfigOptions
 })
 
@@ -396,7 +398,7 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
     })
       .catch(err => console.error(err))
 
-    if (store.state.config['zkn.autoSearch'] === true) {
+    if (configStore.config.zkn.autoSearch) {
       emit('globalSearch', linkContents)
     }
   })
