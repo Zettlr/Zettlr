@@ -17,7 +17,6 @@
 import { createStore as baseCreateStore, type StoreOptions, type Store } from 'vuex'
 import { type InjectionKey } from 'vue'
 import { type ColoredTag } from '@providers/tags'
-import type { SearchResultWrapper } from '@dts/common/search'
 
 // Import Actions
 import updateBibliographyAction from './actions/update-bibliography'
@@ -61,10 +60,6 @@ export interface ZettlrState {
    * Snippets (including file contents)
    */
   snippets: Array<{ name: string, content: string }>
-  /**
-   * This variable stores search results from the global search
-   */
-  searchResults: SearchResultWrapper[]
 }
 
 /**
@@ -76,8 +71,6 @@ function getConfig (): StoreOptions<ZettlrState> {
   const config: StoreOptions<ZettlrState> = {
     state () {
       return {
-        // TODO: Move to a documents pinia store
-        searchResults: [],
         // TODO: Move to an autocomplete state (?)
         activeFile: null,
         colouredTags: [],
@@ -104,15 +97,6 @@ function getConfig (): StoreOptions<ZettlrState> {
       },
       updateCSLItems: function (state, newItems: any[]) {
         state.cslItems = newItems
-      },
-      clearSearchResults: function (state) {
-        state.searchResults = []
-      },
-      addSearchResult: function (state, result: SearchResultWrapper) {
-        state.searchResults.push(result)
-        // Also make sure to sort the search results by relevancy (note the
-        // b-a reversal, since we want a descending sort)
-        state.searchResults.sort((a, b) => b.weight - a.weight)
       },
       snippets: function (state, snippets) {
         state.snippets = snippets

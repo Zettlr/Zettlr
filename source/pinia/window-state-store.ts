@@ -20,6 +20,7 @@ import type { ToCEntry } from 'source/common/modules/markdown-editor/plugins/toc
 import type { OpenDocument } from 'source/types/common/documents'
 import { ref, watch } from 'vue'
 import { useDocumentTreeStore } from './document-tree-store'
+import type { SearchResultWrapper } from 'source/types/common/search'
 
 const ipcRenderer = window.ipc
 
@@ -34,6 +35,11 @@ export const useWindowStateStore = defineStore('window-state', () => {
   const lastLeafActiveFile = ref<OpenDocument|undefined>(undefined)
   const activeDocumentInfo = ref<undefined|DocumentInfo>(undefined)
   const tableOfContents = ref<ToCEntry[]|undefined>(undefined)
+
+  /**
+   * This variable stores search results from the global search
+   */
+  const searchResults = ref<SearchResultWrapper[]>([])
 
   ipcRenderer.on('shortcut', (event, command) => {
     if (command === 'toggle-distraction-free') {
@@ -68,6 +74,7 @@ export const useWindowStateStore = defineStore('window-state', () => {
     lastLeafId,
     lastLeafActiveFile,
     activeDocumentInfo,
-    tableOfContents
+    tableOfContents,
+    searchResults
   }
 })
