@@ -20,6 +20,7 @@ import { type AnyMenuItem } from '@dts/renderer/context'
 import { type SyntaxNode } from '@lezer/common'
 import openMarkdownLink from '../util/open-markdown-link'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
+import makeValidUri from 'source/common/util/make-valid-uri'
 
 const ipcRenderer = window.ipc
 
@@ -49,10 +50,11 @@ function getURLForNode (node: SyntaxNode, state: EditorState): string|undefined 
  * @param   {SyntaxNode}                node    The node
  * @param   {{ x: number, y: number }}  coords  The coordinates
  */
-export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: number, y: number }): void {
+export function linkImageMenu (view: EditorView, node: SyntaxNode, basePath: string, coords: { x: number, y: number }): void {
   const url = getURLForNode(node, view.state)
 
   if (url === undefined) {
+    console.error('Could not show Link/Image context menu: No URL found!')
     return
   }
 
@@ -81,7 +83,8 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     }
   ]
 
-  const isFileLink = url.startsWith('safe-file://') || url.startsWith('file://')
+  const validAbsoluteURI = makeValidUri(url, basePath)
+  const isFileLink = validAbsoluteURI.startsWith('safe-file://') || validAbsoluteURI.startsWith('file://')
   const isLink = node.type.name === 'Link'
 
   const imgTpl: AnyMenuItem[] = [
@@ -92,15 +95,15 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
       type: 'normal'
     },
     {
-      label: trans('Open in browser'),
+      label: trans('Open image'),
       id: 'open-img-in-browser',
-      enabled: !isFileLink,
+      enabled: true,
       type: 'normal'
     },
     {
-      label: trans('Show file'),
+      label: process.platform === 'darwin' ? trans('Reveal in Finder') : trans('Open in File Browser'),
       id: 'show-img-in-folder',
-      enabled: !isFileLink,
+      enabled: isFileLink,
       type: 'normal'
     }
   ]
@@ -113,10 +116,10 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     } else if (clickedID === 'show-img-in-folder') {
       ipcRenderer.send('window-controls', {
         command: 'show-item-in-folder',
-        payload: url // Show the item in folder
+        payload: validAbsoluteURI
       })
     } else if (clickedID === 'open-img-in-browser') {
-      // TODO
+      window.location.href = validAbsoluteURI
     }
   })
 }
