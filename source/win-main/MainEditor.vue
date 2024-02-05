@@ -47,8 +47,9 @@ import { getBibliographyForDescriptor as getBibliography } from '@common/util/ge
 import { EditorSelection } from '@codemirror/state'
 import { type TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
-import { useConfigStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
+import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -96,6 +97,7 @@ const props = defineProps({
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 const store = useStore(storeKey)
+const windowStateStore = useWindowStateStore()
 const configStore = useConfigStore()
 
 // UNREFFED STUFF
@@ -142,7 +144,8 @@ ipcRenderer.on('shortcut', (event, command) => {
   }
 })
 
-ipcRenderer.on('documents-update', (e, { event, context }) => {
+ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context: DocumentsUpdateContext }) => {
+  const { event, context } = payload
   if (event === DP_EVENTS.FILE_REMOTELY_CHANGED && context.filePath === props.file.path) {
     // The currently loaded document has been changed remotely. This event indicates
     // that the document provider has already reloaded the document and we only
@@ -259,7 +262,7 @@ watch(toRef(props.editorCommands, 'jumpToLine'), () => {
   }
 })
 watch(toRef(props.editorCommands, 'moveSection'), () => {
-  if (props.activeFile?.path !== props.file.path || store.state.lastLeafId !== props.leafId) {
+  if (props.activeFile?.path !== props.file.path || windowStateStore.lastLeafId !== props.leafId) {
     return
   }
 
@@ -275,7 +278,7 @@ watch(toRef(props.editorCommands, 'readabilityMode'), () => {
 })
 
 watch(toRef(props, 'distractionFree'), () => {
-  if (currentEditor !== null && props.activeFile?.path === props.file.path && store.state.lastLeafId === props.leafId) {
+  if (currentEditor !== null && props.activeFile?.path === props.file.path && windowStateStore.lastLeafId === props.leafId) {
     currentEditor.distractionFree = props.distractionFree
   }
 })
@@ -285,7 +288,7 @@ watch(toRef(props.editorCommands, 'executeCommand'), () => {
     return
   }
 
-  if (store.state.lastLeafId !== props.leafId) {
+  if (windowStateStore.lastLeafId !== props.leafId) {
     // This editor, even though it may be focused, was not the last focused
     // See https://github.com/Zettlr/Zettlr/issues/4361
     return
@@ -300,7 +303,7 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
     return
   }
 
-  if (store.state.lastLeafId !== props.leafId) {
+  if (windowStateStore.lastLeafId !== props.leafId) {
     // This editor, even though it may be focused, was not the last focused
     // See https://github.com/Zettlr/Zettlr/issues/4361
     return
@@ -361,13 +364,13 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
   // Update the document info on corresponding events
   editor.on('change', () => {
     if (currentEditor === editor) {
-      store.commit('updateTableOfContents', currentEditor.tableOfContents)
+      windowStateStore.tableOfContents = currentEditor.tableOfContents
     }
   })
 
   editor.on('cursorActivity', () => {
     if (currentEditor === editor) {
-      store.commit('activeDocumentInfo', currentEditor.documentInfo)
+      windowStateStore.activeDocumentInfo = currentEditor.documentInfo
     }
   })
 
@@ -380,9 +383,9 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
       }
     }).catch(err => console.error(err))
 
-    store.dispatch('lastLeafId', props.leafId).catch(err => console.error(err))
+    windowStateStore.lastLeafId = props.leafId
     if (currentEditor === editor) {
-      store.commit('updateTableOfContents', currentEditor.tableOfContents)
+      windowStateStore.tableOfContents = currentEditor.tableOfContents
     }
   })
 
@@ -426,8 +429,8 @@ async function loadDocument (): Promise<void> {
   wrapper.replaceWith(newEditor.dom)
   currentEditor = newEditor
 
-  store.commit('updateTableOfContents', currentEditor.tableOfContents)
-  store.commit('activeDocumentInfo', currentEditor.documentInfo)
+  windowStateStore.tableOfContents = currentEditor.tableOfContents
+  windowStateStore.activeDocumentInfo = currentEditor.documentInfo
 
   const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' }) as TagRecord[]
   currentEditor.setCompletionDatabase('tags', tags)

@@ -33,15 +33,13 @@
 import { trans } from '@common/i18n-renderer'
 import { ref, computed, watch } from 'vue'
 import sanitizeHtml from 'sanitize-html'
-import { type ToCEntry } from '@common/modules/markdown-editor/plugins/toc-field'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type AnyDescriptor } from '@dts/common/fsal'
 import { md2html } from '@common/modules/markdown-utils'
-import { useStore } from 'vuex'
-import { key } from '../store'
+import { useWindowStateStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
-const store = useStore(key)
+const windowStateStore = useWindowStateStore()
 
 const emit = defineEmits<{
   (e: 'move-section', data: { from: number, to: number }): void
@@ -51,7 +49,7 @@ const emit = defineEmits<{
 const activeFileDescriptor = ref<AnyDescriptor|null>(null)
 const library = ref<string>(CITEPROC_MAIN_DB)
 
-const tableOfContents = computed<ToCEntry[]>(() => store.state.tableOfContents)
+const tableOfContents = computed(() => windowStateStore.tableOfContents)
 /**
  * Returns either the title property for the active file or the generic ToC
  * label -- to be used within the ToC of the sidebar
@@ -76,10 +74,10 @@ const titleOrTocLabel = computed(() => {
   }
 })
 
-const activeFile = computed(() => store.getters.lastLeafActiveFile())
+const activeFile = computed(() => windowStateStore.lastLeafActiveFile)
 
 watch(activeFile, async (newValue) => {
-  if (newValue === null) {
+  if (newValue === undefined) {
     activeFileDescriptor.value = null
   } else {
     const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('application', {
@@ -109,11 +107,11 @@ watch(activeFileDescriptor, (newValue) => {
  * @param   {number}  tocEntryIdx           Index of heading in ToC
  */
 function tocEntryIsActive (tocEntryLine: number, tocEntryIdx: number): boolean {
-  if (tableOfContents.value === null || store.state.activeDocumentInfo === null) {
+  if (tableOfContents.value === undefined || windowStateStore.activeDocumentInfo === undefined) {
     return false
   }
 
-  const cursorLine = store.state.activeDocumentInfo.cursor.line
+  const cursorLine = windowStateStore.activeDocumentInfo.cursor.line
 
   // Determine index of next heading in ToC list
   const nextTocEntryIdx = Math.min(tocEntryIdx + 1, tableOfContents.value.length - 1)
@@ -188,7 +186,7 @@ function drop (event: DragEvent): void {
 }
 
 function findEndOfEntry (originalToLine: number): number|undefined {
-  if (tableOfContents.value === null) {
+  if (tableOfContents.value == null) {
     return
   }
 

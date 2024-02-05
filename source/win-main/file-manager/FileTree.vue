@@ -81,10 +81,8 @@ import TreeItem from './TreeItem.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { ref, computed } from 'vue'
-import { useConfigStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { type MDFileDescriptor, type CodeFileDescriptor, type DirDescriptor, type AnyDescriptor } from '@dts/common/fsal'
-import { useStore } from 'vuex'
-import { key } from '../store'
 
 const ipcRenderer = window.ipc
 
@@ -130,7 +128,7 @@ const activeTreeItem = ref<undefined|[string, string]>(undefined)
 
 const workSpacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
-const store = useStore(key)
+const windowStateStore = useWindowStateStore()
 
 const platform = process.platform
 const fileSectionHeading = trans('Files')
@@ -141,7 +139,7 @@ const noResultsMessage = trans('No results')
 const fileTree = computed<AnyDescriptor[]>(() => workSpacesStore.roots.map(root => root.descriptor))
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
-const lastLeafId = computed(() => store.state.lastLeafId)
+const lastLeafId = computed(() => windowStateStore.lastLeafId)
 
 const getFilteredTree = computed<AnyDescriptor[]>(() => {
   const q = props.filterQuery.trim().toLowerCase()
@@ -178,8 +176,8 @@ const getDirectories = computed<DirDescriptor[]>(() => {
   return getFilteredTree.value.filter(item => item.type === 'directory') as DirDescriptor[]
 })
 
-const uncollapsedDirectories = computed<string[]>(() => {
-  return store.state.uncollapsedDirectories
+const uncollapsedDirectories = computed(() => {
+  return windowStateStore.uncollapsedDirectories
 })
 
 const flattenedSimpleFileTree = computed<Array<[string, string]>>(() => {
@@ -270,13 +268,20 @@ function navigate (event: KeyboardEvent): void {
     case 'ArrowLeft':
       // Close a directory if applicable
       if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
-        store.commit('removeUncollapsedDirectory', flattenedSimpleFileTree.value[currentIndex][0])
+        const path = flattenedSimpleFileTree.value[currentIndex][0]
+        const idx = windowStateStore.uncollapsedDirectories.indexOf(path)
+        if (idx > -1) {
+          windowStateStore.uncollapsedDirectories.splice(idx, 1)
+        }
       }
       return
     case 'ArrowRight':
       // Open a directory if applicable
       if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
-        store.commit('addUncollapsedDirectory', flattenedSimpleFileTree.value[currentIndex][0])
+        const path = flattenedSimpleFileTree.value[currentIndex][0]
+        if (!windowStateStore.uncollapsedDirectories.includes(path)) {
+          windowStateStore.uncollapsedDirectories.push(path)
+        }
       }
       return
   }
@@ -404,4 +409,3 @@ body.linux {
   }
 }
 </style>
-../../pinia

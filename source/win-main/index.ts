@@ -17,13 +17,9 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import createStore, { key as storeKey } from './store'
-import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { useOpenDirectoryStore } from '../pinia'
 
 const ipcRenderer = window.ipc
-
-const searchParams = new URLSearchParams(window.location.search)
-const windowId = searchParams.get('window_id')
 
 // The first thing we have to do is run the window controller
 windowRegister()
@@ -96,18 +92,6 @@ function afterRegister (): void {
 
   // -----------------------------------------------------------------------------
 
-  // Listen for document state updates
-  ipcRenderer.on('documents-update', (evt, payload) => {
-    // A file has been saved or modified
-    if (payload.event === DP_EVENTS.CHANGE_FILE_STATUS && payload.status === 'modification') {
-      app.config.globalProperties.$store.dispatch('updateModifiedFiles')
-        .catch(e => console.error(e))
-    } else {
-      app.config.globalProperties.$store.dispatch('documentTree', payload)
-        .catch(err => console.error(err))
-    }
-  })
-
   // -----------------------------------------------------------------------------
 
   ipcRenderer.on('targets-provider', (event, what: string) => {
@@ -125,10 +109,6 @@ function afterRegister (): void {
   })
 
   // Initial update
-  app.config.globalProperties.$store.dispatch('documentTree', { event: 'init', context: { windowId } })
-    .catch(err => console.error(err))
-  app.config.globalProperties.$store.dispatch('updateModifiedFiles')
-    .catch(e => console.error(e))
   app.config.globalProperties.$store.dispatch('updateSnippets')
     .catch(e => console.error(e))
   app.config.globalProperties.$store.dispatch('updateWritingTargets')
@@ -140,7 +120,6 @@ function afterRegister (): void {
   ipcRenderer.on('shortcut', (event, command) => {
     // Retrieve the correct contexts first
     const dirDescriptor = useOpenDirectoryStore().openDirectory
-    const fileDescriptor: OpenDocument|null = app.config.globalProperties.$store.getters.lastLeafActiveFile()
 
     if (command === 'new-dir') {
       if (dirDescriptor === null) {
@@ -150,16 +129,6 @@ function afterRegister (): void {
       ipcRenderer.invoke('application', {
         command: 'dir-new',
         payload: { path: dirDescriptor.path }
-      })
-        .catch(err => console.error(err))
-    } else if (command === 'delete-file') {
-      if (fileDescriptor === null) {
-        return // Cannot remove file
-      }
-
-      ipcRenderer.invoke('application', {
-        command: 'file-delete',
-        payload: { path: fileDescriptor.path }
       })
         .catch(err => console.error(err))
     } else if (command === 'delete-dir') {
@@ -172,8 +141,6 @@ function afterRegister (): void {
         payload: { path: dirDescriptor.path }
       })
         .catch(err => console.error(err))
-    } else if (command === 'toggle-distraction-free') {
-      app.config.globalProperties.$store.commit('toggleDistractionFree')
     }
   })
 }

@@ -43,7 +43,7 @@
           <template #view1>
             <!-- First side: Editor -->
             <EditorPane
-              v-if="paneConfiguration.type === 'leaf'"
+              v-if="paneConfiguration?.type === 'leaf'"
               v-bind:node="paneConfiguration"
               v-bind:leaf-id="paneConfiguration.id"
               v-bind:editor-commands="editorCommands"
@@ -51,7 +51,7 @@
               v-on:global-search="startGlobalSearch($event)"
             ></EditorPane>
             <EditorBranch
-              v-else
+              v-else-if="paneConfiguration !== undefined"
               v-bind:node="paneConfiguration"
               v-bind:window-id="windowId"
               v-bind:editor-commands="editorCommands"
@@ -94,9 +94,9 @@
     v-on:insert-table="insertTable($event)"
   ></PopoverTable>
   <PopoverDocInfo
-    v-if="showDocInfoPopover && docInfoButton !== null && store.state.activeDocumentInfo !== null"
+    v-if="showDocInfoPopover && docInfoButton !== null && windowStateStore.activeDocumentInfo != null"
     v-bind:target="docInfoButton"
-    v-bind:doc-info="store.state.activeDocumentInfo"
+    v-bind:doc-info="windowStateStore.activeDocumentInfo"
     v-bind:should-count-chars="shouldCountChars"
     v-on:close="showDocInfoPopover = false"
   ></PopoverDocInfo>
@@ -161,13 +161,15 @@ import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-p
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 import { key as storeKey } from './store'
-import { useConfigStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
 const ipcRenderer = window.ipc
 
 const store = useStore(storeKey)
 const configStore = useConfigStore()
+const documentTreeStore = useDocumentTreeStore()
+const windowStateStore = useWindowStateStore()
 
 const SOUND_EFFECTS = [
   {
@@ -301,7 +303,7 @@ const sidebarsBeforeDistractionfree = ref<{ fileManager: boolean, sidebar: boole
 })
 
 const sidebarVisible = computed<boolean>(() => configStore.config.window.sidebarVisible)
-const activeFile = computed<OpenDocument|null>(() => store.getters.lastLeafActiveFile())
+const activeFile = computed(() => windowStateStore.lastLeafActiveFile)
 const shouldCountChars = computed<boolean>(() => configStore.config.editor.countChars)
 const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || !configStore.config.display.hideToolbarInDistractionFree)
 // We need to display the titlebar in case the user decides to hide the toolbar.
@@ -309,8 +311,8 @@ const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || !con
 // drag the window around.
 const shouldShowTitlebar = computed<boolean>(() => !shouldShowToolbar.value)
 const parsedDocumentInfo = computed<string>(() => {
-  const info = store.state.activeDocumentInfo
-  if (info === null) {
+  const info = windowStateStore.activeDocumentInfo
+  if (info == null) {
     return ''
   }
 
@@ -517,14 +519,16 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
 const editorSidebarSplitComponent = ref<typeof SplitView|null>(null)
 const fileManagerSplitComponent = ref<typeof SplitView|null>(null)
 const globalSearchComponent = ref<typeof GlobalSearch|null>(null)
-const paneConfiguration = computed<BranchNodeJSON|LeafNodeJSON>(() => store.state.paneStructure)
-const lastLeafId = computed<string|undefined>(() => store.state.lastLeafId)
-const distractionFree = computed<boolean>(() => store.state.distractionFreeMode !== undefined)
+const paneConfiguration = computed(() => documentTreeStore.paneStructure)
+const lastLeafId = computed(() => windowStateStore.lastLeafId)
+const distractionFree = computed<boolean>(() => windowStateStore.distractionFreeMode !== undefined)
 
 watch(sidebarVisible, (newValue) => {
   if (newValue) {
     if (distractionFree.value) {
-      store.commit('leaveDistractionFree')
+      if (windowStateStore.distractionFreeMode !== undefined) {
+        windowStateStore.distractionFreeMode = undefined
+      }
     }
 
     editorSidebarSplitComponent.value?.unhide()
@@ -536,7 +540,9 @@ watch(sidebarVisible, (newValue) => {
 watch(fileManagerVisible, (newValue) => {
   if (newValue) {
     if (distractionFree.value) {
-      store.commit('leaveDistractionFree')
+      if (windowStateStore.distractionFreeMode !== undefined) {
+        windowStateStore.distractionFreeMode = undefined
+      }
     }
 
     fileManagerSplitComponent.value?.unhide()
@@ -584,11 +590,10 @@ onMounted(() => {
     } else if (shortcut === 'insert-id') {
       editorCommands.value.data = generateId(configStore.config.zkn.idGen)
       editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
-    } else if (shortcut === 'copy-current-id') {
-      const activeFile = store.getters.lastLeafActiveFile()
+    } else if (shortcut === 'copy-current-id' && windowStateStore.lastLeafActiveFile !== undefined) {
       ipcRenderer.invoke('application', {
         command: 'get-descriptor',
-        payload: activeFile.path
+        payload: windowStateStore.lastLeafActiveFile.path
       })
         .then(descriptor => {
           if (descriptor !== undefined && descriptor.id !== undefined && descriptor.id !== '') {
@@ -620,7 +625,7 @@ onMounted(() => {
     } else if (shortcut === 'export') {
       showExportPopover.value = true
     } else if (shortcut === 'print') {
-      if (activeFile.value !== null) {
+      if (activeFile.value !== undefined) {
         ipcRenderer.invoke('application', { command: 'print', payload: activeFile.value.path })
           .catch(err => console.error(err))
       }
@@ -685,8 +690,8 @@ function genericJtl (lineNumber: number): void {
   // This function is called from the sidebar where we already know the file
   // is open (because its editor component has provided the table of
   // contents in the first place).
-  const doc = store.getters.lastLeafActiveFile() as OpenDocument|null
-  if (doc !== null) {
+  const doc = windowStateStore.lastLeafActiveFile
+  if (doc !== undefined) {
     editorCommands.value.data = { filePath: doc.path, lineNumber }
     editorCommands.value.jumpToLine = !editorCommands.value.jumpToLine
   }
@@ -697,7 +702,7 @@ function jtl (filePath: string, lineNumber: number, newTab: boolean): void {
   // active file.
 
   // Simplest case: The file is already active somewhere
-  const activeFileLeaf: LeafNodeJSON|undefined = store.state.paneData
+  const activeFileLeaf = documentTreeStore.paneData
     .find((pane: LeafNodeJSON) => pane.activeFile?.path === filePath)
   if (activeFileLeaf !== undefined) {
     // There is at least one leaf with the given file being active, so we
@@ -710,7 +715,7 @@ function jtl (filePath: string, lineNumber: number, newTab: boolean): void {
   const WAIT_TIME = 100 // How long to wait before re-executing the jtl()
 
   // Next, let's see if the file is at least open somewhere
-  const containingLeaf: LeafNodeJSON|undefined = store.state.paneData
+  const containingLeaf = documentTreeStore.paneData
     .find((pane: LeafNodeJSON) => {
       return pane.openFiles.find(doc => doc.path === filePath) !== undefined
     })

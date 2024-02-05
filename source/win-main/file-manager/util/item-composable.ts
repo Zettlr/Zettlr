@@ -16,12 +16,9 @@
 
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
-import { useOpenDirectoryStore } from 'source/pinia'
+import { useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
 import type { MaybeRootDescriptor } from 'source/types/common/fsal'
-import { key } from 'source/win-main/store'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
-import { useStore } from 'vuex'
-import type { OpenDocument } from 'source/types/common/documents'
 
 const ipcRenderer = window.ipc
 
@@ -37,10 +34,10 @@ export function useItemComposable (
   const operationType = ref<'createFile'|'createDir'|undefined>(undefined)
 
   const openDirectoryStore = useOpenDirectoryStore()
-  const store = useStore(key)
+  const windowStateStore = useWindowStateStore()
 
   const isDirectory = computed(() => obj.value.type === 'directory')
-  const selectedFile = computed<OpenDocument|null>(() => store.getters.lastLeafActiveFile())
+  const selectedFile = computed(() => windowStateStore.lastLeafActiveFile)
   const selectedDir = computed(() => openDirectoryStore.openDirectory)
 
   watch(nameEditing, (newVal) => {
@@ -95,7 +92,7 @@ export function useItemComposable (
         payload: {
           path: obj.value.path,
           windowId,
-          leafId: store.state.lastLeafId,
+          leafId: windowStateStore.lastLeafId,
           newTab: middleClick || (alt && type === 'file') // Force a new tab in this case.
         }
       })
@@ -184,7 +181,7 @@ export function useItemComposable (
             payload: {
               path: obj.value.path,
               windowId,
-              leafId: store.state.lastLeafId
+              leafId: windowStateStore.lastLeafId
             }
           })
             .catch(err => console.error(err))
