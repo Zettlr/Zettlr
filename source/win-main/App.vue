@@ -150,23 +150,20 @@ import {
   watch,
   onMounted
 } from 'vue'
-import { useStore } from 'vuex'
 
 // Import the sound effects for the pomodoro timer
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
-import { type OpenDocument, type BranchNodeJSON, type LeafNodeJSON } from '@dts/common/documents'
+import { type LeafNodeJSON } from '@dts/common/documents'
 import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-pipe'
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
-import { key as storeKey } from './store'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
 const ipcRenderer = window.ipc
 
-const store = useStore(storeKey)
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 const windowStateStore = useWindowStateStore()

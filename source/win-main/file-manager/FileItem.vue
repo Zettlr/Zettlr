@@ -136,7 +136,7 @@
     v-bind:creationtime="obj.creationtime"
     v-bind:modtime="obj.modtime"
     v-bind:tags="obj.type === 'file' ? obj.tags : []"
-    v-bind:coloured-tags="$store.state.colouredTags"
+    v-bind:colored-tags="windowStateStore.coloredTags"
     v-bind:target-value="0"
     v-bind:target-mode="'words'"
     v-bind:file-size="obj.size"
@@ -171,9 +171,7 @@ import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import { ref, computed, toRef, watch } from 'vue'
 import { type AnyDescriptor, type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
-import { useConfigStore } from 'source/pinia'
-import { useStore } from 'vuex'
-import { key } from '../store'
+import { useConfigStore, useWindowStateStore } from 'source/pinia'
 import { useItemComposable } from './util/item-composable'
 
 const props = defineProps<{
@@ -190,12 +188,12 @@ const emit = defineEmits<{
 }>()
 
 const configStore = useConfigStore()
-const store = useStore(key)
+const windowStateStore = useWindowStateStore()
 
 const shouldCountChars = computed(() => configStore.config.editor.countChars)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
-const writingTargets = computed(() => store.state.writingTargets)
+const writingTargets = computed(() => windowStateStore.writingTargets)
 const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
 
 const displayText = ref<HTMLDivElement|null>(null)
@@ -344,12 +342,10 @@ const tagsWithColor = computed<Array<{ name: string, color: string|undefined }>>
     return []
   }
 
-  const coloredTags = store.state.colouredTags
-
   return props.obj.tags.map(tag => {
     return {
       name: tag,
-      color: coloredTags.find(t => t.name === tag)?.color
+      color: windowStateStore.coloredTags.find(t => t.name === tag)?.color
     }
   })
 })

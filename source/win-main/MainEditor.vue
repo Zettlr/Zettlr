@@ -35,8 +35,6 @@ import MarkdownEditor from '@common/modules/markdown-editor'
 import objectToArray from '@common/util/object-to-array'
 
 import { ref, computed, onMounted, watch, toRef } from 'vue'
-import { useStore } from 'vuex'
-import { key as storeKey } from './store'
 import { type EditorCommands } from './App.vue'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
@@ -96,7 +94,6 @@ const props = defineProps({
 
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
-const store = useStore(storeKey)
 const windowStateStore = useWindowStateStore()
 const configStore = useConfigStore()
 
@@ -198,7 +195,7 @@ const useTitle = computed<boolean>(() => configStore.config.fileNameDisplay.incl
 const filenameOnly = computed<boolean>(() => configStore.config.zkn.linkFilenameOnly)
 const fontSize = computed<number>(() => configStore.config.editor.fontSize)
 const globalSearchResults = computed(() => windowStateStore.searchResults)
-const snippets = computed(() => store.state.snippets)
+const snippets = computed(() => windowStateStore.snippets)
 
 const activeFileDescriptor = ref<undefined|MDFileDescriptor|CodeFileDescriptor>(undefined)
 

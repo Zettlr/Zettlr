@@ -93,8 +93,6 @@ import { trans } from '@common/i18n-renderer'
 import { nextTick, ref, computed, watch, onMounted } from 'vue'
 import { useConfigStore, useOpenDirectoryStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import type { AnyDescriptor, DirDescriptor } from 'source/types/common/fsal'
-import { key } from '../store'
-import { useStore } from 'vuex'
 
 const ipcRenderer = window.ipc
 
@@ -117,7 +115,6 @@ const openDirectoryStore = useOpenDirectoryStore()
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
-const store = useStore(key)
 
 const fileTree = computed<AnyDescriptor[]>(() => workspacesStore.roots.map(root => root.descriptor))
 const selectedDirectory = computed<DirDescriptor|null>(() => openDirectoryStore.openDirectory)
