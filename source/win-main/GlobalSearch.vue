@@ -145,9 +145,7 @@ import { type SearchResult, type SearchResultWrapper } from '@dts/common/search'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { type AnyMenuItem } from '@dts/renderer/context'
 import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
-import { useConfigStore, useOpenDirectoryStore, useWorkspacesStore } from 'source/pinia'
-import { useStore } from 'vuex'
-import { key } from './store'
+import { useConfigStore, useOpenDirectoryStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
@@ -211,7 +209,7 @@ const activeLineIdx = ref<undefined|number>(undefined)
 const workspacesStore = useWorkspacesStore()
 const openDirectoryStory = useOpenDirectoryStore()
 const configStore = useConfigStore()
-const store = useStore(key)
+const windowStateStore = useWindowStateStore()
 
 const recentGlobalSearches = computed(() => configStore.config.window.recentGlobalSearches)
 const selectedDir = computed(() => openDirectoryStory.openDirectory)
@@ -221,7 +219,12 @@ const useH1 = computed(() => configStore.config.fileNameDisplay.includes('headin
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const queryInputElement = ref<HTMLInputElement|null>(null)
 
-const searchResults = computed<SearchResultWrapper[]>(() => store.state.searchResults)
+const searchResults = computed(() => {
+  // NOTE: Vue's reactivity can be tricky, and one thing is to sort arrays.
+  // This is why we first clone them, sort the cloned array and return that one.
+  const results = [...windowStateStore.searchResults]
+  return results.sort((a, b) => b.weight - a.weight)
+})
 
 const resultsMessage = computed<string>(() => trans('%s matches', searchResults.value.length))
 
@@ -406,7 +409,7 @@ async function singleSearchRun (): Promise<void> {
           return accumulator + currentValue.weight
         }, 0) // This is the initialValue, b/c we're summing up props
       }
-      store.commit('addSearchResult', newResult)
+      windowStateStore.searchResults.push(newResult)
       if (newResult.weight > maxWeight.value) {
         maxWeight.value = newResult.weight
       }
@@ -421,7 +424,7 @@ function finaliseSearch (): void {
 }
 
 function emptySearchResults (): void {
-  store.commit('clearSearchResults')
+  windowStateStore.searchResults = []
 
   // Clear indices of active search result
   activeFileIdx.value = -1
