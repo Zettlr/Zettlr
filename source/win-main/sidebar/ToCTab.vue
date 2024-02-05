@@ -12,7 +12,7 @@
       v-bind:style="{
         'margin-left': `${entry.level * 10}px`
       }"
-      v-on:click="$emit('jump-to-line', entry.line)"
+      v-on:click="emit('jump-to-line', entry.line)"
       v-on:dragstart="startDragging"
       v-on:dragover="dragOver"
       v-on:drop="drop"
@@ -29,180 +29,181 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
+import { ref, computed, watch } from 'vue'
 import sanitizeHtml from 'sanitize-html'
 import { type ToCEntry } from '@common/modules/markdown-editor/plugins/toc-field'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { type OpenDocument } from '@dts/common/documents'
-import { type AnyDescriptor, type MDFileDescriptor, type CodeFileDescriptor } from '@dts/common/fsal'
+import { type AnyDescriptor } from '@dts/common/fsal'
 import { md2html } from '@common/modules/markdown-utils'
+import { useStore } from 'vuex'
+import { key } from '../store'
 
 const ipcRenderer = window.ipc
+const store = useStore(key)
 
-export default defineComponent({
-  name: 'ToCTab',
-  emits: [ 'move-section', 'jump-to-line' ],
-  data () {
-    return {
-      activeFileDescriptor: null as AnyDescriptor|null,
-      library: CITEPROC_MAIN_DB
-    }
-  },
-  computed: {
-    tableOfContents: function (): ToCEntry[]|null {
-      return this.$store.state.tableOfContents
-    },
-    /**
-     * Returns either the title property for the active file or the generic ToC
-     * label -- to be used within the ToC of the sidebar
-     *
-     * @return  {string}  The title for the ToC sidebar
-     */
-    titleOrTocLabel: function (): string {
-      if (
-        this.activeFileDescriptor === null ||
-        this.activeFileDescriptor.type !== 'file' ||
-        this.activeFileDescriptor.frontmatter == null
-      ) {
-        return this.tocLabel
-      }
+const emit = defineEmits<{
+  (e: 'move-section', data: { from: number, to: number }): void
+  (e: 'jump-to-line', line: number): void
+}>()
 
-      const frontmatter = this.activeFileDescriptor.frontmatter
+const activeFileDescriptor = ref<AnyDescriptor|null>(null)
+const library = ref<string>(CITEPROC_MAIN_DB)
 
-      if ('title' in frontmatter && frontmatter.title.length > 0) {
-        return frontmatter.title
-      } else {
-        return this.tocLabel
-      }
-    },
-    activeFile: function (): OpenDocument|null {
-      return this.$store.getters.lastLeafActiveFile()
-    },
-    tocLabel: function (): string {
-      return trans('Table of Contents')
-    }
-  },
-  watch: {
-    async activeFile (newValue: OpenDocument|null) {
-      if (newValue === null) {
-        this.activeFileDescriptor = null
-      } else {
-        const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('application', {
-          command: 'get-descriptor',
-          payload: newValue.path
-        })
+const tableOfContents = computed<ToCEntry[]>(() => store.state.tableOfContents)
+/**
+ * Returns either the title property for the active file or the generic ToC
+ * label -- to be used within the ToC of the sidebar
+ *
+ * @return  {string}  The title for the ToC sidebar
+ */
+const titleOrTocLabel = computed(() => {
+  if (
+    activeFileDescriptor.value === null ||
+    activeFileDescriptor.value.type !== 'file' ||
+    activeFileDescriptor.value.frontmatter == null
+  ) {
+    return trans('Table of Contents')
+  }
 
-        this.activeFileDescriptor = descriptor ?? null
-      }
-    },
-    activeFileDescriptor (newValue: MDFileDescriptor|CodeFileDescriptor|null) {
-      if (newValue === null || newValue.type === 'code') {
-        this.library = CITEPROC_MAIN_DB
-      } else {
-        const fm = newValue.frontmatter
-        if (fm != null && 'bibliography' in fm && typeof fm.bibliography === 'string' && fm.bibliography.length > 0) {
-          this.library = fm.bibliography
-        }
-      }
-    }
-  },
-  methods: {
-    /**
-     * Whether the cursor is within the corresponding document section
-     *
-     * @param   {number}  tocEntryLine          Line number of section heading
-     * @param   {number}  tocEntryIdx           Index of heading in ToC
-     */
-    tocEntryIsActive: function (tocEntryLine: number, tocEntryIdx: number) {
-      if (this.tableOfContents === null) {
-        return false
-      }
+  const frontmatter = activeFileDescriptor.value.frontmatter
 
-      const cursorLine = this.$store.state.activeDocumentInfo.cursor.line
+  if ('title' in frontmatter && frontmatter.title.length > 0) {
+    return frontmatter.title
+  } else {
+    return trans('Table of Contents')
+  }
+})
 
-      // Determine index of next heading in ToC list
-      const nextTocEntryIdx = Math.min(tocEntryIdx + 1, this.tableOfContents.length - 1)
+const activeFile = computed(() => store.getters.lastLeafActiveFile())
 
-      // Now, determine the next heading's line number
-      let nextTocEntryLine = Infinity
-      if (tocEntryIdx !== nextTocEntryIdx) {
-        nextTocEntryLine = this.tableOfContents[nextTocEntryIdx].line
-      }
+watch(activeFile, async (newValue) => {
+  if (newValue === null) {
+    activeFileDescriptor.value = null
+  } else {
+    const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('application', {
+      command: 'get-descriptor',
+      payload: newValue.path
+    })
 
-      // True, when cursor lies between current and next heading
-      return (cursorLine >= tocEntryLine && cursorLine < nextTocEntryLine)
-    },
-    /**
-     * Converts a Table of Contents-entry to (safe) HTML
-     *
-     * @param   {string}  entryText  The Markdown ToC entry
-     *
-     * @return  {string}             The safe HTML string
-     */
-    toc2html: function (entryText: string): string {
-      const html = md2html(entryText, window.getCitationCallback(this.library))
-      return sanitizeHtml(html, {
-        // Headings may be emphasised and contain code
-        allowedTags: [ 'em', 'kbd', 'code' ]
-      })
-    },
-    startDragging: function (event: DragEvent) {
-      if (event.currentTarget === null) {
-        return
-      }
-      const fromLine = (event.currentTarget as HTMLElement).dataset.line
-      event.dataTransfer?.setData('x-zettlr/toc-drag', fromLine as string)
-    },
-    dragOver: function (event: DragEvent) {
-      const elem = document.querySelectorAll('.toc-entry-container')
-      elem.forEach(e => e.classList.remove('toc-drop-effect'))
-      const container = event.currentTarget as HTMLElement
-      container.classList.add('toc-drop-effect')
-    },
-    drop: function (event: DragEvent) {
-      if (event.currentTarget === null) {
-        return
-      }
+    activeFileDescriptor.value = descriptor ?? null
+  }
+})
 
-      const container = event.currentTarget as HTMLElement
-      container.classList.remove('toc-drop-effect')
-
-      const fromLine = parseInt(event.dataTransfer?.getData('x-zettlr/toc-drag') as string, 10)
-      const toLine = parseInt(container.dataset.line as string, 10)
-      if (fromLine === toLine) {
-        return
-      }
-
-      const actualToLine = this.findEndOfEntry(toLine)
-      if (actualToLine === undefined) {
-        console.warn('Could not move section: Could not find correct target line')
-        return
-      }
-
-      this.$emit('move-section', { from: fromLine, to: actualToLine })
-    },
-    findEndOfEntry: function (originalToLine: number) {
-      if (this.tableOfContents === null) {
-        return
-      }
-
-      const idx = this.tableOfContents.findIndex(elem => elem.line === originalToLine)
-
-      if (idx < 0) {
-        return
-      }
-
-      if (idx === this.tableOfContents.length - 1) {
-        return -1
-      } else {
-        return this.tableOfContents[idx + 1].line - 1
-      }
+watch(activeFileDescriptor, (newValue) => {
+  if (newValue === null || newValue.type !== 'file') {
+    library.value = CITEPROC_MAIN_DB
+  } else {
+    const fm = newValue.frontmatter
+    if (fm != null && 'bibliography' in fm && typeof fm.bibliography === 'string' && fm.bibliography.length > 0) {
+      library.value = fm.bibliography
     }
   }
 })
 
+/**
+ * Whether the cursor is within the corresponding document section
+ *
+ * @param   {number}  tocEntryLine          Line number of section heading
+ * @param   {number}  tocEntryIdx           Index of heading in ToC
+ */
+function tocEntryIsActive (tocEntryLine: number, tocEntryIdx: number): boolean {
+  if (tableOfContents.value === null || store.state.activeDocumentInfo === null) {
+    return false
+  }
+
+  const cursorLine = store.state.activeDocumentInfo.cursor.line
+
+  // Determine index of next heading in ToC list
+  const nextTocEntryIdx = Math.min(tocEntryIdx + 1, tableOfContents.value.length - 1)
+
+  // Now, determine the next heading's line number
+  let nextTocEntryLine = Infinity
+  if (tocEntryIdx !== nextTocEntryIdx) {
+    nextTocEntryLine = tableOfContents.value[nextTocEntryIdx].line
+  }
+
+  // True, when cursor lies between current and next heading
+  return (cursorLine >= tocEntryLine && cursorLine < nextTocEntryLine)
+}
+
+/**
+ * Converts a Table of Contents-entry to (safe) HTML
+ *
+ * @param   {string}  entryText  The Markdown ToC entry
+ *
+ * @return  {string}             The safe HTML string
+ */
+function toc2html (entryText: string): string {
+  const html = md2html(entryText, window.getCitationCallback(library.value))
+  return sanitizeHtml(html, {
+    // Headings may be emphasised and contain code
+    allowedTags: [ 'em', 'kbd', 'code' ]
+  })
+}
+
+function startDragging (event: DragEvent): void {
+  if (event.currentTarget === null) {
+    return
+  }
+  const fromLine = (event.currentTarget as HTMLElement).dataset.line
+  if (fromLine !== undefined) {
+    event.dataTransfer?.setData('x-zettlr/toc-drag', fromLine)
+  }
+}
+
+function dragOver (event: DragEvent): void {
+  const elem = document.querySelectorAll('.toc-entry-container')
+  elem.forEach(e => e.classList.remove('toc-drop-effect'))
+  const container = event.currentTarget as HTMLElement
+  container.classList.add('toc-drop-effect')
+}
+
+function drop (event: DragEvent): void {
+  if (event.currentTarget === null || event.dataTransfer === null) {
+    return
+  }
+
+  const container = event.currentTarget as HTMLElement
+  container.classList.remove('toc-drop-effect')
+
+  if (container.dataset.line === undefined) {
+    return
+  }
+
+  const fromLine = parseInt(event.dataTransfer.getData('x-zettlr/toc-drag'), 10)
+  const toLine = parseInt(container.dataset.line, 10)
+  if (fromLine === toLine) {
+    return
+  }
+
+  const actualToLine = findEndOfEntry(toLine)
+  if (actualToLine === undefined) {
+    console.warn('Could not move section: Could not find correct target line')
+    return
+  }
+
+  emit('move-section', { from: fromLine, to: actualToLine })
+}
+
+function findEndOfEntry (originalToLine: number): number|undefined {
+  if (tableOfContents.value === null) {
+    return
+  }
+
+  const idx = tableOfContents.value.findIndex(elem => elem.line === originalToLine)
+
+  if (idx < 0) {
+    return
+  }
+
+  if (idx === tableOfContents.value.length - 1) {
+    return -1
+  } else {
+    return tableOfContents.value[idx + 1].line - 1
+  }
+}
 </script>
 
 <style lang="less">
