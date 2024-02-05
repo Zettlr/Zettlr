@@ -18,17 +18,11 @@ import { createStore as baseCreateStore, type StoreOptions, type Store } from 'v
 import { type InjectionKey } from 'vue'
 import { type ColoredTag } from '@providers/tags'
 import type { SearchResultWrapper } from '@dts/common/search'
-import type { BranchNodeJSON, LeafNodeJSON, OpenDocument } from '@dts/common/documents'
-
-// Import Mutations
-import documentTreeMutation from './mutations/document-tree'
 
 // Import Actions
 import updateBibliographyAction from './actions/update-bibliography'
-import documentTreeUpdateAction from './actions/document-tree-update'
 import { type WritingTarget } from '@providers/targets'
 import updateSnippetsAction from './actions/update-snippets'
-import { type DocumentInfo } from '@common/modules/markdown-editor'
 
 const ipcRenderer = window.ipc
 
@@ -42,19 +36,6 @@ export const key: InjectionKey<Store<ZettlrState>> = Symbol('store key')
  * This is the main window's store state, including all properties we have
  */
 export interface ZettlrState {
-  /**
-   * Contains a full document tree managed by this window
-   */
-  paneStructure: BranchNodeJSON|LeafNodeJSON
-  /**
-   * Contains just the data points of the document tree
-   */
-  paneData: LeafNodeJSON[]
-  /**
-   * This array contains the paths of directories which are open (necessary to
-   * keep the state during filtering, etc.)
-   */
-  uncollapsedDirectories: string[]
   activeFile: null
   /**
    * Contains coloured tags that can be managed in the tag manager
@@ -64,18 +45,6 @@ export interface ZettlrState {
    * Holds all current writing targets
    */
   writingTargets: WritingTarget[]
-  /**
-   * Info about the currently active document
-   */
-  activeDocumentInfo: DocumentInfo|null
-  /**
-   * Modified files are stored here (only the paths, though)
-   */
-  modifiedDocuments: string[]
-  /**
-   * Contains the current table of contents of the active document
-   */
-  tableOfContents: any|null
   /**
    * Citation keys to be found within the current document
    */
@@ -96,16 +65,6 @@ export interface ZettlrState {
    * This variable stores search results from the global search
    */
   searchResults: SearchResultWrapper[]
-  /**
-   * This describes the editor that was most recently focused. Can be used to,
-   * e.g., retrieve that state's activeFile.
-   */
-  lastLeafId: string|undefined
-  /**
-   * If any leaf is currently in distractionFree, this variable will hold its
-   * leafId. Otherwise, it's undefined.
-   */
-  distractionFreeMode: string|undefined
 }
 
 /**
@@ -117,79 +76,19 @@ function getConfig (): StoreOptions<ZettlrState> {
   const config: StoreOptions<ZettlrState> = {
     state () {
       return {
-        paneStructure: { type: 'leaf', id: '', openFiles: [], activeFile: null },
-        paneData: [],
+        // TODO: Move to a documents pinia store
+        searchResults: [],
+        // TODO: Move to an autocomplete state (?)
         activeFile: null,
-        uncollapsedDirectories: [],
         colouredTags: [],
         writingTargets: [],
-        activeDocumentInfo: null,
-        modifiedDocuments: [],
-        tableOfContents: null,
         citationKeys: [],
         bibliography: undefined,
-        lastLeafId: undefined,
-        distractionFreeMode: undefined,
         snippets: [],
-        cslItems: [],
-        searchResults: []
-      }
-    },
-    getters: {
-      lastLeafActiveFile: state => (): OpenDocument|null => {
-        const leaf = state.paneData.find(leaf => leaf.id === state.lastLeafId)
-        if (leaf !== undefined) {
-          return leaf.activeFile
-        } else {
-          return null
-        }
+        cslItems: []
       }
     },
     mutations: {
-      updateTableOfContents: function (state, toc) {
-        state.tableOfContents = toc
-      },
-      activeDocumentInfo: function (state, info) {
-        state.activeDocumentInfo = info
-      },
-      lastLeafId: function (state, leafId: string|undefined) {
-        state.lastLeafId = leafId
-      },
-      toggleDistractionFree: function (state) {
-        if (state.distractionFreeMode === undefined && state.lastLeafId !== undefined) {
-          state.distractionFreeMode = state.lastLeafId
-        } else if (state.distractionFreeMode !== undefined && state.lastLeafId === state.distractionFreeMode) {
-          state.distractionFreeMode = undefined
-        } else if (state.distractionFreeMode !== undefined && state.lastLeafId !== state.distractionFreeMode) {
-          state.distractionFreeMode = state.lastLeafId
-        }
-      },
-      leaveDistractionFree: function (state) {
-        if (state.distractionFreeMode !== undefined) {
-          state.distractionFreeMode = undefined
-        }
-      },
-      addUncollapsedDirectory: function (state, dirPath) {
-        if (!state.uncollapsedDirectories.includes(dirPath)) {
-          // In order for the reactivity to pick up on a changed state, we have
-          // to literally deproxy and then re-assign. Proxies still have some
-          // way to go.
-          const oldUncollapsed = state.uncollapsedDirectories.map(e => e)
-          oldUncollapsed.push(dirPath)
-          state.uncollapsedDirectories = oldUncollapsed
-        }
-      },
-      removeUncollapsedDirectory: function (state, dirPath) {
-        const idx = state.uncollapsedDirectories.indexOf(dirPath)
-        if (idx > -1) {
-          const oldUncollapsed = state.uncollapsedDirectories.map(e => e)
-          oldUncollapsed.splice(idx, 1)
-          state.uncollapsedDirectories = oldUncollapsed
-        }
-      },
-      updateModifiedFiles: function (state, modifiedDocuments: string[]) {
-        state.modifiedDocuments = modifiedDocuments
-      },
       colouredTags: function (state, tags) {
         state.colouredTags = tags
       },
@@ -217,23 +116,11 @@ function getConfig (): StoreOptions<ZettlrState> {
       },
       snippets: function (state, snippets) {
         state.snippets = snippets
-      },
-      documentTree: documentTreeMutation
+      }
     },
     actions: {
-      lastLeafId: async function (ctx, lastLeafId: string) {
-        ctx.commit('lastLeafId', lastLeafId)
-      },
       updateBibliography: updateBibliographyAction,
-      documentTree: documentTreeUpdateAction,
       updateSnippets: updateSnippetsAction,
-      updateModifiedFiles: async (ctx) => {
-        const modifiedFiles: string[] = await ipcRenderer.invoke('documents-provider', {
-          command: 'get-file-modification-status'
-        })
-
-        ctx.commit('updateModifiedFiles', modifiedFiles)
-      },
       updateWritingTargets: async (ctx) => {
         const targets: WritingTarget[] = await ipcRenderer.invoke('targets-provider', {
           command: 'get-targets'

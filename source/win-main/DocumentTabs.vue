@@ -91,11 +91,9 @@
 import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, computed, ref, watch, onMounted, onBeforeUnmount, onUpdated } from 'vue'
-import { useConfigStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
-import { useStore } from 'vuex'
-import { key } from './store'
 
 const ipcRenderer = window.ipc
 
@@ -117,16 +115,17 @@ const documentTabDragOverOrigin = ref<boolean>(false)
 
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
-const store = useStore(key)
+const windowStateStore = useWindowStateStore()
+const documentTreeStore = useDocumentTreeStore()
 
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
 const container = ref<HTMLDivElement|null>(null)
-const node = computed<LeafNodeJSON|undefined>(() => store.state.paneData.find((leaf: LeafNodeJSON) => leaf.id === props.leafId))
+const node = computed<LeafNodeJSON|undefined>(() => documentTreeStore.paneData.find((leaf: LeafNodeJSON) => leaf.id === props.leafId))
 const openFiles = computed(() => node.value?.openFiles ?? [])
 const activeFile = computed(() => node.value?.activeFile ?? null)
-const modifiedPaths = computed(() => store.state.modifiedDocuments)
+const modifiedPaths = computed(() => documentTreeStore.modifiedDocuments)
 
 watch(activeFile, () => {
   // Make sure the activeFile is in view
@@ -154,7 +153,7 @@ onMounted(() => {
         selectFile(openFiles.value[0])
       }
     } else if (shortcut === 'close-window') {
-      if (store.state.lastLeafId !== props.leafId) {
+      if (windowStateStore.lastLeafId !== props.leafId) {
         return // Otherwise all document tabs would close one file at the same
         // time
       }

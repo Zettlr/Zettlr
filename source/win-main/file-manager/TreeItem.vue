@@ -173,7 +173,7 @@ import PopoverFileProps from './util/PopoverFileProps.vue'
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
-import { useConfigStore, useOpenDirectoryStore } from 'source/pinia'
+import { useConfigStore, useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useStore } from 'vuex'
 import { key } from '../store'
@@ -200,6 +200,7 @@ const newObjectInput = ref<HTMLInputElement|null>(null)
 
 const openDirectoryStore = useOpenDirectoryStore()
 const configStore = useConfigStore()
+const windowStateStore = useWindowStateStore()
 const store = useStore(key)
 
 const {
@@ -221,7 +222,7 @@ const shouldBeCollapsed = computed<boolean>(() => {
     return false
   } else {
     // Else, just uncollapse if the user wishes so
-    return !store.state.uncollapsedDirectories.includes(props.obj.path)
+    return !windowStateStore.uncollapsedDirectories.includes(props.obj.path)
   }
 })
 
@@ -363,9 +364,14 @@ const isSelected = computed(() => {
 watch(selectedFile, uncollapseIfApplicable)
 watch(collapsed, () => {
   if (collapsed.value) {
-    store.commit('removeUncollapsedDirectory', props.obj.path)
+    const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
+    if (idx > -1) {
+      windowStateStore.uncollapsedDirectories.splice(idx, 1)
+    }
   } else {
-    store.commit('addUncollapsedDirectory', props.obj.path)
+    if (!windowStateStore.uncollapsedDirectories.includes(props.obj.path)) {
+      windowStateStore.uncollapsedDirectories.push(props.obj.path)
+    }
   }
 })
 
