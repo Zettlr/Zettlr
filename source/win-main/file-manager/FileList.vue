@@ -7,8 +7,7 @@
     aria-label="File List"
     v-bind:class="{ hidden: !isVisible }"
     v-bind:aria-hidden="!isVisible"
-    v-on:focus="onFocusHandler"
-    v-on:blur="activeDescriptor = null"
+    v-on:blur="selectedFile = undefined"
   >
     <template v-if="getDirectoryContents.length > 1">
       <div v-if="getFilteredDirectoryContents.length === 0" class="empty-file-list">
@@ -99,10 +98,8 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
-import { useConfigStore, useOpenDirectoryStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
 import { type MaybeRootDescriptor, type AnyDescriptor } from '@dts/common/fsal'
-import { useStore } from 'vuex'
-import { key } from '../store'
 
 const ipcRenderer = window.ipc
 
@@ -114,18 +111,19 @@ const props = defineProps<{
 
 const emit = defineEmits<(e: 'lock-file-tree') => void>()
 
-const activeDescriptor = ref<AnyDescriptor|null>(null) // Can contain the active ("focused") item
+const activeDescriptor = ref<AnyDescriptor|undefined>(undefined) // Can contain the active ("focused") item
 
 const openDirectoryStore = useOpenDirectoryStore()
+const windowStateStore = useWindowStateStore()
+const documentTreeStore = useDocumentTreeStore()
 const configStore = useConfigStore()
-const store = useStore(key)
 
 const selectedDirectory = computed(() => openDirectoryStore.openDirectory)
 
 const noResultsMessage = trans('No results')
 const emptyFileListMessage = trans('No directory selected')
 const emptyDirectoryMessage = trans('Empty directory')
-const selectedFile = computed(() => store.getters.lastLeafActiveFile())
+const selectedFile = computed(() => windowStateStore.lastLeafActiveFile)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const itemHeight = computed(() => configStore.config.fileMeta ? 70 : 30)
@@ -181,11 +179,22 @@ watch(getFilteredDirectoryContents, () => {
   })
 
   if (foundDescriptor === undefined) {
-    activeDescriptor.value = null
+    activeDescriptor.value = undefined
   }
 })
 
-watch(selectedFile, scrollIntoView)
+watch(selectedFile, () => {
+  scrollIntoView()
+  const foundDescriptor = getFilteredDirectoryContents.value.find((elem) => {
+    return elem.props.path === selectedFile.value?.path
+  })
+
+  if (foundDescriptor === undefined) {
+    activeDescriptor.value = undefined
+  } else {
+    activeDescriptor.value = foundDescriptor.props
+  }
+})
 
 watch(getDirectoryContents, () => {
   nextTick()
@@ -213,7 +222,7 @@ function navigate (evt: KeyboardEvent): void {
   const cmdOrCtrl = cmd || ctrl
 
   // On pressing enter, that's the same as clicking
-  if (evt.key === 'Enter' && activeDescriptor.value !== null) {
+  if (evt.key === 'Enter' && activeDescriptor.value !== undefined) {
     if (activeDescriptor.value.type === 'directory') {
       ipcRenderer.invoke('application', {
         command: 'set-open-directory',
@@ -236,10 +245,12 @@ function navigate (evt: KeyboardEvent): void {
 
   const list = getFilteredDirectoryContents.value.map(e => e.props)
   const descriptor = list.find(e => {
-    if (activeDescriptor.value !== null) {
+    if (activeDescriptor.value !== undefined) {
       return e.path === activeDescriptor.value.path
-    } else {
+    } else if (selectedFile.value !== undefined) {
       return e.path === selectedFile.value.path
+    } else {
+      return false
     }
   })
 
@@ -284,7 +295,7 @@ function navigate (evt: KeyboardEvent): void {
 }
 
 function stopNavigate (): void {
-  activeDescriptor.value = null
+  activeDescriptor.value = undefined
 }
 
 function scrollIntoView (): void {
@@ -295,10 +306,12 @@ function scrollIntoView (): void {
   // In case the file changed, make sure it's in view.
   let scrollTop = rootElement.value.scrollTop
   const activeDescriptorOrFile = getFilteredDirectoryContents.value.find(e => {
-    if (activeDescriptor.value !== null) {
-      return e.props === activeDescriptor.value
+    if (activeDescriptor.value !== undefined) {
+      return e.props.path === activeDescriptor.value.path
+    } else if (selectedFile.value !== undefined) {
+      return e.props.path === selectedFile.value.path
     } else {
-      return e.props === selectedFile.value
+      return false
     }
   })
 
@@ -352,10 +365,6 @@ function updateDynamics (): void {
       })
     }
   }
-}
-
-function onFocusHandler (event: any): void {
-  activeDescriptor.value = selectedFile.value
 }
 
 async function handleOperation (type: string, idx: number): Promise<void> {

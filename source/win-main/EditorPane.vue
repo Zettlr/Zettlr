@@ -104,12 +104,12 @@ import { type EditorCommands } from './App.vue'
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'
-import { useStore } from 'vuex'
-import { key } from './store'
+import { useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
-const store = useStore(key)
+const windowStateStore = useWindowStateStore()
+const documentTreeStore = useDocumentTreeStore()
 
 const props = defineProps<{
   leafId: string
@@ -135,8 +135,8 @@ const elementStyles = computed<string>(() => {
 })
 
 const paneElement = ref<HTMLDivElement|null>(null)
-const distractionFree = computed<boolean>(() => store.state.distractionFreeMode === props.leafId)
-const node = computed<LeafNodeJSON|undefined>(() => store.state.paneData.find((leaf: LeafNodeJSON) => leaf.id === props.leafId))
+const distractionFree = computed<boolean>(() => windowStateStore.distractionFreeMode === props.leafId)
+const node = computed<LeafNodeJSON|undefined>(() => documentTreeStore.paneData.find((leaf: LeafNodeJSON) => leaf.id === props.leafId))
 const activeFile = computed<OpenDocument|null>(() => node.value?.activeFile ?? null)
 const openFiles = computed<OpenDocument[]>(() => node.value?.openFiles ?? [])
 const hasNoOpenFiles = computed<boolean>(() => openFiles.value.length === 0)

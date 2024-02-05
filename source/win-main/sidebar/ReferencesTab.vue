@@ -13,14 +13,14 @@ import extractCitations from '@common/util/extract-citations'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { isAbsolutePath, resolvePath } from '@common/util/renderer-path-polyfill'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
+import { DP_EVENTS } from '@dts/common/documents'
 import { type AnyDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { onMounted, ref, computed, watch } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '../store'
+import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
+import { useWindowStateStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
-const store = useStore(key)
+const windowStateStore = useWindowStateStore()
 
 // This function overwrites the getBibliographyForDescriptor function to ensure
 // the library is always absolute. We have to do it this ridiculously since the
@@ -39,7 +39,7 @@ function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
 const bibliography = ref<[{ bibstart: string, bibend: string }, string[]]|undefined>(undefined)
 
 const referencesLabel = trans('References')
-const activeFile = computed<OpenDocument|null>(() => store.getters.lastLeafActiveFile())
+const activeFile = computed(() => windowStateStore.lastLeafActiveFile)
 
 /**
  * Takes the bibliography and returns a renderable HTML representation of it
@@ -63,7 +63,8 @@ watch(activeFile, () => {
 })
 
 onMounted(() => {
-  ipcRenderer.on('documents-update', (e, { event, context }) => {
+  ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context: DocumentsUpdateContext }) => {
+    const { event, context } = payload
     // Update the bibliography if the active file has been saved
     if (event === DP_EVENTS.CHANGE_FILE_STATUS && context.status === 'modification') {
       const { filePath } = context
@@ -83,7 +84,7 @@ onMounted(() => {
  * active file.
  */
 async function updateBibliography (): Promise<void> {
-  if (activeFile.value === null) {
+  if (activeFile.value === undefined) {
     bibliography.value = undefined
     return
   }

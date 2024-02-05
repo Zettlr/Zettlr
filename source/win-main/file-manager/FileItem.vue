@@ -11,8 +11,8 @@
       v-bind:class="{
         'list-item': true,
         project: obj.type === 'directory' && obj.settings.project !== null,
-        selected: selectedFile !== null && obj.path === selectedFile.path,
-        active: activeFile !== null && obj.path === activeFile.path,
+        selected: selectedFile !== undefined && obj.path === selectedFile.path,
+        active: activeFile !== undefined && obj.path === activeFile.path,
         'has-meta-info': fileMeta,
         directory: obj.type === 'directory'
       }"
@@ -177,7 +177,7 @@ import { key } from '../store'
 import { useItemComposable } from './util/item-composable'
 
 const props = defineProps<{
-  activeFile: AnyDescriptor|null
+  activeFile: AnyDescriptor|undefined
   index: number
   obj: MDFileDescriptor|CodeFileDescriptor|DirDescriptor
   windowId: string
@@ -235,7 +235,6 @@ const getFilename = computed(() => props.obj.name)
 const isProject = computed(() => props.obj.type === 'directory' && props.obj.settings.project !== null)
 const isDraggable = computed(() => !isDirectory.value)
 const fileMeta = computed(() => configStore.config.fileMeta)
-const isCode = computed(() => props.obj.type === 'code')
 const getDate = computed(() => {
   if (configStore.config.fileMetaTime === 'modtime') {
     return formatDate(props.obj.modtime, configStore.config.appLang, true)

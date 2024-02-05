@@ -64,13 +64,10 @@
 import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { ref, computed, watch } from 'vue'
-import { useConfigStore, useWorkspacesStore } from 'source/pinia'
-import { type OpenDocument } from '@dts/common/documents'
+import { useConfigStore, useWorkspacesStore, useWindowStateStore } from 'source/pinia'
 import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { type TagRecord } from '@providers/tags'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
-import { useStore } from 'vuex'
-import { key } from '../store'
 
 export interface RelatedFile {
   file: string
@@ -83,7 +80,7 @@ const ipcRenderer = window.ipc
 
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
-const store = useStore(key)
+const windowStateStore = useWindowStateStore()
 
 const searchParams = new URLSearchParams(window.location.search)
 const windowId = searchParams.get('window_id')
@@ -115,12 +112,12 @@ const scrollerRelatedFiles = computed(() => {
   })
 })
 
-const lastActiveFile = computed<OpenDocument|null>(() => store.getters.lastLeafActiveFile())
+const lastActiveFile = computed(() => windowStateStore.lastLeafActiveFile)
 const roots = computed(() => workspacesStore.roots)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
-const lastLeafId = computed(() => store.state.lastLeafId)
+const lastLeafId = computed(() => windowStateStore.lastLeafId)
 
 watch(lastActiveFile, () => {
   recomputeRelatedFiles().catch(err => console.error('Could not recompute related files:', err))
@@ -131,7 +128,7 @@ watch(roots, () => {
 })
 
 async function recomputeRelatedFiles (): Promise<void> {
-  if (lastActiveFile.value === null) {
+  if (lastActiveFile.value === undefined) {
     relatedFiles.value = []
     return
   }

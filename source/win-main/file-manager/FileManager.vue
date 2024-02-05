@@ -91,7 +91,7 @@ import FileTree from './FileTree.vue'
 import FileList from './FileList.vue'
 import { trans } from '@common/i18n-renderer'
 import { nextTick, ref, computed, watch, onMounted } from 'vue'
-import { useConfigStore, useOpenDirectoryStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useOpenDirectoryStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import type { AnyDescriptor, DirDescriptor } from 'source/types/common/fsal'
 import { key } from '../store'
 import { useStore } from 'vuex'
@@ -116,6 +116,7 @@ const fileListComponent = ref<typeof FileList|null>(null)
 const openDirectoryStore = useOpenDirectoryStore()
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
+const windowStateStore = useWindowStateStore()
 const store = useStore(key)
 
 const fileTree = computed<AnyDescriptor[]>(() => workspacesStore.roots.map(root => root.descriptor))
@@ -172,7 +173,7 @@ watch(fileManagerMode, () => {
 onMounted(() => {
   if (openDirectoryStore.openDirectory !== null) {
     // TODO: Logical bug: Apparently I was always just pushing entire descriptors in there!
-    store.state.uncollapsedDirectories.push(openDirectoryStore.openDirectory.path)
+    windowStateStore.uncollapsedDirectories.push(openDirectoryStore.openDirectory.path)
   }
 
   ipcRenderer.on('shortcut', (event, message) => {
