@@ -83,6 +83,8 @@ be able to run the app again just fine on ARM computers with Linux.
   pathname contained a colon on non-Windows systems (#4822)
 - Fixes an issue where the re-ordering of list item numbers would not ensure
   that lists start at 1
+- Fixes an issue that has removed the custom background color from the Bielefeld
+  and Bordeaux themes (#4913)
 
 ## Under the Hood
 
