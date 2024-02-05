@@ -18,7 +18,6 @@ import { createStore as baseCreateStore, type StoreOptions, type Store } from 'v
 import { type InjectionKey } from 'vue'
 import { type ColoredTag } from '@providers/tags'
 import type { SearchResultWrapper } from '@dts/common/search'
-import configToArrayMapper from './config-to-array'
 import type { BranchNodeJSON, LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 
 // Import Mutations
@@ -65,12 +64,6 @@ export interface ZettlrState {
    * Holds all current writing targets
    */
   writingTargets: WritingTarget[]
-  /**
-   * Holds all configuration options. These need to be stored here separately
-   * to make use of the reactivity of Vue. We'll basically be binding the config
-   * listener to this store state. It's basically a dictionary for quick access.
-   */
-  config: any
   /**
    * Info about the currently active document
    */
@@ -130,7 +123,6 @@ function getConfig (): StoreOptions<ZettlrState> {
         uncollapsedDirectories: [],
         colouredTags: [],
         writingTargets: [],
-        config: configToArrayMapper(window.config.get()),
         activeDocumentInfo: null,
         modifiedDocuments: [],
         tableOfContents: null,
@@ -194,9 +186,6 @@ function getConfig (): StoreOptions<ZettlrState> {
           oldUncollapsed.splice(idx, 1)
           state.uncollapsedDirectories = oldUncollapsed
         }
-      },
-      updateConfig: function (state, option) {
-        state.config[option] = window.config.get(option)
       },
       updateModifiedFiles: function (state, modifiedDocuments: string[]) {
         state.modifiedDocuments = modifiedDocuments

@@ -96,13 +96,6 @@ function afterRegister (): void {
 
   // -----------------------------------------------------------------------------
 
-  // Update the configuration if some value changes
-  ipcRenderer.on('config-provider', (event, { command, payload }) => {
-    if (command === 'update') {
-      app.config.globalProperties.$store.commit('updateConfig', payload)
-    }
-  })
-
   // Listen for document state updates
   ipcRenderer.on('documents-update', (evt, payload) => {
     // A file has been saved or modified
