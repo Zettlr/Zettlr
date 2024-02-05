@@ -112,7 +112,7 @@ export default {
       type: Object as PropType<string[]>,
       default: () => { return {} }
     },
-    colouredTags: {
+    coloredTags: {
       type: Object as PropType<ColoredTag[]>,
       default: () => { return {} }
     },
@@ -207,7 +207,7 @@ export default {
       }).catch(e => console.error(e))
     },
     retrieveTagColour: function (tagName: string) {
-      const foundTag = this.colouredTags.find(tag => tag.name === tagName)
+      const foundTag = this.coloredTags.find(tag => tag.name === tagName)
       return foundTag !== undefined ? foundTag.color : ''
     }
   }

@@ -139,7 +139,7 @@
     v-bind:creationtime="obj.creationtime"
     v-bind:modtime="obj.modtime"
     v-bind:tags="obj.type === 'file' ? obj.tags : []"
-    v-bind:coloured-tags="$store.state.colouredTags"
+    v-bind:colored-tags="windowStateStore.coloredTags"
     v-bind:target-value="0"
     v-bind:target-mode="'words'"
     v-bind:file-size="obj.size"
@@ -175,8 +175,6 @@ import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
-import { useStore } from 'vuex'
-import { key } from '../store'
 import { useItemComposable } from './util/item-composable'
 
 const ipcRenderer = window.ipc
@@ -201,7 +199,6 @@ const newObjectInput = ref<HTMLInputElement|null>(null)
 const openDirectoryStore = useOpenDirectoryStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
-const store = useStore(key)
 
 const {
   nameEditing,
@@ -280,7 +277,7 @@ const writingTarget = computed<undefined|{ path: string, mode: 'words'|'chars', 
   if (props.obj.type !== 'file') {
     return undefined
   } else {
-    return store.state.writingTargets.find((x: any) => x.path === props.obj.path)
+    return windowStateStore.writingTargets.find((x: any) => x.path === props.obj.path)
   }
 })
 

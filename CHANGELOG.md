@@ -108,6 +108,7 @@ be able to run the app again just fine on ARM computers with Linux.
 - No more JavaScript: With this update, the entire code base (sans build
   scripts) is written in TypeScript.
 - Migrated from Electron's deprecated clipboard API to the native Browser API
+- Migrated the entire main window store state from Vuex to Pinia
 
 # 3.0.5
 

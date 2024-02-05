@@ -2367,13 +2367,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/devtools-api@npm:^6.0.0-beta.11":
-  version: 6.4.5
-  resolution: "@vue/devtools-api@npm:6.4.5"
-  checksum: 40c5adc8788cb283972ce09ba7ce105fa894f4decec9168829cc8e6211462763402442e6c31be76f9da62b0e74ae724971b924571367b4ac89b94dc6894e2d07
-  languageName: node
-  linkType: hard
-
 "@vue/devtools-api@npm:^6.5.0":
   version: 6.5.1
   resolution: "@vue/devtools-api@npm:6.5.1"
@@ -13860,17 +13853,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vuex@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "vuex@npm:4.1.0"
-  dependencies:
-    "@vue/devtools-api": ^6.0.0-beta.11
-  peerDependencies:
-    vue: ^3.2.0
-  checksum: f5e375a9c19ea3bbf4b9bc4c2adc033c37d2583e59b2d79da42bde2ab0771a086c419d62323fb354b6d421a8ddb4fd4e14f3abe5d49e9862311bc4847732b608
-  languageName: node
-  linkType: hard
-
 "w3c-keyname@npm:^2.2.4":
   version: 2.2.6
   resolution: "w3c-keyname@npm:2.2.6"
@@ -14600,7 +14582,6 @@ __metadata:
     vue: ^3.3.4
     vue-loader: ^17.2.2
     vue-virtual-scroller: ^2.0.0-beta.8
-    vuex: ^4.1.0
     yaml: ^2.3.4
   dependenciesMeta:
     fsevents:
