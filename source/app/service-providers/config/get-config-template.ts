@@ -86,7 +86,7 @@ export interface ConfigOptions {
     inputMode: 'default'|'vim'|'emacs'
     boldFormatting: '**'|'__'
     italicFormatting: '_'|'*'
-    readabilityAlgorithm: string
+    readabilityAlgorithm: 'dale-chall'|'gunning-fog'|'coleman-liau'|'automated-readability'
     lint: {
       markdown: boolean
       languageTool: {
