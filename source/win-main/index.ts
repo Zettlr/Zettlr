@@ -16,7 +16,6 @@ import windowRegister from '@common/modules/window-register'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-import createStore, { key as storeKey } from './store'
 import { useOpenDirectoryStore } from '../pinia'
 
 const ipcRenderer = window.ipc
@@ -29,14 +28,8 @@ windowRegister()
   .catch(e => console.error(e))
 
 function afterRegister (): void {
-  const appStore = createStore()
   const pinia = createPinia()
-
-  // Create the Vue app. We additionally use appStore, which exposes $store, and
-  // PopupProvider, which exposes $showPopover, $togglePopover, and $closePopover
-  const app = createApp(App)
-    .use(pinia)
-    .use(appStore, storeKey)
+  const app = createApp(App).use(pinia)
 
   app.mount('#app')
 
@@ -68,53 +61,6 @@ function afterRegister (): void {
   }, false)
 
   // -----------------------------------------------------------------------------
-
-  /**
-   * Listen to update events
-   */
-  function updateColoredTags (): void {
-    ipcRenderer.invoke('tag-provider', {
-      command: 'get-colored-tags'
-    })
-      .then(tags => {
-        app.config.globalProperties.$store.commit('colouredTags', tags)
-      })
-      .catch(e => console.error(e))
-  }
-
-  ipcRenderer.on('colored-tags', (event) => {
-    // Update the tags
-    updateColoredTags()
-  })
-
-  // Send the first update for tags
-  updateColoredTags()
-
-  // -----------------------------------------------------------------------------
-
-  // -----------------------------------------------------------------------------
-
-  ipcRenderer.on('targets-provider', (event, what: string) => {
-    if (what === 'writing-targets-updated') {
-      app.config.globalProperties.$store.dispatch('updateWritingTargets')
-        .catch(e => console.error(e))
-    }
-  })
-
-  ipcRenderer.on('assets-provider', (event, what: string) => {
-    if (what === 'snippets-updated') {
-      app.config.globalProperties.$store.dispatch('updateSnippets')
-        .catch(e => console.error(e))
-    }
-  })
-
-  // Initial update
-  app.config.globalProperties.$store.dispatch('updateSnippets')
-    .catch(e => console.error(e))
-  app.config.globalProperties.$store.dispatch('updateWritingTargets')
-    .catch(e => console.error(e))
-
-  // -----------------------------------------------
 
   // Further shortcuts we have to listen to
   ipcRenderer.on('shortcut', (event, command) => {
