@@ -27,10 +27,8 @@ const commonRules: Record<string, any> = {
 
 export const themeBordeauxLight = EditorView.theme({
   ...commonRules,
-  '&': {
-    backgroundColor: '#fffff8'
-  },
   '.cm-scroller': {
+    backgroundColor: '#fffff8',
     color: 'var(--grey-5)',
     fontFamily: 'Inconsolata, monospace'
   },
@@ -63,12 +61,10 @@ export const themeBordeauxLight = EditorView.theme({
 
 export const themeBordeauxDark = EditorView.theme({
   ...commonRules,
-  '&': {
-    backgroundColor: '#002b36',
-    color: '#839496'
-  },
   '.cm-scroller': {
-    color: 'var(--grey-0)',
+    backgroundColor: '#002b36',
+    color: '#839496',
+    // color: 'var(--grey-0)',
     fontFamily: 'Inconsolata, monospace'
   },
   '.cm-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-0)' },
