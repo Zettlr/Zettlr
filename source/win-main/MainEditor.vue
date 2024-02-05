@@ -197,7 +197,7 @@ const useH1 = computed<boolean>(() => configStore.config.fileNameDisplay.include
 const useTitle = computed<boolean>(() => configStore.config.fileNameDisplay.includes('title'))
 const filenameOnly = computed<boolean>(() => configStore.config.zkn.linkFilenameOnly)
 const fontSize = computed<number>(() => configStore.config.editor.fontSize)
-const globalSearchResults = computed(() => store.state.searchResults)
+const globalSearchResults = computed(() => windowStateStore.searchResults)
 const snippets = computed(() => store.state.snippets)
 
 const activeFileDescriptor = ref<undefined|MDFileDescriptor|CodeFileDescriptor>(undefined)
