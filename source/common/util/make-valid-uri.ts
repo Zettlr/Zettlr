@@ -70,7 +70,6 @@ export default function makeValidUri (uri: string, base: string = ''): string {
 
   try {
     const parsed = new URL(uri)
-    console.log(parsed.protocol)
     if (parsed.protocol === 'file:') {
       // "file" links could be relative, and we need to tend to that possibility
       // below, so even if this is a proper URL, we have to let the rest of the
