@@ -22,7 +22,7 @@
       v-on:dragleave="leaveDragging"
       v-on:drop="handleDrop"
     >
-      <!-- First: Secondary icon (only if primaryIcon displays the chevron) -->
+      <!-- First: Secondary icon (if its a directory and it has children) -->
       <span class="item-icon" aria-hidden="true">
         <cds-icon
           v-if="secondaryIcon !== false"
@@ -33,9 +33,11 @@
             'is-solid': typeof secondaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(secondaryIcon),
             'special': typeof secondaryIcon !== 'boolean'
           }"
+          v-on:click.stop="maybeUncollapse"
+          v-on:auxclick.stop.prevent="maybeUncollapse"
         />
       </span>
-      <!-- Second: Primary icon (either the chevron, or the custom icon) -->
+      <!-- Second: Primary icon (The folder, file, or custom icon) -->
       <span class="toggle-icon" aria-hidden="true">
         <!-- If the customIcon is set to 'writing-target' we need to display our
         custom progress ring, instead of a regular icon -->
@@ -52,8 +54,6 @@
             'special': typeof primaryIcon !== 'boolean' && ![ 'right', 'down' ].includes(primaryIcon)
           }"
           v-bind:solid="typeof primaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(primaryIcon)"
-          v-on:click.stop="handlePrimaryIconClick"
-          v-on:auxclick.stop.prevent="handlePrimaryIconClick"
         ></cds-icon>
       </span>
       <span
@@ -189,7 +189,8 @@ const props = defineProps<{
   windowId: string
 }>()
 
-const collapsed = ref<boolean>(true) // Initial: collapsed list (if there are children)
+// const collapsed = ref<boolean>(true) // Initial: collapsed list (if there are children)
+const collapsed = computed(() => !windowStateStore.uncollapsedDirectories.includes(props.obj.path))
 const canAcceptDraggable = ref<boolean>(false) // Helper var set to true while something hovers over this element
 const uncollapseTimeout = ref<undefined|ReturnType<typeof setTimeout>>(undefined) // Used to uncollapse directories during drag&drop ops
 const nameEditingInput = ref<HTMLInputElement|null>(null)
@@ -405,12 +406,12 @@ function uncollapseIfApplicable (): void {
   const dirPath = (selectedDir.value !== null) ? selectedDir.value.path : ''
 
   if (props.obj.path === openDirectoryStore.openDirectory?.path) {
-    collapsed.value = false
+    windowStateStore.uncollapsedDirectories.push(props.obj.path)
   }
 
   // Open the tree, if the selected file is contained in this dir somewhere
   if (filePath.startsWith(props.obj.path)) {
-    collapsed.value = false
+    windowStateStore.uncollapsedDirectories.push(props.obj.path)
   } else {
     // we are not in the filepath of the currently open note, do not change the state!
     return
@@ -418,7 +419,7 @@ function uncollapseIfApplicable (): void {
 
   // If a directory within this has been selected, open up, lads!
   if (props.obj.path.startsWith(dirPath)) {
-    collapsed.value = false
+    windowStateStore.uncollapsedDirectories.push(props.obj.path)
   }
 }
 
@@ -454,7 +455,7 @@ function enterDragging (_event: DragEvent): void {
   }
 
   uncollapseTimeout.value = setTimeout(() => {
-    collapsed.value = false
+    windowStateStore.uncollapsedDirectories.push(props.obj.path)
     uncollapseTimeout.value = undefined
   }, 2000)
 }
@@ -560,9 +561,19 @@ function handleOperationFinish (newName: string): void {
   operationType.value = undefined
 }
 
-function handlePrimaryIconClick (): void {
+/**
+ * Helper function to toggle the collapsed status on a directory item with children
+ */
+function maybeUncollapse (): void {
   if (hasChildren.value) {
-    collapsed.value = !collapsed.value
+    if (collapsed.value) {
+      windowStateStore.uncollapsedDirectories.push(props.obj.path)
+    } else {
+      const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
+      if (idx > -1) {
+        windowStateStore.uncollapsedDirectories.splice(idx, 1)
+      }
+    }
   }
 }
 </script>
