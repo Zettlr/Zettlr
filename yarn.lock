@@ -499,6 +499,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electron-forge/plugin-fuses@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@electron-forge/plugin-fuses@npm:7.2.0"
+  dependencies:
+    "@electron-forge/plugin-base": 7.2.0
+    "@electron-forge/shared-types": 7.2.0
+  peerDependencies:
+    "@electron/fuses": ">=1.0.0"
+  checksum: 5bf825a79a2483d6f7b19e6990a5239bd310c32a3ff7f6d2223e1c5c3f69ccce523e3f9683186bb40b28d54b2b93455c6163460ffc975d4018fed1471d109e0d
+  languageName: node
+  linkType: hard
+
 "@electron-forge/plugin-webpack@npm:^7.2.0":
   version: 7.2.0
   resolution: "@electron-forge/plugin-webpack@npm:7.2.0"
@@ -646,6 +658,19 @@ __metadata:
   bin:
     asar: bin/asar.js
   checksum: 878d3b9ad232e4e8bb179ed50ed81244481c5dfe667952545a841f3afd782479c1d7e353f8fdedac771e029927b0f31b0a05a41f34cfc7c3099a064733c6d50a
+  languageName: node
+  linkType: hard
+
+"@electron/fuses@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@electron/fuses@npm:1.7.0"
+  dependencies:
+    chalk: ^4.1.1
+    fs-extra: ^9.0.1
+    minimist: ^1.2.5
+  bin:
+    electron-fuses: dist/bin.js
+  checksum: c7b524103c4aca432372db6aba817cdaffb86d9f721b0f788223abe40084a2a06334072c24368f50386a8c7c721659f5ac57b57ff31bebc0eb990021518a6c8e
   languageName: node
   linkType: hard
 
@@ -3483,7 +3508,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0, chalk@npm:^4.0.2, chalk@npm:^4.1.0, chalk@npm:^4.1.2":
+"chalk@npm:^4.0.0, chalk@npm:^4.0.2, chalk@npm:^4.1.0, chalk@npm:^4.1.1, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -9744,7 +9769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.8":
+"minimist@npm:^1.2.5, minimist@npm:^1.2.8":
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
   checksum: 75a6d645fb122dad29c06a7597bddea977258957ed88d7a6df59b5cd3fe4a527e253e9bbf2e783e4b73657f9098b96a5fe96ab8a113655d4109108577ecf85b0
@@ -14347,7 +14372,9 @@ __metadata:
     "@electron-forge/maker-deb": ^7.2.0
     "@electron-forge/maker-rpm": ^7.2.0
     "@electron-forge/maker-zip": ^7.2.0
+    "@electron-forge/plugin-fuses": ^7.2.0
     "@electron-forge/plugin-webpack": ^7.2.0
+    "@electron/fuses": ^1.7.0
     "@electron/notarize": ^2.2.1
     "@lezer/common": ^1.1.0
     "@lezer/highlight": ^1.1.6

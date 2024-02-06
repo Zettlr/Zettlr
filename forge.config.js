@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { spawn } = require('child_process')
 const fs = require('fs').promises
 const path = require('path')
+const { FusesPlugin } = require('@electron-forge/plugin-fuses')
+const { FuseV1Options, FuseVersion } = require('@electron/fuses')
 
 /**
  * This function runs the get-pandoc script in order to download the requested
@@ -325,7 +329,14 @@ module.exports = {
           ]
         }
       }
-    }
+    },
+    new FusesPlugin({
+      version: FuseVersion.V1,
+      [FuseV1Options.RunAsNode]: false,
+      [FuseV1Options.EnableCookieEncryption]: true,
+      [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
+      [FuseV1Options.EnableNodeCliInspectArguments]: false
+    })
   ],
   makers: [
     {
