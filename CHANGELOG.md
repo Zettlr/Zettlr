@@ -112,6 +112,7 @@ be able to run the app again just fine on ARM computers with Linux.
   scripts) is written in TypeScript.
 - Migrated from Electron's deprecated clipboard API to the native Browser API
 - Migrated the entire main window store state from Vuex to Pinia
+- Add Electron fuses plugin to turn off unused options in production
 
 # 3.0.5
 
