@@ -125,7 +125,7 @@
     "fsevents": "^2.3.2"
   },
   "resolutions": {
-    "node-abi": "^3.40.0",
+    "node-abi": "^3.54.0",
     "got": "11.x.x",
     "node-gyp": "10.x.x"
   },
@@ -134,7 +134,9 @@
     "@electron-forge/maker-deb": "^6.3.0",
     "@electron-forge/maker-rpm": "^6.3.0",
     "@electron-forge/maker-zip": "^6.3.0",
+    "@electron-forge/plugin-fuses": "^7.2.0",
     "@electron-forge/plugin-webpack": "^6.3.0",
+    "@electron/fuses": "^1.7.0",
     "@electron/notarize": "^1.2.4",
     "@types/adm-zip": "^0.5.0",
     "@types/archiver": "^5.3.2",

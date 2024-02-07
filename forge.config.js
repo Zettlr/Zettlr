@@ -1,6 +1,8 @@
 const { spawn } = require('child_process')
 const fs = require('fs').promises
 const path = require('path')
+const { FusesPlugin } = require('@electron-forge/plugin-fuses')
+const { FuseV1Options, FuseVersion } = require('@electron/fuses')
 
 /**
  * This function runs the get-pandoc script in order to download the requested
@@ -325,7 +327,18 @@ module.exports = {
           ]
         }
       }
-    }
+    },
+    // When building for production, turn off a few fuses that disable certain
+    // debug controls of the app.
+    ...((process.env.NODE_ENV === 'production')
+      ? [new FusesPlugin({
+          version: FuseVersion.V1,
+          [FuseV1Options.RunAsNode]: false,
+          [FuseV1Options.EnableCookieEncryption]: true,
+          [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
+          [FuseV1Options.EnableNodeCliInspectArguments]: false
+        })]
+      : [])
   ],
   makers: [
     {
