@@ -769,6 +769,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     if (windowId === undefined) {
+      this._app.log.warning(`Could not open file ${filePath}: windowId was undefined.`)
       return false
     }
 
@@ -785,6 +786,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     if (leaf === undefined) {
+      this._app.log.warning(`Could not open file ${filePath}: leaf was undefined.`)
       return false
     }
 
@@ -807,21 +809,19 @@ export default class DocumentManager extends ProviderContract {
       return true
     }
 
-    // TODO: Make sure the active file is not modified!
+    const ret = leaf.tabMan.openFile(filePath)
+    if (ret) {
+      this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
+    }
+    
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
     const activeFile = leaf.tabMan.activeFile
-    const ret = leaf.tabMan.openFile(filePath)
     const { avoidNewTabs } = this._app.config.get().system
-
     if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)
       this.syncWatchedFilePaths()
-      this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath })
-      this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
-    }
-    if (ret) {
-      this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
+      this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath: activeFile.path })
     }
 
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
@@ -1471,5 +1471,10 @@ export default class DocumentManager extends ProviderContract {
   private _updateFocusLeaf (windowId: string, leafId: string): void {
     this._lastEditor.windowId = windowId
     this._lastEditor.leafId = leafId
+    this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, {
+      windowId,
+      leafId,
+      filePath: this.getActiveFile(leafId) ?? undefined
+    })
   }
 }
