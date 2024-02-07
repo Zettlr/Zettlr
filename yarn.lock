@@ -875,15 +875,17 @@ __metadata:
   linkType: hard
 
 "@electron/windows-sign@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@electron/windows-sign@npm:1.0.0"
+  version: 1.1.0
+  resolution: "@electron/windows-sign@npm:1.1.0"
   dependencies:
+    cross-dirname: ^0.1.0
     debug: ^4.3.4
     fs-extra: ^11.1.1
     minimist: ^1.2.8
+    postject: ^1.0.0-alpha.6
   bin:
     electron-windows-sign: bin/electron-windows-sign.js
-  checksum: 70cf35e5bb69b9e03387882bc892ee43665be44d3e91b82da57bb1851149ed7d39f814ffba1e1bf7603bed86ec1c6a6c68a58c121580bffd830ee3e6f13097ee
+  checksum: aab6491e7ad68a4400fc697328aa65cba614c82eaee9ce73075dec07e2733a67a96ec8b44b817dd470e9c4fcebc528019cd2f432eff119df0f990a6dd631f51c
   languageName: node
   linkType: hard
 
@@ -3788,6 +3790,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^9.4.0":
+  version: 9.5.0
+  resolution: "commander@npm:9.5.0"
+  checksum: c7a3e27aa59e913b54a1bafd366b88650bc41d6651f0cbe258d4ff09d43d6a7394232a4dadd0bf518b3e696fdf595db1028a0d82c785b88bd61f8a440cecfade
+  languageName: node
+  linkType: hard
+
 "compare-version@npm:^0.1.2":
   version: 0.1.2
   resolution: "compare-version@npm:0.1.2"
@@ -3988,6 +3997,13 @@ __metadata:
   version: 1.0.5
   resolution: "crelt@npm:1.0.5"
   checksum: 04a618c5878e12a14a9a328a49ff6e37bed76abb88b72e661c56b5f161d8a9aca133650da6bcbc5224ad1f7f43a69325627f209e92a21002986d52a8f844b367
+  languageName: node
+  linkType: hard
+
+"cross-dirname@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "cross-dirname@npm:0.1.0"
+  checksum: 4020d8503a8ac4e59c4cf687613bd9c7ae127047a11fdd9aa4b7d204cf5e740206a0e9ec789dcb94643a1e44da588d01e0d899f3c85b0d78dbf7d79dd6ae84ac
   languageName: node
   linkType: hard
 
@@ -10855,6 +10871,17 @@ __metadata:
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
   checksum: 1d8611341b073143ad90486fcdfeab49edd243377b1f51834dc4f6d028e82ce5190e4f11bb2633276864503654fb7cab28e67abdc0fbf9d1f88cad4a0ff0beea
+  languageName: node
+  linkType: hard
+
+"postject@npm:^1.0.0-alpha.6":
+  version: 1.0.0-alpha.6
+  resolution: "postject@npm:1.0.0-alpha.6"
+  dependencies:
+    commander: ^9.4.0
+  bin:
+    postject: dist/cli.js
+  checksum: efd41b322fca21f08a24d3a0ee417357626bc0d25c183812e0ca2325dd5af59a8455d20724b92f612275c593eaaa84ca7765f4281c2cf57b8781c2acc5bb2961
   languageName: node
   linkType: hard
 
