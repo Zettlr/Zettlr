@@ -153,7 +153,7 @@ onMounted(() => {
         selectFile(openFiles.value[0])
       }
     } else if (shortcut === 'close-window') {
-      if (windowStateStore.lastLeafId !== props.leafId) {
+      if (documentTreeStore.lastLeafId !== props.leafId) {
         return // Otherwise all document tabs would close one file at the same
         // time
       }

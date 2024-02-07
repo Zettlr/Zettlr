@@ -64,7 +64,7 @@
 import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { ref, computed, watch } from 'vue'
-import { useConfigStore, useWorkspacesStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useWorkspacesStore, useDocumentTreeStore } from 'source/pinia'
 import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { type TagRecord } from '@providers/tags'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
@@ -80,7 +80,7 @@ const ipcRenderer = window.ipc
 
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
-const windowStateStore = useWindowStateStore()
+const documentTreeStore = useDocumentTreeStore()
 
 const searchParams = new URLSearchParams(window.location.search)
 const windowId = searchParams.get('window_id')
@@ -112,12 +112,12 @@ const scrollerRelatedFiles = computed(() => {
   })
 })
 
-const lastActiveFile = computed(() => windowStateStore.lastLeafActiveFile)
+const lastActiveFile = computed(() => documentTreeStore.lastLeafActiveFile)
 const roots = computed(() => workspacesStore.roots)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
-const lastLeafId = computed(() => windowStateStore.lastLeafId)
+const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 
 watch(lastActiveFile, () => {
   recomputeRelatedFiles().catch(err => console.error('Could not recompute related files:', err))
