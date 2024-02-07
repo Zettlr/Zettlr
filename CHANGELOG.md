@@ -1,12 +1,5 @@
 # Upcoming
 
-## Dropping Support for macOS 10.13 and 10.14
-
-Due to Zettlr's underlying Electron framework dropping support for macOS 10.13
-(High Sierra) and 10.14 (Mojave), Zettlr drops support for these operating
-systems as well. To continue to use Zettlr on a Mac, ensure to update to at
-least macOS 10.15 (Catalina).
-
 ## Changes to the link detection
 
 For a long time now, Zettlr would (sometimes aggressively so) detect plain links
@@ -30,13 +23,6 @@ surround them with angled brackets: `<https://www.google.com>` or
 This changes brings Zettlr's link functionality much more into alignment with
 other editors as well, since this is the way that many other applications handle
 links as well.
-
-## Linux ARM builds functionally again
-
-Since Zettlr v3.0.0, Linux users on ARM-machines had the issue that they could
-not run the app, as a dependency has been compiled for the wrong architecture.
-Thanks to efforts by @LaPingvino, this has now been finally fixed and you should
-be able to run the app again just fine on ARM computers with Linux.
 
 ## GUI and Functionality
 
@@ -69,7 +55,6 @@ be able to run the app again just fine on ARM computers with Linux.
   as text, instead of offering to insert an image of the selection
 - Fix pasting behavior: Now Zettlr should properly paste most formatted text
   without too much noise (in the form of comments, styles, and other additions)
-- Fix Linux ARM builds
 - Fix restart-dialog showing multiple times for the same options (#4768)
 - Fix the active typewriter line background color in dark mode
 - Fixed an issue where gutter markers were not equally offset when typewriter
@@ -101,7 +86,6 @@ be able to run the app again just fine on ARM computers with Linux.
   of an error
 - Reimplement configuration guard options as Maps to allow for volatile state
 - Begin migrating application state to Pinia
-- Upgrade Electron to v28
 - Fully remove the renderers's dependency on Node.js's path module to prepare
   for fully sandboxing the window code; instead polyfill the required functions,
   testing them against the module's behavior
@@ -112,7 +96,6 @@ be able to run the app again just fine on ARM computers with Linux.
   scripts) is written in TypeScript.
 - Migrated from Electron's deprecated clipboard API to the native Browser API
 - Migrated the entire main window store state from Vuex to Pinia
-- Add Electron fuses plugin to turn off unused options in production
 
 # 3.0.5
 
