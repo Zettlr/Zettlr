@@ -17,9 +17,17 @@ Due to Zettlr's underlying Electron framework dropping support for macOS 10.13
 systems as well. To continue to use Zettlr on a Mac, ensure to update to at
 least macOS 10.15 (Catalina).
 
+## Linux ARM builds functionally again
+
+Since Zettlr v3.0.0, Linux users on ARM-machines had the issue that they could
+not run the app, as a dependency has been compiled for the wrong architecture.
+Thanks to efforts by @LaPingvino, this has now been finally fixed and you should
+be able to run the app again just fine on ARM computers with Linux.
+
 ## GUI and Functionality
 
 - Fix: Segmentation faults in Wayland environments (#4877)
+- Fix Linux ARM builds (#4910)
 
 ## Under the Hood
 
@@ -29,6 +37,8 @@ least macOS 10.15 (Catalina).
   pressing for the Arch Linux repository (see #4887; thanks to @alerque for
   bringing this to our attention), but also means that macOS 10.13 and 10.14 are
   no longer supported
+- Switched to Zig compiler to enable successful compilation for Linux ARM
+  targets (#4910)
 
 # 3.0.4
 
