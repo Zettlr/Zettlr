@@ -941,15 +941,17 @@ __metadata:
   linkType: hard
 
 "@electron/windows-sign@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@electron/windows-sign@npm:1.0.0"
+  version: 1.1.0
+  resolution: "@electron/windows-sign@npm:1.1.0"
   dependencies:
+    cross-dirname: ^0.1.0
     debug: ^4.3.4
     fs-extra: ^11.1.1
     minimist: ^1.2.8
+    postject: ^1.0.0-alpha.6
   bin:
     electron-windows-sign: bin/electron-windows-sign.js
-  checksum: 70cf35e5bb69b9e03387882bc892ee43665be44d3e91b82da57bb1851149ed7d39f814ffba1e1bf7603bed86ec1c6a6c68a58c121580bffd830ee3e6f13097ee
+  checksum: aab6491e7ad68a4400fc697328aa65cba614c82eaee9ce73075dec07e2733a67a96ec8b44b817dd470e9c4fcebc528019cd2f432eff119df0f990a6dd631f51c
   languageName: node
   linkType: hard
 
