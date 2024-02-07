@@ -114,6 +114,28 @@ be able to run the app again just fine on ARM computers with Linux.
 - Migrated the entire main window store state from Vuex to Pinia
 - Add Electron fuses plugin to turn off unused options in production
 
+# 3.0.5
+
+## Dropping Support for macOS 10.13 and 10.14
+
+Due to Zettlr's underlying Electron framework dropping support for macOS 10.13
+(High Sierra) and 10.14 (Mojave), Zettlr drops support for these operating
+systems as well. To continue to use Zettlr on a Mac, ensure to update to at
+least macOS 10.15 (Catalina).
+
+## GUI and Functionality
+
+- Fix: Segmentation faults in Wayland environments (#4877)
+
+## Under the Hood
+
+- Update Electron from v25 to the latest available release (`v28.2.1`); this
+  fixes segmentation fault issues in Wayland environments (#4877) and ensures
+  that Zettlr keeps running a supported Electron version, which is especially
+  pressing for the Arch Linux repository (see #4887; thanks to @alerque for
+  bringing this to our attention), but also means that macOS 10.13 and 10.14 are
+  no longer supported
+
 # 3.0.4
 
 ## Security patch -- Please Update immediately
