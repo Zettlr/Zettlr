@@ -123,17 +123,9 @@ Due to Zettlr's underlying Electron framework dropping support for macOS 10.13
 systems as well. To continue to use Zettlr on a Mac, ensure to update to at
 least macOS 10.15 (Catalina).
 
-## Linux ARM builds functionally again
-
-Since Zettlr v3.0.0, Linux users on ARM-machines had the issue that they could
-not run the app, as a dependency has been compiled for the wrong architecture.
-Thanks to efforts by @LaPingvino, this has now been finally fixed and you should
-be able to run the app again just fine on ARM computers with Linux.
-
 ## GUI and Functionality
 
 - Fix: Segmentation faults in Wayland environments (#4877)
-- Fix Linux ARM builds (#4910)
 
 ## Under the Hood
 
@@ -143,42 +135,6 @@ be able to run the app again just fine on ARM computers with Linux.
   pressing for the Arch Linux repository (see #4887; thanks to @alerque for
   bringing this to our attention), but also means that macOS 10.13 and 10.14 are
   no longer supported
-- Switched to Zig compiler to enable successful compilation for Linux ARM
-  targets (#4910)
-
-# 3.0.4
-
-## Security patch -- Please Update immediately
-
-Dear users,
-
-a security researcher has brought to our attention an issue that can lead to a
-potential remote code execution (RCE) attack utilizing Zettlr's binary. This
-issue has been first discovered and exploited in 2023. It is unlikely that you
-have been affected, since the effort for this exploit is comparatively high and
-it requires you to take some non-trivial actions. However, since we are
-committed to making the app as safe as humanely possible to use, and the
-corresponding fix was pretty easy to implement, we decided to offer this
-security release that includes the same functionality as Zettlr v3.0.3, but with
-the added security patch included.
-
-A CVE (Common Vulnerabilities and Exposures) number has been applied for at
-MITRE, but not yet issued. Once we know the number, we will publish a postmortem
-on our blog and include some background as well as details about what this issue
-exactly implied, how it could have been exploited, and how we have mitigated the
-issue in this patch.
-
-## GUI and Functionality
-
-Nothing changed.
-
-## Under the hood
-
-- Update Electron to the last version 25 update (`v25.9.8`)
-- Add Electron fuses support and disable those that allow certain debug commands
-  to be sent to the binary (e.g., `--inspect`). This can be abused by malicious
-  actors for remote code execution (RCE) attacks (CVE number applied for at
-  MITRE; not yet issued; please see the Zettlr blog for updates)
 
 # 3.0.4
 
