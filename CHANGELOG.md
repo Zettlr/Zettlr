@@ -114,6 +114,40 @@ be able to run the app again just fine on ARM computers with Linux.
 - Migrated the entire main window store state from Vuex to Pinia
 - Add Electron fuses plugin to turn off unused options in production
 
+# 3.0.4
+
+## Security patch -- Please Update immediately
+
+Dear users,
+
+a security researcher has brought to our attention an issue that can lead to a
+potential remote code execution (RCE) attack utilizing Zettlr's binary. This
+issue has been first discovered and exploited in 2023. It is unlikely that you
+have been affected, since the effort for this exploit is comparatively high and
+it requires you to take some non-trivial actions. However, since we are
+committed to making the app as safe as humanely possible to use, and the
+corresponding fix was pretty easy to implement, we decided to offer this
+security release that includes the same functionality as Zettlr v3.0.3, but with
+the added security patch included.
+
+A CVE (Common Vulnerabilities and Exposures) number has been applied for at
+MITRE, but not yet issued. Once we know the number, we will publish a postmortem
+on our blog and include some background as well as details about what this issue
+exactly implied, how it could have been exploited, and how we have mitigated the
+issue in this patch.
+
+## GUI and Functionality
+
+Nothing changed.
+
+## Under the hood
+
+- Update Electron to the last version 25 update (`v25.9.8`)
+- Add Electron fuses support and disable those that allow certain debug commands
+  to be sent to the binary (e.g., `--inspect`). This can be abused by malicious
+  actors for remote code execution (RCE) attacks (CVE number applied for at
+  MITRE; not yet issued; please see the Zettlr blog for updates)
+
 # 3.0.3
 
 ## A Note on Custom CSS
