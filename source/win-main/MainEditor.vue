@@ -45,7 +45,7 @@ import { getBibliographyForDescriptor as getBibliography } from '@common/util/ge
 import { EditorSelection } from '@codemirror/state'
 import { type TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
-import { useConfigStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
 import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
 
@@ -95,6 +95,7 @@ const props = defineProps({
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 const windowStateStore = useWindowStateStore()
+const documentTreeStore = useDocumentTreeStore()
 const configStore = useConfigStore()
 
 // UNREFFED STUFF
@@ -259,7 +260,7 @@ watch(toRef(props.editorCommands, 'jumpToLine'), () => {
   }
 })
 watch(toRef(props.editorCommands, 'moveSection'), () => {
-  if (props.activeFile?.path !== props.file.path || windowStateStore.lastLeafId !== props.leafId) {
+  if (props.activeFile?.path !== props.file.path || documentTreeStore.lastLeafId !== props.leafId) {
     return
   }
 
@@ -275,7 +276,7 @@ watch(toRef(props.editorCommands, 'readabilityMode'), () => {
 })
 
 watch(toRef(props, 'distractionFree'), () => {
-  if (currentEditor !== null && props.activeFile?.path === props.file.path && windowStateStore.lastLeafId === props.leafId) {
+  if (currentEditor !== null && props.activeFile?.path === props.file.path && documentTreeStore.lastLeafId === props.leafId) {
     currentEditor.distractionFree = props.distractionFree
   }
 })
@@ -285,7 +286,7 @@ watch(toRef(props.editorCommands, 'executeCommand'), () => {
     return
   }
 
-  if (windowStateStore.lastLeafId !== props.leafId) {
+  if (documentTreeStore.lastLeafId !== props.leafId) {
     // This editor, even though it may be focused, was not the last focused
     // See https://github.com/Zettlr/Zettlr/issues/4361
     return
@@ -300,7 +301,7 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
     return
   }
 
-  if (windowStateStore.lastLeafId !== props.leafId) {
+  if (documentTreeStore.lastLeafId !== props.leafId) {
     // This editor, even though it may be focused, was not the last focused
     // See https://github.com/Zettlr/Zettlr/issues/4361
     return
@@ -380,7 +381,9 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
       }
     }).catch(err => console.error(err))
 
-    windowStateStore.lastLeafId = props.leafId
+    // NOTE: The lastLeafId will be changed in the documentTreeStore in response
+    // to an event from main (DP_EVENTS.ACTIVE_FILE) which will be emitted as a
+    // result of our focus-leaf event above.
     if (currentEditor === editor) {
       windowStateStore.tableOfContents = currentEditor.tableOfContents
     }

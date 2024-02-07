@@ -17,10 +17,10 @@ import { DP_EVENTS } from '@dts/common/documents'
 import { type AnyDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { onMounted, ref, computed, watch } from 'vue'
 import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
-import { useWindowStateStore } from 'source/pinia'
+import { useDocumentTreeStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
-const windowStateStore = useWindowStateStore()
+const documentTreeStore = useDocumentTreeStore()
 
 // This function overwrites the getBibliographyForDescriptor function to ensure
 // the library is always absolute. We have to do it this ridiculously since the
@@ -39,7 +39,7 @@ function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
 const bibliography = ref<[{ bibstart: string, bibend: string }, string[]]|undefined>(undefined)
 
 const referencesLabel = trans('References')
-const activeFile = computed(() => windowStateStore.lastLeafActiveFile)
+const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
 
 /**
  * Takes the bibliography and returns a renderable HTML representation of it

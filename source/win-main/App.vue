@@ -72,9 +72,9 @@
 
   <!-- Popover area: these will be teleported to the body element anyhow -->
   <PopoverExport
-    v-if="showExportPopover && exportButton !== null"
+    v-if="showExportPopover && exportButton !== null && activeFile !== undefined"
     v-bind:target="exportButton"
-    v-bind:file-path="activeFile?.path"
+    v-bind:file-path="activeFile.path"
     v-on:close="showExportPopover = false"
   ></PopoverExport>
   <PopoverStats
@@ -300,7 +300,7 @@ const sidebarsBeforeDistractionfree = ref<{ fileManager: boolean, sidebar: boole
 })
 
 const sidebarVisible = computed<boolean>(() => configStore.config.window.sidebarVisible)
-const activeFile = computed(() => windowStateStore.lastLeafActiveFile)
+const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
 const shouldCountChars = computed<boolean>(() => configStore.config.editor.countChars)
 const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || !configStore.config.display.hideToolbarInDistractionFree)
 // We need to display the titlebar in case the user decides to hide the toolbar.
@@ -517,7 +517,7 @@ const editorSidebarSplitComponent = ref<typeof SplitView|null>(null)
 const fileManagerSplitComponent = ref<typeof SplitView|null>(null)
 const globalSearchComponent = ref<typeof GlobalSearch|null>(null)
 const paneConfiguration = computed(() => documentTreeStore.paneStructure)
-const lastLeafId = computed(() => windowStateStore.lastLeafId)
+const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 const distractionFree = computed<boolean>(() => windowStateStore.distractionFreeMode !== undefined)
 
 watch(sidebarVisible, (newValue) => {
@@ -587,10 +587,10 @@ onMounted(() => {
     } else if (shortcut === 'insert-id') {
       editorCommands.value.data = generateId(configStore.config.zkn.idGen)
       editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
-    } else if (shortcut === 'copy-current-id' && windowStateStore.lastLeafActiveFile !== undefined) {
+    } else if (shortcut === 'copy-current-id' && documentTreeStore.lastLeafActiveFile !== undefined) {
       ipcRenderer.invoke('application', {
         command: 'get-descriptor',
-        payload: windowStateStore.lastLeafActiveFile.path
+        payload: documentTreeStore.lastLeafActiveFile.path
       })
         .then(descriptor => {
           if (descriptor !== undefined && descriptor.id !== undefined && descriptor.id !== '') {
@@ -687,7 +687,7 @@ function genericJtl (lineNumber: number): void {
   // This function is called from the sidebar where we already know the file
   // is open (because its editor component has provided the table of
   // contents in the first place).
-  const doc = windowStateStore.lastLeafActiveFile
+  const doc = documentTreeStore.lastLeafActiveFile
   if (doc !== undefined) {
     editorCommands.value.data = { filePath: doc.path, lineNumber }
     editorCommands.value.jumpToLine = !editorCommands.value.jumpToLine

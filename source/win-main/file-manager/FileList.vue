@@ -98,7 +98,7 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useOpenDirectoryStore } from 'source/pinia'
 import { type MaybeRootDescriptor, type AnyDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
@@ -114,7 +114,6 @@ const emit = defineEmits<(e: 'lock-file-tree') => void>()
 const activeDescriptor = ref<AnyDescriptor|undefined>(undefined) // Can contain the active ("focused") item
 
 const openDirectoryStore = useOpenDirectoryStore()
-const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
 const configStore = useConfigStore()
 
@@ -123,7 +122,7 @@ const selectedDirectory = computed(() => openDirectoryStore.openDirectory)
 const noResultsMessage = trans('No results')
 const emptyFileListMessage = trans('No directory selected')
 const emptyDirectoryMessage = trans('Empty directory')
-const selectedFile = computed(() => windowStateStore.lastLeafActiveFile)
+const selectedFile = computed(() => documentTreeStore.lastLeafActiveFile)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const itemHeight = computed(() => configStore.config.fileMeta ? 70 : 30)

@@ -36,10 +36,11 @@ import sanitizeHtml from 'sanitize-html'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type AnyDescriptor } from '@dts/common/fsal'
 import { md2html } from '@common/modules/markdown-utils'
-import { useWindowStateStore } from 'source/pinia'
+import { useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 const windowStateStore = useWindowStateStore()
+const documentTreeStore = useDocumentTreeStore()
 
 const emit = defineEmits<{
   (e: 'move-section', data: { from: number, to: number }): void
@@ -74,7 +75,7 @@ const titleOrTocLabel = computed(() => {
   }
 })
 
-const activeFile = computed(() => windowStateStore.lastLeafActiveFile)
+const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
 
 watch(activeFile, async (newValue) => {
   if (newValue === undefined) {
