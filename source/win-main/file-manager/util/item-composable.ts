@@ -16,7 +16,7 @@
 
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
-import { useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
+import { useDocumentTreeStore, useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
 import type { MaybeRootDescriptor } from 'source/types/common/fsal'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
 
@@ -35,9 +35,10 @@ export function useItemComposable (
 
   const openDirectoryStore = useOpenDirectoryStore()
   const windowStateStore = useWindowStateStore()
+  const documentTreeStore = useDocumentTreeStore()
 
   const isDirectory = computed(() => obj.value.type === 'directory')
-  const selectedFile = computed(() => windowStateStore.lastLeafActiveFile)
+  const selectedFile = computed(() => documentTreeStore.lastLeafActiveFile)
   const selectedDir = computed(() => openDirectoryStore.openDirectory)
 
   watch(nameEditing, (newVal) => {
@@ -92,7 +93,7 @@ export function useItemComposable (
         payload: {
           path: obj.value.path,
           windowId,
-          leafId: windowStateStore.lastLeafId,
+          leafId: documentTreeStore.lastLeafId,
           newTab: middleClick || (alt && type === 'file') // Force a new tab in this case.
         }
       })
@@ -181,7 +182,7 @@ export function useItemComposable (
             payload: {
               path: obj.value.path,
               windowId,
-              leafId: windowStateStore.lastLeafId
+              leafId: documentTreeStore.lastLeafId
             }
           })
             .catch(err => console.error(err))

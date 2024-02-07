@@ -81,7 +81,7 @@ import TreeItem from './TreeItem.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { ref, computed } from 'vue'
-import { useConfigStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { type MDFileDescriptor, type CodeFileDescriptor, type DirDescriptor, type AnyDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
@@ -129,6 +129,7 @@ const activeTreeItem = ref<undefined|[string, string]>(undefined)
 const workSpacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
+const documentTreeStore = useDocumentTreeStore()
 
 const platform = process.platform
 const fileSectionHeading = trans('Files')
@@ -139,7 +140,7 @@ const noResultsMessage = trans('No results')
 const fileTree = computed<AnyDescriptor[]>(() => workSpacesStore.roots.map(root => root.descriptor))
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
-const lastLeafId = computed(() => windowStateStore.lastLeafId)
+const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 
 const getFilteredTree = computed<AnyDescriptor[]>(() => {
   const q = props.filterQuery.trim().toLowerCase()

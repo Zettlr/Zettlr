@@ -45,15 +45,9 @@ async function updateSnippets (snippets: Ref<Array<{ name: string, content: stri
   }
 }
 
-// NOTE: THIS STATE IS ONLY INTENDED FOR THE MAIN WINDOW. IT WILL BREAK ON OTHER
-// WINDOWS, E.G., DUE TO A LACK OF THE SEARCH PARAM WINDOW_ID!
 export const useWindowStateStore = defineStore('window-state', () => {
-  const documentTreeStore = useDocumentTreeStore()
-
   const uncollapsedDirectories = ref<string[]>([])
   const distractionFreeMode = ref<undefined|string>(undefined)
-  const lastLeafId = ref<undefined|string>(undefined)
-  const lastLeafActiveFile = ref<OpenDocument|undefined>(undefined)
   const activeDocumentInfo = ref<undefined|DocumentInfo>(undefined)
   const tableOfContents = ref<ToCEntry[]|undefined>(undefined)
   const coloredTags = ref<ColoredTag[]>([])
@@ -64,24 +58,6 @@ export const useWindowStateStore = defineStore('window-state', () => {
    * This variable stores search results from the global search
    */
   const searchResults = ref<SearchResultWrapper[]>([])
-
-  ipcRenderer.on('shortcut', (event, command) => {
-    if (command === 'toggle-distraction-free') {
-      if (distractionFreeMode.value === undefined && lastLeafId.value !== undefined) {
-        distractionFreeMode.value = lastLeafId.value
-      } else if (distractionFreeMode.value !== undefined && lastLeafId.value === distractionFreeMode.value) {
-        distractionFreeMode.value = undefined
-      } else if (distractionFreeMode.value !== undefined && lastLeafId.value !== distractionFreeMode.value) {
-        distractionFreeMode.value = lastLeafId.value
-      }
-    } else if (command === 'delete-file' && lastLeafActiveFile.value !== undefined) {
-      ipcRenderer.invoke('application', {
-        command: 'file-delete',
-        payload: { path: lastLeafActiveFile.value.path }
-      })
-        .catch(err => console.error(err))
-    }
-  })
 
   // Central management for a few things that various components need
   // Colored tags
@@ -117,20 +93,9 @@ export const useWindowStateStore = defineStore('window-state', () => {
     .then((targets: WritingTarget[]) => { writingTargets.value = targets })
     .catch(e => console.error(e))
 
-  watch(lastLeafId, () => {
-    const leaf = documentTreeStore.paneData.find(leaf => leaf.id === lastLeafId.value)
-    if (leaf?.activeFile != null) {
-      lastLeafActiveFile.value = leaf.activeFile
-    } else {
-      lastLeafActiveFile.value = undefined
-    }
-  })
-
   return {
     uncollapsedDirectories,
     distractionFreeMode,
-    lastLeafId,
-    lastLeafActiveFile,
     activeDocumentInfo,
     tableOfContents,
     searchResults,
