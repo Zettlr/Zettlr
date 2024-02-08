@@ -813,7 +813,7 @@ export default class DocumentManager extends ProviderContract {
     if (ret) {
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
     }
-    
+
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
     const activeFile = leaf.tabMan.activeFile

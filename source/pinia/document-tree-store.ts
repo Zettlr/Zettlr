@@ -203,19 +203,19 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
             case DP_EVENTS.FILES_SORTED:
               copyDelta(paneData, treedata, context)
               break
+          }
+
+          // NOTE: We must ensure the paneData is correct before we (potentially set the leaf IDs)
+          if (event === DP_EVENTS.ACTIVE_FILE) {
+            const { leafId } = context
+            lastLeafId.value = leafId
+            const leaf = paneData.value.find(leaf => leaf.id === lastLeafId.value)
+            if (leaf?.activeFile != null) {
+              lastLeafActiveFile.value = leaf.activeFile
+            } else {
+              lastLeafActiveFile.value = undefined
             }
-            
-            // NOTE: We must ensure the paneData is correct before we (potentially set the leaf IDs)
-            if (event === DP_EVENTS.ACTIVE_FILE) {
-              const { leafId } = context
-              lastLeafId.value = leafId
-              const leaf = paneData.value.find(leaf => leaf.id === lastLeafId.value)
-              if (leaf?.activeFile != null) {
-                lastLeafActiveFile.value = leaf.activeFile
-              } else {
-                lastLeafActiveFile.value = undefined
-              }
-            }
+          }
         })
         .catch(err => console.error(err))
     }
