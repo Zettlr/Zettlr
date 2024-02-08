@@ -259,6 +259,7 @@ watch(toRef(props.editorCommands, 'jumpToLine'), () => {
     jtl(lineNumber)
   }
 })
+
 watch(toRef(props.editorCommands, 'moveSection'), () => {
   if (props.activeFile?.path !== props.file.path || documentTreeStore.lastLeafId !== props.leafId) {
     return
@@ -267,6 +268,7 @@ watch(toRef(props.editorCommands, 'moveSection'), () => {
   const { from, to } = props.editorCommands.data
   currentEditor?.moveSection(from, to)
 })
+
 watch(toRef(props.editorCommands, 'readabilityMode'), () => {
   if (currentEditor === null || props.activeFile?.path !== props.file.path) {
     return
@@ -296,6 +298,7 @@ watch(toRef(props.editorCommands, 'executeCommand'), () => {
   currentEditor.runCommand(command)
   currentEditor.focus()
 })
+
 watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   if (props.activeFile?.path !== props.file.path) {
     return
@@ -319,7 +322,10 @@ const fsalFiles = computed<MDFileDescriptor[]>(() => {
 
   for (const item of tree) {
     if (item.type === 'directory') {
-      const contents = objectToArray(item, 'children').filter(descriptor => descriptor.type === 'file')
+      const contents = objectToArray(item, 'children')
+        .filter((descriptor): descriptor is MDFileDescriptor => {
+          return descriptor.type === 'file'
+        })
       files.push(...contents)
     } else if (item.type === 'file') {
       files.push(item)
@@ -389,7 +395,7 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
     }
   })
 
-  editor.on('zettelkasten-link', (linkContents) => {
+  editor.on('zettelkasten-link', (linkContents: string) => {
     ipcRenderer.invoke('application', {
       command: 'force-open',
       payload: {
@@ -406,7 +412,7 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
     }
   })
 
-  editor.on('zettelkasten-tag', (tag) => {
+  editor.on('zettelkasten-tag', (tag: string) => {
     emit('globalSearch', tag)
   })
 
@@ -465,7 +471,7 @@ function jtl (lineNumber: number): void {
 }
 
 async function updateCitationKeys (library: string): Promise<void> {
-  const items: any[] = (await ipcRenderer.invoke('citeproc-provider', {
+  const items: Array<{ citekey: string, displayText: string }> = (await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-items',
     payload: { database: library }
   }))
