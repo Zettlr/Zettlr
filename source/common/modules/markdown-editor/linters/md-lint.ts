@@ -65,6 +65,11 @@ function placeToOffset (place: Point|Position|undefined, source: Text): { from: 
   } else {
     // It's a point
     const { column, line } = place
+    if (column == null || line == null) {
+      // BUG: The Markdown linter sometimes spits out objects that have these
+      // properties, but which are preset to null.
+      return { from: 0, to: 0 }
+    }
     const offset = source.line(line).from + column - 1
     return { from: offset, to: offset }
   }
