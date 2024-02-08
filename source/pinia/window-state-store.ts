@@ -17,9 +17,7 @@
 import { defineStore } from 'pinia'
 import type { DocumentInfo } from 'source/common/modules/markdown-editor'
 import type { ToCEntry } from 'source/common/modules/markdown-editor/plugins/toc-field'
-import type { OpenDocument } from 'source/types/common/documents'
-import { ref, watch, type Ref } from 'vue'
-import { useDocumentTreeStore } from './document-tree-store'
+import { ref, type Ref } from 'vue'
 import type { SearchResultWrapper } from 'source/types/common/search'
 import { type ColoredTag } from 'source/app/service-providers/tags'
 import { type WritingTarget } from '@providers/targets'
@@ -34,15 +32,17 @@ async function updateSnippets (snippets: Ref<Array<{ name: string, content: stri
     command: 'list-snippets'
   })
 
-  snippets.value = []
+  const newSnippets: Array<{ name: string, content: string }> = []
   for (const snippet of snippetNames) {
     const content: string = await ipcRenderer.invoke('assets-provider', {
       command: 'get-snippet',
       payload: { name: snippet }
     })
 
-    snippets.value.push({ name: snippet, content })
+    newSnippets.push({ name: snippet, content })
   }
+
+  snippets.value = newSnippets
 }
 
 export const useWindowStateStore = defineStore('window-state', () => {
