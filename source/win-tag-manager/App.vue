@@ -221,7 +221,6 @@ export default defineComponent({
           type: 'button',
           label: trans('Save'),
           id: 'save',
-          icon: '',
           buttonClass: 'primary' // It's a primary button
         },
         {
@@ -231,8 +230,7 @@ export default defineComponent({
         {
           type: 'button',
           label: trans('Close'),
-          id: 'close',
-          icon: ''
+          id: 'close'
         }
       ]
     }
