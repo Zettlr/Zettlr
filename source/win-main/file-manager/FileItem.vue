@@ -125,24 +125,16 @@
   <PopoverDirProps
     v-if="showPopover && displayText !== null && obj.type === 'directory'"
     v-bind:target="displayText"
-    v-bind:directory-path="obj.path"
+    v-bind:directory="obj"
     v-on:close="showPopover = false"
   ></PopoverDirProps>
   <PopoverFileProps
     v-if="showPopover && displayText !== null && obj.type !== 'directory'"
     v-bind:target="displayText"
-    v-bind:filepath="obj.path"
-    v-bind:filename="obj.name"
-    v-bind:creationtime="obj.creationtime"
-    v-bind:modtime="obj.modtime"
-    v-bind:tags="obj.type === 'file' ? obj.tags : []"
+    v-bind:file="obj"
     v-bind:colored-tags="windowStateStore.coloredTags"
     v-bind:target-value="0"
     v-bind:target-mode="'words'"
-    v-bind:file-size="obj.size"
-    v-bind:type="obj.type"
-    v-bind:words="obj.type === 'file' ? obj.wordCount : 0"
-    v-bind:ext="obj.ext"
     v-on:close="showPopover = false"
   ></PopoverFileProps>
 </template>
