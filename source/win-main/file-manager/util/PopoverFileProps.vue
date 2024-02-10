@@ -76,19 +76,15 @@ import formatDate from '@common/util/format-date'
 import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
 import { type ColoredTag } from '@providers/tags'
-import { ref, computed, watch, toRef } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { CodeFileDescriptor, MDFileDescriptor } from 'source/types/common/fsal'
-import { useConfigStore } from 'source/pinia'
-import type { WritingTarget } from 'source/app/service-providers/targets'
+import { useConfigStore, useWritingTargetsStore, useColoredTagsStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
 const props = defineProps<{
   target: HTMLElement
   file: MDFileDescriptor|CodeFileDescriptor
-  coloredTags: ColoredTag[]
-  targetValue: WritingTarget['count']
-  targetMode: WritingTarget['mode']
 }>()
 
 const wordsLabel = trans('Words')
@@ -101,9 +97,8 @@ const charactersLabel = trans('Characters')
 const emit = defineEmits<(e: 'close') => void>()
 
 const configStore = useConfigStore()
-
-const internalTargetValue = ref(props.targetValue)
-const internalTargetMode = ref(props.targetMode)
+const writingTargetsStore = useWritingTargetsStore()
+const coloredTagStore = useColoredTagsStore()
 
 const creationTime = computed(() => {
   return formatDate(new Date(props.file.creationtime), configStore.config.appLang, true)
@@ -120,15 +115,17 @@ const formattedWords = computed(() => {
   }
 })
 
+const fileTarget = computed(() => writingTargetsStore.targets.find(t => t.path === props.file.path))
+
+const internalTargetValue = ref(fileTarget.value?.count ?? 0)
+const internalTargetMode = ref(fileTarget.value?.mode ?? 'words')
+
 watch(internalTargetValue, updateWritingTarget)
 watch(internalTargetMode, updateWritingTarget)
 
-watch(toRef(props, 'targetValue'), () => {
-  internalTargetValue.value = props.targetValue
-})
-
-watch(toRef(props, 'targetMode'), () => {
-  internalTargetMode.value = props.targetMode
+watch(fileTarget, () => {
+  internalTargetValue.value = fileTarget.value?.count ?? 0
+  internalTargetMode.value = fileTarget.value?.mode ?? 'words'
 })
 
 function reset (): void {
@@ -148,7 +145,7 @@ function updateWritingTarget (): void {
 }
 
 function retrieveTagColour (tagName: string): string {
-  const foundTag = props.coloredTags.find(tag => tag.name === tagName)
+  const foundTag = coloredTagStore.tags.find(tag => tag.name === tagName)
   return foundTag !== undefined ? foundTag.color : ''
 }
 </script>
