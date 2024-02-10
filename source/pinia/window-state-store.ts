@@ -19,7 +19,6 @@ import type { DocumentInfo } from 'source/common/modules/markdown-editor'
 import type { ToCEntry } from 'source/common/modules/markdown-editor/plugins/toc-field'
 import { ref, type Ref } from 'vue'
 import type { SearchResultWrapper } from 'source/types/common/search'
-import { type ColoredTag } from 'source/app/service-providers/tags'
 import { type WritingTarget } from '@providers/targets'
 
 const ipcRenderer = window.ipc
@@ -50,7 +49,6 @@ export const useWindowStateStore = defineStore('window-state', () => {
   const distractionFreeMode = ref<undefined|string>(undefined)
   const activeDocumentInfo = ref<undefined|DocumentInfo>(undefined)
   const tableOfContents = ref<ToCEntry[]|undefined>(undefined)
-  const coloredTags = ref<ColoredTag[]>([])
   const snippets = ref<Array<{ name: string, content: string }>>([])
   const writingTargets = ref<WritingTarget[]>([])
 
@@ -58,18 +56,6 @@ export const useWindowStateStore = defineStore('window-state', () => {
    * This variable stores search results from the global search
    */
   const searchResults = ref<SearchResultWrapper[]>([])
-
-  // Central management for a few things that various components need
-  // Colored tags
-  ipcRenderer.on('colored-tags', (event) => {
-    ipcRenderer.invoke('tag-provider', { command: 'get-colored-tags' })
-      .then(tags => { coloredTags.value = tags })
-      .catch(e => console.error(e))
-  })
-
-  ipcRenderer.invoke('tag-provider', { command: 'get-colored-tags' })
-    .then(tags => { coloredTags.value = tags })
-    .catch(e => console.error(e))
 
   // Snippets
   ipcRenderer.on('assets-provider', (event, what: string) => {
@@ -99,7 +85,6 @@ export const useWindowStateStore = defineStore('window-state', () => {
     activeDocumentInfo,
     tableOfContents,
     searchResults,
-    coloredTags,
     snippets,
     writingTargets
   }

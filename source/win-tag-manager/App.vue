@@ -111,7 +111,7 @@
   </WindowChrome>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -131,176 +131,142 @@ import TextControl from '@common/vue/form/elements/TextControl.vue'
 import ColorControl from '@common/vue/form/elements/ColorControl.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
-import { type TagRecord } from '@providers/tags'
+import { ref, computed, unref } from 'vue'
 import { type StatusbarControl } from '@common/vue/window/WindowStatusbar.vue'
+import { useConfigStore, useTagsStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  components: {
-    WindowChrome,
-    TextControl,
-    ButtonControl,
-    ColorControl
-  },
-  data: function () {
-    return {
-      tags: [] as TagRecord[],
-      hasUnsavedChanges: false,
-      renameActiveFor: '',
-      sortBy: 'name' as 'name'|'idf'|'count'|'color',
-      descending: false,
-      query: '',
-      newTag: ''
-    }
-  },
-  computed: {
-    assignColorLabel: function () {
-      return trans('Assign color')
-    },
-    removeColorLabel: function () {
-      return trans('Remove color')
-    },
-    tagNameLabel: function () {
-      return trans('Tag name')
-    },
-    colorLabel: function () {
-      return trans('Color')
-    },
-    countLabel: function () {
-      return trans('Count')
-    },
-    descriptionPlaceholder: function () {
-      return trans('A short description')
-    },
-    tagManagerIntro: function () {
-      return trans('Here you can assign colors to different tags. If a tag is found in a file, its tile in the preview list will receive a colored indicator. The description will be shown on mouse hover.')
-    },
-    windowTitle: function () {
-      return trans('Manage tags')
-    },
-    filterPlaceholder () {
-      return trans('Filter tags…')
-    },
-    filteredTags () {
-      const q = this.query.toLowerCase()
-      const copy = this.tags.map(x => x).filter(x => x.name.toLowerCase().includes(q))
+const assignColorLabel = trans('Assign color')
+const removeColorLabel = trans('Remove color')
+const tagNameLabel = trans('Tag name')
+const colorLabel = trans('Color')
+const countLabel = trans('Count')
+const descriptionPlaceholder = trans('A short description')
+const tagManagerIntro = trans('Here you can assign colors to different tags. If a tag is found in a file, its tile in the preview list will receive a colored indicator. The description will be shown on mouse hover.')
+const windowTitle = trans('Manage tags')
+const filterPlaceholder = trans('Filter tags…')
 
-      const languagePreferences = [ window.config.get('appLang'), 'en' ]
-      const coll = new Intl.Collator(languagePreferences, { numeric: true })
-      copy.sort((a, b) => {
-        if (this.sortBy === 'name') {
-          return coll.compare(a.name, b.name)
-        } else if (this.sortBy === 'color') {
-          const aCol = a.color !== undefined
-          const bCol = b.color !== undefined
-          if (!aCol && bCol) {
-            return 1
-          } else if (aCol && !bCol) {
-            return -1
-          } else {
-            return 0
-          }
-        } else if (this.sortBy === 'count') {
-          return a.files.length - b.files.length
-        } else {
-          return a.idf - b.idf
-        }
-      })
+const configStore = useConfigStore()
+const tagStore = useTagsStore()
 
-      if (this.descending) {
-        copy.reverse()
-      }
+// TODO const tags: [] as TagRecord[],
+const hasUnsavedChanges = ref(false)
+const renameActiveFor = ref('')
+const sortBy = ref<'name'|'idf'|'count'|'color'>('name')
+const descending = ref(false)
+const query = ref('')
+const newTag = ref('')
 
-      return copy
-    },
-    statusbarControls: function (): StatusbarControl[] {
-      return [
-        {
-          type: 'button',
-          label: trans('Save'),
-          id: 'save',
-          buttonClass: 'primary' // It's a primary button
-        },
-        {
-          type: 'text',
-          label: this.hasUnsavedChanges ? trans('Unsaved changes') : ''
-        },
-        {
-          type: 'button',
-          label: trans('Close'),
-          id: 'close'
-        }
-      ]
-    }
-  },
-  created: function () {
-    this.retrieveTags().catch(e => console.error(e))
-  },
-  methods: {
-    handleStatusbar: function (controlID: string) {
-      if (controlID === 'save') {
-        ipcRenderer.invoke('tag-provider', {
-          command: 'set-colored-tags',
-          // De-proxy the tags so they can be sent over IPC
-          payload: JSON.parse(JSON.stringify(this.tags))
-        })
-          .then(() => {
-            ipcRenderer.send('window-controls', { command: 'win-close' })
-          })
-          .catch(e => console.error(e))
-      } else if (controlID === 'close') {
-        ipcRenderer.send('window-controls', { command: 'win-close' })
-      }
-    },
-    removeColor: function (tagName: string) {
-      const found = this.tags.find(tag => tag.name === tagName)
-      if (found !== undefined) {
-        found.color = undefined
-        found.desc = undefined
-        this.hasUnsavedChanges = true
+const filteredTags = computed(() => {
+  const q = query.value.toLowerCase()
+  const copy = tagStore.tags.map(x => x).filter(x => x.name.toLowerCase().includes(q))
+
+  const languagePreferences = [ configStore.config.appLang, 'en' ]
+  const coll = new Intl.Collator(languagePreferences, { numeric: true })
+  copy.sort((a, b) => {
+    if (sortBy.value === 'name') {
+      return coll.compare(a.name, b.name)
+    } else if (sortBy.value === 'color') {
+      const aCol = a.color !== undefined
+      const bCol = b.color !== undefined
+      if (!aCol && bCol) {
+        return 1
+      } else if (aCol && !bCol) {
+        return -1
       } else {
-        console.error(`Could not remove color for tag ${tagName}: Tag not found`)
+        return 0
       }
-    },
-    assignColor: function (tagName: string) {
-      const found = this.tags.find(tag => tag.name === tagName)
-      if (found !== undefined) {
-        found.color = '#1cb27e'
-        found.desc = ''
-        this.hasUnsavedChanges = true
-      } else {
-        console.error(`Could not assign color to tag ${tagName}: Tag not found`)
-      }
-    },
-    retrieveTags: async function () {
-      this.tags = await ipcRenderer.invoke('tag-provider', {
-        command: 'get-all-tags'
-      }) as TagRecord[]
-    },
-    renameTag: async function (tagName: string) {
-      await ipcRenderer.invoke('application', {
-        command: 'rename-tag',
-        payload: { oldName: tagName, newName: this.newTag }
-      })
-
-      this.newTag = ''
-      this.renameActiveFor = tagName
-
-      // Afterwards, fetch the new set of tags
-      await this.retrieveTags()
-    },
-    changeSorting (which: 'name'|'color'|'count'|'idf') {
-      if (this.sortBy === which) {
-        this.descending = !this.descending
-      } else {
-        this.sortBy = which
-        this.descending = false
-      }
+    } else if (sortBy.value === 'count') {
+      return a.files.length - b.files.length
+    } else {
+      return a.idf - b.idf
     }
+  })
+
+  if (descending.value) {
+    copy.reverse()
   }
+
+  return copy
 })
+
+const statusbarControls = computed<StatusbarControl[]>(() => {
+  return [
+    {
+      type: 'button',
+      label: trans('Save'),
+      id: 'save',
+      buttonClass: 'primary' // It's a primary button
+    },
+    {
+      type: 'text',
+      label: hasUnsavedChanges.value ? trans('Unsaved changes') : ''
+    },
+    {
+      type: 'button',
+      label: trans('Close'),
+      id: 'close'
+    }
+  ]
+})
+
+function handleStatusbar (controlID: string): void {
+  if (controlID === 'save') {
+    ipcRenderer.invoke('tag-provider', {
+      command: 'set-colored-tags',
+      // De-proxy the tags so they can be sent over IPC
+      payload: structuredClone(unref(tagStore.tags))
+    })
+      .then(() => {
+        ipcRenderer.send('window-controls', { command: 'win-close' })
+      })
+      .catch(e => console.error(e))
+  } else if (controlID === 'close') {
+    ipcRenderer.send('window-controls', { command: 'win-close' })
+  }
+}
+
+function removeColor (tagName: string): void {
+  const found = tagStore.tags.find(tag => tag.name === tagName)
+  if (found !== undefined) {
+    found.color = undefined
+    found.desc = undefined
+    hasUnsavedChanges.value = true
+  } else {
+    console.error(`Could not remove color for tag ${tagName}: Tag not found`)
+  }
+}
+
+function assignColor (tagName: string): void {
+  const found = tagStore.tags.find(tag => tag.name === tagName)
+  if (found !== undefined) {
+    found.color = '#1cb27e'
+    found.desc = ''
+    hasUnsavedChanges.value = true
+  } else {
+    console.error(`Could not assign color to tag ${tagName}: Tag not found`)
+  }
+}
+
+async function renameTag (tagName: string): Promise<void> {
+  await ipcRenderer.invoke('application', {
+    command: 'rename-tag',
+    payload: { oldName: tagName, newName: newTag.value }
+  })
+
+  newTag.value = ''
+  renameActiveFor.value = tagName
+}
+
+function changeSorting (which: 'name'|'color'|'count'|'idf'): void {
+  if (sortBy.value === which) {
+    descending.value = !descending.value
+  } else {
+    sortBy.value = which
+    descending.value = false
+  }
+}
 </script>
 
 <style lang="less">

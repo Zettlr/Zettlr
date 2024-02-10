@@ -86,6 +86,7 @@
     v-if="showTagsPopover && tagsButton !== null"
     v-bind:target="tagsButton"
     v-on:close="showTagsPopover = false"
+    v-on:search-tag="startGlobalSearch($event)"
   ></PopoverTags>
   <PopoverTable
     v-if="showTablePopover && tableButton !== null"
