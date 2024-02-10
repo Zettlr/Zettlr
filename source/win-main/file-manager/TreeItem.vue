@@ -135,9 +135,6 @@
     v-if="showPopover && displayText !== null && obj.type !== 'directory'"
     v-bind:target="displayText"
     v-bind:file="obj"
-    v-bind:colored-tags="windowStateStore.coloredTags"
-    v-bind:target-value="0"
-    v-bind:target-mode="'words'"
     v-on:close="showPopover = false"
   ></PopoverFileProps>
 </template>
