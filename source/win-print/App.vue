@@ -79,7 +79,7 @@ export default defineComponent({
     }
   },
   methods: {
-    handleClick: function (buttonID: string) {
+    handleClick: function (buttonID?: string) {
       if (buttonID === 'print') {
         // NOTE: Printing only works in production, as during development
         // contents are served from localhost:3000 (which gives a CORS error)

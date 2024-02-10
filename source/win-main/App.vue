@@ -771,7 +771,7 @@ function toggleFileList (): void {
   fileManagerSplitComponent.value?.toggleFileList()
 }
 
-function handleClick (clickedID: string): void {
+function handleClick (clickedID?: string): void {
   if (clickedID === 'toggle-readability') {
     editorCommands.value.readabilityMode = !editorCommands.value.readabilityMode
   } else if (clickedID === 'root-open-workspaces') {
@@ -816,7 +816,7 @@ function handleClick (clickedID: string): void {
     showTablePopover.value = !showTablePopover.value
   } else if (clickedID === 'document-info') {
     showDocInfoPopover.value = !showDocInfoPopover.value
-  } else if (clickedID.startsWith('markdown') && clickedID.length > 8) {
+  } else if (clickedID !== undefined && clickedID.startsWith('markdown') && clickedID.length > 8) {
     // The user clicked a command button, so we just have to run that.
     editorCommands.value.data = clickedID
     editorCommands.value.executeCommand = !editorCommands.value.executeCommand
@@ -857,16 +857,18 @@ function setPomodoroConfig (config: PomodoroConfig): void {
   }
 }
 
-function handleToggle (controlState: { id: string, state: any }): void {
+function handleToggle (controlState: { id?: string, state?: string | boolean }): void {
   const { id, state } = controlState
   if (id === 'toggle-sidebar') {
     window.config.set('window.sidebarVisible', state)
   } else if (id === 'toggle-file-manager') {
     // Since this is a three-way-toggle, we have to inspect the state.
     fileManagerVisible.value = state !== undefined
-    if (state !== undefined) {
+    if (typeof state === 'string' && (state === 'fileManager' || state === 'globalSearch')) {
       // Set the shown component to the correct one
       mainSplitViewVisibleComponent.value = state
+    } else {
+      console.warn(`Could not toggle main split component; expected state to be 'fileManager' or 'globalSearch', received ${state}`)
     }
   }
 }

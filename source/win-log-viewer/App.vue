@@ -187,8 +187,12 @@ export default defineComponent({
       const elem = this.$refs['log-viewer'] as Element
       elem.scrollTop = elem.scrollHeight - elem.getBoundingClientRect().height
     },
-    handleToggle: function (event: { id: string, state: any }) {
+    handleToggle: function (event: { id?: string, state?: string|boolean }) {
       const { id, state } = event
+      if (typeof state !== 'boolean') {
+        console.warn('Could not toggle log level: State was not a boolean.')
+        return
+      }
       if (id === 'verboseToggle') {
         this.includeVerbose = state
       } else if (id === 'infoToggle') {

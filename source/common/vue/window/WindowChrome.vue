@@ -18,7 +18,7 @@
         v-if="showMenubar"
       ></WindowMenubar>
       <WindowToolbar
-        v-if="showToolbar"
+        v-if="showToolbar && toolbarControls !== undefined"
         v-bind:controls="toolbarControls"
         v-bind:show-labels="toolbarLabels"
         v-on:search="emit('toolbar-search', $event)"
@@ -50,7 +50,7 @@
     <WindowStatusbar
       v-if="showStatusbar"
       v-bind:controls="statusbarControls ?? []"
-      v-on:click="$emit('statusbar-click', $event)"
+      v-on:click="emit('statusbar-click', $event)"
     ></WindowStatusbar>
   </div>
 </template>
@@ -114,8 +114,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'toolbar-search', value: string): void
-  (e: 'toolbar-click', value: string): void
-  (e: 'toolbar-toggle', value: { id: string, state: any }): void // TODO
+  (e: 'toolbar-click', value?: string): void
+  (e: 'toolbar-toggle', value: { id?: string, state?: string|boolean }): void
   (e: 'tab', value: number): void
   (e: 'statusbar-click', value: any): void // TODO
 }>()
