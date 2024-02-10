@@ -363,6 +363,15 @@ export interface Table extends MDNode {
    * A list of rows of this table
    */
   rows: TableRow[]
+  /**
+   * A list of column alignments in the table. May be undefined; the default is
+   * for all columns to be left-aligned.
+   */
+  alignment?: Array<'left'|'center'|'right'>
+  /**
+   * This property can optionally contain the table type in the source.
+   */
+  tableType?: 'grid'|'pipe'
 }
 
 /**
@@ -926,28 +935,90 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       }
       const header = node.getChildren('TableHeader')
       const rows = node.getChildren('TableRow')
+      // The parser cannot reliably extract the table delimiters, but we need
+      // those for the column alignment. Thus, we need to see if we can find it
+      // manually and determine the column alignments.
+
+      // First, find the delimiter row. We have to do this manually since the
+      // Markdown Lezer parser is sometimes a tad stupid for finding that.
+      for (const line of markdown.substring(node.from, node.to).split('\n')) {
+        if (!/^[|+:-]+$/.test(line)) {
+          continue
+        }
+
+        // Gotcha.
+        if (line.includes('|')) {
+          astNode.tableType = 'pipe'
+        } else {
+          astNode.tableType = 'grid'
+        }
+
+        // The plus indicates a special Pandoc-type of pipe table
+        const splitter = line.includes('+') ? '+' : '|'
+        astNode.alignment = line.split(splitter)
+          // NOTE: |-|-| will result in ['', '-', '-', ''] -> filter out
+          .filter(c => c.length > 0)
+          .map(c => {
+            if (c.startsWith('|')) {
+              c = c.substring(1)
+            }
+            if (c.endsWith('|')) {
+              c = c.substring(0, c.length - 1)
+            }
+            if (c.startsWith(':') && c.endsWith(':')) {
+              return 'center'
+            } else if (c.endsWith(':')) {
+              return 'right'
+            } else {
+              return 'left'
+            }
+          })
+        break
+      } // Else: Couldn't determine either column alignment nor table type
+
       for (const row of [ ...header, ...rows ]) {
         const rowNode: TableRow = {
           type: 'TableRow',
           name: row.name,
           from: row.from,
           to: row.to,
-          whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+          whitespaceBefore: '',
           isHeaderOrFooter: row.name === 'TableHeader',
           cells: []
         }
-        for (const cell of row.getChildren('TableCell')) {
-          const cellNode: TableCell = {
-            type: 'TableCell',
-            name: 'TableCell',
-            from: cell.from,
-            to: cell.to,
-            whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-            children: []
+
+        // Some rows may have no cells. This can happen with grid tables, for
+        // example.
+        const cells = row.getChildren('TableCell')
+        if (cells.length > 0) {
+          for (const cell of cells) {
+            const cellNode: TableCell = {
+              type: 'TableCell',
+              name: 'TableCell',
+              from: cell.from,
+              to: cell.to,
+              whitespaceBefore: '',
+              children: []
+            }
+            rowNode.cells.push(parseChildren(cellNode, cell, markdown))
+            if (
+              astNode.tableType === 'grid' &&
+              cellNode.children.length > 0 &&
+              cellNode.children[0].type === 'Text' &&
+              cellNode.children[0].value.startsWith('|')
+            ) {
+              // Special case handling: The Lezer parser unfortunately is a bit
+              // sloppy when it comes to grid table parsing and often includes
+              // the delimiting pipes between cells as part of the TableCell
+              // nodes. Here we account for that and remove that pipe if
+              // applicable.
+              cellNode.children[0].value = cellNode.children[0].value.substring(1)
+              cellNode.children[0].from += 1
+              cellNode.from += 1
+            }
           }
-          rowNode.cells.push(parseChildren(cellNode, cell, markdown))
+          astNode.rows.push(rowNode)
         }
-        astNode.rows.push(rowNode)
       }
       return astNode
     }
