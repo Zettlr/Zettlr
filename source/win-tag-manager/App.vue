@@ -54,12 +54,15 @@
             ></ColorControl>
 
             <TextControl
-              v-if="tag.color !== undefined"
+              v-if="tag.color !== undefined && tag.desc !== undefined"
               v-model="tag.desc"
               v-bind:inline="true"
               v-bind:placeholder="descriptionPlaceholder"
               v-on:change="hasUnsavedChanges = true"
             ></TextControl>
+            <span v-else-if="tag.color !== undefined && tag.desc === undefined">
+              No description
+            </span>
 
             <ButtonControl
               v-if="tag.color !== undefined"
