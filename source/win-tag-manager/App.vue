@@ -216,7 +216,7 @@ function handleStatusbar (controlID: string): void {
     ipcRenderer.invoke('tag-provider', {
       command: 'set-colored-tags',
       // De-proxy the tags so they can be sent over IPC
-      payload: structuredClone(unref(tagStore.tags))
+      payload: JSON.parse(JSON.stringify(unref(tagStore.tags)))
     })
       .then(() => {
         ipcRenderer.send('window-controls', { command: 'win-close' })
