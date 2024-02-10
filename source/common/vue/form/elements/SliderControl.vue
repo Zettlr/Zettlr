@@ -3,10 +3,10 @@
     <label v-if="label !== ''" v-html="label"></label>
     <input
       type="range"
-      v-bind:min="min"
-      v-bind:max="max"
-      v-bind:value="modelValue"
-      v-bind:name="name"
+      v-bind:min="props.min"
+      v-bind:max="props.max"
+      v-bind:value="props.modelValue"
+      v-bind:name="props.name"
       v-on:input="emit('update:modelValue', parseInt(($event.target as HTMLInputElement).value, 10))"
       v-on:change="emit('update:modelValue', parseInt(($event.target as HTMLInputElement).value, 10))"
     >

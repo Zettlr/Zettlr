@@ -14,7 +14,7 @@
           'no-info': !hasInfoString(item),
           'no-icons': !needsIconColumn
         }"
-        v-on:click="$emit('select', idx)"
+        v-on:click="emit('select', idx)"
         v-on:contextmenu="handleContextMenu($event, idx)"
       >
         <cds-icon

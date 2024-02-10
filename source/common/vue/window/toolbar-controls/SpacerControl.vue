@@ -2,9 +2,9 @@
   <div
     v-bind:class="{
       'spacer': true,
-      'spacer-5x': control.size === '5x',
-      'spacer-3x': control.size === '3x',
-      'spacer-1x': control.size === '1x'
+      'spacer-5x': props.control.size === '5x',
+      'spacer-3x': props.control.size === '3x',
+      'spacer-1x': props.control.size === '1x'
     }"
   ></div>
 </template>

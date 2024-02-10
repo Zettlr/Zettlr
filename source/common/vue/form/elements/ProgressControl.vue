@@ -1,13 +1,13 @@
 <template>
   <div class="progress-bar-container">
     <progress
-      v-bind:max="max ?? 100"
-      v-bind:value="value ?? 0"
+      v-bind:max="props.max ?? 100"
+      v-bind:value="props.value ?? 0"
     >
-      Progress: {{ value ?? 0 }} of {{ max ?? 100 }}
+      Progress: {{ props.value ?? 0 }} of {{ props.max ?? 100 }}
     </progress>
     <button
-      v-if="interruptible === true"
+      v-if="props.interruptible === true"
       class="interrupt-button"
       v-on:click="emit('interrupt')"
     >
