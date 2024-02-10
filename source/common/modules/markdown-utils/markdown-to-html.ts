@@ -388,6 +388,5 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
  */
 export function md2html (markdown: string, getCitation: (citations: CiteItem[], composite: boolean) => string|undefined): string {
   const ast = markdownToAST(markdown)
-  console.log(nodeToHTML(ast, getCitation))
   return nodeToHTML(ast, getCitation)
 }
