@@ -77,7 +77,7 @@ import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
 import { ref, computed, watch } from 'vue'
 import type { CodeFileDescriptor, MDFileDescriptor } from 'source/types/common/fsal'
-import { useConfigStore, useWritingTargetsStore, useColoredTagsStore } from 'source/pinia'
+import { useConfigStore, useWritingTargetsStore, useTagsStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
@@ -97,7 +97,7 @@ const emit = defineEmits<(e: 'close') => void>()
 
 const configStore = useConfigStore()
 const writingTargetsStore = useWritingTargetsStore()
-const coloredTagStore = useColoredTagsStore()
+const tagStore = useTagsStore()
 
 const creationTime = computed(() => {
   return formatDate(new Date(props.file.creationtime), configStore.config.appLang, true)
@@ -144,7 +144,7 @@ function updateWritingTarget (): void {
 }
 
 function retrieveTagColour (tagName: string): string {
-  const foundTag = coloredTagStore.tags.find(tag => tag.name === tagName)
+  const foundTag = tagStore.coloredTags.find(tag => tag.name === tagName)
   return foundTag !== undefined ? foundTag.color : ''
 }
 </script>

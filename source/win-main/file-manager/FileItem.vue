@@ -160,7 +160,7 @@ import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import { ref, computed, toRef, watch } from 'vue'
 import { type AnyDescriptor, type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
-import { useConfigStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useTagsStore, useWindowStateStore } from 'source/pinia'
 import { useItemComposable } from './util/item-composable'
 
 const props = defineProps<{
@@ -177,6 +177,7 @@ const emit = defineEmits<{
 }>()
 
 const configStore = useConfigStore()
+const tagStore = useTagsStore()
 const windowStateStore = useWindowStateStore()
 
 const shouldCountChars = computed(() => configStore.config.editor.countChars)
@@ -334,7 +335,7 @@ const tagsWithColor = computed<Array<{ name: string, color: string|undefined }>>
   return props.obj.tags.map(tag => {
     return {
       name: tag,
-      color: windowStateStore.coloredTags.find(t => t.name === tag)?.color
+      color: tagStore.coloredTags.find(t => t.name === tag)?.color
     }
   })
 })

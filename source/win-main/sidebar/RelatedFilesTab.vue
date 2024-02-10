@@ -64,7 +64,7 @@
 import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { ref, computed, watch } from 'vue'
-import { useConfigStore, useWorkspacesStore, useDocumentTreeStore } from 'source/pinia'
+import { useConfigStore, useWorkspacesStore, useDocumentTreeStore, useTagsStore } from 'source/pinia'
 import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { type TagRecord } from '@providers/tags'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
@@ -80,6 +80,7 @@ const ipcRenderer = window.ipc
 
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
+const tagStore = useTagsStore()
 const documentTreeStore = useDocumentTreeStore()
 
 const searchParams = new URLSearchParams(window.location.search)
@@ -180,8 +181,7 @@ async function recomputeRelatedFiles (): Promise<void> {
   // This relation is not as important as explicit links, so they should
   // be below the inbound linked files.
 
-  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' }) as TagRecord[]
-  const recommendations = tags.filter(tag => descriptor.tags.includes(tag.name))
+  const recommendations = tagStore.tags.filter(tag => descriptor.tags.includes(tag.name))
 
   for (const tagRecord of recommendations) {
     for (const filePath of tagRecord.files) {
@@ -217,7 +217,7 @@ async function recomputeRelatedFiles (): Promise<void> {
 
   const tagsOnly = unreactiveList.filter(e => e.link === 'none')
   const idf: Record<string, number> = {}
-  for (const tagRecord of tags) {
+  for (const tagRecord of tagStore.tags) {
     idf[tagRecord.name] = tagRecord.idf
   }
 

@@ -125,8 +125,8 @@ export default class TagProvider extends ProviderContract {
 
     this._coloredTags = uniqueTags
     this.container.set(this._coloredTags)
-    broadcastIpcMessage('colored-tags')
-    broadcastIpcMessage('tags')
+    broadcastIpcMessage('tag-provider', 'colored-tags-updated', this.getColoredTags())
+    broadcastIpcMessage('tag-provider', 'tags-updated', this.getAllTags())
   }
 
   /**
