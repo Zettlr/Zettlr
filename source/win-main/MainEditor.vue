@@ -43,9 +43,8 @@ import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/c
 import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
-import { type TagRecord } from '@providers/tags'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
-import { useConfigStore, useDocumentTreeStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useTagsStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
 import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
 
@@ -97,6 +96,7 @@ const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
 const configStore = useConfigStore()
+const tagStore = useTagsStore()
 
 // UNREFFED STUFF
 let currentEditor: MarkdownEditor|null = null
@@ -197,6 +197,7 @@ const filenameOnly = computed<boolean>(() => configStore.config.zkn.linkFilename
 const fontSize = computed<number>(() => configStore.config.editor.fontSize)
 const globalSearchResults = computed(() => windowStateStore.searchResults)
 const snippets = computed(() => windowStateStore.snippets)
+const tags = computed(() => tagStore.tags)
 
 const activeFileDescriptor = ref<undefined|MDFileDescriptor|CodeFileDescriptor>(undefined)
 
@@ -354,6 +355,10 @@ watch(snippets, (newValue) => {
   currentEditor?.setCompletionDatabase('snippets', newValue)
 })
 
+watch(tags, (newValue) => {
+  currentEditor?.setCompletionDatabase('tags', newValue)
+})
+
 // METHODS
 /**
  * Returns a MarkdownEditor for the provided path.
@@ -438,8 +443,7 @@ async function loadDocument (): Promise<void> {
   windowStateStore.tableOfContents = currentEditor.tableOfContents
   windowStateStore.activeDocumentInfo = currentEditor.documentInfo
 
-  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' }) as TagRecord[]
-  currentEditor.setCompletionDatabase('tags', tags)
+  currentEditor.setCompletionDatabase('tags', tags.value)
   currentEditor.setCompletionDatabase('snippets', snippets.value)
 
   maybeHighlightSearchResults()
