@@ -28,7 +28,7 @@ import { getFilesystemMetadata } from './util/get-fs-metadata'
  * @param {CodeFileDescriptor} origFile The file object
  * @param {any} cachedFile The cache object to apply
  */
-function applyCache (cachedFile: any, origFile: CodeFileDescriptor): CodeFileDescriptor {
+function applyCache (cachedFile: CodeFileDescriptor, origFile: CodeFileDescriptor): CodeFileDescriptor {
   return safeAssign(cachedFile, origFile)
 }
 
@@ -37,7 +37,7 @@ function applyCache (cachedFile: any, origFile: CodeFileDescriptor): CodeFileDes
  * @param {CodeFileDescriptor} origFile The file to cache
  */
 function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache): void {
-  if (!cacheAdapter.set(origFile.path, JSON.stringify(origFile))) {
+  if (!cacheAdapter.set(origFile.path, structuredClone(origFile))) {
     throw new Error(`Could not cache file ${origFile.name}!`)
   }
 }
@@ -104,9 +104,9 @@ export async function parse (
   // let's check if the file has been changed
   let hasCache = false
   if (cache?.has(file.path) === true) {
-    let cachedFile = cache.get(file.path)
-    // If the modtime is still the same, we can apply the cache
-    if (cachedFile.modtime === file.modtime) {
+    const cachedFile = cache.get(file.path)
+    // If the modtime is still the same, we can apply the cache.
+    if (cachedFile !== undefined && cachedFile.modtime === file.modtime && cachedFile.type === 'code') {
       file = applyCache(cachedFile, file)
       hasCache = true
     }
