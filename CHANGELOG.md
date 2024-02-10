@@ -73,6 +73,12 @@ links as well.
 - Fixed broken context menu options for images (#4893)
 - Implemented superscript and subscript HTML rendering in the internal Markdown-
   to-HTML converter (#4943)
+- Improved the TableEditor to more reliably parse tables; also, when a table
+  could not be rendered out of any reason, the editor will simply remain dormant
+  and not render the table instead of messing up the entire document
+- Improvements to how the Markdown AST handles table parsing, which will improve
+  Markdown-to-HTML conversion both within the TableEditor as well as when
+  copying as HTML
 
 ## Under the Hood
 
@@ -103,6 +109,9 @@ links as well.
   (see #4269)
 - The internal Markdown-to-HTML converter now respects (potentially significant)
   whitespace in the Markdown source to construct the HTML
+- The TableEditor now parses any table directly from the underlying parser to
+  ensure that the representation is (almost) identical to the parse state and
+  reduce complexity when parsing the table; several edge cases remain
 
 # 3.0.5
 
