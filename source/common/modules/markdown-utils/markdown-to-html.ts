@@ -260,7 +260,7 @@ function getTagInfo (node: GenericNode): HTMLTag {
     ret.tagName = 'span'
   }
 
-  if (ret.tagName === 'span' || ret.tagName === 'div') {
+  if ([ 'span', 'div', 'p' ].includes(ret.tagName)) {
     ret.attributes.push([ 'class', node.name ])
   }
 
