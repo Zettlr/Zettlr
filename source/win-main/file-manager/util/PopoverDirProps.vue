@@ -1,5 +1,5 @@
 <template>
-  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
+  <PopoverWrapper v-bind:target="target" v-on:close="emit('close')">
     <h4>{{ props.directory.name }}</h4>
     <div class="properties-info-container">
       <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
