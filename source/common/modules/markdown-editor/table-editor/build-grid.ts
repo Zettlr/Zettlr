@@ -104,11 +104,7 @@ export default function buildGridTable (ast: string[][], colAlignment: ColAlignm
       }
 
       // Now, pad each "split" cell accordingly
-      if (colAlignment[col] === 'right') {
-        splitCell = splitCell.map(c => ' ' + c.padStart(colSizes[col]) + ' ')
-      } else {
-        splitCell = splitCell.map(c => ' ' + c.padEnd(colSizes[col]) + ' ')
-      }
+      splitCell = splitCell.map(c => ' ' + c.padEnd(colSizes[col]) + ' ')
 
       // Now add all parts of the given cell to the inner table. Here, we pivot
       // the data from [col][row] to [row][col]
