@@ -73,7 +73,7 @@ export default class AppServiceContainer {
     this._appearanceProvider = new AppearanceProvider(this._logProvider, this._configProvider)
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
 
-    this._targetProvider = new TargetProvider(this._logProvider)
+    this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._documentManager = new DocumentManager(this)
     this._workspaces = new WorkspaceProvider(this._logProvider, this._configProvider, this._fsal)
     this._tagProvider = new TagProvider(this._logProvider, this._workspaces)
