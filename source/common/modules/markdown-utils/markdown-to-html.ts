@@ -283,7 +283,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
     for (const child of node) {
       body.push(nodeToHTML(child, getCitation, indent))
     }
-    return body.join('\n')
+    return body.join('')
   } else if (node.type === 'Generic' && node.name === 'Document') {
     // This ensures there's no outer div class=Document
     return nodeToHTML(node.children, getCitation, indent)
@@ -291,35 +291,39 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
     return '' // Frontmatters must be removed upon HTML export
   } else if (node.type === 'Citation') {
     const rendered = getCitation(node.parsedCitation.citations, node.parsedCitation.composite)
-    return `<span class="citation">${rendered ?? htmlEntities(node.value)}</span>`
+    return `${node.whitespaceBefore}<span class="citation">${rendered ?? htmlEntities(node.value)}</span>`
   } else if (node.type === 'Footnote') {
-    return `<a class="footnote" href="#fnref:${htmlEntities(node.label)}">${htmlEntities(node.label)}</a>`
+    return `${node.whitespaceBefore}<a class="footnote" href="#fnref:${htmlEntities(node.label)}">${htmlEntities(node.label)}</a>`
   } else if (node.type === 'FootnoteRef') {
-    return `<div class="footnote-ref"><a name="fnref:${htmlEntities(node.label)}"></a>${nodeToHTML(node.children, getCitation, indent)}</div>`
+    return `${node.whitespaceBefore}<div class="footnote-ref"><a name="fnref:${htmlEntities(node.label)}"></a>${nodeToHTML(node.children, getCitation, indent)}</div>`
   } else if (node.type === 'Heading') {
-    return `<h${node.level}>${htmlEntities(node.value.value)}</h${node.level}>`
+    return `${node.whitespaceBefore}<h${node.level}>${htmlEntities(node.value.value)}</h${node.level}>`
   } else if (node.type === 'Highlight') {
-    return `<mark>${nodeToHTML(node.children, getCitation, indent)}</mark>`
+    return `${node.whitespaceBefore}<mark>${nodeToHTML(node.children, getCitation, indent)}</mark>`
+  } else if (node.type === 'Superscript') {
+    return `${node.whitespaceBefore}<sup>${nodeToHTML(node.children, getCitation, indent)}</sup>`
+  } else if (node.type === 'Subscript') {
+    return `${node.whitespaceBefore}<sub>${nodeToHTML(node.children, getCitation, indent)}</sub>`
   } else if (node.type === 'Image') {
-    return `<img src="${node.url}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
+    return `${node.whitespaceBefore}<img src="${node.url}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
   } else if (node.type === 'Link') {
-    return `<a href="${node.url}" title="${node.title?.value ?? htmlEntities(node.url)}">${htmlEntities(node.alt.value)}</a>`
+    return `${node.whitespaceBefore}<a href="${node.url}" title="${node.title?.value ?? htmlEntities(node.url)}">${htmlEntities(node.alt.value)}</a>`
   } else if (node.type === 'OrderedList') {
     const startsAt = node.startsAt > 1 ? ` start="${node.startsAt}"` : ''
-    return `<ol${startsAt}>\n${nodeToHTML(node.items, getCitation, indent)}\n</ol>`
+    return `${node.whitespaceBefore}<ol${startsAt}>\n${nodeToHTML(node.items, getCitation, indent)}\n</ol>`
   } else if (node.type === 'BulletList') {
-    return `<ul>\n${nodeToHTML(node.items, getCitation, indent)}\n</ul>`
+    return `${node.whitespaceBefore}<ul>\n${nodeToHTML(node.items, getCitation, indent)}\n</ul>`
   } else if (node.type === 'ListItem') {
     const task = node.checked !== undefined ? `<input type="checkbox" disabled="disabled" ${node.checked ? 'checked="checked"' : ''}>` : ''
-    return `<li>${task}${nodeToHTML(node.children, getCitation, indent + 1)}</li>`
+    return `${node.whitespaceBefore}<li>${task}${nodeToHTML(node.children, getCitation, indent + 1)}</li>`
   } else if (node.type === 'Emphasis') {
     const body = nodeToHTML(node.children, getCitation, indent)
 
     switch (node.which) {
       case 'bold':
-        return `<strong>${body}</strong>`
+        return `${node.whitespaceBefore}<strong>${body}</strong>`
       case 'italic':
-        return `<em>${body}</em>`
+        return `${node.whitespaceBefore}<em>${body}</em>`
     }
   } else if (node.type === 'Table') {
     const rows: string[] = []
@@ -331,22 +335,22 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
       const tag = row.isHeaderOrFooter ? 'th' : 'td'
       const content = cells.map(c => `<${tag}>${c}</${tag}>`).join('\n')
       if (row.isHeaderOrFooter) {
-        rows.push(`<thead>\n<tr>\n${content}\n</tr>\n</thead>`)
+        rows.push(`${row.whitespaceBefore}<thead>\n<tr>\n${content}\n</tr>\n</thead>`)
       } else {
-        rows.push(`<tr>\n${content}\n</tr>`)
+        rows.push(`${row.whitespaceBefore}<tr>\n${content}\n</tr>`)
       }
     }
-    return `<table>\n${rows.join('\n')}\n</table>`
+    return `${node.whitespaceBefore}<table>\n${rows.join('\n')}\n</table>`
   } else if (node.type === 'Text') {
-    return node.value.trim() // Plain text
+    return node.whitespaceBefore + node.value // Plain text
   } else if (node.type === 'FencedCode') {
     if (node.info === '$$') {
-      return katex.renderToString(node.source)
+      return node.whitespaceBefore + katex.renderToString(node.source)
     } else {
-      return `<pre><code class="language-${node.info}">${htmlEntities(node.source)}</code></pre>`
+      return `${node.whitespaceBefore}<pre><code class="language-${node.info}">${htmlEntities(node.source)}</code></pre>`
     }
   } else if (node.type === 'InlineCode') {
-    return `<code>${htmlEntities(node.source)}</code>`
+    return `${node.whitespaceBefore}<code>${htmlEntities(node.source)}</code>`
   } else if (node.type === 'Generic') {
     // Generic nodes are differentiated by name. There are a few we can support,
     // but most we wrap in a div.
@@ -360,14 +364,14 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
       ? ' ' + tagInfo.attributes.map(a => `${a[0]}="${a[1]}"`).join(' ')
       : ''
 
-    const open = `<${tagInfo.tagName}${attr}${tagInfo.selfClosing ? '/' : ''}>`
+    const open = `${node.whitespaceBefore}<${tagInfo.tagName}${attr}${tagInfo.selfClosing ? '/' : ''}>`
     const close = tagInfo.selfClosing ? '' : `</${tagInfo.tagName}>`
     const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, getCitation)
     return `${open}${body}${close}`
   } else if (node.type === 'ZettelkastenLink') {
-    return `[[${node.value}]]`
+    return `${node.whitespaceBefore}[[${node.value}]]`
   } else if (node.type === 'ZettelkastenTag') {
-    return `#${node.value}`
+    return `${node.whitespaceBefore}#${node.value}`
   }
 
   return ''
@@ -384,5 +388,6 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
  */
 export function md2html (markdown: string, getCitation: (citations: CiteItem[], composite: boolean) => string|undefined): string {
   const ast = markdownToAST(markdown)
+  console.log(nodeToHTML(ast, getCitation))
   return nodeToHTML(ast, getCitation)
 }

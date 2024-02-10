@@ -71,6 +71,8 @@ links as well.
 - Fixed an issue that has removed the custom background color from the Bielefeld
   and Bordeaux themes (#4913)
 - Fixed broken context menu options for images (#4893)
+- Implemented superscript and subscript HTML rendering in the internal Markdown-
+  to-HTML converter (#4943)
 
 ## Under the Hood
 
@@ -99,6 +101,8 @@ links as well.
 - Fixed an issue with the FSALCache provider where we accidentally stored the
   descriptors as strings, increasing the complexity of loading the cache values
   (see #4269)
+- The internal Markdown-to-HTML converter now respects (potentially significant)
+  whitespace in the Markdown source to construct the HTML
 
 # 3.0.5
 

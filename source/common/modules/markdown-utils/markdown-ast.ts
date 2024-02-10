@@ -47,6 +47,8 @@ const EMPTY_NODES = [
   'HeaderMark',
   'CodeMark',
   'EmphasisMark',
+  'SuperscriptMark',
+  'SubscriptMark',
   'QuoteMark',
   'ListMark',
   'YAMLFrontmatterStart',
@@ -74,6 +76,12 @@ interface MDNode {
    * The end offset of this node in the original source
    */
   to: number
+  /**
+   * This property contains the whitespace before this node; required to
+   * determine appropriate significant whitespace portions for some elements
+   * upon converting to HTML.
+   */
+  whitespaceBefore: string
   /**
    * Can be used to store arbitrary attributes (e.g. Pandoc-style attributes
    * such as {.className})
@@ -171,6 +179,16 @@ export interface Highlight extends MDNode {
   /**
    * Since it's a regular inline element, it can have children
    */
+  children: ASTNode[]
+}
+
+export interface Superscript extends MDNode {
+  type: 'Superscript'
+  children: ASTNode[]
+}
+
+export interface Subscript extends MDNode {
+  type: 'Subscript'
   children: ASTNode[]
 }
 
@@ -405,7 +423,10 @@ export interface GenericNode extends MDNode {
 /**
  * Any node that can be part of the AST is an ASTNode.
  */
-export type ASTNode = Comment | Footnote | FootnoteRef | LinkOrImage | TextNode | Heading | Citation | Highlight | OrderedList | BulletList | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
+export type ASTNode = Comment | Footnote | FootnoteRef | LinkOrImage | TextNode
+| Heading | Citation | Highlight | Superscript | Subscript | OrderedList
+| BulletList | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter
+| Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -415,14 +436,15 @@ export type ASTNodeType = ASTNode['type']
  * Creates a generic text node; this is used to represent textual contents of
  * SyntaxNodes.
  *
- * @param   {number}    from   The start offset (absolute; zero-indexed)
- * @param   {number}    to     The end offset (absolute; zero-indexed)
- * @param   {string}    value  The actual text
+ * @param   {number}    from              The absolute start offset
+ * @param   {number}    to                The absolute end offset
+ * @param   {string}    value             The actual text
+ * @param   {string}    whitespaceBefore  Potential whitespace before the node
  *
- * @return  {TextNode}         The rendered TextNode
+ * @return  {TextNode}                    The rendered TextNode
  */
-function genericTextNode (from: number, to: number, value: string): TextNode {
-  return { type: 'Text', name: 'text', from, to, value }
+function genericTextNode (from: number, to: number, value: string, whitespaceBefore = ''): TextNode {
+  return { type: 'Text', name: 'text', from, to, value, whitespaceBefore }
 }
 
 /**
@@ -478,7 +500,7 @@ function parseAttributeNode (oldAttributes: Record<string, string> = {}, node: S
 function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNode: T, node: SyntaxNode, markdown: string): T {
   if (node.firstChild === null) {
     if (!EMPTY_NODES.includes(node.name)) {
-      const textNode = genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))
+      const textNode = genericTextNode(node.from, node.to, markdown.substring(node.from, node.to), getWhitespaceBeforeNode(node, markdown))
       astNode.children = [textNode]
     }
     return astNode // We're done
@@ -494,7 +516,14 @@ function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNode: T, 
     // nodes that just contain those strings.
     if (currentChild.from > currentIndex && !EMPTY_NODES.includes(node.name)) {
       const gap = markdown.substring(currentIndex, currentChild.from)
-      const textNode = genericTextNode(currentIndex, currentChild.from, gap)
+      const onlyWhitespace = /^(\s*)/m.exec(gap)
+      const whitespaceBefore = onlyWhitespace !== null ? onlyWhitespace[1] : ''
+      const textNode = genericTextNode(
+        currentIndex,
+        currentChild.from,
+        gap.substring(whitespaceBefore.length),
+        whitespaceBefore
+      )
       astNode.children.push(textNode)
     }
     if (currentChild.name === 'PandocAttribute') {
@@ -521,6 +550,29 @@ function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNode: T, 
 }
 
 /**
+ * Extracts any amount of whitespace (\t\s\n\r\f\v, etc.) that occurs before
+ * this node.
+ *
+ * @param   {SyntaxNode}  node      The node to extract whitespace for
+ * @param   {string}      markdown  The Markdown source to extract the whitespace
+ *
+ * @return  {string}                The whitespace string
+ */
+function getWhitespaceBeforeNode (node: SyntaxNode, markdown: string): string {
+  if (node.prevSibling !== null) {
+    const sliceBefore = markdown.substring(node.prevSibling.to, node.from)
+    const onlyWhitespace = /(\s*)$/m.exec(sliceBefore) // NOTE the "m" flag
+    return onlyWhitespace !== null ? onlyWhitespace[1] : ''
+  } else if (node.parent !== null) {
+    const sliceBefore = markdown.substring(node.parent.from, node.from)
+    const onlyWhitespace = /(\s*)$/m.exec(sliceBefore) // NOTE the "m" flag
+    return onlyWhitespace !== null ? onlyWhitespace[1] : ''
+  } else {
+    return ''
+  }
+}
+
+/**
  * Parses a single Lezer style SyntaxNode to an ASTNode.
  *
  * @param   {SyntaxNode}  node      The node to convert
@@ -544,6 +596,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
           name: node.name,
           from: node.from,
           to: node.to,
+          whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
           children: [genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))]
         }
       }
@@ -553,6 +606,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: node.name,
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
         url: markdown.substring(url.from, url.to),
         alt: alt !== null
@@ -577,6 +631,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: node.name,
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
         url: markdown.substring(node.from, node.to),
         alt: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))
@@ -596,6 +651,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: node.name,
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         value: genericTextNode(mark?.to ?? node.from, node.to, markdown.substring(mark?.to ?? node.from, node.to).trim()),
         level
       }
@@ -610,6 +666,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: node.name,
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         value: genericTextNode(mark?.to ?? node.from, node.to, markdown.substring(node.from, mark?.from ?? node.to).trim()),
         level
       }
@@ -622,7 +679,8 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         value: markdown.substring(node.from, node.to),
         parsedCitation: extractCitations(markdown.substring(node.from, node.to))[0],
         from: node.from,
-        to: node.to
+        to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown)
       }
       return astNode
     }
@@ -634,6 +692,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         inline: contents.endsWith('^'),
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         label: contents.endsWith('^') ? contents.substring(0, contents.length - 1) : contents
       }
       return astNode
@@ -646,6 +705,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: 'FootnoteRef',
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         label: label !== null ? markdown.substring(label.from + 2, label.to - 2) : '',
         children: []
       }
@@ -663,6 +723,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: 'Highlight',
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         children: []
       }
       return parseChildren(astNode, content ?? node, markdown)
@@ -676,6 +737,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: node.name,
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         items: []
       }
 
@@ -685,6 +747,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
           name: 'ListItem',
           from: item.from,
           to: item.to,
+          whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
           children: [],
           marker: { from: item.from, to: item.from }
         }
@@ -726,6 +789,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: node.name,
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         items: []
       }
 
@@ -735,6 +799,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
           name: 'ListItem',
           from: item.from,
           to: item.to,
+          whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
           children: [],
           marker: { from: item.from, to: item.from }
         }
@@ -782,6 +847,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: isFrontmatter ? 'YAMLFrontmatter' : 'FencedCode',
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         info: info !== null ? markdown.substring(info.from, info.to) : '',
         source: source !== null ? markdown.substring(source.from, source.to) : ''
       }
@@ -794,6 +860,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: 'InlineCode',
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         source: markdown.substring(start.to, end.from)
       }
       return astNode
@@ -805,6 +872,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: node.name,
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         value: markdown.slice(node.from + 4, node.to - 3).trim() // <!-- and -->
       }
       return astNode
@@ -817,6 +885,31 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         which: node.name === 'Emphasis' ? 'italic' : 'bold',
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+        children: []
+      }
+
+      return parseChildren(astNode, node, markdown)
+    }
+    case 'Superscript': {
+      const astNode: Superscript = {
+        type: 'Superscript',
+        name: 'Superscript',
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+        children: []
+      }
+
+      return parseChildren(astNode, node, markdown)
+    }
+    case 'Subscript': {
+      const astNode: Subscript = {
+        type: 'Subscript',
+        name: 'Subscript',
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         children: []
       }
 
@@ -828,6 +921,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: 'Table',
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         rows: []
       }
       const header = node.getChildren('TableHeader')
@@ -838,6 +932,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
           name: row.name,
           from: row.from,
           to: row.to,
+          whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
           isHeaderOrFooter: row.name === 'TableHeader',
           cells: []
         }
@@ -847,6 +942,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
             name: 'TableCell',
             from: cell.from,
             to: cell.to,
+            whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
             children: []
           }
           rowNode.cells.push(parseChildren(cellNode, cell, markdown))
@@ -866,6 +962,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: 'ZknLink',
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         value: markdown.substring(content.from, content.to)
       }
       return astNode
@@ -876,6 +973,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: 'ZknTag',
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         value: markdown.substring(node.from + 1, node.to)
       }
       return astNode
@@ -886,6 +984,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         name: node.name,
         from: node.from,
         to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         children: []
       }
       return parseChildren(astNode, node, markdown)
