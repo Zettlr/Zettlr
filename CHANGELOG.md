@@ -96,6 +96,9 @@ links as well.
   scripts) is written in TypeScript.
 - Migrated from Electron's deprecated clipboard API to the native Browser API
 - Migrated the entire main window store state from Vuex to Pinia
+- Fixed an issue with the FSALCache provider where we accidentally stored the
+  descriptors as strings, increasing the complexity of loading the cache values
+  (see #4269)
 
 # 3.0.5
 
