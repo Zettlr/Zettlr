@@ -9,7 +9,7 @@
     v-on:dblclick="handleDoubleClick"
     v-on:mousedown="$event.preventDefault()"
   >
-    <template v-for="(item, idx) in controls">
+    <template v-for="(item, idx) in props.controls">
       <ButtonControl
         v-if="item.type === 'button' && item.visible !== false"
         v-bind:key="idx"

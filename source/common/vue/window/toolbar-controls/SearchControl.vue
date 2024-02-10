@@ -6,11 +6,11 @@
   >
     <cds-icon shape="search" role="presentation"></cds-icon>
     <input
-      v-bind:id="`toolbar-${control.id}`"
+      v-bind:id="`toolbar-${props.control.id}`"
       ref="input"
       type="search"
       class="toolbar-search"
-      v-bind:placeholder="control.placeholder"
+      v-bind:placeholder="props.control.placeholder"
       v-on:input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       v-on:keypress.enter="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >

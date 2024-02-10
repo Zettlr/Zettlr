@@ -1,14 +1,14 @@
 <template>
   <div class="system-tablist" role="tablist">
     <button
-      v-for="tab, idx in tabs"
+      v-for="tab, idx in props.tabs"
       v-bind:key="idx"
       role="tab"
       v-bind:aria-label="tab.label"
       v-bind:data-target="tab.target"
       v-bind:class="{
         'system-tab': true,
-        'active': currentTab === tab.id
+        active: props.currentTab === tab.id
       }"
       v-bind:title="tab.label"
       v-on:click="emit('tab', tab.id)"
