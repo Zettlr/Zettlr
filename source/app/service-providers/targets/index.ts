@@ -39,7 +39,7 @@ export default class TargetProvider extends ProviderContract {
   /**
    * Create the instance on program start and initially load the targets.
    */
-  constructor (private readonly _logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider, private readonly _fsal: FSAL) {
     super()
 
     this._file = path.join(app.getPath('userData'), 'targets.json')
@@ -64,6 +64,7 @@ export default class TargetProvider extends ProviderContract {
       await this.container.init([])
     } else {
       this._targets = await this.container.get()
+      await this.verify()
     }
   }
 
@@ -96,12 +97,12 @@ export default class TargetProvider extends ProviderContract {
    * Verifies the validity of all targets.
    * @return {ZettlrTargets} Chainability.
    */
-  verify (fsal: FSAL): void {
+  async verify (): Promise<void> {
     // A target is defined to be "valid" if it contains a valid integer number
     // as the target word/char count, and the corresponding file/folder is still
     // loaded within the app.
-    let validTargets = []
-    for (let target of this._targets) {
+    const validTargets = []
+    for (const target of this._targets) {
       // count must be a number
       if (typeof target.count !== 'number') {
         continue
@@ -112,10 +113,8 @@ export default class TargetProvider extends ProviderContract {
         continue
       }
 
-      // Now check if the file still exists. At this point, writing targets set
-      // in a Zettlr 1.x branch will be lost because target.path will evaluate
-      // to undefined.
-      if (fsal.findFile(target.path) === null) {
+      // Now check if the file still exists.
+      if (!await this._fsal.isFile(target.path)) {
         continue
       }
 
@@ -155,7 +154,7 @@ export default class TargetProvider extends ProviderContract {
     }
 
     // Either update or add the target.
-    let existingTarget = this._targets.find(e => e.path === target.path)
+    const existingTarget = this._targets.find(e => e.path === target.path)
     if (existingTarget !== undefined) {
       existingTarget.mode = target.mode
       existingTarget.count = target.count
