@@ -1,14 +1,14 @@
 <template>
   <button
-    v-bind:id="`toolbar-${control.id ?? ''}`"
+    v-bind:id="`toolbar-${props.control.id ?? ''}`"
     role="button"
     v-on:click="emit('click')"
   >
     <RingProgress
-      v-bind:ratio="control.progressPercent / 100"
-      v-bind:color="control.trackColour"
+      v-bind:ratio="props.control.progressPercent / 100"
+      v-bind:color="props.control.trackColour"
     ></RingProgress>
-    <span v-html="control.label"></span>
+    <span v-html="props.control.label"></span>
   </button>
 </template>
 

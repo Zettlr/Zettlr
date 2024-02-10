@@ -1,15 +1,15 @@
 <template>
   <div
-    v-bind:id="`toolbar-${control.id}`"
+    v-bind:id="`toolbar-${props.control.id}`"
     role="presentation"
     class="toolbar-text"
     v-bind:style="{
-      textAlign: control.align
+      textAlign: props.control.align
     }"
   >
-    <strong v-if="control.style === 'strong'" v-html="control.content"></strong>
-    <em v-else-if="control.style === 'emphasis'" v-html="control.content"></em>
-    <span v-else v-html="control.content"></span>
+    <strong v-if="props.control.style === 'strong'" v-html="props.control.content"></strong>
+    <em v-else-if="props.control.style === 'emphasis'" v-html="props.control.content"></em>
+    <span v-else v-html="props.control.content"></span>
   </div>
 </template>
 

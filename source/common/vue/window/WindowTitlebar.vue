@@ -1,6 +1,6 @@
 <template>
   <div id="titlebar">
-    {{ titleContent }}
+    {{ props.titleContent }}
   </div>
 </template>
 
