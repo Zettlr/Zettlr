@@ -760,7 +760,6 @@ function startGlobalSearch (terms: string): void {
   fileManagerVisible.value = true
   nextTick()
     .then(() => {
-      // globalSearchComponent.value?.$data.query = terms
       globalSearchComponent.value?.startSearch(terms)
     })
     .catch(err => console.error(err))

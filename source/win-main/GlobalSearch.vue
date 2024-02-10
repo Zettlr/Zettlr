@@ -505,7 +505,7 @@ function blurQueryInput (): void {
   queryInputElement.value?.blur()
 }
 
-defineExpose({ focusQueryInput, blurQueryInput })
+defineExpose({ focusQueryInput, blurQueryInput, startSearch })
 </script>
 
 <style lang="less">
