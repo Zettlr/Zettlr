@@ -18,7 +18,9 @@ import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 import { trans } from '@common/i18n-renderer'
-import { pathBasename } from '@common/util/renderer-path-polyfill'
+import { pathDirname } from '@common/util/renderer-path-polyfill'
+
+const ipcRenderer = window.ipc
 
 /**
  * Displays a tooltip for URLs and Links across a document
@@ -48,13 +50,13 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
   // We got an URL.
   const absPath = view.state.field(configField).metadata.path
   const url = view.state.sliceDoc(nodeAt.from, nodeAt.to)
-  const base = pathBasename(absPath)
+  const base = pathDirname(absPath)
   const validURI = makeValidUri(url, base)
 
   return {
     pos,
     above: true,
-    create (view) {
+    create (_view) {
       const dom = document.createElement('div')
       const shortUrl = shortenUrlVisually(validURI.replace(/^safe-file:\/\//, ''))
       dom.textContent = trans('Fetching link preview…')
