@@ -21,12 +21,14 @@ import { type SyntaxNode } from '@lezer/common'
 import openMarkdownLink from '../util/open-markdown-link'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 import makeValidUri from 'source/common/util/make-valid-uri'
+import { pathDirname } from 'source/common/util/renderer-path-polyfill'
+import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
 
 /**
- * Given a node, extracts the first child of type 'URL' and returns its text
- * contents
+ * Given a node, tries to find a URL node. This function expects that node is of
+ * type URL or any node that can contain an URL node as a child.
  *
  * @param   {SyntaxNode}   node   The node
  * @param   {EditorState}  state  The editor state (for extracting the text)
@@ -34,6 +36,10 @@ const ipcRenderer = window.ipc
  * @return  {string}              The URL string, or undefined
  */
 function getURLForNode (node: SyntaxNode, state: EditorState): string|undefined {
+  if (node.type.name === 'URL') {
+    return state.sliceDoc(node.from, node.to)
+  }
+
   const child = node.getChild('URL')
 
   if (child === null) {
@@ -50,7 +56,8 @@ function getURLForNode (node: SyntaxNode, state: EditorState): string|undefined 
  * @param   {SyntaxNode}                node    The node
  * @param   {{ x: number, y: number }}  coords  The coordinates
  */
-export function linkImageMenu (view: EditorView, node: SyntaxNode, basePath: string, coords: { x: number, y: number }): void {
+export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: number, y: number }): void {
+  const basePath = pathDirname(view.state.field(configField).metadata.path)
   const url = getURLForNode(node, view.state)
 
   if (url === undefined) {
@@ -85,7 +92,7 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, basePath: str
 
   const validAbsoluteURI = makeValidUri(url, basePath)
   const isFileLink = validAbsoluteURI.startsWith('safe-file://') || validAbsoluteURI.startsWith('file://')
-  const isLink = node.type.name === 'Link'
+  const isLink = node.type.name !== 'Image'
 
   const imgTpl: AnyMenuItem[] = [
     {
