@@ -2301,15 +2301,13 @@ msgstr ""
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr ""
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
 msgstr ""
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/request-move.ts:64
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
+msgid "The file/directory %s already exists in target."
 msgstr ""
 
 #. If the user cancels, do not omit (the default) but actually cancel
@@ -2528,16 +2526,13 @@ msgstr ""
 msgid "No other files"
 msgstr ""
 
-#: source/tmp/Defaults.vue.ts:70
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
+#: source/tmp/FileItem.vue.ts:97 source/tmp/FileItem.vue.ts:99
+#: source/tmp/PopoverDirProps.vue.ts:169
+msgid "Directories"
 msgstr ""
 
-#: source/tmp/Defaults.vue.ts:73
-msgid ""
-"This profile is invalid. It may contain errors, or it may be missing the "
-"writer or reader property."
+#: source/tmp/FileItem.vue.ts:170 source/tmp/PopoverFileProps.vue.ts:113
+msgid "Characters"
 msgstr ""
 
 #: source/tmp/Defaults.vue.ts:111

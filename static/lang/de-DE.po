@@ -1267,13 +1267,9 @@ msgstr "Dem Link mit Cmd/Strg+Klick folgen"
 msgid "just now"
 msgstr "gerade eben"
 
-#: source/common/util/localise-number.ts:28
-msgid ","
-msgstr "."
-
-#: source/common/util/localise-number.ts:29
-msgid "."
-msgstr ","
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr "gerade eben"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
@@ -2400,8 +2396,7 @@ msgid ""
 "File %s has been modified remotely. Replace the loaded version with the "
 "newer one from disk?"
 msgstr ""
-"Datei %s wurde außerhalb von Zettlr verändert. Soll die geladene Datei mit "
-"der neueren Version ersetzt werden?"
+"Du kannst kein Verzeichnis in eines seiner Unterverzeichnisse verschieben."
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2415,9 +2410,9 @@ msgstr "Ungespeicherte Änderungen"
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr "Die Datei enthält ungesicherte Änderungen. Verwerfen oder speichern?"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "Datei speichern"
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "Der Name enthielt keine erlaubten Zeichen."
 
 #: source/app/service-providers/documents/index.ts:345
 #, fuzzy

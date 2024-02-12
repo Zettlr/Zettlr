@@ -2370,15 +2370,13 @@ msgstr ""
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr ""
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
 msgstr ""
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/request-move.ts:64
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
+msgid "The file/directory %s already exists in target."
 msgstr ""
 
 #. If the user cancels, do not omit (the default) but actually cancel

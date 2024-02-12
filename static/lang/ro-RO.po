@@ -2379,18 +2379,14 @@ msgstr "Suprascriu fișier deja existent"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "Acest fișier există deja în dosar. Suprascriu?"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Înlocuiește fișierul"
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "Dosarul nu poate fi deschis"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"Fișierul %s a fost modificat de la distanță. Să înlocuiesc versiunea aflată "
-"acum în memorie cu versiunea mai nouă de pe disc?"
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Dosarul &quot;%s&quot; nu poate fi deschis de Zettlr"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2484,18 +2480,12 @@ msgstr ""
 msgid "Delete"
 msgstr "Șterge fișierul"
 
-#: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
-msgid "Exporting…"
-msgstr "Exportă..."
+#: source/tmp/OtherFilesTab.vue.ts:12
+msgid "Open directory"
+msgstr "Deschide dosarul"
 
-#: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
-msgid "Export"
-msgstr "Exportă..."
-
-#: source/tmp/PopoverExport.vue.ts:27
-msgid "command"
+#: source/tmp/OtherFilesTab.vue.ts:13
+msgid "No other files"
 msgstr ""
 
 #: source/tmp/FileItem.vue.ts:98 source/tmp/FileItem.vue.ts:100

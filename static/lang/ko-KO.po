@@ -2391,18 +2391,14 @@ msgstr "기존 파일 덮어쓰기"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "%s 파일이 이미 이 디렉토리에 있습니다. 덮어 쓰시겠습니까?"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "파일 바꾸기"
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "디렉토리를 열 수 없습니다"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"%s 파일이 원격에서 수정되었습니다. 현재 로드되어 있는 버전을 디스크 최신 버전"
-"으로 교체하시겠습니까?"
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Zettlr 에서 &quot;%s&quot; 디렉토리를 열 수 없습니다."
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2419,8 +2415,22 @@ msgstr ""
 "현재 파일에 저장하지 않은 변경 사항이 있습니다. 변경 사항을 생략하거나 아니"
 "면 저장할까요?"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "제공된 이름에는 허용된 문자가 없습니다."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+msgid "The requested directory was not found."
+msgstr "요청한 디렉토리를 찾을 수 없습니다."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "이미지를 저장할 수 없습니다"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
 msgstr ""
 
 #: source/app/service-providers/documents/index.ts:345

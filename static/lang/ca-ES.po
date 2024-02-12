@@ -2399,8 +2399,6 @@ msgid ""
 "File %s has been modified remotely. Replace the loaded version with the "
 "newer one from disk?"
 msgstr ""
-"El fitxer %s ha estat modificat remotament. Voleu reemplaçar la versió "
-"carregada amb la nova del disc dur?"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2414,9 +2412,9 @@ msgstr "Canvis no desats"
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr "Hi ha canvis no desats. Voleu desar-los primer?"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "Desa el fitxer"
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "No podeu moure una carpeta a una subcarpeta"
 
 #: source/app/service-providers/documents/index.ts:345
 #, fuzzy

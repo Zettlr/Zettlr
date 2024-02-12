@@ -2390,18 +2390,14 @@ msgstr "Gainidatzi aurrez badagoen fitxategia"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "%s fitxategia badago dagoeneko direktorio honetan. Gainidatzi?"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Fitxategia ordezkatu"
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "Ezin da direktorioa ireki"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"%s fitxategia urrunetik aldatu da. Kargatutako bertsioa diskoko "
-"berriagoarekin ordezkatu nahi duzu?"
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "&quot;%s&quot; direktorioa ezin da ireki Zettlr-en."
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2418,8 +2414,22 @@ msgstr ""
 "Gorde gabeko aldaketak daude uneko fitxategian. Baztertu nahi dituzu, ala "
 "gorde?"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "Emandako izenak ez zuen baimendutako hizkirik."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+msgid "The requested directory was not found."
+msgstr "Eskatutako direktorioa ez da aurkitu."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "Ezin izan da irudia gorde"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
 msgstr ""
 
 #: source/app/service-providers/documents/index.ts:345

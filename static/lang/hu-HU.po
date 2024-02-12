@@ -2370,16 +2370,14 @@ msgstr ""
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr ""
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Fájl cseréje"
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "Ezt a könyvtárat nem lehet kinyitni"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "A(z) &quot;%s&quot; könyvtárat nem lehet kezelni."
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2394,9 +2392,9 @@ msgstr ""
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr "A fájl megváltozott. Menteni vagy eldobni?"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "Fájl mentése"
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "A megadott név nem tartalmazott engedélyezett betűket."
 
 #: source/app/service-providers/documents/index.ts:345
 #, fuzzy
@@ -2469,18 +2467,8 @@ msgstr ""
 msgid "Delete"
 msgstr "Fájlt törölni"
 
-#: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
-msgid "Exporting…"
-msgstr "Exportálni …"
-
-#: source/tmp/PopoverExport.vue.ts:6
-#, fuzzy
-msgid "Export"
-msgstr "Exportálni …"
-
-#: source/tmp/PopoverExport.vue.ts:27
-msgid "command"
+#: source/tmp/FileList.vue.ts:49
+msgid "Empty directory"
 msgstr ""
 
 #: source/tmp/FileItem.vue.ts:98 source/tmp/FileItem.vue.ts:100

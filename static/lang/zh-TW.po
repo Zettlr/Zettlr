@@ -2403,16 +2403,14 @@ msgstr "覆蓋原有檔案"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "檔案 %s 已經存在，要覆蓋嗎？"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "取代檔案"
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
+msgstr "無法移動目錄或檔案"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/request-move.ts:64
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr "檔案 %s 已被其他人修改。是否使用硬碟中的新版本取代目前版本？"
+msgid "The file/directory %s already exists in target."
+msgstr "檔案/目錄 ％s 已存在。"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
