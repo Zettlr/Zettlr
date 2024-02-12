@@ -270,6 +270,12 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
   copying the file
 - If multiple candidate profiles to import files are found, the user can now
   choose the correct one
+- Cmd/Ctrl-Clicking on non-rendered Markdown links will now have the same effect
+  as directly clicking on the URL part of the link: follow the link
+- The link renderer is now native in that it simply hides formatting characters
+  instead of rendering a widget in place of the link; making inline formatting
+  easier. NOTE: When copying a link as HTML, inline formatting in the
+  descriptions is not yet parsed to HTML due to a limitation in the AST parser
 
 ## Under the Hood
 

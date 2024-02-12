@@ -2393,18 +2393,14 @@ msgstr "Mevcut dosyanın üzerine yaz"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "%s dosyası zaten bu dizinde mevcut. Üzerine yazılsın mı?"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Dosyayı yenisiyle değiştir"
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "Dizin açılamadı"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"%s uygulama dışında değiştirildi. Uygulamada açık olanın yerine diskte "
-"kayıtlı olan yeni sürümü yüklemek ister misiniz?"
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "&quot;%s&quot; dizinini Zettlr açamadı."
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2421,8 +2417,22 @@ msgstr ""
 "Mevcut dosyada kaydedilmemiş değişiklikler var. Değişiklikler atlansın mı "
 "yoksa kaydetmek mi istersiniz?"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "Girilen isim, izin verilen harfler içermiyor."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+msgid "The requested directory was not found."
+msgstr "İstenen dizin bulunamadı."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "Görüntü kaydedilemedi"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
 msgstr ""
 
 #: source/app/service-providers/documents/index.ts:345

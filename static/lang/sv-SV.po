@@ -2096,6 +2096,124 @@ msgstr "just nu"
 msgid "Restart later"
 msgstr ""
 
+#: source/win-preferences/schema/zettelkasten.ts:85
+msgid "Path to folder"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:34
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+msgid "Properties"
+msgstr "Egenskaper"
+
+#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/app/service-providers/menu/menu.win32.ts:281
+#: source/tmp/Defaults.vue.ts:76
+msgid "Rename file"
+msgstr "Döp om fil"
+
+#: source/win-main/file-manager/util/file-item-context.ts:50
+#: source/app/service-providers/menu/menu.darwin.ts:298
+#: source/app/service-providers/menu/menu.win32.ts:292
+msgid "Delete file"
+msgstr "Ta bort fil"
+
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "Duplicera fil"
+
+#: source/win-main/file-manager/util/file-item-context.ts:66
+#: source/win-main/file-manager/util/dir-item-context.ts:67
+#, fuzzy
+msgid "Copy path"
+msgstr "Kopiera hela sök vägen"
+
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Kopiera filnamn"
+
+#: source/win-main/file-manager/util/file-item-context.ts:78
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
+msgid "Copy ID"
+msgstr "Kopiera ID"
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Explorer"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in File Browser"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "Stäng fil"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
+msgid "New File…"
+msgstr "Ny fil…"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
+msgid "New directory…"
+msgstr "Ny katalog…"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "Byt namn på mappen"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:306
+#: source/app/service-providers/menu/menu.win32.ts:299
+msgid "Delete directory"
+msgstr "Ta bort katalog"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "Sök efter mappen..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "Exportera projekt"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "Stäng arbetsyta"
+
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
+msgid "Close Tab"
+msgstr "Stäng flik"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "Stäng andra flikar"
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Stäng alla flikar"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "Kopiera hela sök vägen"
+
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
 #: source/app/service-providers/menu/menu.win32.ts:614
@@ -2406,18 +2524,59 @@ msgstr "Skriv över befintlig fil"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "Filen %s finns redan i den här katalogen. Skriva över?"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Byt ut fil"
+#: source/app/service-providers/commands/root-open.ts:62
+#: source/tmp/FileItem.vue.ts:104 source/tmp/FileItem.vue.ts:106
+#: source/tmp/PopoverDirProps.vue.ts:178
+msgid "Files"
+msgstr "Filer"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "Det går inte att öppna katalogen"
+
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Katalogen &quot;%s&quot; går inte att öppnas av Zettlr."
+
+#: source/app/service-providers/commands/request-move.ts:53
+msgid "Cannot move directory"
+msgstr "Det går inte att flytta katalogen"
+
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Du kan inte flytta en katalog till en underkatalog."
+
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
+msgstr "Kan inte flytta katalog eller fil"
+
+#: source/app/service-providers/commands/request-move.ts:64
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "Filen/katalogen %s finns redan i målet."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "Den begärda filen hittades inte."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "Det angivna namnet innehöll inga tillåtna bokstäver."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+msgid "The requested directory was not found."
+msgstr "Den begärda katalogen hittades inte."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "Det gick inte att spara bilden"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
 msgstr ""
-"Filen %s har modifierats på distans. Ersätta den laddade versionen med den "
-"nyare från disken?"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38

@@ -2103,6 +2103,1009 @@ msgstr "zonet"
 msgid "Restart later"
 msgstr ""
 
+#: source/win-preferences/schema/advanced.ts:28
+#, fuzzy
+msgid "Pattern for new file names"
+msgstr "Patroon voor nieuwe bestandsnamen"
+
+#: source/win-preferences/schema/advanced.ts:34
+#, fuzzy
+msgid "Define a pattern for new file names"
+msgstr "Patroon voor nieuwe bestandsnamen"
+
+#: source/win-preferences/schema/advanced.ts:36
+#, javascript-format
+msgid "Available variables: %s"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:42
+msgid "Do not prompt for filename when creating new files"
+msgstr ""
+"Vraag niet naar de bestandsnaam wanneer nieuwe bestanden worden aangemaakt"
+
+#: source/win-preferences/schema/advanced.ts:49
+msgid "Appearance"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:55
+msgid "Use native window appearance"
+msgstr "Gebruik het systeemeigen vensteruiterlijk"
+
+#: source/win-preferences/schema/advanced.ts:56
+msgid "Only available on Linux; this is the default for macOS and Windows."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:62
+#, fuzzy
+msgid "Enable window vibrancy"
+msgstr "Gebruik het systeemeigen vensteruiterlijk"
+
+#: source/win-preferences/schema/advanced.ts:63
+msgid "Only available on macOS; makes the window background opaque."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:70
+msgid "Show app in the notification area"
+msgstr "Toon app in het systeemvak"
+
+#: source/win-preferences/schema/advanced.ts:71
+msgid "Leave app running in the notification area"
+msgstr "Laat de app draaien in het systeemvak"
+
+#: source/win-preferences/schema/advanced.ts:80
+msgid "Zoom behavior"
+msgstr "Zoomgedrag"
+
+#: source/win-preferences/schema/advanced.ts:83
+#, fuzzy
+msgid "Resizes the whole GUI"
+msgstr "Zoom verandert de hele gebruiksinterface"
+
+#: source/win-preferences/schema/advanced.ts:84
+#, fuzzy
+msgid "Changes the editor font size"
+msgstr "Zoomen verandert de tekengrootte in de editor"
+
+#: source/win-preferences/schema/advanced.ts:90
+msgid "Attachments sidebar"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:96
+msgid "File extensions to be visible in the Attachments sidebar"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:102
+#, fuzzy
+msgid "Iframe rendering whitelist"
+msgstr "Witte lijst voor iFrame-weergave"
+
+#: source/win-preferences/schema/advanced.ts:111
+msgid "Hostname"
+msgstr "Hostnaam"
+
+#: source/win-preferences/schema/advanced.ts:113
+#: source/win-preferences/schema/autocorrect.ts:111
+#: source/win-preferences/schema/spellchecking.ts:118
+#, fuzzy
+msgid "Filter"
+msgstr "Filter ..."
+
+#: source/win-preferences/schema/advanced.ts:118
+#, fuzzy
+msgid "Watchdog polling"
+msgstr "Activeer Watchdog polling"
+
+#: source/win-preferences/schema/advanced.ts:124
+msgid "Activate Watchdog polling"
+msgstr "Activeer Watchdog polling"
+
+#: source/win-preferences/schema/advanced.ts:129
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr ""
+"Tijdsduur om te wachten voordat er wordt aangenomen dat het schrijven naar "
+"een bestand is afgerond (in ms)"
+
+#: source/win-preferences/schema/advanced.ts:136
+#, fuzzy
+msgid "Deleting items"
+msgstr "Verwijder bestand"
+
+#: source/win-preferences/schema/advanced.ts:142
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr ""
+"Verwijder items definitief als ze niet in de prullenbak geworpen kunnen "
+"worden"
+
+#: source/win-preferences/schema/advanced.ts:148
+#, fuzzy
+msgid "Debug mode"
+msgstr "Zet debug mode aan"
+
+#: source/win-preferences/schema/advanced.ts:154
+msgid "Enable debug mode"
+msgstr "Zet debug mode aan"
+
+#: source/win-preferences/schema/advanced.ts:161
+msgid "Beta releases"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:167
+msgid "Notify me about beta releases"
+msgstr "Notificeer mij bij beta releases"
+
+#: source/win-preferences/schema/autocorrect.ts:21
+#, fuzzy
+msgid "Autocorrect"
+msgstr "Zet autocorrectie aan"
+
+#: source/win-preferences/schema/autocorrect.ts:31
+msgid "Smart quotes"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:44
+#, fuzzy
+msgid "Double Quotes"
+msgstr "Geen"
+
+#: source/win-preferences/schema/autocorrect.ts:47
+#: source/win-preferences/schema/autocorrect.ts:69
+msgid "Disable Magic Quotes"
+msgstr "Geen"
+
+#: source/win-preferences/schema/autocorrect.ts:66
+#, fuzzy
+msgid "Single Quotes"
+msgstr "Geen"
+
+#: source/win-preferences/schema/autocorrect.ts:94
+msgid "Text-replacement patterns"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:98
+msgid "Match whole words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:99
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:106
+#, fuzzy
+msgid "Replace"
+msgstr "Vervang bestand"
+
+#: source/win-preferences/schema/autocorrect.ts:106
+msgid "With"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:21
+#, fuzzy
+msgid "Input mode"
+msgstr "Invoermodus editor"
+
+#: source/win-preferences/schema/editor.ts:37
+msgid ""
+"The input mode determines how you interact with the editor. We recommend "
+"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
+"know what this implies."
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:42
+#, fuzzy
+msgid "Writing direction"
+msgstr "Zoek in map"
+
+#: source/win-preferences/schema/editor.ts:50
+msgid "Markdown rendering"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:57
+msgid ""
+"Check to enable live rendering of various Markdown elements to formatted "
+"appearance. This hides formatting characters (such as **text**) or renders "
+"images instead of their link."
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:65
+msgid "Render Citations"
+msgstr "Geef citaten weer"
+
+#: source/win-preferences/schema/editor.ts:70
+msgid "Render Iframes"
+msgstr "Geef Iframes weer"
+
+#: source/win-preferences/schema/editor.ts:75
+msgid "Render Images"
+msgstr "Geef afbeeldingen weer"
+
+#: source/win-preferences/schema/editor.ts:80
+msgid "Render Links"
+msgstr "Geef links weer"
+
+#: source/win-preferences/schema/editor.ts:85
+msgid "Render Formulae"
+msgstr "Geef formules weer"
+
+#: source/win-preferences/schema/editor.ts:90
+msgid "Render Tasks"
+msgstr "Geef taken weer"
+
+#: source/win-preferences/schema/editor.ts:95
+msgid "Hide heading characters"
+msgstr "Verberg karakters voor kopteksten"
+
+#: source/win-preferences/schema/editor.ts:100
+msgid "Render emphasis"
+msgstr "Geef de nadruk weer"
+
+#: source/win-preferences/schema/editor.ts:109
+msgid "Formatting characters for bold and italic"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:136
+msgid "Check Markdown for style issues"
+msgstr "Controleer Markdown op stijlproblemen"
+
+#: source/win-preferences/schema/editor.ts:142
+#, fuzzy
+msgid "Table Editor"
+msgstr "Zet tabel editor aan"
+
+#: source/win-preferences/schema/editor.ts:153
+msgid ""
+"The Table Editor is an interactive interface that simplifies creation and "
+"editing of tables. It provides buttons for common functionality, and takes "
+"care of Markdown formatting."
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:158
+#, fuzzy
+msgid "Distraction-free mode"
+msgstr "Afleidingsvrije modus"
+
+#: source/win-preferences/schema/editor.ts:164
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr "Maak regels zonder focus minder opvallend in afleidingsvrije modus"
+
+#: source/win-preferences/schema/editor.ts:169
+msgid "Hide toolbar in distraction free mode"
+msgstr "Verberg de gereedschapsbalk in afleidingsvrije modus"
+
+#: source/win-preferences/schema/editor.ts:175
+#, fuzzy
+msgid "Word counter"
+msgstr "Aantal woorden"
+
+#: source/win-preferences/schema/editor.ts:182
+msgid "Count characters instead of words (e.g., for Chinese)"
+msgstr "Tel karakters in plaats van woorden (bijv. voor Chinees)"
+
+#: source/win-preferences/schema/editor.ts:188
+msgid "Readability mode"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:195
+msgid "Algorithm"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:207
+#, fuzzy
+msgid "Image size"
+msgstr "Afbeelding"
+
+#: source/win-preferences/schema/editor.ts:213
+#, fuzzy
+msgid "Maximum width of images (%s %)"
+msgstr "Maximale afbeeldingsbreedte (procent)"
+
+#: source/win-preferences/schema/editor.ts:220
+#, fuzzy
+msgid "Maximum height of images (%s %)"
+msgstr "Maximale afbeeldingshoogte (procent)"
+
+#: source/win-preferences/schema/editor.ts:228
+#, fuzzy
+msgid "Other settings"
+msgstr "Andere bestanden"
+
+#: source/win-preferences/schema/editor.ts:234
+#, fuzzy
+msgid "Font size"
+msgstr "Tekengrootte in de editor"
+
+#: source/win-preferences/schema/editor.ts:241
+#, fuzzy
+msgid "Indentation size (number of spaces)"
+msgstr "Spring in met het volgende aantal spaties"
+
+#: source/win-preferences/schema/editor.ts:248
+#, fuzzy
+msgid "Indent using tabs instead of spaces"
+msgstr "Inspringen met tabs"
+
+#: source/win-preferences/schema/editor.ts:255
+#, fuzzy
+msgid "Suggest emojis during autocompletion"
+msgstr "Aanvaard spaties bij automatisch aanvullen"
+
+#: source/win-preferences/schema/editor.ts:260
+msgid "Show link previews"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:266
+msgid "Automatically close matching character pairs"
+msgstr "Sluit automatisch bijpassende tekenparen"
+
+#: source/win-preferences/schema/import-export.ts:23
+msgid "Import and export profiles"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:29
+msgid "Open import profiles editor"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:43
+msgid "Open export profiles editor"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:58
+#, fuzzy
+msgid "Export settings"
+msgstr "Exporteren naar %s"
+
+#. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
+#: source/win-preferences/schema/import-export.ts:64
+#, fuzzy
+msgid "Use Zettlr's internal Pandoc for exports"
+msgstr "Gebruik de interne Pandoc voor export"
+
+#: source/win-preferences/schema/import-export.ts:70
+#, fuzzy
+msgid "Remove tags from files when exporting"
+msgstr "Verwijder labels uit bestanden"
+
+#: source/win-preferences/schema/import-export.ts:76
+#: source/win-preferences/schema/zettelkasten.ts:42
+#, fuzzy
+msgid "Internal links"
+msgstr "Ontkoppel interne links"
+
+#: source/win-preferences/schema/import-export.ts:79
+msgid "Remove internal links completely"
+msgstr "Verwijder alle interne links"
+
+#: source/win-preferences/schema/import-export.ts:80
+msgid "Unlink internal links"
+msgstr "Ontkoppel interne links"
+
+#: source/win-preferences/schema/import-export.ts:81
+msgid "Don't touch internal links"
+msgstr "Raak de interne links niet aan"
+
+#: source/win-preferences/schema/import-export.ts:87
+msgid "Destination folder for exported files"
+msgstr ""
+
+#. TODO: Add info-strings
+#: source/win-preferences/schema/import-export.ts:91
+msgid "Temporary folder"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:92
+#, fuzzy
+msgid "Same as file location"
+msgstr "Toon bestandsinformatie"
+
+#: source/win-preferences/schema/import-export.ts:93
+msgid "Ask for folder when exporting"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:99
+msgid ""
+"Warning! Files in the temporary folder are regularly deleted. Choosing the "
+"same location as the file overwrites files with identical filenames if they "
+"already exist."
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:104
+msgid "Custom export commands"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:112
+#, fuzzy
+msgid "Display name"
+msgstr "Toon knop om afbeelding in te voegen"
+
+#: source/win-preferences/schema/import-export.ts:112
+#, fuzzy
+msgid "Command"
+msgstr "Commentaar"
+
+#: source/win-preferences/schema/import-export.ts:113
+msgid ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:22
+msgid "LanguageTool"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:32
+msgid "Strictness"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:35
+#, fuzzy
+msgid "Standard"
+msgstr "Kalender"
+
+#: source/win-preferences/schema/spellchecking.ts:36
+msgid "Picky"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:45
+msgid "Mother language"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:51
+msgid "Not set"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:59
+msgid "LanguageTool Provider"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:63
+#, fuzzy
+msgid "Custom server"
+msgstr "Aangepaste CSS"
+
+#: source/win-preferences/schema/spellchecking.ts:70
+#, fuzzy
+msgid "Custom server address"
+msgstr "Aangepaste CSS"
+
+#: source/win-preferences/schema/spellchecking.ts:79
+msgid "LanguageTool Premium"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:84
+msgid ""
+"Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
+"credentials here."
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:88
+msgid "LanguageTool Username"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:95
+msgid "LanguageTool API key"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:103
+msgid "Spellchecking"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:112
+#, fuzzy
+msgid "Active"
+msgstr "Acties"
+
+#: source/win-preferences/schema/spellchecking.ts:112
+msgid "Language"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:113
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr ""
+"Selecteer de talen waarvoor je de automatische spellingscontrole wil "
+"aanzetten."
+
+#: source/win-preferences/schema/spellchecking.ts:125
+msgid "User dictionary. Remove words by clicking them."
+msgstr "Gebruikerswoordenboek. Verwijder woorden door op ze te klikken."
+
+#: source/win-preferences/schema/spellchecking.ts:127
+msgid "Dictionary entry"
+msgstr "Woordenboeklemma"
+
+#: source/win-preferences/schema/spellchecking.ts:130
+msgid "Search for entries …"
+msgstr "Zoeken naar invoer …"
+
+#: source/win-preferences/schema/file-manager.ts:7
+#, fuzzy
+msgid "Display mode"
+msgstr "Toon knop om afbeelding in te voegen"
+
+#: source/win-preferences/schema/file-manager.ts:16
+msgid "Thin"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:17
+msgid "Expanded"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:18
+msgid "Combined"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:24
+msgid ""
+"The Thin mode shows your directories and files separately. Select a "
+"directory to have its contents displayed in the file list. Switch between "
+"file list and directory tree by clicking on directories or the arrow button "
+"which appears at the top left corner of the file list."
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:29
+msgid "Show file information"
+msgstr "Toon bestandsinformatie"
+
+#: source/win-preferences/schema/file-manager.ts:34
+msgid "Show folders above files"
+msgstr "Toon mappen boven bestanden"
+
+#: source/win-preferences/schema/file-manager.ts:40
+msgid "Markdown document name display"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:48
+msgid "Filename only"
+msgstr "Alleen bestandsnaam"
+
+#: source/win-preferences/schema/file-manager.ts:49
+msgid "Title if applicable"
+msgstr "Titel (indien van toepassing)"
+
+#: source/win-preferences/schema/file-manager.ts:50
+msgid "First heading level 1 if applicable"
+msgstr "Eerste kop niveau 1 indien van toepassing"
+
+#: source/win-preferences/schema/file-manager.ts:51
+msgid "Title or first heading level 1 if applicable"
+msgstr "Titel of eerste kop (indien van toepassing)"
+
+#: source/win-preferences/schema/file-manager.ts:57
+msgid "Display Markdown file extensions"
+msgstr "Toon Markdown bestandsextensies"
+
+#: source/win-preferences/schema/file-manager.ts:64
+msgid "Time display"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:72
+msgid "Last modification time"
+msgstr "Tijdstip waarop de laatste aanpassingen zijn gemaakt."
+
+#: source/win-preferences/schema/file-manager.ts:73
+msgid "File creation time"
+msgstr "Tijdstip waarop het bestand is aangemaakt."
+
+#: source/win-preferences/schema/file-manager.ts:79
+#, fuzzy
+msgid "Sorting"
+msgstr "Exporteren..."
+
+#: source/win-preferences/schema/file-manager.ts:85
+#, fuzzy
+msgid "When sorting documents…"
+msgstr "Recente documenten"
+
+#: source/win-preferences/schema/file-manager.ts:88
+#, fuzzy
+msgid "Use natural order (2 comes before 10)"
+msgstr "Natuurlijke volgorde (10 na 2)"
+
+#: source/win-preferences/schema/file-manager.ts:89
+#, fuzzy
+msgid "Use ASCII order (2 comes after 10)"
+msgstr "ASCII volgorde (2 na 10)"
+
+#: source/win-preferences/schema/citations.ts:21
+#, fuzzy
+msgid "Citations"
+msgstr "Geef citaten weer"
+
+#: source/win-preferences/schema/citations.ts:27
+msgid "How would you like autocomplete to insert your citations?"
+msgstr "Hoe moeten uw verwijzingen automatisch ingevoegd worden?"
+
+#: source/win-preferences/schema/citations.ts:38
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "Citaten database (CSL JSON of BibTex)"
+
+#: source/win-preferences/schema/citations.ts:40
+#: source/win-preferences/schema/citations.ts:52
+#, fuzzy
+msgid "Path to file"
+msgstr "Voeg toe aan bestand"
+
+#: source/win-preferences/schema/citations.ts:50
+msgid "CSL-Style (optional)"
+msgstr "CSL stijl (optioneel)"
+
+#: source/win-preferences/schema/general.ts:21
+msgid "Application language"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:32
+msgid "Autosave"
+msgstr "Automatisch opslaan"
+
+#: source/win-preferences/schema/general.ts:42
+#, fuzzy
+msgid "Save modifications"
+msgstr "Tijdstip waarop de laatste aanpassingen zijn gemaakt."
+
+#: source/win-preferences/schema/general.ts:46
+#: source/win-preferences/schema/appearance.ts:25
+msgid "Off"
+msgstr "Uit"
+
+#: source/win-preferences/schema/general.ts:47
+msgid "Immediately"
+msgstr "Onmiddellijk"
+
+#: source/win-preferences/schema/general.ts:48
+msgid "After a short delay"
+msgstr "Na een korte wachttijd"
+
+#: source/win-preferences/schema/general.ts:54
+msgid "Default image folder"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:66
+msgid ""
+"Click \"Select folder…\" or type an absolute or relative path directly into "
+"the input field."
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:71
+#, fuzzy
+msgid "Behavior"
+msgstr "Zoomgedrag"
+
+#: source/win-preferences/schema/general.ts:77
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
+msgid "Always load remote changes to the current file"
+msgstr "Altijd externe wijzigingen in het huidige bestand laden"
+
+#: source/win-preferences/schema/general.ts:82
+msgid "Avoid opening files in new tabs if possible"
+msgstr "Vermijd indien mogelijk bestanden in nieuwe tabbladen te openen"
+
+#: source/win-preferences/schema/general.ts:88
+#, fuzzy
+msgid "Updates"
+msgstr "Bijwerker"
+
+#: source/win-preferences/schema/general.ts:94
+msgid "Automatically check for updates"
+msgstr "Controleer automatisch op updates"
+
+#: source/win-preferences/schema/appearance.ts:10
+#: source/app/service-providers/menu/menu.darwin.ts:448
+#: source/app/service-providers/menu/menu.win32.ts:430
+msgid "Dark mode"
+msgstr "Donkere modus"
+
+#: source/win-preferences/schema/appearance.ts:21
+msgid "Schedule"
+msgstr "Schema"
+
+#: source/win-preferences/schema/appearance.ts:26
+#, fuzzy
+msgid "Follow system"
+msgstr "Volg het besturingssysteem"
+
+#: source/win-preferences/schema/appearance.ts:27
+msgid "On"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:36
+#: source/tmp/PopoverPomodoro.vue.ts:77
+msgid "Start"
+msgstr "Start"
+
+#: source/win-preferences/schema/appearance.ts:43
+msgid "End"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:53
+msgid "Theme"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:60
+msgid "Here you can choose the theme for the app."
+msgstr "Hier kun je het thema voor de app kiezen."
+
+#: source/win-preferences/schema/appearance.ts:102
+msgid "Toolbar options"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:109
+msgid "Left section buttons"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:113
+msgid "Display \"Open Preferences\" button"
+msgstr "Toon knop om voorkeuren te openen"
+
+#: source/win-preferences/schema/appearance.ts:118
+msgid "Display \"New File\" button"
+msgstr "Toon knop om nieuw bestand te creëren"
+
+#: source/win-preferences/schema/appearance.ts:123
+msgid "Display \"Previous File\" button"
+msgstr "Toon knop om naar vorig bestand te gaan"
+
+#: source/win-preferences/schema/appearance.ts:128
+msgid "Display \"Next File\" button"
+msgstr "Toon knop om naar volgend bestand te gaan"
+
+#: source/win-preferences/schema/appearance.ts:135
+msgid "Center section buttons"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:139
+msgid "Display readability button"
+msgstr "Toon knop voor leesbaarheidsmodus"
+
+#: source/win-preferences/schema/appearance.ts:144
+msgid "Display \"Insert Comment\" button"
+msgstr "Toon knop om commentaar in te voegen"
+
+#: source/win-preferences/schema/appearance.ts:149
+msgid "Display link button"
+msgstr "Toon knop om link in te voegen"
+
+#: source/win-preferences/schema/appearance.ts:154
+msgid "Display image button"
+msgstr "Toon knop om afbeelding in te voegen"
+
+#: source/win-preferences/schema/appearance.ts:159
+msgid "Display task list button"
+msgstr "Toon knop 'takenlijst'"
+
+#: source/win-preferences/schema/appearance.ts:164
+msgid "Display \"Insert Table\" button"
+msgstr "Toon knop om tabel in te voegen"
+
+#: source/win-preferences/schema/appearance.ts:169
+msgid "Display \"Insert Footnote\" button"
+msgstr "Toon knop om voetnoot in te voegen"
+
+#: source/win-preferences/schema/appearance.ts:176
+msgid "Right section buttons"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:180
+msgid "Display document info"
+msgstr "Toon bestandsinfo"
+
+#: source/win-preferences/schema/appearance.ts:185
+msgid "Display Pomodoro-timer"
+msgstr "Toon Pomodorotimer"
+
+#: source/win-preferences/schema/appearance.ts:191
+#, fuzzy
+msgid "Status bar"
+msgstr "Toon Zettlr"
+
+#: source/win-preferences/schema/appearance.ts:197
+#, fuzzy
+msgid "Show statusbar"
+msgstr "Toon Zettlr"
+
+#: source/win-preferences/schema/appearance.ts:203
+#: source/tmp/CustomCSS.vue.ts:31
+msgid "Custom CSS"
+msgstr "Aangepaste CSS"
+
+#: source/win-preferences/schema/appearance.ts:208
+#, fuzzy
+msgid "Open CSS editor"
+msgstr "Open map"
+
+#: source/win-preferences/schema/snippets.ts:23
+msgid "Snippets"
+msgstr ""
+
+#: source/win-preferences/schema/snippets.ts:29
+msgid "Open snippets editor"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:21
+msgid "Zettelkasten IDs"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:27
+#, fuzzy
+msgid "Pattern for Zettelkasten IDs"
+msgstr "Patroon dat gebruikt wordt om nieuwe IDs te genereren."
+
+#: source/win-preferences/schema/zettelkasten.ts:28
+#, fuzzy
+msgid "Uses ECMAScript regular expressions"
+msgstr "ID reguliere expressie"
+
+#: source/win-preferences/schema/zettelkasten.ts:34
+msgid "Pattern used to generate new IDs"
+msgstr "Patroon dat gebruikt wordt om nieuwe IDs te genereren."
+
+#: source/win-preferences/schema/zettelkasten.ts:37
+#, javascript-format
+msgid "Available Variables: %s"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:48
+msgid "Link with filename only"
+msgstr "Link met alleen de bestandsnaam"
+
+#: source/win-preferences/schema/zettelkasten.ts:53
+#, fuzzy
+msgid "When linking files, add the document name …"
+msgstr "Wanneer bestanden worden gekoppeld, voeg de bestandsnaam toe ..."
+
+#: source/win-preferences/schema/zettelkasten.ts:56
+#, fuzzy
+msgid "Always"
+msgstr "altijd"
+
+#: source/win-preferences/schema/zettelkasten.ts:57
+#, fuzzy
+msgid "Only when linking using the ID"
+msgstr "alleen wanneer er bij het koppelen het ID gebruikt wordt"
+
+#: source/win-preferences/schema/zettelkasten.ts:58
+#, fuzzy
+msgid "Never"
+msgstr "nooit"
+
+#: source/win-preferences/schema/zettelkasten.ts:65
+#, fuzzy
+msgid "Start a full-text search when following internal links"
+msgstr "Begin een zoekopdracht bij klik op een Zettelkasten-link"
+
+#: source/win-preferences/schema/zettelkasten.ts:66
+msgid "The search string will match the content between the brackets: [[ ]]."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:75
+#, fuzzy
+msgid ""
+"Automatically create non-existing files in this folder when following "
+"internal links"
+msgstr ""
+"Automatisch aanmaken van niet-bestaande bestanden wanneer interne links "
+"worden gevolgd"
+
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "For this to work, the folder must be open as a Workspace in Zettlr."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:85
+msgid "Path to folder"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:34
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+msgid "Properties"
+msgstr "Eigenschappen"
+
+#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/app/service-providers/menu/menu.win32.ts:281
+#: source/tmp/Defaults.vue.ts:76
+msgid "Rename file"
+msgstr "Bestand hernoemen"
+
+#: source/win-main/file-manager/util/file-item-context.ts:50
+#: source/app/service-providers/menu/menu.darwin.ts:298
+#: source/app/service-providers/menu/menu.win32.ts:292
+msgid "Delete file"
+msgstr "Verwijder bestand"
+
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "Dupliceer bestand"
+
+#: source/win-main/file-manager/util/file-item-context.ts:66
+#: source/win-main/file-manager/util/dir-item-context.ts:67
+#, fuzzy
+msgid "Copy path"
+msgstr "Volledig pad kopiëren"
+
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Kopieer bestandsnaam"
+
+#: source/win-main/file-manager/util/file-item-context.ts:78
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
+msgid "Copy ID"
+msgstr "Kopieer ID"
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Explorer"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in File Browser"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "Sluit bestand"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
+msgid "New File…"
+msgstr "Nieuw bestand..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
+msgid "New directory…"
+msgstr "Nieuwe map..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "Map hernoemen"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:306
+#: source/app/service-providers/menu/menu.win32.ts:299
+msgid "Delete directory"
+msgstr "Verwijder map"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "Controleer op map ..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "Exporteer project"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "Sluit werkruimte"
+
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
+msgid "Close Tab"
+msgstr "Sluit tabblad"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "Andere tabbladen sluiten"
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Alle tabbladen sluiten"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr "Tabblad losmaken"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr "Tabblad vastzetten"
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "Volledig pad kopiëren"
+
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
 #: source/app/service-providers/menu/menu.win32.ts:614
@@ -2424,8 +3427,6 @@ msgid ""
 "File %s has been modified remotely. Replace the loaded version with the "
 "newer one from disk?"
 msgstr ""
-"Bestand %s is elders gewijzigd. Vervang de geladen versie met de nieuwere "
-"van disk?"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2439,9 +3440,10 @@ msgstr "Onopgeslagen wijzigingen"
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr "Er zijn niet-opgeslagen wijzigingen. Wil je deze eerst opslaan?"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "Bestand opslaan"
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr ""
+"Je kan een map niet naar een van zijn onderliggende mappen verplaatsen."
 
 #: source/app/service-providers/documents/index.ts:345
 #, fuzzy

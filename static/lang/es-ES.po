@@ -2108,6 +2108,130 @@ msgstr "ahora mismo"
 #: source/app/service-providers/config/index.ts:484
 msgid "Restart later"
 msgstr ""
+"Crear automáticamente los ficheros inexistentes cuando se siguen vínculos "
+"internos"
+
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "For this to work, the folder must be open as a Workspace in Zettlr."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:85
+msgid "Path to folder"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:34
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+msgid "Properties"
+msgstr "Propiedades"
+
+#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/app/service-providers/menu/menu.win32.ts:281
+#: source/tmp/Defaults.vue.ts:76
+msgid "Rename file"
+msgstr "Renombrar archivo"
+
+#: source/win-main/file-manager/util/file-item-context.ts:50
+#: source/app/service-providers/menu/menu.darwin.ts:298
+#: source/app/service-providers/menu/menu.win32.ts:292
+msgid "Delete file"
+msgstr "Eliminar archivo"
+
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "Archivo duplicado"
+
+#: source/win-main/file-manager/util/file-item-context.ts:66
+#: source/win-main/file-manager/util/dir-item-context.ts:67
+#, fuzzy
+msgid "Copy path"
+msgstr "Copiar ruta completa"
+
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Copiar nombre de archivo"
+
+#: source/win-main/file-manager/util/file-item-context.ts:78
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
+msgid "Copy ID"
+msgstr "Copiar ID"
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Explorer"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in File Browser"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "Cerrar archivo"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
+msgid "New File…"
+msgstr "Archivo nuevo..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
+msgid "New directory…"
+msgstr "Carpeta nueva..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "Renombrar carpeta"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:306
+#: source/app/service-providers/menu/menu.win32.ts:299
+msgid "Delete directory"
+msgstr "Eliminar carpeta"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "Comprobar por la carpeta..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "Exportar proyecto"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "Cerrar área de trabajo"
+
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
+msgid "Close Tab"
+msgstr "Cerrar Pestaña"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "Cierra las otras pestañas"
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Cierra todas las pestañas"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr "Desanclar pestaña"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr "Anclar pestaña"
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "Copiar ruta completa"
 
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
@@ -2419,18 +2543,59 @@ msgstr "Sobrescribir el archivo existente"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "El archivo %s ya existe en este directorio. ¿Sobreescribir?"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Sustituir Archivo"
+#: source/app/service-providers/commands/root-open.ts:62
+#: source/tmp/FileItem.vue.ts:104 source/tmp/FileItem.vue.ts:106
+#: source/tmp/PopoverDirProps.vue.ts:178
+msgid "Files"
+msgstr "Archivos"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "No se puede abrir la carpeta"
+
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Directorio &quot;%s&quot; no se puede abrir por Zettlr."
+
+#: source/app/service-providers/commands/request-move.ts:53
+msgid "Cannot move directory"
+msgstr "No se puede mover la carpeta"
+
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "No puede mover una carpeta a una de sus sub-carpetas."
+
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
+msgstr "No se puede mover la arpeta o el archivo"
+
+#: source/app/service-providers/commands/request-move.ts:64
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "El archivo / la carpeta %s ya existe en el destino."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "No se ha encontrado el archivo solicitado."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "El nombre proporcionado no contenía ninguna letra permitida."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+msgid "The requested directory was not found."
+msgstr "No se ha encontrado la carpeta solicitada."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "No se ha guardado la imagen"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
 msgstr ""
-"El archivo %s ha sido modificado remotamente. ¿Sustituir la version "
-"actualmente cargada con la nueva del disco?"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38

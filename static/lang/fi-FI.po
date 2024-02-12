@@ -2102,6 +2102,124 @@ msgstr "juuri nyt"
 msgid "Restart later"
 msgstr ""
 
+#: source/win-preferences/schema/zettelkasten.ts:85
+msgid "Path to folder"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:34
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+msgid "Properties"
+msgstr "Ominaisuudet"
+
+#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/app/service-providers/menu/menu.win32.ts:281
+#: source/tmp/Defaults.vue.ts:76
+msgid "Rename file"
+msgstr "Nimeä tiedosto uudelleen"
+
+#: source/win-main/file-manager/util/file-item-context.ts:50
+#: source/app/service-providers/menu/menu.darwin.ts:298
+#: source/app/service-providers/menu/menu.win32.ts:292
+msgid "Delete file"
+msgstr "Poista tiedosto"
+
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "Monista tiedosto"
+
+#: source/win-main/file-manager/util/file-item-context.ts:66
+#: source/win-main/file-manager/util/dir-item-context.ts:67
+#, fuzzy
+msgid "Copy path"
+msgstr "Kopioi koko polku"
+
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Kopioi tiedostonnimi"
+
+#: source/win-main/file-manager/util/file-item-context.ts:78
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
+msgid "Copy ID"
+msgstr "Kopioi ID-numero"
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Explorer"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in File Browser"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "Sulje tiedosto"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
+msgid "New File…"
+msgstr "Uusi tiedosto…"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
+msgid "New directory…"
+msgstr "Uusi hakemisto…"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "Nimeä hakemisto uudelleen"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:306
+#: source/app/service-providers/menu/menu.win32.ts:299
+msgid "Delete directory"
+msgstr "Poista hakemisto"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "Etsi uudelleen hakemistosta…"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "Vie projekti"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "Sulje työtila"
+
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
+msgid "Close Tab"
+msgstr "Sulje välilehti"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "Sulje muut välilehdet"
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Sulje kaikki välilehdet"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr "Poista kiinnitys"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr "Kiinnitä välilehti"
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "Kopioi koko polku"
+
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
 #: source/app/service-providers/menu/menu.win32.ts:614
@@ -2413,18 +2531,20 @@ msgid "The file %s already exists in this directory. Overwrite?"
 msgstr ""
 "Tiedosto %s on jo olemassa tässä hakemistossa. Kirjoitetaanko sen päälle?"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Korvaa tiedosto"
+#: source/app/service-providers/commands/root-open.ts:62
+#: source/tmp/FileItem.vue.ts:104 source/tmp/FileItem.vue.ts:106
+#: source/tmp/PopoverDirProps.vue.ts:178
+msgid "Files"
+msgstr "Tiedostot"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "Hakemistoa ei voitu avata"
+
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"Tiedostoa %s on muokattu muualla. Korvataanko ladattu versio uudemmalla "
-"tallennetulla versiolla?"
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Zettlr ei voi avata hakemistoa &quot;%s&quot;."
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2440,9 +2560,9 @@ msgid "There are unsaved changes. Do you want to save them first?"
 msgstr ""
 "Nykyistä tiedostoa on muutettu. Haluatko hylätä vai tallentaa muutokset?"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "Tallenna tiedosto"
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "Annetussa nimessä ei ollut sallittuja kirjaimia (no_allowed_chars)."
 
 #: source/app/service-providers/documents/index.ts:345
 #, fuzzy

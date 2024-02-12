@@ -2076,6 +2076,134 @@ msgstr "just nüüd"
 msgid "Restart later"
 msgstr ""
 
+#: source/win-preferences/schema/zettelkasten.ts:75
+msgid ""
+"Automatically create non-existing files in this folder when following "
+"internal links"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "For this to work, the folder must be open as a Workspace in Zettlr."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:85
+msgid "Path to folder"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:34
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+msgid "Properties"
+msgstr "Atribuudid"
+
+#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/app/service-providers/menu/menu.win32.ts:281
+#: source/tmp/Defaults.vue.ts:76
+msgid "Rename file"
+msgstr "Nimeta fail ümber"
+
+#: source/win-main/file-manager/util/file-item-context.ts:50
+#: source/app/service-providers/menu/menu.darwin.ts:298
+#: source/app/service-providers/menu/menu.win32.ts:292
+msgid "Delete file"
+msgstr "Kustuta fail"
+
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "Paljunda faili"
+
+#: source/win-main/file-manager/util/file-item-context.ts:66
+#: source/win-main/file-manager/util/dir-item-context.ts:67
+#, fuzzy
+msgid "Copy path"
+msgstr "Kopeeri täispikk rada"
+
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Kopeeri failinimi"
+
+#: source/win-main/file-manager/util/file-item-context.ts:78
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
+msgid "Copy ID"
+msgstr "Kopeeri ID"
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Explorer"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in File Browser"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "Sulge fail"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
+msgid "New File…"
+msgstr "Uus Fail..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
+msgid "New directory…"
+msgstr "Uus nimistu..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "Nimeta nimistu ümber"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:306
+#: source/app/service-providers/menu/menu.win32.ts:299
+msgid "Delete directory"
+msgstr "Kustuta nimistu"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "Kontrolli nimistut ..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "Ekspordi Projekt"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "Sulge Töölaud"
+
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
+msgid "Close Tab"
+msgstr "Sulge Vaheaken"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "Sulge teised vaheaknad"
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Sulge kõik vaheaknad"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "Kopeeri täispikk rada"
+
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
 #: source/app/service-providers/menu/menu.win32.ts:614
@@ -2412,9 +2540,9 @@ msgstr ""
 "Selles failis on salvestamata muudatusi. Kas soovid need hüljata või "
 "salvestada?"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "Salvesta fail"
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Nimistust pole võimalik selle allnimistusse liigutada."
 
 #: source/app/service-providers/documents/index.ts:345
 #, fuzzy
@@ -2625,10 +2753,82 @@ msgstr "Ava nimistu"
 msgid "No other files"
 msgstr "Teisi faile pole"
 
-#: source/tmp/Defaults.vue.ts:70
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
+#: source/tmp/FileItem.vue.ts:97 source/tmp/FileItem.vue.ts:99
+#: source/tmp/PopoverDirProps.vue.ts:169
+msgid "Directories"
+msgstr "Nimistud"
+
+#: source/tmp/FileItem.vue.ts:170 source/tmp/PopoverFileProps.vue.ts:113
+msgid "Characters"
+msgstr "Tähemärgid"
+
+#: source/tmp/FileItem.vue.ts:172 source/tmp/PopoverFileProps.vue.ts:98
+msgid "Words"
+msgstr "Sõnad"
+
+#. STATIC VARIABLES
+#: source/tmp/CalendarView.vue.ts:26
+msgid "Calendar"
+msgstr "Kalender"
+
+#: source/tmp/CalendarView.vue.ts:28
+msgid "January"
+msgstr "jaanuar"
+
+#: source/tmp/CalendarView.vue.ts:29
+msgid "February"
+msgstr "veerbuar"
+
+#: source/tmp/CalendarView.vue.ts:30
+msgid "March"
+msgstr "märts"
+
+#: source/tmp/CalendarView.vue.ts:31
+msgid "April"
+msgstr "aprill"
+
+#: source/tmp/CalendarView.vue.ts:32
+msgid "May"
+msgstr "mai"
+
+#: source/tmp/CalendarView.vue.ts:33
+msgid "June"
+msgstr "juuni"
+
+#: source/tmp/CalendarView.vue.ts:34
+msgid "July"
+msgstr "juuli"
+
+#: source/tmp/CalendarView.vue.ts:35
+msgid "August"
+msgstr "august"
+
+#: source/tmp/CalendarView.vue.ts:36
+msgid "September"
+msgstr "september"
+
+#: source/tmp/CalendarView.vue.ts:37
+msgid "October"
+msgstr "oktoober"
+
+#: source/tmp/CalendarView.vue.ts:38
+msgid "November"
+msgstr "november"
+
+#: source/tmp/CalendarView.vue.ts:39
+msgid "December"
+msgstr "detsember"
+
+#: source/tmp/CalendarView.vue.ts:41
+msgid "Below the monthly average"
+msgstr "Alla kuu keskmise"
+
+#: source/tmp/CalendarView.vue.ts:42
+msgid "Over the monthly average"
+msgstr "Üle kuu keskmise"
+
+#: source/tmp/CalendarView.vue.ts:43
+msgid "More than twice the monthly average"
 msgstr ""
 
 #: source/tmp/Defaults.vue.ts:73

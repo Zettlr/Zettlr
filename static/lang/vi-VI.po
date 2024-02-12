@@ -2093,6 +2093,124 @@ msgstr "Vừa nãy"
 msgid "Restart later"
 msgstr ""
 
+#: source/win-preferences/schema/zettelkasten.ts:85
+msgid "Path to folder"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:34
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+msgid "Properties"
+msgstr "Các thuộc tính"
+
+#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/app/service-providers/menu/menu.win32.ts:281
+#: source/tmp/Defaults.vue.ts:76
+msgid "Rename file"
+msgstr "Đổi tên tập tin"
+
+#: source/win-main/file-manager/util/file-item-context.ts:50
+#: source/app/service-providers/menu/menu.darwin.ts:298
+#: source/app/service-providers/menu/menu.win32.ts:292
+msgid "Delete file"
+msgstr "Xoá tập tin"
+
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "Tạo tập tin bản sao"
+
+#: source/win-main/file-manager/util/file-item-context.ts:66
+#: source/win-main/file-manager/util/dir-item-context.ts:67
+#, fuzzy
+msgid "Copy path"
+msgstr "Sao chép đường dẫn đầy đủ"
+
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Sao chép tên tập tin"
+
+#: source/win-main/file-manager/util/file-item-context.ts:78
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
+msgid "Copy ID"
+msgstr "Sao chép ID"
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Explorer"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in File Browser"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "Đóng tập tin"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
+msgid "New File…"
+msgstr "Tập tin mới..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
+msgid "New directory…"
+msgstr "Thư mục mới..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "Đổi tên thư mục"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:306
+#: source/app/service-providers/menu/menu.win32.ts:299
+msgid "Delete directory"
+msgstr "Xoá thư mục"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "Kiểm tra thư mục ..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "Xuất Dự Án"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "Đóng Vùng Làm Việc"
+
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
+msgid "Close Tab"
+msgstr "Đóng Tab"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "Đóng các tab khác"
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Đóng tất cả tab"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr "Bỏ ghim tab"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr "Ghim tab"
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "Sao chép đường dẫn đầy đủ"
+
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
 #: source/app/service-providers/menu/menu.win32.ts:614
@@ -2403,18 +2521,59 @@ msgstr "Ghi đè lên tập tin đang có"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "Tập tin %s tồn tại trong thư mục này. Ghi đè?"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Thay thể tập tin"
+#: source/app/service-providers/commands/root-open.ts:62
+#: source/tmp/FileItem.vue.ts:104 source/tmp/FileItem.vue.ts:106
+#: source/tmp/PopoverDirProps.vue.ts:178
+msgid "Files"
+msgstr "Các tập tin"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "Không thể mở thực mục"
+
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Zettlr không thể mở thư mục &quot;%s&quot;"
+
+#: source/app/service-providers/commands/request-move.ts:53
+msgid "Cannot move directory"
+msgstr "Không thể di chuyển thư mục"
+
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Bạn không thể di chuyển một thư mục vào trong chính nó."
+
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
+msgstr "Không thể di chuyển thư mục hay tập tin"
+
+#: source/app/service-providers/commands/request-move.ts:64
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "Tập tin/thư mục %s tồn tại trong thư mục đích."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "Không thể tìm thấy tập tin được yêu cầu."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "Tên định dùng không chứa bất kì kí tự nào được cho phép."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+msgid "The requested directory was not found."
+msgstr "Không thể tìm thấy thư mục được yêu cầu"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "Không thể lưu hình ảnh"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
 msgstr ""
-"Tập tin %s đã được thay đổi từ bên ngoài. Thay thế phiên bản được hiển thị "
-"hiện tại với phiên bản mới hơn từ đĩa cứng?"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38

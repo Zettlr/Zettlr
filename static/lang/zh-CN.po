@@ -2092,6 +2092,1005 @@ msgstr "刚才"
 msgid "Restart later"
 msgstr ""
 
+#: source/win-preferences/schema/advanced.ts:28
+#, fuzzy
+msgid "Pattern for new file names"
+msgstr "新文件名的模式"
+
+#: source/win-preferences/schema/advanced.ts:34
+#, fuzzy
+msgid "Define a pattern for new file names"
+msgstr "新文件名的模式"
+
+#: source/win-preferences/schema/advanced.ts:36
+#, javascript-format
+msgid "Available variables: %s"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:42
+msgid "Do not prompt for filename when creating new files"
+msgstr "在创建新文件时不要提示文件名"
+
+#: source/win-preferences/schema/advanced.ts:49
+msgid "Appearance"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:55
+msgid "Use native window appearance"
+msgstr "使用本机窗口外观"
+
+#: source/win-preferences/schema/advanced.ts:56
+msgid "Only available on Linux; this is the default for macOS and Windows."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:62
+#, fuzzy
+msgid "Enable window vibrancy"
+msgstr "使用本机窗口外观"
+
+#: source/win-preferences/schema/advanced.ts:63
+msgid "Only available on macOS; makes the window background opaque."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:70
+msgid "Show app in the notification area"
+msgstr "在消息区显示应用"
+
+#: source/win-preferences/schema/advanced.ts:71
+msgid "Leave app running in the notification area"
+msgstr "使应用在通知区运行"
+
+#: source/win-preferences/schema/advanced.ts:80
+msgid "Zoom behavior"
+msgstr "缩放行为"
+
+#: source/win-preferences/schema/advanced.ts:83
+#, fuzzy
+msgid "Resizes the whole GUI"
+msgstr "缩放可以调整整个图形用户界面的大小"
+
+#: source/win-preferences/schema/advanced.ts:84
+#, fuzzy
+msgid "Changes the editor font size"
+msgstr "缩放可以改变编辑器的字体大小"
+
+#: source/win-preferences/schema/advanced.ts:90
+msgid "Attachments sidebar"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:96
+msgid "File extensions to be visible in the Attachments sidebar"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:102
+#, fuzzy
+msgid "Iframe rendering whitelist"
+msgstr "iFrame 渲染白名单"
+
+#: source/win-preferences/schema/advanced.ts:111
+msgid "Hostname"
+msgstr "主机名"
+
+#: source/win-preferences/schema/advanced.ts:113
+#: source/win-preferences/schema/autocorrect.ts:111
+#: source/win-preferences/schema/spellchecking.ts:118
+#, fuzzy
+msgid "Filter"
+msgstr "过滤..."
+
+#: source/win-preferences/schema/advanced.ts:118
+#, fuzzy
+msgid "Watchdog polling"
+msgstr "激活看门狗轮询"
+
+#: source/win-preferences/schema/advanced.ts:124
+msgid "Activate Watchdog polling"
+msgstr "激活看门狗轮询"
+
+#: source/win-preferences/schema/advanced.ts:129
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr "判断一个文件写入完成前的等待时间"
+
+#: source/win-preferences/schema/advanced.ts:136
+#, fuzzy
+msgid "Deleting items"
+msgstr "删除文档"
+
+#: source/win-preferences/schema/advanced.ts:142
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr "如果移到回收站失败，则永久性地删除它们"
+
+#: source/win-preferences/schema/advanced.ts:148
+#, fuzzy
+msgid "Debug mode"
+msgstr "启用调试模式"
+
+#: source/win-preferences/schema/advanced.ts:154
+msgid "Enable debug mode"
+msgstr "启用调试模式"
+
+#: source/win-preferences/schema/advanced.ts:161
+msgid "Beta releases"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:167
+msgid "Notify me about beta releases"
+msgstr "当有新Beta版本发布时通知我"
+
+#: source/win-preferences/schema/autocorrect.ts:21
+#, fuzzy
+msgid "Autocorrect"
+msgstr "自动修正"
+
+#: source/win-preferences/schema/autocorrect.ts:31
+msgid "Smart quotes"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:44
+#, fuzzy
+msgid "Double Quotes"
+msgstr "无"
+
+#: source/win-preferences/schema/autocorrect.ts:47
+#: source/win-preferences/schema/autocorrect.ts:69
+msgid "Disable Magic Quotes"
+msgstr "无"
+
+#: source/win-preferences/schema/autocorrect.ts:66
+#, fuzzy
+msgid "Single Quotes"
+msgstr "无"
+
+#: source/win-preferences/schema/autocorrect.ts:94
+msgid "Text-replacement patterns"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:98
+msgid "Match whole words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:99
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:106
+#, fuzzy
+msgid "Replace"
+msgstr "替换文件"
+
+#: source/win-preferences/schema/autocorrect.ts:106
+msgid "With"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:21
+#, fuzzy
+msgid "Input mode"
+msgstr "编辑器输入模式"
+
+#: source/win-preferences/schema/editor.ts:37
+msgid ""
+"The input mode determines how you interact with the editor. We recommend "
+"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
+"know what this implies."
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:42
+#, fuzzy
+msgid "Writing direction"
+msgstr "在目录中查找"
+
+#: source/win-preferences/schema/editor.ts:50
+msgid "Markdown rendering"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:57
+msgid ""
+"Check to enable live rendering of various Markdown elements to formatted "
+"appearance. This hides formatting characters (such as **text**) or renders "
+"images instead of their link."
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:65
+msgid "Render Citations"
+msgstr "渲染引用段落"
+
+#: source/win-preferences/schema/editor.ts:70
+msgid "Render Iframes"
+msgstr "渲染内嵌框架"
+
+#: source/win-preferences/schema/editor.ts:75
+msgid "Render Images"
+msgstr "渲染图片"
+
+#: source/win-preferences/schema/editor.ts:80
+msgid "Render Links"
+msgstr "渲染链接"
+
+#: source/win-preferences/schema/editor.ts:85
+msgid "Render Formulae"
+msgstr "渲染公式"
+
+#: source/win-preferences/schema/editor.ts:90
+msgid "Render Tasks"
+msgstr "渲染任务"
+
+#: source/win-preferences/schema/editor.ts:95
+msgid "Hide heading characters"
+msgstr "隐藏标题字符"
+
+#: source/win-preferences/schema/editor.ts:100
+msgid "Render emphasis"
+msgstr "渲染强调"
+
+#: source/win-preferences/schema/editor.ts:109
+msgid "Formatting characters for bold and italic"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:136
+msgid "Check Markdown for style issues"
+msgstr "检查 Markdown 是否存在样式问题"
+
+#: source/win-preferences/schema/editor.ts:142
+#, fuzzy
+msgid "Table Editor"
+msgstr "启用表格编辑器"
+
+#: source/win-preferences/schema/editor.ts:153
+msgid ""
+"The Table Editor is an interactive interface that simplifies creation and "
+"editing of tables. It provides buttons for common functionality, and takes "
+"care of Markdown formatting."
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:158
+#, fuzzy
+msgid "Distraction-free mode"
+msgstr "专注模式"
+
+#: source/win-preferences/schema/editor.ts:164
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr "隐藏所有非当前行"
+
+#: source/win-preferences/schema/editor.ts:169
+msgid "Hide toolbar in distraction free mode"
+msgstr "在专注模式下隐藏工具条"
+
+#: source/win-preferences/schema/editor.ts:175
+#, fuzzy
+msgid "Word counter"
+msgstr "词数"
+
+#: source/win-preferences/schema/editor.ts:182
+msgid "Count characters instead of words (e.g., for Chinese)"
+msgstr "统计字的数量而不是词语的数量（例如，中文）"
+
+#: source/win-preferences/schema/editor.ts:188
+msgid "Readability mode"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:195
+msgid "Algorithm"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:207
+#, fuzzy
+msgid "Image size"
+msgstr "图像"
+
+#: source/win-preferences/schema/editor.ts:213
+#, fuzzy
+msgid "Maximum width of images (%s %)"
+msgstr "最大图片宽度（%）"
+
+#: source/win-preferences/schema/editor.ts:220
+#, fuzzy
+msgid "Maximum height of images (%s %)"
+msgstr "最大图片高度（%）"
+
+#: source/win-preferences/schema/editor.ts:228
+#, fuzzy
+msgid "Other settings"
+msgstr "其他文件"
+
+#: source/win-preferences/schema/editor.ts:234
+#, fuzzy
+msgid "Font size"
+msgstr "编辑器字体大小"
+
+#: source/win-preferences/schema/editor.ts:241
+#, fuzzy
+msgid "Indentation size (number of spaces)"
+msgstr "使用以下数量的空格来缩进"
+
+#: source/win-preferences/schema/editor.ts:248
+#, fuzzy
+msgid "Indent using tabs instead of spaces"
+msgstr "使用制表符缩进"
+
+#: source/win-preferences/schema/editor.ts:255
+#, fuzzy
+msgid "Suggest emojis during autocompletion"
+msgstr "允许自动完成生成空格"
+
+#: source/win-preferences/schema/editor.ts:260
+msgid "Show link previews"
+msgstr "显示链接预览"
+
+#: source/win-preferences/schema/editor.ts:266
+msgid "Automatically close matching character pairs"
+msgstr "括号自动配对"
+
+#: source/win-preferences/schema/import-export.ts:23
+msgid "Import and export profiles"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:29
+msgid "Open import profiles editor"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:43
+msgid "Open export profiles editor"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:58
+#, fuzzy
+msgid "Export settings"
+msgstr "成功导出到％s！"
+
+#. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
+#: source/win-preferences/schema/import-export.ts:64
+#, fuzzy
+msgid "Use Zettlr's internal Pandoc for exports"
+msgstr "使用内置的Pandoc导出"
+
+#: source/win-preferences/schema/import-export.ts:70
+#, fuzzy
+msgid "Remove tags from files when exporting"
+msgstr "删除文档中的标签"
+
+#: source/win-preferences/schema/import-export.ts:76
+#: source/win-preferences/schema/zettelkasten.ts:42
+#, fuzzy
+msgid "Internal links"
+msgstr "取消内部链接"
+
+#: source/win-preferences/schema/import-export.ts:79
+msgid "Remove internal links completely"
+msgstr "彻底删除内部链接"
+
+#: source/win-preferences/schema/import-export.ts:80
+msgid "Unlink internal links"
+msgstr "取消内部链接"
+
+#: source/win-preferences/schema/import-export.ts:81
+msgid "Don't touch internal links"
+msgstr "不改变内部链接"
+
+#: source/win-preferences/schema/import-export.ts:87
+msgid "Destination folder for exported files"
+msgstr ""
+
+#. TODO: Add info-strings
+#: source/win-preferences/schema/import-export.ts:91
+msgid "Temporary folder"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:92
+#, fuzzy
+msgid "Same as file location"
+msgstr "显示文件信息"
+
+#: source/win-preferences/schema/import-export.ts:93
+msgid "Ask for folder when exporting"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:99
+msgid ""
+"Warning! Files in the temporary folder are regularly deleted. Choosing the "
+"same location as the file overwrites files with identical filenames if they "
+"already exist."
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:104
+msgid "Custom export commands"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:112
+#, fuzzy
+msgid "Display name"
+msgstr "显示图像按钮"
+
+#: source/win-preferences/schema/import-export.ts:112
+#, fuzzy
+msgid "Command"
+msgstr "注释"
+
+#: source/win-preferences/schema/import-export.ts:113
+msgid ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:22
+#, fuzzy
+msgid "LanguageTool"
+msgstr "使用语言工具"
+
+#: source/win-preferences/schema/spellchecking.ts:32
+msgid "Strictness"
+msgstr "严格"
+
+#: source/win-preferences/schema/spellchecking.ts:35
+#, fuzzy
+msgid "Standard"
+msgstr "日历"
+
+#: source/win-preferences/schema/spellchecking.ts:36
+msgid "Picky"
+msgstr "讲究"
+
+#: source/win-preferences/schema/spellchecking.ts:45
+msgid "Mother language"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:51
+msgid "Not set"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:59
+msgid "LanguageTool Provider"
+msgstr "语言工具 提供程序"
+
+#: source/win-preferences/schema/spellchecking.ts:63
+#, fuzzy
+msgid "Custom server"
+msgstr "自定义CSS"
+
+#: source/win-preferences/schema/spellchecking.ts:70
+#, fuzzy
+msgid "Custom server address"
+msgstr "自定义CSS"
+
+#: source/win-preferences/schema/spellchecking.ts:79
+#, fuzzy
+msgid "LanguageTool Premium"
+msgstr "语言工具 提供程序"
+
+#: source/win-preferences/schema/spellchecking.ts:84
+msgid ""
+"Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
+"credentials here."
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:88
+msgid "LanguageTool Username"
+msgstr "语言工具 用户名"
+
+#: source/win-preferences/schema/spellchecking.ts:95
+msgid "LanguageTool API key"
+msgstr "语言工具 API密钥"
+
+#: source/win-preferences/schema/spellchecking.ts:103
+msgid "Spellchecking"
+msgstr "拼写检查"
+
+#: source/win-preferences/schema/spellchecking.ts:112
+#, fuzzy
+msgid "Active"
+msgstr "Actions"
+
+#: source/win-preferences/schema/spellchecking.ts:112
+#, fuzzy
+msgid "Language"
+msgstr "语言工具 提供程序"
+
+#: source/win-preferences/schema/spellchecking.ts:113
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr "选择要启用自动拼写检查的语言。"
+
+#: source/win-preferences/schema/spellchecking.ts:125
+msgid "User dictionary. Remove words by clicking them."
+msgstr "用户字典。点击移除单词。"
+
+#: source/win-preferences/schema/spellchecking.ts:127
+msgid "Dictionary entry"
+msgstr "字典词条"
+
+#: source/win-preferences/schema/spellchecking.ts:130
+msgid "Search for entries …"
+msgstr "搜索内容 ..."
+
+#: source/win-preferences/schema/file-manager.ts:7
+#, fuzzy
+msgid "Display mode"
+msgstr "显示图像按钮"
+
+#: source/win-preferences/schema/file-manager.ts:16
+msgid "Thin"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:17
+msgid "Expanded"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:18
+msgid "Combined"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:24
+msgid ""
+"The Thin mode shows your directories and files separately. Select a "
+"directory to have its contents displayed in the file list. Switch between "
+"file list and directory tree by clicking on directories or the arrow button "
+"which appears at the top left corner of the file list."
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:29
+msgid "Show file information"
+msgstr "显示文件信息"
+
+#: source/win-preferences/schema/file-manager.ts:34
+msgid "Show folders above files"
+msgstr "在文档上方显示文件夹"
+
+#: source/win-preferences/schema/file-manager.ts:40
+msgid "Markdown document name display"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:48
+msgid "Filename only"
+msgstr "只显示文件名"
+
+#: source/win-preferences/schema/file-manager.ts:49
+msgid "Title if applicable"
+msgstr "标题（如适用）"
+
+#: source/win-preferences/schema/file-manager.ts:50
+msgid "First heading level 1 if applicable"
+msgstr "第一个1级标题（如适用）"
+
+#: source/win-preferences/schema/file-manager.ts:51
+msgid "Title or first heading level 1 if applicable"
+msgstr "标题或第一个1级标题（如适用）"
+
+#: source/win-preferences/schema/file-manager.ts:57
+msgid "Display Markdown file extensions"
+msgstr "显示Markdown文件扩展名"
+
+#: source/win-preferences/schema/file-manager.ts:64
+#, fuzzy
+msgid "Time display"
+msgstr "显示"
+
+#: source/win-preferences/schema/file-manager.ts:72
+msgid "Last modification time"
+msgstr "最后修改时间"
+
+#: source/win-preferences/schema/file-manager.ts:73
+msgid "File creation time"
+msgstr "文件创建时间"
+
+#: source/win-preferences/schema/file-manager.ts:79
+#, fuzzy
+msgid "Sorting"
+msgstr "导出…"
+
+#: source/win-preferences/schema/file-manager.ts:85
+#, fuzzy
+msgid "When sorting documents…"
+msgstr "最近的文件"
+
+#: source/win-preferences/schema/file-manager.ts:88
+#, fuzzy
+msgid "Use natural order (2 comes before 10)"
+msgstr "自然顺序（10在2之后）"
+
+#: source/win-preferences/schema/file-manager.ts:89
+#, fuzzy
+msgid "Use ASCII order (2 comes after 10)"
+msgstr "ASCII顺序（2在10之后）"
+
+#: source/win-preferences/schema/citations.ts:21
+msgid "Citations"
+msgstr "引用"
+
+#: source/win-preferences/schema/citations.ts:27
+msgid "How would you like autocomplete to insert your citations?"
+msgstr "自动完成功能如何插入引文？"
+
+#: source/win-preferences/schema/citations.ts:38
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "引文数据库（CSL JSON 或 BibTex 格式）"
+
+#: source/win-preferences/schema/citations.ts:40
+#: source/win-preferences/schema/citations.ts:52
+#, fuzzy
+msgid "Path to file"
+msgstr "添加到文件"
+
+#: source/win-preferences/schema/citations.ts:50
+msgid "CSL-Style (optional)"
+msgstr "CSL风格（可选）"
+
+#: source/win-preferences/schema/general.ts:21
+msgid "Application language"
+msgstr "应用语言"
+
+#: source/win-preferences/schema/general.ts:32
+msgid "Autosave"
+msgstr "自动保存"
+
+#: source/win-preferences/schema/general.ts:42
+#, fuzzy
+msgid "Save modifications"
+msgstr "最后修改时间"
+
+#: source/win-preferences/schema/general.ts:46
+#: source/win-preferences/schema/appearance.ts:25
+msgid "Off"
+msgstr "关闭"
+
+#: source/win-preferences/schema/general.ts:47
+msgid "Immediately"
+msgstr "马上"
+
+#: source/win-preferences/schema/general.ts:48
+msgid "After a short delay"
+msgstr "短暂延迟后"
+
+#: source/win-preferences/schema/general.ts:54
+msgid "Default image folder"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:66
+msgid ""
+"Click \"Select folder…\" or type an absolute or relative path directly into "
+"the input field."
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:71
+#, fuzzy
+msgid "Behavior"
+msgstr "缩放行为"
+
+#: source/win-preferences/schema/general.ts:77
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
+msgid "Always load remote changes to the current file"
+msgstr "始终将远程更改加载到当前文件"
+
+#: source/win-preferences/schema/general.ts:82
+msgid "Avoid opening files in new tabs if possible"
+msgstr "尽量避免在新标签页打开文件"
+
+#: source/win-preferences/schema/general.ts:88
+#, fuzzy
+msgid "Updates"
+msgstr "更新管理"
+
+#: source/win-preferences/schema/general.ts:94
+msgid "Automatically check for updates"
+msgstr "自动检查更新"
+
+#: source/win-preferences/schema/appearance.ts:10
+#: source/app/service-providers/menu/menu.darwin.ts:448
+#: source/app/service-providers/menu/menu.win32.ts:430
+msgid "Dark mode"
+msgstr "夜间模式"
+
+#: source/win-preferences/schema/appearance.ts:21
+msgid "Schedule"
+msgstr "计划"
+
+#: source/win-preferences/schema/appearance.ts:26
+#, fuzzy
+msgid "Follow system"
+msgstr "跟随系统设置"
+
+#: source/win-preferences/schema/appearance.ts:27
+msgid "On"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:36
+#: source/tmp/PopoverPomodoro.vue.ts:77
+msgid "Start"
+msgstr "开始"
+
+#: source/win-preferences/schema/appearance.ts:43
+msgid "End"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:53
+msgid "Theme"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:60
+msgid "Here you can choose the theme for the app."
+msgstr "你可以在此选择应用的主题。"
+
+#: source/win-preferences/schema/appearance.ts:102
+#, fuzzy
+msgid "Toolbar options"
+msgstr "工具栏"
+
+#: source/win-preferences/schema/appearance.ts:109
+msgid "Left section buttons"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:113
+msgid "Display \"Open Preferences\" button"
+msgstr "显示打开偏好设置按钮"
+
+#: source/win-preferences/schema/appearance.ts:118
+msgid "Display \"New File\" button"
+msgstr "显示新文件按钮"
+
+#: source/win-preferences/schema/appearance.ts:123
+msgid "Display \"Previous File\" button"
+msgstr "显示打开前一个文件按钮"
+
+#: source/win-preferences/schema/appearance.ts:128
+msgid "Display \"Next File\" button"
+msgstr "显示下一个文件按钮"
+
+#: source/win-preferences/schema/appearance.ts:135
+msgid "Center section buttons"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:139
+msgid "Display readability button"
+msgstr "显示可读性按钮"
+
+#: source/win-preferences/schema/appearance.ts:144
+msgid "Display \"Insert Comment\" button"
+msgstr "显示插入备注按钮"
+
+#: source/win-preferences/schema/appearance.ts:149
+msgid "Display link button"
+msgstr "显示链接按钮"
+
+#: source/win-preferences/schema/appearance.ts:154
+msgid "Display image button"
+msgstr "显示图像按钮"
+
+#: source/win-preferences/schema/appearance.ts:159
+msgid "Display task list button"
+msgstr "显示任务清单按钮"
+
+#: source/win-preferences/schema/appearance.ts:164
+msgid "Display \"Insert Table\" button"
+msgstr "显示插入表格按钮"
+
+#: source/win-preferences/schema/appearance.ts:169
+msgid "Display \"Insert Footnote\" button"
+msgstr "显示注脚按钮"
+
+#: source/win-preferences/schema/appearance.ts:176
+msgid "Right section buttons"
+msgstr ""
+
+#: source/win-preferences/schema/appearance.ts:180
+msgid "Display document info"
+msgstr "显示文件信息"
+
+#: source/win-preferences/schema/appearance.ts:185
+msgid "Display Pomodoro-timer"
+msgstr "显示番茄钟按钮"
+
+#: source/win-preferences/schema/appearance.ts:191
+#, fuzzy
+msgid "Status bar"
+msgstr "在托盘中显示Zettlr"
+
+#: source/win-preferences/schema/appearance.ts:197
+#, fuzzy
+msgid "Show statusbar"
+msgstr "在托盘中显示Zettlr"
+
+#: source/win-preferences/schema/appearance.ts:203
+#: source/tmp/CustomCSS.vue.ts:31
+msgid "Custom CSS"
+msgstr "自定义CSS"
+
+#: source/win-preferences/schema/appearance.ts:208
+#, fuzzy
+msgid "Open CSS editor"
+msgstr "打开目录"
+
+#: source/win-preferences/schema/snippets.ts:23
+msgid "Snippets"
+msgstr ""
+
+#: source/win-preferences/schema/snippets.ts:29
+msgid "Open snippets editor"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:21
+msgid "Zettelkasten IDs"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:27
+#, fuzzy
+msgid "Pattern for Zettelkasten IDs"
+msgstr "用于生成新ID的模式"
+
+#: source/win-preferences/schema/zettelkasten.ts:28
+#, fuzzy
+msgid "Uses ECMAScript regular expressions"
+msgstr "ID正则表达式"
+
+#: source/win-preferences/schema/zettelkasten.ts:34
+msgid "Pattern used to generate new IDs"
+msgstr "用于生成新ID的模式"
+
+#: source/win-preferences/schema/zettelkasten.ts:37
+#, javascript-format
+msgid "Available Variables: %s"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:48
+#, fuzzy
+msgid "Link with filename only"
+msgstr "只显示文件名"
+
+#: source/win-preferences/schema/zettelkasten.ts:53
+#, fuzzy
+msgid "When linking files, add the document name …"
+msgstr "当链接文件时，添加文件名"
+
+#: source/win-preferences/schema/zettelkasten.ts:56
+#, fuzzy
+msgid "Always"
+msgstr "总是"
+
+#: source/win-preferences/schema/zettelkasten.ts:57
+#, fuzzy
+msgid "Only when linking using the ID"
+msgstr "只在链接时使用 ID"
+
+#: source/win-preferences/schema/zettelkasten.ts:58
+#, fuzzy
+msgid "Never"
+msgstr "从不"
+
+#: source/win-preferences/schema/zettelkasten.ts:65
+#, fuzzy
+msgid "Start a full-text search when following internal links"
+msgstr "跟踪Zettelkasten-links时搜索"
+
+#: source/win-preferences/schema/zettelkasten.ts:66
+msgid "The search string will match the content between the brackets: [[ ]]."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:75
+#, fuzzy
+msgid ""
+"Automatically create non-existing files in this folder when following "
+"internal links"
+msgstr "追踪内部链接时自动创建不存在的文件"
+
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "For this to work, the folder must be open as a Workspace in Zettlr."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:85
+msgid "Path to folder"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:34
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+msgid "Properties"
+msgstr "属性"
+
+#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/app/service-providers/menu/menu.win32.ts:281
+#: source/tmp/Defaults.vue.ts:76
+msgid "Rename file"
+msgstr "重命名文档"
+
+#: source/win-main/file-manager/util/file-item-context.ts:50
+#: source/app/service-providers/menu/menu.darwin.ts:298
+#: source/app/service-providers/menu/menu.win32.ts:292
+msgid "Delete file"
+msgstr "删除文档"
+
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "创建文件副本"
+
+#: source/win-main/file-manager/util/file-item-context.ts:66
+#: source/win-main/file-manager/util/dir-item-context.ts:67
+#, fuzzy
+msgid "Copy path"
+msgstr "复制全路径按钮"
+
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "复制文件名"
+
+#: source/win-main/file-manager/util/file-item-context.ts:78
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
+msgid "Copy ID"
+msgstr "复制ID"
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Explorer"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in File Browser"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "关闭文档"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
+msgid "New File…"
+msgstr "新文档…"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
+msgid "New directory…"
+msgstr "新目录…"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "重命名目录"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:306
+#: source/app/service-providers/menu/menu.win32.ts:299
+msgid "Delete directory"
+msgstr "删除目录"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "选择目录..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "导出项目"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "关闭工作区"
+
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
+msgid "Close Tab"
+msgstr "关闭标签"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "关闭其他标签"
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "关闭所有标签"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr "取消固定标签"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr "固定标签"
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "复制全路径按钮"
+
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
 #: source/app/service-providers/menu/menu.win32.ts:614
@@ -2401,16 +3400,14 @@ msgstr "覆盖已存在的文件"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "文件 %s 已存在，是否覆盖？"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "替换文件"
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
+msgstr "无法移动目录或文档"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/request-move.ts:64
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr "文件 %s 已被远程修改。是否使用硬盘中的新版本替代当前版本？"
+msgid "The file/directory %s already exists in target."
+msgstr "文件/目录％s已存在。"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38

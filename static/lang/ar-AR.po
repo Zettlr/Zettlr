@@ -2383,18 +2383,14 @@ msgstr "الكتابة على مستند موجود"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "الملف٪ s موجود بالفعل في هذا الدليل. الكتابة فوق؟"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "استبدل الملف"
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "لا يمكن فتح الدليل/المجلد"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"تم تعديل الملف٪ s عن بعد. هل تريد استبدال النسخة المحملة بالنسخة الأحدث من "
-"القرص؟"
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "الدليل & quot؛٪ s & quot؛ لا يمكن فتحه بواسطة Zettlr."
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2409,8 +2405,22 @@ msgstr ""
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr "هناك تغييرات غير محفوظة على الملف الحالي. هل تريد حذفها أو حفظها؟"
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "الاسم المقدم لا يحتوي على أي أحرف مسموح بها."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+msgid "The requested directory was not found."
+msgstr "لم يتم العثور على الدليل المطلوب."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "تعذر حفظ الصورة"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
 msgstr ""
 
 #: source/app/service-providers/documents/index.ts:345
