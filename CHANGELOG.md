@@ -79,6 +79,10 @@ links as well.
 - Improvements to how the Markdown AST handles table parsing, which will improve
   Markdown-to-HTML conversion both within the TableEditor as well as when
   copying as HTML
+- Fixed an issue that would make a context menu on macOS appear offset from the
+  actual mouse position if the window's GUI was scaled absolutely (as per the
+  preferences); now the context menu should always appear exactly where it
+  should be
 
 ## Under the Hood
 

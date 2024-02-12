@@ -293,6 +293,20 @@ export default class MenuProvider extends ProviderContract {
           resolve(resolvedID)
         }, 100)
       })
+
+      // NOTE: The coordinates we receive from the renderer are scaled by the
+      // zoom scale factor, but the context menu will show up at absolute
+      // coordinates, meaning that the x/y values will diverge more and more the
+      // further the user moves down/right. By normalizing the coordinates with
+      // the scale factor, we avoid that the context menu is offset from the
+      // mouse pointer.
+      const focusedWindow = BrowserWindow.getFocusedWindow()
+      if (focusedWindow !== null && focusedWindow.webContents.getZoomLevel() !== 0) {
+        const factor = focusedWindow.webContents.getZoomFactor()
+        x *= factor
+        y *= factor
+      }
+
       // Enforce integers for the coordinates, otherwise we will get this weird
       // "conversion failure" error.
       popupMenu.popup({ x: Math.round(x), y: Math.round(y) })
