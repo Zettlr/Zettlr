@@ -58,9 +58,25 @@
     <term name="circa">circa</term>
     <term name="circa" form="short">c.</term>
     <term name="cited">citado</term>
+    <term name="first-reference-note-number">
+      <single>reference</single>
+      <multiple>references</multiple>
+    </term>
+    <term name="number">
+      <single>number</single>
+      <multiple>numbers</multiple>
+    </term>
     <term name="edition">
       <single>edición</single>
       <multiple>ediciones</multiple>
+    </term>
+    <term name="first-reference-note-number" form="short">
+      <single>ref.</single>
+      <multiple>refs.</multiple>
+    </term>
+    <term name="number" form="short">
+      <single>no.</single>
+      <multiple>nos.</multiple>
     </term>
     <term name="edition" form="short">
       <single>ed.</single>
@@ -86,6 +102,8 @@
       <single>ref.</single>
       <multiple>refs.</multiple>
     </term>
+    <term name="review-of">review of</term>
+    <term name="review-of" form="short">rev. of</term>
     <term name="retrieved">recuperado</term>
     <term name="scale">escala</term>
     <term name="version">versión</term>
@@ -153,6 +171,12 @@
     <term name="review" form="short">rev.</term>
     <term name="review-book" form="short">bk. rev.</term>
     <term name="song" form="short">audio rec.</term>
+
+    <!-- VERB ITEM TYPE FORMS -->
+    <!-- Only where applicable -->
+    <term name="hearing" form="verb">testimony of</term>
+    <term name="review" form="verb">review of</term>
+    <term name="review-book" form="verb">review of the book</term>
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">d.&#160;C.</term>
@@ -272,6 +296,31 @@
       <single>página</single>
       <multiple>páginas</multiple>
     </term>
+    <term name="number-of-volumes">
+      <single>volume</single>
+      <multiple>volumes</multiple>
+    </term>
+    <term name="page-first">
+      <single>page</single>
+      <multiple>pages</multiple>
+    </term>
+    <term name="printing">
+      <single>printing</single>
+      <multiple>printings</multiple>
+    </term>
+
+    <term name="chapter-number" form="short">
+      <single>chap.</single>
+      <multiple>chaps.</multiple>
+    </term>
+    <term name="citation-number" form="short">
+      <single>cit.</single>
+      <multiple>cits.</multiple>
+    </term>
+    <term name="collection-number" form="short">
+      <single>coll.</single>
+      <multiple>colls.</multiple>
+    </term>
     <term name="number-of-pages">
       <single>página</single>
       <multiple>páginas</multiple>
@@ -287,6 +336,10 @@
     <term name="section">
       <single>sección</single>
       <multiple>secciones</multiple>
+    </term>
+    <term name="supplement">
+      <single>supplement</single>
+      <multiple>supplements</multiple>
     </term>
     <term name="sub-verbo">
       <single>sub voce</single>
@@ -378,6 +431,20 @@
       <single>p.</single>
       <multiple>pp.</multiple>
     </term>
+    <term name="number-of-volumes" form="short">
+      <single>vol.</single>
+      <multiple>vols.</multiple>
+    </term>
+    <term name="page-first" form="short">
+      <single>p.</single>
+      <multiple>pp.</multiple>
+    </term>
+    <term name="printing" form="short">
+      <single>print.</single>
+      <multiple>prints.</multiple>
+    </term>
+    
+
     <term name="number-of-pages" form="short">
       <single>p.</single>
       <multiple>pp.</multiple>
@@ -393,6 +460,10 @@
     <term name="section" form="short">
       <single>sec.</single>
       <multiple>secs.</multiple>
+    </term>
+    <term name="supplement" form="short">
+      <single>supp.</single>
+      <multiple>supps.</multiple>
     </term>
     <term name="sub-verbo" form="short">
       <single>s.&#160;v.</single>
@@ -412,12 +483,28 @@
       <single>¶</single>
       <multiple>¶</multiple>
     </term>
+    <term name="chapter-number">
+      <single>chapter</single>
+      <multiple>chapters</multiple>
+    </term>
+    <term name="citation-number">
+      <single>citation</single>
+      <multiple>citations</multiple>
+    </term>
+    <term name="collection-number">
+      <single>collection</single>
+      <multiple>collections</multiple>
+    </term>
     <term name="section" form="symbol">
       <single>§</single>
       <multiple>§</multiple>
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="collection-editor">
+      <single>ed.</single>
+      <multiple>eds.</multiple>
+    </term>
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
@@ -562,6 +649,7 @@
     </term>
 
     <!-- VERB ROLE FORMS -->
+    <term name="collection-editor" form="verb">edited by</term>
     <term name="chair" form="verb">chaired by</term>
     <term name="compiler" form="verb">compiled by</term>
     <term name="contributor" form="verb">with</term>
@@ -583,6 +671,7 @@
     <term name="interviewer" form="verb">entrevistado por</term>
     <term name="recipient" form="verb">a</term>
     <term name="reviewed-author" form="verb">por</term>
+    <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">traducido por</term>
     <term name="editortranslator" form="verb">editado y traducido por</term>
 
