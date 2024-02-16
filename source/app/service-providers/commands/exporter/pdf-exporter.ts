@@ -16,27 +16,14 @@
  * END HEADER
  */
 
-import commandExists from 'command-exists'
 import path from 'path'
 import { promises as fs } from 'fs'
 import { BrowserWindow } from 'electron'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
-import { trans } from '@common/i18n-main'
 import sanitize from 'sanitize-filename'
 
 export const plugin: ExporterPlugin = {
   run: async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
-    // Determine the availability of Pandoc. As the Pandoc path is added to
-    // process.env.PATH during the environment check, this should always work
-    // if a supported Zettlr variant is being used. In other cases (e.g. custom
-    // 32 bit builds) users can manually add a path. In any case, the exporter
-    // requires Pandoc, and if it's not there we fail.
-    try {
-      await commandExists('pandoc')
-    } catch (err) {
-      throw new Error(trans('Pandoc has not been found on this system. Please install Pandoc prior to exporting or importing files.'))
-    }
-
     // First file determines the name of the output path, EXCEPT a title is
     // explicitly set.
     const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)

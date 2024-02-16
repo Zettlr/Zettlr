@@ -74,7 +74,7 @@ export default defineComponent({
       platformVersion: () => process.getSystemVersion(),
       // Add version strings for external helper programs Zettlr can use
       programVersions: {
-        pandoc: process.env.PANDOC_VERSION,
+        pandoc: process.env.PANDOC_VERSION ?? 'not available',
         quarto: process.env.QUARTO_VERSION ?? 'not available',
         git: process.env.GIT_VERSION ?? 'not available'
       }

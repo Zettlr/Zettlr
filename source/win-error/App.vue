@@ -66,7 +66,6 @@ export default defineComponent({
           type: 'button',
           label: trans('Ok'),
           id: 'ok',
-          icon: '',
           buttonClass: 'primary' // It's a primary button
         }
       ]

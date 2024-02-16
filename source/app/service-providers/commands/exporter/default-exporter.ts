@@ -12,27 +12,14 @@
  * END HEADER
  */
 
-import commandExists from 'command-exists'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { trans } from '@common/i18n-main'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { WRITER2EXT } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 
 export const plugin: ExporterPlugin = {
   run: async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
-    // Determine the availability of Pandoc. As the Pandoc path is added to
-    // process.env.PATH during the environment check, this should always work
-    // if a supported Zettlr variant is being used. In other cases (e.g. custom
-    // 32 bit builds) users can manually add a path. In any case, the exporter
-    // requires Pandoc, and if it's not there we fail.
-    try {
-      await commandExists('pandoc')
-    } catch (err) {
-      throw new Error(trans('Pandoc has not been found on this system. Please install Pandoc prior to exporting or importing files.'))
-    }
-
     if (typeof options.profile === 'string') {
       throw new Error('Cannot run default exporter plugin: Wrong profile provided!')
     }
