@@ -69,6 +69,7 @@ function getToolbar (state: EditorState): Tooltip[] {
 
       buttonWrapper.append(bold, italic, link, image, comment, code)
       dom.append(buttonWrapper)
+      console.log(dom)
 
       // NOTE: We need to use the onmousedown event here, since the click only
       // triggers after onmouseup, and by that time the editor has gone through
@@ -113,7 +114,9 @@ export const formattingToolbar = [
       margin: '0',
       backgroundColor: 'transparent',
       borderRadius: '0',
-      lineHeight: '30px'
+      lineHeight: '30px',
+      padding: '0',
+      width: '30px'
     },
     '&dark .cm-tooltip.cm-formatting-bar button.formatting-toolbar-button': {
       color: 'rgb(200, 200, 200)'
