@@ -116,6 +116,9 @@ links as well.
 - The TableEditor now parses any table directly from the underlying parser to
   ensure that the representation is (almost) identical to the parse state and
   reduce complexity when parsing the table; several edge cases remain
+- Removed a check for whether certain commands exist; instead we now attempt to
+  run them, and if they do not succeed, we catch that error instead; removed
+  `commandExists` as it appears to have a few minor issues on Windows installs
 
 # 3.0.5
 

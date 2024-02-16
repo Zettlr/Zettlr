@@ -19,7 +19,6 @@ import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
 import path from 'path'
-import commandExists from 'command-exists'
 import { getProgramVersion } from './util/get-program-version'
 
 // Developer tools
@@ -87,7 +86,6 @@ export async function bootApplication (): Promise<AppServiceContainer> {
   // extract the version string, since we may get any of the two but need the
   // correct version string of the version that will actually be used.
   try {
-    await commandExists('pandoc')
     const version = await getProgramVersion('pandoc')
     process.env.PANDOC_VERSION = String(version)
   } catch (err) {
