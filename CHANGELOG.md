@@ -93,7 +93,7 @@ links as well.
   inferred from the option `zkn.customDir`
 - Simplified tab bar tab retention logic across reloads
 - Add the ability to programmatically open the assets window with specified tab
-- Bump the bundled Pandoc to version `3.1.11`
+- Bump the bundled Pandoc to version `3.1.12`
 - Failure to fetch a link preview will now simply log a verbose message instead
   of an error
 - Reimplement configuration guard options as Maps to allow for volatile state
