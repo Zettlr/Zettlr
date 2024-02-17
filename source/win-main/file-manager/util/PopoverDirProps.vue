@@ -188,7 +188,7 @@ const emit = defineEmits<(e: 'close') => void>()
 
 const sortingType = ref<'name'|'time'>('name')
 const sortingDirection = ref<'up'|'down'>('up')
-const isProject = ref<boolean>(false)
+const isProject = ref<boolean>(props.directory.settings.project !== null)
 
 const creationTime = computed(() => {
   return formatDate(new Date(props.directory.creationtime), configStore.config.appLang, true)
@@ -218,7 +218,10 @@ const formattedWordCount = computed(() => {
 watch(sortingType, updateSorting)
 watch(sortingDirection, updateSorting)
 watch(isProject, updateProject)
-watch(toRef(props, 'directory'), setSorting)
+watch(toRef(props, 'directory'), () => {
+  setSorting()
+  isProject.value = props.directory.settings.project !== null
+})
 
 onBeforeMount(setSorting)
 
