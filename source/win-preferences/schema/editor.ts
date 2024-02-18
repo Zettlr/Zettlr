@@ -15,8 +15,9 @@
 import { trans } from '@common/i18n-renderer'
 import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
+import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
-export function getEditorFields (): PreferencesFieldset[] {
+export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
       title: trans('Input mode'),
@@ -211,14 +212,14 @@ export function getEditorFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'slider',
-          label: trans('Maximum width of images (%s %)', window.config.get('display.imageWidth')),
+          label: trans('Maximum width of images (%s %)', config.display.imageWidth),
           min: 0,
           max: 100,
           model: 'display.imageWidth'
         },
         {
           type: 'slider',
-          label: trans('Maximum height of images (%s %)', window.config.get('display.imageHeight')),
+          label: trans('Maximum height of images (%s %)', config.display.imageHeight),
           min: 0,
           max: 100,
           model: 'display.imageHeight'

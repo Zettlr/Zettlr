@@ -15,8 +15,9 @@
 import { trans } from '@common/i18n-renderer'
 import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
+import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
-export function getFileManagerFields (): PreferencesFieldset[] {
+export function getFileManagerFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
       title: trans('Display mode'),
@@ -71,7 +72,7 @@ export function getFileManagerFields (): PreferencesFieldset[] {
           type: 'checkbox',
           label: trans('Display Markdown file extensions'),
           model: 'display.markdownFileExtensions',
-          disabled: window.config.get('fileNameDisplay') !== 'filename'
+          disabled: config.fileNameDisplay !== 'filename'
         }
       ]
     },
