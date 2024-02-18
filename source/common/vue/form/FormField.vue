@@ -138,7 +138,7 @@
     v-bind:max="props.field.max"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
-    v-on:change="emit('update:modelValue', $event)"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></SliderInput>
   <ThemeInput
     v-if="props.field.type === 'theme'"
