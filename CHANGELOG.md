@@ -119,6 +119,7 @@ links as well.
 - Removed a check for whether certain commands exist; instead we now attempt to
   run them, and if they do not succeed, we catch that error instead; removed
   `commandExists` as it appears to have a few minor issues on Windows installs
+- Fixed a bug that would sometimes make the "New file" command hang (#4785)
 
 # 3.0.5
 
