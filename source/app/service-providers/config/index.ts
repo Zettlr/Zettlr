@@ -119,7 +119,7 @@ export default class ConfigProvider extends ProviderContract {
       const { command, payload } = message
 
       if (command === 'get-config') {
-        event.returnValue = this.get(payload.key)
+        event.returnValue = payload !== undefined ? this.get(payload.key) : this.get()
       } else if (command === 'set-config-single') {
         event.returnValue = this.set(payload.key, payload.val)
       }
