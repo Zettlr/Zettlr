@@ -14,7 +14,8 @@
 
 import { trans } from '@common/i18n-renderer'
 import { mapLangCodeToName } from '@common/util/map-lang-code'
-import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
+import { type PreferencesFieldset } from '../App.vue'
+import { PreferencesGroups } from './_preferences-groups'
 
 export function getSpellcheckingFields (): PreferencesFieldset[] {
   return [
