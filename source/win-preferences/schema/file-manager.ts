@@ -1,5 +1,20 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        File Manager Preferences Schema
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Exports the file manager tab schema.
+ *
+ * END HEADER
+ */
+
 import { trans } from '@common/i18n-renderer'
-import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
+import { type PreferencesFieldset } from '../App.vue'
+import { PreferencesGroups } from './_preferences-groups'
 
 export function getFileManagerFields (): PreferencesFieldset[] {
   return [
