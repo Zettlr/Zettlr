@@ -16,8 +16,9 @@ import { trans } from '@common/i18n-renderer'
 import { mapLangCodeToName } from '@common/util/map-lang-code'
 import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
+import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
-export function getSpellcheckingFields (): PreferencesFieldset[] {
+export function getSpellcheckingFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
       title: trans('LanguageTool'),
@@ -37,7 +38,7 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
             picky: trans('Picky')
           },
           model: 'editor.lint.languageTool.level',
-          disabled: window.config.get('editor.lint.languageTool.active') === false
+          disabled: !config.editor.lint.languageTool.active
         },
         { type: 'separator' },
         {
@@ -64,14 +65,14 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
             custom: trans('Custom server')
           },
           model: 'editor.lint.languageTool.provider',
-          disabled: window.config.get('editor.lint.languageTool.active') === false
+          disabled: !config.editor.lint.languageTool.active
         },
         {
           type: 'text',
           label: trans('Custom server address'),
           placeholder: 'https://api.languagetoolplus.com',
           model: 'editor.lint.languageTool.customServer',
-          disabled: window.config.get('editor.lint.languageTool.provider') !== 'custom'
+          disabled: config.editor.lint.languageTool.provider !== 'custom'
         },
         { type: 'separator' },
         {
@@ -89,14 +90,14 @@ export function getSpellcheckingFields (): PreferencesFieldset[] {
           label: trans('LanguageTool Username'),
           model: 'editor.lint.languageTool.username',
           placeholder: 'Username',
-          disabled: window.config.get('editor.lint.languageTool.active') === false || window.config.get('editor.lint.languageTool.provider') === 'custom'
+          disabled: !config.editor.lint.languageTool.active || config.editor.lint.languageTool.provider === 'custom'
         },
         {
           type: 'text',
           label: trans('LanguageTool API key'),
           model: 'editor.lint.languageTool.apiKey',
           placeholder: 'API key',
-          disabled: window.config.get('editor.lint.languageTool.active') === false || window.config.get('editor.lint.languageTool.provider') === 'custom'
+          disabled: !config.editor.lint.languageTool.active || config.editor.lint.languageTool.provider === 'custom'
         }
       ]
     },

@@ -15,8 +15,9 @@
 import { trans } from '@common/i18n-renderer'
 import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
+import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
-export function getZettelkastenFields (): PreferencesFieldset[] {
+export function getZettelkastenFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
       title: trans('Zettelkasten IDs'),
@@ -58,7 +59,7 @@ export function getZettelkastenFields (): PreferencesFieldset[] {
             withID: trans('Only when linking using the ID'),
             never: trans('Never')
           },
-          disabled: window.config.get('zkn.linkFilenameOnly') === true
+          disabled: config.zkn.linkFilenameOnly
         },
         { type: 'separator' },
         {
