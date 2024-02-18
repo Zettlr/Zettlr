@@ -187,7 +187,7 @@ export default class PersistentDataContainer {
   private stringify (): string {
     if (this._dataType === 'json') {
       // By passing a space as the third character, we make the JSON readable
-      return JSON.stringify(this._data, undefined, ' ')
+      return JSON.stringify(this._data, undefined, '  ')
     } else {
       return stringifyYAML(this._data)
     }
