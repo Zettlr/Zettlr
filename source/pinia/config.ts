@@ -18,15 +18,31 @@ import { ref } from 'vue'
 
 const ipcRenderer = window.ipc
 
+/**
+ * Synchronously retrieves the configuration
+ *
+ * @return  {ConfigOptions}  The configuration
+ */
+function retrieveConfig (): ConfigOptions {
+  return ipcRenderer.sendSync('config-provider', { command: 'get-config' })
+}
+
 export const useConfigStore = defineStore('config', () => {
-  const config = ref<ConfigOptions>(window.config.get())
+  const config = ref<ConfigOptions>(retrieveConfig())
 
   // Listen to subsequent changes
-  ipcRenderer.on('config-provider', (event, { command, payload }) => {
+  ipcRenderer.on('config-provider', (event, { command }) => {
     if (command === 'update') {
-      config.value = window.config.get()
+      config.value = retrieveConfig()
     }
   })
 
-  return { config }
+  function setConfigValue (property: string, value: any): boolean {
+    return ipcRenderer.sendSync('config-provider', {
+      command: 'set-config-single',
+      payload: { key: property, val: value }
+    })
+  }
+
+  return { config, setConfigValue }
 })
