@@ -112,11 +112,17 @@ export default class DirProjectExport extends ZettlrCommand {
         template = config.templates.tex
       }
 
+      // Set target directory so that it is not always cwd. We check if the project .ztl_directory file has a 'targetDir' set and set targetDirectory to that value (or set targetDirectory = dir.cwd if it is not set)
+      let targetDir = dir.path
+      if (config.targetDir !== '') {
+        targetDir = config.targetDir
+      }
+
       try {
         const opt: ExporterOptions = {
           profile,
           sourceFiles: files,
-          targetDirectory: dir.path,
+          targetDirectory: targetDir,
           cwd: dir.path,
           defaultsOverride: {
             title: config.title,

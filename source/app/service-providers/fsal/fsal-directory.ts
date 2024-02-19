@@ -58,7 +58,8 @@ const PROJECT_TEMPLATE: ProjectSettings = {
   templates: {
     tex: '', // An optional tex template
     html: '' // An optional HTML template
-  }
+  },
+  targetDir: ''
 }
 
 /**
