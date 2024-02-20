@@ -1029,6 +1029,10 @@ export default class TableEditor {
    *                       select actual ranges.
    */
   selectCell (where: 'start'|'end'|{ from: number, to: number }): void {
+    if (!this.domElement.contains(document.activeElement)) {
+      return // Only select any cell if focus is currently within the table
+    }
+
     const currentCell = this._elem.rows[this._rowIndex].cells[this._cellIndex]
     currentCell.focus()
     const textLength = currentCell.textContent?.length ?? 0
