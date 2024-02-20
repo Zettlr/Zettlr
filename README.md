@@ -143,7 +143,8 @@ In order to provide code, you should have basic familiarity with the following t
 * [Electron forge](https://www.electronforge.io/)
 * [Electron builder](https://www.electron.build/)
 
-> Note: See the "Directory Structure" section below to get an idea of how Zettlr specifically works.
+> [!TIP]
+> See the "Directory Structure" section below to get an idea of how Zettlr specifically works.
 
 ### Development Commands
 
@@ -166,6 +167,7 @@ Packages the application, but not bundle it into an installer. Without any suffi
 
 The resulting application packages are stored in `./out`.
 
+> [!IMPORTANT]
 > This command will skip typechecking to speed up builds, so be extra cautious.
 
 #### `release:{platform-arch}`
@@ -181,18 +183,21 @@ Packages the application and then bundles it into an installer for the correspon
 
 The resulting setup bundles are stored in `./release`.
 
-> Please note that, while you can `package` directly for your platform without any suffix, for creating a release specifying the platform is required as electron-builder would otherwise include the development-dependencies in the `app.asar`, resulting in a bloated application.
+> [!NOTE]
+> While you can `package` directly for your platform without any suffix, for creating a release specifying the platform is required as electron-builder would otherwise include the development-dependencies in the `app.asar`, resulting in a bloated application.
 
 #### `csl:refresh`
 
 This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) files with which the application is shipped, and places them in the `static/csl-locales`- and `static/csl-styles`-directories respectively.
 
-> Please note, that this command is intended for an automated workflow that runs from time to time on the repository to perform this action. This means: Do **not** commit updated files to the repository. Instead, the updated files will be downloaded whenever you `git fetch`.
+> [!NOTE]
+> This command is intended for an automated workflow that runs from time to time on the repository to perform this action. This means: Do **not** commit updated files to the repository. Instead, the updated files will be downloaded whenever you `git fetch`.
 
 #### `lint`
 
 This simply runs [ESLint](https://eslint.org/). Apps such as [Atom](https://atom.io/) or [Visual Studio Code](https://code.visualstudio.com/) will automatically run ESLint in the background, but if you want to be extra-safe, make sure to run this command prior to submitting a Pull Request.
 
+> [!NOTE]
 > This command will run automatically on each Pull Request to check your code for inconsistencies.
 
 #### `test`
@@ -203,6 +208,7 @@ This runs the unit tests in the directory `./test`. Make sure to run this comman
 
 Use this command to carefree test any changes you make to the application. This command will start the application as if you ran `yarn start`, but will provide a custom configuration and a custom directory.
 
+> [!IMPORTANT]
 > This command will skip typechecking to speed up builds, so be extra cautious.
 
 **The first time you start this command**, pass the `--clean`-flag to copy a bunch of test-files to your `./resources`-directory, create a `test-config.yml` in your project root, and start the application with this clean configuration. Then, you can adapt the `test-config.yml` to your liking (so that certain settings which you would otherwise _always_ set will be pre-set without you having to open the preferences).
@@ -213,6 +219,7 @@ If you want to prevent a config-file from being created (e.g., to simulate the f
 
 You can pass additional command-line switches such as `--clear-cache` to this command as well. They will be passed to the child process.
 
+> [!WARNING]
 > Attention: Before first running the command, you **must** run it with the `--clean`-flag to create the directory in the first place!
 
 Additionally, have a look at our [full development documentation](https://docs.zettlr.com/en/get-involved).
@@ -313,7 +320,8 @@ This CLI flag will instruct Zettlr not to show the main window on start. This is
 
 Since this implies the need to have the app running in the tray bar or notification area when starting the app like this, it will automatically set the corresponding setting `system.leaveAppRunning` to true.
 
-> Note: This flag will not have any effect on Linux systems which do not support displaying an icon in a tray bar or notification area.
+> [!NOTE]
+> This flag will not have any effect on Linux systems which do not support displaying an icon in a tray bar or notification area.
 
 #### `--clear-cache`
 
@@ -327,7 +335,6 @@ Use this switch to specify custom data directory, which holds your configuration
 
 This switch causes Zettlr to disable hardware acceleration, which could be necessary in certain setups. For more information on why this flag was added, see issue [#2127](https://github.com/Zettlr/Zettlr/issues/2127).
 
-
 ## VSCode Extension Recommendations
 
 This repository makes use of Visual Studio Code's [recommended extensions feature](https://go.microsoft.com/fwlink/?LinkId=827846). This means: If you use VS Code and open the repository for the first time, VS Code will tell you that the repository recommends to install a handful of extensions. These extensions are recommended if you work with Zettlr and will make contributing much easier. The recommendations are specified in the file `.vscode/extensions.json`.
@@ -336,6 +343,7 @@ Since installing extensions is sometimes a matter of taste, we have added short 
 
 If you choose not to install all of the recommended extensions at once (which we recommend), VS Code will show you the recommendations in the extensions sidebar so you can first decide which of the ones you'd like to install and then manually install those you'd like to have.
 
+> [!TIP]
 > Using the same extensions as the core developer team will make the code generally more consistent since you will have the same visual feedback.
 
 ## License
