@@ -48,7 +48,7 @@ export interface TableEditorOptions {
    *
    * @param   {TableEditor}  instance     The TableEditor instance
    */
-  onCellChange?: (instance: typeof TableEditor) => void
+  onCellChange?: (instance: TableEditor) => void
 
   /**
    * When the user clicks on the save button, this callback is called to signal
@@ -56,5 +56,5 @@ export interface TableEditorOptions {
    *
    * @param   {TableEditor}  instance  The TableEditor instance
    */
-  saveIntent?: (instance: typeof TableEditor) => void
+  saveIntent?: (instance: TableEditor) => void
 }
