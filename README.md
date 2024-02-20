@@ -228,50 +228,57 @@ Additionally, have a look at our [full development documentation](https://docs.z
 
 Zettlr is a mature app that has amassed hundreds of directories over the course of its development. Since it is hard to contribute to an application without any guidance, we have compiled a short description of the directories with how they interrelate.
 
+<!-- File tree generated with `tree -d -L 4 -I node_modules .` in root -->
+
 ```
 .
-├── resources                      # Contains resource files
-│   ├── NSIS                       # Images for the Windows installer
-│   ├── icons                      # Icons used to build the application
-│   ├── screenshots                # The screenshots used in this README file
-├── scripts                        # Scripts that are run by the CI and some YARN commands
-│   ├── assets                     # Asset files used by some scripts
-│   └── test-gui                   # Test files used by `yarn test-gui`
-├── source                         # Contains the actual source code for the app
-│   ├── app                        # Contains service providers and the boot/shutdown routines
-│   ├── common                     # Common files used by several or all renderer processes
-│   │   ├── fonts                  # Contains the font files (note: location will likely change)
-│   │   ├── img                    # Currently unused image files
-│   │   ├── less                   # Contains the themes (note: location will likely change)
-│   │   ├── modules                # Contains renderer modules
-│   │   │   ├── markdown-editor    # The central CodeMirror markdown editor
-│   │   │   ├── preload            # Electron preload files
-│   │   │   └── window-register    # Run by every renderer during setup
-│   │   ├── util                   # A collection of utility functions
-│   │   └── vue                    # Contains Vue components used by the graphical interface
-│   ├── main                       # Contains code for the main process
-│   │   ├── assets                 # Static files (note: location will likely change)
-│   │   ├── commands               # Commands that perform user-actions, run from within zettlr.ts
-│   │   └── modules                # Main process modules
-│   │       ├── document-manager   # The document manager handles all open files
-│   │       ├── export             # The exporter converts Markdown files into other formats
-│   │       ├── fsal               # The File System Abstraction Layer provides the file tree
-│   │       ├── import             # The importer converts other formats into Markdown files
-│   │       └── window-manager     # The window manager manages all application windows
-│   ├── win-about                  # Code for the About window
-│   ├── win-custom-css             # Code for the Custom CSS window
-│   ├── win-defaults               # Code for the defaults file editor
-│   ├── win-error                  # The error modal window
-│   ├── win-log-viewer             # Displays the running logs from the app
-│   ├── win-main                   # The main window
-│   ├── win-paste-image            # The modal displayed when pasting an image
-│   ├── win-preferences            # The preferences window
-│   ├── win-print                  # Code for the print and preview window
-│   ├── win-stats                  # Code for the general statistics window
-│   ├── win-tag-manager            # Code for the tag manager
-│   └── win-update                 # The dedicated update window
-├── static                         # Contains static files, cf. the README-file in there
-└── test                           # Unit tests
+├── out                         # Contains unpackaged binaries after running any `package` command
+├── release                     # Contains distributables after running any `release` command
+├── resources                   # General resource files
+│   ├── NSIS                    # Windows installer bitmaps
+│   ├── icons                   # Various icon formats
+│   ├── screenshots             # Contains the main screenshots
+├── scripts                     # Scripts used during the build process and CI pipeline 
+│   ├── assets                  # Assets for the script files
+│   └── test-gui                # A full file tree used with the `test-gui` command
+├── source                      # This is the actual source filetree
+│   ├── app                     # Main process components
+│   │   ├── service-providers   # Service providers that handle most of the business logic
+│   │   └── util                # Utility functions for the main process
+│   ├── common                  # Shared files between various renderer processes
+│   │   ├── img                 # Images used in various places
+│   │   ├── modules             # Shared modules
+│   │   │   ├── markdown-editor # Main Markdown editor
+│   │   │   ├── markdown-utils  # MD Utilities such as md2html converter
+│   │   │   ├── preload         # Electron preload files
+│   │   │   └── window-register # Run by every renderer during setup
+│   │   ├── util                # General utility functions
+│   │   └── vue                 # Shared Vue components
+│   ├── pinia                   # Renderer state management
+│   ├── types                   # Types-only directory; deprecated
+│   ├── win-about               # About dialog window
+│   ├── win-assets              # Assets Manager
+│   ├── win-error               # Error window
+│   ├── win-log-viewer          # Log Viewer
+│   ├── win-main                # Main window
+│   ├── win-paste-image         # Paste-Image-dialog
+│   ├── win-preferences         # Preferences window
+│   ├── win-print               # Print preview
+│   ├── win-project-properties  # Project properties
+│   ├── win-splash-screen       # The splash screen
+│   ├── win-stats               # Statistics window
+│   ├── win-tag-manager         # Tag manager
+│   └── win-update              # Updater
+├── static                      # Contains static resources
+│   ├── csl-locales             # CSL locale files
+│   ├── csl-styles              # CSL styles
+│   ├── defaults                # Default defaults/Pandoc profiles
+│   ├── dict                    # Dictionaries that ship with the app
+│   ├── fonts                   # Fonts that ship with the app
+│   ├── lang                    # Language and i18n-related files
+│   ├── lua-filter              # Default Lua-filters
+│   └── tutorial                # Tutorial files in various languages
+└── test                        # Unit tests
 ```
 
 ### On the Distinction between Modules and Service Providers
