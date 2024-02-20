@@ -109,6 +109,16 @@ export default class Export extends ZettlrCommand {
         exporterOptions.cwd = fileDescriptor.frontmatter.zettlr.pandoc_working_dir
       }
 
+      // A user can override this default by providing in a frontmatter the
+      // key zettlr.pandoc_target_dir: /path/to/directory. This sets the destination for the
+      // output file.
+      let frontmatterTarget = ''
+      if (fileDescriptor.type === 'file' &&
+      typeof fileDescriptor.frontmatter?.zettlr?.pandoc_target_dir === 'string' &&
+      await this._app.fsal.isDir(fileDescriptor.frontmatter.zettlr.pandoc_target_dir)) {
+        frontmatterTarget = fileDescriptor.frontmatter.zettlr.pandoc_target_dir
+      }
+
       switch (exportTo) {
         case 'ask': {
           const folderSelection = await this._app.windows.askDir(trans('Choose export destination'), null, trans('Save'))
@@ -126,6 +136,10 @@ export default class Export extends ZettlrCommand {
         default:
           exporterOptions.targetDirectory = fileDescriptor.dir
           break
+      }
+
+      if (frontmatterTarget !== '') {
+        exporterOptions.targetDirectory = frontmatterTarget
       }
     }
 

@@ -83,6 +83,7 @@ links as well.
   actual mouse position if the window's GUI was scaled absolutely (as per the
   preferences); now the context menu should always appear exactly where it
   should be
+- Added the ability to specify the target directory when exporting. This allows you to place the output file wherever you please independently of the current working directory. When exporting a single file the target directory can be specified in the YAML frontmatter as zettlr:pandoc_target_filename (similar to how the existing zettlr:pandoc_target_dir is implemented). When exporting a project the target directory can be specified in the .zsh_directory project json as targetDir.
 
 ## Under the Hood
 

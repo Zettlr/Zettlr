@@ -9,6 +9,7 @@ export interface ProjectSettings {
     tex: string
     html: string
   }
+  targetDir: string
 }
 
 /**
