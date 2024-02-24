@@ -166,7 +166,7 @@
     "css-loader": "^6.8.1",
     "csso": "^5.0.5",
     "electron": "28.x.x",
-    "electron-builder": "^24.5.0",
+    "electron-builder": "^24.12.0",
     "electron-devtools-assembler": "^1.2.0",
     "eslint": "^8.56.0",
     "eslint-config-standard": "^17.1.0",
