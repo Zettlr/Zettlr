@@ -675,7 +675,17 @@ export default class DocumentManager extends ProviderContract {
     for (const update of clientUpdates) {
       const changes = ChangeSet.fromJSON(update.changes)
       doc.updates.push(update)
-      doc.document = changes.apply(doc.document)
+      try {
+        doc.document = changes.apply(doc.document)
+      } catch (err: any) {
+        dialog.showErrorBox(
+          'Document out of sync',
+          `Your modifications could not be applied to the document in memory.
+This means that saving might fail. Please report this bug to us, copy the
+current contents from the editor somewhere else, and restart the application.`
+        )
+        throw err
+      }
       doc.currentVersion = doc.minimumVersion + doc.updates.length
       // People are lazy, and hence there is a non-zero chance that in a few
       // instances the currentVersion will get dangerously close to
@@ -1449,16 +1459,21 @@ export default class DocumentManager extends ProviderContract {
 
     this._ignoreChanges.push(filePath)
 
-    if (doc.descriptor.type === 'file') {
-      await FSALFile.save(
-        doc.descriptor,
-        content,
-        this._app.fsal.getMarkdownFileParser(),
-        null
-      )
-      await this.synchronizeDatabases() // The file may have gotten a library
-    } else {
-      await FSALCodeFile.save(doc.descriptor, content, null)
+    try {
+      if (doc.descriptor.type === 'file') {
+        await FSALFile.save(
+          doc.descriptor,
+          content,
+          this._app.fsal.getMarkdownFileParser(),
+          null
+        )
+        await this.synchronizeDatabases() // The file may have gotten a library
+      } else {
+        await FSALCodeFile.save(doc.descriptor, content, null)
+      }
+    } catch (err: any) {
+      dialog.showErrorBox(trans('Could not save file'), trans('Could not save file %s: %s', doc.descriptor.name, err.message))
+      throw err
     }
 
     this._app.log.info(`[DocumentManager] File ${filePath} saved.`)
