@@ -139,7 +139,7 @@ class ImageWidget extends WidgetType {
     container.addEventListener('contextmenu', (event) => {
       event.preventDefault()
       event.stopPropagation()
-      linkImageMenu(view, this.node, basePath, { x: event.clientX, y: event.clientY })
+      linkImageMenu(view, this.node, { x: event.clientX, y: event.clientY })
     })
 
     container.addEventListener('click', event => {
