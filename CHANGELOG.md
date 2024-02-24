@@ -49,6 +49,15 @@ In order to make Pandoc aware of your choice, you can add one of the following
 reader extensions to your export profiles: `wikilinks_title_after_pipe` or
 `wikilinks_title_before_pipe`.
 
+## Re-enabling old Link-Title-Syntax
+
+After the release of Zettlr v3.0.0, some users have complained that their
+internal links have stopped working. It turns out that quite a lot were using
+Logseq's syntax for adding titles to internal links (`[Title]([[Link]])`), which
+we broke during a refactor of the Markdown parser. This update partially
+restores this link functionality, allowing you to `Cmd/Ctrl-Click` them to
+follow these links again.
+
 ## GUI and Functionality
 
 - **Feature**: Zettlr now supports titles in internal (wiki) links; the default
@@ -127,6 +136,8 @@ reader extensions to your export profiles: `wikilinks_title_after_pipe` or
 - Added a visible error message to two places in which saving documents may go
   wrong so that users have visible feedback if their changes are actually
   persisted to disk (#4229)
+- Re-enable following internal Links in the format `[Title]([[Link]])` by
+  clicking them with `Cmd/Ctrl` pressed
 
 ## Under the Hood
 
