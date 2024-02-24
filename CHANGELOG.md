@@ -124,6 +124,9 @@ reader extensions to your export profiles: `wikilinks_title_after_pipe` or
   show the headers, if enabled
 - Internal link tooltips will now show regardless of where inside the link your
   mouse cursor is
+- Added a visible error message to two places in which saving documents may go
+  wrong so that users have visible feedback if their changes are actually
+  persisted to disk (#4229)
 
 ## Under the Hood
 
