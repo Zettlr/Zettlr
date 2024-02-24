@@ -1094,12 +1094,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/highlight@npm:^1.0.0, @lezer/highlight@npm:^1.1.6":
+"@lezer/highlight@npm:^1.0.0":
   version: 1.1.6
   resolution: "@lezer/highlight@npm:1.1.6"
   dependencies:
     "@lezer/common": ^1.0.0
   checksum: 411a702394c4c996b7d7f145a38f3a85a8cc698b3918acc7121c629255bb76d4ab383753f69009e011dc415210c6acbbb5b27bde613259ab67e600b29397b03b
+  languageName: node
+  linkType: hard
+
+"@lezer/highlight@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@lezer/highlight@npm:1.2.0"
+  dependencies:
+    "@lezer/common": ^1.0.0
+  checksum: 5b9dfe741f95db13f6124cb9556a43011cb8041ecf490be98d44a86b04d926a66e912bcd3a766f6a3d79e064410f1a2f60ab240b50b645a12c56987bf4870086
   languageName: node
   linkType: hard
 
@@ -14420,8 +14429,8 @@ __metadata:
     "@electron-forge/plugin-webpack": ^7.3.0
     "@electron/fuses": ^1.7.0
     "@electron/notarize": ^2.3.0
-    "@lezer/common": ^1.1.0
-    "@lezer/highlight": ^1.1.6
+    "@lezer/common": ^1.2.1
+    "@lezer/highlight": ^1.2.0
     "@replit/codemirror-emacs": ^6.0.1
     "@replit/codemirror-vim": ^6.0.14
     "@types/adm-zip": ^0.5.5
