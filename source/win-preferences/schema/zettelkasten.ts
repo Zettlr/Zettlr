@@ -63,14 +63,33 @@ export function getZettelkastenFields (config: ConfigOptions): PreferencesFields
         },
         { type: 'separator' },
         {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Link format')
+        },
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('Internal links allow you to add an optional title, separated by a vertical bar character from the actual link target. Here you can define the ordering of the two.')
+        },
+        {
+          type: 'radio',
+          model: 'zkn.linkFormat',
+          options: {
+            'link|title': trans('[[Link|Title]]: Link first (recommended)'),
+            'title|link': trans('[[Title|Link]]: Title first')
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
           type: 'checkbox',
           label: trans('Start a full-text search when following internal links'),
           info: trans('The search string will match the content between the brackets: [[ ]].'),
           model: 'zkn.autoSearch'
         },
-        {
-          type: 'separator'
-        },
+        { type: 'separator' },
         {
           type: 'form-text',
           display: 'sub-heading',

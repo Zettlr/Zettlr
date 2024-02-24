@@ -20,6 +20,7 @@ import { md2html } from '@common/modules/markdown-utils/markdown-to-html'
 import formatDate from '@common/util/format-date'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import sanitizeHtml from 'sanitize-html'
+import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
 
@@ -30,16 +31,25 @@ type IpcResult = undefined|[string, string, number, number]
 async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1): Promise<Tooltip|null> {
   const nodeAt = syntaxTree(view.state).resolve(pos, side)
 
-  if (nodeAt.type.name !== 'ZknLinkContent') {
+  if (![ 'ZknLinkContent', 'ZknLinkPipe', 'ZknLink', 'ZknLinkTitle' ].includes(nodeAt.type.name)) {
     return null
   }
 
-  const fileToDisplay = view.state.sliceDoc(nodeAt.from, nodeAt.to)
+  const wrapperNode = nodeAt.type.name === 'ZknLink' ? nodeAt : nodeAt.parent
+  const contentNode = wrapperNode?.getChild('ZknLinkContent')
+
+  if (contentNode == null) {
+    return null
+  }
+
+  const fileToDisplay = view.state.sliceDoc(contentNode.from, contentNode.to)
 
   const res: IpcResult = await ipcRenderer.invoke(
     'application',
     { command: 'file-find-and-return-meta-data', payload: fileToDisplay }
   )
+
+  const { zknLinkFormat } = view.state.field(configField)
 
   // By annotating a range (providing `end`) the hover tooltip will stay as long
   // as the user is somewhere over the links
@@ -49,7 +59,7 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
     above: true,
     create (view) {
       if (res !== undefined) {
-        return { dom: getPreviewElement(res, fileToDisplay) }
+        return { dom: getPreviewElement(res, fileToDisplay, zknLinkFormat) }
       } else {
         const dom = document.createElement('div')
         dom.textContent = trans('File %s does not exist.', fileToDisplay)
@@ -68,7 +78,7 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
  *
  * @return  {Element}                 The wrapper element
  */
-function getPreviewElement (metadata: [string, string, number, number], linkContents: string): HTMLDivElement {
+function getPreviewElement (metadata: [string, string, number, number], linkContents: string, zknLinkFormat: 'link|title'|'title|link'): HTMLDivElement {
   const wrapper = document.createElement('div')
   wrapper.classList.add('editor-note-preview')
 
@@ -78,7 +88,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
 
   const content = document.createElement('div')
   content.classList.add('note-content')
-  const html = md2html(metadata[1], window.getCitationCallback(CITEPROC_MAIN_DB))
+  const html = md2html(metadata[1], window.getCitationCallback(CITEPROC_MAIN_DB), zknLinkFormat)
   content.innerHTML = sanitizeHtml(html, {
     // These options basically translate into: Allow nothing but bare metal tags
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),

@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
+import markdownParser, { type MarkdownParserConfig } from '@common/modules/markdown-editor/parser/markdown-parser'
 import { parseNode, type ASTNode, type ASTNodeType, type TextNode } from './markdown-ast'
 import { type Tree } from '@lezer/common'
 
@@ -35,9 +35,9 @@ export { md2html } from './markdown-to-html'
  *
  * @return  {ASTNode}            The root node of the AST
  */
-export function markdownToAST (markdown: string, tree?: Tree): ASTNode {
+export function markdownToAST (markdown: string, tree?: Tree, parserConfig?: MarkdownParserConfig): ASTNode {
   if (tree === undefined) {
-    const { parser } = markdownParser().language
+    const { parser } = markdownParser(parserConfig).language
     tree = parser.parse(markdown)
   }
   const ast = parseNode(tree.topNode, markdown)

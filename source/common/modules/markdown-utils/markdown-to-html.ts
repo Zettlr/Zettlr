@@ -25,6 +25,7 @@ import katex from 'katex'
 import 'katex/contrib/mhchem'
 import { markdownToAST } from '.'
 import { type ASTNode, type GenericNode } from './markdown-ast'
+import { type MarkdownParserConfig } from '../markdown-editor/parser/markdown-parser'
 
 /**
  * Represents an HTML tag. This is a purposefully shallow representation
@@ -369,7 +370,10 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
     const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, getCitation)
     return `${open}${body}${close}`
   } else if (node.type === 'ZettelkastenLink') {
-    return `${node.whitespaceBefore}[[${node.value}]]`
+    // NOTE: We count a ZettelkastenLink's title as a TextNode for various
+    // purposes, such as spellchecking it, but it should not contain any syntax
+    // which is why we directly access its value here.
+    return `${node.whitespaceBefore}[[${node.title.value}]]`
   } else if (node.type === 'ZettelkastenTag') {
     return `${node.whitespaceBefore}#${node.value}`
   }
@@ -381,12 +385,16 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
  * Takes Markdown source and turns it into a valid HTML fragment. The citeLibrary
  * will be used to resolve citations.
  *
- * @param   {string}  markdown       The Markdown source
- * @param   {Function}  getCitation  The citation callback to use
+ * @param   {string}    markdown       The Markdown source
+ * @param   {Function}  getCitation    The citation callback to use
+ * @param   {string}    zknLinkFormat  (Optional) The Wikilink format
  *
- * @return  {string}                 The resulting HTML
+ * @return  {string}                   The resulting HTML
  */
-export function md2html (markdown: string, getCitation: (citations: CiteItem[], composite: boolean) => string|undefined): string {
-  const ast = markdownToAST(markdown)
+export function md2html (markdown: string, getCitation: (citations: CiteItem[], composite: boolean) => string|undefined, zknLinkFormat: 'link|title'|'title|link' = 'link|title'): string {
+  const config: MarkdownParserConfig = {
+    zknLinkParserConfig: { format: zknLinkFormat }
+  }
+  const ast = markdownToAST(markdown, undefined, config)
   return nodeToHTML(ast, getCitation)
 }

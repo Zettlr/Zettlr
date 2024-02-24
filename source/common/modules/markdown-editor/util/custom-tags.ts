@@ -37,6 +37,8 @@ export const customTags = {
   // Zettelkasten links
   ZknLink: Tag.define(),
   ZknLinkContent: Tag.define(),
+  ZknLinkTitle: Tag.define(),
+  ZknLinkPipe: Tag.define(tags.processingInstruction),
   // Zettelkasten tags
   ZknTag: Tag.define(),
   ZknTagContent: Tag.define(),

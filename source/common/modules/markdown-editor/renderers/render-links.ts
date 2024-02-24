@@ -26,7 +26,7 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
       from,
       to,
       enter (node) {
-        if (node.name !== 'Link') {
+        if (node.name !== 'Link' && node.name !== 'ZknLink') {
           return
         }
 
@@ -35,18 +35,31 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
           return false
         }
 
-        const marks = node.node.getChildren('LinkMark')
+        if (node.name === 'ZknLink') {
+          const contentNode = node.node.getChild('ZknLinkContent')
+          const titleNode = node.node.getChild('ZknLinkTitle')
+          const pipeNode = node.node.getChild('ZknLinkPipe')
+          if (contentNode !== null && titleNode !== null && pipeNode !== null) {
+            ranges.push(
+              hiddenDeco.range(contentNode.from, contentNode.to),
+              hiddenDeco.range(pipeNode.from, pipeNode.to)
+            )
+          }
+        } else {
+          // It's a regular Markdown Link
+          const marks = node.node.getChildren('LinkMark')
 
-        // We need at least three LinkMarks: [, ], and ( since the parser will
-        // also parse ellipses as Links (a.k.a. reference style links)
-        if (marks.length < 3) {
-          return false
+          // We need at least three LinkMarks: [, ], and ( since the parser will
+          // also parse ellipses as Links (a.k.a. reference style links)
+          if (marks.length < 3) {
+            return false
+          }
+
+          ranges.push(
+            hiddenDeco.range(marks[0].from, marks[0].to),
+            hiddenDeco.range(marks[1].from, marks[marks.length - 1].to)
+          )
         }
-
-        ranges.push(
-          hiddenDeco.range(marks[0].from, marks[0].to),
-          hiddenDeco.range(marks[1].from, marks[marks.length - 1].to)
-        )
       }
     })
   }

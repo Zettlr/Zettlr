@@ -383,6 +383,10 @@ export interface ZettelkastenLink extends MDNode {
    * Contains the raw contents of the link
    */
   value: string
+  /**
+   * The link title; may be the same as value
+   */
+  title: TextNode
 }
 
 /**
@@ -1027,14 +1031,15 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       if (content === null) {
         throw new Error('Could not parse node ZknLink: No ZknLinkContent node found within children!')
       }
-
+      const title = node.getChild('ZknLinkTitle') ?? content
       const astNode: ZettelkastenLink = {
         type: 'ZettelkastenLink',
         name: 'ZknLink',
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: markdown.substring(content.from, content.to)
+        value: markdown.substring(content.from, content.to),
+        title: genericTextNode(title.from, title.to, markdown.substring(title.from, title.to))
       }
       return astNode
     }
