@@ -454,17 +454,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron-forge/maker-deb@npm:^7.2.0":
-  version: 7.2.0
-  resolution: "@electron-forge/maker-deb@npm:7.2.0"
+"@electron-forge/maker-base@npm:7.3.0":
+  version: 7.3.0
+  resolution: "@electron-forge/maker-base@npm:7.3.0"
   dependencies:
-    "@electron-forge/maker-base": 7.2.0
-    "@electron-forge/shared-types": 7.2.0
+    "@electron-forge/shared-types": 7.3.0
+    fs-extra: ^10.0.0
+    which: ^2.0.2
+  checksum: dbd786625a674fbdad81aa64cf831b1b91fa7e07970b8ba3ca4ecec760ecc6586ebfe3d7fe9c378f1b3875380fc725b26c1ccfe81d24f0dc0435be5a3c277c6c
+  languageName: node
+  linkType: hard
+
+"@electron-forge/maker-deb@npm:^7.3.0":
+  version: 7.3.0
+  resolution: "@electron-forge/maker-deb@npm:7.3.0"
+  dependencies:
+    "@electron-forge/maker-base": 7.3.0
+    "@electron-forge/shared-types": 7.3.0
     electron-installer-debian: ^3.2.0
   dependenciesMeta:
     electron-installer-debian:
       optional: true
-  checksum: b4c3764d21b6c4a7762c185f1f71dd97b04161123f3a3e2d87e4c904ecc82f322056a0fc9cd5ce82c2f54afae1dbd99a47930452ec2c9a3411a1ad4fed886c07
+  checksum: 4d6c876606951d045ac886075cb2ea6f77013e8076623bfacb8888102cc67f19b8fda1422b552ea4cd7d6ed0300479025eb342058fe07d05c80762934a344789
   languageName: node
   linkType: hard
 
@@ -556,6 +567,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electron-forge/shared-types@npm:7.3.0":
+  version: 7.3.0
+  resolution: "@electron-forge/shared-types@npm:7.3.0"
+  dependencies:
+    "@electron-forge/tracer": 7.3.0
+    "@electron/packager": ^18.1.2
+    "@electron/rebuild": ^3.2.10
+    listr2: ^5.0.3
+  checksum: 066092557b617c8e97e88587f2936d7cd3e32e84cfd4bd4f7d0a064e861362a07caa2b15264b53cad77475570fbc98934701a6ad57362bc2ecfadf6c875add9f
+  languageName: node
+  linkType: hard
+
 "@electron-forge/template-base@npm:7.2.0":
   version: 7.2.0
   resolution: "@electron-forge/template-base@npm:7.2.0"
@@ -619,6 +642,15 @@ __metadata:
   dependencies:
     chrome-trace-event: ^1.0.3
   checksum: fed8ccbc823abe621eabfc3648a48d611944f90b9ed4ec7206447ff42539b74fb30fc66dbc938bbc9d577d26af7ac59beff275f67e57f61d1cce3d932a278c03
+  languageName: node
+  linkType: hard
+
+"@electron-forge/tracer@npm:7.3.0":
+  version: 7.3.0
+  resolution: "@electron-forge/tracer@npm:7.3.0"
+  dependencies:
+    chrome-trace-event: ^1.0.3
+  checksum: 13060a5c44a36df91fc4b7bc09596864b853128a297043921dddc2b1de00b456a713738763ae856c86901872c0c7edc31962b4f3b647aad360d26a858531e281
   languageName: node
   linkType: hard
 
@@ -772,7 +804,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/packager@npm:^18.0.0":
+"@electron/packager@npm:^18.0.0, @electron/packager@npm:^18.1.2":
   version: 18.1.3
   resolution: "@electron/packager@npm:18.1.3"
   dependencies:
@@ -14401,7 +14433,7 @@ __metadata:
     "@codemirror/state": ^6.4.1
     "@codemirror/view": ^6.24.1
     "@electron-forge/cli": ^7.2.0
-    "@electron-forge/maker-deb": ^7.2.0
+    "@electron-forge/maker-deb": ^7.3.0
     "@electron-forge/maker-rpm": ^7.2.0
     "@electron-forge/maker-zip": ^7.2.0
     "@electron-forge/plugin-fuses": ^7.2.0
