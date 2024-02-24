@@ -83,6 +83,9 @@ links as well.
   actual mouse position if the window's GUI was scaled absolutely (as per the
   preferences); now the context menu should always appear exactly where it
   should be
+- Updated the CodeMirror dependencies to resolve an issue where users of
+  keyboards with `Alt-G` being assigned to some character were unable to type
+  that (specifically, Swiss-Mac keyboard users could not type an `@`)
 
 ## Under the Hood
 
