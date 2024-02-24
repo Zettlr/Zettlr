@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-02-24 11:09+0000\n"
+"POT-Creation-Date: 2024-02-24 15:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -717,16 +717,36 @@ msgstr "hanya pada saat menautkan menggunakan ID"
 msgid "Never"
 msgstr "Jangan penah"
 
-#: source/win-preferences/schema/zettelkasten.ts:67
+#: source/win-preferences/schema/zettelkasten.ts:68
+#, fuzzy
+msgid "Link format"
+msgstr "Awal tautan"
+
+#: source/win-preferences/schema/zettelkasten.ts:73
+msgid ""
+"Internal links allow you to add an optional title, separated by a vertical "
+"bar character from the actual link target. Here you can define the ordering "
+"of the two."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:79
+msgid "[[Link|Title]]: Link first (recommended)"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "[[Title|Link]]: Title first"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:88
 #, fuzzy
 msgid "Start a full-text search when following internal links"
 msgstr "Lakukan pencarian ketika mengklik pranala-Zettelkasten"
 
-#: source/win-preferences/schema/zettelkasten.ts:68
+#: source/win-preferences/schema/zettelkasten.ts:89
 msgid "The search string will match the content between the brackets: [[ ]]."
 msgstr ""
 
-#: source/win-preferences/schema/zettelkasten.ts:77
+#: source/win-preferences/schema/zettelkasten.ts:96
 #, fuzzy
 msgid ""
 "Automatically create non-existing files in this folder when following "
@@ -734,11 +754,11 @@ msgid ""
 msgstr ""
 "Membuat file yang tidak ada secara otomatis saat mengikuti tautan internal"
 
-#: source/win-preferences/schema/zettelkasten.ts:82
+#: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
 msgstr ""
 
-#: source/win-preferences/schema/zettelkasten.ts:87
+#: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
 msgstr ""
 
@@ -936,7 +956,7 @@ msgstr "Zettlr"
 
 #: source/app/service-providers/commands/file-rename.ts:108
 #: source/app/service-providers/commands/rename-tag.ts:43
-#: source/app/service-providers/config/index.ts:488
+#: source/app/service-providers/config/index.ts:500
 msgid "Confirm"
 msgstr ""
 
@@ -1266,18 +1286,18 @@ msgstr ""
 msgid "Save file"
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:480
+#: source/app/service-providers/config/index.ts:492
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:483
+#: source/app/service-providers/config/index.ts:495
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
 #, fuzzy
 msgid "Restart now"
 msgstr "baru saja"
 
-#: source/app/service-providers/config/index.ts:484
+#: source/app/service-providers/config/index.ts:496
 msgid "Restart later"
 msgstr ""
 
@@ -1368,7 +1388,7 @@ msgstr "Direktori baru"
 
 #: source/app/service-providers/menu/menu.darwin.ts:166
 #: source/app/service-providers/menu/menu.win32.ts:140
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
 msgid "Open…"
 msgstr "Buka"
 
@@ -1445,7 +1465,7 @@ msgstr "Hapus direktori"
 
 #: source/app/service-providers/menu/menu.darwin.ts:317
 #: source/app/service-providers/menu/menu.win32.ts:318
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:107
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
 msgid "Edit"
 msgstr "Edit"
 
@@ -1761,40 +1781,50 @@ msgstr ""
 "Perubahan belum tersimpan ke file saat ini. Ingin disimpan atau diabaikan "
 "saja?"
 
-#: source/app/service-providers/documents/index.ts:996
+#: source/app/service-providers/documents/index.ts:1006
 #, fuzzy
 msgid "File changed on disk"
 msgstr "Mode pengelola berkas"
 
-#: source/app/service-providers/documents/index.ts:997
+#: source/app/service-providers/documents/index.ts:1007
 #, javascript-format
 msgid "%s changed on disk"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:999
+#: source/app/service-providers/documents/index.ts:1009
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1000
+#: source/app/service-providers/documents/index.ts:1010
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1003
+#: source/app/service-providers/documents/index.ts:1013
 msgid "Keep editor contents"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1004
+#: source/app/service-providers/documents/index.ts:1014
 msgid "Load changes from disk"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1007
+#: source/app/service-providers/documents/index.ts:1017
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
+
+#: source/app/service-providers/documents/index.ts:1475
+#, fuzzy
+msgid "Could not save file"
+msgstr "Tidak bisa menyimpan gambar"
+
+#: source/app/service-providers/documents/index.ts:1475
+#, fuzzy, javascript-format
+msgid "Could not save file %s: %s"
+msgstr "Tidak bisa menyimpan gambar"
 
 #: source/tmp/MainSidebar.vue.ts:39 source/tmp/ToCTab.vue.ts:35
 #: source/tmp/ToCTab.vue.ts:43
@@ -1867,7 +1897,7 @@ msgid "Created"
 msgstr "Dibuat"
 
 #: source/tmp/PopoverFileProps.vue.ts:36 source/tmp/PopoverDirProps.vue.ts:30
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
 msgid "Modified"
 msgstr "Dimodifikasi"
 
@@ -1967,7 +1997,7 @@ msgstr "Alihkan penampilan hasil pencarian"
 
 #: source/tmp/GlobalSearch.vue.ts:53
 #: source/win-main/file-manager/util/file-item-context.ts:28
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:147
 msgid "Open in a new tab"
 msgstr "Buka di tab baru"
 
@@ -2484,12 +2514,12 @@ msgstr "Gambar"
 msgid "Comment"
 msgstr "Komentar"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
 #, javascript-format
 msgid "File %s does not exist."
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:106
 msgid "Word count"
 msgstr "Jumlah kata"
 
@@ -2497,7 +2527,7 @@ msgstr "Jumlah kata"
 msgid "Fetching link preview…"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:90
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
 msgid "No footnote text found."
 msgstr ""
 
@@ -3104,9 +3134,6 @@ msgstr "."
 
 #~ msgid "Toggle regular expression search"
 #~ msgstr "Nyalakan/matikan pencarian menggunakan eskpresi reguler (regex)"
-
-#~ msgid "Link start"
-#~ msgstr "Awal tautan"
 
 #~ msgid "Link ending"
 #~ msgstr "Akhir tautan"

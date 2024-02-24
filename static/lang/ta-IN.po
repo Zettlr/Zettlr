@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-02-24 11:09+0000\n"
+"POT-Creation-Date: 2024-02-24 15:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: தமிழ்நேரம் <https://TamilNeram.github.io>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -722,27 +722,46 @@ msgstr "அடையாலத்தைப் பயன்படுத்தி �
 msgid "Never"
 msgstr "ஒருபோதும்"
 
-#: source/win-preferences/schema/zettelkasten.ts:67
+#: source/win-preferences/schema/zettelkasten.ts:68
+msgid "Link format"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:73
+msgid ""
+"Internal links allow you to add an optional title, separated by a vertical "
+"bar character from the actual link target. Here you can define the ordering "
+"of the two."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:79
+msgid "[[Link|Title]]: Link first (recommended)"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "[[Title|Link]]: Title first"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:88
 #, fuzzy
 msgid "Start a full-text search when following internal links"
 msgstr "செட்டல்காச்டன்-இணைப்புகளைப் பின்பற்றும்போது தேடலைத் தொடங்கவும்"
 
-#: source/win-preferences/schema/zettelkasten.ts:68
+#: source/win-preferences/schema/zettelkasten.ts:89
 msgid "The search string will match the content between the brackets: [[ ]]."
 msgstr ""
 
-#: source/win-preferences/schema/zettelkasten.ts:77
+#: source/win-preferences/schema/zettelkasten.ts:96
 #, fuzzy
 msgid ""
 "Automatically create non-existing files in this folder when following "
 "internal links"
 msgstr "உள் இணைப்புகளைப் பின்பற்றும்போது தானாகவே இல்லாத கோப்புகளை உருவாக்கவும்"
 
-#: source/win-preferences/schema/zettelkasten.ts:82
+#: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
 msgstr ""
 
-#: source/win-preferences/schema/zettelkasten.ts:87
+#: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
 msgstr ""
 
@@ -939,7 +958,7 @@ msgstr "செட்லர்"
 
 #: source/app/service-providers/commands/file-rename.ts:108
 #: source/app/service-providers/commands/rename-tag.ts:43
-#: source/app/service-providers/config/index.ts:488
+#: source/app/service-providers/config/index.ts:500
 msgid "Confirm"
 msgstr "உறுதிப்படுத்தவும்"
 
@@ -1268,17 +1287,17 @@ msgstr ""
 msgid "Save file"
 msgstr "கோப்பை சேமி"
 
-#: source/app/service-providers/config/index.ts:480
+#: source/app/service-providers/config/index.ts:492
 msgid "Changing this option requires a restart to take effect."
 msgstr "இந்த விருப்பத்தை மாற்றுவதற்கு மறுதொடக்கம் செய்ய வேண்டும்."
 
-#: source/app/service-providers/config/index.ts:483
+#: source/app/service-providers/config/index.ts:495
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
 msgid "Restart now"
 msgstr "இப்போது மறுதொடக்கம் செய்யுங்கள்"
 
-#: source/app/service-providers/config/index.ts:484
+#: source/app/service-providers/config/index.ts:496
 msgid "Restart later"
 msgstr "பின்னர் மறுதொடக்கம் செய்யுங்கள்"
 
@@ -1369,7 +1388,7 @@ msgstr "புதிய அடைவு…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:166
 #: source/app/service-providers/menu/menu.win32.ts:140
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
 msgid "Open…"
 msgstr "திற…"
 
@@ -1446,7 +1465,7 @@ msgstr "கோப்பகத்தை நீக்கு"
 
 #: source/app/service-providers/menu/menu.darwin.ts:317
 #: source/app/service-providers/menu/menu.win32.ts:318
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:107
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
 msgid "Edit"
 msgstr "தொகு"
 
@@ -1759,16 +1778,16 @@ msgstr "சேமிக்கப்படாத மாற்றங்கள்"
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr "சேமிக்கப்படாத மாற்றங்கள் உள்ளன. முதலில் அவற்றைக் சேமிக்க விரும்புகிறீர்களா?"
 
-#: source/app/service-providers/documents/index.ts:996
+#: source/app/service-providers/documents/index.ts:1006
 msgid "File changed on disk"
 msgstr "வட்டில் கோப்பு மாற்றப்பட்டது"
 
-#: source/app/service-providers/documents/index.ts:997
+#: source/app/service-providers/documents/index.ts:1007
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s வட்டில் மாற்றப்பட்டுள்ளன"
 
-#: source/app/service-providers/documents/index.ts:999
+#: source/app/service-providers/documents/index.ts:1009
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -1778,27 +1797,37 @@ msgstr ""
 "திருத்தி உள்ளடக்கங்களை வைத்திருக்க விரும்புகிறீர்களா அல்லது வட்டில் இருந்து கோப்பை ஏற்ற "
 "விரும்புகிறீர்களா?"
 
-#: source/app/service-providers/documents/index.ts:1000
+#: source/app/service-providers/documents/index.ts:1010
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "தற்போதைய திருத்தி உள்ளடக்கங்களை வைத்திருக்க விரும்புகிறீர்களா அல்லது வட்டில் இருந்து கோப்பை "
 "ஏற்ற விரும்புகிறீர்களா?"
 
-#: source/app/service-providers/documents/index.ts:1003
+#: source/app/service-providers/documents/index.ts:1013
 msgid "Keep editor contents"
 msgstr "ஆசிரியர் உள்ளடக்கங்களை வைத்திருங்கள்"
 
-#: source/app/service-providers/documents/index.ts:1004
+#: source/app/service-providers/documents/index.ts:1014
 msgid "Load changes from disk"
 msgstr "வட்டில் இருந்து மாற்றங்களை ஏற்றவும்"
 
-#: source/app/service-providers/documents/index.ts:1007
+#: source/app/service-providers/documents/index.ts:1017
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "திருத்தியில் சேமிக்கப்படாத மாற்றங்கள் இல்லாவிட்டால் எப்போதும் வட்டில் இருந்து மாற்றங்களை "
 "ஏற்றவும்"
+
+#: source/app/service-providers/documents/index.ts:1475
+#, fuzzy
+msgid "Could not save file"
+msgstr "படத்தை சேமிக்க முடியவில்லை"
+
+#: source/app/service-providers/documents/index.ts:1475
+#, fuzzy, javascript-format
+msgid "Could not save file %s: %s"
+msgstr "படத்தை சேமிக்க முடியவில்லை"
 
 #: source/tmp/MainSidebar.vue.ts:39 source/tmp/ToCTab.vue.ts:35
 #: source/tmp/ToCTab.vue.ts:43
@@ -1870,7 +1899,7 @@ msgid "Created"
 msgstr "உருவாக்கப்பட்டது"
 
 #: source/tmp/PopoverFileProps.vue.ts:36 source/tmp/PopoverDirProps.vue.ts:30
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
 msgid "Modified"
 msgstr "மாற்றியமைக்கப்பட்ட"
 
@@ -1969,7 +1998,7 @@ msgstr "முடிவுகளை மாற்றவும்"
 
 #: source/tmp/GlobalSearch.vue.ts:53
 #: source/win-main/file-manager/util/file-item-context.ts:28
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:147
 msgid "Open in a new tab"
 msgstr "புதிய தாவலில் திறக்கவும்"
 
@@ -2486,12 +2515,12 @@ msgstr "படம்"
 msgid "Comment"
 msgstr "கருத்து"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "கோப்பு %s இல்லை."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:106
 msgid "Word count"
 msgstr "சொல் எண்ணிக்கை"
 
@@ -2500,7 +2529,7 @@ msgstr "சொல் எண்ணிக்கை"
 msgid "Fetching link preview…"
 msgstr "இணைப்பு முன்னோட்டங்களைக் காட்டு"
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:90
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
 msgid "No footnote text found."
 msgstr "அடிக்குறிப்பு உரை எதுவும் கிடைக்கவில்லை."
 

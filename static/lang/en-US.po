@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.5\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-02-24 11:09+0000\n"
+"POT-Creation-Date: 2024-02-24 15:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -689,15 +689,37 @@ msgstr "Only when linking using the ID"
 msgid "Never"
 msgstr "Never"
 
-#: source/win-preferences/schema/zettelkasten.ts:67
+#: source/win-preferences/schema/zettelkasten.ts:68
+msgid "Link format"
+msgstr "Link format"
+
+#: source/win-preferences/schema/zettelkasten.ts:73
+msgid ""
+"Internal links allow you to add an optional title, separated by a vertical "
+"bar character from the actual link target. Here you can define the ordering "
+"of the two."
+msgstr ""
+"Internal links allow you to add an optional title, separated by a vertical "
+"bar character from the actual link target. Here you can define the ordering "
+"of the two."
+
+#: source/win-preferences/schema/zettelkasten.ts:79
+msgid "[[Link|Title]]: Link first (recommended)"
+msgstr "[[Link|Title]]: Link first (recommended)"
+
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "[[Title|Link]]: Title first"
+msgstr "[[Title|Link]]: Title first"
+
+#: source/win-preferences/schema/zettelkasten.ts:88
 msgid "Start a full-text search when following internal links"
 msgstr "Start a full-text search when following internal links"
 
-#: source/win-preferences/schema/zettelkasten.ts:68
+#: source/win-preferences/schema/zettelkasten.ts:89
 msgid "The search string will match the content between the brackets: [[ ]]."
 msgstr "The search string will match the content between the brackets: [[ ]]."
 
-#: source/win-preferences/schema/zettelkasten.ts:77
+#: source/win-preferences/schema/zettelkasten.ts:96
 msgid ""
 "Automatically create non-existing files in this folder when following "
 "internal links"
@@ -705,11 +727,11 @@ msgstr ""
 "Automatically create non-existing files in this folder when following "
 "internal links"
 
-#: source/win-preferences/schema/zettelkasten.ts:82
+#: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
 msgstr "For this to work, the folder must be open as a Workspace in Zettlr."
 
-#: source/win-preferences/schema/zettelkasten.ts:87
+#: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
 msgstr "Path to folder"
 
@@ -901,7 +923,7 @@ msgstr "Zettlr"
 
 #: source/app/service-providers/commands/file-rename.ts:108
 #: source/app/service-providers/commands/rename-tag.ts:43
-#: source/app/service-providers/config/index.ts:488
+#: source/app/service-providers/config/index.ts:500
 msgid "Confirm"
 msgstr "Confirm"
 
@@ -1229,17 +1251,17 @@ msgstr ""
 msgid "Save file"
 msgstr "Save file"
 
-#: source/app/service-providers/config/index.ts:480
+#: source/app/service-providers/config/index.ts:492
 msgid "Changing this option requires a restart to take effect."
 msgstr "Changing this option requires a restart to take effect."
 
-#: source/app/service-providers/config/index.ts:483
+#: source/app/service-providers/config/index.ts:495
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
 msgid "Restart now"
 msgstr "Restart now"
 
-#: source/app/service-providers/config/index.ts:484
+#: source/app/service-providers/config/index.ts:496
 msgid "Restart later"
 msgstr "Restart later"
 
@@ -1330,7 +1352,7 @@ msgstr "New directory…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:166
 #: source/app/service-providers/menu/menu.win32.ts:140
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
 msgid "Open…"
 msgstr "Open…"
 
@@ -1407,7 +1429,7 @@ msgstr "Delete directory"
 
 #: source/app/service-providers/menu/menu.darwin.ts:317
 #: source/app/service-providers/menu/menu.win32.ts:318
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:107
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
 msgid "Edit"
 msgstr "Edit"
 
@@ -1717,16 +1739,16 @@ msgstr "Discard changes"
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr "There are unsaved changes. Do you want to save or discard them?"
 
-#: source/app/service-providers/documents/index.ts:996
+#: source/app/service-providers/documents/index.ts:1006
 msgid "File changed on disk"
 msgstr "File changed on disk"
 
-#: source/app/service-providers/documents/index.ts:997
+#: source/app/service-providers/documents/index.ts:1007
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s changed on disk"
 
-#: source/app/service-providers/documents/index.ts:999
+#: source/app/service-providers/documents/index.ts:1009
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -1735,25 +1757,34 @@ msgstr ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 
-#: source/app/service-providers/documents/index.ts:1000
+#: source/app/service-providers/documents/index.ts:1010
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "Do you want to keep the current editor contents or load the file from disk?"
 
-#: source/app/service-providers/documents/index.ts:1003
+#: source/app/service-providers/documents/index.ts:1013
 msgid "Keep editor contents"
 msgstr "Keep editor contents"
 
-#: source/app/service-providers/documents/index.ts:1004
+#: source/app/service-providers/documents/index.ts:1014
 msgid "Load changes from disk"
 msgstr "Load changes from disk"
 
-#: source/app/service-providers/documents/index.ts:1007
+#: source/app/service-providers/documents/index.ts:1017
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "Always load changes from disk if there are no unsaved changes in the editor"
+
+#: source/app/service-providers/documents/index.ts:1475
+msgid "Could not save file"
+msgstr "Could not save file"
+
+#: source/app/service-providers/documents/index.ts:1475
+#, javascript-format
+msgid "Could not save file %s: %s"
+msgstr "Could not save file %s: %s"
 
 #: source/tmp/MainSidebar.vue.ts:39 source/tmp/ToCTab.vue.ts:35
 #: source/tmp/ToCTab.vue.ts:43
@@ -1826,7 +1857,7 @@ msgid "Created"
 msgstr "Created"
 
 #: source/tmp/PopoverFileProps.vue.ts:36 source/tmp/PopoverDirProps.vue.ts:30
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
 msgid "Modified"
 msgstr "Modified"
 
@@ -1922,7 +1953,7 @@ msgstr "Toggle results"
 
 #: source/tmp/GlobalSearch.vue.ts:53
 #: source/win-main/file-manager/util/file-item-context.ts:28
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:147
 msgid "Open in a new tab"
 msgstr "Open in a new tab"
 
@@ -2439,12 +2470,12 @@ msgstr "Image"
 msgid "Comment"
 msgstr "Comment"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "File %s does not exist."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:106
 msgid "Word count"
 msgstr "Word count"
 
@@ -2452,7 +2483,7 @@ msgstr "Word count"
 msgid "Fetching link preview…"
 msgstr "Fetching link preview…"
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:90
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
 msgid "No footnote text found."
 msgstr "No footnote text found."
 
