@@ -26,9 +26,9 @@ import {
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 import { php } from '@codemirror/lang-php'
 import { python } from '@codemirror/lang-python'
-import { cssLanguage } from '@codemirror/lang-css'
-import { javascriptLanguage, typescriptLanguage } from '@codemirror/lang-javascript'
-import { jsonLanguage } from '@codemirror/lang-json'
+import { css } from '@codemirror/lang-css'
+import { javascript } from '@codemirror/lang-javascript'
+import { json } from '@codemirror/lang-json'
 // Now from the legacy modes package
 import { c, cpp, csharp, java, kotlin, objectiveC, dart, scala } from '@codemirror/legacy-modes/mode/clike'
 import { clojure } from '@codemirror/legacy-modes/mode/clojure'
@@ -87,11 +87,12 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
     mode: StreamLanguage.define({ token (stream, state) { stream.skipToEnd(); return null } }),
     selectors: ['mermaid']
   },
-  { mode: cssLanguage, selectors: ['css'] },
-  { mode: javascriptLanguage, selectors: [ 'javascript', 'js', 'node' ] },
-  { mode: jsonLanguage, selectors: ['json'] },
+  { mode: css().language, selectors: ['css'] },
+  { mode: javascript().language, selectors: [ 'javascript', 'js', 'node' ] },
+  { mode: json().language, selectors: ['json'] },
   { mode: markdownLanguage, selectors: [ 'markdown', 'md' ] },
-  { mode: php().language, selectors: ['php'] },
+  // NOTE: The PHP parser usually expects the PHP code to start with <?, unless "plain" is set
+  { mode: php({ plain: true }).language, selectors: ['php'] },
   { mode: python().language, selectors: [ 'python', 'py' ] },
   { mode: StreamLanguage.define(c), selectors: ['c'] },
   { mode: StreamLanguage.define(clojure), selectors: ['clojure'] },
@@ -137,7 +138,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(vhdl), selectors: [ 'vhdl', 'vhd' ] },
   { mode: StreamLanguage.define(xml), selectors: ['xml'] },
   { mode: StreamLanguage.define(yaml), selectors: [ 'yaml', 'yml' ] },
-  { mode: typescriptLanguage, selectors: [ 'typescript', 'ts' ] }
+  { mode: javascript({ typescript: true }).language, selectors: [ 'typescript', 'ts' ] }
 ]
 
 // TIP: Uncomment the following line to get a full list of all unique characters
