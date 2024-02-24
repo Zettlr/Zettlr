@@ -1911,10 +1911,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:^3.3.7":
-  version: 3.3.7
-  resolution: "@types/luxon@npm:3.3.7"
-  checksum: 97026557e92bcba308a5592f981591cd200d493fc8997874d79acecf6a2ec41debeded3ac5cd80c371ef7f6f56cc0d1be0a5aca846e03d3e6b4a2be37256fe2f
+"@types/luxon@npm:^3.4.2":
+  version: 3.4.2
+  resolution: "@types/luxon@npm:3.4.2"
+  checksum: 6f92d5bd02e89f310395753506bcd9cef3a56f5940f7a50db2a2b9822bce753553ac767d143cb5b4f9ed5ddd4a84e64f89ff538082ceb4d18739af7781b56925
   languageName: node
   linkType: hard
 
@@ -2062,19 +2062,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sanitize-html@npm:^2.9.5":
-  version: 2.9.5
-  resolution: "@types/sanitize-html@npm:2.9.5"
+"@types/sanitize-html@npm:^2.11.0":
+  version: 2.11.0
+  resolution: "@types/sanitize-html@npm:2.11.0"
   dependencies:
     htmlparser2: ^8.0.0
-  checksum: fd0afee5dac91aa2c42391f0c8c9254204f4ee1f10b902aa04e8f7809043d785e28af2732f75277ef09e46838013ad60abedb02ba1424b6218264f3333437fb5
+  checksum: a901d55d31cd946a7fce0130cc7cf6bcf56602af9c87291be77d8149c60e7afc47c83ca74c67c2d84e6ba029fe9bbd6f14f89a8cb30fbd185766eebc5722c251
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7.5.0, @types/semver@npm:^7.5.6":
+"@types/semver@npm:^7.5.0":
   version: 7.5.6
   resolution: "@types/semver@npm:7.5.6"
   checksum: 563a0120ec0efcc326567db2ed920d5d98346f3638b6324ea6b50222b96f02a8add3c51a916b6897b51523aad8ac227d21d3dcf8913559f1bfc6c15b14d23037
+  languageName: node
+  linkType: hard
+
+"@types/semver@npm:^7.5.7":
+  version: 7.5.7
+  resolution: "@types/semver@npm:7.5.7"
+  checksum: 5af9b13e3d74d86d4b618f6506ccbded801fb35dbc28608cd5a7bfb8bcac0021dd35ef305a72a0c2a8def0cff60acd706bfee16a9ed1c39a893d2a175e778ea7
   languageName: node
   linkType: hard
 
@@ -2141,10 +2148,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^9.0.7":
-  version: 9.0.7
-  resolution: "@types/uuid@npm:9.0.7"
-  checksum: c7321194aeba9ea173efd1e721403bdf4e7ae6945f8f8cdbc87c791f4b505ccf3dbc4a8883d90b394ef13b7c2dc778045792b05dbb23b3c746f8ea347804d448
+"@types/uuid@npm:^9.0.8":
+  version: 9.0.8
+  resolution: "@types/uuid@npm:9.0.8"
+  checksum: b8c60b7ba8250356b5088302583d1704a4e1a13558d143c549c408bf8920535602ffc12394ede77f8a8083511b023704bc66d1345792714002bfa261b17c5275
   languageName: node
   linkType: hard
 
@@ -8836,10 +8843,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "luxon@npm:3.3.0"
-  checksum: 50cf17a0dc155c3dcacbeae8c0b7e80db425e0ba97b9cbdf12a7fc142d841ff1ab1560919f033af46240ed44e2f70c49f76e3422524c7fc8bb8d81ca47c66187
+"luxon@npm:^3.4.4":
+  version: 3.4.4
+  resolution: "luxon@npm:3.4.4"
+  checksum: 36c1f99c4796ee4bfddf7dc94fa87815add43ebc44c8934c924946260a58512f0fd2743a629302885df7f35ccbd2d13f178c15df046d0e3b6eb71db178f1c60c
   languageName: node
   linkType: hard
 
@@ -12073,9 +12080,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sanitize-html@npm:^2.11.0":
-  version: 2.11.0
-  resolution: "sanitize-html@npm:2.11.0"
+"sanitize-html@npm:^2.12.1":
+  version: 2.12.1
+  resolution: "sanitize-html@npm:2.12.1"
   dependencies:
     deepmerge: ^4.2.2
     escape-string-regexp: ^4.0.0
@@ -12083,7 +12090,7 @@ __metadata:
     is-plain-object: ^5.0.0
     parse-srcset: ^1.0.2
     postcss: ^8.3.11
-  checksum: 44807f22b0feb5a6a883b4bc04bcd8690ec3bbd6dacb24d6e52226ffe0c0e4fad43d6a882ce60e3884a327fae2de01e67e566e3a211491add50ff0160be2e98a
+  checksum: fb96ea7170d51b5af2607f5cfd84464c78fc6f47e339407f55783e781c6a0288a8d40bbf97ea6a8758924ba9b2d33dcc4846bb94caacacd90d7f2de10ed8541a
   languageName: node
   linkType: hard
 
@@ -12206,6 +12213,17 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 9d58db16525e9f749ad0a696a1f27deabaa51f66e91d2fa2b0db3de3e9644e8677de3b7d7a03f4c15bc81521e0c3916d7369e0572dbde250d9bedf5194e2a8a7
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.6.0":
+  version: 7.6.0
+  resolution: "semver@npm:7.6.0"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: 7427f05b70786c696640edc29fdd4bc33b2acf3bbe1740b955029044f80575fc664e1a512e4113c3af21e767154a94b4aa214bf6cd6e42a1f6dba5914e0b208c
   languageName: node
   linkType: hard
 
@@ -13666,6 +13684,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "uuid@npm:9.0.1"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 39931f6da74e307f51c0fb463dc2462807531dc80760a9bff1e35af4316131b4fc3203d16da60ae33f07fdca5b56f3f1dd662da0c99fea9aaeab2004780cc5f4
+  languageName: node
+  linkType: hard
+
 "uvu@npm:^0.5.0":
   version: 0.5.6
   resolution: "uvu@npm:0.5.6"
@@ -14504,15 +14531,15 @@ __metadata:
     "@types/gettext-parser": ^4.0.4
     "@types/katex": ^0.16.7
     "@types/lodash": ^4.14.202
-    "@types/luxon": ^3.3.7
+    "@types/luxon": ^3.4.2
     "@types/md5": ^2.3.5
     "@types/mermaid": ^9.2.0
     "@types/mocha": ^10.0.6
     "@types/node": ^18.19.18
-    "@types/sanitize-html": ^2.9.5
-    "@types/semver": ^7.5.6
+    "@types/sanitize-html": ^2.11.0
+    "@types/semver": ^7.5.7
     "@types/showdown": ^2.0.6
-    "@types/uuid": ^9.0.7
+    "@types/uuid": ^9.0.8
     "@typescript-eslint/eslint-plugin": ^6.21.0
     "@typescript-eslint/parser": ^6.21.0
     "@vercel/webpack-asset-relocator-loader": ^1.7.3
@@ -14550,7 +14577,7 @@ __metadata:
     less: ^4.1.3
     less-loader: ^11.1.3
     lodash: ^4.17.21
-    luxon: ^3.3.0
+    luxon: ^3.4.4
     md5: ^2.3.0
     mermaid: ^10.2.3
     minimatch: ^9.0.3
@@ -14590,8 +14617,8 @@ __metadata:
     remark-stringify: ^11.0.0
     rimraf: ^5.0.5
     sanitize-filename: ^1.6.3
-    sanitize-html: ^2.11.0
-    semver: ^7.5.4
+    sanitize-html: ^2.12.1
+    semver: ^7.6.0
     style-loader: ^3.3.3
     tippy.js: ^6.3.7
     ts-loader: ^9.4.3
@@ -14599,7 +14626,7 @@ __metadata:
     tsconfig-paths: ^4.2.0
     typescript: ^4.9.5
     unified: ^11.0.4
-    uuid: ^9.0.0
+    uuid: ^9.0.1
     vue: ^3.3.4
     vue-loader: ^17.2.2
     vue-virtual-scroller: ^2.0.0-beta.8
