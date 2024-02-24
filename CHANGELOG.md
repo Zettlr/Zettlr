@@ -86,6 +86,7 @@ links as well.
 - Updated the CodeMirror dependencies to resolve an issue where users of
   keyboards with `Alt-G` being assigned to some character were unable to type
   that (specifically, Swiss-Mac keyboard users could not type an `@`)
+- Fixed a bug that would not properly highlight PHP syntax in code blocks
 
 ## Under the Hood
 
