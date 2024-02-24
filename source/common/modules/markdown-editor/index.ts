@@ -310,7 +310,11 @@ export default class MarkdownEditor extends EventEmitter {
           if (nodeAt.type.name === 'URL') {
             // We found a plain link!
             const url = view.state.sliceDoc(nodeAt.from, nodeAt.to)
-            openMarkdownLink(url, view)
+            if (url.startsWith('[[') && url.endsWith(']]')) {
+              editorInstance.emit('zettelkasten-link', url.substring(2, url.length - 2))
+            } else {
+              openMarkdownLink(url, view)
+            }
             event.preventDefault()
             return true
           } else if ([ 'ZknLinkContent', 'ZknLinkTitle', 'ZknLinkPipe' ].includes(nodeAt.type.name)) {
@@ -345,7 +349,11 @@ export default class MarkdownEditor extends EventEmitter {
             const urlNode = currentNode.getChild('URL')
             if (urlNode !== null) {
               const url = view.state.sliceDoc(urlNode.from, urlNode.to)
-              openMarkdownLink(url, view)
+              if (url.startsWith('[[') && url.endsWith(']]')) {
+                editorInstance.emit('zettelkasten-link', url.substring(2, url.length - 2))
+              } else {
+                openMarkdownLink(url, view)
+              }
               event.preventDefault()
               return true
             }
