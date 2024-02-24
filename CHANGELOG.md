@@ -24,8 +24,41 @@ This changes brings Zettlr's link functionality much more into alignment with
 other editors as well, since this is the way that many other applications handle
 links as well.
 
+## Introducing Wikilink Titles
+
+This update brings a long-awaited change to Zettlr's handling of internal links
+(sometimes called Wikilinks). Specifically, with this version, Zettlr finally
+supports optional titles in such links. Your old links in the format `[[link]]`
+still work fine, but now you can add a title that is different from the link,
+separated by a pipe, or vertical bar character (`|`).
+
+If such a title is given, Zettlr will use it in various ways to make your files
+more readable. For example, if you have the link renderer activated in the
+settings, it will take care of hiding the link target of Wikilinks as well as
+those of regular Markdown links.
+
+Since there is no way of knowing which of the two parts is the link, and which
+is the title, Zettlr follows Pandoc's solution in allowing you to specify how
+internal links are structured for you. The default and recommended setting is to
+put links first, and titles second (`[[link|title]]`). This ensure compatibility
+with VimWiki, MediaWiki, Obsidian, and others. However, should you need to
+target GitHub wiki pages or another application that expects a title to come
+first, you can select the alternative option (`[[title|link]]`).
+
+In order to make Pandoc aware of your choice, you can add one of the following
+reader extensions to your export profiles: `wikilinks_title_after_pipe` or
+`wikilinks_title_before_pipe`.
+
 ## GUI and Functionality
 
+- **Feature**: Zettlr now supports titles in internal (wiki) links; the default
+  setting instructs the parser to expect first the link, and then the title
+  (`[[link|title]]`), which ensures compatibility to, e.g., VimWiki, MediaWiki,
+  or Obsidian, whereas the alternative setting (`[[title|link]]`) is compatible
+  to GitHub wiki syntax. Remember that you need to enable the corresponding
+  option on the Pandoc Markdown reader (`wikilinks_title_after_pipe` or
+  `wikilinks_title_before_pipe`, respectively) if you wish to export files with
+  this option
 - **Feature**: Zettlr can now suggest you emojis during autocompletion. Emojis
   use the same trigger character as the snippets autocomplete, a colon (`:`);
   and Emojis will always be sorted below your snippets -- you can turn this off
@@ -87,6 +120,10 @@ links as well.
   keyboards with `Alt-G` being assigned to some character were unable to type
   that (specifically, Swiss-Mac keyboard users could not type an `@`)
 - Fixed a bug that would not properly highlight PHP syntax in code blocks
+- The link renderer will now also hide internal link/Wikilink links and only
+  show the headers, if enabled
+- Internal link tooltips will now show regardless of where inside the link your
+  mouse cursor is
 
 ## Under the Hood
 
@@ -125,6 +162,13 @@ links as well.
   run them, and if they do not succeed, we catch that error instead; removed
   `commandExists` as it appears to have a few minor issues on Windows installs
 - Fixed a bug that would sometimes make the "New file" command hang (#4785)
+- The config provider now allows specifying options that will cause an event to
+  be emitted instructing every open MainEditor to reload itself; this can be
+  used to change options that affect non-reloadable components such as the
+  parser without having to manually close and re-open affected editors, or
+  forcing a reload of the entire main window
+- MainEditors can now be programmatically instructed by the main process to
+  reload themselves with the broadcast event `reload-editors`
 
 # 3.0.5
 

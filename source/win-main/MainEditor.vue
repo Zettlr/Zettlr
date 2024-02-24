@@ -177,6 +177,10 @@ ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context: Doc
   }
 })
 
+ipcRenderer.on('reload-editors', _e => {
+  currentEditor?.reload().catch(err => console.error('Failed to reload editor after `reload-editors` event', err))
+})
+
 // Update the file database whenever links have been updated
 ipcRenderer.on('links', _e => {
   updateFileDatabase().catch(err => console.error('Could not update file database', err))
@@ -240,6 +244,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     renderTables: editor.enableTableHelper,
     renderEmphasis: display.renderEmphasis,
     linkPreference: zkn.linkWithFilename,
+    zknLinkFormat: zkn.linkFormat,
     linkFilenameOnly: zkn.linkFilenameOnly,
     inputMode: editor.inputMode,
     lintMarkdown: editor.lint.markdown,

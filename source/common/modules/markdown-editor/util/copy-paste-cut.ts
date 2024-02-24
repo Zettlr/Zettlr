@@ -87,9 +87,11 @@ export function copyAsHTML (view: EditorView): void {
     selections.push(view.state.sliceDoc(from, to))
   }
 
+  const { zknLinkFormat } = view.state.field(configField)
+
   const plainBlob = new Blob([selections.join('\n')], { type: 'text/plain' })
   const htmlBlob = new Blob(
-    [md2html(selections.join('\n'), window.getCitationCallback(library))],
+    [md2html(selections.join('\n'), window.getCitationCallback(library), zknLinkFormat)],
     { type: 'text/html' }
   )
 

@@ -73,7 +73,7 @@ import { frontmatterParser } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
 import { sloppyParser } from './sloppy-parser'
 import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
-import { zknLinkParser } from './zkn-link-parser'
+import { type ZknLinkParserConfig, zknLinkParser } from './zkn-link-parser'
 import { pandocAttributesParser } from './pandoc-attributes-parser'
 import { highlightParser } from './highlight-parser'
 import { zknTagParser } from './zkn-tag-parser'
@@ -141,13 +141,17 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: javascript({ typescript: true }).language, selectors: [ 'typescript', 'ts' ] }
 ]
 
+export interface MarkdownParserConfig {
+  zknLinkParserConfig?: ZknLinkParserConfig
+}
+
 // TIP: Uncomment the following line to get a full list of all unique characters
 // that are capable of belonging to a selector
 // console.log([...new Set(codeLanguages.map(x => x.selectors).flat().join('').split(''))])
 
 // This file returns a syntax extension that provides parsing and syntax
 // capabilities
-export default function markdownParser (): LanguageSupport {
+export default function markdownParser (config?: MarkdownParserConfig): LanguageSupport {
   return markdown({
     base: markdownLanguage,
     codeLanguages: (infoString) => {
@@ -184,7 +188,7 @@ export default function markdownParser (): LanguageSupport {
         footnoteParser,
         citationParser,
         sloppyParser,
-        zknLinkParser,
+        zknLinkParser(config?.zknLinkParserConfig),
         zknTagParser,
         pandocAttributesParser,
         highlightParser
@@ -211,6 +215,8 @@ export default function markdownParser (): LanguageSupport {
         { name: 'FootnoteRefBody', style: customTags.FootnoteRefBody },
         { name: 'ZknLink', style: customTags.ZknLink },
         { name: 'ZknLinkContent', style: customTags.ZknLinkContent },
+        { name: 'ZknLinkTitle', style: customTags.ZknLinkTitle },
+        { name: 'ZknLinkPipe', style: customTags.ZknLinkPipe },
         { name: 'ZknTag', style: customTags.ZknTag },
         { name: 'ZknTagContent', style: customTags.ZknTagContent },
         { name: 'PandocAttribute', style: customTags.PandocAttribute }

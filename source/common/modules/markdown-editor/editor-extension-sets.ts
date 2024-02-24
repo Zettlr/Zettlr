@@ -280,7 +280,9 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
       ...customKeymap
     ])),
     // The parser generates the AST for the document ...
-    markdownParser(),
+    markdownParser({
+      zknLinkParserConfig: { format: options.initialConfig.zknLinkFormat }
+    }),
     // ... which can then be styled with a highlighter
     markdownSyntaxHighlighter(),
     syntaxExtensions, // Add our own specific syntax plugin

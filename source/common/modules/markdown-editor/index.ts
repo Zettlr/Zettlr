@@ -313,17 +313,22 @@ export default class MarkdownEditor extends EventEmitter {
             openMarkdownLink(url, view)
             event.preventDefault()
             return true
-          } else if (nodeAt.type.name === 'ZknLinkContent') {
+          } else if ([ 'ZknLinkContent', 'ZknLinkTitle', 'ZknLinkPipe' ].includes(nodeAt.type.name)) {
             // We found a Zettelkasten link!
-            const linkContents = view.state.sliceDoc(nodeAt.from, nodeAt.to)
-            editorInstance.emit('zettelkasten-link', linkContents)
             event.preventDefault()
+            // In these cases, nodeAt.parent is always a ZettelkastenLink
+            const contentNode = nodeAt.parent?.getChild('ZknLinkContent')
+            if (contentNode != null) {
+              const linkContents = view.state.sliceDoc(contentNode.from, contentNode.to)
+              editorInstance.emit('zettelkasten-link', linkContents)
+            }
             return true
           } else if (nodeAt.type.name === 'ZknTagContent') {
             // A tag!
             const tagContents = view.state.sliceDoc(nodeAt.from, nodeAt.to)
             editorInstance.emit('zettelkasten-tag', tagContents)
             event.preventDefault()
+            return true
           }
 
           // Lastly, the user may have clicked somewhere in a link. However,

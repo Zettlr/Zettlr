@@ -135,7 +135,7 @@ function tocEntryIsActive (tocEntryLine: number, tocEntryIdx: number): boolean {
  * @return  {string}             The safe HTML string
  */
 function toc2html (entryText: string): string {
-  const html = md2html(entryText, window.getCitationCallback(library.value))
+  const html = md2html(entryText, window.getCitationCallback(library.value), window.config.get('zkn.linkFormat'))
   return sanitizeHtml(html, {
     // Headings may be emphasised and contain code
     allowedTags: [ 'em', 'kbd', 'code' ]
