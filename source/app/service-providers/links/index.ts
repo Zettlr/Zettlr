@@ -58,7 +58,7 @@ export default class LinkProvider extends ProviderContract {
 
   public async boot (): Promise<void> {
     // Listen to state changes within the Workspaces Provider
-    this._workspaces.on(WORKSPACE_PROVIDER_EVENTS.WorkspaceChanged, (which) => {
+    this._workspaces.on(WORKSPACE_PROVIDER_EVENTS.WorkspaceChanged, (_which) => {
       // Some workspace has changed, so simply pull in the new map
       this._fileLinkDatabase = this._workspaces.getLinks()
       this._idDatabase = this._workspaces.getIds()

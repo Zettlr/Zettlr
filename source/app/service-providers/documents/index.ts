@@ -656,7 +656,7 @@ export default class DocumentManager extends ProviderContract {
     }
   }
 
-  private async pushUpdates (filePath: string, clientVersion: number, clientUpdates: any[]): Promise<boolean> { // clientUpdates must be produced via "toJSON"
+  private async pushUpdates (filePath: string, clientVersion: number, clientUpdates: Update[]): Promise<boolean> { // clientUpdates must be produced via "toJSON"
     const doc = this.documents.find(doc => doc.filePath === filePath)
     if (doc === undefined) {
       throw new Error(`Could not receive updates for file ${filePath}: Not found.`)

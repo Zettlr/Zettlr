@@ -256,7 +256,7 @@ export default class MenuProvider extends ProviderContract {
    * @return  {Promise<string|undefined>}        Returns the clicked ID, or undefined
    */
   private async _displayNativeContextMenu (menu: MenuItemConstructorOptions[], x: number, y: number): Promise<string|undefined> {
-    return await new Promise((resolve, reject) => {
+    return await new Promise((resolve, _reject) => {
       let resolvedID: string|undefined
       // Define a quick'n'dirty recursive function that applies the click handler
       // to (theoretically) indefinite submenus

@@ -35,7 +35,7 @@ export default class AppearanceProvider extends ProviderContract {
   private _startMin: number
   private _endHour: number
   private _endMin: number
-  private _tickInterval: NodeJS.Timer
+  private _tickInterval: NodeJS.Timeout
 
   /**
    * Create the instance on program start and initially load the settings.
@@ -96,7 +96,7 @@ export default class AppearanceProvider extends ProviderContract {
       }
     })
 
-    ipcMain.handle('appearance-provider', (event, { command, payload }) => {
+    ipcMain.handle('appearance-provider', (event, { command }) => {
       // This command returns the accent colour including a contrast colour to be used
       // as the opposite colour, if a good visible contrast is wished for.
       if (command === 'get-accent-color') {
@@ -190,8 +190,9 @@ export default class AppearanceProvider extends ProviderContract {
    * Parses the current auto dark mode start and end times for quick access.
    */
   _recalculateSchedule (): void {
-    const start = this._config.get('autoDarkModeStart').split(':')
-    const end = this._config.get('autoDarkModeEnd').split(':')
+    const { autoDarkModeStart, autoDarkModeEnd } = this._config.get()
+    const start = autoDarkModeStart.split(':')
+    const end = autoDarkModeEnd.split(':')
 
     this._startHour = parseInt(start[0], 10)
     this._startMin = parseInt(start[1], 10)
