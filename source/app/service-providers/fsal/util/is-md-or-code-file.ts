@@ -12,7 +12,6 @@
  */
 
 import { lstatSync } from 'fs'
-import path from 'path'
 import { mdFileExtensions, codeFileExtensions } from './valid-file-extensions'
 
 const MD_FILES = mdFileExtensions(true)

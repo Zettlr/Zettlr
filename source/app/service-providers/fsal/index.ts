@@ -147,8 +147,8 @@ export default class FSAL extends ProviderContract {
    * @return  {Function}  A parser that can be passed to FSAL functions involving files
    */
   public getMarkdownFileParser (): (file: MDFileDescriptor, content: string) => void {
-    const idPattern = this._config.get('zkn.idRE')
-    return getMarkdownFileParser(idPattern)
+    const { idRE } = this._config.get().zkn
+    return getMarkdownFileParser(idRE)
   }
 
   /**
@@ -157,12 +157,13 @@ export default class FSAL extends ProviderContract {
    * @return  {GenericSorter}The sorter
    */
   public getDirectorySorter (): GenericSorter {
+    const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = this._config.get()
     return getSorter(
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('fileMetaTime')
+      sorting,
+      sortFoldersFirst,
+      fileNameDisplay,
+      appLang,
+      fileMetaTime
     )
   }
 

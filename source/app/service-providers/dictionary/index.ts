@@ -89,7 +89,7 @@ export default class DictionaryProvider extends ProviderContract {
     })
 
     // Reload as soon as the config has been updated
-    this._config.on('update', (opt: string) => {
+    this._config.on('update', (_opt: string) => {
       // Reload the dictionaries (if applicable) ...
       this.reload()
       // ... and add cache the autocorrect replacements so they are not seen as "wrong"
@@ -183,7 +183,7 @@ export default class DictionaryProvider extends ProviderContract {
     this._reloadWanted = false
     this._reloadLock = true
 
-    let selectedDicts = this._config.get('selectedDicts') as string[]
+    const { selectedDicts } = this._config.get()
     let dictsToLoad = []
 
     let changeWanted = false
@@ -311,7 +311,7 @@ export default class DictionaryProvider extends ProviderContract {
    */
   check (term: string): boolean {
     // Don't check until all are loaded
-    if (this._config.get('selectedDicts').length !== this.hunspell.length) {
+    if (this._config.get().selectedDicts.length !== this.hunspell.length) {
       return true
     }
 
@@ -352,7 +352,7 @@ export default class DictionaryProvider extends ProviderContract {
     }
 
     // Return no suggestions
-    if (this._config.get('selectedDicts').length !== this.hunspell.length) {
+    if (this._config.get().selectedDicts.length !== this.hunspell.length) {
       return []
     }
 
