@@ -138,8 +138,8 @@ export default class DictionaryProvider extends ProviderContract {
    * as correct.
    */
   _cacheAutoCorrectValues (): void {
-    const table = this._config.get('editor.autoCorrect.replacements')
-    this._cachedAutocorrect = Object.values(table)
+    const table = this._config.get().editor.autoCorrect.replacements
+    this._cachedAutocorrect = table.map(x => x.value)
   }
 
   /**

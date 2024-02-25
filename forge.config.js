@@ -37,12 +37,12 @@ async function downloadPandoc (platform, arch) {
     // To not mess with Electron forge's output, suppress this processes output.
     // But we should reject if there's any error output.
     let shouldReject = false
-    shellProcess.stderr.on('data', (data) => {
+    shellProcess.stderr.on('data', (_data) => {
       shouldReject = true
     })
 
     // Resolve or reject once the process has finished.
-    shellProcess.on('close', (code, signal) => {
+    shellProcess.on('close', (code, _signal) => {
       if (code !== 0 || shouldReject) {
         reject(new Error(`Failed to download Pandoc: Process quit with code ${code}. If the code is 0, then there was error output.`))
       } else {

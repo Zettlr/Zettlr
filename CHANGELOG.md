@@ -138,6 +138,8 @@ follow these links again.
   persisted to disk (#4229)
 - Re-enable following internal Links in the format `[Title]([[Link]])` by
   clicking them with `Cmd/Ctrl` pressed
+- Fixed a bug that would not properly check for autocorrect values during a
+  spell check
 
 ## Under the Hood
 
