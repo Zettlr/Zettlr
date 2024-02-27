@@ -142,6 +142,9 @@ follow these links again.
   spell check
 - The cursor on the editor scrollbars should now be a regular pointer instead of
   a text cursor (#4441)
+- The global search now differentiates between the total amount of matches and
+  the number of matched files
+- The search button in the global search will now be disabled during a search
 
 ## Under the Hood
 

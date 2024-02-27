@@ -25,6 +25,7 @@
       <ButtonControl
         v-bind:label="searchButtonLabel"
         v-bind:inline="true"
+        v-bind:disabled="filesToSearch.length > 0"
         v-on:click="startSearch()"
       ></ButtonControl>
     </p>
@@ -226,7 +227,13 @@ const searchResults = computed(() => {
   return results.sort((a, b) => b.weight - a.weight)
 })
 
-const resultsMessage = computed<string>(() => trans('%s matches', searchResults.value.length))
+const resultsMessage = computed<string>(() => {
+  const nMatches = searchResults.value
+    .map(x => x.result.length)
+    .reduce((prev, cur) => prev + cur, 0)
+  const nFiles = searchResults.value.length
+  return trans('%s matches across %s files', nMatches, nFiles)
+})
 
 /**
  * Allows search results to be further filtered
@@ -291,6 +298,11 @@ function recomputeDirectorySuggestions (): void {
 }
 
 function startSearch (overrideQuery?: string): void {
+  if (filesToSearch.value.length > 0) {
+    console.warn('Global search in progress: Not starting a new one.')
+    return
+  }
+
   // This allows other components to inject a new query when starting a search
   if (overrideQuery !== undefined) {
     query.value = overrideQuery
@@ -374,6 +386,7 @@ function startSearch (overrideQuery?: string): void {
   }
 
   recentSearches.unshift(query.value)
+  // TODO: Refactor to use pinia's config store instead!
   ;(global as any).config.set('window.recentGlobalSearches', recentSearches.slice(0, 10))
 
   // Now we're good to go!
