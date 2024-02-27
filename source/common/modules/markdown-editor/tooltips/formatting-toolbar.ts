@@ -69,7 +69,6 @@ function getToolbar (state: EditorState): Tooltip[] {
 
       buttonWrapper.append(bold, italic, link, image, comment, code)
       dom.append(buttonWrapper)
-      console.log(dom)
 
       // NOTE: We need to use the onmousedown event here, since the click only
       // triggers after onmouseup, and by that time the editor has gone through
