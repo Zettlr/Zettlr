@@ -140,6 +140,8 @@ follow these links again.
   clicking them with `Cmd/Ctrl` pressed
 - Fixed a bug that would not properly check for autocorrect values during a
   spell check
+- The cursor on the editor scrollbars should now be a regular pointer instead of
+  a text cursor (#4441)
 
 ## Under the Hood
 
