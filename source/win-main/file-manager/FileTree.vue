@@ -374,8 +374,6 @@ body.darwin {
 
 body.win32 {
   #file-tree {
-    background-color: rgb(230, 230, 230);
-
     #directories-dirs-header, #directories-files-header {
       border-bottom: 1px solid rgb(160, 160, 160);
       font-size: 11px;
@@ -393,8 +391,6 @@ body.win32 {
 
 body.linux {
   #file-tree {
-    background-color: rgb(230, 230, 230);
-
     #directories-dirs-header, #directories-files-header {
       border-bottom: 1px solid rgb(160, 160, 160);
       font-size: 11px;
