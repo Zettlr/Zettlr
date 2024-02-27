@@ -39,6 +39,9 @@ import { search, searchKeymap } from '@codemirror/search'
 import { defaultKeymap, historyKeymap, history, indentLess, indentMore } from '@codemirror/commands'
 import { snippetSyntaxExtension } from '@common/modules/markdown-utils/snippets-syntax-extension'
 import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-highlighter'
+import { useConfigStore } from 'source/pinia'
+
+const configStore = useConfigStore()
 
 /**
  * We have to define the CodeMirror instance outside of Vue, since the Proxy-
@@ -105,7 +108,14 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
       return [
         ...extensions,
         snippetSyntaxExtension,
-        markdownParser(), // Comes from the main editor
+        markdownParser({
+          // NOTE: This is not reactive to configuration changes while the code
+          // editor is on, but I can't imagine too many people making use of the
+          // linkFormat explicitly, or changing it that often (they shouldn't,
+          // after all). Should we ever need to add more configs, I can still
+          // react to changes in the parser config.
+          zknLinkParserConfig: { format: configStore.config.zkn.linkFormat }
+        }), // Comes from the main editor
         markdownSyntaxHighlighter() // Comes from the main editor
       ]
   }
