@@ -49,6 +49,12 @@ In order to make Pandoc aware of your choice, you can add one of the following
 reader extensions to your export profiles: `wikilinks_title_after_pipe` or
 `wikilinks_title_before_pipe`.
 
+Lastly, due to this improvement, we have changed the default setting for "link
+with filename" from "always" to "never", since it will be more ergonomic to use
+a custom link title directly instead of having the filename pop up after the
+link. This default setting applies to new installations; so you may consider to
+change this setting manually yourself as well.
+
 ## Re-enabling old Link-Title-Syntax
 
 After the release of Zettlr v3.0.0, some users have complained that their
@@ -145,6 +151,9 @@ follow these links again.
 - The global search now differentiates between the total amount of matches and
   the number of matched files
 - The search button in the global search will now be disabled during a search
+- Due to the new ability to add link titles, the default setting for "Link with
+  filename" is now set to "never" for new installations; you may consider
+  changing this as well
 
 ## Under the Hood
 
