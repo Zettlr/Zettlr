@@ -29,9 +29,9 @@
         v-on:click="startSearch()"
       ></ButtonControl>
     </p>
-    <hr>
     <!-- ... as well as two buttons to clear the results or toggle them. -->
     <template v-if="searchResults.length > 0">
+      <hr>
       <p style="text-align: center;">
         <ButtonControl
           v-if="filesToSearch.length === 0"
@@ -527,7 +527,11 @@ body div#global-search-pane {
   overflow: auto;
   height: 100%;
 
-  hr { margin: 5px 0; }
+  hr {
+    margin: 10px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+  }
 
   div.search-result-container {
     border-bottom: 1px solid rgb(180, 180, 180);

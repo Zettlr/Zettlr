@@ -243,7 +243,7 @@ body {
   }
 }
 
-body.darwin {
+body.darwin, body.linux {
   div#sidebar {
     background-color: transparent;
 

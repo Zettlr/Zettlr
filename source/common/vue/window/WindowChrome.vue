@@ -306,7 +306,7 @@ body {
 
   &:not(.darwin) {
     div#window-content {
-      background-color: rgb(235, 235, 235);
+      background-color: #fafafa;
     }
   }
 
