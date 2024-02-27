@@ -160,7 +160,7 @@
     "@types/semver": "^7.5.7",
     "@types/showdown": "^2.0.6",
     "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.0.2",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "copy-webpack-plugin": "^12.0.2",
