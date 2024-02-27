@@ -433,4 +433,3 @@ body.win32 {
   }
 }
 </style>
-../../pinia
