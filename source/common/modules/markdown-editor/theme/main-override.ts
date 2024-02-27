@@ -20,7 +20,8 @@ export const mainOverride = EditorView.baseTheme({
   '&.cm-editor': {
     height: '100%',
     fontFamily: 'inherit',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    cursor: 'auto'
   },
   '.cm-scroller': {
     flexGrow: '1', // Ensure the content pushes possible panels towards the edge
