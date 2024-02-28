@@ -121,6 +121,9 @@ export function magicQuotesStatus (state: EditorState, view: EditorView): Status
     allowHtml: true,
     title: 'MagicQuotes',
     onClick (event) {
+      // Ensure the event doesn't get propagated to the DOM root where it would
+      // be picked up by the context menu handler and closed again immediately.
+      event.stopPropagation()
       const items: AnyMenuItem[] = [
         {
           type: 'checkbox',

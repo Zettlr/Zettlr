@@ -202,6 +202,8 @@ follow these links again.
 - Added the commands `shortcut:install` and `shortcut:uninstall` to add develop
   shortcuts on Linux systems, allowing the simple launching of a binary compiled
   from source (rather than the provided binaries)
+- Fixed a bug on Windows and Linux that would not make the context menu on the
+  statusbars' MagicQuotes handler appear
 
 # 3.0.5
 
