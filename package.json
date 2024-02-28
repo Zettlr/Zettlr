@@ -34,7 +34,9 @@
     "test": "mocha",
     "test-gui": "cross-env NODE_ENV=develop node scripts/test-gui/index.mjs",
     "lint": "eslint --ext js,vue,ts source",
-    "lint:po": "node scripts/lint-po.mjs"
+    "lint:po": "node scripts/lint-po.mjs",
+    "shortcut:install": "node scripts/develop-shortcut.mjs install",
+    "shortcut:uninstall": "node scripts/develop-shortcut.mjs uninstall"
   },
   "config": {
     "forge": "./forge.config.js"

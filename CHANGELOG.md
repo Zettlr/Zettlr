@@ -199,6 +199,9 @@ follow these links again.
   forcing a reload of the entire main window
 - MainEditors can now be programmatically instructed by the main process to
   reload themselves with the broadcast event `reload-editors`
+- Added the commands `shortcut:install` and `shortcut:uninstall` to add develop
+  shortcuts on Linux systems, allowing the simple launching of a binary compiled
+  from source (rather than the provided binaries)
 
 # 3.0.5
 
