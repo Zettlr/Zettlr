@@ -69,15 +69,12 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     return () => { /* Noop-function, since no cleanup is required */ }
   } // END darwin specific code
 
-  console.log('Creating menu...')
-
   // We have just received a serialized submenu which we should now display
   const appMenu = document.createElement('div')
   appMenu.classList.add('application-menu')
   appMenu.style.zIndex = '99999' // Ensure it always stays on top of anything
 
   for (const item of items) {
-    console.log(item)
     const menuItem = renderMenuItem(item)
 
     if (item.type !== 'submenu' && item.type !== 'separator' && item.enabled) {
