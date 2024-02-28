@@ -135,7 +135,7 @@ In order to provide code, you should have basic familiarity with the following t
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) (especially asynchronous code) and [TypeScript](https://www.typescriptlang.org/docs/)
 * [Node.js](https://nodejs.org/api/)
 * [Electron](https://www.electronjs.org/docs)
-* [Vue.js 3.x](https://vuejs.org/guide/introduction.html) and [Vuex](https://vuex.vuejs.org/)
+* [Vue.js 3.x](https://vuejs.org/guide/introduction.html) and [Pinia](https://pinia.vuejs.org/)
 * [CodeMirror 6.x](https://codemirror.net/docs/)
 * [ESLint](https://eslint.org/)
 * [LESS](https://lesscss.org/#)
@@ -152,7 +152,10 @@ This section lists all available commands that you can use during application de
 
 #### `start`
 
-Starts `electron-forge`, which will build the application and launch it in development mode. This will use the normal settings, so if you use Zettlr on the same computer in production, it will use the same configuration files as the regular application. This means: be careful when breaking things. In that case, it's better to use `test-gui`.
+Starts `electron-forge`, which will build the application and launch it in development mode.
+
+> [!CAUTION]
+> **We do not recommend using this command. Use `test-gui` instead.** By using this command, the app will use the default settings, so if you use Zettlr on the same computer in production, it will use the same configuration files as the regular application. This means: be careful when breaking things, otherwise this command **will** lead to data loss.
 
 #### `package`
 
@@ -161,14 +164,13 @@ Packages the application, but not bundle it into an installer. Without any suffi
 - `package:mac-x64` (Intel-based Macs)
 - `package:mac-arm` (Apple Silicon-based Macs)
 - `package:win-x64` (Intel-based Windows)
-- `package:win-arm` (ARM-based Windows)
 - `package:linux-x64` (Intel-based Linux)
 - `package:linux-arm` (ARM-based Linux)
 
 The resulting application packages are stored in `./out`.
 
 > [!IMPORTANT]
-> This command will skip typechecking to speed up builds, so be extra cautious.
+> This command will skip typechecking to speed up builds, so we recommend running `lint` before packaging to ensure that there are no errors.
 
 #### `release:{platform-arch}`
 
@@ -177,28 +179,41 @@ Packages the application and then bundles it into an installer for the correspon
 - `release:mac-x64` (Intel-based Macs)
 - `release:mac-arm` (Apple Silicon-based Macs)
 - `release:win-x64` (Intel-based Windows)
-- `release:win-arm` (ARM-based Windows)
 - `release:linux-x64` (Intel-based Linux)
 - `release:linux-arm` (ARM-based Linux)
 
 The resulting setup bundles are stored in `./release`.
 
 > [!NOTE]
-> While you can `package` directly for your platform without any suffix, for creating a release specifying the platform is required as electron-builder would otherwise include the development-dependencies in the `app.asar`, resulting in a bloated application.
+> While you can `package` directly for your platform without any suffix, you need to specify the platform and architecture when creating a release bundle, since electron-builder would otherwise include the development-dependencies in the `app.asar`, resulting in a bloated application.
 
 #### `csl:refresh`
 
 This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) files with which the application is shipped, and places them in the `static/csl-locales`- and `static/csl-styles`-directories respectively.
 
 > [!NOTE]
-> This command is intended for an automated workflow that runs from time to time on the repository to perform this action. This means: Do **not** commit updated files to the repository. Instead, the updated files will be downloaded whenever you `git fetch`.
+> This command is intended for an automated workflow that runs from time to time on the repository to perform this action. **Do not commit updated files to the repository**. Instead, the updated files will be downloaded whenever you `git fetch`.
 
 #### `lint`
 
-This simply runs [ESLint](https://eslint.org/). Apps such as [Atom](https://atom.io/) or [Visual Studio Code](https://code.visualstudio.com/) will automatically run ESLint in the background, but if you want to be extra-safe, make sure to run this command prior to submitting a Pull Request.
+Runs [ESLint](https://eslint.org/). Apps such as [Visual Studio Code](https://code.visualstudio.com/) will automatically run ESLint in the background on your open files. This command runs them across the entire code base. Make sure to run this command prior to submitting a Pull Request.
 
 > [!NOTE]
 > This command will run automatically on each Pull Request to check your code for inconsistencies.
+
+#### `shortcut:install`
+
+Creates a `.desktop`-file into your applications which enables you to quickly start an app that you have compiled from source. This requires Linux. To use new changes, simple sync the repository, run `package` again, and you're good to go.
+
+> [!WARNING]
+> We provide this command as a convenience. Unless you know what you are doing, you should not run code directly compiled from the HEAD commit of the develop branch. This command *can* be useful, however, in a few instances where you know what may go wrong and can take appropriate precautions.
+
+### `shortcut:uninstall`
+
+Removes the `.desktop`-file created by `shortcut:install`.
+
+> [!NOTE]
+> You don't have to uninstall and reinstall the shortcut whenever you compile the binary anew. Just make sure that Zettlr is closed before you recompile it. You should only have to reinstall the shortcut if the template (in `scripts/assets/zettlr-dev.desktop`) has changed.
 
 #### `test`
 
@@ -334,9 +349,12 @@ Since this implies the need to have the app running in the tray bar or notificat
 
 This will direct the File System Abstraction Layer to fully clear its cache on boot. This can be used to mitigate issues regarding changes in the code base. To ensure compatibility with any changes to the information stored in the cache, the cache is also automatically cleared when the version field in your `config.json` does not match the one in the `package.json`, which means that, as long as you do not explicitly set the `version`-field in your `test-config.yml`, the cache will always be cleared on each run when you type `yarn test-gui`.
 
+> [!TIP]
+> If you just want to casually clear the cache for troubleshooting, you can also clear the cache by selecting the appropriate menu item in the "Help" menu, which saves you from having to dabble with anything technical.
+
 #### `--data-dir=path`
 
-Use this switch to specify custom data directory, which holds your configuration files. Without this switch data directory defaults to `%AppData%/Zettlr` (on Windows 10), `~/.config/Zettlr` (on Linux), etc. The path can be absolute or relative. Basis for the relative path will be either the binary's directory (when running a packaged app) or the repository root directory (when running an app that is not packaged). If the path contains spaces, do not forget to escape it in quotes. `~` to denote home directory does not work. Due to the bug in Electron an empty `Dictionaries` subdirectory is created in the default data directory, but it does not impact functionality.
+Use this switch to specify a custom data directory, which holds your configuration files. Without this switch, the data directory defaults to `%AppData%/Zettlr` (on Windows 10 and newer), `~/.config/Zettlr` (on Linux), or `~/Library/Application Support/Zettlr` (on macOS). The path can be absolute or relative. Basis for the relative path will be either the binary's directory (when running a packaged app) or the repository root (when running an app that is not packaged). Remember to escape spaces or quote the path, if necessary. The `~` character to denote the home directory is not expanded in this case, so make sure to pass the entire path to your home directory if necessary. Due to a minor bug in Electron, an empty `Dictionaries` subdirectory is created in the default data directory, but it does not impact functionality.
 
 #### `--disable-hardware-acceleration`
 
