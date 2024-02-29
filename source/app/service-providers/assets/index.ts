@@ -14,7 +14,7 @@
  */
 
 import path from 'path'
-import { app, ipcMain } from 'electron'
+import { app, ipcMain, shell } from 'electron'
 import { promises as fs } from 'fs'
 import YAML from 'yaml'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
@@ -81,6 +81,9 @@ export default class AssetsProvider extends ProviderContract {
       } else if (command === 'list-export-profiles') {
         const profiles = await this.listDefaults()
         return profiles.concat(getCustomProfiles())
+      } else if (command === 'open-defaults-directory') {
+        this._logger.info(`[AssetsProvider] Opening path ${this._defaultsPath}`)
+        return await shell.openPath(this._defaultsPath)
       } else if (command === 'get-snippet') {
         return await this.getSnippet(payload.name)
       } else if (command === 'set-snippet') {
@@ -91,6 +94,9 @@ export default class AssetsProvider extends ProviderContract {
         return await this.listSnippets()
       } else if (command === 'rename-snippet') {
         return await this.renameSnippet(payload.name, payload.newName)
+      } else if (command === 'open-snippets-directory') {
+        this._logger.info(`[AssetsProvider] Opening path ${this._snippetsPath}`)
+        return await shell.openPath(this._snippetsPath)
       }
     })
   }

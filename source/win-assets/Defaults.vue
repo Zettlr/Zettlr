@@ -19,17 +19,25 @@
       <div id="defaults-container">
         <p>{{ defaultsExplanation }}</p>
 
-        <TextControl
-          v-model="currentFilename"
-          v-bind:inline="false"
-          v-bind:disabled="currentItem < 0"
-          v-on:confirm="renameFile()"
-        ></TextControl>
+        <p>
+          <TextControl
+            v-model="currentFilename"
+            v-bind:inline="false"
+            v-bind:disabled="currentItem < 0"
+            v-on:confirm="renameFile()"
+          ></TextControl>
+          <ButtonControl
+            v-bind:label="renameFileLabel"
+            v-bind:inline="true"
+            v-bind:disabled="visibleItems.length === 0 || currentFilename === visibleItems[currentItem].name"
+            v-on:click="renameFile()"
+          ></ButtonControl>
+        </p>
+
         <ButtonControl
-          v-bind:label="renameFileLabel"
-          v-bind:inline="true"
-          v-bind:disabled="visibleItems.length === 0 || currentFilename === visibleItems[currentItem].name"
-          v-on:click="renameFile()"
+          v-bind:label="openDefaultsFolderLabel"
+          v-bind:inline="false"
+          v-on:click="openDefaultsDirectory"
         ></ButtonControl>
 
         <span v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" class="protected-info">
@@ -140,6 +148,9 @@ export default defineComponent({
     },
     renameFileLabel: function (): string {
       return trans('Rename file')
+    },
+    openDefaultsFolderLabel () {
+      return trans('Open defaults folder')
     },
     codeEditor: function (): typeof CodeEditor {
       return this.$refs['code-editor'] as typeof CodeEditor
@@ -328,6 +339,11 @@ export default defineComponent({
           await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
         })
         .catch(err => console.error(err))
+    },
+    openDefaultsDirectory () {
+      ipcRenderer.invoke('assets-provider', {
+        command: 'open-defaults-directory'
+      }).catch(err => console.error(err))
     }
   }
 })
