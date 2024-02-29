@@ -204,6 +204,8 @@ follow these links again.
   from source (rather than the provided binaries)
 - Fixed a bug on Windows and Linux that would not make the context menu on the
   statusbars' MagicQuotes handler appear
+- Fixed an issue with showing the appropriate `platformVersion` in the about
+  debug info tab
 
 # 3.0.5
 
