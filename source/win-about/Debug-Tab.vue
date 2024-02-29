@@ -71,7 +71,9 @@ export default defineComponent({
       arch: process.arch,
       env: Object.assign({}, process.env),
       platform: process.platform,
-      platformVersion: () => process.getSystemVersion(),
+      // DEBUG: In the renderer, getSystemVersion is a property, not a function
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      platformVersion: process.getSystemVersion,
       // Add version strings for external helper programs Zettlr can use
       programVersions: {
         pandoc: process.env.PANDOC_VERSION ?? 'not available',
