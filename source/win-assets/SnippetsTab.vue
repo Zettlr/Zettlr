@@ -34,6 +34,12 @@
           ></ButtonControl>
         </p>
 
+        <ButtonControl
+          v-bind:label="openSnippetsFolderLabel"
+          v-bind:inline="false"
+          v-on:click="openSnippetsDirectory"
+        ></ButtonControl>
+
         <CodeEditor
           ref="code-editor"
           v-model="editorContents"
@@ -107,6 +113,9 @@ export default defineComponent({
     },
     snippetsExplanation: function (): string {
       return trans('Snippets let you define reusable pieces of text with variables.')
+    },
+    openSnippetsFolderLabel () {
+      return trans('Open snippets folder')
     }
   },
   watch: {
@@ -265,6 +274,11 @@ export default defineComponent({
       }
 
       return candidate + '-' + count
+    },
+    openSnippetsDirectory () {
+      ipcRenderer.invoke('assets-provider', {
+        command: 'open-snippets-directory'
+      }).catch(err => console.error(err))
     }
   }
 })

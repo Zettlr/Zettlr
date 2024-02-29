@@ -84,6 +84,8 @@ follow these links again.
 - Removed the option for choosing to sort by either file creation or last
   modification time, since that can also be inferred from whichever time you
   choose to display
+- **Feature**: The assets manager now provides buttons to open the defaults and
+  snippets directories directly from within the app
 - Removed the option for activating or disabling automatic file creation upon
   following internal links; now this will happen automatically as long as the
   "custom folder" option points to an existing folder; to disable this
