@@ -20,15 +20,15 @@
       style="height: 100%;"
     >
       <!-- Export defaults -->
-      <Defaults
+      <DefaultsTab
         v-if="tabs[currentTab].id === 'tab-export-control'"
         v-bind:which="'export'"
-      ></Defaults>
+      ></DefaultsTab>
       <!-- Import defaults -->
-      <Defaults
+      <DefaultsTab
         v-if="tabs[currentTab].id === 'tab-import-control'"
         v-bind:which="'import'"
-      ></Defaults>
+      ></DefaultsTab>
       <!-- Custom CSS -->
       <CustomCSS
         v-else-if="tabs[currentTab].id === 'tab-custom-css-control'"
@@ -41,63 +41,50 @@
   </WindowChrome>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import WindowChrome from '@common/vue/window/WindowChrome.vue'
-import Defaults from './Defaults.vue'
+import DefaultsTab from './DefaultsTab.vue'
 import CustomCSS from './CustomCSS.vue'
 import SnippetsTab from './SnippetsTab.vue'
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
+import { ref, computed } from 'vue'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
 
-export default defineComponent({
-  components: {
-    WindowChrome,
-    Defaults,
-    CustomCSS,
-    SnippetsTab
-  },
-  data: function () {
-    return {
-      tabs: [
-        {
-          label: trans('Exporting'),
-          controls: 'tab-export',
-          id: 'tab-export-control',
-          icon: 'export'
-        },
-        {
-          label: trans('Importing'),
-          controls: 'tab-import',
-          id: 'tab-import-control',
-          icon: 'import'
-        },
-        {
-          label: trans('Custom CSS'),
-          controls: 'tab-custom-css',
-          id: 'tab-custom-css-control',
-          icon: 'code'
-        },
-        {
-          label: trans('Snippets'),
-          controls: 'tab-snippets',
-          id: 'tab-snippets-control',
-          icon: 'pinboard'
-        }
-      ] as WindowTab[],
-      currentTab: 0
-    }
-  },
-  computed: {
-    windowTitle: function (): string {
-      if (document.body.classList.contains('darwin')) {
-        return this.tabs[this.currentTab].label
-      } else {
-        return trans('Assets Manager')
-      }
-    }
+const currentTab = ref(0)
+const windowTitle = computed(() => {
+  if (document.body.classList.contains('darwin')) {
+    return tabs[currentTab.value].label
+  } else {
+    return trans('Assets Manager')
   }
 })
+
+const tabs: WindowTab[] = [
+  {
+    label: trans('Exporting'),
+    controls: 'tab-export',
+    id: 'tab-export-control',
+    icon: 'export'
+  },
+  {
+    label: trans('Importing'),
+    controls: 'tab-import',
+    id: 'tab-import-control',
+    icon: 'import'
+  },
+  {
+    label: trans('Custom CSS'),
+    controls: 'tab-custom-css',
+    id: 'tab-custom-css-control',
+    icon: 'code'
+  },
+  {
+    label: trans('Snippets'),
+    controls: 'tab-snippets',
+    id: 'tab-snippets-control',
+    icon: 'pinboard'
+  }
+]
 </script>
 
 <style lang="less">
