@@ -29,7 +29,7 @@ import { plugin as PDFExporter } from './pdf-exporter'
 import { plugin as TextbundleExporter } from './textbundle-exporter'
 import type AssetsProvider from '@providers/assets'
 import type LogProvider from '@providers/log'
-import { type PandocProfileMetadata } from '@dts/common/assets'
+import { type PandocProfileMetadata } from '@providers/assets'
 import type ConfigProvider from '@providers/config'
 
 /**
