@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.5\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-02-24 15:35+0000\n"
+"POT-Creation-Date: 2024-03-01 19:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -404,7 +404,6 @@ msgid "Show statusbar"
 msgstr ""
 
 #: source/win-preferences/schema/appearance.ts:219
-#: source/tmp/CustomCSS.vue.ts:31
 msgid "Custom CSS"
 msgstr ""
 
@@ -933,7 +932,6 @@ msgstr ""
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
 #: source/app/service-providers/menu/menu.darwin.ts:712
 #: source/app/service-providers/menu/menu.win32.ts:685
-#: source/tmp/CustomCSS.vue.ts:49
 msgid "Cancel"
 msgstr ""
 
@@ -1128,8 +1126,7 @@ msgstr ""
 #: source/app/service-providers/commands/export.ts:114
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/app/service-providers/menu/menu.win32.ts:162
-#: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
-#: source/tmp/SnippetsTab.vue.ts:47 source/tmp/Defaults.vue.ts:114
+#: source/tmp/CustomCSS.vue.ts:24 source/tmp/SnippetsTab.vue.ts:27
 msgid "Save"
 msgstr ""
 
@@ -1168,20 +1165,20 @@ msgstr ""
 msgid "offline"
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:248
-#: source/app/service-providers/citeproc/index.ts:455
+#: source/app/service-providers/citeproc/index.ts:249
+#: source/app/service-providers/citeproc/index.ts:457
 msgid "The citation database could not be loaded"
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:443
+#: source/app/service-providers/citeproc/index.ts:444
 msgid "Changes to the library file detected. Reloading …"
 msgstr ""
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 #: source/app/service-providers/documents/index.ts:349
-#: source/tmp/CustomCSS.vue.ts:65 source/tmp/SnippetsTab.vue.ts:65
-#: source/tmp/Defaults.vue.ts:132
+#: source/tmp/CustomCSS.vue.ts:34 source/tmp/SnippetsTab.vue.ts:46
+#: source/tmp/DefaultsTab.vue.ts:48
 msgid "Unsaved changes"
 msgstr ""
 
@@ -1376,7 +1373,6 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:287
 #: source/app/service-providers/menu/menu.win32.ts:281
-#: source/tmp/Defaults.vue.ts:76
 #: source/win-main/file-manager/util/file-item-context.ts:43
 msgid "Rename file"
 msgstr ""
@@ -1604,7 +1600,7 @@ msgid "Help"
 msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:648
-#: source/app/service-providers/menu/menu.win32.ts:621 source/tmp/App.vue.ts:94
+#: source/app/service-providers/menu/menu.win32.ts:621 source/tmp/App.vue.ts:34
 msgid "Check for updates"
 msgstr ""
 
@@ -1651,17 +1647,17 @@ msgid ""
 "of your disk. The window(s) will show afterward."
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:294
+#: source/app/service-providers/updates/index.ts:298
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:296
+#: source/app/service-providers/updates/index.ts:300
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:298
+#: source/app/service-providers/updates/index.ts:302
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -1670,21 +1666,21 @@ msgstr ""
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
 #. offline.
-#: source/app/service-providers/updates/index.ts:303
+#: source/app/service-providers/updates/index.ts:307
 msgid "Could not check for updates: Could not establish connection"
 msgstr ""
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:306
+#: source/app/service-providers/updates/index.ts:310
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:322
+#: source/app/service-providers/updates/index.ts:326
 msgid "Could not check for updates: Server hasn't sent any data"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:579
+#: source/app/service-providers/updates/index.ts:585
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr ""
@@ -1761,7 +1757,7 @@ msgstr ""
 msgid "Other files"
 msgstr ""
 
-#: source/tmp/CustomCSS.vue.ts:32
+#: source/tmp/CustomCSS.vue.ts:23
 msgid ""
 "Here you can override the styles of Zettlr to customise it even further. "
 "<strong>Attention: This file overrides all CSS directives! Never alter the "
@@ -1769,12 +1765,12 @@ msgid ""
 "strong>"
 msgstr ""
 
-#: source/tmp/CustomCSS.vue.ts:88 source/tmp/SnippetsTab.vue.ts:124
-#: source/tmp/Defaults.vue.ts:196
+#: source/tmp/CustomCSS.vue.ts:56 source/tmp/SnippetsTab.vue.ts:105
+#: source/tmp/DefaultsTab.vue.ts:115
 msgid "Saving …"
 msgstr ""
 
-#: source/tmp/CustomCSS.vue.ts:97
+#: source/tmp/CustomCSS.vue.ts:66
 msgid "Saving failed"
 msgstr ""
 
@@ -1824,15 +1820,19 @@ msgstr ""
 msgid "Set writing target…"
 msgstr ""
 
-#: source/tmp/SnippetsTab.vue.ts:50
+#: source/tmp/SnippetsTab.vue.ts:28
 msgid "Rename snippet"
 msgstr ""
 
-#: source/tmp/SnippetsTab.vue.ts:53
+#: source/tmp/SnippetsTab.vue.ts:29
 msgid "Snippets let you define reusable pieces of text with variables."
 msgstr ""
 
-#: source/tmp/SnippetsTab.vue.ts:134 source/tmp/Defaults.vue.ts:205
+#: source/tmp/SnippetsTab.vue.ts:30
+msgid "Open snippets folder"
+msgstr ""
+
+#: source/tmp/SnippetsTab.vue.ts:115 source/tmp/DefaultsTab.vue.ts:125
 msgid "Saved!"
 msgstr ""
 
@@ -1911,9 +1911,9 @@ msgstr ""
 msgid "Open in a new tab"
 msgstr ""
 
-#: source/tmp/GlobalSearch.vue.ts:109
+#: source/tmp/GlobalSearch.vue.ts:114
 #, javascript-format
-msgid "%s matches"
+msgid "%s matches across %s files"
 msgstr ""
 
 #: source/tmp/ReferencesTab.vue.ts:42
@@ -1932,7 +1932,7 @@ msgstr ""
 msgid "Empty directory"
 msgstr ""
 
-#: source/tmp/Projects-Tab.vue.ts:24
+#: source/tmp/Projects-Tab.vue.ts:19
 msgid "Zettlr also makes use of these projects:"
 msgstr ""
 
@@ -1953,7 +1953,7 @@ msgstr ""
 msgid "Charts"
 msgstr ""
 
-#: source/tmp/General-Tab.vue.ts:23
+#: source/tmp/General-Tab.vue.ts:18
 msgid ""
 "Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
 "It is Open Source, free of charge and based upon the Electron framework. "
@@ -1962,7 +1962,7 @@ msgid ""
 "possible. Below you can find all projects that Zettlr uses."
 msgstr ""
 
-#: source/tmp/General-Tab.vue.ts:24
+#: source/tmp/General-Tab.vue.ts:19
 msgid ""
 "Zettlr makes use of citeproc to display citations directly in the editor. To "
 "this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
@@ -1970,14 +1970,14 @@ msgid ""
 "information:"
 msgstr ""
 
-#: source/tmp/General-Tab.vue.ts:25
+#: source/tmp/General-Tab.vue.ts:20
 msgid ""
 "All logos and brand names are subject to their rightful owners. Besides "
 "using their code, Zettlr is in no way affiliated with any of these projects. "
 "Node.js is a trademark of Joyent, Inc."
 msgstr ""
 
-#: source/tmp/General-Tab.vue.ts:26
+#: source/tmp/General-Tab.vue.ts:21
 msgid ""
 "Zettlr offers an integration with LanguageTool.org, a service provided by "
 "LanguageTooler GmbH. Using this service requires an internet connection and "
@@ -2001,22 +2001,6 @@ msgstr ""
 msgid "Tag Cloud"
 msgstr ""
 
-#: source/tmp/Defaults.vue.ts:70
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:73
-msgid ""
-"This profile is invalid. It may contain errors, or it may be missing the "
-"writer or reader property."
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:111
-msgid "Edit the default settings for imports or exports here."
-msgstr ""
-
 #: source/tmp/PopoverDirProps.vue.ts:33
 msgid "Project Settings…"
 msgstr ""
@@ -2033,38 +2017,46 @@ msgstr ""
 msgid "characters"
 msgstr ""
 
-#: source/tmp/App.vue.ts:34
+#: source/tmp/App.vue.ts:28
 msgid "Updater"
 msgstr ""
 
-#. True as soon as the update starts
-#: source/tmp/App.vue.ts:36
-msgid "Click to start update"
-msgstr ""
-
-#: source/tmp/App.vue.ts:76
+#: source/tmp/App.vue.ts:29
 msgid "New update available"
 msgstr ""
 
-#: source/tmp/App.vue.ts:79
+#: source/tmp/App.vue.ts:30
 msgid "Your version"
 msgstr ""
 
-#: source/tmp/App.vue.ts:82
+#: source/tmp/App.vue.ts:31
 msgid ""
 "There is a new version of Zettlr available to download. Please read the "
 "changelog below."
 msgstr ""
 
-#: source/tmp/App.vue.ts:85
+#: source/tmp/App.vue.ts:32
 msgid "Downloading your update"
 msgstr ""
 
-#: source/tmp/App.vue.ts:88
+#: source/tmp/App.vue.ts:33
 msgid "No update available. You have the most recent version."
 msgstr ""
 
-#: source/tmp/App.vue.ts:133
+#: source/tmp/App.vue.ts:39
+msgid "Click to start update"
+msgstr ""
+
+#: source/tmp/App.vue.ts:42
+msgid "never"
+msgstr ""
+
+#: source/tmp/App.vue.ts:42 source/tmp/App.vue.ts:45
+#, javascript-format
+msgid "Last checked: %s"
+msgstr ""
+
+#: source/tmp/App.vue.ts:121
 msgid "Starting update …"
 msgstr ""
 
@@ -2292,11 +2284,11 @@ msgstr ""
 msgid "Go to footnote reference"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
 msgid "Disabled"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
 msgid "Custom"
 msgstr ""
 

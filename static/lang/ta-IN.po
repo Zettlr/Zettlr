@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-02-24 15:35+0000\n"
+"POT-Creation-Date: 2024-03-01 19:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: தமிழ்நேரம் <https://TamilNeram.github.io>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -428,7 +428,6 @@ msgid "Show statusbar"
 msgstr "நிலைப்பட்டியைக் காட்டு"
 
 #: source/win-preferences/schema/appearance.ts:219
-#: source/tmp/CustomCSS.vue.ts:31
 msgid "Custom CSS"
 msgstr "தனிப்பயன் சிஎச்எச்"
 
@@ -996,7 +995,6 @@ msgstr "சரி"
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
 #: source/app/service-providers/menu/menu.darwin.ts:712
 #: source/app/service-providers/menu/menu.win32.ts:685
-#: source/tmp/CustomCSS.vue.ts:49
 msgid "Cancel"
 msgstr "ரத்துசெய்"
 
@@ -1196,8 +1194,7 @@ msgstr "ஏற்றுமதி இலக்கைத் தேர்வுச�
 #: source/app/service-providers/commands/export.ts:114
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/app/service-providers/menu/menu.win32.ts:162
-#: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
-#: source/tmp/SnippetsTab.vue.ts:47 source/tmp/Defaults.vue.ts:114
+#: source/tmp/CustomCSS.vue.ts:24 source/tmp/SnippetsTab.vue.ts:27
 msgid "Save"
 msgstr "சேமிக்கவும்"
 
@@ -1236,20 +1233,20 @@ msgstr "ஆவணம் மிக நீளமானது"
 msgid "offline"
 msgstr "இணையமில்லாமல்"
 
-#: source/app/service-providers/citeproc/index.ts:248
-#: source/app/service-providers/citeproc/index.ts:455
+#: source/app/service-providers/citeproc/index.ts:249
+#: source/app/service-providers/citeproc/index.ts:457
 msgid "The citation database could not be loaded"
 msgstr "மேற்கோள் தரவுத்தளத்தை ஏற்ற முடியவில்லை"
 
-#: source/app/service-providers/citeproc/index.ts:443
+#: source/app/service-providers/citeproc/index.ts:444
 msgid "Changes to the library file detected. Reloading …"
 msgstr "கண்டறியப்பட்ட நூலகக் கோப்பில் மாற்றங்கள். மீண்டும் ஏற்றுதல்…"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 #: source/app/service-providers/documents/index.ts:349
-#: source/tmp/CustomCSS.vue.ts:65 source/tmp/SnippetsTab.vue.ts:65
-#: source/tmp/Defaults.vue.ts:132
+#: source/tmp/CustomCSS.vue.ts:34 source/tmp/SnippetsTab.vue.ts:46
+#: source/tmp/DefaultsTab.vue.ts:48
 msgid "Unsaved changes"
 msgstr "சேமிக்கப்படாத மாற்றங்கள்"
 
@@ -1446,7 +1443,6 @@ msgstr "இறக்குமதி அகராதி…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:287
 #: source/app/service-providers/menu/menu.win32.ts:281
-#: source/tmp/Defaults.vue.ts:76
 #: source/win-main/file-manager/util/file-item-context.ts:43
 msgid "Rename file"
 msgstr "கோப்பை மறுபெயரிடுங்கள்"
@@ -1674,7 +1670,7 @@ msgid "Help"
 msgstr "உதவி"
 
 #: source/app/service-providers/menu/menu.darwin.ts:648
-#: source/app/service-providers/menu/menu.win32.ts:621 source/tmp/App.vue.ts:94
+#: source/app/service-providers/menu/menu.win32.ts:621 source/tmp/App.vue.ts:34
 msgid "Check for updates"
 msgstr "புதுப்பிப்புகளை சரிபார்க்கவும்"
 
@@ -1723,17 +1719,17 @@ msgstr ""
 "மறுதொடக்கத்திற்குப் பிறகு, நீங்கள் ஏற்றிய கோப்புகளின் அளவு மற்றும் உங்கள் வட்டின் வேகத்தைப் "
 "பொறுத்து சில தருணங்கள் ஆகலாம். சாளரம் (கள்) பின்னர் காண்பிக்கப்படும்."
 
-#: source/app/service-providers/updates/index.ts:294
+#: source/app/service-providers/updates/index.ts:298
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "புதுப்பிப்புகளை சரிபார்க்க முடியவில்லை: சேவையக பிழை (நிலை குறியீடு: %s)"
 
-#: source/app/service-providers/updates/index.ts:296
+#: source/app/service-providers/updates/index.ts:300
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr "புதுப்பிப்புகளை சரிபார்க்க முடியவில்லை: வாடிக்கையாளர் பிழை (நிலை குறியீடு: %s)"
 
-#: source/app/service-providers/updates/index.ts:298
+#: source/app/service-providers/updates/index.ts:302
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -1744,21 +1740,21 @@ msgstr ""
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
 #. offline.
-#: source/app/service-providers/updates/index.ts:303
+#: source/app/service-providers/updates/index.ts:307
 msgid "Could not check for updates: Could not establish connection"
 msgstr "புதுப்பிப்புகளை சரிபார்க்க முடியவில்லை: இணைப்பை நிறுவ முடியவில்லை"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:306
+#: source/app/service-providers/updates/index.ts:310
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "புதுப்பிப்புகளை சரிபார்க்க முடியவில்லை. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:322
+#: source/app/service-providers/updates/index.ts:326
 msgid "Could not check for updates: Server hasn't sent any data"
 msgstr "புதுப்பிப்புகளை சரிபார்க்க முடியவில்லை: சேவையகம் எந்த தரவையும் அனுப்பவில்லை"
 
-#: source/app/service-providers/updates/index.ts:579
+#: source/app/service-providers/updates/index.ts:585
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr "பதிப்பு %s க்கான புதுப்பிப்பு கிடைக்கிறது!"
@@ -1846,7 +1842,7 @@ msgstr "தொடர்புடைய கோப்புகள்"
 msgid "Other files"
 msgstr "பிற கோப்புகள்"
 
-#: source/tmp/CustomCSS.vue.ts:32
+#: source/tmp/CustomCSS.vue.ts:23
 msgid ""
 "Here you can override the styles of Zettlr to customise it even further. "
 "<strong>Attention: This file overrides all CSS directives! Never alter the "
@@ -1857,12 +1853,12 @@ msgstr ""
 "கோப்பு அனைத்து சிஎச்எச் வழிமுறைகளையும் மீறுகிறது! உறுப்புகளின் வடிவவியலை ஒருபோதும் "
 "மாற்ற வேண்டாம், இல்லையெனில் பயன்பாடு தேவையற்ற நடத்தையை அம்பலப்படுத்தக்கூடும்! </strong>"
 
-#: source/tmp/CustomCSS.vue.ts:88 source/tmp/SnippetsTab.vue.ts:124
-#: source/tmp/Defaults.vue.ts:196
+#: source/tmp/CustomCSS.vue.ts:56 source/tmp/SnippetsTab.vue.ts:105
+#: source/tmp/DefaultsTab.vue.ts:115
 msgid "Saving …"
 msgstr "சேமிப்பு…"
 
-#: source/tmp/CustomCSS.vue.ts:97
+#: source/tmp/CustomCSS.vue.ts:66
 msgid "Saving failed"
 msgstr "சேமிப்பு தோல்வியடைந்தது"
 
@@ -1912,16 +1908,21 @@ msgstr "மீட்டமை"
 msgid "Set writing target…"
 msgstr "எழுதும் இலக்கை அமைக்கவும்…"
 
-#: source/tmp/SnippetsTab.vue.ts:50
+#: source/tmp/SnippetsTab.vue.ts:28
 msgid "Rename snippet"
 msgstr "துணுக்கை மறுபெயரிடுங்கள்"
 
-#: source/tmp/SnippetsTab.vue.ts:53
+#: source/tmp/SnippetsTab.vue.ts:29
 msgid "Snippets let you define reusable pieces of text with variables."
 msgstr ""
 "துணுக்குகள் மீண்டும் பயன்படுத்தக்கூடிய உரையின் துண்டுகளை மாறிகள் வரையறுக்க அனுமதிக்கின்றன."
 
-#: source/tmp/SnippetsTab.vue.ts:134 source/tmp/Defaults.vue.ts:205
+#: source/tmp/SnippetsTab.vue.ts:30
+#, fuzzy
+msgid "Open snippets folder"
+msgstr "திட்டக் கோப்புறை திற"
+
+#: source/tmp/SnippetsTab.vue.ts:115 source/tmp/DefaultsTab.vue.ts:125
 msgid "Saved!"
 msgstr "சேமிக்கப்பட்டது!"
 
@@ -2002,10 +2003,10 @@ msgstr "முடிவுகளை மாற்றவும்"
 msgid "Open in a new tab"
 msgstr "புதிய தாவலில் திறக்கவும்"
 
-#: source/tmp/GlobalSearch.vue.ts:109
-#, javascript-format
-msgid "%s matches"
-msgstr "%s போட்டிகள்"
+#: source/tmp/GlobalSearch.vue.ts:114
+#, fuzzy, javascript-format
+msgid "%s matches across %s files"
+msgstr "குறிச்சொல்லை \"%s\" ஐ \"%s\" உடன் %s கோப்புகளில் மாற்றவா?"
 
 #: source/tmp/ReferencesTab.vue.ts:42
 msgid "There are no citations in this document."
@@ -2023,7 +2024,7 @@ msgstr "எந்த கோப்பகமும் தேர்ந்தெட�
 msgid "Empty directory"
 msgstr "வெற்று அடைவு"
 
-#: source/tmp/Projects-Tab.vue.ts:24
+#: source/tmp/Projects-Tab.vue.ts:19
 msgid "Zettlr also makes use of these projects:"
 msgstr "இந்த திட்டங்களையும் செட்லர் பயன்படுத்துகிறது:"
 
@@ -2044,7 +2045,7 @@ msgstr "கட்டளை"
 msgid "Charts"
 msgstr "விளக்கப்படங்கள்"
 
-#: source/tmp/General-Tab.vue.ts:23
+#: source/tmp/General-Tab.vue.ts:18
 msgid ""
 "Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
 "It is Open Source, free of charge and based upon the Electron framework. "
@@ -2058,7 +2059,7 @@ msgstr ""
 "நன்றி தெரிவிக்க செட்லர் நன்றி. அவர்கள் இல்லாமல், செட்லர் சாத்தியமில்லை. செட்லர் பயன்படுத்தும் "
 "அனைத்து திட்டங்களையும் கீழே காணலாம்."
 
-#: source/tmp/General-Tab.vue.ts:24
+#: source/tmp/General-Tab.vue.ts:19
 msgid ""
 "Zettlr makes use of citeproc to display citations directly in the editor. To "
 "this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
@@ -2070,7 +2071,7 @@ msgstr ""
 "பயன்படுத்துகிறார். எழுத்தாளர் உருவகதரவுடன் கோப்புகள் மாற்றப்படாமல் அனுப்பப்பட்டுள்ளன. மேலும் "
 "தகவல்:"
 
-#: source/tmp/General-Tab.vue.ts:25
+#: source/tmp/General-Tab.vue.ts:20
 msgid ""
 "All logos and brand names are subject to their rightful owners. Besides "
 "using their code, Zettlr is in no way affiliated with any of these projects. "
@@ -2080,7 +2081,7 @@ msgstr ""
 "உட்பட்டவை. அவற்றின் குறியீட்டைப் பயன்படுத்துவதைத் தவிர, செட்லர் இந்த திட்டங்களில் எந்தவொரு "
 "வகையிலும் எந்த வகையிலும் இணைக்கப்படவில்லை. நோடு.சேஎச் என்பது சாயண்ட், இன்க். வணிக குறி"
 
-#: source/tmp/General-Tab.vue.ts:26
+#: source/tmp/General-Tab.vue.ts:21
 msgid ""
 "Zettlr offers an integration with LanguageTool.org, a service provided by "
 "LanguageTooler GmbH. Using this service requires an internet connection and "
@@ -2108,26 +2109,6 @@ msgstr "குறிச்சொற்களை வடிகட்டி…"
 msgid "Tag Cloud"
 msgstr "குறிச்சொல் மேகம்"
 
-#: source/tmp/Defaults.vue.ts:70
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
-msgstr ""
-"இந்த சுயவிவரம் பாதுகாக்கப்படுகிறது. இதன் பொருள் நீங்கள் அதை அகற்றும்போது அல்லது "
-"மறுபெயரிடும்போது அது மீட்டமைக்கப்படும்."
-
-#: source/tmp/Defaults.vue.ts:73
-msgid ""
-"This profile is invalid. It may contain errors, or it may be missing the "
-"writer or reader property."
-msgstr ""
-"இந்த சுயவிவரம் தவறானது. அதில் பிழைகள் இருக்கலாம், அல்லது எழுத்தாளர் அல்லது வாசகர் பண்பு "
-"இல்லாமல் இருக்கலாம்."
-
-#: source/tmp/Defaults.vue.ts:111
-msgid "Edit the default settings for imports or exports here."
-msgstr "இறக்குமதி அல்லது ஏற்றுமதிக்கான இயல்புநிலை அமைப்புகளை இங்கே திருத்தவும்."
-
 #: source/tmp/PopoverDirProps.vue.ts:33
 msgid "Project Settings…"
 msgstr "திட்ட அமைப்புகள்…"
@@ -2144,38 +2125,47 @@ msgstr "சொற்கள்"
 msgid "characters"
 msgstr "எழுத்துக்கள்"
 
-#: source/tmp/App.vue.ts:34
+#: source/tmp/App.vue.ts:28
 msgid "Updater"
 msgstr "புதுப்பிப்பவர்"
 
-#. True as soon as the update starts
-#: source/tmp/App.vue.ts:36
-msgid "Click to start update"
-msgstr "புதுப்பிப்பைத் தொடங்க சொடுக்கவும்"
-
-#: source/tmp/App.vue.ts:76
+#: source/tmp/App.vue.ts:29
 msgid "New update available"
 msgstr "புதிய புதுப்பிப்பு கிடைக்கிறது"
 
-#: source/tmp/App.vue.ts:79
+#: source/tmp/App.vue.ts:30
 msgid "Your version"
 msgstr "உங்கள் பதிப்பு"
 
-#: source/tmp/App.vue.ts:82
+#: source/tmp/App.vue.ts:31
 msgid ""
 "There is a new version of Zettlr available to download. Please read the "
 "changelog below."
 msgstr "பதிவிறக்கம் செய்ய செட்லரின் புதிய பதிப்பு உள்ளது. கீழே உள்ள மாற்றங்களைபடிக்கவும்."
 
-#: source/tmp/App.vue.ts:85
+#: source/tmp/App.vue.ts:32
 msgid "Downloading your update"
 msgstr "உங்கள் புதுப்பிப்பைப் பதிவிறக்குகிறது"
 
-#: source/tmp/App.vue.ts:88
+#: source/tmp/App.vue.ts:33
 msgid "No update available. You have the most recent version."
 msgstr "புதுப்பிப்பு எதுவும் கிடைக்கவில்லை. உங்களிடம் மிக சமீபத்திய பதிப்பு உள்ளது."
 
-#: source/tmp/App.vue.ts:133
+#: source/tmp/App.vue.ts:39
+msgid "Click to start update"
+msgstr "புதுப்பிப்பைத் தொடங்க சொடுக்கவும்"
+
+#: source/tmp/App.vue.ts:42
+#, fuzzy
+msgid "never"
+msgstr "ஒருபோதும்"
+
+#: source/tmp/App.vue.ts:42 source/tmp/App.vue.ts:45
+#, javascript-format
+msgid "Last checked: %s"
+msgstr ""
+
+#: source/tmp/App.vue.ts:121
 msgid "Starting update …"
 msgstr "புதுப்பிப்பு தொடங்குகிறது …"
 
@@ -2403,11 +2393,11 @@ msgstr "முன்னிலைப்படுத்துதல் இல்�
 msgid "Go to footnote reference"
 msgstr "அடிக்குறிப்பு குறிப்புக்குச் செல்லுங்கள்"
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
 msgid "Disabled"
 msgstr "முடக்கப்பட்டது"
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
 msgid "Custom"
 msgstr "தனிப்பயன்"
 
@@ -2946,6 +2936,27 @@ msgstr ","
 #: source/common/util/localise-number.ts:29
 msgid "."
 msgstr "."
+
+#, javascript-format
+#~ msgid "%s matches"
+#~ msgstr "%s போட்டிகள்"
+
+#~ msgid ""
+#~ "This profile is protected. This means that it will be restored when you "
+#~ "remove or rename it."
+#~ msgstr ""
+#~ "இந்த சுயவிவரம் பாதுகாக்கப்படுகிறது. இதன் பொருள் நீங்கள் அதை அகற்றும்போது அல்லது "
+#~ "மறுபெயரிடும்போது அது மீட்டமைக்கப்படும்."
+
+#~ msgid ""
+#~ "This profile is invalid. It may contain errors, or it may be missing the "
+#~ "writer or reader property."
+#~ msgstr ""
+#~ "இந்த சுயவிவரம் தவறானது. அதில் பிழைகள் இருக்கலாம், அல்லது எழுத்தாளர் அல்லது வாசகர் "
+#~ "பண்பு இல்லாமல் இருக்கலாம்."
+
+#~ msgid "Edit the default settings for imports or exports here."
+#~ msgstr "இறக்குமதி அல்லது ஏற்றுமதிக்கான இயல்புநிலை அமைப்புகளை இங்கே திருத்தவும்."
 
 #~ msgid ""
 #~ "Pandoc has not been found on this system. Please install Pandoc prior to "
