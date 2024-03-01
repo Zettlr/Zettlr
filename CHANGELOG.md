@@ -64,6 +64,9 @@ we broke during a refactor of the Markdown parser. This update partially
 restores this link functionality, allowing you to `Cmd/Ctrl-Click` them to
 follow these links again.
 
+Note that we have not yet implemented the functionality of auto-renaming files
+or showing tooltips on these links.
+
 ## GUI and Functionality
 
 - **Feature**: Zettlr now supports titles in internal (wiki) links; the default
@@ -158,6 +161,9 @@ follow these links again.
   changing this as well
 - The updater now contains a message indicating when Zettlr last checked for
   updates (#4963)
+- Fixed a bug that would sometimes make the "New file" command hang (#4785)
+- Fixed a bug on Windows and Linux that would not make the context menu on the
+  statusbars' MagicQuotes handler appear
 
 ## Under the Hood
 
@@ -169,11 +175,10 @@ follow these links again.
 - Simplified tab bar tab retention logic across reloads
 - Add the ability to programmatically open the assets window with specified tab
 - Bump the bundled Pandoc to version `3.1.12`
-- Bump Electron to version 29
+- Bump Electron to version `29`
 - Failure to fetch a link preview will now simply log a verbose message instead
   of an error
 - Reimplement configuration guard options as Maps to allow for volatile state
-- Begin migrating application state to Pinia
 - Fully remove the renderers's dependency on Node.js's path module to prepare
   for fully sandboxing the window code; instead polyfill the required functions,
   testing them against the module's behavior
@@ -195,7 +200,6 @@ follow these links again.
 - Removed a check for whether certain commands exist; instead we now attempt to
   run them, and if they do not succeed, we catch that error instead; removed
   `commandExists` as it appears to have a few minor issues on Windows installs
-- Fixed a bug that would sometimes make the "New file" command hang (#4785)
 - The config provider now allows specifying options that will cause an event to
   be emitted instructing every open MainEditor to reload itself; this can be
   used to change options that affect non-reloadable components such as the
@@ -206,8 +210,6 @@ follow these links again.
 - Added the commands `shortcut:install` and `shortcut:uninstall` to add develop
   shortcuts on Linux systems, allowing the simple launching of a binary compiled
   from source (rather than the provided binaries)
-- Fixed a bug on Windows and Linux that would not make the context menu on the
-  statusbars' MagicQuotes handler appear
 - Fixed an issue with showing the appropriate `platformVersion` in the about
   debug info tab
 
