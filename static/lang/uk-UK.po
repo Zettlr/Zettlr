@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-03-01 19:46+0000\n"
+"POT-Creation-Date: 2024-03-01 21:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -778,155 +778,155 @@ msgstr ""
 msgid "Writing direction"
 msgstr "Шукати у каталозі"
 
-#: source/win-preferences/schema/editor.ts:52
+#: source/win-preferences/schema/editor.ts:57
 msgid "Markdown rendering"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:59
+#: source/win-preferences/schema/editor.ts:64
 msgid ""
 "Check to enable live rendering of various Markdown elements to formatted "
 "appearance. This hides formatting characters (such as **text**) or renders "
 "images instead of their link."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:67
+#: source/win-preferences/schema/editor.ts:72
 msgid "Render Citations"
 msgstr "Відображення цитат"
 
-#: source/win-preferences/schema/editor.ts:72
+#: source/win-preferences/schema/editor.ts:77
 msgid "Render Iframes"
 msgstr "Відображення фреймів"
 
-#: source/win-preferences/schema/editor.ts:77
+#: source/win-preferences/schema/editor.ts:82
 msgid "Render Images"
 msgstr "Відображення зображень"
 
-#: source/win-preferences/schema/editor.ts:82
+#: source/win-preferences/schema/editor.ts:87
 msgid "Render Links"
 msgstr "Відображення посилань"
 
-#: source/win-preferences/schema/editor.ts:87
+#: source/win-preferences/schema/editor.ts:92
 msgid "Render Formulae"
 msgstr "Відображення формул"
 
-#: source/win-preferences/schema/editor.ts:92
+#: source/win-preferences/schema/editor.ts:97
 msgid "Render Tasks"
 msgstr "Відображення завдань"
 
-#: source/win-preferences/schema/editor.ts:97
+#: source/win-preferences/schema/editor.ts:102
 msgid "Hide heading characters"
 msgstr "Ховати символи заголовків"
 
-#: source/win-preferences/schema/editor.ts:102
+#: source/win-preferences/schema/editor.ts:107
 msgid "Render emphasis"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:111
+#: source/win-preferences/schema/editor.ts:116
 msgid "Formatting characters for bold and italic"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:121
-#: source/win-preferences/schema/editor.ts:122
+#: source/win-preferences/schema/editor.ts:126
+#: source/win-preferences/schema/editor.ts:127
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 msgid "Bold"
 msgstr "Жирний"
 
-#: source/win-preferences/schema/editor.ts:129
-#: source/win-preferences/schema/editor.ts:130
+#: source/win-preferences/schema/editor.ts:134
+#: source/win-preferences/schema/editor.ts:135
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
 msgid "Italics"
 msgstr "Курсив"
 
-#: source/win-preferences/schema/editor.ts:138
+#: source/win-preferences/schema/editor.ts:143
 msgid "Check Markdown for style issues"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:144
+#: source/win-preferences/schema/editor.ts:149
 #, fuzzy
 msgid "Table Editor"
 msgstr "Дозволити Редактор таблиць"
 
-#: source/win-preferences/schema/editor.ts:155
+#: source/win-preferences/schema/editor.ts:160
 msgid ""
 "The Table Editor is an interactive interface that simplifies creation and "
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:160
+#: source/win-preferences/schema/editor.ts:165
 #, fuzzy
 msgid "Distraction-free mode"
 msgstr "Режим без відволікання"
 
-#: source/win-preferences/schema/editor.ts:166
+#: source/win-preferences/schema/editor.ts:171
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "Робити блідими рядки, які не під фокусом (в режимі без відволікання)"
 
-#: source/win-preferences/schema/editor.ts:171
+#: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction free mode"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:177
+#: source/win-preferences/schema/editor.ts:182
 msgid "Word counter"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:184
+#: source/win-preferences/schema/editor.ts:189
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "Рахувати символи замість слів (напр. для китайської)"
 
-#: source/win-preferences/schema/editor.ts:190
+#: source/win-preferences/schema/editor.ts:195
 msgid "Readability mode"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:197
+#: source/win-preferences/schema/editor.ts:202
 msgid "Algorithm"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:209
+#: source/win-preferences/schema/editor.ts:214
 #, fuzzy
 msgid "Image size"
 msgstr "Зображення"
 
-#: source/win-preferences/schema/editor.ts:215
+#: source/win-preferences/schema/editor.ts:220
 #, fuzzy
 msgid "Maximum width of images (%s %)"
 msgstr "Максимальна ширина зображень (відсотки)"
 
-#: source/win-preferences/schema/editor.ts:222
+#: source/win-preferences/schema/editor.ts:227
 #, fuzzy
 msgid "Maximum height of images (%s %)"
 msgstr "Максимальна висота зображень (відсотки)"
 
-#: source/win-preferences/schema/editor.ts:230
+#: source/win-preferences/schema/editor.ts:235
 msgid "Other settings"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:236
+#: source/win-preferences/schema/editor.ts:241
 #, fuzzy
 msgid "Font size"
 msgstr "Розмір шрифту редактора"
 
-#: source/win-preferences/schema/editor.ts:243
+#: source/win-preferences/schema/editor.ts:248
 #, fuzzy
 msgid "Indentation size (number of spaces)"
 msgstr "Кількість символів для відступу"
 
-#: source/win-preferences/schema/editor.ts:250
+#: source/win-preferences/schema/editor.ts:255
 #, fuzzy
 msgid "Indent using tabs instead of spaces"
 msgstr "Кількість символів для відступу"
 
-#: source/win-preferences/schema/editor.ts:257
+#: source/win-preferences/schema/editor.ts:262
 #, fuzzy
 msgid "Suggest emojis during autocompletion"
 msgstr "Використовувати пробіли для автодоповнення"
 
-#: source/win-preferences/schema/editor.ts:262
+#: source/win-preferences/schema/editor.ts:267
 msgid "Show link previews"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:268
+#: source/win-preferences/schema/editor.ts:273
 msgid "Automatically close matching character pairs"
 msgstr "Автоматично закривати відповідні пари символів"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-03-01 19:46+0000\n"
+"POT-Creation-Date: 2024-03-01 21:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: தமிழ்நேரம் <https://TamilNeram.github.io>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -781,158 +781,158 @@ msgstr ""
 msgid "Writing direction"
 msgstr "கோப்பகத்தில் காணலாம்"
 
-#: source/win-preferences/schema/editor.ts:52
+#: source/win-preferences/schema/editor.ts:57
 msgid "Markdown rendering"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:59
+#: source/win-preferences/schema/editor.ts:64
 msgid ""
 "Check to enable live rendering of various Markdown elements to formatted "
 "appearance. This hides formatting characters (such as **text**) or renders "
 "images instead of their link."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:67
+#: source/win-preferences/schema/editor.ts:72
 msgid "Render Citations"
 msgstr "மேற்கோள்களை வழங்கவும்"
 
-#: source/win-preferences/schema/editor.ts:72
+#: source/win-preferences/schema/editor.ts:77
 msgid "Render Iframes"
 msgstr "இசட்டங்களை வழங்கவும்"
 
-#: source/win-preferences/schema/editor.ts:77
+#: source/win-preferences/schema/editor.ts:82
 msgid "Render Images"
 msgstr "படங்களை வழங்கவும்"
 
-#: source/win-preferences/schema/editor.ts:82
+#: source/win-preferences/schema/editor.ts:87
 msgid "Render Links"
 msgstr "இணைப்புகளை வழங்கவும்"
 
-#: source/win-preferences/schema/editor.ts:87
+#: source/win-preferences/schema/editor.ts:92
 msgid "Render Formulae"
 msgstr "சூத்திரங்களை வழங்கவும்"
 
-#: source/win-preferences/schema/editor.ts:92
+#: source/win-preferences/schema/editor.ts:97
 msgid "Render Tasks"
 msgstr "பணிகளை வழங்கவும்"
 
-#: source/win-preferences/schema/editor.ts:97
+#: source/win-preferences/schema/editor.ts:102
 msgid "Hide heading characters"
 msgstr "தலைப்பு எழுத்துக்களை மறைக்கவும்"
 
-#: source/win-preferences/schema/editor.ts:102
+#: source/win-preferences/schema/editor.ts:107
 msgid "Render emphasis"
 msgstr "முக்கியத்துவம் அளிக்கவும்"
 
-#: source/win-preferences/schema/editor.ts:111
+#: source/win-preferences/schema/editor.ts:116
 msgid "Formatting characters for bold and italic"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:121
-#: source/win-preferences/schema/editor.ts:122
+#: source/win-preferences/schema/editor.ts:126
+#: source/win-preferences/schema/editor.ts:127
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 msgid "Bold"
 msgstr "தடிமான"
 
-#: source/win-preferences/schema/editor.ts:129
-#: source/win-preferences/schema/editor.ts:130
+#: source/win-preferences/schema/editor.ts:134
+#: source/win-preferences/schema/editor.ts:135
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
 msgid "Italics"
 msgstr "சாய்வு"
 
-#: source/win-preferences/schema/editor.ts:138
+#: source/win-preferences/schema/editor.ts:143
 msgid "Check Markdown for style issues"
 msgstr "பாணி சிக்கல்களுக்கு கீழ்குறி சரிபார்க்கவும்"
 
-#: source/win-preferences/schema/editor.ts:144
+#: source/win-preferences/schema/editor.ts:149
 #, fuzzy
 msgid "Table Editor"
 msgstr "அட்டவணை எடிட்டரை இயக்கு"
 
-#: source/win-preferences/schema/editor.ts:155
+#: source/win-preferences/schema/editor.ts:160
 msgid ""
 "The Table Editor is an interactive interface that simplifies creation and "
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:160
+#: source/win-preferences/schema/editor.ts:165
 #, fuzzy
 msgid "Distraction-free mode"
 msgstr "கவனச்சிதறல் இல்லாத பயன்முறை"
 
-#: source/win-preferences/schema/editor.ts:166
+#: source/win-preferences/schema/editor.ts:171
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "கவனச்சிதறல் இல்லாத பயன்முறையில் முடக்கு மையப்படுத்தப்படாத கோடுகள்"
 
-#: source/win-preferences/schema/editor.ts:171
+#: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction free mode"
 msgstr "கருவிப்பட்டியை கவனச்சிதறல் இல்லாத பயன்முறையில் மறைக்கவும்"
 
-#: source/win-preferences/schema/editor.ts:177
+#: source/win-preferences/schema/editor.ts:182
 #, fuzzy
 msgid "Word counter"
 msgstr "சொல் எண்ணிக்கை"
 
-#: source/win-preferences/schema/editor.ts:184
+#: source/win-preferences/schema/editor.ts:189
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "சொற்களுக்கு பதிலாக எழுத்துக்களை எண்ணுங்கள் (எ.கா., சீனருக்கு)"
 
-#: source/win-preferences/schema/editor.ts:190
+#: source/win-preferences/schema/editor.ts:195
 #, fuzzy
 msgid "Readability mode"
 msgstr "வாசிப்பு முறை (%s)"
 
-#: source/win-preferences/schema/editor.ts:197
+#: source/win-preferences/schema/editor.ts:202
 msgid "Algorithm"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:209
+#: source/win-preferences/schema/editor.ts:214
 #, fuzzy
 msgid "Image size"
 msgstr "படம்"
 
-#: source/win-preferences/schema/editor.ts:215
+#: source/win-preferences/schema/editor.ts:220
 #, fuzzy
 msgid "Maximum width of images (%s %)"
 msgstr "படங்களின் அதிகபட்ச அகலம் (விழுக்காடு)"
 
-#: source/win-preferences/schema/editor.ts:222
+#: source/win-preferences/schema/editor.ts:227
 #, fuzzy
 msgid "Maximum height of images (%s %)"
 msgstr "படங்களின் அதிகபட்ச உயரம் (விழுக்காடு)"
 
-#: source/win-preferences/schema/editor.ts:230
+#: source/win-preferences/schema/editor.ts:235
 #, fuzzy
 msgid "Other settings"
 msgstr "பிற கோப்புகள்"
 
-#: source/win-preferences/schema/editor.ts:236
+#: source/win-preferences/schema/editor.ts:241
 #, fuzzy
 msgid "Font size"
 msgstr "ஆசிரியர் எழுத்துரு அளவு"
 
-#: source/win-preferences/schema/editor.ts:243
+#: source/win-preferences/schema/editor.ts:248
 #, fuzzy
 msgid "Indentation size (number of spaces)"
 msgstr "பின்வரும் எண்ணிக்கையிலான இடைவெளிகளால் உள்தள்ளுங்கள்"
 
-#: source/win-preferences/schema/editor.ts:250
+#: source/win-preferences/schema/editor.ts:255
 #, fuzzy
 msgid "Indent using tabs instead of spaces"
 msgstr "தாவல்களைப் பயன்படுத்தி உள்தள்ளல்"
 
-#: source/win-preferences/schema/editor.ts:257
+#: source/win-preferences/schema/editor.ts:262
 #, fuzzy
 msgid "Suggest emojis during autocompletion"
 msgstr "தன்னியக்கவியல் போது இடங்களை ஏற்றுக்கொள்ளுங்கள்"
 
-#: source/win-preferences/schema/editor.ts:262
+#: source/win-preferences/schema/editor.ts:267
 msgid "Show link previews"
 msgstr "இணைப்பு முன்னோட்டங்களைக் காட்டு"
 
-#: source/win-preferences/schema/editor.ts:268
+#: source/win-preferences/schema/editor.ts:273
 msgid "Automatically close matching character pairs"
 msgstr "பொருந்தக்கூடிய எழுத்து சோடிகளை தானாக மூடு"
 
