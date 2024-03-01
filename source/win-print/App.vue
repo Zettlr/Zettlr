@@ -65,9 +65,15 @@ const windowTitle = computed(() => {
   }
 })
 
-// TODO: We do need to retrieve the file from main so that it's served in the
-// same "origin" 🫠
-const fileUrl = computed(() => `safe-file://${filePath}`)
+// DEBUG BUG NOTE TODO: Using the "file" scheme is deprecated. Instead, we
+// should use a custom scheme. So why do we use "file://" here? Well, since we
+// are rendering the file in an iframe, that iframe needs to be from the same
+// origin as the surrounding document. And since Forge (at the time of writing)
+// serves files exclusively from the file://-protocol, we need to utilize the
+// same one here.
+// This will be fixed in an upcoming version of Forge, see:
+// https://github.com/electron/forge/issues/3508
+const fileUrl = computed(() => `file://${filePath}`)
 
 function handleClick (buttonID?: string): void {
   if (buttonID === 'print') {
@@ -81,4 +87,3 @@ function handleClick (buttonID?: string): void {
 <style lang="less">
 //
 </style>
-@common/util/renderer-path-polyfill

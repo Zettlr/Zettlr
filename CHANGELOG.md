@@ -164,6 +164,7 @@ or showing tooltips on these links.
 - Fixed a bug that would sometimes make the "New file" command hang (#4785)
 - Fixed a bug on Windows and Linux that would not make the context menu on the
   statusbars' MagicQuotes handler appear
+- Fixed a bug in the print window (#4902)
 
 ## Under the Hood
 
