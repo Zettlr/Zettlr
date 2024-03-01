@@ -764,7 +764,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/packager@npm:^18.0.0":
+"@electron/packager@npm:^18.1.2":
   version: 18.1.3
   resolution: "@electron/packager@npm:18.1.3"
   dependencies:
@@ -2603,13 +2603,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xmldom/xmldom@npm:^0.8.8":
-  version: 0.8.10
-  resolution: "@xmldom/xmldom@npm:0.8.10"
-  checksum: 4c136aec31fb3b49aaa53b6fcbfe524d02a1dc0d8e17ee35bd3bf35e9ce1344560481cd1efd086ad1a4821541482528672306d5e37cdbd187f33d7fadd3e2cf0
-  languageName: node
-  linkType: hard
-
 "@xtuc/ieee754@npm:^1.2.0":
   version: 1.2.0
   resolution: "@xtuc/ieee754@npm:1.2.0"
@@ -3670,7 +3663,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chrome-trace-event@npm:^1.0.2, chrome-trace-event@npm:^1.0.3":
 "chrome-trace-event@npm:^1.0.2, chrome-trace-event@npm:^1.0.3":
   version: 1.0.3
   resolution: "chrome-trace-event@npm:1.0.3"
@@ -5275,16 +5267,6 @@ __metadata:
     buffer-equal: ^1.0.0
     minimatch: ^3.0.4
   checksum: 05e7381509b17cb4e6791bd9569c12ce4267f44b1ee36594946ed895ed7ad24da9285130dc42af3a60707d58c76307bb3a1cbae2acd0a9cce8c74664e6a26828
-  languageName: node
-  linkType: hard
-
-"dir-compare@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "dir-compare@npm:4.2.0"
-  dependencies:
-    minimatch: ^3.0.5
-    p-limit: "^3.1.0 "
-  checksum: 138ee3c7716f45c1dc100efdf6b9517459428f1cb83fecda1f0dc633326d911a01f6456ff68333f916209649321c70fa004f448f137531664582ecddde4e2601
   languageName: node
   linkType: hard
 
@@ -10597,7 +10579,6 @@ __metadata:
   linkType: hard
 
 "p-limit@npm:^3.0.2, p-limit@npm:^3.1.0 ":
-"p-limit@npm:^3.0.2, p-limit@npm:^3.1.0 ":
   version: 3.1.0
   resolution: "p-limit@npm:3.1.0"
   dependencies:
@@ -10909,17 +10890,6 @@ __metadata:
     base64-js: ^1.5.1
     xmlbuilder: ^15.1.1
   checksum: e21390fab8a3c388f8f51b76c0aa187242a40537119ce865d8637630e7d7df79b21f841ec6a4668e7c68d409a6f584d696619099a6125d28011561639c0823b8
-  languageName: node
-  linkType: hard
-
-"plist@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "plist@npm:3.1.0"
-  dependencies:
-    "@xmldom/xmldom": ^0.8.8
-    base64-js: ^1.5.1
-    xmlbuilder: ^15.1.1
-  checksum: c8ea013da8646d4c50dff82f9be39488054621cc229957621bb00add42b5d4ce3657cf58d4b10c50f7dea1a81118f825838f838baeb4e6f17fab453ecf91d424
   languageName: node
   linkType: hard
 
