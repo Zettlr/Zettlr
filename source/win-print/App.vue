@@ -11,13 +11,13 @@
     <iframe
       v-bind:src="fileUrl"
       style="position: relative; width: 0; height: 0; width: 100%; height: 100%; border: none"
-      sandbox=""
+      sandbox="allow-same-origin allow-modals"
     >
     </iframe>
   </WindowChrome>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -34,60 +34,48 @@
 
 import { trans } from '@common/i18n-renderer'
 import WindowChrome from '@common/vue/window/WindowChrome.vue'
-import { defineComponent } from 'vue'
+import { computed } from 'vue'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 
-export default defineComponent({
-  components: {
-    WindowChrome
+const toolbarControls: ToolbarControl[] = [
+  {
+    type: 'spacer',
+    id: 'spacer-one',
+    size: '5x'
   },
-  data: function () {
-    return {
-      filePath: ''
-    }
-  },
-  computed: {
-    windowTitle: function (): string {
-      if (this.filePath !== '') {
-        document.title = pathBasename(this.filePath)
-        return pathBasename(this.filePath)
-      } else {
-        document.title = trans('Print…')
-        return trans('Print…')
-      }
-    },
-    fileUrl: function (): string {
-      // TODO: With safe-file:// added electron crashes as soon as the print
-      // window is opened.
-      return `file://${this.filePath}`
-    },
-    toolbarControls: function (): ToolbarControl[] {
-      return [
-        {
-          type: 'spacer',
-          id: 'spacer-one',
-          size: '5x'
-        },
-        {
-          type: 'button',
-          label: '',
-          id: 'print',
-          icon: 'printer'
-        }
-      ]
-    }
-  },
-  methods: {
-    handleClick: function (buttonID?: string) {
-      if (buttonID === 'print') {
-        // NOTE: Printing only works in production, as during development
-        // contents are served from localhost:3000 (which gives a CORS error)
-        window.frames[0].print()
-      }
-    }
+  {
+    type: 'button',
+    label: '',
+    id: 'print',
+    icon: 'printer'
+  }
+]
+
+const searchParams = new URLSearchParams(window.location.search)
+const filePath = searchParams.get('file') ?? ''
+
+const windowTitle = computed(() => {
+  if (filePath !== '') {
+    document.title = pathBasename(filePath)
+    return pathBasename(filePath)
+  } else {
+    document.title = trans('Print…')
+    return trans('Print…')
   }
 })
+
+// TODO: We do need to retrieve the file from main so that it's served in the
+// same "origin" 🫠
+const fileUrl = computed(() => `safe-file://${filePath}`)
+
+function handleClick (buttonID?: string): void {
+  if (buttonID === 'print') {
+    // NOTE: Printing only works in production, as during development
+    // contents are served from localhost:3000 (which gives a CORS error)
+    window.frames[0].print()
+  }
+}
 </script>
 
 <style lang="less">
