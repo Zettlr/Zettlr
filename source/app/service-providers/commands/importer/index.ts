@@ -24,7 +24,7 @@ import type { DirDescriptor } from '@dts/common/fsal'
 import { app, dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import type AssetsProvider from '@providers/assets'
-import type { PandocProfileMetadata } from '@dts/common/assets'
+import { type PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 

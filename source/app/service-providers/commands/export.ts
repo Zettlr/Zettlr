@@ -20,7 +20,7 @@ import type { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
-import { type PandocProfileMetadata } from '@dts/common/assets'
+import { type PandocProfileMetadata } from '@providers/assets'
 import { runShellCommand } from './exporter/run-shell-command'
 import { showNativeNotification } from '@common/util/show-notification'
 

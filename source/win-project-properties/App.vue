@@ -16,11 +16,11 @@
     >
       <!-- Add the project title field -->
       <TextControl
-        v-model="projectTitle"
+        v-model="projectSettings.title"
         v-bind:label="projectTitleLabel"
       ></TextControl>
 
-      <p v-if="selectedExportProfiles.length === 0" class="warning">
+      <p v-if="projectSettings.profiles.length === 0" class="warning">
         <cds-icon shape="warning-standard"></cds-icon>
         <span>{{ projectBuildWarning }}</span>
       </p>
@@ -42,7 +42,7 @@
     >
       <!-- First the glob patterns -->
       <ListControl
-        v-model="patterns"
+        v-model="projectSettings.filters"
         v-bind:value-type="'simpleArray'"
         v-bind:label="exportPatternLabel"
         v-bind:column-labels="[exportPatternNameLabel]"
@@ -53,20 +53,20 @@
 
       <!-- Then the CSL file -->
       <FileControl
-        v-model="cslStyle"
+        v-model="projectSettings.cslStyle"
         v-bind:label="cslStyleLabel"
         v-bind:reset="true"
         v-bind:filter="[{ extensions: ['csl'], name: 'CSL Stylesheet' }]"
       ></FileControl>
       <!-- Also, the other possible files users can override -->
       <FileControl
-        v-model="texTemplate"
+        v-model="projectSettings.templates.tex"
         v-bind:label="texTemplateLabel"
         v-bind:reset="true"
         v-bind:filter="[{ extensions: ['tex'], name: 'LaTeX Source' }]"
       ></FileControl>
       <FileControl
-        v-model="htmlTemplate"
+        v-model="projectSettings.templates.html"
         v-bind:label="htmlTemplateLabel"
         v-bind:reset="true"
         v-bind:filter="[{ extensions: [ 'html', 'htm' ], name: 'HTML Template' }]"
@@ -75,7 +75,7 @@
   </WindowChrome>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -95,9 +95,9 @@ import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import ListControl from '@common/vue/form/elements/ListControl.vue'
 import FileControl from '@common/vue/form/elements/FileControl.vue'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
-import { defineComponent } from 'vue'
-import { type DirDescriptor } from '@dts/common/fsal'
-import { type PandocProfileMetadata } from '@dts/common/assets'
+import { ref, computed, watch } from 'vue'
+import { type ProjectSettings, type DirDescriptor } from '@dts/common/fsal'
+import { type PandocProfileMetadata } from '@providers/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
@@ -107,241 +107,166 @@ const ipcRenderer = window.ipc
 interface ExportProfile { selected: boolean, name: string, conversion: string }
 interface CustomCommand { displayName: string, command: string }
 
-export default defineComponent({
-  components: {
-    WindowChrome,
-    ListControl,
-    FileControl,
-    TextControl
+const exportFormatLabel = trans('Export project to:')
+const exportFormatUseLabel = trans('Use')
+const exportFormatNameLabel = trans('Format')
+const conversionLabel = trans('Conversion')
+const exportPatternLabel = trans('Add Glob patterns to include only specific files')
+const exportPatternNameLabel = trans('Glob Pattern')
+const projectBuildWarning = trans('Please select at least one profile to build this project.')
+const projectTitleLabel = trans('Project Title')
+const cslStyleLabel = trans('CSL Stylesheet')
+const texTemplateLabel = trans('LaTeX Template')
+const htmlTemplateLabel = trans('HTML Template')
+
+const tabs: WindowTab[] = [
+  {
+    id: 'formats-control',
+    label: trans('General'),
+    icon: 'cog',
+    controls: 'formats-panel'
   },
-  data: function () {
-    const searchParams = new URLSearchParams(window.location.search)
+  {
+    id: 'files-control',
+    label: 'Files',
+    icon: 'file-settings',
+    controls: 'formats-panel'
+  }
+]
+
+const searchParams = new URLSearchParams(window.location.search)
+const dirPath = searchParams.get('directory') ?? ''
+
+const updateLock = ref(true) // To ensure these defaults aren't written before the properties have been loaded
+const profiles = ref<PandocProfileMetadata[]>([])
+const customCommands: CustomCommand[] = window.config.get('export.customCommands')
+
+const projectSettings = ref<ProjectSettings>({
+  title: '',
+  profiles: [],
+  filters: [],
+  cslStyle: '',
+  templates: { tex: '', html: '' }
+})
+
+const currentTab = ref(0)
+
+const windowTitle = computed(() => projectSettings.value.title)
+
+const exportFormatList = computed<ExportProfile[]>(() => {
+  // We need to return a list of { selected: boolean, name: string, conversion: string }
+  return profiles.value.filter(e => {
+    return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(e.reader))
+  }).map(e => {
+    const plainReader = getPlainPandocReaderWriter(e.reader)
+    const plainWriter = getPlainPandocReaderWriter(e.writer)
+
+    const hasReaderExtensions = plainReader !== e.reader
+    const hasWriterExtensions = plainWriter !== e.writer
+
+    const reader = plainReader in PANDOC_READERS ? PANDOC_READERS[plainReader] : plainReader
+    const writer = plainWriter in PANDOC_WRITERS ? PANDOC_WRITERS[plainWriter] : plainWriter
+
+    const readerFull = hasReaderExtensions ? reader + ` (${e.reader})` : reader
+    const writerFull = hasWriterExtensions ? writer + ` (${e.writer})` : writer
+
+    const conversionString = (e.isInvalid) ? 'Invalid' : [ readerFull, writerFull ].join(' → ')
+
     return {
-      dirPath: searchParams.get('directory') ?? '',
-      updateLock: true, // To ensure these defaults aren't written before the properties have been loaded
-      profiles: [] as PandocProfileMetadata[],
-      customCommands: window.config.get('export.customCommands') as Array<{ displayName: string, command: string }>,
-      selectedExportProfiles: [] as string[], // NOTE: Must correspond to the defaults in fsal-directory.ts
-      patterns: [] as string[],
-      cslStyle: '',
-      texTemplate: '',
-      htmlTemplate: '',
-      projectTitle: '',
-      tabs: [
-        {
-          id: 'formats-control',
-          label: trans('General'),
-          icon: 'cog',
-          controls: 'formats-panel'
-        },
-        {
-          id: 'files-control',
-          label: 'Files',
-          icon: 'file-settings',
-          controls: 'formats-panel'
-        }
-      ] as WindowTab[],
-      currentTab: 0
+      selected: projectSettings.value.profiles.includes(e.name),
+      name: getDisplayText(e.name),
+      conversion: conversionString
     }
-  },
-  computed: {
-    windowTitle: function (): string {
-      return this.projectTitle
-    },
-    exportFormatList: function (): ExportProfile[] {
-      // We need to return a list of { selected: boolean, name: string, conversion: string }
-      return this.profiles.filter(e => {
-        return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(e.reader))
-      }).map(e => {
-        const plainReader = getPlainPandocReaderWriter(e.reader)
-        const plainWriter = getPlainPandocReaderWriter(e.writer)
-
-        const hasReaderExtensions = plainReader !== e.reader
-        const hasWriterExtensions = plainWriter !== e.writer
-
-        const reader = plainReader in PANDOC_READERS ? PANDOC_READERS[plainReader] : plainReader
-        const writer = plainWriter in PANDOC_WRITERS ? PANDOC_WRITERS[plainWriter] : plainWriter
-
-        const readerFull = hasReaderExtensions ? reader + ` (${e.reader})` : reader
-        const writerFull = hasWriterExtensions ? writer + ` (${e.writer})` : writer
-
-        const conversionString = (e.isInvalid) ? 'Invalid' : [ readerFull, writerFull ].join(' → ')
-
-        return {
-          selected: this.selectedExportProfiles.includes(e.name),
-          name: this.getDisplayText(e.name),
-          conversion: conversionString
-        }
-      }).concat(
-        this.customCommands.map(c => {
-          return {
-            selected: this.selectedExportProfiles.includes(c.command),
-            name: c.displayName,
-            conversion: c.command
-          }
-        })
-      )
-    },
-    exportFormatLabel: function (): string {
-      return trans('Export project to:')
-    },
-    exportFormatUseLabel: function (): string {
-      return trans('Use')
-    },
-    exportFormatNameLabel: function (): string {
-      return trans('Format')
-    },
-    conversionLabel: function (): string {
-      return trans('Conversion')
-    },
-    exportPatternLabel: function (): string {
-      return trans('Add Glob patterns to include only specific files')
-    },
-    exportPatternNameLabel: function (): string {
-      return trans('Glob Pattern')
-    },
-    projectBuildWarning: function (): string {
-      return trans('Please select at least one profile to build this project.')
-    },
-    projectTitleLabel: function (): string {
-      return trans('Project Title')
-    },
-    cslStyleLabel: function (): string {
-      return trans('CSL Stylesheet')
-    },
-    texTemplateLabel: function (): string {
-      return trans('LaTeX Template')
-    },
-    htmlTemplateLabel: function (): string {
-      return trans('HTML Template')
-    }
-  },
-  watch: {
-    selectedExportProfiles: function () {
-      this.updateProperties()
-    },
-    projectTitle: function () {
-      this.updateProperties()
-    },
-    patterns: function () {
-      this.updateProperties()
-    },
-    cslStyle: function () {
-      this.updateProperties()
-    },
-    texTemplate: function () {
-      this.updateProperties()
-    },
-    htmlTemplate: function () {
-      this.updateProperties()
-    },
-    dirPath: function () {
-      this.fetchProperties()
-    }
-  },
-  mounted: function () {
-    // First, we need to get the available export formats
-    ipcRenderer.invoke('assets-provider', {
-      command: 'list-export-profiles'
+  }).concat(
+    customCommands.map(c => {
+      return {
+        selected: projectSettings.value.profiles.includes(c.command),
+        name: c.displayName,
+        conversion: c.command
+      }
     })
-      .then((defaults: PandocProfileMetadata[]) => {
-        this.profiles = defaults
-      })
-      .catch(err => console.error(err))
+  )
+})
 
-    if (this.dirPath !== '') {
-      // Get the properties if we already have a dirPath
-      this.fetchProperties()
-    }
+watch(projectSettings, updateProperties, { deep: true })
 
-    // We listen to filetree changes -- in case one of these means that our
-    // dir is no longer a project, fetchProperties will automatically close this
-    // window.
-    // ipcRenderer.on('fsal-state-changed', (event, kind) => {
-    //   if (kind === 'filetree') {
-    //     this.fetchProperties()
-    //   }
-    // })
-    // TODO: RE-IMPLEMENT!!!
-  },
-  methods: {
-    selectExportProfile: function (newListVal: ExportProfile[]) {
-      const newProfiles = newListVal
-        .filter(e => e.selected)
-        .map(e => {
-          return this.profiles.find(x => this.getDisplayText(x.name) === e.name) ?? this.customCommands.find(c => c.displayName === e.name)
-        })
-        .filter(x => x !== undefined) as Array<PandocProfileMetadata|CustomCommand>
+// First, we need to get the available export formats
+ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' })
+  .then((defaults: PandocProfileMetadata[]) => {
+    profiles.value = defaults
+  })
+  .catch(err => console.error(err))
 
-      this.selectedExportProfiles = newProfiles.map(x => {
-        return ('name' in x) ? x.name : x.command
-      })
-      this.updateProperties()
-    },
-    getDisplayText: function (name: string): string {
-      return name.substring(0, name.lastIndexOf('.'))
-    },
-    updateProperties: function () {
-      if (this.updateLock) {
-        return
+// On startup, fetch the properties immediately
+fetchProperties()
+
+function selectExportProfile (newListVal: ExportProfile[]): void {
+  console.log(newListVal)
+  const newProfiles = newListVal
+    .filter(e => e.selected)
+    .map(e => {
+      return profiles.value.find(x => getDisplayText(x.name) === e.name) ?? customCommands.find(c => c.displayName === e.name)
+    })
+    .filter(x => x !== undefined) as Array<PandocProfileMetadata|CustomCommand>
+
+  projectSettings.value.profiles = newProfiles.map(x => {
+    return ('name' in x) ? x.name : x.command
+  })
+}
+
+function getDisplayText (name: string): string {
+  return name.substring(0, name.lastIndexOf('.'))
+}
+
+function updateProperties (): void {
+  if (updateLock.value) {
+    return
+  }
+
+  updateLock.value = true
+
+  ipcRenderer.invoke('application', {
+    command: 'get-descriptor',
+    payload: dirPath
+  })
+    .then(descriptor => {
+      if (descriptor.settings.project == null) {
+        throw new Error('Could not update project settings: Project was null!')
       }
 
-      this.updateLock = true
+      const deproxiedSettings = JSON.parse(JSON.stringify(projectSettings.value))
 
       ipcRenderer.invoke('application', {
-        command: 'get-descriptor',
-        payload: this.dirPath
+        command: 'update-project-properties',
+        payload: { properties: deproxiedSettings, path: dirPath }
       })
-        .then(descriptor => {
-          if (descriptor.settings.project == null) {
-            throw new Error('Could not update project settings: Project was null!')
-          }
-
-          const settings = descriptor.settings.project
-          settings.profiles = this.selectedExportProfiles.map(e => e) // De-proxy
-          settings.filters = this.patterns.map(e => e) // De-proxy
-          settings.cslStyle = this.cslStyle
-          settings.title = this.projectTitle
-          settings.templates.tex = this.texTemplate
-          settings.templates.html = this.htmlTemplate
-
-          ipcRenderer.invoke('application', {
-            command: 'update-project-properties',
-            payload: { properties: settings, path: this.dirPath }
-          })
-            .then(() => {
-              this.updateLock = false
-            })
-            .catch(err => console.error(err))
+        .finally(() => {
+          updateLock.value = false
         })
         .catch(err => console.error(err))
-    },
-    fetchProperties: function () {
-      ipcRenderer.invoke('application', {
-        command: 'get-descriptor',
-        payload: this.dirPath
-      })
-        .then((descriptor: DirDescriptor) => {
-          // Save the actually used formats.
-          if (descriptor.settings.project !== null) {
-            this.selectedExportProfiles = descriptor.settings.project.profiles
-            this.patterns = descriptor.settings.project.filters
-            this.cslStyle = descriptor.settings.project.cslStyle
-            this.htmlTemplate = descriptor.settings.project.templates.html
-            this.texTemplate = descriptor.settings.project.templates.tex
-            this.projectTitle = descriptor.settings.project.title
-          } else {
-            // Apparently the user kept the window open and removed the project
-            // state on this project. So let's close this window silently.
-            ipcRenderer.send('window-controls', { command: 'win-close' })
-          }
-          this.updateLock = false // Now the properties are fetched, so the
-          // handlers can overwrite them.
-        })
-        .catch(err => console.error(err))
-    }
-  }
-})
+    })
+    .catch(err => console.error(err))
+}
+
+function fetchProperties (): void {
+  ipcRenderer.invoke('application', {
+    command: 'get-descriptor',
+    payload: dirPath
+  })
+    .then((descriptor: DirDescriptor) => {
+      // Save the actually used formats.
+      if (descriptor.settings.project !== null) {
+        projectSettings.value = descriptor.settings.project
+      } else {
+        // Apparently the user kept the window open and removed the project
+        // state on this project. So let's close this window silently.
+        ipcRenderer.send('window-controls', { command: 'win-close' })
+      }
+      updateLock.value = false // Now the properties are fetched, so the
+      // handlers can overwrite them.
+    })
+    .catch(err => console.error(err))
+}
 </script>
 
 <style lang="less">
