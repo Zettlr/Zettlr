@@ -7,6 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.5\n"
+"Project-Id-Version: Zettlr 3.0.5\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-03-01 19:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -20,7 +21,13 @@ msgstr ""
 #: source/win-preferences/schema/general.ts:22
 msgid "Application language"
 msgstr "Application language"
+#: source/win-preferences/schema/general.ts:22
+msgid "Application language"
+msgstr "Application language"
 
+#: source/win-preferences/schema/general.ts:33
+msgid "Autosave"
+msgstr "Autosave"
 #: source/win-preferences/schema/general.ts:33
 msgid "Autosave"
 msgstr "Autosave"
@@ -28,7 +35,14 @@ msgstr "Autosave"
 #: source/win-preferences/schema/general.ts:43
 msgid "Save modifications"
 msgstr "Save modifications"
+#: source/win-preferences/schema/general.ts:43
+msgid "Save modifications"
+msgstr "Save modifications"
 
+#: source/win-preferences/schema/general.ts:47
+#: source/win-preferences/schema/appearance.ts:41
+msgid "Off"
+msgstr "Off"
 #: source/win-preferences/schema/general.ts:47
 #: source/win-preferences/schema/appearance.ts:41
 msgid "Off"
@@ -41,7 +55,17 @@ msgstr "Immediately"
 #: source/win-preferences/schema/general.ts:49
 msgid "After a short delay"
 msgstr "After a short delay"
+#: source/win-preferences/schema/general.ts:48
+msgid "Immediately"
+msgstr "Immediately"
 
+#: source/win-preferences/schema/general.ts:49
+msgid "After a short delay"
+msgstr "After a short delay"
+
+#: source/win-preferences/schema/general.ts:55
+msgid "Default image folder"
+msgstr "Default image folder"
 #: source/win-preferences/schema/general.ts:55
 msgid "Default image folder"
 msgstr "Default image folder"
@@ -53,7 +77,17 @@ msgid ""
 msgstr ""
 "Click \"Select folder…\" or type an absolute or relative path directly into "
 "the input field."
+#: source/win-preferences/schema/general.ts:67
+msgid ""
+"Click \"Select folder…\" or type an absolute or relative path directly into "
+"the input field."
+msgstr ""
+"Click \"Select folder…\" or type an absolute or relative path directly into "
+"the input field."
 
+#: source/win-preferences/schema/general.ts:72
+msgid "Behavior"
+msgstr "Behavior"
 #: source/win-preferences/schema/general.ts:72
 msgid "Behavior"
 msgstr "Behavior"
@@ -62,7 +96,14 @@ msgstr "Behavior"
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 msgid "Always load remote changes to the current file"
 msgstr "Always load remote changes to the current file"
+#: source/win-preferences/schema/general.ts:78
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
+msgid "Always load remote changes to the current file"
+msgstr "Always load remote changes to the current file"
 
+#: source/win-preferences/schema/general.ts:83
+msgid "Avoid opening files in new tabs if possible"
+msgstr "Avoid opening files in new tabs if possible"
 #: source/win-preferences/schema/general.ts:83
 msgid "Avoid opening files in new tabs if possible"
 msgstr "Avoid opening files in new tabs if possible"
@@ -70,7 +111,13 @@ msgstr "Avoid opening files in new tabs if possible"
 #: source/win-preferences/schema/general.ts:89
 msgid "Updates"
 msgstr "Updates"
+#: source/win-preferences/schema/general.ts:89
+msgid "Updates"
+msgstr "Updates"
 
+#: source/win-preferences/schema/general.ts:95
+msgid "Automatically check for updates"
+msgstr "Automatically check for updates"
 #: source/win-preferences/schema/general.ts:95
 msgid "Automatically check for updates"
 msgstr "Automatically check for updates"
@@ -78,11 +125,20 @@ msgstr "Automatically check for updates"
 #: source/win-preferences/schema/autocorrect.ts:22
 msgid "Autocorrect"
 msgstr "Autocorrect"
+#: source/win-preferences/schema/autocorrect.ts:22
+msgid "Autocorrect"
+msgstr "Autocorrect"
 
 #: source/win-preferences/schema/autocorrect.ts:32
 msgid "Smart quotes"
 msgstr "Smart quotes"
+#: source/win-preferences/schema/autocorrect.ts:32
+msgid "Smart quotes"
+msgstr "Smart quotes"
 
+#: source/win-preferences/schema/autocorrect.ts:45
+msgid "Double Quotes"
+msgstr "Double Quotes"
 #: source/win-preferences/schema/autocorrect.ts:45
 msgid "Double Quotes"
 msgstr "Double Quotes"
@@ -91,7 +147,14 @@ msgstr "Double Quotes"
 #: source/win-preferences/schema/autocorrect.ts:70
 msgid "Disable Magic Quotes"
 msgstr "Disable Magic Quotes"
+#: source/win-preferences/schema/autocorrect.ts:48
+#: source/win-preferences/schema/autocorrect.ts:70
+msgid "Disable Magic Quotes"
+msgstr "Disable Magic Quotes"
 
+#: source/win-preferences/schema/autocorrect.ts:67
+msgid "Single Quotes"
+msgstr "Single Quotes"
 #: source/win-preferences/schema/autocorrect.ts:67
 msgid "Single Quotes"
 msgstr "Single Quotes"
@@ -99,7 +162,13 @@ msgstr "Single Quotes"
 #: source/win-preferences/schema/autocorrect.ts:95
 msgid "Text-replacement patterns"
 msgstr "Text-replacement patterns"
+#: source/win-preferences/schema/autocorrect.ts:95
+msgid "Text-replacement patterns"
+msgstr "Text-replacement patterns"
 
+#: source/win-preferences/schema/autocorrect.ts:99
+msgid "Match whole words"
+msgstr "Match whole words"
 #: source/win-preferences/schema/autocorrect.ts:99
 msgid "Match whole words"
 msgstr "Match whole words"
@@ -107,11 +176,20 @@ msgstr "Match whole words"
 #: source/win-preferences/schema/autocorrect.ts:100
 msgid "When checked, AutoCorrect will never replace parts of words"
 msgstr "When checked, AutoCorrect will never replace parts of words"
+#: source/win-preferences/schema/autocorrect.ts:100
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr "When checked, AutoCorrect will never replace parts of words"
 
 #: source/win-preferences/schema/autocorrect.ts:107
 msgid "Replace"
 msgstr "Replace"
+#: source/win-preferences/schema/autocorrect.ts:107
+msgid "Replace"
+msgstr "Replace"
 
+#: source/win-preferences/schema/autocorrect.ts:107
+msgid "With"
+msgstr "With"
 #: source/win-preferences/schema/autocorrect.ts:107
 msgid "With"
 msgstr "With"
@@ -121,7 +199,15 @@ msgstr "With"
 #: source/win-preferences/schema/advanced.ts:115
 msgid "Filter"
 msgstr "Filter"
+#: source/win-preferences/schema/autocorrect.ts:112
+#: source/win-preferences/schema/spellchecking.ts:120
+#: source/win-preferences/schema/advanced.ts:115
+msgid "Filter"
+msgstr "Filter"
 
+#: source/win-preferences/schema/spellchecking.ts:24
+msgid "LanguageTool"
+msgstr "LanguageTool"
 #: source/win-preferences/schema/spellchecking.ts:24
 msgid "LanguageTool"
 msgstr "LanguageTool"
@@ -129,7 +215,13 @@ msgstr "LanguageTool"
 #: source/win-preferences/schema/spellchecking.ts:34
 msgid "Strictness"
 msgstr "Strictness"
+#: source/win-preferences/schema/spellchecking.ts:34
+msgid "Strictness"
+msgstr "Strictness"
 
+#: source/win-preferences/schema/spellchecking.ts:37
+msgid "Standard"
+msgstr "Standard"
 #: source/win-preferences/schema/spellchecking.ts:37
 msgid "Standard"
 msgstr "Standard"
@@ -137,7 +229,13 @@ msgstr "Standard"
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "Picky"
 msgstr "Picky"
+#: source/win-preferences/schema/spellchecking.ts:38
+msgid "Picky"
+msgstr "Picky"
 
+#: source/win-preferences/schema/spellchecking.ts:47
+msgid "Mother language"
+msgstr "Mother language"
 #: source/win-preferences/schema/spellchecking.ts:47
 msgid "Mother language"
 msgstr "Mother language"
@@ -145,7 +243,13 @@ msgstr "Mother language"
 #: source/win-preferences/schema/spellchecking.ts:53
 msgid "Not set"
 msgstr "Not set"
+#: source/win-preferences/schema/spellchecking.ts:53
+msgid "Not set"
+msgstr "Not set"
 
+#: source/win-preferences/schema/spellchecking.ts:61
+msgid "LanguageTool Provider"
+msgstr "LanguageTool Provider"
 #: source/win-preferences/schema/spellchecking.ts:61
 msgid "LanguageTool Provider"
 msgstr "LanguageTool Provider"
@@ -153,11 +257,20 @@ msgstr "LanguageTool Provider"
 #: source/win-preferences/schema/spellchecking.ts:65
 msgid "Custom server"
 msgstr "Custom server"
+#: source/win-preferences/schema/spellchecking.ts:65
+msgid "Custom server"
+msgstr "Custom server"
 
 #: source/win-preferences/schema/spellchecking.ts:72
 msgid "Custom server address"
 msgstr "Custom server address"
+#: source/win-preferences/schema/spellchecking.ts:72
+msgid "Custom server address"
+msgstr "Custom server address"
 
+#: source/win-preferences/schema/spellchecking.ts:81
+msgid "LanguageTool Premium"
+msgstr "LanguageTool Premium"
 #: source/win-preferences/schema/spellchecking.ts:81
 msgid "LanguageTool Premium"
 msgstr "LanguageTool Premium"
@@ -169,7 +282,17 @@ msgid ""
 msgstr ""
 "Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
 "credentials here."
+#: source/win-preferences/schema/spellchecking.ts:86
+msgid ""
+"Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
+"credentials here."
+msgstr ""
+"Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
+"credentials here."
 
+#: source/win-preferences/schema/spellchecking.ts:90
+msgid "LanguageTool Username"
+msgstr "LanguageTool Username"
 #: source/win-preferences/schema/spellchecking.ts:90
 msgid "LanguageTool Username"
 msgstr "LanguageTool Username"
@@ -177,7 +300,13 @@ msgstr "LanguageTool Username"
 #: source/win-preferences/schema/spellchecking.ts:97
 msgid "LanguageTool API key"
 msgstr "LanguageTool API key"
+#: source/win-preferences/schema/spellchecking.ts:97
+msgid "LanguageTool API key"
+msgstr "LanguageTool API key"
 
+#: source/win-preferences/schema/spellchecking.ts:105
+msgid "Spellchecking"
+msgstr "Spellchecking"
 #: source/win-preferences/schema/spellchecking.ts:105
 msgid "Spellchecking"
 msgstr "Spellchecking"
@@ -185,7 +314,18 @@ msgstr "Spellchecking"
 #: source/win-preferences/schema/spellchecking.ts:114
 msgid "Active"
 msgstr "Active"
+#: source/win-preferences/schema/spellchecking.ts:114
+msgid "Active"
+msgstr "Active"
 
+#: source/win-preferences/schema/spellchecking.ts:114
+msgid "Language"
+msgstr "Language"
+
+#: source/win-preferences/schema/spellchecking.ts:114
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+msgid "Code"
+msgstr "Code"
 #: source/win-preferences/schema/spellchecking.ts:114
 msgid "Language"
 msgstr "Language"
@@ -200,7 +340,15 @@ msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr ""
 "Select the languages for which you want to enable automatic spell checking."
+#: source/win-preferences/schema/spellchecking.ts:115
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr ""
+"Select the languages for which you want to enable automatic spell checking."
 
+#: source/win-preferences/schema/spellchecking.ts:127
+msgid "User dictionary. Remove words by clicking them."
+msgstr "User dictionary. Remove words by clicking them."
 #: source/win-preferences/schema/spellchecking.ts:127
 msgid "User dictionary. Remove words by clicking them."
 msgstr "User dictionary. Remove words by clicking them."
@@ -208,7 +356,13 @@ msgstr "User dictionary. Remove words by clicking them."
 #: source/win-preferences/schema/spellchecking.ts:129
 msgid "Dictionary entry"
 msgstr "Dictionary entry"
+#: source/win-preferences/schema/spellchecking.ts:129
+msgid "Dictionary entry"
+msgstr "Dictionary entry"
 
+#: source/win-preferences/schema/spellchecking.ts:132
+msgid "Search for entries …"
+msgstr "Search for entries …"
 #: source/win-preferences/schema/spellchecking.ts:132
 msgid "Search for entries …"
 msgstr "Search for entries …"
@@ -216,7 +370,13 @@ msgstr "Search for entries …"
 #: source/win-preferences/schema/import-export.ts:24
 msgid "Import and export profiles"
 msgstr "Import and export profiles"
+#: source/win-preferences/schema/import-export.ts:24
+msgid "Import and export profiles"
+msgstr "Import and export profiles"
 
+#: source/win-preferences/schema/import-export.ts:30
+msgid "Open import profiles editor"
+msgstr "Open import profiles editor"
 #: source/win-preferences/schema/import-export.ts:30
 msgid "Open import profiles editor"
 msgstr "Open import profiles editor"
@@ -224,7 +384,13 @@ msgstr "Open import profiles editor"
 #: source/win-preferences/schema/import-export.ts:44
 msgid "Open export profiles editor"
 msgstr "Open export profiles editor"
+#: source/win-preferences/schema/import-export.ts:44
+msgid "Open export profiles editor"
+msgstr "Open export profiles editor"
 
+#: source/win-preferences/schema/import-export.ts:59
+msgid "Export settings"
+msgstr "Export settings"
 #: source/win-preferences/schema/import-export.ts:59
 msgid "Export settings"
 msgstr "Export settings"
@@ -233,7 +399,14 @@ msgstr "Export settings"
 #: source/win-preferences/schema/import-export.ts:65
 msgid "Use Zettlr's internal Pandoc for exports"
 msgstr "Use Zettlr's internal Pandoc for exports"
+#. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
+#: source/win-preferences/schema/import-export.ts:65
+msgid "Use Zettlr's internal Pandoc for exports"
+msgstr "Use Zettlr's internal Pandoc for exports"
 
+#: source/win-preferences/schema/import-export.ts:71
+msgid "Remove tags from files when exporting"
+msgstr "Remove tags from files when exporting"
 #: source/win-preferences/schema/import-export.ts:71
 msgid "Remove tags from files when exporting"
 msgstr "Remove tags from files when exporting"
@@ -242,7 +415,14 @@ msgstr "Remove tags from files when exporting"
 #: source/win-preferences/schema/zettelkasten.ts:44
 msgid "Internal links"
 msgstr "Internal links"
+#: source/win-preferences/schema/import-export.ts:77
+#: source/win-preferences/schema/zettelkasten.ts:44
+msgid "Internal links"
+msgstr "Internal links"
 
+#: source/win-preferences/schema/import-export.ts:80
+msgid "Remove internal links completely"
+msgstr "Remove internal links completely"
 #: source/win-preferences/schema/import-export.ts:80
 msgid "Remove internal links completely"
 msgstr "Remove internal links completely"
@@ -250,11 +430,20 @@ msgstr "Remove internal links completely"
 #: source/win-preferences/schema/import-export.ts:81
 msgid "Unlink internal links"
 msgstr "Unlink internal links"
+#: source/win-preferences/schema/import-export.ts:81
+msgid "Unlink internal links"
+msgstr "Unlink internal links"
 
 #: source/win-preferences/schema/import-export.ts:82
 msgid "Don't touch internal links"
 msgstr "Don't touch internal links"
+#: source/win-preferences/schema/import-export.ts:82
+msgid "Don't touch internal links"
+msgstr "Don't touch internal links"
 
+#: source/win-preferences/schema/import-export.ts:88
+msgid "Destination folder for exported files"
+msgstr "Destination folder for exported files"
 #: source/win-preferences/schema/import-export.ts:88
 msgid "Destination folder for exported files"
 msgstr "Destination folder for exported files"
@@ -263,11 +452,21 @@ msgstr "Destination folder for exported files"
 #: source/win-preferences/schema/import-export.ts:92
 msgid "Temporary folder"
 msgstr "Temporary folder"
+#. TODO: Add info-strings
+#: source/win-preferences/schema/import-export.ts:92
+msgid "Temporary folder"
+msgstr "Temporary folder"
 
 #: source/win-preferences/schema/import-export.ts:93
 msgid "Same as file location"
 msgstr "Same as file location"
+#: source/win-preferences/schema/import-export.ts:93
+msgid "Same as file location"
+msgstr "Same as file location"
 
+#: source/win-preferences/schema/import-export.ts:94
+msgid "Ask for folder when exporting"
+msgstr "Ask for folder when exporting"
 #: source/win-preferences/schema/import-export.ts:94
 msgid "Ask for folder when exporting"
 msgstr "Ask for folder when exporting"
@@ -281,7 +480,19 @@ msgstr ""
 "Warning! Files in the temporary folder are regularly deleted. Choosing the "
 "same location as the file overwrites files with identical filenames if they "
 "already exist."
+#: source/win-preferences/schema/import-export.ts:100
+msgid ""
+"Warning! Files in the temporary folder are regularly deleted. Choosing the "
+"same location as the file overwrites files with identical filenames if they "
+"already exist."
+msgstr ""
+"Warning! Files in the temporary folder are regularly deleted. Choosing the "
+"same location as the file overwrites files with identical filenames if they "
+"already exist."
 
+#: source/win-preferences/schema/import-export.ts:105
+msgid "Custom export commands"
+msgstr "Custom export commands"
 #: source/win-preferences/schema/import-export.ts:105
 msgid "Custom export commands"
 msgstr "Custom export commands"
@@ -289,11 +500,24 @@ msgstr "Custom export commands"
 #: source/win-preferences/schema/import-export.ts:113
 msgid "Display name"
 msgstr "Display name"
+#: source/win-preferences/schema/import-export.ts:113
+msgid "Display name"
+msgstr "Display name"
 
 #: source/win-preferences/schema/import-export.ts:113
 msgid "Command"
 msgstr "Command"
+#: source/win-preferences/schema/import-export.ts:113
+msgid "Command"
+msgstr "Command"
 
+#: source/win-preferences/schema/import-export.ts:114
+msgid ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
+msgstr ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
 #: source/win-preferences/schema/import-export.ts:114
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
@@ -307,7 +531,15 @@ msgstr ""
 #: source/app/service-providers/menu/menu.win32.ts:430
 msgid "Dark mode"
 msgstr "Dark mode"
+#: source/win-preferences/schema/appearance.ts:26
+#: source/app/service-providers/menu/menu.darwin.ts:448
+#: source/app/service-providers/menu/menu.win32.ts:430
+msgid "Dark mode"
+msgstr "Dark mode"
 
+#: source/win-preferences/schema/appearance.ts:37
+msgid "Schedule"
+msgstr "Schedule"
 #: source/win-preferences/schema/appearance.ts:37
 msgid "Schedule"
 msgstr "Schedule"
@@ -315,7 +547,13 @@ msgstr "Schedule"
 #: source/win-preferences/schema/appearance.ts:42
 msgid "Follow system"
 msgstr "Follow system"
+#: source/win-preferences/schema/appearance.ts:42
+msgid "Follow system"
+msgstr "Follow system"
 
+#: source/win-preferences/schema/appearance.ts:43
+msgid "On"
+msgstr "On"
 #: source/win-preferences/schema/appearance.ts:43
 msgid "On"
 msgstr "On"
@@ -324,7 +562,14 @@ msgstr "On"
 #: source/tmp/PopoverPomodoro.vue.ts:77
 msgid "Start"
 msgstr "Start"
+#: source/win-preferences/schema/appearance.ts:52
+#: source/tmp/PopoverPomodoro.vue.ts:77
+msgid "Start"
+msgstr "Start"
 
+#: source/win-preferences/schema/appearance.ts:59
+msgid "End"
+msgstr "End"
 #: source/win-preferences/schema/appearance.ts:59
 msgid "End"
 msgstr "End"
@@ -332,7 +577,13 @@ msgstr "End"
 #: source/win-preferences/schema/appearance.ts:69
 msgid "Theme"
 msgstr "Theme"
+#: source/win-preferences/schema/appearance.ts:69
+msgid "Theme"
+msgstr "Theme"
 
+#: source/win-preferences/schema/appearance.ts:76
+msgid "Here you can choose the theme for the app."
+msgstr "Here you can choose the theme for the app."
 #: source/win-preferences/schema/appearance.ts:76
 msgid "Here you can choose the theme for the app."
 msgstr "Here you can choose the theme for the app."
@@ -340,7 +591,13 @@ msgstr "Here you can choose the theme for the app."
 #: source/win-preferences/schema/appearance.ts:118
 msgid "Toolbar options"
 msgstr "Toolbar options"
+#: source/win-preferences/schema/appearance.ts:118
+msgid "Toolbar options"
+msgstr "Toolbar options"
 
+#: source/win-preferences/schema/appearance.ts:125
+msgid "Left section buttons"
+msgstr "Left section buttons"
 #: source/win-preferences/schema/appearance.ts:125
 msgid "Left section buttons"
 msgstr "Left section buttons"
@@ -348,7 +605,13 @@ msgstr "Left section buttons"
 #: source/win-preferences/schema/appearance.ts:129
 msgid "Display \"Open Preferences\" button"
 msgstr "Display \"Open Preferences\" button"
+#: source/win-preferences/schema/appearance.ts:129
+msgid "Display \"Open Preferences\" button"
+msgstr "Display \"Open Preferences\" button"
 
+#: source/win-preferences/schema/appearance.ts:134
+msgid "Display \"New File\" button"
+msgstr "Display \"New File\" button"
 #: source/win-preferences/schema/appearance.ts:134
 msgid "Display \"New File\" button"
 msgstr "Display \"New File\" button"
@@ -356,7 +619,13 @@ msgstr "Display \"New File\" button"
 #: source/win-preferences/schema/appearance.ts:139
 msgid "Display \"Previous File\" button"
 msgstr "Display \"Previous File\" button"
+#: source/win-preferences/schema/appearance.ts:139
+msgid "Display \"Previous File\" button"
+msgstr "Display \"Previous File\" button"
 
+#: source/win-preferences/schema/appearance.ts:144
+msgid "Display \"Next File\" button"
+msgstr "Display \"Next File\" button"
 #: source/win-preferences/schema/appearance.ts:144
 msgid "Display \"Next File\" button"
 msgstr "Display \"Next File\" button"
@@ -364,7 +633,13 @@ msgstr "Display \"Next File\" button"
 #: source/win-preferences/schema/appearance.ts:151
 msgid "Center section buttons"
 msgstr "Center section buttons"
+#: source/win-preferences/schema/appearance.ts:151
+msgid "Center section buttons"
+msgstr "Center section buttons"
 
+#: source/win-preferences/schema/appearance.ts:155
+msgid "Display readability button"
+msgstr "Display readability button"
 #: source/win-preferences/schema/appearance.ts:155
 msgid "Display readability button"
 msgstr "Display readability button"
@@ -372,7 +647,13 @@ msgstr "Display readability button"
 #: source/win-preferences/schema/appearance.ts:160
 msgid "Display \"Insert Comment\" button"
 msgstr "Display \"Insert Comment\" button"
+#: source/win-preferences/schema/appearance.ts:160
+msgid "Display \"Insert Comment\" button"
+msgstr "Display \"Insert Comment\" button"
 
+#: source/win-preferences/schema/appearance.ts:165
+msgid "Display link button"
+msgstr "Display link button"
 #: source/win-preferences/schema/appearance.ts:165
 msgid "Display link button"
 msgstr "Display link button"
@@ -380,7 +661,13 @@ msgstr "Display link button"
 #: source/win-preferences/schema/appearance.ts:170
 msgid "Display image button"
 msgstr "Display image button"
+#: source/win-preferences/schema/appearance.ts:170
+msgid "Display image button"
+msgstr "Display image button"
 
+#: source/win-preferences/schema/appearance.ts:175
+msgid "Display task list button"
+msgstr "Display task list button"
 #: source/win-preferences/schema/appearance.ts:175
 msgid "Display task list button"
 msgstr "Display task list button"
@@ -388,7 +675,13 @@ msgstr "Display task list button"
 #: source/win-preferences/schema/appearance.ts:180
 msgid "Display \"Insert Table\" button"
 msgstr "Display \"Insert Table\" button"
+#: source/win-preferences/schema/appearance.ts:180
+msgid "Display \"Insert Table\" button"
+msgstr "Display \"Insert Table\" button"
 
+#: source/win-preferences/schema/appearance.ts:185
+msgid "Display \"Insert Footnote\" button"
+msgstr "Display \"Insert Footnote\" button"
 #: source/win-preferences/schema/appearance.ts:185
 msgid "Display \"Insert Footnote\" button"
 msgstr "Display \"Insert Footnote\" button"
@@ -396,7 +689,13 @@ msgstr "Display \"Insert Footnote\" button"
 #: source/win-preferences/schema/appearance.ts:192
 msgid "Right section buttons"
 msgstr "Right section buttons"
+#: source/win-preferences/schema/appearance.ts:192
+msgid "Right section buttons"
+msgstr "Right section buttons"
 
+#: source/win-preferences/schema/appearance.ts:196
+msgid "Display document info"
+msgstr "Display document info"
 #: source/win-preferences/schema/appearance.ts:196
 msgid "Display document info"
 msgstr "Display document info"
@@ -424,7 +723,13 @@ msgstr "Open CSS editor"
 #: source/win-preferences/schema/file-manager.ts:23
 msgid "Display mode"
 msgstr "Display mode"
+#: source/win-preferences/schema/file-manager.ts:23
+msgid "Display mode"
+msgstr "Display mode"
 
+#: source/win-preferences/schema/file-manager.ts:32
+msgid "Thin"
+msgstr "Thin"
 #: source/win-preferences/schema/file-manager.ts:32
 msgid "Thin"
 msgstr "Thin"
@@ -432,7 +737,13 @@ msgstr "Thin"
 #: source/win-preferences/schema/file-manager.ts:33
 msgid "Expanded"
 msgstr "Expanded"
+#: source/win-preferences/schema/file-manager.ts:33
+msgid "Expanded"
+msgstr "Expanded"
 
+#: source/win-preferences/schema/file-manager.ts:34
+msgid "Combined"
+msgstr "Combined"
 #: source/win-preferences/schema/file-manager.ts:34
 msgid "Combined"
 msgstr "Combined"
@@ -452,7 +763,25 @@ msgstr ""
 #: source/win-preferences/schema/file-manager.ts:45
 msgid "Show file information"
 msgstr "Show file information"
+#: source/win-preferences/schema/file-manager.ts:40
+msgid ""
+"The Thin mode shows your directories and files separately. Select a "
+"directory to have its contents displayed in the file list. Switch between "
+"file list and directory tree by clicking on directories or the arrow button "
+"which appears at the top left corner of the file list."
+msgstr ""
+"The Thin mode shows your directories and files separately. Select a "
+"directory to have its contents displayed in the file list. Switch between "
+"file list and directory tree by clicking on directories or the arrow button "
+"which appears at the top left corner of the file list."
 
+#: source/win-preferences/schema/file-manager.ts:45
+msgid "Show file information"
+msgstr "Show file information"
+
+#: source/win-preferences/schema/file-manager.ts:50
+msgid "Show folders above files"
+msgstr "Show folders above files"
 #: source/win-preferences/schema/file-manager.ts:50
 msgid "Show folders above files"
 msgstr "Show folders above files"
@@ -460,7 +789,13 @@ msgstr "Show folders above files"
 #: source/win-preferences/schema/file-manager.ts:56
 msgid "Markdown document name display"
 msgstr "Markdown document name display"
+#: source/win-preferences/schema/file-manager.ts:56
+msgid "Markdown document name display"
+msgstr "Markdown document name display"
 
+#: source/win-preferences/schema/file-manager.ts:64
+msgid "Filename only"
+msgstr "Filename only"
 #: source/win-preferences/schema/file-manager.ts:64
 msgid "Filename only"
 msgstr "Filename only"
@@ -468,7 +803,17 @@ msgstr "Filename only"
 #: source/win-preferences/schema/file-manager.ts:65
 msgid "Title if applicable"
 msgstr "Title if applicable"
+#: source/win-preferences/schema/file-manager.ts:65
+msgid "Title if applicable"
+msgstr "Title if applicable"
 
+#: source/win-preferences/schema/file-manager.ts:66
+msgid "First heading level 1 if applicable"
+msgstr "First heading level 1 if applicable"
+
+#: source/win-preferences/schema/file-manager.ts:67
+msgid "Title or first heading level 1 if applicable"
+msgstr "Title or first heading level 1 if applicable"
 #: source/win-preferences/schema/file-manager.ts:66
 msgid "First heading level 1 if applicable"
 msgstr "First heading level 1 if applicable"
@@ -484,7 +829,21 @@ msgstr "Display Markdown file extensions"
 #: source/win-preferences/schema/file-manager.ts:80
 msgid "Time display"
 msgstr "Time display"
+#: source/win-preferences/schema/file-manager.ts:73
+msgid "Display Markdown file extensions"
+msgstr "Display Markdown file extensions"
 
+#: source/win-preferences/schema/file-manager.ts:80
+msgid "Time display"
+msgstr "Time display"
+
+#: source/win-preferences/schema/file-manager.ts:88
+msgid "Last modification time"
+msgstr "Last modification time"
+
+#: source/win-preferences/schema/file-manager.ts:89
+msgid "File creation time"
+msgstr "File creation time"
 #: source/win-preferences/schema/file-manager.ts:88
 msgid "Last modification time"
 msgstr "Last modification time"
@@ -500,11 +859,32 @@ msgstr "Sorting"
 #: source/win-preferences/schema/file-manager.ts:101
 msgid "When sorting documents…"
 msgstr "When sorting documents…"
+#: source/win-preferences/schema/file-manager.ts:95
+msgid "Sorting"
+msgstr "Sorting"
+
+#: source/win-preferences/schema/file-manager.ts:101
+msgid "When sorting documents…"
+msgstr "When sorting documents…"
 
 #: source/win-preferences/schema/file-manager.ts:104
 msgid "Use natural order (2 comes before 10)"
 msgstr "Use natural order (2 comes before 10)"
+#: source/win-preferences/schema/file-manager.ts:104
+msgid "Use natural order (2 comes before 10)"
+msgstr "Use natural order (2 comes before 10)"
 
+#: source/win-preferences/schema/file-manager.ts:105
+msgid "Use ASCII order (2 comes after 10)"
+msgstr "Use ASCII order (2 comes after 10)"
+
+#: source/win-preferences/schema/citations.ts:22
+msgid "Citations"
+msgstr "Citations"
+
+#: source/win-preferences/schema/citations.ts:28
+msgid "How would you like autocomplete to insert your citations?"
+msgstr "How would you like autocomplete to insert your citations?"
 #: source/win-preferences/schema/file-manager.ts:105
 msgid "Use ASCII order (2 comes after 10)"
 msgstr "Use ASCII order (2 comes after 10)"
@@ -525,7 +905,18 @@ msgstr "Citation Database (CSL JSON or BibTex)"
 #: source/win-preferences/schema/citations.ts:53
 msgid "Path to file"
 msgstr "Path to file"
+#: source/win-preferences/schema/citations.ts:39
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "Citation Database (CSL JSON or BibTex)"
 
+#: source/win-preferences/schema/citations.ts:41
+#: source/win-preferences/schema/citations.ts:53
+msgid "Path to file"
+msgstr "Path to file"
+
+#: source/win-preferences/schema/citations.ts:51
+msgid "CSL-Style (optional)"
+msgstr "CSL-Style (optional)"
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL-Style (optional)"
 msgstr "CSL-Style (optional)"
@@ -533,16 +924,32 @@ msgstr "CSL-Style (optional)"
 #: source/win-preferences/schema/advanced.ts:30
 msgid "Pattern for new file names"
 msgstr "Pattern for new file names"
+#: source/win-preferences/schema/advanced.ts:30
+msgid "Pattern for new file names"
+msgstr "Pattern for new file names"
 
+#: source/win-preferences/schema/advanced.ts:36
+msgid "Define a pattern for new file names"
+msgstr "Define a pattern for new file names"
 #: source/win-preferences/schema/advanced.ts:36
 msgid "Define a pattern for new file names"
 msgstr "Define a pattern for new file names"
 
 #: source/win-preferences/schema/advanced.ts:38
+#: source/win-preferences/schema/advanced.ts:38
 #, javascript-format
 msgid "Available variables: %s"
 msgstr "Available variables: %s"
+msgid "Available variables: %s"
+msgstr "Available variables: %s"
 
+#: source/win-preferences/schema/advanced.ts:44
+msgid "Do not prompt for filename when creating new files"
+msgstr "Do not prompt for filename when creating new files"
+
+#: source/win-preferences/schema/advanced.ts:51
+msgid "Appearance"
+msgstr "Appearance"
 #: source/win-preferences/schema/advanced.ts:44
 msgid "Do not prompt for filename when creating new files"
 msgstr "Do not prompt for filename when creating new files"
@@ -554,7 +961,17 @@ msgstr "Appearance"
 #: source/win-preferences/schema/advanced.ts:57
 msgid "Use native window appearance"
 msgstr "Use native window appearance"
+#: source/win-preferences/schema/advanced.ts:57
+msgid "Use native window appearance"
+msgstr "Use native window appearance"
 
+#: source/win-preferences/schema/advanced.ts:58
+msgid "Only available on Linux; this is the default for macOS and Windows."
+msgstr "Only available on Linux; this is the default for macOS and Windows."
+
+#: source/win-preferences/schema/advanced.ts:64
+msgid "Enable window vibrancy"
+msgstr "Enable window vibrancy"
 #: source/win-preferences/schema/advanced.ts:58
 msgid "Only available on Linux; this is the default for macOS and Windows."
 msgstr "Only available on Linux; this is the default for macOS and Windows."
@@ -566,7 +983,13 @@ msgstr "Enable window vibrancy"
 #: source/win-preferences/schema/advanced.ts:65
 msgid "Only available on macOS; makes the window background opaque."
 msgstr "Only available on macOS; makes the window background opaque."
+#: source/win-preferences/schema/advanced.ts:65
+msgid "Only available on macOS; makes the window background opaque."
+msgstr "Only available on macOS; makes the window background opaque."
 
+#: source/win-preferences/schema/advanced.ts:72
+msgid "Show app in the notification area"
+msgstr "Show app in the notification area"
 #: source/win-preferences/schema/advanced.ts:72
 msgid "Show app in the notification area"
 msgstr "Show app in the notification area"
@@ -574,7 +997,13 @@ msgstr "Show app in the notification area"
 #: source/win-preferences/schema/advanced.ts:73
 msgid "Leave app running in the notification area"
 msgstr "Leave app running in the notification area"
+#: source/win-preferences/schema/advanced.ts:73
+msgid "Leave app running in the notification area"
+msgstr "Leave app running in the notification area"
 
+#: source/win-preferences/schema/advanced.ts:82
+msgid "Zoom behavior"
+msgstr "Zoom behavior"
 #: source/win-preferences/schema/advanced.ts:82
 msgid "Zoom behavior"
 msgstr "Zoom behavior"
@@ -582,7 +1011,13 @@ msgstr "Zoom behavior"
 #: source/win-preferences/schema/advanced.ts:85
 msgid "Resizes the whole GUI"
 msgstr "Resizes the whole GUI"
+#: source/win-preferences/schema/advanced.ts:85
+msgid "Resizes the whole GUI"
+msgstr "Resizes the whole GUI"
 
+#: source/win-preferences/schema/advanced.ts:86
+msgid "Changes the editor font size"
+msgstr "Changes the editor font size"
 #: source/win-preferences/schema/advanced.ts:86
 msgid "Changes the editor font size"
 msgstr "Changes the editor font size"
@@ -590,7 +1025,13 @@ msgstr "Changes the editor font size"
 #: source/win-preferences/schema/advanced.ts:92
 msgid "Attachments sidebar"
 msgstr "Attachments sidebar"
+#: source/win-preferences/schema/advanced.ts:92
+msgid "Attachments sidebar"
+msgstr "Attachments sidebar"
 
+#: source/win-preferences/schema/advanced.ts:98
+msgid "File extensions to be visible in the Attachments sidebar"
+msgstr "File extensions to be visible in the Attachments sidebar"
 #: source/win-preferences/schema/advanced.ts:98
 msgid "File extensions to be visible in the Attachments sidebar"
 msgstr "File extensions to be visible in the Attachments sidebar"
@@ -598,7 +1039,13 @@ msgstr "File extensions to be visible in the Attachments sidebar"
 #: source/win-preferences/schema/advanced.ts:104
 msgid "Iframe rendering whitelist"
 msgstr "Iframe rendering whitelist"
+#: source/win-preferences/schema/advanced.ts:104
+msgid "Iframe rendering whitelist"
+msgstr "Iframe rendering whitelist"
 
+#: source/win-preferences/schema/advanced.ts:113
+msgid "Hostname"
+msgstr "Hostname"
 #: source/win-preferences/schema/advanced.ts:113
 msgid "Hostname"
 msgstr "Hostname"
@@ -606,7 +1053,13 @@ msgstr "Hostname"
 #: source/win-preferences/schema/advanced.ts:120
 msgid "Watchdog polling"
 msgstr "Watchdog polling"
+#: source/win-preferences/schema/advanced.ts:120
+msgid "Watchdog polling"
+msgstr "Watchdog polling"
 
+#: source/win-preferences/schema/advanced.ts:126
+msgid "Activate Watchdog polling"
+msgstr "Activate Watchdog polling"
 #: source/win-preferences/schema/advanced.ts:126
 msgid "Activate Watchdog polling"
 msgstr "Activate Watchdog polling"
@@ -614,7 +1067,13 @@ msgstr "Activate Watchdog polling"
 #: source/win-preferences/schema/advanced.ts:131
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "Time to wait before writing a file is considered done (in ms)"
+#: source/win-preferences/schema/advanced.ts:131
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr "Time to wait before writing a file is considered done (in ms)"
 
+#: source/win-preferences/schema/advanced.ts:138
+msgid "Deleting items"
+msgstr "Deleting items"
 #: source/win-preferences/schema/advanced.ts:138
 msgid "Deleting items"
 msgstr "Deleting items"
@@ -622,7 +1081,13 @@ msgstr "Deleting items"
 #: source/win-preferences/schema/advanced.ts:144
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr "Delete items irreversibly, if moving them to trash fails"
+#: source/win-preferences/schema/advanced.ts:144
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr "Delete items irreversibly, if moving them to trash fails"
 
+#: source/win-preferences/schema/advanced.ts:150
+msgid "Debug mode"
+msgstr "Debug mode"
 #: source/win-preferences/schema/advanced.ts:150
 msgid "Debug mode"
 msgstr "Debug mode"
@@ -630,7 +1095,13 @@ msgstr "Debug mode"
 #: source/win-preferences/schema/advanced.ts:156
 msgid "Enable debug mode"
 msgstr "Enable debug mode"
+#: source/win-preferences/schema/advanced.ts:156
+msgid "Enable debug mode"
+msgstr "Enable debug mode"
 
+#: source/win-preferences/schema/advanced.ts:163
+msgid "Beta releases"
+msgstr "Beta releases"
 #: source/win-preferences/schema/advanced.ts:163
 msgid "Beta releases"
 msgstr "Beta releases"
@@ -642,7 +1113,21 @@ msgstr "Notify me about beta releases"
 #: source/win-preferences/schema/snippets.ts:24
 msgid "Snippets"
 msgstr "Snippets"
+#: source/win-preferences/schema/advanced.ts:169
+msgid "Notify me about beta releases"
+msgstr "Notify me about beta releases"
 
+#: source/win-preferences/schema/snippets.ts:24
+msgid "Snippets"
+msgstr "Snippets"
+
+#: source/win-preferences/schema/snippets.ts:30
+msgid "Open snippets editor"
+msgstr "Open snippets editor"
+
+#: source/win-preferences/schema/zettelkasten.ts:23
+msgid "Zettelkasten IDs"
+msgstr "Zettelkasten IDs"
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
 msgstr "Open snippets editor"
@@ -664,14 +1149,35 @@ msgid "Pattern used to generate new IDs"
 msgstr "Pattern used to generate new IDs"
 
 #: source/win-preferences/schema/zettelkasten.ts:39
+#: source/win-preferences/schema/zettelkasten.ts:29
+msgid "Pattern for Zettelkasten IDs"
+msgstr "Pattern for Zettelkasten IDs"
+
+#: source/win-preferences/schema/zettelkasten.ts:30
+msgid "Uses ECMAScript regular expressions"
+msgstr "Uses ECMAScript regular expressions"
+
+#: source/win-preferences/schema/zettelkasten.ts:36
+msgid "Pattern used to generate new IDs"
+msgstr "Pattern used to generate new IDs"
+
+#: source/win-preferences/schema/zettelkasten.ts:39
 #, javascript-format
+msgid "Available Variables: %s"
+msgstr "Available Variables: %s"
 msgid "Available Variables: %s"
 msgstr "Available Variables: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:50
 msgid "Link with filename only"
 msgstr "Link with filename only"
+#: source/win-preferences/schema/zettelkasten.ts:50
+msgid "Link with filename only"
+msgstr "Link with filename only"
 
+#: source/win-preferences/schema/zettelkasten.ts:55
+msgid "When linking files, add the document name …"
+msgstr "When linking files, add the document name …"
 #: source/win-preferences/schema/zettelkasten.ts:55
 msgid "When linking files, add the document name …"
 msgstr "When linking files, add the document name …"
@@ -683,7 +1189,21 @@ msgstr "Always"
 #: source/win-preferences/schema/zettelkasten.ts:59
 msgid "Only when linking using the ID"
 msgstr "Only when linking using the ID"
+#: source/win-preferences/schema/zettelkasten.ts:58
+msgid "Always"
+msgstr "Always"
 
+#: source/win-preferences/schema/zettelkasten.ts:59
+msgid "Only when linking using the ID"
+msgstr "Only when linking using the ID"
+
+#: source/win-preferences/schema/zettelkasten.ts:60
+msgid "Never"
+msgstr "Never"
+
+#: source/win-preferences/schema/zettelkasten.ts:68
+msgid "Link format"
+msgstr "Link format"
 #: source/win-preferences/schema/zettelkasten.ts:60
 msgid "Never"
 msgstr "Never"
@@ -705,11 +1225,30 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:79
 msgid "[[Link|Title]]: Link first (recommended)"
 msgstr "[[Link|Title]]: Link first (recommended)"
+#: source/win-preferences/schema/zettelkasten.ts:73
+msgid ""
+"Internal links allow you to add an optional title, separated by a vertical "
+"bar character from the actual link target. Here you can define the ordering "
+"of the two."
+msgstr ""
+"Internal links allow you to add an optional title, separated by a vertical "
+"bar character from the actual link target. Here you can define the ordering "
+"of the two."
+
+#: source/win-preferences/schema/zettelkasten.ts:79
+msgid "[[Link|Title]]: Link first (recommended)"
+msgstr "[[Link|Title]]: Link first (recommended)"
 
 #: source/win-preferences/schema/zettelkasten.ts:80
 msgid "[[Title|Link]]: Title first"
 msgstr "[[Title|Link]]: Title first"
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "[[Title|Link]]: Title first"
+msgstr "[[Title|Link]]: Title first"
 
+#: source/win-preferences/schema/zettelkasten.ts:88
+msgid "Start a full-text search when following internal links"
+msgstr "Start a full-text search when following internal links"
 #: source/win-preferences/schema/zettelkasten.ts:88
 msgid "Start a full-text search when following internal links"
 msgstr "Start a full-text search when following internal links"
@@ -725,7 +1264,21 @@ msgid ""
 msgstr ""
 "Automatically create non-existing files in this folder when following "
 "internal links"
+#: source/win-preferences/schema/zettelkasten.ts:89
+msgid "The search string will match the content between the brackets: [[ ]]."
+msgstr "The search string will match the content between the brackets: [[ ]]."
 
+#: source/win-preferences/schema/zettelkasten.ts:96
+msgid ""
+"Automatically create non-existing files in this folder when following "
+"internal links"
+msgstr ""
+"Automatically create non-existing files in this folder when following "
+"internal links"
+
+#: source/win-preferences/schema/zettelkasten.ts:101
+msgid "For this to work, the folder must be open as a Workspace in Zettlr."
+msgstr "For this to work, the folder must be open as a Workspace in Zettlr."
 #: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
 msgstr "For this to work, the folder must be open as a Workspace in Zettlr."
@@ -733,17 +1286,34 @@ msgstr "For this to work, the folder must be open as a Workspace in Zettlr."
 #: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
 msgstr "Path to folder"
+#: source/win-preferences/schema/zettelkasten.ts:106
+msgid "Path to folder"
+msgstr "Path to folder"
 
+#: source/win-preferences/schema/editor.ts:23
+msgid "Input mode"
+msgstr "Input mode"
 #: source/win-preferences/schema/editor.ts:23
 msgid "Input mode"
 msgstr "Input mode"
 
 #: source/win-preferences/schema/editor.ts:39
+#: source/win-preferences/schema/editor.ts:39
 msgid ""
 "The input mode determines how you interact with the editor. We recommend "
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
+"The input mode determines how you interact with the editor. We recommend "
+"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
+"know what this implies."
 msgstr ""
+"The input mode determines how you interact with the editor. We recommend "
+"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
+"know what this implies."
+
+#: source/win-preferences/schema/editor.ts:44
+msgid "Writing direction"
+msgstr "Writing direction"
 "The input mode determines how you interact with the editor. We recommend "
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
@@ -757,7 +1327,15 @@ msgid "Markdown rendering"
 msgstr "Markdown rendering"
 
 #: source/win-preferences/schema/editor.ts:59
+#: source/win-preferences/schema/editor.ts:52
+msgid "Markdown rendering"
+msgstr "Markdown rendering"
+
+#: source/win-preferences/schema/editor.ts:59
 msgid ""
+"Check to enable live rendering of various Markdown elements to formatted "
+"appearance. This hides formatting characters (such as **text**) or renders "
+"images instead of their link."
 "Check to enable live rendering of various Markdown elements to formatted "
 "appearance. This hides formatting characters (such as **text**) or renders "
 "images instead of their link."
@@ -777,7 +1355,45 @@ msgstr "Render Iframes"
 #: source/win-preferences/schema/editor.ts:77
 msgid "Render Images"
 msgstr "Render Images"
+"Check to enable live rendering of various Markdown elements to formatted "
+"appearance. This hides formatting characters (such as **text**) or renders "
+"images instead of their link."
 
+#: source/win-preferences/schema/editor.ts:67
+msgid "Render Citations"
+msgstr "Render Citations"
+
+#: source/win-preferences/schema/editor.ts:72
+msgid "Render Iframes"
+msgstr "Render Iframes"
+
+#: source/win-preferences/schema/editor.ts:77
+msgid "Render Images"
+msgstr "Render Images"
+
+#: source/win-preferences/schema/editor.ts:82
+msgid "Render Links"
+msgstr "Render Links"
+
+#: source/win-preferences/schema/editor.ts:87
+msgid "Render Formulae"
+msgstr "Render Formulae"
+
+#: source/win-preferences/schema/editor.ts:92
+msgid "Render Tasks"
+msgstr "Render Tasks"
+
+#: source/win-preferences/schema/editor.ts:97
+msgid "Hide heading characters"
+msgstr "Hide heading characters"
+
+#: source/win-preferences/schema/editor.ts:102
+msgid "Render emphasis"
+msgstr "Render emphasis"
+
+#: source/win-preferences/schema/editor.ts:111
+msgid "Formatting characters for bold and italic"
+msgstr "Formatting characters for bold and italic"
 #: source/win-preferences/schema/editor.ts:82
 msgid "Render Links"
 msgstr "Render Links"
@@ -818,7 +1434,28 @@ msgstr "Italics"
 #: source/win-preferences/schema/editor.ts:138
 msgid "Check Markdown for style issues"
 msgstr "Check Markdown for style issues"
+#: source/win-preferences/schema/editor.ts:121
+#: source/win-preferences/schema/editor.ts:122
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
+msgid "Bold"
+msgstr "Bold"
 
+#: source/win-preferences/schema/editor.ts:129
+#: source/win-preferences/schema/editor.ts:130
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
+msgid "Italics"
+msgstr "Italics"
+
+#: source/win-preferences/schema/editor.ts:138
+msgid "Check Markdown for style issues"
+msgstr "Check Markdown for style issues"
+
+#: source/win-preferences/schema/editor.ts:144
+msgid "Table Editor"
+msgstr "Table Editor"
+
+#: source/win-preferences/schema/editor.ts:155
 #: source/win-preferences/schema/editor.ts:144
 msgid "Table Editor"
 msgstr "Table Editor"
@@ -828,7 +1465,13 @@ msgid ""
 "The Table Editor is an interactive interface that simplifies creation and "
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
+"The Table Editor is an interactive interface that simplifies creation and "
+"editing of tables. It provides buttons for common functionality, and takes "
+"care of Markdown formatting."
 msgstr ""
+"The Table Editor is an interactive interface that simplifies creation and "
+"editing of tables. It provides buttons for common functionality, and takes "
+"care of Markdown formatting."
 "The Table Editor is an interactive interface that simplifies creation and "
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
@@ -840,7 +1483,17 @@ msgstr "Distraction-free mode"
 #: source/win-preferences/schema/editor.ts:166
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "Mute non-focused lines in distraction-free mode"
+#: source/win-preferences/schema/editor.ts:160
+msgid "Distraction-free mode"
+msgstr "Distraction-free mode"
 
+#: source/win-preferences/schema/editor.ts:166
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr "Mute non-focused lines in distraction-free mode"
+
+#: source/win-preferences/schema/editor.ts:171
+msgid "Hide toolbar in distraction free mode"
+msgstr "Hide toolbar in distraction free mode"
 #: source/win-preferences/schema/editor.ts:171
 msgid "Hide toolbar in distraction free mode"
 msgstr "Hide toolbar in distraction free mode"
@@ -852,11 +1505,32 @@ msgstr "Word counter"
 #: source/win-preferences/schema/editor.ts:184
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "Count characters instead of words (e.g., for Chinese)"
+#: source/win-preferences/schema/editor.ts:177
+msgid "Word counter"
+msgstr "Word counter"
+
+#: source/win-preferences/schema/editor.ts:184
+msgid "Count characters instead of words (e.g., for Chinese)"
+msgstr "Count characters instead of words (e.g., for Chinese)"
 
 #: source/win-preferences/schema/editor.ts:190
 msgid "Readability mode"
 msgstr "Readability mode"
+#: source/win-preferences/schema/editor.ts:190
+msgid "Readability mode"
+msgstr "Readability mode"
 
+#: source/win-preferences/schema/editor.ts:197
+msgid "Algorithm"
+msgstr "Algorithm"
+
+#: source/win-preferences/schema/editor.ts:209
+msgid "Image size"
+msgstr "Image size"
+
+#: source/win-preferences/schema/editor.ts:215
+msgid "Maximum width of images (%s %)"
+msgstr "Maximum width of images (%s %)"
 #: source/win-preferences/schema/editor.ts:197
 msgid "Algorithm"
 msgstr "Algorithm"
@@ -884,11 +1558,40 @@ msgstr "Font size"
 #: source/win-preferences/schema/editor.ts:243
 msgid "Indentation size (number of spaces)"
 msgstr "Indentation size (number of spaces)"
+#: source/win-preferences/schema/editor.ts:222
+msgid "Maximum height of images (%s %)"
+msgstr "Maximum height of images (%s %)"
+
+#: source/win-preferences/schema/editor.ts:230
+msgid "Other settings"
+msgstr "Other settings"
+
+#: source/win-preferences/schema/editor.ts:236
+msgid "Font size"
+msgstr "Font size"
+
+#: source/win-preferences/schema/editor.ts:243
+msgid "Indentation size (number of spaces)"
+msgstr "Indentation size (number of spaces)"
 
 #: source/win-preferences/schema/editor.ts:250
 msgid "Indent using tabs instead of spaces"
 msgstr "Indent using tabs instead of spaces"
+#: source/win-preferences/schema/editor.ts:250
+msgid "Indent using tabs instead of spaces"
+msgstr "Indent using tabs instead of spaces"
 
+#: source/win-preferences/schema/editor.ts:257
+msgid "Suggest emojis during autocompletion"
+msgstr "Suggest emojis during autocompletion"
+
+#: source/win-preferences/schema/editor.ts:262
+msgid "Show link previews"
+msgstr "Show link previews"
+
+#: source/win-preferences/schema/editor.ts:268
+msgid "Automatically close matching character pairs"
+msgstr "Automatically close matching character pairs"
 #: source/win-preferences/schema/editor.ts:257
 msgid "Suggest emojis during autocompletion"
 msgstr "Suggest emojis during autocompletion"
@@ -919,7 +1622,28 @@ msgstr "Quit"
 #: source/app/service-providers/tray/index.ts:173
 msgid "Zettlr"
 msgstr "Zettlr"
+#: source/app/service-providers/workspaces/index.ts:163
+#, javascript-format
+msgid "Loading workspace %s"
+msgstr "Loading workspace %s"
 
+#: source/app/service-providers/tray/index.ts:160
+msgid "Show Zettlr"
+msgstr "Show Zettlr"
+
+#: source/app/service-providers/tray/index.ts:166
+#: source/app/service-providers/menu/menu.darwin.ts:104
+#: source/app/service-providers/menu/menu.win32.ts:308
+msgid "Quit"
+msgstr "Quit"
+
+#: source/app/service-providers/tray/index.ts:173
+msgid "Zettlr"
+msgstr "Zettlr"
+
+#: source/app/service-providers/commands/file-rename.ts:108
+#: source/app/service-providers/commands/rename-tag.ts:43
+#: source/app/service-providers/config/index.ts:500
 #: source/app/service-providers/commands/file-rename.ts:108
 #: source/app/service-providers/commands/rename-tag.ts:43
 #: source/app/service-providers/config/index.ts:500
@@ -927,10 +1651,15 @@ msgid "Confirm"
 msgstr "Confirm"
 
 #: source/app/service-providers/commands/file-rename.ts:109
+#: source/app/service-providers/commands/file-rename.ts:109
 #, javascript-format
 msgid "Update %s internal links to file %s?"
 msgstr "Update %s internal links to file %s?"
+msgid "Update %s internal links to file %s?"
+msgstr "Update %s internal links to file %s?"
 
+#: source/app/service-providers/commands/file-rename.ts:111
+#: source/app/service-providers/commands/rename-tag.ts:46
 #: source/app/service-providers/commands/file-rename.ts:111
 #: source/app/service-providers/commands/rename-tag.ts:46
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
@@ -951,7 +1680,24 @@ msgstr "No"
 msgid "Ok"
 msgstr "Ok"
 
+#. 0: Save all changes
+#: source/app/service-providers/commands/file-rename.ts:112
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+msgid "No"
+msgstr "No"
+
+#: source/app/service-providers/commands/dir-delete.ts:35
+#: source/app/service-providers/commands/file-delete.ts:36
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+msgid "Ok"
+msgstr "Ok"
+
 #. 1: Omit all changes
+#: source/app/service-providers/commands/dir-delete.ts:36
+#: source/app/service-providers/commands/rename-tag.ts:47
+#: source/app/service-providers/commands/file-delete.ts:37
 #: source/app/service-providers/commands/dir-delete.ts:36
 #: source/app/service-providers/commands/rename-tag.ts:47
 #: source/app/service-providers/commands/file-delete.ts:37
@@ -967,10 +1713,18 @@ msgstr "Cancel"
 #: source/app/service-providers/commands/file-delete.ts:41
 msgid "Really delete?"
 msgstr "Really delete?"
+#: source/app/service-providers/commands/dir-delete.ts:40
+#: source/app/service-providers/commands/file-delete.ts:41
+msgid "Really delete?"
+msgstr "Really delete?"
 
 #: source/app/service-providers/commands/dir-delete.ts:41
 #: source/app/service-providers/commands/file-delete.ts:42
+#: source/app/service-providers/commands/dir-delete.ts:41
+#: source/app/service-providers/commands/file-delete.ts:42
 #, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "Do you really want to remove %s?"
 msgid "Do you really want to remove %s?"
 msgstr "Do you really want to remove %s?"
 
@@ -983,6 +1737,7 @@ msgstr "You have to select a directory to import to."
 #: source/app/service-providers/commands/import.ts:42
 #: source/app/service-providers/windows/dialog/ask-file.ts:47
 #: source/tmp/FileControl.vue.ts:57
+#: source/tmp/FileControl.vue.ts:57
 msgid "All Files"
 msgstr "All Files"
 
@@ -993,16 +1748,19 @@ msgstr "Importing. Please wait …"
 
 #. This callback gets called whenever there is an error while running pandoc.
 #: source/app/service-providers/commands/import.ts:67
+#: source/app/service-providers/commands/import.ts:67
 #, javascript-format
 msgid "Couldn't import %s."
 msgstr "Couldn't import %s."
 
+#: source/app/service-providers/commands/import.ts:71
 #: source/app/service-providers/commands/import.ts:71
 #, javascript-format
 msgid "%s imported successfully."
 msgstr "%s imported successfully."
 
 #. Some files failed to import.
+#: source/app/service-providers/commands/import.ts:76
 #: source/app/service-providers/commands/import.ts:76
 #, javascript-format
 msgid ""
@@ -1015,16 +1773,36 @@ msgstr ""
 #: source/app/service-providers/commands/import.ts:82
 msgid "Import failed"
 msgstr "Import failed"
+#: source/app/service-providers/commands/import.ts:82
+msgid "Import failed"
+msgstr "Import failed"
 
 #: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/commands/rename-tag.ts:44
 #, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr "Replace tag \"%s\" with \"%s\" across %s files?"
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr "Replace tag \"%s\" with \"%s\" across %s files?"
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:37
 msgid "The requested file was not found."
 msgstr "The requested file was not found."
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "The requested file was not found."
 
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "The provided name did not contain any allowed letters."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+msgid "The requested directory was not found."
+msgstr "The requested directory was not found."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "Could not save image"
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:54
 msgid "The provided name did not contain any allowed letters."
 msgstr "The provided name did not contain any allowed letters."
@@ -1067,6 +1845,15 @@ msgstr "Could not create file"
 #: source/app/service-providers/commands/root-open.ts:62
 #: source/tmp/FileItem.vue.ts:105 source/tmp/FileItem.vue.ts:107
 #: source/tmp/PopoverDirProps.vue.ts:32
+#: source/app/service-providers/commands/file-new.ts:147
+#: source/app/service-providers/commands/file-duplicate.ts:42
+#: source/app/service-providers/commands/file-duplicate.ts:59
+msgid "Could not create file"
+msgstr "Could not create file"
+
+#: source/app/service-providers/commands/root-open.ts:62
+#: source/tmp/FileItem.vue.ts:105 source/tmp/FileItem.vue.ts:107
+#: source/tmp/PopoverDirProps.vue.ts:32
 msgid "Files"
 msgstr "Files"
 
@@ -1074,13 +1861,17 @@ msgstr "Files"
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:75
 #: source/app/service-providers/windows/index.ts:221
+#: source/app/service-providers/commands/root-open.ts:75
+#: source/app/service-providers/windows/index.ts:221
 msgid "Open project folder"
 msgstr "Open project folder"
 
 #: source/app/service-providers/commands/root-open.ts:85
+#: source/app/service-providers/commands/root-open.ts:85
 msgid "Cannot open directory"
 msgstr "Cannot open directory"
 
+#: source/app/service-providers/commands/root-open.ts:86
 #: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
 msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
@@ -1088,7 +1879,21 @@ msgstr "Directory &quot;%s&quot; cannot be opened by Zettlr."
 
 #. Better error message
 #: source/app/service-providers/commands/open-attachment.ts:113
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:113
 #, javascript-format
+msgid "The reference with key %s does not appear to have attachments."
+msgstr "The reference with key %s does not appear to have attachments."
+
+#: source/app/service-providers/commands/open-attachment.ts:118
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "Could not open attachment. Is Zotero running?"
+
+#. Else standard val for new dirs.
+#: source/app/service-providers/commands/dir-new.ts:31
+#: source/tmp/TreeItem.vue.ts:240
+msgid "Untitled"
+msgstr "Untitled"
 msgid "The reference with key %s does not appear to have attachments."
 msgstr "The reference with key %s does not appear to have attachments."
 
@@ -1109,10 +1914,21 @@ msgid "Could not create directory"
 msgstr "Could not create directory"
 
 #: source/app/service-providers/commands/import-lang-file.ts:60
+#: source/app/service-providers/commands/dir-new.ts:37
+#: source/app/service-providers/commands/dir-new.ts:38
+#: source/app/service-providers/commands/dir-new.ts:50
+msgid "Could not create directory"
+msgstr "Could not create directory"
+
+#: source/app/service-providers/commands/import-lang-file.ts:60
 #, javascript-format
 msgid "Language file imported: %s"
 msgstr "Language file imported: %s"
+msgid "Language file imported: %s"
+msgstr "Language file imported: %s"
 
+#: source/app/service-providers/commands/import-lang-file.ts:62
+#: source/app/service-providers/commands/import-lang-file.ts:65
 #: source/app/service-providers/commands/import-lang-file.ts:62
 #: source/app/service-providers/commands/import-lang-file.ts:65
 #, javascript-format
@@ -1140,21 +1956,50 @@ msgstr "Select import profile"
 #, javascript-format
 msgid "There are multiple profiles that can import %s. Please choose one."
 msgstr "There are multiple profiles that can import %s. Please choose one."
+msgid "Could not import language file %s!"
+msgstr "Could not import language file %s!"
 
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
+msgstr "Copy of %s"
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:63
+#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "Malformed Textbundle: %s"
+
+#: source/app/service-providers/commands/importer/index.ts:92
+#: source/app/service-providers/commands/importer/index.ts:93
+msgid "Select import profile"
+msgstr "Select import profile"
+
+#: source/app/service-providers/commands/importer/index.ts:94
+#, javascript-format
+msgid "There are multiple profiles that can import %s. Please choose one."
+msgstr "There are multiple profiles that can import %s. Please choose one."
+
+#: source/app/service-providers/commands/export.ts:55
+#: source/app/service-providers/commands/export.ts:157
 #: source/app/service-providers/commands/export.ts:55
 #: source/app/service-providers/commands/export.ts:157
 msgid "Export failed"
 msgstr "Export failed"
 
 #: source/app/service-providers/commands/export.ts:56
+#: source/app/service-providers/commands/export.ts:56
 #, javascript-format
 msgid "An error occurred during export: %s"
 msgstr "An error occurred during export: %s"
 
 #: source/app/service-providers/commands/export.ts:114
+#: source/app/service-providers/commands/export.ts:114
 msgid "Choose export destination"
 msgstr "Choose export destination"
 
+#: source/app/service-providers/commands/export.ts:114
 #: source/app/service-providers/commands/export.ts:114
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/app/service-providers/menu/menu.win32.ts:162
@@ -1163,15 +2008,30 @@ msgid "Save"
 msgstr "Save"
 
 #: source/app/service-providers/commands/export.ts:145
+#: source/app/service-providers/commands/export.ts:145
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "Exporting to %s"
 
 #: source/app/service-providers/commands/export.ts:158
+#: source/app/service-providers/commands/export.ts:158
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "An error occurred on export: %s"
 
+#: source/app/service-providers/commands/request-move.ts:53
+msgid "Cannot move directory"
+msgstr "Cannot move directory"
+
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "You cannot move a directory into one of its subdirectories."
+
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
+msgstr "Cannot move directory or file"
+
+#: source/app/service-providers/commands/request-move.ts:64
 #: source/app/service-providers/commands/request-move.ts:53
 msgid "Cannot move directory"
 msgstr "Cannot move directory"
@@ -1218,6 +2078,79 @@ msgstr "Unsaved changes"
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr "There are unsaved changes. Do you want to save them first?"
 
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
+msgid "Overwrite existing file"
+msgstr "Overwrite existing file"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#, javascript-format
+msgid "The file %s already exists in this directory. Overwrite?"
+msgstr "The file %s already exists in this directory. Overwrite?"
+
+#: source/app/service-providers/windows/dialog/ask-file.ts:54
+msgid "Open file"
+msgstr "Open file"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
+msgid "Replace file"
+msgstr "Replace file"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#, javascript-format
+msgid ""
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
+msgstr ""
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
+
+#: source/app/service-providers/windows/dialog/save-dialog.ts:58
+msgid "Save file"
+msgstr "Save file"
+
+#: source/app/service-providers/config/index.ts:492
+msgid "Changing this option requires a restart to take effect."
+msgstr "Changing this option requires a restart to take effect."
+
+#: source/app/service-providers/config/index.ts:495
+#: source/app/service-providers/menu/menu.darwin.ts:711
+#: source/app/service-providers/menu/menu.win32.ts:684
+msgid "Restart now"
+msgstr "Restart now"
+
+#: source/app/service-providers/config/index.ts:496
+msgid "Restart later"
+msgstr "Restart later"
+
+#: source/app/service-providers/config/config-validation.ts:278
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "Option %s has to be of type %s."
+
+#: source/app/service-providers/config/config-validation.ts:281
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "Option %s must be one of: %s."
+
+#: source/app/service-providers/config/config-validation.ts:284
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "Option %s must be between %s and %s (characters long)."
+
+#: source/app/service-providers/config/config-validation.ts:287
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "Option %s may not exceed %s (characters)."
+
+#: source/app/service-providers/config/config-validation.ts:290
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "Option %s must be at least %s (characters long)."
+
+#: source/app/service-providers/config/config-validation.ts:293
+#, javascript-format
+msgid "Option %s is required."
+msgstr "Option %s is required."
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
 msgid "Overwrite existing file"
 msgstr "Overwrite existing file"
@@ -1338,14 +2271,22 @@ msgstr "File"
 #: source/app/service-providers/menu/menu.darwin.ts:116
 #: source/app/service-providers/menu/menu.win32.ts:90
 #: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/win-main/file-manager/util/dir-item-context.ts:37
 msgid "New File…"
 msgstr "New File…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:155
 #: source/app/service-providers/menu/menu.win32.ts:129
 #: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/win-main/file-manager/util/dir-item-context.ts:43
 msgid "New directory…"
 msgstr "New directory…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:166
+#: source/app/service-providers/menu/menu.win32.ts:140
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
+msgid "Open…"
+msgstr "Open…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:166
 #: source/app/service-providers/menu/menu.win32.ts:140
@@ -1414,14 +2355,22 @@ msgstr "Rename file"
 #: source/app/service-providers/menu/menu.darwin.ts:298
 #: source/app/service-providers/menu/menu.win32.ts:292
 #: source/win-main/file-manager/util/file-item-context.ts:50
+#: source/win-main/file-manager/util/file-item-context.ts:50
 msgid "Delete file"
 msgstr "Delete file"
 
 #: source/app/service-providers/menu/menu.darwin.ts:306
 #: source/app/service-providers/menu/menu.win32.ts:299
 #: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/win-main/file-manager/util/dir-item-context.ts:58
 msgid "Delete directory"
 msgstr "Delete directory"
+
+#: source/app/service-providers/menu/menu.darwin.ts:317
+#: source/app/service-providers/menu/menu.win32.ts:318
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
+msgid "Edit"
+msgstr "Edit"
 
 #: source/app/service-providers/menu/menu.darwin.ts:317
 #: source/app/service-providers/menu/menu.win32.ts:318
@@ -1438,6 +2387,46 @@ msgstr "Undo"
 #: source/app/service-providers/menu/menu.win32.ts:329
 msgid "Redo"
 msgstr "Redo"
+
+#: source/app/service-providers/menu/menu.darwin.ts:337
+#: source/app/service-providers/menu/menu.win32.ts:338
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/common/modules/window-register/register-default-context.ts:76
+msgid "Cut"
+msgstr "Cut"
+
+#: source/app/service-providers/menu/menu.darwin.ts:343
+#: source/app/service-providers/menu/menu.win32.ts:344
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
+#: source/common/modules/window-register/register-default-context.ts:83
+msgid "Copy"
+msgstr "Copy"
+
+#: source/app/service-providers/menu/menu.darwin.ts:348
+#: source/app/service-providers/menu/menu.win32.ts:349
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
+msgid "Copy as HTML"
+msgstr "Copy as HTML"
+
+#: source/app/service-providers/menu/menu.darwin.ts:357
+#: source/app/service-providers/menu/menu.win32.ts:358
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/common/modules/window-register/register-default-context.ts:90
+msgid "Paste"
+msgstr "Paste"
+
+#: source/app/service-providers/menu/menu.darwin.ts:362
+#: source/app/service-providers/menu/menu.win32.ts:363
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
+msgid "Paste without style"
+msgstr "Paste without style"
+
+#: source/app/service-providers/menu/menu.darwin.ts:371
+#: source/app/service-providers/menu/menu.win32.ts:372
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
+#: source/common/modules/window-register/register-default-context.ts:100
+msgid "Select all"
+msgstr "Select all"
 
 #: source/app/service-providers/menu/menu.darwin.ts:337
 #: source/app/service-providers/menu/menu.win32.ts:338
@@ -1501,6 +2490,7 @@ msgstr "Generate new ID"
 
 #: source/app/service-providers/menu/menu.darwin.ts:414
 #: source/app/service-providers/menu/menu.win32.ts:415
+#: source/win-main/file-manager/util/file-item-context.ts:78
 #: source/win-main/file-manager/util/file-item-context.ts:78
 #: source/win-main/tabs-context.ts:80
 msgid "Copy ID"
@@ -1730,11 +2720,24 @@ msgstr "Save changes"
 #: source/app/service-providers/documents/index.ts:346
 msgid "Discard changes"
 msgstr "Discard changes"
+#: source/app/service-providers/documents/index.ts:345
+msgid "Save changes"
+msgstr "Save changes"
+
+#: source/app/service-providers/documents/index.ts:346
+msgid "Discard changes"
+msgstr "Discard changes"
 
 #: source/app/service-providers/documents/index.ts:350
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr "There are unsaved changes. Do you want to save or discard them?"
+#: source/app/service-providers/documents/index.ts:350
+msgid "There are unsaved changes. Do you want to save or discard them?"
+msgstr "There are unsaved changes. Do you want to save or discard them?"
 
+#: source/app/service-providers/documents/index.ts:1006
+msgid "File changed on disk"
+msgstr "File changed on disk"
 #: source/app/service-providers/documents/index.ts:1006
 msgid "File changed on disk"
 msgstr "File changed on disk"
@@ -1743,9 +2746,20 @@ msgstr "File changed on disk"
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s changed on disk"
+#: source/app/service-providers/documents/index.ts:1007
+#, javascript-format
+msgid "%s changed on disk"
+msgstr "%s changed on disk"
 
 #: source/app/service-providers/documents/index.ts:1009
+#: source/app/service-providers/documents/index.ts:1009
 #, javascript-format
+msgid ""
+"%s has changed on disk, but the editor contains unsaved changes. Do you want "
+"to keep the current editor contents or load the file from disk?"
+msgstr ""
+"%s has changed on disk, but the editor contains unsaved changes. Do you want "
+"to keep the current editor contents or load the file from disk?"
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
@@ -1758,7 +2772,15 @@ msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "Do you want to keep the current editor contents or load the file from disk?"
+#: source/app/service-providers/documents/index.ts:1010
+msgid ""
+"Do you want to keep the current editor contents or load the file from disk?"
+msgstr ""
+"Do you want to keep the current editor contents or load the file from disk?"
 
+#: source/app/service-providers/documents/index.ts:1013
+msgid "Keep editor contents"
+msgstr "Keep editor contents"
 #: source/app/service-providers/documents/index.ts:1013
 msgid "Keep editor contents"
 msgstr "Keep editor contents"
@@ -1768,20 +2790,37 @@ msgid "Load changes from disk"
 msgstr "Load changes from disk"
 
 #: source/app/service-providers/documents/index.ts:1017
+#: source/app/service-providers/documents/index.ts:1014
+msgid "Load changes from disk"
+msgstr "Load changes from disk"
+
+#: source/app/service-providers/documents/index.ts:1017
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
+"Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
+"Always load changes from disk if there are no unsaved changes in the editor"
 "Always load changes from disk if there are no unsaved changes in the editor"
 
 #: source/app/service-providers/documents/index.ts:1475
 msgid "Could not save file"
 msgstr "Could not save file"
+#: source/app/service-providers/documents/index.ts:1475
+msgid "Could not save file"
+msgstr "Could not save file"
 
+#: source/app/service-providers/documents/index.ts:1475
 #: source/app/service-providers/documents/index.ts:1475
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "Could not save file %s: %s"
+msgid "Could not save file %s: %s"
+msgstr "Could not save file %s: %s"
 
+#: source/tmp/MainSidebar.vue.ts:39 source/tmp/ToCTab.vue.ts:35
+#: source/tmp/ToCTab.vue.ts:43
+msgid "Table of Contents"
+msgstr "Table of Contents"
 #: source/tmp/MainSidebar.vue.ts:39 source/tmp/ToCTab.vue.ts:35
 #: source/tmp/ToCTab.vue.ts:43
 msgid "Table of Contents"
@@ -1790,11 +2829,18 @@ msgstr "Table of Contents"
 #: source/tmp/MainSidebar.vue.ts:45 source/tmp/ReferencesTab.vue.ts:32
 msgid "References"
 msgstr "References"
+#: source/tmp/MainSidebar.vue.ts:45 source/tmp/ReferencesTab.vue.ts:32
+msgid "References"
+msgstr "References"
 
 #: source/tmp/MainSidebar.vue.ts:51 source/tmp/RelatedFilesTab.vue.ts:33
 msgid "Related files"
 msgstr "Related files"
+#: source/tmp/MainSidebar.vue.ts:51 source/tmp/RelatedFilesTab.vue.ts:33
+msgid "Related files"
+msgstr "Related files"
 
+#: source/tmp/MainSidebar.vue.ts:57 source/tmp/OtherFilesTab.vue.ts:11
 #: source/tmp/MainSidebar.vue.ts:57 source/tmp/OtherFilesTab.vue.ts:11
 msgid "Other files"
 msgstr "Other files"
@@ -1824,7 +2870,17 @@ msgstr "Saving failed"
 #: source/tmp/PopoverDirProps.vue.ts:29
 msgid "Directories"
 msgstr "Directories"
+#: source/tmp/FileItem.vue.ts:98 source/tmp/FileItem.vue.ts:100
+#: source/tmp/PopoverDirProps.vue.ts:29
+msgid "Directories"
+msgstr "Directories"
 
+#: source/tmp/FileItem.vue.ts:121 source/tmp/FileItem.vue.ts:184
+#: source/tmp/PopoverDocInfo.vue.ts:71
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
+#, javascript-format
+msgid "%s characters"
+msgstr "%s characters"
 #: source/tmp/FileItem.vue.ts:121 source/tmp/FileItem.vue.ts:184
 #: source/tmp/PopoverDocInfo.vue.ts:71
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
@@ -1839,7 +2895,17 @@ msgstr "%s characters"
 #, javascript-format
 msgid "%s words"
 msgstr "%s words"
+#: source/tmp/FileItem.vue.ts:123 source/tmp/FileItem.vue.ts:186
+#: source/tmp/PopoverFileProps.vue.ts:56 source/tmp/PopoverDirProps.vue.ts:140
+#: source/tmp/PopoverDocInfo.vue.ts:73
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
+#, javascript-format
+msgid "%s words"
+msgstr "%s words"
 
+#: source/tmp/FileItem.vue.ts:171 source/tmp/PopoverFileProps.vue.ts:39
+msgid "Characters"
+msgstr "Characters"
 #: source/tmp/FileItem.vue.ts:171 source/tmp/PopoverFileProps.vue.ts:39
 msgid "Characters"
 msgstr "Characters"
@@ -1847,11 +2913,24 @@ msgstr "Characters"
 #: source/tmp/FileItem.vue.ts:173 source/tmp/PopoverFileProps.vue.ts:34
 msgid "Words"
 msgstr "Words"
+#: source/tmp/FileItem.vue.ts:173 source/tmp/PopoverFileProps.vue.ts:34
+msgid "Words"
+msgstr "Words"
 
 #: source/tmp/PopoverFileProps.vue.ts:35 source/tmp/PopoverDirProps.vue.ts:31
 msgid "Created"
 msgstr "Created"
+#: source/tmp/PopoverFileProps.vue.ts:35 source/tmp/PopoverDirProps.vue.ts:31
+msgid "Created"
+msgstr "Created"
 
+#: source/tmp/PopoverFileProps.vue.ts:36 source/tmp/PopoverDirProps.vue.ts:30
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
+msgid "Modified"
+msgstr "Modified"
+
+#: source/tmp/PopoverFileProps.vue.ts:37 source/tmp/ColorControl.vue.ts:35
+#: source/tmp/ShortcutChooser.vue.ts:61 source/tmp/NumberControl.vue.ts:40
 #: source/tmp/PopoverFileProps.vue.ts:36 source/tmp/PopoverDirProps.vue.ts:30
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
 msgid "Modified"
@@ -1907,10 +2986,18 @@ msgid "This relation is based on a backlink."
 msgstr "This relation is based on a backlink."
 
 #: source/tmp/RelatedFilesTab.vue.ts:221
+#: source/tmp/RelatedFilesTab.vue.ts:221
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr "This relation is based on %s shared tags: %s"
+msgid "This relation is based on %s shared tags: %s"
+msgstr "This relation is based on %s shared tags: %s"
 
+#: source/tmp/GlobalSearch.vue.ts:34
+msgid "Full-Text Search"
+msgstr "Full-Text Search"
+
+#: source/tmp/GlobalSearch.vue.ts:35
 #: source/tmp/GlobalSearch.vue.ts:34
 msgid "Full-Text Search"
 msgstr "Full-Text Search"
@@ -1920,33 +3007,41 @@ msgid "Enter your search terms below"
 msgstr "Enter your search terms below"
 
 #: source/tmp/GlobalSearch.vue.ts:36
+#: source/tmp/GlobalSearch.vue.ts:36
 msgid "Find …"
 msgstr "Find …"
 
+#: source/tmp/GlobalSearch.vue.ts:37 source/tmp/FileManager.vue.ts:48
 #: source/tmp/GlobalSearch.vue.ts:37 source/tmp/FileManager.vue.ts:48
 msgid "Filter …"
 msgstr "Filter …"
 
 #: source/tmp/GlobalSearch.vue.ts:38
+#: source/tmp/GlobalSearch.vue.ts:38
 msgid "Filter search results"
 msgstr "Filter search results"
 
+#: source/tmp/GlobalSearch.vue.ts:39
 #: source/tmp/GlobalSearch.vue.ts:39
 msgid "Restrict search to directory"
 msgstr "Restrict search to directory"
 
 #: source/tmp/GlobalSearch.vue.ts:40
+#: source/tmp/GlobalSearch.vue.ts:40
 msgid "Restrict to directory …"
 msgstr "Restrict to directory …"
 
+#: source/tmp/GlobalSearch.vue.ts:41
 #: source/tmp/GlobalSearch.vue.ts:41
 msgid "Search"
 msgstr "Search"
 
 #: source/tmp/GlobalSearch.vue.ts:42
+#: source/tmp/GlobalSearch.vue.ts:42
 msgid "Clear search"
 msgstr "Clear search"
 
+#: source/tmp/GlobalSearch.vue.ts:43
 #: source/tmp/GlobalSearch.vue.ts:43
 msgid "Toggle results"
 msgstr "Toggle results"
@@ -2074,7 +3169,17 @@ msgstr "No open document"
 #: source/tmp/PopoverDocInfo.vue.ts:48
 msgid "words"
 msgstr "words"
+#: source/tmp/PopoverDocInfo.vue.ts:45
+msgid "No open document"
+msgstr "No open document"
 
+#: source/tmp/PopoverDocInfo.vue.ts:48
+msgid "words"
+msgstr "words"
+
+#: source/tmp/PopoverDocInfo.vue.ts:51
+msgid "characters"
+msgstr "characters"
 #: source/tmp/PopoverDocInfo.vue.ts:51
 msgid "characters"
 msgstr "characters"
@@ -2127,7 +3232,13 @@ msgstr "Starting update …"
 #: source/tmp/PopoverPomodoro.vue.ts:80
 msgid "Stop"
 msgstr "Stop"
+#: source/tmp/PopoverPomodoro.vue.ts:80
+msgid "Stop"
+msgstr "Stop"
 
+#: source/tmp/PopoverPomodoro.vue.ts:83
+msgid "Work"
+msgstr "Work"
 #: source/tmp/PopoverPomodoro.vue.ts:83
 msgid "Work"
 msgstr "Work"
@@ -2135,7 +3246,13 @@ msgstr "Work"
 #: source/tmp/PopoverPomodoro.vue.ts:86
 msgid "Short break"
 msgstr "Short break"
+#: source/tmp/PopoverPomodoro.vue.ts:86
+msgid "Short break"
+msgstr "Short break"
 
+#: source/tmp/PopoverPomodoro.vue.ts:89
+msgid "Break"
+msgstr "Break"
 #: source/tmp/PopoverPomodoro.vue.ts:89
 msgid "Break"
 msgstr "Break"
@@ -2143,35 +3260,48 @@ msgstr "Break"
 #: source/tmp/PopoverPomodoro.vue.ts:92
 msgid "Sound Effect"
 msgstr "Sound Effect"
+#: source/tmp/PopoverPomodoro.vue.ts:92
+msgid "Sound Effect"
+msgstr "Sound Effect"
 
+#: source/tmp/PopoverPomodoro.vue.ts:95
+msgid "Volume"
+msgstr "Volume"
 #: source/tmp/PopoverPomodoro.vue.ts:95
 msgid "Volume"
 msgstr "Volume"
 
 #: source/tmp/PopoverStats.vue.ts:79
+#: source/tmp/PopoverStats.vue.ts:79
 msgid "words last month"
 msgstr "words last month"
 
+#: source/tmp/PopoverStats.vue.ts:82
 #: source/tmp/PopoverStats.vue.ts:82
 msgid "daily average"
 msgstr "daily average"
 
 #: source/tmp/PopoverStats.vue.ts:85
+#: source/tmp/PopoverStats.vue.ts:85
 msgid "words today"
 msgstr "words today"
 
+#: source/tmp/PopoverStats.vue.ts:88
 #: source/tmp/PopoverStats.vue.ts:88
 msgid "🔥 You're on fire!"
 msgstr "🔥 You're on fire!"
 
 #: source/tmp/PopoverStats.vue.ts:91
+#: source/tmp/PopoverStats.vue.ts:91
 msgid "💪 You're close to hitting your daily average!"
 msgstr "💪 You're close to hitting your daily average!"
 
 #: source/tmp/PopoverStats.vue.ts:94
+#: source/tmp/PopoverStats.vue.ts:94
 msgid "✍🏼 Get writing to surpass your daily average."
 msgstr "✍🏼 Get writing to surpass your daily average."
 
+#: source/tmp/PopoverStats.vue.ts:97
 #: source/tmp/PopoverStats.vue.ts:97
 msgid "More statistics …"
 msgstr "More statistics …"
@@ -2179,84 +3309,110 @@ msgstr "More statistics …"
 #: source/tmp/OtherFilesTab.vue.ts:12
 msgid "Open directory"
 msgstr "Open directory"
+#: source/tmp/OtherFilesTab.vue.ts:12
+msgid "Open directory"
+msgstr "Open directory"
 
+#: source/tmp/OtherFilesTab.vue.ts:13
+msgid "No other files"
+msgstr "No other files"
 #: source/tmp/OtherFilesTab.vue.ts:13
 msgid "No other files"
 msgstr "No other files"
 
 #. STATIC VARIABLES
 #: source/tmp/CalendarView.vue.ts:26
+#. STATIC VARIABLES
+#: source/tmp/CalendarView.vue.ts:26
 msgid "Calendar"
 msgstr "Calendar"
 
+#: source/tmp/CalendarView.vue.ts:28
 #: source/tmp/CalendarView.vue.ts:28
 msgid "January"
 msgstr "January"
 
 #: source/tmp/CalendarView.vue.ts:29
+#: source/tmp/CalendarView.vue.ts:29
 msgid "February"
 msgstr "February"
 
+#: source/tmp/CalendarView.vue.ts:30
 #: source/tmp/CalendarView.vue.ts:30
 msgid "March"
 msgstr "March"
 
 #: source/tmp/CalendarView.vue.ts:31
+#: source/tmp/CalendarView.vue.ts:31
 msgid "April"
 msgstr "April"
 
+#: source/tmp/CalendarView.vue.ts:32
 #: source/tmp/CalendarView.vue.ts:32
 msgid "May"
 msgstr "May"
 
 #: source/tmp/CalendarView.vue.ts:33
+#: source/tmp/CalendarView.vue.ts:33
 msgid "June"
 msgstr "June"
 
+#: source/tmp/CalendarView.vue.ts:34
 #: source/tmp/CalendarView.vue.ts:34
 msgid "July"
 msgstr "July"
 
 #: source/tmp/CalendarView.vue.ts:35
+#: source/tmp/CalendarView.vue.ts:35
 msgid "August"
 msgstr "August"
 
+#: source/tmp/CalendarView.vue.ts:36
 #: source/tmp/CalendarView.vue.ts:36
 msgid "September"
 msgstr "September"
 
 #: source/tmp/CalendarView.vue.ts:37
+#: source/tmp/CalendarView.vue.ts:37
 msgid "October"
 msgstr "October"
 
+#: source/tmp/CalendarView.vue.ts:38
 #: source/tmp/CalendarView.vue.ts:38
 msgid "November"
 msgstr "November"
 
 #: source/tmp/CalendarView.vue.ts:39
+#: source/tmp/CalendarView.vue.ts:39
 msgid "December"
 msgstr "December"
 
+#: source/tmp/CalendarView.vue.ts:41
 #: source/tmp/CalendarView.vue.ts:41
 msgid "Below the monthly average"
 msgstr "Below the monthly average"
 
 #: source/tmp/CalendarView.vue.ts:42
+#: source/tmp/CalendarView.vue.ts:42
 msgid "Over the monthly average"
 msgstr "Over the monthly average"
 
+#: source/tmp/CalendarView.vue.ts:43
 #: source/tmp/CalendarView.vue.ts:43
 msgid "More than twice the monthly average"
 msgstr "More than twice the monthly average"
 
 #: source/tmp/ListControl.vue.ts:76
+#: source/tmp/ListControl.vue.ts:76
 msgid "Add"
 msgstr "Add"
 
 #: source/tmp/ListControl.vue.ts:77
+#: source/tmp/ListControl.vue.ts:77
 msgid "Actions"
 msgstr "Actions"
 
+#: source/tmp/ListControl.vue.ts:78
 #: source/tmp/ListControl.vue.ts:78
 msgid "Delete"
 msgstr "Delete"
@@ -2265,7 +3421,14 @@ msgstr "Delete"
 #: source/win-main/file-manager/util/dir-item-context.ts:28
 msgid "Properties"
 msgstr "Properties"
+#: source/win-main/file-manager/util/file-item-context.ts:34
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+msgid "Properties"
+msgstr "Properties"
 
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "Duplicate file"
 #: source/win-main/file-manager/util/file-item-context.ts:57
 msgid "Duplicate file"
 msgstr "Duplicate file"
@@ -2274,7 +3437,15 @@ msgstr "Duplicate file"
 #: source/win-main/file-manager/util/dir-item-context.ts:67
 msgid "Copy path"
 msgstr "Copy path"
+#: source/win-main/file-manager/util/file-item-context.ts:66
+#: source/win-main/file-manager/util/dir-item-context.ts:67
+msgid "Copy path"
+msgstr "Copy path"
 
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Copy filename"
 #: source/win-main/file-manager/util/file-item-context.ts:72
 #: source/win-main/tabs-context.ts:68
 msgid "Copy filename"
@@ -2285,7 +3456,16 @@ msgstr "Copy filename"
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
 msgid "Reveal in Finder"
 msgstr "Reveal in Finder"
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
+msgid "Reveal in Finder"
+msgstr "Reveal in Finder"
 
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Explorer"
+msgstr "Reveal in Explorer"
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 msgid "Reveal in Explorer"
@@ -2295,7 +3475,14 @@ msgstr "Reveal in Explorer"
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 msgid "Reveal in File Browser"
 msgstr "Reveal in File Browser"
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in File Browser"
+msgstr "Reveal in File Browser"
 
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "Close file"
 #: source/win-main/file-manager/util/file-item-context.ts:100
 msgid "Close file"
 msgstr "Close file"
@@ -2303,7 +3490,13 @@ msgstr "Close file"
 #: source/win-main/file-manager/util/dir-item-context.ts:52
 msgid "Rename directory"
 msgstr "Rename directory"
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "Rename directory"
 
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "Check for directory …"
 #: source/win-main/file-manager/util/dir-item-context.ts:87
 msgid "Check for directory …"
 msgstr "Check for directory …"
@@ -2311,7 +3504,13 @@ msgstr "Check for directory …"
 #: source/win-main/file-manager/util/dir-item-context.ts:104
 msgid "Export Project"
 msgstr "Export Project"
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "Export Project"
 
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "Close Workspace"
 #: source/win-main/file-manager/util/dir-item-context.ts:116
 msgid "Close Workspace"
 msgstr "Close Workspace"
@@ -2319,7 +3518,13 @@ msgstr "Close Workspace"
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
 msgstr "Close other tabs"
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "Close other tabs"
 
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Close all tabs"
 #: source/win-main/tabs-context.ts:50
 msgid "Close all tabs"
 msgstr "Close all tabs"
@@ -2327,7 +3532,13 @@ msgstr "Close all tabs"
 #: source/win-main/tabs-context.ts:59
 msgid "Unpin tab"
 msgstr "Unpin tab"
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr "Unpin tab"
 
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr "Pin tab"
 #: source/win-main/tabs-context.ts:59
 msgid "Pin tab"
 msgstr "Pin tab"
@@ -2335,7 +3546,13 @@ msgstr "Pin tab"
 #: source/win-main/tabs-context.ts:74
 msgid "Copy full path"
 msgstr "Copy full path"
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "Copy full path"
 
+#: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
+msgid "Cmd/Ctrl-click to follow this link"
+msgstr "Cmd/Ctrl-click to follow this link"
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
 msgstr "Cmd/Ctrl-click to follow this link"
@@ -2343,7 +3560,13 @@ msgstr "Cmd/Ctrl-click to follow this link"
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
 msgstr "No highlighting"
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
+msgstr "No highlighting"
 
+#: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
+msgid "Go to footnote reference"
+msgstr "Go to footnote reference"
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
 msgstr "Go to footnote reference"
@@ -2359,7 +3582,13 @@ msgstr "Custom"
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
 msgstr "Open diagnostics panel"
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Open diagnostics panel"
+msgstr "Open diagnostics panel"
 
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
+msgid "Detect automatically"
+msgstr "Detect automatically"
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
 msgstr "Detect automatically"
@@ -2368,11 +3597,21 @@ msgstr "Detect automatically"
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "Image not found: %s"
+#: source/common/modules/markdown-editor/renderers/render-images.ts:98
+#, javascript-format
+msgid "Image not found: %s"
+msgstr "Image not found: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
 msgstr "Rendering mermaid graph …"
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
+msgid "Rendering mermaid graph …"
+msgstr "Rendering mermaid graph …"
 
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
+msgid "Could not render Graph:"
+msgstr "Could not render Graph:"
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
 msgid "Could not render Graph:"
 msgstr "Could not render Graph:"
@@ -2381,7 +3620,14 @@ msgstr "Could not render Graph:"
 #, javascript-format
 msgid "Readability mode (%s)"
 msgstr "Readability mode (%s)"
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr "Readability mode (%s)"
 
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
+msgid "No suggestions"
+msgstr "No suggestions"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
 msgid "No suggestions"
 msgstr "No suggestions"
@@ -2389,7 +3635,13 @@ msgstr "No suggestions"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
 msgid "Add to dictionary"
 msgstr "Add to dictionary"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
+msgid "Add to dictionary"
+msgstr "Add to dictionary"
 
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
+msgid "Italic"
+msgstr "Italic"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
 msgid "Italic"
 msgstr "Italic"
@@ -2397,7 +3649,13 @@ msgstr "Italic"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
 msgid "Insert link"
 msgstr "Insert link"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
+msgid "Insert link"
+msgstr "Insert link"
 
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
+msgid "Insert numbered list"
+msgstr "Insert numbered list"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
 msgid "Insert numbered list"
 msgstr "Insert numbered list"
@@ -2405,7 +3663,13 @@ msgstr "Insert numbered list"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
 msgid "Insert unordered list"
 msgstr "Insert unordered list"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
+msgid "Insert unordered list"
+msgstr "Insert unordered list"
 
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
+msgid "Insert tasklist"
+msgstr "Insert tasklist"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
 msgid "Insert tasklist"
 msgstr "Insert tasklist"
@@ -2413,7 +3677,13 @@ msgstr "Insert tasklist"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
 msgid "Blockquote"
 msgstr "Blockquote"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+msgid "Blockquote"
+msgstr "Blockquote"
 
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
+msgid "Insert Table"
+msgstr "Insert Table"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
 msgid "Insert Table"
 msgstr "Insert Table"
@@ -2421,7 +3691,13 @@ msgstr "Insert Table"
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
 msgid "Copy equation code"
 msgstr "Copy equation code"
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
+msgid "Copy equation code"
+msgstr "Copy equation code"
 
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+msgid "Open Link"
+msgstr "Open Link"
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
 msgid "Open Link"
 msgstr "Open Link"
@@ -2429,7 +3705,13 @@ msgstr "Open Link"
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
 msgid "Copy Mail Address"
 msgstr "Copy Mail Address"
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+msgid "Copy Mail Address"
+msgstr "Copy Mail Address"
 
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+msgid "Copy Link"
+msgstr "Copy Link"
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
 msgid "Copy Link"
 msgstr "Copy Link"
@@ -2437,7 +3719,13 @@ msgstr "Copy Link"
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:99
 msgid "Copy image to clipboard"
 msgstr "Copy image to clipboard"
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:99
+msgid "Copy image to clipboard"
+msgstr "Copy image to clipboard"
 
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
+msgid "Open image"
+msgstr "Open image"
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
 msgid "Open image"
 msgstr "Open image"
@@ -2445,7 +3733,13 @@ msgstr "Open image"
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
 msgid "Open in File Browser"
 msgstr "Open in File Browser"
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
+msgid "Open in File Browser"
+msgstr "Open in File Browser"
 
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+msgid "Link"
+msgstr "Link"
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
 msgid "Link"
 msgstr "Link"
@@ -2453,7 +3747,13 @@ msgstr "Link"
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
 msgid "Image"
 msgstr "Image"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
+msgid "Image"
+msgstr "Image"
 
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+msgid "Comment"
+msgstr "Comment"
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
 msgid "Comment"
 msgstr "Comment"
@@ -2462,7 +3762,14 @@ msgstr "Comment"
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "File %s does not exist."
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
+#, javascript-format
+msgid "File %s does not exist."
+msgstr "File %s does not exist."
 
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:106
+msgid "Word count"
+msgstr "Word count"
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:106
 msgid "Word count"
 msgstr "Word count"
@@ -2470,7 +3777,13 @@ msgstr "Word count"
 #: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:62
 msgid "Fetching link preview…"
 msgstr "Fetching link preview…"
+#: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:62
+msgid "Fetching link preview…"
+msgstr "Fetching link preview…"
 
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
+msgid "No footnote text found."
+msgstr "No footnote text found."
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
 msgid "No footnote text found."
 msgstr "No footnote text found."
@@ -2478,7 +3791,13 @@ msgstr "No footnote text found."
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
 msgstr "Spelling mistake"
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+msgid "Spelling mistake"
+msgstr "Spelling mistake"
 
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr "just now"
 #: source/common/util/format-date.ts:33
 msgid "just now"
 msgstr "just now"
@@ -2486,7 +3805,13 @@ msgstr "just now"
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
 msgstr "Afrikaans"
+#: source/common/util/map-lang-code.ts:33
+msgid "Afrikaans"
+msgstr "Afrikaans"
 
+#: source/common/util/map-lang-code.ts:34
+msgid "Arabic"
+msgstr "Arabic"
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
 msgstr "Arabic"
@@ -2494,7 +3819,13 @@ msgstr "Arabic"
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
 msgstr "Asturian"
+#: source/common/util/map-lang-code.ts:35
+msgid "Asturian"
+msgstr "Asturian"
 
+#: source/common/util/map-lang-code.ts:36
+msgid "Belarus"
+msgstr "Belarus"
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
 msgstr "Belarus"
@@ -2502,7 +3833,13 @@ msgstr "Belarus"
 #: source/common/util/map-lang-code.ts:37
 msgid "Bulgarian"
 msgstr "Bulgarian"
+#: source/common/util/map-lang-code.ts:37
+msgid "Bulgarian"
+msgstr "Bulgarian"
 
+#: source/common/util/map-lang-code.ts:38
+msgid "Breton"
+msgstr "Breton"
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
 msgstr "Breton"
@@ -2510,7 +3847,13 @@ msgstr "Breton"
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
 msgstr "Bosnian"
+#: source/common/util/map-lang-code.ts:39
+msgid "Bosnian"
+msgstr "Bosnian"
 
+#: source/common/util/map-lang-code.ts:40
+msgid "Catalan"
+msgstr "Catalan"
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
 msgstr "Catalan"
@@ -2522,7 +3865,17 @@ msgstr "Czech"
 #: source/common/util/map-lang-code.ts:42
 msgid "Danish"
 msgstr "Danish"
+#: source/common/util/map-lang-code.ts:41
+msgid "Czech"
+msgstr "Czech"
 
+#: source/common/util/map-lang-code.ts:42
+msgid "Danish"
+msgstr "Danish"
+
+#: source/common/util/map-lang-code.ts:43
+msgid "German (Austria)"
+msgstr "German (Austria)"
 #: source/common/util/map-lang-code.ts:43
 msgid "German (Austria)"
 msgstr "German (Austria)"
@@ -2530,7 +3883,13 @@ msgstr "German (Austria)"
 #: source/common/util/map-lang-code.ts:44
 msgid "German (Switzerland)"
 msgstr "German (Switzerland)"
+#: source/common/util/map-lang-code.ts:44
+msgid "German (Switzerland)"
+msgstr "German (Switzerland)"
 
+#: source/common/util/map-lang-code.ts:45
+msgid "German (simple)"
+msgstr "German (simple)"
 #: source/common/util/map-lang-code.ts:45
 msgid "German (simple)"
 msgstr "German (simple)"
@@ -2538,7 +3897,13 @@ msgstr "German (simple)"
 #: source/common/util/map-lang-code.ts:46
 msgid "German (Germany)"
 msgstr "German (Germany)"
+#: source/common/util/map-lang-code.ts:46
+msgid "German (Germany)"
+msgstr "German (Germany)"
 
+#: source/common/util/map-lang-code.ts:47
+msgid "German (Luxembourg)"
+msgstr "German (Luxembourg)"
 #: source/common/util/map-lang-code.ts:47
 msgid "German (Luxembourg)"
 msgstr "German (Luxembourg)"
@@ -2546,7 +3911,13 @@ msgstr "German (Luxembourg)"
 #: source/common/util/map-lang-code.ts:48
 msgid "German"
 msgstr "German"
+#: source/common/util/map-lang-code.ts:48
+msgid "German"
+msgstr "German"
 
+#: source/common/util/map-lang-code.ts:49
+msgid "Greek"
+msgstr "Greek"
 #: source/common/util/map-lang-code.ts:49
 msgid "Greek"
 msgstr "Greek"
@@ -2554,7 +3925,13 @@ msgstr "Greek"
 #: source/common/util/map-lang-code.ts:50
 msgid "English (Australia)"
 msgstr "English (Australia)"
+#: source/common/util/map-lang-code.ts:50
+msgid "English (Australia)"
+msgstr "English (Australia)"
 
+#: source/common/util/map-lang-code.ts:51
+msgid "English (Canada)"
+msgstr "English (Canada)"
 #: source/common/util/map-lang-code.ts:51
 msgid "English (Canada)"
 msgstr "English (Canada)"
@@ -2562,7 +3939,13 @@ msgstr "English (Canada)"
 #: source/common/util/map-lang-code.ts:52
 msgid "English (United Kingdom)"
 msgstr "English (United Kingdom)"
+#: source/common/util/map-lang-code.ts:52
+msgid "English (United Kingdom)"
+msgstr "English (United Kingdom)"
 
+#: source/common/util/map-lang-code.ts:53
+msgid "English (India)"
+msgstr "English (India)"
 #: source/common/util/map-lang-code.ts:53
 msgid "English (India)"
 msgstr "English (India)"
@@ -2570,7 +3953,13 @@ msgstr "English (India)"
 #: source/common/util/map-lang-code.ts:54
 msgid "English (New Zealand)"
 msgstr "English (New Zealand)"
+#: source/common/util/map-lang-code.ts:54
+msgid "English (New Zealand)"
+msgstr "English (New Zealand)"
 
+#: source/common/util/map-lang-code.ts:55
+msgid "English (United States)"
+msgstr "English (United States)"
 #: source/common/util/map-lang-code.ts:55
 msgid "English (United States)"
 msgstr "English (United States)"
@@ -2578,7 +3967,13 @@ msgstr "English (United States)"
 #: source/common/util/map-lang-code.ts:56
 msgid "English (South Africa)"
 msgstr "English (South Africa)"
+#: source/common/util/map-lang-code.ts:56
+msgid "English (South Africa)"
+msgstr "English (South Africa)"
 
+#: source/common/util/map-lang-code.ts:57
+msgid "English"
+msgstr "English"
 #: source/common/util/map-lang-code.ts:57
 msgid "English"
 msgstr "English"
@@ -2586,7 +3981,13 @@ msgstr "English"
 #: source/common/util/map-lang-code.ts:58
 msgid "Esperanto"
 msgstr "Esperanto"
+#: source/common/util/map-lang-code.ts:58
+msgid "Esperanto"
+msgstr "Esperanto"
 
+#: source/common/util/map-lang-code.ts:59
+msgid "Spanish (Argentina)"
+msgstr "Spanish (Argentina)"
 #: source/common/util/map-lang-code.ts:59
 msgid "Spanish (Argentina)"
 msgstr "Spanish (Argentina)"
@@ -2594,7 +3995,13 @@ msgstr "Spanish (Argentina)"
 #: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Spain)"
 msgstr "Spanish (Spain)"
+#: source/common/util/map-lang-code.ts:60
+msgid "Spanish (Spain)"
+msgstr "Spanish (Spain)"
 
+#: source/common/util/map-lang-code.ts:61
+msgid "Spanish"
+msgstr "Spanish"
 #: source/common/util/map-lang-code.ts:61
 msgid "Spanish"
 msgstr "Spanish"
@@ -2602,7 +4009,13 @@ msgstr "Spanish"
 #: source/common/util/map-lang-code.ts:62
 msgid "Estonian"
 msgstr "Estonian"
+#: source/common/util/map-lang-code.ts:62
+msgid "Estonian"
+msgstr "Estonian"
 
+#: source/common/util/map-lang-code.ts:63
+msgid "Basque"
+msgstr "Basque"
 #: source/common/util/map-lang-code.ts:63
 msgid "Basque"
 msgstr "Basque"
@@ -2610,7 +4023,13 @@ msgstr "Basque"
 #: source/common/util/map-lang-code.ts:64
 msgid "Persian (Farsi)"
 msgstr "Persian (Farsi)"
+#: source/common/util/map-lang-code.ts:64
+msgid "Persian (Farsi)"
+msgstr "Persian (Farsi)"
 
+#: source/common/util/map-lang-code.ts:65
+msgid "Finnish"
+msgstr "Finnish"
 #: source/common/util/map-lang-code.ts:65
 msgid "Finnish"
 msgstr "Finnish"
@@ -2618,7 +4037,13 @@ msgstr "Finnish"
 #: source/common/util/map-lang-code.ts:66
 msgid "Faroese"
 msgstr "Faroese"
+#: source/common/util/map-lang-code.ts:66
+msgid "Faroese"
+msgstr "Faroese"
 
+#: source/common/util/map-lang-code.ts:67
+msgid "French (Belgium)"
+msgstr "French (Belgium)"
 #: source/common/util/map-lang-code.ts:67
 msgid "French (Belgium)"
 msgstr "French (Belgium)"
@@ -2626,7 +4051,13 @@ msgstr "French (Belgium)"
 #: source/common/util/map-lang-code.ts:68
 msgid "French (Switzerland)"
 msgstr "French (Switzerland)"
+#: source/common/util/map-lang-code.ts:68
+msgid "French (Switzerland)"
+msgstr "French (Switzerland)"
 
+#: source/common/util/map-lang-code.ts:69
+msgid "French (France)"
+msgstr "French (France)"
 #: source/common/util/map-lang-code.ts:69
 msgid "French (France)"
 msgstr "French (France)"
@@ -2634,7 +4065,13 @@ msgstr "French (France)"
 #: source/common/util/map-lang-code.ts:70
 msgid "French (Luxembourg)"
 msgstr "French (Luxembourg)"
+#: source/common/util/map-lang-code.ts:70
+msgid "French (Luxembourg)"
+msgstr "French (Luxembourg)"
 
+#: source/common/util/map-lang-code.ts:71
+msgid "French (Principality of Monaco)"
+msgstr "French (Principality of Monaco)"
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
 msgstr "French (Principality of Monaco)"
@@ -2642,7 +4079,13 @@ msgstr "French (Principality of Monaco)"
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
 msgstr "French"
+#: source/common/util/map-lang-code.ts:72
+msgid "French"
+msgstr "French"
 
+#: source/common/util/map-lang-code.ts:73
+msgid "Irish"
+msgstr "Irish"
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
 msgstr "Irish"
@@ -2650,7 +4093,13 @@ msgstr "Irish"
 #: source/common/util/map-lang-code.ts:74
 msgid "Scottish (Gaelic)"
 msgstr "Scottish (Gaelic)"
+#: source/common/util/map-lang-code.ts:74
+msgid "Scottish (Gaelic)"
+msgstr "Scottish (Gaelic)"
 
+#: source/common/util/map-lang-code.ts:75
+msgid "Galician"
+msgstr "Galician"
 #: source/common/util/map-lang-code.ts:75
 msgid "Galician"
 msgstr "Galician"
@@ -2658,7 +4107,13 @@ msgstr "Galician"
 #: source/common/util/map-lang-code.ts:76
 msgid "Hebrew"
 msgstr "Hebrew"
+#: source/common/util/map-lang-code.ts:76
+msgid "Hebrew"
+msgstr "Hebrew"
 
+#: source/common/util/map-lang-code.ts:77
+msgid "Hindi"
+msgstr "Hindi"
 #: source/common/util/map-lang-code.ts:77
 msgid "Hindi"
 msgstr "Hindi"
@@ -2666,7 +4121,13 @@ msgstr "Hindi"
 #: source/common/util/map-lang-code.ts:78
 msgid "Croatian"
 msgstr "Croatian"
+#: source/common/util/map-lang-code.ts:78
+msgid "Croatian"
+msgstr "Croatian"
 
+#: source/common/util/map-lang-code.ts:79
+msgid "Hungarian"
+msgstr "Hungarian"
 #: source/common/util/map-lang-code.ts:79
 msgid "Hungarian"
 msgstr "Hungarian"
@@ -2674,7 +4135,13 @@ msgstr "Hungarian"
 #: source/common/util/map-lang-code.ts:80
 msgid "Armenian"
 msgstr "Armenian"
+#: source/common/util/map-lang-code.ts:80
+msgid "Armenian"
+msgstr "Armenian"
 
+#: source/common/util/map-lang-code.ts:81
+msgid "Indonesian"
+msgstr "Indonesian"
 #: source/common/util/map-lang-code.ts:81
 msgid "Indonesian"
 msgstr "Indonesian"
@@ -2682,7 +4149,13 @@ msgstr "Indonesian"
 #: source/common/util/map-lang-code.ts:82
 msgid "Icelandic"
 msgstr "Icelandic"
+#: source/common/util/map-lang-code.ts:82
+msgid "Icelandic"
+msgstr "Icelandic"
 
+#: source/common/util/map-lang-code.ts:83
+msgid "Italian (Switzerland)"
+msgstr "Italian (Switzerland)"
 #: source/common/util/map-lang-code.ts:83
 msgid "Italian (Switzerland)"
 msgstr "Italian (Switzerland)"
@@ -2690,11 +4163,20 @@ msgstr "Italian (Switzerland)"
 #: source/common/util/map-lang-code.ts:84
 msgid "Italian (Italy)"
 msgstr "Italian (Italy)"
+#: source/common/util/map-lang-code.ts:84
+msgid "Italian (Italy)"
+msgstr "Italian (Italy)"
 
 #: source/common/util/map-lang-code.ts:85
 msgid "Italian"
 msgstr "Italian"
+#: source/common/util/map-lang-code.ts:85
+msgid "Italian"
+msgstr "Italian"
 
+#: source/common/util/map-lang-code.ts:86
+msgid "Japanese"
+msgstr "Japanese"
 #: source/common/util/map-lang-code.ts:86
 msgid "Japanese"
 msgstr "Japanese"
@@ -2710,7 +4192,21 @@ msgstr "Khmer (Cambodia)"
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
 msgstr "Korean"
+#: source/common/util/map-lang-code.ts:87
+msgid "Georgian"
+msgstr "Georgian"
 
+#: source/common/util/map-lang-code.ts:88
+msgid "Khmer (Cambodia)"
+msgstr "Khmer (Cambodia)"
+
+#: source/common/util/map-lang-code.ts:89
+msgid "Korean"
+msgstr "Korean"
+
+#: source/common/util/map-lang-code.ts:90
+msgid "Latin"
+msgstr "Latin"
 #: source/common/util/map-lang-code.ts:90
 msgid "Latin"
 msgstr "Latin"
@@ -2722,7 +4218,17 @@ msgstr "Luxembourgian"
 #: source/common/util/map-lang-code.ts:92
 msgid "Lithuanian"
 msgstr "Lithuanian"
+#: source/common/util/map-lang-code.ts:91
+msgid "Luxembourgian"
+msgstr "Luxembourgian"
 
+#: source/common/util/map-lang-code.ts:92
+msgid "Lithuanian"
+msgstr "Lithuanian"
+
+#: source/common/util/map-lang-code.ts:93
+msgid "Latvian"
+msgstr "Latvian"
 #: source/common/util/map-lang-code.ts:93
 msgid "Latvian"
 msgstr "Latvian"
@@ -2730,7 +4236,13 @@ msgstr "Latvian"
 #: source/common/util/map-lang-code.ts:94
 msgid "Macedonian"
 msgstr "Macedonian"
+#: source/common/util/map-lang-code.ts:94
+msgid "Macedonian"
+msgstr "Macedonian"
 
+#: source/common/util/map-lang-code.ts:95
+msgid "Mongolian"
+msgstr "Mongolian"
 #: source/common/util/map-lang-code.ts:95
 msgid "Mongolian"
 msgstr "Mongolian"
@@ -2738,7 +4250,13 @@ msgstr "Mongolian"
 #: source/common/util/map-lang-code.ts:96
 msgid "Malaysian (Brunei Darussalam)"
 msgstr "Malaysian (Brunei Darussalam)"
+#: source/common/util/map-lang-code.ts:96
+msgid "Malaysian (Brunei Darussalam)"
+msgstr "Malaysian (Brunei Darussalam)"
 
+#: source/common/util/map-lang-code.ts:97
+msgid "Malaysian (Malaysia)"
+msgstr "Malaysian (Malaysia)"
 #: source/common/util/map-lang-code.ts:97
 msgid "Malaysian (Malaysia)"
 msgstr "Malaysian (Malaysia)"
@@ -2746,7 +4264,13 @@ msgstr "Malaysian (Malaysia)"
 #: source/common/util/map-lang-code.ts:98
 msgid "Malaysian"
 msgstr "Malaysian"
+#: source/common/util/map-lang-code.ts:98
+msgid "Malaysian"
+msgstr "Malaysian"
 
+#: source/common/util/map-lang-code.ts:99
+msgid "Norwegian (Bokmål)"
+msgstr "Norwegian (Bokmål)"
 #: source/common/util/map-lang-code.ts:99
 msgid "Norwegian (Bokmål)"
 msgstr "Norwegian (Bokmål)"
@@ -2754,7 +4278,13 @@ msgstr "Norwegian (Bokmål)"
 #: source/common/util/map-lang-code.ts:100
 msgid "Nepalese"
 msgstr "Nepalese"
+#: source/common/util/map-lang-code.ts:100
+msgid "Nepalese"
+msgstr "Nepalese"
 
+#: source/common/util/map-lang-code.ts:101
+msgid "Dutch (Belgium)"
+msgstr "Dutch (Belgium)"
 #: source/common/util/map-lang-code.ts:101
 msgid "Dutch (Belgium)"
 msgstr "Dutch (Belgium)"
@@ -2762,7 +4292,13 @@ msgstr "Dutch (Belgium)"
 #: source/common/util/map-lang-code.ts:102
 msgid "Dutch (Netherlands)"
 msgstr "Dutch (Netherlands)"
+#: source/common/util/map-lang-code.ts:102
+msgid "Dutch (Netherlands)"
+msgstr "Dutch (Netherlands)"
 
+#: source/common/util/map-lang-code.ts:103
+msgid "Dutch"
+msgstr "Dutch"
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
 msgstr "Dutch"
@@ -2770,7 +4306,13 @@ msgstr "Dutch"
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
 msgstr "Norwegian (Nyorsk)"
+#: source/common/util/map-lang-code.ts:104
+msgid "Norwegian (Nyorsk)"
+msgstr "Norwegian (Nyorsk)"
 
+#: source/common/util/map-lang-code.ts:105
+msgid "Norwegian"
+msgstr "Norwegian"
 #: source/common/util/map-lang-code.ts:105
 msgid "Norwegian"
 msgstr "Norwegian"
@@ -2778,7 +4320,13 @@ msgstr "Norwegian"
 #: source/common/util/map-lang-code.ts:106
 msgid "Polish"
 msgstr "Polish"
+#: source/common/util/map-lang-code.ts:106
+msgid "Polish"
+msgstr "Polish"
 
+#: source/common/util/map-lang-code.ts:107
+msgid "Portuguese (Angola)"
+msgstr "Portuguese (Angola)"
 #: source/common/util/map-lang-code.ts:107
 msgid "Portuguese (Angola)"
 msgstr "Portuguese (Angola)"
@@ -2786,7 +4334,13 @@ msgstr "Portuguese (Angola)"
 #: source/common/util/map-lang-code.ts:108
 msgid "Portuguese (Brazil)"
 msgstr "Portuguese (Brazil)"
+#: source/common/util/map-lang-code.ts:108
+msgid "Portuguese (Brazil)"
+msgstr "Portuguese (Brazil)"
 
+#: source/common/util/map-lang-code.ts:109
+msgid "Portuguese (Mozambique)"
+msgstr "Portuguese (Mozambique)"
 #: source/common/util/map-lang-code.ts:109
 msgid "Portuguese (Mozambique)"
 msgstr "Portuguese (Mozambique)"
@@ -2794,7 +4348,13 @@ msgstr "Portuguese (Mozambique)"
 #: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Portugal)"
 msgstr "Portuguese (Portugal)"
+#: source/common/util/map-lang-code.ts:110
+msgid "Portuguese (Portugal)"
+msgstr "Portuguese (Portugal)"
 
+#: source/common/util/map-lang-code.ts:111
+msgid "Portuguese"
+msgstr "Portuguese"
 #: source/common/util/map-lang-code.ts:111
 msgid "Portuguese"
 msgstr "Portuguese"
@@ -2802,7 +4362,13 @@ msgstr "Portuguese"
 #: source/common/util/map-lang-code.ts:112
 msgid "Romanian"
 msgstr "Romanian"
+#: source/common/util/map-lang-code.ts:112
+msgid "Romanian"
+msgstr "Romanian"
 
+#: source/common/util/map-lang-code.ts:113
+msgid "Russian"
+msgstr "Russian"
 #: source/common/util/map-lang-code.ts:113
 msgid "Russian"
 msgstr "Russian"
@@ -2810,7 +4376,13 @@ msgstr "Russian"
 #: source/common/util/map-lang-code.ts:114
 msgid "Rwandan (Kinyarwanda)"
 msgstr "Rwandan (Kinyarwanda)"
+#: source/common/util/map-lang-code.ts:114
+msgid "Rwandan (Kinyarwanda)"
+msgstr "Rwandan (Kinyarwanda)"
 
+#: source/common/util/map-lang-code.ts:115
+msgid "Slovakian"
+msgstr "Slovakian"
 #: source/common/util/map-lang-code.ts:115
 msgid "Slovakian"
 msgstr "Slovakian"
@@ -2818,7 +4390,13 @@ msgstr "Slovakian"
 #: source/common/util/map-lang-code.ts:116
 msgid "Slovenian"
 msgstr "Slovenian"
+#: source/common/util/map-lang-code.ts:116
+msgid "Slovenian"
+msgstr "Slovenian"
 
+#: source/common/util/map-lang-code.ts:117
+msgid "Serbian"
+msgstr "Serbian"
 #: source/common/util/map-lang-code.ts:117
 msgid "Serbian"
 msgstr "Serbian"
@@ -2826,11 +4404,20 @@ msgstr "Serbian"
 #: source/common/util/map-lang-code.ts:118
 msgid "Albanian"
 msgstr "Albanian"
+#: source/common/util/map-lang-code.ts:118
+msgid "Albanian"
+msgstr "Albanian"
 
 #: source/common/util/map-lang-code.ts:119
 msgid "Albanian (Albania)"
 msgstr "Albanian (Albania)"
+#: source/common/util/map-lang-code.ts:119
+msgid "Albanian (Albania)"
+msgstr "Albanian (Albania)"
 
+#: source/common/util/map-lang-code.ts:120
+msgid "Swedish"
+msgstr "Swedish"
 #: source/common/util/map-lang-code.ts:120
 msgid "Swedish"
 msgstr "Swedish"
@@ -2842,7 +4429,17 @@ msgstr "Tamil (India)"
 #: source/common/util/map-lang-code.ts:122
 msgid "Thai"
 msgstr "Thai"
+#: source/common/util/map-lang-code.ts:121
+msgid "Tamil (India)"
+msgstr "Tamil (India)"
 
+#: source/common/util/map-lang-code.ts:122
+msgid "Thai"
+msgstr "Thai"
+
+#: source/common/util/map-lang-code.ts:123
+msgid "Tagalog (Filipino)"
+msgstr "Tagalog (Filipino)"
 #: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
 msgstr "Tagalog (Filipino)"
@@ -2850,11 +4447,24 @@ msgstr "Tagalog (Filipino)"
 #: source/common/util/map-lang-code.ts:124
 msgid "Turkish"
 msgstr "Turkish"
+#: source/common/util/map-lang-code.ts:124
+msgid "Turkish"
+msgstr "Turkish"
 
 #: source/common/util/map-lang-code.ts:125
 msgid "Ukrainian"
 msgstr "Ukrainian"
+#: source/common/util/map-lang-code.ts:125
+msgid "Ukrainian"
+msgstr "Ukrainian"
 
+#: source/common/util/map-lang-code.ts:126
+msgid "Urdu"
+msgstr "Urdu"
+
+#: source/common/util/map-lang-code.ts:127
+msgid "Vietnamese"
+msgstr "Vietnamese"
 #: source/common/util/map-lang-code.ts:126
 msgid "Urdu"
 msgstr "Urdu"
@@ -2868,7 +4478,15 @@ msgstr "Vietnamese"
 #: source/common/util/map-lang-code.ts:130
 msgid "Sorbian"
 msgstr "Sorbian"
+#. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
+#. Sorbian, wen denotes the language family as such
+#: source/common/util/map-lang-code.ts:130
+msgid "Sorbian"
+msgstr "Sorbian"
 
+#: source/common/util/map-lang-code.ts:131
+msgid "Chinese (China)"
+msgstr "Chinese (China)"
 #: source/common/util/map-lang-code.ts:131
 msgid "Chinese (China)"
 msgstr "Chinese (China)"
@@ -2876,7 +4494,13 @@ msgstr "Chinese (China)"
 #: source/common/util/map-lang-code.ts:132
 msgid "Chinese (Taiwan)"
 msgstr "Chinese (Taiwan)"
+#: source/common/util/map-lang-code.ts:132
+msgid "Chinese (Taiwan)"
+msgstr "Chinese (Taiwan)"
 
+#: source/common/util/map-lang-code.ts:133
+msgid "Chinese"
+msgstr "Chinese"
 #: source/common/util/map-lang-code.ts:133
 msgid "Chinese"
 msgstr "Chinese"
@@ -2884,7 +4508,13 @@ msgstr "Chinese"
 #: source/common/util/localise-number.ts:28
 msgid ","
 msgstr ","
+#: source/common/util/localise-number.ts:28
+msgid ","
+msgstr ","
 
+#: source/common/util/localise-number.ts:29
+msgid "."
+msgstr "."
 #: source/common/util/localise-number.ts:29
 msgid "."
 msgstr "."

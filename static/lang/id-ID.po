@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-03-01 19:46+0000\n"
+"POT-Creation-Date: 2023-11-25 09:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -424,9 +424,9 @@ msgstr "Perlihatkan Zettlr"
 msgid "Show statusbar"
 msgstr "Perlihatkan Zettlr"
 
-#: source/win-preferences/schema/appearance.ts:219
-msgid "Custom CSS"
-msgstr "Kustom CSS"
+#: source/common/util/map-lang-code.ts:120
+msgid "Swedish"
+msgstr "Swedia"
 
 #: source/win-preferences/schema/appearance.ts:224
 #, fuzzy
@@ -991,8 +991,8 @@ msgstr "Ok"
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
-#: source/app/service-providers/menu/menu.darwin.ts:712
-#: source/app/service-providers/menu/menu.win32.ts:685
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:35
+#: source/tmp/CustomCSS.vue.ts:49
 msgid "Cancel"
 msgstr "Batal"
 
@@ -1190,7 +1190,8 @@ msgstr ""
 #: source/app/service-providers/commands/export.ts:114
 #: source/app/service-providers/menu/menu.darwin.ts:197
 #: source/app/service-providers/menu/menu.win32.ts:162
-#: source/tmp/CustomCSS.vue.ts:24 source/tmp/SnippetsTab.vue.ts:27
+#: source/tmp/SnippetsTab.vue.ts:47 source/tmp/CustomCSS.vue.ts:42
+#: source/tmp/CustomCSS.vue.ts:56 source/tmp/Defaults.vue.ts:112
 msgid "Save"
 msgstr "Simpan"
 
@@ -1228,105 +1229,6 @@ msgstr ""
 #: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
 msgstr ""
-
-#: source/app/service-providers/citeproc/index.ts:249
-#: source/app/service-providers/citeproc/index.ts:457
-msgid "The citation database could not be loaded"
-msgstr "Database kutipan tidak bisa dimuat"
-
-#: source/app/service-providers/citeproc/index.ts:444
-msgid "Changes to the library file detected. Reloading …"
-msgstr "Perubahan pada file library terdeteksi. Memuat ulang…"
-
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-#: source/app/service-providers/documents/index.ts:349
-#: source/tmp/CustomCSS.vue.ts:34 source/tmp/SnippetsTab.vue.ts:46
-#: source/tmp/DefaultsTab.vue.ts:48
-msgid "Unsaved changes"
-msgstr "Perubahan yang belum tersimpan"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
-msgid "There are unsaved changes. Do you want to save them first?"
-msgstr ""
-"Perubahan belum tersimpan ke file saat ini. Ingin disimpan atau diabaikan "
-"saja?"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
-msgid "Overwrite existing file"
-msgstr "Timpa file yang sudah ada"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
-#, javascript-format
-msgid "The file %s already exists in this directory. Overwrite?"
-msgstr "File %s sudah ada pada direktori ini. Timpa?"
-
-#: source/app/service-providers/windows/dialog/ask-file.ts:54
-msgid "Open file"
-msgstr "Buka file"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Ganti file"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
-#, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"File %s telah diubah secara remote. Ganti versi yang dimuat dengan yang "
-"terbaru dari disk?"
-
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr ""
-
-#: source/app/service-providers/config/index.ts:492
-msgid "Changing this option requires a restart to take effect."
-msgstr ""
-
-#: source/app/service-providers/config/index.ts:495
-#: source/app/service-providers/menu/menu.darwin.ts:711
-#: source/app/service-providers/menu/menu.win32.ts:684
-#, fuzzy
-msgid "Restart now"
-msgstr "baru saja"
-
-#: source/app/service-providers/config/index.ts:496
-msgid "Restart later"
-msgstr ""
-
-#: source/app/service-providers/config/config-validation.ts:278
-#, javascript-format
-msgid "Option %s has to be of type %s."
-msgstr "Pilihan %s harus bertipe %s."
-
-#: source/app/service-providers/config/config-validation.ts:281
-#, javascript-format
-msgid "Option %s must be one of: %s."
-msgstr "Pilihan %s harus salah satu dari: %s."
-
-#: source/app/service-providers/config/config-validation.ts:284
-#, javascript-format
-msgid "Option %s must be between %s and %s (characters long)."
-msgstr "Pilihan %s harus diantara %s dan %s (panjang karakter)."
-
-#: source/app/service-providers/config/config-validation.ts:287
-#, javascript-format
-msgid "Option %s may not exceed %s (characters)."
-msgstr "Pilihan %s tidak boleh melebihi %s (karakter)."
-
-#: source/app/service-providers/config/config-validation.ts:290
-#, javascript-format
-msgid "Option %s must be at least %s (characters long)."
-msgstr "Pilihan %s setidaknya harus %s (panjang karakter)."
-
-#: source/app/service-providers/config/config-validation.ts:293
-#, javascript-format
-msgid "Option %s is required."
-msgstr "Pilihan %s diwajibkan."
 
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
@@ -1443,7 +1345,8 @@ msgstr "Impor kamus…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:287
 #: source/app/service-providers/menu/menu.win32.ts:281
-#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/tmp/Defaults.vue.ts:76
+#: source/win-main/file-manager/util/file-item-context.ts:44
 msgid "Rename file"
 msgstr "Ubah nama file"
 
@@ -1720,7 +1623,52 @@ msgid ""
 "of your disk. The window(s) will show afterward."
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:298
+#: source/app/service-providers/menu/menu.darwin.ts:711
+#: source/app/service-providers/menu/menu.win32.ts:684
+#: source/app/service-providers/config/index.ts:426
+#, fuzzy
+msgid "Restart now"
+msgstr "baru saja"
+
+#: source/app/service-providers/config/config-validation.ts:280
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "Pilihan %s harus bertipe %s."
+
+#: source/app/service-providers/config/config-validation.ts:283
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "Pilihan %s harus salah satu dari: %s."
+
+#: source/app/service-providers/config/config-validation.ts:286
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "Pilihan %s harus diantara %s dan %s (panjang karakter)."
+
+#: source/app/service-providers/config/config-validation.ts:289
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "Pilihan %s tidak boleh melebihi %s (karakter)."
+
+#: source/app/service-providers/config/config-validation.ts:292
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "Pilihan %s setidaknya harus %s (panjang karakter)."
+
+#: source/app/service-providers/config/config-validation.ts:295
+#, javascript-format
+msgid "Option %s is required."
+msgstr "Pilihan %s diwajibkan."
+
+#: source/app/service-providers/config/index.ts:423
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:427
+msgid "Restart later"
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:294
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "Tidak dapat memeriksa pembaruan: Galat Server (Kode status: %s)"
@@ -1814,26 +1762,24 @@ msgstr ""
 
 #: source/app/service-providers/documents/index.ts:1475
 #, fuzzy
-msgid "Could not save file"
-msgstr "Tidak bisa menyimpan gambar"
+msgid "Export"
+msgstr "Ekspor..."
 
-#: source/app/service-providers/documents/index.ts:1475
-#, fuzzy, javascript-format
-msgid "Could not save file %s: %s"
-msgstr "Tidak bisa menyimpan gambar"
+#: source/tmp/PopoverExport.vue.ts:27
+msgid "command"
+msgstr ""
 
-#: source/tmp/MainSidebar.vue.ts:39 source/tmp/ToCTab.vue.ts:35
-#: source/tmp/ToCTab.vue.ts:43
-msgid "Table of Contents"
-msgstr "Daftar Isi"
+#: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:72
+msgid "Other files"
+msgstr "Ber"
 
-#: source/tmp/MainSidebar.vue.ts:45 source/tmp/ReferencesTab.vue.ts:32
-msgid "References"
-msgstr "Referensi"
+#: source/tmp/OtherFilesTab.vue.ts:16
+msgid "Open directory"
+msgstr "Buka direktori"
 
-#: source/tmp/MainSidebar.vue.ts:51 source/tmp/RelatedFilesTab.vue.ts:33
-msgid "Related files"
-msgstr "Berkas yang berkaitan"
+#: source/tmp/OtherFilesTab.vue.ts:19
+msgid "No other files"
+msgstr "Tidak ada berkas lainnya"
 
 #: source/tmp/MainSidebar.vue.ts:57 source/tmp/OtherFilesTab.vue.ts:11
 msgid "Other files"
@@ -1851,116 +1797,86 @@ msgstr ""
 "mengubah geometri elemen, karena dapat menyebabkan masalah pada aplikasi!</"
 "strong>"
 
-#: source/tmp/CustomCSS.vue.ts:56 source/tmp/SnippetsTab.vue.ts:105
-#: source/tmp/DefaultsTab.vue.ts:115
+#: source/tmp/SnippetsTab.vue.ts:124 source/tmp/CustomCSS.vue.ts:88
+#: source/tmp/Defaults.vue.ts:192
 msgid "Saving …"
 msgstr "Menyimpan ..."
 
-#: source/tmp/CustomCSS.vue.ts:66
-msgid "Saving failed"
-msgstr "Gagal menyimpan"
+#: source/tmp/SnippetsTab.vue.ts:134 source/tmp/Defaults.vue.ts:201
+msgid "Saved!"
+msgstr "Berhasil tersimpan"
 
-#: source/tmp/FileItem.vue.ts:98 source/tmp/FileItem.vue.ts:100
-#: source/tmp/PopoverDirProps.vue.ts:29
-msgid "Directories"
-msgstr "Direktori"
+#: source/tmp/PopoverPomodoro.vue.ts:110
+msgid "Start"
+msgstr "Mulai"
 
-#: source/tmp/FileItem.vue.ts:121 source/tmp/FileItem.vue.ts:184
-#: source/tmp/PopoverDocInfo.vue.ts:71
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
-#, javascript-format
-msgid "%s characters"
-msgstr "%s karakter"
+#: source/tmp/PopoverPomodoro.vue.ts:113
+msgid "Stop"
+msgstr "Stop"
 
-#: source/tmp/FileItem.vue.ts:123 source/tmp/FileItem.vue.ts:186
-#: source/tmp/PopoverFileProps.vue.ts:56 source/tmp/PopoverDirProps.vue.ts:140
-#: source/tmp/PopoverDocInfo.vue.ts:73
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
-#, javascript-format
-msgid "%s words"
-msgstr "%s kata"
+#: source/tmp/PopoverPomodoro.vue.ts:116
+msgid "Work"
+msgstr "Kerja"
 
-#: source/tmp/FileItem.vue.ts:171 source/tmp/PopoverFileProps.vue.ts:39
-msgid "Characters"
-msgstr "Karakter"
+#: source/tmp/PopoverPomodoro.vue.ts:119
+msgid "Short break"
+msgstr "Istirahat sebentar"
 
-#: source/tmp/FileItem.vue.ts:173 source/tmp/PopoverFileProps.vue.ts:34
-msgid "Words"
-msgstr "Kata"
+#: source/tmp/PopoverPomodoro.vue.ts:122
+msgid "Break"
+msgstr "Istirahat"
 
-#: source/tmp/PopoverFileProps.vue.ts:35 source/tmp/PopoverDirProps.vue.ts:31
-msgid "Created"
-msgstr "Dibuat"
+#: source/tmp/PopoverPomodoro.vue.ts:125
+msgid "Sound Effect"
+msgstr ""
 
-#: source/tmp/PopoverFileProps.vue.ts:36 source/tmp/PopoverDirProps.vue.ts:30
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
-msgid "Modified"
-msgstr "Dimodifikasi"
+#: source/tmp/PopoverPomodoro.vue.ts:128
+msgid "Volume"
+msgstr ""
 
-#: source/tmp/PopoverFileProps.vue.ts:37 source/tmp/ColorControl.vue.ts:35
-#: source/tmp/ShortcutChooser.vue.ts:61 source/tmp/NumberControl.vue.ts:40
+#: source/tmp/File.vue.ts:60 source/tmp/Color.vue.ts:51
+#: source/tmp/PopoverFileProps.vue.ts:112 source/tmp/Number.vue.ts:60
+#: source/tmp/ShortcutChooser.vue.ts:61
 msgid "Reset"
 msgstr "Atur ulang"
 
-#: source/tmp/PopoverFileProps.vue.ts:38
-msgid "Set writing target…"
-msgstr "Tetapkan target penulisan…"
+#: source/tmp/PopoverTags.vue.ts:42
+#: source/win-preferences/schema/spellchecking.ts:82
+msgid "Name"
+msgstr ""
 
-#: source/tmp/SnippetsTab.vue.ts:28
-msgid "Rename snippet"
-msgstr "Ganti nama cuplikan"
-
-#: source/tmp/SnippetsTab.vue.ts:29
-msgid "Snippets let you define reusable pieces of text with variables."
+#: source/tmp/PopoverTags.vue.ts:43
+msgid "Count"
 msgstr ""
 "Cuplikan adalah potongan teks yang dapat digunakan kembali, definisikan "
 "menggunakan peubah"
 
-#: source/tmp/SnippetsTab.vue.ts:30
-#, fuzzy
-msgid "Open snippets folder"
-msgstr "Buka folder proyek"
+#: source/tmp/PopoverTags.vue.ts:61
+msgid "Filter tags…"
+msgstr "Filter label..."
 
-#: source/tmp/SnippetsTab.vue.ts:115 source/tmp/DefaultsTab.vue.ts:125
-msgid "Saved!"
-msgstr "Berhasil tersimpan"
+#: source/tmp/PopoverTags.vue.ts:64
+msgid "Tag Cloud"
+msgstr "Awan Label"
 
-#: source/tmp/FileControl.vue.ts:42
-#, fuzzy
-msgid "Select folder…"
-msgstr "Buka folder proyek"
+#: source/tmp/PopoverTags.vue.ts:67
+msgid "Suggested tags for the current file"
+msgstr "Rekomendasi tag untuk berkas ini"
 
-#: source/tmp/FileControl.vue.ts:42
-#, fuzzy
-msgid "Select file…"
-msgstr "Hapus file"
+#: source/tmp/PopoverTags.vue.ts:70
+msgid "Add to file"
+msgstr "Tambahkan ke berkas"
 
-#: source/tmp/RelatedFilesTab.vue.ts:34
-msgid "No related files"
-msgstr "Tidak ada berkas yang berkaitan"
-
-#: source/tmp/RelatedFilesTab.vue.ts:35
-msgid "This relation is based on a bidirectional link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:36
-msgid "This relation is based on an outbound link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:37
-msgid "This relation is based on a backlink."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:221
-#, javascript-format
-msgid "This relation is based on %s shared tags: %s"
-msgstr ""
-
-#: source/tmp/GlobalSearch.vue.ts:34
+#: source/tmp/GlobalSearch.vue.ts:117
 msgid "Full-Text Search"
 msgstr "Pencarian teks lengkap"
 
-#: source/tmp/GlobalSearch.vue.ts:35
+#: source/tmp/GlobalSearch.vue.ts:120
+#, javascript-format
+msgid "%s matches"
+msgstr ""
+
+#: source/tmp/GlobalSearch.vue.ts:123
 msgid "Enter your search terms below"
 msgstr "Masukkan kata pencarian"
 
@@ -1995,6 +1911,56 @@ msgstr "Bersihkan pencarian"
 #: source/tmp/GlobalSearch.vue.ts:43
 msgid "Toggle results"
 msgstr "Alihkan penampilan hasil pencarian"
+
+#: source/tmp/GlobalSearch.vue.ts:53
+#: source/win-main/file-manager/util/file-item-context.ts:28
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:147
+msgid "Open in a new tab"
+msgstr "Buka di tab baru"
+
+#: source/tmp/GlobalSearch.vue.ts:109
+#, javascript-format
+msgid "%s matches"
+msgstr ""
+
+#: source/tmp/ReferencesTab.vue.ts:42
+msgid "There are no citations in this document."
+msgstr "Tidak ada kutipan pada dokumen ini."
+
+#: source/tmp/FileList.vue.ts:46
+msgid "No results"
+msgstr "Tidak ada hasil"
+
+#: source/tmp/FileList.vue.ts:47
+msgid "No directory selected"
+msgstr "Direktori belum dipilih"
+
+#: source/tmp/FileList.vue.ts:48
+msgid "Empty directory"
+msgstr "Kosongkan direktori"
+
+#: source/tmp/Projects-Tab.vue.ts:24
+msgid "Zettlr also makes use of these projects:"
+msgstr "Zettlr juga menggunakan proyek-proyek ini:"
+
+#: source/tmp/PopoverExport.vue.ts:6
+#, fuzzy
+msgid "Exporting…"
+msgstr "Ekspor..."
+
+#: source/tmp/PopoverExport.vue.ts:6
+#, fuzzy
+msgid "Export"
+msgstr "Ekspor..."
+
+#: source/tmp/PopoverExport.vue.ts:27
+msgid "command"
+msgstr ""
+
+#. Static properties
+#: source/tmp/ChartView.vue.ts:39
+msgid "Charts"
+msgstr "Grafik"
 
 #: source/tmp/GlobalSearch.vue.ts:53
 #: source/win-main/file-manager/util/file-item-context.ts:28
@@ -2090,29 +2056,25 @@ msgid ""
 "server that you use."
 msgstr ""
 
-#: source/tmp/PopoverTags.vue.ts:39
-msgid "Name"
-msgstr ""
+#: source/tmp/MainSidebar.vue.ts:75 source/tmp/ReferencesTab.vue.ts:36
+msgid "References"
+msgstr "Referensi"
 
-#: source/tmp/PopoverTags.vue.ts:40
-msgid "Count"
-msgstr ""
+#: source/tmp/MainSidebar.vue.ts:78 source/tmp/ToCTab.vue.ts:53
+msgid "Table of Contents"
+msgstr "Daftar Isi"
 
-#: source/tmp/PopoverTags.vue.ts:47
-msgid "Filter tags…"
-msgstr "Filter label..."
+#: source/tmp/MainSidebar.vue.ts:81 source/tmp/RelatedFilesTab.vue.ts:33
+msgid "Related files"
+msgstr "Berkas yang berkaitan"
 
-#: source/tmp/PopoverTags.vue.ts:48
-msgid "Tag Cloud"
-msgstr "Awan Label"
+#: source/tmp/file-item.vue.ts:113 source/tmp/PopoverDirProps.vue.ts:170
+msgid "Directories"
+msgstr "Direktori"
 
-#: source/tmp/PopoverDirProps.vue.ts:33
-msgid "Project Settings…"
-msgstr "Pengaturan Proyek..."
-
-#: source/tmp/PopoverDocInfo.vue.ts:45
-msgid "No open document"
-msgstr "Tidak ada dokumen yang dibuka"
+#: source/tmp/file-item.vue.ts:193 source/tmp/PopoverFileProps.vue.ts:118
+msgid "Characters"
+msgstr "Karakter"
 
 #: source/tmp/PopoverDocInfo.vue.ts:48
 msgid "words"
@@ -2394,17 +2356,12 @@ msgstr ""
 msgid "Go to footnote reference"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
-msgid "Disabled"
+#: source/win-preferences/schema/toolbar.ts:66
+msgid "Display task list button"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
-#, fuzzy
-msgid "Custom"
-msgstr "Kustom CSS"
-
-#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
-msgid "Open diagnostics panel"
+#: source/win-preferences/schema/toolbar.ts:71
+msgid "Display \"Insert Table\" button"
 msgstr ""
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
@@ -2963,18 +2920,18 @@ msgstr ","
 msgid "."
 msgstr "."
 
-#~ msgid "Edit the default settings for imports or exports here."
-#~ msgstr "Ubah pengaturan bawaan untuk mengimpor atau mengekspor di sini."
+#: source/win-preferences/schema/advanced.ts:47
+msgid "Use native window appearance"
+msgstr "Gunakan tampilan jendela bawaan"
 
-#~ msgid ""
-#~ "Pandoc has not been found on this system. Please install Pandoc prior to "
-#~ "exporting or importing files."
-#~ msgstr ""
-#~ "Pandoc tidak ditemukan pada sistem. Instal Pandoc sebelum mengekspor atau "
-#~ "mengimpor file."
+#: source/win-preferences/schema/advanced.ts:53
+#, fuzzy
+msgid "Enable window vibrancy"
+msgstr "Gunakan tampilan jendela bawaan"
 
-#~ msgid "Suggested tags for the current file"
-#~ msgstr "Rekomendasi tag untuk berkas ini"
+#: source/win-preferences/schema/advanced.ts:59
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr "Hapus item secara permanen, jika gagal memindahkannya ke Recycle Bin"
 
 #~ msgid "Add to file"
 #~ msgstr "Tambahkan ke berkas"
