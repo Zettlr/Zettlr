@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -29,34 +29,19 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
+import { ref } from 'vue'
 import ProgressControl from '@common/vue/form/elements/ProgressControl.vue'
 import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  components: {
-    ProgressControl
-  },
-  data: function () {
-    return {
-      stepLabel: trans('Loading…'),
-      stepPercentage: 0
-    }
-  },
-  computed: {
-  },
-  mounted () {
-    ipcRenderer.on('step-update', (event, { currentStepMessage, currentStepPercentage }) => {
-      console.log('Received new step instructions', currentStepMessage, currentStepPercentage)
-      this.stepLabel = currentStepMessage
-      // Account for potential ratios instead of percentages
-      this.stepPercentage = currentStepPercentage > 1 ? currentStepPercentage : Math.round(currentStepPercentage * 100)
-    })
-  },
-  methods: {
-  }
+const stepLabel = ref(trans('Loading…'))
+const stepPercentage = ref(0)
+
+ipcRenderer.on('step-update', (event, { currentStepMessage, currentStepPercentage }) => {
+  stepLabel.value = currentStepMessage
+  // Account for potential ratios instead of percentages
+  stepPercentage.value = currentStepPercentage > 1 ? currentStepPercentage : Math.round(currentStepPercentage * 100)
 })
 </script>
 
