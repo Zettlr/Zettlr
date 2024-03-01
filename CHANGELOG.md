@@ -156,6 +156,8 @@ follow these links again.
 - Due to the new ability to add link titles, the default setting for "Link with
   filename" is now set to "never" for new installations; you may consider
   changing this as well
+- The updater now contains a message indicating when Zettlr last checked for
+  updates (#4963)
 
 ## Under the Hood
 

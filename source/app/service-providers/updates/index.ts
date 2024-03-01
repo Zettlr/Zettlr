@@ -110,6 +110,10 @@ export interface UpdateState {
    */
   updateAvailable: boolean
   /**
+   * When the last update check happened (in Milliseconds as returned from Date.now())
+   */
+  lastCheck?: number
+  /**
    * Is this release a beta version?
    */
   prerelease: boolean
@@ -351,6 +355,8 @@ export default class UpdateProvider extends ProviderContract {
 
       return false
     })
+
+    this._updateState.lastCheck = Date.now()
 
     broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
 
