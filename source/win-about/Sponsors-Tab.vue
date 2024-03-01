@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -32,7 +32,7 @@
  */
 
 import ky from 'ky'
-import { defineComponent } from 'vue'
+import { ref } from 'vue'
 
 interface Sponsor {
   id: string
@@ -40,25 +40,17 @@ interface Sponsor {
   link?: string
 }
 
-export default defineComponent({
-  name: 'SponsorsTab',
-  data: function () {
-    return {
-      sponsors: [] as Sponsor[]
-    }
-  },
-  created: function () {
-    ky('https://zettlr.com/api/sponsors')
-      .then((response) => {
-        response.json()
-          .then(res => {
-            this.sponsors = res
-          })
-          .catch(err => console.error(err))
+const sponsors = ref<Sponsor[]>([])
+
+ky('https://zettlr.com/api/sponsors')
+  .then(response => {
+    response.json<Sponsor[]>()
+      .then(res => {
+        sponsors.value = res
       })
-      .catch(e => console.error(e))
-  }
-})
+      .catch(err => console.error(err))
+  })
+  .catch(e => console.error(e))
 </script>
 
 <style lang="less">

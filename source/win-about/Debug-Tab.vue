@@ -43,7 +43,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -58,33 +58,22 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'DebugTab',
-  data: function () {
-    return {
-      version: (global as any).config.get('version'),
-      uuid: (global as any).config.get('uuid'),
-      versions: process.versions,
-      argv: process.argv,
-      arch: process.arch,
-      env: Object.assign({}, process.env),
-      platform: process.platform,
-      // DEBUG: In the renderer, getSystemVersion is a property, not a function
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      platformVersion: process.getSystemVersion,
-      // Add version strings for external helper programs Zettlr can use
-      programVersions: {
-        pandoc: process.env.PANDOC_VERSION ?? 'not available',
-        quarto: process.env.QUARTO_VERSION ?? 'not available',
-        git: process.env.GIT_VERSION ?? 'not available'
-      }
-    }
-  },
-  methods: {
-  }
-})
+const version = window.config.get('version')
+const uuid = window.config.get('uuid')
+const versions = process.versions
+const argv = process.argv
+const arch = process.arch
+const env = Object.assign({}, process.env)
+const platform = process.platform
+// DEBUG: getSystemVersion is a simple property in the renderer
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const platformVersion = process.getSystemVersion
+// Add version strings for external helper programs Zettlr can use
+const programVersions = {
+  pandoc: process.env.PANDOC_VERSION ?? 'not available',
+  quarto: process.env.QUARTO_VERSION ?? 'not available',
+  git: process.env.GIT_VERSION ?? 'not available'
+}
 </script>
 
 <style lang="less">
