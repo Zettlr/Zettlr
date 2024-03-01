@@ -904,7 +904,7 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -920,11 +920,6 @@
  *
  * END HEADER
  */
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'LicenseTab'
-})
 </script>
 
 <style lang="less">
