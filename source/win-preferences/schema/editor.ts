@@ -46,6 +46,11 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
       help: undefined, // TODO
       fields: [
         // TODO: Add field for LTR/RTL
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: 'We are currently planning on re-introducing bidirectional writing support, which will then be configurable here.'
+        }
       ]
     },
     {

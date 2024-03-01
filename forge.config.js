@@ -5,8 +5,6 @@ const fs = require('fs').promises
 const path = require('path')
 const { FusesPlugin } = require('@electron-forge/plugin-fuses')
 const { FuseV1Options, FuseVersion } = require('@electron/fuses')
-const { FusesPlugin } = require('@electron-forge/plugin-fuses')
-const { FuseV1Options, FuseVersion } = require('@electron/fuses')
 
 /**
  * This function runs the get-pandoc script in order to download the requested
