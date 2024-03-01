@@ -30,15 +30,5 @@ windowRegister()
     })
 
     const app = createApp(App).mount('#app')
-
-    // Finally, pass the correct file to the application to preview
-    const searchParams = new URLSearchParams(window.location.search)
-    const filePath = searchParams.get('file')
-
-    if (filePath === null) {
-      console.error('Could not load file to preview, since the passed file was null!')
-    } else {
-      app.$data.filePath = filePath
-    }
   })
   .catch(e => console.error(e))
