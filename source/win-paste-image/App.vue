@@ -83,71 +83,13 @@ import NumberControl from '@common/vue/form/elements/NumberControl.vue'
 import File from '@common/vue/form/elements/FileControl.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, watch } from 'vue'
-import md5 from 'md5'
-import { pathBasename, pathExtname } from '@common/util/renderer-path-polyfill'
 import { type StatusbarControl } from '@common/vue/window/WindowStatusbar.vue'
 
 const ipcRenderer = window.ipc
 
 // BEGIN READING RELEVANT INFO FROM CLIPBOARD
 async function retrieveClipboardData (): Promise<{ dataUrl: string, size: { width: number, height: number }, aspect: number, name: string }> {
-  const clipboardItems = await navigator.clipboard.read()
-  const clipboardImage = clipboardItems.find(i => i.types.includes('image/png'))
-  if (clipboardImage === undefined) {
-    throw new Error('Could not paste image: None in the clipboard.')
-  }
-
-  const blob = await clipboardImage.getType('image/png')
-  const dataUrl = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(blob)
-    reader.onloadend = function () {
-      if (typeof reader.result === 'string') {
-        resolve(reader.result)
-      } else {
-        reject(new Error('Could not decode image data: Result was not a base64 encoded string; data type is: ' + typeof reader.result))
-      }
-    }
-    reader.onerror = function () { reject(new Error('Error decoding image data')) }
-    reader.onabort = function () { reject(new Error('Decoding image data was aborted')) }
-  })
-
-  const image = new Image()
-  image.src = dataUrl
-  const { size, aspect } = await new Promise<{ size: { width: number, height: number }, aspect: number }>((resolve, reject) => {
-    image.onload = function () {
-      const size = {
-        width: image.naturalWidth,
-        height: image.naturalHeight
-      }
-
-      const aspect = image.naturalWidth / image.naturalHeight
-      resolve({ aspect, size })
-    }
-    image.onerror = function () { reject(new Error('Could not determine image dimensions: Load error')) }
-    image.onabort = function () { reject(new Error('Image loading was aborted.')) }
-  })
-
-  // After only 50 lines of code we have retrieved the existing information
-  // about the image, lol. Now, let's see how long it takes to read plain text
-  // ... oh, one line.
-  const clipboardText = await navigator.clipboard.readText()
-
-  let name = ''
-  if (clipboardText.length > 0) {
-    // If you copy an image from the web, the browser sometimes inserts
-    // the original URL to it as text into the clipboard. In this case
-    // we've already got a good image name!
-    const basename = pathBasename(clipboardText, pathExtname(clipboardText))
-    name = basename + '.png'
-  } else {
-    // In case there is no potential basename we could extract, simply
-    // hash the dataURL. This way we can magically also prevent the same
-    // image to be saved twice in the same directory. Such efficiency!
-    name = md5('img' + dataUrl) + '.png'
-  }
-
-  return { aspect, dataUrl, size, name }
+  return await ipcRenderer.invoke('paste-image-retrieve-data')
 }
 
 retrieveClipboardData().then(({ aspect, name, size, dataUrl }) => {

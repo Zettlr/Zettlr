@@ -165,6 +165,7 @@ or showing tooltips on these links.
 - Fixed a bug on Windows and Linux that would not make the context menu on the
   statusbars' MagicQuotes handler appear
 - Fixed a bug in the print window (#4902)
+- Fixed a bug in the image pasting modal handler (#5007)
 
 ## Under the Hood
 
