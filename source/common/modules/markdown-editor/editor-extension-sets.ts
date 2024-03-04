@@ -21,7 +21,7 @@ import { type Update } from '@codemirror/collab'
 import { defaultKeymap, history, undo, redo, undoSelection, redoSelection } from '@codemirror/commands'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
 import { stex } from '@codemirror/legacy-modes/mode/stex'
-import { yaml } from '@codemirror/legacy-modes/mode/yaml'
+import { yaml } from '@codemirror/lang-yaml'
 import { search, searchKeymap } from '@codemirror/search'
 import { Compartment, EditorState, Prec, type Extension } from '@codemirror/state'
 import {
@@ -52,7 +52,7 @@ import { type EditorConfiguration, configField } from './util/configuration'
 import { highlightRanges } from './plugins/highlight-ranges'
 import { jsonFolding } from './code-folding/json'
 import { markdownFolding } from './code-folding/markdown'
-import { jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
+import { json, jsonParseLinter } from '@codemirror/lang-json'
 import { softwrapVisualIndent } from './plugins/visual-indent'
 import { backgroundLayers } from './plugins/code-background'
 import { vim } from '@replit/codemirror-vim'
@@ -321,7 +321,7 @@ export function getJSONExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getGenericCodeExtensions(options),
     jsonFolding,
-    jsonLanguage,
+    json(),
     linter(jsonParseLinter())
   ]
 }
@@ -338,7 +338,7 @@ export function getJSONExtensions (options: CoreExtensionOptions): Extension[] {
 export function getYAMLExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getGenericCodeExtensions(options),
-    StreamLanguage.define(yaml)
+    yaml()
   ]
 }
 

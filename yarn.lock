@@ -286,6 +286,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/lang-yaml@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@codemirror/lang-yaml@npm:6.0.0"
+  dependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@lezer/common": ^1.2.0
+    "@lezer/yaml": ^1.0.0
+  checksum: d9f5067fda326e2d3dd182c4f3ef41801a791b83da8d73251ca7cb2cde1dbafa04eab7a9f49ab6801ace0cdfffaa4fb18aa1f870945772b8aed0ab29f7139f6b
+  languageName: node
+  linkType: hard
+
 "@codemirror/language@npm:6.10.1":
   version: 6.10.1
   resolution: "@codemirror/language@npm:6.10.1"
@@ -1093,6 +1106,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lezer/lr@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@lezer/lr@npm:1.4.0"
+  dependencies:
+    "@lezer/common": ^1.0.0
+  checksum: 4c8517017e9803415c6c5cb8230d8764107eafd7d0b847676cd1023abb863a4b268d0d01c7ce3cf1702c4749527c68f0a26b07c329cb7b68c36ed88362d7b193
+  languageName: node
+  linkType: hard
+
 "@lezer/markdown@npm:^1.0.0":
   version: 1.0.2
   resolution: "@lezer/markdown@npm:1.0.2"
@@ -1120,6 +1142,17 @@ __metadata:
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
   checksum: 7ae6b4ae770b3cd849eee3d8fb1d904745aee202a76e7db0a079725a97571c4778fa5bd74878206e44aa3349044bf056008e19e7a90650fad93d51890f685077
+  languageName: node
+  linkType: hard
+
+"@lezer/yaml@npm:^1.0.0":
+  version: 1.0.2
+  resolution: "@lezer/yaml@npm:1.0.2"
+  dependencies:
+    "@lezer/common": ^1.2.0
+    "@lezer/highlight": ^1.0.0
+    "@lezer/lr": ^1.4.0
+  checksum: bdc34e9a18150178021b34105d8c5603672ca5e21226e6ce5aba294ef6973ffad052e418dc5d2a707903346bd0d7d19cfafc265d277eed02e6a93973eb04c8f7
   languageName: node
   linkType: hard
 
@@ -14580,6 +14613,7 @@ __metadata:
     "@codemirror/lang-markdown": ^6.2.4
     "@codemirror/lang-php": ^6.0.1
     "@codemirror/lang-python": ^6.1.4
+    "@codemirror/lang-yaml": ^6.0.0
     "@codemirror/language": ^6.10.1
     "@codemirror/legacy-modes": ^6.3.3
     "@codemirror/search": ^6.5.6

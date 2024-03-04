@@ -28,7 +28,7 @@ import { onMounted, ref, toRef, watch } from 'vue'
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, StreamLanguage } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
-import { yaml } from '@codemirror/legacy-modes/mode/yaml'
+import { yaml } from '@codemirror/lang-yaml'
 import { EditorState, type Extension } from '@codemirror/state'
 import { cssLanguage } from '@codemirror/lang-css'
 import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
@@ -96,7 +96,7 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
     case 'yaml':
       return [
         ...extensions,
-        StreamLanguage.define(yaml),
+        yaml(),
         yamlLint
       ]
     case 'css':
@@ -204,56 +204,75 @@ body {
   }
 
   .cm-editor {
-    cursor: text;
     .cm-scroller { overflow: auto; }
+    .cm-content { cursor: text; }
     height: 100%;
 
     // margin: 20px 0px;
     // background-color: white;
     // border: 1px solid rgb(173, 173, 173);
-    color: @base01;
-    .cm-string     { color: @green; }
-    .cm-string-2   { color: @green; }
-    .cm-keyword    { color: @green; }
-    .cm-atom       { color: @green; }
-    .cm-tag        { color: @blue; }
-    .cm-qualifier  { color: @blue; }
-    .cm-builtin    { color: @blue; }
-    .cm-variable-2 { color: @yellow; }
-    .cm-variable   { color: @yellow; }
-    .cm-comment    { color: @base1; }
-    .cm-attribute  { color: @orange; }
-    .cm-property   { color: @magenta; }
-    .cm-type       { color: @red; }
-    .cm-number     { color: @violet; }
+    color: @base00;
+    .cm-separator         { color: @base00; }
+    .cm-punctuation       { color: @base00; }
+
+    .cm-content-span      { color: @base0; }
+    .cm-brace             { color: @base0; }
+    .cm-square-bracket    { color: @base0; }
+
+    .cm-comment           { color: @base1; }
+    .cm-line-comment      { color: @base1; }
+    .cm-block-comment     { color: @base1; }
+    .cm-unit              { color: @base1; }
+
+    .cm-string            { color: @green; }
+    .cm-string-2          { color: @green; }
+    .cm-keyword           { color: @green; }
+    .cm-operator-keyword  { color: @green; }
+    .cm-atom              { color: @green; }
+
+    .cm-property-name     { color: @blue; }
+    .cm-tag               { color: @blue; }
+    .cm-qualifier         { color: @blue; }
+    .cm-builtin           { color: @blue; }
+
+    .cm-number            { color: @violet; }
+    .cm-class-name        { color: @violet; }
+    .cm-label-name        { color: @violet; }
+
+    .cm-code-mark         { color: @magenta; }
+    .cm-property          { color: @magenta; }
+
+    .cm-variable-2        { color: @yellow; }
+    .cm-variable          { color: @yellow; }
+
+    .cm-tag-name          { color: @cyan; }
+    .cm-deref-operator    { color: @cyan; }
+
+    .cm-attribute         { color: @orange; }
+
+    .cm-type              { color: @red; }
+
     .cm-gutters {
-      background-color: @base1;
-      color: @base00;
+      background-color: @base2;
+      color: @base1;
     }
   }
 
   &.dark {
+    .code-editor-wrapper {
+      border-color: rgb(100, 100, 100);
+    }
+
     .cm-editor {
       background-color: rgb(65, 65, 65);
-      border-color: rgb(100, 100, 100);
       color: @base3;
-      .cm-string     { color: @red; }
-      .cm-string-2   { color: @red; }
-      .cm-keyword    { color: @red; }
-      .cm-atom       { color: @red; }
-      .cm-tag        { color: @blue; }
-      .cm-qualifier  { color: @blue; }
-      .cm-builtin    { color: @blue; }
-      .cm-variable-2 { color: @yellow; }
-      .cm-variable   { color: @yellow; }
-      .cm-comment    { color: @base1; }
-      .cm-attribute  { color: @orange; }
-      .cm-property   { color: @magenta; }
-      .cm-type       { color: @green; }
-      .cm-number     { color: @violet; }
+      .cm-comment    { color: @base00; }
+      .cm-line-comment { color: @base00; }
+      .cm-block-comment { color: @base00; }
       .cm-gutters {
-        background-color: @base01;
-        color: @base1;
+        background-color: @base03;
+        color: @base00;
+        border-color: rgb(100, 100, 100);
       }
     }
   }

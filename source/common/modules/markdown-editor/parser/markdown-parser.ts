@@ -29,6 +29,7 @@ import { python } from '@codemirror/lang-python'
 import { css } from '@codemirror/lang-css'
 import { javascript } from '@codemirror/lang-javascript'
 import { json } from '@codemirror/lang-json'
+import { yaml } from '@codemirror/lang-yaml'
 // Now from the legacy modes package
 import { c, cpp, csharp, java, kotlin, objectiveC, dart, scala } from '@codemirror/legacy-modes/mode/clike'
 import { clojure } from '@codemirror/legacy-modes/mode/clojure'
@@ -46,7 +47,6 @@ import { sql } from '@codemirror/legacy-modes/mode/sql'
 import { swift } from '@codemirror/legacy-modes/mode/swift'
 import { shell } from '@codemirror/legacy-modes/mode/shell'
 import { vb } from '@codemirror/legacy-modes/mode/vb'
-import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { go } from '@codemirror/legacy-modes/mode/go'
 import { rust } from '@codemirror/legacy-modes/mode/rust'
 import { julia } from '@codemirror/legacy-modes/mode/julia'
@@ -137,7 +137,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(verilog), selectors: [ 'verilog', 'v' ] },
   { mode: StreamLanguage.define(vhdl), selectors: [ 'vhdl', 'vhd' ] },
   { mode: StreamLanguage.define(xml), selectors: ['xml'] },
-  { mode: StreamLanguage.define(yaml), selectors: [ 'yaml', 'yml' ] },
+  { mode: yaml().language, selectors: [ 'yaml', 'yml' ] },
   { mode: javascript({ typescript: true }).language, selectors: [ 'typescript', 'ts' ] }
 ]
 
