@@ -16,6 +16,7 @@ if (process.env.BUNDLE_FSEVENTS !== '1') {
 module.exports = {
   // Main entry point: the file that runs in the main process
   entry: './source/main.ts',
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   module: { rules },
   plugins: [
     new CopyWebpackPlugin({
