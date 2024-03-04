@@ -25,6 +25,7 @@ import { getProgramVersion } from './util/get-program-version'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-assembler'
 import AppServiceContainer from './app-service-container'
 import { app } from 'electron'
+import { attachAppNavigationHandlers } from './util/attach-app-navigation-handlers'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -67,6 +68,10 @@ export async function bootApplication (): Promise<AppServiceContainer> {
   }
 
   registerCustomProtocols(log)
+
+  // Prevent navigation away from our main windows and the creation of arbitrary
+  // browser windows with external URLs
+  attachAppNavigationHandlers(log)
 
   // Now boot up the service container
   await appServiceContainer.boot()

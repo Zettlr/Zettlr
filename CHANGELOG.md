@@ -213,6 +213,8 @@ or showing tooltips on these links.
   from source (rather than the provided binaries)
 - Fixed an issue with showing the appropriate `platformVersion` in the about
   debug info tab
+- Move `preventNavigation` utility function into the lifecycle handlers to
+  reduce boilerplate code and make the app more secure
 
 # 3.0.5
 

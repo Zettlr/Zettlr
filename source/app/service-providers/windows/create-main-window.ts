@@ -20,7 +20,6 @@ import {
 } from 'electron'
 import type { WindowPosition } from './types'
 import setWindowChrome from './set-window-chrome'
-import preventNavigation from './prevent-navigation'
 import attachLogger from './attach-logger'
 import type LogProvider from '@providers/log'
 import type ConfigProvider from '@providers/config'
@@ -71,8 +70,6 @@ export default function createMainWindow (
 
   // EVENT LISTENERS
 
-  // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(logger, window)
   // Implement main process logging
   attachLogger(logger, window, `Main Window (${windowId})`)
 
