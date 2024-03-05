@@ -7,7 +7,7 @@
     aria-label="File List"
     v-bind:class="{ hidden: !isVisible }"
     v-bind:aria-hidden="!isVisible"
-    v-on:blur="selectedFile = undefined"
+    v-on:blur="activeDescriptor = undefined"
   >
     <template v-if="getDirectoryContents.length > 1">
       <div v-if="getFilteredDirectoryContents.length === 0" class="empty-file-list">
