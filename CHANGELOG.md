@@ -217,6 +217,7 @@ or showing tooltips on these links.
 - Move `preventNavigation` utility function into the lifecycle handlers to
   reduce boilerplate code and make the app more secure
 - Switched to the new YAML parser (`@codemirror/lang-yaml`)
+- Improved linting to include plain JavaScript files, but exclude type checking
 
 # 3.0.5
 
