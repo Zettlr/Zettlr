@@ -28,7 +28,7 @@
   "overrides": [
     {
       "files": ["**/*.js"],
-      "extends": ["tseslint.configs.disableTypeChecked"]
+      "extends": ["plugin:@typescript-eslint/disable-type-checked"]
     }
   ],
   "globals": {
