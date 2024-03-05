@@ -5,14 +5,18 @@
       Zettlr.
     </p>
     <h2>General Information</h2>
-    <p>Zettlr Version: <strong>{{ version }}</strong> (UUID: {{ uuid }})</p>
-    <p>
-      System: <strong>{{ platform }} {{ platformVersion }}</strong>
-      (architecture: {{ arch }})
-    </p>
+    <ul>
+      <li>Zettlr Version: <strong>{{ version }}</strong></li>
+      <li>Build number: <strong><code>{{ commit }}</code></strong></li>
+      <li>UUID: <strong><code>{{ uuid }}</code></strong></li>
+      <li>
+        System: <strong>{{ platform }} {{ platformVersion }}</strong>
+        (architecture: {{ arch }})
+      </li>
+    </ul>
     <h2>Build Dependencies</h2>
     <p>
-      This build was compiled using
+      This build was compiled using:
       <ul>
         <li>Node.js <strong>v{{ versions.node }}</strong></li>
         <li>Electron <strong>v{{ versions.electron }}</strong></li>
@@ -65,6 +69,7 @@ const argv = process.argv
 const arch = process.arch
 const env = Object.assign({}, process.env)
 const platform = process.platform
+const commit = __GIT_COMMIT_HASH__
 // DEBUG: getSystemVersion is a simple property in the renderer
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const platformVersion = process.getSystemVersion

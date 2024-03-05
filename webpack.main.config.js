@@ -1,4 +1,5 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { DefinePlugin } = require('webpack')
 const path = require('path')
 const rules = require('./webpack.rules')
 
@@ -33,6 +34,9 @@ module.exports = {
         { from: 'resources/icons/icon.ico', to: 'assets/icons' },
         { from: 'resources/icons/png', to: 'assets/icons/png' }
       ]
+    }),
+    new DefinePlugin({
+      __GIT_COMMIT_HASH__: JSON.stringify(process.env.GIT_COMMIT_HASH)
     })
   ],
   resolve: {

@@ -218,6 +218,7 @@ or showing tooltips on these links.
   reduce boilerplate code and make the app more secure
 - Switched to the new YAML parser (`@codemirror/lang-yaml`)
 - Improved linting to include plain JavaScript files, but exclude type checking
+- Add build number (= git commit hash) to the debug info of the about dialog
 
 # 3.0.5
 

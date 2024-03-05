@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { spawn } = require('child_process')
 const fs = require('fs').promises
 const path = require('path')
 const { FusesPlugin } = require('@electron-forge/plugin-fuses')
 const { FuseV1Options, FuseVersion } = require('@electron/fuses')
+const { getGitHash } = require('./scripts/get-git-hash.js')
 
 /**
  * This function runs the get-pandoc script in order to download the requested
@@ -62,6 +61,10 @@ module.exports = {
       // variable that is then accessible by the webpack process so that we can
       // either include or not include fsevents for macOS platforms.
       process.env.BUNDLE_FSEVENTS = (targetPlatform === 'darwin') ? '1' : '0'
+
+      // This will be baked into the binary so that we know which commit this
+      // build was based off on.
+      process.env.GIT_COMMIT_HASH = await getGitHash()
 
       // Second, we need to make sure we can bundle Pandoc.
       const isMacOS = targetPlatform === 'darwin'
