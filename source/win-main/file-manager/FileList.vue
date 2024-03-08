@@ -24,6 +24,7 @@
         -->
         <RecycleScroller
           v-slot="{ item }"
+          key-field="id"
           v-bind:items="getFilteredDirectoryContents"
           v-bind:item-size="itemHeight"
           v-bind:emit-update="true"

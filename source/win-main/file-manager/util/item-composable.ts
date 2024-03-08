@@ -34,7 +34,6 @@ export function useItemComposable (
   const operationType = ref<'createFile'|'createDir'|undefined>(undefined)
 
   const openDirectoryStore = useOpenDirectoryStore()
-  const windowStateStore = useWindowStateStore()
   const documentTreeStore = useDocumentTreeStore()
 
   const isDirectory = computed(() => obj.value.type === 'directory')
@@ -55,6 +54,10 @@ export function useItemComposable (
       nameEditingInput.value.setSelectionRange(0, lastDot)
     })
       .catch(err => console.error(err))
+  })
+
+  watch(obj, (value) => {
+    console.log('obj changed!', value)
   })
 
   /**
@@ -87,6 +90,7 @@ export function useItemComposable (
     }
 
     if ([ 'file', 'code' ].includes(type)) {
+      console.log('Requesting file:', obj.value.path)
       // Request the clicked file
       ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
