@@ -1,15 +1,17 @@
 <template>
-  <button
-    v-bind:id="`toolbar-${props.control.id ?? ''}`"
-    role="button"
-    v-on:click="emit('click')"
-  >
-    <RingProgress
-      v-bind:ratio="props.control.progressPercent / 100"
-      v-bind:color="props.control.trackColour"
-    ></RingProgress>
-    <span v-html="props.control.label"></span>
-  </button>
+  <div class="toolbar-group">
+    <button
+      v-bind:id="`toolbar-${props.control.id ?? ''}`"
+      role="button"
+      v-on:click="emit('click')"
+    >
+      <RingProgress
+        v-bind:ratio="props.control.progressPercent / 100"
+        v-bind:color="props.control.trackColour"
+      ></RingProgress>
+      <span v-html="props.control.label"></span>
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">
