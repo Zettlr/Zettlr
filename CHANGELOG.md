@@ -166,6 +166,8 @@ or showing tooltips on these links.
   statusbars' MagicQuotes handler appear
 - Fixed a bug in the print window (#4902)
 - Fixed a bug in the image pasting modal handler (#5007)
+- Fixed a bug caused by a workaround from a few years ago, making dialogs modal
+  again (see #4952)
 
 ## Under the Hood
 
