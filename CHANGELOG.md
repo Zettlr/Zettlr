@@ -222,6 +222,8 @@ or showing tooltips on these links.
 - Improved linting to include plain JavaScript files, but exclude type checking
 - Add build number (= git commit hash) to the debug info of the about dialog
 - Simplify exporter types
+- Retire the `test-gui` command; instead now the `start` command does the same;
+  similarly, `start` won't touch any existing Zettlr configuration anymore
 
 # 3.0.5
 

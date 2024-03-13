@@ -152,10 +152,20 @@ This section lists all available commands that you can use during application de
 
 #### `start`
 
-Starts `electron-forge`, which will build the application and launch it in development mode.
+Use this command to carefree test any changes you make to the application. This command will start the application, but will provide a custom configuration and a custom directory. Thus, it will not touch any files that a regular Zettlr installation will use.
 
-> [!CAUTION]
-> **We do not recommend using this command. Use `test-gui` instead.** By using this command, the app will use the default settings, so if you use Zettlr on the same computer in production, it will use the same configuration files as the regular application. This means: be careful when breaking things, otherwise this command **will** lead to data loss.
+**The first time you start this command**, pass the `--clean`-flag to copy a bunch of test-files to your `./resources`-directory, create a `test-config.yml` in your project root, and start the application with this clean configuration. Then, you can adapt the `test-config.yml` to your liking (so that certain settings which you would otherwise _always_ set will be pre-set without you having to open the preferences).
+
+Whenever you want to reset the test directory to its initial state (or you removed the directory, or cloned the whole project anew), pass the flag `--clean` to the command in order to create or reset the directory. **This is also necessary if you changed something in `test-config.yml`**.
+
+If you want to prevent a config-file from being created (e.g., to simulate the first start experience), you can pass the flag `--no-config` to this command.
+
+You can pass additional command-line switches such as `--clear-cache` to this command as well. They will be passed to the child process.
+
+> [!WARNING]
+> Attention: Before first running the command, you **must** run it with the `--clean`-flag to create the directory in the first place!
+
+Additionally, have a look at our [full development documentation](https://docs.zettlr.com/en/get-involved).
 
 #### `package`
 
@@ -221,23 +231,10 @@ This runs the unit tests in the directory `./test`. Make sure to run this comman
 
 #### `test-gui`
 
-Use this command to carefree test any changes you make to the application. This command will start the application as if you ran `yarn start`, but will provide a custom configuration and a custom directory.
+See `start`.
 
 > [!IMPORTANT]
-> This command will skip typechecking to speed up builds, so be extra cautious.
-
-**The first time you start this command**, pass the `--clean`-flag to copy a bunch of test-files to your `./resources`-directory, create a `test-config.yml` in your project root, and start the application with this clean configuration. Then, you can adapt the `test-config.yml` to your liking (so that certain settings which you would otherwise _always_ set will be pre-set without you having to open the preferences).
-
-Whenever you want to reset the test directory to its initial state (or you removed the directory, or cloned the whole project anew), pass the flag `--clean` to the command in order to create or reset the directory. **This is also necessary if you changed something in `test-config.yml`**.
-
-If you want to prevent a config-file from being created (e.g., to simulate the first start experience), you can pass the flag `--no-config` to this command.
-
-You can pass additional command-line switches such as `--clear-cache` to this command as well. They will be passed to the child process.
-
-> [!WARNING]
-> Attention: Before first running the command, you **must** run it with the `--clean`-flag to create the directory in the first place!
-
-Additionally, have a look at our [full development documentation](https://docs.zettlr.com/en/get-involved).
+> This command is deprecated and only an alias for `start`. Use `start` instead.
 
 ### Directory Structure
 
