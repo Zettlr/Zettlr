@@ -25,37 +25,35 @@ import sanitize from 'sanitize-filename'
 
 const ASSETS_FOLDER_NAME = 'assets'
 
-export const plugin: ExporterPlugin = {
-  run: async function (options: ExporterOptions, sourceFiles, ctx: ExporterAPI): Promise<ExporterOutput> {
-    const output: ExporterOutput = {
-      code: 0,
-      stdout: [],
-      stderr: [],
-      targetFile: ''
-    }
-
-    if (sourceFiles.length > 1) {
-      throw new Error('Cannot export to Textbundle: Please only pass one single file.')
-    }
-
-    const baseName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
-    const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : baseName
-    const ext = options.profile.writer === 'textpack' ? '.textpack' : '.textbundle'
-    const targetPath = path.join(options.targetDirectory, title + ext)
-    try {
-      output.targetFile = await makeTextbundle(
-        sourceFiles[0],
-        targetPath,
-        options.profile.writer === 'textpack',
-        path.basename(sourceFiles[0])
-      )
-    } catch (err: any) {
-      output.code = 1
-      output.stderr.push(err.message)
-    }
-
-    return output
+export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles, ctx: ExporterAPI): Promise<ExporterOutput> {
+  const output: ExporterOutput = {
+    code: 0,
+    stdout: [],
+    stderr: [],
+    targetFile: ''
   }
+
+  if (sourceFiles.length > 1) {
+    throw new Error('Cannot export to Textbundle: Please only pass one single file.')
+  }
+
+  const baseName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
+  const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : baseName
+  const ext = options.profile.writer === 'textpack' ? '.textpack' : '.textbundle'
+  const targetPath = path.join(options.targetDirectory, title + ext)
+  try {
+    output.targetFile = await makeTextbundle(
+      sourceFiles[0],
+      targetPath,
+      options.profile.writer === 'textpack',
+      path.basename(sourceFiles[0])
+    )
+  } catch (err: any) {
+    output.code = 1
+    output.stderr.push(err.message)
+  }
+
+  return output
 }
 
 /**

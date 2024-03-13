@@ -221,6 +221,7 @@ or showing tooltips on these links.
 - Switched to the new YAML parser (`@codemirror/lang-yaml`)
 - Improved linting to include plain JavaScript files, but exclude type checking
 - Add build number (= git commit hash) to the debug info of the about dialog
+- Simplify exporter types
 
 # 3.0.5
 
