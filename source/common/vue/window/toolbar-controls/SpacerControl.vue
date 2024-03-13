@@ -37,8 +37,8 @@ const props = defineProps<{ control: ToolbarSpacerControl }>()
 <style lang="less">
 body #toolbar .spacer {
   flex-grow: 1;
-  &.spacer-5x { flex-grow: 0.5; }
-  &.spacer-3x { flex-grow: 0.3; }
-  &.spacer-1x { flex-grow: 0.1; }
+  &.spacer-5x { flex-grow: 5; }
+  &.spacer-3x { flex-grow: 3; }
+  &.spacer-1x { flex-grow: 1; }
 }
 </style>
