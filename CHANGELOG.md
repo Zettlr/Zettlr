@@ -168,6 +168,8 @@ or showing tooltips on these links.
 - Fixed a bug in the image pasting modal handler (#5007)
 - Fixed a bug caused by a workaround from a few years ago, making dialogs modal
   again (see #4952)
+- Fixed an issue that would prevent the status bar in Code editors to switch
+  between light and dark
 
 ## Under the Hood
 

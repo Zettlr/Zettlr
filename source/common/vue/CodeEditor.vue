@@ -26,7 +26,7 @@
 import { drawSelection, dropCursor, EditorView, keymap, lineNumbers } from '@codemirror/view'
 import { onMounted, ref, toRef, watch } from 'vue'
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete'
-import { bracketMatching, codeFolding, foldGutter, indentOnInput, StreamLanguage } from '@codemirror/language'
+import { bracketMatching, codeFolding, foldGutter, indentOnInput } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
 import { yaml } from '@codemirror/lang-yaml'
 import { EditorState, type Extension } from '@codemirror/state'
@@ -40,6 +40,7 @@ import { defaultKeymap, historyKeymap, history, indentLess, indentMore } from '@
 import { snippetSyntaxExtension } from '@common/modules/markdown-utils/snippets-syntax-extension'
 import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-highlighter'
 import { useConfigStore } from 'source/pinia'
+import { darkMode, darkModeEffect } from '../modules/markdown-editor/theme/dark-mode'
 
 const configStore = useConfigStore()
 
@@ -82,6 +83,7 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
     bracketMatching(),
     indentOnInput(),
     codeSyntaxHighlighter(), // This comes from the main editor component
+    darkMode({ darkMode: configStore.config.darkMode }),
     plainLinkHighlighter,
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {
@@ -141,6 +143,11 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<(e: 'update:modelValue', newContents: string) => void>()
+
+// Switch the darkMode variable in the editor based on the config
+configStore.$subscribe((_mutation, state) => {
+  cmInstance.dispatch({ effects: darkModeEffect.of({ darkMode: state.config.darkMode }) })
+})
 
 watch(toRef(props, 'modelValue'), () => {
   // Assign new contents, but only if not the same as the current contents
