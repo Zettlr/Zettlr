@@ -535,8 +535,6 @@ export default class MarkdownEditor extends EventEmitter {
     const darkModeChanged = newOptions.darkMode !== undefined && newOptions.darkMode !== this.config.darkMode
     const themeChanged = newOptions.theme !== undefined && newOptions.theme !== this.config.theme
 
-    console.log({ darkModeChanged, themeChanged, newTheme: newOptions.theme, currentTheme: this.config.theme })
-
     // Third: The input mode, if applicable
     if (inputModeChanged) {
       if (newOptions.inputMode === 'emacs') {

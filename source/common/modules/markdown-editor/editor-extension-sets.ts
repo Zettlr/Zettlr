@@ -70,7 +70,7 @@ import { themeBielefeldLight, themeBielefeldDark } from './theme/bielefeld'
 import { themeBordeauxLight, themeBordeauxDark } from './theme/bordeaux'
 import { themeFrankfurtLight, themeFrankfurtDark } from './theme/frankfurt'
 import { themeKarlMarxStadtLight, themeKarlMarxStadtDark } from './theme/karl-marx-stadt'
-import { defaultDark, defaultLight } from './theme/main-override'
+import { mainOverride } from './theme/main-override'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -100,24 +100,24 @@ export const inputModeCompartment = new Compartment()
 export function getMainEditorThemes (): Record<EditorConfiguration['theme'], { lightThemes: Extension[], darkThemes: Extension[] }> {
   return {
     berlin: {
-      lightThemes: [ defaultLight, themeBerlinLight ],
-      darkThemes: [ defaultDark, themeBerlinDark ]
+      lightThemes: [ mainOverride, themeBerlinLight ],
+      darkThemes: [ mainOverride, themeBerlinDark ]
     },
     bielefeld: {
-      lightThemes: [ defaultLight, themeBielefeldLight ],
-      darkThemes: [ defaultDark, themeBielefeldDark ]
+      lightThemes: [ mainOverride, themeBielefeldLight ],
+      darkThemes: [ mainOverride, themeBielefeldDark ]
     },
     bordeaux: {
-      lightThemes: [ defaultLight, themeBordeauxLight ],
-      darkThemes: [ defaultDark, themeBordeauxDark ]
+      lightThemes: [ mainOverride, themeBordeauxLight ],
+      darkThemes: [ mainOverride, themeBordeauxDark ]
     },
     frankfurt: {
-      lightThemes: [ defaultLight, themeFrankfurtLight ],
-      darkThemes: [ defaultDark, themeFrankfurtDark ]
+      lightThemes: [ mainOverride, themeFrankfurtLight ],
+      darkThemes: [ mainOverride, themeFrankfurtDark ]
     },
     'karl-marx-stadt': {
-      lightThemes: [ defaultLight, themeKarlMarxStadtLight ],
-      darkThemes: [ defaultDark, themeKarlMarxStadtDark ]
+      lightThemes: [ mainOverride, themeKarlMarxStadtLight ],
+      darkThemes: [ mainOverride, themeKarlMarxStadtDark ]
     }
   }
 }
