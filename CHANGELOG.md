@@ -170,6 +170,8 @@ or showing tooltips on these links.
   again (see #4952)
 - Fixed an issue that would prevent the status bar in Code editors to switch
   between light and dark
+- Fixed an issue that would not show the color picker's color in the tag manager
+  on Windows
 
 ## Under the Hood
 
