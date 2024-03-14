@@ -70,6 +70,7 @@ import { themeBielefeldLight, themeBielefeldDark } from './theme/bielefeld'
 import { themeBordeauxLight, themeBordeauxDark } from './theme/bordeaux'
 import { themeFrankfurtLight, themeFrankfurtDark } from './theme/frankfurt'
 import { themeKarlMarxStadtLight, themeKarlMarxStadtDark } from './theme/karl-marx-stadt'
+import { defaultDark, defaultLight } from './theme/main-override'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -95,6 +96,31 @@ export interface CoreExtensionOptions {
  * @var  {Compartment}
  */
 export const inputModeCompartment = new Compartment()
+
+export function getMainEditorThemes (): Record<EditorConfiguration['theme'], { lightThemes: Extension[], darkThemes: Extension[] }> {
+  return {
+    berlin: {
+      lightThemes: [ defaultLight, themeBerlinLight ],
+      darkThemes: [ defaultDark, themeBerlinDark ]
+    },
+    bielefeld: {
+      lightThemes: [ defaultLight, themeBielefeldLight ],
+      darkThemes: [ defaultDark, themeBielefeldDark ]
+    },
+    bordeaux: {
+      lightThemes: [ defaultLight, themeBordeauxLight ],
+      darkThemes: [ defaultDark, themeBordeauxDark ]
+    },
+    frankfurt: {
+      lightThemes: [ defaultLight, themeFrankfurtLight ],
+      darkThemes: [ defaultDark, themeFrankfurtDark ]
+    },
+    'karl-marx-stadt': {
+      lightThemes: [ defaultLight, themeKarlMarxStadtLight ],
+      darkThemes: [ defaultDark, themeKarlMarxStadtDark ]
+    }
+  }
+}
 
 /**
  * This private function loads a set of core extensions that are required for
@@ -131,13 +157,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     autoCloseBracketsConfig.push(closeBrackets())
   }
 
-  const themes: Record<EditorConfiguration['theme'], { lightThemes: Extension[], darkThemes: Extension[] }> = {
-    berlin: { lightThemes: [themeBerlinLight], darkThemes: [themeBerlinDark] },
-    bielefeld: { lightThemes: [themeBielefeldLight], darkThemes: [themeBielefeldDark] },
-    bordeaux: { lightThemes: [themeBordeauxLight], darkThemes: [themeBordeauxDark] },
-    frankfurt: { lightThemes: [themeFrankfurtLight], darkThemes: [themeFrankfurtDark] },
-    'karl-marx-stadt': { lightThemes: [themeKarlMarxStadtLight], darkThemes: [themeKarlMarxStadtDark] }
-  }
+  const themes = getMainEditorThemes()
 
   return [
     // Both vim and emacs modes need to be included first, before any other

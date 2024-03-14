@@ -54,7 +54,8 @@ import {
   getMarkdownExtensions,
   getTexExtensions,
   getYAMLExtensions,
-  inputModeCompartment
+  inputModeCompartment,
+  getMainEditorThemes
 } from './editor-extension-sets'
 
 import {
@@ -549,14 +550,7 @@ export default class MarkdownEditor extends EventEmitter {
 
     // Fourth: Switch theme, if applicable
     if (darkModeChanged || themeChanged) {
-      console.log('Theme or dark mode changed!')
-      const themes: Record<EditorConfiguration['theme'], { lightThemes: Extension[], darkThemes: Extension[] }> = {
-        berlin: { lightThemes: [themeBerlinLight], darkThemes: [themeBerlinDark] },
-        bielefeld: { lightThemes: [themeBielefeldLight], darkThemes: [themeBielefeldDark] },
-        bordeaux: { lightThemes: [themeBordeauxLight], darkThemes: [themeBordeauxDark] },
-        frankfurt: { lightThemes: [themeFrankfurtLight], darkThemes: [themeFrankfurtDark] },
-        'karl-marx-stadt': { lightThemes: [themeKarlMarxStadtLight], darkThemes: [themeKarlMarxStadtDark] }
-      }
+      const themes = getMainEditorThemes()
 
       this._instance.dispatch({
         effects: darkModeEffect.of({
