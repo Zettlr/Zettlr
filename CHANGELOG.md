@@ -172,6 +172,7 @@ or showing tooltips on these links.
   between light and dark
 - Fixed an issue that would not show the color picker's color in the tag manager
   on Windows
+- Fixed list item indentation in Markdown and Code files
 
 ## Under the Hood
 

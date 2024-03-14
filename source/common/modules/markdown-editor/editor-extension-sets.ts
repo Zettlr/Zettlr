@@ -175,7 +175,6 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
       ...closeBracketsKeymap, // Binds Backspace to deletion of matching brackets
       ...searchKeymap // Search commands (Ctrl+F, etc.)
     ]),
-    softwrapVisualIndent, // Always indent visually
     darkMode({ darkMode: options.initialConfig.darkMode, ...themes[options.initialConfig.theme] }),
     // CODE FOLDING
     codeFolding(),
@@ -337,6 +336,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     filePreview,
     backgroundLayers, // Add a background behind inline code and code blocks
     defaultContextMenu, // A default context menu
+    softwrapVisualIndent, // Always indent visually
     EditorView.domEventHandlers(options.domEventsListeners)
   ]
 }
