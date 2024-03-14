@@ -60,11 +60,16 @@ import { emacs } from '@replit/codemirror-emacs'
 import { distractionFree } from './plugins/distraction-free'
 import { languageTool } from './linters/language-tool'
 import { statusbar } from './statusbar'
-import { themeManager } from './theme'
 import { renderers } from './renderers'
 import { mdPasteDropHandlers } from './plugins/md-paste-drop-handlers'
 import { footnoteGutter } from './plugins/footnote-gutter'
 import { yamlFrontmatterLint } from './linters/yaml-frontmatter-lint'
+import { darkMode } from './theme/dark-mode'
+import { themeBerlinLight, themeBerlinDark } from './theme/berlin'
+import { themeBielefeldLight, themeBielefeldDark } from './theme/bielefeld'
+import { themeBordeauxLight, themeBordeauxDark } from './theme/bordeaux'
+import { themeFrankfurtLight, themeFrankfurtDark } from './theme/frankfurt'
+import { themeKarlMarxStadtLight, themeKarlMarxStadtDark } from './theme/karl-marx-stadt'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -126,6 +131,14 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     autoCloseBracketsConfig.push(closeBrackets())
   }
 
+  const themes: Record<EditorConfiguration['theme'], { lightThemes: Extension[], darkThemes: Extension[] }> = {
+    berlin: { lightThemes: [themeBerlinLight], darkThemes: [themeBerlinDark] },
+    bielefeld: { lightThemes: [themeBielefeldLight], darkThemes: [themeBielefeldDark] },
+    bordeaux: { lightThemes: [themeBordeauxLight], darkThemes: [themeBordeauxDark] },
+    frankfurt: { lightThemes: [themeFrankfurtLight], darkThemes: [themeFrankfurtDark] },
+    'karl-marx-stadt': { lightThemes: [themeKarlMarxStadtLight], darkThemes: [themeKarlMarxStadtDark] }
+  }
+
   return [
     // Both vim and emacs modes need to be included first, before any other
     // keymap.
@@ -143,7 +156,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
       ...searchKeymap // Search commands (Ctrl+F, etc.)
     ]),
     softwrapVisualIndent, // Always indent visually
-    themeManager(options),
+    darkMode({ darkMode: options.initialConfig.darkMode, ...themes[options.initialConfig.theme] }),
     // CODE FOLDING
     codeFolding(),
     foldGutter(),

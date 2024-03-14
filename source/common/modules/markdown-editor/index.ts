@@ -91,6 +91,12 @@ import {
 import { markdownToAST } from '../markdown-utils'
 import { countField } from './plugins/statistics-fields'
 import type { SyntaxNode } from '@lezer/common'
+import { darkModeEffect } from './theme/dark-mode'
+import { themeBerlinDark, themeBerlinLight } from './theme/berlin'
+import { themeBielefeldDark, themeBielefeldLight } from './theme/bielefeld'
+import { themeBordeauxDark, themeBordeauxLight } from './theme/bordeaux'
+import { themeFrankfurtDark, themeFrankfurtLight } from './theme/frankfurt'
+import { themeKarlMarxStadtDark, themeKarlMarxStadtLight } from './theme/karl-marx-stadt'
 
 export interface DocumentWrapper {
   path: string
@@ -279,9 +285,7 @@ export default class MarkdownEditor extends EventEmitter {
         // both end up in our cache.
         for (const transaction of update.transactions) {
           for (const effect of transaction.effects) {
-            if (effect.is(configUpdateEffect)) {
-              this.onConfigUpdate(effect.value)
-            } else if (effect.is(reloadStateEffect)) {
+            if (effect.is(reloadStateEffect)) {
               // ATTENTION: The document state is out of sync with the document
               // authority, so we must reload it.
               this.reload().catch(err => console.error('Could not reload document state', err))
@@ -508,7 +512,12 @@ export default class MarkdownEditor extends EventEmitter {
     // configuration. However, in case there's no state (initial update), we
     // still need to cache the config here, as the updateListener won't be
     // firing yet.
+
+    // Cache the current config first, and then apply it
+    this.onConfigUpdate(newOptions)
+
     this.config = safeAssign(newOptions, this.config)
+
     this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
   }
 
@@ -522,19 +531,39 @@ export default class MarkdownEditor extends EventEmitter {
    */
   private onConfigUpdate (newOptions: Partial<EditorConfiguration>): void {
     const inputModeChanged = newOptions.inputMode !== undefined && newOptions.inputMode !== this.config.inputMode
+    const darkModeChanged = newOptions.darkMode !== undefined && newOptions.darkMode !== this.config.darkMode
+    const themeChanged = newOptions.theme !== undefined && newOptions.theme !== this.config.theme
 
-    // Cache the current config first, and then apply it
-    this.config = safeAssign(newOptions, this.config)
+    console.log({ darkModeChanged, themeChanged, newTheme: newOptions.theme, currentTheme: this.config.theme })
 
     // Third: The input mode, if applicable
     if (inputModeChanged) {
-      if (this.config.inputMode === 'emacs') {
+      if (newOptions.inputMode === 'emacs') {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure(emacs()) })
-      } else if (this.config.inputMode === 'vim') {
+      } else if (newOptions.inputMode === 'vim') {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure(vim()) })
       } else {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure([]) })
       }
+    }
+
+    // Fourth: Switch theme, if applicable
+    if (darkModeChanged || themeChanged) {
+      console.log('Theme or dark mode changed!')
+      const themes: Record<EditorConfiguration['theme'], { lightThemes: Extension[], darkThemes: Extension[] }> = {
+        berlin: { lightThemes: [themeBerlinLight], darkThemes: [themeBerlinDark] },
+        bielefeld: { lightThemes: [themeBielefeldLight], darkThemes: [themeBielefeldDark] },
+        bordeaux: { lightThemes: [themeBordeauxLight], darkThemes: [themeBordeauxDark] },
+        frankfurt: { lightThemes: [themeFrankfurtLight], darkThemes: [themeFrankfurtDark] },
+        'karl-marx-stadt': { lightThemes: [themeKarlMarxStadtLight], darkThemes: [themeKarlMarxStadtDark] }
+      }
+
+      this._instance.dispatch({
+        effects: darkModeEffect.of({
+          darkMode: newOptions.darkMode,
+          ...themes[newOptions.theme ?? this.config.theme]
+        })
+      })
     }
   }
 

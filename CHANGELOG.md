@@ -228,6 +228,8 @@ or showing tooltips on these links.
 - Simplify exporter types
 - Retire the `test-gui` command; instead now the `start` command does the same;
   similarly, `start` won't touch any existing Zettlr configuration anymore
+- Simplify CodeMirror theming, retire the `themeManager` and replace it with a
+  simpler, more general `darkTheme` extension
 
 # 3.0.5
 
