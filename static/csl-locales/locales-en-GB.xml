@@ -324,8 +324,8 @@
       <multiple>cits.</multiple>
     </term>
     <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
+      <single>no.</single>
+      <multiple>nos.</multiple>
     </term>
     <term name="number-of-pages">
       <single>page</single>
@@ -498,8 +498,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+      <single>number</single>
+      <multiple>numbers</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

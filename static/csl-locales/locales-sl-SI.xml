@@ -314,10 +314,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">št.</term>
     <term name="number-of-pages">
       <single>stran</single>
       <multiple>strani</multiple>
@@ -453,8 +450,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+      <single>številka</single>
+      <multiple>številke</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

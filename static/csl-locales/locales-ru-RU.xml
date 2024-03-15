@@ -338,10 +338,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">вып.</term>
     <term name="number-of-pages" gender="feminine">
       <single>страница</single>
       <multiple>страницы</multiple>
@@ -477,9 +474,9 @@
       <single>citation</single>
       <multiple>citations</multiple>
     </term>
-    <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+    <term name="collection-number" gender="masculine">
+      <single>выпуск</single>
+      <multiple>выпуски</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

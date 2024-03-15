@@ -314,10 +314,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">ش</term>
     <term name="number-of-pages">
       <single>صفحه</single>
       <multiple>صفحات</multiple>
@@ -453,8 +450,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+      <single>شماره</single>
+      <multiple>شماره‌های</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

@@ -311,10 +311,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">ฉบับที่</term>
     <term name="number-of-pages">
       <single>หน้า</single>
       <multiple>หน้า</multiple>
@@ -450,8 +447,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+      <single>ฉบับที่</single>
+      <multiple>ฉบับที่</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

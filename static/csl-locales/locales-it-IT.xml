@@ -336,10 +336,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">fasc.</term>
     <term name="number-of-pages">
       <single>pagina</single>
       <multiple>pagine</multiple>
@@ -477,9 +474,9 @@
       <single>citation</single>
       <multiple>citations</multiple>
     </term>
-    <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+    <term name="collection-number" gender="masculine">
+      <single>fascicolo</single>
+      <multiple>fascicoli</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

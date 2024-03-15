@@ -317,8 +317,8 @@
       <multiple>cits.</multiple>
     </term>
     <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
+      <single>nᵒ</single>
+      <multiple>nᵒˢ</multiple>
     </term>
     <term name="number-of-pages">
       <single>page</single>
@@ -460,9 +460,9 @@
       <single>citation</single>
       <multiple>citations</multiple>
     </term>
-    <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+    <term name="collection-number" gender="masculine">
+      <single>numéro</single>
+      <multiple>numéros</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

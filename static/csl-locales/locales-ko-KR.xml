@@ -314,10 +314,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">호</term>
     <term name="number-of-pages">
       <single>페이지</single>
       <multiple>페이지</multiple>
@@ -453,8 +450,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+      <single>number</single>
+      <multiple>numbers</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

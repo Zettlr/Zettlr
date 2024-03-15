@@ -17,7 +17,7 @@
       <name>Brenton M. Wiernik</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2015-10-10T23:31:02+00:00</updated>
+    <updated>2024-03-12T13:41:31+00:00</updated>
   </info>
   <style-options punctuation-in-quote="true"/>
   <date form="text">
@@ -334,7 +334,7 @@
       <single>bk.</single>
       <multiple>bks.</multiple>
     </term>
-    <term name="canon">			 
+    <term name="canon" form="short">
       <single>c.</single>
       <multiple>cc.</multiple>						 
     </term>
@@ -451,12 +451,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
-    </term>
-    <term name="edition">
-      <single>edition</single>
-      <multiple>editions</multiple>
+      <single>number</single>
+      <multiple>numbers</multiple>
     </term>
     <term name="edition">
       <single>edition</single>
@@ -497,8 +493,8 @@
       <multiple>cits.</multiple>
     </term>
     <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
+      <single>no.</single>
+      <multiple>nos.</multiple>
     </term>
     <term name="edition" form="short">
       <single>ed.</single>
@@ -619,7 +615,7 @@
     <!-- Omitted roles: 
          author, chair, composer, container-author, guest, host, interviewer, original-author, recipient, reviewed-author 
     -->
-    <term name="collection-editor">
+    <term name="collection-editor" form="short">
       <single>ed.</single>
       <multiple>eds.</multiple>
     </term>

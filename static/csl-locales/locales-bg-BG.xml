@@ -2,7 +2,7 @@
 <locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="bg-BG">
   <info>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2018-02-15T04:14:02+00:00</updated>
+    <updated>2024-03-12T14:00:50+00:00</updated>
     <translator>
       <name>Valeriya Simeonova</name>
       <email>simeonova@fmi.uni-sofia.bg</email>
@@ -353,10 +353,6 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
     <term name="number-of-pages">брой страници</term>
     <term name="paragraph">
       <single>абзац</single>
@@ -477,8 +473,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+      <single>брой</single>
+      <multiple>броеве</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

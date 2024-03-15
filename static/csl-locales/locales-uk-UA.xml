@@ -293,10 +293,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">вип.</term>
     <term name="number-of-pages">с.</term>
     <term name="paragraph">
       <single>параграф</single>
@@ -416,10 +413,7 @@
       <single>citation</single>
       <multiple>citations</multiple>
     </term>
-    <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
-    </term>
+    <term name="collection-number">випуск</term>
     <term name="section" form="symbol">
       <single>§</single>
       <multiple>§§</multiple>

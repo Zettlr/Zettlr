@@ -11,7 +11,7 @@
       <name>Renato Cirino</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2016-05-16T00:00:00+03:00</updated>
+    <updated>2024-03-12T14:06:50+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false" limit-day-ordinals-to-day-1="true"/>
   <date form="text">
@@ -116,9 +116,9 @@
     <term name="article-magazine">artigo de revista</term>
     <term name="article-newspaper">artigo de jornal</term>
     <term name="bill">lei</term>
-    <term name="book">livro</term>
+    <!-- book is in the list of locator terms -->
     <term name="broadcast">transmissão</term>
-    <term name="chapter">capítulo de livro</term>
+    <!-- chapter is in the list of locator terms -->
     <term name="classic">clássico</term>
     <term name="collection">coleção</term>
     <term name="dataset">dataset</term>
@@ -329,10 +329,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">nº</term>
     <term name="number-of-pages">
       <single>página</single>
       <multiple>páginas</multiple>
@@ -468,8 +465,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+      <single>número</single>
+      <multiple>números</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

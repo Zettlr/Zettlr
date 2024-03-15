@@ -272,10 +272,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">期</term>
     <term name="number-of-pages">總頁數</term>      
     <term name="paragraph">段落</term>
     <term name="part">部分</term>     
@@ -373,10 +370,7 @@
       <single>citation</single>
       <multiple>citations</multiple>
     </term>
-    <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
-    </term>
+    <term name="collection-number">期</term>
     <term name="section" form="symbol">
       <single>§</single>
       <multiple>§§</multiple>

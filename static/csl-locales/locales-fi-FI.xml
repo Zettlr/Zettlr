@@ -320,10 +320,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">nro</term>
     <term name="number-of-pages">
       <single>sivu</single>
       <multiple>sivut</multiple>
@@ -459,8 +456,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+      <single>numero</single>
+      <multiple>numerot</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>

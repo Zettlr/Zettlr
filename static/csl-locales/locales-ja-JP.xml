@@ -8,7 +8,7 @@
       <name>cmplstofB</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2023-09-21T23:31:02+00:00</updated>
+    <updated>2024-03-12T14:01:18+00:00</updated>
     <!--
       日本語化にあたって参考にした文献
       * SIST 02:2007「参照文献の書き方」
@@ -168,7 +168,7 @@
     <term name="document" form="short">doc.</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic" form="short">graph.</term>
-    <term name="interview">面接</term>
+    <term name="interview" form="short">面接</term>
     <term name="manuscript" form="short">MS</term>
     <term name="motion_picture" form="short">video rec.</term>
     <term name="report" form="short">rep.</term>
@@ -325,10 +325,7 @@
       <single>cit.</single>
       <multiple>cits.</multiple>
     </term>
-    <term name="collection-number" form="short">
-      <single>coll.</single>
-      <multiple>colls.</multiple>
-    </term>
+    <term name="collection-number" form="short">no.</term>
     <term name="number-of-pages">
       <single>ページ</single>
       <multiple>ページ</multiple>
@@ -468,8 +465,8 @@
       <multiple>citations</multiple>
     </term>
     <term name="collection-number">
-      <single>collection</single>
-      <multiple>collections</multiple>
+      <single>号</single>
+      <multiple>号</multiple>
     </term>
     <term name="section" form="symbol">
       <single>§</single>
