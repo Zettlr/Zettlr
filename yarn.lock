@@ -9255,9 +9255,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:^10.8.0":
-  version: 10.8.0
-  resolution: "mermaid@npm:10.8.0"
+"mermaid@npm:^10.9.0":
+  version: 10.9.0
+  resolution: "mermaid@npm:10.9.0"
   dependencies:
     "@braintree/sanitize-url": ^6.0.1
     "@types/d3-scale": ^4.0.3
@@ -9270,6 +9270,7 @@ __metadata:
     dayjs: ^1.11.7
     dompurify: ^3.0.5
     elkjs: ^0.9.0
+    katex: ^0.16.9
     khroma: ^2.0.0
     lodash-es: ^4.17.21
     mdast-util-from-markdown: ^1.3.0
@@ -9278,7 +9279,7 @@ __metadata:
     ts-dedent: ^2.2.0
     uuid: ^9.0.0
     web-worker: ^1.2.0
-  checksum: 30d7e8cad8cf01250d3aa5a2fb0aee2aa38491b5070d54fe2f8ff62a208ff5d7fce2bbbb5f535cbd53e340955fd8e1604c70b2afb92ffc43a283d32e6bfece7d
+  checksum: 73ee57b365fbfba8ad72b2ce611a2703753dc155884db3bec4a47951326b9061b31926f84fc0ad67ca203067b62db636f1543fa6f633a6afa24cd4c754b96cf0
   languageName: node
   linkType: hard
 
@@ -14688,7 +14689,7 @@ __metadata:
     lodash: ^4.17.21
     luxon: ^3.4.4
     md5: ^2.3.0
-    mermaid: ^10.8.0
+    mermaid: ^10.9.0
     minimatch: ^9.0.3
     mocha: ^10.3.0
     node-loader: ^2.0.0
