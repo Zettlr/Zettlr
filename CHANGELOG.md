@@ -173,6 +173,9 @@ or showing tooltips on these links.
 - Fixed an issue that would not show the color picker's color in the tag manager
   on Windows
 - Fixed list item indentation in Markdown and Code files
+- Fixed a bug that would make Zettlr always save files with regular newlines
+  (LF), even if the file originally uses carriage returns (CR) or a mixture
+  (CRLF or LFCR), leading, among other things, to save issues (#4959)
 
 ## Under the Hood
 
