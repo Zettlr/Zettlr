@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@cds/core": "^6.9.2",
-    "@codemirror/autocomplete": "^6.12.0",
+    "@codemirror/autocomplete": "^6.15.0",
     "@codemirror/collab": "^6.1.1",
     "@codemirror/commands": "^6.3.3",
     "@codemirror/lang-css": "^6.2.1",
