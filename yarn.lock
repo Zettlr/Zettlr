@@ -6034,9 +6034,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^9.22.0":
-  version: 9.22.0
-  resolution: "eslint-plugin-vue@npm:9.22.0"
+"eslint-plugin-vue@npm:^9.23.0":
+  version: 9.23.0
+  resolution: "eslint-plugin-vue@npm:9.23.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.4.0
     natural-compare: ^1.4.0
@@ -6047,7 +6047,7 @@ __metadata:
     xml-name-validator: ^4.0.0
   peerDependencies:
     eslint: ^6.2.0 || ^7.0.0 || ^8.0.0
-  checksum: 5f1e94b412567b8d0bb99c89ea1032d7801d1aa34344e61d82b71c926d3ced049861b484c31c641606923246d482972a45e690236e5479f46b9736d432545ecd
+  checksum: acb3a4dd27a815be37b63fc735c88bf9bfd12a5147639635eb6e473c7fdf47f69a78693ffeb67581ffd11e0016c134bb56a667193b958a189cbfc2df3e93160b
   languageName: node
   linkType: hard
 
@@ -14674,7 +14674,7 @@ __metadata:
     eslint-plugin-import: ^2.29.1
     eslint-plugin-n: ^16.6.2
     eslint-plugin-promise: ^6.1.1
-    eslint-plugin-vue: ^9.22.0
+    eslint-plugin-vue: ^9.23.0
     fix-path: ^4.0.0
     fsevents: ^2.3.3
     gemoji: ^8.1.0
