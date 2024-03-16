@@ -4980,9 +4980,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3@npm:^7.8.5":
-  version: 7.8.5
-  resolution: "d3@npm:7.8.5"
+"d3@npm:^7.9.0":
+  version: 7.9.0
+  resolution: "d3@npm:7.9.0"
   dependencies:
     d3-array: 3
     d3-axis: 3
@@ -5014,7 +5014,7 @@ __metadata:
     d3-timer: 3
     d3-transition: 3
     d3-zoom: 3
-  checksum: e407e79731f74d946a5eb8dec2f037b5a4ad33c294409b1d3531fdf7094de48adfe364974cb37e2396bdb81e23149d56d0ede716c004d6aebb52b3cc114cd15c
+  checksum: 1c0e9135f1fb78aa32b187fafc8b56ae6346102bd0e4e5e5a5339611a51e6038adbaa293fae373994228100eddd87320e930b1be922baeadc07c9fd43d26d99b
   languageName: node
   linkType: hard
 
@@ -14673,7 +14673,7 @@ __metadata:
     cross-env: ^7.0.3
     css-loader: ^6.10.0
     csso: ^5.0.5
-    d3: ^7.8.5
+    d3: ^7.9.0
     electron: ^29.1.3
     electron-builder: ^24.13.2
     electron-devtools-assembler: ^1.2.0
