@@ -234,6 +234,8 @@ or showing tooltips on these links.
   similarly, `start` won't touch any existing Zettlr configuration anymore
 - Simplify CodeMirror theming, retire the `themeManager` and replace it with a
   simpler, more general `darkTheme` extension
+- Disallow fuzzy matching during updates of translation files; previously this
+  has led to inaccurate results (see, e.g., #5042)
 
 # 3.0.5
 
