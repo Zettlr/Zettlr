@@ -2896,9 +2896,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"app-builder-lib@npm:24.13.2":
-  version: 24.13.2
-  resolution: "app-builder-lib@npm:24.13.2"
+"app-builder-lib@npm:24.13.3":
+  version: 24.13.3
+  resolution: "app-builder-lib@npm:24.13.3"
   dependencies:
     "@develar/schema-utils": ~2.6.5
     "@electron/notarize": 2.2.1
@@ -2928,9 +2928,9 @@ __metadata:
     tar: ^6.1.12
     temp-file: ^3.4.0
   peerDependencies:
-    dmg-builder: 24.13.2
-    electron-builder-squirrel-windows: 24.13.2
-  checksum: 70cd3e4bf0f1e82a26fb164c531d6cadce914e66c344d5764de313ccedcac06578d2b16bf6e473d75d2f478f01c72905cdf29eabd59c13f44e930a4e378fc6d9
+    dmg-builder: 24.13.3
+    electron-builder-squirrel-windows: 24.13.3
+  checksum: 68ea3295efe99b8e8d4f9a1e77f3eae34de01b9829f8907e467d658b9406aa04c95baa2c06142b29bd8184d4efdc69f176a53d62fec36e7eba80024c46ce5adc
   languageName: node
   linkType: hard
 
@@ -5331,11 +5331,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dmg-builder@npm:24.13.2":
-  version: 24.13.2
-  resolution: "dmg-builder@npm:24.13.2"
+"dmg-builder@npm:24.13.3":
+  version: 24.13.3
+  resolution: "dmg-builder@npm:24.13.3"
   dependencies:
-    app-builder-lib: 24.13.2
+    app-builder-lib: 24.13.3
     builder-util: 24.13.1
     builder-util-runtime: 9.2.4
     dmg-license: ^1.0.11
@@ -5345,7 +5345,7 @@ __metadata:
   dependenciesMeta:
     dmg-license:
       optional: true
-  checksum: ec3981889edc1c5f853d7eaebc6731ffcbc3b6bb20a9fa2b9911c64a8da29777f156c0ef9225b99e4191a132eece13e1d4f089a804e8fbc33346104b133ec529
+  checksum: 5c25293d795bb3326baee9d911d797a1ec703ad78ba57b60c6e6ce672582fe820590c59913b6800885e8303c853b3797ce518e304aa83f568caab147e1e8979a
   languageName: node
   linkType: hard
 
@@ -5542,15 +5542,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-builder@npm:^24.13.2":
-  version: 24.13.2
-  resolution: "electron-builder@npm:24.13.2"
+"electron-builder@npm:^24.13.3":
+  version: 24.13.3
+  resolution: "electron-builder@npm:24.13.3"
   dependencies:
-    app-builder-lib: 24.13.2
+    app-builder-lib: 24.13.3
     builder-util: 24.13.1
     builder-util-runtime: 9.2.4
     chalk: ^4.1.2
-    dmg-builder: 24.13.2
+    dmg-builder: 24.13.3
     fs-extra: ^10.1.0
     is-ci: ^3.0.0
     lazy-val: ^1.0.5
@@ -5560,7 +5560,7 @@ __metadata:
   bin:
     electron-builder: cli.js
     install-app-deps: install-app-deps.js
-  checksum: f28f2e54395fdbc1212ab1767632f2d58c7344d572236412084150f3ced245ac4688158336e3d369785fbe1a88200f2d20859d05f7f0c2c17fb2b02c8380480a
+  checksum: 8d7943d990363e547f1fbe391fee6b94d5e35e78c355645399f1f9b6709b6c167f0781abf8926c984c8a92475e6647f863f5e6a6938101a8a3a18ca85559810b
   languageName: node
   linkType: hard
 
@@ -14675,7 +14675,7 @@ __metadata:
     csso: ^5.0.5
     d3: ^7.8.5
     electron: ^29.1.3
-    electron-builder: ^24.13.2
+    electron-builder: ^24.13.3
     electron-devtools-assembler: ^1.2.0
     eslint: ^8.57.0
     eslint-config-standard: ^17.1.0
