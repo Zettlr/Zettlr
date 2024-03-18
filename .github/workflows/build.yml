@@ -125,11 +125,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -148,7 +148,7 @@ jobs:
           CSC_LINK: ${{ secrets.WIN_CERT_2025_03_15 }}
           CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS_2025_03_15 }}
       - name: Cache installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: win32_x64
           path: |
@@ -168,11 +168,11 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -200,7 +200,7 @@ jobs:
       - name: Release
         run: yarn release:mac-x64
       - name: Cache image file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: darwin_x64
           path: |
@@ -214,11 +214,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -246,7 +246,7 @@ jobs:
       - name: Release
         run: yarn release:mac-arm
       - name: Cache image file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: darwin_arm64
           path: |
@@ -266,11 +266,11 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -289,7 +289,7 @@ jobs:
           yarn package:linux-x64
           yarn release:linux-x64
       - name: Cache installers
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux_x64
           path: |
@@ -307,11 +307,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -331,7 +331,7 @@ jobs:
           yarn package:linux-arm
           yarn release:linux-arm
       - name: Cache installers
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux_arm64
           path: |
@@ -362,9 +362,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -381,27 +381,27 @@ jobs:
         run: mkdir ./release
       # Download all resulting assets from the previous steps.
       - name: Retrieve installers (Windows x86_64)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: win32_x64
           path: ./release
       - name: Retrieve installers (macOS x86_64)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: darwin_x64
           path: ./release
       - name: Retrieve installers (macOS arm64)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: darwin_arm64
           path: ./release
       - name: Retrieve installers (Linux x86_64)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux_x64
           path: ./release
       - name: Retrieve installers (Linux arm64)
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux_arm64
           path: ./release
@@ -448,7 +448,7 @@ jobs:
       # OTHERWISE: Create a new release draft
       - name: Create release draft
         if: github.ref_name == 'master'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
