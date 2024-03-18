@@ -2719,10 +2719,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"adm-zip@npm:^0.5.10":
-  version: 0.5.10
-  resolution: "adm-zip@npm:0.5.10"
-  checksum: 07ed91cf6423bf5dca4ee63977bc7635e91b8d21829c00829d48dce4c6932e1b19e6cfcbe44f1931c956e68795ae97183fc775913883fa48ce88a1ac11fb2034
+"adm-zip@npm:^0.5.12":
+  version: 0.5.12
+  resolution: "adm-zip@npm:0.5.12"
+  checksum: 299bd727c5275f6f6d30f2540aad1c7d6e5671613ff5b720201d04fc69bb3ab00fa0770f922da38b26654381cbc5043113fb3458dd0d1aff8fede542493921f5
   languageName: node
   linkType: hard
 
@@ -14661,7 +14661,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^7.2.0
     "@typescript-eslint/parser": ^7.2.0
     "@vercel/webpack-asset-relocator-loader": ^1.7.3
-    adm-zip: ^0.5.10
+    adm-zip: ^0.5.12
     archiver: ^7.0.1
     astrocite: ^0.16.4
     bcp-47: ^2.1.0
