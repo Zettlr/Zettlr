@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-02-12 15:20+0000\n"
-"PO-Revision-Date: 2023-08-19 17:46+0200\n"
+"PO-Revision-Date: 2024-03-18 08:35+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: source/win-preferences/schema/appearance.ts:10
 #: source/app/service-providers/menu/menu.darwin.ts:448
@@ -33,13 +33,12 @@ msgid "Off"
 msgstr "Off"
 
 #: source/win-preferences/schema/appearance.ts:26
-#, fuzzy
 msgid "Follow system"
 msgstr "Follow Operating System"
 
 #: source/win-preferences/schema/appearance.ts:27
 msgid "On"
-msgstr ""
+msgstr "On"
 
 #: source/win-preferences/schema/appearance.ts:36
 #: source/tmp/PopoverPomodoro.vue.ts:77
@@ -48,11 +47,11 @@ msgstr "Start"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: source/win-preferences/schema/appearance.ts:53
 msgid "Theme"
-msgstr ""
+msgstr "Theme"
 
 #: source/win-preferences/schema/appearance.ts:60
 msgid "Here you can choose the theme for the app."
@@ -60,11 +59,11 @@ msgstr "Here you can choose the theme for the app."
 
 #: source/win-preferences/schema/appearance.ts:102
 msgid "Toolbar options"
-msgstr ""
+msgstr "Toolbar options"
 
 #: source/win-preferences/schema/appearance.ts:109
 msgid "Left section buttons"
-msgstr ""
+msgstr "Left section buttons"
 
 #: source/win-preferences/schema/appearance.ts:113
 msgid "Display \"Open Preferences\" button"
@@ -84,7 +83,7 @@ msgstr "Display \"Next File\" button"
 
 #: source/win-preferences/schema/appearance.ts:135
 msgid "Center section buttons"
-msgstr ""
+msgstr "Center section buttons"
 
 #: source/win-preferences/schema/appearance.ts:139
 msgid "Display readability button"
@@ -116,7 +115,7 @@ msgstr "Display \"Insert Footnote\" button"
 
 #: source/win-preferences/schema/appearance.ts:176
 msgid "Right section buttons"
-msgstr ""
+msgstr "Right section buttons"
 
 #: source/win-preferences/schema/appearance.ts:180
 msgid "Display document info"
@@ -127,9 +126,8 @@ msgid "Display Pomodoro-timer"
 msgstr "Display Pomodoro-timer"
 
 #: source/win-preferences/schema/appearance.ts:191
-#, fuzzy
 msgid "Status bar"
-msgstr "Show statusbar"
+msgstr "Status bar"
 
 #: source/win-preferences/schema/appearance.ts:197
 msgid "Show statusbar"
@@ -141,24 +139,21 @@ msgid "Custom CSS"
 msgstr "Custom CSS"
 
 #: source/win-preferences/schema/appearance.ts:208
-#, fuzzy
 msgid "Open CSS editor"
-msgstr "Open directory"
+msgstr "Open CSS editor"
 
 #: source/win-preferences/schema/advanced.ts:28
-#, fuzzy
 msgid "Pattern for new file names"
-msgstr "Pattern for new filenames"
+msgstr "Pattern for new file names"
 
 #: source/win-preferences/schema/advanced.ts:34
-#, fuzzy
 msgid "Define a pattern for new file names"
-msgstr "Pattern for new filenames"
+msgstr "Define a pattern for new file names"
 
 #: source/win-preferences/schema/advanced.ts:36
 #, javascript-format
 msgid "Available variables: %s"
-msgstr ""
+msgstr "Available variables: %s"
 
 #: source/win-preferences/schema/advanced.ts:42
 msgid "Do not prompt for filename when creating new files"
@@ -166,7 +161,7 @@ msgstr "Do not prompt for filename when creating new files"
 
 #: source/win-preferences/schema/advanced.ts:49
 msgid "Appearance"
-msgstr ""
+msgstr "Appearance"
 
 #: source/win-preferences/schema/advanced.ts:55
 msgid "Use native window appearance"
@@ -174,7 +169,7 @@ msgstr "Use native window appearance"
 
 #: source/win-preferences/schema/advanced.ts:56
 msgid "Only available on Linux; this is the default for macOS and Windows."
-msgstr ""
+msgstr "Only available on Linux; this is the default for macOS and Windows."
 
 #: source/win-preferences/schema/advanced.ts:62
 msgid "Enable window vibrancy"
@@ -182,7 +177,7 @@ msgstr "Enable window vibrancy"
 
 #: source/win-preferences/schema/advanced.ts:63
 msgid "Only available on macOS; makes the window background opaque."
-msgstr ""
+msgstr "Only available on macOS; makes the window background opaque."
 
 #: source/win-preferences/schema/advanced.ts:70
 msgid "Show app in the notification area"
@@ -197,27 +192,24 @@ msgid "Zoom behavior"
 msgstr "Zoom behavior"
 
 #: source/win-preferences/schema/advanced.ts:83
-#, fuzzy
 msgid "Resizes the whole GUI"
-msgstr "Zoom resizes the whole GUI"
+msgstr "Resizes the whole GUI"
 
 #: source/win-preferences/schema/advanced.ts:84
-#, fuzzy
 msgid "Changes the editor font size"
-msgstr "Zoom changes the editor font size"
+msgstr "Changes the editor font size"
 
 #: source/win-preferences/schema/advanced.ts:90
 msgid "Attachments sidebar"
-msgstr ""
+msgstr "Attachments sidebar"
 
 #: source/win-preferences/schema/advanced.ts:96
 msgid "File extensions to be visible in the Attachments sidebar"
-msgstr ""
+msgstr "File extensions to be visible in the Attachments sidebar"
 
 #: source/win-preferences/schema/advanced.ts:102
-#, fuzzy
 msgid "Iframe rendering whitelist"
-msgstr "iFrame rendering whitelist"
+msgstr "Iframe rendering whitelist"
 
 #: source/win-preferences/schema/advanced.ts:111
 msgid "Hostname"
@@ -226,14 +218,12 @@ msgstr "Hostname"
 #: source/win-preferences/schema/advanced.ts:113
 #: source/win-preferences/schema/autocorrect.ts:111
 #: source/win-preferences/schema/spellchecking.ts:118
-#, fuzzy
 msgid "Filter"
-msgstr "Filter …"
+msgstr "Filter"
 
 #: source/win-preferences/schema/advanced.ts:118
-#, fuzzy
 msgid "Watchdog polling"
-msgstr "Activate Watchdog polling"
+msgstr "Watchdog polling"
 
 #: source/win-preferences/schema/advanced.ts:124
 msgid "Activate Watchdog polling"
@@ -244,18 +234,16 @@ msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "Time to wait before writing a file is considered done (in ms)"
 
 #: source/win-preferences/schema/advanced.ts:136
-#, fuzzy
 msgid "Deleting items"
-msgstr "Delete file"
+msgstr "Deleting items"
 
 #: source/win-preferences/schema/advanced.ts:142
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr "Delete items irreversibly, if moving them to trash fails"
 
 #: source/win-preferences/schema/advanced.ts:148
-#, fuzzy
 msgid "Debug mode"
-msgstr "Enable debug mode"
+msgstr "Debug mode"
 
 #: source/win-preferences/schema/advanced.ts:154
 msgid "Enable debug mode"
@@ -263,7 +251,7 @@ msgstr "Enable debug mode"
 
 #: source/win-preferences/schema/advanced.ts:161
 msgid "Beta releases"
-msgstr ""
+msgstr "Beta releases"
 
 #: source/win-preferences/schema/advanced.ts:167
 msgid "Notify me about beta releases"
@@ -271,37 +259,33 @@ msgstr "Notify me about beta releases"
 
 #: source/win-preferences/schema/import-export.ts:23
 msgid "Import and export profiles"
-msgstr ""
+msgstr "Import and export profiles"
 
 #: source/win-preferences/schema/import-export.ts:29
 msgid "Open import profiles editor"
-msgstr ""
+msgstr "Open import profiles editor"
 
 #: source/win-preferences/schema/import-export.ts:43
 msgid "Open export profiles editor"
-msgstr ""
+msgstr "Open export profiles editor"
 
 #: source/win-preferences/schema/import-export.ts:58
-#, fuzzy
 msgid "Export settings"
-msgstr "Exporting to %s"
+msgstr "Export settings"
 
 #. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
 #: source/win-preferences/schema/import-export.ts:64
-#, fuzzy
 msgid "Use Zettlr's internal Pandoc for exports"
-msgstr "Use the internal Pandoc for exports"
+msgstr "Use Zettlr's internal Pandoc for exports"
 
 #: source/win-preferences/schema/import-export.ts:70
-#, fuzzy
 msgid "Remove tags from files when exporting"
-msgstr "Remove tags from files"
+msgstr "Remove tags from files when exporting"
 
 #: source/win-preferences/schema/import-export.ts:76
 #: source/win-preferences/schema/zettelkasten.ts:42
-#, fuzzy
 msgid "Internal links"
-msgstr "Unlink internal links"
+msgstr "Internal links"
 
 #: source/win-preferences/schema/import-export.ts:79
 msgid "Remove internal links completely"
@@ -317,32 +301,28 @@ msgstr "Don't touch internal links"
 
 #: source/win-preferences/schema/import-export.ts:87
 msgid "Destination folder for exported files"
-msgstr ""
+msgstr "Destination folder for exported files"
 
 #. TODO: Add info-strings
 #: source/win-preferences/schema/import-export.ts:91
 msgid "Temporary folder"
-msgstr ""
+msgstr "Temporary folder"
 
 #: source/win-preferences/schema/import-export.ts:92
-#, fuzzy
 msgid "Same as file location"
-msgstr "Show file information"
+msgstr "Same as file location"
 
 #: source/win-preferences/schema/import-export.ts:93
 msgid "Ask for folder when exporting"
-msgstr ""
+msgstr "Ask for folder when exporting"
 
 #: source/win-preferences/schema/import-export.ts:99
-msgid ""
-"Warning! Files in the temporary folder are regularly deleted. Choosing the "
-"same location as the file overwrites files with identical filenames if they "
-"already exist."
-msgstr ""
+msgid "Warning! Files in the temporary folder are regularly deleted. Choosing the same location as the file overwrites files with identical filenames if they already exist."
+msgstr "Warning! Files in the temporary folder are regularly deleted. Choosing the same location as the file overwrites files with identical filenames if they already exist."
 
 #: source/win-preferences/schema/import-export.ts:104
 msgid "Custom export commands"
-msgstr ""
+msgstr "Custom export commands"
 
 #: source/win-preferences/schema/import-export.ts:112
 msgid "Display name"
@@ -353,25 +333,20 @@ msgid "Command"
 msgstr "Command"
 
 #: source/win-preferences/schema/import-export.ts:113
-msgid ""
-"Enter custom commands to run the exporter with. Each command receives as its "
-"first argument the file or project folder to be exported."
-msgstr ""
-"Enter custom commands to run the exporter with. Each command receives as its "
-"first argument the file or project folder to be exported."
+msgid "Enter custom commands to run the exporter with. Each command receives as its first argument the file or project folder to be exported."
+msgstr "Enter custom commands to run the exporter with. Each command receives as its first argument the file or project folder to be exported."
 
 #: source/win-preferences/schema/snippets.ts:23
 msgid "Snippets"
-msgstr ""
+msgstr "Snippets"
 
 #: source/win-preferences/schema/snippets.ts:29
 msgid "Open snippets editor"
-msgstr ""
+msgstr "Open snippets editor"
 
 #: source/win-preferences/schema/citations.ts:21
-#, fuzzy
 msgid "Citations"
-msgstr "Render Citations"
+msgstr "Citations"
 
 #: source/win-preferences/schema/citations.ts:27
 msgid "How would you like autocomplete to insert your citations?"
@@ -383,9 +358,8 @@ msgstr "Citation Database (CSL JSON or BibTex)"
 
 #: source/win-preferences/schema/citations.ts:40
 #: source/win-preferences/schema/citations.ts:52
-#, fuzzy
 msgid "Path to file"
-msgstr "Add to file"
+msgstr "Path to file"
 
 #: source/win-preferences/schema/citations.ts:50
 msgid "CSL-Style (optional)"
@@ -400,9 +374,8 @@ msgid "Autosave"
 msgstr "Autosave"
 
 #: source/win-preferences/schema/general.ts:42
-#, fuzzy
 msgid "Save modifications"
-msgstr "Last modification time"
+msgstr "Save modifications"
 
 #: source/win-preferences/schema/general.ts:47
 msgid "Immediately"
@@ -414,18 +387,15 @@ msgstr "After a short delay"
 
 #: source/win-preferences/schema/general.ts:54
 msgid "Default image folder"
-msgstr ""
+msgstr "Default image folder"
 
 #: source/win-preferences/schema/general.ts:66
-msgid ""
-"Click \"Select folder…\" or type an absolute or relative path directly into "
-"the input field."
-msgstr ""
+msgid "Click \"Select folder…\" or type an absolute or relative path directly into the input field."
+msgstr "Click \"Select folder…\" or type an absolute or relative path directly into the input field."
 
 #: source/win-preferences/schema/general.ts:71
-#, fuzzy
 msgid "Behavior"
-msgstr "Zoom behavior"
+msgstr "Behaviour"
 
 #: source/win-preferences/schema/general.ts:77
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
@@ -437,41 +407,32 @@ msgid "Avoid opening files in new tabs if possible"
 msgstr "Avoid opening files in new tabs if possible"
 
 #: source/win-preferences/schema/general.ts:88
-#, fuzzy
 msgid "Updates"
-msgstr "Updater"
+msgstr "Updates"
 
 #: source/win-preferences/schema/general.ts:94
 msgid "Automatically check for updates"
 msgstr "Automatically check for updates"
 
 #: source/win-preferences/schema/editor.ts:21
-#, fuzzy
 msgid "Input mode"
-msgstr "Editor input mode"
+msgstr "Input mode"
 
 #: source/win-preferences/schema/editor.ts:37
-msgid ""
-"The input mode determines how you interact with the editor. We recommend "
-"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
-"know what this implies."
-msgstr ""
+msgid "The input mode determines how you interact with the editor. We recommend keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you know what this implies."
+msgstr "The input mode determines how you interact with the editor. We recommend keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you know what this implies."
 
 #: source/win-preferences/schema/editor.ts:42
-#, fuzzy
 msgid "Writing direction"
-msgstr "Find in directory"
+msgstr "Writing direction"
 
 #: source/win-preferences/schema/editor.ts:50
 msgid "Markdown rendering"
-msgstr ""
+msgstr "Markdown rendering"
 
 #: source/win-preferences/schema/editor.ts:57
-msgid ""
-"Check to enable live rendering of various Markdown elements to formatted "
-"appearance. This hides formatting characters (such as **text**) or renders "
-"images instead of their link."
-msgstr ""
+msgid "Check to enable live rendering of various Markdown elements to formatted appearance. This hides formatting characters (such as **text**) or renders images instead of their link."
+msgstr "Check to enable live rendering of various Markdown elements to formatted appearance. This hides formatting characters (such as **text**) or renders images instead of their link."
 
 #: source/win-preferences/schema/editor.ts:65
 msgid "Render Citations"
@@ -507,7 +468,7 @@ msgstr "Render emphasis"
 
 #: source/win-preferences/schema/editor.ts:109
 msgid "Formatting characters for bold and italic"
-msgstr ""
+msgstr "Formatting characters for bold and italic"
 
 #: source/win-preferences/schema/editor.ts:119
 #: source/win-preferences/schema/editor.ts:120
@@ -527,21 +488,16 @@ msgid "Check Markdown for style issues"
 msgstr "Check Markdown for style issues"
 
 #: source/win-preferences/schema/editor.ts:142
-#, fuzzy
 msgid "Table Editor"
-msgstr "Enable Table Editor"
+msgstr "Table Editor"
 
 #: source/win-preferences/schema/editor.ts:153
-msgid ""
-"The Table Editor is an interactive interface that simplifies creation and "
-"editing of tables. It provides buttons for common functionality, and takes "
-"care of Markdown formatting."
-msgstr ""
+msgid "The Table Editor is an interactive interface that simplifies creation and editing of tables. It provides buttons for common functionality, and takes care of Markdown formatting."
+msgstr "The Table Editor is an interactive interface that simplifies creation and editing of tables. It provides buttons for common functionality, and takes care of Markdown formatting."
 
 #: source/win-preferences/schema/editor.ts:158
-#, fuzzy
 msgid "Distraction-free mode"
-msgstr "Distraction free mode"
+msgstr "Distraction-free mode"
 
 #: source/win-preferences/schema/editor.ts:164
 msgid "Mute non-focused lines in distraction-free mode"
@@ -552,62 +508,52 @@ msgid "Hide toolbar in distraction free mode"
 msgstr "Hide toolbar in distraction free mode"
 
 #: source/win-preferences/schema/editor.ts:175
-#, fuzzy
 msgid "Word counter"
-msgstr "Word count"
+msgstr "Word counter"
 
 #: source/win-preferences/schema/editor.ts:182
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "Count characters instead of words (e.g., for Chinese)"
 
 #: source/win-preferences/schema/editor.ts:188
-#, fuzzy
 msgid "Readability mode"
-msgstr "Readability mode (%s)"
+msgstr "Readability mode"
 
 #: source/win-preferences/schema/editor.ts:195
 msgid "Algorithm"
-msgstr ""
+msgstr "Algorithm"
 
 #: source/win-preferences/schema/editor.ts:207
-#, fuzzy
 msgid "Image size"
-msgstr "Image"
+msgstr "Image size"
 
 #: source/win-preferences/schema/editor.ts:213
-#, fuzzy
 msgid "Maximum width of images (%s %)"
-msgstr "Maximum width of images (percent)"
+msgstr "Maximum width of images (%s %)"
 
 #: source/win-preferences/schema/editor.ts:220
-#, fuzzy
 msgid "Maximum height of images (%s %)"
-msgstr "Maximum height of images (percent)"
+msgstr "Maximum height of images (%s %)"
 
 #: source/win-preferences/schema/editor.ts:228
-#, fuzzy
 msgid "Other settings"
-msgstr "Other files"
+msgstr "Other settings"
 
 #: source/win-preferences/schema/editor.ts:234
-#, fuzzy
 msgid "Font size"
-msgstr "Editor font size"
+msgstr "Font size"
 
 #: source/win-preferences/schema/editor.ts:241
-#, fuzzy
 msgid "Indentation size (number of spaces)"
-msgstr "Indent by the following number of spaces"
+msgstr "Indentation size (number of spaces)"
 
 #: source/win-preferences/schema/editor.ts:248
-#, fuzzy
 msgid "Indent using tabs instead of spaces"
-msgstr "Indent using tabs"
+msgstr "Indent using tabs instead of spaces"
 
 #: source/win-preferences/schema/editor.ts:255
-#, fuzzy
 msgid "Suggest emojis during autocompletion"
-msgstr "Accept spaces during autocompletion"
+msgstr "Suggest emojis during autocompletion"
 
 #: source/win-preferences/schema/editor.ts:260
 msgid "Show link previews"
@@ -619,17 +565,15 @@ msgstr "Automatically close matching character pairs"
 
 #: source/win-preferences/schema/zettelkasten.ts:21
 msgid "Zettelkasten IDs"
-msgstr ""
+msgstr "Zettelkasten IDs"
 
 #: source/win-preferences/schema/zettelkasten.ts:27
-#, fuzzy
 msgid "Pattern for Zettelkasten IDs"
-msgstr "Pattern used to generate new IDs"
+msgstr "Pattern for Zettelkasten IDs"
 
 #: source/win-preferences/schema/zettelkasten.ts:28
-#, fuzzy
 msgid "Uses ECMAScript regular expressions"
-msgstr "ID regular expression"
+msgstr "Uses ECMAScript regular expressions"
 
 #: source/win-preferences/schema/zettelkasten.ts:34
 msgid "Pattern used to generate new IDs"
@@ -638,69 +582,59 @@ msgstr "Pattern used to generate new IDs"
 #: source/win-preferences/schema/zettelkasten.ts:37
 #, javascript-format
 msgid "Available Variables: %s"
-msgstr ""
+msgstr "Available Variables: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:48
 msgid "Link with filename only"
 msgstr "Link with filename only"
 
 #: source/win-preferences/schema/zettelkasten.ts:53
-#, fuzzy
 msgid "When linking files, add the document name …"
-msgstr "When linking files, add the display name …"
+msgstr "When linking files, add the document name …"
 
 #: source/win-preferences/schema/zettelkasten.ts:56
-#, fuzzy
 msgid "Always"
-msgstr "always"
+msgstr "Always"
 
 #: source/win-preferences/schema/zettelkasten.ts:57
-#, fuzzy
 msgid "Only when linking using the ID"
-msgstr "only when linking using the ID"
+msgstr "Only when linking using the ID"
 
 #: source/win-preferences/schema/zettelkasten.ts:58
-#, fuzzy
 msgid "Never"
-msgstr "never"
+msgstr "Never"
 
 #: source/win-preferences/schema/zettelkasten.ts:65
-#, fuzzy
 msgid "Start a full-text search when following internal links"
-msgstr "Start a search when following Zettelkasten-links"
+msgstr "Start a full-text search when following internal links"
 
 #: source/win-preferences/schema/zettelkasten.ts:66
 msgid "The search string will match the content between the brackets: [[ ]]."
-msgstr ""
+msgstr "The search string will match the content between the brackets: [[ ]]."
 
 #: source/win-preferences/schema/zettelkasten.ts:75
-#, fuzzy
-msgid ""
-"Automatically create non-existing files in this folder when following "
-"internal links"
-msgstr "Automatically create non-existing files when following internal links"
+msgid "Automatically create non-existing files in this folder when following internal links"
+msgstr "Automatically create non-existing files in this folder when following internal links"
 
 #: source/win-preferences/schema/zettelkasten.ts:80
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
-msgstr ""
+msgstr "For this to work, the folder must be open as a Workspace in Zettlr."
 
 #: source/win-preferences/schema/zettelkasten.ts:85
 msgid "Path to folder"
-msgstr ""
+msgstr "Path to folder"
 
 #: source/win-preferences/schema/autocorrect.ts:21
-#, fuzzy
 msgid "Autocorrect"
-msgstr "Turn on AutoCorrect"
+msgstr "Autocorrect"
 
 #: source/win-preferences/schema/autocorrect.ts:31
 msgid "Smart quotes"
-msgstr ""
+msgstr "Smart quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:44
-#, fuzzy
 msgid "Double Quotes"
-msgstr "Disable Magic Quotes"
+msgstr "Double Quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:47
 #: source/win-preferences/schema/autocorrect.ts:69
@@ -708,13 +642,12 @@ msgid "Disable Magic Quotes"
 msgstr "Disable Magic Quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:66
-#, fuzzy
 msgid "Single Quotes"
-msgstr "Disable Magic Quotes"
+msgstr "Single Quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:94
 msgid "Text-replacement patterns"
-msgstr ""
+msgstr "Text-replacement patterns"
 
 #: source/win-preferences/schema/autocorrect.ts:98
 msgid "Match whole words"
@@ -725,38 +658,32 @@ msgid "When checked, AutoCorrect will never replace parts of words"
 msgstr "When checked, AutoCorrect will never replace parts of words"
 
 #: source/win-preferences/schema/autocorrect.ts:106
-#, fuzzy
 msgid "Replace"
-msgstr "Replacement"
+msgstr "Replace"
 
 #: source/win-preferences/schema/autocorrect.ts:106
 msgid "With"
-msgstr ""
+msgstr "With"
 
 #: source/win-preferences/schema/file-manager.ts:7
-#, fuzzy
 msgid "Display mode"
-msgstr "Display name"
+msgstr "Display mode"
 
 #: source/win-preferences/schema/file-manager.ts:16
 msgid "Thin"
-msgstr ""
+msgstr "Thin"
 
 #: source/win-preferences/schema/file-manager.ts:17
 msgid "Expanded"
-msgstr ""
+msgstr "Expanded"
 
 #: source/win-preferences/schema/file-manager.ts:18
 msgid "Combined"
-msgstr ""
+msgstr "Combined"
 
 #: source/win-preferences/schema/file-manager.ts:24
-msgid ""
-"The Thin mode shows your directories and files separately. Select a "
-"directory to have its contents displayed in the file list. Switch between "
-"file list and directory tree by clicking on directories or the arrow button "
-"which appears at the top left corner of the file list."
-msgstr ""
+msgid "The Thin mode shows your directories and files separately. Select a directory to have its contents displayed in the file list. Switch between file list and directory tree by clicking on directories or the arrow button which appears at the top left corner of the file list."
+msgstr "The Thin mode shows your directories and files separately. Select a directory to have its contents displayed in the file list. Switch between file list and directory tree by clicking on directories or the arrow button which appears at the top left corner of the file list."
 
 #: source/win-preferences/schema/file-manager.ts:29
 msgid "Show file information"
@@ -768,7 +695,7 @@ msgstr "Show folders above files"
 
 #: source/win-preferences/schema/file-manager.ts:40
 msgid "Markdown document name display"
-msgstr ""
+msgstr "Markdown document name display"
 
 #: source/win-preferences/schema/file-manager.ts:48
 msgid "Filename only"
@@ -792,7 +719,7 @@ msgstr "Display Markdown file extensions"
 
 #: source/win-preferences/schema/file-manager.ts:64
 msgid "Time display"
-msgstr ""
+msgstr "Time display"
 
 #: source/win-preferences/schema/file-manager.ts:72
 msgid "Last modification time"
@@ -803,29 +730,24 @@ msgid "File creation time"
 msgstr "File creation time"
 
 #: source/win-preferences/schema/file-manager.ts:79
-#, fuzzy
 msgid "Sorting"
-msgstr "Exporting…"
+msgstr "Sorting"
 
 #: source/win-preferences/schema/file-manager.ts:85
-#, fuzzy
 msgid "When sorting documents…"
-msgstr "Recent documents"
+msgstr "When sorting documents…"
 
 #: source/win-preferences/schema/file-manager.ts:88
-#, fuzzy
 msgid "Use natural order (2 comes before 10)"
-msgstr "Natural order (10 after 2)"
+msgstr "Use natural order (2 comes before 10)"
 
 #: source/win-preferences/schema/file-manager.ts:89
-#, fuzzy
 msgid "Use ASCII order (2 comes after 10)"
-msgstr "ASCII order (2 after 10)"
+msgstr "Use ASCII order (2 comes after 10)"
 
 #: source/win-preferences/schema/spellchecking.ts:22
-#, fuzzy
 msgid "LanguageTool"
-msgstr "Use LanguageTool"
+msgstr "LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:32
 msgid "Strictness"
@@ -840,9 +762,8 @@ msgid "Picky"
 msgstr "Picky"
 
 #: source/win-preferences/schema/spellchecking.ts:45
-#, fuzzy
 msgid "Mother language"
-msgstr "Mother tongue"
+msgstr "Mother language"
 
 #: source/win-preferences/schema/spellchecking.ts:51
 msgid "Not set"
@@ -857,20 +778,16 @@ msgid "Custom server"
 msgstr "Custom server"
 
 #: source/win-preferences/schema/spellchecking.ts:70
-#, fuzzy
 msgid "Custom server address"
-msgstr "Custom server"
+msgstr "Custom server address"
 
 #: source/win-preferences/schema/spellchecking.ts:79
-#, fuzzy
 msgid "LanguageTool Premium"
-msgstr "LanguageTool Provider"
+msgstr "LanguageTool Premium"
 
 #: source/win-preferences/schema/spellchecking.ts:84
-msgid ""
-"Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
-"credentials here."
-msgstr ""
+msgid "Zettlr will ignore the \"LanguageTool provider\" settings if you enter any credentials here."
+msgstr "Zettlr will ignore the \"LanguageTool provider\" settings if you enter any credentials here."
 
 #: source/win-preferences/schema/spellchecking.ts:88
 msgid "LanguageTool Username"
@@ -882,16 +799,15 @@ msgstr "LanguageTool API key"
 
 #: source/win-preferences/schema/spellchecking.ts:103
 msgid "Spellchecking"
-msgstr ""
+msgstr "Spellchecking"
 
 #: source/win-preferences/schema/spellchecking.ts:112
 msgid "Active"
 msgstr "Active"
 
 #: source/win-preferences/schema/spellchecking.ts:112
-#, fuzzy
 msgid "Language"
-msgstr "Language Code"
+msgstr "Language"
 
 #: source/win-preferences/schema/spellchecking.ts:112
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
@@ -899,10 +815,8 @@ msgid "Code"
 msgstr "Code"
 
 #: source/win-preferences/schema/spellchecking.ts:113
-msgid ""
-"Select the languages for which you want to enable automatic spell checking."
-msgstr ""
-"Select the languages for which you want to enable automatic spell checking."
+msgid "Select the languages for which you want to enable automatic spell checking."
+msgstr "Select the languages for which you want to enable automatic spell checking."
 
 #: source/win-preferences/schema/spellchecking.ts:125
 msgid "User dictionary. Remove words by clicking them."
@@ -1138,14 +1052,12 @@ msgid "Copy image to clipboard"
 msgstr "Copy image to clipboard"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:98
-#, fuzzy
 msgid "Open image"
-msgstr "Open file"
+msgstr "Open image"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:104
-#, fuzzy
 msgid "Open in File Browser"
-msgstr "Reveal in File Browser"
+msgstr "Open in File Browser"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
@@ -1681,10 +1593,8 @@ msgstr "Could not check for updates: Client Error (Status code: %s)"
 
 #: source/app/service-providers/updates/index.ts:298
 #, javascript-format
-msgid ""
-"Could not check for updates: The server tried to redirect (Status code: %s)"
-msgstr ""
-"Could not check for updates: The server tried to redirect (Status code: %s)"
+msgid "Could not check for updates: The server tried to redirect (Status code: %s)"
+msgstr "Could not check for updates: The server tried to redirect (Status code: %s)"
 
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
@@ -1790,12 +1700,8 @@ msgstr "Could not save image"
 #: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
 #: source/app/service-providers/commands/exporter/default-exporter.ts:33
 #: source/app/service-providers/commands/importer/index.ts:47
-msgid ""
-"Pandoc has not been found on this system. Please install Pandoc prior to "
-"exporting or importing files."
-msgstr ""
-"Pandoc has not been found on this system. Please install Pandoc prior to "
-"exporting or importing files."
+msgid "Pandoc has not been found on this system. Please install Pandoc prior to exporting or importing files."
+msgstr "Pandoc has not been found on this system. Please install Pandoc prior to exporting or importing files."
 
 #: source/app/service-providers/commands/file-rename.ts:108
 #: source/app/service-providers/commands/rename-tag.ts:43
@@ -1905,39 +1811,29 @@ msgstr "%s imported successfully."
 #. Some files failed to import.
 #: source/app/service-providers/commands/import.ts:76
 #, javascript-format
-msgid ""
-"The following %s files could not be imported, because their filetype is "
-"unknown: %s"
-msgstr ""
-"The following %s files could not be imported, because their filetype is "
-"unknown: %s"
+msgid "The following %s files could not be imported, because their filetype is unknown: %s"
+msgstr "The following %s files could not be imported, because their filetype is unknown: %s"
 
 #: source/app/service-providers/commands/import.ts:82
-#, fuzzy
 msgid "Import failed"
-msgstr "Export failed"
+msgstr "Import failed"
 
 #: source/app/service-providers/commands/dir-project-export.ts:74
 msgid "Cannot export project"
 msgstr "Cannot export project"
 
 #: source/app/service-providers/commands/dir-project-export.ts:75
-msgid ""
-"After applying your glob-filters, no files remained to export. Please adjust "
-"them in the project settings."
-msgstr ""
-"After applying your glob-filters, no files remained to export. Please adjust "
-"them in the project settings."
+msgid "After applying your glob-filters, no files remained to export. Please adjust them in the project settings."
+msgstr "After applying your glob-filters, no files remained to export. Please adjust them in the project settings."
 
 #: source/app/service-providers/commands/dir-project-export.ts:147
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
-msgstr "Project successfully exported. Click to show."
+msgstr "Project \"%s\" successfully exported. Click to show."
 
 #: source/app/service-providers/commands/dir-project-export.ts:148
-#, fuzzy
 msgid "Project Export"
-msgstr "Export"
+msgstr "Project Export"
 
 #: source/app/service-providers/commands/file-new.ts:151
 #: source/app/service-providers/commands/file-duplicate.ts:42
@@ -1969,12 +1865,12 @@ msgstr "Malformed Textbundle: %s"
 #: source/app/service-providers/commands/importer/index.ts:104
 #: source/app/service-providers/commands/importer/index.ts:105
 msgid "Select import profile"
-msgstr ""
+msgstr "Select import profile"
 
 #: source/app/service-providers/commands/importer/index.ts:106
 #, javascript-format
 msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr ""
+msgstr "There are multiple profiles that can import %s. Please choose one."
 
 #. We need to generate our own filename. First, attempt to just use 'copy of'
 #: source/app/service-providers/commands/file-duplicate.ts:71
@@ -2304,9 +2200,8 @@ msgstr "Next Tab"
 
 #: source/app/service-providers/menu/menu.darwin.ts:625
 #: source/app/service-providers/menu/menu.win32.ts:598
-#, fuzzy
 msgid "New window"
-msgstr "Window"
+msgstr "New window"
 
 #: source/app/service-providers/menu/menu.darwin.ts:636
 #: source/app/service-providers/menu/menu.win32.ts:609
@@ -2355,14 +2250,8 @@ msgstr "Clearing the FSAL cache requires a restart."
 
 #: source/app/service-providers/menu/menu.darwin.ts:708
 #: source/app/service-providers/menu/menu.win32.ts:681
-msgid ""
-"After the restart, Zettlr will recreate the entire cache, which may take a "
-"few moments, depending on the amount of files you have loaded and the speed "
-"of your disk. The window(s) will show afterward."
-msgstr ""
-"After the restart, Zettlr will recreate the entire cache, which may take a "
-"few moments, depending on the amount of files you have loaded and the speed "
-"of your disk. The window(s) will show afterward."
+msgid "After the restart, Zettlr will recreate the entire cache, which may take a few moments, depending on the amount of files you have loaded and the speed of your disk. The window(s) will show afterward."
+msgstr "After the restart, Zettlr will recreate the entire cache, which may take a few moments, depending on the amount of files you have loaded and the speed of your disk. The window(s) will show afterward."
 
 #: source/app/service-providers/windows/dialog/ask-file.ts:54
 msgid "Open file"
@@ -2403,54 +2292,46 @@ msgid "Save file"
 msgstr "Save file"
 
 #: source/app/service-providers/documents/index.ts:345
-#, fuzzy
 msgid "Save changes"
-msgstr "Unsaved changes"
+msgstr "Save changes"
 
 #: source/app/service-providers/documents/index.ts:346
-#, fuzzy
 msgid "Discard changes"
-msgstr "Unsaved changes"
+msgstr "Discard changes"
 
 #: source/app/service-providers/documents/index.ts:350
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save or discard them?"
-msgstr "There are unsaved changes. Do you want to save them first?"
+msgstr "There are unsaved changes. Do you want to save or discard them?"
 
 #: source/app/service-providers/documents/index.ts:996
-#, fuzzy
 msgid "File changed on disk"
-msgstr "File manager mode"
+msgstr "File changed on disk"
 
 #: source/app/service-providers/documents/index.ts:997
 #, javascript-format
 msgid "%s changed on disk"
-msgstr ""
+msgstr "%s changed on disk"
 
 #: source/app/service-providers/documents/index.ts:999
 #, javascript-format
-msgid ""
-"%s has changed on disk, but the editor contains unsaved changes. Do you want "
-"to keep the current editor contents or load the file from disk?"
-msgstr ""
+msgid "%s has changed on disk, but the editor contains unsaved changes. Do you want to keep the current editor contents or load the file from disk?"
+msgstr "%s has changed on disk, but the editor contains unsaved changes. Do you want to keep the current editor contents or load the file from disk?"
 
 #: source/app/service-providers/documents/index.ts:1000
-msgid ""
-"Do you want to keep the current editor contents or load the file from disk?"
-msgstr ""
+msgid "Do you want to keep the current editor contents or load the file from disk?"
+msgstr "Do you want to keep the current editor contents or load the file from disk?"
 
 #: source/app/service-providers/documents/index.ts:1003
 msgid "Keep editor contents"
-msgstr ""
+msgstr "Keep editor contents"
 
 #: source/app/service-providers/documents/index.ts:1004
 msgid "Load changes from disk"
-msgstr ""
+msgstr "Load changes from disk"
 
 #: source/app/service-providers/documents/index.ts:1007
-msgid ""
-"Always load changes from disk if there are no unsaved changes in the editor"
-msgstr ""
+msgid "Always load changes from disk if there are no unsaved changes in the editor"
+msgstr "Always load changes from disk if there are no unsaved changes in the editor"
 
 #: source/tmp/Projects-Tab.vue.ts:24
 msgid "Zettlr also makes use of these projects:"
@@ -2582,16 +2463,8 @@ msgid "There are no citations in this document."
 msgstr "There are no citations in this document."
 
 #: source/tmp/CustomCSS.vue.ts:32
-msgid ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted behaviour!</"
-"strong>"
-msgstr ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted behaviour!</"
-"strong>"
+msgid "Here you can override the styles of Zettlr to customise it even further. <strong>Attention: This file overrides all CSS directives! Never alter the geometry of elements, otherwise the app may expose unwanted behaviour!</strong>"
+msgstr "Here you can override the styles of Zettlr to customise it even further. <strong>Attention: This file overrides all CSS directives! Never alter the geometry of elements, otherwise the app may expose unwanted behaviour!</strong>"
 
 #: source/tmp/CustomCSS.vue.ts:88 source/tmp/Defaults.vue.ts:196
 #: source/tmp/SnippetsTab.vue.ts:124
@@ -2611,20 +2484,12 @@ msgid "No other files"
 msgstr "No other files"
 
 #: source/tmp/Defaults.vue.ts:70
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
-msgstr ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
+msgid "This profile is protected. This means that it will be restored when you remove or rename it."
+msgstr "This profile is protected. This means that it will be restored when you remove or rename it."
 
 #: source/tmp/Defaults.vue.ts:73
-msgid ""
-"This profile is invalid. It may contain errors, or it may be missing the "
-"writer or reader property."
-msgstr ""
-"This profile is invalid. It may contain errors, or it may be missing the "
-"writer or reader property."
+msgid "This profile is invalid. It may contain errors, or it may be missing the writer or reader property."
+msgstr "This profile is invalid. It may contain errors, or it may be missing the writer or reader property."
 
 #: source/tmp/Defaults.vue.ts:111
 msgid "Edit the default settings for imports or exports here."
@@ -2664,12 +2529,8 @@ msgid "Your version"
 msgstr "Your version"
 
 #: source/tmp/App.vue.ts:82
-msgid ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
-msgstr ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
+msgid "There is a new version of Zettlr available to download. Please read the changelog below."
+msgstr "There is a new version of Zettlr available to download. Please read the changelog below."
 
 #: source/tmp/App.vue.ts:85
 msgid "Downloading your update"
@@ -2716,62 +2577,28 @@ msgid "Snippets let you define reusable pieces of text with variables."
 msgstr "Snippets let you define reusable pieces of text with variables."
 
 #: source/tmp/FileControl.vue.ts:42
-#, fuzzy
 msgid "Select folder…"
-msgstr "Open project folder"
+msgstr "Select folder…"
 
 #: source/tmp/FileControl.vue.ts:42
-#, fuzzy
 msgid "Select file…"
-msgstr "Delete file"
+msgstr "Select file…"
 
 #: source/tmp/General-Tab.vue.ts:23
-msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
-msgstr ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
+msgid "Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses."
+msgstr "Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses."
 
 #: source/tmp/General-Tab.vue.ts:24
-msgid ""
-"Zettlr makes use of citeproc to display citations directly in the editor. To "
-"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
-msgstr ""
-"Zettlr makes use of citeproc to display citations directly in the editor. To "
-"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
+msgid "Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:"
+msgstr "Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:"
 
 #: source/tmp/General-Tab.vue.ts:25
-msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
-msgstr ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
+msgid "All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc."
+msgstr "All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc."
 
 #: source/tmp/General-Tab.vue.ts:26
-msgid ""
-"Zettlr offers an integration with LanguageTool.org, a service provided by "
-"LanguageTooler GmbH. Using this service requires an internet connection and "
-"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
-"server that you use."
-msgstr ""
-"Zettlr offers an integration with LanguageTool.org, a service provided by "
-"LanguageTooler GmbH. Using this service requires an internet connection and "
-"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
-"server that you use."
+msgid "Zettlr offers an integration with LanguageTool.org, a service provided by LanguageTooler GmbH. Using this service requires an internet connection and is subject to the privacy policy of LanguageTooler GmbH or the corresponding server that you use."
+msgstr "Zettlr offers an integration with LanguageTool.org, a service provided by LanguageTooler GmbH. Using this service requires an internet connection and is subject to the privacy policy of LanguageTooler GmbH or the corresponding server that you use."
 
 #: source/tmp/RelatedFilesTab.vue.ts:34
 msgid "No related files"
@@ -2915,242 +2742,3 @@ msgstr "Over the monthly average"
 msgid "More than twice the monthly average"
 msgstr "More than twice the monthly average"
 
-#~ msgid "Suggested tags for the current file"
-#~ msgstr "Suggested tags for the current file"
-
-#~ msgid "Add to file"
-#~ msgstr "Add to file"
-
-#~ msgid "Open in browser"
-#~ msgstr "Open in browser"
-
-#~ msgid "Show file"
-#~ msgstr "Show file"
-
-#~ msgid "Directory not found"
-#~ msgstr "Directory not found"
-
-#, javascript-format
-#~ msgid "Opening new root %s …"
-#~ msgstr "Opening new root %s …"
-
-#, javascript-format
-#~ msgid "%s has been loaded."
-#~ msgstr "%s has been loaded."
-
-#, javascript-format
-#~ msgid "Could not open workspace %s."
-#~ msgstr "Could not open workspace %s."
-
-#~ msgid "selected"
-#~ msgstr "selected"
-
-#~ msgid "click to select"
-#~ msgstr "click to select"
-
-#~ msgid "Workspaces"
-#~ msgstr "Workspaces"
-
-#~ msgid "No open files or folders"
-#~ msgstr "No open files or folders"
-
-#~ msgid "Automatically switch to dark mode"
-#~ msgstr "Automatically switch to dark mode"
-
-#~ msgid "Start dark mode at"
-#~ msgstr "Start dark mode at"
-
-#~ msgid "End dark mode at"
-#~ msgstr "End dark mode at"
-
-#~ msgid "File manager mode"
-#~ msgstr "File manager mode"
-
-#~ msgid "Thin &mdash; show either file tree or file list"
-#~ msgstr "Thin &mdash; show either file tree or file list"
-
-#~ msgid "Expanded &mdash; show both file tree and file list"
-#~ msgstr "Expanded &mdash; show both file tree and file list"
-
-#~ msgid "Combined &mdash; show files and directories in the file tree"
-#~ msgstr "Combined &mdash; show files and directories in the file tree"
-
-#~ msgid "Display files using"
-#~ msgstr "Display files using"
-
-#~ msgid "Sorting order for files (used for sorting by name)"
-#~ msgstr "Sorting order for files (used for sorting by name)"
-
-#~ msgid "When sorting by time, sort by"
-#~ msgstr "When sorting by time, sort by"
-
-#~ msgid "In the file metadata display"
-#~ msgstr "In the file metadata display"
-
-#~ msgid ""
-#~ "Choose the formatting characters that the bold/emphasis commands should "
-#~ "use"
-#~ msgstr ""
-#~ "Choose the formatting characters that the bold/emphasis commands should "
-#~ "use"
-
-#~ msgid "Default image path (relative or absolute)"
-#~ msgstr "Default image path (relative or absolute)"
-
-#~ msgid "Algorithm to use for the readability mode"
-#~ msgstr "Algorithm to use for the readability mode"
-
-#~ msgid "Primary Magic Quotes"
-#~ msgstr "Primary Magic Quotes"
-
-#~ msgid "Secondary Magic Quotes"
-#~ msgstr "Secondary Magic Quotes"
-
-#~ msgid "String"
-#~ msgstr "String"
-
-#~ msgid ""
-#~ "Here you can define certain strings that will be replaced when "
-#~ "AutoCorrect is on. The characters on the left side will be replaced with "
-#~ "whatever comes on the right."
-#~ msgstr ""
-#~ "Here you can define certain strings that will be replaced when "
-#~ "AutoCorrect is on. The characters on the left side will be replaced with "
-#~ "whatever comes on the right."
-
-#~ msgid "Search for dictionaries…"
-#~ msgstr "Search for dictionaries…"
-
-#~ msgid ""
-#~ "Put auto-created files into this directory (must be loaded in Zettlr)"
-#~ msgstr ""
-#~ "Put auto-created files into this directory (must be loaded in Zettlr)"
-
-#~ msgid ""
-#~ "Target directory for exported files. <em>Attention:</em> Selecting the "
-#~ "current working directory will overwrite files without warning!"
-#~ msgstr ""
-#~ "Target directory for exported files. <em>Attention:</em> Selecting the "
-#~ "current working directory will overwrite files without warning!"
-
-#~ msgid "Temporary directory: is regularly expunged"
-#~ msgstr "Temporary directory: is regularly expunged"
-
-#~ msgid ""
-#~ "Current working directory: exported files will be saved into the "
-#~ "currently selected directory."
-#~ msgstr ""
-#~ "Current working directory: exported files will be saved into the "
-#~ "currently selected directory."
-
-#~ msgid "Ask for directory"
-#~ msgstr "Ask for directory"
-
-#~ msgid ""
-#~ "Enter all file extensions that you want to see in your attachment "
-#~ "sidebar. Separate them with a comma. Changes are recognised after a "
-#~ "restart."
-#~ msgstr ""
-#~ "Enter all file extensions that you want to see in your attachment "
-#~ "sidebar. Separate them with a comma. Changes are recognised after a "
-#~ "restart."
-
-#~ msgid "Use the operating system's accent colour instead of the theme colour"
-#~ msgstr ""
-#~ "Use the operating system's accent colour instead of the theme colour"
-
-#~ msgid "This setting is only available on Windows and macOS"
-#~ msgstr "This setting is only available on Windows and macOS"
-
-#~ msgid "These options determine which elements are rendered in documents."
-#~ msgstr "These options determine which elements are rendered in documents."
-
-#~ msgid "With these controls you can constrain the image previews."
-#~ msgstr "With these controls you can constrain the image previews."
-
-#~ msgid "Options for ZKN elements"
-#~ msgstr "Options for ZKN elements"
-
-#~ msgid "Item"
-#~ msgstr "Item"
-
-#~ msgid "Get LaTeX"
-#~ msgstr "Get LaTeX"
-
-#~ msgid "characters (w/o spaces)"
-#~ msgstr "characters (w/o spaces)"
-
-#~ msgid ""
-#~ "This profile appears to be either missing the writer or reader property. "
-#~ "Make sure to set both so that Zettlr can use this profile."
-#~ msgstr ""
-#~ "This profile appears to be either missing the writer or reader property. "
-#~ "Make sure to set both so that Zettlr can use this profile."
-
-#~ msgid "Application language (<strong>Restart required!</strong>)"
-#~ msgstr "Application language (<strong>Restart required!</strong>)"
-
-#~ msgid "Find…"
-#~ msgstr "Find…"
-
-#~ msgid "Replace with"
-#~ msgstr "Replace with"
-
-#~ msgid "Replace next occurrence"
-#~ msgstr "Replace next occurrence"
-
-#~ msgid "Replace all occurrences"
-#~ msgstr "Replace all occurrences"
-
-#~ msgid "Close search"
-#~ msgstr "Close search"
-
-#~ msgid "Toggle regular expression search"
-#~ msgstr "Toggle regular expression search"
-
-#~ msgid "Link start"
-#~ msgstr "Link start"
-
-#~ msgid "Link ending"
-#~ msgstr "Link ending"
-
-#~ msgid "Proceed without saving"
-#~ msgstr "Proceed without saving"
-
-#~ msgid "Omit unsaved changes?"
-#~ msgstr "Omit unsaved changes?"
-
-#~ msgid "Afrikaans (South Africa)"
-#~ msgstr "Afrikaans (South Africa)"
-
-#~ msgid "Catalan (Catalonia)"
-#~ msgstr "Catalan (Catalonia)"
-
-#~ msgid "Czech (Czech Republic)"
-#~ msgstr "Czech (Czech Republic)"
-
-#~ msgid "Urdu (Pakistan)"
-#~ msgstr "Urdu (Pakistan)"
-
-#~ msgid ""
-#~ "Use the CodeMirror default actions for <kbd>Home</kbd> and <kbd>End</kbd>."
-#~ msgstr ""
-#~ "Use the CodeMirror default actions for <kbd>Home</kbd> and <kbd>End</kbd>."
-
-#~ msgid "Use left-to-right (LTR) writing direction"
-#~ msgstr "Use left-to-right (LTR) writing direction"
-
-#~ msgid "Use right-to-left (RTL) writing direction"
-#~ msgstr "Use right-to-left (RTL) writing direction"
-
-#~ msgid "Use visual order for arrow key movement while in RTL-mode"
-#~ msgstr "Use visual order for arrow key movement while in RTL-mode"
-
-#~ msgid "Word style (replace immediately without pressing Space/Enter)"
-#~ msgstr "Word style (replace immediately without pressing Space/Enter)"
-
-#~ msgid "LibreOffice style (press Space or Enter to replace)"
-#~ msgstr "LibreOffice style (press Space or Enter to replace)"
-
-#~ msgid "Check for updated translations on start"
-#~ msgstr "Check for updated translations on start"
