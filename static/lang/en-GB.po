@@ -2266,15 +2266,6 @@ msgstr "Overwrite existing file"
 msgid "The file %s already exists in this directory. Overwrite?"
 msgstr "The file %s already exists in this directory. Overwrite?"
 
-#: source/app/service-providers/commands/request-move.ts:63
-msgid "Cannot move directory or file"
-msgstr "Cannot move directory or file"
-
-#: source/app/service-providers/commands/request-move.ts:64
-#, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "The file/directory %s already exists in target."
-
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 #: source/app/service-providers/documents/index.ts:349
