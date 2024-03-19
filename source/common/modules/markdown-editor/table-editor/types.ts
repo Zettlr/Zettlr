@@ -13,12 +13,13 @@
  * END HEADER
  */
 
-import type TableEditor from './index'
+import type TableEditor from './table-editor'
 
 export type ColAlignment = 'center'|'left'|'right'
 
 export interface ParsedTable {
   ast: string[][]
+  type?: 'grid'|'pipe'
   colAlignments: ColAlignment[]
 }
 
@@ -33,21 +34,21 @@ export interface TableEditorOptions {
    *
    * @param   {TableEditor}  instance  The TableEditor instance
    */
-  onBlur?: (instance: ReturnType<typeof TableEditor>) => void
+  onBlur?: (instance: TableEditor) => void
 
   /**
    * A callback that is fired whenever the TableEditor's contents change
    *
    * @param   {TableEditor}  instance  The TableEditor instance
    */
-  onChange?: (instance: ReturnType<typeof TableEditor>) => void
+  onChange?: (instance: TableEditor) => void
 
   /**
    * A callback that is fired whenever the user switches the cell of the table
    *
    * @param   {TableEditor}  instance     The TableEditor instance
    */
-  onCellChange?: (instance: ReturnType<typeof TableEditor>) => void
+  onCellChange?: (instance: TableEditor) => void
 
   /**
    * When the user clicks on the save button, this callback is called to signal
@@ -55,5 +56,5 @@ export interface TableEditorOptions {
    *
    * @param   {TableEditor}  instance  The TableEditor instance
    */
-  saveIntent?: (instance: ReturnType<typeof TableEditor>) => void
+  saveIntent?: (instance: TableEditor) => void
 }

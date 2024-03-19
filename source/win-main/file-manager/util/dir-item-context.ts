@@ -18,9 +18,8 @@ import type { DirDescriptor } from '@dts/common/fsal'
 import type { AnyMenuItem } from '@dts/renderer/context'
 
 const ipcRenderer = window.ipc
-const clipboard = window.clipboard
 
-export default function displayFileContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: any): void {
+export default function displayFileContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
   const isMac = process.platform === 'darwin'
   const isWin = process.platform === 'win32'
 
@@ -124,7 +123,7 @@ export default function displayFileContext (event: MouseEvent, dirObject: DirDes
     callback(clickedID) // TODO
     switch (clickedID) {
       case 'menu.copy_path':
-        clipboard.writeText(dirObject.path)
+        navigator.clipboard.writeText(dirObject.path).catch(err => console.error(err))
         break
       case 'gui.attachments_open_dir':
         ipcRenderer.send('window-controls', {

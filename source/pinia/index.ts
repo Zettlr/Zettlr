@@ -14,3 +14,9 @@
 
 export { useWorkspacesStore } from './workspaces'
 export { useOpenDirectoryStore } from './open-directory'
+export { useConfigStore } from './config'
+export { useStatisticsStore } from './statistics-store'
+export { useWindowStateStore } from './window-state-store'
+export { useDocumentTreeStore } from './document-tree-store'
+export { useWritingTargetsStore } from './writing-targets-store'
+export { useTagsStore } from './tags-store'

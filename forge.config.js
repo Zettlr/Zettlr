@@ -1,6 +1,9 @@
 const { spawn } = require('child_process')
 const fs = require('fs').promises
 const path = require('path')
+const { FusesPlugin } = require('@electron-forge/plugin-fuses')
+const { FuseV1Options, FuseVersion } = require('@electron/fuses')
+const { getGitHash } = require('./scripts/get-git-hash.js')
 
 /**
  * This function runs the get-pandoc script in order to download the requested
@@ -31,12 +34,12 @@ async function downloadPandoc (platform, arch) {
     // To not mess with Electron forge's output, suppress this processes output.
     // But we should reject if there's any error output.
     let shouldReject = false
-    shellProcess.stderr.on('data', (data) => {
+    shellProcess.stderr.on('data', (_data) => {
       shouldReject = true
     })
 
     // Resolve or reject once the process has finished.
-    shellProcess.on('close', (code, signal) => {
+    shellProcess.on('close', (code, _signal) => {
       if (code !== 0 || shouldReject) {
         reject(new Error(`Failed to download Pandoc: Process quit with code ${code}. If the code is 0, then there was error output.`))
       } else {
@@ -58,6 +61,10 @@ module.exports = {
       // variable that is then accessible by the webpack process so that we can
       // either include or not include fsevents for macOS platforms.
       process.env.BUNDLE_FSEVENTS = (targetPlatform === 'darwin') ? '1' : '0'
+
+      // This will be baked into the binary so that we know which commit this
+      // build was based off on.
+      process.env.GIT_COMMIT_HASH = await getGitHash()
 
       // Second, we need to make sure we can bundle Pandoc.
       const isMacOS = targetPlatform === 'darwin'
@@ -325,7 +332,19 @@ module.exports = {
           ]
         }
       }
-    }
+    },
+    // When building for production, turn off a few fuses that disable certain
+    // debug controls of the app.
+    ...((process.env.NODE_ENV === 'production')
+      ? [new FusesPlugin({
+          version: FuseVersion.V1,
+          [FuseV1Options.RunAsNode]: false,
+          [FuseV1Options.EnableCookieEncryption]: true,
+          [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
+          [FuseV1Options.EnableNodeCliInspectArguments]: false,
+          [FuseV1Options.GrantFileProtocolExtraPrivileges]: true
+        })]
+      : [])
   ],
   makers: [
     {

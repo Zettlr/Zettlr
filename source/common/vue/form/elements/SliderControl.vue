@@ -2,13 +2,11 @@
   <div class="slider-group">
     <label v-if="label !== ''" v-html="label"></label>
     <input
+      v-model.number="internalModel"
       type="range"
-      v-bind:min="min"
-      v-bind:max="max"
-      v-bind:value="modelValue"
-      v-bind:name="name"
-      v-on:input="emit('update:modelValue', parseInt(($event.target as HTMLInputElement).value, 10))"
-      v-on:change="emit('update:modelValue', parseInt(($event.target as HTMLInputElement).value, 10))"
+      v-bind:min="props.min"
+      v-bind:max="props.max"
+      v-bind:name="props.name"
     >
   </div>
 </template>
@@ -28,6 +26,8 @@
  * END HEADER
  */
 
+import { ref, toRef, watch } from 'vue'
+
 const props = defineProps<{
   modelValue: number
   min?: number
@@ -37,6 +37,17 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<(e: 'update:modelValue', value: number) => void>()
+
+const internalModel = ref<number>(props.modelValue)
+
+watch(toRef(props, 'modelValue'), () => {
+  internalModel.value = props.modelValue
+})
+
+watch(internalModel, () => {
+  emit('update:modelValue', internalModel.value)
+})
+
 </script>
 
 <style lang="less">

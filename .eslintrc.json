@@ -15,13 +15,21 @@
     "parser": "@typescript-eslint/parser",
     "ecmaVersion": 2018,
     "project": "./tsconfig.json",
-    "extraFileExtensions": [".vue", ".mjs"]
+    "extraFileExtensions": [".vue"]
   },
   // We don't want to write all our stuff ourselves, but instead extend these
   // rulesets
   "extends": [
     "standard-with-typescript",
     "plugin:vue/vue3-recommended"
+  ],
+  // The following overrides ensure that any pure JavaScript files are also
+  // linted with ESLint, but not type checked.
+  "overrides": [
+    {
+      "files": ["**/*.js"],
+      "extends": ["plugin:@typescript-eslint/disable-type-checked"]
+    }
   ],
   "globals": {
     "Atomics": "readonly",

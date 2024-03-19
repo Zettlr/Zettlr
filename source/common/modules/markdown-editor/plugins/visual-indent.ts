@@ -72,7 +72,6 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
     }
 
     // Second, determine the offset based on list elements.
-    // BUG: Currently this applies even to code files, which is not desirable.
     const match = /^\s*((?:[+*>-](?:\s\[[x\s]\])?|\d+\.)\s)/.exec(line.text)
     const listMarker = match !== null ? match[1].length : 0
 
@@ -108,9 +107,11 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
 
     const indent = measurements?.get(measurementKey)
     if (indent !== undefined) {
-      // NOTE: This time we do not need the basePadding, as the measurement
-      // comes straight from the DOM and thus already includes that.
-      const deco = Decoration.line({ attributes: { style: `text-indent: -${indent}px; padding-left: ${indent}px;` } })
+      // NOTE: Each `.cm-line` has a padding of `0 2px 0 6px` as per CodeMirror's
+      // base styles from somewhere in the library. We need to account for that
+      // not to induce any problems.
+      const basePadding = 6
+      const deco = Decoration.line({ attributes: { style: `text-indent: -${indent-basePadding}px; padding-left: ${indent}px;` } })
       builder.add(line.from, line.from, deco)
     }
   }

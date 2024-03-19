@@ -5,14 +5,18 @@
       Zettlr.
     </p>
     <h2>General Information</h2>
-    <p>Zettlr Version: <strong>{{ version }}</strong> (UUID: {{ uuid }})</p>
-    <p>
-      System: <strong>{{ platform }} {{ platformVersion }}</strong>
-      (architecture: {{ arch }})
-    </p>
+    <ul>
+      <li>Zettlr Version: <strong>{{ version }}</strong></li>
+      <li>Build number: <strong><code>{{ commit }}</code></strong></li>
+      <li>UUID: <strong><code>{{ uuid }}</code></strong></li>
+      <li>
+        System: <strong>{{ platform }} {{ platformVersion }}</strong>
+        (architecture: {{ arch }})
+      </li>
+    </ul>
     <h2>Build Dependencies</h2>
     <p>
-      This build was compiled using
+      This build was compiled using:
       <ul>
         <li>Node.js <strong>v{{ versions.node }}</strong></li>
         <li>Electron <strong>v{{ versions.electron }}</strong></li>
@@ -43,7 +47,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -58,31 +62,23 @@
  * END HEADER
  */
 
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'DebugTab',
-  data: function () {
-    return {
-      version: (global as any).config.get('version'),
-      uuid: (global as any).config.get('uuid'),
-      versions: process.versions,
-      argv: process.argv,
-      arch: process.arch,
-      env: Object.assign({}, process.env),
-      platform: process.platform,
-      platformVersion: () => process.getSystemVersion(),
-      // Add version strings for external helper programs Zettlr can use
-      programVersions: {
-        pandoc: process.env.PANDOC_VERSION,
-        quarto: process.env.QUARTO_VERSION ?? 'not available',
-        git: process.env.GIT_VERSION ?? 'not available'
-      }
-    }
-  },
-  methods: {
-  }
-})
+const version = window.config.get('version')
+const uuid = window.config.get('uuid')
+const versions = process.versions
+const argv = process.argv
+const arch = process.arch
+const env = Object.assign({}, process.env)
+const platform = process.platform
+const commit = __GIT_COMMIT_HASH__
+// DEBUG: getSystemVersion is a simple property in the renderer
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const platformVersion = process.getSystemVersion
+// Add version strings for external helper programs Zettlr can use
+const programVersions = {
+  pandoc: process.env.PANDOC_VERSION ?? 'not available',
+  quarto: process.env.QUARTO_VERSION ?? 'not available',
+  git: process.env.GIT_VERSION ?? 'not available'
+}
 </script>
 
 <style lang="less">

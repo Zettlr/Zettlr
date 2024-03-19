@@ -28,7 +28,7 @@ import { getFilesystemMetadata } from './util/get-fs-metadata'
  * @param {CodeFileDescriptor} origFile The file object
  * @param {any} cachedFile The cache object to apply
  */
-function applyCache (cachedFile: any, origFile: CodeFileDescriptor): CodeFileDescriptor {
+function applyCache (cachedFile: CodeFileDescriptor, origFile: CodeFileDescriptor): CodeFileDescriptor {
   return safeAssign(cachedFile, origFile)
 }
 
@@ -37,7 +37,7 @@ function applyCache (cachedFile: any, origFile: CodeFileDescriptor): CodeFileDes
  * @param {CodeFileDescriptor} origFile The file to cache
  */
 function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache): void {
-  if (!cacheAdapter.set(origFile.path, JSON.stringify(origFile))) {
+  if (!cacheAdapter.set(origFile.path, structuredClone(origFile))) {
     throw new Error(`Could not cache file ${origFile.name}!`)
   }
 }
@@ -104,9 +104,9 @@ export async function parse (
   // let's check if the file has been changed
   let hasCache = false
   if (cache?.has(file.path) === true) {
-    let cachedFile = cache.get(file.path)
-    // If the modtime is still the same, we can apply the cache
-    if (cachedFile.modtime === file.modtime) {
+    const cachedFile = cache.get(file.path)
+    // If the modtime is still the same, we can apply the cache.
+    if (cachedFile !== undefined && cachedFile.modtime === file.modtime && cachedFile.type === 'code') {
       file = applyCache(cachedFile, file)
       hasCache = true
     }
@@ -141,7 +141,7 @@ export async function hasChangedOnDisk (fileObject: CodeFileDescriptor): Promise
   return stat.mtime.getTime() !== fileObject.modtime
 }
 
-export async function save (fileObject: CodeFileDescriptor, content: string, cache: any): Promise<void> {
+export async function save (fileObject: CodeFileDescriptor, content: string, cache: FSALCache|null): Promise<void> {
   await fs.writeFile(fileObject.path, content)
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
@@ -153,7 +153,7 @@ export async function save (fileObject: CodeFileDescriptor, content: string, cac
   }
 }
 
-export async function rename (fileObject: CodeFileDescriptor, cache: any, newName: string): Promise<void> {
+export async function rename (fileObject: CodeFileDescriptor, cache: FSALCache|null, newName: string): Promise<void> {
   let oldPath = fileObject.path
   let newPath = path.join(fileObject.dir, newName)
   await fs.rename(oldPath, newPath)
@@ -189,7 +189,7 @@ export function markClean (fileObject: CodeFileDescriptor): void {
   fileObject.modified = false
 }
 
-export async function reparseChangedFile (fileObject: CodeFileDescriptor, cache: any): Promise<void> {
+export async function reparseChangedFile (fileObject: CodeFileDescriptor, cache: FSALCache|null): Promise<void> {
   // Almost the same, except we don't write anything
   const contents = await load(fileObject)
   // Afterwards, retrieve the now current modtime

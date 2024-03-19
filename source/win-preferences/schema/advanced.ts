@@ -13,7 +13,9 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
+import { type PreferencesFieldset } from '../App.vue'
+import { PreferencesGroups } from './_preferences-groups'
+import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
 /**
  * Returns all available advanced preferences settings as a two-dimensional
@@ -22,7 +24,7 @@ import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
  *
  * @return  {Fieldset[]}  The fields
  */
-export function getAdvancedFields (): PreferencesFieldset[] {
+export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
       title: trans('Pattern for new file names'),
@@ -128,7 +130,7 @@ export function getAdvancedFields (): PreferencesFieldset[] {
           type: 'number',
           label: trans('Time to wait before writing a file is considered done (in ms)'),
           model: 'watchdog.stabilityThreshold',
-          disabled: window.config.get('watchdog.activatePolling') === false
+          disabled: !config.watchdog.activatePolling
         }
       ]
     },

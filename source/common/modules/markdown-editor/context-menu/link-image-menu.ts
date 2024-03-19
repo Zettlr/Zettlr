@@ -20,13 +20,15 @@ import { type AnyMenuItem } from '@dts/renderer/context'
 import { type SyntaxNode } from '@lezer/common'
 import openMarkdownLink from '../util/open-markdown-link'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
+import makeValidUri from 'source/common/util/make-valid-uri'
+import { pathDirname } from 'source/common/util/renderer-path-polyfill'
+import { configField } from '../util/configuration'
 
-const clipboard = window.clipboard
 const ipcRenderer = window.ipc
 
 /**
- * Given a node, extracts the first child of type 'URL' and returns its text
- * contents
+ * Given a node, tries to find a URL node. This function expects that node is of
+ * type URL or any node that can contain an URL node as a child.
  *
  * @param   {SyntaxNode}   node   The node
  * @param   {EditorState}  state  The editor state (for extracting the text)
@@ -34,6 +36,10 @@ const ipcRenderer = window.ipc
  * @return  {string}              The URL string, or undefined
  */
 function getURLForNode (node: SyntaxNode, state: EditorState): string|undefined {
+  if (node.type.name === 'URL') {
+    return state.sliceDoc(node.from, node.to)
+  }
+
   const child = node.getChild('URL')
 
   if (child === null) {
@@ -51,9 +57,11 @@ function getURLForNode (node: SyntaxNode, state: EditorState): string|undefined 
  * @param   {{ x: number, y: number }}  coords  The coordinates
  */
 export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: number, y: number }): void {
+  const basePath = pathDirname(view.state.field(configField).metadata.path)
   const url = getURLForNode(node, view.state)
 
   if (url === undefined) {
+    console.error('Could not show Link/Image context menu: No URL found!')
     return
   }
 
@@ -82,8 +90,9 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     }
   ]
 
-  const isFileLink = url.startsWith('safe-file://') || url.startsWith('file://')
-  const isLink = node.type.name === 'Link'
+  const validAbsoluteURI = makeValidUri(url, basePath)
+  const isFileLink = validAbsoluteURI.startsWith('safe-file://') || validAbsoluteURI.startsWith('file://')
+  const isLink = node.type.name !== 'Image'
 
   const imgTpl: AnyMenuItem[] = [
     {
@@ -93,31 +102,31 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
       type: 'normal'
     },
     {
-      label: trans('Open in browser'),
+      label: trans('Open image'),
       id: 'open-img-in-browser',
-      enabled: !isFileLink,
+      enabled: true,
       type: 'normal'
     },
     {
-      label: trans('Show file'),
+      label: process.platform === 'darwin' ? trans('Reveal in Finder') : trans('Open in File Browser'),
       id: 'show-img-in-folder',
-      enabled: !isFileLink,
+      enabled: isFileLink,
       type: 'normal'
     }
   ]
 
   showPopupMenu(coords, isLink ? linkTpl : imgTpl, (clickedID) => {
     if (clickedID === 'menu.copy_link') {
-      clipboard.writeText(url)
+      navigator.clipboard.writeText(url).catch(err => console.error(err))
     } else if (clickedID === 'menu.open_link') {
       openMarkdownLink(url, view)
     } else if (clickedID === 'show-img-in-folder') {
       ipcRenderer.send('window-controls', {
         command: 'show-item-in-folder',
-        payload: url // Show the item in folder
+        payload: validAbsoluteURI
       })
     } else if (clickedID === 'open-img-in-browser') {
-      // TODO
+      window.location.href = validAbsoluteURI
     }
   })
 }

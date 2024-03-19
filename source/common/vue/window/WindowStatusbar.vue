@@ -1,6 +1,6 @@
 <template>
   <div id="statusbar">
-    <template v-for="(item, idx) in controls">
+    <template v-for="(item, idx) in props.controls">
       <ButtonControl
         v-if="item.type === 'button'"
         v-bind:key="idx"
@@ -10,7 +10,7 @@
         v-bind:disabled="item.disabled"
         v-bind:inline="true"
         v-bind:primary="item.buttonClass === 'primary'"
-        v-on:click="$emit('click', item.id)"
+        v-on:click="emit('click', item.id)"
       ></ButtonControl>
       <span
         v-if="item.type === 'text'"

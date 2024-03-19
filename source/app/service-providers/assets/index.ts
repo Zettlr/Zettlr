@@ -14,16 +14,44 @@
  */
 
 import path from 'path'
-import { app, ipcMain } from 'electron'
+import { app, ipcMain, shell } from 'electron'
 import { promises as fs } from 'fs'
 import YAML from 'yaml'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
-import { type PandocProfileMetadata } from '@dts/common/assets'
 import { getCustomProfiles } from '@providers/commands/exporter'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
+
+export interface PandocProfileMetadata {
+  /**
+   * The filename of the defaults file
+   */
+  name: string
+  /**
+   * The writer, can be an empty string
+   */
+  writer: string
+  /**
+   * The reader, can be an empty string
+   */
+  reader: string
+  /**
+   * Since Zettlr has a few requirements, we must have writers and readers.
+   * While we strive to even support unknown readers and writers, those fields
+   * at least have to have a value. If any hasn't, isInvalid will be true.
+   */
+  isInvalid: boolean
+  /**
+   * Zettlr ships with a few profiles by default. In order to ensure that there
+   * is always a set of minimal profiles to export and import to, Zettlr will
+   * ensure that these standard defaults files will always be present. With this
+   * flag, renderer elements can additionally indicate that. This helps prevent
+   * some misconceptions, i.e. why certain files cannot be deleted.
+   */
+  isProtected?: boolean
+}
 
 export default class AssetsProvider extends ProviderContract {
   /**
@@ -81,6 +109,9 @@ export default class AssetsProvider extends ProviderContract {
       } else if (command === 'list-export-profiles') {
         const profiles = await this.listDefaults()
         return profiles.concat(getCustomProfiles())
+      } else if (command === 'open-defaults-directory') {
+        this._logger.info(`[AssetsProvider] Opening path ${this._defaultsPath}`)
+        return await shell.openPath(this._defaultsPath)
       } else if (command === 'get-snippet') {
         return await this.getSnippet(payload.name)
       } else if (command === 'set-snippet') {
@@ -91,6 +122,9 @@ export default class AssetsProvider extends ProviderContract {
         return await this.listSnippets()
       } else if (command === 'rename-snippet') {
         return await this.renameSnippet(payload.name, payload.newName)
+      } else if (command === 'open-snippets-directory') {
+        this._logger.info(`[AssetsProvider] Opening path ${this._snippetsPath}`)
+        return await shell.openPath(this._snippetsPath)
       }
     })
   }

@@ -113,7 +113,9 @@ export const formattingToolbar = [
       margin: '0',
       backgroundColor: 'transparent',
       borderRadius: '0',
-      lineHeight: '30px'
+      lineHeight: '30px',
+      padding: '0',
+      width: '30px'
     },
     '&dark .cm-tooltip.cm-formatting-bar button.formatting-toolbar-button': {
       color: 'rgb(200, 200, 200)'

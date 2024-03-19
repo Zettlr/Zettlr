@@ -17,7 +17,6 @@ import { app } from 'electron'
 import { promises as fs } from 'fs'
 import isFile from '../../common/util/is-file'
 import isTraySupported from './is-tray-supported'
-import commandExists from 'command-exists'
 import { getProgramVersion } from './get-program-version'
 import fixPath from 'fix-path'
 
@@ -117,7 +116,6 @@ export default async function environmentCheck (): Promise<void> {
 
   // Now, let's see if there's a quarto package installed
   try {
-    await commandExists('quarto')
     const version = await getProgramVersion('quarto')
     console.log(`[Application] Found a system-wide Quarto install! Version ${String(version)}`)
     process.env.QUARTO_SUPPORT = '1'
@@ -130,9 +128,8 @@ export default async function environmentCheck (): Promise<void> {
 
   // Finally, determine if git is installed on this machine
   try {
-    await commandExists('git')
-    process.env.GIT_SUPPORT = '1'
     const version = await getProgramVersion('git')
+    process.env.GIT_SUPPORT = '1'
     process.env.GIT_VERSION = version
   } catch (err) {
     process.env.GIT_SUPPORT = '0'

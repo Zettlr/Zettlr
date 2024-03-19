@@ -41,8 +41,10 @@ export default async function shouldReplaceFileDialog (config: ConfigProvider, w
   }
 
   // Asynchronous message box to not block the main process
-  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
-  const response = ([ 'darwin', 'win32' ].includes(process.platform)) ? await dialog.showMessageBox(win, options) : await dialog.showMessageBox(options)
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status
+  // vs. promise awaits. UPDATE 2024-03-11: In response to #4952, removing the
+  // platform check again.
+  const response = await dialog.showMessageBox(win, options)
 
   config.set('alwaysReloadFiles', response.checkboxChecked)
 

@@ -77,6 +77,10 @@ declare const PROJECT_PROPERTIES_WEBPACK_ENTRY: string
 declare const SPLASH_SCREEN_WEBPACK_ENTRY: string
 declare const SPLASH_SCREEN_PRELOAD_WEBPACK_ENTRY: string
 
+// Contains the git build number
+// eslint-disable-next-line @typescript-eslint/naming-convention
+declare const __GIT_COMMIT_HASH__: string
+
 /**
  * Declare and extend the global NodeJS object to enable the globals
  * for the service providers.
@@ -162,62 +166,5 @@ declare interface Window {
      * @return {Function}  A function to stop listening (remove the listener)
      */
     on: (channel: string, listener: (event: undefined, ...args: any) => void) => () => void
-  }
-  clipboard: {
-    /**
-     * Returns whatever text is currently in the clipboard
-     *
-     * @return  {string}  The clipboard's plain text contents
-     */
-    readText: () => string
-    /**
-     * Returns whatever HTML is currently in the clipboard
-     *
-     * @return  {string}  The clipboard's HTML contents
-     */
-    readHTML: () => string
-    /**
-     * Returns whatever RTF is currently in the clipboard
-     *
-     * @return  {string}  The clipboard's RTF contents
-     */
-    readRTF: () => string
-    /**
-     * Is there currently image data in the clipboard?
-     *
-     * @return  {boolean}  True if the clipboard contains a non-empty image
-     */
-    hasImage: () => boolean
-    /**
-     * Returns the image data for the clipbord content
-     *
-     * @return {{ size: Electron.Size, aspect: number, dataUrl: string }} The image data
-     */
-    getImageData: () => { size: Electron.Size, aspect: number, dataUrl: string }
-    /**
-     * Writes the data into the clipboard
-     *
-     * @param {Electron.Data} data The data to be written to the clipboard
-     */
-    write: (data: Electron.Data) => void
-    /**
-     * Writes the given text into the clipboard
-     *
-     * @param   {string}  text  The text to put into the clipboard
-     */
-    writeText: (text: string) => void
-    /**
-     * Determines whether there is currently a selection clipboard (Linux)
-     *
-     * @return  {boolean}  True if there is a selection clipboard
-     */
-    hasSelectionClipboard: () => boolean
-    /**
-     * Returns the plain text and HTML contents of the selection clipboard on
-     * linux.
-     *
-     * @return  {{text: string, html: string}}}  Returns an object containing HTML and text contents
-     */
-    getSelectionClipboard: () => { text: string, html: string }
   }
 }

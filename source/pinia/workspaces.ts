@@ -18,7 +18,7 @@ import { mergeEventsIntoTree } from '@providers/workspaces/merge-events-into-tre
 import { defineStore } from 'pinia'
 import { ref, computed, watch, type Ref } from 'vue'
 import locateByPath from '@providers/fsal/util/locate-by-path'
-import { useConfigStore } from './config'
+import { useConfigStore } from '.'
 import { getSorter } from '@providers/fsal/util/directory-sorter'
 import { sortDirectory } from '@providers/workspaces/sort-all-directories'
 
@@ -59,8 +59,8 @@ async function processNextRootUpdateRequest (): Promise<void> {
  * @param   {Ref<RootRefValue>}              roots         The reactive roots
  */
 async function updateRoot (rootPath: string, roots: Ref<RootRefValue>): Promise<void> {
-  const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = useConfigStore().config
-  const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
+  const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = useConfigStore().config
+  const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
   const root = roots.value.find(root => root.descriptor.path === rootPath)
 
   if (root === undefined) {
@@ -135,7 +135,7 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
     const sortFoldersFirst = configStore.config.sortFoldersFirst
     const fileNameDisplay = configStore.config.fileNameDisplay
     const appLang = configStore.config.appLang
-    const sortingTime = configStore.config.sortingTime
+    const sortingTime = configStore.config.fileMetaTime
     return { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime }
   })
 

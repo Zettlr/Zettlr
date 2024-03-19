@@ -26,9 +26,10 @@ import {
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 import { php } from '@codemirror/lang-php'
 import { python } from '@codemirror/lang-python'
-import { cssLanguage } from '@codemirror/lang-css'
-import { javascriptLanguage, typescriptLanguage } from '@codemirror/lang-javascript'
-import { jsonLanguage } from '@codemirror/lang-json'
+import { css } from '@codemirror/lang-css'
+import { javascript } from '@codemirror/lang-javascript'
+import { json } from '@codemirror/lang-json'
+import { yaml } from '@codemirror/lang-yaml'
 // Now from the legacy modes package
 import { c, cpp, csharp, java, kotlin, objectiveC, dart, scala } from '@codemirror/legacy-modes/mode/clike'
 import { clojure } from '@codemirror/legacy-modes/mode/clojure'
@@ -46,7 +47,6 @@ import { sql } from '@codemirror/legacy-modes/mode/sql'
 import { swift } from '@codemirror/legacy-modes/mode/swift'
 import { shell } from '@codemirror/legacy-modes/mode/shell'
 import { vb } from '@codemirror/legacy-modes/mode/vb'
-import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { go } from '@codemirror/legacy-modes/mode/go'
 import { rust } from '@codemirror/legacy-modes/mode/rust'
 import { julia } from '@codemirror/legacy-modes/mode/julia'
@@ -73,7 +73,7 @@ import { frontmatterParser } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
 import { sloppyParser } from './sloppy-parser'
 import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
-import { zknLinkParser } from './zkn-link-parser'
+import { type ZknLinkParserConfig, zknLinkParser } from './zkn-link-parser'
 import { pandocAttributesParser } from './pandoc-attributes-parser'
 import { highlightParser } from './highlight-parser'
 import { zknTagParser } from './zkn-tag-parser'
@@ -87,11 +87,12 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
     mode: StreamLanguage.define({ token (stream, state) { stream.skipToEnd(); return null } }),
     selectors: ['mermaid']
   },
-  { mode: cssLanguage, selectors: ['css'] },
-  { mode: javascriptLanguage, selectors: [ 'javascript', 'js', 'node' ] },
-  { mode: jsonLanguage, selectors: ['json'] },
+  { mode: css().language, selectors: ['css'] },
+  { mode: javascript().language, selectors: [ 'javascript', 'js', 'node' ] },
+  { mode: json().language, selectors: ['json'] },
   { mode: markdownLanguage, selectors: [ 'markdown', 'md' ] },
-  { mode: php().language, selectors: ['php'] },
+  // NOTE: The PHP parser usually expects the PHP code to start with <?, unless "plain" is set
+  { mode: php({ plain: true }).language, selectors: ['php'] },
   { mode: python().language, selectors: [ 'python', 'py' ] },
   { mode: StreamLanguage.define(c), selectors: ['c'] },
   { mode: StreamLanguage.define(clojure), selectors: ['clojure'] },
@@ -136,9 +137,13 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(verilog), selectors: [ 'verilog', 'v' ] },
   { mode: StreamLanguage.define(vhdl), selectors: [ 'vhdl', 'vhd' ] },
   { mode: StreamLanguage.define(xml), selectors: ['xml'] },
-  { mode: StreamLanguage.define(yaml), selectors: [ 'yaml', 'yml' ] },
-  { mode: typescriptLanguage, selectors: [ 'typescript', 'ts' ] }
+  { mode: yaml().language, selectors: [ 'yaml', 'yml' ] },
+  { mode: javascript({ typescript: true }).language, selectors: [ 'typescript', 'ts' ] }
 ]
+
+export interface MarkdownParserConfig {
+  zknLinkParserConfig?: ZknLinkParserConfig
+}
 
 // TIP: Uncomment the following line to get a full list of all unique characters
 // that are capable of belonging to a selector
@@ -146,7 +151,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
 
 // This file returns a syntax extension that provides parsing and syntax
 // capabilities
-export default function markdownParser (): LanguageSupport {
+export default function markdownParser (config?: MarkdownParserConfig): LanguageSupport {
   return markdown({
     base: markdownLanguage,
     codeLanguages: (infoString) => {
@@ -183,7 +188,7 @@ export default function markdownParser (): LanguageSupport {
         footnoteParser,
         citationParser,
         sloppyParser,
-        zknLinkParser,
+        zknLinkParser(config?.zknLinkParserConfig),
         zknTagParser,
         pandocAttributesParser,
         highlightParser
@@ -210,6 +215,8 @@ export default function markdownParser (): LanguageSupport {
         { name: 'FootnoteRefBody', style: customTags.FootnoteRefBody },
         { name: 'ZknLink', style: customTags.ZknLink },
         { name: 'ZknLinkContent', style: customTags.ZknLinkContent },
+        { name: 'ZknLinkTitle', style: customTags.ZknLinkTitle },
+        { name: 'ZknLinkPipe', style: customTags.ZknLinkPipe },
         { name: 'ZknTag', style: customTags.ZknTag },
         { name: 'ZknTagContent', style: customTags.ZknTagContent },
         { name: 'PandocAttribute', style: customTags.PandocAttribute }

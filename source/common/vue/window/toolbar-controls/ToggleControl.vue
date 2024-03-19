@@ -1,18 +1,20 @@
 <template>
-  <button
-    v-bind:id="`toolbar-${control.id}`"
-    role="button"
-    v-bind:aria-pressed="isActive"
-    v-bind:class="{
-      toggle: true,
-      active: isActive
-    }"
-    v-bind:title="titleWithFallback"
-    v-on:click="toggle"
-  >
-    <cds-icon v-if="control.icon" v-bind:shape="control.icon"></cds-icon>
-    <span v-if="showLabel === true" class="toolbar-label" v-html="labelWithFallback"></span>
-  </button>
+  <div class="toolbar-group">
+    <button
+      v-bind:id="`toolbar-${control.id}`"
+      role="button"
+      v-bind:aria-pressed="isActive"
+      v-bind:class="{
+        toggle: true,
+        active: isActive
+      }"
+      v-bind:title="titleWithFallback"
+      v-on:click="toggle"
+    >
+      <cds-icon v-if="control.icon" v-bind:shape="control.icon"></cds-icon>
+      <span v-if="showLabel === true" class="toolbar-label" v-html="labelWithFallback"></span>
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">

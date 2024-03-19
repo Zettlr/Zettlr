@@ -54,7 +54,8 @@ import {
   getMarkdownExtensions,
   getTexExtensions,
   getYAMLExtensions,
-  inputModeCompartment
+  inputModeCompartment,
+  getMainEditorThemes
 } from './editor-extension-sets'
 
 import {
@@ -90,6 +91,13 @@ import {
 } from './plugins/remote-doc'
 import { markdownToAST } from '../markdown-utils'
 import { countField } from './plugins/statistics-fields'
+import type { SyntaxNode } from '@lezer/common'
+import { darkModeEffect } from './theme/dark-mode'
+import { themeBerlinDark, themeBerlinLight } from './theme/berlin'
+import { themeBielefeldDark, themeBielefeldLight } from './theme/bielefeld'
+import { themeBordeauxDark, themeBordeauxLight } from './theme/bordeaux'
+import { themeFrankfurtDark, themeFrankfurtLight } from './theme/frankfurt'
+import { themeKarlMarxStadtDark, themeKarlMarxStadtLight } from './theme/karl-marx-stadt'
 
 export interface DocumentWrapper {
   path: string
@@ -278,9 +286,7 @@ export default class MarkdownEditor extends EventEmitter {
         // both end up in our cache.
         for (const transaction of update.transactions) {
           for (const effect of transaction.effects) {
-            if (effect.is(configUpdateEffect)) {
-              this.onConfigUpdate(effect.value)
-            } else if (effect.is(reloadStateEffect)) {
+            if (effect.is(reloadStateEffect)) {
               // ATTENTION: The document state is out of sync with the document
               // authority, so we must reload it.
               this.reload().catch(err => console.error('Could not reload document state', err))
@@ -307,22 +313,55 @@ export default class MarkdownEditor extends EventEmitter {
           // Both plain URLs as well as Zettelkasten links and tags are
           // implemented on the syntax tree.
           if (nodeAt.type.name === 'URL') {
-            // We found a link!
+            // We found a plain link!
             const url = view.state.sliceDoc(nodeAt.from, nodeAt.to)
-            openMarkdownLink(url, view)
+            if (url.startsWith('[[') && url.endsWith(']]')) {
+              editorInstance.emit('zettelkasten-link', url.substring(2, url.length - 2))
+            } else {
+              openMarkdownLink(url, view)
+            }
             event.preventDefault()
             return true
-          } else if (nodeAt.type.name === 'ZknLinkContent') {
+          } else if ([ 'ZknLinkContent', 'ZknLinkTitle', 'ZknLinkPipe' ].includes(nodeAt.type.name)) {
             // We found a Zettelkasten link!
-            const linkContents = view.state.sliceDoc(nodeAt.from, nodeAt.to)
-            editorInstance.emit('zettelkasten-link', linkContents)
             event.preventDefault()
+            // In these cases, nodeAt.parent is always a ZettelkastenLink
+            const contentNode = nodeAt.parent?.getChild('ZknLinkContent')
+            if (contentNode != null) {
+              const linkContents = view.state.sliceDoc(contentNode.from, contentNode.to)
+              editorInstance.emit('zettelkasten-link', linkContents)
+            }
             return true
           } else if (nodeAt.type.name === 'ZknTagContent') {
             // A tag!
             const tagContents = view.state.sliceDoc(nodeAt.from, nodeAt.to)
             editorInstance.emit('zettelkasten-tag', tagContents)
             event.preventDefault()
+            return true
+          }
+
+          // Lastly, the user may have clicked somewhere in a link. However,
+          // since the link description can take various inline elements, we
+          // have to recursively move up the tree until we find a 'Link' element
+          // or abort if we reach the top
+          let currentNode: SyntaxNode|null = nodeAt
+          while (currentNode !== null && currentNode.name !== 'Link') {
+            currentNode = currentNode.parent
+          }
+
+          if (currentNode !== null) {
+            // We have a link
+            const urlNode = currentNode.getChild('URL')
+            if (urlNode !== null) {
+              const url = view.state.sliceDoc(urlNode.from, urlNode.to)
+              if (url.startsWith('[[') && url.endsWith(']]')) {
+                editorInstance.emit('zettelkasten-link', url.substring(2, url.length - 2))
+              } else {
+                openMarkdownLink(url, view)
+              }
+              event.preventDefault()
+              return true
+            }
           }
         }
       }
@@ -474,7 +513,12 @@ export default class MarkdownEditor extends EventEmitter {
     // configuration. However, in case there's no state (initial update), we
     // still need to cache the config here, as the updateListener won't be
     // firing yet.
+
+    // Cache the current config first, and then apply it
+    this.onConfigUpdate(newOptions)
+
     this.config = safeAssign(newOptions, this.config)
+
     this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
   }
 
@@ -488,19 +532,30 @@ export default class MarkdownEditor extends EventEmitter {
    */
   private onConfigUpdate (newOptions: Partial<EditorConfiguration>): void {
     const inputModeChanged = newOptions.inputMode !== undefined && newOptions.inputMode !== this.config.inputMode
-
-    // Cache the current config first, and then apply it
-    this.config = safeAssign(newOptions, this.config)
+    const darkModeChanged = newOptions.darkMode !== undefined && newOptions.darkMode !== this.config.darkMode
+    const themeChanged = newOptions.theme !== undefined && newOptions.theme !== this.config.theme
 
     // Third: The input mode, if applicable
     if (inputModeChanged) {
-      if (this.config.inputMode === 'emacs') {
+      if (newOptions.inputMode === 'emacs') {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure(emacs()) })
-      } else if (this.config.inputMode === 'vim') {
+      } else if (newOptions.inputMode === 'vim') {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure(vim()) })
       } else {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure([]) })
       }
+    }
+
+    // Fourth: Switch theme, if applicable
+    if (darkModeChanged || themeChanged) {
+      const themes = getMainEditorThemes()
+
+      this._instance.dispatch({
+        effects: darkModeEffect.of({
+          darkMode: newOptions.darkMode,
+          ...themes[newOptions.theme ?? this.config.theme]
+        })
+      })
     }
   }
 

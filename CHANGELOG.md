@@ -1,12 +1,5 @@
 # Upcoming
 
-## Dropping Support for macOS 10.13 and 10.14
-
-Due to Zettlr's underlying Electron framework dropping support for macOS 10.13
-(High Sierra) and 10.14 (Mojave), Zettlr drops support for these operating
-systems as well. To continue to use Zettlr on a Mac, ensure to update to at
-least macOS 10.15 (Catalina).
-
 ## Changes to the link detection
 
 For a long time now, Zettlr would (sometimes aggressively so) detect plain links
@@ -31,15 +24,59 @@ This changes brings Zettlr's link functionality much more into alignment with
 other editors as well, since this is the way that many other applications handle
 links as well.
 
-## Linux ARM builds functionally again
+## Introducing Wikilink Titles
 
-Since Zettlr v3.0.0, Linux users on ARM-machines had the issue that they could
-not run the app, as a dependency has been compiled for the wrong architecture.
-Thanks to efforts by @LaPingvino, this has now been finally fixed and you should
-be able to run the app again just fine on ARM computers with Linux.
+This update brings a long-awaited change to Zettlr's handling of internal links
+(sometimes called Wikilinks). Specifically, with this version, Zettlr finally
+supports optional titles in such links. Your old links in the format `[[link]]`
+still work fine, but now you can add a title that is different from the link,
+separated by a pipe, or vertical bar character (`|`).
+
+If such a title is given, Zettlr will use it in various ways to make your files
+more readable. For example, if you have the link renderer activated in the
+settings, it will take care of hiding the link target of Wikilinks as well as
+those of regular Markdown links.
+
+Since there is no way of knowing which of the two parts is the link, and which
+is the title, Zettlr follows Pandoc's solution in allowing you to specify how
+internal links are structured for you. The default and recommended setting is to
+put links first, and titles second (`[[link|title]]`). This ensure compatibility
+with VimWiki, MediaWiki, Obsidian, and others. However, should you need to
+target GitHub wiki pages or another application that expects a title to come
+first, you can select the alternative option (`[[title|link]]`).
+
+In order to make Pandoc aware of your choice, you can add one of the following
+reader extensions to your export profiles: `wikilinks_title_after_pipe` or
+`wikilinks_title_before_pipe`.
+
+Lastly, due to this improvement, we have changed the default setting for "link
+with filename" from "always" to "never", since it will be more ergonomic to use
+a custom link title directly instead of having the filename pop up after the
+link. This default setting applies to new installations; so you may consider to
+change this setting manually yourself as well.
+
+## Re-enabling old Link-Title-Syntax
+
+After the release of Zettlr v3.0.0, some users have complained that their
+internal links have stopped working. It turns out that quite a lot were using
+Logseq's syntax for adding titles to internal links (`[Title]([[Link]])`), which
+we broke during a refactor of the Markdown parser. This update partially
+restores this link functionality, allowing you to `Cmd/Ctrl-Click` them to
+follow these links again.
+
+Note that we have not yet implemented the functionality of auto-renaming files
+or showing tooltips on these links.
 
 ## GUI and Functionality
 
+- **Feature**: Zettlr now supports titles in internal (wiki) links; the default
+  setting instructs the parser to expect first the link, and then the title
+  (`[[link|title]]`), which ensures compatibility to, e.g., VimWiki, MediaWiki,
+  or Obsidian, whereas the alternative setting (`[[title|link]]`) is compatible
+  to GitHub wiki syntax. Remember that you need to enable the corresponding
+  option on the Pandoc Markdown reader (`wikilinks_title_after_pipe` or
+  `wikilinks_title_before_pipe`, respectively) if you wish to export files with
+  this option
 - **Feature**: Zettlr can now suggest you emojis during autocompletion. Emojis
   use the same trigger character as the snippets autocomplete, a colon (`:`);
   and Emojis will always be sorted below your snippets -- you can turn this off
@@ -50,6 +87,8 @@ be able to run the app again just fine on ARM computers with Linux.
 - Removed the option for choosing to sort by either file creation or last
   modification time, since that can also be inferred from whichever time you
   choose to display
+- **Feature**: The assets manager now provides buttons to open the defaults and
+  snippets directories directly from within the app
 - Removed the option for activating or disabling automatic file creation upon
   following internal links; now this will happen automatically as long as the
   "custom folder" option points to an existing folder; to disable this
@@ -69,7 +108,6 @@ be able to run the app again just fine on ARM computers with Linux.
   as text, instead of offering to insert an image of the selection
 - Fix pasting behavior: Now Zettlr should properly paste most formatted text
   without too much noise (in the form of comments, styles, and other additions)
-- Fix Linux ARM builds
 - Fix restart-dialog showing multiple times for the same options (#4768)
 - Fix the active typewriter line background color in dark mode
 - Fixed an issue where gutter markers were not equally offset when typewriter
@@ -81,8 +119,63 @@ be able to run the app again just fine on ARM computers with Linux.
   boot (#3797)
 - Fixed an issue that would break drag & drop behavior of editor panes when the
   pathname contained a colon on non-Windows systems (#4822)
-- Fixes an issue where the re-ordering of list item numbers would not ensure
+- Fixed an issue where the re-ordering of list item numbers would not ensure
   that lists start at 1
+- Fixed an issue that has removed the custom background color from the Bielefeld
+  and Bordeaux themes (#4913)
+- Fixed broken context menu options for images (#4893)
+- Implemented superscript and subscript HTML rendering in the internal Markdown-
+  to-HTML converter (#4943)
+- Improved the TableEditor to more reliably parse tables; also, when a table
+  could not be rendered out of any reason, the editor will simply remain dormant
+  and not render the table instead of messing up the entire document
+- Improvements to how the Markdown AST handles table parsing, which will improve
+  Markdown-to-HTML conversion both within the TableEditor as well as when
+  copying as HTML
+- Fixed an issue that would make a context menu on macOS appear offset from the
+  actual mouse position if the window's GUI was scaled absolutely (as per the
+  preferences); now the context menu should always appear exactly where it
+  should be
+- Updated the CodeMirror dependencies to resolve an issue where users of
+  keyboards with `Alt-G` being assigned to some character were unable to type
+  that (specifically, Swiss-Mac keyboard users could not type an `@`)
+- Fixed a bug that would not properly highlight PHP syntax in code blocks
+- The link renderer will now also hide internal link/Wikilink links and only
+  show the headers, if enabled
+- Internal link tooltips will now show regardless of where inside the link your
+  mouse cursor is
+- Added a visible error message to two places in which saving documents may go
+  wrong so that users have visible feedback if their changes are actually
+  persisted to disk (#4229)
+- Re-enable following internal Links in the format `[Title]([[Link]])` by
+  clicking them with `Cmd/Ctrl` pressed
+- Fixed a bug that would not properly check for autocorrect values during a
+  spell check
+- The cursor on the editor scrollbars should now be a regular pointer instead of
+  a text cursor (#4441)
+- The global search now differentiates between the total amount of matches and
+  the number of matched files
+- The search button in the global search will now be disabled during a search
+- Due to the new ability to add link titles, the default setting for "Link with
+  filename" is now set to "never" for new installations; you may consider
+  changing this as well
+- The updater now contains a message indicating when Zettlr last checked for
+  updates (#4963)
+- Fixed a bug that would sometimes make the "New file" command hang (#4785)
+- Fixed a bug on Windows and Linux that would not make the context menu on the
+  statusbars' MagicQuotes handler appear
+- Fixed a bug in the print window (#4902)
+- Fixed a bug in the image pasting modal handler (#5007)
+- Fixed a bug caused by a workaround from a few years ago, making dialogs modal
+  again (see #4952)
+- Fixed an issue that would prevent the status bar in Code editors to switch
+  between light and dark
+- Fixed an issue that would not show the color picker's color in the tag manager
+  on Windows
+- Fixed list item indentation in Markdown and Code files
+- Fixed a bug that would make Zettlr always save files with regular newlines
+  (LF), even if the file originally uses carriage returns (CR) or a mixture
+  (CRLF or LFCR), leading, among other things, to save issues (#4959)
 
 ## Under the Hood
 
@@ -93,18 +186,122 @@ be able to run the app again just fine on ARM computers with Linux.
   inferred from the option `zkn.customDir`
 - Simplified tab bar tab retention logic across reloads
 - Add the ability to programmatically open the assets window with specified tab
-- Bump the bundled Pandoc to version `3.1.11`
+- Bump the bundled Pandoc to version `3.1.12`
+- Bump Electron to version `29`
 - Failure to fetch a link preview will now simply log a verbose message instead
   of an error
 - Reimplement configuration guard options as Maps to allow for volatile state
-- Begin migrating application state to Pinia
-- Upgrade Electron to v28
 - Fully remove the renderers's dependency on Node.js's path module to prepare
   for fully sandboxing the window code; instead polyfill the required functions,
   testing them against the module's behavior
 - Completely sandbox renderers
 - Switched the popover logic away from deprecated plugin syntax to child
   components with `Teleport` (#4663)
+- No more JavaScript: With this update, the entire code base (sans build
+  scripts) is written in TypeScript.
+- Migrated from Electron's deprecated clipboard API to the native Browser API
+- Migrated the entire main window store state from Vuex to Pinia
+- Fixed an issue with the FSALCache provider where we accidentally stored the
+  descriptors as strings, increasing the complexity of loading the cache values
+  (see #4269)
+- The internal Markdown-to-HTML converter now respects (potentially significant)
+  whitespace in the Markdown source to construct the HTML
+- The TableEditor now parses any table directly from the underlying parser to
+  ensure that the representation is (almost) identical to the parse state and
+  reduce complexity when parsing the table; several edge cases remain
+- Removed a check for whether certain commands exist; instead we now attempt to
+  run them, and if they do not succeed, we catch that error instead; removed
+  `commandExists` as it appears to have a few minor issues on Windows installs
+- The config provider now allows specifying options that will cause an event to
+  be emitted instructing every open MainEditor to reload itself; this can be
+  used to change options that affect non-reloadable components such as the
+  parser without having to manually close and re-open affected editors, or
+  forcing a reload of the entire main window
+- MainEditors can now be programmatically instructed by the main process to
+  reload themselves with the broadcast event `reload-editors`
+- Added the commands `shortcut:install` and `shortcut:uninstall` to add develop
+  shortcuts on Linux systems, allowing the simple launching of a binary compiled
+  from source (rather than the provided binaries)
+- Fixed an issue with showing the appropriate `platformVersion` in the about
+  debug info tab
+- Move `preventNavigation` utility function into the lifecycle handlers to
+  reduce boilerplate code and make the app more secure
+- Switched to the new YAML parser (`@codemirror/lang-yaml`)
+- Improved linting to include plain JavaScript files, but exclude type checking
+- Add build number (= git commit hash) to the debug info of the about dialog
+- Simplify exporter types
+- Retire the `test-gui` command; instead now the `start` command does the same;
+  similarly, `start` won't touch any existing Zettlr configuration anymore
+- Simplify CodeMirror theming, retire the `themeManager` and replace it with a
+  simpler, more general `darkTheme` extension
+- Disallow fuzzy matching during updates of translation files; previously this
+  has led to inaccurate results (see, e.g., #5042)
+
+# 3.0.5
+
+## Dropping Support for macOS 10.13 and 10.14
+
+Due to Zettlr's underlying Electron framework dropping support for macOS 10.13
+(High Sierra) and 10.14 (Mojave), Zettlr drops support for these operating
+systems as well. To continue to use Zettlr on a Mac, ensure to update to at
+least macOS 10.15 (Catalina).
+
+## Linux ARM builds functionally again
+
+Since Zettlr v3.0.0, Linux users on ARM-machines had the issue that they could
+not run the app, as a dependency has been compiled for the wrong architecture.
+Thanks to efforts by @LaPingvino, this has now been finally fixed and you should
+be able to run the app again just fine on ARM computers with Linux.
+
+## GUI and Functionality
+
+- Fix: Segmentation faults in Wayland environments (#4877)
+- Fix Linux ARM builds (#4910)
+
+## Under the Hood
+
+- Update Electron from v25 to the latest available release (`v28.2.1`); this
+  fixes segmentation fault issues in Wayland environments (#4877) and ensures
+  that Zettlr keeps running a supported Electron version, which is especially
+  pressing for the Arch Linux repository (see #4887; thanks to @alerque for
+  bringing this to our attention), but also means that macOS 10.13 and 10.14 are
+  no longer supported
+- Switched to Zig compiler to enable successful compilation for Linux ARM
+  targets (#4910)
+
+# 3.0.4
+
+## Security patch -- Please Update immediately
+
+Dear users,
+
+a security researcher has brought to our attention an issue that can lead to a
+potential remote code execution (RCE) attack utilizing Zettlr's binary. This
+issue has been first discovered and exploited in 2023. It is unlikely that you
+have been affected, since the effort for this exploit is comparatively high and
+it requires you to take some non-trivial actions. However, since we are
+committed to making the app as safe as humanely possible to use, and the
+corresponding fix was pretty easy to implement, we decided to offer this
+security release that includes the same functionality as Zettlr v3.0.3, but with
+the added security patch included.
+
+A CVE (Common Vulnerabilities and Exposures) number has been applied for at
+MITRE, but not yet issued. Once we know the number, we will publish a postmortem
+on our blog and include some background as well as details about what this issue
+exactly implied, how it could have been exploited, and how we have mitigated the
+issue in this patch.
+
+## GUI and Functionality
+
+Nothing changed.
+
+## Under the hood
+
+- Update Electron to the last version 25 update (`v25.9.8`)
+- Add Electron fuses support and disable those that allow certain debug commands
+  to be sent to the binary (e.g., `--inspect`). This can be abused by malicious
+  actors for remote code execution (RCE) attacks (CVE number applied for at
+  MITRE; not yet issued; please see the Zettlr blog for updates)
 
 # 3.0.3
 
@@ -197,6 +394,12 @@ but the possibility of having to adapt the Custom CSS may arise for some of you.
   copying the file
 - If multiple candidate profiles to import files are found, the user can now
   choose the correct one
+- Cmd/Ctrl-Clicking on non-rendered Markdown links will now have the same effect
+  as directly clicking on the URL part of the link: follow the link
+- The link renderer is now native in that it simply hides formatting characters
+  instead of rendering a widget in place of the link; making inline formatting
+  easier. NOTE: When copying a link as HTML, inline formatting in the
+  descriptions is not yet parsed to HTML due to a limitation in the AST parser
 
 ## Under the Hood
 

@@ -19,7 +19,6 @@ import {
   type BrowserWindowConstructorOptions
 } from 'electron'
 import attachLogger from './attach-logger'
-import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
 import type { WindowPosition } from './types'
 
@@ -62,9 +61,6 @@ export default function createAssetsWindow (logger: LogProvider, config: ConfigP
     })
 
   // EVENT LISTENERS
-
-  // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(logger, window)
 
   // Implement main process logging
   attachLogger(logger, window, 'Defaults Window')

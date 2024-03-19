@@ -1,152 +1,152 @@
 <template>
-  <hr v-if="field.type === 'separator'">
-  <p v-if="field.type === 'form-text' && field.display === 'info'" class="form-field-info-text">
-    {{ field.contents }}
+  <hr v-if="props.field.type === 'separator'">
+  <p v-if="props.field.type === 'form-text' && props.field.display === 'info'" class="form-field-info-text">
+    {{ props.field.contents }}
   </p>
-  <h4 v-if="field.type === 'form-text' && field.display === 'sub-heading'" class="form-field-sub-heading">
-    {{ field.contents }}
+  <h4 v-if="props.field.type === 'form-text' && props.field.display === 'sub-heading'" class="form-field-sub-heading">
+    {{ props.field.contents }}
   </h4>
   <Button
-    v-if="field.type === 'button'"
-    v-bind:label="field.label"
+    v-if="props.field.type === 'button'"
+    v-bind:label="props.field.label"
     v-bind:inline="true"
-    v-on:click="field.onClick()"
+    v-on:click="props.field.onClick()"
   ></Button>
   <TextInput
-    v-if="field.type === 'text'"
+    v-if="props.field.type === 'text'"
     v-bind:model-value="model"
-    v-bind:disabled="field.disabled"
-    v-bind:placeholder="field.placeholder"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-bind:reset="field.reset"
-    v-bind:info="field.info"
-    v-bind:inline="field.inline"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:disabled="props.field.disabled"
+    v-bind:placeholder="props.field.placeholder"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-bind:reset="props.field.reset"
+    v-bind:info="props.field.info"
+    v-bind:inline="props.field.inline"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></TextInput>
   <NumberInput
-    v-if="field.type === 'number'"
+    v-if="props.field.type === 'number'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-bind:reset="field.reset"
-    v-bind:inline="field.inline"
-    v-bind:disabled="field.disabled"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-bind:reset="props.field.reset"
+    v-bind:inline="props.field.inline"
+    v-bind:disabled="props.field.disabled"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></NumberInput>
   <TimeInput
-    v-if="field.type === 'time'"
+    v-if="props.field.type === 'time'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-bind:inline="field.inline"
-    v-bind:disabled="field.disabled"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-bind:inline="props.field.inline"
+    v-bind:disabled="props.field.disabled"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></TimeInput>
   <ColorInput
-    v-if="field.type === 'color'"
+    v-if="props.field.type === 'color'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-bind:inline="field.inline"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-bind:inline="props.field.inline"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></ColorInput>
   <FileInput
-    v-if="field.type === 'file'"
+    v-if="props.field.type === 'file'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:reset="field.reset"
-    v-bind:name="field.model"
-    v-bind:placeholder="field.placeholder"
+    v-bind:label="props.field.label"
+    v-bind:reset="props.field.reset"
+    v-bind:name="props.field.model"
+    v-bind:placeholder="props.field.placeholder"
     v-bind:directory="false"
-    v-bind:filter="field.filter"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:filter="props.field.filter"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></FileInput>
   <FileInput
-    v-if="field.type === 'directory'"
+    v-if="props.field.type === 'directory'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:reset="field.reset"
-    v-bind:name="field.model"
-    v-bind:placeholder="field.placeholder"
+    v-bind:label="props.field.label"
+    v-bind:reset="props.field.reset"
+    v-bind:name="props.field.model"
+    v-bind:placeholder="props.field.placeholder"
     v-bind:directory="true"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></FileInput>
   <CheckboxInput
-    v-if="field.type === 'checkbox'"
+    v-if="props.field.type === 'checkbox'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-bind:disabled="field.disabled"
-    v-bind:info="field.info"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-bind:disabled="props.field.disabled"
+    v-bind:info="props.field.info"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></CheckboxInput>
   <SwitchInput
-    v-if="field.type === 'switch'"
+    v-if="props.field.type === 'switch'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></SwitchInput>
   <RadioInput
-    v-if="field.type === 'radio'"
+    v-if="props.field.type === 'radio'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-bind:disabled="field.disabled"
-    v-bind:inline="field.inline"
-    v-bind:options="field.options"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-bind:disabled="props.field.disabled"
+    v-bind:inline="props.field.inline"
+    v-bind:options="props.field.options"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></RadioInput>
   <SelectInput
-    v-if="field.type === 'select'"
+    v-if="props.field.type === 'select'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-bind:options="field.options"
-    v-bind:inline="field.inline"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-bind:options="props.field.options"
+    v-bind:inline="props.field.inline"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></SelectInput>
   <ListControl
-    v-if="field.type === 'list'"
+    v-if="props.field.type === 'list'"
     v-bind:model-value="model"
-    v-bind:value-type="field.valueType"
-    v-bind:label="field.label"
-    v-bind:column-labels="field.columnLabels"
-    v-bind:key-names="field.keyNames"
-    v-bind:name="field.model"
-    v-bind:deletable="field.deletable"
-    v-bind:editable="field.editable"
-    v-bind:striped="field.striped"
-    v-bind:addable="field.addable"
-    v-bind:searchable="field.searchable"
-    v-bind:search-label="field.searchLabel"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:value-type="props.field.valueType"
+    v-bind:label="props.field.label"
+    v-bind:column-labels="props.field.columnLabels"
+    v-bind:key-names="props.field.keyNames"
+    v-bind:name="props.field.model"
+    v-bind:deletable="props.field.deletable"
+    v-bind:editable="props.field.editable"
+    v-bind:striped="props.field.striped"
+    v-bind:addable="props.field.addable"
+    v-bind:searchable="props.field.searchable"
+    v-bind:search-label="props.field.searchLabel"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></ListControl>
   <TokenInput
-    v-if="field.type === 'token'"
+    v-if="props.field.type === 'token'"
     v-bind:model-value="model"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></TokenInput>
   <!-- NOTE: For sliders we only listen to change events -->
   <SliderInput
-    v-if="field.type === 'slider'"
+    v-if="props.field.type === 'slider'"
     v-bind:model-value="model"
-    v-bind:min="field.min"
-    v-bind:max="field.max"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-on:change="$emit('update:modelValue', $event)"
+    v-bind:min="props.field.min"
+    v-bind:max="props.field.max"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></SliderInput>
   <ThemeInput
-    v-if="field.type === 'theme'"
+    v-if="props.field.type === 'theme'"
     v-bind:model-value="model"
-    v-bind:options="field.options"
-    v-bind:label="field.label"
-    v-bind:name="field.model"
-    v-on:update:model-value="$emit('update:modelValue', $event)"
+    v-bind:options="props.field.options"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-on:update:model-value="emit('update:modelValue', $event)"
   ></ThemeInput>
 </template>
 
@@ -183,15 +183,8 @@ import ThemeInput from './elements/ThemeSelector.vue'
  * END HEADER
  */
 
-interface Props {
-  field: FormField
-  model: any
-}
-
-type Emits = (e: 'update:modelValue', newValue: any) => void
-
-defineProps<Props>()
-defineEmits<Emits>()
+const props = defineProps<{ field: FormField, model: any }>()
+const emit = defineEmits<(e: 'update:modelValue', newValue: any) => void>()
 </script>
 
 <style lang="less">

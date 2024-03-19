@@ -244,8 +244,9 @@ export default class CiteprocProvider extends ProviderContract {
     try {
       await this.loadDatabase(this.mainLibrary)
     } catch (err: any) {
-      this._logger.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
-      this._windows.showErrorMessage(trans('The citation database could not be loaded'), err.message, err.message)
+      const msg = String(err.message)
+      this._logger.error(`[Citeproc Provider] Could not load main library: ${msg}`, err)
+      this._windows.showErrorMessage(trans('The citation database could not be loaded'), msg, msg)
     }
   }
 
@@ -289,7 +290,7 @@ export default class CiteprocProvider extends ProviderContract {
     )
 
     // The last parameter enforces usage of the language we provide
-    this.engine = new CSL.Engine(this.sys, style, this._config.get('appLang'), true)
+    this.engine = new CSL.Engine(this.sys, style, this._config.get().appLang, true)
     // ATTENTION: This is a development extension we're using to auto-wrap
     // links and DOIs in a-tags so that the user can click them in the
     // bibliography. Remove if it becomes unstable and implement manually.
@@ -451,8 +452,9 @@ export default class CiteprocProvider extends ProviderContract {
         this.loadDatabase(this.mainLibrary)
           .then(() => broadcastIpcMessage('citeproc-database-updated', CITEPROC_MAIN_DB))
           .catch(err => {
-            this._logger.error(`[Citeproc Provider] Could not reload main library: ${String(err.message)}`, err)
-            this._windows.showErrorMessage(trans('The citation database could not be loaded'), err.message)
+            const msg = String(err.message)
+            this._logger.error(`[Citeproc Provider] Could not reload main library: ${msg}`, err)
+            this._windows.showErrorMessage(trans('The citation database could not be loaded'), msg)
           })
       }
     }

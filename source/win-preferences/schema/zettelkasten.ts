@@ -13,9 +13,11 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
+import { type PreferencesFieldset } from '../App.vue'
+import { PreferencesGroups } from './_preferences-groups'
+import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
-export function getZettelkastenFields (): PreferencesFieldset[] {
+export function getZettelkastenFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
       title: trans('Zettelkasten IDs'),
@@ -57,18 +59,37 @@ export function getZettelkastenFields (): PreferencesFieldset[] {
             withID: trans('Only when linking using the ID'),
             never: trans('Never')
           },
-          disabled: window.config.get('zkn.linkFilenameOnly') === true
+          disabled: config.zkn.linkFilenameOnly
         },
         { type: 'separator' },
+        {
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Link format')
+        },
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('Internal links allow you to add an optional title, separated by a vertical bar character from the actual link target. Here you can define the ordering of the two.')
+        },
+        {
+          type: 'radio',
+          model: 'zkn.linkFormat',
+          options: {
+            'link|title': trans('[[Link|Title]]: Link first (recommended)'),
+            'title|link': trans('[[Title|Link]]: Title first')
+          }
+        },
+        {
+          type: 'separator'
+        },
         {
           type: 'checkbox',
           label: trans('Start a full-text search when following internal links'),
           info: trans('The search string will match the content between the brackets: [[ ]].'),
           model: 'zkn.autoSearch'
         },
-        {
-          type: 'separator'
-        },
+        { type: 'separator' },
         {
           type: 'form-text',
           display: 'sub-heading',

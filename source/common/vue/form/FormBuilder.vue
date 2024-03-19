@@ -25,7 +25,7 @@
             <FormFieldControl
               v-bind:field="fieldset.titleField"
               v-bind:model="getModelValue(fieldset.titleField.model)"
-              v-on:update:model-value="$emit('update:modelValue', fieldset.titleField.model, $event)"
+              v-on:update:model-value="emit('update:modelValue', fieldset.titleField.model, $event)"
             ></FormFieldControl>
           </div>
           <!-- Finally the optional help tooltip -->
@@ -377,7 +377,7 @@ body.dark .form-container {
   }
 }
 
-body.win32 .form-container {
+body.win32:not(.dark) .form-container {
   fieldset {
     border-radius: 0px;
     background-color: rgb(245, 245, 245);

@@ -2,9 +2,9 @@
   <div
     v-bind:class="{
       'spacer': true,
-      'spacer-5x': control.size === '5x',
-      'spacer-3x': control.size === '3x',
-      'spacer-1x': control.size === '1x'
+      'spacer-5x': props.control.size === '5x',
+      'spacer-3x': props.control.size === '3x',
+      'spacer-1x': props.control.size === '1x'
     }"
   ></div>
 </template>
@@ -37,8 +37,8 @@ const props = defineProps<{ control: ToolbarSpacerControl }>()
 <style lang="less">
 body #toolbar .spacer {
   flex-grow: 1;
-  &.spacer-5x { flex-grow: 0.5; }
-  &.spacer-3x { flex-grow: 0.3; }
-  &.spacer-1x { flex-grow: 0.1; }
+  &.spacer-5x { flex-grow: 5; }
+  &.spacer-3x { flex-grow: 3; }
+  &.spacer-1x { flex-grow: 1; }
 }
 </style>

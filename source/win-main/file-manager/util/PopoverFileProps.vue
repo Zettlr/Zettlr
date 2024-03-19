@@ -1,23 +1,23 @@
 <template>
-  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
-    <h4>{{ filename }}</h4>
+  <PopoverWrapper v-bind:target="target" v-on:close="emit('close')">
+    <h4>{{ props.file.name }}</h4>
     <div class="properties-info-container">
       <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
-      <div v-if="type === 'file'">
+      <div v-if="props.file.type === 'file'">
         <span>{{ formattedWords }}</span>
       </div>
       <div v-else>
-        <span>Type: <span class="badge primary">{{ ext.substring(1) }}</span></span>
+        <span>Type: <span class="badge primary">{{ props.file.ext.substring(1) }}</span></span>
       </div>
     </div>
     <div class="properties-info-container">
       <div><span>{{ modifiedLabel }}: {{ modificationTime }}</span></div>
       <div><span>{{ formattedSize }}</span></div>
     </div>
-    <template v-if="type === 'file' && tags.length > 0">
+    <template v-if="props.file.type === 'file' && props.file.tags.length > 0">
       <hr>
       <div>
-        <div v-for="(item, idx) in tags" v-bind:key="idx" class="badge">
+        <div v-for="(item, idx) in props.file.tags" v-bind:key="idx" class="badge">
           <span
             v-if="retrieveTagColour(item) !== ''"
             class="color-circle"
@@ -29,7 +29,7 @@
         </div>
       </div>
     </template>
-    <template v-if="type === 'file'">
+    <template v-if="props.file.type === 'file'">
       <hr>
       <p>
         {{ writingTargetTitle }}
@@ -53,7 +53,7 @@
   </PopoverWrapper>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -75,142 +75,77 @@ import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
 import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
-import { type ColoredTag } from '@providers/tags'
-import { type PropType } from 'vue'
+import { ref, computed, watch } from 'vue'
+import type { CodeFileDescriptor, MDFileDescriptor } from 'source/types/common/fsal'
+import { useConfigStore, useWritingTargetsStore, useTagsStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
-export default {
-  name: 'PopoverFileProps',
-  components: {
-    NumberControl,
-    SelectControl,
-    PopoverWrapper
-  },
-  props: {
-    target: {
-      type: HTMLElement,
-      required: true
-    },
-    filepath: {
-      type: String,
-      default: ''
-    },
-    filename: {
-      type: String,
-      default: ''
-    },
-    creationtime: {
-      type: Number,
-      default: 0
-    },
-    modtime: {
-      type: Number,
-      default: 0
-    },
-    tags: {
-      type: Object as PropType<string[]>,
-      default: () => { return {} }
-    },
-    colouredTags: {
-      type: Object as PropType<ColoredTag[]>,
-      default: () => { return {} }
-    },
-    targetValue: {
-      type: Number,
-      default: 0
-    },
-    targetMode: {
-      type: String,
-      default: 'words'
-    },
-    words: {
-      type: Number,
-      default: 0
-    },
-    fileSize: {
-      type: Number,
-      default: 0
-    },
-    type: {
-      type: String,
-      default: 'file'
-    },
-    ext: {
-      type: String,
-      default: '.md'
-    }
-  },
-  emits: ['close'],
-  data: function () {
-    return {
-      internalTargetMode: this.targetMode,
-      internalTargetValue: this.targetValue
-    }
-  },
-  computed: {
-    wordsLabel: function () {
-      return trans('Words')
-    },
-    createdLabel: function () {
-      return trans('Created')
-    },
-    modifiedLabel: function () {
-      return trans('Modified')
-    },
-    resetLabel: function () {
-      return trans('Reset')
-    },
-    writingTargetTitle: function () {
-      return trans('Set writing target…')
-    },
-    charactersLabel: function () {
-      return trans('Characters')
-    },
-    creationTime: function () {
-      return formatDate(new Date(this.creationtime), window.config.get('appLang'), true)
-    },
-    modificationTime: function () {
-      return formatDate(new Date(this.modtime), window.config.get('appLang'), true)
-    },
-    formattedSize: function () {
-      return formatSize(this.fileSize)
-    },
-    formattedWords: function () {
-      return trans('%s words', localiseNumber(this.words))
-    }
-  },
-  watch: {
-    internalTargetValue () {
-      this.updateWritingTarget()
-    },
-    internalTargetMode () {
-      this.updateWritingTarget()
-    }
-  },
-  methods: {
-    /**
-     * Resets the data, a.k.a. removes the writing target
-     */
-    reset: function () {
-      this.internalTargetValue = 0
-      this.internalTargetMode = 'words'
-    },
-    updateWritingTarget () {
-      ipcRenderer.invoke('targets-provider', {
-        command: 'set-writing-target',
-        payload: {
-          mode: this.internalTargetMode,
-          count: this.internalTargetValue,
-          path: this.filepath
-        }
-      }).catch(e => console.error(e))
-    },
-    retrieveTagColour: function (tagName: string) {
-      const foundTag = this.colouredTags.find(tag => tag.name === tagName)
-      return foundTag !== undefined ? foundTag.color : ''
-    }
+const props = defineProps<{
+  target: HTMLElement
+  file: MDFileDescriptor|CodeFileDescriptor
+}>()
+
+const wordsLabel = trans('Words')
+const createdLabel = trans('Created')
+const modifiedLabel = trans('Modified')
+const resetLabel = trans('Reset')
+const writingTargetTitle = trans('Set writing target…')
+const charactersLabel = trans('Characters')
+
+const emit = defineEmits<(e: 'close') => void>()
+
+const configStore = useConfigStore()
+const writingTargetsStore = useWritingTargetsStore()
+const tagStore = useTagsStore()
+
+const creationTime = computed(() => {
+  return formatDate(new Date(props.file.creationtime), configStore.config.appLang, true)
+})
+const modificationTime = computed(() => {
+  return formatDate(new Date(props.file.modtime), configStore.config.appLang, true)
+})
+const formattedSize = computed(() => formatSize(props.file.size))
+const formattedWords = computed(() => {
+  if (props.file.type === 'file') {
+    return trans('%s words', localiseNumber(props.file.wordCount))
+  } else {
+    return ''
   }
+})
+
+const fileTarget = computed(() => writingTargetsStore.targets.find(t => t.path === props.file.path))
+
+const internalTargetValue = ref(fileTarget.value?.count ?? 0)
+const internalTargetMode = ref(fileTarget.value?.mode ?? 'words')
+
+watch(internalTargetValue, updateWritingTarget)
+watch(internalTargetMode, updateWritingTarget)
+
+watch(fileTarget, () => {
+  internalTargetValue.value = fileTarget.value?.count ?? 0
+  internalTargetMode.value = fileTarget.value?.mode ?? 'words'
+})
+
+function reset (): void {
+  internalTargetValue.value = 0
+  internalTargetMode.value = 'words'
+}
+
+function updateWritingTarget (): void {
+  ipcRenderer.invoke('targets-provider', {
+    command: 'set-writing-target',
+    payload: {
+      mode: internalTargetMode.value,
+      count: internalTargetValue.value,
+      path: props.file.path
+    }
+  }).catch(e => console.error(e))
+}
+
+function retrieveTagColour (tagName: string): string {
+  const foundTag = tagStore.coloredTags.find(tag => tag.name === tagName)
+  return foundTag !== undefined ? foundTag.color : ''
 }
 </script>
 

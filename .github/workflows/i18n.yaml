@@ -13,7 +13,7 @@ permissions:
   contents: write
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
 
 # Ensure only a single build workflow runs at any one time
 concurrency:
@@ -25,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: develop
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'

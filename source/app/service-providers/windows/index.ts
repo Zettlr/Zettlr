@@ -776,16 +776,20 @@ export default class WindowProvider extends ProviderContract {
       }
       this._pasteImageModal = createPasteImageModal(this._logger, this._config, firstMainWin, startPath)
 
-      ipcMain.on('paste-image-ready', (event, data) => {
+      let hasResolved = false
+      ipcMain.once('paste-image-ready', (event, data) => {
         // Resolve now
         resolve(data)
+        hasResolved = true
         this._pasteImageModal?.close()
       })
 
-      // Dereference the modal as soon as it is closed
+      // Dereference the modal as soon as it is closed.
       this._pasteImageModal.on('closed', () => {
         ipcMain.removeAllListeners('paste-image-ready') // Not to have a dangling listener hanging around
-        resolve(undefined) // Resolve with undefined to indicate that the user has aborted
+        if (!hasResolved) {
+          resolve(undefined) // Resolve with undefined to indicate that the user has aborted
+        }
         this._pasteImageModal = null
       })
     })

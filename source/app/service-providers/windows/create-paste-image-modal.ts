@@ -20,7 +20,6 @@ import {
   type BrowserWindowConstructorOptions
 } from 'electron'
 import attachLogger from './attach-logger'
-import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
 
 /**
@@ -60,9 +59,6 @@ export default function createPasteImageModal (logger: LogProvider, config: Conf
     })
 
   // EVENT LISTENERS
-
-  // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(logger, window)
 
   // Implement main process logging
   attachLogger(logger, window, 'Paste Image Modal')

@@ -28,6 +28,7 @@ const commonRules: Record<string, any> = {
 export const themeBielefeldLight = EditorView.theme({
   ...commonRules,
   '.cm-scroller': {
+    backgroundColor: 'var(--beige-0)',
     color: 'var(--grey-5)',
     fontFamily: '"Liberation Mono", monospace'
   },

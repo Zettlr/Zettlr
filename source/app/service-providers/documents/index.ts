@@ -656,7 +656,7 @@ export default class DocumentManager extends ProviderContract {
     }
   }
 
-  private async pushUpdates (filePath: string, clientVersion: number, clientUpdates: any[]): Promise<boolean> { // clientUpdates must be produced via "toJSON"
+  private async pushUpdates (filePath: string, clientVersion: number, clientUpdates: Update[]): Promise<boolean> { // clientUpdates must be produced via "toJSON"
     const doc = this.documents.find(doc => doc.filePath === filePath)
     if (doc === undefined) {
       throw new Error(`Could not receive updates for file ${filePath}: Not found.`)
@@ -675,7 +675,17 @@ export default class DocumentManager extends ProviderContract {
     for (const update of clientUpdates) {
       const changes = ChangeSet.fromJSON(update.changes)
       doc.updates.push(update)
-      doc.document = changes.apply(doc.document)
+      try {
+        doc.document = changes.apply(doc.document)
+      } catch (err: any) {
+        dialog.showErrorBox(
+          'Document out of sync',
+          `Your modifications could not be applied to the document in memory.
+This means that saving might fail. Please report this bug to us, copy the
+current contents from the editor somewhere else, and restart the application.`
+        )
+        throw err
+      }
       doc.currentVersion = doc.minimumVersion + doc.updates.length
       // People are lazy, and hence there is a non-zero chance that in a few
       // instances the currentVersion will get dangerously close to
@@ -769,6 +779,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     if (windowId === undefined) {
+      this._app.log.warning(`Could not open file ${filePath}: windowId was undefined.`)
       return false
     }
 
@@ -785,6 +796,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     if (leaf === undefined) {
+      this._app.log.warning(`Could not open file ${filePath}: leaf was undefined.`)
       return false
     }
 
@@ -807,21 +819,19 @@ export default class DocumentManager extends ProviderContract {
       return true
     }
 
-    // TODO: Make sure the active file is not modified!
+    const ret = leaf.tabMan.openFile(filePath)
+    if (ret) {
+      this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
+    }
+
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
     const activeFile = leaf.tabMan.activeFile
-    const ret = leaf.tabMan.openFile(filePath)
     const { avoidNewTabs } = this._app.config.get().system
-
     if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)
       this.syncWatchedFilePaths()
-      this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath })
-      this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
-    }
-    if (ret) {
-      this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
+      this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath: activeFile.path })
     }
 
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
@@ -973,6 +983,8 @@ export default class DocumentManager extends ProviderContract {
     // next
     const diskContents = await this._app.fsal.loadAnySupportedFile(doc.descriptor.path)
 
+    // NOTE: This assumes that the internal "lastSavedContent" utilizes the same
+    // linefeed as the file on disk. (See issue #4959)
     if (diskContents === doc.lastSavedContent) {
       return
     }
@@ -1430,7 +1442,13 @@ export default class DocumentManager extends ProviderContract {
     // 2. The save commences
     // 3. The user adds more changes
     // 4. The save finishes and undos the modifications
-    const content = doc.document.toString()
+
+    // NOTE: Internally, CodeMirror Text objects use regular LF line separators.
+    // We take only the lines and then manually join them with the correct
+    // linefeed to ensure that it uses the one that the file needs. This should
+    // fix and in the future prevent bugs like #4959
+    const docLines = [...doc.document.iterLines()]
+    const content = docLines.join(doc.descriptor.linefeed)
     doc.lastSavedVersion = doc.currentVersion
     doc.lastSavedContent = content
 
@@ -1449,16 +1467,21 @@ export default class DocumentManager extends ProviderContract {
 
     this._ignoreChanges.push(filePath)
 
-    if (doc.descriptor.type === 'file') {
-      await FSALFile.save(
-        doc.descriptor,
-        content,
-        this._app.fsal.getMarkdownFileParser(),
-        null
-      )
-      await this.synchronizeDatabases() // The file may have gotten a library
-    } else {
-      await FSALCodeFile.save(doc.descriptor, content, null)
+    try {
+      if (doc.descriptor.type === 'file') {
+        await FSALFile.save(
+          doc.descriptor,
+          content,
+          this._app.fsal.getMarkdownFileParser(),
+          null
+        )
+        await this.synchronizeDatabases() // The file may have gotten a library
+      } else {
+        await FSALCodeFile.save(doc.descriptor, content, null)
+      }
+    } catch (err: any) {
+      dialog.showErrorBox(trans('Could not save file'), trans('Could not save file %s: %s', doc.descriptor.name, err.message))
+      throw err
     }
 
     this._app.log.info(`[DocumentManager] File ${filePath} saved.`)
@@ -1471,5 +1494,10 @@ export default class DocumentManager extends ProviderContract {
   private _updateFocusLeaf (windowId: string, leafId: string): void {
     this._lastEditor.windowId = windowId
     this._lastEditor.leafId = leafId
+    this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, {
+      windowId,
+      leafId,
+      filePath: this.getActiveFile(leafId) ?? undefined
+    })
   }
 }

@@ -30,6 +30,9 @@
  * @return {string}             The URL in a way that fits maxLength
  */
 export function shortenUrlVisually (url: string, maxLength: number = 80): string {
+  // Plain links need to be surrounded by <>, so we can definitely remove those
+  // if present.
+  url = url.replace(/^<(.+)>$/, '$1')
   if (url.length <= maxLength) {
     return url
   }

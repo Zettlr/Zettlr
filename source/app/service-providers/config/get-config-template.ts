@@ -66,6 +66,7 @@ export interface ConfigOptions {
     idGen: string
     linkFilenameOnly: boolean
     linkWithFilename: 'always'|'never'|'withID'
+    linkFormat: 'link|title'|'title|link'
     autoSearch: boolean
     customDirectory: string
   }
@@ -86,7 +87,7 @@ export interface ConfigOptions {
     inputMode: 'default'|'vim'|'emacs'
     boldFormatting: '**'|'__'
     italicFormatting: '_'|'*'
-    readabilityAlgorithm: string
+    readabilityAlgorithm: 'dale-chall'|'gunning-fog'|'coleman-liau'|'automated-readability'
     lint: {
       markdown: boolean
       languageTool: {
@@ -239,7 +240,8 @@ export function getConfigTemplate (): ConfigOptions {
       idRE: '(\\d{14})',
       idGen: '%Y%M%D%h%m%s',
       linkFilenameOnly: false,
-      linkWithFilename: 'always', // can be always|never|withID
+      linkWithFilename: 'never', // can be always|never|withID
+      linkFormat: 'link|title', // Determines what internal links ([[link|title]]) look like
       autoSearch: true, // Automatically start a search upon following a link?
       customDirectory: '' // If present, saves auto-created files here
     },

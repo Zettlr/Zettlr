@@ -33,7 +33,7 @@
             v-bind:active-file="activeFile"
             v-bind:window-id="windowId"
             v-bind:editor-commands="editorCommands"
-            v-on:global-search="$emit('globalSearch', $event)"
+            v-on:global-search="emit('globalSearch', $event)"
           ></MainEditor>
         </Teleport>
       </template>
@@ -98,163 +98,137 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { type LeafNodeJSON, type OpenDocument } from '@dts/common/documents'
-import { type EditorCommands } from '@dts/renderer/editor'
-import { defineComponent } from 'vue'
+import { type EditorCommands } from './App.vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'
+import { useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  name: 'EditorPane',
-  components: {
-    DocumentTabs,
-    MainEditor
-  },
-  props: {
-    leafId: {
-      type: String,
-      required: true
-    },
-    windowId: {
-      type: String,
-      required: true
-    },
-    availableWidth: {
-      type: Number,
-      default: 100
-    },
-    availableHeight: {
-      type: Number,
-      default: 100
-    },
-    editorCommands: {
-      type: Object as () => EditorCommands,
-      required: true
-    }
-  },
-  emits: ['globalSearch'],
-  data () {
-    return {
-      documentTabDrag: false,
-      documentTabDragWhere: undefined as undefined|string,
-      boundFinishDrag: this.finishDrag.bind(this)
-    }
-  },
-  computed: {
-    elementStyles () {
-      if (this.distractionFree) {
-        return ''
-      } else {
-        return `width: ${this.availableWidth}%; height: ${this.availableHeight}%`
-      }
-    },
-    paneElement (): HTMLDivElement {
-      return this.$refs.paneElement as HTMLDivElement
-    },
-    lastLeafId () {
-      return this.$store.state.lastLeafId
-    },
-    distractionFree () {
-      return this.$store.state.distractionFreeMode === this.leafId
-    },
-    node (): LeafNodeJSON|undefined {
-      return this.$store.state.paneData.find((leaf: LeafNodeJSON) => leaf.id === this.leafId)
-    },
-    activeFile (): OpenDocument|null {
-      return this.node?.activeFile ?? null
-    },
-    openFiles (): OpenDocument[] {
-      return this.node?.openFiles ?? []
-    },
-    hasNoOpenFiles (): boolean {
-      return this.openFiles.length === 0
-    }
-  },
-  created () {
-    // Global drag end listener to ensure the split-view indicators always disappear
-    document.addEventListener('dragend', this.boundFinishDrag, true)
-  },
-  beforeUnmount () {
-    document.removeEventListener('dragend', this.boundFinishDrag)
-  },
-  methods: {
-    handleDrop: function (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
-      const DELIM = (process.platform === 'win32') ? ';' : ':'
-      const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
-      if (documentTab !== undefined && documentTab.includes(DELIM)) {
-        this.documentTabDrag = false
-        event.stopPropagation()
-        event.preventDefault()
-        // At this point, we have received a drop we need to handle it. There
-        // are two possibilities: Either the user has dropped the file onto the
-        // editor, which means the file should be moved from its origin here.
-        // Or, the user has dropped the file onto one of the four edges. In that
-        // case, we need to first split this specific leaf, and then move the
-        // dropped file there. The drag data contains both the origin and the
-        // path, separated by the $PATH delimiter -> window:leaf:absPath
-        const [ originWindow, originLeaf, ...filePath ] = documentTab.split(DELIM)
-        if (where === 'editor' && this.leafId === originLeaf) {
-          // Nothing to do, the user dropped the file on the origin
-          return false
-        }
+const windowStateStore = useWindowStateStore()
+const documentTreeStore = useDocumentTreeStore()
 
-        // Now actually perform the act
-        if (where === 'editor') {
-          ipcRenderer.invoke('documents-provider', {
-            command: 'move-file',
-            payload: {
-              originWindow,
-              targetWindow: this.windowId,
-              originLeaf,
-              targetLeaf: this.leafId,
-              path: filePath.join(DELIM)
-            }
-          })
-            .catch(err => console.error(err))
-        } else {
-          const dir = ([ 'left', 'right' ].includes(where)) ? 'horizontal' : 'vertical'
-          const ins = ([ 'top', 'left' ].includes(where)) ? 'before' : 'after'
-          ipcRenderer.invoke('documents-provider', {
-            command: 'split-leaf',
-            payload: {
-              originWindow: this.windowId,
-              originLeaf: this.leafId,
-              direction: dir,
-              insertion: ins,
-              path: filePath.join(DELIM),
-              fromWindow: originWindow,
-              fromLeaf: originLeaf
-            }
-          })
-            .catch(err => console.error(err))
-        }
-      }
-    },
-    handleDragEnter: function (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
-      const hasDocumentTab = event.dataTransfer?.types.includes('zettlr/document-tab') ?? false
-      if (hasDocumentTab) {
-        event.stopPropagation()
-        this.documentTabDrag = true
-        this.documentTabDragWhere = where
-      }
-    },
-    handleDragLeave: function (event: DragEvent) {
-      const bounds = this.paneElement.getBoundingClientRect()
-      const outX = event.clientX < bounds.left || event.clientX > bounds.right
-      const outY = event.clientY < bounds.top || event.clientY > bounds.bottom
-      if (outX || outY) {
-        this.finishDrag()
-      }
-    },
-    finishDrag () {
-      this.documentTabDrag = false
-      this.documentTabDragWhere = undefined
-    }
+const props = defineProps<{
+  leafId: string
+  windowId: string
+  availableWidth?: number
+  availableHeight?: number
+  editorCommands: EditorCommands
+}>()
+
+type DragTargetAreas = 'editor'|'top'|'left'|'right'|'bottom'
+
+const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
+
+const documentTabDrag = ref<boolean>(false)
+const documentTabDragWhere = ref<DragTargetAreas|undefined>(undefined)
+
+const elementStyles = computed<string>(() => {
+  if (distractionFree.value) {
+    return ''
+  } else {
+    return `width: ${props.availableWidth ?? 100}%; height: ${props.availableHeight ?? 100}%`
   }
 })
+
+const paneElement = ref<HTMLDivElement|null>(null)
+const distractionFree = computed<boolean>(() => windowStateStore.distractionFreeMode === props.leafId)
+const node = computed<LeafNodeJSON|undefined>(() => documentTreeStore.paneData.find((leaf: LeafNodeJSON) => leaf.id === props.leafId))
+const activeFile = computed<OpenDocument|null>(() => node.value?.activeFile ?? null)
+const openFiles = computed<OpenDocument[]>(() => node.value?.openFiles ?? [])
+const hasNoOpenFiles = computed<boolean>(() => openFiles.value.length === 0)
+
+onMounted(() => {
+  // Global drag end listener to ensure the split-view indicators always disappear
+  document.addEventListener('dragend', finishDrag, true)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('dragend', finishDrag)
+})
+
+function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom'): boolean|undefined {
+  const DELIM = (process.platform === 'win32') ? ';' : ':'
+  const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
+  if (documentTab !== undefined && documentTab.includes(DELIM)) {
+    documentTabDrag.value = false
+    event.stopPropagation()
+    event.preventDefault()
+    // At this point, we have received a drop we need to handle it. There
+    // are two possibilities: Either the user has dropped the file onto the
+    // editor, which means the file should be moved from its origin here.
+    // Or, the user has dropped the file onto one of the four edges. In that
+    // case, we need to first split this specific leaf, and then move the
+    // dropped file there. The drag data contains both the origin and the
+    // path, separated by the $PATH delimiter -> window:leaf:absPath
+    const [ originWindow, originLeaf, ...filePath ] = documentTab.split(DELIM)
+    if (where === 'editor' && props.leafId === originLeaf) {
+      // Nothing to do, the user dropped the file on the origin
+      return false
+    }
+
+    // Now actually perform the act
+    if (where === 'editor') {
+      ipcRenderer.invoke('documents-provider', {
+        command: 'move-file',
+        payload: {
+          originWindow,
+          targetWindow: props.windowId,
+          originLeaf,
+          targetLeaf: props.leafId,
+          path: filePath.join(DELIM)
+        }
+      })
+        .catch(err => console.error(err))
+    } else {
+      const dir = ([ 'left', 'right' ].includes(where)) ? 'horizontal' : 'vertical'
+      const ins = ([ 'top', 'left' ].includes(where)) ? 'before' : 'after'
+      ipcRenderer.invoke('documents-provider', {
+        command: 'split-leaf',
+        payload: {
+          originWindow: props.windowId,
+          originLeaf: props.leafId,
+          direction: dir,
+          insertion: ins,
+          path: filePath.join(DELIM),
+          fromWindow: originWindow,
+          fromLeaf: originLeaf
+        }
+      })
+        .catch(err => console.error(err))
+    }
+  }
+}
+
+function handleDragEnter (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom'): void {
+  const hasDocumentTab = event.dataTransfer?.types.includes('zettlr/document-tab') ?? false
+  if (hasDocumentTab) {
+    event.stopPropagation()
+    documentTabDrag.value = true
+    documentTabDragWhere.value = where
+  }
+}
+
+function handleDragLeave (event: DragEvent): void {
+  if (paneElement.value === null) {
+    return
+  }
+
+  const bounds = paneElement.value.getBoundingClientRect()
+  const outX = event.clientX < bounds.left || event.clientX > bounds.right
+  const outY = event.clientY < bounds.top || event.clientY > bounds.bottom
+  if (outX || outY) {
+    finishDrag()
+  }
+}
+
+function finishDrag (): void {
+  documentTabDrag.value = false
+  documentTabDragWhere.value = undefined
+}
 </script>
 
 <style lang="less">

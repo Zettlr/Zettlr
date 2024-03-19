@@ -39,8 +39,10 @@ export default async function askSaveChanges (win: BrowserWindow|null): Promise<
     message: trans('There are unsaved changes. Do you want to save them first?')
   }
 
-  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
-  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status
+  // vs. promise awaits. UPDATE 2024-03-11: In response to #4952, removing the
+  // platform check again.
+  if (win !== null) {
     return await dialog.showMessageBox(win, boxOptions)
   } else {
     return await dialog.showMessageBox(boxOptions)

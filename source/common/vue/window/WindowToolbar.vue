@@ -9,7 +9,7 @@
     v-on:dblclick="handleDoubleClick"
     v-on:mousedown="$event.preventDefault()"
   >
-    <template v-for="(item, idx) in controls">
+    <template v-for="(item, idx) in props.controls">
       <ButtonControl
         v-if="item.type === 'button' && item.visible !== false"
         v-bind:key="idx"
@@ -135,11 +135,7 @@ body div#toolbar {
   display: flex;
   align-items: center;
   justify-content: space-around;
-
-  button {
-    // Reset the min-width from generic.less
-    min-width: auto;
-  }
+  gap: 10px;
 
   div.spacer {
     .size-1x { flex-grow: 1; }
@@ -155,6 +151,10 @@ body div#toolbar {
       font-size: 10px;
       text-align: center;
     }
+  }
+
+  button {
+    flex-grow: 1;
   }
 }
 

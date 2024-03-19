@@ -11,7 +11,13 @@ const plugins = [
   // Set a few Vue 3 options; see: http://link.vuejs.org/feature-flags
   new DefinePlugin({
     __VUE_OPTIONS_API__: true,
-    __VUE_PROD_DEVTOOLS__: false
+    __VUE_PROD_DEVTOOLS__: false,
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false, // New in Vue 3.4
+    // Quote from the docs: "Note that because the plugin does a direct text
+    // replacement, the value given to it must include actual quotes inside of
+    // the string itself. Typically, this is done either with alternate quotes,
+    // such as '"production"', or by using JSON.stringify('production')."
+    __GIT_COMMIT_HASH__: JSON.stringify(process.env.GIT_COMMIT_HASH)
   })
 ]
 

@@ -16,8 +16,9 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import sanitize from 'sanitize-filename'
 import path from 'path'
+import md5 from 'md5'
 import { promises as fs } from 'fs'
-import { clipboard } from 'electron'
+import { clipboard, ipcMain } from 'electron'
 import { showNativeNotification } from '@common/util/show-notification'
 
 export default class SaveImage extends ZettlrCommand {
@@ -39,6 +40,34 @@ export default class SaveImage extends ZettlrCommand {
 
     const defaultPath = this._app.config.get('editor.defaultSaveImagePath')
     const startPath = path.resolve(arg.startPath, defaultPath)
+
+    // The paste image modal will request the image's data once after it has
+    // been loaded.
+    // NOTE: We must implement this logic here in main which will (a) save the
+    // ridiculous amount of code it takes to get that exact information with
+    // only browser APIs, and (b) circumvent permission issues (since in the
+    // browser, reading from clipboard often requires the user to do something).
+    ipcMain.handleOnce('paste-image-retrieve-data', (event) => {
+      const img = clipboard.readImage()
+      const text = clipboard.readText()
+
+      const dataUrl = img.toDataURL()
+
+      let name = ''
+      if (text.length > 0) {
+        // If you copy an image from the web, the browser sometimes inserts
+        // the original URL to it as text into the clipboard. In this case
+        // we've already got a good image name!
+        const basename = path.basename(text, path.extname(text))
+        name = basename + '.png'
+      } else {
+        // In case there is no potential basename we could extract, simply
+        // hash the dataURL. This way we can magically also prevent the same
+        // image to be saved twice in the same directory. Such efficiency!
+        name = md5('img' + dataUrl) + '.png'
+      }
+      return { dataUrl, name, size: img.getSize(), aspect: img.getAspectRatio() }
+    })
 
     const target = await this._app.windows.showPasteImageModal(startPath)
     if (target === undefined) {

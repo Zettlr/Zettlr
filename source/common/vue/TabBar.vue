@@ -1,14 +1,14 @@
 <template>
   <div class="system-tablist" role="tablist">
     <button
-      v-for="tab, idx in tabs"
+      v-for="tab, idx in props.tabs"
       v-bind:key="idx"
       role="tab"
       v-bind:aria-label="tab.label"
       v-bind:data-target="tab.target"
       v-bind:class="{
         'system-tab': true,
-        'active': currentTab === tab.id
+        active: props.currentTab === tab.id
       }"
       v-bind:title="tab.label"
       v-on:click="emit('tab', tab.id)"
@@ -41,7 +41,28 @@
  *
  * END HEADER
  */
-import type { TabbarControl } from './window/WindowTabbar.vue'
+
+/**
+ * This interface represents a Tabbar control
+ */
+export interface TabbarControl {
+  /**
+   * This should match a Clarity icon shape
+   */
+  icon?: string
+  /**
+   * A unique ID for the tab
+   */
+  id: string
+  /**
+   * The target ID of whichever tab this represents (for a11y purposes)
+   */
+  target: string
+  /**
+   * A label, may be displayed.
+   */
+  label: string
+}
 
 const props = defineProps<{
   tabs: TabbarControl[]

@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="root-elem"
+    ref="rootElement"
     class="split-pane-container"
     v-bind:style="elementStyles"
   >
@@ -17,7 +17,7 @@
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
         v-bind:is-last="index === node.nodes.length - 1"
-        v-on:global-search="$emit('globalSearch', $event)"
+        v-on:global-search="emit('globalSearch', $event)"
       ></EditorBranch>
       <EditorPane
         v-else
@@ -26,12 +26,12 @@
         v-bind:window-id="windowId"
         v-bind:editor-commands="editorCommands"
         v-bind:class="{
-          'border-right': (index < node.nodes.length - 1 && node.direction === 'horizontal') || !isLast,
+          'border-right': (index < node.nodes.length - 1 && node.direction === 'horizontal') || isLast === true,
           'border-bottom': index < node.nodes.length - 1 && node.direction === 'vertical'
         }"
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
-        v-on:global-search="$emit('globalSearch', $event)"
+        v-on:global-search="emit('globalSearch', $event)"
       ></EditorPane>
       <!-- Here comes the resizing (for every but the last child) -->
       <div
@@ -43,136 +43,102 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import EditorPane from './EditorPane.vue'
 import { type BranchNodeJSON } from '@dts/common/documents'
-import { defineComponent } from 'vue'
-import { type EditorCommands } from '@dts/renderer/editor'
+import { ref, computed, watch, toRef } from 'vue'
+import { type EditorCommands } from './App.vue'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  name: 'EditorBranch',
-  components: {
-    EditorPane
-  },
-  props: {
-    node: {
-      type: Object as () => BranchNodeJSON,
-      required: true
-    },
-    windowId: {
-      type: String,
-      required: true
-    },
-    availableWidth: {
-      type: Number,
-      default: 100
-    },
-    availableHeight: {
-      type: Number,
-      default: 100
-    },
-    isLast: {
-      type: Boolean,
-      default: false
-    },
-    editorCommands: {
-      type: Object as () => EditorCommands,
-      required: true
-    }
-  },
-  emits: ['globalSearch'],
-  data () {
-    return {
-      sizes: this.node.sizes.map(s => s), // Holds the sizes of the child nodes
-      currentResizerIndex: -1, // Holds the index of the resizer during resizing
-      lastOffset: 0,
-      boundOnResizing: this.onResizing.bind(this),
-      boundEndResizing: this.endResizing.bind(this)
-    }
-  },
-  computed: {
-    rootElem (): HTMLDivElement {
-      return this.$refs['root-elem'] as HTMLDivElement
-    },
-    isHorizontalBranch () {
-      return this.node.direction === 'horizontal'
-    },
-    elementStyles () {
-      const rules = [
-        `width: ${this.availableWidth}%; height: ${this.availableHeight}%`
-      ]
-      if (this.node.type === 'branch') {
-        if (this.node.direction === 'horizontal') {
-          rules.push('flex-direction: row')
-        } else {
-          rules.push('flex-direction: column')
-        }
-      }
-      return rules.join('; ')
-    },
-    nodeSizes () {
-      return this.node.sizes
-    }
-  },
-  watch: {
-    nodeSizes () {
-      this.sizes = this.node.sizes.map(s => s)
-    }
-  },
-  methods: {
-    beginResizing (event: MouseEvent, index: number) {
-      this.currentResizerIndex = index
-      this.lastOffset = this.isHorizontalBranch ? event.clientX : event.clientY
-      this.rootElem.addEventListener('mousemove', this.boundOnResizing)
-      this.rootElem.addEventListener('mouseup', this.boundEndResizing)
-    },
-    onResizing (event: MouseEvent) {
-      if (this.currentResizerIndex < 0) {
-        return
-      }
+const props = defineProps<{
+  node: BranchNodeJSON
+  windowId: string
+  availableWidth?: number
+  availableHeight?: number
+  isLast?: boolean
+  editorCommands: EditorCommands
+}>()
 
-      const node1 = this.currentResizerIndex
-      const node2 = node1 + 1
-      const offset = this.isHorizontalBranch ? event.clientX : event.clientY
+const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
-      // Convert from pixels to percent
-      const offsetPixels = Math.abs(this.lastOffset - offset)
-      const rect = this.rootElem.getBoundingClientRect()
-      const totalPixels = this.isHorizontalBranch ? rect.width : rect.height
-      const offsetPercent = offsetPixels / totalPixels * 100
+const sizes = ref<number[]>(props.node.sizes.map(s => s))
+const currentResizerIndex = ref<number>(-1)
+const lastOffset = ref<number>(0)
 
-      if (offset > this.lastOffset) {
-        // Direction --> or v
-        this.sizes[node1] += offsetPercent
-        this.sizes[node2] -= offsetPercent
-      } else if (offset < this.lastOffset) {
-        // Direction <-- or ^
-        this.sizes[node1] -= offsetPercent
-        this.sizes[node2] += offsetPercent
-      }
-
-      this.lastOffset = offset
-    },
-    endResizing (event: MouseEvent) {
-      this.currentResizerIndex = -1
-      this.lastOffset = 0
-      this.rootElem.removeEventListener('mousemove', this.boundOnResizing)
-      this.rootElem.removeEventListener('mouseup', this.boundEndResizing)
-      // Inform main about the new sizes
-      ipcRenderer.invoke('documents-provider', {
-        command: 'set-branch-sizes',
-        payload: {
-          windowId: this.windowId,
-          branchId: this.node.id,
-          sizes: this.sizes.map(s => s) // Again, deproxy
-        }
-      })
-        .catch(err => console.error(err))
+const elementStyles = computed<string>(() => {
+  const rules = [
+    `width: ${props.availableWidth ?? 100}%; height: ${props.availableHeight ?? 100}%`
+  ]
+  if (props.node.type === 'branch') {
+    if (props.node.direction === 'horizontal') {
+      rules.push('flex-direction: row')
+    } else {
+      rules.push('flex-direction: column')
     }
   }
+  return rules.join('; ')
 })
+
+const rootElement = ref<HTMLDivElement|null>(null)
+
+const isHorizontalBranch = computed<boolean>(() => props.node.direction === 'horizontal')
+
+watch(toRef(props, 'node'), () => {
+  sizes.value = props.node.sizes.map(s => s)
+})
+
+function beginResizing (event: MouseEvent, index: number): void {
+  currentResizerIndex.value = index
+  lastOffset.value = isHorizontalBranch.value ? event.clientX : event.clientY
+  rootElement.value?.addEventListener('mousemove', onResizing)
+  rootElement.value?.addEventListener('mouseup', onEndResizing)
+}
+
+function onResizing (event: MouseEvent): void {
+  if (currentResizerIndex.value < 0 || rootElement.value === null) {
+    return
+  }
+
+  const node1 = currentResizerIndex.value
+  const node2 = node1 + 1
+  const offset = isHorizontalBranch.value ? event.clientX : event.clientY
+
+  // Convert from pixels to percent
+  const offsetPixels = Math.abs(lastOffset.value - offset)
+  const rect = rootElement.value.getBoundingClientRect()
+  const totalPixels = isHorizontalBranch.value ? rect.width : rect.height
+  const offsetPercent = offsetPixels / totalPixels * 100
+
+  if (offset > lastOffset.value) {
+    // Direction --> or v
+    sizes.value[node1] += offsetPercent
+    sizes.value[node2] -= offsetPercent
+  } else if (offset < lastOffset.value) {
+    // Direction <-- or ^
+    sizes.value[node1] -= offsetPercent
+    sizes.value[node2] += offsetPercent
+  }
+
+  lastOffset.value = offset
+}
+
+function onEndResizing (event: MouseEvent): void {
+  currentResizerIndex.value = -1
+  lastOffset.value = 0
+  rootElement.value?.removeEventListener('mousemove', onResizing)
+  rootElement.value?.removeEventListener('mouseup', onEndResizing)
+  // Inform main about the new sizes
+  ipcRenderer.invoke('documents-provider', {
+    command: 'set-branch-sizes',
+    payload: {
+      windowId: props.windowId,
+      branchId: props.node.id,
+      sizes: sizes.value.map(s => s) // Again, deproxy
+    }
+  })
+    .catch(err => console.error(err))
+}
 </script>
 
 <style lang="less">

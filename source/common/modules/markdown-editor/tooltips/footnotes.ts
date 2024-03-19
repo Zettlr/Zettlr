@@ -83,13 +83,15 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   }
 
   const fnBody = findRefForFootnote(view.state, fn)
+  const { zknLinkFormat } = view.state.field(configField)
 
   const { library } = view.state.field(configField).metadata
   const tooltipContent = md2html(
     (fnBody === undefined || fnBody.text === '')
       ? trans('No footnote text found.')
       : fnBody.text,
-    window.getCitationCallback(library)
+    window.getCitationCallback(library),
+    zknLinkFormat
   )
 
   return {
@@ -107,7 +109,7 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
       editButton.textContent = trans('Edit')
       dom.appendChild(editButton)
 
-      editButton.addEventListener('click', e => {
+      editButton.addEventListener('click', _e => {
         view.dispatch({
           selection: { anchor: fnBody.from, head: fnBody.to },
           scrollIntoView: true

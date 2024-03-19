@@ -66,7 +66,6 @@ export default class Print extends ZettlrCommand {
       profile: profiles[0], // First valid filtered profile will be used
       sourceFiles: [fileDescriptor], // The file to be exported
       targetDirectory: app.getPath('temp'), // Export to temporary directory
-      absoluteImagePaths: true, // Explicitly request absolute image paths
       cwd: fileDescriptor.dir
     }
 

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Zettlr (develop)
+Comment=Develop version of Zettlr, compiled from source
+Exec="$REPO_ROOT/out/Zettlr-linux-$ARCH/Zettlr" %u
+Icon=$REPO_ROOT/resources/icons/png.develop/1024x1024.png
+Terminal=false
+StartupNotify=false
+Categories=Office;
+MimeType=text/markdown;
+StartupWMClass=Zettlr

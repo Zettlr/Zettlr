@@ -13,11 +13,10 @@
  */
 
 import { type BlockParser } from '@lezer/markdown'
-import { StreamLanguage } from '@codemirror/language'
-import { yaml } from '@codemirror/legacy-modes/mode/yaml'
+import { yaml } from '@codemirror/lang-yaml'
 import { partialParse } from './partial-parse'
 
-const yamlLang = StreamLanguage.define(yaml)
+const yamlLang = yaml().language
 
 // TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser
 export const frontmatterParser: BlockParser = {

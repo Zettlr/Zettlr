@@ -382,7 +382,7 @@ export default class TableEditor {
 
       for (let j = 0; j < this._ast[i].length; j++) {
         const cell = row.insertCell(-1)
-        cell.innerHTML = md2html(this._ast[i][j], window.getCitationCallback(CITEPROC_MAIN_DB)) // TODO: Library
+        cell.innerHTML = md2html(this._ast[i][j], window.getCitationCallback(CITEPROC_MAIN_DB), window.config.get('zkn.linkFormat')) // TODO: Library
         cell.style.textAlign = this._colAlignment[j]
         cell.setAttribute('contenteditable', 'true')
         cell.addEventListener('focus', (event) => {
@@ -412,7 +412,7 @@ export default class TableEditor {
 
     // Re-render the table element and save the textContent as data-source
     this._ast[row][col] = cell.textContent ?? ''
-    cell.innerHTML = md2html(this._ast[row][col], window.getCitationCallback(CITEPROC_MAIN_DB)) // TODO: Library
+    cell.innerHTML = md2html(this._ast[row][col], window.getCitationCallback(CITEPROC_MAIN_DB), window.config.get('zkn.linkFormat')) // TODO: Library
 
     // For a short amount of time, the table won't have any focused
     // elements, so we'll set a small timeout, after which we test
@@ -1029,6 +1029,10 @@ export default class TableEditor {
    *                       select actual ranges.
    */
   selectCell (where: 'start'|'end'|{ from: number, to: number }): void {
+    if (!this.domElement.contains(document.activeElement)) {
+      return // Only select any cell if focus is currently within the table
+    }
+
     const currentCell = this._elem.rows[this._rowIndex].cells[this._cellIndex]
     currentCell.focus()
     const textLength = currentCell.textContent?.length ?? 0

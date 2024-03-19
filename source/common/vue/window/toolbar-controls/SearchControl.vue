@@ -6,11 +6,11 @@
   >
     <cds-icon shape="search" role="presentation"></cds-icon>
     <input
-      v-bind:id="`toolbar-${control.id}`"
+      v-bind:id="`toolbar-${props.control.id}`"
       ref="input"
       type="search"
       class="toolbar-search"
-      v-bind:placeholder="control.placeholder"
+      v-bind:placeholder="props.control.placeholder"
       v-on:input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       v-on:keypress.enter="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >
@@ -78,6 +78,7 @@ body.darwin {
   .toolbar-search-container {
     border-radius: 4px;
     background-color: rgb(245, 245, 245);
+    padding-left: 5px;
     width: 32px; // Hide the search bar initially, and reveal on focus
     height: 26px;
     transition: width 0.2s ease;
@@ -100,6 +101,8 @@ body.darwin {
     &:focus-within {
       width: initial; // Reset the width of the container
       height: initial;
+      display: flex;
+      align-items: center;
       border: 1px solid rgb(190, 190, 190);
     }
 

@@ -47,7 +47,12 @@ const guardOptions = {
   // The following options additionally require a clearing of the cache
   clearCache: new Map<string, boolean>([
     [ 'zkn.idRE', false ]
-  ])
+  ]),
+  // The following options only require the editors to reload, since they are,
+  // e.g., required by one of the extensions.
+  reloadEditors: [
+    'zkn.linkFormat' // Requires a reload since required by the parser that has no access to the editor config
+  ]
 }
 
 /**
@@ -119,7 +124,7 @@ export default class ConfigProvider extends ProviderContract {
       const { command, payload } = message
 
       if (command === 'get-config') {
-        event.returnValue = this.get(payload.key)
+        event.returnValue = payload !== undefined ? this.get(payload.key) : this.get()
       } else if (command === 'set-config-single') {
         event.returnValue = this.set(payload.key, payload.val)
       }
@@ -460,13 +465,20 @@ export default class ConfigProvider extends ProviderContract {
   }
 
   /**
-   * After setting an option, this function can check if the option is guarded.
-   * In that case, the app will automatically ask the user if they want to
-   * restart now.
+   * After setting an option, this function checks if the provided option is
+   * guarded. There are various layers of "guards". Some require a full restart
+   * of the app, others only require a reload cycle of the main editor(s). This
+   * function ensures that this happens, e.g., by emitting appropriate events or
+   * asking the user if they want to restart now.
    *
-   * @param   {string}  option  The option to check
+   * @param   {string}  option  The configuration option to check
    */
   private checkOptionForGuard (option: string): void {
+    // Some settings require all editors to perform a full reload
+    if (guardOptions.reloadEditors.includes(option)) {
+      broadcastIpcMessage('reload-editors')
+    }
+
     // If the option is not guarded or the dialog has already been asked,
     // quietly return.
     const opt = guardOptions.relaunch.get(option)

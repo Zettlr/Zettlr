@@ -1,10 +1,26 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Appearance Preferences Schema
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Exports the appearance tab schema.
+ *
+ * END HEADER
+ */
+
 import { trans } from '@common/i18n-renderer'
-import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
+import { type PreferencesFieldset } from '../App.vue'
+import { PreferencesGroups } from './_preferences-groups'
 import { ProgrammaticallyOpenableWindows } from '@providers/commands/open-aux-window'
+import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
 const ipcRenderer = window.ipc
 
-export function getAppearanceFields (): PreferencesFieldset[] {
+export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
       title: trans('Dark mode'),
@@ -36,14 +52,14 @@ export function getAppearanceFields (): PreferencesFieldset[] {
               label: trans('Start'),
               model: 'autoDarkModeStart',
               inline: true,
-              disabled: window.config.get('autoDarkMode') !== 'schedule'
+              disabled: config.autoDarkMode !== 'schedule'
             },
             {
               type: 'time',
               label: trans('End'),
               model: 'autoDarkModeEnd',
               inline: true,
-              disabled: window.config.get('autoDarkMode') !== 'schedule'
+              disabled: config.autoDarkMode !== 'schedule'
             }
           ]
         }

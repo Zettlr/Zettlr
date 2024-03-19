@@ -13,7 +13,8 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { PreferencesGroups, type PreferencesFieldset } from '../App.vue'
+import { type PreferencesFieldset } from '../App.vue'
+import { PreferencesGroups } from './_preferences-groups'
 
 export function getCitationFields (): PreferencesFieldset[] {
   return [
