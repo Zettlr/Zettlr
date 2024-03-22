@@ -204,7 +204,7 @@ const {
   isDirectory,
   selectedFile,
   selectedDir
-} = useItemComposable(toRef(props.obj), displayText, props.windowId, nameEditingInput)
+} = useItemComposable(props.obj, displayText, props.windowId, nameEditingInput)
 
 const shouldBeCollapsed = computed<boolean>(() => {
   if (props.isCurrentlyFiltering) {

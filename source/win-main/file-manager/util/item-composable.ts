@@ -24,11 +24,12 @@ const ipcRenderer = window.ipc
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useItemComposable (
-  obj: Ref<MaybeRootDescriptor>,
+  object: MaybeRootDescriptor,
   rootElement: Ref<HTMLElement|null>,
   windowId: string,
   nameEditingInput: Ref<HTMLInputElement|null>
 ) {
+  const obj = ref(object)
   const nameEditing = ref<boolean>(false)
   const showPopover = ref<boolean>(false)
   const operationType = ref<'createFile'|'createDir'|undefined>(undefined)
@@ -68,6 +69,7 @@ export function useItemComposable (
    * @param   {KeyboardEvent|MouseEvent}  event  The triggering event
    */
   function requestSelection (event: MouseEvent): void {
+    console.log('Request Selection', event.target, obj.value)
     // Dead directories can't be opened, so stop the propagation to
     // the file manager and don't do a thing.
     if (obj.value.type === 'directory' && obj.value.dirNotFoundFlag === true) {
@@ -267,6 +269,10 @@ export function useItemComposable (
       .finally(() => { nameEditing.value = false })
   }
 
+  function updateObject (newObject: MaybeRootDescriptor): void {
+    obj.value = newObject
+  }
+
   return {
     nameEditing,
     showPopover,
@@ -277,6 +283,7 @@ export function useItemComposable (
     finishNameEditing,
     isDirectory,
     selectedFile,
-    selectedDir
+    selectedDir,
+    updateObject
   }
 }

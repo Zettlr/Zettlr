@@ -198,8 +198,9 @@ const {
   requestSelection,
   finishNameEditing,
   isDirectory,
-  selectedFile
-} = useItemComposable(toRef(props.obj), displayText, props.windowId, nameEditingInput)
+  selectedFile,
+  updateObject
+} = useItemComposable(props.obj, displayText, props.windowId, nameEditingInput)
 
 // We have to explicitly transform ALL properties to computed ones for
 // the reactivity in conjunction with the recycle-scroller.
@@ -348,6 +349,12 @@ watch(operationType, () => {
     emit('create-dir')
     operationType.value = undefined
   }
+})
+
+// I have no idea why passing this as a Ref to the composable doesn't work, but
+// this way it does.
+watch(toRef(props, 'obj'), function (value) {
+  updateObject(value)
 })
 
 function beginDragging (event: DragEvent): void {
