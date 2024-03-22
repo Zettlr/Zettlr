@@ -181,6 +181,9 @@ or showing tooltips on these links.
 
 ## Under the Hood
 
+- Version updates:
+  - Pandoc: `3.1.12.3`
+  - Electron: `29`
 - Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
 - Removed the config option `sortingTime` since that can be inferred from the
   option `fileMetaTime`
@@ -188,8 +191,6 @@ or showing tooltips on these links.
   inferred from the option `zkn.customDir`
 - Simplified tab bar tab retention logic across reloads
 - Add the ability to programmatically open the assets window with specified tab
-- Bump the bundled Pandoc to version `3.1.12`
-- Bump Electron to version `29`
 - Failure to fetch a link preview will now simply log a verbose message instead
   of an error
 - Reimplement configuration guard options as Maps to allow for volatile state
