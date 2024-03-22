@@ -23,7 +23,12 @@
       v-on:drop="handleDrop"
     >
       <!-- First: Secondary icon (if its a directory and it has children) -->
-      <span class="item-icon" aria-hidden="true">
+      <span
+        class="item-icon"
+        aria-hidden="true"
+        v-on:click.stop="maybeUncollapse"
+        v-on:auxclick.stop.prevent="maybeUncollapse"
+      >
         <cds-icon
           v-if="secondaryIcon !== false"
           v-bind:shape="secondaryIcon"
@@ -33,8 +38,6 @@
             'is-solid': typeof secondaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(secondaryIcon),
             'special': typeof secondaryIcon !== 'boolean'
           }"
-          v-on:click.stop="maybeUncollapse"
-          v-on:auxclick.stop.prevent="maybeUncollapse"
         />
       </span>
       <!-- Second: Primary icon (The folder, file, or custom icon) -->
@@ -262,7 +265,6 @@ const angleDirection = computed(() => {
   }
 })
 
-// TODO
 const writingTarget = computed<undefined|{ path: string, mode: 'words'|'chars', count: number }>(() => {
   if (props.obj.type !== 'file') {
     return undefined

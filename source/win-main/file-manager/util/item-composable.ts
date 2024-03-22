@@ -35,6 +35,7 @@ export function useItemComposable (
 
   const openDirectoryStore = useOpenDirectoryStore()
   const documentTreeStore = useDocumentTreeStore()
+  const windowStateStore = useWindowStateStore()
 
   const isDirectory = computed(() => obj.value.type === 'directory')
   const selectedFile = computed(() => documentTreeStore.lastLeafActiveFile)
@@ -90,7 +91,6 @@ export function useItemComposable (
     }
 
     if ([ 'file', 'code' ].includes(type)) {
-      console.log('Requesting file:', obj.value.path)
       // Request the clicked file
       ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
@@ -121,6 +121,11 @@ export function useItemComposable (
           payload: obj.value.path
         })
           .catch(e => console.error(e))
+      }
+
+      // Finally, since it's a directory, uncollapse it.
+      if (!windowStateStore.uncollapsedDirectories.includes(obj.value.path)) {
+        windowStateStore.uncollapsedDirectories.push(obj.value.path)
       }
     }
   }
