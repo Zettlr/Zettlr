@@ -86,7 +86,7 @@ or showing tooltips on these links.
   searching and follows a more stringent structure
 - **Feature**: The assets manager now provides buttons to open the defaults and
   snippets directories directly from within the app
-- **New Feature**: The table insertion popover now displays how many rows and
+- **Feature**: The table insertion popover now displays how many rows and
   columns will be inserted
 - Removed the option for choosing to sort by either file creation or last
   modification time, since that can also be inferred from whichever time you
