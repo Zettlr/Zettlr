@@ -1,5 +1,5 @@
 <template>
-  <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
+  <PopoverWrapper v-bind:target="props.target" v-on:close="$emit('close')">
     <div id="stats-popover">
       <table>
         <tr>
@@ -46,7 +46,7 @@
   </PopoverWrapper>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -66,144 +66,105 @@ import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import { type Stats } from '@providers/stats'
 import { DateTime } from 'luxon'
+import { ref, computed } from 'vue'
 
 const ipcRenderer = window.ipc
 
-export default {
-  name: 'PopoverExport',
-  components: {
-    PopoverWrapper
-  },
-  props: {
-    target: {
-      type: HTMLElement,
-      required: true
+const svgWidth = 100
+const svgHeight = 20
+
+const lastMonthLabel = trans('words last month')
+const averageLabel = trans('daily average')
+const todayLabel = trans('words today')
+const surpassedMessage = trans('🔥 You\'re on fire!')
+const closeToMessage = trans('💪 You\'re close to hitting your daily average!')
+const notReachedMessage = trans('✍🏼 Get writing to surpass your daily average.')
+const buttonLabel = trans('More statistics …')
+
+const emit = defineEmits<(e: 'close') => void>()
+
+const props = defineProps<{ target: HTMLElement }>()
+
+const sumMonth = ref(0)
+const averageMonth = ref(0)
+const sumToday = ref(0)
+const wordCounts = ref<Record<string, number>>({})
+
+const displaySumMonth = computed(() => localiseNumber(sumMonth.value))
+const displayAvgMonth = computed(() => localiseNumber(averageMonth.value))
+const displaySumToday = computed(() => localiseNumber(sumToday.value))
+
+// Asynchronously pull in the data on setup
+ipcRenderer.invoke('stats-provider', { command: 'get-data' })
+  .then((stats: Stats) => {
+    sumMonth.value = stats.sumMonth
+    averageMonth.value = stats.avgMonth
+    sumToday.value = stats.today
+    wordCounts.value = stats.wordCount
+  })
+  .catch(e => console.error(e))
+
+const wordCountsLastMonth = computed(() => {
+  // This function basically returns a list of the last 30 days of word counts
+  const today = DateTime.now()
+  const year = today.year
+  const month = today.month
+  const numDays = today.daysInMonth ?? 0
+  const allKeys = Object.keys(wordCounts.value)
+  const dailyCounts = []
+  for (let i = 1; i <= numDays; i++) {
+    let day = i.toString()
+    if (i < 10) {
+      day = `0${i}`
     }
-  },
-  emits: ['close'],
-  data: function () {
-    return {
-      sumMonth: 0,
-      averageMonth: 0,
-      sumToday: 0,
-      showMoreStats: false,
-      wordCounts: {} satisfies Record<string, number>
+
+    let m = month.toString()
+    if (month < 10) {
+      m = `0${m}`
     }
-  },
-  computed: {
-    popoverData: function () {
-      return {
-        showMoreStats: this.showMoreStats
-      }
-    },
-    svgWidth: function () {
-      return 100
-    },
-    svgHeight: function () {
-      return 20
-    },
-    wordCountsLastMonth: function () {
-      // This function basically returns a list of the last 30 days of word counts
-      const today = DateTime.now()
-      const year = today.year
-      const month = today.month
-      const numDays = today.daysInMonth ?? 0
-      const allKeys = Object.keys(this.wordCounts)
-      const dailyCounts = []
-      for (let i = 1; i <= numDays; i++) {
-        let day = i.toString()
-        if (i < 10) {
-          day = `0${i}`
-        }
 
-        let m = month.toString()
-        if (month < 10) {
-          m = `0${m}`
-        }
-
-        const currentKey = `${year}-${m}-${day}`
-        if (allKeys.includes(currentKey)) {
-          dailyCounts.push(this.wordCounts[currentKey])
-        } else {
-          dailyCounts.push(0)
-        }
-      }
-      return dailyCounts
-    },
-    getDailyCountsSVGPath: function () {
-      // Retrieve the size, and substract a little bit padding
-      const height = this.svgHeight - 2
-      const width = this.svgWidth - 2
-      const interval = width / this.wordCountsLastMonth.length
-      let p = `M1 ${height} ` // Move to the bottom left
-      let max = 1 // Prevent division by zero
-
-      // Find the maximum word count
-      for (const count of this.wordCountsLastMonth) {
-        if (count > max) {
-          max = count
-        }
-      }
-
-      // Move to the right
-      let position = interval
-      for (const count of this.wordCountsLastMonth) {
-        p += `L${position} ${height - count / max * height} `
-        position += interval
-      }
-
-      // Finally return the path
-      return p
-    },
-    displaySumMonth: function () {
-      return localiseNumber(this.sumMonth)
-    },
-    displayAvgMonth: function () {
-      return localiseNumber(this.averageMonth)
-    },
-    displaySumToday: function () {
-      return localiseNumber(this.sumToday)
-    },
-    lastMonthLabel: function () {
-      return trans('words last month')
-    },
-    averageLabel: function () {
-      return trans('daily average')
-    },
-    todayLabel: function () {
-      return trans('words today')
-    },
-    surpassedMessage: function () {
-      return trans('🔥 You\'re on fire!')
-    },
-    closeToMessage: function () {
-      return trans('💪 You\'re close to hitting your daily average!')
-    },
-    notReachedMessage: function () {
-      return trans('✍🏼 Get writing to surpass your daily average.')
-    },
-    buttonLabel: function () {
-      return trans('More statistics …')
-    }
-  },
-  created: function () {
-    console.log('Creating stats window')
-    // Asynchronously pull in the data
-    ipcRenderer.invoke('stats-provider', { command: 'get-data' }).then((stats: Stats) => {
-      this.sumMonth = stats.sumMonth
-      this.averageMonth = stats.avgMonth
-      this.sumToday = stats.today
-      this.wordCounts = stats.wordCount
-    }).catch(e => console.error(e))
-  },
-  methods: {
-    buttonClick: function () {
-      ipcRenderer.invoke('application', { command: 'open-stats-window' })
-        .catch(err => console.error(err))
-      this.$emit('close')
+    const currentKey = `${year}-${m}-${day}`
+    if (allKeys.includes(currentKey)) {
+      dailyCounts.push(wordCounts.value[currentKey])
+    } else {
+      dailyCounts.push(0)
     }
   }
+  return dailyCounts
+})
+
+const getDailyCountsSVGPath = computed(() => {
+  // Retrieve the size, and substract a little bit padding
+  const height = svgHeight - 2
+  const width = svgWidth - 2
+  const interval = width / wordCountsLastMonth.value.length
+  let p = `M1 ${height} ` // Move to the bottom left
+  let max = 1 // Prevent division by zero
+
+  // Find the maximum word count
+  for (const count of wordCountsLastMonth.value) {
+    if (count > max) {
+      max = count
+    }
+  }
+
+  // Move to the right
+  let position = interval
+  for (const count of wordCountsLastMonth.value) {
+    p += `L${position} ${height - count / max * height} `
+    position += interval
+  }
+
+  // Finally return the path
+  return p
+})
+
+function buttonClick (): void {
+  ipcRenderer.invoke('application', { command: 'open-stats-window' })
+    .catch(err => console.error(err))
+  emit('close')
 }
+
 </script>
 
 <style lang="less">
