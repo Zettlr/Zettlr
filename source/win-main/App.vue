@@ -162,6 +162,7 @@ import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
+import { type AnyDescriptor } from 'source/types/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -593,8 +594,8 @@ onMounted(() => {
         command: 'get-descriptor',
         payload: documentTreeStore.lastLeafActiveFile.path
       })
-        .then(descriptor => {
-          if (descriptor !== undefined && descriptor.id !== undefined && descriptor.id !== '') {
+        .then((descriptor: AnyDescriptor|undefined) => {
+          if (descriptor?.type === 'file' && descriptor?.id !== '') {
             navigator.clipboard.writeText(descriptor.id).catch(err => console.error(err))
           }
         })
