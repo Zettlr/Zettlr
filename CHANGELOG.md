@@ -88,9 +88,6 @@ or showing tooltips on these links.
   snippets directories directly from within the app
 - **Feature**: The table insertion popover now displays how many rows and
   columns will be inserted
-- Removed the option for choosing to sort by either file creation or last
-  modification time, since that can also be inferred from whichever time you
-  choose to display
 - **Feature**: A new setting allows to highlight whitespace across the app
   (#1123)
 - **Change**: The attachment sidebar no longer considers the "open folder" for
@@ -100,10 +97,13 @@ or showing tooltips on these links.
   menu as it provided an intransparent way of deleting a seemingly
   random folder; now deleting a folder requires right-clicking the corresponding
   directory which makes the process more transparent
-- Removed the option for activating or disabling automatic file creation upon
-  following internal links; now this will happen automatically as long as the
-  "custom folder" option points to an existing folder; to disable this
-  functionality simply remove the folder path
+- **Change**: Removed the option for choosing to sort by either file creation or
+  last modification time, since that can also be inferred from whichever time
+  you choose to display
+- **Change**: Removed the option for activating or disabling automatic file
+  creation upon following internal links; now this will happen automatically as
+  long as the "custom folder" option points to an existing folder; to disable
+  this functionality simply remove the folder path
 - Fixed a bug where recent documents would not turn up in the menu
 - Fixed the sidebar shortcut: It is now `Cmd/Ctrl+Shift+0` (to align with the
   file manager shortcut, `Cmd/Ctrl+Shift+1`)
