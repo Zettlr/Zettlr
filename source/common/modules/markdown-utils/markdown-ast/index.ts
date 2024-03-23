@@ -34,10 +34,10 @@
 
 import extractCitations, { type CitePosition } from '@common/util/extract-citations'
 import { type SyntaxNode } from '@lezer/common'
-import { parseTableNode } from './ast-utils/parse-table-node'
-import { getWhitespaceBeforeNode } from './ast-utils/get-whitespace-before-node'
-import { genericTextNode } from './ast-utils/generic-text-node'
-import { parseChildren } from './ast-utils/parse-children'
+import { parseTableNode } from './parse-table-node'
+import { getWhitespaceBeforeNode } from './get-whitespace-before-node'
+import { genericTextNode } from './generic-text-node'
+import { parseChildren } from './parse-children'
 
 /**
  * Basic info every ASTNode needs to provide
