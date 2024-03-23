@@ -539,10 +539,8 @@ function maybeUncollapse (): void {
   }
 
   if (collapsed.value) {
-    console.log('Opening dir')
     windowStateStore.uncollapsedDirectories.push(props.obj.path)
   } else {
-    console.log('Closing dir')
     const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
     if (idx > -1) {
       windowStateStore.uncollapsedDirectories.splice(idx, 1)
