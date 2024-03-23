@@ -119,6 +119,7 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
           ]
         }
         rowNode.cells.push(cellNode)
+        wasDelim = false
       } else if (next.name === 'TableCell') {
         // Functional table cell
         const cellNode: TableCell = {
@@ -131,8 +132,10 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
         }
         parseChildren(cellNode, next, markdown)
         rowNode.cells.push(cellNode)
+        wasDelim = false
       } else {
         console.warn(`Could not fully parse Table node: Unexpected node "${next.name}" in row.`)
+        wasDelim = false
       }
       next = next.nextSibling
     }
