@@ -82,6 +82,9 @@ import WindowControls from './WindowControls.vue'
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.less'
 import { ref, computed, watch, toRef, onBeforeMount } from 'vue'
+import { useConfigStore } from 'source/pinia'
+
+const configStore = useConfigStore()
 
 const ipcRenderer = window.ipc
 
@@ -129,7 +132,7 @@ const emit = defineEmits<{
 const platform = ref<typeof process.platform>(process.platform)
 // const platform = ref<typeof process.platform>('win32')
 
-const useNativeAppearance = ref<boolean>(Boolean(window.config.get('window.nativeAppearance')))
+const useNativeAppearance = ref(configStore.config.window.nativeAppearance)
 
 const showTitlebar = computed<boolean>(() => {
   // Shows a titlebar if one is requested and we are on macOS or on Windows
@@ -181,7 +184,7 @@ watch(toRef(props, 'title'), () => {
 onBeforeMount(() => {
   ipcRenderer.on('config-provider', (event, { command, payload }) => {
     if (command === 'update' && payload === 'window.nativeAppearance') {
-      useNativeAppearance.value = window.config.get('window.nativeAppearance')
+      useNativeAppearance.value = configStore.config.window.nativeAppearance
     }
   })
 

@@ -241,6 +241,7 @@ or showing tooltips on these links.
   simpler, more general `darkTheme` extension
 - Disallow fuzzy matching during updates of translation files; previously this
   has led to inaccurate results (see, e.g., #5042)
+- All renderer processes (= all windows) now have access to Pinia
 
 # 3.0.5
 

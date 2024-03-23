@@ -191,10 +191,10 @@ const searchParams = new URLSearchParams(window.location.search)
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const windowId = searchParams.get('window_id')!
 
-const fileManagerVisible = ref<boolean>(true)
+const fileManagerVisible = ref(true)
 const mainSplitViewVisibleComponent = ref<'fileManager'|'globalSearch'>('fileManager')
-const isUpdateAvailable = ref<boolean>(false)
-const vibrancyEnabled = ref<boolean>(Boolean(window.config.get('window.vibrancy')))
+const isUpdateAvailable = ref(false)
+const vibrancyEnabled = ref(configStore.config.window.vibrancy)
 
 // Popover targets
 const exportButton = ref<HTMLElement|null>(null)
@@ -566,11 +566,11 @@ watch(distractionFree, (newValue) => {
       fileManager: fileManagerVisible.value,
       sidebar: sidebarVisible.value
     }
-    window.config.set('window.sidebarVisible', false)
+    configStore.setConfigValue('window.sidebarVisible', false)
     fileManagerVisible.value = false
   } else {
     // Leave distraction free mode
-    window.config.set('window.sidebarVisible', sidebarsBeforeDistractionfree.value.sidebar)
+    configStore.setConfigValue('window.sidebarVisible', sidebarsBeforeDistractionfree.value.sidebar)
     fileManagerVisible.value = sidebarsBeforeDistractionfree.value.fileManager
   }
 })
@@ -585,7 +585,7 @@ onMounted(() => {
 
   ipcRenderer.on('shortcut', (event, shortcut) => {
     if (shortcut === 'toggle-sidebar') {
-      window.config.set('window.sidebarVisible', !sidebarVisible.value)
+      configStore.setConfigValue('window.sidebarVisible', !sidebarVisible.value)
     } else if (shortcut === 'insert-id') {
       editorCommands.value.data = generateId(configStore.config.zkn.idGen)
       editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
@@ -861,7 +861,7 @@ function setPomodoroConfig (config: PomodoroConfig): void {
 function handleToggle (controlState: { id?: string, state?: string | boolean }): void {
   const { id, state } = controlState
   if (id === 'toggle-sidebar') {
-    window.config.set('window.sidebarVisible', state)
+    configStore.setConfigValue('window.sidebarVisible', state)
   } else if (id === 'toggle-file-manager') {
     // Since this is a three-way-toggle, we have to inspect the state.
     fileManagerVisible.value = state !== undefined

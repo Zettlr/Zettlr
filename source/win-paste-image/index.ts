@@ -13,13 +13,15 @@
  */
 
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import windowRegister from '@common/modules/window-register'
 
 // The first thing we have to do is run the window controller
 windowRegister()
   .then(() => {
-    const app = createApp(App)
+    const pinia = createPinia()
+    const app = createApp(App).use(pinia)
     app.mount('#app')
   })
   .catch(e => console.error(e))

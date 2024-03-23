@@ -101,6 +101,7 @@ import { type PandocProfileMetadata } from '@providers/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
+import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
@@ -118,6 +119,8 @@ const projectTitleLabel = trans('Project Title')
 const cslStyleLabel = trans('CSL Stylesheet')
 const texTemplateLabel = trans('LaTeX Template')
 const htmlTemplateLabel = trans('HTML Template')
+
+const configStore = useConfigStore()
 
 const tabs: WindowTab[] = [
   {
@@ -139,7 +142,7 @@ const dirPath = searchParams.get('directory') ?? ''
 
 const updateLock = ref(true) // To ensure these defaults aren't written before the properties have been loaded
 const profiles = ref<PandocProfileMetadata[]>([])
-const customCommands: CustomCommand[] = window.config.get('export.customCommands')
+const customCommands = configStore.config.export.customCommands
 
 const projectSettings = ref<ProjectSettings>({
   title: '',

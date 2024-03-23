@@ -99,8 +99,11 @@ import PACKAGE_JSON from '../../package.json'
 import { computed, onUnmounted, ref } from 'vue'
 import { type UpdateState } from 'source/app/service-providers/updates'
 import { DateTime } from 'luxon'
+import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
+
+const configStore = useConfigStore()
 
 const windowTitle = trans('Updater')
 const updateTitle = trans('New update available')
@@ -110,7 +113,7 @@ const downloadProgressLabel = trans('Downloading your update')
 const noUpdateMessage = trans('No update available. You have the most recent version.')
 const checkForUpdateLabel = trans('Check for updates')
 
-const vibrancyEnabled = window.config.get('window.vibrancy') as boolean
+const vibrancyEnabled = configStore.config.window.vibrancy
 const currentVersion = PACKAGE_JSON.version
 
 const startButtonLabel = ref(trans('Click to start update'))

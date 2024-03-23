@@ -13,6 +13,7 @@
  */
 
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 
 import windowRegister from '@common/modules/window-register'
@@ -29,6 +30,7 @@ windowRegister()
       }
     })
 
-    createApp(App).mount('#app')
+    const pinia = createPinia()
+    createApp(App).use(pinia).mount('#app')
   })
   .catch(e => console.error(e))

@@ -36,11 +36,12 @@ import sanitizeHtml from 'sanitize-html'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type AnyDescriptor } from '@dts/common/fsal'
 import { md2html } from '@common/modules/markdown-utils'
-import { useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
+const configStore = useConfigStore()
 
 const emit = defineEmits<{
   (e: 'move-section', data: { from: number, to: number }): void
@@ -135,7 +136,7 @@ function tocEntryIsActive (tocEntryLine: number, tocEntryIdx: number): boolean {
  * @return  {string}             The safe HTML string
  */
 function toc2html (entryText: string): string {
-  const html = md2html(entryText, window.getCitationCallback(library.value), window.config.get('zkn.linkFormat'))
+  const html = md2html(entryText, window.getCitationCallback(library.value), configStore.config.zkn.linkFormat)
   return sanitizeHtml(html, {
     // Headings may be emphasised and contain code
     allowedTags: [ 'em', 'kbd', 'code' ]

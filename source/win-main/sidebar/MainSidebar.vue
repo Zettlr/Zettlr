@@ -81,7 +81,7 @@ const tabs = [
 ]
 
 function setCurrentTab (which: string): void {
-  window.config.set('window.currentSidebarTab', which)
+  configStore.setConfigValue('window.currentSidebarTab', which)
 }
 </script>
 

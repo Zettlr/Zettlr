@@ -6,9 +6,9 @@
     </p>
     <h2>General Information</h2>
     <ul>
-      <li>Zettlr Version: <strong>{{ version }}</strong></li>
+      <li>Zettlr Version: <strong>{{ configStore.config.version }}</strong></li>
       <li>Build number: <strong><code>{{ commit }}</code></strong></li>
-      <li>UUID: <strong><code>{{ uuid }}</code></strong></li>
+      <li>UUID: <strong><code>{{ configStore.config.uuid }}</code></strong></li>
       <li>
         System: <strong>{{ platform }} {{ platformVersion }}</strong>
         (architecture: {{ arch }})
@@ -48,6 +48,8 @@
 </template>
 
 <script setup lang="ts">
+import { useConfigStore } from 'source/pinia'
+
 /**
  * @ignore
  * BEGIN HEADER
@@ -62,8 +64,8 @@
  * END HEADER
  */
 
-const version = window.config.get('version')
-const uuid = window.config.get('uuid')
+const configStore = useConfigStore()
+
 const versions = process.versions
 const argv = process.argv
 const arch = process.arch
