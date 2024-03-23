@@ -58,10 +58,6 @@ export function useItemComposable (
       .catch(err => console.error(err))
   })
 
-  watch(obj, (value) => {
-    console.log('obj changed!', value)
-  })
-
   /**
    * Requests a file or directory to be selected and sends an appropriate
    * request to main.
@@ -69,7 +65,6 @@ export function useItemComposable (
    * @param   {KeyboardEvent|MouseEvent}  event  The triggering event
    */
   function requestSelection (event: MouseEvent): void {
-    console.log('Request Selection', event.target, obj.value)
     // Dead directories can't be opened, so stop the propagation to
     // the file manager and don't do a thing.
     if (obj.value.type === 'directory' && obj.value.dirNotFoundFlag === true) {

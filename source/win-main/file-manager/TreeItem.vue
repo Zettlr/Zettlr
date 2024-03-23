@@ -205,15 +205,7 @@ const {
   selectedDir
 } = useItemComposable(props.obj, displayText, props.windowId, nameEditingInput)
 
-const shouldBeCollapsed = computed<boolean>(() => {
-  if (props.isCurrentlyFiltering) {
-    // If the application is currently running a filter, uncollapse everything
-    return false
-  } else {
-    // Else, just uncollapse if the user wishes so
-    return !windowStateStore.uncollapsedDirectories.includes(props.obj.path)
-  }
-})
+const shouldBeCollapsed = computed<boolean>(() => props.isCurrentlyFiltering ? false : collapsed.value)
 
 /**
  * The secondary icon's shape -- this is the visually FIRST icon to be
@@ -350,20 +342,7 @@ const isSelected = computed(() => {
 })
 
 watch(selectedFile, uncollapseIfApplicable)
-watch(collapsed, () => {
-  if (collapsed.value) {
-    const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
-    if (idx > -1) {
-      windowStateStore.uncollapsedDirectories.splice(idx, 1)
-    }
-  } else {
-    if (!windowStateStore.uncollapsedDirectories.includes(props.obj.path)) {
-      windowStateStore.uncollapsedDirectories.push(props.obj.path)
-    }
-  }
-})
-
-// watch(selectedDir, uncollapseIfApplicable)  TODO: As of now this would also uncollapse the containing file's directory
+watch(selectedDir, uncollapseIfApplicable)
 
 watch(operationType, (newVal) => {
   if (newVal !== undefined) {
@@ -392,6 +371,10 @@ watch(operationType, (newVal) => {
 onMounted(uncollapseIfApplicable)
 
 function uncollapseIfApplicable (): void {
+  if (!collapsed.value) {
+    return // We are already open, no need to do anything.
+  }
+
   const filePath = selectedFile.value?.path ?? ''
   const dirPath = (selectedDir.value !== null) ? selectedDir.value.path : ''
 
@@ -551,14 +534,18 @@ function handleOperationFinish (newName: string): void {
  * Helper function to toggle the collapsed status on a directory item with children
  */
 function maybeUncollapse (): void {
-  if (hasChildren.value) {
-    if (collapsed.value) {
-      windowStateStore.uncollapsedDirectories.push(props.obj.path)
-    } else {
-      const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
-      if (idx > -1) {
-        windowStateStore.uncollapsedDirectories.splice(idx, 1)
-      }
+  if (!hasChildren.value) {
+    return
+  }
+
+  if (collapsed.value) {
+    console.log('Opening dir')
+    windowStateStore.uncollapsedDirectories.push(props.obj.path)
+  } else {
+    console.log('Closing dir')
+    const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
+    if (idx > -1) {
+      windowStateStore.uncollapsedDirectories.splice(idx, 1)
     }
   }
 }
