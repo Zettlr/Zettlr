@@ -191,6 +191,7 @@ or showing tooltips on these links.
   `openDirectory` configuration value as a metric
 - Fixed an issue with the AST parser that would be unable to successfully parse
   Markdown tables with empty cells (#5025)
+- Fixed an issue with inserting Markdown tables via the popover (#5028)
 
 ## Under the Hood
 
