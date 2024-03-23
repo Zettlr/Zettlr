@@ -180,6 +180,8 @@ or showing tooltips on these links.
   (CRLF or LFCR), leading, among other things, to save issues (#4959)
 - Fixed a bug that would make opening and closing folders in the file manager
   very hard
+- The importer will ask for a target directory first now, and no longer use the
+  `openDirectory` configuration value as a metric
 
 ## Under the Hood
 
