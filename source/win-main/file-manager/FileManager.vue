@@ -49,7 +49,7 @@
         ref="fileTreeComponent"
         v-bind:is-visible="fileTreeVisible"
         v-bind:filter-query="filterQuery"
-        v-bind:window-id="windowId"
+        v-bind:window-id="props.windowId"
         v-on:selection="selectionListener"
       ></FileTree>
       <!-- Now render the file list -->
@@ -65,7 +65,7 @@
         ref="fileListComponent"
         v-bind:is-visible="isFileListVisible"
         v-bind:filter-query="filterQuery"
-        v-bind:window-id="windowId"
+        v-bind:window-id="props.windowId"
         v-on:lock-file-tree="lockDirectoryTree()"
       ></FileList>
     </div>
@@ -91,7 +91,7 @@ import FileTree from './FileTree.vue'
 import FileList from './FileList.vue'
 import { trans } from '@common/i18n-renderer'
 import { nextTick, ref, computed, watch, onMounted } from 'vue'
-import { useConfigStore, useOpenDirectoryStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useOpenDirectoryStore, useWorkspacesStore } from 'source/pinia'
 import type { AnyDescriptor, DirDescriptor } from 'source/types/common/fsal'
 
 const ipcRenderer = window.ipc
@@ -114,7 +114,6 @@ const fileListComponent = ref<typeof FileList|null>(null)
 const openDirectoryStore = useOpenDirectoryStore()
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
-const windowStateStore = useWindowStateStore()
 
 const fileTree = computed<AnyDescriptor[]>(() => workspacesStore.roots.map(root => root.descriptor))
 const selectedDirectory = computed<DirDescriptor|null>(() => openDirectoryStore.openDirectory)
@@ -168,11 +167,6 @@ watch(fileManagerMode, () => {
 })
 
 onMounted(() => {
-  if (openDirectoryStore.openDirectory !== null) {
-    // TODO: Logical bug: Apparently I was always just pushing entire descriptors in there!
-    windowStateStore.uncollapsedDirectories.push(openDirectoryStore.openDirectory.path)
-  }
-
   ipcRenderer.on('shortcut', (event, message) => {
     if (message === 'filter-files') {
       // Focus the filter on the next tick. Why? Because it might be that

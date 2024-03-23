@@ -163,9 +163,9 @@ import PopoverDirProps from './util/PopoverDirProps.vue'
 import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
-import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
+import { nextTick, ref, computed, watch, onMounted } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
-import { useConfigStore, useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
 
@@ -189,7 +189,6 @@ const nameEditingInput = ref<HTMLInputElement|null>(null)
 const displayText = ref<HTMLDivElement|null>(null)
 const newObjectInput = ref<HTMLInputElement|null>(null)
 
-const openDirectoryStore = useOpenDirectoryStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
 
@@ -395,10 +394,6 @@ onMounted(uncollapseIfApplicable)
 function uncollapseIfApplicable (): void {
   const filePath = selectedFile.value?.path ?? ''
   const dirPath = (selectedDir.value !== null) ? selectedDir.value.path : ''
-
-  if (props.obj.path === openDirectoryStore.openDirectory?.path) {
-    windowStateStore.uncollapsedDirectories.push(props.obj.path)
-  }
 
   // Open the tree, if the selected file is contained in this dir somewhere
   if (filePath.startsWith(props.obj.path)) {

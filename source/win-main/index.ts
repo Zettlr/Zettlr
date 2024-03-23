@@ -16,7 +16,6 @@ import windowRegister from '@common/modules/window-register'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-import { useOpenDirectoryStore } from '../pinia'
 
 const ipcRenderer = window.ipc
 
@@ -59,34 +58,4 @@ function afterRegister (): void {
       .catch(e => console.error(e))
     return false
   }, false)
-
-  // -----------------------------------------------------------------------------
-
-  // Further shortcuts we have to listen to
-  ipcRenderer.on('shortcut', (event, command) => {
-    // Retrieve the correct contexts first
-    const dirDescriptor = useOpenDirectoryStore().openDirectory
-
-    if (command === 'new-dir') {
-      if (dirDescriptor === null) {
-        return // Cannot create a new directory
-      }
-
-      ipcRenderer.invoke('application', {
-        command: 'dir-new',
-        payload: { path: dirDescriptor.path }
-      })
-        .catch(err => console.error(err))
-    } else if (command === 'delete-dir') {
-      if (dirDescriptor === null) {
-        return // Cannot remove dir
-      }
-
-      ipcRenderer.invoke('application', {
-        command: 'dir-delete',
-        payload: { path: dirDescriptor.path }
-      })
-        .catch(err => console.error(err))
-    }
-  })
 }

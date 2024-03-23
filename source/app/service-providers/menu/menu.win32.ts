@@ -295,13 +295,6 @@ export default function getMenu (
           }
         },
         {
-          id: 'menu.delete_dir',
-          label: trans('Delete directory'),
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'delete-dir')
-          }
-        },
-        {
           type: 'separator'
         },
         {

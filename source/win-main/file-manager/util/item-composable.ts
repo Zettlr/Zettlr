@@ -112,6 +112,8 @@ export function useItemComposable (
       })
         .catch(e => console.error(e))
     } else if (type === 'directory') {
+      // TODO: We need to implement another config value that describes the
+      // "file list directory" instead of the open directory.
       if (selectedDir.value === obj.value) {
         // The clicked directory was already the selected directory, so just
         // tell the application to show the file list, if applicable.

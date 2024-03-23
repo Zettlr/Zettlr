@@ -300,14 +300,6 @@ export default function getMenu (
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'delete-file')
           }
-        },
-        {
-          id: 'menu.delete_dir',
-          label: trans('Delete directory'),
-          accelerator: 'Cmd+Shift+Backspace',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'delete-dir')
-          }
         }
       ]
     },

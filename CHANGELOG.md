@@ -91,6 +91,13 @@ or showing tooltips on these links.
 - Removed the option for choosing to sort by either file creation or last
   modification time, since that can also be inferred from whichever time you
   choose to display
+- **Change**: The attachment sidebar no longer considers the "open folder" for
+  fetching its "other files" -- instead it will use the last focused file's
+  folder
+- **Change**: The shortcut for deleting a directory has been removed from the
+  menu as it provided an intransparent way of deleting a seemingly
+  random folder; now deleting a folder requires right-clicking the corresponding
+  directory which makes the process more transparent
 - Removed the option for activating or disabling automatic file creation upon
   following internal links; now this will happen automatically as long as the
   "custom folder" option points to an existing folder; to disable this

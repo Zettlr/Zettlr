@@ -38,25 +38,32 @@ import { trans } from '@common/i18n-renderer'
 import { type OtherFileDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@cds/core/icon'
 import { computed } from 'vue'
-import { useConfigStore, useOpenDirectoryStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
+import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 
-const openDirectoryStore = useOpenDirectoryStore()
 const configStore = useConfigStore()
+const documentTreeStore = useDocumentTreeStore()
+const workspacesStore = useWorkspacesStore()
 
 const otherFilesLabel = trans('Other files')
 const openDirLabel = trans('Open directory')
 const noAttachmentsMessage = trans('No other files')
 
 const attachments = computed(() => {
-  const currentDir = openDirectoryStore.openDirectory
-  if (currentDir === null) {
+  const activeFile = documentTreeStore.lastLeafActiveFile
+  if (activeFile === undefined) {
     return []
-  } else {
-    const extensions = configStore.config.attachmentExtensions
-    return currentDir.children
-      .filter((child): child is OtherFileDescriptor => child.type === 'other')
-      .filter(attachment => extensions.includes(attachment.ext))
   }
+
+  const currentDir = workspacesStore.getDir(pathDirname(activeFile.path))
+  if (currentDir === undefined) {
+    return []
+  }
+
+  const extensions = configStore.config.attachmentExtensions
+  return currentDir.children
+    .filter((child): child is OtherFileDescriptor => child.type === 'other')
+    .filter(attachment => extensions.includes(attachment.ext))
 })
 
 /**

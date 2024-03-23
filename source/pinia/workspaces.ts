@@ -144,9 +144,32 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
   const rootPaths = computed<string[]>(() => { return roots.value.map(root => root.descriptor.path) })
   const rootDescriptors = computed<AnyDescriptor[]>(() => { return roots.value.map(root => root.descriptor) })
 
+  /**
+   * Fetches the provided path's file descriptor.
+   *
+   * @param   {string}            targetPath  The path to search for
+   *
+   * @return  {MDFileDescriptor}              The file descriptor, or undefined
+   */
   const getFile = (targetPath: string): MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor|undefined => {
     const descriptor = locateByPath(rootDescriptors.value, targetPath)
     if (descriptor !== undefined && descriptor.type === 'directory') {
+      return undefined
+    } else {
+      return descriptor
+    }
+  }
+
+  /**
+   * Fetches the provided path's directory descriptor.
+   *
+   * @param   {string}         targetPath  The path to search for
+   *
+   * @return  {DirDescriptor|undefined}    The dir descriptor, or undefined
+   */
+  const getDir = (targetPath: string): DirDescriptor|undefined => {
+    const descriptor = locateByPath(rootDescriptors.value, targetPath)
+    if (descriptor?.type !== 'directory') {
       return undefined
     } else {
       return descriptor
@@ -222,5 +245,5 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
       .catch(err => console.error(`Could not process root update request: ${err.message as string}`))
   })
 
-  return { roots, rootPaths, rootDescriptors, getFile }
+  return { roots, rootPaths, rootDescriptors, getFile, getDir }
 })
