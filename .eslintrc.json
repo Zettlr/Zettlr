@@ -103,6 +103,7 @@
         "ignoredTypeNames": ["Text"]
       }
     ],
+    "@typescript-eslint/no-non-null-assertion": "off",
     // DEBUG: Turn a few errors into warnings after upgrading ESLint to >6.x
     // This rule is difficult to disable right now; it interferes with the
     // "no-null-assertion" rule, and it won't be an easy fix. We'll have to
