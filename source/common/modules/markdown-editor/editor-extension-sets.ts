@@ -71,6 +71,7 @@ import { themeBordeauxLight, themeBordeauxDark } from './theme/bordeaux'
 import { themeFrankfurtLight, themeFrankfurtDark } from './theme/frankfurt'
 import { themeKarlMarxStadtLight, themeKarlMarxStadtDark } from './theme/karl-marx-stadt'
 import { mainOverride } from './theme/main-override'
+import { highlightWhitespace } from './plugins/highlight-whitespace'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -184,6 +185,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // SELECTIONS
     // Overrides the default browser selection drawing, allows styling
     drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
+    highlightWhitespace(options.initialConfig.highlightWhitespace),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
     // Ensure the cursor never completely sticks to the top or bottom of the editor

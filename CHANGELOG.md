@@ -91,6 +91,8 @@ or showing tooltips on these links.
 - Removed the option for choosing to sort by either file creation or last
   modification time, since that can also be inferred from whichever time you
   choose to display
+- **Feature**: A new setting allows to highlight whitespace across the app
+  (#1123)
 - **Change**: The attachment sidebar no longer considers the "open folder" for
   fetching its "other files" -- instead it will use the last focused file's
   folder

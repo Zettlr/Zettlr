@@ -41,6 +41,7 @@ import { snippetSyntaxExtension } from '@common/modules/markdown-utils/snippets-
 import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-highlighter'
 import { useConfigStore } from 'source/pinia'
 import { darkMode, darkModeEffect } from '../modules/markdown-editor/theme/dark-mode'
+import { highlightWhitespace, highlightWhitespaceEffect } from '../modules/markdown-editor/plugins/highlight-whitespace'
 
 const configStore = useConfigStore()
 
@@ -71,6 +72,7 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
     codeFolding(),
     foldGutter(),
     history(),
+    highlightWhitespace(configStore.config.editor.showWhitespace),
     drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
     dropCursor(),
     statusbar,
@@ -146,7 +148,12 @@ const emit = defineEmits<(e: 'update:modelValue', newContents: string) => void>(
 
 // Switch the darkMode variable in the editor based on the config
 configStore.$subscribe((_mutation, state) => {
-  cmInstance.dispatch({ effects: darkModeEffect.of({ darkMode: state.config.darkMode }) })
+  cmInstance.dispatch({
+    effects: [
+      darkModeEffect.of({ darkMode: state.config.darkMode }),
+      highlightWhitespaceEffect.of(state.config.editor.showWhitespace)
+    ]
+  })
 })
 
 watch(toRef(props, 'modelValue'), () => {

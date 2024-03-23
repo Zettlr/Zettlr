@@ -78,6 +78,7 @@ export interface ConfigOptions {
     autoCloseBrackets: boolean
     showLinkPreviews: boolean
     showStatusbar: boolean
+    showWhitespace: boolean
     defaultSaveImagePath: string
     enableTableHelper: boolean
     indentUnit: number
@@ -252,6 +253,7 @@ export function getConfigTemplate (): ConfigOptions {
       autocompleteSuggestEmojis: true,
       autoCloseBrackets: true,
       showLinkPreviews: true, // Whether to fetch link previews in the editor
+      showWhitespace: false,
       defaultSaveImagePath: '',
       citeStyle: 'regular', // Determines how autocomplete will complete citations
       enableTableHelper: true, // Enable the table helper plugin

@@ -70,6 +70,7 @@ export interface EditorConfiguration {
   darkMode: boolean
   theme: MarkdownTheme
   margins: 'S'|'M'|'L'
+  highlightWhitespace: boolean
 }
 
 export function getDefaultConfig (): EditorConfiguration {
@@ -122,7 +123,8 @@ export function getDefaultConfig (): EditorConfiguration {
     showStatusbar: false,
     darkMode: false,
     theme: 'berlin',
-    margins: 'M'
+    margins: 'M',
+    highlightWhitespace: false
   }
 }
 

@@ -253,7 +253,8 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     distractionFree: props.distractionFree.valueOf(),
     showStatusbar: editor.showStatusbar,
     darkMode,
-    theme: display.theme
+    theme: display.theme,
+    highlightWhitespace: editor.showWhitespace
   } satisfies EditorConfigOptions
 })
 
