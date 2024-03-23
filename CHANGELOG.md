@@ -189,6 +189,8 @@ or showing tooltips on these links.
   very hard
 - The importer will ask for a target directory first now, and no longer use the
   `openDirectory` configuration value as a metric
+- Fixed an issue with the AST parser that would be unable to successfully parse
+  Markdown tables with empty cells (#5025)
 
 ## Under the Hood
 
@@ -251,6 +253,7 @@ or showing tooltips on these links.
 - Disallow fuzzy matching during updates of translation files; previously this
   has led to inaccurate results (see, e.g., #5042)
 - All renderer processes (= all windows) now have access to Pinia
+- Markdown AST parser is now its own module
 
 # 3.0.5
 
