@@ -72,6 +72,7 @@ import { themeFrankfurtLight, themeFrankfurtDark } from './theme/frankfurt'
 import { themeKarlMarxStadtLight, themeKarlMarxStadtDark } from './theme/karl-marx-stadt'
 import { mainOverride } from './theme/main-override'
 import { highlightWhitespace } from './plugins/highlight-whitespace'
+import { tagClasses } from './plugins/tag-classes'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -339,6 +340,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     backgroundLayers, // Add a background behind inline code and code blocks
     defaultContextMenu, // A default context menu
     softwrapVisualIndent, // Always indent visually
+    tagClasses(), // Apply a custom class to each tag so that users can style them (#4589)
     EditorView.domEventHandlers(options.domEventsListeners)
   ]
 }

@@ -261,6 +261,8 @@ or showing tooltips on these links.
   instead it is now again managed entirely by using the config provider,
   removing tons of superfluous code
 - Properly unmount CodeMirror instances when the `MainEditor` is unmounted
+- Reinstated ability to style tags individually again; by targeting classes with
+  the format `.cm-zkn-tag-<tagName>` (#4589)
 
 # 3.0.5
 
