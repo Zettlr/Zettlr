@@ -14,8 +14,8 @@
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
-      v-on:click.stop="requestSelection"
-      v-on:auxclick.stop="requestSelection"
+      v-on:click.stop="sel"
+      v-on:auxclick.stop="sel"
       v-on:contextmenu="handleContextMenu"
       v-on:dragover="acceptDrags"
       v-on:dragenter="enterDragging"
@@ -122,6 +122,7 @@
         v-bind:depth="depth + 1"
         v-bind:active-item="activeItem"
         v-bind:window-id="windowId"
+        v-on:toggle-file-list="emit('toggle-file-list')"
       >
       </TreeItem>
     </div>
@@ -171,6 +172,8 @@ import { useItemComposable } from './util/item-composable'
 
 const ipcRenderer = window.ipc
 
+const emit = defineEmits<(e: 'toggle-file-list') => void>()
+
 const props = defineProps<{
   // How deep is this tree item nested?
   depth: number
@@ -204,6 +207,18 @@ const {
   selectedFile,
   selectedDir
 } = useItemComposable(props.obj, displayText, props.windowId, nameEditingInput)
+
+function sel (event: MouseEvent): void {
+  requestSelection(event)
+  // We have one problem: We can't emit events from within the composable, so we
+  // have to wrap this function for one specific instance: When the user clicks
+  // again on the already selected directory, the file manager must toggle to
+  // the file list. This doesn't work by implication because the configuration
+  // doesn't update if oldValue === newValue.
+  if (selectedDir.value === props.obj.path) {
+    emit('toggle-file-list')
+  }
+}
 
 const shouldBeCollapsed = computed<boolean>(() => props.isCurrentlyFiltering ? false : collapsed.value)
 
@@ -335,7 +350,7 @@ const basename = computed(() => {
 
 const isSelected = computed(() => {
   if (props.obj.type === 'directory') {
-    return selectedDir.value?.path === props.obj.path
+    return selectedDir.value === props.obj.path
   } else {
     return selectedFile.value?.path === props.obj.path
   }
@@ -376,7 +391,7 @@ function uncollapseIfApplicable (): void {
   }
 
   const filePath = selectedFile.value?.path ?? ''
-  const dirPath = (selectedDir.value !== null) ? selectedDir.value.path : ''
+  const dirPath = selectedDir.value ?? ''
 
   // Open the tree, if the selected file is contained in this dir somewhere
   if (filePath.startsWith(props.obj.path)) {

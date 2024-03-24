@@ -16,7 +16,7 @@
 
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
-import { useDocumentTreeStore, useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import type { MaybeRootDescriptor } from 'source/types/common/fsal'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
 
@@ -34,13 +34,13 @@ export function useItemComposable (
   const showPopover = ref<boolean>(false)
   const operationType = ref<'createFile'|'createDir'|undefined>(undefined)
 
-  const openDirectoryStore = useOpenDirectoryStore()
+  const configStore = useConfigStore()
   const documentTreeStore = useDocumentTreeStore()
   const windowStateStore = useWindowStateStore()
 
   const isDirectory = computed(() => obj.value.type === 'directory')
   const selectedFile = computed(() => documentTreeStore.lastLeafActiveFile)
-  const selectedDir = computed(() => openDirectoryStore.openDirectory)
+  const selectedDir = computed(() => configStore.config.openDirectory)
 
   watch(nameEditing, (newVal) => {
     if (!newVal) {
@@ -101,27 +101,9 @@ export function useItemComposable (
         .catch(e => console.error(e))
     } else if (alt) {
       // Select the parent directory
-      ipcRenderer.invoke('application', {
-        command: 'set-open-directory',
-        payload: obj.value.dir
-      })
-        .catch(e => console.error(e))
+      configStore.setConfigValue('openDirectory', obj.value.dir)
     } else if (type === 'directory') {
-      // TODO: We need to implement another config value that describes the
-      // "file list directory" instead of the open directory.
-      if (selectedDir.value === obj.value) {
-        // The clicked directory was already the selected directory, so just
-        // tell the application to show the file list, if applicable.
-        // BUG: No more $root reference this.$root.toggleFileList()
-      } else {
-        // Select this directory
-        ipcRenderer.invoke('application', {
-          command: 'set-open-directory',
-          payload: obj.value.path
-        })
-          .catch(e => console.error(e))
-      }
-
+      configStore.setConfigValue('openDirectory', obj.value.path)
       // Finally, since it's a directory, uncollapse it.
       if (!windowStateStore.uncollapsedDirectories.includes(obj.value.path)) {
         windowStateStore.uncollapsedDirectories.push(obj.value.path)

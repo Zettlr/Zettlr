@@ -176,7 +176,6 @@ export default class DocumentManager extends ProviderContract {
 
   private _shuttingDown: boolean
 
-  private openDirectory: string|null
   private readonly _lastEditor: {
     windowId: string|undefined
     leafId: string|undefined
@@ -194,7 +193,6 @@ export default class DocumentManager extends ProviderContract {
     this._remoteChangeDialogShownFor = []
     this.documents = []
     this._shuttingDown = false
-    this.openDirectory = null
     this._lastEditor = {
       windowId: undefined,
       leafId: undefined
@@ -431,11 +429,6 @@ export default class DocumentManager extends ProviderContract {
     // Loads in all openFiles
     this._app.log.verbose('Document Manager starting up ...')
 
-    // BUG: This is a weird solution; the openDirectory shouldn't even be
-    // managed by the documents provider. Also, didn't I want to get rid of this
-    // altogether in the future ...?
-    this.openDirectory = this._app.config.get().openDirectory
-
     // Check if the data store is initialized
     if (!await this._config.isInitialized()) {
       this._app.log.info('[Document Manager] Initializing document storage ...')
@@ -552,21 +545,6 @@ export default class DocumentManager extends ProviderContract {
     // which will result in a crash report appearing on macOS.
     await this._watcher.shutdown()
     this._config.shutdown()
-  }
-
-  public setOpenDirectory (directory: string | null): void {
-    this.openDirectory = directory
-    this._emitter.emit('documents-provider', 'openDirectory')
-    if (this.openDirectory === null) {
-      this._app.config.set('openDirectory', null)
-    } else {
-      this._app.config.set('openDirectory', this.openDirectory)
-    }
-    broadcastIpcMessage('documents-provider', 'openDirectory')
-  }
-
-  public getOpenDirectory (): string|null {
-    return this.openDirectory
   }
 
   private broadcastEvent (event: DP_EVENTS, context?: DocumentsUpdateContext): void {

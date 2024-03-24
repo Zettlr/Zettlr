@@ -257,6 +257,9 @@ or showing tooltips on these links.
   has led to inaccurate results (see, e.g., #5042)
 - All renderer processes (= all windows) now have access to Pinia
 - Markdown AST parser is now its own module
+- Removed `openDirectory` functionality completely from the documents manager;
+  instead it is now again managed entirely by using the config provider,
+  removing tons of superfluous code
 
 # 3.0.5
 
