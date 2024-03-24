@@ -422,6 +422,14 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
+   * Unmount the editor instance entirely. NOTE: After calling this, DO NO
+   * LONGER USE THIS CLASS INSTANCE! Instantiate it anew!
+   */
+  public unmount (): void {
+    this.instance.destroy()
+  }
+
+  /**
    * Allows highlighting of arbitrary ranges independent of a search
    *
    * @param  {SelectionRange[]}  ranges  The ranges to highlight

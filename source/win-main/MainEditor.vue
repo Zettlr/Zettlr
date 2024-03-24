@@ -34,13 +34,13 @@
 import MarkdownEditor from '@common/modules/markdown-editor'
 import objectToArray from '@common/util/object-to-array'
 
-import { ref, computed, onMounted, watch, toRef } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch, toRef } from 'vue'
 import { type EditorCommands } from './App.vue'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
-import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
@@ -191,6 +191,10 @@ onMounted(() => {
   loadDocument().catch(err => console.error(err))
 })
 
+onBeforeUnmount(() => {
+  currentEditor?.unmount()
+})
+
 // DATA SETUP
 const showSearch = ref(false)
 
@@ -329,7 +333,7 @@ const fsalFiles = computed<MDFileDescriptor[]>(() => {
 
   for (const item of tree) {
     if (item.type === 'directory') {
-      const contents = objectToArray(item, 'children')
+      const contents = objectToArray<AnyDescriptor>(item, 'children')
         .filter((descriptor): descriptor is MDFileDescriptor => {
           return descriptor.type === 'file'
         })

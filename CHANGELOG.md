@@ -260,6 +260,7 @@ or showing tooltips on these links.
 - Removed `openDirectory` functionality completely from the documents manager;
   instead it is now again managed entirely by using the config provider,
   removing tons of superfluous code
+- Properly unmount CodeMirror instances when the `MainEditor` is unmounted
 
 # 3.0.5
 
