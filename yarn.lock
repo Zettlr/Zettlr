@@ -8610,10 +8610,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ky@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "ky@npm:1.2.2"
-  checksum: dd35c2303e58c148f686094bd87bc605e4d7f114534f3cf202fe9de844a4df336e3227f8bff685af91a8c3fc3407d30dd0cb058d2071691d1ca585d4cdb05244
+"ky@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "ky@npm:1.2.3"
+  checksum: a9972af7bd7344c7486aec31ab1685794a426c5a58d76ff189523986dbf491e1079aba3e0c34e57f82cfb4368b29d8f1ded5c8c4c65649802f9e1bde5bffc9cb
   languageName: node
   linkType: hard
 
@@ -14701,7 +14701,7 @@ __metadata:
     got: ^14.2.0
     jsdom: ^24.0.0
     katex: ^0.16.9
-    ky: ^1.2.2
+    ky: ^1.2.3
     less: ^4.2.0
     less-loader: ^12.2.0
     lodash: ^4.17.21
