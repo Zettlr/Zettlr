@@ -35,11 +35,6 @@
             ?
           </div>
         </div>
-        <!-- If the first fieldset field is not a separator and we have following fields, add a small gap -->
-        <div
-          v-if="fieldset.fields.length > 0 && fieldset.fields[0].type !== 'separator'"
-          style="height: 10px;"
-        ></div>
         <!-- Now to the contents of the fieldset -->
         <template v-for="(field, fieldIdx) in fieldset.fields" v-bind:key="fieldIdx">
           <FormFieldControl
