@@ -1278,16 +1278,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replit/codemirror-vim@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "@replit/codemirror-vim@npm:6.2.0"
+"@replit/codemirror-vim@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@replit/codemirror-vim@npm:6.2.1"
   peerDependencies:
     "@codemirror/commands": ^6.0.0
     "@codemirror/language": ^6.1.0
     "@codemirror/search": ^6.2.0
     "@codemirror/state": ^6.0.1
     "@codemirror/view": ^6.0.3
-  checksum: 4b220032a42798216e8ad3d16b7032075df9f903d7118ee2882655883921175e5d87804f164391b385b7fec99f88be5b6ee713b7b4c7afe42a06827be57e5dae
+  checksum: 95e25cd1fa18a90f44c606744d2f7979e44f90e5c3ffb9f28f26c34e2cb0b5fb6d91563e4e2fa60cd0e84d06e1e50bd9c9197558ee404d473c8bb134d5833bde
   languageName: node
   linkType: hard
 
@@ -14651,7 +14651,7 @@ __metadata:
     "@lezer/common": ^1.2.1
     "@lezer/highlight": ^1.2.0
     "@replit/codemirror-emacs": ^6.0.1
-    "@replit/codemirror-vim": ^6.2.0
+    "@replit/codemirror-vim": ^6.2.1
     "@types/adm-zip": ^0.5.5
     "@types/archiver": ^6.0.2
     "@types/command-exists": ^1.2.3
