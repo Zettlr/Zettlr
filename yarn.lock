@@ -8580,6 +8580,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"katex@npm:^0.16.10":
+  version: 0.16.10
+  resolution: "katex@npm:0.16.10"
+  dependencies:
+    commander: ^8.3.0
+  bin:
+    katex: cli.js
+  checksum: 108e9d810e17840c43eef8d46171096f4cc97852bfd1e2dd1890d9b3435846816e3e98678a31d38bd064eb97eea83b18ff224cb65d5f9511b54ce7ff4359b591
+  languageName: node
+  linkType: hard
+
 "keyv@npm:^4.0.0":
   version: 4.5.2
   resolution: "keyv@npm:4.5.2"
@@ -14700,7 +14711,7 @@ __metadata:
     gettext-parser: ^8.0.0
     got: ^14.2.0
     jsdom: ^24.0.0
-    katex: ^0.16.9
+    katex: ^0.16.10
     ky: ^1.2.2
     less: ^4.2.0
     less-loader: ^12.2.0
