@@ -145,7 +145,7 @@
     "@electron-forge/maker-zip": "^7.3.1",
     "@electron-forge/plugin-fuses": "^7.3.1",
     "@electron-forge/plugin-webpack": "^7.3.1",
-    "@electron/fuses": "^1.7.0",
+    "@electron/fuses": "^1.8.0",
     "@electron/notarize": "^2.3.0",
     "@types/adm-zip": "^0.5.5",
     "@types/archiver": "^6.0.2",
