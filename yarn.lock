@@ -687,16 +687,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/fuses@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "@electron/fuses@npm:1.7.0"
+"@electron/fuses@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "@electron/fuses@npm:1.8.0"
   dependencies:
     chalk: ^4.1.1
     fs-extra: ^9.0.1
     minimist: ^1.2.5
   bin:
     electron-fuses: dist/bin.js
-  checksum: c7b524103c4aca432372db6aba817cdaffb86d9f721b0f788223abe40084a2a06334072c24368f50386a8c7c721659f5ac57b57ff31bebc0eb990021518a6c8e
+  checksum: 94cb8ba10d69c0750401fc29cde38215c2b1934014008e98c231f16e78a653209b716a56223a09063e7b6a8526cfeed9223cd8d95559ff4a244d1c3783dec23f
   languageName: node
   linkType: hard
 
@@ -14646,7 +14646,7 @@ __metadata:
     "@electron-forge/maker-zip": ^7.3.1
     "@electron-forge/plugin-fuses": ^7.3.1
     "@electron-forge/plugin-webpack": ^7.3.1
-    "@electron/fuses": ^1.7.0
+    "@electron/fuses": ^1.8.0
     "@electron/notarize": ^2.3.0
     "@lezer/common": ^1.2.1
     "@lezer/highlight": ^1.2.0
