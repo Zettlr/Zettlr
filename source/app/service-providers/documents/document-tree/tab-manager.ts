@@ -210,14 +210,16 @@ export class TabManager {
 
     // Now, if we just closed the active file, we need to make another file
     // active, or none, if there are no more open files active.
-    if (isActive) {
-      if (this._openFiles.length > 0 && activeFileIdx > 0) {
-        this.activeFile = this._openFiles[activeFileIdx - 1]
-      } else if (this._openFiles.length > 0 && activeFileIdx === 0) {
-        this.activeFile = this._openFiles[0]
-      } else {
-        this.activeFile = null
-      }
+    if (!isActive) {
+      return true
+    }
+
+    if (this._openFiles.length > 0 && activeFileIdx > 0) {
+      this.activeFile = this._openFiles[activeFileIdx - 1]
+    } else if (this._openFiles.length > 0 && activeFileIdx === 0) {
+      this.activeFile = this._openFiles[0]
+    } else {
+      this.activeFile = null
     }
 
     return true
