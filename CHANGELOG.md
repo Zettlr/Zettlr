@@ -263,6 +263,10 @@ or showing tooltips on these links.
 - Properly unmount CodeMirror instances when the `MainEditor` is unmounted
 - Reinstated ability to style tags individually again; by targeting classes with
   the format `.cm-zkn-tag-<tagName>` (#4589)
+- Fixed a bug that would prevent rendering of citations in certain edge cases
+  (#5069)
+- The citation parser is now more strict when it comes to `@Author [p. 123]`
+  citations: Now only spaces are allowed between the citation key and the suffix
 
 # 3.0.5
 

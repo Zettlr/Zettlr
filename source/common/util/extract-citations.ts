@@ -56,7 +56,7 @@ const locatorLabels: Record<string, string[]> = {
  *
  * @var {RegExp}
  */
-const citationRE = /(?:\[([^[\]]*@[^[\]]+)\])|(?<=\s|^|(-))(?:@([\p{L}\d_][^\s]*[\p{L}\d_]|\{.+\})(?:\s+\[(.*?)\])?)/gum
+const citationRE = /(?:\[([^[\]]*@[^[\]]+)\])|(?<=\s|^|(-))(?:@([\p{L}\d_][^\s]*[\p{L}\d_]|\{.+\})(?: +\[(.*?)\])?)/gum
 
 /**
  * I hate everything at this. This can match every single possible variation on
@@ -215,7 +215,7 @@ export default function extractCitations (markdown: string): CitePosition[] {
   const retValue = []
 
   for (const match of markdown.matchAll(citationRE)) {
-    let from = match.index as number // Here we know index will be set
+    let from = match.index! // Here we know index will be set
     let to = from + match[0].length
     const citations = []
     let composite = false // Is set to true for in-text citations
