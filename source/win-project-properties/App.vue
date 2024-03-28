@@ -204,7 +204,6 @@ ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' })
 fetchProperties()
 
 function selectExportProfile (newListVal: ExportProfile[]): void {
-  console.log(newListVal)
   const newProfiles = newListVal
     .filter(e => e.selected)
     .map(e => {

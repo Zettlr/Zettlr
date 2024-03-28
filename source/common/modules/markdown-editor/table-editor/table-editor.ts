@@ -733,8 +733,6 @@ export default class TableEditor {
       case 'grid':
         return buildGridTable(this._ast, this._colAlignment)
       default:
-        console.log('Building pipe table ...')
-        console.log(this._ast, this._colAlignment)
         return buildPipeTable(this._ast, this._colAlignment)
     }
   }
