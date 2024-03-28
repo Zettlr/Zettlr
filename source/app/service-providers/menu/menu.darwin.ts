@@ -153,7 +153,6 @@ export default function getMenu (
         {
           id: 'menu.new_dir',
           label: trans('New directory…'),
-          accelerator: 'Cmd+Shift+N',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'new-dir')
           }
