@@ -201,7 +201,7 @@ or showing tooltips on these links.
 
 - Version updates:
   - Pandoc: `3.1.12.3`
-  - Electron: `29`
+  - Electron: `29.2.0`
 - Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
 - Removed the config option `sortingTime` since that can be inferred from the
   option `fileMetaTime`
