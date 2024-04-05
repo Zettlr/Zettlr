@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-02-12 15:20+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2024-04-03 00:00+UTC\n"
+"Last-Translator: Hung Vu <hung.v.vu.cs@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: vi-VI\n"
 "MIME-Version: 1.0\n"
@@ -39,20 +39,20 @@ msgstr "Theo Hệ Điều Hành"
 
 #: source/win-preferences/schema/appearance.ts:27
 msgid "On"
-msgstr ""
+msgstr "Bật"
 
 #: source/win-preferences/schema/appearance.ts:36
 #: source/tmp/PopoverPomodoro.vue.ts:77
 msgid "Start"
-msgstr "Bắt đầu"
+msgstr "Bắt Đầu"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "End"
-msgstr ""
+msgstr "Kết Thúc"
 
 #: source/win-preferences/schema/appearance.ts:53
 msgid "Theme"
-msgstr ""
+msgstr "Chủ Đề"
 
 #: source/win-preferences/schema/appearance.ts:60
 msgid "Here you can choose the theme for the app."
@@ -60,11 +60,11 @@ msgstr "Tại đây bạn có thể chọn chủ đề cho ứng dụng"
 
 #: source/win-preferences/schema/appearance.ts:102
 msgid "Toolbar options"
-msgstr ""
+msgstr "Tùy chọn thanh công cụ"
 
 #: source/win-preferences/schema/appearance.ts:109
 msgid "Left section buttons"
-msgstr ""
+msgstr "Các nút vùng bên trái"
 
 #: source/win-preferences/schema/appearance.ts:113
 msgid "Display \"Open Preferences\" button"
@@ -84,7 +84,7 @@ msgstr "Hiển thị nút \"Tập Tin Tiếp Theo\""
 
 #: source/win-preferences/schema/appearance.ts:135
 msgid "Center section buttons"
-msgstr ""
+msgstr "Các nút vùng trung tâm"
 
 #: source/win-preferences/schema/appearance.ts:139
 msgid "Display readability button"
@@ -116,7 +116,7 @@ msgstr "Hiển thị nút \"Chèn Chú Thích Cuối Trang\""
 
 #: source/win-preferences/schema/appearance.ts:176
 msgid "Right section buttons"
-msgstr ""
+msgstr "Các nút vùng bên phải"
 
 #: source/win-preferences/schema/appearance.ts:180
 msgid "Display document info"
@@ -129,12 +129,12 @@ msgstr "Hiển thị đồng hồ bấm giờ Promodoro"
 #: source/win-preferences/schema/appearance.ts:191
 #, fuzzy
 msgid "Status bar"
-msgstr "Hiển thị Zettlr"
+msgstr "Thanh trạng thái"
 
 #: source/win-preferences/schema/appearance.ts:197
 #, fuzzy
 msgid "Show statusbar"
-msgstr "Hiển thị Zettlr"
+msgstr "Hiển thị Thannh Trạng Thái"
 
 #: source/win-preferences/schema/appearance.ts:203
 #: source/tmp/CustomCSS.vue.ts:31
@@ -144,7 +144,7 @@ msgstr "Tuỳ chỉnh CSS"
 #: source/win-preferences/schema/appearance.ts:208
 #, fuzzy
 msgid "Open CSS editor"
-msgstr "Mở thư mục"
+msgstr "Mở trình chỉnh sửa CSS"
 
 #: source/win-preferences/schema/advanced.ts:28
 #, fuzzy
@@ -154,12 +154,12 @@ msgstr "Khuôn mẫu cho tên tập tin mới"
 #: source/win-preferences/schema/advanced.ts:34
 #, fuzzy
 msgid "Define a pattern for new file names"
-msgstr "Khuôn mẫu cho tên tập tin mới"
+msgstr "Xác định khuôn mẫu cho tên tập tin mới"
 
 #: source/win-preferences/schema/advanced.ts:36
 #, javascript-format
 msgid "Available variables: %s"
-msgstr ""
+msgstr "Các biến khả dụng: %s"
 
 #: source/win-preferences/schema/advanced.ts:42
 msgid "Do not prompt for filename when creating new files"
@@ -167,7 +167,7 @@ msgstr "Không hỏi tên tập tin khi đang tạo tập tin mới"
 
 #: source/win-preferences/schema/advanced.ts:49
 msgid "Appearance"
-msgstr ""
+msgstr "Giao diện"
 
 #: source/win-preferences/schema/advanced.ts:55
 msgid "Use native window appearance"
@@ -175,7 +175,7 @@ msgstr "Dùng giao diện thuần của Window"
 
 #: source/win-preferences/schema/advanced.ts:56
 msgid "Only available on Linux; this is the default for macOS and Windows."
-msgstr ""
+msgstr "Chỉ khả dụng cho Linux; đây là tùy chọn mặc định cho macOS và Windows."
 
 #: source/win-preferences/schema/advanced.ts:62
 #, fuzzy
@@ -184,7 +184,7 @@ msgstr "Dùng giao diện thuần của Window"
 
 #: source/win-preferences/schema/advanced.ts:63
 msgid "Only available on macOS; makes the window background opaque."
-msgstr ""
+msgstr "Chỉ khả dụng cho macOS; làm mờ phần nền của cửa sổ"
 
 #: source/win-preferences/schema/advanced.ts:70
 msgid "Show app in the notification area"
@@ -210,11 +210,11 @@ msgstr "Thu phóng thay đổi kích thước font của khung soạn thảo"
 
 #: source/win-preferences/schema/advanced.ts:90
 msgid "Attachments sidebar"
-msgstr ""
+msgstr "Thanh tệp đính kèm"
 
 #: source/win-preferences/schema/advanced.ts:96
 msgid "File extensions to be visible in the Attachments sidebar"
-msgstr ""
+msgstr "Định dạng tập tin được hiển thị ở Thanh tệp đính kèm"
 
 #: source/win-preferences/schema/advanced.ts:102
 #, fuzzy
@@ -235,7 +235,7 @@ msgstr "Bộ lọc ..."
 #: source/win-preferences/schema/advanced.ts:118
 #, fuzzy
 msgid "Watchdog polling"
-msgstr "Kích hoạt chế độ Watchdog polling"
+msgstr "Chế độ Watchdog polling"
 
 #: source/win-preferences/schema/advanced.ts:124
 msgid "Activate Watchdog polling"
@@ -258,7 +258,7 @@ msgstr "Xoá vĩnh viễn các tập tin, nếu đưa vào thùng rác thất b�
 #: source/win-preferences/schema/advanced.ts:148
 #, fuzzy
 msgid "Debug mode"
-msgstr "Bật chế độ gỡ lỗi"
+msgstr "Chế độ gỡ lỗi"
 
 #: source/win-preferences/schema/advanced.ts:154
 msgid "Enable debug mode"
@@ -266,7 +266,7 @@ msgstr "Bật chế độ gỡ lỗi"
 
 #: source/win-preferences/schema/advanced.ts:161
 msgid "Beta releases"
-msgstr ""
+msgstr "Các phiên bản beta"
 
 #: source/win-preferences/schema/advanced.ts:167
 msgid "Notify me about beta releases"
@@ -274,20 +274,20 @@ msgstr "Báo tôi biết về các bản cập nhật beta"
 
 #: source/win-preferences/schema/import-export.ts:23
 msgid "Import and export profiles"
-msgstr ""
+msgstr "Các cài đặt nhập và xuất tập tin"
 
 #: source/win-preferences/schema/import-export.ts:29
 msgid "Open import profiles editor"
-msgstr ""
+msgstr "Mở trình soạn thảo hồ sơ nhập tập tin"
 
 #: source/win-preferences/schema/import-export.ts:43
 msgid "Open export profiles editor"
-msgstr ""
+msgstr "Mở trình soạn thảo hồ sơ xuất tập tin"
 
 #: source/win-preferences/schema/import-export.ts:58
 #, fuzzy
 msgid "Export settings"
-msgstr "Xuất ra %s"
+msgstr "Xuất cài đặt hiện tại"
 
 #. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
 #: source/win-preferences/schema/import-export.ts:64
@@ -298,7 +298,7 @@ msgstr "Sử dụng bản Pandoc nhúng kèm để xuất tập tin"
 #: source/win-preferences/schema/import-export.ts:70
 #, fuzzy
 msgid "Remove tags from files when exporting"
-msgstr "Xoá các thẻ khỏi tập tin"
+msgstr "Xoá các thẻ khi xuất tập tin"
 
 #: source/win-preferences/schema/import-export.ts:76
 #: source/win-preferences/schema/zettelkasten.ts:42
@@ -320,56 +320,59 @@ msgstr "Đừng đụng vào các đường dẫn nội bộ"
 
 #: source/win-preferences/schema/import-export.ts:87
 msgid "Destination folder for exported files"
-msgstr ""
+msgstr "Danh mục đích dành cho các tập tin được xuất"
 
 #. TODO: Add info-strings
 #: source/win-preferences/schema/import-export.ts:91
 msgid "Temporary folder"
-msgstr ""
+msgstr "Thư mục tạm"
 
 #: source/win-preferences/schema/import-export.ts:92
 #, fuzzy
 msgid "Same as file location"
-msgstr "Thể hiện thông tin tập tin"
+msgstr "Giống với địa điểm lưu tập tin"
 
 #: source/win-preferences/schema/import-export.ts:93
 msgid "Ask for folder when exporting"
-msgstr ""
+msgstr "Hỏi địa điểm lưu khi xuất"
 
 #: source/win-preferences/schema/import-export.ts:99
 msgid ""
 "Warning! Files in the temporary folder are regularly deleted. Choosing the "
 "same location as the file overwrites files with identical filenames if they "
 "already exist."
-msgstr ""
+msgstr "Cảnh báo! Các tập tin trong thư mục tạm thường xuyên được xóa. Nếu chọn "
+"địa điểm lưu trùng với tập tin sẽ lưu đè lên những tập tin cùng tên nếu chúng "
+"tồn tại"
 
 #: source/win-preferences/schema/import-export.ts:104
 msgid "Custom export commands"
-msgstr ""
+msgstr "Tùy chỉnh lệnh xuất"
 
 #: source/win-preferences/schema/import-export.ts:112
 #, fuzzy
 msgid "Display name"
-msgstr "Hiển thị nút Hình Ảnh"
+msgstr "Hiển thị tên"
 
 #: source/win-preferences/schema/import-export.ts:112
 #, fuzzy
 msgid "Command"
-msgstr "Ghi chú"
+msgstr "Lệnh"
 
 #: source/win-preferences/schema/import-export.ts:113
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
-msgstr ""
+msgstr "Nhập lệnh để tùy chỉnh trình xuất file. Mỗi lệnh sẽ dùng tập tin hoặc dự án "
+"được xuất làm tham số đầu tiên" 
 
 #: source/win-preferences/schema/snippets.ts:23
 msgid "Snippets"
-msgstr ""
+msgstr "Đoạn Mẫu"
 
 #: source/win-preferences/schema/snippets.ts:29
 msgid "Open snippets editor"
-msgstr ""
+msgstr "Mở trình soạn thảo đoạn mẫu"
 
 #: source/win-preferences/schema/citations.ts:21
 #, fuzzy
@@ -388,7 +391,7 @@ msgstr "Cơ sở dữ liệu trích dẫn (CSL JSON hay BibTex)"
 #: source/win-preferences/schema/citations.ts:52
 #, fuzzy
 msgid "Path to file"
-msgstr "Chèn vào tập tin"
+msgstr "Đường dẫn đến tập tin"
 
 #: source/win-preferences/schema/citations.ts:50
 msgid "CSL-Style (optional)"
@@ -396,7 +399,7 @@ msgstr "CSL-Style (tuỳ chọn)"
 
 #: source/win-preferences/schema/general.ts:21
 msgid "Application language"
-msgstr ""
+msgstr "Ngôn ngữ"
 
 #: source/win-preferences/schema/general.ts:32
 msgid "Autosave"
@@ -413,17 +416,18 @@ msgstr "Ngay lập tức"
 
 #: source/win-preferences/schema/general.ts:48
 msgid "After a short delay"
-msgstr "Sau một khoảng trễ nhỏ"
+msgstr "Sau một khoảng trễ ngắn"
 
 #: source/win-preferences/schema/general.ts:54
 msgid "Default image folder"
-msgstr ""
+msgstr "Thư mục hình ảnh mặc định"
 
 #: source/win-preferences/schema/general.ts:66
 msgid ""
 "Click \"Select folder…\" or type an absolute or relative path directly into "
 "the input field."
-msgstr ""
+msgstr "Nhấn \"Chọn thư mục…\" hoặc nhập đường dẫn tuyệt đối hoặc tương đối "
+"vào trường nhập liệu."
 
 #: source/win-preferences/schema/general.ts:71
 #, fuzzy
@@ -446,12 +450,12 @@ msgstr "Trình cập nhật"
 
 #: source/win-preferences/schema/general.ts:94
 msgid "Automatically check for updates"
-msgstr "Tự động kiểm tra các nâng cấp"
+msgstr "Tự động kiểm tra các bản cập nhât"
 
 #: source/win-preferences/schema/editor.ts:21
 #, fuzzy
 msgid "Input mode"
-msgstr "Chế độ nhập của khung soạn thảo"
+msgstr "Chế độ soạn thảo"
 
 #: source/win-preferences/schema/editor.ts:37
 msgid ""
@@ -459,15 +463,18 @@ msgid ""
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
 msgstr ""
+"Chế độ soạn thảo quyết định cách bạn tương tác với khung soạn thảo. Chúng"
+"tôi đề xuất giữ tùy chỉnh này ở chế độ \"Bình thường\". Chỉ chọn \"Vim\" hoặc"
+"\"Emacs\" nếu bạn biết chúng là gì."
 
 #: source/win-preferences/schema/editor.ts:42
 #, fuzzy
 msgid "Writing direction"
-msgstr "Tìm trong thư mục"
+msgstr "Hướng viết"
 
 #: source/win-preferences/schema/editor.ts:50
 msgid "Markdown rendering"
-msgstr ""
+msgstr "Hiển thị Markdown"
 
 #: source/win-preferences/schema/editor.ts:57
 msgid ""
@@ -475,6 +482,9 @@ msgid ""
 "appearance. This hides formatting characters (such as **text**) or renders "
 "images instead of their link."
 msgstr ""
+"Chọn để kích hoạt hiện thị trực tiếp các thành phần Markdown thành định "
+"dạng hoàn chỉnh. Chế độ này giấu các ký tự định dạng (như **text**) hoặc " 
+"hiển thị hình ảnh trực tiếp thay vì đường dẫn của chúng"
 
 #: source/win-preferences/schema/editor.ts:65
 msgid "Render Citations"
@@ -482,7 +492,7 @@ msgstr "Hiển thị các trích dẫn"
 
 #: source/win-preferences/schema/editor.ts:70
 msgid "Render Iframes"
-msgstr "Hiển thị iframes"
+msgstr "Hiển thị Iframes"
 
 #: source/win-preferences/schema/editor.ts:75
 msgid "Render Images"
@@ -510,14 +520,14 @@ msgstr "Thể hiện nhấn mạnh"
 
 #: source/win-preferences/schema/editor.ts:109
 msgid "Formatting characters for bold and italic"
-msgstr ""
+msgstr "Ký tự định dạng cho in đậm và in nghiêng"
 
 #: source/win-preferences/schema/editor.ts:119
 #: source/win-preferences/schema/editor.ts:120
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 msgid "Bold"
-msgstr "Đậm"
+msgstr "In đậm"
 
 #: source/win-preferences/schema/editor.ts:127
 #: source/win-preferences/schema/editor.ts:128
@@ -527,7 +537,7 @@ msgstr "In nghiêng"
 
 #: source/win-preferences/schema/editor.ts:136
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Kiểm tra cú pháp Markdown"
 
 #: source/win-preferences/schema/editor.ts:142
 #, fuzzy
@@ -540,11 +550,14 @@ msgid ""
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
 msgstr ""
+"Khung Soạn Thảo Bảng là một giao diện hỗ trợ đơn giản hóa tạo bảng và điều chỉnh "
+"chúng. Công cụ này cung cấp các nút cho những chức năng thông dụng, và tự "
+"điều chỉnh cú pháp Markdown tương ứng."
 
 #: source/win-preferences/schema/editor.ts:158
 #, fuzzy
 msgid "Distraction-free mode"
-msgstr "Chế độ không bị làm phiền"
+msgstr "Chế độ không làm phiền"
 
 #: source/win-preferences/schema/editor.ts:164
 msgid "Mute non-focused lines in distraction-free mode"
@@ -565,31 +578,31 @@ msgstr "Đếm số ký tự thay vì số chữ (Ví dụ: cho tiếng Trung)"
 
 #: source/win-preferences/schema/editor.ts:188
 msgid "Readability mode"
-msgstr ""
+msgstr "Chế độ đánh giá dễ đọc"
 
 #: source/win-preferences/schema/editor.ts:195
 msgid "Algorithm"
-msgstr ""
+msgstr "Thuật toán"
 
 #: source/win-preferences/schema/editor.ts:207
 #, fuzzy
 msgid "Image size"
-msgstr "Ảnh"
+msgstr "Kích cỡ ảnh"
 
 #: source/win-preferences/schema/editor.ts:213
 #, fuzzy
 msgid "Maximum width of images (%s %)"
-msgstr "Chiều ngang tối đa của ảnh (đơn vị phần trăm)"
+msgstr "Chiều ngang tối đa của ảnh (%s %)"
 
 #: source/win-preferences/schema/editor.ts:220
 #, fuzzy
 msgid "Maximum height of images (%s %)"
-msgstr "Chiều cao tối đa của ảnh (đơn vị phần trăm)"
+msgstr "Chiều cao tối đa của ảnh (%s %)"
 
 #: source/win-preferences/schema/editor.ts:228
 #, fuzzy
 msgid "Other settings"
-msgstr "Các tập tin khác"
+msgstr "Các tùy chỉnh khác"
 
 #: source/win-preferences/schema/editor.ts:234
 #, fuzzy
@@ -609,11 +622,11 @@ msgstr "Thụt đầu dòng dùng Tabs"
 #: source/win-preferences/schema/editor.ts:255
 #, fuzzy
 msgid "Suggest emojis during autocompletion"
-msgstr "Chấp nhận spaces trong lúc tự hoàn tất"
+msgstr "Đề xuất emoji trong lúc tự hoàn tất"
 
 #: source/win-preferences/schema/editor.ts:260
 msgid "Show link previews"
-msgstr ""
+msgstr "Xem trước kết quả đường dẫn"
 
 #: source/win-preferences/schema/editor.ts:266
 msgid "Automatically close matching character pairs"
@@ -621,17 +634,17 @@ msgstr "Tự động thêm ký tự kết thúc của cặp kí tự"
 
 #: source/win-preferences/schema/zettelkasten.ts:21
 msgid "Zettelkasten IDs"
-msgstr ""
+msgstr "ID Zettelkasten"
 
 #: source/win-preferences/schema/zettelkasten.ts:27
 #, fuzzy
 msgid "Pattern for Zettelkasten IDs"
-msgstr "Mẫu dùng để tạo các ID mới"
+msgstr "Mẫu định dạng ID Zettelkasten"
 
 #: source/win-preferences/schema/zettelkasten.ts:28
 #, fuzzy
 msgid "Uses ECMAScript regular expressions"
-msgstr "Regular Expression của ID"
+msgstr "Dùng ECMAScript regular expression"
 
 #: source/win-preferences/schema/zettelkasten.ts:34
 msgid "Pattern used to generate new IDs"
@@ -640,7 +653,7 @@ msgstr "Mẫu dùng để tạo các ID mới"
 #: source/win-preferences/schema/zettelkasten.ts:37
 #, javascript-format
 msgid "Available Variables: %s"
-msgstr ""
+msgstr "Các biến khả dụng: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:48
 #, fuzzy
@@ -655,12 +668,12 @@ msgstr "Khi liên kết các tập tin với nhau, thêm tên tập tin ..."
 #: source/win-preferences/schema/zettelkasten.ts:56
 #, fuzzy
 msgid "Always"
-msgstr "luôn luôn"
+msgstr "Luôn luôn"
 
 #: source/win-preferences/schema/zettelkasten.ts:57
 #, fuzzy
 msgid "Only when linking using the ID"
-msgstr "chỉ khi liên kết dùng ID"
+msgstr "Chỉ khi liên kết bằng ID"
 
 #: source/win-preferences/schema/zettelkasten.ts:58
 #, fuzzy
@@ -674,7 +687,7 @@ msgstr "Tự động tìm kiếm khi đi theo đường dẫn Zettelkasten"
 
 #: source/win-preferences/schema/zettelkasten.ts:66
 msgid "The search string will match the content between the brackets: [[ ]]."
-msgstr ""
+msgstr "Chuỗi tìm kiếm sẽ khớp với nội dung nằm giữa các dấu ngoặc vuông"
 
 #: source/win-preferences/schema/zettelkasten.ts:75
 #, fuzzy
@@ -685,11 +698,11 @@ msgstr "Tự động tạo các tập tin chưa tồn tại khi đi theo các đ
 
 #: source/win-preferences/schema/zettelkasten.ts:80
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
-msgstr ""
+msgstr "Để chế độ này có hiệu lực, thư mục mục tiêu phải là một Workspace trong Zettlr."
 
 #: source/win-preferences/schema/zettelkasten.ts:85
 msgid "Path to folder"
-msgstr ""
+msgstr "Đường dẫn tập tin"
 
 #: source/win-preferences/schema/autocorrect.ts:21
 #, fuzzy
@@ -698,12 +711,12 @@ msgstr "Bật Tự Chỉnh Sửa"
 
 #: source/win-preferences/schema/autocorrect.ts:31
 msgid "Smart quotes"
-msgstr ""
+msgstr "Ngoặc kép/đơn tự động"
 
 #: source/win-preferences/schema/autocorrect.ts:44
 #, fuzzy
 msgid "Double Quotes"
-msgstr "Tắt Magic Quotes"
+msgstr "Ngoặc kép"
 
 #: source/win-preferences/schema/autocorrect.ts:47
 #: source/win-preferences/schema/autocorrect.ts:69
@@ -713,45 +726,45 @@ msgstr "Tắt Magic Quotes"
 #: source/win-preferences/schema/autocorrect.ts:66
 #, fuzzy
 msgid "Single Quotes"
-msgstr "Tắt Magic Quotes"
+msgstr "Ngoặc Đơn"
 
 #: source/win-preferences/schema/autocorrect.ts:94
 msgid "Text-replacement patterns"
-msgstr ""
+msgstr "Mẫu dùng để thay thế văn bản"
 
 #: source/win-preferences/schema/autocorrect.ts:98
 msgid "Match whole words"
-msgstr ""
+msgstr "Khớp nguyên từ"
 
 #: source/win-preferences/schema/autocorrect.ts:99
 msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
+msgstr "Chọn để khiến chế độ tự sửa lỗi không thay thế những phần của từ"
 
 #: source/win-preferences/schema/autocorrect.ts:106
 #, fuzzy
 msgid "Replace"
-msgstr "Thay thể tập tin"
+msgstr "Thay thế tập tin"
 
 #: source/win-preferences/schema/autocorrect.ts:106
 msgid "With"
-msgstr ""
+msgstr "Với"
 
 #: source/win-preferences/schema/file-manager.ts:7
 #, fuzzy
 msgid "Display mode"
-msgstr "Hiển thị nút Hình Ảnh"
+msgstr "Chế độ hiển thị"
 
 #: source/win-preferences/schema/file-manager.ts:16
 msgid "Thin"
-msgstr ""
+msgstr "Mảnh"
 
 #: source/win-preferences/schema/file-manager.ts:17
 msgid "Expanded"
-msgstr ""
+msgstr "Đầy đủ"
 
 #: source/win-preferences/schema/file-manager.ts:18
 msgid "Combined"
-msgstr ""
+msgstr "Kết hợp"
 
 #: source/win-preferences/schema/file-manager.ts:24
 msgid ""
@@ -760,6 +773,10 @@ msgid ""
 "file list and directory tree by clicking on directories or the arrow button "
 "which appears at the top left corner of the file list."
 msgstr ""
+"Chế độ mảnh hiển thị các thư mục và tập tin một cách độc lập. Chọn "
+"một thư mục để hiển thị nội dung của thư mục đó theo một danh sách các tệp. "
+"Chuyển giữa danh sách tệp và cây thư mục bằng cách nhấn vào một thư mục hoặc "
+"chọn dấu mũi tên ở góc trái danh sách tập tin."
 
 #: source/win-preferences/schema/file-manager.ts:29
 msgid "Show file information"
@@ -771,7 +788,7 @@ msgstr "Hiển thị các thư mục bên trên tập tin"
 
 #: source/win-preferences/schema/file-manager.ts:40
 msgid "Markdown document name display"
-msgstr ""
+msgstr "Hiển thị tên tài liệu Markdown"
 
 #: source/win-preferences/schema/file-manager.ts:48
 msgid "Filename only"
@@ -795,7 +812,7 @@ msgstr "Hiển thị mở rộng của tập tin Markdown"
 
 #: source/win-preferences/schema/file-manager.ts:64
 msgid "Time display"
-msgstr ""
+msgstr "Hiển thị thời gian"
 
 #: source/win-preferences/schema/file-manager.ts:72
 msgid "Last modification time"
@@ -808,12 +825,12 @@ msgstr "Thời gian tập tin được tạo"
 #: source/win-preferences/schema/file-manager.ts:79
 #, fuzzy
 msgid "Sorting"
-msgstr "Xuất..."
+msgstr "Thứ tự"
 
 #: source/win-preferences/schema/file-manager.ts:85
 #, fuzzy
 msgid "When sorting documents…"
-msgstr "Các văn bản gần đây"
+msgstr "Sắp xếp văn bản theo…"
 
 #: source/win-preferences/schema/file-manager.ts:88
 #, fuzzy
@@ -827,73 +844,75 @@ msgstr "Theo thứ tự ASCII (2 hiển thị sau 10)"
 
 #: source/win-preferences/schema/spellchecking.ts:22
 msgid "LanguageTool"
-msgstr ""
+msgstr "Công cụ ngôn ngữ"
 
 #: source/win-preferences/schema/spellchecking.ts:32
 msgid "Strictness"
-msgstr ""
+msgstr "Độ nghiêm"
 
 #: source/win-preferences/schema/spellchecking.ts:35
 #, fuzzy
 msgid "Standard"
-msgstr "Lịch"
+msgstr "Tiêu chuẩn"
 
 #: source/win-preferences/schema/spellchecking.ts:36
 msgid "Picky"
-msgstr ""
+msgstr "Kén chọn"
 
 #: source/win-preferences/schema/spellchecking.ts:45
 msgid "Mother language"
-msgstr ""
+msgstr "Ngôn ngữ mẹ đẻ"
 
 #: source/win-preferences/schema/spellchecking.ts:51
 msgid "Not set"
-msgstr ""
+msgstr "Không chọn"
 
 #: source/win-preferences/schema/spellchecking.ts:59
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "Nhà cung cấp công cụ ngôn ngữ"
 
 #: source/win-preferences/schema/spellchecking.ts:63
 #, fuzzy
 msgid "Custom server"
-msgstr "Tuỳ chỉnh CSS"
+msgstr "Máy chủ tùy chỉnh"
 
 #: source/win-preferences/schema/spellchecking.ts:70
 #, fuzzy
 msgid "Custom server address"
-msgstr "Tuỳ chỉnh CSS"
+msgstr "Địa chỉ máy chủ"
 
 #: source/win-preferences/schema/spellchecking.ts:79
 msgid "LanguageTool Premium"
-msgstr ""
+msgstr "Công cụ ngôn ngữ Premium"
 
 #: source/win-preferences/schema/spellchecking.ts:84
 msgid ""
 "Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
 "credentials here."
 msgstr ""
+"Zettlr sẽ bỏ qua phần \"Nhà cung cấp ngôn ngữ\" nếu bạn nhập thông tin vào "
+"phần này."
 
 #: source/win-preferences/schema/spellchecking.ts:88
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "Username của công cụ ngôn ngữ"
 
 #: source/win-preferences/schema/spellchecking.ts:95
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "API Key của công cụ ngôn ngữ"
 
 #: source/win-preferences/schema/spellchecking.ts:103
 msgid "Spellchecking"
-msgstr ""
+msgstr "Kiểm tra chính tả"
 
 #: source/win-preferences/schema/spellchecking.ts:112
 #, fuzzy
 msgid "Active"
-msgstr "Các hành động"
+msgstr "Kích hoạt"
 
 #: source/win-preferences/schema/spellchecking.ts:112
 msgid "Language"
-msgstr ""
+msgstr "Ngôn ngữ"
 
 #: source/win-preferences/schema/spellchecking.ts:112
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
@@ -992,21 +1011,21 @@ msgstr "Sao chép đường dẫn đầy đủ"
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:104
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Hiển thị trong Finder"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 #: source/win-main/file-manager/util/file-item-context.ts:87
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "Hiển thị trong Explorer"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 #: source/win-main/file-manager/util/file-item-context.ts:87
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "Hiển thị trong File Browser"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:87
 msgid "Check for directory …"
-msgstr "Kiểm tra thư mục ..."
+msgstr "Kiểm tra thư mục…"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:104
 msgid "Export Project"
@@ -1014,7 +1033,7 @@ msgstr "Xuất Dự Án"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:116
 msgid "Close Workspace"
-msgstr "Đóng Vùng Làm Việc"
+msgstr "Đóng Workspace"
 
 #: source/win-main/file-manager/util/file-item-context.ts:28
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
@@ -1085,7 +1104,7 @@ msgstr "Thêm vào từ điển"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
 msgid "Italic"
-msgstr "Nghiêng"
+msgstr "In nghiêng"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
 msgid "Insert link"
@@ -1142,16 +1161,16 @@ msgstr "Sao chép ảnh vào bảng tạm clipboard"
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:98
 #, fuzzy
 msgid "Open image"
-msgstr "Mở tập tin"
+msgstr "Mở ảnh"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:104
 #, fuzzy
 msgid "Open in File Browser"
-msgstr "Mở trong trình duyệt"
+msgstr "Mở trong File Browser"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "Tự động phát hiện"
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
 #: source/tmp/FileItem.vue.ts:123 source/tmp/FileItem.vue.ts:186
@@ -1170,11 +1189,11 @@ msgstr "%s kí tự"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Mở bảng chẩn đoán"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:128
 msgid "Disabled"
-msgstr ""
+msgstr "Tắt"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:135
 #, fuzzy
@@ -1183,16 +1202,16 @@ msgstr "Tuỳ chỉnh CSS"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "Đi đến chú thích cuối trang"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Lỗi chính tả"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:55
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "Tếp %s không tồn tại."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
@@ -1211,7 +1230,7 @@ msgstr "Mở..."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:90
 msgid "No footnote text found."
-msgstr ""
+msgstr "Không tìm thấy chú thích." 
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:107
 #: source/app/service-providers/menu/menu.darwin.ts:317
@@ -1234,33 +1253,33 @@ msgstr "Ghi chú"
 #: source/common/modules/markdown-editor/renderers/render-images.ts:98
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Không tìm thấy ảnh: %s"
 
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Chế độ đánh giá dễ đọc (%s)" 
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Đang tạo biểu đồ mermaid …"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
 #, fuzzy
 msgid "Could not render Graph:"
-msgstr "Không thể tạo tập tin"
+msgstr "Không thể tạo biểu đồ"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "Không highlight"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Giữ Cmd/Ctrl và nhấp để theo đường dẫn"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
-msgstr "Vừa nãy"
+msgstr "Vừa xong"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -1272,7 +1291,7 @@ msgstr ","
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Nam Phi"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -1381,16 +1400,16 @@ msgstr "Esperanto"
 #: source/common/util/map-lang-code.ts:59
 #, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "Tây Ban Nha"
+msgstr "Tây Ban Nha (Argentina)"
 
 #: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Spain)"
-msgstr "Tây Ban Nha"
+msgstr "Tây Ban Nha (Tây Ban Nha)"
 
 #: source/common/util/map-lang-code.ts:61
 #, fuzzy
 msgid "Spanish"
-msgstr "Đan Mạch"
+msgstr "Tây Ban Nha"
 
 #: source/common/util/map-lang-code.ts:62
 msgid "Estonian"
@@ -1415,29 +1434,29 @@ msgstr "Faroese"
 #: source/common/util/map-lang-code.ts:67
 #, fuzzy
 msgid "French (Belgium)"
-msgstr "Hà Lan (Bỉ)"
+msgstr "Pháp (Bỉ)"
 
 #: source/common/util/map-lang-code.ts:68
 #, fuzzy
 msgid "French (Switzerland)"
-msgstr "Đức (Thuỵ Sĩ)"
+msgstr "Pháp (Thuỵ Sĩ)"
 
 #: source/common/util/map-lang-code.ts:69
 msgid "French (France)"
-msgstr "Pháp"
+msgstr "Pháp (Pháp)"
 
 #: source/common/util/map-lang-code.ts:70
 #, fuzzy
 msgid "French (Luxembourg)"
-msgstr "Luxembourg"
+msgstr "Pháp (Luxembourg)"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Pháp (Vùng Monaco)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
-msgstr ""
+msgstr "Pháp"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
@@ -1487,12 +1506,12 @@ msgstr "Đức (Thuỵ Sĩ)"
 
 #: source/common/util/map-lang-code.ts:84
 msgid "Italian (Italy)"
-msgstr "Ý"
+msgstr "Ý (Ý)"
 
 #: source/common/util/map-lang-code.ts:85
 #, fuzzy
 msgid "Italian"
-msgstr "Nghiêng"
+msgstr "Ý"
 
 #: source/common/util/map-lang-code.ts:86
 msgid "Japanese"
@@ -1504,7 +1523,7 @@ msgstr "Georgian"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Khmer (Campuchia)"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
@@ -1537,11 +1556,11 @@ msgstr "Mông Cổ"
 #: source/common/util/map-lang-code.ts:96
 #, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "Malaysia"
+msgstr "Malaysia (Brunei Darussalam)"
 
 #: source/common/util/map-lang-code.ts:97
 msgid "Malaysian (Malaysia)"
-msgstr "Malaysia"
+msgstr "Malaysia (Malaysia)"
 
 #: source/common/util/map-lang-code.ts:98
 #, fuzzy
@@ -1566,7 +1585,7 @@ msgstr "Hà Lan (Hà Lan)"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
-msgstr ""
+msgstr "Hà Lan"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
@@ -1575,7 +1594,7 @@ msgstr "Na Uy (Nyorsk)"
 #: source/common/util/map-lang-code.ts:105
 #, fuzzy
 msgid "Norwegian"
-msgstr "Georgian"
+msgstr "Na Uy"
 
 #: source/common/util/map-lang-code.ts:106
 msgid "Polish"
@@ -1593,7 +1612,7 @@ msgstr "Bồ Đào Nha (Brazil)"
 #: source/common/util/map-lang-code.ts:109
 #, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr "Bồ Đào Nha (Brazil)"
+msgstr "Bồ Đào Nha (Mazambique)"
 
 #: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Portugal)"
@@ -1602,7 +1621,7 @@ msgstr "Bồ Đào Nha (Bồ Đào Nha)"
 #: source/common/util/map-lang-code.ts:111
 #, fuzzy
 msgid "Portuguese"
-msgstr "Bồ Đào Nha (Brazil)"
+msgstr "Bồ Đào Nha"
 
 #: source/common/util/map-lang-code.ts:112
 msgid "Romanian"
@@ -1614,7 +1633,7 @@ msgstr "Nga"
 
 #: source/common/util/map-lang-code.ts:114
 msgid "Rwandan (Kinyarwanda)"
-msgstr "Rwanda"
+msgstr "Rwanda (Kinyarwanda)"
 
 #: source/common/util/map-lang-code.ts:115
 msgid "Slovakian"
@@ -1631,12 +1650,12 @@ msgstr "Serb"
 #: source/common/util/map-lang-code.ts:118
 #, fuzzy
 msgid "Albanian"
-msgstr "Romani"
+msgstr "Albania"
 
 #: source/common/util/map-lang-code.ts:119
 #, fuzzy
 msgid "Albanian (Albania)"
-msgstr "Malaysia"
+msgstr "Albania (Albania)"
 
 #: source/common/util/map-lang-code.ts:120
 msgid "Swedish"
@@ -1645,15 +1664,15 @@ msgstr "Thuỵ Điển"
 #: source/common/util/map-lang-code.ts:121
 #, fuzzy
 msgid "Tamil (India)"
-msgstr "Anh (Ấn Độ)"
+msgstr "Tamil (Ấn Độ)"
 
 #: source/common/util/map-lang-code.ts:122
 msgid "Thai"
-msgstr ""
+msgstr "Thái"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Tagalog (Philippin)"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Turkish"
@@ -1665,11 +1684,11 @@ msgstr "Ukraina"
 
 #: source/common/util/map-lang-code.ts:126
 msgid "Urdu"
-msgstr ""
+msgstr "Urdu"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Vietnamese"
-msgstr "Việt Nam"
+msgstr "Tiếng Việt"
 
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
@@ -1680,12 +1699,12 @@ msgstr "Serb"
 
 #: source/common/util/map-lang-code.ts:131
 msgid "Chinese (China)"
-msgstr "Trung Quốc"
+msgstr "Trung Quốc (Đại Lục)"
 
 #: source/common/util/map-lang-code.ts:132
 #, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "Trung Quốc"
+msgstr "Trung Quốc (Đài Loan)"
 
 #: source/common/util/map-lang-code.ts:133
 #, fuzzy
@@ -1695,7 +1714,7 @@ msgstr "Trung Quốc"
 #: source/app/service-providers/workspaces/index.ts:163
 #, fuzzy, javascript-format
 msgid "Loading workspace %s"
-msgstr "Vùng Làm Việc"
+msgstr "Đang tải workspace %s"
 
 #: source/app/service-providers/updates/index.ts:294
 #, javascript-format
@@ -1760,11 +1779,11 @@ msgstr "Thay đổi trong tập tin thư viện được phát hiện. Đang t�
 
 #: source/app/service-providers/commands/language-tool.ts:187
 msgid "Document too long"
-msgstr ""
+msgstr "Văn bản quá dài"
 
 #: source/app/service-providers/commands/language-tool.ts:192
 msgid "offline"
-msgstr ""
+msgstr "ngoại tuyến"
 
 #: source/app/service-providers/commands/export.ts:55
 #: source/app/service-providers/commands/export.ts:157
@@ -1791,7 +1810,7 @@ msgstr "Lưu"
 #: source/app/service-providers/commands/export.ts:145
 #, javascript-format
 msgid "Exporting to %s"
-msgstr "Xuất ra %s"
+msgstr "Xuất đến %s"
 
 #: source/app/service-providers/commands/export.ts:158
 #, javascript-format
@@ -1828,24 +1847,24 @@ msgstr ""
 #: source/app/service-providers/commands/rename-tag.ts:43
 #: source/app/service-providers/config/index.ts:488
 msgid "Confirm"
-msgstr ""
+msgstr "Xác nhận"
 
 #: source/app/service-providers/commands/file-rename.ts:109
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Cập nhật đường dẫn nội bộ %s vào file %s?"
 
 #: source/app/service-providers/commands/file-rename.ts:111
 #: source/app/service-providers/commands/rename-tag.ts:46
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Có"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:112
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "Không"
 
 #: source/app/service-providers/commands/dir-delete.ts:35
 #: source/app/service-providers/commands/file-delete.ts:36
@@ -1903,7 +1922,7 @@ msgstr "Zettlr không thể mở thư mục &quot;%s&quot;"
 
 #: source/app/service-providers/commands/import.ts:36
 msgid "You have to select a directory to import to."
-msgstr "Bạn cần chọn thư mục để bắt đầu tích hợp."
+msgstr "Bạn cần chọn thư mục để tích hợp."
 
 #. Prepare the list of file filters
 #. The "All Files" filter should be at the top
@@ -1936,34 +1955,36 @@ msgid ""
 "The following %s files could not be imported, because their filetype is "
 "unknown: %s"
 msgstr ""
-"%s tập tin không thể được tích hợp vào hệ thống, bởi kiểu tập tin là không "
+"%s tập tin không thể được tích hợp vào hệ thống, bởi định dạng tập tin là không "
 "rõ: %s"
 
 #: source/app/service-providers/commands/import.ts:82
 #, fuzzy
 msgid "Import failed"
-msgstr "Xuất thất bại"
+msgstr "Tích hợp thất bại"
 
 #: source/app/service-providers/commands/dir-project-export.ts:74
 #, fuzzy
 msgid "Cannot export project"
-msgstr "Xuất Dự Án"
+msgstr "Không thể xuất Dự Án"
 
 #: source/app/service-providers/commands/dir-project-export.ts:75
 msgid ""
 "After applying your glob-filters, no files remained to export. Please adjust "
 "them in the project settings."
 msgstr ""
+"Sau khi sử dụng các glob-filter, không còn tệp nào để xuất nữa. Hãy điều chỉnh "
+"chúng trong phần cài đặt dự án"
 
 #: source/app/service-providers/commands/dir-project-export.ts:147
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
-msgstr ""
+msgstr "Dự án \"%s\" được xuất thành công. Nhấn để hiển thị."
 
 #: source/app/service-providers/commands/dir-project-export.ts:148
 #, fuzzy
 msgid "Project Export"
-msgstr "Xuất..."
+msgstr "Xuất dự án"
 
 #: source/app/service-providers/commands/file-new.ts:151
 #: source/app/service-providers/commands/file-duplicate.ts:42
@@ -1974,7 +1995,7 @@ msgstr "Không thể tạo tập tin"
 #: source/app/service-providers/commands/rename-tag.ts:44
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Thay thế thẻ\"%s\" với \"%s\" trong %s tệp?"
 
 #. Better error message
 #: source/app/service-providers/commands/open-attachment.ts:113
@@ -1995,18 +2016,18 @@ msgstr "Textbundle sai định dạng: %s"
 #: source/app/service-providers/commands/importer/index.ts:104
 #: source/app/service-providers/commands/importer/index.ts:105
 msgid "Select import profile"
-msgstr ""
+msgstr "Chọn tùy chỉnh tích hợp"
 
 #: source/app/service-providers/commands/importer/index.ts:106
 #, javascript-format
 msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr ""
+msgstr "Có nhiều tùy chỉnh có thể tích hợp %s. Vui lòng chọn một."
 
 #. We need to generate our own filename. First, attempt to just use 'copy of'
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Bản sao của %s"
 
 #. Else standard val for new dirs.
 #: source/app/service-providers/commands/dir-new.ts:31
@@ -2080,136 +2101,136 @@ msgstr "Tuỳ chọn %s là bắt buộc"
 
 #: source/app/service-providers/config/index.ts:480
 msgid "Changing this option requires a restart to take effect."
-msgstr ""
+msgstr "Thay đổi tùy chọn này cần khởi động lại để có hiệu lực."
 
 #: source/app/service-providers/config/index.ts:483
 #: source/app/service-providers/menu/menu.darwin.ts:711
 #: source/app/service-providers/menu/menu.win32.ts:684
 #, fuzzy
 msgid "Restart now"
-msgstr "Vừa nãy"
+msgstr "Khởi động lại ngay"
 
 #: source/app/service-providers/config/index.ts:484
 msgid "Restart later"
-msgstr ""
+msgstr "Khởi động lại sau" 
 
 #: source/win-preferences/schema/zettelkasten.ts:85
-msgid "Path to folder"
-msgstr ""
+# msgid "Path to folder"
+# msgstr "Đường dẫn thư mục"
 
 #: source/win-main/file-manager/util/file-item-context.ts:34
 #: source/win-main/file-manager/util/dir-item-context.ts:28
-msgid "Properties"
-msgstr "Các thuộc tính"
+# msgid "Properties"
+# msgstr "Các thuộc tính"
 
 #: source/win-main/file-manager/util/file-item-context.ts:43
 #: source/app/service-providers/menu/menu.darwin.ts:287
 #: source/app/service-providers/menu/menu.win32.ts:281
 #: source/tmp/Defaults.vue.ts:76
-msgid "Rename file"
-msgstr "Đổi tên tập tin"
+# msgid "Rename file"
+# msgstr "Đổi tên tập tin"
 
 #: source/win-main/file-manager/util/file-item-context.ts:50
 #: source/app/service-providers/menu/menu.darwin.ts:298
 #: source/app/service-providers/menu/menu.win32.ts:292
-msgid "Delete file"
-msgstr "Xoá tập tin"
+# msgid "Delete file"
+# msgstr "Xoá tập tin"
 
 #: source/win-main/file-manager/util/file-item-context.ts:57
-msgid "Duplicate file"
-msgstr "Tạo tập tin bản sao"
+# msgid "Duplicate file"
+# msgstr "Tạo tập tin bản sao"
 
 #: source/win-main/file-manager/util/file-item-context.ts:66
 #: source/win-main/file-manager/util/dir-item-context.ts:67
 #, fuzzy
-msgid "Copy path"
-msgstr "Sao chép đường dẫn đầy đủ"
+# msgid "Copy path"
+# msgstr "Sao chép đường dẫn đầy đủ"
 
 #: source/win-main/file-manager/util/file-item-context.ts:72
 #: source/win-main/tabs-context.ts:68
-msgid "Copy filename"
-msgstr "Sao chép tên tập tin"
+# msgid "Copy filename"
+# msgstr "Sao chép tên tập tin"
 
 #: source/win-main/file-manager/util/file-item-context.ts:78
 #: source/win-main/tabs-context.ts:80
 #: source/app/service-providers/menu/menu.darwin.ts:414
 #: source/app/service-providers/menu/menu.win32.ts:415
-msgid "Copy ID"
-msgstr "Sao chép ID"
+# msgid "Copy ID"
+# msgstr "Sao chép ID"
 
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
-msgid "Reveal in Explorer"
-msgstr ""
+# msgid "Reveal in Explorer"
+# msgstr "Hiển thị trong Explorer"
 
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
-msgid "Reveal in File Browser"
-msgstr ""
+# msgid "Reveal in File Browser"
+# msgstr "Hiển thị trong File Browser"
 
 #: source/win-main/file-manager/util/file-item-context.ts:100
-msgid "Close file"
-msgstr "Đóng tập tin"
+# msgid "Close file"
+# msgstr "Đóng tập tin"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:37
 #: source/app/service-providers/menu/menu.darwin.ts:116
 #: source/app/service-providers/menu/menu.win32.ts:90
-msgid "New File…"
-msgstr "Tập tin mới..."
+# msgid "New File…"
+# msgstr "Tập tin mới..."
 
 #: source/win-main/file-manager/util/dir-item-context.ts:43
 #: source/app/service-providers/menu/menu.darwin.ts:155
 #: source/app/service-providers/menu/menu.win32.ts:129
-msgid "New directory…"
-msgstr "Thư mục mới..."
+# msgid "New directory…"
+# msgstr "Thư mục mới..."
 
 #: source/win-main/file-manager/util/dir-item-context.ts:52
-msgid "Rename directory"
-msgstr "Đổi tên thư mục"
+# msgid "Rename directory"
+# msgstr "Đổi tên thư mục"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:58
 #: source/app/service-providers/menu/menu.darwin.ts:306
 #: source/app/service-providers/menu/menu.win32.ts:299
-msgid "Delete directory"
-msgstr "Xoá thư mục"
+# msgid "Delete directory"
+# msgstr "Xoá thư mục"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:87
-msgid "Check for directory …"
-msgstr "Kiểm tra thư mục ..."
+# msgid "Check for directory …"
+# msgstr "Kiểm tra thư mục ..."
 
 #: source/win-main/file-manager/util/dir-item-context.ts:104
-msgid "Export Project"
-msgstr "Xuất Dự Án"
+# msgid "Export Project"
+# msgstr "Xuất Dự Án"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:116
-msgid "Close Workspace"
-msgstr "Đóng Vùng Làm Việc"
+# msgid "Close Workspace"
+# msgstr ""
 
 #: source/win-main/tabs-context.ts:38
 #: source/app/service-providers/menu/menu.darwin.ts:601
 #: source/app/service-providers/menu/menu.win32.ts:574
-msgid "Close Tab"
-msgstr "Đóng Tab"
+# msgid "Close Tab"
+# msgstr "Đóng Tab"
 
 #: source/win-main/tabs-context.ts:44
-msgid "Close other tabs"
-msgstr "Đóng các tab khác"
+# msgid "Close other tabs"
+# msgstr "Đóng các tab khác"
 
 #: source/win-main/tabs-context.ts:50
-msgid "Close all tabs"
-msgstr "Đóng tất cả tab"
+# msgid "Close all tabs"
+# msgstr "Đóng tất cả tab"
 
 #: source/win-main/tabs-context.ts:59
-msgid "Unpin tab"
-msgstr "Bỏ ghim tab"
+# msgid "Unpin tab"
+# msgstr "Bỏ ghim tab"
 
 #: source/win-main/tabs-context.ts:59
-msgid "Pin tab"
-msgstr "Ghim tab"
+# msgid "Pin tab"
+# msgstr "Ghim tab"
 
 #: source/win-main/tabs-context.ts:74
-msgid "Copy full path"
-msgstr "Sao chép đường dẫn đầy đủ"
+# msgid "Copy full path"
+# msgstr "Sao chép đường dẫn đầy đủ"
 
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:641
@@ -2243,7 +2264,7 @@ msgstr "Ẩn"
 
 #: source/app/service-providers/menu/menu.darwin.ts:91
 msgid "Hide others"
-msgstr "Ẩn các cái khác"
+msgstr "Lực chọn ẩn khác"
 
 #: source/app/service-providers/menu/menu.darwin.ts:96
 msgid "Show"
@@ -2257,7 +2278,7 @@ msgstr "Tập Tin"
 #: source/app/service-providers/menu/menu.darwin.ts:175
 #: source/app/service-providers/menu/menu.win32.ts:149
 msgid "Open Workspace …"
-msgstr "Mở Vùng Làm Việc ..."
+msgstr "Mở Vùng Workspace…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:184
 #: source/app/service-providers/menu/menu.win32.ts:44
@@ -2309,12 +2330,12 @@ msgstr "Nhập thêm từ điển..."
 #: source/app/service-providers/menu/menu.darwin.ts:322
 #: source/app/service-providers/menu/menu.win32.ts:323
 msgid "Undo"
-msgstr "Hồi lại"
+msgstr "Undo"
 
 #: source/app/service-providers/menu/menu.darwin.ts:328
 #: source/app/service-providers/menu/menu.win32.ts:329
 msgid "Redo"
-msgstr "Hồi lại"
+msgstr "Redo"
 
 #: source/app/service-providers/menu/menu.darwin.ts:379
 #: source/app/service-providers/menu/menu.win32.ts:380
@@ -2351,7 +2372,7 @@ msgstr "Ngừng nói"
 #: source/app/service-providers/menu/menu.darwin.ts:444
 #: source/app/service-providers/menu/menu.win32.ts:426
 msgid "View"
-msgstr "Cách Nhìn"
+msgstr "Xem"
 
 #: source/app/service-providers/menu/menu.darwin.ts:458
 #: source/app/service-providers/menu/menu.win32.ts:440
@@ -2411,7 +2432,7 @@ msgstr "Tải lại"
 #: source/app/service-providers/menu/menu.darwin.ts:555
 #: source/app/service-providers/menu/menu.win32.ts:535
 msgid "Toggle developer tools"
-msgstr "Bật/tắt các ứng dụng cho phát triển"
+msgstr "Bật/tắt công cụ cho nhà phát triển"
 
 #: source/app/service-providers/menu/menu.darwin.ts:563
 #: source/app/service-providers/menu/menu.win32.ts:543
@@ -2487,18 +2508,18 @@ msgstr "Mở Hướng Dẫn"
 #: source/app/service-providers/menu/menu.darwin.ts:702
 #: source/app/service-providers/menu/menu.win32.ts:675
 msgid "Clear FSAL cache …"
-msgstr ""
+msgstr "Xóa cache FSAL …"
 
 #: source/app/service-providers/menu/menu.darwin.ts:706
 #: source/app/service-providers/menu/menu.win32.ts:679
 #, fuzzy
 msgid "Clear FSAL Cache"
-msgstr "Xoá tìm kiếm"
+msgstr "Xóa cache FSAL …"
 
 #: source/app/service-providers/menu/menu.darwin.ts:707
 #: source/app/service-providers/menu/menu.win32.ts:680
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "Cần khởi động lại ứng dụng để Xóa cache FSAL."
 
 #: source/app/service-providers/menu/menu.darwin.ts:708
 #: source/app/service-providers/menu/menu.win32.ts:681
@@ -2507,6 +2528,9 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
+"Sau khi khởi động lại, Zettlr sẽ tái tại lại toàn bộ cache, và sẽ mất chút "
+"thời gian, tùy theo lượng tập tin bạn đã mở và tốc độ xử lý bộ nhớ. "
+"Các cửa sổ sẽ được hiển thị sau khi hoàn tất."
 
 #: source/app/service-providers/windows/dialog/ask-file.ts:54
 msgid "Open file"
@@ -2524,56 +2548,56 @@ msgstr "Tập tin %s tồn tại trong thư mục này. Ghi đè?"
 #: source/app/service-providers/commands/root-open.ts:62
 #: source/tmp/FileItem.vue.ts:104 source/tmp/FileItem.vue.ts:106
 #: source/tmp/PopoverDirProps.vue.ts:178
-msgid "Files"
-msgstr "Các tập tin"
+# msgid "Files"
+# msgstr "Các tập tin"
 
 #: source/app/service-providers/commands/root-open.ts:85
-msgid "Cannot open directory"
-msgstr "Không thể mở thực mục"
+# msgid "Cannot open directory"
+# msgstr "Không thể mở thư mục"
 
 #: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
-msgstr "Zettlr không thể mở thư mục &quot;%s&quot;"
+# msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+# msgstr "Zettlr không thể mở thư mục &quot;%s&quot;"
 
 #: source/app/service-providers/commands/request-move.ts:53
-msgid "Cannot move directory"
-msgstr "Không thể di chuyển thư mục"
+# msgid "Cannot move directory"
+# msgstr "Không thể di chuyển thư mục"
 
 #: source/app/service-providers/commands/request-move.ts:54
-msgid "You cannot move a directory into one of its subdirectories."
-msgstr "Bạn không thể di chuyển một thư mục vào trong chính nó."
+# msgid "You cannot move a directory into one of its subdirectories."
+# msgstr "Bạn không thể di chuyển một thư mục vào trong chính nó."
 
 #: source/app/service-providers/commands/request-move.ts:63
-msgid "Cannot move directory or file"
-msgstr "Không thể di chuyển thư mục hay tập tin"
+# msgid "Cannot move directory or file"
+# msgstr "Không thể di chuyển thư mục hay tập tin"
 
 #: source/app/service-providers/commands/request-move.ts:64
 #, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "Tập tin/thư mục %s tồn tại trong thư mục đích."
+# msgid "The file/directory %s already exists in target."
+# msgstr "Tập tin/thư mục %s tồn tại trong thư mục đích."
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:37
-msgid "The requested file was not found."
-msgstr "Không thể tìm thấy tập tin được yêu cầu."
+# msgid "The requested file was not found."
+# msgstr "Không thể tìm thấy tập tin được yêu cầu."
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:54
-msgid "The provided name did not contain any allowed letters."
-msgstr "Tên định dùng không chứa bất kì kí tự nào được cho phép."
+# msgid "The provided name did not contain any allowed letters."
+# msgstr "Tên định dùng không chứa bất kì kí tự nào được cho phép."
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:75
-msgid "The requested directory was not found."
-msgstr "Không thể tìm thấy thư mục được yêu cầu"
+# msgid "The requested directory was not found."
+# msgstr "Không thể tìm thấy thư mục được yêu cầu"
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:86
-msgid "Could not save image"
-msgstr "Không thể lưu hình ảnh"
+# msgid "Could not save image"
+# msgstr "Không thể lưu hình ảnh"
 
 #. We need to generate our own filename. First, attempt to just use 'copy of'
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
-msgid "Copy of %s"
-msgstr ""
+# msgid "Copy of %s"
+# msgstr "Sao chép vào %s"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -2587,7 +2611,7 @@ msgstr "Thay đổi chưa được lưu"
 #, fuzzy
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr ""
-"Có những thay đổi chưa lưu lại trên tập tin. Bạn có muốn bỏ qua hay sẽ lưu"
+"Có những thay đổi chưa lưu lại. Bạn muốn bỏ qua hay lưu chúng trước?"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
@@ -2607,17 +2631,17 @@ msgstr "Thay đổi chưa được lưu"
 #, fuzzy
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr ""
-"Có những thay đổi chưa lưu lại trên tập tin. Bạn có muốn bỏ qua hay sẽ lưu"
+"Có những thay đổi chưa lưu lại. Bạn muốn lưu hay bỏ qua chúng?"
 
 #: source/app/service-providers/documents/index.ts:996
 #, fuzzy
 msgid "File changed on disk"
-msgstr "Chế độ quản lý tập tin"
+msgstr "Tập tin được thay đổi trên bộ nhớ"
 
 #: source/app/service-providers/documents/index.ts:997
 #, javascript-format
 msgid "%s changed on disk"
-msgstr ""
+msgstr "%s được thay đổi trên bộ nhớ"
 
 #: source/app/service-providers/documents/index.ts:999
 #, javascript-format
@@ -2625,24 +2649,29 @@ msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
+"%s được thay đổi trên bộ nhớ, nhưng trình soạn thảo vẫn còn thay đổi chưa được" 
+"lưu. Bạn muốn giữ nội dung của trình soạn thảo hay tải nội dung "
+"được lưu trên đĩa?"
 
 #: source/app/service-providers/documents/index.ts:1000
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
+"Bạn muốn giữ nội dung của trình soản thảo hay tải nội dung được lưu trên đĩa?"
 
 #: source/app/service-providers/documents/index.ts:1003
 msgid "Keep editor contents"
-msgstr ""
+msgstr "Giữ nội dung của trình soạn thảo"
 
 #: source/app/service-providers/documents/index.ts:1004
 msgid "Load changes from disk"
-msgstr ""
+msgstr "Tải nội dung từ đĩa"
 
 #: source/app/service-providers/documents/index.ts:1007
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
+"Luôn tải nội dung từ đĩa nếu không có thay đổi chưa được lưu trong trình soạn thảo"
 
 #: source/tmp/Projects-Tab.vue.ts:24
 msgid "Zettlr also makes use of these projects:"
@@ -2678,7 +2707,7 @@ msgstr "Xuất..."
 
 #: source/tmp/PopoverExport.vue.ts:27
 msgid "command"
-msgstr ""
+msgstr "lệnh"
 
 #: source/tmp/FileItem.vue.ts:98 source/tmp/FileItem.vue.ts:100
 #: source/tmp/PopoverDirProps.vue.ts:29
@@ -2703,11 +2732,11 @@ msgstr "Nhập chuỗi tìm kiếm của bạn bên dưới"
 
 #: source/tmp/GlobalSearch.vue.ts:36
 msgid "Find …"
-msgstr "Tìm ..."
+msgstr "Tìm …"
 
 #: source/tmp/GlobalSearch.vue.ts:37 source/tmp/FileManager.vue.ts:48
 msgid "Filter …"
-msgstr "Bộ lọc ..."
+msgstr "Bộ lọc …"
 
 #: source/tmp/GlobalSearch.vue.ts:38
 msgid "Filter search results"
@@ -2719,7 +2748,7 @@ msgstr "Giới hạn tìm kiếm trong thư mục"
 
 #: source/tmp/GlobalSearch.vue.ts:40
 msgid "Restrict to directory …"
-msgstr "Giới hạn trong thư mục ..."
+msgstr "Giới hạn trong thư mục …"
 
 #: source/tmp/GlobalSearch.vue.ts:41
 msgid "Search"
@@ -2736,7 +2765,7 @@ msgstr "Ẩn/hiện các kết quả"
 #: source/tmp/GlobalSearch.vue.ts:109
 #, javascript-format
 msgid "%s matches"
-msgstr ""
+msgstr "%s trùng khớp"
 
 #: source/tmp/MainSidebar.vue.ts:39 source/tmp/ToCTab.vue.ts:35
 #: source/tmp/ToCTab.vue.ts:43
@@ -2770,7 +2799,7 @@ msgstr "Đặt lại"
 
 #: source/tmp/PopoverFileProps.vue.ts:38
 msgid "Set writing target…"
-msgstr "Đặt mục tiêu viết..."
+msgstr "Đặt mục tiêu viết…"
 
 #: source/tmp/ReferencesTab.vue.ts:42
 msgid "There are no citations in this document."
@@ -2791,7 +2820,7 @@ msgstr ""
 #: source/tmp/CustomCSS.vue.ts:88 source/tmp/Defaults.vue.ts:196
 #: source/tmp/SnippetsTab.vue.ts:124
 msgid "Saving …"
-msgstr "Đang lưu ..."
+msgstr "Đang lưu …"
 
 #: source/tmp/CustomCSS.vue.ts:97
 msgid "Saving failed"
@@ -2818,6 +2847,8 @@ msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"Hồ sơ này không hợp lệ. Nó có thể chứa lỗi, hoặc không bao gồm đặc tính "
+"người viết hoặc người đọc."
 
 #: source/tmp/Defaults.vue.ts:111
 msgid "Edit the default settings for imports or exports here."
@@ -2874,7 +2905,7 @@ msgstr "Không có cập nhật mới. Bạn đang dùng phiên bản mới nh�
 
 #: source/tmp/App.vue.ts:133
 msgid "Starting update …"
-msgstr "Bắt đầu cập nhật ..."
+msgstr "Bắt đầu cập nhật …"
 
 #: source/tmp/PopoverPomodoro.vue.ts:80
 msgid "Stop"
@@ -2894,15 +2925,15 @@ msgstr "Nghỉ"
 
 #: source/tmp/PopoverPomodoro.vue.ts:92
 msgid "Sound Effect"
-msgstr ""
+msgstr "Hiệu Ứng Âm Thanh"
 
 #: source/tmp/PopoverPomodoro.vue.ts:95
 msgid "Volume"
-msgstr ""
+msgstr "Âm Lượng"
 
 #: source/tmp/SnippetsTab.vue.ts:50
 msgid "Rename snippet"
-msgstr "Thay đổi snippet"
+msgstr "Thay đổi tên snippet"
 
 #: source/tmp/SnippetsTab.vue.ts:53
 msgid "Snippets let you define reusable pieces of text with variables."
@@ -2918,7 +2949,7 @@ msgstr "Mở thư mục dự án"
 #: source/tmp/FileControl.vue.ts:42
 #, fuzzy
 msgid "Select file…"
-msgstr "Xoá tập tin"
+msgstr "Chọn tập tin…"
 
 #: source/tmp/General-Tab.vue.ts:23
 msgid ""
@@ -2971,20 +3002,20 @@ msgstr "Không có tập tin liên quan"
 
 #: source/tmp/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Quan hệ này được dựa trên liên kết hai chiều."
 
 #: source/tmp/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Quan hệ này được dựa trên liên kết đi."
 
 #: source/tmp/RelatedFilesTab.vue.ts:37
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Quan hệ này được dựa trên liên kết tới."
 
 #: source/tmp/RelatedFilesTab.vue.ts:221
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Quan hệ này được dựa trên %s thẻ chung: %s"
 
 #: source/tmp/PopoverDocInfo.vue.ts:45
 msgid "No open document"
@@ -3000,15 +3031,15 @@ msgstr "kí tự"
 
 #: source/tmp/PopoverTags.vue.ts:39
 msgid "Name"
-msgstr ""
+msgstr "Tên"
 
 #: source/tmp/PopoverTags.vue.ts:40
 msgid "Count"
-msgstr ""
+msgstr "Số từ"
 
 #: source/tmp/PopoverTags.vue.ts:47
 msgid "Filter tags…"
-msgstr "Bộ lọc thẻ..."
+msgstr "Bộ lọc thẻ…"
 
 #: source/tmp/PopoverTags.vue.ts:48
 msgid "Tag Cloud"
@@ -3016,15 +3047,15 @@ msgstr "Đám mây thẻ"
 
 #: source/tmp/PopoverStats.vue.ts:79
 msgid "words last month"
-msgstr "từ tháng trước"
+msgstr "số từ trong tháng trước"
 
 #: source/tmp/PopoverStats.vue.ts:82
 msgid "daily average"
-msgstr "Trung bình ngày"
+msgstr "trung bình ngày"
 
 #: source/tmp/PopoverStats.vue.ts:85
 msgid "words today"
-msgstr "từ hôm nay"
+msgstr "số từ hôm nay"
 
 #: source/tmp/PopoverStats.vue.ts:88
 msgid "🔥 You're on fire!"
@@ -3040,7 +3071,7 @@ msgstr "✍🏼 Tiếp tục viết để vượt qua thành tích thường ng�
 
 #: source/tmp/PopoverStats.vue.ts:97
 msgid "More statistics …"
-msgstr "Thêm thống kê ..."
+msgstr "Thêm thống kê …"
 
 #. STATIC VARIABLES
 #: source/tmp/CalendarView.vue.ts:26
