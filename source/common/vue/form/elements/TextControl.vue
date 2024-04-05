@@ -30,7 +30,7 @@
         v-bind:title="resetLabel"
         v-on:click="emit('update:modelValue', typeof reset === 'boolean' ? '' : reset)"
       >
-        &times;
+        <cds-icon shape="times"></cds-icon>
       </button>
     </div>
     <p v-if="info !== undefined" class="info" v-html="info"></p>

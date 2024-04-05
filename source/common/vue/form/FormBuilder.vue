@@ -370,6 +370,10 @@ body.dark .form-container {
     color: inherit;
     border-color: rgb(30, 30, 30);
   }
+
+  hr {
+    border-top-color: #5a5a5a;
+  }
 }
 
 body.win32:not(.dark) .form-container {
