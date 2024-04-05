@@ -194,6 +194,8 @@ or showing tooltips on these links.
 - Fixed an issue with the AST parser that would be unable to successfully parse
   Markdown tables with empty cells (#5025)
 - Fixed an issue with inserting Markdown tables via the popover (#5028)
+- Add a somewhat more informative message to the directory selection in the
+  file importing workflow
 
 ## Under the Hood
 
