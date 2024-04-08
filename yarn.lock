@@ -286,16 +286,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-yaml@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/lang-yaml@npm:6.0.0"
+"@codemirror/lang-yaml@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "@codemirror/lang-yaml@npm:6.1.0"
   dependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
     "@lezer/common": ^1.2.0
+    "@lezer/highlight": ^1.2.0
     "@lezer/yaml": ^1.0.0
-  checksum: d9f5067fda326e2d3dd182c4f3ef41801a791b83da8d73251ca7cb2cde1dbafa04eab7a9f49ab6801ace0cdfffaa4fb18aa1f870945772b8aed0ab29f7139f6b
+  checksum: 283d5462e7b40c8caa5ef2b32cf394303af3c3926583a718b373395162ac94d74e8d79545e985a8cf9959ff82286f8a99d4fe1d17d60df03fb4c432c5d9e7adf
   languageName: node
   linkType: hard
 
@@ -14654,7 +14655,7 @@ __metadata:
     "@codemirror/lang-markdown": ^6.2.4
     "@codemirror/lang-php": ^6.0.1
     "@codemirror/lang-python": ^6.1.5
-    "@codemirror/lang-yaml": ^6.0.0
+    "@codemirror/lang-yaml": ^6.1.0
     "@codemirror/language": ^6.10.1
     "@codemirror/legacy-modes": ^6.4.0
     "@codemirror/search": ^6.5.6
