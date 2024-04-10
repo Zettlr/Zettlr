@@ -196,6 +196,7 @@ or showing tooltips on these links.
 - Fixed an issue with inserting Markdown tables via the popover (#5028)
 - Add a somewhat more informative message to the directory selection in the
   file importing workflow
+- Improved how focusing the various open editors works (#4889)
 
 ## Under the Hood
 

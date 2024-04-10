@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="editor"
+    ref="mainEditorWrapper"
     class="main-editor-wrapper"
     v-bind:style="{ 'font-size': `${fontSize}px` }"
     v-bind:class="{
@@ -34,7 +34,7 @@
 import MarkdownEditor from '@common/modules/markdown-editor'
 import objectToArray from '@common/util/object-to-array'
 
-import { ref, computed, onMounted, onBeforeUnmount, watch, toRef } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch, toRef, onUpdated } from 'vue'
 import { type EditorCommands } from './App.vue'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
@@ -195,8 +195,28 @@ onBeforeUnmount(() => {
   currentEditor?.unmount()
 })
 
+onUpdated(() => {
+  // We hook into the onUpdated lifecycle event since that will fire when the
+  // data for this component update, which includes visibility with the v-show
+  // directive. In case that the editor component is mounted and non-hidden, we
+  // will fire
+  const elem = mainEditorWrapper.value
+  if (elem === null || currentEditor === null) {
+    return
+  }
+
+  if (elem.style.display === 'none') {
+    return // Editor is hidden by v-show directive
+  }
+
+  if (!currentEditor.hasFocus()) {
+    currentEditor.focus()
+  }
+})
+
 // DATA SETUP
 const showSearch = ref(false)
+const mainEditorWrapper = ref<HTMLDivElement|null>(null)
 
 // COMPUTED PROPERTIES
 const useH1 = computed<boolean>(() => configStore.config.fileNameDisplay.includes('heading'))
