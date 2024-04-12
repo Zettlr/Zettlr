@@ -197,6 +197,8 @@ or showing tooltips on these links.
 - Add a somewhat more informative message to the directory selection in the
   file importing workflow
 - Improved how focusing the various open editors works (#4889)
+- Fixed an issue where some borders in between split views wouldn't be drawn in
+  more complex layouts
 
 ## Under the Hood
 

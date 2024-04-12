@@ -55,6 +55,7 @@
               v-bind:node="paneConfiguration"
               v-bind:window-id="windowId"
               v-bind:editor-commands="editorCommands"
+              v-bind:is-last="true"
               v-on:global-search="startGlobalSearch($event)"
             ></EditorBranch>
           </template>
