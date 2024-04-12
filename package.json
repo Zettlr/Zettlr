@@ -81,7 +81,6 @@
     "luxon": "^3.4.4",
     "md5": "^2.3.0",
     "mermaid": "^10.9.0",
-    "minimatch": "^9.0.4",
     "nodehun": "^3.0.2",
     "pinia": "^2.1.7",
     "rehype-parse": "^9.0.0",
