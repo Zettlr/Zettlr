@@ -102,8 +102,8 @@ export default function displayFileContext (event: MouseEvent, dirObject: DirDes
       id: 'menu.project_build',
       type: 'normal',
       label: trans('Export Project'),
-      // Only enable if there are formats to export to
-      enabled: dirObject.settings.project.profiles.length > 0
+      // Only enable if there are files and formats to export to
+      enabled: dirObject.settings.project.profiles.length > 0 && dirObject.settings.project.files.length > 0
     })
   }
 
