@@ -98,6 +98,17 @@ body {
     }
 
     .cb-group-label { grid-area: label; }
+
+    label {
+      &.disabled {
+        color: grey;
+      }
+    }
+
+    div.info {
+      color: grey;
+      font-size: 80%;
+    }
   }
 
   label.checkbox {
@@ -152,17 +163,6 @@ body {
         border-color: rgb(90, 90, 90);
       }
     }
-  }
-
-  label {
-    &.disabled {
-      color: grey;
-    }
-  }
-
-  div.info {
-    color: grey;
-    font-size: 80%;
   }
 }
 
