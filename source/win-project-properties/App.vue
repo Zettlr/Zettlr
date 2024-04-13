@@ -197,6 +197,18 @@ const configStore = useConfigStore()
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 
+/**
+ * Helper function that converts any path fragment -- especially when it comes
+ * from Windows -- into a Unix path by replacing \ with /.
+ *
+ * @param   {string}  pathFragment  The path (fragment)
+ *
+ * @return  {string}                The path as a Unix path
+ */
+function pathToUnix (pathFragment: string): string {
+  return pathFragment.replace(/\\/g, '/')
+}
+
 const tabs: WindowTab[] = [
   {
     id: 'formats-control',
@@ -246,7 +258,8 @@ const exportFileList = computed(() => {
       }
     }
 
-    const relativePath = file.path.slice(dirPath.length + 1)
+    // The app always defaults to the Unix path conventions (/ instead of \\)
+    const relativePath = pathToUnix(file.path.slice(dirPath.length + 1))
     files.push({
       // NOTE: We must map the files to the relative paths from the directory!
       relativePath,
@@ -279,7 +292,7 @@ const exportFileList = computed(() => {
 // present in the project directory.
 const missingFiles = computed(() => {
   const missing: string[] = []
-  const availablePaths = availableFiles.value.map(x => x.path.slice(dirPath.length + 1))
+  const availablePaths = availableFiles.value.map(x => pathToUnix(x.path.slice(dirPath.length + 1)))
 
   for (const file of projectSettings.value.files) {
     if (!availablePaths.includes(file)) {

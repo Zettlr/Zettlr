@@ -24,6 +24,17 @@ import { showNativeNotification } from '@common/util/show-notification'
 import type { AnyDescriptor } from 'source/types/common/fsal'
 import path from 'path'
 
+/**
+ * Converts a path fragment to use Windows path separators by replacing / with \
+ *
+ * @param   {string}  pathFragment  The path fragment
+ *
+ * @return  {string}                The path fragment using Windows conventions.
+ */
+function pathToWin (pathFragment: string): string {
+  return pathFragment.replace(/\//g, '\\')
+}
+
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
     super(app, 'dir-project-export')
@@ -60,7 +71,13 @@ export default class DirProjectExport extends ZettlrCommand {
     // Since the config.files array already includes relative paths, we
     // basically just have to make them absolute relative to the directory and
     // ensure those paths exist in availableFiles.
-    const existingFilesWithSorting = config.files.map(file => path.join(dir.path, file)).filter(file => availableFiles.includes(file))
+    const existingFilesWithSorting = config.files
+      // Since we default to always using Unix paths, to make the magic work on
+      // Windows, we here have to map the relative paths in the project config
+      // (back) to the Windows conventions by replacing / with \\.
+      .map(file => process.platform === 'win32' ? pathToWin(file) : file)
+      .map(file => path.join(dir.path, file))
+      .filter(file => availableFiles.includes(file))
 
     if (existingFilesWithSorting.length === 0) {
       this._app.log.warning('[Project] Aborting project export: No files to export')
