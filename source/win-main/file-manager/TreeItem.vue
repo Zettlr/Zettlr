@@ -164,7 +164,7 @@ import PopoverDirProps from './util/PopoverDirProps.vue'
 import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
-import { nextTick, ref, computed, watch, onMounted } from 'vue'
+import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useWindowStateStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
@@ -205,7 +205,8 @@ const {
   finishNameEditing,
   isDirectory,
   selectedFile,
-  selectedDir
+  selectedDir,
+  updateObject
 } = useItemComposable(props.obj, displayText, props.windowId, nameEditingInput)
 
 function sel (event: MouseEvent): void {
@@ -381,6 +382,12 @@ watch(operationType, (newVal) => {
     })
       .catch(err => console.error(err))
   }
+})
+
+// I have no idea why passing this as a Ref to the composable doesn't work, but
+// this way it does.
+watch(toRef(props, 'obj'), function (value) {
+  updateObject(value)
 })
 
 onMounted(uncollapseIfApplicable)
