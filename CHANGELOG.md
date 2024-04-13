@@ -250,6 +250,9 @@ take the appropriate action (especially if it was an accidental deletion).
 - Improved how focusing the various open editors works (#4889)
 - Fixed an issue where some borders in between split views wouldn't be drawn in
   more complex layouts
+- Fixed an issue that would not add a newly created file outside the loaded
+  workspaces to the list of standalone files, leading to various minor
+  annoyances around other parts of the app
 
 ## Under the Hood
 

@@ -141,6 +141,14 @@ export default class FileNew extends ZettlrCommand {
 
       // And directly thereafter, open the file
       await this._app.documents.openFile(windowId, leafId, absPath, true)
+      // Final check: If the file has been created outside of any loaded
+      // workspace, we must add it as root so that some other functions of
+      // Zettlr work fine (even though the editing should work flawlessly.).
+      // Since at this point the events that add the file to the tree likely
+      // haven't fired yet, we can check whether the parent directory exists.
+      if (this._app.workspaces.findDir(path.dirname(absPath)) === undefined) {
+        this._app.config.addPath(absPath)
+      }
     } catch (err: any) {
       this._app.log.error(`Could not create file: ${err.message as string}`)
       this._app.windows.prompt({
