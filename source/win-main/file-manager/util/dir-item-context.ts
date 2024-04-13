@@ -19,7 +19,7 @@ import type { AnyMenuItem } from '@dts/renderer/context'
 
 const ipcRenderer = window.ipc
 
-export default function displayFileContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
+export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
   const isMac = process.platform === 'darwin'
   const isWin = process.platform === 'win32'
 
