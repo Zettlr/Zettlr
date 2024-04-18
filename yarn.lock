@@ -152,15 +152,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/commands@npm:^6.3.3":
-  version: 6.3.3
-  resolution: "@codemirror/commands@npm:6.3.3"
+"@codemirror/commands@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@codemirror/commands@npm:6.4.0"
   dependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.4.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.1.0
-  checksum: 7d23aecc973823969434b839aefa9a98bb47212d2ce0e6869ae903adbb5233aad22a760788fb7bb6eb45b00b01a4932fb93ad43bacdcbc0215e7500cf54b17bb
+  checksum: 92fb4ffe75e177186ce0801fdd1d1dacfd9a005122f8d032211e8d86fd9e81d4dd0440fa2bcf866df720be259dc7c91e7912884d44f5eb7fa8dce683ec820563
   languageName: node
   linkType: hard
 
@@ -14647,7 +14647,7 @@ __metadata:
     "@cds/core": ^6.9.2
     "@codemirror/autocomplete": ^6.15.0
     "@codemirror/collab": ^6.1.1
-    "@codemirror/commands": ^6.3.3
+    "@codemirror/commands": ^6.4.0
     "@codemirror/lang-css": ^6.2.1
     "@codemirror/lang-javascript": ^6.2.2
     "@codemirror/lang-json": ^6.0.1
