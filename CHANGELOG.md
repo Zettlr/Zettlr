@@ -155,6 +155,11 @@ take the appropriate action (especially if it was an accidental deletion).
   creation upon following internal links; now this will happen automatically as
   long as the "custom folder" option points to an existing folder; to disable
   this functionality simply remove the folder path
+- LanguageTool now respects the `lang` YAML frontmatter property (if present and
+  conforming to simple BCP-47 tags, e.g., `de` or `de-DE`), instead of
+  defaulting to "auto"; this allows you to specify the languages of your
+  documents instead of relying on LanguageTool to figure it out; may not work
+  with more exotic tag variants (such as `de-DE-x-simple-language`)
 - Fixed a bug where recent documents would not turn up in the menu
 - Fixed the sidebar shortcut: It is now `Cmd/Ctrl+Shift+0` (to align with the
   file manager shortcut, `Cmd/Ctrl+Shift+1`)
