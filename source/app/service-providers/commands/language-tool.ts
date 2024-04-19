@@ -141,6 +141,11 @@ export default class LanguageTool extends ZettlrCommand {
       searchParams.append('motherTongue', motherTongue)
     }
 
+    // If the language is auto-detected, add the preferred variants
+    if (language === 'auto') {
+      // TODO: searchParams.append('preferredVariants', 'en-GB,de-DE')
+    }
+
     const useCredentials = username.trim() !== '' && apiKey.trim() !== ''
 
     let server = 'https://api.languagetool.org'
