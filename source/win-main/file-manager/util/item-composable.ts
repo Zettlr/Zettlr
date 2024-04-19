@@ -14,8 +14,8 @@
  * END HEADER
  */
 
-import fileContextMenu from './file-item-context'
-import dirContextMenu from './dir-item-context'
+import { displayFileContext } from './file-item-context'
+import { displayDirContext } from './dir-item-context'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import type { MaybeRootDescriptor } from 'source/types/common/fsal'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
@@ -121,7 +121,7 @@ export function useItemComposable (
     }
 
     if (obj.value.type === 'directory') {
-      dirContextMenu(event, obj.value, rootElement.value, clickedID => {
+      displayDirContext(event, obj.value, rootElement.value, clickedID => {
         if (clickedID === 'menu.rename_dir') {
           nameEditing.value = true
         } else if (clickedID === 'menu.new_file') {
@@ -152,7 +152,7 @@ export function useItemComposable (
         }
       })
     } else {
-      fileContextMenu(event, obj.value, rootElement.value, clickedID => {
+      displayFileContext(event, obj.value, rootElement.value, clickedID => {
         if (clickedID === 'new-tab') {
           // Request the clicked file, explicitly in a new tab
           ipcRenderer.invoke('documents-provider', {

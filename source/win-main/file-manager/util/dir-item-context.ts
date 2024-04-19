@@ -19,7 +19,7 @@ import type { AnyMenuItem } from '@dts/renderer/context'
 
 const ipcRenderer = window.ipc
 
-export default function displayFileContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
+export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
   const isMac = process.platform === 'darwin'
   const isWin = process.platform === 'win32'
 
@@ -102,8 +102,8 @@ export default function displayFileContext (event: MouseEvent, dirObject: DirDes
       id: 'menu.project_build',
       type: 'normal',
       label: trans('Export Project'),
-      // Only enable if there are formats to export to
-      enabled: dirObject.settings.project.profiles.length > 0
+      // Only enable if there are files and formats to export to
+      enabled: dirObject.settings.project.profiles.length > 0 && dirObject.settings.project.files.length > 0
     })
   }
 

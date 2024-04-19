@@ -15,13 +15,25 @@
 import ZettlrCommand from './zettlr-command'
 import objectToArray from '@common/util/object-to-array'
 import { makeExport } from './exporter'
-import { minimatch } from 'minimatch'
 import { shell, dialog } from 'electron'
 import type { ExporterOptions } from './exporter/types'
 import type LogProvider from '@providers/log'
 import { trans } from '@common/i18n-main'
 import { runShellCommand } from './exporter/run-shell-command'
 import { showNativeNotification } from '@common/util/show-notification'
+import type { AnyDescriptor } from 'source/types/common/fsal'
+import path from 'path'
+
+/**
+ * Converts a path fragment to use Windows path separators by replacing / with \
+ *
+ * @param   {string}  pathFragment  The path fragment
+ *
+ * @return  {string}                The path fragment using Windows conventions.
+ */
+function pathToWin (pathFragment: string): string {
+  return pathFragment.replace(/\//g, '\\')
+}
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -49,32 +61,37 @@ export default class DirProjectExport extends ZettlrCommand {
       return false
     }
 
-    // Receive a two dimensional array of all directory contents and remove all
-    // directories as well as any non-code/MD file
-    let files = objectToArray(dir, 'children').filter(e => e.type !== 'directory' && e.type !== 'other')
+    // Now, we have to retrieve the files. We have a directory descriptor that
+    // contains a list of existing files on disk, and we have a project config
+    // that specifies files and a sorting for export. We need to check that all
+    // files specified in the config still exist. If a file is missing, display
+    // a warning but export anyway.
+    const availableFiles = objectToArray<AnyDescriptor>(dir, 'children').filter(e => e.type !== 'directory' && e.type !== 'other').map(e => e.path)
 
-    if (files.length === 0) {
-      return false // Cannot export, but this should be obvious to the user
-    }
+    // Since the config.files array already includes relative paths, we
+    // basically just have to make them absolute relative to the directory and
+    // ensure those paths exist in availableFiles.
+    const existingFilesWithSorting = config.files
+      // Since we default to always using Unix paths, to make the magic work on
+      // Windows, we here have to map the relative paths in the project config
+      // (back) to the Windows conventions by replacing / with \\.
+      .map(file => process.platform === 'win32' ? pathToWin(file) : file)
+      .map(file => path.join(dir.path, file))
+      .filter(file => availableFiles.includes(file))
 
-    // Use minimatch to filter against the project's filter patterns
-    for (const pattern of config.filters) {
-      this._app.log.info(`[Project] Filtering fileset: Matching against "${pattern}"`)
-      // NOTE: We cannot use the `array.filter(minimatch.filter()) pattern because
-      // we have an array of objects, not strings!
-      const filter = minimatch.filter(pattern, { matchBase: true })
-      files = files.filter(fileDescriptor => filter(fileDescriptor.name))
-    }
-
-    if (files.length === 0) {
-      this._app.log.warning('[Project] Aborting export: No files remained after filtering.')
-      // Cannot export, but this time we must inform the user that their patterns
-      // have filtered out every file.
+    if (existingFilesWithSorting.length === 0) {
+      this._app.log.warning('[Project] Aborting project export: No files to export')
       dialog.showErrorBox(
         trans('Cannot export project'),
-        trans('After applying your glob-filters, no files remained to export. Please adjust them in the project settings.')
+        trans('There are no files selected for export. Please select files to be included in the project settings.')
       )
-      return false
+      return false // Cannot export
+    } else if (existingFilesWithSorting.length !== config.files.length) {
+      await dialog.showMessageBox({
+        title: trans('Project File Mismatch'),
+        message: trans('One or more files specified in the project settings have not been found. They may have moved or been deleted. Please verify that all files that you would like to export are included.'),
+        buttons: [trans('Ok')]
+      }) // Don't return, because we still can export
     }
 
     const allDefaults = await this._app.assets.listDefaults()
@@ -112,10 +129,14 @@ export default class DirProjectExport extends ZettlrCommand {
         template = config.templates.tex
       }
 
+      const sourceFiles = existingFilesWithSorting.map(file => {
+        return { path: file, name: path.basename(file), ext: path.extname(file) }
+      })
+
       try {
         const opt: ExporterOptions = {
           profile,
-          sourceFiles: files,
+          sourceFiles,
           targetDirectory: dir.path,
           cwd: dir.path,
           defaultsOverride: {
@@ -134,11 +155,11 @@ export default class DirProjectExport extends ZettlrCommand {
         }
         this._app.log.info(`[Project] Exported ${dir.name} as ${result.targetFile}`)
       } catch (err: any) {
-        this._app.log.error(err.message, err)
+        this._app.log.error(String(err.message), err)
         this._app.windows.showErrorMessage(
-          ('title' in err) ? err.title : err.message,
-          err.message,
-          ('additionalInfo' in err) ? err.additionalInfo : ''
+          ('title' in err) ? String(err.title) : String(err.message),
+          String(err.message),
+          ('additionalInfo' in err) ? String(err.additionalInfo) : ''
         )
       }
     }

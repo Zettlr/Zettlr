@@ -314,7 +314,7 @@ export default class WorkspaceProvider extends ProviderContract {
    * @return  {Array<AnyFileDescriptor>}  An array of every file
    */
   public getAllFiles (): Array<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
-    return objectToArray(this.roots.map(root => root.rootDescriptor), 'children')
+    return objectToArray<any>(this.roots.map(root => root.rootDescriptor), 'children')
       .filter(descriptor => descriptor.type !== 'directory')
   }
 
@@ -346,7 +346,7 @@ export default class WorkspaceProvider extends ProviderContract {
    * @param  {string}  query  What to search for
    */
   public findExact (query: string): MDFileDescriptor|undefined {
-    const idREPattern = this._config.get('zkn.idRE')
+    const idREPattern = this._config.get().zkn.idRE
     const idRE = getIDRE(idREPattern, true)
     const extensions = mdFileExtensions(true)
     const allWorkspaces = this.roots.map(root => root.rootDescriptor)

@@ -67,6 +67,55 @@ follow these links again.
 Note that we have not yet implemented the functionality of auto-renaming files
 or showing tooltips on these links.
 
+## Project Overhaul: Full Control Over Your Files
+
+Projects are at the heart of Zettlr. As a writing toolbox primarily targeted at
+academics, journalists, and writers, it must cater not just to simple note-
+taking workflows, but also to serious writing. Because of this, Zettlr ships
+with a project feature since the very beginning (since version `0.18.0`,
+released on Jul 20, 2018, to be precise).
+
+However, for a long time the feature attempted to piggyback on the way your
+files were displayed. This meant that (a) the order in which your files were
+weaved together into the project file depended on the sorting of the directory,
+and (b) there was no clear way to exclude files that naturally amass during the
+lifetime of a project, such as notes, backup files, and miscellaneous.
+
+Zettlr 3.1.0 fixes this issue by introducing a rather small, but powerful change
+to the way projects work. We have removed the difficult to understand glob-
+patterns that were introduced in a less-than-ideal attempt to fix some of the
+complexity-issues that were introduced later (such as displaying file titles
+instead of filenames, and others). Instead, you can now explicitly select which
+files will be included in your bound export files – and in which order.
+
+The new file list, which you can find in the project properties dialog, aims to
+be dead-simple to understand, yet give you back the certainty which files will
+end up where in your export – without a doubt.
+
+This also means a change to your projects: After this update, the glob patterns
+will be removed from your `.ztr-directory` files and replaced with an (initially
+empty) array of files to be included in your project. That means that you will
+have to select the files you want to include in a project once after the update.
+
+Managing this list in the project properties is simple: The "Files" tab includes
+a list of all files available within the project's folder structure. To select a
+file for export, click the "+"-button to move it up and include it in the
+export. Next, you can use the "Up"- and "Down"-buttons to change the order of
+the files within your export. The "-"-button removes a file again and moves it
+back down to the list of ignored files. Changes are immediately applied and
+persisted to your disk.
+
+When you now export the project, Zettlr will use only the files you have
+selected, and put them in the appropriate order.
+
+Should you have deleted a file that you originally included in the list of
+files, Zettlr will show you a warning message as soon as you export it so that
+you can have a second look to not send off a file that's missing a crucial part
+of your work. Such missing files are shown atop of the available files and
+feature a "-"-button which allows you to remove them from the list. We opted for
+this approach, since it makes it transparent which files are missing so you can
+take the appropriate action (especially if it was an accidental deletion).
+
 ## GUI and Functionality
 
 - **Feature**: Zettlr now supports titles in internal (wiki) links; the default
@@ -77,6 +126,8 @@ or showing tooltips on these links.
   option on the Pandoc Markdown reader (`wikilinks_title_after_pipe` or
   `wikilinks_title_before_pipe`, respectively) if you wish to export files with
   this option
+- **Feature**: Project Overhaul. Now you can properly manage which files will be
+  exported in projects, and in which order
 - **Feature**: Zettlr can now suggest you emojis during autocompletion. Emojis
   use the same trigger character as the snippets autocomplete, a colon (`:`);
   and Emojis will always be sorted below your snippets -- you can turn this off
@@ -199,6 +250,9 @@ or showing tooltips on these links.
 - Improved how focusing the various open editors works (#4889)
 - Fixed an issue where some borders in between split views wouldn't be drawn in
   more complex layouts
+- Fixed an issue that would not add a newly created file outside the loaded
+  workspaces to the list of standalone files, leading to various minor
+  annoyances around other parts of the app
 
 ## Under the Hood
 
