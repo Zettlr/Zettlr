@@ -116,6 +116,36 @@ feature a "-"-button which allows you to remove them from the list. We opted for
 this approach, since it makes it transparent which files are missing so you can
 take the appropriate action (especially if it was an accidental deletion).
 
+## LanguageTool Improvements
+
+The first update to Zettlr's LanguageTool integration concerns the language
+detection. This update ships with two improvements:
+
+1. Zettlr implements LanguageTool's "Preferred Variants" setting
+2. LanguageTool respects the `lang` frontmatter property
+
+Those who prefer writing in British English (instead of, e.g., US English) had
+to resort to manually switching the automatically detected language from en-US
+to en-GB every time they opened a file. This has to do with fact that
+LanguageTool's auto-detector cannot reliably distinguish between variants of
+some languages (English, German, Portuguese, and Catalan). That is why LT
+implements a "Preferred Variants" setting that allows you to specify which
+variant you prefer when writing in any of these languages. Zettlr now implements
+this setting so that when LT auto-detects the language, it will choose that
+variant if it detects that, e.g., English is the language. You can adapt this in
+the settings.
+
+Second, LanguageTool now respects the `lang` property in YAML frontmatters. This
+will come in especially handy for people writing bilingual and where
+LanguageTool has troubles auto-detecting the proper language. By setting the
+property `lang` to the language of the document (e.g., `en-CA`), LanguageTool
+will default to that one instead of choosing the auto-detection. As an added
+benefit, Pandoc also supports this property to localize some things here and
+there (read more at https://pandoc.org/MANUAL.html#language-variables).
+
+Note that both improvements only apply to the initial loading of a document. You
+can always override the language on a per-document basis using the status bar.
+
 ## GUI and Functionality
 
 - **Feature**: Zettlr now supports titles in internal (wiki) links; the default
@@ -141,6 +171,9 @@ take the appropriate action (especially if it was an accidental deletion).
   columns will be inserted
 - **Feature**: A new setting allows to highlight whitespace across the app
   (#1123)
+- **Feature**: Implemented the LanguageTool Preferred Variants setting; now you
+  can select variants of certain languages (English, German, Portuguese, and
+  Catalan) for cases in which the automatic detection may pick the wrong one
 - **Change**: The attachment sidebar no longer considers the "open folder" for
   fetching its "other files" -- instead it will use the last focused file's
   folder

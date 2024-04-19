@@ -95,6 +95,12 @@ export interface ConfigOptions {
         active: boolean
         level: 'picky'|'default'
         motherTongue: string // e.g., en-US, de-DE
+        variants: {
+          en: string
+          de: string
+          pt: string
+          ca: string
+        }
         provider: 'official'|'custom'
         customServer: string
         username: string
@@ -272,6 +278,13 @@ export function getConfigTemplate (): ConfigOptions {
           active: false, // Utilize languageTool?
           level: 'picky', // API: https://languagetool.org/http-api/#!/default/post_check
           motherTongue: '', // Optional motherTongue property
+          variants: {
+            // These defaults are taken from LT's extension
+            en: 'en-US',
+            de: 'de-DE',
+            pt: 'pt-PT',
+            ca: 'ca-ES'
+          },
           provider: 'official',
           customServer: '',
           username: '',

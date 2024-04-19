@@ -123,6 +123,7 @@ export default class LanguageTool extends ZettlrCommand {
       active,
       level,
       motherTongue,
+      variants,
       username,
       apiKey,
       customServer,
@@ -141,9 +142,10 @@ export default class LanguageTool extends ZettlrCommand {
       searchParams.append('motherTongue', motherTongue)
     }
 
-    // If the language is auto-detected, add the preferred variants
+    // If the language is auto-detected, add the preferred variants from the
+    // settings
     if (language === 'auto') {
-      // TODO: searchParams.append('preferredVariants', 'en-GB,de-DE')
+      searchParams.append('preferredVariants', Object.values(variants).join(','))
     }
 
     const useCredentials = username.trim() !== '' && apiKey.trim() !== ''
