@@ -1006,6 +1006,9 @@ there.
   command hub
 - Removed the `Zettlr` class; the last remnant of the old, class-based system
 - Remove deprecated modules `svg-inline-loader`, `raw-loader`, and `file-loader`
+- Removed unused Markdown Syntax Tree tags
+- Separate frontmatter detection and inner (YAML) parse responsibilities
+- Remove the `info` property from YAML frontmatter blocks in Markdown AST
 
 # 2.3.0
 

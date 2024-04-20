@@ -39,7 +39,7 @@ function posInProtectedNode (state: EditorState, pos: number): boolean {
     'Comment', 'CommentBlock', // <!-- comment -->
     'FencedCode', 'CodeText', // Code block
     'HorizontalRule', // --- and ***
-    'YAMLFrontmatterStart', 'YAMLFrontmatterEnd',
+    'YAMLFrontmatter',
     'HTMLTag', 'HTMLBlock' // HTML elements
   ]
 

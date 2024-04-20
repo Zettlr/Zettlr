@@ -299,10 +299,6 @@ export interface Emphasis extends MDNode {
 export interface YAMLFrontmatter extends MDNode {
   type: 'YAMLFrontmatter'
   /**
-   * The info string will always be yaml frontmatter.
-   */
-  info: string
-  /**
    * The verbatim YAML source.
    */
   source: string
@@ -694,14 +690,25 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         }
       }
       const source = node.getChild('CodeText')
-      const isFrontmatter = node.getChild('YAMLFrontmatterStart') !== null
-      const astNode: FencedCode|YAMLFrontmatter = {
-        type: isFrontmatter ? 'YAMLFrontmatter' : 'FencedCode',
-        name: isFrontmatter ? 'YAMLFrontmatter' : 'FencedCode',
+      const astNode: FencedCode = {
+        type: 'FencedCode',
+        name: 'FencedCode',
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         info: info !== null ? markdown.substring(info.from, info.to) : '',
+        source: source !== null ? markdown.substring(source.from, source.to) : ''
+      }
+      return astNode
+    }
+    case 'YAMLFrontmatter': {
+      const source = node.getChild('CodeText')
+      const astNode: YAMLFrontmatter = {
+        type: 'YAMLFrontmatter',
+        name: 'YAMLFrontmatter',
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         source: source !== null ? markdown.substring(source.from, source.to) : ''
       }
       return astNode
