@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-03-18 09:45+0000\n"
+"POT-Creation-Date: 2024-04-20 12:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: தமிழ்நேரம் <https://TamilNeram.github.io>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,12 +16,113 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: source/tmp/ColorControl.vue.ts:35 source/tmp/PopoverFileProps.vue.ts:37
-#: source/tmp/NumberControl.vue.ts:40 source/tmp/ShortcutChooser.vue.ts:61
+#: source/tmp/FileManager.vue.ts:46 source/tmp/GlobalSearch.vue.ts:37
+msgid "Filter …"
+msgstr "வடிகட்டி …"
+
+#: source/tmp/ShortcutChooser.vue.ts:61 source/tmp/ColorControl.vue.ts:35
+#: source/tmp/PopoverFileProps.vue.ts:37 source/tmp/NumberControl.vue.ts:40
 msgid "Reset"
 msgstr "மீட்டமை"
 
-#: source/tmp/PopoverFileProps.vue.ts:34 source/tmp/FileItem.vue.ts:173
+#: source/tmp/Projects-Tab.vue.ts:19
+msgid "Zettlr also makes use of these projects:"
+msgstr "இந்த திட்டங்களையும் செட்லர் பயன்படுத்துகிறது:"
+
+#: source/tmp/FileList.vue.ts:46
+msgid "No results"
+msgstr "முடிவுகள் இல்லை"
+
+#: source/tmp/FileList.vue.ts:47
+msgid "No directory selected"
+msgstr "எந்த கோப்பகமும் தேர்ந்தெடுக்கப்படவில்லை"
+
+#: source/tmp/FileList.vue.ts:48
+msgid "Empty directory"
+msgstr "வெற்று அடைவு"
+
+#: source/tmp/PopoverTable.vue.ts:30
+#, javascript-format
+msgid "Table size: %s &times; %s"
+msgstr ""
+
+#. Static properties
+#: source/tmp/ChartView.vue.ts:39
+msgid "Charts"
+msgstr "விளக்கப்படங்கள்"
+
+#: source/tmp/MainSidebar.vue.ts:39 source/tmp/ToCTab.vue.ts:36
+#: source/tmp/ToCTab.vue.ts:44
+msgid "Table of Contents"
+msgstr "உள்ளடக்க அட்டவணை"
+
+#: source/tmp/MainSidebar.vue.ts:45 source/tmp/ReferencesTab.vue.ts:32
+msgid "References"
+msgstr "குறிப்புகள்"
+
+#: source/tmp/MainSidebar.vue.ts:51 source/tmp/RelatedFilesTab.vue.ts:33
+msgid "Related files"
+msgstr "தொடர்புடைய கோப்புகள்"
+
+#: source/tmp/MainSidebar.vue.ts:57 source/tmp/OtherFilesTab.vue.ts:13
+msgid "Other files"
+msgstr "பிற கோப்புகள்"
+
+#: source/tmp/App.vue.ts:31
+msgid "Updater"
+msgstr "புதுப்பிப்பவர்"
+
+#: source/tmp/App.vue.ts:32
+msgid "New update available"
+msgstr "புதிய புதுப்பிப்பு கிடைக்கிறது"
+
+#: source/tmp/App.vue.ts:33
+msgid "Your version"
+msgstr "உங்கள் பதிப்பு"
+
+#: source/tmp/App.vue.ts:34
+msgid ""
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr "பதிவிறக்கம் செய்ய செட்லரின் புதிய பதிப்பு உள்ளது. கீழே உள்ள மாற்றங்களை படி."
+
+#: source/tmp/App.vue.ts:35
+msgid "Downloading your update"
+msgstr "உங்கள் புதுப்பிப்பைப் பதிவிறக்குகிறது"
+
+#: source/tmp/App.vue.ts:36
+msgid "No update available. You have the most recent version."
+msgstr "புதுப்பிப்பு எதுவும் கிடைக்கவில்லை. உங்களிடம் மிக அண்மைக் கால பதிப்பு உள்ளது."
+
+#: source/tmp/App.vue.ts:37 source/app/service-providers/menu/menu.win32.ts:613
+#: source/app/service-providers/menu/menu.darwin.ts:639
+msgid "Check for updates"
+msgstr "புதுப்பிப்புகளுக்கு சரிபார்"
+
+#: source/tmp/App.vue.ts:42
+msgid "Click to start update"
+msgstr "புதுப்பிப்பைத் தொடங்க சொடுக்கு"
+
+#: source/tmp/App.vue.ts:45
+msgid "never"
+msgstr "ஒருபோதும்"
+
+#: source/tmp/App.vue.ts:45 source/tmp/App.vue.ts:48
+#, javascript-format
+msgid "Last checked: %s"
+msgstr "கடைசியாக சரிப்பார்த்தது: %s"
+
+#: source/tmp/App.vue.ts:124
+msgid "Starting update …"
+msgstr "புதுப்பிப்பு தொடங்குகிறது …"
+
+#. Else standard val for new dirs.
+#: source/tmp/TreeItem.vue.ts:232
+#: source/app/service-providers/commands/dir-new.ts:31
+msgid "Untitled"
+msgstr "தலைப்பில்லாத்து"
+
+#: source/tmp/PopoverFileProps.vue.ts:34 source/tmp/FileItem.vue.ts:174
 msgid "Words"
 msgstr "சொற்கள்"
 
@@ -38,218 +139,33 @@ msgstr "மாற்றப்பட்ட"
 msgid "Set writing target…"
 msgstr "எழுதும் இலக்கை அமை…"
 
-#: source/tmp/PopoverFileProps.vue.ts:39 source/tmp/FileItem.vue.ts:171
+#: source/tmp/PopoverFileProps.vue.ts:39 source/tmp/FileItem.vue.ts:172
 msgid "Characters"
 msgstr "எழுத்துக்கள்"
 
-#: source/tmp/PopoverFileProps.vue.ts:56 source/tmp/PopoverDocInfo.vue.ts:73
-#: source/tmp/FileItem.vue.ts:123 source/tmp/FileItem.vue.ts:186
-#: source/tmp/PopoverDirProps.vue.ts:140
+#: source/tmp/PopoverFileProps.vue.ts:56 source/tmp/PopoverDirProps.vue.ts:140
+#: source/tmp/FileItem.vue.ts:124 source/tmp/FileItem.vue.ts:187
+#: source/tmp/PopoverDocInfo.vue.ts:53
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
 #, javascript-format
 msgid "%s words"
 msgstr "%s சொற்கள்"
 
-#: source/tmp/FileControl.vue.ts:42
-msgid "Select folder…"
-msgstr "கோப்புறை தேர்ந்தெடு..."
+#: source/tmp/ReferencesTab.vue.ts:42
+msgid "There are no citations in this document."
+msgstr "இந்த ஆவணத்தில் மேற்கோள்கள் எதுவும் இல்லை."
 
-#: source/tmp/FileControl.vue.ts:42
-msgid "Select file…"
-msgstr "கோப்பை தேர்ந்தெடு..."
+#: source/tmp/ListControl.vue.ts:76
+msgid "Add"
+msgstr "சேர்"
 
-#. Prepare the list of file filters
-#. The "All Files" filter should be at the top
-#: source/tmp/FileControl.vue.ts:57
-#: source/app/service-providers/windows/dialog/ask-file.ts:47
-#: source/app/service-providers/commands/import.ts:42
-msgid "All Files"
-msgstr "அனைத்து கோப்புகள்"
+#: source/tmp/ListControl.vue.ts:77
+msgid "Actions"
+msgstr "செயல்கள்"
 
-#: source/tmp/App.vue.ts:28
-msgid "Updater"
-msgstr "புதுப்பிப்பவர்"
-
-#: source/tmp/App.vue.ts:29
-msgid "New update available"
-msgstr "புதிய புதுப்பிப்பு கிடைக்கிறது"
-
-#: source/tmp/App.vue.ts:30
-msgid "Your version"
-msgstr "உங்கள் பதிப்பு"
-
-#: source/tmp/App.vue.ts:31
-msgid ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
-msgstr "பதிவிறக்கம் செய்ய செட்லரின் புதிய பதிப்பு உள்ளது. கீழே உள்ள மாற்றங்களை படி."
-
-#: source/tmp/App.vue.ts:32
-msgid "Downloading your update"
-msgstr "உங்கள் புதுப்பிப்பைப் பதிவிறக்குகிறது"
-
-#: source/tmp/App.vue.ts:33
-msgid "No update available. You have the most recent version."
-msgstr "புதுப்பிப்பு எதுவும் கிடைக்கவில்லை. உங்களிடம் மிக அண்மைக் கால பதிப்பு உள்ளது."
-
-#: source/tmp/App.vue.ts:34
-#: source/app/service-providers/menu/menu.darwin.ts:648
-#: source/app/service-providers/menu/menu.win32.ts:621
-msgid "Check for updates"
-msgstr "புதுப்பிப்புகளுக்கு சரிபார்"
-
-#: source/tmp/App.vue.ts:39
-msgid "Click to start update"
-msgstr "புதுப்பிப்பைத் தொடங்க சொடுக்கு"
-
-#: source/tmp/App.vue.ts:42
-msgid "never"
-msgstr "ஒருபோதும்"
-
-#: source/tmp/App.vue.ts:42 source/tmp/App.vue.ts:45
-#, javascript-format
-msgid "Last checked: %s"
-msgstr "கடைசியாக சரிப்பார்த்தது: %s"
-
-#: source/tmp/App.vue.ts:121
-msgid "Starting update …"
-msgstr "புதுப்பிப்பு தொடங்குகிறது …"
-
-#: source/tmp/SnippetsTab.vue.ts:27 source/tmp/CustomCSS.vue.ts:24
-#: source/app/service-providers/menu/menu.darwin.ts:197
-#: source/app/service-providers/menu/menu.win32.ts:162
-#: source/app/service-providers/commands/export.ts:114
-msgid "Save"
-msgstr "சேமி"
-
-#: source/tmp/SnippetsTab.vue.ts:28
-msgid "Rename snippet"
-msgstr "துணுக்கை மறுபெயரிடு"
-
-#: source/tmp/SnippetsTab.vue.ts:29
-msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
-"துணுக்குகள் மீண்டும் பயன்படுத்தக்கூடிய உரையின் துண்டுகளை மாறிகள் வரையறுக்க அனுமதிக்கின்றன."
-
-#: source/tmp/SnippetsTab.vue.ts:30
-msgid "Open snippets folder"
-msgstr "துணுக்குக் கோப்புறை திற"
-
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/tmp/SnippetsTab.vue.ts:46 source/tmp/CustomCSS.vue.ts:34
-#: source/tmp/DefaultsTab.vue.ts:48
-#: source/app/service-providers/documents/index.ts:349
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-msgid "Unsaved changes"
-msgstr "சேமிக்கப்படாத மாற்றங்கள்"
-
-#: source/tmp/SnippetsTab.vue.ts:105 source/tmp/CustomCSS.vue.ts:56
-#: source/tmp/DefaultsTab.vue.ts:115
-msgid "Saving …"
-msgstr "சேமிப்பு…"
-
-#: source/tmp/SnippetsTab.vue.ts:115 source/tmp/DefaultsTab.vue.ts:125
-msgid "Saved!"
-msgstr "சேமிக்கப்பட்டது!"
-
-#: source/tmp/PopoverPomodoro.vue.ts:77
-#: source/win-preferences/schema/appearance.ts:52
-msgid "Start"
-msgstr "தொடங்கு"
-
-#: source/tmp/PopoverPomodoro.vue.ts:80
-msgid "Stop"
-msgstr "நிறுத்து"
-
-#: source/tmp/PopoverPomodoro.vue.ts:83
-msgid "Work"
-msgstr "வேலை"
-
-#: source/tmp/PopoverPomodoro.vue.ts:86
-msgid "Short break"
-msgstr "சிறு இடைவேளை"
-
-#: source/tmp/PopoverPomodoro.vue.ts:89
-msgid "Break"
-msgstr "இடைவேளை"
-
-#: source/tmp/PopoverPomodoro.vue.ts:92
-msgid "Sound Effect"
-msgstr "ஒலி விளைவு"
-
-#: source/tmp/PopoverPomodoro.vue.ts:95
-msgid "Volume"
-msgstr "தொகுதி"
-
-#: source/tmp/PopoverDocInfo.vue.ts:45
-msgid "No open document"
-msgstr "திறந்த ஆவணம் இல்லை"
-
-#: source/tmp/PopoverDocInfo.vue.ts:48
-msgid "words"
-msgstr "சொற்கள்"
-
-#: source/tmp/PopoverDocInfo.vue.ts:51
-msgid "characters"
-msgstr "எழுத்துக்கள்"
-
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/FileItem.vue.ts:121
-#: source/tmp/FileItem.vue.ts:184
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
-#, javascript-format
-msgid "%s characters"
-msgstr "%s எழுத்துக்கள்"
-
-#: source/tmp/CustomCSS.vue.ts:23
-msgid ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted behaviour!</"
-"strong>"
-msgstr ""
-"அதை மேலும் தனிப்பயனாக்க செட்லர் இன் பாணிகளை இங்கே மேலெழுதலாம். <strong> "
-"கவனம்: இந்த கோப்பு அனைத்து சிஎச்எச் வழிமுறைகளையும் மீறுகிறது! உறுப்புகளின் "
-"வடிவவியலை ஒருபோதும் மாற்ற வேண்டாம், இல்லையெனில் பயன்பாடு தேவையற்ற நடத்தையை "
-"வெளிப்படுத்தக்கூடும்! </strong>"
-
-#: source/tmp/CustomCSS.vue.ts:66
-msgid "Saving failed"
-msgstr "சேமிப்பு தோல்வியடைந்தது"
-
-#: source/tmp/FileItem.vue.ts:98 source/tmp/FileItem.vue.ts:100
-#: source/tmp/PopoverDirProps.vue.ts:29
-msgid "Directories"
-msgstr "கோப்பகங்கள்"
-
-#: source/tmp/FileItem.vue.ts:105 source/tmp/FileItem.vue.ts:107
-#: source/tmp/PopoverDirProps.vue.ts:32
-#: source/app/service-providers/commands/root-open.ts:62
-msgid "Files"
-msgstr "கோப்புகள்"
-
-#: source/tmp/PopoverExport.vue.ts:6
-msgid "Exporting…"
-msgstr "ஏற்றுமதி செய்கிறது…"
-
-#: source/tmp/PopoverExport.vue.ts:6
-msgid "Export"
-msgstr "ஏற்றுமதி"
-
-#: source/tmp/PopoverExport.vue.ts:27
-msgid "command"
-msgstr "கட்டளை"
-
-#: source/tmp/FileList.vue.ts:46
-msgid "No results"
-msgstr "முடிவுகள் இல்லை"
-
-#: source/tmp/FileList.vue.ts:47
-msgid "No directory selected"
-msgstr "எந்த கோப்பகமும் தேர்ந்தெடுக்கப்படவில்லை"
-
-#: source/tmp/FileList.vue.ts:48
-msgid "Empty directory"
-msgstr "வெற்று அடைவு"
+#: source/tmp/ListControl.vue.ts:78
+msgid "Delete"
+msgstr "நீக்கு"
 
 #. STATIC VARIABLES
 #: source/tmp/CalendarView.vue.ts:26
@@ -316,9 +232,77 @@ msgstr "திங்கள் சராசரியை விட அதிகம
 msgid "More than twice the monthly average"
 msgstr "திங்கள் சராசரியை விட இரண்டு மடங்கு அதிகமாகும்"
 
-#: source/tmp/RelatedFilesTab.vue.ts:33 source/tmp/MainSidebar.vue.ts:51
-msgid "Related files"
-msgstr "தொடர்புடைய கோப்புகள்"
+#: source/tmp/OtherFilesTab.vue.ts:14
+msgid "Open directory"
+msgstr "அடைவு திற"
+
+#: source/tmp/OtherFilesTab.vue.ts:15
+msgid "No other files"
+msgstr "வேறு கோப்புகள் இல்லை"
+
+#: source/tmp/General-Tab.vue.ts:21
+msgid ""
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
+msgstr ""
+"செட்ட்லர் என்பது குனு சிபிஎல் ப3 உரிமத்தின் கீழ் உரிமம் பெற்ற என்ட்ரிக் எர்ச் எழுதிய ஒரு "
+"திட்டமாகும். இது திறந்த மூலமாகும், இலவசம் மற்றும் மின் கட்டமைப்பின் அடிப்படையில். மின் "
+"உருவாக்குபவர்கள், நோடு.சேஎச் கட்டமைப்பு மற்றும் குறிகண்ணாடி திருத்திக்கு அவர்களின் பணிக்கு "
+"செட்லர் நன்றி தெரிவிக்கிறது. அவர்கள் இல்லாமல், செட்லர் சாத்தியமில்லை. செட்லர் பயன்படுத்தும் "
+"அனைத்து திட்டங்களையும் கீழே காணலாம்."
+
+#: source/tmp/General-Tab.vue.ts:22
+msgid ""
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
+msgstr ""
+"திருத்தியில் நேரடியாக மேற்கோள்களைக் காண்பிக்க செட்லர் மேற்கோள்முறையைப் பயன்படுத்துகிறது. "
+"இந்த நோக்கத்திற்காக, செட்ட்லர் மேற்கோள்பாணிமொழி (மேபாமொ) மொழி மற்றும் பாணி கோப்புகளைப் "
+"பயன்படுத்துகிறார். எழுத்தாளர் உருவகதரவுடன் கோப்புகள் மாற்றப்படாமல் அனுப்பப்பட்டுள்ளன. மேலும் "
+"தகவல்:"
+
+#: source/tmp/General-Tab.vue.ts:23
+msgid ""
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
+msgstr ""
+"அனைத்து சிறுஉருகள் மற்றும் வணிக குறி பெயர்கள் அவற்றின் சரியான உரிமையாளர்களுக்கு "
+"உட்பட்டவை. அவற்றின் குறியீட்டைப் பயன்படுத்துவதைத் தவிர, செட்லர் இந்த திட்டங்களில் எந்தவொரு "
+"வகையிலும் எந்த வகையிலும் இணைக்கப்படவில்லை. நோடு.சேஎச் என்பது சாயண்ட், இன்க். வணிக குறி"
+
+#: source/tmp/General-Tab.vue.ts:24
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
+"மொழிகருவியாளர் செர்மன் ஆல் வழங்கப்படும் சேவையான மொழிகருவி நிறுவனம் செட்லர் ஒரு "
+"ஒருங்கிணைப்பை வழங்குகிறது. இந்த சேவையைப் பயன்படுத்துவதற்கு இணைய இணைப்பு தேவைப்படுகிறது "
+"மற்றும் இது மொழிகருவியாளர் செர்மன் அல்லது நீங்கள் பயன்படுத்தும் தொடர்புடைய சேவையகத்தின் "
+"தனியுரிமைக் கொள்கைக்கு உட்பட்டது."
+
+#: source/tmp/PopoverTags.vue.ts:39
+msgid "Name"
+msgstr "பெயர்"
+
+#: source/tmp/PopoverTags.vue.ts:40
+msgid "Count"
+msgstr "எண்ணிக்கை"
+
+#: source/tmp/PopoverTags.vue.ts:47
+msgid "Filter tags…"
+msgstr "குறிச்சொற்களை வடிகட்டி…"
+
+#: source/tmp/PopoverTags.vue.ts:48
+msgid "Tag Cloud"
+msgstr "குறிச்சொல் முகில்"
 
 #: source/tmp/RelatedFilesTab.vue.ts:34
 msgid "No related files"
@@ -341,6 +325,131 @@ msgstr "இந்த உறவு ஒரு பின்னிணைப்பை
 msgid "This relation is based on %s shared tags: %s"
 msgstr "இந்த உறவு %s பகிரப்பட்ட குறிச்சொற்களை அடிப்படையாகக் கொண்டது: %s"
 
+#: source/tmp/PopoverDirProps.vue.ts:29 source/tmp/FileItem.vue.ts:99
+#: source/tmp/FileItem.vue.ts:101
+msgid "Directories"
+msgstr "கோப்பகங்கள்"
+
+#: source/tmp/PopoverDirProps.vue.ts:32 source/tmp/FileItem.vue.ts:106
+#: source/tmp/FileItem.vue.ts:108
+#: source/app/service-providers/commands/root-open.ts:62
+msgid "Files"
+msgstr "கோப்புகள்"
+
+#: source/tmp/PopoverDirProps.vue.ts:33
+msgid "Project Settings…"
+msgstr "திட்ட அமைப்புகள்…"
+
+#: source/tmp/PopoverStats.vue.ts:28
+msgid "words last month"
+msgstr "கடந்த திங்கள் சொற்கள்"
+
+#: source/tmp/PopoverStats.vue.ts:29
+msgid "daily average"
+msgstr "அன்றாடம் சராசரி"
+
+#: source/tmp/PopoverStats.vue.ts:30
+msgid "words today"
+msgstr "இன்று சொற்கள்"
+
+#: source/tmp/PopoverStats.vue.ts:31
+msgid "🔥 You're on fire!"
+msgstr "🔥 நீங்கள் தீயில்!"
+
+#: source/tmp/PopoverStats.vue.ts:32
+msgid "💪 You're close to hitting your daily average!"
+msgstr "💪 உங்கள் அன்றாட சராசரியைத் தாக்க நீங்கள் நெருக்கமாக இருக்கிறீர்கள்!"
+
+#: source/tmp/PopoverStats.vue.ts:33
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr "✍🏼 உங்கள் அன்றாட சராசரியை மிஞ்சும் எழுத்தைப் பெறு."
+
+#: source/tmp/PopoverStats.vue.ts:34
+msgid "More statistics …"
+msgstr "மேலும் புள்ளிவிவரங்கள்…"
+
+#: source/tmp/FileControl.vue.ts:42
+msgid "Select folder…"
+msgstr "கோப்புறை தேர்ந்தெடு..."
+
+#: source/tmp/FileControl.vue.ts:42
+msgid "Select file…"
+msgstr "கோப்பை தேர்ந்தெடு..."
+
+#. Prepare the list of file filters
+#. The "All Files" filter should be at the top
+#: source/tmp/FileControl.vue.ts:57
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
+#: source/app/service-providers/commands/import.ts:44
+msgid "All Files"
+msgstr "அனைத்து கோப்புகள்"
+
+#: source/tmp/CustomCSS.vue.ts:23
+msgid ""
+"Here you can override the styles of Zettlr to customise it even further. "
+"<strong>Attention: This file overrides all CSS directives! Never alter the "
+"geometry of elements, otherwise the app may expose unwanted behaviour!</"
+"strong>"
+msgstr ""
+"அதை மேலும் தனிப்பயனாக்க செட்லர் இன் பாணிகளை இங்கே மேலெழுதலாம். <strong> கவனம்: இந்த "
+"கோப்பு அனைத்து சிஎச்எச் வழிமுறைகளையும் மீறுகிறது! உறுப்புகளின் வடிவவியலை ஒருபோதும் "
+"மாற்ற வேண்டாம், இல்லையெனில் பயன்பாடு தேவையற்ற நடத்தையை வெளிப்படுத்தக்கூடும்! </strong>"
+
+#: source/tmp/CustomCSS.vue.ts:24 source/tmp/SnippetsTab.vue.ts:27
+#: source/app/service-providers/menu/menu.win32.ts:161
+#: source/app/service-providers/menu/menu.darwin.ts:196
+#: source/app/service-providers/commands/export.ts:114
+msgid "Save"
+msgstr "சேமி"
+
+#. If the user cancels, do not omit (the default) but actually cancel
+#: source/tmp/CustomCSS.vue.ts:34 source/tmp/SnippetsTab.vue.ts:46
+#: source/tmp/DefaultsTab.vue.ts:48
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
+#: source/app/service-providers/documents/index.ts:347
+msgid "Unsaved changes"
+msgstr "சேமிக்கப்படாத மாற்றங்கள்"
+
+#: source/tmp/CustomCSS.vue.ts:56 source/tmp/SnippetsTab.vue.ts:105
+#: source/tmp/DefaultsTab.vue.ts:115
+msgid "Saving …"
+msgstr "சேமிப்பு…"
+
+#: source/tmp/CustomCSS.vue.ts:66
+msgid "Saving failed"
+msgstr "சேமிப்பு தோல்வியடைந்தது"
+
+#: source/tmp/FileItem.vue.ts:122 source/tmp/FileItem.vue.ts:185
+#: source/tmp/PopoverDocInfo.vue.ts:51
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
+#, javascript-format
+msgid "%s characters"
+msgstr "%s எழுத்துக்கள்"
+
+#: source/tmp/PopoverExport.vue.ts:61
+msgid "Exporting…"
+msgstr "ஏற்றுமதி செய்கிறது…"
+
+#: source/tmp/PopoverExport.vue.ts:61
+msgid "Export"
+msgstr "ஏற்றுமதி"
+
+#: source/tmp/PopoverExport.vue.ts:74
+msgid "command"
+msgstr "கட்டளை"
+
+#: source/tmp/PopoverDocInfo.vue.ts:21
+msgid "words"
+msgstr "சொற்கள்"
+
+#: source/tmp/PopoverDocInfo.vue.ts:22
+msgid "characters"
+msgstr "எழுத்துக்கள்"
+
+#: source/tmp/PopoverDocInfo.vue.ts:23
+msgid "No open document"
+msgstr "திறந்த ஆவணம் இல்லை"
+
 #: source/tmp/GlobalSearch.vue.ts:34
 msgid "Full-Text Search"
 msgstr "முழு-உரை தேடல்"
@@ -352,10 +461,6 @@ msgstr "உங்கள் தேடல் சொற்களை கீழே �
 #: source/tmp/GlobalSearch.vue.ts:36
 msgid "Find …"
 msgstr "கண்டுபிடி…"
-
-#: source/tmp/GlobalSearch.vue.ts:37 source/tmp/FileManager.vue.ts:48
-msgid "Filter …"
-msgstr "வடிகட்டி …"
 
 #: source/tmp/GlobalSearch.vue.ts:38
 msgid "Filter search results"
@@ -387,181 +492,538 @@ msgstr "முடிவுகளை மாற்று"
 msgid "Open in a new tab"
 msgstr "புதிய தாவலில் திற"
 
-#: source/tmp/GlobalSearch.vue.ts:114
+#: source/tmp/GlobalSearch.vue.ts:112
 #, javascript-format
 msgid "%s matches across %s files"
 msgstr "குறிச்சொல்லை \"%s\" ஐ \"%s\" உடன் %s கோப்புகளில் மாற்றவா?"
 
-#: source/tmp/PopoverStats.vue.ts:79
-msgid "words last month"
-msgstr "கடந்த திங்கள் சொற்கள்"
+#: source/tmp/SnippetsTab.vue.ts:28
+msgid "Rename snippet"
+msgstr "துணுக்கை மறுபெயரிடு"
 
-#: source/tmp/PopoverStats.vue.ts:82
-msgid "daily average"
-msgstr "அன்றாடம் சராசரி"
-
-#: source/tmp/PopoverStats.vue.ts:85
-msgid "words today"
-msgstr "இன்று சொற்கள்"
-
-#: source/tmp/PopoverStats.vue.ts:88
-msgid "🔥 You're on fire!"
-msgstr "🔥 நீங்கள் தீயில்!"
-
-#: source/tmp/PopoverStats.vue.ts:91
-msgid "💪 You're close to hitting your daily average!"
-msgstr "💪 உங்கள் அன்றாட சராசரியைத் தாக்க நீங்கள் நெருக்கமாக இருக்கிறீர்கள்!"
-
-#: source/tmp/PopoverStats.vue.ts:94
-msgid "✍🏼 Get writing to surpass your daily average."
-msgstr "✍🏼 உங்கள் அன்றாட சராசரியை மிஞ்சும் எழுத்தைப் பெறு."
-
-#: source/tmp/PopoverStats.vue.ts:97
-msgid "More statistics …"
-msgstr "மேலும் புள்ளிவிவரங்கள்…"
-
-#: source/tmp/ToCTab.vue.ts:35 source/tmp/ToCTab.vue.ts:43
-#: source/tmp/MainSidebar.vue.ts:39
-msgid "Table of Contents"
-msgstr "உள்ளடக்க அட்டவணை"
-
-#. Else standard val for new dirs.
-#: source/tmp/TreeItem.vue.ts:240
-#: source/app/service-providers/commands/dir-new.ts:31
-msgid "Untitled"
-msgstr "தலைப்பில்லாத்து"
-
-#: source/tmp/OtherFilesTab.vue.ts:11 source/tmp/MainSidebar.vue.ts:57
-msgid "Other files"
-msgstr "பிற கோப்புகள்"
-
-#: source/tmp/OtherFilesTab.vue.ts:12
-msgid "Open directory"
-msgstr "அடைவு திற"
-
-#: source/tmp/OtherFilesTab.vue.ts:13
-msgid "No other files"
-msgstr "வேறு கோப்புகள் இல்லை"
-
-#: source/tmp/MainSidebar.vue.ts:45 source/tmp/ReferencesTab.vue.ts:32
-msgid "References"
-msgstr "குறிப்புகள்"
-
-#: source/tmp/ReferencesTab.vue.ts:42
-msgid "There are no citations in this document."
-msgstr "இந்த ஆவணத்தில் மேற்கோள்கள் எதுவும் இல்லை."
-
-#: source/tmp/General-Tab.vue.ts:18
-msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
+#: source/tmp/SnippetsTab.vue.ts:29
+msgid "Snippets let you define reusable pieces of text with variables."
 msgstr ""
-"செட்ட்லர் என்பது குனு சிபிஎல் ப3 உரிமத்தின் கீழ் உரிமம் பெற்ற என்ட்ரிக் எர்ச் எழுதிய ஒரு "
-"திட்டமாகும். இது திறந்த மூலமாகும், இலவசம் மற்றும் மின் கட்டமைப்பின் அடிப்படையில். மின் "
-"உருவாக்குபவர்கள், நோடு.சேஎச் கட்டமைப்பு மற்றும் குறிகண்ணாடி திருத்திக்கு அவர்களின் பணிக்கு "
-"செட்லர் நன்றி தெரிவிக்கிறது. அவர்கள் இல்லாமல், செட்லர் சாத்தியமில்லை. செட்லர் பயன்படுத்தும் "
-"அனைத்து திட்டங்களையும் கீழே காணலாம்."
+"துணுக்குகள் மீண்டும் பயன்படுத்தக்கூடிய உரையின் துண்டுகளை மாறிகள் வரையறுக்க அனுமதிக்கின்றன."
 
-#: source/tmp/General-Tab.vue.ts:19
+#: source/tmp/SnippetsTab.vue.ts:30
+msgid "Open snippets folder"
+msgstr "துணுக்குக் கோப்புறை திற"
+
+#: source/tmp/SnippetsTab.vue.ts:115 source/tmp/DefaultsTab.vue.ts:125
+msgid "Saved!"
+msgstr "சேமிக்கப்பட்டது!"
+
+#: source/app/service-providers/citeproc/index.ts:249
+#: source/app/service-providers/citeproc/index.ts:457
+msgid "The citation database could not be loaded"
+msgstr "மேற்கோள் தரவுத்தளத்தை ஏற்ற முடியவில்லை"
+
+#: source/app/service-providers/citeproc/index.ts:444
+msgid "Changes to the library file detected. Reloading …"
+msgstr "கண்டறியப்பட்ட நூலகக் கோப்பில் மாற்றங்கள். மீண்டும் ஏற்றுதல்…"
+
+#: source/app/service-providers/menu/menu.win32.ts:44
+#: source/app/service-providers/menu/menu.win32.ts:56
+#: source/app/service-providers/menu/menu.darwin.ts:183
+msgid "Recent documents"
+msgstr "அண்மைக் கால  ஆவணங்கள்"
+
+#: source/app/service-providers/menu/menu.win32.ts:48
+#: source/app/service-providers/menu/menu.win32.ts:60
+#: source/app/service-providers/menu/menu.darwin.ts:187
+msgid "Empty"
+msgstr "காலி"
+
+#: source/app/service-providers/menu/menu.win32.ts:87
+#: source/app/service-providers/menu/menu.darwin.ts:113
+msgid "File"
+msgstr "கோப்பு"
+
+#: source/app/service-providers/menu/menu.win32.ts:90
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+msgid "New File…"
+msgstr "புதிய கோப்பு…"
+
+#: source/app/service-providers/menu/menu.win32.ts:129
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+msgid "New directory…"
+msgstr "புதிய அடைவு…"
+
+#: source/app/service-providers/menu/menu.win32.ts:139
+#: source/app/service-providers/menu/menu.darwin.ts:165
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
+msgid "Open…"
+msgstr "திற…"
+
+#: source/app/service-providers/menu/menu.win32.ts:148
+#: source/app/service-providers/menu/menu.darwin.ts:174
+msgid "Open Workspace …"
+msgstr "பணியிடம் திற …"
+
+#: source/app/service-providers/menu/menu.win32.ts:172
+#: source/app/service-providers/menu/menu.darwin.ts:207
+msgid "Previous file"
+msgstr "முந்தைய கோப்பு"
+
+#: source/app/service-providers/menu/menu.win32.ts:183
+#: source/app/service-providers/menu/menu.darwin.ts:218
+msgid "Next file"
+msgstr "அடுத்த கோப்பு"
+
+#: source/app/service-providers/menu/menu.win32.ts:197
+#: source/app/service-providers/menu/menu.darwin.ts:232
+msgid "Import files…"
+msgstr "கோப்புகளை இறக்குமதி செய்…"
+
+#: source/app/service-providers/menu/menu.win32.ts:205
+#: source/app/service-providers/menu/menu.darwin.ts:240
+msgid "Export…"
+msgstr "ஏற்றுமதி…"
+
+#: source/app/service-providers/menu/menu.win32.ts:213
+#: source/app/service-providers/menu/menu.darwin.ts:248
+msgid "Print…"
+msgstr "அச்சிடு…"
+
+#: source/app/service-providers/menu/menu.win32.ts:221
+#: source/app/service-providers/menu/menu.win32.ts:225
+#: source/app/service-providers/menu/menu.darwin.ts:51
+msgid "Preferences…"
+msgstr "விருப்பத்தேர்வுகள்…"
+
+#: source/app/service-providers/menu/menu.win32.ts:233
+#: source/app/service-providers/menu/menu.darwin.ts:59
+msgid "Assets Manager"
+msgstr "சொத்துக்கள் மேலாளர்"
+
+#: source/app/service-providers/menu/menu.win32.ts:241
+#: source/app/service-providers/menu/menu.darwin.ts:67
+msgid "Manage Tags…"
+msgstr "குறிச்சொற்களை நிர்வகி…"
+
+#: source/app/service-providers/menu/menu.win32.ts:253
+#: source/app/service-providers/menu/menu.darwin.ts:259
+msgid "Import translation…"
+msgstr "மொழிபெயர்ப்பு இறக்குமதி…"
+
+#: source/app/service-providers/menu/menu.win32.ts:261
+#: source/app/service-providers/menu/menu.darwin.ts:267
+msgid "Import dictionary…"
+msgstr "அகராதி இறக்குமதி…"
+
+#: source/app/service-providers/menu/menu.win32.ts:280
+#: source/app/service-providers/menu/menu.darwin.ts:286
+#: source/win-main/file-manager/util/file-item-context.ts:43
+msgid "Rename file"
+msgstr "கோப்பை மறுபெயரிடு"
+
+#: source/app/service-providers/menu/menu.win32.ts:291
+#: source/app/service-providers/menu/menu.darwin.ts:297
+#: source/win-main/file-manager/util/file-item-context.ts:50
+msgid "Delete file"
+msgstr "கோப்பை நீக்கு"
+
+#: source/app/service-providers/menu/menu.win32.ts:300
+#: source/app/service-providers/menu/menu.darwin.ts:104
+#: source/app/service-providers/tray/index.ts:166
+msgid "Quit"
+msgstr "வெளியேறு"
+
+#: source/app/service-providers/menu/menu.win32.ts:310
+#: source/app/service-providers/menu/menu.darwin.ts:308
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
+msgid "Edit"
+msgstr "திருத்து"
+
+#: source/app/service-providers/menu/menu.win32.ts:315
+#: source/app/service-providers/menu/menu.darwin.ts:313
+msgid "Undo"
+msgstr "செயல்தவிர்"
+
+#: source/app/service-providers/menu/menu.win32.ts:321
+#: source/app/service-providers/menu/menu.darwin.ts:319
+msgid "Redo"
+msgstr "மீண்டும்செய்"
+
+#: source/app/service-providers/menu/menu.win32.ts:330
+#: source/app/service-providers/menu/menu.darwin.ts:328
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/common/modules/window-register/register-default-context.ts:76
+msgid "Cut"
+msgstr "வெட்டு"
+
+#: source/app/service-providers/menu/menu.win32.ts:336
+#: source/app/service-providers/menu/menu.darwin.ts:334
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
+#: source/common/modules/window-register/register-default-context.ts:83
+msgid "Copy"
+msgstr "நகலெடு"
+
+#: source/app/service-providers/menu/menu.win32.ts:341
+#: source/app/service-providers/menu/menu.darwin.ts:339
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
+msgid "Copy as HTML"
+msgstr "உஉகுமொ ஆக நகலெடு"
+
+#: source/app/service-providers/menu/menu.win32.ts:350
+#: source/app/service-providers/menu/menu.darwin.ts:348
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/common/modules/window-register/register-default-context.ts:90
+msgid "Paste"
+msgstr "ஒட்டு"
+
+#: source/app/service-providers/menu/menu.win32.ts:355
+#: source/app/service-providers/menu/menu.darwin.ts:353
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
+msgid "Paste without style"
+msgstr "பாணி இல்லாமல் ஒட்டு"
+
+#: source/app/service-providers/menu/menu.win32.ts:364
+#: source/app/service-providers/menu/menu.darwin.ts:362
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
+#: source/common/modules/window-register/register-default-context.ts:100
+msgid "Select all"
+msgstr "அனைத்தையும் தெரிவுசெய்"
+
+#: source/app/service-providers/menu/menu.win32.ts:372
+#: source/app/service-providers/menu/menu.darwin.ts:370
+msgid "Find in file"
+msgstr "கோப்பில் தேடு"
+
+#: source/app/service-providers/menu/menu.win32.ts:380
+#: source/app/service-providers/menu/menu.darwin.ts:378
+msgid "Find in directory"
+msgstr "கோப்பகத்தில் தேடு"
+
+#: source/app/service-providers/menu/menu.win32.ts:388
+#: source/app/service-providers/menu/menu.darwin.ts:386
+msgid "Filter files"
+msgstr "கோப்புகளை வடிகட்டு"
+
+#: source/app/service-providers/menu/menu.win32.ts:399
+#: source/app/service-providers/menu/menu.darwin.ts:397
+msgid "Generate new ID"
+msgstr "புதிய அடையாளத்தை உருவாக்கு"
+
+#: source/app/service-providers/menu/menu.win32.ts:407
+#: source/app/service-providers/menu/menu.darwin.ts:405
+#: source/win-main/file-manager/util/file-item-context.ts:78
+#: source/win-main/tabs-context.ts:80
+msgid "Copy ID"
+msgstr "அடையாளத்தை நகல்"
+
+#: source/app/service-providers/menu/menu.win32.ts:418
+#: source/app/service-providers/menu/menu.darwin.ts:435
+msgid "View"
+msgstr "காட்சி"
+
+#: source/app/service-providers/menu/menu.win32.ts:422
+#: source/app/service-providers/menu/menu.darwin.ts:439
+#: source/win-preferences/schema/appearance.ts:26
+msgid "Dark mode"
+msgstr "இருண்ட முறை"
+
+#: source/app/service-providers/menu/menu.win32.ts:432
+#: source/app/service-providers/menu/menu.darwin.ts:449
+msgid "Additional Information"
+msgstr "கூடுதல் தகவல்"
+
+#: source/app/service-providers/menu/menu.win32.ts:442
+#: source/app/service-providers/menu/menu.darwin.ts:459
+msgid "Distraction free mode"
+msgstr "கவனச்சிதறல் இல்லாத பயன்முறை"
+
+#: source/app/service-providers/menu/menu.win32.ts:450
+#: source/app/service-providers/menu/menu.darwin.ts:467
+msgid "Typewriter Mode"
+msgstr "தட்டச்சுப்பொறி பயன்முறை"
+
+#: source/app/service-providers/menu/menu.win32.ts:461
+#: source/app/service-providers/menu/menu.darwin.ts:478
+msgid "Toggle file manager"
+msgstr "கோப்பு மேலாளரை மாற்று"
+
+#: source/app/service-providers/menu/menu.win32.ts:469
+#: source/app/service-providers/menu/menu.darwin.ts:486
+msgid "Toggle Sidebar"
+msgstr "பக்கப்பட்டியை மாற்று"
+
+#: source/app/service-providers/menu/menu.win32.ts:480
+#: source/app/service-providers/menu/menu.darwin.ts:500
+msgid "Reset zoom"
+msgstr "பெரிதாக்கு மீட்டமை"
+
+#: source/app/service-providers/menu/menu.win32.ts:489
+#: source/app/service-providers/menu/menu.darwin.ts:509
+msgid "Zoom in"
+msgstr "பெரிதாக்கு"
+
+#: source/app/service-providers/menu/menu.win32.ts:496
+#: source/app/service-providers/menu/menu.darwin.ts:516
+msgid "Zoom out"
+msgstr "சிறிதாக்கு"
+
+#: source/app/service-providers/menu/menu.win32.ts:506
+#: source/app/service-providers/menu/menu.darwin.ts:526
+msgid "Toggle fullscreen"
+msgstr "மாற்று முழுத்திரை"
+
+#: source/app/service-providers/menu/menu.win32.ts:515
+#: source/app/service-providers/menu/menu.darwin.ts:534
+msgid "Develop"
+msgstr "உருவாக்கு"
+
+#: source/app/service-providers/menu/menu.win32.ts:519
+#: source/app/service-providers/menu/menu.darwin.ts:538
+msgid "Reload"
+msgstr "மீண்டும்ஏற்று"
+
+#: source/app/service-providers/menu/menu.win32.ts:527
+#: source/app/service-providers/menu/menu.darwin.ts:546
+msgid "Toggle developer tools"
+msgstr "உருவாக்குபவர் கருவிகளை மாற்று"
+
+#: source/app/service-providers/menu/menu.win32.ts:535
+#: source/app/service-providers/menu/menu.darwin.ts:554
+msgid "Open Logs"
+msgstr "பதிவுகள் திற"
+
+#: source/app/service-providers/menu/menu.win32.ts:546
+#: source/app/service-providers/menu/menu.darwin.ts:565
+msgid "Window"
+msgstr "சாளரம்"
+
+#: source/app/service-providers/menu/menu.win32.ts:551
+#: source/app/service-providers/menu/menu.darwin.ts:570
+msgid "Minimize"
+msgstr "குறை"
+
+#: source/app/service-providers/menu/menu.win32.ts:557
+#: source/app/service-providers/menu/menu.darwin.ts:578
+msgid "Close"
+msgstr "மூடு"
+
+#: source/app/service-providers/menu/menu.win32.ts:566
+#: source/app/service-providers/menu/menu.darwin.ts:592
+#: source/win-main/tabs-context.ts:38
+msgid "Close Tab"
+msgstr "தாவலை மூடு"
+
+#: source/app/service-providers/menu/menu.win32.ts:574
+#: source/app/service-providers/menu/menu.darwin.ts:600
+msgid "Previous Tab"
+msgstr "முந்தைய தாவல்"
+
+#: source/app/service-providers/menu/menu.win32.ts:582
+#: source/app/service-providers/menu/menu.darwin.ts:608
+msgid "Next Tab"
+msgstr "அடுத்த தாவல்"
+
+#: source/app/service-providers/menu/menu.win32.ts:590
+#: source/app/service-providers/menu/menu.darwin.ts:616
+msgid "New window"
+msgstr "புதிய சாளரம்"
+
+#: source/app/service-providers/menu/menu.win32.ts:601
+#: source/app/service-providers/menu/menu.darwin.ts:627
+msgid "Help"
+msgstr "உதவி"
+
+#: source/app/service-providers/menu/menu.win32.ts:606
+#: source/app/service-providers/menu/menu.darwin.ts:46
+#: source/app/service-providers/menu/menu.darwin.ts:632
+msgid "About Zettlr"
+msgstr "செட்ட்லர் பற்றி"
+
+#: source/app/service-providers/menu/menu.win32.ts:625
+#: source/app/service-providers/menu/menu.darwin.ts:651
+msgid "Support Zettlr"
+msgstr "செட்லரை ஆதரி"
+
+#: source/app/service-providers/menu/menu.win32.ts:635
+#: source/app/service-providers/menu/menu.darwin.ts:661
+msgid "Visit website"
+msgstr "வலைத்தளத்தைப் பார்"
+
+#: source/app/service-providers/menu/menu.win32.ts:645
+#: source/app/service-providers/menu/menu.darwin.ts:671
+msgid "Open user manual"
+msgstr "பயனர் கையேட்டைத் திற"
+
+#: source/app/service-providers/menu/menu.win32.ts:659
+#: source/app/service-providers/menu/menu.darwin.ts:685
+msgid "Open Tutorial"
+msgstr "பயிற்சி திற"
+
+#: source/app/service-providers/menu/menu.win32.ts:667
+#: source/app/service-providers/menu/menu.darwin.ts:693
+msgid "Clear FSAL cache …"
+msgstr "ஃபஎச்எஎல் தற்காலிக சேமிப்பை அழி…"
+
+#: source/app/service-providers/menu/menu.win32.ts:671
+#: source/app/service-providers/menu/menu.darwin.ts:697
+msgid "Clear FSAL Cache"
+msgstr "ஃபஎச்எஎல் தற்காலிக சேமிப்பை அழி"
+
+#: source/app/service-providers/menu/menu.win32.ts:672
+#: source/app/service-providers/menu/menu.darwin.ts:698
+msgid "Clearing the FSAL cache requires a restart."
+msgstr "ஃபஎச்எஎல் தற்காலிக சேமிப்பை அழிக்க மறுதொடக்கம் தேவை."
+
+#: source/app/service-providers/menu/menu.win32.ts:673
+#: source/app/service-providers/menu/menu.darwin.ts:699
 msgid ""
-"Zettlr makes use of citeproc to display citations directly in the editor. To "
-"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
+"After the restart, Zettlr will recreate the entire cache, which may take a "
+"few moments, depending on the amount of files you have loaded and the speed "
+"of your disk. The window(s) will show afterward."
 msgstr ""
-"திருத்தியில் நேரடியாக மேற்கோள்களைக் காண்பிக்க செட்லர் மேற்கோள்முறையைப் பயன்படுத்துகிறது. "
-"இந்த நோக்கத்திற்காக, செட்ட்லர் மேற்கோள்பாணிமொழி (மேபாமொ) மொழி மற்றும் பாணி கோப்புகளைப் "
-"பயன்படுத்துகிறார். எழுத்தாளர் உருவகதரவுடன் கோப்புகள் மாற்றப்படாமல் அனுப்பப்பட்டுள்ளன. மேலும் "
-"தகவல்:"
+"மறுதொடக்கத்திற்குப் பிறகு, செட்லர் இடையக கோப்புகளை உருவாக்கும், நீங்கள் ஏற்றிய கோப்புகளின் "
+"அளவு மற்றும் உங்கள் வட்டின் வேகத்தைப் பொறுத்து சில தருணங்கள் ஆகலாம். சாளரம் (கள்) பின்னர் "
+"காண்பிக்கப்படும்."
 
-#: source/tmp/General-Tab.vue.ts:20
+#: source/app/service-providers/menu/menu.win32.ts:676
+#: source/app/service-providers/menu/menu.darwin.ts:702
+#: source/app/service-providers/config/index.ts:495
+msgid "Restart now"
+msgstr "இப்போது மறுதொடக்கம்"
+
+#. 1: Omit all changes
+#: source/app/service-providers/menu/menu.win32.ts:677
+#: source/app/service-providers/menu/menu.darwin.ts:703
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/app/service-providers/commands/rename-tag.ts:47
+#: source/app/service-providers/commands/dir-delete.ts:36
+#: source/app/service-providers/commands/file-delete.ts:37
+msgid "Cancel"
+msgstr "விலக்கு"
+
+#: source/app/service-providers/menu/menu.darwin.ts:77
+msgid "Services"
+msgstr "சேவைகள்"
+
+#: source/app/service-providers/menu/menu.darwin.ts:86
+msgid "Hide"
+msgstr "மறை"
+
+#: source/app/service-providers/menu/menu.darwin.ts:91
+msgid "Hide others"
+msgstr "மற்றவை மறை"
+
+#: source/app/service-providers/menu/menu.darwin.ts:96
+msgid "Show"
+msgstr "காட்டு"
+
+#: source/app/service-providers/menu/menu.darwin.ts:416
+msgid "Speech"
+msgstr "பேச்சு"
+
+#: source/app/service-providers/menu/menu.darwin.ts:420
+msgid "Start speaking"
+msgstr "பேசத் தொடங்கு"
+
+#: source/app/service-providers/menu/menu.darwin.ts:425
+msgid "Stop speaking"
+msgstr "பேசுவதை நிறுத்து"
+
+#: source/app/service-providers/menu/menu.darwin.ts:584
+msgid "Bring All to Front"
+msgstr "அனைத்தையும் முன்னால் கொண்டு வா"
+
+#. TODO: Move this to a command
+#. The user wants to open another file or directory.
+#: source/app/service-providers/windows/index.ts:221
+#: source/app/service-providers/commands/root-open.ts:75
+msgid "Open project folder"
+msgstr "திட்டக் கோப்புறை திற"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
+msgid "Replace file"
+msgstr "கோப்பை மாற்று"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#, javascript-format
 msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
 msgstr ""
-"அனைத்து சிறுஉருகள் மற்றும் வணிக குறி பெயர்கள் அவற்றின் சரியான உரிமையாளர்களுக்கு "
-"உட்பட்டவை. அவற்றின் குறியீட்டைப் பயன்படுத்துவதைத் தவிர, செட்லர் இந்த திட்டங்களில் எந்தவொரு "
-"வகையிலும் எந்த வகையிலும் இணைக்கப்படவில்லை. நோடு.சேஎச் என்பது சாயண்ட், இன்க். வணிக குறி"
+"கோப்பு %s தொலைதூரத்தில் மாற்றியமைக்கப்பட்டது. ஏற்றப்பட்ட பதிப்பை வட்டில் இருந்து புதிய "
+"ஒன்றைக் கொண்டு மாற்றவா?"
 
-#: source/tmp/General-Tab.vue.ts:21
-msgid ""
-"Zettlr offers an integration with LanguageTool.org, a service provided by "
-"LanguageTooler GmbH. Using this service requires an internet connection and "
-"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
-"server that you use."
-msgstr ""
-"மொழிகருவியாளர் செர்மன் ஆல் வழங்கப்படும் சேவையான மொழிகருவி நிறுவனம் செட்லர் ஒரு "
-"ஒருங்கிணைப்பை வழங்குகிறது. இந்த சேவையைப் பயன்படுத்துவதற்கு இணைய இணைப்பு தேவைப்படுகிறது "
-"மற்றும் இது மொழிகருவியாளர் செர்மன் அல்லது நீங்கள் பயன்படுத்தும் தொடர்புடைய சேவையகத்தின் "
-"தனியுரிமைக் கொள்கைக்கு உட்பட்டது."
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
+#: source/win-preferences/schema/general.ts:78
+msgid "Always load remote changes to the current file"
+msgstr "தற்போதைய கோப்பில் எப்போதும் தொலை மாற்றங்களை ஏற்று"
 
-#. Static properties
-#: source/tmp/ChartView.vue.ts:39
-msgid "Charts"
-msgstr "விளக்கப்படங்கள்"
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+#: source/app/service-providers/commands/dir-delete.ts:35
+#: source/app/service-providers/commands/file-delete.ts:36
+#: source/app/service-providers/commands/dir-project-export.ts:93
+msgid "Ok"
+msgstr "சரி"
 
-#: source/tmp/ListControl.vue.ts:76
-msgid "Add"
-msgstr "சேர்"
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+#: source/app/service-providers/commands/rename-tag.ts:46
+#: source/app/service-providers/commands/file-rename.ts:111
+msgid "Yes"
+msgstr "ஆம்"
 
-#: source/tmp/ListControl.vue.ts:77
-msgid "Actions"
-msgstr "செயல்கள்"
+#. 0: Save all changes
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+#: source/app/service-providers/commands/file-rename.ts:112
+msgid "No"
+msgstr "இல்லை"
 
-#: source/tmp/ListControl.vue.ts:78
-msgid "Delete"
-msgstr "நீக்கு"
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
+msgid "There are unsaved changes. Do you want to save them first?"
+msgstr "சேமிக்கப்படாத மாற்றங்கள் உள்ளன. முதலில் அவற்றைக் சேமிக்க விரும்புகிறீர்களா?"
 
-#: source/tmp/PopoverDirProps.vue.ts:33
-msgid "Project Settings…"
-msgstr "திட்ட அமைப்புகள்…"
+#: source/app/service-providers/windows/dialog/ask-file.ts:54
+msgid "Open file"
+msgstr "கோப்பை திற"
 
-#: source/tmp/PopoverTags.vue.ts:39
-msgid "Name"
-msgstr "பெயர்"
+#: source/app/service-providers/windows/dialog/save-dialog.ts:58
+msgid "Save file"
+msgstr "கோப்பை சேமி"
 
-#: source/tmp/PopoverTags.vue.ts:40
-msgid "Count"
-msgstr "எண்ணிக்கை"
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
+msgid "Overwrite existing file"
+msgstr "இருக்கும் கோப்பை மேலெழுது"
 
-#: source/tmp/PopoverTags.vue.ts:47
-msgid "Filter tags…"
-msgstr "குறிச்சொற்களை வடிகட்டி…"
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#, javascript-format
+msgid "The file %s already exists in this directory. Overwrite?"
+msgstr "இந்த கோப்பகத்தில் %s ஏற்கனவே உள்ளன. மேலெழுதவா?"
 
-#: source/tmp/PopoverTags.vue.ts:48
-msgid "Tag Cloud"
-msgstr "குறிச்சொல் முகில்"
-
-#: source/tmp/Projects-Tab.vue.ts:19
-msgid "Zettlr also makes use of these projects:"
-msgstr "இந்த திட்டங்களையும் செட்லர் பயன்படுத்துகிறது:"
-
-#: source/app/service-providers/documents/index.ts:345
+#: source/app/service-providers/documents/index.ts:343
 msgid "Save changes"
 msgstr "மாற்றங்களை சேமி"
 
-#: source/app/service-providers/documents/index.ts:346
+#: source/app/service-providers/documents/index.ts:344
 msgid "Discard changes"
 msgstr "மாற்றங்களை நிராகரி"
 
-#: source/app/service-providers/documents/index.ts:350
+#: source/app/service-providers/documents/index.ts:348
 msgid "There are unsaved changes. Do you want to save or discard them?"
-msgstr "சேமிக்கப்படாத மாற்றங்கள் உள்ளன. முதலில் அவற்றைக் சேமிக்க அல்லது நிராகரி விரும்புகிறீர்களா?"
+msgstr ""
+"சேமிக்கப்படாத மாற்றங்கள் உள்ளன. முதலில் அவற்றைக் சேமிக்க அல்லது நிராகரி விரும்புகிறீர்களா?"
 
-#: source/app/service-providers/documents/index.ts:1008
+#: source/app/service-providers/documents/index.ts:986
 msgid "File changed on disk"
 msgstr "வட்டில் கோப்பு மாற்றப்பட்டது"
 
-#: source/app/service-providers/documents/index.ts:1009
+#: source/app/service-providers/documents/index.ts:987
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s வட்டில் மாற்றப்பட்டது"
 
-#: source/app/service-providers/documents/index.ts:1011
+#: source/app/service-providers/documents/index.ts:989
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -571,36 +1033,313 @@ msgstr ""
 "திருத்தி உள்ளடக்கங்களை வைத்திருக்க விரும்புகிறீர்களா அல்லது வட்டில் இருந்து கோப்பை ஏற்ற "
 "விரும்புகிறீர்களா?"
 
-#: source/app/service-providers/documents/index.ts:1012
+#: source/app/service-providers/documents/index.ts:990
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "தற்போதைய திருத்தி உள்ளடக்கங்களை வைத்திருக்க விரும்புகிறீர்களா அல்லது வட்டில் இருந்து கோப்பை "
 "ஏற்ற விரும்புகிறீர்களா?"
 
-#: source/app/service-providers/documents/index.ts:1015
+#: source/app/service-providers/documents/index.ts:993
 msgid "Keep editor contents"
 msgstr "திருத்தி உள்ளடக்கங்களை வைத்திரு"
 
-#: source/app/service-providers/documents/index.ts:1016
+#: source/app/service-providers/documents/index.ts:994
 msgid "Load changes from disk"
 msgstr "வட்டில் இருந்து மாற்றங்களை ஏற்று"
 
-#: source/app/service-providers/documents/index.ts:1019
+#: source/app/service-providers/documents/index.ts:997
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
-"திருத்தியில் சேமிக்கப்படாத மாற்றங்கள் இல்லாவிட்டால் எப்போதும் வட்டில் இருந்து மாற்றங்களை "
-"ஏற்று"
+"திருத்தியில் சேமிக்கப்படாத மாற்றங்கள் இல்லாவிட்டால் எப்போதும் வட்டில் இருந்து மாற்றங்களை ஏற்று"
 
-#: source/app/service-providers/documents/index.ts:1483
+#: source/app/service-providers/documents/index.ts:1461
 msgid "Could not save file"
 msgstr "கோப்பை சேமிக்க முடியவில்லை"
 
-#: source/app/service-providers/documents/index.ts:1483
+#: source/app/service-providers/documents/index.ts:1461
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "கோப்பை சேமிக்க முடியவில்லை %s: %s"
+
+#: source/app/service-providers/commands/rename-tag.ts:43
+#: source/app/service-providers/commands/file-rename.ts:108
+#: source/app/service-providers/config/index.ts:500
+msgid "Confirm"
+msgstr "உறுதிப்படுத்து"
+
+#: source/app/service-providers/commands/rename-tag.ts:44
+#, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr "குறிச்சொல்லை \"%s\" ஐ \"%s\" உடன் %s கோப்புகளில் மாற்றவா?"
+
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "கோப்பகத்தைத் திறக்க முடியாது"
+
+#: source/app/service-providers/commands/root-open.ts:86
+#, javascript-format
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "அடைவு &quot;%s&quot; செட்லர் ஆல் திறக்க முடியாது."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:38
+msgid "The requested file was not found."
+msgstr "கோரப்பட்ட கோப்பு கிடைக்கவில்லை."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:83
+msgid "The provided name did not contain any allowed letters."
+msgstr "வழங்கப்பட்ட பெயரில் அனுமதிக்கப்பட்ட எழுத்துகள் இல்லை."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:104
+msgid "The requested directory was not found."
+msgstr "கோரப்பட்ட அடைவு காணப்படவில்லை."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:115
+msgid "Could not save image"
+msgstr "படத்தை சேமிக்க முடியவில்லை"
+
+#: source/app/service-providers/commands/file-duplicate.ts:42
+#: source/app/service-providers/commands/file-duplicate.ts:59
+#: source/app/service-providers/commands/file-new.ts:156
+msgid "Could not create file"
+msgstr "கோப்பை உருவாக்க முடியவில்லை"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
+msgstr "%s நகல்"
+
+#: source/app/service-providers/commands/importer/index.ts:92
+#: source/app/service-providers/commands/importer/index.ts:93
+msgid "Select import profile"
+msgstr "இறக்குமதி தன்வயவிவரத்தைத் தேர்ந்தெடு"
+
+#: source/app/service-providers/commands/importer/index.ts:94
+#, javascript-format
+msgid "There are multiple profiles that can import %s. Please choose one."
+msgstr "%s ஐ இறக்குமதி செய்யக்கூடிய பல தன்வயவிவரங்கள் உள்ளன. ஒன்றைத் தேர்வுசெய்க."
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:63
+#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "தவறான உரைப்பாடு: %s"
+
+#: source/app/service-providers/commands/dir-delete.ts:40
+#: source/app/service-providers/commands/file-delete.ts:41
+msgid "Really delete?"
+msgstr "உண்மையில் நீக்கவா?"
+
+#: source/app/service-providers/commands/dir-delete.ts:41
+#: source/app/service-providers/commands/file-delete.ts:42
+#, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "நீங்கள் உண்மையில் %s ஐ அகற்ற விரும்புகிறீர்களா?"
+
+#: source/app/service-providers/commands/dir-project-export.ts:85
+msgid "Cannot export project"
+msgstr "திட்டத்தை ஏற்றுமதி செய்ய முடியாது"
+
+#: source/app/service-providers/commands/dir-project-export.ts:86
+msgid ""
+"There are no files selected for export. Please select files to be included "
+"in the project settings."
+msgstr ""
+
+#: source/app/service-providers/commands/dir-project-export.ts:91
+msgid "Project File Mismatch"
+msgstr ""
+
+#: source/app/service-providers/commands/dir-project-export.ts:92
+msgid ""
+"One or more files specified in the project settings have not been found. "
+"They may have moved or been deleted. Please verify that all files that you "
+"would like to export are included."
+msgstr ""
+
+#: source/app/service-providers/commands/dir-project-export.ts:168
+#, javascript-format
+msgid "Project \"%s\" successfully exported. Click to show."
+msgstr "திட்டம் \"%s\" வெற்றிகரமாக ஏற்றுமதி செய்யப்பட்டது. காண்பிக்க சொடுக்கு."
+
+#: source/app/service-providers/commands/dir-project-export.ts:169
+msgid "Project Export"
+msgstr "திட்ட ஏற்றுமதி"
+
+#: source/app/service-providers/commands/import-lang-file.ts:60
+#, javascript-format
+msgid "Language file imported: %s"
+msgstr "மொழி கோப்பு இறக்குமதி செய்யப்பட்டது: %s"
+
+#: source/app/service-providers/commands/import-lang-file.ts:62
+#: source/app/service-providers/commands/import-lang-file.ts:65
+#, javascript-format
+msgid "Could not import language file %s!"
+msgstr "மொழி கோப்பு %s ஐ இறக்குமதி செய்ய முடியவில்லை!"
+
+#: source/app/service-providers/commands/file-rename.ts:109
+#, javascript-format
+msgid "Update %s internal links to file %s?"
+msgstr "கோப்புகளுக்கான உள் இணைப்புகளைப் புதுப்பிக்கவா?"
+
+#: source/app/service-providers/commands/request-move.ts:53
+msgid "Cannot move directory"
+msgstr "கோப்பகத்தை நகர்த்த முடியாது"
+
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "நீங்கள் ஒரு கோப்பகத்தை அதன் துணை அடைவுகளில் ஒன்றில் நகர்த்த முடியாது."
+
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
+msgstr "அடைவு அல்லது கோப்பை நகர்த்த முடியாது"
+
+#: source/app/service-providers/commands/request-move.ts:64
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "கோப்பு/அடைவு %s ஏற்கனவே இலக்கில் உள்ளன."
+
+#: source/app/service-providers/commands/import.ts:34
+msgid "Import directory"
+msgstr ""
+
+#: source/app/service-providers/commands/import.ts:34
+msgid "Select folder"
+msgstr ""
+
+#: source/app/service-providers/commands/import.ts:34
+msgid "Select import destination"
+msgstr ""
+
+#: source/app/service-providers/commands/import.ts:36
+msgid "You have to select a directory to import to."
+msgstr "இறக்குமதி செய்ய நீங்கள் ஒரு கோப்பகத்தைத் தேர்ந்தெடுக்க வேண்டும்."
+
+#. Now import.
+#: source/app/service-providers/commands/import.ts:61
+msgid "Importing. Please wait …"
+msgstr "இறக்குமதி. தயவுசெய்து காத்திரு…"
+
+#. This callback gets called whenever there is an error while running pandoc.
+#: source/app/service-providers/commands/import.ts:69
+#, javascript-format
+msgid "Couldn't import %s."
+msgstr "%s ஐ இறக்குமதி செய்ய முடியவில்லை."
+
+#: source/app/service-providers/commands/import.ts:73
+#, javascript-format
+msgid "%s imported successfully."
+msgstr "%s வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது."
+
+#. Some files failed to import.
+#: source/app/service-providers/commands/import.ts:78
+#, javascript-format
+msgid ""
+"The following %s files could not be imported, because their filetype is "
+"unknown: %s"
+msgstr ""
+"பின்வரும் %s கோப்புகளை இறக்குமதி செய்ய முடியவில்லை, ஏனெனில் அவற்றின் கோப்பு வகை "
+"தெரியவில்லை: %s"
+
+#: source/app/service-providers/commands/import.ts:84
+msgid "Import failed"
+msgstr "ஏற்றுமதி தோல்வியடைந்தது"
+
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:113
+#, javascript-format
+msgid "The reference with key %s does not appear to have attachments."
+msgstr "திறவுகோல் %s கொண்ட குறிப்பு இணைப்புகளைக் கொண்டிருப்பதாகத் தெரியவில்லை."
+
+#: source/app/service-providers/commands/open-attachment.ts:118
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "இணைப்பைத் திறக்க முடியவில்லை. சோட்டெரோ இயங்குகிறதா?"
+
+#: source/app/service-providers/commands/export.ts:55
+#: source/app/service-providers/commands/export.ts:157
+msgid "Export failed"
+msgstr "ஏற்றுமதி தோல்வியடைந்தது"
+
+#: source/app/service-providers/commands/export.ts:56
+#, javascript-format
+msgid "An error occurred during export: %s"
+msgstr "ஏற்றுமதியின் போது பிழை ஏற்பட்டது: %s"
+
+#: source/app/service-providers/commands/export.ts:114
+msgid "Choose export destination"
+msgstr "ஏற்றுமதி இலக்கைத் தேர்வுசெய்க"
+
+#: source/app/service-providers/commands/export.ts:145
+#, javascript-format
+msgid "Exporting to %s"
+msgstr "%sக்கு ஏற்றுமதி"
+
+#: source/app/service-providers/commands/export.ts:158
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "ஏற்றுமதியில் பிழை ஏற்பட்டது: %s"
+
+#: source/app/service-providers/commands/language-tool.ts:194
+msgid "Document too long"
+msgstr "ஆவணம் மிக நீளமானது"
+
+#: source/app/service-providers/commands/language-tool.ts:199
+msgid "offline"
+msgstr "இணையமில்லாமல்"
+
+#: source/app/service-providers/commands/dir-new.ts:37
+#: source/app/service-providers/commands/dir-new.ts:38
+#: source/app/service-providers/commands/dir-new.ts:50
+msgid "Could not create directory"
+msgstr "கோப்பகத்தை உருவாக்க முடியவில்லை"
+
+#: source/app/service-providers/config/index.ts:492
+msgid "Changing this option requires a restart to take effect."
+msgstr "இந்த விருப்பம் மாறுவதற்கு மறுதொடக்கம் செய்ய வேண்டும்."
+
+#: source/app/service-providers/config/index.ts:496
+msgid "Restart later"
+msgstr "பின்னர் மறுதொடக்கம்"
+
+#: source/app/service-providers/config/config-validation.ts:278
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "விருப்பம் %s வகை %s ஆக இருக்க வேண்டும்."
+
+#: source/app/service-providers/config/config-validation.ts:281
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "விருப்பம் %s ஒன்றாக இருக்க வேண்டும்: %s."
+
+#: source/app/service-providers/config/config-validation.ts:284
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "விருப்பம் %s %s மற்றும் %s க்கு இடையில் இருக்க வேண்டும் (எழுத்துக்கள் நீளமானது)."
+
+#: source/app/service-providers/config/config-validation.ts:287
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "விருப்பம் %s %s (எழுத்துக்கள்) ஐ தாண்டக்கூடாது."
+
+#: source/app/service-providers/config/config-validation.ts:290
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "விருப்பம் %s குறைந்தது %s (எழுத்துக்கள் நீளமாக) இருக்க வேண்டும்."
+
+#: source/app/service-providers/config/config-validation.ts:293
+#, javascript-format
+msgid "Option %s is required."
+msgstr "விருப்பம் %s தேவை."
+
+#: source/app/service-providers/tray/index.ts:160
+msgid "Show Zettlr"
+msgstr "செட்லரைக் காட்டு"
+
+#: source/app/service-providers/tray/index.ts:173
+msgid "Zettlr"
+msgstr "செட்லர்"
 
 #: source/app/service-providers/updates/index.ts:298
 #, javascript-format
@@ -642,759 +1381,181 @@ msgstr "புதுப்பிப்புகளை சரிபார்க�
 msgid "An update to version %s is available!"
 msgstr "பதிப்பு %s க்கான புதுப்பிப்பு கிடைக்கிறது!"
 
-#: source/app/service-providers/config/config-validation.ts:278
-#, javascript-format
-msgid "Option %s has to be of type %s."
-msgstr "விருப்பம் %s வகை %s ஆக இருக்க வேண்டும்."
-
-#: source/app/service-providers/config/config-validation.ts:281
-#, javascript-format
-msgid "Option %s must be one of: %s."
-msgstr "விருப்பம் %s ஒன்றாக இருக்க வேண்டும்: %s."
-
-#: source/app/service-providers/config/config-validation.ts:284
-#, javascript-format
-msgid "Option %s must be between %s and %s (characters long)."
-msgstr "விருப்பம் %s %s மற்றும் %s க்கு இடையில் இருக்க வேண்டும் (எழுத்துக்கள் நீளமானது)."
-
-#: source/app/service-providers/config/config-validation.ts:287
-#, javascript-format
-msgid "Option %s may not exceed %s (characters)."
-msgstr "விருப்பம் %s %s (எழுத்துக்கள்) ஐ தாண்டக்கூடாது."
-
-#: source/app/service-providers/config/config-validation.ts:290
-#, javascript-format
-msgid "Option %s must be at least %s (characters long)."
-msgstr "விருப்பம் %s குறைந்தது %s (எழுத்துக்கள் நீளமாக) இருக்க வேண்டும்."
-
-#: source/app/service-providers/config/config-validation.ts:293
-#, javascript-format
-msgid "Option %s is required."
-msgstr "விருப்பம் %s தேவை."
-
-#: source/app/service-providers/config/index.ts:492
-msgid "Changing this option requires a restart to take effect."
-msgstr "இந்த விருப்பம் மாறுவதற்கு மறுதொடக்கம் செய்ய வேண்டும்."
-
-#: source/app/service-providers/config/index.ts:495
-#: source/app/service-providers/menu/menu.darwin.ts:711
-#: source/app/service-providers/menu/menu.win32.ts:684
-msgid "Restart now"
-msgstr "இப்போது மறுதொடக்கம்"
-
-#: source/app/service-providers/config/index.ts:496
-msgid "Restart later"
-msgstr "பின்னர் மறுதொடக்கம்"
-
-#: source/app/service-providers/config/index.ts:500
-#: source/app/service-providers/commands/file-rename.ts:108
-#: source/app/service-providers/commands/rename-tag.ts:43
-msgid "Confirm"
-msgstr "உறுதிப்படுத்து"
-
-#: source/app/service-providers/menu/menu.darwin.ts:46
-#: source/app/service-providers/menu/menu.darwin.ts:641
-#: source/app/service-providers/menu/menu.win32.ts:614
-msgid "About Zettlr"
-msgstr "செட்ட்லர் பற்றி"
-
-#: source/app/service-providers/menu/menu.darwin.ts:51
-#: source/app/service-providers/menu/menu.win32.ts:222
-#: source/app/service-providers/menu/menu.win32.ts:226
-msgid "Preferences…"
-msgstr "விருப்பத்தேர்வுகள்…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:59
-#: source/app/service-providers/menu/menu.win32.ts:234
-msgid "Assets Manager"
-msgstr "சொத்துக்கள் மேலாளர்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:67
-#: source/app/service-providers/menu/menu.win32.ts:242
-msgid "Manage Tags…"
-msgstr "குறிச்சொற்களை நிர்வகி…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:77
-msgid "Services"
-msgstr "சேவைகள்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:86
-msgid "Hide"
-msgstr "மறை"
-
-#: source/app/service-providers/menu/menu.darwin.ts:91
-msgid "Hide others"
-msgstr "மற்றவை மறை"
-
-#: source/app/service-providers/menu/menu.darwin.ts:96
-msgid "Show"
-msgstr "காட்டு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:104
-#: source/app/service-providers/menu/menu.win32.ts:308
-#: source/app/service-providers/tray/index.ts:166
-msgid "Quit"
-msgstr "வெளியேறு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:113
-#: source/app/service-providers/menu/menu.win32.ts:87
-msgid "File"
-msgstr "கோப்பு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:116
-#: source/app/service-providers/menu/menu.win32.ts:90
-#: source/win-main/file-manager/util/dir-item-context.ts:37
-msgid "New File…"
-msgstr "புதிய கோப்பு…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:155
-#: source/app/service-providers/menu/menu.win32.ts:129
-#: source/win-main/file-manager/util/dir-item-context.ts:43
-msgid "New directory…"
-msgstr "புதிய அடைவு…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:166
-#: source/app/service-providers/menu/menu.win32.ts:140
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
-msgid "Open…"
-msgstr "திற…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:175
-#: source/app/service-providers/menu/menu.win32.ts:149
-msgid "Open Workspace …"
-msgstr "பணியிடம் திற …"
-
-#: source/app/service-providers/menu/menu.darwin.ts:184
-#: source/app/service-providers/menu/menu.win32.ts:44
-#: source/app/service-providers/menu/menu.win32.ts:56
-msgid "Recent documents"
-msgstr "அண்மைக் கால  ஆவணங்கள்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:188
-#: source/app/service-providers/menu/menu.win32.ts:48
-#: source/app/service-providers/menu/menu.win32.ts:60
-msgid "Empty"
-msgstr "காலி"
-
-#: source/app/service-providers/menu/menu.darwin.ts:208
-#: source/app/service-providers/menu/menu.win32.ts:173
-msgid "Previous file"
-msgstr "முந்தைய கோப்பு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:219
-#: source/app/service-providers/menu/menu.win32.ts:184
-msgid "Next file"
-msgstr "அடுத்த கோப்பு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:233
-#: source/app/service-providers/menu/menu.win32.ts:198
-msgid "Import files…"
-msgstr "கோப்புகளை இறக்குமதி செய்…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:241
-#: source/app/service-providers/menu/menu.win32.ts:206
-msgid "Export…"
-msgstr "ஏற்றுமதி…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:249
-#: source/app/service-providers/menu/menu.win32.ts:214
-msgid "Print…"
-msgstr "அச்சிடு…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:260
-#: source/app/service-providers/menu/menu.win32.ts:254
-msgid "Import translation…"
-msgstr "மொழிபெயர்ப்பு இறக்குமதி…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:268
-#: source/app/service-providers/menu/menu.win32.ts:262
-msgid "Import dictionary…"
-msgstr "அகராதி இறக்குமதி…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:287
-#: source/app/service-providers/menu/menu.win32.ts:281
-#: source/win-main/file-manager/util/file-item-context.ts:43
-msgid "Rename file"
-msgstr "கோப்பை மறுபெயரிடு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:298
-#: source/app/service-providers/menu/menu.win32.ts:292
-#: source/win-main/file-manager/util/file-item-context.ts:50
-msgid "Delete file"
-msgstr "கோப்பை நீக்கு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:306
-#: source/app/service-providers/menu/menu.win32.ts:299
-#: source/win-main/file-manager/util/dir-item-context.ts:58
-msgid "Delete directory"
-msgstr "கோப்பகத்தை நீக்கு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:317
-#: source/app/service-providers/menu/menu.win32.ts:318
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
-msgid "Edit"
-msgstr "திருத்து"
-
-#: source/app/service-providers/menu/menu.darwin.ts:322
-#: source/app/service-providers/menu/menu.win32.ts:323
-msgid "Undo"
-msgstr "செயல்தவிர்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:328
-#: source/app/service-providers/menu/menu.win32.ts:329
-msgid "Redo"
-msgstr "மீண்டும்செய்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:337
-#: source/app/service-providers/menu/menu.win32.ts:338
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
-#: source/common/modules/window-register/register-default-context.ts:76
-msgid "Cut"
-msgstr "வெட்டு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:343
-#: source/app/service-providers/menu/menu.win32.ts:344
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
-#: source/common/modules/window-register/register-default-context.ts:83
-msgid "Copy"
-msgstr "நகலெடு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:348
-#: source/app/service-providers/menu/menu.win32.ts:349
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
-msgid "Copy as HTML"
-msgstr "உஉகுமொ ஆக நகலெடு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:357
-#: source/app/service-providers/menu/menu.win32.ts:358
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
-#: source/common/modules/window-register/register-default-context.ts:90
-msgid "Paste"
-msgstr "ஒட்டு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:362
-#: source/app/service-providers/menu/menu.win32.ts:363
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
-msgid "Paste without style"
-msgstr "பாணி இல்லாமல் ஒட்டு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:371
-#: source/app/service-providers/menu/menu.win32.ts:372
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
-#: source/common/modules/window-register/register-default-context.ts:100
-msgid "Select all"
-msgstr "அனைத்தையும் தெரிவுசெய்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:379
-#: source/app/service-providers/menu/menu.win32.ts:380
-msgid "Find in file"
-msgstr "கோப்பில் தேடு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:387
-#: source/app/service-providers/menu/menu.win32.ts:388
-msgid "Find in directory"
-msgstr "கோப்பகத்தில் தேடு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:395
-#: source/app/service-providers/menu/menu.win32.ts:396
-msgid "Filter files"
-msgstr "கோப்புகளை வடிகட்டு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:406
-#: source/app/service-providers/menu/menu.win32.ts:407
-msgid "Generate new ID"
-msgstr "புதிய அடையாளத்தை உருவாக்கு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:414
-#: source/app/service-providers/menu/menu.win32.ts:415
-#: source/win-main/tabs-context.ts:80
-#: source/win-main/file-manager/util/file-item-context.ts:78
-msgid "Copy ID"
-msgstr "அடையாளத்தை நகல்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:425
-msgid "Speech"
-msgstr "பேச்சு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:429
-msgid "Start speaking"
-msgstr "பேசத் தொடங்கு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:434
-msgid "Stop speaking"
-msgstr "பேசுவதை நிறுத்து"
-
-#: source/app/service-providers/menu/menu.darwin.ts:444
-#: source/app/service-providers/menu/menu.win32.ts:426
-msgid "View"
-msgstr "காட்சி"
-
-#: source/app/service-providers/menu/menu.darwin.ts:448
-#: source/app/service-providers/menu/menu.win32.ts:430
-#: source/win-preferences/schema/appearance.ts:26
-msgid "Dark mode"
-msgstr "இருண்ட முறை"
-
-#: source/app/service-providers/menu/menu.darwin.ts:458
-#: source/app/service-providers/menu/menu.win32.ts:440
-msgid "Additional Information"
-msgstr "கூடுதல் தகவல்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:468
-#: source/app/service-providers/menu/menu.win32.ts:450
-msgid "Distraction free mode"
-msgstr "கவனச்சிதறல் இல்லாத பயன்முறை"
-
-#: source/app/service-providers/menu/menu.darwin.ts:476
-#: source/app/service-providers/menu/menu.win32.ts:458
-msgid "Typewriter Mode"
-msgstr "தட்டச்சுப்பொறி பயன்முறை"
-
-#: source/app/service-providers/menu/menu.darwin.ts:487
-#: source/app/service-providers/menu/menu.win32.ts:469
-msgid "Toggle file manager"
-msgstr "கோப்பு மேலாளரை மாற்று"
-
-#: source/app/service-providers/menu/menu.darwin.ts:495
-#: source/app/service-providers/menu/menu.win32.ts:477
-msgid "Toggle Sidebar"
-msgstr "பக்கப்பட்டியை மாற்று"
-
-#: source/app/service-providers/menu/menu.darwin.ts:509
-#: source/app/service-providers/menu/menu.win32.ts:488
-msgid "Reset zoom"
-msgstr "பெரிதாக்கு மீட்டமை"
-
-#: source/app/service-providers/menu/menu.darwin.ts:518
-#: source/app/service-providers/menu/menu.win32.ts:497
-msgid "Zoom in"
-msgstr "பெரிதாக்கு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:525
-#: source/app/service-providers/menu/menu.win32.ts:504
-msgid "Zoom out"
-msgstr "சிறிதாக்கு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:535
-#: source/app/service-providers/menu/menu.win32.ts:514
-msgid "Toggle fullscreen"
-msgstr "மாற்று முழுத்திரை"
-
-#: source/app/service-providers/menu/menu.darwin.ts:543
-#: source/app/service-providers/menu/menu.win32.ts:523
-msgid "Develop"
-msgstr "உருவாக்கு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:547
-#: source/app/service-providers/menu/menu.win32.ts:527
-msgid "Reload"
-msgstr "மீண்டும்ஏற்று"
-
-#: source/app/service-providers/menu/menu.darwin.ts:555
-#: source/app/service-providers/menu/menu.win32.ts:535
-msgid "Toggle developer tools"
-msgstr "உருவாக்குபவர் கருவிகளை மாற்று"
-
-#: source/app/service-providers/menu/menu.darwin.ts:563
-#: source/app/service-providers/menu/menu.win32.ts:543
-msgid "Open Logs"
-msgstr "பதிவுகள் திற"
-
-#: source/app/service-providers/menu/menu.darwin.ts:574
-#: source/app/service-providers/menu/menu.win32.ts:554
-msgid "Window"
-msgstr "சாளரம்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:579
-#: source/app/service-providers/menu/menu.win32.ts:559
-msgid "Minimize"
-msgstr "குறை"
-
-#: source/app/service-providers/menu/menu.darwin.ts:587
-#: source/app/service-providers/menu/menu.win32.ts:565
-msgid "Close"
-msgstr "மூடு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:593
-msgid "Bring All to Front"
-msgstr "அனைத்தையும் முன்னால் கொண்டு வா"
-
-#: source/app/service-providers/menu/menu.darwin.ts:601
-#: source/app/service-providers/menu/menu.win32.ts:574
-#: source/win-main/tabs-context.ts:38
-msgid "Close Tab"
-msgstr "தாவலை மூடு"
-
-#: source/app/service-providers/menu/menu.darwin.ts:609
-#: source/app/service-providers/menu/menu.win32.ts:582
-msgid "Previous Tab"
-msgstr "முந்தைய தாவல்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:617
-#: source/app/service-providers/menu/menu.win32.ts:590
-msgid "Next Tab"
-msgstr "அடுத்த தாவல்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:625
-#: source/app/service-providers/menu/menu.win32.ts:598
-msgid "New window"
-msgstr "புதிய சாளரம்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:636
-#: source/app/service-providers/menu/menu.win32.ts:609
-msgid "Help"
-msgstr "உதவி"
-
-#: source/app/service-providers/menu/menu.darwin.ts:660
-#: source/app/service-providers/menu/menu.win32.ts:633
-msgid "Support Zettlr"
-msgstr "செட்லரை ஆதரி"
-
-#: source/app/service-providers/menu/menu.darwin.ts:670
-#: source/app/service-providers/menu/menu.win32.ts:643
-msgid "Visit website"
-msgstr "வலைத்தளத்தைப் பார்"
-
-#: source/app/service-providers/menu/menu.darwin.ts:680
-#: source/app/service-providers/menu/menu.win32.ts:653
-msgid "Open user manual"
-msgstr "பயனர் கையேட்டைத் திற"
-
-#: source/app/service-providers/menu/menu.darwin.ts:694
-#: source/app/service-providers/menu/menu.win32.ts:667
-msgid "Open Tutorial"
-msgstr "பயிற்சி திற"
-
-#: source/app/service-providers/menu/menu.darwin.ts:702
-#: source/app/service-providers/menu/menu.win32.ts:675
-msgid "Clear FSAL cache …"
-msgstr "ஃபஎச்எஎல் தற்காலிக சேமிப்பை அழி…"
-
-#: source/app/service-providers/menu/menu.darwin.ts:706
-#: source/app/service-providers/menu/menu.win32.ts:679
-msgid "Clear FSAL Cache"
-msgstr "ஃபஎச்எஎல் தற்காலிக சேமிப்பை அழி"
-
-#: source/app/service-providers/menu/menu.darwin.ts:707
-#: source/app/service-providers/menu/menu.win32.ts:680
-msgid "Clearing the FSAL cache requires a restart."
-msgstr "ஃபஎச்எஎல் தற்காலிக சேமிப்பை அழிக்க மறுதொடக்கம் தேவை."
-
-#: source/app/service-providers/menu/menu.darwin.ts:708
-#: source/app/service-providers/menu/menu.win32.ts:681
-msgid ""
-"After the restart, Zettlr will recreate the entire cache, which may take a "
-"few moments, depending on the amount of files you have loaded and the speed "
-"of your disk. The window(s) will show afterward."
-msgstr ""
-"மறுதொடக்கத்திற்குப் பிறகு, செட்லர் இடையக கோப்புகளை உருவாக்கும், நீங்கள் ஏற்றிய கோப்புகளின் அளவு மற்றும் உங்கள் "
-"வட்டின் வேகத்தைப் பொறுத்து சில தருணங்கள் ஆகலாம். சாளரம் (கள்) பின்னர் "
-"காண்பிக்கப்படும்."
-
-#. 1: Omit all changes
-#: source/app/service-providers/menu/menu.darwin.ts:712
-#: source/app/service-providers/menu/menu.win32.ts:685
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
-#: source/app/service-providers/commands/dir-delete.ts:36
-#: source/app/service-providers/commands/rename-tag.ts:47
-#: source/app/service-providers/commands/file-delete.ts:37
-msgid "Cancel"
-msgstr "விலக்கு"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "கோப்பை மாற்று"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
-#, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"கோப்பு %s தொலைதூரத்தில் மாற்றியமைக்கப்பட்டது. ஏற்றப்பட்ட பதிப்பை வட்டில் இருந்து புதிய "
-"ஒன்றைக் கொண்டு மாற்றவா?"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
-#: source/win-preferences/schema/general.ts:78
-msgid "Always load remote changes to the current file"
-msgstr "தற்போதைய கோப்பில் எப்போதும் தொலை மாற்றங்களை ஏற்று"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
-#: source/app/service-providers/windows/dialog/prompt.ts:32
-#: source/app/service-providers/commands/dir-delete.ts:35
-#: source/app/service-providers/commands/file-delete.ts:36
-msgid "Ok"
-msgstr "சரி"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
-msgid "Overwrite existing file"
-msgstr "இருக்கும் கோப்பை மேலெழுது"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
-#, javascript-format
-msgid "The file %s already exists in this directory. Overwrite?"
-msgstr "இந்த கோப்பகத்தில் %s ஏற்கனவே உள்ளன. மேலெழுதவா?"
-
-#: source/app/service-providers/windows/dialog/ask-file.ts:54
-msgid "Open file"
-msgstr "கோப்பை திற"
-
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "கோப்பை சேமி"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-#: source/app/service-providers/commands/file-rename.ts:111
-#: source/app/service-providers/commands/rename-tag.ts:46
-msgid "Yes"
-msgstr "ஆம்"
-
-#. 0: Save all changes
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
-#: source/app/service-providers/commands/file-rename.ts:112
-msgid "No"
-msgstr "இல்லை"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-msgid "There are unsaved changes. Do you want to save them first?"
-msgstr "சேமிக்கப்படாத மாற்றங்கள் உள்ளன. முதலில் அவற்றைக் சேமிக்க விரும்புகிறீர்களா?"
-
-#. TODO: Move this to a command
-#. The user wants to open another file or directory.
-#: source/app/service-providers/windows/index.ts:221
-#: source/app/service-providers/commands/root-open.ts:75
-msgid "Open project folder"
-msgstr "திட்டக் கோப்புறை திற"
-
-#: source/app/service-providers/citeproc/index.ts:249
-#: source/app/service-providers/citeproc/index.ts:457
-msgid "The citation database could not be loaded"
-msgstr "மேற்கோள் தரவுத்தளத்தை ஏற்ற முடியவில்லை"
-
-#: source/app/service-providers/citeproc/index.ts:444
-msgid "Changes to the library file detected. Reloading …"
-msgstr "கண்டறியப்பட்ட நூலகக் கோப்பில் மாற்றங்கள். மீண்டும் ஏற்றுதல்…"
-
-#: source/app/service-providers/commands/import.ts:36
-msgid "You have to select a directory to import to."
-msgstr "இறக்குமதி செய்ய நீங்கள் ஒரு கோப்பகத்தைத் தேர்ந்தெடுக்க வேண்டும்."
-
-#. Now import.
-#: source/app/service-providers/commands/import.ts:59
-msgid "Importing. Please wait …"
-msgstr "இறக்குமதி. தயவுசெய்து காத்திரு…"
-
-#. This callback gets called whenever there is an error while running pandoc.
-#: source/app/service-providers/commands/import.ts:67
-#, javascript-format
-msgid "Couldn't import %s."
-msgstr "%s ஐ இறக்குமதி செய்ய முடியவில்லை."
-
-#: source/app/service-providers/commands/import.ts:71
-#, javascript-format
-msgid "%s imported successfully."
-msgstr "%s வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது."
-
-#. Some files failed to import.
-#: source/app/service-providers/commands/import.ts:76
-#, javascript-format
-msgid ""
-"The following %s files could not be imported, because their filetype is "
-"unknown: %s"
-msgstr ""
-"பின்வரும் %s கோப்புகளை இறக்குமதி செய்ய முடியவில்லை, ஏனெனில் அவற்றின் கோப்பு வகை "
-"தெரியவில்லை: %s"
-
-#: source/app/service-providers/commands/import.ts:82
-msgid "Import failed"
-msgstr "ஏற்றுமதி தோல்வியடைந்தது"
-
-#: source/app/service-providers/commands/dir-new.ts:37
-#: source/app/service-providers/commands/dir-new.ts:38
-#: source/app/service-providers/commands/dir-new.ts:50
-msgid "Could not create directory"
-msgstr "கோப்பகத்தை உருவாக்க முடியவில்லை"
-
-#: source/app/service-providers/commands/import-lang-file.ts:60
-#, javascript-format
-msgid "Language file imported: %s"
-msgstr "மொழி கோப்பு இறக்குமதி செய்யப்பட்டது: %s"
-
-#: source/app/service-providers/commands/import-lang-file.ts:62
-#: source/app/service-providers/commands/import-lang-file.ts:65
-#, javascript-format
-msgid "Could not import language file %s!"
-msgstr "மொழி கோப்பு %s ஐ இறக்குமதி செய்ய முடியவில்லை!"
-
-#. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:113
-#, javascript-format
-msgid "The reference with key %s does not appear to have attachments."
-msgstr "திறவுகோல் %s கொண்ட குறிப்பு இணைப்புகளைக் கொண்டிருப்பதாகத் தெரியவில்லை."
-
-#: source/app/service-providers/commands/open-attachment.ts:118
-msgid "Could not open attachment. Is Zotero running?"
-msgstr "இணைப்பைத் திறக்க முடியவில்லை. சோட்டெரோ இயங்குகிறதா?"
-
-#: source/app/service-providers/commands/file-rename.ts:109
-#, javascript-format
-msgid "Update %s internal links to file %s?"
-msgstr "கோப்புகளுக்கான உள் இணைப்புகளைப் புதுப்பிக்கவா?"
-
-#: source/app/service-providers/commands/file-new.ts:147
-#: source/app/service-providers/commands/file-duplicate.ts:42
-#: source/app/service-providers/commands/file-duplicate.ts:59
-msgid "Could not create file"
-msgstr "கோப்பை உருவாக்க முடியவில்லை"
-
-#: source/app/service-providers/commands/dir-delete.ts:40
-#: source/app/service-providers/commands/file-delete.ts:41
-msgid "Really delete?"
-msgstr "உண்மையில் நீக்கவா?"
-
-#: source/app/service-providers/commands/dir-delete.ts:41
-#: source/app/service-providers/commands/file-delete.ts:42
-#, javascript-format
-msgid "Do you really want to remove %s?"
-msgstr "நீங்கள் உண்மையில் %s ஐ அகற்ற விரும்புகிறீர்களா?"
-
-#: source/app/service-providers/commands/request-move.ts:53
-msgid "Cannot move directory"
-msgstr "கோப்பகத்தை நகர்த்த முடியாது"
-
-#: source/app/service-providers/commands/request-move.ts:54
-msgid "You cannot move a directory into one of its subdirectories."
-msgstr "நீங்கள் ஒரு கோப்பகத்தை அதன் துணை அடைவுகளில் ஒன்றில் நகர்த்த முடியாது."
-
-#: source/app/service-providers/commands/request-move.ts:63
-msgid "Cannot move directory or file"
-msgstr "அடைவு அல்லது கோப்பை நகர்த்த முடியாது"
-
-#: source/app/service-providers/commands/request-move.ts:64
-#, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "கோப்பு/அடைவு %s ஏற்கனவே இலக்கில் உள்ளன."
-
-#. We need to generate our own filename. First, attempt to just use 'copy of'
-#: source/app/service-providers/commands/file-duplicate.ts:71
-#, javascript-format
-msgid "Copy of %s"
-msgstr "%s நகல்"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:38
-msgid "The requested file was not found."
-msgstr "கோரப்பட்ட கோப்பு கிடைக்கவில்லை."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:83
-msgid "The provided name did not contain any allowed letters."
-msgstr "வழங்கப்பட்ட பெயரில் அனுமதிக்கப்பட்ட எழுத்துகள் இல்லை."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:104
-msgid "The requested directory was not found."
-msgstr "கோரப்பட்ட அடைவு காணப்படவில்லை."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:115
-msgid "Could not save image"
-msgstr "படத்தை சேமிக்க முடியவில்லை"
-
-#: source/app/service-providers/commands/rename-tag.ts:44
-#, javascript-format
-msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr "குறிச்சொல்லை \"%s\" ஐ \"%s\" உடன் %s கோப்புகளில் மாற்றவா?"
-
-#: source/app/service-providers/commands/language-tool.ts:187
-msgid "Document too long"
-msgstr "ஆவணம் மிக நீளமானது"
-
-#: source/app/service-providers/commands/language-tool.ts:192
-msgid "offline"
-msgstr "இணையமில்லாமல்"
-
-#: source/app/service-providers/commands/export.ts:55
-#: source/app/service-providers/commands/export.ts:157
-msgid "Export failed"
-msgstr "ஏற்றுமதி தோல்வியடைந்தது"
-
-#: source/app/service-providers/commands/export.ts:56
-#, javascript-format
-msgid "An error occurred during export: %s"
-msgstr "ஏற்றுமதியின் போது பிழை ஏற்பட்டது: %s"
-
-#: source/app/service-providers/commands/export.ts:114
-msgid "Choose export destination"
-msgstr "ஏற்றுமதி இலக்கைத் தேர்வுசெய்க"
-
-#: source/app/service-providers/commands/export.ts:145
-#, javascript-format
-msgid "Exporting to %s"
-msgstr "%sக்கு ஏற்றுமதி"
-
-#: source/app/service-providers/commands/export.ts:158
-#, javascript-format
-msgid "An error occurred on export: %s"
-msgstr "ஏற்றுமதியில் பிழை ஏற்பட்டது: %s"
-
-#: source/app/service-providers/commands/root-open.ts:85
-msgid "Cannot open directory"
-msgstr "கோப்பகத்தைத் திறக்க முடியாது"
-
-#: source/app/service-providers/commands/root-open.ts:86
-#, javascript-format
-msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
-msgstr "அடைவு &quot;%s&quot; செட்லர் ஆல் திறக்க முடியாது."
-
-#: source/app/service-providers/commands/dir-project-export.ts:74
-msgid "Cannot export project"
-msgstr "திட்டத்தை ஏற்றுமதி செய்ய முடியாது"
-
-#: source/app/service-providers/commands/dir-project-export.ts:75
-msgid ""
-"After applying your glob-filters, no files remained to export. Please adjust "
-"them in the project settings."
-msgstr ""
-"உங்கள் உலக-வடிகட்டிகளைப் பயன்படுத்திய பிறகு, ஏற்றுமதி செய்ய எந்த கோப்புகளும் இல்லை. திட்ட "
-"அமைப்புகளில் அவற்றை சரிசெய்."
-
-#: source/app/service-providers/commands/dir-project-export.ts:147
-#, javascript-format
-msgid "Project \"%s\" successfully exported. Click to show."
-msgstr "திட்டம் \"%s\" வெற்றிகரமாக ஏற்றுமதி செய்யப்பட்டது. காண்பிக்க சொடுக்கு."
-
-#: source/app/service-providers/commands/dir-project-export.ts:148
-msgid "Project Export"
-msgstr "திட்ட ஏற்றுமதி"
-
-#: source/app/service-providers/commands/importer/import-textbundle.ts:63
-#: source/app/service-providers/commands/importer/import-textbundle.ts:69
-#, javascript-format
-msgid "Malformed Textbundle: %s"
-msgstr "தவறான உரைப்பாடு: %s"
-
-#: source/app/service-providers/commands/importer/index.ts:92
-#: source/app/service-providers/commands/importer/index.ts:93
-msgid "Select import profile"
-msgstr "இறக்குமதி தன்வயவிவரத்தைத் தேர்ந்தெடு"
-
-#: source/app/service-providers/commands/importer/index.ts:94
-#, javascript-format
-msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr "%s ஐ இறக்குமதி செய்யக்கூடிய பல தன்வயவிவரங்கள் உள்ளன. ஒன்றைத் தேர்வுசெய்க."
-
-#: source/app/service-providers/tray/index.ts:160
-msgid "Show Zettlr"
-msgstr "செட்லரைக் காட்டு"
-
-#: source/app/service-providers/tray/index.ts:173
-msgid "Zettlr"
-msgstr "செட்லர்"
-
 #: source/app/service-providers/workspaces/index.ts:163
 #, javascript-format
 msgid "Loading workspace %s"
 msgstr "பணியிடத்தை ஏற்றுகிறது %s"
+
+#: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
+msgid "Cmd/Ctrl-click to follow this link"
+msgstr "இந்த இணைப்பைப் பின்பற்ற கட்டளை/கட்டுபாடு-சொடுக்கு"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+msgid "Open Link"
+msgstr "இணைப்பை திற"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+msgid "Copy Mail Address"
+msgstr "அஞ்சல் முகவரியை நகலெடு"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+msgid "Copy Link"
+msgstr "இணைப்பை நகலெடு"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:99
+msgid "Copy image to clipboard"
+msgstr "இடைநிலைப் பலகைக்கு படத்தை நகலெடு"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
+msgid "Open image"
+msgstr "படத்தை திற"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+#: source/win-main/file-manager/util/file-item-context.ts:87
+msgid "Reveal in Finder"
+msgstr "கண்டுபிடிப்பாளரில் வெளிப்படுத்து"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
+msgid "Open in File Browser"
+msgstr "கோப்பு உலாவியில் வெளிப்படுத்து"
+
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
+msgid "Copy equation code"
+msgstr "சமன்பாடு குறியீட்டை நகலெடு"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
+msgid "No suggestions"
+msgstr "பரிந்துரைகள் இல்லை"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
+msgid "Add to dictionary"
+msgstr "அகராதியில் சேர்"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
+#: source/win-preferences/schema/editor.ts:126
+#: source/win-preferences/schema/editor.ts:127
+msgid "Bold"
+msgstr "தடிமான"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
+msgid "Italic"
+msgstr "சாய்வு"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
+msgid "Insert link"
+msgstr "இணைப்பைச் செருகு"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
+msgid "Insert numbered list"
+msgstr "எண்ணிடப்பட்ட பட்டியலைச் செருகு"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
+msgid "Insert unordered list"
+msgstr "வரிசைப்படுத்தப்படாத பட்டியலைச் செருகு"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
+msgid "Insert tasklist"
+msgstr "பணிபட்டியலைச் செருகு"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+msgid "Blockquote"
+msgstr "தொகுதிமேற்கோள்"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
+msgid "Insert Table"
+msgstr "அட்டவணையைச் செருகு"
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
+#, javascript-format
+msgid "File %s does not exist."
+msgstr "கோப்பு %s இல்லை."
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:106
+msgid "Word count"
+msgstr "சொல் எண்ணிக்கை"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
+#: source/win-preferences/schema/editor.ts:134
+#: source/win-preferences/schema/editor.ts:135
+msgid "Italics"
+msgstr "சாய்வு"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+msgid "Link"
+msgstr "இணைப்பு"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
+msgid "Image"
+msgstr "படம்"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+msgid "Comment"
+msgstr "கருத்து"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+#: source/win-preferences/schema/spellchecking.ts:167
+msgid "Code"
+msgstr "குறியீடு"
+
+#: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:62
+msgid "Fetching link preview…"
+msgstr "இணைப்பு முன்னோட்டங்களை எடுக்கிறது"
+
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
+msgid "No footnote text found."
+msgstr "அடிக்குறிப்பு உரை எதுவும் கிடைக்கவில்லை."
+
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+msgid "Spelling mistake"
+msgstr "எழுத்துப்பிழை"
+
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr "படிக்கக்கூடிய முறை (%s)"
+
+#: source/common/modules/markdown-editor/renderers/render-images.ts:98
+#, javascript-format
+msgid "Image not found: %s"
+msgstr "படம் காணப்படவில்லை: %s"
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
+msgid "Rendering mermaid graph …"
+msgstr "தேவதை வரைபடத்தை வழங்குதல்…"
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
+msgid "Could not render Graph:"
+msgstr "வரைபடத்தை வழங்க முடியவில்லை:"
+
+#: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
+msgid "Go to footnote reference"
+msgstr "அடிக்குறிப்பு குறிப்புக்குச் செல்"
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
+msgid "Disabled"
+msgstr "முடக்கப்பட்டது"
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
+msgid "Custom"
+msgstr "தனிப்பயன்"
+
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Open diagnostics panel"
+msgstr "கண்டறியும் பலகம் திற"
+
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
+msgid "Detect automatically"
+msgstr "தானாகவே கண்டறி"
+
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
+msgstr "முன்னிலைப்படுத்துதல் இல்லை"
+
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr "இப்போது"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
@@ -1429,374 +1590,374 @@ msgid "Catalan"
 msgstr "கற்றலான்"
 
 #: source/common/util/map-lang-code.ts:41
+msgid "Catalan (Valencia)"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:42
 msgid "Czech"
 msgstr "செக்"
 
-#: source/common/util/map-lang-code.ts:42
+#: source/common/util/map-lang-code.ts:43
 msgid "Danish"
 msgstr "டேனிச்"
 
-#: source/common/util/map-lang-code.ts:43
+#: source/common/util/map-lang-code.ts:44
 msgid "German (Austria)"
 msgstr "செர்மன் (ஆச்திரியா)"
 
-#: source/common/util/map-lang-code.ts:44
+#: source/common/util/map-lang-code.ts:45
 msgid "German (Switzerland)"
 msgstr "செர்மன் (சுவிட்சர்லாந்து)"
 
-#: source/common/util/map-lang-code.ts:45
+#: source/common/util/map-lang-code.ts:46
 msgid "German (simple)"
 msgstr "செர்மன் (எளிமையானது)"
 
-#: source/common/util/map-lang-code.ts:46
+#: source/common/util/map-lang-code.ts:47
 msgid "German (Germany)"
 msgstr "செர்மன் (செர்மனி)"
 
-#: source/common/util/map-lang-code.ts:47
+#: source/common/util/map-lang-code.ts:48
 msgid "German (Luxembourg)"
 msgstr "செர்மன் (லக்சம்பர்க்)"
 
-#: source/common/util/map-lang-code.ts:48
+#: source/common/util/map-lang-code.ts:49
 msgid "German"
 msgstr "செர்மன்"
 
-#: source/common/util/map-lang-code.ts:49
+#: source/common/util/map-lang-code.ts:50
 msgid "Greek"
 msgstr "கிரேக்கம்"
 
-#: source/common/util/map-lang-code.ts:50
+#: source/common/util/map-lang-code.ts:51
 msgid "English (Australia)"
 msgstr "ஆங்கிலம் (ஆச்திரேலியா)"
 
-#: source/common/util/map-lang-code.ts:51
+#: source/common/util/map-lang-code.ts:52
 msgid "English (Canada)"
 msgstr "ஆங்கிலம் (கனடா)"
 
-#: source/common/util/map-lang-code.ts:52
+#: source/common/util/map-lang-code.ts:53
 msgid "English (United Kingdom)"
 msgstr "ஆங்கிலம் (ஐக்கிய முடியரசு)"
 
-#: source/common/util/map-lang-code.ts:53
+#: source/common/util/map-lang-code.ts:54
 msgid "English (India)"
 msgstr "ஆங்கிலம் (இந்தியா)"
 
-#: source/common/util/map-lang-code.ts:54
+#: source/common/util/map-lang-code.ts:55
 msgid "English (New Zealand)"
 msgstr "ஆங்கிலம் (நியூசிலாந்து)"
 
-#: source/common/util/map-lang-code.ts:55
+#: source/common/util/map-lang-code.ts:56
 msgid "English (United States)"
 msgstr "ஆங்கிலம் (ஐக்கிய அமெரிக்க)"
 
-#: source/common/util/map-lang-code.ts:56
+#: source/common/util/map-lang-code.ts:57
 msgid "English (South Africa)"
 msgstr "ஆங்கிலம் (தென்னாப்பிரிக்கா)"
 
-#: source/common/util/map-lang-code.ts:57
+#: source/common/util/map-lang-code.ts:58
 msgid "English"
 msgstr "ஆங்கிலம்"
 
-#: source/common/util/map-lang-code.ts:58
+#: source/common/util/map-lang-code.ts:59
 msgid "Esperanto"
 msgstr "எச்பெராண்டோ"
 
-#: source/common/util/map-lang-code.ts:59
+#: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Argentina)"
 msgstr "ச்பானிச் (அர்சென்டினா)"
 
-#: source/common/util/map-lang-code.ts:60
+#: source/common/util/map-lang-code.ts:61
 msgid "Spanish (Spain)"
 msgstr "ச்பானிச் (ச்பெயின்)"
 
-#: source/common/util/map-lang-code.ts:61
+#: source/common/util/map-lang-code.ts:62
 msgid "Spanish"
 msgstr "ச்பானிச்"
 
-#: source/common/util/map-lang-code.ts:62
+#: source/common/util/map-lang-code.ts:63
 msgid "Estonian"
 msgstr "எச்டோனிய"
 
-#: source/common/util/map-lang-code.ts:63
+#: source/common/util/map-lang-code.ts:64
 msgid "Basque"
 msgstr "பாச்க்"
 
-#: source/common/util/map-lang-code.ts:64
+#: source/common/util/map-lang-code.ts:65
 msgid "Persian (Farsi)"
 msgstr "பாரசீக (ஃபார்சி)"
 
-#: source/common/util/map-lang-code.ts:65
+#: source/common/util/map-lang-code.ts:66
 msgid "Finnish"
 msgstr "பின்னிச்"
 
-#: source/common/util/map-lang-code.ts:66
+#: source/common/util/map-lang-code.ts:67
 msgid "Faroese"
 msgstr "பரோச்"
 
-#: source/common/util/map-lang-code.ts:67
+#: source/common/util/map-lang-code.ts:68
 msgid "French (Belgium)"
 msgstr "பிரஞ்சு (பெல்சியம்)"
 
-#: source/common/util/map-lang-code.ts:68
+#: source/common/util/map-lang-code.ts:69
 msgid "French (Switzerland)"
 msgstr "பிரஞ்சு (சுவிட்சர்லாந்து)"
 
-#: source/common/util/map-lang-code.ts:69
+#: source/common/util/map-lang-code.ts:70
 msgid "French (France)"
 msgstr "பிரஞ்சு (பிரான்ச்)"
 
-#: source/common/util/map-lang-code.ts:70
+#: source/common/util/map-lang-code.ts:71
 msgid "French (Luxembourg)"
 msgstr "பிரஞ்சு (லக்சம்பர்க்)"
 
-#: source/common/util/map-lang-code.ts:71
+#: source/common/util/map-lang-code.ts:72
 msgid "French (Principality of Monaco)"
 msgstr "பிரஞ்சு (மொனாக்கோவின் முதன்மை)"
 
-#: source/common/util/map-lang-code.ts:72
+#: source/common/util/map-lang-code.ts:73
 msgid "French"
 msgstr "பிரஞ்சு"
 
-#: source/common/util/map-lang-code.ts:73
+#: source/common/util/map-lang-code.ts:74
 msgid "Irish"
 msgstr "ஐரிச்"
 
-#: source/common/util/map-lang-code.ts:74
+#: source/common/util/map-lang-code.ts:75
 msgid "Scottish (Gaelic)"
 msgstr "ச்காட்டிச் (கேலிக்)"
 
-#: source/common/util/map-lang-code.ts:75
+#: source/common/util/map-lang-code.ts:76
 msgid "Galician"
 msgstr "காலிசியன்"
 
-#: source/common/util/map-lang-code.ts:76
+#: source/common/util/map-lang-code.ts:77
 msgid "Hebrew"
 msgstr "எபிரேய"
 
-#: source/common/util/map-lang-code.ts:77
+#: source/common/util/map-lang-code.ts:78
 msgid "Hindi"
 msgstr "இந்தி"
 
-#: source/common/util/map-lang-code.ts:78
+#: source/common/util/map-lang-code.ts:79
 msgid "Croatian"
 msgstr "குரோசியன்"
 
-#: source/common/util/map-lang-code.ts:79
+#: source/common/util/map-lang-code.ts:80
 msgid "Hungarian"
 msgstr "அங்கேரியன்"
 
-#: source/common/util/map-lang-code.ts:80
+#: source/common/util/map-lang-code.ts:81
 msgid "Armenian"
 msgstr "ஆர்மீனியன்"
 
-#: source/common/util/map-lang-code.ts:81
+#: source/common/util/map-lang-code.ts:82
 msgid "Indonesian"
 msgstr "இந்தோனேசிய"
 
-#: source/common/util/map-lang-code.ts:82
+#: source/common/util/map-lang-code.ts:83
 msgid "Icelandic"
 msgstr "ஐச்லாந்திய"
 
-#: source/common/util/map-lang-code.ts:83
+#: source/common/util/map-lang-code.ts:84
 msgid "Italian (Switzerland)"
 msgstr "இத்தாலியன் (சுவிட்சர்லாந்து)"
 
-#: source/common/util/map-lang-code.ts:84
+#: source/common/util/map-lang-code.ts:85
 msgid "Italian (Italy)"
 msgstr "இத்தாலியன் (இத்தாலி)"
 
-#: source/common/util/map-lang-code.ts:85
+#: source/common/util/map-lang-code.ts:86
 msgid "Italian"
 msgstr "இத்தாலிய"
 
-#: source/common/util/map-lang-code.ts:86
+#: source/common/util/map-lang-code.ts:87
 msgid "Japanese"
 msgstr "சப்பானியர்கள்"
 
-#: source/common/util/map-lang-code.ts:87
+#: source/common/util/map-lang-code.ts:88
 msgid "Georgian"
 msgstr "சார்சியன்"
 
-#: source/common/util/map-lang-code.ts:88
+#: source/common/util/map-lang-code.ts:89
 msgid "Khmer (Cambodia)"
 msgstr "கெமர் (கம்போடியா)"
 
-#: source/common/util/map-lang-code.ts:89
+#: source/common/util/map-lang-code.ts:90
 msgid "Korean"
 msgstr "கொரிய"
 
-#: source/common/util/map-lang-code.ts:90
+#: source/common/util/map-lang-code.ts:91
 msgid "Latin"
 msgstr "லத்தீன்"
 
-#: source/common/util/map-lang-code.ts:91
+#: source/common/util/map-lang-code.ts:92
 msgid "Luxembourgian"
 msgstr "லக்சம்பர்கியன்"
 
-#: source/common/util/map-lang-code.ts:92
+#: source/common/util/map-lang-code.ts:93
 msgid "Lithuanian"
 msgstr "லிதுவேனியன்"
 
-#: source/common/util/map-lang-code.ts:93
+#: source/common/util/map-lang-code.ts:94
 msgid "Latvian"
 msgstr "லாட்வியன்"
 
-#: source/common/util/map-lang-code.ts:94
+#: source/common/util/map-lang-code.ts:95
 msgid "Macedonian"
 msgstr "மாசிடோனியன்"
 
-#: source/common/util/map-lang-code.ts:95
+#: source/common/util/map-lang-code.ts:96
 msgid "Mongolian"
 msgstr "மங்கோலியன்"
 
-#: source/common/util/map-lang-code.ts:96
+#: source/common/util/map-lang-code.ts:97
 msgid "Malaysian (Brunei Darussalam)"
 msgstr "மலேசியன் (புருனே தாருச்சலம்)"
 
-#: source/common/util/map-lang-code.ts:97
+#: source/common/util/map-lang-code.ts:98
 msgid "Malaysian (Malaysia)"
 msgstr "மலேசியன் (மலேசியா)"
 
-#: source/common/util/map-lang-code.ts:98
+#: source/common/util/map-lang-code.ts:99
 msgid "Malaysian"
 msgstr "மலேசியன்"
 
-#: source/common/util/map-lang-code.ts:99
+#: source/common/util/map-lang-code.ts:100
 msgid "Norwegian (Bokmål)"
 msgstr "நோர்வே (போக்மால்)"
 
-#: source/common/util/map-lang-code.ts:100
+#: source/common/util/map-lang-code.ts:101
 msgid "Nepalese"
 msgstr "நேபாள"
 
-#: source/common/util/map-lang-code.ts:101
+#: source/common/util/map-lang-code.ts:102
 msgid "Dutch (Belgium)"
 msgstr "டச்சு (பெல்சியம்)"
 
-#: source/common/util/map-lang-code.ts:102
+#: source/common/util/map-lang-code.ts:103
 msgid "Dutch (Netherlands)"
 msgstr "டச்சு (நெதர்லாந்து)"
 
-#: source/common/util/map-lang-code.ts:103
+#: source/common/util/map-lang-code.ts:104
 msgid "Dutch"
 msgstr "டச்சு"
 
-#: source/common/util/map-lang-code.ts:104
+#: source/common/util/map-lang-code.ts:105
 msgid "Norwegian (Nyorsk)"
 msgstr "நோர்வே (நைனோர்ச்க்)"
 
-#: source/common/util/map-lang-code.ts:105
+#: source/common/util/map-lang-code.ts:106
 msgid "Norwegian"
 msgstr "நோர்வே"
 
-#: source/common/util/map-lang-code.ts:106
+#: source/common/util/map-lang-code.ts:107
 msgid "Polish"
 msgstr "போலீச்"
 
-#: source/common/util/map-lang-code.ts:107
+#: source/common/util/map-lang-code.ts:108
 msgid "Portuguese (Angola)"
 msgstr "போர்த்துகீசியம் (அங்கோலா)"
 
-#: source/common/util/map-lang-code.ts:108
+#: source/common/util/map-lang-code.ts:109
 msgid "Portuguese (Brazil)"
 msgstr "போர்த்துகீசியம் (பிரேசில்)"
 
-#: source/common/util/map-lang-code.ts:109
+#: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Mozambique)"
 msgstr "போர்த்துகீசியம் (மொசாம்பிக்)"
 
-#: source/common/util/map-lang-code.ts:110
+#: source/common/util/map-lang-code.ts:111
 msgid "Portuguese (Portugal)"
 msgstr "போர்த்துகீசியம் (போர்ச்சுகல்)"
 
-#: source/common/util/map-lang-code.ts:111
+#: source/common/util/map-lang-code.ts:112
 msgid "Portuguese"
 msgstr "போர்த்துகீசியம்"
 
-#: source/common/util/map-lang-code.ts:112
+#: source/common/util/map-lang-code.ts:113
 msgid "Romanian"
 msgstr "ருமேனிய"
 
-#: source/common/util/map-lang-code.ts:113
+#: source/common/util/map-lang-code.ts:114
 msgid "Russian"
 msgstr "ரச்ய"
 
-#: source/common/util/map-lang-code.ts:114
+#: source/common/util/map-lang-code.ts:115
 msgid "Rwandan (Kinyarwanda)"
 msgstr "ருவாண்டன் (கின்யர்வாண்டா)"
 
-#: source/common/util/map-lang-code.ts:115
+#: source/common/util/map-lang-code.ts:116
 msgid "Slovakian"
 msgstr "ச்லோவாக்கியன்"
 
-#: source/common/util/map-lang-code.ts:116
+#: source/common/util/map-lang-code.ts:117
 msgid "Slovenian"
 msgstr "ச்லோவேனியன்"
 
-#: source/common/util/map-lang-code.ts:117
+#: source/common/util/map-lang-code.ts:118
 msgid "Serbian"
 msgstr "செர்பிய"
 
-#: source/common/util/map-lang-code.ts:118
+#: source/common/util/map-lang-code.ts:119
 msgid "Albanian"
 msgstr "அல்பேனிய"
 
-#: source/common/util/map-lang-code.ts:119
+#: source/common/util/map-lang-code.ts:120
 msgid "Albanian (Albania)"
 msgstr "அல்பேனிய (அல்பேனியா)"
 
-#: source/common/util/map-lang-code.ts:120
+#: source/common/util/map-lang-code.ts:121
 msgid "Swedish"
 msgstr "ச்வீடிச்"
 
-#: source/common/util/map-lang-code.ts:121
+#: source/common/util/map-lang-code.ts:122
 msgid "Tamil (India)"
 msgstr "தமிழ் (இந்தியா)"
 
-#: source/common/util/map-lang-code.ts:122
+#: source/common/util/map-lang-code.ts:123
 msgid "Thai"
 msgstr "தாய்"
 
-#: source/common/util/map-lang-code.ts:123
+#: source/common/util/map-lang-code.ts:124
 msgid "Tagalog (Filipino)"
 msgstr "டாக்லாக் (பிலிப்பைன்ச்)"
 
-#: source/common/util/map-lang-code.ts:124
+#: source/common/util/map-lang-code.ts:125
 msgid "Turkish"
 msgstr "துருக்கிய"
 
-#: source/common/util/map-lang-code.ts:125
+#: source/common/util/map-lang-code.ts:126
 msgid "Ukrainian"
 msgstr "உக்ரேனிய"
 
-#: source/common/util/map-lang-code.ts:126
+#: source/common/util/map-lang-code.ts:127
 msgid "Urdu"
 msgstr "உருது"
 
-#: source/common/util/map-lang-code.ts:127
+#: source/common/util/map-lang-code.ts:128
 msgid "Vietnamese"
 msgstr "வியட்நாமிய"
 
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
-#: source/common/util/map-lang-code.ts:130
+#: source/common/util/map-lang-code.ts:131
 msgid "Sorbian"
 msgstr "சோர்பியன்"
 
-#: source/common/util/map-lang-code.ts:131
+#: source/common/util/map-lang-code.ts:132
 msgid "Chinese (China)"
 msgstr "சீன (சீனா)"
 
-#: source/common/util/map-lang-code.ts:132
+#: source/common/util/map-lang-code.ts:133
 msgid "Chinese (Taiwan)"
 msgstr "சீன (தைவான்)"
 
-#: source/common/util/map-lang-code.ts:133
+#: source/common/util/map-lang-code.ts:134
 msgid "Chinese"
 msgstr "சீன"
-
-#: source/common/util/format-date.ts:33
-msgid "just now"
-msgstr "இப்போது"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -1806,241 +1967,144 @@ msgstr ","
 msgid "."
 msgstr "."
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
-msgid "No footnote text found."
-msgstr "அடிக்குறிப்பு உரை எதுவும் கிடைக்கவில்லை."
+#: source/win-preferences/schema/citations.ts:22
+msgid "Citations"
+msgstr "மேற்கோள்கள்"
 
-#: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:62
-msgid "Fetching link preview…"
-msgstr "இணைப்பு முன்னோட்டங்களை எடுக்கிறது"
+#: source/win-preferences/schema/citations.ts:28
+msgid "How would you like autocomplete to insert your citations?"
+msgstr "உங்கள் மேற்கோள்களைச் செருக தன்னியக்க ஒப்பனை எப்படி விரும்புகிறீர்கள்?"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
-#, javascript-format
-msgid "File %s does not exist."
-msgstr "கோப்பு %s இல்லை."
+#: source/win-preferences/schema/citations.ts:39
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "மேற்கோள் தரவுத்தளம் (மேபாமொ சேசான் அல்லது பிப்உரை)"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:106
-msgid "Word count"
-msgstr "சொல் எண்ணிக்கை"
+#: source/win-preferences/schema/citations.ts:41
+#: source/win-preferences/schema/citations.ts:53
+msgid "Path to file"
+msgstr "கோப்பு பாதை"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/win-preferences/schema/editor.ts:126
-#: source/win-preferences/schema/editor.ts:127
-msgid "Bold"
-msgstr "தடிமான"
+#: source/win-preferences/schema/citations.ts:51
+msgid "CSL-Style (optional)"
+msgstr "மேபாமொ-பாணி (விரும்பினால்)"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:134
-#: source/win-preferences/schema/editor.ts:135
-msgid "Italics"
-msgstr "சாய்வு"
+#: source/win-preferences/schema/spellchecking.ts:24
+msgid "LanguageTool"
+msgstr "மொழிகருவி"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
-msgid "Link"
-msgstr "இணைப்பு"
+#: source/win-preferences/schema/spellchecking.ts:34
+msgid "Strictness"
+msgstr "கண்டிப்பு"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
-msgid "Image"
-msgstr "படம்"
+#: source/win-preferences/schema/spellchecking.ts:37
+msgid "Standard"
+msgstr "தரநிலை"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
-msgid "Comment"
-msgstr "கருத்து"
+#: source/win-preferences/schema/spellchecking.ts:38
+msgid "Picky"
+msgstr "எடுத்துரை"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+#: source/win-preferences/schema/spellchecking.ts:47
+msgid "Mother language"
+msgstr "தாய்மொழி"
+
+#: source/win-preferences/schema/spellchecking.ts:53
+msgid "Not set"
+msgstr "அமைக்கப்படவில்லை"
+
+#: source/win-preferences/schema/spellchecking.ts:61
+msgid "Preferred Variants"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:66
+msgid ""
+"LanguageTool cannot distinguish certain language's variants. These settings "
+"will nudge LanguageTool to auto-detect your preferred variant of these "
+"languages."
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:71
+msgid "Interpret English as"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:84
+msgid "Interpret German as"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:94
+msgid "Interpret Portuguese as"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:105
+msgid "Interpret Catalan as"
+msgstr ""
+
 #: source/win-preferences/schema/spellchecking.ts:114
-msgid "Code"
-msgstr "குறியீடு"
+msgid "LanguageTool Provider"
+msgstr "மொழிகருவி வழங்குநர்"
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
-msgid "Spelling mistake"
-msgstr "எழுத்துப்பிழை"
+#: source/win-preferences/schema/spellchecking.ts:118
+msgid "Custom server"
+msgstr "தனிப்பயன் சேவையகம்"
 
-#: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
-msgid "Go to footnote reference"
-msgstr "அடிக்குறிப்பு குறிப்புக்குச் செல்"
+#: source/win-preferences/schema/spellchecking.ts:125
+msgid "Custom server address"
+msgstr "தனிப்பயன் சேவையக முகவரி"
 
-#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
-msgid "Open diagnostics panel"
-msgstr "கண்டறியும் பலகம் திற"
+#: source/win-preferences/schema/spellchecking.ts:134
+msgid "LanguageTool Premium"
+msgstr "மொழிகருவி உயர்மதிப்பு"
 
-#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
-msgid "Detect automatically"
-msgstr "தானாகவே கண்டறி"
+#: source/win-preferences/schema/spellchecking.ts:139
+msgid ""
+"Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
+"credentials here."
+msgstr ""
+"செட்லர் \"மொழிகருவி வழங்குநர்\" அமைப்புகளை நீங்கள் இங்கு ஏதேனும் நற்சான்றிதழ்களை உள்ளிட்டால் "
+"புறக்கணிக்கும்."
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
-msgid "Disabled"
-msgstr "முடக்கப்பட்டது"
+#: source/win-preferences/schema/spellchecking.ts:143
+msgid "LanguageTool Username"
+msgstr "மொழிகருவி பயனர்பெயர்"
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
-msgid "Custom"
-msgstr "தனிப்பயன்"
+#: source/win-preferences/schema/spellchecking.ts:150
+msgid "LanguageTool API key"
+msgstr "மொழிகருவி பநிஇ திறவுகோல்"
 
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
-msgid "Rendering mermaid graph …"
-msgstr "தேவதை வரைபடத்தை வழங்குதல்…"
+#: source/win-preferences/schema/spellchecking.ts:158
+msgid "Spellchecking"
+msgstr "எழுத்துகள்சரிபார்ப்பு"
 
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
-msgid "Could not render Graph:"
-msgstr "வரைபடத்தை வழங்க முடியவில்லை:"
+#: source/win-preferences/schema/spellchecking.ts:167
+msgid "Active"
+msgstr "செயலில்"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:98
-#, javascript-format
-msgid "Image not found: %s"
-msgstr "படம் காணப்படவில்லை: %s"
+#: source/win-preferences/schema/spellchecking.ts:167
+msgid "Language"
+msgstr "மொழி"
 
-#: source/common/modules/markdown-editor/renderers/readability.ts:39
-#, javascript-format
-msgid "Readability mode (%s)"
-msgstr "படிக்கக்கூடிய முறை (%s)"
+#: source/win-preferences/schema/spellchecking.ts:168
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr "தானியங்கி எழுத்துப்பிழை சரிபார்ப்பை இயக்க விரும்பும் மொழிகளைத் தேர்ந்தெடு."
 
-#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
-msgid "No highlighting"
-msgstr "முன்னிலைப்படுத்துதல் இல்லை"
+#: source/win-preferences/schema/spellchecking.ts:173
+#: source/win-preferences/schema/advanced.ts:115
+#: source/win-preferences/schema/autocorrect.ts:112
+msgid "Filter"
+msgstr "வடிகட்டி"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
-msgid "No suggestions"
-msgstr "பரிந்துரைகள் இல்லை"
+#: source/win-preferences/schema/spellchecking.ts:180
+msgid "User dictionary. Remove words by clicking them."
+msgstr "பயனர் அகராதி. சொற்களைக் சொடுக்குவதன் மூலம் அவற்றை அகற்று."
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
-msgid "Add to dictionary"
-msgstr "அகராதியில் சேர்"
+#: source/win-preferences/schema/spellchecking.ts:182
+msgid "Dictionary entry"
+msgstr "அகராதி பதிவு"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
-msgid "Italic"
-msgstr "சாய்வு"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
-msgid "Insert link"
-msgstr "இணைப்பைச் செருகு"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
-msgid "Insert numbered list"
-msgstr "எண்ணிடப்பட்ட பட்டியலைச் செருகு"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
-msgid "Insert unordered list"
-msgstr "வரிசைப்படுத்தப்படாத பட்டியலைச் செருகு"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
-msgid "Insert tasklist"
-msgstr "பணிபட்டியலைச் செருகு"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
-msgid "Blockquote"
-msgstr "தொகுதிமேற்கோள்"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
-msgid "Insert Table"
-msgstr "அட்டவணையைச் செருகு"
-
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
-msgid "Copy equation code"
-msgstr "சமன்பாடு குறியீட்டை நகலெடு"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
-msgid "Open Link"
-msgstr "இணைப்பை திற"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
-msgid "Copy Mail Address"
-msgstr "அஞ்சல் முகவரியை நகலெடு"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
-msgid "Copy Link"
-msgstr "இணைப்பை நகலெடு"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:99
-msgid "Copy image to clipboard"
-msgstr "இடைநிலைப் பலகைக்கு படத்தை நகலெடு"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
-msgid "Open image"
-msgstr "படத்தை திற"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
-#: source/win-main/file-manager/util/dir-item-context.ts:76
-#: source/win-main/file-manager/util/file-item-context.ts:87
-msgid "Reveal in Finder"
-msgstr "கண்டுபிடிப்பாளரில் வெளிப்படுத்து"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
-msgid "Open in File Browser"
-msgstr "கோப்பு உலாவியில் வெளிப்படுத்து"
-
-#: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
-msgid "Cmd/Ctrl-click to follow this link"
-msgstr "இந்த இணைப்பைப் பின்பற்ற கட்டளை/கட்டுபாடு-சொடுக்கு"
-
-#: source/win-main/tabs-context.ts:44
-msgid "Close other tabs"
-msgstr "மற்ற தாவல்களை மூடு"
-
-#: source/win-main/tabs-context.ts:50
-msgid "Close all tabs"
-msgstr "எல்லா தாவல்களையும் மூடு"
-
-#: source/win-main/tabs-context.ts:59
-msgid "Unpin tab"
-msgstr "பின்நீக்கு தாவல்"
-
-#: source/win-main/tabs-context.ts:59
-msgid "Pin tab"
-msgstr "முள் தாவல்"
-
-#: source/win-main/tabs-context.ts:68
-#: source/win-main/file-manager/util/file-item-context.ts:72
-msgid "Copy filename"
-msgstr "கோப்பு பெயரை நகலெடு"
-
-#: source/win-main/tabs-context.ts:74
-msgid "Copy full path"
-msgstr "முழு பாதையை நகலெடு"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:28
-#: source/win-main/file-manager/util/file-item-context.ts:34
-msgid "Properties"
-msgstr "பண்புகள்"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:52
-msgid "Rename directory"
-msgstr "கோப்பகத்தை மறுபெயரிடு"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:67
-#: source/win-main/file-manager/util/file-item-context.ts:66
-msgid "Copy path"
-msgstr "நகல் பாதை"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:76
-#: source/win-main/file-manager/util/file-item-context.ts:87
-msgid "Reveal in Explorer"
-msgstr "உலாவியில் வெளிப்படுத்து"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:76
-#: source/win-main/file-manager/util/file-item-context.ts:87
-msgid "Reveal in File Browser"
-msgstr "கோப்பு உலாவியில் வெளிப்படுத்து"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:87
-msgid "Check for directory …"
-msgstr "கோப்பகத்தை சரிபார்…"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:104
-msgid "Export Project"
-msgstr "ஏற்றுமதி திட்டம்"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:116
-msgid "Close Workspace"
-msgstr "பணியிடத்தை மூடு"
-
-#: source/win-main/file-manager/util/file-item-context.ts:57
-msgid "Duplicate file"
-msgstr "நகல் கோப்பு"
-
-#: source/win-main/file-manager/util/file-item-context.ts:100
-msgid "Close file"
-msgstr "கோப்பை மூடு"
+#: source/win-preferences/schema/spellchecking.ts:185
+msgid "Search for entries …"
+msgstr "உள்ளீடுகளைத் தேடு…"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
@@ -2097,9 +2161,9 @@ msgid ""
 "Internal links allow you to add an optional title, separated by a vertical "
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
-msgstr "உண்மையான இணைப்பு இலக்கிலிருந்து செங்குத்து பட்டை"
-" எழுத்தால் பிரிக்கப்பட்ட விருப்பத் தலைப்பைச் சேர்க்க உள் இணைப்புகள் "
-"உங்களை அனுமதிக்கின்றன. இங்கே நீங்கள் இரண்டின் வரிசையை வரையறுக்கலாம்."
+msgstr ""
+"உண்மையான இணைப்பு இலக்கிலிருந்து செங்குத்து பட்டை எழுத்தால் பிரிக்கப்பட்ட விருப்பத் தலைப்பைச் "
+"சேர்க்க உள் இணைப்புகள் உங்களை அனுமதிக்கின்றன. இங்கே நீங்கள் இரண்டின் வரிசையை வரையறுக்கலாம்."
 
 #: source/win-preferences/schema/zettelkasten.ts:79
 msgid "[[Link|Title]]: Link first (recommended)"
@@ -2121,7 +2185,8 @@ msgstr "தேடல் சரமானது அடைப்புக்கு�
 msgid ""
 "Automatically create non-existing files in this folder when following "
 "internal links"
-msgstr "உள் இணைப்புகளைப் பின்பற்றும்போது தானாகவே இந்த கோப்புறையில் இல்லாத கோப்புகளை உருவாக்கு"
+msgstr ""
+"உள் இணைப்புகளைப் பின்பற்றும்போது தானாகவே இந்த கோப்புறையில் இல்லாத கோப்புகளை உருவாக்கு"
 
 #: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
@@ -2130,417 +2195,6 @@ msgstr "இது வேலை செய்ய, கோப்புறை செ�
 #: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
 msgstr "கோப்புறைக்கான பாதை"
-
-#: source/win-preferences/schema/editor.ts:23
-msgid "Input mode"
-msgstr "உள்ளீட்டு முறை"
-
-#: source/win-preferences/schema/editor.ts:39
-msgid ""
-"The input mode determines how you interact with the editor. We recommend "
-"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
-"know what this implies."
-msgstr "நீங்கள் திருத்தியுடன் எவ்வாறு தொடர்பு "
-"கொள்கிறீர்கள் என்பதை உள்ளீட்டு முறை தீர்மானிக்கிறது. "
-"இந்த அமைப்பை \"இயல்பான\" இல் வைக்க "
-"பரிந்துரைக்கிறோம். இது எதைக் குறிக்கிறது என்று "
-"உங்களுக்குத் தெரிந்தால் மட்டுமே \"விம்\" அல்லது "
-"\"இமேக்சு\" என்பதைத் தேர்ந்தெடு."
-
-#: source/win-preferences/schema/editor.ts:44
-msgid "Writing direction"
-msgstr "எழுதும் திசை"
-
-#: source/win-preferences/schema/editor.ts:57
-msgid "Markdown rendering"
-msgstr "குறிகீழ் வழங்குதல்"
-
-#: source/win-preferences/schema/editor.ts:64
-msgid ""
-"Check to enable live rendering of various Markdown elements to formatted "
-"appearance. This hides formatting characters (such as **text**) or renders "
-"images instead of their link."
-msgstr "வடிவமைக்கப்பட்ட தோற்றத்திற்கு பல்வேறு"
-" குறிகீழ் கூறுகளின் நேரடி வழங்குதலை இயக்க சரிபார்."
-" இது வடிவமைத்தல் எழுத்துக்களை (**உரை** போன்றவை)"
-" மறைக்கிறது அல்லது அவற்றின் இணைப்பிற்குப் "
-"பதிலாக படங்களை வழங்குகிறது."
-
-#: source/win-preferences/schema/editor.ts:72
-msgid "Render Citations"
-msgstr "மேற்கோள்களை வழங்கு"
-
-#: source/win-preferences/schema/editor.ts:77
-msgid "Render Iframes"
-msgstr "இசட்டங்களை வழங்கு"
-
-#: source/win-preferences/schema/editor.ts:82
-msgid "Render Images"
-msgstr "படங்களை வழங்கு"
-
-#: source/win-preferences/schema/editor.ts:87
-msgid "Render Links"
-msgstr "இணைப்புகளை வழங்கு"
-
-#: source/win-preferences/schema/editor.ts:92
-msgid "Render Formulae"
-msgstr "வாய்ப்பாடுகளை வழங்கு"
-
-#: source/win-preferences/schema/editor.ts:97
-msgid "Render Tasks"
-msgstr "பணிகளை வழங்கு"
-
-#: source/win-preferences/schema/editor.ts:102
-msgid "Hide heading characters"
-msgstr "தலைப்பு எழுத்துக்களை மறை"
-
-#: source/win-preferences/schema/editor.ts:107
-msgid "Render emphasis"
-msgstr "முக்கியத்துவம் அளி"
-
-#: source/win-preferences/schema/editor.ts:116
-msgid "Formatting characters for bold and italic"
-msgstr "தடிமனான மற்றும் சாய்வுக்கான எழுத்துகளை வடிவமைத்தல்"
-
-#: source/win-preferences/schema/editor.ts:143
-msgid "Check Markdown for style issues"
-msgstr "பாணி சிக்கல்களுக்கு கீழ்குறி சரிபார்"
-
-#: source/win-preferences/schema/editor.ts:149
-msgid "Table Editor"
-msgstr "அட்டவணை திருத்தி"
-
-#: source/win-preferences/schema/editor.ts:160
-msgid ""
-"The Table Editor is an interactive interface that simplifies creation and "
-"editing of tables. It provides buttons for common functionality, and takes "
-"care of Markdown formatting."
-msgstr "அட்டவணை திருத்தி என்பது ஒரு ஊடாடும்"
-" இடைமுகமாகும், இது அட்டவணைகளை உருவாக்குவதையும் "
-"திருத்துவதையும் எளிதாக்குகிறது. இது பொதுவான "
-"செயல்பாட்டிற்கான பொத்தான்களை வழங்குகிறது, "
-"மேலும் குறிகீழ் வடிவமைப்பை கவனித்துக்கொள்கிறது."
-
-#: source/win-preferences/schema/editor.ts:165
-msgid "Distraction-free mode"
-msgstr "கவனச்சிதறல் இல்லாத பயன்முறை"
-
-#: source/win-preferences/schema/editor.ts:171
-msgid "Mute non-focused lines in distraction-free mode"
-msgstr "கவனச்சிதறல் இல்லாத பயன்முறையில் கவனம்செலுத்தாத வரிகளை முடக்கு"
-
-#: source/win-preferences/schema/editor.ts:176
-msgid "Hide toolbar in distraction free mode"
-msgstr "கருவிப்பட்டியை கவனச்சிதறல் இல்லாத பயன்முறையில் மறை"
-
-#: source/win-preferences/schema/editor.ts:182
-msgid "Word counter"
-msgstr "சொல் எண்ணி"
-
-#: source/win-preferences/schema/editor.ts:189
-msgid "Count characters instead of words (e.g., for Chinese)"
-msgstr "சொற்களுக்கு பதிலாக எழுத்துக்களை எண்ணு (எ.கா., சீனருக்கு)"
-
-#: source/win-preferences/schema/editor.ts:195
-msgid "Readability mode"
-msgstr "வாசிப்பு முறை"
-
-#: source/win-preferences/schema/editor.ts:202
-msgid "Algorithm"
-msgstr "படிமுறை"
-
-#: source/win-preferences/schema/editor.ts:214
-msgid "Image size"
-msgstr "பட அளவு"
-
-#: source/win-preferences/schema/editor.ts:220
-msgid "Maximum width of images (%s %)"
-msgstr "படங்களின் அதிகபட்ச அகலம் (%s %)"
-
-#: source/win-preferences/schema/editor.ts:227
-msgid "Maximum height of images (%s %)"
-msgstr "படங்களின் அதிகபட்ச உயரம் (%s %)"
-
-#: source/win-preferences/schema/editor.ts:235
-msgid "Other settings"
-msgstr "பிற அமைப்புகள்"
-
-#: source/win-preferences/schema/editor.ts:241
-msgid "Font size"
-msgstr "எழுத்துரு அளவு"
-
-#: source/win-preferences/schema/editor.ts:248
-msgid "Indentation size (number of spaces)"
-msgstr "உள்தள்ளல் அளவு (இடைவெளி எண்ணிக்கை)"
-
-#: source/win-preferences/schema/editor.ts:255
-msgid "Indent using tabs instead of spaces"
-msgstr "இடைவெளிகளுக்கு பதிலாக தாவல்களைப் பயன்படுத்தி உள்தள்ளல்"
-
-#: source/win-preferences/schema/editor.ts:262
-msgid "Suggest emojis during autocompletion"
-msgstr "தானாக நிறைவு செய்யும் போது உணர்வுகளைப் பரிந்துரை"
-
-#: source/win-preferences/schema/editor.ts:267
-msgid "Show link previews"
-msgstr "இணைப்பு முன்னோட்டங்களைக் காட்டு"
-
-#: source/win-preferences/schema/editor.ts:273
-msgid "Automatically close matching character pairs"
-msgstr "பொருந்தக்கூடிய எழுத்து இணைகளை தானாக மூடு"
-
-#: source/win-preferences/schema/citations.ts:22
-msgid "Citations"
-msgstr "மேற்கோள்கள்"
-
-#: source/win-preferences/schema/citations.ts:28
-msgid "How would you like autocomplete to insert your citations?"
-msgstr "உங்கள் மேற்கோள்களைச் செருக தன்னியக்க ஒப்பனை எப்படி விரும்புகிறீர்கள்?"
-
-#: source/win-preferences/schema/citations.ts:39
-msgid "Citation Database (CSL JSON or BibTex)"
-msgstr "மேற்கோள் தரவுத்தளம் (மேபாமொ சேசான் அல்லது பிப்உரை)"
-
-#: source/win-preferences/schema/citations.ts:41
-#: source/win-preferences/schema/citations.ts:53
-msgid "Path to file"
-msgstr "கோப்பு பாதை"
-
-#: source/win-preferences/schema/citations.ts:51
-msgid "CSL-Style (optional)"
-msgstr "மேபாமொ-பாணி (விரும்பினால்)"
-
-#: source/win-preferences/schema/spellchecking.ts:24
-msgid "LanguageTool"
-msgstr "மொழிகருவி"
-
-#: source/win-preferences/schema/spellchecking.ts:34
-msgid "Strictness"
-msgstr "கண்டிப்பு"
-
-#: source/win-preferences/schema/spellchecking.ts:37
-msgid "Standard"
-msgstr "தரநிலை"
-
-#: source/win-preferences/schema/spellchecking.ts:38
-msgid "Picky"
-msgstr "எடுத்துரை"
-
-#: source/win-preferences/schema/spellchecking.ts:47
-msgid "Mother language"
-msgstr "தாய்மொழி"
-
-#: source/win-preferences/schema/spellchecking.ts:53
-msgid "Not set"
-msgstr "அமைக்கப்படவில்லை"
-
-#: source/win-preferences/schema/spellchecking.ts:61
-msgid "LanguageTool Provider"
-msgstr "மொழிகருவி வழங்குநர்"
-
-#: source/win-preferences/schema/spellchecking.ts:65
-msgid "Custom server"
-msgstr "தனிப்பயன் சேவையகம்"
-
-#: source/win-preferences/schema/spellchecking.ts:72
-msgid "Custom server address"
-msgstr "தனிப்பயன் சேவையக முகவரி"
-
-#: source/win-preferences/schema/spellchecking.ts:81
-msgid "LanguageTool Premium"
-msgstr "மொழிகருவி உயர்மதிப்பு"
-
-#: source/win-preferences/schema/spellchecking.ts:86
-msgid ""
-"Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
-"credentials here."
-msgstr "செட்லர் \"மொழிகருவி வழங்குநர்\" அமைப்புகளை நீங்கள் இங்கு ஏதேனும் நற்சான்றிதழ்களை உள்ளிட்டால் புறக்கணிக்கும்."
-
-#: source/win-preferences/schema/spellchecking.ts:90
-msgid "LanguageTool Username"
-msgstr "மொழிகருவி பயனர்பெயர்"
-
-#: source/win-preferences/schema/spellchecking.ts:97
-msgid "LanguageTool API key"
-msgstr "மொழிகருவி பநிஇ திறவுகோல்"
-
-#: source/win-preferences/schema/spellchecking.ts:105
-msgid "Spellchecking"
-msgstr "எழுத்துகள்சரிபார்ப்பு"
-
-#: source/win-preferences/schema/spellchecking.ts:114
-msgid "Active"
-msgstr "செயலில்"
-
-#: source/win-preferences/schema/spellchecking.ts:114
-msgid "Language"
-msgstr "மொழி"
-
-#: source/win-preferences/schema/spellchecking.ts:115
-msgid ""
-"Select the languages for which you want to enable automatic spell checking."
-msgstr "தானியங்கி எழுத்துப்பிழை சரிபார்ப்பை இயக்க விரும்பும் மொழிகளைத் தேர்ந்தெடு."
-
-#: source/win-preferences/schema/spellchecking.ts:120
-#: source/win-preferences/schema/advanced.ts:115
-#: source/win-preferences/schema/autocorrect.ts:112
-msgid "Filter"
-msgstr "வடிகட்டி"
-
-#: source/win-preferences/schema/spellchecking.ts:127
-msgid "User dictionary. Remove words by clicking them."
-msgstr "பயனர் அகராதி. சொற்களைக் சொடுக்குவதன் மூலம் அவற்றை அகற்று."
-
-#: source/win-preferences/schema/spellchecking.ts:129
-msgid "Dictionary entry"
-msgstr "அகராதி பதிவு"
-
-#: source/win-preferences/schema/spellchecking.ts:132
-msgid "Search for entries …"
-msgstr "உள்ளீடுகளைத் தேடு…"
-
-#: source/win-preferences/schema/general.ts:22
-msgid "Application language"
-msgstr "பயன்பாட்டு மொழி"
-
-#: source/win-preferences/schema/general.ts:33
-msgid "Autosave"
-msgstr "தானிசேமி"
-
-#: source/win-preferences/schema/general.ts:43
-msgid "Save modifications"
-msgstr "மாற்றங்களை சேமி"
-
-#: source/win-preferences/schema/general.ts:47
-#: source/win-preferences/schema/appearance.ts:41
-msgid "Off"
-msgstr "அணை"
-
-#: source/win-preferences/schema/general.ts:48
-msgid "Immediately"
-msgstr "உடனடியாக"
-
-#: source/win-preferences/schema/general.ts:49
-msgid "After a short delay"
-msgstr "குறுகிய தாமதத்திற்குப் பிறகு"
-
-#: source/win-preferences/schema/general.ts:55
-msgid "Default image folder"
-msgstr "இயல்புநிலை பட கோப்புறை"
-
-#: source/win-preferences/schema/general.ts:67
-msgid ""
-"Click \"Select folder…\" or type an absolute or relative path directly into "
-"the input field."
-msgstr "\"கோப்புறையைத் தேர்ந்தெடு...\" என்பதைக் சொடுக்கவும் அல்லது உள்ளீட்டு புலத்தில் நேரடியாக ஒரு முழுமையான அல்லது தொடர்புடைய பாதையைத் தட்டச்சு செய்யவும்."
-
-#: source/win-preferences/schema/general.ts:72
-msgid "Behavior"
-msgstr "நடத்தை"
-
-#: source/win-preferences/schema/general.ts:83
-msgid "Avoid opening files in new tabs if possible"
-msgstr "முடிந்தால் புதிய தாவல்களில் கோப்புகளைத் திறப்பதைத் தவிர்"
-
-#: source/win-preferences/schema/general.ts:89
-msgid "Updates"
-msgstr "புதுப்பிகள்"
-
-#: source/win-preferences/schema/general.ts:95
-msgid "Automatically check for updates"
-msgstr "புதுப்பிப்புகளை தானாக சரிபார்"
-
-#: source/win-preferences/schema/import-export.ts:24
-msgid "Import and export profiles"
-msgstr "இறக்குமதி மற்றும் ஏற்றுமதி தன்வயவிவரங்கள்"
-
-#: source/win-preferences/schema/import-export.ts:30
-msgid "Open import profiles editor"
-msgstr "இறக்குமதி தன்வயவிவரங்கள் திருத்தி திற"
-
-#: source/win-preferences/schema/import-export.ts:44
-msgid "Open export profiles editor"
-msgstr "ஏற்றுமதி தன்வயவிவரங்கள் திருத்தி திற"
-
-#: source/win-preferences/schema/import-export.ts:59
-msgid "Export settings"
-msgstr "ஏற்றுமதி அமைப்புகள்"
-
-#. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
-#: source/win-preferences/schema/import-export.ts:65
-msgid "Use Zettlr's internal Pandoc for exports"
-msgstr "ஏற்றுமதிக்கு செட்லரின் உள் பாண்ஆவணம் பயன்படுத்து"
-
-#: source/win-preferences/schema/import-export.ts:71
-msgid "Remove tags from files when exporting"
-msgstr "ஏற்றுமதிமதியின் போது கோப்புகளிலிருந்து குறிச்சொற்களை அகற்று"
-
-#: source/win-preferences/schema/import-export.ts:80
-msgid "Remove internal links completely"
-msgstr "உள் இணைப்புகளை முழுவதுமாக அகற்று"
-
-#: source/win-preferences/schema/import-export.ts:81
-msgid "Unlink internal links"
-msgstr "உள் இணைப்புகளை அவிழ்த்து விடு"
-
-#: source/win-preferences/schema/import-export.ts:82
-msgid "Don't touch internal links"
-msgstr "உள் இணைப்புகளைத் தொட வேண்டாம்"
-
-#: source/win-preferences/schema/import-export.ts:88
-msgid "Destination folder for exported files"
-msgstr "ஏற்றுமதி செய்யப்பட்ட கோப்புகளுக்கான இலக்கு கோப்புறை"
-
-#. TODO: Add info-strings
-#: source/win-preferences/schema/import-export.ts:92
-msgid "Temporary folder"
-msgstr "தற்காலிக கோப்புறை"
-
-#: source/win-preferences/schema/import-export.ts:93
-msgid "Same as file location"
-msgstr "கோப்பு இருப்பிடம் போன்றது"
-
-#: source/win-preferences/schema/import-export.ts:94
-msgid "Ask for folder when exporting"
-msgstr "ஏற்றுமதி செய்யும் போது கோப்புறையைக் கேள்"
-
-#: source/win-preferences/schema/import-export.ts:100
-msgid ""
-"Warning! Files in the temporary folder are regularly deleted. Choosing the "
-"same location as the file overwrites files with identical filenames if they "
-"already exist."
-msgstr "எச்சரிக்கை! தற்காலிக கோப்புறையில் உள்ள கோப்புகள் "
-"தொடர்ந்து நீக்கப்படும். கோப்பு இருக்கும் அதே இடத்தைத் தேர்ந்தெடுப்பது, "
-"ஏற்கனவே இருந்தால், ஒரே மாதிரியான கோப்புப்பெயர்களைக் கொண்ட"
-" கோப்புகளை மேலெழுதும்."
-
-#: source/win-preferences/schema/import-export.ts:105
-msgid "Custom export commands"
-msgstr "தனிப்பயன் ஏற்றுமதி கட்டளைகள்"
-
-#: source/win-preferences/schema/import-export.ts:113
-msgid "Display name"
-msgstr "காட்சி பெயர்"
-
-#: source/win-preferences/schema/import-export.ts:113
-msgid "Command"
-msgstr "கட்டளை"
-
-#: source/win-preferences/schema/import-export.ts:114
-msgid ""
-"Enter custom commands to run the exporter with. Each command receives as its "
-"first argument the file or project folder to be exported."
-msgstr ""
-"ஏற்றுமதியாளரை இயக்க தனிப்பயன் கட்டளைகளை உள்ளிடவும். ஒவ்வொரு கட்டளையும் அதன் முதல் வாதமாக "
-"ஏற்றுமதி செய்ய வேண்டிய கோப்பு அல்லது திட்ட கோப்புறையைப் பெறுகிறது."
-
-#: source/win-preferences/schema/snippets.ts:24
-msgid "Snippets"
-msgstr "துணுக்குகள்"
-
-#: source/win-preferences/schema/snippets.ts:30
-msgid "Open snippets editor"
-msgstr "துணுக்குகள் திருத்தியைத் திற"
 
 #: source/win-preferences/schema/advanced.ts:30
 msgid "Pattern for new file names"
@@ -2652,51 +2306,14 @@ msgstr "ஆவண்னா வெளியீடுகள்"
 msgid "Notify me about beta releases"
 msgstr "ஆவண்னா வெளியீடுகள் பற்றி எனக்குத் தெரிவி"
 
-#: source/win-preferences/schema/autocorrect.ts:22
-msgid "Autocorrect"
-msgstr "தானாகதிருத்து"
-
-#: source/win-preferences/schema/autocorrect.ts:32
-msgid "Smart quotes"
-msgstr "அறிவு மேற்கோள்கள்"
-
-#: source/win-preferences/schema/autocorrect.ts:45
-msgid "Double Quotes"
-msgstr "இரட்டை மேற்கோள்கள்"
-
-#: source/win-preferences/schema/autocorrect.ts:48
-#: source/win-preferences/schema/autocorrect.ts:70
-msgid "Disable Magic Quotes"
-msgstr "மந்திர மேற்கோள்களை முடக்கு"
-
-#: source/win-preferences/schema/autocorrect.ts:67
-msgid "Single Quotes"
-msgstr "ஒற்றை மேற்கோள்கள்"
-
-#: source/win-preferences/schema/autocorrect.ts:95
-msgid "Text-replacement patterns"
-msgstr "உரை-மாற்று வடிவங்கள்"
-
-#: source/win-preferences/schema/autocorrect.ts:99
-msgid "Match whole words"
-msgstr "முழு சொற்களையும் பொருத்து"
-
-#: source/win-preferences/schema/autocorrect.ts:100
-msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
-"சரிபார்க்கும்போது, தன்னியக்கக் கட்டுப்பாடு ஒருபோதும் சொற்களின் சில பகுதிகளை மாற்றாது"
-
-#: source/win-preferences/schema/autocorrect.ts:107
-msgid "Replace"
-msgstr "மாற்று"
-
-#: source/win-preferences/schema/autocorrect.ts:107
-msgid "With"
-msgstr "உடன்"
-
 #: source/win-preferences/schema/appearance.ts:37
 msgid "Schedule"
 msgstr "அட்டவணை"
+
+#: source/win-preferences/schema/appearance.ts:41
+#: source/win-preferences/schema/general.ts:47
+msgid "Off"
+msgstr "அணை"
 
 #: source/win-preferences/schema/appearance.ts:42
 msgid "Follow system"
@@ -2705,6 +2322,10 @@ msgstr "முறைமையைப் பின்பற்று"
 #: source/win-preferences/schema/appearance.ts:43
 msgid "On"
 msgstr "மேல்"
+
+#: source/win-preferences/schema/appearance.ts:52
+msgid "Start"
+msgstr "தொடங்கு"
 
 #: source/win-preferences/schema/appearance.ts:59
 msgid "End"
@@ -2802,6 +2423,346 @@ msgstr "தனிப்பயன் சிஎச்எச்"
 msgid "Open CSS editor"
 msgstr "சிஎச்எச் திருத்தி திற"
 
+#: source/win-preferences/schema/import-export.ts:24
+msgid "Import and export profiles"
+msgstr "இறக்குமதி மற்றும் ஏற்றுமதி தன்வயவிவரங்கள்"
+
+#: source/win-preferences/schema/import-export.ts:30
+msgid "Open import profiles editor"
+msgstr "இறக்குமதி தன்வயவிவரங்கள் திருத்தி திற"
+
+#: source/win-preferences/schema/import-export.ts:44
+msgid "Open export profiles editor"
+msgstr "ஏற்றுமதி தன்வயவிவரங்கள் திருத்தி திற"
+
+#: source/win-preferences/schema/import-export.ts:59
+msgid "Export settings"
+msgstr "ஏற்றுமதி அமைப்புகள்"
+
+#. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
+#: source/win-preferences/schema/import-export.ts:65
+msgid "Use Zettlr's internal Pandoc for exports"
+msgstr "ஏற்றுமதிக்கு செட்லரின் உள் பாண்ஆவணம் பயன்படுத்து"
+
+#: source/win-preferences/schema/import-export.ts:71
+msgid "Remove tags from files when exporting"
+msgstr "ஏற்றுமதிமதியின் போது கோப்புகளிலிருந்து குறிச்சொற்களை அகற்று"
+
+#: source/win-preferences/schema/import-export.ts:80
+msgid "Remove internal links completely"
+msgstr "உள் இணைப்புகளை முழுவதுமாக அகற்று"
+
+#: source/win-preferences/schema/import-export.ts:81
+msgid "Unlink internal links"
+msgstr "உள் இணைப்புகளை அவிழ்த்து விடு"
+
+#: source/win-preferences/schema/import-export.ts:82
+msgid "Don't touch internal links"
+msgstr "உள் இணைப்புகளைத் தொட வேண்டாம்"
+
+#: source/win-preferences/schema/import-export.ts:88
+msgid "Destination folder for exported files"
+msgstr "ஏற்றுமதி செய்யப்பட்ட கோப்புகளுக்கான இலக்கு கோப்புறை"
+
+#. TODO: Add info-strings
+#: source/win-preferences/schema/import-export.ts:92
+msgid "Temporary folder"
+msgstr "தற்காலிக கோப்புறை"
+
+#: source/win-preferences/schema/import-export.ts:93
+msgid "Same as file location"
+msgstr "கோப்பு இருப்பிடம் போன்றது"
+
+#: source/win-preferences/schema/import-export.ts:94
+msgid "Ask for folder when exporting"
+msgstr "ஏற்றுமதி செய்யும் போது கோப்புறையைக் கேள்"
+
+#: source/win-preferences/schema/import-export.ts:100
+msgid ""
+"Warning! Files in the temporary folder are regularly deleted. Choosing the "
+"same location as the file overwrites files with identical filenames if they "
+"already exist."
+msgstr ""
+"எச்சரிக்கை! தற்காலிக கோப்புறையில் உள்ள கோப்புகள் தொடர்ந்து நீக்கப்படும். கோப்பு இருக்கும் அதே "
+"இடத்தைத் தேர்ந்தெடுப்பது, ஏற்கனவே இருந்தால், ஒரே மாதிரியான கோப்புப்பெயர்களைக் கொண்ட "
+"கோப்புகளை மேலெழுதும்."
+
+#: source/win-preferences/schema/import-export.ts:105
+msgid "Custom export commands"
+msgstr "தனிப்பயன் ஏற்றுமதி கட்டளைகள்"
+
+#: source/win-preferences/schema/import-export.ts:113
+msgid "Display name"
+msgstr "காட்சி பெயர்"
+
+#: source/win-preferences/schema/import-export.ts:113
+msgid "Command"
+msgstr "கட்டளை"
+
+#: source/win-preferences/schema/import-export.ts:114
+msgid ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
+msgstr ""
+"ஏற்றுமதியாளரை இயக்க தனிப்பயன் கட்டளைகளை உள்ளிடவும். ஒவ்வொரு கட்டளையும் அதன் முதல் வாதமாக "
+"ஏற்றுமதி செய்ய வேண்டிய கோப்பு அல்லது திட்ட கோப்புறையைப் பெறுகிறது."
+
+#: source/win-preferences/schema/snippets.ts:24
+msgid "Snippets"
+msgstr "துணுக்குகள்"
+
+#: source/win-preferences/schema/snippets.ts:30
+msgid "Open snippets editor"
+msgstr "துணுக்குகள் திருத்தியைத் திற"
+
+#: source/win-preferences/schema/general.ts:22
+msgid "Application language"
+msgstr "பயன்பாட்டு மொழி"
+
+#: source/win-preferences/schema/general.ts:33
+msgid "Autosave"
+msgstr "தானிசேமி"
+
+#: source/win-preferences/schema/general.ts:43
+msgid "Save modifications"
+msgstr "மாற்றங்களை சேமி"
+
+#: source/win-preferences/schema/general.ts:48
+msgid "Immediately"
+msgstr "உடனடியாக"
+
+#: source/win-preferences/schema/general.ts:49
+msgid "After a short delay"
+msgstr "குறுகிய தாமதத்திற்குப் பிறகு"
+
+#: source/win-preferences/schema/general.ts:55
+msgid "Default image folder"
+msgstr "இயல்புநிலை பட கோப்புறை"
+
+#: source/win-preferences/schema/general.ts:67
+msgid ""
+"Click \"Select folder…\" or type an absolute or relative path directly into "
+"the input field."
+msgstr ""
+"\"கோப்புறையைத் தேர்ந்தெடு...\" என்பதைக் சொடுக்கவும் அல்லது உள்ளீட்டு புலத்தில் நேரடியாக "
+"ஒரு முழுமையான அல்லது தொடர்புடைய பாதையைத் தட்டச்சு செய்யவும்."
+
+#: source/win-preferences/schema/general.ts:72
+msgid "Behavior"
+msgstr "நடத்தை"
+
+#: source/win-preferences/schema/general.ts:83
+msgid "Avoid opening files in new tabs if possible"
+msgstr "முடிந்தால் புதிய தாவல்களில் கோப்புகளைத் திறப்பதைத் தவிர்"
+
+#: source/win-preferences/schema/general.ts:89
+msgid "Updates"
+msgstr "புதுப்பிகள்"
+
+#: source/win-preferences/schema/general.ts:95
+msgid "Automatically check for updates"
+msgstr "புதுப்பிப்புகளை தானாக சரிபார்"
+
+#: source/win-preferences/schema/autocorrect.ts:22
+msgid "Autocorrect"
+msgstr "தானாகதிருத்து"
+
+#: source/win-preferences/schema/autocorrect.ts:32
+msgid "Smart quotes"
+msgstr "அறிவு மேற்கோள்கள்"
+
+#: source/win-preferences/schema/autocorrect.ts:45
+msgid "Double Quotes"
+msgstr "இரட்டை மேற்கோள்கள்"
+
+#: source/win-preferences/schema/autocorrect.ts:48
+#: source/win-preferences/schema/autocorrect.ts:70
+msgid "Disable Magic Quotes"
+msgstr "மந்திர மேற்கோள்களை முடக்கு"
+
+#: source/win-preferences/schema/autocorrect.ts:67
+msgid "Single Quotes"
+msgstr "ஒற்றை மேற்கோள்கள்"
+
+#: source/win-preferences/schema/autocorrect.ts:95
+msgid "Text-replacement patterns"
+msgstr "உரை-மாற்று வடிவங்கள்"
+
+#: source/win-preferences/schema/autocorrect.ts:99
+msgid "Match whole words"
+msgstr "முழு சொற்களையும் பொருத்து"
+
+#: source/win-preferences/schema/autocorrect.ts:100
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr ""
+"சரிபார்க்கும்போது, தன்னியக்கக் கட்டுப்பாடு ஒருபோதும் சொற்களின் சில பகுதிகளை மாற்றாது"
+
+#: source/win-preferences/schema/autocorrect.ts:107
+msgid "Replace"
+msgstr "மாற்று"
+
+#: source/win-preferences/schema/autocorrect.ts:107
+msgid "With"
+msgstr "உடன்"
+
+#: source/win-preferences/schema/editor.ts:23
+msgid "Input mode"
+msgstr "உள்ளீட்டு முறை"
+
+#: source/win-preferences/schema/editor.ts:39
+msgid ""
+"The input mode determines how you interact with the editor. We recommend "
+"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
+"know what this implies."
+msgstr ""
+"நீங்கள் திருத்தியுடன் எவ்வாறு தொடர்பு கொள்கிறீர்கள் என்பதை உள்ளீட்டு முறை தீர்மானிக்கிறது. இந்த "
+"அமைப்பை \"இயல்பான\" இல் வைக்க பரிந்துரைக்கிறோம். இது எதைக் குறிக்கிறது என்று உங்களுக்குத் "
+"தெரிந்தால் மட்டுமே \"விம்\" அல்லது \"இமேக்சு\" என்பதைத் தேர்ந்தெடு."
+
+#: source/win-preferences/schema/editor.ts:44
+msgid "Writing direction"
+msgstr "எழுதும் திசை"
+
+#: source/win-preferences/schema/editor.ts:57
+msgid "Markdown rendering"
+msgstr "குறிகீழ் வழங்குதல்"
+
+#: source/win-preferences/schema/editor.ts:64
+msgid ""
+"Check to enable live rendering of various Markdown elements to formatted "
+"appearance. This hides formatting characters (such as **text**) or renders "
+"images instead of their link."
+msgstr ""
+"வடிவமைக்கப்பட்ட தோற்றத்திற்கு பல்வேறு குறிகீழ் கூறுகளின் நேரடி வழங்குதலை இயக்க சரிபார். "
+"இது வடிவமைத்தல் எழுத்துக்களை (**உரை** போன்றவை) மறைக்கிறது அல்லது அவற்றின் இணைப்பிற்குப் "
+"பதிலாக படங்களை வழங்குகிறது."
+
+#: source/win-preferences/schema/editor.ts:72
+msgid "Render Citations"
+msgstr "மேற்கோள்களை வழங்கு"
+
+#: source/win-preferences/schema/editor.ts:77
+msgid "Render Iframes"
+msgstr "இசட்டங்களை வழங்கு"
+
+#: source/win-preferences/schema/editor.ts:82
+msgid "Render Images"
+msgstr "படங்களை வழங்கு"
+
+#: source/win-preferences/schema/editor.ts:87
+msgid "Render Links"
+msgstr "இணைப்புகளை வழங்கு"
+
+#: source/win-preferences/schema/editor.ts:92
+msgid "Render Formulae"
+msgstr "வாய்ப்பாடுகளை வழங்கு"
+
+#: source/win-preferences/schema/editor.ts:97
+msgid "Render Tasks"
+msgstr "பணிகளை வழங்கு"
+
+#: source/win-preferences/schema/editor.ts:102
+msgid "Hide heading characters"
+msgstr "தலைப்பு எழுத்துக்களை மறை"
+
+#: source/win-preferences/schema/editor.ts:107
+msgid "Render emphasis"
+msgstr "முக்கியத்துவம் அளி"
+
+#: source/win-preferences/schema/editor.ts:116
+msgid "Formatting characters for bold and italic"
+msgstr "தடிமனான மற்றும் சாய்வுக்கான எழுத்துகளை வடிவமைத்தல்"
+
+#: source/win-preferences/schema/editor.ts:143
+msgid "Check Markdown for style issues"
+msgstr "பாணி சிக்கல்களுக்கு கீழ்குறி சரிபார்"
+
+#: source/win-preferences/schema/editor.ts:149
+msgid "Table Editor"
+msgstr "அட்டவணை திருத்தி"
+
+#: source/win-preferences/schema/editor.ts:160
+msgid ""
+"The Table Editor is an interactive interface that simplifies creation and "
+"editing of tables. It provides buttons for common functionality, and takes "
+"care of Markdown formatting."
+msgstr ""
+"அட்டவணை திருத்தி என்பது ஒரு ஊடாடும் இடைமுகமாகும், இது அட்டவணைகளை உருவாக்குவதையும் "
+"திருத்துவதையும் எளிதாக்குகிறது. இது பொதுவான செயல்பாட்டிற்கான பொத்தான்களை வழங்குகிறது, "
+"மேலும் குறிகீழ் வடிவமைப்பை கவனித்துக்கொள்கிறது."
+
+#: source/win-preferences/schema/editor.ts:165
+msgid "Distraction-free mode"
+msgstr "கவனச்சிதறல் இல்லாத பயன்முறை"
+
+#: source/win-preferences/schema/editor.ts:171
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr "கவனச்சிதறல் இல்லாத பயன்முறையில் கவனம்செலுத்தாத வரிகளை முடக்கு"
+
+#: source/win-preferences/schema/editor.ts:176
+msgid "Hide toolbar in distraction free mode"
+msgstr "கருவிப்பட்டியை கவனச்சிதறல் இல்லாத பயன்முறையில் மறை"
+
+#: source/win-preferences/schema/editor.ts:182
+msgid "Word counter"
+msgstr "சொல் எண்ணி"
+
+#: source/win-preferences/schema/editor.ts:189
+msgid "Count characters instead of words (e.g., for Chinese)"
+msgstr "சொற்களுக்கு பதிலாக எழுத்துக்களை எண்ணு (எ.கா., சீனருக்கு)"
+
+#: source/win-preferences/schema/editor.ts:195
+msgid "Readability mode"
+msgstr "வாசிப்பு முறை"
+
+#: source/win-preferences/schema/editor.ts:202
+msgid "Algorithm"
+msgstr "படிமுறை"
+
+#: source/win-preferences/schema/editor.ts:214
+msgid "Image size"
+msgstr "பட அளவு"
+
+#: source/win-preferences/schema/editor.ts:220
+msgid "Maximum width of images (%s %)"
+msgstr "படங்களின் அதிகபட்ச அகலம் (%s %)"
+
+#: source/win-preferences/schema/editor.ts:227
+msgid "Maximum height of images (%s %)"
+msgstr "படங்களின் அதிகபட்ச உயரம் (%s %)"
+
+#: source/win-preferences/schema/editor.ts:235
+msgid "Other settings"
+msgstr "பிற அமைப்புகள்"
+
+#: source/win-preferences/schema/editor.ts:241
+msgid "Font size"
+msgstr "எழுத்துரு அளவு"
+
+#: source/win-preferences/schema/editor.ts:248
+msgid "Indentation size (number of spaces)"
+msgstr "உள்தள்ளல் அளவு (இடைவெளி எண்ணிக்கை)"
+
+#: source/win-preferences/schema/editor.ts:255
+msgid "Indent using tabs instead of spaces"
+msgstr "இடைவெளிகளுக்கு பதிலாக தாவல்களைப் பயன்படுத்தி உள்தள்ளல்"
+
+#: source/win-preferences/schema/editor.ts:261
+msgid "Highlight whitespace"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:267
+msgid "Suggest emojis during autocompletion"
+msgstr "தானாக நிறைவு செய்யும் போது உணர்வுகளைப் பரிந்துரை"
+
+#: source/win-preferences/schema/editor.ts:272
+msgid "Show link previews"
+msgstr "இணைப்பு முன்னோட்டங்களைக் காட்டு"
+
+#: source/win-preferences/schema/editor.ts:278
+msgid "Automatically close matching character pairs"
+msgstr "பொருந்தக்கூடிய எழுத்து இணைகளை தானாக மூடு"
+
 #: source/win-preferences/schema/file-manager.ts:23
 msgid "Display mode"
 msgstr "காட்சி முறை"
@@ -2824,12 +2785,11 @@ msgid ""
 "directory to have its contents displayed in the file list. Switch between "
 "file list and directory tree by clicking on directories or the arrow button "
 "which appears at the top left corner of the file list."
-msgstr "மெல்லிய பயன்முறை உங்கள் கோப்பகங்களையும் "
-"கோப்புகளையும் தனித்தனியாகக் காட்டுகிறது. கோப்பு பட்டியலில் "
-"அதன் உள்ளடக்கங்களைக் காட்ட ஒரு கோப்பகத்தைத் தேர்ந்தெடுக்கவும். "
-"கோப்பகங்கள் அல்லது கோப்பு பட்டியலின் மேல் இடது மூலையில்"
-"தோன்றும் அம்புக்குறி பொத்தானைக் கிளிக் செய்வதன் மூலம் கோப்பு "
-"பட்டியல் மற்றும் அடைவு மரத்திற்கு இடையில் மாறவும்."
+msgstr ""
+"மெல்லிய பயன்முறை உங்கள் கோப்பகங்களையும் கோப்புகளையும் தனித்தனியாகக் காட்டுகிறது. கோப்பு "
+"பட்டியலில் அதன் உள்ளடக்கங்களைக் காட்ட ஒரு கோப்பகத்தைத் தேர்ந்தெடுக்கவும். கோப்பகங்கள் அல்லது "
+"கோப்பு பட்டியலின் மேல் இடது மூலையில்தோன்றும் அம்புக்குறி பொத்தானைக் கிளிக் செய்வதன் மூலம் "
+"கோப்பு பட்டியல் மற்றும் அடைவு மரத்திற்கு இடையில் மாறவும்."
 
 #: source/win-preferences/schema/file-manager.ts:45
 msgid "Show file information"
@@ -2890,6 +2850,104 @@ msgstr "இயற்கை ஒழுங்கு பயன்படுத்த�
 #: source/win-preferences/schema/file-manager.ts:105
 msgid "Use ASCII order (2 comes after 10)"
 msgstr "தபஅஇகு ஒழுங்கு பயன்படுத்து(10 க்குப் பிறகு 2 வரும்)"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+#: source/win-main/file-manager/util/file-item-context.ts:34
+msgid "Properties"
+msgstr "பண்புகள்"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "கோப்பகத்தை மறுபெயரிடு"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+msgid "Delete directory"
+msgstr "கோப்பகத்தை நீக்கு"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:67
+#: source/win-main/file-manager/util/file-item-context.ts:66
+msgid "Copy path"
+msgstr "நகல் பாதை"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+#: source/win-main/file-manager/util/file-item-context.ts:87
+msgid "Reveal in Explorer"
+msgstr "உலாவியில் வெளிப்படுத்து"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+#: source/win-main/file-manager/util/file-item-context.ts:87
+msgid "Reveal in File Browser"
+msgstr "கோப்பு உலாவியில் வெளிப்படுத்து"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "கோப்பகத்தை சரிபார்…"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "ஏற்றுமதி திட்டம்"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "பணியிடத்தை மூடு"
+
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "நகல் கோப்பு"
+
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "கோப்பு பெயரை நகலெடு"
+
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "கோப்பை மூடு"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr "மற்ற தாவல்களை மூடு"
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "எல்லா தாவல்களையும் மூடு"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr "பின்நீக்கு தாவல்"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr "முள் தாவல்"
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr "முழு பாதையை நகலெடு"
+
+#~ msgid "Stop"
+#~ msgstr "நிறுத்து"
+
+#~ msgid "Work"
+#~ msgstr "வேலை"
+
+#~ msgid "Short break"
+#~ msgstr "சிறு இடைவேளை"
+
+#~ msgid "Break"
+#~ msgstr "இடைவேளை"
+
+#~ msgid "Sound Effect"
+#~ msgstr "ஒலி விளைவு"
+
+#~ msgid "Volume"
+#~ msgstr "தொகுதி"
+
+#~ msgid ""
+#~ "After applying your glob-filters, no files remained to export. Please "
+#~ "adjust them in the project settings."
+#~ msgstr ""
+#~ "உங்கள் உலக-வடிகட்டிகளைப் பயன்படுத்திய பிறகு, ஏற்றுமதி செய்ய எந்த கோப்புகளும் இல்லை. "
+#~ "திட்ட அமைப்புகளில் அவற்றை சரிசெய்."
 
 #, javascript-format
 #~ msgid "%s matches"
@@ -3054,5 +3112,4 @@ msgstr "தபஅஇகு ஒழுங்கு பயன்படுத்த�
 
 #~ msgid ""
 #~ "Put auto-created files into this directory (must be loaded in Zettlr)"
-#~ msgstr ""
-#~ "இந்த கோப்பகத்தில் தானாக உருவாக்கப்பட்ட கோப்புகளை வை (செட்லரில் ஏற்றப்பட வேண்டும்)"
+#~ msgstr "இந்த கோப்பகத்தில் தானாக உருவாக்கப்பட்ட கோப்புகளை வை (செட்லரில் ஏற்றப்பட வேண்டும்)"
