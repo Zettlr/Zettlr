@@ -952,6 +952,8 @@ there.
 - The combined file tree is now more verbose when it comes to icons: Folders
   now always have icons to indicate that they're folders (can be overridden with
   a project icon or a custom icon), and Markdown files have a more distinct icon
+- Made the code block autocomplete more resilient in interaction with European
+  keyboard layouts' dead key mechanism
 
 ## Under the Hood
 

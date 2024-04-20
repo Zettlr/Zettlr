@@ -101,8 +101,16 @@ export const codeBlocks: AutocompletePlugin = {
     // We're not at the very start of the document, so let's see what the line
     // above the position says. TODO: For this we have to check if the previous
     // line is already part of a codeblock
-    if ((line.text.startsWith('```') || line.text.startsWith('~~~')) && ch === 3) {
-      return ctx.pos
+    const match = /^\s{0,3}[`~]{3,}\s*{?(.*)/.exec(line.text)
+    console.log(match)
+    if (match !== null && ch === match[0].length) {
+      // To make the regex more robust, there is a capturing group that captures
+      // any characters already typed, and that will be passed on as "query"
+      // below. NOTE: This is mainly due to the dead-letter mechanism on
+      // European keyboards, since usually this keeps letters in a "ghost" state
+      // and if users afterwards press the space, that will count as a keypress
+      // but not as an additional character, preventing the autocomplete to show.
+      return ctx.pos - match[1].length
     } else {
       return false
     }
