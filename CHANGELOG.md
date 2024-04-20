@@ -954,6 +954,9 @@ there.
   a project icon or a custom icon), and Markdown files have a more distinct icon
 - Made the code block autocomplete more resilient in interaction with European
   keyboard layouts' dead key mechanism
+- Contrain tooltips to a reasonable size, mainly to prevent overly long lines
+  that are uncomfortable to read when the tooltip spans an entire fullscreen
+  window
 
 ## Under the Hood
 

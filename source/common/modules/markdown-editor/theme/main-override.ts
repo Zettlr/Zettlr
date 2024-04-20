@@ -47,7 +47,10 @@ export const mainOverride = EditorView.baseTheme({
     userSelect: 'none' // prevent search panel text elements from being selected
   },
   // TOOLTIPS
-  '.cm-tooltip': { padding: '4px' },
+  '.cm-tooltip': {
+    padding: '4px',
+    maxWidth: '800px'
+  },
   // Footnotes
   '.footnote, .footnote-ref-label': {
     verticalAlign: 'super',
