@@ -797,6 +797,10 @@ current contents from the editor somewhere else, and restart the application.`
       return true
     }
 
+    // NOTE: Since openFile will set filePath as active, we have to retrieve the
+    // (previously) active file *before* opening the new one. See bug #5065 for
+    // context.
+    const activeFile = leaf.tabMan.activeFile
     const ret = leaf.tabMan.openFile(filePath)
     if (ret) {
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
@@ -804,7 +808,6 @@ current contents from the editor somewhere else, and restart the application.`
 
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
-    const activeFile = leaf.tabMan.activeFile
     const { avoidNewTabs } = this._app.config.get().system
     if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)
