@@ -295,7 +295,7 @@ can always override the language on a per-document basis using the status bar.
 ## Under the Hood
 
 - Version updates:
-  - Pandoc: `3.1.12.3`
+  - Pandoc: `3.1.13`
   - Electron: `29.2.0`
 - Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
 - Removed the config option `sortingTime` since that can be inferred from the
