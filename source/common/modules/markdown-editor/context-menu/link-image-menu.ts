@@ -50,6 +50,19 @@ function getURLForNode (node: SyntaxNode, state: EditorState): string|undefined 
 }
 
 /**
+ * Function Description
+ * 
+ * @param {Type}  name  Comment on the parameter
+ * 
+ * @return {Type}       Comment on the return value
+ */
+function removeMarkdownLink (name: Type): Type|undefined {
+  // Implement code to remove mark down link here
+  // Look at function insertLinkOrImage in ../commands/markdown.ts line 21 for example of how link is inserted
+  // Base function around this to remove a link
+}
+
+/**
  * Shows a context menu appropriate for a link or image using the given node
  *
  * @param   {EditorView}                view    The view
@@ -87,6 +100,12 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
       enabled: true,
       type: 'normal',
       label: (url.indexOf('mailto:') === 0) ? trans('Copy Mail Address') : trans('Copy Link')
+    },
+    {
+      id: 'menu.remove_link',
+      enabled: true,
+      type: 'normal',
+      label: trans('Remove Link')
     }
   ]
 
@@ -127,6 +146,8 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
       })
     } else if (clickedID === 'open-img-in-browser') {
       window.location.href = validAbsoluteURI
+    } else if (clickedID === 'menu.remove_link') {
+      removeMarkdownLink()
     }
   })
 }
