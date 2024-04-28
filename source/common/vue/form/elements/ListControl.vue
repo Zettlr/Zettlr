@@ -535,6 +535,11 @@ function handleAddition (): void {
 
   const newValues = valuesToAdd.value
 
+  if (newValues.some(x => x === undefined)) {
+    console.error('Cannot add new record: Some value was undefined.', newValues)
+    return
+  }
+
   if (simple !== undefined) {
     const newValue = simple.map(elem => elem)
     newValue.push(newValues[0])
@@ -544,12 +549,18 @@ function handleAddition (): void {
     newValue.push(newValues.map(x => x))
     emit('update:modelValue', newValue)
   } else if (record !== undefined && objectKeys.value !== undefined) {
+    if (objectKeys.value.length !== newValues.length) {
+      console.error('Cannot add new record: Didn\'t receive the right amount of values to add.')
+      return
+    }
+
     const newValue = record.map(elem => Object.assign({}, elem))
     const keys = objectKeys.value
-    const newObject: any = {}
+    const newObject: SupportedRecord = {}
     for (let i = 0; i < keys.length; i++) {
       newObject[keys[i]] = newValues[i]
     }
+
     newValue.push(newObject)
     emit('update:modelValue', newValue)
   }

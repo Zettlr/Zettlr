@@ -291,6 +291,7 @@ can always override the language on a per-document basis using the status bar.
 - Fixed an issue that would not add a newly created file outside the loaded
   workspaces to the list of standalone files, leading to various minor
   annoyances around other parts of the app
+- It should now be more difficult to add faulty autocorrect entries (#4961)
 
 ## Under the Hood
 
