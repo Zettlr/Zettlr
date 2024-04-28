@@ -365,6 +365,7 @@ can always override the language on a per-document basis using the status bar.
   (#5069)
 - The citation parser is now more strict when it comes to `@Author [p. 123]`
   citations: Now only spaces are allowed between the citation key and the suffix
+- Improved the i18n runs over the software, improving translatability (#5122)
 
 # 3.0.5
 
