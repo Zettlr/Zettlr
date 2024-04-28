@@ -35,13 +35,23 @@ walkDir(INDIR, absPath => {
   }
 
   const contents = fs.readFileSync(absPath, 'utf-8')
-  const match = /^<script.*>$(.+)^<\/script>$/ms.exec(contents)
+  const match = /^<script[^\n\r]*>$(.+)^<\/script>$/ms.exec(contents)
   if (match === null) {
     return
   }
 
   const script = match[1]
-  const basename = path.basename(absPath) + '.ts'
-  const outPath = path.join(OUTDIR, basename)
+  // Retain the relative path so that (except for the /tmp at the beginning) the
+  // file paths correspond.
+  const relativePath = path.relative(INDIR, absPath) + '.ts'
+  const outPath = path.join(OUTDIR, relativePath)
+  // Ensure the folder exists
+  try {
+    fs.statSync(path.dirname(outPath))
+  } catch (err) {
+    fs.mkdirSync(path.dirname(outPath), { recursive: true })
+  }
+
   fs.writeFileSync(outPath, script, 'utf-8')
+  console.log(`Extracting Vue TS: ${absPath} --> ${outPath}`)
 })
