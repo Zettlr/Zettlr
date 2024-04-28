@@ -40,10 +40,10 @@ those of regular Markdown links.
 Since there is no way of knowing which of the two parts is the link, and which
 is the title, Zettlr follows Pandoc's solution in allowing you to specify how
 internal links are structured for you. The default and recommended setting is to
-put links first, and titles second (`[[link|title]]`). This ensure compatibility
-with VimWiki, MediaWiki, Obsidian, and others. However, should you need to
-target GitHub wiki pages or another application that expects a title to come
-first, you can select the alternative option (`[[title|link]]`).
+put links first, and titles second (`[[link|title]]`). This ensures
+compatibility with VimWiki, MediaWiki, Obsidian, and others. However, should you
+need to target GitHub wiki pages or another application that expects a title to
+come first, you can select the alternative option (`[[title|link]]`).
 
 In order to make Pandoc aware of your choice, you can add one of the following
 reader extensions to your export profiles: `wikilinks_title_after_pipe` or
@@ -178,9 +178,9 @@ can always override the language on a per-document basis using the status bar.
   fetching its "other files" -- instead it will use the last focused file's
   folder
 - **Change**: The shortcut for deleting a directory has been removed from the
-  menu as it provided an intransparent way of deleting a seemingly
-  random folder; now deleting a folder requires right-clicking the corresponding
-  directory which makes the process more transparent
+  menu as it provided an opaque way of deleting a seemingly random folder; now
+  deleting a folder requires right-clicking the corresponding directory which
+  makes the process more transparent
 - **Change**: Removed the option for choosing to sort by either file creation or
   last modification time, since that can also be inferred from whichever time
   you choose to display
@@ -218,7 +218,7 @@ can always override the language on a per-document basis using the status bar.
 - Fixed a bug that would not properly restore the open directory on application
   boot (#3797)
 - Fixed an issue that would break drag & drop behavior of editor panes when the
-  pathname contained a colon on non-Windows systems (#4822)
+  path name contained a colon on non-Windows systems (#4822)
 - Fixed an issue where the re-ordering of list item numbers would not ensure
   that lists start at 1
 - Fixed an issue that has removed the custom background color from the Bielefeld
@@ -263,7 +263,7 @@ can always override the language on a per-document basis using the status bar.
   updates (#4963)
 - Fixed a bug that would sometimes make the "New file" command hang (#4785)
 - Fixed a bug on Windows and Linux that would not make the context menu on the
-  statusbars' MagicQuotes handler appear
+  status bar's MagicQuotes handler appear
 - Fixed a bug in the print window (#4902)
 - Fixed a bug in the image pasting modal handler (#5007)
 - Fixed a bug caused by a workaround from a few years ago, making dialogs modal
