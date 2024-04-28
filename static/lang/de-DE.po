@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-04-28 17:58+0200\n"
-"PO-Revision-Date: 2024-03-18 08:59+0100\n"
+"PO-Revision-Date: 2024-04-28 18:28+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -752,15 +752,15 @@ msgstr "Kopie von %s"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Import directory"
-msgstr ""
+msgstr "Importverzeichnis"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Select folder"
-msgstr ""
+msgstr "Ordern auswählen"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Select import destination"
-msgstr ""
+msgstr "Zielordner für Import auswählen"
 
 #: source/app/service-providers/commands/import.ts:36
 msgid "You have to select a directory to import to."
@@ -814,10 +814,12 @@ msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
 msgstr ""
+"Keine Dateien sind für den Export ausgewählt. Bitte wähle Dateien in den "
+"Projekteinstellungen aus."
 
 #: source/app/service-providers/commands/dir-project-export.ts:91
 msgid "Project File Mismatch"
-msgstr ""
+msgstr "Fehlende Projektdateien"
 
 #: source/app/service-providers/commands/dir-project-export.ts:92
 msgid ""
@@ -825,6 +827,9 @@ msgid ""
 "They may have moved or been deleted. Please verify that all files that you "
 "would like to export are included."
 msgstr ""
+"Eine oder mehrere für den Export ausgewählte Dateien sind nicht mehr "
+"auffindbar. Sie könnten gelöscht oder umbenannt worden sein. Bitte "
+"verifiziere die zu exportierenden Dateien in den Projekteinstellungen."
 
 #: source/app/service-providers/commands/dir-project-export.ts:168
 #, javascript-format
@@ -909,12 +914,12 @@ msgstr ""
 
 #: source/app/service-providers/documents/index.ts:1464
 msgid "Could not save file"
-msgstr ""
+msgstr "Konnte Datei nicht speichern"
 
 #: source/app/service-providers/documents/index.ts:1464
 #, javascript-format
 msgid "Could not save file %s: %s"
-msgstr ""
+msgstr "Konnte Datei %s nicht speichern: %s"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
 msgid "There are unsaved changes. Do you want to save them first?"
@@ -926,7 +931,7 @@ msgstr "Datei öffnen"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
-msgstr ""
+msgstr "Datei speichern"
 
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
 msgid "Overwrite existing file"
@@ -1074,7 +1079,7 @@ msgstr "Katalonisch"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Catalan (Valencia)"
-msgstr ""
+msgstr "Katalanisch (Valencia)"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Czech"
@@ -1448,11 +1453,11 @@ msgstr "gerade eben"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
-msgstr ""
+msgstr "."
 
 #: source/common/util/localise-number.ts:29
 msgid "."
-msgstr ""
+msgstr ","
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:98
 #, javascript-format
@@ -1598,7 +1603,7 @@ msgstr "Kein Fußnotentext gefunden."
 
 #: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:62
 msgid "Fetching link preview…"
-msgstr ""
+msgstr "Generiere Linkvorschau…"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
 #: source/win-preferences/schema/editor.ts:134
@@ -1663,7 +1668,7 @@ msgstr ""
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:59
 msgid "Open defaults folder"
-msgstr ""
+msgstr "Öffne Defaults-Ordner"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:60
 msgid "Edit the default settings for imports or exports here."
@@ -1682,11 +1687,11 @@ msgstr "Gespeichert!"
 
 #: source/tmp/win-assets/App.vue.ts:21
 msgid "Exporting"
-msgstr ""
+msgstr "Exportieren"
 
 #: source/tmp/win-assets/App.vue.ts:27
 msgid "Importing"
-msgstr ""
+msgstr "Importieren"
 
 #: source/tmp/win-assets/App.vue.ts:33
 #: source/win-preferences/schema/appearance.ts:219
@@ -1709,7 +1714,7 @@ msgstr "Snippets sind wiederverwendbare Textbausteine mit Variablen."
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:30
 msgid "Open snippets folder"
-msgstr ""
+msgstr "Öffne Snippets-Ordner"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:23
 msgid ""
@@ -1826,7 +1831,7 @@ msgstr "Kein offenes Dokument"
 #: source/tmp/win-main/PopoverTable.vue.ts:30
 #, javascript-format
 msgid "Table size: %s &times; %s"
-msgstr ""
+msgstr "Tabellengröße: %s &times; %s"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:28
 msgid "words last month"
@@ -1859,57 +1864,57 @@ msgstr "Mehr Statistiken …"
 #: source/tmp/win-main/App.vue.ts:212
 #, javascript-format
 msgid "%s selected"
-msgstr ""
+msgstr "%s ausgewählt"
 
 #. Multiple selections --> indicate
 #: source/tmp/win-main/App.vue.ts:221
 #, javascript-format
 msgid "%s selections"
-msgstr ""
+msgstr "%s Selektionen"
 
 #: source/tmp/win-main/App.vue.ts:242
 msgid "File manager"
-msgstr ""
+msgstr "Dateimanager"
 
 #: source/tmp/win-main/App.vue.ts:247
 msgid "Global search"
-msgstr ""
+msgstr "Volltextsuche"
 
 #: source/tmp/win-main/App.vue.ts:261
 msgid "View stats"
-msgstr ""
+msgstr "Statistiken"
 
 #: source/tmp/win-main/App.vue.ts:267
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: source/tmp/win-main/App.vue.ts:274
 msgid "Open the settings dialog"
-msgstr ""
+msgstr "Einstellungen öffnen"
 
 #: source/tmp/win-main/App.vue.ts:309
 msgid "Export the current file"
-msgstr ""
+msgstr "Aktuelle Datei exportieren"
 
 #: source/tmp/win-main/App.vue.ts:315
 msgid "Toggle readability mode"
-msgstr ""
+msgstr "Lesbarkeitsmodus umschalten"
 
 #: source/tmp/win-main/App.vue.ts:348
 msgid "Tasklist"
-msgstr ""
+msgstr "Todo-Liste"
 
 #: source/tmp/win-main/App.vue.ts:362
 msgid "Footnote"
-msgstr ""
+msgstr "Fußnote"
 
 #: source/tmp/win-main/App.vue.ts:380
 msgid "Pomodoro-Timer"
-msgstr ""
+msgstr "Pomodoro-Timer"
 
 #: source/tmp/win-main/App.vue.ts:396
 msgid "Update available"
-msgstr ""
+msgstr "Update verfügbar"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:34
 msgid "Full-Text Search"
@@ -1955,7 +1960,7 @@ msgstr "Ergebnisse umschalten"
 #: source/tmp/win-main/GlobalSearch.vue.ts:112
 #, javascript-format
 msgid "%s matches across %s files"
-msgstr ""
+msgstr "%s Treffer in %s Dateien"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:24
 #: source/win-preferences/schema/appearance.ts:52
@@ -2096,15 +2101,15 @@ msgstr ""
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
-msgstr ""
+msgstr "Andere Projekte"
 
 #: source/tmp/win-about/App.vue.ts:47
 msgid "Sponsors"
-msgstr ""
+msgstr "Unterstützer*innen"
 
 #: source/tmp/win-about/App.vue.ts:53
 msgid "License"
-msgstr ""
+msgstr "Lizenz"
 
 #: source/tmp/win-about/Projects-Tab.vue.ts:19
 msgid "Zettlr also makes use of these projects:"
@@ -2112,77 +2117,78 @@ msgstr "Zettlr nutzt auch die folgenden Projekte:"
 
 #: source/tmp/win-splash-screen/App.vue.ts:22
 msgid "Loading…"
-msgstr ""
+msgstr "Lade…"
 
 #: source/tmp/win-project-properties/App.vue.ts:37
 msgid "Export project to:"
-msgstr ""
+msgstr "Exportiere Projekt nach:"
 
 #: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Use"
-msgstr ""
+msgstr "Aktiv"
 
 #: source/tmp/win-project-properties/App.vue.ts:39
 msgid "Format"
-msgstr ""
+msgstr "Profil"
 
 #: source/tmp/win-project-properties/App.vue.ts:40
 msgid "Conversion"
-msgstr ""
+msgstr "Transformation"
 
 #: source/tmp/win-project-properties/App.vue.ts:41
 msgid "Files to be included in the export"
-msgstr ""
+msgstr "Dateien für den Exportvorgang"
 
 #: source/tmp/win-project-properties/App.vue.ts:42
 msgid "Please select at least one profile to build this project."
-msgstr ""
+msgstr "Bitte wähle mindestens ein Profil aus, um das Projekt zu exportieren."
 
 #: source/tmp/win-project-properties/App.vue.ts:43
 msgid "Project Title"
-msgstr ""
+msgstr "Projekt-Titel"
 
 #: source/tmp/win-project-properties/App.vue.ts:44
 msgid "CSL Stylesheet"
-msgstr ""
+msgstr "CSL Stylesheet"
 
 #: source/tmp/win-project-properties/App.vue.ts:45
 msgid "LaTeX Template"
-msgstr ""
+msgstr "LaTeX-Template"
 
 #: source/tmp/win-project-properties/App.vue.ts:46
 msgid "HTML Template"
-msgstr ""
+msgstr "HTML-Template"
 
 #: source/tmp/win-project-properties/App.vue.ts:47
 msgid "Remove file from export"
-msgstr ""
+msgstr "Entferne Datei aus Exportliste"
 
 #: source/tmp/win-project-properties/App.vue.ts:48
 msgid "Add file to export"
-msgstr ""
+msgstr "Füge Datei zur Exportliste hinzu"
 
 #: source/tmp/win-project-properties/App.vue.ts:49
 msgid "Move file up"
-msgstr ""
+msgstr "Nach oben"
 
 #: source/tmp/win-project-properties/App.vue.ts:50
 msgid "Move file down"
-msgstr ""
+msgstr "Nach unten"
 
 #: source/tmp/win-project-properties/App.vue.ts:51
 msgid "You have not selected any files for export."
-msgstr ""
+msgstr "Du hast keine Dateien für den Export bestimmt."
 
 #: source/tmp/win-project-properties/App.vue.ts:52
 msgid ""
 "Some files are selected for export but no longer exist in the directory."
 msgstr ""
+"Einige Dateien wurden zum Export ausgewählt, sind aber nicht mehr auffindbar."
 
 #: source/tmp/win-project-properties/App.vue.ts:73
 #: source/tmp/win-preferences/App.vue.ts:134
 msgid "General"
-msgstr ""
+msgstr "Allgemein"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:106
 msgid "Add"
@@ -2277,31 +2283,31 @@ msgstr "Charts"
 
 #: source/tmp/win-stats/App.vue.ts:39
 msgid "FSAL Stats"
-msgstr ""
+msgstr "FSAL-Statistiken"
 
 #: source/tmp/win-stats/App.vue.ts:58
 msgid "Writing statistics"
-msgstr ""
+msgstr "Schreibstatistiken"
 
 #: source/tmp/win-tag-manager/App.vue.ts:27
 msgid "Assign color"
-msgstr ""
+msgstr "Farbe zuweisen"
 
 #: source/tmp/win-tag-manager/App.vue.ts:28
 msgid "Remove color"
-msgstr ""
+msgstr "Farbe entfernen"
 
 #: source/tmp/win-tag-manager/App.vue.ts:29
 msgid "Tag name"
-msgstr ""
+msgstr "Tagname"
 
 #: source/tmp/win-tag-manager/App.vue.ts:30
 msgid "Color"
-msgstr ""
+msgstr "Farbe"
 
 #: source/tmp/win-tag-manager/App.vue.ts:32
 msgid "A short description"
-msgstr ""
+msgstr "Kurzbeschreibung"
 
 #: source/tmp/win-tag-manager/App.vue.ts:33
 msgid ""
@@ -2309,14 +2315,17 @@ msgid ""
 "its tile in the preview list will receive a colored indicator. The "
 "description will be shown on mouse hover."
 msgstr ""
+"In diesem Dialog kannst du Tags Farben zuweisen. Wenn ein Tag in einer Datei "
+"enthalten ist, erhält die Datei an verschiedenen Stellen einen farblichen "
+"Marker. Die Beschreibung wird beim Hovern angezeigt."
 
 #: source/tmp/win-tag-manager/App.vue.ts:34
 msgid "Manage tags"
-msgstr ""
+msgstr "Tags verwalten"
 
 #: source/tmp/win-paste-image/App.vue.ts:57
 msgid "Insert Image from Clipboard"
-msgstr ""
+msgstr "Bild von Zwischenablage einfügen"
 
 #: source/tmp/win-paste-image/App.vue.ts:58
 #: source/win-preferences/schema/editor.ts:214
@@ -2325,25 +2334,25 @@ msgstr "Bildgröße"
 
 #: source/tmp/win-paste-image/App.vue.ts:59
 msgid "Retain aspect ratio"
-msgstr ""
+msgstr "Größenverhältnis sperren"
 
 #: source/tmp/win-paste-image/App.vue.ts:60
 msgid "Resize image to"
-msgstr ""
+msgstr "Ändere Bild zu"
 
 #: source/tmp/win-paste-image/App.vue.ts:61
 msgid "Filename"
-msgstr ""
+msgstr "Dateiname"
 
 #: source/tmp/win-paste-image/App.vue.ts:62
 #: source/tmp/win-paste-image/App.vue.ts:63
 msgid "A unique filename"
-msgstr ""
+msgstr "Ein einzigartiger Dateiname"
 
 #: source/tmp/win-preferences/App.vue.ts:56
 #, javascript-format
 msgid "No results for \"%s\""
-msgstr ""
+msgstr "Keine Ergebnisse für “%s”"
 
 #: source/tmp/win-preferences/App.vue.ts:139
 #: source/win-preferences/schema/advanced.ts:51
@@ -2352,11 +2361,11 @@ msgstr "Erscheinungsbild"
 
 #: source/tmp/win-preferences/App.vue.ts:144
 msgid "File Manager"
-msgstr ""
+msgstr "Dateimanager"
 
 #: source/tmp/win-preferences/App.vue.ts:149
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
 #: source/tmp/win-preferences/App.vue.ts:154
 #: source/win-preferences/schema/spellchecking.ts:158
@@ -2365,7 +2374,7 @@ msgstr "Rechtschreibprüfung"
 
 #: source/tmp/win-preferences/App.vue.ts:159
 msgid "AutoCorrect"
-msgstr ""
+msgstr "AutoCorrect"
 
 #: source/tmp/win-preferences/App.vue.ts:164
 #: source/win-preferences/schema/citations.ts:22
@@ -2374,24 +2383,24 @@ msgstr "Zitationen"
 
 #: source/tmp/win-preferences/App.vue.ts:169
 msgid "Zettelkasten"
-msgstr ""
+msgstr "Zettelkasten"
 
 #: source/tmp/win-preferences/App.vue.ts:179
 msgid "Import and Export"
-msgstr ""
+msgstr "Import und Export"
 
 #: source/tmp/win-preferences/App.vue.ts:184
 msgid "Advanced"
-msgstr ""
+msgstr "Erweitert"
 
 #: source/tmp/win-preferences/App.vue.ts:193
 #, javascript-format
 msgid "Searching: %s"
-msgstr ""
+msgstr "Suche: %s"
 
 #: source/tmp/win-preferences/App.vue.ts:197
 msgid "Preferences"
-msgstr ""
+msgstr "Einstellungen"
 
 #: source/tmp/win-update/App.vue.ts:31
 msgid "Updater"
@@ -2427,12 +2436,12 @@ msgstr "Update starten"
 
 #: source/tmp/win-update/App.vue.ts:45
 msgid "never"
-msgstr ""
+msgstr "nie"
 
 #: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
 #, javascript-format
 msgid "Last checked: %s"
-msgstr ""
+msgstr "Zuletzt überprüft: %s"
 
 #: source/tmp/win-update/App.vue.ts:124
 msgid "Starting update …"
@@ -2577,7 +2586,7 @@ msgid ""
 "the input field."
 msgstr ""
 "Klicke “Ordner auswählen…” oder füge einen relativen oder absoluten Pfad in "
-"das Feld ein"
+"das Feld ein."
 
 #: source/win-preferences/schema/general.ts:72
 msgid "Behavior"
@@ -2823,7 +2832,7 @@ msgstr "Mit Tab-Zeichen einrücken"
 
 #: source/win-preferences/schema/editor.ts:261
 msgid "Highlight whitespace"
-msgstr ""
+msgstr "Steuerzeichen hervorheben"
 
 #: source/win-preferences/schema/editor.ts:267
 msgid "Suggest emojis during autocompletion"
@@ -3009,19 +3018,19 @@ msgstr "Beim Verlinken von Dateien, füge den Dateititel …"
 
 #: source/win-preferences/schema/zettelkasten.ts:58
 msgid "Always"
-msgstr "immer an"
+msgstr "Immer an"
 
 #: source/win-preferences/schema/zettelkasten.ts:59
 msgid "Only when linking using the ID"
-msgstr "nur an, wenn mit ID verlinkt wird"
+msgstr "Nur, wenn mit ID verlinkt wird"
 
 #: source/win-preferences/schema/zettelkasten.ts:60
 msgid "Never"
-msgstr "niemals an"
+msgstr "Niemals"
 
 #: source/win-preferences/schema/zettelkasten.ts:68
 msgid "Link format"
-msgstr ""
+msgstr "Format für interne Links"
 
 #: source/win-preferences/schema/zettelkasten.ts:73
 msgid ""
@@ -3029,14 +3038,16 @@ msgid ""
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
 msgstr ""
+"Du kannst optionale Titel zu internen Links hinzufügen, separiert durch "
+"einen vertikalen Strich. Hier kannst du bestimmen, was zuerst kommt."
 
 #: source/win-preferences/schema/zettelkasten.ts:79
 msgid "[[Link|Title]]: Link first (recommended)"
-msgstr ""
+msgstr "[[Link|Titel]]: Link zuerst (empfohlen)"
 
 #: source/win-preferences/schema/zettelkasten.ts:80
 msgid "[[Title|Link]]: Title first"
-msgstr ""
+msgstr "[[Titel|Link]]: Titel zuerst"
 
 #: source/win-preferences/schema/zettelkasten.ts:88
 msgid "Start a full-text search when following internal links"
@@ -3088,7 +3099,7 @@ msgstr "Nicht eingestellt"
 
 #: source/win-preferences/schema/spellchecking.ts:61
 msgid "Preferred Variants"
-msgstr ""
+msgstr "Bevorzugte Sprachvarianten"
 
 #: source/win-preferences/schema/spellchecking.ts:66
 msgid ""
@@ -3096,22 +3107,25 @@ msgid ""
 "will nudge LanguageTool to auto-detect your preferred variant of these "
 "languages."
 msgstr ""
+"LanguageTool kann nicht zwischen bestimmten Sprachvarianten unterscheiden. "
+"Mit diesen Einstellungen hilfst du LanguageTool, die für dich passende "
+"Variante automatisch zu erkennen."
 
 #: source/win-preferences/schema/spellchecking.ts:71
 msgid "Interpret English as"
-msgstr ""
+msgstr "Interpretiere Englisch als"
 
 #: source/win-preferences/schema/spellchecking.ts:84
 msgid "Interpret German as"
-msgstr ""
+msgstr "Interpretiere Deutsch als"
 
 #: source/win-preferences/schema/spellchecking.ts:94
 msgid "Interpret Portuguese as"
-msgstr ""
+msgstr "Interpretiere Portugiesisch als"
 
 #: source/win-preferences/schema/spellchecking.ts:105
 msgid "Interpret Catalan as"
-msgstr ""
+msgstr "Interpretiere Katalanisch als"
 
 #: source/win-preferences/schema/spellchecking.ts:114
 msgid "LanguageTool Provider"
@@ -3205,7 +3219,7 @@ msgstr "Aktiviere Fenster-vibrancy"
 
 #: source/win-preferences/schema/advanced.ts:65
 msgid "Only available on macOS; makes the window background opaque."
-msgstr "Nur verfügbar für macOS; macht den Fensterhintergrund undurchsichtig"
+msgstr "Nur verfügbar für macOS; macht den Fensterhintergrund undurchsichtig."
 
 #: source/win-preferences/schema/advanced.ts:72
 msgid "Show app in the notification area"
