@@ -65,11 +65,6 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     console.error('Could not show Link/Image context menu: No URL found!')
     return
   }
-  // Calls the remove markdown thing, although I note this is called on every right link context menu so this might
-  // not be needed until its clicked, also the node.from is the starting index in the document and node.to is the end
-  // index so when you do the slice doc it gets the full string
-  // const textToInsert = removeMarkdownLink(view.state.sliceDoc(node.from, node.to))
-  // const textToInsert = getTextForNode(node, view.state)
 
   const linkTpl: AnyMenuItem[] = [
     {
