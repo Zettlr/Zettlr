@@ -17,11 +17,14 @@ import { type EditorView } from '@codemirror/view'
 import { type ChangeSpec } from '@codemirror/state'
 
 /**
- * Utility to remove a markdown link. It extracts the text from the markdown link and replaces the link with just the text.
+ * Utility to remove a markdown link. It extracts the text from the markdown
+ * link and replaces the link with just the text.
  *
- * @param {EditorView} view - The editor view.
- * @param {number} from - Starting position of the link in the document, I think we can get this information from the editor view tho.
- * @param {number} to - Ending position of the link in the document, I think we can get this information from the editor view tho.
+ * @param {EditorView} view - The editor view
+ * @param {number} from - Starting position of the link in the document, I
+ * think we can get this information from the editor view tho.
+ * @param {number} to - Ending position of the link in the document, I
+ * think we can get this information from the editor view tho.
  */
 export function removeMarkdownLink (view: EditorView, from: number, to: number): void {
   const nodeText = view.state.sliceDoc(from, to)
