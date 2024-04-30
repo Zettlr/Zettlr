@@ -135,7 +135,7 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     } else if (clickedID === 'open-img-in-browser') {
       window.location.href = validAbsoluteURI
     } else if (clickedID === 'menu.remove_link') {
-      removeMarkdownLink(view, node.from, node.to)
+      removeMarkdownLink(node, view)
     }
   })
 }

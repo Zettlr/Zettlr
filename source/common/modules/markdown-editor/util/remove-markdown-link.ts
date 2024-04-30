@@ -15,18 +15,32 @@
 
 import { type EditorView } from '@codemirror/view'
 import { type ChangeSpec } from '@codemirror/state'
+import { SyntaxNode } from '@lezer/common'
 
 /**
  * Utility to remove a markdown link. It extracts the text from the markdown
  * link and replaces the link with just the text.
  *
  * @param {EditorView} view - The editor view
- * @param {number} from - Starting position of the link markdown in the document
- * @param {number} to - Ending position of the link markdown in the document
+ * @param {SyntaxNode} node - The node containing the Link
  */
-export function removeMarkdownLink (view: EditorView, from: number, to: number): void {
-  const nodeText = view.state.sliceDoc(from, to)
-  const linkText = nodeText.match(/\[(.*?)\]/g)?.map(match => match.slice(1, -1))[0]
+export function removeMarkdownLink (node: SyntaxNode, view: EditorView): void {
+  // To deal with user being able to click on either part of the link (Text or URL)
+  // Check which node they clicked on before passing it
+  var useNode: SyntaxNode
+  if (node.type.name === 'URL' && node.parent != null) {
+    useNode = node.parent
+  } else {
+    useNode = node
+  }
+
+  const from = useNode.from
+  const to = useNode.to
+
+  // Using same logic seen in AST Parser
+  const marks = useNode.getChildren('LinkMark')
+  const linkText = view.state.sliceDoc(marks[0].to, marks[1].from)
+
   const changes: ChangeSpec = { from, to, insert: linkText }
   view.dispatch({ changes })
 }
