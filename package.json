@@ -128,7 +128,7 @@
     "fsevents": "^2.3.3"
   },
   "resolutions": {
-    "node-abi": "^3.54.0",
+    "node-abi": "^3.62.0",
     "got": "11.x.x",
     "node-gyp": "10.x.x",
     "@codemirror/state": "6.4.1",
@@ -138,12 +138,12 @@
     "@lezer/highlight": "1.2.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.3.1",
-    "@electron-forge/maker-deb": "^7.3.1",
-    "@electron-forge/maker-rpm": "^7.3.1",
-    "@electron-forge/maker-zip": "^7.3.1",
-    "@electron-forge/plugin-fuses": "^7.3.1",
-    "@electron-forge/plugin-webpack": "^7.3.1",
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron-forge/plugin-webpack": "^7.4.0",
     "@electron/fuses": "^1.8.0",
     "@electron/notarize": "^2.3.0",
     "@types/adm-zip": "^0.5.5",
@@ -169,7 +169,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.10.0",
     "csso": "^5.0.5",
-    "electron": "^29.2.0",
+    "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
     "electron-devtools-assembler": "^1.2.0",
     "eslint": "^8.57.0",
