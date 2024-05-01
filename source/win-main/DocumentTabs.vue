@@ -700,7 +700,9 @@ function handleExternalDrop (event: DragEvent): void {
   documentTabDragOver.value = false
   const DELIM = (process.platform === 'win32') ? ';' : ':'
   const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
-  if (documentTab === undefined || !documentTab.includes(DELIM)) {
+  if (documentTab === undefined) {
+    return
+  } else if (!documentTab.includes(DELIM)) {
     return
   }
 
