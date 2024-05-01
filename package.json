@@ -74,9 +74,9 @@
     "fix-path": "^4.0.0",
     "gemoji": "^8.1.0",
     "gettext-parser": "^8.0.0",
-    "got": "^14.2.0",
+    "got": "^14.2.1",
     "katex": "^0.16.10",
-    "ky": "^1.2.3",
+    "ky": "^1.2.4",
     "lodash": "^4.17.21",
     "luxon": "^3.4.4",
     "md5": "^2.3.0",
@@ -120,9 +120,9 @@
     "tippy.js": "^6.3.7",
     "unified": "^11.0.4",
     "uuid": "^9.0.1",
-    "vue": "^3.4.21",
+    "vue": "^3.4.26",
     "vue-virtual-scroller": "^2.0.0-beta.8",
-    "yaml": "^2.4.1"
+    "yaml": "^2.4.2"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.3"
