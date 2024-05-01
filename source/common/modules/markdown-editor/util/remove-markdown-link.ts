@@ -26,21 +26,31 @@ import { type SyntaxNode } from '@lezer/common'
  */
 export function removeMarkdownLink (node: SyntaxNode, view: EditorView): void {
   // To deal with user being able to click on either part of the link (Text or URL)
+  // And the two different types of links []() and <>
   // Check which node they clicked on before passing it
-  var useNode: SyntaxNode
+  var useNode: SyntaxNode = node
   if (node.type.name === 'URL' && node.parent != null) {
-    useNode = node.parent
-  } else {
-    useNode = node
+    if (node.parent.type.name === 'Link') {
+      useNode = node.parent
+    } if (node.parent.type.name === 'Paragraph') {
+      useNode = node
+    }
   }
 
   const from = useNode.from
   const to = useNode.to
 
-  // Using same logic seen in AST Parser
-  const marks = useNode.getChildren('LinkMark')
-  const linkText = view.state.sliceDoc(marks[0].to, marks[1].from)
-
+  var linkText: string
+  if (useNode.type.name === 'URL') {
+    // This is where the URL with <> formate is parsed
+    // We add +- 1 to remove the < > brackets from the text
+    linkText = view.state.sliceDoc(node.from+1, node.to-1)
+  } else {
+    // This is where the URL with []<> format is parsed
+    // Using same logic seen in AST Parser to get the text between the []
+    const marks = useNode.getChildren('LinkMark')
+    linkText = view.state.sliceDoc(marks[0].to, marks[1].from)
+  }
   const changes: ChangeSpec = { from, to, insert: linkText }
   view.dispatch({ changes })
 }
