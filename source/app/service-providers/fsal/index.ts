@@ -351,19 +351,20 @@ export default class FSAL extends ProviderContract {
   /**
    * Sets the given directory settings
    *
-   * @param   {DirDescriptor}  src       The target directory
+   * @param  {DirDescriptor}                       src       The target directory
+   * @param  {Partial<DirDescriptor['settings']>}  settings  The settings to apply
    */
-  public async setDirectorySetting (src: DirDescriptor, settings: any): Promise<void> {
+  public async setDirectorySetting (src: DirDescriptor, settings: Partial<DirDescriptor['settings']>): Promise<void> {
     await FSALDir.setSetting(src, settings)
   }
 
   /**
    * Creates a new project in this dir
    *
-   * @param   {DirDescriptor}  src           The directory
-   * @param   {any}            initialProps  Any initial settings
+   * @param   {DirDescriptor}             src           The directory
+   * @param   {Partial<ProjectSettings>}  initialProps  Any initial settings
    */
-  public async createProject (src: DirDescriptor, initialProps: any): Promise<void> {
+  public async createProject (src: DirDescriptor, initialProps: Partial<ProjectSettings>): Promise<void> {
     await FSALDir.makeProject(src, initialProps)
   }
 
