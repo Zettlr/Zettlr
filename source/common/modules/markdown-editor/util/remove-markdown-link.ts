@@ -15,7 +15,7 @@
 
 import { type EditorView } from '@codemirror/view'
 import { type ChangeSpec } from '@codemirror/state'
-import { SyntaxNode } from '@lezer/common'
+import { type SyntaxNode } from '@lezer/common'
 
 /**
  * Utility to remove a markdown link. It extracts the text from the markdown
