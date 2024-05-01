@@ -97,73 +97,51 @@ export const mdLint = linter(async view => {
       // ... or Jekyll/Static site generators-style frontmatters.
       { type: 'yaml', fence: { open: '---', close: '---' } }
     ])
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLint)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-blockquote-indentation#
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintBlockquoteIndentation, 2)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-checkbox-character-style
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintCheckboxCharacterStyle, { checked: 'consistent', unchecked: ' ' })
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-code-block-style
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintCodeBlockStyle, 'consistent')
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-emphasis-marker
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintEmphasisMarker, emphasisMarker ?? 'consistent')
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-fenced-code-marker
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintFencedCodeMarker, 'consistent')
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-heading-style
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintHeadingStyle, 'consistent')
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-link-title-style
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintLinkTitleStyle, '"')
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-ordered-list-marker-style
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintOrderedListMarkerStyle, '.')
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-rule-style
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintRuleStyle, 'consistent')
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-strong-marker
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintStrongMarker, boldSetting)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-table-cell-padding
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintTableCellPadding, 'consistent')
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-list-item-bullet-indent
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintListItemBulletIndent)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-list-item-indent
-    // @ts-expect-error Type incompatibilities, works fine
-    .use(remarkLintListItemIndent, 'space')
+    .use(remarkLintListItemIndent, 'one')
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-blockquote-without-marker
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintNoBlockquoteWithoutMarker)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-hard-break-spaces
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintHardBreakSpaces)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-duplicate-definitions
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintNoDuplicateDefinitions)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-heading-content-indent
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintNoHeadingContentIndent)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-inline-padding
     // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintNoInlinePadding)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-shortcut-reference-image
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintNoShortcutReferenceImage)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-shortcut-reference-link
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintNoShortcutReferenceLink)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-unused-definitions
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintNoUnusedDefinitions)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-consecutive-blank-lines
-    // @ts-expect-error Type incompatibilities, works fine
     .use(remarkLintNoConsecutiveBlankLines)
     .process(view.state.doc.toString())
 
