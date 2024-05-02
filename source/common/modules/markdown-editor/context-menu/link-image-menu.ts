@@ -135,7 +135,14 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     } else if (clickedID === 'open-img-in-browser') {
       window.location.href = validAbsoluteURI
     } else if (clickedID === 'menu.remove_link') {
-      removeMarkdownLink(node, view)
+      if (node.type.name === 'URL' && node.parent?.type.name === 'Link') {
+        console.log("Here")
+        // Handles when user clicks on (url) node in the [text](url) type link 
+        removeMarkdownLink(node.parent, view)
+      } else {
+        // Handles when user clicks on [text] part of [text](url) type link or <url> part of <url> type link
+        removeMarkdownLink(node, view)
+      }
     }
   })
 }

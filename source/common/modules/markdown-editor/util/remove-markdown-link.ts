@@ -4,7 +4,8 @@
  *
  * Contains:        removeMarkdownLink function
  * CVM-Role:        Utility function
- * Maintainer:      Hendrik Erz
+ * Maintainers:     Neil Mazumdar NMazzy
+ *                  Maxwell Bruce MWBruce
  * License:         GNU GPL v3
  *
  * Description:     This function removes a markdown link, performing necessary
@@ -16,6 +17,7 @@
 import { type EditorView } from '@codemirror/view'
 import { type ChangeSpec } from '@codemirror/state'
 import { type SyntaxNode } from '@lezer/common'
+import { shortenUrlVisually } from 'source/common/util/shorten-url-visually'
 
 /**
  * Utility to remove a markdown link. It extracts the text from the markdown
@@ -25,30 +27,19 @@ import { type SyntaxNode } from '@lezer/common'
  * @param {SyntaxNode} node - The node containing the Link
  */
 export function removeMarkdownLink (node: SyntaxNode, view: EditorView): void {
-  // To deal with user being able to click on either part of the link (Text or URL)
-  // And the two different types of links []() and <>
-  // Check which node they clicked on before passing it
-  var useNode: SyntaxNode = node
-  if (node.type.name === 'URL' && node.parent != null) {
-    if (node.parent.type.name === 'Link') {
-      useNode = node.parent
-    } if (node.parent.type.name === 'Paragraph') {
-      useNode = node
-    }
-  }
-
-  const from = useNode.from
-  const to = useNode.to
-
+  const from = node.from
+  const to = node.to
   var linkText: string
-  if (useNode.type.name === 'URL') {
+
+  if (node.type.name === 'URL') {
     // This is where the URL with <> formate is parsed
-    // We add +- 1 to remove the < > brackets from the text
-    linkText = view.state.sliceDoc(node.from+1, node.to-1)
+    // We remove the < > brackets from the link text
+    linkText = view.state.sliceDoc(from, to)
+    linkText = shortenUrlVisually(linkText)
   } else {
-    // This is where the URL with []<> format is parsed
+    // This is where the URL with []() format is parsed
     // Using same logic seen in AST Parser to get the text between the []
-    const marks = useNode.getChildren('LinkMark')
+    const marks = node.getChildren('LinkMark')
     linkText = view.state.sliceDoc(marks[0].to, marks[1].from)
   }
   const changes: ChangeSpec = { from, to, insert: linkText }
