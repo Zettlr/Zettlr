@@ -78,6 +78,25 @@ follow these links again.
 Note that we have not implemented other parts yet, and we recommend the more
 common `[[wikilinks]]` or `[regular markdown links](./file.md)`.
 
+## Preferences Window Overhaul
+
+This release marks the debut of our UX/UI artist Artem Barinov who spent the
+better half of 2023 redesigning the entire preferences window from scratch.
+While this change narrowly didn't make it into 3.0.0, we are more than excited
+to introduce this new and sleek overhaul in this version.
+
+The new window now follows a much more consistent design philosophy. While we
+have kept the broad tabbed outline, the settings have now been moved into
+smaller blocks that contain sets of related settings. Furthermore, instead of
+having to remember where a setting is located, you can now directly search for
+it using the new search bar.
+
+We also took the opportunity to change, rename, relabel, and remove settings so
+that a bit of older remnants are now gone. Overall, the experience of changing
+the settings should now be much smoother, and we hope you like the change. In
+the coming updates, you can improve many more improvements on the UX side of
+things!
+
 ## Project Overhaul: Full Control Over Your Files
 
 Projects are at the heart of Zettlr. As a writing toolbox primarily targeted at
