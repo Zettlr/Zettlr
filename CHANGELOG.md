@@ -1,5 +1,15 @@
 # Upcoming
 
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.1.0
+
 ## Changes to the link detection
 
 For a long time now, Zettlr would (sometimes aggressively so) detect plain links
