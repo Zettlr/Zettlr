@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git://github.com/Zettlr/Zettlr.git"
   },
-  "version": "3.1.0-beta.3",
+  "version": "3.1.0",
   "license": "GPL-3.0",
   "description": "Your One-Stop Publication Workbench",
   "main": ".webpack/main",
