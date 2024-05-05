@@ -2,11 +2,12 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fixed a segmentation fault crash on startup across various Linux setups
+  (#5135)
 
 ## Under the Hood
 
-(nothing here)
+- Downgrade Electron to version `29.3.2` (cf. Electron issue #41839)
 
 # 3.1.0
 
