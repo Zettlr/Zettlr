@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(Nothing here)
+
+## Under the Hood
+
+(Nothing here)
+
+# 3.1.1
+
+## GUI and Functionality
+
 - Fixed a segmentation fault crash on startup across various Linux setups
   (#5135)
 
