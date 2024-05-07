@@ -1,5 +1,17 @@
 # Upcoming
 
+## Chanes to file filtering logic
+
+Previously when searching for files and workspaces in the filter field in
+Zettlr, OR logic would be used, meaning that if a item matched any search query,
+that item would be desplayed as a result of the search. This is not a very
+efficient way to search for files, as often multiple queries will want to be
+searched, and all files matching all queries will be displayed.
+
+In this latest update, Zettlr has changed to AND file filtering logic, meaning
+that only items that match all queries will be displayed when searching with
+multiple queries.
+
 ## Changes to the link detection
 
 For a long time now, Zettlr would (sometimes aggressively so) detect plain links
