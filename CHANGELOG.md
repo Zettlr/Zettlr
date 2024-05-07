@@ -1,6 +1,6 @@
 # Upcoming
 
-## Chanes to file filtering logic
+## Changes to file filtering logic
 
 Previously when searching for files and workspaces in the filter field in
 Zettlr, OR logic would be used, meaning that if a item matched any search query,
@@ -11,6 +11,27 @@ searched, and all files matching all queries will be displayed.
 In this latest update, Zettlr has changed to AND file filtering logic, meaning
 that only items that match all queries will be displayed when searching with
 multiple queries.
+
+## GUI and Functionality
+
+(Nothing here)
+
+## Under the Hood
+
+(Nothing here)
+
+# 3.1.1
+
+## GUI and Functionality
+
+- Fixed a segmentation fault crash on startup across various Linux setups
+  (#5135)
+
+## Under the Hood
+
+- Downgrade Electron to version `29.3.2` (cf. Electron issue #41839)
+
+# 3.1.0
 
 ## Changes to the link detection
 
