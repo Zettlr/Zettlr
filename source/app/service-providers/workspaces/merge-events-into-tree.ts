@@ -23,10 +23,15 @@ export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescri
 
   for (const event of events) {
     if (event.type === 'add') {
+      if (locateByPath(descriptorToReturn, event.descriptor.path) !== undefined) {
+        console.error(`Received an add event for a path that is already present in the tree -- not merging in (${event.descriptor.path}).`)
+        continue
+      }
+
       // Find the parent, and add the given descriptor to its children
       const parent = locateByPath(descriptorToReturn, event.descriptor.dir)
       if (parent === undefined || parent.type !== 'directory') {
-        throw new Error('Received an add event, but the tree descriptor did not contain its parent!')
+        throw new Error(`[mergeEventsIntoTree] add:${event.descriptor.path}: Local tree did not contain the descriptor's parent.`)
       }
 
       parent.children.push(event.descriptor)
@@ -46,13 +51,13 @@ export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescri
       const parent = locateByPath(descriptorToReturn, event.descriptor.dir)
 
       if (parent === undefined || parent.type !== 'directory') {
-        throw new Error('Received a change event, but the tree descriptor did not contain its parent!')
+        throw new Error(`[mergeEventsIntoTree] change:${event.path}: Local tree did not contain the descriptor's parent.`)
       }
 
       const idx = parent.children.findIndex(desc => desc.path === event.path)
 
       if (idx < 0) {
-        throw new Error('Received a change event but could not find the old descriptor in the parent!')
+        throw new Error(`[mergeEventsIntoTree] change:${event.path}: Could not find the old descriptor in the parent.`)
       }
 
       if (event.descriptor.type === 'directory') {
@@ -68,13 +73,13 @@ export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescri
       const dirname = event.path.substring(0, event.path.lastIndexOf(PATH_SEP))
       const parent = locateByPath(descriptorToReturn, dirname)
       if (parent === undefined || parent.type !== 'directory') {
-        throw new Error('Received an unlink event but could not find its parent!')
+        throw new Error(`[mergeEventsIntoTree] unlink:${event.path}: Could not find the descriptor's parent.`)
       }
 
       const idx = parent.children.findIndex(desc => desc.path === event.path)
 
       if (idx < 0) {
-        throw new Error('Could not remove descriptor from tree!')
+        throw new Error(`[mergeEventsIntoTree] unlink:${event.path}: Could not remove descriptor from tree.`)
       }
 
       parent.children.splice(idx, 1)

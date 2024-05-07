@@ -122,7 +122,7 @@ function handleDoubleClick (event: MouseEvent): void {
   // Only emit a double click event if the user double clicked on the
   // _toolbar_ or on a spacer, and not just on any button.
   const t = event.target as HTMLElement|null
-  if (t === element.value || (t !== null && t.className.includes('spacer'))) {
+  if (t === element.value || t?.className.includes('spacer') === true) {
     emit('dblclick')
   }
 }
