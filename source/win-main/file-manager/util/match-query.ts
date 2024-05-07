@@ -32,7 +32,7 @@
   export default function matchQuery(query: string, includeTitle: boolean, includeH1: boolean): (item: AnyDescriptor) => boolean {
    const queries = query.split(' ').map(q => q.trim()).filter(q => q !== '')
  
-   // Returns a function that takes a Meta descriptor and returns whether it matches or not
+   // Returns a function that takes a Meta descriptor and returns whether it matches all queries or not
    return function(item: AnyDescriptor): boolean {
      // Initialize a variable to keep track of whether all queries are matched
      let allQueriesMatched = true;
@@ -44,12 +44,14 @@
        if (item.name.toLowerCase().includes(q)) {
          queryMatched = true;
        }
- 
+      
+       // The rest can only match files
        if (item.type === 'file') {
          // Type assertion to check if 'firstHeading' exists on file descriptors
          const fileDescriptor = item as { type: 'file'; tags: string[]; frontmatter?: { [key: string]: any }; firstHeading?: string | null }; 
  
-         // If the query only consists of a "#" also include files that contain tags, no matter which.
+         // If the query only consists of a "#" also include files that
+         // contain tags, no matter which.
          if (q === '#' && item.tags.length > 0) {
            queryMatched = true;
          }
@@ -71,6 +73,7 @@
          }
  
          // Check if 'firstHeading' exists before accessing it
+         // Should we use headings 1 and, if so, does it match?
          if (includeH1 && 'firstHeading' in fileDescriptor && fileDescriptor.firstHeading !== null) {
            if (fileDescriptor.firstHeading !== undefined && fileDescriptor.firstHeading.toLowerCase().includes(q)) {
              queryMatched = true;
@@ -78,7 +81,7 @@
          }
        }
  
-       // If any of the queries is not matched, set allQueriesMatched to false
+       // If any of the queries are not matched, set allQueriesMatched to false
        if (!queryMatched) {
          allQueriesMatched = false;
          break; // No need to continue checking other queries if one is not matched
