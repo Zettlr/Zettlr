@@ -20,15 +20,15 @@
 import type { AnyDescriptor } from '@dts/common/fsal'
 
 /**
-  * Returns a function that can be used as a filter (i.e. in Array.filter) to match
-  * descriptors (Codefiles, Directories, Markdown files) against the given query.
-  *
-  * @param   {string}    query                   The query string to match against.
-  * @param   {boolean}   includeTitle            Whether or not to include titles
-  * @param   {boolean}   includeH1               Whether or not to include headings level 1
-  *
-  * @return  {(item: AnyDescriptor) => boolean}  The filter function. Takes a descriptor as its only argument.
-  */
+ * Returns a function that can be used as a filter (i.e. in Array.filter) to match
+ * descriptors (Codefiles, Directories, Markdown files) against the given query.
+ *
+ * @param   {string}    query                   The query string to match against.
+ * @param   {boolean}   includeTitle            Whether or not to include titles
+ * @param   {boolean}   includeH1               Whether or not to include headings level 1
+ *
+ * @return  {(item: AnyDescriptor) => boolean}  The filter function. Takes a descriptor as its only argument.
+ */
 export default function matchQuery (query: string, includeTitle: boolean, includeH1: boolean): (item: AnyDescriptor) => boolean {
   const queries = query.split(' ').map(q => q.trim()).filter(q => q !== '')
 
