@@ -459,6 +459,9 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string>}           Resolves with a string
    */
   public async loadAnySupportedFile (absPath: string): Promise<string> {
+    // Encode the file path to handle special characters
+    let encodedPath = encodeURI(absPath)
+
     if (await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
     }
@@ -487,6 +490,9 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<MDFileDescriptor>}           Resolves with the descriptor
    */
   public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    // Encode the file path to handle special characters
+    let encodedPath = encodeURI(absPath)
+
     if (await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
     }
