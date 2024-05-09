@@ -1976,12 +1976,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.12.8":
-  version: 20.12.8
-  resolution: "@types/node@npm:20.12.8"
+"@types/node@npm:^20.12.11":
+  version: 20.12.11
+  resolution: "@types/node@npm:20.12.11"
   dependencies:
     undici-types: ~5.26.4
-  checksum: 84d4876d95792a9567d2cc5a2c48db7028c397820e842cd65e2f848c23dd4b868b7131bda8eb66a1729d4944289070153d6180048de5bd155b35de421283c433
+  checksum: 0cc06bb69cd8150e96fcf65fa3d7f2eeebedf110a99e1834a7fa55bd6c04e7b6d73f74321a2acfc569ca300c0b88d8e1b702ce245b3802f6e5f6a8987fef451a
   languageName: node
   linkType: hard
 
@@ -14699,7 +14699,7 @@ __metadata:
     "@types/md5": ^2.3.5
     "@types/mermaid": ^9.2.0
     "@types/mocha": ^10.0.6
-    "@types/node": ^20.12.8
+    "@types/node": ^20.12.11
     "@types/sanitize-html": ^2.11.0
     "@types/semver": ^7.5.8
     "@types/showdown": ^2.0.6
