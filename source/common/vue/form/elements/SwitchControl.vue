@@ -59,7 +59,7 @@ body {
     label.switch {
       position: relative;
       margin-right: 5px;
-      width: @input-size * 2;
+      width: @input-size * 1.75;
       height: @input-size;
       background-color: var(--grey-4);
       border-radius: @input-size;
@@ -75,9 +75,9 @@ body {
         left: 0;
         right: 0;
         bottom: 0;
-        transition: .4s;
+        transition: .15s;
         border-radius: (@input-size / 2);
-        box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, .25);
+        box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, .15);
         background-color: var(--grey-1);
 
         &:before {
@@ -85,18 +85,18 @@ body {
           content: "";
           height: (@input-size - @input-margin * 2); // Fancy equations here!
           width: (@input-size - @input-margin * 2);
-          box-shadow: @input-margin @input-margin 5px 0px rgba(0, 0, 0, .5);
+          box-shadow: @input-margin @input-margin 3px 0px rgba(0, 0, 0, .15);
           left: @input-margin;
           bottom: @input-margin;
           background-color: white;
           transform: translateX(0);
-          transition: transform .4s ease;
+          transition: transform .15s ease;
           border-radius: 50%;
         }
       }
 
       input:checked + .toggle:before {
-        transform: translateX((@input-size));
+        transform: translateX((@input-size * 0.75));
       }
 
       input:checked + .toggle {

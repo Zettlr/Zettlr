@@ -138,11 +138,16 @@ body div.form-control {
 
   p.info {
     font-size: 70%;
-    opacity: 0.8;
+    opacity: 0.6;
+    margin-top: 6px;
   }
 }
 
 body.darwin {
+  div.form-control > label {
+    display: inline-block;
+  }
+
   div.form-control .input-text-button-group {
     font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 13px;

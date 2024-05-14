@@ -190,10 +190,15 @@ const emit = defineEmits<(e: 'update:modelValue', newValue: any) => void>()
 </script>
 
 <style lang="less">
+.form-field {
+  margin-bottom: 16px;
+}
+
 .form-field-info-text {
   // This is some faint hint text
   font-size: 11px;
-  color: rgb(150, 150, 150);
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 12px;
 }
 
 .form-field-sub-heading {

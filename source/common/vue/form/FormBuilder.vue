@@ -297,6 +297,11 @@ function getModelValue (model: string): any {
 
 <style lang="less">
 .form-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
   .fieldset-category {
     color: rgb(114, 114, 114);
     font-size: 13px;
@@ -308,51 +313,51 @@ function getModelValue (model: string): any {
   }
 
   fieldset {
-    background-color: rgb(236, 236, 236);
-    border: 1px solid rgb(230, 230, 230);
-    margin: 10px;
+    background-color: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
     padding: 24px;
-    padding-top: 18px;
+    padding-top: 20px;
     border-radius: 6px;
     position: relative;
-    color: #333;
+    color: rgba(0, 0, 0, 0.85);
 
     .form-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       column-gap: 10px;
+      margin-bottom: 16px;
 
       legend {
-        flex-grow: 1;
-        font-weight: bolder;
         font-size: 15px;
-        margin-top: 2px;
+        font-weight: 700;
         padding: 0;
       }
-
-      // .form-header-field {}
     }
 
-    .form-help {
-      display: block;
-      width: 18px;
-      min-width: 18px;
-      cursor: help;
-      height: 18px;
-      line-height: 16px;
-      text-align: center;
-      background-color: rgb(222, 222, 222);
-      border: 1px solid rgb(124, 124, 124);
-      color: rgb(124, 124, 124);
-      border-radius: 10px;
-      font-size: 10px;
+    :last-child {
+      margin-bottom: 0;
     }
+
+    // .form-help {
+    //   display: block;
+    //   width: 18px;
+    //   min-width: 18px;
+    //   cursor: help;
+    //   height: 18px;
+    //   line-height: 16px;
+    //   text-align: center;
+    //   background-color: rgb(222, 222, 222);
+    //   border: 1px solid rgb(124, 124, 124);
+    //   color: rgb(124, 124, 124);
+    //   border-radius: 10px;
+    //   font-size: 10px;
+    // }
 
     hr {
-      margin: 20px 0px;
+      margin: 16px 0px;
       border: none;
-      border-top: 1px solid rgb(211, 211, 211);
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .style-group {
@@ -366,13 +371,13 @@ function getModelValue (model: string): any {
 
 body.dark .form-container {
   fieldset {
-    background-color: rgb(60, 60, 60);
+    background-color: #2A2A2A;
+    border-color: #303030;
     color: inherit;
-    border-color: rgb(30, 30, 30);
   }
 
   hr {
-    border-top-color: #5a5a5a;
+    border-top-color: #404040;
   }
 }
 
@@ -385,7 +390,7 @@ body.win32:not(.dark) .form-container {
 
 body.linux:not(.dark) .form-container {
   fieldset {
-    border-radius: 4px;
+    border-radius: 12px;
     background-color: rgb(245, 245, 245);
   }
 }

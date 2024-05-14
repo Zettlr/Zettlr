@@ -27,7 +27,7 @@ export function getSnippetsFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'button',
-          label: trans('Open snippets editor'),
+          label: trans('Open the snippets editor'),
           onClick: () => {
             ipcRenderer.invoke('application', {
               command: 'open-aux-window',

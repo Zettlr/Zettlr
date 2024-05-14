@@ -88,14 +88,18 @@ body {
 
     &.inline {
       display: flex;
-      flex-direction: row;
-      column-gap: 40px;
+      align-items: center;
+      column-gap: 48px;
+
+      :last-child {
+        margin: unset;
+      }
     }
   }
 
   .radio-group {
     display: grid;
-    grid-template-columns: @input-size * 2 max-content;
+    grid-template-columns: @input-size * 1.6 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
     align-items: center;
@@ -159,7 +163,10 @@ body.darwin {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
-  .radio-group-outside-label { font-size: 13px; }
+  .radio-group-outside-label {
+    font-size: 13px;
+    font-weight: 590;
+  }
 
   label.radio {
     width: @input-size;

@@ -134,7 +134,7 @@ function handleContextMenu (event: MouseEvent, idx: number): void {
 <style lang="less">
 body .selectable-list-wrapper {
   --selectable-list-border-color: rgb(230, 230, 230);
-  padding: 10px;
+  padding: 20px;
 
   &.has-footer { padding-bottom: 40px; }
 
@@ -168,12 +168,14 @@ body .selectable-list-wrapper {
       overflow: hidden;
       display: grid;
       // Default: A spacious list item with icon, label, and info areas
-      grid-template-columns: 28px auto;
+      grid-template-columns: 16px auto;
       grid-template-rows: 14px 14px;
       grid-template-areas:
         "icon label"
         "icon info";
       align-items: center;
+      column-gap: 12px;
+      row-gap: 2px;
 
       &.no-info {
         // An item that has no info can be a bit narrower
@@ -199,7 +201,13 @@ body .selectable-list-wrapper {
       }
 
       .display-text { grid-area: label; }
-      .icon { grid-area: icon; justify-self: center; }
+      .icon {
+        grid-area: icon;
+        justify-self: center;
+        width: 16px;
+        height: 16px;
+        color: rgba(0, 0, 0, 0.6);
+      }
 
       &.selected {
         // background-color: rgb(230, 230, 230);
@@ -229,7 +237,7 @@ body .selectable-list-wrapper {
 }
 
 body.dark .selectable-list-wrapper {
-  --selectable-list-border-color-dark: rgb(120, 120, 120);
+  --selectable-list-border-color-dark: rgb(70, 70, 70);
   .selectable-list-footer, .selectable-list-container, div.item {
     border-color: var(--selectable-list-border-color-dark);
   }
@@ -239,19 +247,19 @@ body.dark .selectable-list-wrapper {
 body.darwin {
   .selectable-list-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 12px;
-    border-radius: 8px;
+    font-size: 13px;
+    border-radius: 6px;
 
     .item {
       line-height: 20px;
-      padding: 5px;
+      padding: 8px 12px;
     }
   }
 
   .selectable-list-wrapper {
     .selectable-list-footer {
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
       .add, .remove {
         border-right: 1px solid rgb(230, 230, 230);
       }
@@ -266,7 +274,7 @@ body.darwin {
   &.dark {
     .selectable-list-footer {
       background-color: rgb(68, 68, 68);
-      border-color: #505050;
+      border-color: var(--selectable-list-border-color-dark);
 
       .add, .remove {
         color: rgb(230, 230, 230);
@@ -275,12 +283,12 @@ body.darwin {
     }
 
     .selectable-list-container {
-      border-color: #505050;
+      border-color: var(--selectable-list-border-color-dark);
 
       .item {
         background-color: rgb(50, 50, 50);
         color: white;
-        border-color: #505050;
+        border-color: var(--selectable-list-border-color-dark);
 
         &.selected {
           background-color: var(--system-accent-color);
@@ -336,6 +344,6 @@ body.win32, body.linux {
 }
 
 body.linux .selectable-list-wrapper .selectable-list-container {
-  border-radius: 4px;
+  border-radius: 6px;
 }
 </style>

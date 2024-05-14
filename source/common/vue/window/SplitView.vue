@@ -185,16 +185,18 @@ defineExpose({ hideView, unhide })
 body div.split-view {
   display: flex;
   height: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 
   div.view {
     overflow: auto;
     &.view-border {
-      border-left: 1px solid rgb(213, 213, 213);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
       margin-left: -6px; // Account for resizer
     }
 
     &:not(.view-border) {
       margin-right: -5px; // Account for resizer
+      background-color: rgba(0, 0, 0, 0.05);
     }
   }
 

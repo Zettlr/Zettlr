@@ -23,7 +23,7 @@
           v-bind:search-icon="true"
           v-bind:autofocus="true"
           v-bind:reset="true"
-          style="padding: 5px 10px"
+          style="padding: 20px"
         ></TextControl>
         <SelectableList
           v-bind:items="groups"
