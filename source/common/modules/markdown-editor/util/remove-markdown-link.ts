@@ -33,9 +33,18 @@ export function removeMarkdownLink (node: SyntaxNode, view: EditorView): void {
 
   if (node.type.name === 'URL') {
     // This is where the URL with <> formate is parsed
-    // We remove the < > brackets from the link text
+    // We remove the < > brackets from the link text\
     linkText = view.state.sliceDoc(from, to)
-    linkText = shortenUrlVisually(linkText)
+
+    const regex = /<([^>]+)>/g;
+    const match = regex.exec(linkText)
+
+    if (match !== null) {
+      linkText = match[1]
+    } else {
+      console.error('Unable to parse <> style URL')
+      return
+    }
   } else {
     // This is where the URL with []() format is parsed
     // Using same logic seen in AST Parser to get the text between the []
