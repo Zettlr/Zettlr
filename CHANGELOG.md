@@ -4,7 +4,7 @@
 
 Previously when searching for files and workspaces in the filter field in
 Zettlr, OR logic would be used, meaning that if a item matched any search query,
-that item would be desplayed as a result of the search. This is not a very
+that item would be displayed as a result of the search. This is not a very
 efficient way to search for files, as often multiple queries will want to be
 searched, and all files matching all queries will be displayed.
 
@@ -14,11 +14,8 @@ multiple queries.
 
 ## GUI and Functionality
 
-(Nothing here)
-
-## Under the Hood
-
-(Nothing here)
+- **Change**: When searching for files in the filter field, only files and
+  workspaces that match all queries entered will be displayed.
 
 # 3.1.1
 
