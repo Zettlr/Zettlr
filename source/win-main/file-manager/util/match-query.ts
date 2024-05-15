@@ -17,7 +17,7 @@
  * END HEADER
  */
 
-import type { AnyDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 
 /**
  * Returns a function that can be used as a filter (i.e. in Array.filter) to match
@@ -34,11 +34,10 @@ export default function matchQuery (query: string, includeTitle: boolean, includ
 
   // Returns a function that takes a Meta descriptor and returns whether it matches all queries or not
   return function (item: AnyDescriptor): boolean {
-    // Initialize a variable to keep track of whether all queries are matched
     let allQueriesMatched = true
 
     for (const q of queries) {
-      let queryMatched = false // Track if the current query is matched
+      let queryMatched = false
 
       // First, see if the name gives a match since that's what all descriptors have.
       if (item.name.toLowerCase().includes(q)) {
@@ -48,7 +47,7 @@ export default function matchQuery (query: string, includeTitle: boolean, includ
       // The rest can only match files
       if (item.type === 'file') {
         // Type assertion to check if 'firstHeading' exists on file descriptors
-        const fileDescriptor = item as { type: 'file', tags: string[], frontmatter?: Record<string, any>, firstHeading?: string | null }
+        const fileDescriptor = item as MDFileDescriptor
 
         // If the query only consists of a "#" also include files that
         // contain tags, no matter which.
