@@ -47,7 +47,7 @@ export default function matchQuery (query: string, includeTitle: boolean, includ
       // The rest can only match files
       if (item.type === 'file') {
         // Type assertion to check if 'firstHeading' exists on file descriptors
-        const fileDescriptor = item as MDFileDescriptor
+        const fileDescriptor = item
 
         // If the query only consists of a "#" also include files that
         // contain tags, no matter which.
