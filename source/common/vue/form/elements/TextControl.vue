@@ -1,6 +1,7 @@
 <template>
-  <div v-bind:class="{ inline: inline === true, 'form-control': true }">
+  <div v-bind:class="{ inline: inline === true, 'form-control text-field': true }">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <p v-if="info !== undefined" class="info" v-html="info"></p>
     <div
       v-bind:class="{
         'input-text-button-group': true,
@@ -33,7 +34,6 @@
         <cds-icon shape="times"></cds-icon>
       </button>
     </div>
-    <p v-if="info !== undefined" class="info" v-html="info"></p>
   </div>
 </template>
 
@@ -138,16 +138,19 @@ body div.form-control {
 
   p.info {
     font-size: 70%;
-    opacity: 0.6;
-    margin-top: 6px;
+    color: rgba(0, 0, 0, 0.5);
+    margin-top: 2px;
+    margin-bottom: 6px;
+  }
+}
+
+body.dark div.form-control {
+  p.info {
+    color: rgba(255, 255, 255, 0.6);
   }
 }
 
 body.darwin {
-  div.form-control > label {
-    display: inline-block;
-  }
-
   div.form-control .input-text-button-group {
     font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 13px;

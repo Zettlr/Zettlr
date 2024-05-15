@@ -80,7 +80,7 @@ function fieldID (key: string): string {
 body {
   .radio-group-container {
     break-inside: avoid;
-    margin: 10px 0;
+    // margin: 10px 0;
 
     p { font-size: 13px; }
 
@@ -89,7 +89,7 @@ body {
     &.inline {
       display: flex;
       align-items: center;
-      column-gap: 48px;
+      column-gap: 40px;
 
       :last-child {
         margin: unset;
@@ -129,7 +129,7 @@ body {
       right: 0;
       bottom: 0;
       border-radius: @input-size;
-      transition: .4s;
+      transition: .1s;
 
       // Inner part
       &:before {
@@ -141,7 +141,7 @@ body {
         top: (@input-size * 0.2);
         background-color: transparent;
         border-radius: @input-size;
-        transition: .4s;
+        transition: .1s;
       }
     }
 
@@ -269,7 +269,7 @@ body.win32 {
         top: (@input-size * 0.25 - 2px);
         background-color: transparent;
         border-radius: @input-size;
-        transition: .4s;
+        transition: .1s;
       }
     }
 

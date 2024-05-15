@@ -210,7 +210,7 @@ body div.split-view {
 
 body.dark div.split-view {
   div.view.view-border {
-    border-color: rgb(80, 80, 80);
+    border-color: rgba(255, 255, 255, 0.15);
   }
 }
 </style>

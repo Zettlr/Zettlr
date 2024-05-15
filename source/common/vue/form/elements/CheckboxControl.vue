@@ -94,7 +94,7 @@ body {
     align-items: center;
 
     &:not(.checkbox-outer-div-inline) {
-      margin: 10px 0;
+      // padding: 5px 0;
     }
 
     .cb-group-label { grid-area: label; }
@@ -131,7 +131,7 @@ body {
       width: @input-size;
       border-radius: 4px;
       background-color: #eee;
-      transition: background-color .2s ease;
+      transition: background-color .1s ease;
 
       &:after {
         content: "";
@@ -144,7 +144,7 @@ body {
         border: solid white;
         border-width: 0 2px 2px 0;
         transform: rotate(45deg);
-        transition: opacity .2s ease;
+        transition: opacity .1s ease;
       }
     }
 
@@ -164,6 +164,12 @@ body {
         border-color: rgb(90, 90, 90);
       }
     }
+  }
+}
+
+body.dark {
+  div.info {
+    color: rgba(255, 255, 255, 0.6);
   }
 }
 
@@ -273,7 +279,7 @@ body.win32 {
         border: solid white;
         border-width: 0 2px 2px 0;
         transform: rotate(45deg);
-        transition: opacity 1s ease;
+        transition: opacity .1s ease;
       }
     }
 

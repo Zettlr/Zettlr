@@ -19,7 +19,7 @@
       <template #view1>
         <TextControl
           v-model="query"
-          v-bind:placeholder="'Find…'"
+          v-bind:placeholder="'Search'"
           v-bind:search-icon="true"
           v-bind:autofocus="true"
           v-bind:reset="true"

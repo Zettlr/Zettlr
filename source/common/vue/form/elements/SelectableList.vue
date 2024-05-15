@@ -240,8 +240,10 @@ body.dark .selectable-list-wrapper {
   --selectable-list-border-color-dark: rgb(70, 70, 70);
   .selectable-list-footer, .selectable-list-container, div.item {
     border-color: var(--selectable-list-border-color-dark);
+    .icon {
+      color: rgba(255, 255, 255, 0.6);
+    }
   }
-
 }
 
 body.darwin {

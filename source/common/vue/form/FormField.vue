@@ -205,4 +205,10 @@ const emit = defineEmits<(e: 'update:modelValue', newValue: any) => void>()
   font-size: 13px;
   margin-bottom: 10px;
 }
+
+body.dark {
+  .form-field-info-text {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
 </style>

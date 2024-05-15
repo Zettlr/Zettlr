@@ -15,7 +15,10 @@
       </div>
       <fieldset>
         <!-- First, let's do some setup of the fieldset -->
-        <div class="form-header">
+        <div
+          class="form-header"
+          v-bind:class="{ 'space-between': fieldset.title === 'Application language' }"
+        >
           <!-- First the fieldset legend: Required -->
           <legend>
             {{ fieldset.title }}
@@ -323,10 +326,13 @@ function getModelValue (model: string): any {
 
     .form-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      column-gap: 10px;
+      gap: 24px;
       margin-bottom: 16px;
+
+      &.space-between {
+        justify-content: space-between;
+      }
 
       legend {
         font-size: 15px;
@@ -339,28 +345,37 @@ function getModelValue (model: string): any {
       margin-bottom: 0;
     }
 
-    // .form-help {
-    //   display: block;
-    //   width: 18px;
-    //   min-width: 18px;
-    //   cursor: help;
-    //   height: 18px;
-    //   line-height: 16px;
-    //   text-align: center;
-    //   background-color: rgb(222, 222, 222);
-    //   border: 1px solid rgb(124, 124, 124);
-    //   color: rgb(124, 124, 124);
-    //   border-radius: 10px;
-    //   font-size: 10px;
-    // }
+    > :not(:last-child) {
+      margin-bottom: 12px;
+      // border: 1px solid red;
+    }
+
+    .form-help {
+      display: block;
+      width: 18px;
+      min-width: 18px;
+      cursor: help;
+      height: 18px;
+      line-height: 16px;
+      text-align: center;
+      background-color: rgb(222, 222, 222);
+      border: 1px solid rgb(124, 124, 124);
+      color: rgb(124, 124, 124);
+      border-radius: 10px;
+      font-size: 10px;
+    }
 
     hr {
       margin: 16px 0px;
       border: none;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      border-top: 1px solid rgba(0, 0, 0, 0.075);
     }
 
     .style-group {
+      > div {
+        padding: 6px 0;
+      }
+
       .columns {
         column-count: 2;
         column-fill: balance;

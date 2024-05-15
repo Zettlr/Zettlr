@@ -77,7 +77,7 @@ body {
         bottom: 0;
         transition: .15s;
         border-radius: (@input-size / 2);
-        box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, .15);
+        box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, .3);
         background-color: var(--grey-1);
 
         &:before {
@@ -85,7 +85,7 @@ body {
           content: "";
           height: (@input-size - @input-margin * 2); // Fancy equations here!
           width: (@input-size - @input-margin * 2);
-          box-shadow: @input-margin @input-margin 3px 0px rgba(0, 0, 0, .15);
+          box-shadow: @input-margin @input-margin 3px 0px rgba(0, 0, 0, .1);
           left: @input-margin;
           bottom: @input-margin;
           background-color: white;
