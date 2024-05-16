@@ -852,12 +852,12 @@ msgstr "Le fichier de la bibliographie a été modifié. Rechargement…"
 #: source/app/service-providers/documents/index.ts:343
 #, fuzzy
 msgid "Save changes"
-msgstr "Modifications non enregistrées"
+msgstr "Sauvegarder les modifications"
 
 #: source/app/service-providers/documents/index.ts:344
 #, fuzzy
 msgid "Discard changes"
-msgstr "Modifications non enregistrées"
+msgstr "Abandonner les modifications"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/documents/index.ts:347
