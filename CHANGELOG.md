@@ -6,7 +6,7 @@
 
 ## Under the Hood
 
-- Downgrade Ubuntu builds to 20.04 (#5137)
+- Downgrade Linux builds to use Ubuntu 20.04 (#5137)
 
 # 3.1.1
 
