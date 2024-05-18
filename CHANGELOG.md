@@ -2,7 +2,33 @@
 
 ## GUI and Functionality
 
-(Nothing here)
+## Changes to Pandoc Profiles
+
+This update fixes a workaround that Zettlr had in place for a shortcoming of Pandoc regarding
+the automatic numbering of headings. This workaround is no longer necessary, since Pandoc has
+since fixed the issue. 
+
+From this version onward, Zettlr will ship with changed default
+profiles for various export formats. Since Zettlr never overwrites any data, the new defaults
+will not be applied automatically.
+
+You can activate these changes in two ways:
+
+* Regenerate profiles: In case you did not modify one of these profiles or are fine with resetting your changes, you can just delete them. This will prompt Zettlr to immediately recreate them – but now with the new settings.
+* Backup changed profiles and regenerate: In case you did modify them and want to keep your changes, rename the file to something else – Zettlr will then recreate the profile with the new default settings.
+
+You can also manually adapt them by removing the following line: `shift-heading-level-by: 1`.
+
+The following profiles are affected by this change:
+
+* HTML
+* LaTex
+* Microsoft Word
+* Open Document Text
+* Plain Text
+* Reveal.js
+* Rich Text Format
+* XeLaTeX PDF
 
 ## Under the Hood
 
