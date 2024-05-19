@@ -17,6 +17,10 @@ multiple queries.
 - **Change**: When searching for files in the filter field, only files and
   workspaces that match all queries entered will be displayed
 
+## Under the Hood
+
+- Downgrade Linux builds to use Ubuntu 20.04 instead of 22.04 (#5137)
+
 # 3.1.1
 
 ## GUI and Functionality
