@@ -1,12 +1,25 @@
 # Upcoming
 
+## Changes to file filtering logic
+
+Previously when searching for files and workspaces in the filter field in
+Zettlr, OR logic would be used, meaning that if a item matched any search query,
+that item would be displayed as a result of the search. This is not a very
+efficient way to search for files, as often multiple queries will want to be
+searched, and all files matching all queries will be displayed.
+
+In this latest update, Zettlr has changed to AND file filtering logic, meaning
+that only items that match all queries will be displayed when searching with
+multiple queries.
+
 ## GUI and Functionality
 
-(Nothing here)
+- **Change**: When searching for files in the filter field, only files and
+  workspaces that match all queries entered will be displayed
 
 ## Under the Hood
 
-- Downgrade Linux builds to use Ubuntu 20.04 (#5137)
+- Downgrade Linux builds to use Ubuntu 20.04 instead of 22.04 (#5137)
 
 # 3.1.1
 
