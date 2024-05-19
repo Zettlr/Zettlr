@@ -1,6 +1,5 @@
 # Upcoming
 
-
 ## Changes to file filtering logic
 
 Previously when searching for files and workspaces in the filter field in
@@ -16,7 +15,7 @@ multiple queries.
 ## GUI and Functionality
 
 - **Change**: When searching for files in the filter field, only files and
-  workspaces that match all queries entered will be displayed.
+  workspaces that match all queries entered will be displayed
 
 # 3.1.1
 
