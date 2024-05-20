@@ -459,16 +459,20 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string>}           Resolves with a string
    */
   public async loadAnySupportedFile (absPath: string): Promise<string> {
-    if (await this.isDir(absPath)) {
-      throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
+    // Encode the file path to handle special characters
+    let encodedPath = encodeURI(absPath)
+
+    if (await this.isDir(encodedPath)) {
+      throw new Error(`[FSAL] Cannot load file ${encodedPath} as it is a directory`)
     }
 
-    if (!await this.isFile(absPath)) {
-      throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
+    if (!await this.isFile(encodedPath)) {
+      throw new Error(`[FSAL] Cannot load file ${encodedPath}: Not found`)
     }
 
-    if (hasMdOrCodeExt(absPath)) {
-      const content = await fs.readFile(absPath, { encoding: 'utf-8' })
+    if (hasMdOrCodeExt(encodedPath)) {
+      // Decode the URI before reading the file
+      const content = await fs.readFile(decodeURI(encodedPath), { encoding: 'utf-8' })
       return content
     }
 
@@ -487,11 +491,14 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<MDFileDescriptor>}           Resolves with the descriptor
    */
   public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
-    if (await this.isDir(absPath)) {
+    // Encode the file path to handle special characters
+    let encodedPath = encodeURI(absPath)
+
+    if (await this.isDir(encodedPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
     }
 
-    if (!await this.isFile(absPath)) {
+    if (!await this.isFile(encodedPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
     }
 
