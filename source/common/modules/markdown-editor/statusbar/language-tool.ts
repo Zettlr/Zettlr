@@ -7,7 +7,7 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file defines the LanguageTool statusbar item
+ * Description:     This file defines the LanguageTool statusbar and its toggle
  *
  * END HEADER
  */
