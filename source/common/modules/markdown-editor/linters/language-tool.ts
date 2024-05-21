@@ -25,6 +25,7 @@ const ipcRenderer = window.ipc
 
 export interface LanguageToolStateField {
   running: boolean
+  paused: boolean
   lastDetectedLanguage: string
   supportedLanguages: string[]
   overrideLanguage: 'auto'|string
@@ -48,6 +49,7 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
 
     return {
       running: false,
+      paused: false,
       lastDetectedLanguage: 'auto',
       lastError: undefined,
       overrideLanguage,
@@ -58,6 +60,7 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
     for (const e of transaction.effects) {
       if (e.is(updateLTState)) {
         value.running = e.value.running ?? value.running
+        value.paused = e.value.paused ?? value.paused
         value.lastDetectedLanguage = e.value.lastDetectedLanguage ?? value.lastDetectedLanguage
         value.lastError = e.value.lastError
         value.supportedLanguages = e.value.supportedLanguages ?? value.supportedLanguages

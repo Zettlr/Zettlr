@@ -101,10 +101,6 @@ async function fetchSupportedLanguages (server: string): Promise<string[]> {
 }
 
 export default class LanguageTool extends ZettlrCommand {
-  constructor (app: any) {
-    super(app, 'run-language-tool')
-  }
-
   /**
    * Fetches LanguageTool replies for a given text. It returns either an API
    * response, if everything went well, a string if there was a (possibly
@@ -129,11 +125,13 @@ export default class LanguageTool extends ZettlrCommand {
       customServer,
       provider
     } = this._app.config.getConfig().editor.lint.languageTool
-    const { text, language } = arg
 
+    // moved the if statement upward to skip the const declaration if the service is not active
     if (!active) {
       return undefined // LanguageTool is not active
     }
+
+    const { text, language } = arg
 
     const searchParams = new URLSearchParams({ language, text, level })
 

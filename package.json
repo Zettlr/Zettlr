@@ -71,6 +71,7 @@
     "chokidar": "^3.6.0",
     "citeproc": "^2.4.63",
     "d3": "^7.9.0",
+    "electron-builder-squirrel-windows": "^25.0.0-alpha.8",
     "fix-path": "^4.0.0",
     "gemoji": "^8.1.0",
     "gettext-parser": "^8.0.0",
@@ -122,6 +123,7 @@
     "uuid": "^9.0.1",
     "vue": "^3.4.26",
     "vue-virtual-scroller": "^2.0.0-beta.8",
+    "webpack": "latest",
     "yaml": "^2.4.2"
   },
   "optionalDependencies": {
@@ -162,7 +164,7 @@
     "@types/semver": "^7.5.8",
     "@types/showdown": "^2.0.6",
     "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "^7.8.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "copy-webpack-plugin": "^12.0.2",
@@ -176,7 +178,7 @@
     "eslint-config-standard": "^17.1.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^17.4.0",
+    "eslint-plugin-n": "latest",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.25.0",
     "jsdom": "^24.0.0",

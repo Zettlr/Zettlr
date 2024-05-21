@@ -22,6 +22,7 @@ import { type StatusbarItem } from '.'
 import { languageToolState, updateLTState } from '../linters/language-tool'
 import { configField } from '../util/configuration'
 import { forceLinting } from '@codemirror/lint'
+import { lt } from 'lodash'
 
 /**
  * Displays the status of LanguageTool, if applicable
@@ -156,6 +157,37 @@ export function languageToolStatus (state: EditorState, view: EditorView): Statu
         view.dispatch({ effects: updateLTState.of({ overrideLanguage: clickedID }) })
         forceLinting(view)
       })
+    }
+  }
+}
+
+export function languageToolPauseToggle (state: EditorState, view: EditorView): StatusbarItem|null {
+  /**
+   * A toggle switch to pause and resume LanguageTool linting by using the languageTool.togglePause() function
+   * @param   {EditorState}    state  The EditorState
+   * @param   {EditorView}     view   The EditorView
+   * @return  {StatusbarItem}         Returns the element, or null
+   * @example
+   * ```typescript
+   * const languageToolPauseToggle = languageToolPauseToggle(state, view)
+   * ```
+   */
+  const config = state.field(configField, false)
+  const ltState = state.field(languageToolState, false)
+
+  // if LanguageTool is not active or the state is not defined, return null to not display the statusbar item
+  if (config === undefined || !config.lintLanguageTool || ltState === undefined) {
+    return null
+  }
+
+  const SHAPE_LIST = [ 'play', 'pause' ]
+  // if LanguageTool is paused, display the pause icon in the statusbar item
+  return {
+    content: `LanguageTool: <cds-icon shape="${ltState.paused ? SHAPE_LIST[0] : SHAPE_LIST[1]}"></cds-icon>`,
+    allowHtml: true,
+    onClick () {
+      view.dispatch({ effects: updateLTState.of({ paused: !ltState.paused }) })
+      ltState.paused ? (() => {})() : forceLinting(view) // if paused, do nothing, else force linting
     }
   }
 }
