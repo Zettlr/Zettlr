@@ -16,6 +16,7 @@ multiple queries.
 
 - **Change**: When searching for files in the filter field, only files and
   workspaces that match all queries entered will be displayed
+- Fixed the French translation of unsaved-changes dialog actions. (#5177)
 
 ## Under the Hood
 
