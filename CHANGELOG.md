@@ -16,6 +16,8 @@ multiple queries.
 
 - **Change**: When searching for files in the filter field, only files and
   workspaces that match all queries entered will be displayed
+- **Fix**: Focus input field when search in folder (global search) is
+  triggered
 
 ## Under the Hood
 
