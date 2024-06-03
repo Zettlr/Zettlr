@@ -20,8 +20,8 @@ export function extractLinefeed (text: string): Linefeed {
   const CRLF = text.includes('\r\n')
   const LFCR = text.includes('\n\r')
 
-  const indexCRLF = text.indexOf('\r\n')
-  const indexLFCR = text.indexOf('\n\r')
+  const indexCRLF = CRLF ? text.indexOf('\r\n') : Infinity
+  const indexLFCR = LFCR ? text.indexOf('\n\r') : Infinity
 
   if (LF && !CR) {
     return '\n' // Unix-style (Linux/macOS)
