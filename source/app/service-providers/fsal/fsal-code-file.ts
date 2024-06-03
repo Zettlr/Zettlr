@@ -22,6 +22,7 @@ import type { CodeFileDescriptor } from '@dts/common/fsal'
 import type FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
+import { extractLinefeed } from './util/extract-linefeed'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -62,10 +63,8 @@ async function updateFileMetadata (fileObject: CodeFileDescriptor): Promise<void
 function parseFileContents (file: CodeFileDescriptor, content: string): void {
   // Determine linefeed to preserve on saving so that version control
   // systems don't complain.
-  file.linefeed = '\n'
   file.bom = extractBOM(content)
-  if (content.includes('\r\n')) file.linefeed = '\r\n'
-  if (content.includes('\n\r')) file.linefeed = '\n\r'
+  file.linefeed = extractLinefeed(content)
 }
 
 export async function parse (
@@ -130,10 +129,21 @@ export async function search (fileObject: CodeFileDescriptor, terms: any[]): Pro
   return searchFile(fileObject, terms, cnt)
 }
 
+/**
+ * Loads the given Code file from disk and returns its content in normalized
+ * form (uses always newlines).
+ *
+ * @param   {CodeFileDescriptor}  fileObject  The descriptor to load
+ *
+ * @return  {Promise<string>}                 The file contents
+ */
 export async function load (fileObject: CodeFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
-  return content.substring(fileObject.bom.length)
+  return content
+    .substring(fileObject.bom.length)
+    .split(fileObject.linefeed)
+    .join('\n')
 }
 
 export async function hasChangedOnDisk (fileObject: CodeFileDescriptor): Promise<boolean> {
@@ -141,12 +151,21 @@ export async function hasChangedOnDisk (fileObject: CodeFileDescriptor): Promise
   return stat.mtime.getTime() !== fileObject.modtime
 }
 
+/**
+ * Saves the provided file content. NOTE: The file content should only use
+ * newlines, since the file will be de-normalized only here.
+ *
+ * @param   {CodeFileDescriptor}  fileObject  The file descriptor
+ * @param   {string}              content     The new content
+ * @param   {FSALCache|null}      cache       The cache object
+ */
 export async function save (fileObject: CodeFileDescriptor, content: string, cache: FSALCache|null): Promise<void> {
-  await fs.writeFile(fileObject.path, content)
+  const safeContent = fileObject.bom + content.split('\n').join(fileObject.linefeed)
+  await fs.writeFile(fileObject.path, safeContent)
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  parseFileContents(fileObject, content)
+  parseFileContents(fileObject, safeContent)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

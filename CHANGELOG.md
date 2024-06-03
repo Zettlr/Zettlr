@@ -16,10 +16,16 @@ multiple queries.
 
 - **Change**: When searching for files in the filter field, only files and
   workspaces that match all queries entered will be displayed
+- Fixed bugs with properly saving files (and retaining linefeeds) on Windows
+  systems; now Zettlr should be capable of handling any type of linefeed (#5109)
 
 ## Under the Hood
 
 - Downgrade Linux builds to use Ubuntu 20.04 instead of 22.04 (#5137)
+- Fully abstract away newline handling from the internal logic. Now, newlines
+  are always `\n` across the entire app. The actual newlines from the files will
+  be stored in their respective file descriptor, and will be exclusively used on
+  file reads (to replace them with `\n`) and file writes (to replace `\n` with)
 
 # 3.1.1
 

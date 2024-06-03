@@ -599,7 +599,7 @@ export default class DocumentManager extends ProviderContract {
       lastSavedVersion: 0,
       lastSavedContent: content,
       updates: [],
-      document: Text.of(content.split(descriptor.linefeed)),
+      document: Text.of(content.split('\n')),
       lastSavedCharCount: descriptor.type === 'file' ? descriptor.charCount : 0,
       lastSavedWordCount: descriptor.type === 'file' ? descriptor.wordCount : 0,
       saveTimeout: undefined
@@ -964,8 +964,6 @@ current contents from the editor somewhere else, and restart the application.`
     // next
     const diskContents = await this._app.fsal.loadAnySupportedFile(doc.descriptor.path)
 
-    // NOTE: This assumes that the internal "lastSavedContent" utilizes the same
-    // linefeed as the file on disk. (See issue #4959)
     if (diskContents === doc.lastSavedContent) {
       return
     }
@@ -1424,12 +1422,12 @@ current contents from the editor somewhere else, and restart the application.`
     // 3. The user adds more changes
     // 4. The save finishes and undos the modifications
 
-    // NOTE: Internally, CodeMirror Text objects use regular LF line separators.
-    // We take only the lines and then manually join them with the correct
-    // linefeed to ensure that it uses the one that the file needs. This should
-    // fix and in the future prevent bugs like #4959
+    // NOTE: Zettlr internally always uses regular LF linefeeds. The FSAL load
+    // and FSAL save methods will take care to actually use the proper linefeeds
+    // and BOMs. So here we will always use newlines. This should fix and in the
+    // future prevent bugs like #4959
     const docLines = [...doc.document.iterLines()]
-    const content = docLines.join(doc.descriptor.linefeed)
+    const content = docLines.join('\n')
     doc.lastSavedVersion = doc.currentVersion
     doc.lastSavedContent = content
 
