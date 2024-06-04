@@ -18,6 +18,8 @@ multiple queries.
   workspaces that match all queries entered will be displayed
 - Fixed bugs with properly saving files (and retaining linefeeds) on Windows
   systems; now Zettlr should be capable of handling any type of linefeed (#5109)
+- Fixed an issue where checkboxes in various list controls would not be properly
+  updated to reflect the actual, underlying value
 
 ## Under the Hood
 
