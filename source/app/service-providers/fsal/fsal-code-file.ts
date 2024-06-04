@@ -147,7 +147,7 @@ export async function load (fileObject: CodeFileDescriptor): Promise<string> {
     // Always split with a regular expression to ensure that mixed linefeeds
     // don't break reading in a file. Then, on save, the linefeeds will be
     // standardized to whatever the linefeed extractor detected.
-    .split(/[\r\n]{1,2}/g)
+    .split(/\r\n|\n\r|\n|\r/g)
     .join('\n')
 }
 
