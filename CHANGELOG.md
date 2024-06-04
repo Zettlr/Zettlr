@@ -14,6 +14,8 @@ multiple queries.
 
 ## GUI and Functionality
 
+- **Feature**: The attachment/assets/other file sidebar tab now also shows files
+  found in the default image folder if applicable
 - **Change**: When searching for files in the filter field, only files and
   workspaces that match all queries entered will be displayed
 - Fixed bugs with properly saving files (and retaining linefeeds) on Windows
