@@ -160,8 +160,12 @@ export async function load (fileObject: MDFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return content
-    .substring(fileObject.bom.length) // Account for an optional BOM, if present
-    .split(fileObject.linefeed)
+    // Account for an optional BOM, if present
+    .substring(fileObject.bom.length)
+    // Always split with a regular expression to ensure that mixed linefeeds
+    // don't break reading in a file. Then, on save, the linefeeds will be
+    // standardized to whatever the linefeed extractor detected.
+    .split(/[\r\n]{1,2}/g)
     .join('\n')
 }
 

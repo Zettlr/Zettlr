@@ -141,8 +141,12 @@ export async function load (fileObject: CodeFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return content
+    // Account for an optional BOM, if present
     .substring(fileObject.bom.length)
-    .split(fileObject.linefeed)
+    // Always split with a regular expression to ensure that mixed linefeeds
+    // don't break reading in a file. Then, on save, the linefeeds will be
+    // standardized to whatever the linefeed extractor detected.
+    .split(/[\r\n]{1,2}/g)
     .join('\n')
 }
 
