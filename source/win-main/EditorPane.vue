@@ -153,7 +153,7 @@ onBeforeUnmount(() => {
 function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom'): boolean|undefined {
   const DELIM = (process.platform === 'win32') ? ';' : ':'
   const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
-  if (documentTab !== undefined && documentTab.includes(DELIM)) {
+  if (documentTab?.includes(DELIM) === true) {
     documentTabDrag.value = false
     event.stopPropagation()
     event.preventDefault()

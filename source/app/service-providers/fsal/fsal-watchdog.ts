@@ -154,6 +154,7 @@ export default class FSALWatchdog {
    * @param  {string|readonly string[]}  paths  One or more paths to watch
    */
   public watchPath (paths: string | readonly string[]): void {
+    this._logger.verbose(`Starting to watch path(s) ${String(paths)}`)
     this.process.add(paths)
   }
 

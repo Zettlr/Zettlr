@@ -232,7 +232,7 @@ export const useWorkspacesStore = defineStore('workspaces', () => {
     }
   })
 
-  ipcRenderer.on('workspace-added', (event, rootPath) => {
+  ipcRenderer.on('workspace-added', (event, rootPath: string) => {
     updateRequests.push(async () => {
       await updateRoot(rootPath, roots)
     })

@@ -29,10 +29,14 @@
     <contributor>
       <name>Brenton M. Wiernik</name>
     </contributor>
+    <contributor>
+      <name>Zeping Lee</name>
+      <email>zepinglee@gmail.com</email>
+    </contributor>
     <category citation-format="author-date"/>
     <category field="generic-base"/>
     <summary>The author-date variant of the Chicago style</summary>
-    <updated>2018-01-24T12:00:00+00:00</updated>
+    <updated>2024-05-09T13:08:37+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <locale xml:lang="en">
@@ -385,8 +389,19 @@
       </if>
       <else-if type="article-journal">
         <choose>
-          <if variable="volume issue" match="any">
-            <text variable="page" prefix=": "/>
+          <if variable="volume">
+            <choose>
+              <if variable="issue">
+                <text variable="page" prefix=": "/>
+              </if>
+              <else>
+                <!-- CMoS 15.48: If the month or season is included, it is
+                  enclosed in parentheses, and a space follows the colon.
+                  Unfortunately we can't check the month in CSL v1.0.2.
+                -->
+                <text variable="page" prefix=":"/>
+              </else>
+            </choose>
           </if>
           <else>
             <text variable="page" prefix=", "/>
@@ -500,6 +515,11 @@
         <text variable="year-suffix" prefix="-"/>
       </else>
     </choose>
+  </macro>
+  <macro name="date-sort">
+    <date variable="issued">
+      <date-part name="year"/>
+    </date>
   </macro>
   <macro name="day-month">
     <date variable="issued">
@@ -658,7 +678,7 @@
   <bibliography hanging-indent="true" et-al-min="11" et-al-use-first="7" subsequent-author-substitute="&#8212;&#8212;&#8212;" entry-spacing="0">
     <sort>
       <key macro="contributors"/>
-      <key variable="issued"/>
+      <key macro="date-sort"/>
       <key variable="title"/>
     </sort>
     <layout suffix=".">

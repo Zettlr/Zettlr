@@ -1,5 +1,45 @@
 # Upcoming
 
+## Changes to file filtering logic
+
+Previously when searching for files and workspaces in the filter field in
+Zettlr, OR logic would be used, meaning that if a item matched any search query,
+that item would be displayed as a result of the search. This is not a very
+efficient way to search for files, as often multiple queries will want to be
+searched, and all files matching all queries will be displayed.
+
+In this latest update, Zettlr has changed to AND file filtering logic, meaning
+that only items that match all queries will be displayed when searching with
+multiple queries.
+
+## GUI and Functionality
+
+- **Change**: When searching for files in the filter field, only files and
+  workspaces that match all queries entered will be displayed
+- Fixed bugs with properly saving files (and retaining linefeeds) on Windows
+  systems; now Zettlr should be capable of handling any type of linefeed (#5109)
+
+## Under the Hood
+
+- Downgrade Linux builds to use Ubuntu 20.04 instead of 22.04 (#5137)
+- Fully abstract away newline handling from the internal logic. Now, newlines
+  are always `\n` across the entire app. The actual newlines from the files will
+  be stored in their respective file descriptor, and will be exclusively used on
+  file reads (to replace them with `\n`) and file writes (to replace `\n` with)
+
+# 3.1.1
+
+## GUI and Functionality
+
+- Fixed a segmentation fault crash on startup across various Linux setups
+  (#5135)
+
+## Under the Hood
+
+- Downgrade Electron to version `29.3.2` (cf. Electron issue #41839)
+
+# 3.1.0
+
 ## Changes to the link detection
 
 For a long time now, Zettlr would (sometimes aggressively so) detect plain links
@@ -12,8 +52,9 @@ highlighting. In this version, we have entirely removed our custom link
 detection and rely upon the more straight-forward way of detecting links.
 
 Regarding your exporting experience, this should not have any impact, since the
-auto-link-detection feature wasn't supported by Pandoc anyhow, but depending on
-how you have been writing, you may notice less detected links in your documents.
+auto-link-detection feature wasn't enabled by default by Pandoc anyhow, but
+depending on how you have been writing, you may notice less detected links in
+your documents.
 
 To add "plain" links (without using the full `[]()`-syntax) from now on, simply
 surround them with angled brackets: `<https://www.google.com>` or
@@ -52,8 +93,8 @@ reader extensions to your export profiles: `wikilinks_title_after_pipe` or
 Lastly, due to this improvement, we have changed the default setting for "link
 with filename" from "always" to "never", since it will be more ergonomic to use
 a custom link title directly instead of having the filename pop up after the
-link. This default setting applies to new installations; so you may consider to
-change this setting manually yourself as well.
+link. This default setting applies only to new installations automatically; so
+if you already installed Zettlr, you can manually switch it.
 
 ## Re-enabling old Link-Title-Syntax
 
@@ -64,8 +105,27 @@ we broke during a refactor of the Markdown parser. This update partially
 restores this link functionality, allowing you to `Cmd/Ctrl-Click` them to
 follow these links again.
 
-Note that we have not yet implemented the functionality of auto-renaming files
-or showing tooltips on these links.
+Note that we have not implemented other parts yet, and we recommend the more
+common `[[wikilinks]]` or `[regular markdown links](./file.md)`.
+
+## Preferences Window Overhaul
+
+This release marks the debut of our UX/UI artist Artem Barinov who spent the
+better half of 2023 redesigning the entire preferences window from scratch.
+While this change narrowly didn't make it into 3.0.0, we are more than excited
+to introduce this new and sleek overhaul in this version.
+
+The new window now follows a much more consistent design philosophy. While we
+have kept the broad tabbed outline, the settings have now been moved into
+smaller blocks that contain sets of related settings. Furthermore, instead of
+having to remember where a setting is located, you can now directly search for
+it using the new search bar.
+
+We also took the opportunity to change, rename, relabel, and remove settings so
+that a bit of older remnants are now gone. Overall, the experience of changing
+the settings should now be much smoother, and we hope you like the change. In
+the coming updates, you can improve many more improvements on the UX side of
+things!
 
 ## Project Overhaul: Full Control Over Your Files
 
@@ -113,8 +173,9 @@ files, Zettlr will show you a warning message as soon as you export it so that
 you can have a second look to not send off a file that's missing a crucial part
 of your work. Such missing files are shown atop of the available files and
 feature a "-"-button which allows you to remove them from the list. We opted for
-this approach, since it makes it transparent which files are missing so you can
-take the appropriate action (especially if it was an accidental deletion).
+this approach of you manually having to remove missing links, since it makes it
+transparent which files are missing so you can take the appropriate action
+(especially if it was an accidental deletion).
 
 ## LanguageTool Improvements
 
@@ -137,7 +198,7 @@ the settings.
 
 Second, LanguageTool now respects the `lang` property in YAML frontmatters. This
 will come in especially handy for people writing bilingual and where
-LanguageTool has troubles auto-detecting the proper language. By setting the
+LanguageTool has troubles auto-detecting the primary language. By setting the
 property `lang` to the language of the document (e.g., `en-CA`), LanguageTool
 will default to that one instead of choosing the auto-detection. As an added
 benefit, Pandoc also supports this property to localize some things here and
@@ -164,7 +225,9 @@ can always override the language on a per-document basis using the status bar.
   in the editor settings
 - **Feature**: We've completely redesigned the preferences dialog; now it is
   more aligned with the system preferences on macOS and Windows, allows
-  searching and follows a more stringent structure
+  searching and follows a more stringent structure (special thanks to our UX/UI
+  artist Artem for spending almost an entire year redesigning it from the ground
+  up!)
 - **Feature**: The assets manager now provides buttons to open the defaults and
   snippets directories directly from within the app
 - **Feature**: The table insertion popover now displays how many rows and
@@ -174,6 +237,11 @@ can always override the language on a per-document basis using the status bar.
 - **Feature**: Implemented the LanguageTool Preferred Variants setting; now you
   can select variants of certain languages (English, German, Portuguese, and
   Catalan) for cases in which the automatic detection may pick the wrong one
+- **Feature**: LanguageTool now respects the `lang` YAML frontmatter property
+  (if present and conforming to simple BCP-47 tags, e.g., `de` or `de-DE`),
+  instead of defaulting to "auto"; this allows you to specify the languages of
+  your documents instead of relying on LanguageTool to figure it out; may not
+  work with more exotic tag variants (such as `de-DE-x-simple-language`)
 - **Feature**: The right-click context menu for external markdown links now 
   contains the options to "Remove Link". When removing `<link>` style links the
   `link` text remains as plain text. When removing `[title](link)` style links, 
@@ -192,14 +260,9 @@ can always override the language on a per-document basis using the status bar.
   creation upon following internal links; now this will happen automatically as
   long as the "custom folder" option points to an existing folder; to disable
   this functionality simply remove the folder path
-- LanguageTool now respects the `lang` YAML frontmatter property (if present and
-  conforming to simple BCP-47 tags, e.g., `de` or `de-DE`), instead of
-  defaulting to "auto"; this allows you to specify the languages of your
-  documents instead of relying on LanguageTool to figure it out; may not work
-  with more exotic tag variants (such as `de-DE-x-simple-language`)
 - Fixed a bug where recent documents would not turn up in the menu
 - Fixed the sidebar shortcut: It is now `Cmd/Ctrl+Shift+0` (to align with the
-  file manager shortcut, `Cmd/Ctrl+Shift+1`)
+  file manager shortcut, which is `Cmd/Ctrl+Shift+1`)
 - Custom protocols should now be opened without problems by Zettlr (#3853)
 - Added Tamil (India) translation (#4848)
 - Removed the custom plain link parser out of two reasons: (1) It was a tad too
@@ -245,7 +308,7 @@ can always override the language on a per-document basis using the status bar.
   that (specifically, Swiss-Mac keyboard users could not type an `@`)
 - Fixed a bug that would not properly highlight PHP syntax in code blocks
 - The link renderer will now also hide internal link/Wikilink links and only
-  show the headers, if enabled
+  show the titles, if enabled
 - Internal link tooltips will now show regardless of where inside the link your
   mouse cursor is
 - Added a visible error message to two places in which saving documents may go
@@ -283,9 +346,11 @@ can always override the language on a per-document basis using the status bar.
 - Fixed a bug that would make opening and closing folders in the file manager
   very hard
 - The importer will ask for a target directory first now, and no longer use the
-  `openDirectory` configuration value as a metric
-- Fixed an issue with the AST parser that would be unable to successfully parse
-  Markdown tables with empty cells (#5025)
+  `openDirectory` configuration value as a metric (due to a limitation in the
+  dialog engine, this is a bit opaque and will be improved; for more info see
+  issue #5084)
+- Fixed an issue with the AST parser that has made it impossible to successfully
+  parse Markdown tables with empty cells (#5025)
 - Fixed an issue with inserting Markdown tables via the popover (#5028)
 - Add a somewhat more informative message to the directory selection in the
   file importing workflow
@@ -301,7 +366,7 @@ can always override the language on a per-document basis using the status bar.
 
 - Version updates:
   - Pandoc: `3.1.13`
-  - Electron: `29.2.0`
+  - Electron: `30.0.2`
 - Switched from the `vue-recommended` to the `vue3-recommended` ESLint ruleset
 - Removed the config option `sortingTime` since that can be inferred from the
   option `fileMetaTime`

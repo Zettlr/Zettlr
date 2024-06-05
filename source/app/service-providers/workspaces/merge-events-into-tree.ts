@@ -23,6 +23,11 @@ export function mergeEventsIntoTree (events: ChangeDescriptor[], tree: AnyDescri
 
   for (const event of events) {
     if (event.type === 'add') {
+      if (locateByPath(descriptorToReturn, event.descriptor.path) !== undefined) {
+        console.error(`Received an add event for a path that is already present in the tree -- not merging in (${event.descriptor.path}).`)
+        continue
+      }
+
       // Find the parent, and add the given descriptor to its children
       const parent = locateByPath(descriptorToReturn, event.descriptor.dir)
       if (parent === undefined || parent.type !== 'directory') {
