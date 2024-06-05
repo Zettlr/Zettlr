@@ -174,6 +174,10 @@ can always override the language on a per-document basis using the status bar.
 - **Feature**: Implemented the LanguageTool Preferred Variants setting; now you
   can select variants of certain languages (English, German, Portuguese, and
   Catalan) for cases in which the automatic detection may pick the wrong one
+- **Feature**: The right-click context menu for external markdown links now 
+  contains the options to "Remove Link". When removing `<link>` style links the
+  `link` text remains as plain text. When removing `[title](link)` style links, 
+  the `title` text remains as plain text.
 - **Change**: The attachment sidebar no longer considers the "open folder" for
   fetching its "other files" -- instead it will use the last focused file's
   folder
