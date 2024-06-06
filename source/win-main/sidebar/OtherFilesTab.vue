@@ -120,7 +120,13 @@ function getIcon (ext: string): string {
 <style lang="less">
 h2.other-files-panel-folder-name {
   font-size: 80%;
-  margin: 10px;
+  margin: 10px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+a.attachment {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

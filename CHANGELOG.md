@@ -22,6 +22,7 @@ multiple queries.
   systems; now Zettlr should be capable of handling any type of linefeed (#5109)
 - Fixed an issue where checkboxes in various list controls would not be properly
   updated to reflect the actual, underlying value
+- Design fixes in the sidebar
 
 ## Under the Hood
 
