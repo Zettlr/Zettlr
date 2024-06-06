@@ -27,6 +27,7 @@ multiple queries.
 
 ## Under the Hood
 
+- Upgrade Electron to `v30.1.0` (cf. issue #5135 and Electron issue #41839)
 - Downgrade Linux builds to use Ubuntu 20.04 instead of 22.04 (#5137)
 - Fully abstract away newline handling from the internal logic. Now, newlines
   are always `\n` across the entire app. The actual newlines from the files will
