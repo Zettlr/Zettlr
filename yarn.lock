@@ -5730,13 +5730,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.15.0":
-  version: 5.16.0
-  resolution: "enhanced-resolve@npm:5.16.0"
+"enhanced-resolve@npm:^5.17.0":
+  version: 5.17.0
+  resolution: "enhanced-resolve@npm:5.17.0"
   dependencies:
     graceful-fs: ^4.2.4
     tapable: ^2.2.0
-  checksum: ccfd01850ecf2aa51e8554d539973319ff7d8a539ef1e0ba3460a0ccad6223c4ef6e19165ee64161b459cd8a48df10f52af4434c60023c65fde6afa32d475f7e
+  checksum: 1066000454da6a7aeabdbe1f433d912d1e39e6892142a78a37b6577aab27e0436091fa1399d857ad87085b1c3b73a0f811c8874da3dbdc40fbd5ebe89a5568e6
   languageName: node
   linkType: hard
 
@@ -6023,12 +6023,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-n@npm:^17.4.0":
-  version: 17.4.0
-  resolution: "eslint-plugin-n@npm:17.4.0"
+"eslint-plugin-n@npm:^17.8.1":
+  version: 17.8.1
+  resolution: "eslint-plugin-n@npm:17.8.1"
   dependencies:
     "@eslint-community/eslint-utils": ^4.4.0
-    enhanced-resolve: ^5.15.0
+    enhanced-resolve: ^5.17.0
     eslint-plugin-es-x: ^7.5.0
     get-tsconfig: ^4.7.0
     globals: ^15.0.0
@@ -6037,7 +6037,7 @@ __metadata:
     semver: ^7.5.3
   peerDependencies:
     eslint: ">=8.23.0"
-  checksum: e36279911ea967994c1546e412d02ab48a5d8a4182c43844a975b7dd97c61afad5ee124abb1ac9da0e1e195fc95559c4c914215d4e41fba55ddf47bfb4fc017b
+  checksum: 71be8734456a132f363667cc8647e1f12c222d9f64ec8c0d587572296391d962bdaf3120f0bc34da9f3575ff0a4516334e2bce111d83f67e0b074c408f724e20
   languageName: node
   linkType: hard
 
@@ -14727,7 +14727,7 @@ __metadata:
     eslint-config-standard: ^17.1.0
     eslint-config-standard-with-typescript: ^43.0.1
     eslint-plugin-import: ^2.29.1
-    eslint-plugin-n: ^17.4.0
+    eslint-plugin-n: ^17.8.1
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-vue: ^9.25.0
     fix-path: ^4.0.0
