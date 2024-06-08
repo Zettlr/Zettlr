@@ -16,6 +16,10 @@ multiple queries.
 
 - **Feature**: The attachment/assets/other file sidebar tab now also shows files
   found in the default image folder if applicable
+- **Feature**: The right-click context menu for external markdown links now 
+  contains the options to "Remove Link". When removing `<link>` style links the
+  `link` text remains as plain text. When removing `[title](link)` style links, 
+  the `title` text remains as plain text.
 - **Change**: When searching for files in the filter field, only files and
   workspaces that match all queries entered will be displayed
 - Fixed bugs with properly saving files (and retaining linefeeds) on Windows
@@ -250,10 +254,6 @@ can always override the language on a per-document basis using the status bar.
   instead of defaulting to "auto"; this allows you to specify the languages of
   your documents instead of relying on LanguageTool to figure it out; may not
   work with more exotic tag variants (such as `de-DE-x-simple-language`)
-- **Feature**: The right-click context menu for external markdown links now 
-  contains the options to "Remove Link". When removing `<link>` style links the
-  `link` text remains as plain text. When removing `[title](link)` style links, 
-  the `title` text remains as plain text.
 - **Change**: The attachment sidebar no longer considers the "open folder" for
   fetching its "other files" -- instead it will use the last focused file's
   folder
