@@ -33,13 +33,11 @@ export function removeMarkdownLink (node: SyntaxNode, view: EditorView): void {
 
   if (node.type.name === 'URL') {
     linkText = view.state.sliceDoc(from, to)
-
     if ((linkText[0] === '<') && (linkText[linkText.length-1] === '>')) {
       // This is where the URL with <> formate is parsed
       // We remove the < > brackets from the link text\
-      const regex = /<([^>]+)>/g;
+      const regex = /<([^>]+)>/g
       const match = regex.exec(linkText)
-  
       if (match !== null) {
         linkText = match[1]
       } else {
