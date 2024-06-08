@@ -102,7 +102,6 @@ export const codeBlocks: AutocompletePlugin = {
     // above the position says. TODO: For this we have to check if the previous
     // line is already part of a codeblock
     const match = /^\s{0,3}[`~]{3,}\s*{?(.*)/.exec(line.text)
-    console.log(match)
     if (match !== null && ch === match[0].length) {
       // To make the regex more robust, there is a capturing group that captures
       // any characters already typed, and that will be passed on as "query"

@@ -20,6 +20,12 @@ import type { MDFileDescriptor } from '@dts/common/fsal'
 const MAX_FILE_PREVIEW_LENGTH = 300
 const MAX_FILE_PREVIEW_LINES = 10
 
+function previewTitleGenerator (userConfig: string, descriptor: MDFileDescriptor): string {
+  if (userConfig.includes('title')&& descriptor.yamlTitle !== undefined) return descriptor.yamlTitle
+  else if (userConfig.includes('heading') && descriptor.firstHeading !== null) return descriptor.firstHeading
+  return descriptor.name
+}
+
 export default class FilePathFindMetaData extends ZettlrCommand {
   constructor (app: any) {
     super(app, [ 'find-exact', 'file-find-and-return-meta-data' ])
@@ -64,7 +70,7 @@ export default class FilePathFindMetaData extends ZettlrCommand {
     }
 
     return [
-      descriptor.name,
+      previewTitleGenerator(this._app.config.get().fileNameDisplay, descriptor),
       preview,
       descriptor.wordCount,
       descriptor.modtime

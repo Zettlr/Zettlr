@@ -14,13 +14,31 @@ multiple queries.
 
 ## GUI and Functionality
 
+- **Feature**: The attachment/assets/other file sidebar tab now also shows files
+  found in the default image folder if applicable
+- **Feature**: The right-click context menu for external markdown links now 
+  contains the options to "Remove Link". When removing `<link>` style links the
+  `link` text remains as plain text. When removing `[title](link)` style links, 
+  the `title` text remains as plain text.
 - **Change**: When searching for files in the filter field, only files and
   workspaces that match all queries entered will be displayed
 - Fixed the French translation of unsaved-changes dialog actions. (#5177)
+- Fixed bugs with properly saving files (and retaining linefeeds) on Windows
+  systems; now Zettlr should be capable of handling any type of linefeed (#5109)
+- Fixed an issue where checkboxes in various list controls would not be properly
+  updated to reflect the actual, underlying value
+- Fix assets file icons in the sidebar
+- Design fixes in the sidebar
+- Fix: The file preview tooltip now respects the filename display settings
 
 ## Under the Hood
 
+- Upgrade Electron to `v30.1.0` (cf. issue #5135 and Electron issue #41839)
 - Downgrade Linux builds to use Ubuntu 20.04 instead of 22.04 (#5137)
+- Fully abstract away newline handling from the internal logic. Now, newlines
+  are always `\n` across the entire app. The actual newlines from the files will
+  be stored in their respective file descriptor, and will be exclusively used on
+  file reads (to replace them with `\n`) and file writes (to replace `\n` with)
 
 # 3.1.1
 

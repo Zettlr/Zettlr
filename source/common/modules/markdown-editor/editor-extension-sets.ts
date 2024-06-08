@@ -73,6 +73,7 @@ import { themeKarlMarxStadtLight, themeKarlMarxStadtDark } from './theme/karl-ma
 import { mainOverride } from './theme/main-override'
 import { highlightWhitespace } from './plugins/highlight-whitespace'
 import { tagClasses } from './plugins/tag-classes'
+import { autocompleteTriggerCharacter } from './autocomplete/snippets'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -197,6 +198,10 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
     EditorView.lineWrapping, // Enable line wrapping,
     autoCloseBracketsConfig,
+
+    // Allow configuration of the trigger character
+    autocompleteTriggerCharacter.of(':'),
+    // TODO: autocompleteTriggerCharacter.from(configField, val => val.FINDANAME),
 
     // Add the statusbar
     statusbar,
