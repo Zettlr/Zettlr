@@ -54,7 +54,7 @@
  * END HEADER
  */
 
-import { ref, computed } from 'vue'
+import { ref, computed, watch, toRef } from 'vue'
 
 const props = defineProps<{
   modelValue: boolean
@@ -66,6 +66,10 @@ const props = defineProps<{
 }>()
 
 const isChecked = ref<boolean>(props.modelValue)
+
+watch(toRef(props, 'modelValue'), (val) => {
+  isChecked.value = val
+})
 
 const emit = defineEmits<(e: 'update:modelValue', val: boolean) => void>()
 
