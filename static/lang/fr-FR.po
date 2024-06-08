@@ -852,7 +852,7 @@ msgstr "Le fichier de la bibliographie a été modifié. Rechargement…"
 #: source/app/service-providers/documents/index.ts:343
 #, fuzzy
 msgid "Save changes"
-msgstr "Sauvegarder les modifications"
+msgstr "Enregistrer les modifications"
 
 #: source/app/service-providers/documents/index.ts:344
 #, fuzzy

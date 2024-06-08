@@ -22,6 +22,7 @@ multiple queries.
   the `title` text remains as plain text.
 - **Change**: When searching for files in the filter field, only files and
   workspaces that match all queries entered will be displayed
+- Fixed the French translation of unsaved-changes dialog actions. (#5177)
 - Fixed bugs with properly saving files (and retaining linefeeds) on Windows
   systems; now Zettlr should be capable of handling any type of linefeed (#5109)
 - Fixed an issue where checkboxes in various list controls would not be properly
