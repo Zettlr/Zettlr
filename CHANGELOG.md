@@ -30,6 +30,8 @@ multiple queries.
 - Fix assets file icons in the sidebar
 - Design fixes in the sidebar
 - Fix: The file preview tooltip now respects the filename display settings
+- Fix: Focus input field when search in folder (global search) is
+  triggered
 
 ## Under the Hood
 

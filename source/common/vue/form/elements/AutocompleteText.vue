@@ -4,7 +4,7 @@
     <!-- AutocompleteText is being implemented as a search for easy emptying of the field -->
     <input
       v-bind:id="fieldId"
-      ref="input-field"
+      ref="inputField"
       v-model="thisValue"
       type="search"
       v-bind:class="{ inline: inline === true }"
