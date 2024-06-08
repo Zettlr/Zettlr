@@ -250,6 +250,10 @@ can always override the language on a per-document basis using the status bar.
   instead of defaulting to "auto"; this allows you to specify the languages of
   your documents instead of relying on LanguageTool to figure it out; may not
   work with more exotic tag variants (such as `de-DE-x-simple-language`)
+- **Feature**: The right-click context menu for external markdown links now 
+  contains the options to "Remove Link". When removing `<link>` style links the
+  `link` text remains as plain text. When removing `[title](link)` style links, 
+  the `title` text remains as plain text.
 - **Change**: The attachment sidebar no longer considers the "open folder" for
   fetching its "other files" -- instead it will use the last focused file's
   folder
