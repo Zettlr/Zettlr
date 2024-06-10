@@ -152,7 +152,7 @@
     "@types/d3": "^7.4.3",
     "@types/gettext-parser": "^4.0.4",
     "@types/katex": "^0.16.7",
-    "@types/lodash": "^4.17.0",
+    "@types/lodash": "^4.17.5",
     "@types/luxon": "^3.4.2",
     "@types/md5": "^2.3.5",
     "@types/mermaid": "^9.2.0",
