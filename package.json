@@ -145,7 +145,7 @@
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron-forge/plugin-webpack": "^7.4.0",
     "@electron/fuses": "^1.8.0",
-    "@electron/notarize": "^2.3.0",
+    "@electron/notarize": "^2.3.2",
     "@types/adm-zip": "^0.5.5",
     "@types/archiver": "^6.0.2",
     "@types/command-exists": "^1.2.3",
