@@ -6,6 +6,7 @@
 
 ## Under the Hood
 
+- Update Electron to `v31.0.0`
 - Switched to ESLint v9.x, thereby replacing the "old" `.eslintrc.json` config
   with what ESLint calls "flat" configs
 
