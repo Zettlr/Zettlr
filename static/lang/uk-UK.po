@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-04-28 17:58+0200\n"
+"POT-Creation-Date: 2024-06-11 09:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,1026 +17,992 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: source/app/service-providers/config/config-validation.ts:278
-#, javascript-format
-msgid "Option %s has to be of type %s."
-msgstr "Параметр %s повинен мати тип %s."
-
-#: source/app/service-providers/config/config-validation.ts:281
-#, javascript-format
-msgid "Option %s must be one of: %s."
-msgstr "Параметр %s повинен бути одним із: %s."
-
-#: source/app/service-providers/config/config-validation.ts:284
-#, javascript-format
-msgid "Option %s must be between %s and %s (characters long)."
-msgstr "Опція %s повинна бути між %s і %s (кількість символів)."
-
-#: source/app/service-providers/config/config-validation.ts:287
-#, javascript-format
-msgid "Option %s may not exceed %s (characters)."
-msgstr "Опція %s не повинна перевищувати %s (символи)."
-
-#: source/app/service-providers/config/config-validation.ts:290
-#, javascript-format
-msgid "Option %s must be at least %s (characters long)."
-msgstr "Опція %s повинна бути щонайменше %s (кількість символів)."
-
-#: source/app/service-providers/config/config-validation.ts:293
-#, javascript-format
-msgid "Option %s is required."
-msgstr "Опція %s обов'язкова."
-
-#: source/app/service-providers/config/index.ts:492
-msgid "Changing this option requires a restart to take effect."
+#: source/tmp/common/vue/form/elements/NumberControl.vue.ts:40
+#: source/tmp/common/vue/form/elements/ColorControl.vue.ts:35
+#: source/tmp/common/vue/form/elements/ShortcutChooser.vue.ts:61
+#: source/tmp/common/vue/form/elements/TextControl.vue.ts:47
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
+msgid "Reset"
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:495
-#: source/app/service-providers/menu/menu.win32.ts:676
-#: source/app/service-providers/menu/menu.darwin.ts:702
-msgid "Restart now"
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:106
+msgid "Add"
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:496
-msgid "Restart later"
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:107
+msgid "Actions"
 msgstr ""
 
-#: source/app/service-providers/config/index.ts:500
-#: source/app/service-providers/commands/file-rename.ts:108
-#: source/app/service-providers/commands/rename-tag.ts:43
-msgid "Confirm"
-msgstr ""
-
-#: source/app/service-providers/tray/index.ts:160
-msgid "Show Zettlr"
-msgstr ""
-
-#: source/app/service-providers/tray/index.ts:166
-#: source/app/service-providers/menu/menu.win32.ts:300
-#: source/app/service-providers/menu/menu.darwin.ts:104
-msgid "Quit"
-msgstr "Вийти"
-
-#: source/app/service-providers/tray/index.ts:173
-msgid "Zettlr"
-msgstr ""
-
-#: source/app/service-providers/updates/index.ts:298
-#, javascript-format
-msgid "Could not check for updates: Server Error (Status code: %s)"
-msgstr "Неможливо перевірити на оновлення: Помилка сервера (Код помилки: %s)"
-
-#: source/app/service-providers/updates/index.ts:300
-#, javascript-format
-msgid "Could not check for updates: Client Error (Status code: %s)"
-msgstr "Неможливо перевірити на оновлення: Помилка клієнта (Код помилки: %s)"
-
-#: source/app/service-providers/updates/index.ts:302
-#, javascript-format
-msgid ""
-"Could not check for updates: The server tried to redirect (Status code: %s)"
-msgstr ""
-"Неможливо перевірити на оновлення: Сервер намагається перенаправити (Код "
-"помилки: %s)"
-
-#. getaddrinfo has reported that the host has not been found.
-#. This normally only happens if the networking interface is
-#. offline.
-#: source/app/service-providers/updates/index.ts:307
-msgid "Could not check for updates: Could not establish connection"
-msgstr "Неможливо перевірити на оновлення: Не вдалося встановити з'єднання"
-
-#. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:310
-#, javascript-format
-msgid "Could not check for updates. %s: %s"
-msgstr "Не вдалося перевірити оновлення. %s: %s"
-
-#: source/app/service-providers/updates/index.ts:326
-msgid "Could not check for updates: Server hasn't sent any data"
-msgstr "Неможливо перевірити на оновлення: Сервер не надсилає даних"
-
-#: source/app/service-providers/updates/index.ts:585
-#, javascript-format
-msgid "An update to version %s is available!"
-msgstr "Доступне оновлення до версії %s!"
-
-#: source/app/service-providers/workspaces/index.ts:163
-#, fuzzy, javascript-format
-msgid "Loading workspace %s"
-msgstr "Робочі простори"
-
-#: source/app/service-providers/menu/menu.win32.ts:44
-#: source/app/service-providers/menu/menu.win32.ts:56
-#: source/app/service-providers/menu/menu.darwin.ts:183
-msgid "Recent documents"
-msgstr "Недавні документи"
-
-#: source/app/service-providers/menu/menu.win32.ts:48
-#: source/app/service-providers/menu/menu.win32.ts:60
-#: source/app/service-providers/menu/menu.darwin.ts:187
-msgid "Empty"
-msgstr "Пусто"
-
-#: source/app/service-providers/menu/menu.win32.ts:87
-#: source/app/service-providers/menu/menu.darwin.ts:113
-msgid "File"
-msgstr "Файл"
-
-#: source/app/service-providers/menu/menu.win32.ts:90
-#: source/app/service-providers/menu/menu.darwin.ts:116
-#: source/win-main/file-manager/util/dir-item-context.ts:37
-#: source/tmp/win-main/App.vue.ts:281
-msgid "New File…"
-msgstr "Новий файл..."
-
-#: source/app/service-providers/menu/menu.win32.ts:129
-#: source/app/service-providers/menu/menu.darwin.ts:155
-#: source/win-main/file-manager/util/dir-item-context.ts:43
-msgid "New directory…"
-msgstr "Новий каталог..."
-
-#: source/app/service-providers/menu/menu.win32.ts:139
-#: source/app/service-providers/menu/menu.darwin.ts:165
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
-msgid "Open…"
-msgstr "Відкрити..."
-
-#: source/app/service-providers/menu/menu.win32.ts:148
-#: source/app/service-providers/menu/menu.darwin.ts:174
-#: source/tmp/win-main/App.vue.ts:255
-msgid "Open Workspace …"
-msgstr "Відкрити робочий простір ..."
-
-#. primary: true // It's a primary button
-#: source/app/service-providers/menu/menu.win32.ts:161
-#: source/app/service-providers/menu/menu.darwin.ts:196
-#: source/app/service-providers/commands/export.ts:114
-#: source/tmp/win-assets/DefaultsTab.vue.ts:61
-#: source/tmp/win-assets/SnippetsTab.vue.ts:27
-#: source/tmp/win-assets/CustomCSS.vue.ts:24
-#: source/tmp/win-tag-manager/App.vue.ts:85
-#: source/tmp/win-paste-image/App.vue.ts:66
-msgid "Save"
-msgstr "Зберегти"
-
-#: source/app/service-providers/menu/menu.win32.ts:172
-#: source/app/service-providers/menu/menu.darwin.ts:207
-#: source/tmp/win-main/App.vue.ts:288
-msgid "Previous file"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:183
-#: source/app/service-providers/menu/menu.darwin.ts:218
-#: source/tmp/win-main/App.vue.ts:296
-msgid "Next file"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:197
-#: source/app/service-providers/menu/menu.darwin.ts:232
-msgid "Import files…"
-msgstr "Імпортування файлів..."
-
-#: source/app/service-providers/menu/menu.win32.ts:205
-#: source/app/service-providers/menu/menu.darwin.ts:240
-msgid "Export…"
-msgstr "Експорт..."
-
-#: source/app/service-providers/menu/menu.win32.ts:213
-#: source/app/service-providers/menu/menu.darwin.ts:248
-#: source/tmp/win-print/App.vue.ts:44 source/tmp/win-print/App.vue.ts:45
-msgid "Print…"
-msgstr "Друк..."
-
-#: source/app/service-providers/menu/menu.win32.ts:221
-#: source/app/service-providers/menu/menu.win32.ts:225
-#: source/app/service-providers/menu/menu.darwin.ts:51
-msgid "Preferences…"
-msgstr "Налаштування"
-
-#: source/app/service-providers/menu/menu.win32.ts:233
-#: source/app/service-providers/menu/menu.darwin.ts:59
-#: source/tmp/win-assets/App.vue.ts:15
-msgid "Assets Manager"
-msgstr "Менеджер файлів"
-
-#: source/app/service-providers/menu/menu.win32.ts:241
-#: source/app/service-providers/menu/menu.darwin.ts:67
-msgid "Manage Tags…"
-msgstr "Керування мітками..."
-
-#: source/app/service-providers/menu/menu.win32.ts:253
-#: source/app/service-providers/menu/menu.darwin.ts:259
-msgid "Import translation…"
-msgstr "Імпортувати переклад..."
-
-#: source/app/service-providers/menu/menu.win32.ts:261
-#: source/app/service-providers/menu/menu.darwin.ts:267
-msgid "Import dictionary…"
-msgstr "Імпортувати словник..."
-
-#: source/app/service-providers/menu/menu.win32.ts:280
-#: source/app/service-providers/menu/menu.darwin.ts:286
-#: source/win-main/file-manager/util/file-item-context.ts:43
-#: source/tmp/win-assets/DefaultsTab.vue.ts:58
-msgid "Rename file"
-msgstr "Перейменувати файл"
-
-#: source/app/service-providers/menu/menu.win32.ts:291
-#: source/app/service-providers/menu/menu.darwin.ts:297
-#: source/win-main/file-manager/util/file-item-context.ts:50
-msgid "Delete file"
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:108
+#, fuzzy
+msgid "Delete"
 msgstr "Видалити файл"
 
-#: source/app/service-providers/menu/menu.win32.ts:310
-#: source/app/service-providers/menu/menu.darwin.ts:308
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
-msgid "Edit"
-msgstr "Зміни"
-
-#: source/app/service-providers/menu/menu.win32.ts:315
-#: source/app/service-providers/menu/menu.darwin.ts:313
-msgid "Undo"
-msgstr "Скасувати"
-
-#: source/app/service-providers/menu/menu.win32.ts:321
-#: source/app/service-providers/menu/menu.darwin.ts:319
-msgid "Redo"
-msgstr "Повторити"
-
-#: source/app/service-providers/menu/menu.win32.ts:330
-#: source/app/service-providers/menu/menu.darwin.ts:328
-#: source/common/modules/window-register/register-default-context.ts:76
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
-msgid "Cut"
-msgstr "Вирізати"
-
-#: source/app/service-providers/menu/menu.win32.ts:336
-#: source/app/service-providers/menu/menu.darwin.ts:334
-#: source/common/modules/window-register/register-default-context.ts:83
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
-msgid "Copy"
-msgstr "Копіювати"
-
-#: source/app/service-providers/menu/menu.win32.ts:341
-#: source/app/service-providers/menu/menu.darwin.ts:339
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
-msgid "Copy as HTML"
-msgstr "Копіювати як HTML"
-
-#: source/app/service-providers/menu/menu.win32.ts:350
-#: source/app/service-providers/menu/menu.darwin.ts:348
-#: source/common/modules/window-register/register-default-context.ts:90
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
-msgid "Paste"
-msgstr "Вставити"
-
-#: source/app/service-providers/menu/menu.win32.ts:355
-#: source/app/service-providers/menu/menu.darwin.ts:353
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
-msgid "Paste without style"
-msgstr "Вставити без стилів"
-
-#: source/app/service-providers/menu/menu.win32.ts:364
-#: source/app/service-providers/menu/menu.darwin.ts:362
-#: source/common/modules/window-register/register-default-context.ts:100
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
-msgid "Select all"
-msgstr "Виділити все"
-
-#: source/app/service-providers/menu/menu.win32.ts:372
-#: source/app/service-providers/menu/menu.darwin.ts:370
-msgid "Find in file"
-msgstr "Пошук у файлі"
-
-#: source/app/service-providers/menu/menu.win32.ts:380
-#: source/app/service-providers/menu/menu.darwin.ts:378
-msgid "Find in directory"
-msgstr "Шукати у каталозі"
-
-#: source/app/service-providers/menu/menu.win32.ts:388
-#: source/app/service-providers/menu/menu.darwin.ts:386
-msgid "Filter files"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:399
-#: source/app/service-providers/menu/menu.darwin.ts:397
-msgid "Generate new ID"
-msgstr "Згенерувати новий ID"
-
-#: source/app/service-providers/menu/menu.win32.ts:407
-#: source/app/service-providers/menu/menu.darwin.ts:405
-#: source/win-main/tabs-context.ts:80
-#: source/win-main/file-manager/util/file-item-context.ts:78
-msgid "Copy ID"
-msgstr "Копіювати ID"
-
-#: source/app/service-providers/menu/menu.win32.ts:418
-#: source/app/service-providers/menu/menu.darwin.ts:435
-msgid "View"
-msgstr "Вигляд"
-
-#: source/app/service-providers/menu/menu.win32.ts:422
-#: source/app/service-providers/menu/menu.darwin.ts:439
-#: source/win-preferences/schema/appearance.ts:26
-msgid "Dark mode"
-msgstr "Темний режим"
-
-#: source/app/service-providers/menu/menu.win32.ts:432
-#: source/app/service-providers/menu/menu.darwin.ts:449
-msgid "Additional Information"
-msgstr "Додаткова інформація"
-
-#: source/app/service-providers/menu/menu.win32.ts:442
-#: source/app/service-providers/menu/menu.darwin.ts:459
-msgid "Distraction free mode"
-msgstr "Режим без відволікання"
-
-#: source/app/service-providers/menu/menu.win32.ts:450
-#: source/app/service-providers/menu/menu.darwin.ts:467
-msgid "Typewriter Mode"
-msgstr "Режим введення"
-
-#: source/app/service-providers/menu/menu.win32.ts:461
-#: source/app/service-providers/menu/menu.darwin.ts:478
-msgid "Toggle file manager"
-msgstr "Перемкнути файловий менеджер"
-
-#: source/app/service-providers/menu/menu.win32.ts:469
-#: source/app/service-providers/menu/menu.darwin.ts:486
-#: source/tmp/win-main/App.vue.ts:389
-msgid "Toggle Sidebar"
-msgstr "Показати бічну панель"
-
-#: source/app/service-providers/menu/menu.win32.ts:480
-#: source/app/service-providers/menu/menu.darwin.ts:500
-msgid "Reset zoom"
-msgstr "Відновити масштаб"
-
-#: source/app/service-providers/menu/menu.win32.ts:489
-#: source/app/service-providers/menu/menu.darwin.ts:509
-msgid "Zoom in"
-msgstr "Збільшити"
-
-#: source/app/service-providers/menu/menu.win32.ts:496
-#: source/app/service-providers/menu/menu.darwin.ts:516
-msgid "Zoom out"
-msgstr "Зменшити"
-
-#: source/app/service-providers/menu/menu.win32.ts:506
-#: source/app/service-providers/menu/menu.darwin.ts:526
-msgid "Toggle fullscreen"
-msgstr "На весь екран"
-
-#: source/app/service-providers/menu/menu.win32.ts:515
-#: source/app/service-providers/menu/menu.darwin.ts:534
-msgid "Develop"
-msgstr "Розробка"
-
-#: source/app/service-providers/menu/menu.win32.ts:519
-#: source/app/service-providers/menu/menu.darwin.ts:538
-msgid "Reload"
-msgstr "Перезавантажити"
-
-#: source/app/service-providers/menu/menu.win32.ts:527
-#: source/app/service-providers/menu/menu.darwin.ts:546
-msgid "Toggle developer tools"
-msgstr "Показати інструменти розробника"
-
-#: source/app/service-providers/menu/menu.win32.ts:535
-#: source/app/service-providers/menu/menu.darwin.ts:554
-msgid "Open Logs"
-msgstr "Відкрити логи"
-
-#: source/app/service-providers/menu/menu.win32.ts:546
-#: source/app/service-providers/menu/menu.darwin.ts:565
-msgid "Window"
-msgstr "Вікно"
-
-#: source/app/service-providers/menu/menu.win32.ts:551
-#: source/app/service-providers/menu/menu.darwin.ts:570
-msgid "Minimize"
-msgstr "Згорнути"
-
-#: source/app/service-providers/menu/menu.win32.ts:557
-#: source/app/service-providers/menu/menu.darwin.ts:578
-#: source/tmp/win-tag-manager/App.vue.ts:95
-msgid "Close"
-msgstr "Закрити"
-
-#: source/app/service-providers/menu/menu.win32.ts:566
-#: source/app/service-providers/menu/menu.darwin.ts:592
-#: source/win-main/tabs-context.ts:38
-msgid "Close Tab"
-msgstr "Закрити вкладку"
-
-#: source/app/service-providers/menu/menu.win32.ts:574
-#: source/app/service-providers/menu/menu.darwin.ts:600
-msgid "Previous Tab"
-msgstr "Попередня вкладка"
-
-#: source/app/service-providers/menu/menu.win32.ts:582
-#: source/app/service-providers/menu/menu.darwin.ts:608
-msgid "Next Tab"
-msgstr "Нова вкладка"
-
-#: source/app/service-providers/menu/menu.win32.ts:590
-#: source/app/service-providers/menu/menu.darwin.ts:616
+#: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
 #, fuzzy
-msgid "New window"
-msgstr "Вікно"
-
-#: source/app/service-providers/menu/menu.win32.ts:601
-#: source/app/service-providers/menu/menu.darwin.ts:627
-msgid "Help"
-msgstr "Довідка"
-
-#: source/app/service-providers/menu/menu.win32.ts:606
-#: source/app/service-providers/menu/menu.darwin.ts:46
-#: source/app/service-providers/menu/menu.darwin.ts:632
-#: source/tmp/win-about/App.vue.ts:35 source/tmp/win-about/App.vue.ts:76
-msgid "About Zettlr"
-msgstr "Про програму"
-
-#: source/app/service-providers/menu/menu.win32.ts:613
-#: source/app/service-providers/menu/menu.darwin.ts:639
-#: source/tmp/win-update/App.vue.ts:37
-msgid "Check for updates"
-msgstr "Перевірити наявність оновлень"
-
-#: source/app/service-providers/menu/menu.win32.ts:625
-#: source/app/service-providers/menu/menu.darwin.ts:651
-msgid "Support Zettlr"
-msgstr "Підтримати Zettlr"
-
-#: source/app/service-providers/menu/menu.win32.ts:635
-#: source/app/service-providers/menu/menu.darwin.ts:661
-#, fuzzy
-msgid "Visit website"
-msgstr "Відкрити вебсайт"
-
-#: source/app/service-providers/menu/menu.win32.ts:645
-#: source/app/service-providers/menu/menu.darwin.ts:671
-msgid "Open user manual"
-msgstr "Відкрити документацію"
-
-#: source/app/service-providers/menu/menu.win32.ts:659
-#: source/app/service-providers/menu/menu.darwin.ts:685
-msgid "Open Tutorial"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:667
-#: source/app/service-providers/menu/menu.darwin.ts:693
-msgid "Clear FSAL cache …"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:671
-#: source/app/service-providers/menu/menu.darwin.ts:697
-msgid "Clear FSAL Cache"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:672
-#: source/app/service-providers/menu/menu.darwin.ts:698
-msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:673
-#: source/app/service-providers/menu/menu.darwin.ts:699
-msgid ""
-"After the restart, Zettlr will recreate the entire cache, which may take a "
-"few moments, depending on the amount of files you have loaded and the speed "
-"of your disk. The window(s) will show afterward."
-msgstr ""
-
-#. 1: Omit all changes
-#: source/app/service-providers/menu/menu.win32.ts:677
-#: source/app/service-providers/menu/menu.darwin.ts:703
-#: source/app/service-providers/commands/file-delete.ts:37
-#: source/app/service-providers/commands/rename-tag.ts:47
-#: source/app/service-providers/commands/dir-delete.ts:36
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
-#: source/tmp/win-paste-image/App.vue.ts:67
-msgid "Cancel"
-msgstr "Скасувати"
-
-#: source/app/service-providers/menu/menu.darwin.ts:77
-msgid "Services"
-msgstr "Сервіси"
-
-#: source/app/service-providers/menu/menu.darwin.ts:86
-msgid "Hide"
-msgstr "Сховати"
-
-#: source/app/service-providers/menu/menu.darwin.ts:91
-msgid "Hide others"
-msgstr "Сховати інші"
-
-#: source/app/service-providers/menu/menu.darwin.ts:96
-msgid "Show"
-msgstr "Показати"
-
-#: source/app/service-providers/menu/menu.darwin.ts:416
-msgid "Speech"
-msgstr "Промова"
-
-#: source/app/service-providers/menu/menu.darwin.ts:420
-msgid "Start speaking"
-msgstr "Почати говорити"
-
-#: source/app/service-providers/menu/menu.darwin.ts:425
-msgid "Stop speaking"
-msgstr "Завершити говорити"
-
-#: source/app/service-providers/menu/menu.darwin.ts:584
-msgid "Bring All to Front"
-msgstr "Перенести все на фронтову частину"
-
-#: source/app/service-providers/commands/file-delete.ts:36
-#: source/app/service-providers/commands/dir-delete.ts:35
-#: source/app/service-providers/commands/dir-project-export.ts:93
-#: source/app/service-providers/windows/dialog/prompt.ts:32
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
-#: source/tmp/win-error/App.vue.ts:43
-msgid "Ok"
-msgstr "Гаразд"
-
-#: source/app/service-providers/commands/file-delete.ts:41
-#: source/app/service-providers/commands/dir-delete.ts:40
-msgid "Really delete?"
-msgstr "Видалення"
-
-#: source/app/service-providers/commands/file-delete.ts:42
-#: source/app/service-providers/commands/dir-delete.ts:41
-#, javascript-format
-msgid "Do you really want to remove %s?"
-msgstr "Дійсно видалити %s?"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:38
-msgid "The requested file was not found."
-msgstr "Запитуваний файл не знайдено."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:83
-msgid "The provided name did not contain any allowed letters."
-msgstr "Дана назва не містить дозволених символів."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:104
-msgid "The requested directory was not found."
-msgstr "Запитуваний каталог не знайдено."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:115
-msgid "Could not save image"
-msgstr "Неможливо зберегти зображення"
-
-#: source/app/service-providers/commands/file-new.ts:156
-#: source/app/service-providers/commands/file-duplicate.ts:42
-#: source/app/service-providers/commands/file-duplicate.ts:59
-msgid "Could not create file"
-msgstr "Неможливо створити файл"
-
-#: source/app/service-providers/commands/importer/import-textbundle.ts:63
-#: source/app/service-providers/commands/importer/import-textbundle.ts:69
-#, javascript-format
-msgid "Malformed Textbundle: %s"
-msgstr "Неправильний Textbundle: %s"
-
-#: source/app/service-providers/commands/importer/index.ts:92
-#: source/app/service-providers/commands/importer/index.ts:93
-msgid "Select import profile"
-msgstr ""
-
-#: source/app/service-providers/commands/importer/index.ts:94
-#, javascript-format
-msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr ""
-
-#: source/app/service-providers/commands/file-rename.ts:109
-#, javascript-format
-msgid "Update %s internal links to file %s?"
-msgstr ""
-
-#: source/app/service-providers/commands/file-rename.ts:111
-#: source/app/service-providers/commands/rename-tag.ts:46
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Yes"
-msgstr ""
-
-#. 0: Save all changes
-#: source/app/service-providers/commands/file-rename.ts:112
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
-msgid "No"
-msgstr ""
-
-#: source/app/service-providers/commands/root-open.ts:62
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:32
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:106
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:108
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:75
-msgid "Files"
-msgstr "Файли"
-
-#. TODO: Move this to a command
-#. The user wants to open another file or directory.
-#: source/app/service-providers/commands/root-open.ts:75
-#: source/app/service-providers/windows/index.ts:221
-msgid "Open project folder"
+msgid "Select folder…"
 msgstr "Відкрити каталог проєкту"
 
-#: source/app/service-providers/commands/root-open.ts:85
-msgid "Cannot open directory"
-msgstr "Неможливо відкрити каталог"
-
-#: source/app/service-providers/commands/root-open.ts:86
-#, javascript-format
-msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
-msgstr "Каталог &quot;%s&quot; неможливо відкрити через Zettlr."
-
-#: source/app/service-providers/commands/request-move.ts:53
-msgid "Cannot move directory"
-msgstr "Неможливо перемістити каталог"
-
-#: source/app/service-providers/commands/request-move.ts:54
-msgid "You cannot move a directory into one of its subdirectories."
-msgstr "Ви не можете перемістити каталог в один з підкаталогів."
-
-#: source/app/service-providers/commands/request-move.ts:63
-msgid "Cannot move directory or file"
-msgstr "Неможливо перемістити каталог або файл"
-
-#: source/app/service-providers/commands/request-move.ts:64
-#, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "Файл/каталог %s вже існує."
-
-#: source/app/service-providers/commands/import-lang-file.ts:60
-#, javascript-format
-msgid "Language file imported: %s"
-msgstr "Імпортовано мовний файл: %s"
-
-#: source/app/service-providers/commands/import-lang-file.ts:62
-#: source/app/service-providers/commands/import-lang-file.ts:65
-#, javascript-format
-msgid "Could not import language file %s!"
-msgstr "Не вдалося імпортувати мовний файл %s!"
-
-#: source/app/service-providers/commands/export.ts:55
-#: source/app/service-providers/commands/export.ts:157
-msgid "Export failed"
-msgstr "Помилка експорту"
-
-#: source/app/service-providers/commands/export.ts:56
-#, fuzzy, javascript-format
-msgid "An error occurred during export: %s"
-msgstr "Виникла помилка під час експортування: %s"
-
-#: source/app/service-providers/commands/export.ts:114
-msgid "Choose export destination"
-msgstr ""
-
-#: source/app/service-providers/commands/export.ts:145
-#, javascript-format
-msgid "Exporting to %s"
-msgstr "Експортування в %s"
-
-#: source/app/service-providers/commands/export.ts:158
-#, javascript-format
-msgid "An error occurred on export: %s"
-msgstr "Виникла помилка під час експортування: %s"
-
-#. Else standard val for new dirs.
-#: source/app/service-providers/commands/dir-new.ts:31
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:232
-msgid "Untitled"
-msgstr "Без назви"
-
-#: source/app/service-providers/commands/dir-new.ts:37
-#: source/app/service-providers/commands/dir-new.ts:38
-#: source/app/service-providers/commands/dir-new.ts:50
-msgid "Could not create directory"
-msgstr "Неможливо створити каталог"
-
-#: source/app/service-providers/commands/rename-tag.ts:44
-#, javascript-format
-msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
-
-#. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:113
-#, javascript-format
-msgid "The reference with key %s does not appear to have attachments."
-msgstr "Посилання з ключем %s не має вкладень."
-
-#: source/app/service-providers/commands/open-attachment.ts:118
-msgid "Could not open attachment. Is Zotero running?"
-msgstr "Не вдається відкрити вкладення. Чи запущено Zotero?"
-
-#: source/app/service-providers/commands/language-tool.ts:194
-msgid "Document too long"
-msgstr ""
-
-#: source/app/service-providers/commands/language-tool.ts:199
-msgid "offline"
-msgstr ""
-
-#. We need to generate our own filename. First, attempt to just use 'copy of'
-#: source/app/service-providers/commands/file-duplicate.ts:71
-#, javascript-format
-msgid "Copy of %s"
-msgstr ""
-
-#: source/app/service-providers/commands/import.ts:34
-msgid "Import directory"
-msgstr ""
-
-#: source/app/service-providers/commands/import.ts:34
-msgid "Select folder"
-msgstr ""
-
-#: source/app/service-providers/commands/import.ts:34
-msgid "Select import destination"
-msgstr ""
-
-#: source/app/service-providers/commands/import.ts:36
-msgid "You have to select a directory to import to."
-msgstr "Потрібно вибрати каталог для імпортування."
+#: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
+#, fuzzy
+msgid "Select file…"
+msgstr "Видалити файл"
 
 #. Prepare the list of file filters
 #. The "All Files" filter should be at the top
+#: source/tmp/common/vue/form/elements/FileControl.vue.ts:57
 #: source/app/service-providers/commands/import.ts:44
 #: source/app/service-providers/windows/dialog/ask-file.ts:47
-#: source/tmp/common/vue/form/elements/FileControl.vue.ts:57
 msgid "All Files"
 msgstr "Усі файли"
 
-#. Now import.
-#: source/app/service-providers/commands/import.ts:61
-msgid "Importing. Please wait …"
-msgstr "Імпортування. Зачекайте ..."
+#: source/tmp/win-about/App.vue.ts:35 source/tmp/win-about/App.vue.ts:76
+#: source/app/service-providers/menu/menu.darwin.ts:46
+#: source/app/service-providers/menu/menu.darwin.ts:632
+#: source/app/service-providers/menu/menu.win32.ts:606
+msgid "About Zettlr"
+msgstr "Про програму"
 
-#. This callback gets called whenever there is an error while running pandoc.
-#: source/app/service-providers/commands/import.ts:69
-#, javascript-format
-msgid "Couldn't import %s."
-msgstr "Неможливо імпортувати %s."
+#: source/tmp/win-about/App.vue.ts:41
+msgid "Other projects"
+msgstr ""
 
-#: source/app/service-providers/commands/import.ts:73
-#, javascript-format
-msgid "%s imported successfully."
-msgstr "%s імпортовано успішно."
+#: source/tmp/win-about/App.vue.ts:47
+msgid "Sponsors"
+msgstr ""
 
-#. Some files failed to import.
-#: source/app/service-providers/commands/import.ts:78
-#, javascript-format
+#: source/tmp/win-about/App.vue.ts:53
+msgid "License"
+msgstr ""
+
+#: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
-"The following %s files could not be imported, because their filetype is "
-"unknown: %s"
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
 msgstr ""
-"Наступні %s файли неможливо імпортувати, тому що їхнє розширення невідоме: %s"
+"Zettlr це проект від Hendrik Erz, який використовує ліцензію GNU GPL v3. "
+"Дане ПЗ відкрите, безкоштовне і засноване на фреймворку Electron. Zettlr "
+"дякує розробникам Electron, фреймворка Node.js та редактора CodeMirror. Без "
+"них Zettlr був би неможливим. Нижче наведено проекти, які використовує "
+"Zettlr."
 
-#: source/app/service-providers/commands/import.ts:84
-#, fuzzy
-msgid "Import failed"
-msgstr "Помилка експорту"
-
-#: source/app/service-providers/commands/dir-project-export.ts:85
-#, fuzzy
-msgid "Cannot export project"
-msgstr "Експортувати проект"
-
-#: source/app/service-providers/commands/dir-project-export.ts:86
+#: source/tmp/win-about/General-Tab.vue.ts:22
 msgid ""
-"There are no files selected for export. Please select files to be included "
-"in the project settings."
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
 msgstr ""
+"Zettlr використовує citeproc для завантаження цитат прямо в редактор. Також "
+"Zettlr використовує CitationStyleLanguage (CSL) та файли стилів. Файли "
+"використовуються без зміни метаданих автора. Більше інформації:"
 
-#: source/app/service-providers/commands/dir-project-export.ts:91
-msgid "Project File Mismatch"
-msgstr ""
-
-#: source/app/service-providers/commands/dir-project-export.ts:92
+#: source/tmp/win-about/General-Tab.vue.ts:23
 msgid ""
-"One or more files specified in the project settings have not been found. "
-"They may have moved or been deleted. Please verify that all files that you "
-"would like to export are included."
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
+msgstr ""
+"Усі права на логотипи і назви брендів належать їхнім власникам. Крім "
+"використаного коду, Zettlr ніяк не пов'язаний з цими проектами. Торгова "
+"марка Node.js належить Joyent, Inc."
+
+#: source/tmp/win-about/General-Tab.vue.ts:24
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:168
-#, javascript-format
-msgid "Project \"%s\" successfully exported. Click to show."
-msgstr ""
+#: source/tmp/win-about/Projects-Tab.vue.ts:19
+msgid "Zettlr also makes use of these projects:"
+msgstr "Zettlr також використовує проєкти:"
 
-#: source/app/service-providers/commands/dir-project-export.ts:169
+#: source/tmp/win-print/App.vue.ts:44 source/tmp/win-print/App.vue.ts:45
+#: source/app/service-providers/menu/menu.darwin.ts:248
+#: source/app/service-providers/menu/menu.win32.ts:213
+msgid "Print…"
+msgstr "Друк..."
+
+#: source/tmp/win-main/PopoverExport.vue.ts:61
 #, fuzzy
-msgid "Project Export"
+msgid "Exporting…"
 msgstr "Експорт..."
 
-#: source/app/service-providers/citeproc/index.ts:249
-#: source/app/service-providers/citeproc/index.ts:457
-msgid "The citation database could not be loaded"
-msgstr "Неможливо завантажити базу цитат"
-
-#: source/app/service-providers/citeproc/index.ts:444
-msgid "Changes to the library file detected. Reloading …"
-msgstr "Зміни у файлі бібліотеки. Перезавантаження ..."
-
-#: source/app/service-providers/documents/index.ts:343
+#: source/tmp/win-main/PopoverExport.vue.ts:61
 #, fuzzy
-msgid "Save changes"
-msgstr "Незбережені зміни"
+msgid "Export"
+msgstr "Експорт..."
 
-#: source/app/service-providers/documents/index.ts:344
-#, fuzzy
-msgid "Discard changes"
-msgstr "Незбережені зміни"
-
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/app/service-providers/documents/index.ts:347
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-#: source/tmp/win-assets/DefaultsTab.vue.ts:110
-#: source/tmp/win-assets/SnippetsTab.vue.ts:46
-#: source/tmp/win-assets/CustomCSS.vue.ts:34
-#: source/tmp/win-tag-manager/App.vue.ts:91
-msgid "Unsaved changes"
-msgstr "Незбережені зміни"
-
-#: source/app/service-providers/documents/index.ts:348
-#, fuzzy
-msgid "There are unsaved changes. Do you want to save or discard them?"
+#: source/tmp/win-main/PopoverExport.vue.ts:74
+msgid "command"
 msgstr ""
-"У поточному файлі є незбережені зміни. Хочете опустити зміни чи зберегти?"
 
-#: source/app/service-providers/documents/index.ts:989
-#, fuzzy
-msgid "File changed on disk"
-msgstr "Режим файлового менеджера"
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:24
+#: source/win-preferences/schema/appearance.ts:52
+msgid "Start"
+msgstr "Запуск"
 
-#: source/app/service-providers/documents/index.ts:990
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:25
+msgid "Stop"
+msgstr "Зупинити"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:26
+msgid "Work"
+msgstr "Робота"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:27
+msgid "Short break"
+msgstr "Коротка перерва"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:28
+msgid "Break"
+msgstr "Перерва"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:29
+msgid "Sound Effect"
+msgstr ""
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:30
+msgid "Volume"
+msgstr ""
+
+#: source/tmp/win-main/PopoverTags.vue.ts:39
+msgid "Name"
+msgstr ""
+
+#: source/tmp/win-main/PopoverTags.vue.ts:40
+#: source/tmp/win-tag-manager/App.vue.ts:31
+msgid "Count"
+msgstr ""
+
+#: source/tmp/win-main/PopoverTags.vue.ts:47
+#: source/tmp/win-tag-manager/App.vue.ts:35
+msgid "Filter tags…"
+msgstr "Фільтр міток..."
+
+#: source/tmp/win-main/PopoverTags.vue.ts:48
+msgid "Tag Cloud"
+msgstr "Хмара міток"
+
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:21
+msgid "words"
+msgstr "слів"
+
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:22
+msgid "characters"
+msgstr "символів"
+
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:23
+msgid "No open document"
+msgstr ""
+
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:51
+#: source/tmp/win-main/App.vue.ts:226
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:122
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:185
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
 #, javascript-format
-msgid "%s changed on disk"
-msgstr ""
+msgid "%s characters"
+msgstr "%s символів"
 
-#: source/app/service-providers/documents/index.ts:992
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:53
+#: source/tmp/win-main/App.vue.ts:227
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:56
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:140
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:124
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:187
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
 #, javascript-format
-msgid ""
-"%s has changed on disk, but the editor contains unsaved changes. Do you want "
-"to keep the current editor contents or load the file from disk?"
-msgstr ""
+msgid "%s words"
+msgstr "%s слів"
 
-#: source/app/service-providers/documents/index.ts:993
-msgid ""
-"Do you want to keep the current editor contents or load the file from disk?"
-msgstr ""
-
-#: source/app/service-providers/documents/index.ts:996
-msgid "Keep editor contents"
-msgstr ""
-
-#: source/app/service-providers/documents/index.ts:997
-msgid "Load changes from disk"
-msgstr ""
-
-#: source/app/service-providers/documents/index.ts:1000
-msgid ""
-"Always load changes from disk if there are no unsaved changes in the editor"
-msgstr ""
-
-#: source/app/service-providers/documents/index.ts:1464
-#, fuzzy
-msgid "Could not save file"
-msgstr "Неможливо зберегти зображення"
-
-#: source/app/service-providers/documents/index.ts:1464
-#, fuzzy, javascript-format
-msgid "Could not save file %s: %s"
-msgstr "Неможливо зберегти зображення"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
-msgid "There are unsaved changes. Do you want to save them first?"
-msgstr ""
-"У поточному файлі є незбережені зміни. Хочете опустити зміни чи зберегти?"
-
-#: source/app/service-providers/windows/dialog/ask-file.ts:54
-msgid "Open file"
-msgstr "Відкрити файл"
-
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr ""
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
-msgid "Overwrite existing file"
-msgstr "Перезапис існуючого файлу"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#: source/tmp/win-main/App.vue.ts:212
 #, javascript-format
-msgid "The file %s already exists in this directory. Overwrite?"
-msgstr "Файл %s вже існує в цьому каталозі. Перезаписати?"
+msgid "%s selected"
+msgstr ""
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Замінити файл"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#. Multiple selections --> indicate
+#: source/tmp/win-main/App.vue.ts:221
 #, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"Файл %s змінено віддалено. Замінити завантажену версію на нову з диска?"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
-#: source/win-preferences/schema/general.ts:78
-msgid "Always load remote changes to the current file"
-msgstr "Завжди загружати віддалені зміни поточного файлу"
-
-#: source/win-main/tabs-context.ts:44
-msgid "Close other tabs"
+msgid "%s selections"
 msgstr ""
 
-#: source/win-main/tabs-context.ts:50
-msgid "Close all tabs"
-msgstr "Закрити всі вкладки"
-
-#: source/win-main/tabs-context.ts:59
-msgid "Unpin tab"
+#: source/tmp/win-main/App.vue.ts:242
+msgid "File manager"
 msgstr ""
 
-#: source/win-main/tabs-context.ts:59
-msgid "Pin tab"
+#: source/tmp/win-main/App.vue.ts:247
+msgid "Global search"
 msgstr ""
 
-#: source/win-main/tabs-context.ts:68
-#: source/win-main/file-manager/util/file-item-context.ts:72
-msgid "Copy filename"
-msgstr "Копіювати ім'я файлу"
+#: source/tmp/win-main/App.vue.ts:255
+#: source/app/service-providers/menu/menu.darwin.ts:174
+#: source/app/service-providers/menu/menu.win32.ts:148
+msgid "Open Workspace …"
+msgstr "Відкрити робочий простір ..."
 
-#: source/win-main/tabs-context.ts:74
-msgid "Copy full path"
+#: source/tmp/win-main/App.vue.ts:261
+msgid "View stats"
 msgstr ""
 
-#: source/win-main/file-manager/util/file-item-context.ts:28
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:147
+#: source/tmp/win-main/App.vue.ts:267
+msgid "Tags"
+msgstr ""
+
+#: source/tmp/win-main/App.vue.ts:274
+msgid "Open the settings dialog"
+msgstr ""
+
+#: source/tmp/win-main/App.vue.ts:281
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
+msgid "New File…"
+msgstr "Новий файл..."
+
+#: source/tmp/win-main/App.vue.ts:288
+#: source/app/service-providers/menu/menu.darwin.ts:207
+#: source/app/service-providers/menu/menu.win32.ts:172
+msgid "Previous file"
+msgstr ""
+
+#: source/tmp/win-main/App.vue.ts:296
+#: source/app/service-providers/menu/menu.darwin.ts:218
+#: source/app/service-providers/menu/menu.win32.ts:183
+msgid "Next file"
+msgstr ""
+
+#: source/tmp/win-main/App.vue.ts:309
+msgid "Export the current file"
+msgstr ""
+
+#: source/tmp/win-main/App.vue.ts:315
+msgid "Toggle readability mode"
+msgstr ""
+
+#: source/tmp/win-main/App.vue.ts:327
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+msgid "Comment"
+msgstr "Коментар"
+
+#: source/tmp/win-main/App.vue.ts:334
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+msgid "Link"
+msgstr "Ланка"
+
+#: source/tmp/win-main/App.vue.ts:341
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
+msgid "Image"
+msgstr "Зображення"
+
+#: source/tmp/win-main/App.vue.ts:348
+msgid "Tasklist"
+msgstr ""
+
+#: source/tmp/win-main/App.vue.ts:355
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
+msgid "Insert Table"
+msgstr "Вставити таблицю"
+
+#: source/tmp/win-main/App.vue.ts:362
+msgid "Footnote"
+msgstr ""
+
+#: source/tmp/win-main/App.vue.ts:380
+msgid "Pomodoro-Timer"
+msgstr ""
+
+#: source/tmp/win-main/App.vue.ts:389
+#: source/app/service-providers/menu/menu.darwin.ts:486
+#: source/app/service-providers/menu/menu.win32.ts:469
+msgid "Toggle Sidebar"
+msgstr "Показати бічну панель"
+
+#: source/tmp/win-main/App.vue.ts:396
+msgid "Update available"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:34
+msgid "Full-Text Search"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:35
+msgid "Enter your search terms below"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:36
+msgid "Find …"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:37
+#: source/tmp/win-main/file-manager/FileManager.vue.ts:46
+msgid "Filter …"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:38
+msgid "Filter search results"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:39
+msgid "Restrict search to directory"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:40
+msgid "Restrict to directory …"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:41
+msgid "Search"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:42
+msgid "Clear search"
+msgstr ""
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:43
+msgid "Toggle results"
+msgstr ""
+
 #: source/tmp/win-main/GlobalSearch.vue.ts:53
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:147
+#: source/win-main/file-manager/util/file-item-context.ts:28
 msgid "Open in a new tab"
 msgstr ""
 
-#: source/win-main/file-manager/util/file-item-context.ts:34
-#: source/win-main/file-manager/util/dir-item-context.ts:28
-msgid "Properties"
-msgstr "Властивості"
+#: source/tmp/win-main/GlobalSearch.vue.ts:112
+#, javascript-format
+msgid "%s matches across %s files"
+msgstr ""
 
-#: source/win-main/file-manager/util/file-item-context.ts:57
-msgid "Duplicate file"
-msgstr "Дублювати файл"
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:34
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:174
+msgid "Words"
+msgstr "слів"
 
-#: source/win-main/file-manager/util/file-item-context.ts:66
-#: source/win-main/file-manager/util/dir-item-context.ts:67
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:31
+msgid "Created"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:30
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
+msgid "Modified"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:38
+msgid "Set writing target…"
+msgstr "Задати ціль..."
+
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:39
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:172
+msgid "Characters"
+msgstr "символів"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:29
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:99
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:101
+msgid "Directories"
+msgstr "Директорії"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:32
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:75
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:106
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:108
+#: source/app/service-providers/commands/root-open.ts:62
+msgid "Files"
+msgstr "Файли"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:33
+msgid "Project Settings…"
+msgstr "Налаштування проекту..."
+
+#. Else standard val for new dirs.
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:232
+#: source/app/service-providers/commands/dir-new.ts:31
+msgid "Untitled"
+msgstr "Без назви"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:76
+msgid "Workspaces"
+msgstr "Робочі простори"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:77
+msgid "No open files or folders"
+msgstr "Не відкрито жодного файлу чи каталогу"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:78
+#: source/tmp/win-main/file-manager/FileList.vue.ts:46
+msgid "No results"
+msgstr "Немає результатів"
+
+#: source/tmp/win-main/file-manager/FileList.vue.ts:47
+msgid "No directory selected"
+msgstr "Немає вибраних каталогів"
+
+#: source/tmp/win-main/file-manager/FileList.vue.ts:48
+msgid "Empty directory"
+msgstr "Пустий каталог"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:28
+msgid "words last month"
+msgstr "слів за минулий місяць"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:29
+msgid "daily average"
+msgstr "в середньому за день"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:30
+msgid "words today"
+msgstr "слів за сьогодні"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:31
+msgid "🔥 You're on fire!"
+msgstr "🔥 Робота горить!"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:32
+msgid "💪 You're close to hitting your daily average!"
+msgstr "💪 Ви наближаєтеся до середньодобової позначки!"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:33
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr "✍🏼 Продовжуйте писати, щоб перевершити свій середньодобовий показник."
+
+#: source/tmp/win-main/PopoverStats.vue.ts:34
+msgid "More statistics …"
+msgstr "Більше статистики..."
+
+#: source/tmp/win-main/PopoverTable.vue.ts:30
+#, javascript-format
+msgid "Table size: %s &times; %s"
+msgstr ""
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:13
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
+msgid "Other files"
+msgstr ""
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:14
+msgid "Open directory"
+msgstr "Відкрити каталог"
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:15
+msgid "No other files"
+msgstr ""
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:34
+msgid "Current folder"
+msgstr ""
+
+#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:32
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
+msgid "References"
+msgstr "Примітки"
+
+#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:42
+msgid "There are no citations in this document."
+msgstr "Цей документ не містить цитат."
+
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
+#: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
+#: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
+msgid "Table of Contents"
+msgstr "Зміст"
+
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
+msgid "Related files"
+msgstr ""
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
+msgid "No related files"
+msgstr ""
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
+msgid "This relation is based on a bidirectional link."
+msgstr ""
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
+msgid "This relation is based on an outbound link."
+msgstr ""
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
+msgid "This relation is based on a backlink."
+msgstr ""
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr ""
+
+#. STATIC VARIABLES
+#: source/tmp/win-stats/CalendarView.vue.ts:26
+#: source/tmp/win-stats/App.vue.ts:27
+msgid "Calendar"
+msgstr "Календар"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:28
+msgid "January"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:29
+msgid "February"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:30
+msgid "March"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:31
+msgid "April"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:32
+msgid "May"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:33
+msgid "June"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:34
+msgid "July"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:35
+msgid "August"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:36
+msgid "September"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:37
+msgid "October"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:38
+msgid "November"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:39
+msgid "December"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:41
+msgid "Below the monthly average"
+msgstr ""
+
+#: source/tmp/win-stats/CalendarView.vue.ts:42
+msgid "Over the monthly average"
+msgstr "Понад середньомісячний показник"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:43
+msgid "More than twice the monthly average"
+msgstr "Більш ніж у два рази перевищує середньомісячний показник"
+
+#. Static properties
+#: source/tmp/win-stats/App.vue.ts:33 source/tmp/win-stats/ChartView.vue.ts:39
+msgid "Charts"
+msgstr "Графіки"
+
+#: source/tmp/win-stats/App.vue.ts:39
+msgid "FSAL Stats"
+msgstr ""
+
+#: source/tmp/win-stats/App.vue.ts:58
+msgid "Writing statistics"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:37
+msgid "Export project to:"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:38
+msgid "Use"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:39
+msgid "Format"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:40
+msgid "Conversion"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:41
+msgid "Files to be included in the export"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:42
+msgid "Please select at least one profile to build this project."
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:43
+msgid "Project Title"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:44
+msgid "CSL Stylesheet"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:45
+msgid "LaTeX Template"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:46
+msgid "HTML Template"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:47
+msgid "Remove file from export"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:48
+msgid "Add file to export"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:49
+msgid "Move file up"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:50
+msgid "Move file down"
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:51
+msgid "You have not selected any files for export."
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:52
+msgid ""
+"Some files are selected for export but no longer exist in the directory."
+msgstr ""
+
+#: source/tmp/win-project-properties/App.vue.ts:73
+#: source/tmp/win-preferences/App.vue.ts:134
+msgid "General"
+msgstr ""
+
+#: source/tmp/win-update/App.vue.ts:31
+msgid "Updater"
+msgstr "Програма оновлення"
+
+#: source/tmp/win-update/App.vue.ts:32
+msgid "New update available"
+msgstr "Доступне нове оновлення"
+
+#: source/tmp/win-update/App.vue.ts:33
+msgid "Your version"
+msgstr "Поточна версія"
+
+#: source/tmp/win-update/App.vue.ts:34
+msgid ""
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr "Нова версія Zettlr готова до завантаження. Прочитайте опис змін нижче."
+
+#: source/tmp/win-update/App.vue.ts:35
+msgid "Downloading your update"
+msgstr "Завантаження оновлення"
+
+#: source/tmp/win-update/App.vue.ts:36
+msgid "No update available. You have the most recent version."
+msgstr "Оновлень немає. У вас остання версія програми."
+
+#: source/tmp/win-update/App.vue.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:639
+#: source/app/service-providers/menu/menu.win32.ts:613
+msgid "Check for updates"
+msgstr "Перевірити наявність оновлень"
+
+#: source/tmp/win-update/App.vue.ts:42
+msgid "Click to start update"
+msgstr "Натисніть, щоб почати оновлення"
+
+#: source/tmp/win-update/App.vue.ts:45
 #, fuzzy
-msgid "Copy path"
-msgstr "Копіювати ID"
+msgid "never"
+msgstr "ніколи"
 
-#: source/win-main/file-manager/util/file-item-context.ts:87
-#: source/win-main/file-manager/util/dir-item-context.ts:76
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
-msgid "Reveal in Finder"
+#: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
+#, javascript-format
+msgid "Last checked: %s"
 msgstr ""
 
-#: source/win-main/file-manager/util/file-item-context.ts:87
-#: source/win-main/file-manager/util/dir-item-context.ts:76
-msgid "Reveal in Explorer"
+#: source/tmp/win-update/App.vue.ts:124
+msgid "Starting update …"
+msgstr "Початок оновлення…"
+
+#: source/tmp/win-error/App.vue.ts:43
+#: source/app/service-providers/commands/file-delete.ts:36
+#: source/app/service-providers/commands/dir-project-export.ts:93
+#: source/app/service-providers/commands/dir-delete.ts:35
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+msgid "Ok"
+msgstr "Гаразд"
+
+#: source/tmp/win-assets/App.vue.ts:15
+#: source/app/service-providers/menu/menu.darwin.ts:59
+#: source/app/service-providers/menu/menu.win32.ts:233
+msgid "Assets Manager"
+msgstr "Менеджер файлів"
+
+#: source/tmp/win-assets/App.vue.ts:21
+msgid "Exporting"
 msgstr ""
 
-#: source/win-main/file-manager/util/file-item-context.ts:87
-#: source/win-main/file-manager/util/dir-item-context.ts:76
-msgid "Reveal in File Browser"
+#: source/tmp/win-assets/App.vue.ts:27
+msgid "Importing"
 msgstr ""
 
-#: source/win-main/file-manager/util/file-item-context.ts:100
-msgid "Close file"
-msgstr "Закрити файл"
+#: source/tmp/win-assets/App.vue.ts:33
+#: source/win-preferences/schema/appearance.ts:219
+msgid "Custom CSS"
+msgstr "Власний CSS"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:52
-msgid "Rename directory"
-msgstr "Перейменувати каталог"
+#: source/tmp/win-assets/App.vue.ts:39
+#: source/tmp/win-preferences/App.vue.ts:174
+#: source/win-preferences/schema/snippets.ts:24
+msgid "Snippets"
+msgstr ""
 
-#: source/win-main/file-manager/util/dir-item-context.ts:58
-msgid "Delete directory"
-msgstr "Видалити каталог"
+#. primary: true // It's a primary button
+#: source/tmp/win-assets/SnippetsTab.vue.ts:27
+#: source/tmp/win-assets/CustomCSS.vue.ts:24
+#: source/tmp/win-assets/DefaultsTab.vue.ts:61
+#: source/tmp/win-paste-image/App.vue.ts:66
+#: source/tmp/win-tag-manager/App.vue.ts:85
+#: source/app/service-providers/commands/export.ts:114
+#: source/app/service-providers/menu/menu.darwin.ts:196
+#: source/app/service-providers/menu/menu.win32.ts:161
+msgid "Save"
+msgstr "Зберегти"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:87
-msgid "Check for directory …"
-msgstr "Перевірити каталог ..."
+#: source/tmp/win-assets/SnippetsTab.vue.ts:28
+msgid "Rename snippet"
+msgstr "Перейменувати сніппет"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:104
-msgid "Export Project"
-msgstr "Експортувати проект"
+#: source/tmp/win-assets/SnippetsTab.vue.ts:29
+msgid "Snippets let you define reusable pieces of text with variables."
+msgstr ""
+"Сніпети дозволяють визначати повторювані фрагменти тексту за допомогою "
+"перемінних.."
 
-#: source/win-main/file-manager/util/dir-item-context.ts:116
-msgid "Close Workspace"
-msgstr "Закрити робочий простір"
+#: source/tmp/win-assets/SnippetsTab.vue.ts:30
+#, fuzzy
+msgid "Open snippets folder"
+msgstr "Відкрити каталог проєкту"
+
+#. If the user cancels, do not omit (the default) but actually cancel
+#: source/tmp/win-assets/SnippetsTab.vue.ts:46
+#: source/tmp/win-assets/CustomCSS.vue.ts:34
+#: source/tmp/win-assets/DefaultsTab.vue.ts:110
+#: source/tmp/win-tag-manager/App.vue.ts:91
+#: source/app/service-providers/documents/index.ts:347
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
+msgid "Unsaved changes"
+msgstr "Незбережені зміни"
+
+#: source/tmp/win-assets/SnippetsTab.vue.ts:105
+#: source/tmp/win-assets/CustomCSS.vue.ts:56
+#: source/tmp/win-assets/DefaultsTab.vue.ts:177
+msgid "Saving …"
+msgstr "Збереження…"
+
+#: source/tmp/win-assets/SnippetsTab.vue.ts:115
+#: source/tmp/win-assets/DefaultsTab.vue.ts:187
+msgid "Saved!"
+msgstr "Збережено!"
+
+#: source/tmp/win-assets/CustomCSS.vue.ts:23
+msgid ""
+"Here you can override the styles of Zettlr to customise it even further. "
+"<strong>Attention: This file overrides all CSS directives! Never alter the "
+"geometry of elements, otherwise the app may expose unwanted behaviour!</"
+"strong>"
+msgstr ""
+"Тут ви можете перевизначити стилі програми, щоб налаштувати її під себе. "
+"<strong>Увага: Цей файл перезаписує усі CSS директиви! Ніколи не змінюйте "
+"геометрію об'єктів, це може призвести до небажаної поведінки програми!</"
+"strong>"
+
+#: source/tmp/win-assets/CustomCSS.vue.ts:66
+msgid "Saving failed"
+msgstr "Не вдалося зберегти"
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:56
+msgid ""
+"This profile is protected. This means that it will be restored when you "
+"remove or rename it."
+msgstr ""
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:57
+msgid ""
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
+msgstr ""
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:58
+#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:286
+#: source/app/service-providers/menu/menu.win32.ts:280
+msgid "Rename file"
+msgstr "Перейменувати файл"
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:59
+msgid "Open defaults folder"
+msgstr ""
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:60
+msgid "Edit the default settings for imports or exports here."
+msgstr "Змінити налаштування за замовчуванням для імпорту чи експорту."
+
+#: source/tmp/win-splash-screen/App.vue.ts:22
+msgid "Loading…"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:56
+#, javascript-format
+msgid "No results for \"%s\""
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:139
+#: source/win-preferences/schema/advanced.ts:51
+msgid "Appearance"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:144
+msgid "File Manager"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:149
+msgid "Editor"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:154
+#: source/win-preferences/schema/spellchecking.ts:158
+msgid "Spellchecking"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:159
+msgid "AutoCorrect"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:164
+#: source/win-preferences/schema/citations.ts:22
+#, fuzzy
+msgid "Citations"
+msgstr "Відображення цитат"
+
+#: source/tmp/win-preferences/App.vue.ts:169
+msgid "Zettelkasten"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:179
+msgid "Import and Export"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:184
+msgid "Advanced"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:193
+#, javascript-format
+msgid "Searching: %s"
+msgstr ""
+
+#: source/tmp/win-preferences/App.vue.ts:197
+msgid "Preferences"
+msgstr ""
+
+#: source/tmp/win-paste-image/App.vue.ts:57
+msgid "Insert Image from Clipboard"
+msgstr ""
+
+#: source/tmp/win-paste-image/App.vue.ts:58
+#: source/win-preferences/schema/editor.ts:214
+#, fuzzy
+msgid "Image size"
+msgstr "Зображення"
+
+#: source/tmp/win-paste-image/App.vue.ts:59
+msgid "Retain aspect ratio"
+msgstr ""
+
+#: source/tmp/win-paste-image/App.vue.ts:60
+msgid "Resize image to"
+msgstr ""
+
+#: source/tmp/win-paste-image/App.vue.ts:61
+msgid "Filename"
+msgstr ""
+
+#: source/tmp/win-paste-image/App.vue.ts:62
+#: source/tmp/win-paste-image/App.vue.ts:63
+msgid "A unique filename"
+msgstr ""
+
+#. 1: Omit all changes
+#: source/tmp/win-paste-image/App.vue.ts:67
+#: source/app/service-providers/commands/file-delete.ts:37
+#: source/app/service-providers/commands/rename-tag.ts:47
+#: source/app/service-providers/commands/dir-delete.ts:36
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/app/service-providers/menu/menu.darwin.ts:703
+#: source/app/service-providers/menu/menu.win32.ts:677
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: source/tmp/win-tag-manager/App.vue.ts:27
+msgid "Assign color"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:28
+msgid "Remove color"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:29
+msgid "Tag name"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:30
+msgid "Color"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:32
+msgid "A short description"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:33
+msgid ""
+"Here you can assign colors to different tags. If a tag is found in a file, "
+"its tile in the preview list will receive a colored indicator. The "
+"description will be shown on mouse hover."
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:34
+msgid "Manage tags"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:95
+#: source/app/service-providers/menu/menu.darwin.ts:578
+#: source/app/service-providers/menu/menu.win32.ts:557
+msgid "Close"
+msgstr "Закрити"
+
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr ""
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
@@ -1464,10 +1430,6 @@ msgstr "Китайська (Китай)"
 msgid "Chinese"
 msgstr "Китайська (Китай)"
 
-#: source/common/util/format-date.ts:33
-msgid "just now"
-msgstr ""
-
 #: source/common/util/localise-number.ts:28
 msgid ","
 msgstr ","
@@ -1476,73 +1438,88 @@ msgstr ","
 msgid "."
 msgstr "."
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:98
-#, javascript-format
-msgid "Image not found: %s"
+#: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
+msgid "Cmd/Ctrl-click to follow this link"
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
-msgid "Rendering mermaid graph …"
-msgstr ""
+#: source/common/modules/window-register/register-default-context.ts:76
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/app/service-providers/menu/menu.darwin.ts:328
+#: source/app/service-providers/menu/menu.win32.ts:330
+msgid "Cut"
+msgstr "Вирізати"
 
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
-#, fuzzy
-msgid "Could not render Graph:"
-msgstr "Неможливо створити файл"
+#: source/common/modules/window-register/register-default-context.ts:83
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
+#: source/app/service-providers/menu/menu.darwin.ts:334
+#: source/app/service-providers/menu/menu.win32.ts:336
+msgid "Copy"
+msgstr "Копіювати"
 
-#: source/common/modules/markdown-editor/renderers/readability.ts:39
-#, javascript-format
-msgid "Readability mode (%s)"
-msgstr ""
+#: source/common/modules/window-register/register-default-context.ts:90
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/app/service-providers/menu/menu.darwin.ts:348
+#: source/app/service-providers/menu/menu.win32.ts:350
+msgid "Paste"
+msgstr "Вставити"
+
+#: source/common/modules/window-register/register-default-context.ts:100
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
+#: source/app/service-providers/menu/menu.darwin.ts:362
+#: source/app/service-providers/menu/menu.win32.ts:364
+msgid "Select all"
+msgstr "Виділити все"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
-msgid "Go to footnote reference"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
+#: source/win-preferences/schema/editor.ts:126
+#: source/win-preferences/schema/editor.ts:127
+msgid "Bold"
+msgstr "Жирний"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
+#: source/win-preferences/schema/editor.ts:134
+#: source/win-preferences/schema/editor.ts:135
+msgid "Italics"
+msgstr "Курсив"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+#: source/win-preferences/schema/spellchecking.ts:167
+msgid "Code"
+msgstr "Код"
+
+#: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:62
+msgid "Fetching link preview…"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
-#: source/tmp/win-main/PopoverDocInfo.vue.ts:53
-#: source/tmp/win-main/App.vue.ts:227
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:140
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:56
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:124
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:187
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
 #, javascript-format
-msgid "%s words"
-msgstr "%s слів"
-
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
-#: source/tmp/win-main/PopoverDocInfo.vue.ts:51
-#: source/tmp/win-main/App.vue.ts:226
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:122
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:185
-#, javascript-format
-msgid "%s characters"
-msgstr "%s символів"
-
-#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
-msgid "Detect automatically"
+msgid "File %s does not exist."
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
-msgid "Open diagnostics panel"
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:106
+msgid "Word count"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
-msgid "Disabled"
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
+#: source/app/service-providers/menu/menu.darwin.ts:165
+#: source/app/service-providers/menu/menu.win32.ts:139
+msgid "Open…"
+msgstr "Відкрити..."
+
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
+msgid "No footnote text found."
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
-#, fuzzy
-msgid "Custom"
-msgstr "Власний CSS"
-
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
-msgid "Copy equation code"
-msgstr ""
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
+#: source/app/service-providers/menu/menu.darwin.ts:308
+#: source/app/service-providers/menu/menu.win32.ts:310
+msgid "Edit"
+msgstr "Зміни"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
 msgid "No suggestions"
@@ -1551,13 +1528,6 @@ msgstr "Немає пропозицій"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
 msgid "Add to dictionary"
 msgstr "Додати в словник"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
-#: source/win-preferences/schema/editor.ts:126
-#: source/win-preferences/schema/editor.ts:127
-msgid "Bold"
-msgstr "Жирний"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
 msgid "Italic"
@@ -1583,892 +1553,1077 @@ msgstr "Вставити список завдань"
 msgid "Blockquote"
 msgstr "Цитата"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
-#: source/tmp/win-main/App.vue.ts:355
-msgid "Insert Table"
-msgstr "Вставити таблицю"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
+#: source/app/service-providers/menu/menu.darwin.ts:339
+#: source/app/service-providers/menu/menu.win32.ts:341
+msgid "Copy as HTML"
+msgstr "Копіювати як HTML"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
+#: source/app/service-providers/menu/menu.darwin.ts:353
+#: source/app/service-providers/menu/menu.win32.ts:355
+msgid "Paste without style"
+msgstr "Вставити без стилів"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
 msgid "Open Link"
 msgstr "Відкрити посилання"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:90
 msgid "Copy Mail Address"
 msgstr "Копіювати поштову адресу"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:90
 msgid "Copy Link"
 msgstr "Копіювати ланку"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:99
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
+msgid "Remove Link"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:106
 msgid "Copy image to clipboard"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 #, fuzzy
 msgid "Open image"
 msgstr "Відкрити файл"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:111
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:118
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Finder"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:118
 msgid "Open in File Browser"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
+msgid "Copy equation code"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
+msgid "Rendering mermaid graph …"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
+#, fuzzy
+msgid "Could not render Graph:"
+msgstr "Неможливо створити файл"
+
+#: source/common/modules/markdown-editor/renderers/render-images.ts:98
+#, javascript-format
+msgid "Image not found: %s"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
+msgid "Disabled"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
+#, fuzzy
+msgid "Custom"
+msgstr "Власний CSS"
+
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Open diagnostics panel"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
+msgid "Detect automatically"
 msgstr ""
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
-msgid "No footnote text found."
+#: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
+msgid "Go to footnote reference"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:62
-msgid "Fetching link preview…"
-msgstr ""
+#: source/win-main/file-manager/util/file-item-context.ts:34
+#: source/win-main/file-manager/util/dir-item-context.ts:28
+msgid "Properties"
+msgstr "Властивості"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:134
-#: source/win-preferences/schema/editor.ts:135
-msgid "Italics"
-msgstr "Курсив"
+#: source/win-main/file-manager/util/file-item-context.ts:50
+#: source/app/service-providers/menu/menu.darwin.ts:297
+#: source/app/service-providers/menu/menu.win32.ts:291
+msgid "Delete file"
+msgstr "Видалити файл"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
-#: source/tmp/win-main/App.vue.ts:334
-msgid "Link"
-msgstr "Ланка"
+#: source/win-main/file-manager/util/file-item-context.ts:57
+msgid "Duplicate file"
+msgstr "Дублювати файл"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
-#: source/tmp/win-main/App.vue.ts:341
-msgid "Image"
-msgstr "Зображення"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
-#: source/tmp/win-main/App.vue.ts:327
-msgid "Comment"
-msgstr "Коментар"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
-#: source/win-preferences/schema/spellchecking.ts:167
-msgid "Code"
-msgstr "Код"
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
-#, javascript-format
-msgid "File %s does not exist."
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:106
-msgid "Word count"
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:30
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
-msgid "Modified"
-msgstr ""
-
-#: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
-msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
-
-#: source/tmp/win-assets/DefaultsTab.vue.ts:56
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
-msgstr ""
-
-#: source/tmp/win-assets/DefaultsTab.vue.ts:57
-msgid ""
-"This profile is invalid. It may contain errors, or it may be missing the "
-"writer or reader property."
-msgstr ""
-
-#: source/tmp/win-assets/DefaultsTab.vue.ts:59
-msgid "Open defaults folder"
-msgstr ""
-
-#: source/tmp/win-assets/DefaultsTab.vue.ts:60
-msgid "Edit the default settings for imports or exports here."
-msgstr "Змінити налаштування за замовчуванням для імпорту чи експорту."
-
-#: source/tmp/win-assets/DefaultsTab.vue.ts:177
-#: source/tmp/win-assets/SnippetsTab.vue.ts:105
-#: source/tmp/win-assets/CustomCSS.vue.ts:56
-msgid "Saving …"
-msgstr "Збереження…"
-
-#: source/tmp/win-assets/DefaultsTab.vue.ts:187
-#: source/tmp/win-assets/SnippetsTab.vue.ts:115
-msgid "Saved!"
-msgstr "Збережено!"
-
-#: source/tmp/win-assets/App.vue.ts:21
-msgid "Exporting"
-msgstr ""
-
-#: source/tmp/win-assets/App.vue.ts:27
-msgid "Importing"
-msgstr ""
-
-#: source/tmp/win-assets/App.vue.ts:33
-#: source/win-preferences/schema/appearance.ts:219
-msgid "Custom CSS"
-msgstr "Власний CSS"
-
-#: source/tmp/win-assets/App.vue.ts:39
-#: source/tmp/win-preferences/App.vue.ts:174
-#: source/win-preferences/schema/snippets.ts:24
-msgid "Snippets"
-msgstr ""
-
-#: source/tmp/win-assets/SnippetsTab.vue.ts:28
-msgid "Rename snippet"
-msgstr "Перейменувати сніппет"
-
-#: source/tmp/win-assets/SnippetsTab.vue.ts:29
-msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
-"Сніпети дозволяють визначати повторювані фрагменти тексту за допомогою "
-"перемінних.."
-
-#: source/tmp/win-assets/SnippetsTab.vue.ts:30
+#: source/win-main/file-manager/util/file-item-context.ts:66
+#: source/win-main/file-manager/util/dir-item-context.ts:67
 #, fuzzy
-msgid "Open snippets folder"
-msgstr "Відкрити каталог проєкту"
+msgid "Copy path"
+msgstr "Копіювати ID"
 
-#: source/tmp/win-assets/CustomCSS.vue.ts:23
+#: source/win-main/file-manager/util/file-item-context.ts:72
+#: source/win-main/tabs-context.ts:68
+msgid "Copy filename"
+msgstr "Копіювати ім'я файлу"
+
+#: source/win-main/file-manager/util/file-item-context.ts:78
+#: source/win-main/tabs-context.ts:80
+#: source/app/service-providers/menu/menu.darwin.ts:405
+#: source/app/service-providers/menu/menu.win32.ts:407
+msgid "Copy ID"
+msgstr "Копіювати ID"
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in Explorer"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:87
+#: source/win-main/file-manager/util/dir-item-context.ts:76
+msgid "Reveal in File Browser"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:100
+msgid "Close file"
+msgstr "Закрити файл"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
+msgid "New directory…"
+msgstr "Новий каталог..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+msgid "Rename directory"
+msgstr "Перейменувати каталог"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+msgid "Delete directory"
+msgstr "Видалити каталог"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:87
+msgid "Check for directory …"
+msgstr "Перевірити каталог ..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:104
+msgid "Export Project"
+msgstr "Експортувати проект"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:116
+msgid "Close Workspace"
+msgstr "Закрити робочий простір"
+
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:592
+#: source/app/service-providers/menu/menu.win32.ts:566
+msgid "Close Tab"
+msgstr "Закрити вкладку"
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr "Закрити всі вкладки"
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr ""
+
+#: source/app/service-providers/documents/index.ts:343
+#, fuzzy
+msgid "Save changes"
+msgstr "Незбережені зміни"
+
+#: source/app/service-providers/documents/index.ts:344
+#, fuzzy
+msgid "Discard changes"
+msgstr "Незбережені зміни"
+
+#: source/app/service-providers/documents/index.ts:348
+#, fuzzy
+msgid "There are unsaved changes. Do you want to save or discard them?"
+msgstr ""
+"У поточному файлі є незбережені зміни. Хочете опустити зміни чи зберегти?"
+
+#: source/app/service-providers/documents/index.ts:987
+#, fuzzy
+msgid "File changed on disk"
+msgstr "Режим файлового менеджера"
+
+#: source/app/service-providers/documents/index.ts:988
+#, javascript-format
+msgid "%s changed on disk"
+msgstr ""
+
+#: source/app/service-providers/documents/index.ts:990
+#, javascript-format
 msgid ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted behaviour!</"
-"strong>"
-msgstr ""
-"Тут ви можете перевизначити стилі програми, щоб налаштувати її під себе. "
-"<strong>Увага: Цей файл перезаписує усі CSS директиви! Ніколи не змінюйте "
-"геометрію об'єктів, це може призвести до небажаної поведінки програми!</"
-"strong>"
-
-#: source/tmp/win-assets/CustomCSS.vue.ts:66
-msgid "Saving failed"
-msgstr "Не вдалося зберегти"
-
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
-#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
-msgid "Related files"
+"%s has changed on disk, but the editor contains unsaved changes. Do you want "
+"to keep the current editor contents or load the file from disk?"
 msgstr ""
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
-msgid "No related files"
+#: source/app/service-providers/documents/index.ts:991
+msgid ""
+"Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
-msgid "This relation is based on a bidirectional link."
+#: source/app/service-providers/documents/index.ts:994
+msgid "Keep editor contents"
 msgstr ""
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
-msgid "This relation is based on an outbound link."
+#: source/app/service-providers/documents/index.ts:995
+msgid "Load changes from disk"
 msgstr ""
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
-msgid "This relation is based on a backlink."
+#: source/app/service-providers/documents/index.ts:998
+msgid ""
+"Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
-#, javascript-format
-msgid "This relation is based on %s shared tags: %s"
-msgstr ""
-
-#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
-#: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
-#: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
-msgid "Table of Contents"
-msgstr "Зміст"
-
-#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
-#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:32
-msgid "References"
-msgstr "Примітки"
-
-#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:13
-msgid "Other files"
-msgstr ""
-
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:14
-msgid "Open directory"
-msgstr "Відкрити каталог"
-
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:15
-msgid "No other files"
-msgstr ""
-
-#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:42
-msgid "There are no citations in this document."
-msgstr "Цей документ не містить цитат."
-
-#: source/tmp/win-main/PopoverTags.vue.ts:39
-msgid "Name"
-msgstr ""
-
-#: source/tmp/win-main/PopoverTags.vue.ts:40
-#: source/tmp/win-tag-manager/App.vue.ts:31
-msgid "Count"
-msgstr ""
-
-#: source/tmp/win-main/PopoverTags.vue.ts:47
-#: source/tmp/win-tag-manager/App.vue.ts:35
-msgid "Filter tags…"
-msgstr "Фільтр міток..."
-
-#: source/tmp/win-main/PopoverTags.vue.ts:48
-msgid "Tag Cloud"
-msgstr "Хмара міток"
-
-#: source/tmp/win-main/PopoverExport.vue.ts:61
+#: source/app/service-providers/documents/index.ts:1462
 #, fuzzy
-msgid "Exporting…"
-msgstr "Експорт..."
+msgid "Could not save file"
+msgstr "Неможливо зберегти зображення"
 
-#: source/tmp/win-main/PopoverExport.vue.ts:61
-#, fuzzy
-msgid "Export"
-msgstr "Експорт..."
+#: source/app/service-providers/documents/index.ts:1462
+#, fuzzy, javascript-format
+msgid "Could not save file %s: %s"
+msgstr "Неможливо зберегти зображення"
 
-#: source/tmp/win-main/PopoverExport.vue.ts:74
-msgid "command"
-msgstr ""
-
-#: source/tmp/win-main/PopoverDocInfo.vue.ts:21
-msgid "words"
-msgstr "слів"
-
-#: source/tmp/win-main/PopoverDocInfo.vue.ts:22
-msgid "characters"
-msgstr "символів"
-
-#: source/tmp/win-main/PopoverDocInfo.vue.ts:23
-msgid "No open document"
-msgstr ""
-
-#: source/tmp/win-main/PopoverTable.vue.ts:30
-#, javascript-format
-msgid "Table size: %s &times; %s"
-msgstr ""
-
-#: source/tmp/win-main/PopoverStats.vue.ts:28
-msgid "words last month"
-msgstr "слів за минулий місяць"
-
-#: source/tmp/win-main/PopoverStats.vue.ts:29
-msgid "daily average"
-msgstr "в середньому за день"
-
-#: source/tmp/win-main/PopoverStats.vue.ts:30
-msgid "words today"
-msgstr "слів за сьогодні"
-
-#: source/tmp/win-main/PopoverStats.vue.ts:31
-msgid "🔥 You're on fire!"
-msgstr "🔥 Робота горить!"
-
-#: source/tmp/win-main/PopoverStats.vue.ts:32
-msgid "💪 You're close to hitting your daily average!"
-msgstr "💪 Ви наближаєтеся до середньодобової позначки!"
-
-#: source/tmp/win-main/PopoverStats.vue.ts:33
-msgid "✍🏼 Get writing to surpass your daily average."
-msgstr "✍🏼 Продовжуйте писати, щоб перевершити свій середньодобовий показник."
-
-#: source/tmp/win-main/PopoverStats.vue.ts:34
-msgid "More statistics …"
-msgstr "Більше статистики..."
-
-#: source/tmp/win-main/App.vue.ts:212
-#, javascript-format
-msgid "%s selected"
-msgstr ""
-
-#. Multiple selections --> indicate
-#: source/tmp/win-main/App.vue.ts:221
-#, javascript-format
-msgid "%s selections"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:242
-msgid "File manager"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:247
-msgid "Global search"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:261
-msgid "View stats"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:267
-msgid "Tags"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:274
-msgid "Open the settings dialog"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:309
-msgid "Export the current file"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:315
-msgid "Toggle readability mode"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:348
-msgid "Tasklist"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:362
-msgid "Footnote"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:380
-msgid "Pomodoro-Timer"
-msgstr ""
-
-#: source/tmp/win-main/App.vue.ts:396
-msgid "Update available"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:34
-msgid "Full-Text Search"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:35
-msgid "Enter your search terms below"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:36
-msgid "Find …"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:37
-#: source/tmp/win-main/file-manager/FileManager.vue.ts:46
-msgid "Filter …"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:38
-msgid "Filter search results"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:39
-msgid "Restrict search to directory"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:40
-msgid "Restrict to directory …"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:41
-msgid "Search"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:42
-msgid "Clear search"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:43
-msgid "Toggle results"
-msgstr ""
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:112
-#, javascript-format
-msgid "%s matches across %s files"
-msgstr ""
-
-#: source/tmp/win-main/PopoverPomodoro.vue.ts:24
-#: source/win-preferences/schema/appearance.ts:52
-msgid "Start"
-msgstr "Запуск"
-
-#: source/tmp/win-main/PopoverPomodoro.vue.ts:25
-msgid "Stop"
-msgstr "Зупинити"
-
-#: source/tmp/win-main/PopoverPomodoro.vue.ts:26
-msgid "Work"
-msgstr "Робота"
-
-#: source/tmp/win-main/PopoverPomodoro.vue.ts:27
-msgid "Short break"
-msgstr "Коротка перерва"
-
-#: source/tmp/win-main/PopoverPomodoro.vue.ts:28
-msgid "Break"
-msgstr "Перерва"
-
-#: source/tmp/win-main/PopoverPomodoro.vue.ts:29
-msgid "Sound Effect"
-msgstr ""
-
-#: source/tmp/win-main/PopoverPomodoro.vue.ts:30
-msgid "Volume"
-msgstr ""
-
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:29
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:99
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:101
-msgid "Directories"
-msgstr "Директорії"
-
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:31
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
-msgid "Created"
-msgstr ""
-
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:33
-msgid "Project Settings…"
-msgstr "Налаштування проекту..."
-
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:34
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:174
-msgid "Words"
-msgstr "слів"
-
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
-#: source/tmp/common/vue/form/elements/NumberControl.vue.ts:40
-#: source/tmp/common/vue/form/elements/TextControl.vue.ts:47
-#: source/tmp/common/vue/form/elements/ShortcutChooser.vue.ts:61
-#: source/tmp/common/vue/form/elements/ColorControl.vue.ts:35
-msgid "Reset"
-msgstr ""
-
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:38
-msgid "Set writing target…"
-msgstr "Задати ціль..."
-
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:39
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:172
-msgid "Characters"
-msgstr "символів"
-
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:76
-msgid "Workspaces"
+#: source/app/service-providers/workspaces/index.ts:163
+#, fuzzy, javascript-format
+msgid "Loading workspace %s"
 msgstr "Робочі простори"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:77
-msgid "No open files or folders"
-msgstr "Не відкрито жодного файлу чи каталогу"
+#: source/app/service-providers/citeproc/index.ts:249
+#: source/app/service-providers/citeproc/index.ts:457
+msgid "The citation database could not be loaded"
+msgstr "Неможливо завантажити базу цитат"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:78
-#: source/tmp/win-main/file-manager/FileList.vue.ts:46
-msgid "No results"
-msgstr "Немає результатів"
+#: source/app/service-providers/citeproc/index.ts:444
+msgid "Changes to the library file detected. Reloading …"
+msgstr "Зміни у файлі бібліотеки. Перезавантаження ..."
 
-#: source/tmp/win-main/file-manager/FileList.vue.ts:47
-msgid "No directory selected"
-msgstr "Немає вибраних каталогів"
+#: source/app/service-providers/commands/export.ts:55
+#: source/app/service-providers/commands/export.ts:157
+msgid "Export failed"
+msgstr "Помилка експорту"
 
-#: source/tmp/win-main/file-manager/FileList.vue.ts:48
-msgid "Empty directory"
-msgstr "Пустий каталог"
+#: source/app/service-providers/commands/export.ts:56
+#, fuzzy, javascript-format
+msgid "An error occurred during export: %s"
+msgstr "Виникла помилка під час експортування: %s"
 
-#: source/tmp/win-about/General-Tab.vue.ts:21
-msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
-msgstr ""
-"Zettlr це проект від Hendrik Erz, який використовує ліцензію GNU GPL v3. "
-"Дане ПЗ відкрите, безкоштовне і засноване на фреймворку Electron. Zettlr "
-"дякує розробникам Electron, фреймворка Node.js та редактора CodeMirror. Без "
-"них Zettlr був би неможливим. Нижче наведено проекти, які використовує "
-"Zettlr."
-
-#: source/tmp/win-about/General-Tab.vue.ts:22
-msgid ""
-"Zettlr makes use of citeproc to display citations directly in the editor. To "
-"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
-msgstr ""
-"Zettlr використовує citeproc для завантаження цитат прямо в редактор. Також "
-"Zettlr використовує CitationStyleLanguage (CSL) та файли стилів. Файли "
-"використовуються без зміни метаданих автора. Більше інформації:"
-
-#: source/tmp/win-about/General-Tab.vue.ts:23
-msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
-msgstr ""
-"Усі права на логотипи і назви брендів належать їхнім власникам. Крім "
-"використаного коду, Zettlr ніяк не пов'язаний з цими проектами. Торгова "
-"марка Node.js належить Joyent, Inc."
-
-#: source/tmp/win-about/General-Tab.vue.ts:24
-msgid ""
-"Zettlr offers an integration with LanguageTool.org, a service provided by "
-"LanguageTooler GmbH. Using this service requires an internet connection and "
-"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
-"server that you use."
+#: source/app/service-providers/commands/export.ts:114
+msgid "Choose export destination"
 msgstr ""
 
-#: source/tmp/win-about/App.vue.ts:41
-msgid "Other projects"
+#: source/app/service-providers/commands/export.ts:145
+#, javascript-format
+msgid "Exporting to %s"
+msgstr "Експортування в %s"
+
+#: source/app/service-providers/commands/export.ts:158
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "Виникла помилка під час експортування: %s"
+
+#: source/app/service-providers/commands/file-new.ts:156
+#: source/app/service-providers/commands/file-duplicate.ts:42
+#: source/app/service-providers/commands/file-duplicate.ts:59
+msgid "Could not create file"
+msgstr "Неможливо створити файл"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:38
+msgid "The requested file was not found."
+msgstr "Запитуваний файл не знайдено."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:83
+msgid "The provided name did not contain any allowed letters."
+msgstr "Дана назва не містить дозволених символів."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:104
+msgid "The requested directory was not found."
+msgstr "Запитуваний каталог не знайдено."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:115
+msgid "Could not save image"
+msgstr "Неможливо зберегти зображення"
+
+#: source/app/service-providers/commands/dir-new.ts:37
+#: source/app/service-providers/commands/dir-new.ts:38
+#: source/app/service-providers/commands/dir-new.ts:50
+msgid "Could not create directory"
+msgstr "Неможливо створити каталог"
+
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:113
+#, javascript-format
+msgid "The reference with key %s does not appear to have attachments."
+msgstr "Посилання з ключем %s не має вкладень."
+
+#: source/app/service-providers/commands/open-attachment.ts:118
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "Не вдається відкрити вкладення. Чи запущено Zotero?"
+
+#: source/app/service-providers/commands/file-delete.ts:41
+#: source/app/service-providers/commands/dir-delete.ts:40
+msgid "Really delete?"
+msgstr "Видалення"
+
+#: source/app/service-providers/commands/file-delete.ts:42
+#: source/app/service-providers/commands/dir-delete.ts:41
+#, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "Дійсно видалити %s?"
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:63
+#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "Неправильний Textbundle: %s"
+
+#: source/app/service-providers/commands/importer/index.ts:92
+#: source/app/service-providers/commands/importer/index.ts:93
+msgid "Select import profile"
 msgstr ""
 
-#: source/tmp/win-about/App.vue.ts:47
-msgid "Sponsors"
+#: source/app/service-providers/commands/importer/index.ts:94
+#, javascript-format
+msgid "There are multiple profiles that can import %s. Please choose one."
 msgstr ""
 
-#: source/tmp/win-about/App.vue.ts:53
-msgid "License"
-msgstr ""
-
-#: source/tmp/win-about/Projects-Tab.vue.ts:19
-msgid "Zettlr also makes use of these projects:"
-msgstr "Zettlr також використовує проєкти:"
-
-#: source/tmp/win-splash-screen/App.vue.ts:22
-msgid "Loading…"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:37
-msgid "Export project to:"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:38
-msgid "Use"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:39
-msgid "Format"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:40
-msgid "Conversion"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:41
-msgid "Files to be included in the export"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:42
-msgid "Please select at least one profile to build this project."
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:43
-msgid "Project Title"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:44
-msgid "CSL Stylesheet"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:45
-msgid "LaTeX Template"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:46
-msgid "HTML Template"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:47
-msgid "Remove file from export"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:48
-msgid "Add file to export"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:49
-msgid "Move file up"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:50
-msgid "Move file down"
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:51
-msgid "You have not selected any files for export."
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:52
-msgid ""
-"Some files are selected for export but no longer exist in the directory."
-msgstr ""
-
-#: source/tmp/win-project-properties/App.vue.ts:73
-#: source/tmp/win-preferences/App.vue.ts:134
-msgid "General"
-msgstr ""
-
-#: source/tmp/common/vue/form/elements/ListControl.vue.ts:106
-msgid "Add"
-msgstr ""
-
-#: source/tmp/common/vue/form/elements/ListControl.vue.ts:107
-msgid "Actions"
-msgstr ""
-
-#: source/tmp/common/vue/form/elements/ListControl.vue.ts:108
+#: source/app/service-providers/commands/dir-project-export.ts:85
 #, fuzzy
-msgid "Delete"
-msgstr "Видалити файл"
+msgid "Cannot export project"
+msgstr "Експортувати проект"
 
-#: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
+#: source/app/service-providers/commands/dir-project-export.ts:86
+msgid ""
+"There are no files selected for export. Please select files to be included "
+"in the project settings."
+msgstr ""
+
+#: source/app/service-providers/commands/dir-project-export.ts:91
+msgid "Project File Mismatch"
+msgstr ""
+
+#: source/app/service-providers/commands/dir-project-export.ts:92
+msgid ""
+"One or more files specified in the project settings have not been found. "
+"They may have moved or been deleted. Please verify that all files that you "
+"would like to export are included."
+msgstr ""
+
+#: source/app/service-providers/commands/dir-project-export.ts:168
+#, javascript-format
+msgid "Project \"%s\" successfully exported. Click to show."
+msgstr ""
+
+#: source/app/service-providers/commands/dir-project-export.ts:169
 #, fuzzy
-msgid "Select folder…"
+msgid "Project Export"
+msgstr "Експорт..."
+
+#: source/app/service-providers/commands/language-tool.ts:194
+msgid "Document too long"
+msgstr ""
+
+#: source/app/service-providers/commands/language-tool.ts:199
+msgid "offline"
+msgstr ""
+
+#: source/app/service-providers/commands/import-lang-file.ts:60
+#, javascript-format
+msgid "Language file imported: %s"
+msgstr "Імпортовано мовний файл: %s"
+
+#: source/app/service-providers/commands/import-lang-file.ts:62
+#: source/app/service-providers/commands/import-lang-file.ts:65
+#, javascript-format
+msgid "Could not import language file %s!"
+msgstr "Не вдалося імпортувати мовний файл %s!"
+
+#: source/app/service-providers/commands/file-rename.ts:108
+#: source/app/service-providers/commands/rename-tag.ts:43
+#: source/app/service-providers/config/index.ts:500
+msgid "Confirm"
+msgstr ""
+
+#: source/app/service-providers/commands/file-rename.ts:109
+#, javascript-format
+msgid "Update %s internal links to file %s?"
+msgstr ""
+
+#: source/app/service-providers/commands/file-rename.ts:111
+#: source/app/service-providers/commands/rename-tag.ts:46
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+msgid "Yes"
+msgstr ""
+
+#. 0: Save all changes
+#: source/app/service-providers/commands/file-rename.ts:112
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+msgid "No"
+msgstr ""
+
+#. TODO: Move this to a command
+#. The user wants to open another file or directory.
+#: source/app/service-providers/commands/root-open.ts:75
+#: source/app/service-providers/windows/index.ts:221
+msgid "Open project folder"
 msgstr "Відкрити каталог проєкту"
 
-#: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
-#, fuzzy
-msgid "Select file…"
-msgstr "Видалити файл"
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open directory"
+msgstr "Неможливо відкрити каталог"
 
-#. STATIC VARIABLES
-#: source/tmp/win-stats/CalendarView.vue.ts:26
-#: source/tmp/win-stats/App.vue.ts:27
-msgid "Calendar"
-msgstr "Календар"
-
-#: source/tmp/win-stats/CalendarView.vue.ts:28
-msgid "January"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:29
-msgid "February"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:30
-msgid "March"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:31
-msgid "April"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:32
-msgid "May"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:33
-msgid "June"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:34
-msgid "July"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:35
-msgid "August"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:36
-msgid "September"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:37
-msgid "October"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:38
-msgid "November"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:39
-msgid "December"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:41
-msgid "Below the monthly average"
-msgstr ""
-
-#: source/tmp/win-stats/CalendarView.vue.ts:42
-msgid "Over the monthly average"
-msgstr "Понад середньомісячний показник"
-
-#: source/tmp/win-stats/CalendarView.vue.ts:43
-msgid "More than twice the monthly average"
-msgstr "Більш ніж у два рази перевищує середньомісячний показник"
-
-#. Static properties
-#: source/tmp/win-stats/App.vue.ts:33 source/tmp/win-stats/ChartView.vue.ts:39
-msgid "Charts"
-msgstr "Графіки"
-
-#: source/tmp/win-stats/App.vue.ts:39
-msgid "FSAL Stats"
-msgstr ""
-
-#: source/tmp/win-stats/App.vue.ts:58
-msgid "Writing statistics"
-msgstr ""
-
-#: source/tmp/win-tag-manager/App.vue.ts:27
-msgid "Assign color"
-msgstr ""
-
-#: source/tmp/win-tag-manager/App.vue.ts:28
-msgid "Remove color"
-msgstr ""
-
-#: source/tmp/win-tag-manager/App.vue.ts:29
-msgid "Tag name"
-msgstr ""
-
-#: source/tmp/win-tag-manager/App.vue.ts:30
-msgid "Color"
-msgstr ""
-
-#: source/tmp/win-tag-manager/App.vue.ts:32
-msgid "A short description"
-msgstr ""
-
-#: source/tmp/win-tag-manager/App.vue.ts:33
-msgid ""
-"Here you can assign colors to different tags. If a tag is found in a file, "
-"its tile in the preview list will receive a colored indicator. The "
-"description will be shown on mouse hover."
-msgstr ""
-
-#: source/tmp/win-tag-manager/App.vue.ts:34
-msgid "Manage tags"
-msgstr ""
-
-#: source/tmp/win-paste-image/App.vue.ts:57
-msgid "Insert Image from Clipboard"
-msgstr ""
-
-#: source/tmp/win-paste-image/App.vue.ts:58
-#: source/win-preferences/schema/editor.ts:214
-#, fuzzy
-msgid "Image size"
-msgstr "Зображення"
-
-#: source/tmp/win-paste-image/App.vue.ts:59
-msgid "Retain aspect ratio"
-msgstr ""
-
-#: source/tmp/win-paste-image/App.vue.ts:60
-msgid "Resize image to"
-msgstr ""
-
-#: source/tmp/win-paste-image/App.vue.ts:61
-msgid "Filename"
-msgstr ""
-
-#: source/tmp/win-paste-image/App.vue.ts:62
-#: source/tmp/win-paste-image/App.vue.ts:63
-msgid "A unique filename"
-msgstr ""
-
-#: source/tmp/win-preferences/App.vue.ts:56
+#: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
-msgid "No results for \"%s\""
-msgstr ""
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Каталог &quot;%s&quot; неможливо відкрити через Zettlr."
 
-#: source/tmp/win-preferences/App.vue.ts:139
-#: source/win-preferences/schema/advanced.ts:51
-msgid "Appearance"
-msgstr ""
-
-#: source/tmp/win-preferences/App.vue.ts:144
-msgid "File Manager"
-msgstr ""
-
-#: source/tmp/win-preferences/App.vue.ts:149
-msgid "Editor"
-msgstr ""
-
-#: source/tmp/win-preferences/App.vue.ts:154
-#: source/win-preferences/schema/spellchecking.ts:158
-msgid "Spellchecking"
-msgstr ""
-
-#: source/tmp/win-preferences/App.vue.ts:159
-msgid "AutoCorrect"
-msgstr ""
-
-#: source/tmp/win-preferences/App.vue.ts:164
-#: source/win-preferences/schema/citations.ts:22
-#, fuzzy
-msgid "Citations"
-msgstr "Відображення цитат"
-
-#: source/tmp/win-preferences/App.vue.ts:169
-msgid "Zettelkasten"
-msgstr ""
-
-#: source/tmp/win-preferences/App.vue.ts:179
-msgid "Import and Export"
-msgstr ""
-
-#: source/tmp/win-preferences/App.vue.ts:184
-msgid "Advanced"
-msgstr ""
-
-#: source/tmp/win-preferences/App.vue.ts:193
+#: source/app/service-providers/commands/rename-tag.ts:44
 #, javascript-format
-msgid "Searching: %s"
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:197
-msgid "Preferences"
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
 msgstr ""
 
-#: source/tmp/win-update/App.vue.ts:31
-msgid "Updater"
-msgstr "Програма оновлення"
+#: source/app/service-providers/commands/request-move.ts:53
+msgid "Cannot move directory"
+msgstr "Неможливо перемістити каталог"
 
-#: source/tmp/win-update/App.vue.ts:32
-msgid "New update available"
-msgstr "Доступне нове оновлення"
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Ви не можете перемістити каталог в один з підкаталогів."
 
-#: source/tmp/win-update/App.vue.ts:33
-msgid "Your version"
-msgstr "Поточна версія"
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "Cannot move directory or file"
+msgstr "Неможливо перемістити каталог або файл"
 
-#: source/tmp/win-update/App.vue.ts:34
+#: source/app/service-providers/commands/request-move.ts:64
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "Файл/каталог %s вже існує."
+
+#: source/app/service-providers/commands/import.ts:34
+msgid "Import directory"
+msgstr ""
+
+#: source/app/service-providers/commands/import.ts:34
+msgid "Select folder"
+msgstr ""
+
+#: source/app/service-providers/commands/import.ts:34
+msgid "Select import destination"
+msgstr ""
+
+#: source/app/service-providers/commands/import.ts:36
+msgid "You have to select a directory to import to."
+msgstr "Потрібно вибрати каталог для імпортування."
+
+#. Now import.
+#: source/app/service-providers/commands/import.ts:61
+msgid "Importing. Please wait …"
+msgstr "Імпортування. Зачекайте ..."
+
+#. This callback gets called whenever there is an error while running pandoc.
+#: source/app/service-providers/commands/import.ts:69
+#, javascript-format
+msgid "Couldn't import %s."
+msgstr "Неможливо імпортувати %s."
+
+#: source/app/service-providers/commands/import.ts:73
+#, javascript-format
+msgid "%s imported successfully."
+msgstr "%s імпортовано успішно."
+
+#. Some files failed to import.
+#: source/app/service-providers/commands/import.ts:78
+#, javascript-format
 msgid ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
-msgstr "Нова версія Zettlr готова до завантаження. Прочитайте опис змін нижче."
+"The following %s files could not be imported, because their filetype is "
+"unknown: %s"
+msgstr ""
+"Наступні %s файли неможливо імпортувати, тому що їхнє розширення невідоме: %s"
 
-#: source/tmp/win-update/App.vue.ts:35
-msgid "Downloading your update"
-msgstr "Завантаження оновлення"
-
-#: source/tmp/win-update/App.vue.ts:36
-msgid "No update available. You have the most recent version."
-msgstr "Оновлень немає. У вас остання версія програми."
-
-#: source/tmp/win-update/App.vue.ts:42
-msgid "Click to start update"
-msgstr "Натисніть, щоб почати оновлення"
-
-#: source/tmp/win-update/App.vue.ts:45
+#: source/app/service-providers/commands/import.ts:84
 #, fuzzy
-msgid "never"
+msgid "Import failed"
+msgstr "Помилка експорту"
+
+#: source/app/service-providers/config/config-validation.ts:278
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "Параметр %s повинен мати тип %s."
+
+#: source/app/service-providers/config/config-validation.ts:281
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "Параметр %s повинен бути одним із: %s."
+
+#: source/app/service-providers/config/config-validation.ts:284
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "Опція %s повинна бути між %s і %s (кількість символів)."
+
+#: source/app/service-providers/config/config-validation.ts:287
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "Опція %s не повинна перевищувати %s (символи)."
+
+#: source/app/service-providers/config/config-validation.ts:290
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "Опція %s повинна бути щонайменше %s (кількість символів)."
+
+#: source/app/service-providers/config/config-validation.ts:293
+#, javascript-format
+msgid "Option %s is required."
+msgstr "Опція %s обов'язкова."
+
+#: source/app/service-providers/config/index.ts:492
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:495
+#: source/app/service-providers/menu/menu.darwin.ts:702
+#: source/app/service-providers/menu/menu.win32.ts:676
+msgid "Restart now"
+msgstr ""
+
+#: source/app/service-providers/config/index.ts:496
+msgid "Restart later"
+msgstr ""
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
+msgid "Replace file"
+msgstr "Замінити файл"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#, javascript-format
+msgid ""
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
+msgstr ""
+"Файл %s змінено віддалено. Замінити завантажену версію на нову з диска?"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
+#: source/win-preferences/schema/general.ts:78
+msgid "Always load remote changes to the current file"
+msgstr "Завжди загружати віддалені зміни поточного файлу"
+
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
+#, fuzzy
+msgid "There are unsaved changes. Do you want to save them first?"
+msgstr ""
+"У поточному файлі є незбережені зміни. Хочете опустити зміни чи зберегти?"
+
+#: source/app/service-providers/windows/dialog/save-dialog.ts:58
+msgid "Save file"
+msgstr ""
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
+msgid "Overwrite existing file"
+msgstr "Перезапис існуючого файлу"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#, javascript-format
+msgid "The file %s already exists in this directory. Overwrite?"
+msgstr "Файл %s вже існує в цьому каталозі. Перезаписати?"
+
+#: source/app/service-providers/windows/dialog/ask-file.ts:54
+msgid "Open file"
+msgstr "Відкрити файл"
+
+#: source/app/service-providers/menu/menu.darwin.ts:51
+#: source/app/service-providers/menu/menu.win32.ts:221
+#: source/app/service-providers/menu/menu.win32.ts:225
+msgid "Preferences…"
+msgstr "Налаштування"
+
+#: source/app/service-providers/menu/menu.darwin.ts:67
+#: source/app/service-providers/menu/menu.win32.ts:241
+msgid "Manage Tags…"
+msgstr "Керування мітками..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:77
+msgid "Services"
+msgstr "Сервіси"
+
+#: source/app/service-providers/menu/menu.darwin.ts:86
+msgid "Hide"
+msgstr "Сховати"
+
+#: source/app/service-providers/menu/menu.darwin.ts:91
+msgid "Hide others"
+msgstr "Сховати інші"
+
+#: source/app/service-providers/menu/menu.darwin.ts:96
+msgid "Show"
+msgstr "Показати"
+
+#: source/app/service-providers/menu/menu.darwin.ts:104
+#: source/app/service-providers/menu/menu.win32.ts:300
+#: source/app/service-providers/tray/index.ts:166
+msgid "Quit"
+msgstr "Вийти"
+
+#: source/app/service-providers/menu/menu.darwin.ts:113
+#: source/app/service-providers/menu/menu.win32.ts:87
+msgid "File"
+msgstr "Файл"
+
+#: source/app/service-providers/menu/menu.darwin.ts:183
+#: source/app/service-providers/menu/menu.win32.ts:44
+#: source/app/service-providers/menu/menu.win32.ts:56
+msgid "Recent documents"
+msgstr "Недавні документи"
+
+#: source/app/service-providers/menu/menu.darwin.ts:187
+#: source/app/service-providers/menu/menu.win32.ts:48
+#: source/app/service-providers/menu/menu.win32.ts:60
+msgid "Empty"
+msgstr "Пусто"
+
+#: source/app/service-providers/menu/menu.darwin.ts:232
+#: source/app/service-providers/menu/menu.win32.ts:197
+msgid "Import files…"
+msgstr "Імпортування файлів..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:240
+#: source/app/service-providers/menu/menu.win32.ts:205
+msgid "Export…"
+msgstr "Експорт..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:259
+#: source/app/service-providers/menu/menu.win32.ts:253
+msgid "Import translation…"
+msgstr "Імпортувати переклад..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:267
+#: source/app/service-providers/menu/menu.win32.ts:261
+msgid "Import dictionary…"
+msgstr "Імпортувати словник..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:313
+#: source/app/service-providers/menu/menu.win32.ts:315
+msgid "Undo"
+msgstr "Скасувати"
+
+#: source/app/service-providers/menu/menu.darwin.ts:319
+#: source/app/service-providers/menu/menu.win32.ts:321
+msgid "Redo"
+msgstr "Повторити"
+
+#: source/app/service-providers/menu/menu.darwin.ts:370
+#: source/app/service-providers/menu/menu.win32.ts:372
+msgid "Find in file"
+msgstr "Пошук у файлі"
+
+#: source/app/service-providers/menu/menu.darwin.ts:378
+#: source/app/service-providers/menu/menu.win32.ts:380
+msgid "Find in directory"
+msgstr "Шукати у каталозі"
+
+#: source/app/service-providers/menu/menu.darwin.ts:386
+#: source/app/service-providers/menu/menu.win32.ts:388
+msgid "Filter files"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:397
+#: source/app/service-providers/menu/menu.win32.ts:399
+msgid "Generate new ID"
+msgstr "Згенерувати новий ID"
+
+#: source/app/service-providers/menu/menu.darwin.ts:416
+msgid "Speech"
+msgstr "Промова"
+
+#: source/app/service-providers/menu/menu.darwin.ts:420
+msgid "Start speaking"
+msgstr "Почати говорити"
+
+#: source/app/service-providers/menu/menu.darwin.ts:425
+msgid "Stop speaking"
+msgstr "Завершити говорити"
+
+#: source/app/service-providers/menu/menu.darwin.ts:435
+#: source/app/service-providers/menu/menu.win32.ts:418
+msgid "View"
+msgstr "Вигляд"
+
+#: source/app/service-providers/menu/menu.darwin.ts:439
+#: source/app/service-providers/menu/menu.win32.ts:422
+#: source/win-preferences/schema/appearance.ts:26
+msgid "Dark mode"
+msgstr "Темний режим"
+
+#: source/app/service-providers/menu/menu.darwin.ts:449
+#: source/app/service-providers/menu/menu.win32.ts:432
+msgid "Additional Information"
+msgstr "Додаткова інформація"
+
+#: source/app/service-providers/menu/menu.darwin.ts:459
+#: source/app/service-providers/menu/menu.win32.ts:442
+msgid "Distraction free mode"
+msgstr "Режим без відволікання"
+
+#: source/app/service-providers/menu/menu.darwin.ts:467
+#: source/app/service-providers/menu/menu.win32.ts:450
+msgid "Typewriter Mode"
+msgstr "Режим введення"
+
+#: source/app/service-providers/menu/menu.darwin.ts:478
+#: source/app/service-providers/menu/menu.win32.ts:461
+msgid "Toggle file manager"
+msgstr "Перемкнути файловий менеджер"
+
+#: source/app/service-providers/menu/menu.darwin.ts:500
+#: source/app/service-providers/menu/menu.win32.ts:480
+msgid "Reset zoom"
+msgstr "Відновити масштаб"
+
+#: source/app/service-providers/menu/menu.darwin.ts:509
+#: source/app/service-providers/menu/menu.win32.ts:489
+msgid "Zoom in"
+msgstr "Збільшити"
+
+#: source/app/service-providers/menu/menu.darwin.ts:516
+#: source/app/service-providers/menu/menu.win32.ts:496
+msgid "Zoom out"
+msgstr "Зменшити"
+
+#: source/app/service-providers/menu/menu.darwin.ts:526
+#: source/app/service-providers/menu/menu.win32.ts:506
+msgid "Toggle fullscreen"
+msgstr "На весь екран"
+
+#: source/app/service-providers/menu/menu.darwin.ts:534
+#: source/app/service-providers/menu/menu.win32.ts:515
+msgid "Develop"
+msgstr "Розробка"
+
+#: source/app/service-providers/menu/menu.darwin.ts:538
+#: source/app/service-providers/menu/menu.win32.ts:519
+msgid "Reload"
+msgstr "Перезавантажити"
+
+#: source/app/service-providers/menu/menu.darwin.ts:546
+#: source/app/service-providers/menu/menu.win32.ts:527
+msgid "Toggle developer tools"
+msgstr "Показати інструменти розробника"
+
+#: source/app/service-providers/menu/menu.darwin.ts:554
+#: source/app/service-providers/menu/menu.win32.ts:535
+msgid "Open Logs"
+msgstr "Відкрити логи"
+
+#: source/app/service-providers/menu/menu.darwin.ts:565
+#: source/app/service-providers/menu/menu.win32.ts:546
+msgid "Window"
+msgstr "Вікно"
+
+#: source/app/service-providers/menu/menu.darwin.ts:570
+#: source/app/service-providers/menu/menu.win32.ts:551
+msgid "Minimize"
+msgstr "Згорнути"
+
+#: source/app/service-providers/menu/menu.darwin.ts:584
+msgid "Bring All to Front"
+msgstr "Перенести все на фронтову частину"
+
+#: source/app/service-providers/menu/menu.darwin.ts:600
+#: source/app/service-providers/menu/menu.win32.ts:574
+msgid "Previous Tab"
+msgstr "Попередня вкладка"
+
+#: source/app/service-providers/menu/menu.darwin.ts:608
+#: source/app/service-providers/menu/menu.win32.ts:582
+msgid "Next Tab"
+msgstr "Нова вкладка"
+
+#: source/app/service-providers/menu/menu.darwin.ts:616
+#: source/app/service-providers/menu/menu.win32.ts:590
+#, fuzzy
+msgid "New window"
+msgstr "Вікно"
+
+#: source/app/service-providers/menu/menu.darwin.ts:627
+#: source/app/service-providers/menu/menu.win32.ts:601
+msgid "Help"
+msgstr "Довідка"
+
+#: source/app/service-providers/menu/menu.darwin.ts:651
+#: source/app/service-providers/menu/menu.win32.ts:625
+msgid "Support Zettlr"
+msgstr "Підтримати Zettlr"
+
+#: source/app/service-providers/menu/menu.darwin.ts:661
+#: source/app/service-providers/menu/menu.win32.ts:635
+#, fuzzy
+msgid "Visit website"
+msgstr "Відкрити вебсайт"
+
+#: source/app/service-providers/menu/menu.darwin.ts:671
+#: source/app/service-providers/menu/menu.win32.ts:645
+msgid "Open user manual"
+msgstr "Відкрити документацію"
+
+#: source/app/service-providers/menu/menu.darwin.ts:685
+#: source/app/service-providers/menu/menu.win32.ts:659
+msgid "Open Tutorial"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:693
+#: source/app/service-providers/menu/menu.win32.ts:667
+msgid "Clear FSAL cache …"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:697
+#: source/app/service-providers/menu/menu.win32.ts:671
+msgid "Clear FSAL Cache"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:698
+#: source/app/service-providers/menu/menu.win32.ts:672
+msgid "Clearing the FSAL cache requires a restart."
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:699
+#: source/app/service-providers/menu/menu.win32.ts:673
+msgid ""
+"After the restart, Zettlr will recreate the entire cache, which may take a "
+"few moments, depending on the amount of files you have loaded and the speed "
+"of your disk. The window(s) will show afterward."
+msgstr ""
+
+#: source/app/service-providers/tray/index.ts:160
+msgid "Show Zettlr"
+msgstr ""
+
+#: source/app/service-providers/tray/index.ts:173
+msgid "Zettlr"
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:298
+#, javascript-format
+msgid "Could not check for updates: Server Error (Status code: %s)"
+msgstr "Неможливо перевірити на оновлення: Помилка сервера (Код помилки: %s)"
+
+#: source/app/service-providers/updates/index.ts:300
+#, javascript-format
+msgid "Could not check for updates: Client Error (Status code: %s)"
+msgstr "Неможливо перевірити на оновлення: Помилка клієнта (Код помилки: %s)"
+
+#: source/app/service-providers/updates/index.ts:302
+#, javascript-format
+msgid ""
+"Could not check for updates: The server tried to redirect (Status code: %s)"
+msgstr ""
+"Неможливо перевірити на оновлення: Сервер намагається перенаправити (Код "
+"помилки: %s)"
+
+#. getaddrinfo has reported that the host has not been found.
+#. This normally only happens if the networking interface is
+#. offline.
+#: source/app/service-providers/updates/index.ts:307
+msgid "Could not check for updates: Could not establish connection"
+msgstr "Неможливо перевірити на оновлення: Не вдалося встановити з'єднання"
+
+#. Something else has occurred. GotError objects have a name property.
+#: source/app/service-providers/updates/index.ts:310
+#, javascript-format
+msgid "Could not check for updates. %s: %s"
+msgstr "Не вдалося перевірити оновлення. %s: %s"
+
+#: source/app/service-providers/updates/index.ts:326
+msgid "Could not check for updates: Server hasn't sent any data"
+msgstr "Неможливо перевірити на оновлення: Сервер не надсилає даних"
+
+#: source/app/service-providers/updates/index.ts:585
+#, javascript-format
+msgid "An update to version %s is available!"
+msgstr "Доступне оновлення до версії %s!"
+
+#: source/win-preferences/schema/zettelkasten.ts:23
+msgid "Zettelkasten IDs"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:29
+#, fuzzy
+msgid "Pattern for Zettelkasten IDs"
+msgstr "Шаблон для генерації нових ID"
+
+#: source/win-preferences/schema/zettelkasten.ts:30
+#, fuzzy
+msgid "Uses ECMAScript regular expressions"
+msgstr "Регулярний вираз для ID"
+
+#: source/win-preferences/schema/zettelkasten.ts:36
+msgid "Pattern used to generate new IDs"
+msgstr "Шаблон для генерації нових ID"
+
+#: source/win-preferences/schema/zettelkasten.ts:39
+#, javascript-format
+msgid "Available Variables: %s"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:44
+#: source/win-preferences/schema/import-export.ts:77
+#, fuzzy
+msgid "Internal links"
+msgstr "Вилучати внутрішні посилання"
+
+#: source/win-preferences/schema/zettelkasten.ts:50
+msgid "Link with filename only"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:55
+#, fuzzy
+msgid "When linking files, add the document name …"
+msgstr "Під час зв’язування файлів додайте ім’я файлу …"
+
+#: source/win-preferences/schema/zettelkasten.ts:58
+#, fuzzy
+msgid "Always"
+msgstr "завжди"
+
+#: source/win-preferences/schema/zettelkasten.ts:59
+#, fuzzy
+msgid "Only when linking using the ID"
+msgstr "лише при встановленні посилань з використанням ідентифікатора"
+
+#: source/win-preferences/schema/zettelkasten.ts:60
+#, fuzzy
+msgid "Never"
 msgstr "ніколи"
 
-#: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
-#, javascript-format
-msgid "Last checked: %s"
+#: source/win-preferences/schema/zettelkasten.ts:68
+#, fuzzy
+msgid "Link format"
+msgstr "Початок посилання"
+
+#: source/win-preferences/schema/zettelkasten.ts:73
+msgid ""
+"Internal links allow you to add an optional title, separated by a vertical "
+"bar character from the actual link target. Here you can define the ordering "
+"of the two."
 msgstr ""
 
-#: source/tmp/win-update/App.vue.ts:124
-msgid "Starting update …"
-msgstr "Початок оновлення…"
+#: source/win-preferences/schema/zettelkasten.ts:79
+msgid "[[Link|Title]]: Link first (recommended)"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "[[Title|Link]]: Title first"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:88
+#, fuzzy
+msgid "Start a full-text search when following internal links"
+msgstr "Починати пошук при переході за Zettelkasten-посиланнями"
+
+#: source/win-preferences/schema/zettelkasten.ts:89
+msgid "The search string will match the content between the brackets: [[ ]]."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:96
+#, fuzzy
+msgid ""
+"Automatically create non-existing files in this folder when following "
+"internal links"
+msgstr ""
+"Автоматично створювати неіснуючі файли при переході за внутрішніми "
+"посиланнями"
+
+#: source/win-preferences/schema/zettelkasten.ts:101
+msgid "For this to work, the folder must be open as a Workspace in Zettlr."
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:106
+msgid "Path to folder"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:22
+msgid "Application language"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:33
+msgid "Autosave"
+msgstr "Автозбереження"
+
+#: source/win-preferences/schema/general.ts:43
+#, fuzzy
+msgid "Save modifications"
+msgstr "Час останньої зміни"
+
+#: source/win-preferences/schema/general.ts:47
+#: source/win-preferences/schema/appearance.ts:41
+msgid "Off"
+msgstr "Вимкнено"
+
+#: source/win-preferences/schema/general.ts:48
+msgid "Immediately"
+msgstr "Негайно"
+
+#: source/win-preferences/schema/general.ts:49
+msgid "After a short delay"
+msgstr "Після невеликої затримки"
+
+#: source/win-preferences/schema/general.ts:55
+msgid "Default image folder"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:67
+msgid ""
+"Click \"Select folder…\" or type an absolute or relative path directly into "
+"the input field."
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:72
+msgid "Behavior"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:83
+msgid "Avoid opening files in new tabs if possible"
+msgstr "По можливості уникайте відкриття файлів у нових вкладках"
+
+#: source/win-preferences/schema/general.ts:89
+#, fuzzy
+msgid "Updates"
+msgstr "Програма оновлення"
+
+#: source/win-preferences/schema/general.ts:95
+msgid "Automatically check for updates"
+msgstr ""
 
 #: source/win-preferences/schema/appearance.ts:37
 msgid "Schedule"
 msgstr "Запланувати"
-
-#: source/win-preferences/schema/appearance.ts:41
-#: source/win-preferences/schema/general.ts:47
-msgid "Off"
-msgstr "Вимкнено"
 
 #: source/win-preferences/schema/appearance.ts:42
 #, fuzzy
@@ -2572,142 +2727,126 @@ msgstr ""
 msgid "Open CSS editor"
 msgstr "Відкрити каталог"
 
-#: source/win-preferences/schema/general.ts:22
-msgid "Application language"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:33
-msgid "Autosave"
-msgstr "Автозбереження"
-
-#: source/win-preferences/schema/general.ts:43
+#: source/win-preferences/schema/advanced.ts:30
 #, fuzzy
-msgid "Save modifications"
-msgstr "Час останньої зміни"
+msgid "Pattern for new file names"
+msgstr "Шаблон для нових файлів"
 
-#: source/win-preferences/schema/general.ts:48
-msgid "Immediately"
-msgstr "Негайно"
-
-#: source/win-preferences/schema/general.ts:49
-msgid "After a short delay"
-msgstr "Після невеликої затримки"
-
-#: source/win-preferences/schema/general.ts:55
-msgid "Default image folder"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:67
-msgid ""
-"Click \"Select folder…\" or type an absolute or relative path directly into "
-"the input field."
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:72
-msgid "Behavior"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:83
-msgid "Avoid opening files in new tabs if possible"
-msgstr "По можливості уникайте відкриття файлів у нових вкладках"
-
-#: source/win-preferences/schema/general.ts:89
+#: source/win-preferences/schema/advanced.ts:36
 #, fuzzy
-msgid "Updates"
-msgstr "Програма оновлення"
+msgid "Define a pattern for new file names"
+msgstr "Шаблон для нових файлів"
 
-#: source/win-preferences/schema/general.ts:95
-msgid "Automatically check for updates"
+#: source/win-preferences/schema/advanced.ts:38
+#, javascript-format
+msgid "Available variables: %s"
 msgstr ""
 
-#: source/win-preferences/schema/file-manager.ts:23
+#: source/win-preferences/schema/advanced.ts:44
+msgid "Do not prompt for filename when creating new files"
+msgstr "Не запитувати назву при створенні нових файлів"
+
+#: source/win-preferences/schema/advanced.ts:57
+msgid "Use native window appearance"
+msgstr "Використовувати нативний зовнішній вигляд вікна"
+
+#: source/win-preferences/schema/advanced.ts:58
+msgid "Only available on Linux; this is the default for macOS and Windows."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:64
 #, fuzzy
-msgid "Display mode"
-msgstr "Темний режим"
+msgid "Enable window vibrancy"
+msgstr "Використовувати нативний зовнішній вигляд вікна"
 
-#: source/win-preferences/schema/file-manager.ts:32
-msgid "Thin"
+#: source/win-preferences/schema/advanced.ts:65
+msgid "Only available on macOS; makes the window background opaque."
 msgstr ""
 
-#: source/win-preferences/schema/file-manager.ts:33
-msgid "Expanded"
+#: source/win-preferences/schema/advanced.ts:72
+msgid "Show app in the notification area"
+msgstr "Показати сповіщення"
+
+#: source/win-preferences/schema/advanced.ts:73
+msgid "Leave app running in the notification area"
+msgstr "Залиште програму запущеною в області сповіщень"
+
+#: source/win-preferences/schema/advanced.ts:82
+msgid "Zoom behavior"
 msgstr ""
 
-#: source/win-preferences/schema/file-manager.ts:34
-msgid "Combined"
+#: source/win-preferences/schema/advanced.ts:85
+msgid "Resizes the whole GUI"
 msgstr ""
 
-#: source/win-preferences/schema/file-manager.ts:40
-msgid ""
-"The Thin mode shows your directories and files separately. Select a "
-"directory to have its contents displayed in the file list. Switch between "
-"file list and directory tree by clicking on directories or the arrow button "
-"which appears at the top left corner of the file list."
-msgstr ""
-
-#: source/win-preferences/schema/file-manager.ts:45
-msgid "Show file information"
-msgstr "Показувати інформацію про файл"
-
-#: source/win-preferences/schema/file-manager.ts:50
-msgid "Show folders above files"
-msgstr "Показати папки над файлами"
-
-#: source/win-preferences/schema/file-manager.ts:56
-msgid "Markdown document name display"
-msgstr ""
-
-#: source/win-preferences/schema/file-manager.ts:64
-msgid "Filename only"
-msgstr ""
-
-#: source/win-preferences/schema/file-manager.ts:65
-msgid "Title if applicable"
-msgstr ""
-
-#: source/win-preferences/schema/file-manager.ts:66
-msgid "First heading level 1 if applicable"
-msgstr ""
-
-#: source/win-preferences/schema/file-manager.ts:67
-msgid "Title or first heading level 1 if applicable"
-msgstr ""
-
-#: source/win-preferences/schema/file-manager.ts:73
-msgid "Display Markdown file extensions"
-msgstr ""
-
-#: source/win-preferences/schema/file-manager.ts:80
-msgid "Time display"
-msgstr ""
-
-#: source/win-preferences/schema/file-manager.ts:88
-msgid "Last modification time"
-msgstr "Час останньої зміни"
-
-#: source/win-preferences/schema/file-manager.ts:89
-msgid "File creation time"
-msgstr "Час створення файлу"
-
-#: source/win-preferences/schema/file-manager.ts:95
+#: source/win-preferences/schema/advanced.ts:86
 #, fuzzy
-msgid "Sorting"
-msgstr "Експорт..."
+msgid "Changes the editor font size"
+msgstr "Розмір шрифту редактора"
 
-#: source/win-preferences/schema/file-manager.ts:101
-#, fuzzy
-msgid "When sorting documents…"
-msgstr "Недавні документи"
+#: source/win-preferences/schema/advanced.ts:92
+msgid "Attachments sidebar"
+msgstr ""
 
-#: source/win-preferences/schema/file-manager.ts:104
-#, fuzzy
-msgid "Use natural order (2 comes before 10)"
-msgstr "Звичайне сортування (10 після 2)"
+#: source/win-preferences/schema/advanced.ts:98
+msgid "File extensions to be visible in the Attachments sidebar"
+msgstr ""
 
-#: source/win-preferences/schema/file-manager.ts:105
+#: source/win-preferences/schema/advanced.ts:104
 #, fuzzy
-msgid "Use ASCII order (2 comes after 10)"
-msgstr "Сортування ASCII (2 після 10)"
+msgid "Iframe rendering whitelist"
+msgstr "Список візуалізації iFrame"
+
+#: source/win-preferences/schema/advanced.ts:113
+msgid "Hostname"
+msgstr "Hostname"
+
+#: source/win-preferences/schema/advanced.ts:115
+#: source/win-preferences/schema/spellchecking.ts:173
+#: source/win-preferences/schema/autocorrect.ts:112
+#, fuzzy
+msgid "Filter"
+msgstr "Фільтр міток..."
+
+#: source/win-preferences/schema/advanced.ts:120
+#, fuzzy
+msgid "Watchdog polling"
+msgstr "Активувати спостереження за файлами"
+
+#: source/win-preferences/schema/advanced.ts:126
+msgid "Activate Watchdog polling"
+msgstr "Активувати спостереження за файлами"
+
+#: source/win-preferences/schema/advanced.ts:131
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr "Час очікування перед тим, як запис файлу вважається виконаним (в мс)"
+
+#: source/win-preferences/schema/advanced.ts:138
+#, fuzzy
+msgid "Deleting items"
+msgstr "Видалити файл"
+
+#: source/win-preferences/schema/advanced.ts:144
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr ""
+"Видаляти елементи безповоротно, якщо переміщення їх у смітник не вдається"
+
+#: source/win-preferences/schema/advanced.ts:150
+#, fuzzy
+msgid "Debug mode"
+msgstr "Увімкнути режим зневадження"
+
+#: source/win-preferences/schema/advanced.ts:156
+msgid "Enable debug mode"
+msgstr "Увімкнути режим зневадження"
+
+#: source/win-preferences/schema/advanced.ts:163
+msgid "Beta releases"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:169
+msgid "Notify me about beta releases"
+msgstr "Сповіщати мене про вихід бета-версій"
 
 #: source/win-preferences/schema/editor.ts:23
 #, fuzzy
@@ -2864,58 +3003,6 @@ msgstr ""
 msgid "Automatically close matching character pairs"
 msgstr "Автоматично закривати відповідні пари символів"
 
-#: source/win-preferences/schema/autocorrect.ts:22
-#, fuzzy
-msgid "Autocorrect"
-msgstr "Увімкнути автовиправлення"
-
-#: source/win-preferences/schema/autocorrect.ts:32
-msgid "Smart quotes"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:45
-#, fuzzy
-msgid "Double Quotes"
-msgstr "Вимкнути Magic Quotes"
-
-#: source/win-preferences/schema/autocorrect.ts:48
-#: source/win-preferences/schema/autocorrect.ts:70
-msgid "Disable Magic Quotes"
-msgstr "Вимкнути Magic Quotes"
-
-#: source/win-preferences/schema/autocorrect.ts:67
-#, fuzzy
-msgid "Single Quotes"
-msgstr "Вимкнути Magic Quotes"
-
-#: source/win-preferences/schema/autocorrect.ts:95
-msgid "Text-replacement patterns"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:99
-msgid "Match whole words"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:100
-msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:107
-#, fuzzy
-msgid "Replace"
-msgstr "Замінити файл"
-
-#: source/win-preferences/schema/autocorrect.ts:107
-msgid "With"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:112
-#: source/win-preferences/schema/spellchecking.ts:173
-#: source/win-preferences/schema/advanced.ts:115
-#, fuzzy
-msgid "Filter"
-msgstr "Фільтр міток..."
-
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
 msgstr ""
@@ -2947,12 +3034,6 @@ msgstr "Використовувати внутрішній Pandoc для екс
 #, fuzzy
 msgid "Remove tags from files when exporting"
 msgstr "Видаляти мітки з файлів"
-
-#: source/win-preferences/schema/import-export.ts:77
-#: source/win-preferences/schema/zettelkasten.ts:44
-#, fuzzy
-msgid "Internal links"
-msgstr "Вилучати внутрішні посилання"
 
 #: source/win-preferences/schema/import-export.ts:80
 msgid "Remove internal links completely"
@@ -3008,99 +3089,6 @@ msgstr "Коментар"
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:23
-msgid "Zettelkasten IDs"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:29
-#, fuzzy
-msgid "Pattern for Zettelkasten IDs"
-msgstr "Шаблон для генерації нових ID"
-
-#: source/win-preferences/schema/zettelkasten.ts:30
-#, fuzzy
-msgid "Uses ECMAScript regular expressions"
-msgstr "Регулярний вираз для ID"
-
-#: source/win-preferences/schema/zettelkasten.ts:36
-msgid "Pattern used to generate new IDs"
-msgstr "Шаблон для генерації нових ID"
-
-#: source/win-preferences/schema/zettelkasten.ts:39
-#, javascript-format
-msgid "Available Variables: %s"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:50
-msgid "Link with filename only"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:55
-#, fuzzy
-msgid "When linking files, add the document name …"
-msgstr "Під час зв’язування файлів додайте ім’я файлу …"
-
-#: source/win-preferences/schema/zettelkasten.ts:58
-#, fuzzy
-msgid "Always"
-msgstr "завжди"
-
-#: source/win-preferences/schema/zettelkasten.ts:59
-#, fuzzy
-msgid "Only when linking using the ID"
-msgstr "лише при встановленні посилань з використанням ідентифікатора"
-
-#: source/win-preferences/schema/zettelkasten.ts:60
-#, fuzzy
-msgid "Never"
-msgstr "ніколи"
-
-#: source/win-preferences/schema/zettelkasten.ts:68
-#, fuzzy
-msgid "Link format"
-msgstr "Початок посилання"
-
-#: source/win-preferences/schema/zettelkasten.ts:73
-msgid ""
-"Internal links allow you to add an optional title, separated by a vertical "
-"bar character from the actual link target. Here you can define the ordering "
-"of the two."
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:79
-msgid "[[Link|Title]]: Link first (recommended)"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:80
-msgid "[[Title|Link]]: Title first"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:88
-#, fuzzy
-msgid "Start a full-text search when following internal links"
-msgstr "Починати пошук при переході за Zettelkasten-посиланнями"
-
-#: source/win-preferences/schema/zettelkasten.ts:89
-msgid "The search string will match the content between the brackets: [[ ]]."
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:96
-#, fuzzy
-msgid ""
-"Automatically create non-existing files in this folder when following "
-"internal links"
-msgstr ""
-"Автоматично створювати неіснуючі файли при переході за внутрішніми "
-"посиланнями"
-
-#: source/win-preferences/schema/zettelkasten.ts:101
-msgid "For this to work, the folder must be open as a Workspace in Zettlr."
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:106
-msgid "Path to folder"
 msgstr ""
 
 #: source/win-preferences/schema/spellchecking.ts:24
@@ -3213,119 +3201,50 @@ msgstr "Словниковий запис"
 msgid "Search for entries …"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:30
+#: source/win-preferences/schema/autocorrect.ts:22
 #, fuzzy
-msgid "Pattern for new file names"
-msgstr "Шаблон для нових файлів"
+msgid "Autocorrect"
+msgstr "Увімкнути автовиправлення"
 
-#: source/win-preferences/schema/advanced.ts:36
+#: source/win-preferences/schema/autocorrect.ts:32
+msgid "Smart quotes"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:45
 #, fuzzy
-msgid "Define a pattern for new file names"
-msgstr "Шаблон для нових файлів"
+msgid "Double Quotes"
+msgstr "Вимкнути Magic Quotes"
 
-#: source/win-preferences/schema/advanced.ts:38
-#, javascript-format
-msgid "Available variables: %s"
-msgstr ""
+#: source/win-preferences/schema/autocorrect.ts:48
+#: source/win-preferences/schema/autocorrect.ts:70
+msgid "Disable Magic Quotes"
+msgstr "Вимкнути Magic Quotes"
 
-#: source/win-preferences/schema/advanced.ts:44
-msgid "Do not prompt for filename when creating new files"
-msgstr "Не запитувати назву при створенні нових файлів"
-
-#: source/win-preferences/schema/advanced.ts:57
-msgid "Use native window appearance"
-msgstr "Використовувати нативний зовнішній вигляд вікна"
-
-#: source/win-preferences/schema/advanced.ts:58
-msgid "Only available on Linux; this is the default for macOS and Windows."
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:64
+#: source/win-preferences/schema/autocorrect.ts:67
 #, fuzzy
-msgid "Enable window vibrancy"
-msgstr "Використовувати нативний зовнішній вигляд вікна"
+msgid "Single Quotes"
+msgstr "Вимкнути Magic Quotes"
 
-#: source/win-preferences/schema/advanced.ts:65
-msgid "Only available on macOS; makes the window background opaque."
+#: source/win-preferences/schema/autocorrect.ts:95
+msgid "Text-replacement patterns"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:72
-msgid "Show app in the notification area"
-msgstr "Показати сповіщення"
-
-#: source/win-preferences/schema/advanced.ts:73
-msgid "Leave app running in the notification area"
-msgstr "Залиште програму запущеною в області сповіщень"
-
-#: source/win-preferences/schema/advanced.ts:82
-msgid "Zoom behavior"
+#: source/win-preferences/schema/autocorrect.ts:99
+msgid "Match whole words"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:85
-msgid "Resizes the whole GUI"
+#: source/win-preferences/schema/autocorrect.ts:100
+msgid "When checked, AutoCorrect will never replace parts of words"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:86
+#: source/win-preferences/schema/autocorrect.ts:107
 #, fuzzy
-msgid "Changes the editor font size"
-msgstr "Розмір шрифту редактора"
+msgid "Replace"
+msgstr "Замінити файл"
 
-#: source/win-preferences/schema/advanced.ts:92
-msgid "Attachments sidebar"
+#: source/win-preferences/schema/autocorrect.ts:107
+msgid "With"
 msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:98
-msgid "File extensions to be visible in the Attachments sidebar"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:104
-#, fuzzy
-msgid "Iframe rendering whitelist"
-msgstr "Список візуалізації iFrame"
-
-#: source/win-preferences/schema/advanced.ts:113
-msgid "Hostname"
-msgstr "Hostname"
-
-#: source/win-preferences/schema/advanced.ts:120
-#, fuzzy
-msgid "Watchdog polling"
-msgstr "Активувати спостереження за файлами"
-
-#: source/win-preferences/schema/advanced.ts:126
-msgid "Activate Watchdog polling"
-msgstr "Активувати спостереження за файлами"
-
-#: source/win-preferences/schema/advanced.ts:131
-msgid "Time to wait before writing a file is considered done (in ms)"
-msgstr "Час очікування перед тим, як запис файлу вважається виконаним (в мс)"
-
-#: source/win-preferences/schema/advanced.ts:138
-#, fuzzy
-msgid "Deleting items"
-msgstr "Видалити файл"
-
-#: source/win-preferences/schema/advanced.ts:144
-msgid "Delete items irreversibly, if moving them to trash fails"
-msgstr ""
-"Видаляти елементи безповоротно, якщо переміщення їх у смітник не вдається"
-
-#: source/win-preferences/schema/advanced.ts:150
-#, fuzzy
-msgid "Debug mode"
-msgstr "Увімкнути режим зневадження"
-
-#: source/win-preferences/schema/advanced.ts:156
-msgid "Enable debug mode"
-msgstr "Увімкнути режим зневадження"
-
-#: source/win-preferences/schema/advanced.ts:163
-msgid "Beta releases"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:169
-msgid "Notify me about beta releases"
-msgstr "Сповіщати мене про вихід бета-версій"
 
 #: source/win-preferences/schema/citations.ts:28
 msgid "How would you like autocomplete to insert your citations?"
@@ -3344,6 +3263,95 @@ msgstr "Додати до файлу"
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL-Style (optional)"
 msgstr "Стилі CSL (необов'язково)"
+
+#: source/win-preferences/schema/file-manager.ts:23
+#, fuzzy
+msgid "Display mode"
+msgstr "Темний режим"
+
+#: source/win-preferences/schema/file-manager.ts:32
+msgid "Thin"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:33
+msgid "Expanded"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:34
+msgid "Combined"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:40
+msgid ""
+"The Thin mode shows your directories and files separately. Select a "
+"directory to have its contents displayed in the file list. Switch between "
+"file list and directory tree by clicking on directories or the arrow button "
+"which appears at the top left corner of the file list."
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:45
+msgid "Show file information"
+msgstr "Показувати інформацію про файл"
+
+#: source/win-preferences/schema/file-manager.ts:50
+msgid "Show folders above files"
+msgstr "Показати папки над файлами"
+
+#: source/win-preferences/schema/file-manager.ts:56
+msgid "Markdown document name display"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:64
+msgid "Filename only"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:65
+msgid "Title if applicable"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:66
+msgid "First heading level 1 if applicable"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:67
+msgid "Title or first heading level 1 if applicable"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:73
+msgid "Display Markdown file extensions"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:80
+msgid "Time display"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:88
+msgid "Last modification time"
+msgstr "Час останньої зміни"
+
+#: source/win-preferences/schema/file-manager.ts:89
+msgid "File creation time"
+msgstr "Час створення файлу"
+
+#: source/win-preferences/schema/file-manager.ts:95
+#, fuzzy
+msgid "Sorting"
+msgstr "Експорт..."
+
+#: source/win-preferences/schema/file-manager.ts:101
+#, fuzzy
+msgid "When sorting documents…"
+msgstr "Недавні документи"
+
+#: source/win-preferences/schema/file-manager.ts:104
+#, fuzzy
+msgid "Use natural order (2 comes before 10)"
+msgstr "Звичайне сортування (10 після 2)"
+
+#: source/win-preferences/schema/file-manager.ts:105
+#, fuzzy
+msgid "Use ASCII order (2 comes after 10)"
+msgstr "Сортування ASCII (2 після 10)"
 
 #~ msgid ""
 #~ "Pandoc has not been found on this system. Please install Pandoc prior to "
