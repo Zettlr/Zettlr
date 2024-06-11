@@ -187,7 +187,7 @@
     "less-loader": "^12.2.0",
     "mocha": "^10.4.0",
     "node-loader": "^2.0.0",
-    "style-loader": "^3.3.4",
+    "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
