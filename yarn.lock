@@ -1067,9 +1067,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/config-inspector@npm:^0.4.10":
-  version: 0.4.10
-  resolution: "@eslint/config-inspector@npm:0.4.10"
+"@eslint/config-inspector@npm:^0.4.11":
+  version: 0.4.11
+  resolution: "@eslint/config-inspector@npm:0.4.11"
   dependencies:
     bundle-require: ^4.1.0
     cac: ^6.7.14
@@ -1090,7 +1090,7 @@ __metadata:
   bin:
     config-inspector: bin.mjs
     eslint-config-inspector: bin.mjs
-  checksum: 9af37ef36b8519f63fca0216a9ada6e71590c883bc3ed59cb72b75075069e70e72aea88957be3bbed4331a9187452e231f2bdcc896d6248c85e818c7c43384ee
+  checksum: 7019e89e811d84793e7c760445de810a33e8cf17b68ca2ac87c421f7e21215be4c1ea45d601c3434df0b1f7773caa0e96a3d2afc743ef33e30356d8f680f09e7
   languageName: node
   linkType: hard
 
@@ -15311,7 +15311,7 @@ __metadata:
     "@electron-forge/plugin-webpack": ^7.4.0
     "@electron/fuses": ^1.8.0
     "@electron/notarize": ^2.3.2
-    "@eslint/config-inspector": ^0.4.10
+    "@eslint/config-inspector": ^0.4.11
     "@lezer/common": ^1.2.1
     "@lezer/highlight": ^1.2.0
     "@replit/codemirror-emacs": ^6.0.1
