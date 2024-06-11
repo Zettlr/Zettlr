@@ -153,7 +153,6 @@ export default function getMenu (
         {
           id: 'menu.new_dir',
           label: trans('New directory…'),
-          accelerator: 'Cmd+Shift+N',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'new-dir')
           }
@@ -299,14 +298,6 @@ export default function getMenu (
           accelerator: 'Cmd+Backspace',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'delete-file')
-          }
-        },
-        {
-          id: 'menu.delete_dir',
-          label: trans('Delete directory'),
-          accelerator: 'Cmd+Shift+Backspace',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'delete-dir')
           }
         }
       ]

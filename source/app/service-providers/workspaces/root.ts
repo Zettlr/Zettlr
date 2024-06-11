@@ -152,8 +152,8 @@ export class Root {
           return
         }
 
-        const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = this.config.get()
-        const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
+        const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = this.config.get()
+        const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
         sortDirectory(this.rootDescriptor as DirDescriptor, sorter)
       })
     }
@@ -178,12 +178,13 @@ export class Root {
     }
 
     const { eventName, eventPath } = nextEvent
-    // console.log('PROCESSING EVENT:', eventName, eventPath) // DEBUG
+
+    let hasError = false
 
     const isUnlink = eventName === 'unlink' || eventName === 'unlinkDir'
 
-    const { sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime } = this.config.get()
-    const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, sortingTime)
+    const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = this.config.get()
+    const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
 
     if (isUnlink && eventPath === this.rootPath) {
       // The root itself has been removed from disk
@@ -201,6 +202,15 @@ export class Root {
     } else {
       // Change or add
       try {
+        if (eventPath === this.rootPath && eventName.startsWith('addDir')) {
+          // I noticed this issue on my Nextcloud setup on my MBP 14in M2 Pro in
+          // April 2024. Somehow the Nextcloud provider was re-adding a root
+          // every time. This is a bug with them, however, as the bug
+          // disappeared once I stopped the Nextcloud sync. I'll leave this here
+          // in case other providers also do something funky in the future.
+          throw new Error('There was an add event on the root descriptor which doesnt make sense -- ignoring')
+        }
+
         // Load directories "shallow", no recursive parsing here
         const descriptor = await this.fsal.loadAnyPath(eventPath, true)
         if (descriptor.type === 'directory') {
@@ -225,14 +235,18 @@ export class Root {
         this.currentVersion++
       } catch (err: any) {
         this.log.error(`[Workspace Provider] Could not process event ${eventName}:${eventPath}`, err)
+        hasError = true
       }
     }
 
     // Now we either have a new root or a change in the queue.
     this.isProcessingEvent = false
 
-    // Notify that one change has just been processed
-    this.onChangeCallback(this.rootPath)
+    // Notify that one change has just been processed, but only if there was no
+    // error to prevent consumers of these events to run into trouble.
+    if (!hasError) {
+      this.onChangeCallback(this.rootPath)
+    }
 
     // Immediately process the next event if new events have been added in the meantime.
     if (this.eventQueue.length > 0) {

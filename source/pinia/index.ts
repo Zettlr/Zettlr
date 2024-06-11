@@ -13,7 +13,6 @@
  */
 
 export { useWorkspacesStore } from './workspaces'
-export { useOpenDirectoryStore } from './open-directory'
 export { useConfigStore } from './config'
 export { useStatisticsStore } from './statistics-store'
 export { useWindowStateStore } from './window-state-store'

@@ -40,16 +40,13 @@
           v-on:click="openDefaultsDirectory"
         ></ButtonControl>
 
-        <span v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" class="protected-info">
-          &#128274; {{ protectedProfileWarning }}
-        </span>
+        <ZtrAdmonition v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" type="info">
+          {{ protectedProfileWarning }}
+        </ZtrAdmonition>
 
-        <p v-if="visibleItems[currentItem]?.isInvalid" class="warning">
-          <cds-icon shape="warning-standard"></cds-icon>
-          <span> <!-- NOTE: Wrapping in a span due to the flex -->
-            {{ invalidProfileWarning }}
-          </span>
-        </p>
+        <ZtrAdmonition v-if="visibleItems[currentItem]?.isInvalid">
+          {{ invalidProfileWarning }}
+        </ZtrAdmonition>
 
         <CodeEditor
           ref="code-editor"
@@ -93,6 +90,7 @@ import SelectableList, { type SelectableListItem } from '@common/vue/form/elemen
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import CodeEditor from '@common/vue/CodeEditor.vue'
+import ZtrAdmonition from '@common/vue/ZtrAdmonition.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, computed, toRef, watch, onUnmounted } from 'vue'
 import { type PandocProfileMetadata } from '@providers/assets'
@@ -336,20 +334,6 @@ function openDefaultsDirectory (): void {
 
   .CodeMirror {
     flex-grow: 1;
-  }
-
-  p.warning {
-    display: flex;
-    align-items: center;
-    color: rgb(135, 135, 0);
-    background-color: rgb(255, 255, 0);
-    border: 1px solid rgb(135, 135, 0);
-    border-radius: 5px;
-    padding: 5px;
-    margin: 5px;
-
-    // More spacing between the icon and the text
-    span { padding-left: 5px; }
   }
 
   span.protected-info {

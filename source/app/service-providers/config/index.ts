@@ -436,7 +436,7 @@ export default class ConfigProvider extends ProviderContract {
       // A nested argument was requested, so iterate until we find it
       let nested = option.split('.')
       // Last one must be set manually, b/c simple attributes aren't pointers
-      let prop = nested.pop() as string // We can be sure it's not undefined
+      let prop = nested.pop()! // We can be sure it's not undefined
       let cfg = this.config
       for (let arg of nested) {
         if (arg in cfg) {

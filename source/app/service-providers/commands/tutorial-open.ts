@@ -67,7 +67,7 @@ export default class TutorialOpen extends ZettlrCommand {
       return
     }
 
-    this._app.documents.setOpenDirectory(tutorialDirectory.path)
+    this._app.config.set('openDirectory', tutorialDirectory.path)
     // We will pre-set the app with a three-pane layout at first. There are two
     // reference files that we will open to the right of the "main" file (welcome.md)
 

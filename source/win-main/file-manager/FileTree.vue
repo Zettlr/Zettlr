@@ -29,7 +29,8 @@
         v-bind:active-item="activeTreeItem?.[0]"
         v-bind:is-currently-filtering="filterQuery.trim() !== ''"
         v-bind:has-duplicate-name="getFiles.filter(i => i.name === item.name).length > 1"
-        v-bind:window-id="windowId"
+        v-bind:window-id="props.windowId"
+        v-on:toggle-file-list="emit('toggle-file-list')"
       >
       </TreeItem>
       <div v-show="getDirectories.length > 0" id="directories-dirs-header">
@@ -47,7 +48,8 @@
         v-bind:depth="0"
         v-bind:active-item="activeTreeItem?.[0]"
         v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
-        v-bind:window-id="windowId"
+        v-bind:window-id="props.windowId"
+        v-on:toggle-file-list="emit('toggle-file-list')"
       >
       </TreeItem>
     </template>
@@ -121,7 +123,10 @@ const props = defineProps<{
   windowId: string
 }>()
 
-const emit = defineEmits<(e: 'selection', event: MouseEvent) => void>()
+const emit = defineEmits<{
+  (e: 'selection', event: MouseEvent): void
+  (e: 'toggle-file-list'): void
+}>()
 
 // Can contain the path to a tree item that is focused
 const activeTreeItem = ref<undefined|[string, string]>(undefined)
@@ -236,11 +241,7 @@ function navigate (event: KeyboardEvent): void {
   if (event.key === 'Enter' && activeTreeItem.value !== undefined) {
     // Open the currently active item
     if (activeTreeItem.value[1] === 'directory') {
-      ipcRenderer.invoke('application', {
-        command: 'set-open-directory',
-        payload: activeTreeItem.value[0]
-      })
-        .catch(e => console.error(e))
+      configStore.setConfigValue('openDirectory', activeTreeItem.value[0])
     } else {
       // Select the active file (if there is one)
       ipcRenderer.invoke('documents-provider', {

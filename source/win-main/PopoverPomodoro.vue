@@ -59,7 +59,7 @@
   </PopoverWrapper>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -79,124 +79,95 @@ import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import SliderControl from '@common/vue/form/elements/SliderControl.vue'
 import PopoverWrapper from './PopoverWrapper.vue'
 import { trans } from '@common/i18n-renderer'
-import { type PropType } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { PomodoroConfig } from './App.vue'
 
-export default {
-  name: 'PopoverExport',
-  components: {
-    NumberControl,
-    SelectControl,
-    SliderControl,
-    PopoverWrapper
-  },
-  props: {
-    target: {
-      type: HTMLElement,
-      required: true
-    },
-    pomodoro: {
-      type: Object as PropType<PomodoroConfig>,
-      required: true
-    },
-    soundEffects: {
-      type: Object as PropType<Array<{ label: string, file: string }>>,
-      required: true
-    }
-  },
-  emits: [ 'close', 'start', 'stop', 'config' ],
-  data: function () {
-    return {
-      internalVolume: this.pomodoro.soundEffect.volume * 100,
-      internalEffect: this.pomodoro.currentEffectFile,
-      internalShortDuration: this.pomodoro.durations.short / 60,
-      internalTaskDuration: this.pomodoro.durations.task / 60,
-      internalLongDuration: this.pomodoro.durations.long / 60
-    }
-  },
-  computed: {
-    optionizedEffects () {
-      const opt: Record<string, string> = {}
-      for (const effect of this.soundEffects) {
-        opt[effect.file] = effect.label
-      }
-      return opt
-    },
-    isRunning () {
-      return this.pomodoro.intervalHandle !== undefined
-    },
-    remainingTimeFormatted: function () {
-      const currentDuration = this.pomodoro.durations[this.pomodoro.phase.type]
-      const timeRemaining = currentDuration - this.pomodoro.phase.elapsed
-      const minutes = Math.floor(timeRemaining / 60)
-      const seconds = timeRemaining % 60
-      const minStr = (minutes < 10) ? `0${minutes}` : String(minutes)
-      const secStr = (seconds < 10) ? `0${seconds}` : String(seconds)
-      return `${minStr}:${secStr}`
-    },
-    startLabel: function () {
-      return trans('Start')
-    },
-    stopLabel: function () {
-      return trans('Stop')
-    },
-    taskLabel: function () {
-      return trans('Work')
-    },
-    shortLabel: function () {
-      return trans('Short break')
-    },
-    longLabel: function () {
-      return trans('Break')
-    },
-    soundEffectsLabel: function () {
-      return trans('Sound Effect')
-    },
-    volumeLabel: function () {
-      return trans('Volume')
-    },
-    currentPhaseLabel: function () {
-      if (this.pomodoro.phase.type === 'task') {
-        return this.taskLabel
-      } else if (this.pomodoro.phase.type === 'long') {
-        return this.longLabel
-      } else {
-        return this.shortLabel
-      }
-    }
-  },
-  watch: {
-    internalTaskDuration () { this.updateConfig() },
-    internalShortDuration () { this.updateConfig() },
-    internalLongDuration () { this.updateConfig() },
-    internalVolume () { this.updateConfig() },
-    internalEffect () { this.updateConfig() }
-  },
-  methods: {
-    updateConfig () {
-      // TODO This is bad style
-      // eslint-disable-next-line vue/no-mutating-props
-      const effect = new Audio(this.internalEffect)
-      effect.volume = this.internalVolume / 100
-      const newConfig = {
-        ...this.pomodoro,
-        durations: {
-          task: this.internalTaskDuration * 60,
-          short: this.internalShortDuration * 60,
-          long: this.internalLongDuration * 60
-        },
-        soundEffect: effect,
-        currentEffectFile: this.internalEffect
-      }
-      this.$emit('config', newConfig)
-    },
-    startPomodoro: function () {
-      this.$emit('start')
-    },
-    stopPomodoro: function () {
-      this.$emit('stop')
-    }
+const startLabel = trans('Start')
+const stopLabel = trans('Stop')
+const taskLabel = trans('Work')
+const shortLabel = trans('Short break')
+const longLabel = trans('Break')
+const soundEffectsLabel = trans('Sound Effect')
+const volumeLabel = trans('Volume')
+
+const props = defineProps<{
+  target: HTMLElement
+  pomodoro: PomodoroConfig
+  soundEffects: Array<{ label: string, file: string }>
+}>()
+
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'start'): void
+  (e: 'stop'): void
+  (e: 'config', value: PomodoroConfig): void
+}>()
+
+const internalVolume = ref(props.pomodoro.soundEffect.volume * 100)
+const internalEffect = ref(props.pomodoro.currentEffectFile)
+const internalShortDuration = ref(props.pomodoro.durations.short / 60)
+const internalTaskDuration = ref(props.pomodoro.durations.task / 60)
+const internalLongDuration = ref(props.pomodoro.durations.long / 60)
+
+const optionizedEffects = computed(() => {
+  const opt: Record<string, string> = {}
+  for (const effect of props.soundEffects) {
+    opt[effect.file] = effect.label
   }
+  return opt
+})
+
+const isRunning = computed(() => props.pomodoro.intervalHandle !== undefined)
+
+const remainingTimeFormatted = computed(() => {
+  const currentDuration = props.pomodoro.durations[props.pomodoro.phase.type]
+  const timeRemaining = currentDuration - props.pomodoro.phase.elapsed
+  const minutes = Math.floor(timeRemaining / 60)
+  const seconds = timeRemaining % 60
+  const minStr = (minutes < 10) ? `0${minutes}` : String(minutes)
+  const secStr = (seconds < 10) ? `0${seconds}` : String(seconds)
+  return `${minStr}:${secStr}`
+})
+
+const currentPhaseLabel = computed(() => {
+  if (props.pomodoro.phase.type === 'task') {
+    return taskLabel
+  } else if (props.pomodoro.phase.type === 'long') {
+    return longLabel
+  } else {
+    return shortLabel
+  }
+})
+
+watch(internalTaskDuration, updateConfig)
+watch(internalShortDuration, updateConfig)
+watch(internalLongDuration, updateConfig)
+watch(internalVolume, updateConfig)
+watch(internalEffect, updateConfig)
+
+function updateConfig (): void {
+  const effect = new Audio()
+  effect.src = internalEffect.value
+  effect.volume = internalVolume.value / 100
+  const newConfig = {
+    ...props.pomodoro,
+    durations: {
+      task: internalTaskDuration.value * 60,
+      short: internalShortDuration.value * 60,
+      long: internalLongDuration.value * 60
+    },
+    soundEffect: effect,
+    currentEffectFile: internalEffect.value
+  }
+  emit('config', newConfig)
+}
+
+function startPomodoro (): void {
+  emit('start')
+}
+
+function stopPomodoro (): void {
+  emit('stop')
 }
 </script>
 

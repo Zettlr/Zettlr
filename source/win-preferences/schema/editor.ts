@@ -257,6 +257,11 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
         },
         { type: 'separator' },
         {
+          type: 'checkbox',
+          label: trans('Highlight whitespace'),
+          model: 'editor.showWhitespace'
+        },
+        {
           // TODO: Where to move this new setting???
           type: 'checkbox',
           label: trans('Suggest emojis during autocompletion'),

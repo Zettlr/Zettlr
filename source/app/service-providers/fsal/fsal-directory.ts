@@ -53,7 +53,7 @@ const PROJECT_TEMPLATE: ProjectSettings = {
   // General values that not only pertain to the PDF generation
   title: 'Untitled', // Default project title is the directory's name
   profiles: [], // NOTE: Must correspond to the defaults in ProjectProperties.vue
-  filters: [], // A list of filters (glob patterns) to exclude certain files
+  files: [], // A list of absolute paths to the files to be included, sorted (!)
   cslStyle: '', // A path to an optional CSL style file.
   templates: {
     tex: '', // An optional tex template

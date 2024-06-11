@@ -48,7 +48,6 @@ import UpdateUserDictionary from './update-user-dictionary'
 import ProviderContract from '@providers/provider-contract'
 import type AppServiceContainer from 'source/app/app-service-container'
 import type ZettlrCommand from './zettlr-command'
-import SetOpenDirectory from './set-open-directory'
 import { clipboard, ipcMain, nativeImage } from 'electron'
 import enumLangFiles from '@common/util/enum-lang-files'
 import enumDictFiles from '@common/util/enum-dict-files'
@@ -85,7 +84,6 @@ export const commands = [
   RootClose,
   RootOpen,
   SaveImageFromClipboard,
-  SetOpenDirectory,
   TutorialOpen,
   UpdateProjectProperties,
   UpdateUserDictionary
@@ -128,17 +126,6 @@ export default class CommandProvider extends ProviderContract {
         return await this._app.fsal.getAnyDirectoryDescriptor(payload)
       } else {
         this._app.log.error(`[Application] Could not return descriptor for ${String(payload)}: Neither file nor directory.`)
-      }
-    } else if (command === 'get-open-directory') {
-      const openDir = this._app.documents.getOpenDirectory()
-      if (openDir === null) {
-        return null
-      }
-
-      try {
-        return await this._app.fsal.getAnyDirectoryDescriptor(openDir)
-      } catch (err: any) {
-        return null
       }
     } else if (command === 'next-file') {
       // Trigger a "forward" command on the document manager

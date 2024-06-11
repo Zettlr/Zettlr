@@ -148,7 +148,9 @@ export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[])
 }
 
 /**
- * Loads the file contents for the given descriptor
+ * Loads the file contents for the given descriptor. NOTE: This always returns
+ * a document with newline feeds, normalizing the file contents, regardless of
+ * the actual linefeed the file uses.
  *
  * @param   {MDFileDescriptor}  fileObject  The file descriptor
  *
@@ -157,8 +159,14 @@ export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[])
 export async function load (fileObject: MDFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
-  // Account for an optional BOM, if present
-  return content.substring(fileObject.bom.length)
+  return content
+    // Account for an optional BOM, if present
+    .substring(fileObject.bom.length)
+    // Always split with a regular expression to ensure that mixed linefeeds
+    // don't break reading in a file. Then, on save, the linefeeds will be
+    // standardized to whatever the linefeed extractor detected.
+    .split(/\r\n|\n\r|\n|\r/g)
+    .join('\n')
 }
 
 /**
@@ -174,7 +182,8 @@ export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<b
 }
 
 /**
- * Saves the content into the given file descriptor
+ * Saves the content into the given file descriptor. NOTE: The file contents
+ * must be using exclusively newlines.
  *
  * @param   {MDFileDescriptor}  fileObject  The file descriptor
  * @param   {string}            content     The content to be written to file
@@ -188,11 +197,12 @@ export async function save (
   parser: (file: MDFileDescriptor, content: string) => void,
   cache: FSALCache|null
 ): Promise<void> {
-  // Make sure to retain the BOM if applicable
-  await fs.writeFile(fileObject.path, fileObject.bom + content)
+  // Make sure to retain the BOM if applicable, and use the correct linefeed.
+  const safeContent = fileObject.bom + content.split('\n').join(fileObject.linefeed)
+  await fs.writeFile(fileObject.path, safeContent)
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
-  parser(fileObject, content)
+  parser(fileObject, safeContent)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

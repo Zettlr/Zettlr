@@ -35,12 +35,11 @@ class TableWidget extends WidgetType {
       const node = this.node
       const table = fromSyntaxNode(this.node, view.state.sliceDoc(), {
         saveIntent () {
-          const newTable = table.getMarkdownTable()
           view.dispatch({
             changes: {
               from: node.from,
               to: node.to,
-              insert: newTable.substring(0, newTable.length)
+              insert: table.getMarkdownTable()
             }
           })
 

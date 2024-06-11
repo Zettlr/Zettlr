@@ -54,7 +54,7 @@
  * END HEADER
  */
 
-import { ref, computed } from 'vue'
+import { ref, computed, watch, toRef } from 'vue'
 
 const props = defineProps<{
   modelValue: boolean
@@ -66,6 +66,10 @@ const props = defineProps<{
 }>()
 
 const isChecked = ref<boolean>(props.modelValue)
+
+watch(toRef(props, 'modelValue'), (val) => {
+  isChecked.value = val
+})
 
 const emit = defineEmits<(e: 'update:modelValue', val: boolean) => void>()
 
@@ -98,6 +102,17 @@ body {
     }
 
     .cb-group-label { grid-area: label; }
+
+    label {
+      &.disabled {
+        color: grey;
+      }
+    }
+
+    div.info {
+      color: grey;
+      font-size: 80%;
+    }
   }
 
   label.checkbox {
@@ -152,17 +167,6 @@ body {
         border-color: rgb(90, 90, 90);
       }
     }
-  }
-
-  label {
-    &.disabled {
-      color: grey;
-    }
-  }
-
-  div.info {
-    color: grey;
-    font-size: 80%;
   }
 }
 

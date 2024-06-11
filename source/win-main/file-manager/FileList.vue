@@ -99,7 +99,7 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useOpenDirectoryStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
 import { type MaybeRootDescriptor, type AnyDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
@@ -114,11 +114,11 @@ const emit = defineEmits<(e: 'lock-file-tree') => void>()
 
 const activeDescriptor = ref<AnyDescriptor|undefined>(undefined) // Can contain the active ("focused") item
 
-const openDirectoryStore = useOpenDirectoryStore()
 const documentTreeStore = useDocumentTreeStore()
+const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
 
-const selectedDirectory = computed(() => openDirectoryStore.openDirectory)
+const selectedDirectory = computed(() => configStore.config.openDirectory)
 
 const noResultsMessage = trans('No results')
 const emptyFileListMessage = trans('No directory selected')
@@ -134,8 +134,13 @@ const getDirectoryContents = computed<Array<{ id: number, props: MaybeRootDescri
     return []
   }
 
+  const dir = workspacesStore.getDir(selectedDirectory.value)
+  if (dir === undefined) {
+    return []
+  }
+
   const ret: Array<{ id: number, props: MaybeRootDescriptor }> = []
-  const items = objectToArray(selectedDirectory.value, 'children') as AnyDescriptor[]
+  const items = objectToArray(dir, 'children') as AnyDescriptor[]
   for (let i = 0; i < items.length; i++) {
     if (items[i].type !== 'other') {
       ret.push({
@@ -224,11 +229,7 @@ function navigate (evt: KeyboardEvent): void {
   // On pressing enter, that's the same as clicking
   if (evt.key === 'Enter' && activeDescriptor.value !== undefined) {
     if (activeDescriptor.value.type === 'directory') {
-      ipcRenderer.invoke('application', {
-        command: 'set-open-directory',
-        payload: activeDescriptor.value.path
-      })
-        .catch(e => console.error(e))
+      configStore.setConfigValue('openDirectory', activeDescriptor.value.path)
     } else {
       // Select the active file (if there is one)
       ipcRenderer.invoke('documents-provider', {

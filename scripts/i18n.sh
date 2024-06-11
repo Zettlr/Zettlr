@@ -52,6 +52,11 @@ cd static/lang
 for file in *.po; do
     [ -f "$file" ] || break
     echo "Merging new strings to $file ..."
+
+    # First, run msguniq over the file which removes duplicate entries (which
+    # would cause msgmerge to fail, see https://www.gnu.org/software/gettext/manual/html_node/msguniq-Invocation.html)
+    msguniq $file -o $file
+
     # NOTE the --backup=off flag, since we're using git-svn to backup old files
     # NOTE the --no-fuzzy-matching flag that prevents inaccurate translations
     msgmerge --update $file --backup=off --no-fuzzy-matching ../i18n.pot

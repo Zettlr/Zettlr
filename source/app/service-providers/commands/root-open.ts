@@ -164,7 +164,7 @@ export default class RootOpen extends ZettlrCommand {
 
     // Open the newly added path(s) directly.
     if (newDir !== undefined) {
-      this._app.documents.setOpenDirectory(newDir.path)
+      this._app.config.set('openDirectory', newDir.path)
     }
   }
 }

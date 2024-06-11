@@ -113,15 +113,14 @@ function requestDir (): void {
 <style lang="less">
 body {
   .form-control .input-button-group {
-    display: flex;
+    display: grid;
     column-gap: 10px;
+    grid-template-columns: auto 100px;
     margin: 10px 0;
 
     input, button { white-space: nowrap; }
 
-    input { flex-grow: 4; }
     button {
-      flex-grow: 1;
       overflow: hidden;
       text-overflow: ellipsis;
     }

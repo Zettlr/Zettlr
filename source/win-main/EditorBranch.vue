@@ -1,7 +1,11 @@
 <template>
   <div
     ref="rootElement"
-    class="split-pane-container"
+    v-bind:class="{
+      'split-pane-container': true,
+      'border-right': !props.isLast && props.node.direction === 'vertical',
+      'border-bottom': !props.isLast && props.node.direction === 'horizontal'
+    }"
     v-bind:style="elementStyles"
   >
     <template
@@ -16,7 +20,7 @@
         v-bind:editor-commands="editorCommands"
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
-        v-bind:is-last="index === node.nodes.length - 1"
+        v-bind:is-last="index === node.nodes.length - 1 || node.nodes.length === 1"
         v-on:global-search="emit('globalSearch', $event)"
       ></EditorBranch>
       <EditorPane
@@ -26,8 +30,8 @@
         v-bind:window-id="windowId"
         v-bind:editor-commands="editorCommands"
         v-bind:class="{
-          'border-right': (index < node.nodes.length - 1 && node.direction === 'horizontal') || isLast === true,
-          'border-bottom': index < node.nodes.length - 1 && node.direction === 'vertical'
+          'border-right': paneShouldHaveBorderRight(index),
+          'border-bottom': paneShouldHaveBorderBottom(index)
         }"
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
@@ -87,6 +91,38 @@ const isHorizontalBranch = computed<boolean>(() => props.node.direction === 'hor
 watch(toRef(props, 'node'), () => {
   sizes.value = props.node.sizes.map(s => s)
 })
+
+/**
+ * Should the pane with the provided index have a right border?
+ *
+ * @param   {number}   index  The index to check
+ *
+ * @return  {boolean}         True if it should have a border
+ */
+function paneShouldHaveBorderRight (index: number): boolean {
+  if (props.node.direction === 'horizontal') {
+    // In horizontal mode, all panes except the last one get a border right
+    return index < props.node.nodes.length - 1
+  } else {
+    return false // The branch itself will have the border
+  }
+}
+
+/**
+ * Should the pane with the provided index have a bottom border?
+ *
+ * @param   {number}   index  The index to check
+ *
+ * @return  {boolean}         True if it should have a border
+ */
+function paneShouldHaveBorderBottom (index: number): boolean {
+  if (props.node.direction === 'vertical') {
+    // Reversed: Bottom border applies to all but the last element in vertical mode
+    return index < props.node.nodes.length - 1
+  } else {
+    return false // The branch itself will have the border
+  }
+}
 
 function beginResizing (event: MouseEvent, index: number): void {
   currentResizerIndex.value = index
@@ -168,7 +204,7 @@ body .split-pane-container {
     cursor: ns-resize;
   }
 
-  .editor-pane {
+  .editor-pane, & {
     &.border-right { border-right: 1px solid #d5d5d5; }
     &.border-bottom { border-bottom: 1px solid #d5d5d5; }
   }

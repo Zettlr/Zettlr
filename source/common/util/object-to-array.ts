@@ -23,7 +23,7 @@
  *
  * @return  {any[]}            The flattened array
  */
-export default function objectToArray (tree: any, traverse: string, arr: any[] = []): any[] {
+export default function objectToArray<T extends Record<string, any>> (tree: T, traverse: string, arr: T[] = []): T[] {
   if (Array.isArray(tree)) {
     for (const elem of tree) {
       arr = objectToArray(elem, traverse, arr)

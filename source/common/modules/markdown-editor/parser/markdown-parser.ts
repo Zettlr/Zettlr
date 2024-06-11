@@ -69,7 +69,7 @@ import { lua } from '@codemirror/legacy-modes/mode/lua'
 // Additional parser
 import { citationParser } from './citation-parser'
 import { footnoteParser, footnoteRefParser } from './footnote-parser'
-import { frontmatterParser } from './frontmatter-parser'
+import { frontmatterParser, yamlCodeParse } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
 import { sloppyParser } from './sloppy-parser'
 import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
@@ -173,6 +173,12 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       return null
     },
     extensions: {
+      // yamlCodeParse is a wrapper that scans the document for the existence of
+      // a YAML frontmatter and then parses its contents. NOTE: Since a single
+      // MarkdownConfig only accepts one parse, I could either add additional
+      // logic to a generalized parser, or start passing additional config
+      // options here, since "extensions" also takes an array.
+      wrap: yamlCodeParse(),
       parseBlock: [
         // This BlockParser parses YAML frontmatters
         frontmatterParser,
@@ -196,16 +202,9 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes
       defineNodes: [
+        { name: 'YAMLFrontmatter' },
         { name: 'YAMLFrontmatterStart', style: customTags.YAMLFrontmatterStart },
         { name: 'YAMLFrontmatterEnd', style: customTags.YAMLFrontmatterEnd },
-        { name: 'YAMLFrontmatterKey', style: customTags.YAMLFrontmatterKey },
-        { name: 'YAMLFrontmatterString', style: customTags.YAMLFrontmatterString },
-        { name: 'YAMLFrontmatterBoolean', style: customTags.YAMLFrontmatterBoolean },
-        { name: 'YAMLFrontmatterNumber', style: customTags.YAMLFrontmatterNumber },
-        { name: 'YAMLFrontmatterPlain', style: customTags.YAMLFrontmatterPlain },
-        { name: 'YAMLFrontmatterPair', style: customTags.YAMLFrontmatterPair },
-        { name: 'YAMLFrontmatterSeq', style: customTags.YAMLFrontmatterSeq },
-        { name: 'YAMLFrontmatterMap', style: customTags.YAMLFrontmatterMap },
         { name: 'Citation', style: customTags.Citation },
         { name: 'Highlight', style: customTags.Highlight },
         { name: 'HighlightContent', style: customTags.HighlightContent },

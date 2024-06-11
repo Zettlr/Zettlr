@@ -31,16 +31,18 @@ export default class ImportFiles extends ZettlrCommand {
     * @return {void} Does not return.
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    const openDirectory = this._app.documents.getOpenDirectory()
-    if (openDirectory === null) {
+    const dirs = await this._app.windows.askDir(trans('Import directory'), undefined, trans('Select folder'), trans('Select import destination'))
+    if (dirs.length === 0) {
       showNativeNotification(trans('You have to select a directory to import to.'))
       return false
     }
 
+    const targetDirectory = dirs[0]
+
     // Prepare the list of file filters
     // The "All Files" filter should be at the top
-    let fltr = [{ name: trans('All Files'), extensions: ['*'] }]
-    for (let f of FORMATS) {
+    const fltr = [{ name: trans('All Files'), extensions: ['*'] }]
+    for (const f of FORMATS) {
       // The import_files array has the structure "readable format" "extensions"...
       // Here we set index 1 as readable name and all following elements (without leading dots)
       // as extensions
@@ -59,9 +61,9 @@ export default class ImportFiles extends ZettlrCommand {
     showNativeNotification(trans('Importing. Please wait …'))
 
     try {
-      const openDirDescriptor = await this._app.fsal.getAnyDirectoryDescriptor(openDirectory)
+      const directory = await this._app.fsal.getAnyDirectoryDescriptor(targetDirectory)
       this._app.log.info(`[Importer] Importing ${fileList.length} files: ${fileList.join(', ')} ...`)
-      let ret = await makeImport(fileList, openDirDescriptor, this._app.assets, (file: string, error: string) => {
+      const ret = await makeImport(fileList, directory, this._app.assets, (file: string, error: string) => {
         this._app.log.error(`[Importer] Could not import file ${file}: ${error}`)
         // This callback gets called whenever there is an error while running pandoc.
         showNativeNotification(trans('Couldn\'t import %s.', path.basename(file)))

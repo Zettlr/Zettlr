@@ -14,9 +14,9 @@
  * END HEADER
  */
 
-import fileContextMenu from './file-item-context'
-import dirContextMenu from './dir-item-context'
-import { useDocumentTreeStore, useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
+import { displayFileContext } from './file-item-context'
+import { displayDirContext } from './dir-item-context'
+import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import type { MaybeRootDescriptor } from 'source/types/common/fsal'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
 
@@ -24,22 +24,23 @@ const ipcRenderer = window.ipc
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useItemComposable (
-  obj: Ref<MaybeRootDescriptor>,
+  object: MaybeRootDescriptor,
   rootElement: Ref<HTMLElement|null>,
   windowId: string,
   nameEditingInput: Ref<HTMLInputElement|null>
 ) {
+  const obj = ref(object)
   const nameEditing = ref<boolean>(false)
   const showPopover = ref<boolean>(false)
   const operationType = ref<'createFile'|'createDir'|undefined>(undefined)
 
-  const openDirectoryStore = useOpenDirectoryStore()
+  const configStore = useConfigStore()
   const documentTreeStore = useDocumentTreeStore()
   const windowStateStore = useWindowStateStore()
 
   const isDirectory = computed(() => obj.value.type === 'directory')
   const selectedFile = computed(() => documentTreeStore.lastLeafActiveFile)
-  const selectedDir = computed(() => openDirectoryStore.openDirectory)
+  const selectedDir = computed(() => configStore.config.openDirectory)
 
   watch(nameEditing, (newVal) => {
     if (!newVal) {
@@ -55,10 +56,6 @@ export function useItemComposable (
       nameEditingInput.value.setSelectionRange(0, lastDot)
     })
       .catch(err => console.error(err))
-  })
-
-  watch(obj, (value) => {
-    console.log('obj changed!', value)
   })
 
   /**
@@ -104,25 +101,9 @@ export function useItemComposable (
         .catch(e => console.error(e))
     } else if (alt) {
       // Select the parent directory
-      ipcRenderer.invoke('application', {
-        command: 'set-open-directory',
-        payload: obj.value.dir
-      })
-        .catch(e => console.error(e))
+      configStore.setConfigValue('openDirectory', obj.value.dir)
     } else if (type === 'directory') {
-      if (selectedDir.value === obj.value) {
-        // The clicked directory was already the selected directory, so just
-        // tell the application to show the file list, if applicable.
-        // BUG: No more $root reference this.$root.toggleFileList()
-      } else {
-        // Select this directory
-        ipcRenderer.invoke('application', {
-          command: 'set-open-directory',
-          payload: obj.value.path
-        })
-          .catch(e => console.error(e))
-      }
-
+      configStore.setConfigValue('openDirectory', obj.value.path)
       // Finally, since it's a directory, uncollapse it.
       if (!windowStateStore.uncollapsedDirectories.includes(obj.value.path)) {
         windowStateStore.uncollapsedDirectories.push(obj.value.path)
@@ -140,7 +121,7 @@ export function useItemComposable (
     }
 
     if (obj.value.type === 'directory') {
-      dirContextMenu(event, obj.value, rootElement.value, clickedID => {
+      displayDirContext(event, obj.value, rootElement.value, clickedID => {
         if (clickedID === 'menu.rename_dir') {
           nameEditing.value = true
         } else if (clickedID === 'menu.new_file') {
@@ -171,7 +152,7 @@ export function useItemComposable (
         }
       })
     } else {
-      fileContextMenu(event, obj.value, rootElement.value, clickedID => {
+      displayFileContext(event, obj.value, rootElement.value, clickedID => {
         if (clickedID === 'new-tab') {
           // Request the clicked file, explicitly in a new tab
           ipcRenderer.invoke('documents-provider', {
@@ -267,6 +248,10 @@ export function useItemComposable (
       .finally(() => { nameEditing.value = false })
   }
 
+  function updateObject (newObject: MaybeRootDescriptor): void {
+    obj.value = newObject
+  }
+
   return {
     nameEditing,
     showPopover,
@@ -277,6 +262,7 @@ export function useItemComposable (
     finishNameEditing,
     isDirectory,
     selectedFile,
-    selectedDir
+    selectedDir,
+    updateObject
   }
 }

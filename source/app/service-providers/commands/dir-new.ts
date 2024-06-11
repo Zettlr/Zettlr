@@ -56,7 +56,7 @@ export default class DirNew extends ZettlrCommand {
     // Now the dir should be created, the FSAL will automatically notify the
     // application of the changes, so all we have to do is set the directory
     // as the new current directory.
-    this._app.documents.setOpenDirectory(dirPath)
+    this._app.config.set('openDirectory', dirPath)
 
     return true
   }

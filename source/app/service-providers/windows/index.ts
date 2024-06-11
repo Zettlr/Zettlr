@@ -973,15 +973,15 @@ export default class WindowProvider extends ProviderContract {
     * Show the dialog for choosing a directory
     * @return {string[]} An array containing all selected paths.
     */
-  async askDir (title: string, win?: BrowserWindow|null, buttonLabel?: string|undefined): Promise<string[]> {
+  async askDir (title: string, win?: BrowserWindow|null, buttonLabel?: string, message?: string): Promise<string[]> {
     if (win != null) {
-      return await askDirectoryDialog(this._config, win, title, buttonLabel)
+      return await askDirectoryDialog(this._config, win, title, buttonLabel, message)
     } else {
       const firstMainWin = this.getFirstMainWindow()
       if (firstMainWin === undefined) {
         throw new Error('Could not ask user for directory: No main window open!')
       }
-      return await askDirectoryDialog(this._config, firstMainWin, title, buttonLabel)
+      return await askDirectoryDialog(this._config, firstMainWin, title, buttonLabel, message)
     }
   }
 

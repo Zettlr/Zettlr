@@ -61,14 +61,15 @@ export default class FileNew extends ZettlrCommand {
       return
     }
 
-    let dirpath = arg.path ?? this._app.documents.getOpenDirectory()
+    let dirpath = app.getPath('documents')
     let isFallbackDir = false
-    if (dirpath == null) {
+    if (typeof arg.path === 'string' && await this._app.fsal.isDir(arg.path)) {
+      dirpath = arg.path
+    } else {
       // There is no directory we could salvage, so choose a default one: the
       // documents directory. Displaying the file choosing dialog should never
       // fail because we can't decide on a directory.
       isFallbackDir = true
-      dirpath = app.getPath('documents')
     }
 
     // Make sure we have a filename and have the user confirm this if applicable
@@ -140,6 +141,14 @@ export default class FileNew extends ZettlrCommand {
 
       // And directly thereafter, open the file
       await this._app.documents.openFile(windowId, leafId, absPath, true)
+      // Final check: If the file has been created outside of any loaded
+      // workspace, we must add it as root so that some other functions of
+      // Zettlr work fine (even though the editing should work flawlessly.).
+      // Since at this point the events that add the file to the tree likely
+      // haven't fired yet, we can check whether the parent directory exists.
+      if (this._app.workspaces.findDir(path.dirname(absPath)) === undefined) {
+        this._app.config.addPath(absPath)
+      }
     } catch (err: any) {
       this._app.log.error(`Could not create file: ${err.message as string}`)
       this._app.windows.prompt({

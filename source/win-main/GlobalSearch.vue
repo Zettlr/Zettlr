@@ -146,7 +146,7 @@ import { type SearchResult, type SearchResultWrapper } from '@dts/common/search'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { type AnyMenuItem } from '@dts/renderer/context'
 import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
-import { useConfigStore, useOpenDirectoryStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
@@ -208,12 +208,10 @@ const activeFileIdx = ref<undefined|number>(undefined)
 const activeLineIdx = ref<undefined|number>(undefined)
 
 const workspacesStore = useWorkspacesStore()
-const openDirectoryStory = useOpenDirectoryStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
 
 const recentGlobalSearches = computed(() => configStore.config.window.recentGlobalSearches)
-const selectedDir = computed(() => openDirectoryStory.openDirectory)
 
 const fileTree = computed(() => workspacesStore.rootDescriptors)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
@@ -355,11 +353,7 @@ function startSearch (overrideQuery?: string): void {
       }
     })
 
-    if (selectedDir.value !== null && selectedDir.value.path.startsWith(treeItem.path)) {
-      // Append the selected directory's contents BEFORE any other items
-      // since that's probably something the user sees as more relevant.
-      fileList = dirContents.concat(fileList)
-    } else if (treeItem.type === 'directory') {
+    if (treeItem.type === 'directory') {
       fileList = fileList.concat(dirContents)
     }
   }

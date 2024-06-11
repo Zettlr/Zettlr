@@ -49,8 +49,9 @@
         ref="fileTreeComponent"
         v-bind:is-visible="fileTreeVisible"
         v-bind:filter-query="filterQuery"
-        v-bind:window-id="windowId"
+        v-bind:window-id="props.windowId"
         v-on:selection="selectionListener"
+        v-on:toggle-file-list="toggleFileList"
       ></FileTree>
       <!-- Now render the file list -->
       <!--
@@ -65,7 +66,7 @@
         ref="fileListComponent"
         v-bind:is-visible="isFileListVisible"
         v-bind:filter-query="filterQuery"
-        v-bind:window-id="windowId"
+        v-bind:window-id="props.windowId"
         v-on:lock-file-tree="lockDirectoryTree()"
       ></FileList>
     </div>
@@ -91,7 +92,7 @@ import FileTree from './FileTree.vue'
 import FileList from './FileList.vue'
 import { trans } from '@common/i18n-renderer'
 import { nextTick, ref, computed, watch, onMounted } from 'vue'
-import { useConfigStore, useOpenDirectoryStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useWorkspacesStore } from 'source/pinia'
 import type { AnyDescriptor, DirDescriptor } from 'source/types/common/fsal'
 
 const ipcRenderer = window.ipc
@@ -111,13 +112,11 @@ const rootElement = ref<HTMLDivElement|null>(null)
 const fileTreeComponent = ref<typeof FileTree|null>(null)
 const fileListComponent = ref<typeof FileList|null>(null)
 
-const openDirectoryStore = useOpenDirectoryStore()
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
-const windowStateStore = useWindowStateStore()
 
 const fileTree = computed<AnyDescriptor[]>(() => workspacesStore.roots.map(root => root.descriptor))
-const selectedDirectory = computed<DirDescriptor|null>(() => openDirectoryStore.openDirectory)
+const selectedDirectory = computed(() => configStore.config.openDirectory)
 
 const filterPlaceholder = trans('Filter …')
 const fileManagerMode = computed(() => configStore.config.fileManagerMode)
@@ -127,12 +126,12 @@ const isExpanded = computed<boolean>(() => fileManagerMode.value === 'expanded')
 
 const isFileListVisible = computed<boolean>(() => isExpanded.value || fileListVisible.value)
 
-watch(selectedDirectory, () => {
+watch(selectedDirectory, (value, oldValue) => {
   // Reset the local search when a new directory has been selected
   filterQuery.value = ''
   // If the directory just got de-selected and the fileList
   // is visible, switch to the directories.
-  if (selectedDirectory.value === null && isFileListVisible.value) {
+  if (value === null && isFileListVisible.value) {
     toggleFileList()
   } else if (!isFileListVisible.value) {
     // Otherwise make sure the fileList is visible (toggleFileList
@@ -168,11 +167,6 @@ watch(fileManagerMode, () => {
 })
 
 onMounted(() => {
-  if (openDirectoryStore.openDirectory !== null) {
-    // TODO: Logical bug: Apparently I was always just pushing entire descriptors in there!
-    windowStateStore.uncollapsedDirectories.push(openDirectoryStore.openDirectory.path)
-  }
-
   ipcRenderer.on('shortcut', (event, message) => {
     if (message === 'filter-files') {
       // Focus the filter on the next tick. Why? Because it might be that

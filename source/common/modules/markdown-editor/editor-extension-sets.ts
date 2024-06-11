@@ -71,6 +71,9 @@ import { themeBordeauxLight, themeBordeauxDark } from './theme/bordeaux'
 import { themeFrankfurtLight, themeFrankfurtDark } from './theme/frankfurt'
 import { themeKarlMarxStadtLight, themeKarlMarxStadtDark } from './theme/karl-marx-stadt'
 import { mainOverride } from './theme/main-override'
+import { highlightWhitespace } from './plugins/highlight-whitespace'
+import { tagClasses } from './plugins/tag-classes'
+import { autocompleteTriggerCharacter } from './autocomplete/snippets'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -184,6 +187,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // SELECTIONS
     // Overrides the default browser selection drawing, allows styling
     drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
+    highlightWhitespace(options.initialConfig.highlightWhitespace),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
     // Ensure the cursor never completely sticks to the top or bottom of the editor
@@ -194,6 +198,10 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
     EditorView.lineWrapping, // Enable line wrapping,
     autoCloseBracketsConfig,
+
+    // Allow configuration of the trigger character
+    autocompleteTriggerCharacter.of(':'),
+    // TODO: autocompleteTriggerCharacter.from(configField, val => val.FINDANAME),
 
     // Add the statusbar
     statusbar,
@@ -337,6 +345,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     backgroundLayers, // Add a background behind inline code and code blocks
     defaultContextMenu, // A default context menu
     softwrapVisualIndent, // Always indent visually
+    tagClasses(), // Apply a custom class to each tag so that users can style them (#4589)
     EditorView.domEventHandlers(options.domEventsListeners)
   ]
 }

@@ -30,6 +30,7 @@ import EventEmitter from 'events'
 import { EditorView } from '@codemirror/view'
 import {
   EditorState,
+  Text,
   type Extension,
   type SelectionRange
 } from '@codemirror/state'
@@ -388,7 +389,7 @@ export default class MarkdownEditor extends EventEmitter {
 
     // The documents contents have changed, so we must recreate the state
     const state = EditorState.create({
-      doc: content,
+      doc: Text.of(content.split('\n')),
       extensions: this._getExtensions(this.representedDocument, type, startVersion)
     })
 
@@ -419,6 +420,14 @@ export default class MarkdownEditor extends EventEmitter {
    */
   async reload (): Promise<void> {
     await this.loadDocument()
+  }
+
+  /**
+   * Unmount the editor instance entirely. NOTE: After calling this, DO NO
+   * LONGER USE THIS CLASS INSTANCE! Instantiate it anew!
+   */
+  public unmount (): void {
+    this.instance.destroy()
   }
 
   /**

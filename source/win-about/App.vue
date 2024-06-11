@@ -61,6 +61,9 @@ import LicenseTab from './License-Tab.vue'
 import FontLicenseTab from './Font-License-Tab.vue'
 import DebugTab from './Debug-Tab.vue'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
+import { useConfigStore } from 'source/pinia'
+
+const configStore = useConfigStore()
 
 const currentTab = ref(0)
 const tabs: WindowTab[] = [
@@ -106,7 +109,7 @@ const windowTitle = computed(() => {
   if (process.platform === 'darwin') {
     return tabs[currentTab.value].label
   } else {
-    return trans('About Zettlr') + ' ' + window.config.get('version')
+    return trans('About Zettlr') + ' ' + configStore.config.version
   }
 })
 </script>

@@ -176,7 +176,6 @@ export default class DocumentManager extends ProviderContract {
 
   private _shuttingDown: boolean
 
-  private openDirectory: string|null
   private readonly _lastEditor: {
     windowId: string|undefined
     leafId: string|undefined
@@ -194,7 +193,6 @@ export default class DocumentManager extends ProviderContract {
     this._remoteChangeDialogShownFor = []
     this.documents = []
     this._shuttingDown = false
-    this.openDirectory = null
     this._lastEditor = {
       windowId: undefined,
       leafId: undefined
@@ -431,11 +429,6 @@ export default class DocumentManager extends ProviderContract {
     // Loads in all openFiles
     this._app.log.verbose('Document Manager starting up ...')
 
-    // BUG: This is a weird solution; the openDirectory shouldn't even be
-    // managed by the documents provider. Also, didn't I want to get rid of this
-    // altogether in the future ...?
-    this.openDirectory = this._app.config.get().openDirectory
-
     // Check if the data store is initialized
     if (!await this._config.isInitialized()) {
       this._app.log.info('[Document Manager] Initializing document storage ...')
@@ -554,21 +547,6 @@ export default class DocumentManager extends ProviderContract {
     this._config.shutdown()
   }
 
-  public setOpenDirectory (directory: string | null): void {
-    this.openDirectory = directory
-    this._emitter.emit('documents-provider', 'openDirectory')
-    if (this.openDirectory === null) {
-      this._app.config.set('openDirectory', null)
-    } else {
-      this._app.config.set('openDirectory', this.openDirectory)
-    }
-    broadcastIpcMessage('documents-provider', 'openDirectory')
-  }
-
-  public getOpenDirectory (): string|null {
-    return this.openDirectory
-  }
-
   private broadcastEvent (event: DP_EVENTS, context?: DocumentsUpdateContext): void {
     // Here we blast an event notification across every line of code of the app
     broadcastIpcMessage('documents-update', { event, context })
@@ -621,7 +599,7 @@ export default class DocumentManager extends ProviderContract {
       lastSavedVersion: 0,
       lastSavedContent: content,
       updates: [],
-      document: Text.of(content.split(descriptor.linefeed)),
+      document: Text.of(content.split('\n')),
       lastSavedCharCount: descriptor.type === 'file' ? descriptor.charCount : 0,
       lastSavedWordCount: descriptor.type === 'file' ? descriptor.wordCount : 0,
       saveTimeout: undefined
@@ -819,6 +797,10 @@ current contents from the editor somewhere else, and restart the application.`
       return true
     }
 
+    // NOTE: Since openFile will set filePath as active, we have to retrieve the
+    // (previously) active file *before* opening the new one. See bug #5065 for
+    // context.
+    const activeFile = leaf.tabMan.activeFile
     const ret = leaf.tabMan.openFile(filePath)
     if (ret) {
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
@@ -826,7 +808,6 @@ current contents from the editor somewhere else, and restart the application.`
 
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
-    const activeFile = leaf.tabMan.activeFile
     const { avoidNewTabs } = this._app.config.get().system
     if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)
@@ -983,8 +964,6 @@ current contents from the editor somewhere else, and restart the application.`
     // next
     const diskContents = await this._app.fsal.loadAnySupportedFile(doc.descriptor.path)
 
-    // NOTE: This assumes that the internal "lastSavedContent" utilizes the same
-    // linefeed as the file on disk. (See issue #4959)
     if (diskContents === doc.lastSavedContent) {
       return
     }
@@ -1443,12 +1422,12 @@ current contents from the editor somewhere else, and restart the application.`
     // 3. The user adds more changes
     // 4. The save finishes and undos the modifications
 
-    // NOTE: Internally, CodeMirror Text objects use regular LF line separators.
-    // We take only the lines and then manually join them with the correct
-    // linefeed to ensure that it uses the one that the file needs. This should
-    // fix and in the future prevent bugs like #4959
+    // NOTE: Zettlr internally always uses regular LF linefeeds. The FSAL load
+    // and FSAL save methods will take care to actually use the proper linefeeds
+    // and BOMs. So here we will always use newlines. This should fix and in the
+    // future prevent bugs like #4959
     const docLines = [...doc.document.iterLines()]
-    const content = docLines.join(doc.descriptor.linefeed)
+    const content = docLines.join('\n')
     doc.lastSavedVersion = doc.currentVersion
     doc.lastSavedContent = content
 

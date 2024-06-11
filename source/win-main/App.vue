@@ -55,6 +55,7 @@
               v-bind:node="paneConfiguration"
               v-bind:window-id="windowId"
               v-bind:editor-commands="editorCommands"
+              v-bind:is-last="true"
               v-on:global-search="startGlobalSearch($event)"
             ></EditorBranch>
           </template>
@@ -162,6 +163,7 @@ import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
+import { type AnyDescriptor } from 'source/types/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -190,10 +192,10 @@ const searchParams = new URLSearchParams(window.location.search)
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const windowId = searchParams.get('window_id')!
 
-const fileManagerVisible = ref<boolean>(true)
+const fileManagerVisible = ref(true)
 const mainSplitViewVisibleComponent = ref<'fileManager'|'globalSearch'>('fileManager')
-const isUpdateAvailable = ref<boolean>(false)
-const vibrancyEnabled = ref<boolean>(Boolean(window.config.get('window.vibrancy')))
+const isUpdateAvailable = ref(false)
+const vibrancyEnabled = ref(configStore.config.window.vibrancy)
 
 // Popover targets
 const exportButton = ref<HTMLElement|null>(null)
@@ -565,11 +567,11 @@ watch(distractionFree, (newValue) => {
       fileManager: fileManagerVisible.value,
       sidebar: sidebarVisible.value
     }
-    window.config.set('window.sidebarVisible', false)
+    configStore.setConfigValue('window.sidebarVisible', false)
     fileManagerVisible.value = false
   } else {
     // Leave distraction free mode
-    window.config.set('window.sidebarVisible', sidebarsBeforeDistractionfree.value.sidebar)
+    configStore.setConfigValue('window.sidebarVisible', sidebarsBeforeDistractionfree.value.sidebar)
     fileManagerVisible.value = sidebarsBeforeDistractionfree.value.fileManager
   }
 })
@@ -584,7 +586,7 @@ onMounted(() => {
 
   ipcRenderer.on('shortcut', (event, shortcut) => {
     if (shortcut === 'toggle-sidebar') {
-      window.config.set('window.sidebarVisible', !sidebarVisible.value)
+      configStore.setConfigValue('window.sidebarVisible', !sidebarVisible.value)
     } else if (shortcut === 'insert-id') {
       editorCommands.value.data = generateId(configStore.config.zkn.idGen)
       editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
@@ -593,8 +595,8 @@ onMounted(() => {
         command: 'get-descriptor',
         payload: documentTreeStore.lastLeafActiveFile.path
       })
-        .then(descriptor => {
-          if (descriptor !== undefined && descriptor.id !== undefined && descriptor.id !== '') {
+        .then((descriptor: AnyDescriptor|undefined) => {
+          if (descriptor?.type === 'file' && descriptor?.id !== '') {
             navigator.clipboard.writeText(descriptor.id).catch(err => console.error(err))
           }
         })
@@ -860,7 +862,7 @@ function setPomodoroConfig (config: PomodoroConfig): void {
 function handleToggle (controlState: { id?: string, state?: string | boolean }): void {
   const { id, state } = controlState
   if (id === 'toggle-sidebar') {
-    window.config.set('window.sidebarVisible', state)
+    configStore.setConfigValue('window.sidebarVisible', state)
   } else if (id === 'toggle-file-manager') {
     // Since this is a three-way-toggle, we have to inspect the state.
     fileManagerVisible.value = state !== undefined

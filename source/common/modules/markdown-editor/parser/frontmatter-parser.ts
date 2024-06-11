@@ -12,13 +12,29 @@
  * END HEADER
  */
 
+import { type ParseWrapper, parseMixed } from '@lezer/common'
 import { type BlockParser } from '@lezer/markdown'
 import { yaml } from '@codemirror/lang-yaml'
-import { partialParse } from './partial-parse'
 
-const yamlLang = yaml().language
+// Adapted from: https://github.com/lezer-parser/markdown/blob/main/src/nest.ts
+// This function looks out for parsed frontmatter nodes and starts an inner
+// parse to add syntax highlighting to these.
+export function yamlCodeParse (): ParseWrapper {
+  const parser = yaml().language.parser
+  return parseMixed((node, input) => {
+    if (node.type.name === 'YAMLFrontmatter') {
+      return { parser, overlay: node => node.type.name === 'CodeText' }
+    } else {
+      return null
+    }
+  })
+}
 
-// TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser
+/**
+ * A BlockParser that looks out for frontmatter blocks and wraps them in a
+ * YAMLFrontmatter and CodeText node. The parsing of the actual contents is done
+ * with a separate parse wrapper (see above)
+ */
 export const frontmatterParser: BlockParser = {
   // We need to give the parser a name. Since it should only parse YAML frontmatters,
   // here we go.
@@ -38,8 +54,6 @@ export const frontmatterParser: BlockParser = {
     // Meanwhile, we'll be collecting all lines encountered so that we can parse
     // them into a YAML AST.
     const yamlLines: string[] = []
-    // We also need the position at which the (actual) frontmatter starts
-    const from = 4
     while (ctx.nextLine() && !/^(?:-{3}|\.{3})$/.test(line.text)) {
       yamlLines.push(line.text)
     }
@@ -51,15 +65,11 @@ export const frontmatterParser: BlockParser = {
       return false
     }
 
-    if (yamlLines.length === 0) {
-      return false // A frontmatter must have content
-    }
-
-    // A final check: A frontmatter is NOT a valid document if there is
-    // whitespace at the top (i.e. no blank lines between the delimiters and the
-    // frontmatter content). NOTE: Whitespace AFTER the frontmatter content is
-    // allowed!
-    if (yamlLines[0].trim() === '') {
+    // A final check: A frontmatter is allowed to be empty, but it is NOT a
+    // valid document if there is whitespace at the top (i.e. no blank lines
+    // between the delimiters and the frontmatter content). Note that whitespace
+    // *after* the frontmatter content is allowed.
+    if (yamlLines.length > 0 && yamlLines[0].trim() === '') {
       return false
     }
 
@@ -68,11 +78,10 @@ export const frontmatterParser: BlockParser = {
     // required AST, we defer to letting the YAML parser parse this thing into
     // a tree that we can then simply convert into the format consumed by
     // Codemirror.
-    const treeElem = partialParse(ctx, yamlLang.parser, yamlLines.join('\n'), from)
 
-    const wrapperNode = ctx.elt('FencedCode', 0, ctx.lineStart + 3, [
+    const wrapperNode = ctx.elt('YAMLFrontmatter', 0, ctx.lineStart + 3, [
       ctx.elt('YAMLFrontmatterStart', 0, 3),
-      ctx.elt('CodeText', 4, ctx.lineStart - 1, [treeElem]),
+      ctx.elt('CodeText', 4, ctx.lineStart - 1),
       ctx.elt('YAMLFrontmatterEnd', ctx.lineStart, ctx.lineStart + 3)
     ])
 

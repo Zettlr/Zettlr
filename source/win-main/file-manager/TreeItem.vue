@@ -14,8 +14,8 @@
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
-      v-on:click.stop="requestSelection"
-      v-on:auxclick.stop="requestSelection"
+      v-on:click.stop="sel"
+      v-on:auxclick.stop="sel"
       v-on:contextmenu="handleContextMenu"
       v-on:dragover="acceptDrags"
       v-on:dragenter="enterDragging"
@@ -122,6 +122,7 @@
         v-bind:depth="depth + 1"
         v-bind:active-item="activeItem"
         v-bind:window-id="windowId"
+        v-on:toggle-file-list="emit('toggle-file-list')"
       >
       </TreeItem>
     </div>
@@ -165,11 +166,13 @@ import PopoverFileProps from './util/PopoverFileProps.vue'
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
 import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
-import { useConfigStore, useOpenDirectoryStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
 
 const ipcRenderer = window.ipc
+
+const emit = defineEmits<(e: 'toggle-file-list') => void>()
 
 const props = defineProps<{
   // How deep is this tree item nested?
@@ -189,7 +192,6 @@ const nameEditingInput = ref<HTMLInputElement|null>(null)
 const displayText = ref<HTMLDivElement|null>(null)
 const newObjectInput = ref<HTMLInputElement|null>(null)
 
-const openDirectoryStore = useOpenDirectoryStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
 
@@ -203,18 +205,23 @@ const {
   finishNameEditing,
   isDirectory,
   selectedFile,
-  selectedDir
-} = useItemComposable(toRef(props.obj), displayText, props.windowId, nameEditingInput)
+  selectedDir,
+  updateObject
+} = useItemComposable(props.obj, displayText, props.windowId, nameEditingInput)
 
-const shouldBeCollapsed = computed<boolean>(() => {
-  if (props.isCurrentlyFiltering) {
-    // If the application is currently running a filter, uncollapse everything
-    return false
-  } else {
-    // Else, just uncollapse if the user wishes so
-    return !windowStateStore.uncollapsedDirectories.includes(props.obj.path)
+function sel (event: MouseEvent): void {
+  requestSelection(event)
+  // We have one problem: We can't emit events from within the composable, so we
+  // have to wrap this function for one specific instance: When the user clicks
+  // again on the already selected directory, the file manager must toggle to
+  // the file list. This doesn't work by implication because the configuration
+  // doesn't update if oldValue === newValue.
+  if (selectedDir.value === props.obj.path) {
+    emit('toggle-file-list')
   }
-})
+}
+
+const shouldBeCollapsed = computed<boolean>(() => props.isCurrentlyFiltering ? false : collapsed.value)
 
 /**
  * The secondary icon's shape -- this is the visually FIRST icon to be
@@ -344,27 +351,14 @@ const basename = computed(() => {
 
 const isSelected = computed(() => {
   if (props.obj.type === 'directory') {
-    return selectedDir.value?.path === props.obj.path
+    return selectedDir.value === props.obj.path
   } else {
     return selectedFile.value?.path === props.obj.path
   }
 })
 
 watch(selectedFile, uncollapseIfApplicable)
-watch(collapsed, () => {
-  if (collapsed.value) {
-    const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
-    if (idx > -1) {
-      windowStateStore.uncollapsedDirectories.splice(idx, 1)
-    }
-  } else {
-    if (!windowStateStore.uncollapsedDirectories.includes(props.obj.path)) {
-      windowStateStore.uncollapsedDirectories.push(props.obj.path)
-    }
-  }
-})
-
-// watch(selectedDir, uncollapseIfApplicable)  TODO: As of now this would also uncollapse the containing file's directory
+watch(selectedDir, uncollapseIfApplicable)
 
 watch(operationType, (newVal) => {
   if (newVal !== undefined) {
@@ -390,15 +384,21 @@ watch(operationType, (newVal) => {
   }
 })
 
+// I have no idea why passing this as a Ref to the composable doesn't work, but
+// this way it does.
+watch(toRef(props, 'obj'), function (value) {
+  updateObject(value)
+})
+
 onMounted(uncollapseIfApplicable)
 
 function uncollapseIfApplicable (): void {
-  const filePath = selectedFile.value?.path ?? ''
-  const dirPath = (selectedDir.value !== null) ? selectedDir.value.path : ''
-
-  if (props.obj.path === openDirectoryStore.openDirectory?.path) {
-    windowStateStore.uncollapsedDirectories.push(props.obj.path)
+  if (!collapsed.value) {
+    return // We are already open, no need to do anything.
   }
+
+  const filePath = selectedFile.value?.path ?? ''
+  const dirPath = selectedDir.value ?? ''
 
   // Open the tree, if the selected file is contained in this dir somewhere
   if (filePath.startsWith(props.obj.path)) {
@@ -556,14 +556,16 @@ function handleOperationFinish (newName: string): void {
  * Helper function to toggle the collapsed status on a directory item with children
  */
 function maybeUncollapse (): void {
-  if (hasChildren.value) {
-    if (collapsed.value) {
-      windowStateStore.uncollapsedDirectories.push(props.obj.path)
-    } else {
-      const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
-      if (idx > -1) {
-        windowStateStore.uncollapsedDirectories.splice(idx, 1)
-      }
+  if (!hasChildren.value) {
+    return
+  }
+
+  if (collapsed.value) {
+    windowStateStore.uncollapsedDirectories.push(props.obj.path)
+  } else {
+    const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
+    if (idx > -1) {
+      windowStateStore.uncollapsedDirectories.splice(idx, 1)
     }
   }
 }

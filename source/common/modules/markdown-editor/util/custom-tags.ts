@@ -18,13 +18,9 @@
 import { Tag, tags } from '@lezer/highlight'
 
 export const customTags = {
+  YAMLFrontmatter: Tag.define(tags.monospace),
   YAMLFrontmatterStart: Tag.define(tags.contentSeparator),
   YAMLFrontmatterEnd: Tag.define(tags.contentSeparator),
-  YAMLFrontmatterKey: Tag.define(tags.tagName),
-  YAMLFrontmatterString: Tag.define(tags.string),
-  YAMLFrontmatterBoolean: Tag.define(tags.bool),
-  YAMLFrontmatterNumber: Tag.define(tags.number),
-  YAMLFrontmatterPlain: Tag.define(),
   // Meta-tags only used to contain the actual values
   YAMLFrontmatterPair: Tag.define(),
   YAMLFrontmatterSeq: Tag.define(),

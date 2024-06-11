@@ -34,6 +34,7 @@
         "nb": "nb-NO",
         "nl": "nl-NL",
         "nn": "nn-NO",
+        "pa": "pa-PK",
         "pl": "pl-PL",
         "pt": "pt-PT",
         "ro": "ro-RO",
@@ -208,6 +209,10 @@
         "nn-NO": [
             "Norsk nynorsk",
             "Norwegian (Nynorsk)"
+        ],
+        "pa-PK": [
+            "پنجابی (شاہ‌مکھی)",
+            "Punjabi (Shahmukhi)"
         ],
         "pl-PL": [
             "Polski",

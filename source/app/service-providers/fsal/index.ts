@@ -34,7 +34,7 @@ import type { SearchTerm } from '@dts/common/search'
 import ProviderContract from '@providers/provider-contract'
 import { app } from 'electron'
 import type LogProvider from '@providers/log'
-import { hasCodeExt, hasMarkdownExt, hasMdOrCodeExt } from './util/is-md-or-code-file'
+import { hasCodeExt, hasMarkdownExt } from './util/is-md-or-code-file'
 import getMarkdownFileParser from './util/file-parser'
 import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
@@ -351,19 +351,20 @@ export default class FSAL extends ProviderContract {
   /**
    * Sets the given directory settings
    *
-   * @param   {DirDescriptor}  src       The target directory
+   * @param  {DirDescriptor}                       src       The target directory
+   * @param  {Partial<DirDescriptor['settings']>}  settings  The settings to apply
    */
-  public async setDirectorySetting (src: DirDescriptor, settings: any): Promise<void> {
+  public async setDirectorySetting (src: DirDescriptor, settings: Partial<DirDescriptor['settings']>): Promise<void> {
     await FSALDir.setSetting(src, settings)
   }
 
   /**
    * Creates a new project in this dir
    *
-   * @param   {DirDescriptor}  src           The directory
-   * @param   {any}            initialProps  Any initial settings
+   * @param   {DirDescriptor}             src           The directory
+   * @param   {Partial<ProjectSettings>}  initialProps  Any initial settings
    */
-  public async createProject (src: DirDescriptor, initialProps: any): Promise<void> {
+  public async createProject (src: DirDescriptor, initialProps: Partial<ProjectSettings>): Promise<void> {
     await FSALDir.makeProject(src, initialProps)
   }
 
@@ -466,12 +467,15 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
     }
 
-    if (hasMdOrCodeExt(absPath)) {
-      const content = await fs.readFile(absPath, { encoding: 'utf-8' })
-      return content
-    }
+    const descriptor = await this.getDescriptorForAnySupportedFile(absPath)
 
-    throw new Error(`[FSAL] Cannot load file ${absPath}: Unsupported`)
+    if (descriptor.type === 'file') {
+      return await FSALFile.load(descriptor)
+    } else if (descriptor.type === 'code') {
+      return await FSALCodeFile.load(descriptor)
+    } else {
+      throw new Error(`[FSAL] Cannot load file ${absPath}: Unsupported`)
+    }
   }
 
   /**

@@ -70,11 +70,11 @@ export class TabManager {
   // PUBLIC METHODS
 
   /**
-   * Sorts the openFiles according to hashArray, and returns the new sorting.
+   * Sorts the openFiles according to pathArray.
    *
-   * @param {Array} pathArray An array with absolute paths to sort with
+   * @param  {string[]}  pathArray  An array with absolute paths to sort with
    *
-   * @return {Array} The new sorting
+   * @return {boolean}              The new sorting
    */
   public sortOpenFiles (pathArray: string[]): boolean {
     // Only sort if something changed
@@ -115,17 +115,14 @@ export class TabManager {
   }
 
   /**
-   * Returns a file's metadata including the contents.
+   * Opens a file within this tab manager.
    *
    * @param   {string}   filePath       The absolute file path
    * @param   {boolean}  modifyHistory  Optional. Only used internally.
    *
    * @return  {Promise<boolean>}        True upon successful opening
    */
-  public openFile (
-    filePath: string,
-    modifyHistory?: boolean
-  ): boolean {
+  public openFile (filePath: string, modifyHistory?: boolean): boolean {
     if (this.activeFile?.path === filePath) {
       return false
     }
@@ -150,10 +147,7 @@ export class TabManager {
       return true
     }
 
-    const file: OpenDocument = {
-      path: filePath,
-      pinned: false
-    }
+    const file: OpenDocument = { path: filePath, pinned: false }
 
     if (this._activeFile !== null) {
       // ... behind our active file
@@ -168,6 +162,7 @@ export class TabManager {
     // ensure the new file (unpinned) doesn't end up in between several pinned
     // files.
     this.sortOpenFiles(this._openFiles.map(d => d.path))
+    this.movePinnedTabsLeft()
 
     this.activeFile = file
 
@@ -215,14 +210,16 @@ export class TabManager {
 
     // Now, if we just closed the active file, we need to make another file
     // active, or none, if there are no more open files active.
-    if (isActive) {
-      if (this._openFiles.length > 0 && activeFileIdx > 0) {
-        this.activeFile = this._openFiles[activeFileIdx - 1]
-      } else if (this._openFiles.length > 0 && activeFileIdx === 0) {
-        this.activeFile = this._openFiles[0]
-      } else {
-        this.activeFile = null
-      }
+    if (!isActive) {
+      return true
+    }
+
+    if (this._openFiles.length > 0 && activeFileIdx > 0) {
+      this.activeFile = this._openFiles[activeFileIdx - 1]
+    } else if (this._openFiles.length > 0 && activeFileIdx === 0) {
+      this.activeFile = this._openFiles[0]
+    } else {
+      this.activeFile = null
     }
 
     return true

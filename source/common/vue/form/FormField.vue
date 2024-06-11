@@ -1,11 +1,13 @@
 <template>
   <hr v-if="props.field.type === 'separator'">
-  <p v-if="props.field.type === 'form-text' && props.field.display === 'info'" class="form-field-info-text">
-    {{ props.field.contents }}
-  </p>
-  <h4 v-if="props.field.type === 'form-text' && props.field.display === 'sub-heading'" class="form-field-sub-heading">
-    {{ props.field.contents }}
-  </h4>
+  <template v-else-if="props.field.type === 'form-text'">
+    <p v-if="props.field.display === 'info'" class="form-field-info-text">
+      {{ props.field.contents }}
+    </p>
+    <h4 v-else-if="props.field.display === 'sub-heading'" class="form-field-sub-heading">
+      {{ props.field.contents }}
+    </h4>
+  </template>
   <Button
     v-if="props.field.type === 'button'"
     v-bind:label="props.field.label"
@@ -13,7 +15,7 @@
     v-on:click="props.field.onClick()"
   ></Button>
   <TextInput
-    v-if="props.field.type === 'text'"
+    v-else-if="props.field.type === 'text'"
     v-bind:model-value="model"
     v-bind:disabled="props.field.disabled"
     v-bind:placeholder="props.field.placeholder"
@@ -25,7 +27,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></TextInput>
   <NumberInput
-    v-if="props.field.type === 'number'"
+    v-else-if="props.field.type === 'number'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
@@ -35,7 +37,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></NumberInput>
   <TimeInput
-    v-if="props.field.type === 'time'"
+    v-else-if="props.field.type === 'time'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
@@ -44,7 +46,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></TimeInput>
   <ColorInput
-    v-if="props.field.type === 'color'"
+    v-else-if="props.field.type === 'color'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
@@ -52,7 +54,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></ColorInput>
   <FileInput
-    v-if="props.field.type === 'file'"
+    v-else-if="props.field.type === 'file'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:reset="props.field.reset"
@@ -63,7 +65,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></FileInput>
   <FileInput
-    v-if="props.field.type === 'directory'"
+    v-else-if="props.field.type === 'directory'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:reset="props.field.reset"
@@ -73,7 +75,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></FileInput>
   <CheckboxInput
-    v-if="props.field.type === 'checkbox'"
+    v-else-if="props.field.type === 'checkbox'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
@@ -82,14 +84,14 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></CheckboxInput>
   <SwitchInput
-    v-if="props.field.type === 'switch'"
+    v-else-if="props.field.type === 'switch'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></SwitchInput>
   <RadioInput
-    v-if="props.field.type === 'radio'"
+    v-else-if="props.field.type === 'radio'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
@@ -99,7 +101,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></RadioInput>
   <SelectInput
-    v-if="props.field.type === 'select'"
+    v-else-if="props.field.type === 'select'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
@@ -108,7 +110,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></SelectInput>
   <ListControl
-    v-if="props.field.type === 'list'"
+    v-else-if="props.field.type === 'list'"
     v-bind:model-value="model"
     v-bind:value-type="props.field.valueType"
     v-bind:label="props.field.label"
@@ -124,7 +126,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></ListControl>
   <TokenInput
-    v-if="props.field.type === 'token'"
+    v-else-if="props.field.type === 'token'"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
@@ -132,7 +134,7 @@
   ></TokenInput>
   <!-- NOTE: For sliders we only listen to change events -->
   <SliderInput
-    v-if="props.field.type === 'slider'"
+    v-else-if="props.field.type === 'slider'"
     v-bind:model-value="model"
     v-bind:min="props.field.min"
     v-bind:max="props.field.max"
@@ -141,7 +143,7 @@
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></SliderInput>
   <ThemeInput
-    v-if="props.field.type === 'theme'"
+    v-else-if="props.field.type === 'theme'"
     v-bind:model-value="model"
     v-bind:options="props.field.options"
     v-bind:label="props.field.label"
