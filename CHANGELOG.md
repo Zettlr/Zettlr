@@ -1,23 +1,48 @@
 # Upcoming
 
-## Changes to file filtering logic
+## GUI and Functionality
 
-Previously when searching for files and workspaces in the filter field in
-Zettlr, OR logic would be used, meaning that if a item matched any search query,
-that item would be displayed as a result of the search. This is not a very
-efficient way to search for files, as often multiple queries will want to be
-searched, and all files matching all queries will be displayed.
+(nothing here yet)
 
-In this latest update, Zettlr has changed to AND file filtering logic, meaning
-that only items that match all queries will be displayed when searching with
-multiple queries.
+## Under the Hood
+
+(nothing here yet)
+
+# 3.2.0
+
+## Resolved Data Loss Issues
+
+When Zettlr v3.0.0 was released, we started receiving reports by users
+mentioning that some files wouldn't properly save, potentially leading to data
+loss. After searching for the underlying root cause, we have now identified it as
+improper newline handling in files. Specifically, we have accidentally introduced
+a bug that would render Zettlr incapable of properly detecting Windows-style
+CRLF newlines. This means that Zettlr was only sometimes able to properly read
+and modify such files.
+
+This update fixes this bug. Now, Zettlr is able to properly read and modify any
+file, regardless of whether it has been created on Windows, macOS, Linux, or even
+some older systems. We would like to apologize for this bug and thank you for
+sticking with Zettlr despite it.
+
+## Changes to the file filtering logic
+
+The filter field in the file manager has always applied OR-logic when searching for
+files and workspaces. In this latest update, Zettlr changes to AND file filtering
+logic, meaning that only items matching all queries will be displayed when
+entering phrases separated by spaces.
+
+As an example: Until now, searching for "Niklas Luhmann" would've surfaced files
+that contained either "Niklas" or "Luhmann," or both. From now on, searching for
+"Niklas Luhmann" will only show files that contain *both* "Niklas" *and*
+"Luhmann" and exclude files that miss one of these phrases.
 
 ## GUI and Functionality
 
 - **Feature**: The attachment/assets/other file sidebar tab now also shows files
-  found in the default image folder if applicable
+  found in the default image folder where applicable
 - **Feature**: The right-click context menu for external markdown links now 
-  contains the options to "Remove Link". When removing `<link>` style links the
+  contains an option to remove a link. When removing `<link>` style links, the
   `link` text remains as plain text. When removing `[title](link)` style links, 
   the `title` text remains as plain text.
 - **Change**: When searching for files in the filter field, only files and
