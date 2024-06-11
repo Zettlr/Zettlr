@@ -6,7 +6,8 @@
 
 ## Under the Hood
 
-(nothing here yet)
+- Switched to ESLint v9.x, thereby replacing the "old" `.eslintrc.json` config
+  with what ESLint calls "flat" configs
 
 # 3.2.0
 

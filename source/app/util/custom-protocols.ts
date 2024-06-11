@@ -24,7 +24,6 @@ export default function registerCustomProtocols (logger: LogProvider): void {
   protocol.registerFileProtocol(protocolName, (request, callback) => {
     const url = request.url.replace(`${protocolName}://`, '')
     try {
-      // eslint-disable-next-line n/no-callback-literal
       return callback({
         path: decodeURIComponent(url),
         // Prevent that local files are cached
