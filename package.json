@@ -135,7 +135,9 @@
     "@codemirror/view": "6.28.0",
     "@codemirror/language": "6.10.2",
     "@lezer/common": "1.2.1",
-    "@lezer/highlight": "1.2.0"
+    "@lezer/highlight": "1.2.0",
+    "mermaid/katex": "^0.16.10",
+    "micromark-extension-math/katex": "^0.16.10"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
