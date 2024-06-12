@@ -2,7 +2,9 @@
 
 ## GUI and Functionality
 
-(nothing here yet)
+- Zettlr now remembers the widths of file manager and sidebar
+- You can now reset the file manager and sidebar widths by double-clicking the
+  corresponding resizer
 
 ## Under the Hood
 
