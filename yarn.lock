@@ -2540,12 +2540,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/webpack-asset-relocator-loader@npm:1.7.3":
-  version: 1.7.3
-  resolution: "@vercel/webpack-asset-relocator-loader@npm:1.7.3"
+"@vercel/webpack-asset-relocator-loader@npm:1.7.4":
+  version: 1.7.4
+  resolution: "@vercel/webpack-asset-relocator-loader@npm:1.7.4"
   dependencies:
     resolve: ^1.10.0
-  checksum: e4d761e82f5f389206b7261874cc232382984c84f9476fb1c90759507782f8cc8a414ec910e24e63075d28ca5999bdf9d8f3ef2b2e41ea05e477188e8b9669d6
+  checksum: 1b49e036173f173a9cfbcc6a53f666a487965506f3154260fd8dbda3f2e1d58610289826f49e888b965623b01fecedacfe3da46ecb4eedf482f3d9415a2a50fc
   languageName: node
   linkType: hard
 
@@ -15300,7 +15300,7 @@ __metadata:
     "@types/uuid": ^9.0.8
     "@typescript-eslint/eslint-plugin": ^7.13.0
     "@typescript-eslint/parser": ^7.13.0
-    "@vercel/webpack-asset-relocator-loader": 1.7.3
+    "@vercel/webpack-asset-relocator-loader": 1.7.4
     adm-zip: ^0.5.14
     archiver: ^7.0.1
     astrocite: ^0.16.4
