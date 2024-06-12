@@ -194,7 +194,6 @@ const SOUND_EFFECTS = [
 const searchParams = new URLSearchParams(window.location.search)
 // The window number indicates which main window this one here is. This is only
 // necessary for the documents and split views to show up.
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const windowId = searchParams.get('window_id')!
 
 const fileManagerVisible = ref(true)
