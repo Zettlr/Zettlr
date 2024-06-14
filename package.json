@@ -179,7 +179,7 @@
     "eslint-config-standard": "^17.1.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^17.8.1",
+    "eslint-plugin-n": "^17.9.0",
     "eslint-plugin-promise": "^6.2.0",
     "eslint-plugin-vue": "^9.26.0",
     "jsdom": "^24.1.0",

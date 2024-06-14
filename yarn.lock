@@ -6375,9 +6375,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-n@npm:^17.8.1":
-  version: 17.8.1
-  resolution: "eslint-plugin-n@npm:17.8.1"
+"eslint-plugin-n@npm:^17.9.0":
+  version: 17.9.0
+  resolution: "eslint-plugin-n@npm:17.9.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.4.0
     enhanced-resolve: ^5.17.0
@@ -6389,7 +6389,7 @@ __metadata:
     semver: ^7.5.3
   peerDependencies:
     eslint: ">=8.23.0"
-  checksum: 71be8734456a132f363667cc8647e1f12c222d9f64ec8c0d587572296391d962bdaf3120f0bc34da9f3575ff0a4516334e2bce111d83f67e0b074c408f724e20
+  checksum: 35183020aecfa9daddb5d522175817aa4069acb66e3e4cfc850e04a2882d98fdc2d88189d9ce1bd450afa460a7563e77226526c283cb7179270e99da7bc0391e
   languageName: node
   linkType: hard
 
@@ -15321,7 +15321,7 @@ __metadata:
     eslint-config-standard: ^17.1.0
     eslint-config-standard-with-typescript: ^43.0.1
     eslint-plugin-import: ^2.29.1
-    eslint-plugin-n: ^17.8.1
+    eslint-plugin-n: ^17.9.0
     eslint-plugin-promise: ^6.2.0
     eslint-plugin-vue: ^9.26.0
     fix-path: ^4.0.0
