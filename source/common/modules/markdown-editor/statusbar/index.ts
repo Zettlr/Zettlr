@@ -17,7 +17,7 @@ import { StateEffect, StateField, type EditorState } from '@codemirror/state'
 import { configUpdateEffect } from '../util/configuration'
 import { magicQuotesStatus } from './magic-quotes'
 import { readabilityStatus } from '../renderers/readability'
-import { cursorStatus, wordcountStatus, charcountStatus, inputModeStatus } from './info-fields'
+import { cursorStatus, wordcountStatus, charcountStatus, inputModeStatus,getWordCountLimit } from './info-fields'
 import { languageToolStatus, languageToolPauseToggle } from './language-tool'
 import { diagnosticsStatus } from './diagnostics'
 
@@ -74,6 +74,7 @@ function createStatusbar (view: EditorView): Panel {
         readabilityStatus,
         cursorStatus,
         wordcountStatus,
+        getWordCountLimit,
         charcountStatus,
         inputModeStatus,
         languageToolStatus,

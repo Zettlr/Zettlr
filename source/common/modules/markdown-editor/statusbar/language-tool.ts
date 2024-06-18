@@ -172,6 +172,7 @@ export function languageToolPauseToggle (state: EditorState, view: EditorView): 
    * const languageToolPauseToggle = languageToolPauseToggle(state, view)
    * ```
    */
+  
   const config = state.field(configField, false)
   const ltState = state.field(languageToolState, false)
 
