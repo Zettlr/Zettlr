@@ -48,12 +48,9 @@ export function cursorStatus (state: EditorState, view: EditorView): StatusbarIt
 // Variable to store the word count limit
 
 let sessionWordCountTarget: number | null = null;
-let activePopup: HTMLDivElement | null = null; // Track active popup
 
 export function getWordCountLimit(state: EditorState, view: EditorView){
-  let isDragging = false;
-  let initialX: number;
-  let initialY: number;
+  let activePopup: HTMLDivElement | null = null; // Track active popup
 
   const onClickHandler = (event: MouseEvent) => {
     if (activePopup) {
@@ -62,6 +59,11 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
       activePopup = null;
     }
 
+    activePopup = createPopup();
+    document.body.appendChild(activePopup);
+  };
+
+  function createPopup() {
     const popupContainer = document.createElement('div');
     popupContainer.className = 'popup-container';
     popupContainer.style.position = 'fixed';
@@ -79,6 +81,10 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
     popupContainer.style.cursor = 'move'; // Cursor style for drag
 
     // Draggable functionality
+    let isDragging = false;
+    let initialX: number;
+    let initialY: number;
+
     popupContainer.addEventListener('mousedown', (e) => {
       isDragging = true;
       initialX = e.clientX - popupContainer.getBoundingClientRect().left;
@@ -101,12 +107,13 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
     // Style for the popup input field
     const inputElement = document.createElement('input');
     inputElement.type = 'number';
-    inputElement.placeholder = 'Enter word count target';
+    inputElement.value = '1'; // Set default value to 1
+    inputElement.min = '1'; // Minimum value allowed is 1
     inputElement.style.width = 'calc(100% - 20px)';
     inputElement.style.padding = '8px';
     inputElement.style.marginBottom = '10px';
-    inputElement.style.border = '1px solid black'; 
-    inputElement.min = '1';
+    inputElement.style.border = '1px solid black'; // Highlight with black border
+    popupContainer.appendChild(inputElement);
 
     const buttonContainer = document.createElement('div');
     buttonContainer.style.display = 'flex';
@@ -124,7 +131,7 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
     submitButton.addEventListener('click', () => {
       const inputValue = inputElement.value.trim();
       const parsedInput = parseInt(inputValue, 10);
-      if (!isNaN(parsedInput) && parsedInput > 0) {
+      if (!isNaN(parsedInput) && parsedInput >= 0) {
         sessionWordCountTarget = parsedInput;
         alert(`Session word count target set to: ${sessionWordCountTarget}`);
         closePopup();
@@ -143,21 +150,16 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
 
     buttonContainer.appendChild(submitButton);
     buttonContainer.appendChild(cancelButton);
-
-    popupContainer.appendChild(inputElement);
     popupContainer.appendChild(buttonContainer);
-
-    document.body.appendChild(popupContainer);
-    activePopup = popupContainer;
 
     // Function to close the popup and clean up
     function closePopup() {
-      if (activePopup === popupContainer) {
-        document.body.removeChild(popupContainer);
-        activePopup = null;
-      }
+      document.body.removeChild(popupContainer);
+      activePopup = null;
     }
-  };
+
+    return popupContainer;
+  }
 
   const statusBarItem: StatusbarItem = {
     content: 'Set Session Word Count Target',
@@ -192,14 +194,28 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
 //     };
 //   }
 // }
-export function wordcountStatus (state: EditorState, view: EditorView): StatusbarItem|null {
-  const counter = state.field(countField, false)
+export function wordcountStatus(state: EditorState, view: EditorView): StatusbarItem | null {
+  const counter = state.field(countField, false);
+  
   if (counter === undefined) {
-    return null
+    return null;
   } else {
-    return {
-      content: trans('%s words', localiseNumber(counter.words))
+    const wordCount = counter.words;
+    let content = trans('sesson word count: %s', localiseNumber(wordCount));
+    if (sessionWordCountTarget !== null) {
+      let percentage = ((wordCount / sessionWordCountTarget) * 100).toFixed(2);
+      if (wordCount > sessionWordCountTarget){
+        content = trans('sesson word count: %s', localiseNumber(sessionWordCountTarget));
+        percentage = ((sessionWordCountTarget / sessionWordCountTarget) * 100).toFixed(2);
+      } 
+      content += trans('/%s', localiseNumber(sessionWordCountTarget));
+      content += ` (${percentage}%)`;
     }
+    content += ` words`
+
+    return {
+      content: content
+    };
   }
 }
 
