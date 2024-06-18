@@ -51,6 +51,10 @@ let sessionWordCountTarget: number | null = null;
 let activePopup: HTMLDivElement | null = null; // Track active popup
 
 export function getWordCountLimit(state: EditorState, view: EditorView){
+  let isDragging = false;
+  let initialX: number;
+  let initialY: number;
+
   const onClickHandler = (event: MouseEvent) => {
     if (activePopup) {
       // Close any existing popups before opening a new one
@@ -67,25 +71,60 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
     popupContainer.style.backgroundColor = '#fff';
     popupContainer.style.padding = '20px';
     popupContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    popupContainer.style.border = '2px solid black'; // Highlight with black border
+    popupContainer.style.borderRadius = '10px'; // Rounded corners
     popupContainer.style.zIndex = '1000';
+    popupContainer.style.width = '300px'; // Set width
+    popupContainer.style.height = '150px'; // Set height
+    popupContainer.style.cursor = 'move'; // Cursor style for drag
+
+    // Draggable functionality
+    popupContainer.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      initialX = e.clientX - popupContainer.getBoundingClientRect().left;
+      initialY = e.clientY - popupContainer.getBoundingClientRect().top;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const newX = e.clientX - initialX;
+        const newY = e.clientY - initialY;
+        popupContainer.style.left = `${newX}px`;
+        popupContainer.style.top = `${newY}px`;
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
 
     // Style for the popup input field
     const inputElement = document.createElement('input');
     inputElement.type = 'number';
     inputElement.placeholder = 'Enter word count target';
-    inputElement.style.width = '100%';
+    inputElement.style.width = 'calc(100% - 20px)';
     inputElement.style.padding = '8px';
-    inputElement.style.border = '1px solid black';
+    inputElement.style.marginBottom = '10px';
+    inputElement.style.border = '1px solid black'; 
+    inputElement.min = '1';
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.display = 'flex';
+    buttonContainer.style.justifyContent = 'flex-end';
+    buttonContainer.style.position = 'absolute';
+    buttonContainer.style.bottom = '10px';
+    buttonContainer.style.right = '10px';
+    buttonContainer.style.width = 'calc(100% - 20px)';
 
     const submitButton = document.createElement('button');
     submitButton.textContent = 'Set Target';
-    submitButton.style.marginTop = '10px';
     submitButton.style.padding = '8px';
+    submitButton.style.marginLeft = '10px';
     submitButton.style.cursor = 'pointer';
     submitButton.addEventListener('click', () => {
       const inputValue = inputElement.value.trim();
       const parsedInput = parseInt(inputValue, 10);
-      if (!isNaN(parsedInput) && parsedInput >= 0) {
+      if (!isNaN(parsedInput) && parsedInput > 0) {
         sessionWordCountTarget = parsedInput;
         alert(`Session word count target set to: ${sessionWordCountTarget}`);
         closePopup();
@@ -96,17 +135,17 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
 
     const cancelButton = document.createElement('button');
     cancelButton.textContent = 'Cancel';
-    cancelButton.style.marginTop = '10px';
     cancelButton.style.padding = '8px';
     cancelButton.style.cursor = 'pointer';
     cancelButton.addEventListener('click', () => {
       closePopup();
     });
 
+    buttonContainer.appendChild(submitButton);
+    buttonContainer.appendChild(cancelButton);
+
     popupContainer.appendChild(inputElement);
-    popupContainer.appendChild(document.createElement('br'));
-    popupContainer.appendChild(submitButton);
-    popupContainer.appendChild(cancelButton);
+    popupContainer.appendChild(buttonContainer);
 
     document.body.appendChild(popupContainer);
     activePopup = popupContainer;
