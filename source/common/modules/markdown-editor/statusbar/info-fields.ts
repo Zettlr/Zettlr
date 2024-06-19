@@ -23,10 +23,10 @@ import { configField } from '../util/configuration'
 /**
  * Displays the cursor position
  *
- * @param   {EditorState}    state  The EditorState
- * @param   {EditorView}     view   The EditorView
+ * @param {EditorState} state - The EditorState
+ * @param {EditorView} view - The EditorView
  *
- * @return  {StatusbarItem}         Returns the element
+ * @return  {StatusbarItem|null} - Returns the element
  */
 export function cursorStatus (state: EditorState, view: EditorView): StatusbarItem|null {
   const mainOffset = state.selection.main.head
@@ -36,22 +36,27 @@ export function cursorStatus (state: EditorState, view: EditorView): StatusbarIt
   }
 }
 
-/**
- * Displays the word count, if applicable
- *
- * @param   {EditorState}    state  The EditorState
- * @param   {EditorView}     view   The EditorView
- *
- * @return  {StatusbarItem}         Returns the element or null
- */
 
-// Variable to store the word count limit
-
+// A variable to store the session word count target
 let sessionWordCountTarget: number | null = null;
 
-export function getWordCountLimit(state: EditorState, view: EditorView){
-  let activePopup: HTMLDivElement | null = null; // Track active popup
+/**
+ * Creates and returns a status bar item for setting the word count limit.
+ * 
+ * @param {EditorState} state - The EditorState
+ * @param {EditorView} view - The EditorView
+ * @return {StatusbarItem|null} - Returns the element
+ */
+export function getWordCountLimit(state: EditorState, view: EditorView): StatusbarItem|null {
+  // Track the currently active popup element
+  let activePopup: HTMLDivElement | null = null; 
 
+  /**
+   * Handler function to be called when the status bar item is clicked.
+   * It opens a popup to set the word count limit.
+   * 
+   * @param {MouseEvent} event - The mouse event triggered by the click
+   */
   const onClickHandler = (event: MouseEvent) => {
     if (activePopup) {
       // Close any existing popups before opening a new one
@@ -59,11 +64,17 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
       activePopup = null;
     }
 
+    // Create and display the new popup
     activePopup = createPopup();
     document.body.appendChild(activePopup);
   };
 
-  function createPopup() {
+  /**
+   * Function to create a draggable popup for setting the word count limit.
+   * 
+   * @return {HTMLDivElement} - The popup element
+   */
+  function createPopup(): HTMLDivElement {
     const popupContainer = document.createElement('div');
     popupContainer.className = 'popup-container';
     popupContainer.style.position = 'fixed';
@@ -73,18 +84,19 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
     popupContainer.style.backgroundColor = '#fff';
     popupContainer.style.padding = '20px';
     popupContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
-    popupContainer.style.border = '2px solid black'; // Highlight with black border
-    popupContainer.style.borderRadius = '10px'; // Rounded corners
+    popupContainer.style.border = '2px solid black'; 
+    popupContainer.style.borderRadius = '10px'; 
     popupContainer.style.zIndex = '1000';
-    popupContainer.style.width = '300px'; // Set width
-    popupContainer.style.height = '150px'; // Set height
-    popupContainer.style.cursor = 'move'; // Cursor style for drag
+    popupContainer.style.width = '300px';
+    popupContainer.style.height = '150px'; 
+    popupContainer.style.cursor = 'move'; 
 
     // Draggable functionality
     let isDragging = false;
     let initialX: number;
     let initialY: number;
 
+    // Add event listeners for dragging
     popupContainer.addEventListener('mousedown', (e) => {
       isDragging = true;
       initialX = e.clientX - popupContainer.getBoundingClientRect().left;
@@ -104,17 +116,18 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
       isDragging = false;
     });
 
-    // Style for the popup input field
+    // Create and style the input field for word count target
     const inputElement = document.createElement('input');
     inputElement.type = 'number';
-    inputElement.value = '1'; // Set default value to 1
-    inputElement.min = '1'; // Minimum value allowed is 1
+    inputElement.value = '1'; 
+    inputElement.min = '1'; 
     inputElement.style.width = 'calc(100% - 20px)';
     inputElement.style.padding = '8px';
     inputElement.style.marginBottom = '10px';
-    inputElement.style.border = '1px solid black'; // Highlight with black border
+    inputElement.style.border = '1px solid black'; 
     popupContainer.appendChild(inputElement);
 
+    // Container for the buttons
     const buttonContainer = document.createElement('div');
     buttonContainer.style.display = 'flex';
     buttonContainer.style.justifyContent = 'flex-end';
@@ -123,6 +136,7 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
     buttonContainer.style.right = '10px';
     buttonContainer.style.width = 'calc(100% - 20px)';
 
+    // Create and style the submit button
     const submitButton = document.createElement('button');
     submitButton.textContent = 'Set Target';
     submitButton.style.padding = '8px';
@@ -132,6 +146,7 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
       const inputValue = inputElement.value.trim();
       const parsedInput = parseInt(inputValue, 10);
       if (!isNaN(parsedInput) && parsedInput >= 0) {
+        // Set the session word count target
         sessionWordCountTarget = parsedInput;
         alert(`Session word count target set to: ${sessionWordCountTarget}`);
         closePopup();
@@ -140,6 +155,7 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
       }
     });
 
+    // Create and style the cancel button
     const cancelButton = document.createElement('button');
     cancelButton.textContent = 'Cancel';
     cancelButton.style.padding = '8px';
@@ -148,11 +164,14 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
       closePopup();
     });
 
+    // Append buttons to the button container
     buttonContainer.appendChild(submitButton);
     buttonContainer.appendChild(cancelButton);
     popupContainer.appendChild(buttonContainer);
 
-    // Function to close the popup and clean up
+    /**
+     * Function to close the popup and clean up.
+     */
     function closePopup() {
       document.body.removeChild(popupContainer);
       activePopup = null;
@@ -161,58 +180,45 @@ export function getWordCountLimit(state: EditorState, view: EditorView){
     return popupContainer;
   }
 
+  // Create the status bar item with the onClick handler
   const statusBarItem: StatusbarItem = {
     content: 'Set Session Word Count Target',
     onClick: onClickHandler,
-    allowHtml: false // Adjust based on your needs
+    allowHtml: false 
   };
 
   return statusBarItem;
 }
-// export function wordcountStatus(state: EditorState, view: EditorView) {
-//   const counter = state.field(countField, false);
-//   if (counter === undefined) {
-//     return null;
-//   } else {
-//     let displayWordCount = counter.words;
 
-//     if (wordCountLimit !== null && counter.words >= wordCountLimit) {
-//       displayWordCount = wordCountLimit;
-//     }
-
-//     return {
-//       content: trans('%s words', localiseNumber(displayWordCount)),
-//       allowHtml: true,
-//       onClick() {
-//         wordCountLimit = getWordCountLimit();
-//         if (wordCountLimit !== null) {
-//           alert(`Word count limit set to ${wordCountLimit} words.`);
-//         } else {
-//           alert('Word count limit removed.');
-//         }
-//       }
-//     };
-//   }
-// }
-export function wordcountStatus(state: EditorState, view: EditorView): StatusbarItem | null {
+/**
+ * Returns a status bar item displaying the current word count and target.
+ * 
+ * @param {EditorState} state - The EditorState
+ * @param {EditorView} view - The EditorView
+ * @return {StatusbarItem|null} - Returns the element
+ */
+export function wordcountStatus(state: EditorState, view: EditorView): StatusbarItem|null {
+  // Get the word count from the state
   const counter = state.field(countField, false);
   
   if (counter === undefined) {
     return null;
   } else {
+    // Get the current word count
     const wordCount = counter.words;
-    let content = trans('sesson word count: %s', localiseNumber(wordCount));
+    let content = trans('session word count: %s', localiseNumber(wordCount));
     if (sessionWordCountTarget !== null) {
       let percentage = ((wordCount / sessionWordCountTarget) * 100).toFixed(2);
-      if (wordCount > sessionWordCountTarget){
-        content = trans('sesson word count: %s', localiseNumber(sessionWordCountTarget));
+      if (wordCount > sessionWordCountTarget) {
+        content = trans('session word count: %s', localiseNumber(sessionWordCountTarget));
         percentage = ((sessionWordCountTarget / sessionWordCountTarget) * 100).toFixed(2);
       } 
       content += trans('/%s', localiseNumber(sessionWordCountTarget));
       content += ` (${percentage}%)`;
     }
-    content += ` words`
+    content += ` words`;
 
+    // Return the status bar item with the word count information
     return {
       content: content
     };
@@ -222,10 +228,10 @@ export function wordcountStatus(state: EditorState, view: EditorView): Statusbar
 /**
  * Displays the character count, if applicable
  *
- * @param   {EditorState}    state  The EditorState
- * @param   {EditorView}     view   The EditorView
+ * @param {EditorState} state - The EditorState
+ * @param {EditorView} view - The EditorView
  *
- * @return  {StatusbarItem}         Returns the element or null
+ * @return  {StatusbarItem|null} - Returns the element
  */
 export function charcountStatus (state: EditorState, view: EditorView): StatusbarItem|null {
   const counter = state.field(countField, false)
@@ -241,10 +247,10 @@ export function charcountStatus (state: EditorState, view: EditorView): Statusba
 /**
  * Displays an input mode indication, if applicable
  *
- * @param   {EditorState}    state  The EditorState
- * @param   {EditorView}     view   The EditorView
+ * @param {EditorState} state - The EditorState
+ * @param {EditorView} view - The EditorView
  *
- * @return  {StatusbarItem}         Returns the element or null
+ * @return  {StatusbarItem|null} - Returns the element
  */
 export function inputModeStatus (state: EditorState, view: EditorView): StatusbarItem|null {
   const config = state.field(configField, false)
