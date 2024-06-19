@@ -63,13 +63,17 @@ interface TableEditorState {
 
 // This widget holds a visual DOM representation of a table.
 class TableWidget extends WidgetType {
-  public hasSubview: boolean
+  /**
+   * Each TableWidget can have one activeSubview, if the main selection is
+   * within this table. Of course, there can be multiple selections and each
+   * will be updated accordingly through the various update methods, but because
+   * it would cause mayhem, we only allow one EditorView.
+   */
+  private activeSubview: EditorView|undefined
+
   constructor (readonly table: string, readonly node: SyntaxNode) {
     super()
-    this.hasSubview = false
-    // TODO: Set up the data structure for the widget. Everytime a Decoration is
-    // created a new widget will be created that holds this data. This means the
-    // constructor should be extremely thin!
+    this.activeSubview = undefined
   }
 
   // This is called by CodeMirror for all widgets to see if there are
@@ -79,10 +83,14 @@ class TableWidget extends WidgetType {
   // happen quite frequently, so the `eq` method needs to also be very fast.
   eq (other: TableWidget): boolean {
     console.log('Calling `eq`')
-    // NOTE: The widget should always be redrawn if the table has actually
-    // changed and no active subview. In the latter case, we have to manually
-    // redraw it.
-    return this.table === other.table || this.hasSubview
+    // NOTE: In our current setup, `eq` will never be called, because we're
+    // doing the synchronization ourselves
+    return this.table === other.table || this.activeSubview !== undefined
+  }
+
+  updateDOM (dom: HTMLElement, view: EditorView): boolean {
+      console.log('Calling `updateDOM`')
+      return true
   }
 
   toDOM (view: EditorView): HTMLElement {
@@ -91,8 +99,7 @@ class TableWidget extends WidgetType {
       const table = document.createElement('table')
       // DEBUG: Move to proper styles
       table.style.borderCollapse = 'collapse'
-      const ast = parseTableNode(this.node, this.table)
-      updateTable(this, table, ast, view)
+      updateTable(this, table, view)
       return table
     } catch (err: any) {
       console.log('Could not create table', err)
@@ -105,10 +112,37 @@ class TableWidget extends WidgetType {
   }
 
   // TODO: Any additional cleanup necessary we should do here.
-  destroy (dom: HTMLElement): void {}
+  destroy (dom: HTMLElement): void {
+    // This function will be called automatically whenever the main view or this
+    // widget gets destroyed
+  }
 
   ignoreEvent (event: Event): boolean {
     return true // In this plugin case, the table should handle everything
+  }
+}
+
+/**
+ * Attempts to create a TableEditor TableWidget from the provided SyntaxNode.
+ * Returns undefined if there was any error in the creation of the widget.
+ *
+ * @param   {EditorState}                  state  The EditorState
+ * @param   {SyntaxNode}                   node   The SyntaxNode
+ *
+ * @return  {Range<Decoration>|undefined}         The widget, wrapped in a range, or undefined
+ */
+function createTableEditorWidget (state: EditorState, node: SyntaxNode): Range<Decoration>|undefined {
+  try {
+    const decoration = Decoration.replace({
+      widget: new TableWidget(state.sliceDoc(node.from, node.to), node.node),
+      inclusive: false,
+      block: true
+    })
+
+    return decoration.range(node.from, node.to)
+  } catch (err: any) {
+    err.message = 'Could not instantiate TableEditor widget: ' + err.message
+    console.error(err)
   }
 }
 
@@ -142,13 +176,19 @@ function maybeUpdateSubview (subview: EditorView, tr: Transaction): void {
  * @param  {Table}             tableAST  An AST that contains the table
  * @param  {EditorView}        view      The EditorView
  */
-function updateTable (widget: TableWidget, table: HTMLTableElement, tableAST: Table, view: EditorView): void {
+function updateTable (widget: TableWidget, table: HTMLTableElement, view: EditorView): void {
+  // TODO: Create an EditorView for the main selection if that happens to be
+  // within the bounds of an editorcell.
   const thead = table.querySelector('thead') ?? document.createElement('thead')
   const tbody = table.querySelector('tbody') ?? document.createElement('tbody')
 
   // TODO: Better update mechanism that actually only updates what exactly has changed
   thead.innerHTML = ''
   tbody.innerHTML = ''
+
+  const tableAST = parseTableNode(widget.node, widget.table)
+
+  const mainSelection = view.state.selection.main
 
   for (const row of tableAST.rows) {
     const tr = document.createElement('tr')
@@ -185,21 +225,7 @@ export const renderTables = StateField.define<TableEditorState>({
       // Get all Table nodes in the document
       .topNode.getChildren('Table')
       // Turn the nodes into TableWidgets
-      .map(node => {
-        const table = state.sliceDoc(node.from, node.to)
-        try {
-          const widget = Decoration.replace({
-            widget: new TableWidget(table, node.node),
-            inclusive: false,
-            block: true
-          })
-
-          return widget.range(node.from, node.to)
-        } catch (err: any) {
-          err.message = 'Could not instantiate TableEditor widget: ' + err.message
-          console.error(err)
-        }
-      })
+      .map(node => createTableEditorWidget(state, node))
       // Filter out erroneous ones
       .filter((val): val is Range<Decoration> => val !== undefined)
 
@@ -218,10 +244,14 @@ export const renderTables = StateField.define<TableEditorState>({
       // NOTE: This may never trigger an update on the main view, so ensure
       // this annotates the transactions and that the subview knows not to
       // re-emit these updates back to the main view.
+      // TODO: Update all subviews, so maybe move this to the "filter" method
+      // to update the subviews of any already existing widget!
       maybeUpdateSubview(field.subview, tr)
     }
 
     // Second, ensure the range values are correct for the new document state.
+    // NOTE: This does NOT trigger the `updateDOM` method
+    // TODO: Provide the now-correct nodes to retained widgets
     field.decorations = field.decorations.map(tr.changes)
 
     // Third, we have to compare the Table nodes that are actually present
@@ -245,24 +275,11 @@ export const renderTables = StateField.define<TableEditorState>({
     const newDecos: Array<Range<Decoration>> = []
 
     for (const node of tableNodes) {
-      const isNew = renderedRanges.find(r => node.from === r.from && node.to === r.to) === undefined
-
-      if (!isNew) {
-        continue
-      }
-
-      const table = tr.state.sliceDoc(node.from, node.to)
-      try {
-        const widget = Decoration.replace({
-          widget: new TableWidget(table, node.node), // TODO: Do I even need the node? No, right?
-          inclusive: false,
-          block: true
-        })
-
-        newDecos.push(widget.range(node.from, node.to))
-      } catch (err: any) {
-        err.message = 'Could not instantiate TableEditor widget: ' + err.message
-        console.error(err)
+      if (renderedRanges.find(r => node.from === r.from && node.to === r.to) === undefined) {
+        const newRange = createTableEditorWidget(tr.state, node)
+        if (newRange !== undefined) {
+          newDecos.push(newRange)
+        }
       }
     }
 
@@ -279,6 +296,8 @@ export const renderTables = StateField.define<TableEditorState>({
       // Remove any decoration range whose corresponding table is no longer
       // in the document
       filter (from, to, value) {
+        // TODO: Here, whenever a node still exists, provide it with the now
+        // correct table node, update the subview, and call updateDOM
         return tableNodes.find(val => val.from === from && val.to === to) !== undefined
       }
     })
