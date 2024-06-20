@@ -116,10 +116,11 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
           // Has no real children; here we basically just account for any whitespace
           children: [
             genericTextNode(prev.to, next.from, markdown.slice(prev.to, next.from))
-          ]
+          ],
+          textContent: markdown.slice(prev.to, next.from)
         }
         rowNode.cells.push(cellNode)
-        wasDelim = false
+        wasDelim = false // TODO: Isn't that a bug? Because ... it WAS indeed a delimiter
       } else if (next.name === 'TableCell') {
         // Functional table cell
         const cellNode: TableCell = {
@@ -128,13 +129,15 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
           from: next.from,
           to: next.to,
           whitespaceBefore: '',
-          children: []
+          children: [],
+          textContent: markdown.slice(next.from, next.to)
         }
         parseChildren(cellNode, next, markdown)
         rowNode.cells.push(cellNode)
         wasDelim = false
       } else {
-        console.warn(`Could not fully parse Table node: Unexpected node "${next.name}" in row.`)
+        // TODO: There are frequent TableHeader warnings printed to the console.
+        console.warn(`Could not fully parse Table node: Unexpected node "${next.name}" in row (text content: "${markdown.slice(next.from, next.to)}").`)
         wasDelim = false
       }
       next = next.nextSibling

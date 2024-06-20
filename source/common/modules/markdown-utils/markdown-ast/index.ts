@@ -313,6 +313,10 @@ export interface TableCell extends MDNode {
    * The text content of the cell TODO: Arbitrary children!
    */
   children: ASTNode[]
+  /**
+   * Contains the raw cell contents as a string
+   */
+  textContent: string
 }
 
 /**
