@@ -12,6 +12,39 @@
  * END HEADER
  */
 
+// A NOTE on the update cycle of the TableEditor
+// =============================================
+//
+// CodeMirror has a very peculiar update cycle that we need to respect. The
+// TableEditor is a complex piece of software that needs to somehow sandwich
+// itself in between CodeMirror and its very own state.
+//
+// On a high level, updating the TableEditor works only one-way:
+// CodeMirror updates --> TableEditor updates
+//
+// Only when there is an active subview in a table will the data flow reverse
+// (kind of): TableEditor update --> CodeMirror update
+//
+// The source of truth must always be exclusively the CodeMirror state; the
+// TableEditor must remain a slave that simply computes its own state based on
+// CodeMirror's state, and never vice versa.
+//
+// However, that is actually easier said than done, because what gets updated
+// when in CodeMirror is somewhat delicate. Here's how it works (at least in my
+// very limited understanding of CodeMirror's codebase):
+//
+// 1. There needs to be some transaction at the beginning specifying what should
+//    change, and how.
+// 2. This transaction then is applied to the state itself, and all its
+//    dependencies.
+// 3. At this point, the TableEditor's StateField is updated as well. This
+//    includes a recalculation of which Table nodes are in the document, and
+//    whether we have to draw new ones. The updated DecorationSet is then
+//    returned to the state.
+// 4. Now CodeMirror will begin updating its View to reflect that new state.
+//    This specifically also includes calling the `toDOM` methods of any new
+//    TableEditor widgets.
+
 // DEBUG // Addendum June 18: After an unsuccessful attempt of migrating the
 // DEBUG // plugin to a ViewPlugin, the major improvement to the previous commit
 // DEBUG // is that it is now a teeny-tiny bit more efficient. One thing that I
@@ -46,7 +79,7 @@ import { Range, Transaction, Annotation, EditorState, StateField } from '@codemi
 import { syntaxTree } from '@codemirror/language'
 import { SyntaxNode } from '@lezer/common'
 import { parseTableNode } from "../../markdown-utils/markdown-ast/parse-table-node"
-import { Table } from '../../markdown-utils/markdown-ast'
+import { Table, TableRow } from '../../markdown-utils/markdown-ast'
 
 // This syncAnnotation is used to tag all transactions originating from the main
 // EditorView when dispatching them to the subview to ensure they don't get re-
@@ -70,10 +103,12 @@ class TableWidget extends WidgetType {
    * it would cause mayhem, we only allow one EditorView.
    */
   private activeSubview: EditorView|undefined
+  private node: SyntaxNode
 
-  constructor (readonly table: string, readonly node: SyntaxNode) {
+  constructor (readonly table: string, node: SyntaxNode) {
     super()
     this.activeSubview = undefined
+    this.node = node
   }
 
   // This is called by CodeMirror for all widgets to see if there are
@@ -89,8 +124,13 @@ class TableWidget extends WidgetType {
   }
 
   updateDOM (dom: HTMLElement, view: EditorView): boolean {
-      console.log('Calling `updateDOM`')
-      return true
+    console.log('Calling `updateDOM`')
+    // This check allows us to, e.g., create error divs (instead of Table elements)
+    if (!(dom instanceof HTMLTableElement)) {
+      return false
+    }
+    updateTable(this, dom, view.state)
+    return true
   }
 
   toDOM (view: EditorView): HTMLElement {
@@ -99,7 +139,7 @@ class TableWidget extends WidgetType {
       const table = document.createElement('table')
       // DEBUG: Move to proper styles
       table.style.borderCollapse = 'collapse'
-      updateTable(this, table, view)
+      updateTable(this, table, view.state)
       return table
     } catch (err: any) {
       console.log('Could not create table', err)
@@ -119,6 +159,20 @@ class TableWidget extends WidgetType {
 
   ignoreEvent (event: Event): boolean {
     return true // In this plugin case, the table should handle everything
+  }
+
+  /**
+   * This function allows us to update the corresponding table node after a
+   * state update to ensure it will retrieve the proper contents of the table.
+   *
+   * @param   {SyntaxNode}  newNode  The new updated SyntaxNode containing the table.
+   */
+  setNode (newNode: SyntaxNode): void {
+    this.node = newNode
+  }
+
+  getNode (): SyntaxNode {
+    return this.node
   }
 }
 
@@ -173,47 +227,60 @@ function maybeUpdateSubview (subview: EditorView, tr: Transaction): void {
  *
  * @param  {TableWidget}       widget    A TableWidget
  * @param  {HTMLTableElement}  table     The DOM-element containing the table
- * @param  {Table}             tableAST  An AST that contains the table
- * @param  {EditorView}        view      The EditorView
+ * @param  {EditorState}       state     The EditorState
  */
-function updateTable (widget: TableWidget, table: HTMLTableElement, view: EditorView): void {
-  // TODO: Create an EditorView for the main selection if that happens to be
-  // within the bounds of an editorcell.
-  const thead = table.querySelector('thead') ?? document.createElement('thead')
-  const tbody = table.querySelector('tbody') ?? document.createElement('tbody')
+function updateTable (widget: TableWidget, table: HTMLTableElement, state: EditorState): void {
+  const tableAST = parseTableNode(widget.getNode(), widget.table)
 
-  // TODO: Better update mechanism that actually only updates what exactly has changed
-  thead.innerHTML = ''
-  tbody.innerHTML = ''
+  // TODO: Apply mainSelection EditorView subview
+  const mainSelection = state.selection.main
 
-  const tableAST = parseTableNode(widget.node, widget.table)
+  let trs = Array.from(table.querySelectorAll('tr'))
 
-  const mainSelection = view.state.selection.main
-
-  for (const row of tableAST.rows) {
-    const tr = document.createElement('tr')
-    if (row.isHeaderOrFooter) {
-      thead.appendChild(tr)
-    } else {
-      tbody.appendChild(tr)
+  if (trs.length > tableAST.rows.length) {
+    // Too many TRs --> Remove. The for-loop below accounts for too few.
+    for (let j = tableAST.rows.length; j < trs.length; j++) {
+      trs[j].parentElement?.removeChild(trs[j])
     }
+    trs = trs.slice(0, tableAST.rows.length)
+  }
 
-    for (const cell of row.cells) {
-      const td = document.createElement(row.isHeaderOrFooter ? 'th' : 'td')
-      td.textContent = view.state.sliceDoc(cell.from, cell.to)
+  for (let i = 0; i < tableAST.rows.length; i++) {
+    const row = tableAST.rows[i]
+    if (i === trs.length) {
+      // We have to create a new TR
+      const tr = document.createElement('tr')
+      table.appendChild(tr)
+      updateRow(tr, row, row.isHeaderOrFooter)
+    } else {
+      // Transfer the contents
+      updateRow(trs[i], row, row.isHeaderOrFooter)
+    }
+  }
+}
+
+function updateRow (tr: HTMLTableRowElement, astRow: TableRow, isHeaderOrFooter: boolean): void {
+  let tds = Array.from(tr.querySelectorAll(isHeaderOrFooter ? 'th' : 'td'))
+  if (tds.length > astRow.cells.length) {
+    // Too many TDs --> Remove. The for-loop below accounts for too few.
+    for (let j = astRow.cells.length; j < tds.length; j++) {
+      tds[j].parentElement?.removeChild(tds[j])
+    }
+    tds = tds.slice(0, astRow.cells.length)
+  }
+
+  for (let i = 0; i < astRow.cells.length; i++) {
+    const cell = astRow.cells[i]
+    if (i === tds.length) {
+      // We have to create a new TD
+      const td = document.createElement(isHeaderOrFooter ? 'th' : 'td')
       // DEBUG: Move to proper styles
       td.style.border = '1px solid black'
-      tr.appendChild(td)
-      // makeCellEditable(widget, td, view) TODO
+      td.textContent = cell.textContent
+    } else {
+      // Transfer the contents
+      tds[i].textContent = cell.textContent
     }
-  }
-
-  if (table.querySelector('thead') === null && thead.childNodes.length > 0) {
-    table.appendChild(thead)
-  }
-
-  if (table.querySelector('tbody') === null) {
-    table.appendChild(tbody)
   }
 }
 
@@ -298,7 +365,16 @@ export const renderTables = StateField.define<TableEditorState>({
       filter (from, to, value) {
         // TODO: Here, whenever a node still exists, provide it with the now
         // correct table node, update the subview, and call updateDOM
-        return tableNodes.find(val => val.from === from && val.to === to) !== undefined
+        const node = tableNodes.find(val => val.from === from && val.to === to)
+        if (node !== undefined) {
+          // Provide the proper new node so that, when the table updates its DOM
+          // next time, it will draw the correct source code from the editor
+          // state
+          value.spec.widget.setNode(node)
+          return true
+        } else {
+          return false
+        }
       }
     })
 
@@ -311,5 +387,10 @@ export const renderTables = StateField.define<TableEditorState>({
   // NOTE: Since we store additional data in our StateField, we must use an
   // overload of the Facet's `from` method that allows us to return just a part
   // of the field whenever the Facet is recomputed.
+  // TODO: Here, we will *also* have to provide a ViewPlugin that will go through
+  // all the decorations within the field state during its update and call
+  // "updateDOM" on all of them. Additional TODO: According to the documentation
+  // (https://codemirror.net/docs/ref/#view.EditorView%5Edecorations), we will
+  // probably have to call the updateDOM method either here.. or... I don't know
   provide: f => EditorView.decorations.from(f, value => value.decorations)
 })
