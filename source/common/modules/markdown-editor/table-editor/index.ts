@@ -20,12 +20,19 @@
 // DEBUG // EditorView, ensuring that no changes are retained just within the
 // DEBUG // subview.
 
+// TODOs:
+// 1. Synchronize subviews with transactions generated from the main view
+// 2. Check how large the performance penalty is for converting the Markdown
+//    into HTML every time we update the table's DOM. Since we already parsing
+//    the AST, I guess it should not be too bad, but I'll have to run a
+//    performance test.
+
 import { Decoration, DecorationSet, EditorView, WidgetType, drawSelection, keymap } from '@codemirror/view'
-import { Range, Transaction, Annotation, EditorState, StateField } from '@codemirror/state'
+import { Range, Transaction, Annotation, EditorState, StateField, Prec } from '@codemirror/state'
 import { defaultHighlightStyle, syntaxHighlighting, syntaxTree } from '@codemirror/language'
 import { SyntaxNode } from '@lezer/common'
 import { parseTableNode } from "../../markdown-utils/markdown-ast/parse-table-node"
-import { TableRow } from '../../markdown-utils/markdown-ast'
+import { TableCell, TableRow } from '../../markdown-utils/markdown-ast'
 import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
 import { defaultKeymap } from '@codemirror/commands'
 
@@ -200,16 +207,26 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
       const td = document.createElement(astRow.isHeaderOrFooter ? 'th' : 'td')
       // TODO: Enable citation rendering here
       td.innerHTML = nodeToHTML(cell.children, (citations, composite) => undefined, 0).trim()
-      const handler = () => {
-        console.log(`Click! Setting selection: ${cell.from}:${cell.to}`)
+      // NOTE: This handler gets attached once and then remains on the TD for
+      // the existence of the table. Since the `view` will always be the same,
+      // we only have to save the cellFrom and cellTo to the TDs dataset each
+      // time around (see below).
+      td.addEventListener('click', () => {
+        const from = td.dataset.cellFrom ?? '0'
+        const to = td.dataset.cellTo ?? '0'
         // TODO: Find a more appropriate position for the cursor
-        view.dispatch({ selection: { anchor: cell.from, head: cell.from } })
-        td.removeEventListener('click', handler)
-      }
-      td.addEventListener('click', handler)
+        view.dispatch({
+          selection: { anchor: parseInt(from, 10), head: parseInt(to, 10) }
+        })
+      })
       tr.appendChild(td)
       tds.push(td)
     }
+
+    // Always ensure that the corresponding document offsets are saved
+    // appropriately
+    tds[i].dataset.cellFrom = String(cell.from)
+    tds[i].dataset.cellTo = String(cell.to)
 
     // At this point, there is guaranteed to be an element at i. Now let's check
     // if there's a subview at this cell.
@@ -244,23 +261,42 @@ function createSubviewForCell (mainView: EditorView, targetCell: HTMLTableCellEl
   const state = EditorState.create({
     // Subviews always hold the entire document. This is to make synchronizing
     // updates between main and subviews faster and simpler. This should only
-    // become a problem on very old computers for people working with 10MB
-    // documents. This assumes that this would be an edge case.
+    // become a problem on very old computers for people working with 100MB
+    // documents. This assumes that this would be an edge case. Note to future
+    // me: "You knew there was going to be this guy who now keeps peskering
+    // because he can't edit his ten-million line JSON files without waiting
+    // three seconds for the changes to be applied to his overweight text file."
     doc: mainView.state.sliceDoc(),
     extensions: [
       // A minimal set of extensions
       keymap.of(defaultKeymap),
+      Prec.high(keymap.of([
+        // Disable a few shortcuts, preventing programmatic insertion of newlines
+        { key: 'Return', run: (view) => true },
+        { key: 'Ctrl-Return', run: (view) => true },
+        { key: 'Cmd-Return', run: (view) => true },
+      ])),
       drawSelection(),
       syntaxHighlighting(defaultHighlightStyle),
+      EditorView.lineWrapping,
       // A field whose sole purpose is to hide the two stretches of content
       // before and after the table cell contents
       StateField.define<DecorationSet>({
         create (state) {
+          const { from, to } = mainView.state.doc.lineAt(cellRange.from)
           return Decoration.set([
-            Decoration.replace({ block: true, inclusive: false })
-              .range(0, cellRange.from), // Before
-            Decoration.replace({ block: true, inclusive: false })
-              .range(cellRange.to, mainView.state.doc.length) // After
+            // 1: Block before
+            Decoration.replace({ block: true, inclusive: true })
+              .range(0, from - 1),
+            // 2: Line until cellRange.from
+            Decoration.replace({ block: false, inclusive: false })
+              .range(from, cellRange.from),
+            // 3: Line after cellRange.to
+            Decoration.replace({ block: false, inclusive: false })
+              .range(cellRange.to, to),
+            // 4: Block after
+            Decoration.replace({ block: true, inclusive: true })
+              .range(to + 1, mainView.state.doc.length)
           ])
         },
         update (value, tr) {
@@ -268,6 +304,42 @@ function createSubviewForCell (mainView: EditorView, targetCell: HTMLTableCellEl
           return value.map(tr.changes)
         },
         provide: f => EditorView.decorations.from(f)
+      }),
+      // A transaction filter that disallows insertion of linebreaks
+      EditorState.transactionFilter.of((tr) => {
+        // TODO: Works pretty well, BUT I have to check for whether the cursor
+        // is at the end of the cell, because when the user wants to insert text
+        // there is new text added, and this also means the selection will
+        // strictly speaking end up after the cell which in this particular case
+        // is fine.
+        const cellFrom = parseInt(targetCell.dataset.cellFrom ?? '0', 10)
+        const cellTo = parseInt(targetCell.dataset.cellTo ?? '0', 10)
+        // Sanity check
+        if (cellFrom !== cellTo && cellTo > 0) {
+          console.log(`Cell range ${cellFrom}:${cellTo}`)
+          for (const { from, to } of tr.newSelection.ranges) {
+            if (from < cellFrom || to > cellTo) {
+              return [] // Disallow this transaction
+            }
+          }
+        }
+
+        if (!tr.docChanged) {
+          return tr
+        }
+
+        let hasNewline = false
+        tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
+          if (hasNewline || inserted.sliceString(0).includes('\n')) {
+            hasNewline = true
+          }
+        })
+
+        if (hasNewline) {
+          return [] // Disallow this transaction
+        }
+
+        return tr
       })
     ]
   })
@@ -316,6 +388,9 @@ export const renderTables = [
     '.cm-content .cm-table-editor-widget': {
       borderCollapse: 'collapse',
       margin: '0 2px 0 6px' // Taken from .cm-line so that tables align
+    },
+    '.cm-content .cm-table-editor-widget .cm-scroller': {
+      padding: '0' // Override the large margin from the main editor view
     },
     '.cm-content .cm-table-editor-widget td, .cm-content .cm-table-editor-widget th': {
       border: '1px solid black',
