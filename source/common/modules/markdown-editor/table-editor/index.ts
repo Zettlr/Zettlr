@@ -13,10 +13,12 @@
  */
 
 // DEBUG // As of now, the new TableEditor has very rudimentary functionality.
-// DEBUG // What works is we only have a single source of truth -- the main
-// DEBUG // editor. Changes written to individual table cells are persisted
-// DEBUG // directly. However, there is still some wonkyness in how the editor
-// DEBUG // works, but in general it is beginning to work. Slowly, but steadily.
+// DEBUG // It properly renders tables with basic styles in Markdown documents
+// DEBUG // and allows users to click inside tables to start editing. That
+// DEBUG // creation and removal of various subviews is a bit wonky right now,
+// DEBUG // but any change is immediately applied to the underlying main
+// DEBUG // EditorView, ensuring that no changes are retained just within the
+// DEBUG // subview.
 
 import { Decoration, DecorationSet, EditorView, WidgetType, drawSelection, keymap } from '@codemirror/view'
 import { Range, Transaction, Annotation, EditorState, StateField } from '@codemirror/state'
@@ -38,22 +40,10 @@ class TableWidget extends WidgetType {
     super()
   }
 
-  updateDOM (dom: HTMLElement, view: EditorView): boolean {
-    // console.log('Calling `updateDOM`')
-    // This check allows us to, e.g., create error divs (instead of Table elements)
-    if (!(dom instanceof HTMLTableElement)) {
-      return false
-    }
-    updateTable(this, dom, view)
-    return true
-  }
-
   toDOM (view: EditorView): HTMLElement {
-    // console.log('Calling `toDOM`')
     try {
       const table = document.createElement('table')
-      // DEBUG: Move to proper styles
-      table.style.borderCollapse = 'collapse'
+      table.classList.add('cm-table-editor-widget')
       updateTable(this, table, view)
       return table
     } catch (err: any) {
@@ -61,19 +51,60 @@ class TableWidget extends WidgetType {
       const error = document.createElement('div')
       error.classList.add('error')
       error.textContent = `Could not render table: ${err.message}`
-      // error.addEventListener('click', () => clickAndSelect(view))
       return error
     }
   }
 
-  // TODO: Any additional cleanup necessary we should do here.
+  updateDOM (dom: HTMLElement, view: EditorView): boolean {
+    // This check allows us to, e.g., create error divs
+    if (!(dom instanceof HTMLTableElement)) {
+      return false
+    }
+    updateTable(this, dom, view)
+    return true
+  }
+
   destroy (dom: HTMLElement): void {
-    // This function will be called automatically whenever the main view or this
-    // widget gets destroyed
+    // Here we ensure that we completely detach any active subview from the rest
+    // of the document so that the garbage collector can remove the subview.
+    const cells = [
+      ...dom.querySelectorAll('td'),
+      ...dom.querySelectorAll('th')
+    ]
+
+    for (const cell of cells) {
+      const subview = EditorView.findFromDOM(cell)
+      if (subview !== null) {
+        subview.destroy()
+      }
+    }
   }
 
   ignoreEvent (event: Event): boolean {
     return true // In this plugin case, the table should handle everything
+  }
+
+  /**
+   * Takes an EditorState and returns a DecorationSet containing TableWidgets
+   * for each Table node found in the state.
+   *
+   * @param   {EditorState}    state  The EditorState
+   *
+   * @return  {DecorationSet}         The DecorationSet
+   */
+  public static createForState (state: EditorState): DecorationSet {
+    const newDecos: Array<Range<Decoration>> = syntaxTree(state)
+      // Get all Table nodes in the document
+      .topNode.getChildren('Table')
+      // Turn the nodes into Decorations
+      .map(node => {
+        return Decoration.replace({
+          widget: new TableWidget(state.sliceDoc(node.from, node.to), node.node),
+          // inclusive: false,
+          block: true
+        }).range(node.from, node.to)
+      })
+    return Decoration.set(newDecos)
   }
 }
 
@@ -104,15 +135,14 @@ function maybeUpdateSubview (subview: EditorView, tr: Transaction): void {
  * This function takes a DOM-node and a string representing the same Markdown
  * table and ensures that the DOM-node representation conforms to the string.
  *
- * @param  {TableWidget}       widget    A TableWidget
- * @param  {HTMLTableElement}  table     The DOM-element containing the table
- * @param  {EditorState}       state     The EditorState
+ * @param  {TableWidget}       widget  A TableWidget
+ * @param  {HTMLTableElement}  table   The DOM-element containing the table
+ * @param  {EditorView}        view    The EditorView
  */
 function updateTable (widget: TableWidget, table: HTMLTableElement, view: EditorView): void {
   const tableAST = parseTableNode(widget.node, view.state.sliceDoc())
 
-  let trs = Array.from(table.querySelectorAll('tr'))
-
+  let trs = [...table.querySelectorAll('tr')]
   if (trs.length > tableAST.rows.length) {
     // Too many TRs --> Remove. The for-loop below accounts for too few.
     for (let j = tableAST.rows.length; j < trs.length; j++) {
@@ -136,8 +166,18 @@ function updateTable (widget: TableWidget, table: HTMLTableElement, view: Editor
   }
 }
 
+/**
+ * This function takes a single table row to update it. This is basically the
+ * second level of recursion for those tree structures, but since it is
+ * noticeably different from the first level function above, and also the last
+ * layer of recursion here, we use a second function for that.
+ *
+ * @param  {HTMLTableRowElement}  tr      The table row element
+ * @param  {TableRow}             astRow  The AST table row element
+ * @param  {EditorView}           view    The EditorView
+ */
 function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView): void {
-  let tds = Array.from(tr.querySelectorAll(astRow.isHeaderOrFooter ? 'th' : 'td'))
+  let tds = [...tr.querySelectorAll(astRow.isHeaderOrFooter ? 'th' : 'td')]
   if (tds.length > astRow.cells.length) {
     // Too many TDs --> Remove. The for-loop below accounts for too few.
     for (let j = astRow.cells.length; j < tds.length; j++) {
@@ -146,7 +186,7 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
     tds = tds.slice(0, astRow.cells.length)
   }
 
-  const mainSelection = view.state.selection.main
+  const mainSel = view.state.selection.main
 
   for (let i = 0; i < astRow.cells.length; i++) {
     const cell = astRow.cells[i]
@@ -154,96 +194,135 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
     // within a cell. Any overlapping selection will not cause a rendering of
     // the editor view, because selections that cross table cell boundaries are
     // just ... puh.
-    const selectionInCell =  mainSelection.from >= cell.from && mainSelection.to <= cell.to
+    const selectionInCell =  mainSel.from >= cell.from && mainSel.to <= cell.to
     if (i === tds.length) {
       // We have to create a new TD
       const td = document.createElement(astRow.isHeaderOrFooter ? 'th' : 'td')
-      // DEBUG: Move to proper styles
-      td.style.border = '1px solid black'
-      td.style.padding = '2px'
-      td.innerHTML = nodeToHTML(cell.children, (citations, composite) => undefined, 0)
+      // TODO: Enable citation rendering here
+      td.innerHTML = nodeToHTML(cell.children, (citations, composite) => undefined, 0).trim()
       const handler = () => {
         console.log(`Click! Setting selection: ${cell.from}:${cell.to}`)
+        // TODO: Find a more appropriate position for the cursor
         view.dispatch({ selection: { anchor: cell.from, head: cell.from } })
         td.removeEventListener('click', handler)
       }
       td.addEventListener('click', handler)
       tr.appendChild(td)
       tds.push(td)
-    } else {
-      const subview = EditorView.findFromDOM(tds[i])
-      if (subview !== null && !selectionInCell) {
-        // The selection was in the cell but isn't any longer -> remove the
-        // subview.
-        subview.dom.parentElement?.removeChild(subview.dom)
-        subview.destroy()
-      } else if (subview === null && selectionInCell) {
-        console.log('Selection is in cell, creating subview...')
-        // Create a new subview to represent the selection here
-        const state = EditorState.create({
-          // TODO: Find the substring this cell contains in the original view
-          doc: view.state.sliceDoc(), // subview holds the entirety of the doc BUT hides whatever we don't need
-          extensions: [
-            keymap.of(defaultKeymap),
-            drawSelection(),
-            syntaxHighlighting(defaultHighlightStyle)
-          ]
-        })
-    
-        const subview = new EditorView({
-          state,
-          parent: tds[i],
-          // Route any updates to the main view
-          dispatch: (tr, subview) => {
-            // TODO: Find a way to update the table based on the updates in the subview
-            subview.update([tr])
-            if (!tr.changes.empty && tr.annotation(syncAnnotation) === undefined) {
-              const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
-              const userEvent = tr.annotation(Transaction.userEvent)
-              if (userEvent !== undefined) {
-                annotations.push(Transaction.userEvent.of(userEvent))
-              }
-              view.dispatch({ changes: tr.changes, annotations })
-            }
-          }
-        })
-      } else if (subview === null) {
-        // Simply transfer the contents
-        tds[i].innerHTML = nodeToHTML(cell.children, (citations, composite) => undefined, 0)
-      } // Else: There is a subview in there, and the selection is also here, so don't do anything
     }
+
+    // At this point, there is guaranteed to be an element at i. Now let's check
+    // if there's a subview at this cell.
+    const subview = EditorView.findFromDOM(tds[i])
+    if (subview !== null && !selectionInCell) {
+      console.log('Removing subview from table cell')
+      // The selection was in the cell but isn't any longer -> remove the
+      // subview.
+      subview.destroy()
+    } else if (subview === null && selectionInCell) {
+      // Create a new subview to represent the selection here
+      // Ensure the cell itself is empty before we mount the subview.
+      console.log('Creating subview in table cell')
+      tds[i].innerHTML = ''
+      createSubviewForCell(view, tds[i], { from: cell.from, to: cell.to })
+    } else if (subview === null) {
+      // Simply transfer the contents
+      // TODO: Enable citation rendering here
+      tds[i].innerHTML = nodeToHTML(cell.children, (citations, composite) => undefined, 0).trim()
+    } // Else: The cell has a subview and the selection is still in there.
   }
 }
 
-function createTableEditorWidgets (state: EditorState): DecorationSet {
-  const newDecos: Array<Range<Decoration>> = syntaxTree(state)
-    // Get all Table nodes in the document
-    .topNode.getChildren('Table')
-    // Turn the nodes into Decorations
-    .map(node => {
-      try {
-        return Decoration.replace({
-          widget: new TableWidget(state.sliceDoc(node.from, node.to), node.node),
-          // inclusive: false,
-          block: true
-        }).range(node.from, node.to)
-      } catch (err: any) {
-        err.message = 'Could not instantiate TableEditor widget: ' + err.message
-        console.error(err)
+/**
+ * Creates and mounts a sub-EditorView within the provided targetCell.
+ *
+ * @param  {EditorView}            mainView    The main view
+ * @param  {HTMLTableCellElement}  targetCell  The cell element
+ */
+function createSubviewForCell (mainView: EditorView, targetCell: HTMLTableCellElement, cellRange: { from: number, to: number }): void {
+  // TODO: Listen to main view updates and apply them as they come in.
+  const state = EditorState.create({
+    // Subviews always hold the entire document. This is to make synchronizing
+    // updates between main and subviews faster and simpler. This should only
+    // become a problem on very old computers for people working with 10MB
+    // documents. This assumes that this would be an edge case.
+    doc: mainView.state.sliceDoc(),
+    extensions: [
+      // A minimal set of extensions
+      keymap.of(defaultKeymap),
+      drawSelection(),
+      syntaxHighlighting(defaultHighlightStyle),
+      // A field whose sole purpose is to hide the two stretches of content
+      // before and after the table cell contents
+      StateField.define<DecorationSet>({
+        create (state) {
+          return Decoration.set([
+            Decoration.replace({ block: true, inclusive: false })
+              .range(0, cellRange.from), // Before
+            Decoration.replace({ block: true, inclusive: false })
+              .range(cellRange.to, mainView.state.doc.length) // After
+          ])
+        },
+        update (value, tr) {
+          // Ensure the range always stays the same
+          return value.map(tr.changes)
+        },
+        provide: f => EditorView.decorations.from(f)
+      })
+    ]
+  })
+
+  const subview = new EditorView({
+    state,
+    parent: targetCell,
+    // Route any updates to the main view
+    dispatch: (tr, subview) => {
+      // TODO: Find a way to update the subview as soon as the main view
+      // gets updated.
+      subview.update([tr])
+      if (!tr.changes.empty && tr.annotation(syncAnnotation) === undefined) {
+        const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
+        const userEvent = tr.annotation(Transaction.userEvent)
+        if (userEvent !== undefined) {
+          annotations.push(Transaction.userEvent.of(userEvent))
+        }
+        mainView.dispatch({ changes: tr.changes, annotations })
       }
-    })
-    // Filter out erroneous ones
-    .filter((val): val is Range<Decoration> => val !== undefined)
-  return Decoration.set(newDecos)
+    }
+  })
+
+  subview.focus()
 }
 
-// Define a StateField that handles the entire TableEditor Schischi
-export const renderTables = StateField.define<DecorationSet>({
-  create (state: EditorState) {
-    return createTableEditorWidgets(state)
-  },
-  update (field, tr) {
-    return tr.docChanged ? createTableEditorWidgets(tr.state) : field
-  },
-  provide: f => EditorView.decorations.from(f)
-})
+// Define a StateField that handles the entire TableEditor Schischi, as well as
+// a few helper extensions that are necessary for the functioning of the widgets
+export const renderTables = [
+  // The actual TableEditor provider
+  StateField.define<DecorationSet>({
+    create (state: EditorState) {
+      return TableWidget.createForState(state)
+    },
+    update (field, tr) {
+      // DEBUG We also need to recompute when the selection changed, check if we
+      // could also explicitly check for the selection and update only when
+      // necessary
+      // return tr.docChanged ? TableWidget.createForState(tr.state) : field
+      return TableWidget.createForState(tr.state)
+    },
+    provide: f => EditorView.decorations.from(f)
+  }),
+  // A theme for the various elements
+  EditorView.baseTheme({
+    '.cm-content .cm-table-editor-widget': {
+      borderCollapse: 'collapse',
+      margin: '0 2px 0 6px' // Taken from .cm-line so that tables align
+    },
+    '.cm-content .cm-table-editor-widget td, .cm-content .cm-table-editor-widget th': {
+      border: '1px solid black',
+      padding: '2px 4px'
+    },
+    '&dark .cm-content .cm-table-editor-widget td, &dark .cm-content .cm-table-editor-widget th': {
+      borderColor: '#aaaaaa'
+    }
+  })
+]
