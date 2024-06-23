@@ -1,5 +1,6 @@
 import tsESLintParser from '@typescript-eslint/parser'
 import tsESLintPlugin from '@typescript-eslint/eslint-plugin'
+import stylisticTSLint from '@stylistic/eslint-plugin'
 import vueParser from 'vue-eslint-parser'
 import pluginVue from 'eslint-plugin-vue'
 
@@ -31,6 +32,7 @@ export default [
     plugins: {
       // The keys here must correspond to the plugin namespaces referred below
       '@typescript-eslint': tsESLintPlugin,
+      '@stylistic': stylisticTSLint,
       vue: pluginVue
     },
     languageOptions: {
@@ -43,6 +45,25 @@ export default [
       parser: vueParser
     },
     rules: {
+      ////////////////////////// STYLISTIC RULES ///////////////////////////////
+
+      // Disallow semicolons except where absolutely necessary
+      '@stylistic/semi': [ 'error', 'never' ],
+      // Require multi-line arrays to have brackets on their own line
+      '@stylistic/array-bracket-newline': [ 'error', 'consistent' ],
+      '@stylistic/array-bracket-spacing': [
+        'error',
+        'always',
+        { objectsInArrays: false, singleValue: false }
+      ],
+      '@stylistic/arrow-spacing': [ 'error' ],
+      '@stylistic/brace-style': [ 'error', '1tbs', { allowSingleLine: true }],
+      '@stylistic/dot-location': [ 'error', 'property' ],
+      '@stylistic/eol-last': [ 'error', 'always' ],
+      '@stylistic/indent': [ 'error', 2 ],
+
+      /////////////////////// END STYLISTIC RULES //////////////////////////////
+
       // We do use explicit anys at certain points
       '@typescript-eslint/no-explicit-any': 'off',
       'no-unused-vars': 'off', // We need to turn off the vanilla option ...
@@ -52,7 +73,7 @@ export default [
       '@typescript-eslint/no-unused-vars': 'off',
       // See https://typescript-eslint.io/rules/no-unused-vars/
 
-      'space-before-function-paren': [ 2, 'always' ],
+      'space-before-function-paren': [ 'error', 'always' ],
       // The following rule-changes to JSStandard Coding Style are tradition,
       // as they were included with the default configuration of Atom's ESLint
       // plugin, so we'll keep them here for the time being.
@@ -60,14 +81,6 @@ export default [
       // Sometimes, it makes sense to return a void to save a line of code, so we
       // keep this rule off.
       '@typescript-eslint/no-confusing-void-expression': 'off',
-      'array-bracket-spacing': [
-        2,
-        'always',
-        {
-          objectsInArrays: false,
-          singleValue: false
-        }
-      ],
       // Here follow vue-styles. While the short form is recommended
       // I tend to value verbose code. At least for now, discussion is
       // well received.
