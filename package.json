@@ -149,6 +149,7 @@
     "@electron/fuses": "^1.8.0",
     "@electron/notarize": "^2.3.2",
     "@eslint/config-inspector": "^0.4.11",
+    "@stylistic/eslint-plugin": "^2.2.2",
     "@types/adm-zip": "^0.5.5",
     "@types/archiver": "^6.0.2",
     "@types/command-exists": "^1.2.3",
