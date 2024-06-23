@@ -21,18 +21,17 @@
 // DEBUG // subview.
 
 // TODOs:
-// 1. Synchronize subviews with transactions generated from the main view
-// 2. Check how large the performance penalty is for converting the Markdown
+// 1. Check how large the performance penalty is for converting the Markdown
 //    into HTML every time we update the table's DOM. Since we already parsing
 //    the AST, I guess it should not be too bad, but I'll have to run a
 //    performance test.
 
-import { Decoration, DecorationSet, EditorView, WidgetType, drawSelection, keymap } from '@codemirror/view'
+import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate, WidgetType, drawSelection, keymap } from '@codemirror/view'
 import { Range, Transaction, Annotation, EditorState, StateField, Prec } from '@codemirror/state'
 import { defaultHighlightStyle, syntaxHighlighting, syntaxTree } from '@codemirror/language'
 import { SyntaxNode } from '@lezer/common'
 import { parseTableNode } from "../../markdown-utils/markdown-ast/parse-table-node"
-import { TableCell, TableRow } from '../../markdown-utils/markdown-ast'
+import { TableRow } from '../../markdown-utils/markdown-ast'
 import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
 import { defaultKeymap } from '@codemirror/commands'
 
@@ -115,8 +114,6 @@ class TableWidget extends WidgetType {
   }
 }
 
-// DEBUG: Maybe we won't need that at all...? At least I can actually write
-// properly into the table cells. But this is a problem for future me.
 /**
  * This function takes an EditorView that is acting as a slave to some main
  * EditorView in which the TableEditor is running and applies all provided
@@ -211,7 +208,9 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
       // the existence of the table. Since the `view` will always be the same,
       // we only have to save the cellFrom and cellTo to the TDs dataset each
       // time around (see below).
-      td.addEventListener('click', () => {
+      td.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
         const from = td.dataset.cellFrom ?? '0'
         const to = td.dataset.cellTo ?? '0'
         // TODO: Find a more appropriate position for the cursor
@@ -347,6 +346,7 @@ function createSubviewForCell (mainView: EditorView, targetCell: HTMLTableCellEl
   const subview = new EditorView({
     state,
     parent: targetCell,
+    selection: { anchor: cellRange.from, head: cellRange.from },
     // Route any updates to the main view
     dispatch: (tr, subview) => {
       // TODO: Find a way to update the subview as soon as the main view
@@ -399,5 +399,24 @@ export const renderTables = [
     '&dark .cm-content .cm-table-editor-widget td, &dark .cm-content .cm-table-editor-widget th': {
       borderColor: '#aaaaaa'
     }
-  })
+  }),
+  // A view plugin that passes any transaction from the main view into the
+  // various subviews.
+  ViewPlugin.define(view => ({
+    update (u: ViewUpdate) {
+      const cells = [
+        ...view.dom.querySelectorAll('.cm-table-editor-widget td'),
+        ...view.dom.querySelectorAll('.cm-table-editor-widget th')
+      ] as HTMLTableCellElement[]
+
+      for (const cell of cells) {
+        const subview = EditorView.findFromDOM(cell)
+        if (subview !== null) {
+          for (const tr of u.transactions) {
+            maybeUpdateSubview(subview, tr)
+          }
+        }
+      }
+    }
+  }))
 ]
