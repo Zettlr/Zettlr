@@ -35,20 +35,20 @@ const syncAnnotation = Annotation.define<boolean>()
  */
 function ensureBoundariesPlugin (targetCell: HTMLTableCellElement): Extension {
   return EditorState.transactionFilter.of((tr) => {
-    // TODO: Works pretty well, BUT I have to check for whether the cursor
-    // is at the end of the cell, because when the user wants to insert text
-    // there is new text added, and this also means the selection will
-    // strictly speaking end up after the cell which in this particular case
-    // is fine.
+    // TODO: Works okay-ish for now, but I have to implement many more checks to
+    // ensure that most use-cases will end up having better rendering. Also,
+    // apparently the transaction will still end up being forwarded to the main
+    // view, which means that the selections can get out of sync: Whereas a
+    // cursor in here will be still at the same position, the cursor in the main
+    // view will be out of the cell, and any additional changes can end up
+    // there. That's no good!
     const cellFrom = parseInt(targetCell.dataset.cellFrom ?? '0', 10)
     const cellTo = parseInt(targetCell.dataset.cellTo ?? '0', 10)
     // Sanity check
-    if (cellFrom !== cellTo && cellTo > 0) {
-      console.log(`Cell range ${cellFrom}:${cellTo}`)
-      for (const { from, to } of tr.newSelection.ranges) {
-        if (from < cellFrom || to > cellTo) {
-          return [] // Disallow this transaction
-        }
+    if (tr.selection !== undefined && tr.changes.length === 0 && cellFrom !== cellTo && cellTo > 0) {
+      const { from, to } = tr.selection.main
+      if (from < cellFrom || to > cellTo) {
+        return [] // Disallow this transaction
       }
     }
   
@@ -113,7 +113,11 @@ function hideBeforeAndAfterCell (mainView: EditorView, cellRange: { from: number
 * @param  {EditorView}            mainView    The main view
 * @param  {HTMLTableCellElement}  targetCell  The cell element
 */
-export function createSubviewForCell (mainView: EditorView, targetCell: HTMLTableCellElement, cellRange: { from: number, to: number }): void {
+export function createSubviewForCell (
+  mainView: EditorView,
+  targetCell: HTMLTableCellElement,
+  cellRange: { from: number, to: number }
+): void {
   const state = EditorState.create({
     // Subviews always hold the entire document. This is to make synchronizing
     // updates between main and subviews faster and simpler. This should only
@@ -135,8 +139,9 @@ export function createSubviewForCell (mainView: EditorView, targetCell: HTMLTabl
       drawSelection(),
       syntaxHighlighting(defaultHighlightStyle),
       EditorView.lineWrapping,
+      // Two custom extensions that are required for the specific use-case of
+      // this single-line minimal EditorView
       hideBeforeAndAfterCell(mainView, cellRange),
-      // A transaction filter that disallows insertion of linebreaks
       ensureBoundariesPlugin(targetCell)
     ]
   })
@@ -147,6 +152,7 @@ export function createSubviewForCell (mainView: EditorView, targetCell: HTMLTabl
     selection: { anchor: cellRange.from, head: cellRange.from },
     // Route any updates to the main view
     dispatch: (tr, subview) => {
+      console.log('Dispatching subview transaction')
       subview.update([tr])
       if (!tr.changes.empty && tr.annotation(syncAnnotation) === undefined) {
         const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
