@@ -34,19 +34,16 @@ msgid "Actions"
 msgstr "Actions"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:108
-#, fuzzy
 msgid "Delete"
-msgstr "Supprimer le fichier"
+msgstr "Supprimer"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
-#, fuzzy
 msgid "Select folder…"
-msgstr "Ouvrir le dossier racine."
+msgstr "Sélectionner le dossier"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
-#, fuzzy
 msgid "Select file…"
-msgstr "Supprimer le fichier"
+msgstr "Sélectionner le fichier"
 
 #. Prepare the list of file filters
 #. The "All Files" filter should be at the top
@@ -137,7 +134,7 @@ msgstr "Imprimer…"
 #: source/tmp/win-main/PopoverExport.vue.ts:61
 #, fuzzy
 msgid "Exporting…"
-msgstr "Exporter…"
+msgstr "Export…"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:61
 #, fuzzy
@@ -146,7 +143,7 @@ msgstr "Exporter"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:74
 msgid "command"
-msgstr ""
+msgstr "commande"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:24
 #: source/win-preferences/schema/appearance.ts:52
@@ -909,7 +906,7 @@ msgstr ""
 #: source/win-preferences/schema/citations.ts:22
 #, fuzzy
 msgid "Citations"
-msgstr "Visualiser des citations"
+msgstr "Citations"
 
 #: source/tmp/win-preferences/App.vue.ts:169
 msgid "Zettelkasten"
@@ -940,11 +937,12 @@ msgstr ""
 #: source/win-preferences/schema/editor.ts:214
 #, fuzzy
 msgid "Image size"
-msgstr "Image"
+msgstr "Taille image"
 
 #: source/tmp/win-paste-image/App.vue.ts:59
+#, fuzzy
 msgid "Retain aspect ratio"
-msgstr ""
+msgstr "Conserver proportions"
 
 #: source/tmp/win-paste-image/App.vue.ts:60
 msgid "Resize image to"
@@ -952,12 +950,12 @@ msgstr ""
 
 #: source/tmp/win-paste-image/App.vue.ts:61
 msgid "Filename"
-msgstr ""
+msgstr "Nom de fichier"
 
 #: source/tmp/win-paste-image/App.vue.ts:62
 #: source/tmp/win-paste-image/App.vue.ts:63
 msgid "A unique filename"
-msgstr ""
+msgstr "Un nom de fichier unique"
 
 #. 1: Omit all changes
 #: source/tmp/win-paste-image/App.vue.ts:67
@@ -1068,7 +1066,7 @@ msgstr "Allemand (Suisse)"
 #: source/common/util/map-lang-code.ts:46
 #, fuzzy
 msgid "German (simple)"
-msgstr "Allemand (Autriche)"
+msgstr "Allemand (simple)"
 
 #: source/common/util/map-lang-code.ts:47
 msgid "German (Germany)"
@@ -2598,7 +2596,7 @@ msgstr "Sauvegarde automatique"
 #: source/win-preferences/schema/general.ts:43
 #, fuzzy
 msgid "Save modifications"
-msgstr "Heure de la dernière modification"
+msgstr "Enregistrer modification"
 
 #: source/win-preferences/schema/general.ts:47
 #: source/win-preferences/schema/appearance.ts:41
@@ -2626,7 +2624,7 @@ msgstr ""
 #: source/win-preferences/schema/general.ts:72
 #, fuzzy
 msgid "Behavior"
-msgstr "Comportement du zoom"
+msgstr "Comportement"
 
 #: source/win-preferences/schema/general.ts:83
 msgid "Avoid opening files in new tabs if possible"
@@ -2635,7 +2633,7 @@ msgstr "Éviter d'ouvrir des fichiers dans de nouveaux onglets si possible"
 #: source/win-preferences/schema/general.ts:89
 #, fuzzy
 msgid "Updates"
-msgstr "Mise à jour"
+msgstr "Mises à jour"
 
 #: source/win-preferences/schema/general.ts:95
 msgid "Automatically check for updates"
@@ -2648,7 +2646,7 @@ msgstr "Horaires"
 #: source/win-preferences/schema/appearance.ts:42
 #, fuzzy
 msgid "Follow system"
-msgstr "Utiliser l'horloge système"
+msgstr "Suivre le système"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "On"
@@ -2737,17 +2735,17 @@ msgstr "Afficher la minuterie Pomodoro"
 #: source/win-preferences/schema/appearance.ts:207
 #, fuzzy
 msgid "Status bar"
-msgstr "Afficher Zettlr"
+msgstr "Barre d'état"
 
 #: source/win-preferences/schema/appearance.ts:213
 #, fuzzy
 msgid "Show statusbar"
-msgstr "Afficher Zettlr"
+msgstr "Afficher la barre d'état"
 
 #: source/win-preferences/schema/appearance.ts:224
 #, fuzzy
 msgid "Open CSS editor"
-msgstr "Ouvrir le dossier"
+msgstr "Ouvrir l'éditeur CSS"
 
 #: source/win-preferences/schema/advanced.ts:30
 #, fuzzy
@@ -2801,12 +2799,12 @@ msgstr "Comportement du zoom"
 #: source/win-preferences/schema/advanced.ts:85
 #, fuzzy
 msgid "Resizes the whole GUI"
-msgstr "Le zoom redimensionne l'ensemble de l'interface graphique"
+msgstr "Redimensionne l'ensemble de l'interface graphique"
 
 #: source/win-preferences/schema/advanced.ts:86
 #, fuzzy
 msgid "Changes the editor font size"
-msgstr "Le zoom modifie la taille de la police de l'éditeur"
+msgstr "Modifie la taille de la police de l'éditeur"
 
 #: source/win-preferences/schema/advanced.ts:92
 msgid "Attachments sidebar"
@@ -2830,7 +2828,7 @@ msgstr "Nom d'hôte"
 #: source/win-preferences/schema/autocorrect.ts:112
 #, fuzzy
 msgid "Filter"
-msgstr "Filtre..."
+msgstr "Filtre"
 
 #: source/win-preferences/schema/advanced.ts:120
 #, fuzzy
@@ -2850,7 +2848,7 @@ msgstr ""
 #: source/win-preferences/schema/advanced.ts:138
 #, fuzzy
 msgid "Deleting items"
-msgstr "Supprimer le fichier"
+msgstr "Supprimer les éléments"
 
 #: source/win-preferences/schema/advanced.ts:144
 msgid "Delete items irreversibly, if moving them to trash fails"
@@ -2878,7 +2876,7 @@ msgstr "Me prévenir à propos des versions bêta"
 #: source/win-preferences/schema/editor.ts:23
 #, fuzzy
 msgid "Input mode"
-msgstr "Mode de saisie de l'éditeur"
+msgstr "Mode de saisie"
 
 #: source/win-preferences/schema/editor.ts:39
 msgid ""
@@ -2890,7 +2888,7 @@ msgstr ""
 #: source/win-preferences/schema/editor.ts:44
 #, fuzzy
 msgid "Writing direction"
-msgstr "Trouver dans le dossier"
+msgstr "Direction d'écriture"
 
 #: source/win-preferences/schema/editor.ts:57
 msgid "Markdown rendering"
@@ -2946,7 +2944,7 @@ msgstr "Vérifier les erreurs de style Markdown"
 #: source/win-preferences/schema/editor.ts:149
 #, fuzzy
 msgid "Table Editor"
-msgstr "Activer l'éditeur de tableau"
+msgstr "Editeur de tableau"
 
 #: source/win-preferences/schema/editor.ts:160
 msgid ""
@@ -2980,7 +2978,7 @@ msgstr "Compter caractères au lieu des mots (p. ex., pour le chinois)"
 #: source/win-preferences/schema/editor.ts:195
 #, fuzzy
 msgid "Readability mode"
-msgstr "Mode de lisibilité (%s)"
+msgstr "Mode de lisibilité"
 
 #: source/win-preferences/schema/editor.ts:202
 msgid "Algorithm"
@@ -2989,17 +2987,17 @@ msgstr ""
 #: source/win-preferences/schema/editor.ts:220
 #, fuzzy
 msgid "Maximum width of images (%s %)"
-msgstr "Largeur maximale des images (pourcentage)"
+msgstr "Largeur maximale des images (%s %)"
 
 #: source/win-preferences/schema/editor.ts:227
 #, fuzzy
 msgid "Maximum height of images (%s %)"
-msgstr "Hauteur maximale des images (pourcentage)"
+msgstr "Hauteur maximale des images (%s %)"
 
 #: source/win-preferences/schema/editor.ts:235
 #, fuzzy
 msgid "Other settings"
-msgstr "Autres fichiers"
+msgstr "Autres paramètres"
 
 #: source/win-preferences/schema/editor.ts:241
 #, fuzzy
@@ -3023,7 +3021,7 @@ msgstr ""
 #: source/win-preferences/schema/editor.ts:267
 #, fuzzy
 msgid "Suggest emojis during autocompletion"
-msgstr "Accepter les espaces lors de la saisie semi-automatique"
+msgstr "Suggérer des émojis pendant l'autocomplétion"
 
 #: source/win-preferences/schema/editor.ts:272
 msgid "Show link previews"
@@ -3052,18 +3050,18 @@ msgstr ""
 #: source/win-preferences/schema/import-export.ts:59
 #, fuzzy
 msgid "Export settings"
-msgstr "Exportation vers %s"
+msgstr "Paramètres d'export"
 
 #. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
 #: source/win-preferences/schema/import-export.ts:65
 #, fuzzy
 msgid "Use Zettlr's internal Pandoc for exports"
-msgstr "Utilisez le Pandoc interne pour les exportations"
+msgstr "Utilisez le Pandoc interne pour les exports"
 
 #: source/win-preferences/schema/import-export.ts:71
 #, fuzzy
 msgid "Remove tags from files when exporting"
-msgstr "Supprimer les mot-clés dans les fichiers"
+msgstr "Supprimer les mot-clés lors de l'export"
 
 #: source/win-preferences/schema/import-export.ts:80
 msgid "Remove internal links completely"
@@ -3089,7 +3087,7 @@ msgstr ""
 #: source/win-preferences/schema/import-export.ts:93
 #, fuzzy
 msgid "Same as file location"
-msgstr "Propriétés du fichier"
+msgstr "Même endroit que le fichier"
 
 #: source/win-preferences/schema/import-export.ts:94
 msgid "Ask for folder when exporting"
@@ -3109,12 +3107,12 @@ msgstr ""
 #: source/win-preferences/schema/import-export.ts:113
 #, fuzzy
 msgid "Display name"
-msgstr "Afficher le bouton image"
+msgstr "Afficher le nom"
 
 #: source/win-preferences/schema/import-export.ts:113
 #, fuzzy
 msgid "Command"
-msgstr "Commentaire"
+msgstr "Commande"
 
 #: source/win-preferences/schema/import-export.ts:114
 msgid ""
@@ -3187,12 +3185,12 @@ msgstr "CSS personnalisé"
 #: source/win-preferences/schema/spellchecking.ts:125
 #, fuzzy
 msgid "Custom server address"
-msgstr "CSS personnalisé"
+msgstr "Adresse serveur personnalisée"
 
 #: source/win-preferences/schema/spellchecking.ts:134
 #, fuzzy
 msgid "LanguageTool Premium"
-msgstr "Fournisseur de LanguageTool"
+msgstr "LanguageTool Premium"
 
 #: source/win-preferences/schema/spellchecking.ts:139
 msgid ""
@@ -3211,12 +3209,12 @@ msgstr "LanguageTool API key"
 #: source/win-preferences/schema/spellchecking.ts:167
 #, fuzzy
 msgid "Active"
-msgstr "Actions"
+msgstr "Actif"
 
 #: source/win-preferences/schema/spellchecking.ts:167
 #, fuzzy
 msgid "Language"
-msgstr "Fournisseur de LanguageTool"
+msgstr "Langue"
 
 #: source/win-preferences/schema/spellchecking.ts:168
 msgid ""
@@ -3249,17 +3247,17 @@ msgstr ""
 #: source/win-preferences/schema/autocorrect.ts:45
 #, fuzzy
 msgid "Double Quotes"
-msgstr "Aucun"
+msgstr "Guillemets doubles"
 
 #: source/win-preferences/schema/autocorrect.ts:48
 #: source/win-preferences/schema/autocorrect.ts:70
 msgid "Disable Magic Quotes"
-msgstr "Aucun"
+msgstr "Désactiver Magic Quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:67
 #, fuzzy
 msgid "Single Quotes"
-msgstr "Aucun"
+msgstr "Guillemets simples"
 
 #: source/win-preferences/schema/autocorrect.ts:95
 msgid "Text-replacement patterns"
@@ -3276,7 +3274,7 @@ msgstr ""
 #: source/win-preferences/schema/autocorrect.ts:107
 #, fuzzy
 msgid "Replace"
-msgstr "Remplacer le fichier"
+msgstr "Remplacer"
 
 #: source/win-preferences/schema/autocorrect.ts:107
 msgid "With"
@@ -3294,7 +3292,7 @@ msgstr "Fichier de références bibliographiques (au format CSL JSON ou BibTex)"
 #: source/win-preferences/schema/citations.ts:53
 #, fuzzy
 msgid "Path to file"
-msgstr "Ajouter au fichier"
+msgstr "Chemin du fichier"
 
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL-Style (optional)"
@@ -3303,7 +3301,7 @@ msgstr "Fichier de format de références bibliographiques CSL (optionnel)"
 #: source/win-preferences/schema/file-manager.ts:23
 #, fuzzy
 msgid "Display mode"
-msgstr "Afficher le bouton image"
+msgstr "Mode d'affichage"
 
 #: source/win-preferences/schema/file-manager.ts:32
 msgid "Thin"
@@ -3372,12 +3370,12 @@ msgstr "Temps de création du fichier"
 #: source/win-preferences/schema/file-manager.ts:95
 #, fuzzy
 msgid "Sorting"
-msgstr "Exporter…"
+msgstr "Tri…"
 
 #: source/win-preferences/schema/file-manager.ts:101
 #, fuzzy
 msgid "When sorting documents…"
-msgstr "Fichiers récents"
+msgstr "Pour trier les documents…"
 
 #: source/win-preferences/schema/file-manager.ts:104
 #, fuzzy
@@ -3486,7 +3484,7 @@ msgstr "Ordre ASCII (2 après 10)"
 
 #, fuzzy
 #~ msgid "String"
-#~ msgstr "Sévérité"
+#~ msgstr "Chaîne de caractères"
 
 #~ msgid ""
 #~ "Here you can define certain strings that will be replaced when "
