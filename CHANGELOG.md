@@ -18,23 +18,23 @@
 
 When Zettlr v3.0.0 was released, we started receiving reports by users
 mentioning that some files wouldn't properly save, potentially leading to data
-loss. After searching for the underlying root cause, we have now identified it as
-improper newline handling in files. Specifically, we have accidentally introduced
-a bug that would render Zettlr incapable of properly detecting Windows-style
-CRLF newlines. This means that Zettlr was only sometimes able to properly read
-and modify such files.
+loss. After searching for the underlying root cause, we have now identified it
+as improper newline handling in files. Specifically, we have accidentally
+introduced a bug that would render Zettlr incapable of properly detecting
+Windows-style CRLF newlines. This means that Zettlr was only sometimes able to
+properly read and modify such files.
 
 This update fixes this bug. Now, Zettlr is able to properly read and modify any
-file, regardless of whether it has been created on Windows, macOS, Linux, or even
-some older systems. We would like to apologize for this bug and thank you for
-sticking with Zettlr despite it.
+file, regardless of whether it has been created on Windows, macOS, Linux, or
+even some older systems. We would like to apologize for this bug and thank you
+for sticking with Zettlr despite it.
 
 ## Changes to the file filtering logic
 
-The filter field in the file manager has always applied OR-logic when searching for
-files and workspaces. In this latest update, Zettlr changes to AND file filtering
-logic, meaning that only items matching all queries will be displayed when
-entering phrases separated by spaces.
+The filter field in the file manager has always applied OR-logic when searching
+for files and workspaces. In this latest update, Zettlr changes to AND file
+filtering logic, meaning that only items matching all queries will be displayed
+when entering phrases separated by spaces.
 
 As an example: Until now, searching for "Niklas Luhmann" would've surfaced files
 that contained either "Niklas" or "Luhmann," or both. From now on, searching for
