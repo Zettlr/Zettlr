@@ -11,7 +11,10 @@ body:
     id: description
     attributes:
       label: Description
-      description: "Please be holistic in your description: Even seemingly trivial stuff might contain the important clue to fix the bug! If applicable, also make tell us what you expect to happen instead."
+      description: |
+        Please be holistic in your description: Even seemingly trivial stuff
+        might contain the important clue to fix the bug! If applicable, also
+        make tell us what you expect to happen instead.
       placeholder: Describe your bug and the expected behaviour here.
     validations:
       required: true
@@ -20,33 +23,23 @@ body:
     id: reproducing
     attributes:
       label: Reproducing
-      description: "Please tell us an easy way how we can reproduce the bug so we know where to look. The more contextual information you include, the better!"
+      description: |
+        Please tell us an easy way how we can reproduce the bug so we know where
+        to look. The more contextual information you include, the better!
       placeholder: Describe the steps necessary to reproduce this bug.
     validations:
       required: true
   # Now the version
-  - type: dropdown
+  - type: input
     id: version
     attributes:
-      label: Zettlr Version
-      description: "What version of Zettlr are you running? Choose **Stable** if you are simply using the regular install."
-      options:
-        - Stable (most recent version)
-        - Stable (but an older version)
-        - Beta (if applicable)
-        - Nightly
-        - Right off the develop branch
-    validations:
-      required: true
-  # Including the specific one if they provide it
-  - type: input
-    id: specific-version
-    attributes:
-      label: Specify version
-      description: Optional, but it is encouraged to add this information (especially if we release many versions in a short span of time).
+      label: Zettlr version
+      description: |
+        What version of Zettlr are you running? Specify the exact version. It
+        can be found in the About-dialog.
       placeholder: e.g. 1.8.9 or 1.8.9+nightly-20210628
     validations:
-      required: false
+      required: true
   # Since Zettlr is being distributed via many different channels, sometimes
   # bugs are not necessarily the cause of the codebase, but rather how it's
   # packaged. For example, we have received many bug reports in Q2 of 2022 that
@@ -65,13 +58,27 @@ body:
         - Flathub
         - Other (please specify below)
     validations:
+      required: true
+  # Other:
+  - type: input
+    id: package-manager-other
+    attributes:
+      label: Installation Method (Other)
+      description: |
+        If you specified "Other" in the Installation Method dropdown, specify
+        the exact setup method you used here.
+      placeholder: e.g. Big Sur 11.4, Linux Mate, pop!_OS, Windows 10
+    validations:
       required: false
   # Also, we need to know the operating system(s) where this happens
   - type: checkboxes
     id: scope
     attributes:
       label: Your Platform
-      description: "Please tell us what platform you're on. If you were able to check other operating systems and they have the same bug, please check all operating systems that apply!"
+      description: |
+        Please tell us what platform you're on. If you were able to check other
+        operating systems and they have the same bug, please check all operating
+        systems that apply!
       options:
         - label: Windows
         - label: macOS
@@ -86,14 +93,16 @@ body:
       description: On which architecture(s) does this bug appear?
       options:
         - label: Intel 64bit
-        - label: ARM 64bit
+        - label: ARM 64bit (includes Apple Silicon)
     validations:
       required: true
   - type: input
     id: os-version
     attributes:
       label: Operating System Version
-      description: Which operating system(s) are you running? Include all on which you experience this bug.
+      description: |
+        Which operating system(s) are you running? Include all on which you
+        experience this bug.
       placeholder: e.g. Big Sur 11.4, Linux Mate, pop!_OS, Windows 10
     validations:
       required: true
@@ -101,9 +110,14 @@ body:
     id: more-info
     attributes:
       label: Additional Information
-      description: If applicable, feel free to include more info, such as log outputs or error messages you are seeing.
+      description: |
+        If applicable, feel free to include more info, such as log outputs or
+        error messages you are seeing.
   - type: markdown
     id: outro
     attributes:
       value: |
-        Thank you for taking the time to fill out this bug report. We'll get back to you as soon as possible. Note that we might have additional questions so please make sure to check your notifications in case need some more info!
+        Thank you for taking the time to fill out this bug report. We'll get
+        back to you as soon as possible. Note that we might have additional
+        questions so please make sure to check your notifications in case need
+        some more info!
