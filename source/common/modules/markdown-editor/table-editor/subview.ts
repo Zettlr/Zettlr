@@ -15,7 +15,7 @@
 
 import { defaultKeymap } from "@codemirror/commands"
 import { syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
-import { EditorState, Prec, StateField, Annotation, Transaction, Extension } from "@codemirror/state"
+import { EditorState, Prec, StateField, Annotation, Transaction, Extension, EditorSelection } from "@codemirror/state"
 import { EditorView, keymap, drawSelection, DecorationSet, Decoration, ViewPlugin, ViewUpdate } from "@codemirror/view"
 
 /**
@@ -127,6 +127,7 @@ export function createSubviewForCell (
     // because he can't edit his ten-million line JSON files without waiting
     // three seconds for the changes to be applied to his overweight text file."
     doc: mainView.state.sliceDoc(),
+    selection: EditorSelection.single(cellRange.from),
     extensions: [
       // A minimal set of extensions
       keymap.of(defaultKeymap),
@@ -149,10 +150,8 @@ export function createSubviewForCell (
   const subview = new EditorView({
     state,
     parent: targetCell,
-    selection: { anchor: cellRange.from, head: cellRange.from },
     // Route any updates to the main view
     dispatch: (tr, subview) => {
-      console.log('Dispatching subview transaction')
       subview.update([tr])
       if (!tr.changes.empty && tr.annotation(syncAnnotation) === undefined) {
         const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
