@@ -48,4 +48,17 @@ const fieldId = computed<string>(() => `form-button${props.name}`)
 </script>
 
 <style lang="less">
+  body {
+    .form-control.inline {
+      margin-right: 24px;
+    }
+  }
+
+  body.darwin {
+    .form-control {
+      >button {
+        padding: 4px 12px;
+      }
+    }
+  }
 </style>

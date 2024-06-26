@@ -80,7 +80,7 @@ function fieldID (key: string): string {
 body {
   .radio-group-container {
     break-inside: avoid;
-    margin: 10px 0;
+    // margin: 10px 0;
 
     p { font-size: 13px; }
 
@@ -88,14 +88,18 @@ body {
 
     &.inline {
       display: flex;
-      flex-direction: row;
+      align-items: center;
       column-gap: 40px;
+
+      :last-child {
+        margin: unset;
+      }
     }
   }
 
   .radio-group {
     display: grid;
-    grid-template-columns: @input-size * 2 max-content;
+    grid-template-columns: @input-size * 1.6 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
     align-items: center;
@@ -125,7 +129,7 @@ body {
       right: 0;
       bottom: 0;
       border-radius: @input-size;
-      transition: .4s;
+      transition: .1s;
 
       // Inner part
       &:before {
@@ -137,7 +141,7 @@ body {
         top: (@input-size * 0.2);
         background-color: transparent;
         border-radius: @input-size;
-        transition: .4s;
+        transition: .1s;
       }
     }
 
@@ -159,7 +163,10 @@ body.darwin {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
-  .radio-group-outside-label { font-size: 13px; }
+  .radio-group-outside-label {
+    font-size: 13px;
+    font-weight: 590;
+  }
 
   label.radio {
     width: @input-size;
@@ -262,7 +269,7 @@ body.win32 {
         top: (@input-size * 0.25 - 2px);
         background-color: transparent;
         border-radius: @input-size;
-        transition: .4s;
+        transition: .1s;
       }
     }
 
