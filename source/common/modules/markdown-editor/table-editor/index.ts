@@ -205,14 +205,12 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
     // if there's a subview at this cell.
     const subview = EditorView.findFromDOM(tds[i])
     if (subview !== null && !selectionInCell) {
-      console.log('Removing subview from table cell')
       // The selection was in the cell but isn't any longer -> remove the
       // subview.
       subview.destroy()
     } else if (subview === null && selectionInCell) {
       // Create a new subview to represent the selection here
       // Ensure the cell itself is empty before we mount the subview.
-      console.log('Creating subview in table cell')
       tds[i].innerHTML = ''
       createSubviewForCell(view, tds[i], { from: cell.from, to: cell.to })
     } else if (subview === null) {
