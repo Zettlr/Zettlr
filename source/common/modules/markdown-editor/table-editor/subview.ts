@@ -27,136 +27,137 @@ import markdownParser from "../parser/markdown-parser"
 const syncAnnotation = Annotation.define<boolean>()
 
 /**
- * A transaction filter that ensures that, e.g., selections can never leave the
- * visible stretch of the table cell, and that no newlines get inserted.
- *
- * @param   {StateField<DecorationSet>}  field  The instantiated boundaries
- *                                              field to retrieve the current
- *                                              cell boundaries from.
- *
- * @return  {Extension}                         The view extension
+ * A transaction filter that ensures that any changes made to the view that
+ * don't come from the main view (i.e., are not synchronizing) are sanitized so
+ * that they never exceed the cell's boundaries.
  */
-function ensureBoundariesPlugin (field: StateField<DecorationSet>): Extension {
-  return EditorState.transactionFilter.of((tr) => {
-    if (tr.annotation(syncAnnotation) === true) {
-      return tr // Do not mess with synchronizing transactions
+const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
+  if (tr.annotation(syncAnnotation) === true) {
+    return tr // Do not mess with synchronizing transactions
+  }
+
+  // NOTE: There are also cell boundaries written to the TD/TH's dataset, but
+  // we can't use those since they strictly exclude *any* whitespace from the
+  // cell's contents. This means that, would we use those to determine the
+  // selection ranges, any time a user enters a space, this space would be
+  // considered "out of the cell", and as such the user could not enter any
+  // text afterwards. By looking at the hide-decorations (which are
+  // constantly mapped through any changes and thus constitute a "moving
+  // target") we can account for that. Basically, the hideDeco field "freezes"
+  // the spaces outside of the table cell on editing, and therefore adds any
+  // manually added space to the cell's content.
+
+  // Here, we retrieve the boundaries from the given StateField. By mapping
+  // only those through the ChangeSet and not recomputing the entire state
+  // (e.g., by accessing tr.state), we keep the computational overhead small.
+  const cursor = tr.startState.field(hiddenSpanField).map(tr.changes).iter(0) // First
+  cursor.next() // Second
+  const cellFrom = cursor.to
+  cursor.next() // Third
+  const cellTo = cursor.from
+
+  // First, find the longest cell range after the transaction has been
+  // applied. This is necessary to accurately figure out whether the selection
+  // will be moved past where the cell boundaries will end up after applying
+  // this transaction. In practical terms: If the user inserts a character at
+  // the very end of the table cell, the selection will be one position beyond
+  // the current cell range. This check means that we account for that.
+  let cellEndAfter = cellTo
+  tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
+    if (fromA >= cellFrom && toA <= cellTo && toB > cellEndAfter) {
+      cellEndAfter = toB
     }
-
-    // NOTE: There are also cell boundaries written to the TD/TH's dataset, but
-    // we can't use those since they strictly exclude *any* whitespace from the
-    // cell's contents. This means that, would we use those to determine the
-    // selection ranges, any time a user enters a space, this space would be
-    // considered "out of the cell", and as such the user could not enter any
-    // text afterwards. By looking at the hide-decorations (which are
-    // constantly mapped through any changes and thus constitute a "moving
-    // target") we can account for that. Basically, the hideDeco field "freezes"
-    // the spaces outside of the table cell on editing, and therefore adds any
-    // manually added space to the cell's content.
-
-    // Here, we retrieve the boundaries from the given StateField. By mapping
-    // only those through the ChangeSet and not recomputing the entire state
-    // (e.g., by accessing tr.state), we keep the computational overhead small.
-    const cursor = tr.startState.field(field).map(tr.changes).iter(0) // First
-    cursor.next() // Second
-    const cellFrom = cursor.to
-    cursor.next() // Third
-    const cellTo = cursor.from
-
-    // First, find the longest cell range after the transaction has been
-    // applied. This is necessary to accurately figure out whether the selection
-    // will be moved past where the cell boundaries will end up after applying
-    // this transaction. In practical terms: If the user inserts a character at
-    // the very end of the table cell, the selection will be one position beyond
-    // the current cell range. This check means that we account for that.
-    let cellEndAfter = cellTo
-    tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
-      if (fromA >= cellFrom && toA <= cellTo && toB > cellEndAfter) {
-        cellEndAfter = toB
-      }
-    })
-
-    // TODO: Right now it works all adequately for our purposes. There is one
-    // edge-case, though: The CodeMirror parser counts as TableCell contents
-    // exclusively non-whitespace within the cell, and excludes any whitespace
-    // before and after. This means that, if the user types a space, and then
-    // attempts to write something, this would prevent this, as the cursor is
-    // now outside of what is considered the cell range for CodeMirror. However,
-    // it should be noted that the hide-decorations still accurately reflect the
-    // proper boundaries (they include any whitespace that was in the cell
-    // before the view got instantiated, but exclude any whitespace added to the
-    // cell after the fact.)
-    if (tr.selection !== undefined && cellFrom !== cellTo && cellTo > 0) {
-      const { from, to } = tr.selection.main
-      if (from < cellFrom || to > cellEndAfter) {
-        console.log('Disallowing transaction', tr)
-        return [] // Disallow this transaction
-      }
-    }
-  
-    if (!tr.docChanged) {
-      return tr
-    }
-  
-    // Ensure that any changes are safe to apply without breaking the table or
-    // removing things people don't want to remove.
-    const safeChanges: ChangeSpec[] = []
-    let shouldOverrideTransaction = false
-    tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
-      // First: Ensure that the transaction does not mess with the hidden ranges
-      if (fromA < cellFrom || toA < cellFrom || fromA > cellEndAfter || toA > cellEndAfter) {
-        // With this flag set, all other safe changes will be used to override
-        // the transaction
-        shouldOverrideTransaction = true
-        return
-      }
-
-      // Next, ensure that no newlines will be inserted into the table cell
-      const ins = inserted.toString()
-      const safeInsertion = ins.includes('\n') ? ins.replace(/\n+/g, ' ') : ins
-      safeChanges.push({ from: fromA, to: toA, insert: safeInsertion })
-      if (safeInsertion !== ins) {
-        shouldOverrideTransaction = true
-      }
-    })
-
-    return shouldOverrideTransaction ? { ...tr, changes: safeChanges } : tr
   })
-}
+
+  // TODO: Right now it works all adequately for our purposes. There is one
+  // edge-case, though: The CodeMirror parser counts as TableCell contents
+  // exclusively non-whitespace within the cell, and excludes any whitespace
+  // before and after. This means that, if the user types a space, and then
+  // attempts to write something, this would prevent this, as the cursor is
+  // now outside of what is considered the cell range for CodeMirror. However,
+  // it should be noted that the hide-decorations still accurately reflect the
+  // proper boundaries (they include any whitespace that was in the cell
+  // before the view got instantiated, but exclude any whitespace added to the
+  // cell after the fact.)
+  if (tr.selection !== undefined && cellFrom !== cellTo && cellTo > 0) {
+    const { from, to } = tr.selection.main
+    if (from < cellFrom || to > cellEndAfter) {
+      console.log('Disallowing transaction', tr)
+      return [] // Disallow this transaction
+    }
+  }
+
+  if (!tr.docChanged) {
+    return tr
+  }
+
+  // Ensure that any changes are safe to apply without breaking the table or
+  // removing things people don't want to remove.
+  const safeChanges: ChangeSpec[] = []
+  let shouldOverrideTransaction = false
+  tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
+    // First: Ensure that the transaction does not mess with the hidden ranges
+    if (fromA < cellFrom || toA < cellFrom || fromA > cellEndAfter || toA > cellEndAfter) {
+      // With this flag set, all other safe changes will be used to override
+      // the transaction
+      shouldOverrideTransaction = true
+      return
+    }
+
+    // Next, ensure that no newlines will be inserted into the table cell
+    const ins = inserted.toString()
+    const safeInsertion = ins.includes('\n') ? ins.replace(/\n+/g, ' ') : ins
+    safeChanges.push({ from: fromA, to: toA, insert: safeInsertion })
+    if (safeInsertion !== ins) {
+      shouldOverrideTransaction = true
+    }
+  })
+
+  return shouldOverrideTransaction ? { ...tr, changes: safeChanges } : tr
+})
 
 /**
- * A field whose sole purpose is to hide the two stretches of content before and
- * after the table cell contents.
- *
- * @param   {EditorView}                    mainView   The mainView
- * @param   {{ from: number, to: number }}  cellRange  The cell range (from/to)
- *
- * @return  {StateField<DecorationSet>}                The extension for the view
+ * A StateField whose sole purpose is to hide the two stretches of content
+ * before and after the table cell contents.
  */
-function hideBeforeAndAfterCell (mainView: EditorView, cellRange: { from: number, to: number }): StateField<DecorationSet> {
-  return StateField.define<DecorationSet>({
-    create (state) {
-      const { from, to } = mainView.state.doc.lineAt(cellRange.from)
-      return Decoration.set([
-        // 1: Block before
-        Decoration.replace({ block: true, inclusive: true })
-          .range(0, from - 1),
-        // 2: Line until cellRange.from
-        Decoration.replace({ block: false, inclusive: false })
-          .range(from, cellRange.from),
-        // 3: Line after cellRange.to
-        Decoration.replace({ block: false, inclusive: false })
-          .range(cellRange.to, to),
-        // 4: Block after
-        Decoration.replace({ block: true, inclusive: true })
-          .range(to + 1, mainView.state.doc.length)
-      ])
-    },
-    update (value, tr) {
-      // Ensure the range always stays the same
-      return value.map(tr.changes)
-    },
-    provide: f => EditorView.decorations.from(f)
-  })
+const hiddenSpanField = StateField.define<DecorationSet>({
+  create (state) {
+    // NOTE: Override using `init`! Otherwise this extension won't do much.
+    return Decoration.none
+  },
+  update (value, tr) {
+    // Ensure the range always stays the same
+    return value.map(tr.changes)
+  },
+  provide: f => EditorView.decorations.from(f)
+})
+
+/**
+ * Creates a set of four decorations that hide the spans before and after the
+ * provided cell range. Provide the result of this function to the hiddenSpanField's init method.
+ *
+ * @param   {EditorState}                    state   The main editor state
+ * @param   {{ from: number, to: number }}  cellRange  The cell range
+ *
+ * @return  {DecorationSet}                            The initial deco set
+ */
+function createHiddenDecorations (state: EditorState, cellRange: { from: number, to: number }): DecorationSet {
+  const { from, to } = state.doc.lineAt(cellRange.from)
+  return Decoration.set([
+    // 1: Block before
+    Decoration.replace({ block: true, inclusive: true })
+      .range(0, from - 1),
+    // 2: Line until cellRange.from
+    Decoration.replace({ block: false, inclusive: false })
+      .range(from, cellRange.from),
+    // 3: Line after cellRange.to
+    Decoration.replace({ block: false, inclusive: false })
+      .range(cellRange.to, to),
+    // 4: Block after
+    Decoration.replace({ block: true, inclusive: true })
+      .range(to + 1, state.doc.length)
+  ])
+
 }
 
 /**
@@ -164,20 +165,18 @@ function hideBeforeAndAfterCell (mainView: EditorView, cellRange: { from: number
  * Instead of selecting the entire state (= document) it will only select the
  * cell boundaries.
  *
- * @param   {StateField<DecorationSet>}  hideBeforeAndAfterCell  The hideBeforeandAfterCell extension
+ * @param   {EditorView}  view  The editor view
  *
- * @return  {CallableFunction}                                    A command function
+ * @return  {boolean}           Returns true
  */
-function selectAllCommand (hideBeforeAndAfterCell: StateField<DecorationSet>): (view: EditorView) => boolean {
-  return (view) => {
-    const cursor = view.state.field(hideBeforeAndAfterCell).iter(0) // First
-    cursor.next() // Second
-    const cellFrom = cursor.to
-    cursor.next() // Third
-    const cellTo = cursor.from
-    view.dispatch({ selection: { anchor: cellFrom, head: cellTo } })
-    return true
-  }
+function selectAllCommand (view: EditorView): boolean {
+  const cursor = view.state.field(hiddenSpanField).iter(0) // First
+  cursor.next() // Second
+  const cellFrom = cursor.to
+  cursor.next() // Third
+  const cellTo = cursor.from
+  view.dispatch({ selection: { anchor: cellFrom, head: cellTo } })
+  return true
 }
 
 /**
@@ -191,11 +190,6 @@ export function createSubviewForCell (
   targetCell: HTMLTableCellElement,
   cellRange: { from: number, to: number }
 ): void {
-  // Instantiate our custom fields here, so that we can reference them, e.g.,
-  // to retrieve its value
-  const hideDecoField = hideBeforeAndAfterCell(mainView, cellRange)
-  const boundariesPlugin = ensureBoundariesPlugin(hideDecoField)
-
   const state = EditorState.create({
     // Subviews always hold the entire document. This is to make synchronizing
     // updates between main and subviews faster and simpler. This should only
@@ -218,7 +212,7 @@ export function createSubviewForCell (
         { key: 'Mod-z', run: v => undo(mainView), preventDefault: true },
         { key: 'Mod-Shift-z', run: v => redo(mainView), preventDefault: true },
         // Override the select all command
-        { key: 'Mod-a', run: selectAllCommand(hideDecoField), preventDefault: true }
+        { key: 'Mod-a', run: selectAllCommand, preventDefault: true }
       ])),
       drawSelection(),
       // TODO: Light and dark mode switch
@@ -227,8 +221,8 @@ export function createSubviewForCell (
       markdownParser(), // TODO: Config?
       // Two custom extensions that are required for the specific use-case of
       // this single-line minimal EditorView
-      hideDecoField,
-      boundariesPlugin
+      hiddenSpanField.init(s => createHiddenDecorations(s, cellRange)),
+      ensureBoundariesFilter
     ]
   })
 
