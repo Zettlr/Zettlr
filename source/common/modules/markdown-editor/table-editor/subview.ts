@@ -15,13 +15,9 @@
 
 import { defaultKeymap, redo, undo } from "@codemirror/commands"
 import { syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
-import { EditorState, Prec, StateField, Annotation, Transaction, Extension } from "@codemirror/state"
+import { EditorState, Prec, StateField, Annotation, Transaction, Extension, ChangeSpec } from "@codemirror/state"
 import { EditorView, keymap, drawSelection, DecorationSet, Decoration, ViewPlugin, ViewUpdate } from "@codemirror/view"
 import markdownParser from "../parser/markdown-parser"
-
-// DEBUG // Remaining TODOs for the basic usability state:
-// DEBUG // * The user can currently delete the complete hidden spans of the
-// DEBUG //   document by pressing backspace or delete (backward & forward)
 
 /**
  * This syncAnnotation is used to tag all transactions originating from the main
@@ -92,6 +88,7 @@ function ensureBoundariesPlugin (field: StateField<DecorationSet>): Extension {
     if (tr.selection !== undefined && cellFrom !== cellTo && cellTo > 0) {
       const { from, to } = tr.selection.main
       if (from < cellFrom || to > cellEndAfter) {
+        console.log('Disallowing transaction', tr)
         return [] // Disallow this transaction
       }
     }
@@ -100,25 +97,29 @@ function ensureBoundariesPlugin (field: StateField<DecorationSet>): Extension {
       return tr
     }
   
-    // TODO: Instead of simply disallowing this transaction, it would be nice to
-    // exchange newlines appropriately, e.g., with spaces. In a future update,
-    // we could even enable users to drop CSV data into a table so that newlines
-    // make the editor create rows as it goes.
-    let hasNewline = false
+    // Ensure that any changes are safe to apply without breaking the table or
+    // removing things people don't want to remove.
+    const safeChanges: ChangeSpec[] = []
+    let shouldOverrideTransaction = false
     tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
-      if (hasNewline || inserted.sliceString(0).includes('\n')) {
-        hasNewline = true
+      // First: Ensure that the transaction does not mess with the hidden ranges
+      if (fromA < cellFrom || toA < cellFrom || fromA > cellEndAfter || toA > cellEndAfter) {
+        // With this flag set, all other safe changes will be used to override
+        // the transaction
+        shouldOverrideTransaction = true
+        return
+      }
+
+      // Next, ensure that no newlines will be inserted into the table cell
+      const ins = inserted.toString()
+      const safeInsertion = ins.includes('\n') ? ins.replace(/\n+/g, ' ') : ins
+      safeChanges.push({ from: fromA, to: toA, insert: safeInsertion })
+      if (safeInsertion !== ins) {
+        shouldOverrideTransaction = true
       }
     })
 
-    // TODO: The user may also press backspace or delete and is able to actually
-    // delete the hidden document ranges. This needs to be addressed!
-  
-    if (hasNewline) {
-      return [] // Disallow this transaction
-    }
-  
-    return tr
+    return shouldOverrideTransaction ? { ...tr, changes: safeChanges } : tr
   })
 }
 
@@ -159,6 +160,27 @@ function hideBeforeAndAfterCell (mainView: EditorView, cellRange: { from: number
 }
 
 /**
+ * This command can be used to override the default selectAll functionality.
+ * Instead of selecting the entire state (= document) it will only select the
+ * cell boundaries.
+ *
+ * @param   {StateField<DecorationSet>}  hideBeforeAndAfterCell  The hideBeforeandAfterCell extension
+ *
+ * @return  {CallableFunction}                                    A command function
+ */
+function selectAllCommand (hideBeforeAndAfterCell: StateField<DecorationSet>): (view: EditorView) => boolean {
+  return (view) => {
+    const cursor = view.state.field(hideBeforeAndAfterCell).iter(0) // First
+    cursor.next() // Second
+    const cellFrom = cursor.to
+    cursor.next() // Third
+    const cellTo = cursor.from
+    view.dispatch({ selection: { anchor: cellFrom, head: cellTo } })
+    return true
+  }
+}
+
+/**
 * Creates and mounts a sub-EditorView within the provided targetCell.
 *
 * @param  {EditorView}            mainView    The main view
@@ -188,13 +210,15 @@ export function createSubviewForCell (
       // A minimal set of extensions
       keymap.of(defaultKeymap),
       Prec.high(keymap.of([
-        // Disable a few shortcuts, preventing programmatic insertion of newlines
-        { key: 'Return', run: (view) => true },
-        { key: 'Ctrl-Return', run: (view) => true },
-        { key: 'Cmd-Return', run: (view) => true },
+        // Prevent programmatic insertion of newlines by disabling some keybindings
+        { key: 'Return', run: v => true },
+        { key: 'Ctrl-Return', run: v => true },
+        { key: 'Cmd-Return', run: v => true },
         // Map the undo/redo keys to the main view
         { key: 'Mod-z', run: v => undo(mainView), preventDefault: true },
-        { key: 'Mod-Shift-z', run: v => redo(mainView), preventDefault: true }
+        { key: 'Mod-Shift-z', run: v => redo(mainView), preventDefault: true },
+        // Override the select all command
+        { key: 'Mod-a', run: selectAllCommand(hideDecoField), preventDefault: true }
       ])),
       drawSelection(),
       // TODO: Light and dark mode switch
