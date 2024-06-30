@@ -113,7 +113,6 @@ export class TableWidget extends WidgetType {
  */
 function updateTable (widget: TableWidget, table: HTMLTableElement, view: EditorView): void {
   const tableAST = parseTableNode(widget.node, view.state.sliceDoc())
-  console.log(tableAST)
 
   let trs = [...table.querySelectorAll('tr')]
   if (trs.length > tableAST.rows.length) {
@@ -189,7 +188,6 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
         const selection = getSelection()
         const textOffset = selection?.focusOffset ?? 0
         const nodeOffset = estimateNodeOffset(selection?.anchorNode ?? td, td, cell.textContent)
-        console.log(`Selection: ${from} (F) ${nodeOffset} (NO) ${textOffset} (TO)`)
         view.dispatch({
           selection: { anchor: from + nodeOffset + textOffset }
         })
@@ -244,7 +242,7 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
  *                                               `anchorNode` within `td`
  */
 function estimateNodeOffset (anchorNode: Node, td: HTMLTableCellElement, cellContent: string): number {
-  if (anchorNode === td) {
+  if (anchorNode === td || anchorNode.parentNode === td) {
     // Clicked node was the target itself, but realistically this doesn't happen
     return 0
   }
