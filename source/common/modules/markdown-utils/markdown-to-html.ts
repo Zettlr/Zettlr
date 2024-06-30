@@ -277,7 +277,7 @@ function getTagInfo (node: GenericNode): HTMLTag {
  *
  * @return  {string}                The HTML string
  */
-function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[], composite: boolean) => string|undefined, indent: number = 0): string {
+export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[], composite: boolean) => string|undefined, indent: number = 0): string {
   // Convenience to convert a list of child nodes to HTML
   if (Array.isArray(node)) {
     const body: string[] = []

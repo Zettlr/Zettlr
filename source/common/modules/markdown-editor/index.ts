@@ -638,6 +638,16 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
+   * Whether any element (including the editor, but also any widgets or other
+   * elements inside the entire editor DOM element) has currently focus.
+   *
+   * @return  {boolean} The focus status
+   */
+  hasFocusWithin (): boolean {
+    return this._instance.dom.contains(document.activeElement)
+  }
+
+  /**
    * Sets an autocomplete database of given type to a new value
    *
    * @param   {String}  type      The type of the database

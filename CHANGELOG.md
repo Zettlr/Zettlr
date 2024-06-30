@@ -5,12 +5,16 @@
 - Zettlr now remembers the widths of file manager and sidebar
 - You can now reset the file manager and sidebar widths by double-clicking the
   corresponding resizer
+- Fixed an issue with the Markdown AST parser that would wrongly parse tables
+  with empty cells and forget some of them
 
 ## Under the Hood
 
 - Update Electron to `v31.0.0`
 - Switched to ESLint v9.x, thereby replacing the "old" `.eslintrc.json` config
   with what ESLint calls "flat" configs
+- The MainEditor component will now execute shortcuts also when the focused
+  element is anywhere within the EditorView instance
 
 # 3.2.0
 
