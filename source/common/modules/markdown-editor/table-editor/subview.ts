@@ -15,9 +15,16 @@
 
 import { defaultKeymap, redo, undo } from "@codemirror/commands"
 import { syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
-import { EditorState, Prec, StateField, Annotation, Transaction, Extension, ChangeSpec } from "@codemirror/state"
+import { EditorState, Prec, StateField, Annotation, Transaction, ChangeSpec } from "@codemirror/state"
 import { EditorView, keymap, drawSelection, DecorationSet, Decoration, ViewPlugin, ViewUpdate } from "@codemirror/view"
 import markdownParser from "../parser/markdown-parser"
+
+// DEBUG // TODOs
+// DEBUG // * See if I have to implement a tabbing method here to properly move
+// DEBUG //   the focus to the next table cell
+// DEBUG // * When there is a subview in a table, clicking on the next table
+// DEBUG //   cell only disabled the existing one, and users have to click a
+// DEBUG //   second time to move the focus into that cell
 
 /**
  * This syncAnnotation is used to tag all transactions originating from the main

@@ -40,10 +40,6 @@ export const renderTables = [
       return TableWidget.createForState(state)
     },
     update (field, tr) {
-      // DEBUG We also need to recompute when the selection changed, check if we
-      // could also explicitly check for the selection and update only when
-      // necessary
-      // return tr.docChanged ? TableWidget.createForState(tr.state) : field
       return TableWidget.createForState(tr.state)
     },
     provide: f => EditorView.decorations.from(f)

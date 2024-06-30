@@ -22,6 +22,13 @@ import { parseTableNode } from "../../markdown-utils/markdown-ast/parse-table-no
 import { nodeToHTML } from "../../markdown-utils/markdown-to-html"
 import { createSubviewForCell } from "./subview"
 
+// DEBUG // TODOs:
+// DEBUG // * An empty table is difficult to fill with content because the cells
+// DEBUG //   are very small then
+// DEBUG // * If someone presses tab, this should bring the selection into the
+// DEBUG //   next cell
+// DEBUG // * Selections in small/almost empty cells are brittle
+
 // This widget holds a visual DOM representation of a table.
 export class TableWidget extends WidgetType {
   constructor (readonly table: string, readonly node: SyntaxNode) {
@@ -165,6 +172,9 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
       const td = document.createElement(astRow.isHeaderOrFooter ? 'th' : 'td')
       // TODO: Enable citation rendering here
       td.innerHTML = nodeToHTML(cell.children, (citations, composite) => undefined, 0).trim()
+      if (td.innerHTML === '') {
+        td.innerHTML = '&nbsp;' // Ensure that even empty cells have at least a space in them
+      }
       // NOTE: This handler gets attached once and then remains on the TD for
       // the existence of the table. Since the `view` will always be the same,
       // we only have to save the cellFrom and cellTo to the TDs dataset each
@@ -207,6 +217,9 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
       // Simply transfer the contents
       // TODO: Enable citation rendering here
       tds[i].innerHTML = nodeToHTML(cell.children, (citations, composite) => undefined, 0).trim()
+      if (tds[i].innerHTML === '') {
+        tds[i].innerHTML = '&nbsp;' // Ensure that even empty cells have at least a space in them
+      }
     } // Else: The cell has a subview and the selection is still in there.
   }
 }
