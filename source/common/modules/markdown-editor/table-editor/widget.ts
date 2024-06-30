@@ -113,6 +113,7 @@ export class TableWidget extends WidgetType {
  */
 function updateTable (widget: TableWidget, table: HTMLTableElement, view: EditorView): void {
   const tableAST = parseTableNode(widget.node, view.state.sliceDoc())
+  console.log(tableAST)
 
   let trs = [...table.querySelectorAll('tr')]
   if (trs.length > tableAST.rows.length) {
@@ -188,6 +189,7 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
         const selection = getSelection()
         const textOffset = selection?.focusOffset ?? 0
         const nodeOffset = estimateNodeOffset(selection?.anchorNode ?? td, td, cell.textContent)
+        console.log(`Selection: ${from} (F) ${nodeOffset} (NO) ${textOffset} (TO)`)
         view.dispatch({
           selection: { anchor: from + nodeOffset + textOffset }
         })
@@ -267,7 +269,6 @@ function estimateNodeOffset (anchorNode: Node, td: HTMLTableCellElement, cellCon
   // Here we assume that we're somewhere in the td's sub-tree. We'll start
   // navigating node by node backwards until we end up at the td.
   let currentNode = anchorNode
-  console.log(currentNode)
   while (currentNode !== td) {
     if (currentNode.previousSibling !== null ) {
       currentNode = currentNode.previousSibling

@@ -120,7 +120,6 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
           textContent: markdown.slice(prev.to, next.from)
         }
         rowNode.cells.push(cellNode)
-        wasDelim = false // TODO: Isn't that a bug? Because ... it WAS indeed a delimiter
       } else if (next.name === 'TableCell') {
         // Functional table cell
         const cellNode: TableCell = {

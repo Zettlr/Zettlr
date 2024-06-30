@@ -5,6 +5,8 @@
 - Zettlr now remembers the widths of file manager and sidebar
 - You can now reset the file manager and sidebar widths by double-clicking the
   corresponding resizer
+- Fixed an issue with the Markdown AST parser that would wrongly parse tables
+  with empty cells and forget some of them
 
 ## Under the Hood
 
