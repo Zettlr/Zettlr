@@ -104,7 +104,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   let shouldOverrideTransaction = false
   tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
     // First: Ensure that the transaction does not mess with the hidden ranges
-    if (fromA < cellFrom || toA < cellFrom || fromA > cellEndAfter || toA > cellEndAfter) {
+    if (fromA < cellFrom || toA < cellFrom || fromA > cellTo) {
       // With this flag set, all other safe changes will be used to override
       // the transaction
       shouldOverrideTransaction = true
