@@ -11,6 +11,8 @@
 - Update Electron to `v31.0.0`
 - Switched to ESLint v9.x, thereby replacing the "old" `.eslintrc.json` config
   with what ESLint calls "flat" configs
+- The MainEditor component will now execute shortcuts also when the focused
+  element is anywhere within the EditorView instance
 
 # 3.2.0
 

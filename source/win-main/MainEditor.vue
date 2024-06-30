@@ -117,7 +117,7 @@ ipcRenderer.on('citeproc-database-updated', (_event, _dbPath: string) => {
 })
 
 ipcRenderer.on('shortcut', (event, command) => {
-  if (currentEditor?.hasFocus() !== true) {
+  if (currentEditor?.hasFocusWithin() !== true) {
     return // None of our business
   }
 
