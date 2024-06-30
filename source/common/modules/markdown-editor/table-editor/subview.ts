@@ -13,10 +13,15 @@
  * END HEADER
  */
 
-import { defaultKeymap } from "@codemirror/commands"
+import { defaultKeymap, redo, undo } from "@codemirror/commands"
 import { syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
-import { EditorState, Prec, StateField, Annotation, Transaction, Extension, EditorSelection } from "@codemirror/state"
+import { EditorState, Prec, StateField, Annotation, Transaction, Extension } from "@codemirror/state"
 import { EditorView, keymap, drawSelection, DecorationSet, Decoration, ViewPlugin, ViewUpdate } from "@codemirror/view"
+import markdownParser from "../parser/markdown-parser"
+
+// DEBUG // Remaining TODOs for the basic usability state:
+// DEBUG // * The user can currently delete the complete hidden spans of the
+// DEBUG //   document by pressing backspace or delete (backward & forward)
 
 /**
  * This syncAnnotation is used to tag all transactions originating from the main
@@ -29,25 +34,64 @@ const syncAnnotation = Annotation.define<boolean>()
  * A transaction filter that ensures that, e.g., selections can never leave the
  * visible stretch of the table cell, and that no newlines get inserted.
  *
- * @param   {HTMLTableCellElement}  targetCell  The table cell
+ * @param   {StateField<DecorationSet>}  field  The instantiated boundaries
+ *                                              field to retrieve the current
+ *                                              cell boundaries from.
  *
  * @return  {Extension}                         The view extension
  */
-function ensureBoundariesPlugin (targetCell: HTMLTableCellElement): Extension {
+function ensureBoundariesPlugin (field: StateField<DecorationSet>): Extension {
   return EditorState.transactionFilter.of((tr) => {
-    // TODO: Works okay-ish for now, but I have to implement many more checks to
-    // ensure that most use-cases will end up having better rendering. Also,
-    // apparently the transaction will still end up being forwarded to the main
-    // view, which means that the selections can get out of sync: Whereas a
-    // cursor in here will be still at the same position, the cursor in the main
-    // view will be out of the cell, and any additional changes can end up
-    // there. That's no good!
-    const cellFrom = parseInt(targetCell.dataset.cellFrom ?? '0', 10)
-    const cellTo = parseInt(targetCell.dataset.cellTo ?? '0', 10)
-    // Sanity check
-    if (tr.selection !== undefined && tr.changes.length === 0 && cellFrom !== cellTo && cellTo > 0) {
+    if (tr.annotation(syncAnnotation) === true) {
+      return tr // Do not mess with synchronizing transactions
+    }
+
+    // NOTE: There are also cell boundaries written to the TD/TH's dataset, but
+    // we can't use those since they strictly exclude *any* whitespace from the
+    // cell's contents. This means that, would we use those to determine the
+    // selection ranges, any time a user enters a space, this space would be
+    // considered "out of the cell", and as such the user could not enter any
+    // text afterwards. By looking at the hide-decorations (which are
+    // constantly mapped through any changes and thus constitute a "moving
+    // target") we can account for that. Basically, the hideDeco field "freezes"
+    // the spaces outside of the table cell on editing, and therefore adds any
+    // manually added space to the cell's content.
+
+    // Here, we retrieve the boundaries from the given StateField. By mapping
+    // only those through the ChangeSet and not recomputing the entire state
+    // (e.g., by accessing tr.state), we keep the computational overhead small.
+    const cursor = tr.startState.field(field).map(tr.changes).iter(0) // First
+    cursor.next() // Second
+    const cellFrom = cursor.to
+    cursor.next() // Third
+    const cellTo = cursor.from
+
+    // First, find the longest cell range after the transaction has been
+    // applied. This is necessary to accurately figure out whether the selection
+    // will be moved past where the cell boundaries will end up after applying
+    // this transaction. In practical terms: If the user inserts a character at
+    // the very end of the table cell, the selection will be one position beyond
+    // the current cell range. This check means that we account for that.
+    let cellEndAfter = cellTo
+    tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
+      if (fromA >= cellFrom && toA <= cellTo && toB > cellEndAfter) {
+        cellEndAfter = toB
+      }
+    })
+
+    // TODO: Right now it works all adequately for our purposes. There is one
+    // edge-case, though: The CodeMirror parser counts as TableCell contents
+    // exclusively non-whitespace within the cell, and excludes any whitespace
+    // before and after. This means that, if the user types a space, and then
+    // attempts to write something, this would prevent this, as the cursor is
+    // now outside of what is considered the cell range for CodeMirror. However,
+    // it should be noted that the hide-decorations still accurately reflect the
+    // proper boundaries (they include any whitespace that was in the cell
+    // before the view got instantiated, but exclude any whitespace added to the
+    // cell after the fact.)
+    if (tr.selection !== undefined && cellFrom !== cellTo && cellTo > 0) {
       const { from, to } = tr.selection.main
-      if (from < cellFrom || to > cellTo) {
+      if (from < cellFrom || to > cellEndAfter) {
         return [] // Disallow this transaction
       }
     }
@@ -56,12 +100,19 @@ function ensureBoundariesPlugin (targetCell: HTMLTableCellElement): Extension {
       return tr
     }
   
+    // TODO: Instead of simply disallowing this transaction, it would be nice to
+    // exchange newlines appropriately, e.g., with spaces. In a future update,
+    // we could even enable users to drop CSV data into a table so that newlines
+    // make the editor create rows as it goes.
     let hasNewline = false
     tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
       if (hasNewline || inserted.sliceString(0).includes('\n')) {
         hasNewline = true
       }
     })
+
+    // TODO: The user may also press backspace or delete and is able to actually
+    // delete the hidden document ranges. This needs to be addressed!
   
     if (hasNewline) {
       return [] // Disallow this transaction
@@ -78,9 +129,9 @@ function ensureBoundariesPlugin (targetCell: HTMLTableCellElement): Extension {
  * @param   {EditorView}                    mainView   The mainView
  * @param   {{ from: number, to: number }}  cellRange  The cell range (from/to)
  *
- * @return  {Extension}                                The extension for the view
+ * @return  {StateField<DecorationSet>}                The extension for the view
  */
-function hideBeforeAndAfterCell (mainView: EditorView, cellRange: { from: number, to: number }): Extension {
+function hideBeforeAndAfterCell (mainView: EditorView, cellRange: { from: number, to: number }): StateField<DecorationSet> {
   return StateField.define<DecorationSet>({
     create (state) {
       const { from, to } = mainView.state.doc.lineAt(cellRange.from)
@@ -118,6 +169,11 @@ export function createSubviewForCell (
   targetCell: HTMLTableCellElement,
   cellRange: { from: number, to: number }
 ): void {
+  // Instantiate our custom fields here, so that we can reference them, e.g.,
+  // to retrieve its value
+  const hideDecoField = hideBeforeAndAfterCell(mainView, cellRange)
+  const boundariesPlugin = ensureBoundariesPlugin(hideDecoField)
+
   const state = EditorState.create({
     // Subviews always hold the entire document. This is to make synchronizing
     // updates between main and subviews faster and simpler. This should only
@@ -127,7 +183,7 @@ export function createSubviewForCell (
     // because he can't edit his ten-million line JSON files without waiting
     // three seconds for the changes to be applied to his overweight text file."
     doc: mainView.state.sliceDoc(),
-    selection: EditorSelection.single(cellRange.from),
+    selection: mainView.state.selection,
     extensions: [
       // A minimal set of extensions
       keymap.of(defaultKeymap),
@@ -136,14 +192,19 @@ export function createSubviewForCell (
         { key: 'Return', run: (view) => true },
         { key: 'Ctrl-Return', run: (view) => true },
         { key: 'Cmd-Return', run: (view) => true },
+        // Map the undo/redo keys to the main view
+        { key: 'Mod-z', run: v => undo(mainView), preventDefault: true },
+        { key: 'Mod-Shift-z', run: v => redo(mainView), preventDefault: true }
       ])),
       drawSelection(),
+      // TODO: Light and dark mode switch
       syntaxHighlighting(defaultHighlightStyle),
       EditorView.lineWrapping,
+      markdownParser(), // TODO: Config?
       // Two custom extensions that are required for the specific use-case of
       // this single-line minimal EditorView
-      hideBeforeAndAfterCell(mainView, cellRange),
-      ensureBoundariesPlugin(targetCell)
+      hideDecoField,
+      boundariesPlugin
     ]
   })
 
