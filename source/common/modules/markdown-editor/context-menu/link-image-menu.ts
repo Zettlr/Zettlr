@@ -124,7 +124,15 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
 
   showPopupMenu(coords, isLink ? linkTpl : imgTpl, (clickedID) => {
     if (clickedID === 'menu.copy_link') {
-      navigator.clipboard.writeText(url).catch(err => console.error(err))
+      var sanitizeUrl = url;
+      if(sanitizeUrl.includes("<") || sanitizeUrl.includes(">")){
+        sanitizeUrl = sanitizeUrl.replace("<", "");
+        sanitizeUrl = sanitizeUrl.replace(">", "");
+        navigator.clipboard.writeText(sanitizeUrl).catch(err => console.error(err))
+      }else{
+        navigator.clipboard.writeText(url).catch(err => console.error(err))
+      }
+      
     } else if (clickedID === 'menu.open_link') {
       openMarkdownLink(url, view)
     } else if (clickedID === 'show-img-in-folder') {
