@@ -41,35 +41,35 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
 
   const header = node.getChildren('TableHeader')
   const rows = node.getChildren('TableRow')
+  const tableSource = markdown.substring(node.from, node.to)
+  const tableLines = tableSource.split('\n')
 
-  // The parser cannot reliably extract the table delimiters, but we need
-  // those for the column alignment. Thus, we need to see if we can find the
-  // header row (pipe tables) or a delimiter row (grid tables) in order to
-  // determine the column alignments.
-  for (const line of markdown.substring(node.from, node.to).split('\n')) {
-    if (!/^[|+:-]+$/.test(line)) {
-      continue
-    }
+  // The parser cannot reliably extract the table heading indicator row, but we
+  // need it for the column alignment. Thus, we need to see if we can find the
+  // delimiter row in order to determine the column alignments.
+  const headerRow = tableLines.find(line => /^[|+:-]+$/.test(line))
 
-    // Gotcha.
-    if (line.includes('|')) {
-      astNode.tableType = 'pipe'
-    } else {
-      astNode.tableType = 'grid'
-    }
+  if (headerRow !== undefined) {
+    // Also note down the table type
+    astNode.tableType = headerRow.includes('|') ? 'pipe' : 'grid'
+    // The plus indicates either a grid table or a special type of pipe table
+    // produced by Emacs' orgtbl command
+    // (cf. https://pandoc.org/MANUAL.html#extension-pipe_tables)
+    const splitter = headerRow.includes('+') ? '+' : '|'
 
-    // The plus indicates a special Pandoc-type of pipe table
-    const splitter = line.includes('+') ? '+' : '|'
-    astNode.alignment = line.split(splitter)
+    astNode.alignment = headerRow.split(splitter)
       // NOTE: |-|-| will result in ['', '-', '-', ''] -> filter out
       .filter(c => c.length > 0)
       .map(c => {
+        // Pipes at the beginning or end are possible with the Emacs tables
+        // --> remove
         if (c.startsWith('|')) {
           c = c.substring(1)
         }
         if (c.endsWith('|')) {
           c = c.substring(0, c.length - 1)
         }
+        // Now extract the alignment characters
         if (c.startsWith(':') && c.endsWith(':')) {
           return 'center'
         } else if (c.endsWith(':')) {
@@ -78,7 +78,6 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
           return 'left'
         }
       })
-    break
   } // Else: Couldn't determine either column alignment nor table type
 
   // Now, transform the rows.
@@ -94,9 +93,9 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
     }
 
     // NOTE: The Lezer parser intentionally does not emit TableCell nodes for
-    // empty cells, so we cannot fully rely on the existence of table cells. See:
-    // https://github.com/lezer-parser/markdown/issues/23
-    // Thus, we have to manually move through the line one by one. If a
+    // empty cells, so we cannot fully rely on the existence of table cells.
+    // See: https://github.com/lezer-parser/markdown/issues/23
+    // Thus, we have to manually move through the lines one by one. If a
     // TableDelimiter is followed by another TableDelimiter, we know that there
     // is an empty cell in between.
     let next = row.firstChild
