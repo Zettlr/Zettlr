@@ -166,15 +166,20 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
     // within a cell. Any overlapping selection will not cause a rendering of
     // the editor view, because selections that cross table cell boundaries are
     // just ... puh.
+    // TODO: When the user deletes content, as soon as the user reaches a space,
+    // this will cause cell.to to "jump" two characters, because the space gets
+    // removed from the cell contents. This then leads to the removal of the
+    // subview (because the selection is no longer "inside" the cell). This
+    // means that we definitely have to change how the cell.from and cell.to are
+    // calculated, so that they orient themselves more at the pipe delimiters,
+    // rather than whatever the parser thinks is the cell contents.
     const selectionInCell =  mainSel.from >= cell.from && mainSel.to <= cell.to
     if (i === tds.length) {
       // We have to create a new TD
       const td = document.createElement(astRow.isHeaderOrFooter ? 'th' : 'td')
       // TODO: Enable citation rendering here
-      td.innerHTML = nodeToHTML(cell.children, (citations, composite) => undefined, 0).trim()
-      if (td.innerHTML === '') {
-        td.innerHTML = '&nbsp;' // Ensure that even empty cells have at least a space in them
-      }
+      const html = nodeToHTML(cell.children, (citations, composite) => undefined, 0).trim()
+      td.innerHTML = html.length > 0 ? html : '&nbsp;'
       // NOTE: This handler gets attached once and then remains on the TD for
       // the existence of the table. Since the `view` will always be the same,
       // we only have to save the cellFrom and cellTo to the TDs dataset each
@@ -188,9 +193,7 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
         const selection = getSelection()
         const textOffset = selection?.focusOffset ?? 0
         const nodeOffset = estimateNodeOffset(selection?.anchorNode ?? td, td, cell.textContent)
-        view.dispatch({
-          selection: { anchor: from + nodeOffset + textOffset }
-        })
+        view.dispatch({ selection: { anchor: from + nodeOffset + textOffset } })
       })
       tr.appendChild(td)
       tds.push(td)
@@ -216,10 +219,8 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
     } else if (subview === null) {
       // Simply transfer the contents
       // TODO: Enable citation rendering here
-      tds[i].innerHTML = nodeToHTML(cell.children, (citations, composite) => undefined, 0).trim()
-      if (tds[i].innerHTML === '') {
-        tds[i].innerHTML = '&nbsp;' // Ensure that even empty cells have at least a space in them
-      }
+      const html = nodeToHTML(cell.children, (citations, composite) => undefined, 0).trim()
+      tds[i].innerHTML = html.length > 0 ? html : '&nbsp;'
     } // Else: The cell has a subview and the selection is still in there.
   }
 }
@@ -242,6 +243,9 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
  *                                               `anchorNode` within `td`
  */
 function estimateNodeOffset (anchorNode: Node, td: HTMLTableCellElement, cellContent: string): number {
+  // BUG: Somehow this function returns numbers that are WAY too high, there is
+  // still some bug in here. I can reproduce this sometimes in empty cells/an
+  // empty table, but I couldn't find a specific pattern yet.
   if (anchorNode === td || anchorNode.parentNode === td) {
     // Clicked node was the target itself, but realistically this doesn't happen
     return 0
