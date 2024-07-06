@@ -15,7 +15,7 @@
 
 import { defaultKeymap, redo, undo } from "@codemirror/commands"
 import { syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
-import { EditorState, Prec, StateField, Annotation, Transaction, ChangeSpec } from "@codemirror/state"
+import { EditorState, Prec, StateField, Annotation, Transaction, ChangeSpec, Range, RangeSet } from "@codemirror/state"
 import { EditorView, keymap, drawSelection, DecorationSet, Decoration, ViewPlugin, ViewUpdate } from "@codemirror/view"
 import markdownParser from "../parser/markdown-parser"
 
@@ -57,11 +57,9 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // Here, we retrieve the boundaries from the given StateField. By mapping
   // only those through the ChangeSet and not recomputing the entire state
   // (e.g., by accessing tr.state), we keep the computational overhead small.
-  const cursor = tr.startState.field(hiddenSpanField).map(tr.changes).iter(0) // First
-  cursor.next() // Second
-  const cellFrom = cursor.to
-  cursor.next() // Third
-  const cellTo = cursor.from
+  const cursor = tr.startState.field(hiddenSpanField).cellRange.map(tr.changes).iter(0)
+  const cellFrom = cursor.from
+  const cellTo = cursor.to
 
   // First, find the longest cell range after the transaction has been
   // applied. This is necessary to accurately figure out whether the selection
@@ -123,20 +121,35 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   return shouldOverrideTransaction ? { ...tr, changes: safeChanges } : tr
 })
 
+interface hiddenSpanState {
+  decorations: DecorationSet
+  cellRange: DecorationSet
+}
+
 /**
  * A StateField whose sole purpose is to hide the two stretches of content
  * before and after the table cell contents.
  */
-const hiddenSpanField = StateField.define<DecorationSet>({
+const hiddenSpanField = StateField.define<hiddenSpanState>({
   create (state) {
     // NOTE: Override using `init`! Otherwise this extension won't do much.
-    return Decoration.none
+    return {
+      decorations: Decoration.none,
+      cellRange: RangeSet.empty
+    }
   },
   update (value, tr) {
-    // Ensure the range always stays the same
-    return value.map(tr.changes)
+    if (!tr.docChanged) {
+      return value
+    } else {
+      // Ensure the range always stays the same
+      return {
+        decorations: value.decorations.map(tr.changes),
+        cellRange: value.cellRange.map(tr.changes)
+      }
+    }
   },
-  provide: f => EditorView.decorations.from(f)
+  provide: f => EditorView.decorations.from(f, (value) => value.decorations)
 })
 
 /**
@@ -150,21 +163,41 @@ const hiddenSpanField = StateField.define<DecorationSet>({
  */
 function createHiddenDecorations (state: EditorState, cellRange: { from: number, to: number }): DecorationSet {
   const { from, to } = state.doc.lineAt(cellRange.from)
-  return Decoration.set([
-    // 1: Block before
-    Decoration.replace({ block: true, inclusive: true })
-      .range(0, from - 1),
-    // 2: Line until cellRange.from
-    Decoration.replace({ block: false, inclusive: false })
-      .range(from, cellRange.from),
-    // 3: Line after cellRange.to
-    Decoration.replace({ block: false, inclusive: false })
-      .range(cellRange.to, to),
-    // 4: Block after
-    Decoration.replace({ block: true, inclusive: true })
-      .range(to + 1, state.doc.length)
-  ])
+  // The table cell can be at the start/end of a line/document, and CodeMirror
+  // does not allow atomic ranges where from === to. Therefore, conditional
+  // ranges
 
+  const decorations: Array<Range<Decoration>> = []
+
+  // 1: Block before
+  if (from - 1 > 0) {
+    decorations.push(
+      Decoration.replace({ block: true, inclusive: true }).range(0, from - 1)
+    )
+  }
+  // 2: Line until cellRange.from
+  if (cellRange.from > from) {
+    decorations.push(
+      Decoration.replace({ block: false, inclusive: false })
+        .range(from, cellRange.from)
+    )
+  }
+  // 3: Line after cellRange.to
+  if (to > cellRange.to) {
+    decorations.push(
+      Decoration.replace({ block: false, inclusive: false })
+        .range(cellRange.to, to)
+    )
+  }
+  // 4: Block after
+  if (state.doc.length > to + 1) {
+    decorations.push(
+      Decoration.replace({ block: true, inclusive: true })
+        .range(to + 1, state.doc.length)
+    )
+  }
+
+  return Decoration.set(decorations)
 }
 
 /**
@@ -177,12 +210,8 @@ function createHiddenDecorations (state: EditorState, cellRange: { from: number,
  * @return  {boolean}           Returns true
  */
 function selectAllCommand (view: EditorView): boolean {
-  const cursor = view.state.field(hiddenSpanField).iter(0) // First
-  cursor.next() // Second
-  const cellFrom = cursor.to
-  cursor.next() // Third
-  const cellTo = cursor.from
-  view.dispatch({ selection: { anchor: cellFrom, head: cellTo } })
+  const cursor = view.state.field(hiddenSpanField).cellRange.iter(0)
+  view.dispatch({ selection: { anchor: cursor.from, head: cursor.to } })
   return true
 }
 
@@ -228,7 +257,12 @@ export function createSubviewForCell (
       markdownParser(), // TODO: Config?
       // Two custom extensions that are required for the specific use-case of
       // this single-line minimal EditorView
-      hiddenSpanField.init(s => createHiddenDecorations(s, cellRange)),
+      hiddenSpanField.init(s => {
+        return {
+          decorations: createHiddenDecorations(s, cellRange),
+          cellRange: RangeSet.of(Decoration.mark({}).range(cellRange.from, cellRange.to))
+        }
+      }),
       ensureBoundariesFilter
     ]
   })
