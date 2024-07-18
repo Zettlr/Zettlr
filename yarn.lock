@@ -352,14 +352,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.28.0":
-  version: 6.28.0
-  resolution: "@codemirror/view@npm:6.28.0"
+"@codemirror/view@npm:6.28.5":
+  version: 6.28.5
+  resolution: "@codemirror/view@npm:6.28.5"
   dependencies:
     "@codemirror/state": ^6.4.0
     style-mod: ^4.1.0
     w3c-keyname: ^2.2.4
-  checksum: ff9e17c635e558383b07c812a8f2457903f8076c9682a840c06bf917c9f83524db75b5b0e08dfac266a6025ad74e412407b64afe23c9fc0eba4b5eadf715f27f
+  checksum: fdbc317241a92dd140bd19c2218550aa8327c24ee8c3f10146b6c4375f4b4d38c673166925990f3ac2d9b0f2f2661e93b0a7428e21d2c73f710374e0bc4b976e
   languageName: node
   linkType: hard
 
@@ -15413,7 +15413,7 @@ __metadata:
     "@codemirror/legacy-modes": ^6.4.0
     "@codemirror/search": ^6.5.6
     "@codemirror/state": ^6.4.1
-    "@codemirror/view": ^6.28.0
+    "@codemirror/view": ^6.28.5
     "@electron-forge/cli": ^7.4.0
     "@electron-forge/maker-deb": ^7.4.0
     "@electron-forge/maker-rpm": ^7.4.0
