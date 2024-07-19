@@ -704,9 +704,16 @@ function maybeHighlightSearchResults (): void {
   }
 }
 
+//These are styles specific to dark-style.
 body.dark .main-editor-wrapper {
   background-color: rgba(20, 20, 30, 1);
   .CodeMirror .CodeMirror-gutters { background-color: rgba(20, 20, 30, 1); }
+
+  //Three dots (...) When a header is folder:
+  .cm-foldPlaceholder{
+        background-color: rgb(20, 20, 30);
+        border-style: none;
+    }
 }
 
 // CodeMirror fullscreen
