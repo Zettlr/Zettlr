@@ -5,6 +5,7 @@
 - Zettlr now remembers the widths of file manager and sidebar
 - You can now reset the file manager and sidebar widths by double-clicking the
   corresponding resizer
+- Dark mode folded header's ellipsis are now properly colored.
 
 ## Under the Hood
 
