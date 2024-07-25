@@ -6,10 +6,12 @@
 - You can now reset the file manager and sidebar widths by double-clicking the
   corresponding resizer
 - Dark mode folded header's ellipsis are now properly colored.
+- Copying plain links in the form `<http://www.example.com>` will now remove the
+  angled brackets (#5285)
 
 ## Under the Hood
 
-- Update Electron to `v31.0.0`
+- Update Electron to `v31.3.0`
 - Switched to ESLint v9.x, thereby replacing the "old" `.eslintrc.json` config
   with what ESLint calls "flat" configs
 
