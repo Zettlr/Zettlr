@@ -5,6 +5,8 @@
 - Zettlr now remembers the widths of file manager and sidebar
 - You can now reset the file manager and sidebar widths by double-clicking the
   corresponding resizer
+- Copying plain links in the form `<http://www.example.com>` will now remove the
+  angled brackets (#5285)
 
 ## Under the Hood
 
