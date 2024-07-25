@@ -15474,7 +15474,7 @@ __metadata:
     fsevents: ^2.3.3
     gemoji: ^8.1.0
     gettext-parser: ^8.0.0
-    got: ^14.4.1
+    got: ^14.4.2
     jsdom: ^24.1.0
     katex: ^0.16.10
     ky: ^1.3.0
