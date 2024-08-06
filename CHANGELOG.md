@@ -7,6 +7,10 @@
   corresponding resizer
 - Copying plain links in the form `<http://www.example.com>` will now remove the
   angled brackets (#5285)
+- Reverted a change from 3.1.0 which altered the process of creating new files
+  in such a way that the "open directory" was no longer considered; now Zettlr
+  will again use the open directory if present, allowing users to quickly create
+  new files by selecting a folder first in the file manager (#5141)
 
 ## Under the Hood
 
