@@ -176,7 +176,7 @@
     "electron": "30.x.x",
     "electron-builder": "^24.13.3",
     "electron-devtools-assembler": "^1.2.0",
-    "eslint": "^9.4.0",
+    "eslint": "^9.8.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
     "eslint-plugin-import": "^2.29.1",
