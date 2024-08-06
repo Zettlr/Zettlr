@@ -12,7 +12,7 @@
 
 ## Under the Hood
 
-- Update Electron to `v31.3.0`
+- Update Electron to `v30.3.1`
 - Switched to ESLint v9.x, thereby replacing the "old" `.eslintrc.json` config
   with what ESLint calls "flat" configs
 - The MainEditor component will now execute shortcuts also when the focused
