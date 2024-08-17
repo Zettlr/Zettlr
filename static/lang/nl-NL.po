@@ -1753,12 +1753,12 @@ msgstr "Volledig pad kopiëren"
 #: source/app/service-providers/documents/index.ts:343
 #, fuzzy
 msgid "Save changes"
-msgstr "Onopgeslagen wijzigingen"
+msgstr "Ja, wijzigingen opslaan"
 
 #: source/app/service-providers/documents/index.ts:344
 #, fuzzy
 msgid "Discard changes"
-msgstr "Onopgeslagen wijzigingen"
+msgstr "Nee, wijzigingen verwerpen"
 
 #: source/app/service-providers/documents/index.ts:348
 #, fuzzy
