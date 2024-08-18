@@ -1891,7 +1891,8 @@ msgstr "Невозможно экспортировать проект"
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
-msgstr ""Для экспорта не выбрано ни одного файла. Пожалуйста, выберите файлы, которые будут включены "
+msgstr ""
+"Для экспорта не выбрано ни одного файла. Пожалуйста, выберите файлы, которые будут включены "
 " в настройках проекта."
 
 #: source/app/service-providers/commands/dir-project-export.ts:91
