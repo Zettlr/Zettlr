@@ -1749,7 +1749,7 @@ msgstr "%s изменено на диске"
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
-msgstr "
+msgstr ""
 "%s изменился на диске, но редактор содержит несохраненные изменения. Хотите ли вы "
 "сохранить текущее содержимое редактора или загрузить файл с диска?"
 
