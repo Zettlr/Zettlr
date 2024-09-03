@@ -188,12 +188,13 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
         e.preventDefault()
         e.stopPropagation()
         const from = parseInt(td.dataset.cellFrom ?? '0', 10)
+        const cellTo = parseInt(td.dataset.cellTo ?? '0', 10)
         // This code attempts to set the selection as close as possible to the
         // actual character the user has clicked.
         const selection = getSelection()
         const textOffset = selection?.focusOffset ?? 0
         const nodeOffset = estimateNodeOffset(selection?.anchorNode ?? td, td, cell.textContent)
-        view.dispatch({ selection: { anchor: from + nodeOffset + textOffset } })
+        view.dispatch({ selection: { anchor: Math.min(from + nodeOffset + textOffset, cellTo) } })
       })
       tr.appendChild(td)
       tds.push(td)
