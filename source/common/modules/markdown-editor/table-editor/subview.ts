@@ -8,7 +8,10 @@
  * License:         GNU GPL v3
  *
  * Description:     This module contains a set of methods that are used to 
- *                  create and manage subviews within table editor widgets.
+ *                  create and manage subviews within table editor widgets. A
+ *                  subview is a CodeMirror instance that mirrors the main
+ *                  document, but only allows editing the span of text within a
+ *                  given table cell.
  *
  * END HEADER
  */
@@ -57,9 +60,9 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // Here, we retrieve the boundaries from the given StateField. By mapping
   // only those through the ChangeSet and not recomputing the entire state
   // (e.g., by accessing tr.state), we keep the computational overhead small.
-  const cursor = tr.startState.field(hiddenSpanField).cellRange.map(tr.changes).iter(0)
-  const cellFrom = cursor.from
-  const cellTo = cursor.to
+  // NOTE the associations (also in the hidden state updater)
+  const [ cellFrom, cellTo ] = tr.startState.field(hiddenSpanField)
+    .cellRange.map((pos, idx) => tr.changes.mapPos(pos, idx < 0 ? -1 : 1))
 
   // First, find the longest cell range after the transaction has been
   // applied. This is necessary to accurately figure out whether the selection
@@ -123,7 +126,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
 
 interface hiddenSpanState {
   decorations: DecorationSet
-  cellRange: DecorationSet
+  cellRange: [number, number]
 }
 
 /**
@@ -135,7 +138,7 @@ const hiddenSpanField = StateField.define<hiddenSpanState>({
     // NOTE: Override using `init`! Otherwise this extension won't do much.
     return {
       decorations: Decoration.none,
-      cellRange: RangeSet.empty
+      cellRange: [ 0, 0 ]
     }
   },
   update (value, tr) {
@@ -145,7 +148,14 @@ const hiddenSpanField = StateField.define<hiddenSpanState>({
       // Ensure the range always stays the same
       return {
         decorations: value.decorations.map(tr.changes),
-        cellRange: value.cellRange.map(tr.changes)
+        cellRange: [
+          // The assocs ensure that it's really an "outer" bound and any text
+          // inserted in there stays within this cell range. If we didn't
+          // provide it, inserting a character in an empty range (from === to)
+          // would cause that inserted character to end up right to the `to`.
+          tr.changes.mapPos(value.cellRange[0], -1),
+          tr.changes.mapPos(value.cellRange[1], 1)
+        ]
       }
     }
   },
@@ -210,8 +220,8 @@ function createHiddenDecorations (state: EditorState, cellRange: { from: number,
  * @return  {boolean}           Returns true
  */
 function selectAllCommand (view: EditorView): boolean {
-  const cursor = view.state.field(hiddenSpanField).cellRange.iter(0)
-  view.dispatch({ selection: { anchor: cursor.from, head: cursor.to } })
+  const cursor = view.state.field(hiddenSpanField).cellRange
+  view.dispatch({ selection: { anchor: cursor[0], head: cursor[1] } })
   return true
 }
 
@@ -243,7 +253,7 @@ export function createSubviewForCell (
         // Prevent programmatic insertion of newlines by disabling some keybindings
         { key: 'Return', run: v => true },
         { key: 'Ctrl-Return', run: v => true },
-        { key: 'Cmd-Return', run: v => true },
+        { key: 'Mod-Return', run: v => true },
         // Map the undo/redo keys to the main view
         { key: 'Mod-z', run: v => undo(mainView), preventDefault: true },
         { key: 'Mod-Shift-z', run: v => redo(mainView), preventDefault: true },
@@ -260,7 +270,7 @@ export function createSubviewForCell (
       hiddenSpanField.init(s => {
         return {
           decorations: createHiddenDecorations(s, cellRange),
-          cellRange: RangeSet.of(Decoration.mark({}).range(cellRange.from, cellRange.to))
+          cellRange: [ cellRange.from, cellRange.to ]
         }
       }),
       ensureBoundariesFilter
