@@ -91,7 +91,7 @@ export function movePrevCell (target: EditorView): boolean {
     if (cellIndex <= 0) {
       return undefined
     } else {
-      return EditorSelection.cursor(offsets[cellIndex - 1][0])
+      return EditorSelection.cursor(offsets[cellIndex - 1][1])
     }
   })
     .filter(sel => sel !== undefined)
