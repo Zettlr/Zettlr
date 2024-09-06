@@ -97,17 +97,20 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
   }
 
   const tableSource = markdown.substring(node.from, node.to)
-  const tableLines: [ number, string ][] = [...tableSource.matchAll(/(.+)/gm)]
-    .map(match => {
-      return [ match.index, match[0] ]
+  // Extract all lines including their offsets
+  const tableLines: [ number, string ][] = tableSource.split('\n')
+    .map((text, idx, arr) => {
+      const offset = arr.slice(0, idx).reduce((off, t) => off + t.length + 1, 0)
+      return [ offset, text ]
     })
+
   const globalOffset = node.from
 
   for (const [ lineOffset, line ] of tableLines) {
-    if (/^[+=-]+$/.test(line)) {
+    if (/^[+-]+$/.test(line)) {
       // The line is a simple separator for grid tables -> do nothing
       continue
-    } else if (/^[|+:-]+$/.test(line)) {
+    } else if ((/^[|:-]+$/.test(line) && line.includes('-')) || /^[+=:]+$/.test(line)) {
       // The line is a header
       const tt = line.includes('-') ? 'pipe' : 'grid'
       astNode.tableType = tt
