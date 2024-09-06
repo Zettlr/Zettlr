@@ -15,7 +15,7 @@
  */
 
 import { syntaxTree } from '@codemirror/language'
-import { EditorSelection, SelectionRange } from '@codemirror/state'
+import { ChangeSpec, EditorSelection, SelectionRange } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { parseTableNode } from '../../markdown-utils/markdown-ast/parse-table-node'
 import { SyntaxNode } from '@lezer/common'
@@ -225,8 +225,72 @@ export function swapPrevCol (target: EditorView): boolean {
   return false
 }
 
+/**
+ * For any selection ranges within a table, this function swaps the anchor's row
+ * with the next one if applicable, accounting for table type and header rows.
+ *
+ * @param   {EditorView}  target  The target view
+ *
+ * @return  {boolean}             Whether any swaps have happened.
+ */
 export function swapNextRow (target: EditorView): boolean {
-  return false
+  const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
+  const changes: ChangeSpec[] = []
+  
+  target.state.selection.ranges.map(range => {
+    // TODO: What if selection spans multiple rows? The user then clearly intends
+    // to move them all together
+    // 1. Is this selection inside a table?
+    const table = tableNodes.find(node => node.from <= range.anchor && node.to >= range.anchor)
+    if (table === undefined) {
+      return undefined
+    }
+
+    const tableAST = parseTableNode(table, target.state.sliceDoc())
+    const thisLine = target.state.doc.lineAt(range.anchor)
+    const lastLine = target.state.doc.lineAt(table.to)
+    if (thisLine.number === target.state.doc.lines || thisLine.number === lastLine.number) {
+      return undefined
+    }
+
+    console.log({ tableAST })
+    if (tableAST.tableType === 'grid') {
+      // Handle a grid table
+      let nextLine = target.state.doc.line(thisLine.number + 2)
+      if (nextLine.number > lastLine.number || nextLine.number >= target.state.doc.lines) {
+        return undefined
+      }
+      console.log(thisLine.text, nextLine.text)
+      changes.push(
+        { from: thisLine.from, to: thisLine.to, insert: nextLine.text },
+        { from: nextLine.from, to: nextLine.to, insert: thisLine.text }
+      )
+    } else {
+      // Handle a pipe table
+      let nextLine = target.state.doc.line(thisLine.number + 1)
+      if (/^[|:-]+$/.test(nextLine.text)) {
+        // We have to swap the lines to retain the header row
+        nextLine = target.state.doc.line(nextLine.number + 1)
+        changes.push(
+          { from: thisLine.from, to: thisLine.to, insert: nextLine.text },
+          { from: nextLine.from, to: nextLine.to, insert: thisLine.text }
+        )
+      } else {
+        // Regular swap
+        changes.push(
+          { from: thisLine.from, to: thisLine.to + 1, insert: '' },
+          { from: nextLine.to, to: nextLine.to, insert: '\n' + thisLine.text }
+        )
+      }
+    }
+  })
+
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
 export function swapPrevRow (target: EditorView): boolean {
