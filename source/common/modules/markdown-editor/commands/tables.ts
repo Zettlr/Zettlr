@@ -1,3 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Table commands
+ * CVM-Role:        Utility Functions
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file exposes a series of CodeMirror commands that make
+ *                  working with tables easier and allow for keyboard-based
+ *                  manipulation of them.
+ *
+ * END HEADER
+ */
+
 import { syntaxTree } from '@codemirror/language'
 import { EditorSelection, SelectionRange } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
