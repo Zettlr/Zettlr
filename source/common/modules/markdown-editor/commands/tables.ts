@@ -113,11 +113,92 @@ export function movePrevCell (target: EditorView): boolean {
  * @return  {boolean}             Whether any movement has happened
  */
 export function moveNextRow (target: EditorView): boolean {
-  return false
+  const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
+  const newSelections: SelectionRange[] = target.state.selection.ranges.map(range => {
+    // 1. Is this selection inside a table?
+    const table = tableNodes.find(node => node.from <= range.anchor && node.to >= range.anchor)
+    if (table === undefined) {
+      return undefined
+    }
+
+    const offsets = getTableCellOffsets(table, target.state.sliceDoc())
+    console.log(offsets)
+
+    // Now with the offsets at hand, it's relatively easy: We only need to find
+    // the cell in which the cursor is in, then see if there is a next one, and
+    // return a cursor that points to the start of the next cell.
+    const rowIndex = offsets.findIndex(cellOffsets => {
+      return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
+    })
+
+    if (rowIndex < 0 || rowIndex === offsets.length - 1) {
+      return undefined
+    } else {
+      const row = offsets[rowIndex]
+      const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
+      if (cellIndex < 0) {
+        return undefined
+      }
+
+      return EditorSelection.cursor(offsets[rowIndex + 1][cellIndex][0])
+    }
+  })
+    .filter(sel => sel !== undefined)
+
+  if (newSelections.length > 0) {
+    target.dispatch({ selection: EditorSelection.create(newSelections) })
+    return true
+  } else {
+    return false
+  }
 }
 
+/**
+ * This command takes all editor selections and moves those within tables to the
+ * previous row, same cell offset.
+ *
+ * @param   {EditorView}  target  The EditorView
+ *
+ * @return  {boolean}             Whether any movement has happened
+ */
 export function movePrevRow (target: EditorView): boolean {
-  return false
+  const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
+  const newSelections: SelectionRange[] = target.state.selection.ranges.map(range => {
+    // 1. Is this selection inside a table?
+    const table = tableNodes.find(node => node.from <= range.anchor && node.to >= range.anchor)
+    if (table === undefined) {
+      return undefined
+    }
+
+    const offsets = getTableCellOffsets(table, target.state.sliceDoc())
+
+    // Now with the offsets at hand, it's relatively easy: We only need to find
+    // the cell in which the cursor is in, then see if there is a next one, and
+    // return a cursor that points to the start of the next cell.
+    const rowIndex = offsets.findIndex(cellOffsets => {
+      return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
+    })
+
+    if (rowIndex <= 0) {
+      return undefined
+    } else {
+      const row = offsets[rowIndex]
+      const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
+      if (cellIndex < 0) {
+        return undefined
+      }
+
+      return EditorSelection.cursor(offsets[rowIndex - 1][cellIndex][0])
+    }
+  })
+    .filter(sel => sel !== undefined)
+
+  if (newSelections.length > 0) {
+    target.dispatch({ selection: EditorSelection.create(newSelections) })
+    return true
+  } else {
+    return false
+  }
 }
 
 export function swapNextCol (target: EditorView): boolean {
