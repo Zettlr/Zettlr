@@ -104,7 +104,7 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
   const globalOffset = node.from
 
   for (const [ lineOffset, line ] of tableLines) {
-    if (/^[+-]+$/.test(line)) {
+    if (/^[+=-]+$/.test(line)) {
       // The line is a simple separator for grid tables -> do nothing
       continue
     } else if (/^[|+:-]+$/.test(line)) {
