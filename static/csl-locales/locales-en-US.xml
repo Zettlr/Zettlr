@@ -685,7 +685,6 @@
     </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="author" form="verb">by</term>
     <term name="chair" form="verb">chaired by</term>
     <term name="collection-editor" form="verb">edited by</term>
     <term name="compiler" form="verb">compiled by</term>

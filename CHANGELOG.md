@@ -8,12 +8,23 @@
 - Dark mode folded header's ellipsis are now properly colored.
 - Copying plain links in the form `<http://www.example.com>` will now remove the
   angled brackets (#5285)
+- Reverted a change from 3.1.0 which altered the process of creating new files
+  in such a way that the "open directory" was no longer considered; now Zettlr
+  will again use the open directory if present, allowing users to quickly create
+  new files by selecting a folder first in the file manager (#5141)
+- Updated translations:
+  - `it-IT` (#5233)
+  - `zh-TW` (#5327)
+  - `nl-NL` (#5319)
+  - `ru-RU` (#5314)
 
 ## Under the Hood
 
-- Update Electron to `v31.3.0`
+- Update Electron to `v32.0.1`
+- Update Pandoc to `v3.3`
 - Switched to ESLint v9.x, thereby replacing the "old" `.eslintrc.json` config
   with what ESLint calls "flat" configs
+- Bumped various dependencies
 
 # 3.2.0
 
