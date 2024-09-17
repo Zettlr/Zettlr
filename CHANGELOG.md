@@ -1,4 +1,4 @@
-# Upcoming
+# 3.2.1
 
 ## GUI and Functionality
 
@@ -21,12 +21,10 @@
 
 ## Under the Hood
 
-- Update Electron to `v32.0.1`
-- Update Pandoc to `v3.3`
+- Update Electron to `v32.1.0`
+- Update Pandoc to `v3.4`
 - Switched to ESLint v9.x, thereby replacing the "old" `.eslintrc.json` config
   with what ESLint calls "flat" configs
-- The MainEditor component will now execute shortcuts also when the focused
-  element is anywhere within the EditorView instance
 - Bumped various dependencies
 
 # 3.2.0
