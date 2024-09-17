@@ -7,7 +7,8 @@
 
 ## Under the Hood
 
-(nothing here)
+- Images across the application now have a `max-width: 100%` applied to them to
+  ensure they never overflow their parent container.
 
 # 3.2.1
 
