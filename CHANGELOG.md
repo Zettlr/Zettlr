@@ -1,3 +1,13 @@
+# Upcoming
+
+## GUI and Functionality
+
+- Fixed the "Paste as Plain" menu item not working (#5052)
+
+## Under the Hood
+
+(nothing here)
+
 # 3.2.1
 
 ## GUI and Functionality
