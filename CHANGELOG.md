@@ -4,6 +4,8 @@
 
 - Fixed the "Paste as Plain" menu item not working (#5052)
 - Add Pascal syntax highlighting (keyword: `pascal`; #5368)
+- Fixed images in file previews on hovering internal file links not working
+  (#5041)
 
 ## Under the Hood
 
