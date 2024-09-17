@@ -45,6 +45,21 @@ interface HTMLTag {
   attributes: Array<[ string, string ]>
 }
 
+export type CitationCallback = (citations: CiteItem[], composite: boolean) => string|undefined
+
+export interface MD2HTMLCallbacks {
+  /**
+   * Can be used to hook into the image tag generation to alter the image's
+   * `src` attribute from the Markdown.
+   *
+   * @param   {string}  src  The link as it is written in the Markdown source.
+   *
+   * @return  {string}       Returns whatever should be taken as the `src`
+   *                         attribute for the resulting `<img>` tag.
+   */
+  onImageSrc: (src: string) => string
+}
+
 /**
  * Use this function to convert plain text contents to HTML entities before
  * converting an AST to HTML.
@@ -277,17 +292,17 @@ function getTagInfo (node: GenericNode): HTMLTag {
  *
  * @return  {string}                The HTML string
  */
-function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[], composite: boolean) => string|undefined, indent: number = 0): string {
+function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallback, hooks: Partial<MD2HTMLCallbacks>, indent: number = 0): string {
   // Convenience to convert a list of child nodes to HTML
   if (Array.isArray(node)) {
     const body: string[] = []
     for (const child of node) {
-      body.push(nodeToHTML(child, getCitation, indent))
+      body.push(nodeToHTML(child, getCitation, hooks, indent))
     }
     return body.join('')
   } else if (node.type === 'Generic' && node.name === 'Document') {
     // This ensures there's no outer div class=Document
-    return nodeToHTML(node.children, getCitation, indent)
+    return nodeToHTML(node.children, getCitation, hooks, indent)
   } else if (node.type === 'YAMLFrontmatter') {
     return '' // Frontmatters must be removed upon HTML export
   } else if (node.type === 'Citation') {
@@ -296,29 +311,31 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
   } else if (node.type === 'Footnote') {
     return `${node.whitespaceBefore}<a class="footnote" href="#fnref:${htmlEntities(node.label)}">${htmlEntities(node.label)}</a>`
   } else if (node.type === 'FootnoteRef') {
-    return `${node.whitespaceBefore}<div class="footnote-ref"><a name="fnref:${htmlEntities(node.label)}"></a>${nodeToHTML(node.children, getCitation, indent)}</div>`
+    return `${node.whitespaceBefore}<div class="footnote-ref"><a name="fnref:${htmlEntities(node.label)}"></a>${nodeToHTML(node.children, getCitation, hooks, indent)}</div>`
   } else if (node.type === 'Heading') {
     return `${node.whitespaceBefore}<h${node.level}>${htmlEntities(node.value.value)}</h${node.level}>`
   } else if (node.type === 'Highlight') {
-    return `${node.whitespaceBefore}<mark>${nodeToHTML(node.children, getCitation, indent)}</mark>`
+    return `${node.whitespaceBefore}<mark>${nodeToHTML(node.children, getCitation, hooks, indent)}</mark>`
   } else if (node.type === 'Superscript') {
-    return `${node.whitespaceBefore}<sup>${nodeToHTML(node.children, getCitation, indent)}</sup>`
+    return `${node.whitespaceBefore}<sup>${nodeToHTML(node.children, getCitation, hooks, indent)}</sup>`
   } else if (node.type === 'Subscript') {
-    return `${node.whitespaceBefore}<sub>${nodeToHTML(node.children, getCitation, indent)}</sub>`
+    return `${node.whitespaceBefore}<sub>${nodeToHTML(node.children, getCitation, hooks, indent)}</sub>`
   } else if (node.type === 'Image') {
-    return `${node.whitespaceBefore}<img src="${node.url}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
+    const src = hooks.onImageSrc !== undefined ? hooks.onImageSrc(node.url) : node.url
+    console.log(`Original Url is: ${node.url}. Converted is: ${src}`)
+    return `${node.whitespaceBefore}<img src="${src}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
   } else if (node.type === 'Link') {
     return `${node.whitespaceBefore}<a href="${node.url}" title="${node.title?.value ?? htmlEntities(node.url)}">${htmlEntities(node.alt.value)}</a>`
   } else if (node.type === 'OrderedList') {
     const startsAt = node.startsAt > 1 ? ` start="${node.startsAt}"` : ''
-    return `${node.whitespaceBefore}<ol${startsAt}>\n${nodeToHTML(node.items, getCitation, indent)}\n</ol>`
+    return `${node.whitespaceBefore}<ol${startsAt}>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ol>`
   } else if (node.type === 'BulletList') {
-    return `${node.whitespaceBefore}<ul>\n${nodeToHTML(node.items, getCitation, indent)}\n</ul>`
+    return `${node.whitespaceBefore}<ul>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ul>`
   } else if (node.type === 'ListItem') {
     const task = node.checked !== undefined ? `<input type="checkbox" disabled="disabled" ${node.checked ? 'checked="checked"' : ''}>` : ''
-    return `${node.whitespaceBefore}<li>${task}${nodeToHTML(node.children, getCitation, indent + 1)}</li>`
+    return `${node.whitespaceBefore}<li>${task}${nodeToHTML(node.children, getCitation, hooks, indent + 1)}</li>`
   } else if (node.type === 'Emphasis') {
-    const body = nodeToHTML(node.children, getCitation, indent)
+    const body = nodeToHTML(node.children, getCitation, hooks, indent)
 
     switch (node.which) {
       case 'bold':
@@ -331,7 +348,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
     for (const row of node.rows) {
       const cells: string[] = []
       for (const cell of row.cells) {
-        cells.push(nodeToHTML(cell.children, getCitation, indent))
+        cells.push(nodeToHTML(cell.children, getCitation, hooks, indent))
       }
       const tag = row.isHeaderOrFooter ? 'th' : 'td'
       const content = cells.map(c => `<${tag}>${c}</${tag}>`).join('\n')
@@ -367,7 +384,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
 
     const open = `${node.whitespaceBefore}<${tagInfo.tagName}${attr}${tagInfo.selfClosing ? '/' : ''}>`
     const close = tagInfo.selfClosing ? '' : `</${tagInfo.tagName}>`
-    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, getCitation)
+    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, getCitation, hooks)
     return `${open}${body}${close}`
   } else if (node.type === 'ZettelkastenLink') {
     // NOTE: We count a ZettelkastenLink's title as a TextNode for various
@@ -385,16 +402,17 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: (citations: CiteItem[
  * Takes Markdown source and turns it into a valid HTML fragment. The citeLibrary
  * will be used to resolve citations.
  *
- * @param   {string}    markdown       The Markdown source
- * @param   {Function}  getCitation    The citation callback to use
- * @param   {string}    zknLinkFormat  (Optional) The Wikilink format
+ * @param   {string}           markdown       The Markdown source
+ * @param   {Function}         getCitation    The citation callback to use
+ * @param   {string}           zknLinkFormat  (Optional) The Wikilink format
+ * @param   {MD2HTMLCallbacks} hooks          Any hooks that can be used to programmatically alter the produced HTML
  *
  * @return  {string}                   The resulting HTML
  */
-export function md2html (markdown: string, getCitation: (citations: CiteItem[], composite: boolean) => string|undefined, zknLinkFormat: 'link|title'|'title|link' = 'link|title'): string {
+export function md2html (markdown: string, getCitation: CitationCallback, zknLinkFormat: 'link|title'|'title|link' = 'link|title', hooks?: Partial<MD2HTMLCallbacks>): string {
   const config: MarkdownParserConfig = {
     zknLinkParserConfig: { format: zknLinkFormat }
   }
   const ast = markdownToAST(markdown, undefined, config)
-  return nodeToHTML(ast, getCitation)
+  return nodeToHTML(ast, getCitation, hooks ?? {})
 }
