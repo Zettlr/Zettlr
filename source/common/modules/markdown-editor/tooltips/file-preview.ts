@@ -22,6 +22,8 @@ import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import sanitizeHtml from 'sanitize-html'
 import { configField } from '../util/configuration'
 import type { FindFileAndReturnMetadataResult } from 'source/app/service-providers/commands/file-find-and-return-meta-data'
+import { pathDirname } from 'source/common/util/renderer-path-polyfill'
+import makeValidUri from 'source/common/util/make-valid-uri'
 
 const ipcRenderer = window.ipc
 
@@ -87,7 +89,26 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
 
   const content = document.createElement('div')
   content.classList.add('note-content')
-  const html = md2html(metadata.previewMarkdown, window.getCitationCallback(CITEPROC_MAIN_DB), zknLinkFormat)
+
+  // basePath is needed to convert any relative URLs into absolute ones
+  const basePath = pathDirname(metadata.filePath)
+  const html = md2html(
+    metadata.previewMarkdown,
+    window.getCitationCallback(CITEPROC_MAIN_DB),
+    zknLinkFormat,
+    {
+      // Convert the image links to absolute (if necessary)
+      onImageSrc (src) {
+        const isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(src)
+        if (isDataUrl) {
+          return src
+        } else {
+          return makeValidUri(src, basePath)
+        }
+      }
+    }
+  )
+
   content.innerHTML = sanitizeHtml(html, {
     // These options basically translate into: Allow nothing but bare metal tags
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
@@ -95,7 +116,7 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
     allowedIframeDomains: [],
     allowedIframeHostnames: [],
     allowedScriptDomains: [],
-    allowedSchemes: [],
+    allowedSchemes: sanitizeHtml.defaults.allowedSchemes.concat(['safe-file']),
     allowedScriptHostnames: [],
     allowVulnerableTags: false
   })
