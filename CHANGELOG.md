@@ -6,6 +6,7 @@
 - Add Pascal syntax highlighting (keyword: `pascal`; #5368)
 - Fixed images in file previews on hovering internal file links not working
   (#5041)
+- Fixed the tag search from the tag cloud popover (#5124)
 
 ## Under the Hood
 
