@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Fixed the "Paste as Plain" menu item not working (#5052)
+- Add Pascal syntax highlighting (keyword: `pascal`; #5368)
 
 ## Under the Hood
 
