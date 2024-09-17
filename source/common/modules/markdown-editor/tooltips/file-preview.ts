@@ -21,11 +21,9 @@ import formatDate from '@common/util/format-date'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import sanitizeHtml from 'sanitize-html'
 import { configField } from '../util/configuration'
+import type { FindFileAndReturnMetadataResult } from 'source/app/service-providers/commands/file-find-and-return-meta-data'
 
 const ipcRenderer = window.ipc
-
-// [ file.name, preview, file.wordCount, file.modtime ]
-type IpcResult = undefined|[string, string, number, number]
 
 // Previews files with tooltips
 async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1): Promise<Tooltip|null> {
@@ -44,7 +42,7 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
 
   const fileToDisplay = view.state.sliceDoc(contentNode.from, contentNode.to)
 
-  const res: IpcResult = await ipcRenderer.invoke(
+  const res: FindFileAndReturnMetadataResult|undefined = await ipcRenderer.invoke(
     'application',
     { command: 'file-find-and-return-meta-data', payload: fileToDisplay }
   )
@@ -73,22 +71,23 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
  * Generates the full wrapper element for displaying file information in a
  * tippy tooltip.
  *
- * @param   {string[]}  metadata      The note metadata
- * @param   {string}    linkContents  The link contents (used for navigation)
+ * @param   {FindFileAndReturnMetadataResult}  metadata      The note metadata
+ * @param   {string}                           linkContents  The link contents
+ *                                                        (used for navigation)
  *
- * @return  {Element}                 The wrapper element
+ * @return  {Element}                                        The wrapper element
  */
-function getPreviewElement (metadata: [string, string, number, number], linkContents: string, zknLinkFormat: 'link|title'|'title|link'): HTMLDivElement {
+function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkContents: string, zknLinkFormat: 'link|title'|'title|link'): HTMLDivElement {
   const wrapper = document.createElement('div')
   wrapper.classList.add('editor-note-preview')
 
   const title = document.createElement('p')
   title.classList.add('filename')
-  title.textContent = metadata[0]
+  title.textContent = metadata.title
 
   const content = document.createElement('div')
   content.classList.add('note-content')
-  const html = md2html(metadata[1], window.getCitationCallback(CITEPROC_MAIN_DB), zknLinkFormat)
+  const html = md2html(metadata.previewMarkdown, window.getCitationCallback(CITEPROC_MAIN_DB), zknLinkFormat)
   content.innerHTML = sanitizeHtml(html, {
     // These options basically translate into: Allow nothing but bare metal tags
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
@@ -103,9 +102,9 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
 
   const meta = document.createElement('div')
   meta.classList.add('metadata')
-  meta.innerHTML = `${trans('Word count')}: ${metadata[2]}`
+  meta.innerHTML = `${trans('Word count')}: ${metadata.wordCount}`
   meta.innerHTML += '<br>'
-  meta.innerHTML += `${trans('Modified')}: ${formatDate(metadata[3], window.config.get('appLang'))}`
+  meta.innerHTML += `${trans('Modified')}: ${formatDate(metadata.modtime, window.config.get('appLang'))}`
 
   const actions = document.createElement('div')
   actions.classList.add('actions')
