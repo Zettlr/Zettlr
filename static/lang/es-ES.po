@@ -36,17 +36,17 @@ msgstr "Acciones"
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:108
 #, fuzzy
 msgid "Delete"
-msgstr "Eliminar archivo"
+msgstr "Eliminar"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
 #, fuzzy
 msgid "Select folder…"
-msgstr "Abrir carpeta de proyectos"
+msgstr "Seleccionar carpeta…"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
 #, fuzzy
 msgid "Select file…"
-msgstr "Eliminar archivo"
+msgstr "Seleccionar archivo"
 
 #. Prepare the list of file filters
 #. The "All Files" filter should be at the top
@@ -65,15 +65,15 @@ msgstr "Acerca de Zettlr"
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
-msgstr ""
+msgstr "Otros proyectos"
 
 #: source/tmp/win-about/App.vue.ts:47
 msgid "Sponsors"
-msgstr ""
+msgstr "Patrocinadores"
 
 #: source/tmp/win-about/App.vue.ts:53
 msgid "License"
-msgstr ""
+msgstr "Licencia"
 
 #: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
@@ -83,11 +83,11 @@ msgid ""
 "and the CodeMirror editor for their work. Without them, Zettlr would not be "
 "possible. Below you can find all projects that Zettlr uses."
 msgstr ""
-"Zettlr es un proyecto de Hendrik Erz, licenciado bajo la licencia GNU GPL "
-"v3. Es de código abierto, gratuito y basado en el framework de Electron. "
-"Zettlr agradece a los desarrolladores de Electron, del framework Node.js y "
-"del editor CodeMirror por su trabajo. Sin ellos, Zettlr no sería posible. "
-"Abajo puedes encontrar todos los proyectos que Zettlr utiliza"
+"Zettlr es un proyecto de Hendrik Erz, licenciado bajo la licencia GNU GPL v3."
+"Es de código abierto, gratuito y está basado en el framework Electron."
+"Zettlr quisiera agradecer a los desarrolladores de Electron, el framework Node.js "
+"y el editor CodeMirror por su trabajo. Sin ellos, Zettlr no sería posible. "
+"A continuación, puedes encontrar todos los proyectos que Zettlr utiliza."
 
 #: source/tmp/win-about/General-Tab.vue.ts:22
 msgid ""
@@ -96,10 +96,10 @@ msgid ""
 "files. The files have been shipped unaltered with author metadata. More "
 "information:"
 msgstr ""
-"Zettlr utiliza citeproc para mostrar las citas directamente en el editor. "
-"Para ello, Zettlr utiliza los archivos de lenguaje y estilo "
-"CitationStyleLanguage (CSL). Los archivos se han enviado sin alterar con "
-"metadatos de autor. Más información:"
+"Zettlr utiliza citeproc para mostrar citas directamente en el editor. Para "
+"este fin, Zettlr usa los archivos de lenguaje y estilo CitationStyleLanguage (CSL). "
+"Los archivos se han incluido sin alteraciones con metadatos de autor. Más "
+"información:"
 
 #: source/tmp/win-about/General-Tab.vue.ts:23
 msgid ""
@@ -107,9 +107,9 @@ msgid ""
 "using their code, Zettlr is in no way affiliated with any of these projects. "
 "Node.js is a trademark of Joyent, Inc."
 msgstr ""
-"Todos los logotipos y marcas están sujetos a sus legítimos propietarios. "
-"Además de usar su código, Zettlr no está de ninguna manera afiliado a "
-"ninguno de estos proyectos. Node.js es una marca registrada de Joyent, Inc."
+"Todos los logotipos y nombres de marcas están sujetos a sus respectivos propietarios. Además "
+"de usar su código, Zettlr no está de ninguna manera afiliado a ninguno de estos proyectos. "
+"Node.js es una marca registrada de Joyent, Inc."
 
 #: source/tmp/win-about/General-Tab.vue.ts:24
 msgid ""
@@ -118,10 +118,14 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr ofrece una integración con LanguageTool.org, un servicio proporcionado por "
+"LanguageTooler GmbH. Usar este servicio requiere una conexión a Internet y "
+"está sujeto a la política de privacidad de LanguageTooler GmbH o del servidor correspondiente "
+"que utilices."
 
 #: source/tmp/win-about/Projects-Tab.vue.ts:19
 msgid "Zettlr also makes use of these projects:"
-msgstr "Zettlr también hace uso de los siguientes proyectos:"
+msgstr "Zettlr también utiliza estos proyectos:"
 
 #: source/tmp/win-print/App.vue.ts:44 source/tmp/win-print/App.vue.ts:45
 #: source/app/service-providers/menu/menu.darwin.ts:248
@@ -132,16 +136,16 @@ msgstr "Imprimir...."
 #: source/tmp/win-main/PopoverExport.vue.ts:61
 #, fuzzy
 msgid "Exporting…"
-msgstr "Exportar..."
+msgstr "Exportando…"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:61
 #, fuzzy
 msgid "Export"
-msgstr "Exportar..."
+msgstr "Exportar"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:74
 msgid "command"
-msgstr ""
+msgstr "comando"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:24
 #: source/win-preferences/schema/appearance.ts:52
@@ -166,29 +170,29 @@ msgstr "Descanso"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:29
 msgid "Sound Effect"
-msgstr ""
+msgstr "Efecto de sonido"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:30
 msgid "Volume"
-msgstr ""
+msgstr "Volumen"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:39
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:40
 #: source/tmp/win-tag-manager/App.vue.ts:31
 msgid "Count"
-msgstr ""
+msgstr "Contar"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:47
 #: source/tmp/win-tag-manager/App.vue.ts:35
 msgid "Filter tags…"
-msgstr "Filtrar tags..."
+msgstr "Filtrar etiquetas…"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:48
 msgid "Tag Cloud"
-msgstr "Nube de Tags (etiquetas)"
+msgstr "Nube de etiquetas (Tags)"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:21
 msgid "words"
@@ -196,7 +200,7 @@ msgstr "palabras"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:22
 msgid "characters"
-msgstr "caracteres"
+msgstr "carácteres"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:23
 msgid "No open document"
@@ -209,7 +213,7 @@ msgstr "No hay ningún documento abierto"
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
 #, javascript-format
 msgid "%s characters"
-msgstr "Caracteres %"
+msgstr "%s caracteres"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:53
 #: source/tmp/win-main/App.vue.ts:227
@@ -225,21 +229,21 @@ msgstr "%s palabras"
 #: source/tmp/win-main/App.vue.ts:212
 #, javascript-format
 msgid "%s selected"
-msgstr ""
+msgstr "%s seleccionado(s)"
 
 #. Multiple selections --> indicate
 #: source/tmp/win-main/App.vue.ts:221
 #, javascript-format
 msgid "%s selections"
-msgstr ""
+msgstr "%s selecciones"
 
 #: source/tmp/win-main/App.vue.ts:242
 msgid "File manager"
-msgstr ""
+msgstr "Administrador de archivos"
 
 #: source/tmp/win-main/App.vue.ts:247
 msgid "Global search"
-msgstr ""
+msgstr "Búsqueda global"
 
 #: source/tmp/win-main/App.vue.ts:255
 #: source/app/service-providers/menu/menu.darwin.ts:174
@@ -249,22 +253,22 @@ msgstr "Abrir área de trabajo..."
 
 #: source/tmp/win-main/App.vue.ts:261
 msgid "View stats"
-msgstr ""
+msgstr "Ver estadísticas"
 
 #: source/tmp/win-main/App.vue.ts:267
 msgid "Tags"
-msgstr ""
+msgstr "Etiquetas"
 
 #: source/tmp/win-main/App.vue.ts:274
 msgid "Open the settings dialog"
-msgstr ""
+msgstr "Abrir el diálogo de configuración"
 
 #: source/tmp/win-main/App.vue.ts:281
 #: source/win-main/file-manager/util/dir-item-context.ts:37
 #: source/app/service-providers/menu/menu.darwin.ts:116
 #: source/app/service-providers/menu/menu.win32.ts:90
 msgid "New File…"
-msgstr "Archivo nuevo..."
+msgstr "Nuevo archivo…"
 
 #: source/tmp/win-main/App.vue.ts:288
 #: source/app/service-providers/menu/menu.darwin.ts:207
@@ -280,11 +284,11 @@ msgstr "Siguiente archivo"
 
 #: source/tmp/win-main/App.vue.ts:309
 msgid "Export the current file"
-msgstr ""
+msgstr "Exportar el archivo actual"
 
 #: source/tmp/win-main/App.vue.ts:315
 msgid "Toggle readability mode"
-msgstr ""
+msgstr "Alternar modo de legibilidad"
 
 #: source/tmp/win-main/App.vue.ts:327
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
@@ -303,7 +307,7 @@ msgstr "Imagen"
 
 #: source/tmp/win-main/App.vue.ts:348
 msgid "Tasklist"
-msgstr ""
+msgstr "Lista de tareas"
 
 #: source/tmp/win-main/App.vue.ts:355
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
@@ -312,11 +316,11 @@ msgstr "Insertar tabla"
 
 #: source/tmp/win-main/App.vue.ts:362
 msgid "Footnote"
-msgstr ""
+msgstr "Nota de pie de página"
 
 #: source/tmp/win-main/App.vue.ts:380
 msgid "Pomodoro-Timer"
-msgstr ""
+msgstr "Temporizador Pomodoro"
 
 #: source/tmp/win-main/App.vue.ts:389
 #: source/app/service-providers/menu/menu.darwin.ts:486
@@ -326,7 +330,7 @@ msgstr "Activar barra lateral"
 
 #: source/tmp/win-main/App.vue.ts:396
 msgid "Update available"
-msgstr ""
+msgstr "Actualización disponible"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:34
 msgid "Full-Text Search"
@@ -347,7 +351,7 @@ msgstr "Filtra ..."
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:38
 msgid "Filter search results"
-msgstr "Filtra los resultados"
+msgstr "Filtrar los resultados"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:39
 msgid "Restrict search to directory"
@@ -378,7 +382,7 @@ msgstr "Abrir en una pestaña nueva"
 #: source/tmp/win-main/GlobalSearch.vue.ts:112
 #, javascript-format
 msgid "%s matches across %s files"
-msgstr ""
+msgstr "%s coincidencias en %s archivos"
 
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:34
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:174
@@ -481,7 +485,7 @@ msgstr "Más estadísticas..."
 #: source/tmp/win-main/PopoverTable.vue.ts:30
 #, javascript-format
 msgid "Table size: %s &times; %s"
-msgstr ""
+msgstr "Tamaño de la tabla: %s × %s"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:13
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
@@ -490,7 +494,7 @@ msgstr "Otros archivos"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:14
 msgid "Open directory"
-msgstr "Abrir carpeta"
+msgstr "Abrir directorio"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:15
 msgid "No other files"
@@ -498,7 +502,7 @@ msgstr "No hay otros archivos"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:34
 msgid "Current folder"
-msgstr ""
+msgstr "Carpeta actual"
 
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:32
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
@@ -522,24 +526,24 @@ msgstr "Archivos relacionados"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
 msgid "No related files"
-msgstr "Archivos no relacionados"
+msgstr "Sin archivos relacionados"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Esta relación se basa en un enlace bidireccional."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Esta relación se basa en un enlace saliente."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Esta relación se basa en un enlace de retroceso."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Esta relación se basa en %s etiquetas compartidas: %s"
 
 #. STATIC VARIABLES
 #: source/tmp/win-stats/CalendarView.vue.ts:26
@@ -549,31 +553,31 @@ msgstr "Calendario"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:28
 msgid "January"
-msgstr "enero"
+msgstr "Enero"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "February"
-msgstr "febrero"
+msgstr "Febrero"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:30
 msgid "March"
-msgstr "marzo"
+msgstr "Marzo"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:31
 msgid "April"
-msgstr "abril"
+msgstr "Abril"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:32
 msgid "May"
-msgstr "mayo"
+msgstr "Mayo"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:33
 msgid "June"
-msgstr "junio"
+msgstr "Junio"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:34
 msgid "July"
-msgstr "julio"
+msgstr "Julio"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:35
 msgid "August"
@@ -581,19 +585,19 @@ msgstr "Agosto"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:36
 msgid "September"
-msgstr "septiembre"
+msgstr "Septiembre"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:37
 msgid "October"
-msgstr "octubre"
+msgstr "Octubre"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:38
 msgid "November"
-msgstr "noviembre"
+msgstr "Noviembre"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:39
 msgid "December"
-msgstr "diciembre"
+msgstr "Diciembre"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:41
 msgid "Below the monthly average"
@@ -614,55 +618,55 @@ msgstr "Gráficos"
 
 #: source/tmp/win-stats/App.vue.ts:39
 msgid "FSAL Stats"
-msgstr ""
+msgstr "Estadísticas FSAL"
 
 #: source/tmp/win-stats/App.vue.ts:58
 msgid "Writing statistics"
-msgstr ""
+msgstr "Estadísticas de escritura"
 
 #: source/tmp/win-project-properties/App.vue.ts:37
 msgid "Export project to:"
-msgstr ""
+msgstr "Exportar proyecto a:"
 
 #: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Use"
-msgstr ""
+msgstr "Usar"
 
 #: source/tmp/win-project-properties/App.vue.ts:39
 msgid "Format"
-msgstr ""
+msgstr "Formatear"
 
 #: source/tmp/win-project-properties/App.vue.ts:40
 msgid "Conversion"
-msgstr ""
+msgstr "Conversión"
 
 #: source/tmp/win-project-properties/App.vue.ts:41
 msgid "Files to be included in the export"
-msgstr ""
+msgstr "Archivos a incluir en la exportación"
 
 #: source/tmp/win-project-properties/App.vue.ts:42
 msgid "Please select at least one profile to build this project."
-msgstr ""
+msgstr "Por favor, selecciona al menos un perfil para crear este proyecto."
 
 #: source/tmp/win-project-properties/App.vue.ts:43
 msgid "Project Title"
-msgstr ""
+msgstr "Título del proyecto"
 
 #: source/tmp/win-project-properties/App.vue.ts:44
 msgid "CSL Stylesheet"
-msgstr ""
+msgstr "Hoja de estilo CSL"
 
 #: source/tmp/win-project-properties/App.vue.ts:45
 msgid "LaTeX Template"
-msgstr ""
+msgstr "Plantilla LaTeX"
 
 #: source/tmp/win-project-properties/App.vue.ts:46
 msgid "HTML Template"
-msgstr ""
+msgstr "Plantilla HTML"
 
 #: source/tmp/win-project-properties/App.vue.ts:47
 msgid "Remove file from export"
-msgstr ""
+msgstr "Eliminar archivo de la exportación"
 
 #: source/tmp/win-project-properties/App.vue.ts:48
 msgid "Add file to export"
@@ -670,15 +674,15 @@ msgstr ""
 
 #: source/tmp/win-project-properties/App.vue.ts:49
 msgid "Move file up"
-msgstr ""
+msgstr "Mover archivo hacia arriba"
 
 #: source/tmp/win-project-properties/App.vue.ts:50
 msgid "Move file down"
-msgstr ""
+msgstr "Mover archivo hacia abajo"
 
 #: source/tmp/win-project-properties/App.vue.ts:51
 msgid "You have not selected any files for export."
-msgstr ""
+msgstr "No has seleccionado ningun archivo para exportar."
 
 #: source/tmp/win-project-properties/App.vue.ts:52
 msgid ""
@@ -688,7 +692,7 @@ msgstr ""
 #: source/tmp/win-project-properties/App.vue.ts:73
 #: source/tmp/win-preferences/App.vue.ts:134
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: source/tmp/win-update/App.vue.ts:31
 msgid "Updater"
@@ -759,11 +763,11 @@ msgstr "Gestor de recursos"
 
 #: source/tmp/win-assets/App.vue.ts:21
 msgid "Exporting"
-msgstr ""
+msgstr "Exportando"
 
 #: source/tmp/win-assets/App.vue.ts:27
 msgid "Importing"
-msgstr ""
+msgstr "Importando"
 
 #: source/tmp/win-assets/App.vue.ts:33
 #: source/win-preferences/schema/appearance.ts:219
@@ -1755,7 +1759,7 @@ msgstr "Copiar ruta completa"
 #: source/app/service-providers/documents/index.ts:343
 #, fuzzy
 msgid "Save changes"
-msgstr "Cambios no guardados"
+msgstr "Guardar cambios"
 
 #: source/app/service-providers/documents/index.ts:344
 #, fuzzy
