@@ -91,7 +91,7 @@
 import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, computed, ref, watch, onMounted, onBeforeUnmount, onUpdated } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
 import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
 
@@ -115,7 +115,6 @@ const documentTabDragOverOrigin = ref<boolean>(false)
 
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
-const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
 
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
@@ -139,6 +138,10 @@ watch(activeFile, () => {
 onMounted(() => {
   // Listen for shortcuts so that we can switch tabs programmatically
   ipcRenderer.on('shortcut', (event, shortcut) => {
+    if (documentTreeStore.lastLeafId !== props.leafId) {
+      return // Doesn't apply to this pane
+    }
+
     const currentIdx = openFiles.value.findIndex(elem => activeFile.value !== null && elem.path === activeFile.value.path)
     if (shortcut === 'previous-tab') {
       if (currentIdx > 0) {

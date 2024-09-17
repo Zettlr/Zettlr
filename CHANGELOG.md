@@ -8,6 +8,8 @@
   (#5041)
 - Fixed the tag search from the tag cloud popover (#5124)
 - Fixed visual artifacts in the backgrounds for code blocks and comments (#5260)
+- Fixed a bug that would apply certain shortcuts to all open editor panes,
+  rather than the last focused one (#5282)
 
 ## Under the Hood
 
