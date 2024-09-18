@@ -242,7 +242,7 @@ interface CSLKernelConfig {
 /**
  * The actual intantiated CSL kernel configuration
  */
-interface CSLKernel extends CSLKernelConfig {}
+type CSLKernel = CSLKernelConfig
 
 declare module 'citeproc' {
   export class Engine {
