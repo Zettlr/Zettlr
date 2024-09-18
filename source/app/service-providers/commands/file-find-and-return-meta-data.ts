@@ -26,6 +26,14 @@ function previewTitleGenerator (userConfig: string, descriptor: MDFileDescriptor
   return descriptor.name
 }
 
+export interface FindFileAndReturnMetadataResult {
+  title: string
+  filePath: string
+  previewMarkdown: string
+  wordCount: number
+  modtime: number
+}
+
 export default class FilePathFindMetaData extends ZettlrCommand {
   constructor (app: any) {
     super(app, [ 'find-exact', 'file-find-and-return-meta-data' ])
@@ -41,7 +49,7 @@ export default class FilePathFindMetaData extends ZettlrCommand {
    *
    * @return  {MDFileDescriptor|undefined|string[]} Returns a MetaDescriptor, undefined, or an array
    */
-  async run (evt: string, arg: any): Promise<MDFileDescriptor|undefined|any[]> {
+  async run (evt: string, arg: any): Promise<MDFileDescriptor|undefined|FindFileAndReturnMetadataResult> {
     // Quick'n'dirty command to return the Meta descriptor for the given query
     const descriptor = this._app.workspaces.findExact(arg)
     if (descriptor === undefined) {
@@ -69,11 +77,12 @@ export default class FilePathFindMetaData extends ZettlrCommand {
       i++
     }
 
-    return [
-      previewTitleGenerator(this._app.config.get().fileNameDisplay, descriptor),
-      preview,
-      descriptor.wordCount,
-      descriptor.modtime
-    ]
+    return {
+      title: previewTitleGenerator(this._app.config.get().fileNameDisplay, descriptor),
+      filePath: descriptor.path,
+      previewMarkdown: preview,
+      wordCount: descriptor.wordCount,
+      modtime: descriptor.modtime
+    }
   }
 }

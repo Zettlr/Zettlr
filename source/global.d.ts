@@ -88,7 +88,7 @@ declare const __GIT_COMMIT_HASH__: string
  * NOTE: Most service providers define these interfaces in the corresponding
  * types files in ./source/app/service-providers/assets
  */
-declare module global {
+declare namespace global {
   // Translation data necessary to facilitate internationalisation
   var i18n: any
   var i18nRawData: any

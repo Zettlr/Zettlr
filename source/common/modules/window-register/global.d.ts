@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-declare module NodeJS {
+declare namespace NodeJS {
   interface Global {
     config: any
   }

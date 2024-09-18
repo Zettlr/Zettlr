@@ -65,6 +65,7 @@ import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
 import { diff } from '@codemirror/legacy-modes/mode/diff'
 import { octave } from '@codemirror/legacy-modes/mode/octave'
 import { lua } from '@codemirror/legacy-modes/mode/lua'
+import { pascal } from '@codemirror/legacy-modes/mode/pascal'
 
 // Additional parser
 import { citationParser } from './citation-parser'
@@ -116,6 +117,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(lua), selectors: ['lua'] },
   { mode: StreamLanguage.define(objectiveC), selectors: [ 'objective-c', 'objectivec', 'objc' ] },
   { mode: StreamLanguage.define(octave), selectors: ['octave'] },
+  { mode: StreamLanguage.define(pascal), selectors: ['pascal'] },
   { mode: StreamLanguage.define(perl), selectors: [ 'perl', 'pl' ] },
   { mode: StreamLanguage.define(powerShell), selectors: ['powershell'] },
   { mode: StreamLanguage.define(r), selectors: ['r'] },
