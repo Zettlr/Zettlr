@@ -41,14 +41,10 @@ class ImageWidget extends WidgetType {
 
     const decodedUrl = this.imageUrl
 
-    let isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(decodedUrl)
-    let actualURLToLoad = decodedUrl
     const absPath = view.state.field(configField).metadata.path
     const basePath = pathDirname(absPath)
-
-    if (!isDataUrl) {
-      actualURLToLoad = makeValidUri(actualURLToLoad, basePath)
-    }
+    let isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(decodedUrl)
+    const actualURLToLoad = isDataUrl ? decodedUrl : makeValidUri(decodedUrl, basePath)
 
     img.src = actualURLToLoad
 

@@ -262,7 +262,7 @@ jobs:
     env:
       npm_config_arch: x64
     needs: [preflight, verify_version]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Checkout branch ${{ github.ref_name }}
@@ -304,7 +304,7 @@ jobs:
       CC: zig cc -target aarch64-linux-gnu
       CXX: zig c++ -target aarch64-linux-gnu
     needs: [preflight, verify_version]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout branch ${{ github.ref_name }}
         uses: actions/checkout@v4

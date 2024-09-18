@@ -139,6 +139,8 @@ ipcRenderer.on('shortcut', (event, command) => {
     currentEditor.hasTypewriterMode = !currentEditor.hasTypewriterMode
   } else if (command === 'copy-as-html') {
     currentEditor.copyAsHTML()
+  } else if (command === 'paste-as-plain') {
+    currentEditor.pasteAsPlainText()
   }
 })
 

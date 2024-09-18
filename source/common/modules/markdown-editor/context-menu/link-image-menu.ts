@@ -19,6 +19,7 @@ import showPopupMenu from '@common/modules/window-register/application-menu-help
 import { type AnyMenuItem } from '@dts/renderer/context'
 import { type SyntaxNode } from '@lezer/common'
 import openMarkdownLink from '../util/open-markdown-link'
+import { removeMarkdownLink } from '../util/remove-markdown-link'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 import makeValidUri from 'source/common/util/make-valid-uri'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
@@ -87,6 +88,12 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
       enabled: true,
       type: 'normal',
       label: (url.indexOf('mailto:') === 0) ? trans('Copy Mail Address') : trans('Copy Link')
+    },
+    {
+      id: 'menu.remove_link',
+      enabled: true,
+      type: 'normal',
+      label: trans('Remove Link')
     }
   ]
 
@@ -117,7 +124,8 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
 
   showPopupMenu(coords, isLink ? linkTpl : imgTpl, (clickedID) => {
     if (clickedID === 'menu.copy_link') {
-      navigator.clipboard.writeText(url).catch(err => console.error(err))
+      const sanitizedUrl = url.replace(/^<|>$/g, '') // Remove markdown characters
+      navigator.clipboard.writeText(sanitizedUrl).catch(err => console.error(err))
     } else if (clickedID === 'menu.open_link') {
       openMarkdownLink(url, view)
     } else if (clickedID === 'show-img-in-folder') {
@@ -127,6 +135,14 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
       })
     } else if (clickedID === 'open-img-in-browser') {
       window.location.href = validAbsoluteURI
+    } else if (clickedID === 'menu.remove_link') {
+      if (node.type.name === 'URL' && node.parent?.type.name === 'Link') {
+        // Handles when user clicks on (url) node in the [text](url) type link
+        removeMarkdownLink(node.parent, view)
+      } else {
+        // Handles when user clicks on [text] part of [text](url) type link or <url> part of <url> type link
+        removeMarkdownLink(node, view)
+      }
     }
   })
 }

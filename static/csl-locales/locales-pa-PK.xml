@@ -440,7 +440,6 @@
     </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="author" form="verb">بقلم</term>
     <term name="chair" form="verb">چیر نال</term>
     <term name="collection-editor" form="verb">سودھی نال</term>
     <term name="compiler" form="verb">مرتب نال</term>

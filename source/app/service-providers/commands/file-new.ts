@@ -61,23 +61,34 @@ export default class FileNew extends ZettlrCommand {
       return
     }
 
+    // Assume there is no directory we could salvage, so choose the documents
+    // directory, but (by setting isFallbackDir to true) allow the user to
+    // change it.
     let dirpath = app.getPath('documents')
-    let isFallbackDir = false
+    const { openDirectory } = this._app.config.get()
+    let isFallbackDir = true
     if (typeof arg.path === 'string' && await this._app.fsal.isDir(arg.path)) {
+      // Explicitly provided directory
       dirpath = arg.path
-    } else {
-      // There is no directory we could salvage, so choose a default one: the
-      // documents directory. Displaying the file choosing dialog should never
-      // fail because we can't decide on a directory.
-      isFallbackDir = true
+      isFallbackDir = false
+    } else if (openDirectory !== null && await this._app.fsal.isDir(openDirectory)) {
+      // Choose the openDirectory
+      dirpath = openDirectory
+      isFallbackDir = false
     }
 
     // Make sure we have a filename and have the user confirm this if applicable
     // Also, if the user does not want to be prompted BUT we had to use the
     // fallback directory, we should also prompt the user as otherwise it would
     // be opaque to the user where the notes end up in.
-    if ((arg.name === undefined && !newFileDontPrompt) || (newFileDontPrompt && isFallbackDir)) {
-      // The user wishes to confirm the filename
+    if (
+      // No name provided, but the user does not want an auto-generated name
+      (arg.name === undefined && !newFileDontPrompt) ||
+      // The user does not wish to provide a filename, but we've had to revert
+      // to a fallback directory
+      (newFileDontPrompt && isFallbackDir)
+    ) {
+      // The user wishes/needs to confirm the filename and/or the directory
       const chosenPath = await this._app.windows.saveFile(path.join(dirpath, generatedName))
       if (chosenPath === undefined) {
         this._app.log.info('Did not create new file since the dialog was aborted.')

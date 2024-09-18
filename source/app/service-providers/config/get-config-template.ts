@@ -35,6 +35,10 @@ export interface ConfigOptions {
     currentSidebarTab: 'toc'|'references'|'relatedFiles'|'attachments'
     recentGlobalSearches: string[]
   }
+  ui: {
+    fileManagerSplitSize: [number, number]
+    editorSidebarSplitSize: [number, number]
+  }
   attachmentExtensions: string[]
   darkMode: boolean
   alwaysReloadFiles: boolean
@@ -213,6 +217,10 @@ export function getConfigTemplate (): ConfigOptions {
       sidebarVisible: false,
       currentSidebarTab: 'toc',
       recentGlobalSearches: []
+    },
+    ui: {
+      fileManagerSplitSize: [ 20, 80 ],
+      editorSidebarSplitSize: [ 80, 20 ]
     },
     // Visible attachment filetypes
     attachmentExtensions: ATTACHMENT_EXTENSIONS,

@@ -1,38 +1,126 @@
 # Upcoming
 
-## GUI and Functionality
-
 ## Changes to Pandoc Profiles
 
-This update fixes a workaround that Zettlr had in place for a shortcoming of Pandoc regarding
-the automatic numbering of headings. This workaround is no longer necessary, since Pandoc has
-since fixed the issue. 
+This update fixes a workaround that Zettlr had in place for a shortcoming of
+Pandoc regarding the automatic numbering of headings. This workaround is no
+longer necessary, since Pandoc has since fixed the issue. 
 
-From this version onward, Zettlr will ship with changed default
-profiles for various export formats. Since Zettlr never overwrites any data, the new defaults
-will not be applied automatically.
+Zettlr now ships with changed default profiles for various export formats. Since
+Zettlr never overwrites any data, the new defaults will not be applied
+automatically. You can apply the change manually by removing the following line
+from the default profiles: `shift-heading-level-by: 1`.
 
-You can activate these changes in two ways:
+## GUI and Functionality
 
-* Regenerate profiles: In case you did not modify one of these profiles or are fine with resetting your changes, you can just delete them. This will prompt Zettlr to immediately recreate them – but now with the new settings.
-* Backup changed profiles and regenerate: In case you did modify them and want to keep your changes, rename the file to something else – Zettlr will then recreate the profile with the new default settings.
-
-You can also manually adapt them by removing the following line: `shift-heading-level-by: 1`.
-
-The following profiles are affected by this change:
-
-* HTML
-* LaTex
-* Microsoft Word
-* Open Document Text
-* Plain Text
-* Reveal.js
-* Rich Text Format
-* XeLaTeX PDF
+- **change**: Remove `shift-heading-level-by: 1` line from default profiles
+- Fixed the "Paste as Plain" menu item not working (#5052)
+- Add Pascal syntax highlighting (keyword: `pascal`; #5368)
+- Fixed images in file previews on hovering internal file links not working
+  (#5041)
+- Fixed the tag search from the tag cloud popover (#5124)
+- Fixed visual artifacts in the backgrounds for code blocks and comments (#5260)
+- Fixed a bug that would apply certain shortcuts to all open editor panes,
+  rather than the last focused one (#5282)
+- The save changes dialog now offers a cancel option that will be chosen when
+  pressing Escape (#5338)
+- Updated translation for `es-ES` (#5372)
 
 ## Under the Hood
 
-(Nothing here)
+- Images across the application now have a `max-width: 100%` applied to them to
+  ensure they never overflow their parent container.
+- The `md2html` utility function now allows a fourth parameter containing hooks
+  that allow the further customization of the produced HTML output
+- Bumped CodeMirror and dependencies
+- Bumped ESLint and dependencies
+- Fixed HTML DOM structure in a few places where they would violate the spec
+
+# 3.2.1
+
+## GUI and Functionality
+
+- Zettlr now remembers the widths of file manager and sidebar
+- You can now reset the file manager and sidebar widths by double-clicking the
+  corresponding resizer
+- Copying plain links in the form `<http://www.example.com>` will now remove the
+  angled brackets (#5285)
+- Reverted a change from 3.1.0 which altered the process of creating new files
+  in such a way that the "open directory" was no longer considered; now Zettlr
+  will again use the open directory if present, allowing users to quickly create
+  new files by selecting a folder first in the file manager (#5141)
+- Updated translations:
+  - `it-IT` (#5233)
+  - `zh-TW` (#5327)
+  - `nl-NL` (#5319)
+  - `ru-RU` (#5314)
+
+## Under the Hood
+
+- Update Electron to `v32.1.0`
+- Update Pandoc to `v3.4`
+- Switched to ESLint v9.x, thereby replacing the "old" `.eslintrc.json` config
+  with what ESLint calls "flat" configs
+- Bumped various dependencies
+
+# 3.2.0
+
+## Resolved Data Loss Issues
+
+When Zettlr v3.0.0 was released, we started receiving reports by users
+mentioning that some files wouldn't properly save, potentially leading to data
+loss. After searching for the underlying root cause, we have now identified it
+as improper newline handling in files. Specifically, we have accidentally
+introduced a bug that would render Zettlr incapable of properly detecting
+Windows-style CRLF newlines. This means that Zettlr was only sometimes able to
+properly read and modify such files.
+
+This update fixes this bug. Now, Zettlr is able to properly read and modify any
+file, regardless of whether it has been created on Windows, macOS, Linux, or
+even some older systems. We would like to apologize for this bug and thank you
+for sticking with Zettlr despite it.
+
+## Changes to the file filtering logic
+
+The filter field in the file manager has always applied OR-logic when searching
+for files and workspaces. In this latest update, Zettlr changes to AND file
+filtering logic, meaning that only items matching all queries will be displayed
+when entering phrases separated by spaces.
+
+As an example: Until now, searching for "Niklas Luhmann" would've surfaced files
+that contained either "Niklas" or "Luhmann," or both. From now on, searching for
+"Niklas Luhmann" will only show files that contain *both* "Niklas" *and*
+"Luhmann" and exclude files that miss one of these phrases.
+
+## GUI and Functionality
+
+- **Feature**: The attachment/assets/other file sidebar tab now also shows files
+  found in the default image folder where applicable
+- **Feature**: The right-click context menu for external markdown links now 
+  contains an option to remove a link. When removing `<link>` style links, the
+  `link` text remains as plain text. When removing `[title](link)` style links, 
+  the `title` text remains as plain text.
+- **Change**: When searching for files in the filter field, only files and
+  workspaces that match all queries entered will be displayed
+- Fixed the French translation of unsaved-changes dialog actions. (#5177)
+- Fixed bugs with properly saving files (and retaining linefeeds) on Windows
+  systems; now Zettlr should be capable of handling any type of linefeed (#5109)
+- Fixed an issue where checkboxes in various list controls would not be properly
+  updated to reflect the actual, underlying value
+- Fix assets file icons in the sidebar
+- Design fixes in the sidebar
+- Fix: The file preview tooltip now respects the filename display settings
+- Fix: Focus input field when search in folder (global search) is
+  triggered
+
+## Under the Hood
+
+- Upgrade Electron to `v30.1.0` (cf. issue #5135 and Electron issue #41839)
+- Downgrade Linux builds to use Ubuntu 20.04 instead of 22.04 (#5137)
+- Fully abstract away newline handling from the internal logic. Now, newlines
+  are always `\n` across the entire app. The actual newlines from the files will
+  be stored in their respective file descriptor, and will be exclusively used on
+  file reads (to replace them with `\n`) and file writes (to replace `\n` with)
 
 # 3.1.1
 

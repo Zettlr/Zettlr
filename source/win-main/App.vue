@@ -12,9 +12,11 @@
   >
     <SplitView
       ref="fileManagerSplitComponent"
-      v-bind:initial-size-percent="[ 20, 80 ]"
+      v-bind:initial-size-percent="fileManagerSplitComponentInitialSize"
       v-bind:minimum-size-percent="[ 10, 50 ]"
+      v-bind:reset-size-percent="[ 20, 80 ]"
       v-bind:split="'horizontal'"
+      v-on:views-resized="fileManagerSplitComponentResized($event)"
     >
       <template #view1>
         <!-- File manager in the left side of the split view -->
@@ -36,9 +38,11 @@
         <!-- Another split view in the right side -->
         <SplitView
           ref="editorSidebarSplitComponent"
-          v-bind:initial-size-percent="[ 80, 20 ]"
+          v-bind:initial-size-percent="editorSidebarSplitComponentInitialSize"
           v-bind:minimum-size-percent="[ 50, 10 ]"
+          v-bind:reset-size-percent="[ 80, 20 ]"
           v-bind:split="'horizontal'"
+          v-on:views-resized="editorSidebarSplitComponentResized($event)"
         >
           <template #view1>
             <!-- First side: Editor -->
@@ -150,7 +154,8 @@ import {
   ref,
   computed,
   watch,
-  onMounted
+  onMounted,
+  onBeforeMount
 } from 'vue'
 
 // Import the sound effects for the pomodoro timer
@@ -189,13 +194,20 @@ const SOUND_EFFECTS = [
 const searchParams = new URLSearchParams(window.location.search)
 // The window number indicates which main window this one here is. This is only
 // necessary for the documents and split views to show up.
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const windowId = searchParams.get('window_id')!
 
 const fileManagerVisible = ref(true)
 const mainSplitViewVisibleComponent = ref<'fileManager'|'globalSearch'>('fileManager')
 const isUpdateAvailable = ref(false)
 const vibrancyEnabled = ref(configStore.config.window.vibrancy)
+
+// Ensure the app remembers the previous sidebar sizes
+const fileManagerSplitComponentInitialSize = ref<[number, number]>([ 20, 80 ])
+const editorSidebarSplitComponentInitialSize = ref<[number, number]>([ 80, 20 ])
+onBeforeMount(() => {
+  fileManagerSplitComponentInitialSize.value = configStore.config.ui.fileManagerSplitSize
+  editorSidebarSplitComponentInitialSize.value = configStore.config.ui.editorSidebarSplitSize
+})
 
 // Popover targets
 const exportButton = ref<HTMLElement|null>(null)
@@ -668,6 +680,14 @@ onMounted(() => {
     }
   })
 })
+
+function fileManagerSplitComponentResized (sizes: [number, number]): void {
+  configStore.setConfigValue('ui.fileManagerSplitSize', sizes)
+}
+
+function editorSidebarSplitComponentResized (sizes: [number, number]): void {
+  configStore.setConfigValue('ui.editorSidebarSplitSize', sizes)
+}
 
 function insertTable (spec: { rows: number, cols: number }): void {
   // Generate a simple table based on the info, and insert it.

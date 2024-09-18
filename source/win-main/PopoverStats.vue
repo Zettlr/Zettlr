@@ -2,24 +2,26 @@
   <PopoverWrapper v-bind:target="props.target" v-on:close="$emit('close')">
     <div id="stats-popover">
       <table>
-        <tr>
-          <td style="text-align: right;">
-            <strong>{{ displaySumMonth }}</strong>
-          </td>
-          <td>{{ lastMonthLabel }}</td>
-        </tr>
-        <tr>
-          <td style="text-align: right;">
-            <strong>{{ displayAvgMonth }}</strong>
-          </td>
-          <td>{{ averageLabel }}</td>
-        </tr>
-        <tr>
-          <td style="text-align: right;">
-            <strong>{{ displaySumToday }}</strong>
-          </td>
-          <td>{{ todayLabel }}</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td style="text-align: right;">
+              <strong>{{ displaySumMonth }}</strong>
+            </td>
+            <td>{{ lastMonthLabel }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <strong>{{ displayAvgMonth }}</strong>
+            </td>
+            <td>{{ averageLabel }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <strong>{{ displaySumToday }}</strong>
+            </td>
+            <td>{{ todayLabel }}</td>
+          </tr>
+        </tbody>
       </table>
       <p v-if="sumToday > averageMonth">
         {{ surpassedMessage }}
