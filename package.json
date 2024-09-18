@@ -128,7 +128,6 @@
     "fsevents": "^2.3.3"
   },
   "resolutions": {
-    "node-abi": "^3.67.0",
     "node-gyp": "10.x.x",
     "@lezer/lr": "^1.4.0"
   },
