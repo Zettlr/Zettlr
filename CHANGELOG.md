@@ -19,6 +19,7 @@
   ensure they never overflow their parent container.
 - The `md2html` utility function now allows a fourth parameter containing hooks
   that allow the further customization of the produced HTML output
+- Bumped CodeMirror and dependencies
 
 # 3.2.1
 
