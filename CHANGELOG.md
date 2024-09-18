@@ -20,6 +20,7 @@
 - The `md2html` utility function now allows a fourth parameter containing hooks
   that allow the further customization of the produced HTML output
 - Bumped CodeMirror and dependencies
+- Bumped ESLint and dependencies
 
 # 3.2.1
 
