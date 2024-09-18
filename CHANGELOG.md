@@ -15,6 +15,7 @@ from the default profiles: `shift-heading-level-by: 1`.
 
 - **change**: Remove `shift-heading-level-by: 1` line from default profiles
 - Fixed the "Paste as Plain" menu item not working (#5052)
+- Dark mode folded header's ellipsis are now properly colored (#5284)
 - Add Pascal syntax highlighting (keyword: `pascal`; #5368)
 - Fixed images in file previews on hovering internal file links not working
   (#5041)
@@ -43,7 +44,6 @@ from the default profiles: `shift-heading-level-by: 1`.
 - Zettlr now remembers the widths of file manager and sidebar
 - You can now reset the file manager and sidebar widths by double-clicking the
   corresponding resizer
-- Dark mode folded header's ellipsis are now properly colored.
 - Copying plain links in the form `<http://www.example.com>` will now remove the
   angled brackets (#5285)
 - Reverted a change from 3.1.0 which altered the process of creating new files
