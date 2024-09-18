@@ -1796,7 +1796,7 @@ msgid "Export failed"
 msgstr "Error de exportación"
 
 #: source/app/service-providers/commands/export.ts:56
- javascript-format
+#, javascript-format
 msgid "An error occurred during export: %s"
 msgstr "Se produjo un error durante la exportación: %s"
 
