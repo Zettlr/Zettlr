@@ -709,6 +709,12 @@ function maybeHighlightSearchResults (): void {
 body.dark .main-editor-wrapper {
   background-color: rgba(20, 20, 30, 1);
   .CodeMirror .CodeMirror-gutters { background-color: rgba(20, 20, 30, 1); }
+
+  //Ellipsis (...) When a header is folded
+  .cm-foldPlaceholder{
+      background-color: rgb(20, 20, 30);
+      border-style: none;
+    }
 }
 
 // CodeMirror fullscreen
