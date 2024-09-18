@@ -1,7 +1,19 @@
 # Upcoming
 
+## Changes to Pandoc Profiles
+
+This update fixes a workaround that Zettlr had in place for a shortcoming of
+Pandoc regarding the automatic numbering of headings. This workaround is no
+longer necessary, since Pandoc has since fixed the issue. 
+
+Zettlr now ships with changed default profiles for various export formats. Since
+Zettlr never overwrites any data, the new defaults will not be applied
+automatically. You can apply the change manually by removing the following line
+from the default profiles: `shift-heading-level-by: 1`.
+
 ## GUI and Functionality
 
+- **change**: Remove `shift-heading-level-by: 1` line from default profiles
 - Fixed the "Paste as Plain" menu item not working (#5052)
 - Add Pascal syntax highlighting (keyword: `pascal`; #5368)
 - Fixed images in file previews on hovering internal file links not working
