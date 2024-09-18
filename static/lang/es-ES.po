@@ -1777,7 +1777,7 @@ msgid "Could not save file %s: %s"
 msgstr "No se pudo guardar el archivo %s: %s"
 
 #: source/app/service-providers/workspaces/index.ts:163
- javascript-format
+# javascript-format
 msgid "Loading workspace %s"
 msgstr "Cargando espacio de trabajo %s"
 
