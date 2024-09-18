@@ -74,7 +74,7 @@
     "fix-path": "^4.0.0",
     "gemoji": "^8.1.0",
     "gettext-parser": "^8.0.0",
-    "got": "^14.4.1",
+    "got": "11.x.x",
     "katex": "^0.16.11",
     "ky": "^1.7.2",
     "lodash": "^4.17.21",
@@ -129,11 +129,8 @@
   },
   "resolutions": {
     "node-abi": "^3.67.0",
-    "got": "11.x.x",
     "node-gyp": "10.x.x",
-    "@lezer/lr": "^1.4.0",
-    "mermaid/katex": "^0.16.10",
-    "micromark-extension-math/katex": "^0.16.10"
+    "@lezer/lr": "^1.4.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",

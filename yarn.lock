@@ -7964,7 +7964,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"got@npm:11.x.x":
+"got@npm:11.x.x, got@npm:^11.7.0, got@npm:^11.8.5":
   version: 11.8.6
   resolution: "got@npm:11.8.6"
   dependencies:
@@ -9558,18 +9558,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:^0.16.10":
-  version: 0.16.10
-  resolution: "katex@npm:0.16.10"
-  dependencies:
-    commander: ^8.3.0
-  bin:
-    katex: cli.js
-  checksum: 108e9d810e17840c43eef8d46171096f4cc97852bfd1e2dd1890d9b3435846816e3e98678a31d38bd064eb97eea83b18ff224cb65d5f9511b54ce7ff4359b591
-  languageName: node
-  linkType: hard
-
-"katex@npm:^0.16.11":
+"katex@npm:^0.16.0, katex@npm:^0.16.11, katex@npm:^0.16.9":
   version: 0.16.11
   resolution: "katex@npm:0.16.11"
   dependencies:
@@ -16178,7 +16167,7 @@ __metadata:
     fsevents: ^2.3.3
     gemoji: ^8.1.0
     gettext-parser: ^8.0.0
-    got: ^14.4.1
+    got: 11.x.x
     jsdom: ^25.0.0
     katex: ^0.16.11
     ky: ^1.7.2
