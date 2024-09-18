@@ -10,6 +10,8 @@
 - Fixed visual artifacts in the backgrounds for code blocks and comments (#5260)
 - Fixed a bug that would apply certain shortcuts to all open editor panes,
   rather than the last focused one (#5282)
+- The save changes dialog now offers a cancel option that will be chosen when
+  pressing Escape (#5338)
 
 ## Under the Hood
 
