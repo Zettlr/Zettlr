@@ -21,6 +21,7 @@
   that allow the further customization of the produced HTML output
 - Bumped CodeMirror and dependencies
 - Bumped ESLint and dependencies
+- Fixed HTML DOM structure in a few places where they would violate the spec
 
 # 3.2.1
 

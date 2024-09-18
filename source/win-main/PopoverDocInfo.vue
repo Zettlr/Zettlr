@@ -2,35 +2,37 @@
   <PopoverWrapper v-bind:target="props.target" v-on:close="emit('close')">
     <div class="document-info">
       <table v-if="props.docInfo != null">
-        <tr>
-          <td colspan="3" style="text-align:right">
-            <strong>{{ selectedWords }}</strong>
-          </td>
-          <td>{{ wordsLabel }}</td>
-        </tr>
-        <tr>
-          <td colspan="3" style="text-align:right">
-            <strong>{{ selectedChars }}</strong>
-          </td>
-          <td>{{ charsLabel }}</td>
-        </tr>
-
-        <tr v-if="props.docInfo.selections.length > 0">
-          <td colspan="4">
-            &nbsp;
-          </td>
-        </tr>
-
-        <tr v-for="sel, idx in props.docInfo.selections" v-bind:key="idx">
-          <td style="text-align:right">
-            <strong>{{ sel.anchor.line }}:{{ sel.anchor.ch }}</strong>
-          </td>
-          <td><strong>&ndash;</strong></td>
-          <td>
-            <strong>{{ sel.head.line }}:{{ sel.head.ch }}</strong>
-          </td>
-          <td>{{ getWdSelectedLabel(shouldCountChars ? sel.chars : sel.words) }}</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td colspan="3" style="text-align:right">
+              <strong>{{ selectedWords }}</strong>
+            </td>
+            <td>{{ wordsLabel }}</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="text-align:right">
+              <strong>{{ selectedChars }}</strong>
+            </td>
+            <td>{{ charsLabel }}</td>
+          </tr>
+  
+          <tr v-if="props.docInfo.selections.length > 0">
+            <td colspan="4">
+              &nbsp;
+            </td>
+          </tr>
+  
+          <tr v-for="sel, idx in props.docInfo.selections" v-bind:key="idx">
+            <td style="text-align:right">
+              <strong>{{ sel.anchor.line }}:{{ sel.anchor.ch }}</strong>
+            </td>
+            <td><strong>&ndash;</strong></td>
+            <td>
+              <strong>{{ sel.head.line }}:{{ sel.head.ch }}</strong>
+            </td>
+            <td>{{ getWdSelectedLabel(shouldCountChars ? sel.chars : sel.words) }}</td>
+          </tr>
+        </tbody>
       </table>
       <p v-else>
         {{ noDocumentMessage }}
