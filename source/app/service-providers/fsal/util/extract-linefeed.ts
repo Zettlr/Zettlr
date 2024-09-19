@@ -14,6 +14,14 @@
 
 type Linefeed = '\n'|'\r'|'\r\n'|'\n\r'
 
+/**
+ * Utility function that detects and returns the first detected linefeed of a
+ * file. It checks for linefeeds one after another in decreasing prevalence.
+ *
+ * @param   {string}    text  The text in question
+ *
+ * @return  {Linefeed}        The detected linefeed
+ */
 export function extractLinefeed (text: string): Linefeed {
   const CR = text.includes('\r')
   const LF = text.includes('\n')
