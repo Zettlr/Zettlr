@@ -17,15 +17,15 @@
     <h2>Build Dependencies</h2>
     <p>
       This build was compiled using:
-      <ul>
-        <li>Node.js <strong>v{{ versions.node }}</strong></li>
-        <li>Electron <strong>v{{ versions.electron }}</strong></li>
-        <li>Chrome <strong>v{{ versions.chrome }}</strong></li>
-        <li>v8 engine <strong>v{{ versions.v8 }}</strong></li>
-        <li>Zlib <strong>v{{ versions.zlib }}</strong></li>
-        <li>OpenSSL <strong>v{{ versions.openssl }}</strong></li>
-      </ul>
     </p>
+    <ul>
+      <li>Node.js <strong>v{{ versions.node }}</strong></li>
+      <li>Electron <strong>v{{ versions.electron }}</strong></li>
+      <li>Chrome <strong>v{{ versions.chrome }}</strong></li>
+      <li>v8 engine <strong>v{{ versions.v8 }}</strong></li>
+      <li>Zlib <strong>v{{ versions.zlib }}</strong></li>
+      <li>OpenSSL <strong>v{{ versions.openssl }}</strong></li>
+    </ul>
     <h2>Helper programs</h2>
     <ul>
       <li>Pandoc: <strong>{{ programVersions.pandoc }}</strong></li>

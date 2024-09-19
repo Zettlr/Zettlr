@@ -112,7 +112,7 @@ onBeforeMount(() => {
 })
 
 function searchAndClose (tagName: string): void {
-  emit('search-tag', tagName)
+  emit('search-tag', `#${tagName}`)
   emit('close')
 }
 </script>

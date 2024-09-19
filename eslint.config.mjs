@@ -9,6 +9,7 @@ export default [
     // With the new flat configs, we unfortunately have to ignore everything
     // manually that we don't want linted.
     ignores: [
+      '**/*.mjs',
       '*.js',
       'scripts/**/*.js',
       'resources/**/*.js',

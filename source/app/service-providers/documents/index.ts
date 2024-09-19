@@ -341,27 +341,33 @@ export default class DocumentManager extends ProviderContract {
           type: 'question',
           buttons: [
             trans('Save changes'),
-            trans('Discard changes')
+            trans('Discard changes'),
+            trans('Cancel')
           ],
           defaultId: 0,
+          cancelId: 2,
           title: trans('Unsaved changes'),
           message: trans('There are unsaved changes. Do you want to save or discard them?')
         }
 
         dialog.showMessageBox(opt)
-          .then(async result => {
+          .then(async ({ response }) => {
             // 0 = Save, 1 = Don't save, 2 = Cancel
+            if (response === 2) {
+              this._app.log.verbose('User cancelled save-dialog; not quitting.')
+              return // Do nothing
+            }
+
+            // Apply the choice to all open documents
             for (const document of this.documents) {
-              if (result.response === 0) {
+              if (response === 0) {
                 await this.saveFile(document.filePath)
               } else {
                 document.lastSavedVersion = document.currentVersion
               }
-
-              // TODO: Emit events that the documents are now clean, same below
-
-              app.quit()
             }
+
+            app.quit()
           })
           .catch(err => {
             this._app.log.error('[DocumentManager] Cannot ask user to save or omit changes!', err)
