@@ -138,7 +138,6 @@ export function moveNextRow (target: EditorView): boolean {
     }
 
     const offsets = getTableCellOffsets(table, target.state.sliceDoc())
-    console.log(offsets)
 
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
@@ -389,6 +388,18 @@ export function setAlignmentCenter (target: EditorView): boolean {
 }
 
 export function setAlignmentRight (target: EditorView): boolean {
+  return false
+}
+
+export function clearRow (target: EditorView): boolean {
+  return false
+}
+
+export function clearCol (target: EditorView): boolean {
+  return false
+}
+
+export function clearTable (target: EditorView): boolean {
   return false
 }
 
