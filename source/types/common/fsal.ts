@@ -84,6 +84,8 @@ export interface MDFileDescriptor extends FSMetaInfo {
   tags: string[]
   links: string[] // Any outlinks declared in the file
   bom: string // An optional BOM
+  indentChar: '\t'|' ' // Detected indentation char, either a tab or a space
+  indentSize: number // Number of char repetitions, always 1 for tabs.
   wordCount: number
   charCount: number
   firstHeading: string|null
@@ -100,6 +102,8 @@ export interface CodeFileDescriptor extends FSMetaInfo {
   ext: string
   type: 'code'
   bom: string // An optional BOM
+  indentChar: '\t'|' ' // Detected indentation char, either a tab or a space
+  indentSize: number // Number of char repetitions, always 1 for tabs.
   linefeed: string
   modified: boolean
 }

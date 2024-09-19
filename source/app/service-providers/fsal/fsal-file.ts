@@ -21,6 +21,7 @@ import type { MDFileDescriptor } from '@dts/common/fsal'
 import type FSALCache from './fsal-cache'
 import type { SearchTerm } from '@dts/common/search'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
+import { normalizeLineEndings } from './util/normalize-line-endings'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -85,6 +86,8 @@ export async function parse (
     tags: [], // All tags that are to be found inside the file's contents.
     links: [], // Any outlinks
     bom: '', // Default: No BOM
+    indentChar: ' ', // Default: spaces
+    indentSize: 4, // Default: 4 spaces
     type: 'file',
     wordCount: 0,
     charCount: 0,
@@ -159,14 +162,8 @@ export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[])
 export async function load (fileObject: MDFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
-  return content
-    // Account for an optional BOM, if present
-    .substring(fileObject.bom.length)
-    // Always split with a regular expression to ensure that mixed linefeeds
-    // don't break reading in a file. Then, on save, the linefeeds will be
-    // standardized to whatever the linefeed extractor detected.
-    .split(/\r\n|\n\r|\n|\r/g)
-    .join('\n')
+  // Account for an optional BOM, if present
+  return normalizeLineEndings(content.substring(fileObject.bom.length))
 }
 
 /**

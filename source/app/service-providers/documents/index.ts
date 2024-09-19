@@ -36,6 +36,7 @@ import { markdownToAST } from '@common/modules/markdown-utils'
 import isFile from '@common/util/is-file'
 import { trans } from '@common/i18n-main'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
+import { changeFileIndentation } from './util/change-file-indentation'
 
 type DocumentWindows = Record<string, DocumentTree>
 
@@ -579,7 +580,14 @@ export default class DocumentManager extends ProviderContract {
       throw new Error(`Cannot load file ${filePath}`) // TODO: Proper error handling & state recovery!
     }
 
-    const content = await this._app.fsal.loadAnySupportedFile(filePath)
+    // Load in the file. This procedure here will already normalize the line
+    // endings as well as the file indentation.
+    const { editor } = this._app.config.get()
+    const content = changeFileIndentation(
+      await this._app.fsal.loadAnySupportedFile(filePath),
+      editor.indentWithTabs ? '\t' : ' ',
+      editor.indentWithTabs ? 1 : editor.indentUnit
+    )
 
     if (descriptor.type === 'code') {
       switch (descriptor.ext) {
@@ -1433,7 +1441,11 @@ current contents from the editor somewhere else, and restart the application.`
     // and BOMs. So here we will always use newlines. This should fix and in the
     // future prevent bugs like #4959
     const docLines = [...doc.document.iterLines()]
-    const content = docLines.join('\n')
+    const content = changeFileIndentation(
+      docLines.join('\n'),
+      doc.descriptor.indentChar,
+      doc.descriptor.indentSize
+    )
     doc.lastSavedVersion = doc.currentVersion
     doc.lastSavedContent = content
 
