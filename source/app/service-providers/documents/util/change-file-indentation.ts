@@ -35,7 +35,7 @@ export function changeFileIndentation (text: string, newIndent: '\t'|' ', newSiz
   for (let i = 0; i < lines.length; i++) {
     // Take the current indent in multiples of current indentation size in its
     // entirety (leaving out any trailing spaces)...
-    lines[i] = lines[i].replace(new RegExp(`^${currentIndent}{${currentSize}}*`), (match) => {
+    lines[i] = lines[i].replace(new RegExp(`^(?:${currentIndent}{${currentSize}})*`), (match) => {
       // And replace them with the same amount of newIndents times newSize.
       return newIndent.repeat(newSize * Math.floor(match.length / currentSize))
     })
