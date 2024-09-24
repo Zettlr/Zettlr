@@ -153,7 +153,7 @@
     "@types/md5": "^2.3.5",
     "@types/mermaid": "^9.2.0",
     "@types/mocha": "^10.0.8",
-    "@types/node": "^20.16.5",
+    "@types/node": "^22.6.1",
     "@types/sanitize-html": "^2.13.0",
     "@types/semver": "^7.5.8",
     "@types/showdown": "^2.0.6",
