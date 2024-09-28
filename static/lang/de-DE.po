@@ -94,7 +94,7 @@ msgid ""
 "files. The files have been shipped unaltered with author metadata. More "
 "information:"
 msgstr ""
-"Zettlr verwendet citeproc, um Zitationen direkt im Editor anzuzeigen. Hierzu "
+"Zettlr verwendet citeproc, um Zitierungen direkt im Editor anzuzeigen. Hierzu "
 "verwendet Zettlr die CitationStyleLanguage (CSL) Sprachdateien sowie Stile. "
 "Die Dateien wurden unverändert mit Autorenangaben ausgeliefert. Weitere "
 "Informationen:"
@@ -185,7 +185,7 @@ msgstr "Anzahl"
 #: source/tmp/win-main/PopoverTags.vue.ts:47
 #: source/tmp/win-tag-manager/App.vue.ts:35
 msgid "Filter tags…"
-msgstr "Schlagworte filtern…"
+msgstr "Tags filtern…"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:48
 msgid "Tag Cloud"
@@ -499,7 +499,7 @@ msgstr "Keine anderen Dateien"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:34
 msgid "Current folder"
-msgstr ""
+msgstr "Aktueller Ordner"
 
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:32
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
@@ -508,7 +508,7 @@ msgstr "Literatur"
 
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:42
 msgid "There are no citations in this document."
-msgstr "In diesem Dokument wurden keine Zitationen gefunden."
+msgstr "In diesem Dokument gibt es keine Zitate."
 
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
@@ -540,7 +540,7 @@ msgstr "Verwandt aufgrund eingehendem Link."
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr "Verwandt basierend auf %s gemeinsamen Schlagworten: %s"
+msgstr "Verwandt basierend auf %s gemeinsamen Tags: %s"
 
 #. STATIC VARIABLES
 #: source/tmp/win-stats/CalendarView.vue.ts:26
@@ -698,7 +698,7 @@ msgstr "Updates"
 
 #: source/tmp/win-update/App.vue.ts:32
 msgid "New update available"
-msgstr "Neue Version"
+msgstr "Neue Version verfügbar"
 
 #: source/tmp/win-update/App.vue.ts:33
 msgid "Your version"
@@ -714,17 +714,17 @@ msgstr ""
 
 #: source/tmp/win-update/App.vue.ts:35
 msgid "Downloading your update"
-msgstr "Lade Aktualisierung herunter"
+msgstr "Lade Update herunter"
 
 #: source/tmp/win-update/App.vue.ts:36
 msgid "No update available. You have the most recent version."
-msgstr "Keine Aktualisierung verfügbar. Du nutzt die aktuelle Version."
+msgstr "Keine Updates verfügbar. Du nutzt die aktuelle Version."
 
 #: source/tmp/win-update/App.vue.ts:37
 #: source/app/service-providers/menu/menu.darwin.ts:639
 #: source/app/service-providers/menu/menu.win32.ts:613
 msgid "Check for updates"
-msgstr "Nach neuer Version suchen"
+msgstr "Nach Updates suchen"
 
 #: source/tmp/win-update/App.vue.ts:42
 msgid "Click to start update"
@@ -904,7 +904,7 @@ msgstr "AutoCorrect"
 #: source/tmp/win-preferences/App.vue.ts:164
 #: source/win-preferences/schema/citations.ts:22
 msgid "Citations"
-msgstr "Zitationen"
+msgstr "Zitierungen"
 
 #: source/tmp/win-preferences/App.vue.ts:169
 msgid "Zettelkasten"
@@ -1561,7 +1561,7 @@ msgstr "Link kopieren"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
 msgid "Remove Link"
-msgstr ""
+msgstr "Link entfernen"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:106
 msgid "Copy image to clipboard"
@@ -1613,7 +1613,7 @@ msgstr "Benutzerdefiniert"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr "Prüfpaneel öffnen"
+msgstr "Prüfpanel öffnen"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
@@ -1795,7 +1795,7 @@ msgstr "Lade Arbeitsverzeichnis %s"
 #: source/app/service-providers/citeproc/index.ts:249
 #: source/app/service-providers/citeproc/index.ts:457
 msgid "The citation database could not be loaded"
-msgstr "Die Zitationsdatenbank konnte nicht geladen werden"
+msgstr "Die Zitatdatenbank konnte nicht geladen werden"
 
 #: source/app/service-providers/citeproc/index.ts:444
 msgid "Changes to the library file detected. Reloading …"
@@ -1899,12 +1899,12 @@ msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
 msgstr ""
-"Keine Dateien sind für den Export ausgewählt. Bitte wähle Dateien in den "
+"Für den Export sind keine Dateien ausgewählt. Bitte wähle Dateien in den "
 "Projekteinstellungen aus."
 
 #: source/app/service-providers/commands/dir-project-export.ts:91
 msgid "Project File Mismatch"
-msgstr "Fehlende Projektdateien"
+msgstr "Projektdatei stimmt nicht überein"
 
 #: source/app/service-providers/commands/dir-project-export.ts:92
 msgid ""
@@ -1986,7 +1986,7 @@ msgstr "Das Verzeichnis &quot;%s&quot; kann von Zettlr nicht geöffnet werden."
 #: source/app/service-providers/commands/rename-tag.ts:44
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr "Ersetze Schlagwort “%s” mit “%s” in %s Dateien?"
+msgstr "Ersetze Tag “%s” mit “%s” in %s Dateien?"
 
 #. We need to generate our own filename. First, attempt to just use 'copy of'
 #: source/app/service-providers/commands/file-duplicate.ts:71
@@ -2151,7 +2151,7 @@ msgstr "Einstellungen…"
 #: source/app/service-providers/menu/menu.darwin.ts:67
 #: source/app/service-providers/menu/menu.win32.ts:241
 msgid "Manage Tags…"
-msgstr "Schlagwörter…"
+msgstr "Tags verwalten…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
@@ -2205,7 +2205,7 @@ msgstr "Exportieren…"
 #: source/app/service-providers/menu/menu.darwin.ts:259
 #: source/app/service-providers/menu/menu.win32.ts:253
 msgid "Import translation…"
-msgstr "Sprachdatei importieren…"
+msgstr "Übersetzung importieren…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:267
 #: source/app/service-providers/menu/menu.win32.ts:261
@@ -2342,7 +2342,7 @@ msgstr "Alle in den Vordergrund"
 #: source/app/service-providers/menu/menu.darwin.ts:600
 #: source/app/service-providers/menu/menu.win32.ts:574
 msgid "Previous Tab"
-msgstr "Voriger Tab"
+msgstr "Vorheriger Tab"
 
 #: source/app/service-providers/menu/menu.darwin.ts:608
 #: source/app/service-providers/menu/menu.win32.ts:582
@@ -2453,7 +2453,7 @@ msgstr "Konnte nicht nach Updates suchen: Server hat keine Daten gesendet"
 #: source/app/service-providers/updates/index.ts:585
 #, javascript-format
 msgid "An update to version %s is available!"
-msgstr "Eine Aktualisierung auf Version %s ist verfügbar!"
+msgstr "Eine Update auf Version %s ist verfügbar!"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
@@ -2487,7 +2487,7 @@ msgstr "Nur mit Dateinamen verlinken"
 
 #: source/win-preferences/schema/zettelkasten.ts:55
 msgid "When linking files, add the document name …"
-msgstr "Beim Verlinken von Dateien, füge den Dateititel …"
+msgstr "Beim Verlinken von Dateien, füge den Dateititel ein …"
 
 #: source/win-preferences/schema/zettelkasten.ts:58
 msgid "Always"
@@ -2597,11 +2597,11 @@ msgstr "Updates"
 
 #: source/win-preferences/schema/general.ts:95
 msgid "Automatically check for updates"
-msgstr "Automatisch auf Aktualisierungen überprüfen"
+msgstr "Automatisch auf Updates überprüfen"
 
 #: source/win-preferences/schema/appearance.ts:37
 msgid "Schedule"
-msgstr "Zeit"
+msgstr "Zeitplan"
 
 #: source/win-preferences/schema/appearance.ts:42
 msgid "Follow system"
@@ -2831,7 +2831,7 @@ msgid ""
 "know what this implies."
 msgstr ""
 "Der Eingabemodus bestimmt deine Interaktion mit dem Editor. Wir empfehlen "
-"die Einstellung “Normal”. Selektiere “Vim” oder “Emacs” nur, wenn du weißt, "
+"die Einstellung “Normal”. Wähle “Vim” oder “Emacs” nur, wenn du weißt, "
 "was das bedeutet."
 
 #: source/win-preferences/schema/editor.ts:44
@@ -2854,7 +2854,7 @@ msgstr ""
 
 #: source/win-preferences/schema/editor.ts:72
 msgid "Render Citations"
-msgstr "Zitationen darstellen"
+msgstr "Zitatierung darstellen"
 
 #: source/win-preferences/schema/editor.ts:77
 msgid "Render Iframes"
@@ -2912,7 +2912,7 @@ msgstr "Ablenkungsfreier Modus"
 
 #: source/win-preferences/schema/editor.ts:171
 msgid "Mute non-focused lines in distraction-free mode"
-msgstr "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab"
+msgstr "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus aus"
 
 #: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction free mode"
@@ -2960,7 +2960,7 @@ msgstr "Mit Tab-Zeichen einrücken"
 
 #: source/win-preferences/schema/editor.ts:261
 msgid "Highlight whitespace"
-msgstr "Steuerzeichen hervorheben"
+msgstr "Leerzeichen hervorheben"
 
 #: source/win-preferences/schema/editor.ts:267
 msgid "Suggest emojis during autocompletion"
@@ -3001,7 +3001,7 @@ msgstr "Nutze die interne Pandoc-Bibliothek für Exporte"
 
 #: source/win-preferences/schema/import-export.ts:71
 msgid "Remove tags from files when exporting"
-msgstr "Entferne Schlagworte aus den Dateien"
+msgstr "Entferne Tags aus den Dateien"
 
 #: source/win-preferences/schema/import-export.ts:80
 msgid "Remove internal links completely"
@@ -3009,7 +3009,7 @@ msgstr "Entferne interne Links komplett"
 
 #: source/win-preferences/schema/import-export.ts:81
 msgid "Unlink internal links"
-msgstr "Entferne eckige Klammern um interne Links"
+msgstr "Entferne interne Links"
 
 #: source/win-preferences/schema/import-export.ts:82
 msgid "Don't touch internal links"
@@ -3030,7 +3030,7 @@ msgstr "Wie Dateiort"
 
 #: source/win-preferences/schema/import-export.ts:94
 msgid "Ask for folder when exporting"
-msgstr "Frage beim Export"
+msgstr "Frage nach Ordner beim Export"
 
 #: source/win-preferences/schema/import-export.ts:100
 msgid ""
@@ -3219,11 +3219,11 @@ msgstr "Mit"
 
 #: source/win-preferences/schema/citations.ts:28
 msgid "How would you like autocomplete to insert your citations?"
-msgstr "Wie soll Autocomplete Zitationen einfügen?"
+msgstr "Wie soll Autocomplete Zitate einfügen?"
 
 #: source/win-preferences/schema/citations.ts:39
 msgid "Citation Database (CSL JSON or BibTex)"
-msgstr "Zitationsdatenbank (CSL JSON oder BibTex)"
+msgstr "Zitatsdatenbank (CSL JSON oder BibTex)"
 
 #: source/win-preferences/schema/citations.ts:41
 #: source/win-preferences/schema/citations.ts:53
@@ -3341,7 +3341,7 @@ msgstr "Nutze die ASCII-Reihenfolge (2 kommt nach 10)"
 #~ msgstr "%s Treffer"
 
 #~ msgid "Suggested tags for the current file"
-#~ msgstr "Vorgeschlagene Schlagworte für die aktuelle Datei"
+#~ msgstr "Vorgeschlagene Tags für die aktuelle Datei"
 
 #~ msgid "Add to file"
 #~ msgstr "Hinzufügen"
@@ -3496,7 +3496,7 @@ msgstr "Nutze die ASCII-Reihenfolge (2 kommt nach 10)"
 #~ msgstr "LaTeX installieren"
 
 #~ msgid "characters (w/o spaces)"
-#~ msgstr "Zeichen (ohne Leer)"
+#~ msgstr "Zeichen (ohne Leerzeichen)"
 
 #~ msgid ""
 #~ "This profile appears to be either missing the writer or reader property. "
@@ -3566,10 +3566,10 @@ msgstr "Nutze die ASCII-Reihenfolge (2 kommt nach 10)"
 #~ msgstr "Navigiere visuell mit den Pfeiltasten im RTL-Modus"
 
 #~ msgid "Word style (replace immediately without pressing Space/Enter)"
-#~ msgstr "Word-Stil (sofort ersetzen, ohne Leerzeichen oder Enter zu drücken)"
+#~ msgstr "Word-Stil (sofort ersetzen, ohne Leertaste oder Enter zu drücken)"
 
 #~ msgid "LibreOffice style (press Space or Enter to replace)"
-#~ msgstr "LibreOffice-Stil (drücke Leerzeichen oder Enter zum ersetzen)"
+#~ msgstr "LibreOffice-Stil (drücke Leertaste oder Enter zum ersetzen)"
 
 #~ msgid "Check for updated translations on start"
 #~ msgstr "Beim Start auf aktualisierte Übersetzungen prüfen"
