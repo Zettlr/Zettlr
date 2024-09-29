@@ -26,6 +26,7 @@ from the default profiles: `shift-heading-level-by: 1`.
 - The save changes dialog now offers a cancel option that will be chosen when
   pressing Escape (#5338)
 - Updated translation for `es-ES` (#5372)
+- Fixed the main editor search panel overlaying popovers/flyouts (#5397)
 
 ## Under the Hood
 
