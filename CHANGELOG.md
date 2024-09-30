@@ -31,6 +31,8 @@ from the default profiles: `shift-heading-level-by: 1`.
   functions like interacting with links) between the markers (`==highlight==`)
   as well as enabling spell checking of highlighted ranges
 - Fixed an issue preventing pasting of images into the editor (#5386)
+- Fixed the maximum height of the image preview in the paste-image dialog to 50%
+  in order to prevent it from pushing the controls out of view
 
 ## Under the Hood
 
