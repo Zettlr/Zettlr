@@ -92,9 +92,8 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
             }
             break
           }
-          case 'Highlight': {
-            ranges.push(hiddenDeco.range(node.from, node.from + 2))
-            ranges.push(hiddenDeco.range(node.to - 2, node.to))
+          case 'HighlightMark': {
+            ranges.push(hiddenDeco.range(node.from, node.to))
             break
           }
           // For fenced code, also hide the CodeInfo

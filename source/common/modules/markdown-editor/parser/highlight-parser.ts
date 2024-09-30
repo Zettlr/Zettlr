@@ -12,32 +12,46 @@
  * END HEADER
  */
 
-import { type InlineParser } from '@lezer/markdown'
+import { type InlineParser, type DelimiterType } from '@lezer/markdown'
+
+const MarkDelimiter: DelimiterType = {
+  resolve: 'HighlightContent',
+  mark: 'HighlightMark' // No specific syntax node (for now due to backwards compatibility reasons)
+}
+
+function isWhitespace (c: number): boolean {
+  const char = String.fromCharCode(c)
+  return /\s/.test(char)
+}
 
 export const highlightParser: InlineParser = {
   name: 'highlights',
-  // before: 'Link',
   parse: (ctx, next, pos) => {
     // The next char must be either a colon or an equal sign
-    if (next !== 58 && next !== 61) {
-      // 58 = :; 61 = =
+    if (next !== 58 /* : */ && next !== 61 /* = */) {
       return -1
     }
 
-    const slice = ctx.text.slice(pos - ctx.offset)
-
-    if (!slice.startsWith('::') && !slice.startsWith('==')) {
+    // The one following `next` must be the same character
+    if (pos === ctx.end || next !== ctx.char(pos + 1)) {
       return -1
     }
 
-    const idx = slice.startsWith('::') ? slice.indexOf('::', 2) : slice.indexOf('==', 2)
-    if (idx <= 2) { // idx must be > 2 (to ensure there's content in there)
-      return -1
-    }
+    // A highlight marker is considered opening if it is at the beginning of the
+    // line (bol) or is preceded by whitespace. Furthermore, it must not be
+    // followed by whitespace and not be at the end of the line (eol).
+    // For a highlight marker to be considered closing, it needs the opposite
+    // requirements. This is why we need both checks (because otherwise closing
+    // tags would allow preceding whitespace which would prompt Pandoc not to
+    // render them).
+    const bol = pos === ctx.offset
+    const eol = pos === ctx.end
+    const spaceBefore = bol || (pos > ctx.offset && isWhitespace(ctx.char(pos - 1)))
+    const spaceAfter = eol || (pos + 1 < ctx.end && isWhitespace(ctx.char(pos + 2)))
 
-    // At this point we have a citation and it's at the current pos
-    const content = ctx.elt('HighlightContent', pos + 2, pos + idx)
-    const wrapper = ctx.elt('Highlight', pos, pos + idx + 2, [content])
-    return ctx.addElement(wrapper)
+    const isOpening = spaceBefore && !spaceAfter
+    const isClosing = !spaceBefore // No check for spaceAfter to allow for, e.g., "Some ==test==." (with punctuation afterwards)
+
+    return ctx.addDelimiter(MarkDelimiter, pos, pos + 2, isOpening, isClosing)
   }
 }

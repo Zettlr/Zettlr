@@ -17,6 +17,7 @@
 
 import { Tag, tags } from '@lezer/highlight'
 
+// NOTE: Changes here must be reflected in theme/syntax.ts and parser/markdown-parser.ts
 export const customTags = {
   YAMLFrontmatter: Tag.define(tags.monospace),
   YAMLFrontmatterStart: Tag.define(tags.contentSeparator),
@@ -40,6 +41,6 @@ export const customTags = {
   ZknTagContent: Tag.define(),
   // Pandoc attributes, like: `# Heading or Title {.unnumbered}`
   PandocAttribute: Tag.define(),
-  Highlight: Tag.define(),
+  HighlightMark: Tag.define(),
   HighlightContent: Tag.define()
 }

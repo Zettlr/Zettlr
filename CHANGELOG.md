@@ -27,6 +27,9 @@ from the default profiles: `shift-heading-level-by: 1`.
   pressing Escape (#5338)
 - Updated translation for `es-ES` (#5372)
 - Fixed the main editor search panel overlaying popovers/flyouts (#5397)
+- Fixed the highlighting, which now retains any syntax highlighting (and thus
+  functions like interacting with links) between the markers (`==highlight==`)
+  as well as enabling spell checking of highlighted ranges
 
 ## Under the Hood
 
