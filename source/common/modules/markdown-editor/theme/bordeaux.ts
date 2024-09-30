@@ -71,7 +71,7 @@ export const themeBordeauxDark = EditorView.theme({
   '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
     color: primaryColor
   },
-  '.citeproc-citation, .code-block-line-background, .inline-code-background': { backgroundColor: 'var(--grey-7)' },
+  '.citeproc-citation, .code-block-line-background, .inline-code-background': { backgroundColor: '#002024' },
   '.citeproc-citation.error, .mermaid-chart.error': { color: 'var(--red-2)' },
   '.cm-cursor-primary': { background: primaryColor },
   '.cm-cursor-secondary': { background: 'var(--red-2)' },

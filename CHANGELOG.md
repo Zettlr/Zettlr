@@ -33,6 +33,7 @@ from the default profiles: `shift-heading-level-by: 1`.
 - Fixed an issue preventing pasting of images into the editor (#5386)
 - Fixed the maximum height of the image preview in the paste-image dialog to 50%
   in order to prevent it from pushing the controls out of view
+- Fixed the code and citation background colors in the Bordeaux dark theme
 
 ## Under the Hood
 
