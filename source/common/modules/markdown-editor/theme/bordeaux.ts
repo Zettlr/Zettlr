@@ -88,5 +88,8 @@ export const themeBordeauxDark = EditorView.theme({
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
     background: selectionDark
   },
+  '.cm-highlight': {
+    color: 'black !important',
+  },
   '.cm-quote, .cm-link, .cm-strong, .cm-emphasis': { color: '#93a1a1' }
 }, { dark: true })
