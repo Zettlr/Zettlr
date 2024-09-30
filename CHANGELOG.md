@@ -30,6 +30,7 @@ from the default profiles: `shift-heading-level-by: 1`.
 - Fixed the highlighting, which now retains any syntax highlighting (and thus
   functions like interacting with links) between the markers (`==highlight==`)
   as well as enabling spell checking of highlighted ranges
+- Fixed an issue preventing pasting of images into the editor (#5386)
 
 ## Under the Hood
 

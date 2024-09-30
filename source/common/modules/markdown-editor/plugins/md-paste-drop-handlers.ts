@@ -127,7 +127,10 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       // The user intends to paste an image or a series of files
       for (const file of data.files) {
         if (imageRE.test(file.name)) {
-          if (file.path === '') {
+          // NOTE 2024-09-30: Apparently there was an API change where file.path
+          // can now also be undefined (even though this is not part of the
+          // types). Thanks, Chrome! See issue #5386
+          if (file.path === '' || file.path === undefined) {
             // This image resides only within the clipboard, so prompt the user
             // to save it down. The command will already wrap everything into
             // `![]()`.
