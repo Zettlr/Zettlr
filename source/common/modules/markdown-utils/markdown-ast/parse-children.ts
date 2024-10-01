@@ -32,6 +32,7 @@ const EMPTY_NODES = [
   'EmphasisMark',
   'SuperscriptMark',
   'SubscriptMark',
+  'HighlightMark',
   'QuoteMark',
   'ListMark',
   'YAMLFrontmatterStart',
