@@ -1,5 +1,15 @@
 # Upcoming
 
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.2.2
+
 ## Changes to Pandoc Profiles
 
 This update fixes a workaround that Zettlr had in place for a shortcoming of
