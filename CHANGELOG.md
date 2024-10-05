@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-(nothing here)
+* Fix highlight markers not appearing while the emphasis renderer is on when the
+  user edits a highlighted span
 
 ## Under the Hood
 
