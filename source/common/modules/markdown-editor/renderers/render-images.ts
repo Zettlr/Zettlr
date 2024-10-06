@@ -14,7 +14,7 @@
 
 import { renderInlineWidgets } from './base-renderer'
 import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
-import { WidgetType, type EditorView } from '@codemirror/view'
+import { EditorView, WidgetType } from '@codemirror/view'
 import { type EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'
@@ -70,13 +70,10 @@ class ImageWidget extends WidgetType {
     openExternally.appendChild(openIcon)
 
     const figure = document.createElement('figure')
+    figure.classList.add('image-preview')
     figure.appendChild(img)
     figure.appendChild(caption)
     figure.appendChild(size)
-
-    const container = document.createElement('div')
-    container.classList.add('editor-image-container')
-    container.appendChild(figure)
 
     // Retrieve the size constraints
     const { imagePreviewHeight, imagePreviewWidth } = view.state.field(configField)
@@ -117,10 +114,10 @@ class ImageWidget extends WidgetType {
 
       event.preventDefault()
       event.stopPropagation()
-      // Make sure there are no quotes since these will break the image
-      const newCaption = caption.textContent?.replace(/"/g, '') ?? ''
+      // Escape quotes to prevent breaking of the image
+      const newCaption = caption.textContent?.replace(/"/g, '\\"') ?? ''
       // "Why are you setting the caption both as the image description and title?"
-      // Well, since all exports sometimes us this, sometimes the other value.
+      // Well, since all exports sometimes use this, sometimes the other value.
       const newImageTag = `![${newCaption}](${decodedUrl} "${newCaption}")${data}`
       // Remove the event listeners beforehand to prevent multiple dispatches
       caption.removeEventListener('keydown', updateCaptionFunction)
@@ -132,19 +129,19 @@ class ImageWidget extends WidgetType {
     caption.addEventListener('keydown', updateCaptionFunction)
     caption.addEventListener('focusout', updateCaptionFunction)
 
-    container.addEventListener('contextmenu', (event) => {
+    figure.addEventListener('contextmenu', (event) => {
       event.preventDefault()
       event.stopPropagation()
       linkImageMenu(view, this.node, { x: event.clientX, y: event.clientY })
     })
 
-    container.addEventListener('click', event => {
+    figure.addEventListener('click', event => {
       if (event.target === img) {
         clickAndSelect(view)(event)
       }
     })
 
-    return container
+    return figure
   }
 
   ignoreEvent (event: Event): boolean { return true }
@@ -157,10 +154,11 @@ function shouldHandleNode (node: SyntaxNodeRef): boolean {
 function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|undefined {
   // Get the actual link contents, extract title and URL and create a
   // replacement widget
-  const literalImage = state.sliceDoc(node.from, node.to)
-  const match = /(?<=\s|^)!\[(.*?)\]\((.+?(?:(?<= )"(.+)")?)\)({[^{]+})?/.exec(literalImage)
+  const imgSource = state.sliceDoc(node.from, node.to)
+  const match = /(?<=\s|^)!\[(.*?)\]\((.+?(?:(?<= )"(.+)")?)\)({[^{]+})?/.exec(imgSource)
   if (match === null) {
-    return undefined // Should not happen, but we never know.
+    console.error(`Could not parse image from source: "${imgSource}"`)
+    return undefined
   }
 
   // The image RE will give us the following groups:
@@ -168,10 +166,10 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
   // p2: The complete contents of the round braces
   // p3: If applicable, an image title (within round braces)
   // p4: Anything in curly brackets (mostly commands for Pandoc)
-  let altText = match[1] ?? '' // Everything inside the square brackets
+  const altText = match[1] ?? '' // Everything inside the square brackets
   let url = match[2] ?? '' // The URL
-  let title = match[3] ?? altText // An optional title in quotes after the image
-  let p4 = match[4] ?? ''
+  const title = match[3] ?? altText // An optional title in quotes after the image
+  const p4 = match[4] ?? ''
 
   // Remove the "title" from the surrounding URL group, if applicable.
   if (match[3] !== undefined) {
@@ -181,4 +179,52 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
   return new ImageWidget(node.node, title, url, altText, p4)
 }
 
-export const renderImages = renderInlineWidgets(shouldHandleNode, createWidget)
+export const renderImages = [
+  EditorView.baseTheme({
+    'figure.image-preview': {
+      position: 'relative',
+      display: 'inline-block',
+      textAlign: 'center',
+      cursor: 'default',
+      '& :not(img)': { opacity: '0' },
+      '&:hover :not(img), &:focus-within :not(img)': { opacity: '1' },
+      '& .image-size-info, & figcaption, & .open-externally-button': {
+        position: 'absolute',
+        transition: '0.2s opacity ease',
+        backgroundColor: 'rgba(0, 0, 0, .7)',
+        color: 'white',
+        fontSize: '12px',
+        borderRadius: '6px',
+        padding: '10px',
+        // If we have images in a list, they will inherit the textIndent applied
+        // by CodeMirror, so we have to set it explicitly
+        textIndent: '0'
+      },
+      '& .image-size-info': {
+        top: '10px',
+        left: '10px'
+      },
+      '& .open-externally-button': {
+        top: '10px',
+        right: '10px',
+        cursor: 'pointer'
+      },
+      '& figcaption': {
+        bottom: '10px',
+        left: '10px',
+        right: '10px',
+        cursor: 'text', // Captions can be edited
+        // Codemirror 6's drawCursor plugin makes the actual cursor transparent,
+        // so we have to reset it here for the contenteditables. Same for
+        // selection backgrounds.
+        caretColor: 'rgb(255, 255, 255)',
+        '&::selection': {
+          color: 'black',
+          // Overwrite the important by the plugin
+          backgroundColor: 'rgba(255, 255, 255, 0.8) !important'
+        }
+      }
+    }
+  }),
+  renderInlineWidgets(shouldHandleNode, createWidget)
+]

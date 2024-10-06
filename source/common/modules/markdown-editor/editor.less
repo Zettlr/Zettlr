@@ -194,66 +194,6 @@
     .cm-variable-2, .cm-variable-3, .cm-keyword { text-decoration: line-through !important; }
   }
 
-  // Deliver a much more fancy UX for images inserted into the editor
-  .editor-image-container {
-    position: relative;
-    display: inline-block;
-    text-align: center;
-    cursor: default;
-
-    figure {
-      img { display: inherit; }
-
-      &:hover, &:focus-within {
-        figcaption, span.image-size-info, span.open-externally-button {
-          opacity: 1;
-        }
-      }
-
-      span.image-size-info, figcaption, span.open-externally-button {
-        position: absolute;
-        opacity: 0;
-        transition: 0.2s opacity ease;
-        background-color: rgba(0, 0, 0, .7);
-        color: white;
-        font-size: 12px;
-        border-radius: 6px;
-        padding: 10px;
-        // If we have images in a list, they will inherit the textIndent applied
-        // by CodeMirror, so we have to set it explicitly
-        text-indent: 0;
-      }
-
-      span.image-size-info {
-        top: 10px;
-        left: 10px;
-      }
-
-      span.open-externally-button {
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-      }
-
-      figcaption {
-        bottom: 10px;
-        left: 10px;
-        right: 10px;
-        cursor: text; // Captions can be edited
-
-        // Codemirror 6's drawCursor plugin makes the actual cursor transparent,
-        // so we have to reset it here for the contenteditables. Same for
-        // selection backgrounds.
-        caret-color: rgb(255, 255, 255);
-        &::selection {
-          color: black;
-          // Overwrite the important by the plugin
-          background-color: rgba(255, 255, 255, 0.8) !important;
-        }
-      }
-    }
-  }
-
   // The wrapper node for the iFrames (both rendered + the warning)
   .iframe-wrapper {
     text-align: center;

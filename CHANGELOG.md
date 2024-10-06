@@ -10,7 +10,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Moved image preview styles into Codemirror plugin; simplified container
 
 # 3.2.2
 
