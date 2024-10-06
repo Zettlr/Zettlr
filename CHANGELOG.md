@@ -9,6 +9,9 @@
   characters
 * Image previews now treat escaped quotes in image titles properly
   (`![alt](image.png "\"quoted\" title")`)
+* Fix an issue with image caption updating that may replace text surrounding the
+  image (#5021)
+* Too small images won't display the informational layers anymore (#3953)
 
 ## Under the Hood
 
