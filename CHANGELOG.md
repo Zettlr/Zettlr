@@ -7,6 +7,8 @@
 * Add pascal syntax highlighting to the code block autocomplete
 * Improved highlight detection around punctuation marks and other non-word
   characters
+* Image previews now treat escaped quotes in image titles properly
+  (`![alt](image.png "\"quoted\" title")`)
 
 ## Under the Hood
 

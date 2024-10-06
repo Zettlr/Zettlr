@@ -49,7 +49,7 @@ class ImageWidget extends WidgetType {
     img.src = actualURLToLoad
 
     const caption = document.createElement('figcaption')
-    caption.textContent = this.imageTitle
+    caption.textContent = this.imageTitle.replace(/\\"/g, '"') // Un-escape title
     caption.contentEditable = 'true'
 
     const size = document.createElement('span')
@@ -94,7 +94,7 @@ class ImageWidget extends WidgetType {
 
     // Update the image title on load to retrieve the real image size.
     img.onload = () => {
-      img.title = `${this.imageTitle} (${img.naturalWidth}x${img.naturalHeight}px)`
+      img.title = `${this.imageTitle.replace(/\\"/g, '"')} (${img.naturalWidth}x${img.naturalHeight}px)`
       size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}`
 
       if (!isDataUrl) {
