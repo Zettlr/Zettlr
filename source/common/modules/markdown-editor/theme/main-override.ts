@@ -72,6 +72,13 @@ export const mainOverride = EditorView.baseTheme({
   '&dark .cm-yaml-frontmatter-start::after': {
     color: 'var(--grey-0)',
     backgroundColor: 'var(--grey-4)'
+  },
+  // Highlight/mark elements
+  '.cm-highlight': {
+    backgroundColor: '#ffff0080',
+  },
+  '&dark .cm-highlight': {
+    backgroundColor: '#ffff0060',
   }
 })
 

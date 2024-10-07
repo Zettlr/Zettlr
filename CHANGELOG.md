@@ -1,5 +1,33 @@
 # Upcoming
 
+## GUI and Functionality
+
+- Fix highlight markers not appearing while the emphasis renderer is on when the
+  user edits a highlighted span
+- Add pascal syntax highlighting to the code block autocomplete
+- Improved highlight detection around punctuation marks and other non-word
+  characters
+- Image previews now treat escaped quotes in image titles properly
+  (`![alt](image.png "\"quoted\" title")`)
+- Fix an issue with image caption updating that may replace text surrounding the
+  image (#5021)
+- Too small images won't display the informational layers anymore (#3953)
+- Improve image copy and paste operations (#5408)
+- Improve dropping operations onto the main editor
+- Blockquote markers are now properly hidden with the emphasis renderer on and
+  the cursor not within the blockquote (#4667)
+- Fix ambiguous German unsaved-changes dialog (#5072)
+- Fixed an issue where some websites could make Zettlr freeze on loading a link
+  preview via catastrophic backtracking in a regular expression (#4883)
+- Make link preview generator more resilient
+
+## Under the Hood
+
+- Moved image preview styles into Codemirror plugin; simplified container
+- Bump Pandoc to version 3.5
+
+# 3.2.2
+
 ## Changes to Pandoc Profiles
 
 This update fixes a workaround that Zettlr had in place for a shortcoming of
@@ -26,6 +54,14 @@ from the default profiles: `shift-heading-level-by: 1`.
 - The save changes dialog now offers a cancel option that will be chosen when
   pressing Escape (#5338)
 - Updated translation for `es-ES` (#5372)
+- Fixed the main editor search panel overlaying popovers/flyouts (#5397)
+- Fixed the highlighting, which now retains any syntax highlighting (and thus
+  functions like interacting with links) between the markers (`==highlight==`)
+  as well as enabling spell checking of highlighted ranges
+- Fixed an issue preventing pasting of images into the editor (#5386)
+- Fixed the maximum height of the image preview in the paste-image dialog to 50%
+  in order to prevent it from pushing the controls out of view
+- Fixed the code and citation background colors in the Bordeaux dark theme
 
 ## Under the Hood
 

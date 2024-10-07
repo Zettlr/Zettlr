@@ -203,13 +203,18 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       ],
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes
+      // NOTE: Changes here must be reflected in util/custom-tags.ts and theme/syntax.ts!
       defineNodes: [
         { name: 'YAMLFrontmatter' },
         { name: 'YAMLFrontmatterStart', style: customTags.YAMLFrontmatterStart },
         { name: 'YAMLFrontmatterEnd', style: customTags.YAMLFrontmatterEnd },
         { name: 'Citation', style: customTags.Citation },
-        { name: 'Highlight', style: customTags.Highlight },
-        { name: 'HighlightContent', style: customTags.HighlightContent },
+        { name: 'HighlightMark', style: customTags.HighlightMark },
+        // NOTE: The convention {TagName}/... means that the corresponding styles
+        // from the syntax theme get assigned to all child nodes that are contained
+        // within this node as well. The default is to only style otherwise "empty"
+        // spans of plain text.
+        { name: 'HighlightContent', style: { 'HighlightContent/...': customTags.HighlightContent } },
         { name: 'Footnote', style: customTags.Footnote },
         { name: 'FootnoteRef', style: customTags.FootnoteRef },
         { name: 'FootnoteRefLabel', style: customTags.FootnoteRefLabel },

@@ -92,9 +92,11 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
             }
             break
           }
-          case 'Highlight': {
-            ranges.push(hiddenDeco.range(node.from, node.from + 2))
-            ranges.push(hiddenDeco.range(node.to - 2, node.to))
+          case 'HighlightContent': {
+            const marks = node.node.getChildren('HighlightMark')
+            for (const mark of marks) {
+              ranges.push(hiddenDeco.range(mark.from, mark.to))
+            }
             break
           }
           // For fenced code, also hide the CodeInfo
@@ -114,10 +116,15 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
             ranges.push(hiddenDeco.range(node.to - 1, node.to))
             break
           }
-          case 'Blockquote': {
-            const marks = node.node.getChildren('QuoteMark')
-            for (const mark of marks) {
-              ranges.push(Decoration.replace({ widget: new SpaceWidget(mark.node, mark.to - mark.from) }).range(mark.from, mark.to))
+          case 'QuoteMark': { // Blockquotes
+            // Only render QuoteMark if its parent Blockquote doesn't contain a cursor
+            let parent: SyntaxNode|undefined|null = node.node.parent
+            while (parent != null && parent.node.name !== 'Blockquote') {
+              parent = parent.parent?.node
+            }
+
+            if (parent && !rangeInSelection(view.state, parent.from, parent.to)) {
+              ranges.push(Decoration.replace({ widget: new SpaceWidget(node.node, node.to - node.from) }).range(node.from, node.to))
             }
             break
           }
