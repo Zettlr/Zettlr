@@ -57,6 +57,7 @@ import { trans } from '@common/i18n-main'
 import type ConfigProvider from '@providers/config'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
+import { PasteModalResult } from '../commands/save-image-from-clipboard'
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: Record<string, BrowserWindow>
@@ -768,7 +769,7 @@ export default class WindowProvider extends ProviderContract {
   /**
    * Shows the paste image modal and, after closing, returns
    */
-  async showPasteImageModal (startPath: string): Promise<any> {
+  async showPasteImageModal (startPath: string): Promise<PasteModalResult|undefined> {
     return await new Promise((resolve, reject) => {
       const firstMainWin = this.getFirstMainWindow()
       if (firstMainWin === undefined) {
@@ -777,7 +778,7 @@ export default class WindowProvider extends ProviderContract {
       this._pasteImageModal = createPasteImageModal(this._logger, this._config, firstMainWin, startPath)
 
       let hasResolved = false
-      ipcMain.once('paste-image-ready', (event, data) => {
+      ipcMain.once('paste-image-ready', (event, data: PasteModalResult) => {
         // Resolve now
         resolve(data)
         hasResolved = true

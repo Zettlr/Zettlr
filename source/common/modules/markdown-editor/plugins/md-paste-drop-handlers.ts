@@ -18,6 +18,7 @@ import { type DOMEventHandlers } from '@codemirror/view'
 import html2md from '@common/util/html-to-md'
 import { configField } from '../util/configuration'
 import { pathBasename, pathDirname, pathExtname, relativePath } from '@common/util/renderer-path-polyfill'
+import { type SaveImageFromClipboardAPI } from 'source/app/service-providers/commands/save-image-from-clipboard'
 
 const ipcRenderer = window.ipc
 
@@ -47,13 +48,26 @@ function normalizePathForInsertion (p: string, basePath: string): string {
  * image tag with the image path as soon as the image has been saved to disk.
  *
  * @param   {string}           basePath  The base path for the image
+ * @param   {File}             file      The image object
  *
  * @return  {Promise<string>}            Resolves with the image tag or undefined.
  */
-async function saveImageFromClipboard (basePath: string): Promise<string|undefined> {
-  const pathToInsert = await ipcRenderer.invoke('application', {
+async function saveImageFromClipboard (basePath: string, file: File): Promise<string|undefined> {
+  const imageData = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+
+    // Hook event listeners
+    reader.addEventListener('abort', () => reject(new Error('Image read was aborted')))
+    reader.addEventListener('error', () => reject(new Error('Could not read image data')))
+    reader.addEventListener('load', () => resolve(reader.result as string))
+
+    // Start loading (as a data URL)
+    reader.readAsDataURL(file)
+  })
+
+  const pathToInsert: string|undefined = await ipcRenderer.invoke('application', {
     command: 'save-image-from-clipboard',
-    payload: { startPath: basePath }
+    payload: { basePath, imageData } as SaveImageFromClipboardAPI
   })
 
   // If the user aborts the pasting process, the command will return
@@ -127,29 +141,21 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       // The user intends to paste an image or a series of files
       for (const file of data.files) {
         if (imageRE.test(file.name)) {
-          // NOTE 2024-09-30: Apparently there was an API change where file.path
-          // can now also be undefined (even though this is not part of the
-          // types). Thanks, Chrome! See issue #5386
-          if (file.path === '' || file.path === undefined) {
-            // This image resides only within the clipboard, so prompt the user
-            // to save it down. The command will already wrap everything into
-            // `![]()`.
-            allPromises.push(new Promise((resolve, reject) => {
-              saveImageFromClipboard(basePath)
-                .then(tag => {
-                  if (tag !== undefined) {
-                    insertions.push(tag)
-                  }
-                  resolve()
-                })
-                .catch(err => reject(err))
-            }))
-          } else {
-            // There is a path in the file item
-            insertions.push(`![${file.name}](${normalizePathForInsertion(file.path, basePath)})`)
-          }
+          // This image resides only within the clipboard, so prompt the user
+          // to save it down. The command will already wrap everything into
+          // `![]()`.
+          allPromises.push(new Promise((resolve, reject) => {
+            saveImageFromClipboard(basePath, file)
+              .then(tag => {
+                if (tag !== undefined) {
+                  insertions.push(tag)
+                }
+                resolve()
+              })
+              .catch(err => reject(err))
+          }))
         } else {
-          // Not an image, so simply link it.
+          // Not an image, so simply link it. TODO: Get path from main
           insertions.push(`[${file.name}](${normalizePathForInsertion(file.path, basePath)})`)
         }
       }
