@@ -17,6 +17,8 @@
 - Blockquote markers are now properly hidden with the emphasis renderer on and
   the cursor not within the blockquote (#4667)
 - Fix ambiguous German unsaved-changes dialog (#5072)
+- Fixed an issue where some websites could make Zettlr freeze on loading a link
+  preview via catastrophic backtracking in a regular expression (#4883)
 
 ## Under the Hood
 

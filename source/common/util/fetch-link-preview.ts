@@ -156,8 +156,18 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
 
   // Extract all meta properties where we can find some of the info we want
   const meta: Record<string, string> = {}
-  for (const match of body.matchAll(/<meta.+?(?:name|property)="(.+?)".+?content="(.+?)".*?>/gi)) {
-    meta[match[1]] = match[2]
+  for (const match of body.matchAll(/<meta .+?>/gi)) {
+    // NOTE: We have to do a two-stage extraction, because otherwise badly
+    // formatted websites can cause the entire app to lock up (catastrophic
+    // backtracking, see issue #4883)
+    const propMatches = [...match[0].matchAll(/(name|content)=(?:"(.+)"|([^\s>]+))/gi)]
+    const name = propMatches.find(m => m[1] === 'name')
+    const content = propMatches.find(m => m[1] === 'content')
+    if (name !== undefined && content !== undefined) {
+      const key = name[2] ?? name[3]
+      const value = content[2] ?? content[3]
+      meta[key] = value
+    }
   }
 
   // Now with the meta at hand, we can fill in the image property (possibly)
