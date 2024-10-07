@@ -147,7 +147,7 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
   const body = result.body
 
   // Next, we can retrieve the title of the website
-  const title = body.match(/<title>(.+?)<\/title>/)
+  const title = body.match(/<title\s*>(.+?)<\/title\s*>/i)
   if (title !== null) {
     returnValue.title = title[1]
   } else {
@@ -160,9 +160,10 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
     // NOTE: We have to do a two-stage extraction, because otherwise badly
     // formatted websites can cause the entire app to lock up (catastrophic
     // backtracking, see issue #4883)
-    const propMatches = [...match[0].matchAll(/(name|content)=(?:"(.+)"|([^\s>]+))/gi)]
+    const propMatches = [...match[0].matchAll(/(name|content)=(?:"(.+?)"|([^\s>]+))/gi)]
     const name = propMatches.find(m => m[1] === 'name')
     const content = propMatches.find(m => m[1] === 'content')
+    console.log(match[0], name, content)
     if (name !== undefined && content !== undefined) {
       const key = name[2] ?? name[3]
       const value = content[2] ?? content[3]
@@ -187,9 +188,9 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
     const result = await got(url.href)
     const body: MediaWikiAPIResponse = JSON.parse(result.body)
     returnValue.summary = Object.values(body.query.pages)[0].extract
-  } else if ('description' in meta) {
+  } else {
     // Otherwise, regular treatment
-    returnValue.summary = meta.description
+    returnValue.summary = meta['description'] ?? meta['og:description'] ?? meta['twitter:description']
   }
 
   if (returnValue.summary !== undefined && returnValue.summary.length > 300) {

@@ -19,8 +19,14 @@ import makeValidUri from '@common/util/make-valid-uri'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 import { trans } from '@common/i18n-renderer'
 import { pathDirname } from '@common/util/renderer-path-polyfill'
+import _ from 'underscore'
 
 const ipcRenderer = window.ipc
+
+function unescape (text: string): string {
+  const value = _.unescape(text)
+  return value.replace(/&#(\d+);/g, (m, p1: string) => String.fromCharCode(parseInt(p1, 10)))
+}
 
 /**
  * Displays a tooltip for URLs and Links across a document
@@ -70,7 +76,7 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
           dom.innerHTML = ''
 
           const h4 = document.createElement('h4')
-          h4.textContent = res.title
+          h4.textContent = unescape(res.title as string)
 
           const imgParaWrapper = document.createElement('div')
           imgParaWrapper.style.margin = '10px 0'
@@ -90,7 +96,7 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
             const para = document.createElement('p')
             para.style.margin = '0'
             para.style.whiteSpace = 'pre-wrap'
-            para.textContent = res.summary
+            para.textContent = unescape(res.summary as string)
             imgParaWrapper.appendChild(para)
           }
 

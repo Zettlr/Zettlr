@@ -2418,6 +2418,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/underscore@npm:^1.11.15":
+  version: 1.11.15
+  resolution: "@types/underscore@npm:1.11.15"
+  checksum: 25fdf6da96e0d11ca39a4740aab6fa3bd717e57301be4cb9e7893dc0ad6ce330992d0c8e0b02cac5c5ea86df6f8949c5a8f1fb95f3666b85418d399d3b1112e9
+  languageName: node
+  linkType: hard
+
 "@types/unist@npm:*, @types/unist@npm:^2.0.0":
   version: 2.0.6
   resolution: "@types/unist@npm:2.0.6"
@@ -14910,6 +14917,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"underscore@npm:^1.13.7":
+  version: 1.13.7
+  resolution: "underscore@npm:1.13.7"
+  checksum: 174b011af29e4fbe2c70eb2baa8bfab0d0336cf2f5654f364484967bc6264a86224d0134b9176e4235c8cceae00d11839f0fd4824268de04b11c78aca1241684
+  languageName: node
+  linkType: hard
+
 "undici-types@npm:~5.26.4":
   version: 5.26.5
   resolution: "undici-types@npm:5.26.5"
@@ -16121,6 +16135,7 @@ __metadata:
     "@types/sanitize-html": ^2.13.0
     "@types/semver": ^7.5.8
     "@types/showdown": ^2.0.6
+    "@types/underscore": ^1.11.15
     "@types/uuid": ^10.0.0
     "@typescript-eslint/eslint-plugin": ^8.6.0
     "@typescript-eslint/parser": ^8.6.0
@@ -16205,6 +16220,7 @@ __metadata:
     ts-node: ^10.9.2
     tsconfig-paths: ^4.2.0
     typescript: 5.5.x
+    underscore: ^1.13.7
     unified: ^11.0.4
     uuid: ^10.0.0
     vue: ^3.5.6
