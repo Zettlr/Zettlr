@@ -1099,7 +1099,7 @@ msgstr "Nein"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr "Die Datei enthält ungesicherte Änderungen. Verwerfen oder speichern?"
+msgstr "Die Datei enthält ungesicherte Änderungen. Änderungen jetzt speichern?"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:31
 msgid "Replace file"
