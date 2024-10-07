@@ -67,7 +67,7 @@ async function saveImageFromClipboard (basePath: string, file: File): Promise<st
 
   const pathToInsert: string|undefined = await ipcRenderer.invoke('application', {
     command: 'save-image-from-clipboard',
-    payload: { basePath, imageData } as SaveImageFromClipboardAPI
+    payload: { basePath, imageData, imageName: file.name } as SaveImageFromClipboardAPI
   })
 
   // If the user aborts the pasting process, the command will return
@@ -155,8 +155,7 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
               .catch(err => reject(err))
           }))
         } else {
-          // Not an image, so simply link it. TODO: Get path from main
-          insertions.push(`[${file.name}](${normalizePathForInsertion(file.path, basePath)})`)
+          // Unsupported file type
         }
       }
     }
@@ -201,22 +200,31 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
 
     // First: Do we have a fileList of files to drop here?
     if (dataTransfer.files.length > 0) {
-      const files: string[] = []
-      // We have a list of files being dropped onto the editor --> link them
+      const allPromises: Promise<void>[] = []
+      const insertions: string[] = []
+      // We have a list of files being dropped onto the editor --> handle them
       for (const file of dataTransfer.files) {
-        files.push(file.path)
+        if (imageRE.test(file.name)) {
+          // It's an image --> offer to save
+          allPromises.push(new Promise((resolve, reject) => {
+            saveImageFromClipboard(cwd, file)
+              .then(tag => {
+                if (tag !== undefined) {
+                  insertions.push(tag)
+                }
+                resolve()
+              })
+              .catch(err => reject(err))
+          }))
+        } else {
+          // Unsupported file type -> ignore
+        }
       }
 
-      const toInsert = files.map(f => {
-        const pathToInsert = normalizePathForInsertion(f, cwd)
-        if (imageRE.test(f)) {
-          return `![${pathBasename(f)}](${pathToInsert})`
-        } else {
-          return `[${pathBasename(f)}](${pathToInsert})`
-        }
+      Promise.allSettled(allPromises).then(() => {
+        view.dispatch({ changes: { from: pos, insert: insertions.join('\n') } })
       })
 
-      view.dispatch({ changes: { from: pos, insert: toInsert.join('\n') } })
       return true
     } else if (zettlrFile !== '') {
       // We have a Markdown/Code file to insert

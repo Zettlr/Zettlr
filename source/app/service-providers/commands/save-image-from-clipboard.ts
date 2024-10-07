@@ -23,6 +23,7 @@ import { showNativeNotification } from '@common/util/show-notification'
 
 export interface SaveImageFromClipboardAPI {
   basePath: string
+  imageName?: string
   imageData: string // base64 encoded image data
 }
 
@@ -64,7 +65,9 @@ export default class SaveImage extends ZettlrCommand {
       const dataUrl = arg.imageData
 
       let name = ''
-      if (text.length > 0) {
+      if (arg.imageName !== undefined) {
+        name = arg.imageName // Caller has provided a name
+      } else if (text.length > 0) {
         // If you copy an image from the web, the browser sometimes inserts
         // the original URL to it as text into the clipboard. In this case
         // we've already got a good image name!

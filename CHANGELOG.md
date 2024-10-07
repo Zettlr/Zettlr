@@ -13,6 +13,7 @@
   image (#5021)
 * Too small images won't display the informational layers anymore (#3953)
 * Improve image copy and paste operations (#5408)
+* Improve dropping operations onto the main editor
 * Blockquote markers are now properly hidden with the emphasis renderer on and
   the cursor not within the blockquote (#4667)
 
