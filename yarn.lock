@@ -16158,7 +16158,6 @@ __metadata:
     ky: ^1.7.2
     less: ^4.2.0
     less-loader: ^12.2.0
-    lodash: ^4.17.21
     luxon: ^3.5.0
     md5: ^2.3.0
     mermaid: ^10.9.1
