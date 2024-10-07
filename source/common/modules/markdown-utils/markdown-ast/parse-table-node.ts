@@ -12,17 +12,74 @@
  *                  to increase parser speed), parsing tables requires a lot of
  *                  code which is why this function has been externalized.
  *
+ *                  TODO: Fix the table parsing. The Markdown parser does
+ *                  successfully detect most tables, but it's really bad at
+ *                  properly marking delimiters, headers, and cells.
+ *
  * END HEADER
  */
 
 import { type SyntaxNode } from '@lezer/common'
-import type { Table, TableRow, TableCell } from '../markdown-ast'
-import { getWhitespaceBeforeNode } from './get-whitespace-before-node'
-import { parseChildren } from './parse-children'
-import { genericTextNode } from './generic-text-node'
+import { type Table, type TableRow, type TableCell, type ASTNode, parseNode } from '../markdown-ast'
 
 /**
- * Parses a SyntaxNode of name "Table"
+ * Since we can't fully rely on the Lezer parser to properly give us table nodes
+ * we have to manually parse the children of table cells. For this, this
+ * function extracts all nodes within from/to (the table cell boundaries) and
+ * returns parsed AST nodes for them that can be mounted onto the child array
+ * of table cell nodes.
+ *
+ * @param   {SyntaxNode}  tableNode  The table node
+ * @param   {number}      from       Table cell start
+ * @param   {number}      to         Table cell end
+ * @param   {string}      markdown   The Markdown source
+ *
+ * @return  {ASTNode[]}              The parsed array
+ */
+function parseTableCellNodes (tableNode: SyntaxNode, from: number, to: number, markdown: string): ASTNode[] {
+  const nodes: SyntaxNode[] = []
+  // Find all nodes within the table cell; we want the top-most ones.
+  let idx = from
+  while (idx < to) {
+    const node = tableNode.resolve(idx, 1)
+    if (node.from > to) {
+      break
+    } else {
+      nodes.push(node)
+      idx = node.to
+    }
+  }
+  return nodes.map(n => parseNode(n, markdown))
+}
+
+/**
+ * Creates a new table cell node
+ *
+ * @param   {SyntaxNode}  tableNode  The outer table node
+ * @param   {number}      from       Cell contents start
+ * @param   {number}      to         Cell contents end
+ * @param   {string}      markdown   The full Markdown content (entire document)
+ *
+ * @return  {TableCell}              The parsed cell
+ */
+function makeTableCell (tableNode: SyntaxNode, from: number, to: number, markdown: string): TableCell {
+  const cell: TableCell = {
+    type: 'TableCell',
+    name: 'TableCell',
+    from,
+    to,
+    whitespaceBefore: '',
+    children: parseTableCellNodes(tableNode, from, to, markdown),
+    textContent: markdown.slice(from, to).trim()
+  }
+
+  return cell
+}
+
+/**
+ * Parses a SyntaxNode of name "Table". NOTE: Although the parser recognizes
+ * grid tables, these are not officially implemented, and as such will cause
+ * issues.
  *
  * @param   {SyntaxNode}  node      The node to parse
  * @param   {string}      markdown  The original Markdown source
@@ -35,126 +92,78 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
     name: 'Table',
     from: node.from,
     to: node.to,
-    whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+    whitespaceBefore: '', // Must be ''
     rows: []
   }
 
-  const header = node.getChildren('TableHeader')
-  const rows = node.getChildren('TableRow')
+  const tableSource = markdown.substring(node.from, node.to)
+  // Extract all lines including their offsets
+  const tableLines: [ number, string ][] = tableSource.split('\n')
+    .map((text, idx, arr) => {
+      const offset = arr.slice(0, idx).reduce((off, t) => off + t.length + 1, 0)
+      return [ offset, text ]
+    })
 
-  // The parser cannot reliably extract the table delimiters, but we need
-  // those for the column alignment. Thus, we need to see if we can find the
-  // header row (pipe tables) or a delimiter row (grid tables) in order to
-  // determine the column alignments.
-  for (const line of markdown.substring(node.from, node.to).split('\n')) {
-    if (!/^[|+:-]+$/.test(line)) {
+  const globalOffset = node.from
+
+  for (const [ lineOffset, line ] of tableLines) {
+    if (/^[+-]+$/.test(line)) {
+      // The line is a simple separator for grid tables -> do nothing
       continue
-    }
-
-    // Gotcha.
-    if (line.includes('|')) {
-      astNode.tableType = 'pipe'
+    } else if ((/^[|:-]+$/.test(line) && line.includes('-')) || /^[+=:]+$/.test(line)) {
+      // The line is a header
+      const tt = line.includes('-') ? 'pipe' : 'grid'
+      astNode.tableType = tt
+      // The plus indicates either a grid table or a special type of pipe table
+      // produced by Emacs' orgtbl command
+      // (cf. https://pandoc.org/MANUAL.html#extension-pipe_tables)
+      astNode.alignment = (tt === 'grid' ? line.split('+') : line.split('|'))
+        // NOTE: |-|-| will result in ['', '-', '-', ''] -> filter out
+        .filter(c => c.length > 0)
+        .map(c => {
+          // Pipes at the beginning or end are possible with the Emacs tables
+          // --> remove
+          if (c.startsWith('|')) {
+            c = c.substring(1)
+          }
+          if (c.endsWith('|')) {
+            c = c.substring(0, c.length - 1)
+          }
+          // Now extract the alignment characters
+          if (c.startsWith(':') && c.endsWith(':')) {
+            return 'center'
+          } else if (c.endsWith(':')) {
+            return 'right'
+          } else {
+            return 'left'
+          }
+        })
     } else {
-      astNode.tableType = 'grid'
-    }
+      // Regular line -> extract all cells.
+      // The regular expression matches cell contents without the separating
+      // pipe characters, and excludes leading and trailing whitespace. Group
+      // 1 = leading whitespace, group 2 = the cell's contents.
+      const cells = [...line.matchAll(/(?<=\|)(\s*)(.+?)\s*(?=\|)/g)]
+        .map(match => {
+          const localOffset = globalOffset + lineOffset
+          const cellFrom = localOffset + match.index + match[1].length
+          const cellTo = cellFrom + match[2].length
+          return makeTableCell(node, cellFrom, cellTo, markdown)
+        })
 
-    // The plus indicates a special Pandoc-type of pipe table
-    const splitter = line.includes('+') ? '+' : '|'
-    astNode.alignment = line.split(splitter)
-      // NOTE: |-|-| will result in ['', '-', '-', ''] -> filter out
-      .filter(c => c.length > 0)
-      .map(c => {
-        if (c.startsWith('|')) {
-          c = c.substring(1)
-        }
-        if (c.endsWith('|')) {
-          c = c.substring(0, c.length - 1)
-        }
-        if (c.startsWith(':') && c.endsWith(':')) {
-          return 'center'
-        } else if (c.endsWith(':')) {
-          return 'right'
-        } else {
-          return 'left'
-        }
-      })
-    break
-  } // Else: Couldn't determine either column alignment nor table type
-
-  // Now, transform the rows.
-  for (const row of [ ...header, ...rows ]) {
-    const rowNode: TableRow = {
-      type: 'TableRow',
-      name: row.name,
-      from: row.from,
-      to: row.to,
-      whitespaceBefore: '',
-      isHeaderOrFooter: row.name === 'TableHeader',
-      cells: []
-    }
-
-    // NOTE: The Lezer parser intentionally does not emit TableCell nodes for
-    // empty cells, so we cannot fully rely on the existence of table cells. See:
-    // https://github.com/lezer-parser/markdown/issues/23
-    // Thus, we have to manually move through the line one by one. If a
-    // TableDelimiter is followed by another TableDelimiter, we know that there
-    // is an empty cell in between.
-    let next = row.firstChild
-    let wasDelim = false
-    while (next !== null) {
-      if (next.name === 'TableDelimiter' && !wasDelim) {
-        wasDelim = true
-      } else if (next.name === 'TableDelimiter' && wasDelim) {
-        // Last iteration was a TableDelimiter, and now again --> Empty cell
-        const prev = next.prevSibling!
-        const cellNode: TableCell = {
-          type: 'TableCell',
-          name: 'TableCell',
-          from: prev.to,
-          to: next.from,
-          whitespaceBefore: '',
-          // Has no real children; here we basically just account for any whitespace
-          children: [
-            genericTextNode(prev.to, next.from, markdown.slice(prev.to, next.from))
-          ]
-        }
-        rowNode.cells.push(cellNode)
-        wasDelim = false
-      } else if (next.name === 'TableCell') {
-        // Functional table cell
-        const cellNode: TableCell = {
-          type: 'TableCell',
-          name: 'TableCell',
-          from: next.from,
-          to: next.to,
-          whitespaceBefore: '',
-          children: []
-        }
-        parseChildren(cellNode, next, markdown)
-        rowNode.cells.push(cellNode)
-        wasDelim = false
-      } else {
-        console.warn(`Could not fully parse Table node: Unexpected node "${next.name}" in row.`)
-        wasDelim = false
+      const row: TableRow = {
+        type: 'TableRow',
+        name: 'tr',
+        from: globalOffset + lineOffset,
+        to: globalOffset + lineOffset + line.length,
+        cells,
+        isHeaderOrFooter: false, // TODO
+        whitespaceBefore: ''
       }
-      next = next.nextSibling
-    }
 
-    // Special case handling: The Lezer parser unfortunately is a bit sloppy
-    // when it comes to grid table parsing and often includes the delimiting
-    // pipes between cells as part of the TableCell nodes. Here we account for
-    // that and remove that pipe if applicable.
-    for (const cellNode of rowNode.cells) {
-      if (
-        astNode.tableType === 'grid' && cellNode.children.length > 0 &&
-        cellNode.children[0].type === 'Text' && cellNode.children[0].value.startsWith('|')
-      ) {
-        cellNode.children[0].value = cellNode.children[0].value.substring(1)
-        cellNode.children[0].from += 1
-        cellNode.from += 1
-      }
+      astNode.rows.push(row)
     }
-    astNode.rows.push(rowNode)
   }
+
   return astNode
 }
