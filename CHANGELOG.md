@@ -20,6 +20,7 @@
 - Fixed an issue where some websites could make Zettlr freeze on loading a link
   preview via catastrophic backtracking in a regular expression (#4883)
 - Make link preview generator more resilient
+- Updated German (`de-DE`) translation (#5399)
 
 ## Under the Hood
 
