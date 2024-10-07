@@ -12655,14 +12655,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rehype-remove-comments@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "rehype-remove-comments@npm:6.0.0"
+"rehype-remove-comments@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "rehype-remove-comments@npm:6.1.1"
   dependencies:
     "@types/hast": ^3.0.0
     hast-util-is-conditional-comment: ^3.0.0
     unist-util-visit: ^5.0.0
-  checksum: 597093d131937fb56c8cc57a1569af005de1234ac3f236689a440653ca661eb190beb8bb7417f46a570df93969aaf471d246687c7bc359cd3ec043ec5017af29
+  checksum: df40dafb6f7eeaf5c6e00ffd8d05edcd8b323d65e3adaa7c59382c05ffac04252af973fac4ae298902234af62df10effd86b2a3deb4d73162ddc3cffead5b40a
   languageName: node
   linkType: hard
 
@@ -16188,7 +16188,7 @@ __metadata:
     pinia: ^2.2.2
     rehype-parse: ^9.0.0
     rehype-remark: ^10.0.0
-    rehype-remove-comments: ^6.0.0
+    rehype-remove-comments: ^6.1.1
     remark: ^15.0.1
     remark-frontmatter: ^5.0.0
     remark-lint: ^10.0.0
