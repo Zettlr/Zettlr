@@ -261,6 +261,11 @@ export const renderImages = [
       display: 'inline-block',
       textAlign: 'center',
       cursor: 'default',
+      textIndent: '0', // Reset the text indent
+      '& img': {
+        display: 'block',
+        position: 'relative'
+      },
       '& :not(img)': { opacity: '0' },
       '&:hover :not(img), &:focus-within :not(img)': { opacity: '1' },
       '& .image-size-info, & figcaption, & .open-externally-button': {
