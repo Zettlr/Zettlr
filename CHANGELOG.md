@@ -21,6 +21,8 @@
   preview via catastrophic backtracking in a regular expression (#4883)
 - Make link preview generator more resilient
 - Updated German (`de-DE`) translation (#5399)
+- Fixed an issue where indented LaTeX math equations could crash the editor
+  instance due to the code marks including superfluous newlines (#4726)
 
 ## Under the Hood
 
