@@ -18,6 +18,7 @@
 ## Under the Hood
 
 - Moved image preview styles into Codemirror plugin; simplified container
+- Bump Pandoc to version 3.5
 
 # 3.2.2
 
