@@ -1392,6 +1392,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lezer/common@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@lezer/common@npm:1.2.2"
+  checksum: ebac1144893ffb6b86feb9e84cbf617493e5c8f498ceac24382e0627e787372175aad0fad007d292e0cb2a748577d87f880d34b31f22b5a57f4c651330da68c9
+  languageName: node
+  linkType: hard
+
 "@lezer/css@npm:^1.0.0":
   version: 1.0.1
   resolution: "@lezer/css@npm:1.0.1"
@@ -16121,7 +16128,7 @@ __metadata:
     "@electron/fuses": ^1.8.0
     "@electron/notarize": ^2.5.0
     "@eslint/config-inspector": ^0.5.4
-    "@lezer/common": ^1.2.1
+    "@lezer/common": ^1.2.2
     "@lezer/highlight": ^1.2.1
     "@replit/codemirror-emacs": ^6.1.0
     "@replit/codemirror-vim": ^6.2.1
