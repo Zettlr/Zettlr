@@ -2336,10 +2336,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mocha@npm:^10.0.8":
-  version: 10.0.8
-  resolution: "@types/mocha@npm:10.0.8"
-  checksum: d64faa9f1ed249441944a6ae3f01d72c756b54d8bcf8e2edccb09c0d084cec6d8a0cd8b717df517812f045ade20b4b8768e06aa8633bd2485a41ec37f06be710
+"@types/mocha@npm:^10.0.9":
+  version: 10.0.9
+  resolution: "@types/mocha@npm:10.0.9"
+  checksum: cd15e7df49338466e75c580991d8fb3f86dad567f3abd6ca6489c0875b8af44f57a95167552fab7bbc950f53f97596be30b3507a9c16e0dc8d41a2d1e23b169d
   languageName: node
   linkType: hard
 
@@ -16136,7 +16136,7 @@ __metadata:
     "@types/luxon": ^3.4.2
     "@types/md5": ^2.3.5
     "@types/mermaid": ^9.2.0
-    "@types/mocha": ^10.0.8
+    "@types/mocha": ^10.0.9
     "@types/node": ^20.16.5
     "@types/sanitize-html": ^2.13.0
     "@types/semver": ^7.5.8
