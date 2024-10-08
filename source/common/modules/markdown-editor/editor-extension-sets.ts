@@ -195,7 +195,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     search({ top: true }), // Add a search
     // TAB SIZES/INDENTATION -> Depend on the configuration field
     EditorState.tabSize.from(configField, (val) => val.indentUnit),
-    indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
+    indentUnit.from(configField, (val) => ' '.repeat(val.indentUnit)),
     EditorView.lineWrapping, // Enable line wrapping,
     autoCloseBracketsConfig,
 
