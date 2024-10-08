@@ -23,6 +23,7 @@
 - Updated German (`de-DE`) translation (#5399)
 - Fixed an issue where indented LaTeX math equations could crash the editor
   instance due to the code marks including superfluous newlines (#4726)
+- Fixed missing code block background on YAML Frontmatters
 
 ## Under the Hood
 

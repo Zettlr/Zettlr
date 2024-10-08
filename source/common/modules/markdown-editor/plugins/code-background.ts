@@ -24,7 +24,8 @@ export const codeblockBackground = layer({
         // CodeBlock = Generic, four-space-indented code
         // FencedCode = Code explicitly created with backticks
         // CommentBlock = <!----> But without anything preceding the beginning
-        if (![ 'CodeBlock', 'FencedCode', 'CommentBlock' ].includes(node.type.name)) {
+        // YAMLFrontmatter = A YAML frontmatter
+        if (![ 'CodeBlock', 'FencedCode', 'CommentBlock', 'YAMLFrontmatter' ].includes(node.type.name)) {
           return
         }
 
@@ -32,9 +33,9 @@ export const codeblockBackground = layer({
           let start = node.from
           let end = node.to
 
-          if (node.type.name === 'FencedCode') {
-            // For FencedCode blocks we want to exclude the first and last lines
-            // that contain the delimiters
+          if (node.type.name === 'FencedCode' || node.type.name === 'YAMLFrontmatter') {
+            // For FencedCode and YAMLFrontmatter blocks we want to exclude the
+            // first and last lines that contain the delimiters.
             const startLine = view.state.doc.lineAt(node.from).number
             start = view.state.doc.line(startLine + 1).from
             end = view.state.doc.lineAt(node.to).from
