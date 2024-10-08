@@ -82,7 +82,7 @@
     "mermaid": "^11.3.0",
     "nodehun": "^3.0.2",
     "pinia": "^2.2.2",
-    "rehype-parse": "^9.0.0",
+    "rehype-parse": "^9.0.1",
     "rehype-remark": "^10.0.0",
     "rehype-remove-comments": "^6.1.1",
     "remark": "^15.0.1",
