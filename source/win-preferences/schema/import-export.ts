@@ -27,7 +27,7 @@ export function getImportExportFields (): PreferencesFieldset[] {
       fields: [
         {
           type: 'button',
-          label: trans('Open import profiles editor'),
+          label: trans('Open the import profiles editor'),
           onClick: () => {
             ipcRenderer.invoke('application', {
               command: 'open-aux-window',
@@ -41,7 +41,7 @@ export function getImportExportFields (): PreferencesFieldset[] {
         },
         {
           type: 'button',
-          label: trans('Open export profiles editor'),
+          label: trans('Open the export profiles editor'),
           onClick: () => {
             ipcRenderer.invoke('application', {
               command: 'open-aux-window',
