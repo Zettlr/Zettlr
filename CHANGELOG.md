@@ -24,6 +24,8 @@
 - Fixed an issue where indented LaTeX math equations could crash the editor
   instance due to the code marks including superfluous newlines (#4726)
 - Fixed missing code block background on YAML Frontmatters
+- Improved visual feedback during the update process
+- Zettlr now checks for new updates once an hour instead only during startup
 
 ## Under the Hood
 
