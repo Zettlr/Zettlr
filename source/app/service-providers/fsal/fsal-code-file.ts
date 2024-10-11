@@ -24,6 +24,8 @@ import extractBOM from './util/extract-bom'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
 import { extractLinefeed } from './util/extract-linefeed'
 import { type SearchTerm } from 'source/types/common/search'
+import { normalizeLineEndings } from './util/normalize-line-endings'
+import { detectFileIndentation } from './util/detect-file-indentation'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -66,6 +68,8 @@ function parseFileContents (file: CodeFileDescriptor, content: string): void {
   // systems don't complain.
   file.bom = extractBOM(content)
   file.linefeed = extractLinefeed(content)
+  const normalizedContent = normalizeLineEndings(content)
+  ;[ file.indentChar, file.indentSize ] = detectFileIndentation(normalizedContent.split('\n'))
 }
 
 export async function parse (
@@ -82,6 +86,8 @@ export async function parse (
     ext: path.extname(filePath),
     size: 0,
     bom: '', // Default: No BOM
+    indentChar: ' ', // Default: spaces
+    indentSize: 4, // Default: 4 spaces
     type: 'code',
     modtime: 0, // Modification time
     creationtime: 0, // Creation time
@@ -141,14 +147,8 @@ export async function search (fileObject: CodeFileDescriptor, terms: SearchTerm[
 export async function load (fileObject: CodeFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
-  return content
-    // Account for an optional BOM, if present
-    .substring(fileObject.bom.length)
-    // Always split with a regular expression to ensure that mixed linefeeds
-    // don't break reading in a file. Then, on save, the linefeeds will be
-    // standardized to whatever the linefeed extractor detected.
-    .split(/\r\n|\n\r|\n|\r/g)
-    .join('\n')
+  // Account for an optional BOM, if present
+  return normalizeLineEndings(content.substring(fileObject.bom.length))
 }
 
 export async function hasChangedOnDisk (fileObject: CodeFileDescriptor): Promise<boolean> {

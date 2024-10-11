@@ -29,6 +29,8 @@ import type {
   ZettelkastenTag
 } from '@common/modules/markdown-utils/markdown-ast'
 import { extractLinefeed } from './extract-linefeed'
+import { detectFileIndentation } from './detect-file-indentation'
+import { normalizeLineEndings } from './normalize-line-endings'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -65,6 +67,8 @@ export default function getMarkdownFileParser (
     file.bom = extractBOM(content)
     file.linefeed = extractLinefeed(content)
     file.id = extractFileId(file.name, content, idREPattern)
+    const normalizedContent = normalizeLineEndings(content)
+    ;[ file.indentChar, file.indentSize ] = detectFileIndentation(normalizedContent.split('\n'))
 
     // Parse the file into our AST
     const ast = md2ast(content)
