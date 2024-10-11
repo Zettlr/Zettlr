@@ -22,7 +22,7 @@ import { addNewFootnote } from './footnotes'
 import { maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown } from './lists'
 import { insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList } from './markdown'
 import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
-import { moveNextCell, moveNextRow, movePrevCell, movePrevRow, swapNextRow, swapPrevRow } from './tables'
+import { moveNextCell, moveNextRow, movePrevCell, movePrevRow, swapNextCol, swapNextRow, swapPrevCol, swapPrevRow } from './tables'
 
 /**
  * Zettlr's custom keymap. It defines many of the default key bindings
@@ -34,6 +34,7 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Tab', run: moveNextCell, shift: movePrevCell },
   { key: 'Enter', run: moveNextRow, shift: movePrevRow },
   { key: 'Alt-Enter', run: swapNextRow, shift: swapPrevRow },
+  // TODO: Find key{ key: undefined, run: swapNextCol, shift: swapPrevCol },
   // ------------------------------
   { key: 'Mod-k', run: insertLink },
   // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on

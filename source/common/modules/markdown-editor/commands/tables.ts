@@ -216,12 +216,120 @@ export function movePrevRow (target: EditorView): boolean {
   }
 }
 
+/**
+ * Swaps the columns where cursors currently are within TableNodes with the
+ * following ones where possible.
+ *
+ * @param   {EditorView}  target  The EditorView
+ *
+ * @return  {boolean}             Whether there has been at least one change.
+ */
 export function swapNextCol (target: EditorView): boolean {
-  return false
+  const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
+  const changes: ChangeSpec[] = target.state.selection.ranges.map(range => {
+    // 1. Is this selection inside a table?
+    const table = tableNodes.find(node => node.from <= range.anchor && node.to >= range.anchor)
+    if (table === undefined) {
+      return undefined
+    }
+
+    const offsets = getTableCellOffsets(table, target.state.sliceDoc())
+
+    // Now with the offsets at hand, it's relatively easy: We only need to find
+    // the cell in which the cursor is in, then see if there is a next one, and
+    // then, for each row, swap both using the indices.
+    const cellIndex = offsets.map(row => {
+      return row.findIndex(cell => cell[0] <= range.anchor && cell[1] >= range.anchor)
+    })
+      .filter(sel => sel > -1)
+
+    // Now cellIndex should contain exactly one index, and there should be a
+    // cell afterwards.
+    if (cellIndex.length !== 1 || cellIndex[0] >= offsets[0].length) {
+      return undefined
+    }
+
+    const idx = cellIndex[0]
+
+    return offsets.map(row => {
+      return [
+        // Cell 1 -> 0
+        {
+          from: row[idx][0],
+          to: row[idx][1],
+          insert: target.state.sliceDoc(row[idx + 1][0], row[idx + 1][1])
+        },
+        // Cell 0 -> 1
+        {
+          from: row[idx + 1][0],
+          to: row[idx + 1][1],
+          insert: target.state.sliceDoc(row[idx][0], row[idx][1])
+        }
+      ]
+    }).flat()
+  })
+    .filter(sel => sel !== undefined)
+
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
 export function swapPrevCol (target: EditorView): boolean {
-  return false
+  const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
+  const changes: ChangeSpec[] = target.state.selection.ranges.map(range => {
+    // 1. Is this selection inside a table?
+    const table = tableNodes.find(node => node.from <= range.anchor && node.to >= range.anchor)
+    if (table === undefined) {
+      return undefined
+    }
+
+    const offsets = getTableCellOffsets(table, target.state.sliceDoc())
+
+    // Now with the offsets at hand, it's relatively easy: We only need to find
+    // the cell in which the cursor is in, then see if there is a next one, and
+    // then, for each row, swap both using the indices.
+    const cellIndex = offsets.map(row => {
+      return row.findIndex(cell => cell[0] <= range.anchor && cell[1] >= range.anchor)
+    })
+      .filter(sel => sel > -1)
+
+    // Now cellIndex should contain exactly one index, and there should be a
+    // cell afterwards.
+    if (cellIndex.length !== 1 || cellIndex[0] < 1) {
+      return undefined
+    }
+
+    const idx = cellIndex[0]
+
+    return offsets.map(row => {
+      return [
+        // Cell 0 -> 1
+        {
+          from: row[idx - 1][0],
+          to: row[idx - 1][1],
+          insert: target.state.sliceDoc(row[idx][0], row[idx][1])
+        },
+        // Cell 1 -> 0
+        {
+          from: row[idx][0],
+          to: row[idx][1],
+          insert: target.state.sliceDoc(row[idx - 1][0], row[idx - 1][1])
+        }
+      ]
+    }).flat()
+  })
+    .filter(sel => sel !== undefined)
+
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
 /**
