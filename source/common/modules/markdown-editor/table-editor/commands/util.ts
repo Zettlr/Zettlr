@@ -21,9 +21,9 @@ import { SyntaxNode } from "@lezer/common"
 import { parseTableNode } from "@common/modules/markdown-utils/markdown-ast/parse-table-node"
 
 /**
- * Takes a tale node and the corresponding Markdown source and returns a list of
- * the cell offsets (from, to) for every cell in the table, sorted by rows. The
- * structure of the return value is `[rows][cells][from, to]`.
+ * Takes a table node and the corresponding Markdown source and returns a list
+ * of the cell offsets (from, to) for every cell in the table, sorted by rows.
+ * The structure of the return value is `[rows][cells][from, to]`.
  *
  * @param   {SyntaxNode}  tableNode  The table SyntaxNode
  * @param   {string}      markdown   The original Markdown source
