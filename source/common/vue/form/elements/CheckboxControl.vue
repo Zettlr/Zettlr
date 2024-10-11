@@ -92,13 +92,13 @@ body {
     // Some space for the checkbox itself, and then only as much as necessary to
     // fit in the label (this prevents checking/unchecking the checkbox if the
     // user clicks far beyond the label string)
-    grid-template-columns: @input-size * 2 max-content;
+    grid-template-columns: @input-size * 1.6 max-content;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
     align-items: center;
 
     &:not(.checkbox-outer-div-inline) {
-      margin: 10px 0;
+      // padding: 5px 0;
     }
 
     .cb-group-label { grid-area: label; }
@@ -110,8 +110,9 @@ body {
     }
 
     div.info {
-      color: grey;
+      color: rgba(0, 0, 0, 0.6);
       font-size: 80%;
+      margin-top: 2px;
     }
   }
 
@@ -134,7 +135,7 @@ body {
       width: @input-size;
       border-radius: 4px;
       background-color: #eee;
-      transition: background-color .2s ease;
+      transition: background-color .1s ease;
 
       &:after {
         content: "";
@@ -147,7 +148,7 @@ body {
         border: solid white;
         border-width: 0 2px 2px 0;
         transform: rotate(45deg);
-        transition: opacity .2s ease;
+        transition: opacity .1s ease;
       }
     }
 
@@ -167,6 +168,12 @@ body {
         border-color: rgb(90, 90, 90);
       }
     }
+  }
+}
+
+body.dark {
+  div.info {
+    color: rgba(255, 255, 255, 0.6);
   }
 }
 
@@ -276,7 +283,7 @@ body.win32 {
         border: solid white;
         border-width: 0 2px 2px 0;
         transform: rotate(45deg);
-        transition: opacity 1s ease;
+        transition: opacity .1s ease;
       }
     }
 
