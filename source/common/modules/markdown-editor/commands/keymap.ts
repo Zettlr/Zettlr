@@ -22,7 +22,8 @@ import { addNewFootnote } from './footnotes'
 import { maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown } from './lists'
 import { insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList } from './markdown'
 import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
-import { moveNextCell, moveNextRow, movePrevCell, movePrevRow, swapNextCol, swapNextRow, swapPrevCol, swapPrevRow } from './tables'
+import { moveNextCell, movePrevCell } from '../table-editor/commands/columns'
+import { moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
 
 /**
  * Zettlr's custom keymap. It defines many of the default key bindings
@@ -33,7 +34,8 @@ export const customKeymap: KeyBinding[] = [
   // First, the most specific commands: Tables
   { key: 'Tab', run: moveNextCell, shift: movePrevCell },
   { key: 'Enter', run: moveNextRow, shift: movePrevRow },
-  { key: 'Alt-Enter', run: swapNextRow, shift: swapPrevRow },
+  { key: 'Alt-ArrowUp', run: swapPrevRow },
+  { key: 'Alt-ArrowDown', run: swapNextRow },
   // TODO: Find key{ key: undefined, run: swapNextCol, shift: swapPrevCol },
   // ------------------------------
   { key: 'Mod-k', run: insertLink },
