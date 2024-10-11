@@ -12631,14 +12631,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rehype-parse@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "rehype-parse@npm:9.0.0"
+"rehype-parse@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "rehype-parse@npm:9.0.1"
   dependencies:
     "@types/hast": ^3.0.0
     hast-util-from-html: ^2.0.0
     unified: ^11.0.0
-  checksum: cfff1ed913cfb390c6c9c2d3ee396172098f615f0439e162d4ab0645f201727f58859429bbd33e187da603c605a6f34a796910511c45357043ea8c9a00f83f93
+  checksum: 3175c8d352ca2c8bddb4749fa1bd21336cab27b06165f6db77678e944479ac4fdee729ced8956bf303ba8ff01a7e8d0666e8123980cfbce28a7b4527b2167717
   languageName: node
   linkType: hard
 
@@ -16186,7 +16186,7 @@ __metadata:
     node-loader: ^2.0.0
     nodehun: ^3.0.2
     pinia: ^2.2.2
-    rehype-parse: ^9.0.0
+    rehype-parse: ^9.0.1
     rehype-remark: ^10.0.0
     rehype-remove-comments: ^6.1.1
     remark: ^15.0.1
