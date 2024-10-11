@@ -56,7 +56,7 @@ watch(inputValue, () => {
   emit('update:modelValue', inputValue.value)
 })
 
-const fieldID = computed<string>(() => 'form-select-' + props.name ?? '')
+const fieldID = computed<string>(() => 'form-select-' + (props.name ?? ''))
 </script>
 
 <style lang="less">

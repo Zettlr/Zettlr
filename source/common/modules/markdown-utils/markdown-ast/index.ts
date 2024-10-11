@@ -569,8 +569,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         return astNode
       }
     }
-    case 'Highlight': {
-      const content = node.getChild('HighlightContent')
+    case 'HighlightContent': {
       const astNode: Highlight = {
         type: 'Highlight',
         name: 'Highlight',
@@ -579,7 +578,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         children: []
       }
-      return parseChildren(astNode, content ?? node, markdown)
+      return parseChildren(astNode, node, markdown)
     }
     case 'OrderedList': {
       const astNode: OrderedList = {

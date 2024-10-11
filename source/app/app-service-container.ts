@@ -76,13 +76,13 @@ export default class AppServiceContainer {
     this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._documentManager = new DocumentManager(this)
     this._workspaces = new WorkspaceProvider(this._logProvider, this._configProvider, this._fsal)
-    this._tagProvider = new TagProvider(this._logProvider, this._workspaces)
+    this._tagProvider = new TagProvider(this._logProvider, this._documentManager, this._workspaces)
     this._linkProvider = new LinkProvider(this._logProvider, this._workspaces)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
     this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider, this._documentManager)
-    this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._commandProvider)
+    this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._commandProvider, this._windowProvider)
   }
 
   /**
