@@ -52,7 +52,7 @@ import PopoverWrapper from './PopoverWrapper.vue'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import TabBar, { type TabbarControl } from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
-import { ref, computed, onBeforeMount } from 'vue'
+import { ref, computed, onBeforeMount, onMounted } from 'vue'
 import { useConfigStore, useTagsStore } from 'source/pinia'
 
 const props = defineProps<{
@@ -107,7 +107,7 @@ const filteredTags = computed(() => {
   })
 })
 
-onBeforeMount(() => {
+onMounted(() => {
   filter.value?.focus()
 })
 
