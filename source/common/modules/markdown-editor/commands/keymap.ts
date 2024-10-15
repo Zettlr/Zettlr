@@ -22,6 +22,8 @@ import { addNewFootnote } from './footnotes'
 import { maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown } from './lists'
 import { insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList } from './markdown'
 import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
+import { moveNextCell, movePrevCell } from '../table-editor/commands/columns'
+import { moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
 
 /**
  * Zettlr's custom keymap. It defines many of the default key bindings
@@ -29,6 +31,13 @@ import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
  * @var {KeyBinding[]}
  */
 export const customKeymap: KeyBinding[] = [
+  // First, the most specific commands: Tables
+  { key: 'Tab', run: moveNextCell, shift: movePrevCell },
+  { key: 'Enter', run: moveNextRow, shift: movePrevRow },
+  { key: 'Alt-ArrowUp', run: swapPrevRow },
+  { key: 'Alt-ArrowDown', run: swapNextRow },
+  // TODO: Find key{ key: undefined, run: swapNextCol, shift: swapPrevCol },
+  // ------------------------------
   { key: 'Mod-k', run: insertLink },
   // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
   // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.

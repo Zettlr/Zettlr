@@ -1,64 +1,65 @@
 /**
-  * @ignore
-  * BEGIN HEADER
-  *
-  * Contains:        TableEditor
-  * CVM-Role:        Model
-  * Maintainer:      Hendrik Erz
-  * License:         GNU GPL v3
-  *
-  * Description:     This class models Markdown tables using an internal AST and
-  *                  enables easy WYSIWYG-style editing of tables.
-  *
-  * END HEADER
-  */
-
-import TableEditor from './table-editor'
-import parsePipeTable from './parse-pipe'
-import parseSimpleTable from './parse-simple'
-import parseGridTable from './parse-grid'
-import type { TableEditorOptions } from './types'
-import { parseNode } from './parse-node'
-import type { SyntaxNode } from '@lezer/common'
-
-/**
- * Instantiates a TableEditor from Markdown source
+ * @ignore
+ * BEGIN HEADER
  *
- * @param   {string}              markdownTable  The Markdown source
- * @param   {TableEditorOptions}  hooks          TableEditor options
+ * Contains:        TableRenderer
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
  *
- * @return  {TableEditor}                        The instance
+ * Description:     Utilizing the TableEditor, this renderer renders tables.
+ *
+ * END HEADER
  */
-export function fromMarkdown (markdownTable: string, hooks: TableEditorOptions = {}): TableEditor {
-  // We support three types of tables: Grid tables, pipe tables, and simple tables.
-  // Two of those types can be determined by looking at the first row, the third
-  // is then the default.
-  const firstRow = markdownTable.split('\n')[0]
-  if (/^\+[-=+:]+\+$/.test(firstRow)) {
-    // Must be a grid table
-    const parsed = parseGridTable(markdownTable)
-    return new TableEditor(parsed.ast, parsed.colAlignments, 'grid', hooks)
-  } else if (/^(\|.+?\|)$|(.+?\|.+?)/.test(firstRow)) {
-    // Must be a pipe table
-    const parsed = parsePipeTable(markdownTable)
-    return new TableEditor(parsed.ast, parsed.colAlignments, 'pipe', hooks)
-  } else {
-    // Fall back to simple table
-    const parsed = parseSimpleTable(markdownTable)
-    return new TableEditor(parsed.ast, parsed.colAlignments, 'simple', hooks)
-  }
-}
 
-/**
- * Instantiates a TableEditor based on a SyntaxNode
- *
- * @param   {SyntaxNode}          tableNode  The syntax node
- * @param   {string}              markdown   The Markdown source
- * @param   {TableEditorOptions}  hooks      TableEditor options
- *
- * @return  {TableEditor}                    The instance
- */
-export function fromSyntaxNode (tableNode: SyntaxNode, markdown: string, hooks: TableEditorOptions = {}): TableEditor {
-  const parsed = parseNode(tableNode, markdown)
-  return new TableEditor(parsed.ast, parsed.colAlignments, parsed.type ?? 'pipe', hooks)
-}
+// DEBUG // As of now, the new TableEditor has very rudimentary functionality.
+// DEBUG // It properly renders tables with basic styles in Markdown documents
+// DEBUG // and allows users to click inside tables to start editing. That
+// DEBUG // creation and removal of various subviews is a bit wonky right now,
+// DEBUG // but any change is immediately applied to the underlying main
+// DEBUG // EditorView, ensuring that no changes are retained just within the
+// DEBUG // subview.
+
+// TODOs:
+// 1. Check how large the performance penalty is for converting the Markdown
+//    into HTML every time we update the table's DOM. Since we already parsing
+//    the AST, I guess it should not be too bad, but I'll have to run a
+//    performance test.
+
+import { DecorationSet, EditorView } from '@codemirror/view'
+import { EditorState, StateField } from '@codemirror/state'
+import { subviewUpdatePlugin } from './subview'
+import { TableWidget } from './widget'
+
+// Define a StateField that handles the entire TableEditor Schischi, as well as
+// a few helper extensions that are necessary for the functioning of the widgets
+export const renderTables = [
+  // The actual TableEditor provider
+  StateField.define<DecorationSet>({
+    create (state: EditorState) {
+      return TableWidget.createForState(state)
+    },
+    update (field, tr) {
+      return TableWidget.createForState(tr.state)
+    },
+    provide: f => EditorView.decorations.from(f)
+  }),
+  // A theme for the various elements
+  EditorView.baseTheme({
+    '.cm-content .cm-table-editor-widget': {
+      borderCollapse: 'collapse',
+      margin: '0 2px 0 6px' // Taken from .cm-line so that tables align
+    },
+    '.cm-content .cm-table-editor-widget .cm-scroller': {
+      padding: '0' // Override the large margin from the main editor view
+    },
+    '.cm-content .cm-table-editor-widget td, .cm-content .cm-table-editor-widget th': {
+      border: '1px solid black',
+      padding: '2px 4px'
+    },
+    '&dark .cm-content .cm-table-editor-widget td, &dark .cm-content .cm-table-editor-widget th': {
+      borderColor: '#aaaaaa'
+    }
+  }),
+  subviewUpdatePlugin
+]
