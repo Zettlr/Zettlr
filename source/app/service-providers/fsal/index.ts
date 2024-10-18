@@ -446,10 +446,9 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
-   * This is a convenience function to retrieve the file contents (as a string)
-   * of any file that is supported by Zettlr, meaning you can use this function
-   * to load the contents of any Markdown file, any JSON or YAML file, or any
-   * TeX file (+ maybe others in the future).
+   * Retrieves the file contents (as a string) of any text file that is
+   * supported by Zettlr. NOTE: This function will normalize the line endings of
+   * the file, so it cannot be used to perform linefeed detection!
    *
    * @throws When the path was a directory or an unsupported file (unsupported
    *         includes attachments)
