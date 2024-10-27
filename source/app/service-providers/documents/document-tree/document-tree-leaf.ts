@@ -170,7 +170,7 @@ export class DTLeaf {
    *
    * @return  {Promise<DTLeaf>}                  Resolves with the new leaf
    */
-  static fromJSON (parent: DocumentTree|DTBranch, nodeData: any): DTLeaf {
+  static fromJSON (parent: DocumentTree|DTBranch, nodeData: LeafNodeJSON): DTLeaf {
     const leaf = new DTLeaf(parent, nodeData.id)
     for (const file of nodeData.openFiles as OpenDocument[]) {
       if (typeof file.path !== 'string' || !isFile(file.path)) {
@@ -186,8 +186,15 @@ export class DTLeaf {
     }
 
     // Revitalize the active File pointer
-    const activeFile = leaf.tabMan.openFiles.find(e => e.path === nodeData.activeFile.path) ?? null
+    const activeFile = leaf.tabMan.openFiles.find(e => e.path === nodeData.activeFile?.path) ?? null
     leaf.tabMan.activeFile = activeFile
+
+    // If the last active file can't be restored, make the first one of this
+    // leaf active so that the editor shows something.
+    if (leaf.tabMan.activeFile === null && leaf.tabMan.openFiles.length > 0) {
+      leaf.tabMan.activeFile = leaf.tabMan.openFiles[0]
+    }
+
     return leaf
   }
 

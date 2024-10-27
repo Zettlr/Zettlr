@@ -1,3 +1,5 @@
+import { TabManagerJSON } from "source/app/service-providers/documents/document-tree/tab-manager"
+
 /**
  * A descriptor for some metadata that is associated to opened documents, such
  * as pinning status, or an icon.
@@ -31,7 +33,7 @@ export enum DocumentType {
 /**
  * A JSON serializable representation of a document tree leaf
  */
-export interface LeafNodeJSON {
+export interface LeafNodeJSON extends TabManagerJSON {
   /**
    * Indicates that this is a leaf
    */
@@ -40,14 +42,6 @@ export interface LeafNodeJSON {
    * The ID for this leaf (UUID)
    */
   id: string
-  /**
-   * A list of open files within this leaf
-   */
-  openFiles: OpenDocument[]
-  /**
-   * The currently active file of this leaf
-   */
-  activeFile: OpenDocument|null
 }
 
 /**
