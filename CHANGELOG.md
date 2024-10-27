@@ -31,6 +31,7 @@
   box (#5444)
 - Nightly releases are no longer considered older than the current stable
   version (#5429)
+- Fixed file duplication (#5360)
 
 ## Under the Hood
 

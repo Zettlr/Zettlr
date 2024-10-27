@@ -47,9 +47,9 @@ export default class FileDuplicate extends ZettlrCommand {
 
     // Then, the target directory.
     let dir = this._app.workspaces.findDir(file.dir) // (1) A specified directory
-    const openDir = this._app.documents.getOpenDirectory()
-    if (dir === undefined && openDir !== null) {
-      dir = await this._app.fsal.getAnyDirectoryDescriptor(openDir)
+    const { openDirectory } = this._app.config.get()
+    if (dir === undefined && openDirectory !== null && await this._app.fsal.isDir(openDirectory)) {
+      dir = await this._app.fsal.getAnyDirectoryDescriptor(openDirectory)
     }
 
     if (dir === undefined) { // (3) Fail
