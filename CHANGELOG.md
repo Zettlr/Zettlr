@@ -34,6 +34,8 @@
 - Fixed file duplication (#5360)
 - Fixed a bug that would cause a saved window state to be lost due to an issue
   with the active file not existing anymore
+- Zettlr now respects your chosen symbols for bold and italic formatting upon
+  converting HTML to Markdown (e.g., during paste; #5396)
 
 ## Under the Hood
 

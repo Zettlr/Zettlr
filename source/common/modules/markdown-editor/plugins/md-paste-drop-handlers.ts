@@ -120,10 +120,11 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       // The user intends to paste text, and there is formatted HTML in the
       // clipboard that we need to turn into HTML.
       const html = data.getData('text/html')
-      console.log('Converting from HTML ...')
-      const promise = html2md(html, true)
+      const { boldFormatting, italicFormatting } = view.state.field(configField)
+      const emphasis = italicFormatting
+      const strong = boldFormatting.includes('*') ? '*' : '_'
+      const promise = html2md(html, true, { emphasis, strong })
         .then(md => {
-          console.log('Done!')
           insertions.push(md)
         })
         .catch(err => {

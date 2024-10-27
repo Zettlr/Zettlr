@@ -63,7 +63,10 @@ async function handlePaste (view: EditorView): Promise<void> {
       if (html === plain) {
         view.dispatch(view.state.replaceSelection(plain))
       } else {
-        const converted = await html2md(html)
+        const { boldFormatting, italicFormatting } = view.state.field(configField)
+        const emphasis = italicFormatting
+        const strong = boldFormatting.includes('*') ? '*' : '_'
+        const converted = await html2md(html, false, { strong, emphasis })
         view.dispatch(view.state.replaceSelection(converted))
       }
     } else if (hasPlain) {
