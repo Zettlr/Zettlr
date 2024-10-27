@@ -41,6 +41,7 @@
 - Bump Pandoc to version 3.5
 - Properly type document tree JSONs and make the logic more resilient to a lack
   of an active file upon hydration
+- Properly type props for MainEditor Vue component
 
 # 3.2.2
 

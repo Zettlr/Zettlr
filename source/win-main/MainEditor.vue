@@ -64,32 +64,14 @@ function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
   }
 }
 
-const props = defineProps({
-  leafId: {
-    type: String,
-    required: true
-  },
-  windowId: {
-    type: String,
-    required: true
-  },
-  activeFile: {
-    type: Object as () => OpenDocument|null,
-    required: true
-  },
-  editorCommands: {
-    type: Object as () => EditorCommands,
-    required: true
-  },
-  distractionFree: {
-    type: Boolean,
-    required: true
-  },
-  file: {
-    type: Object as () => OpenDocument,
-    required: true
-  }
-})
+const props = defineProps<{
+  leafId: string
+  windowId: string
+  activeFile: OpenDocument|null
+  editorCommands: EditorCommands
+  distractionFree: boolean
+  file: OpenDocument
+}>()
 
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
