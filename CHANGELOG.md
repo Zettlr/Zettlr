@@ -29,6 +29,8 @@
 - New tags are now picked up by the app immediately (#5140)
 - Fixed a UI regression where clicking on the tag filter didn't focus the text
   box (#5444)
+- Nightly releases are no longer considered older than the current stable
+  version (#5429)
 
 ## Under the Hood
 

@@ -391,8 +391,36 @@ export default class UpdateProvider extends ProviderContract {
     const parsedResponse = JSON.parse(response.body) as ServerAPIResponse
     const state = getUpdateState()
 
+    const lv = semver.parse(CUR_VER) // localVersion
+    const rv = semver.parse(parsedResponse.tag_name) // remoteVersion
+
+    if (lv === null || rv === null) {
+      this._cleanup()
+      const error = new Error('Cannot complete check for new version: Either the local or remote version could not be parsed!')
+      this._logger.error(error.message, { localVersion: lv, remoteVersion: rv })
+      throw error
+    }
+  
+    // We have one issue (#5429), namely that Zettlr follows the convention to
+    // declare nightlies using the SAME major/minor/patch as the current stable
+    // release with "-nightly" appended to it. However, under strict SemVer
+    // rules, this makes the nightlies a *prerelease* (and not a ...
+    // "postrelease"...? I don't think this term exists). Here we have to do a
+    // bit of manual engineering to account for this edge case.
+
+    // First, store the regular check in the variable ...
+    state.updateAvailable = semver.lt(lv, rv)
+    // ... and then check if the versions match up except for the local one
+    // having "nightly" in its prerelease array.
+    if (
+      lv.major === rv.major && lv.minor === rv.minor && lv.patch === rv.patch &&
+      lv.prerelease.includes('nightly')
+    ) {
+      state.updateAvailable = false
+    }
+
+    // Adapt the rest of the state
     state.tagName = parsedResponse.tag_name
-    state.updateAvailable = semver.lt(CUR_VER, parsedResponse.tag_name)
     state.changelog = md2html(parsedResponse.body, (_c1, _c2) => undefined)
     state.prerelease = parsedResponse.prerelease
     state.releasePage = parsedResponse.html_url
