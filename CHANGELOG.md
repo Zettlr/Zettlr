@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.2.3
+
+## GUI and Functionality
+
 - Fix highlight markers not appearing while the emphasis renderer is on when the
   user edits a highlighted span
 - Add pascal syntax highlighting to the code block autocomplete
