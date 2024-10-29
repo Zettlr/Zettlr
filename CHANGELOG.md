@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Columns in the preferences window are now properly aligned (#5410)
 
 ## Under the Hood
 
