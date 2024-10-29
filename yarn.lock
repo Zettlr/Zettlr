@@ -2357,21 +2357,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.16.5":
-  version: 20.16.5
-  resolution: "@types/node@npm:20.16.5"
-  dependencies:
-    undici-types: ~6.19.2
-  checksum: f38b7bd8c4993dcf38943afa2ffdd7dfd18fc94f8f3f28d0c1045a10d39871a6cc1b8f8d3bf0c7ed848457d0e1d283482f6ca125579c13fed1b7575d23e8e8f5
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:^20.9.0":
   version: 20.11.20
   resolution: "@types/node@npm:20.11.20"
   dependencies:
     undici-types: ~5.26.4
   checksum: 79d339622fed1c0e64297c8b9f558815a91edb9fea3acb69c1201b919d450e12915cf98b1a96b2d2c121bf86f30b62b6de3708f8894c5319f8dfb3a991e3ccdd
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^22.8.2":
+  version: 22.8.2
+  resolution: "@types/node@npm:22.8.2"
+  dependencies:
+    undici-types: ~6.19.8
+  checksum: 8d57352fe563e8de78311c2f799e8c3805cbec3840dfa54d5168588c30112d1e87a7940ebdbdcebb1f0094e26b7e626dfadd9683f5c60d8a76e9082051fea14a
   languageName: node
   linkType: hard
 
@@ -14885,7 +14885,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.19.2":
+"undici-types@npm:~6.19.8":
   version: 6.19.8
   resolution: "undici-types@npm:6.19.8"
   checksum: de51f1b447d22571cf155dfe14ff6d12c5bdaec237c765085b439c38ca8518fc360e88c70f99469162bf2e14188a7b0bcb06e1ed2dc031042b984b0bb9544017
@@ -16137,7 +16137,7 @@ __metadata:
     "@types/md5": ^2.3.5
     "@types/mermaid": ^9.2.0
     "@types/mocha": ^10.0.8
-    "@types/node": ^20.16.5
+    "@types/node": ^22.8.2
     "@types/sanitize-html": ^2.13.0
     "@types/semver": ^7.5.8
     "@types/showdown": ^2.0.6
