@@ -667,7 +667,11 @@ export default class UpdateProvider extends ProviderContract {
       })
     }, UPDATE_CHECK_INTERVAL)
 
-    // One initial check
+    // One initial check (if applicable)
+    if (!this._config.get().system.checkForUpdates) {
+      return
+    }
+
     this.check().catch(err => {
       this._logger.error('[Update Provider] Could not check for updates: Unexpected error', err)
     })
