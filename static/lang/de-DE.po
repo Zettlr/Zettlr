@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-10-28 12:09+0000\n"
-"PO-Revision-Date: 2024-04-28 18:28+0200\n"
+"PO-Revision-Date: 2024-10-31 11:20+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:56
 msgid ""
@@ -30,6 +30,8 @@ msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"Dieses Profil ist ungültig. Es enthält Syntaxfehler oder das “writer” oder "
+"“reader”-Attribut fehlen."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:58
 #: source/app/service-providers/menu/menu.darwin.ts:286
@@ -40,7 +42,7 @@ msgstr "Datei umbenennen"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:59
 msgid "Open defaults folder"
-msgstr ""
+msgstr "Öffne Profilordner"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:60
 msgid "Edit the default settings for imports or exports here."
@@ -202,13 +204,8 @@ msgstr "AutoCorrect"
 
 #: source/tmp/win-preferences/App.vue.ts:164
 #: source/win-preferences/schema/citations.ts:22
-#, fuzzy
 msgid "Citations"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Zitierungen\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Zitationen"
+msgstr "Zitationen"
 
 #: source/tmp/win-preferences/App.vue.ts:169
 msgid "Zettelkasten"
@@ -247,19 +244,12 @@ msgstr ""
 "ermöglichen."
 
 #: source/tmp/win-about/General-Tab.vue.ts:22
-#, fuzzy
 msgid ""
 "Zettlr makes use of citeproc to display citations directly in the editor. To "
 "this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
 "files. The files have been shipped unaltered with author metadata. More "
 "information:"
 msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Zettlr verwendet citeproc, um Zitierungen direkt im Editor anzuzeigen. "
-"Hierzu verwendet Zettlr die CitationStyleLanguage (CSL) Sprachdateien sowie "
-"Stile. Die Dateien wurden unverändert mit Autorenangaben ausgeliefert. "
-"Weitere Informationen:\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Zettlr verwendet citeproc, um Zitationen direkt im Editor anzuzeigen. Hierzu "
 "verwendet Zettlr die CitationStyleLanguage (CSL) Sprachdateien sowie Stile. "
 "Die Dateien wurden unverändert mit Autorenangaben ausgeliefert. Weitere "
@@ -324,7 +314,7 @@ msgstr "Charts"
 #: source/tmp/win-stats/CalendarView.vue.ts:26
 #: source/tmp/win-stats/App.vue.ts:27
 msgid "Calendar"
-msgstr ""
+msgstr "Kalender"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:28
 msgid "January"
@@ -420,13 +410,8 @@ msgstr "Anzahl"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:47
 #: source/tmp/win-tag-manager/App.vue.ts:35
-#, fuzzy
 msgid "Filter tags…"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Tags filtern…\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Schlagworte filtern…"
+msgstr "Schlagworte filtern…"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:48
 msgid "Tag Cloud"
@@ -577,13 +562,9 @@ msgid "This relation is based on a backlink."
 msgstr "Verwandt aufgrund eingehendem Link."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Verwandt basierend auf %s gemeinsamen Tags: %s\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Verwandt basierend auf %s gemeinsamen Schlagworten: %s"
+msgstr "Verwandt basierend auf %s gemeinsamen Schlagworten: %s"
 
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
@@ -614,13 +595,8 @@ msgid "References"
 msgstr "Literatur"
 
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:42
-#, fuzzy
 msgid "There are no citations in this document."
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"In diesem Dokument gibt es keine Zitate.\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"In diesem Dokument wurden keine Zitationen gefunden."
+msgstr "In diesem Dokument wurden keine Zitationen gefunden."
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:24
 #: source/win-preferences/schema/appearance.ts:52
@@ -943,7 +919,7 @@ msgstr "Drucken…"
 
 #: source/tmp/win-tag-manager/App.vue.ts:27
 msgid "Assign color"
-msgstr ""
+msgstr "Farbe zuweisen"
 
 #: source/tmp/win-tag-manager/App.vue.ts:28
 msgid "Remove color"
@@ -951,15 +927,15 @@ msgstr "Farbe entfernen"
 
 #: source/tmp/win-tag-manager/App.vue.ts:29
 msgid "Tag name"
-msgstr "Tagname"
+msgstr "Schlagwort"
 
 #: source/tmp/win-tag-manager/App.vue.ts:30
 msgid "Color"
-msgstr ""
+msgstr "Farbe"
 
 #: source/tmp/win-tag-manager/App.vue.ts:32
 msgid "A short description"
-msgstr ""
+msgstr "Kurzbeschreibung"
 
 #: source/tmp/win-tag-manager/App.vue.ts:33
 msgid ""
@@ -986,13 +962,8 @@ msgid "Updater"
 msgstr "Updates"
 
 #: source/tmp/win-update/App.vue.ts:32
-#, fuzzy
 msgid "New update available"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Neue Version\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Neue Version verfügbar"
+msgstr "Neue Version verfügbar"
 
 #: source/tmp/win-update/App.vue.ts:33
 msgid "Your version"
@@ -1007,33 +978,18 @@ msgstr ""
 "Änderungsdatei unten."
 
 #: source/tmp/win-update/App.vue.ts:35
-#, fuzzy
 msgid "Downloading your update"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Lade Aktualisierung herunter\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Lade Update herunter"
+msgstr "Lade Update herunter"
 
 #: source/tmp/win-update/App.vue.ts:36
-#, fuzzy
 msgid "No update available. You have the most recent version."
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Keine Aktualisierung verfügbar. Du nutzt die aktuelle Version.\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Keine Updates verfügbar. Du nutzt die aktuelle Version."
+msgstr "Keine Updates verfügbar. Du nutzt die aktuelle Version."
 
 #: source/tmp/win-update/App.vue.ts:37
 #: source/app/service-providers/menu/menu.darwin.ts:639
 #: source/app/service-providers/menu/menu.win32.ts:613
-#, fuzzy
 msgid "Check for updates"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Nach neuer Version suchen\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Nach Updates suchen"
+msgstr "Nach Updates suchen"
 
 #: source/tmp/win-update/App.vue.ts:42
 msgid "Click to start update"
@@ -1141,7 +1097,7 @@ msgstr "Keine Vorschläge"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
 msgid "Add to dictionary"
-msgstr ""
+msgstr "Zum Wörterbuch hinzufügen"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
 msgid "Italic"
@@ -1220,11 +1176,11 @@ msgstr "Bild konnte nicht geladen werden: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:166
 msgid "Open image externally"
-msgstr ""
+msgstr "Bild extern öffnen"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Lade Mermaid-Graph …"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
 msgid "Could not render Graph:"
@@ -1256,13 +1212,8 @@ msgid "Custom"
 msgstr "Benutzerdefiniert"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
-#, fuzzy
 msgid "Open diagnostics panel"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Prüfpanel öffnen\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Prüfpaneel öffnen"
+msgstr "Prüfpaneel öffnen"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
@@ -1482,11 +1433,11 @@ msgstr "Italienisch"
 
 #: source/common/util/map-lang-code.ts:86
 msgid "Italian"
-msgstr ""
+msgstr "Italienisch"
 
 #: source/common/util/map-lang-code.ts:87
 msgid "Japanese"
-msgstr ""
+msgstr "Japanisch"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Georgian"
@@ -1546,7 +1497,7 @@ msgstr "Nepali"
 
 #: source/common/util/map-lang-code.ts:102
 msgid "Dutch (Belgium)"
-msgstr ""
+msgstr "Niederländisch (Belgien)"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch (Netherlands)"
@@ -1676,7 +1627,7 @@ msgstr "gerade eben"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
-msgstr ""
+msgstr "."
 
 #: source/common/util/localise-number.ts:29
 msgid "."
@@ -1684,7 +1635,7 @@ msgstr ","
 
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
-msgstr ""
+msgstr "Öffne Vorlagen-Editor"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
@@ -1784,13 +1735,8 @@ msgid "Dark mode"
 msgstr "Dunkles Thema"
 
 #: source/win-preferences/schema/appearance.ts:37
-#, fuzzy
 msgid "Schedule"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Zeitplan\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Zeit"
+msgstr "Zeitplan"
 
 #: source/win-preferences/schema/appearance.ts:41
 #: source/win-preferences/schema/general.ts:47
@@ -1902,20 +1848,14 @@ msgid "Input mode"
 msgstr "Eingabemodus"
 
 #: source/win-preferences/schema/editor.ts:39
-#, fuzzy
 msgid ""
 "The input mode determines how you interact with the editor. We recommend "
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
 msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Der Eingabemodus bestimmt deine Interaktion mit dem Editor. Wir empfehlen "
 "die Einstellung “Normal”. Wähle “Vim” oder “Emacs” nur, wenn du weißt, was "
-"das bedeutet.\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Der Eingabemodus bestimmt deine Interaktion mit dem Editor. Wir empfehlen "
-"die Einstellung “Normal”. Selektiere “Vim” oder “Emacs” nur, wenn du weißt, "
-"was das bedeutet."
+"das bedeutet."
 
 #: source/win-preferences/schema/editor.ts:44
 msgid "Writing direction"
@@ -1936,13 +1876,8 @@ msgstr ""
 "Bilder direkt dar, anstelle ihres Links."
 
 #: source/win-preferences/schema/editor.ts:72
-#, fuzzy
 msgid "Render Citations"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Zitatierung darstellen\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Zitationen darstellen"
+msgstr "Zitationen darstellen"
 
 #: source/win-preferences/schema/editor.ts:77
 msgid "Render Iframes"
@@ -1999,13 +1934,8 @@ msgid "Distraction-free mode"
 msgstr "Ablenkungsfreier Modus"
 
 #: source/win-preferences/schema/editor.ts:171
-#, fuzzy
 msgid "Mute non-focused lines in distraction-free mode"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Blende nicht fokussierte Zeilen im ablenkungsfreien Modus aus\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab"
+msgstr "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab"
 
 #: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction free mode"
@@ -2052,13 +1982,8 @@ msgid "Indent using tabs instead of spaces"
 msgstr "Mit Tab-Zeichen einrücken"
 
 #: source/win-preferences/schema/editor.ts:261
-#, fuzzy
 msgid "Highlight whitespace"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Leerzeichen hervorheben\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Steuerzeichen hervorheben"
+msgstr "Leerzeichen anzeigen"
 
 #: source/win-preferences/schema/editor.ts:267
 msgid "Suggest emojis during autocompletion"
@@ -2438,7 +2363,7 @@ msgstr "Einfache Anführungszeichen"
 
 #: source/win-preferences/schema/autocorrect.ts:95
 msgid "Text-replacement patterns"
-msgstr ""
+msgstr "Automatischer Textersatz"
 
 #: source/win-preferences/schema/autocorrect.ts:99
 msgid "Match whole words"
@@ -2669,13 +2594,8 @@ msgstr "Einstellungen…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:67
 #: source/app/service-providers/menu/menu.win32.ts:241
-#, fuzzy
 msgid "Manage Tags…"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Schlagwörter…\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Tags verwalten…"
+msgstr "Schlagwörter…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
@@ -2728,13 +2648,8 @@ msgstr "Exportieren…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:259
 #: source/app/service-providers/menu/menu.win32.ts:253
-#, fuzzy
 msgid "Import translation…"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Sprachdatei importieren…\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Übersetzung importieren…"
+msgstr "Sprachdatei importieren…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:267
 #: source/app/service-providers/menu/menu.win32.ts:261
@@ -2883,13 +2798,8 @@ msgstr "Tab schließen"
 
 #: source/app/service-providers/menu/menu.darwin.ts:600
 #: source/app/service-providers/menu/menu.win32.ts:574
-#, fuzzy
 msgid "Previous Tab"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Voriger Tab\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Vorheriger Tab"
+msgstr "Vorheriger Tab"
 
 #: source/app/service-providers/menu/menu.darwin.ts:608
 #: source/app/service-providers/menu/menu.win32.ts:582
@@ -2961,35 +2871,32 @@ msgstr "Jetzt neustarten"
 
 #: source/app/service-providers/updates/index.ts:284
 msgid "Cannot check for update"
-msgstr ""
+msgstr "Kann nicht auf Updates prüfen"
 
 #: source/app/service-providers/updates/index.ts:285
 #, javascript-format
 msgid "There was an error while checking for updates. %s: %s"
-msgstr ""
+msgstr "Beim Update-Check ist ein Fehler aufgetreten. %s: %s"
 
 #: source/app/service-providers/updates/index.ts:324
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "An update to version %s is available!"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Eine Aktualisierung auf Version %s ist verfügbar!\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Eine Update auf Version %s ist verfügbar!"
+msgstr "Eine Update auf Version %s ist verfügbar!"
 
 #: source/app/service-providers/updates/index.ts:325
 msgid ""
 "Please update at your earliest convenience. You can open the updater now, or "
 "update later."
 msgstr ""
+"Bitte aktualisiere bald. Du kannst das Update jetzt oder später durchführen."
 
 #: source/app/service-providers/updates/index.ts:327
 msgid "Open updater"
-msgstr ""
+msgstr "Updater öffnen"
 
 #: source/app/service-providers/updates/index.ts:328
 msgid "Not now"
-msgstr ""
+msgstr "Nicht jetzt"
 
 #: source/app/service-providers/updates/index.ts:356
 #, javascript-format
@@ -3029,33 +2936,39 @@ msgstr "Konnte nicht nach Updates suchen: Server hat keine Daten gesendet"
 
 #: source/app/service-providers/updates/index.ts:464
 msgid "The SHA256 checksums file seems to be missing for this release."
-msgstr ""
+msgstr "Die SHA256 Prüfsummendatei scheint bei diesem Update zu fehlen."
 
 #: source/app/service-providers/updates/index.ts:486
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
-msgstr ""
+msgstr "Kann SHA256 Prüfsummen nicht finden: %s"
 
 #: source/app/service-providers/updates/index.ts:527
 msgid "Could not accept data for application update: Write stream is gone."
-msgstr ""
+msgstr "Kann keine Daten empfangen: Dateistream nicht gefunden."
 
 #: source/app/service-providers/updates/index.ts:582
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
 msgstr ""
+"Kann die Integrität der Update-Datei nicht verifizieren. Bitte erneut "
+"versuchen oder manuell updaten."
 
 #: source/app/service-providers/updates/index.ts:594
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
 msgstr ""
+"Die heruntergeladene Datei hat eine andere Prüfsumme als vom Server "
+"angegeben. Bitte erneut versuchen oder manuell updaten."
 
 #: source/app/service-providers/updates/index.ts:612
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
+"Konnte Update nicht starten. Bitte erneut versuchen oder manuell updaten. "
+"Fehler: %s"
 
 #: source/app/service-providers/workspaces/index.ts:163
 #, javascript-format
@@ -3108,26 +3021,17 @@ msgstr "Option %s ist erforderlich."
 
 #: source/app/service-providers/citeproc/index.ts:249
 #: source/app/service-providers/citeproc/index.ts:457
-#, fuzzy
 msgid "The citation database could not be loaded"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Die Zitationsdatenbank konnte nicht geladen werden\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Die Zitatdatenbank konnte nicht geladen werden"
+msgstr "Die Zitationsdatenbank konnte nicht geladen werden"
 
 #: source/app/service-providers/citeproc/index.ts:444
 msgid "Changes to the library file detected. Reloading …"
 msgstr "Änderung in der Bibliothek entdeckt. Lade neu …"
 
 #: source/app/service-providers/commands/rename-tag.ts:44
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Ersetze Schlagwort “%s” mit “%s” in %s Dateien?\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Ersetze Tag “%s” mit “%s” in %s Dateien?"
+msgstr "Ersetze Schlagwort “%s” mit “%s” in %s Dateien?"
 
 #: source/app/service-providers/commands/rename-tag.ts:46
 #: source/app/service-providers/commands/file-rename.ts:111
@@ -3150,26 +3054,16 @@ msgid "Cannot export project"
 msgstr "Kann Projekt nicht exportieren"
 
 #: source/app/service-providers/commands/dir-project-export.ts:86
-#, fuzzy
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
 msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Keine Dateien sind für den Export ausgewählt. Bitte wähle Dateien in den "
-"Projekteinstellungen aus.\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Für den Export sind keine Dateien ausgewählt. Bitte wähle Dateien in den "
 "Projekteinstellungen aus."
 
 #: source/app/service-providers/commands/dir-project-export.ts:91
-#, fuzzy
 msgid "Project File Mismatch"
-msgstr ""
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Fehlende Projektdateien\n"
-"#-#-#-#-#  de-DE.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Projektdatei stimmt nicht überein"
+msgstr "Fehlende Projektdateien"
 
 #: source/app/service-providers/commands/dir-project-export.ts:92
 msgid ""
@@ -3291,7 +3185,7 @@ msgstr "Kann Verzeichnis nicht verschieben"
 
 #: source/app/service-providers/commands/request-move.ts:54
 msgid "You cannot move a directory into one of its subdirectories."
-msgstr ""
+msgstr "Kann keinen Ordner in einen seiner Unterordner verschieben."
 
 #: source/app/service-providers/commands/request-move.ts:63
 msgid "Cannot move directory or file"
@@ -3319,7 +3213,7 @@ msgstr "Dokument zu lang"
 
 #: source/app/service-providers/commands/language-tool.ts:199
 msgid "offline"
-msgstr ""
+msgstr "offline"
 
 #: source/app/service-providers/commands/export.ts:55
 #: source/app/service-providers/commands/export.ts:157
@@ -3439,7 +3333,7 @@ msgstr "Dateipfad kopieren"
 #: source/win-main/file-manager/util/file-item-context.ts:34
 #: source/win-main/file-manager/util/dir-item-context.ts:28
 msgid "Properties"
-msgstr ""
+msgstr "Eigenschaften"
 
 #: source/win-main/file-manager/util/file-item-context.ts:57
 msgid "Duplicate file"

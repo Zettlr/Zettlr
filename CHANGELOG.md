@@ -5,6 +5,7 @@
 - Columns in the preferences window are now properly aligned (#5410)
 - Prevent initial startup update-check if the setting is unchecked (context:
   https://github.com/Zettlr/Zettlr/commit/812899#r148519528)
+- Fix errors in German translation (`de-DE`)
 
 ## Under the Hood
 
