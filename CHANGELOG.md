@@ -13,6 +13,7 @@
 
 - Update Codemirror dependencies
 - Update Electron forge to `v7.5.0`
+- Update various other dependencies
 
 # 3.2.3
 
