@@ -11,7 +11,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Update Codemirror dependencies
 
 # 3.2.3
 

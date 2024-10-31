@@ -42,22 +42,22 @@
     "forge": "./forge.config.js"
   },
   "dependencies": {
-    "@cds/core": "^6.13.0",
-    "@codemirror/autocomplete": "^6.18.1",
+    "@cds/core": "^6.14.0",
+    "@codemirror/autocomplete": "^6.18.2",
     "@codemirror/collab": "^6.1.1",
-    "@codemirror/commands": "^6.6.2",
+    "@codemirror/commands": "^6.7.1",
     "@codemirror/lang-css": "^6.3.0",
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/lang-json": "^6.0.1",
-    "@codemirror/lang-markdown": "^6.2.5",
+    "@codemirror/lang-markdown": "^6.3.0",
     "@codemirror/lang-php": "^6.0.1",
     "@codemirror/lang-python": "^6.1.6",
     "@codemirror/lang-yaml": "^6.1.1",
-    "@codemirror/language": "^6.10.2",
+    "@codemirror/language": "^6.10.3",
     "@codemirror/legacy-modes": "^6.4.1",
     "@codemirror/search": "^6.5.6",
     "@codemirror/state": "^6.4.1",
-    "@codemirror/view": "^6.33.0",
+    "@codemirror/view": "^6.34.1",
     "@lezer/common": "^1.2.1",
     "@lezer/highlight": "^1.2.1",
     "@replit/codemirror-emacs": "^6.1.0",
@@ -129,7 +129,9 @@
   },
   "resolutions": {
     "node-gyp": "10.x.x",
-    "@lezer/lr": "^1.4.0"
+    "@lezer/lr": "^1.4.0",
+    "@codemirror/language": "^6.10.3",
+    "@codemirror/view": "^6.34.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
