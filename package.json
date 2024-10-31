@@ -188,7 +188,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "5.5.x",
+    "typescript": "5.6.x",
     "vue-loader": "^17.4.2"
   },
   "packageManager": "yarn@3.3.1"
