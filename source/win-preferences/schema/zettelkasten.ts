@@ -36,7 +36,7 @@ export function getZettelkastenFields (config: ConfigOptions): PreferencesFields
           label: trans('Pattern used to generate new IDs'),
           model: 'zkn.idGen',
           reset: '%Y%M%D%h%m%s',
-          info: trans('Available Variables: %s', '%Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4')
+          info: trans('Available Variables: %s', '%Y, %y, %M, %D, %W, %h, %m, %s, %o, %X, %uuid4')
         }
       ]
     },

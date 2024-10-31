@@ -20,7 +20,6 @@ import { RangeSet, Range, type Line } from '@codemirror/state'
 import {
   Decoration,
   ViewPlugin,
-  type DecorationSet,
   type EditorView,
   type ViewUpdate
 } from '@codemirror/view'

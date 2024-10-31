@@ -7,6 +7,7 @@
   https://github.com/Zettlr/Zettlr/commit/812899#r148519528)
 - Fix errors in German translation (`de-DE`)
 - Fix "dancing list items" (#4602)
+- Allow three-digit ordinal day of the year in IDs and filenames (`%o`; #5424)
 
 ## Under the Hood
 
