@@ -6,6 +6,7 @@
 - Prevent initial startup update-check if the setting is unchecked (context:
   https://github.com/Zettlr/Zettlr/commit/812899#r148519528)
 - Fix errors in German translation (`de-DE`)
+- Fix "dancing list items" (#4602)
 
 ## Under the Hood
 

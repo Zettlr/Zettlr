@@ -16,7 +16,7 @@
  */
 
 import { syntaxTree } from '@codemirror/language'
-import { RangeSetBuilder, type Line } from '@codemirror/state'
+import { RangeSet, Range, type Line } from '@codemirror/state'
 import {
   Decoration,
   ViewPlugin,
@@ -24,15 +24,16 @@ import {
   type EditorView,
   type ViewUpdate
 } from '@codemirror/view'
+import { SpaceWidget } from '../renderers/render-emphasis'
 
-function render (view: EditorView, measurements?: Map<string, number>): DecorationSet {
+function render (view: EditorView, measurements?: Map<string, number>): RangeSet<Decoration> {
   // Original inspiration came from this plugin:
   // https://gist.github.com/lishid/c10db431cb8a9e83905a3443cfdb53bb
   // HOWEVER, that didn't quite do the job. After months of thinking, I finally
   // had a good idea, which is what the below shows.
 
   const tabSize = view.state.tabSize
-  const builder = new RangeSetBuilder<Decoration>()
+  const ranges: Array<Range<Decoration>> = []
 
   // Then, retrieve all lines that are indentable via this plugin. These are:
   // All lines that are part of the current viewport and that are not part of a
@@ -58,6 +59,53 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
   // Now that we know which lines need to be potentially indented, let's go
   // through them one by one.
   for (const line of [...indentableLines]) {
+    // Before we do ANYTHING ELSE, we MUST UNDER ALL CIRCUMSTANCES replace any
+    // tab characters with spaces using a replacement widget. "Why?" you may ask
+    // now. Well, because tab characters in CodeMirror behave very weirdly in
+    // conjunction with negative text-indents. "How so?", you will ask. Well,
+    // because of the way tab characters are *intended* (not indented) to be
+    // used: They don't have a fixed width. Rather, they are supposed to "snap"
+    // to invisible vertical columns on a page (today rather a container on a
+    // website). However, by applying text-indents below, we basically move the
+    // starting offset for these tab characters around, and they really don't
+    // like that. In effect, this results in what many have described as
+    // "jumping" behavior: Whenever the required text indent is recalculated (in
+    // the measuring phase below), we will read the text indent together with
+    // the current width of the tab character. As soon as the new text indent is
+    // applied, however, the browser will recalculate the actual width required
+    // for the tab in order to snap it to one of these columns. Since that is
+    // asynchronous with how we need to take our measurements, the next time WE
+    // measure the text indent, it has changed AGAIN. This means that for every
+    // measuring phase, we move the line around due to this behavior of tabs.
+    // Over the past year, I have tried several attempts. First, I tried to find
+    // ways of making tabs fixed-width, but there is no mechanism for that. Then
+    // I thought very long to no avail, but suddenly I had an idea. If tabs are
+    // the problem, why not completely remove them from the renderer? After all,
+    // the mechanism works flawlessly with spaces. This led to PR #5384.
+    // However, normalizing all files like this comes with an insane amount of
+    // added complexity that I never fully figured out. However, on Halloween
+    // 2024, I figured out the solution. And let me tell you: It is SO STUPID,
+    // SO SIMPLE, SO FUCKING OBVIOUS that I am absolutely ashamed of myself that
+    // it took me literally x months to get to it, even though all pieces were
+    // already in place: Simply replace every tab character with `tabSize`
+    // spaces using a replacement decoration. That's it. That's the entire
+    // story. It's simple, works, easy to maintain, and has the wanted effect.
+    for (let j = 0; j < line.text.length; j++) {
+      if (line.text.charAt(j) !== '\t') {
+        break
+      }
+
+      ranges.push(
+        Decoration
+          .replace({ widget: new SpaceWidget(tabSize) })
+          .range(line.from + j, line.from + j + 1)
+      )
+    }
+
+    // Now, after having averted the dance macabre
+    // (https://www.youtube.com/watch?v=7Gr63DiEUxw), here's the original
+    // algorithm -- unchanged, mind you!
+
     // First determine how much we're offset based purely on whitespace.
     let tabs = 0
     let spaces = 0
@@ -112,11 +160,11 @@ function render (view: EditorView, measurements?: Map<string, number>): Decorati
       // not to induce any problems.
       const basePadding = 6
       const deco = Decoration.line({ attributes: { style: `text-indent: -${indent-basePadding}px; padding-left: ${indent}px;` } })
-      builder.add(line.from, line.from, deco)
+      ranges.push(deco.range(line.from))
     }
   }
 
-  return builder.finish()
+  return Decoration.set(ranges, true)
 }
 
 export const softwrapVisualIndent = ViewPlugin.define(view => ({
