@@ -13,8 +13,11 @@
     <translator>
       <name>Sebastian Karcher</name>
     </translator>
+    <translator>
+      <name>Patrick O'Brien</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2012-07-04T23:31:02+00:00</updated>
+    <updated>2023-03-28T23:31:02+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -28,33 +31,33 @@
     <date-part name="year"/>
   </date>
   <terms>
-    <term name="advance-online-publication">advance online publication</term>
-    <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
-    <term name="film">film</term>
-    <term name="henceforth">henceforth</term>
+    <term name="advance-online-publication">Online-Vorab-Publikation</term>
+    <term name="album">Album</term>
+    <term name="audio-recording">Audioaufzeichnung</term>
+    <term name="film">Film</term>
+    <term name="henceforth">zukünftig</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
-    <term name="on">on</term>
+    <term name="no-place">ohne Ort</term>
+    <term name="no-place" form="short">o.&#160;O.</term>
+    <term name="no-publisher">ohne Verlag</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">o.&#160;V.</term>
+    <term name="on">auf</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="original-work-published">Ursprünglich erschienen</term>
     <term name="personal-communication">persönliche Kommunikation</term>
-    <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
+    <term name="podcast">Podcast</term>
+    <term name="podcast-episode">Podcast-Episode</term>
     <term name="preprint">preprint</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
-    <term name="video">video</term>
-    <term name="working-paper">working paper</term>
+    <term name="radio-broadcast">Radioaufzeichnung</term>
+    <term name="radio-series">Sendereihe</term>
+    <term name="radio-series-episode">Sendereihenfolge</term>
+    <term name="special-issue">Spezialausgabe</term>
+    <term name="special-section">Sonderbereich</term>
+    <term name="television-broadcast">Fernsehsendung</term>
+    <term name="television-series">Fernsehserie</term>
+    <term name="television-series-episode">Serienfolge</term>
+    <term name="video">Video</term>
+    <term name="working-paper">Arbeitspapier</term>
     <term name="accessed">zugegriffen</term>
     <term name="and">und</term>
     <term name="and others">und andere</term>
@@ -110,7 +113,7 @@
     <term name="review-of">review of</term>
     <term name="review-of" form="short">rev. of</term>
     <term name="retrieved">abgerufen</term>
-    <term name="scale">Massstab</term>
+    <term name="scale">Maßstab</term>
     <term name="version">Version</term>
 
     <!-- LONG ITEM TYPE FORMS -->
@@ -190,10 +193,10 @@
     <term name="ce">CE</term>
 
     <!-- PUNCTUATION -->
-    <term name="open-quote">«</term>
-    <term name="close-quote">»</term>
-    <term name="open-inner-quote">‹</term>
-    <term name="close-inner-quote">›</term>
+    <term name="open-quote">„</term>
+    <term name="close-quote">“</term>
+    <term name="open-inner-quote">‚</term>
+    <term name="close-inner-quote">‘</term>
     <term name="page-range-delimiter">–</term>
     <term name="colon">:</term>
     <term name="comma">,</term>
@@ -397,8 +400,8 @@
     <term name="figure" form="short">Abb.</term>
     <term name="folio" form="short">Fol.</term>
     <term name="issue" form="short">Nr.</term>
-    <term name="line" form="short">l.</term>
-    <term name="note" form="short">n.</term>
+    <term name="line" form="short">Z.</term>
+    <term name="note" form="short">N.</term>
     <term name="opus" form="short">op.</term>
     <term name="page" form="short">
       <single>S.</single>
@@ -439,7 +442,7 @@
     </term>
     <term name="volume" form="short">
       <single>Bd.</single>
-      <multiple>Bd.</multiple>
+      <multiple>Bde.</multiple>
     </term>
 
     <!-- SYMBOL LOCATOR FORMS -->
@@ -529,6 +532,10 @@
       <single>Herausgeber</single>
       <multiple>Herausgeber</multiple>
     </term>
+    <term name="collection-editor">
+      <single>Reihenherausgeber</single>
+      <multiple>Reihenherausgeber</multiple>
+    </term>
     <term name="editorial-director">
       <single>Herausgeber</single>
       <multiple>Herausgeber</multiple>
@@ -595,6 +602,10 @@
       <single>Hrsg.</single>
       <multiple>Hrsg.</multiple>
     </term>
+    <term name="collection-editor" form="short">
+      <single>Hrsg.</single>
+      <multiple>Hrsg.</multiple>
+    </term>
     <term name="editorial-director" form="short">
       <single>Hrsg.</single>
       <multiple>Hrsg.</multiple>
@@ -630,6 +641,7 @@
     <term name="container-author" form="verb">von</term>
     <term name="director" form="verb">Regie von</term>
     <term name="editor" form="verb">herausgegeben von</term>
+    <term name="collection-editor" form="verb">herausgegeben von</term>
     <term name="editorial-director" form="verb">herausgegeben von</term>
     <term name="illustrator" form="verb">illustriert von</term>
     <term name="interviewer" form="verb">interviewt von</term>
@@ -654,6 +666,7 @@
     <term name="series-creator" form="verb-short">cre. by</term>
     <term name="director" form="verb-short">Reg.</term>
     <term name="editor" form="verb-short">hg. von</term>
+    <term name="collection-editor" form="verb-short">hg. von</term>
     <term name="editorial-director" form="verb-short">hg. von</term>
     <term name="illustrator" form="verb-short">illus. von</term>
     <term name="translator" form="verb-short">übers. von</term>
