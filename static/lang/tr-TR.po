@@ -21,13 +21,13 @@ msgstr ""
 msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
-msgstr ""
+msgstr "Bu profil korumalıdır. Bu, sildiğiniz veya yeniden adlandırdığınız zaman geri yükleneceği anlamına gelir."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:57
 msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
-msgstr ""
+msgstr "Bu profil geçersiz. Hatalar içeriyor olabilir veya yazar ya da okuyucu özelliği eksik olabilir."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:58
 #: source/app/service-providers/menu/menu.darwin.ts:286
@@ -38,7 +38,7 @@ msgstr "Dosyayı yeniden adlandır"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:59
 msgid "Open defaults folder"
-msgstr ""
+msgstr "Varsayılanlar klasörünü aç"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:60
 msgid "Edit the default settings for imports or exports here."
@@ -64,30 +64,30 @@ msgstr "Kaydet"
 #: source/app/service-providers/documents/index.ts:349
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 msgid "Unsaved changes"
-msgstr ""
+msgstr "Kaydedilmemiş değişiklikler"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:177
 #: source/tmp/win-assets/SnippetsTab.vue.ts:105
 #: source/tmp/win-assets/CustomCSS.vue.ts:56
 msgid "Saving …"
-msgstr ""
+msgstr "Kaydediliyor…"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:187
 #: source/tmp/win-assets/SnippetsTab.vue.ts:115
 msgid "Saved!"
-msgstr ""
+msgstr "Kaydedildi!"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:28
 msgid "Rename snippet"
-msgstr ""
+msgstr "Kod parçacığını yeniden adlandır"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:29
 msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
+msgstr "Kod parçacıkları, değişkenlerle yeniden kullanılabilir metin parçaları tanımlamanıza olanak tanır."
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:30
 msgid "Open snippets folder"
-msgstr ""
+msgstr "Kod parçacıkları klasörünü aç"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:23
 msgid ""
@@ -103,21 +103,21 @@ msgstr ""
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:66
 msgid "Saving failed"
-msgstr ""
+msgstr "Kaydetme başarısız"
 
 #: source/tmp/win-assets/App.vue.ts:15
 #: source/app/service-providers/menu/menu.darwin.ts:59
 #: source/app/service-providers/menu/menu.win32.ts:233
 msgid "Assets Manager"
-msgstr ""
+msgstr "Kaynak Yöneticisi"
 
 #: source/tmp/win-assets/App.vue.ts:21
 msgid "Exporting"
-msgstr ""
+msgstr "Dışa aktarılıyor"
 
 #: source/tmp/win-assets/App.vue.ts:27
 msgid "Importing"
-msgstr ""
+msgstr "İçeri aktarılıyor"
 
 #: source/tmp/win-assets/App.vue.ts:33
 #: source/win-preferences/schema/appearance.ts:219
@@ -128,7 +128,7 @@ msgstr "Özel CSS"
 #: source/tmp/win-preferences/App.vue.ts:174
 #: source/win-preferences/schema/snippets.ts:24
 msgid "Snippets"
-msgstr ""
+msgstr "Kod Parçacıkları"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
 #, fuzzy
@@ -154,15 +154,15 @@ msgstr "Tüm Dosyalar"
 #: source/tmp/common/vue/form/elements/ShortcutChooser.vue.ts:61
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
 msgid "Reset"
-msgstr ""
+msgstr "Sıfırla"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:106
 msgid "Add"
-msgstr ""
+msgstr "Ekle"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:107
 msgid "Actions"
-msgstr ""
+msgstr "Eylemler"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:108
 #, fuzzy
@@ -172,34 +172,34 @@ msgstr "Dosyayı sil"
 #: source/tmp/win-preferences/App.vue.ts:56
 #, javascript-format
 msgid "No results for \"%s\""
-msgstr ""
+msgstr "\"%s\" için sonuç bulunamadı"
 
 #: source/tmp/win-preferences/App.vue.ts:134
 #: source/tmp/win-project-properties/App.vue.ts:73
 msgid "General"
-msgstr ""
+msgstr "Genel"
 
 #: source/tmp/win-preferences/App.vue.ts:139
 #: source/win-preferences/schema/advanced.ts:51
 msgid "Appearance"
-msgstr ""
+msgstr "Görünüm"
 
 #: source/tmp/win-preferences/App.vue.ts:144
 msgid "File Manager"
-msgstr ""
+msgstr "Dosya Yöneticisi"
 
 #: source/tmp/win-preferences/App.vue.ts:149
 msgid "Editor"
-msgstr ""
+msgstr "Düzenleyici"
 
 #: source/tmp/win-preferences/App.vue.ts:154
 #: source/win-preferences/schema/spellchecking.ts:158
 msgid "Spellchecking"
-msgstr ""
+msgstr "Yazım Denetimi"
 
 #: source/tmp/win-preferences/App.vue.ts:159
 msgid "AutoCorrect"
-msgstr ""
+msgstr "Otomatik Düzeltme"
 
 #: source/tmp/win-preferences/App.vue.ts:164
 #: source/win-preferences/schema/citations.ts:22
@@ -209,24 +209,24 @@ msgstr "Atıfları göster"
 
 #: source/tmp/win-preferences/App.vue.ts:169
 msgid "Zettelkasten"
-msgstr ""
+msgstr "Zettelkasten"
 
 #: source/tmp/win-preferences/App.vue.ts:179
 msgid "Import and Export"
-msgstr ""
+msgstr "İçe ve Dışa Aktarma"
 
 #: source/tmp/win-preferences/App.vue.ts:184
 msgid "Advanced"
-msgstr ""
+msgstr "Gelişmiş"
 
 #: source/tmp/win-preferences/App.vue.ts:193
 #, javascript-format
 msgid "Searching: %s"
-msgstr ""
+msgstr "Aranıyor: %s"
 
 #: source/tmp/win-preferences/App.vue.ts:197
 msgid "Preferences"
-msgstr ""
+msgstr "Tercihler"
 
 #: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
@@ -281,15 +281,15 @@ msgstr "Zettlr Hakkında"
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
-msgstr ""
+msgstr "Diğer projeler"
 
 #: source/tmp/win-about/App.vue.ts:47
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponsorlar"
 
 #: source/tmp/win-about/App.vue.ts:53
 msgid "License"
-msgstr ""
+msgstr "Lisans"
 
 #: source/tmp/win-about/Projects-Tab.vue.ts:19
 msgid "Zettlr also makes use of these projects:"
@@ -297,66 +297,66 @@ msgstr "Zettlr ayrıca şu projeleri de kullanır:"
 
 #: source/tmp/win-splash-screen/App.vue.ts:22
 msgid "Loading…"
-msgstr ""
+msgstr "Yükleniyor…"
 
 #. Static properties
 #: source/tmp/win-stats/ChartView.vue.ts:39 source/tmp/win-stats/App.vue.ts:33
 msgid "Charts"
-msgstr ""
+msgstr "Grafikler"
 
 #. STATIC VARIABLES
 #: source/tmp/win-stats/CalendarView.vue.ts:26
 #: source/tmp/win-stats/App.vue.ts:27
 msgid "Calendar"
-msgstr ""
+msgstr "Takvim"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:28
 msgid "January"
-msgstr ""
+msgstr "Ocak"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "February"
-msgstr ""
+msgstr "Şubat"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:30
 msgid "March"
-msgstr ""
+msgstr "Mart"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:31
 msgid "April"
-msgstr ""
+msgstr "Nisan"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:32
 msgid "May"
-msgstr ""
+msgstr "Mayıs"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:33
 msgid "June"
-msgstr ""
+msgstr "Haziran"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:34
 msgid "July"
-msgstr ""
+msgstr "Temmuz"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:35
 msgid "August"
-msgstr ""
+msgstr "Ağustos"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:36
 msgid "September"
-msgstr ""
+msgstr "Eylül"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:37
 msgid "October"
-msgstr ""
+msgstr "Ekim"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:38
 msgid "November"
-msgstr ""
+msgstr "Kasım"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:39
 msgid "December"
-msgstr ""
+msgstr "Aralık"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:41
 msgid "Below the monthly average"
@@ -364,19 +364,19 @@ msgstr ""
 
 #: source/tmp/win-stats/CalendarView.vue.ts:42
 msgid "Over the monthly average"
-msgstr ""
+msgstr "Aylık ortalamanın altında"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:43
 msgid "More than twice the monthly average"
-msgstr ""
+msgstr "Aylık ortalamanın iki katından fazla"
 
 #: source/tmp/win-stats/App.vue.ts:39
 msgid "FSAL Stats"
-msgstr ""
+msgstr "FSAL İstatistikleri"
 
 #: source/tmp/win-stats/App.vue.ts:58
 msgid "Writing statistics"
-msgstr ""
+msgstr "Yazma istatistikleri"
 
 #: source/tmp/win-error/App.vue.ts:43
 #: source/app/service-providers/commands/dir-project-export.ts:93
@@ -391,16 +391,16 @@ msgstr "Tamam"
 #: source/tmp/win-main/PopoverTable.vue.ts:30
 #, javascript-format
 msgid "Table size: %s &times; %s"
-msgstr ""
+msgstr "Tablo boyutu: %s &tımes %s"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:39
 msgid "Name"
-msgstr ""
+msgstr "Ad"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:40
 #: source/tmp/win-tag-manager/App.vue.ts:31
 msgid "Count"
-msgstr ""
+msgstr "Adet"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:47
 #: source/tmp/win-tag-manager/App.vue.ts:35
@@ -432,7 +432,7 @@ msgstr "Dosyalar"
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
 #, javascript-format
 msgid "%s characters"
-msgstr ""
+msgstr "%s karakter"
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:124
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:187
@@ -477,13 +477,13 @@ msgstr "İsimsiz"
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:31
 msgid "Created"
-msgstr ""
+msgstr "Oluşturulma Tarihi"
 
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:30
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:128
 msgid "Modified"
-msgstr ""
+msgstr "Değiştirilme Tarihi"
 
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:38
 msgid "Set writing target…"
@@ -504,7 +504,7 @@ msgstr "Boş dizin"
 #: source/tmp/win-main/file-manager/FileManager.vue.ts:46
 #: source/tmp/win-main/GlobalSearch.vue.ts:37
 msgid "Filter …"
-msgstr ""
+msgstr "Filtrele …"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:28
 msgid "words last month"
@@ -537,28 +537,28 @@ msgstr "Daha fazla istatistik..."
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
 msgid "Related files"
-msgstr ""
+msgstr "İlgili dosyalar"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
 msgid "No related files"
-msgstr ""
+msgstr "İlgili dosya yok"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Bu ilişki, çift yönlü bir bağlantıya dayanmaktadır."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Bu ilişki, giden bir bağlantıya dayanmaktadır."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Bu ilişki, bir geri bağlantıya dayanmaktadır."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Bu ilişki, paylaşılan %s etikete dayanmaktadır: %s"
 
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
@@ -569,7 +569,7 @@ msgstr "İçindekiler"
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:13
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
 msgid "Other files"
-msgstr ""
+msgstr "Diğer dosyalar"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:14
 msgid "Open directory"
@@ -577,11 +577,11 @@ msgstr "Dizini aç"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:15
 msgid "No other files"
-msgstr ""
+msgstr "Başka dosya yok"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:34
 msgid "Current folder"
-msgstr ""
+msgstr "Aktif Klasör"
 
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:32
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
@@ -615,11 +615,11 @@ msgstr "Mola"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:29
 msgid "Sound Effect"
-msgstr ""
+msgstr "Ses Efekti"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:30
 msgid "Volume"
-msgstr ""
+msgstr "Ses Düzeyi"
 
 #: source/tmp/win-main/App.vue.ts:220
 #, javascript-format
@@ -630,15 +630,15 @@ msgstr ""
 #: source/tmp/win-main/App.vue.ts:229
 #, javascript-format
 msgid "%s selections"
-msgstr ""
+msgstr "%s seçildi"
 
 #: source/tmp/win-main/App.vue.ts:250
 msgid "File manager"
-msgstr ""
+msgstr "Dosya yöneticisi"
 
 #: source/tmp/win-main/App.vue.ts:255
 msgid "Global search"
-msgstr ""
+msgstr "Genel arama"
 
 #: source/tmp/win-main/App.vue.ts:263
 #: source/app/service-providers/menu/menu.darwin.ts:174
@@ -648,15 +648,15 @@ msgstr "Çalışma Alanını Aç ..."
 
 #: source/tmp/win-main/App.vue.ts:269
 msgid "View stats"
-msgstr ""
+msgstr "İstatistikleri görüntüle"
 
 #: source/tmp/win-main/App.vue.ts:275
 msgid "Tags"
-msgstr ""
+msgstr "Etiketler"
 
 #: source/tmp/win-main/App.vue.ts:282
 msgid "Open the settings dialog"
-msgstr ""
+msgstr "Ayarlar iletişim kutusunu aç"
 
 #: source/tmp/win-main/App.vue.ts:289
 #: source/app/service-providers/menu/menu.darwin.ts:116
@@ -669,17 +669,17 @@ msgstr "Yeni dosya..."
 #: source/app/service-providers/menu/menu.darwin.ts:207
 #: source/app/service-providers/menu/menu.win32.ts:172
 msgid "Previous file"
-msgstr ""
+msgstr "Önceki dosya"
 
 #: source/tmp/win-main/App.vue.ts:304
 #: source/app/service-providers/menu/menu.darwin.ts:218
 #: source/app/service-providers/menu/menu.win32.ts:183
 msgid "Next file"
-msgstr ""
+msgstr "Sonraki dosya"
 
 #: source/tmp/win-main/App.vue.ts:317
 msgid "Export the current file"
-msgstr ""
+msgstr "Aktif dosyayı dışa aktar"
 
 #: source/tmp/win-main/App.vue.ts:323
 msgid "Toggle readability mode"
