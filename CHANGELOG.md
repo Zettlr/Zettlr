@@ -8,6 +8,11 @@
 - Fix errors in German translation (`de-DE`)
 - Fix "dancing list items" (#4602)
 - Allow three-digit ordinal day of the year in IDs and filenames (`%o`; #5424)
+- The link preview and force-open workflows now expect internal/wiki-links that
+  link to headings within the file (`[[filename#heading-id]]`) and can handle
+  such links appropriately; the editors will not yet jump to the corresponding
+  headings, but this will improve compatibility with other editors who already
+  support this feature (#3727)
 
 ## Under the Hood
 
