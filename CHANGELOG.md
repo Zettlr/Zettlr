@@ -8,6 +8,7 @@
 - Fix errors in German translation (`de-DE`)
 - Fix "dancing list items" (#4602)
 - Allow three-digit ordinal day of the year in IDs and filenames (`%o`; #5424)
+- Zettlr finally counts and remembers character counts
 
 ## Under the Hood
 
@@ -17,6 +18,7 @@
 - Update various other dependencies
 - The `PersistentDataContainer` now uses proper data types, making usage more
   type-safe
+- Completely refactor the Statistics provider as well as the statistics display
 
 # 3.2.3
 
