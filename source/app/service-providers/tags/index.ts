@@ -66,7 +66,7 @@ export interface ColoredTag {
  */
 export default class TagProvider extends ProviderContract {
   private readonly _file: string
-  private readonly container: PersistentDataContainer
+  private readonly container: PersistentDataContainer<ColoredTag[]>
   private _coloredTags: ColoredTag[]
   /**
    * Create the instance on program start and initially load the tags.
@@ -100,7 +100,9 @@ export default class TagProvider extends ProviderContract {
     if (!await this.container.isInitialized()) {
       await this.container.init([])
     } else {
-      this.setColoredTags(await this.container.get() as TagRecord[])
+      this.setColoredTags(
+        (await this.container.get()).filter((tag) => tag !== undefined)
+      )
     }
 
     this._docs.on(DP_EVENTS.FILE_SAVED, () => {
@@ -126,9 +128,10 @@ export default class TagProvider extends ProviderContract {
 
   /**
    * Updates all tags (i.e. replaces them)
+   *
    * @param  {ColoredTag[]} tags The new tags as an array
    */
-  setColoredTags (tags: TagRecord[]): void {
+  setColoredTags (tags: ColoredTag[]): void {
     // First, remove anything that doesn't have a color set
     tags = tags.filter(tag => tag.color !== undefined && tag.desc !== undefined)
 
@@ -148,8 +151,8 @@ export default class TagProvider extends ProviderContract {
 
   /**
    * Returns the special (= colored) tags
-   * @param  {string} name An optional name to get one. Otherwise, will return all.
-   * @return {ColoredTag[]}      The special tag array.
+   *
+   * @return  {ColoredTag[]}  The special tag array.
    */
   getColoredTags (): ColoredTag[] {
     return this._coloredTags

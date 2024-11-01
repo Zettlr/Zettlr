@@ -98,7 +98,7 @@ export default class ConfigProvider extends ProviderContract {
    *
    * @var {PersistentDataContainer}
    */
-  private readonly _container: PersistentDataContainer
+  private readonly _container: PersistentDataContainer<ConfigOptions>
 
   private readonly _emitter: EventEmitter
 
