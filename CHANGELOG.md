@@ -15,6 +15,8 @@
 - Update Electron to `v32.2.2`
 - Update Electron forge to `v7.5.0`
 - Update various other dependencies
+- The `PersistentDataContainer` now uses proper data types, making usage more
+  type-safe
 
 # 3.2.3
 
