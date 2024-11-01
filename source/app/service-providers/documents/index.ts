@@ -140,9 +140,9 @@ export default class DocumentManager extends ProviderContract {
    * The config file container persists the document tree data to disk so that
    * open editor panes & windows can be restored
    *
-   * @var {PersistentDataContainer}
+   * @var {PersistentDataContainer<DocumentWindows>}
    */
-  private readonly _config: PersistentDataContainer
+  private readonly _config: PersistentDataContainer // TODO <DocumentWindows>
   /**
    * The process that watches currently opened files for remote changes
    *
@@ -1443,8 +1443,10 @@ current contents from the editor somewhere else, and restart the application.`
       const newWordCount = countWords(ast)
       const newCharCount = countChars(ast)
 
-      this._app.stats.updateWordCount(newWordCount - doc.lastSavedWordCount)
-      // TODO: Proper character counting
+      this._app.stats.updateCounts(
+        newWordCount - doc.lastSavedWordCount,
+        newCharCount - doc.lastSavedCharCount
+      )
 
       doc.lastSavedWordCount = newWordCount
       doc.lastSavedCharCount = newCharCount
