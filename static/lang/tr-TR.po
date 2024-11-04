@@ -2071,7 +2071,7 @@ msgid ""
 "Click \"Select folder…\" or type an absolute or relative path directly into "
 "the input field."
 msgstr ""
-"Bir klasör seçmek için /"Klasör Seç…/" seçeneğine tıklayın veya giriş alanına "
+"Bir klasör seçmek için \"Klasör Seç…\" seçeneğine tıklayın veya giriş alanına "
 "doğrudan bir yol (mutlak veya göreli) girin."
 
 #: source/win-preferences/schema/general.ts:72
