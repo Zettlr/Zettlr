@@ -1706,9 +1706,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stylistic/eslint-plugin@npm:^2.10.0":
-  version: 2.10.0
-  resolution: "@stylistic/eslint-plugin@npm:2.10.0"
+"@stylistic/eslint-plugin@npm:^2.10.1":
+  version: 2.10.1
+  resolution: "@stylistic/eslint-plugin@npm:2.10.1"
   dependencies:
     "@typescript-eslint/utils": ^8.12.2
     eslint-visitor-keys: ^4.2.0
@@ -1717,7 +1717,7 @@ __metadata:
     picomatch: ^4.0.2
   peerDependencies:
     eslint: ">=8.40.0"
-  checksum: f992b760d31444cc9b943eb4f5f253ce9f7dd9d2bbc7c17f9eda7ab8fd12224984e963bceed44effb5313743b514e3d936c43d2966785f029d1926fcf9e2653d
+  checksum: 31411c83772da348a61a00c3949873d995fe0a849cccf2c903ca8b222af391294f586d10c1089bb20a6b7a199dee15d55a19577e5b457fb63b8ce17f5c92332b
   languageName: node
   linkType: hard
 
@@ -16106,7 +16106,7 @@ __metadata:
     "@lezer/highlight": ^1.2.1
     "@replit/codemirror-emacs": ^6.1.0
     "@replit/codemirror-vim": ^6.2.1
-    "@stylistic/eslint-plugin": ^2.10.0
+    "@stylistic/eslint-plugin": ^2.10.1
     "@types/adm-zip": ^0.5.6
     "@types/archiver": ^6.0.3
     "@types/command-exists": ^1.2.3
