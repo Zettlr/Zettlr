@@ -1890,7 +1890,7 @@ msgid ""
 "know what this implies."
 msgstr ""
 "Girdi modu, düzenleyiciyle etkileşiminizi belirler. "
-"/"Normal/" modda kalmanızı öneririz. /"Vim/" veya /"Emacs/" "
+"\"Normal\" modda kalmanızı öneririz. \"Vim\" veya \"Emacs\" "
 "modlarını yalnızca ne olduklarını biliyorsanız seçin."
 
 #: source/win-preferences/schema/editor.ts:44
