@@ -1680,13 +1680,13 @@ msgstr "Yeni IDler oluşturmak için kullanılacak şablon"
 #: source/win-preferences/schema/zettelkasten.ts:39
 #, javascript-format
 msgid "Available Variables: %s"
-msgstr "Kullanılabilir Değişkenler: %s""
+msgstr "Kullanılabilir Değişkenler: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:44
 #: source/win-preferences/schema/import-export.ts:77
 #, fuzzy
 msgid "Internal links"
-msgstr "Dahili bağlantıların bağlantılarını kaldır"
+msgstr "Dahili bağlantılar"
 
 #: source/win-preferences/schema/zettelkasten.ts:50
 msgid "Link with filename only"
