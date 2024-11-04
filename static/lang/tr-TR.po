@@ -702,7 +702,7 @@ msgstr "Görüntü"
 
 #: source/tmp/win-main/App.vue.ts:356
 msgid "Tasklist"
-msgstr ""
+msgstr "Görev listesi"
 
 #: source/tmp/win-main/App.vue.ts:363
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
@@ -711,11 +711,11 @@ msgstr "Tablo"
 
 #: source/tmp/win-main/App.vue.ts:370
 msgid "Footnote"
-msgstr ""
+msgstr "Dipnot"
 
 #: source/tmp/win-main/App.vue.ts:388
 msgid "Pomodoro-Timer"
-msgstr ""
+msgstr "Pomodoro Zamanlayıcısı"
 
 #: source/tmp/win-main/App.vue.ts:397
 #: source/app/service-providers/menu/menu.darwin.ts:486
@@ -726,7 +726,7 @@ msgstr "Kenar Çubuğunu Aç/Kapat"
 #: source/tmp/win-main/App.vue.ts:404
 #: source/app/service-providers/updates/index.ts:323
 msgid "Update available"
-msgstr ""
+msgstr "Güncelleme mevcut"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:61
 #, fuzzy
@@ -740,43 +740,43 @@ msgstr "Dışarı aktar..."
 
 #: source/tmp/win-main/PopoverExport.vue.ts:74
 msgid "command"
-msgstr ""
+msgstr "komut"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:34
 msgid "Full-Text Search"
-msgstr ""
+msgstr "Tam Metin Araması"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:35
 msgid "Enter your search terms below"
-msgstr ""
+msgstr "Arama terimlerinizi aşağıya girin"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:36
 msgid "Find …"
-msgstr ""
+msgstr "Bul …"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:38
 msgid "Filter search results"
-msgstr ""
+msgstr "Arama sonuçlarını filtrele"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:39
 msgid "Restrict search to directory"
-msgstr ""
+msgstr "Aramayı yalnızca klasörde yap"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:40
 msgid "Restrict to directory …"
-msgstr ""
+msgstr "Yalnızca şu klasörde ara …"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:41
 msgid "Search"
-msgstr ""
+msgstr "Ara"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:42
 msgid "Clear search"
-msgstr ""
+msgstr "Aramayı temizle"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:43
 msgid "Toggle results"
-msgstr ""
+msgstr "Sonuçları değiştir"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:53
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:167
@@ -787,7 +787,7 @@ msgstr "Yeni sekmede aç"
 #: source/tmp/win-main/GlobalSearch.vue.ts:112
 #, javascript-format
 msgid "%s matches across %s files"
-msgstr ""
+msgstr "%s dosyada %s eşleşme"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:21
 msgid "words"
@@ -799,11 +799,11 @@ msgstr "karakter"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:23
 msgid "No open document"
-msgstr ""
+msgstr "Açık belge yok"
 
 #: source/tmp/win-paste-image/App.vue.ts:57
 msgid "Insert Image from Clipboard"
-msgstr ""
+msgstr "Panodan Resim Ekle"
 
 #: source/tmp/win-paste-image/App.vue.ts:58
 #: source/win-preferences/schema/editor.ts:214
@@ -813,20 +813,20 @@ msgstr "Görüntü"
 
 #: source/tmp/win-paste-image/App.vue.ts:59
 msgid "Retain aspect ratio"
-msgstr ""
+msgstr "En boy oranını koru"
 
 #: source/tmp/win-paste-image/App.vue.ts:60
 msgid "Resize image to"
-msgstr ""
+msgstr "Resim boyutunu ayarla:"
 
 #: source/tmp/win-paste-image/App.vue.ts:61
 msgid "Filename"
-msgstr ""
+msgstr "Dosya adı"
 
 #: source/tmp/win-paste-image/App.vue.ts:62
 #: source/tmp/win-paste-image/App.vue.ts:63
 msgid "A unique filename"
-msgstr ""
+msgstr "Benzersiz bir dosya adı"
 
 #. 1: Omit all changes
 #: source/tmp/win-paste-image/App.vue.ts:67
@@ -844,68 +844,68 @@ msgstr "İptal"
 
 #: source/tmp/win-project-properties/App.vue.ts:37
 msgid "Export project to:"
-msgstr ""
+msgstr "Projeyi dışa aktar:"
 
 #: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Use"
-msgstr ""
+msgstr "Kullan"
 
 #: source/tmp/win-project-properties/App.vue.ts:39
 msgid "Format"
-msgstr ""
+msgstr "Biçimlendir"
 
 #: source/tmp/win-project-properties/App.vue.ts:40
 msgid "Conversion"
-msgstr ""
+msgstr "Dönüştürme"
 
 #: source/tmp/win-project-properties/App.vue.ts:41
 msgid "Files to be included in the export"
-msgstr ""
+msgstr "Dışa aktarıma dahil edilecek dosyalar"
 
 #: source/tmp/win-project-properties/App.vue.ts:42
 msgid "Please select at least one profile to build this project."
-msgstr ""
+msgstr "Lütfen bu projeyi oluşturmak için en az bir profil seçin."
 
 #: source/tmp/win-project-properties/App.vue.ts:43
 msgid "Project Title"
-msgstr ""
+msgstr "Proje Başlığı"
 
 #: source/tmp/win-project-properties/App.vue.ts:44
 msgid "CSL Stylesheet"
-msgstr ""
+msgstr "CSL Stil Sayfası"
 
 #: source/tmp/win-project-properties/App.vue.ts:45
 msgid "LaTeX Template"
-msgstr ""
+msgstr "LaTeX Şablonu"
 
 #: source/tmp/win-project-properties/App.vue.ts:46
 msgid "HTML Template"
-msgstr ""
+msgstr "HTML Şablonu"
 
 #: source/tmp/win-project-properties/App.vue.ts:47
 msgid "Remove file from export"
-msgstr ""
+msgstr "Dosyayı dışa aktarımdan kaldır"
 
 #: source/tmp/win-project-properties/App.vue.ts:48
 msgid "Add file to export"
-msgstr ""
+msgstr "Dosyayı dışa aktarıma ekle"
 
 #: source/tmp/win-project-properties/App.vue.ts:49
 msgid "Move file up"
-msgstr ""
+msgstr "Dosyayı yukarı taşı"
 
 #: source/tmp/win-project-properties/App.vue.ts:50
 msgid "Move file down"
-msgstr ""
+msgstr "Dosyayı aşağı taşı"
 
 #: source/tmp/win-project-properties/App.vue.ts:51
 msgid "You have not selected any files for export."
-msgstr ""
+msgstr "Dışa aktarım için herhangi bir dosya seçmediniz."
 
 #: source/tmp/win-project-properties/App.vue.ts:52
 msgid ""
 "Some files are selected for export but no longer exist in the directory."
-msgstr ""
+msgstr "Bazı dosyalar dışa aktarım için seçili, ancak artık dizinde bulunmuyor."
 
 #: source/tmp/win-print/App.vue.ts:44 source/tmp/win-print/App.vue.ts:45
 #: source/app/service-providers/menu/menu.darwin.ts:248
@@ -915,23 +915,23 @@ msgstr "Yazdır..."
 
 #: source/tmp/win-tag-manager/App.vue.ts:27
 msgid "Assign color"
-msgstr ""
+msgstr "Renk ata"
 
 #: source/tmp/win-tag-manager/App.vue.ts:28
 msgid "Remove color"
-msgstr ""
+msgstr "Rengi kaldır"
 
 #: source/tmp/win-tag-manager/App.vue.ts:29
 msgid "Tag name"
-msgstr ""
+msgstr "Etiket adı"
 
 #: source/tmp/win-tag-manager/App.vue.ts:30
 msgid "Color"
-msgstr ""
+msgstr "Renk"
 
 #: source/tmp/win-tag-manager/App.vue.ts:32
 msgid "A short description"
-msgstr ""
+msgstr "Kısa bir açıklama"
 
 #: source/tmp/win-tag-manager/App.vue.ts:33
 msgid ""
@@ -939,10 +939,13 @@ msgid ""
 "its tile in the preview list will receive a colored indicator. The "
 "description will be shown on mouse hover."
 msgstr ""
+"Burada farklı etiketlere renkler atayabilirsiniz. Bir dosyada bir etiket "
+"bulunursa, önizleme listesindeki kutucuğu renkli bir gösterge alır. "
+"Açıklama, fareyle üzerine gelindiğinde gösterilecektir."
 
 #: source/tmp/win-tag-manager/App.vue.ts:34
 msgid "Manage tags"
-msgstr ""
+msgstr "Etiketleri yönet"
 
 #: source/tmp/win-tag-manager/App.vue.ts:95
 #: source/app/service-providers/menu/menu.darwin.ts:578
@@ -952,7 +955,7 @@ msgstr "Kapat"
 
 #: source/tmp/win-update/App.vue.ts:31
 msgid "Updater"
-msgstr ""
+msgstr "Güncelleyici"
 
 #: source/tmp/win-update/App.vue.ts:32
 msgid "New update available"
@@ -970,11 +973,11 @@ msgstr "Yeni bir Zettlr"
 
 #: source/tmp/win-update/App.vue.ts:35
 msgid "Downloading your update"
-msgstr ""
+msgstr "Güncellemeniz indiriliyor"
 
 #: source/tmp/win-update/App.vue.ts:36
 msgid "No update available. You have the most recent version."
-msgstr ""
+msgstr "Güncelleme mevcut değil. En son sürüme sahipsiniz."
 
 #: source/tmp/win-update/App.vue.ts:37
 #: source/app/service-providers/menu/menu.darwin.ts:639
@@ -984,20 +987,20 @@ msgstr "Güncellemeleri kontrol et"
 
 #: source/tmp/win-update/App.vue.ts:42
 msgid "Click to start update"
-msgstr ""
+msgstr "Güncellemeye başlamak için tıklayın"
 
 #: source/tmp/win-update/App.vue.ts:45
 msgid "never"
-msgstr ""
+msgstr "asla"
 
 #: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
 #, javascript-format
 msgid "Last checked: %s"
-msgstr ""
+msgstr "Son kontrol: %s"
 
 #: source/tmp/win-update/App.vue.ts:124
 msgid "Starting update …"
-msgstr ""
+msgstr "Güncelleme başlatılıyor …"
 
 #: source/common/modules/window-register/register-default-context.ts:76
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
@@ -1029,7 +1032,7 @@ msgstr "Tümünü seç"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Bağlantıya gitmek için Cmd/Ctrl tuşuyla tıklayın"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
@@ -1052,11 +1055,11 @@ msgstr "Kod"
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "%s dosyası mevcut değil."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
 msgid "Word count"
-msgstr ""
+msgstr "Kelime sayısı"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:146
 #: source/app/service-providers/menu/menu.darwin.ts:165
@@ -1066,7 +1069,7 @@ msgstr "Aç..."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
 msgid "No footnote text found."
-msgstr ""
+msgstr "Dipnot metni bulunamadı."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
 #: source/app/service-providers/menu/menu.darwin.ts:308
@@ -1076,11 +1079,11 @@ msgstr "Düzenle"
 
 #: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:68
 msgid "Fetching link preview…"
-msgstr ""
+msgstr "Link önizlemesi alınıyor…"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
 msgid "Copy equation code"
-msgstr ""
+msgstr "Denklem kodunu kopyala"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
 msgid "No suggestions"
@@ -1140,7 +1143,7 @@ msgstr "Link'i kopyala"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
 msgid "Remove Link"
-msgstr ""
+msgstr "Link'i kaldır"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:106
 msgid "Copy image to clipboard"
@@ -1155,7 +1158,7 @@ msgstr "Dosyayı aç"
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Finder'da Göster"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:118
 #, fuzzy
@@ -1165,15 +1168,15 @@ msgstr "Tarayıcıda aç"
 #: source/common/modules/markdown-editor/renderers/render-images.ts:96
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Resim bulunamadı: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:166
 msgid "Open image externally"
-msgstr ""
+msgstr "Resmi harici olarak aç"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Mermaid grafiği oluşturuluyor …"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
 #, fuzzy
@@ -1183,23 +1186,23 @@ msgstr "Dosya oluşturulamadı"
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Okunabilirlik modu (%s)"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "İşaretleme yok"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Yazım hatası"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "Dipnot referansına git"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
 msgid "Disabled"
-msgstr ""
+msgstr "Devre Dışı"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
 #, fuzzy
@@ -1208,15 +1211,15 @@ msgstr "Özel CSS"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Teşhis panelini aç"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "Otomatik olarak algıla"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Afrikaans"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -1224,7 +1227,7 @@ msgstr "Arapça"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "Asturyasca"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -1236,7 +1239,7 @@ msgstr "Bulgarca"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "Bretonca"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
@@ -1244,15 +1247,15 @@ msgstr "Boşnakça"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "Katalanca"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Catalan (Valencia)"
-msgstr ""
+msgstr "Valensiya Katalancası"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Czech"
-msgstr ""
+msgstr "Çekçe"
 
 #: source/common/util/map-lang-code.ts:43
 msgid "Danish"
@@ -1282,7 +1285,7 @@ msgstr "Almanca (Avusturya)"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "German"
-msgstr ""
+msgstr "Almanca"
 
 #: source/common/util/map-lang-code.ts:50
 msgid "Greek"
@@ -1338,7 +1341,7 @@ msgstr "İspanyolca (İspanya)"
 #: source/common/util/map-lang-code.ts:62
 #, fuzzy
 msgid "Spanish"
-msgstr "Danca"
+msgstr "İspanyolca"
 
 #: source/common/util/map-lang-code.ts:63
 msgid "Estonian"
@@ -1363,12 +1366,12 @@ msgstr "Faroe Dili"
 #: source/common/util/map-lang-code.ts:68
 #, fuzzy
 msgid "French (Belgium)"
-msgstr "Hollandaca (Belçika)"
+msgstr "Fransızca (Belçika)"
 
 #: source/common/util/map-lang-code.ts:69
 #, fuzzy
 msgid "French (Switzerland)"
-msgstr "Almanca (İsviçre)"
+msgstr "Fransızca (İsviçre)"
 
 #: source/common/util/map-lang-code.ts:70
 msgid "French (France)"
@@ -1377,15 +1380,15 @@ msgstr "Fransızca (Fransa)"
 #: source/common/util/map-lang-code.ts:71
 #, fuzzy
 msgid "French (Luxembourg)"
-msgstr "Lüksemburg Dili"
+msgstr "Fransızca (Lüksemburg Dili)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Fransızca (Monako Prensliği)"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "French"
-msgstr ""
+msgstr "Fransızca"
 
 #: source/common/util/map-lang-code.ts:74
 msgid "Irish"
@@ -1431,7 +1434,7 @@ msgstr "İzlandaca"
 #: source/common/util/map-lang-code.ts:84
 #, fuzzy
 msgid "Italian (Switzerland)"
-msgstr "Almanca (İsviçre)"
+msgstr "İtalyanca (İsviçre)"
 
 #: source/common/util/map-lang-code.ts:85
 msgid "Italian (Italy)"
@@ -1440,7 +1443,7 @@ msgstr "İtalyanca (İtalya)"
 #: source/common/util/map-lang-code.ts:86
 #, fuzzy
 msgid "Italian"
-msgstr "Eğik"
+msgstr "İtalyanca"
 
 #: source/common/util/map-lang-code.ts:87
 msgid "Japanese"
@@ -1452,7 +1455,7 @@ msgstr "Gürcü Dili"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Kmerce (Kamboçya)"
 
 #: source/common/util/map-lang-code.ts:90
 msgid "Korean"
@@ -1485,7 +1488,7 @@ msgstr "Moğolca"
 #: source/common/util/map-lang-code.ts:97
 #, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "Malayca (Malezya)"
+msgstr "Malayca (Brunei)"
 
 #: source/common/util/map-lang-code.ts:98
 msgid "Malaysian (Malaysia)"
@@ -1523,7 +1526,7 @@ msgstr "Norveççe (Nyorsk)"
 #: source/common/util/map-lang-code.ts:106
 #, fuzzy
 msgid "Norwegian"
-msgstr "Gürcü Dili"
+msgstr "Norveççe"
 
 #: source/common/util/map-lang-code.ts:107
 msgid "Polish"
@@ -1532,7 +1535,7 @@ msgstr "Lehçe"
 #: source/common/util/map-lang-code.ts:108
 #, fuzzy
 msgid "Portuguese (Angola)"
-msgstr "Portekizce (Portekiz)"
+msgstr "Portekizce (Angola)"
 
 #: source/common/util/map-lang-code.ts:109
 msgid "Portuguese (Brazil)"
@@ -1541,7 +1544,7 @@ msgstr "Portekizce (Brezilya)"
 #: source/common/util/map-lang-code.ts:110
 #, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr "Portekizce (Brezilya)"
+msgstr "Portekizce (Mozambik)"
 
 #: source/common/util/map-lang-code.ts:111
 msgid "Portuguese (Portugal)"
@@ -1550,7 +1553,7 @@ msgstr "Portekizce (Portekiz)"
 #: source/common/util/map-lang-code.ts:112
 #, fuzzy
 msgid "Portuguese"
-msgstr "Portekizce (Brezilya)"
+msgstr "Portekizce"
 
 #: source/common/util/map-lang-code.ts:113
 msgid "Romanian"
@@ -1579,12 +1582,12 @@ msgstr "Sırpça"
 #: source/common/util/map-lang-code.ts:119
 #, fuzzy
 msgid "Albanian"
-msgstr "Rumence"
+msgstr "Arnavutça"
 
 #: source/common/util/map-lang-code.ts:120
 #, fuzzy
 msgid "Albanian (Albania)"
-msgstr "Malayca (Malezya)"
+msgstr "Arnavutça (Arnavutluk)"
 
 #: source/common/util/map-lang-code.ts:121
 msgid "Swedish"
@@ -1593,15 +1596,15 @@ msgstr "İsveççe"
 #: source/common/util/map-lang-code.ts:122
 #, fuzzy
 msgid "Tamil (India)"
-msgstr "İngilizce (Hindistan)"
+msgstr "Tamilce (Hindistan)"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Thai"
-msgstr ""
+msgstr "Tayca"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Tagalogca (Filipince)"
 
 #: source/common/util/map-lang-code.ts:125
 msgid "Turkish"
@@ -1613,7 +1616,7 @@ msgstr "Ukraynaca"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Urdu"
-msgstr ""
+msgstr "Urdu"
 
 #: source/common/util/map-lang-code.ts:128
 msgid "Vietnamese"
@@ -1624,7 +1627,7 @@ msgstr "Vietnamca"
 #: source/common/util/map-lang-code.ts:131
 #, fuzzy
 msgid "Sorbian"
-msgstr "Sırpça"
+msgstr "Sorpça"
 
 #: source/common/util/map-lang-code.ts:132
 msgid "Chinese (China)"
@@ -1633,7 +1636,7 @@ msgstr "Çince (Çin)"
 #: source/common/util/map-lang-code.ts:133
 #, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "Çince (Çin)"
+msgstr "Çince (Tayvan)"
 
 #: source/common/util/map-lang-code.ts:134
 #, fuzzy
@@ -1642,7 +1645,7 @@ msgstr "Çince (Çin)"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
-msgstr ""
+msgstr "şimdi"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -1654,11 +1657,11 @@ msgstr ","
 
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
-msgstr ""
+msgstr "Snippet Düzenleyiciyi Aç"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
-msgstr ""
+msgstr "Zettelkasten Kimlikleri"
 
 #: source/win-preferences/schema/zettelkasten.ts:29
 #, fuzzy
@@ -1677,7 +1680,7 @@ msgstr "Yeni IDler oluşturmak için kullanılacak şablon"
 #: source/win-preferences/schema/zettelkasten.ts:39
 #, javascript-format
 msgid "Available Variables: %s"
-msgstr ""
+msgstr "Kullanılabilir Değişkenler: %s""
 
 #: source/win-preferences/schema/zettelkasten.ts:44
 #: source/win-preferences/schema/import-export.ts:77
@@ -1687,7 +1690,7 @@ msgstr "Dahili bağlantıların bağlantılarını kaldır"
 
 #: source/win-preferences/schema/zettelkasten.ts:50
 msgid "Link with filename only"
-msgstr ""
+msgstr "Yalnızca dosya adıyla bağlantı oluştur"
 
 #: source/win-preferences/schema/zettelkasten.ts:55
 #, fuzzy
@@ -1711,7 +1714,7 @@ msgstr "hiçbir zaman"
 
 #: source/win-preferences/schema/zettelkasten.ts:68
 msgid "Link format"
-msgstr ""
+msgstr "Link biçimi"
 
 #: source/win-preferences/schema/zettelkasten.ts:73
 msgid ""
@@ -1719,14 +1722,17 @@ msgid ""
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
 msgstr ""
+"Dahili bağlantılara isteğe bağlı bir başlık ekleyebilirsiniz. Bu başlık, " 
+"gerçek bağlantı hedefinden dikey bir çubuk karakteri (|) ile ayrılır. "
+"Burada başlık ve bağlantı hedefinin sıralamasını belirleyebilirsiniz."
 
 #: source/win-preferences/schema/zettelkasten.ts:79
 msgid "[[Link|Title]]: Link first (recommended)"
-msgstr ""
+msgstr "[[Link|Başlık]]: Link önce (önerilen)"
 
 #: source/win-preferences/schema/zettelkasten.ts:80
 msgid "[[Title|Link]]: Title first"
-msgstr ""
+msgstr "[[Başlık|Link]]: Başlık önce"
 
 #: source/win-preferences/schema/zettelkasten.ts:88
 #, fuzzy
@@ -1735,7 +1741,7 @@ msgstr "Zettelkasten bağlantılarını takip ederken aramayı başlat"
 
 #: source/win-preferences/schema/zettelkasten.ts:89
 msgid "The search string will match the content between the brackets: [[ ]]."
-msgstr ""
+msgstr "Arama dizesi, köşeli parantezler arasındaki içerikle eşleşecektir: [[ ]]."
 
 #: source/win-preferences/schema/zettelkasten.ts:96
 #, fuzzy
@@ -1743,21 +1749,21 @@ msgid ""
 "Automatically create non-existing files in this folder when following "
 "internal links"
 msgstr ""
-"İş bağlantıları takip ederken var olmayan dosyaları otomatik olarak oluştur"
+"İç bağlantıları takip ederken var olmayan dosyaları otomatik olarak oluştur"
 
 #: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
-msgstr ""
+msgstr "Bunun çalışması için klasörün Zettlr'da bir Çalışma Alanı olarak açılması gerekir."
 
 #: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
-msgstr ""
+msgstr "Klasör konumu"
 
 #: source/win-preferences/schema/appearance.ts:26
 #: source/app/service-providers/menu/menu.darwin.ts:439
 #: source/app/service-providers/menu/menu.win32.ts:422
 msgid "Dark mode"
-msgstr ""
+msgstr "Karanlık Mod"
 
 #: source/win-preferences/schema/appearance.ts:37
 msgid "Schedule"
@@ -1775,15 +1781,15 @@ msgstr "İşletim Sistemini Takip Et"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "On"
-msgstr ""
+msgstr "Açık"
 
 #: source/win-preferences/schema/appearance.ts:59
 msgid "End"
-msgstr ""
+msgstr "Son"
 
 #: source/win-preferences/schema/appearance.ts:69
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #: source/win-preferences/schema/appearance.ts:76
 msgid "Here you can choose the theme for the app."
@@ -1791,81 +1797,81 @@ msgstr "Buradan uygulama için tema seçebilirsiniz."
 
 #: source/win-preferences/schema/appearance.ts:118
 msgid "Toolbar options"
-msgstr ""
+msgstr "Araç çubuğu ayarları"
 
 #: source/win-preferences/schema/appearance.ts:125
 msgid "Left section buttons"
-msgstr ""
+msgstr "Sol bölüm düğmeleri"
 
 #: source/win-preferences/schema/appearance.ts:129
 msgid "Display \"Open Preferences\" button"
-msgstr ""
+msgstr "\"Tercihleri Aç\" düğmesini göster"
 
 #: source/win-preferences/schema/appearance.ts:134
 msgid "Display \"New File\" button"
-msgstr ""
+msgstr "\"Yeni Dosya\" düğmesini göster"
 
 #: source/win-preferences/schema/appearance.ts:139
 msgid "Display \"Previous File\" button"
-msgstr ""
+msgstr "\"Önceki Dosya\" düğmesini göster"
 
 #: source/win-preferences/schema/appearance.ts:144
 msgid "Display \"Next File\" button"
-msgstr ""
+msgstr "\"Sonraki Dosya\" düğmesini göster"
 
 #: source/win-preferences/schema/appearance.ts:151
 msgid "Center section buttons"
-msgstr ""
+msgstr "Orta bölüm düğmeleri"
 
 #: source/win-preferences/schema/appearance.ts:155
 msgid "Display readability button"
-msgstr ""
+msgstr "\"Okunabilirlik\" düğmesini göster"
 
 #: source/win-preferences/schema/appearance.ts:160
 msgid "Display \"Insert Comment\" button"
-msgstr ""
+msgstr "\"Yorum Ekle\" düğmesini göster"
 
 #: source/win-preferences/schema/appearance.ts:165
 msgid "Display link button"
-msgstr ""
+msgstr "Link butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:170
 msgid "Display image button"
-msgstr ""
+msgstr "Resim butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:175
 msgid "Display task list button"
-msgstr ""
+msgstr "\"Görev Listesi\" düğmesini göster"
 
 #: source/win-preferences/schema/appearance.ts:180
 msgid "Display \"Insert Table\" button"
-msgstr ""
+msgstr "\"Tablo Ekle\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:185
 msgid "Display \"Insert Footnote\" button"
-msgstr ""
+msgstr "\"Dipnot Ekle\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:192
 msgid "Right section buttons"
-msgstr ""
+msgstr "Sağ bölüm butonları"
 
 #: source/win-preferences/schema/appearance.ts:196
 msgid "Display document info"
-msgstr ""
+msgstr "Doküman özelliklerini göster"
 
 #: source/win-preferences/schema/appearance.ts:201
 msgid "Display Pomodoro-timer"
-msgstr ""
+msgstr "Pomodoro sayacını göster"
 
 #: source/win-preferences/schema/appearance.ts:207
 #, fuzzy
 msgid "Status bar"
-msgstr "Zettlr'ı Göster"
+msgstr "Durum alanı"
 
 #: source/win-preferences/schema/appearance.ts:213
 #, fuzzy
 msgid "Show statusbar"
-msgstr "Zettlr'ı Göster"
+msgstr "Durum alanını göster"
 
 #: source/win-preferences/schema/appearance.ts:224
 #, fuzzy
@@ -1883,15 +1889,18 @@ msgid ""
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
 msgstr ""
+"Girdi modu, düzenleyiciyle etkileşiminizi belirler. "
+"/"Normal/" modda kalmanızı öneririz. /"Vim/" veya /"Emacs/" "
+"modlarını yalnızca ne olduklarını biliyorsanız seçin."
 
 #: source/win-preferences/schema/editor.ts:44
 #, fuzzy
 msgid "Writing direction"
-msgstr "Dizinde bul"
+msgstr "Yazım yönü"
 
 #: source/win-preferences/schema/editor.ts:57
 msgid "Markdown rendering"
-msgstr ""
+msgstr "Markdown oluşturma"
 
 #: source/win-preferences/schema/editor.ts:64
 msgid ""
@@ -1899,6 +1908,9 @@ msgid ""
 "appearance. This hides formatting characters (such as **text**) or renders "
 "images instead of their link."
 msgstr ""
+"Çeşitli Markdown öğelerinin biçimlendirilmiş görünümde canlı olarak işlenmesini "
+"etkinleştirmek için işaretleyin. Bu, biçimlendirme karakterlerini (örneğin **metin**) "
+"gizler veya bağlantıları yerine görüntüleri işler."
 
 #: source/win-preferences/schema/editor.ts:72
 msgid "Render Citations"
@@ -1930,15 +1942,15 @@ msgstr "Başlık karakterlerini gizle"
 
 #: source/win-preferences/schema/editor.ts:107
 msgid "Render emphasis"
-msgstr ""
+msgstr "Vurguları oluştur"
 
 #: source/win-preferences/schema/editor.ts:116
 msgid "Formatting characters for bold and italic"
-msgstr ""
+msgstr "Kalın ve italik karakterler oluşturuluyor"
 
 #: source/win-preferences/schema/editor.ts:143
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Markdown stil hatalarını kontrol et"
 
 #: source/win-preferences/schema/editor.ts:149
 #, fuzzy
@@ -1951,23 +1963,25 @@ msgid ""
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
 msgstr ""
+"Tablo Düzenleyici, tablo oluşturmayı ve düzenlemeyi basitleştiren etkileşimli bir arayüzdür.  "
+"Sık kullanılan işlevler için düğmeler sağlar ve Markdown biçimlendirmesini halleder."
 
 #: source/win-preferences/schema/editor.ts:165
 #, fuzzy
 msgid "Distraction-free mode"
-msgstr "Rahatsız etme modu"
+msgstr "Odaklanma modu"
 
 #: source/win-preferences/schema/editor.ts:171
 msgid "Mute non-focused lines in distraction-free mode"
-msgstr "Rahatsız etme modunda odaklanılmamış satırları sustur"
+msgstr "Odaklanma modunda odaklanılmayan satırları kıs"
 
 #: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction free mode"
-msgstr ""
+msgstr "Odaklanma modunda araç çubuğunu gizle"
 
 #: source/win-preferences/schema/editor.ts:182
 msgid "Word counter"
-msgstr ""
+msgstr "Kelime sayacı"
 
 #: source/win-preferences/schema/editor.ts:189
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -1975,16 +1989,16 @@ msgstr "Kelimeler yerine karakterleri say (örn. Çince için)"
 
 #: source/win-preferences/schema/editor.ts:195
 msgid "Readability mode"
-msgstr ""
+msgstr "Okunabilirlik modu"
 
 #: source/win-preferences/schema/editor.ts:202
 msgid "Algorithm"
-msgstr ""
+msgstr "Algoritma"
 
 #: source/win-preferences/schema/editor.ts:220
 #, fuzzy
 msgid "Maximum width of images (%s %)"
-msgstr "Görsellerin minimum yüksekliği (yüzdelik)"
+msgstr "Görsellerin maksimum genişliği (yüzdelik)"
 
 #: source/win-preferences/schema/editor.ts:227
 #, fuzzy
@@ -1993,7 +2007,7 @@ msgstr "Görsellerin maksimum yüksekliği (yüzdelik)"
 
 #: source/win-preferences/schema/editor.ts:235
 msgid "Other settings"
-msgstr ""
+msgstr "Diğer ayarlar"
 
 #: source/win-preferences/schema/editor.ts:241
 #, fuzzy
@@ -2003,25 +2017,25 @@ msgstr "Editor yazı boyutu"
 #: source/win-preferences/schema/editor.ts:248
 #, fuzzy
 msgid "Indentation size (number of spaces)"
-msgstr "Bu boşluk sayısına göre girinti ekle"
+msgstr "Girinti miktarı (boşluk sayısı)"
 
 #: source/win-preferences/schema/editor.ts:255
 #, fuzzy
 msgid "Indent using tabs instead of spaces"
-msgstr "Bu boşluk sayısına göre girinti ekle"
+msgstr "Girinti için boşluk yerine sekmeleri kullan"
 
 #: source/win-preferences/schema/editor.ts:261
 msgid "Highlight whitespace"
-msgstr ""
+msgstr "Boşlukları işaretle"
 
 #: source/win-preferences/schema/editor.ts:267
 #, fuzzy
 msgid "Suggest emojis during autocompletion"
-msgstr "Otomatik tamamlama esnasında boşlukları kabul et"
+msgstr "Otomatik tamamlamada emojiler öner"
 
 #: source/win-preferences/schema/editor.ts:272
 msgid "Show link previews"
-msgstr ""
+msgstr "Link önizlemelerini göster"
 
 #: source/win-preferences/schema/editor.ts:278
 msgid "Automatically close matching character pairs"
@@ -2029,7 +2043,7 @@ msgstr "Eşleşen karakter çiftlerini otomatik olarak kapat"
 
 #: source/win-preferences/schema/general.ts:22
 msgid "Application language"
-msgstr ""
+msgstr "Uygulama dili"
 
 #: source/win-preferences/schema/general.ts:33
 msgid "Autosave"
@@ -2050,17 +2064,19 @@ msgstr "Kısa bir süre sonra"
 
 #: source/win-preferences/schema/general.ts:55
 msgid "Default image folder"
-msgstr ""
+msgstr "Standart resim klasörü"
 
 #: source/win-preferences/schema/general.ts:67
 msgid ""
 "Click \"Select folder…\" or type an absolute or relative path directly into "
 "the input field."
 msgstr ""
+"Bir klasör seçmek için /"Klasör Seç…/" seçeneğine tıklayın veya giriş alanına "
+"doğrudan bir yol (mutlak veya göreli) girin."
 
 #: source/win-preferences/schema/general.ts:72
 msgid "Behavior"
-msgstr ""
+msgstr "Davranış"
 
 #: source/win-preferences/schema/general.ts:78
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
@@ -2069,23 +2085,23 @@ msgstr "Her zaman mevcut dosyaya dışarıdan yapılan değişikleri ekle"
 
 #: source/win-preferences/schema/general.ts:83
 msgid "Avoid opening files in new tabs if possible"
-msgstr "Mümkünse dosyaları yeni sekmede açma"
+msgstr "Dosyaları mümkünse yeni sekmelerde açma"
 
 #: source/win-preferences/schema/general.ts:89
 msgid "Updates"
-msgstr ""
+msgstr "Güncellemeler"
 
 #: source/win-preferences/schema/general.ts:95
 msgid "Automatically check for updates"
-msgstr ""
+msgstr "Güncellemeler için otomatik kontrol"
 
 #: source/win-preferences/schema/import-export.ts:24
 msgid "Import and export profiles"
-msgstr ""
+msgstr "Profil içe/dışa aktarma"
 
 #: source/win-preferences/schema/import-export.ts:30
 msgid "Open import profiles editor"
-msgstr ""
+msgstr "İçe aktarma profili düzenleyicisini aç"
 
 #: source/win-preferences/schema/import-export.ts:44
 msgid "Open export profiles editor"
