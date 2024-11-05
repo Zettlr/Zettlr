@@ -14,6 +14,7 @@
   headings, but this will improve compatibility with other editors who already
   support this feature (#3727)
 - Fixed an edge case in rendering highlight marks
+- Fixed non-unique clipboard data paste filenames (#5449)
 
 ## Under the Hood
 

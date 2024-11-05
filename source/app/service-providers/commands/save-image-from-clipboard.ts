@@ -53,6 +53,13 @@ export default class SaveImage extends ZettlrCommand {
     const startPath = path.resolve(arg.basePath, defaultPath)
     let image = nativeImage.createFromDataURL(arg.imageData)
 
+    // When the user takes a screenshot into the clipboard and pastes that, the
+    // Chromium API sets the "file"'s name to a generic "image.png". In that
+    // case we want to provide a unique one. See #5449
+    if (arg.imageName === 'image.png') {
+      arg.imageName = undefined
+    }
+
     // The paste image modal will request the image's data once after it has
     // been loaded.
     // NOTE: We must implement this logic here in main which will (a) save the
