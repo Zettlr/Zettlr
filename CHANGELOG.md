@@ -13,6 +13,7 @@
   such links appropriately; the editors will not yet jump to the corresponding
   headings, but this will improve compatibility with other editors who already
   support this feature (#3727)
+- Fixed an edge case in rendering highlight marks
 
 ## Under the Hood
 

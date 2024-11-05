@@ -61,7 +61,7 @@ export const highlightParser: InlineParser = {
     const validAfter = eol || (pos + 1 < ctx.end && allowedSurroundingChar(ctx.char(pos + 2)))
 
     const isOpening = validBefore && !validAfter
-    const isClosing = !validBefore && validAfter
+    const isClosing = validAfter
 
     return ctx.addDelimiter(MarkDelimiter, pos, pos + 2, isOpening, isClosing)
   }
