@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { type EditorView } from '@codemirror/view'
+import { type EditorView } from '@codemirror/view';
 
 /**
  * A helper function that returns a click-callback that can be used to set a
@@ -24,23 +24,42 @@ import { type EditorView } from '@codemirror/view'
  *
  * @return  {Function}           A callback compatible with mouse events
  */
-export default function clickAndSelect (view: EditorView): (event: MouseEvent) => void {
+export default function clickAndSelect(
+  view: EditorView
+): (event: MouseEvent) => void {
   return function (event: MouseEvent) {
-    const { target } = event
+    const { target } = event;
     if (!(target instanceof HTMLElement)) {
-      return
+      return;
     }
 
-    const { top, left, bottom, right } = target.getBoundingClientRect()
-    const fromPos = view.posAtCoords({ x: left, y: top })
-    const toPos = view.posAtCoords({ x: right, y: bottom })
+    const rects = target.getClientRects();
+    let fromPos = null;
+    let toPos = null;
+
+    //iterate over each line and find the first and last position
+    for (const rect of rects) {
+      const startPos = view.posAtCoords({ x: rect.left, y: rect.top });
+      const endPos = view.posAtCoords({ x: rect.right, y: rect.bottom });
+
+      if (startPos !== null && (fromPos === null || startPos < fromPos)) {
+        fromPos = startPos;
+      }
+      if (endPos !== null && (toPos === null || endPos > toPos)) {
+        toPos = endPos;
+      }
+    }
+
+    // const { top, left, bottom, right } = target.getBoundingClientRect()
+    // const fromPos = view.posAtCoords({ x: left, y: top })
+    // const toPos = view.posAtCoords({ x: right, y: bottom })
 
     if (fromPos === null || toPos === null) {
-      return
+      return;
     }
 
-    event.stopPropagation()
-    event.preventDefault()
-    view.dispatch({ selection: { anchor: fromPos, head: toPos } })
-  }
+    event.stopPropagation();
+    event.preventDefault();
+    view.dispatch({ selection: { anchor: fromPos, head: toPos } });
+  };
 }
