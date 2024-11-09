@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { type EditorView } from '@codemirror/view';
+import { type EditorView } from '@codemirror/view'
 
 /**
  * A helper function that returns a click-callback that can be used to set a
@@ -33,20 +33,20 @@ export default function clickAndSelect(
       return;
     }
 
-    const rects = target.getClientRects();
-    let fromPos = null;
-    let toPos = null;
+    const rects = target.getClientRects()
+    let fromPos = null
+    let toPos = null
 
     //iterate over each line and find the first and last position
     for (const rect of rects) {
-      const startPos = view.posAtCoords({ x: rect.left, y: rect.top });
-      const endPos = view.posAtCoords({ x: rect.right, y: rect.bottom });
+      const startPos = view.posAtCoords({ x: rect.left, y: rect.top })
+      const endPos = view.posAtCoords({ x: rect.right, y: rect.bottom })
 
       if (startPos !== null && (fromPos === null || startPos < fromPos)) {
-        fromPos = startPos;
+        fromPos = startPos
       }
       if (endPos !== null && (toPos === null || endPos > toPos)) {
-        toPos = endPos;
+        toPos = endPos
       }
     }
 
@@ -55,11 +55,11 @@ export default function clickAndSelect(
     // const toPos = view.posAtCoords({ x: right, y: bottom })
 
     if (fromPos === null || toPos === null) {
-      return;
+      return
     }
 
-    event.stopPropagation();
-    event.preventDefault();
-    view.dispatch({ selection: { anchor: fromPos, head: toPos } });
+    event.stopPropagation()
+    event.preventDefault()
+    view.dispatch({ selection: { anchor: fromPos, head: toPos } })
   };
 }
