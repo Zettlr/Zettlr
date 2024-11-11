@@ -6,6 +6,7 @@
 - Prevent initial startup update-check if the setting is unchecked (context:
   https://github.com/Zettlr/Zettlr/commit/812899#r148519528)
 - Fix errors in German translation (`de-DE`)
+- Update Turkish translation (`tr-TR`) (#5461)
 - Fix "dancing list items" (#4602)
 - Allow three-digit ordinal day of the year in IDs and filenames (`%o`; #5424)
 - The link preview and force-open workflows now expect internal/wiki-links that
