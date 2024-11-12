@@ -18,6 +18,8 @@
 - Fixed non-unique clipboard data paste filenames (#5449)
 - Fixed non-proportional images (especially very tall ones) overlaying other
   text below them (#5465)
+- The background color of the active line in typewriter mode no longer blocks
+  the selection background (#5430)
 
 ## Under the Hood
 
