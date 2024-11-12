@@ -16,6 +16,8 @@
   support this feature (#3727)
 - Fixed an edge case in rendering highlight marks
 - Fixed non-unique clipboard data paste filenames (#5449)
+- Fixed non-proportional images (especially very tall ones) overlaying other
+  text below them (#5465)
 
 ## Under the Hood
 

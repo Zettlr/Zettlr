@@ -262,6 +262,8 @@ export const renderImages = [
       textAlign: 'center',
       cursor: 'default',
       textIndent: '0', // Reset the text indent
+      // Ensure that very un-proportional images do not overflow (see #5465)
+      overflow: 'hidden',
       '& img': {
         display: 'block',
         position: 'relative'
