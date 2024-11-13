@@ -75,6 +75,10 @@ class ImageWidget extends WidgetType {
     // IMG
     //////////////////////////////////////////
     const img = document.createElement('img')
+    // This ensures that overly tall images will not be cropped by a too-short
+    // figure, and instead scale down. The figure will also become narrower,
+    // accommodating only for the total width of the resized image.
+    img.style.maxHeight = height
     img.alt = this.altText
     img.title = this.imageTitle
 
@@ -266,7 +270,9 @@ export const renderImages = [
       overflow: 'hidden',
       '& img': {
         display: 'block',
-        position: 'relative'
+        position: 'relative',
+        // The figure will squeeze it if necessary to the user-specified width
+        maxWidth: '100%'
       },
       '& :not(img)': { opacity: '0' },
       '&:hover :not(img), &:focus-within :not(img)': { opacity: '1' },
