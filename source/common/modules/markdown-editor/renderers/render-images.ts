@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { renderInlineWidgets } from './base-renderer'
+import { renderBlockWidgets } from './base-renderer'
 import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
 import { EditorView, WidgetType } from '@codemirror/view'
 import { type EditorState } from '@codemirror/state'
@@ -32,6 +32,17 @@ function isDataUrl (url: string): boolean {
 }
 
 /**
+ * This map is a cache that holds the actual (natural) sizes of the images we
+ * have loaded across the app, identified by their absolute paths. These numbers
+ * will be updated as images load, and will be used by the image widgets to
+ * report a (likely) height which will help CodeMirror render scroll bars etc.
+ * much more accurately. NOTE: The image height cache caches the EXACT height of
+ * the rendered widget at the time of caching, NOT the natural image's height!
+ * Also, this cache will be kept updated whenever an image is reloaded.
+ */
+const IMAGE_HEIGHT_CACHE = new Map<string, number>()
+
+/**
  * Resolves the actual image URL to load, provided the current file's location.
  *
  * @param   {string}  filePath  The file path
@@ -45,11 +56,23 @@ function resolveImageUrl (filePath: string, imageUrl: string): string {
 }
 
 class ImageWidget extends WidgetType {
-  constructor (readonly node: SyntaxNode, readonly imageTitle: string, readonly imageUrl: string, readonly altText: string, readonly data: string) {
+  constructor (
+    readonly node: SyntaxNode,
+    readonly imageTitle: string,
+    readonly imageUrl: string,
+    readonly resolvedImageUrl: string,
+    readonly altText: string,
+    readonly data: string
+  ) {
     super()
   }
 
+  get estimatedHeight (): number {
+    return IMAGE_HEIGHT_CACHE.get(this.resolvedImageUrl) ?? -1
+  }
+
   toDOM (view: EditorView): HTMLElement {
+    console.log('Image to DOM')
     //////////////////////////////////////////
     // FIGURE
     //////////////////////////////////////////
@@ -125,6 +148,11 @@ class ImageWidget extends WidgetType {
         caption.style.display = 'none'
         openExternally.style.display = 'none'
       }
+
+      // Lastly, cache the image's resolved height. This can quickly become
+      // inaccurate, but can be solved by the user with a simple Ctrl+A, which
+      // will force-reload everything.
+      IMAGE_HEIGHT_CACHE.set(this.resolvedImageUrl, height)
     }
 
     //////////////////////////////////////////
@@ -255,7 +283,8 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
     url = url.replace(`"${match[3]}"`, '').trim()
   }
 
-  return new ImageWidget(node.node, title, url, altText, p4)
+  const resolvedImageSrc = resolveImageUrl(state.field(configField).metadata.path, url)
+  return new ImageWidget(node.node, title, url, resolvedImageSrc, altText, p4)
 }
 
 export const renderImages = [
@@ -314,5 +343,5 @@ export const renderImages = [
       }
     }
   }),
-  renderInlineWidgets(shouldHandleNode, createWidget)
+  renderBlockWidgets(shouldHandleNode, createWidget)
 ]
