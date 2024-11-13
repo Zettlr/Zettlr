@@ -20,6 +20,8 @@
   text below them (#5465)
 - The background color of the active line in typewriter mode no longer blocks
   the selection background (#5430)
+- Dropping or copy-pasting images from the file browser now inserts relative
+  links to them again instead of offering to save a copy (#5475)
 
 ## Under the Hood
 
