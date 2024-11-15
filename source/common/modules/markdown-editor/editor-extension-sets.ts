@@ -16,16 +16,15 @@
  * END HEADER
  */
 
-import { closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete'
+import { closeBrackets } from '@codemirror/autocomplete'
 import { type Update } from '@codemirror/collab'
-import { defaultKeymap, history, undo, redo, undoSelection, redoSelection } from '@codemirror/commands'
+import { history } from '@codemirror/commands'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/lang-yaml'
-import { search, searchKeymap } from '@codemirror/search'
-import { Compartment, EditorState, Prec, type Extension } from '@codemirror/state'
+import { search } from '@codemirror/search'
+import { Compartment, EditorState, type Extension } from '@codemirror/state'
 import {
-  keymap,
   drawSelection,
   EditorView,
   lineNumbers,
@@ -34,7 +33,6 @@ import {
   type DOMEventHandlers
 } from '@codemirror/view'
 import { autocomplete } from './autocomplete'
-import { customKeymap } from './commands/keymap'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './theme/syntax'
 import markdownParser from './parser/markdown-parser'
 import { syntaxExtensions } from './parser/syntax-extensions'
@@ -74,6 +72,8 @@ import { mainOverride } from './theme/main-override'
 import { highlightWhitespace } from './plugins/highlight-whitespace'
 import { tagClasses } from './plugins/tag-classes'
 import { autocompleteTriggerCharacter } from './autocomplete/snippets'
+import { markdownKeymap } from './keymaps/markdown'
+import { codeKeymap } from './keymaps/code'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -166,18 +166,6 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // Both vim and emacs modes need to be included first, before any other
     // keymap.
     inputModeCompartment.of(inputMode),
-    // KEYMAPS
-    keymap.of([
-      ...defaultKeymap, // Minimal default keymap
-      // NOTE: We had to add the history commands here since the default
-      // keybindings were ... unexpected.
-      { key: 'Mod-z', run: undo, preventDefault: true },
-      { key: 'Mod-Shift-z', run: redo, preventDefault: true },
-      { key: 'Mod-u', run: undoSelection, preventDefault: true },
-      { key: 'Alt-u', mac: 'Mod-Shift-u', run: redoSelection, preventDefault: true },
-      ...closeBracketsKeymap, // Binds Backspace to deletion of matching brackets
-      ...searchKeymap // Search commands (Ctrl+F, etc.)
-    ]),
     darkMode({ darkMode: options.initialConfig.darkMode, ...themes[options.initialConfig.theme] }),
     // CODE FOLDING
     codeFolding(),
@@ -243,6 +231,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
 function getGenericCodeExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getCoreExtensions(options),
+    codeKeymap(),
     lineNumbers(),
     bracketMatching(),
     indentOnInput(),
@@ -315,10 +304,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     // Markdown prior. Additionally, images should get preferential treatment.
     EditorView.domEventHandlers(mdPasteDropHandlers),
     // We need our custom keymaps first
-    Prec.high(keymap.of([
-      ...completionKeymap,
-      ...customKeymap
-    ])),
+    markdownKeymap(),
     // The parser generates the AST for the document ...
     markdownParser({
       zknLinkParserConfig: { format: options.initialConfig.zknLinkFormat }

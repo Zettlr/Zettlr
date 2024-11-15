@@ -30,6 +30,7 @@
   the selection background (#5430)
 - Dropping or copy-pasting images from the file browser now inserts relative
   links to them again instead of offering to save a copy (#5475)
+- Code files can now also be indented and unindented as expected using `Tab`
 
 ## Under the Hood
 
@@ -40,11 +41,13 @@
 - The `PersistentDataContainer` now uses proper data types, making usage more
   type-safe
 - Replace the deprecated `registerFileProtocol` call with the new recommended
-  `handle` call for handling `safe-file;//` calls
+  `handle` call for handling `safe-file://` calls
 - Re-introduce linter rules; all of these are part of the common style we
   already use, but they got lost in one of the past ESLint upgrades:
   - enforce single quotes across the codebase
   - enforce proper object property spacing
+- Moved all keymaps to a centralized space, enabling us to customize them
+  further in the future and streamlining the available keybindings
 
 # 3.2.3
 
