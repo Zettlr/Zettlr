@@ -123,31 +123,6 @@ body {
       margin: 10px 0;
     }
 
-    a.attachment {
-      display: block;
-      padding: 4px;
-      text-decoration: none;
-      color: inherit;
-      // Padding 4px + 4px margin + 24px icon width = 32px
-      text-indent: -32px;
-      padding-left: 32px;
-      // Some filenames are too long for the sidebar. However, unlike with the
-      // file manager where we have the full filename visible in multiple places,
-      // here we must make sure the filename is fully visible. Hence, we don't
-      // use white-space: nowrap, but rather word-break: break-all.
-      word-break: break-all;
-
-      svg {
-        width: 24px;
-        height: 24px;
-        margin-right: 4px;
-        vertical-align: bottom;
-        margin-bottom: -1px;
-        // Necessary to give the extension icons the correct colour
-        fill: currentColor;
-      }
-    }
-
     // Bibliography entries
     div.csl-bib-body {
       div.csl-entry {
