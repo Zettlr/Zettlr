@@ -41,6 +41,7 @@
   type-safe
 - Replace the deprecated `registerFileProtocol` call with the new recommended
   `handle` call for handling `safe-file;//` calls
+- Re-introduce quoting linter rule to enforce single quotes across the codebase
 
 # 3.2.3
 

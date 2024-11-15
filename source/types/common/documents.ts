@@ -1,4 +1,4 @@
-import { TabManagerJSON } from "source/app/service-providers/documents/document-tree/tab-manager"
+import { TabManagerJSON } from 'source/app/service-providers/documents/document-tree/tab-manager'
 
 /**
  * A descriptor for some metadata that is associated to opened documents, such
