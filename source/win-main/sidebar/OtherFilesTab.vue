@@ -196,4 +196,8 @@ a.attachment {
     fill: currentColor;
   }
 }
+
+body.dark a.attachment {
+  color: inherit;
+}
 </style>
