@@ -13,6 +13,7 @@
 
 import type LogProvider from '@providers/log'
 import { protocol } from 'electron'
+import { promises as fs } from 'fs'
 
 export default function registerCustomProtocols (logger: LogProvider): void {
   // Make it possible to safely load external files
@@ -21,16 +22,19 @@ export default function registerCustomProtocols (logger: LogProvider): void {
   const protocolName = 'safe-file'
 
   logger.info(`Registering custom protocol ${protocolName}`)
-  protocol.registerFileProtocol(protocolName, (request, callback) => {
+  protocol.handle(protocolName, async request => {
     const url = request.url.replace(`${protocolName}://`, '')
     try {
-      return callback({
-        path: decodeURIComponent(url),
+      const fileBuffer = await fs.readFile(decodeURIComponent(url))
+      return new Response(fileBuffer, {
+        status: 200,
         // Prevent that local files are cached
         headers: { 'Cache-control': 'no-store', pragma: 'no-cache' }
       })
     } catch (err: any) {
-      logger.error(`Error loading external file: ${err.message as string}`, err)
+      const msg = `Error loading external file: ${err.message as string}`
+      logger.error(msg, err)
+      return new Response(msg, { status: 500 })
     }
   })
 }

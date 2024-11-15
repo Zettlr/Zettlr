@@ -33,6 +33,8 @@
 - Update various other dependencies
 - The `PersistentDataContainer` now uses proper data types, making usage more
   type-safe
+- Replace the deprecated `registerFileProtocol` call with the new recommended
+  `handle` call for handling `safe-file;//` calls
 
 # 3.2.3
 
