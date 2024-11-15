@@ -28,7 +28,7 @@
 ## Under the Hood
 
 - Update Codemirror dependencies
-- Update Electron to `v32.2.2`
+- Update Electron to `v33.2.0`
 - Update Electron forge to `v7.5.0`
 - Update various other dependencies
 - The `PersistentDataContainer` now uses proper data types, making usage more
