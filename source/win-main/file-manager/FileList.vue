@@ -102,6 +102,11 @@ import { nextTick, ref, computed, watch, onUpdated } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
 import { type MaybeRootDescriptor, type AnyDescriptor } from '@dts/common/fsal'
 
+interface RecycleScrollerData {
+  id: number
+  props: MaybeRootDescriptor
+}
+
 const ipcRenderer = window.ipc
 
 const props = defineProps<{
@@ -119,6 +124,13 @@ const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
 
 const selectedDirectory = computed(() => configStore.config.openDirectory)
+const selectedDirDescriptor = computed(() => {
+  if (selectedDirectory.value === null) {
+    return undefined
+  }
+
+  return workspacesStore.getDir(selectedDirectory.value)
+})
 
 const noResultsMessage = trans('No results')
 const emptyFileListMessage = trans('No directory selected')
@@ -129,17 +141,13 @@ const useTitle = computed(() => configStore.config.fileNameDisplay.includes('tit
 const itemHeight = computed(() => configStore.config.fileMeta ? 70 : 30)
 const rootElement = ref<HTMLDivElement|null>(null)
 
-const getDirectoryContents = computed<Array<{ id: number, props: MaybeRootDescriptor }>>(() => {
-  if (selectedDirectory.value === null) {
-    return []
-  }
-
-  const dir = workspacesStore.getDir(selectedDirectory.value)
+const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
+  const dir = selectedDirDescriptor.value
   if (dir === undefined) {
     return []
   }
 
-  const ret: Array<{ id: number, props: MaybeRootDescriptor }> = []
+  const ret: RecycleScrollerData[] = []
   const items = objectToArray(dir, 'children') as AnyDescriptor[]
   for (let i = 0; i < items.length; i++) {
     if (items[i].type !== 'other') {
@@ -152,9 +160,42 @@ const getDirectoryContents = computed<Array<{ id: number, props: MaybeRootDescri
   return ret
 })
 
+// Add an additional layer of filtering: This function applies a potential
+// project filtering to the files in this list to ensure that project files stay
+// on top. This implements the same logic as `projectSortedFilteredChildren` in
+// the `TreeItem.vue` component.
+const getProjectOrderedDirectoryContents = computed(() => {
+  const dir = selectedDirDescriptor.value
+  if (dir === undefined || dir.type !== 'directory' || dir.settings.project === null) {
+    return getDirectoryContents.value
+  }
+
+  // Modify the order using the project files by first mapping the sorted
+  // project file paths onto the descriptors available, sorting all other files
+  // separately, and then concatenating them with the project files up top.
+  const projectFiles: RecycleScrollerData[] = dir.settings.project.files
+    .map(filePath => getDirectoryContents.value.find(x => x.props.name === filePath))
+    .filter(x => x !== undefined)
+
+  const files: RecycleScrollerData[] = []
+  for (const desc of getDirectoryContents.value) {
+    if (!projectFiles.includes(desc)) {
+      files.push(desc)
+    }
+  }
+
+  // The file list displays the directory itself as its first element, so that
+  // must be on top of even the project files.
+  return [
+    files[0],
+    ...projectFiles,
+    ...files.slice(1)
+  ]
+})
+
 const getFilteredDirectoryContents = computed(() => {
   // Returns a list of directory contents, filtered
-  const originalContents = getDirectoryContents.value
+  const originalContents = getProjectOrderedDirectoryContents.value
 
   const q = props.filterQuery.trim().toLowerCase() // Easy access
 

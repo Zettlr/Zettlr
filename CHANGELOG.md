@@ -4,6 +4,12 @@
 
 - **New Feature**: Images in the "other files" tab do now contain a small
   preview to help find the correct images
+- **New Feature**: Project settings can now override folder sorting, which means
+  that any project folder will from now on be sorted like so: (1) the files
+  within the folder in the order of the project settings; (2) all other files
+  according to the folder's regular sort settings. Note that this requires all
+  project files to reside in the top folder; included project files in
+  subfolders will not be affected
 - Columns in the preferences window are now properly aligned (#5410)
 - Prevent initial startup update-check if the setting is unchecked (context:
   https://github.com/Zettlr/Zettlr/commit/812899#r148519528)
