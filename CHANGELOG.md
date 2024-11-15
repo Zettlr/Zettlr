@@ -41,7 +41,10 @@
   type-safe
 - Replace the deprecated `registerFileProtocol` call with the new recommended
   `handle` call for handling `safe-file;//` calls
-- Re-introduce quoting linter rule to enforce single quotes across the codebase
+- Re-introduce linter rules; all of these are part of the common style we
+  already use, but they got lost in one of the past ESLint upgrades:
+  - enforce single quotes across the codebase
+  - enforce proper object property spacing
 
 # 3.2.3
 
