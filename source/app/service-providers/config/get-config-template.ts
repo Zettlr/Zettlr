@@ -75,7 +75,6 @@ export interface ConfigOptions {
     customDirectory: string
   }
   editor: {
-    autocompleteAcceptSpace: boolean // TODO: DEPRECATED
     autocompleteSuggestEmojis: boolean
     autoSave: 'off'|'immediately'|'delayed'
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
@@ -263,7 +262,6 @@ export function getConfigTemplate (): ConfigOptions {
     // Editor related stuff
     editor: {
       autoSave: 'off',
-      autocompleteAcceptSpace: false, // Whether you can type spaces in autocorrect
       autocompleteSuggestEmojis: true,
       autoCloseBrackets: true,
       showLinkPreviews: true, // Whether to fetch link previews in the editor
