@@ -42,6 +42,9 @@
 - Code files can now also be indented and unindented as expected using `Tab`
 - Changing capitalization of filenames on Windows, macOS, or other case-
   insensitive file systems (e.g., testfile -> Testfile) no longer fails (#5460)
+- Fixed drag & drop behavior of open-able files onto the editor from the file
+  browser; dropping any supported file onto the app will now attempt to open it
+  (#5344)
 
 ## Under the Hood
 

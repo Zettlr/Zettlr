@@ -19,6 +19,7 @@ import html2md from '@common/util/html-to-md'
 import { configField } from '../util/configuration'
 import { pathBasename, pathDirname, pathExtname, relativePath } from '@common/util/renderer-path-polyfill'
 import { type SaveImageFromClipboardAPI } from 'source/app/service-providers/commands/save-image-from-clipboard'
+import { hasMdOrCodeExt } from 'source/app/service-providers/fsal/util/is-md-or-code-file'
 
 const ipcRenderer = window.ipc
 
@@ -186,11 +187,11 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       return false
     }
 
-    const zettlrFile = dataTransfer.getData('text/x-zettlr-file')
-
     if (dataTransfer.getData('zettlr/document-tab') !== '') {
       return false // There's a document being dragged, let the MainEditor capture the event
     }
+
+    const zettlrFile = dataTransfer.getData('text/x-zettlr-file')
 
     if (dataTransfer.files.length === 0 && zettlrFile === '') {
       return false
@@ -212,24 +213,34 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
       const insertions: string[] = []
       // We have a list of files being dropped onto the editor --> handle them
       for (const file of dataTransfer.files) {
-        if (imageRE.test(file.name)) {
-          const filePath = window.getPathForFile(file)
-          if (filePath === undefined) {
-            // It's an image --> offer to save
-            allPromises.push(new Promise((resolve, reject) => {
-              saveImageFromClipboard(cwd, file)
-                .then(tag => {
-                  if (tag !== undefined) {
-                    insertions.push(tag)
-                  }
-                  resolve()
-                })
-                .catch(err => reject(err))
-            }))
-          } else {
-            // The image resides somewhere on disk -> directly insert
-            insertions.push(`![${file.name}](${relativePath(cwd, filePath)})`)
-          }
+        const filePath = window.getPathForFile(file)
+        const isImage = imageRE.test(file.name)
+
+        if (isImage && filePath !== undefined) {
+          // The image resides somewhere on disk -> directly insert
+          insertions.push(`![${file.name}](${relativePath(cwd, filePath)})`)
+        } else if (isImage && filePath === undefined) {
+          // It's an image --> offer to save
+          allPromises.push(new Promise((resolve, reject) => {
+            saveImageFromClipboard(cwd, file)
+              .then(tag => {
+                if (tag !== undefined) {
+                  insertions.push(tag)
+                }
+                resolve()
+              })
+              .catch(err => reject(err))
+          }))
+        } else if (hasMdOrCodeExt(file.name) && filePath !== undefined) {
+          // It's a Markdown or supported code file -> tell main to open them
+          ipcRenderer.invoke('documents-provider', {
+            command: 'open-file',
+            payload: {
+              path: filePath,
+              newTab: true
+            }
+          })
+            .catch(e => console.error(e))
         } else {
           // Unsupported file type -> ignore
         }
