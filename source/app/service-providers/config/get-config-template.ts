@@ -81,6 +81,7 @@ export interface ConfigOptions {
     autoCloseBrackets: boolean
     showLinkPreviews: boolean
     showStatusbar: boolean
+    showFormattingToolbar: boolean
     showWhitespace: boolean
     defaultSaveImagePath: string
     enableTableHelper: boolean
@@ -278,6 +279,7 @@ export function getConfigTemplate (): ConfigOptions {
       italicFormatting: '_', // Can be * or _
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
       showStatusbar: true,
+      showFormattingToolbar: true,
       lint: {
         markdown: true, // Should Markdown be linted?
         languageTool: {

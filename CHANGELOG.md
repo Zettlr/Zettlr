@@ -10,6 +10,7 @@
   according to the folder's regular sort settings. Note that this requires all
   project files to reside in the top folder; included project files in
   subfolders will not be affected
+- The formatting toolbar can now be toggled on or off in the preferences (#5207)
 - Mapped Vim's write and quit commands to saving and closing actions (#4720,
   #5463):
   - `w`: Executes a save command for the current file

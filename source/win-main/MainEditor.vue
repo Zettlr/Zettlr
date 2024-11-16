@@ -260,6 +260,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     lintLanguageTool: editor.lint.languageTool.active,
     distractionFree: props.distractionFree.valueOf(),
     showStatusbar: editor.showStatusbar,
+    showFormattingToolbar: editor.showFormattingToolbar,
     darkMode,
     theme: display.theme,
     highlightWhitespace: editor.showWhitespace
