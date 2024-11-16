@@ -39,6 +39,8 @@
 - Dropping or copy-pasting images from the file browser now inserts relative
   links to them again instead of offering to save a copy (#5475)
 - Code files can now also be indented and unindented as expected using `Tab`
+- Changing capitalization of filenames on Windows, macOS, or other case-
+  insensitive file systems (e.g., testfile -> Testfile) no longer fails (#5460)
 
 ## Under the Hood
 
