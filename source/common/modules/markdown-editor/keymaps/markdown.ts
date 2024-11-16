@@ -28,8 +28,6 @@ import { sharedKeymap } from './shared'
 export function markdownKeymap (): Extension {
   return keymap.of([
     // completionKeymap
-    { key: 'Ctrl-Space', run: startCompletion },
-    { mac: 'Alt-`', run: startCompletion },
     { key: 'Escape', run: closeCompletion },
     { key: 'ArrowDown', run: moveCompletionSelection(true) },
     { key: 'ArrowUp', run: moveCompletionSelection(false) },
