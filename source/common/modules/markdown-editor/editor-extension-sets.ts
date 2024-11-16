@@ -53,7 +53,6 @@ import { markdownFolding } from './code-folding/markdown'
 import { json, jsonParseLinter } from '@codemirror/lang-json'
 import { softwrapVisualIndent } from './plugins/visual-indent'
 import { backgroundLayers } from './plugins/code-background'
-import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
 import { distractionFree } from './plugins/distraction-free'
 import { languageTool } from './linters/language-tool'
@@ -74,6 +73,7 @@ import { tagClasses } from './plugins/tag-classes'
 import { autocompleteTriggerCharacter } from './autocomplete/snippets'
 import { markdownKeymap } from './keymaps/markdown'
 import { codeKeymap } from './keymaps/code'
+import { vimPlugin } from './plugins/vim-mode'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -150,7 +150,7 @@ export function getMainEditorThemes (): Record<EditorConfiguration['theme'], { l
 function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
   const inputMode: Extension[] = []
   if (options.initialConfig.inputMode === 'vim') {
-    inputMode.push(vim())
+    inputMode.push(vimPlugin())
   } else if (options.initialConfig.inputMode === 'emacs') {
     inputMode.push(emacs())
   }
