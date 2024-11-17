@@ -32,6 +32,7 @@
 - Update Turkish translation (`tr-TR`) (#5461)
 - Fix "dancing list items" (#4602)
 - Allow three-digit ordinal day of the year in IDs and filenames (`%o`; #5424)
+- Zettlr finally counts and remembers character counts
 - The link preview and force-open workflows now expect internal/wiki-links that
   link to headings within the file (`[[filename#heading-id]]`) and can handle
   such links appropriately; the editors will not yet jump to the corresponding
@@ -60,6 +61,7 @@
 - Update various other dependencies
 - The `PersistentDataContainer` now uses proper data types, making usage more
   type-safe
+- Completely refactor the Statistics provider as well as the statistics display
 - Replace the deprecated `registerFileProtocol` call with the new recommended
   `handle` call for handling `safe-file://` calls
 - Re-introduce linter rules; all of these are part of the common style we
@@ -68,6 +70,8 @@
   - enforce proper object property spacing
 - Moved all keymaps to a centralized space, enabling us to customize them
   further in the future and streamlining the available keybindings
+- The document provider is now more strict when loading persisted window
+  arrangements from disk on startup
 
 # 3.2.3
 
