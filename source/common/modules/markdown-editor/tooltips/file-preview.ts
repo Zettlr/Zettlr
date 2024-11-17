@@ -24,6 +24,7 @@ import { configField } from '../util/configuration'
 import type { FindFileAndReturnMetadataResult } from 'source/app/service-providers/commands/file-find-and-return-meta-data'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import makeValidUri from 'source/common/util/make-valid-uri'
+import type { ForceOpenAPI } from 'source/app/service-providers/commands/force-open'
 
 const ipcRenderer = window.ipc
 
@@ -62,7 +63,8 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
         return { dom: getPreviewElement(res, fileToDisplay, zknLinkFormat) }
       } else {
         const dom = document.createElement('div')
-        dom.textContent = trans('File %s does not exist.', fileToDisplay)
+        const filename = fileToDisplay.includes('#') ? fileToDisplay.slice(0, fileToDisplay.indexOf('#')) : fileToDisplay
+        dom.textContent = trans('File %s does not exist.', filename)
         return { dom }
       }
     }
@@ -136,7 +138,7 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
       payload: {
         linkContents,
         newTab: undefined // let open-file command decide based on preferences
-      }
+      } as ForceOpenAPI
     })
       .catch(err => console.error(err))
   }

@@ -62,6 +62,11 @@ export default [
       '@stylistic/dot-location': [ 'error', 'property' ],
       '@stylistic/eol-last': [ 'error', 'always' ],
       '@stylistic/indent': [ 'error', 2 ],
+      // Enforce single quotes across the codebase except where backticks are
+      // necessary (-> template strings) or it would avoid escaping (-> "'...'")
+      '@stylistic/quotes': [ 'error', 'single', { avoidEscape: true } ],
+      // Enforce proper spacing in objects ({ a: 1 } instead of {a:1})
+      '@stylistic/object-curly-spacing': [ 'error', 'always' ],
 
       /////////////////////// END STYLISTIC RULES //////////////////////////////
 

@@ -75,13 +75,13 @@ export interface ConfigOptions {
     customDirectory: string
   }
   editor: {
-    autocompleteAcceptSpace: boolean // TODO: DEPRECATED
     autocompleteSuggestEmojis: boolean
     autoSave: 'off'|'immediately'|'delayed'
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
     autoCloseBrackets: boolean
     showLinkPreviews: boolean
     showStatusbar: boolean
+    showFormattingToolbar: boolean
     showWhitespace: boolean
     defaultSaveImagePath: string
     enableTableHelper: boolean
@@ -263,7 +263,6 @@ export function getConfigTemplate (): ConfigOptions {
     // Editor related stuff
     editor: {
       autoSave: 'off',
-      autocompleteAcceptSpace: false, // Whether you can type spaces in autocorrect
       autocompleteSuggestEmojis: true,
       autoCloseBrackets: true,
       showLinkPreviews: true, // Whether to fetch link previews in the editor
@@ -280,6 +279,7 @@ export function getConfigTemplate (): ConfigOptions {
       italicFormatting: '_', // Can be * or _
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
       showStatusbar: true,
+      showFormattingToolbar: true,
       lint: {
         markdown: true, // Should Markdown be linted?
         languageTool: {

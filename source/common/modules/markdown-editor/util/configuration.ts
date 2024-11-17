@@ -67,6 +67,7 @@ export interface EditorConfiguration {
   lintMarkdown: boolean
   lintLanguageTool: boolean
   showStatusbar: boolean
+  showFormattingToolbar: boolean
   darkMode: boolean
   theme: MarkdownTheme
   margins: 'S'|'M'|'L'
@@ -121,6 +122,7 @@ export function getDefaultConfig (): EditorConfiguration {
     lintMarkdown: false,
     lintLanguageTool: false,
     showStatusbar: false,
+    showFormattingToolbar: true,
     darkMode: false,
     theme: 'berlin',
     margins: 'M',

@@ -133,7 +133,6 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallback, hoo
     return `${node.whitespaceBefore}<sub>${nodeToHTML(node.children, getCitation, hooks, indent)}</sub>`
   } else if (node.type === 'Image') {
     const src = hooks.onImageSrc !== undefined ? hooks.onImageSrc(node.url) : node.url
-    console.log(`Original Url is: ${node.url}. Converted is: ${src}`)
     return `${node.whitespaceBefore}<img src="${src}" alt="${_.escape(node.alt.value)}" title="${node.title?.value ?? _.escape(node.alt.value)}">`
   } else if (node.type === 'Link') {
     return `${node.whitespaceBefore}<a href="${node.url}" title="${node.title?.value ?? _.escape(node.url)}">${_.escape(node.alt.value)}</a>`

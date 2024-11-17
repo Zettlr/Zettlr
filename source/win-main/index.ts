@@ -46,15 +46,15 @@ function afterRegister (): void {
     }
 
     // Retrieve all paths
-    let f = []
+    const filesToOpen = []
     for (let i = 0; i < event.dataTransfer.files.length; i++) {
       const file = event.dataTransfer.files.item(i)
       if (file !== null) {
-        f.push(file.path)
+        filesToOpen.push(window.getPathForFile(file))
       }
     }
 
-    ipcRenderer.invoke('application', { command: 'roots-add', payload: f })
+    ipcRenderer.invoke('application', { command: 'roots-add', payload: filesToOpen.filter(x => x !== undefined) })
       .catch(e => console.error(e))
     return false
   }, false)
