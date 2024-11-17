@@ -1,5 +1,16 @@
 # Upcoming
 
+## Please Backup Your Writing Statistics
+
+This update includes a change in the writing statistics. While we extensively
+tested it, we would like you backup your personal writing statistics. You can do
+so by going into Zettlr's data directory and simply make a copy of the file
+`stats.json` before launching the update. Your data directory is located at
+`C:\Users\<your username>\AppData\Roaming\Zettlr` (Windows),
+`/Users/<your username>/Library/Application support/Zettlr` (macOS), or
+`/home/<your username>/.config/Zettlr` (Linux). Then, check if your writing
+statistics still look proper. If not, please report this. Thanks!
+
 ## GUI and Functionality
 
 - **New Feature**: Images in the "other files" tab do now contain a small
