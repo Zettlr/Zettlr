@@ -165,7 +165,7 @@ export default class StatsProvider extends ProviderContract {
     if (!(todayISO in this.stats.pomodoros)) {
       this.stats.pomodoros[todayISO] = 1
     } else {
-      this.stats.pomodoros[todayISO] = this.stats.pomodoros[todayISO] + 1
+      this.stats.pomodoros[todayISO] += 1
     }
 
     this._recompute()
