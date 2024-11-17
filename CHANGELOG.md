@@ -17,12 +17,14 @@
     - `w`: Executes a save command for the current file
     - `q`: Executes a close-file command for the current file
     - `wq`: Attempts to save the current file and then close it
-    - Note that the `!` argument for supressing the "Omit unsaved changes" dialog
-      will not work, as the editor does not have the authority to tell main to
-      simply omit work (this is a security feature)
+    - Note that the `!` argument for supressing the "Omit unsaved changes"
+      dialog will not work, as the editor does not have the authority to tell
+      main to simply omit work (this is a security feature)
   - Movement keys (`j`/`k`) now account for line wrapping for a smoother
     navigation experience
-  - Default Shortcuts Restored: Unmapped `C-f`, `C-t`, and `C-c` in specific modes to re-enable default editor behaviors like search and task item shortcuts
+  - Default Shortcuts Restored: Unmapped `C-f`, `C-t`, and `C-c` in specific
+    modes to re-enable default editor behaviors like search and task item
+    shortcuts
 - Columns in the preferences window are now properly aligned (#5410)
 - Prevent initial startup update-check if the setting is unchecked (context:
   https://github.com/Zettlr/Zettlr/commit/812899#r148519528)
