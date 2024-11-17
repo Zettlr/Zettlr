@@ -26,7 +26,7 @@ import { ipcMain, app, dialog, type BrowserWindow, type MessageBoxOptions } from
 import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { type TabManager } from '@providers/documents/document-tree/tab-manager'
-import { DP_EVENTS, type OpenDocument, DocumentType } from '@dts/common/documents'
+import { DP_EVENTS, type OpenDocument, DocumentType, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
 import { v4 as uuid4 } from 'uuid'
 import { type Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
@@ -38,6 +38,7 @@ import { trans } from '@common/i18n-main'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
 
 type DocumentWindows = Record<string, DocumentTree>
+type DocumentWindowsJSON = Record<string, BranchNodeJSON|LeafNodeJSON>
 
 // Keep no more than this many updates.
 const MAX_VERSION_HISTORY = 100
@@ -140,9 +141,9 @@ export default class DocumentManager extends ProviderContract {
    * The config file container persists the document tree data to disk so that
    * open editor panes & windows can be restored
    *
-   * @var {PersistentDataContainer<DocumentWindows>}
+   * @var {PersistentDataContainer<DocumentWindowsJSON>}
    */
-  private readonly _config: PersistentDataContainer // TODO <DocumentWindows>
+  private readonly _config: PersistentDataContainer<DocumentWindowsJSON>
   /**
    * The process that watches currently opened files for remote changes
    *
@@ -443,7 +444,7 @@ export default class DocumentManager extends ProviderContract {
       await this._config.init({ [key]: tree.toJSON() })
     }
 
-    const treedata: DocumentWindows = await this._config.get()
+    const treedata = await this._config.get()
     for (const key in treedata) {
       try {
         // Make sure to fish out invalid paths before mounting the tree

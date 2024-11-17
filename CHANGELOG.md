@@ -70,6 +70,8 @@
   - enforce proper object property spacing
 - Moved all keymaps to a centralized space, enabling us to customize them
   further in the future and streamlining the available keybindings
+- The document provider is now more strict when loading persisted window
+  arrangements from disk on startup
 
 # 3.2.3
 
