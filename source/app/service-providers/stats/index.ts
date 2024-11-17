@@ -150,7 +150,7 @@ export default class StatsProvider extends ProviderContract {
     if (!(todayISO in this.stats.charCount)) {
       this.stats.charCount[todayISO] = chars
     } else {
-      this.stats.charCount[todayISO] = this.stats.charCount[todayISO] + chars
+      this.stats.charCount[todayISO] += chars
     }
 
     this._recompute()
