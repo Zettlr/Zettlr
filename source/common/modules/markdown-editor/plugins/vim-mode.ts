@@ -109,6 +109,15 @@ Vim.defineEx('wq', 'wq', (cm: CodeMirror, params: VimParams) => {
   })
 })
 
+// Remap movement keys
+Vim.map('j', 'gj') // Account for line wraps when moving down
+Vim.map('k', 'gk') // Account for line wraps when moving up
+
+// Unmap bindings to restore default editor behavior
+Vim.unmap('<C-f>') // Allow invoking Ctrl+F search from all modes
+Vim.unmap('<C-t>', 'insert') // Allow task item shortcut in Insert mode
+Vim.unmap('<C-c>', 'insert') // Allow using Ctrl+C without exiting Insert mode
+
 // Why do we do this, even though it seems somewhat pointless? Well, first to
 // ensure that we have a central place where we modify the Vim extension, and
 // two, in case we can actually provide extensions inside the state here, we
