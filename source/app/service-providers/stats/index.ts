@@ -144,7 +144,7 @@ export default class StatsProvider extends ProviderContract {
     if (!(todayISO in this.stats.wordCount)) {
       this.stats.wordCount[todayISO] = words
     } else {
-      this.stats.wordCount[todayISO] = this.stats.wordCount[todayISO] + words
+      this.stats.wordCount[todayISO] += words
     }
 
     if (!(todayISO in this.stats.charCount)) {
