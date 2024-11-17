@@ -13,7 +13,6 @@
  * END HEADER
  */
 
-
 /**
  * Returns today's date as an ISO string (YYYY-MM-DD)
  *
@@ -37,7 +36,7 @@ export function today (): string {
  *
  * @return  {Array<[string, number]>}          The up to last 30 values
  */
-export function anyLast30Days (record: Record<string, number>): Array<[string, number]> {
+export function last30EntriesByDate (record: Record<string, number>): Array<[string, number]> {
   return Object.entries(record)
     // Sort by date (ascending; earlier first)
     .sort((a, b) => a[0].localeCompare(b[0], 'en'))
@@ -55,7 +54,7 @@ export function anyLast30Days (record: Record<string, number>): Array<[string, n
  * @return  {number}                          The sum
  */
 export function sumAny30Days (record: Record<string, number>): number {
-  return anyLast30Days(record).map(x => x[1]).reduce((prev, cur) => prev + cur, 0)
+  return last30EntriesByDate(record).map(x => x[1]).reduce((prev, cur) => prev + cur, 0)
 }
 
 /**
@@ -66,9 +65,9 @@ export function sumAny30Days (record: Record<string, number>): number {
  * @return  {number}                          The average
  */
 export function avgAny30Days (record: Record<string, number>): number {
-  if (anyLast30Days(record).length === 0) {
+  if (last30EntriesByDate(record).length === 0) {
     return 0
   }
 
-  return sumAny30Days(record) / anyLast30Days(record).length
+  return sumAny30Days(record) / last30EntriesByDate(record).length
 }

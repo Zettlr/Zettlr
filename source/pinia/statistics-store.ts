@@ -14,7 +14,7 @@
 
 import { type Stats } from '@providers/stats'
 import { defineStore } from 'pinia'
-import { anyLast30Days, avgAny30Days, sumAny30Days } from 'source/common/util/stats'
+import { last30EntriesByDate, avgAny30Days, sumAny30Days } from 'source/common/util/stats'
 import { DateTime } from 'luxon'
 import { ref, computed } from 'vue'
 
@@ -38,7 +38,16 @@ function generateLast30ISODates (): string[] {
   return dates
 }
 
-function anyLast30CalendarDays (record: Array<[string, number]>): Array<[string, number]> {
+/**
+ * Takes a record of date->count assignments, and aligns them to a total of last
+ * 30 days, filling dates that do not exist in `record` with zeros. This
+ * function is guaranteed to return an array of length 30.
+ *
+ * @param   {Array<[string, number]>}  record  The record to align
+ *
+ * @return  {Array<[string, number]>}          The aligned numbers
+ */
+function alignToLast30CalendarDays (record: Array<[string, number]>): Array<[string, number]> {
   const last30Days = generateLast30ISODates()
 
   const data: Array<[string, number]> = []
@@ -67,27 +76,27 @@ export const useStatisticsStore = defineStore('statistics', () => {
   const sum30DaysChars = computed(() => sumAny30Days(stats.value.charCount))
 
   const todayWords = computed(() => {
-    if (anyLast30Days(stats.value.wordCount).length === 0) {
+    if (last30EntriesByDate(stats.value.wordCount).length === 0) {
       return 0
     }
 
-    return anyLast30Days(stats.value.wordCount)[0][1]
+    return last30EntriesByDate(stats.value.wordCount)[0][1]
   })
 
   const todayChars = computed(() => {
-    if (anyLast30Days(stats.value.charCount).length === 0) {
+    if (last30EntriesByDate(stats.value.charCount).length === 0) {
       return 0
     }
 
-    return anyLast30Days(stats.value.charCount)[0][1]
+    return last30EntriesByDate(stats.value.charCount)[0][1]
   })
 
   const wordsLast30CalendarDays = computed(() => {
-    return anyLast30CalendarDays(anyLast30Days(stats.value.wordCount))
+    return alignToLast30CalendarDays(last30EntriesByDate(stats.value.wordCount))
   })
 
   const charsLast30CalendarDays = computed(() => {
-    return anyLast30CalendarDays(anyLast30Days(stats.value.charCount))
+    return alignToLast30CalendarDays(last30EntriesByDate(stats.value.charCount))
   })
 
   // Initial update
