@@ -63,6 +63,7 @@ statistics still look proper. If not, please report this. Thanks!
 - Fixed drag & drop behavior of open-able files onto the editor from the file
   browser; dropping any supported file onto the app will now attempt to open it
   (#5344)
+- Fixed export menu not remembering last selected custom commands (#5163)
 
 ## Under the Hood
 
