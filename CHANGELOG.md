@@ -40,7 +40,7 @@ statistics still look proper. If not, please report this. Thanks!
 - Fix color scheme in readability mode (#5478)
 - Prevent initial startup update-check if the setting is unchecked (context:
   https://github.com/Zettlr/Zettlr/commit/812899#r148519528)
-- Fix errors in German translation (`de-DE`)
+- Fix errors in, and update, German translation (`de-DE`)
 - Update Turkish translation (`tr-TR`) (#5461)
 - Fix "dancing list items" (#4602)
 - Allow three-digit ordinal day of the year in IDs and filenames (`%o`; #5424)
