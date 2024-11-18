@@ -37,6 +37,7 @@ statistics still look proper. If not, please report this. Thanks!
     modes to re-enable default editor behaviors like search and task item
     shortcuts
 - Columns in the preferences window are now properly aligned (#5410)
+- Fix color scheme in readability mode (#5478)
 - Prevent initial startup update-check if the setting is unchecked (context:
   https://github.com/Zettlr/Zettlr/commit/812899#r148519528)
 - Fix errors in German translation (`de-DE`)
