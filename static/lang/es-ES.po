@@ -1949,6 +1949,7 @@ msgstr "Sí"
 #: source/app/service-providers/commands/file-rename.ts:112
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
+msgstr ""
 
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
