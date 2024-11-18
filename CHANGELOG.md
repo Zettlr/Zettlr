@@ -3,8 +3,8 @@
 ## Please Backup Your Writing Statistics
 
 This update includes a change in the writing statistics. While we extensively
-tested it, we would like you backup your personal writing statistics. You can do
-so by going into Zettlr's data directory and simply make a copy of the file
+tested it, we would like you to backup your personal writing statistics. You can
+do so by going into Zettlr's data directory and simply make a copy of the file
 `stats.json` before launching the update. Your data directory is located at
 `C:\Users\<your username>\AppData\Roaming\Zettlr` (Windows),
 `/Users/<your username>/Library/Application support/Zettlr` (macOS), or
