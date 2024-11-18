@@ -12,9 +12,9 @@
     <RadioControl
       v-model="exportDirectory"
       v-bind:options="{
-        'temp': 'Temporary directory',
-        'cwd': 'Current directory',
-        'ask': 'Select directory'
+        'temp': tempDirLabel,
+        'cwd': cwdLabel,
+        'ask': askLabel
       }"
     ></RadioControl>
     <!-- Add the exporting button -->
@@ -51,6 +51,10 @@ import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
+
+const tempDirLabel = trans('Temporary directory')
+const cwdLabel = trans('Current directory')
+const askLabel = trans('Select directory')
 
 ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' })
   .then((defaults: PandocProfileMetadata[]) => {

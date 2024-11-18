@@ -92,17 +92,17 @@
               <TextControl
                 v-if="renameActiveFor === tag.name"
                 v-model="newTag"
-                v-bind:placeholder="'New tag'"
+                v-bind:placeholder="newTagPlaceholderLabel"
               ></TextControl>
               <ButtonControl
                 v-if="renameActiveFor === tag.name"
-                v-bind:label="'Rename'"
+                v-bind:label="renameTagLabel"
                 v-on:click="renameTag(tag.name)"
               ></ButtonControl>
   
               <ButtonControl
                 v-else
-                v-bind:label="'Rename tag...'"
+                v-bind:label="renameTagDefaultLabel"
                 v-on:click="renameActiveFor = tag.name"
               ></ButtonControl>
             </td>
@@ -148,6 +148,9 @@ const descriptionPlaceholder = trans('A short description')
 const tagManagerIntro = trans('Here you can assign colors to different tags. If a tag is found in a file, its tile in the preview list will receive a colored indicator. The description will be shown on mouse hover.')
 const windowTitle = trans('Manage tags')
 const filterPlaceholder = trans('Filter tags…')
+const newTagPlaceholderLabel = trans('New tag')
+const renameTagLabel = trans('Rename')
+const renameTagDefaultLabel = trans('Rename tag…')
 
 const configStore = useConfigStore()
 const tagStore = useTagsStore()

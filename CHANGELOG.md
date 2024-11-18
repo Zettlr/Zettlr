@@ -85,6 +85,7 @@ statistics still look proper. If not, please report this. Thanks!
   further in the future and streamlining the available keybindings
 - The document provider is now more strict when loading persisted window
   arrangements from disk on startup
+- Made many additional strings in the GUI translatable
 
 # 3.2.3
 
