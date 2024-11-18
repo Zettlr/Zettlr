@@ -65,6 +65,7 @@ statistics still look proper. If not, please report this. Thanks!
   browser; dropping any supported file onto the app will now attempt to open it
   (#5344)
 - Fixed export menu not remembering last selected custom commands (#5163)
+- Provide default reset-to-sizes for various split views
 
 ## Under the Hood
 
