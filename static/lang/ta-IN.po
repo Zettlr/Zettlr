@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-10-28 12:09+0000\n"
+"POT-Creation-Date: 2024-11-18 09:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: தமிழ்நேரம் <https://TamilNeram.github.io>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,7 +52,7 @@ msgstr "இறக்குமதி அல்லது ஏற்றுமதி�
 #: source/tmp/win-assets/SnippetsTab.vue.ts:27
 #: source/tmp/win-assets/CustomCSS.vue.ts:24
 #: source/tmp/win-paste-image/App.vue.ts:66
-#: source/tmp/win-tag-manager/App.vue.ts:85
+#: source/tmp/win-tag-manager/App.vue.ts:88
 #: source/app/service-providers/menu/menu.darwin.ts:196
 #: source/app/service-providers/menu/menu.win32.ts:161
 #: source/app/service-providers/commands/export.ts:114
@@ -63,8 +63,8 @@ msgstr "சேமி"
 #: source/tmp/win-assets/DefaultsTab.vue.ts:110
 #: source/tmp/win-assets/SnippetsTab.vue.ts:46
 #: source/tmp/win-assets/CustomCSS.vue.ts:34
-#: source/tmp/win-tag-manager/App.vue.ts:91
-#: source/app/service-providers/documents/index.ts:349
+#: source/tmp/win-tag-manager/App.vue.ts:94
+#: source/app/service-providers/documents/index.ts:350
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 msgid "Unsaved changes"
 msgstr "சேமிக்கப்படாத மாற்றங்கள்"
@@ -154,6 +154,7 @@ msgstr "அனைத்து கோப்புகள்"
 #: source/tmp/common/vue/form/elements/ColorControl.vue.ts:35
 #: source/tmp/common/vue/form/elements/ShortcutChooser.vue.ts:61
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
 msgid "Reset"
 msgstr "மீட்டமை"
 
@@ -175,7 +176,7 @@ msgid "No results for \"%s\""
 msgstr ""
 
 #: source/tmp/win-preferences/App.vue.ts:134
-#: source/tmp/win-project-properties/App.vue.ts:73
+#: source/tmp/win-project-properties/App.vue.ts:62
 msgid "General"
 msgstr ""
 
@@ -310,6 +311,7 @@ msgstr "விளக்கப்படங்கள்"
 #. STATIC VARIABLES
 #: source/tmp/win-stats/CalendarView.vue.ts:26
 #: source/tmp/win-stats/App.vue.ts:27
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:59
 msgid "Calendar"
 msgstr "நாட்காட்டி"
 
@@ -440,7 +442,7 @@ msgstr "%s எழுத்துக்கள்"
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:124
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:187
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:56
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:140
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:145
 #: source/tmp/win-main/App.vue.ts:235
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:53
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
@@ -467,12 +469,12 @@ msgid "No open files or folders"
 msgstr "திறந்த கோப்புகள் அல்லது கோப்புறைகள் இல்லை"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:78
-#: source/tmp/win-main/file-manager/FileList.vue.ts:46
+#: source/tmp/win-main/file-manager/FileList.vue.ts:58
 msgid "No results"
 msgstr "முடிவுகள் இல்லை"
 
 #. Else standard val for new dirs.
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:232
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:258
 #: source/app/service-providers/commands/dir-new.ts:31
 msgid "Untitled"
 msgstr "தலைப்பில்லாத்து"
@@ -484,7 +486,7 @@ msgstr "உருவாக்கப்பட்டது"
 
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:30
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:128
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:130
 msgid "Modified"
 msgstr "மாற்றப்பட்ட"
 
@@ -496,69 +498,365 @@ msgstr "எழுதும் இலக்கை அமை…"
 msgid "Project Settings…"
 msgstr "திட்ட அமைப்புகள்…"
 
-#: source/tmp/win-main/file-manager/FileList.vue.ts:47
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:34
+msgid "Enable Project"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:35
+msgid "Sort by name"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
+msgid "Sort by time"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
+msgid "ascending"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
+msgid "descending"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
+msgid "Cog"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
+msgid "Cloud"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:44
+msgid "Check"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:45
+msgid "Times"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:46
+#: source/app/service-providers/menu/menu.darwin.ts:627
+#: source/app/service-providers/menu/menu.win32.ts:601
+msgid "Help"
+msgstr "உதவி"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:47
+msgid "Info"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:48
+msgid "Success"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
+msgid "Error"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
+msgid "Warning"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
+msgid "Bell"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:52
+msgid "Person"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:53
+msgid "People"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
+msgid "Folder"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
+msgid "Folder (open)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:56
+#: source/tmp/win-main/App.vue.ts:349
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:59
+msgid "Image"
+msgstr "படம்"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
+msgid "Eye"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:58
+msgid "Eye (crossed)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:60
+msgid "Calculator"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
+msgid "Store"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:62
+msgid "Shopping bag"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:63
+msgid "Shopping cart"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
+msgid "Factory"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:65
+msgid "Heart"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
+msgid "Heart (broken)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:67
+msgid "Bubbles"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:68
+msgid "Bubble"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
+msgid "Bubble (exclamation)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
+msgid "Colour Palette"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:71
+msgid "Bars"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:72
+msgid "Thermometer"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:73
+msgid "Book"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:74
+msgid "Library"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:75
+msgid "Bug"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:76
+msgid "Note"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:77
+msgid "Lightbulb"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:78
+msgid "Trash"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
+msgid "Snowflake"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
+msgid "Asterisk"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
+msgid "Key"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
+msgid "Bolt"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
+msgid "Wrench"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
+msgid "Flame"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
+msgid "Hourglass"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
+msgid "Briefcase"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
+msgid "Tools"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
+msgid "Moon"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
+msgid "Sun"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
+msgid "Tree"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
+msgid "Circle (dot)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
+msgid "Circle"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
+msgid "Video camera"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
+msgid "Film strip"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
+msgid "Microphone"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
+msgid "Crown"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
+msgid "Star"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
+msgid "Flag"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:99
+msgid "Envelope"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
+msgid "Airplane"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
+msgid "Happy emoji"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:102
+msgid "Neutral emoji"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
+msgid "Sad emoji"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
+msgid "Thumbs up"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
+msgid "Thumbs down"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:106
+msgid "Map"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:107
+msgid "Compass"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:108
+msgid "Map marker"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:109
+msgid "Flask"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
+msgid "CD/DVD"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileList.vue.ts:59
 msgid "No directory selected"
 msgstr "எந்த கோப்பகமும் தேர்ந்தெடுக்கப்படவில்லை"
 
-#: source/tmp/win-main/file-manager/FileList.vue.ts:48
+#: source/tmp/win-main/file-manager/FileList.vue.ts:60
 msgid "Empty directory"
 msgstr "வெற்று அடைவு"
 
 #: source/tmp/win-main/file-manager/FileManager.vue.ts:46
-#: source/tmp/win-main/GlobalSearch.vue.ts:37
+#: source/tmp/win-main/GlobalSearch.vue.ts:38
 msgid "Filter …"
 msgstr "வடிகட்டி …"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:28
+#: source/tmp/win-main/PopoverStats.vue.ts:29
 msgid "words last month"
 msgstr "கடந்த திங்கள் சொற்கள்"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:29
+#: source/tmp/win-main/PopoverStats.vue.ts:30
 msgid "daily average"
 msgstr "அன்றாடம் சராசரி"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:30
+#: source/tmp/win-main/PopoverStats.vue.ts:31
 msgid "words today"
 msgstr "இன்று சொற்கள்"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:31
+#: source/tmp/win-main/PopoverStats.vue.ts:32
 msgid "🔥 You're on fire!"
 msgstr "🔥 நீங்கள் தீயில்!"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:32
+#: source/tmp/win-main/PopoverStats.vue.ts:33
 msgid "💪 You're close to hitting your daily average!"
 msgstr "💪 உங்கள் அன்றாட சராசரியைத் தாக்க நீங்கள் நெருக்கமாக இருக்கிறீர்கள்!"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:33
+#: source/tmp/win-main/PopoverStats.vue.ts:34
 msgid "✍🏼 Get writing to surpass your daily average."
 msgstr "✍🏼 உங்கள் அன்றாட சராசரியை மிஞ்சும் எழுத்தைப் பெறு."
 
-#: source/tmp/win-main/PopoverStats.vue.ts:34
+#: source/tmp/win-main/PopoverStats.vue.ts:35
 msgid "More statistics …"
 msgstr "மேலும் புள்ளிவிவரங்கள்…"
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:32
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
 msgid "Related files"
 msgstr "தொடர்புடைய கோப்புகள்"
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
 msgid "No related files"
 msgstr "தொடர்புடைய கோப்புகள் இல்லை"
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
 msgid "This relation is based on a bidirectional link."
 msgstr "இந்த உறவு ஒரு இருதரப்பு இணைப்பை அடிப்படையாகக் கொண்டது."
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on an outbound link."
 msgstr "இந்த உறவு வெளிச்செல்லும் இணைப்பை அடிப்படையாகக் கொண்டது."
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on a backlink."
 msgstr "இந்த உறவு ஒரு பின்னிணைப்பை அடிப்படையாகக் கொண்டது."
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:220
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr "இந்த உறவு %s பகிரப்பட்ட குறிச்சொற்களை அடிப்படையாகக் கொண்டது: %s"
@@ -569,20 +867,20 @@ msgstr "இந்த உறவு %s பகிரப்பட்ட குறி
 msgid "Table of Contents"
 msgstr "உள்ளடக்க அட்டவணை"
 
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:13
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:15
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
 msgid "Other files"
 msgstr "பிற கோப்புகள்"
 
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:14
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:16
 msgid "Open directory"
 msgstr "அடைவு திற"
 
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:15
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:17
 msgid "No other files"
 msgstr "வேறு கோப்புகள் இல்லை"
 
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:34
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:36
 msgid "Current folder"
 msgstr ""
 
@@ -689,19 +987,14 @@ msgid "Toggle readability mode"
 msgstr ""
 
 #: source/tmp/win-main/App.vue.ts:335
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:64
 msgid "Comment"
 msgstr "கருத்து"
 
 #: source/tmp/win-main/App.vue.ts:342
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:54
 msgid "Link"
 msgstr "இணைப்பு"
-
-#: source/tmp/win-main/App.vue.ts:349
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
-msgid "Image"
-msgstr "படம்"
 
 #: source/tmp/win-main/App.vue.ts:356
 msgid "Tasklist"
@@ -731,61 +1024,73 @@ msgstr "பக்கப்பட்டியை மாற்று"
 msgid "Update available"
 msgstr ""
 
-#: source/tmp/win-main/PopoverExport.vue.ts:61
+#: source/tmp/win-main/PopoverExport.vue.ts:29
+msgid "Temporary directory"
+msgstr ""
+
+#: source/tmp/win-main/PopoverExport.vue.ts:30
+msgid "Current directory"
+msgstr ""
+
+#: source/tmp/win-main/PopoverExport.vue.ts:31
+msgid "Select directory"
+msgstr ""
+
+#: source/tmp/win-main/PopoverExport.vue.ts:64
 msgid "Exporting…"
 msgstr "ஏற்றுமதி செய்கிறது…"
 
-#: source/tmp/win-main/PopoverExport.vue.ts:61
+#: source/tmp/win-main/PopoverExport.vue.ts:64
 msgid "Export"
 msgstr "ஏற்றுமதி"
 
-#: source/tmp/win-main/PopoverExport.vue.ts:74
+#: source/tmp/win-main/PopoverExport.vue.ts:77
 msgid "command"
 msgstr "கட்டளை"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:34
+#: source/tmp/win-main/GlobalSearch.vue.ts:35
 msgid "Full-Text Search"
 msgstr "முழு-உரை தேடல்"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:35
+#: source/tmp/win-main/GlobalSearch.vue.ts:36
 msgid "Enter your search terms below"
 msgstr "உங்கள் தேடல் சொற்களை கீழே உள்ளிடு"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:36
+#: source/tmp/win-main/GlobalSearch.vue.ts:37
 msgid "Find …"
 msgstr "கண்டுபிடி…"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:38
+#: source/tmp/win-main/GlobalSearch.vue.ts:39
 msgid "Filter search results"
 msgstr "தேடல் முடிவுகளை வடிகட்டு"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:39
+#: source/tmp/win-main/GlobalSearch.vue.ts:40
 msgid "Restrict search to directory"
 msgstr "கோப்பகத்திற்கு தேடலை கட்டுப்படுத்து"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:40
+#: source/tmp/win-main/GlobalSearch.vue.ts:41
 msgid "Restrict to directory …"
 msgstr "கோப்பகத்திற்கு கட்டுப்படுத்து…"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:41
+#: source/tmp/win-main/GlobalSearch.vue.ts:42
 msgid "Search"
 msgstr "தேடல்"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:42
+#: source/tmp/win-main/GlobalSearch.vue.ts:43
 msgid "Clear search"
 msgstr "தேடலை அழி"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:43
+#: source/tmp/win-main/GlobalSearch.vue.ts:44
 msgid "Toggle results"
 msgstr "முடிவுகளை மாற்று"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:53
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:167
+#: source/tmp/win-main/GlobalSearch.vue.ts:54
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:169
 #: source/win-main/file-manager/util/file-item-context.ts:28
 msgid "Open in a new tab"
 msgstr "புதிய தாவலில் திற"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:112
+#: source/tmp/win-main/GlobalSearch.vue.ts:113
 #, javascript-format
 msgid "%s matches across %s files"
 msgstr "குறிச்சொல்லை \"%s\" ஐ \"%s\" உடன் %s கோப்புகளில் மாற்றவா?"
@@ -830,7 +1135,7 @@ msgstr ""
 
 #. 1: Omit all changes
 #: source/tmp/win-paste-image/App.vue.ts:67
-#: source/app/service-providers/documents/index.ts:345
+#: source/app/service-providers/documents/index.ts:346
 #: source/app/service-providers/menu/menu.darwin.ts:703
 #: source/app/service-providers/menu/menu.win32.ts:677
 #: source/app/service-providers/commands/rename-tag.ts:47
@@ -842,67 +1147,67 @@ msgstr ""
 msgid "Cancel"
 msgstr "விலக்கு"
 
-#: source/tmp/win-project-properties/App.vue.ts:37
+#: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Export project to:"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:38
+#: source/tmp/win-project-properties/App.vue.ts:39
 msgid "Use"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:39
+#: source/tmp/win-project-properties/App.vue.ts:40
 msgid "Format"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:40
+#: source/tmp/win-project-properties/App.vue.ts:41
 msgid "Conversion"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:41
+#: source/tmp/win-project-properties/App.vue.ts:42
 msgid "Files to be included in the export"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:42
+#: source/tmp/win-project-properties/App.vue.ts:43
 msgid "Please select at least one profile to build this project."
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:43
+#: source/tmp/win-project-properties/App.vue.ts:44
 msgid "Project Title"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:44
+#: source/tmp/win-project-properties/App.vue.ts:45
 msgid "CSL Stylesheet"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:45
+#: source/tmp/win-project-properties/App.vue.ts:46
 msgid "LaTeX Template"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:46
+#: source/tmp/win-project-properties/App.vue.ts:47
 msgid "HTML Template"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:47
+#: source/tmp/win-project-properties/App.vue.ts:48
 msgid "Remove file from export"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:48
+#: source/tmp/win-project-properties/App.vue.ts:49
 msgid "Add file to export"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:49
+#: source/tmp/win-project-properties/App.vue.ts:50
 msgid "Move file up"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:50
+#: source/tmp/win-project-properties/App.vue.ts:51
 msgid "Move file down"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:51
+#: source/tmp/win-project-properties/App.vue.ts:52
 msgid "You have not selected any files for export."
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:52
+#: source/tmp/win-project-properties/App.vue.ts:53
 msgid ""
 "Some files are selected for export but no longer exist in the directory."
 msgstr ""
@@ -944,7 +1249,19 @@ msgstr ""
 msgid "Manage tags"
 msgstr ""
 
-#: source/tmp/win-tag-manager/App.vue.ts:95
+#: source/tmp/win-tag-manager/App.vue.ts:36
+msgid "New tag"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:37
+msgid "Rename"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:38
+msgid "Rename tag…"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:98
 #: source/app/service-providers/menu/menu.darwin.ts:578
 #: source/app/service-providers/menu/menu.win32.ts:557
 msgid "Close"
@@ -1031,34 +1348,34 @@ msgstr "அனைத்தையும் தெரிவுசெய்"
 msgid "Cmd/Ctrl-click to follow this link"
 msgstr "இந்த இணைப்பைப் பின்பற்ற கட்டளை/கட்டுபாடு-சொடுக்கு"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
 #: source/win-preferences/schema/editor.ts:126
 #: source/win-preferences/schema/editor.ts:127
 msgid "Bold"
 msgstr "தடிமான"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:49
 #: source/win-preferences/schema/editor.ts:134
 #: source/win-preferences/schema/editor.ts:135
 msgid "Italics"
 msgstr "சாய்வு"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:69
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Code"
 msgstr "குறியீடு"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:67
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "கோப்பு %s இல்லை."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:128
 msgid "Word count"
 msgstr "சொல் எண்ணிக்கை"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:146
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:148
 #: source/app/service-providers/menu/menu.darwin.ts:165
 #: source/app/service-providers/menu/menu.win32.ts:139
 msgid "Open…"
@@ -1160,12 +1477,12 @@ msgstr "கண்டுபிடிப்பாளரில் வெளிப�
 msgid "Open in File Browser"
 msgstr "கோப்பு உலாவியில் வெளிப்படுத்து"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:96
+#: source/common/modules/markdown-editor/renderers/render-images.ts:123
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "படம் காணப்படவில்லை: %s"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:166
+#: source/common/modules/markdown-editor/renderers/render-images.ts:198
 msgid "Open image externally"
 msgstr ""
 
@@ -1972,18 +2289,22 @@ msgid "Indent using tabs instead of spaces"
 msgstr "இடைவெளிகளுக்கு பதிலாக தாவல்களைப் பயன்படுத்தி உள்தள்ளல்"
 
 #: source/win-preferences/schema/editor.ts:261
+msgid "Show formatting toolbar when text is selected"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:266
 msgid "Highlight whitespace"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:267
+#: source/win-preferences/schema/editor.ts:272
 msgid "Suggest emojis during autocompletion"
 msgstr "தானாக நிறைவு செய்யும் போது உணர்வுகளைப் பரிந்துரை"
 
-#: source/win-preferences/schema/editor.ts:272
+#: source/win-preferences/schema/editor.ts:277
 msgid "Show link previews"
 msgstr "இணைப்பு முன்னோட்டங்களைக் காட்டு"
 
-#: source/win-preferences/schema/editor.ts:278
+#: source/win-preferences/schema/editor.ts:283
 msgid "Automatically close matching character pairs"
 msgstr "பொருந்தக்கூடிய எழுத்து இணைகளை தானாக மூடு"
 
@@ -2505,29 +2826,29 @@ msgstr "வெளியேறு"
 msgid "Zettlr"
 msgstr "செட்லர்"
 
-#: source/app/service-providers/documents/index.ts:343
+#: source/app/service-providers/documents/index.ts:344
 msgid "Save changes"
 msgstr "மாற்றங்களை சேமி"
 
-#: source/app/service-providers/documents/index.ts:344
+#: source/app/service-providers/documents/index.ts:345
 msgid "Discard changes"
 msgstr "மாற்றங்களை நிராகரி"
 
-#: source/app/service-providers/documents/index.ts:350
+#: source/app/service-providers/documents/index.ts:351
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr ""
 "சேமிக்கப்படாத மாற்றங்கள் உள்ளன. முதலில் அவற்றைக் சேமிக்க அல்லது நிராகரி விரும்புகிறீர்களா?"
 
-#: source/app/service-providers/documents/index.ts:993
+#: source/app/service-providers/documents/index.ts:994
 msgid "File changed on disk"
 msgstr "வட்டில் கோப்பு மாற்றப்பட்டது"
 
-#: source/app/service-providers/documents/index.ts:994
+#: source/app/service-providers/documents/index.ts:995
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s வட்டில் மாற்றப்பட்டது"
 
-#: source/app/service-providers/documents/index.ts:996
+#: source/app/service-providers/documents/index.ts:997
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -2537,32 +2858,32 @@ msgstr ""
 "திருத்தி உள்ளடக்கங்களை வைத்திருக்க விரும்புகிறீர்களா அல்லது வட்டில் இருந்து கோப்பை ஏற்ற "
 "விரும்புகிறீர்களா?"
 
-#: source/app/service-providers/documents/index.ts:997
+#: source/app/service-providers/documents/index.ts:998
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "தற்போதைய திருத்தி உள்ளடக்கங்களை வைத்திருக்க விரும்புகிறீர்களா அல்லது வட்டில் இருந்து கோப்பை "
 "ஏற்ற விரும்புகிறீர்களா?"
 
-#: source/app/service-providers/documents/index.ts:1000
+#: source/app/service-providers/documents/index.ts:1001
 msgid "Keep editor contents"
 msgstr "திருத்தி உள்ளடக்கங்களை வைத்திரு"
 
-#: source/app/service-providers/documents/index.ts:1001
+#: source/app/service-providers/documents/index.ts:1002
 msgid "Load changes from disk"
 msgstr "வட்டில் இருந்து மாற்றங்களை ஏற்று"
 
-#: source/app/service-providers/documents/index.ts:1004
+#: source/app/service-providers/documents/index.ts:1005
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "திருத்தியில் சேமிக்கப்படாத மாற்றங்கள் இல்லாவிட்டால் எப்போதும் வட்டில் இருந்து மாற்றங்களை ஏற்று"
 
-#: source/app/service-providers/documents/index.ts:1468
+#: source/app/service-providers/documents/index.ts:1471
 msgid "Could not save file"
 msgstr "கோப்பை சேமிக்க முடியவில்லை"
 
-#: source/app/service-providers/documents/index.ts:1468
+#: source/app/service-providers/documents/index.ts:1471
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "கோப்பை சேமிக்க முடியவில்லை %s: %s"
@@ -2792,11 +3113,6 @@ msgstr "அடுத்த தாவல்"
 msgid "New window"
 msgstr "புதிய சாளரம்"
 
-#: source/app/service-providers/menu/menu.darwin.ts:627
-#: source/app/service-providers/menu/menu.win32.ts:601
-msgid "Help"
-msgstr "உதவி"
-
 #: source/app/service-providers/menu/menu.darwin.ts:651
 #: source/app/service-providers/menu/menu.win32.ts:625
 msgid "Support Zettlr"
@@ -2957,7 +3273,7 @@ msgstr "பின்னர் மறுதொடக்கம்"
 
 #: source/app/service-providers/config/index.ts:500
 #: source/app/service-providers/commands/rename-tag.ts:43
-#: source/app/service-providers/commands/file-rename.ts:108
+#: source/app/service-providers/commands/file-rename.ts:117
 msgid "Confirm"
 msgstr "உறுதிப்படுத்து"
 
@@ -3006,7 +3322,7 @@ msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr "குறிச்சொல்லை \"%s\" ஐ \"%s\" உடன் %s கோப்புகளில் மாற்றவா?"
 
 #: source/app/service-providers/commands/rename-tag.ts:46
-#: source/app/service-providers/commands/file-rename.ts:111
+#: source/app/service-providers/commands/file-rename.ts:120
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
 msgstr "ஆம்"
@@ -3120,11 +3436,11 @@ msgstr "கோப்பை உருவாக்க முடியவில்�
 msgid "Copy of %s"
 msgstr "%s நகல்"
 
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:96
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:103
 msgid "The provided name did not contain any allowed letters."
 msgstr "வழங்கப்பட்ட பெயரில் அனுமதிக்கப்பட்ட எழுத்துகள் இல்லை."
 
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:117
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:124
 msgid "The requested directory was not found."
 msgstr "கோரப்பட்ட அடைவு காணப்படவில்லை."
 
@@ -3162,13 +3478,13 @@ msgstr "அடைவு அல்லது கோப்பை நகர்த்
 msgid "The file/directory %s already exists in target."
 msgstr "கோப்பு/அடைவு %s ஏற்கனவே இலக்கில் உள்ளன."
 
-#: source/app/service-providers/commands/file-rename.ts:109
+#: source/app/service-providers/commands/file-rename.ts:118
 #, javascript-format
 msgid "Update %s internal links to file %s?"
 msgstr "கோப்புகளுக்கான உள் இணைப்புகளைப் புதுப்பிக்கவா?"
 
 #. 0: Save all changes
-#: source/app/service-providers/commands/file-rename.ts:112
+#: source/app/service-providers/commands/file-rename.ts:121
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
 msgstr "இல்லை"
@@ -3224,7 +3540,7 @@ msgstr "தவறான உரைப்பாடு: %s"
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:75
-#: source/app/service-providers/windows/index.ts:222
+#: source/app/service-providers/windows/index.ts:221
 msgid "Open project folder"
 msgstr "திட்டக் கோப்புறை திற"
 

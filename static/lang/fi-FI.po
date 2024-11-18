@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2024-10-28 12:09+0000\n"
+"POT-Creation-Date: 2024-11-18 09:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgstr "Muokkaa tuonnin ja viennin oletusasetuksia täällä."
 #: source/tmp/win-assets/SnippetsTab.vue.ts:27
 #: source/tmp/win-assets/CustomCSS.vue.ts:24
 #: source/tmp/win-paste-image/App.vue.ts:66
-#: source/tmp/win-tag-manager/App.vue.ts:85
+#: source/tmp/win-tag-manager/App.vue.ts:88
 #: source/app/service-providers/menu/menu.darwin.ts:196
 #: source/app/service-providers/menu/menu.win32.ts:161
 #: source/app/service-providers/commands/export.ts:114
@@ -62,8 +62,8 @@ msgstr "Tallenna"
 #: source/tmp/win-assets/DefaultsTab.vue.ts:110
 #: source/tmp/win-assets/SnippetsTab.vue.ts:46
 #: source/tmp/win-assets/CustomCSS.vue.ts:34
-#: source/tmp/win-tag-manager/App.vue.ts:91
-#: source/app/service-providers/documents/index.ts:349
+#: source/tmp/win-tag-manager/App.vue.ts:94
+#: source/app/service-providers/documents/index.ts:350
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 msgid "Unsaved changes"
 msgstr "Tallentamattomia muutoksia"
@@ -156,6 +156,7 @@ msgstr "Kaikki tiedostot"
 #: source/tmp/common/vue/form/elements/ColorControl.vue.ts:35
 #: source/tmp/common/vue/form/elements/ShortcutChooser.vue.ts:61
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
 msgid "Reset"
 msgstr "Nollaa"
 
@@ -178,7 +179,7 @@ msgid "No results for \"%s\""
 msgstr ""
 
 #: source/tmp/win-preferences/App.vue.ts:134
-#: source/tmp/win-project-properties/App.vue.ts:73
+#: source/tmp/win-project-properties/App.vue.ts:62
 msgid "General"
 msgstr ""
 
@@ -308,6 +309,7 @@ msgstr "Kaaviot"
 #. STATIC VARIABLES
 #: source/tmp/win-stats/CalendarView.vue.ts:26
 #: source/tmp/win-stats/App.vue.ts:27
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:59
 msgid "Calendar"
 msgstr "Kalenteri"
 
@@ -438,7 +440,7 @@ msgstr "%s merkkiä"
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:124
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:187
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:56
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:140
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:145
 #: source/tmp/win-main/App.vue.ts:235
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:53
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
@@ -465,12 +467,12 @@ msgid "No open files or folders"
 msgstr "Ei avoimia tiedostoja tai hakemistoja"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:78
-#: source/tmp/win-main/file-manager/FileList.vue.ts:46
+#: source/tmp/win-main/file-manager/FileList.vue.ts:58
 msgid "No results"
 msgstr "Ei tuloksia"
 
 #. Else standard val for new dirs.
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:232
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:258
 #: source/app/service-providers/commands/dir-new.ts:31
 msgid "Untitled"
 msgstr "Uusi hakemisto"
@@ -482,7 +484,7 @@ msgstr "Luotu"
 
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:30
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:128
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:130
 msgid "Modified"
 msgstr "Muokattu"
 
@@ -494,69 +496,365 @@ msgstr "Aseta kirjoitustavoite…"
 msgid "Project Settings…"
 msgstr "Projektin asetukset…"
 
-#: source/tmp/win-main/file-manager/FileList.vue.ts:47
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:34
+msgid "Enable Project"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:35
+msgid "Sort by name"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
+msgid "Sort by time"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
+msgid "ascending"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
+msgid "descending"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
+msgid "Cog"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
+msgid "Cloud"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:44
+msgid "Check"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:45
+msgid "Times"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:46
+#: source/app/service-providers/menu/menu.darwin.ts:627
+#: source/app/service-providers/menu/menu.win32.ts:601
+msgid "Help"
+msgstr "Ohje"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:47
+msgid "Info"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:48
+msgid "Success"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
+msgid "Error"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
+msgid "Warning"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
+msgid "Bell"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:52
+msgid "Person"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:53
+msgid "People"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
+msgid "Folder"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
+msgid "Folder (open)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:56
+#: source/tmp/win-main/App.vue.ts:349
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:59
+msgid "Image"
+msgstr "Kuva"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
+msgid "Eye"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:58
+msgid "Eye (crossed)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:60
+msgid "Calculator"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
+msgid "Store"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:62
+msgid "Shopping bag"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:63
+msgid "Shopping cart"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
+msgid "Factory"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:65
+msgid "Heart"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
+msgid "Heart (broken)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:67
+msgid "Bubbles"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:68
+msgid "Bubble"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
+msgid "Bubble (exclamation)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
+msgid "Colour Palette"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:71
+msgid "Bars"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:72
+msgid "Thermometer"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:73
+msgid "Book"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:74
+msgid "Library"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:75
+msgid "Bug"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:76
+msgid "Note"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:77
+msgid "Lightbulb"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:78
+msgid "Trash"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
+msgid "Snowflake"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
+msgid "Asterisk"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
+msgid "Key"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
+msgid "Bolt"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
+msgid "Wrench"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
+msgid "Flame"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
+msgid "Hourglass"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
+msgid "Briefcase"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
+msgid "Tools"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
+msgid "Moon"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
+msgid "Sun"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
+msgid "Tree"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
+msgid "Circle (dot)"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
+msgid "Circle"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
+msgid "Video camera"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
+msgid "Film strip"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
+msgid "Microphone"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
+msgid "Crown"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
+msgid "Star"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
+msgid "Flag"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:99
+msgid "Envelope"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
+msgid "Airplane"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
+msgid "Happy emoji"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:102
+msgid "Neutral emoji"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
+msgid "Sad emoji"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
+msgid "Thumbs up"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
+msgid "Thumbs down"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:106
+msgid "Map"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:107
+msgid "Compass"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:108
+msgid "Map marker"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:109
+msgid "Flask"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
+msgid "CD/DVD"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileList.vue.ts:59
 msgid "No directory selected"
 msgstr "Hakemistoa ei ole valittu"
 
-#: source/tmp/win-main/file-manager/FileList.vue.ts:48
+#: source/tmp/win-main/file-manager/FileList.vue.ts:60
 msgid "Empty directory"
 msgstr "Tyhjä hakemisto"
 
 #: source/tmp/win-main/file-manager/FileManager.vue.ts:46
-#: source/tmp/win-main/GlobalSearch.vue.ts:37
+#: source/tmp/win-main/GlobalSearch.vue.ts:38
 msgid "Filter …"
 msgstr "Suodatin..."
 
-#: source/tmp/win-main/PopoverStats.vue.ts:28
+#: source/tmp/win-main/PopoverStats.vue.ts:29
 msgid "words last month"
 msgstr "sanaa viime kuussa"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:29
+#: source/tmp/win-main/PopoverStats.vue.ts:30
 msgid "daily average"
 msgstr "päivittäinen keskiarvo"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:30
+#: source/tmp/win-main/PopoverStats.vue.ts:31
 msgid "words today"
 msgstr "sanaa tänään"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:31
+#: source/tmp/win-main/PopoverStats.vue.ts:32
 msgid "🔥 You're on fire!"
 msgstr "🔥 Olet liekeissä!"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:32
+#: source/tmp/win-main/PopoverStats.vue.ts:33
 msgid "💪 You're close to hitting your daily average!"
 msgstr "💪 Olet lähellä päivittäistä keskiarvoasi!"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:33
+#: source/tmp/win-main/PopoverStats.vue.ts:34
 msgid "✍🏼 Get writing to surpass your daily average."
 msgstr "✍🏼 Aloita kirjoittaminen parantaaksesi keskiarvoasi."
 
-#: source/tmp/win-main/PopoverStats.vue.ts:34
+#: source/tmp/win-main/PopoverStats.vue.ts:35
 msgid "More statistics …"
 msgstr "Lisää tilastoja..."
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:32
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
 msgid "Related files"
 msgstr "Liittyvät tiedostot"
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
 msgid "No related files"
 msgstr "Ei liittyviä tiedostoja"
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
 msgid "This relation is based on a bidirectional link."
 msgstr ""
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on an outbound link."
 msgstr ""
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on a backlink."
 msgstr ""
 
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:220
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
 msgstr ""
@@ -567,20 +865,20 @@ msgstr ""
 msgid "Table of Contents"
 msgstr "Sisällysluettelo"
 
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:13
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:15
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
 msgid "Other files"
 msgstr "Muut tiedostot"
 
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:14
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:16
 msgid "Open directory"
 msgstr "Avaa hakemisto"
 
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:15
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:17
 msgid "No other files"
 msgstr "Ei muita tiedostoja"
 
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:34
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:36
 msgid "Current folder"
 msgstr ""
 
@@ -687,19 +985,14 @@ msgid "Toggle readability mode"
 msgstr ""
 
 #: source/tmp/win-main/App.vue.ts:335
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:64
 msgid "Comment"
 msgstr "Kommentti"
 
 #: source/tmp/win-main/App.vue.ts:342
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:54
 msgid "Link"
 msgstr "Linkki"
-
-#: source/tmp/win-main/App.vue.ts:349
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
-msgid "Image"
-msgstr "Kuva"
 
 #: source/tmp/win-main/App.vue.ts:356
 msgid "Tasklist"
@@ -729,63 +1022,75 @@ msgstr "Sivupalkki"
 msgid "Update available"
 msgstr ""
 
-#: source/tmp/win-main/PopoverExport.vue.ts:61
+#: source/tmp/win-main/PopoverExport.vue.ts:29
+msgid "Temporary directory"
+msgstr ""
+
+#: source/tmp/win-main/PopoverExport.vue.ts:30
+msgid "Current directory"
+msgstr ""
+
+#: source/tmp/win-main/PopoverExport.vue.ts:31
+msgid "Select directory"
+msgstr ""
+
+#: source/tmp/win-main/PopoverExport.vue.ts:64
 #, fuzzy
 msgid "Exporting…"
 msgstr "Vie…"
 
-#: source/tmp/win-main/PopoverExport.vue.ts:61
+#: source/tmp/win-main/PopoverExport.vue.ts:64
 #, fuzzy
 msgid "Export"
 msgstr "Vie…"
 
-#: source/tmp/win-main/PopoverExport.vue.ts:74
+#: source/tmp/win-main/PopoverExport.vue.ts:77
 msgid "command"
 msgstr ""
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:34
+#: source/tmp/win-main/GlobalSearch.vue.ts:35
 msgid "Full-Text Search"
 msgstr "Kokotekstihaku"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:35
+#: source/tmp/win-main/GlobalSearch.vue.ts:36
 msgid "Enter your search terms below"
 msgstr "Syötä hakutermit alle"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:36
+#: source/tmp/win-main/GlobalSearch.vue.ts:37
 msgid "Find …"
 msgstr "Etsi..."
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:38
+#: source/tmp/win-main/GlobalSearch.vue.ts:39
 msgid "Filter search results"
 msgstr "Suodata hakutuloksia"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:39
+#: source/tmp/win-main/GlobalSearch.vue.ts:40
 msgid "Restrict search to directory"
 msgstr "Rajaa haku hakemistoon"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:40
+#: source/tmp/win-main/GlobalSearch.vue.ts:41
 msgid "Restrict to directory …"
 msgstr "Rajaa hakemistoon..."
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:41
+#: source/tmp/win-main/GlobalSearch.vue.ts:42
 msgid "Search"
 msgstr "Etsi"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:42
+#: source/tmp/win-main/GlobalSearch.vue.ts:43
 msgid "Clear search"
 msgstr "Tyhjennä haku"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:43
+#: source/tmp/win-main/GlobalSearch.vue.ts:44
 msgid "Toggle results"
 msgstr "Vaihtele tulokset"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:53
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:167
+#: source/tmp/win-main/GlobalSearch.vue.ts:54
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:169
 #: source/win-main/file-manager/util/file-item-context.ts:28
 msgid "Open in a new tab"
 msgstr "Avaa uudessa välilehdessä"
 
-#: source/tmp/win-main/GlobalSearch.vue.ts:112
+#: source/tmp/win-main/GlobalSearch.vue.ts:113
 #, javascript-format
 msgid "%s matches across %s files"
 msgstr ""
@@ -831,7 +1136,7 @@ msgstr ""
 
 #. 1: Omit all changes
 #: source/tmp/win-paste-image/App.vue.ts:67
-#: source/app/service-providers/documents/index.ts:345
+#: source/app/service-providers/documents/index.ts:346
 #: source/app/service-providers/menu/menu.darwin.ts:703
 #: source/app/service-providers/menu/menu.win32.ts:677
 #: source/app/service-providers/commands/rename-tag.ts:47
@@ -843,67 +1148,67 @@ msgstr ""
 msgid "Cancel"
 msgstr "Peruuta"
 
-#: source/tmp/win-project-properties/App.vue.ts:37
+#: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Export project to:"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:38
+#: source/tmp/win-project-properties/App.vue.ts:39
 msgid "Use"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:39
+#: source/tmp/win-project-properties/App.vue.ts:40
 msgid "Format"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:40
+#: source/tmp/win-project-properties/App.vue.ts:41
 msgid "Conversion"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:41
+#: source/tmp/win-project-properties/App.vue.ts:42
 msgid "Files to be included in the export"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:42
+#: source/tmp/win-project-properties/App.vue.ts:43
 msgid "Please select at least one profile to build this project."
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:43
+#: source/tmp/win-project-properties/App.vue.ts:44
 msgid "Project Title"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:44
+#: source/tmp/win-project-properties/App.vue.ts:45
 msgid "CSL Stylesheet"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:45
+#: source/tmp/win-project-properties/App.vue.ts:46
 msgid "LaTeX Template"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:46
+#: source/tmp/win-project-properties/App.vue.ts:47
 msgid "HTML Template"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:47
+#: source/tmp/win-project-properties/App.vue.ts:48
 msgid "Remove file from export"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:48
+#: source/tmp/win-project-properties/App.vue.ts:49
 msgid "Add file to export"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:49
+#: source/tmp/win-project-properties/App.vue.ts:50
 msgid "Move file up"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:50
+#: source/tmp/win-project-properties/App.vue.ts:51
 msgid "Move file down"
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:51
+#: source/tmp/win-project-properties/App.vue.ts:52
 msgid "You have not selected any files for export."
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:52
+#: source/tmp/win-project-properties/App.vue.ts:53
 msgid ""
 "Some files are selected for export but no longer exist in the directory."
 msgstr ""
@@ -945,7 +1250,19 @@ msgstr ""
 msgid "Manage tags"
 msgstr ""
 
-#: source/tmp/win-tag-manager/App.vue.ts:95
+#: source/tmp/win-tag-manager/App.vue.ts:36
+msgid "New tag"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:37
+msgid "Rename"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:38
+msgid "Rename tag…"
+msgstr ""
+
+#: source/tmp/win-tag-manager/App.vue.ts:98
 #: source/app/service-providers/menu/menu.darwin.ts:578
 #: source/app/service-providers/menu/menu.win32.ts:557
 msgid "Close"
@@ -1032,34 +1349,34 @@ msgstr "Valitse kaikki"
 msgid "Cmd/Ctrl-click to follow this link"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
 #: source/win-preferences/schema/editor.ts:126
 #: source/win-preferences/schema/editor.ts:127
 msgid "Bold"
 msgstr "Lihavoitu"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:49
 #: source/win-preferences/schema/editor.ts:134
 #: source/win-preferences/schema/editor.ts:135
 msgid "Italics"
 msgstr "Kursivoitu"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:69
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Code"
 msgstr "Koodi"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:65
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:67
 #, javascript-format
 msgid "File %s does not exist."
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:128
 msgid "Word count"
 msgstr "Sanamäärä"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:146
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:148
 #: source/app/service-providers/menu/menu.darwin.ts:165
 #: source/app/service-providers/menu/menu.win32.ts:139
 msgid "Open…"
@@ -1163,12 +1480,12 @@ msgstr ""
 msgid "Open in File Browser"
 msgstr "Avaa selaimessa"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:96
+#: source/common/modules/markdown-editor/renderers/render-images.ts:123
 #, javascript-format
 msgid "Image not found: %s"
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:166
+#: source/common/modules/markdown-editor/renderers/render-images.ts:198
 msgid "Open image externally"
 msgstr ""
 
@@ -2014,19 +2331,23 @@ msgid "Indent using tabs instead of spaces"
 msgstr "Sisennä käyttämällä sarkainta"
 
 #: source/win-preferences/schema/editor.ts:261
+msgid "Show formatting toolbar when text is selected"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:266
 msgid "Highlight whitespace"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:267
+#: source/win-preferences/schema/editor.ts:272
 #, fuzzy
 msgid "Suggest emojis during autocompletion"
 msgstr "Hyväksy välilyöntejä automaattisen täydennyksen aikana"
 
-#: source/win-preferences/schema/editor.ts:272
+#: source/win-preferences/schema/editor.ts:277
 msgid "Show link previews"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:278
+#: source/win-preferences/schema/editor.ts:283
 msgid "Automatically close matching character pairs"
 msgstr "Sulje automaattisesti yhtenevät merkkiparit"
 
@@ -2572,62 +2893,62 @@ msgstr "Lopeta"
 msgid "Zettlr"
 msgstr "Zettlr"
 
-#: source/app/service-providers/documents/index.ts:343
+#: source/app/service-providers/documents/index.ts:344
 #, fuzzy
 msgid "Save changes"
 msgstr "Tallentamattomia muutoksia"
 
-#: source/app/service-providers/documents/index.ts:344
+#: source/app/service-providers/documents/index.ts:345
 #, fuzzy
 msgid "Discard changes"
 msgstr "Tallentamattomia muutoksia"
 
-#: source/app/service-providers/documents/index.ts:350
+#: source/app/service-providers/documents/index.ts:351
 #, fuzzy
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr ""
 "Nykyistä tiedostoa on muutettu. Haluatko hylätä vai tallentaa muutokset?"
 
-#: source/app/service-providers/documents/index.ts:993
+#: source/app/service-providers/documents/index.ts:994
 #, fuzzy
 msgid "File changed on disk"
 msgstr "Tiedostoselaimen muoto"
 
-#: source/app/service-providers/documents/index.ts:994
+#: source/app/service-providers/documents/index.ts:995
 #, javascript-format
 msgid "%s changed on disk"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:996
+#: source/app/service-providers/documents/index.ts:997
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:997
+#: source/app/service-providers/documents/index.ts:998
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1000
+#: source/app/service-providers/documents/index.ts:1001
 msgid "Keep editor contents"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1001
+#: source/app/service-providers/documents/index.ts:1002
 msgid "Load changes from disk"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1004
+#: source/app/service-providers/documents/index.ts:1005
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1468
+#: source/app/service-providers/documents/index.ts:1471
 msgid "Could not save file"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1468
+#: source/app/service-providers/documents/index.ts:1471
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr ""
@@ -2858,11 +3179,6 @@ msgstr "Seuraava välilehti"
 msgid "New window"
 msgstr "Ikkuna"
 
-#: source/app/service-providers/menu/menu.darwin.ts:627
-#: source/app/service-providers/menu/menu.win32.ts:601
-msgid "Help"
-msgstr "Ohje"
-
 #: source/app/service-providers/menu/menu.darwin.ts:651
 #: source/app/service-providers/menu/menu.win32.ts:625
 msgid "Support Zettlr"
@@ -3024,7 +3340,7 @@ msgstr ""
 
 #: source/app/service-providers/config/index.ts:500
 #: source/app/service-providers/commands/rename-tag.ts:43
-#: source/app/service-providers/commands/file-rename.ts:108
+#: source/app/service-providers/commands/file-rename.ts:117
 msgid "Confirm"
 msgstr ""
 
@@ -3075,7 +3391,7 @@ msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr ""
 
 #: source/app/service-providers/commands/rename-tag.ts:46
-#: source/app/service-providers/commands/file-rename.ts:111
+#: source/app/service-providers/commands/file-rename.ts:120
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
 msgstr ""
@@ -3191,11 +3507,11 @@ msgstr "Tiedostoa ei voitu luoda"
 msgid "Copy of %s"
 msgstr ""
 
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:96
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:103
 msgid "The provided name did not contain any allowed letters."
 msgstr "Annetussa nimessä ei ollut sallittuja kirjaimia (no_allowed_chars)."
 
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:117
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:124
 msgid "The requested directory was not found."
 msgstr "Pyydettyä hakemistoa ei löydy."
 
@@ -3233,13 +3549,13 @@ msgstr "Ei voitu siirtää"
 msgid "The file/directory %s already exists in target."
 msgstr "Tiedosto tai hakemisto %s on jo olemassa."
 
-#: source/app/service-providers/commands/file-rename.ts:109
+#: source/app/service-providers/commands/file-rename.ts:118
 #, javascript-format
 msgid "Update %s internal links to file %s?"
 msgstr ""
 
 #. 0: Save all changes
-#: source/app/service-providers/commands/file-rename.ts:112
+#: source/app/service-providers/commands/file-rename.ts:121
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
 msgstr ""
@@ -3295,7 +3611,7 @@ msgstr "Epäkelpo Textbundle: %s"
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:75
-#: source/app/service-providers/windows/index.ts:222
+#: source/app/service-providers/windows/index.ts:221
 msgid "Open project folder"
 msgstr "Avaa hakemisto"
 
