@@ -70,6 +70,24 @@ export default [
 
       /////////////////////// END STYLISTIC RULES //////////////////////////////
 
+      // Enforce using the `type` keyword to import names when only used as
+      // types. This is especially necessary when cross-importing interfaces and
+      // APIs for use in IPC calls between renderers and main. Most modules rely
+      // on APIs that only either exist in the main process (e.g., Electron
+      // imports) or the renderer (e.g., certain locale-dependent APIs).
+      // Importing interfaces from the respective other domain without the
+      // `type` keyword causes webpack to fully transclude the entire module in
+      // the corresponding part of the code, resulting in runtime errors.
+      // However, when we only need types and interfaces, using the `type`
+      // keyword ensures that the corresponding import is only used by
+      // TypeScript for checking types, but the import will be removed before
+      // webpack sees it, meaning that webpack won't cross-pollute the various
+      // parts of the app. This is also the reason for the `fixStyle` option
+      // below, making this accidental leakage less likely.
+      '@typescript-eslint/consistent-type-imports': [ 'error', {
+        prefer: 'type-imports', fixStyle: 'separate-type-imports'
+      } ],
+
       // We do use explicit anys at certain points
       '@typescript-eslint/no-explicit-any': 'off',
       'no-unused-vars': 'off', // We need to turn off the vanilla option ...

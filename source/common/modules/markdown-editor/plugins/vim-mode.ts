@@ -16,8 +16,8 @@
  * END HEADER
  */
 
-import { Extension } from '@codemirror/state'
-import { vim, Vim, CodeMirror } from '@replit/codemirror-vim'
+import type { Extension } from '@codemirror/state'
+import { vim, Vim, type CodeMirror } from '@replit/codemirror-vim'
 import { configField } from '../util/configuration'
 import { editorMetadataFacet } from './editor-metadata'
 

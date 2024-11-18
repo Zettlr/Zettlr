@@ -56,7 +56,7 @@ import { trans } from '@common/i18n-main'
 import type ConfigProvider from '@providers/config'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
-import { PasteModalResult } from '../commands/save-image-from-clipboard'
+import type { PasteModalResult } from '../commands/save-image-from-clipboard'
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: Record<string, BrowserWindow>

@@ -34,7 +34,7 @@ import type CommandProvider from '../commands'
 import type ConfigProvider from '@providers/config'
 import { md2html } from '@common/modules/markdown-utils'
 import { showNativeNotification } from '@common/util/show-notification'
-import WindowProvider from '../windows'
+import type WindowProvider from '../windows'
 
 /**
  * Struct which represents a single asset provided for by the updater

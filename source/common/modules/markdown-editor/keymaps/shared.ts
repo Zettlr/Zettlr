@@ -22,7 +22,7 @@ import {
   openSearchPanel, findNext, findPrevious, closeSearchPanel,
   selectSelectionMatches, gotoLine, selectNextOccurrence
 } from '@codemirror/search'
-import { KeyBinding } from '@codemirror/view'
+import type { KeyBinding } from '@codemirror/view'
 
 // Includes:
 // * defaultKeymap

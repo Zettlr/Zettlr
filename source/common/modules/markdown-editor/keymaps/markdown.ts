@@ -6,7 +6,7 @@ import {
   insertNewlineAndIndent, copyLineUp, copyLineDown
 } from '@codemirror/commands'
 import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
-import { Extension } from '@codemirror/state'
+import type { Extension } from '@codemirror/state'
 import { keymap } from '@codemirror/view'
 import { nextSnippet, abortSnippet } from '../autocomplete/snippets'
 import {

@@ -1,4 +1,4 @@
-import { Extension } from '@codemirror/state'
+import type { Extension } from '@codemirror/state'
 import { keymap } from '@codemirror/view'
 import { sharedKeymap } from './shared'
 

@@ -82,6 +82,7 @@ statistics still look proper. If not, please report this. Thanks!
   already use, but they got lost in one of the past ESLint upgrades:
   - enforce single quotes across the codebase
   - enforce proper object property spacing
+  - enforce type imports
 - Moved all keymaps to a centralized space, enabling us to customize them
   further in the future and streamlining the available keybindings
 - The document provider is now more strict when loading persisted window

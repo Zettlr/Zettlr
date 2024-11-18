@@ -25,7 +25,7 @@ import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import type WorkspaceProvider from '@providers/workspaces'
-import DocumentManager from '../documents'
+import type DocumentManager from '../documents'
 import { DP_EVENTS } from '@dts/common/documents'
 
 /**
