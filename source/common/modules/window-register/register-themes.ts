@@ -80,10 +80,17 @@ function setCustomCss (cssPath: string): void {
     formerCustomCSS.parentElement?.removeChild(formerCustomCSS)
   }
 
+  // Due to the colons in the drive letters on Windows, the pathname will
+  // look like this: /C:/Users/Documents/test.jpg
+  // See: https://github.com/Zettlr/Zettlr/issues/5489
+  if (/^[A-Z]:/i.test(cssPath)) {
+    cssPath = `/${cssPath}`
+  }
+
   // (Re)load the custom CSS
   let link = document.createElement('link')
   link.rel = 'stylesheet'
-  link.setAttribute('href', 'safe-file://' + cssPath)
+  link.setAttribute('href', (new URL('safe-file://' + cssPath)).toString())
   link.setAttribute('type', 'text/css')
   link.setAttribute('id', 'custom-css-link')
   document.head.appendChild(link)

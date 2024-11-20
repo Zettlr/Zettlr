@@ -194,7 +194,15 @@ export default class WindowProvider extends ProviderContract {
           } else if (itemPath.startsWith('file://')) {
             itemPath = itemPath.replace('file://', '')
           }
-          shell.showItemInFolder(itemPath)
+
+          // Due to the colons in the drive letters on Windows, the pathname will
+          // look like this: /C:/Users/Documents/test.jpg
+          // See: https://github.com/Zettlr/Zettlr/issues/5489
+          if (/^\/[A-Z]:/i.test(itemPath)) {
+            itemPath = itemPath.slice(1)
+          }
+
+          shell.showItemInFolder(decodeURIComponent(itemPath))
           break
       }
     })

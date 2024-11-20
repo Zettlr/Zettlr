@@ -63,31 +63,33 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   // Shortcut for mailto-links, as these have a protocol (mailto) but with
   // *only* a colon, not the double-slash (//).
   if (uri.startsWith('mailto:')) {
-    return uri
+    return (new URL(uri)).toString()
   } else if (emailRe.test(uri)) {
-    return 'mailto:' + uri
+    return (new URL('mailto:' + uri)).toString()
   }
+
+  // Set the isFile var to undefined
+  let isFile
+  let protocol = ''
 
   try {
     const parsed = new URL(uri)
     if (parsed.protocol === 'file:') {
+      isFile = true
+      protocol = 'file'
       // "file" links could be relative, and we need to tend to that possibility
       // below, so even if this is a proper URL, we have to let the rest of the
       // functionality take over.
       throw new Error('Look at my smart programming lol')
     }
-    return uri
+    return parsed.toString()
   } catch (err) {
     // We can trust the URL constructor to throw an error if it is not something
     // that a web browser can *immediately* open. So if new URL() doesn't throw,
     // we have a proper URL and can save us these shenanigans.
   }
 
-  // Set the isFile var to undefined
-  let isFile
-
   // First, remove a potential protocol and save it for later use
-  let protocol = ''
   const protoMatch = protocolRE.exec(uri)
   // If there was a protocol, extract the capturing group
   if (protoMatch !== null) {
@@ -162,13 +164,19 @@ export default function makeValidUri (uri: string, base: string = ''): string {
       uri = resolvePath(base, uri)
     }
 
+    // See https://github.com/Zettlr/Zettlr/issues/5489
+    // I was very salty.
+    if (process.platform === 'win32') {
+      uri = `/${uri}`
+    }
+
     protocol = 'safe-file'
   }
 
   // Now we can return the correct uri, made absolute
   if (!protocolRE.test(uri)) {
-    return protocol + '://' + uri
+    return new URL(protocol + '://' + uri).toString()
   } else {
-    return uri
+    return new URL(uri).toString()
   }
 }

@@ -28,7 +28,7 @@
           draggable="true"
           v-bind:data-link="attachment.path"
           v-bind:title="attachment.path"
-          v-bind:href="`safe-file://${attachment.path}`"
+          v-bind:href="makeValidUri(attachment.path)"
           v-on:dragstart="handleDragStart($event, attachment.path)"
         >
           <img v-if="hasPreview(attachment.path)" v-bind:src="getPreviewImageData(attachment.path)">
@@ -46,6 +46,7 @@
 
 <script setup lang="ts">
 import { trans } from '@common/i18n-renderer'
+import makeValidUri from '@common/util/make-valid-uri'
 import { type OtherFileDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@cds/core/icon'
 import { computed } from 'vue'
@@ -145,7 +146,7 @@ function hasPreview (attachmentPath: string): boolean {
  */
 function getPreviewImageData (attachmentPath: string): string {
   if (IMAGE_RE.test(attachmentPath)) {
-    return `safe-file://${attachmentPath}` // Can be used (almost) as-is
+    return makeValidUri(attachmentPath) // Can be used (almost) as-is
   }
 
   return ''

@@ -66,7 +66,13 @@ export default function (url: string, view: EditorView): void {
 
     // Create a path from the URL by stripping the protocol and decoding any
     // potential encoded characters.
-    const localPath = decodeURIComponent(validURI.replace('safe-file://', ''))
+    let localPath = decodeURIComponent(validURI.replace('safe-file://', ''))
+    // Due to the colons in the drive letters on Windows, the pathname will
+    // look like this: /C:/Users/Documents/test.jpg
+    // See: https://github.com/Zettlr/Zettlr/issues/5489
+    if (/^\/[A-Z]:/i.test(localPath)) {
+      localPath = localPath.slice(1)
+    }
 
     // It's a valid file we can open if it's an absolute path to a Markdown or
     // code file

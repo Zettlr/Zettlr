@@ -72,7 +72,6 @@ class ImageWidget extends WidgetType {
   }
 
   toDOM (view: EditorView): HTMLElement {
-    console.log('Image to DOM')
     //////////////////////////////////////////
     // FIGURE
     //////////////////////////////////////////
