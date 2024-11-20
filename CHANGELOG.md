@@ -1,5 +1,15 @@
 # Upcoming
 
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.3.0
+
 ## Please Backup Your Writing Statistics
 
 This update includes a change in the writing statistics. While we extensively
