@@ -13,8 +13,8 @@
 ## GUI and Functionality
 
 - Fixed a serious bug that would prevent external files from being properly
-  handled on Windows (#5489); which included images, linked files, attachments,
-  and others
+  handled on Windows; which included images, linked files, attachments, and
+  others (#5489)
 
 ## Under the Hood
 
