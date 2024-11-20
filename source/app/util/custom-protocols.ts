@@ -23,9 +23,18 @@ export default function registerCustomProtocols (logger: LogProvider): void {
 
   logger.info(`Registering custom protocol ${protocolName}`)
   protocol.handle(protocolName, async request => {
-    const url = request.url.replace(`${protocolName}://`, '')
+    const url = new URL(request.url)
     try {
-      const fileBuffer = await fs.readFile(decodeURIComponent(url))
+      let pathName = decodeURIComponent(url.pathname)
+
+      // Due to the colons in the drive letters on Windows, the pathname will
+      // look like this: /C:/Users/Documents/test.jpg
+      // See: https://github.com/Zettlr/Zettlr/issues/5489
+      if (/^\/[A-Z]:/i.test(pathName)) {
+        pathName = pathName.slice(1)
+      }
+
+      const fileBuffer = await fs.readFile(pathName)
       return new Response(fileBuffer, {
         status: 200,
         // Prevent that local files are cached

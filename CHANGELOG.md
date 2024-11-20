@@ -8,6 +8,18 @@
 
 (nothing here)
 
+# 3.3.1
+
+## GUI and Functionality
+
+- Fixed a serious bug that would prevent external files from being properly
+  handled on Windows; which included images, linked files, attachments, and
+  others (#5489)
+
+## Under the Hood
+
+(nothing here)
+
 # 3.3.0
 
 ## Please Backup Your Writing Statistics
