@@ -21,8 +21,11 @@ statistics still look proper. If not, please report this. Thanks!
   according to the folder's regular sort settings. Note that this requires all
   project files to reside in the top folder; included project files in
   subfolders will not be affected
-- The formatting toolbar can now be toggled on or off in the preferences (#5207)
-- Vim mode improvements:
+- **New Feature**: The formatting toolbar can now be toggled on or off in the
+  preferences (#5207)
+- **New Feature**: Allow three-digit ordinal day of the year in IDs and
+  filenames (`%o`; #5424)
+- **Vim mode improvements**:
   - Mapped Vim's write and quit commands to saving and closing actions (#4720,
     #5463):
     - `w`: Executes a save command for the current file
@@ -43,7 +46,6 @@ statistics still look proper. If not, please report this. Thanks!
 - Fix errors in, and update, German translation (`de-DE`)
 - Update Turkish translation (`tr-TR`) (#5461)
 - Fix "dancing list items" (#4602)
-- Allow three-digit ordinal day of the year in IDs and filenames (`%o`; #5424)
 - Zettlr finally counts and remembers character counts
 - The link preview and force-open workflows now expect internal/wiki-links that
   link to headings within the file (`[[filename#heading-id]]`) and can handle
