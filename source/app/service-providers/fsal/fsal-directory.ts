@@ -25,14 +25,10 @@ import * as FSALCodeFile from './fsal-code-file'
 import * as FSALAttachment from './fsal-attachment'
 import type { DirDescriptor, AnyDescriptor, MDFileDescriptor, SortMethod, ProjectSettings } from '@dts/common/fsal'
 import type FSALCache from './fsal-cache'
-import {
-  codeFileExtensions,
-  mdFileExtensions
-} from '@providers/fsal/util/valid-file-extensions'
-import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import { safeDelete } from './util/safe-delete'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
 import type LogProvider from '@providers/log'
+import { hasCodeExt, hasMarkdownExt } from '@common/util/file-extention-checks'
 
 /**
  * Determines what will be written to file (.ztr-directory)
@@ -42,9 +38,6 @@ const SETTINGS_TEMPLATE = {
   project: null as ProjectSettings|null, // Default: no project
   icon: null as null|string // Default: no icon
 }
-
-const ALLOWED_CODE_FILES = codeFileExtensions(true)
-const MARKDOWN_FILES = mdFileExtensions(true)
 
 /**
  * Used to insert a default project
@@ -212,15 +205,12 @@ export async function parse (
     if (isDir(absolutePath) && !ignoreDir(absolutePath)) {
       const cDir = await parse(absolutePath, cache, parser, sorter, false)
       dir.children.push(cDir)
-    } else if (isMdOrCodeFile(absolutePath)) {
-      const isCode = ALLOWED_CODE_FILES.includes(path.extname(absolutePath).toLowerCase())
-      if (isCode) {
-        const file = await FSALCodeFile.parse(absolutePath, cache, false)
-        dir.children.push(file)
-      } else {
-        const file = await FSALFile.parse(absolutePath, cache, parser, false)
-        dir.children.push(file)
-      }
+    } else if (hasMarkdownExt(absolutePath)) {
+      const file = await FSALFile.parse(absolutePath, cache, parser, false)
+      dir.children.push(file)
+    } else if (hasCodeExt(absolutePath)) {
+      const file = await FSALCodeFile.parse(absolutePath, cache, false)
+      dir.children.push(file)
     } else if (isFile(absolutePath)) {
       dir.children.push(await FSALAttachment.parse(absolutePath))
     } // Else: Probably a symlink TODO
@@ -520,9 +510,9 @@ export async function addChild (
 ): Promise<void> {
   if (isDir(childPath)) {
     dirObject.children.push(await parse(childPath, cache, parser, sorter, false))
-  } else if (ALLOWED_CODE_FILES.includes(path.extname(childPath))) {
+  } else if (hasCodeExt(childPath)) {
     dirObject.children.push(await FSALCodeFile.parse(childPath, cache, false))
-  } else if (MARKDOWN_FILES.includes(path.extname(childPath))) {
+  } else if (hasMarkdownExt(childPath)) {
     dirObject.children.push(await FSALFile.parse(childPath, cache, parser, false))
   }
   sortChildren(dirObject, sorter)

@@ -19,7 +19,7 @@ import html2md from '@common/util/html-to-md'
 import { configField } from '../util/configuration'
 import { pathBasename, pathDirname, pathExtname, relativePath } from '@common/util/renderer-path-polyfill'
 import { type SaveImageFromClipboardAPI } from 'source/app/service-providers/commands/save-image-from-clipboard'
-import { hasMdOrCodeExt } from 'source/app/service-providers/fsal/util/is-md-or-code-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 
 const ipcRenderer = window.ipc
 

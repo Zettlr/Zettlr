@@ -27,8 +27,6 @@ import EventEmitter from 'events'
 import { getIDRE } from '@common/regular-expressions'
 import findObject from '@common/util/find-object'
 import type { AnyDescriptor, CodeFileDescriptor, DirDescriptor, MDFileDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import { showSplashScreen, closeSplashScreen, updateSplashScreen } from '@providers/workspaces/splash-screen'
 import { trans } from '@common/i18n-main'
@@ -36,6 +34,7 @@ import path from 'path'
 import { performance } from 'perf_hooks'
 import objectToArray from '@common/util/object-to-array'
 import generateStats, { type WorkspacesStatistics } from './generate-stats'
+import { hasMarkdownExt, MD_EXT } from '@common/util/file-extention-checks'
 
 export enum WORKSPACE_PROVIDER_EVENTS {
   WorkspaceAdded = 'workspace-added',
@@ -348,7 +347,6 @@ export default class WorkspaceProvider extends ProviderContract {
   public findExact (query: string): MDFileDescriptor|undefined {
     const idREPattern = this._config.get().zkn.idRE
     const idRE = getIDRE(idREPattern, true)
-    const extensions = mdFileExtensions(true)
     const allWorkspaces = this.roots.map(root => root.rootDescriptor)
 
     // First, let's see if what we got looks like an ID, or not. If it looks
@@ -364,7 +362,7 @@ export default class WorkspaceProvider extends ProviderContract {
         // No file ending given, so let's test all allowed. The filetypes are
         // sorted by probability (first .md, then .markdown), to reduce the
         // amount of time spent on the tree.
-        for (const type of extensions) {
+        for (const type of MD_EXT) {
           const file = findObject(allWorkspaces, 'name', query + type, 'children')
           if (file !== undefined) {
             return file

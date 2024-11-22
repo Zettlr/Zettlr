@@ -16,10 +16,7 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { codeFileExtensions, mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
-
-const CODEFILE_TYPES = codeFileExtensions(true)
-const ALLOWED_FILETYPES = mdFileExtensions(true)
+import { hasCodeExt, hasMarkdownExt } from '@common/util/file-extention-checks'
 
 export default class FileDuplicate extends ZettlrCommand {
   constructor (app: any) {
@@ -88,9 +85,9 @@ export default class FileDuplicate extends ZettlrCommand {
 
     // If no valid filename is provided, assume the original file's extension
     const newFileExtname = path.extname(filename).toLowerCase()
-    if (file.type === 'file' && !ALLOWED_FILETYPES.includes(newFileExtname)) {
+    if (file.type === 'file' && !hasMarkdownExt(filename)) {
       filename += file.ext // Assume the original file's extension
-    } else if (file.type === 'code' && !CODEFILE_TYPES.includes(newFileExtname)) {
+    } else if (file.type === 'code' && !hasCodeExt(filename)) {
       filename += file.ext // Assume the original file's extension
     }
 

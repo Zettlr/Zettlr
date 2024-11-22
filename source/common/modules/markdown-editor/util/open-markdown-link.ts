@@ -18,7 +18,7 @@ import { type EditorState, type Line } from '@codemirror/state'
 import { configField } from './configuration'
 import { EditorView } from '@codemirror/view'
 import { tocField } from '../plugins/toc-field'
-import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import { isAbsolutePath, pathDirname } from '@common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc

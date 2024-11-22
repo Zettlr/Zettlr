@@ -6,7 +6,10 @@
 
 ## Under the Hood
 
-(nothing here)
+- Refactored the file type detection system; it is now simpler and easier to use
+  and can detect a variety of additional groups of files (previously only
+  Markdown and code files; now also images, PDFs, MS and Open Office files as
+  well as data files)
 
 # 3.3.1
 
