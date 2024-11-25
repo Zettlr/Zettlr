@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fix SVG image preview (#5496)
 
 ## Under the Hood
 
