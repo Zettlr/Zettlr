@@ -10,6 +10,8 @@
   and can detect a variety of additional groups of files (previously only
   Markdown and code files; now also images, PDFs, MS and Open Office files as
   well as data files)
+- Checking task-list checkboxes now returns the focus back to the editor
+  immediately (#5246)
 
 # 3.3.1
 
