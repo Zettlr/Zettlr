@@ -395,14 +395,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/search@npm:^6.5.6":
-  version: 6.5.6
-  resolution: "@codemirror/search@npm:6.5.6"
+"@codemirror/search@npm:^6.5.8":
+  version: 6.5.8
+  resolution: "@codemirror/search@npm:6.5.8"
   dependencies:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     crelt: ^1.0.5
-  checksum: 19dc88d09fc750563347001e83c6194bbb2a25c874bd919d2d81809e1f98d6330222ddbd284aa9758a09eeb41fd153ec7c2cf810b2ee51452c25963d7f5833d5
+  checksum: 0f9633037492a7b647b606c30255ea42c4327319e643be7ea3aa2913ed8e4aa662589f457e376636521c7d4d1215fae0e8939f127db9c0790b19ae3b654c3bc4
   languageName: node
   linkType: hard
 
@@ -16090,7 +16090,7 @@ __metadata:
     "@codemirror/lang-yaml": ^6.1.1
     "@codemirror/language": ^6.10.3
     "@codemirror/legacy-modes": ^6.4.1
-    "@codemirror/search": ^6.5.6
+    "@codemirror/search": ^6.5.8
     "@codemirror/state": ^6.4.1
     "@codemirror/view": ^6.34.1
     "@electron-forge/cli": ^7.5.0

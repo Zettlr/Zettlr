@@ -55,7 +55,7 @@
     "@codemirror/lang-yaml": "^6.1.1",
     "@codemirror/language": "^6.10.3",
     "@codemirror/legacy-modes": "^6.4.1",
-    "@codemirror/search": "^6.5.6",
+    "@codemirror/search": "^6.5.8",
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.34.1",
     "@lezer/common": "^1.2.3",
