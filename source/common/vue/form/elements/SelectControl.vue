@@ -4,6 +4,7 @@
     <select
       v-bind:id="fieldID"
       v-model="inputValue"
+      v-bind:disabled="props.disabled"
       v-bind:name="name"
       v-bind:class="{ inline: inline === true }"
     >
@@ -38,6 +39,7 @@ import { computed, ref, watch, toRef } from 'vue'
 
 const props = defineProps<{
   modelValue: string
+  disabled?: boolean
   inline?: boolean
   label?: string
   name?: string

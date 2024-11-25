@@ -3,6 +3,8 @@
 ## GUI and Functionality
 
 - Fix SVG image preview (#5496)
+- Checking task-list checkboxes now returns the focus back to the editor
+  immediately (#5246)
 
 ## Under the Hood
 
@@ -10,8 +12,7 @@
   and can detect a variety of additional groups of files (previously only
   Markdown and code files; now also images, PDFs, MS and Open Office files as
   well as data files)
-- Checking task-list checkboxes now returns the focus back to the editor
-  immediately (#5246)
+- Select controls can be disabled now
 
 # 3.3.1
 
