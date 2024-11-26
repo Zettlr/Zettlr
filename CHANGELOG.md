@@ -1,7 +1,37 @@
 # Upcoming
 
+## Image Viewer and PDF Viewer
+
+This update brings with it a great new feature for Zettlr: A built-in image
+viewer and PDF viewer. Once you have selected in the settings that you wish to
+open images or PDF files in Zettlr instead of the default behavior to open it
+externally, Zettlr will open them in editor panes just like the editors. You can
+rearrange them just like you can other files, and you have some options
+available to inspect the files.
+
+For images, the viewer offers various options to zoom and fit the images so that
+you can view every detail of them while having other files open side-by-side.
+In addition, the image viewer offers four background modes to accommodate
+transparency and difficult-to-view colors in the images better: transparent
+(the default), a black background, white background, and a translucent
+checkerboard background.
+
+The PDF viewer likewise allows you to preview PDF files using Chromium's built-
+in PDF viewer that you may already know if you have opened PDF files in Google
+Chrome or Edge. Due to restrictions in how this works, however, you will have to
+manually "enable" such a viewer before being able to scroll it by clicking into
+it. Whether an iframe is interactive is indicated by a small border around the
+iframe.
+
+Note that both image and PDF viewers are just that: viewers. As Zettlr is a text
+app, we do not plan on implementing any ways of editing images or PDF files. To
+annotate your PDF files, please continue using your existing workflow.
+
 ## GUI and Functionality
 
+- **New Feature**: Zettlr can now open images and PDF files right next to your
+  regular files, enabling you to preview pictures of, e.g., plots, or studies to
+  reference in your text; and double-check PDF files which you need to reference
 - Fix SVG image preview (#5496)
 - Checking task-list checkboxes now returns the focus back to the editor
   immediately (#5246)
