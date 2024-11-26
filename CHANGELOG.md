@@ -29,6 +29,9 @@ annotate your PDF files, please continue using your existing workflow.
 
 ## GUI and Functionality
 
+- **New Feature**: Zettlr can now display a set of file types not only in the
+  sidebar's "Other files" tab, but also in the file manager, which in turn makes
+  it simpler to find and open relevant plots or PDF files for reference
 - **New Feature**: Zettlr can now open images and PDF files right next to your
   regular files, enabling you to preview pictures of, e.g., plots, or studies to
   reference in your text; and double-check PDF files which you need to reference
