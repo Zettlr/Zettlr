@@ -13,6 +13,9 @@
   Markdown and code files; now also images, PDFs, MS and Open Office files as
   well as data files)
 - Select controls can be disabled now
+- Added a new form builder field, `control-grid`
+- Added a `plain` display style for form builder text fields
+- Forward `disabled` attribute to selects in the form builder
 
 # 3.3.1
 
