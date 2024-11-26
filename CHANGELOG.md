@@ -49,6 +49,10 @@ annotate your PDF files, please continue using your existing workflow.
 - Added a new form builder field, `control-grid`
 - Added a `plain` display style for form builder text fields
 - Forward `disabled` attribute to selects in the form builder
+- Images and PDF files clicked on in the file manager, the "Other Files" sidebar
+  tab, or the image previews in an editor component will now respect the
+  corresponding setting of whether the user wants to open them in Zettlr or with
+  the default system app for the file types
 
 # 3.3.1
 
