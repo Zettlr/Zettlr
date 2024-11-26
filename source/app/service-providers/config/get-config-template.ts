@@ -395,7 +395,7 @@ export function getConfigTemplate (): ConfigOptions {
     },
     files: {
       builtin: { showInFilemanager: true, showInSidebar: false, openWith: 'zettlr' },
-      images: { showInFilemanager: false, showInSidebar: true, openWith: 'zettlr' },
+      images: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
       pdf: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
       msoffice: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
       openOffice: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
