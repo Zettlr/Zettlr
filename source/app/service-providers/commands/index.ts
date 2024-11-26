@@ -147,6 +147,13 @@ export default class CommandProvider extends ProviderContract {
         imgPath = imgPath.replace('file://', '')
       }
 
+      // Due to the colons in the drive letters on Windows, the pathname will
+      // look like this: /C:/Users/Documents/test.jpg
+      // See: https://github.com/Zettlr/Zettlr/issues/5489
+      if (/^\/[A-Z]:/i.test(imgPath)) {
+        imgPath = imgPath.slice(1)
+      }
+
       const img = nativeImage.createFromPath(imgPath)
 
       if (!img.isEmpty()) {

@@ -13,6 +13,7 @@
     <SplitView
       v-bind:initial-size-percent="[ 20, 80 ]"
       v-bind:minimum-size-percent="[ 20, 20 ]"
+      v-bind:reset-size-percent="[ 20, 80 ]"
       v-bind:split="'horizontal'"
       v-bind:initial-total-width="100"
     >

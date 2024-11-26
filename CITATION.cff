@@ -14,8 +14,8 @@ keywords:
   - GUI
   - editor
   - pandoc
-version: v3.2.3
+version: v3.3.1
 doi: 10.5281/zenodo.2580173
-date-released: 2024-10-28
+date-released: 2024-11-20
 license: gpl-3.0
 repository-code: https://github.com/Zettlr/Zettlr

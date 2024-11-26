@@ -36,7 +36,7 @@ import objectToArray from '@common/util/object-to-array'
 
 import { ref, computed, onMounted, onBeforeUnmount, watch, toRef, onUpdated } from 'vue'
 import { type EditorCommands } from './App.vue'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
@@ -260,6 +260,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     lintLanguageTool: editor.lint.languageTool.active,
     distractionFree: props.distractionFree.valueOf(),
     showStatusbar: editor.showStatusbar,
+    showFormattingToolbar: editor.showFormattingToolbar,
     darkMode,
     theme: display.theme,
     highlightWhitespace: editor.showWhitespace
@@ -382,7 +383,7 @@ watch(tags, (newValue) => {
  * @return  {MarkdownEditor}       The requested editor
  */
 async function getEditorFor (doc: string): Promise<MarkdownEditor> {
-  const editor = new MarkdownEditor(props.leafId, doc, documentAuthorityIPCAPI)
+  const editor = new MarkdownEditor(props.leafId, props.windowId, doc, documentAuthorityIPCAPI)
 
   // Update the document info on corresponding events
   editor.on('change', () => {

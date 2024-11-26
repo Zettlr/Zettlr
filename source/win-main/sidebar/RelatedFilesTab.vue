@@ -66,7 +66,6 @@ import { RecycleScroller } from 'vue-virtual-scroller'
 import { ref, computed, watch } from 'vue'
 import { useConfigStore, useWorkspacesStore, useDocumentTreeStore, useTagsStore } from 'source/pinia'
 import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
-import { type TagRecord } from '@providers/tags'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 
 export interface RelatedFile {

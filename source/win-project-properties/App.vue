@@ -170,6 +170,7 @@ import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
 import { useConfigStore } from 'source/pinia'
 import objectToArray from 'source/common/util/object-to-array'
 import { pathBasename } from 'source/common/util/renderer-path-polyfill'
+import { pathToUnix } from 'source/common/util/path-to-unix'
 
 const ipcRenderer = window.ipc
 
@@ -196,18 +197,6 @@ const missingFilesMessage = trans('Some files are selected for export but no lon
 const configStore = useConfigStore()
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
-
-/**
- * Helper function that converts any path fragment -- especially when it comes
- * from Windows -- into a Unix path by replacing \ with /.
- *
- * @param   {string}  pathFragment  The path (fragment)
- *
- * @return  {string}                The path as a Unix path
- */
-function pathToUnix (pathFragment: string): string {
-  return pathFragment.replace(/\\/g, '/')
-}
 
 const tabs: WindowTab[] = [
   {

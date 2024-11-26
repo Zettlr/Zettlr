@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, webUtils } from 'electron'
 
 // PREPARATION: Since we have multiple editor panes and all of them need to
 // listen to a few events, we need to ramp up some of the channels' max
@@ -82,4 +82,15 @@ contextBridge.exposeInMainWorld('process', {
   getSystemVersion: process.getSystemVersion(),
   env: Object.assign({}, process.env),
   argv: process.argv
+})
+
+// Allow renderers to retrieve the absolute file path for any file object that
+// points to a file on disk
+contextBridge.exposeInMainWorld('getPathForFile', function (file: File): string|undefined {
+  try {
+    const filePath = webUtils.getPathForFile(file)
+    return filePath !== '' ? filePath : undefined
+  } catch (err) {
+    return undefined
+  }
 })

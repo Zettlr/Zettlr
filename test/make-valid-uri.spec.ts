@@ -27,8 +27,8 @@ const makeUriTesters = [
   // Relative files with file protocol should be converted to absolute
   { input: 'file://./relative/file.md', expected: 'safe-file:///home/foo/documents/relative/file.md' },
   // Links without protocol should receive the HTTPS protocol
-  { input: 'github.com', expected: 'https://github.com' },
-  { input: 'www.zettlr.com', expected: 'https://www.zettlr.com' },
+  { input: 'github.com', expected: 'https://github.com/' },
+  { input: 'www.zettlr.com', expected: 'https://www.zettlr.com/' },
   // Absolute file paths should be returned with the file protocol
   { input: '/home/bar/documents/absolute.md', expected: 'safe-file:///home/bar/documents/absolute.md' },
   { input: '/Users/user/Documents/test/code-file.json', expected: 'safe-file:///Users/user/Documents/test/code-file.json' },

@@ -47,7 +47,15 @@ export default class FetchLinkPreview extends ZettlrCommand {
     // Next, is it an absolute path to a file on the computer?
     if (arg.startsWith('safe-file://')) {
       arg = arg.slice(12)
+      // Due to the colons in the drive letters on Windows, the pathname will
+      // look like this: /C:/Users/Documents/test.jpg
+      // See: https://github.com/Zettlr/Zettlr/issues/5489
+      if (/^\/[A-Z]:/i.test(arg)) {
+        arg = arg.slice(1)
+      }
     }
+
+    arg = decodeURIComponent(arg)
 
     if (path.isAbsolute(arg)) {
       try {

@@ -28,11 +28,13 @@
           draggable="true"
           v-bind:data-link="attachment.path"
           v-bind:title="attachment.path"
-          v-bind:href="`safe-file://${attachment.path}`"
+          v-bind:href="makeValidUri(attachment.path)"
           v-on:dragstart="handleDragStart($event, attachment.path)"
         >
-          <span v-html="getIcon(attachment.ext)"></span>
-          {{ attachment.name }}
+          <img v-if="hasPreview(attachment.path)" v-bind:src="getPreviewImageData(attachment.path)">
+          <span v-else v-html="getIcon(attachment.ext)"></span>
+
+          <span class="attachment-name">{{ attachment.name }}</span>
         </a>
       </template>
       <span v-else>
@@ -44,11 +46,14 @@
 
 <script setup lang="ts">
 import { trans } from '@common/i18n-renderer'
+import makeValidUri from '@common/util/make-valid-uri'
 import { type OtherFileDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@cds/core/icon'
 import { computed } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
 import { pathDirname, isAbsolutePath, resolvePath } from 'source/common/util/renderer-path-polyfill'
+
+const IMAGE_RE = /\.(?:png|jpe?g|svg|bmp|webp|gif)$/
 
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
@@ -110,10 +115,41 @@ function getIcon (ext: string): string {
   // @ts-expect-error We know that this thing has an outline, because we assign it in load-icons.ts
   const fileExtIcon = ClarityIcons.registry['file-ext'].outline!
   if (typeof fileExtIcon === 'string') {
-    return fileExtIcon.replace('EXT', ext.substring(1))
+    return fileExtIcon.replace('EXT', ext.slice(1, 4))
   } else {
     return ''
   }
+}
+
+/**
+ * Returns true for any attachments that Zettlr can show a preview for
+ *
+ * @param   {string}   attachmentPath  The absolute path to the attachment
+ *
+ * @return  {boolean}                  Returns true for previewable attachments
+ */
+function hasPreview (attachmentPath: string): boolean {
+  if (IMAGE_RE.test(attachmentPath)) {
+    return true
+  }
+
+  return false
+}
+
+/**
+ * Returns a string that can be used as an Image source to show the preview for
+ * the provided file.
+ *
+ * @param   {string}  attachmentPath  The absolute path to the attachment
+ *
+ * @return  {string}                  The image src attribute's contents
+ */
+function getPreviewImageData (attachmentPath: string): string {
+  if (IMAGE_RE.test(attachmentPath)) {
+    return makeValidUri(attachmentPath) // Can be used (almost) as-is
+  }
+
+  return ''
 }
 </script>
 
@@ -127,8 +163,42 @@ h2.other-files-panel-folder-name {
 }
 
 a.attachment {
+  display: grid;
+  align-items: center;
+  gap: 4px;
+  grid-template-columns: 48px auto;
+
+  padding: 4px;
+  text-decoration: none;
+  color: inherit;
+  // Some filenames are too long for the sidebar. However, unlike with the
+  // file manager where we have the full filename visible in multiple places,
+  // here we must make sure the filename is fully visible. Hence, we don't
+  // use white-space: nowrap, but rather word-break: break-all.
+  word-break: break-all;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+  span.attachment-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  svg {
+    width: 32px;
+    height: 32px;
+    margin-right: 4px;
+    vertical-align: bottom;
+    margin-bottom: -1px;
+    // Necessary to give the extension icons the correct colour
+    fill: currentColor;
+  }
+}
+
+body.dark a.attachment {
+  color: inherit;
 }
 </style>

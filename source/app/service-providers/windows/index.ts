@@ -56,7 +56,7 @@ import { trans } from '@common/i18n-main'
 import type ConfigProvider from '@providers/config'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
-import { PasteModalResult } from '../commands/save-image-from-clipboard'
+import type { PasteModalResult } from '../commands/save-image-from-clipboard'
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: Record<string, BrowserWindow>
@@ -194,7 +194,15 @@ export default class WindowProvider extends ProviderContract {
           } else if (itemPath.startsWith('file://')) {
             itemPath = itemPath.replace('file://', '')
           }
-          shell.showItemInFolder(itemPath)
+
+          // Due to the colons in the drive letters on Windows, the pathname will
+          // look like this: /C:/Users/Documents/test.jpg
+          // See: https://github.com/Zettlr/Zettlr/issues/5489
+          if (/^\/[A-Z]:/i.test(itemPath)) {
+            itemPath = itemPath.slice(1)
+          }
+
+          shell.showItemInFolder(decodeURIComponent(itemPath))
           break
       }
     })

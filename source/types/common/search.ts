@@ -43,16 +43,21 @@ export interface SearchResult {
 }
 
 /**
+ * This interface describes a specific descriptor for use during file searches
+ */
+export interface FileSearchDescriptor {
+  path: string
+  relativeDirectoryPath: string
+  filename: string
+  displayName: string
+}
+
+/**
  * This interface describes a wrapper that combines search results with metadata
  * on the file the results describe
  */
 export interface SearchResultWrapper {
-  file: {
-    path: string
-    relativeDirectoryPath: string
-    filename: string
-    displayName: string
-  }
+  file: FileSearchDescriptor
   result: SearchResult[]
   hideResultSet: boolean
   weight: number

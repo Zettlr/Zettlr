@@ -26,7 +26,7 @@ import { trans } from '@common/i18n-main'
 import type AssetsProvider from '@providers/assets'
 import { type PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMarkdownExt } from '@common/util/file-extention-checks'
 
 export default async function makeImport (
   fileList: string[],

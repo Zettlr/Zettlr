@@ -108,15 +108,11 @@ const unit = ref<'month'|'year'>('month')
 const chartCanvas = ref<HTMLCanvasElement|null>(null)
 
 const earliestYear = computed<number>(() => {
-  const years = Object.keys(statisticsStore.stats.wordCount).map(k => parseInt(k.substring(0, 4), 10))
-  let min = +Infinity
-  for (const year of years) {
-    if (min > year) {
-      min = year
-    }
-  }
-
-  return min
+  return Math.min(
+    ...Object
+      .keys(statisticsStore.stats.wordCount)
+      .map(k => parseInt(k.substring(0, 4), 10))
+  )
 })
 
 const latestYear = computed<number>(() => {

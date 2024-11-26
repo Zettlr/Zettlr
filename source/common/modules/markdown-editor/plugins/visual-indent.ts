@@ -16,7 +16,7 @@
  */
 
 import { syntaxTree } from '@codemirror/language'
-import { RangeSet, Range, type Line } from '@codemirror/state'
+import type { RangeSet, Range, Line } from '@codemirror/state'
 import {
   Decoration,
   ViewPlugin,

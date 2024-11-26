@@ -14,14 +14,11 @@
 
 import { trans } from '@common/i18n-main'
 import ignoreDir from '@common/util/ignore-dir'
-import ignoreFile from '@common/util/ignore-file'
 import { app } from 'electron'
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
-import { showNativeNotification } from '@common/util/show-notification'
 import { type DirDescriptor } from '@dts/common/fsal'
-import isFile from '@common/util/is-file'
-import isDir from '@common/util/is-dir'
+import { CODE_EXT, MD_EXT } from '@common/util/file-extention-checks'
 
 export default class RootOpen extends ZettlrCommand {
   constructor (app: any) {
@@ -58,8 +55,10 @@ export default class RootOpen extends ZettlrCommand {
    */
   private async openFiles (): Promise<string[]> {
     // The user wants to open another file or directory.
-    const extensions = [ 'markdown', 'md', 'txt', 'rmd' ]
-    const filter = [{ name: trans('Files'), extensions }]
+    const filter = [
+      { name: trans('Markdown Files'), extensions: MD_EXT.map(x => x.slice(1)) },
+      { name: trans('Code Files'), extensions: CODE_EXT.map(x => x.slice(1)) }
+    ]
 
     return await this._app.windows.askFile(filter, true)
   }
@@ -72,18 +71,17 @@ export default class RootOpen extends ZettlrCommand {
   private async openWorkspaces (): Promise<string[]> {
     // TODO: Move this to a command
     // The user wants to open another file or directory.
-    const ret = await this._app.windows.askDir(trans('Open project folder'), null)
+    const ret = await this._app.windows.askDir(trans('Open workspace'), null)
 
     for (const workspace of ret) {
-      const ignoredDir = await this._app.fsal.isDir(workspace) && ignoreDir(workspace)
-      const ignoredFile = await this._app.fsal.isFile(workspace) && ignoreFile(workspace)
-      if (ignoredDir || ignoredFile || workspace === app.getPath('home')) {
+      const isDir = await this._app.fsal.isDir(workspace)
+      if (!isDir || ignoreDir(workspace) || workspace === app.getPath('home')) {
         // We cannot add this dir, because it is in the list of ignored directories.
         this._app.log.error(`The chosen workspace "${workspace}" is on the ignore list.`)
         this._app.windows.prompt({
           type: 'error',
-          title: trans('Cannot open directory'),
-          message: trans('Directory &quot;%s&quot; cannot be opened by Zettlr.', path.basename(workspace))
+          title: trans('Cannot open workpace'),
+          message: trans('Cannot open workspace "%s".', path.basename(workspace))
         })
       }
     }
