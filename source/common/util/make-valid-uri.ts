@@ -60,6 +60,10 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   // across the codebase, we can do this centrally here.
   uri = uri.replace(/^<(.+)>$/, '$1')
 
+  // To reduce the function complexity, and since Windows also works with
+  // forward slashes, let's add this normalization step here.
+  uri = uri.replace(/\\/g, '/')
+
   // Shortcut for mailto-links, as these have a protocol (mailto) but with
   // *only* a colon, not the double-slash (//).
   if (uri.startsWith('mailto:')) {
