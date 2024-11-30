@@ -6,6 +6,10 @@
 - Fix network share image preview (#5495)
 - Checking task-list checkboxes now returns the focus back to the editor
   immediately (#5246)
+- Fixed a bug where opened documents would not be closed once the last tab was
+  closed, retaining outdated file contents and making the file unresponsive to
+  external changes. Now files that do not have an open editor instance will be
+  closed appropriately
 
 ## Under the Hood
 

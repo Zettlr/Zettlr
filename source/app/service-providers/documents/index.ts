@@ -875,6 +875,10 @@ current contents from the editor somewhere else, and restart the application.`
 
       // Remove the file
       this.documents.splice(this.documents.indexOf(openFile), 1)
+    } else if (openFile !== undefined && numOpenInstances === 1) {
+      // The file is not modified, but this is still the last instance, so we
+      // can close it without having to ask.
+      this.documents.splice(this.documents.indexOf(openFile), 1)
     }
 
     const ret = leaf.tabMan.closeFile(filePath)
