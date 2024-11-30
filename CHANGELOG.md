@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Fix SVG image preview (#5496)
+- Fix network share image preview (#5495)
 - Checking task-list checkboxes now returns the focus back to the editor
   immediately (#5246)
 

@@ -72,6 +72,16 @@ export default function makeValidUri (uri: string, base: string = ''): string {
     return (new URL('mailto:' + uri)).toString()
   }
 
+  if (uri.startsWith('//')) {
+    // The URI looks like a network share. This is a complete can of worms, and
+    // the URL constructor will complain about this, so just shortcircuit here
+    // and let the recipient deal with it. NOTE that this will ensure that
+    // the URL will start with four slashes. This is important to give the main
+    // process a chance to detect that this is supposed to be a network share.
+    // For more context, please see issue #5495
+    return (new URL(`safe-file://${uri}`)).toString()
+  }
+
   // Set the isFile var to undefined
   let isFile
   let protocol = ''
