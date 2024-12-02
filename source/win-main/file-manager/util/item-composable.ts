@@ -17,14 +17,16 @@
 import { displayFileContext } from './file-item-context'
 import { displayDirContext } from './dir-item-context'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
-import type { MaybeRootDescriptor } from 'source/types/common/fsal'
+import type { AnyDescriptor } from 'source/types/common/fsal'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
+import { hasImageExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import makeValidUri from 'source/common/util/make-valid-uri'
 
 const ipcRenderer = window.ipc
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useItemComposable (
-  object: MaybeRootDescriptor,
+  object: AnyDescriptor,
   rootElement: Ref<HTMLElement|null>,
   windowId: string,
   nameEditingInput: Ref<HTMLInputElement|null>
@@ -99,6 +101,24 @@ export function useItemComposable (
         }
       })
         .catch(e => console.error(e))
+    } else if (type === 'other') {
+      const { files } = configStore.config
+      // Determine if we can open the file in Zettlr
+      if (
+        (hasImageExt(obj.value.path) && files.images.openWith === 'zettlr') ||
+        (hasPDFExt(obj.value.path) && files.pdf.openWith === 'zettlr')
+      ) {
+        ipcRenderer.invoke('documents-provider', {
+          command: 'open-file',
+          // We leave leafId undefined
+          payload: { path: obj.value.path, windowId }
+        })
+          .catch(e => console.error(e))
+      } else {
+        // Open the file externally (again, NOTE, this only works because main
+        // intercepts every navigation attempt).
+        window.location.href = makeValidUri(obj.value.path)
+      }
     } else if (alt) {
       // Select the parent directory
       configStore.setConfigValue('openDirectory', obj.value.dir)
@@ -248,7 +268,7 @@ export function useItemComposable (
       .finally(() => { nameEditing.value = false })
   }
 
-  function updateObject (newObject: MaybeRootDescriptor): void {
+  function updateObject (newObject: AnyDescriptor): void {
     obj.value = newObject
   }
 

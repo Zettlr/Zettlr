@@ -93,7 +93,7 @@ import FileList from './FileList.vue'
 import { trans } from '@common/i18n-renderer'
 import { nextTick, ref, computed, watch, onMounted } from 'vue'
 import { useConfigStore, useWorkspacesStore } from 'source/pinia'
-import type { AnyDescriptor, DirDescriptor } from 'source/types/common/fsal'
+import type { AnyDescriptor } from 'source/types/common/fsal'
 
 const ipcRenderer = window.ipc
 

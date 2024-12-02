@@ -20,11 +20,30 @@
       v-on:drop="handleDrop($event, 'editor')"
     >
       <template v-for="file in openFiles" v-bind:key="file.path">
+        <ImageViewer
+          v-if="hasImageExt(file.path)"
+          v-show="activeFile?.path === file.path"
+          v-bind:file="file"
+          v-bind:leaf-id="leafId"
+          v-bind:active-file="activeFile"
+          v-bind:window-id="windowId"
+          v-bind:editor-commands="editorCommands"
+        ></ImageViewer>
+        <PDFViewer
+          v-else-if="hasPDFExt(file.path)"
+          v-show="activeFile?.path === file.path"
+          v-bind:file="file"
+          v-bind:leaf-id="leafId"
+          v-bind:active-file="activeFile"
+          v-bind:window-id="windowId"
+          v-bind:editor-commands="editorCommands"
+        ></PDFViewer>
+
         <!--
           Teleport the correct editor that needs to be in distraction free
           outside the DOM structure to have it render on top of everything else.
         -->
-        <Teleport to="div#window-content" v-bind:disabled="!distractionFree || activeFile?.path !== file.path">
+        <Teleport v-else to="div#window-content" v-bind:disabled="!distractionFree || activeFile?.path !== file.path">
           <MainEditor
             v-show="activeFile?.path === file.path"
             v-bind:file="file"
@@ -105,6 +124,9 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'
 import { useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import ImageViewer from './file-viewers/ImageViewer.vue'
+import { hasImageExt, hasPDFExt } from '@common/util/file-extention-checks'
+import PDFViewer from './file-viewers/PDFViewer.vue'
 
 const ipcRenderer = window.ipc
 

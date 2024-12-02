@@ -174,12 +174,13 @@ const getFilteredTree = computed<AnyDescriptor[]>(() => {
   return filteredTree
 })
 
-const getFiles = computed<Array<MDFileDescriptor|CodeFileDescriptor>>(() => {
-  return getFilteredTree.value.filter(item => item.type !== 'directory') as Array<MDFileDescriptor|CodeFileDescriptor>
+const getFiles = computed(() => {
+  // NOTE: These are the root files. We'll only allow Markdown and code files here.
+  return getFilteredTree.value.filter(item => item.type === 'file' || item.type === 'code')
 })
 
-const getDirectories = computed<DirDescriptor[]>(() => {
-  return getFilteredTree.value.filter(item => item.type === 'directory') as DirDescriptor[]
+const getDirectories = computed(() => {
+  return getFilteredTree.value.filter(item => item.type === 'directory')
 })
 
 const uncollapsedDirectories = computed(() => {
