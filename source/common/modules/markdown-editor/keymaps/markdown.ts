@@ -21,6 +21,8 @@ import {
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
+import { moveNextCell, movePrevCell } from '../table-editor/commands/columns'
+import { moveNextRow, movePrevRow } from '../table-editor/commands/rows'
 
 // Includes:
 // * completionKeymap
@@ -51,12 +53,14 @@ export function markdownKeymap (): Extension {
     { key: 'Tab', run: acceptCompletion },
     { key: 'Tab', run: nextSnippet },
     { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
+    { key: 'Tab', run: moveNextCell, shift: movePrevCell },
 
     // Overload Enter
     { key: 'Enter', run: handleReplacement },
     // If no replacement can be handled, the default should be newlineAndIndent
     { key: 'Enter', run: insertNewlineContinueMarkup },
     { key: 'Enter', run: insertNewlineAndIndent },
+    { key: 'Enter', run: moveNextRow, shift: movePrevRow },
 
     // Overload Backspace
     { key: 'Backspace', run: deleteBracketPair },
