@@ -50,14 +50,13 @@ import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
 import ProviderContract from '@providers/provider-contract'
 import type LogProvider from '@providers/log'
-// import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import type DocumentManager from '@providers/documents'
 import { DP_EVENTS } from '@dts/common/documents'
 import { trans } from '@common/i18n-main'
 import type ConfigProvider from '@providers/config'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
-import { PasteModalResult } from '../commands/save-image-from-clipboard'
+import type { PasteModalResult } from '../commands/save-image-from-clipboard'
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: Record<string, BrowserWindow>
@@ -75,7 +74,7 @@ export default class WindowProvider extends ProviderContract {
   private _printWindowFile: string|undefined
   private _windowState: Map<string, WindowPosition>
   private readonly _configFile: string
-  private readonly _stateContainer: PersistentDataContainer
+  private readonly _stateContainer: PersistentDataContainer<Record<string, WindowPosition>>
   private readonly _hasRTLLocale: boolean
   private suppressWindowOpening: boolean
   private readonly _emitter: EventEmitter
@@ -195,7 +194,15 @@ export default class WindowProvider extends ProviderContract {
           } else if (itemPath.startsWith('file://')) {
             itemPath = itemPath.replace('file://', '')
           }
-          shell.showItemInFolder(itemPath)
+
+          // Due to the colons in the drive letters on Windows, the pathname will
+          // look like this: /C:/Users/Documents/test.jpg
+          // See: https://github.com/Zettlr/Zettlr/issues/5489
+          if (/^\/[A-Z]:/i.test(itemPath)) {
+            itemPath = itemPath.slice(1)
+          }
+
+          shell.showItemInFolder(decodeURIComponent(itemPath))
           break
       }
     })
@@ -263,7 +270,12 @@ export default class WindowProvider extends ProviderContract {
       await this._stateContainer.init(Object.fromEntries(this._windowState))
     }
     const tmpObject = await this._stateContainer.get()
-    this._windowState = new Map(Object.entries(tmpObject))
+    this._windowState = new Map()
+    for (const [ key, value ] of Object.entries(tmpObject)) {
+      if (value !== undefined) {
+        this._windowState.set(key, value)
+      }
+    }
     this._logger.info('[Window Manager] Window Manager started.')
   }
 

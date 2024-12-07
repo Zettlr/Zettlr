@@ -163,7 +163,6 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
     const propMatches = [...match[0].matchAll(/(name|content)=(?:"(.+?)"|([^\s>]+))/gi)]
     const name = propMatches.find(m => m[1] === 'name')
     const content = propMatches.find(m => m[1] === 'content')
-    console.log(match[0], name, content)
     if (name !== undefined && content !== undefined) {
       const key = name[2] ?? name[3]
       const value = content[2] ?? content[3]

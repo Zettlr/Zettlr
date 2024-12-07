@@ -16,6 +16,11 @@
 
 import type { OpenDocument } from '@dts/common/documents'
 
+export interface TabManagerJSON {
+  openFiles: OpenDocument[]
+  activeFile: OpenDocument|null
+}
+
 export class TabManager {
   private readonly _openFiles: OpenDocument[]
   private _activeFile: OpenDocument|null
@@ -212,14 +217,14 @@ export class TabManager {
     // active, or none, if there are no more open files active.
     if (!isActive) {
       return true
+    } else {
+      this.activeFile = null
     }
 
     if (this._openFiles.length > 0 && activeFileIdx > 0) {
       this.activeFile = this._openFiles[activeFileIdx - 1]
     } else if (this._openFiles.length > 0 && activeFileIdx === 0) {
       this.activeFile = this._openFiles[0]
-    } else {
-      this.activeFile = null
     }
 
     return true
@@ -308,9 +313,9 @@ export class TabManager {
   /**
    * Returns a JSON serializable representation of the tab manager instance
    *
-   * @return  {any}     The JSON data
+   * @return  {TabManagerJSON}     The JSON data
    */
-  public toJSON (): any {
+  public toJSON (): TabManagerJSON {
     return {
       openFiles: this._openFiles,
       activeFile: this._activeFile

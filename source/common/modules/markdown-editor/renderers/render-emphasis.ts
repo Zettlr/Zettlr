@@ -36,19 +36,22 @@ class BulletWidget extends WidgetType {
   }
 }
 
-class SpaceWidget extends WidgetType {
-  constructor (readonly node: SyntaxNode, readonly numChars: number) {
+export class SpaceWidget extends WidgetType {
+  constructor (readonly numChars: number, readonly node?: SyntaxNode) {
     super()
   }
 
   eq (other: BulletWidget): boolean {
+    if (this.node === undefined || other.node === undefined) {
+      return false
+    }
+
     return other.node.from === this.node.from && other.node.to === this.node.from
   }
 
   toDOM (view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.innerHTML = '&nbsp;'.repeat(this.numChars)
-    elem.style.fontFamily = 'monospace'
     return elem
   }
 }
@@ -124,7 +127,7 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
             }
 
             if (parent && !rangeInSelection(view.state, parent.from, parent.to)) {
-              ranges.push(Decoration.replace({ widget: new SpaceWidget(node.node, node.to - node.from) }).range(node.from, node.to))
+              ranges.push(Decoration.replace({ widget: new SpaceWidget(node.to - node.from, node.node) }).range(node.from, node.to))
             }
             break
           }

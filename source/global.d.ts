@@ -167,4 +167,14 @@ declare interface Window {
      */
     on: (channel: string, listener: (event: undefined, ...args: any) => void) => () => void
   }
+  /**
+   * Returns the absolute path to the file on disk which this File object is
+   * representing. Returns undefined if there was either an error or the File
+   * object does not represent a file on disk.
+   *
+   * @param   {File}              file  The web File object
+   *
+   * @return  {string|undefined}        The absolute path, or undefined.
+   */
+  getPathForFile: (file: File) => string|undefined
 }

@@ -171,23 +171,53 @@ export class DTLeaf {
    * @return  {Promise<DTLeaf>}                  Resolves with the new leaf
    */
   static fromJSON (parent: DocumentTree|DTBranch, nodeData: any): DTLeaf {
-    const leaf = new DTLeaf(parent, nodeData.id)
-    for (const file of nodeData.openFiles as OpenDocument[]) {
-      if (typeof file.path !== 'string' || !isFile(file.path)) {
-        continue
+    if (typeof nodeData !== 'object') {
+      throw new Error('Could not instantiate DTLeaf: Provided JSON was not an object.')
+    }
+
+    const { id, openFiles } = nodeData
+
+    if (typeof id !== 'string') {
+      throw new Error(`Could not instantiate DTLeaf: ID was invalid: ${String(id)}`)
+    }
+
+    if (!Array.isArray(openFiles)) {
+      throw new Error(`Could not instantiate DTLeaf: openFiles was not an array: ${typeof openFiles}`)
+    }
+
+    // NOTE: After this point, we don't throw any more errors, since the leaf
+    // can be successfully instantiated. The only thing that may miss are the
+    // open documents.
+    const leaf = new DTLeaf(parent, id)
+    for (const file of openFiles) {
+      if (typeof file !== 'object') {
+        continue // Invalid entry
       }
 
-      const success = leaf.tabMan.openFile(file.path, false)
+      const { path, pinned } = file
+
+      if (typeof path !== 'string' || typeof pinned !== 'boolean' || !isFile(path)) {
+        continue // Invalid entry
+      }
+
+      const success = leaf.tabMan.openFile(path, false)
       if (success) {
-        leaf.tabMan.setPinnedStatus(file.path, file.pinned)
+        leaf.tabMan.setPinnedStatus(path, pinned)
       } else {
-        // TODO: Log the error that the file couldn't be opened
+        // Invalid entry
       }
     }
 
     // Revitalize the active File pointer
-    const activeFile = leaf.tabMan.openFiles.find(e => e.path === nodeData.activeFile.path) ?? null
+    const activeFile = leaf.tabMan.openFiles.find(e => e.path === nodeData.activeFile?.path) ?? null
     leaf.tabMan.activeFile = activeFile
+
+    // If the last active file can't be restored, make the first one of this
+    // leaf active so that the editor shows something.
+    if (leaf.tabMan.activeFile === null && leaf.tabMan.openFiles.length > 0) {
+      leaf.tabMan.activeFile = leaf.tabMan.openFiles[0]
+    }
+
     return leaf
   }
 

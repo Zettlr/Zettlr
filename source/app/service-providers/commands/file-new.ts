@@ -17,8 +17,8 @@ import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
 import generateFilename from '@common/util/generate-filename'
-import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
 import { app } from 'electron'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {

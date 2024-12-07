@@ -64,7 +64,14 @@ export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Toolti
     above: true,
     create (_view) {
       const dom = document.createElement('div')
-      const shortUrl = shortenUrlVisually(validURI.replace(/^safe-file:\/\//, ''))
+      let shortUrl = shortenUrlVisually(validURI.replace('safe-file://', ''))
+      // Due to the colons in the drive letters on Windows, the pathname will
+      // look like this: /C:/Users/Documents/test.jpg
+      // See: https://github.com/Zettlr/Zettlr/issues/5489
+      if (/^\/[A-Z]:/i.test(shortUrl)) {
+        shortUrl = shortUrl.slice(1)
+      }
+
       dom.textContent = trans('Fetching link preview…')
       ipcRenderer.invoke('application', { command: 'fetch-link-preview', payload: validURI })
         .then(res => {

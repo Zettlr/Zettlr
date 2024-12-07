@@ -37,8 +37,8 @@ import {
 import { syntaxTree } from '@codemirror/language'
 
 // Keymaps/Input modes
-import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
+import { vimPlugin } from './plugins/vim-mode'
 
 import { type ToCEntry, tocField } from './plugins/toc-field'
 import {
@@ -94,11 +94,7 @@ import { markdownToAST } from '../markdown-utils'
 import { countField } from './plugins/statistics-fields'
 import type { SyntaxNode } from '@lezer/common'
 import { darkModeEffect } from './theme/dark-mode'
-import { themeBerlinDark, themeBerlinLight } from './theme/berlin'
-import { themeBielefeldDark, themeBielefeldLight } from './theme/bielefeld'
-import { themeBordeauxDark, themeBordeauxLight } from './theme/bordeaux'
-import { themeFrankfurtDark, themeFrankfurtLight } from './theme/frankfurt'
-import { themeKarlMarxStadtDark, themeKarlMarxStadtLight } from './theme/karl-marx-stadt'
+import { editorMetadataFacet } from './plugins/editor-metadata'
 
 export interface DocumentWrapper {
   path: string
@@ -205,6 +201,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param  {string}                leafId               The ID of the leaf
    *                                                      this editor is part of
+   * @param  {string}                windowId             The window's ID
    * @param  {string}                representedDocument  The absolute path to
    *                                                      the file that will be
    *                                                      loaded in this editor
@@ -214,7 +211,8 @@ export default class MarkdownEditor extends EventEmitter {
    *                                                      IPC authority.
    */
   constructor (
-    leafId: string,
+    readonly leafId: string,
+    readonly windowId: string,
     representedDocument: string,
     authorityAPI: DocumentAuthorityAPI,
     configOverride?: Partial<EditorConfiguration>
@@ -388,9 +386,13 @@ export default class MarkdownEditor extends EventEmitter {
     const { content, type, startVersion } = await this.authority.fetchDoc(this.representedDocument)
 
     // The documents contents have changed, so we must recreate the state
+    const extensions = this._getExtensions(this.representedDocument, type, startVersion)
+    // This particular editor type needs access to the window and leaf IDs
+    extensions.push(editorMetadataFacet.of({ windowId: this.windowId, leafId: this.leafId }))
+
     const state = EditorState.create({
       doc: Text.of(content.split('\n')),
-      extensions: this._getExtensions(this.representedDocument, type, startVersion)
+      extensions
     })
 
     this._instance.setState(state)
@@ -549,7 +551,7 @@ export default class MarkdownEditor extends EventEmitter {
       if (newOptions.inputMode === 'emacs') {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure(emacs()) })
       } else if (newOptions.inputMode === 'vim') {
-        this._instance.dispatch({ effects: inputModeCompartment.reconfigure(vim()) })
+        this._instance.dispatch({ effects: inputModeCompartment.reconfigure(vimPlugin()) })
       } else {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure([]) })
       }

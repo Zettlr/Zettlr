@@ -37,7 +37,7 @@ export default class TutorialOpen extends ZettlrCommand {
       .map(e => { return { tag: e, path: path.join(tutorialPath, e) } })
       .filter(e => isDir(e.path))
 
-    const { exact, close } = findLangCandidates(this._app.config.get('appLang'), candidates)
+    const { exact, close } = findLangCandidates(this._app.config.get().appLang, candidates)
 
     let tutorial = path.join(tutorialPath, 'en')
     if (exact !== undefined) {

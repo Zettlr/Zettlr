@@ -12,9 +12,9 @@ body:
     attributes:
       label: Description
       description: |
-        Please be holistic in your description: Even seemingly trivial stuff
-        might contain the important clue to fix the bug! If applicable, also
-        make tell us what you expect to happen instead.
+        Please be holistic in your description: Even seemingly trivial things
+        may contain the important clue to fix the bug. If applicable, also tell
+        us what you expect to happen instead.
       placeholder: Describe your bug and the expected behaviour here.
     validations:
       required: true
@@ -24,9 +24,10 @@ body:
     attributes:
       label: Reproducing
       description: |
-        Please tell us an easy way how we can reproduce the bug so we know where
-        to look. The more contextual information you include, the better!
-      placeholder: Describe the steps necessary to reproduce this bug.
+        What steps do you need to take in order to make the bug happen? We need
+        this information to be able to find the bug. We can only fix what we can
+        see on our side. The more contextual information you include the better.
+      placeholder: How can we make this issue occur?
     validations:
       required: true
   # Now the version
@@ -83,8 +84,6 @@ body:
         - label: Windows
         - label: macOS
         - label: Linux
-    validations:
-      required: true
   # The architecture might come in handy
   - type: checkboxes
     id: arch
@@ -94,8 +93,6 @@ body:
       options:
         - label: Intel 64bit
         - label: ARM 64bit (includes Apple Silicon)
-    validations:
-      required: true
   - type: input
     id: os-version
     attributes:
@@ -114,10 +111,9 @@ body:
         If applicable, feel free to include more info, such as log outputs or
         error messages you are seeing.
   - type: markdown
-    id: outro
     attributes:
       value: |
         Thank you for taking the time to fill out this bug report. We'll get
-        back to you as soon as possible. Note that we might have additional
-        questions so please make sure to check your notifications in case need
-        some more info!
+        back to you as soon as possible. Please check your notifications
+        regularly and respond quickly to any additional questions we have. This
+        ensures that we can timely address the issue.

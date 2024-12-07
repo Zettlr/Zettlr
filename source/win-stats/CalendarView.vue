@@ -130,16 +130,14 @@ const year = computed<number>(() => now.value.year)
 const isCurrentYear = computed<boolean>(() => DateTime.local().year === now.value.year)
 const isMinimumYear = computed<boolean>(() => {
   // Returns true if `now` holds the minimum year for which there is data
-  const years = Object.keys(statisticsStore.stats.wordCount).map(k => parseInt(k.substring(0, 4), 10))
-  let min = +Infinity
-  for (const year of years) {
-    if (min > year) {
-      min = year
-    }
-  }
-
-  return now.value.year === min
+  const minYear = Math.min(
+    ...Object
+      .keys(statisticsStore.stats.wordCount)
+      .map(k => parseInt(k.substring(0, 4), 10))
+  )
+  return now.value.year === minYear
 })
+
 const months = computed<Array<{ name: string, padding: number, daysInMonth: number }>>(() => {
   const ret: Array<{ name: string, padding: number, daysInMonth: number }> = []
 
@@ -166,26 +164,17 @@ const months = computed<Array<{ name: string, padding: number, daysInMonth: numb
  * @return  {number}         The percentage from 0 to 1
  */
 function getActivityScore (year: number, month: number, date: number): number {
-  let parsedMonth = String(month)
-  let parsedDate = String(date)
-
-  if (parsedMonth.length < 2) {
-    parsedMonth = `0${month}`
-  }
-
-  if (parsedDate.length < 2) {
-    parsedDate = `0${date}`
-  }
-
+  const parsedMonth = String(month).padStart(2, '0')
+  const parsedDate = String(date).padStart(2, '0')
   const wordCount = statisticsStore.stats.wordCount[`${year}-${parsedMonth}-${parsedDate}`]
 
   if (wordCount === undefined || wordCount === 0) {
     return -1
-  } else if (wordCount < statisticsStore.stats.avgMonth / 2) {
+  } else if (wordCount < statisticsStore.avg30DaysWords / 2) {
     return 0
-  } else if (wordCount < statisticsStore.stats.avgMonth) {
+  } else if (wordCount < statisticsStore.avg30DaysWords) {
     return 1
-  } else if (wordCount < statisticsStore.stats.avgMonth * 2) {
+  } else if (wordCount < statisticsStore.avg30DaysWords * 2) {
     return 2 // Less than twice the monthly average
   } else {
     return 3 // More than twice the monthly average
@@ -193,18 +182,10 @@ function getActivityScore (year: number, month: number, date: number): number {
 }
 
 function getLocalizedWordCount (year: number, month: number, date: number): string {
-  let parsedMonth = String(month)
-  let parsedDate = String(date)
-
-  if (parsedMonth.length < 2) {
-    parsedMonth = `0${month}`
-  }
-
-  if (parsedDate.length < 2) {
-    parsedDate = `0${date}`
-  }
-
+  const parsedMonth = String(month).padStart(2, '0')
+  const parsedDate = String(date).padStart(2, '0')
   const wordCount = statisticsStore.stats.wordCount[`${year}-${parsedMonth}-${parsedDate}`]
+
   return wordCount !== undefined ? localiseNumber(wordCount) : ''
 }
 
@@ -214,7 +195,7 @@ function yearMinus (): void {
 
 function yearPlus (): void {
   // Prevent going into the future
-  if (now.value.year === DateTime.local().year) {
+  if (isCurrentYear.value) {
     return
   }
 

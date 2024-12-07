@@ -18,7 +18,7 @@ import sanitize from 'sanitize-filename'
 import { dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import replaceLinks from '@common/util/replace-links'
-import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 
 export default class FileRename extends ZettlrCommand {
   constructor (app: any) {
@@ -66,9 +66,18 @@ export default class FileRename extends ZettlrCommand {
     }
 
     const newPath = path.join(file.dir, newName)
+    const pathsEqualCaseInsensitive = file.path.toLowerCase() === newPath.toLowerCase()
 
-    // Test if we are about to override a file
-    if (await this._app.fsal.pathExists(newPath)) {
+    // Test if we are about to override a file. In the case that the user only
+    // wants to change the capitalization of a file (e.g., testfile -> Testfile)
+    // then case-insensitive file systems (including Windows & macOS) will
+    // report that testfile === Testfile, which means that `pathExists` will
+    // return true. That's where the second check comes in: If the OS reports
+    // that the new path already exists, BUT if we compare it case-insensitive
+    // it's the same, then we know that newPath is essentially oldPath, and we
+    // should not ask the user for overwriting, as this is literally the file
+    // we want to rename. See #5460
+    if (await this._app.fsal.pathExists(newPath) && !pathsEqualCaseInsensitive) {
       // Ask for override
       if (!await this._app.windows.shouldOverwriteFile(newName)) {
         return // No override wanted

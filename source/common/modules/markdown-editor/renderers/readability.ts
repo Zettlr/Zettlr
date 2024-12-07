@@ -15,7 +15,7 @@
 import { type EditorState } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { type StatusbarItem } from '../statusbar'
 import { configField, configUpdateEffect } from '../util/configuration'
 
