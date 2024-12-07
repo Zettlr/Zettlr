@@ -16,11 +16,11 @@
  * END HEADER
  */
 
-import { defaultKeymap, redo, undo } from "@codemirror/commands"
-import { syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
-import { EditorState, Prec, StateField, Annotation, Transaction, ChangeSpec, Range, RangeSet } from "@codemirror/state"
-import { EditorView, keymap, drawSelection, DecorationSet, Decoration, ViewPlugin, ViewUpdate } from "@codemirror/view"
-import markdownParser from "../parser/markdown-parser"
+import { defaultKeymap, redo, undo } from '@codemirror/commands'
+import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language'
+import { EditorState, Prec, StateField, Annotation, Transaction, type ChangeSpec, type Range } from '@codemirror/state'
+import { EditorView, keymap, drawSelection, type DecorationSet, Decoration, ViewPlugin, type ViewUpdate } from '@codemirror/view'
+import markdownParser from '../parser/markdown-parser'
 
 // DEBUG // TODOs
 // DEBUG // * See if I have to implement a tabbing method here to properly move
@@ -314,7 +314,7 @@ function maybeUpdateSubview (subview: EditorView, tr: Transaction): void {
     if (userEvent !== undefined) {
       annotations.push(Transaction.userEvent.of(userEvent))
     }
-    subview.dispatch({changes: tr.changes, annotations})
+    subview.dispatch({ changes: tr.changes, annotations })
   }
 }
 

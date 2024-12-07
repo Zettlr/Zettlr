@@ -26,8 +26,8 @@
 //    the AST, I guess it should not be too bad, but I'll have to run a
 //    performance test.
 
-import { DecorationSet, EditorView } from '@codemirror/view'
-import { EditorState, StateField } from '@codemirror/state'
+import { type DecorationSet, EditorView } from '@codemirror/view'
+import { type EditorState, StateField } from '@codemirror/state'
 import { subviewUpdatePlugin } from './subview'
 import { TableWidget } from './widget'
 

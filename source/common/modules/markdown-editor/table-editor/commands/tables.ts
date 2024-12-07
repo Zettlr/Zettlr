@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { EditorView } from "@codemirror/view"
+import type { EditorView } from '@codemirror/view'
 
 export function setAlignmentLeft (target: EditorView): boolean {
   return false

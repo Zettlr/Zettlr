@@ -14,10 +14,10 @@
  * END HEADER
  */
 
-import { SelectionRange, EditorSelection, ChangeSpec } from "@codemirror/state"
-import { EditorView } from "@codemirror/view"
-import { mapSelectionsWithTables } from "./util"
-import { parseTableNode } from "@common/modules/markdown-utils/markdown-ast/parse-table-node"
+import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
+import type { EditorView } from '@codemirror/view'
+import { mapSelectionsWithTables } from './util'
+import { parseTableNode } from '@common/modules/markdown-utils/markdown-ast/parse-table-node'
 
 /**
  * This command takes all editor selections and moves those within tables to the

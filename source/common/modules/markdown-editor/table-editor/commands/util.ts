@@ -14,11 +14,11 @@
  * END HEADER
  */
 
-import { syntaxTree } from "@codemirror/language"
-import { SelectionRange } from "@codemirror/state"
-import { EditorView } from "@codemirror/view"
-import { SyntaxNode } from "@lezer/common"
-import { parseTableNode } from "@common/modules/markdown-utils/markdown-ast/parse-table-node"
+import { syntaxTree } from '@codemirror/language'
+import type { SelectionRange } from '@codemirror/state'
+import type { EditorView } from '@codemirror/view'
+import type { SyntaxNode } from '@lezer/common'
+import { parseTableNode } from '@common/modules/markdown-utils/markdown-ast/parse-table-node'
 
 /**
  * Takes a table node and the corresponding Markdown source and returns a list

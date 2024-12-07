@@ -14,9 +14,9 @@
  * END HEADER
  */
 
-import { SelectionRange, EditorSelection, ChangeSpec } from "@codemirror/state"
-import { EditorView } from "@codemirror/view"
-import { mapSelectionsWithTables } from "./util"
+import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
+import type { EditorView } from '@codemirror/view'
+import { mapSelectionsWithTables } from './util'
 
 /**
  * Attempts to move all cursors/selections to the next cell. NOTE: This command
