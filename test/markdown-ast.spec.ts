@@ -15,6 +15,7 @@
 import { deepStrictEqual } from "assert"
 import { markdownToAST } from "source/common/modules/markdown-utils"
 import { ASTNode } from "source/common/modules/markdown-utils/markdown-ast"
+import util from 'util'
 
 const TESTERS: Array<{ input: string, output: ASTNode }> = [
   {
@@ -63,7 +64,11 @@ const TESTERS: Array<{ input: string, output: ASTNode }> = [
 
 describe('MarkdownAST#markdownToAST()', function () {
   for (const test of TESTERS) {
-    console.log(markdownToAST(test.input))
+    // console.log(markdownToAST(test.input))
+    // TODO: This test currently fails. This is not yet a problem, but we have
+    // to decide what to do. Specifically, currently the AST parser spits out
+    // TableDelimiters as their own nodes. Do we want that or not?
+    console.log(util.inspect(markdownToAST(test.input), { colors: true, depth: null }))
     it('should parse the Markdown properly', () => {
       deepStrictEqual(test.output, markdownToAST(test.input))
     })
