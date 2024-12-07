@@ -37,8 +37,7 @@ export class TableWidget extends WidgetType {
 
   toDOM (view: EditorView): HTMLElement {
     try {
-      const table = document.createElement('table')
-      table.classList.add('cm-table-editor-widget')
+      const table = generateEmptyTableWidgetElement()
       updateTable(this, table, view)
       return table
     } catch (err: any) {
@@ -101,6 +100,18 @@ export class TableWidget extends WidgetType {
       })
     return Decoration.set(newDecos)
   }
+}
+
+/**
+ * Generates an empty table widget element that represents a Markdown table. To
+ * fill this element with content, use the updateTable function below.
+ *
+ * @return  {HTMLTableElement}  The empty table
+ */
+function generateEmptyTableWidgetElement (): HTMLTableElement {
+  const table = document.createElement('table')
+  table.classList.add('cm-table-editor-widget')
+  return table
 }
 
 /**
