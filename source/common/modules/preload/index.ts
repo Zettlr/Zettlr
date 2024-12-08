@@ -26,8 +26,16 @@ ipcRenderer.setMaxListeners(100)
 
 // We need a few ipc methods
 contextBridge.exposeInMainWorld('ipc', {
+  // TODO: Instead of simply exposing the required IPC functions to the main
+  // context, we may want to create a dedicated (possibly much more type-safe)
+  // API object that JS in the renderer can call. This would get rid of the
+  // no-unsafe-argument problems we have here.
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   send: (channel: string, ...args: any[]) => ipcRenderer.send(channel, ...args),
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   sendSync: (event: string, ...args: any[]) => ipcRenderer.sendSync(event, ...args),
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   invoke: async (channel: string, ...args: any[]) => await ipcRenderer.invoke(channel, ...args),
   on: (channel: string, listener: (...args: any[]) => void) => {
     // NOTE: We're returning a stopListening() callback here since the function
@@ -35,6 +43,7 @@ contextBridge.exposeInMainWorld('ipc', {
     // it cannot be removed otherwise.
     const callback = (event: any, ...args: any[]): void => {
       // Omit the event when calling the listener
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       listener(undefined, ...args)
     }
     ipcRenderer.on(channel, callback)
