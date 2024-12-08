@@ -18,6 +18,7 @@
   Markdown and code files; now also images, PDFs, MS and Open Office files as
   well as data files)
 - Select controls can be disabled now
+- Bump CodeMirror dependencies
 
 # 3.3.1
 
