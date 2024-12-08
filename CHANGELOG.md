@@ -21,6 +21,8 @@
 - The statusbar's character/word counters now respect the character count
   setting, meaning only the word or character count is shown, not both
 - Fixed a bug that would prevent text nodes from tables to be extracted
+- Fixed an issue where valid citations from within, e.g., comments, or other
+  non-valid places would end up in the list of references
 
 ## Under the Hood
 

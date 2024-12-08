@@ -25,6 +25,7 @@ import { type DocumentsUpdateContext } from 'source/app/service-providers/docume
 import { useDocumentTreeStore } from 'source/pinia'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import localiseNumber from 'source/common/util/localise-number'
+import { extractASTNodes, markdownToAST } from 'source/common/modules/markdown-utils'
 
 const ipcRenderer = window.ipc
 const documentTreeStore = useDocumentTreeStore()
@@ -124,12 +125,15 @@ async function updateBibliography (): Promise<void> {
     payload: activeFile.value.path
   })
 
-  const library = getBibliographyForDescriptor(descriptor)
-  const citations = extractCitations(fileContents)
-  const keys = []
-  for (const citation of citations) {
-    keys.push(...citation.citations.map(elem => elem.id))
-  }
+  // To retrieve the citations as efficiently as possible while remaining
+  // precise, we have some compact code here. It parses the file contents and
+  // only extracts what the (more accurate) Markdown parser sees as a citation,
+  // use extractCitations to parse those nodes, and only retain all the IDs/
+  // citekeys that we find in there. Also, we make sure to always flatten the
+  // resulting 2d-arrays.
+  const keys = extractASTNodes(markdownToAST(fileContents), 'Citation')
+    .flatMap(n => extractCitations(fileContents.slice(n.from, n.to)))
+    .flatMap(c => c.citations.map(cit => cit.id))
 
   // Now also include potential nocite citations (see https://pandoc.org/MANUAL.html#including-uncited-items-in-the-bibliography)
   if (descriptor.frontmatter != null && 'nocite' in descriptor.frontmatter) {
@@ -149,7 +153,7 @@ async function updateBibliography (): Promise<void> {
   bibliography.value = await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-bibliography',
     payload: {
-      database: library,
+      database: getBibliographyForDescriptor(descriptor),
       citations: [...new Set(keys)]
     }
   } as CiteprocProviderIPCAPI)
