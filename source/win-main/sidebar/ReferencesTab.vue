@@ -1,7 +1,12 @@
 <template>
   <div role="tabpanel">
     <!-- References -->
-    <h1>{{ referencesLabel }}</h1>
+    <h1>
+      {{ referencesLabel }}
+      <small v-if="bibliography !== undefined && bibliography[1].length > 0" class="word-count">
+        {{ wordCountLabel }}
+      </small>
+    </h1>
     <!-- Will contain the actual HTML -->
     <div v-html="referenceHTML"></div>
   </div>
@@ -19,6 +24,7 @@ import { onMounted, ref, computed, watch } from 'vue'
 import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import { useDocumentTreeStore } from 'source/pinia'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
+import localiseNumber from 'source/common/util/localise-number'
 
 const ipcRenderer = window.ipc
 const documentTreeStore = useDocumentTreeStore()
@@ -53,8 +59,6 @@ const referenceHTML = computed(() => {
   }
 
   return [
-    // NOTE: Somehow a scoped CSS doesn't catch this HTML element
-    `<p style="font-size: 80%; font-style: italic;">${wordCountLabel.value}</p>`,
     bibliography.value[0].bibstart,
     ...bibliography.value[1],
     bibliography.value[0].bibend
@@ -72,7 +76,7 @@ const approximateWordCount = computed(() => {
   return bibliography.value[1].map(x => x.split(/\s+/g).length).reduce((p, c) => p + c, 0)
 })
 
-const wordCountLabel = computed(() => trans('circa %s words', approximateWordCount.value))
+const wordCountLabel = computed(() => trans('circa %s words', localiseNumber(approximateWordCount.value)))
 
 watch(activeFile, () => {
   updateBibliography().catch(e => console.error('Could not update bibliography', e))
@@ -151,3 +155,11 @@ async function updateBibliography (): Promise<void> {
   } as CiteprocProviderIPCAPI)
 }
 </script>
+
+<style lang="css" scoped>
+small.word-count {
+  font-size: 70%;
+  font-style: italic;
+  float: right;
+}
+</style>
