@@ -90,6 +90,8 @@ export default [
 
       // We do use explicit anys at certain points
       '@typescript-eslint/no-explicit-any': 'off',
+      // Avoid the use of `delete`
+      '@typescript-eslint/no-dynamic-delete': 'error',
       'no-unused-vars': 'off', // We need to turn off the vanilla option ...
       // ... and turn on the TypeScript one. HOWEVER, we also need to use the
       // appropriate option that allows us to declare variables as unused by
