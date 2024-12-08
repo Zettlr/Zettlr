@@ -79,7 +79,7 @@ export function extractASTNodes (ast: ASTNode, nodeType: ASTNodeType, filter?: (
     let returnNodes: ASTNode[] = []
     for (const row of ast.rows) {
       for (const cell of row.cells) {
-        returnNodes = returnNodes.concat(extractASTNodes(cell, nodeType, filter))
+        returnNodes = returnNodes.concat(cell.children.flatMap(c => extractASTNodes(c, nodeType, filter)))
       }
     }
     return returnNodes
@@ -129,7 +129,8 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
   } else if (ast.type === 'Table') {
     for (const row of ast.rows) {
       for (const cell of row.cells) {
-        textNodes = textNodes.concat(extractTextnodes(cell, filter))
+        const nodes = cell.children.flatMap(c => extractTextnodes(c, filter))
+        textNodes = textNodes.concat(nodes)
       }
     }
   }

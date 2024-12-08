@@ -20,6 +20,7 @@
   closed appropriately
 - The statusbar's character/word counters now respect the character count
   setting, meaning only the word or character count is shown, not both
+- Fixed a bug that would prevent text nodes from tables to be extracted
 
 ## Under the Hood
 
