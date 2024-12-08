@@ -37,6 +37,8 @@
   - DocumentManager
   - WindowProvider
   - CiteprocProvider
+- Configuration updates in the renderer are now throttled to at most once every
+  second, preventing some fast updates from inducing lag
 
 # 3.3.1
 
