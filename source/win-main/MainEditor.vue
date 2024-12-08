@@ -46,7 +46,7 @@ import { EditorSelection } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 import { useConfigStore, useDocumentTreeStore, useTagsStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
-import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
+import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -108,7 +108,7 @@ ipcRenderer.on('shortcut', (event, command) => {
     ipcRenderer.invoke('documents-provider', {
       command: 'save-file',
       payload: { path: props.file.path }
-    })
+    } as DocumentManagerIPCAPI)
       .then(result => {
         if (result !== true) {
           console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
@@ -405,7 +405,7 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
         leafId: props.leafId,
         windowId: props.windowId
       }
-    }).catch(err => console.error(err))
+    } as DocumentManagerIPCAPI).catch(err => console.error(err))
 
     // NOTE: The lastLeafId will be changed in the documentTreeStore in response
     // to an event from main (DP_EVENTS.ACTIVE_FILE) which will be emitted as a

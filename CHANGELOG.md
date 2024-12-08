@@ -24,6 +24,7 @@
 - Fully type IPC APIs:
   - AssetsProvider
   - DocumentAuthority
+  - DocumentManager
 
 # 3.3.1
 

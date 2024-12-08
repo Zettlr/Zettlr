@@ -19,6 +19,7 @@ import { displayDirContext } from './dir-item-context'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import type { MaybeRootDescriptor } from 'source/types/common/fsal'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -97,7 +98,7 @@ export function useItemComposable (
           leafId: documentTreeStore.lastLeafId,
           newTab: middleClick || (alt && type === 'file') // Force a new tab in this case.
         }
-      })
+      } as DocumentManagerIPCAPI)
         .catch(e => console.error(e))
     } else if (alt) {
       // Select the parent directory
@@ -162,7 +163,7 @@ export function useItemComposable (
               windowId,
               newTab: true
             }
-          })
+          } as DocumentManagerIPCAPI)
             .catch(e => console.error(e))
         } else if (clickedID === 'menu.rename_file') {
           nameEditing.value = true

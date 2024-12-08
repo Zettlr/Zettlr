@@ -105,6 +105,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'
 import { useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -181,7 +182,7 @@ function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bot
           targetLeaf: props.leafId,
           path: filePath.join(DELIM)
         }
-      })
+      } as DocumentManagerIPCAPI)
         .catch(err => console.error(err))
     } else {
       const dir = ([ 'left', 'right' ].includes(where)) ? 'horizontal' : 'vertical'
@@ -197,7 +198,7 @@ function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bot
           fromWindow: originWindow,
           fromLeaf: originLeaf
         }
-      })
+      } as DocumentManagerIPCAPI)
         .catch(err => console.error(err))
     }
   }

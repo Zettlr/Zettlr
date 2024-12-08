@@ -130,6 +130,40 @@ export type DocumentAuthorityIPCAPI = IPCAPI<{
   'push-updates': { filePath: string, version: number, updates: Update[] }
 }>
 
+// Most document manager commands require a leaf location, described by the
+// window and leaf IDs.
+type LeafLoc = { windowId: string, leafId: string }
+export type DocumentManagerIPCAPI = IPCAPI<{
+  'set-pinned': LeafLoc & { path: string, pinned: boolean }
+  'retrieve-tab-config': { windowId: string }
+  'save-file': { path: string }
+  'open-file': LeafLoc & { path: string, newTab: boolean }
+  'close-file': LeafLoc & { path: string }
+  'sort-open-files': LeafLoc & { newOrder: string[] }
+  'get-file-modification-status': unknown
+  'move-file': {
+    originWindow: string,
+    targetWindow: string,
+    originLeaf: string,
+    targetLeaf: string,
+    path: string
+  }
+  'split-leaf': {
+    originWindow: string,
+    originLeaf: string,
+    direction: 'horizontal'|'vertical',
+    insertion: 'before'|'after',
+    path?: string,
+    fromWindow?: string,
+    fromLeaf?: string
+  }
+  'close-leaf': LeafLoc
+  'focus-leaf': LeafLoc
+  'set-branch-sizes': { windowId: string, branchId: string, sizes: number[] },
+  'navigate-forward': LeafLoc
+  'navigate-back': LeafLoc
+}>
+
 export default class DocumentManager extends ProviderContract {
   /**
    * This array holds all open windows, here represented as document trees
@@ -243,15 +277,13 @@ export default class DocumentManager extends ProviderContract {
     })
 
     // Finally, listen to events from the renderer
-    ipcMain.handle('documents-provider', async (event, { command, payload }) => {
+    ipcMain.handle('documents-provider', async (event, message: DocumentManagerIPCAPI) => {
+      const { command, payload } = message
       switch (command) {
         // A given tab should be set as pinned
         case 'set-pinned': {
-          const windowId = payload.windowId as string
-          const leafID = payload.leafId as string
-          const filePath = payload.path as string
-          const shouldBePinned = payload.pinned as boolean
-          this.setPinnedStatus(windowId, leafID, filePath, shouldBePinned)
+          const { windowId, leafId, path, pinned } = payload
+          this.setPinnedStatus(windowId, leafId, path, pinned)
           return
         }
         // Some main window has requested its tab/split view state
@@ -259,22 +291,18 @@ export default class DocumentManager extends ProviderContract {
           return this._windows[payload.windowId].toJSON()
         }
         case 'save-file': {
-          const filePath = payload.path as string
-          return await this.saveFile(filePath)
+          return await this.saveFile(payload.path)
         }
         case 'open-file': {
-          return await this.openFile(payload.windowId, payload.leafId, payload.path, payload.newTab)
+          const { windowId, leafId, path, newTab } = payload
+          return await this.openFile(windowId, leafId, path, newTab)
         }
         case 'close-file': {
-          const leafId = payload.leafId as string
-          const windowId = payload.windowId as string
-          const filePath = payload.path as string
-          return await this.closeFile(windowId, leafId, filePath)
+          const { windowId, leafId, path } = payload
+          return await this.closeFile(windowId, leafId, path)
         }
         case 'sort-open-files': {
-          const leafId = payload.leafId as string
-          const windowId = payload.windowId as string
-          const newOrder = payload.newOrder as string[]
+          const { windowId, leafId, newOrder } = payload
           this.sortOpenFiles(windowId, leafId, newOrder)
           return
         }
@@ -282,22 +310,27 @@ export default class DocumentManager extends ProviderContract {
           return this.documents.filter(x => this.isModified(x.filePath)).map(x => x.filePath)
         }
         case 'move-file': {
-          const oWin = payload.originWindow
-          const tWin = payload.targetWindow
-          const oLeaf = payload.originLeaf
-          const tLeaf = payload.targetLeaf
-          const filePath = payload.path
-          return await this.moveFile(oWin, tWin, oLeaf, tLeaf, filePath)
+          const {
+            originWindow, originLeaf, targetWindow, targetLeaf, path
+          } = payload
+          return await this.moveFile(
+            originWindow, targetWindow, originLeaf, targetLeaf, path
+          )
         }
         case 'split-leaf': {
-          const oWin = payload.originWindow
-          const oLeaf = payload.originLeaf
-          const direction = payload.direction
-          const insertion = payload.insertion
-          const filePath = payload.path // Optional, may be undefined
-          const fromWindow = payload.fromWindow // Optional, may be undefined
-          const fromLeaf = payload.fromLeaf // Optional, may be undefined
-          return await this.splitLeaf(oWin, oLeaf, direction, insertion, filePath, fromWindow, fromLeaf)
+          const {
+            originWindow, originLeaf,
+            direction, insertion,
+            path,
+            fromWindow, fromLeaf
+          } = payload
+
+          return await this.splitLeaf(
+            originWindow, originLeaf,
+            direction, insertion,
+            path,
+            fromWindow, fromLeaf
+          )
         }
         case 'close-leaf': {
           return this.closeLeaf(payload.windowId, payload.leafId)

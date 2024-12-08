@@ -58,6 +58,7 @@ import tippy from 'tippy.js'
 import { type SimulationNodeDatum } from 'd3'
 import DirectedGraph from '@providers/links/directed-graph'
 import { type MDFileDescriptor } from '@dts/common/fsal'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -419,7 +420,7 @@ function startSimulation (): void {
                 path: vertex.id,
                 newTab: (event.altKey === true) ? true : undefined
               }
-            }).catch(err => console.error(err))
+            } as DocumentManagerIPCAPI).catch(err => console.error(err))
           })
           .attr('data-tippy-content', (vertex) => {
             let cnt = ''

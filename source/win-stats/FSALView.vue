@@ -187,6 +187,7 @@
 import localiseNumber from '@common/util/localise-number'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import type { WorkspacesStatistics } from '@providers/workspaces/generate-stats'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
@@ -308,7 +309,7 @@ export default defineComponent({
       ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
         payload: { path: absPath, newTab: true }
-      }).catch(err => console.error(err))
+      } as DocumentManagerIPCAPI).catch(err => console.error(err))
     }
   }
 })

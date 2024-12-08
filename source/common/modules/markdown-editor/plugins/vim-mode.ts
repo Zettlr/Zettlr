@@ -20,6 +20,7 @@ import type { Extension } from '@codemirror/state'
 import { vim, Vim, type CodeMirror } from '@replit/codemirror-vim'
 import { configField } from '../util/configuration'
 import { editorMetadataFacet } from './editor-metadata'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -58,7 +59,7 @@ function write (cm: CodeMirror, params: VimParams): Promise<void> {
   return ipcRenderer.invoke('documents-provider', {
     command: 'save-file',
     payload: { path: filePath }
-  })
+  } as DocumentManagerIPCAPI)
     .then(result => {
       if (result !== true) {
         console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
@@ -92,7 +93,7 @@ function quit (cm: CodeMirror, params: VimParams): Promise<void> {
       windowId: windowId,
       leafId: leafId
     }
-  })
+  } as DocumentManagerIPCAPI)
     .catch(e => console.error(e))
 }
 
