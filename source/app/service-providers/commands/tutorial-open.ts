@@ -28,7 +28,7 @@ export default class TutorialOpen extends ZettlrCommand {
    * @param {String} evt The event name
    * @param  {Object} arg An object containing both a hash and a sorting type
    */
-  async run (evt: string, arg: any): Promise<any> {
+  async run (event: string, _arg: any): Promise<any> {
     const tutorialPath = path.join(__dirname, 'tutorial')
     const targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
     const availableLanguages = await this._app.fsal.readdir(tutorialPath)

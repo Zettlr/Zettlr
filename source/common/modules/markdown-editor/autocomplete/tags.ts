@@ -23,7 +23,7 @@ import { type AutocompletePlugin } from '.'
  */
 export const tagsUpdate = StateEffect.define<TagRecord[]>()
 export const tagsUpdateField = StateField.define<Completion[]>({
-  create (state) {
+  create (_state) {
     return []
   },
   update (val, transaction) {

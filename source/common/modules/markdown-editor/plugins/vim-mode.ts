@@ -76,7 +76,7 @@ function write (cm: CodeMirror, params: VimParams): Promise<void> {
  *
  * @return  {Promise<void>}            Returns the IPC promise
  */
-function quit (cm: CodeMirror, params: VimParams): Promise<void> {
+function quit (cm: CodeMirror, _params: VimParams): Promise<void> {
   // Grab the required information from the editor state
   const filePath = cm.cm6.state.field(configField).metadata.path
   const { leafId, windowId } = cm.cm6.state.facet(editorMetadataFacet)

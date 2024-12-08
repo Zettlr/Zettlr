@@ -23,7 +23,6 @@ import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documen
 
 const ipcRenderer = window.ipc
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useItemComposable (
   object: MaybeRootDescriptor,
   rootElement: Ref<HTMLElement|null>,

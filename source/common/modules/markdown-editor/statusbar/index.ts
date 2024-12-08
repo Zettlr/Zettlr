@@ -60,7 +60,7 @@ export const showStatusbarEffect = StateEffect.define<boolean>()
  *
  * @return  {Panel}             Returns the statusbar panel
  */
-function createStatusbar (view: EditorView): Panel {
+function createStatusbar (_view: EditorView): Panel {
   const elem = document.createElement('div')
   elem.className = 'cm-statusbar'
   return {
@@ -110,7 +110,7 @@ function createStatusbar (view: EditorView): Panel {
 }
 
 const statusbarState = StateField.define<boolean>({
-  create: (state: EditorState) => false,
+  create: (_state: EditorState) => false,
   update (value, transaction) {
     // Determine if we have to switch our toggle
     for (const effect of transaction.effects) {

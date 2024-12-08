@@ -1,4 +1,3 @@
-/* eslint-disable no-var */
 /**
  * @ignore
  * BEGIN HEADER
@@ -78,7 +77,6 @@ declare const SPLASH_SCREEN_WEBPACK_ENTRY: string
 declare const SPLASH_SCREEN_PRELOAD_WEBPACK_ENTRY: string
 
 // Contains the git build number
-// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __GIT_COMMIT_HASH__: string
 
 /**

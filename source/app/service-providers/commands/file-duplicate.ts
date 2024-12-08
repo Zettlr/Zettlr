@@ -84,7 +84,6 @@ export default class FileDuplicate extends ZettlrCommand {
     }
 
     // If no valid filename is provided, assume the original file's extension
-    const newFileExtname = path.extname(filename).toLowerCase()
     if (file.type === 'file' && !hasMarkdownExt(filename)) {
       filename += file.ext // Assume the original file's extension
     } else if (file.type === 'code' && !hasCodeExt(filename)) {
@@ -93,7 +92,7 @@ export default class FileDuplicate extends ZettlrCommand {
 
     // Retrieve the file's content and create a new file with the same content
     const contents = await this._app.fsal.loadAnySupportedFile(file.path)
-    await this._app.fsal.createFile(path.join(dir.path, filename), contents)
+    await this._app.fsal.writeTextFile(path.join(dir.path, filename), contents)
 
     // And directly thereafter, open the file
     await this._app.documents.openFile(arg.windowNumber, arg.leafId, path.join(dir.path, filename))

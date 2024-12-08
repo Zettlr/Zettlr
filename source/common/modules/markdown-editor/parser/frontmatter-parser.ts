@@ -21,7 +21,7 @@ import { yaml } from '@codemirror/lang-yaml'
 // parse to add syntax highlighting to these.
 export function yamlCodeParse (): ParseWrapper {
   const parser = yaml().language.parser
-  return parseMixed((node, input) => {
+  return parseMixed((node, _input) => {
     if (node.type.name === 'YAMLFrontmatter') {
       return { parser, overlay: node => node.type.name === 'CodeText' }
     } else {

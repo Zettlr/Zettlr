@@ -134,7 +134,7 @@ export type EditorConfigOptions = Partial<EditorConfiguration>
 
 export const configUpdateEffect = StateEffect.define<EditorConfigOptions>()
 export const configField = StateField.define<EditorConfiguration>({
-  create (state) {
+  create (_state) {
     return getDefaultConfig()
   },
   update (val, transaction) {

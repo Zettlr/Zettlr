@@ -38,7 +38,7 @@
             v-bind:window-id="windowId"
             v-on:create-file="handleOperation('file-new', item.id)"
             v-on:create-dir="handleOperation('dir-new', item.id)"
-            v-on:begin-dragging="$emit('lock-file-tree')"
+            v-on:begin-dragging="emit('lock-file-tree')"
           ></FileItem>
         </RecycleScroller>
       </template>

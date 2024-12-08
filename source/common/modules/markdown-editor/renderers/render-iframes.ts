@@ -92,7 +92,7 @@ class IFrameWidget extends WidgetType {
     return other.source === this.source
   }
 
-  toDOM (view: EditorView): HTMLElement {
+  toDOM (_view: EditorView): HTMLElement {
     const { hostname } = new URL(this.source)
 
     // Check if the hostname is part of our whitelist. If so, render it directly

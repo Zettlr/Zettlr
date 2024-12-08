@@ -23,7 +23,7 @@ import { configField } from '../util/configuration'
  */
 export const filesUpdate = StateEffect.define<Array<{ filename: string, displayName: string, id: string }>>()
 export const filesUpdateField = StateField.define<Completion[]>({
-  create (state) {
+  create (_state) {
     return []
   },
   update (val, transaction) {

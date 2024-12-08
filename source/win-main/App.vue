@@ -788,6 +788,7 @@ function startGlobalSearch (terms: string): void {
     .catch(err => console.error(err))
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function toggleFileList (): void {
   // This event can be used by various components to ask the file manager to
   // toggle its file list visibility

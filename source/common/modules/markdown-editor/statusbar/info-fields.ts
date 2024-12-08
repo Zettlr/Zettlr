@@ -28,7 +28,7 @@ import { configField } from '../util/configuration'
  *
  * @return  {StatusbarItem}         Returns the element
  */
-export function cursorStatus (state: EditorState, view: EditorView): StatusbarItem|null {
+export function cursorStatus (state: EditorState, _view: EditorView): StatusbarItem|null {
   const mainOffset = state.selection.main.head
   const line = state.doc.lineAt(mainOffset)
   return {
@@ -44,7 +44,7 @@ export function cursorStatus (state: EditorState, view: EditorView): StatusbarIt
  *
  * @return  {StatusbarItem}         Returns the element or null
  */
-export function wordcountStatus (state: EditorState, view: EditorView): StatusbarItem|null {
+export function wordcountStatus (state: EditorState, _view: EditorView): StatusbarItem|null {
   const counter = state.field(countField, false)
   if (counter === undefined) {
     return null
@@ -63,7 +63,7 @@ export function wordcountStatus (state: EditorState, view: EditorView): Statusba
  *
  * @return  {StatusbarItem}         Returns the element or null
  */
-export function charcountStatus (state: EditorState, view: EditorView): StatusbarItem|null {
+export function charcountStatus (state: EditorState, _view: EditorView): StatusbarItem|null {
   const counter = state.field(countField, false)
   if (counter === undefined) {
     return null
@@ -82,7 +82,7 @@ export function charcountStatus (state: EditorState, view: EditorView): Statusba
  *
  * @return  {StatusbarItem}         Returns the element or null
  */
-export function inputModeStatus (state: EditorState, view: EditorView): StatusbarItem|null {
+export function inputModeStatus (state: EditorState, _view: EditorView): StatusbarItem|null {
   const config = state.field(configField, false)
   if (config === undefined) {
     return null

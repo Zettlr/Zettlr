@@ -79,11 +79,11 @@ function getNaturalSorter (fileNameDisplay: FilenameDisplay, appLang: string): (
     // the YAML frontmatter title variable
 
     if (aHeading && useH1) {
-      aSort = a.firstHeading as string
+      aSort = a.firstHeading!
     }
 
     if (bHeading && useH1) {
-      bSort = b.firstHeading as string
+      bSort = b.firstHeading!
     }
 
     if (aTitle && useTitle) {
@@ -125,11 +125,11 @@ function getAsciiSorter (fileNameDisplay: FilenameDisplay): (a: any, b: any) => 
     // the YAML frontmatter title variable
 
     if (aHeading && useH1) {
-      aSort = a.firstHeading as string
+      aSort = a.firstHeading!
     }
 
     if (bHeading && useH1) {
-      bSort = b.firstHeading as string
+      bSort = b.firstHeading!
     }
 
     if (aTitle && useTitle) {

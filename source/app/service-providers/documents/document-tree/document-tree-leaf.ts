@@ -17,7 +17,7 @@
  */
 
 import isFile from '@common/util/is-file'
-import type { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
+import type { LeafNodeJSON } from '@dts/common/documents'
 import { v4 as uuid4 } from 'uuid'
 import { DocumentTree } from './document-tree'
 import { DTBranch } from './document-tree-branch'

@@ -24,7 +24,7 @@ import { configField } from '../util/configuration'
  */
 export const citekeyUpdate = StateEffect.define<Array<{ citekey: string, displayText: string }>>()
 export const citekeyUpdateField = StateField.define<Completion[]>({
-  create (state) {
+  create (_state) {
     return []
   },
   update (val, transaction) {

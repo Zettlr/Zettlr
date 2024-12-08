@@ -40,7 +40,7 @@ const simpleLinkRegex = /https?:\/\/\S+/g
  */
 const linkDecorator = new MatchDecorator({
   regexp: simpleLinkRegex,
-  decoration: m => linkDeco
+  decoration: _m => linkDeco
 })
 
 /**

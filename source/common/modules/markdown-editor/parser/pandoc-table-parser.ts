@@ -158,7 +158,7 @@ export const gridTableParser: BlockParser = {
 }
 
 const pipeLeafParser: LeafBlockParser = {
-  nextLine (ctx, line, leaf) {
+  nextLine (_ctx, _line, _leaf) {
     // Pipe tables are only finished on empty lines, i.e. we don't have to do
     // any logic in here.
     return false

@@ -242,12 +242,12 @@ export default class WindowProvider extends ProviderContract {
       )
     })
 
-    ipcMain.handle('request-dir', async (event, message) => {
+    ipcMain.handle('request-dir', async (event, _message) => {
       const focusedWindow = BrowserWindow.getFocusedWindow()
       return await this.askDir(trans('Open project folder'), focusedWindow)
     })
 
-    this._documents.on(DP_EVENTS.CHANGE_FILE_STATUS, (ctx: any) => {
+    this._documents.on(DP_EVENTS.CHANGE_FILE_STATUS, (_ctx: any) => {
       // Always update the main window's flag depending on whether the document
       // manager is clean or not
       for (const key in this._mainWindows) {

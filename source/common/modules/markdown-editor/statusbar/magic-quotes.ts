@@ -86,7 +86,7 @@ const MAGIC_QUOTES_PAIRS: Record<string, { primary: string, secondary: string }>
  *
  * @return  {StatusbarItem}         The statusbar item, or null
  */
-export function magicQuotesStatus (state: EditorState, view: EditorView): StatusbarItem|null {
+export function magicQuotesStatus (state: EditorState, _view: EditorView): StatusbarItem|null {
   const config = state.field(configField, false)
   if (config === undefined) {
     return null

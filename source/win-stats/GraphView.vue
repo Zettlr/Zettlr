@@ -81,7 +81,6 @@ const graphWidth = ref(0)
 const graphHeight = ref(0)
 // This variable contains zoom information
 const zoomFactor = ref(1)
-const graph = ref<LinkGraph|null>(null)
 // Store the D3 elements
 const graphElement = ref<d3.Selection<SVGSVGElement, undefined, null, undefined>|null>(null)
 const simulation = ref<d3.Simulation<d3.SimulationNodeDatum, undefined>|null>(null)
