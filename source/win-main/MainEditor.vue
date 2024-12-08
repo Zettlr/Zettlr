@@ -290,20 +290,30 @@ function updateProjectInfo (): ProjectInfo|null {
     return null
   }
 
+  const extractedMetadata = absPaths
+    .map(p => {
+      return workspacesStore.getFile(p)
+    })
+    .filter (d => d !== undefined && d.type === 'file')
+    .map(d => {
+      return {
+        wordCount: d.wordCount,
+        charCount: d.charCount,
+        path: d.path,
+        displayName: d.yamlTitle ?? d.firstHeading ?? d.name
+      }
+    })
+
   // It is! So now we can return the proper project info.
   return {
     name: dir.settings.project.title,
-    wordCount: absPaths
-      .map(p => {
-        const desc = workspacesStore.getFile(p)
-        return desc?.type === 'file' ? desc.wordCount : 0
-      })
+    files: extractedMetadata
+      .map(p => ({ path: p.path, displayName: p.displayName })),
+    wordCount: extractedMetadata
+      .map(p => p.wordCount)
       .reduce((p, c) => p + c, 0),
-    charCount: absPaths
-      .map(p => {
-        const desc = workspacesStore.getFile(p)
-        return desc?.type === 'file' ? desc.charCount : 0
-      })
+    charCount: extractedMetadata
+      .map(p => p.charCount)
       .reduce((p, c) => p + c, 0)
   }
 }

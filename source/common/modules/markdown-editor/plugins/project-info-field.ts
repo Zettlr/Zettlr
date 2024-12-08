@@ -20,9 +20,15 @@ import localiseNumber from 'source/common/util/localise-number'
 import { trans } from 'source/common/i18n-renderer'
 import type { EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
+import type { AnyMenuItem } from 'source/types/renderer/context'
+import showPopupMenu from '../../window-register/application-menu-helper'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+
+const ipcRenderer = window.ipc
 
 export interface ProjectInfo {
   name: string // Project name
+  files: Array<{ path: string, displayName: string }> // All files in the project
   wordCount: number // Total words across project files
   charCount: number // Total characters across project files
 }
@@ -75,6 +81,33 @@ export function statusbarProjectInfo (state: EditorState, _view: EditorView): St
     // NOTE: Should be the same icon that we also use for projects in the file manager
     content: `<cds-icon shape="blocks-group"></cds-icon> ${countLabel}`,
     title: trans('This file is part of project "%s"', field.name),
-    allowHtml: true
+    allowHtml: true,
+    onClick (event) {
+      const items: AnyMenuItem[] = [
+        {
+          id: 'none',
+          label: field.name,
+          type: 'normal',
+          enabled: false
+        }
+      ]
+
+      for (const { path, displayName } of field.files) {
+        items.push({
+          id: path,
+          label: displayName,
+          type: 'normal',
+          enabled: true
+        })
+      }
+
+      showPopupMenu({ x: event.clientX, y: event.clientY }, items, clickedID => {
+        ipcRenderer.invoke('documents-provider', {
+          command: 'open-file',
+          payload: { path: clickedID }
+        } as DocumentManagerIPCAPI)
+          .catch(e => console.error(e))
+      })
+    }
   }
 }
