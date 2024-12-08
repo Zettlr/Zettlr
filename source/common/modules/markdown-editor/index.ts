@@ -95,6 +95,7 @@ import { countField } from './plugins/statistics-fields'
 import type { SyntaxNode } from '@lezer/common'
 import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
+import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
 
 export interface DocumentWrapper {
   path: string
@@ -637,6 +638,15 @@ export default class MarkdownEditor extends EventEmitter {
    */
   hasFocus (): boolean {
     return this._instance.hasFocus
+  }
+
+  /**
+   * Sets the project info field of the editor state to the provided value.
+   *
+   * @param   {ProjectInfo|null}  info  The data
+   */
+  set projectInfo (info: ProjectInfo|null) {
+    this._instance.dispatch({ effects: projectInfoUpdateEffect.of(info) })
   }
 
   /**

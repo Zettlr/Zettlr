@@ -2,6 +2,10 @@
 
 ## GUI and Functionality
 
+- **New Feature**: For files that belong to a Zettlr project, the status bar now
+  additionally displays the total word or character count for all files across
+  the entire project, making it easy to check for a total limit (e.g., for a
+  journal submission)
 - Fix SVG image preview (#5496)
 - Fix network share image preview (#5495)
 - Checking task-list checkboxes now returns the focus back to the editor

@@ -20,6 +20,7 @@ import { readabilityStatus } from '../renderers/readability'
 import { cursorStatus, wordcountStatus, charcountStatus, inputModeStatus } from './info-fields'
 import { languageToolStatus } from './language-tool'
 import { diagnosticsStatus } from './diagnostics'
+import { statusbarProjectInfo } from '../plugins/project-info-field'
 
 /**
  * The interface each item on the statusbar must conform to.
@@ -70,6 +71,7 @@ function createStatusbar (_view: EditorView): Panel {
       const elements: StatusbarItem[] = []
       // NOTE: Order here determines the order in the statusbar
       const items = [
+        statusbarProjectInfo,
         magicQuotesStatus,
         readabilityStatus,
         cursorStatus,

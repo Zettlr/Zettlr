@@ -74,6 +74,7 @@ import { autocompleteTriggerCharacter } from './autocomplete/snippets'
 import { markdownKeymap } from './keymaps/markdown'
 import { codeKeymap } from './keymaps/code'
 import { vimPlugin } from './plugins/vim-mode'
+import { projectInfoField } from './plugins/project-info-field'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -320,6 +321,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     typewriter,
     distractionFree,
     tocField,
+    projectInfoField,
     markdownFolding, // Should be before footnoteGutter
     autocomplete,
     readabilityMode,

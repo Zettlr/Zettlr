@@ -45,9 +45,10 @@ import { getBibliographyForDescriptor as getBibliography } from '@common/util/ge
 import { EditorSelection } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 import { useConfigStore, useDocumentTreeStore, useTagsStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
-import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
+import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
+import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
 
 const ipcRenderer = window.ipc
 
@@ -78,6 +79,7 @@ const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
+const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
 const tagStore = useTagsStore()
 
@@ -264,9 +266,55 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     showFormattingToolbar: editor.showFormattingToolbar,
     darkMode,
     theme: display.theme,
-    highlightWhitespace: editor.showWhitespace
+    highlightWhitespace: editor.showWhitespace,
+    countChars: editor.countChars
   } satisfies EditorConfigOptions
 })
+
+// BEGIN: PROJECT INFO
+function updateProjectInfo (): ProjectInfo|null {
+  // If this file is part of a project, the project must be defined in any
+  // containing folder -> traverse up the file tree until we have found one.
+  let dir = workspacesStore.getDir(pathDirname(props.file.path))
+  while (dir !== undefined && dir.settings.project === null) {
+    dir = workspacesStore.getDir(dir.dir)
+  }
+
+  if (dir === undefined || dir.settings.project === null) {
+    return null // No project found in the tree
+  }
+
+  // Check if this file is part of the project.
+  const absPaths = dir.settings.project.files.map(p => resolvePath(dir.path, p))
+  if (!absPaths.includes(props.file.path)) {
+    return null
+  }
+
+  // It is! So now we can return the proper project info.
+  return {
+    name: dir.settings.project.title,
+    wordCount: absPaths
+      .map(p => {
+        const desc = workspacesStore.getFile(p)
+        return desc?.type === 'file' ? desc.wordCount : 0
+      })
+      .reduce((p, c) => p + c, 0),
+    charCount: absPaths
+      .map(p => {
+        const desc = workspacesStore.getFile(p)
+        return desc?.type === 'file' ? desc.charCount : 0
+      })
+      .reduce((p, c) => p + c, 0)
+  }
+}
+
+// Update the project info as soon as anything in the workspaces has changed.
+workspacesStore.$subscribe(_mutation => {
+  if (currentEditor !== null) {
+    currentEditor.projectInfo = updateProjectInfo()
+  }
+})
+// END: PROJECT INFO
 
 // External commands/"event" system
 watch(toRef(props.editorCommands, 'jumpToLine'), () => {
@@ -332,8 +380,6 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   const textToInsert: string = props.editorCommands.data
   currentEditor?.replaceSelection(textToInsert)
 })
-
-const workspacesStore = useWorkspacesStore()
 
 const fsalFiles = computed<MDFileDescriptor[]>(() => {
   const tree = workspacesStore.rootDescriptors
@@ -486,6 +532,7 @@ async function loadDocument (): Promise<void> {
       library: library ?? CITEPROC_MAIN_DB
     }
   })
+  currentEditor.projectInfo = updateProjectInfo()
 }
 
 function jtl (lineNumber: number): void {
