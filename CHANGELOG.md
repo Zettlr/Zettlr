@@ -21,6 +21,9 @@
 - Bump CodeMirror dependencies
 - Define a new shared type, `IPCAPI` that can be used to type the various IPC
   APIs the service providers use across the app.
+- Fully type IPC APIs:
+  - AssetsProvider
+  - DocumentAuthority
 
 # 3.3.1
 

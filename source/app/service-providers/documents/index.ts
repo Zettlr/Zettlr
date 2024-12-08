@@ -19,7 +19,7 @@ import EventEmitter from 'events'
 import path from 'path'
 import { constants as FSConstants } from 'fs'
 import { FSALCodeFile, FSALFile } from '@providers/fsal'
-import ProviderContract from '@providers/provider-contract'
+import ProviderContract, { type IPCAPI } from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import type AppServiceContainer from 'source/app/app-service-container'
 import { ipcMain, app, dialog, type BrowserWindow, type MessageBoxOptions } from 'electron'
@@ -124,6 +124,12 @@ interface Document {
   saveTimeout: undefined|NodeJS.Timeout
 }
 
+export type DocumentAuthorityIPCAPI = IPCAPI<{
+  'get-document': { filePath: string }
+  'pull-updates': { filePath: string, version: number }
+  'push-updates': { filePath: string, version: number, updates: Update[] }
+}>
+
 export default class DocumentManager extends ProviderContract {
   /**
    * This array holds all open windows, here represented as document trees
@@ -224,7 +230,8 @@ export default class DocumentManager extends ProviderContract {
     /**
      * Hook the event listener that directly communicates with the editors
      */
-    ipcMain.handle('documents-authority', async (event, { command, payload }) => {
+    ipcMain.handle('documents-authority', async (event, message: DocumentAuthorityIPCAPI) => {
+      const { command, payload } = message
       switch (command) {
         case 'pull-updates':
           return await this.pullUpdates(payload.filePath, payload.version)
