@@ -48,7 +48,7 @@ import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
 import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
-import ProviderContract from '@providers/provider-contract'
+import ProviderContract, { type IPCAPI } from '@providers/provider-contract'
 import type LogProvider from '@providers/log'
 import type DocumentManager from '@providers/documents'
 import { DP_EVENTS } from '@dts/common/documents'
@@ -57,6 +57,26 @@ import type ConfigProvider from '@providers/config'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
 import type { PasteModalResult } from '../commands/save-image-from-clipboard'
+
+export interface RequestFilesIPCAPI {
+  filters: FileFilter[],
+  multiSelection: boolean
+}
+
+export type WindowControlsIPCAPI = IPCAPI<{
+  'win-maximise': unknown
+  'get-maximised-status': unknown
+  'win-minimise': unknown
+  'win-close': unknown
+  'get-traffic-lights-rtl': unknown
+  'cut': unknown
+  'copy': unknown
+  'paste': unknown
+  'selectAll': unknown
+  'inspect-element': { x: number, y: number }
+  'drag-start': { filePath: string }
+  'show-item-in-folder': { itemPath: string }
+}>
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: Record<string, BrowserWindow>
@@ -128,15 +148,13 @@ export default class WindowProvider extends ProviderContract {
     }
 
     // Listen to window control commands
-    ipcMain.on('window-controls', (event, message) => {
+    ipcMain.on('window-controls', (event, message: WindowControlsIPCAPI) => {
       const callingWindow = BrowserWindow.fromWebContents(event.sender)
       if (callingWindow === null) {
         return
       }
 
       const { command, payload } = message
-
-      let itemPath: string = payload
 
       switch (command) {
         case 'win-maximise':
@@ -189,6 +207,7 @@ export default class WindowProvider extends ProviderContract {
             .catch(err => this._logger.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
           break
         case 'show-item-in-folder':
+          let { itemPath } = payload
           if (itemPath.startsWith('safe-file://')) {
             itemPath = itemPath.replace('safe-file://', '')
           } else if (itemPath.startsWith('file://')) {
@@ -213,21 +232,19 @@ export default class WindowProvider extends ProviderContract {
      * user for files corresponding to the given filters, and then return a list
      * of those selected.
      */
-    ipcMain.handle('request-files', async (event, message) => {
+    ipcMain.handle('request-files', async (event, message: RequestFilesIPCAPI) => {
       const focusedWindow = BrowserWindow.getFocusedWindow()
       // The client only can choose what and how much it wants to get
-      let files = await this.askFile(
+      return await this.askFile(
         message.filters,
         message.multiSelection,
         focusedWindow
       )
-      return files
     })
 
     ipcMain.handle('request-dir', async (event, message) => {
       const focusedWindow = BrowserWindow.getFocusedWindow()
-      let dir = await this.askDir(trans('Open project folder'), focusedWindow)
-      return dir
+      return await this.askDir(trans('Open project folder'), focusedWindow)
     })
 
     this._documents.on(DP_EVENTS.CHANGE_FILE_STATUS, (ctx: any) => {
@@ -436,7 +453,8 @@ export default class WindowProvider extends ProviderContract {
    * @return  {WindowPosition}                        A sanitised WindowPosition
    */
   private _retrieveWindowPosition (stateId: string, defaultSize: Electron.Rectangle|null): WindowPosition {
-    if (!this._windowState.has(stateId)) {
+    const existingPosition = this._windowState.get(stateId)
+    if (existingPosition === undefined) {
       // Generate a default window position
       const { workArea, id } = screen.getPrimaryDisplay()
       const defaultPosition: WindowPosition = {
@@ -460,12 +478,11 @@ export default class WindowProvider extends ProviderContract {
       this._updateWindowPosition(stateId, defaultPosition)
     } else {
       // We already have a position in our map, so retrieve, sanitize, and return.
-      const existingPosition = this._windowState.get(stateId) as WindowPosition
       this._updateWindowPosition(stateId, existingPosition) // Sanitize the position
     }
 
     // At this point we will definitely have a WindowPosition for this window.
-    return this._windowState.get(stateId) as WindowPosition
+    return this._windowState.get(stateId)!
   }
 
   /**

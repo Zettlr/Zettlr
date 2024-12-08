@@ -25,6 +25,7 @@
   - AssetsProvider
   - DocumentAuthority
   - DocumentManager
+  - WindowProvider
 
 # 3.3.1
 
