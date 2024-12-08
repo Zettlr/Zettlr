@@ -272,7 +272,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
 watch(toRef(props.editorCommands, 'jumpToLine'), () => {
   const { filePath, lineNumber } = props.editorCommands.data
   // Execute a jtl-command if the current displayed file is the correct one
-  if (filePath === props.file.path) {
+  if (filePath === props.file.path && typeof lineNumber === 'number') {
     jtl(lineNumber)
   }
 })
@@ -283,7 +283,9 @@ watch(toRef(props.editorCommands, 'moveSection'), () => {
   }
 
   const { from, to } = props.editorCommands.data
-  currentEditor?.moveSection(from, to)
+  if (typeof from === 'number' && typeof to === 'number') {
+    currentEditor?.moveSection(from, to)
+  }
 })
 
 watch(toRef(props.editorCommands, 'readabilityMode'), () => {
