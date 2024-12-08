@@ -47,6 +47,7 @@ import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ip
 import { useConfigStore, useDocumentTreeStore, useTagsStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
+import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 
 const ipcRenderer = window.ipc
 
@@ -493,7 +494,7 @@ async function updateCitationKeys (library: string): Promise<void> {
   const items: Array<{ citekey: string, displayText: string }> = (await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-items',
     payload: { database: library }
-  }))
+  } as CiteprocProviderIPCAPI))
     .map((item: any) => {
       // Get a rudimentary author list. Precedence are authors, then editors.
       // Fallback: Container title.

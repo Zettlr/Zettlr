@@ -26,6 +26,7 @@
   - DocumentAuthority
   - DocumentManager
   - WindowProvider
+  - CiteprocProvider
 
 # 3.3.1
 

@@ -15,6 +15,7 @@
  */
 
 import { contextBridge, ipcRenderer, webUtils } from 'electron'
+import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 
 // PREPARATION: Since we have multiple editor panes and all of them need to
 // listen to a few events, we need to ramp up some of the channels' max
@@ -67,7 +68,7 @@ contextBridge.exposeInMainWorld(
       return ipcRenderer.sendSync('citeproc-provider', {
         command: 'get-citation-sync',
         payload: { database, citations, composite }
-      })
+      } as CiteprocProviderIPCAPI)
     }
   }
 )

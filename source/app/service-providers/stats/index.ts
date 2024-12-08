@@ -116,6 +116,7 @@ export default class StatsProvider extends ProviderContract {
       for (const prop of dateCounts) {
         for (const [ key, value ] of Object.entries(this.stats[prop])) {
           if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete this.stats[prop][key]
           } else if (typeof value !== 'number' || Number.isNaN(value)) {
             this.stats[prop][key] = 0

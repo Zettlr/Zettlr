@@ -18,6 +18,7 @@ import { type AnyDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { onMounted, ref, computed, watch } from 'vue'
 import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import { useDocumentTreeStore } from 'source/pinia'
+import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 
 const ipcRenderer = window.ipc
 const documentTreeStore = useDocumentTreeStore()
@@ -132,7 +133,7 @@ async function updateBibliography (): Promise<void> {
       database: library,
       citations: [...new Set(keys)]
     }
-  })
+  } as CiteprocProviderIPCAPI)
 }
 </script>
 @common/util/renderer-path-polyfill
