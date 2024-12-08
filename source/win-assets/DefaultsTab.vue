@@ -94,7 +94,7 @@ import CodeEditor from '@common/vue/CodeEditor.vue'
 import ZtrAdmonition from '@common/vue/ZtrAdmonition.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, computed, toRef, watch, onUnmounted } from 'vue'
-import { type PandocProfileMetadata } from '@providers/assets'
+import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import sanitizeFilename from 'sanitize-filename'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
@@ -220,7 +220,7 @@ async function loadDefaultsForState (): Promise<void> {
   const data = await ipcRenderer.invoke('assets-provider', {
     command: 'get-defaults-file',
     payload: { filename: name }
-  })
+  } as AssetsProviderIPCAPI)
 
   lastLoadedEditorContents.value = data
   editorContents.value = data
@@ -234,7 +234,7 @@ async function retrieveDefaultsFiles (): Promise<void> {
   // does not work with the custom profiles the exporter provides).
   ipcRenderer.invoke('assets-provider', {
     command: 'list-defaults'
-  })
+  } as AssetsProviderIPCAPI)
     .then((files: PandocProfileMetadata[]) => {
       availableDefaultsFiles.value = files
       if (currentItem.value < 0) {
@@ -253,7 +253,7 @@ function saveDefaultsFile (): void {
   ipcRenderer.invoke('assets-provider', {
     command: 'set-defaults-file',
     payload: { filename: name, contents: editorContents.value }
-  })
+  } as AssetsProviderIPCAPI)
     .then(async () => {
       lastLoadedEditorContents.value = editorContents.value
       savingStatus.value = trans('Saved!')
@@ -275,7 +275,7 @@ function newDefaultsFile (): void {
   ipcRenderer.invoke('assets-provider', {
     command: 'set-defaults-file',
     payload: { filename: newName, contents: NEW_DEFAULTS_FILE_CONTENTS }
-  })
+  } as AssetsProviderIPCAPI)
     .then(async () => {
       await retrieveDefaultsFiles() // Always make sure to pull in any changes
     })
@@ -295,7 +295,7 @@ function renameFile (): void {
   ipcRenderer.invoke('assets-provider', {
     command: 'rename-defaults-file',
     payload: { oldName, newName }
-  })
+  } as AssetsProviderIPCAPI)
     .then(async () => {
       await retrieveDefaultsFiles() // Always make sure to pull in any changes
     })
@@ -312,7 +312,7 @@ function removeFile (idx: number): void {
   ipcRenderer.invoke('assets-provider', {
     command: 'remove-defaults-file',
     payload: { filename }
-  })
+  } as AssetsProviderIPCAPI)
     .then(async () => {
       await retrieveDefaultsFiles() // Always make sure to pull in any changes
     })
@@ -322,7 +322,7 @@ function removeFile (idx: number): void {
 function openDefaultsDirectory (): void {
   ipcRenderer.invoke('assets-provider', {
     command: 'open-defaults-directory'
-  }).catch(err => console.error(err))
+  } as AssetsProviderIPCAPI).catch(err => console.error(err))
 }
 </script>
 

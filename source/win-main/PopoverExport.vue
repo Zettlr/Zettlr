@@ -43,7 +43,7 @@ import PopoverWrapper from './PopoverWrapper.vue'
 import RadioControl from '@common/vue/form/elements/RadioControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { ref, computed, watch } from 'vue'
-import { type PandocProfileMetadata } from '@providers/assets'
+import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { trans } from '@common/i18n-renderer'
@@ -56,7 +56,7 @@ const tempDirLabel = trans('Temporary directory')
 const cwdLabel = trans('Current directory')
 const askLabel = trans('Select directory')
 
-ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' })
+ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' } as AssetsProviderIPCAPI)
   .then((defaults: PandocProfileMetadata[]) => {
     // Save all the exporter information into the array. The computed
     // properties will take the info from that array and re-compute based
