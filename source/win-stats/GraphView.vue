@@ -359,6 +359,10 @@ function startSimulation (): void {
 
   if (simulation.value === null) {
     const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(includedLinks).id((node, _i, _nodesData) => node.id).strength((link, _i) => link.weight * 2)
+    // Below we have to typecast since d3 will take our arbitrary data (which
+    // don't really have any required properties, and ADD any
+    // SimulationNodeDatum properties it needs into the object).
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     simulation.value = d3.forceSimulation(includedNodes as any)
       .force('link', forceLink)
       .force('charge', d3.forceManyBody())
@@ -384,14 +388,21 @@ function startSimulation (): void {
       })
   } else {
     // If the simulation already exists, we can simply update it
+    // Same as above: includedNodes will be enriched by the required properties
+    // of SimulationNodeDatum, but the types don't express this.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     simulation.value.nodes(includedNodes as any).alpha(1).alphaTarget(0).restart()
-    const link = simulation.value.force('link') as d3.ForceLink<GraphVertex & d3.SimulationNodeDatum, GraphArc>
-    const charge = simulation.value.force('charge') as d3.ForceManyBody<d3.SimulationNodeDatum>
-    const coll = simulation.value.force('collide') as d3.ForceCollide<d3.SimulationNodeDatum>
+    const link: d3.ForceLink<GraphVertex & d3.SimulationNodeDatum, GraphArc> = simulation.value.force('link')!
+    const charge: d3.ForceManyBody<d3.SimulationNodeDatum> = simulation.value.force('charge')!
+    const coll: d3.ForceCollide<d3.SimulationNodeDatum> = simulation.value.force('collide')!
     link.links(includedLinks)
     link.initialize(includedNodes, () => Math.random() * 5)
-    charge.initialize(includedNodes as any[], () => 1)
-    coll.initialize(includedNodes as any[], () => Math.random() * 5)
+    // Same here...
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    charge.initialize(includedNodes as any, () => 1)
+    // ... and here.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    coll.initialize(includedNodes as any, () => Math.random() * 5)
   }
 
   const linkSelection = svg.select('#arc-container')
@@ -548,7 +559,7 @@ async function buildGraph (): Promise<void> {
           }
         }
       }
-      DG.addArc(sourcePath, resolvedLinks.get(target) as string)
+      DG.addArc(sourcePath, resolvedLinks.get(target)!)
     }
   }
   DG.endOperation()
