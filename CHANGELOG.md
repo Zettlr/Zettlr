@@ -6,6 +6,9 @@
   additionally displays the total word or character count for all files across
   the entire project, making it easy to check for a total limit (e.g., for a
   journal submission)
+- **New Feature**: The references sidebar tab now provides an approximate word
+  count, which is useful if some word count limit includes the bibliography; as
+  references aren't included in any other word count
 - Fix SVG image preview (#5496)
 - Fix network share image preview (#5495)
 - Checking task-list checkboxes now returns the focus back to the editor

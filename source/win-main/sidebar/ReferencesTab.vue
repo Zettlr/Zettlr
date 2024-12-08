@@ -53,11 +53,26 @@ const referenceHTML = computed(() => {
   }
 
   return [
+    // NOTE: Somehow a scoped CSS doesn't catch this HTML element
+    `<p style="font-size: 80%; font-style: italic;">${wordCountLabel.value}</p>`,
     bibliography.value[0].bibstart,
     ...bibliography.value[1],
     bibliography.value[0].bibend
   ].join('\n')
 })
+
+// Provides an approximate word count. This can be used to, e.g., gauge how many
+// words the list of references will contain, which can be important if a there
+// is a limit that includes the bibliography that needs to be maintained.
+const approximateWordCount = computed(() => {
+  if (bibliography.value === undefined) {
+    return 0
+  }
+
+  return bibliography.value[1].map(x => x.split(/\s+/g).length).reduce((p, c) => p + c, 0)
+})
+
+const wordCountLabel = computed(() => trans('circa %s words', approximateWordCount.value))
 
 watch(activeFile, () => {
   updateBibliography().catch(e => console.error('Could not update bibliography', e))
@@ -136,4 +151,3 @@ async function updateBibliography (): Promise<void> {
   } as CiteprocProviderIPCAPI)
 }
 </script>
-@common/util/renderer-path-polyfill
