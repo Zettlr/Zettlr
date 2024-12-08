@@ -10,6 +10,8 @@
   closed, retaining outdated file contents and making the file unresponsive to
   external changes. Now files that do not have an open editor instance will be
   closed appropriately
+- The statusbar's character/word counters now respect the character count
+  setting, meaning only the word or character count is shown, not both
 
 ## Under the Hood
 
