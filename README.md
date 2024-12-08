@@ -21,6 +21,9 @@
   <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/Zettlr/Zettlr/total.svg">
   <img alt="Unit Tests / Lint" src="https://github.com/Zettlr/Zettlr/actions/workflows/check.yml/badge.svg">
   <img alt="Build" src="https://github.com/Zettlr/Zettlr/workflows/Build/badge.svg">
+  <a href="https://gurubase.io/g/zettlr">
+    <img src="https://img.shields.io/badge/Gurubase-Ask%20Zettlr%20Guru-006BFF" alt="Gurubase">
+  </a>
 </p>
 
 <p align="center">
