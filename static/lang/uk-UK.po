@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-11-18 09:26+0000\n"
-"PO-Revision-Date: 2024-12-08 11:55+0200\n"
+"PO-Revision-Date: 2024-12-09 16:52+0200\n"
 "Last-Translator: Fedir Zinchuk <fedikw@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk_UK\n"
@@ -22,12 +22,16 @@ msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
 msgstr ""
+"Цей профіль захищений. Це означає, що його буде відновлено, коли ви видалите "
+"або перейменуєте його."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:57
 msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"Цей профіль недійсний. Він може містити помилки або може бути відсутнім "
+"властивість запису або читання."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:58
 #: source/app/service-providers/menu/menu.darwin.ts:286
@@ -172,7 +176,7 @@ msgstr "Вилучити"
 #: source/tmp/win-preferences/App.vue.ts:56
 #, javascript-format
 msgid "No results for \"%s\""
-msgstr ""
+msgstr "Немає результатів для \"%s\""
 
 #: source/tmp/win-preferences/App.vue.ts:134
 #: source/tmp/win-project-properties/App.vue.ts:62
@@ -840,20 +844,20 @@ msgstr "Непов'язані файли"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Цей зв'язок заснований на двонаправленому посиланні."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Цей зв'язок заснований на вихідному посиланні."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Цей зв'язок заснований на зворотному посиланні."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:220
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Цей зв'язок заснований на %s спільних мітках: %s"
 
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
@@ -1099,11 +1103,11 @@ msgstr "символів"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:23
 msgid "No open document"
-msgstr ""
+msgstr "Не відкрито жодного документу"
 
 #: source/tmp/win-paste-image/App.vue.ts:57
 msgid "Insert Image from Clipboard"
-msgstr ""
+msgstr "Додати зображення з буферу обміну"
 
 #: source/tmp/win-paste-image/App.vue.ts:58
 #: source/win-preferences/schema/editor.ts:214
@@ -1112,20 +1116,20 @@ msgstr "Розмір зображення"
 
 #: source/tmp/win-paste-image/App.vue.ts:59
 msgid "Retain aspect ratio"
-msgstr ""
+msgstr "Зберігати співвідношення сторін"
 
 #: source/tmp/win-paste-image/App.vue.ts:60
 msgid "Resize image to"
-msgstr ""
+msgstr "Змінити розмір до"
 
 #: source/tmp/win-paste-image/App.vue.ts:61
 msgid "Filename"
-msgstr ""
+msgstr "Назва файлу"
 
 #: source/tmp/win-paste-image/App.vue.ts:62
 #: source/tmp/win-paste-image/App.vue.ts:63
 msgid "A unique filename"
-msgstr ""
+msgstr "Унікальна назва файлу"
 
 #. 1: Omit all changes
 #: source/tmp/win-paste-image/App.vue.ts:67
@@ -1143,68 +1147,68 @@ msgstr "Скасувати"
 
 #: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Export project to:"
-msgstr ""
+msgstr "Експортувати проект до:"
 
 #: source/tmp/win-project-properties/App.vue.ts:39
 msgid "Use"
-msgstr ""
+msgstr "Використати"
 
 #: source/tmp/win-project-properties/App.vue.ts:40
 msgid "Format"
-msgstr ""
+msgstr "Формат"
 
 #: source/tmp/win-project-properties/App.vue.ts:41
 msgid "Conversion"
-msgstr ""
+msgstr "Перетворення"
 
 #: source/tmp/win-project-properties/App.vue.ts:42
 msgid "Files to be included in the export"
-msgstr ""
+msgstr "Файли які буде експортовано"
 
 #: source/tmp/win-project-properties/App.vue.ts:43
 msgid "Please select at least one profile to build this project."
-msgstr ""
+msgstr "Будь ласка оберіть принаймні один профіль для створення цього проекту."
 
 #: source/tmp/win-project-properties/App.vue.ts:44
 msgid "Project Title"
-msgstr ""
+msgstr "Назва проекту"
 
 #: source/tmp/win-project-properties/App.vue.ts:45
 msgid "CSL Stylesheet"
-msgstr ""
+msgstr "CSL таблиця стилів"
 
 #: source/tmp/win-project-properties/App.vue.ts:46
 msgid "LaTeX Template"
-msgstr ""
+msgstr "LaTeX шаблон"
 
 #: source/tmp/win-project-properties/App.vue.ts:47
 msgid "HTML Template"
-msgstr ""
+msgstr "HTML шаблон"
 
 #: source/tmp/win-project-properties/App.vue.ts:48
 msgid "Remove file from export"
-msgstr ""
+msgstr "Вилучити файл з експорту"
 
 #: source/tmp/win-project-properties/App.vue.ts:49
 msgid "Add file to export"
-msgstr ""
+msgstr "Додати файли до експорту"
 
 #: source/tmp/win-project-properties/App.vue.ts:50
 msgid "Move file up"
-msgstr ""
+msgstr "Перемістити файл вгору"
 
 #: source/tmp/win-project-properties/App.vue.ts:51
 msgid "Move file down"
-msgstr ""
+msgstr "Перемістити файл вниз"
 
 #: source/tmp/win-project-properties/App.vue.ts:52
 msgid "You have not selected any files for export."
-msgstr ""
+msgstr "Ви не обрали жодного файлу для експорту."
 
 #: source/tmp/win-project-properties/App.vue.ts:53
 msgid ""
 "Some files are selected for export but no longer exist in the directory."
-msgstr ""
+msgstr "Деякі файли вибрано для експорту, але їх більше немає в каталозі."
 
 #: source/tmp/win-print/App.vue.ts:44 source/tmp/win-print/App.vue.ts:45
 #: source/app/service-providers/menu/menu.darwin.ts:248
@@ -1214,23 +1218,23 @@ msgstr "Друк..."
 
 #: source/tmp/win-tag-manager/App.vue.ts:27
 msgid "Assign color"
-msgstr ""
+msgstr "Призначити колір"
 
 #: source/tmp/win-tag-manager/App.vue.ts:28
 msgid "Remove color"
-msgstr ""
+msgstr "Вилучити колір"
 
 #: source/tmp/win-tag-manager/App.vue.ts:29
 msgid "Tag name"
-msgstr ""
+msgstr "Назва мітки"
 
 #: source/tmp/win-tag-manager/App.vue.ts:30
 msgid "Color"
-msgstr ""
+msgstr "Колір"
 
 #: source/tmp/win-tag-manager/App.vue.ts:32
 msgid "A short description"
-msgstr ""
+msgstr "Короткий опис"
 
 #: source/tmp/win-tag-manager/App.vue.ts:33
 msgid ""
@@ -1238,22 +1242,25 @@ msgid ""
 "its tile in the preview list will receive a colored indicator. The "
 "description will be shown on mouse hover."
 msgstr ""
+"Тут ви можете призначити кольори різним міткам. Якщо у файлі знайдено мітку, "
+"його позначка у списку попереднього перегляду отримає кольоровий індикатор. "
+"Опис буде показано при наведенні миші."
 
 #: source/tmp/win-tag-manager/App.vue.ts:34
 msgid "Manage tags"
-msgstr ""
+msgstr "Керувати мітками"
 
 #: source/tmp/win-tag-manager/App.vue.ts:36
 msgid "New tag"
-msgstr ""
+msgstr "Нова мітка"
 
 #: source/tmp/win-tag-manager/App.vue.ts:37
 msgid "Rename"
-msgstr ""
+msgstr "Перейменувати"
 
 #: source/tmp/win-tag-manager/App.vue.ts:38
 msgid "Rename tag…"
-msgstr ""
+msgstr "Перейменувати мітку ..."
 
 #: source/tmp/win-tag-manager/App.vue.ts:98
 #: source/app/service-providers/menu/menu.darwin.ts:578
@@ -1304,7 +1311,7 @@ msgstr "нікол"
 #: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
 #, javascript-format
 msgid "Last checked: %s"
-msgstr ""
+msgstr "Востаннє перевірено: %s"
 
 #: source/tmp/win-update/App.vue.ts:124
 msgid "Starting update …"
@@ -1340,7 +1347,7 @@ msgstr "Виділити все"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Cmd/Ctrl-клік щоб перейти за посиланням"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
@@ -1363,11 +1370,11 @@ msgstr "Код"
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:67
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "Файлу %s не існує."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:128
 msgid "Word count"
-msgstr ""
+msgstr "Лічильник слів"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:148
 #: source/app/service-providers/menu/menu.darwin.ts:165
@@ -1377,7 +1384,7 @@ msgstr "Відкрити..."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
 msgid "No footnote text found."
-msgstr ""
+msgstr "Текст виноски не знайдено."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
 #: source/app/service-providers/menu/menu.darwin.ts:308
@@ -1387,11 +1394,11 @@ msgstr "Зміни"
 
 #: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:68
 msgid "Fetching link preview…"
-msgstr ""
+msgstr "Отримання попереднього перегляду для посилання ..."
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
 msgid "Copy equation code"
-msgstr ""
+msgstr "Копіювати код рівняння"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
 msgid "No suggestions"
@@ -1451,11 +1458,11 @@ msgstr "Копіювати ланку"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
 msgid "Remove Link"
-msgstr ""
+msgstr "Вилучити посилання"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:106
 msgid "Copy image to clipboard"
-msgstr ""
+msgstr "Копіювати зображення до буферу обміну"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Open image"
