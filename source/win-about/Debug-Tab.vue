@@ -72,9 +72,8 @@ const arch = process.arch
 const env = Object.assign({}, process.env)
 const platform = process.platform
 const commit = __GIT_COMMIT_HASH__
-// DEBUG: getSystemVersion is a simple property in the renderer
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const platformVersion = process.getSystemVersion
+// DEBUG: getSystemVersion is a simple property in the renderer, not a function
+const platformVersion = process.getSystemVersion as unknown as string
 // Add version strings for external helper programs Zettlr can use
 const programVersions = {
   pandoc: process.env.PANDOC_VERSION ?? 'not available',

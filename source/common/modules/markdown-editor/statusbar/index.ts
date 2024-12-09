@@ -20,6 +20,7 @@ import { readabilityStatus } from '../renderers/readability'
 import { cursorStatus, wordcountStatus, charcountStatus, inputModeStatus } from './info-fields'
 import { languageToolStatus } from './language-tool'
 import { diagnosticsStatus } from './diagnostics'
+import { statusbarProjectInfo } from '../plugins/project-info-field'
 
 /**
  * The interface each item on the statusbar must conform to.
@@ -60,7 +61,7 @@ export const showStatusbarEffect = StateEffect.define<boolean>()
  *
  * @return  {Panel}             Returns the statusbar panel
  */
-function createStatusbar (view: EditorView): Panel {
+function createStatusbar (_view: EditorView): Panel {
   const elem = document.createElement('div')
   elem.className = 'cm-statusbar'
   return {
@@ -70,6 +71,7 @@ function createStatusbar (view: EditorView): Panel {
       const elements: StatusbarItem[] = []
       // NOTE: Order here determines the order in the statusbar
       const items = [
+        statusbarProjectInfo,
         magicQuotesStatus,
         readabilityStatus,
         cursorStatus,
@@ -110,7 +112,7 @@ function createStatusbar (view: EditorView): Panel {
 }
 
 const statusbarState = StateField.define<boolean>({
-  create: (state: EditorState) => false,
+  create: (_state: EditorState) => false,
   update (value, transaction) {
     // Determine if we have to switch our toggle
     for (const effect of transaction.effects) {

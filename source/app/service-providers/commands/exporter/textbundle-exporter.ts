@@ -25,7 +25,7 @@ import sanitize from 'sanitize-filename'
 
 const ASSETS_FOLDER_NAME = 'assets'
 
-export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles, ctx: ExporterAPI): Promise<ExporterOutput> {
+export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles, _ctx: ExporterAPI): Promise<ExporterOutput> {
   const output: ExporterOutput = {
     code: 0,
     stdout: [],

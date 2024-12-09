@@ -124,10 +124,10 @@ export default async function makeImport (
 
       try {
         await new Promise<void>((resolve, reject) => {
-          pandocProcess.on('message', (message, handle) => {
+          pandocProcess.on('message', (message, _handle) => {
             console.log(message)
           })
-          pandocProcess.on('close', (code, signal) => {
+          pandocProcess.on('close', (code, _signal) => {
             if (code === 0) {
               resolve()
             } else {

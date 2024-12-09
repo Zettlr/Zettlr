@@ -109,7 +109,7 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
         const prev = next.prevSibling!
         const cellNode: TableCell = {
           type: 'TableCell',
-          name: 'TableCell',
+          name: rowNode.isHeaderOrFooter ? 'th' : 'td',
           from: prev.to,
           to: next.from,
           whitespaceBefore: '',
@@ -124,7 +124,7 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table {
         // Functional table cell
         const cellNode: TableCell = {
           type: 'TableCell',
-          name: 'TableCell',
+          name: rowNode.isHeaderOrFooter ? 'th' : 'td',
           from: next.from,
           to: next.to,
           whitespaceBefore: '',

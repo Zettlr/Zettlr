@@ -38,7 +38,7 @@
             v-bind:window-id="windowId"
             v-on:create-file="handleOperation('file-new', item.id)"
             v-on:create-dir="handleOperation('dir-new', item.id)"
-            v-on:begin-dragging="$emit('lock-file-tree')"
+            v-on:begin-dragging="emit('lock-file-tree')"
           ></FileItem>
         </RecycleScroller>
       </template>
@@ -102,6 +102,7 @@ import { nextTick, ref, computed, watch, onUpdated } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
 import type { AnyDescriptor } from '@dts/common/fsal'
 import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 interface RecycleScrollerData {
   id: number
@@ -307,7 +308,7 @@ function navigate (evt: KeyboardEvent): void {
           path: activeDescriptor.value.path,
           newTab: false
         }
-      })
+      } as DocumentManagerIPCAPI)
         .catch(e => console.error(e))
     }
     return // Stop handling

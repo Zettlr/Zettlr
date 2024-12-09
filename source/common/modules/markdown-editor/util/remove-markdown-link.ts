@@ -17,7 +17,6 @@
 import { type EditorView } from '@codemirror/view'
 import { type ChangeSpec } from '@codemirror/state'
 import { type SyntaxNode } from '@lezer/common'
-import { shortenUrlVisually } from 'source/common/util/shorten-url-visually'
 
 /**
  * Utility to remove a markdown link. It extracts the text from the markdown

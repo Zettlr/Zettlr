@@ -20,6 +20,7 @@ import { configField } from '../util/configuration'
 import { pathBasename, pathDirname, pathExtname, relativePath } from '@common/util/renderer-path-polyfill'
 import { type SaveImageFromClipboardAPI } from 'source/app/service-providers/commands/save-image-from-clipboard'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -239,7 +240,7 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
               path: filePath,
               newTab: true
             }
-          })
+          } as DocumentManagerIPCAPI)
             .catch(e => console.error(e))
         } else {
           // Unsupported file type -> ignore

@@ -620,7 +620,18 @@
     <term name="month-12">ديسمبر</term>
 
     <!-- SHORT MONTH FORMS -->
-
+    <term name="month-01" form="short">يناير</term>
+    <term name="month-02" form="short">فبراير</term>
+    <term name="month-03" form="short">مارس</term>
+    <term name="month-04" form="short">أبريل</term>
+    <term name="month-05" form="short">مايو</term>
+    <term name="month-06" form="short">يونيو</term>
+    <term name="month-07" form="short">يوليو</term>
+    <term name="month-08" form="short">أغسطس</term>
+    <term name="month-09" form="short">سبتمبر</term>
+    <term name="month-10" form="short">أكتوبر</term>
+    <term name="month-11" form="short">نوفمبر</term>
+    <term name="month-12" form="short">ديسمبر</term>
 
     <!-- SEASONS -->
     <term name="season-01">ربيع</term>

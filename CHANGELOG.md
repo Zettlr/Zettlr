@@ -35,9 +35,27 @@ annotate your PDF files, please continue using your existing workflow.
 - **New Feature**: Zettlr can now open images and PDF files right next to your
   regular files, enabling you to preview pictures of, e.g., plots, or studies to
   reference in your text; and double-check PDF files which you need to reference
+- **New Feature**: For files that belong to a Zettlr project, the status bar now
+  additionally displays the total word or character count for all files across
+  the entire project, making it easy to check for a total limit (e.g., for a
+  journal submission); clicking on the item furthermore allows quick switching
+  between just those files that are part of the project
+- **New Feature**: The references sidebar tab now provides an approximate word
+  count, which is useful if some word count limit includes the bibliography; as
+  references aren't included in any other word count
 - Fix SVG image preview (#5496)
+- Fix network share image preview (#5495)
 - Checking task-list checkboxes now returns the focus back to the editor
   immediately (#5246)
+- Fixed a bug where opened documents would not be closed once the last tab was
+  closed, retaining outdated file contents and making the file unresponsive to
+  external changes. Now files that do not have an open editor instance will be
+  closed appropriately
+- The statusbar's character/word counters now respect the character count
+  setting, meaning only the word or character count is shown, not both
+- Fixed a bug that would prevent text nodes from tables to be extracted
+- Fixed an issue where valid citations from within, e.g., comments, or other
+  non-valid places would end up in the list of references
 
 ## Under the Hood
 
@@ -53,6 +71,17 @@ annotate your PDF files, please continue using your existing workflow.
   tab, or the image previews in an editor component will now respect the
   corresponding setting of whether the user wants to open them in Zettlr or with
   the default system app for the file types
+- Bump CodeMirror dependencies
+- Define a new shared type, `IPCAPI` that can be used to type the various IPC
+  APIs the service providers use across the app.
+- Fully type IPC APIs:
+  - AssetsProvider
+  - DocumentAuthority
+  - DocumentManager
+  - WindowProvider
+  - CiteprocProvider
+- Configuration updates in the renderer are now throttled to at most once every
+  second, preventing some fast updates from inducing lag
 
 # 3.3.1
 

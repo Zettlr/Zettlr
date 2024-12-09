@@ -94,6 +94,7 @@ import { nextTick, computed, ref, watch, onMounted, onBeforeUnmount, onUpdated }
 import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
 import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -172,7 +173,7 @@ onMounted(() => {
             leafId: props.leafId,
             windowId: props.windowId
           }
-        })
+        } as DocumentManagerIPCAPI)
           .catch(e => console.error(e))
       } else {
         // No more open files, so request closing of the window
@@ -403,7 +404,7 @@ function handleClickClose (event: MouseEvent, file: OpenDocument): void {
       windowId: props.windowId,
       leafId: props.leafId
     }
-  })
+  } as DocumentManagerIPCAPI)
     .catch(e => console.error(e))
 }
 
@@ -447,7 +448,7 @@ function selectFile (file: OpenDocument): void {
   ipcRenderer.invoke('documents-provider', {
     command: 'open-file',
     payload: { path: file.path, windowId: props.windowId, leafId: props.leafId }
-  })
+  } as DocumentManagerIPCAPI)
     .catch(e => console.error(e))
 }
 
@@ -461,7 +462,7 @@ function handleTabbarContext (event: MouseEvent): void {
           leafId: props.leafId,
           windowId: props.windowId
         }
-      }).catch(e => console.error(e))
+      } as DocumentManagerIPCAPI).catch(e => console.error(e))
     }
   })
 }
@@ -482,7 +483,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
           leafId: props.leafId,
           windowId: props.windowId
         }
-      }).catch(e => console.error(e))
+      } as DocumentManagerIPCAPI).catch(e => console.error(e))
     } else if (clickedID === 'close-others') {
       // Close all files ...
       for (const openFile of openFiles.value) {
@@ -497,7 +498,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
             leafId: props.leafId,
             windowId: props.windowId
           }
-        }).catch(e => console.error(e))
+        } as DocumentManagerIPCAPI).catch(e => console.error(e))
       }
     } else if (clickedID === 'close-all') {
       // Close all files
@@ -509,7 +510,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
             leafId: props.leafId,
             windowId: props.windowId
           }
-        }).catch(e => console.error(e))
+        } as DocumentManagerIPCAPI).catch(e => console.error(e))
       }
     } else if (clickedID === 'copy-filename') {
       // Copy the filename to the clipboard
@@ -530,7 +531,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
           windowId: props.windowId,
           pinned: !doc.pinned
         }
-      }).catch(e => console.error(e))
+      } as DocumentManagerIPCAPI).catch(e => console.error(e))
     }
   })
 }
@@ -688,7 +689,7 @@ function handleDragEnd (event: DragEvent): void {
       windowId: props.windowId,
       leafId: props.leafId
     }
-  })
+  } as DocumentManagerIPCAPI)
     .catch(err => console.error(err))
 }
 
@@ -731,7 +732,7 @@ function handleExternalDrop (event: DragEvent): void {
       targetLeaf: props.leafId,
       path: filePath.join(DELIM)
     }
-  })
+  } as DocumentManagerIPCAPI)
     .catch(err => console.error(err))
 }
 

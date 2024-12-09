@@ -126,7 +126,7 @@ const isExpanded = computed<boolean>(() => fileManagerMode.value === 'expanded')
 
 const isFileListVisible = computed<boolean>(() => isExpanded.value || fileListVisible.value)
 
-watch(selectedDirectory, (value, oldValue) => {
+watch(selectedDirectory, (value, _oldValue) => {
   // Reset the local search when a new directory has been selected
   filterQuery.value = ''
   // If the directory just got de-selected and the fileList

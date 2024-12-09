@@ -28,7 +28,7 @@ class BulletWidget extends WidgetType {
     return other.node.from === this.node.from && other.node.to === this.node.from
   }
 
-  toDOM (view: EditorView): HTMLElement {
+  toDOM (_view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.innerHTML = '&bull;'
     elem.classList.add('rendered-bullet')
@@ -49,7 +49,7 @@ export class SpaceWidget extends WidgetType {
     return other.node.from === this.node.from && other.node.to === this.node.from
   }
 
-  toDOM (view: EditorView): HTMLElement {
+  toDOM (_view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.innerHTML = '&nbsp;'.repeat(this.numChars)
     return elem

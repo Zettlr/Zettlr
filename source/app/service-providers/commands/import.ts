@@ -30,7 +30,7 @@ export default class ImportFiles extends ZettlrCommand {
     * @param {Object} arg The command arguments.
     * @return {void} Does not return.
     */
-  async run (evt: string, arg: any): Promise<boolean> {
+  async run (event: string, _arg: any): Promise<boolean> {
     const dirs = await this._app.windows.askDir(trans('Import directory'), undefined, trans('Select folder'), trans('Select import destination'))
     if (dirs.length === 0) {
       showNativeNotification(trans('You have to select a directory to import to.'))

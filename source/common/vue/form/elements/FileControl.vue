@@ -41,6 +41,7 @@ import { trans } from '@common/i18n-renderer'
 import { ref, computed, watch, toRef } from 'vue'
 import TextControl from './TextControl.vue'
 import type { FileFilter } from 'electron'
+import type { RequestFilesIPCAPI } from 'source/app/service-providers/windows'
 
 const ipcRenderer = window.ipc
 
@@ -59,11 +60,11 @@ const emit = defineEmits<(e: 'update:modelValue', val: string) => void>()
 const textValue = ref<string>(props.modelValue)
 
 const fieldID = computed<string>(() => {
-  return 'field-input-' + props.name ?? ''
+  return 'field-input-' + props.name
 })
 
 const selectButtonLabel = computed<string>(() => {
-  return props.directory === true ? trans('Select folder…') : trans('Select file…')
+  return props.directory ? trans('Select folder…') : trans('Select file…')
 })
 
 watch(toRef(props, 'modelValue'), (newValue) => {
@@ -77,9 +78,9 @@ watch(textValue, () => {
 })
 
 function requestFile (): void {
-  const payload = {
+  const payload: RequestFilesIPCAPI = {
     filters: props.filter ?? [{ name: trans('All Files'), extensions: ['*'] }],
-    multiSel: false
+    multiSelection: false
   }
 
   ipcRenderer.invoke('request-files', payload)

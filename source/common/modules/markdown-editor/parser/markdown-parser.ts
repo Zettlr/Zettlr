@@ -85,7 +85,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
     // to be inside a 'FencedCode' Syntax node so that our renderer can pick it
     // up. By defining an empty StreamParser, we can ensure that there will be
     // such a structure, even if it's basically just plain text.
-    mode: StreamLanguage.define({ token (stream, state) { stream.skipToEnd(); return null } }),
+    mode: StreamLanguage.define({ token (stream, _state) { stream.skipToEnd(); return null } }),
     selectors: ['mermaid']
   },
   { mode: css().language, selectors: ['css'] },

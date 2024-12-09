@@ -1,13 +1,13 @@
 <template>
   <div>
-    <p id="theme-selection-label" v-html="label"></p>
+    <p id="theme-selection-label" v-html="props.label"></p>
     <div id="theme-container">
       <div
-        v-for="(theme, index) in options"
+        v-for="(theme, index) in props.options"
         v-bind:key="index"
         v-bind:class="{
           'theme-container-item': true,
-          selected: modelValue === index
+          selected: props.modelValue === index
         }"
       >
         <!-- NOTE: "index" here is not actually an index number but the theme's name -->

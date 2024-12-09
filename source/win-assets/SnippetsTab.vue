@@ -83,7 +83,8 @@ import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import CodeEditor from '@common/vue/CodeEditor.vue'
 import { trans } from '@common/i18n-renderer'
-import { ref, computed, watch, toRef, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
+import type { AssetsProviderIPCAPI } from 'source/app/service-providers/assets'
 
 const ipcRenderer = window.ipc
 
@@ -122,7 +123,7 @@ const offCallback = ipcRenderer.on('shortcut', (event, shortcut) => {
 onUnmounted(() => { offCallback() })
 
 function updateAvailableSnippets (selectAfterUpdate?: string): void {
-  ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
+  ipcRenderer.invoke('assets-provider', { command: 'list-snippets' } as AssetsProviderIPCAPI)
     .then(data => {
       availableSnippets.value = data
       if (typeof selectAfterUpdate === 'string' && availableSnippets.value.includes(selectAfterUpdate)) {
@@ -154,7 +155,7 @@ function loadState (): void {
     payload: {
       name: availableSnippets.value[currentItem.value]
     }
-  })
+  } as AssetsProviderIPCAPI)
     .then(data => {
       editorContents.value = data
       CodeEditor.value?.markClean()
@@ -173,7 +174,7 @@ function saveSnippet (): void {
       name: availableSnippets.value[currentItem.value],
       contents: editorContents.value
     }
-  })
+  } as AssetsProviderIPCAPI)
     .then(() => {
       savingStatus.value = trans('Saved!')
       setTimeout(() => {
@@ -193,7 +194,7 @@ function addSnippet (): void {
       name: newName,
       contents: ''
     }
-  })
+  } as AssetsProviderIPCAPI)
     .then(() => { updateAvailableSnippets(newName) })
     .catch(err => console.error(err))
 }
@@ -207,7 +208,7 @@ function removeSnippet (idx: number): void {
   ipcRenderer.invoke('assets-provider', {
     command: 'remove-snippet',
     payload: { name: availableSnippets.value[idx] }
-  })
+  } as AssetsProviderIPCAPI)
     .then(() => { updateAvailableSnippets() })
     .catch(err => console.error(err))
 }
@@ -226,7 +227,7 @@ function renameSnippet (): void {
       name: availableSnippets.value[currentItem.value],
       newName: newVal
     }
-  })
+  } as AssetsProviderIPCAPI)
     .then(() => { updateAvailableSnippets(newVal) })
     .catch(err => console.error(err))
 }
@@ -262,7 +263,7 @@ function ensureUniqueName (candidate: string): string {
 function openSnippetsDirectory (): void {
   ipcRenderer.invoke('assets-provider', {
     command: 'open-snippets-directory'
-  }).catch(err => console.error(err))
+  } as AssetsProviderIPCAPI).catch(err => console.error(err))
 }
 </script>
 

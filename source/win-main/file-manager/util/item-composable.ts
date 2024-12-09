@@ -21,10 +21,10 @@ import type { AnyDescriptor } from 'source/types/common/fsal'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
 import { hasImageExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import makeValidUri from 'source/common/util/make-valid-uri'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useItemComposable (
   object: AnyDescriptor,
   rootElement: Ref<HTMLElement|null>,
@@ -99,7 +99,7 @@ export function useItemComposable (
           leafId: documentTreeStore.lastLeafId,
           newTab: middleClick || (alt && type === 'file') // Force a new tab in this case.
         }
-      })
+      } as DocumentManagerIPCAPI)
         .catch(e => console.error(e))
     } else if (type === 'other') {
       const { files } = configStore.config
@@ -182,7 +182,7 @@ export function useItemComposable (
               windowId,
               newTab: true
             }
-          })
+          } as DocumentManagerIPCAPI)
             .catch(e => console.error(e))
         } else if (clickedID === 'menu.rename_file') {
           nameEditing.value = true

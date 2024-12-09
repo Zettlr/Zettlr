@@ -139,7 +139,7 @@ app.whenReady().then(() => {
  * @param {Array} argv The arguments the second instance had received
  * @param {String} cwd The current working directory
  */
-app.on('second-instance', (event, argv, cwd) => {
+app.on('second-instance', (event, argv, _cwd) => {
   serviceContainer?.log.info('[Application] A second instance has been opened.')
 
   // openWindow calls the appropriate function of the windowManager, which deals

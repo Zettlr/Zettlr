@@ -28,7 +28,7 @@ export async function runShellCommand (command: string, argv: string[], cwd: str
       stderr.push(String(data))
     })
 
-    proc.on('close', (code: number, signal) => {
+    proc.on('close', (code: number, _signal) => {
       finalCode = code
       resolve()
     })

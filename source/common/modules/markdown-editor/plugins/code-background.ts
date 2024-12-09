@@ -10,7 +10,7 @@ import { EditorView, layer, RectangleMarker } from '@codemirror/view'
 export const codeblockBackground = layer({
   above: false, // Render below text
   class: 'cm-codeBackgroundLayer',
-  update (update, layer) {
+  update (update, _layer) {
     return update.docChanged || update.viewportChanged // Return true to redraw markers
   },
   markers (view) {
@@ -109,7 +109,7 @@ export const codeblockBackground = layer({
 export const inlineCodeBackground = layer({
   above: false, // Render below text
   class: 'cm-inlineCodeBackgroundLayer',
-  update (update, layer) {
+  update (update, _layer) {
     return update.docChanged || update.viewportChanged // Return true to redraw markers
   },
   markers (view) {

@@ -12,9 +12,9 @@ export interface ProjectSettings {
    */
   profiles: string[]
   /**
-   * A sorted (!) list of absolute paths to the files that should be included in
-   * the export of this project, including the ordering in which they should be
-   * included.
+   * A sorted (!) list of project-relative paths to the files that should be
+   * included in the export of this project, including the ordering in which
+   * they should be included.
    */
   files: string[]
   /**

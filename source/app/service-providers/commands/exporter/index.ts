@@ -133,7 +133,7 @@ async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: strin
       output.stderr.push(String(data))
     })
 
-    pandocProcess.on('close', (code: number, signal) => {
+    pandocProcess.on('close', (code: number, _signal) => {
       // Code should be 0. To check for errors, check that
       output.code = code
       resolve()
