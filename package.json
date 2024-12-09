@@ -138,7 +138,7 @@
     "@electron-forge/maker-rpm": "^7.5.0",
     "@electron-forge/maker-zip": "^7.5.0",
     "@electron-forge/plugin-fuses": "^7.5.0",
-    "@electron-forge/plugin-webpack": "^7.5.0",
+    "@electron-forge/plugin-webpack": "^7.6.0",
     "@electron/fuses": "^1.8.0",
     "@electron/notarize": "^2.5.0",
     "@eslint/config-inspector": "^0.5.6",
