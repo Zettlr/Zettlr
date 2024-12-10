@@ -68,6 +68,7 @@ defaults:
 # Global environment variables
 env:
   NODE_VERSION: '20'
+  DEBUG: '*' # DEBUG: Enable debug mode to debug macOS ARM package notarization errors
 
 # Ensure only a single build workflow runs at any one time
 concurrency:
