@@ -197,7 +197,7 @@ module.exports = {
           tool: 'notarytool',
           appleId: process.env.APPLE_ID,
           appleIdPassword: process.env.APPLE_ID_PASS,
-          teamId: 'QS52BN8W68'
+          teamId: process.env.APPLE_TEAM_ID
         }
       : false,
     extraResource: [
