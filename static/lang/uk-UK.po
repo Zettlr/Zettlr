@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-11-18 09:26+0000\n"
-"PO-Revision-Date: 2024-12-09 16:52+0200\n"
+"PO-Revision-Date: 2024-12-10 16:28+0200\n"
 "Last-Translator: Fedir Zinchuk <fedikw@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk_UK\n"
@@ -1472,24 +1472,24 @@ msgstr "Відкрити зображення"
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Відкрити у Файндер"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:118
 msgid "Open in File Browser"
-msgstr ""
+msgstr "Відкрити в менеджері файлів"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:123
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Зображення не знайдено: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:198
 msgid "Open image externally"
-msgstr ""
+msgstr "Відкрити зображення в зовнішній програмі"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Побудова діаграми mermaid ..."
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
 msgid "Could not render Graph:"
@@ -1498,23 +1498,23 @@ msgstr "Неможливо відтворити графік"
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Режим читабельності (%s)"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "Без підсвічування"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Орфографічна помилка"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "Перейти до посилання на виноску"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
 msgid "Disabled"
-msgstr ""
+msgstr "Вимкнено"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
 msgid "Custom"
@@ -1522,15 +1522,15 @@ msgstr "Власний"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Відкрити панель діагностики"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "Визначити автоматично"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Африкаанс"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -1538,7 +1538,7 @@ msgstr "Арабська"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "Астурійська"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -1550,7 +1550,7 @@ msgstr "Болгарська"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "Бретонська"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
@@ -1558,15 +1558,15 @@ msgstr "Боснійська"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "Каталонська"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Catalan (Valencia)"
-msgstr ""
+msgstr "Каталонська (Валенсія)"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Czech"
-msgstr ""
+msgstr "Чеська"
 
 #: source/common/util/map-lang-code.ts:43
 msgid "Danish"
@@ -1594,7 +1594,7 @@ msgstr "Німецька (Люксембург)"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "German"
-msgstr ""
+msgstr "Німецька"
 
 #: source/common/util/map-lang-code.ts:50
 msgid "Greek"
@@ -1686,11 +1686,11 @@ msgstr "Французька (Люксембург)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Французька (Князівство Монако)"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "French"
-msgstr ""
+msgstr "Французька"
 
 #: source/common/util/map-lang-code.ts:74
 msgid "Irish"
@@ -1754,7 +1754,7 @@ msgstr "Грузинська"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Кхмерська (Камбоджа)"
 
 #: source/common/util/map-lang-code.ts:90
 msgid "Korean"
@@ -1814,7 +1814,7 @@ msgstr "Нідерландська (Нідерланди)"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Dutch"
-msgstr ""
+msgstr "Голландська"
 
 #: source/common/util/map-lang-code.ts:105
 msgid "Norwegian (Nyorsk)"
@@ -1890,11 +1890,11 @@ msgstr "Тамільська (Індія)"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Thai"
-msgstr ""
+msgstr "Тайська"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Тагальська (філіппінська)"
 
 #: source/common/util/map-lang-code.ts:125
 msgid "Turkish"
@@ -1906,7 +1906,7 @@ msgstr "Українська"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Urdu"
-msgstr ""
+msgstr "Урду"
 
 #: source/common/util/map-lang-code.ts:128
 msgid "Vietnamese"
@@ -1932,7 +1932,7 @@ msgstr "Китайська"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
-msgstr ""
+msgstr "тількищо"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -2033,7 +2033,7 @@ msgstr ""
 
 #: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
-msgstr ""
+msgstr "Шлях до каталогу"
 
 #: source/win-preferences/schema/appearance.ts:26
 #: source/app/service-providers/menu/menu.darwin.ts:439
@@ -2056,15 +2056,15 @@ msgstr "Слідувати за системою"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "On"
-msgstr ""
+msgstr "Ввімкнено"
 
 #: source/win-preferences/schema/appearance.ts:59
 msgid "End"
-msgstr ""
+msgstr "Вимкнено"
 
 #: source/win-preferences/schema/appearance.ts:69
 msgid "Theme"
-msgstr ""
+msgstr "Тема"
 
 #: source/win-preferences/schema/appearance.ts:76
 msgid "Here you can choose the theme for the app."
@@ -2072,79 +2072,79 @@ msgstr "Тут можна обрати тему для програми."
 
 #: source/win-preferences/schema/appearance.ts:118
 msgid "Toolbar options"
-msgstr ""
+msgstr "Параметри панелі інструментів"
 
 #: source/win-preferences/schema/appearance.ts:125
 msgid "Left section buttons"
-msgstr ""
+msgstr "Кнопки ліворуч"
 
 #: source/win-preferences/schema/appearance.ts:129
 msgid "Display \"Open Preferences\" button"
-msgstr ""
+msgstr "Показати кнопку \"Відкрити налаштування\""
 
 #: source/win-preferences/schema/appearance.ts:134
 msgid "Display \"New File\" button"
-msgstr ""
+msgstr "Показати кнопку \"Новий файл\""
 
 #: source/win-preferences/schema/appearance.ts:139
 msgid "Display \"Previous File\" button"
-msgstr ""
+msgstr "Показати кнопку \"Попередній файл\""
 
 #: source/win-preferences/schema/appearance.ts:144
 msgid "Display \"Next File\" button"
-msgstr ""
+msgstr "Показати кнопку \"Наступний файл\""
 
 #: source/win-preferences/schema/appearance.ts:151
 msgid "Center section buttons"
-msgstr ""
+msgstr "Кнопки посередині"
 
 #: source/win-preferences/schema/appearance.ts:155
 msgid "Display readability button"
-msgstr ""
+msgstr "Показати кнопку читабельності"
 
 #: source/win-preferences/schema/appearance.ts:160
 msgid "Display \"Insert Comment\" button"
-msgstr ""
+msgstr "Показати кнопку \"Додати коментар\""
 
 #: source/win-preferences/schema/appearance.ts:165
 msgid "Display link button"
-msgstr ""
+msgstr "Показати кнопку посилання"
 
 #: source/win-preferences/schema/appearance.ts:170
 msgid "Display image button"
-msgstr ""
+msgstr "Показати кнопку зображення"
 
 #: source/win-preferences/schema/appearance.ts:175
 msgid "Display task list button"
-msgstr ""
+msgstr "Показати кнопку списку завдань"
 
 #: source/win-preferences/schema/appearance.ts:180
 msgid "Display \"Insert Table\" button"
-msgstr ""
+msgstr "Показати кнопку \"Додати таблицю\""
 
 #: source/win-preferences/schema/appearance.ts:185
 msgid "Display \"Insert Footnote\" button"
-msgstr ""
+msgstr "Показати кнопку \"Додати виноску\""
 
 #: source/win-preferences/schema/appearance.ts:192
 msgid "Right section buttons"
-msgstr ""
+msgstr "Кнопки праворуч"
 
 #: source/win-preferences/schema/appearance.ts:196
 msgid "Display document info"
-msgstr ""
+msgstr "Показати інформацію про документ"
 
 #: source/win-preferences/schema/appearance.ts:201
 msgid "Display Pomodoro-timer"
-msgstr ""
+msgstr "Показати таймер Помодоро"
 
 #: source/win-preferences/schema/appearance.ts:207
 msgid "Status bar"
-msgstr ""
+msgstr "Рядок стану"
 
 #: source/win-preferences/schema/appearance.ts:213
 msgid "Show statusbar"
-msgstr ""
+msgstr "Показати рядок стану"
 
 #: source/win-preferences/schema/appearance.ts:224
 msgid "Open CSS editor"
@@ -2160,6 +2160,9 @@ msgid ""
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
 msgstr ""
+"Режим введення визначає, як ви взаємодієте з редактором. Ми рекомендуємо "
+"залишити цей параметр на \"Звичайний\". Вибирайте \"Vim\" або \"Emacs\", "
+"лише якщо знаєте, що це означає."
 
 #: source/win-preferences/schema/editor.ts:44
 msgid "Writing direction"
@@ -2167,7 +2170,7 @@ msgstr "Напрям письма"
 
 #: source/win-preferences/schema/editor.ts:57
 msgid "Markdown rendering"
-msgstr ""
+msgstr "Візуалізація Markdown"
 
 #: source/win-preferences/schema/editor.ts:64
 msgid ""
@@ -2175,6 +2178,9 @@ msgid ""
 "appearance. This hides formatting characters (such as **text**) or renders "
 "images instead of their link."
 msgstr ""
+"Поставте прапорець, щоб увімкнути показ різних елементів Markdown у "
+"відформатований вигляд. Це приховує символи форматування (наприклад, "
+"**текст**) або показує картинки замість їх посилань."
 
 #: source/win-preferences/schema/editor.ts:72
 msgid "Render Citations"
@@ -2210,11 +2216,11 @@ msgstr ""
 
 #: source/win-preferences/schema/editor.ts:116
 msgid "Formatting characters for bold and italic"
-msgstr ""
+msgstr "Форматування символів для напівжирного та курсиву"
 
 #: source/win-preferences/schema/editor.ts:143
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Перевіряти Markdown на помилки в розмітці"
 
 #: source/win-preferences/schema/editor.ts:149
 msgid "Table Editor"
@@ -2226,6 +2232,9 @@ msgid ""
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
 msgstr ""
+"Редактор таблиць надає інтерактивний інтерфейс, який спрощує створення та "
+"редагування таблиць. Він надає кнопки для загальних функцій і стежить про "
+"форматування Markdown."
 
 #: source/win-preferences/schema/editor.ts:165
 msgid "Distraction-free mode"
@@ -2237,11 +2246,11 @@ msgstr "Робити блідими рядки, які не під фокусо�
 
 #: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction free mode"
-msgstr ""
+msgstr "Приховати панель інструментів у режимі без відволікань"
 
 #: source/win-preferences/schema/editor.ts:182
 msgid "Word counter"
-msgstr ""
+msgstr "Лічильник слів"
 
 #: source/win-preferences/schema/editor.ts:189
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -2249,11 +2258,11 @@ msgstr "Рахувати символи замість слів (напр. дл�
 
 #: source/win-preferences/schema/editor.ts:195
 msgid "Readability mode"
-msgstr ""
+msgstr "Режим читабельності"
 
 #: source/win-preferences/schema/editor.ts:202
 msgid "Algorithm"
-msgstr ""
+msgstr "Алгоритм"
 
 #: source/win-preferences/schema/editor.ts:220
 msgid "Maximum width of images (%s %)"
@@ -2265,7 +2274,7 @@ msgstr "Максимальна висота зображень (%s %)"
 
 #: source/win-preferences/schema/editor.ts:235
 msgid "Other settings"
-msgstr ""
+msgstr "Інші налаштування"
 
 #: source/win-preferences/schema/editor.ts:241
 msgid "Font size"
@@ -2281,11 +2290,11 @@ msgstr "Для відступу використовувати табуляці�
 
 #: source/win-preferences/schema/editor.ts:261
 msgid "Show formatting toolbar when text is selected"
-msgstr ""
+msgstr "Показувати панель форматування, коли вибрано текст"
 
 #: source/win-preferences/schema/editor.ts:266
 msgid "Highlight whitespace"
-msgstr ""
+msgstr "Виділяти пробіли"
 
 #: source/win-preferences/schema/editor.ts:272
 msgid "Suggest emojis during autocompletion"
@@ -2293,7 +2302,7 @@ msgstr "Пропонувати емодзі під час автозаповне
 
 #: source/win-preferences/schema/editor.ts:277
 msgid "Show link previews"
-msgstr ""
+msgstr "Показувати перегляд для посилань"
 
 #: source/win-preferences/schema/editor.ts:283
 msgid "Automatically close matching character pairs"
@@ -2301,7 +2310,7 @@ msgstr "Автоматично закривати відповідні пари 
 
 #: source/win-preferences/schema/general.ts:22
 msgid "Application language"
-msgstr ""
+msgstr "Мова програми"
 
 #: source/win-preferences/schema/general.ts:33
 msgid "Autosave"
@@ -2321,17 +2330,19 @@ msgstr "Після невеликої затримки"
 
 #: source/win-preferences/schema/general.ts:55
 msgid "Default image folder"
-msgstr ""
+msgstr "Типовий каталог зображень"
 
 #: source/win-preferences/schema/general.ts:67
 msgid ""
 "Click \"Select folder…\" or type an absolute or relative path directly into "
 "the input field."
 msgstr ""
+"Натисніть \"Вибрати каталог…\" або введіть абсолютний або відносний шлях "
+"безпосередньо в поле введення."
 
 #: source/win-preferences/schema/general.ts:72
 msgid "Behavior"
-msgstr ""
+msgstr "Поведінка"
 
 #: source/win-preferences/schema/general.ts:78
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
@@ -2348,19 +2359,19 @@ msgstr "Оновлення"
 
 #: source/win-preferences/schema/general.ts:95
 msgid "Automatically check for updates"
-msgstr ""
+msgstr "Автоматично перевіряти оновлення"
 
 #: source/win-preferences/schema/import-export.ts:24
 msgid "Import and export profiles"
-msgstr ""
+msgstr "Імпорт та експорт профілів"
 
 #: source/win-preferences/schema/import-export.ts:30
 msgid "Open import profiles editor"
-msgstr ""
+msgstr "Відкрити редактор профілів імпорту"
 
 #: source/win-preferences/schema/import-export.ts:44
 msgid "Open export profiles editor"
-msgstr ""
+msgstr "Відкрити редактор профілів експорту"
 
 #: source/win-preferences/schema/import-export.ts:59
 msgid "Export settings"
@@ -2389,12 +2400,12 @@ msgstr "Не чіпати внутрішні посилання"
 
 #: source/win-preferences/schema/import-export.ts:88
 msgid "Destination folder for exported files"
-msgstr ""
+msgstr "Каталог призначення для файлів експорту"
 
 #. TODO: Add info-strings
 #: source/win-preferences/schema/import-export.ts:92
 msgid "Temporary folder"
-msgstr ""
+msgstr "Тимчасовий каталог"
 
 #: source/win-preferences/schema/import-export.ts:93
 msgid "Same as file location"
@@ -2402,7 +2413,7 @@ msgstr "Те саме як розташування файлу"
 
 #: source/win-preferences/schema/import-export.ts:94
 msgid "Ask for folder when exporting"
-msgstr ""
+msgstr "Запитувати під час експорту"
 
 #: source/win-preferences/schema/import-export.ts:100
 msgid ""
@@ -2410,14 +2421,17 @@ msgid ""
 "same location as the file overwrites files with identical filenames if they "
 "already exist."
 msgstr ""
+"Увага! Файли у тимчасовому каталозі регулярно видаляються. Вибір одного й "
+"того самого розташування, що й файл, перезаписує файли з ідентичними назвами "
+"файлів, якщо вони вже існують."
 
 #: source/win-preferences/schema/import-export.ts:105
 msgid "Custom export commands"
-msgstr ""
+msgstr "Спеціальні команди експорту"
 
 #: source/win-preferences/schema/import-export.ts:113
 msgid "Display name"
-msgstr ""
+msgstr "Назва для показу"
 
 #: source/win-preferences/schema/import-export.ts:113
 msgid "Command"
@@ -2428,6 +2442,8 @@ msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
 msgstr ""
+"Введіть спеціальні команди для запуску експортера. Кожна команда отримує як "
+"свій перший аргумент файл або каталог проекту, які потрібно експортувати."
 
 #: source/win-preferences/schema/file-manager.ts:23
 msgid "Display mode"
@@ -2435,15 +2451,15 @@ msgstr "Режим показу"
 
 #: source/win-preferences/schema/file-manager.ts:32
 msgid "Thin"
-msgstr ""
+msgstr "Тонкий"
 
 #: source/win-preferences/schema/file-manager.ts:33
 msgid "Expanded"
-msgstr ""
+msgstr "Розширений"
 
 #: source/win-preferences/schema/file-manager.ts:34
 msgid "Combined"
-msgstr ""
+msgstr "Змішаний"
 
 #: source/win-preferences/schema/file-manager.ts:40
 msgid ""
@@ -2452,6 +2468,10 @@ msgid ""
 "file list and directory tree by clicking on directories or the arrow button "
 "which appears at the top left corner of the file list."
 msgstr ""
+"\"Тонкий\" режим показує ваші каталоги та файли окремо. Виберіть каталог, "
+"щоб побачити його вміст у списку файлів. Перемикайтеся між списком файлів і "
+"деревом каталогів, натискаючи на каталоги, або кнопку зі стрілкою, яка "
+"з'являється у верхньому лівому куті списку файлів."
 
 #: source/win-preferences/schema/file-manager.ts:45
 msgid "Show file information"
@@ -2463,31 +2483,31 @@ msgstr "Показати папки над файлами"
 
 #: source/win-preferences/schema/file-manager.ts:56
 msgid "Markdown document name display"
-msgstr ""
+msgstr "Показ назви документа Markdown"
 
 #: source/win-preferences/schema/file-manager.ts:64
 msgid "Filename only"
-msgstr ""
+msgstr "Лише назва файлу"
 
 #: source/win-preferences/schema/file-manager.ts:65
 msgid "Title if applicable"
-msgstr ""
+msgstr "Заголовок, коли доступно"
 
 #: source/win-preferences/schema/file-manager.ts:66
 msgid "First heading level 1 if applicable"
-msgstr ""
+msgstr "Перший доступний заголовок рівня 1"
 
 #: source/win-preferences/schema/file-manager.ts:67
 msgid "Title or first heading level 1 if applicable"
-msgstr ""
+msgstr "Заголовок або перший заголовок рівня 1, коли доступно"
 
 #: source/win-preferences/schema/file-manager.ts:73
 msgid "Display Markdown file extensions"
-msgstr ""
+msgstr "Показати розширення файлів Markdown"
 
 #: source/win-preferences/schema/file-manager.ts:80
 msgid "Time display"
-msgstr ""
+msgstr "Показ часу"
 
 #: source/win-preferences/schema/file-manager.ts:88
 msgid "Last modification time"
