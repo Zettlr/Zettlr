@@ -34,6 +34,7 @@
 - Bump CodeMirror dependencies
 - Define a new shared type, `IPCAPI` that can be used to type the various IPC
   APIs the service providers use across the app.
+- Update Pandoc to version `3.6`
 - Fully type IPC APIs:
   - AssetsProvider
   - DocumentAuthority
