@@ -76,14 +76,14 @@ import formatDate from '@common/util/format-date'
 import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
 import { ref, computed, watch } from 'vue'
-import type { CodeFileDescriptor, MDFileDescriptor } from 'source/types/common/fsal'
+import type { CodeFileDescriptor, MDFileDescriptor, OtherFileDescriptor } from 'source/types/common/fsal'
 import { useConfigStore, useWritingTargetsStore, useTagsStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
 const props = defineProps<{
   target: HTMLElement
-  file: MDFileDescriptor|CodeFileDescriptor
+  file: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor
 }>()
 
 const wordsLabel = trans('Words')

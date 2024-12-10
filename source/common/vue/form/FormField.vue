@@ -1,7 +1,13 @@
 <template>
   <hr v-if="props.field.type === 'separator'">
   <template v-else-if="props.field.type === 'form-text'">
-    <p v-if="props.field.display === 'info'" class="form-field-info-text">
+    <p
+      v-if="props.field.display === 'info' || props.field.display === 'plain'"
+      v-bind:class="{
+        'form-field-info-text': props.field.display === 'info',
+        'form-field-plain-text': props.field.display === 'plain'
+      }"
+    >
       {{ props.field.contents }}
     </p>
     <h4 v-else-if="props.field.display === 'sub-heading'" class="form-field-sub-heading">
@@ -102,6 +108,7 @@
   ></RadioInput>
   <SelectInput
     v-else-if="props.field.type === 'select'"
+    v-bind:disabled="props.field.disabled"
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
@@ -199,5 +206,9 @@ const emit = defineEmits<(e: 'update:modelValue', newValue: any) => void>()
 .form-field-sub-heading {
   font-size: 13px;
   margin-bottom: 10px;
+}
+
+.form-field-plain-text {
+  font-size: 13px;
 }
 </style>

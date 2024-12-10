@@ -89,10 +89,10 @@
               space, we will either display only the words, OR the word count in
               relation to a set writing target, if there is one.
             -->
-            <span v-else-if="!hasWritingTarget" class="badge">
+            <span v-else-if="obj.type === 'file' && !hasWritingTarget" class="badge">
               {{ formattedWordCharCountOfFile }}
             </span>
-            <span v-else class="badge">
+            <span v-else-if="obj.type === 'file'" class="badge">
               <svg
                 class="target-progress-indicator"
                 width="16"
@@ -159,14 +159,14 @@ import PopoverDirProps from './util/PopoverDirProps.vue'
 import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import { ref, computed, toRef, watch } from 'vue'
-import { type AnyDescriptor, type CodeFileDescriptor, type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { type AnyDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useTagsStore, useWindowStateStore } from 'source/pinia'
 import { useItemComposable } from './util/item-composable'
 
 const props = defineProps<{
   activeFile: AnyDescriptor|undefined
   index: number
-  obj: MDFileDescriptor|CodeFileDescriptor|DirDescriptor
+  obj: AnyDescriptor
   windowId: string
 }>()
 
