@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-11-18 09:26+0000\n"
-"PO-Revision-Date: 2024-12-10 16:28+0200\n"
+"PO-Revision-Date: 2024-12-14 11:32+0200\n"
 "Last-Translator: Fedir Zinchuk <fedikw@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk_UK\n"
@@ -1965,7 +1965,7 @@ msgstr "Шаблон для генерації нових ID"
 #: source/win-preferences/schema/zettelkasten.ts:39
 #, javascript-format
 msgid "Available Variables: %s"
-msgstr ""
+msgstr "Доступні змінні: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:44
 #: source/win-preferences/schema/import-export.ts:77
@@ -1974,7 +1974,7 @@ msgstr "Внутрішні посилання"
 
 #: source/win-preferences/schema/zettelkasten.ts:50
 msgid "Link with filename only"
-msgstr ""
+msgstr "Лише посилання з назвою файлу"
 
 #: source/win-preferences/schema/zettelkasten.ts:55
 msgid "When linking files, add the document name …"
@@ -2002,22 +2002,26 @@ msgid ""
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
 msgstr ""
+"Внутрішні посилання дозволяють додавати необов'язковий заголовок, він "
+"відокремлений вертикальною рискою від фактичної цілі посилання. Тут ви "
+"можете визначити порядок цих двох елементів."
 
 #: source/win-preferences/schema/zettelkasten.ts:79
 msgid "[[Link|Title]]: Link first (recommended)"
-msgstr ""
+msgstr "[[Link|Title]]: Посилання перше (рекомендовано)"
 
 #: source/win-preferences/schema/zettelkasten.ts:80
 msgid "[[Title|Link]]: Title first"
-msgstr ""
+msgstr "[[Title|Link]]: Заголовок перший"
 
 #: source/win-preferences/schema/zettelkasten.ts:88
 msgid "Start a full-text search when following internal links"
 msgstr ""
+"Почати повнотекстовий пошук під час переходу за внутрішніми посиланнями"
 
 #: source/win-preferences/schema/zettelkasten.ts:89
 msgid "The search string will match the content between the brackets: [[ ]]."
-msgstr ""
+msgstr "Рядок пошуку відповідатиме вмісту в квадратних дужках: [[ ]]."
 
 #: source/win-preferences/schema/zettelkasten.ts:96
 msgid ""
@@ -2535,31 +2539,31 @@ msgstr "Сортування ASCII (2 буде позаду 10)"
 
 #: source/win-preferences/schema/spellchecking.ts:24
 msgid "LanguageTool"
-msgstr ""
+msgstr "Мовний інструмент"
 
 #: source/win-preferences/schema/spellchecking.ts:34
 msgid "Strictness"
-msgstr ""
+msgstr "Строгість"
 
 #: source/win-preferences/schema/spellchecking.ts:37
 msgid "Standard"
-msgstr "Стандартне"
+msgstr "Стандартно"
 
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "Picky"
-msgstr ""
+msgstr "Вимогливо"
 
 #: source/win-preferences/schema/spellchecking.ts:47
 msgid "Mother language"
-msgstr ""
+msgstr "Рідна мова"
 
 #: source/win-preferences/schema/spellchecking.ts:53
 msgid "Not set"
-msgstr ""
+msgstr "Не вказано"
 
 #: source/win-preferences/schema/spellchecking.ts:61
 msgid "Preferred Variants"
-msgstr ""
+msgstr "Бажані варіанти"
 
 #: source/win-preferences/schema/spellchecking.ts:66
 msgid ""
@@ -2567,26 +2571,29 @@ msgid ""
 "will nudge LanguageTool to auto-detect your preferred variant of these "
 "languages."
 msgstr ""
+"Мовний інструмент не може розрізняти певні варіанти мови. Ці налаштування "
+"підштовхнуть Мовний інструмент до автоматичного визначення бажаного варіанту "
+"цих мов."
 
 #: source/win-preferences/schema/spellchecking.ts:71
 msgid "Interpret English as"
-msgstr ""
+msgstr "Інтерпретувати англійську як"
 
 #: source/win-preferences/schema/spellchecking.ts:84
 msgid "Interpret German as"
-msgstr ""
+msgstr "Інтерпретувати німецьку як"
 
 #: source/win-preferences/schema/spellchecking.ts:94
 msgid "Interpret Portuguese as"
-msgstr ""
+msgstr "Інтерпретувати португальську як"
 
 #: source/win-preferences/schema/spellchecking.ts:105
 msgid "Interpret Catalan as"
-msgstr ""
+msgstr "Інтерпретувати каталонську як"
 
 #: source/win-preferences/schema/spellchecking.ts:114
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "Постачальник Мовного інструменту"
 
 #: source/win-preferences/schema/spellchecking.ts:118
 msgid "Custom server"
@@ -2598,29 +2605,31 @@ msgstr "Адреса власного серверу"
 
 #: source/win-preferences/schema/spellchecking.ts:134
 msgid "LanguageTool Premium"
-msgstr ""
+msgstr "Мовний інструмент преміум"
 
 #: source/win-preferences/schema/spellchecking.ts:139
 msgid ""
 "Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
 "credentials here."
 msgstr ""
+"Zettlr ігноруватиме налаштування \"Мовний інструмент\" коли вкажете будь які "
+"дані тут."
 
 #: source/win-preferences/schema/spellchecking.ts:143
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "\"Мовний інструмент\" користувач"
 
 #: source/win-preferences/schema/spellchecking.ts:150
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "\"Мовний інструмент\" ключ API"
 
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Active"
-msgstr ""
+msgstr "Активно"
 
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Language"
-msgstr ""
+msgstr "Мова"
 
 #: source/win-preferences/schema/spellchecking.ts:168
 msgid ""
@@ -2644,7 +2653,7 @@ msgstr "Словниковий запис"
 
 #: source/win-preferences/schema/spellchecking.ts:185
 msgid "Search for entries …"
-msgstr ""
+msgstr "Пошук записів ..."
 
 #: source/win-preferences/schema/autocorrect.ts:22
 msgid "Autocorrect"
@@ -2652,7 +2661,7 @@ msgstr "Автовиправлення"
 
 #: source/win-preferences/schema/autocorrect.ts:32
 msgid "Smart quotes"
-msgstr ""
+msgstr "Розумні цитати"
 
 #: source/win-preferences/schema/autocorrect.ts:45
 msgid "Double Quotes"
@@ -2669,15 +2678,15 @@ msgstr "Одинарні лапки"
 
 #: source/win-preferences/schema/autocorrect.ts:95
 msgid "Text-replacement patterns"
-msgstr ""
+msgstr "Шаблони заміни тексту"
 
 #: source/win-preferences/schema/autocorrect.ts:99
 msgid "Match whole words"
-msgstr ""
+msgstr "Повний збіг зі словом"
 
 #: source/win-preferences/schema/autocorrect.ts:100
 msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
+msgstr "Коли обрано, автокорекція ніколи не буде заміняти частину слова"
 
 #: source/win-preferences/schema/autocorrect.ts:107
 msgid "Replace"
@@ -2685,7 +2694,7 @@ msgstr "Замінити"
 
 #: source/win-preferences/schema/autocorrect.ts:107
 msgid "With"
-msgstr ""
+msgstr "На"
 
 #: source/win-preferences/schema/citations.ts:28
 msgid "How would you like autocomplete to insert your citations?"
@@ -2715,7 +2724,7 @@ msgstr "Вкажіть шаблон назви для нових файлів"
 #: source/win-preferences/schema/advanced.ts:38
 #, javascript-format
 msgid "Available variables: %s"
-msgstr ""
+msgstr "Доступні змінні: %s"
 
 #: source/win-preferences/schema/advanced.ts:44
 msgid "Do not prompt for filename when creating new files"
@@ -2747,11 +2756,11 @@ msgstr "Залиште програму запущеною в області с�
 
 #: source/win-preferences/schema/advanced.ts:82
 msgid "Zoom behavior"
-msgstr ""
+msgstr "Поведінка масштабування"
 
 #: source/win-preferences/schema/advanced.ts:85
 msgid "Resizes the whole GUI"
-msgstr ""
+msgstr "Змінює розмір всього інтерфейсу"
 
 #: source/win-preferences/schema/advanced.ts:86
 msgid "Changes the editor font size"
@@ -3151,7 +3160,7 @@ msgstr ""
 #: source/app/service-providers/menu/menu.win32.ts:676
 #: source/app/service-providers/config/index.ts:495
 msgid "Restart now"
-msgstr ""
+msgstr "Перезапустити зараз"
 
 #: source/app/service-providers/updates/index.ts:284
 msgid "Cannot check for update"
