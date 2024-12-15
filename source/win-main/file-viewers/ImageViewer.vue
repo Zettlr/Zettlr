@@ -61,6 +61,13 @@
         }"
         v-on:click="backgroundPattern = 'checkerboard'"
       ></div>
+
+      <!-- Open externally button -->
+      <ButtonControl
+        v-bind:icon="'pop-out'"
+        v-bind:label="openExternallyLabel"
+        v-on:click="openImageExternally"
+      ></ButtonControl>
     </div>
     <div
       v-bind:class="{
@@ -105,6 +112,7 @@ import makeValidUri from 'source/common/util/make-valid-uri'
 import SelectControl from 'source/common/vue/form/elements/SelectControl.vue'
 import NumberControl from 'source/common/vue/form/elements/NumberControl.vue'
 import ButtonControl from 'source/common/vue/form/elements/ButtonControl.vue'
+import { trans } from 'source/common/i18n-renderer'
 
 const MINIMUM_ZOOM = 1 // Percent, not ratio
 const ZOOM_STEP = 10 // By how much the +/- buttons should affect the zoom level
@@ -120,6 +128,8 @@ const props = defineProps<{
 const zoomLevel = ref(100)
 const naturalWidth = ref(0)
 const naturalHeight = ref(0)
+
+const openExternallyLabel = trans('Open image externally')
 
 type BackgroundPattern = 'transparent'|'white'|'black'|'checkerboard'
 const backgroundPattern = ref<BackgroundPattern>('transparent')
@@ -156,6 +166,11 @@ function updateNaturalSize () {
 
   naturalHeight.value = imgElement.value.naturalHeight
   naturalWidth.value = imgElement.value.naturalWidth
+}
+
+function openImageExternally () {
+  // Works because main intercepts these requests
+  window.location.href = makeValidUri(props.file.path)
 }
 </script>
 
