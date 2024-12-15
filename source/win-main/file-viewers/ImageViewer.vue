@@ -25,42 +25,44 @@
         v-on:click="zoomLevel = Math.max(zoomLevel - ZOOM_STEP, MINIMUM_ZOOM)"
       ></ButtonControl>
       <!-- Background controls -->
-      <!-- Transparent -->
-      <div
-        v-bind:class="{
-          'background-button': true,
-          'bg-transparent': true,
-          active: backgroundPattern === 'transparent'
-        }"
-        v-on:click="backgroundPattern = 'transparent'"
-      ></div>
-      <!-- White -->
-      <div
-        v-bind:class="{
-          'background-button': true,
-          'bg-white': true,
-          active: backgroundPattern === 'white'
-        }"
-        v-on:click="backgroundPattern = 'white'"
-      ></div>
-      <!-- Black -->
-      <div
-        v-bind:class="{
-          'background-button': true,
-          'bg-black': true,
-          active: backgroundPattern === 'black'
-        }"
-        v-on:click="backgroundPattern = 'black'"
-      ></div>
-      <!-- Checkerboard -->
-      <div
-        v-bind:class="{
-          'background-button': true,
-          'bg-checker': true,
-          active: backgroundPattern === 'checkerboard'
-        }"
-        v-on:click="backgroundPattern = 'checkerboard'"
-      ></div>
+      <div class="background-controls-wrapper">
+        <!-- Transparent -->
+        <div
+          v-bind:class="{
+            'background-button': true,
+            'bg-transparent': true,
+            active: backgroundPattern === 'transparent'
+          }"
+          v-on:click="backgroundPattern = 'transparent'"
+        ></div>
+        <!-- White -->
+        <div
+          v-bind:class="{
+            'background-button': true,
+            'bg-white': true,
+            active: backgroundPattern === 'white'
+          }"
+          v-on:click="backgroundPattern = 'white'"
+        ></div>
+        <!-- Black -->
+        <div
+          v-bind:class="{
+            'background-button': true,
+            'bg-black': true,
+            active: backgroundPattern === 'black'
+          }"
+          v-on:click="backgroundPattern = 'black'"
+        ></div>
+        <!-- Checkerboard -->
+        <div
+          v-bind:class="{
+            'background-button': true,
+            'bg-checker': true,
+            active: backgroundPattern === 'checkerboard'
+          }"
+          v-on:click="backgroundPattern = 'checkerboard'"
+        ></div>
+      </div>
 
       <!-- Open externally button -->
       <ButtonControl
@@ -70,18 +72,21 @@
       ></ButtonControl>
     </div>
     <div
+      ref="imageWrapper"
       v-bind:class="{
         'image-wrapper': true,
         'bg-white': backgroundPattern === 'white',
         'bg-black': backgroundPattern === 'black',
         'bg-checker': backgroundPattern === 'checkerboard'
       }"
+      v-on:wheel="handleScroll($event)"
     >
       <img
-        ref="imgElement"
         v-bind:src="makeValidUri(props.file.path)" v-bind:class="imageClass"
         v-bind:style="imageStyle"
         v-on:load="updateNaturalSize"
+        v-on:mousedown.prevent="startDragging"
+        v-on:mousemove="handleMouseMove($event)"
       >
     </div>
   </div>
@@ -107,7 +112,7 @@
  */
 import type { OpenDocument } from 'source/types/common/documents'
 import type { EditorCommands } from '../App.vue'
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import makeValidUri from 'source/common/util/make-valid-uri'
 import SelectControl from 'source/common/vue/form/elements/SelectControl.vue'
 import NumberControl from 'source/common/vue/form/elements/NumberControl.vue'
@@ -128,6 +133,20 @@ const props = defineProps<{
 const zoomLevel = ref(100)
 const naturalWidth = ref(0)
 const naturalHeight = ref(0)
+
+const imageWrapper = ref<HTMLDivElement|null>(null)
+const isDragging = ref(false)
+
+function startDragging () { isDragging.value = true }
+function stopDragging () { isDragging.value = false }
+
+onMounted(() => {
+  document.addEventListener('mouseup', stopDragging)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('mouseup', stopDragging)
+})
 
 const openExternallyLabel = trans('Open image externally')
 
@@ -172,6 +191,43 @@ function openImageExternally () {
   // Works because main intercepts these requests
   window.location.href = makeValidUri(props.file.path)
 }
+
+/**
+ * Allow zooming by scrolling
+ *
+ * @param   {WheelEvent}  event  The Wheel event
+ */
+function handleScroll (event: WheelEvent) {
+  // This function only reacts to vertical scrolling by zooming
+  if (event.deltaY === 0) {
+    return
+  }
+
+  // Set correct mode
+  if (viewMode.value !== 'zoom') {
+    viewMode.value = 'zoom'
+  }
+
+  zoomLevel.value = Math.max(MINIMUM_ZOOM, zoomLevel.value + event.deltaY)
+}
+
+function handleMouseMove (event: MouseEvent) {
+  if (imageWrapper.value === null || !isDragging.value) {
+    return
+  }
+
+  const element = imageWrapper.value
+
+  // NOTE: We're inverting the values here so that moving occurs naturally:
+  // Mouse --> means Image <--, and vice versa.
+  if (element.scrollWidth > element.clientWidth) {
+    element.scrollLeft -= event.movementX
+  }
+
+  if (element.scrollHeight > element.clientHeight) {
+    element.scrollTop -= event.movementY
+  }
+}
 </script>
 
 <style lang="css" scoped>
@@ -186,11 +242,16 @@ div.image-toolbar {
   display: flex;
   justify-items: flex-start;
   align-items: center;
+  gap: 5px;
   width: 100%;
   padding: 5px 0;
   /* Disallow shrinking of any items; we use flex box only for vertical alignment */
   > * { flex-shrink: 0; }
   overflow: auto;
+}
+
+div.background-controls-wrapper {
+  height: 20px;
 }
 
 div.background-button {
@@ -235,7 +296,7 @@ div.image-wrapper {
 img {
   max-width: none;
   max-height: none;
-  pointer-events: none;
+  pointer-events: all;
 }
 
 img.fit {
