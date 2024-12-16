@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-11-18 09:26+0000\n"
-"PO-Revision-Date: 2024-12-14 11:32+0200\n"
+"PO-Revision-Date: 2024-12-16 17:35+0200\n"
 "Last-Translator: Fedir Zinchuk <fedikw@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk_UK\n"
@@ -2736,7 +2736,7 @@ msgstr "Використовувати нативний зовнішній ви�
 
 #: source/win-preferences/schema/advanced.ts:58
 msgid "Only available on Linux; this is the default for macOS and Windows."
-msgstr ""
+msgstr "Доступно лише в Linux; це типове значення для macOS і Windows."
 
 #: source/win-preferences/schema/advanced.ts:64
 msgid "Enable window vibrancy"
@@ -2744,7 +2744,7 @@ msgstr "Увімкнути яскравість вікна"
 
 #: source/win-preferences/schema/advanced.ts:65
 msgid "Only available on macOS; makes the window background opaque."
-msgstr ""
+msgstr "Доступно лише в macOS; робить фон вікна непрозорим."
 
 #: source/win-preferences/schema/advanced.ts:72
 msgid "Show app in the notification area"
@@ -2768,11 +2768,11 @@ msgstr "Змінює розмір шрифту редактора"
 
 #: source/win-preferences/schema/advanced.ts:92
 msgid "Attachments sidebar"
-msgstr ""
+msgstr "Бічна панель вкладень"
 
 #: source/win-preferences/schema/advanced.ts:98
 msgid "File extensions to be visible in the Attachments sidebar"
-msgstr ""
+msgstr "Розширення файлів які буде показано на бічній панелі вкладень"
 
 #: source/win-preferences/schema/advanced.ts:104
 msgid "Iframe rendering whitelist"
@@ -2813,7 +2813,7 @@ msgstr "Увімкнути режим зневадження"
 
 #: source/win-preferences/schema/advanced.ts:163
 msgid "Beta releases"
-msgstr ""
+msgstr "Бета-версії"
 
 #: source/win-preferences/schema/advanced.ts:169
 msgid "Notify me about beta releases"
@@ -2821,7 +2821,7 @@ msgstr "Сповіщати мене про вихід бета-версій"
 
 #: source/app/service-providers/tray/index.ts:160
 msgid "Show Zettlr"
-msgstr ""
+msgstr "Показати Zettlr"
 
 #: source/app/service-providers/tray/index.ts:166
 #: source/app/service-providers/menu/menu.darwin.ts:104
@@ -2831,7 +2831,7 @@ msgstr "Вийти"
 
 #: source/app/service-providers/tray/index.ts:173
 msgid "Zettlr"
-msgstr ""
+msgstr "Zettlr"
 
 #: source/app/service-providers/documents/index.ts:344
 msgid "Save changes"
@@ -2852,7 +2852,7 @@ msgstr "Файл змінено на диску"
 #: source/app/service-providers/documents/index.ts:995
 #, javascript-format
 msgid "%s changed on disk"
-msgstr ""
+msgstr "%s змінено на диску"
 
 #: source/app/service-providers/documents/index.ts:997
 #, javascript-format
@@ -2860,24 +2860,28 @@ msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
+"%s змінено на диску, але редактор містить незбережені зміни. Бажаєте "
+"залишити поточний вміст редактора чи завантажити файл із диска?"
 
 #: source/app/service-providers/documents/index.ts:998
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
+"Бажаєте залишити поточний вміст редактора чи завантажити файл із диска?"
 
 #: source/app/service-providers/documents/index.ts:1001
 msgid "Keep editor contents"
-msgstr ""
+msgstr "Залишити поточний вміст редактора"
 
 #: source/app/service-providers/documents/index.ts:1002
 msgid "Load changes from disk"
-msgstr ""
+msgstr "Ззавантажити зміни із диска"
 
 #: source/app/service-providers/documents/index.ts:1005
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
+"Завжди завантажувати зміни з диска, коли в редакторі немає незбережених змін"
 
 #: source/app/service-providers/documents/index.ts:1471
 msgid "Could not save file"
@@ -2987,7 +2991,7 @@ msgstr "Шукати у каталозі"
 #: source/app/service-providers/menu/menu.darwin.ts:386
 #: source/app/service-providers/menu/menu.win32.ts:388
 msgid "Filter files"
-msgstr ""
+msgstr "Фільтр файлів"
 
 #: source/app/service-providers/menu/menu.darwin.ts:397
 #: source/app/service-providers/menu/menu.win32.ts:399
@@ -3131,22 +3135,22 @@ msgstr "Відкрити документацію"
 #: source/app/service-providers/menu/menu.darwin.ts:685
 #: source/app/service-providers/menu/menu.win32.ts:659
 msgid "Open Tutorial"
-msgstr ""
+msgstr "Відкрити посібник"
 
 #: source/app/service-providers/menu/menu.darwin.ts:693
 #: source/app/service-providers/menu/menu.win32.ts:667
 msgid "Clear FSAL cache …"
-msgstr ""
+msgstr "Очистити кеш FSAL ..."
 
 #: source/app/service-providers/menu/menu.darwin.ts:697
 #: source/app/service-providers/menu/menu.win32.ts:671
 msgid "Clear FSAL Cache"
-msgstr ""
+msgstr "Очистити кеш FSAL "
 
 #: source/app/service-providers/menu/menu.darwin.ts:698
 #: source/app/service-providers/menu/menu.win32.ts:672
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "Очищення кешу FSAL потребує перезапуску програми."
 
 #: source/app/service-providers/menu/menu.darwin.ts:699
 #: source/app/service-providers/menu/menu.win32.ts:673
@@ -3155,6 +3159,9 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
+"Після перезапуску Zettlr відтворить весь кеш, що може зайняти кілька хвилин, "
+"залежно від кількості файлів які ви завантажили і швидкості вашого диска. "
+"Вікно програми з'явиться згодом по закінченню ."
 
 #: source/app/service-providers/menu/menu.darwin.ts:702
 #: source/app/service-providers/menu/menu.win32.ts:676
@@ -3164,12 +3171,12 @@ msgstr "Перезапустити зараз"
 
 #: source/app/service-providers/updates/index.ts:284
 msgid "Cannot check for update"
-msgstr ""
+msgstr "Неможливо перевірити наявність оновлень"
 
 #: source/app/service-providers/updates/index.ts:285
 #, javascript-format
 msgid "There was an error while checking for updates. %s: %s"
-msgstr ""
+msgstr "Сталася помилка під час перевірки на оновлення. %s: %s"
 
 #: source/app/service-providers/updates/index.ts:324
 #, javascript-format
@@ -3181,14 +3188,16 @@ msgid ""
 "Please update at your earliest convenience. You can open the updater now, or "
 "update later."
 msgstr ""
+"Будь ласка, оновіть якнайшвидше. Ви можете відкрити програму оновлення зараз "
+"або оновити пізніше."
 
 #: source/app/service-providers/updates/index.ts:327
 msgid "Open updater"
-msgstr ""
+msgstr "Відкрити програму оновлення"
 
 #: source/app/service-providers/updates/index.ts:328
 msgid "Not now"
-msgstr ""
+msgstr "Не зараз"
 
 #: source/app/service-providers/updates/index.ts:356
 #, javascript-format
@@ -3227,33 +3236,39 @@ msgstr "Неможливо перевірити на оновлення: Сер�
 
 #: source/app/service-providers/updates/index.ts:464
 msgid "The SHA256 checksums file seems to be missing for this release."
-msgstr ""
+msgstr "Схоже у цьому випуску відсутній файл контрольних сум SHA256."
 
 #: source/app/service-providers/updates/index.ts:486
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
-msgstr ""
+msgstr "Не можливо отримати файл контрольних сум SHA256: %s"
 
 #: source/app/service-providers/updates/index.ts:527
 msgid "Could not accept data for application update: Write stream is gone."
-msgstr ""
+msgstr "Не вдалося записати дані оновлення програми: потік запису зник."
 
 #: source/app/service-providers/updates/index.ts:582
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
 msgstr ""
+"Не вдалося перевірити цілісність завантаженого оновлення. Повторіть спробу "
+"або оновіть вручну."
 
 #: source/app/service-providers/updates/index.ts:594
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
 msgstr ""
+"Контрольна сума завантаженого файлу відрізняється від повідомленої сервером. "
+"Повторіть спробу або оновіть вручну."
 
 #: source/app/service-providers/updates/index.ts:612
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
+"Не вдалося розпочати оновлення. Повторіть спробу або оновіть вручну. "
+"Помилка: %s"
 
 #: source/app/service-providers/workspaces/index.ts:163
 #, javascript-format
@@ -3263,16 +3278,18 @@ msgstr "Завантаження робочого простору %s"
 #: source/app/service-providers/config/index.ts:492
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
+"Зміна цього параметра потребує перезапуску програми, щоб зміни вступити в "
+"силу."
 
 #: source/app/service-providers/config/index.ts:496
 msgid "Restart later"
-msgstr ""
+msgstr "Перезапустити пізніше"
 
 #: source/app/service-providers/config/index.ts:500
 #: source/app/service-providers/commands/rename-tag.ts:43
 #: source/app/service-providers/commands/file-rename.ts:117
 msgid "Confirm"
-msgstr ""
+msgstr "Підтвердити"
 
 #: source/app/service-providers/config/config-validation.ts:278
 #, javascript-format
@@ -3316,13 +3333,13 @@ msgstr "Зміни у файлі бібліотеки. Перезавантаж�
 #: source/app/service-providers/commands/rename-tag.ts:44
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Замінити мітку \"%s\" на \"%s\" у файлах %s?"
 
 #: source/app/service-providers/commands/rename-tag.ts:46
 #: source/app/service-providers/commands/file-rename.ts:120
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #. Better error message
 #: source/app/service-providers/commands/open-attachment.ts:113
