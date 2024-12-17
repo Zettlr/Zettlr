@@ -4129,31 +4129,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "chokidar@npm:3.6.0"
-  dependencies:
-    anymatch: ~3.1.2
-    braces: ~3.0.2
-    fsevents: ~2.3.2
-    glob-parent: ~5.1.2
-    is-binary-path: ~2.1.0
-    is-glob: ~4.0.1
-    normalize-path: ~3.0.0
-    readdirp: ~3.6.0
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  checksum: d2f29f499705dcd4f6f3bbed79a9ce2388cf530460122eed3b9c48efeab7a4e28739c6551fd15bec9245c6b9eeca7a32baa64694d64d9b6faeb74ddb8c4a413d
-  languageName: node
-  linkType: hard
-
 "chokidar@npm:^4.0.1":
   version: 4.0.1
   resolution: "chokidar@npm:4.0.1"
   dependencies:
     readdirp: ^4.0.1
   checksum: 193da9786b0422a895d59c7552195d15c6c636e6a2293ae43d09e34e243e24ccd02d693f007c767846a65abbeae5fea6bfacb8fc2ddec4ea4d397620d552010d
+  languageName: node
+  linkType: hard
+
+"chokidar@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "chokidar@npm:4.0.2"
+  dependencies:
+    readdirp: ^4.0.1
+  checksum: ba7c43d249fa99bdc19c809b0085468e0709b2f1e27eb8573ed2b21af51667677d663dbc68d30ad9eb7620fc216131d98f9017952776db03063955ee58ed2834
   languageName: node
   linkType: hard
 
@@ -15981,7 +15971,7 @@ __metadata:
     bcp-47: ^2.1.0
     chalk: ^5.3.0
     chart.js: ^4.4.6
-    chokidar: ^3.6.0
+    chokidar: ^4.0.2
     citeproc: ^2.4.63
     copy-webpack-plugin: ^12.0.2
     cross-env: ^7.0.3
