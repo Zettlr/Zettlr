@@ -198,7 +198,7 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
         },
         {
           type: 'checkbox',
-          label: trans('Display Pomodoro-timer'),
+          label: trans('Display Pomodoro timer'),
           model: 'displayToolbarButtons.showPomodoroButton'
         }
       ]
@@ -210,7 +210,7 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
       fields: [
         {
           type: 'checkbox',
-          label: trans('Show statusbar'),
+          label: trans('Show status bar'),
           model: 'editor.showStatusbar'
         }
       ]

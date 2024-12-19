@@ -48,7 +48,7 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
         },
         {
           type: 'select',
-          inline: true,
+          inline: false,
           options: {
             '': trans('Not set'),
             ...mapLangCodeToName()
@@ -177,12 +177,12 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
         {
           type: 'list',
           valueType: 'simpleArray',
-          label: trans('User dictionary. Remove words by clicking them.'),
+          label: trans('User dictionary'),
           model: 'userDictionaryContents',
           columnLabels: [trans('Dictionary entry')],
           deletable: true,
           searchable: true,
-          searchLabel: trans('Search for entries …'),
+          searchLabel: trans('Filter'),
           striped: true
         }
       ]

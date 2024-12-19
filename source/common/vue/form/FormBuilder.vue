@@ -15,7 +15,10 @@
       </div>
       <fieldset>
         <!-- First, let's do some setup of the fieldset -->
-        <div class="form-header">
+        <div
+          class="form-header"
+          v-bind:class="{ 'space-between': fieldset.title === 'Application language' }"
+        >
           <!-- First the fieldset legend: Required -->
           <legend>
             {{ fieldset.title }}
@@ -297,6 +300,11 @@ function getModelValue (model: string): any {
 
 <style lang="less">
 .form-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
   .fieldset-category {
     color: rgb(114, 114, 114);
     font-size: 13px;
@@ -308,30 +316,38 @@ function getModelValue (model: string): any {
   }
 
   fieldset {
-    background-color: rgb(236, 236, 236);
-    border: 1px solid rgb(230, 230, 230);
-    margin: 10px;
+    background-color: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
     padding: 24px;
-    padding-top: 18px;
+    padding-top: 20px;
     border-radius: 6px;
     position: relative;
-    color: #333;
+    color: rgba(0, 0, 0, 0.85);
 
     .form-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      column-gap: 10px;
+      gap: 24px;
+      margin-bottom: 16px;
 
-      legend {
-        flex-grow: 1;
-        font-weight: bolder;
-        font-size: 15px;
-        margin-top: 2px;
-        padding: 0;
+      &.space-between {
+        justify-content: space-between;
       }
 
-      // .form-header-field {}
+      legend {
+        font-size: 15px;
+        font-weight: 700;
+        padding: 0;
+      }
+    }
+
+    :last-child {
+      margin-bottom: 0;
+    }
+
+    > :not(:last-child) {
+      margin-bottom: 12px;
+      // border: 1px solid red;
     }
 
     .form-help {
@@ -350,12 +366,16 @@ function getModelValue (model: string): any {
     }
 
     hr {
-      margin: 20px 0px;
+      margin: 16px 0px;
       border: none;
-      border-top: 1px solid rgb(211, 211, 211);
+      border-top: 1px solid rgba(0, 0, 0, 0.075);
     }
 
     .style-group {
+      > div {
+        padding: 6px 0;
+      }
+
       .columns {
         column-count: 2;
         column-fill: balance;
@@ -366,13 +386,13 @@ function getModelValue (model: string): any {
 
 body.dark .form-container {
   fieldset {
-    background-color: rgb(60, 60, 60);
+    background-color: #2A2A2A;
+    border-color: #303030;
     color: inherit;
-    border-color: rgb(30, 30, 30);
   }
 
   hr {
-    border-top-color: #5a5a5a;
+    border-top-color: #404040;
   }
 }
 
@@ -385,7 +405,7 @@ body.win32:not(.dark) .form-container {
 
 body.linux:not(.dark) .form-container {
   fieldset {
-    border-radius: 4px;
+    border-radius: 12px;
     background-color: rgb(245, 245, 245);
   }
 }

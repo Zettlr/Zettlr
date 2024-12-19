@@ -113,7 +113,7 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
         {
           type: 'form-text',
           display: 'sub-heading',
-          contents: trans('Formatting characters for bold and italic')
+          contents: trans('Formatting characters for bold and italics')
         },
         {
           type: 'style-group',
