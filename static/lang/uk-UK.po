@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-11-18 09:26+0000\n"
-"PO-Revision-Date: 2024-12-16 17:35+0200\n"
+"PO-Revision-Date: 2024-12-19 13:37+0200\n"
 "Last-Translator: Fedir Zinchuk <fedikw@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: Ukrainian translators\n"
 "Language: uk_UK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -212,7 +212,7 @@ msgstr "Цитування"
 
 #: source/tmp/win-preferences/App.vue.ts:169
 msgid "Zettelkasten"
-msgstr ""
+msgstr "Zettelkasten"
 
 #: source/tmp/win-preferences/App.vue.ts:179
 msgid "Import and Export"
@@ -273,6 +273,10 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr надає інтеграцію з LanguageTool.org, послугою яку надає "
+"LanguageTooler GmbH. Для використання цієї послуги потрібне підключення до "
+"Інтернету та регулюється політикою конфіденційності LanguageTooler GmbH або "
+"відповідного сервера, який ви використовуєте."
 
 #: source/tmp/win-about/App.vue.ts:35 source/tmp/win-about/App.vue.ts:76
 #: source/app/service-providers/menu/menu.darwin.ts:46
@@ -375,7 +379,7 @@ msgstr "Більш ніж у два рази перевищує середньо
 
 #: source/tmp/win-stats/App.vue.ts:39
 msgid "FSAL Stats"
-msgstr ""
+msgstr "Статистика FSAL"
 
 #: source/tmp/win-stats/App.vue.ts:58
 msgid "Writing statistics"
@@ -1948,11 +1952,11 @@ msgstr "Відкрити редактор фрагментів"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
-msgstr ""
+msgstr "Zettelkasten IDs"
 
 #: source/win-preferences/schema/zettelkasten.ts:29
 msgid "Pattern for Zettelkasten IDs"
-msgstr ""
+msgstr "Правило Zettelkasten IDs"
 
 #: source/win-preferences/schema/zettelkasten.ts:30
 msgid "Uses ECMAScript regular expressions"
@@ -2034,6 +2038,7 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
 msgstr ""
+"Щоб це працювало, каталог має бути відкрито як робочий простір у Zettlr."
 
 #: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
@@ -2188,27 +2193,27 @@ msgstr ""
 
 #: source/win-preferences/schema/editor.ts:72
 msgid "Render Citations"
-msgstr "Відображення цитат"
+msgstr "Показ цитат"
 
 #: source/win-preferences/schema/editor.ts:77
 msgid "Render Iframes"
-msgstr "Відображення фреймів"
+msgstr "Показ фреймів"
 
 #: source/win-preferences/schema/editor.ts:82
 msgid "Render Images"
-msgstr "Відображення зображень"
+msgstr "Показ зображень"
 
 #: source/win-preferences/schema/editor.ts:87
 msgid "Render Links"
-msgstr "Відображення посилань"
+msgstr "Показ посилань"
 
 #: source/win-preferences/schema/editor.ts:92
 msgid "Render Formulae"
-msgstr "Відображення формул"
+msgstr "Показ формул"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Render Tasks"
-msgstr "Відображення завдань"
+msgstr "Показ завдань"
 
 #: source/win-preferences/schema/editor.ts:102
 msgid "Hide heading characters"
@@ -2216,7 +2221,7 @@ msgstr "Ховати символи заголовків"
 
 #: source/win-preferences/schema/editor.ts:107
 msgid "Render emphasis"
-msgstr ""
+msgstr "Візуалізація наголосу"
 
 #: source/win-preferences/schema/editor.ts:116
 msgid "Formatting characters for bold and italic"
@@ -2784,7 +2789,7 @@ msgstr "Hostname"
 
 #: source/win-preferences/schema/advanced.ts:120
 msgid "Watchdog polling"
-msgstr ""
+msgstr "Опитування спостерігача"
 
 #: source/win-preferences/schema/advanced.ts:126
 msgid "Activate Watchdog polling"
@@ -3360,10 +3365,12 @@ msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
 msgstr ""
+"Не обрано файлів для експорту. Оберіть файли які потрібно додати в "
+"налаштування проекту."
 
 #: source/app/service-providers/commands/dir-project-export.ts:91
 msgid "Project File Mismatch"
-msgstr ""
+msgstr "Невідповідність файлу проекту"
 
 #: source/app/service-providers/commands/dir-project-export.ts:92
 msgid ""
@@ -3371,11 +3378,14 @@ msgid ""
 "They may have moved or been deleted. Please verify that all files that you "
 "would like to export are included."
 msgstr ""
+"Один або кілька файлів, указаних у налаштуваннях проекту, не знайдено. "
+"Можливо, їх було переміщено або вилучено. Переконайтеся, що включено всі "
+"файли які ви хочете експортувати."
 
 #: source/app/service-providers/commands/dir-project-export.ts:168
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
-msgstr ""
+msgstr "Проект \"%s\" успішно експортовано. Натисніть щоб показати."
 
 #: source/app/service-providers/commands/dir-project-export.ts:169
 msgid "Project Export"
@@ -3394,15 +3404,15 @@ msgstr "Дійсно видалити %s?"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Import directory"
-msgstr ""
+msgstr "Каталог імпорту"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Select folder"
-msgstr ""
+msgstr "Обрати каталог"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Select import destination"
-msgstr ""
+msgstr "Обрати пункт призначення для імпорту"
 
 #: source/app/service-providers/commands/import.ts:36
 msgid "You have to select a directory to import to."
@@ -3447,7 +3457,7 @@ msgstr "Неможливо створити файл"
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Копіювання %s"
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:103
 msgid "The provided name did not contain any allowed letters."
@@ -3494,21 +3504,21 @@ msgstr "Файл/каталог %s вже існує."
 #: source/app/service-providers/commands/file-rename.ts:118
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Оновити %s внутрішні посилання на файл %s?"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:121
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "Ні"
 
 #: source/app/service-providers/commands/language-tool.ts:194
 msgid "Document too long"
-msgstr ""
+msgstr "Документ задовгий"
 
 #: source/app/service-providers/commands/language-tool.ts:199
 msgid "offline"
-msgstr ""
+msgstr "не в мережі"
 
 #: source/app/service-providers/commands/export.ts:55
 #: source/app/service-providers/commands/export.ts:157
@@ -3522,7 +3532,7 @@ msgstr "Виникла помилка під час експорту: %s"
 
 #: source/app/service-providers/commands/export.ts:114
 msgid "Choose export destination"
-msgstr ""
+msgstr "Обрати пункт призначення для експорту"
 
 #: source/app/service-providers/commands/export.ts:145
 #, javascript-format
@@ -3537,12 +3547,12 @@ msgstr "Виникла помилка під час експортування: 
 #: source/app/service-providers/commands/importer/index.ts:92
 #: source/app/service-providers/commands/importer/index.ts:93
 msgid "Select import profile"
-msgstr ""
+msgstr "Обрати профіль імпорту"
 
 #: source/app/service-providers/commands/importer/index.ts:94
 #, javascript-format
 msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr ""
+msgstr "Доступно кілька профілів які можна імпортувати %s. Виберіть один."
 
 #: source/app/service-providers/commands/importer/import-textbundle.ts:63
 #: source/app/service-providers/commands/importer/import-textbundle.ts:69
@@ -3585,7 +3595,7 @@ msgstr "Відкрити файл"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
-msgstr ""
+msgstr "Зберегти файл"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:31
 msgid "Replace file"
@@ -3601,7 +3611,7 @@ msgstr ""
 
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
-msgstr ""
+msgstr "Закрити інші вкладки"
 
 #: source/win-main/tabs-context.ts:50
 msgid "Close all tabs"
@@ -3609,11 +3619,11 @@ msgstr "Закрити всі вкладки"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Unpin tab"
-msgstr ""
+msgstr "Відкріпити вкладку"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Pin tab"
-msgstr ""
+msgstr "Закріпити вкладку"
 
 #: source/win-main/tabs-context.ts:68
 #: source/win-main/file-manager/util/file-item-context.ts:72
@@ -3622,7 +3632,7 @@ msgstr "Копіювати ім'я файлу"
 
 #: source/win-main/tabs-context.ts:74
 msgid "Copy full path"
-msgstr ""
+msgstr "Копіювати повний шлях"
 
 #: source/win-main/file-manager/util/file-item-context.ts:34
 #: source/win-main/file-manager/util/dir-item-context.ts:28
@@ -3641,12 +3651,12 @@ msgstr "Копіювати шлях"
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "Розкрити в Провіднику"
 
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "Відкрити в браузері файлів"
 
 #: source/win-main/file-manager/util/file-item-context.ts:100
 msgid "Close file"
