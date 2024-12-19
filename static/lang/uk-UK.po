@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-11-18 09:26+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2024-12-19 13:37+0200\n"
+"Last-Translator: Fedir Zinchuk <fedikw@gmail.com>\n"
+"Language-Team: Ukrainian translators\n"
 "Language: uk-UK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,12 +22,16 @@ msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
 msgstr ""
+"Цей профіль захищений. Це означає, що його буде відновлено, коли ви видалите "
+"або перейменуєте його."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:57
 msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"Цей профіль недійсний. Він може містити помилки або може бути відсутнім "
+"властивість запису або читання."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:58
 #: source/app/service-providers/menu/menu.darwin.ts:286
@@ -38,7 +42,7 @@ msgstr "Перейменувати файл"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:59
 msgid "Open defaults folder"
-msgstr ""
+msgstr "Відкрити стандартний каталог"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:60
 msgid "Edit the default settings for imports or exports here."
@@ -79,18 +83,17 @@ msgstr "Збережено!"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:28
 msgid "Rename snippet"
-msgstr "Перейменувати сніппет"
+msgstr "Перейменувати фрагмент"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:29
 msgid "Snippets let you define reusable pieces of text with variables."
 msgstr ""
-"Сніпети дозволяють визначати повторювані фрагменти тексту за допомогою "
+"Фрагменти дозволяють визначати повторювані елементи тексту за допомогою "
 "перемінних.."
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:30
-#, fuzzy
 msgid "Open snippets folder"
-msgstr "Відкрити каталог проєкту"
+msgstr "Відкрити каталог фрагментів"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:23
 msgid ""
@@ -116,11 +119,11 @@ msgstr "Менеджер файлів"
 
 #: source/tmp/win-assets/App.vue.ts:21
 msgid "Exporting"
-msgstr ""
+msgstr "Експортування"
 
 #: source/tmp/win-assets/App.vue.ts:27
 msgid "Importing"
-msgstr ""
+msgstr "Імпортування"
 
 #: source/tmp/win-assets/App.vue.ts:33
 #: source/win-preferences/schema/appearance.ts:219
@@ -131,17 +134,15 @@ msgstr "Власний CSS"
 #: source/tmp/win-preferences/App.vue.ts:174
 #: source/win-preferences/schema/snippets.ts:24
 msgid "Snippets"
-msgstr ""
+msgstr "Фрагменти"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
-#, fuzzy
 msgid "Select folder…"
-msgstr "Відкрити каталог проєкту"
+msgstr "Обрати каталог..."
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:42
-#, fuzzy
 msgid "Select file…"
-msgstr "Видалити файл"
+msgstr "Обрати файл..."
 
 #. Prepare the list of file filters
 #. The "All Files" filter should be at the top
@@ -158,79 +159,77 @@ msgstr "Усі файли"
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
 msgid "Reset"
-msgstr ""
+msgstr "Скинути"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:106
 msgid "Add"
-msgstr ""
+msgstr "Додати"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:107
 msgid "Actions"
-msgstr ""
+msgstr "Дії"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:108
-#, fuzzy
 msgid "Delete"
-msgstr "Видалити файл"
+msgstr "Вилучити"
 
 #: source/tmp/win-preferences/App.vue.ts:56
 #, javascript-format
 msgid "No results for \"%s\""
-msgstr ""
+msgstr "Немає результатів для \"%s\""
 
 #: source/tmp/win-preferences/App.vue.ts:134
 #: source/tmp/win-project-properties/App.vue.ts:62
 msgid "General"
-msgstr ""
+msgstr "Загальне"
 
 #: source/tmp/win-preferences/App.vue.ts:139
 #: source/win-preferences/schema/advanced.ts:51
 msgid "Appearance"
-msgstr ""
+msgstr "Вигляд"
 
 #: source/tmp/win-preferences/App.vue.ts:144
 msgid "File Manager"
-msgstr ""
+msgstr "Менеджер файлів"
 
 #: source/tmp/win-preferences/App.vue.ts:149
 msgid "Editor"
-msgstr ""
+msgstr "Редактор"
 
 #: source/tmp/win-preferences/App.vue.ts:154
 #: source/win-preferences/schema/spellchecking.ts:158
 msgid "Spellchecking"
-msgstr ""
+msgstr "Правопис"
 
 #: source/tmp/win-preferences/App.vue.ts:159
 msgid "AutoCorrect"
-msgstr ""
+msgstr "Автокорекція"
 
 #: source/tmp/win-preferences/App.vue.ts:164
 #: source/win-preferences/schema/citations.ts:22
-#, fuzzy
 msgid "Citations"
-msgstr "Відображення цитат"
+msgstr "Цитування"
 
 #: source/tmp/win-preferences/App.vue.ts:169
 msgid "Zettelkasten"
-msgstr ""
+msgstr "Zettelkasten"
 
 #: source/tmp/win-preferences/App.vue.ts:179
 msgid "Import and Export"
-msgstr ""
+msgstr "Імпорт та експорт"
 
 #: source/tmp/win-preferences/App.vue.ts:184
 msgid "Advanced"
-msgstr ""
+msgstr "Розширені"
 
 #: source/tmp/win-preferences/App.vue.ts:193
 #, javascript-format
 msgid "Searching: %s"
-msgstr ""
+msgstr "Пошук: %s"
 
 #: source/tmp/win-preferences/App.vue.ts:197
 msgid "Preferences"
-msgstr ""
+msgstr "Налаштування"
 
 #: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
@@ -274,6 +273,10 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr надає інтеграцію з LanguageTool.org, послугою яку надає "
+"LanguageTooler GmbH. Для використання цієї послуги потрібне підключення до "
+"Інтернету та регулюється політикою конфіденційності LanguageTooler GmbH або "
+"відповідного сервера, який ви використовуєте."
 
 #: source/tmp/win-about/App.vue.ts:35 source/tmp/win-about/App.vue.ts:76
 #: source/app/service-providers/menu/menu.darwin.ts:46
@@ -284,15 +287,15 @@ msgstr "Про програму"
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
-msgstr ""
+msgstr "Інші проекти"
 
 #: source/tmp/win-about/App.vue.ts:47
 msgid "Sponsors"
-msgstr ""
+msgstr "Спонсори"
 
 #: source/tmp/win-about/App.vue.ts:53
 msgid "License"
-msgstr ""
+msgstr "Ліцензія"
 
 #: source/tmp/win-about/Projects-Tab.vue.ts:19
 msgid "Zettlr also makes use of these projects:"
@@ -300,7 +303,7 @@ msgstr "Zettlr також використовує проєкти:"
 
 #: source/tmp/win-splash-screen/App.vue.ts:22
 msgid "Loading…"
-msgstr ""
+msgstr "Завантаження..."
 
 #. Static properties
 #: source/tmp/win-stats/ChartView.vue.ts:39 source/tmp/win-stats/App.vue.ts:33
@@ -316,55 +319,55 @@ msgstr "Календар"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:28
 msgid "January"
-msgstr ""
+msgstr "Січень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "February"
-msgstr ""
+msgstr "Лютий"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:30
 msgid "March"
-msgstr ""
+msgstr "Березень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:31
 msgid "April"
-msgstr ""
+msgstr "Квітень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:32
 msgid "May"
-msgstr ""
+msgstr "Травень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:33
 msgid "June"
-msgstr ""
+msgstr "Червень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:34
 msgid "July"
-msgstr ""
+msgstr "Липень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:35
 msgid "August"
-msgstr ""
+msgstr "Серпень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:36
 msgid "September"
-msgstr ""
+msgstr "Вересень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:37
 msgid "October"
-msgstr ""
+msgstr "Жовтень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:38
 msgid "November"
-msgstr ""
+msgstr "Литсопад"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:39
 msgid "December"
-msgstr ""
+msgstr "Грудень"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:41
 msgid "Below the monthly average"
-msgstr ""
+msgstr "Нижче середньомісячного"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:42
 msgid "Over the monthly average"
@@ -376,11 +379,11 @@ msgstr "Більш ніж у два рази перевищує середньо
 
 #: source/tmp/win-stats/App.vue.ts:39
 msgid "FSAL Stats"
-msgstr ""
+msgstr "Статистика FSAL"
 
 #: source/tmp/win-stats/App.vue.ts:58
 msgid "Writing statistics"
-msgstr ""
+msgstr "Запис статистики"
 
 #: source/tmp/win-error/App.vue.ts:43
 #: source/app/service-providers/commands/dir-project-export.ts:93
@@ -395,16 +398,16 @@ msgstr "Гаразд"
 #: source/tmp/win-main/PopoverTable.vue.ts:30
 #, javascript-format
 msgid "Table size: %s &times; %s"
-msgstr ""
+msgstr "Розмір таблиці: %s &times; %s"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:39
 msgid "Name"
-msgstr ""
+msgstr "Назва"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:40
 #: source/tmp/win-tag-manager/App.vue.ts:31
 msgid "Count"
-msgstr ""
+msgstr "Кількість"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:47
 #: source/tmp/win-tag-manager/App.vue.ts:35
@@ -452,12 +455,12 @@ msgstr "%s слів"
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:172
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:39
 msgid "Characters"
-msgstr "символів"
+msgstr "Cимволи"
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:174
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:34
 msgid "Words"
-msgstr "слів"
+msgstr "Слів"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:76
 msgid "Workspaces"
@@ -481,13 +484,13 @@ msgstr "Без назви"
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:31
 msgid "Created"
-msgstr ""
+msgstr "Створено"
 
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:30
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:130
 msgid "Modified"
-msgstr ""
+msgstr "Змінено"
 
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:38
 msgid "Set writing target…"
@@ -499,39 +502,39 @@ msgstr "Налаштування проекту..."
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:34
 msgid "Enable Project"
-msgstr ""
+msgstr "Активувати проект"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:35
 msgid "Sort by name"
-msgstr ""
+msgstr "Сортувати за назвою"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
 msgid "Sort by time"
-msgstr ""
+msgstr "Сортувати за часом"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
 msgid "ascending"
-msgstr ""
+msgstr "висхідний"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
 msgid "descending"
-msgstr ""
+msgstr "спадання"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
 msgid "Cog"
-msgstr ""
+msgstr "Шестерня"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
 msgid "Cloud"
-msgstr ""
+msgstr "Хмара"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:44
 msgid "Check"
-msgstr ""
+msgstr "Галочка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:45
 msgid "Times"
-msgstr ""
+msgstr "Час"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:627
@@ -541,39 +544,39 @@ msgstr "Довідка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:47
 msgid "Info"
-msgstr ""
+msgstr "Інфо"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:48
 msgid "Success"
-msgstr ""
+msgstr "Успіх"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
 msgid "Error"
-msgstr ""
+msgstr "Помилка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
 msgid "Warning"
-msgstr ""
+msgstr "Попередження"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
 msgid "Bell"
-msgstr ""
+msgstr "Дзвоник"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:52
 msgid "Person"
-msgstr ""
+msgstr "Особа"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:53
 msgid "People"
-msgstr ""
+msgstr "Люди"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
 msgid "Folder"
-msgstr ""
+msgstr "Каталог"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
 msgid "Folder (open)"
-msgstr ""
+msgstr "Каталог (відкритий)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:56
 #: source/tmp/win-main/App.vue.ts:349
@@ -583,215 +586,215 @@ msgstr "Зображення"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
 msgid "Eye"
-msgstr ""
+msgstr "Око"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:58
 msgid "Eye (crossed)"
-msgstr ""
+msgstr "Око (закрите)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:60
 msgid "Calculator"
-msgstr ""
+msgstr "Калькулятор"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
 msgid "Store"
-msgstr ""
+msgstr "Магазин"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:62
 msgid "Shopping bag"
-msgstr ""
+msgstr "Сумка для покупок"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:63
 msgid "Shopping cart"
-msgstr ""
+msgstr "Кошик для покупок"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
 msgid "Factory"
-msgstr ""
+msgstr "Завод"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:65
 msgid "Heart"
-msgstr ""
+msgstr "Серце"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
 msgid "Heart (broken)"
-msgstr ""
+msgstr "Серце (розбите)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:67
 msgid "Bubbles"
-msgstr ""
+msgstr "Бульбашки"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:68
 msgid "Bubble"
-msgstr ""
+msgstr "Бульбашка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
 msgid "Bubble (exclamation)"
-msgstr ""
+msgstr "Бульбашка (знак оклику)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
 msgid "Colour Palette"
-msgstr ""
+msgstr "Палітра"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:71
 msgid "Bars"
-msgstr ""
+msgstr "Бруски"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:72
 msgid "Thermometer"
-msgstr ""
+msgstr "Термометер"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:73
 msgid "Book"
-msgstr ""
+msgstr "Книга"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:74
 msgid "Library"
-msgstr ""
+msgstr "Бібліотека"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:75
 msgid "Bug"
-msgstr ""
+msgstr "Жук"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:76
 msgid "Note"
-msgstr ""
+msgstr "Замітка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:77
 msgid "Lightbulb"
-msgstr ""
+msgstr "Лампочка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:78
 msgid "Trash"
-msgstr ""
+msgstr "Смітник"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
 msgid "Snowflake"
-msgstr ""
+msgstr "Сніжинка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
 msgid "Asterisk"
-msgstr ""
+msgstr "Зірочка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
 msgid "Key"
-msgstr ""
+msgstr "Ключ"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
 msgid "Bolt"
-msgstr ""
+msgstr "Блискавка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
 msgid "Wrench"
-msgstr ""
+msgstr "Ключ"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
 msgid "Flame"
-msgstr ""
+msgstr "Вогонь"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
 msgid "Hourglass"
-msgstr ""
+msgstr "Піщаний годинник"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
 msgid "Briefcase"
-msgstr ""
+msgstr "Портфель"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
 msgid "Tools"
-msgstr ""
+msgstr "Інструменти"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
 msgid "Moon"
-msgstr ""
+msgstr "Місяць"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
 msgid "Sun"
-msgstr ""
+msgstr "Сонце"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
 msgid "Tree"
-msgstr ""
+msgstr "Дерево"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
 msgid "Circle (dot)"
-msgstr ""
+msgstr "Коло (крапка)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
 msgid "Circle"
-msgstr ""
+msgstr "Коло"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
 msgid "Video camera"
-msgstr ""
+msgstr "Відеокамера"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
 msgid "Film strip"
-msgstr ""
+msgstr "Кінострічка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
 msgid "Microphone"
-msgstr ""
+msgstr "Мікрофон"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
 msgid "Crown"
-msgstr ""
+msgstr "Корона"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
 msgid "Star"
-msgstr ""
+msgstr "Зарка"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
 msgid "Flag"
-msgstr ""
+msgstr "Прапорець"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:99
 msgid "Envelope"
-msgstr ""
+msgstr "Коверт"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
 msgid "Airplane"
-msgstr ""
+msgstr "Літак"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
 msgid "Happy emoji"
-msgstr ""
+msgstr "Щасливе емодзі"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:102
 msgid "Neutral emoji"
-msgstr ""
+msgstr "Нейтральне емодзі"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
 msgid "Sad emoji"
-msgstr ""
+msgstr "Сумне емодзі"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
 msgid "Thumbs up"
-msgstr ""
+msgstr "Палець вгору"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
 msgid "Thumbs down"
-msgstr ""
+msgstr "Палець вниз"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:106
 msgid "Map"
-msgstr ""
+msgstr "Мапа"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:107
 msgid "Compass"
-msgstr ""
+msgstr "Компас"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:108
 msgid "Map marker"
-msgstr ""
+msgstr "Маркер на мапі"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:109
 msgid "Flask"
-msgstr ""
+msgstr "Колба"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
 msgid "CD/DVD"
-msgstr ""
+msgstr "CD/DVD"
 
 #: source/tmp/win-main/file-manager/FileList.vue.ts:59
 msgid "No directory selected"
@@ -804,7 +807,7 @@ msgstr "Пустий каталог"
 #: source/tmp/win-main/file-manager/FileManager.vue.ts:46
 #: source/tmp/win-main/GlobalSearch.vue.ts:38
 msgid "Filter …"
-msgstr ""
+msgstr "Фільтр …"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:29
 msgid "words last month"
@@ -837,28 +840,28 @@ msgstr "Більше статистики..."
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:32
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
 msgid "Related files"
-msgstr ""
+msgstr "Пов'язані файли"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
 msgid "No related files"
-msgstr ""
+msgstr "Непов'язані файли"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Цей зв'язок заснований на двонаправленому посиланні."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Цей зв'язок заснований на вихідному посиланні."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Цей зв'язок заснований на зворотному посиланні."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:220
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Цей зв'язок заснований на %s спільних мітках: %s"
 
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
@@ -869,7 +872,7 @@ msgstr "Зміст"
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:15
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
 msgid "Other files"
-msgstr ""
+msgstr "Інші файли"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:16
 msgid "Open directory"
@@ -877,11 +880,11 @@ msgstr "Відкрити каталог"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:17
 msgid "No other files"
-msgstr ""
+msgstr "Інші фали відсутні"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:36
 msgid "Current folder"
-msgstr ""
+msgstr "Поточний каталог"
 
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:32
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
@@ -915,30 +918,30 @@ msgstr "Перерва"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:29
 msgid "Sound Effect"
-msgstr ""
+msgstr "Звуковий ефект"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:30
 msgid "Volume"
-msgstr ""
+msgstr "Гучність"
 
 #: source/tmp/win-main/App.vue.ts:220
 #, javascript-format
 msgid "%s selected"
-msgstr ""
+msgstr "%s обрано"
 
 #. Multiple selections --> indicate
 #: source/tmp/win-main/App.vue.ts:229
 #, javascript-format
 msgid "%s selections"
-msgstr ""
+msgstr "%s обрано"
 
 #: source/tmp/win-main/App.vue.ts:250
 msgid "File manager"
-msgstr ""
+msgstr "Менеджер файлів"
 
 #: source/tmp/win-main/App.vue.ts:255
 msgid "Global search"
-msgstr ""
+msgstr "Глобальний пошук"
 
 #: source/tmp/win-main/App.vue.ts:263
 #: source/app/service-providers/menu/menu.darwin.ts:174
@@ -948,15 +951,15 @@ msgstr "Відкрити робочий простір ..."
 
 #: source/tmp/win-main/App.vue.ts:269
 msgid "View stats"
-msgstr ""
+msgstr "Статистика"
 
 #: source/tmp/win-main/App.vue.ts:275
 msgid "Tags"
-msgstr ""
+msgstr "Мітки"
 
 #: source/tmp/win-main/App.vue.ts:282
 msgid "Open the settings dialog"
-msgstr ""
+msgstr "Відкрити діалог налаштувань"
 
 #: source/tmp/win-main/App.vue.ts:289
 #: source/app/service-providers/menu/menu.darwin.ts:116
@@ -969,21 +972,21 @@ msgstr "Новий файл..."
 #: source/app/service-providers/menu/menu.darwin.ts:207
 #: source/app/service-providers/menu/menu.win32.ts:172
 msgid "Previous file"
-msgstr ""
+msgstr "Попередній файл"
 
 #: source/tmp/win-main/App.vue.ts:304
 #: source/app/service-providers/menu/menu.darwin.ts:218
 #: source/app/service-providers/menu/menu.win32.ts:183
 msgid "Next file"
-msgstr ""
+msgstr "Наступний файл"
 
 #: source/tmp/win-main/App.vue.ts:317
 msgid "Export the current file"
-msgstr ""
+msgstr "Експортувати поточний файл"
 
 #: source/tmp/win-main/App.vue.ts:323
 msgid "Toggle readability mode"
-msgstr ""
+msgstr "Перемкнути режим читання"
 
 #: source/tmp/win-main/App.vue.ts:335
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:64
@@ -997,7 +1000,7 @@ msgstr "Ланка"
 
 #: source/tmp/win-main/App.vue.ts:356
 msgid "Tasklist"
-msgstr ""
+msgstr "Список завдань"
 
 #: source/tmp/win-main/App.vue.ts:363
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
@@ -1006,11 +1009,11 @@ msgstr "Вставити таблицю"
 
 #: source/tmp/win-main/App.vue.ts:370
 msgid "Footnote"
-msgstr ""
+msgstr "Виноска"
 
 #: source/tmp/win-main/App.vue.ts:388
 msgid "Pomodoro-Timer"
-msgstr ""
+msgstr "Таймер Помодоро"
 
 #: source/tmp/win-main/App.vue.ts:397
 #: source/app/service-providers/menu/menu.darwin.ts:486
@@ -1021,80 +1024,78 @@ msgstr "Показати бічну панель"
 #: source/tmp/win-main/App.vue.ts:404
 #: source/app/service-providers/updates/index.ts:323
 msgid "Update available"
-msgstr ""
+msgstr "Доступне оновлення"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:29
 msgid "Temporary directory"
-msgstr ""
+msgstr "Тимчасовий каталог"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:30
 msgid "Current directory"
-msgstr ""
+msgstr "Поточний каталог"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:31
 msgid "Select directory"
-msgstr ""
+msgstr "Обрати каталог"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:64
-#, fuzzy
 msgid "Exporting…"
-msgstr "Експорт..."
+msgstr "Експортування..."
 
 #: source/tmp/win-main/PopoverExport.vue.ts:64
-#, fuzzy
 msgid "Export"
-msgstr "Експорт..."
+msgstr "Експорт"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:77
 msgid "command"
-msgstr ""
+msgstr "команда"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:35
 msgid "Full-Text Search"
-msgstr ""
+msgstr "Повнотекстовий пошук"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:36
 msgid "Enter your search terms below"
-msgstr ""
+msgstr "Введіть пошуковий термін нижче"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:37
 msgid "Find …"
-msgstr ""
+msgstr "Пошук ..."
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:39
 msgid "Filter search results"
-msgstr ""
+msgstr "Фільтр результатів пошуку"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:40
 msgid "Restrict search to directory"
-msgstr ""
+msgstr "Обмежити пошук лиш каталогу"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:41
 msgid "Restrict to directory …"
-msgstr ""
+msgstr "Обмежити до каталогу ..."
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:42
 msgid "Search"
-msgstr ""
+msgstr "Пошук"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:43
 msgid "Clear search"
-msgstr ""
+msgstr "Очистити пошук"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:44
 msgid "Toggle results"
-msgstr ""
+msgstr "Переключити результати"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:54
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:169
 #: source/win-main/file-manager/util/file-item-context.ts:28
 msgid "Open in a new tab"
-msgstr ""
+msgstr "Відкрити в новій вкладці"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:113
 #, javascript-format
 msgid "%s matches across %s files"
-msgstr ""
+msgstr "%s збігів з %s файлів"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:21
 msgid "words"
@@ -1106,34 +1107,33 @@ msgstr "символів"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:23
 msgid "No open document"
-msgstr ""
+msgstr "Не відкрито жодного документу"
 
 #: source/tmp/win-paste-image/App.vue.ts:57
 msgid "Insert Image from Clipboard"
-msgstr ""
+msgstr "Додати зображення з буферу обміну"
 
 #: source/tmp/win-paste-image/App.vue.ts:58
 #: source/win-preferences/schema/editor.ts:214
-#, fuzzy
 msgid "Image size"
-msgstr "Зображення"
+msgstr "Розмір зображення"
 
 #: source/tmp/win-paste-image/App.vue.ts:59
 msgid "Retain aspect ratio"
-msgstr ""
+msgstr "Зберігати співвідношення сторін"
 
 #: source/tmp/win-paste-image/App.vue.ts:60
 msgid "Resize image to"
-msgstr ""
+msgstr "Змінити розмір до"
 
 #: source/tmp/win-paste-image/App.vue.ts:61
 msgid "Filename"
-msgstr ""
+msgstr "Назва файлу"
 
 #: source/tmp/win-paste-image/App.vue.ts:62
 #: source/tmp/win-paste-image/App.vue.ts:63
 msgid "A unique filename"
-msgstr ""
+msgstr "Унікальна назва файлу"
 
 #. 1: Omit all changes
 #: source/tmp/win-paste-image/App.vue.ts:67
@@ -1151,68 +1151,68 @@ msgstr "Скасувати"
 
 #: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Export project to:"
-msgstr ""
+msgstr "Експортувати проект до:"
 
 #: source/tmp/win-project-properties/App.vue.ts:39
 msgid "Use"
-msgstr ""
+msgstr "Використати"
 
 #: source/tmp/win-project-properties/App.vue.ts:40
 msgid "Format"
-msgstr ""
+msgstr "Формат"
 
 #: source/tmp/win-project-properties/App.vue.ts:41
 msgid "Conversion"
-msgstr ""
+msgstr "Перетворення"
 
 #: source/tmp/win-project-properties/App.vue.ts:42
 msgid "Files to be included in the export"
-msgstr ""
+msgstr "Файли які буде експортовано"
 
 #: source/tmp/win-project-properties/App.vue.ts:43
 msgid "Please select at least one profile to build this project."
-msgstr ""
+msgstr "Будь ласка оберіть принаймні один профіль для створення цього проекту."
 
 #: source/tmp/win-project-properties/App.vue.ts:44
 msgid "Project Title"
-msgstr ""
+msgstr "Назва проекту"
 
 #: source/tmp/win-project-properties/App.vue.ts:45
 msgid "CSL Stylesheet"
-msgstr ""
+msgstr "CSL таблиця стилів"
 
 #: source/tmp/win-project-properties/App.vue.ts:46
 msgid "LaTeX Template"
-msgstr ""
+msgstr "LaTeX шаблон"
 
 #: source/tmp/win-project-properties/App.vue.ts:47
 msgid "HTML Template"
-msgstr ""
+msgstr "HTML шаблон"
 
 #: source/tmp/win-project-properties/App.vue.ts:48
 msgid "Remove file from export"
-msgstr ""
+msgstr "Вилучити файл з експорту"
 
 #: source/tmp/win-project-properties/App.vue.ts:49
 msgid "Add file to export"
-msgstr ""
+msgstr "Додати файли до експорту"
 
 #: source/tmp/win-project-properties/App.vue.ts:50
 msgid "Move file up"
-msgstr ""
+msgstr "Перемістити файл вгору"
 
 #: source/tmp/win-project-properties/App.vue.ts:51
 msgid "Move file down"
-msgstr ""
+msgstr "Перемістити файл вниз"
 
 #: source/tmp/win-project-properties/App.vue.ts:52
 msgid "You have not selected any files for export."
-msgstr ""
+msgstr "Ви не обрали жодного файлу для експорту."
 
 #: source/tmp/win-project-properties/App.vue.ts:53
 msgid ""
 "Some files are selected for export but no longer exist in the directory."
-msgstr ""
+msgstr "Деякі файли вибрано для експорту, але їх більше немає в каталозі."
 
 #: source/tmp/win-print/App.vue.ts:44 source/tmp/win-print/App.vue.ts:45
 #: source/app/service-providers/menu/menu.darwin.ts:248
@@ -1222,23 +1222,23 @@ msgstr "Друк..."
 
 #: source/tmp/win-tag-manager/App.vue.ts:27
 msgid "Assign color"
-msgstr ""
+msgstr "Призначити колір"
 
 #: source/tmp/win-tag-manager/App.vue.ts:28
 msgid "Remove color"
-msgstr ""
+msgstr "Вилучити колір"
 
 #: source/tmp/win-tag-manager/App.vue.ts:29
 msgid "Tag name"
-msgstr ""
+msgstr "Назва мітки"
 
 #: source/tmp/win-tag-manager/App.vue.ts:30
 msgid "Color"
-msgstr ""
+msgstr "Колір"
 
 #: source/tmp/win-tag-manager/App.vue.ts:32
 msgid "A short description"
-msgstr ""
+msgstr "Короткий опис"
 
 #: source/tmp/win-tag-manager/App.vue.ts:33
 msgid ""
@@ -1246,22 +1246,25 @@ msgid ""
 "its tile in the preview list will receive a colored indicator. The "
 "description will be shown on mouse hover."
 msgstr ""
+"Тут ви можете призначити кольори різним міткам. Якщо у файлі знайдено мітку, "
+"його позначка у списку попереднього перегляду отримає кольоровий індикатор. "
+"Опис буде показано при наведенні миші."
 
 #: source/tmp/win-tag-manager/App.vue.ts:34
 msgid "Manage tags"
-msgstr ""
+msgstr "Керувати мітками"
 
 #: source/tmp/win-tag-manager/App.vue.ts:36
 msgid "New tag"
-msgstr ""
+msgstr "Нова мітка"
 
 #: source/tmp/win-tag-manager/App.vue.ts:37
 msgid "Rename"
-msgstr ""
+msgstr "Перейменувати"
 
 #: source/tmp/win-tag-manager/App.vue.ts:38
 msgid "Rename tag…"
-msgstr ""
+msgstr "Перейменувати мітку ..."
 
 #: source/tmp/win-tag-manager/App.vue.ts:98
 #: source/app/service-providers/menu/menu.darwin.ts:578
@@ -1306,14 +1309,13 @@ msgid "Click to start update"
 msgstr "Натисніть, щоб почати оновлення"
 
 #: source/tmp/win-update/App.vue.ts:45
-#, fuzzy
 msgid "never"
-msgstr "ніколи"
+msgstr "нікол"
 
 #: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
 #, javascript-format
 msgid "Last checked: %s"
-msgstr ""
+msgstr "Востаннє перевірено: %s"
 
 #: source/tmp/win-update/App.vue.ts:124
 msgid "Starting update …"
@@ -1349,7 +1351,7 @@ msgstr "Виділити все"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Cmd/Ctrl-клік щоб перейти за посиланням"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
@@ -1372,11 +1374,11 @@ msgstr "Код"
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:67
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "Файлу %s не існує."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:128
 msgid "Word count"
-msgstr ""
+msgstr "Лічильник слів"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:148
 #: source/app/service-providers/menu/menu.darwin.ts:165
@@ -1386,7 +1388,7 @@ msgstr "Відкрити..."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
 msgid "No footnote text found."
-msgstr ""
+msgstr "Текст виноски не знайдено."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
 #: source/app/service-providers/menu/menu.darwin.ts:308
@@ -1396,11 +1398,11 @@ msgstr "Зміни"
 
 #: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:68
 msgid "Fetching link preview…"
-msgstr ""
+msgstr "Отримання попереднього перегляду для посилання ..."
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
 msgid "Copy equation code"
-msgstr ""
+msgstr "Копіювати код рівняння"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
 msgid "No suggestions"
@@ -1460,82 +1462,79 @@ msgstr "Копіювати ланку"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
 msgid "Remove Link"
-msgstr ""
+msgstr "Вилучити посилання"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:106
 msgid "Copy image to clipboard"
-msgstr ""
+msgstr "Копіювати зображення до буферу обміну"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
-#, fuzzy
 msgid "Open image"
-msgstr "Відкрити файл"
+msgstr "Відкрити зображення"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:118
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Відкрити у Файндер"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:118
 msgid "Open in File Browser"
-msgstr ""
+msgstr "Відкрити в менеджері файлів"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:123
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Зображення не знайдено: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:198
 msgid "Open image externally"
-msgstr ""
+msgstr "Відкрити зображення в зовнішній програмі"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Побудова діаграми mermaid ..."
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
-#, fuzzy
 msgid "Could not render Graph:"
-msgstr "Неможливо створити файл"
+msgstr "Неможливо відтворити графік"
 
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Режим читабельності (%s)"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "Без підсвічування"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Орфографічна помилка"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "Перейти до посилання на виноску"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
 msgid "Disabled"
-msgstr ""
+msgstr "Вимкнено"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
-#, fuzzy
 msgid "Custom"
-msgstr "Власний CSS"
+msgstr "Власний"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Відкрити панель діагностики"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "Визначити автоматично"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Африкаанс"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -1543,7 +1542,7 @@ msgstr "Арабська"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "Астурійська"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -1555,7 +1554,7 @@ msgstr "Болгарська"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "Бретонська"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
@@ -1563,15 +1562,15 @@ msgstr "Боснійська"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "Каталонська"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Catalan (Valencia)"
-msgstr ""
+msgstr "Каталонська (Валенсія)"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Czech"
-msgstr ""
+msgstr "Чеська"
 
 #: source/common/util/map-lang-code.ts:43
 msgid "Danish"
@@ -1586,22 +1585,20 @@ msgid "German (Switzerland)"
 msgstr "Німецька (Швейцарія)"
 
 #: source/common/util/map-lang-code.ts:46
-#, fuzzy
 msgid "German (simple)"
-msgstr "Німецька (Австрія)"
+msgstr "Німецька (проста)"
 
 #: source/common/util/map-lang-code.ts:47
 msgid "German (Germany)"
 msgstr "Німецька (Німеччина)"
 
 #: source/common/util/map-lang-code.ts:48
-#, fuzzy
 msgid "German (Luxembourg)"
-msgstr "Німецька (Австрія)"
+msgstr "Німецька (Люксембург)"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "German"
-msgstr ""
+msgstr "Німецька"
 
 #: source/common/util/map-lang-code.ts:50
 msgid "Greek"
@@ -1624,9 +1621,8 @@ msgid "English (India)"
 msgstr "Англійська (Індія)"
 
 #: source/common/util/map-lang-code.ts:55
-#, fuzzy
 msgid "English (New Zealand)"
-msgstr "Англійська (Канада)"
+msgstr "Англійська (Нова Зеладія)"
 
 #: source/common/util/map-lang-code.ts:56
 msgid "English (United States)"
@@ -1637,27 +1633,24 @@ msgid "English (South Africa)"
 msgstr "Англійська (Південна Африка)"
 
 #: source/common/util/map-lang-code.ts:58
-#, fuzzy
 msgid "English"
-msgstr "Англійська (Індія)"
+msgstr "Англійська"
 
 #: source/common/util/map-lang-code.ts:59
 msgid "Esperanto"
 msgstr "Есперанто"
 
 #: source/common/util/map-lang-code.ts:60
-#, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "Іспанська (Іспанія)"
+msgstr "Іспанська (Аргентина)"
 
 #: source/common/util/map-lang-code.ts:61
 msgid "Spanish (Spain)"
 msgstr "Іспанська (Іспанія)"
 
 #: source/common/util/map-lang-code.ts:62
-#, fuzzy
 msgid "Spanish"
-msgstr "Данська"
+msgstr "Іспанська"
 
 #: source/common/util/map-lang-code.ts:63
 msgid "Estonian"
@@ -1680,31 +1673,28 @@ msgid "Faroese"
 msgstr "Фарерська"
 
 #: source/common/util/map-lang-code.ts:68
-#, fuzzy
 msgid "French (Belgium)"
-msgstr "Нідерландська (Бельгія)"
+msgstr "Французька (Бельгія)"
 
 #: source/common/util/map-lang-code.ts:69
-#, fuzzy
 msgid "French (Switzerland)"
-msgstr "Німецька (Швейцарія)"
+msgstr "Французька (Швейцарія)"
 
 #: source/common/util/map-lang-code.ts:70
 msgid "French (France)"
 msgstr "Французька (Франція)"
 
 #: source/common/util/map-lang-code.ts:71
-#, fuzzy
 msgid "French (Luxembourg)"
-msgstr "Люксембурзька"
+msgstr "Французька (Люксембург)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Французька (Князівство Монако)"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "French"
-msgstr ""
+msgstr "Французька"
 
 #: source/common/util/map-lang-code.ts:74
 msgid "Irish"
@@ -1715,9 +1705,8 @@ msgid "Scottish (Gaelic)"
 msgstr "Шотландська (Гельська)"
 
 #: source/common/util/map-lang-code.ts:76
-#, fuzzy
 msgid "Galician"
-msgstr "Галісійська (Іспанія)"
+msgstr "Галісійська"
 
 #: source/common/util/map-lang-code.ts:77
 msgid "Hebrew"
@@ -1748,18 +1737,16 @@ msgid "Icelandic"
 msgstr "Ісландська"
 
 #: source/common/util/map-lang-code.ts:84
-#, fuzzy
 msgid "Italian (Switzerland)"
-msgstr "Німецька (Швейцарія)"
+msgstr "Італійська (Швейцарія)"
 
 #: source/common/util/map-lang-code.ts:85
 msgid "Italian (Italy)"
 msgstr "Італійська (Італія)"
 
 #: source/common/util/map-lang-code.ts:86
-#, fuzzy
 msgid "Italian"
-msgstr "Курсив"
+msgstr "Італійська"
 
 #: source/common/util/map-lang-code.ts:87
 msgid "Japanese"
@@ -1771,7 +1758,7 @@ msgstr "Грузинська"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Кхмерська (Камбоджа)"
 
 #: source/common/util/map-lang-code.ts:90
 msgid "Korean"
@@ -1802,18 +1789,16 @@ msgid "Mongolian"
 msgstr "Монгольська"
 
 #: source/common/util/map-lang-code.ts:97
-#, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "Малайська (Малайзія)"
+msgstr "Малазійська (Бруней-Даруссалам)"
 
 #: source/common/util/map-lang-code.ts:98
 msgid "Malaysian (Malaysia)"
 msgstr "Малайська (Малайзія)"
 
 #: source/common/util/map-lang-code.ts:99
-#, fuzzy
 msgid "Malaysian"
-msgstr "Малайська (Малайзія)"
+msgstr "Малазійська (Малайзія)"
 
 #: source/common/util/map-lang-code.ts:100
 msgid "Norwegian (Bokmål)"
@@ -1833,43 +1818,39 @@ msgstr "Нідерландська (Нідерланди)"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Dutch"
-msgstr ""
+msgstr "Голландська"
 
 #: source/common/util/map-lang-code.ts:105
 msgid "Norwegian (Nyorsk)"
 msgstr "Норвезька (Нюношк)"
 
 #: source/common/util/map-lang-code.ts:106
-#, fuzzy
 msgid "Norwegian"
-msgstr "Грузинська"
+msgstr "Норвезька"
 
 #: source/common/util/map-lang-code.ts:107
 msgid "Polish"
 msgstr "Польська"
 
 #: source/common/util/map-lang-code.ts:108
-#, fuzzy
 msgid "Portuguese (Angola)"
-msgstr "Португальська (Португалія)"
+msgstr "Португальська (Ангола)"
 
 #: source/common/util/map-lang-code.ts:109
 msgid "Portuguese (Brazil)"
 msgstr "Португальська (Бразилія)"
 
 #: source/common/util/map-lang-code.ts:110
-#, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr "Португальська (Бразилія)"
+msgstr "Португальська (Мозамбік)"
 
 #: source/common/util/map-lang-code.ts:111
 msgid "Portuguese (Portugal)"
 msgstr "Португальська (Португалія)"
 
 #: source/common/util/map-lang-code.ts:112
-#, fuzzy
 msgid "Portuguese"
-msgstr "Португальська (Бразилія)"
+msgstr "Португальська"
 
 #: source/common/util/map-lang-code.ts:113
 msgid "Romanian"
@@ -1896,31 +1877,28 @@ msgid "Serbian"
 msgstr "Сербська"
 
 #: source/common/util/map-lang-code.ts:119
-#, fuzzy
 msgid "Albanian"
-msgstr "Ромунська"
+msgstr "Албанська"
 
 #: source/common/util/map-lang-code.ts:120
-#, fuzzy
 msgid "Albanian (Albania)"
-msgstr "Малайська (Малайзія)"
+msgstr "Албанська (Албанія)"
 
 #: source/common/util/map-lang-code.ts:121
 msgid "Swedish"
 msgstr "Шведська"
 
 #: source/common/util/map-lang-code.ts:122
-#, fuzzy
 msgid "Tamil (India)"
-msgstr "Англійська (Індія)"
+msgstr "Тамільська (Індія)"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Thai"
-msgstr ""
+msgstr "Тайська"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Тагальська (філіппінська)"
 
 #: source/common/util/map-lang-code.ts:125
 msgid "Turkish"
@@ -1932,7 +1910,7 @@ msgstr "Українська"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Urdu"
-msgstr ""
+msgstr "Урду"
 
 #: source/common/util/map-lang-code.ts:128
 msgid "Vietnamese"
@@ -1941,27 +1919,24 @@ msgstr "В'єтнамська"
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
 #: source/common/util/map-lang-code.ts:131
-#, fuzzy
 msgid "Sorbian"
-msgstr "Сербська"
+msgstr "Лужицька"
 
 #: source/common/util/map-lang-code.ts:132
 msgid "Chinese (China)"
 msgstr "Китайська (Китай)"
 
 #: source/common/util/map-lang-code.ts:133
-#, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "Китайська (Китай)"
+msgstr "Китайська (Тайвань)"
 
 #: source/common/util/map-lang-code.ts:134
-#, fuzzy
 msgid "Chinese"
-msgstr "Китайська (Китай)"
+msgstr "Китайська"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
-msgstr ""
+msgstr "тількищо"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -1973,21 +1948,19 @@ msgstr "."
 
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
-msgstr ""
+msgstr "Відкрити редактор фрагментів"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
-msgstr ""
+msgstr "Zettelkasten IDs"
 
 #: source/win-preferences/schema/zettelkasten.ts:29
-#, fuzzy
 msgid "Pattern for Zettelkasten IDs"
-msgstr "Шаблон для генерації нових ID"
+msgstr "Правило Zettelkasten IDs"
 
 #: source/win-preferences/schema/zettelkasten.ts:30
-#, fuzzy
 msgid "Uses ECMAScript regular expressions"
-msgstr "Регулярний вираз для ID"
+msgstr "Використовує регулярний вираз ECMAScript"
 
 #: source/win-preferences/schema/zettelkasten.ts:36
 msgid "Pattern used to generate new IDs"
@@ -1996,42 +1969,36 @@ msgstr "Шаблон для генерації нових ID"
 #: source/win-preferences/schema/zettelkasten.ts:39
 #, javascript-format
 msgid "Available Variables: %s"
-msgstr ""
+msgstr "Доступні змінні: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:44
 #: source/win-preferences/schema/import-export.ts:77
-#, fuzzy
 msgid "Internal links"
-msgstr "Вилучати внутрішні посилання"
+msgstr "Внутрішні посилання"
 
 #: source/win-preferences/schema/zettelkasten.ts:50
 msgid "Link with filename only"
-msgstr ""
+msgstr "Лише посилання з назвою файлу"
 
 #: source/win-preferences/schema/zettelkasten.ts:55
-#, fuzzy
 msgid "When linking files, add the document name …"
-msgstr "Під час зв’язування файлів додайте ім’я файлу …"
+msgstr "Під час зв'язування файлів додавати ім'я файлу..."
 
 #: source/win-preferences/schema/zettelkasten.ts:58
-#, fuzzy
 msgid "Always"
-msgstr "завжди"
+msgstr "Завжди"
 
 #: source/win-preferences/schema/zettelkasten.ts:59
-#, fuzzy
 msgid "Only when linking using the ID"
-msgstr "лише при встановленні посилань з використанням ідентифікатора"
+msgstr "Лише при зв'язування з використанням ідентифікатора"
 
 #: source/win-preferences/schema/zettelkasten.ts:60
-#, fuzzy
 msgid "Never"
-msgstr "ніколи"
+msgstr "Ніколи"
 
 #: source/win-preferences/schema/zettelkasten.ts:68
-#, fuzzy
 msgid "Link format"
-msgstr "Початок посилання"
+msgstr "Формат посилання"
 
 #: source/win-preferences/schema/zettelkasten.ts:73
 msgid ""
@@ -2039,40 +2006,43 @@ msgid ""
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
 msgstr ""
+"Внутрішні посилання дозволяють додавати необов'язковий заголовок, він "
+"відокремлений вертикальною рискою від фактичної цілі посилання. Тут ви "
+"можете визначити порядок цих двох елементів."
 
 #: source/win-preferences/schema/zettelkasten.ts:79
 msgid "[[Link|Title]]: Link first (recommended)"
-msgstr ""
+msgstr "[[Link|Title]]: Посилання перше (рекомендовано)"
 
 #: source/win-preferences/schema/zettelkasten.ts:80
 msgid "[[Title|Link]]: Title first"
-msgstr ""
+msgstr "[[Title|Link]]: Заголовок перший"
 
 #: source/win-preferences/schema/zettelkasten.ts:88
-#, fuzzy
 msgid "Start a full-text search when following internal links"
-msgstr "Починати пошук при переході за Zettelkasten-посиланнями"
+msgstr ""
+"Почати повнотекстовий пошук під час переходу за внутрішніми посиланнями"
 
 #: source/win-preferences/schema/zettelkasten.ts:89
 msgid "The search string will match the content between the brackets: [[ ]]."
-msgstr ""
+msgstr "Рядок пошуку відповідатиме вмісту в квадратних дужках: [[ ]]."
 
 #: source/win-preferences/schema/zettelkasten.ts:96
-#, fuzzy
 msgid ""
 "Automatically create non-existing files in this folder when following "
 "internal links"
 msgstr ""
-"Автоматично створювати неіснуючі файли при переході за внутрішніми "
-"посиланнями"
+"Автоматично створювати відсутні файли при переході в цей каталог за "
+"внутрішніми посиланнями"
 
 #: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
 msgstr ""
+"Щоб це працювало, каталог має бути відкрито як робочий простір у Zettlr."
 
 #: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
-msgstr ""
+msgstr "Шлях до каталогу"
 
 #: source/win-preferences/schema/appearance.ts:26
 #: source/app/service-providers/menu/menu.darwin.ts:439
@@ -2090,21 +2060,20 @@ msgid "Off"
 msgstr "Вимкнено"
 
 #: source/win-preferences/schema/appearance.ts:42
-#, fuzzy
 msgid "Follow system"
-msgstr "Наслідувати операційну систему"
+msgstr "Слідувати за системою"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "On"
-msgstr ""
+msgstr "Ввімкнено"
 
 #: source/win-preferences/schema/appearance.ts:59
 msgid "End"
-msgstr ""
+msgstr "Вимкнено"
 
 #: source/win-preferences/schema/appearance.ts:69
 msgid "Theme"
-msgstr ""
+msgstr "Тема"
 
 #: source/win-preferences/schema/appearance.ts:76
 msgid "Here you can choose the theme for the app."
@@ -2112,89 +2081,87 @@ msgstr "Тут можна обрати тему для програми."
 
 #: source/win-preferences/schema/appearance.ts:118
 msgid "Toolbar options"
-msgstr ""
+msgstr "Параметри панелі інструментів"
 
 #: source/win-preferences/schema/appearance.ts:125
 msgid "Left section buttons"
-msgstr ""
+msgstr "Кнопки ліворуч"
 
 #: source/win-preferences/schema/appearance.ts:129
 msgid "Display \"Open Preferences\" button"
-msgstr ""
+msgstr "Показати кнопку \"Відкрити налаштування\""
 
 #: source/win-preferences/schema/appearance.ts:134
 msgid "Display \"New File\" button"
-msgstr ""
+msgstr "Показати кнопку \"Новий файл\""
 
 #: source/win-preferences/schema/appearance.ts:139
 msgid "Display \"Previous File\" button"
-msgstr ""
+msgstr "Показати кнопку \"Попередній файл\""
 
 #: source/win-preferences/schema/appearance.ts:144
 msgid "Display \"Next File\" button"
-msgstr ""
+msgstr "Показати кнопку \"Наступний файл\""
 
 #: source/win-preferences/schema/appearance.ts:151
 msgid "Center section buttons"
-msgstr ""
+msgstr "Кнопки посередині"
 
 #: source/win-preferences/schema/appearance.ts:155
 msgid "Display readability button"
-msgstr ""
+msgstr "Показати кнопку читабельності"
 
 #: source/win-preferences/schema/appearance.ts:160
 msgid "Display \"Insert Comment\" button"
-msgstr ""
+msgstr "Показати кнопку \"Додати коментар\""
 
 #: source/win-preferences/schema/appearance.ts:165
 msgid "Display link button"
-msgstr ""
+msgstr "Показати кнопку посилання"
 
 #: source/win-preferences/schema/appearance.ts:170
 msgid "Display image button"
-msgstr ""
+msgstr "Показати кнопку зображення"
 
 #: source/win-preferences/schema/appearance.ts:175
 msgid "Display task list button"
-msgstr ""
+msgstr "Показати кнопку списку завдань"
 
 #: source/win-preferences/schema/appearance.ts:180
 msgid "Display \"Insert Table\" button"
-msgstr ""
+msgstr "Показати кнопку \"Додати таблицю\""
 
 #: source/win-preferences/schema/appearance.ts:185
 msgid "Display \"Insert Footnote\" button"
-msgstr ""
+msgstr "Показати кнопку \"Додати виноску\""
 
 #: source/win-preferences/schema/appearance.ts:192
 msgid "Right section buttons"
-msgstr ""
+msgstr "Кнопки праворуч"
 
 #: source/win-preferences/schema/appearance.ts:196
 msgid "Display document info"
-msgstr ""
+msgstr "Показати інформацію про документ"
 
 #: source/win-preferences/schema/appearance.ts:201
 msgid "Display Pomodoro-timer"
-msgstr ""
+msgstr "Показати таймер Помодоро"
 
 #: source/win-preferences/schema/appearance.ts:207
 msgid "Status bar"
-msgstr ""
+msgstr "Рядок стану"
 
 #: source/win-preferences/schema/appearance.ts:213
 msgid "Show statusbar"
-msgstr ""
+msgstr "Показати рядок стану"
 
 #: source/win-preferences/schema/appearance.ts:224
-#, fuzzy
 msgid "Open CSS editor"
-msgstr "Відкрити каталог"
+msgstr "Відкрити редактор CSS"
 
 #: source/win-preferences/schema/editor.ts:23
-#, fuzzy
 msgid "Input mode"
-msgstr "Режим редагування"
+msgstr "Режим введення"
 
 #: source/win-preferences/schema/editor.ts:39
 msgid ""
@@ -2202,15 +2169,17 @@ msgid ""
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
 msgstr ""
+"Режим введення визначає, як ви взаємодієте з редактором. Ми рекомендуємо "
+"залишити цей параметр на \"Звичайний\". Вибирайте \"Vim\" або \"Emacs\", "
+"лише якщо знаєте, що це означає."
 
 #: source/win-preferences/schema/editor.ts:44
-#, fuzzy
 msgid "Writing direction"
-msgstr "Шукати у каталозі"
+msgstr "Напрям письма"
 
 #: source/win-preferences/schema/editor.ts:57
 msgid "Markdown rendering"
-msgstr ""
+msgstr "Візуалізація Markdown"
 
 #: source/win-preferences/schema/editor.ts:64
 msgid ""
@@ -2218,30 +2187,33 @@ msgid ""
 "appearance. This hides formatting characters (such as **text**) or renders "
 "images instead of their link."
 msgstr ""
+"Поставте прапорець, щоб увімкнути показ різних елементів Markdown у "
+"відформатований вигляд. Це приховує символи форматування (наприклад, "
+"**текст**) або показує картинки замість їх посилань."
 
 #: source/win-preferences/schema/editor.ts:72
 msgid "Render Citations"
-msgstr "Відображення цитат"
+msgstr "Показ цитат"
 
 #: source/win-preferences/schema/editor.ts:77
 msgid "Render Iframes"
-msgstr "Відображення фреймів"
+msgstr "Показ фреймів"
 
 #: source/win-preferences/schema/editor.ts:82
 msgid "Render Images"
-msgstr "Відображення зображень"
+msgstr "Показ зображень"
 
 #: source/win-preferences/schema/editor.ts:87
 msgid "Render Links"
-msgstr "Відображення посилань"
+msgstr "Показ посилань"
 
 #: source/win-preferences/schema/editor.ts:92
 msgid "Render Formulae"
-msgstr "Відображення формул"
+msgstr "Показ формул"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Render Tasks"
-msgstr "Відображення завдань"
+msgstr "Показ завдань"
 
 #: source/win-preferences/schema/editor.ts:102
 msgid "Hide heading characters"
@@ -2249,20 +2221,19 @@ msgstr "Ховати символи заголовків"
 
 #: source/win-preferences/schema/editor.ts:107
 msgid "Render emphasis"
-msgstr ""
+msgstr "Візуалізація наголосу"
 
 #: source/win-preferences/schema/editor.ts:116
 msgid "Formatting characters for bold and italic"
-msgstr ""
+msgstr "Форматування символів для напівжирного та курсиву"
 
 #: source/win-preferences/schema/editor.ts:143
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Перевіряти Markdown на помилки в розмітці"
 
 #: source/win-preferences/schema/editor.ts:149
-#, fuzzy
 msgid "Table Editor"
-msgstr "Дозволити Редактор таблиць"
+msgstr "Редактор таблиць"
 
 #: source/win-preferences/schema/editor.ts:160
 msgid ""
@@ -2270,11 +2241,13 @@ msgid ""
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
 msgstr ""
+"Редактор таблиць надає інтерактивний інтерфейс, який спрощує створення та "
+"редагування таблиць. Він надає кнопки для загальних функцій і стежить про "
+"форматування Markdown."
 
 #: source/win-preferences/schema/editor.ts:165
-#, fuzzy
 msgid "Distraction-free mode"
-msgstr "Режим без відволікання"
+msgstr "Режим без відволіканн"
 
 #: source/win-preferences/schema/editor.ts:171
 msgid "Mute non-focused lines in distraction-free mode"
@@ -2282,11 +2255,11 @@ msgstr "Робити блідими рядки, які не під фокусо�
 
 #: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction free mode"
-msgstr ""
+msgstr "Приховати панель інструментів у режимі без відволікань"
 
 #: source/win-preferences/schema/editor.ts:182
 msgid "Word counter"
-msgstr ""
+msgstr "Лічильник слів"
 
 #: source/win-preferences/schema/editor.ts:189
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -2294,57 +2267,51 @@ msgstr "Рахувати символи замість слів (напр. дл�
 
 #: source/win-preferences/schema/editor.ts:195
 msgid "Readability mode"
-msgstr ""
+msgstr "Режим читабельності"
 
 #: source/win-preferences/schema/editor.ts:202
 msgid "Algorithm"
-msgstr ""
+msgstr "Алгоритм"
 
 #: source/win-preferences/schema/editor.ts:220
-#, fuzzy
 msgid "Maximum width of images (%s %)"
-msgstr "Максимальна ширина зображень (відсотки)"
+msgstr "Максимальна ширина зображень (%s %)"
 
 #: source/win-preferences/schema/editor.ts:227
-#, fuzzy
 msgid "Maximum height of images (%s %)"
-msgstr "Максимальна висота зображень (відсотки)"
+msgstr "Максимальна висота зображень (%s %)"
 
 #: source/win-preferences/schema/editor.ts:235
 msgid "Other settings"
-msgstr ""
+msgstr "Інші налаштування"
 
 #: source/win-preferences/schema/editor.ts:241
-#, fuzzy
 msgid "Font size"
-msgstr "Розмір шрифту редактора"
+msgstr "Розмір шрифту"
 
 #: source/win-preferences/schema/editor.ts:248
-#, fuzzy
 msgid "Indentation size (number of spaces)"
-msgstr "Кількість символів для відступу"
+msgstr "Розмір відступу (кількість пробілів)"
 
 #: source/win-preferences/schema/editor.ts:255
-#, fuzzy
 msgid "Indent using tabs instead of spaces"
-msgstr "Кількість символів для відступу"
+msgstr "Для відступу використовувати табуляцію замість пробілів"
 
 #: source/win-preferences/schema/editor.ts:261
 msgid "Show formatting toolbar when text is selected"
-msgstr ""
+msgstr "Показувати панель форматування, коли вибрано текст"
 
 #: source/win-preferences/schema/editor.ts:266
 msgid "Highlight whitespace"
-msgstr ""
+msgstr "Виділяти пробіли"
 
 #: source/win-preferences/schema/editor.ts:272
-#, fuzzy
 msgid "Suggest emojis during autocompletion"
-msgstr "Використовувати пробіли для автодоповнення"
+msgstr "Пропонувати емодзі під час автозаповнення"
 
 #: source/win-preferences/schema/editor.ts:277
 msgid "Show link previews"
-msgstr ""
+msgstr "Показувати перегляд для посилань"
 
 #: source/win-preferences/schema/editor.ts:283
 msgid "Automatically close matching character pairs"
@@ -2352,16 +2319,15 @@ msgstr "Автоматично закривати відповідні пари 
 
 #: source/win-preferences/schema/general.ts:22
 msgid "Application language"
-msgstr ""
+msgstr "Мова програми"
 
 #: source/win-preferences/schema/general.ts:33
 msgid "Autosave"
 msgstr "Автозбереження"
 
 #: source/win-preferences/schema/general.ts:43
-#, fuzzy
 msgid "Save modifications"
-msgstr "Час останньої зміни"
+msgstr "Зберегти зміни"
 
 #: source/win-preferences/schema/general.ts:48
 msgid "Immediately"
@@ -2373,17 +2339,19 @@ msgstr "Після невеликої затримки"
 
 #: source/win-preferences/schema/general.ts:55
 msgid "Default image folder"
-msgstr ""
+msgstr "Типовий каталог зображень"
 
 #: source/win-preferences/schema/general.ts:67
 msgid ""
 "Click \"Select folder…\" or type an absolute or relative path directly into "
 "the input field."
 msgstr ""
+"Натисніть \"Вибрати каталог…\" або введіть абсолютний або відносний шлях "
+"безпосередньо в поле введення."
 
 #: source/win-preferences/schema/general.ts:72
 msgid "Behavior"
-msgstr ""
+msgstr "Поведінка"
 
 #: source/win-preferences/schema/general.ts:78
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
@@ -2395,41 +2363,37 @@ msgid "Avoid opening files in new tabs if possible"
 msgstr "По можливості уникайте відкриття файлів у нових вкладках"
 
 #: source/win-preferences/schema/general.ts:89
-#, fuzzy
 msgid "Updates"
-msgstr "Програма оновлення"
+msgstr "Оновлення"
 
 #: source/win-preferences/schema/general.ts:95
 msgid "Automatically check for updates"
-msgstr ""
+msgstr "Автоматично перевіряти оновлення"
 
 #: source/win-preferences/schema/import-export.ts:24
 msgid "Import and export profiles"
-msgstr ""
+msgstr "Імпорт та експорт профілів"
 
 #: source/win-preferences/schema/import-export.ts:30
 msgid "Open import profiles editor"
-msgstr ""
+msgstr "Відкрити редактор профілів імпорту"
 
 #: source/win-preferences/schema/import-export.ts:44
 msgid "Open export profiles editor"
-msgstr ""
+msgstr "Відкрити редактор профілів експорту"
 
 #: source/win-preferences/schema/import-export.ts:59
-#, fuzzy
 msgid "Export settings"
-msgstr "Експортування в %s"
+msgstr "Експортування налаштування"
 
 #. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
 #: source/win-preferences/schema/import-export.ts:65
-#, fuzzy
 msgid "Use Zettlr's internal Pandoc for exports"
 msgstr "Використовувати внутрішній Pandoc для експорту"
 
 #: source/win-preferences/schema/import-export.ts:71
-#, fuzzy
 msgid "Remove tags from files when exporting"
-msgstr "Видаляти мітки з файлів"
+msgstr "Вилучати мітки з файлів під час експорту"
 
 #: source/win-preferences/schema/import-export.ts:80
 msgid "Remove internal links completely"
@@ -2445,21 +2409,20 @@ msgstr "Не чіпати внутрішні посилання"
 
 #: source/win-preferences/schema/import-export.ts:88
 msgid "Destination folder for exported files"
-msgstr ""
+msgstr "Каталог призначення для файлів експорту"
 
 #. TODO: Add info-strings
 #: source/win-preferences/schema/import-export.ts:92
 msgid "Temporary folder"
-msgstr ""
+msgstr "Тимчасовий каталог"
 
 #: source/win-preferences/schema/import-export.ts:93
-#, fuzzy
 msgid "Same as file location"
-msgstr "Показувати інформацію про файл"
+msgstr "Те саме як розташування файлу"
 
 #: source/win-preferences/schema/import-export.ts:94
 msgid "Ask for folder when exporting"
-msgstr ""
+msgstr "Запитувати під час експорту"
 
 #: source/win-preferences/schema/import-export.ts:100
 msgid ""
@@ -2467,42 +2430,45 @@ msgid ""
 "same location as the file overwrites files with identical filenames if they "
 "already exist."
 msgstr ""
+"Увага! Файли у тимчасовому каталозі регулярно видаляються. Вибір одного й "
+"того самого розташування, що й файл, перезаписує файли з ідентичними назвами "
+"файлів, якщо вони вже існують."
 
 #: source/win-preferences/schema/import-export.ts:105
 msgid "Custom export commands"
-msgstr ""
+msgstr "Спеціальні команди експорту"
 
 #: source/win-preferences/schema/import-export.ts:113
 msgid "Display name"
-msgstr ""
+msgstr "Назва для показу"
 
 #: source/win-preferences/schema/import-export.ts:113
-#, fuzzy
 msgid "Command"
-msgstr "Коментар"
+msgstr "Команда"
 
 #: source/win-preferences/schema/import-export.ts:114
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
 msgstr ""
+"Введіть спеціальні команди для запуску експортера. Кожна команда отримує як "
+"свій перший аргумент файл або каталог проекту, які потрібно експортувати."
 
 #: source/win-preferences/schema/file-manager.ts:23
-#, fuzzy
 msgid "Display mode"
-msgstr "Темний режим"
+msgstr "Режим показу"
 
 #: source/win-preferences/schema/file-manager.ts:32
 msgid "Thin"
-msgstr ""
+msgstr "Тонкий"
 
 #: source/win-preferences/schema/file-manager.ts:33
 msgid "Expanded"
-msgstr ""
+msgstr "Розширений"
 
 #: source/win-preferences/schema/file-manager.ts:34
 msgid "Combined"
-msgstr ""
+msgstr "Змішаний"
 
 #: source/win-preferences/schema/file-manager.ts:40
 msgid ""
@@ -2511,6 +2477,10 @@ msgid ""
 "file list and directory tree by clicking on directories or the arrow button "
 "which appears at the top left corner of the file list."
 msgstr ""
+"\"Тонкий\" режим показує ваші каталоги та файли окремо. Виберіть каталог, "
+"щоб побачити його вміст у списку файлів. Перемикайтеся між списком файлів і "
+"деревом каталогів, натискаючи на каталоги, або кнопку зі стрілкою, яка "
+"з'являється у верхньому лівому куті списку файлів."
 
 #: source/win-preferences/schema/file-manager.ts:45
 msgid "Show file information"
@@ -2522,31 +2492,31 @@ msgstr "Показати папки над файлами"
 
 #: source/win-preferences/schema/file-manager.ts:56
 msgid "Markdown document name display"
-msgstr ""
+msgstr "Показ назви документа Markdown"
 
 #: source/win-preferences/schema/file-manager.ts:64
 msgid "Filename only"
-msgstr ""
+msgstr "Лише назва файлу"
 
 #: source/win-preferences/schema/file-manager.ts:65
 msgid "Title if applicable"
-msgstr ""
+msgstr "Заголовок, коли доступно"
 
 #: source/win-preferences/schema/file-manager.ts:66
 msgid "First heading level 1 if applicable"
-msgstr ""
+msgstr "Перший доступний заголовок рівня 1"
 
 #: source/win-preferences/schema/file-manager.ts:67
 msgid "Title or first heading level 1 if applicable"
-msgstr ""
+msgstr "Заголовок або перший заголовок рівня 1, коли доступно"
 
 #: source/win-preferences/schema/file-manager.ts:73
 msgid "Display Markdown file extensions"
-msgstr ""
+msgstr "Показати розширення файлів Markdown"
 
 #: source/win-preferences/schema/file-manager.ts:80
 msgid "Time display"
-msgstr ""
+msgstr "Показ часу"
 
 #: source/win-preferences/schema/file-manager.ts:88
 msgid "Last modification time"
@@ -2557,53 +2527,48 @@ msgid "File creation time"
 msgstr "Час створення файлу"
 
 #: source/win-preferences/schema/file-manager.ts:95
-#, fuzzy
 msgid "Sorting"
-msgstr "Експорт..."
+msgstr "Сортування"
 
 #: source/win-preferences/schema/file-manager.ts:101
-#, fuzzy
 msgid "When sorting documents…"
-msgstr "Недавні документи"
+msgstr "Під час сортування документів…"
 
 #: source/win-preferences/schema/file-manager.ts:104
-#, fuzzy
 msgid "Use natural order (2 comes before 10)"
-msgstr "Звичайне сортування (10 після 2)"
+msgstr "Натуральне сортування (2 буде попереду 10)"
 
 #: source/win-preferences/schema/file-manager.ts:105
-#, fuzzy
 msgid "Use ASCII order (2 comes after 10)"
-msgstr "Сортування ASCII (2 після 10)"
+msgstr "Сортування ASCII (2 буде позаду 10)"
 
 #: source/win-preferences/schema/spellchecking.ts:24
 msgid "LanguageTool"
-msgstr ""
+msgstr "Мовний інструмент"
 
 #: source/win-preferences/schema/spellchecking.ts:34
 msgid "Strictness"
-msgstr ""
+msgstr "Строгість"
 
 #: source/win-preferences/schema/spellchecking.ts:37
-#, fuzzy
 msgid "Standard"
-msgstr "Календар"
+msgstr "Стандартно"
 
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "Picky"
-msgstr ""
+msgstr "Вимогливо"
 
 #: source/win-preferences/schema/spellchecking.ts:47
 msgid "Mother language"
-msgstr ""
+msgstr "Рідна мова"
 
 #: source/win-preferences/schema/spellchecking.ts:53
 msgid "Not set"
-msgstr ""
+msgstr "Не вказано"
 
 #: source/win-preferences/schema/spellchecking.ts:61
 msgid "Preferred Variants"
-msgstr ""
+msgstr "Бажані варіанти"
 
 #: source/win-preferences/schema/spellchecking.ts:66
 msgid ""
@@ -2611,62 +2576,65 @@ msgid ""
 "will nudge LanguageTool to auto-detect your preferred variant of these "
 "languages."
 msgstr ""
+"Мовний інструмент не може розрізняти певні варіанти мови. Ці налаштування "
+"підштовхнуть Мовний інструмент до автоматичного визначення бажаного варіанту "
+"цих мов."
 
 #: source/win-preferences/schema/spellchecking.ts:71
 msgid "Interpret English as"
-msgstr ""
+msgstr "Інтерпретувати англійську як"
 
 #: source/win-preferences/schema/spellchecking.ts:84
 msgid "Interpret German as"
-msgstr ""
+msgstr "Інтерпретувати німецьку як"
 
 #: source/win-preferences/schema/spellchecking.ts:94
 msgid "Interpret Portuguese as"
-msgstr ""
+msgstr "Інтерпретувати португальську як"
 
 #: source/win-preferences/schema/spellchecking.ts:105
 msgid "Interpret Catalan as"
-msgstr ""
+msgstr "Інтерпретувати каталонську як"
 
 #: source/win-preferences/schema/spellchecking.ts:114
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "Постачальник Мовного інструменту"
 
 #: source/win-preferences/schema/spellchecking.ts:118
-#, fuzzy
 msgid "Custom server"
-msgstr "Власний CSS"
+msgstr "Власний сервер"
 
 #: source/win-preferences/schema/spellchecking.ts:125
-#, fuzzy
 msgid "Custom server address"
-msgstr "Власний CSS"
+msgstr "Адреса власного серверу"
 
 #: source/win-preferences/schema/spellchecking.ts:134
 msgid "LanguageTool Premium"
-msgstr ""
+msgstr "Мовний інструмент преміум"
 
 #: source/win-preferences/schema/spellchecking.ts:139
 msgid ""
 "Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
 "credentials here."
 msgstr ""
+"Zettlr ігноруватиме налаштування \"Мовний інструмент\" коли вкажете будь які "
+"дані тут."
 
 #: source/win-preferences/schema/spellchecking.ts:143
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "\"Мовний інструмент\" користувач"
 
 #: source/win-preferences/schema/spellchecking.ts:150
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "\"Мовний інструмент\" ключ API"
 
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Active"
-msgstr ""
+msgstr "Активно"
 
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Language"
-msgstr ""
+msgstr "Мова"
 
 #: source/win-preferences/schema/spellchecking.ts:168
 msgid ""
@@ -2677,9 +2645,8 @@ msgstr ""
 #: source/win-preferences/schema/spellchecking.ts:173
 #: source/win-preferences/schema/autocorrect.ts:112
 #: source/win-preferences/schema/advanced.ts:115
-#, fuzzy
 msgid "Filter"
-msgstr "Фільтр міток..."
+msgstr "Фільтр"
 
 #: source/win-preferences/schema/spellchecking.ts:180
 msgid "User dictionary. Remove words by clicking them."
@@ -2691,21 +2658,19 @@ msgstr "Словниковий запис"
 
 #: source/win-preferences/schema/spellchecking.ts:185
 msgid "Search for entries …"
-msgstr ""
+msgstr "Пошук записів ..."
 
 #: source/win-preferences/schema/autocorrect.ts:22
-#, fuzzy
 msgid "Autocorrect"
-msgstr "Увімкнути автовиправлення"
+msgstr "Автовиправлення"
 
 #: source/win-preferences/schema/autocorrect.ts:32
 msgid "Smart quotes"
-msgstr ""
+msgstr "Розумні цитати"
 
 #: source/win-preferences/schema/autocorrect.ts:45
-#, fuzzy
 msgid "Double Quotes"
-msgstr "Вимкнути Magic Quotes"
+msgstr "Подвійні лапки"
 
 #: source/win-preferences/schema/autocorrect.ts:48
 #: source/win-preferences/schema/autocorrect.ts:70
@@ -2713,30 +2678,28 @@ msgid "Disable Magic Quotes"
 msgstr "Вимкнути Magic Quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:67
-#, fuzzy
 msgid "Single Quotes"
-msgstr "Вимкнути Magic Quotes"
+msgstr "Одинарні лапки"
 
 #: source/win-preferences/schema/autocorrect.ts:95
 msgid "Text-replacement patterns"
-msgstr ""
+msgstr "Шаблони заміни тексту"
 
 #: source/win-preferences/schema/autocorrect.ts:99
 msgid "Match whole words"
-msgstr ""
+msgstr "Повний збіг зі словом"
 
 #: source/win-preferences/schema/autocorrect.ts:100
 msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
+msgstr "Коли обрано, автокорекція ніколи не буде заміняти частину слова"
 
 #: source/win-preferences/schema/autocorrect.ts:107
-#, fuzzy
 msgid "Replace"
-msgstr "Замінити файл"
+msgstr "Замінити"
 
 #: source/win-preferences/schema/autocorrect.ts:107
 msgid "With"
-msgstr ""
+msgstr "На"
 
 #: source/win-preferences/schema/citations.ts:28
 msgid "How would you like autocomplete to insert your citations?"
@@ -2748,28 +2711,25 @@ msgstr "База цитат (CSL JSON або BibTex)"
 
 #: source/win-preferences/schema/citations.ts:41
 #: source/win-preferences/schema/citations.ts:53
-#, fuzzy
 msgid "Path to file"
-msgstr "Додати до файлу"
+msgstr "Шлях до файлу"
 
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL-Style (optional)"
 msgstr "Стилі CSL (необов'язково)"
 
 #: source/win-preferences/schema/advanced.ts:30
-#, fuzzy
 msgid "Pattern for new file names"
-msgstr "Шаблон для нових файлів"
+msgstr "Шаблон назви для нових файлів"
 
 #: source/win-preferences/schema/advanced.ts:36
-#, fuzzy
 msgid "Define a pattern for new file names"
-msgstr "Шаблон для нових файлів"
+msgstr "Вкажіть шаблон назви для нових файлів"
 
 #: source/win-preferences/schema/advanced.ts:38
 #, javascript-format
 msgid "Available variables: %s"
-msgstr ""
+msgstr "Доступні змінні: %s"
 
 #: source/win-preferences/schema/advanced.ts:44
 msgid "Do not prompt for filename when creating new files"
@@ -2781,16 +2741,15 @@ msgstr "Використовувати нативний зовнішній ви�
 
 #: source/win-preferences/schema/advanced.ts:58
 msgid "Only available on Linux; this is the default for macOS and Windows."
-msgstr ""
+msgstr "Доступно лише в Linux; це типове значення для macOS і Windows."
 
 #: source/win-preferences/schema/advanced.ts:64
-#, fuzzy
 msgid "Enable window vibrancy"
-msgstr "Використовувати нативний зовнішній вигляд вікна"
+msgstr "Увімкнути яскравість вікна"
 
 #: source/win-preferences/schema/advanced.ts:65
 msgid "Only available on macOS; makes the window background opaque."
-msgstr ""
+msgstr "Доступно лише в macOS; робить фон вікна непрозорим."
 
 #: source/win-preferences/schema/advanced.ts:72
 msgid "Show app in the notification area"
@@ -2802,38 +2761,35 @@ msgstr "Залиште програму запущеною в області с�
 
 #: source/win-preferences/schema/advanced.ts:82
 msgid "Zoom behavior"
-msgstr ""
+msgstr "Поведінка масштабування"
 
 #: source/win-preferences/schema/advanced.ts:85
 msgid "Resizes the whole GUI"
-msgstr ""
+msgstr "Змінює розмір всього інтерфейсу"
 
 #: source/win-preferences/schema/advanced.ts:86
-#, fuzzy
 msgid "Changes the editor font size"
-msgstr "Розмір шрифту редактора"
+msgstr "Змінює розмір шрифту редактора"
 
 #: source/win-preferences/schema/advanced.ts:92
 msgid "Attachments sidebar"
-msgstr ""
+msgstr "Бічна панель вкладень"
 
 #: source/win-preferences/schema/advanced.ts:98
 msgid "File extensions to be visible in the Attachments sidebar"
-msgstr ""
+msgstr "Розширення файлів які буде показано на бічній панелі вкладень"
 
 #: source/win-preferences/schema/advanced.ts:104
-#, fuzzy
 msgid "Iframe rendering whitelist"
-msgstr "Список візуалізації iFrame"
+msgstr "Список дозволених адрес для iFrame"
 
 #: source/win-preferences/schema/advanced.ts:113
 msgid "Hostname"
 msgstr "Hostname"
 
 #: source/win-preferences/schema/advanced.ts:120
-#, fuzzy
 msgid "Watchdog polling"
-msgstr "Активувати спостереження за файлами"
+msgstr "Опитування спостерігача"
 
 #: source/win-preferences/schema/advanced.ts:126
 msgid "Activate Watchdog polling"
@@ -2844,9 +2800,8 @@ msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "Час очікування перед тим, як запис файлу вважається виконаним (в мс)"
 
 #: source/win-preferences/schema/advanced.ts:138
-#, fuzzy
 msgid "Deleting items"
-msgstr "Видалити файл"
+msgstr "Вилучення елементів"
 
 #: source/win-preferences/schema/advanced.ts:144
 msgid "Delete items irreversibly, if moving them to trash fails"
@@ -2854,9 +2809,8 @@ msgstr ""
 "Видаляти елементи безповоротно, якщо переміщення їх у смітник не вдається"
 
 #: source/win-preferences/schema/advanced.ts:150
-#, fuzzy
 msgid "Debug mode"
-msgstr "Увімкнути режим зневадження"
+msgstr "Режим налагодження"
 
 #: source/win-preferences/schema/advanced.ts:156
 msgid "Enable debug mode"
@@ -2864,7 +2818,7 @@ msgstr "Увімкнути режим зневадження"
 
 #: source/win-preferences/schema/advanced.ts:163
 msgid "Beta releases"
-msgstr ""
+msgstr "Бета-версії"
 
 #: source/win-preferences/schema/advanced.ts:169
 msgid "Notify me about beta releases"
@@ -2872,7 +2826,7 @@ msgstr "Сповіщати мене про вихід бета-версій"
 
 #: source/app/service-providers/tray/index.ts:160
 msgid "Show Zettlr"
-msgstr ""
+msgstr "Показати Zettlr"
 
 #: source/app/service-providers/tray/index.ts:166
 #: source/app/service-providers/menu/menu.darwin.ts:104
@@ -2882,33 +2836,28 @@ msgstr "Вийти"
 
 #: source/app/service-providers/tray/index.ts:173
 msgid "Zettlr"
-msgstr ""
+msgstr "Zettlr"
 
 #: source/app/service-providers/documents/index.ts:344
-#, fuzzy
 msgid "Save changes"
-msgstr "Незбережені зміни"
+msgstr "Зберегти зміни"
 
 #: source/app/service-providers/documents/index.ts:345
-#, fuzzy
 msgid "Discard changes"
-msgstr "Незбережені зміни"
+msgstr "Відкинути зміни"
 
 #: source/app/service-providers/documents/index.ts:351
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save or discard them?"
-msgstr ""
-"У поточному файлі є незбережені зміни. Хочете опустити зміни чи зберегти?"
+msgstr "Є незбережені зміни. Бажаєте зберегти чи відкинути зміни?"
 
 #: source/app/service-providers/documents/index.ts:994
-#, fuzzy
 msgid "File changed on disk"
-msgstr "Режим файлового менеджера"
+msgstr "Файл змінено на диску"
 
 #: source/app/service-providers/documents/index.ts:995
 #, javascript-format
 msgid "%s changed on disk"
-msgstr ""
+msgstr "%s змінено на диску"
 
 #: source/app/service-providers/documents/index.ts:997
 #, javascript-format
@@ -2916,34 +2865,37 @@ msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
+"%s змінено на диску, але редактор містить незбережені зміни. Бажаєте "
+"залишити поточний вміст редактора чи завантажити файл із диска?"
 
 #: source/app/service-providers/documents/index.ts:998
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
+"Бажаєте залишити поточний вміст редактора чи завантажити файл із диска?"
 
 #: source/app/service-providers/documents/index.ts:1001
 msgid "Keep editor contents"
-msgstr ""
+msgstr "Залишити поточний вміст редактора"
 
 #: source/app/service-providers/documents/index.ts:1002
 msgid "Load changes from disk"
-msgstr ""
+msgstr "Ззавантажити зміни із диска"
 
 #: source/app/service-providers/documents/index.ts:1005
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
+"Завжди завантажувати зміни з диска, коли в редакторі немає незбережених змін"
 
 #: source/app/service-providers/documents/index.ts:1471
-#, fuzzy
 msgid "Could not save file"
-msgstr "Неможливо зберегти зображення"
+msgstr "Неможливо зберегти файл"
 
 #: source/app/service-providers/documents/index.ts:1471
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not save file %s: %s"
-msgstr "Неможливо зберегти зображення"
+msgstr "Неможливо зберегти файл %s: %s"
 
 #: source/app/service-providers/menu/menu.darwin.ts:51
 #: source/app/service-providers/menu/menu.win32.ts:221
@@ -3044,7 +2996,7 @@ msgstr "Шукати у каталозі"
 #: source/app/service-providers/menu/menu.darwin.ts:386
 #: source/app/service-providers/menu/menu.win32.ts:388
 msgid "Filter files"
-msgstr ""
+msgstr "Фільтр файлів"
 
 #: source/app/service-providers/menu/menu.darwin.ts:397
 #: source/app/service-providers/menu/menu.win32.ts:399
@@ -3167,9 +3119,8 @@ msgstr "Нова вкладка"
 
 #: source/app/service-providers/menu/menu.darwin.ts:616
 #: source/app/service-providers/menu/menu.win32.ts:590
-#, fuzzy
 msgid "New window"
-msgstr "Вікно"
+msgstr "Нове вікно"
 
 #: source/app/service-providers/menu/menu.darwin.ts:651
 #: source/app/service-providers/menu/menu.win32.ts:625
@@ -3178,9 +3129,8 @@ msgstr "Підтримати Zettlr"
 
 #: source/app/service-providers/menu/menu.darwin.ts:661
 #: source/app/service-providers/menu/menu.win32.ts:635
-#, fuzzy
 msgid "Visit website"
-msgstr "Відкрити вебсайт"
+msgstr "Відвідати вебсайт"
 
 #: source/app/service-providers/menu/menu.darwin.ts:671
 #: source/app/service-providers/menu/menu.win32.ts:645
@@ -3190,22 +3140,22 @@ msgstr "Відкрити документацію"
 #: source/app/service-providers/menu/menu.darwin.ts:685
 #: source/app/service-providers/menu/menu.win32.ts:659
 msgid "Open Tutorial"
-msgstr ""
+msgstr "Відкрити посібник"
 
 #: source/app/service-providers/menu/menu.darwin.ts:693
 #: source/app/service-providers/menu/menu.win32.ts:667
 msgid "Clear FSAL cache …"
-msgstr ""
+msgstr "Очистити кеш FSAL ..."
 
 #: source/app/service-providers/menu/menu.darwin.ts:697
 #: source/app/service-providers/menu/menu.win32.ts:671
 msgid "Clear FSAL Cache"
-msgstr ""
+msgstr "Очистити кеш FSAL "
 
 #: source/app/service-providers/menu/menu.darwin.ts:698
 #: source/app/service-providers/menu/menu.win32.ts:672
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "Очищення кешу FSAL потребує перезапуску програми."
 
 #: source/app/service-providers/menu/menu.darwin.ts:699
 #: source/app/service-providers/menu/menu.win32.ts:673
@@ -3214,21 +3164,24 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
+"Після перезапуску Zettlr відтворить весь кеш, що може зайняти кілька хвилин, "
+"залежно від кількості файлів які ви завантажили і швидкості вашого диска. "
+"Вікно програми з'явиться згодом по закінченню ."
 
 #: source/app/service-providers/menu/menu.darwin.ts:702
 #: source/app/service-providers/menu/menu.win32.ts:676
 #: source/app/service-providers/config/index.ts:495
 msgid "Restart now"
-msgstr ""
+msgstr "Перезапустити зараз"
 
 #: source/app/service-providers/updates/index.ts:284
 msgid "Cannot check for update"
-msgstr ""
+msgstr "Неможливо перевірити наявність оновлень"
 
 #: source/app/service-providers/updates/index.ts:285
 #, javascript-format
 msgid "There was an error while checking for updates. %s: %s"
-msgstr ""
+msgstr "Сталася помилка під час перевірки на оновлення. %s: %s"
 
 #: source/app/service-providers/updates/index.ts:324
 #, javascript-format
@@ -3240,14 +3193,16 @@ msgid ""
 "Please update at your earliest convenience. You can open the updater now, or "
 "update later."
 msgstr ""
+"Будь ласка, оновіть якнайшвидше. Ви можете відкрити програму оновлення зараз "
+"або оновити пізніше."
 
 #: source/app/service-providers/updates/index.ts:327
 msgid "Open updater"
-msgstr ""
+msgstr "Відкрити програму оновлення"
 
 #: source/app/service-providers/updates/index.ts:328
 msgid "Not now"
-msgstr ""
+msgstr "Не зараз"
 
 #: source/app/service-providers/updates/index.ts:356
 #, javascript-format
@@ -3286,52 +3241,60 @@ msgstr "Неможливо перевірити на оновлення: Сер�
 
 #: source/app/service-providers/updates/index.ts:464
 msgid "The SHA256 checksums file seems to be missing for this release."
-msgstr ""
+msgstr "Схоже у цьому випуску відсутній файл контрольних сум SHA256."
 
 #: source/app/service-providers/updates/index.ts:486
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
-msgstr ""
+msgstr "Не можливо отримати файл контрольних сум SHA256: %s"
 
 #: source/app/service-providers/updates/index.ts:527
 msgid "Could not accept data for application update: Write stream is gone."
-msgstr ""
+msgstr "Не вдалося записати дані оновлення програми: потік запису зник."
 
 #: source/app/service-providers/updates/index.ts:582
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
 msgstr ""
+"Не вдалося перевірити цілісність завантаженого оновлення. Повторіть спробу "
+"або оновіть вручну."
 
 #: source/app/service-providers/updates/index.ts:594
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
 msgstr ""
+"Контрольна сума завантаженого файлу відрізняється від повідомленої сервером. "
+"Повторіть спробу або оновіть вручну."
 
 #: source/app/service-providers/updates/index.ts:612
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
+"Не вдалося розпочати оновлення. Повторіть спробу або оновіть вручну. "
+"Помилка: %s"
 
 #: source/app/service-providers/workspaces/index.ts:163
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Loading workspace %s"
-msgstr "Робочі простори"
+msgstr "Завантаження робочого простору %s"
 
 #: source/app/service-providers/config/index.ts:492
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
+"Зміна цього параметра потребує перезапуску програми, щоб зміни вступити в "
+"силу."
 
 #: source/app/service-providers/config/index.ts:496
 msgid "Restart later"
-msgstr ""
+msgstr "Перезапустити пізніше"
 
 #: source/app/service-providers/config/index.ts:500
 #: source/app/service-providers/commands/rename-tag.ts:43
 #: source/app/service-providers/commands/file-rename.ts:117
 msgid "Confirm"
-msgstr ""
+msgstr "Підтвердити"
 
 #: source/app/service-providers/config/config-validation.ts:278
 #, javascript-format
@@ -3375,13 +3338,13 @@ msgstr "Зміни у файлі бібліотеки. Перезавантаж�
 #: source/app/service-providers/commands/rename-tag.ts:44
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Замінити мітку \"%s\" на \"%s\" у файлах %s?"
 
 #: source/app/service-providers/commands/rename-tag.ts:46
 #: source/app/service-providers/commands/file-rename.ts:120
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #. Better error message
 #: source/app/service-providers/commands/open-attachment.ts:113
@@ -3394,19 +3357,20 @@ msgid "Could not open attachment. Is Zotero running?"
 msgstr "Не вдається відкрити вкладення. Чи запущено Zotero?"
 
 #: source/app/service-providers/commands/dir-project-export.ts:85
-#, fuzzy
 msgid "Cannot export project"
-msgstr "Експортувати проект"
+msgstr "Неможливо експортувати проект"
 
 #: source/app/service-providers/commands/dir-project-export.ts:86
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
 msgstr ""
+"Не обрано файлів для експорту. Оберіть файли які потрібно додати в "
+"налаштування проекту."
 
 #: source/app/service-providers/commands/dir-project-export.ts:91
 msgid "Project File Mismatch"
-msgstr ""
+msgstr "Невідповідність файлу проекту"
 
 #: source/app/service-providers/commands/dir-project-export.ts:92
 msgid ""
@@ -3414,21 +3378,23 @@ msgid ""
 "They may have moved or been deleted. Please verify that all files that you "
 "would like to export are included."
 msgstr ""
+"Один або кілька файлів, указаних у налаштуваннях проекту, не знайдено. "
+"Можливо, їх було переміщено або вилучено. Переконайтеся, що включено всі "
+"файли які ви хочете експортувати."
 
 #: source/app/service-providers/commands/dir-project-export.ts:168
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
-msgstr ""
+msgstr "Проект \"%s\" успішно експортовано. Натисніть щоб показати."
 
 #: source/app/service-providers/commands/dir-project-export.ts:169
-#, fuzzy
 msgid "Project Export"
-msgstr "Експорт..."
+msgstr "Експорт проекту"
 
 #: source/app/service-providers/commands/file-delete.ts:41
 #: source/app/service-providers/commands/dir-delete.ts:40
 msgid "Really delete?"
-msgstr "Видалення"
+msgstr "Дійсно вилучити?"
 
 #: source/app/service-providers/commands/file-delete.ts:42
 #: source/app/service-providers/commands/dir-delete.ts:41
@@ -3438,15 +3404,15 @@ msgstr "Дійсно видалити %s?"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Import directory"
-msgstr ""
+msgstr "Каталог імпорту"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Select folder"
-msgstr ""
+msgstr "Обрати каталог"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Select import destination"
-msgstr ""
+msgstr "Обрати пункт призначення для імпорту"
 
 #: source/app/service-providers/commands/import.ts:36
 msgid "You have to select a directory to import to."
@@ -3478,9 +3444,8 @@ msgstr ""
 "Наступні %s файли неможливо імпортувати, тому що їхнє розширення невідоме: %s"
 
 #: source/app/service-providers/commands/import.ts:84
-#, fuzzy
 msgid "Import failed"
-msgstr "Помилка експорту"
+msgstr "Помилка імпорту"
 
 #: source/app/service-providers/commands/file-duplicate.ts:42
 #: source/app/service-providers/commands/file-duplicate.ts:59
@@ -3492,7 +3457,7 @@ msgstr "Неможливо створити файл"
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Копіювання %s"
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:103
 msgid "The provided name did not contain any allowed letters."
@@ -3539,21 +3504,21 @@ msgstr "Файл/каталог %s вже існує."
 #: source/app/service-providers/commands/file-rename.ts:118
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Оновити %s внутрішні посилання на файл %s?"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:121
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "Ні"
 
 #: source/app/service-providers/commands/language-tool.ts:194
 msgid "Document too long"
-msgstr ""
+msgstr "Документ задовгий"
 
 #: source/app/service-providers/commands/language-tool.ts:199
 msgid "offline"
-msgstr ""
+msgstr "не в мережі"
 
 #: source/app/service-providers/commands/export.ts:55
 #: source/app/service-providers/commands/export.ts:157
@@ -3561,13 +3526,13 @@ msgid "Export failed"
 msgstr "Помилка експорту"
 
 #: source/app/service-providers/commands/export.ts:56
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "An error occurred during export: %s"
-msgstr "Виникла помилка під час експортування: %s"
+msgstr "Виникла помилка під час експорту: %s"
 
 #: source/app/service-providers/commands/export.ts:114
 msgid "Choose export destination"
-msgstr ""
+msgstr "Обрати пункт призначення для експорту"
 
 #: source/app/service-providers/commands/export.ts:145
 #, javascript-format
@@ -3582,12 +3547,12 @@ msgstr "Виникла помилка під час експортування: 
 #: source/app/service-providers/commands/importer/index.ts:92
 #: source/app/service-providers/commands/importer/index.ts:93
 msgid "Select import profile"
-msgstr ""
+msgstr "Обрати профіль імпорту"
 
 #: source/app/service-providers/commands/importer/index.ts:94
 #, javascript-format
 msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr ""
+msgstr "Доступно кілька профілів які можна імпортувати %s. Виберіть один."
 
 #: source/app/service-providers/commands/importer/import-textbundle.ts:63
 #: source/app/service-providers/commands/importer/import-textbundle.ts:69
@@ -3612,10 +3577,8 @@ msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
 msgstr "Каталог &quot;%s&quot; неможливо відкрити через Zettlr."
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr ""
-"У поточному файлі є незбережені зміни. Хочете опустити зміни чи зберегти?"
+msgstr "Є незбережені зміни. Бажаєте їх зберегти?"
 
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
 msgid "Overwrite existing file"
@@ -3632,7 +3595,7 @@ msgstr "Відкрити файл"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
-msgstr ""
+msgstr "Зберегти файл"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:31
 msgid "Replace file"
@@ -3648,7 +3611,7 @@ msgstr ""
 
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
-msgstr ""
+msgstr "Закрити інші вкладки"
 
 #: source/win-main/tabs-context.ts:50
 msgid "Close all tabs"
@@ -3656,11 +3619,11 @@ msgstr "Закрити всі вкладки"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Unpin tab"
-msgstr ""
+msgstr "Відкріпити вкладку"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Pin tab"
-msgstr ""
+msgstr "Закріпити вкладку"
 
 #: source/win-main/tabs-context.ts:68
 #: source/win-main/file-manager/util/file-item-context.ts:72
@@ -3669,7 +3632,7 @@ msgstr "Копіювати ім'я файлу"
 
 #: source/win-main/tabs-context.ts:74
 msgid "Copy full path"
-msgstr ""
+msgstr "Копіювати повний шлях"
 
 #: source/win-main/file-manager/util/file-item-context.ts:34
 #: source/win-main/file-manager/util/dir-item-context.ts:28
@@ -3682,19 +3645,18 @@ msgstr "Дублювати файл"
 
 #: source/win-main/file-manager/util/file-item-context.ts:66
 #: source/win-main/file-manager/util/dir-item-context.ts:67
-#, fuzzy
 msgid "Copy path"
-msgstr "Копіювати ID"
+msgstr "Копіювати шлях"
 
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "Розкрити в Провіднику"
 
 #: source/win-main/file-manager/util/file-item-context.ts:87
 #: source/win-main/file-manager/util/dir-item-context.ts:76
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "Відкрити в браузері файлів"
 
 #: source/win-main/file-manager/util/file-item-context.ts:100
 msgid "Close file"
@@ -3745,11 +3707,9 @@ msgstr "Закрити робочий простір"
 #~ msgid "Directory not found"
 #~ msgstr "Каталог не знайдено"
 
-#, javascript-format
 #~ msgid "Opening new root %s …"
 #~ msgstr "Відкриття нового кореневого каталогу %s …"
 
-#, javascript-format
 #~ msgid "%s has been loaded."
 #~ msgstr "%s завантажено."
 
