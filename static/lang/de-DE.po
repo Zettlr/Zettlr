@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-12-19 15:39+0100\n"
-"PO-Revision-Date: 2024-11-18 10:38+0100\n"
+"PO-Revision-Date: 2024-12-19 15:46+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -693,26 +693,26 @@ msgstr "Nein"
 
 #: source/app/service-providers/commands/root-open.ts:59
 msgid "Markdown Files"
-msgstr ""
+msgstr "Markdown-Dateien"
 
 #: source/app/service-providers/commands/root-open.ts:60
 msgid "Code Files"
-msgstr ""
+msgstr "Code-Dateien"
 
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:74
 msgid "Open workspace"
-msgstr ""
+msgstr "Arbeitsverzeichnis öffnen"
 
 #: source/app/service-providers/commands/root-open.ts:83
 msgid "Cannot open workpace"
-msgstr ""
+msgstr "Kann Arbeitsverzeichnis nicht öffnen"
 
 #: source/app/service-providers/commands/root-open.ts:84
 #, javascript-format
 msgid "Cannot open workspace \"%s\"."
-msgstr ""
+msgstr "Kann Arbeitsverzeichnis “%s” nicht öffnen."
 
 #: source/app/service-providers/commands/request-move.ts:53
 msgid "Cannot move directory"
@@ -1571,7 +1571,7 @@ msgstr "%s Wörter"
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:83
 #, javascript-format
 msgid "This file is part of project \"%s\""
-msgstr ""
+msgstr "Diese Datei ist Teil von Projekt “%s”"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
@@ -1870,7 +1870,7 @@ msgstr "In diesem Dokument wurden keine Zitationen gefunden."
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:66
 #, javascript-format
 msgid "circa %s words"
-msgstr ""
+msgstr "circa %s Wörter"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:39
 msgid "Name"
@@ -2452,10 +2452,10 @@ msgid ""
 msgstr ""
 "Zettlr ist ein Projekt von Hendrik Erz, lizensiert unter der GNU GPL v3-"
 "Lizenz. Es ist Open Source, komplett kostenlos und basiert auf dem Electron-"
-"Framework. Zettlr dankt an dieser Stelle den Entwicklern von Electron, "
-"Node.js und dem CodeMirror-Editor für ihre Arbeit. Ohne sie wäre die "
-"Entwicklung von Zettlr nicht möglich. Hier sind alle Projekte aufgelistet, "
-"die Zettlr ermöglichen."
+"Framework. Zettlr dankt an dieser Stelle den Entwicklern von Electron, Node."
+"js und dem CodeMirror-Editor für ihre Arbeit. Ohne sie wäre die Entwicklung "
+"von Zettlr nicht möglich. Hier sind alle Projekte aufgelistet, die Zettlr "
+"ermöglichen."
 
 #: source/tmp/win-about/General-Tab.vue.ts:22
 msgid ""
@@ -3856,8 +3856,8 @@ msgstr "CSL-Styledatei (optional)"
 #~ "Target directory for exported files. <em>Attention:</em> Selecting the "
 #~ "current working directory will overwrite files without warning!"
 #~ msgstr ""
-#~ "Zielverzeichnis für Exporte. <em>Vorsicht:</em> Die Auswahl "
-#~ "&quot;Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell "
+#~ "Zielverzeichnis für Exporte. <em>Vorsicht:</em> Die Auswahl &quot;"
+#~ "Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell "
 #~ "vorhandene Dateien!"
 
 #~ msgid "Temporary directory: is regularly expunged"
