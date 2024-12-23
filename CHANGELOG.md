@@ -23,6 +23,7 @@
 - Fixed a bug that would prevent text nodes from tables to be extracted
 - Fixed an issue where valid citations from within, e.g., comments, or other
   non-valid places would end up in the list of references
+- Fixed a bug that would cause spellcheck suggestions to appear offset (#5494)
 - Update translations:
   - `uk-UA` (#5524)
   - `de-DE`
@@ -47,6 +48,7 @@
 - Configuration updates in the renderer are now throttled to at most once every
   second, preventing some fast updates from inducing lag
 - Headings can now have regular children in the Markdown AST parser
+- Refactored spellcheck linter
 
 # 3.3.1
 

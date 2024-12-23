@@ -14,10 +14,9 @@
  */
 
 import { linter, type Diagnostic } from '@codemirror/lint'
-import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
+import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
-import { type TextNode } from '@common/modules/markdown-utils/markdown-ast'
 
 const ipcRenderer = window.ipc
 
@@ -160,12 +159,12 @@ export const spellcheck = linter(async view => {
   const diagnostics: Diagnostic[] = []
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
   const ast = markdownToAST(view.state.doc.toString())
-  const textNodes = extractASTNodes(ast, 'Text') as TextNode[]
+  const textNodes = extractTextnodes(ast)
 
   const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = textNodes
-    // Then, extract all words from the node's value
-    .map(node => {
-      const words: string[] = []
+    // First, extract all words from the node's value
+    .flatMap(node => {
+      const words: Array<{ index: number, word: string }> = []
       for (const match of node.value.matchAll(anyLetterRE)) {
         // Remove words that only consists, e.g., of quotes
         if (!noneLetterRE.test(match[0])) {
@@ -177,22 +176,12 @@ export const spellcheck = linter(async view => {
           while (nonLetters.includes(word[word.length - 1])) {
             word = word.slice(0, word.length - 1)
           }
-          words.push(word)
+          words.push({ word, index: match.index })
         }
       }
 
-      const ret: Array<{ word: string, index: number, nodeStart: number }> = []
-      const nodeStart = node.from
-      let index = 0
-      for (const word of words) {
-        index = node.value.indexOf(word, index)
-        ret.push({ word, index, nodeStart })
-        index += word.length
-      }
-
-      return ret
+      return words.map(x => ({ ...x, nodeStart: node.from }))
     })
-    .flat() // We now have a 2d array --> flatten
 
   // Now make sure everything is cached beforehand with two IPC calls
   await batchCheck(wordsToCheck.map(x => x.word))
