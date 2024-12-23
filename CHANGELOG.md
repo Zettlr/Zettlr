@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.4.0
+
+## GUI and Functionality
+
 - **New Feature**: For files that belong to a Zettlr project, the status bar now
   additionally displays the total word or character count for all files across
   the entire project, making it easy to check for a total limit (e.g., for a
@@ -12,42 +22,41 @@
   references aren't included in any other word count
 - Fix SVG image preview (#5496)
 - Fix network share image preview (#5495)
-- Checking task-list checkboxes now returns the focus back to the editor
-  immediately (#5246)
 - Fixed a bug where opened documents would not be closed once the last tab was
   closed, retaining outdated file contents and making the file unresponsive to
   external changes. Now files that do not have an open editor instance will be
   closed appropriately
-- The statusbar's character/word counters now respect the character count
-  setting, meaning only the word or character count is shown, not both
-- Fixed a bug that would prevent text nodes from tables to be extracted
 - Fixed an issue where valid citations from within, e.g., comments, or other
   non-valid places would end up in the list of references
 - Fixed a bug that would cause spellcheck suggestions to appear offset (#5494)
+- Checking task-list checkboxes now returns the focus back to the editor
+  immediately (#5246)
+- The statusbar's character/word counters now respect the character count
+  setting, meaning only the word or character count is shown, not both
 - Update translations:
   - `uk-UA` (#5524)
   - `de-DE`
 
 ## Under the Hood
 
+- Update Pandoc to version `3.6`
+- Bump CodeMirror dependencies
+- Updates to the Markdown AST parser:
+  - Headings now have regular children
+  - Fixed a bug that would prevent text nodes from tables to be extracted
+  - Better detection of content "gaps"
+- Type system updates:
+  - Define a new shared type, `IPCAPI` that can be used to type the various IPC
+    APIs the service providers use across the app.
+  - Fully type IPC APIs: `AssetsProvider`, `DocumentAuthority`,
+    `DocumentManager`, `WindowProvider`, `CiteprocProvider`
 - Refactored the file type detection system; it is now simpler and easier to use
   and can detect a variety of additional groups of files (previously only
   Markdown and code files; now also images, PDFs, MS and Open Office files as
   well as data files)
 - Select controls can be disabled now
-- Bump CodeMirror dependencies
-- Define a new shared type, `IPCAPI` that can be used to type the various IPC
-  APIs the service providers use across the app.
-- Update Pandoc to version `3.6`
-- Fully type IPC APIs:
-  - AssetsProvider
-  - DocumentAuthority
-  - DocumentManager
-  - WindowProvider
-  - CiteprocProvider
 - Configuration updates in the renderer are now throttled to at most once every
   second, preventing some fast updates from inducing lag
-- Headings can now have regular children in the Markdown AST parser
 - Refactored spellcheck linter
 
 # 3.3.1
