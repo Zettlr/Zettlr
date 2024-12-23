@@ -129,7 +129,7 @@ export interface Heading extends MDNode {
   /**
    * The heading's content
    */
-  value: TextNode
+  children: ASTNode[]
   /**
    * Level from 1-6
    */
@@ -501,10 +501,10 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: genericTextNode(mark?.to ?? node.from, node.to, markdown.substring(mark?.to ?? node.from, node.to).trim()),
+        children: [],
         level
       }
-      return astNode
+      return parseChildren(astNode, node, markdown)
     }
     case 'SetextHeading1':
     case 'SetextHeading2': {
@@ -516,10 +516,10 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: genericTextNode(mark?.to ?? node.from, node.to, markdown.substring(node.from, mark?.from ?? node.to).trim()),
+        children: [],
         level
       }
-      return astNode
+      return parseChildren(astNode, node, markdown)
     }
     case 'Citation': {
       const astNode: Citation = {

@@ -46,6 +46,7 @@
   - CiteprocProvider
 - Configuration updates in the renderer are now throttled to at most once every
   second, preventing some fast updates from inducing lag
+- Headings can now have regular children in the Markdown AST parser
 
 # 3.3.1
 
