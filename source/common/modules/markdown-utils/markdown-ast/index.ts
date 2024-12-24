@@ -127,6 +127,10 @@ export interface LinkOrImage extends MDNode {
 export interface Heading extends MDNode {
   type: 'Heading'
   /**
+   * The content of the heading, but as a plain string
+   */
+  content: string
+  /**
    * The heading's content
    */
   children: ASTNode[]
@@ -501,6 +505,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+        content: markdown.slice(mark?.to ?? node.from, node.to).trim(),
         children: [],
         level
       }
@@ -516,6 +521,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+        content: markdown.slice(node.from, mark?.from ?? node.to),
         children: [],
         level
       }
