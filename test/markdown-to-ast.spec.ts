@@ -14,8 +14,9 @@
 
 import { deepStrictEqual } from 'assert'
 import { markdownToAST } from '../source/common/modules/markdown-utils'
+import { type ASTNode } from 'source/common/modules/markdown-utils/markdown-ast'
 
-const tests = [
+const tests: Array<{ input: string, expected: ASTNode }> = [
   {
     input: `# Image file
 
@@ -33,6 +34,7 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
           from: 0,
           to: 12,
           whitespaceBefore: '',
+          content: 'Image file',
           children: [
             { type: 'Generic', name: 'HeaderMark', from: 0, to: 1, children: [], whitespaceBefore: '' },
             { type : 'Text', name: 'text', from: 2, to: 12, value: 'Image file', whitespaceBefore: ' ' }
