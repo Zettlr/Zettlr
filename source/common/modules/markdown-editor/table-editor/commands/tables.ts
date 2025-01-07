@@ -16,20 +16,20 @@
 
 import type { EditorView } from '@codemirror/view'
 
-export function setAlignmentLeft (target: EditorView): boolean {
+export function setAlignmentLeft (_target: EditorView): boolean {
   return false
 }
 
-export function setAlignmentCenter (target: EditorView): boolean {
+export function setAlignmentCenter (_target: EditorView): boolean {
   return false
 }
 
-export function setAlignmentRight (target: EditorView): boolean {
+export function setAlignmentRight (_target: EditorView): boolean {
   return false
 }
 
 
-export function clearTable (target: EditorView): boolean {
+export function clearTable (_target: EditorView): boolean {
   return false
 }
 

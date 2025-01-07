@@ -71,7 +71,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // the very end of the table cell, the selection will be one position beyond
   // the current cell range. This check means that we account for that.
   let cellEndAfter = cellTo
-  tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
+  tr.changes.iterChanges((fromA, toA, fromB, toB, _inserted) => {
     if (fromA >= cellFrom && toA <= cellTo && toB > cellEndAfter) {
       cellEndAfter = toB
     }
@@ -134,7 +134,7 @@ interface hiddenSpanState {
  * before and after the table cell contents.
  */
 const hiddenSpanField = StateField.define<hiddenSpanState>({
-  create (state) {
+  create (_state) {
     // NOTE: Override using `init`! Otherwise this extension won't do much.
     return {
       decorations: Decoration.none,
@@ -251,12 +251,12 @@ export function createSubviewForCell (
       keymap.of(defaultKeymap),
       Prec.high(keymap.of([
         // Prevent programmatic insertion of newlines by disabling some keybindings
-        { key: 'Return', run: v => true },
-        { key: 'Ctrl-Return', run: v => true },
-        { key: 'Mod-Return', run: v => true },
+        { key: 'Return', run: _v => true },
+        { key: 'Ctrl-Return', run: _v => true },
+        { key: 'Mod-Return', run: _v => true },
         // Map the undo/redo keys to the main view
-        { key: 'Mod-z', run: v => undo(mainView), preventDefault: true },
-        { key: 'Mod-Shift-z', run: v => redo(mainView), preventDefault: true },
+        { key: 'Mod-z', run: _v => undo(mainView), preventDefault: true },
+        { key: 'Mod-Shift-z', run: _v => redo(mainView), preventDefault: true },
         // Override the select all command
         { key: 'Mod-a', run: selectAllCommand, preventDefault: true }
       ])),

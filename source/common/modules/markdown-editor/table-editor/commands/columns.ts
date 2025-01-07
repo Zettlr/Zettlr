@@ -184,14 +184,14 @@ export function swapPrevCol (target: EditorView): boolean {
   }
 }
 
-export function addColAfter (target: EditorView): boolean {
+export function addColAfter (_target: EditorView): boolean {
   return false
 }
 
-export function addColBefore (target: EditorView): boolean {
+export function addColBefore (_target: EditorView): boolean {
   return false
 }
 
-export function clearCol (target: EditorView): boolean {
+export function clearCol (_target: EditorView): boolean {
   return false
 }

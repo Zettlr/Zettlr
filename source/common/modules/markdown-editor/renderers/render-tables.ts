@@ -42,6 +42,7 @@ function makeCellEditable (td: HTMLTableCellElement, view: EditorView): void {
       // TODO: Find the substring this cell contains in the original view
       doc: td.textContent
     })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const view = new EditorView({ state, parent: td })
     // TODO: Apply all changes NOT here, but to the ORIGINAL view. Then, make
     // sure that any changes to the original view are applied here automagically

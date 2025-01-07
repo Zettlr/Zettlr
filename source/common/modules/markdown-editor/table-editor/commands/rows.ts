@@ -104,7 +104,7 @@ export function movePrevRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any swaps have happened.
  */
 export function swapNextRow (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, table, offsets) => {
+  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, table, _offsets) => {
     // TODO: What if selection spans multiple rows? The user then clearly
     // intends to move them all together
     const tableAST = parseTableNode(table, target.state.sliceDoc())
@@ -160,7 +160,7 @@ export function swapNextRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any swaps occurred
  */
 export function swapPrevRow (target: EditorView): boolean {
-  const changes = mapSelectionsWithTables(target, (range, table, offsets) => {
+  const changes = mapSelectionsWithTables(target, (range, table, _offsets) => {
     // TODO: What if selection spans multiple rows? The user then clearly intends
     // to move them all together
     const tableAST = parseTableNode(table, target.state.sliceDoc())
@@ -208,19 +208,19 @@ export function swapPrevRow (target: EditorView): boolean {
   }
 }
 
-export function addRowAfter (target: EditorView): boolean {
+export function addRowAfter (_target: EditorView): boolean {
   return false
 }
 
-export function addRowBefore (target: EditorView): boolean {
+export function addRowBefore (_target: EditorView): boolean {
   return false
 }
 
-export function deleteRow (target: EditorView): boolean {
+export function deleteRow (_target: EditorView): boolean {
   return false
 }
 
-export function clearRow (target: EditorView): boolean {
+export function clearRow (_target: EditorView): boolean {
   return false
 }
 

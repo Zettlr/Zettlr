@@ -189,7 +189,7 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
       // We have to create a new TD
       const td = document.createElement(astRow.isHeaderOrFooter ? 'th' : 'td')
       // TODO: Enable citation rendering here
-      const html = nodeToHTML(cell.children, (citations, composite) => undefined, {}, 0).trim()
+      const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
       td.innerHTML = html.length > 0 ? html : '&nbsp;'
       // NOTE: This handler gets attached once and then remains on the TD for
       // the existence of the table. Since the `view` will always be the same,
@@ -231,7 +231,7 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
     } else if (subview === null) {
       // Simply transfer the contents
       // TODO: Enable citation rendering here
-      const html = nodeToHTML(cell.children, (citations, composite) => undefined, {}, 0).trim()
+      const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
       tds[i].innerHTML = html.length > 0 ? html : '&nbsp;'
     } // Else: The cell has a subview and the selection is still in there.
   }
