@@ -74,6 +74,7 @@ import { autocompleteTriggerCharacter } from './autocomplete/snippets'
 import { markdownKeymap } from './keymaps/markdown'
 import { codeKeymap } from './keymaps/code'
 import { vimPlugin } from './plugins/vim-mode'
+import { projectInfoField } from './plugins/project-info-field'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -179,7 +180,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
     // Ensure the cursor never completely sticks to the top or bottom of the editor
-    EditorView.scrollMargins.of(view => { return { top: 30, bottom: 30 } }),
+    EditorView.scrollMargins.of(_view => { return { top: 30, bottom: 30 } }),
     search({ top: true }), // Add a search
     // TAB SIZES/INDENTATION -> Depend on the configuration field
     EditorState.tabSize.from(configField, (val) => val.indentUnit),
@@ -196,7 +197,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
 
     // Add the configuration and preset it with whatever is in the cached
     // config.
-    configField.init(state => JSON.parse(JSON.stringify(options.initialConfig))),
+    configField.init(_state => JSON.parse(JSON.stringify(options.initialConfig))),
 
     // The updateListener is a custom extension we're using in order to be
     // able to emit events from this main class based on change events.
@@ -320,6 +321,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     typewriter,
     distractionFree,
     tocField,
+    projectInfoField,
     markdownFolding, // Should be before footnoteGutter
     autocomplete,
     readabilityMode,

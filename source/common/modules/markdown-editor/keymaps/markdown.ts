@@ -1,6 +1,5 @@
 import {
-  acceptCompletion, closeCompletion, deleteBracketPair, moveCompletionSelection,
-  startCompletion
+  acceptCompletion, closeCompletion, deleteBracketPair, moveCompletionSelection
 } from '@codemirror/autocomplete'
 import {
   insertNewlineAndIndent, copyLineUp, copyLineDown

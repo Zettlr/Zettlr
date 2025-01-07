@@ -124,7 +124,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
   } else if (node.type === 'FootnoteRef') {
     return `${node.whitespaceBefore}<div class="footnote-ref"><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, getCitation, hooks, indent)}</div>`
   } else if (node.type === 'Heading') {
-    return `${node.whitespaceBefore}<h${node.level}>${_.escape(node.value.value)}</h${node.level}>`
+    return `${node.whitespaceBefore}<h${node.level}>${nodeToHTML(node.children, getCitation, hooks, indent)}</h${node.level}>`
   } else if (node.type === 'Highlight') {
     return `${node.whitespaceBefore}<mark>${nodeToHTML(node.children, getCitation, hooks, indent)}</mark>`
   } else if (node.type === 'Superscript') {

@@ -16,6 +16,7 @@
 import { DP_EVENTS, type DocumentType } from '@dts/common/documents'
 import { type Update } from '@codemirror/collab'
 import { type DocumentAuthorityAPI } from '..'
+import type { DocumentAuthorityIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -36,7 +37,7 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
       ipcRenderer.invoke('documents-authority', {
         command: 'pull-updates',
         payload: { filePath, version }
-      })
+      } as DocumentAuthorityIPCAPI)
         .then((result: false|Update[]) => {
           // Clean up to not pollute the event listener with millions of callbacks
           stopListening()
@@ -52,7 +53,7 @@ async function pushUpdates (filePath: string, version: number, updates: any): Pr
   return await ipcRenderer.invoke('documents-authority', {
     command: 'push-updates',
     payload: { filePath, version, updates }
-  })
+  } as DocumentAuthorityIPCAPI)
 }
 
 async function fetchDoc (filePath: string): Promise<{ content: string, type: DocumentType, startVersion: number }> {
@@ -60,7 +61,7 @@ async function fetchDoc (filePath: string): Promise<{ content: string, type: Doc
   return await ipcRenderer.invoke('documents-authority', {
     command: 'get-document',
     payload: { filePath }
-  })
+  } as DocumentAuthorityIPCAPI)
 }
 
 /**

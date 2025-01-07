@@ -28,6 +28,7 @@ windowRegister()
 
 function afterRegister (): void {
   const pinia = createPinia()
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const app = createApp(App).use(pinia)
 
   app.mount('#app')

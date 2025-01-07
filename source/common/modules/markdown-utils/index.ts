@@ -79,7 +79,7 @@ export function extractASTNodes (ast: ASTNode, nodeType: ASTNodeType, filter?: (
     let returnNodes: ASTNode[] = []
     for (const row of ast.rows) {
       for (const cell of row.cells) {
-        returnNodes = returnNodes.concat(extractASTNodes(cell, nodeType, filter))
+        returnNodes = returnNodes.concat(cell.children.flatMap(c => extractASTNodes(c, nodeType, filter)))
       }
     }
     return returnNodes
@@ -107,9 +107,7 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
   let textNodes: TextNode[] = []
   if (ast.type === 'Text') {
     textNodes.push(ast)
-  } else if (ast.type === 'Heading') {
-    textNodes.push(ast.value)
-  } else if (ast.type === 'FootnoteRef' || ast.type === 'Highlight' || ast.type === 'ListItem') {
+  } else if (ast.type === 'Heading' || ast.type === 'FootnoteRef' || ast.type === 'Highlight' || ast.type === 'ListItem') {
     for (const child of ast.children) {
       textNodes = textNodes.concat(extractTextnodes(child, filter))
     }
@@ -129,7 +127,8 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
   } else if (ast.type === 'Table') {
     for (const row of ast.rows) {
       for (const cell of row.cells) {
-        textNodes = textNodes.concat(extractTextnodes(cell, filter))
+        const nodes = cell.children.flatMap(c => extractTextnodes(c, filter))
+        textNodes = textNodes.concat(nodes)
       }
     }
   }

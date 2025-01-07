@@ -127,9 +127,13 @@ export interface LinkOrImage extends MDNode {
 export interface Heading extends MDNode {
   type: 'Heading'
   /**
+   * The content of the heading, but as a plain string
+   */
+  content: string
+  /**
    * The heading's content
    */
-  value: TextNode
+  children: ASTNode[]
   /**
    * Level from 1-6
    */
@@ -505,10 +509,11 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: genericTextNode(mark?.to ?? node.from, node.to, markdown.substring(mark?.to ?? node.from, node.to).trim()),
+        content: markdown.slice(mark?.to ?? node.from, node.to).trim(),
+        children: [],
         level
       }
-      return astNode
+      return parseChildren(astNode, node, markdown)
     }
     case 'SetextHeading1':
     case 'SetextHeading2': {
@@ -520,10 +525,11 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: genericTextNode(mark?.to ?? node.from, node.to, markdown.substring(node.from, mark?.from ?? node.to).trim()),
+        content: markdown.slice(node.from, mark?.from ?? node.to),
+        children: [],
         level
       }
-      return astNode
+      return parseChildren(astNode, node, markdown)
     }
     case 'Citation': {
       const astNode: Citation = {

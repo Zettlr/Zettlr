@@ -24,6 +24,7 @@ import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 import makeValidUri from 'source/common/util/make-valid-uri'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import { configField } from '../util/configuration'
+import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 
 const ipcRenderer = window.ipc
 
@@ -131,8 +132,8 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     } else if (clickedID === 'show-img-in-folder') {
       ipcRenderer.send('window-controls', {
         command: 'show-item-in-folder',
-        payload: validAbsoluteURI
-      })
+        payload: { itemPath: validAbsoluteURI }
+      } as WindowControlsIPCAPI)
     } else if (clickedID === 'open-img-in-browser') {
       window.location.href = validAbsoluteURI
     } else if (clickedID === 'menu.remove_link') {

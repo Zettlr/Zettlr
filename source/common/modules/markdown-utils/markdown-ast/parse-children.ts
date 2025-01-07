@@ -33,6 +33,7 @@ const EMPTY_NODES = [
   'SuperscriptMark',
   'SubscriptMark',
   'HighlightMark',
+  'HeaderMark',
   'QuoteMark',
   'ListMark',
   'YAMLFrontmatterStart',
@@ -115,13 +116,14 @@ export function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNo
       const onlyWhitespace = /^(\s*)/m.exec(gap)
       const whitespaceBefore = onlyWhitespace !== null ? onlyWhitespace[1] : ''
       const textNode = genericTextNode(
-        currentIndex,
+        currentIndex + whitespaceBefore.length,
         currentChild.from,
         gap.substring(whitespaceBefore.length),
         whitespaceBefore
       )
       astNode.children.push(textNode)
     }
+
     if (currentChild.name === 'PandocAttribute') {
       // PandocAttribute nodes should never show up in the tree
       // TODO: This assumes that the PandocAttribute should apply to the parent
@@ -132,13 +134,22 @@ export function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNo
     } else {
       astNode.children.push(parseNode(currentChild, markdown))
     }
+
     currentIndex = currentChild.to // Must happen before the nextSibling assignment
     currentChild = currentChild.nextSibling
   }
 
   if (currentIndex < node.to && !EMPTY_NODES.includes(node.name)) {
     // One final text node
-    const textNode = genericTextNode(currentIndex, node.to, markdown.substring(currentIndex, node.to))
+    const gap = markdown.substring(currentIndex, node.to)
+    const onlyWhitespace = /^(\s*)/m.exec(gap)
+    const whitespaceBefore = onlyWhitespace !== null ? onlyWhitespace[1] : ''
+    const textNode = genericTextNode(
+      currentIndex + whitespaceBefore.length,
+      node.to,
+      markdown.substring(currentIndex + whitespaceBefore.length, node.to),
+      whitespaceBefore
+    )
     astNode.children.push(textNode)
   }
 

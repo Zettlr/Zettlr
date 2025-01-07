@@ -75,9 +75,12 @@ export default function getMarkdownFileParser (
     const links = extractASTNodes(ast, 'ZettelkastenLink') as ZettelkastenLink[]
     file.links = links.map(link => link.value)
 
+    file.firstHeading = null
     const headings = extractASTNodes(ast, 'Heading') as Heading[]
     const firstH1 = headings.find(h => h.level === 1)
-    file.firstHeading = firstH1 !== undefined ? firstH1.value.value : null
+    if (firstH1 !== undefined) {
+      file.firstHeading = firstH1.content
+    }
 
     file.wordCount = countWords(ast)
     file.charCount = countChars(ast)

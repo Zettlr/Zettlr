@@ -31,6 +31,7 @@ windowRegister()
     })
 
     const pinia = createPinia()
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     createApp(App).use(pinia).mount('#app')
   })
   .catch(e => console.error(e))

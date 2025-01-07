@@ -42,7 +42,7 @@ export async function getProgramVersion (program: string): Promise<string|undefi
       output += String(data)
     })
 
-    process.on('close', (code: number, signal) => {
+    process.on('close', (code: number, _signal) => {
       if (code !== 0) {
         reject(new Error(`Could not check program version, process exited with code ${code}; stderr: ${err}`))
       } else {

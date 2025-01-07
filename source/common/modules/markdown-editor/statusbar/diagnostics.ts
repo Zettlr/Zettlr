@@ -30,7 +30,7 @@ export function diagnosticsStatus (state: EditorState, view: EditorView): Status
   let info = 0
   let warn = 0
   let error = 0
-  forEachDiagnostic(state, (dia, from, to) => {
+  forEachDiagnostic(state, (dia, _from, _to) => {
     if (dia.severity === 'info') {
       info++
     } else if (dia.severity === 'warning') {

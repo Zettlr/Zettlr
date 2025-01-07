@@ -90,11 +90,26 @@ export default [
 
       // We do use explicit anys at certain points
       '@typescript-eslint/no-explicit-any': 'off',
+      // Avoid the use of `delete`
+      '@typescript-eslint/no-dynamic-delete': 'error',
       'no-unused-vars': 'off', // We need to turn off the vanilla option ...
       // ... and turn on the TypeScript one. HOWEVER, we also need to use the
       // appropriate option that allows us to declare variables as unused by
       // prefixing it with an underscore.
-      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          // Allow ignoring function arguments by prefixing it with _
+          // Also, we often have unused event-arguments in event handler
+          // functions because they are detached from the addEventListener calls
+          // and this helps faster parsing what a listener is for.
+          argsIgnorePattern: '^(?:_|event)',
+          // Don't report unused errors in try-catch blocks
+          caughtErrors: 'none',
+          // Always allow array destructuring with unused elements
+          destructuredArrayIgnorePattern: '.*'
+        }
+      ],
       // See https://typescript-eslint.io/rules/no-unused-vars/
 
       'space-before-function-paren': [ 'error', 'always' ],

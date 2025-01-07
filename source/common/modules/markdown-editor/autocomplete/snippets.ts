@@ -70,7 +70,7 @@ class SnippetWidget extends WidgetType {
     return other.content === this.content && other.range.eq(this.range)
   }
 
-  toDOM (view: EditorView): HTMLElement {
+  toDOM (_view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.classList.add('tabstop')
     elem.innerText = this.content
@@ -123,7 +123,7 @@ interface SnippetStateField {
 }
 
 export const snippetsUpdateField = StateField.define<SnippetStateField>({
-  create (state) {
+  create (_state) {
     return {
       availableSnippets: [],
       activeSelections: []

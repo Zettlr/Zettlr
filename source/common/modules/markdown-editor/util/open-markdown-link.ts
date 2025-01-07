@@ -20,6 +20,7 @@ import { EditorView } from '@codemirror/view'
 import { tocField } from '../plugins/toc-field'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import { isAbsolutePath, pathDirname } from '@common/util/renderer-path-polyfill'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -80,7 +81,7 @@ export default function (url: string, view: EditorView): void {
       ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
         payload: { path: localPath, newTab: false, windowId }
-      })
+      } as DocumentManagerIPCAPI)
         .catch(e => console.error(e))
     } else {
       // Handled by the event listener in the main process

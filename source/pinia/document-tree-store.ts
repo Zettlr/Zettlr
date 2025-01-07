@@ -15,7 +15,7 @@
 import { defineStore } from 'pinia'
 import { DP_EVENTS, type BranchNodeJSON, type LeafNodeJSON, type OpenDocument } from 'source/types/common/documents'
 import { ref, type Ref } from 'vue'
-import { type DocumentsUpdateContext } from '@providers/documents'
+import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from '@providers/documents'
 import { useWindowStateStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
@@ -153,11 +153,11 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
   const lastLeafActiveFile = ref<OpenDocument|undefined>(undefined)
 
   // Initial update for the pane structure ...
-  ipcRenderer.invoke('documents-provider', { command: 'retrieve-tab-config', payload: { windowId } })
+  ipcRenderer.invoke('documents-provider', { command: 'retrieve-tab-config', payload: { windowId } } as DocumentManagerIPCAPI)
     .then((treedata: LeafNodeJSON|BranchNodeJSON) => recoverState(paneStructure, paneData, lastLeafId, treedata))
     .catch(err => console.error(err))
 
-  ipcRenderer.invoke('documents-provider', { command: 'get-file-modification-status' })
+  ipcRenderer.invoke('documents-provider', { command: 'get-file-modification-status' } as DocumentManagerIPCAPI)
     .then((modifiedFiles: string[]) => { modifiedDocuments.value = modifiedFiles })
     .catch(err => console.error(err))
 
@@ -166,7 +166,7 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
     const { event, context } = payload
     // A file has been saved or modified
     if (event === DP_EVENTS.CHANGE_FILE_STATUS && context.status === 'modification') {
-      ipcRenderer.invoke('documents-provider', { command: 'get-file-modification-status' })
+      ipcRenderer.invoke('documents-provider', { command: 'get-file-modification-status' } as DocumentManagerIPCAPI)
         .then((modifiedFiles: string[]) => { modifiedDocuments.value = modifiedFiles })
         .catch(err => console.error(err))
     } else {
@@ -179,7 +179,7 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
       // the full config as it is in the main process, and dispatch it into
       // the worker who then has the task to apply a delta update with as few
       // changes as possible.
-      ipcRenderer.invoke('documents-provider', { command: 'retrieve-tab-config', payload: { windowId } })
+      ipcRenderer.invoke('documents-provider', { command: 'retrieve-tab-config', payload: { windowId } } as DocumentManagerIPCAPI)
         .then((treedata: LeafNodeJSON|BranchNodeJSON) => {
           // The task for this function is to apply the minimum necessary delta update
           // for the document tree. Due to Vue's happy reactivity, we have to maintain

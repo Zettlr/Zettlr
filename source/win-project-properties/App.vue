@@ -163,7 +163,7 @@ import TextControl from '@common/vue/form/elements/TextControl.vue'
 import ZtrAdmonition from '@common/vue/ZtrAdmonition.vue'
 import { ref, computed, watch } from 'vue'
 import type { ProjectSettings, DirDescriptor, AnyDescriptor, MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
-import { type PandocProfileMetadata } from '@providers/assets'
+import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
@@ -334,7 +334,7 @@ const exportFormatList = computed<ExportProfile[]>(() => {
 watch(projectSettings, updateProperties, { deep: true })
 
 // First, we need to get the available export formats
-ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' })
+ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' } as AssetsProviderIPCAPI)
   .then((defaults: PandocProfileMetadata[]) => {
     profiles.value = defaults
   })

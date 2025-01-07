@@ -95,6 +95,7 @@ import { countField } from './plugins/statistics-fields'
 import type { SyntaxNode } from '@lezer/common'
 import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
+import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
 
 export interface DocumentWrapper {
   path: string
@@ -649,6 +650,14 @@ export default class MarkdownEditor extends EventEmitter {
     return this._instance.dom.contains(document.activeElement)
   }
 
+  /* Sets the project info field of the editor state to the provided value.
+   *
+   * @param   {ProjectInfo|null}  info  The data
+   */
+  set projectInfo (info: ProjectInfo|null) {
+    this._instance.dispatch({ effects: projectInfoUpdateEffect.of(info) })
+  }
+
   /**
    * Sets an autocomplete database of given type to a new value
    *
@@ -658,24 +667,24 @@ export default class MarkdownEditor extends EventEmitter {
   setCompletionDatabase (type: 'tags', database: TagRecord[]): void
   setCompletionDatabase (type: 'citations', database: Array<{ citekey: string, displayText: string }>): void
   setCompletionDatabase (type: 'snippets', database: Array<{ name: string, content: string }>): void
-  setCompletionDatabase (type: 'files', database: Array<{ filename: string, id: string }>): void
+  setCompletionDatabase (type: 'files', database: Array<{ filename: string, displayName: string, id: string }>): void
   setCompletionDatabase (type: string, database: any): void {
     switch (type) {
       case 'tags':
         this.databaseCache.tags = database
-        this._instance.dispatch({ effects: tagsUpdate.of(database) })
+        this._instance.dispatch({ effects: tagsUpdate.of(database as TagRecord[]) })
         break
       case 'citations':
         this.databaseCache.citations = database
-        this._instance.dispatch({ effects: citekeyUpdate.of(database) })
+        this._instance.dispatch({ effects: citekeyUpdate.of(database as Array<{ citekey: string, displayText: string }>) })
         break
       case 'snippets':
         this.databaseCache.snippets = database
-        this._instance.dispatch({ effects: snippetsUpdate.of(database) })
+        this._instance.dispatch({ effects: snippetsUpdate.of(database as Array<{ name: string, content: string }>) })
         break
       case 'files':
         this.databaseCache.files = database
-        this._instance.dispatch({ effects: filesUpdate.of(database) })
+        this._instance.dispatch({ effects: filesUpdate.of(database as Array<{ filename: string, displayName: string, id: string }>) })
         break
     }
   }
