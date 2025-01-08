@@ -95,8 +95,7 @@ function parsePipeTable (ctx: BlockContext, pos: number, end: number, lines: str
   for (const line of lines) {
     to = from + line.length + 1
     if (isHeaderLine) {
-      const delim = ctx.elt('TableDelimiter', from, to)
-      rows.push(ctx.elt('TableRow', from, to, [delim]))
+      rows.push(ctx.elt('TableDelimiter', from, to))
       isHeaderLine = false
       from = to
       continue
@@ -107,8 +106,7 @@ function parsePipeTable (ctx: BlockContext, pos: number, end: number, lines: str
     let cellTo = from
     for (const ch of line) {
       if (ch === '|' && cellTo > from) {
-        const type = isFirstLine ? 'TableHeader' : 'TableCell'
-        children.push(ctx.elt(type, cellFrom, cellTo))
+        children.push(ctx.elt('TableCell', cellFrom, cellTo))
         children.push(ctx.elt('TableDelimiter', cellTo, cellTo + 1))
         cellFrom = cellTo + 1
       } else if (ch === '|' && cellFrom === from) {
@@ -118,7 +116,7 @@ function parsePipeTable (ctx: BlockContext, pos: number, end: number, lines: str
       cellTo++
     }
 
-    rows.push(ctx.elt('TableRow', from, to, children))
+    rows.push(ctx.elt(isFirstLine ? 'TableHeader' : 'TableRow', from, to, children))
     from = to
 
     if (isFirstLine) {

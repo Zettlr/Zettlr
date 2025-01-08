@@ -23,6 +23,7 @@ import type { SyntaxNode } from '@lezer/common'
 import type { Table, TableRow, TableCell, TextNode } from '../markdown-ast'
 import { genericTextNode } from './generic-text-node'
 import { parseChildren } from './parse-children'
+// import { logLezerTree } from './debug-tree-logger'
 
 /**
  * Parses a SyntaxNode of name "Table". NOTE the following caveats:
@@ -67,7 +68,11 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
   //    is none, we return a generic Text Node (an error w/o losing information)
   const delimitingRow = node.getChild('TableDelimiter')
   if (delimitingRow === null) {
+    // TODO: Right now, this line will trigger for grid tables (I literally
+    // forgot that I implemented a parser for that).
     console.warn('Could not parse Table: Could not find a delimiting row. This can be caused by ambiguous table markup.')
+    // logLezerTree(node)
+    // console.log(markdown.slice(node.from, node.to))
     return genericTextNode(node.from, node.to, markdown.slice(node.from, node.to))
   }
 
