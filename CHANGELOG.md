@@ -8,6 +8,16 @@
 
 (nothing here)
 
+# 3.4.1
+
+## GUI and Functionality
+
+- Fix heading extraction bug from 3.4.0 that made Zettlr crash on boot
+
+## Under the Hood
+
+(nothing here)
+
 # 3.4.0
 
 ## GUI and Functionality
