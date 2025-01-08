@@ -17,7 +17,7 @@ import { syntaxTree } from '@codemirror/language'
 import type { EditorState, Range } from '@codemirror/state'
 import { WidgetType, EditorView, type DecorationSet, Decoration } from '@codemirror/view'
 import type { SyntaxNode } from '@lezer/common'
-import type { TableRow } from '../../markdown-utils/markdown-ast'
+import type { TableRow, Table } from '../../markdown-utils/markdown-ast'
 import { parseTableNode } from '../../markdown-utils/markdown-ast/parse-table-node'
 import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
 import { createSubviewForCell } from './subview'
@@ -38,7 +38,11 @@ export class TableWidget extends WidgetType {
   toDOM (view: EditorView): HTMLElement {
     try {
       const table = generateEmptyTableWidgetElement()
-      updateTable(this, table, view)
+      const tableAST = parseTableNode(this.node, view.state.sliceDoc())
+      if (tableAST.type !== 'Table') {
+        throw new Error('Cannot render table: Likely malformed')
+      }
+      updateTable(this, table, tableAST, view)
       return table
     } catch (err: any) {
       console.log('Could not create table', err)
@@ -54,8 +58,14 @@ export class TableWidget extends WidgetType {
     if (!(dom instanceof HTMLTableElement)) {
       return false
     }
-    updateTable(this, dom, view)
-    return true
+
+    const tableAST = parseTableNode(this.node, view.state.sliceDoc())
+    if (tableAST.type === 'Table') {
+      updateTable(this, dom, tableAST, view)
+      return true
+    }
+
+    return false
   }
 
   destroy (dom: HTMLElement): void {
@@ -90,6 +100,16 @@ export class TableWidget extends WidgetType {
     const newDecos: Array<Range<Decoration>> = syntaxTree(state)
       // Get all Table nodes in the document
       .topNode.getChildren('Table')
+      .filter(table => {
+        const ast = parseTableNode(table, state.sliceDoc())
+        if (ast.type !== 'Table') {
+          return false
+        }
+
+        return ast.rows
+          .map(r => r.cells.length)
+          .every(len => len === (ast.alignment?.length ?? 0))
+      })
       // Turn the nodes into Decorations
       .map(node => {
         return Decoration.replace({
@@ -122,9 +142,7 @@ function generateEmptyTableWidgetElement (): HTMLTableElement {
  * @param  {HTMLTableElement}  table   The DOM-element containing the table
  * @param  {EditorView}        view    The EditorView
  */
-function updateTable (widget: TableWidget, table: HTMLTableElement, view: EditorView): void {
-  const tableAST = parseTableNode(widget.node, view.state.sliceDoc())
-
+function updateTable (widget: TableWidget, table: HTMLTableElement, tableAST: Table, view: EditorView): void {
   let trs = [...table.querySelectorAll('tr')]
   if (trs.length > tableAST.rows.length) {
     // Too many TRs --> Remove. The for-loop below accounts for too few.

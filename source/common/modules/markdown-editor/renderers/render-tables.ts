@@ -110,6 +110,9 @@ class TableWidget extends WidgetType {
       // DEBUG: Move to proper styles
       table.style.borderCollapse = 'collapse'
       const ast = parseTableNode(this.node, view.state.sliceDoc(this.node.from, this.node.to))
+      if (ast.type !== 'Table') {
+        throw new Error('Could not render table: Likely malformed')
+      }
       updateTable(table, ast, view)
       return table
     } catch (err: any) {
@@ -126,6 +129,9 @@ class TableWidget extends WidgetType {
     console.log('Attempting DOM update')
     try {
       const ast = parseTableNode(this.node, view.state.sliceDoc(this.node.from, this.node.to))
+      if (ast.type !== 'Table') {
+        throw new Error('Could not update widget: Table was malformed.')
+      }
       updateTable(dom as HTMLTableElement, ast, view)
       return true
     } catch (err: any) {
