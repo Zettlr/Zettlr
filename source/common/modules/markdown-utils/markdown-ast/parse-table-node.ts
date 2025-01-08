@@ -91,6 +91,9 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
   //    delimiter row
   astNode.alignment = markdown
     .slice(delimitingRow.from, delimitingRow.to)
+    // Account for Emacs tables which are essentially pipe tables with the one
+    // single exception that they contain "+" instead of "|" in the delimiter.
+    .replace('+', '|')
     .split('|')
     // We can throw away leading whitespace because table headers are required
     // to be non-empty cells and must contain hyphens, whitespace, and colons.
