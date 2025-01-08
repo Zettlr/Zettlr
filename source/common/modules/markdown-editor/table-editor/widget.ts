@@ -42,7 +42,7 @@ export class TableWidget extends WidgetType {
       if (tableAST.type !== 'Table') {
         throw new Error('Cannot render table: Likely malformed')
       }
-      updateTable(this, table, tableAST, view)
+      updateTable(table, tableAST, view)
       return table
     } catch (err: any) {
       console.log('Could not create table', err)
@@ -61,7 +61,7 @@ export class TableWidget extends WidgetType {
 
     const tableAST = parseTableNode(this.node, view.state.sliceDoc())
     if (tableAST.type === 'Table') {
-      updateTable(this, dom, tableAST, view)
+      updateTable(dom, tableAST, view)
       return true
     }
 
@@ -138,18 +138,16 @@ function generateEmptyTableWidgetElement (): HTMLTableElement {
  * This function takes a DOM-node and a string representing the same Markdown
  * table and ensures that the DOM-node representation conforms to the string.
  *
- * @param  {TableWidget}       widget  A TableWidget
- * @param  {HTMLTableElement}  table   The DOM-element containing the table
- * @param  {EditorView}        view    The EditorView
+ * @param  {HTMLTableElement}  table     The DOM-element containing the table
+ * @param  {Table}             tableAST  The table AST node
+ * @param  {EditorView}        view      The EditorView
  */
-function updateTable (widget: TableWidget, table: HTMLTableElement, tableAST: Table, view: EditorView): void {
-  let trs = [...table.querySelectorAll('tr')]
-  if (trs.length > tableAST.rows.length) {
-    // Too many TRs --> Remove. The for-loop below accounts for too few.
-    for (let j = tableAST.rows.length; j < trs.length; j++) {
-      trs[j].parentElement?.removeChild(trs[j])
-    }
-    trs = trs.slice(0, tableAST.rows.length)
+function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView): void {
+  const trs = [...table.querySelectorAll('tr')]
+  // Remove now-superfluous TRs. The for-loop below accounts for too few.
+  while (trs.length > tableAST.rows.length) {
+    const tr = trs.pop()!
+    tr.parentElement?.removeChild(tr)
   }
 
   for (let i = 0; i < tableAST.rows.length; i++) {
@@ -159,10 +157,10 @@ function updateTable (widget: TableWidget, table: HTMLTableElement, tableAST: Ta
       const tr = document.createElement('tr')
       table.appendChild(tr)
       trs.push(tr)
-      updateRow(tr, row, view)
+      updateRow(tr, row, tableAST.alignment, view)
     } else {
       // Transfer the contents
-      updateRow(trs[i], row, view)
+      updateRow(trs[i], row, tableAST.alignment, view)
     }
   }
 }
@@ -177,14 +175,12 @@ function updateTable (widget: TableWidget, table: HTMLTableElement, tableAST: Ta
  * @param  {TableRow}             astRow  The AST table row element
  * @param  {EditorView}           view    The EditorView
  */
-function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView): void {
-  let tds = [...tr.querySelectorAll(astRow.isHeaderOrFooter ? 'th' : 'td')]
-  if (tds.length > astRow.cells.length) {
-    // Too many TDs --> Remove. The for-loop below accounts for too few.
-    for (let j = astRow.cells.length; j < tds.length; j++) {
-      tds[j].parentElement?.removeChild(tds[j])
-    }
-    tds = tds.slice(0, astRow.cells.length)
+function updateRow (tr: HTMLTableRowElement, astRow: TableRow, align: Array<'left'|'center'|'right'>, view: EditorView): void {
+  const tds = [...tr.querySelectorAll(astRow.isHeaderOrFooter ? 'th' : 'td')]
+  // Remove now-superfluous TRs. The for-loop below accounts for too few.
+  while (tds.length > astRow.cells.length) {
+    const td = tds.pop()!
+    td.parentElement?.removeChild(td)
   }
 
   const mainSel = view.state.selection.main
@@ -195,17 +191,11 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
     // within a cell. Any overlapping selection will not cause a rendering of
     // the editor view, because selections that cross table cell boundaries are
     // just ... puh.
-    // TODO: When the user deletes content, as soon as the user reaches a space,
-    // this will cause cell.to to "jump" two characters, because the space gets
-    // removed from the cell contents. This then leads to the removal of the
-    // subview (because the selection is no longer "inside" the cell). This
-    // means that we definitely have to change how the cell.from and cell.to are
-    // calculated, so that they orient themselves more at the pipe delimiters,
-    // rather than whatever the parser thinks is the cell contents.
     const selectionInCell =  mainSel.from >= cell.from && mainSel.to <= cell.to
     if (i === tds.length) {
       // We have to create a new TD
       const td = document.createElement(astRow.isHeaderOrFooter ? 'th' : 'td')
+      td.style.textAlign = align[i] ?? 'left'
       // TODO: Enable citation rendering here
       const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
       td.innerHTML = html.length > 0 ? html : '&nbsp;'
@@ -228,14 +218,14 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, view: EditorView)
       tr.appendChild(td)
       tds.push(td)
     }
-
-    // Always ensure that the corresponding document offsets are saved
-    // appropriately
-    tds[i].dataset.cellFrom = String(cell.from)
-    tds[i].dataset.cellTo = String(cell.to)
-
     // At this point, there is guaranteed to be an element at i. Now let's check
     // if there's a subview at this cell.
+
+    // Save the corresponding document offsets appropriately
+    tds[i].dataset.cellFrom = String(cell.from)
+    tds[i].dataset.cellTo = String(cell.to)
+    tds[i].style.textAlign = align[i] ?? 'left'
+
     const subview = EditorView.findFromDOM(tds[i])
     if (subview !== null && !selectionInCell) {
       // The selection was in the cell but isn't any longer -> remove the
