@@ -145,24 +145,18 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
     if (child.name === 'TableDelimiter' && child.from > row.from) {
       // We assume the row starts with a non-mounted, whitespace-only cell
       hasHiddenFirstCell = true
-      let from = row.from
-      let to = child.from
-      let whitespaceBefore = ''
-      if (row.from - child.from > 0) {
-        to-- // The first whitespace goes to the right
-      } else if (row.from - child.from > 1) {
-        whitespaceBefore = ' ' // Afterwards we pad the left by one.
-        from++
-      }
+      // Put the cell's start in the middle of the whitespace
+      const from = row.from + Math.ceil((child.from - row.from) / 2)
+      const to = from
 
       tableRow.cells.push({
         type: 'TableCell',
         name: 'TableCell',
         from,
         to,
-        whitespaceBefore,
-        children: from === to ? [] : [genericTextNode(from, to, markdown.slice(from, to))],
-        textContent: markdown.slice(from, to)
+        whitespaceBefore: '',
+        children: [],
+        textContent: ''
       })
     }
 
@@ -175,53 +169,31 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
       } else if (child.name === 'TableDelimiter' && wasDelim) {
         // Last iteration was a TableDelimiter, and now again --> Unmounted cell
         const prev = child.prevSibling!
-        let from = prev.to
-        let to = child.from
-        let whitespaceBefore = ''
-        if (to - from > 0) {
-          to-- // Again, first whitespace goes to the end
-        }
-        if (to - from > 0) {
-          from++ // Second to the start
-          whitespaceBefore = ' '
-        }
+        // Put the cell in the center of the whitespace span
+        const from = prev.to + Math.ceil((child.from - prev.to) / 2)
+        const to = from
 
         const cellNode: TableCell = {
           type: 'TableCell',
           name: tableRow.isHeaderOrFooter ? 'th' : 'td',
           from,
           to,
-          whitespaceBefore,
-          // Has no real children; here we basically just account for any whitespace
-          children: from === to ? [] : [genericTextNode(from, to, markdown.slice(from, to))],
-          textContent: markdown.slice(from, to)
+          whitespaceBefore: '',
+          children: [],
+          textContent: ''
         }
         tableRow.cells.push(cellNode)
       } else if (child.name === 'TableCell') {
         // Functional table cell. NOTE: The Lezer parser will trim whitespace
-        // from the start and end, but we need to account for that.
-        const prev = child.prevSibling
-        const next = child.nextSibling
-        let from = prev !== null ? prev.to : child.from
-        let to = next !== null ? next.from : child.to
-        let whitespaceBefore = ''
-
-        if (from < child.from) {
-          from++ // Leading whitespace
-          whitespaceBefore = ' '
-        }
-        if (to > child.to) {
-          to-- // Trailing whitespace
-        }
-
+        // from the start and end.
         const cellNode: TableCell = {
           type: 'TableCell',
           name: tableRow.isHeaderOrFooter ? 'th' : 'td',
-          from,
-          to,
-          whitespaceBefore,
+          from: child.from,
+          to: child.to,
+          whitespaceBefore: '',
           children: [],
-          textContent: markdown.slice(from, to)
+          textContent: markdown.slice(child.from, child.to)
         }
         parseChildren(cellNode, child, markdown)
         tableRow.cells.push(cellNode)

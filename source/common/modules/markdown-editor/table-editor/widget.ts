@@ -20,7 +20,7 @@ import type { SyntaxNode } from '@lezer/common'
 import type { TableRow, Table } from '../../markdown-utils/markdown-ast'
 import { parseTableNode } from '../../markdown-utils/markdown-ast/parse-table-node'
 import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
-import { createSubviewForCell } from './subview'
+import { createSubviewForCell, hiddenSpanField } from './subview'
 
 // DEBUG // TODOs:
 // DEBUG // * An empty table is difficult to fill with content because the cells
@@ -228,9 +228,14 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, align: Array<'lef
 
     const subview = EditorView.findFromDOM(tds[i])
     if (subview !== null && !selectionInCell) {
-      // The selection was in the cell but isn't any longer -> remove the
-      // subview.
-      subview.destroy()
+      // The selection was in the cell but isn't any longer. However, this can
+      // also happen if the user adds whitespace in front of a cell's content,
+      // so IFF there is a subview, we first should check if the new selection
+      // is additionally outside of the current state of the hiddenDeco field.
+      const [ localFrom, localTo ] = subview.state.field(hiddenSpanField).cellRange
+      if (mainSel.from < localFrom || mainSel.to > localTo) {
+        subview.destroy()
+      }
     } else if (subview === null && selectionInCell) {
       // Create a new subview to represent the selection here. Ensure the cell
       // itself is empty before we mount the subview.

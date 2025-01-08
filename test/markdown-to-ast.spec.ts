@@ -32,11 +32,11 @@ const TESTERS: Array<{ input: string, output: ASTNode }> = [
               type: 'TableRow', name: 'TableHeader', from: 0, to: 16, whitespaceBefore: '', isHeaderOrFooter: true,
               cells: [
                 { // Empty cell
-                  type: 'TableCell', name: 'th', from: 2, to: 2, whitespaceBefore: ' ', textContent: '',
+                  type: 'TableCell', name: 'th', from: 2, to: 2, whitespaceBefore: '', textContent: '',
                   children: []
                 },
                 { // Regular (non-empty) cell
-                  type: 'TableCell', name: 'th', from: 5, to: 14, whitespaceBefore: ' ', textContent: 'Not empty',
+                  type: 'TableCell', name: 'th', from: 5, to: 14, whitespaceBefore: '', textContent: 'Not empty',
                   children: [{ type: 'Text', name: 'text', from: 5, to: 14, value: 'Not empty', whitespaceBefore: ' ' }]
                 }
               ]
@@ -49,7 +49,7 @@ const TESTERS: Array<{ input: string, output: ASTNode }> = [
                   children: [{ type: 'Text', name: 'text', from: 26, to: 36, value: 'No padding', whitespaceBefore: '' }]
                 },
                 { // More padding
-                  type: 'TableCell', name: 'td', from: 38, to: 52, whitespaceBefore: ' ', textContent: ' More padding ',
+                  type: 'TableCell', name: 'td', from: 39, to: 51, whitespaceBefore: '', textContent: 'More padding',
                   children: [{ type: 'Text', name: 'text', from: 39, to: 51, value: 'More padding', whitespaceBefore: '  ' }]
                 }
               ]

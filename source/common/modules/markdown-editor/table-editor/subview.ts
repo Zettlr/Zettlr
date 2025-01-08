@@ -62,7 +62,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // (e.g., by accessing tr.state), we keep the computational overhead small.
   // NOTE the associations (also in the hidden state updater)
   const [ cellFrom, cellTo ] = tr.startState.field(hiddenSpanField)
-    .cellRange.map((pos, idx) => tr.changes.mapPos(pos, idx < 0 ? -1 : 1))
+    .cellRange.map((pos, idx) => tr.changes.mapPos(pos, idx === 0 ? -1 : 1))
 
   // First, find the longest cell range after the transaction has been
   // applied. This is necessary to accurately figure out whether the selection
@@ -90,7 +90,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   if (tr.selection !== undefined && cellFrom !== cellTo && cellTo > 0) {
     const { from, to } = tr.selection.main
     if (from < cellFrom || to > cellEndAfter) {
-      console.log('Disallowing transaction', tr)
+      console.log('Disallowing transaction', { from, cellFrom, to, cellTo, cellEndAfter })
       return [] // Disallow this transaction
     }
   }
@@ -133,12 +133,12 @@ interface hiddenSpanState {
  * A StateField whose sole purpose is to hide the two stretches of content
  * before and after the table cell contents.
  */
-const hiddenSpanField = StateField.define<hiddenSpanState>({
-  create (_state) {
+export const hiddenSpanField = StateField.define<hiddenSpanState>({
+  create (state) {
     // NOTE: Override using `init`! Otherwise this extension won't do much.
     return {
       decorations: Decoration.none,
-      cellRange: [ 0, 0 ]
+      cellRange: [ 0, state.doc.length ]
     }
   },
   update (value, tr) {
@@ -271,10 +271,6 @@ export function createSubviewForCell (
       hiddenSpanField.init(s => {
         return {
           decorations: createHiddenDecorations(s, cellRange),
-          // TODO: After an update, the AST parser now includes whitespace in
-          // the cell boundaries, and this is principally good. However, solely
-          // when it comes to the editing experience, we may want to trim this
-          // away.
           cellRange: [ cellRange.from, cellRange.to ]
         }
       }),
