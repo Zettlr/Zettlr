@@ -2,8 +2,8 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        markdownToAST tester
- * CVM-Role:        TESTING
+ * Contains:        Markdown AST Test
+ * CVM-Role:        Test
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
@@ -12,16 +12,58 @@
  * END HEADER
  */
 
-import { deepStrictEqual } from 'assert'
-import { markdownToAST } from '../source/common/modules/markdown-utils'
-import { type ASTNode } from 'source/common/modules/markdown-utils/markdown-ast'
+import { deepStrictEqual } from "assert"
+import { markdownToAST } from "source/common/modules/markdown-utils"
+import { ASTNode } from "source/common/modules/markdown-utils/markdown-ast"
 
-const tests: Array<{ input: string, expected: ASTNode }> = [
+const TESTERS: Array<{ input: string, output: ASTNode }> = [
+  {
+    input: `|  | Not empty |
+|--|--|
+|No padding|  More padding  |`,
+    output: {
+      type: 'Generic', name: 'Document', from: 0, to: 54, whitespaceBefore: '',
+      children: [
+        {
+          type: 'Table', name: 'Table', from: 0, to: 54, whitespaceBefore: '',
+          tableType: 'pipe', alignment: [ 'left', 'left' ],
+          rows: [
+            {
+              type: 'TableRow', name: 'TableHeader', from: 0, to: 16, whitespaceBefore: '', isHeaderOrFooter: true,
+              cells: [
+                { // Empty cell
+                  type: 'TableCell', name: 'th', from: 2, to: 2, whitespaceBefore: ' ', textContent: '',
+                  children: []
+                },
+                { // Regular (non-empty) cell
+                  type: 'TableCell', name: 'th', from: 5, to: 14, whitespaceBefore: ' ', textContent: 'Not empty',
+                  children: [{ type: 'Text', name: 'text', from: 5, to: 14, value: 'Not empty', whitespaceBefore: ' ' }]
+                }
+              ]
+            },
+            {
+              type: 'TableRow', name: 'TableRow', from: 25, to: 54, whitespaceBefore: '', isHeaderOrFooter: false,
+              cells: [
+                { // No padding
+                  type: 'TableCell', name: 'td', from: 26, to: 36, whitespaceBefore: '', textContent: 'No padding',
+                  children: [{ type: 'Text', name: 'text', from: 26, to: 36, value: 'No padding', whitespaceBefore: '' }]
+                },
+                { // More padding
+                  type: 'TableCell', name: 'td', from: 38, to: 52, whitespaceBefore: ' ', textContent: ' More padding ',
+                  children: [{ type: 'Text', name: 'text', from: 39, to: 51, value: 'More padding', whitespaceBefore: '  ' }]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
   {
     input: `# Image file
 
 This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
-    expected: {
+    output: {
       type: 'Generic',
       name: 'Document',
       from: 0,
@@ -85,10 +127,13 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
 ]
 
 describe('MarkdownAST#markdownToAST()', function () {
-  for (const test of tests) {
-    it('should correctly parse the Markdown source', function () {
-      const ast = markdownToAST(test.input)
-      deepStrictEqual(ast, test.expected)
+  for (const test of TESTERS) {
+    // TODO: This test currently fails. This is not yet a problem, but we have
+    // to decide what to do. Specifically, currently the AST parser spits out
+    // TableDelimiters as their own nodes. Do we want that or not?
+    // console.log(util.inspect(markdownToAST(test.input), { colors: true, depth: null }))
+    it('should parse the Markdown properly', () => {
+      deepStrictEqual(test.output, markdownToAST(test.input))
     })
   }
 })
