@@ -248,6 +248,7 @@ export function createSubviewForCell (
     selection: mainView.state.selection,
     extensions: [
       // A minimal set of extensions
+      // TODO: Import the main editor keymap so that key bindings are the same
       keymap.of(defaultKeymap),
       Prec.high(keymap.of([
         // Prevent programmatic insertion of newlines by disabling some keybindings
@@ -270,6 +271,10 @@ export function createSubviewForCell (
       hiddenSpanField.init(s => {
         return {
           decorations: createHiddenDecorations(s, cellRange),
+          // TODO: After an update, the AST parser now includes whitespace in
+          // the cell boundaries, and this is principally good. However, solely
+          // when it comes to the editing experience, we may want to trim this
+          // away.
           cellRange: [ cellRange.from, cellRange.to ]
         }
       }),
@@ -308,14 +313,16 @@ export function createSubviewForCell (
  * @param  {Transaction}  tr       The transaction from the main view
  */
 function maybeUpdateSubview (subview: EditorView, tr: Transaction): void {
-  if (!tr.changes.empty && tr.annotation(syncAnnotation) === undefined) {
-    const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
-    const userEvent = tr.annotation(Transaction.userEvent)
-    if (userEvent !== undefined) {
-      annotations.push(Transaction.userEvent.of(userEvent))
-    }
-    subview.dispatch({ changes: tr.changes, annotations })
+  if (tr.changes.empty || tr.annotation(syncAnnotation) !== undefined) {
+    return
   }
+
+  const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
+  const userEvent = tr.annotation(Transaction.userEvent)
+  if (userEvent !== undefined) {
+    annotations.push(Transaction.userEvent.of(userEvent))
+  }
+  subview.dispatch({ changes: tr.changes, annotations })
 }
 
 /**

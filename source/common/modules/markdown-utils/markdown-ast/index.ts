@@ -348,10 +348,9 @@ export interface Table extends MDNode {
    */
   rows: TableRow[]
   /**
-   * A list of column alignments in the table. May be undefined; the default is
-   * for all columns to be left-aligned.
+   * A list of column alignments in the table.
    */
-  alignment?: Array<'left'|'center'|'right'>
+  alignment: Array<'left'|'center'|'right'>
   /**
    * This property can optionally contain the table type in the source.
    */

@@ -78,6 +78,7 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
     from: node.from,
     to: node.to,
     whitespaceBefore: '',
+    alignment: [],
     rows: []
   }
 
