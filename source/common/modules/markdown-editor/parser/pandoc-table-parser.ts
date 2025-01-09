@@ -51,8 +51,7 @@ function parseGridTable (ctx: BlockContext, pos: number, end: number, lines: str
     to = from + line.length
     const isSeparator = gridLineRE.test(line)
     if (isSeparator) {
-      const sep = ctx.elt('TableDelimiter', from, to)
-      rows.push(ctx.elt('TableRow', from, to, [sep]))
+      rows.push(ctx.elt('TableDelimiter', from, to))
     } else {
       // Content line -> move through the line and mark delimiters as we see them
       const children: Element[] = [ctx.elt('TableDelimiter', from, from + 1)]
@@ -60,9 +59,19 @@ function parseGridTable (ctx: BlockContext, pos: number, end: number, lines: str
       let cellTo = cellFrom
       for (const ch of line.substring(1)) {
         if (ch === '|') {
-          children.push(ctx.elt('TableCell', cellFrom, cellTo))
+          const cellContent = line.slice(cellFrom - from, cellTo - from)
+          if (cellContent.trim() !== '') {
+            // Similar as with pipe tables, don't emit empty cells
+            children.push(
+              ctx.elt(
+                'TableCell',
+                cellFrom, cellTo,
+                ctx.parser.parseInline(cellContent, cellFrom)
+              )
+            )
+          }
           children.push(ctx.elt('TableDelimiter', cellTo, cellTo + 1))
-          cellFrom = cellTo
+          cellFrom = cellTo + 1
         }
         cellTo++
       }
@@ -87,42 +96,67 @@ function parsePipeTable (ctx: BlockContext, pos: number, end: number, lines: str
   const rows: Element[] = []
   // For pipe tables, the first row is always the header, the second always the
   // delimiter, afterwards only content cells.
-  // const header = ctx.elt('TableHeader')
-  let from = pos
-  let to = pos + lines[0].length
+  let lineFrom = pos
+  let lineTo = lineFrom + lines[0].length + 1
   let isFirstLine = true
   let isHeaderLine = false
   for (const line of lines) {
-    to = from + line.length + 1
-    if (isHeaderLine) {
-      rows.push(ctx.elt('TableDelimiter', from, to))
-      isHeaderLine = false
-      from = to
-      continue
-    }
-
-    const children: Element[] = []
-    let cellFrom = from
-    let cellTo = from
-    for (const ch of line) {
-      if (ch === '|' && cellTo > from) {
-        children.push(ctx.elt('TableCell', cellFrom, cellTo))
-        children.push(ctx.elt('TableDelimiter', cellTo, cellTo + 1))
-        cellFrom = cellTo + 1
-      } else if (ch === '|' && cellFrom === from) {
-        children.push(ctx.elt('TableDelimiter', cellFrom, cellFrom + 1))
-        cellFrom++
-      }
-      cellTo++
-    }
-
-    rows.push(ctx.elt(isFirstLine ? 'TableHeader' : 'TableRow', from, to, children))
-    from = to
+    lineTo = lineFrom + line.length + 1
 
     if (isFirstLine) {
       isHeaderLine = true
       isFirstLine = false
+    } else if (isHeaderLine) {
+      rows.push(ctx.elt('TableDelimiter', lineFrom, lineTo))
+      isHeaderLine = false
+      lineFrom = lineTo
+      continue
     }
+
+    // To ensure that our custom parser sticks as much as possible to the
+    // official table parser, below is a modified version of Marijn's parsing
+    // code.
+    const children: Element[] = []
+    let isEscaped = false
+    let cellStart = -1
+    let cellEnd = -1
+    for (let i = 0; i < line.length; i++) {
+      const next = line.charAt(i)
+      if (next === '|' && !isEscaped) {
+        if (cellStart > -1) {
+          children.push(
+            ctx.elt(
+              'TableCell',
+              lineFrom + cellStart,
+              lineFrom + cellEnd,
+              ctx.parser.parseInline(line.slice(cellStart, cellEnd), lineFrom + cellStart)
+            )
+          )
+        }
+        children.push(ctx.elt('TableDelimiter', lineFrom + i, lineFrom + i + 1))
+        cellStart = cellEnd = -1
+      } else if (isEscaped || ![ ' ', '\t' ].includes(next)) {
+        if (cellStart < 0) {
+          cellStart = i
+        }
+        cellEnd = i + 1
+      }
+      isEscaped = !isEscaped && next === '\\'
+    }
+
+    if (cellStart > -1) {
+      children.push(
+        ctx.elt(
+          'TableCell',
+          lineFrom + cellStart,
+          lineFrom + cellEnd,
+          ctx.parser.parseInline(line.slice(cellStart, cellEnd), lineFrom + cellStart)
+        )
+      )
+    }
+
+    rows.push(ctx.elt(isFirstLine ? 'TableHeader' : 'TableRow', lineFrom, lineTo, children))
+    lineFrom = lineTo
   }
   return ctx.elt('Table', pos, end, rows)
 }
