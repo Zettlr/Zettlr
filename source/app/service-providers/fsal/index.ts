@@ -73,8 +73,12 @@ export default class FSAL extends ProviderContract {
     const shouldClearCache = process.argv.includes('--clear-cache')
     if (this._config.newVersionDetected() || shouldClearCache) {
       this._logger.info('Clearing the FSAL cache ...')
-      await this._cache.clearCache()
-      this._logger.info('FSAL cache cleared.')
+      try {
+        await this._cache.clearCache()
+        this._logger.info('FSAL cache cleared.')
+      } catch (err: any) {
+        this._logger.error(`FSAL Cache could not be cleared: ${String(err.message)}`, err)
+      }
     }
   }
 
