@@ -103,9 +103,19 @@ export class TableWidget extends WidgetType {
       .filter(table => {
         const ast = parseTableNode(table, state.sliceDoc())
         if (ast.type !== 'Table') {
+          return false // There was an error in parsing the table
+        }
+
+        if (ast.tableType === 'grid') {
+          // The TableEditor cannot support grid tables, since they can have
+          // (a) colspans and rowspans, and (b) multiple lines, which is just
+          // too difficult to represent using our approach here. (Also, grids
+          // are much easier to parse visually than pipes and less common,
+          // reducing the need for us to support them.)
           return false
         }
 
+        // Finally, check that the table is proper.
         return ast.rows
           .map(r => r.cells.length)
           .every(len => len === (ast.alignment?.length ?? 0))
