@@ -2,12 +2,14 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fixed an issue that prevented the FSAL cache clearing from proceeding
+  appropriately.
 
 ## Under the Hood
 
 - Fixed the boot order of providers to ensure certain actions are taken before
   providers access each others (primary case: the FSAL needs to be booted asap)
+- Promisify the cache clearing procedure
 
 # 3.4.1
 
