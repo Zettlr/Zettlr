@@ -6,7 +6,8 @@
 
 ## Under the Hood
 
-(nothing here)
+- Fixed the boot order of providers to ensure certain actions are taken before
+  providers access each others (primary case: the FSAL needs to be booted asap)
 
 # 3.4.1
 
