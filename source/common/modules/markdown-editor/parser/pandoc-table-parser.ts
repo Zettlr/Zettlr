@@ -45,39 +45,69 @@ function parseGridTable (ctx: BlockContext, pos: number, end: number, lines: str
   const rows: Element[] = []
   // Grid Tables alternate between separator lines and content lines. Content
   // lines can span multiple rows
-  let from = pos
+  let lineFrom = pos
   let to = pos + lines[0].length
+  let rowStart = -1
+  let children: Element[] = []
   for (const line of lines) {
-    to = from + line.length
-    const isSeparator = gridLineRE.test(line)
-    if (isSeparator) {
-      rows.push(ctx.elt('TableDelimiter', from, to))
+    to = lineFrom + line.length
+    if (gridLineRE.test(line)) {
+      if (rowStart > -1) {
+        rows.push(ctx.elt('TableRow', rowStart, lineFrom - 1, children))
+        children = []
+        rowStart = -1
+      }
+
+      rows.push(ctx.elt('TableDelimiter', lineFrom, to))
     } else {
       // Content line -> move through the line and mark delimiters as we see them
-      const children: Element[] = [ctx.elt('TableDelimiter', from, from + 1)]
-      let cellFrom = from + 1
-      let cellTo = cellFrom
-      for (const ch of line.substring(1)) {
-        if (ch === '|') {
-          const cellContent = line.slice(cellFrom - from, cellTo - from)
-          if (cellContent.trim() !== '') {
-            // Similar as with pipe tables, don't emit empty cells
+      if (rowStart < 0) {
+        rowStart = lineFrom
+      }
+
+      // Pretty much the same logic as with pipe tables. The only exception is
+      // that multiple lines can comprise a single, logical TableRow, so the
+      // children array won't be cleared after a single line, but only on a
+      // delimiter line.
+      let isEscaped = false
+      let cellStart = -1
+      let cellEnd = -1
+      for (let i = 0; i < line.length; i++) {
+        const next = line.charAt(i)
+        if (next === '|' && !isEscaped) {
+          if (cellStart > -1) {
             children.push(
               ctx.elt(
                 'TableCell',
-                cellFrom, cellTo,
-                ctx.parser.parseInline(cellContent, cellFrom)
+                lineFrom + cellStart,
+                lineFrom + cellEnd,
+                ctx.parser.parseInline(line.slice(cellStart, cellEnd), lineFrom + cellStart)
               )
             )
           }
-          children.push(ctx.elt('TableDelimiter', cellTo, cellTo + 1))
-          cellFrom = cellTo + 1
+          children.push(ctx.elt('TableDelimiter', lineFrom + i, lineFrom + i + 1))
+          cellStart = cellEnd = -1
+        } else if (isEscaped || ![ ' ', '\t' ].includes(next)) {
+          if (cellStart < 0) {
+            cellStart = i
+          }
+          cellEnd = i + 1
         }
-        cellTo++
+        isEscaped = !isEscaped && next === '\\'
       }
-      rows.push(ctx.elt('TableRow', from, to, children))
+
+      if (cellStart > -1) {
+        children.push(
+          ctx.elt(
+            'TableCell',
+            lineFrom + cellStart,
+            lineFrom + cellEnd,
+            ctx.parser.parseInline(line.slice(cellStart, cellEnd), lineFrom + cellStart)
+          )
+        )
+      }
     }
-    from = to + 1
+    lineFrom = to + 1
   }
   return ctx.elt('Table', pos, end, rows)
 }

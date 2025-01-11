@@ -57,6 +57,8 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
   //    the delimiting row is a child of a TableRow
   // 8. Rows with too few columns will still be detected, but then have too few
   //    TableCell/TableDelimiter nodes
+  // 9. Our parser ALSO supports Grid tables. These can have logical rows that
+  //    consist of multiple lines. The AST-parser needs to allow those, too.
 
   // ===========================================================================
 
@@ -79,13 +81,18 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
   const astNode: Table = {
     type: 'Table',
     name: 'Table',
-    tableType: 'pipe',
+    // Pipe tables must start with the header row while grid tables start with a
+    // delimiter -> here we can distinguish them.
+    tableType: node.firstChild?.name === 'TableDelimiter' ? 'grid' : 'pipe',
     from: node.from,
     to: node.to,
     whitespaceBefore: '',
     alignment: [],
     rows: []
   }
+
+  // TODO: Create two sub-functions; one which does the same as below to parse
+  // pipe tables, and one that parses grid tables.
 
   // 2. We detect both the number of columns as well as the alignment using the
   //    delimiter row
