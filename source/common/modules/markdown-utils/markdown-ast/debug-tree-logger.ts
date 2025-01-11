@@ -39,6 +39,14 @@ export function logLezerTree (rootNode: SyntaxNode, options?: Partial<LogTreeOpt
   options = options ?? {}
   options.baseIndent = options.baseIndent ?? 0
 
+  // Log warnings once if the options are incompatible.
+  if (options.logRoot === true && options.markdown == null && options.baseIndent === 0) {
+    console.warn('Cannot log full table: No Markdown source was provided.')
+  }
+  if (options.logNodes === true && options.markdown == null && options.baseIndent === 0) {
+    console.warn('Cannot log nodes: No Markdown source was provided.')
+  }
+
   if (options.baseIndent === 0 && options.logRoot === true && options.markdown != null) {
     console.log('-'.repeat(80))
     console.log('\x1b[32m' + options.markdown.slice(rootNode.from, rootNode.to) + '\x1b[0m')
