@@ -108,6 +108,10 @@ export function swapNextRow (target: EditorView): boolean {
     // TODO: What if selection spans multiple rows? The user then clearly
     // intends to move them all together
     const tableAST = parseTableNode(table, target.state.sliceDoc())
+    if (tableAST.type !== 'Table') {
+      return undefined
+    }
+
     const thisLine = target.state.doc.lineAt(range.anchor)
     const lastLine = target.state.doc.lineAt(table.to)
     if (thisLine.number === target.state.doc.lines || thisLine.number === lastLine.number) {
@@ -142,7 +146,9 @@ export function swapNextRow (target: EditorView): boolean {
         ]
       }
     }
-  }).flat() // NOTE: We're receiving 2d arrays from the callback
+  })
+    .filter(x => x !== undefined)
+    .flat() // NOTE: We're receiving 2d arrays from the callback
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -164,6 +170,10 @@ export function swapPrevRow (target: EditorView): boolean {
     // TODO: What if selection spans multiple rows? The user then clearly intends
     // to move them all together
     const tableAST = parseTableNode(table, target.state.sliceDoc())
+    if (tableAST.type !== 'Table') {
+      return undefined
+    }
+
     const thisLine = target.state.doc.lineAt(range.anchor)
     const firstLine = target.state.doc.lineAt(table.from)
     if (thisLine.number === 1 || thisLine.number === firstLine.number) {
@@ -198,7 +208,9 @@ export function swapPrevRow (target: EditorView): boolean {
         ]
       }
     }
-  }).flat() // NOTE: We're receiving 2d arrays from the callback
+  })
+    .filter(x => x !== undefined)
+    .flat() // NOTE: We're receiving 2d arrays from the callback
 
   if (changes.length > 0) {
     target.dispatch({ changes })

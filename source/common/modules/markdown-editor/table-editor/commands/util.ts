@@ -25,13 +25,20 @@ import { parseTableNode } from '@common/modules/markdown-utils/markdown-ast/pars
  * of the cell offsets (from, to) for every cell in the table, sorted by rows.
  * The structure of the return value is `[rows][cells][from, to]`.
  *
- * @param   {SyntaxNode}  tableNode  The table SyntaxNode
- * @param   {string}      markdown   The original Markdown source
+ * @param   {SyntaxNode}  tableNode           The table SyntaxNode
+ * @param   {string}      markdown            The original Markdown source
  *
- * @return  {[number, number][][]}   The [from, to] offsets of all Table cells
+ * @return  {[number, number][][]|undefined}  The [from, to] offsets of all
+ *                                            Table cells. Returns undefined if
+ *                                            the AST parser could not properly
+ *                                            parse the table.
  */
-export function getTableCellOffsets (tableNode: SyntaxNode, markdown: string): [number, number][][] {
+export function getTableCellOffsets (tableNode: SyntaxNode, markdown: string): [number, number][][]|undefined {
   const ast = parseTableNode(tableNode, markdown)
+  if (ast.type !== 'Table') {
+    return undefined
+  }
+
   const offsets = ast.rows.map(row => {
     return row.cells.map(cell => {
       return [ cell.from, cell.to ]
@@ -68,7 +75,10 @@ export function mapSelectionsWithTables<T> (
   callback: (
     range: SelectionRange,
     table: SyntaxNode,
-    offsets: ReturnType<typeof getTableCellOffsets>
+    // NOTE: Exclude<> takes a type and removes whatever comes afterward from it.
+    // This means: We have to check for that, but it makes implementing callbacks
+    // simpler.
+    offsets: Exclude<ReturnType<typeof getTableCellOffsets>, undefined>
   ) => T|undefined
 ): T[] {
   // TODO: Is not recursive! Need to iter!
@@ -79,8 +89,12 @@ export function mapSelectionsWithTables<T> (
     if (table === undefined) {
       return undefined
     }
+
+    // The AST parser may spit out a TextNode instead of a Table if there was
+    // something going on with the SyntaxNode. This means that table offsets
+    // aren't guaranteed for any Table node. Here we account for that fact.
     const offsets = getTableCellOffsets(table, target.state.sliceDoc())
-    return callback(range, table, offsets)
+    return offsets !== undefined ? callback(range, table, offsets) : undefined
   })
     .filter(sel => sel !== undefined) // Filter out undefineds
 }
