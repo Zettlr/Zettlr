@@ -22,7 +22,7 @@
 
 import hash from '@common/util/hash'
 import type LogProvider from '@providers/log'
-import fs from 'fs'
+import fs, { promises as fsPromises } from 'fs'
 import path from 'path'
 import type { CodeFileDescriptor, MDFileDescriptor } from 'source/types/common/fsal'
 
@@ -178,7 +178,7 @@ export default class FSALCache {
   /**
    * Clears the cache during runtime
    */
-  clearCache (): void {
+  public async clearCache (): Promise<void> {
     // Two things need to be done:
     // First, flush everything from memory
     // Second: Remove all cache files
@@ -186,27 +186,11 @@ export default class FSALCache {
     this._accessed.clear()
 
     // We'll collect the cache clearing actions to resolve them all
-    let promises = []
-    let directoryContents = fs.readdirSync(this._datadir)
-    for (let file of directoryContents) {
-      let realPath = path.join(this._datadir, file)
-      promises.push(new Promise<void>((resolve, reject) => {
-        fs.unlink(realPath, (err) => {
-          if (err !== null) {
-            reject(err)
-          } else {
-            resolve()
-          }
-        })
-      }))
+    const directoryContents = await fsPromises.readdir(this._datadir)
+    for (const file of directoryContents) {
+      const realPath = path.join(this._datadir, file)
+      await fsPromises.unlink(realPath)
     }
-
-    // Watch how the promises do
-    Promise.all(promises).then(() => {
-      this._logger.info('[FSAL Cache] Cache cleared!')
-    }).catch((e) => {
-      this._logger.error('[FSAL Cache] Error while clearing the cache!', e)
-    })
   }
 
   /**
