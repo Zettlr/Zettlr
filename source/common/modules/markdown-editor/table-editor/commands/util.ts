@@ -18,28 +18,21 @@ import { syntaxTree } from '@codemirror/language'
 import type { SelectionRange } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
 import type { SyntaxNode } from '@lezer/common'
-import { parseTableNode } from '@common/modules/markdown-utils/markdown-ast/parse-table-node'
+import type { Table } from 'source/common/modules/markdown-utils/markdown-ast'
+import { parseTableNode } from 'source/common/modules/markdown-utils/markdown-ast/parse-table-node'
 
 /**
  * Takes a table node and the corresponding Markdown source and returns a list
  * of the cell offsets (from, to) for every cell in the table, sorted by rows.
  * The structure of the return value is `[rows][cells][from, to]`.
  *
- * @param   {SyntaxNode}  tableNode           The table SyntaxNode
- * @param   {string}      markdown            The original Markdown source
+ * @param   {Table}  tableAST           The table AST node
  *
- * @return  {[number, number][][]|undefined}  The [from, to] offsets of all
- *                                            Table cells. Returns undefined if
- *                                            the AST parser could not properly
- *                                            parse the table.
+ * @return  {[number, number][][]}  The [from, to] offsets of all
+ *                                            Table cells.
  */
-export function getTableCellOffsets (tableNode: SyntaxNode, markdown: string): [number, number][][]|undefined {
-  const ast = parseTableNode(tableNode, markdown)
-  if (ast.type !== 'Table') {
-    return undefined
-  }
-
-  const offsets = ast.rows.map(row => {
+export function getTableCellOffsets (tableAST: Table): [number, number][][] {
+  const offsets = tableAST.rows.map(row => {
     return row.cells.map(cell => {
       return [ cell.from, cell.to ]
     }) as [number, number][]
@@ -74,27 +67,29 @@ export function mapSelectionsWithTables<T> (
   target: EditorView,
   callback: (
     range: SelectionRange,
-    table: SyntaxNode,
-    // NOTE: Exclude<> takes a type and removes whatever comes afterward from it.
-    // This means: We have to check for that, but it makes implementing callbacks
-    // simpler.
-    offsets: Exclude<ReturnType<typeof getTableCellOffsets>, undefined>
+    tableNode: SyntaxNode,
+    tableAST: Table,
+    offsets: ReturnType<typeof getTableCellOffsets>
   ) => T|undefined
 ): T[] {
   // TODO: Is not recursive! Need to iter!
   const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
 
   return target.state.selection.ranges.map(range => {
-    const table = tableNodes.find(node => node.from <= range.anchor && node.to >= range.anchor)
-    if (table === undefined) {
+    const tableNode = tableNodes.find(node => node.from <= range.anchor && node.to >= range.anchor)
+    if (tableNode === undefined) {
       return undefined
     }
 
     // The AST parser may spit out a TextNode instead of a Table if there was
     // something going on with the SyntaxNode. This means that table offsets
     // aren't guaranteed for any Table node. Here we account for that fact.
-    const offsets = getTableCellOffsets(table, target.state.sliceDoc())
-    return offsets !== undefined ? callback(range, table, offsets) : undefined
+    const tableAST = parseTableNode(tableNode, target.state.sliceDoc())
+    if (tableAST.type !== 'Table') {
+      return undefined
+    }
+    const offsets = getTableCellOffsets(tableAST)
+    return callback(range, tableNode, tableAST, offsets)
   })
     .filter(sel => sel !== undefined) // Filter out undefineds
 }

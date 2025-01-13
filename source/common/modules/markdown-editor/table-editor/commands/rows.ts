@@ -17,7 +17,6 @@
 import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
 import { mapSelectionsWithTables } from './util'
-import { parseTableNode } from '@common/modules/markdown-utils/markdown-ast/parse-table-node'
 
 /**
  * This command takes all editor selections and moves those within tables to the
@@ -28,7 +27,7 @@ import { parseTableNode } from '@common/modules/markdown-utils/markdown-ast/pars
  * @return  {boolean}             Whether any movement has happened
  */
 export function moveNextRow (target: EditorView): boolean {
-  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, table, offsets) => {
+  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, offsets) => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
@@ -66,7 +65,7 @@ export function moveNextRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any movement has happened
  */
 export function movePrevRow (target: EditorView): boolean {
-  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, table, offsets) => {
+  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, offsets) => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
@@ -104,16 +103,11 @@ export function movePrevRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any swaps have happened.
  */
 export function swapNextRow (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, table, _offsets) => {
+  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
     // TODO: What if selection spans multiple rows? The user then clearly
     // intends to move them all together
-    const tableAST = parseTableNode(table, target.state.sliceDoc())
-    if (tableAST.type !== 'Table') {
-      return undefined
-    }
-
     const thisLine = target.state.doc.lineAt(range.anchor)
-    const lastLine = target.state.doc.lineAt(table.to)
+    const lastLine = target.state.doc.lineAt(tableNode.to)
     if (thisLine.number === target.state.doc.lines || thisLine.number === lastLine.number) {
       return undefined
     }
@@ -166,16 +160,11 @@ export function swapNextRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any swaps occurred
  */
 export function swapPrevRow (target: EditorView): boolean {
-  const changes = mapSelectionsWithTables(target, (range, table, _offsets) => {
+  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
     // TODO: What if selection spans multiple rows? The user then clearly intends
     // to move them all together
-    const tableAST = parseTableNode(table, target.state.sliceDoc())
-    if (tableAST.type !== 'Table') {
-      return undefined
-    }
-
     const thisLine = target.state.doc.lineAt(range.anchor)
-    const firstLine = target.state.doc.lineAt(table.from)
+    const firstLine = target.state.doc.lineAt(tableNode.from)
     if (thisLine.number === 1 || thisLine.number === firstLine.number) {
       return undefined
     }
@@ -221,6 +210,9 @@ export function swapPrevRow (target: EditorView): boolean {
 }
 
 export function addRowAfter (_target: EditorView): boolean {
+  // What we should do here (and in addRowBefore) is stupidly simple: Just take
+  // the current row (grid tables = this + next one), remove every character between
+  // the pipes and put it after the row. Maybe even works without the forEveryTable thing
   return false
 }
 

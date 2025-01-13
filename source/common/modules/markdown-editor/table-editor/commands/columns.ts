@@ -27,7 +27,7 @@ import { mapSelectionsWithTables } from './util'
  * @return  {boolean}             Whether the command has moved any selections
  */
 export function moveNextCell (target: EditorView): boolean {
-  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, table, cellOffsets) => {
+  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
     const offsets = cellOffsets.flat() // Remove the rows
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
@@ -58,7 +58,7 @@ export function moveNextCell (target: EditorView): boolean {
  * @return  {boolean}             Whether the command has moved any selections
  */
 export function movePrevCell (target: EditorView): boolean {
-  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, table, cellOffsets) => {
+  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
     const offsets = cellOffsets.flat() // Remove the rows
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
@@ -89,24 +89,24 @@ export function movePrevCell (target: EditorView): boolean {
  * @return  {boolean}             Whether there has been at least one change.
  */
 export function swapNextCol (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, table, offsets) => {
+  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const cellIndex = offsets.map(row => {
+    const cellIndex = cellOffsets.map(row => {
       return row.findIndex(cell => cell[0] <= range.anchor && cell[1] >= range.anchor)
     })
       .filter(sel => sel > -1)
 
     // Now cellIndex should contain exactly one index, and there should be a
     // cell afterwards.
-    if (cellIndex.length !== 1 || cellIndex[0] >= offsets[0].length) {
+    if (cellIndex.length !== 1 || cellIndex[0] >= cellOffsets[0].length) {
       return undefined
     }
 
     const idx = cellIndex[0]
 
-    return offsets.map(row => {
+    return cellOffsets.map(row => {
       return [
         // Cell 1 -> 0
         {
@@ -141,11 +141,11 @@ export function swapNextCol (target: EditorView): boolean {
  * @return  {boolean}             Whether at least one column has been swapped.
  */
 export function swapPrevCol (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, table, offsets) => {
+  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const cellIndex = offsets.map(row => {
+    const cellIndex = cellOffsets.map(row => {
       return row.findIndex(cell => cell[0] <= range.anchor && cell[1] >= range.anchor)
     })
       .filter(sel => sel > -1)
@@ -158,7 +158,7 @@ export function swapPrevCol (target: EditorView): boolean {
 
     const idx = cellIndex[0]
 
-    return offsets.map(row => {
+    return cellOffsets.map(row => {
       return [
         // Cell 0 -> 1
         {
