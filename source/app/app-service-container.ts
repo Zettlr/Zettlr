@@ -60,27 +60,38 @@ export default class AppServiceContainer {
   private readonly _workspaces: WorkspaceProvider
 
   constructor () {
-    // NOTE: The log and config providers need to be instantiated first. The
-    // rest can be instantiated afterwards.
+    // NOTE: We need to instantiate the providers according to their dependence
+    // on other providers.
+
+    // First section: Crucial providers
     this._logProvider = new LogProvider()
     this._configProvider = new ConfigProvider(this._logProvider)
     this._fsal = new FSAL(this._logProvider, this._configProvider)
-    this._commandProvider = new CommandProvider(this)
+
+    // Now according to their dependencies
+    this._recentDocsProvider = new RecentDocumentsProvider(this._logProvider)
     this._assetsProvider = new AssetsProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
     this._statsProvider = new StatsProvider(this._logProvider)
-    this._recentDocsProvider = new RecentDocumentsProvider(this._logProvider)
+
     this._appearanceProvider = new AppearanceProvider(this._logProvider, this._configProvider)
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
 
-    this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
-    this._documentManager = new DocumentManager(this)
     this._workspaces = new WorkspaceProvider(this._logProvider, this._configProvider, this._fsal)
-    this._tagProvider = new TagProvider(this._logProvider, this._documentManager, this._workspaces)
+    this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._linkProvider = new LinkProvider(this._logProvider, this._workspaces)
+    
+    // The document provider accesses only the FSAL in its constructor
+    this._documentManager = new DocumentManager(this)
+    this._tagProvider = new TagProvider(this._logProvider, this._documentManager, this._workspaces)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
+
     this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
+
+    // The command provider only needs the container for running the commands,
+    // none of which will run during the boot cycle.
+    this._commandProvider = new CommandProvider(this)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider, this._documentManager)
     this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._commandProvider, this._windowProvider)
   }
@@ -90,29 +101,39 @@ export default class AppServiceContainer {
    * application can be used.
    */
   async boot (): Promise<void> {
+    // NOTE: We need to boot the providers in roughly the same order as we
+    // instantiate them to ensure that their boot functions work properly. We
+    // can't do this in the exact same order, because the dependencies are only
+    // required for the variables, while the boot function may access them in
+    // different order.
     await this._informativeBoot(this._logProvider, 'LogProvider')
     await this._informativeBoot(this._configProvider, 'ConfigProvider')
-    await this._informativeBoot(this._workspaces, 'WorkspaceProvider')
+    await this._informativeBoot(this._fsal, 'FSAL')
+
+    await this._informativeBoot(this._recentDocsProvider, 'RecentDocsProvider')
     await this._informativeBoot(this._assetsProvider, 'AssetsProvider')
-    await this._informativeBoot(this._linkProvider, 'LinkProvider')
-    await this._informativeBoot(this._tagProvider, 'TagProvider')
-    await this._informativeBoot(this._targetProvider, 'TargetProvider')
     await this._informativeBoot(this._cssProvider, 'CSSProvider')
     await this._informativeBoot(this._statsProvider, 'StatsProvider')
-    await this._informativeBoot(this._recentDocsProvider, 'RecentDocsProvider')
+
     await this._informativeBoot(this._appearanceProvider, 'AppearanceProvider')
+    await this._informativeBoot(this._dictionaryProvider, 'DictionaryProvider')
+
+    await this._informativeBoot(this._workspaces, 'WorkspaceProvider')
+    await this._informativeBoot(this._targetProvider, 'TargetProvider')
+    await this._informativeBoot(this._linkProvider, 'LinkProvider')
+
     // Boot the commands before the window provider to ensure the handler for
     // application requests from windows is registered before any window opens
     await this._informativeBoot(this._commandProvider, 'CommandProvider')
-    await this._informativeBoot(this._trayProvider, 'TrayProvider')
-    await this._informativeBoot(this._dictionaryProvider, 'DictionaryProvider')
-    await this._informativeBoot(this._menuProvider, 'MenuProvider')
-    await this._informativeBoot(this._citeprocProvider, 'CiteprocProvider')
-    await this._informativeBoot(this._updateProvider, 'UpdateProvider')
-
-    await this._informativeBoot(this._fsal, 'FSAL')
     await this._informativeBoot(this._windowProvider, 'WindowManager')
+
+    await this._informativeBoot(this._tagProvider, 'TagProvider')
+    await this._informativeBoot(this._trayProvider, 'TrayProvider')
+    await this._informativeBoot(this._citeprocProvider, 'CiteprocProvider')
+    
     await this._informativeBoot(this._documentManager, 'DocumentManager')
+    await this._informativeBoot(this._menuProvider, 'MenuProvider')
+    await this._informativeBoot(this._updateProvider, 'UpdateProvider')
 
     this._menuProvider.set() // TODO
 
