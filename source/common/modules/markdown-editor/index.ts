@@ -360,7 +360,7 @@ export default class MarkdownEditor extends EventEmitter {
             }
             const possibleTagKey = view.state.sliceDoc(possibleTagNameNode.from, possibleTagNameNode.to)
 
-            if (possibleTagKey !== 'tags') {
+            if (! [ 'tags', 'keywords' ].includes(possibleTagKey)) {
               return false
             }
 
