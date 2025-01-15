@@ -25,7 +25,6 @@ import './editor.less'
  * APIs
  */
 import EventEmitter from 'events'
-import yaml, { Scalar, YAMLSeq } from 'yaml'
 
 // CodeMirror imports
 import { EditorView } from '@codemirror/view'
@@ -341,25 +340,37 @@ export default class MarkdownEditor extends EventEmitter {
             return true
           } else if ((nodeAt.name === 'CodeText' && nodeAt.prevSibling?.name === 'YAMLFrontmatterStart') ||
               (nodeAt.name === 'string' && nodeAt.matchContext(['CodeText']) && nodeAt.parent?.prevSibling?.name === 'YAMLFrontmatterStart')) {
-              const yamlNode = nodeAt.name === 'string' && (nodeAt.parent != null) ? nodeAt.parent : nodeAt
-              const parsedYaml = yaml.parseDocument(view.state.sliceDoc(yamlNode.from, yamlNode.to))
-              const keywordsAndTags: Array<Scalar<string|number>> = [
-                  parsedYaml?.get('tags', true),
-                  parsedYaml?.get('keywords', true)
-              ].map((each) => each instanceof Scalar ? each : each instanceof YAMLSeq ? each.items : undefined).flat().filter((each) => each instanceof Scalar)
-              const clickedKeywordOrTag = keywordsAndTags.find((each) => {
-                  if (!Array.isArray(each.range)) {
-                      return false
-                  }
-                  const start = each.range[0] + yamlNode.from
-                  const end = each.range[1] + yamlNode.from
-                  return start <= pos && pos <= end
-              })
-              if (clickedKeywordOrTag != null) {
-                  editorInstance.emit('zettelkasten-tag', `#${clickedKeywordOrTag.value}`)
-                  event.preventDefault()
-                  return true
-              }
+
+            const innerNodeAt = syntaxTree(view.state).resolveInner(pos, 0)
+
+            if (![ 'Literal', 'QuotedLiteral' ].includes(innerNodeAt.type.name)) {
+              return false
+            }
+            const isDashList = innerNodeAt.parent?.type.name === 'Item' && innerNodeAt.parent?.parent?.type.name === 'BlockSequence' && innerNodeAt.parent?.parent?.parent?.type.name === 'Pair'
+            const isNoList = innerNodeAt.parent?.type.name === 'Pair'
+            const isArrayList = innerNodeAt.parent?.type.name === 'Item' && innerNodeAt.parent?.parent?.type.name === 'FlowSequence' && innerNodeAt.parent?.parent?.parent?.type.name === 'Pair'
+
+            if (! (isDashList || isNoList || isArrayList)) {
+              return false
+            }
+            const possibleTagRootNode = isNoList ? innerNodeAt.parent : innerNodeAt?.parent?.parent?.parent
+            const possibleTagNameNode = possibleTagRootNode?.childAfter(0)?.childAfter(0)
+            if (! possibleTagNameNode) {
+              return false
+            }
+            const possibleTagKey = view.state.sliceDoc(possibleTagNameNode.from, possibleTagNameNode.to)
+
+            if (possibleTagKey !== 'tags') {
+              return false
+            }
+
+            let tag = view.state.sliceDoc(innerNodeAt.from, innerNodeAt.to)
+            if (innerNodeAt.type.name === 'QuotedLiteral') {
+              tag = tag.substring(1, tag.length-1)
+            }
+            editorInstance.emit('zettelkasten-tag', `#${tag}`)
+            event.preventDefault()
+            return true
           }
 
           // Lastly, the user may have clicked somewhere in a link. However,
