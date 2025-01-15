@@ -346,15 +346,22 @@ export default class MarkdownEditor extends EventEmitter {
             if (![ 'Literal', 'QuotedLiteral' ].includes(innerNodeAt.type.name)) {
               return false
             }
-            const isDashList = innerNodeAt.parent?.type.name === 'Item' && innerNodeAt.parent?.parent?.type.name === 'BlockSequence' && innerNodeAt.parent?.parent?.parent?.type.name === 'Pair'
-            const isNoList = innerNodeAt.parent?.type.name === 'Pair'
-            const isArrayList = innerNodeAt.parent?.type.name === 'Item' && innerNodeAt.parent?.parent?.type.name === 'FlowSequence' && innerNodeAt.parent?.parent?.parent?.type.name === 'Pair'
 
-            if (! (isDashList || isNoList || isArrayList)) {
-              return false
+            const findNodeFollowingParentsTypes = (node: SyntaxNode|null, ...expectedNodeTypes: string[]): SyntaxNode|null => {
+              node = node?.parent ?? null
+              if (! node || expectedNodeTypes[0] !== node.type.name) {
+                return null
+              }
+              if (expectedNodeTypes.length < 2) {
+                return node
+              }
+              return findNodeFollowingParentsTypes(node, ...expectedNodeTypes.slice(1))
             }
-            const possibleTagRootNode = isNoList ? innerNodeAt.parent : innerNodeAt?.parent?.parent?.parent
-            const possibleTagNameNode = possibleTagRootNode?.childAfter(0)?.childAfter(0)
+
+            const dashListTags = findNodeFollowingParentsTypes(innerNodeAt, 'Item', 'BlockSequence', 'Pair')
+            const arrayListTags = findNodeFollowingParentsTypes(innerNodeAt, 'Item', 'FlowSequence', 'Pair')
+            const noListTags = findNodeFollowingParentsTypes(innerNodeAt, 'Pair')
+            const possibleTagNameNode = (dashListTags ?? arrayListTags ?? noListTags)?.childAfter(0)?.childAfter(0)
             if (! possibleTagNameNode) {
               return false
             }
