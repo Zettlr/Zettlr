@@ -191,8 +191,8 @@ jobs:
       - name: Retrieve code signing certificate
         run: ./scripts/add-osx-cert.sh
         env:
-          MACOS_CERT: ${{ secrets.MACOS_CERT }}
-          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS }}
+          MACOS_CERT: ${{ secrets.MACOS_CERT_2030_01_14 }}
+          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS_2030_01_14 }}
       - name: Package
         run: yarn package:mac-x64
         env:
@@ -238,8 +238,8 @@ jobs:
       - name: Retrieve code signing certificate
         run: ./scripts/add-osx-cert.sh
         env:
-          MACOS_CERT: ${{ secrets.MACOS_CERT }}
-          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS }}
+          MACOS_CERT: ${{ secrets.MACOS_CERT_2030_01_14 }}
+          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS_2030_01_14 }}
       - name: Package
         run: yarn package:mac-arm
         env:

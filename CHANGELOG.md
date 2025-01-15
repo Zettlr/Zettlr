@@ -10,6 +10,7 @@
 - Fixed the boot order of providers to ensure certain actions are taken before
   providers access each others (primary case: the FSAL needs to be booted asap)
 - Promisify the cache clearing procedure
+- Switched Apple Code Signing Certificate from expiring to new one
 
 # 3.4.1
 
