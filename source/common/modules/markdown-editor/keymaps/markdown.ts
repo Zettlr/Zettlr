@@ -21,7 +21,7 @@ import {
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
 import { moveNextCell, movePrevCell } from '../table-editor/commands/columns'
-import { moveNextRow, movePrevRow } from '../table-editor/commands/rows'
+import { addRowAfter, addRowBefore, moveNextRow, movePrevRow } from '../table-editor/commands/rows'
 
 // Includes:
 // * completionKeymap
@@ -68,8 +68,13 @@ export function markdownKeymap (): Extension {
     { key: 'Esc', run: abortSnippet },
     { key: 'Space', run: handleReplacement },
 
+    // Overload the copy commands
+    { key: 'Alt-Shift-ArrowUp', run: addRowBefore },
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
+
+    { key: 'Alt-Shift-ArrowDown', run: addRowAfter },
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
+
     { key: 'Mod-t', run: applyTaskList },
     { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
     { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },

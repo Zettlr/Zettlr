@@ -209,15 +209,84 @@ export function swapPrevRow (target: EditorView): boolean {
   }
 }
 
-export function addRowAfter (_target: EditorView): boolean {
+export function addRowAfter (target: EditorView): boolean {
+  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
+    const line = target.state.doc.lineAt(range.head)
+    if (tableAST.tableType === 'pipe') {
+      // Did the user select the divider? The second check is necessary as the
+      // regex also matches empty lines
+      if (/^[\s|+:-]+$/.test(line.text) && line.text.includes('-')) {
+        return undefined
+      }
+
+      return {
+        from: line.number === target.state.doc.lines ? line.to : line.to + 1,
+        insert: line.text.replace(/[^\s\|]/g, ' ') + '\n'
+      }
+    } else {
+      // Grid table
+      // The user may have the cursor in a divider or a content row
+      if (/^[\s+=:-]+$/.test(line.text)) {
+        return undefined
+      }
+      const nextLine = target.state.doc.line(line.number + 1)
+      return {
+        from: nextLine.number === target.state.doc.lines ? nextLine.to : nextLine.to + 1,
+        insert: line.text.replace(/[^\s|+=]/g, ' ') + '\n' + nextLine.text + '\n'
+      }
+    }
+  })
+    .filter(x => x !== undefined)
+
   // What we should do here (and in addRowBefore) is stupidly simple: Just take
   // the current row (grid tables = this + next one), remove every character between
   // the pipes and put it after the row. Maybe even works without the forEveryTable thing
-  return false
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
-export function addRowBefore (_target: EditorView): boolean {
-  return false
+export function addRowBefore (target: EditorView): boolean {
+  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
+    const line = target.state.doc.lineAt(range.head)
+    if (tableAST.tableType === 'pipe') {
+      // Did the user select the divider? The second check is necessary as the
+      // regex also matches empty lines
+      if (/^[\s|+:-]+$/.test(line.text) && line.text.includes('-')) {
+        return undefined
+      }
+
+      return {
+        from: line.from,
+        insert: line.text.replace(/[^\s\|]/g, ' ') + '\n'
+      }
+    } else {
+      // Grid table
+      // The user may have the cursor in a divider or a content row
+      if (/^[\s+=:-]+$/.test(line.text)) {
+        return undefined
+      }
+      const nextLine = target.state.doc.line(line.number + 1)
+      return {
+        from: line.from,
+        insert: line.text.replace(/[^\s|+=]/g, ' ') + '\n' + nextLine.text + '\n'
+      }
+    }
+  })
+    .filter(x => x !== undefined)
+
+  // What we should do here (and in addRowBefore) is stupidly simple: Just take
+  // the current row (grid tables = this + next one), remove every character between
+  // the pipes and put it after the row. Maybe even works without the forEveryTable thing
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
 export function deleteRow (_target: EditorView): boolean {
