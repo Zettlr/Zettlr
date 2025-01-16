@@ -80,6 +80,7 @@ import { addNewFootnote } from './commands/footnotes'
 import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
 import openMarkdownLink from './util/open-markdown-link'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
+import { isAnyLiteralNodeContainingATag } from './util/yaml-tag-detection'
 
 import safeAssign from '@common/util/safe-assign'
 import { countAll } from '@common/util/counter'
@@ -343,41 +344,16 @@ export default class MarkdownEditor extends EventEmitter {
 
             const innerNodeAt = syntaxTree(view.state).resolveInner(pos, 0)
 
-            if (![ 'Literal', 'QuotedLiteral' ].includes(innerNodeAt.type.name)) {
-              return false
-            }
-
-            const findNodeFollowingParentsTypes = (node: SyntaxNode|null, ...expectedNodeTypes: string[]): SyntaxNode|null => {
-              node = node?.parent ?? null
-              if (! node || expectedNodeTypes[0] !== node.type.name) {
-                return null
+            if (isAnyLiteralNodeContainingATag(innerNodeAt, view.state)) {
+              let tag = view.state.sliceDoc(innerNodeAt.from, innerNodeAt.to)
+              if (innerNodeAt.type.name === 'QuotedLiteral') {
+                tag = tag.substring(1, tag.length-1)
               }
-              if (expectedNodeTypes.length < 2) {
-                return node
-              }
-              return findNodeFollowingParentsTypes(node, ...expectedNodeTypes.slice(1))
+              editorInstance.emit('zettelkasten-tag', `#${tag}`)
+              event.preventDefault()
+              return true
             }
 
-            const dashListTags = findNodeFollowingParentsTypes(innerNodeAt, 'Item', 'BlockSequence', 'Pair')
-            const arrayListTags = findNodeFollowingParentsTypes(innerNodeAt, 'Item', 'FlowSequence', 'Pair')
-            const noListTags = findNodeFollowingParentsTypes(innerNodeAt, 'Pair')
-            const possibleTagNameNode = (dashListTags ?? arrayListTags ?? noListTags)?.childAfter(0)?.childAfter(0)
-            if (! possibleTagNameNode) {
-              return false
-            }
-            const possibleTagKey = view.state.sliceDoc(possibleTagNameNode.from, possibleTagNameNode.to)
-
-            if (! [ 'tags', 'keywords' ].includes(possibleTagKey)) {
-              return false
-            }
-
-            let tag = view.state.sliceDoc(innerNodeAt.from, innerNodeAt.to)
-            if (innerNodeAt.type.name === 'QuotedLiteral') {
-              tag = tag.substring(1, tag.length-1)
-            }
-            editorInstance.emit('zettelkasten-tag', `#${tag}`)
-            event.preventDefault()
-            return true
           }
 
           // Lastly, the user may have clicked somewhere in a link. However,
