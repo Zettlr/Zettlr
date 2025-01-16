@@ -192,6 +192,10 @@ export function addColBefore (_target: EditorView): boolean {
   return false
 }
 
+export function deleteCol (_target: EditorView): boolean {
+  return false
+}
+
 export function clearCol (_target: EditorView): boolean {
   return false
 }
