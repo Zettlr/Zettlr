@@ -148,7 +148,7 @@ export const citations: AutocompletePlugin = {
     query = query.toLowerCase()
     const entries = sortCitationKeysByUsage(ctx.state)
     return entries.filter(entry => {
-      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query)
+      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query) === true
     })
   },
   fields: [citekeyUpdateField]

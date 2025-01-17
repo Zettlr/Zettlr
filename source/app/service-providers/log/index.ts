@@ -262,7 +262,7 @@ export default class LogProvider extends ProviderContract {
       details = ` | Native Error: ${name}; ${msg} Stack Trace: ${stack}`
     } else if (Array.isArray(message.details)) {
       details = ` | Details: ${message.details.join(', ')}`
-    } else if ([ 'number', 'string', 'boolean' ].includes(typeof message.details)) {
+    } else if (typeof message.details !== 'object') {
       details = ` | Details: ${String(message.details)}`
     } else if (message.details !== undefined && Object.keys(message.details).length > 0) {
       details = ` | Details: ${JSON.stringify(message.details)}`

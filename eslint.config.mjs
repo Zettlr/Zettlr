@@ -67,6 +67,7 @@ export default [
       '@stylistic/quotes': [ 'error', 'single', { avoidEscape: true } ],
       // Enforce proper spacing in objects ({ a: 1 } instead of {a:1})
       '@stylistic/object-curly-spacing': [ 'error', 'always' ],
+      '@stylistic/space-before-function-paren': [ 'error', 'always' ],
 
       /////////////////////// END STYLISTIC RULES //////////////////////////////
 
@@ -92,10 +93,9 @@ export default [
       '@typescript-eslint/no-explicit-any': 'off',
       // Avoid the use of `delete`
       '@typescript-eslint/no-dynamic-delete': 'error',
-      'no-unused-vars': 'off', // We need to turn off the vanilla option ...
-      // ... and turn on the TypeScript one. HOWEVER, we also need to use the
-      // appropriate option that allows us to declare variables as unused by
-      // prefixing it with an underscore.
+      // Disallow unused variables, except for when they are named "event",
+      // start with an underscore, are errors in try-catch blocks, or
+      // destructured arrays.
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -112,7 +112,6 @@ export default [
       ],
       // See https://typescript-eslint.io/rules/no-unused-vars/
 
-      'space-before-function-paren': [ 'error', 'always' ],
       // The following rule-changes to JSStandard Coding Style are tradition,
       // as they were included with the default configuration of Atom's ESLint
       // plugin, so we'll keep them here for the time being.
@@ -169,10 +168,8 @@ export default [
       // "no-null-assertion" rule, and it won't be an easy fix. We'll have to
       // think about it.
       '@typescript-eslint/non-nullable-type-assertion-style': 1,
-      // The following two rules conflict with each other in a few edge cases, so
-      // we'll keep both on "warning" severity for now.
-      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 1,
-      '@typescript-eslint/strict-boolean-expressions': 1,
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
+      '@typescript-eslint/strict-boolean-expressions': 'error',
       // The following rule basically disallows use of `any`
       '@typescript-eslint/no-unsafe-argument': 1
     }
