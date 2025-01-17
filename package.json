@@ -33,8 +33,10 @@
     "update:citation": "node scripts/update-citation.mjs",
     "test": "mocha",
     "test-gui": "cross-env NODE_ENV=develop node scripts/test-gui/index.mjs",
-    "lint": "eslint",
+    "lint:code": "eslint",
+    "lint:types": "vue-tsc --noEmit",
     "lint:po": "node scripts/lint-po.mjs",
+    "lint": "yarn lint:code && yarn lint:types",
     "shortcut:install": "node scripts/develop-shortcut.mjs install",
     "shortcut:uninstall": "node scripts/develop-shortcut.mjs uninstall"
   },
@@ -186,6 +188,7 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "5.5.x",
     "vue-loader": "^17.4.2",
+    "vue-tsc": "^2.2.0",
     "webpack": "^5.69.1"
   },
   "packageManager": "yarn@3.3.1"

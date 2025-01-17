@@ -48,6 +48,9 @@ export default function generateStats (filetree: AnyDescriptor[]): WorkspacesSta
   // First, we need ALL of our loaded paths as an array
   let pathsArray: Array<DirDescriptor|MDFileDescriptor|CodeFileDescriptor> = []
   for (const descriptor of filetree) {
+    if (descriptor.type === 'other') {
+      continue
+    }
     pathsArray = pathsArray.concat(objectToArray(descriptor, 'children'))
   }
 

@@ -11,6 +11,12 @@
   providers access each others (primary case: the FSAL needs to be booted asap)
 - Promisify the cache clearing procedure
 - Switched Apple Code Signing Certificate from expiring to new one
+- Improve the linting experience by also including a TypeScript lint on top of
+  `vue-tsc`; in addition to stylistic and code-issues that are handled by ESLint
+  this will capture serious TypeScript issues as what happened during the patch
+  from 3.3.1 to 3.4.0 (see for context #5526); the new linting experience will
+  run by default, the old linter has been renamed from `lint` to `lint:code`,
+  and the new linter can be called individually using `lint:types`
 
 # 3.4.1
 

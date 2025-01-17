@@ -204,12 +204,33 @@ This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) 
 > [!NOTE]
 > This command is intended for an automated workflow that runs from time to time on the repository to perform this action. **Do not commit updated files to the repository**. Instead, the updated files will be downloaded whenever you `git fetch`.
 
+#### `lint:code`
+
+Runs [ESLint](https://eslint.org/) over the codebase. Apps such as [Visual Studio Code](https://code.visualstudio.com/) will automatically run ESLint in the background on your open files. This command runs it across the entire code base.
+
+> [!TIP]
+> Usually, you will want to run the `lint` command instead.
+
+#### `lint:types`
+
+Runs TypeScript's type checker via [`vue-tsc`](https://www.npmjs.com/package/vue-tsc) over the codebase. Apps such as [Visual Studio Code](https://code.visualstudio.com/) will automatically check types for your open files in the background. This command checks the entire code base.
+
+> [!TIP]
+> Usually, you will want to run the `lint` command instead.
+
 #### `lint`
 
-Runs [ESLint](https://eslint.org/). Apps such as [Visual Studio Code](https://code.visualstudio.com/) will automatically run ESLint in the background on your open files. This command runs them across the entire code base. Make sure to run this command prior to submitting a Pull Request.
+Runs both `lint:code` and `lint:types` in one go. This ensures that any code you add conforms to stylistic rules and can run without obvious errors. Make sure to run this command prior to submitting a Pull Request.
 
 > [!NOTE]
 > This command will run automatically on each Pull Request to check your code for inconsistencies.
+
+#### `lint:po`
+
+This command ensures all translation files in the directory `static/lang` can be parsed by the app. It does so by parsing them with the `gettext` parser that ships with Zettlr. This command does not require the `gettext` system itself to be installed on the machine, as it only uses the Node module.
+
+> [!NOTE]
+> This command will run automatically on pull requests that touch `*.po`-files.
 
 #### `shortcut:install`
 
