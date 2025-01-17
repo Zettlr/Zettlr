@@ -93,10 +93,9 @@ export default [
       '@typescript-eslint/no-explicit-any': 'off',
       // Avoid the use of `delete`
       '@typescript-eslint/no-dynamic-delete': 'error',
-      'no-unused-vars': 'off', // We need to turn off the vanilla option ...
-      // ... and turn on the TypeScript one. HOWEVER, we also need to use the
-      // appropriate option that allows us to declare variables as unused by
-      // prefixing it with an underscore.
+      // Disallow unused variables, except for when they are named "event",
+      // start with an underscore, are errors in try-catch blocks, or
+      // destructured arrays.
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
