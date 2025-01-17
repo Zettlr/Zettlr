@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { app, type MenuItemConstructorOptions, shell, dialog } from 'electron'
+import { app, type MenuItemConstructorOptions, shell, dialog, type BrowserWindow } from 'electron'
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import type RecentDocumentsProvider from '@providers/recent-docs'
@@ -128,7 +128,7 @@ export default function getMenu (
           id: 'menu.new_dir',
           label: trans('New directory…'),
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'new-dir')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'new-dir')
           }
         },
         {
@@ -161,7 +161,7 @@ export default function getMenu (
           label: trans('Save'),
           accelerator: 'Ctrl+S',
           click: function (_menuItem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'save-file')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'save-file')
           }
         },
         {
@@ -205,7 +205,7 @@ export default function getMenu (
           label: trans('Export…'),
           accelerator: 'Ctrl+E',
           click: function (_menuItem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'export')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'export')
           }
         },
         {
@@ -213,7 +213,7 @@ export default function getMenu (
           label: trans('Print…'),
           accelerator: 'Ctrl+P',
           click: function (_menuItem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'print')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'print')
           }
         },
         {
@@ -280,7 +280,7 @@ export default function getMenu (
           label: trans('Rename file'),
           accelerator: 'Ctrl+R',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'rename-file')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'rename-file')
           }
         },
         {
@@ -290,7 +290,7 @@ export default function getMenu (
           id: 'menu.delete_file',
           label: trans('Delete file'),
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'delete-file')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'delete-file')
           }
         },
         {
@@ -341,7 +341,7 @@ export default function getMenu (
           label: trans('Copy as HTML'),
           accelerator: 'Ctrl+Alt+C',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'copy-as-html')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'copy-as-html')
           }
         },
         {
@@ -355,7 +355,7 @@ export default function getMenu (
           label: trans('Paste without style'),
           accelerator: 'Ctrl+Shift+V',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'paste-as-plain')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'paste-as-plain')
           }
         },
         {
@@ -372,7 +372,7 @@ export default function getMenu (
           label: trans('Find in file'),
           accelerator: 'Ctrl+F',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'search')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'search')
           }
         },
         {
@@ -380,7 +380,7 @@ export default function getMenu (
           label: trans('Find in directory'),
           accelerator: 'Ctrl+Shift+F',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'global-search')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'global-search')
           }
         },
         {
@@ -388,7 +388,7 @@ export default function getMenu (
           label: trans('Filter files'),
           accelerator: 'Ctrl+Shift+T',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'filter-files')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'filter-files')
           }
         },
         {
@@ -399,7 +399,7 @@ export default function getMenu (
           label: trans('Generate new ID'),
           accelerator: 'Ctrl+L',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'insert-id')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'insert-id')
           }
         },
         {
@@ -407,7 +407,7 @@ export default function getMenu (
           label: trans('Copy ID'),
           accelerator: 'Ctrl+Shift+L',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'copy-current-id')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'copy-current-id')
           }
         }
       ]
@@ -442,7 +442,7 @@ export default function getMenu (
           label: trans('Distraction free mode'),
           accelerator: 'Ctrl+J',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'toggle-distraction-free')
           }
         },
         {
@@ -450,7 +450,7 @@ export default function getMenu (
           label: trans('Typewriter Mode'),
           accelerator: 'Ctrl+Alt+T',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'toggle-typewriter-mode')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'toggle-typewriter-mode')
           }
         },
         {
@@ -461,7 +461,7 @@ export default function getMenu (
           label: trans('Toggle file manager'),
           accelerator: 'Ctrl+!',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'toggle-file-manager')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'toggle-file-manager')
           }
         },
         {
@@ -469,7 +469,7 @@ export default function getMenu (
           label: trans('Toggle Sidebar'),
           accelerator: 'Ctrl+Shift+0',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'toggle-sidebar')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'toggle-sidebar')
           }
         },
         {
@@ -519,7 +519,7 @@ export default function getMenu (
           label: trans('Reload'),
           accelerator: 'F5',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.reload()
+            (focusedWindow as BrowserWindow|undefined)?.reload()
           }
         },
         {
@@ -527,7 +527,7 @@ export default function getMenu (
           label: trans('Toggle developer tools'),
           accelerator: 'Ctrl+Alt+I',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.toggleDevTools()
+            (focusedWindow as BrowserWindow|undefined)?.webContents.toggleDevTools()
           }
         },
         {
@@ -566,7 +566,7 @@ export default function getMenu (
           label: trans('Close Tab'),
           accelerator: 'Ctrl+W',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'close-window')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'close-window')
           }
         },
         {
@@ -574,7 +574,7 @@ export default function getMenu (
           label: trans('Previous Tab'),
           accelerator: 'Ctrl+Shift+Tab',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'previous-tab')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'previous-tab')
           }
         },
         {
@@ -582,7 +582,7 @@ export default function getMenu (
           label: trans('Next Tab'),
           accelerator: 'Ctrl+Tab',
           click: function (_menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'next-tab')
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'next-tab')
           }
         },
         {
