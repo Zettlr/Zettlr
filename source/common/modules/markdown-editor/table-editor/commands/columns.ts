@@ -106,7 +106,7 @@ export function swapNextCol (target: EditorView): boolean {
 
     const idx = cellIndex[0]
 
-    return cellOffsets.map(row => {
+    return cellOffsets.flatMap(row => {
       return [
         // Cell 1 -> 0
         {
@@ -121,7 +121,7 @@ export function swapNextCol (target: EditorView): boolean {
           insert: target.state.sliceDoc(row[idx][0], row[idx][1])
         }
       ]
-    }).flat()
+    })
   })
 
   if (changes.length > 0) {
@@ -158,7 +158,7 @@ export function swapPrevCol (target: EditorView): boolean {
 
     const idx = cellIndex[0]
 
-    return cellOffsets.map(row => {
+    return cellOffsets.flatMap(row => {
       return [
         // Cell 0 -> 1
         {
@@ -173,7 +173,7 @@ export function swapPrevCol (target: EditorView): boolean {
           insert: target.state.sliceDoc(row[idx - 1][0], row[idx - 1][1])
         }
       ]
-    }).flat()
+    })
   })
 
   if (changes.length > 0) {
