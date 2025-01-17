@@ -184,12 +184,112 @@ export function swapPrevCol (target: EditorView): boolean {
   }
 }
 
-export function addColAfter (_target: EditorView): boolean {
-  return false
+export function addColAfter (target: EditorView): boolean {
+  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
+    // Only support this in pipe tables. TODO
+    if (tableAST.tableType !== 'pipe') {
+      return undefined
+    }
+
+    // First, find which column the cursor is in
+    const cellIndex = cellOffsets.map(row => {
+      return row.findIndex(cell => cell[0] <= range.head && cell[1] >= range.head)
+    })
+      .filter(sel => sel > -1)
+
+    // Now cellIndex should contain exactly one index, and there should be a
+    // cell afterwards.
+    if (cellIndex.length !== 1) {
+      return undefined
+    }
+
+    const idx = cellIndex[0]
+
+    // Now, for each row, calculate a change that adds ' | ' after the cell's to
+    // position. We also need to add '-|-' to the delimiter
+
+    // NOTE: Remove `null` since that check will be performed during AST parsing
+    const delimNode = tableNode.getChild('TableDelimiter')!
+    const delimLine = target.state.doc.lineAt(delimNode.from)
+    const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
+
+    // Hacky, but working cumsum abomination to get the index of the heading
+    // cell we need to add content after (akin to cell.to below)
+    const delimIdx = delimLine.from + delimLine.text // Take the delim text...
+      .split(delimChar) // ... split into its delimiting cells ...
+      .map(p => p.length + 1) // ... retain only the length (+ delimChar)
+      .map((p, i, a) => (i > 0 ? a[i-1] : 0) + p) // Calculate the cumsum
+      [idx + (delimLine.text.startsWith('|') ? 1 : 0)] // And take the correct index
+
+    return [
+      { from: delimIdx, insert: `-${delimChar}-` },
+      ...cellOffsets.flatMap(row => {
+        return { from: row[idx][1], insert: ' | ' }
+      }).sort((a, b) => a.from - b.from)
+    ]
+  }).flat() // Returns a 2d array above
+
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
-export function addColBefore (_target: EditorView): boolean {
-  return false
+export function addColBefore (target: EditorView): boolean {
+  // Basically the same as addColAfter, with minor changes
+  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
+    // Only support this in pipe tables. TODO
+    if (tableAST.tableType !== 'pipe') {
+      return undefined
+    }
+
+    // First, find which column the cursor is in
+    const cellIndex = cellOffsets.map(row => {
+      return row.findIndex(cell => cell[0] <= range.head && cell[1] >= range.head)
+    })
+      .filter(sel => sel > -1)
+
+    // Now cellIndex should contain exactly one index, and there should be a
+    // cell afterwards.
+    if (cellIndex.length !== 1) {
+      return undefined
+    }
+
+    const idx = cellIndex[0]
+
+    // Now, for each row, calculate a change that adds ' | ' before the cell's
+    // from position. We also need to add '-|-' to the delimiter
+
+    // NOTE: Remove `null` since that check will be performed during AST parsing
+    const delimNode = tableNode.getChild('TableDelimiter')!
+    const delimLine = target.state.doc.lineAt(delimNode.from)
+    const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
+
+    // Hacky, but working cumsum abomination to get the index of the heading
+    // cell we need to add content after (akin to cell.to below)
+    const delimIdx = delimLine.from + delimLine.text // Take the delim text...
+      .split(delimChar) // ... split into its delimiting cells ...
+      .map(p => p.length + 1) // ... retain only the length (+ delimChar)
+      .map((p, i, a) => (i > 0 ? a[i-1] : 0) + p) // Calculate the cumsum
+      [idx + (delimLine.text.startsWith('|') ? 0 : -1)] // And take the correct index
+    // Splitting a line starting with a pipe produces an empty index below
+
+    return [
+      { from: delimIdx, insert: `-${delimChar}-` },
+      ...cellOffsets.flatMap(row => {
+        return { from: row[idx][0], insert: ' | ' }
+      }).sort((a, b) => a.from - b.from)
+    ]
+  }).flat() // Returns a 2d array above
+
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
 export function deleteCol (_target: EditorView): boolean {

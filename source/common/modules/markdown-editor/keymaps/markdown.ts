@@ -20,7 +20,7 @@ import {
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
-import { moveNextCell, movePrevCell } from '../table-editor/commands/columns'
+import { addColAfter, addColBefore, moveNextCell, movePrevCell } from '../table-editor/commands/columns'
 import { addRowAfter, addRowBefore, moveNextRow, movePrevRow } from '../table-editor/commands/rows'
 
 // Includes:
@@ -74,6 +74,9 @@ export function markdownKeymap (): Extension {
 
     { key: 'Alt-Shift-ArrowDown', run: addRowAfter },
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
+
+    { key: 'Alt-Shift-ArrowRight', run: addColAfter },
+    { key: 'Alt-Shift-ArrowLeft', run: addColBefore },
 
     { key: 'Mod-t', run: applyTaskList },
     { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
