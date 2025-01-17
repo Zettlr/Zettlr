@@ -186,7 +186,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "5.5.x",
+    "typescript": "5.7.x",
     "vue-loader": "^17.4.2",
     "vue-tsc": "^2.2.0",
     "webpack": "^5.69.1"
