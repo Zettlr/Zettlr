@@ -314,13 +314,22 @@ export interface YAMLFrontmatter extends MDNode {
 export interface TableCell extends MDNode {
   type: 'TableCell'
   /**
-   * The text content of the cell TODO: Arbitrary children!
+   * The cell's content
    */
   children: ASTNode[]
   /**
    * Contains the raw cell contents as a string
    */
   textContent: string
+  /**
+   * This property contains the "actual" from and to positions of the cell (not
+   * just the actual content, but including the whitespace) just up to the cell
+   * delimiter.
+   */
+  padding: {
+    from: number
+    to: number
+  }
 }
 
 /**

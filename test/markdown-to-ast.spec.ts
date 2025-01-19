@@ -16,8 +16,9 @@ import { deepStrictEqual } from "assert"
 import { markdownToAST } from "source/common/modules/markdown-utils"
 import { ASTNode } from "source/common/modules/markdown-utils/markdown-ast"
 
-const TESTERS: Array<{ input: string, output: ASTNode }> = [
+const TESTERS: Array<{ description: string, input: string, output: ASTNode }> = [
   {
+    description: 'Parse pipe table correctly',
     input: `|  | Not empty |
 |--|--|
 |No padding|  More padding  |`,
@@ -33,10 +34,12 @@ const TESTERS: Array<{ input: string, output: ASTNode }> = [
               cells: [
                 { // Empty cell
                   type: 'TableCell', name: 'th', from: 2, to: 2, whitespaceBefore: '', textContent: '',
+                  padding: { from: 1, to: 3 },
                   children: []
                 },
                 { // Regular (non-empty) cell
                   type: 'TableCell', name: 'th', from: 5, to: 14, whitespaceBefore: '', textContent: 'Not empty',
+                  padding: { from: 4, to: 15 },
                   children: [{ type: 'Text', name: 'text', from: 5, to: 14, value: 'Not empty', whitespaceBefore: ' ' }]
                 }
               ]
@@ -46,10 +49,12 @@ const TESTERS: Array<{ input: string, output: ASTNode }> = [
               cells: [
                 { // No padding
                   type: 'TableCell', name: 'td', from: 26, to: 36, whitespaceBefore: '', textContent: 'No padding',
+                  padding: { from: 26, to: 36 },
                   children: [{ type: 'Text', name: 'text', from: 26, to: 36, value: 'No padding', whitespaceBefore: '' }]
                 },
                 { // More padding
                   type: 'TableCell', name: 'td', from: 39, to: 51, whitespaceBefore: '', textContent: 'More padding',
+                  padding: { from: 37, to: 53 },
                   children: [{ type: 'Text', name: 'text', from: 39, to: 51, value: 'More padding', whitespaceBefore: '  ' }]
                 }
               ]
@@ -60,6 +65,50 @@ const TESTERS: Array<{ input: string, output: ASTNode }> = [
     }
   },
   {
+    description: 'Parse a minimal pipe table correctly',
+    input: `A|B
+-|-
+C|D`,
+    output: {
+      type: 'Generic', name: 'Document', from: 0, to: 11, whitespaceBefore: '',
+      children: [
+        {
+          type: 'Table', name: 'Table', tableType: 'pipe', from: 0, to: 11, whitespaceBefore: '',
+          alignment: ['left', 'left'],
+          rows: [
+            {
+              type: 'TableRow', name: 'TableHeader', isHeaderOrFooter: true, from: 0, to: 3, whitespaceBefore: '',
+              cells: [
+                {
+                  type: 'TableCell', name: 'th', from: 0, to: 1, padding: { from: 0, to: 1 }, whitespaceBefore: '', textContent: 'A',
+                  children: [{ type: 'Text', name: 'text', from: 0, to: 1, value: 'A', whitespaceBefore: '' }]
+                },
+                {
+                  type: 'TableCell', name: 'th', from: 2, to: 3, padding: { from: 2, to: 3 }, whitespaceBefore: '', textContent: 'B',
+                  children: [{ type: 'Text', name: 'text', from: 2, to: 3, value: 'B', whitespaceBefore: '' }]
+                }
+              ]
+            },
+            {
+              type: 'TableRow', name: 'TableRow', isHeaderOrFooter: false, from: 8, to: 11, whitespaceBefore: '',
+              cells: [
+                {
+                  type: 'TableCell', name: 'td', from: 8, to: 9, padding: { from: 8, to: 9 }, whitespaceBefore: '', textContent: 'C',
+                  children: [{ type: 'Text', name: 'text', from: 8, to: 9, value: 'C', whitespaceBefore: '' }]
+                },
+                {
+                  type: 'TableCell', name: 'td', from: 10, to: 11, padding: { from: 10, to: 11 }, whitespaceBefore: '', textContent: 'D',
+                  children: [{ type: 'Text', name: 'text', from: 10, to: 11, value: 'D', whitespaceBefore: '' }]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    description: 'Parse a regular Markdown document correctly',
     input: `# Image file
 
 This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
@@ -128,11 +177,7 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
 
 describe('MarkdownAST#markdownToAST()', function () {
   for (const test of TESTERS) {
-    // TODO: This test currently fails. This is not yet a problem, but we have
-    // to decide what to do. Specifically, currently the AST parser spits out
-    // TableDelimiters as their own nodes. Do we want that or not?
-    // console.log(util.inspect(markdownToAST(test.input), { colors: true, depth: null }))
-    it('should parse the Markdown properly', () => {
+    it(`should: ${test.description}`, () => {
       deepStrictEqual(test.output, markdownToAST(test.input))
     })
   }

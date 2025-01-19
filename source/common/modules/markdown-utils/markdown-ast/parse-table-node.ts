@@ -43,6 +43,7 @@ import { parseChildren } from './parse-children'
  *                                      returned instead.
  */
 export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextNode {
+  // logLezerTree(node, { markdown, logNodes: true })
   // A few NOTEs on how the Lezer parser handles Markdown tables.
   // 1. It only supports GFM tables, i.e., pipe tables. Marijn has implemented
   //    this spec: https://github.github.com/gfm/#tables-extension-
@@ -171,6 +172,11 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
         to,
         whitespaceBefore: '',
         children: [],
+        padding: {
+          // Retain the cell's padding (the entire cell content from delimiter to delimiter)
+          from: row.from,
+          to: child.from
+        },
         textContent: ''
       })
     }
@@ -195,6 +201,11 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
           to,
           whitespaceBefore: '',
           children: [],
+          padding: {
+            // Retain the cell's padding (the entire cell content from delimiter to delimiter)
+            from: prev.to,
+            to: child.from
+          },
           textContent: ''
         }
         tableRow.cells.push(cellNode)
@@ -208,6 +219,11 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
           to: child.to,
           whitespaceBefore: '',
           children: [],
+          padding: {
+            // Retain the cell's padding (the entire cell content from delimiter to delimiter)
+            from: child.prevSibling !== null ? child.prevSibling.to : row.from,
+            to: child.nextSibling !== null ? child.nextSibling.from : row.to
+          },
           textContent: markdown.slice(child.from, child.to)
         }
         parseChildren(cellNode, child, markdown)
