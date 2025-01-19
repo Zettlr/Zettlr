@@ -352,9 +352,9 @@ export interface Table extends MDNode {
    */
   alignment: Array<'left'|'center'|'right'>
   /**
-   * This property can optionally contain the table type in the source.
+   * This property contains the table type in the source.
    */
-  tableType?: 'grid'|'pipe'
+  tableType: 'grid'|'pipe'
 }
 
 /**
