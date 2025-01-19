@@ -16,7 +16,7 @@
 
 import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
-import { mapSelectionsWithTables } from './util'
+import { findColumnIndexByRange, mapSelectionsWithTables } from './util'
 
 /**
  * Attempts to move all cursors/selections to the next cell. NOTE: This command
@@ -32,13 +32,12 @@ export function moveNextCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const cellIndex = offsets.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
-
-    if (cellIndex === -1 || cellIndex === offsets.length - 1) {
+    const idx = findColumnIndexByRange(range, cellOffsets)
+    if (idx === undefined || idx === offsets.length - 1) {
       return undefined
-    } else {
-      return EditorSelection.cursor(offsets[cellIndex + 1][0])
     }
+
+    return EditorSelection.cursor(offsets[idx + 1][0])
   })
 
   if (newSelections.length > 0) {
@@ -63,13 +62,12 @@ export function movePrevCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const cellIndex = offsets.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
-
-    if (cellIndex <= 0) {
+    const idx = findColumnIndexByRange(range, cellOffsets)
+    if (idx === undefined) {
       return undefined
-    } else {
-      return EditorSelection.cursor(offsets[cellIndex - 1][1])
     }
+    
+    return idx === 0 ? undefined : EditorSelection.cursor(offsets[idx - 1][1])
   })
 
   if (newSelections.length > 0) {
@@ -93,18 +91,10 @@ export function swapNextCol (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const cellIndex = cellOffsets.map(row => {
-      return row.findIndex(cell => cell[0] <= range.anchor && cell[1] >= range.anchor)
-    })
-      .filter(sel => sel > -1)
-
-    // Now cellIndex should contain exactly one index, and there should be a
-    // cell afterwards.
-    if (cellIndex.length !== 1 || cellIndex[0] >= cellOffsets[0].length) {
+    const idx = findColumnIndexByRange(range, cellOffsets)
+    if (idx === undefined) {
       return undefined
     }
-
-    const idx = cellIndex[0]
 
     return cellOffsets.flatMap(row => {
       return [
@@ -145,18 +135,10 @@ export function swapPrevCol (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const cellIndex = cellOffsets.map(row => {
-      return row.findIndex(cell => cell[0] <= range.anchor && cell[1] >= range.anchor)
-    })
-      .filter(sel => sel > -1)
-
-    // Now cellIndex should contain exactly one index, and there should be a
-    // cell afterwards.
-    if (cellIndex.length !== 1 || cellIndex[0] < 1) {
+    const idx = findColumnIndexByRange(range, cellOffsets)
+    if (idx === undefined) {
       return undefined
     }
-
-    const idx = cellIndex[0]
 
     return cellOffsets.flatMap(row => {
       return [
@@ -191,19 +173,10 @@ export function addColAfter (target: EditorView): boolean {
       return undefined
     }
 
-    // First, find which column the cursor is in
-    const cellIndex = cellOffsets.map(row => {
-      return row.findIndex(cell => cell[0] <= range.head && cell[1] >= range.head)
-    })
-      .filter(sel => sel > -1)
-
-    // Now cellIndex should contain exactly one index, and there should be a
-    // cell afterwards.
-    if (cellIndex.length !== 1) {
+    const idx = findColumnIndexByRange(range, cellOffsets)
+    if (idx === undefined) {
       return undefined
     }
-
-    const idx = cellIndex[0]
 
     // Now, for each row, calculate a change that adds ' | ' after the cell's to
     // position. We also need to add '-|-' to the delimiter
@@ -245,19 +218,10 @@ export function addColBefore (target: EditorView): boolean {
       return undefined
     }
 
-    // First, find which column the cursor is in
-    const cellIndex = cellOffsets.map(row => {
-      return row.findIndex(cell => cell[0] <= range.head && cell[1] >= range.head)
-    })
-      .filter(sel => sel > -1)
-
-    // Now cellIndex should contain exactly one index, and there should be a
-    // cell afterwards.
-    if (cellIndex.length !== 1) {
+    const idx = findColumnIndexByRange(range, cellOffsets)
+    if (idx === undefined) {
       return undefined
     }
-
-    const idx = cellIndex[0]
 
     // Now, for each row, calculate a change that adds ' | ' before the cell's
     // from position. We also need to add '-|-' to the delimiter

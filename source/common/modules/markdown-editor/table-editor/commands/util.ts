@@ -41,6 +41,35 @@ export function getTableCellOffsets (tableAST: Table): [number, number][][] {
 }
 
 /**
+ * Takes a SelectionRange and a list of cell offsets (produced, e.g., by
+ * `getTableCellOffsets`), and returns the column index that corresponds to the
+ * selection's head or anchor.
+ *
+ * @param   {SelectionRange}   range        The range
+ * @param   {number[][]}       cellOffsets  The matrix of cell offsets
+ * @param   {'head'|'anchor'}  where        The selection part that matters
+ *
+ * @return  {number|undefined}              The cell index (or undefined)
+ */
+export function findColumnIndexByRange (
+  range: SelectionRange,
+  cellOffsets: [number, number][][],
+  where: 'head'|'anchor' = 'head'
+): number|undefined {
+  const cellIndex = cellOffsets.map(row => {
+    return row.findIndex(cell => cell[0] <= range[where] && cell[1] >= range[where])
+  })
+    .filter(sel => sel > -1)
+
+  // Now cellIndex should contain exactly one index
+  if (cellIndex.length !== 1) {
+    return undefined
+  }
+
+  return cellIndex[0]
+}
+
+/**
  * Helper function that makes implementing the table commands simpler due to
  * centrally collecting generally required logic, collecting the required info
  * before handing off to the user-provided callback that will perform the actual
