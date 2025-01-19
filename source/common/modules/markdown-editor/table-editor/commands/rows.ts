@@ -205,6 +205,13 @@ export function swapPrevRow (target: EditorView): boolean {
   }
 }
 
+/**
+ * Adds a row to a table after the one the cursor is in.
+ *
+ * @param   {EditorView}  target  The target EditorView
+ *
+ * @return  {boolean}             Whether the command has changed anything
+ */
 export function addRowAfter (target: EditorView): boolean {
   const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
     const line = target.state.doc.lineAt(range.head)
@@ -244,6 +251,13 @@ export function addRowAfter (target: EditorView): boolean {
   }
 }
 
+/**
+ * Adds a table row before the one with the cursor.
+ *
+ * @param   {EditorView}  target  The target EditorView
+ *
+ * @return  {boolean}             Whether the command has changed anything.
+ */
 export function addRowBefore (target: EditorView): boolean {
   const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
     const line = target.state.doc.lineAt(range.head)
@@ -283,11 +297,81 @@ export function addRowBefore (target: EditorView): boolean {
   }
 }
 
-export function deleteRow (_target: EditorView): boolean {
-  return false
+/**
+ * Deletes an entire row from a table.
+ *
+ * @param   {EditorView}  target  The target EditorView
+ *
+ * @return  {boolean}             Whether the command has changed anything.
+ */
+export function deleteRow (target: EditorView): boolean {
+  // Deleting a row is really boring: Simply replace the current line with nothing
+  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
+    const line = target.state.doc.lineAt(range.head)
+    if (tableAST.tableType === 'pipe') {
+      // Did the user select the divider? The second check is necessary as the
+      // regex also matches empty lines
+      if (/^[\s|+:-]+$/.test(line.text) && line.text.includes('-')) {
+        return undefined
+      }
+
+      return {
+        from: line.from,
+        to: line.to === target.state.doc.length ? line.to : line.to + 1,
+        insert: ''
+      }
+    } else {
+      // Grid table
+      // The user may have the cursor in a divider or a content row
+      if (/^[\s+=:-]+$/.test(line.text)) {
+        return undefined
+      }
+      const nextLine = target.state.doc.line(line.number + 1)
+      return {
+        from: line.from,
+        to: nextLine.to === target.state.doc.length ? nextLine.to : nextLine.to + 1,
+        insert: ''
+      }
+    }
+  })
+
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
-export function clearRow (_target: EditorView): boolean {
-  return false
+/**
+ * Clears an entire table row out.
+ *
+ * @param   {EditorView}  target  The target EditorView
+ *
+ * @return  {boolean}             Whether the command has changed anything
+ */
+export function clearRow (target: EditorView): boolean {
+  // Clearing a row is even simpler, by simply replacing a row cell's contents with whitespace
+  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, offsets) => {
+    const row = offsets.find(row => {
+      const cells = row.flat().sort((a, b) => a - b)
+      return range.head >= cells[0] && range.head <= cells[cells.length - 1]
+    })
+
+    if (row === undefined) {
+      return undefined
+    }
+
+    return row.map(([ from, to ]) => {
+      return { from, to, insert: ' '.repeat(to - from) }
+    })
+  })
+
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
