@@ -104,7 +104,6 @@
     "remark-lint-no-consecutive-blank-lines": "^5.0.0",
     "remark-lint-no-duplicate-definitions": "^4.0.0",
     "remark-lint-no-heading-content-indent": "^5.0.0",
-    "remark-lint-no-inline-padding": "^4.1.2",
     "remark-lint-no-shortcut-reference-image": "^4.0.0",
     "remark-lint-no-shortcut-reference-link": "^4.0.0",
     "remark-lint-no-unused-definitions": "^4.0.0",
