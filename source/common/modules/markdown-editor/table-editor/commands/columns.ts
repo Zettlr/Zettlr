@@ -16,7 +16,7 @@
 
 import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
-import { findColumnIndexByRange, mapSelectionsWithTables } from './util'
+import { findColumnIndexByRange, getPipeDelimiterLineCellOffsets, mapSelectionsWithTables } from './util'
 
 /**
  * Attempts to move all cursors/selections to the next cell. NOTE: This command
@@ -32,7 +32,7 @@ export function moveNextCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const idx = findColumnIndexByRange(range, cellOffsets)
+    const idx = findColumnIndexByRange(range, cellOffsets, 'anchor')
     if (idx === undefined || idx === offsets.length - 1) {
       return undefined
     }
@@ -62,7 +62,7 @@ export function movePrevCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const idx = findColumnIndexByRange(range, cellOffsets)
+    const idx = findColumnIndexByRange(range, cellOffsets, 'anchor')
     if (idx === undefined) {
       return undefined
     }
@@ -166,6 +166,14 @@ export function swapPrevCol (target: EditorView): boolean {
   }
 }
 
+/**
+ * For each selection in the document that is within a table, add a column after
+ * the column that contains the selection.
+ *
+ * @param   {EditorView}  target  The EditorView to apply the command to.
+ *
+ * @return  {boolean}             Whether or not changes have been made.
+ */
 export function addColAfter (target: EditorView): boolean {
   const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
     // Only support this in pipe tables. TODO
@@ -185,22 +193,15 @@ export function addColAfter (target: EditorView): boolean {
     const delimNode = tableNode.getChild('TableDelimiter')!
     const delimLine = target.state.doc.lineAt(delimNode.from)
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
-
-    // Hacky, but working cumsum abomination to get the index of the heading
-    // cell we need to add content after (akin to cell.to below)
-    const delimIdx = delimLine.from + delimLine.text // Take the delim text...
-      .split(delimChar) // ... split into its delimiting cells ...
-      .map(p => p.length + 1) // ... retain only the length (+ delimChar)
-      .map((p, i, a) => (i > 0 ? a[i-1] : 0) + p) // Calculate the cumsum
-      [idx + (delimLine.text.startsWith('|') ? 1 : 0)] // And take the correct index
+    const delimOffsets = getPipeDelimiterLineCellOffsets(delimLine.text, delimChar)
 
     return [
-      { from: delimIdx, insert: `-${delimChar}-` },
+      { from: delimLine.from + delimOffsets[idx][1], insert: `-${delimChar}-` },
       ...cellOffsets.flatMap(row => {
         return { from: row[idx][1], insert: ' | ' }
       }).sort((a, b) => a.from - b.from)
     ]
-  }).flat() // Returns a 2d array above
+  }, 'outer').flat() // NOTE: Outer margins // Returns a 2d array above
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -210,6 +211,14 @@ export function addColAfter (target: EditorView): boolean {
   }
 }
 
+/**
+ * For each selection in the document that is within a table, add a column
+ * before the column that contains the selection.
+ *
+ * @param   {EditorView}  target  The EditorView to apply the command to.
+ *
+ * @return  {boolean}             Whether or not changes have been made.
+ */
 export function addColBefore (target: EditorView): boolean {
   // Basically the same as addColAfter, with minor changes
   const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
@@ -230,23 +239,15 @@ export function addColBefore (target: EditorView): boolean {
     const delimNode = tableNode.getChild('TableDelimiter')!
     const delimLine = target.state.doc.lineAt(delimNode.from)
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
-
-    // Hacky, but working cumsum abomination to get the index of the heading
-    // cell we need to add content after (akin to cell.to below)
-    const delimIdx = delimLine.from + delimLine.text // Take the delim text...
-      .split(delimChar) // ... split into its delimiting cells ...
-      .map(p => p.length + 1) // ... retain only the length (+ delimChar)
-      .map((p, i, a) => (i > 0 ? a[i-1] : 0) + p) // Calculate the cumsum
-      [idx + (delimLine.text.startsWith('|') ? 0 : -1)] // And take the correct index
-    // Splitting a line starting with a pipe produces an empty index below
+    const delimOffsets = getPipeDelimiterLineCellOffsets(delimLine.text, delimChar)
 
     return [
-      { from: delimIdx, insert: `-${delimChar}-` },
+      { from: delimLine.from + delimOffsets[idx][0], insert: `-${delimChar}-` },
       ...cellOffsets.flatMap(row => {
         return { from: row[idx][0], insert: ' | ' }
       }).sort((a, b) => a.from - b.from)
     ]
-  }).flat() // Returns a 2d array above
+  }, 'outer').flat() // NOTE: Outer margins // Returns a 2d array above
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -256,10 +257,92 @@ export function addColBefore (target: EditorView): boolean {
   }
 }
 
-export function deleteCol (_target: EditorView): boolean {
-  return false
+/**
+ * For each selection in the document that is within a table, delete the column
+ * that contains the selection.
+ *
+ * @param   {EditorView}  target  The EditorView to apply the command to.
+ *
+ * @return  {boolean}             Whether or not changes have been made.
+ */
+export function deleteCol (target: EditorView): boolean {
+  // To delete the current column, we basically just have to replace its inner
+  // cell content (incl. padding) plus the following delimiter (if applicable)
+  const changes = mapSelectionsWithTables<ChangeSpec[]>(target, (range, tableNode, tableAST, cellOffsets) => {
+    // Only support this in pipe tables. TODO
+    if (tableAST.tableType !== 'pipe') {
+      return undefined
+    }
+
+    const idx = findColumnIndexByRange(range, cellOffsets)
+    if (idx === undefined) {
+      return undefined
+    }
+
+    // NOTE: Remove `null` since that check will be performed during AST parsing
+    const delimNode = tableNode.getChild('TableDelimiter')!
+    const delimLine = target.state.doc.lineAt(delimNode.from)
+    const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
+    const delimOffsets = getPipeDelimiterLineCellOffsets(delimLine.text, delimChar)
+    const [ delimFrom, delimTo ] = delimOffsets[idx]
+
+    return [
+      // Handle the delimiter line
+      {
+        from: delimLine.from + delimFrom,
+        to: delimLine.from + (delimTo < delimLine.text.length ? delimTo + 1 : delimTo),
+        insert: ''
+      },
+      ...cellOffsets.flatMap(row => {
+        const [ from, to ] = row[idx]
+        const line = target.state.doc.lineAt(from)
+        // Take the following char after `to` iff we're not at the end of the line
+        return { from, to: to < line.to ? to + 1 : to, insert: '' }
+      })
+    ]
+  }, 'outer').flat() // NOTE: Request the outer cell offsets
+  
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
-export function clearCol (_target: EditorView): boolean {
-  return false
+/**
+ * For each selection in the document that is within a table, clear out the
+ * column that contains the selection.
+ *
+ * @param   {EditorView}  target  The EditorView to apply the command to.
+ *
+ * @return  {boolean}             Whether or not changes have been made.
+ */
+export function clearCol (target: EditorView): boolean {
+  // To clear the current column, we basically just have to replace its inner
+  // cell content (excl. padding) with whitespace
+  const changes = mapSelectionsWithTables<ChangeSpec[]>(target, (range, tableNode, tableAST, cellOffsets) => {
+    // Only support this in pipe tables. TODO
+    if (tableAST.tableType !== 'pipe') {
+      return undefined
+    }
+
+    const idx = findColumnIndexByRange(range, cellOffsets)
+    if (idx === undefined) {
+      return undefined
+    }
+
+
+    return cellOffsets.flatMap(row => {
+      const [ from, to ] = row[idx]
+      return { from, to, insert: ' '.repeat(to - from) }
+    })
+  }).flat() // NOTE: Request the outer cell offsets
+  
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }

@@ -26,15 +26,23 @@ import { parseTableNode } from 'source/common/modules/markdown-utils/markdown-as
  * of the cell offsets (from, to) for every cell in the table, sorted by rows.
  * The structure of the return value is `[rows][cells][from, to]`.
  *
- * @param   {Table}  tableAST           The table AST node
+ * @param   {Table}                 tableAST  The table AST node
+ * @param   {'inner'|'outer'}       which     Which offsets to return: `inner`
+ *                                            provides the cell contents without
+ *                                            whitespace padding, whereas
+ *                                            `outer` returns the cell offsets
+ *                                            including padding up to the
+ *                                            delimiters. Defaults to `inner`.
  *
- * @return  {[number, number][][]}  The [from, to] offsets of all
- *                                            Table cells.
+ * @return  {[number, number][][]}  The `[from, to]` offsets of all table cells
+ *                                  by row.
  */
-export function getTableCellOffsets (tableAST: Table): [number, number][][] {
+export function getTableCellOffsets (tableAST: Table, which: 'inner'|'outer' = 'inner'): [number, number][][] {
   const offsets = tableAST.rows.map(row => {
     return row.cells.map(cell => {
-      return [ cell.from, cell.to ]
+      return which === 'inner'
+        ? [ cell.from, cell.to ]
+        : [ cell.padding.from, cell.padding.to ]
     }) as [number, number][]
   })
   return offsets
@@ -47,7 +55,8 @@ export function getTableCellOffsets (tableAST: Table): [number, number][][] {
  *
  * @param   {SelectionRange}   range        The range
  * @param   {number[][]}       cellOffsets  The matrix of cell offsets
- * @param   {'head'|'anchor'}  where        The selection part that matters
+ * @param   {'head'|'anchor'}  where        The selection part that matters,
+ *                                          defaults to `head`
  *
  * @return  {number|undefined}              The cell index (or undefined)
  */
@@ -70,27 +79,67 @@ export function findColumnIndexByRange (
 }
 
 /**
- * Helper function that makes implementing the table commands simpler due to
- * centrally collecting generally required logic, collecting the required info
- * before handing off to the user-provided callback that will perform the actual
- * operation.
+ * Utility function to extract the `[from, to]` offsets of the cells within a
+ * header delimiting table row in a pipe table (e.g., `--|--|--`).
+ *
+ * @param   {string}              line       The line text
+ * @param   {string}              delimChar  The delimiter char (e.g., | or +)
+ *
+ * @return  {[number, number][]}             The offsets
+ */
+export function getPipeDelimiterLineCellOffsets (line: string, delimChar: string): [number, number][] {
+  const offsets: [number, number][] = []
+  let from = 0
+  for (let i = 0; i < line.length; i++) {
+    // Ignore a leading pipe
+    if (i === 0 && line[i] === delimChar) {
+      from++
+      continue
+    }
+
+    if (line[i] === delimChar) {
+      offsets.push([ from, i ])
+      from = i + 1
+    }
+  }
+
+  if (from < line.length - 1) {
+    offsets.push([ from, line.length - 1 ])
+  }
+
+  return offsets
+}
+
+/**
+ * Helper function that makes implementing the table commands simpler by
+ * centrally collecting the required logic. Will call `callback` for every
+ * selection range contained in a `Table` node. The `callback` can return
+ * anything, but usually something that can be turned into a transaction.
  * 
- * This function will call `callback` for every selection range that is
- * contained within a Table node somewhere within the document. It will provide
- * the Table's SyntaxNode and all table cell offsets within that table. The
- * callback is guaranteed to receive a range that is contained within a table.
+ * NOTEs:
  *
- * @param   {EditorView}  target    The target EditorView on which to perform
- *                                  the operation
- * @param   {Callable}    callback  The callback to use. Receives 3 arguments:
- *                                  * `range`: The SelectionRange
- *                                  * `table`: The Table SyntaxNode
- *                                  * `offsets`: The Table's cell offsets
+ * * `callback` can return `undefined` if a command doesn't apply to a selection
+ *   and this command will already filter those out
+ * * Each `callback` is guaranteed to receive a valid range, in a valid table
+ *   with all arguments valid
+ * * The `offsets` to receive can be controlled by the third optional parameter.
  *
- *                                  Can return T or undefined.
+ * @param   {EditorView}     target        The target EditorView on which to
+ *                                         perform the operation.
+ * @param   {Callable}       callback      The callback receives 4 arguments:
+ *                                         * `range`: The SelectionRange
+ *                                         * `tableNode`: The SyntaxNode
+ *                                         * `tableAST`: The ASTNode
+ *                                         * `offsets`: The Table's cell offsets
+ * @param {'inner'|'outer'}  whichOffsets  Optional, specifies which `offsets`
+ *                                         the callback receives. `inner`
+ *                                         returns just the cell contents (can
+ *                                         be the empty range), `outer` returns
+ *                                         the cells with padding to the
+ *                                         delimiters.
  *
- * @return  {T[]}                   Returns an array of whatever type the user
- *                                  callback returns.
+ * @return  {T[]}                          Returns an array of whatever type the
+ *                                         user callback returns.
  */
 export function mapSelectionsWithTables<T> (
   target: EditorView,
@@ -99,7 +148,8 @@ export function mapSelectionsWithTables<T> (
     tableNode: SyntaxNode,
     tableAST: Table,
     offsets: ReturnType<typeof getTableCellOffsets>
-  ) => T|undefined
+  ) => T|undefined,
+  whichOffsets: 'inner'|'outer' = 'inner'
 ): T[] {
   // TODO: Is not recursive! Need to iter!
   const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
@@ -117,7 +167,7 @@ export function mapSelectionsWithTables<T> (
     if (tableAST.type !== 'Table') {
       return undefined
     }
-    const offsets = getTableCellOffsets(tableAST)
+    const offsets = getTableCellOffsets(tableAST, whichOffsets)
     return callback(range, tableNode, tableAST, offsets)
   })
     .filter(sel => sel !== undefined) // Filter out undefineds

@@ -20,7 +20,7 @@ import {
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
-import { addColAfter, addColBefore, moveNextCell, movePrevCell } from '../table-editor/commands/columns'
+import { addColAfter, addColBefore, clearCol, deleteCol, moveNextCell, movePrevCell } from '../table-editor/commands/columns'
 import { addRowAfter, addRowBefore, moveNextRow, movePrevRow } from '../table-editor/commands/rows'
 
 // Includes:
@@ -69,6 +69,7 @@ export function markdownKeymap (): Extension {
     { key: 'Space', run: handleReplacement },
 
     // Overload the copy commands
+    // TODO: Table Shortcuts not final
     { key: 'Alt-Shift-ArrowUp', run: addRowBefore },
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
 
@@ -83,6 +84,11 @@ export function markdownKeymap (): Extension {
     { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
     { key: '"', run: handleQuote('"') },
     { key: "'", run: handleQuote("'") },
+
+    // Delete column (inspired by delete line) TODO: Shortcut not final
+    { key: 'Shift-Mod-k', run: deleteCol },
+    // Clear column TODO: Shortcut not final
+    { mac: 'Mod-Backspace', run: clearCol },
 
     // Include the sharedKeymap at the end to make the defaults available, but
     // with a lower priority, so that we can override anything in this keymap.
