@@ -140,9 +140,7 @@ export function swapNextRow (target: EditorView): boolean {
         ]
       }
     }
-  })
-    .filter(x => x !== undefined)
-    .flat() // NOTE: We're receiving 2d arrays from the callback
+  }).flat() // NOTE: We're receiving 2d arrays from the callback
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -197,9 +195,7 @@ export function swapPrevRow (target: EditorView): boolean {
         ]
       }
     }
-  })
-    .filter(x => x !== undefined)
-    .flat() // NOTE: We're receiving 2d arrays from the callback
+  }).flat() // NOTE: We're receiving 2d arrays from the callback
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -236,7 +232,6 @@ export function addRowAfter (target: EditorView): boolean {
       }
     }
   })
-    .filter(x => x !== undefined)
 
   // What we should do here (and in addRowBefore) is stupidly simple: Just take
   // the current row (grid tables = this + next one), remove every character between
@@ -276,7 +271,6 @@ export function addRowBefore (target: EditorView): boolean {
       }
     }
   })
-    .filter(x => x !== undefined)
 
   // What we should do here (and in addRowBefore) is stupidly simple: Just take
   // the current row (grid tables = this + next one), remove every character between
