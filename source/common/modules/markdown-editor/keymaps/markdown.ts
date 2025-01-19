@@ -21,7 +21,8 @@ import {
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
 import { addColAfter, addColBefore, clearCol, deleteCol, moveNextCell, movePrevCell } from '../table-editor/commands/columns'
-import { addRowAfter, addRowBefore, moveNextRow, movePrevRow } from '../table-editor/commands/rows'
+import { addRowAfter, addRowBefore, clearRow, moveNextRow, movePrevRow } from '../table-editor/commands/rows'
+import { clearTable } from '../table-editor/commands/tables'
 
 // Includes:
 // * completionKeymap
@@ -87,8 +88,11 @@ export function markdownKeymap (): Extension {
 
     // Delete column (inspired by delete line) TODO: Shortcut not final
     { key: 'Shift-Mod-k', run: deleteCol },
-    // Clear column TODO: Shortcut not final
-    { mac: 'Mod-Backspace', run: clearCol },
+
+    // Clear column, row, and table TODO: Shortcut not final
+    { key: 'Mod-Backspace', run: clearCol },
+    { key: 'Shift-Mod-Backspace', run: clearRow },
+    { key: 'Alt-Shift-Mod-Backspace', run: clearTable },
 
     // Include the sharedKeymap at the end to make the defaults available, but
     // with a lower priority, so that we can override anything in this keymap.

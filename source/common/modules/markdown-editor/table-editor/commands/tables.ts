@@ -15,6 +15,8 @@
  */
 
 import type { EditorView } from '@codemirror/view'
+import { mapSelectionsWithTables } from './util'
+import type { ChangeSpec } from '@codemirror/state'
 
 export function setAlignmentLeft (_target: EditorView): boolean {
   return false
@@ -28,9 +30,26 @@ export function setAlignmentRight (_target: EditorView): boolean {
   return false
 }
 
+/**
+ * Clears all tables with selections inside them.
+ *
+ * @param   {EditorView}  target  The target EditorView
+ *
+ * @return  {boolean}             Whether the command has applied any changes.
+ */
+export function clearTable (target: EditorView): boolean {
+  const changes = mapSelectionsWithTables<ChangeSpec[]>(target, (range, tableNode, tableAST, offsets) => {
+    // Map over the offset rows, and then simply yield changes that replace each
+    // table cell with whitespace, flattening the array
+    return offsets.flatMap(row => row.map(([ from, to ]) => ({ from, to, insert: ' '.repeat(to - from) })))
+  }).flat() // Flatten the corresponding array
 
-export function clearTable (_target: EditorView): boolean {
-  return false
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
 }
 
 // Utility/Helper function that adds appropriate spacing
