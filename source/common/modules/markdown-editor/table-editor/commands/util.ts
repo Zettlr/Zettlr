@@ -155,7 +155,7 @@ export function mapSelectionsWithTables<T> (
   const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
 
   return target.state.selection.ranges.map(range => {
-    const tableNode = tableNodes.find(node => node.from <= range.anchor && node.to >= range.anchor)
+    const tableNode = tableNodes.find(node => node.from <= range.head && node.to >= range.head)
     if (tableNode === undefined) {
       return undefined
     }
