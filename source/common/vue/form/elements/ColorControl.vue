@@ -62,7 +62,7 @@ const emit = defineEmits<(e: 'update:modelValue', val: string) => void>()
 const value = ref<string>(props.modelValue)
 
 const fieldID = computed<string>(() => {
-  return 'field-input-' + props.name ?? ''
+  return 'field-input-' + (props.name ?? '')
 })
 
 const resetLabel = trans('Reset')
