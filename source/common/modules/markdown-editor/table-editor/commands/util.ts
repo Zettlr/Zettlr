@@ -87,7 +87,7 @@ export function findColumnIndexByRange (
  *
  * @return  {[number, number][]}             The offsets
  */
-export function getPipeDelimiterLineCellOffsets (line: string, delimChar: string): [number, number][] {
+export function getDelimiterLineCellOffsets (line: string, delimChar: string): [number, number][] {
   const offsets: [number, number][] = []
   let from = 0
   for (let i = 0; i < line.length; i++) {

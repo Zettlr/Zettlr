@@ -16,7 +16,7 @@
 
 import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
-import { findColumnIndexByRange, getPipeDelimiterLineCellOffsets, mapSelectionsWithTables } from './util'
+import { findColumnIndexByRange, getDelimiterLineCellOffsets, mapSelectionsWithTables } from './util'
 
 /**
  * Attempts to move all cursors/selections to the next cell. NOTE: This command
@@ -193,7 +193,7 @@ export function addColAfter (target: EditorView): boolean {
     const delimNode = tableNode.getChild('TableDelimiter')!
     const delimLine = target.state.doc.lineAt(delimNode.from)
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
-    const delimOffsets = getPipeDelimiterLineCellOffsets(delimLine.text, delimChar)
+    const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
 
     return [
       { from: delimLine.from + delimOffsets[idx][1], insert: `-${delimChar}-` },
@@ -239,7 +239,7 @@ export function addColBefore (target: EditorView): boolean {
     const delimNode = tableNode.getChild('TableDelimiter')!
     const delimLine = target.state.doc.lineAt(delimNode.from)
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
-    const delimOffsets = getPipeDelimiterLineCellOffsets(delimLine.text, delimChar)
+    const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
 
     return [
       { from: delimLine.from + delimOffsets[idx][0], insert: `-${delimChar}-` },
@@ -283,7 +283,7 @@ export function deleteCol (target: EditorView): boolean {
     const delimNode = tableNode.getChild('TableDelimiter')!
     const delimLine = target.state.doc.lineAt(delimNode.from)
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
-    const delimOffsets = getPipeDelimiterLineCellOffsets(delimLine.text, delimChar)
+    const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
     const [ delimFrom, delimTo ] = delimOffsets[idx]
 
     return [
