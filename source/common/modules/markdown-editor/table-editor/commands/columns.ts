@@ -112,7 +112,7 @@ export function swapNextCol (target: EditorView): boolean {
         }
       ]
     })
-  })
+  }, 'outer') // NOTE: Request outer perimeter of cells
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -156,7 +156,7 @@ export function swapPrevCol (target: EditorView): boolean {
         }
       ]
     })
-  })
+  }, 'outer') // NOTE: Request outer perimeter
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -337,7 +337,7 @@ export function clearCol (target: EditorView): boolean {
       const [ from, to ] = row[idx]
       return { from, to, insert: ' '.repeat(to - from) }
     })
-  }).flat() // NOTE: Request the outer cell offsets
+  }, 'outer').flat() // NOTE: Request the outer cell offsets
   
   if (changes.length > 0) {
     target.dispatch({ changes })
