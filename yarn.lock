@@ -4319,10 +4319,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "chalk@npm:5.3.0"
-  checksum: 623922e077b7d1e9dedaea6f8b9e9352921f8ae3afe739132e0e00c275971bdd331268183b2628cf4ab1727c45ea1f28d7e24ac23ce1db1eb653c414ca8a5a80
+"chalk@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "chalk@npm:5.4.1"
+  checksum: 0c656f30b782fed4d99198825c0860158901f449a6b12b818b0aabad27ec970389e7e8767d0e00762175b23620c812e70c4fd92c0210e55fc2d993638b74e86e
   languageName: node
   linkType: hard
 
@@ -4361,12 +4361,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^4.4.6":
-  version: 4.4.6
-  resolution: "chart.js@npm:4.4.6"
+"chart.js@npm:^4.4.7":
+  version: 4.4.7
+  resolution: "chart.js@npm:4.4.7"
   dependencies:
     "@kurkle/color": ^0.3.0
-  checksum: 4dcf6aa20f41115bb9e848d3053960eb4eeaaa94272344cc2b9b8faba33316c43893311897e20cd2bcd5b7963333cb30b7805829b78918d1d8c14a9e772e0c87
+  checksum: c0f0e9efd935b21a37286d1544046277bb607c08fb3e012b4c501104187a42a0c6541c8d7575782c7f1f3e0a91537b7d6a2eb9cd57122eb176609493838a9543
   languageName: node
   linkType: hard
 
@@ -6140,16 +6140,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^33.2.0":
-  version: 33.2.0
-  resolution: "electron@npm:33.2.0"
+"electron@npm:^33.3.1":
+  version: 33.3.1
+  resolution: "electron@npm:33.3.1"
   dependencies:
     "@electron/get": ^2.0.0
     "@types/node": ^20.9.0
     extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: 4feacc8923fe4ab45da45d34823f949231da425c83ea2db2e483c2531f0320a1279a5b65913f447e145ab0a3f4e190bc192ed3a63ebe17a06347156e2ec52081
+  checksum: 338b0ae0984b004ba9b387d27c39b146a04689b2afd7e19260599464c67f597a7ea87d0e46b86ffedafc5f66aa4423c0c0dddfa69873379608c447ea232a0acc
   languageName: node
   linkType: hard
 
@@ -16005,8 +16005,8 @@ __metadata:
     archiver: ^7.0.1
     astrocite: ^0.16.4
     bcp-47: ^2.1.0
-    chalk: ^5.3.0
-    chart.js: ^4.4.6
+    chalk: ^5.4.1
+    chart.js: ^4.4.7
     chokidar: ^3.6.0
     citeproc: ^2.4.63
     copy-webpack-plugin: ^12.0.2
@@ -16014,7 +16014,7 @@ __metadata:
     css-loader: ^7.1.2
     csso: ^5.0.5
     d3: ^7.9.0
-    electron: ^33.2.0
+    electron: ^33.3.1
     electron-builder: ^25.1.8
     electron-devtools-assembler: ^1.2.0
     eslint: ^9.18.0
