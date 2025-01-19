@@ -50,7 +50,7 @@ const emit = defineEmits<(e: 'update:modelValue', value: string[]) => void>()
 
 const inputValue = ref<string>('')
 const input = ref<HTMLInputElement|null>(null)
-const fieldID = computed<string>(() => 'field-input-' + props.name ?? '')
+const fieldID = computed<string>(() => 'field-input-' + (props.name ?? ''))
 
 function handleKey (event: KeyboardEvent): void {
   if (inputValue.value.trim() === '') {

@@ -7,6 +7,9 @@
 
 ## Under the Hood
 
+- Bump Pandoc to `v3.6.2`
+- Bump chokidar to `v4.0.3`
+- Bump Electron to `v33.3.1`
 - Fixed the boot order of providers to ensure certain actions are taken before
   providers access each others (primary case: the FSAL needs to be booted asap)
 - Promisify the cache clearing procedure

@@ -34,7 +34,6 @@ import remarkLintNoBlockquoteWithoutMarker from 'remark-lint-no-blockquote-witho
 import remarkLintNoConsecutiveBlankLines from 'remark-lint-no-consecutive-blank-lines'
 import remarkLintNoDuplicateDefinitions from 'remark-lint-no-duplicate-definitions'
 import remarkLintNoHeadingContentIndent from 'remark-lint-no-heading-content-indent'
-import remarkLintNoInlinePadding from 'remark-lint-no-inline-padding'
 import remarkLintNoShortcutReferenceImage from 'remark-lint-no-shortcut-reference-image'
 import remarkLintNoShortcutReferenceLink from 'remark-lint-no-shortcut-reference-link'
 import remarkLintNoUnusedDefinitions from 'remark-lint-no-unused-definitions'
@@ -133,8 +132,6 @@ export const mdLint = linter(async view => {
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-heading-content-indent
     .use(remarkLintNoHeadingContentIndent)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-inline-padding
-    // @ts-expect-error Type incompatibilities, works fine
-    .use(remarkLintNoInlinePadding)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-shortcut-reference-image
     .use(remarkLintNoShortcutReferenceImage)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-shortcut-reference-link
