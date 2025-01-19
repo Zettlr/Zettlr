@@ -521,7 +521,7 @@ export default class UpdateProvider extends ProviderContract {
 
     broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
 
-    this._downloadReadStream.on('data', (chunk: Buffer) => {
+    this._downloadReadStream.on('data', (chunk) => {
       if (this._downloadWriteStream === undefined) {
         this._cleanup(true)
         this._reportError('EWRITESTREAM', trans('Could not accept data for application update: Write stream is gone.'), true)
