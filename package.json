@@ -121,10 +121,10 @@
     "tippy.js": "^6.3.7",
     "underscore": "^1.13.7",
     "unified": "^11.0.5",
-    "uuid": "^11.0.2",
-    "vue": "^3.5.12",
+    "uuid": "^11.0.5",
+    "vue": "^3.5.13",
     "vue-virtual-scroller": "^2.0.0-beta.8",
-    "yaml": "^2.6.0"
+    "yaml": "^2.7.0"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.3"
@@ -189,7 +189,7 @@
     "typescript": "5.5.x",
     "vue-loader": "^17.4.2",
     "vue-tsc": "^2.2.0",
-    "webpack": "^5.69.1"
+    "webpack": "^5.97.1"
   },
   "packageManager": "yarn@3.3.1"
 }
