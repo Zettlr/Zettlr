@@ -112,7 +112,7 @@ export function swapNextCol (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    // TODO: Iterate over all ranges (but only once per column)
+    // NOTE: Swapping columns is complex; here we only consider the first range
     const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
@@ -161,7 +161,7 @@ export function swapPrevCol (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    // TODO: Iterate over all ranges (but only once per column)
+    // NOTE: Swapping columns is complex; here we only consider the first range
     const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
