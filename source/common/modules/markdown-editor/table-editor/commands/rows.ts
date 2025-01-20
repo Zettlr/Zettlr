@@ -31,20 +31,21 @@ export function moveNextRow (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const rowIndex = offsets.findIndex(cellOffsets => {
+    const rowIndex = offsets.outer.findIndex(cellOffsets => {
       return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
     })
 
-    if (rowIndex < 0 || rowIndex === offsets.length - 1) {
+    if (rowIndex < 0 || rowIndex === offsets.outer.length - 1) {
       return undefined
     } else {
-      const row = offsets[rowIndex]
+      const row = offsets.outer[rowIndex]
       const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
       if (cellIndex < 0) {
         return undefined
       }
 
-      return EditorSelection.cursor(offsets[rowIndex + 1][cellIndex][0])
+      // NOTE that we move by the inner offsets here
+      return EditorSelection.cursor(offsets.inner[rowIndex + 1][cellIndex][0])
     }
   })
 
@@ -69,20 +70,21 @@ export function movePrevRow (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const rowIndex = offsets.findIndex(cellOffsets => {
+    const rowIndex = offsets.outer.findIndex(cellOffsets => {
       return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
     })
 
     if (rowIndex <= 0) {
       return undefined
     } else {
-      const row = offsets[rowIndex]
+      const row = offsets.outer[rowIndex]
       const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
       if (cellIndex < 0) {
         return undefined
       }
 
-      return EditorSelection.cursor(offsets[rowIndex - 1][cellIndex][0])
+      // NOTE that we move by the inner offsets
+      return EditorSelection.cursor(offsets.inner[rowIndex - 1][cellIndex][0])
     }
   })
 
@@ -353,7 +355,7 @@ export function deleteRow (target: EditorView): boolean {
 export function clearRow (target: EditorView): boolean {
   // Clearing a row is even simpler, by simply replacing a row cell's contents with whitespace
   const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, offsets) => {
-    const row = offsets.find(row => {
+    const row = offsets.outer.find(row => {
       const cells = row.flat().sort((a, b) => a - b)
       return range.head >= cells[0] && range.head <= cells[cells.length - 1]
     })

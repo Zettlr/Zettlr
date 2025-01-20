@@ -43,7 +43,7 @@ export function setAlignment (which: 'left'|'right'|'center'): (target: EditorVi
   
       const delimLine = target.state.sliceDoc(node.from, node.to)
   
-      const idx = findColumnIndexByRange(range, offsets)
+      const idx = findColumnIndexByRange(range, offsets.outer)
   
       if (idx === undefined) {
         return undefined
@@ -82,7 +82,7 @@ export function clearTable (target: EditorView): boolean {
   const changes = mapSelectionsWithTables<ChangeSpec[]>(target, (range, tableNode, tableAST, offsets) => {
     // Map over the offset rows, and then simply yield changes that replace each
     // table cell with whitespace, flattening the array
-    return offsets.flatMap(row => row.map(([ from, to ]) => ({ from, to, insert: ' '.repeat(to - from) })))
+    return offsets.outer.flatMap(row => row.map(([ from, to ]) => ({ from, to, insert: ' '.repeat(to - from) })))
   }).flat() // Flatten the corresponding array
 
   if (changes.length > 0) {

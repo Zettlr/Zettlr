@@ -28,11 +28,11 @@ import { findColumnIndexByRange, findRowIndexByRange, getDelimiterLineCellOffset
  */
 export function moveNextCell (target: EditorView): boolean {
   const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
-    const offsets = cellOffsets.flat() // Remove the rows
+    const offsets = cellOffsets.inner.flat() // Remove the rows
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const idx = findColumnIndexByRange(range, cellOffsets, 'anchor')
+    const idx = findColumnIndexByRange(range, cellOffsets.inner, 'anchor')
     if (idx === undefined || idx === offsets.length - 1) {
       return undefined
     }
@@ -58,11 +58,11 @@ export function moveNextCell (target: EditorView): boolean {
  */
 export function movePrevCell (target: EditorView): boolean {
   const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
-    const offsets = cellOffsets.flat() // Remove the rows
+    const offsets = cellOffsets.inner.flat() // Remove the rows
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const idx = findColumnIndexByRange(range, cellOffsets, 'anchor')
+    const idx = findColumnIndexByRange(range, cellOffsets.inner, 'anchor')
     if (idx === undefined) {
       return undefined
     }
@@ -91,12 +91,12 @@ export function swapNextCol (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const idx = findColumnIndexByRange(range, cellOffsets)
+    const idx = findColumnIndexByRange(range, cellOffsets.outer)
     if (idx === undefined) {
       return undefined
     }
 
-    const changes = cellOffsets.flatMap(row => {
+    const changes = cellOffsets.outer.flatMap(row => {
       return [
         // Cell 1 -> 0
         {
@@ -111,12 +111,12 @@ export function swapNextCol (target: EditorView): boolean {
       ]
     })
 
-    const rowIndex = findRowIndexByRange(range, cellOffsets)!
-    const cursorPos = cellOffsets[rowIndex][idx + 1][0]
+    const rowIndex = findRowIndexByRange(range, cellOffsets.outer)!
+    const cursorPos = cellOffsets.outer[rowIndex][idx + 1][0]
     const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
 
     return { changes, selection }
-  }, 'outer') // NOTE: Request outer perimeter of cells
+  }) // NOTE: Request outer perimeter of cells
 
   if (tr.length > 0) {
     target.dispatch(...tr)
@@ -139,12 +139,12 @@ export function swapPrevCol (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const idx = findColumnIndexByRange(range, cellOffsets)
+    const idx = findColumnIndexByRange(range, cellOffsets.outer)
     if (idx === undefined) {
       return undefined
     }
 
-    const changes = cellOffsets.flatMap(row => {
+    const changes = cellOffsets.outer.flatMap(row => {
       return [
         // Cell 0 -> 1
         {
@@ -161,12 +161,12 @@ export function swapPrevCol (target: EditorView): boolean {
       ]
     })
 
-    const rowIndex = findRowIndexByRange(range, cellOffsets)!
-    const cursorPos = cellOffsets[rowIndex][idx - 1][1]
+    const rowIndex = findRowIndexByRange(range, cellOffsets.outer)!
+    const cursorPos = cellOffsets.outer[rowIndex][idx - 1][1]
     const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
 
     return { changes, selection }
-  }, 'outer') // NOTE: Request outer perimeter
+  })
 
   if (tr.length > 0) {
     target.dispatch(...tr)
@@ -191,7 +191,7 @@ export function addColAfter (target: EditorView): boolean {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(range, cellOffsets)
+    const idx = findColumnIndexByRange(range, cellOffsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -207,11 +207,11 @@ export function addColAfter (target: EditorView): boolean {
 
     return [
       { from: delimLine.from + delimOffsets[idx][1], insert: `-${delimChar}-` },
-      ...cellOffsets.flatMap(row => {
+      ...cellOffsets.outer.flatMap(row => {
         return { from: row[idx][1], insert: ' | ' }
       }).sort((a, b) => a.from - b.from)
     ]
-  }, 'outer').flat() // NOTE: Outer margins // Returns a 2d array above
+  }).flat() // Returns a 2d array above
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -237,7 +237,7 @@ export function addColBefore (target: EditorView): boolean {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(range, cellOffsets)
+    const idx = findColumnIndexByRange(range, cellOffsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -253,11 +253,11 @@ export function addColBefore (target: EditorView): boolean {
 
     return [
       { from: delimLine.from + delimOffsets[idx][0], insert: `-${delimChar}-` },
-      ...cellOffsets.flatMap(row => {
+      ...cellOffsets.outer.flatMap(row => {
         return { from: row[idx][0], insert: ' | ' }
       }).sort((a, b) => a.from - b.from)
     ]
-  }, 'outer').flat() // NOTE: Outer margins // Returns a 2d array above
+  }).flat() // Returns a 2d array above
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -284,7 +284,7 @@ export function deleteCol (target: EditorView): boolean {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(range, cellOffsets)
+    const idx = findColumnIndexByRange(range, cellOffsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -303,14 +303,14 @@ export function deleteCol (target: EditorView): boolean {
         to: delimLine.from + (delimTo < delimLine.text.length ? delimTo + 1 : delimTo),
         insert: ''
       },
-      ...cellOffsets.flatMap(row => {
+      ...cellOffsets.outer.flatMap(row => {
         const [ from, to ] = row[idx]
         const line = target.state.doc.lineAt(from)
         // Take the following char after `to` iff we're not at the end of the line
         return { from, to: to < line.to ? to + 1 : to, insert: '' }
       })
     ]
-  }, 'outer').flat() // NOTE: Request the outer cell offsets
+  }).flat()
   
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -337,17 +337,17 @@ export function clearCol (target: EditorView): boolean {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(range, cellOffsets)
+    const idx = findColumnIndexByRange(range, cellOffsets.outer)
     if (idx === undefined) {
       return undefined
     }
 
 
-    return cellOffsets.flatMap(row => {
+    return cellOffsets.outer.flatMap(row => {
       const [ from, to ] = row[idx]
       return { from, to, insert: ' '.repeat(to - from) }
     })
-  }, 'outer').flat() // NOTE: Request the outer cell offsets
+  }).flat()
   
   if (changes.length > 0) {
     target.dispatch({ changes })

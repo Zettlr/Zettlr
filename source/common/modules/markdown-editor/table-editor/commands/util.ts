@@ -21,31 +21,38 @@ import type { SyntaxNode } from '@lezer/common'
 import type { Table } from 'source/common/modules/markdown-utils/markdown-ast'
 import { parseTableNode } from 'source/common/modules/markdown-utils/markdown-ast/parse-table-node'
 
+export interface TableCellOffsets {
+  /**
+   * The inner cell `[from, to]` offsets, indexed by row and cell.
+   */
+  inner: [number, number][][]
+  /**
+   * The outer cell `[from, to]` offsets, indexed by row and cell.
+   */
+  outer: [number, number][][]
+}
+
 /**
- * Takes a table node and the corresponding Markdown source and returns a list
- * of the cell offsets (from, to) for every cell in the table, sorted by rows.
- * The structure of the return value is `[rows][cells][from, to]`.
+ * Takes a table node and the corresponding Markdown source and returns an
+ * object with both the inner and outer list of cell offsets `[from, to]` for
+ * every cell in the table, sorted by rows. Inner offsets refer to the offsets
+ * of the cell's actual content (without padding whitespace), whereas the outer
+ * offsets refer to the table cell's maximum extend up until the delimiting
+ * characters. The structure of each list is `[rows][cells][from, to]`.
  *
- * @param   {Table}                 tableAST  The table AST node
- * @param   {'inner'|'outer'}       which     Which offsets to return: `inner`
- *                                            provides the cell contents without
- *                                            whitespace padding, whereas
- *                                            `outer` returns the cell offsets
- *                                            including padding up to the
- *                                            delimiters. Defaults to `inner`.
+ * @param   {Table}             tableAST  The table AST node
  *
- * @return  {[number, number][][]}  The `[from, to]` offsets of all table cells
- *                                  by row.
+ * @return  {TableCellOffsets}            The set of inner and outer cell offsets
  */
-export function getTableCellOffsets (tableAST: Table, which: 'inner'|'outer' = 'inner'): [number, number][][] {
-  const offsets = tableAST.rows.map(row => {
-    return row.cells.map(cell => {
-      return which === 'inner'
-        ? [ cell.from, cell.to ]
-        : [ cell.padding.from, cell.padding.to ]
-    }) as [number, number][]
-  })
-  return offsets
+export function getTableCellOffsets (tableAST: Table): TableCellOffsets {
+  return {
+    inner: tableAST.rows.map(row => {
+      return row.cells.map(cell => [ cell.from, cell.to ])
+    }),
+    outer: tableAST.rows.map(row => {
+      return row.cells.map(cell => [ cell.padding.from, cell.padding.to ])
+    })
+  }
 }
 
 /**
@@ -98,7 +105,8 @@ export function findRowIndexByRange (
 }
 /**
  * Utility function to extract the `[from, to]` offsets of the cells within a
- * header delimiting table row in a pipe table (e.g., `--|--|--`).
+ * header delimiting table row in a pipe table (e.g., `--|--|--`). NOTE: By
+ * definition these are the *outer* margins of the cells.
  *
  * @param   {string}              line       The line text
  * @param   {string}              delimChar  The delimiter char (e.g., | or +)
@@ -149,12 +157,6 @@ export function getDelimiterLineCellOffsets (line: string, delimChar: string): [
  *                                         * `tableNode`: The SyntaxNode
  *                                         * `tableAST`: The ASTNode
  *                                         * `offsets`: The Table's cell offsets
- * @param {'inner'|'outer'}  whichOffsets  Optional, specifies which `offsets`
- *                                         the callback receives. `inner`
- *                                         returns just the cell contents (can
- *                                         be the empty range), `outer` returns
- *                                         the cells with padding to the
- *                                         delimiters.
  *
  * @return  {T[]}                          Returns an array of whatever type the
  *                                         user callback returns.
@@ -166,8 +168,7 @@ export function mapSelectionsWithTables<T> (
     tableNode: SyntaxNode,
     tableAST: Table,
     offsets: ReturnType<typeof getTableCellOffsets>
-  ) => T|undefined,
-  whichOffsets: 'inner'|'outer' = 'inner'
+  ) => T|undefined
 ): T[] {
   // TODO: Is not recursive! Need to iter!
   const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
@@ -185,7 +186,7 @@ export function mapSelectionsWithTables<T> (
     if (tableAST.type !== 'Table') {
       return undefined
     }
-    const offsets = getTableCellOffsets(tableAST, whichOffsets)
+    const offsets = getTableCellOffsets(tableAST)
     return callback(range, tableNode, tableAST, offsets)
   })
     .filter(sel => sel !== undefined) // Filter out undefineds
