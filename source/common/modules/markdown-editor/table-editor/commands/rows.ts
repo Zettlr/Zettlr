@@ -16,7 +16,7 @@
 
 import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
-import { mapSelectionsWithTables } from './util'
+import { isPipeTableDelimRow, mapSelectionsWithTables } from './util'
 
 /**
  * This command takes all editor selections and moves those within tables to the
@@ -31,24 +31,25 @@ export function moveNextRow (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    // TODO: Iterate over all ranges
-    const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
-      return cellOffsets.some(off => off[0] <= ctx.ranges[0].anchor && off[1] >= ctx.ranges[0].anchor)
-    })
-
-    if (rowIndex < 0 || rowIndex === ctx.offsets.outer.length - 1) {
-      return undefined
-    } else {
-      const row = ctx.offsets.outer[rowIndex]
-      const cellIndex = row.findIndex(off => off[0] <= ctx.ranges[0].anchor && off[1] >= ctx.ranges[0].anchor)
-      if (cellIndex < 0) {
+    return ctx.ranges.map(range => {
+      const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
+        return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
+      })
+  
+      if (rowIndex < 0 || rowIndex === ctx.offsets.outer.length - 1) {
         return undefined
+      } else {
+        const row = ctx.offsets.outer[rowIndex]
+        const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
+        if (cellIndex < 0) {
+          return undefined
+        }
+  
+        // NOTE that we move by the inner offsets here
+        return EditorSelection.cursor(ctx.offsets.inner[rowIndex + 1][cellIndex][0])
       }
-
-      // NOTE that we move by the inner offsets here
-      return EditorSelection.cursor(ctx.offsets.inner[rowIndex + 1][cellIndex][0])
-    }
-  })
+    }).filter(i => i !== undefined)
+  }).flat()
 
   if (newSelections.length > 0) {
     target.dispatch({ selection: EditorSelection.create(newSelections) })
@@ -71,24 +72,25 @@ export function movePrevRow (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    // TODO: Iterate over all ranges
-    const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
-      return cellOffsets.some(off => off[0] <= ctx.ranges[0].anchor && off[1] >= ctx.ranges[0].anchor)
-    })
-
-    if (rowIndex <= 0) {
-      return undefined
-    } else {
-      const row = ctx.offsets.outer[rowIndex]
-      const cellIndex = row.findIndex(off => off[0] <= ctx.ranges[0].anchor && off[1] >= ctx.ranges[0].anchor)
-      if (cellIndex < 0) {
+    return ctx.ranges.map(range => {
+      const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
+        return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
+      })
+  
+      if (rowIndex <= 0) {
         return undefined
+      } else {
+        const row = ctx.offsets.outer[rowIndex]
+        const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
+        if (cellIndex < 0) {
+          return undefined
+        }
+  
+        // NOTE that we move by the inner offsets
+        return EditorSelection.cursor(ctx.offsets.inner[rowIndex - 1][cellIndex][0])
       }
-
-      // NOTE that we move by the inner offsets
-      return EditorSelection.cursor(ctx.offsets.inner[rowIndex - 1][cellIndex][0])
-    }
-  })
+    }).filter(i => i !== undefined)
+  }).flat()
 
   if (newSelections.length > 0) {
     target.dispatch({ selection: EditorSelection.create(newSelections) })
@@ -225,8 +227,13 @@ export function addRowAfter (target: EditorView): boolean {
     if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
-      if (/^[\s|+:-]+$/.test(line.text) && line.text.includes('-')) {
+      if (isPipeTableDelimRow(line.text)) {
         return undefined
+      }
+
+      const nextLine = line.number < target.state.doc.lines ? target.state.doc.line(line.number + 1) : undefined
+      if (nextLine !== undefined && isPipeTableDelimRow(nextLine.text)) {
+        return undefined // Only one row in the header allowed
       }
 
       return {
@@ -272,7 +279,7 @@ export function addRowBefore (target: EditorView): boolean {
     if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
-      if (/^[\s|+:-]+$/.test(line.text) && line.text.includes('-')) {
+      if (isPipeTableDelimRow(line.text)) {
         return undefined
       }
 
@@ -320,7 +327,7 @@ export function deleteRow (target: EditorView): boolean {
     if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
-      if (/^[\s|+:-]+$/.test(line.text) && line.text.includes('-')) {
+      if (isPipeTableDelimRow(line.text)) {
         return undefined
       }
 
