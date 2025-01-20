@@ -31,7 +31,7 @@ export function moveNextCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    return ctx.ranges.flatMap(range => {
+    return ctx.ranges.map(range => {
       const colIdx = findColumnIndexByRange(range, ctx.offsets.outer, 'anchor')
       const rowIdx = findRowIndexByRange(range, ctx.offsets.outer, 'anchor')
       if (colIdx === undefined || rowIdx === undefined) {
@@ -72,7 +72,7 @@ export function movePrevCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    return ctx.ranges.flatMap(range => {
+    return ctx.ranges.map(range => {
       const colIdx = findColumnIndexByRange(range, ctx.offsets.outer, 'anchor')
       const rowIdx = findRowIndexByRange(range, ctx.offsets.outer, 'anchor')
       if (colIdx === undefined || rowIdx === undefined) {
