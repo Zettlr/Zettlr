@@ -28,17 +28,26 @@ import { findColumnIndexByRange, findRowIndexByRange, getDelimiterLineCellOffset
  */
 export function moveNextCell (target: EditorView): boolean {
   const newSelections: SelectionRange[] = mapSelectionsWithTables(target, ctx => {
-    const offsets = ctx.offsets.inner.flat() // Remove the rows
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
     // TODO: Iterate over all ranges
-    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.inner, 'anchor')
-    if (idx === undefined || idx === offsets.length - 1) {
+    const colIdx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer, 'anchor')
+    const rowIdx = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer, 'anchor')
+    if (colIdx === undefined || rowIdx === undefined) {
       return undefined
     }
 
-    return EditorSelection.cursor(offsets[idx + 1][0])
+    const lastCol = colIdx === ctx.offsets.outer[rowIdx].length - 1
+    const lastRow = rowIdx === ctx.offsets.outer.length - 1
+
+    if (lastCol && lastRow) {
+      return undefined
+    } else if (!lastCol) {
+      return EditorSelection.cursor(ctx.offsets.inner[rowIdx][colIdx + 1][0])
+    } else if (lastCol && !lastRow) {
+      return EditorSelection.cursor(ctx.offsets.inner[rowIdx + 1][0][0])
+    }
   })
 
   if (newSelections.length > 0) {
@@ -59,17 +68,25 @@ export function moveNextCell (target: EditorView): boolean {
  */
 export function movePrevCell (target: EditorView): boolean {
   const newSelections: SelectionRange[] = mapSelectionsWithTables(target, ctx => {
-    const offsets = ctx.offsets.inner.flat() // Remove the rows
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
     // TODO: Iterate over all ranges
-    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.inner, 'anchor')
-    if (idx === undefined) {
+    const colIdx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer, 'anchor')
+    const rowIdx = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer, 'anchor')
+    if (colIdx === undefined || rowIdx === undefined) {
       return undefined
     }
-    
-    return idx === 0 ? undefined : EditorSelection.cursor(offsets[idx - 1][1])
+
+    const nCols = ctx.offsets.outer[rowIdx].length
+
+    if (colIdx === 0 && rowIdx === 0) {
+      return undefined
+    } else if (colIdx > 0) {
+      return EditorSelection.cursor(ctx.offsets.inner[rowIdx][colIdx - 1][1])
+    } else if (colIdx === 0 && rowIdx > 0) {
+      return EditorSelection.cursor(ctx.offsets.inner[rowIdx - 1][nCols - 1][1])
+    }
   })
 
   if (newSelections.length > 0) {
@@ -189,7 +206,7 @@ export function swapPrevCol (target: EditorView): boolean {
  * @return  {boolean}             Whether or not changes have been made.
  */
 export function addColAfter (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, ctx => {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
     // Only support this in pipe tables. TODO
     if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
@@ -210,16 +227,22 @@ export function addColAfter (target: EditorView): boolean {
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
     const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
 
-    return [
+    const changes = [
       { from: delimLine.from + delimOffsets[idx][1], insert: `-${delimChar}-` },
       ...ctx.offsets.outer.flatMap(row => {
         return { from: row[idx][1], insert: ' | ' }
       }).sort((a, b) => a.from - b.from)
     ]
+
+    const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
+    const cursorPos = ctx.offsets.outer[rowIndex][idx][1] + 3 // Place cursor
+    const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+
+    return { changes, selection }
   }).flat() // Returns a 2d array above
 
-  if (changes.length > 0) {
-    target.dispatch({ changes })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false
@@ -236,7 +259,7 @@ export function addColAfter (target: EditorView): boolean {
  */
 export function addColBefore (target: EditorView): boolean {
   // Basically the same as addColAfter, with minor changes
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, ctx => {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
     // Only support this in pipe tables. TODO
     if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
@@ -257,16 +280,22 @@ export function addColBefore (target: EditorView): boolean {
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
     const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
 
-    return [
+    const changes = [
       { from: delimLine.from + delimOffsets[idx][0], insert: `-${delimChar}-` },
       ...ctx.offsets.outer.flatMap(row => {
         return { from: row[idx][0], insert: ' | ' }
       }).sort((a, b) => a.from - b.from)
     ]
+
+    const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
+    const cursorPos = ctx.offsets.outer[rowIndex][idx][0] - 3
+    const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+
+    return { changes, selection }
   }).flat() // Returns a 2d array above
 
-  if (changes.length > 0) {
-    target.dispatch({ changes })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false
