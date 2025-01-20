@@ -20,7 +20,7 @@ import {
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
-import { addColAfter, addColBefore, clearCol, deleteCol, moveNextCell, movePrevCell } from '../table-editor/commands/columns'
+import { addColAfter, addColBefore, clearCol, deleteCol, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
 import { addRowAfter, addRowBefore, clearRow, moveNextRow, movePrevRow } from '../table-editor/commands/rows'
 import { clearTable, setAlignment } from '../table-editor/commands/tables'
 
@@ -70,34 +70,35 @@ export function markdownKeymap (): Extension {
     { key: 'Space', run: handleReplacement },
 
     // Overload the copy commands
-    // TODO: Table Shortcuts not final
-    { key: 'Alt-Shift-ArrowUp', run: addRowBefore },
+    { key: 'Alt-Shift-ArrowUp', run: addRowBefore }, // TODO: Shortcut not final
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
 
-    { key: 'Alt-Shift-ArrowDown', run: addRowAfter },
+    { key: 'Alt-Shift-ArrowDown', run: addRowAfter }, // TODO: Shortcut not final
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
 
-    { key: 'Alt-Shift-ArrowRight', run: addColAfter },
-    { key: 'Alt-Shift-ArrowLeft', run: addColBefore },
-
+    { key: 'Alt-Shift-ArrowRight', run: addColAfter }, // TODO: Shortcut not final
+    { key: 'Alt-Shift-ArrowLeft', run: addColBefore }, // TODO: Shortcut not final
+    { key: 'Alt-ArrowRight', run: swapNextCol }, // TODO: Shortcut not final
+    { key: 'Alt-ArrowLeft', run: swapPrevCol }, // TODO: Shortcut not final
+    
     { key: 'Mod-t', run: applyTaskList },
     { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
     { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
     { key: '"', run: handleQuote('"') },
     { key: "'", run: handleQuote("'") },
 
-    // Delete column (inspired by delete line) TODO: Shortcut not final
-    { key: 'Shift-Mod-k', run: deleteCol },
+    // Delete column (inspired by delete line)
+    { key: 'Shift-Mod-k', run: deleteCol }, // TODO: Shortcut not final
 
-    // Clear column, row, and table TODO: Shortcut not final
-    { key: 'Mod-Backspace', run: clearCol },
-    { key: 'Shift-Mod-Backspace', run: clearRow },
-    { key: 'Alt-Shift-Mod-Backspace', run: clearTable },
+    // Clear column, row, and table
+    { key: 'Mod-Backspace', run: clearCol }, // TODO: Shortcut not final
+    { key: 'Shift-Mod-Backspace', run: clearRow }, // TODO: Shortcut not final
+    { key: 'Alt-Shift-Mod-Backspace', run: clearTable }, // TODO: Shortcut not final
 
-    // Set alignments TODO: Shortcut not final
-    { key: 'Alt-c', run: setAlignment('center') },
-    { key: 'Alt-l', run: setAlignment('left') },
-    { key: 'Alt-r', run: setAlignment('right') },
+    // Table alignments
+    { key: 'Alt-c', run: setAlignment('center') }, // TODO: Shortcut not final
+    { key: 'Alt-l', run: setAlignment('left') }, // TODO: Shortcut not final
+    { key: 'Alt-r', run: setAlignment('right') }, // TODO: Shortcut not final
 
     // Include the sharedKeymap at the end to make the defaults available, but
     // with a lower priority, so that we can override anything in this keymap.
