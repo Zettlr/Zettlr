@@ -7,9 +7,8 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file exposes a series of CodeMirror commands that make
- *                  working with tables easier and allow for keyboard-based
- *                  manipulation of them.
+ * Description:     This file contains a few utility functions intended for use
+ *                  with the table commands defined within this directory.
  *
  * END HEADER
  */
@@ -59,6 +58,17 @@ export interface SelectionTableContext {
    * The cell offsets within the table.
    */
   offsets: ReturnType<typeof getTableCellOffsets>
+}
+
+/**
+ * Checks whether a provided string looks like a pipe table delimiter row.
+ *
+ * @param   {string}   line  The line text
+ *
+ * @return  {boolean}        Whether it appears to be a delimiter row.
+ */
+export function isPipeTableDelimRow (line: string): boolean {
+  return /^[\s|+:-]+$/.test(line) && line.includes('-')
 }
 
 /**
@@ -168,14 +178,14 @@ export function getDelimiterLineCellOffsets (line: string, delimChar: string): [
 /**
  * Helper function that makes implementing the table commands simpler by
  * centrally collecting the required logic. Will call `callback` for every
- * selection range contained in a `Table` node. The `callback` can return
+ * `Table` node with all containing selection ranges. The `callback` can return
  * anything, but usually something that can be turned into a transaction.
  * 
  * NOTEs:
  *
  * * `callback` can return `undefined` if a command doesn't apply to a selection
  *   and this command will already filter those out
- * * Each `callback` is guaranteed to receive a valid range, in a valid table
+ * * Each `callback` is guaranteed to receive valid ranges, in a valid table
  *   with all arguments valid
  * * The `offsets` to receive can be controlled by the third optional parameter.
  *
