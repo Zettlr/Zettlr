@@ -16,7 +16,7 @@
 
 import { type SelectionRange, EditorSelection, type ChangeSpec, type TransactionSpec } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
-import { findColumnIndexByRange, findRowIndexByRange, getDelimiterLineCellOffsets, mapSelectionsWithTables } from './util'
+import { findColumnIndexByRange, findRowIndexByRange, getColIndicesByRanges, getDelimiterLineCellOffsets, mapSelectionsWithTables } from './util'
 
 /**
  * Attempts to move all cursors/selections to the next cell. NOTE: This command
@@ -321,31 +321,31 @@ export function deleteCol (target: EditorView): boolean {
       return undefined
     }
 
-    // TODO: Iterate over all ranges (but only once per column)
-    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
-    if (idx === undefined) {
-      return undefined
-    }
+    const colIdx = getColIndicesByRanges(ctx.ranges, ctx.offsets.outer)
 
     // NOTE: Remove `null` since that check will be performed during AST parsing
     const delimNode = ctx.tableNode.getChild('TableDelimiter')!
     const delimLine = target.state.doc.lineAt(delimNode.from)
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
     const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
-    const [ delimFrom, delimTo ] = delimOffsets[idx]
 
     return [
       // Handle the delimiter line
-      {
-        from: delimLine.from + delimFrom,
-        to: delimLine.from + (delimTo < delimLine.text.length ? delimTo + 1 : delimTo),
-        insert: ''
-      },
+      ...colIdx.map(col => {
+        const [ delimFrom, delimTo ] = delimOffsets[col]
+        return {
+          from: delimLine.from + delimFrom,
+          to: delimLine.from + (delimTo < delimLine.text.length ? delimTo + 1 : delimTo),
+          insert: ''
+        }
+      }),
       ...ctx.offsets.outer.flatMap(row => {
-        const [ from, to ] = row[idx]
-        const line = target.state.doc.lineAt(from)
-        // Take the following char after `to` iff we're not at the end of the line
-        return { from, to: to < line.to ? to + 1 : to, insert: '' }
+        return colIdx.map(col => {
+          const [ from, to ] = row[col]
+          const line = target.state.doc.lineAt(from)
+          // Take the following char after `to` iff we're not at the end of the line
+          return { from, to: to < line.to ? to + 1 : to, insert: '' }
+        })
       })
     ]
   }).flat()
@@ -375,6 +375,8 @@ export function clearCol (target: EditorView): boolean {
       return undefined
     }
 
+    const colIdx = getColIndicesByRanges(ctx.ranges, ctx.offsets.outer)
+
     // TODO: Iterate over all ranges (but only once per column)
     const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
     if (idx === undefined) {
@@ -383,8 +385,10 @@ export function clearCol (target: EditorView): boolean {
 
 
     return ctx.offsets.outer.flatMap(row => {
-      const [ from, to ] = row[idx]
-      return { from, to, insert: ' '.repeat(to - from) }
+      return colIdx.map(idx => {
+        const [ from, to ] = row[idx]
+        return { from, to, insert: ' '.repeat(to - from) }
+      })
     })
   }).flat()
   

@@ -175,6 +175,27 @@ export function getRowIndicesByRanges (
     )
   ]
 }
+
+/**
+ * Takes an array of ranges and a set of cell offsets and returns a set of all
+ * column indices that contain at least one of these ranges.
+ *
+ * @return  {number[]}  An array of (unique) column indices
+ */
+export function getColIndicesByRanges (
+  ranges: SelectionRange[],
+  cellOffsets: [number, number][][],
+  where: 'head'|'anchor' = 'head'
+): number[] {
+  return [
+    ... new Set(
+      ranges
+        .map(range => findColumnIndexByRange(range, cellOffsets, where))
+        .filter(i => i !== undefined)
+    )
+  ]
+}
+
 /**
  * Utility function to extract the `[from, to]` offsets of the cells within a
  * header delimiting table row in a pipe table (e.g., `--|--|--`). NOTE: By
