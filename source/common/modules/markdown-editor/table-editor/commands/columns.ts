@@ -14,9 +14,9 @@
  * END HEADER
  */
 
-import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
+import { type SelectionRange, EditorSelection, type ChangeSpec, type TransactionSpec } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
-import { findColumnIndexByRange, getDelimiterLineCellOffsets, mapSelectionsWithTables } from './util'
+import { findColumnIndexByRange, findRowIndexByRange, getDelimiterLineCellOffsets, mapSelectionsWithTables } from './util'
 
 /**
  * Attempts to move all cursors/selections to the next cell. NOTE: This command
@@ -87,7 +87,7 @@ export function movePrevCell (target: EditorView): boolean {
  * @return  {boolean}             Whether there has been at least one change.
  */
 export function swapNextCol (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, (range, tableNode, tableAST, cellOffsets) => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
@@ -96,26 +96,30 @@ export function swapNextCol (target: EditorView): boolean {
       return undefined
     }
 
-    return cellOffsets.flatMap(row => {
+    const changes = cellOffsets.flatMap(row => {
       return [
         // Cell 1 -> 0
         {
-          from: row[idx][0],
-          to: row[idx][1],
+          from: row[idx][0], to: row[idx][1],
           insert: target.state.sliceDoc(row[idx + 1][0], row[idx + 1][1])
         },
         // Cell 0 -> 1
         {
-          from: row[idx + 1][0],
-          to: row[idx + 1][1],
+          from: row[idx + 1][0], to: row[idx + 1][1],
           insert: target.state.sliceDoc(row[idx][0], row[idx][1])
         }
       ]
     })
+
+    const rowIndex = findRowIndexByRange(range, cellOffsets)!
+    const cursorPos = cellOffsets[rowIndex][idx + 1][0]
+    const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+
+    return { changes, selection }
   }, 'outer') // NOTE: Request outer perimeter of cells
 
-  if (changes.length > 0) {
-    target.dispatch({ changes })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false
@@ -131,7 +135,7 @@ export function swapNextCol (target: EditorView): boolean {
  * @return  {boolean}             Whether at least one column has been swapped.
  */
 export function swapPrevCol (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, (range, tableNode, tableAST, cellOffsets) => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
@@ -140,7 +144,7 @@ export function swapPrevCol (target: EditorView): boolean {
       return undefined
     }
 
-    return cellOffsets.flatMap(row => {
+    const changes = cellOffsets.flatMap(row => {
       return [
         // Cell 0 -> 1
         {
@@ -156,10 +160,16 @@ export function swapPrevCol (target: EditorView): boolean {
         }
       ]
     })
+
+    const rowIndex = findRowIndexByRange(range, cellOffsets)!
+    const cursorPos = cellOffsets[rowIndex][idx - 1][1]
+    const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+
+    return { changes, selection }
   }, 'outer') // NOTE: Request outer perimeter
 
-  if (changes.length > 0) {
-    target.dispatch({ changes })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false

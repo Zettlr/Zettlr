@@ -79,6 +79,24 @@ export function findColumnIndexByRange (
 }
 
 /**
+ * The equivalent function to `findColumnIndexByRange` for finding the table's
+ * row index according to the selection range.
+ *
+ * @return  {number|undefined}  The row index, or undefined
+ */
+export function findRowIndexByRange (
+  range: SelectionRange,
+  cellOffsets: [number, number][][],
+  where: 'head'|'anchor' = 'head'
+): number|undefined {
+  const rowIndex = cellOffsets.findIndex(row => {
+    const offsets = row.flat()
+    return range[where] >= Math.min(...offsets) && range[where] <= Math.max(...offsets)
+  })
+
+  return rowIndex < 0 ? undefined : rowIndex
+}
+/**
  * Utility function to extract the `[from, to]` offsets of the cells within a
  * header delimiting table row in a pipe table (e.g., `--|--|--`).
  *
