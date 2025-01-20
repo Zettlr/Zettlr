@@ -31,24 +31,25 @@ export function moveNextCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    // TODO: Iterate over all ranges
-    const colIdx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer, 'anchor')
-    const rowIdx = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer, 'anchor')
-    if (colIdx === undefined || rowIdx === undefined) {
-      return undefined
-    }
-
-    const lastCol = colIdx === ctx.offsets.outer[rowIdx].length - 1
-    const lastRow = rowIdx === ctx.offsets.outer.length - 1
-
-    if (lastCol && lastRow) {
-      return undefined
-    } else if (!lastCol) {
-      return EditorSelection.cursor(ctx.offsets.inner[rowIdx][colIdx + 1][0])
-    } else if (lastCol && !lastRow) {
-      return EditorSelection.cursor(ctx.offsets.inner[rowIdx + 1][0][0])
-    }
-  })
+    return ctx.ranges.flatMap(range => {
+      const colIdx = findColumnIndexByRange(range, ctx.offsets.outer, 'anchor')
+      const rowIdx = findRowIndexByRange(range, ctx.offsets.outer, 'anchor')
+      if (colIdx === undefined || rowIdx === undefined) {
+        return undefined
+      }
+  
+      const lastCol = colIdx === ctx.offsets.outer[rowIdx].length - 1
+      const lastRow = rowIdx === ctx.offsets.outer.length - 1
+  
+      if (lastCol && lastRow) {
+        return undefined
+      } else if (!lastCol) {
+        return EditorSelection.cursor(ctx.offsets.inner[rowIdx][colIdx + 1][0])
+      } else if (lastCol && !lastRow) {
+        return EditorSelection.cursor(ctx.offsets.inner[rowIdx + 1][0][0])
+      }
+    }).filter(i => i !== undefined)
+  }).flat()
 
   if (newSelections.length > 0) {
     target.dispatch({ selection: EditorSelection.create(newSelections) })
@@ -71,23 +72,24 @@ export function movePrevCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    // TODO: Iterate over all ranges
-    const colIdx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer, 'anchor')
-    const rowIdx = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer, 'anchor')
-    if (colIdx === undefined || rowIdx === undefined) {
-      return undefined
-    }
+    return ctx.ranges.flatMap(range => {
+      const colIdx = findColumnIndexByRange(range, ctx.offsets.outer, 'anchor')
+      const rowIdx = findRowIndexByRange(range, ctx.offsets.outer, 'anchor')
+      if (colIdx === undefined || rowIdx === undefined) {
+        return undefined
+      }
 
-    const nCols = ctx.offsets.outer[rowIdx].length
+      const nCols = ctx.offsets.outer[rowIdx].length
 
-    if (colIdx === 0 && rowIdx === 0) {
-      return undefined
-    } else if (colIdx > 0) {
-      return EditorSelection.cursor(ctx.offsets.inner[rowIdx][colIdx - 1][1])
-    } else if (colIdx === 0 && rowIdx > 0) {
-      return EditorSelection.cursor(ctx.offsets.inner[rowIdx - 1][nCols - 1][1])
-    }
-  })
+      if (colIdx === 0 && rowIdx === 0) {
+        return undefined
+      } else if (colIdx > 0) {
+        return EditorSelection.cursor(ctx.offsets.inner[rowIdx][colIdx - 1][1])
+      } else if (colIdx === 0 && rowIdx > 0) {
+        return EditorSelection.cursor(ctx.offsets.inner[rowIdx - 1][nCols - 1][1])
+      }
+    }).filter(i => i !== undefined)
+  }).flat()
 
   if (newSelections.length > 0) {
     target.dispatch({ selection: EditorSelection.create(newSelections) })
