@@ -31,15 +31,16 @@ export function moveNextRow (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
+    // TODO: Iterate over all ranges
     const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
-      return cellOffsets.some(off => off[0] <= ctx.range.anchor && off[1] >= ctx.range.anchor)
+      return cellOffsets.some(off => off[0] <= ctx.ranges[0].anchor && off[1] >= ctx.ranges[0].anchor)
     })
 
     if (rowIndex < 0 || rowIndex === ctx.offsets.outer.length - 1) {
       return undefined
     } else {
       const row = ctx.offsets.outer[rowIndex]
-      const cellIndex = row.findIndex(off => off[0] <= ctx.range.anchor && off[1] >= ctx.range.anchor)
+      const cellIndex = row.findIndex(off => off[0] <= ctx.ranges[0].anchor && off[1] >= ctx.ranges[0].anchor)
       if (cellIndex < 0) {
         return undefined
       }
@@ -70,15 +71,16 @@ export function movePrevRow (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
+    // TODO: Iterate over all ranges
     const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
-      return cellOffsets.some(off => off[0] <= ctx.range.anchor && off[1] >= ctx.range.anchor)
+      return cellOffsets.some(off => off[0] <= ctx.ranges[0].anchor && off[1] >= ctx.ranges[0].anchor)
     })
 
     if (rowIndex <= 0) {
       return undefined
     } else {
       const row = ctx.offsets.outer[rowIndex]
-      const cellIndex = row.findIndex(off => off[0] <= ctx.range.anchor && off[1] >= ctx.range.anchor)
+      const cellIndex = row.findIndex(off => off[0] <= ctx.ranges[0].anchor && off[1] >= ctx.ranges[0].anchor)
       if (cellIndex < 0) {
         return undefined
       }
@@ -108,7 +110,8 @@ export function swapNextRow (target: EditorView): boolean {
   const changes: ChangeSpec[] = mapSelectionsWithTables(target, ctx => {
     // TODO: What if selection spans multiple rows? The user then clearly
     // intends to move them all together
-    const thisLine = target.state.doc.lineAt(ctx.range.anchor)
+    // TODO: Iterate over all ranges (but only once per row)
+    const thisLine = target.state.doc.lineAt(ctx.ranges[0].anchor)
     const lastLine = target.state.doc.lineAt(ctx.tableNode.to)
     if (thisLine.number === target.state.doc.lines || thisLine.number === lastLine.number) {
       return undefined
@@ -161,9 +164,10 @@ export function swapNextRow (target: EditorView): boolean {
  */
 export function swapPrevRow (target: EditorView): boolean {
   const changes = mapSelectionsWithTables(target, ctx => {
-    // TODO: What if selection spans multiple rows? The user then clearly intends
-    // to move them all together
-    const thisLine = target.state.doc.lineAt(ctx.range.anchor)
+    // TODO: What if selection spans multiple rows? The user then clearly
+    // intends to move them all together
+    // TODO: Iterate over all ranges (but only once per row)
+    const thisLine = target.state.doc.lineAt(ctx.ranges[0].anchor)
     const firstLine = target.state.doc.lineAt(ctx.tableNode.from)
     if (thisLine.number === 1 || thisLine.number === firstLine.number) {
       return undefined
@@ -216,7 +220,8 @@ export function swapPrevRow (target: EditorView): boolean {
  */
 export function addRowAfter (target: EditorView): boolean {
   const changes = mapSelectionsWithTables(target, ctx => {
-    const line = target.state.doc.lineAt(ctx.range.head)
+    // TODO: Iterate over all ranges (but only once per row)
+    const line = target.state.doc.lineAt(ctx.ranges[0].head)
     if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
@@ -262,7 +267,8 @@ export function addRowAfter (target: EditorView): boolean {
  */
 export function addRowBefore (target: EditorView): boolean {
   const changes = mapSelectionsWithTables(target, ctx => {
-    const line = target.state.doc.lineAt(ctx.range.head)
+    // TODO: Iterate over all ranges (but only once per row)
+    const line = target.state.doc.lineAt(ctx.ranges[0].head)
     if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
@@ -309,7 +315,8 @@ export function addRowBefore (target: EditorView): boolean {
 export function deleteRow (target: EditorView): boolean {
   // Deleting a row is really boring: Simply replace the current line with nothing
   const changes = mapSelectionsWithTables(target, ctx => {
-    const line = target.state.doc.lineAt(ctx.range.head)
+    // TODO: Iterate over all ranges (but only once per row)
+    const line = target.state.doc.lineAt(ctx.ranges[0].head)
     if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
@@ -355,9 +362,10 @@ export function deleteRow (target: EditorView): boolean {
 export function clearRow (target: EditorView): boolean {
   // Clearing a row is even simpler, by simply replacing a row cell's contents with whitespace
   const changes = mapSelectionsWithTables(target, ctx => {
+    // TODO: Iterate over all ranges (but only once per row)
     const row = ctx.offsets.outer.find(row => {
       const cells = row.flat().sort((a, b) => a - b)
-      return ctx.range.head >= cells[0] && ctx.range.head <= cells[cells.length - 1]
+      return ctx.ranges[0].head >= cells[0] && ctx.ranges[0].head <= cells[cells.length - 1]
     })
 
     if (row === undefined) {

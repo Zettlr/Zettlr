@@ -44,15 +44,15 @@ export interface TableCellOffsets {
  */
 export interface SelectionTableContext {
   /**
-   * The selection range for this iteration
+   * An array of all selection ranges that are contained within this table.
    */
-  range: SelectionRange
+  ranges: SelectionRange[]
   /**
-   * The table node in question for this selection range
+   * The table SyntaxNode in question.
    */
   tableNode: SyntaxNode
   /**
-   * The parsed AST node for the table node
+   * The parsed AST node for the table SyntaxNode.
    */
   tableAST: Table
   /**
@@ -197,12 +197,27 @@ export function mapSelectionsWithTables<T> (
   // TODO: Is not recursive! Need to iter!
   const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
 
-  return target.state.selection.ranges.map(range => {
+  // First, collect all tables and their contained selections, since there may
+  // be multiple selections in each table. This ensures that each table will
+  // only visited once.
+  const tablesWithSelections: Array<{ tableNode: SyntaxNode, ranges: SelectionRange[] }> = []
+  for (const range of target.state.selection.ranges) {
     const tableNode = tableNodes.find(node => node.from <= range.head && node.to >= range.head)
     if (tableNode === undefined) {
-      return undefined
+      continue
     }
 
+    const existingTable = tablesWithSelections.find(item => item.tableNode === tableNode)
+    if (existingTable !== undefined) {
+      existingTable.ranges.push(range)
+    } else {
+      tablesWithSelections.push({ tableNode, ranges: [range] })
+    }
+  }
+
+  // Then, iterate over all collected tables
+  return tablesWithSelections.map(item => {
+    const { tableNode, ranges } = item
     // The AST parser may spit out a TextNode instead of a Table if there was
     // something going on with the SyntaxNode. This means that table offsets
     // aren't guaranteed for any Table node. Here we account for that fact.
@@ -210,8 +225,9 @@ export function mapSelectionsWithTables<T> (
     if (tableAST.type !== 'Table') {
       return undefined
     }
+
     const offsets = getTableCellOffsets(tableAST)
-    return callback({ range, tableNode, tableAST, offsets })
+    return callback({ ranges, tableNode, tableAST, offsets })
   })
     .filter(sel => sel !== undefined) // Filter out undefineds
 }

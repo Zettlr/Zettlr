@@ -43,7 +43,8 @@ export function setAlignment (which: 'left'|'right'|'center'): (target: EditorVi
   
       const delimLine = target.state.sliceDoc(node.from, node.to)
   
-      const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
+      // TODO: Iterate over all ranges (but only once per row)
+      const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
   
       if (idx === undefined) {
         return undefined

@@ -32,7 +32,8 @@ export function moveNextCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.inner, 'anchor')
+    // TODO: Iterate over all ranges
+    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.inner, 'anchor')
     if (idx === undefined || idx === offsets.length - 1) {
       return undefined
     }
@@ -62,7 +63,8 @@ export function movePrevCell (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.inner, 'anchor')
+    // TODO: Iterate over all ranges
+    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.inner, 'anchor')
     if (idx === undefined) {
       return undefined
     }
@@ -91,7 +93,8 @@ export function swapNextCol (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
+    // TODO: Iterate over all ranges (but only once per column)
+    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -111,7 +114,7 @@ export function swapNextCol (target: EditorView): boolean {
       ]
     })
 
-    const rowIndex = findRowIndexByRange(ctx.range, ctx.offsets.outer)!
+    const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
     const cursorPos = ctx.offsets.outer[rowIndex][idx + 1][0]
     const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
 
@@ -139,7 +142,8 @@ export function swapPrevCol (target: EditorView): boolean {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
+    // TODO: Iterate over all ranges (but only once per column)
+    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -161,7 +165,7 @@ export function swapPrevCol (target: EditorView): boolean {
       ]
     })
 
-    const rowIndex = findRowIndexByRange(ctx.range, ctx.offsets.outer)!
+    const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
     const cursorPos = ctx.offsets.outer[rowIndex][idx - 1][1]
     const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
 
@@ -191,7 +195,8 @@ export function addColAfter (target: EditorView): boolean {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
+    // TODO: Iterate over all ranges (but only once per column)
+    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -237,7 +242,8 @@ export function addColBefore (target: EditorView): boolean {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
+    // TODO: Iterate over all ranges (but only once per column)
+    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -284,7 +290,8 @@ export function deleteCol (target: EditorView): boolean {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
+    // TODO: Iterate over all ranges (but only once per column)
+    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -337,7 +344,8 @@ export function clearCol (target: EditorView): boolean {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
+    // TODO: Iterate over all ranges (but only once per column)
+    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
