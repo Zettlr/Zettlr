@@ -52,8 +52,8 @@ export function markdownKeymap (): Extension {
     // Overload Tab, depending on context (priority high->low)
     { key: 'Tab', run: acceptCompletion },
     { key: 'Tab', run: nextSnippet },
-    { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
     { key: 'Tab', run: moveNextCell, shift: movePrevCell },
+    { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
 
     // Overload Enter
     { key: 'Enter', run: handleReplacement },
