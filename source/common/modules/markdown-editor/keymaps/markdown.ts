@@ -21,7 +21,7 @@ import {
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
 import { addColAfter, addColBefore, clearCol, deleteCol, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
-import { addRowAfter, addRowBefore, clearRow, moveNextRow, movePrevRow } from '../table-editor/commands/rows'
+import { addRowAfter, addRowBefore, clearRow, moveNextRow, movePrevRow, swapPrevRow } from '../table-editor/commands/rows'
 import { clearTable, setAlignment } from '../table-editor/commands/tables'
 
 // Includes:
@@ -58,9 +58,9 @@ export function markdownKeymap (): Extension {
     // Overload Enter
     { key: 'Enter', run: handleReplacement },
     // If no replacement can be handled, the default should be newlineAndIndent
+    { key: 'Enter', run: moveNextRow, shift: movePrevRow },
     { key: 'Enter', run: insertNewlineContinueMarkup },
     { key: 'Enter', run: insertNewlineAndIndent },
-    { key: 'Enter', run: moveNextRow, shift: movePrevRow },
 
     // Overload Backspace
     { key: 'Backspace', run: deleteBracketPair },
@@ -71,9 +71,11 @@ export function markdownKeymap (): Extension {
 
     // Overload the copy commands
     { key: 'Alt-Shift-ArrowUp', run: addRowBefore }, // TODO: Shortcut not final
+    { key: 'Alt-ArrowUp', run: swapPrevRow },
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
 
     { key: 'Alt-Shift-ArrowDown', run: addRowAfter }, // TODO: Shortcut not final
+    { key: 'Alt-ArrowDown', run: swapPrevRow },
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
 
     { key: 'Alt-Shift-ArrowRight', run: addColAfter }, // TODO: Shortcut not final
