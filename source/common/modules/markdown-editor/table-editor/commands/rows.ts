@@ -27,25 +27,25 @@ import { mapSelectionsWithTables } from './util'
  * @return  {boolean}             Whether any movement has happened
  */
 export function moveNextRow (target: EditorView): boolean {
-  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, offsets) => {
+  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, ctx => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const rowIndex = offsets.outer.findIndex(cellOffsets => {
-      return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
+    const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
+      return cellOffsets.some(off => off[0] <= ctx.range.anchor && off[1] >= ctx.range.anchor)
     })
 
-    if (rowIndex < 0 || rowIndex === offsets.outer.length - 1) {
+    if (rowIndex < 0 || rowIndex === ctx.offsets.outer.length - 1) {
       return undefined
     } else {
-      const row = offsets.outer[rowIndex]
-      const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
+      const row = ctx.offsets.outer[rowIndex]
+      const cellIndex = row.findIndex(off => off[0] <= ctx.range.anchor && off[1] >= ctx.range.anchor)
       if (cellIndex < 0) {
         return undefined
       }
 
       // NOTE that we move by the inner offsets here
-      return EditorSelection.cursor(offsets.inner[rowIndex + 1][cellIndex][0])
+      return EditorSelection.cursor(ctx.offsets.inner[rowIndex + 1][cellIndex][0])
     }
   })
 
@@ -66,25 +66,25 @@ export function moveNextRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any movement has happened
  */
 export function movePrevRow (target: EditorView): boolean {
-  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, offsets) => {
+  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, ctx => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const rowIndex = offsets.outer.findIndex(cellOffsets => {
-      return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
+    const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
+      return cellOffsets.some(off => off[0] <= ctx.range.anchor && off[1] >= ctx.range.anchor)
     })
 
     if (rowIndex <= 0) {
       return undefined
     } else {
-      const row = offsets.outer[rowIndex]
-      const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
+      const row = ctx.offsets.outer[rowIndex]
+      const cellIndex = row.findIndex(off => off[0] <= ctx.range.anchor && off[1] >= ctx.range.anchor)
       if (cellIndex < 0) {
         return undefined
       }
 
       // NOTE that we move by the inner offsets
-      return EditorSelection.cursor(offsets.inner[rowIndex - 1][cellIndex][0])
+      return EditorSelection.cursor(ctx.offsets.inner[rowIndex - 1][cellIndex][0])
     }
   })
 
@@ -105,16 +105,16 @@ export function movePrevRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any swaps have happened.
  */
 export function swapNextRow (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
+  const changes: ChangeSpec[] = mapSelectionsWithTables(target, ctx => {
     // TODO: What if selection spans multiple rows? The user then clearly
     // intends to move them all together
-    const thisLine = target.state.doc.lineAt(range.anchor)
-    const lastLine = target.state.doc.lineAt(tableNode.to)
+    const thisLine = target.state.doc.lineAt(ctx.range.anchor)
+    const lastLine = target.state.doc.lineAt(ctx.tableNode.to)
     if (thisLine.number === target.state.doc.lines || thisLine.number === lastLine.number) {
       return undefined
     }
 
-    if (tableAST.tableType === 'grid') {
+    if (ctx.tableAST.tableType === 'grid') {
       // Handle a grid table
       let nextLine = target.state.doc.line(thisLine.number + 2)
       if (nextLine.number > lastLine.number || nextLine.number >= target.state.doc.lines) {
@@ -160,16 +160,16 @@ export function swapNextRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any swaps occurred
  */
 export function swapPrevRow (target: EditorView): boolean {
-  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
+  const changes = mapSelectionsWithTables(target, ctx => {
     // TODO: What if selection spans multiple rows? The user then clearly intends
     // to move them all together
-    const thisLine = target.state.doc.lineAt(range.anchor)
-    const firstLine = target.state.doc.lineAt(tableNode.from)
+    const thisLine = target.state.doc.lineAt(ctx.range.anchor)
+    const firstLine = target.state.doc.lineAt(ctx.tableNode.from)
     if (thisLine.number === 1 || thisLine.number === firstLine.number) {
       return undefined
     }
 
-    if (tableAST.tableType === 'grid') {
+    if (ctx.tableAST.tableType === 'grid') {
       // Handle a grid table
       let prevLine = target.state.doc.line(thisLine.number - 2)
       if (prevLine.number < firstLine.number || prevLine.number < 1) {
@@ -215,9 +215,9 @@ export function swapPrevRow (target: EditorView): boolean {
  * @return  {boolean}             Whether the command has changed anything
  */
 export function addRowAfter (target: EditorView): boolean {
-  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
-    const line = target.state.doc.lineAt(range.head)
-    if (tableAST.tableType === 'pipe') {
+  const changes = mapSelectionsWithTables(target, ctx => {
+    const line = target.state.doc.lineAt(ctx.range.head)
+    if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
       if (/^[\s|+:-]+$/.test(line.text) && line.text.includes('-')) {
@@ -261,9 +261,9 @@ export function addRowAfter (target: EditorView): boolean {
  * @return  {boolean}             Whether the command has changed anything.
  */
 export function addRowBefore (target: EditorView): boolean {
-  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
-    const line = target.state.doc.lineAt(range.head)
-    if (tableAST.tableType === 'pipe') {
+  const changes = mapSelectionsWithTables(target, ctx => {
+    const line = target.state.doc.lineAt(ctx.range.head)
+    if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
       if (/^[\s|+:-]+$/.test(line.text) && line.text.includes('-')) {
@@ -308,9 +308,9 @@ export function addRowBefore (target: EditorView): boolean {
  */
 export function deleteRow (target: EditorView): boolean {
   // Deleting a row is really boring: Simply replace the current line with nothing
-  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, _offsets) => {
-    const line = target.state.doc.lineAt(range.head)
-    if (tableAST.tableType === 'pipe') {
+  const changes = mapSelectionsWithTables(target, ctx => {
+    const line = target.state.doc.lineAt(ctx.range.head)
+    if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
       if (/^[\s|+:-]+$/.test(line.text) && line.text.includes('-')) {
@@ -354,10 +354,10 @@ export function deleteRow (target: EditorView): boolean {
  */
 export function clearRow (target: EditorView): boolean {
   // Clearing a row is even simpler, by simply replacing a row cell's contents with whitespace
-  const changes = mapSelectionsWithTables(target, (range, tableNode, tableAST, offsets) => {
-    const row = offsets.outer.find(row => {
+  const changes = mapSelectionsWithTables(target, ctx => {
+    const row = ctx.offsets.outer.find(row => {
       const cells = row.flat().sort((a, b) => a - b)
-      return range.head >= cells[0] && range.head <= cells[cells.length - 1]
+      return ctx.range.head >= cells[0] && ctx.range.head <= cells[cells.length - 1]
     })
 
     if (row === undefined) {

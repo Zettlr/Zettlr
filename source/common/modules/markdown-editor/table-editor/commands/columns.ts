@@ -27,12 +27,12 @@ import { findColumnIndexByRange, findRowIndexByRange, getDelimiterLineCellOffset
  * @return  {boolean}             Whether the command has moved any selections
  */
 export function moveNextCell (target: EditorView): boolean {
-  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
-    const offsets = cellOffsets.inner.flat() // Remove the rows
+  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, ctx => {
+    const offsets = ctx.offsets.inner.flat() // Remove the rows
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const idx = findColumnIndexByRange(range, cellOffsets.inner, 'anchor')
+    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.inner, 'anchor')
     if (idx === undefined || idx === offsets.length - 1) {
       return undefined
     }
@@ -57,12 +57,12 @@ export function moveNextCell (target: EditorView): boolean {
  * @return  {boolean}             Whether the command has moved any selections
  */
 export function movePrevCell (target: EditorView): boolean {
-  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
-    const offsets = cellOffsets.inner.flat() // Remove the rows
+  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, ctx => {
+    const offsets = ctx.offsets.inner.flat() // Remove the rows
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
-    const idx = findColumnIndexByRange(range, cellOffsets.inner, 'anchor')
+    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.inner, 'anchor')
     if (idx === undefined) {
       return undefined
     }
@@ -87,16 +87,16 @@ export function movePrevCell (target: EditorView): boolean {
  * @return  {boolean}             Whether there has been at least one change.
  */
 export function swapNextCol (target: EditorView): boolean {
-  const tr = mapSelectionsWithTables<TransactionSpec>(target, (range, tableNode, tableAST, cellOffsets) => {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const idx = findColumnIndexByRange(range, cellOffsets.outer)
+    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
 
-    const changes = cellOffsets.outer.flatMap(row => {
+    const changes = ctx.offsets.outer.flatMap(row => {
       return [
         // Cell 1 -> 0
         {
@@ -111,12 +111,12 @@ export function swapNextCol (target: EditorView): boolean {
       ]
     })
 
-    const rowIndex = findRowIndexByRange(range, cellOffsets.outer)!
-    const cursorPos = cellOffsets.outer[rowIndex][idx + 1][0]
+    const rowIndex = findRowIndexByRange(ctx.range, ctx.offsets.outer)!
+    const cursorPos = ctx.offsets.outer[rowIndex][idx + 1][0]
     const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
 
     return { changes, selection }
-  }) // NOTE: Request outer perimeter of cells
+  })
 
   if (tr.length > 0) {
     target.dispatch(...tr)
@@ -135,16 +135,16 @@ export function swapNextCol (target: EditorView): boolean {
  * @return  {boolean}             Whether at least one column has been swapped.
  */
 export function swapPrevCol (target: EditorView): boolean {
-  const tr = mapSelectionsWithTables<TransactionSpec>(target, (range, tableNode, tableAST, cellOffsets) => {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
-    const idx = findColumnIndexByRange(range, cellOffsets.outer)
+    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
 
-    const changes = cellOffsets.outer.flatMap(row => {
+    const changes = ctx.offsets.outer.flatMap(row => {
       return [
         // Cell 0 -> 1
         {
@@ -161,8 +161,8 @@ export function swapPrevCol (target: EditorView): boolean {
       ]
     })
 
-    const rowIndex = findRowIndexByRange(range, cellOffsets.outer)!
-    const cursorPos = cellOffsets.outer[rowIndex][idx - 1][1]
+    const rowIndex = findRowIndexByRange(ctx.range, ctx.offsets.outer)!
+    const cursorPos = ctx.offsets.outer[rowIndex][idx - 1][1]
     const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
 
     return { changes, selection }
@@ -185,13 +185,13 @@ export function swapPrevCol (target: EditorView): boolean {
  * @return  {boolean}             Whether or not changes have been made.
  */
 export function addColAfter (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
+  const changes: ChangeSpec[] = mapSelectionsWithTables(target, ctx => {
     // Only support this in pipe tables. TODO
-    if (tableAST.tableType !== 'pipe') {
+    if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(range, cellOffsets.outer)
+    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -200,14 +200,14 @@ export function addColAfter (target: EditorView): boolean {
     // position. We also need to add '-|-' to the delimiter
 
     // NOTE: Remove `null` since that check will be performed during AST parsing
-    const delimNode = tableNode.getChild('TableDelimiter')!
+    const delimNode = ctx.tableNode.getChild('TableDelimiter')!
     const delimLine = target.state.doc.lineAt(delimNode.from)
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
     const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
 
     return [
       { from: delimLine.from + delimOffsets[idx][1], insert: `-${delimChar}-` },
-      ...cellOffsets.outer.flatMap(row => {
+      ...ctx.offsets.outer.flatMap(row => {
         return { from: row[idx][1], insert: ' | ' }
       }).sort((a, b) => a.from - b.from)
     ]
@@ -231,13 +231,13 @@ export function addColAfter (target: EditorView): boolean {
  */
 export function addColBefore (target: EditorView): boolean {
   // Basically the same as addColAfter, with minor changes
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, (range, tableNode, tableAST, cellOffsets) => {
+  const changes: ChangeSpec[] = mapSelectionsWithTables(target, ctx => {
     // Only support this in pipe tables. TODO
-    if (tableAST.tableType !== 'pipe') {
+    if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(range, cellOffsets.outer)
+    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
@@ -246,14 +246,14 @@ export function addColBefore (target: EditorView): boolean {
     // from position. We also need to add '-|-' to the delimiter
 
     // NOTE: Remove `null` since that check will be performed during AST parsing
-    const delimNode = tableNode.getChild('TableDelimiter')!
+    const delimNode = ctx.tableNode.getChild('TableDelimiter')!
     const delimLine = target.state.doc.lineAt(delimNode.from)
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
     const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
 
     return [
       { from: delimLine.from + delimOffsets[idx][0], insert: `-${delimChar}-` },
-      ...cellOffsets.outer.flatMap(row => {
+      ...ctx.offsets.outer.flatMap(row => {
         return { from: row[idx][0], insert: ' | ' }
       }).sort((a, b) => a.from - b.from)
     ]
@@ -278,19 +278,19 @@ export function addColBefore (target: EditorView): boolean {
 export function deleteCol (target: EditorView): boolean {
   // To delete the current column, we basically just have to replace its inner
   // cell content (incl. padding) plus the following delimiter (if applicable)
-  const changes = mapSelectionsWithTables<ChangeSpec[]>(target, (range, tableNode, tableAST, cellOffsets) => {
+  const changes = mapSelectionsWithTables<ChangeSpec[]>(target, ctx => {
     // Only support this in pipe tables. TODO
-    if (tableAST.tableType !== 'pipe') {
+    if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(range, cellOffsets.outer)
+    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
 
     // NOTE: Remove `null` since that check will be performed during AST parsing
-    const delimNode = tableNode.getChild('TableDelimiter')!
+    const delimNode = ctx.tableNode.getChild('TableDelimiter')!
     const delimLine = target.state.doc.lineAt(delimNode.from)
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
     const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
@@ -303,7 +303,7 @@ export function deleteCol (target: EditorView): boolean {
         to: delimLine.from + (delimTo < delimLine.text.length ? delimTo + 1 : delimTo),
         insert: ''
       },
-      ...cellOffsets.outer.flatMap(row => {
+      ...ctx.offsets.outer.flatMap(row => {
         const [ from, to ] = row[idx]
         const line = target.state.doc.lineAt(from)
         // Take the following char after `to` iff we're not at the end of the line
@@ -331,19 +331,19 @@ export function deleteCol (target: EditorView): boolean {
 export function clearCol (target: EditorView): boolean {
   // To clear the current column, we basically just have to replace its inner
   // cell content (excl. padding) with whitespace
-  const changes = mapSelectionsWithTables<ChangeSpec[]>(target, (range, tableNode, tableAST, cellOffsets) => {
+  const changes = mapSelectionsWithTables<ChangeSpec[]>(target, ctx => {
     // Only support this in pipe tables. TODO
-    if (tableAST.tableType !== 'pipe') {
+    if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
     }
 
-    const idx = findColumnIndexByRange(range, cellOffsets.outer)
+    const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
     if (idx === undefined) {
       return undefined
     }
 
 
-    return cellOffsets.outer.flatMap(row => {
+    return ctx.offsets.outer.flatMap(row => {
       const [ from, to ] = row[idx]
       return { from, to, insert: ' '.repeat(to - from) }
     })

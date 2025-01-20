@@ -21,6 +21,11 @@ import type { SyntaxNode } from '@lezer/common'
 import type { Table } from 'source/common/modules/markdown-utils/markdown-ast'
 import { parseTableNode } from 'source/common/modules/markdown-utils/markdown-ast/parse-table-node'
 
+/**
+ * Describes a cell offset struct returned by `getTableCellOffsets`. It contains
+ * the cell ranges (from and to) for both inner (just the content) and outer
+ * (including padding) offsets.
+ */
 export interface TableCellOffsets {
   /**
    * The inner cell `[from, to]` offsets, indexed by row and cell.
@@ -30,6 +35,30 @@ export interface TableCellOffsets {
    * The outer cell `[from, to]` offsets, indexed by row and cell.
    */
   outer: [number, number][][]
+}
+
+/**
+ * Describes a single context for a call to mapSelectionsWithTables. Passed to
+ * the callback and can be used to access the selection range, the table as both
+ * Syntax and AST node, and the table cell offsets.
+ */
+export interface SelectionTableContext {
+  /**
+   * The selection range for this iteration
+   */
+  range: SelectionRange
+  /**
+   * The table node in question for this selection range
+   */
+  tableNode: SyntaxNode
+  /**
+   * The parsed AST node for the table node
+   */
+  tableAST: Table
+  /**
+   * The cell offsets within the table.
+   */
+  offsets: ReturnType<typeof getTableCellOffsets>
 }
 
 /**
@@ -163,12 +192,7 @@ export function getDelimiterLineCellOffsets (line: string, delimChar: string): [
  */
 export function mapSelectionsWithTables<T> (
   target: EditorView,
-  callback: (
-    range: SelectionRange,
-    tableNode: SyntaxNode,
-    tableAST: Table,
-    offsets: ReturnType<typeof getTableCellOffsets>
-  ) => T|undefined
+  callback: (ctx: SelectionTableContext) => T|undefined
 ): T[] {
   // TODO: Is not recursive! Need to iter!
   const tableNodes = syntaxTree(target.state).topNode.getChildren('Table')
@@ -187,7 +211,7 @@ export function mapSelectionsWithTables<T> (
       return undefined
     }
     const offsets = getTableCellOffsets(tableAST)
-    return callback(range, tableNode, tableAST, offsets)
+    return callback({ range, tableNode, tableAST, offsets })
   })
     .filter(sel => sel !== undefined) // Filter out undefineds
 }

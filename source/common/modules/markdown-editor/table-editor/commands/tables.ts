@@ -30,8 +30,8 @@ import type { SyntaxNode } from '@lezer/common'
  */
 export function setAlignment (which: 'left'|'right'|'center'): (target: EditorView) => boolean {
   return (target) => {
-    const changes = mapSelectionsWithTables<ChangeSpec>(target, (range, tableNode, tableAST, offsets) => {
-      const delimNodes = tableNode.getChildren('TableDelimiter')
+    const changes = mapSelectionsWithTables<ChangeSpec>(target, ctx => {
+      const delimNodes = ctx.tableNode.getChildren('TableDelimiter')
       let node: SyntaxNode|undefined = delimNodes[0]
       if (delimNodes.length > 1) {
         node = delimNodes.find(node => target.state.sliceDoc(node.from, node.to).includes('='))
@@ -43,14 +43,14 @@ export function setAlignment (which: 'left'|'right'|'center'): (target: EditorVi
   
       const delimLine = target.state.sliceDoc(node.from, node.to)
   
-      const idx = findColumnIndexByRange(range, offsets.outer)
+      const idx = findColumnIndexByRange(ctx.range, ctx.offsets.outer)
   
       if (idx === undefined) {
         return undefined
       }
   
-      const delimChar = tableAST.tableType === 'grid' ? '+' : delimLine.includes('|') ? '|' : '+'
-      const fillChar = tableAST.tableType === 'grid' ? '=' : '-'
+      const delimChar = ctx.tableAST.tableType === 'grid' ? '+' : delimLine.includes('|') ? '|' : '+'
+      const fillChar = ctx.tableAST.tableType === 'grid' ? '=' : '-'
       const delimOffsets = getDelimiterLineCellOffsets(delimLine, delimChar)
       const [ from, to ] = delimOffsets[idx]
       if (which === 'left') {
@@ -79,10 +79,10 @@ export function setAlignment (which: 'left'|'right'|'center'): (target: EditorVi
  * @return  {boolean}             Whether the command has applied any changes.
  */
 export function clearTable (target: EditorView): boolean {
-  const changes = mapSelectionsWithTables<ChangeSpec[]>(target, (range, tableNode, tableAST, offsets) => {
+  const changes = mapSelectionsWithTables<ChangeSpec[]>(target, ctx => {
     // Map over the offset rows, and then simply yield changes that replace each
     // table cell with whitespace, flattening the array
-    return offsets.outer.flatMap(row => row.map(([ from, to ]) => ({ from, to, insert: ' '.repeat(to - from) })))
+    return ctx.offsets.outer.flatMap(row => row.map(([ from, to ]) => ({ from, to, insert: ' '.repeat(to - from) })))
   }).flat() // Flatten the corresponding array
 
   if (changes.length > 0) {
