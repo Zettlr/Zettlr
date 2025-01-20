@@ -72,6 +72,19 @@ export function isPipeTableDelimRow (line: string): boolean {
 }
 
 /**
+ * Checks whether a provided string looks like a grid table delimiter row. NOTE:
+ * This function does not distinguish between regular delimiters and a header
+ * row. Check for the presence of `=` for that.
+ *
+ * @param   {string}   line  The line text
+ *
+ * @return  {boolean}        Whether it appears to be a delimiter row.
+ */
+export function isGridTableDelimRow (line: string): boolean {
+  return /^[+=:-]+$/.test(line)
+}
+
+/**
  * Takes a table node and the corresponding Markdown source and returns an
  * object with both the inner and outer list of cell offsets `[from, to]` for
  * every cell in the table, sorted by rows. Inner offsets refer to the offsets
@@ -141,6 +154,26 @@ export function findRowIndexByRange (
   })
 
   return rowIndex < 0 ? undefined : rowIndex
+}
+
+/**
+ * Takes an array of ranges and a set of cell offsets and returns a set of all
+ * row indices that contain at least one of these ranges.
+ *
+ * @return  {number[]}  An array of (unique) row indices
+ */
+export function getRowIndicesByRanges (
+  ranges: SelectionRange[],
+  cellOffsets: [number, number][][],
+  where: 'head'|'anchor' = 'head'
+): number[] {
+  return [
+    ... new Set(
+      ranges
+        .map(range => findRowIndexByRange(range, cellOffsets, where))
+        .filter(i => i !== undefined)
+    )
+  ]
 }
 /**
  * Utility function to extract the `[from, to]` offsets of the cells within a

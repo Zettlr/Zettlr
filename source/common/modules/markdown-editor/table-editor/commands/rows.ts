@@ -16,7 +16,7 @@
 
 import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
-import { isPipeTableDelimRow, mapSelectionsWithTables } from './util'
+import { findColumnIndexByRange, findRowIndexByRange, getRowIndicesByRanges, isGridTableDelimRow, isPipeTableDelimRow, mapSelectionsWithTables } from './util'
 
 /**
  * This command takes all editor selections and moves those within tables to the
@@ -32,22 +32,19 @@ export function moveNextRow (target: EditorView): boolean {
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
     return ctx.ranges.map(range => {
-      const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
-        return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
-      })
-  
-      if (rowIndex < 0 || rowIndex === ctx.offsets.outer.length - 1) {
+      const rowIndex = findRowIndexByRange(range, ctx.offsets.outer, 'anchor')
+      const cellIndex = findColumnIndexByRange(range, ctx.offsets.outer, 'anchor')
+
+      if (rowIndex === undefined || cellIndex === undefined) {
         return undefined
-      } else {
-        const row = ctx.offsets.outer[rowIndex]
-        const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
-        if (cellIndex < 0) {
-          return undefined
-        }
-  
-        // NOTE that we move by the inner offsets here
-        return EditorSelection.cursor(ctx.offsets.inner[rowIndex + 1][cellIndex][0])
       }
+
+      if (rowIndex === ctx.offsets.outer.length - 1) {
+        return undefined
+      }
+  
+      // NOTE that we move by the inner offsets here
+      return EditorSelection.cursor(ctx.offsets.inner[rowIndex + 1][cellIndex][0])
     }).filter(i => i !== undefined)
   }).flat()
 
@@ -73,22 +70,15 @@ export function movePrevRow (target: EditorView): boolean {
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
     return ctx.ranges.map(range => {
-      const rowIndex = ctx.offsets.outer.findIndex(cellOffsets => {
-        return cellOffsets.some(off => off[0] <= range.anchor && off[1] >= range.anchor)
-      })
-  
-      if (rowIndex <= 0) {
+      const rowIndex = findRowIndexByRange(range, ctx.offsets.outer, 'anchor')
+      const cellIndex = findColumnIndexByRange(range, ctx.offsets.outer, 'anchor')
+
+      if (rowIndex === undefined || cellIndex === undefined || rowIndex === 0) {
         return undefined
-      } else {
-        const row = ctx.offsets.outer[rowIndex]
-        const cellIndex = row.findIndex(off => off[0] <= range.anchor && off[1] >= range.anchor)
-        if (cellIndex < 0) {
-          return undefined
-        }
-  
-        // NOTE that we move by the inner offsets
-        return EditorSelection.cursor(ctx.offsets.inner[rowIndex - 1][cellIndex][0])
       }
+  
+      // NOTE that we move by the inner offsets
+      return EditorSelection.cursor(ctx.offsets.inner[rowIndex - 1][cellIndex][0])
     }).filter(i => i !== undefined)
   }).flat()
 
@@ -112,7 +102,7 @@ export function swapNextRow (target: EditorView): boolean {
   const changes: ChangeSpec[] = mapSelectionsWithTables(target, ctx => {
     // TODO: What if selection spans multiple rows? The user then clearly
     // intends to move them all together
-    // TODO: Iterate over all ranges (but only once per row)
+    // NOTE: Swapping is complex; here we only consider the first range
     const thisLine = target.state.doc.lineAt(ctx.ranges[0].anchor)
     const lastLine = target.state.doc.lineAt(ctx.tableNode.to)
     if (thisLine.number === target.state.doc.lines || thisLine.number === lastLine.number) {
@@ -132,7 +122,7 @@ export function swapNextRow (target: EditorView): boolean {
     } else {
       // Handle a pipe table
       let nextLine = target.state.doc.line(thisLine.number + 1)
-      if (/^[|:-]+$/.test(nextLine.text)) {
+      if (isPipeTableDelimRow(nextLine.text)) {
         // We have to swap the lines to retain the header row
         nextLine = target.state.doc.line(nextLine.number + 1)
         changes.push(
@@ -168,7 +158,7 @@ export function swapPrevRow (target: EditorView): boolean {
   const changes = mapSelectionsWithTables(target, ctx => {
     // TODO: What if selection spans multiple rows? The user then clearly
     // intends to move them all together
-    // TODO: Iterate over all ranges (but only once per row)
+    // NOTE: Swapping is complex; here we only consider the first range
     const thisLine = target.state.doc.lineAt(ctx.ranges[0].anchor)
     const firstLine = target.state.doc.lineAt(ctx.tableNode.from)
     if (thisLine.number === 1 || thisLine.number === firstLine.number) {
@@ -188,7 +178,7 @@ export function swapPrevRow (target: EditorView): boolean {
     } else {
       // Handle a pipe table
       let prevLine = target.state.doc.line(thisLine.number - 1)
-      if (/^[|:-]+$/.test(prevLine.text)) {
+      if (isPipeTableDelimRow(prevLine.text)) {
         // We have to swap the lines to retain the header row
         prevLine = target.state.doc.line(prevLine.number - 1)
         return [
@@ -290,7 +280,7 @@ export function addRowBefore (target: EditorView): boolean {
     } else {
       // Grid table
       // The user may have the cursor in a divider or a content row
-      if (/^[\s+=:-]+$/.test(line.text)) {
+      if (isGridTableDelimRow(line.text)) {
         return undefined
       }
       const nextLine = target.state.doc.line(line.number + 1)
@@ -322,34 +312,30 @@ export function addRowBefore (target: EditorView): boolean {
 export function deleteRow (target: EditorView): boolean {
   // Deleting a row is really boring: Simply replace the current line with nothing
   const changes = mapSelectionsWithTables(target, ctx => {
-    // TODO: Iterate over all ranges (but only once per row)
-    const line = target.state.doc.lineAt(ctx.ranges[0].head)
-    if (ctx.tableAST.tableType === 'pipe') {
-      // Did the user select the divider? The second check is necessary as the
-      // regex also matches empty lines
-      if (isPipeTableDelimRow(line.text)) {
-        return undefined
+    const idx = getRowIndicesByRanges(ctx.ranges, ctx.offsets.outer)
+    return idx.map(rowIdx => {
+      const line = target.state.doc.lineAt(ctx.tableAST.rows[rowIdx].from)
+      const isLastLine = line.number === target.state.doc.lines
+      if (ctx.tableAST.tableType === 'pipe') {
+        // Did the user select the divider? The second check is necessary as the
+        // regex also matches empty lines
+        if (isPipeTableDelimRow(line.text)) {
+          return undefined
+        }
+  
+        return { from: line.from, to: isLastLine ? line.to : line.to + 1, insert: '' }
+      } else {
+        // Grid table
+        // The user may have the cursor in a divider or a content row
+        if (isGridTableDelimRow(line.text)) {
+          return undefined
+        }
+        const nextLine = target.state.doc.line(line.number + 1)
+        const isNextLineLastLine = nextLine.number === target.state.doc.lines
+        return { from: line.from, to: isNextLineLastLine ? nextLine.to : nextLine.to + 1, insert: '' }
       }
-
-      return {
-        from: line.from,
-        to: line.to === target.state.doc.length ? line.to : line.to + 1,
-        insert: ''
-      }
-    } else {
-      // Grid table
-      // The user may have the cursor in a divider or a content row
-      if (/^[\s+=:-]+$/.test(line.text)) {
-        return undefined
-      }
-      const nextLine = target.state.doc.line(line.number + 1)
-      return {
-        from: line.from,
-        to: nextLine.to === target.state.doc.length ? nextLine.to : nextLine.to + 1,
-        insert: ''
-      }
-    }
-  })
+    }).filter(i => i !== undefined)
+  }).flat()
 
   if (changes.length > 0) {
     target.dispatch({ changes })
@@ -369,20 +355,14 @@ export function deleteRow (target: EditorView): boolean {
 export function clearRow (target: EditorView): boolean {
   // Clearing a row is even simpler, by simply replacing a row cell's contents with whitespace
   const changes = mapSelectionsWithTables(target, ctx => {
-    // TODO: Iterate over all ranges (but only once per row)
-    const row = ctx.offsets.outer.find(row => {
-      const cells = row.flat().sort((a, b) => a - b)
-      return ctx.ranges[0].head >= cells[0] && ctx.ranges[0].head <= cells[cells.length - 1]
-    })
+    const rows = getRowIndicesByRanges(ctx.ranges, ctx.offsets.outer)
 
-    if (row === undefined) {
-      return undefined
-    }
-
-    return row.map(([ from, to ]) => {
-      return { from, to, insert: ' '.repeat(to - from) }
+    return rows.flatMap(row => {
+      return ctx.offsets.outer[row].map(([ from, to ]) => {
+        return { from, to, insert: ' '.repeat(to - from) }
+      })
     })
-  })
+  }).flat()
 
   if (changes.length > 0) {
     target.dispatch({ changes })
