@@ -80,7 +80,7 @@ import { addNewFootnote } from './commands/footnotes'
 import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
 import openMarkdownLink from './util/open-markdown-link'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
-import { isAnyLiteralNodeContainingATag } from './util/yaml-tag-detection'
+import { isThisNodeAnyLiteralNodeInAYamlKeywordsOrTagsPair } from './util/yaml-tag-detection'
 
 import safeAssign from '@common/util/safe-assign'
 import { countAll } from '@common/util/counter'
@@ -344,7 +344,7 @@ export default class MarkdownEditor extends EventEmitter {
 
             const innerNodeAt = syntaxTree(view.state).resolveInner(pos, 0)
 
-            if (isAnyLiteralNodeContainingATag(innerNodeAt, view.state)) {
+            if (isThisNodeAnyLiteralNodeInAYamlKeywordsOrTagsPair(innerNodeAt, view.state)) {
               let tag = view.state.sliceDoc(innerNodeAt.from, innerNodeAt.to)
               if (innerNodeAt.type.name === 'QuotedLiteral') {
                 tag = tag.substring(1, tag.length-1)
