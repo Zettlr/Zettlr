@@ -12200,9 +12200,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pinia@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "pinia@npm:2.3.0"
+"pinia@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "pinia@npm:2.3.1"
   dependencies:
     "@vue/devtools-api": ^6.6.3
     vue-demi: ^0.14.10
@@ -12212,7 +12212,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 556dd718563c535e21f35576750afc2abfde0ab60f40b1e31e6cf2ecceee17489549d0c6ffc445a168a84505e9117cfa8d8ae859fc47332db00f88d1db480f56
+  checksum: 848fff9c868a351c54fe169e9a088760fa732bb5b5e9a2b4f651fcf7240927997140774c1c9dc6bc940762d217f54214cd550955dc9d45e26190ce16faa24a77
   languageName: node
   linkType: hard
 
@@ -16385,7 +16385,7 @@ __metadata:
     mocha: ^11.1.0
     node-loader: ^2.1.0
     nodehun: ^3.0.2
-    pinia: ^2.3.0
+    pinia: ^2.3.1
     rehype-parse: ^9.0.1
     rehype-remark: ^10.0.0
     rehype-remove-comments: ^6.1.1
