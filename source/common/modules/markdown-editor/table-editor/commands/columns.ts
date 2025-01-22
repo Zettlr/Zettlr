@@ -208,39 +208,44 @@ export function swapPrevCol (target: EditorView): boolean {
  * @return  {boolean}             Whether or not changes have been made.
  */
 export function addColAfter (target: EditorView): boolean {
-  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
+  const tr = mapSelectionsWithTables<TransactionSpec[]>(target, ctx => {
     // Only support this in pipe tables. TODO
     if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
     }
 
-    // TODO: Iterate over all ranges (but only once per column)
-    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
-    if (idx === undefined) {
-      return undefined
-    }
+    const seen: number[] = []
+    return ctx.ranges.map(range => {
+      const idx = findColumnIndexByRange(range, ctx.offsets.outer)
+      if (idx === undefined || seen.includes(idx)) {
+        return undefined
+      }
 
-    // Now, for each row, calculate a change that adds ' | ' after the cell's to
-    // position. We also need to add '-|-' to the delimiter
+      seen.push(idx) // Make sure we only add one col per col, not per range
 
-    // NOTE: Remove `null` since that check will be performed during AST parsing
-    const delimNode = ctx.tableNode.getChild('TableDelimiter')!
-    const delimLine = target.state.doc.lineAt(delimNode.from)
-    const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
-    const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
+      // Now, for each row, calculate a change that adds ' | ' after the cell's to
+      // position. We also need to add '-|-' to the delimiter
 
-    const changes = [
-      { from: delimLine.from + delimOffsets[idx][1], insert: `-${delimChar}-` },
-      ...ctx.offsets.outer.flatMap(row => {
-        return { from: row[idx][1], insert: ' | ' }
-      }).sort((a, b) => a.from - b.from)
-    ]
+      // NOTE: Remove `null` since that check will be performed during AST parsing
+      const delimNode = ctx.tableNode.getChild('TableDelimiter')!
+      const delimLine = target.state.doc.lineAt(delimNode.from)
+      const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
+      const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
 
-    const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
-    const cursorPos = ctx.offsets.outer[rowIndex][idx][1] + 3 // Place cursor
-    const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+      const changes = [
+        { from: delimLine.from + delimOffsets[idx][1], insert: `-${delimChar}-` },
+        ...ctx.offsets.outer.flatMap(row => {
+          return { from: row[idx][1], insert: ' | ' }
+        }).sort((a, b) => a.from - b.from)
+      ]
 
-    return { changes, selection }
+      // Now we have the changes, but we also need to treat our selections. For
+      // each added column, we will move the causing range into the new column.
+      const rowIndex = findRowIndexByRange(range, ctx.offsets.outer)!
+      const cursorPos = ctx.offsets.outer[rowIndex][idx][1] + 3
+      const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+      return { changes, selection }
+    }).filter(i => i !== undefined) // We need to manually remove our undefines.
   }).flat() // Returns a 2d array above
 
   if (tr.length > 0) {
