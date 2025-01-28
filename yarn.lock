@@ -2767,19 +2767,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^8.20.0":
-  version: 8.20.0
-  resolution: "@typescript-eslint/parser@npm:8.20.0"
+"@typescript-eslint/parser@npm:^8.22.0":
+  version: 8.22.0
+  resolution: "@typescript-eslint/parser@npm:8.22.0"
   dependencies:
-    "@typescript-eslint/scope-manager": 8.20.0
-    "@typescript-eslint/types": 8.20.0
-    "@typescript-eslint/typescript-estree": 8.20.0
-    "@typescript-eslint/visitor-keys": 8.20.0
+    "@typescript-eslint/scope-manager": 8.22.0
+    "@typescript-eslint/types": 8.22.0
+    "@typescript-eslint/typescript-estree": 8.22.0
+    "@typescript-eslint/visitor-keys": 8.22.0
     debug: ^4.3.4
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
     typescript: ">=4.8.4 <5.8.0"
-  checksum: 00b265ed42ee1d8eb715f9978d701be0958baf7a5be9de74a1b58c09c78e3558e1e6352c4476ec8ea376c28f1437de0b58b3e1e2a9975c489f2ecd369a9050eb
+  checksum: 1c5923d76e175ebf30d0d546063ad7f7117ad4d58053f10b6bddccde791d58ea390a6dc80720527d6e7ba2ec64271990372a589b67a50f3c5cdc1c4828f9759b
   languageName: node
   linkType: hard
 
@@ -2800,6 +2800,16 @@ __metadata:
     "@typescript-eslint/types": 8.20.0
     "@typescript-eslint/visitor-keys": 8.20.0
   checksum: d90d89f3dc8394e44652526b88c81a977b251702a9dc5be89ac0bf7412d79d18879e03c2d6018980a09bc7c50d28dbf91ba06e056e081e6000783d69bd280761
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/scope-manager@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@typescript-eslint/scope-manager@npm:8.22.0"
+  dependencies:
+    "@typescript-eslint/types": 8.22.0
+    "@typescript-eslint/visitor-keys": 8.22.0
+  checksum: 0aa51fbf3a226b8392fa87f554514bf710c85635754dfeda7375c807ac098aa61a748f1a35c00f6c1ba20e2bdf8568c5a863511b3961a08fb2351d0d2efbdb9c
   languageName: node
   linkType: hard
 
@@ -2829,6 +2839,13 @@ __metadata:
   version: 8.20.0
   resolution: "@typescript-eslint/types@npm:8.20.0"
   checksum: 4cb0af48411f282db33e7110e2f97de874c637e7b90ded91b77304e96f49663ca4b7308afc569bdd93766fe5f2c194686e32078d5513b5ba4e7d56191998190c
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/types@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@typescript-eslint/types@npm:8.22.0"
+  checksum: 37fae8f21fe15a18f4d825df919e779f38facb59699a675265f7f7392181558473223e32040b89221672da65c6323de6acce09774ae1f4211d27123a435124e1
   languageName: node
   linkType: hard
 
@@ -2865,6 +2882,24 @@ __metadata:
   peerDependencies:
     typescript: ">=4.8.4 <5.8.0"
   checksum: 9690df2d4ec90966b8d5752ad0f1658a951fe76ea3cae8e6935e698715a25c1eb0b118fa8e044065f04ea9f6bef41d991de5298590ef2a4aa98d435bf1df6e15
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/typescript-estree@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@typescript-eslint/typescript-estree@npm:8.22.0"
+  dependencies:
+    "@typescript-eslint/types": 8.22.0
+    "@typescript-eslint/visitor-keys": 8.22.0
+    debug: ^4.3.4
+    fast-glob: ^3.3.2
+    is-glob: ^4.0.3
+    minimatch: ^9.0.4
+    semver: ^7.6.0
+    ts-api-utils: ^2.0.0
+  peerDependencies:
+    typescript: ">=4.8.4 <5.8.0"
+  checksum: e7fd70486931ab02c418d30960d789a806e258cf3d0a06f7a74e65405356c89026cd00f97a657ba250e06eeec82216ce3f2091cd98c20a22b9521af78050deb8
   languageName: node
   linkType: hard
 
@@ -2915,6 +2950,16 @@ __metadata:
     "@typescript-eslint/types": 8.20.0
     eslint-visitor-keys: ^4.2.0
   checksum: d0bf89e431a686197c517fbb7d63ce4c8ef31e6629a545fd08198c67810ddd68c047c01fcfed8ffc3fe438654a2647b3dedf28f04beac23a65614b2e788d929a
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/visitor-keys@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@typescript-eslint/visitor-keys@npm:8.22.0"
+  dependencies:
+    "@typescript-eslint/types": 8.22.0
+    eslint-visitor-keys: ^4.2.0
+  checksum: df205177bcd30fb7320698724d42936f1063c1fc5c5ddc2c4091175dcca351d70fe7d5d5703ff73a1849e9974c3387b2cfefb372c2355e53b66f6d9848b97a2c
   languageName: node
   linkType: hard
 
@@ -16346,7 +16391,7 @@ __metadata:
     "@types/underscore": ^1.13.0
     "@types/uuid": ^10.0.0
     "@typescript-eslint/eslint-plugin": ^8.20.0
-    "@typescript-eslint/parser": ^8.20.0
+    "@typescript-eslint/parser": ^8.22.0
     "@vercel/webpack-asset-relocator-loader": 1.7.3
     adm-zip: ^0.5.16
     archiver: ^7.0.1
