@@ -264,6 +264,8 @@ jobs:
     name: Linux (x86_64)
     env:
       npm_config_arch: x64
+      CC: zig cc -target x86_64-linux-gnu
+      CXX: zig c++ -target x86_64-linux-gnu
     needs: [preflight, verify_version]
     runs-on: ubuntu-20.04
     steps:
@@ -272,22 +274,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
-      # This step is necessary due to a node gyp update that uses a G++ CLI option that
-      # is too new for the older G++ installed on this system. (NOTE: This should be
-      # unnecessary beginning in March when we update the Ubuntu-runners)
-      # Cf. #5596; #5172
-      - name: Update G++
-      # Also output some debug info to confirm
-        run: |
-          which g++
-          g++ --version
-          sudo apt update
-          sudo apt install --only-upgrade g++
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      # Replicate PR #4910 on the x86_64 runner as this compiler appears
+      # still to be supported by node-gyp even after the most recent update.
+      # (NOTE: See added CC/CCX variables, found from output under 'zig targets'
+      # here: https://andrewkelley.me/post/zig-cc-powerful-drop-in-replacement-gcc-clang.html)
+      - name: Install Zig
+        uses: goto-bus-stop/setup-zig@v2
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
