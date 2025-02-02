@@ -67,7 +67,8 @@ linux:
   category: Office
   icon: "./resources/icons/png"
   desktop:
-    StartupWMClass: zettlr
+    entry:
+      StartupWMClass: zettlr
 #
 # Configuration for DMG builds
 #
