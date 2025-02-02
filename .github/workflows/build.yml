@@ -75,6 +75,12 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 
+# We need to set permissions for the Windows runner so that the Azure login
+# action can write the appropriate token as returned from Azure.
+permissions:
+  id-token: write
+  contents: read
+
 # This workflow file contains four jobs, three to build the corresponding
 # releases on all three supported platforms, and a last one, which will
 # create the release draft.

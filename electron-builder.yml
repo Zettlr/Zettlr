@@ -50,9 +50,8 @@ win:
   artifactName: "Zettlr-${version}-${arch}.${ext}"
   icon: "./resources/icons/icon.ico"
   # New signing options for use with Azure Trusted Signing
-  signtoolOptions:
-    publisherName: "Hendrik Erz" # Not completely certain if we need this
   azureSignOptions:
+    publisherName: "Hendrik Erz"
     endpoint: "https://neu.codesigning.azure.net/"
     certificateProfileName: "zettlr-code-sign-cert"
     codeSigningAccountName: "zettlr-mgmt-id"
