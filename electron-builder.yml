@@ -55,7 +55,6 @@ win:
     endpoint: "https://neu.codesigning.azure.net/"
     certificateProfileName: "zettlr-code-sign-cert"
     codeSigningAccountName: "zettlr-code-sign-app"
-    trustedSigningAccount: "zettlr-code-sign-app"
 #
 # Generic Linux options
 #
