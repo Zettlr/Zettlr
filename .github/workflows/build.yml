@@ -272,6 +272,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
+      # This step is necessary due to a node gyp update that uses a G++ CLI option that
+      # is too new for the older G++ installed on this system. (NOTE: This should be
+      # unnecessary beginning in March when we update the Ubuntu-runners)
+      # Cf. #5596; #5172
+      - name: Update G++
+      # Also output some debug info to confirm
+        run: |
+          which g++
+          g++ --version
+          sudo apt update
+          sudo apt install --only-upgrade g++
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
