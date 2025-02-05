@@ -75,12 +75,6 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 
-# We need to set permissions for the Windows runner so that the Azure login
-# action can write the appropriate token as returned from Azure.
-permissions:
-  id-token: write
-  contents: read
-
 # This workflow file contains four jobs, three to build the corresponding
 # releases on all three supported platforms, and a last one, which will
 # create the release draft.
@@ -135,14 +129,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
-      # Log in to the management account so that the Azure Trusted Signing can
-      # work below, using only the Client ID
-      # - name: Azure CLI Login
-      #   uses: azure/login@v2
-      #   with:
-      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
@@ -161,14 +147,10 @@ jobs:
         run: yarn package:win-x64 && yarn release:win-x64
         shell: pwsh # Run this using Powershell because it requires that for CodeSigning
         env:
+          # Use OpenID Authentication flow
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          #####
-          # AZURE_CLIENT_CERTIFICATE_PATH: TODO -- Do we need this?
-          # AZURE_CLIENT_SEND_CERTIFICATE_CHAIN: TODO -- Do we need this?
-          # CSC_LINK: ${{ secrets.WIN_CERT_2025_03_15 }}
-          # CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS_2025_03_15 }}
       - name: Cache installer
         uses: actions/upload-artifact@v4
         with:
