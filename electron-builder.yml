@@ -54,7 +54,7 @@ win:
     publisherName: "Hendrik Erz"
     endpoint: "https://neu.codesigning.azure.net/"
     certificateProfileName: "zettlr-code-sign-cert"
-    codeSigningAccountName: "zettlrAppSignServicePrincipal"
+    codeSigningAccountName: "zettlr"
 #
 # Generic Linux options
 #
