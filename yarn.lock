@@ -606,6 +606,7 @@ __metadata:
 "@electron-forge/maker-base@npm:7.6.1":
   version: 7.6.1
   resolution: "@electron-forge/maker-base@npm:7.6.1"
+<<<<<<< HEAD
   dependencies:
     "@electron-forge/shared-types": 7.6.1
     fs-extra: ^10.0.0
@@ -617,41 +618,54 @@ __metadata:
 "@electron-forge/maker-deb@npm:^7.6.0":
   version: 7.6.0
   resolution: "@electron-forge/maker-deb@npm:7.6.0"
+=======
+>>>>>>> e7519eeda (chore: Bump Electron forge to v7.6.1)
   dependencies:
-    "@electron-forge/maker-base": 7.6.0
-    "@electron-forge/shared-types": 7.6.0
+    "@electron-forge/shared-types": 7.6.1
+    fs-extra: ^10.0.0
+    which: ^2.0.2
+  checksum: 19f378f21f81111ac406840e12509958f3e41158f17f311a14d056846f29e3aa24c7beff3851099e024b06142c0ea5a81b2c954612f7ce31a649a95dd374a272
+  languageName: node
+  linkType: hard
+
+"@electron-forge/maker-deb@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/maker-deb@npm:7.6.1"
+  dependencies:
+    "@electron-forge/maker-base": 7.6.1
+    "@electron-forge/shared-types": 7.6.1
     electron-installer-debian: ^3.2.0
   dependenciesMeta:
     electron-installer-debian:
       optional: true
-  checksum: f42fe1a074b6b1472cfd175c425b5ab0f2c0c1dbfbe32d4146b53eb6e318bcff0f3069e4dbc0840bb0c44597964aaa918e3211d012129a39a4cae09427b88f26
+  checksum: 5d6855766022f5279878321fcc4eb2018d5d9fbe34279e4368617b350f877fcbe08f974afa7daf223709db0fc5c8fa60f5061a40a2e599311e1c33f1ddadfcbe
   languageName: node
   linkType: hard
 
-"@electron-forge/maker-rpm@npm:^7.6.0":
-  version: 7.6.0
-  resolution: "@electron-forge/maker-rpm@npm:7.6.0"
+"@electron-forge/maker-rpm@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/maker-rpm@npm:7.6.1"
   dependencies:
-    "@electron-forge/maker-base": 7.6.0
-    "@electron-forge/shared-types": 7.6.0
+    "@electron-forge/maker-base": 7.6.1
+    "@electron-forge/shared-types": 7.6.1
     electron-installer-redhat: ^3.2.0
   dependenciesMeta:
     electron-installer-redhat:
       optional: true
-  checksum: 5633996384cbdf5fa4a114926b3193cae1ad7a219309f49b2ea6e8aea282082f68898bf78f7b4707fa287550a26703b02527da1b3c03c8435b7d4dee81469b54
+  checksum: 6c5a5c561e64f165c4cd628ae480ef999ae52d19b150a84206facdd212bb57fd9a021dbba817983db39e2c9c42c4a4bfbe8780a67986d0470a38b9e97d6c1b11
   languageName: node
   linkType: hard
 
-"@electron-forge/maker-zip@npm:^7.6.0":
-  version: 7.6.0
-  resolution: "@electron-forge/maker-zip@npm:7.6.0"
+"@electron-forge/maker-zip@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/maker-zip@npm:7.6.1"
   dependencies:
-    "@electron-forge/maker-base": 7.6.0
-    "@electron-forge/shared-types": 7.6.0
+    "@electron-forge/maker-base": 7.6.1
+    "@electron-forge/shared-types": 7.6.1
     cross-zip: ^4.0.0
     fs-extra: ^10.0.0
     got: ^11.8.5
-  checksum: 69395aad9548fab93959b88aab87908370db90426a1996c0b389953dd14e5b2f04f74b40a770dc5564f436fcc3f582e010e30cd18425e6cb5a97ea2e7c4bd279
+  checksum: 14a57690e7b5f4c530064f0c0e0c3052469217870a6db58bacb4bb5b6897c3e3f49f331b91d39d62d1f7fcb50cf6e5a2c4df29410aeb3556710f0c7a1f8fffe3
   languageName: node
   linkType: hard
 
@@ -667,6 +681,7 @@ __metadata:
 "@electron-forge/plugin-base@npm:7.6.1":
   version: 7.6.1
   resolution: "@electron-forge/plugin-base@npm:7.6.1"
+<<<<<<< HEAD
   dependencies:
     "@electron-forge/shared-types": 7.6.1
   checksum: d35da61012b2d3bd59f11acb4a0311dbe7c06156c167f396703f328a8f4d985e8fddb2ab56c3ed87cddf9d33d1d5f82945c5f7584f45fb6c8b89f0c64680856c
@@ -676,23 +691,34 @@ __metadata:
 "@electron-forge/plugin-fuses@npm:^7.6.0":
   version: 7.6.0
   resolution: "@electron-forge/plugin-fuses@npm:7.6.0"
+=======
+>>>>>>> e7519eeda (chore: Bump Electron forge to v7.6.1)
   dependencies:
-    "@electron-forge/plugin-base": 7.6.0
-    "@electron-forge/shared-types": 7.6.0
-  peerDependencies:
-    "@electron/fuses": ">=1.0.0"
-  checksum: 2c0631b9ee8707e3314d2abd09e0609ff3bccd34ec5f32bf4cc9a12ed11f4bcf92ad7416aa20c67e426c6f717c5df89a1665711217311775832438865917d835
+    "@electron-forge/shared-types": 7.6.1
+  checksum: d35da61012b2d3bd59f11acb4a0311dbe7c06156c167f396703f328a8f4d985e8fddb2ab56c3ed87cddf9d33d1d5f82945c5f7584f45fb6c8b89f0c64680856c
   languageName: node
   linkType: hard
 
-"@electron-forge/plugin-webpack@npm:^7.6.0":
-  version: 7.6.0
-  resolution: "@electron-forge/plugin-webpack@npm:7.6.0"
+"@electron-forge/plugin-fuses@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/plugin-fuses@npm:7.6.1"
   dependencies:
-    "@electron-forge/core-utils": 7.6.0
-    "@electron-forge/plugin-base": 7.6.0
-    "@electron-forge/shared-types": 7.6.0
-    "@electron-forge/web-multi-logger": 7.6.0
+    "@electron-forge/plugin-base": 7.6.1
+    "@electron-forge/shared-types": 7.6.1
+  peerDependencies:
+    "@electron/fuses": ">=1.0.0"
+  checksum: 647573127600a93bbf723f39ed77d8ab360e60355c341eb21c1e6ea08e3f9d08a6a86d761b360e8c23204fb2b4d86424e3cd063d03fd7ad5dd2c7e2c343f381f
+  languageName: node
+  linkType: hard
+
+"@electron-forge/plugin-webpack@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/plugin-webpack@npm:7.6.1"
+  dependencies:
+    "@electron-forge/core-utils": 7.6.1
+    "@electron-forge/plugin-base": 7.6.1
+    "@electron-forge/shared-types": 7.6.1
+    "@electron-forge/web-multi-logger": 7.6.1
     chalk: ^4.0.0
     debug: ^4.3.1
     fast-glob: ^3.2.7
@@ -702,7 +728,7 @@ __metadata:
     webpack: ^5.69.1
     webpack-dev-server: ^4.0.0
     webpack-merge: ^5.7.3
-  checksum: afe0c405bd2840010b83bee836ab01becc1f80d08fe77df1fdc230c7f653810186cd0929b011b3893f407f4c610f4370bb33a8add14a06b1eb922b8aeab9af79
+  checksum: d6f3b927ce8a1c64bf7a81cc035cd03ca919d4ee151cef42c26d0975ba98b2328041a1cbb4cfb9692884110969725ae03b1973fc254529dea54d9274bdd1185b
   languageName: node
   linkType: hard
 
@@ -730,6 +756,21 @@ __metadata:
 "@electron-forge/shared-types@npm:7.6.1":
   version: 7.6.1
   resolution: "@electron-forge/shared-types@npm:7.6.1"
+<<<<<<< HEAD
+=======
+  dependencies:
+    "@electron-forge/tracer": 7.6.1
+    "@electron/packager": ^18.3.5
+    "@electron/rebuild": ^3.7.0
+    listr2: ^7.0.2
+  checksum: 4edcb886703342e5a9ac5096acb427b7185ffa01cddb3a39194d462d2583651223af9e0a3872e5ccb8af390578b57f587bb4ea0fac815262759f72dd70f617d8
+  languageName: node
+  linkType: hard
+
+"@electron-forge/template-base@npm:7.6.0":
+  version: 7.6.0
+  resolution: "@electron-forge/template-base@npm:7.6.0"
+>>>>>>> e7519eeda (chore: Bump Electron forge to v7.6.1)
   dependencies:
     "@electron-forge/tracer": 7.6.1
     "@electron/packager": ^18.3.5
@@ -814,16 +855,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@electron-forge/web-multi-logger@npm:7.6.0":
   version: 7.6.0
   resolution: "@electron-forge/web-multi-logger@npm:7.6.0"
+=======
+"@electron-forge/web-multi-logger@npm:7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/web-multi-logger@npm:7.6.1"
+>>>>>>> e7519eeda (chore: Bump Electron forge to v7.6.1)
   dependencies:
     express: ^4.17.1
     express-ws: ^5.0.2
     xterm: ^4.9.0
     xterm-addon-fit: ^0.5.0
     xterm-addon-search: ^0.8.0
-  checksum: 0892bdec707e2a9506b687bf5c42f05eaff04b9d66a3fb42f01af0653b08376b8365b9eb97d7897fbee73d5c43d4ef663f255c03ce7642e6f6cd13e707af6c72
+  checksum: 21c61e42e0e95e13020973020c96eb2aee27d6b93544366a42e360dcefbd412807d8b03574001836e1a3293ee2e7b073f5e01c26c0e4a9aba22d2653964cd2fa
   languageName: node
   linkType: hard
 
