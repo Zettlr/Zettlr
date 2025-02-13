@@ -673,15 +673,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron-forge/plugin-fuses@npm:^7.6.0":
-  version: 7.6.0
-  resolution: "@electron-forge/plugin-fuses@npm:7.6.0"
+"@electron-forge/plugin-fuses@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/plugin-fuses@npm:7.6.1"
   dependencies:
-    "@electron-forge/plugin-base": 7.6.0
-    "@electron-forge/shared-types": 7.6.0
+    "@electron-forge/plugin-base": 7.6.1
+    "@electron-forge/shared-types": 7.6.1
   peerDependencies:
     "@electron/fuses": ">=1.0.0"
-  checksum: 2c0631b9ee8707e3314d2abd09e0609ff3bccd34ec5f32bf4cc9a12ed11f4bcf92ad7416aa20c67e426c6f717c5df89a1665711217311775832438865917d835
+  checksum: 647573127600a93bbf723f39ed77d8ab360e60355c341eb21c1e6ea08e3f9d08a6a86d761b360e8c23204fb2b4d86424e3cd063d03fd7ad5dd2c7e2c343f381f
   languageName: node
   linkType: hard
 
@@ -16386,7 +16386,7 @@ __metadata:
     "@electron-forge/maker-deb": ^7.6.0
     "@electron-forge/maker-rpm": ^7.6.0
     "@electron-forge/maker-zip": ^7.6.0
-    "@electron-forge/plugin-fuses": ^7.6.0
+    "@electron-forge/plugin-fuses": ^7.6.1
     "@electron-forge/plugin-webpack": ^7.6.0
     "@electron/fuses": ^1.8.0
     "@electron/notarize": ^2.5.0
