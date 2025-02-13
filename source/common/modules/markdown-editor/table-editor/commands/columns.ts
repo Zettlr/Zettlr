@@ -239,12 +239,20 @@ export function addColAfter (target: EditorView): boolean {
         }).sort((a, b) => a.from - b.from)
       ]
 
-      // Now we have the changes, but we also need to treat our selections. For
-      // each added column, we will move the causing range into the new column.
-      const rowIndex = findRowIndexByRange(range, ctx.offsets.outer)!
-      const cursorPos = ctx.offsets.outer[rowIndex][idx][1] + 3
-      const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
-      return { changes, selection }
+      // TODO: We have to provide the range positions in the coordinates AFTER
+      // the transformation. Otherwise they will move seemingly erratically.
+      // Move every range in the table to the next cell
+      const ranges = ctx.ranges.map(range => {
+        const row = findRowIndexByRange(range, ctx.offsets.outer)
+        const col = findColumnIndexByRange(range, ctx.offsets.outer)
+        if (row === undefined || col === undefined) {
+          return
+        }
+        const [from] = ctx.offsets.inner[row][col]
+        return EditorSelection.cursor(from, undefined, undefined, range.goalColumn)
+      }).filter(r => r !== undefined)
+
+      return { changes, selection: EditorSelection.create(ranges) }
     }).filter(i => i !== undefined) // We need to manually remove our undefines.
   }).flat() // Returns a 2d array above
 
@@ -266,20 +274,11 @@ export function addColAfter (target: EditorView): boolean {
  */
 export function addColBefore (target: EditorView): boolean {
   // Basically the same as addColAfter, with minor changes
-  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
+  const tr = mapSelectionsWithTables<TransactionSpec[]>(target, ctx => {
     // Only support this in pipe tables. TODO
     if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
     }
-
-    // TODO: Iterate over all ranges (but only once per column)
-    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
-    if (idx === undefined) {
-      return undefined
-    }
-
-    // Now, for each row, calculate a change that adds ' | ' before the cell's
-    // from position. We also need to add '-|-' to the delimiter
 
     // NOTE: Remove `null` since that check will be performed during AST parsing
     const delimNode = ctx.tableNode.getChild('TableDelimiter')!
@@ -287,18 +286,25 @@ export function addColBefore (target: EditorView): boolean {
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
     const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
 
-    const changes = [
-      { from: delimLine.from + delimOffsets[idx][0], insert: `-${delimChar}-` },
-      ...ctx.offsets.outer.flatMap(row => {
-        return { from: row[idx][0], insert: ' | ' }
-      }).sort((a, b) => a.from - b.from)
-    ]
+    const colIdx = getColIndicesByRanges(ctx.ranges, ctx.offsets.outer)
 
-    const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
-    const cursorPos = ctx.offsets.outer[rowIndex][idx][0] - 3
-    const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+    return colIdx.map(idx => {
+      // Now, for each row, calculate a change that adds ' | ' before the cell's
+      // from position. We also need to add '-|-' to the delimiter
 
-    return { changes, selection }
+      const changes = [
+        { from: delimLine.from + delimOffsets[idx][0], insert: `-${delimChar}-` },
+        ...ctx.offsets.outer.flatMap(row => {
+          return { from: row[idx][0], insert: ' | ' }
+        }).sort((a, b) => a.from - b.from)
+      ]
+
+      const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
+      const cursorPos = ctx.offsets.outer[rowIndex][idx][0] - 3
+      const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+
+      return { changes, selection }
+    })
   }).flat() // Returns a 2d array above
 
   if (tr.length > 0) {
