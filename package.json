@@ -130,6 +130,7 @@
   },
   "resolutions": {
     "node-gyp": "10.x.x",
+    "node-abi": "^3.74.0",
     "@lezer/lr": "^1.4.2",
     "@codemirror/state": "^6.5.1",
     "@codemirror/view": "^6.36.2"
