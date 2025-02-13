@@ -642,16 +642,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron-forge/maker-zip@npm:^7.6.0":
-  version: 7.6.0
-  resolution: "@electron-forge/maker-zip@npm:7.6.0"
+"@electron-forge/maker-zip@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/maker-zip@npm:7.6.1"
   dependencies:
-    "@electron-forge/maker-base": 7.6.0
-    "@electron-forge/shared-types": 7.6.0
+    "@electron-forge/maker-base": 7.6.1
+    "@electron-forge/shared-types": 7.6.1
     cross-zip: ^4.0.0
     fs-extra: ^10.0.0
     got: ^11.8.5
-  checksum: 69395aad9548fab93959b88aab87908370db90426a1996c0b389953dd14e5b2f04f74b40a770dc5564f436fcc3f582e010e30cd18425e6cb5a97ea2e7c4bd279
+  checksum: 14a57690e7b5f4c530064f0c0e0c3052469217870a6db58bacb4bb5b6897c3e3f49f331b91d39d62d1f7fcb50cf6e5a2c4df29410aeb3556710f0c7a1f8fffe3
   languageName: node
   linkType: hard
 
@@ -16385,7 +16385,7 @@ __metadata:
     "@electron-forge/cli": ^7.6.1
     "@electron-forge/maker-deb": ^7.6.0
     "@electron-forge/maker-rpm": ^7.6.0
-    "@electron-forge/maker-zip": ^7.6.0
+    "@electron-forge/maker-zip": ^7.6.1
     "@electron-forge/plugin-fuses": ^7.6.0
     "@electron-forge/plugin-webpack": ^7.6.0
     "@electron/fuses": ^1.8.0

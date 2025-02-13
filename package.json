@@ -138,7 +138,7 @@
     "@electron-forge/cli": "^7.6.1",
     "@electron-forge/maker-deb": "^7.6.0",
     "@electron-forge/maker-rpm": "^7.6.0",
-    "@electron-forge/maker-zip": "^7.6.0",
+    "@electron-forge/maker-zip": "^7.6.1",
     "@electron-forge/plugin-fuses": "^7.6.0",
     "@electron-forge/plugin-webpack": "^7.6.0",
     "@electron/fuses": "^1.8.0",
