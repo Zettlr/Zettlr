@@ -7,7 +7,7 @@
 
 ## Under the Hood
 
-- Bump Pandoc to `v3.6.2`
+- Bump Pandoc to `v3.6.3`
 - Bump chokidar to `v4.0.3`
 - Bump Electron to `v34.1.1`
 - Fixed the boot order of providers to ensure certain actions are taken before
