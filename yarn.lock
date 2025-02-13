@@ -614,17 +614,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron-forge/maker-deb@npm:^7.6.0":
-  version: 7.6.0
-  resolution: "@electron-forge/maker-deb@npm:7.6.0"
+"@electron-forge/maker-deb@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/maker-deb@npm:7.6.1"
   dependencies:
-    "@electron-forge/maker-base": 7.6.0
-    "@electron-forge/shared-types": 7.6.0
+    "@electron-forge/maker-base": 7.6.1
+    "@electron-forge/shared-types": 7.6.1
     electron-installer-debian: ^3.2.0
   dependenciesMeta:
     electron-installer-debian:
       optional: true
-  checksum: f42fe1a074b6b1472cfd175c425b5ab0f2c0c1dbfbe32d4146b53eb6e318bcff0f3069e4dbc0840bb0c44597964aaa918e3211d012129a39a4cae09427b88f26
+  checksum: 5d6855766022f5279878321fcc4eb2018d5d9fbe34279e4368617b350f877fcbe08f974afa7daf223709db0fc5c8fa60f5061a40a2e599311e1c33f1ddadfcbe
   languageName: node
   linkType: hard
 
@@ -16383,7 +16383,7 @@ __metadata:
     "@codemirror/state": ^6.5.1
     "@codemirror/view": ^6.36.2
     "@electron-forge/cli": ^7.6.1
-    "@electron-forge/maker-deb": ^7.6.0
+    "@electron-forge/maker-deb": ^7.6.1
     "@electron-forge/maker-rpm": ^7.6.0
     "@electron-forge/maker-zip": ^7.6.0
     "@electron-forge/plugin-fuses": ^7.6.0
