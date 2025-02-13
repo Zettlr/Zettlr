@@ -514,24 +514,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron-forge/core-utils@npm:7.6.0":
-  version: 7.6.0
-  resolution: "@electron-forge/core-utils@npm:7.6.0"
-  dependencies:
-    "@electron-forge/shared-types": 7.6.0
-    "@electron/rebuild": ^3.7.0
-    "@malept/cross-spawn-promise": ^2.0.0
-    chalk: ^4.0.0
-    debug: ^4.3.1
-    find-up: ^5.0.0
-    fs-extra: ^10.0.0
-    log-symbols: ^4.0.0
-    semver: ^7.2.1
-    yarn-or-npm: ^3.0.1
-  checksum: fd2c7e0ce99dfcae0da8216c28a35597dd9c287d630099a3e01a7f79892da6d746a8dd337f3b2821c66d3b88ad85e55c063045c27b6b17d440c90002133f1d30
-  languageName: node
-  linkType: hard
-
 "@electron-forge/core-utils@npm:7.6.1":
   version: 7.6.1
   resolution: "@electron-forge/core-utils@npm:7.6.1"
@@ -685,14 +667,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron-forge/plugin-webpack@npm:^7.6.0":
-  version: 7.6.0
-  resolution: "@electron-forge/plugin-webpack@npm:7.6.0"
+"@electron-forge/plugin-webpack@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/plugin-webpack@npm:7.6.1"
   dependencies:
-    "@electron-forge/core-utils": 7.6.0
-    "@electron-forge/plugin-base": 7.6.0
-    "@electron-forge/shared-types": 7.6.0
-    "@electron-forge/web-multi-logger": 7.6.0
+    "@electron-forge/core-utils": 7.6.1
+    "@electron-forge/plugin-base": 7.6.1
+    "@electron-forge/shared-types": 7.6.1
+    "@electron-forge/web-multi-logger": 7.6.1
     chalk: ^4.0.0
     debug: ^4.3.1
     fast-glob: ^3.2.7
@@ -702,7 +684,7 @@ __metadata:
     webpack: ^5.69.1
     webpack-dev-server: ^4.0.0
     webpack-merge: ^5.7.3
-  checksum: afe0c405bd2840010b83bee836ab01becc1f80d08fe77df1fdc230c7f653810186cd0929b011b3893f407f4c610f4370bb33a8add14a06b1eb922b8aeab9af79
+  checksum: d6f3b927ce8a1c64bf7a81cc035cd03ca919d4ee151cef42c26d0975ba98b2328041a1cbb4cfb9692884110969725ae03b1973fc254529dea54d9274bdd1185b
   languageName: node
   linkType: hard
 
@@ -814,16 +796,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron-forge/web-multi-logger@npm:7.6.0":
-  version: 7.6.0
-  resolution: "@electron-forge/web-multi-logger@npm:7.6.0"
+"@electron-forge/web-multi-logger@npm:7.6.1":
+  version: 7.6.1
+  resolution: "@electron-forge/web-multi-logger@npm:7.6.1"
   dependencies:
     express: ^4.17.1
     express-ws: ^5.0.2
     xterm: ^4.9.0
     xterm-addon-fit: ^0.5.0
     xterm-addon-search: ^0.8.0
-  checksum: 0892bdec707e2a9506b687bf5c42f05eaff04b9d66a3fb42f01af0653b08376b8365b9eb97d7897fbee73d5c43d4ef663f255c03ce7642e6f6cd13e707af6c72
+  checksum: 21c61e42e0e95e13020973020c96eb2aee27d6b93544366a42e360dcefbd412807d8b03574001836e1a3293ee2e7b073f5e01c26c0e4a9aba22d2653964cd2fa
   languageName: node
   linkType: hard
 
@@ -5180,7 +5162,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn@npm:^6.0.0, cross-spawn@npm:^6.0.5":
+"cross-spawn@npm:^6.0.0":
   version: 6.0.6
   resolution: "cross-spawn@npm:6.0.6"
   dependencies:
@@ -7550,16 +7532,6 @@ __metadata:
   dependencies:
     locate-path: ^2.0.0
   checksum: 43284fe4da09f89011f08e3c32cd38401e786b19226ea440b75386c1b12a4cb738c94969808d53a84f564ede22f732c8409e3cfc3f7fb5b5c32378ad0bbf28bd
-  languageName: node
-  linkType: hard
-
-"find-up@npm:^4.0.0":
-  version: 4.1.0
-  resolution: "find-up@npm:4.1.0"
-  dependencies:
-    locate-path: ^5.0.0
-    path-exists: ^4.0.0
-  checksum: 4c172680e8f8c1f78839486e14a43ef82e9decd0e74145f40707cc42e7420506d5ec92d9a11c22bd2c48fb0c384ea05dd30e10dd152fefeec6f2f75282a8b844
   languageName: node
   linkType: hard
 
@@ -10137,15 +10109,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"locate-path@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "locate-path@npm:5.0.0"
-  dependencies:
-    p-locate: ^4.1.0
-  checksum: 83e51725e67517287d73e1ded92b28602e3ae5580b301fe54bfb76c0c723e3f285b19252e375712316774cf52006cb236aed5704692c32db0d5d089b69696e30
-  languageName: node
-  linkType: hard
-
 "locate-path@npm:^6.0.0":
   version: 6.0.0
   resolution: "locate-path@npm:6.0.0"
@@ -11848,15 +11811,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-limit@npm:^2.2.0":
-  version: 2.3.0
-  resolution: "p-limit@npm:2.3.0"
-  dependencies:
-    p-try: ^2.0.0
-  checksum: 84ff17f1a38126c3314e91ecfe56aecbf36430940e2873dadaa773ffe072dc23b7af8e46d4b6485d302a11673fe94c6b67ca2cfbb60c989848b02100d0594ac1
-  languageName: node
-  linkType: hard
-
 "p-limit@npm:^3.0.2, p-limit@npm:^3.1.0 ":
   version: 3.1.0
   resolution: "p-limit@npm:3.1.0"
@@ -11881,15 +11835,6 @@ __metadata:
   dependencies:
     p-limit: ^1.1.0
   checksum: e2dceb9b49b96d5513d90f715780f6f4972f46987dc32a0e18bc6c3fc74a1a5d73ec5f81b1398af5e58b99ea1ad03fd41e9181c01fa81b4af2833958696e3081
-  languageName: node
-  linkType: hard
-
-"p-locate@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "p-locate@npm:4.1.0"
-  dependencies:
-    p-limit: ^2.2.0
-  checksum: 513bd14a455f5da4ebfcb819ef706c54adb09097703de6aeaa5d26fe5ea16df92b48d1ac45e01e3944ce1e6aa2a66f7f8894742b8c9d6e276e16cd2049a2b870
   languageName: node
   linkType: hard
 
@@ -11934,13 +11879,6 @@ __metadata:
   version: 1.0.0
   resolution: "p-try@npm:1.0.0"
   checksum: 3b5303f77eb7722144154288bfd96f799f8ff3e2b2b39330efe38db5dd359e4fb27012464cd85cb0a76e9b7edd1b443568cb3192c22e7cffc34989df0bafd605
-  languageName: node
-  linkType: hard
-
-"p-try@npm:^2.0.0":
-  version: 2.2.0
-  resolution: "p-try@npm:2.2.0"
-  checksum: f8a8e9a7693659383f06aec604ad5ead237c7a261c18048a6e1b5b85a5f8a067e469aa24f5bc009b991ea3b058a87f5065ef4176793a200d4917349881216cae
   languageName: node
   linkType: hard
 
@@ -12280,15 +12218,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 556dd718563c535e21f35576750afc2abfde0ab60f40b1e31e6cf2ecceee17489549d0c6ffc445a168a84505e9117cfa8d8ae859fc47332db00f88d1db480f56
-  languageName: node
-  linkType: hard
-
-"pkg-dir@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "pkg-dir@npm:4.2.0"
-  dependencies:
-    find-up: ^4.0.0
-  checksum: 9863e3f35132bf99ae1636d31ff1e1e3501251d480336edb1c211133c8d58906bed80f154a1d723652df1fda91e01c7442c2eeaf9dc83157c7ae89087e43c8d6
   languageName: node
   linkType: hard
 
@@ -16318,19 +16247,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yarn-or-npm@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "yarn-or-npm@npm:3.0.1"
-  dependencies:
-    cross-spawn: ^6.0.5
-    pkg-dir: ^4.2.0
-  bin:
-    yarn-or-npm: bin/index.js
-    yon: bin/index.js
-  checksum: 94421b4315520075b4db6c09b6284064c047058d8bbe2663cdd4269491e5f7ea5d2e68eeaa0182a760a8757479cef665b7040a8c9ddb48a3da52587a8b712b27
-  languageName: node
-  linkType: hard
-
 "yauzl@npm:^2.10.0":
   version: 2.10.0
   resolution: "yauzl@npm:2.10.0"
@@ -16387,7 +16303,7 @@ __metadata:
     "@electron-forge/maker-rpm": ^7.6.0
     "@electron-forge/maker-zip": ^7.6.0
     "@electron-forge/plugin-fuses": ^7.6.0
-    "@electron-forge/plugin-webpack": ^7.6.0
+    "@electron-forge/plugin-webpack": ^7.6.1
     "@electron/fuses": ^1.8.0
     "@electron/notarize": ^2.5.0
     "@eslint/config-inspector": ^1.0.0
