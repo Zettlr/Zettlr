@@ -13,6 +13,7 @@
   appropriately.
 - Fix an issue that could lead to accidental overwriting of existing files in
   some cases (#4940; also previously #5460 in Zettlr 3.3.0).
+- Fixed malformed rendering of plain links into HTML links (#5587).
 
 ## Under the Hood
 

@@ -484,15 +484,19 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       return astNode
     }
     case 'URL': {
+      let url = markdown.substring(node.from, node.to)
+      if (url.startsWith('<') && url.endsWith('>')) {
+        url = url.slice(1, url.length - 1)
+      }
+
       const astNode: LinkOrImage = {
         type: 'Link',
         name: node.name,
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
-        url: markdown.substring(node.from, node.to),
-        alt: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))
+        url,
+        alt: genericTextNode(node.from, node.to, url)
       }
       return astNode
     }
