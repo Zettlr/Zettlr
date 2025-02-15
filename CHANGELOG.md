@@ -2,6 +2,13 @@
 
 ## GUI and Functionality
 
+- **Breaking Change**: To better support the now recommended Wikilink syntax
+  with titles (`[[filename|Some title]]`), links that use the old and not
+  recommended syntax of adding titles from the time when Zettlr did not support
+  titles (`[Do not use this syntax]([[filename]])`) can no longer be
+  automatically replaced when renaming files (#5606).
+- Zettelkasten links with titles will now get properly replaced when renaming
+  files (#5606).
 - Fixed an issue that prevented the FSAL cache clearing from proceeding
   appropriately.
 - Fix an issue that could lead to accidental overwriting of existing files in

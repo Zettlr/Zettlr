@@ -364,9 +364,14 @@ export interface ZettelkastenLink extends MDNode {
    */
   target: string
   /**
-   * The link title; may be the same as value
+   * The from:to positions of the actual target range. This can be useful to
+   * access just the title range (e.g., for replacing).
    */
-  title: TextNode
+  targetRange: { from: number, to: number }
+  /**
+   * The link title; undefined if the link does not include a title.
+   */
+  title?: TextNode
 }
 
 /**
@@ -788,7 +793,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       if (content === null) {
         throw new Error('Could not parse node ZknLink: No ZknLinkContent node found within children!')
       }
-      const title = node.getChild('ZknLinkTitle') ?? content
+      const title = node.getChild('ZknLinkTitle')
       const astNode: ZettelkastenLink = {
         type: 'ZettelkastenLink',
         name: 'ZknLink',
@@ -796,8 +801,14 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         target: markdown.substring(content.from, content.to),
-        title: genericTextNode(title.from, title.to, markdown.substring(title.from, title.to))
+        targetRange: { from: content.from, to: content.to },
+        title: undefined
       }
+
+      if (title !== null) {
+        astNode.title = genericTextNode(title.from, title.to, markdown.substring(title.from, title.to))
+      }
+
       return astNode
     }
     case 'ZknTag': {
