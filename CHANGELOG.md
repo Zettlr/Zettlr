@@ -16,21 +16,23 @@
 
 ## Under the Hood
 
-- Bump Pandoc to `v3.6.3`
-- Bump chokidar to `v4.0.3`
-- Bump Electron to `v34.2.0`
+- Bump Pandoc to `v3.6.3`.
+- Bump chokidar to `v4.0.3`.
+- Bump Electron to `v34.2.0`.
 - Fixed the boot order of providers to ensure certain actions are taken before
-  providers access each others (primary case: the FSAL needs to be booted asap)
-- Promisify the cache clearing procedure
-- Switched Apple Code Signing Certificate from expiring to new one
+  providers access each others (primary case: the FSAL needs to be booted asap).
+- Promisify the cache clearing procedure.
+- Switched Apple Code Signing Certificate from expiring to new one.
 - Improve the linting experience by also including a TypeScript lint on top of
   `vue-tsc`; in addition to stylistic and code-issues that are handled by ESLint
   this will capture serious TypeScript issues as what happened during the patch
   from 3.3.1 to 3.4.0 (see for context #5526); the new linting experience will
   run by default, the old linter has been renamed from `lint` to `lint:code`,
-  and the new linter can be called individually using `lint:types`
+  and the new linter can be called individually using `lint:types`.
 - Rename `value` to `target` in Markdown AST `ZettelkastenLink` nodes to make it
   more explicit that this field contains the value and never the title.
+- Add new property `targetRange` to Markdown AST `ZettelkastenLink` nodes to
+  allow for easy manipulation of link targets.
 
 # 3.4.1
 
