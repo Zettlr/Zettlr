@@ -360,9 +360,9 @@ export interface Table extends MDNode {
 export interface ZettelkastenLink extends MDNode {
   type: 'ZettelkastenLink'
   /**
-   * Contains the raw contents of the link
+   * Contains the actual target of the link (accounting for optional titles)
    */
-  value: string
+  target: string
   /**
    * The link title; may be the same as value
    */
@@ -795,7 +795,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: markdown.substring(content.from, content.to),
+        target: markdown.substring(content.from, content.to),
         title: genericTextNode(title.from, title.to, markdown.substring(title.from, title.to))
       }
       return astNode

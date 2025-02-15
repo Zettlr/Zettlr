@@ -22,6 +22,8 @@
   from 3.3.1 to 3.4.0 (see for context #5526); the new linting experience will
   run by default, the old linter has been renamed from `lint` to `lint:code`,
   and the new linter can be called individually using `lint:types`
+- Rename `value` to `target` in Markdown AST `ZettelkastenLink` nodes to make it
+  more explicit that this field contains the value and never the title.
 
 # 3.4.1
 
