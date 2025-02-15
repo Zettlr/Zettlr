@@ -10,7 +10,7 @@
       class="toc-entry-container"
       draggable="true"
       v-bind:style="{
-        'margin-left': `${entry.level * 10}px`
+        'margin-left': `${(entry.level - 1) * 10}px`
       }"
       v-on:click="emit('jump-to-line', entry.line)"
       v-on:dragstart="startDragging"

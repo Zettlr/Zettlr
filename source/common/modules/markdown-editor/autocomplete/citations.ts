@@ -24,7 +24,7 @@ import { configField } from '../util/configuration'
  */
 export const citekeyUpdate = StateEffect.define<Array<{ citekey: string, displayText: string }>>()
 export const citekeyUpdateField = StateField.define<Completion[]>({
-  create (state) {
+  create (_state) {
     return []
   },
   update (val, transaction) {
@@ -148,7 +148,7 @@ export const citations: AutocompletePlugin = {
     query = query.toLowerCase()
     const entries = sortCitationKeysByUsage(ctx.state)
     return entries.filter(entry => {
-      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query)
+      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query) === true
     })
   },
   fields: [citekeyUpdateField]

@@ -35,7 +35,7 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
           type: 'text',
           label: trans('Define a pattern for new file names'),
           model: 'newFileNamePattern',
-          info: trans('Available variables: %s', '%id, %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'),
+          info: trans('Available variables: %s', '%id, %Y, %y, %M, %D, %W, %h, %m, %s, %o, %X, %uuid4'),
           reset: '%id.md',
           group: 'advanced'
         },

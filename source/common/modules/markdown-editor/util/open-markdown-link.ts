@@ -18,8 +18,9 @@ import { type EditorState, type Line } from '@codemirror/state'
 import { configField } from './configuration'
 import { EditorView } from '@codemirror/view'
 import { tocField } from '../plugins/toc-field'
-import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import { isAbsolutePath, pathDirname } from '@common/util/renderer-path-polyfill'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -66,7 +67,13 @@ export default function (url: string, view: EditorView): void {
 
     // Create a path from the URL by stripping the protocol and decoding any
     // potential encoded characters.
-    const localPath = decodeURIComponent(validURI.replace('safe-file://', ''))
+    let localPath = decodeURIComponent(validURI.replace('safe-file://', ''))
+    // Due to the colons in the drive letters on Windows, the pathname will
+    // look like this: /C:/Users/Documents/test.jpg
+    // See: https://github.com/Zettlr/Zettlr/issues/5489
+    if (/^\/[A-Z]:/i.test(localPath)) {
+      localPath = localPath.slice(1)
+    }
 
     // It's a valid file we can open if it's an absolute path to a Markdown or
     // code file
@@ -74,7 +81,7 @@ export default function (url: string, view: EditorView): void {
       ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
         payload: { path: localPath, newTab: false, windowId }
-      })
+      } as DocumentManagerIPCAPI)
         .catch(e => console.error(e))
     } else {
       // Handled by the event listener in the main process

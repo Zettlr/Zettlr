@@ -107,12 +107,13 @@ export const typewriter = [
     '.cm-content .typewriter-active-line': {
       borderTop: '2px solid var(--grey-3)',
       borderBottom: '2px solid var(--grey-3)',
-      backgroundColor: 'var(--grey-1)',
+      // This is wild CSS syntax, but it works! See https://chriscoyier.net/2023/05/12/add-opacity-to-an-existing-color/
+      backgroundColor: 'rgb(from var(--grey-1) r g b / 70%)',
       marginTop: '-2px',
       marginBottom: '-2px'
     },
     '&dark .cm-content .typewriter-active-line': {
-      backgroundColor: 'var(--grey-7)'
+      backgroundColor: 'rgb(from var(--grey-7) r g b / 70%)'
     }
   })
 ]

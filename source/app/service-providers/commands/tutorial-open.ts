@@ -28,7 +28,7 @@ export default class TutorialOpen extends ZettlrCommand {
    * @param {String} evt The event name
    * @param  {Object} arg An object containing both a hash and a sorting type
    */
-  async run (evt: string, arg: any): Promise<any> {
+  async run (event: string, _arg: any): Promise<any> {
     const tutorialPath = path.join(__dirname, 'tutorial')
     const targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
     const availableLanguages = await this._app.fsal.readdir(tutorialPath)
@@ -37,7 +37,7 @@ export default class TutorialOpen extends ZettlrCommand {
       .map(e => { return { tag: e, path: path.join(tutorialPath, e) } })
       .filter(e => isDir(e.path))
 
-    const { exact, close } = findLangCandidates(this._app.config.get('appLang'), candidates)
+    const { exact, close } = findLangCandidates(this._app.config.get().appLang, candidates)
 
     let tutorial = path.join(tutorialPath, 'en')
     if (exact !== undefined) {

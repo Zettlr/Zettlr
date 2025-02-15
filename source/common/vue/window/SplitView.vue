@@ -12,6 +12,7 @@
       v-if="hasHiddenView === 0"
       class="horizontal-resizer"
       v-on:mousedown="beginViewResizing"
+      v-on:dblclick="resetSize()"
     ></div> <!-- Enable resizing of the view -->
     <div
       v-if="hasHiddenView !== 2"
@@ -46,9 +47,15 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 const props = defineProps<{
   split?: 'horizontal'|'vertical'
+  // Never go below any of these sizes
   minimumSizePercent: [ number, number ]
+  // What to preset the sizes with
   initialSizePercent: [ number, number ]
+  // When the user double-clicks the resizer, go to this size
+  resetSizePercent: [ number, number ]
 }>()
+
+const emit = defineEmits<(e: 'views-resized', sizes: [number, number]) => void>()
 
 const availableSize = ref<number>(window.innerWidth)
 const viewResizing = ref<boolean>(false)
@@ -91,6 +98,13 @@ function recalculateSizes (): void {
   // Don't forget to also update the minimum widths
   view1WidthMin.value = availableSize.value * (props.minimumSizePercent[0] / 100)
   view2WidthMin.value = availableSize.value * (props.minimumSizePercent[1] / 100)
+
+  // Notify parent
+  const newWidth1Percent = view1Width.value / availableSize.value
+  if (hasHiddenView.value === 0 && newWidth1Percent !== view1Percent) {
+    const intWidth = Math.round(view1Percent * 100)
+    emit('views-resized', [ intWidth, 100 - intWidth ])
+  }
 }
 
 onMounted(() => {
@@ -120,6 +134,8 @@ function onViewResizing (event: MouseEvent): void {
     return
   }
 
+  const oldView1Percent = view1Width.value / availableSize.value
+
   // x > 0 means: Direction -->
   // x < 0 means: Direction <--
   let offsetX = event.clientX - viewResizeX.value
@@ -135,6 +151,13 @@ function onViewResizing (event: MouseEvent): void {
   }
 
   viewResizeX.value = event.clientX
+
+  // Notify parent if applicable
+  const view1Percent = view1Width.value / availableSize.value
+  if (hasHiddenView.value === 0 && oldView1Percent !== view1Percent) {
+    const intWidth = Math.round(view1Percent * 100)
+    emit('views-resized', [ intWidth, 100 - intWidth ])
+  }
 }
 
 function endViewResizing (_event: MouseEvent): void {
@@ -176,6 +199,12 @@ function unhide (): void {
   // After we've unhidden the view, make sure to recalculate possibly
   // changed metrics in the meantime.
   recalculateSizes()
+}
+
+function resetSize (): void {
+  view1Width.value = availableSize.value * (props.resetSizePercent[0] / 100)
+  view2Width.value = availableSize.value * (props.resetSizePercent[1] / 100)
+  emit('views-resized', [...props.resetSizePercent])
 }
 
 defineExpose({ hideView, unhide })

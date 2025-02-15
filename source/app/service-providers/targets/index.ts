@@ -33,7 +33,7 @@ export interface WritingTarget {
  */
 export default class TargetProvider extends ProviderContract {
   private readonly _file: string
-  private readonly container: PersistentDataContainer
+  private readonly container: PersistentDataContainer<WritingTarget[]>
   private readonly _emitter: EventEmitter
   private _targets: WritingTarget[]
   /**
@@ -63,7 +63,7 @@ export default class TargetProvider extends ProviderContract {
     if (!await this.container.isInitialized()) {
       await this.container.init([])
     } else {
-      this._targets = await this.container.get()
+      this._targets = (await this.container.get()).filter(t => t !== undefined)
       await this.verify()
     }
   }

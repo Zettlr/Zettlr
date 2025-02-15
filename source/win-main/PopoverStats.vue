@@ -2,29 +2,31 @@
   <PopoverWrapper v-bind:target="props.target" v-on:close="$emit('close')">
     <div id="stats-popover">
       <table>
-        <tr>
-          <td style="text-align: right;">
-            <strong>{{ displaySumMonth }}</strong>
-          </td>
-          <td>{{ lastMonthLabel }}</td>
-        </tr>
-        <tr>
-          <td style="text-align: right;">
-            <strong>{{ displayAvgMonth }}</strong>
-          </td>
-          <td>{{ averageLabel }}</td>
-        </tr>
-        <tr>
-          <td style="text-align: right;">
-            <strong>{{ displaySumToday }}</strong>
-          </td>
-          <td>{{ todayLabel }}</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td style="text-align: right;">
+              <strong>{{ displaySumMonth }}</strong>
+            </td>
+            <td>{{ lastMonthLabel }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <strong>{{ displayAvgMonth }}</strong>
+            </td>
+            <td>{{ averageLabel }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <strong>{{ displaySumToday }}</strong>
+            </td>
+            <td>{{ todayLabel }}</td>
+          </tr>
+        </tbody>
       </table>
-      <p v-if="sumToday > averageMonth">
+      <p v-if="statisticsStore.todayWords > statisticsStore.avg30DaysWords">
         {{ surpassedMessage }}
       </p>
-      <p v-else-if="sumToday > averageMonth / 2">
+      <p v-else-if="statisticsStore.todayWords > statisticsStore.avg30DaysWords / 2">
         {{ closeToMessage }}
       </p>
       <p v-else>
@@ -64,11 +66,12 @@
 import PopoverWrapper from './PopoverWrapper.vue'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
-import { type Stats } from '@providers/stats'
-import { DateTime } from 'luxon'
-import { ref, computed } from 'vue'
+import { useStatisticsStore } from 'source/pinia'
+import { computed } from 'vue'
 
 const ipcRenderer = window.ipc
+
+const statisticsStore = useStatisticsStore()
 
 const svgWidth = 100
 const svgHeight = 20
@@ -85,74 +88,31 @@ const emit = defineEmits<(e: 'close') => void>()
 
 const props = defineProps<{ target: HTMLElement }>()
 
-const sumMonth = ref(0)
-const averageMonth = ref(0)
-const sumToday = ref(0)
-const wordCounts = ref<Record<string, number>>({})
-
-const displaySumMonth = computed(() => localiseNumber(sumMonth.value))
-const displayAvgMonth = computed(() => localiseNumber(averageMonth.value))
-const displaySumToday = computed(() => localiseNumber(sumToday.value))
-
-// Asynchronously pull in the data on setup
-ipcRenderer.invoke('stats-provider', { command: 'get-data' })
-  .then((stats: Stats) => {
-    sumMonth.value = stats.sumMonth
-    averageMonth.value = stats.avgMonth
-    sumToday.value = stats.today
-    wordCounts.value = stats.wordCount
-  })
-  .catch(e => console.error(e))
-
-const wordCountsLastMonth = computed(() => {
-  // This function basically returns a list of the last 30 days of word counts
-  const today = DateTime.now()
-  const year = today.year
-  const month = today.month
-  const numDays = today.daysInMonth ?? 0
-  const allKeys = Object.keys(wordCounts.value)
-  const dailyCounts = []
-  for (let i = 1; i <= numDays; i++) {
-    let day = i.toString()
-    if (i < 10) {
-      day = `0${i}`
-    }
-
-    let m = month.toString()
-    if (month < 10) {
-      m = `0${m}`
-    }
-
-    const currentKey = `${year}-${m}-${day}`
-    if (allKeys.includes(currentKey)) {
-      dailyCounts.push(wordCounts.value[currentKey])
-    } else {
-      dailyCounts.push(0)
-    }
-  }
-  return dailyCounts
-})
+const displaySumMonth = computed(() => localiseNumber(statisticsStore.sum30DaysWords))
+const displayAvgMonth = computed(() => localiseNumber(Math.round(statisticsStore.avg30DaysWords)))
+const displaySumToday = computed(() => localiseNumber(statisticsStore.todayWords))
 
 const getDailyCountsSVGPath = computed(() => {
+  const data = statisticsStore.wordsLast30CalendarDays
+
   // Retrieve the size, and substract a little bit padding
-  const height = svgHeight - 2
-  const width = svgWidth - 2
-  const interval = width / wordCountsLastMonth.value.length
-  let p = `M1 ${height} ` // Move to the bottom left
-  let max = 1 // Prevent division by zero
+  const padding = 1
+  const height = svgHeight - padding * 2
+  const width = svgWidth - padding * 2
+  const interval = Math.round(width / 30)
 
-  // Find the maximum word count
-  for (const count of wordCountsLastMonth.value) {
-    if (count > max) {
-      max = count
-    }
-  }
+  // Ensure `max` is at least 1 to prevent division by zero
+  const max = Math.max(1, Math.max(...data.map(x => x[1])))
 
-  // Move to the right
-  let position = interval
-  for (const count of wordCountsLastMonth.value) {
-    p += `L${position} ${height - count / max * height} `
-    position += interval
+  let p = `M${padding} ${svgHeight - padding} ` // Move to the bottom left
+
+  // Move to the right by 1/30th for each day
+  let x = interval
+  for (const [ iso, count ] of data) {
+    // Use the word count, or 0
+    // const count = wordsLastMonth.find(x => x[0] === iso)?.[1] ?? 0
+    p += `L${x} ${height - Math.round((count / max) * height)} `
+    x += interval
   }
 
   // Finally return the path
@@ -164,7 +124,6 @@ function buttonClick (): void {
     .catch(err => console.error(err))
   emit('close')
 }
-
 </script>
 
 <style lang="less">

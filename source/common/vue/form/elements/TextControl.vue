@@ -74,7 +74,7 @@ const emit = defineEmits<{
   (e: 'blur', value: string): void
 }>()
 
-const fieldID = computed<string>(() => 'field-input-' + props.name ?? '')
+const fieldID = computed<string>(() => 'field-input-' + (props.name ?? ''))
 const textField = ref<HTMLInputElement|null>(null)
 
 const inputValue = ref<string>(props.modelValue)

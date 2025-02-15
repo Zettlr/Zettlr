@@ -37,7 +37,7 @@ const props = defineProps<{
   name?: string
 }>()
 
-const fieldID = computed<string>(() => 'form-input-' + props.name ?? '')
+const fieldID = computed<string>(() => 'form-input-' + (props.name ?? ''))
 
 const emit = defineEmits<(e: 'update:modelValue', value: boolean) => void>()
 

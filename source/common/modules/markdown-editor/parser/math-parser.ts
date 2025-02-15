@@ -102,7 +102,7 @@ export const blockMathParser: BlockParser = {
     const wrapperNode = ctx.elt('FencedCode', startFrom, ctx.lineStart + line.text.length, [
       ctx.elt('CodeMark', startFrom, from - 1), // Ignore the newline char (to ensure the math renderer can differentiate math blocks from code blocks)
       ctx.elt('CodeText', from, from + equation.length, [treeElem]),
-      ctx.elt('CodeMark', from + equation.length, ctx.lineStart + line.text.length)
+      ctx.elt('CodeMark', Math.max(from + equation.length, ctx.lineStart), ctx.lineStart + line.text.length)
     ])
 
     ctx.addElement(wrapperNode)

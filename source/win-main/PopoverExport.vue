@@ -12,9 +12,9 @@
     <RadioControl
       v-model="exportDirectory"
       v-bind:options="{
-        'temp': 'Temporary directory',
-        'cwd': 'Current directory',
-        'ask': 'Select directory'
+        'temp': tempDirLabel,
+        'cwd': cwdLabel,
+        'ask': askLabel
       }"
     ></RadioControl>
     <!-- Add the exporting button -->
@@ -43,7 +43,7 @@ import PopoverWrapper from './PopoverWrapper.vue'
 import RadioControl from '@common/vue/form/elements/RadioControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { ref, computed, watch } from 'vue'
-import { type PandocProfileMetadata } from '@providers/assets'
+import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { trans } from '@common/i18n-renderer'
@@ -52,7 +52,11 @@ import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
-ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' })
+const tempDirLabel = trans('Temporary directory')
+const cwdLabel = trans('Current directory')
+const askLabel = trans('Select directory')
+
+ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' } as AssetsProviderIPCAPI)
   .then((defaults: PandocProfileMetadata[]) => {
     // Save all the exporter information into the array. The computed
     // properties will take the info from that array and re-compute based
@@ -60,11 +64,10 @@ ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' })
     profileMetadata.value = defaults
     // Get either the last used exporter OR the first element available
     const lastProfile = configStore.config.export.singleFileLastExporter
-    const lastIdx = profileMetadata.value.findIndex(e => e.name === lastProfile)
-    if (lastIdx < 0) {
-      format.value = profileMetadata.value[0].name
+    if (lastProfile in availableFormats.value) {
+      format.value = lastProfile
     } else {
-      format.value = profileMetadata.value[lastIdx].name
+      format.value = profileMetadata.value[0].name
     }
   })
   .catch(err => console.error(err))

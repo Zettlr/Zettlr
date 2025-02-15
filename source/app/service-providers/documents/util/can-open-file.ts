@@ -1,4 +1,4 @@
-import { isMdOrCodeFile } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import { promises as fs, constants as FSConstants } from 'fs'
 
 /**
@@ -23,7 +23,7 @@ export async function canOpenFile (filePath: string): Promise<boolean> {
   }
 
   // Then check if it's actually a file we can handle
-  if (!isMdOrCodeFile(filePath)) {
+  if (!hasMdOrCodeExt(filePath)) {
     return false
   }
 

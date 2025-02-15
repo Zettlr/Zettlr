@@ -34,7 +34,7 @@ import type { SearchTerm } from '@dts/common/search'
 import ProviderContract from '@providers/provider-contract'
 import { app } from 'electron'
 import type LogProvider from '@providers/log'
-import { hasCodeExt, hasMarkdownExt, hasMdOrCodeExt } from './util/is-md-or-code-file'
+import { hasMarkdownExt, hasCodeExt } from '@common/util/file-extention-checks'
 import getMarkdownFileParser from './util/file-parser'
 import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
@@ -73,7 +73,12 @@ export default class FSAL extends ProviderContract {
     const shouldClearCache = process.argv.includes('--clear-cache')
     if (this._config.newVersionDetected() || shouldClearCache) {
       this._logger.info('Clearing the FSAL cache ...')
-      this.clearCache()
+      try {
+        await this._cache.clearCache()
+        this._logger.info('FSAL cache cleared.')
+      } catch (err: any) {
+        this._logger.error(`FSAL Cache could not be cleared: ${String(err.message)}`, err)
+      }
     }
   }
 
@@ -186,13 +191,6 @@ export default class FSAL extends ProviderContract {
     }
 
     return false
-  }
-
-  /**
-   * Clears the cache
-   */
-  public clearCache (): void {
-    return this._cache.clearCache()
   }
 
   // TODO/DEBUG: MOVE TO WORKSPACES PROVIDER OR ROOT
@@ -467,12 +465,15 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
     }
 
-    if (hasMdOrCodeExt(absPath)) {
-      const content = await fs.readFile(absPath, { encoding: 'utf-8' })
-      return content
-    }
+    const descriptor = await this.getDescriptorForAnySupportedFile(absPath)
 
-    throw new Error(`[FSAL] Cannot load file ${absPath}: Unsupported`)
+    if (descriptor.type === 'file') {
+      return await FSALFile.load(descriptor)
+    } else if (descriptor.type === 'code') {
+      return await FSALCodeFile.load(descriptor)
+    } else {
+      throw new Error(`[FSAL] Cannot load file ${absPath}: Unsupported`)
+    }
   }
 
   /**

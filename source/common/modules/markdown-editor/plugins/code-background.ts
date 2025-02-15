@@ -10,7 +10,7 @@ import { EditorView, layer, RectangleMarker } from '@codemirror/view'
 export const codeblockBackground = layer({
   above: false, // Render below text
   class: 'cm-codeBackgroundLayer',
-  update (update, layer) {
+  update (update, _layer) {
     return update.docChanged || update.viewportChanged // Return true to redraw markers
   },
   markers (view) {
@@ -21,15 +21,37 @@ export const codeblockBackground = layer({
       from: 0,
       to: view.state.doc.length,
       enter: (node) => {
-        // CodeText contains a single node that has all the code's contents
-        if (![ 'CodeText', 'CommentBlock' ].includes(node.type.name)) {
+        // CodeBlock = Generic, four-space-indented code
+        // FencedCode = Code explicitly created with backticks
+        // CommentBlock = <!----> But without anything preceding the beginning
+        // YAMLFrontmatter = A YAML frontmatter
+        if (![ 'CodeBlock', 'FencedCode', 'CommentBlock', 'YAMLFrontmatter' ].includes(node.type.name)) {
           return
         }
+
         try {
+          let start = node.from
+          let end = node.to
+
+          if (node.type.name === 'FencedCode' || node.type.name === 'YAMLFrontmatter') {
+            // For FencedCode and YAMLFrontmatter blocks we want to exclude the
+            // first and last lines that contain the delimiters.
+            const startLine = view.state.doc.lineAt(node.from).number
+            start = view.state.doc.line(startLine + 1).from
+            end = view.state.doc.lineAt(node.to).from
+          } else if (node.type.name === 'CodeBlock') {
+            // For CodeBlocks (which are just the generics produced by an
+            // indentation of four spaces) we need to highlight a bit more
+            start = view.state.doc.lineAt(node.from).from
+            end = view.state.doc.lineAt(node.to).to + 1
+          } else if (node.type.name === 'CommentBlock') {
+            end = view.state.doc.lineAt(node.to).to + 1
+          }
+
           const localMarkers = RectangleMarker.forRange(
             view,
             'code code-block-line-background',
-            EditorSelection.range(node.from, node.to + 1)
+            EditorSelection.range(start, end)
           )
 
           // Unfortunately, `RectangleMarker.forRange` has some quirks. In order
@@ -87,7 +109,7 @@ export const codeblockBackground = layer({
 export const inlineCodeBackground = layer({
   above: false, // Render below text
   class: 'cm-inlineCodeBackgroundLayer',
-  update (update, layer) {
+  update (update, _layer) {
     return update.docChanged || update.viewportChanged // Return true to redraw markers
   },
   markers (view) {
@@ -110,10 +132,18 @@ export const inlineCodeBackground = layer({
         }
 
         try {
+          let start = node.from
+          let end = node.to
+
+          if (node.type.name === 'InlineCode') {
+            start += 1
+            end -= 1
+          }
+
           const localMarkers = RectangleMarker.forRange(
             view,
             'code inline-code-background',
-            EditorSelection.range(node.from + 1, node.to - 1)
+            EditorSelection.range(start, end)
           )
 
           markers.push(...localMarkers)

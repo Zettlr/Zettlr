@@ -12,32 +12,57 @@
  * END HEADER
  */
 
-import { type InlineParser } from '@lezer/markdown'
+import { type InlineParser, type DelimiterType } from '@lezer/markdown'
+
+const MarkDelimiter: DelimiterType = {
+  resolve: 'HighlightContent',
+  mark: 'HighlightMark' // No specific syntax node (for now due to backwards compatibility reasons)
+}
+
+/**
+ * Determines if the provided char is allowed to surround highlighting marks
+ *
+ * @param   {number}   c  The char code
+ *
+ * @return  {boolean}     Whether it's allowed before/after a highlight mark
+ */
+function allowedSurroundingChar (c: number): boolean {
+  const char = String.fromCharCode(c)
+  // Regex matches whitespace (Z), non-word-characters (math, currentcy; S), and
+  // general punctuation characters. NOTE: Partially "stolen" and adapted from
+  // the Lezer Markdown parser.
+  return /\p{Z}|\p{S}|\p{P}/u.test(char)
+}
 
 export const highlightParser: InlineParser = {
   name: 'highlights',
-  // before: 'Link',
   parse: (ctx, next, pos) => {
     // The next char must be either a colon or an equal sign
-    if (next !== 58 && next !== 61) {
-      // 58 = :; 61 = =
+    if (next !== 58 /* : */ && next !== 61 /* = */) {
       return -1
     }
 
-    const slice = ctx.text.slice(pos - ctx.offset)
-
-    if (!slice.startsWith('::') && !slice.startsWith('==')) {
+    // The one following `next` must be the same character
+    if (pos === ctx.end || next !== ctx.char(pos + 1)) {
       return -1
     }
 
-    const idx = slice.startsWith('::') ? slice.indexOf('::', 2) : slice.indexOf('==', 2)
-    if (idx <= 2) { // idx must be > 2 (to ensure there's content in there)
-      return -1
-    }
+    // A highlight marker is considered opening if it is at the beginning of the
+    // line (bol) or is preceded by whitespace or any punctuation or generally
+    // non-word characters. Furthermore, it must not be followed by whitespace
+    // (or punctuation/certain chars) and not be at the end of the line (eol).
+    // For a highlight marker to be considered closing, it needs the opposite
+    // requirements. This is why we need both checks (because otherwise closing
+    // tags would allow preceding whitespace which would prompt Pandoc not to
+    // render them).
+    const bol = pos === ctx.offset
+    const eol = pos + 2 === ctx.end
+    const validBefore = bol || (pos > ctx.offset && allowedSurroundingChar(ctx.char(pos - 1)))
+    const validAfter = eol || (pos + 1 < ctx.end && allowedSurroundingChar(ctx.char(pos + 2)))
 
-    // At this point we have a citation and it's at the current pos
-    const content = ctx.elt('HighlightContent', pos + 2, pos + idx)
-    const wrapper = ctx.elt('Highlight', pos, pos + idx + 2, [content])
-    return ctx.addElement(wrapper)
+    const isOpening = validBefore && !validAfter
+    const isClosing = validAfter
+
+    return ctx.addDelimiter(MarkDelimiter, pos, pos + 2, isOpening, isClosing)
   }
 }

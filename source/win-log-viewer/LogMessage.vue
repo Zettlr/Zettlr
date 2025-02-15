@@ -96,9 +96,9 @@ const parsedDetails = computed(() => {
   if (detail instanceof Error) {
     const stack = detail.stack?.replace(/\n/g, '<br>') ?? ''
     return [
-    `Name: ${detail.name}`,
-    `Message: ${detail.message}`,
-    stack
+      `Name: ${detail.name}`,
+      `Message: ${detail.message}`,
+      stack
     ].join('\n')
   } else if (Array.isArray(detail)) {
     for (let i = 0; i < detail.length; i++) {

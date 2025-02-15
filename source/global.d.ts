@@ -1,4 +1,3 @@
-/* eslint-disable no-var */
 /**
  * @ignore
  * BEGIN HEADER
@@ -78,7 +77,6 @@ declare const SPLASH_SCREEN_WEBPACK_ENTRY: string
 declare const SPLASH_SCREEN_PRELOAD_WEBPACK_ENTRY: string
 
 // Contains the git build number
-// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __GIT_COMMIT_HASH__: string
 
 /**
@@ -88,7 +86,7 @@ declare const __GIT_COMMIT_HASH__: string
  * NOTE: Most service providers define these interfaces in the corresponding
  * types files in ./source/app/service-providers/assets
  */
-declare module global {
+declare namespace global {
   // Translation data necessary to facilitate internationalisation
   var i18n: any
   var i18nRawData: any
@@ -167,4 +165,14 @@ declare interface Window {
      */
     on: (channel: string, listener: (event: undefined, ...args: any) => void) => () => void
   }
+  /**
+   * Returns the absolute path to the file on disk which this File object is
+   * representing. Returns undefined if there was either an error or the File
+   * object does not represent a file on disk.
+   *
+   * @param   {File}              file  The web File object
+   *
+   * @return  {string|undefined}        The absolute path, or undefined.
+   */
+  getPathForFile: (file: File) => string|undefined
 }

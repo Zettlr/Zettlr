@@ -15,7 +15,7 @@
 import { foldService, syntaxTree } from '@codemirror/language'
 
 // Code folding for JSON documents
-export const jsonFolding = foldService.of((state, lineStart, lineEnd) => {
+export const jsonFolding = foldService.of((state, lineStart, _lineEnd) => {
   const node = syntaxTree(state).cursorAt(lineStart, 1).node
   if (node.from < lineStart) {
     return null // The node doesn't start on this line

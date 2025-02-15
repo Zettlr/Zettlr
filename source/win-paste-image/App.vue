@@ -173,6 +173,6 @@ div.image-preview-container {
 
 img.image-preview {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 50vh;
 }
 </style>

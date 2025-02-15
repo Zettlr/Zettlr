@@ -58,6 +58,7 @@ import tippy from 'tippy.js'
 import { type SimulationNodeDatum } from 'd3'
 import DirectedGraph from '@providers/links/directed-graph'
 import { type MDFileDescriptor } from '@dts/common/fsal'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -80,7 +81,6 @@ const graphWidth = ref(0)
 const graphHeight = ref(0)
 // This variable contains zoom information
 const zoomFactor = ref(1)
-const graph = ref<LinkGraph|null>(null)
 // Store the D3 elements
 const graphElement = ref<d3.Selection<SVGSVGElement, undefined, null, undefined>|null>(null)
 const simulation = ref<d3.Simulation<d3.SimulationNodeDatum, undefined>|null>(null)
@@ -358,6 +358,10 @@ function startSimulation (): void {
 
   if (simulation.value === null) {
     const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(includedLinks).id((node, _i, _nodesData) => node.id).strength((link, _i) => link.weight * 2)
+    // Below we have to typecast since d3 will take our arbitrary data (which
+    // don't really have any required properties, and ADD any
+    // SimulationNodeDatum properties it needs into the object).
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     simulation.value = d3.forceSimulation(includedNodes as any)
       .force('link', forceLink)
       .force('charge', d3.forceManyBody())
@@ -383,14 +387,21 @@ function startSimulation (): void {
       })
   } else {
     // If the simulation already exists, we can simply update it
+    // Same as above: includedNodes will be enriched by the required properties
+    // of SimulationNodeDatum, but the types don't express this.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     simulation.value.nodes(includedNodes as any).alpha(1).alphaTarget(0).restart()
-    const link = simulation.value.force('link') as d3.ForceLink<GraphVertex & d3.SimulationNodeDatum, GraphArc>
-    const charge = simulation.value.force('charge') as d3.ForceManyBody<d3.SimulationNodeDatum>
-    const coll = simulation.value.force('collide') as d3.ForceCollide<d3.SimulationNodeDatum>
+    const link: d3.ForceLink<GraphVertex & d3.SimulationNodeDatum, GraphArc> = simulation.value.force('link')!
+    const charge: d3.ForceManyBody<d3.SimulationNodeDatum> = simulation.value.force('charge')!
+    const coll: d3.ForceCollide<d3.SimulationNodeDatum> = simulation.value.force('collide')!
     link.links(includedLinks)
     link.initialize(includedNodes, () => Math.random() * 5)
-    charge.initialize(includedNodes as any[], () => 1)
-    coll.initialize(includedNodes as any[], () => Math.random() * 5)
+    // Same here...
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    charge.initialize(includedNodes as any, () => 1)
+    // ... and here.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    coll.initialize(includedNodes as any, () => Math.random() * 5)
   }
 
   const linkSelection = svg.select('#arc-container')
@@ -419,7 +430,7 @@ function startSimulation (): void {
                 path: vertex.id,
                 newTab: (event.altKey === true) ? true : undefined
               }
-            }).catch(err => console.error(err))
+            } as DocumentManagerIPCAPI).catch(err => console.error(err))
           })
           .attr('data-tippy-content', (vertex) => {
             let cnt = ''
@@ -547,7 +558,7 @@ async function buildGraph (): Promise<void> {
           }
         }
       }
-      DG.addArc(sourcePath, resolvedLinks.get(target) as string)
+      DG.addArc(sourcePath, resolvedLinks.get(target)!)
     }
   }
   DG.endOperation()

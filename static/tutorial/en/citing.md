@@ -34,7 +34,7 @@ At the core of Zettlr, there is a mighty engine that is capable of untangling wh
 
 ## The References List 💻
 
-As soon as you write longer papers and even books, you may lose oversight over what you’ve already quoted, and which things still need to find their way into your paper. Zettlr is capable of displaying the full list of your references in the sidebar. Open it now by clicking the sidebar icon again, and have a look at the “References”-section. You will notice that the book is visible there — and as you continue to include references, this list will grow!
+As soon as you write longer papers and even books, you may lose oversight over what you’ve already quoted, and which things still need to find their way into your paper. Zettlr is capable of displaying the full list of your references in the sidebar. Open it now by clicking the sidebar icon again, and have a look at the “References”-section. After saving the file, you will notice that the book is visible there — and as you continue to include references, this list will grow!
 
 > If you export a file using Zettlr, it will automatically add a list of references below the file's contents. You can prevent it from doing so using a [YAML frontmatter](https://docs.zettlr.com/en/advanced/yaml-frontmatter/). Just add the property `suppress-bibliography: true`. You can also [customize this list of references](https://docs.zettlr.com/en/core/citations/#customizing-the-list-of-references).
 

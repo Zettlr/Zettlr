@@ -258,6 +258,11 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
         { type: 'separator' },
         {
           type: 'checkbox',
+          label: trans('Show formatting toolbar when text is selected'),
+          model: 'editor.showFormattingToolbar'
+        },
+        {
+          type: 'checkbox',
           label: trans('Highlight whitespace'),
           model: 'editor.showWhitespace'
         },

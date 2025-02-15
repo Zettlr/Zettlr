@@ -23,89 +23,91 @@
       <hr>
 
       <table>
-        <tr>
-          <th style="text-align: left;" v-on:click="changeSorting('name')">
-            {{ tagNameLabel }}
-          </th>
-          <th style="text-align: left;" v-on:click="changeSorting('color')">
-            {{ colorLabel }}
-          </th>
-          <th style="text-align: right;" v-on:click="changeSorting('count')">
-            {{ countLabel }}
-          </th>
-          <th style="text-align: right;" v-on:click="changeSorting('idf')">
-            IDF
-          </th>
-          <th>
-            Actions <!-- TODO: Translate -->
-          </th>
-        </tr>
-        <tr v-for="tag in filteredTags" v-bind:key="tag.name" class="tag-flex">
-          <td style="text-align: left;">
-            <span style="flex-shrink: 1;">{{ tag.name }}</span>
-          </td>
-
-          <td>
-            <ColorControl
-              v-if="tag.color !== undefined"
-              v-model="tag.color"
-              v-bind:inline="true"
-              v-on:change="hasUnsavedChanges = true"
-            ></ColorControl>
-
-            <TextControl
-              v-if="tag.color !== undefined && tag.desc !== undefined"
-              v-model="tag.desc"
-              v-bind:inline="true"
-              v-bind:placeholder="descriptionPlaceholder"
-              v-on:change="hasUnsavedChanges = true"
-            ></TextControl>
-            <span v-else-if="tag.color !== undefined && tag.desc === undefined">
-              No description
-            </span>
-
-            <ButtonControl
-              v-if="tag.color !== undefined"
-              v-bind:label="removeColorLabel"
-              v-bind:inline="true"
-              v-on:click="removeColor(tag.name)"
-            ></ButtonControl>
-            <ButtonControl
-              v-else
-              v-bind:label="assignColorLabel"
-              v-bind:inline="true"
-              v-on:click="assignColor(tag.name)"
-            ></ButtonControl>
-          </td>
-
-          <td style="text-align: right;">
-            <span style="flex-shrink: 1;">{{ tag.files.length ?? 0 }}&times;</span>
-          </td>
-
-          <!-- IDF shall be displayed rounded to two floating point numbers -->
-          <td style="text-align: right;">
-            {{ Math.round(tag.idf * 100) / 100 }}
-          </td>
-
-          <td>
-            <TextControl
-              v-if="renameActiveFor === tag.name"
-              v-model="newTag"
-              v-bind:placeholder="'New tag'"
-            ></TextControl>
-            <ButtonControl
-              v-if="renameActiveFor === tag.name"
-              v-bind:label="'Rename'"
-              v-on:click="renameTag(tag.name)"
-            ></ButtonControl>
-
-            <ButtonControl
-              v-else
-              v-bind:label="'Rename tag...'"
-              v-on:click="renameActiveFor = tag.name"
-            ></ButtonControl>
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <th style="text-align: left;" v-on:click="changeSorting('name')">
+              {{ tagNameLabel }}
+            </th>
+            <th style="text-align: left;" v-on:click="changeSorting('color')">
+              {{ colorLabel }}
+            </th>
+            <th style="text-align: right;" v-on:click="changeSorting('count')">
+              {{ countLabel }}
+            </th>
+            <th style="text-align: right;" v-on:click="changeSorting('idf')">
+              IDF
+            </th>
+            <th>
+              Actions <!-- TODO: Translate -->
+            </th>
+          </tr>
+          <tr v-for="tag in filteredTags" v-bind:key="tag.name" class="tag-flex">
+            <td style="text-align: left;">
+              <span style="flex-shrink: 1;">{{ tag.name }}</span>
+            </td>
+  
+            <td>
+              <ColorControl
+                v-if="tag.color !== undefined"
+                v-model="tag.color"
+                v-bind:inline="true"
+                v-on:change="hasUnsavedChanges = true"
+              ></ColorControl>
+  
+              <TextControl
+                v-if="tag.color !== undefined && tag.desc !== undefined"
+                v-model="tag.desc"
+                v-bind:inline="true"
+                v-bind:placeholder="descriptionPlaceholder"
+                v-on:change="hasUnsavedChanges = true"
+              ></TextControl>
+              <span v-else-if="tag.color !== undefined && tag.desc === undefined">
+                No description
+              </span>
+  
+              <ButtonControl
+                v-if="tag.color !== undefined"
+                v-bind:label="removeColorLabel"
+                v-bind:inline="true"
+                v-on:click="removeColor(tag.name)"
+              ></ButtonControl>
+              <ButtonControl
+                v-else
+                v-bind:label="assignColorLabel"
+                v-bind:inline="true"
+                v-on:click="assignColor(tag.name)"
+              ></ButtonControl>
+            </td>
+  
+            <td style="text-align: right;">
+              <span style="flex-shrink: 1;">{{ tag.files.length ?? 0 }}&times;</span>
+            </td>
+  
+            <!-- IDF shall be displayed rounded to two floating point numbers -->
+            <td style="text-align: right;">
+              {{ Math.round(tag.idf * 100) / 100 }}
+            </td>
+  
+            <td>
+              <TextControl
+                v-if="renameActiveFor === tag.name"
+                v-model="newTag"
+                v-bind:placeholder="newTagPlaceholderLabel"
+              ></TextControl>
+              <ButtonControl
+                v-if="renameActiveFor === tag.name"
+                v-bind:label="renameTagLabel"
+                v-on:click="renameTag(tag.name)"
+              ></ButtonControl>
+  
+              <ButtonControl
+                v-else
+                v-bind:label="renameTagDefaultLabel"
+                v-on:click="renameActiveFor = tag.name"
+              ></ButtonControl>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </WindowChrome>
@@ -146,6 +148,9 @@ const descriptionPlaceholder = trans('A short description')
 const tagManagerIntro = trans('Here you can assign colors to different tags. If a tag is found in a file, its tile in the preview list will receive a colored indicator. The description will be shown on mouse hover.')
 const windowTitle = trans('Manage tags')
 const filterPlaceholder = trans('Filter tags…')
+const newTagPlaceholderLabel = trans('New tag')
+const renameTagLabel = trans('Rename')
+const renameTagDefaultLabel = trans('Rename tag…')
 
 const configStore = useConfigStore()
 const tagStore = useTagsStore()

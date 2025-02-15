@@ -4,6 +4,7 @@
     <select
       v-bind:id="fieldID"
       v-model="inputValue"
+      v-bind:disabled="props.disabled"
       v-bind:name="name"
       v-bind:class="{ inline: inline === true }"
     >
@@ -38,6 +39,7 @@ import { computed, ref, watch, toRef } from 'vue'
 
 const props = defineProps<{
   modelValue: string
+  disabled?: boolean
   inline?: boolean
   label?: string
   name?: string
@@ -56,7 +58,7 @@ watch(inputValue, () => {
   emit('update:modelValue', inputValue.value)
 })
 
-const fieldID = computed<string>(() => 'form-select-' + props.name ?? '')
+const fieldID = computed<string>(() => 'form-select-' + (props.name ?? ''))
 </script>
 
 <style lang="less">

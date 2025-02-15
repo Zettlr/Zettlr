@@ -273,7 +273,9 @@ body .popover {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 5px;
-  z-index: 10; // Make sure it overlays also CodeMirror elements, which have some z-indices set.
+  // Make sure it overlays also CodeMirror elements, which have some z-indices
+  // set. The highest (for panels) that I've seen so far was 300
+  z-index: 300;
   font-size: 12px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 

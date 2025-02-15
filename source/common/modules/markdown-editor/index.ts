@@ -30,14 +30,15 @@ import EventEmitter from 'events'
 import { EditorView } from '@codemirror/view'
 import {
   EditorState,
+  Text,
   type Extension,
   type SelectionRange
 } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 
 // Keymaps/Input modes
-import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
+import { vimPlugin } from './plugins/vim-mode'
 
 import { type ToCEntry, tocField } from './plugins/toc-field'
 import {
@@ -93,11 +94,8 @@ import { markdownToAST } from '../markdown-utils'
 import { countField } from './plugins/statistics-fields'
 import type { SyntaxNode } from '@lezer/common'
 import { darkModeEffect } from './theme/dark-mode'
-import { themeBerlinDark, themeBerlinLight } from './theme/berlin'
-import { themeBielefeldDark, themeBielefeldLight } from './theme/bielefeld'
-import { themeBordeauxDark, themeBordeauxLight } from './theme/bordeaux'
-import { themeFrankfurtDark, themeFrankfurtLight } from './theme/frankfurt'
-import { themeKarlMarxStadtDark, themeKarlMarxStadtLight } from './theme/karl-marx-stadt'
+import { editorMetadataFacet } from './plugins/editor-metadata'
+import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
 
 export interface DocumentWrapper {
   path: string
@@ -204,6 +202,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param  {string}                leafId               The ID of the leaf
    *                                                      this editor is part of
+   * @param  {string}                windowId             The window's ID
    * @param  {string}                representedDocument  The absolute path to
    *                                                      the file that will be
    *                                                      loaded in this editor
@@ -213,7 +212,8 @@ export default class MarkdownEditor extends EventEmitter {
    *                                                      IPC authority.
    */
   constructor (
-    leafId: string,
+    readonly leafId: string,
+    readonly windowId: string,
     representedDocument: string,
     authorityAPI: DocumentAuthorityAPI,
     configOverride?: Partial<EditorConfiguration>
@@ -387,9 +387,13 @@ export default class MarkdownEditor extends EventEmitter {
     const { content, type, startVersion } = await this.authority.fetchDoc(this.representedDocument)
 
     // The documents contents have changed, so we must recreate the state
+    const extensions = this._getExtensions(this.representedDocument, type, startVersion)
+    // This particular editor type needs access to the window and leaf IDs
+    extensions.push(editorMetadataFacet.of({ windowId: this.windowId, leafId: this.leafId }))
+
     const state = EditorState.create({
-      doc: content,
-      extensions: this._getExtensions(this.representedDocument, type, startVersion)
+      doc: Text.of(content.split('\n')),
+      extensions
     })
 
     this._instance.setState(state)
@@ -548,7 +552,7 @@ export default class MarkdownEditor extends EventEmitter {
       if (newOptions.inputMode === 'emacs') {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure(emacs()) })
       } else if (newOptions.inputMode === 'vim') {
-        this._instance.dispatch({ effects: inputModeCompartment.reconfigure(vim()) })
+        this._instance.dispatch({ effects: inputModeCompartment.reconfigure(vimPlugin()) })
       } else {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure([]) })
       }
@@ -637,6 +641,15 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
+   * Sets the project info field of the editor state to the provided value.
+   *
+   * @param   {ProjectInfo|null}  info  The data
+   */
+  set projectInfo (info: ProjectInfo|null) {
+    this._instance.dispatch({ effects: projectInfoUpdateEffect.of(info) })
+  }
+
+  /**
    * Sets an autocomplete database of given type to a new value
    *
    * @param   {String}  type      The type of the database
@@ -645,24 +658,24 @@ export default class MarkdownEditor extends EventEmitter {
   setCompletionDatabase (type: 'tags', database: TagRecord[]): void
   setCompletionDatabase (type: 'citations', database: Array<{ citekey: string, displayText: string }>): void
   setCompletionDatabase (type: 'snippets', database: Array<{ name: string, content: string }>): void
-  setCompletionDatabase (type: 'files', database: Array<{ filename: string, id: string }>): void
+  setCompletionDatabase (type: 'files', database: Array<{ filename: string, displayName: string, id: string }>): void
   setCompletionDatabase (type: string, database: any): void {
     switch (type) {
       case 'tags':
         this.databaseCache.tags = database
-        this._instance.dispatch({ effects: tagsUpdate.of(database) })
+        this._instance.dispatch({ effects: tagsUpdate.of(database as TagRecord[]) })
         break
       case 'citations':
         this.databaseCache.citations = database
-        this._instance.dispatch({ effects: citekeyUpdate.of(database) })
+        this._instance.dispatch({ effects: citekeyUpdate.of(database as Array<{ citekey: string, displayText: string }>) })
         break
       case 'snippets':
         this.databaseCache.snippets = database
-        this._instance.dispatch({ effects: snippetsUpdate.of(database) })
+        this._instance.dispatch({ effects: snippetsUpdate.of(database as Array<{ name: string, content: string }>) })
         break
       case 'files':
         this.databaseCache.files = database
-        this._instance.dispatch({ effects: filesUpdate.of(database) })
+        this._instance.dispatch({ effects: filesUpdate.of(database as Array<{ filename: string, displayName: string, id: string }>) })
         break
     }
   }

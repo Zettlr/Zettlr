@@ -13,6 +13,9 @@
     <translator>
       <name>Juhana Venäläinen</name>
     </translator>
+    <translator>
+      <name>Tuomas Hietala</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
     <updated>2012-07-04T23:31:02+00:00</updated>
   </info>
@@ -29,8 +32,8 @@
   </date>
   <terms>
     <term name="advance-online-publication">advance online publication</term>
-    <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
+    <term name="album">albumi</term>
+    <term name="audio-recording">äänite</term>
     <term name="film">film</term>
     <term name="henceforth">henceforth</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
@@ -45,14 +48,14 @@
     <term name="podcast">podcast</term>
     <term name="podcast-episode">podcast episode</term>
     <term name="preprint">preprint</term>
-    <term name="radio-broadcast">radio broadcast</term>
+    <term name="radio-broadcast">radiolähetys</term>
     <term name="radio-series">radio series</term>
     <term name="radio-series-episode">radio series episode</term>
-    <term name="special-issue">special issue</term>
+    <term name="special-issue">erikoisnumero</term>
     <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
+    <term name="television-broadcast">televisiolähetys</term>
+    <term name="television-series">televisiosarja</term>
+    <term name="television-series-episode">televisiosarjan jakso</term>
     <term name="video">video</term>
     <term name="working-paper">working paper</term>
     <term name="accessed">viitattu</term>
@@ -67,8 +70,8 @@
     <term name="circa" form="short">n.</term>
     <term name="cited">viitattu</term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>viite</single>
+      <multiple>viitteet</multiple>
     </term>
     <term name="number">
       <single>number</single>
@@ -120,7 +123,7 @@
     <term name="article-newspaper">newspaper article</term>
     <term name="bill">bill</term>
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">lähetys</term>
     <!-- chapter is in the list of locator terms -->
     <term name="classic">classic</term>
     <term name="collection">collection</term>
@@ -136,26 +139,26 @@
     <term name="interview">haastattelu</term>
     <term name="legal_case">legal case</term>
     <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
+    <term name="manuscript">käsikirjoitus</term>
+    <term name="map">kartta</term>
+    <term name="motion_picture">videotallenne</term>
     <term name="musical_score">musical score</term>
     <term name="pamphlet">pamphlet</term>
     <term name="paper-conference">conference paper</term>
-    <term name="patent">patent</term>
-    <term name="performance">performance</term>
+    <term name="patent">patentti</term>
+    <term name="performance">esitys</term>
     <term name="periodical">periodical</term>
     <term name="personal_communication">henkilökohtainen viestintä</term>
     <term name="post">post</term>
-    <term name="post-weblog">blog post</term>
+    <term name="post-weblog">blogikirjoitus</term>
     <term name="regulation">regulation</term>
-    <term name="report">report</term>
+    <term name="report">raportti</term>
     <term name="review">review</term>
-    <term name="review-book">book review</term>
-    <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
-    <term name="standard">standard</term>
+    <term name="review-book">kirja-arvostelu</term>
+    <term name="software">ohjelmisto</term>
+    <term name="song">äänite</term>
+    <term name="speech">esitys</term>
+    <term name="standard">standardi</term>
     <term name="thesis">thesis</term>
     <term name="treaty">treaty</term>
     <term name="webpage">webpage</term>
@@ -184,10 +187,10 @@
     <term name="review-book" form="verb">review of the book</term>
 
     <!-- HISTORICAL ERA TERMS -->
-    <term name="ad">jaa.</term>
-    <term name="bc">eaa.</term>
-    <term name="bce">BCE</term>
-    <term name="ce">CE</term>
+    <term name="ad">jKr.</term>
+    <term name="bc">eKr.</term>
+    <term name="bce">eaa.</term>
+    <term name="ce">jaa.</term>
 
     <!-- PUNCTUATION -->
     <term name="open-quote">”</term>
@@ -304,8 +307,8 @@
       <multiple>volumes</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>sivu</single>
+      <multiple>sivut</multiple>
     </term>
     <term name="printing">
       <single>printing</single>
@@ -402,15 +405,15 @@
     <term name="opus" form="short">op.</term>
     <term name="page" form="short">
       <single>s.</single>
-      <multiple>ss.</multiple>
+      <multiple>s.</multiple>
     </term>
     <term name="number-of-volumes" form="short">
       <single>vol.</single>
       <multiple>vols.</multiple>
     </term>
     <term name="page-first" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
+      <single>s.</single>
+      <multiple>s.</multiple>
     </term>
     <term name="printing" form="short">
       <single>print.</single>
@@ -420,7 +423,7 @@
 
     <term name="number-of-pages" form="short">
       <single>s.</single>
-      <multiple>ss.</multiple>
+      <multiple>s.</multiple>
     </term>
     <term name="paragraph" form="short">kappale</term>
     <term name="part" form="short">osa</term>
@@ -448,12 +451,12 @@
       <multiple>¶¶</multiple>
     </term>
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>luku</single>
+      <multiple>luvut</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>viite</single>
+      <multiple>viitteet</multiple>
     </term>
     <term name="collection-number">
       <single>numero</single>
@@ -466,8 +469,8 @@
 
     <!-- LONG ROLE FORMS -->
     <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
+      <single>toim.</single>
+      <multiple>toim.</multiple>
     </term>
     <term name="chair">
       <single>chair</single>
@@ -482,8 +485,8 @@
       <multiple>contributors</multiple>
     </term>
     <term name="curator">
-      <single>curator</single>
-      <multiple>curators</multiple>
+      <single>kuraattori</single>
+      <multiple>kuraattorit</multiple>
     </term>
     <term name="executive-producer">
       <single>executive producer</single>
@@ -502,24 +505,24 @@
       <multiple>narrators</multiple>
     </term>
     <term name="organizer">
-      <single>organizer</single>
-      <multiple>organizers</multiple>
+      <single>järjestäjä</single>
+      <multiple>järjestäjät</multiple>
     </term>
     <term name="performer">
-      <single>performer</single>
-      <multiple>performers</multiple>
+      <single>esittäjä</single>
+      <multiple>esittäjät</multiple>
     </term>
     <term name="producer">
-      <single>producer</single>
-      <multiple>producers</multiple>
+      <single>tuottaja</single>
+      <multiple>tuottajat</multiple>
     </term>
     <term name="script-writer">
-      <single>writer</single>
-      <multiple>writers</multiple>
+      <single>käsikirjoittaja</single>
+      <multiple>käsikirjoittajat</multiple>
     </term>
     <term name="series-creator">
-      <single>series creator</single>
-      <multiple>series creators</multiple>
+      <single>sarjan luoja</single>
+      <multiple>sarjan luojat</multiple>
     </term>
     <term name="director">
       <single>ohjaaja</single>
@@ -572,16 +575,16 @@
       <multiple>orgs.</multiple>
     </term>
     <term name="performer" form="short">
-      <single>perf.</single>
-      <multiple>perfs.</multiple>
+      <single>esitt.</single>
+      <multiple>esitt.</multiple>
     </term>
     <term name="producer" form="short">
-      <single>prod.</single>
-      <multiple>prods.</multiple>
+      <single>tuott.</single>
+      <multiple>tuott.</multiple>
     </term>
     <term name="script-writer" form="short">
-      <single>writ.</single>
-      <multiple>writs.</multiple>
+      <single>käsik.</single>
+      <multiple>käsik.</multiple>
     </term>
     <term name="series-creator" form="short">
       <single>cre.</single>
@@ -613,19 +616,19 @@
     </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb">edited by</term>
+    <term name="collection-editor" form="verb">toimittanut</term>
     <term name="chair" form="verb">chaired by</term>
     <term name="compiler" form="verb">compiled by</term>
     <term name="contributor" form="verb">with</term>
-    <term name="curator" form="verb">curated by</term>
+    <term name="curator" form="verb">kuratoinut</term>
     <term name="executive-producer" form="verb">executive produced by</term>
     <term name="guest" form="verb">with guest</term>
     <term name="host" form="verb">hosted by</term>
     <term name="narrator" form="verb">narrated by</term>
-    <term name="organizer" form="verb">organized by</term>
-    <term name="performer" form="verb">performed by</term>
-    <term name="producer" form="verb">produced by</term>
-    <term name="script-writer" form="verb">written by</term>
+    <term name="organizer" form="verb">järjestänyt</term>
+    <term name="performer" form="verb">esittänyt</term>
+    <term name="producer" form="verb">tuottanut</term>
+    <term name="script-writer" form="verb">käsikirjoittanut</term>
     <term name="series-creator" form="verb">created by</term>
     <term name="container-author" form="verb"></term>
     <term name="director" form="verb">ohjannut</term>
@@ -648,9 +651,9 @@
     <term name="host" form="verb-short">hosted by</term>
     <term name="narrator" form="verb-short">narr. by</term>
     <term name="organizer" form="verb-short">org. by</term>
-    <term name="performer" form="verb-short">perf. by</term>
-    <term name="producer" form="verb-short">prod. by</term>
-    <term name="script-writer" form="verb-short">writ. by</term>
+    <term name="performer" form="verb-short">esitt.</term>
+    <term name="producer" form="verb-short">tuott.</term>
+    <term name="script-writer" form="verb-short">käsik.</term>
     <term name="series-creator" form="verb-short">cre. by</term>
     <term name="director" form="verb-short">ohj.</term>
     <term name="editor" form="verb-short">toim.</term>

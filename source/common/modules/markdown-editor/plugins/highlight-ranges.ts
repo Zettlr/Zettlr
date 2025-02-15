@@ -21,7 +21,7 @@ const highlightDeco = Decoration.mark({ class: 'cm-selectionMatch' })
 export const highlightRangesEffect = StateEffect.define<SelectionRange[]>()
 
 export const highlightRanges = StateField.define<DecorationSet>({
-  create (state: EditorState) {
+  create (_state: EditorState) {
     return Decoration.none
   },
   update (oldVal, transaction) {

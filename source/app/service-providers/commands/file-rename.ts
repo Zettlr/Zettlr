@@ -18,7 +18,7 @@ import sanitize from 'sanitize-filename'
 import { dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import replaceLinks from '@common/util/replace-links'
-import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 
 export default class FileRename extends ZettlrCommand {
   constructor (app: any) {
@@ -67,10 +67,30 @@ export default class FileRename extends ZettlrCommand {
 
     const newPath = path.join(file.dir, newName)
 
-    // Test if we are about to override a file
+    // Now, we have to ensure we are not accidentally overriding a file by
+    // renaming this one. Take note of issues #5460 (do not ask if changing a
+    // file's capitalization) and #4940 (do not overwrite other files). The
+    // primary complicating factor is that we can't rely on `pathExists` (it may
+    // lie), since many file systems nowadays are case-insensitive case-
+    // preserving. This means you can have a file `testfile.md` and rename it to
+    // `TESTFILE.md`, but the file system will say that `TESTFILE.md` already
+    // exists because ( `testfile.md === TESTFILE.md`).
+    // Thus, we need to check two conditions: Whether the user has requested a
+    // case change only, and whethere there is a DIFFERENT file at that new
+    // place.
+    const newPathFile = this._app.workspaces.findFile(newPath)
+    const caseChangeOnly = newName.toLowerCase() === file.name.toLowerCase()
+
     if (await this._app.fsal.pathExists(newPath)) {
-      // Ask for override
-      if (!await this._app.windows.shouldOverwriteFile(newName)) {
+      // The file system reports the newPath already exists.
+      if (caseChangeOnly && (newPathFile === undefined || newPathFile === file)) {
+        // The user only changed the case. Based on the second check, it appears
+        // that this file system is case-insensitive, which means that the
+        // reason `pathExists()` has returned true is because it confirms the
+        // existence of this very file. So no need to ask the user. I keep this
+        // empty if-case because reversing it would make it less comprehensible.
+      } else if (!await this._app.windows.shouldOverwriteFile(newName)) {
+        // In any other case (full rename or case-sensitive file system), ask.
         return // No override wanted
       } else {
         // Remove the file to be overwritten prior

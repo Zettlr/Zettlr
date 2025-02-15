@@ -68,6 +68,7 @@ defaults:
 # Global environment variables
 env:
   NODE_VERSION: '20'
+  DEBUG: '*' # DEBUG: Enable debug mode to debug macOS ARM package notarization errors
 
 # Ensure only a single build workflow runs at any one time
 concurrency:
@@ -190,13 +191,14 @@ jobs:
       - name: Retrieve code signing certificate
         run: ./scripts/add-osx-cert.sh
         env:
-          MACOS_CERT: ${{ secrets.MACOS_CERT }}
-          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS }}
+          MACOS_CERT: ${{ secrets.MACOS_CERT_2030_01_14 }}
+          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS_2030_01_14 }}
       - name: Package
         run: yarn package:mac-x64
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       - name: Release
         run: yarn release:mac-x64
       - name: Cache image file
@@ -236,13 +238,14 @@ jobs:
       - name: Retrieve code signing certificate
         run: ./scripts/add-osx-cert.sh
         env:
-          MACOS_CERT: ${{ secrets.MACOS_CERT }}
-          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS }}
+          MACOS_CERT: ${{ secrets.MACOS_CERT_2030_01_14 }}
+          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS_2030_01_14 }}
       - name: Package
         run: yarn package:mac-arm
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       - name: Release
         run: yarn release:mac-arm
       - name: Cache image file
@@ -261,8 +264,10 @@ jobs:
     name: Linux (x86_64)
     env:
       npm_config_arch: x64
+      CC: zig cc -target x86_64-linux-gnu
+      CXX: zig c++ -target x86_64-linux-gnu
     needs: [preflight, verify_version]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Checkout branch ${{ github.ref_name }}
@@ -274,6 +279,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      # Replicate PR #4910 on the x86_64 runner as this compiler appears
+      # still to be supported by node-gyp even after the most recent update.
+      # (NOTE: See added CC/CCX variables, found from output under 'zig targets'
+      # here: https://andrewkelley.me/post/zig-cc-powerful-drop-in-replacement-gcc-clang.html)
+      - name: Install Zig
+        uses: goto-bus-stop/setup-zig@v2
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
@@ -304,7 +315,7 @@ jobs:
       CC: zig cc -target aarch64-linux-gnu
       CXX: zig c++ -target aarch64-linux-gnu
     needs: [preflight, verify_version]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout branch ${{ github.ref_name }}
         uses: actions/checkout@v4

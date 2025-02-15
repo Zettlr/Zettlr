@@ -12,9 +12,11 @@
   >
     <SplitView
       ref="fileManagerSplitComponent"
-      v-bind:initial-size-percent="[ 20, 80 ]"
+      v-bind:initial-size-percent="fileManagerSplitComponentInitialSize"
       v-bind:minimum-size-percent="[ 10, 50 ]"
+      v-bind:reset-size-percent="[ 20, 80 ]"
       v-bind:split="'horizontal'"
+      v-on:views-resized="fileManagerSplitComponentResized($event)"
     >
       <template #view1>
         <!-- File manager in the left side of the split view -->
@@ -36,9 +38,11 @@
         <!-- Another split view in the right side -->
         <SplitView
           ref="editorSidebarSplitComponent"
-          v-bind:initial-size-percent="[ 80, 20 ]"
+          v-bind:initial-size-percent="editorSidebarSplitComponentInitialSize"
           v-bind:minimum-size-percent="[ 50, 10 ]"
+          v-bind:reset-size-percent="[ 80, 20 ]"
           v-bind:split="'horizontal'"
+          v-on:views-resized="editorSidebarSplitComponentResized($event)"
         >
           <template #view1>
             <!-- First side: Editor -->
@@ -150,7 +154,8 @@ import {
   ref,
   computed,
   watch,
-  onMounted
+  onMounted,
+  onBeforeMount
 } from 'vue'
 
 // Import the sound effects for the pomodoro timer
@@ -164,6 +169,7 @@ import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 import { type AnyDescriptor } from 'source/types/common/fsal'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -189,13 +195,20 @@ const SOUND_EFFECTS = [
 const searchParams = new URLSearchParams(window.location.search)
 // The window number indicates which main window this one here is. This is only
 // necessary for the documents and split views to show up.
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const windowId = searchParams.get('window_id')!
 
 const fileManagerVisible = ref(true)
 const mainSplitViewVisibleComponent = ref<'fileManager'|'globalSearch'>('fileManager')
 const isUpdateAvailable = ref(false)
 const vibrancyEnabled = ref(configStore.config.window.vibrancy)
+
+// Ensure the app remembers the previous sidebar sizes
+const fileManagerSplitComponentInitialSize = ref<[number, number]>([ 20, 80 ])
+const editorSidebarSplitComponentInitialSize = ref<[number, number]>([ 80, 20 ])
+onBeforeMount(() => {
+  fileManagerSplitComponentInitialSize.value = configStore.config.ui.fileManagerSplitSize
+  editorSidebarSplitComponentInitialSize.value = configStore.config.ui.editorSidebarSplitSize
+})
 
 // Popover targets
 const exportButton = ref<HTMLElement|null>(null)
@@ -636,7 +649,7 @@ onMounted(() => {
           windowId,
           leafId: lastLeafId.value
         }
-      }).catch(err => console.error(err))
+      } as DocumentManagerIPCAPI).catch(err => console.error(err))
     } else if (shortcut === 'navigate-forward') {
       ipcRenderer.invoke('documents-provider', {
         command: 'navigate-forward',
@@ -644,7 +657,7 @@ onMounted(() => {
           windowId,
           leafId: lastLeafId.value
         }
-      }).catch(err => console.error(err))
+      } as DocumentManagerIPCAPI).catch(err => console.error(err))
     }
   })
 
@@ -668,6 +681,14 @@ onMounted(() => {
     }
   })
 })
+
+function fileManagerSplitComponentResized (sizes: [number, number]): void {
+  configStore.setConfigValue('ui.fileManagerSplitSize', sizes)
+}
+
+function editorSidebarSplitComponentResized (sizes: [number, number]): void {
+  configStore.setConfigValue('ui.editorSidebarSplitSize', sizes)
+}
 
 function insertTable (spec: { rows: number, cols: number }): void {
   // Generate a simple table based on the info, and insert it.
@@ -724,7 +745,7 @@ function jtl (filePath: string, lineNumber: number, newTab: boolean): void {
     ipcRenderer.invoke('documents-provider', {
       command: 'open-file',
       payload: { path: filePath, windowId, leafId: containingLeaf.id }
-    })
+    } as DocumentManagerIPCAPI)
       .then(() => {
         // Re-execute the jtl command
         setTimeout(() => jtl(filePath, lineNumber, newTab), WAIT_TIME)
@@ -744,7 +765,7 @@ function jtl (filePath: string, lineNumber: number, newTab: boolean): void {
       leafId: lastLeafId.value,
       newTab
     }
-  })
+  } as DocumentManagerIPCAPI)
     .then(() => {
       // Re-execute the jtl command
       setTimeout(() => jtl(filePath, lineNumber, newTab), WAIT_TIME)
@@ -767,6 +788,7 @@ function startGlobalSearch (terms: string): void {
     .catch(err => console.error(err))
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function toggleFileList (): void {
   // This event can be used by various components to ask the file manager to
   // toggle its file list visibility
@@ -792,7 +814,7 @@ function handleClick (clickedID?: string): void {
         windowId,
         leafId: lastLeafId.value
       }
-    }).catch(err => console.error(err))
+    } as DocumentManagerIPCAPI).catch(err => console.error(err))
   } else if (clickedID === 'next-file') {
     ipcRenderer.invoke('documents-provider', {
       command: 'navigate-forward',
@@ -800,7 +822,7 @@ function handleClick (clickedID?: string): void {
         windowId,
         leafId: lastLeafId.value
       }
-    }).catch(err => console.error(err))
+    } as DocumentManagerIPCAPI).catch(err => console.error(err))
   } else if (clickedID === 'export') {
     showExportPopover.value = !showExportPopover.value
   } else if (clickedID === 'show-stats') {

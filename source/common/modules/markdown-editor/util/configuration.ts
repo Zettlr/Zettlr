@@ -67,10 +67,12 @@ export interface EditorConfiguration {
   lintMarkdown: boolean
   lintLanguageTool: boolean
   showStatusbar: boolean
+  showFormattingToolbar: boolean
   darkMode: boolean
   theme: MarkdownTheme
   margins: 'S'|'M'|'L'
   highlightWhitespace: boolean
+  countChars: boolean
 }
 
 export function getDefaultConfig (): EditorConfiguration {
@@ -121,10 +123,12 @@ export function getDefaultConfig (): EditorConfiguration {
     lintMarkdown: false,
     lintLanguageTool: false,
     showStatusbar: false,
+    showFormattingToolbar: true,
     darkMode: false,
     theme: 'berlin',
     margins: 'M',
-    highlightWhitespace: false
+    highlightWhitespace: false,
+    countChars: false
   }
 }
 
@@ -132,7 +136,7 @@ export type EditorConfigOptions = Partial<EditorConfiguration>
 
 export const configUpdateEffect = StateEffect.define<EditorConfigOptions>()
 export const configField = StateField.define<EditorConfiguration>({
-  create (state) {
+  create (_state) {
     return getDefaultConfig()
   },
   update (val, transaction) {

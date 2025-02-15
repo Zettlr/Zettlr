@@ -25,6 +25,8 @@ import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import type WorkspaceProvider from '@providers/workspaces'
+import type DocumentManager from '../documents'
+import { DP_EVENTS } from '@dts/common/documents'
 
 /**
  * This interface describes a single tag within the files loaded in here.
@@ -64,12 +66,16 @@ export interface ColoredTag {
  */
 export default class TagProvider extends ProviderContract {
   private readonly _file: string
-  private readonly container: PersistentDataContainer
+  private readonly container: PersistentDataContainer<ColoredTag[]>
   private _coloredTags: ColoredTag[]
   /**
    * Create the instance on program start and initially load the tags.
    */
-  constructor (private readonly _logger: LogProvider, private readonly _workspaces: WorkspaceProvider) {
+  constructor (
+    private readonly _logger: LogProvider,
+    private readonly _docs: DocumentManager,
+    private readonly _workspaces: WorkspaceProvider
+  ) {
     super()
     this._file = path.join(app.getPath('userData'), 'tags.json')
     this._coloredTags = []
@@ -94,8 +100,21 @@ export default class TagProvider extends ProviderContract {
     if (!await this.container.isInitialized()) {
       await this.container.init([])
     } else {
-      this.setColoredTags(await this.container.get())
+      this.setColoredTags(
+        (await this.container.get()).filter((tag) => tag !== undefined)
+      )
     }
+
+    this._docs.on(DP_EVENTS.FILE_SAVED, () => {
+      // TODO: This is somewhat of a workaround for #5140. I tested how long
+      // this function would take on a reasonably large workspace (=my own), and
+      // it took about 1.5ms to collect all tags. So whenever a file is saved
+      // here we just emit a tag change event without checking if this actually
+      // changed. I think it's okay to do so, but in the future we may need to
+      // add a sanity check before simply emitting this event, especially if we
+      // do something to make the `getAllTags` method take significantly longer.
+      broadcastIpcMessage('tag-provider', 'tags-updated', this.getAllTags())
+    })
   }
 
   /**
@@ -109,9 +128,10 @@ export default class TagProvider extends ProviderContract {
 
   /**
    * Updates all tags (i.e. replaces them)
+   *
    * @param  {ColoredTag[]} tags The new tags as an array
    */
-  setColoredTags (tags: TagRecord[]): void {
+  setColoredTags (tags: ColoredTag[]): void {
     // First, remove anything that doesn't have a color set
     tags = tags.filter(tag => tag.color !== undefined && tag.desc !== undefined)
 
@@ -131,8 +151,8 @@ export default class TagProvider extends ProviderContract {
 
   /**
    * Returns the special (= colored) tags
-   * @param  {string} name An optional name to get one. Otherwise, will return all.
-   * @return {ColoredTag[]}      The special tag array.
+   *
+   * @return  {ColoredTag[]}  The special tag array.
    */
   getColoredTags (): ColoredTag[] {
     return this._coloredTags

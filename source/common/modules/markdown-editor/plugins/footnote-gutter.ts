@@ -23,7 +23,7 @@ import { trans } from '@common/i18n-renderer'
  * A footnote gutter marker: Basically only a large circle arrow CDS icon
  */
 class FootnoteGutterMarker extends GutterMarker {
-  toDOM (view: EditorView): Node {
+  toDOM (_view: EditorView): Node {
     const icon = document.createElement('cds-icon')
     icon.setAttribute('shape', 'circle-arrow')
     icon.setAttribute('solid', 'true')
@@ -47,7 +47,7 @@ export const footnoteGutter: Extension[] = [
     class: 'cm-footnote-gutter',
     renderEmptyElements: false,
     // For each line that contains a footnote reference body, add an icon to the gutter
-    lineMarker (view: EditorView, line: BlockInfo, otherMarkers: readonly GutterMarker[]): GutterMarker|null {
+    lineMarker (view: EditorView, line: BlockInfo, _otherMarkers: readonly GutterMarker[]): GutterMarker|null {
       const lineText = view.state.sliceDoc(line.from, line.to)
       return fnBodyRE.test(lineText) ? new FootnoteGutterMarker() : null
     },

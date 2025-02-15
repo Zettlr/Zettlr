@@ -65,6 +65,7 @@ import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
 import { diff } from '@codemirror/legacy-modes/mode/diff'
 import { octave } from '@codemirror/legacy-modes/mode/octave'
 import { lua } from '@codemirror/legacy-modes/mode/lua'
+import { pascal } from '@codemirror/legacy-modes/mode/pascal'
 
 // Additional parser
 import { citationParser } from './citation-parser'
@@ -84,7 +85,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
     // to be inside a 'FencedCode' Syntax node so that our renderer can pick it
     // up. By defining an empty StreamParser, we can ensure that there will be
     // such a structure, even if it's basically just plain text.
-    mode: StreamLanguage.define({ token (stream, state) { stream.skipToEnd(); return null } }),
+    mode: StreamLanguage.define({ token (stream, _state) { stream.skipToEnd(); return null } }),
     selectors: ['mermaid']
   },
   { mode: css().language, selectors: ['css'] },
@@ -116,6 +117,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(lua), selectors: ['lua'] },
   { mode: StreamLanguage.define(objectiveC), selectors: [ 'objective-c', 'objectivec', 'objc' ] },
   { mode: StreamLanguage.define(octave), selectors: ['octave'] },
+  { mode: StreamLanguage.define(pascal), selectors: ['pascal'] },
   { mode: StreamLanguage.define(perl), selectors: [ 'perl', 'pl' ] },
   { mode: StreamLanguage.define(powerShell), selectors: ['powershell'] },
   { mode: StreamLanguage.define(r), selectors: ['r'] },
@@ -201,13 +203,18 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       ],
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes
+      // NOTE: Changes here must be reflected in util/custom-tags.ts and theme/syntax.ts!
       defineNodes: [
         { name: 'YAMLFrontmatter' },
         { name: 'YAMLFrontmatterStart', style: customTags.YAMLFrontmatterStart },
         { name: 'YAMLFrontmatterEnd', style: customTags.YAMLFrontmatterEnd },
         { name: 'Citation', style: customTags.Citation },
-        { name: 'Highlight', style: customTags.Highlight },
-        { name: 'HighlightContent', style: customTags.HighlightContent },
+        { name: 'HighlightMark', style: customTags.HighlightMark },
+        // NOTE: The convention {TagName}/... means that the corresponding styles
+        // from the syntax theme get assigned to all child nodes that are contained
+        // within this node as well. The default is to only style otherwise "empty"
+        // spans of plain text.
+        { name: 'HighlightContent', style: { 'HighlightContent/...': customTags.HighlightContent } },
         { name: 'Footnote', style: customTags.Footnote },
         { name: 'FootnoteRef', style: customTags.FootnoteRef },
         { name: 'FootnoteRefLabel', style: customTags.FootnoteRefLabel },

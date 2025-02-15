@@ -57,6 +57,7 @@ const markdownTheme = HighlightStyle.define([
   { tag: tags.labelName, class: 'cm-info-string' }, // CodeInfo (info string)
   { tag: tags.processingInstruction, class: 'cm-code-mark' }, // CodeMark (i.e. ```) but also table delimiters
   { tag: tags.monospace, class: 'cm-monospace' }, // CodeText (i.e. code block content)
+  // NOTE: Changes here must be reflected in util/custom-tags.ts and parser/markdown-parser.ts
   // Tables TODO
   // Footnotes
   { tag: customTags.Footnote, class: 'footnote' },
@@ -66,7 +67,7 @@ const markdownTheme = HighlightStyle.define([
   { tag: customTags.ZknLinkContent, class: 'cm-zkn-link' },
   { tag: customTags.ZknTagContent, class: 'cm-zkn-tag' },
   { tag: customTags.PandocAttribute, class: 'pandoc-attribute' },
-  { tag: customTags.Highlight, class: 'cm-highlight' },
+  { tag: customTags.HighlightMark, class: 'cm-highlight cm-highlight-mark' },
   { tag: customTags.HighlightContent, class: 'cm-highlight' }
 ])
 

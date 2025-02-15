@@ -24,7 +24,8 @@ const ipcRenderer = window.ipc
 windowRegister()
   .then(() => {
     const pinia = createPinia()
-    const app = createApp(App).use(pinia).mount('#app')
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    createApp(App).use(pinia).mount('#app')
 
     // This window will be closed immediately on a window-close command
     ipcRenderer.on('shortcut', (event, shortcut) => {

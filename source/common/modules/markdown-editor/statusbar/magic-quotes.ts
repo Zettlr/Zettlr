@@ -18,7 +18,7 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { resolveLangCode } from '@common/util/map-lang-code'
 import { type AnyMenuItem } from '@dts/renderer/context'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { type StatusbarItem } from '.'
 import { configField } from '../util/configuration'
 
@@ -86,7 +86,7 @@ const MAGIC_QUOTES_PAIRS: Record<string, { primary: string, secondary: string }>
  *
  * @return  {StatusbarItem}         The statusbar item, or null
  */
-export function magicQuotesStatus (state: EditorState, view: EditorView): StatusbarItem|null {
+export function magicQuotesStatus (state: EditorState, _view: EditorView): StatusbarItem|null {
   const config = state.field(configField, false)
   if (config === undefined) {
     return null

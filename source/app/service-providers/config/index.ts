@@ -18,7 +18,6 @@ import EventEmitter from 'events'
 import { ValidationRule, VALIDATE_RULES, VALIDATE_PROPERTIES } from './config-validation'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { app, dialog, ipcMain } from 'electron'
-import ignoreFile from '@common/util/ignore-file'
 import safeAssign from '@common/util/safe-assign'
 import isDir from '@common/util/is-dir'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
@@ -27,6 +26,9 @@ import enumDictFiles from '@common/util/enum-dict-files'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
 import { loadData, trans } from '@common/i18n-main'
+import isFile from '@common/util/is-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
+import ignoreDir from '@common/util/ignore-dir'
 
 const ZETTLR_VERSION = app.getVersion()
 
@@ -98,7 +100,7 @@ export default class ConfigProvider extends ProviderContract {
    *
    * @var {PersistentDataContainer}
    */
-  private readonly _container: PersistentDataContainer
+  private readonly _container: PersistentDataContainer<ConfigOptions>
 
   private readonly _emitter: EventEmitter
 
@@ -336,7 +338,11 @@ export default class ConfigProvider extends ProviderContract {
     */
   addPath (p: string): boolean {
     // Only add valid and unique paths
-    if ((!ignoreFile(p) || isDir(p)) && !this.config.openPaths.includes(p)) {
+    if (this.config.openPaths.includes(p)) {
+      return false
+    }
+
+    if ((isFile(p) && hasMdOrCodeExt(p)) || (isDir(p) && !ignoreDir(p))) {
       this.config.openPaths.push(p)
       this.consolidateRootPaths()
       this.sortPaths()

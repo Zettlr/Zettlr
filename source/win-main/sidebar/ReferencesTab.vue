@@ -1,7 +1,12 @@
 <template>
   <div role="tabpanel">
     <!-- References -->
-    <h1>{{ referencesLabel }}</h1>
+    <h1>
+      {{ referencesLabel }}
+      <small v-if="bibliography !== undefined && bibliography[1].length > 0" class="word-count">
+        {{ wordCountLabel }}
+      </small>
+    </h1>
     <!-- Will contain the actual HTML -->
     <div v-html="referenceHTML"></div>
   </div>
@@ -18,6 +23,9 @@ import { type AnyDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { onMounted, ref, computed, watch } from 'vue'
 import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import { useDocumentTreeStore } from 'source/pinia'
+import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
+import localiseNumber from 'source/common/util/localise-number'
+import { extractASTNodes, markdownToAST } from 'source/common/modules/markdown-utils'
 
 const ipcRenderer = window.ipc
 const documentTreeStore = useDocumentTreeStore()
@@ -57,6 +65,19 @@ const referenceHTML = computed(() => {
     bibliography.value[0].bibend
   ].join('\n')
 })
+
+// Provides an approximate word count. This can be used to, e.g., gauge how many
+// words the list of references will contain, which can be important if a there
+// is a limit that includes the bibliography that needs to be maintained.
+const approximateWordCount = computed(() => {
+  if (bibliography.value === undefined) {
+    return 0
+  }
+
+  return bibliography.value[1].map(x => x.split(/\s+/g).length).reduce((p, c) => p + c, 0)
+})
+
+const wordCountLabel = computed(() => trans('circa %s words', localiseNumber(approximateWordCount.value)))
 
 watch(activeFile, () => {
   updateBibliography().catch(e => console.error('Could not update bibliography', e))
@@ -104,12 +125,15 @@ async function updateBibliography (): Promise<void> {
     payload: activeFile.value.path
   })
 
-  const library = getBibliographyForDescriptor(descriptor)
-  const citations = extractCitations(fileContents)
-  const keys = []
-  for (const citation of citations) {
-    keys.push(...citation.citations.map(elem => elem.id))
-  }
+  // To retrieve the citations as efficiently as possible while remaining
+  // precise, we have some compact code here. It parses the file contents and
+  // only extracts what the (more accurate) Markdown parser sees as a citation,
+  // use extractCitations to parse those nodes, and only retain all the IDs/
+  // citekeys that we find in there. Also, we make sure to always flatten the
+  // resulting 2d-arrays.
+  const keys = extractASTNodes(markdownToAST(fileContents), 'Citation')
+    .flatMap(n => extractCitations(fileContents.slice(n.from, n.to)))
+    .flatMap(c => c.citations.map(cit => cit.id))
 
   // Now also include potential nocite citations (see https://pandoc.org/MANUAL.html#including-uncited-items-in-the-bibliography)
   if (descriptor.frontmatter != null && 'nocite' in descriptor.frontmatter) {
@@ -129,10 +153,17 @@ async function updateBibliography (): Promise<void> {
   bibliography.value = await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-bibliography',
     payload: {
-      database: library,
+      database: getBibliographyForDescriptor(descriptor),
       citations: [...new Set(keys)]
     }
-  })
+  } as CiteprocProviderIPCAPI)
 }
 </script>
-@common/util/renderer-path-polyfill
+
+<style lang="css" scoped>
+small.word-count {
+  font-size: 70%;
+  font-style: italic;
+  float: right;
+}
+</style>

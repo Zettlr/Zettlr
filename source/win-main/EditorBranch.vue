@@ -52,6 +52,7 @@ import EditorPane from './EditorPane.vue'
 import { type BranchNodeJSON } from '@dts/common/documents'
 import { ref, computed, watch, toRef } from 'vue'
 import { type EditorCommands } from './App.vue'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
@@ -172,7 +173,7 @@ function onEndResizing (event: MouseEvent): void {
       branchId: props.node.id,
       sizes: sizes.value.map(s => s) // Again, deproxy
     }
-  })
+  } as DocumentManagerIPCAPI)
     .catch(err => console.error(err))
 }
 </script>

@@ -19,14 +19,14 @@ import EventEmitter from 'events'
 import path from 'path'
 import { constants as FSConstants } from 'fs'
 import { FSALCodeFile, FSALFile } from '@providers/fsal'
-import ProviderContract from '@providers/provider-contract'
+import ProviderContract, { type IPCAPI } from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import type AppServiceContainer from 'source/app/app-service-container'
 import { ipcMain, app, dialog, type BrowserWindow, type MessageBoxOptions } from 'electron'
 import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { type TabManager } from '@providers/documents/document-tree/tab-manager'
-import { DP_EVENTS, type OpenDocument, DocumentType } from '@dts/common/documents'
+import { DP_EVENTS, type OpenDocument, DocumentType, type BranchNodeJSON, type LeafNodeJSON } from '@dts/common/documents'
 import { v4 as uuid4 } from 'uuid'
 import { type Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
@@ -38,6 +38,7 @@ import { trans } from '@common/i18n-main'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
 
 type DocumentWindows = Record<string, DocumentTree>
+type DocumentWindowsJSON = Record<string, BranchNodeJSON|LeafNodeJSON>
 
 // Keep no more than this many updates.
 const MAX_VERSION_HISTORY = 100
@@ -123,6 +124,46 @@ interface Document {
   saveTimeout: undefined|NodeJS.Timeout
 }
 
+export type DocumentAuthorityIPCAPI = IPCAPI<{
+  'get-document': { filePath: string }
+  'pull-updates': { filePath: string, version: number }
+  'push-updates': { filePath: string, version: number, updates: Update[] }
+}>
+
+// Most document manager commands require a leaf location, described by the
+// window and leaf IDs.
+type LeafLoc = { windowId: string, leafId: string }
+export type DocumentManagerIPCAPI = IPCAPI<{
+  'set-pinned': LeafLoc & { path: string, pinned: boolean }
+  'retrieve-tab-config': { windowId: string }
+  'save-file': { path: string }
+  'open-file': LeafLoc & { path: string, newTab: boolean }
+  'close-file': LeafLoc & { path: string }
+  'sort-open-files': LeafLoc & { newOrder: string[] }
+  'get-file-modification-status': unknown
+  'move-file': {
+    originWindow: string,
+    targetWindow: string,
+    originLeaf: string,
+    targetLeaf: string,
+    path: string
+  }
+  'split-leaf': {
+    originWindow: string,
+    originLeaf: string,
+    direction: 'horizontal'|'vertical',
+    insertion: 'before'|'after',
+    path?: string,
+    fromWindow?: string,
+    fromLeaf?: string
+  }
+  'close-leaf': LeafLoc
+  'focus-leaf': LeafLoc
+  'set-branch-sizes': { windowId: string, branchId: string, sizes: number[] },
+  'navigate-forward': LeafLoc
+  'navigate-back': LeafLoc
+}>
+
 export default class DocumentManager extends ProviderContract {
   /**
    * This array holds all open windows, here represented as document trees
@@ -140,9 +181,9 @@ export default class DocumentManager extends ProviderContract {
    * The config file container persists the document tree data to disk so that
    * open editor panes & windows can be restored
    *
-   * @var {PersistentDataContainer}
+   * @var {PersistentDataContainer<DocumentWindowsJSON>}
    */
-  private readonly _config: PersistentDataContainer
+  private readonly _config: PersistentDataContainer<DocumentWindowsJSON>
   /**
    * The process that watches currently opened files for remote changes
    *
@@ -223,7 +264,8 @@ export default class DocumentManager extends ProviderContract {
     /**
      * Hook the event listener that directly communicates with the editors
      */
-    ipcMain.handle('documents-authority', async (event, { command, payload }) => {
+    ipcMain.handle('documents-authority', async (event, message: DocumentAuthorityIPCAPI) => {
+      const { command, payload } = message
       switch (command) {
         case 'pull-updates':
           return await this.pullUpdates(payload.filePath, payload.version)
@@ -235,15 +277,13 @@ export default class DocumentManager extends ProviderContract {
     })
 
     // Finally, listen to events from the renderer
-    ipcMain.handle('documents-provider', async (event, { command, payload }) => {
+    ipcMain.handle('documents-provider', async (event, message: DocumentManagerIPCAPI) => {
+      const { command, payload } = message
       switch (command) {
         // A given tab should be set as pinned
         case 'set-pinned': {
-          const windowId = payload.windowId as string
-          const leafID = payload.leafId as string
-          const filePath = payload.path as string
-          const shouldBePinned = payload.pinned as boolean
-          this.setPinnedStatus(windowId, leafID, filePath, shouldBePinned)
+          const { windowId, leafId, path, pinned } = payload
+          this.setPinnedStatus(windowId, leafId, path, pinned)
           return
         }
         // Some main window has requested its tab/split view state
@@ -251,22 +291,18 @@ export default class DocumentManager extends ProviderContract {
           return this._windows[payload.windowId].toJSON()
         }
         case 'save-file': {
-          const filePath = payload.path as string
-          return await this.saveFile(filePath)
+          return await this.saveFile(payload.path)
         }
         case 'open-file': {
-          return await this.openFile(payload.windowId, payload.leafId, payload.path, payload.newTab)
+          const { windowId, leafId, path, newTab } = payload
+          return await this.openFile(windowId, leafId, path, newTab)
         }
         case 'close-file': {
-          const leafId = payload.leafId as string
-          const windowId = payload.windowId as string
-          const filePath = payload.path as string
-          return await this.closeFile(windowId, leafId, filePath)
+          const { windowId, leafId, path } = payload
+          return await this.closeFile(windowId, leafId, path)
         }
         case 'sort-open-files': {
-          const leafId = payload.leafId as string
-          const windowId = payload.windowId as string
-          const newOrder = payload.newOrder as string[]
+          const { windowId, leafId, newOrder } = payload
           this.sortOpenFiles(windowId, leafId, newOrder)
           return
         }
@@ -274,22 +310,27 @@ export default class DocumentManager extends ProviderContract {
           return this.documents.filter(x => this.isModified(x.filePath)).map(x => x.filePath)
         }
         case 'move-file': {
-          const oWin = payload.originWindow
-          const tWin = payload.targetWindow
-          const oLeaf = payload.originLeaf
-          const tLeaf = payload.targetLeaf
-          const filePath = payload.path
-          return await this.moveFile(oWin, tWin, oLeaf, tLeaf, filePath)
+          const {
+            originWindow, originLeaf, targetWindow, targetLeaf, path
+          } = payload
+          return await this.moveFile(
+            originWindow, targetWindow, originLeaf, targetLeaf, path
+          )
         }
         case 'split-leaf': {
-          const oWin = payload.originWindow
-          const oLeaf = payload.originLeaf
-          const direction = payload.direction
-          const insertion = payload.insertion
-          const filePath = payload.path // Optional, may be undefined
-          const fromWindow = payload.fromWindow // Optional, may be undefined
-          const fromLeaf = payload.fromLeaf // Optional, may be undefined
-          return await this.splitLeaf(oWin, oLeaf, direction, insertion, filePath, fromWindow, fromLeaf)
+          const {
+            originWindow, originLeaf,
+            direction, insertion,
+            path,
+            fromWindow, fromLeaf
+          } = payload
+
+          return await this.splitLeaf(
+            originWindow, originLeaf,
+            direction, insertion,
+            path,
+            fromWindow, fromLeaf
+          )
         }
         case 'close-leaf': {
           return this.closeLeaf(payload.windowId, payload.leafId)
@@ -341,27 +382,33 @@ export default class DocumentManager extends ProviderContract {
           type: 'question',
           buttons: [
             trans('Save changes'),
-            trans('Discard changes')
+            trans('Discard changes'),
+            trans('Cancel')
           ],
           defaultId: 0,
+          cancelId: 2,
           title: trans('Unsaved changes'),
           message: trans('There are unsaved changes. Do you want to save or discard them?')
         }
 
         dialog.showMessageBox(opt)
-          .then(async result => {
+          .then(async ({ response }) => {
             // 0 = Save, 1 = Don't save, 2 = Cancel
+            if (response === 2) {
+              this._app.log.verbose('User cancelled save-dialog; not quitting.')
+              return // Do nothing
+            }
+
+            // Apply the choice to all open documents
             for (const document of this.documents) {
-              if (result.response === 0) {
+              if (response === 0) {
                 await this.saveFile(document.filePath)
               } else {
                 document.lastSavedVersion = document.currentVersion
               }
-
-              // TODO: Emit events that the documents are now clean, same below
-
-              app.quit()
             }
+
+            app.quit()
           })
           .catch(err => {
             this._app.log.error('[DocumentManager] Cannot ask user to save or omit changes!', err)
@@ -437,7 +484,7 @@ export default class DocumentManager extends ProviderContract {
       await this._config.init({ [key]: tree.toJSON() })
     }
 
-    const treedata: DocumentWindows = await this._config.get()
+    const treedata = await this._config.get()
     for (const key in treedata) {
       try {
         // Make sure to fish out invalid paths before mounting the tree
@@ -599,7 +646,7 @@ export default class DocumentManager extends ProviderContract {
       lastSavedVersion: 0,
       lastSavedContent: content,
       updates: [],
-      document: Text.of(content.split(descriptor.linefeed)),
+      document: Text.of(content.split('\n')),
       lastSavedCharCount: descriptor.type === 'file' ? descriptor.charCount : 0,
       lastSavedWordCount: descriptor.type === 'file' ? descriptor.wordCount : 0,
       saveTimeout: undefined
@@ -868,6 +915,10 @@ current contents from the editor somewhere else, and restart the application.`
 
       // Remove the file
       this.documents.splice(this.documents.indexOf(openFile), 1)
+    } else if (openFile !== undefined && numOpenInstances === 1) {
+      // The file is not modified, but this is still the last instance, so we
+      // can close it without having to ask.
+      this.documents.splice(this.documents.indexOf(openFile), 1)
     }
 
     const ret = leaf.tabMan.closeFile(filePath)
@@ -964,8 +1015,6 @@ current contents from the editor somewhere else, and restart the application.`
     // next
     const diskContents = await this._app.fsal.loadAnySupportedFile(doc.descriptor.path)
 
-    // NOTE: This assumes that the internal "lastSavedContent" utilizes the same
-    // linefeed as the file on disk. (See issue #4959)
     if (diskContents === doc.lastSavedContent) {
       return
     }
@@ -1424,12 +1473,12 @@ current contents from the editor somewhere else, and restart the application.`
     // 3. The user adds more changes
     // 4. The save finishes and undos the modifications
 
-    // NOTE: Internally, CodeMirror Text objects use regular LF line separators.
-    // We take only the lines and then manually join them with the correct
-    // linefeed to ensure that it uses the one that the file needs. This should
-    // fix and in the future prevent bugs like #4959
+    // NOTE: Zettlr internally always uses regular LF linefeeds. The FSAL load
+    // and FSAL save methods will take care to actually use the proper linefeeds
+    // and BOMs. So here we will always use newlines. This should fix and in the
+    // future prevent bugs like #4959
     const docLines = [...doc.document.iterLines()]
-    const content = docLines.join(doc.descriptor.linefeed)
+    const content = docLines.join('\n')
     doc.lastSavedVersion = doc.currentVersion
     doc.lastSavedContent = content
 
@@ -1439,8 +1488,10 @@ current contents from the editor somewhere else, and restart the application.`
       const newWordCount = countWords(ast)
       const newCharCount = countChars(ast)
 
-      this._app.stats.updateWordCount(newWordCount - doc.lastSavedWordCount)
-      // TODO: Proper character counting
+      this._app.stats.updateCounts(
+        newWordCount - doc.lastSavedWordCount,
+        newCharCount - doc.lastSavedCharCount
+      )
 
       doc.lastSavedWordCount = newWordCount
       doc.lastSavedCharCount = newCharCount

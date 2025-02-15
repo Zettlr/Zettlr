@@ -36,7 +36,7 @@ import objectToArray from '@common/util/object-to-array'
 
 import { ref, computed, onMounted, onBeforeUnmount, watch, toRef, onUpdated } from 'vue'
 import { type EditorCommands } from './App.vue'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
@@ -45,8 +45,10 @@ import { getBibliographyForDescriptor as getBibliography } from '@common/util/ge
 import { EditorSelection } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 import { useConfigStore, useDocumentTreeStore, useTagsStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
-import { isAbsolutePath, pathBasename, resolvePath } from '@common/util/renderer-path-polyfill'
-import { type DocumentsUpdateContext } from 'source/app/service-providers/documents'
+import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/util/renderer-path-polyfill'
+import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
+import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
+import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
 
 const ipcRenderer = window.ipc
 
@@ -64,37 +66,20 @@ function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
   }
 }
 
-const props = defineProps({
-  leafId: {
-    type: String,
-    required: true
-  },
-  windowId: {
-    type: String,
-    required: true
-  },
-  activeFile: {
-    type: Object as () => OpenDocument|null,
-    required: true
-  },
-  editorCommands: {
-    type: Object as () => EditorCommands,
-    required: true
-  },
-  distractionFree: {
-    type: Boolean,
-    required: true
-  },
-  file: {
-    type: Object as () => OpenDocument,
-    required: true
-  }
-})
+const props = defineProps<{
+  leafId: string
+  windowId: string
+  activeFile: OpenDocument|null
+  editorCommands: EditorCommands
+  distractionFree: boolean
+  file: OpenDocument
+}>()
 
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
+const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
 const tagStore = useTagsStore()
 
@@ -126,7 +111,7 @@ ipcRenderer.on('shortcut', (event, command) => {
     ipcRenderer.invoke('documents-provider', {
       command: 'save-file',
       payload: { path: props.file.path }
-    })
+    } as DocumentManagerIPCAPI)
       .then(result => {
         if (result !== true) {
           console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
@@ -139,6 +124,8 @@ ipcRenderer.on('shortcut', (event, command) => {
     currentEditor.hasTypewriterMode = !currentEditor.hasTypewriterMode
   } else if (command === 'copy-as-html') {
     currentEditor.copyAsHTML()
+  } else if (command === 'paste-as-plain') {
+    currentEditor.pasteAsPlainText()
   }
 })
 
@@ -276,17 +263,74 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     lintLanguageTool: editor.lint.languageTool.active,
     distractionFree: props.distractionFree.valueOf(),
     showStatusbar: editor.showStatusbar,
+    showFormattingToolbar: editor.showFormattingToolbar,
     darkMode,
     theme: display.theme,
-    highlightWhitespace: editor.showWhitespace
+    highlightWhitespace: editor.showWhitespace,
+    countChars: editor.countChars
   } satisfies EditorConfigOptions
 })
+
+// BEGIN: PROJECT INFO
+function updateProjectInfo (): ProjectInfo|null {
+  // If this file is part of a project, the project must be defined in any
+  // containing folder -> traverse up the file tree until we have found one.
+  let dir = workspacesStore.getDir(pathDirname(props.file.path))
+  while (dir !== undefined && dir.settings.project === null) {
+    dir = workspacesStore.getDir(dir.dir)
+  }
+
+  if (dir === undefined || dir.settings.project === null) {
+    return null // No project found in the tree
+  }
+
+  // Check if this file is part of the project.
+  const absPaths = dir.settings.project.files.map(p => resolvePath(dir.path, p))
+  if (!absPaths.includes(props.file.path)) {
+    return null
+  }
+
+  const extractedMetadata = absPaths
+    .map(p => {
+      return workspacesStore.getFile(p)
+    })
+    .filter (d => d !== undefined && d.type === 'file')
+    .map(d => {
+      return {
+        wordCount: d.wordCount,
+        charCount: d.charCount,
+        path: d.path,
+        displayName: d.yamlTitle ?? d.firstHeading ?? d.name
+      }
+    })
+
+  // It is! So now we can return the proper project info.
+  return {
+    name: dir.settings.project.title,
+    files: extractedMetadata
+      .map(p => ({ path: p.path, displayName: p.displayName })),
+    wordCount: extractedMetadata
+      .map(p => p.wordCount)
+      .reduce((p, c) => p + c, 0),
+    charCount: extractedMetadata
+      .map(p => p.charCount)
+      .reduce((p, c) => p + c, 0)
+  }
+}
+
+// Update the project info as soon as anything in the workspaces has changed.
+workspacesStore.$subscribe(_mutation => {
+  if (currentEditor !== null) {
+    currentEditor.projectInfo = updateProjectInfo()
+  }
+})
+// END: PROJECT INFO
 
 // External commands/"event" system
 watch(toRef(props.editorCommands, 'jumpToLine'), () => {
   const { filePath, lineNumber } = props.editorCommands.data
   // Execute a jtl-command if the current displayed file is the correct one
-  if (filePath === props.file.path) {
+  if (filePath === props.file.path && typeof lineNumber === 'number') {
     jtl(lineNumber)
   }
 })
@@ -297,7 +341,9 @@ watch(toRef(props.editorCommands, 'moveSection'), () => {
   }
 
   const { from, to } = props.editorCommands.data
-  currentEditor?.moveSection(from, to)
+  if (typeof from === 'number' && typeof to === 'number') {
+    currentEditor?.moveSection(from, to)
+  }
 })
 
 watch(toRef(props.editorCommands, 'readabilityMode'), () => {
@@ -344,8 +390,6 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   const textToInsert: string = props.editorCommands.data
   currentEditor?.replaceSelection(textToInsert)
 })
-
-const workspacesStore = useWorkspacesStore()
 
 const fsalFiles = computed<MDFileDescriptor[]>(() => {
   const tree = workspacesStore.rootDescriptors
@@ -398,7 +442,7 @@ watch(tags, (newValue) => {
  * @return  {MarkdownEditor}       The requested editor
  */
 async function getEditorFor (doc: string): Promise<MarkdownEditor> {
-  const editor = new MarkdownEditor(props.leafId, doc, documentAuthorityIPCAPI)
+  const editor = new MarkdownEditor(props.leafId, props.windowId, doc, documentAuthorityIPCAPI)
 
   // Update the document info on corresponding events
   editor.on('change', () => {
@@ -420,7 +464,7 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
         leafId: props.leafId,
         windowId: props.windowId
       }
-    }).catch(err => console.error(err))
+    } as DocumentManagerIPCAPI).catch(err => console.error(err))
 
     // NOTE: The lastLeafId will be changed in the documentTreeStore in response
     // to an event from main (DP_EVENTS.ACTIVE_FILE) which will be emitted as a
@@ -498,6 +542,7 @@ async function loadDocument (): Promise<void> {
       library: library ?? CITEPROC_MAIN_DB
     }
   })
+  currentEditor.projectInfo = updateProjectInfo()
 }
 
 function jtl (lineNumber: number): void {
@@ -508,7 +553,7 @@ async function updateCitationKeys (library: string): Promise<void> {
   const items: Array<{ citekey: string, displayText: string }> = (await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-items',
     payload: { database: library }
-  }))
+  } as CiteprocProviderIPCAPI))
     .map((item: any) => {
       // Get a rudimentary author list. Precedence are authors, then editors.
       // Fallback: Container title.
@@ -707,6 +752,12 @@ function maybeHighlightSearchResults (): void {
 body.dark .main-editor-wrapper {
   background-color: rgba(20, 20, 30, 1);
   .CodeMirror .CodeMirror-gutters { background-color: rgba(20, 20, 30, 1); }
+
+  //Ellipsis (...) When a header is folded
+  .cm-foldPlaceholder{
+      background-color: rgb(20, 20, 30);
+      border-style: none;
+    }
 }
 
 // CodeMirror fullscreen

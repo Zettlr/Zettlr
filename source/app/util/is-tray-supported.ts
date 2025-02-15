@@ -27,7 +27,7 @@ export default async function isTraySupported (): Promise<boolean> {
         out += data.toString()
       })
 
-      shellProcess.on('close', (code, signal) => {
+      shellProcess.on('close', (code, _signal) => {
         if (code !== 0) {
           // TODO: Currently, this is a race condition because the translations
           // will only be loaded after this code has run, so on systems which

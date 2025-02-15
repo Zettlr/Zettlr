@@ -142,11 +142,12 @@ import ProgressControl from '@common/vue/form/elements/ProgressControl.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, computed, watch, onMounted } from 'vue'
-import { type SearchResult, type SearchResultWrapper } from '@dts/common/search'
+import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@dts/common/search'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { type AnyMenuItem } from '@dts/renderer/context'
-import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import { useConfigStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import type { MaybeRootDescriptor } from 'source/types/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -194,7 +195,7 @@ const restrictToDir = ref<string>('')
 // All directories we've found in the file tree
 const directorySuggestions = ref<string[]>([])
 // All files that we need to search. Will be emptied during a search.
-const filesToSearch = ref<any[]>([]) // TODO
+const filesToSearch = ref<FileSearchDescriptor[]>([])
 // The number of files the search started with (for progress bar)
 const sumFilesToSearch = ref<number>(0)
 // A global trigger for the result set trigger. This will determine what
@@ -311,7 +312,7 @@ function startSearch (overrideQuery?: string): void {
   // 2. The compiled search terms.
   // Let's do that first.
 
-  let fileList: any[] = []
+  let fileList: FileSearchDescriptor[] = []
 
   for (const treeItem of fileTree.value) {
     if (treeItem.type !== 'directory') {
@@ -333,25 +334,27 @@ function startSearch (overrideQuery?: string): void {
       continue
     }
 
-    let dirContents = objectToArray(treeItem, 'children')
-    dirContents = dirContents.filter(item => item.type !== 'directory')
-    dirContents = dirContents.map(item => {
-      let displayName = item.name
-      if (useTitle.value && item.frontmatter != null && typeof item.frontmatter.title === 'string') {
-        displayName = item.frontmatter.title
-      } else if (useH1.value && item.firstHeading !== null) {
-        displayName = item.firstHeading
-      }
+    const dirContents = objectToArray<MaybeRootDescriptor>(treeItem, 'children')
+      .filter(item => item.type !== 'directory')
+      .map(item => {
+        let displayName = item.name
+        if (item.type === 'file') {
+          if (useTitle.value && item.frontmatter != null && typeof item.frontmatter.title === 'string') {
+            displayName = item.frontmatter.title
+          } else if (useH1.value && item.firstHeading !== null) {
+            displayName = item.firstHeading
+          }
+        }
 
-      return {
-        path: item.path,
-        // Remove the workspace directory path itself so only the
-        // app-internal relative path remains. Also, we're removing the leading (back)slash
-        relativeDirectoryPath: item.dir.replace(treeItem.dir, '').substr(1),
-        filename: item.name,
-        displayName
-      }
-    })
+        return {
+          path: item.path,
+          // Remove the workspace directory path itself so only the
+          // app-internal relative path remains. Also, we're removing the leading (back)slash
+          relativeDirectoryPath: item.dir.replace(treeItem.dir, '').substring(1),
+          filename: item.name,
+          displayName
+        }
+      })
 
     if (treeItem.type === 'directory') {
       fileList = fileList.concat(dirContents)
@@ -396,8 +399,8 @@ function startSearch (overrideQuery?: string): void {
 async function singleSearchRun (): Promise<void> {
   // Take the file to be searched ...
   const terms = compileSearchTerms(query.value)
-  while (filesToSearch.value.length > 0) {
-    const fileToSearch = filesToSearch.value.shift()
+  let fileToSearch: FileSearchDescriptor|undefined
+  while ((fileToSearch = filesToSearch.value.shift()) !== undefined) {
     // Now start the search
     const result: SearchResult[] = await ipcRenderer.invoke('application', {
       command: 'file-search',

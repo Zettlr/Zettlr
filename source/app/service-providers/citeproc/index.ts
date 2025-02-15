@@ -23,7 +23,7 @@ import { trans } from '@common/i18n-main'
 import extractBibTexAttachments from './extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
 import YAML from 'yaml'
-import ProviderContract from '../provider-contract'
+import ProviderContract, { type IPCAPI } from '../provider-contract'
 import type WindowProvider from '../windows'
 import type LogProvider from '../log'
 import type ConfigProvider from '@providers/config'
@@ -39,6 +39,13 @@ interface DatabaseRecord {
   cslData: Record<string, CSLItem>
   bibtexAttachments: Record<string, string[]|false>
 }
+
+export type CiteprocProviderIPCAPI = IPCAPI<{
+  'get-items': { database: string }
+  'get-citation': { database: string, citations: CiteItem[], composite: boolean }
+  'get-citation-sync': { database: string, citations: CiteItem[], composite: boolean }
+  'get-bibliography': { database: string, citations: string[] }
+}>
 
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
@@ -172,7 +179,8 @@ export default class CiteprocProvider extends ProviderContract {
     /**
      * Listen for events coming from the citation renderer of the MarkdownEditor
      */
-    ipcMain.on('citeproc-provider', (event, { command, payload }) => {
+    ipcMain.on('citeproc-provider', (event, message: CiteprocProviderIPCAPI) => {
+      const { command, payload } = message
       if (command === 'get-citation-sync') {
         const { database, citations, composite } = payload
         event.returnValue = this.getCitation(database, citations, composite)
@@ -182,7 +190,8 @@ export default class CiteprocProvider extends ProviderContract {
     /**
      * Listen to renderer requests
      */
-    ipcMain.handle('citeproc-provider', async (event, { command, payload }) => {
+    ipcMain.handle('citeproc-provider', async (event, message: CiteprocProviderIPCAPI) => {
+      const { command, payload } = message
       const { database } = payload
       // Ensure the database is loaded in any case (will throw a visible error
       // if the database cannot be loaded)

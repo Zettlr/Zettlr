@@ -28,6 +28,7 @@ import type {
   ZettelkastenLink,
   ZettelkastenTag
 } from '@common/modules/markdown-utils/markdown-ast'
+import { extractLinefeed } from './extract-linefeed'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -62,9 +63,7 @@ export default function getMarkdownFileParser (
     // First of all, determine all the things that have nothing to do with any
     // Markdown contents.
     file.bom = extractBOM(content)
-    file.linefeed = '\n'
-    if (content.includes('\r\n')) file.linefeed = '\r\n'
-    if (content.includes('\n\r')) file.linefeed = '\n\r'
+    file.linefeed = extractLinefeed(content)
     file.id = extractFileId(file.name, content, idREPattern)
 
     // Parse the file into our AST
@@ -76,9 +75,12 @@ export default function getMarkdownFileParser (
     const links = extractASTNodes(ast, 'ZettelkastenLink') as ZettelkastenLink[]
     file.links = links.map(link => link.value)
 
+    file.firstHeading = null
     const headings = extractASTNodes(ast, 'Heading') as Heading[]
     const firstH1 = headings.find(h => h.level === 1)
-    file.firstHeading = firstH1 !== undefined ? firstH1.value.value : null
+    if (firstH1 !== undefined) {
+      file.firstHeading = firstH1.content
+    }
 
     file.wordCount = countWords(ast)
     file.charCount = countChars(ast)

@@ -101,7 +101,7 @@ body {
     flex-direction: column;
 
     #sidebar-tab-container {
-      padding: 0px 5px 5px 0px;
+      padding: 10px;
       overflow-y: auto;
     }
 
@@ -119,36 +119,8 @@ body {
     }
 
     h1 {
-      padding: 10px;
       font-size: 16px;
-    }
-
-    p { padding: 10px; }
-
-    a.attachment {
-      display: block;
-      margin: 10px;
-      padding: 4px;
-      text-decoration: none;
-      color: inherit;
-      // Padding 4px + 4px margin + 24px icon width = 32px
-      text-indent: -32px;
-      padding-left: 32px;
-      // Some filenames are too long for the sidebar. However, unlike with the
-      // file manager where we have the full filename visible in multiple places,
-      // here we must make sure the filename is fully visible. Hence, we don't
-      // use white-space: nowrap, but rather word-break: break-all.
-      word-break: break-all;
-
-      svg {
-        width: 24px;
-        height: 24px;
-        margin-right: 4px;
-        vertical-align: bottom;
-        margin-bottom: -1px;
-        // Necessary to give the extension icons the correct colour
-        fill: currentColor;
-      }
+      margin: 10px 0;
     }
 
     // Bibliography entries
@@ -171,7 +143,6 @@ body {
       // margin-left: calc(attr(data-level) * 10px);
       display: flex;
       margin-bottom: 10px;
-      margin-right: 10px;
 
       div.toc-level {
         flex-shrink: 1;
@@ -193,8 +164,6 @@ body {
     }
 
     div.related-files-container {
-      padding: 10px;
-
       div.related-file {
         // NOTE: The margin + height equal 42, which was the automatic height
         // before we fixed it here. We have to fix it because the Recycle

@@ -29,23 +29,23 @@
       v-model="sortingType"
       v-bind:inline="true"
       v-bind:options="{
-        name: 'Sort by name',
-        time: 'Sort by time'
+        name: sortByNameLabel,
+        time: sortByTimeLabel
       }"
     ></SelectControl>
     <SelectControl
       v-model="sortingDirection"
       v-bind:inline="true"
       v-bind:options="{
-        up: 'ascending',
-        down: 'descending'
+        up: ascendingLabel,
+        down: descendingLabel
       }"
     ></SelectControl>
     <hr>
     <!-- Project options -->
     <SwitchControl
       v-model="isProject"
-      v-bind:label="'Enable Project'"
+      v-bind:label="projectToggleLabel"
     ></SwitchControl>
     <ButtonControl
       v-if="isProject"
@@ -106,78 +106,83 @@ const modifiedLabel = trans('Modified')
 const createdLabel = trans('Created')
 const filesLabel = trans('Files')
 const projectPropertiesLabel = trans('Project Settings…')
+const projectToggleLabel = trans('Enable Project')
+const sortByNameLabel = trans('Sort by name')
+const sortByTimeLabel = trans('Sort by time')
+const ascendingLabel = trans('ascending')
+const descendingLabel = trans('descending')
 
 const icons = [
-  { shape: null, title: 'Reset' },
-  { shape: 'cog', title: 'Cog' },
-  { shape: 'cloud', title: 'Cloud' },
-  { shape: 'check', title: 'Check' },
-  { shape: 'times', title: 'Times' },
-  { shape: 'help-info', title: 'Help' },
-  { shape: 'info-standard', title: 'Info' },
-  { shape: 'success-standard', title: 'Success' },
-  { shape: 'error-standard', title: 'Error' },
-  { shape: 'warning-standard', title: 'Warning' },
-  { shape: 'bell', title: 'Bell' },
-  { shape: 'user', title: 'Person' },
-  { shape: 'users', title: 'People' },
-  { shape: 'folder', title: 'Folder' },
-  { shape: 'folder-open', title: 'Folder (open)' },
-  { shape: 'image', title: 'Image' },
-  { shape: 'eye', title: 'Eye' },
-  { shape: 'eye-hide', title: 'Eye (crossed)' },
-  { shape: 'calendar', title: 'Calendar' },
-  { shape: 'calculator', title: 'Calculator' },
-  { shape: 'store', title: 'Store' },
-  { shape: 'shopping-bag', title: 'Shopping bag' },
-  { shape: 'shopping-cart', title: 'Shopping cart' },
-  { shape: 'factory', title: 'Factory' },
-  { shape: 'heart', title: 'Heart' },
-  { shape: 'heart-broken', title: 'Heart (broken)' },
-  { shape: 'talk-bubbles', title: 'Bubbles' },
-  { shape: 'chat-bubble', title: 'Bubble' },
-  { shape: 'bubble-exclamation', title: 'Bubble (exclamation)' },
-  { shape: 'color-palette', title: 'Colour Palette' },
-  { shape: 'bars', title: 'Bars' },
-  { shape: 'thermometer', title: 'Thermometer' },
-  { shape: 'book', title: 'Book' },
-  { shape: 'library', title: 'Library' },
-  { shape: 'bug', title: 'Bug' },
-  { shape: 'note', title: 'Note' },
-  { shape: 'lightbulb', title: 'Lightbulb' },
-  { shape: 'trash', title: 'Trash' },
-  { shape: 'snowflake', title: 'Snowflake' },
-  { shape: 'asterisk', title: 'Asterisk' },
-  { shape: 'key', title: 'Key' },
-  { shape: 'bolt', title: 'Bolt' },
-  { shape: 'wrench', title: 'Wrench' },
-  { shape: 'flame', title: 'Flame' },
-  { shape: 'hourglass', title: 'Hourglass' },
-  { shape: 'briefcase', title: 'Briefcase' },
-  { shape: 'tools', title: 'Tools' },
-  { shape: 'moon', title: 'Moon' },
-  { shape: 'sun', title: 'Sun' },
-  { shape: 'tree', title: 'Tree' },
-  { shape: 'dot-circle', title: 'Circle (dot)' },
-  { shape: 'circle', title: 'Circle' },
-  { shape: 'video-camera', title: 'Video camera' },
-  { shape: 'film-strip', title: 'Film strip' },
-  { shape: 'microphone', title: 'Microphone' },
-  { shape: 'crown', title: 'Crown' },
-  { shape: 'star', title: 'Star' },
-  { shape: 'flag', title: 'Flag' },
-  { shape: 'envelope', title: 'Envelope' },
-  { shape: 'airplane', title: 'Airplane' },
-  { shape: 'happy-face', title: 'Happy emoji' },
-  { shape: 'neutral-face', title: 'Neutral emoji' },
-  { shape: 'sad-face', title: 'Sad emoji' },
-  { shape: 'thumbs-up', title: 'Thumbs up' },
-  { shape: 'thumbs-down', title: 'Thumbs down' },
-  { shape: 'map', title: 'Map' },
-  { shape: 'compass', title: 'Compass' },
-  { shape: 'map-marker', title: 'Map marker' },
-  { shape: 'flask', title: 'Flask' },
-  { shape: 'cd-dvd', title: 'CD/DVD' }
+  { shape: null, title: trans('Reset') },
+  { shape: 'cog', title: trans('Cog') },
+  { shape: 'cloud', title: trans('Cloud') },
+  { shape: 'check', title: trans('Check') },
+  { shape: 'times', title: trans('Times') },
+  { shape: 'help-info', title: trans('Help') },
+  { shape: 'info-standard', title: trans('Info') },
+  { shape: 'success-standard', title: trans('Success') },
+  { shape: 'error-standard', title: trans('Error') },
+  { shape: 'warning-standard', title: trans('Warning') },
+  { shape: 'bell', title: trans('Bell') },
+  { shape: 'user', title: trans('Person') },
+  { shape: 'users', title: trans('People') },
+  { shape: 'folder', title: trans('Folder') },
+  { shape: 'folder-open', title: trans('Folder (open)') },
+  { shape: 'image', title: trans('Image') },
+  { shape: 'eye', title: trans('Eye') },
+  { shape: 'eye-hide', title: trans('Eye (crossed)') },
+  { shape: 'calendar', title: trans('Calendar') },
+  { shape: 'calculator', title: trans('Calculator') },
+  { shape: 'store', title: trans('Store') },
+  { shape: 'shopping-bag', title: trans('Shopping bag') },
+  { shape: 'shopping-cart', title: trans('Shopping cart') },
+  { shape: 'factory', title: trans('Factory') },
+  { shape: 'heart', title: trans('Heart') },
+  { shape: 'heart-broken', title: trans('Heart (broken)') },
+  { shape: 'talk-bubbles', title: trans('Bubbles') },
+  { shape: 'chat-bubble', title: trans('Bubble') },
+  { shape: 'bubble-exclamation', title: trans('Bubble (exclamation)') },
+  { shape: 'color-palette', title: trans('Colour Palette') },
+  { shape: 'bars', title: trans('Bars') },
+  { shape: 'thermometer', title: trans('Thermometer') },
+  { shape: 'book', title: trans('Book') },
+  { shape: 'library', title: trans('Library') },
+  { shape: 'bug', title: trans('Bug') },
+  { shape: 'note', title: trans('Note') },
+  { shape: 'lightbulb', title: trans('Lightbulb') },
+  { shape: 'trash', title: trans('Trash') },
+  { shape: 'snowflake', title: trans('Snowflake') },
+  { shape: 'asterisk', title: trans('Asterisk') },
+  { shape: 'key', title: trans('Key') },
+  { shape: 'bolt', title: trans('Bolt') },
+  { shape: 'wrench', title: trans('Wrench') },
+  { shape: 'flame', title: trans('Flame') },
+  { shape: 'hourglass', title: trans('Hourglass') },
+  { shape: 'briefcase', title: trans('Briefcase') },
+  { shape: 'tools', title: trans('Tools') },
+  { shape: 'moon', title: trans('Moon') },
+  { shape: 'sun', title: trans('Sun') },
+  { shape: 'tree', title: trans('Tree') },
+  { shape: 'dot-circle', title: trans('Circle (dot)') },
+  { shape: 'circle', title: trans('Circle') },
+  { shape: 'video-camera', title: trans('Video camera') },
+  { shape: 'film-strip', title: trans('Film strip') },
+  { shape: 'microphone', title: trans('Microphone') },
+  { shape: 'crown', title: trans('Crown') },
+  { shape: 'star', title: trans('Star') },
+  { shape: 'flag', title: trans('Flag') },
+  { shape: 'envelope', title: trans('Envelope') },
+  { shape: 'airplane', title: trans('Airplane') },
+  { shape: 'happy-face', title: trans('Happy emoji') },
+  { shape: 'neutral-face', title: trans('Neutral emoji') },
+  { shape: 'sad-face', title: trans('Sad emoji') },
+  { shape: 'thumbs-up', title: trans('Thumbs up') },
+  { shape: 'thumbs-down', title: trans('Thumbs down') },
+  { shape: 'map', title: trans('Map') },
+  { shape: 'compass', title: trans('Compass') },
+  { shape: 'map-marker', title: trans('Map marker') },
+  { shape: 'flask', title: trans('Flask') },
+  { shape: 'cd-dvd', title: trans('CD/DVD') }
 ]
 
 const configStore = useConfigStore()

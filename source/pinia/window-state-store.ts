@@ -20,6 +20,7 @@ import type { ToCEntry } from 'source/common/modules/markdown-editor/plugins/toc
 import { ref, type Ref } from 'vue'
 import type { SearchResultWrapper } from 'source/types/common/search'
 import { type WritingTarget } from '@providers/targets'
+import type { AssetsProviderIPCAPI } from 'source/app/service-providers/assets'
 
 const ipcRenderer = window.ipc
 
@@ -29,14 +30,14 @@ async function updateSnippets (snippets: Ref<Array<{ name: string, content: stri
   // retrieve its file contents.
   const snippetNames: string[] = await ipcRenderer.invoke('assets-provider', {
     command: 'list-snippets'
-  })
+  } as AssetsProviderIPCAPI)
 
   const newSnippets: Array<{ name: string, content: string }> = []
   for (const snippet of snippetNames) {
     const content: string = await ipcRenderer.invoke('assets-provider', {
       command: 'get-snippet',
       payload: { name: snippet }
-    })
+    } as AssetsProviderIPCAPI)
 
     newSnippets.push({ name: snippet, content })
   }

@@ -63,7 +63,7 @@ export function isAbsolutePath (path: string): boolean {
     return false // Invalid length
   } else if (path.length >= 1 && path.startsWith('/')) {
     return true // Unix
-  } else if (path.length >= 3 && (/^[A-Z]:\\/i.test(path) || path.startsWith('\\\\'))) {
+  } else if (path.length >= 3 && (/^[A-Z]:[\\/]/i.test(path) || path.startsWith('\\\\'))) {
     return true // Windows (drive letters + network drives)
   } else {
     return false

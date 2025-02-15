@@ -16,6 +16,7 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import type { AnyMenuItem } from '@dts/renderer/context'
+import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 
 const ipcRenderer = window.ipc
 
@@ -120,8 +121,8 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
       case 'menu.show_file':
         ipcRenderer.send('window-controls', {
           command: 'show-item-in-folder',
-          payload: fileObject.path
-        })
+          payload: { itemPath: fileObject.path }
+        } as WindowControlsIPCAPI)
         break
     }
   })

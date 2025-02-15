@@ -66,8 +66,8 @@ import { RecycleScroller } from 'vue-virtual-scroller'
 import { ref, computed, watch } from 'vue'
 import { useConfigStore, useWorkspacesStore, useDocumentTreeStore, useTagsStore } from 'source/pinia'
 import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
-import { type TagRecord } from '@providers/tags'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 export interface RelatedFile {
   file: string
@@ -258,7 +258,7 @@ function requestFile (event: MouseEvent, filePath: string): void {
       leafId: lastLeafId.value,
       newTab: event.type === 'mousedown' && event.button === 1
     }
-  })
+  } as DocumentManagerIPCAPI)
     .catch(e => console.error(e))
 }
 

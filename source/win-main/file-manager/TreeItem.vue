@@ -114,7 +114,7 @@
     </div>
     <div v-if="isDirectory && !shouldBeCollapsed">
       <TreeItem
-        v-for="child in filteredChildren"
+        v-for="child in projectSortedFilteredChildren"
         v-bind:key="child.path"
         v-bind:obj="child"
         v-bind:has-duplicate-name="false"
@@ -323,10 +323,36 @@ const filteredChildren = computed(() => {
     return []
   }
   if (combined.value) {
-    return props.obj.children.filter(child => child.type !== 'other') as MaybeRootDescriptor[]
+    return props.obj.children.filter((child): child is MaybeRootDescriptor => child.type !== 'other')
   } else {
-    return props.obj.children.filter(child => child.type === 'directory') as DirDescriptor[]
+    return props.obj.children.filter((child): child is DirDescriptor => child.type === 'directory')
   }
+})
+
+/**
+ * Returns a list of children that can be displayed inside the tree view, sorted
+ * by project inclusion status.
+ */
+const projectSortedFilteredChildren = computed(() => {
+  if (props.obj.type !== 'directory' || props.obj.settings.project === null) {
+    return filteredChildren.value
+  }
+
+  // Modify the order using the project files by first mapping the sorted
+  // project file paths onto the descriptors available, sorting all other files
+  // separately, and then concatenating them with the project files up top.
+  const projectFiles: MaybeRootDescriptor[] = props.obj.settings.project.files
+    .map(filePath => filteredChildren.value.find(x => x.name === filePath))
+    .filter(x => x !== undefined)
+
+  const files: MaybeRootDescriptor[] = []
+  for (const desc of filteredChildren.value) {
+    if (!projectFiles.includes(desc)) {
+      files.push(desc)
+    }
+  }
+
+  return projectFiles.concat(files)
 })
 
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))

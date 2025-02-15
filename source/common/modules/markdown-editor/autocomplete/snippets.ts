@@ -23,6 +23,7 @@ import {
   StateEffect,
   StateField,
   EditorSelection,
+  Facet,
   type SelectionRange,
   type EditorState
 } from '@codemirror/state'
@@ -69,7 +70,7 @@ class SnippetWidget extends WidgetType {
     return other.content === this.content && other.range.eq(this.range)
   }
 
-  toDOM (view: EditorView): HTMLElement {
+  toDOM (_view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.classList.add('tabstop')
     elem.innerText = this.content
@@ -122,7 +123,7 @@ interface SnippetStateField {
 }
 
 export const snippetsUpdateField = StateField.define<SnippetStateField>({
-  create (state) {
+  create (_state) {
     return {
       availableSnippets: [],
       activeSelections: []
@@ -330,10 +331,19 @@ async function replaceSnippetVariables (state: EditorState, text: string): Promi
   })
 }
 
+/**
+ * This facet allows the user to dynamically define which character triggers the
+ * autocompletion.
+ */
+export const autocompleteTriggerCharacter: Facet<string, string> = Facet.define({
+  combine (val) { return val.length > 0 ? val[0] : ':' }
+})
+
 export const snippets: AutocompletePlugin = {
   applies (ctx) {
+    const trigger = ctx.state.facet(autocompleteTriggerCharacter)
     // A valid snippet applies whenever the user typed a colon
-    if (ctx.state.doc.sliceString(ctx.pos - 1, ctx.pos) !== ':') {
+    if (ctx.state.doc.sliceString(ctx.pos - 1, ctx.pos) !== trigger) {
       return false // Only applies after the user typed an #
     }
 

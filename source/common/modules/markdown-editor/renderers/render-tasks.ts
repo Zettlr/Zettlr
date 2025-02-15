@@ -33,10 +33,9 @@ class TaskWidget extends WidgetType {
     elem.setAttribute('type', 'checkbox')
     elem.checked = this.isChecked
     elem.addEventListener('click', (event) => {
-      event.preventDefault()
-      event.stopPropagation()
       const insert = this.isChecked ? '[ ]' : '[x]'
       view.dispatch({ changes: [{ from: this.node.from, to: this.node.to, insert }] })
+      view.contentDOM.focus()
     })
     return elem
   }
