@@ -66,20 +66,31 @@ export default class FileRename extends ZettlrCommand {
     }
 
     const newPath = path.join(file.dir, newName)
-    const pathsEqualCaseInsensitive = file.path.toLowerCase() === newPath.toLowerCase()
 
-    // Test if we are about to override a file. In the case that the user only
-    // wants to change the capitalization of a file (e.g., testfile -> Testfile)
-    // then case-insensitive file systems (including Windows & macOS) will
-    // report that testfile === Testfile, which means that `pathExists` will
-    // return true. That's where the second check comes in: If the OS reports
-    // that the new path already exists, BUT if we compare it case-insensitive
-    // it's the same, then we know that newPath is essentially oldPath, and we
-    // should not ask the user for overwriting, as this is literally the file
-    // we want to rename. See #5460
-    if (await this._app.fsal.pathExists(newPath) && !pathsEqualCaseInsensitive) {
-      // Ask for override
-      if (!await this._app.windows.shouldOverwriteFile(newName)) {
+    // Now, we have to ensure we are not accidentally overriding a file by
+    // renaming this one. Take note of issues #5460 (do not ask if changing a
+    // file's capitalization) and #4940 (do not overwrite other files). The
+    // primary complicating factor is that we can't rely on `pathExists` (it may
+    // lie), since many file systems nowadays are case-insensitive case-
+    // preserving. This means you can have a file `testfile.md` and rename it to
+    // `TESTFILE.md`, but the file system will say that `TESTFILE.md` already
+    // exists because ( `testfile.md === TESTFILE.md`).
+    // Thus, we need to check two conditions: Whether the user has requested a
+    // case change only, and whethere there is a DIFFERENT file at that new
+    // place.
+    const newPathFile = this._app.workspaces.findFile(newPath)
+    const caseChangeOnly = newName.toLowerCase() === file.name.toLowerCase()
+
+    if (await this._app.fsal.pathExists(newPath)) {
+      // The file system reports the newPath already exists.
+      if (caseChangeOnly && (newPathFile === undefined || newPathFile === file)) {
+        // The user only changed the case. Based on the second check, it appears
+        // that this file system is case-insensitive, which means that the
+        // reason `pathExists()` has returned true is because it confirms the
+        // existence of this very file. So no need to ask the user. I keep this
+        // empty if-case because reversing it would make it less comprehensible.
+      } else if (!await this._app.windows.shouldOverwriteFile(newName)) {
+        // In any other case (full rename or case-sensitive file system), ask.
         return // No override wanted
       } else {
         // Remove the file to be overwritten prior
