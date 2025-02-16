@@ -83,7 +83,7 @@
     "md5": "^2.3.0",
     "mermaid": "^11.4.1",
     "nodehun": "^3.0.2",
-    "pinia": "^2.3.0",
+    "pinia": "^3.0.1",
     "rehype-parse": "^9.0.1",
     "rehype-remark": "^10.0.0",
     "rehype-remove-comments": "^6.1.1",
