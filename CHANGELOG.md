@@ -21,6 +21,7 @@
 - Fixed malformed rendering of plain links into HTML links (#5587).
 - Identification of Pandoc readers and writers is now more stable, resulting in
   clearer information across the app.
+- Fix the wikilink/Zettelkasten link Lua filter (#5605).
 
 ## Under the Hood
 
