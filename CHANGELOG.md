@@ -16,6 +16,8 @@
 - Fixed malformed rendering of plain links into HTML links (#5587).
 - Fixed a bad interaction between the default keymap and inserting an `Å`
   character on macOS keyboards.
+- Fixed a bad interaction between the default keymap and inserting backticks on
+  macOS keyboard layouts without deadkeys (#5517)
 
 ## Under the Hood
 

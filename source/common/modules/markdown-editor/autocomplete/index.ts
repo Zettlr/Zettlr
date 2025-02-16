@@ -19,7 +19,11 @@ import {
   type CompletionSource,
   type CompletionResult,
   autocompletion,
-  type CompletionContext
+  type CompletionContext,
+  startCompletion,
+  acceptCompletion,
+  closeCompletion,
+  moveCompletionSelection
 } from '@codemirror/autocomplete'
 import { type StateField } from '@codemirror/state'
 import { codeBlocks } from './code-blocks'
@@ -28,6 +32,7 @@ import { snippets } from './snippets'
 import { files } from './files'
 import { tags } from './tags'
 import { headings } from './headings'
+import { keymap } from '@codemirror/view'
 
 export interface AutocompletePlugin {
   /**
@@ -110,8 +115,24 @@ export const autocomplete = [
     selectOnOpen: true, // But never pre-select anything
     closeOnBlur: true,
     maxRenderedOptions: 20,
-    override: [autocompleteSource]
+    override: [autocompleteSource],
+    // Do not include the default keymap. Instead, we re-define it below to
+    // avoid a specific decision by CodeMirror to remap the autocomplete toggle
+    // on macOS to Alt+\ which, on an Italian keyboard layout, will fail to
+    // produce backticks. (See issue #5517)
+    defaultKeymap: false
   }),
+  keymap.of([
+    // TODO: We probably want to move this into the keymaps section at some
+    // point.
+    { key: 'Ctrl-Space', run: startCompletion },
+    { key: 'Escape', run: closeCompletion },
+    { key: 'ArrowDown', run: moveCompletionSelection(true) },
+    { key: 'ArrowUp', run: moveCompletionSelection(false) },
+    { key: 'PageDown', run: moveCompletionSelection(true, 'page') },
+    { key: 'PageUp', run: moveCompletionSelection(false, 'page') },
+    { key: 'Enter', run: acceptCompletion }
+  ]),
   // Make sure any configuration fields will be inserted into the state so that
   // the plugins can look them up and function correctly. These fields are not
   // required by the main class (MarkdownEditor), hence we do not have to re-
