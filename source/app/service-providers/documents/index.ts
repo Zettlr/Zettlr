@@ -1105,6 +1105,9 @@ current contents from the editor somewhere else, and restart the application.`
     for (const [ windowId, leafId ] of leafsToNotify) {
       this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { filePath: oldPath, windowId, leafId })
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { filePath: newPath, windowId, leafId })
+      // Ensure the renderer picks up the correct (new) active file path, if
+      // that has changed (noop in othe cases; see #5574).
+      this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
     }
   }
 

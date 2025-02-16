@@ -18,6 +18,7 @@
   character on macOS keyboards.
 - Fixed a bad interaction between the default keymap and inserting backticks on
   macOS keyboard layouts without deadkeys (#5517)
+- Fixed file exports not working after renaming file (#5574)
 
 ## Under the Hood
 
