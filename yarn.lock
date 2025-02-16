@@ -6162,14 +6162,14 @@ __metadata:
   linkType: hard
 
 "dompurify@npm:^3.2.1":
-  version: 3.2.3
-  resolution: "dompurify@npm:3.2.3"
+  version: 3.2.4
+  resolution: "dompurify@npm:3.2.4"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10/aad472bcdff40afdbb307fd02abbca86acefee9c39cb35e9634ebbc5e047750a7eeb021b02cd66894d60cf75ad021f69394de2e9e8786b0dd91c5832f497a9af
+  checksum: 10/98570c53385518a2f9b617f796926338856acfdd3369c88b5905bddf96bd7d391bf8a5433127155e0046e6faa2bfb767185fcd571b865dfabe624c099e2537f5
   languageName: node
   linkType: hard
 
