@@ -31,7 +31,7 @@ import type AssetsProvider from '@providers/assets'
 import type LogProvider from '@providers/log'
 import { type PandocProfileMetadata } from '@providers/assets'
 import type ConfigProvider from '@providers/config'
-import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
+import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
 
 /**
  * This function returns faux metadata for the custom export formats the

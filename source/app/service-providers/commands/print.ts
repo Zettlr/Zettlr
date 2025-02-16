@@ -18,7 +18,7 @@ import { makeExport } from './exporter'
 import type { ExporterOptions } from './exporter/types'
 import { EXT2READER } from '@common/pandoc-util/pandoc-maps'
 import { showNativeNotification } from '@common/util/show-notification'
-import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
+import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
 
 export default class Print extends ZettlrCommand {
   constructor (app: any) {
