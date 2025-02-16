@@ -12849,9 +12849,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-heading-style@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "remark-lint-heading-style@npm:4.0.0"
+"remark-lint-heading-style@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "remark-lint-heading-style@npm:4.0.1"
   dependencies:
     "@types/mdast": "npm:^4.0.0"
     mdast-util-heading-style: "npm:^3.0.0"
@@ -12860,7 +12860,7 @@ __metadata:
     unist-util-position: "npm:^5.0.0"
     unist-util-visit-parents: "npm:^6.0.0"
     vfile-message: "npm:^4.0.0"
-  checksum: 10/a4b1ec08ebd372e7d60b9893186bb6e25f42f981946adbd272ef71d2982a35b49379f698fa5bcc7c16cada0f36350130a88b238ac0ef8444f8a6f0061102d6f7
+  checksum: 10/dd728e203d98a15675e3e5b5940b031308d36578f19d6849b4cbef11a543ebbc5bd43609842f4d8d5e9d0f5681d77253f7b220442908401093784efb626d9c3d
   languageName: node
   linkType: hard
 
@@ -16329,7 +16329,7 @@ __metadata:
     remark-lint-emphasis-marker: "npm:^4.0.0"
     remark-lint-fenced-code-marker: "npm:^4.0.0"
     remark-lint-hard-break-spaces: "npm:^4.0.0"
-    remark-lint-heading-style: "npm:^4.0.0"
+    remark-lint-heading-style: "npm:^4.0.1"
     remark-lint-link-title-style: "npm:^4.0.0"
     remark-lint-list-item-bullet-indent: "npm:^5.0.0"
     remark-lint-list-item-indent: "npm:^4.0.0"
