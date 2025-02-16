@@ -17,8 +17,8 @@ import { app } from 'electron'
 import { makeExport } from './exporter'
 import type { ExporterOptions } from './exporter/types'
 import { EXT2READER } from '@common/util/pandoc-maps'
-import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { showNativeNotification } from '@common/util/show-notification'
+import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
 
 export default class Print extends ZettlrCommand {
   constructor (app: any) {
@@ -58,9 +58,9 @@ export default class Print extends ZettlrCommand {
       // ... sans invalid ones ...
       .filter(profile => !profile.isInvalid)
       // ... or those that do not have an HTML writer ...
-      .filter(profile => getPlainPandocReaderWriter(profile.writer) === 'html')
+      .filter(profile => parseReaderWriter(profile.writer).name === 'html')
       // ... and those that feature incompatible readers.
-      .filter(profile => EXT2READER[extWithoutDot].includes(getPlainPandocReaderWriter(profile.reader)))
+      .filter(profile => EXT2READER[extWithoutDot].includes(parseReaderWriter(profile.reader).name))
 
     const opt: ExporterOptions = {
       profile: profiles[0], // First valid filtered profile will be used

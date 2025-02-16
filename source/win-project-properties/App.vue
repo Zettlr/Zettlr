@@ -165,12 +165,12 @@ import { ref, computed, watch } from 'vue'
 import type { ProjectSettings, DirDescriptor, AnyDescriptor, MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
 import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
-import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
 import { useConfigStore } from 'source/pinia'
 import objectToArray from 'source/common/util/object-to-array'
 import { pathBasename } from 'source/common/util/renderer-path-polyfill'
 import { pathToUnix } from 'source/common/util/path-to-unix'
+import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
 
 const ipcRenderer = window.ipc
 
@@ -299,10 +299,10 @@ const windowTitle = computed(() => projectSettings.value.title)
 const exportFormatList = computed<ExportProfile[]>(() => {
   // We need to return a list of { selected: boolean, name: string, conversion: string }
   return profiles.value.filter(e => {
-    return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(e.reader))
+    return SUPPORTED_READERS.includes(parseReaderWriter(e.reader).name)
   }).map(e => {
-    const plainReader = getPlainPandocReaderWriter(e.reader)
-    const plainWriter = getPlainPandocReaderWriter(e.writer)
+    const plainReader = parseReaderWriter(e.reader).name
+    const plainWriter = parseReaderWriter(e.writer).name
 
     const hasReaderExtensions = plainReader !== e.reader
     const hasWriterExtensions = plainWriter !== e.writer

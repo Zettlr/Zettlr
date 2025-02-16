@@ -14,6 +14,8 @@
 - Fix an issue that could lead to accidental overwriting of existing files in
   some cases (#4940; also previously #5460 in Zettlr 3.3.0).
 - Fixed malformed rendering of plain links into HTML links (#5587).
+- Identification of Pandoc readers and writers is now more stable, resulting in
+  clearer information across the app.
 
 ## Under the Hood
 
@@ -34,6 +36,8 @@
   more explicit that this field contains the value and never the title.
 - Add new property `targetRange` to Markdown AST `ZettelkastenLink` nodes to
   allow for easy manipulation of link targets.
+- Import Pandoc `reader`/`writer` parser from
+  `nathanlesage/pandoc-profile-generator`; retire `getPlainPandocReaderWriter`.
 
 # 3.4.1
 

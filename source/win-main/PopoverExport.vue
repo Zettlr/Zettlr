@@ -45,10 +45,10 @@ import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { ref, computed, watch } from 'vue'
 import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
-import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { trans } from '@common/i18n-renderer'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useConfigStore } from 'source/pinia'
+import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
 
 const ipcRenderer = window.ipc
 
@@ -95,7 +95,7 @@ const availableFormats = computed(() => {
   profileMetadata.value
     // Remove files that cannot read any of Zettlr's internal formats ...
     .filter(e => {
-      return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(e.reader))
+      return SUPPORTED_READERS.includes(parseReaderWriter(e.reader).name)
     })
     // ... and add the others to the available options
     .forEach(elem => { selectOptions[elem.name] = getDisplayText(elem) })
