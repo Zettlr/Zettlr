@@ -55,6 +55,10 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
             return false
           }
 
+          if (marks[0].to === marks[1].from) {
+            return false // Empty link title -> would hide the entire link
+          }
+
           ranges.push(
             hiddenDeco.range(marks[0].from, marks[0].to),
             hiddenDeco.range(marks[1].from, marks[marks.length - 1].to)

@@ -17,8 +17,10 @@
 - Fixed a bad interaction between the default keymap and inserting an `Å`
   character on macOS keyboards.
 - Fixed a bad interaction between the default keymap and inserting backticks on
-  macOS keyboard layouts without deadkeys (#5517)
-- Fixed file exports not working after renaming file (#5574)
+  macOS keyboard layouts without deadkeys (#5517).
+- Fixed file exports not working after renaming file (#5574).
+- Links won't be pre-rendered if their title is empty, as this would hide the
+  entire link syntax.
 
 ## Under the Hood
 
