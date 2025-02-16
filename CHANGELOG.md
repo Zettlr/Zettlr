@@ -38,6 +38,7 @@
   allow for easy manipulation of link targets.
 - Import Pandoc `reader`/`writer` parser from
   `nathanlesage/pandoc-profile-generator`; retire `getPlainPandocReaderWriter`.
+- Move `pandoc-maps.ts` to common `pandoc-util` location.
 
 # 3.4.1
 

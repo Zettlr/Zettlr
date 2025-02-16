@@ -15,8 +15,8 @@
 import path from 'path'
 import sanitize from 'sanitize-filename'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
-import { WRITER2EXT } from '@common/util/pandoc-maps'
-import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
+import { WRITER2EXT } from '@common/pandoc-util/pandoc-maps'
+import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
 
 export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
   if (typeof options.profile === 'string') {

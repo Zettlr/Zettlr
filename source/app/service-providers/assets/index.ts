@@ -21,8 +21,8 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract, { type IPCAPI } from '../provider-contract'
 import type LogProvider from '../log'
 import { getCustomProfiles } from '@providers/commands/exporter'
-import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
-import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
+import { SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
+import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
 
 export interface PandocProfileMetadata {
   /**

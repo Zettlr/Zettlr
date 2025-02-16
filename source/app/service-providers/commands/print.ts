@@ -16,7 +16,7 @@ import ZettlrCommand from './zettlr-command'
 import { app } from 'electron'
 import { makeExport } from './exporter'
 import type { ExporterOptions } from './exporter/types'
-import { EXT2READER } from '@common/util/pandoc-maps'
+import { EXT2READER } from '@common/pandoc-util/pandoc-maps'
 import { showNativeNotification } from '@common/util/show-notification'
 import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
 
