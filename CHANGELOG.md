@@ -7,6 +7,11 @@
   recommended syntax of adding titles from the time when Zettlr did not support
   titles (`[Do not use this syntax]([[filename]])`) can no longer be
   automatically replaced when renaming files (#5606).
+- **Change**: The exporter will now forcefully enable (= if it is not yet
+  enabled in the corresponding defaults file in the assets manager) the Pandoc
+  extension `wikilinks_title_after_pipe` or `wikilinks_title_before_pipe`
+  (depending on your settings) for every export from a supported (Markdown-
+  based) reader so that wikilinks/Zettelkasten links are properly parsed.
 - Zettelkasten links with titles will now get properly replaced when renaming
   files (#5606).
 - Fixed an issue that prevented the FSAL cache clearing from proceeding
