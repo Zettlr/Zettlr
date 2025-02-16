@@ -16315,6 +16315,7 @@ __metadata:
     fsevents: ^2.3.3
     gemoji: ^8.1.0
     gettext-parser: ^8.0.0
+    global-agent: ^3.0.0
     got: 11.x.x
     jsdom: ^26.0.0
     katex: ^0.16.21

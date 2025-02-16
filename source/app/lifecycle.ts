@@ -20,6 +20,7 @@ import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
 import path from 'path'
 import { getProgramVersion } from './util/get-program-version'
+import { bootstrap } from 'global-agent'
 
 // Developer tools
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-assembler'
@@ -72,6 +73,9 @@ export async function bootApplication (): Promise<AppServiceContainer> {
   // Prevent navigation away from our main windows and the creation of arbitrary
   // browser windows with external URLs
   attachAppNavigationHandlers(log)
+
+  // Use a proxy if one has been configured
+  bootstrap()
 
   // Now boot up the service container
   await appServiceContainer.boot()
