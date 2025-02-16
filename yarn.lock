@@ -12889,9 +12889,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-list-item-indent@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "remark-lint-list-item-indent@npm:4.0.0"
+"remark-lint-list-item-indent@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "remark-lint-list-item-indent@npm:4.0.1"
   dependencies:
     "@types/mdast": "npm:^4.0.0"
     mdast-util-phrasing: "npm:^4.0.0"
@@ -12899,7 +12899,7 @@ __metadata:
     unified-lint-rule: "npm:^3.0.0"
     unist-util-position: "npm:^5.0.0"
     unist-util-visit-parents: "npm:^6.0.0"
-  checksum: 10/68765ebb7352c21fd3f9082e80ca2758d949ae9416aad80262cb4770794e6a3fb092d2698d3645db97f66e70760abe72bbaedcc1d86c85c7c6006dbcaa95e851
+  checksum: 10/7a7f6a90a027073ee323e92d3f6b2dcade728eb9a58c12b147150efb7cae7442a7c70af809d353c1dff543579730220f639737c06e22fec9c26d1fb663732307
   languageName: node
   linkType: hard
 
@@ -16332,7 +16332,7 @@ __metadata:
     remark-lint-heading-style: "npm:^4.0.0"
     remark-lint-link-title-style: "npm:^4.0.0"
     remark-lint-list-item-bullet-indent: "npm:^5.0.0"
-    remark-lint-list-item-indent: "npm:^4.0.0"
+    remark-lint-list-item-indent: "npm:^4.0.1"
     remark-lint-no-blockquote-without-marker: "npm:^6.0.0"
     remark-lint-no-consecutive-blank-lines: "npm:^5.0.0"
     remark-lint-no-duplicate-definitions: "npm:^4.0.0"
