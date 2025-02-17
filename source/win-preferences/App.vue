@@ -20,7 +20,7 @@
       <template #view1>
         <TextControl
           v-model="query"
-          v-bind:placeholder="'Search'"
+          v-bind:placeholder="searchPlaceholder"
           v-bind:search-icon="true"
           v-bind:autofocus="true"
           v-bind:reset="true"
@@ -105,6 +105,7 @@ const appLangOptions = ref<Record<string, string>>({})
 const config = computed(() => configStore.config)
 
 const noResultsMessage = computed(() => trans('No results for "%s"', query.value))
+const searchPlaceholder = trans('Search')
 
 const schema = computed<FormSchema>(() => {
   return {
