@@ -118,7 +118,7 @@ const configStore = useConfigStore()
 const fileTree = computed<AnyDescriptor[]>(() => workspacesStore.roots.map(root => root.descriptor))
 const selectedDirectory = computed(() => configStore.config.openDirectory)
 
-const filterPlaceholder = trans('Filter …')
+const filterPlaceholder = trans('Filter…')
 const fileManagerMode = computed(() => configStore.config.fileManagerMode)
 const isThin = computed<boolean>(() => fileManagerMode.value === 'thin')
 const isCombined = computed<boolean>(() => fileManagerMode.value === 'combined')

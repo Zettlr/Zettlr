@@ -153,13 +153,13 @@ const ipcRenderer = window.ipc
 
 const sep = process.platform === 'win32' ? '\\': '/'
 
-const searchTitle = trans('Full-Text Search')
+const searchTitle = trans('Search across all files')
 const queryInputLabel = trans('Enter your search terms below')
-const queryInputPlaceholder = trans('Find …')
-const filterPlaceholder = trans('Filter …')
+const queryInputPlaceholder = trans('Find…')
+const filterPlaceholder = trans('Filter…')
 const filterLabel = trans('Filter search results')
 const restrictDirLabel = trans('Restrict search to directory')
-const restrictDirPlaceholder = trans('Restrict to directory …')
+const restrictDirPlaceholder = trans('Choose directory…')
 const searchButtonLabel = trans('Search')
 const clearButtonLabel = trans('Clear search')
 const toggleButtonLabel = trans('Toggle results')
@@ -172,7 +172,7 @@ const toggleButtonLabel = trans('Toggle results')
 function getContextMenu (): AnyMenuItem[] {
   return [
     {
-      label: trans('Open in a new tab'),
+      label: trans('Open in new tab'),
       id: 'new-tab',
       type: 'normal',
       enabled: true

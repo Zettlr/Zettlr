@@ -20,11 +20,11 @@
       <template #view1>
         <TextControl
           v-model="query"
-          v-bind:placeholder="'Find…'"
+          v-bind:placeholder="'Search'"
           v-bind:search-icon="true"
           v-bind:autofocus="true"
           v-bind:reset="true"
-          style="padding: 5px 10px"
+          style="padding: 20px"
         ></TextControl>
         <SelectableList
           v-bind:items="groups"
@@ -212,7 +212,7 @@ const groups = computed<Array<SelectableListItem & { id: PreferencesGroups }>>((
       id: PreferencesGroups.Spellchecking
     },
     {
-      displayText: trans('AutoCorrect'),
+      displayText: trans('Autocorrect'),
       icon: 'wand', // 'block-quote'
       id: PreferencesGroups.Autocorrect
     },

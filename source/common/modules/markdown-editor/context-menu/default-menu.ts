@@ -173,32 +173,32 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       enabled: true
     },
     {
-      label: trans('Insert numbered list'),
-      id: 'markdownMakeOrderedList',
-      type: 'normal',
-      enabled: true
-    },
-    {
       label: trans('Insert unordered list'),
       id: 'markdownMakeUnorderedList',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('Insert tasklist'),
+      label: trans('Insert numbered list'),
+      id: 'markdownMakeOrderedList',
+      type: 'normal',
+      enabled: true
+    },
+    {
+      label: trans('Insert task list'),
       accelerator: 'CmdOrCtrl+T',
       id: 'markdownMakeTaskList',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('Blockquote'),
+      label: trans('Insert blockquote'),
       id: 'markdownBlockquote',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('Insert Table'),
+      label: trans('Insert table'),
       id: 'markdownInsertTable',
       type: 'normal',
       enabled: true
