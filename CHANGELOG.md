@@ -21,6 +21,7 @@
 - Fixed file exports not working after renaming file (#5574).
 - Links won't be pre-rendered if their title is empty, as this would hide the
   entire link syntax.
+- UI text has been improved throughout the app.
 
 ## Under the Hood
 
