@@ -2,6 +2,35 @@
 
 ## GUI and Functionality
 
+- Identification of Pandoc readers and writers is now more stable, resulting in
+  clearer information across the app.
+- Fix the wikilink/Zettelkasten link Lua filter (#5605).
+
+## Under the Hood
+
+(nothing here)
+
+# 3.4.2
+
+## An Important Note for Windows Users
+
+If you use Zettlr on Windows, we **urgently recommend you to install this update**.
+We will release a second update approximately one week after this update, which
+you may not be able to install on Windows right away due to Zettlr switching
+code signing certificates. Therefore, please absolutely make sure you install
+*this* update on your Windows computers.
+
+For more context, please [read our blog post](https://zettlr.com/post/zettlr-switches-code-sign-certificate-important-information-for-windows-users)
+that outlines our roadmap for the code signing certificate change, as well as
+[our Community Forum post](https://forum.zettlr.com/d/11-windows-code-signing-certificate-expires-what-users-need-to-know).
+If you have any questions, please don't hesitate to ask them
+[on the Community Forum](https://forum.zettlr.com/),
+[on Discord](https://go.zettlr.com/discord), or
+as a comment on our [BlueSky](https://bsky.app/profile/zettlr.com) or
+[Mastodon](https://fosstodon.org/@zettlr) accounts.
+
+## GUI and Functionality
+
 - **Breaking Change**: To better support the now recommended Wikilink syntax
   with titles (`[[filename|Some title]]`), links that use the old and not
   recommended syntax of adding titles from the time when Zettlr did not support
@@ -19,9 +48,13 @@
 - Fix an issue that could lead to accidental overwriting of existing files in
   some cases (#4940; also previously #5460 in Zettlr 3.3.0).
 - Fixed malformed rendering of plain links into HTML links (#5587).
-- Identification of Pandoc readers and writers is now more stable, resulting in
-  clearer information across the app.
-- Fix the wikilink/Zettelkasten link Lua filter (#5605).
+- Fixed a bad interaction between the default keymap and inserting an `Å`
+  character on macOS keyboards.
+- Fixed a bad interaction between the default keymap and inserting backticks on
+  macOS keyboard layouts without deadkeys (#5517).
+- Fixed file exports not working after renaming file (#5574).
+- Links won't be pre-rendered if their title is empty, as this would hide the
+  entire link syntax.
 
 ## Under the Hood
 

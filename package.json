@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git://github.com/Zettlr/Zettlr.git"
   },
-  "version": "3.4.1",
+  "version": "3.4.2",
   "license": "GPL-3.0",
   "description": "Your One-Stop Publication Workbench",
   "main": ".webpack/main",
@@ -133,7 +133,8 @@
     "node-abi": "^3.74.0",
     "@lezer/lr": "^1.4.2",
     "@codemirror/state": "^6.5.1",
-    "@codemirror/view": "^6.36.2"
+    "@codemirror/view": "^6.36.2",
+    "katex": "^0.16.21"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.6.1",
@@ -191,5 +192,5 @@
     "vue-tsc": "^2.2.0",
     "webpack": "^5.97.1"
   },
-  "packageManager": "yarn@3.3.1"
+  "packageManager": "yarn@4.6.0"
 }
