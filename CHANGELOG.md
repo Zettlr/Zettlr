@@ -2,6 +2,33 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.4.2
+
+## An Important Note for Windows Users
+
+If you use Zettlr on Windows, we **urgently recommend you to install this update**.
+We will release a second update approximately one week after this update, which
+you may not be able to install on Windows right away due to Zettlr switching
+code signing certificates. Therefore, please absolutely make sure you install
+*this* update on your Windows computers.
+
+For more context, please [read our blog post](https://zettlr.com/post/zettlr-switches-code-sign-certificate-important-information-for-windows-users)
+that outlines our roadmap for the code signing certificate change, as well as
+[our Community Forum post](https://forum.zettlr.com/d/11-windows-code-signing-certificate-expires-what-users-need-to-know).
+If you have any questions, please don't hesitate to ask them
+[on the Community Forum](https://forum.zettlr.com/),
+[on Discord](https://go.zettlr.com/discord), or
+as a comment on our [BlueSky](https://bsky.app/profile/zettlr.com) or
+[Mastodon](https://fosstodon.org/@zettlr) accounts.
+
+## GUI and Functionality
+
 - **Breaking Change**: To better support the now recommended Wikilink syntax
   with titles (`[[filename|Some title]]`), links that use the old and not
   recommended syntax of adding titles from the time when Zettlr did not support
