@@ -21,8 +21,8 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract, { type IPCAPI } from '../provider-contract'
 import type LogProvider from '../log'
 import { getCustomProfiles } from '@providers/commands/exporter'
-import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
-import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
+import { SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
+import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
 
 export interface PandocProfileMetadata {
   /**
@@ -337,8 +337,8 @@ export default class AssetsProvider extends ProviderContract {
         // reader or writer must be a supported Markdown format.
         const hasWriter = yaml.writer !== undefined
         const hasReader = yaml.reader !== undefined
-        const validWriter = hasWriter && SUPPORTED_READERS.includes(getPlainPandocReaderWriter(yaml.writer))
-        const validReader = hasReader && SUPPORTED_READERS.includes(getPlainPandocReaderWriter(yaml.reader))
+        const validWriter = hasWriter && SUPPORTED_READERS.includes(parseReaderWriter(yaml.writer).name)
+        const validReader = hasReader && SUPPORTED_READERS.includes(parseReaderWriter(yaml.reader).name)
 
         profiles.push({
           name: file,

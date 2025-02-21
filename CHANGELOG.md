@@ -2,7 +2,9 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Identification of Pandoc readers and writers is now more stable, resulting in
+  clearer information across the app.
+- Fix the wikilink/Zettelkasten link Lua filter (#5605).
 
 ## Under the Hood
 
@@ -34,6 +36,11 @@ as a comment on our [BlueSky](https://bsky.app/profile/zettlr.com) or
   recommended syntax of adding titles from the time when Zettlr did not support
   titles (`[Do not use this syntax]([[filename]])`) can no longer be
   automatically replaced when renaming files (#5606).
+- **Change**: The exporter will now forcefully enable (= if it is not yet
+  enabled in the corresponding defaults file in the assets manager) the Pandoc
+  extension `wikilinks_title_after_pipe` or `wikilinks_title_before_pipe`
+  (depending on your settings) for every export from a supported (Markdown-
+  based) reader so that wikilinks/Zettelkasten links are properly parsed.
 - Zettelkasten links with titles will now get properly replaced when renaming
   files (#5606).
 - Fixed an issue that prevented the FSAL cache clearing from proceeding
@@ -68,6 +75,9 @@ as a comment on our [BlueSky](https://bsky.app/profile/zettlr.com) or
   more explicit that this field contains the value and never the title.
 - Add new property `targetRange` to Markdown AST `ZettelkastenLink` nodes to
   allow for easy manipulation of link targets.
+- Import Pandoc `reader`/`writer` parser from
+  `nathanlesage/pandoc-profile-generator`; retire `getPlainPandocReaderWriter`.
+- Move `pandoc-maps.ts` to common `pandoc-util` location.
 
 # 3.4.1
 

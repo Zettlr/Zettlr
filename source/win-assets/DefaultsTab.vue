@@ -95,10 +95,10 @@ import ZtrAdmonition from '@common/vue/ZtrAdmonition.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, computed, toRef, watch, onUnmounted } from 'vue'
 import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
-import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
+import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
 import sanitizeFilename from 'sanitize-filename'
-import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 import { DateTime } from 'luxon'
+import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
 
 const ipcRenderer = window.ipc
 
@@ -142,7 +142,8 @@ const visibleItems = computed(() => {
       }
       // Retrieve which one we need to check
       const readerWriter = (props.which === 'import') ? e.writer : e.reader
-      return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(readerWriter))
+      const parsedReaderWriter = parseReaderWriter(readerWriter)
+      return SUPPORTED_READERS.includes(parsedReaderWriter.name)
     })
 })
 
@@ -150,8 +151,10 @@ const listItems = computed<SelectableListItem[]>(() => {
   return visibleItems.value
     .map(file => {
       // Try to resolve known and fully supported extensions
-      const reader = file.reader in PANDOC_READERS ? PANDOC_READERS[file.reader] : file.reader
-      const writer = file.writer in PANDOC_WRITERS ? PANDOC_WRITERS[file.writer] : file.writer
+      const parsedReader = parseReaderWriter(file.reader)
+      const parsedWriter = parseReaderWriter(file.writer)
+      const reader = parsedReader.name in PANDOC_READERS ? PANDOC_READERS[parsedReader.name] : parsedReader.name
+      const writer = parsedWriter.name in PANDOC_WRITERS ? PANDOC_WRITERS[parsedWriter.name] : parsedWriter.name
       const infoString = (file.isInvalid) ? 'Invalid' : [ reader, writer ].join(' → ')
 
       return {

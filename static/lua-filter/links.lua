@@ -1,26 +1,28 @@
 -- ZETTLR ZETTELKASTEN-LINK FILTER
 --
--- (c) 2021 Hendrik Erz
+-- (c) 2025 (2021) Hendrik Erz
 --
 -- This Lua-filter can unlink or remove internal links as they are being used by
--- Zettlr based on preferences set in the program. Since we have to pass these
--- preferences options somehow, we are using the defaults metadata section.
--- Zettlr will write three variables into that section, strip_link, link_start
--- and link_end, which are being used by this program to unlink or remove such
--- links if the user wishes so.
--- These variables can be overridden on a per-file basis by setting the property
--- "zettlr" in the YAML frontmatter section and adding the properties to that
--- property, since YAML frontmatter values override defaults metadata values.
+-- Zettlr based on preferences set in the program.
+-- Two important notes for this file:
+-- 1.) The corresponding wikilink extension MUST be active, as this filter only
+--     looks for "Link" type inlines. Zettlr's exporter will already do this.
+--     If you wish to use this filter elsewhere, ensure to enable the extension
+--     manually.
+-- 2.) This filter requires at least Pandoc 3.6.3, since it will distinguish
+--     wikilinks from regular links by looking up the classes list, which before
+--    3.6.3 was in the title value of the Link.
+-- 3.) You can programmatically steer this filter on a per-file basis (even
+--     inside Zettlr) by setting the YAML frontmatter property
+--     `zettlr.strip_links` to either "no", "full", or "unlink".
 
--- Prepare the defaults for these variables
+-- Prepare our setting variable
 local strip_links = 'no' -- Can be 'full'|'unlink'|'no'
-local link_start = '[['
-local link_end = ']]'
 
 return {
   {
     Meta = function (meta)
-      -- Retrieve the options required for this filter if they exist.
+      -- Retrieve the option required for this filter if they exist.
       if meta.zettlr then
         if meta.zettlr.strip_links then
           strip_links = meta.zettlr.strip_links
@@ -30,51 +32,23 @@ return {
     end
   },
   {
-    -- Since links can contain whitespace, we need to walk a full paragraph at
-    -- a time and remember where we are
-    Para = function (paragraph)
-      if strip_links == 'no' then
-        return paragraph -- nothing to do
+    -- Zettelkasten/internal/wiki links are represent as Link nodes on Pandoc's
+    -- AST.
+    Link = function (elem)
+      -- NOTE: Wikilinks are distinguished from regular links by having the
+      -- class "wikilink" (cf. https://github.com/jgm/pandoc/commit/97b36ecb7703b434ed4325cc128402a9eb32418d)
+      if strip_links == 'no' or elem.classes[1] ~= "wikilink" then
+        -- nothing to do -> return `nil` as per the documentation
+        -- (cf. https://pandoc.org/lua-filters.html#lua-filter-structure)
+        return nil
+      elseif strip_links == 'unlink' then
+        -- Return the content for the link (a list of inlines), thereby
+        -- unlinking it.
+        return elem.content
+      elseif strip_links == 'full' then
+        -- Remove the link altogether by returning an empty list
+        return {}
       end
-
-      local in_link = false
-
-      return pandoc.walk_block(paragraph, {
-        -- Str is whitespace-separated text
-        Str = function (elem)
-
-          -- We know that we must either unlink or remove internal links
-          local has_link_start = elem.text:sub(1, #link_start) == link_start
-          local has_link_end = elem.text:sub(#elem.text - #link_end + 1) == link_end
-
-          if strip_links == 'unlink' then
-            -- Unlink internal links
-            if has_link_start then
-              -- Only beginning of link
-              elem.text = elem.text:sub(#link_start + 1)
-            end
-            if has_link_end then
-              -- Only ending of link
-              elem.text = elem.text:sub(1, #elem.text - #link_end)
-            end
-
-            -- In any case: Return the (modified) elem
-            return elem
-          else
-            -- Remove internal links
-            if has_link_start and not has_link_end then
-              in_link = true
-            elseif has_link_end and not has_link_start then
-              in_link = false
-            end
-
-            -- Remove beginnings, endings, or anything in between
-            if has_link_start or has_link_end or in_link then
-              return pandoc.Str("")
-            end
-          end
-        end,
-      })
-    end
+    end,
   }
 }
