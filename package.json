@@ -92,7 +92,7 @@
     "remark-lint": "^10.0.0",
     "remark-lint-blockquote-indentation": "^4.0.0",
     "remark-lint-checkbox-character-style": "^5.0.0",
-    "remark-lint-code-block-style": "^4.0.0",
+    "remark-lint-code-block-style": "^4.0.1",
     "remark-lint-emphasis-marker": "^4.0.0",
     "remark-lint-fenced-code-marker": "^4.0.0",
     "remark-lint-hard-break-spaces": "^4.0.0",
