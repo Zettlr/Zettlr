@@ -457,8 +457,6 @@ export default function getMenu (
         {
           id: 'menu.toggle_distraction_free',
           label: trans('Distraction-free mode'),
-          type: 'checkbox',
-          checked: false,
           accelerator: 'Cmd+J',
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'toggle-distraction-free')
@@ -467,8 +465,6 @@ export default function getMenu (
         {
           id: 'menu.toggle_typewriter_mode',
           label: trans('Typewriter mode'),
-          type: 'checkbox',
-          checked: false,
           accelerator: 'Cmd+Alt+T',
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'toggle-typewriter-mode')
