@@ -145,9 +145,12 @@ jobs:
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
       - name: Package & Release
         run: yarn package:win-x64 && yarn release:win-x64
+        shell: pwsh # Run this using Powershell because it requires that for CodeSigning
         env:
-          CSC_LINK: ${{ secrets.WIN_CERT_2025_03_15 }}
-          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS_2025_03_15 }}
+          # Use OpenID Authentication flow
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       - name: Cache installer
         uses: actions/upload-artifact@v4
         with:
