@@ -73,7 +73,7 @@ export default function getMarkdownFileParser (
     file.tags = tags.map(tag => tag.value.toLowerCase())
 
     const links = extractASTNodes(ast, 'ZettelkastenLink') as ZettelkastenLink[]
-    file.links = links.map(link => link.value)
+    file.links = links.map(link => link.target)
 
     file.firstHeading = null
     const headings = extractASTNodes(ast, 'Heading') as Heading[]

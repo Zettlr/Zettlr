@@ -76,7 +76,7 @@ export const sharedKeymap: KeyBinding[] = [
   { key: 'Shift-Mod-\\', run: cursorMatchingBracket },
 
   { key: 'Mod-/', run: toggleComment },
-  { key: 'Alt-A', run: toggleBlockComment },
+  { key: 'Mod-C', run: toggleBlockComment },
 
   { key: 'Ctrl-m', mac: 'Shift-Alt-m', run: toggleTabFocusMode },
 
