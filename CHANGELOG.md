@@ -2,11 +2,15 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- **Breaking Change**: Switched Windows Code Signing Certificate to the Azure
+  one. For some time, you may be unable to install new Zettlr updates on your
+  computers. Please watch Zettlr's social media channels to get notified once we
+  have established that it works again.
 
 ## Under the Hood
 
-(nothing here)
+- Bump Electron Builder to `v26.x.x`
+- Switched Windows Code Signing workflow to Azure
 
 # 3.4.2
 
