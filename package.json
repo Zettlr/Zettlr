@@ -102,7 +102,7 @@
     "remark-lint-list-item-indent": "^4.0.0",
     "remark-lint-no-blockquote-without-marker": "^6.0.0",
     "remark-lint-no-consecutive-blank-lines": "^5.0.0",
-    "remark-lint-no-duplicate-definitions": "^4.0.0",
+    "remark-lint-no-duplicate-definitions": "^4.0.1",
     "remark-lint-no-heading-content-indent": "^5.0.0",
     "remark-lint-no-shortcut-reference-image": "^4.0.0",
     "remark-lint-no-shortcut-reference-link": "^4.0.0",
