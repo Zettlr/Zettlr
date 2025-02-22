@@ -58,7 +58,7 @@ const tabs = [
     icon: 'indent',
     id: 'toc',
     target: 'sidebar-toc',
-    label: trans('Table of Contents')
+    label: trans('Table of contents')
   },
   {
     icon: 'book',
