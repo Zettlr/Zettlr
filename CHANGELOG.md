@@ -1,5 +1,8 @@
 # Upcoming
 
+- Fix issues #5636 and #5637 where conflicting keymaps would cause pressing
+  'Enter' to jump to a new line instead of applying autocomplete suggestions. 
+
 ## GUI and Functionality
 
 - **Breaking Change**: Switched Windows Code Signing Certificate to the Azure
