@@ -19,11 +19,7 @@ import {
   type CompletionSource,
   type CompletionResult,
   autocompletion,
-  type CompletionContext,
-  startCompletion,
-  acceptCompletion,
-  closeCompletion,
-  moveCompletionSelection
+  type CompletionContext
 } from '@codemirror/autocomplete'
 import { type StateField } from '@codemirror/state'
 import { codeBlocks } from './code-blocks'
@@ -32,7 +28,6 @@ import { snippets } from './snippets'
 import { files } from './files'
 import { tags } from './tags'
 import { headings } from './headings'
-import { keymap } from '@codemirror/view'
 
 export interface AutocompletePlugin {
   /**
