@@ -1,5 +1,6 @@
 import {
-  acceptCompletion, closeCompletion, deleteBracketPair, moveCompletionSelection
+  acceptCompletion, closeCompletion, deleteBracketPair, moveCompletionSelection,
+  startCompletion
 } from '@codemirror/autocomplete'
 import {
   insertNewlineAndIndent, copyLineUp, copyLineDown
@@ -29,6 +30,7 @@ import { sharedKeymap } from './shared'
 export function markdownKeymap (): Extension {
   return keymap.of([
     // completionKeymap
+    { key: 'Ctrl-Space', run: startCompletion },
     { key: 'Escape', run: closeCompletion },
     { key: 'ArrowDown', run: moveCompletionSelection(true) },
     { key: 'ArrowUp', run: moveCompletionSelection(false) },

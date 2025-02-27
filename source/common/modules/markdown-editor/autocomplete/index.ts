@@ -122,17 +122,6 @@ export const autocomplete = [
     // produce backticks. (See issue #5517)
     defaultKeymap: false
   }),
-  keymap.of([
-    // TODO: We probably want to move this into the keymaps section at some
-    // point.
-    { key: 'Ctrl-Space', run: startCompletion },
-    { key: 'Escape', run: closeCompletion },
-    { key: 'ArrowDown', run: moveCompletionSelection(true) },
-    { key: 'ArrowUp', run: moveCompletionSelection(false) },
-    { key: 'PageDown', run: moveCompletionSelection(true, 'page') },
-    { key: 'PageUp', run: moveCompletionSelection(false, 'page') },
-    { key: 'Enter', run: acceptCompletion }
-  ]),
   // Make sure any configuration fields will be inserted into the state so that
   // the plugins can look them up and function correctly. These fields are not
   // required by the main class (MarkdownEditor), hence we do not have to re-
