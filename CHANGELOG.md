@@ -6,6 +6,7 @@
   one. For some time, you may be unable to install new Zettlr updates on your
   computers. Please watch Zettlr's social media channels to get notified once we
   have established that it works again.
+- Updated `zh_TW` translations (#5635).
 
 ## Under the Hood
 
