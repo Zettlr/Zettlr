@@ -17,8 +17,11 @@
 import { type SyntaxNode } from '@lezer/common'
 
 /**
- * Extracts any amount of whitespace (\t\s\n\r\f\v, etc.) that occurs before
- * this node.
+ * Extracts any amount of whitespace (`\t\s\n\r\f\v`, etc.) that occurs before
+ * this node. TODO: Read through
+ * https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace
+ * to determine if we have to change anything about this (especially in the
+ * HTML converter).
  *
  * @param   {SyntaxNode}  node      The node to extract whitespace for
  * @param   {string}      markdown  The Markdown source to extract the whitespace
