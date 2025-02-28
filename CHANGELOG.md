@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Zettlr now properly retrieves attachments also for items residing in group
+  libraries (#5647).
 
 ## Under the Hood
 
