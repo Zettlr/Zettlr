@@ -99,7 +99,7 @@
     "remark-lint-heading-style": "^4.0.0",
     "remark-lint-link-title-style": "^4.0.0",
     "remark-lint-list-item-bullet-indent": "^5.0.0",
-    "remark-lint-list-item-indent": "^4.0.0",
+    "remark-lint-list-item-indent": "^4.0.1",
     "remark-lint-no-blockquote-without-marker": "^6.0.0",
     "remark-lint-no-consecutive-blank-lines": "^5.0.0",
     "remark-lint-no-duplicate-definitions": "^4.0.0",
