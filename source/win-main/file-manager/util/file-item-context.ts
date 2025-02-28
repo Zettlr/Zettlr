@@ -26,7 +26,7 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
 
   const template: AnyMenuItem[] = [
     {
-      label: trans('Open in a new tab'),
+      label: trans('Open in new tab'),
       id: 'new-tab',
       type: 'normal',
       enabled: true
@@ -48,15 +48,15 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
       enabled: true
     },
     {
-      label: trans('Delete file'),
-      id: 'menu.delete_file',
-      accelerator: 'CmdOrCtrl+Backspace',
+      label: trans('Duplicate file'),
+      id: 'menu.duplicate_file',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('Duplicate file'),
-      id: 'menu.duplicate_file',
+      label: trans('Delete file'),
+      id: 'menu.delete_file',
+      accelerator: 'CmdOrCtrl+Backspace',
       type: 'normal',
       enabled: true
     },

@@ -8,6 +8,47 @@
 
 (nothing here)
 
+# 3.4.3
+
+## An Important Note for Windows Users
+
+If you use Zettlr on Windows, there is a chance that you will be unable to
+install this update at first. This is because this update uses a different, new
+code signing certificate. There is a possibility that especially those of you
+who use a work computer on which you do not have administrative access, Windows
+will warn you of this update and prevent you from installing it. Based on
+initial communication, there are indications that this won't happen, but we
+wanted to let you know just in case.
+
+If you are unable to install this update, please make sure you update to at
+least version 3.4.2, which has been released last week. If you did not update to
+version 3.4.2, you can find do so
+[by clicking this link](https://github.com/Zettlr/Zettlr/releases/tag/v3.4.2).
+
+For more context, please [read our blog post](https://zettlr.com/post/zettlr-switches-code-sign-certificate-important-information-for-windows-users)
+that outlines our roadmap for the code signing certificate change, as well as
+[our Community Forum post](https://forum.zettlr.com/d/11-windows-code-signing-certificate-expires-what-users-need-to-know).
+If you have any questions, please don't hesitate to ask them
+[on the Community Forum](https://forum.zettlr.com/),
+[on Discord](https://go.zettlr.com/discord), or
+as a comment on our [BlueSky](https://bsky.app/profile/zettlr.com) or
+[Mastodon](https://fosstodon.org/@zettlr) accounts.
+
+**If you are able to install this update without issues, please let us know on our Discord channel, Community Forum, or on BlueSky or Mastodon.**
+
+## GUI and Functionality
+
+- **Breaking Change**: Switched Windows Code Signing Certificate to the Azure
+  one. For some time, you may be unable to install new Zettlr updates on your
+  computers. Please watch Zettlr's social media channels to get notified once we
+  have established that it works again.
+- Updated `zh_TW` translations (#5635).
+
+## Under the Hood
+
+- Bump Electron Builder to `v26.x.x`.
+- Switched Windows Code Signing workflow to Azure.
+
 # 3.4.2
 
 ## An Important Note for Windows Users
@@ -48,6 +89,7 @@ as a comment on our [BlueSky](https://bsky.app/profile/zettlr.com) or
 - Fixed file exports not working after renaming file (#5574).
 - Links won't be pre-rendered if their title is empty, as this would hide the
   entire link syntax.
+- UI text has been improved throughout the app.
 
 ## Under the Hood
 

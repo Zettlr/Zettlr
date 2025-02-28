@@ -9,13 +9,14 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2024-12-24 09:09+0000\n"
-"PO-Revision-Date: 2024-08-12 02:30+0800\n"
+"PO-Revision-Date: 2025-02-22 03:12+0800\n"
 "Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: zh-TW\n"
+"Language-Team: \n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.5\n"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
@@ -210,7 +211,7 @@ msgstr "前往註腳參考"
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:83
 #, javascript-format
 msgid "This file is part of project \"%s\""
-msgstr ""
+msgstr "此檔案是專案「%s」的一部分"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:49
 #: source/win-preferences/schema/editor.ts:134
@@ -696,11 +697,11 @@ msgstr "中文"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
-msgstr "，"
+msgstr ","
 
 #: source/common/util/localise-number.ts:29
 msgid "."
-msgstr "。"
+msgstr "."
 
 #: source/app/service-providers/tray/index.ts:160
 msgid "Show Zettlr"
@@ -777,12 +778,12 @@ msgstr "確認"
 
 #: source/app/service-providers/updates/index.ts:284
 msgid "Cannot check for update"
-msgstr ""
+msgstr "無法檢查更新"
 
 #: source/app/service-providers/updates/index.ts:285
 #, javascript-format
 msgid "There was an error while checking for updates. %s: %s"
-msgstr ""
+msgstr "檢查更新時發生錯誤。%s: %s"
 
 #: source/app/service-providers/updates/index.ts:323
 #: source/tmp/win-main/App.vue.ts:405
@@ -798,15 +799,15 @@ msgstr "版本 %s 的更新已經推出！"
 msgid ""
 "Please update at your earliest convenience. You can open the updater now, or "
 "update later."
-msgstr ""
+msgstr "請在方便時儘早更新，你可以現在打開更新工具，或是稍後更新。"
 
 #: source/app/service-providers/updates/index.ts:327
 msgid "Open updater"
-msgstr ""
+msgstr "打開更新工具"
 
 #: source/app/service-providers/updates/index.ts:328
 msgid "Not now"
-msgstr ""
+msgstr "稍後"
 
 #: source/app/service-providers/updates/index.ts:356
 #, javascript-format
@@ -843,33 +844,33 @@ msgstr "無法檢查更新：伺服器沒有傳送任何資料"
 
 #: source/app/service-providers/updates/index.ts:464
 msgid "The SHA256 checksums file seems to be missing for this release."
-msgstr ""
+msgstr "這個發布版本似乎沒有 SHA256 雜湊值檔案。"
 
 #: source/app/service-providers/updates/index.ts:486
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
-msgstr ""
+msgstr "無法取得 SAH256 雜湊值：%s"
 
 #: source/app/service-providers/updates/index.ts:527
 msgid "Could not accept data for application update: Write stream is gone."
-msgstr ""
+msgstr "無法接收程式更新的資料：寫入資料流消失。"
 
 #: source/app/service-providers/updates/index.ts:582
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
-msgstr ""
+msgstr "無法驗證已下載更新的完整性。請重試或是手動更新。"
 
 #: source/app/service-providers/updates/index.ts:594
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
-msgstr ""
+msgstr "下載的檔案雜湊值與伺服器回傳的不相同。請重試或是手動更新。"
 
 #: source/app/service-providers/updates/index.ts:612
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
-msgstr ""
+msgstr "無法開始更新。請重試或是手動更新。錯誤為：%s"
 
 #: source/app/service-providers/documents/index.ts:384
 msgid "Save changes"
@@ -1075,7 +1076,7 @@ msgstr "匯入失敗"
 #: source/app/service-providers/commands/import-lang-file.ts:60
 #, javascript-format
 msgid "Language file imported: %s"
-msgstr "語言包 %s 已匯入。"
+msgstr "語言包 %s 已匯入"
 
 #: source/app/service-providers/commands/import-lang-file.ts:62
 #: source/app/service-providers/commands/import-lang-file.ts:65
@@ -1154,7 +1155,7 @@ msgstr "格式錯誤的 Textbundle：%s"
 
 #: source/app/service-providers/commands/root-open.ts:59
 msgid "Markdown Files"
-msgstr ""
+msgstr "Markdown 檔案"
 
 #: source/app/service-providers/commands/root-open.ts:60
 msgid "Code Files"
@@ -1164,16 +1165,16 @@ msgstr ""
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:74
 msgid "Open workspace"
-msgstr ""
+msgstr "打開工作區"
 
 #: source/app/service-providers/commands/root-open.ts:83
 msgid "Cannot open workpace"
-msgstr ""
+msgstr "無法打開工作區"
 
 #: source/app/service-providers/commands/root-open.ts:84
 #, javascript-format
 msgid "Cannot open workspace \"%s\"."
-msgstr ""
+msgstr "無法打開工作區「%s」。"
 
 #: source/app/service-providers/commands/export.ts:55
 #: source/app/service-providers/commands/export.ts:157
@@ -1933,7 +1934,7 @@ msgstr "使用 Tab 縮排而非空格"
 
 #: source/win-preferences/schema/editor.ts:261
 msgid "Show formatting toolbar when text is selected"
-msgstr ""
+msgstr "當選取文字時顯示格式工作列"
 
 #: source/win-preferences/schema/editor.ts:266
 msgid "Highlight whitespace"
@@ -2767,15 +2768,15 @@ msgstr "篩選標籤…"
 
 #: source/tmp/win-tag-manager/App.vue.ts:36
 msgid "New tag"
-msgstr ""
+msgstr "新標籤"
 
 #: source/tmp/win-tag-manager/App.vue.ts:37
 msgid "Rename"
-msgstr ""
+msgstr "重新命名"
 
 #: source/tmp/win-tag-manager/App.vue.ts:38
 msgid "Rename tag…"
-msgstr ""
+msgstr "重新命名標籤…"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:29
 msgid "Rename snippet"
@@ -3034,23 +3035,23 @@ msgstr "專案設定…"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:34
 msgid "Enable Project"
-msgstr ""
+msgstr "啟用專案"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:35
 msgid "Sort by name"
-msgstr ""
+msgstr "照名稱排序"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
 msgid "Sort by time"
-msgstr ""
+msgstr "照時間排序"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
 msgid "ascending"
-msgstr ""
+msgstr "升序"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
 msgid "descending"
-msgstr ""
+msgstr "降序"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
 msgid "Cog"
@@ -3070,19 +3071,19 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:47
 msgid "Info"
-msgstr ""
+msgstr "資訊"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:48
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
 msgid "Error"
-msgstr ""
+msgstr "錯誤"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
 msgid "Bell"
@@ -3098,7 +3099,7 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
 msgid "Folder"
-msgstr ""
+msgstr "資料夾"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
 msgid "Folder (open)"
@@ -3121,7 +3122,7 @@ msgstr "日曆"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:60
 msgid "Calculator"
-msgstr ""
+msgstr "計算機"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
 msgid "Store"
@@ -3321,7 +3322,7 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
 msgid "CD/DVD"
-msgstr ""
+msgstr "CD/DVD"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:77
 msgid "Workspaces"
@@ -3345,7 +3346,7 @@ msgstr "今天的字數"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:32
 msgid "🔥 You're on fire!"
-msgstr "🔥 你超勇的喔！"
+msgstr "🔥 你狀態超好！"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:33
 msgid "💪 You're close to hitting your daily average!"
@@ -3353,7 +3354,7 @@ msgstr "💪 你快要達成每日平均了！"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:34
 msgid "✍🏼 Get writing to surpass your daily average."
-msgstr "✍🏼 開始寫作，來突破每日平均吧！"
+msgstr "✍🏼 開始寫作，來突破每日平均吧。"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:35
 msgid "More statistics …"
@@ -3426,15 +3427,15 @@ msgstr "%s 個符合項目於 %s 個檔案中"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:29
 msgid "Temporary directory"
-msgstr ""
+msgstr "暫存目錄"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:30
 msgid "Current directory"
-msgstr ""
+msgstr "目前目錄"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:31
 msgid "Select directory"
-msgstr ""
+msgstr "選擇目錄"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:64
 msgid "Exporting…"
@@ -3446,7 +3447,7 @@ msgstr "匯出"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:77
 msgid "command"
-msgstr "命令"
+msgstr "指令"
 
 #: source/tmp/win-main/App.vue.ts:221
 #, javascript-format

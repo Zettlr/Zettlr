@@ -368,12 +368,12 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       id: 'toggle-file-manager',
       stateOne: {
         id: 'fileManager',
-        title: trans('File manager'),
+        title: trans('Toggle File Manager'),
         icon: 'hard-disk'
       },
       stateTwo: {
         id: 'globalSearch',
-        title: trans('Global search'),
+        title: trans('Search across all files'),
         icon: 'search'
       },
       initialState: (fileManagerVisible.value) ? mainSplitViewVisibleComponent.value : undefined
@@ -381,33 +381,33 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
     {
       type: 'button',
       id: 'root-open-workspaces',
-      title: trans('Open Workspace …'),
+      title: trans('Open workspace…'),
       icon: 'folder-open'
     },
     {
       type: 'button',
       id: 'show-stats',
-      title: trans('View stats'),
+      title: trans('View writing statistics'),
       icon: 'line-chart'
     },
     {
       type: 'button',
       id: 'show-tag-cloud',
-      title: trans('Tags'),
+      title: trans('View Tag Cloud'),
       icon: 'tag',
       badge: undefined // this.hasTagSuggestions
     },
     {
       type: 'button',
       id: 'open-preferences',
-      title: trans('Open the settings dialog'),
+      title: trans('Open settings'),
       icon: 'cog',
       visible: getToolbarButtonDisplay('showOpenPreferencesButton')
     },
     {
       type: 'button',
       id: 'new-file',
-      title: trans('New File…'),
+      title: trans('New file…'),
       icon: 'plus',
       visible: getToolbarButtonDisplay('showNewFileButton')
     },
@@ -435,7 +435,7 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       type: 'button',
       class: 'share',
       id: 'export',
-      title: trans('Export the current file'),
+      title: trans('Export current file'),
       icon: 'export'
     },
     {
@@ -453,42 +453,42 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
     {
       type: 'button',
       id: 'markdownComment',
-      title: trans('Comment'),
+      title: trans('Insert comment'),
       icon: 'code',
       visible: getToolbarButtonDisplay('showMarkdownCommentButton')
     },
     {
       type: 'button',
       id: 'markdownLink',
-      title: trans('Link'),
+      title: trans('Insert link'),
       icon: 'link',
       visible: getToolbarButtonDisplay('showMarkdownLinkButton')
     },
     {
       type: 'button',
       id: 'markdownImage',
-      title: trans('Image'),
+      title: trans('Insert image'),
       icon: 'image',
       visible: getToolbarButtonDisplay('showMarkdownImageButton')
     },
     {
       type: 'button',
       id: 'markdownMakeTaskList',
-      title: trans('Tasklist'),
+      title: trans('Insert task list'),
       icon: 'checkbox-list',
       visible: getToolbarButtonDisplay('showMarkdownMakeTaskListButton')
     },
     {
       type: 'button',
       id: 'insert-table',
-      title: trans('Insert Table'),
+      title: trans('Insert table'),
       icon: 'table',
       visible: getToolbarButtonDisplay('showInsertTableButton')
     },
     {
       type: 'button',
       id: 'insertFootnote',
-      title: trans('Footnote'),
+      title: trans('Insert footnote'),
       icon: 'footnote',
       visible: getToolbarButtonDisplay('showInsertFootnoteButton')
     },
@@ -506,7 +506,7 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
     {
       type: 'ring',
       id: 'pomodoro',
-      title: trans('Pomodoro-Timer'),
+      title: trans('Pomodoro timer'),
       // Good morning, we are verbose here
       progressPercent: pomodoro.value.phase.elapsed / pomodoro.value.durations[pomodoro.value.phase.type] * 100,
       colour: pomodoro.value.colour[pomodoro.value.phase.type],

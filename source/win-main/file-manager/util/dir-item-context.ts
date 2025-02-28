@@ -35,7 +35,7 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
       type: 'separator'
     },
     {
-      label: trans('New File…'),
+      label: trans('New file…'),
       type: 'normal',
       id: 'menu.new_file',
       enabled: true
@@ -114,7 +114,7 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
     template.push({
       id: 'menu.close_workspace',
       type: 'normal',
-      label: trans('Close Workspace'),
+      label: trans('Close workspace'),
       enabled: true
     })
   }
