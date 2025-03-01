@@ -1,10 +1,13 @@
 import {
-  acceptCompletion, closeCompletion, deleteBracketPair, moveCompletionSelection
+  acceptCompletion, closeCompletion, deleteBracketPair, moveCompletionSelection,
+  startCompletion
 } from '@codemirror/autocomplete'
 import {
   insertNewlineAndIndent, copyLineUp, copyLineDown
 } from '@codemirror/commands'
-import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
+import { 
+  insertNewlineContinueMarkup, deleteMarkupBackward
+} from '@codemirror/lang-markdown'
 import type { Extension } from '@codemirror/state'
 import { keymap } from '@codemirror/view'
 import { nextSnippet, abortSnippet } from '../autocomplete/snippets'
@@ -27,6 +30,7 @@ import { sharedKeymap } from './shared'
 export function markdownKeymap (): Extension {
   return keymap.of([
     // completionKeymap
+    { key: 'Ctrl-Space', run: startCompletion },
     { key: 'Escape', run: closeCompletion },
     { key: 'ArrowDown', run: moveCompletionSelection(true) },
     { key: 'ArrowUp', run: moveCompletionSelection(false) },
@@ -58,6 +62,7 @@ export function markdownKeymap (): Extension {
     { key: 'Enter', run: insertNewlineAndIndent },
 
     // Overload Backspace
+    { key: 'Backspace', run: deleteMarkupBackward },
     { key: 'Backspace', run: deleteBracketPair },
     { key: 'Backspace', run: handleBackspace },
 
