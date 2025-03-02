@@ -81,3 +81,31 @@ Grid Table Three
 +--------------:+:--------------+:------------------:+
 | Right         | Left          | Centered           |
 +---------------+---------------+--------------------+
+
+*** *** *** ***
+
+## Additional Test Tables
+
+Use these tables to test how table parsing should work.
+
+| A | B | C |
+|---|---|---|
+| D | E | F |
+| G | H | I |
+| J | K | L |
+
+A | B | C
+--|---|--
+D | E | F
+G | H | I
+J | K | L
+
++---+---+---+
+| A | B | C |
++===+===+===+
+| D | E | F |
++---+---+---+
+| G | H | I |
++---+---+---+
+| J | K | L |
++---+---+---+
