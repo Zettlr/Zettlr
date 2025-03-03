@@ -2,12 +2,22 @@
 
 ## GUI and Functionality
 
+- **Change**: The exporter will now forcefully enable (= if it is not yet
+  enabled in the corresponding defaults file in the assets manager) the Pandoc
+  extension `wikilinks_title_after_pipe` or `wikilinks_title_before_pipe`
+  (depending on your settings) for every export from a supported (Markdown-
+  based) reader so that wikilinks/Zettelkasten links are properly parsed.
+- Identification of Pandoc readers and writers is now more stable, resulting in
+  clearer information across the app.
+- Fix the wikilink/Zettelkasten link Lua filter (#5605).
 - Zettlr now properly retrieves attachments also for items residing in group
   libraries (#5647).
 
 ## Under the Hood
 
-(nothing here)
+- Import Pandoc `reader`/`writer` parser from
+  `nathanlesage/pandoc-profile-generator`; retire `getPlainPandocReaderWriter`.
+- Move `pandoc-maps.ts` to common `pandoc-util` location.
 
 # 3.4.3
 
