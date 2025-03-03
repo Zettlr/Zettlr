@@ -90,7 +90,7 @@ const toolbarControls: ToolbarControl[] = [
   {
     type: 'search',
     id: 'log-filter',
-    placeholder: 'Filter …'
+    placeholder: 'Filter…'
   }
 ]
 
