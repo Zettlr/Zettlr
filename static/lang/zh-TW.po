@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2025-02-28 14:52+0000\n"
-"PO-Revision-Date: 2025-02-22 03:12+0800\n"
+"PO-Revision-Date: 2025-03-04 03:36+0800\n"
 "Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -105,11 +105,11 @@ msgstr "版本 %s 的更新已經推出！"
 msgid ""
 "Please update at your earliest convenience. You can open the updater now, or "
 "update later."
-msgstr "請在方便時儘早更新，你可以現在打開更新工具，或是稍後更新。"
+msgstr "請在方便時儘早更新，你可以現在開啟更新工具，或是稍後更新。"
 
 #: source/app/service-providers/updates/index.ts:327
 msgid "Open updater"
-msgstr "打開更新工具"
+msgstr "開啟更新工具"
 
 #: source/app/service-providers/updates/index.ts:328
 msgid "Not now"
@@ -378,22 +378,22 @@ msgstr "Markdown 檔案"
 
 #: source/app/service-providers/commands/root-open.ts:60
 msgid "Code Files"
-msgstr ""
+msgstr "程式碼檔案"
 
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:74
 msgid "Open workspace"
-msgstr "打開工作區"
+msgstr "開啟工作區"
 
 #: source/app/service-providers/commands/root-open.ts:83
 msgid "Cannot open workpace"
-msgstr "無法打開工作區"
+msgstr "無法開啟工作區"
 
 #: source/app/service-providers/commands/root-open.ts:84
 #, javascript-format
 msgid "Cannot open workspace \"%s\"."
-msgstr "無法打開工作區「%s」。"
+msgstr "無法開啟工作區「%s」。"
 
 #. We need to generate our own filename. First, attempt to just use 'copy of'
 #: source/app/service-providers/commands/file-duplicate.ts:68
@@ -536,13 +536,13 @@ msgstr "偵測到資源庫檔案的變更，正在重新載入…"
 #: source/app/service-providers/menu/menu.win32.ts:56
 #: source/app/service-providers/menu/menu.darwin.ts:183
 msgid "Recent files"
-msgstr ""
+msgstr "最近的檔案"
 
 #: source/app/service-providers/menu/menu.win32.ts:48
 #: source/app/service-providers/menu/menu.win32.ts:60
 #: source/app/service-providers/menu/menu.darwin.ts:187
 msgid "Clear"
-msgstr ""
+msgstr "清空"
 
 #: source/app/service-providers/menu/menu.win32.ts:87
 #: source/app/service-providers/menu/menu.darwin.ts:113
@@ -554,7 +554,7 @@ msgstr "檔案"
 #: source/win-main/file-manager/util/dir-item-context.ts:38
 #: source/tmp/win-main/App.vue.ts:290
 msgid "New file…"
-msgstr ""
+msgstr "新增檔案…"
 
 #: source/app/service-providers/menu/menu.win32.ts:129
 #: source/app/service-providers/menu/menu.darwin.ts:155
@@ -565,13 +565,13 @@ msgstr "新目錄…"
 #: source/app/service-providers/menu/menu.win32.ts:139
 #: source/app/service-providers/menu/menu.darwin.ts:165
 msgid "Open file…"
-msgstr ""
+msgstr "開啟檔案…"
 
 #: source/app/service-providers/menu/menu.win32.ts:148
 #: source/app/service-providers/menu/menu.darwin.ts:174
 #: source/tmp/win-main/App.vue.ts:264
 msgid "Open workspace…"
-msgstr ""
+msgstr "開啟工作區…"
 
 #: source/app/service-providers/menu/menu.win32.ts:172
 #: source/app/service-providers/menu/menu.darwin.ts:207
@@ -611,13 +611,13 @@ msgstr "偏好設定…"
 #: source/app/service-providers/menu/menu.darwin.ts:59
 #: source/tmp/win-assets/App.vue.ts:15
 msgid "Assets Manager"
-msgstr "素材管理員"
+msgstr "資源管理員"
 
 #: source/app/service-providers/menu/menu.win32.ts:241
 #: source/app/service-providers/menu/menu.darwin.ts:67
 #: source/tmp/win-tag-manager/App.vue.ts:34
 msgid "Tags Manager"
-msgstr ""
+msgstr "標籤管理員"
 
 #: source/app/service-providers/menu/menu.win32.ts:253
 #: source/app/service-providers/menu/menu.darwin.ts:259
@@ -701,12 +701,12 @@ msgstr "全選"
 #: source/app/service-providers/menu/menu.win32.ts:372
 #: source/app/service-providers/menu/menu.darwin.ts:370
 msgid "Find in current file"
-msgstr ""
+msgstr "在目前的檔案中尋找"
 
 #: source/app/service-providers/menu/menu.win32.ts:380
 #: source/app/service-providers/menu/menu.darwin.ts:378
 msgid "Search all files"
-msgstr ""
+msgstr "在所有的檔案之中尋找"
 
 #: source/app/service-providers/menu/menu.win32.ts:388
 #: source/app/service-providers/menu/menu.darwin.ts:386
@@ -739,7 +739,7 @@ msgstr "夜間模式"
 #: source/app/service-providers/menu/menu.win32.ts:432
 #: source/app/service-providers/menu/menu.darwin.ts:449
 msgid "Additional information"
-msgstr ""
+msgstr "額外資訊"
 
 #: source/app/service-providers/menu/menu.win32.ts:442
 #: source/app/service-providers/menu/menu.darwin.ts:459
@@ -750,13 +750,13 @@ msgstr "專注模式"
 #: source/app/service-providers/menu/menu.win32.ts:450
 #: source/app/service-providers/menu/menu.darwin.ts:467
 msgid "Typewriter mode"
-msgstr ""
+msgstr "打字機模式"
 
 #: source/app/service-providers/menu/menu.win32.ts:461
 #: source/app/service-providers/menu/menu.darwin.ts:478
 #: source/tmp/win-main/App.vue.ts:251
 msgid "Toggle File Manager"
-msgstr ""
+msgstr "切換檔案管理器"
 
 #: source/app/service-providers/menu/menu.win32.ts:469
 #: source/app/service-providers/menu/menu.darwin.ts:486
@@ -802,7 +802,7 @@ msgstr "切換開發者工具"
 #: source/app/service-providers/menu/menu.win32.ts:535
 #: source/app/service-providers/menu/menu.darwin.ts:554
 msgid "View logs"
-msgstr ""
+msgstr "檢視日誌"
 
 #: source/app/service-providers/menu/menu.win32.ts:546
 #: source/app/service-providers/menu/menu.darwin.ts:565
@@ -862,27 +862,27 @@ msgstr "檢查更新"
 #: source/app/service-providers/menu/menu.win32.ts:625
 #: source/app/service-providers/menu/menu.darwin.ts:651
 msgid "Support Zettlr ↗︎"
-msgstr ""
+msgstr "支持 Zettlr ↗︎"
 
 #: source/app/service-providers/menu/menu.win32.ts:635
 #: source/app/service-providers/menu/menu.darwin.ts:661
 msgid "Visit website ↗︎"
-msgstr ""
+msgstr "造訪網站 ↗︎"
 
 #: source/app/service-providers/menu/menu.win32.ts:645
 #: source/app/service-providers/menu/menu.darwin.ts:671
 msgid "Open user manual ↗︎"
-msgstr ""
+msgstr "開啟使用手冊 ↗︎"
 
 #: source/app/service-providers/menu/menu.win32.ts:659
 #: source/app/service-providers/menu/menu.darwin.ts:685
 msgid "Open tutorial"
-msgstr ""
+msgstr "開啟教學課程"
 
 #: source/app/service-providers/menu/menu.win32.ts:667
 #: source/app/service-providers/menu/menu.darwin.ts:693
 msgid "Clear FSAL cache…"
-msgstr ""
+msgstr "清除 FSAL 快取…"
 
 #: source/app/service-providers/menu/menu.win32.ts:671
 #: source/app/service-providers/menu/menu.darwin.ts:697
@@ -1001,7 +1001,7 @@ msgstr "無法儲存檔案 %s：%s"
 #: source/win-main/file-manager/util/file-item-context.ts:29
 #: source/tmp/win-main/GlobalSearch.vue.ts:54
 msgid "Open in new tab"
-msgstr ""
+msgstr "在新標籤中開啟"
 
 #: source/win-main/file-manager/util/file-item-context.ts:35
 #: source/win-main/file-manager/util/dir-item-context.ts:29
@@ -1061,11 +1061,11 @@ msgstr "匯出專案"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:117
 msgid "Close workspace"
-msgstr ""
+msgstr "關閉工作區"
 
 #: source/win-main/tabs-context.ts:38
 msgid "Close tab"
-msgstr ""
+msgstr "關閉分頁"
 
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
@@ -1365,7 +1365,7 @@ msgstr "馬來語"
 
 #: source/common/util/map-lang-code.ts:100
 msgid "Norwegian (Bokmål)"
-msgstr "挪威語（Bokmål）"
+msgstr "挪威語（書面語）"
 
 #: source/common/util/map-lang-code.ts:101
 msgid "Nepalese"
@@ -1616,19 +1616,19 @@ msgstr "無醒目標示"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:82
 msgid "Open link"
-msgstr ""
+msgstr "開啟連結"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:91
 msgid "Copy email address"
-msgstr ""
+msgstr "複製 E-mail 信箱"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:91
 msgid "Copy link"
-msgstr ""
+msgstr "複製連結"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:97
 msgid "Remove link"
-msgstr ""
+msgstr "移除連結"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:107
 msgid "Copy image to clipboard"
@@ -1670,16 +1670,16 @@ msgstr "插入編號列表"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
 #: source/tmp/win-main/App.vue.ts:357
 msgid "Insert task list"
-msgstr ""
+msgstr "插入任務清單"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
 msgid "Insert blockquote"
-msgstr ""
+msgstr "插入引言區塊"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
 #: source/tmp/win-main/App.vue.ts:364
 msgid "Insert table"
-msgstr ""
+msgstr "插入表格"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
 msgid "Copy equation code"
@@ -1697,7 +1697,7 @@ msgstr "找不到圖片：%s"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:197
 msgid "Open image externally"
-msgstr ""
+msgstr "在外部開啟圖片"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
@@ -2016,7 +2016,7 @@ msgstr "音量"
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
 msgid "Table of contents"
-msgstr ""
+msgstr "目次"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
@@ -2073,7 +2073,7 @@ msgstr "這份文件沒有引文。"
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:66
 #, javascript-format
 msgid "circa %s words"
-msgstr ""
+msgstr "大約 %s 字"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:39
 msgid "Name"
@@ -2109,7 +2109,7 @@ msgstr "字數"
 #: source/tmp/win-main/file-manager/FileManager.vue.ts:46
 #: source/tmp/win-main/GlobalSearch.vue.ts:38
 msgid "Filter…"
-msgstr ""
+msgstr "篩選…"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:31
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
@@ -2151,11 +2151,11 @@ msgstr "重設"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
 msgid "Cog"
-msgstr ""
+msgstr "齒輪"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
 msgid "Cloud"
-msgstr ""
+msgstr "雲"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:44
 msgid "Check"
@@ -2183,15 +2183,15 @@ msgstr "警告"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
 msgid "Bell"
-msgstr ""
+msgstr "鈴"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:52
 msgid "Person"
-msgstr ""
+msgstr "人"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:53
 msgid "People"
-msgstr ""
+msgstr "人們"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
 msgid "Folder"
@@ -2199,11 +2199,11 @@ msgstr "資料夾"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
 msgid "Folder (open)"
-msgstr ""
+msgstr "資料夾（打開）"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
 msgid "Eye"
-msgstr ""
+msgstr "眼"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:58
 msgid "Eye (crossed)"
@@ -2222,43 +2222,43 @@ msgstr "計算機"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
 msgid "Store"
-msgstr ""
+msgstr "商店"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:62
 msgid "Shopping bag"
-msgstr ""
+msgstr "購物袋"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:63
 msgid "Shopping cart"
-msgstr ""
+msgstr "購物車"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
 msgid "Factory"
-msgstr ""
+msgstr "工廠"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:65
 msgid "Heart"
-msgstr ""
+msgstr "心"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
 msgid "Heart (broken)"
-msgstr ""
+msgstr "心（碎）"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:67
 msgid "Bubbles"
-msgstr ""
+msgstr "氣泡（多個）"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:68
 msgid "Bubble"
-msgstr ""
+msgstr "氣泡"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
 msgid "Bubble (exclamation)"
-msgstr ""
+msgstr "氣泡（破裂）"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
 msgid "Colour Palette"
-msgstr ""
+msgstr "調色盤"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:71
 msgid "Bars"
@@ -2266,155 +2266,155 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:72
 msgid "Thermometer"
-msgstr ""
+msgstr "溫度計"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:73
 msgid "Book"
-msgstr ""
+msgstr "書"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:74
 msgid "Library"
-msgstr ""
+msgstr "圖書館"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:75
 msgid "Bug"
-msgstr ""
+msgstr "蟲"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:76
 msgid "Note"
-msgstr ""
+msgstr "筆記"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:77
 msgid "Lightbulb"
-msgstr ""
+msgstr "燈泡"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:78
 msgid "Trash"
-msgstr ""
+msgstr "垃圾"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
 msgid "Snowflake"
-msgstr ""
+msgstr "雪花"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
 msgid "Asterisk"
-msgstr ""
+msgstr "星號"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
 msgid "Key"
-msgstr ""
+msgstr "鑰匙"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
 msgid "Bolt"
-msgstr ""
+msgstr "螺栓"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
 msgid "Wrench"
-msgstr ""
+msgstr "扳手"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
 msgid "Flame"
-msgstr ""
+msgstr "火焰"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
 msgid "Hourglass"
-msgstr ""
+msgstr "沙漏"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
 msgid "Briefcase"
-msgstr ""
+msgstr "公事包"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
 msgid "Tools"
-msgstr ""
+msgstr "工具"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
 msgid "Moon"
-msgstr ""
+msgstr "月亮"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
 msgid "Sun"
-msgstr ""
+msgstr "太陽"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
 msgid "Tree"
-msgstr ""
+msgstr "樹"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
 msgid "Circle (dot)"
-msgstr ""
+msgstr "圓圈（點狀）"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
 msgid "Circle"
-msgstr ""
+msgstr "圓圈"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
 msgid "Video camera"
-msgstr ""
+msgstr "攝影機"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
 msgid "Film strip"
-msgstr ""
+msgstr "膠卷"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
 msgid "Microphone"
-msgstr ""
+msgstr "麥克風"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
 msgid "Crown"
-msgstr ""
+msgstr "皇冠"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
 msgid "Star"
-msgstr ""
+msgstr "星星"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
 msgid "Flag"
-msgstr ""
+msgstr "旗"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:99
 msgid "Envelope"
-msgstr ""
+msgstr "信封"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
 msgid "Airplane"
-msgstr ""
+msgstr "飛機"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
 msgid "Happy emoji"
-msgstr ""
+msgstr "開心表情符號"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:102
 msgid "Neutral emoji"
-msgstr ""
+msgstr "中立表情符號"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
 msgid "Sad emoji"
-msgstr ""
+msgstr "哭泣表情符號"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
 msgid "Thumbs up"
-msgstr ""
+msgstr "姆指向上"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
 msgid "Thumbs down"
-msgstr ""
+msgstr "姆指向下"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:106
 msgid "Map"
-msgstr ""
+msgstr "地圖"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:107
 msgid "Compass"
-msgstr ""
+msgstr "羅盤"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:108
 msgid "Map marker"
-msgstr ""
+msgstr "地圖標記"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:109
 msgid "Flask"
-msgstr ""
+msgstr "燒瓶"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
 msgid "CD/DVD"
@@ -2487,23 +2487,23 @@ msgstr "%s 選擇"
 #: source/tmp/win-main/App.vue.ts:256
 #: source/tmp/win-main/GlobalSearch.vue.ts:35
 msgid "Search across all files"
-msgstr ""
+msgstr "在所有的檔案之中尋找"
 
 #: source/tmp/win-main/App.vue.ts:270
 msgid "View writing statistics"
-msgstr ""
+msgstr "檢視寫作統計資訊"
 
 #: source/tmp/win-main/App.vue.ts:276
 msgid "View Tag Cloud"
-msgstr ""
+msgstr "檢視標籤雲"
 
 #: source/tmp/win-main/App.vue.ts:283
 msgid "Open settings"
-msgstr ""
+msgstr "開啟設定"
 
 #: source/tmp/win-main/App.vue.ts:318
 msgid "Export current file"
-msgstr ""
+msgstr "匯出目前檔案"
 
 #: source/tmp/win-main/App.vue.ts:324
 msgid "Toggle readability mode"
@@ -2511,19 +2511,19 @@ msgstr "切換可讀性模式"
 
 #: source/tmp/win-main/App.vue.ts:336
 msgid "Insert comment"
-msgstr ""
+msgstr "插入註解"
 
 #: source/tmp/win-main/App.vue.ts:350
 msgid "Insert image"
-msgstr ""
+msgstr "插入圖片"
 
 #: source/tmp/win-main/App.vue.ts:371
 msgid "Insert footnote"
-msgstr ""
+msgstr "插入註腳"
 
 #: source/tmp/win-main/App.vue.ts:389
 msgid "Pomodoro timer"
-msgstr ""
+msgstr "番茄鐘計時器"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:29
 msgid "Temporary directory"
@@ -2555,7 +2555,7 @@ msgstr "在下方輸入搜尋字詞"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:37
 msgid "Find…"
-msgstr ""
+msgstr "尋找…"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:39
 msgid "Filter search results"
@@ -2567,7 +2567,7 @@ msgstr "限制在目錄中搜尋"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:41
 msgid "Choose directory…"
-msgstr ""
+msgstr "選擇目錄…"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:42
 #: source/tmp/win-preferences/App.vue.ts:57
@@ -2865,7 +2865,7 @@ msgid ""
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
 msgstr ""
-"內部連結允許您新增一個選擇性的標題，並用垂直條分隔符號與實際連結目標分開。在"
+"內部連結允許您新增一個非必要的標題，並用垂直條分隔符號與實際連結目標分開。在"
 "這裡您可以定義兩者的順序。"
 
 #: source/win-preferences/schema/zettelkasten.ts:79
@@ -2973,27 +2973,27 @@ msgstr ""
 
 #: source/win-preferences/schema/editor.ts:72
 msgid "Render citations"
-msgstr ""
+msgstr "繪製引文"
 
 #: source/win-preferences/schema/editor.ts:77
 msgid "Render iframes"
-msgstr ""
+msgstr "繪製 iframe"
 
 #: source/win-preferences/schema/editor.ts:82
 msgid "Render images"
-msgstr ""
+msgstr "繪製圖片"
 
 #: source/win-preferences/schema/editor.ts:87
 msgid "Render links"
-msgstr ""
+msgstr "繪製連結"
 
 #: source/win-preferences/schema/editor.ts:92
 msgid "Render formulae"
-msgstr ""
+msgstr "繪製方程式"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Render tasks"
-msgstr ""
+msgstr "繪製任務"
 
 #: source/win-preferences/schema/editor.ts:102
 msgid "Hide heading characters"
@@ -3005,7 +3005,7 @@ msgstr "繪製強調部份"
 
 #: source/win-preferences/schema/editor.ts:116
 msgid "Formatting characters for bold and italics"
-msgstr ""
+msgstr "粗體和斜體的格式字元"
 
 #: source/win-preferences/schema/editor.ts:143
 msgid "Check Markdown for style issues"
@@ -3030,7 +3030,7 @@ msgstr "在專注模式時，讓周遭的文字顏色變淺"
 
 #: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction-free mode"
-msgstr ""
+msgstr "在專注模式時隱藏工具列"
 
 #: source/win-preferences/schema/editor.ts:182
 msgid "Word counter"
@@ -3038,7 +3038,7 @@ msgstr "字數統計"
 
 #: source/win-preferences/schema/editor.ts:189
 msgid "Count characters instead of words (e.g., for Chinese)"
-msgstr "統計字元數，而非字數（如果你用中文，大概會想要這樣）"
+msgstr "統計字元數，而非字數（例如中文）"
 
 #: source/win-preferences/schema/editor.ts:195
 msgid "Readability mode"
@@ -3123,67 +3123,67 @@ msgstr "工具列選項"
 
 #: source/win-preferences/schema/appearance.ts:124
 msgid "Left section"
-msgstr ""
+msgstr "左側區塊"
 
 #: source/win-preferences/schema/appearance.ts:128
 msgid "Display \"Open settings\" button"
-msgstr ""
+msgstr "顯示「開啟設定」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:133
 msgid "Display \"New file\" button"
-msgstr ""
+msgstr "顯示「新增檔案」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:138
 msgid "Display \"Previous file\" button"
-msgstr ""
+msgstr "顯示「上一個檔案」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:143
 msgid "Display \"Next file\" button"
-msgstr ""
+msgstr "顯示「下一個檔案」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:150
 msgid "Center section"
-msgstr ""
+msgstr "中間區塊"
 
 #: source/win-preferences/schema/appearance.ts:154
 msgid "Display \"Readability mode\" button"
-msgstr ""
+msgstr "顯示「可讀性」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:159
 msgid "Display \"Insert comment\" button"
-msgstr ""
+msgstr "顯示「插入註解」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:164
 msgid "Display \"Insert link\" button"
-msgstr ""
+msgstr "顯示「插入連結」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:169
 msgid "Display \"Insert image\" button"
-msgstr ""
+msgstr "顯示「插入圖片」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:174
 msgid "Display \"Insert task list\" button"
-msgstr ""
+msgstr "顯示「插入任務清單」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:179
 msgid "Display \"Insert table\" button"
-msgstr ""
+msgstr "顯示「插入表格」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:184
 msgid "Display \"Insert footnote\" button"
-msgstr ""
+msgstr "顯示「插入註腳」按鈕"
 
 #: source/win-preferences/schema/appearance.ts:191
 msgid "Right section"
-msgstr ""
+msgstr "右側區塊"
 
 #: source/win-preferences/schema/appearance.ts:195
 msgid "Display word/character counter"
-msgstr ""
+msgstr "顯示字數/字元統計"
 
 #: source/win-preferences/schema/appearance.ts:200
 msgid "Display Pomodoro timer"
-msgstr ""
+msgstr "顯示番茄鐘計時器"
 
 #: source/win-preferences/schema/appearance.ts:206
 msgid "Status bar"
@@ -3191,7 +3191,7 @@ msgstr "狀態列"
 
 #: source/win-preferences/schema/appearance.ts:212
 msgid "Show status bar"
-msgstr ""
+msgstr "顯示狀態列"
 
 #: source/win-preferences/schema/appearance.ts:223
 msgid "Open CSS editor"
@@ -3548,7 +3548,7 @@ msgstr "看門狗輪詢"
 
 #: source/win-preferences/schema/advanced.ts:126
 msgid "Activate watchdog polling"
-msgstr ""
+msgstr "啟用看門狗輪詢"
 
 #: source/win-preferences/schema/advanced.ts:131
 msgid "Time to wait before writing a file is considered done (in ms)"
@@ -3560,7 +3560,7 @@ msgstr "刪除項目"
 
 #: source/win-preferences/schema/advanced.ts:144
 msgid "Delete items irreversibly if moving them to trash fails"
-msgstr ""
+msgstr "如果移動到垃圾桶失敗，就直接刪除檔案"
 
 #: source/win-preferences/schema/advanced.ts:150
 msgid "Debug mode"
@@ -3634,7 +3634,7 @@ msgstr "您希望「自動完成」功能如何插入引文？"
 
 #: source/win-preferences/schema/citations.ts:39
 msgid "Citation database (CSL JSON or BibTex)"
-msgstr ""
+msgstr "引用資料庫（CSL JSON 或 BibTex 格式）"
 
 #: source/win-preferences/schema/citations.ts:41
 #: source/win-preferences/schema/citations.ts:53
@@ -3643,7 +3643,7 @@ msgstr "檔案路徑"
 
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL style (optional)"
-msgstr ""
+msgstr "CSL 樣式（選擇性的）"
 
 #~ msgid "Open Link"
 #~ msgstr "開啟連結"
