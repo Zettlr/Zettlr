@@ -25,6 +25,24 @@ import { zoomIn, zoomOut } from './font-zoom'
 import type ConfigProvider from '@providers/config'
 import type DocumentManager from '@providers/documents'
 
+/**
+ * Translate shortcuts from e.g. 
+ * ctrl-shift-tab to Ctrl+Shift+Tab.
+ * 
+ * @param   {string} shortcut Shortcut to be translated.
+ * 
+ * @returns {string}          Translated shortcut.
+ */
+function transShortcut(shortcut: string): string {
+  var options: { [id:string]: string; } = {
+    'ctrl-tab': 'Ctrl+Tab',
+    'ctrl-shift-tab': 'Ctrl+Shift+Tab',
+    'ctrl-pageup': 'Ctrl+PageUp',
+    'ctrl-pagedown': 'Ctrl+PageDown',
+  }
+  return options[shortcut];
+}
+
 export default function getMenu (
   logger: LogProvider,
   config: ConfigProvider,
@@ -36,6 +54,8 @@ export default function getMenu (
   _setCheckboxState: (id: string, val: boolean) => void
 ): MenuItemConstructorOptions[] {
   const useGuiZoom = config.get('system.zoomBehavior') === 'gui'
+  const nextTabOption = config.get('editor.nextTabSelectionAccelerator');
+  const prevTabOption = config.get('editor.prevTabSelectionAccelerator');
   // While on macOS we can just drop the following menuItem into the menu, the
   // win32-menu is also being used on Linux. Therefore, we use as fallback the
   // default, but ...
@@ -572,7 +592,7 @@ export default function getMenu (
         {
           id: 'menu.tab_previous',
           label: trans('Previous Tab'),
-          accelerator: 'Ctrl+Shift+Tab',
+          accelerator: transShortcut(prevTabOption),
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'previous-tab')
           }
@@ -580,7 +600,7 @@ export default function getMenu (
         {
           id: 'menu.tab_next',
           label: trans('Next Tab'),
-          accelerator: 'Ctrl+Tab',
+          accelerator: transShortcut(nextTabOption),
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'next-tab')
           }

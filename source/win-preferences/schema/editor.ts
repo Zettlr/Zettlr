@@ -282,6 +282,29 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           type: 'checkbox',
           label: trans('Automatically close matching character pairs'),
           model: 'editor.autoCloseBrackets'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          type: 'select',
+          inline: true,
+          label: trans('Select next tab with: '),
+          model: 'editor.nextTabSelectionAccelerator',
+          options: {
+            'ctrl-tab': 'Ctrl+Tab',
+            'ctrl-pageup': 'Ctrl+PageUp',
+          }
+        },
+        {
+          type: 'select',
+          inline: true,
+          label: trans('Select previous tab with: '),
+          model: 'editor.prevTabSelectionAccelerator',
+          options: {
+            'ctrl-shift-tab': 'Ctrl+Shift+Tab',
+            'ctrl-pagedown': 'Ctrl+PageDown',
+          }
         }
       ]
     }
