@@ -245,6 +245,9 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, align: Array<'lef
       const [ localFrom, localTo ] = subview.state.field(hiddenSpanField).cellRange
       if (mainSel.from < localFrom || mainSel.to > localTo) {
         subview.destroy()
+        // TODO: Enable citation rendering here
+        const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
+        tds[i].innerHTML = html.length > 0 ? html : '&nbsp;'
       }
     } else if (subview === null && selectionInCell) {
       // Create a new subview to represent the selection here. Ensure the cell
