@@ -75,6 +75,8 @@ export interface ConfigOptions {
     customDirectory: string
   }
   editor: {
+    nextTabSelectionAccelerator: 'ctrl-pageup'|'ctrl-tab'
+    prevTabSelectionAccelerator: 'ctrl-pagedown'|'ctrl-shift-tab'
     autocompleteSuggestEmojis: boolean
     autoSave: 'off'|'immediately'|'delayed'
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
@@ -262,6 +264,8 @@ export function getConfigTemplate (): ConfigOptions {
     },
     // Editor related stuff
     editor: {
+      nextTabSelectionAccelerator: 'ctrl-pageup',
+      prevTabSelectionAccelerator: 'ctrl-pagedown',
       autoSave: 'off',
       autocompleteSuggestEmojis: true,
       autoCloseBrackets: true,

@@ -22,7 +22,7 @@ import type WindowProvider from '@providers/windows'
 import type CommandProvider from '@providers/commands'
 import type LogProvider from '@providers/log'
 import { zoomIn, zoomOut } from './font-zoom'
-import type ConfigProvider from '@providers/config'
+import ConfigProvider from '@providers/config'
 import type DocumentManager from '@providers/documents'
 
 export default function getMenu (
@@ -36,6 +36,8 @@ export default function getMenu (
   _setCheckboxState: (id: string, val: boolean) => void
 ): MenuItemConstructorOptions[] {
   const useGuiZoom = config.get('system.zoomBehavior') === 'gui'
+  const nextTabOption = config.get('editor.nextTabSelectionAccelerator');
+  const prevTabOption = config.get('editor.prevTabSelectionAccelerator');
   // While on macOS we can just drop the following menuItem into the menu, the
   // win32-menu is also being used on Linux. Therefore, we use as fallback the
   // default, but ...
@@ -572,7 +574,7 @@ export default function getMenu (
         {
           id: 'menu.tab_previous',
           label: trans('Previous Tab'),
-          accelerator: 'Ctrl+Shift+Tab',
+          accelerator: ConfigProvider.transShortcut(prevTabOption),
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'previous-tab')
           }
@@ -580,7 +582,7 @@ export default function getMenu (
         {
           id: 'menu.tab_next',
           label: trans('Next Tab'),
-          accelerator: 'Ctrl+Tab',
+          accelerator: ConfigProvider.transShortcut(nextTabOption),
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'next-tab')
           }

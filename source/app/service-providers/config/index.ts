@@ -551,6 +551,24 @@ export default class ConfigProvider extends ProviderContract {
     // There are some options for which there is no validation.
     return true
   }
+
+  /**
+   * Translate shortcuts from e.g. 
+   * ctrl-shift-tab to Ctrl+Shift+Tab.
+   * 
+   * @param   {string} shortcut Shortcut to be translated.
+   * 
+   * @returns {string}          Translated shortcut.
+   */
+  static transShortcut(shortcut: string): string {
+    var options: { [id:string]: string; } = {
+      'ctrl-tab': 'Ctrl+Tab',
+      'ctrl-shift-tab': 'Ctrl+Shift+Tab',
+      'ctrl-pageup': 'Ctrl+PageUp',
+      'ctrl-pagedown': 'Ctrl+PageDown',
+    }
+    return options[shortcut];
+  }
 }
 
 function isIterable (value: any): boolean {

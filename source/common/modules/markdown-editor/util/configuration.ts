@@ -73,6 +73,8 @@ export interface EditorConfiguration {
   margins: 'S'|'M'|'L'
   highlightWhitespace: boolean
   countChars: boolean
+  nextTabSelectionAccelerator: 'ctrl-pageup'|'ctrl-tab'
+  prevTabSelectionAccelerator: 'ctrl-pagedown'|'ctrl-shift-tab'
 }
 
 export function getDefaultConfig (): EditorConfiguration {
@@ -128,7 +130,9 @@ export function getDefaultConfig (): EditorConfiguration {
     theme: 'berlin',
     margins: 'M',
     highlightWhitespace: false,
-    countChars: false
+    countChars: false,
+    nextTabSelectionAccelerator: 'ctrl-pageup',
+    prevTabSelectionAccelerator: 'ctrl-pagedown'
   }
 }
 

@@ -20,7 +20,7 @@ import type WindowProvider from '@providers/windows'
 import type CommandProvider from '@providers/commands'
 import type LogProvider from '@providers/log'
 import { zoomIn, zoomOut } from './font-zoom'
-import type ConfigProvider from '@providers/config'
+import ConfigProvider from '@providers/config'
 import type DocumentManager from '@providers/documents'
 
 export default function getMenu (
@@ -34,6 +34,8 @@ export default function getMenu (
   _setCheckboxState: (id: string, val: boolean) => void
 ): MenuItemConstructorOptions[] {
   const useGuiZoom = config.get('system.zoomBehavior') === 'gui'
+  const nextTabOption = config.get('editor.nextTabSelectionAccelerator');
+  const prevTabOption = config.get('editor.prevTabSelectionAccelerator');
 
   const menu: MenuItemConstructorOptions[] = [
     // APP MENU
@@ -606,7 +608,7 @@ export default function getMenu (
         {
           id: 'menu.tab_next',
           label: trans('Next Tab'),
-          accelerator: 'Ctrl+Tab',
+          accelerator: ConfigProvider.transShortcut(nextTabOption),
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'next-tab')
           }
@@ -614,7 +616,7 @@ export default function getMenu (
         {
           id: 'menu.new_window',
           label: trans('New window'),
-          accelerator: 'CmdOrCtrl+Shift+N',
+          accelerator: ConfigProvider.transShortcut(prevTabOption),
           click: function (_menuItem, _focusedWindow) {
             documents.newWindow()
           }
