@@ -46,7 +46,7 @@ export function markdownKeymap (): Extension {
     // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
     // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
     { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
-    { key: 'Mod-Shift-c', run: applyComment },
+    { key: 'Mod-C', run: applyComment },
     { key: 'Mod-Alt-f', mac: 'Mod-Alt-r', run: addNewFootnote },
 
     // Overload Tab, depending on context (priority high->low)

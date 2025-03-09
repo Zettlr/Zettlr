@@ -90,7 +90,13 @@ export default class OpenAttachment extends ZettlrCommand {
         json: {
           jsonrpc: '2.0',
           method: 'item.attachments',
-          params: [arg.citekey]
+          // NOTE: The second parameter means that we wish to search across all
+          // libraries (not just the user library, but all groups, too). This
+          // allows Zettlr to retrieve items that have been exported from a
+          // group library, too.
+          // See BBT docs: https://retorque.re/zotero-better-bibtex/exporting/json-rpc/index.html
+          // See issue #5647
+          params: [ arg.citekey, '*' ]
         }
       }).json()
 

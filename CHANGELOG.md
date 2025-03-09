@@ -2,24 +2,125 @@
 
 ## GUI and Functionality
 
-- Fixed an issue that prevented the FSAL cache clearing from proceeding
-  appropriately.
+- **Change**: The exporter will now forcefully enable (= if it is not yet
+  enabled in the corresponding defaults file in the assets manager) the Pandoc
+  extension `wikilinks_title_after_pipe` or `wikilinks_title_before_pipe`
+  (depending on your settings) for every export from a supported (Markdown-
+  based) reader so that wikilinks/Zettelkasten links are properly parsed.
+- Identification of Pandoc readers and writers is now more stable, resulting in
+  clearer information across the app.
+- Fix the wikilink/Zettelkasten link Lua filter (#5605).
+- Zettlr now properly retrieves attachments also for items residing in group
+  libraries (#5647).
 
 ## Under the Hood
 
-- Bump Pandoc to `v3.6.2`
-- Bump chokidar to `v4.0.3`
-- Bump Electron to `v33.3.1`
+- Import Pandoc `reader`/`writer` parser from
+  `nathanlesage/pandoc-profile-generator`; retire `getPlainPandocReaderWriter`.
+- Move `pandoc-maps.ts` to common `pandoc-util` location.
+
+# 3.4.3
+
+## An Important Note for Windows Users
+
+If you use Zettlr on Windows, there is a chance that you will be unable to
+install this update at first. This is because this update uses a different, new
+code signing certificate. There is a possibility that especially those of you
+who use a work computer on which you do not have administrative access, Windows
+will warn you of this update and prevent you from installing it. Based on
+initial communication, there are indications that this won't happen, but we
+wanted to let you know just in case.
+
+If you are unable to install this update, please make sure you update to at
+least version 3.4.2, which has been released last week. If you did not update to
+version 3.4.2, you can find do so
+[by clicking this link](https://github.com/Zettlr/Zettlr/releases/tag/v3.4.2).
+
+For more context, please [read our blog post](https://zettlr.com/post/zettlr-switches-code-sign-certificate-important-information-for-windows-users)
+that outlines our roadmap for the code signing certificate change, as well as
+[our Community Forum post](https://forum.zettlr.com/d/11-windows-code-signing-certificate-expires-what-users-need-to-know).
+If you have any questions, please don't hesitate to ask them
+[on the Community Forum](https://forum.zettlr.com/),
+[on Discord](https://go.zettlr.com/discord), or
+as a comment on our [BlueSky](https://bsky.app/profile/zettlr.com) or
+[Mastodon](https://fosstodon.org/@zettlr) accounts.
+
+**If you are able to install this update without issues, please let us know on our Discord channel, Community Forum, or on BlueSky or Mastodon.**
+
+## GUI and Functionality
+
+- **Breaking Change**: Switched Windows Code Signing Certificate to the Azure
+  one. For some time, you may be unable to install new Zettlr updates on your
+  computers. Please watch Zettlr's social media channels to get notified once we
+  have established that it works again.
+- Updated `zh_TW` translations (#5635).
+
+## Under the Hood
+
+- Bump Electron Builder to `v26.x.x`.
+- Switched Windows Code Signing workflow to Azure.
+
+# 3.4.2
+
+## An Important Note for Windows Users
+
+If you use Zettlr on Windows, we **urgently recommend you to install this update**.
+We will release a second update approximately one week after this update, which
+you may not be able to install on Windows right away due to Zettlr switching
+code signing certificates. Therefore, please absolutely make sure you install
+*this* update on your Windows computers.
+
+For more context, please [read our blog post](https://zettlr.com/post/zettlr-switches-code-sign-certificate-important-information-for-windows-users)
+that outlines our roadmap for the code signing certificate change, as well as
+[our Community Forum post](https://forum.zettlr.com/d/11-windows-code-signing-certificate-expires-what-users-need-to-know).
+If you have any questions, please don't hesitate to ask them
+[on the Community Forum](https://forum.zettlr.com/),
+[on Discord](https://go.zettlr.com/discord), or
+as a comment on our [BlueSky](https://bsky.app/profile/zettlr.com) or
+[Mastodon](https://fosstodon.org/@zettlr) accounts.
+
+## GUI and Functionality
+
+- **Breaking Change**: To better support the now recommended Wikilink syntax
+  with titles (`[[filename|Some title]]`), links that use the old and not
+  recommended syntax of adding titles from the time when Zettlr did not support
+  titles (`[Do not use this syntax]([[filename]])`) can no longer be
+  automatically replaced when renaming files (#5606).
+- Zettelkasten links with titles will now get properly replaced when renaming
+  files (#5606).
+- Fixed an issue that prevented the FSAL cache clearing from proceeding
+  appropriately.
+- Fix an issue that could lead to accidental overwriting of existing files in
+  some cases (#4940; also previously #5460 in Zettlr 3.3.0).
+- Fixed malformed rendering of plain links into HTML links (#5587).
+- Fixed a bad interaction between the default keymap and inserting an `Å`
+  character on macOS keyboards.
+- Fixed a bad interaction between the default keymap and inserting backticks on
+  macOS keyboard layouts without deadkeys (#5517).
+- Fixed file exports not working after renaming file (#5574).
+- Links won't be pre-rendered if their title is empty, as this would hide the
+  entire link syntax.
+- UI text has been improved throughout the app.
+
+## Under the Hood
+
+- Bump Pandoc to `v3.6.3`.
+- Bump chokidar to `v4.0.3`.
+- Bump Electron to `v34.2.0`.
 - Fixed the boot order of providers to ensure certain actions are taken before
-  providers access each others (primary case: the FSAL needs to be booted asap)
-- Promisify the cache clearing procedure
-- Switched Apple Code Signing Certificate from expiring to new one
+  providers access each others (primary case: the FSAL needs to be booted asap).
+- Promisify the cache clearing procedure.
+- Switched Apple Code Signing Certificate from expiring to new one.
 - Improve the linting experience by also including a TypeScript lint on top of
   `vue-tsc`; in addition to stylistic and code-issues that are handled by ESLint
   this will capture serious TypeScript issues as what happened during the patch
   from 3.3.1 to 3.4.0 (see for context #5526); the new linting experience will
   run by default, the old linter has been renamed from `lint` to `lint:code`,
-  and the new linter can be called individually using `lint:types`
+  and the new linter can be called individually using `lint:types`.
+- Rename `value` to `target` in Markdown AST `ZettelkastenLink` nodes to make it
+  more explicit that this field contains the value and never the title.
+- Add new property `targetRange` to Markdown AST `ZettelkastenLink` nodes to
+  allow for easy manipulation of link targets.
 
 # 3.4.1
 

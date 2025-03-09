@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git://github.com/Zettlr/Zettlr.git"
   },
-  "version": "3.4.1",
+  "version": "3.4.3",
   "license": "GPL-3.0",
   "description": "Your One-Stop Publication Workbench",
   "main": ".webpack/main",
@@ -130,17 +130,19 @@
   },
   "resolutions": {
     "node-gyp": "10.x.x",
+    "node-abi": "^3.74.0",
     "@lezer/lr": "^1.4.2",
     "@codemirror/state": "^6.5.1",
-    "@codemirror/view": "^6.36.2"
+    "@codemirror/view": "^6.36.2",
+    "katex": "^0.16.21"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.6.0",
-    "@electron-forge/maker-deb": "^7.6.0",
-    "@electron-forge/maker-rpm": "^7.6.0",
-    "@electron-forge/maker-zip": "^7.6.0",
-    "@electron-forge/plugin-fuses": "^7.6.0",
-    "@electron-forge/plugin-webpack": "^7.6.0",
+    "@electron-forge/cli": "^7.6.1",
+    "@electron-forge/maker-deb": "^7.6.1",
+    "@electron-forge/maker-rpm": "^7.6.1",
+    "@electron-forge/maker-zip": "^7.6.1",
+    "@electron-forge/plugin-fuses": "^7.6.1",
+    "@electron-forge/plugin-webpack": "^7.6.1",
     "@electron/fuses": "^1.8.0",
     "@electron/notarize": "^2.5.0",
     "@eslint/config-inspector": "^1.0.0",
@@ -168,8 +170,8 @@
     "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "csso": "^5.0.5",
-    "electron": "^33.3.1",
-    "electron-builder": "^25.1.8",
+    "electron": "^34.2.0",
+    "electron-builder": "26.x.x",
     "electron-devtools-assembler": "^1.2.0",
     "eslint": "^9.18.0",
     "eslint-plugin-import": "^2.31.0",
@@ -190,5 +192,5 @@
     "vue-tsc": "^2.2.0",
     "webpack": "^5.97.1"
   },
-  "packageManager": "yarn@3.3.1"
+  "packageManager": "yarn@4.6.0"
 }
