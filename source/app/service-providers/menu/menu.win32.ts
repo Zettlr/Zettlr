@@ -22,26 +22,8 @@ import type WindowProvider from '@providers/windows'
 import type CommandProvider from '@providers/commands'
 import type LogProvider from '@providers/log'
 import { zoomIn, zoomOut } from './font-zoom'
-import type ConfigProvider from '@providers/config'
+import ConfigProvider from '@providers/config'
 import type DocumentManager from '@providers/documents'
-
-/**
- * Translate shortcuts from e.g. 
- * ctrl-shift-tab to Ctrl+Shift+Tab.
- * 
- * @param   {string} shortcut Shortcut to be translated.
- * 
- * @returns {string}          Translated shortcut.
- */
-function transShortcut(shortcut: string): string {
-  var options: { [id:string]: string; } = {
-    'ctrl-tab': 'Ctrl+Tab',
-    'ctrl-shift-tab': 'Ctrl+Shift+Tab',
-    'ctrl-pageup': 'Ctrl+PageUp',
-    'ctrl-pagedown': 'Ctrl+PageDown',
-  }
-  return options[shortcut];
-}
 
 export default function getMenu (
   logger: LogProvider,
@@ -592,7 +574,7 @@ export default function getMenu (
         {
           id: 'menu.tab_previous',
           label: trans('Previous Tab'),
-          accelerator: transShortcut(prevTabOption),
+          accelerator: ConfigProvider.transShortcut(prevTabOption),
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'previous-tab')
           }
@@ -600,7 +582,7 @@ export default function getMenu (
         {
           id: 'menu.tab_next',
           label: trans('Next Tab'),
-          accelerator: transShortcut(nextTabOption),
+          accelerator: ConfigProvider.transShortcut(nextTabOption),
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'next-tab')
           }
