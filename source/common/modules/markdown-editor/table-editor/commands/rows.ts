@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { type SelectionRange, EditorSelection, type ChangeSpec } from '@codemirror/state'
+import { type SelectionRange, EditorSelection, type TransactionSpec } from '@codemirror/state'
 import type { EditorView } from '@codemirror/view'
 import { findColumnIndexByRange, findRowIndexByRange, getRowIndicesByRanges, isGridTableDelimRow, isPipeTableDelimRow, mapSelectionsWithTables } from './util'
 
@@ -99,11 +99,12 @@ export function movePrevRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any swaps have happened.
  */
 export function swapNextRow (target: EditorView): boolean {
-  const changes: ChangeSpec[] = mapSelectionsWithTables(target, ctx => {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
     // TODO: What if selection spans multiple rows? The user then clearly
     // intends to move them all together
     // NOTE: Swapping is complex; here we only consider the first range
-    const thisLine = target.state.doc.lineAt(ctx.ranges[0].anchor)
+    const focusRange = ctx.ranges[0]
+    const thisLine = target.state.doc.lineAt(focusRange.head)
     const lastLine = target.state.doc.lineAt(ctx.tableNode.to)
     if (thisLine.number === target.state.doc.lines || thisLine.number === lastLine.number) {
       return undefined
@@ -115,32 +116,41 @@ export function swapNextRow (target: EditorView): boolean {
       if (nextLine.number > lastLine.number || nextLine.number >= target.state.doc.lines) {
         return undefined
       }
-      return [
-        { from: thisLine.from, to: thisLine.to, insert: nextLine.text },
-        { from: nextLine.from, to: nextLine.to, insert: thisLine.text }
-      ]
+
+      return {
+        selection: { anchor: focusRange.anchor, head: focusRange.head },
+        changes: [
+          { from: thisLine.from, to: thisLine.to, insert: nextLine.text },
+          { from: nextLine.from, to: nextLine.to, insert: thisLine.text }
+        ]
+      }
     } else {
       // Handle a pipe table
       let nextLine = target.state.doc.line(thisLine.number + 1)
+      let selectionOffset = thisLine.text.length + 1 // Account for the \n
       if (isPipeTableDelimRow(nextLine.text)) {
-        // We have to swap the lines to retain the header row
+        // We have to modify nextLine and the selectionOffset to "jump over" the
+        // header row
         nextLine = target.state.doc.line(nextLine.number + 1)
-        changes.push(
+        selectionOffset += nextLine.text.length + 1 // Account for the 2nd \n
+      }
+      const diff = nextLine.text.length - thisLine.text.length
+      selectionOffset += diff
+      return {
+        selection: {
+          anchor: focusRange.anchor + selectionOffset,
+          head: focusRange.head  + selectionOffset
+        },
+        changes: [
           { from: thisLine.from, to: thisLine.to, insert: nextLine.text },
           { from: nextLine.from, to: nextLine.to, insert: thisLine.text }
-        )
-      } else {
-        // Regular swap
-        return [
-          { from: thisLine.from, to: thisLine.to + 1, insert: '' },
-          { from: nextLine.to, to: nextLine.to, insert: '\n' + thisLine.text }
         ]
       }
     }
   }).flat() // NOTE: We're receiving 2d arrays from the callback
 
-  if (changes.length > 0) {
-    target.dispatch({ changes })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false
@@ -155,11 +165,12 @@ export function swapNextRow (target: EditorView): boolean {
  * @return  {boolean}             Whether any swaps occurred
  */
 export function swapPrevRow (target: EditorView): boolean {
-  const changes = mapSelectionsWithTables(target, ctx => {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
     // TODO: What if selection spans multiple rows? The user then clearly
     // intends to move them all together
     // NOTE: Swapping is complex; here we only consider the first range
-    const thisLine = target.state.doc.lineAt(ctx.ranges[0].anchor)
+    const focusRange = ctx.ranges[0]
+    const thisLine = target.state.doc.lineAt(focusRange.head)
     const firstLine = target.state.doc.lineAt(ctx.tableNode.from)
     if (thisLine.number === 1 || thisLine.number === firstLine.number) {
       return undefined
@@ -171,32 +182,39 @@ export function swapPrevRow (target: EditorView): boolean {
       if (prevLine.number < firstLine.number || prevLine.number < 1) {
         return undefined
       }
-      return [
-        { from: thisLine.from, to: thisLine.to, insert: prevLine.text },
-        { from: prevLine.from, to: prevLine.to, insert: thisLine.text }
-      ]
-    } else {
-      // Handle a pipe table
-      let prevLine = target.state.doc.line(thisLine.number - 1)
-      if (isPipeTableDelimRow(prevLine.text)) {
-        // We have to swap the lines to retain the header row
-        prevLine = target.state.doc.line(prevLine.number - 1)
-        return [
+      return {
+        selection: { anchor: focusRange.anchor, head: focusRange.head },
+        changes: [
           { from: thisLine.from, to: thisLine.to, insert: prevLine.text },
           { from: prevLine.from, to: prevLine.to, insert: thisLine.text }
         ]
-      } else {
-        // Regular swap
-        return [
-          { from: thisLine.from, to: thisLine.to + 1, insert: '' },
-          { from: prevLine.from, to: prevLine.from, insert: thisLine.text + '\n' }
+      }
+    } else {
+      // Handle a pipe table
+      let prevLine = target.state.doc.line(thisLine.number - 1)
+      let selectionOffset = thisLine.text.length + 1 // Account for \n
+      if (isPipeTableDelimRow(prevLine.text)) {
+        // We have to swap the lines to retain the header row
+        selectionOffset += prevLine.text.length + 1 // Account for \n
+        prevLine = target.state.doc.line(prevLine.number - 1)
+      }
+      const diff = prevLine.text.length - thisLine.text.length
+      selectionOffset += diff
+      return {
+        selection: {
+          anchor: focusRange.anchor - selectionOffset,
+          head: focusRange.head  - selectionOffset
+        },
+        changes: [
+          { from: thisLine.from, to: thisLine.to, insert: prevLine.text },
+          { from: prevLine.from, to: prevLine.to, insert: thisLine.text }
         ]
       }
     }
   }).flat() // NOTE: We're receiving 2d arrays from the callback
 
-  if (changes.length > 0) {
-    target.dispatch({ changes })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false
@@ -211,35 +229,46 @@ export function swapPrevRow (target: EditorView): boolean {
  * @return  {boolean}             Whether the command has changed anything
  */
 export function addRowAfter (target: EditorView): boolean {
-  const changes = mapSelectionsWithTables(target, ctx => {
-    // TODO: Iterate over all ranges (but only once per row)
-    const line = target.state.doc.lineAt(ctx.ranges[0].head)
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
+    const focusRange = ctx.ranges[0]
+    const thisLine = target.state.doc.lineAt(focusRange.head)
     if (ctx.tableAST.tableType === 'pipe') {
       // Did the user select the divider? The second check is necessary as the
       // regex also matches empty lines
-      if (isPipeTableDelimRow(line.text)) {
+      if (isPipeTableDelimRow(thisLine.text)) {
         return undefined
       }
 
-      const nextLine = line.number < target.state.doc.lines ? target.state.doc.line(line.number + 1) : undefined
-      if (nextLine !== undefined && isPipeTableDelimRow(nextLine.text)) {
-        return undefined // Only one row in the header allowed
+      let selectionOffset = thisLine.text.length + 1
+
+      const lineCount = target.state.doc.lines
+      let nextLine = thisLine.number < lineCount ? target.state.doc.line(thisLine.number + 1) : undefined
+      if (nextLine !== undefined && isPipeTableDelimRow(nextLine.text) && nextLine.number < lineCount) {
+        // Next line is the header, so we have to add a line thereafter
+        selectionOffset += nextLine.text.length + 1
+        nextLine = target.state.doc.line(nextLine.number + 1)
       }
 
       return {
-        from: line.number === target.state.doc.lines ? line.to : line.to + 1,
-        insert: line.text.replace(/[^\s\|]/g, ' ') + '\n'
+        selection: {
+          anchor: focusRange.anchor + selectionOffset,
+          head: focusRange.head + selectionOffset
+        },
+        changes: {
+          from: nextLine !== undefined ? nextLine.from : thisLine.to,
+          insert: (nextLine !== undefined ?  '' : '\n') + thisLine.text.replace(/[^\s\|]/g, ' ') + '\n'
+        }
       }
     } else {
       // Grid table
       // The user may have the cursor in a divider or a content row
-      if (/^[\s+=:-]+$/.test(line.text)) {
+      if (/^[\s+=:-]+$/.test(thisLine.text)) {
         return undefined
       }
-      const nextLine = target.state.doc.line(line.number + 1)
+      const nextLine = target.state.doc.line(thisLine.number + 1)
       return {
         from: nextLine.number === target.state.doc.lines ? nextLine.to : nextLine.to + 1,
-        insert: line.text.replace(/[^\s|+=]/g, ' ') + '\n' + nextLine.text + '\n'
+        insert: thisLine.text.replace(/[^\s|+=]/g, ' ') + '\n' + nextLine.text + '\n'
       }
     }
   })
@@ -247,8 +276,8 @@ export function addRowAfter (target: EditorView): boolean {
   // What we should do here (and in addRowBefore) is stupidly simple: Just take
   // the current row (grid tables = this + next one), remove every character between
   // the pipes and put it after the row. Maybe even works without the forEveryTable thing
-  if (changes.length > 0) {
-    target.dispatch({ changes })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false
@@ -263,30 +292,46 @@ export function addRowAfter (target: EditorView): boolean {
  * @return  {boolean}             Whether the command has changed anything.
  */
 export function addRowBefore (target: EditorView): boolean {
-  const changes = mapSelectionsWithTables(target, ctx => {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
     // TODO: Iterate over all ranges (but only once per row)
-    const line = target.state.doc.lineAt(ctx.ranges[0].head)
+    const focusRange = ctx.ranges[0]
+    const nLines = target.state.doc.lines
+    const firstLine = target.state.doc.lineAt(ctx.tableNode.from)
+    let thisLine = target.state.doc.lineAt(focusRange.head)
     if (ctx.tableAST.tableType === 'pipe') {
-      // Did the user select the divider? The second check is necessary as the
-      // regex also matches empty lines
-      if (isPipeTableDelimRow(line.text)) {
+      // Can only add rows in the table body
+      if (thisLine.number === firstLine.number) {
         return undefined
       }
 
+      // Did the user select the divider? If so, move thisLine one below so that
+      // the following checks correctly add rows.
+      if (isPipeTableDelimRow(thisLine.text) && thisLine.number < nLines) {
+        thisLine = target.state.doc.line(thisLine.number + 1)
+      } else if (isPipeTableDelimRow(thisLine.text)) {
+        return undefined // Seems like a malformed table that ends with the delim
+      }
+
       return {
-        from: line.from,
-        insert: line.text.replace(/[^\s\|]/g, ' ') + '\n'
+        // Keep the cursor which will end up at the correct position
+        selection: { anchor: focusRange.anchor, head: focusRange.head },
+        changes: {
+          from: thisLine.from,
+          insert: thisLine.text.replace(/[^\s\|]/g, ' ') + '\n'
+        }
       }
     } else {
       // Grid table
       // The user may have the cursor in a divider or a content row
-      if (isGridTableDelimRow(line.text)) {
+      if (isGridTableDelimRow(thisLine.text)) {
         return undefined
       }
-      const nextLine = target.state.doc.line(line.number + 1)
+      const nextLine = target.state.doc.line(thisLine.number + 1)
       return {
-        from: line.from,
-        insert: line.text.replace(/[^\s|+=]/g, ' ') + '\n' + nextLine.text + '\n'
+        changes: {
+          from: thisLine.from,
+          insert: thisLine.text.replace(/[^\s|+=]/g, ' ') + '\n' + nextLine.text + '\n'
+        }
       }
     }
   })
@@ -294,8 +339,8 @@ export function addRowBefore (target: EditorView): boolean {
   // What we should do here (and in addRowBefore) is stupidly simple: Just take
   // the current row (grid tables = this + next one), remove every character between
   // the pipes and put it after the row. Maybe even works without the forEveryTable thing
-  if (changes.length > 0) {
-    target.dispatch({ changes })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false
@@ -311,7 +356,7 @@ export function addRowBefore (target: EditorView): boolean {
  */
 export function deleteRow (target: EditorView): boolean {
   // Deleting a row is really boring: Simply replace the current line with nothing
-  const changes = mapSelectionsWithTables(target, ctx => {
+  const tr = mapSelectionsWithTables<TransactionSpec[]>(target, ctx => {
     const idx = getRowIndicesByRanges(ctx.ranges, ctx.offsets.outer)
     return idx.map(rowIdx => {
       const line = target.state.doc.lineAt(ctx.tableAST.rows[rowIdx].from)
@@ -323,7 +368,11 @@ export function deleteRow (target: EditorView): boolean {
           return undefined
         }
   
-        return { from: line.from, to: isLastLine ? line.to : line.to + 1, insert: '' }
+        return {
+          changes: {
+            from: line.from, to: isLastLine ? line.to : line.to + 1, insert: ''
+          }
+        }
       } else {
         // Grid table
         // The user may have the cursor in a divider or a content row
@@ -332,13 +381,17 @@ export function deleteRow (target: EditorView): boolean {
         }
         const nextLine = target.state.doc.line(line.number + 1)
         const isNextLineLastLine = nextLine.number === target.state.doc.lines
-        return { from: line.from, to: isNextLineLastLine ? nextLine.to : nextLine.to + 1, insert: '' }
+        return {
+          changes: {
+            from: line.from, to: isNextLineLastLine ? nextLine.to : nextLine.to + 1, insert: ''
+          }
+        }
       }
     }).filter(i => i !== undefined)
   }).flat()
 
-  if (changes.length > 0) {
-    target.dispatch({ changes })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false
@@ -371,4 +424,3 @@ export function clearRow (target: EditorView): boolean {
     return false
   }
 }
-
