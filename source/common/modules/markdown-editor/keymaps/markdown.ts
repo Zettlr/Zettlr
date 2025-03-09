@@ -21,8 +21,8 @@ import {
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
 import { addColAfter, addColBefore, clearCol, deleteCol, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
-import { addRowAfter, addRowBefore, clearRow, moveNextRow, movePrevRow, swapPrevRow } from '../table-editor/commands/rows'
-import { clearTable, setAlignment } from '../table-editor/commands/tables'
+import { addRowAfter, addRowBefore, clearRow, moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
+import { alignTables, clearTable, setAlignment } from '../table-editor/commands/tables'
 
 // Includes:
 // * completionKeymap
@@ -36,6 +36,8 @@ export function markdownKeymap (): Extension {
     { key: 'PageDown', run: moveCompletionSelection(true, 'page') },
     { key: 'PageUp', run: moveCompletionSelection(false, 'page') },
     { key: 'Enter', run: acceptCompletion },
+
+    { key: 'Shift-Enter', run: alignTables }, // TODO: Shortcut not final
 
     // customKeymap
 
@@ -75,7 +77,7 @@ export function markdownKeymap (): Extension {
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
 
     { key: 'Alt-Shift-ArrowDown', run: addRowAfter }, // TODO: Shortcut not final
-    { key: 'Alt-ArrowDown', run: swapPrevRow },
+    { key: 'Alt-ArrowDown', run: swapNextRow },
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
 
     { key: 'Alt-Shift-ArrowRight', run: addColAfter }, // TODO: Shortcut not final
