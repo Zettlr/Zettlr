@@ -113,8 +113,9 @@ export function swapNextCol (target: EditorView): boolean {
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
     // NOTE: Swapping columns is complex; here we only consider the first range
-    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
-    if (idx === undefined) {
+    const focusRange = ctx.ranges[0]
+    const idx = findColumnIndexByRange(focusRange, ctx.offsets.outer)
+    if (idx === undefined || idx === ctx.offsets.outer[0].length - 1) {
       return undefined
     }
 
@@ -133,11 +134,14 @@ export function swapNextCol (target: EditorView): boolean {
       ]
     })
 
-    const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
-    const cursorPos = ctx.offsets.outer[rowIndex][idx + 1][0]
-    const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+    const rowIdx = findRowIndexByRange(focusRange, ctx.offsets.outer)!
+    const nextCell = ctx.offsets.outer[rowIdx][idx + 1]
+    const moveBy =  nextCell[1] - nextCell[0] + 1 // Account for the delimiter
 
-    return { changes, selection }
+    return {
+      changes,
+      selection: { anchor: focusRange.anchor + moveBy, head: focusRange.head + moveBy }
+    }
   })
 
   if (tr.length > 0) {
@@ -162,8 +166,9 @@ export function swapPrevCol (target: EditorView): boolean {
     // the cell in which the cursor is in, then see if there is a next one, and
     // then, for each row, swap both using the indices.
     // NOTE: Swapping columns is complex; here we only consider the first range
-    const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
-    if (idx === undefined) {
+    const focusRange = ctx.ranges[0]
+    const idx = findColumnIndexByRange(focusRange, ctx.offsets.outer)
+    if (idx === undefined || idx === 0) {
       return undefined
     }
 
@@ -184,11 +189,16 @@ export function swapPrevCol (target: EditorView): boolean {
       ]
     })
 
-    const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
-    const cursorPos = ctx.offsets.outer[rowIndex][idx - 1][1]
-    const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+    const rowIdx = findRowIndexByRange(focusRange, ctx.offsets.outer)!
+    const prevCell = ctx.offsets.outer[rowIdx][idx - 1]
+    const moveBy =  prevCell[1] - prevCell[0] + 1 // Account for the delimiter
 
-    return { changes, selection }
+    return {
+      changes,
+      selection: {
+        anchor: focusRange.anchor - moveBy, head: focusRange.head - moveBy
+      }
+    }
   })
 
   if (tr.length > 0) {
@@ -208,53 +218,53 @@ export function swapPrevCol (target: EditorView): boolean {
  * @return  {boolean}             Whether or not changes have been made.
  */
 export function addColAfter (target: EditorView): boolean {
-  const tr = mapSelectionsWithTables<TransactionSpec[]>(target, ctx => {
-    // Only support this in pipe tables. TODO
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
+    // Only support this in pipe tables.
     if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
     }
 
-    const seen: number[] = []
-    return ctx.ranges.map(range => {
-      const idx = findColumnIndexByRange(range, ctx.offsets.outer)
-      if (idx === undefined || seen.includes(idx)) {
-        return undefined
+    // Again, only respect a single focusRange
+    const focusRange = ctx.ranges[0]
+
+    const idx = findColumnIndexByRange(focusRange, ctx.offsets.outer)
+    if (idx === undefined) {
+      return undefined
+    }
+
+    // Now, for each row, calculate a change that adds '|  ' after the cell's to
+    // position. We also need to add '|--' to the delimiter
+
+    // NOTE: Remove `null` since that check will be performed during AST parsing
+    const delimNode = ctx.tableNode.getChild('TableDelimiter')!
+    const delimLine = target.state.doc.lineAt(delimNode.from)
+    const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
+    const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
+
+    const changes = [
+      { from: delimLine.from + delimOffsets[idx][1], insert: `${delimChar}--` },
+      ...ctx.offsets.outer.flatMap(row => {
+        return { from: row[idx][1], insert: '|  ' }
+      }).sort((a, b) => a.from - b.from)
+    ]
+
+    // Move the selection so that it ends up in the newly added column. NOTE
+    // that we have to account for the added characters in the delimiter row.
+    const rangeLine = target.state.doc.lineAt(focusRange.head)
+    const firstLine = target.state.doc.lineAt(ctx.tableAST.from)
+    const rowIdx = findRowIndexByRange(focusRange, ctx.offsets.outer)!
+    // First, move the range so that it stays in place
+    let moveBy = (rangeLine.number - firstLine.number) * 3
+    const thisCellTo = ctx.offsets.outer[rowIdx][idx][1]
+    // Second, add enough characters to make the cursor end up in the added col.
+    moveBy += thisCellTo - focusRange.to + 2
+
+    return {
+      changes, selection: {
+        anchor: focusRange.anchor + moveBy, head: focusRange.head + moveBy
       }
-
-      seen.push(idx) // Make sure we only add one col per col, not per range
-
-      // Now, for each row, calculate a change that adds ' | ' after the cell's to
-      // position. We also need to add '-|-' to the delimiter
-
-      // NOTE: Remove `null` since that check will be performed during AST parsing
-      const delimNode = ctx.tableNode.getChild('TableDelimiter')!
-      const delimLine = target.state.doc.lineAt(delimNode.from)
-      const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
-      const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
-
-      const changes = [
-        { from: delimLine.from + delimOffsets[idx][1], insert: `-${delimChar}-` },
-        ...ctx.offsets.outer.flatMap(row => {
-          return { from: row[idx][1], insert: ' | ' }
-        }).sort((a, b) => a.from - b.from)
-      ]
-
-      // TODO: We have to provide the range positions in the coordinates AFTER
-      // the transformation. Otherwise they will move seemingly erratically.
-      // Move every range in the table to the next cell
-      const ranges = ctx.ranges.map(range => {
-        const row = findRowIndexByRange(range, ctx.offsets.outer)
-        const col = findColumnIndexByRange(range, ctx.offsets.outer)
-        if (row === undefined || col === undefined) {
-          return
-        }
-        const [from] = ctx.offsets.inner[row][col]
-        return EditorSelection.cursor(from, undefined, undefined, range.goalColumn)
-      }).filter(r => r !== undefined)
-
-      return { changes, selection: EditorSelection.create(ranges) }
-    }).filter(i => i !== undefined) // We need to manually remove our undefines.
-  }).flat() // Returns a 2d array above
+    }
+  })
 
   if (tr.length > 0) {
     target.dispatch(...tr)
@@ -274,8 +284,8 @@ export function addColAfter (target: EditorView): boolean {
  */
 export function addColBefore (target: EditorView): boolean {
   // Basically the same as addColAfter, with minor changes
-  const tr = mapSelectionsWithTables<TransactionSpec[]>(target, ctx => {
-    // Only support this in pipe tables. TODO
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
+    // Only support this in pipe tables.
     if (ctx.tableAST.tableType !== 'pipe') {
       return undefined
     }
@@ -286,26 +296,41 @@ export function addColBefore (target: EditorView): boolean {
     const delimChar = delimLine.text.includes('+') ? '+' : '|' // Support emacs
     const delimOffsets = getDelimiterLineCellOffsets(delimLine.text, delimChar)
 
-    const colIdx = getColIndicesByRanges(ctx.ranges, ctx.offsets.outer)
+    const focusRange = ctx.ranges[0]
+    const idx = findColumnIndexByRange(focusRange, ctx.offsets.outer)
 
-    return colIdx.map(idx => {
-      // Now, for each row, calculate a change that adds ' | ' before the cell's
-      // from position. We also need to add '-|-' to the delimiter
+    if (idx === undefined) {
+      return
+    }
 
-      const changes = [
-        { from: delimLine.from + delimOffsets[idx][0], insert: `-${delimChar}-` },
-        ...ctx.offsets.outer.flatMap(row => {
-          return { from: row[idx][0], insert: ' | ' }
-        }).sort((a, b) => a.from - b.from)
-      ]
+    // Now, for each row, calculate a change that adds ' | ' before the cell's
+    // from position. We also need to add '-|-' to the delimiter
 
-      const rowIndex = findRowIndexByRange(ctx.ranges[0], ctx.offsets.outer)!
-      const cursorPos = ctx.offsets.outer[rowIndex][idx][0] - 3
-      const selection = EditorSelection.create([EditorSelection.cursor(cursorPos)])
+    const changes = [
+      { from: delimLine.from + delimOffsets[idx][0], insert: `--${delimChar}` },
+      ...ctx.offsets.outer.flatMap(row => {
+        return { from: row[idx][0], insert: '  |' }
+      }).sort((a, b) => a.from - b.from)
+    ]
 
-      return { changes, selection }
-    })
-  }).flat() // Returns a 2d array above
+    // Move the selection so that it ends up in the newly added column. NOTE
+    // that we have to account for the added characters in the delimiter row.
+    const rangeLine = target.state.doc.lineAt(focusRange.head)
+    const firstLine = target.state.doc.lineAt(ctx.tableAST.from)
+    // First, move the range so that it stays in place
+    let moveBy = (rangeLine.number - firstLine.number + 1) * 3
+    // Second, remove characters to make the cursor end up in the added col.
+    const rowIdx = findRowIndexByRange(focusRange, ctx.offsets.outer)!
+    const cellOffset = focusRange.from - ctx.offsets.outer[rowIdx][idx][0]
+    moveBy -= cellOffset + 2
+
+    return {
+      changes,
+      selection: {
+        anchor: focusRange.anchor + moveBy, head: focusRange.head + moveBy
+      }
+    }
+  })
 
   if (tr.length > 0) {
     target.dispatch(...tr)
