@@ -641,7 +641,16 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
-   * Sets the project info field of the editor state to the provided value.
+   * Whether any element (including the editor, but also any widgets or other
+   * elements inside the entire editor DOM element) has currently focus.
+   *
+   * @return  {boolean} The focus status
+   */
+  hasFocusWithin (): boolean {
+    return this._instance.dom.contains(document.activeElement)
+  }
+
+  /* Sets the project info field of the editor state to the provided value.
    *
    * @param   {ProjectInfo|null}  info  The data
    */
