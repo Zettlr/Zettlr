@@ -16,7 +16,7 @@
 
 import type { EditorView } from '@codemirror/view'
 import { findColumnIndexByRange, getDelimiterLineCellOffsets, mapSelectionsWithTables } from './util'
-import type { ChangeSpec } from '@codemirror/state'
+import type { ChangeSpec, TransactionSpec } from '@codemirror/state'
 import type { SyntaxNode } from '@lezer/common'
 
 /**
@@ -95,5 +95,75 @@ export function clearTable (target: EditorView): boolean {
 }
 
 // Utility/Helper function that adds appropriate spacing
-export function alignTable (/* TODO: Parameters */): void {
+export function alignTables (target: EditorView, pos?: number): boolean {
+  const tr = mapSelectionsWithTables<TransactionSpec>(target, ctx => {
+    if (pos !== undefined && (pos < ctx.tableAST.from || pos > ctx.tableAST.to)) {
+      return
+    }
+
+    const cellContents = ctx.tableAST.rows.map(row => {
+      return row.cells.map(cell => target.state.sliceDoc(cell.from, cell.to).trim())
+    })
+
+    const cellSizes = cellContents.map(row => {
+      return row.map(cell => cell.length)
+    })
+
+    const targetColumnSizes = []
+    for (let i = 0; i < cellSizes[0].length; i++) {
+      targetColumnSizes.push(Math.max(...cellSizes.map(row => row[i])) + 2)
+    }
+
+    const newContents: string[][] = []
+    for (let i = 0; i < cellContents.length; i++) {
+      newContents.push([])
+      for (let j = 0; j < cellContents[0].length; j++) {
+        const cell = cellContents[i][j]
+        const pad = targetColumnSizes[j] - cell.length
+        switch (ctx.tableAST.alignment[j]) {
+          case 'center':
+            newContents[i].push(' '.repeat(Math.floor(pad/2)) + cell + ' '.repeat(Math.ceil(pad/2)))
+            break
+          case 'right':
+            newContents[i].push(cell.padStart(targetColumnSizes[j] - 1, ' ') + ' ')
+            break
+          default:
+            newContents[i].push(' ' + cell.padEnd(targetColumnSizes[j] - 1, ' '))
+            break
+        }
+      }
+    }
+
+    const delimRow: string[] = []
+    for (let i = 0; i < ctx.tableAST.alignment.length; i++) {
+      const size = targetColumnSizes[i]
+      switch (ctx.tableAST.alignment[i]) {
+        case 'center':
+          delimRow.push(':' + '-'.repeat(size - 2) + ':')
+          break
+        case 'right':
+          delimRow.push('-'.repeat(size - 1) + ':')
+          break
+        default:
+          delimRow.push(':' + '-'.repeat(size - 1))
+      }
+    }
+
+    const newRows = newContents.map(row => '|' + row.join('|') + '|')
+    newRows.splice(1, 0, '|' + delimRow.join('|') + '|')
+
+    return {
+      changes: {
+        from: ctx.tableAST.from, to: ctx.tableAST.to,
+        insert: newRows.join('\n')
+      }
+    }
+  })
+
+  if (tr.length > 0) {
+    target.dispatch(...tr)
+    return true
+  } else {
+    return false
+  }
 }
