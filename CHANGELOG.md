@@ -18,6 +18,8 @@
 - Import Pandoc `reader`/`writer` parser from
   `nathanlesage/pandoc-profile-generator`; retire `getPlainPandocReaderWriter`.
 - Move `pandoc-maps.ts` to common `pandoc-util` location.
+- Add additional classes to Table of Contents-headings in the sidebar to allow
+  targeting them with Custom CSS rules (`toc-heading-X` where `X` is the level).
 
 # 3.4.3
 
