@@ -25,13 +25,6 @@ import { moveNextRow, movePrevRow } from './commands/rows'
 import { moveNextCell, movePrevCell } from './commands/columns'
 import { setAlignment } from './commands/tables'
 
-// DEBUG // TODOs
-// DEBUG // * See if I have to implement a tabbing method here to properly move
-// DEBUG //   the focus to the next table cell
-// DEBUG // * When there is a subview in a table, clicking on the next table
-// DEBUG //   cell only disabled the existing one, and users have to click a
-// DEBUG //   second time to move the focus into that cell
-
 /**
  * This syncAnnotation is used to tag all transactions originating from the main
  * EditorView when dispatching them to the subview to ensure they don't get
