@@ -230,6 +230,22 @@ export function getDelimiterLineCellOffsets (line: string, delimChar: string): [
 }
 
 /**
+ * For a given selection range and a parsed Table node, returns the column and
+ * row indices for the selection range.
+ *
+ * @param   {SelectionRange}                 range  The SelectionRange
+ * @param   {Table}                          table  The table in question
+ *
+ * @return  {{ col: number, row: number }?}         Either the coordinates, or undefined
+ */
+export function getCoordinatesForRange (range: SelectionRange, table: Table): { col: number, row: number }|undefined {
+  const offsets = getTableCellOffsets(table)
+  const col = findColumnIndexByRange(range, offsets.outer)
+  const row = findRowIndexByRange(range, offsets.outer)
+  return col !== undefined && row !== undefined ? { col, row } : undefined
+}
+
+/**
  * Helper function that makes implementing the table commands simpler by
  * centrally collecting the required logic. Will call `callback` for every
  * `Table` node with all containing selection ranges. The `callback` can return

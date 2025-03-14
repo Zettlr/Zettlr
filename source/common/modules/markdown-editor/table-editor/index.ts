@@ -11,21 +11,6 @@
  *
  * END HEADER
  */
-
-// DEBUG // As of now, the new TableEditor has very rudimentary functionality.
-// DEBUG // It properly renders tables with basic styles in Markdown documents
-// DEBUG // and allows users to click inside tables to start editing. That
-// DEBUG // creation and removal of various subviews is a bit wonky right now,
-// DEBUG // but any change is immediately applied to the underlying main
-// DEBUG // EditorView, ensuring that no changes are retained just within the
-// DEBUG // subview.
-
-// TODOs:
-// 1. Check how large the performance penalty is for converting the Markdown
-//    into HTML every time we update the table's DOM. Since we already parsing
-//    the AST, I guess it should not be too bad, but I'll have to run a
-//    performance test.
-
 import { type DecorationSet, EditorView } from '@codemirror/view'
 import { type EditorState, StateField } from '@codemirror/state'
 import { subviewUpdatePlugin } from './subview'
@@ -90,7 +75,17 @@ export const renderTables = [
   }),
   // A theme for the various elements
   EditorView.baseTheme({
-    '.cm-table-editor-widget': {
+    'div.cm-table-editor-widget-wrapper': {
+      maxWidth: 'fit-content',
+      // Ensure the add buttons never disappear
+      paddingTop: '21px',
+      paddingLeft: '21px',
+      paddingRight: '10.5px',
+      marginTop: '-21px',
+      marginLeft: '-21px',
+      overflow: 'auto'
+    },
+    'div.cm-table-editor-widget-wrapper table': {
       borderCollapse: 'collapse',
       margin: '0 2px 0 6px', // Taken from .cm-line so that tables align
       // Implement Artem's theme
@@ -98,32 +93,74 @@ export const renderTables = [
         color: '#3a3a3a',
         position: 'relative',
         border: `1px solid ${COLORS.colorNeutral08}`,
-        padding: '12px 16px',
+        padding: '0px',
         minWidth: '96px',
         outlineOffset: '-0.5px',
+        zIndex: '0',
         '&:hover': {
           outline: `1px solid ${COLORS.colorNeutral17}`,
+          zIndex: '100',
         },
         '&:focus-within, &:focus-visible': {
           padding: '8px 8px',
           outline: `1px solid ${COLORS.colorAccent500}`,
           outlineColor: '#1cb27e',
-          zIndex: '100',
           boxShadow: `inset 0 0 0 1px var(${COLORS.colorAccent500})`,
           '&:hover': {
             outline: `1px solid ${COLORS.colorAccent400}`,
             boxShadow: `inset 0 0 0 1px var(${COLORS.colorAccent400})`
           }
+        },
+        // Content wrapper styles
+        '& div.content': {
+          padding: '12px 16px'
+        },
+        // Handler styles
+        '& .handler': {
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'grab',
+          padding: '3px',
+          '& svg': { height: '15px', width: '20px' },
+          '&.column': {
+            height: '21px',
+            width: '100%',
+            top: '-21px'
+          },
+          '&.row': {
+            width: '26px', // Necessary because otherwise it'll shrink
+            height: '100%',
+            top: '0',
+            left: '-23px', // Ensure the now superfluous padding is removed
+            '& svg': { transform: 'rotate(90deg)' }
+          }
+        },
+        '& .plus': {
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'copy', // Usually makes a "+" cursor
+          padding: '3px',
+          width: '21px',
+          height: '21px',
+          '& svg': { width: '15px', height: '15px' },
+          '&.top': { top: '-10.5px', left: '-21px' },
+          '&.bottom': { bottom: '-10.5px', left: '-21px' },
+          '&.left': { top: '-21px', left: '-10.5px' },
+          '&.right': { top: '-21px', right: '-10.5px' }
         }
       },
       '& th': { backgroundColor: COLORS.colorNeutral04 },
       '& tr:nth-child(2n+1) td': { backgroundColor: COLORS.colorNeutral02 }
     },
-    '.cm-content .cm-table-editor-widget .cm-scroller': {
-      padding: '0' // Override the large margin from the main editor view
-    },
+    // Override the large margins from the main editor view
+    '.cm-content .cm-table-editor-widget-wrapper .cm-scroller': { padding: '0' },
+    '.cm-content .cm-table-editor-widget-wrapper .cm-content': { padding: '0' },
     // DARK STYLES
-    '&dark .cm-table-editor-widget': {
+    '&dark div.cm-table-editor-widget-wrapper table': {
       // Implement Artem's theme
       '& td, & th': {
         color: '#d6d6d6',

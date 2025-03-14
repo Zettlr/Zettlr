@@ -224,12 +224,12 @@ function selectAllCommand (view: EditorView): boolean {
 /**
 * Creates and mounts a sub-EditorView within the provided targetCell.
 *
-* @param  {EditorView}            mainView    The main view
-* @param  {HTMLTableCellElement}  targetCell  The cell element
+* @param  {EditorView}      mainView        The main view
+* @param  {HTMLDivElement}  contentWrapper  The cell's content wrapper
 */
 export function createSubviewForCell (
   mainView: EditorView,
-  targetCell: HTMLTableCellElement,
+  contentWrapper: HTMLDivElement,
   cellRange: { from: number, to: number }
 ): void {
   const state = EditorState.create({
@@ -288,7 +288,7 @@ export function createSubviewForCell (
 
   const subview = new EditorView({
     state,
-    parent: targetCell,
+    parent: contentWrapper,
     // Route any updates to the main view
     dispatch: (tr, subview) => {
       subview.update([tr])

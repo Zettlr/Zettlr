@@ -20,7 +20,9 @@ import type { SyntaxNode } from '@lezer/common'
 import type { TableRow, Table } from '../../markdown-utils/markdown-ast'
 import { parseTableNode } from '../../markdown-utils/markdown-ast/parse-table-node'
 import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
-import { createSubviewForCell, hiddenSpanField } from './subview'
+import { createSubviewForCell } from './subview'
+import { getCoordinatesForRange } from './commands/util'
+import { generateColumnModifiers, generateEmptyTableWidgetElement, generateRowModifiers } from './widget-dom'
 
 // DEBUG // TODOs:
 // DEBUG // * An empty table is difficult to fill with content because the cells
@@ -37,13 +39,13 @@ export class TableWidget extends WidgetType {
 
   toDOM (view: EditorView): HTMLElement {
     try {
-      const table = generateEmptyTableWidgetElement()
+      const { wrapper, table } = generateEmptyTableWidgetElement()
       const tableAST = parseTableNode(this.node, view.state.sliceDoc())
       if (tableAST.type !== 'Table') {
         throw new Error('Cannot render table: Likely malformed')
       }
       updateTable(table, tableAST, view)
-      return table
+      return wrapper
     } catch (err: any) {
       console.log('Could not create table', err)
       const error = document.createElement('div')
@@ -54,14 +56,17 @@ export class TableWidget extends WidgetType {
   }
 
   updateDOM (dom: HTMLElement, view: EditorView): boolean {
+    // `dom` is the widget wrapper.
+    const table: HTMLTableElement|null = dom.querySelector('table')
+
     // This check allows us to, e.g., create error divs
-    if (!(dom instanceof HTMLTableElement)) {
+    if (table === null) {
       return false
     }
 
     const tableAST = parseTableNode(this.node, view.state.sliceDoc())
     if (tableAST.type === 'Table') {
-      updateTable(dom, tableAST, view)
+      updateTable(table, tableAST, view)
       return true
     }
 
@@ -71,10 +76,9 @@ export class TableWidget extends WidgetType {
   destroy (dom: HTMLElement): void {
     // Here we ensure that we completely detach any active subview from the rest
     // of the document so that the garbage collector can remove the subview.
-    const cells = [
-      ...dom.querySelectorAll('td'),
-      ...dom.querySelectorAll('th')
-    ]
+    // NOTE that all content, including the subviews, are mounted into a content
+    // wrapper DIV element within the table cell elements.
+    const cells = [...dom.querySelectorAll<HTMLDivElement>('div.content')]
 
     for (const cell of cells) {
       const subview = EditorView.findFromDOM(cell)
@@ -133,18 +137,6 @@ export class TableWidget extends WidgetType {
 }
 
 /**
- * Generates an empty table widget element that represents a Markdown table. To
- * fill this element with content, use the updateTable function below.
- *
- * @return  {HTMLTableElement}  The empty table
- */
-function generateEmptyTableWidgetElement (): HTMLTableElement {
-  const table = document.createElement('table')
-  table.classList.add('cm-table-editor-widget')
-  return table
-}
-
-/**
  * This function takes a DOM-node and a string representing the same Markdown
  * table and ensures that the DOM-node representation conforms to the string.
  *
@@ -153,12 +145,20 @@ function generateEmptyTableWidgetElement (): HTMLTableElement {
  * @param  {EditorView}        view      The EditorView
  */
 function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView): void {
+  // Before we get started in updating the table, we need to find and remove all
+  // handler elements we have in the table. They will be re-inserted in the
+  // updateRow function calls below.
+  table.querySelectorAll('div.handler').forEach(handler => handler.parentElement!.removeChild(handler))
+  table.querySelectorAll('div.plus').forEach(plus => plus.parentElement!.removeChild(plus))
+
   const trs = [...table.querySelectorAll('tr')]
   // Remove now-superfluous TRs. The for-loop below accounts for too few.
   while (trs.length > tableAST.rows.length) {
     const tr = trs.pop()!
     tr.parentElement?.removeChild(tr)
   }
+
+  const coords = getCoordinatesForRange(view.state.selection.main, tableAST)
 
   for (let i = 0; i < tableAST.rows.length; i++) {
     const row = tableAST.rows[i]
@@ -167,10 +167,10 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
       const tr = document.createElement('tr')
       table.appendChild(tr)
       trs.push(tr)
-      updateRow(tr, row, tableAST.alignment, view)
+      updateRow(tr, row, i, tableAST.alignment, view, coords)
     } else {
       // Transfer the contents
-      updateRow(trs[i], row, tableAST.alignment, view)
+      updateRow(trs[i], row, i, tableAST.alignment, view, coords)
     }
   }
 }
@@ -183,9 +183,17 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
  *
  * @param  {HTMLTableRowElement}  tr      The table row element
  * @param  {TableRow}             astRow  The AST table row element
+ * @param  {number}               idx     The row's index in the table
  * @param  {EditorView}           view    The EditorView
  */
-function updateRow (tr: HTMLTableRowElement, astRow: TableRow, align: Array<'left'|'center'|'right'>, view: EditorView): void {
+function updateRow (
+  tr: HTMLTableRowElement,
+  astRow: TableRow,
+  idx: number,
+  align: Array<'left'|'center'|'right'>,
+  view: EditorView,
+  selectionCoords?: { col: number, row: number }
+): void {
   const tds = [...tr.querySelectorAll(astRow.isHeaderOrFooter ? 'th' : 'td')]
   // Remove now-superfluous TRs. The for-loop below accounts for too few.
   while (tds.length > astRow.cells.length) {
@@ -193,22 +201,22 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, align: Array<'lef
     td.parentElement?.removeChild(td)
   }
 
-  const mainSel = view.state.selection.main
+  const { row, col } = selectionCoords !== undefined ? selectionCoords : { row: -1, col: -1 }
 
   for (let i = 0; i < astRow.cells.length; i++) {
     const cell = astRow.cells[i]
-    // NOTE: This only is true for a selection that is completely contained
-    // within a cell. Any overlapping selection will not cause a rendering of
-    // the editor view, because selections that cross table cell boundaries are
-    // just ... puh.
-    const selectionInCell =  mainSel.from >= cell.from && mainSel.to <= cell.to
+    const selectionInCell = row === idx && col === i
     if (i === tds.length) {
       // We have to create a new TD
       const td = document.createElement(astRow.isHeaderOrFooter ? 'th' : 'td')
-      td.style.textAlign = align[i] ?? 'left'
+
       // TODO: Enable citation rendering here
+      const contentWrapper = document.createElement('div')
+      contentWrapper.classList.add('content')
+      td.appendChild(contentWrapper)
       const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
-      td.innerHTML = html.length > 0 ? html : '&nbsp;'
+      contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
+
       // NOTE: This handler gets attached once and then remains on the TD for
       // the existence of the table. Since the `view` will always be the same,
       // we only have to save the cellFrom and cellTo to the TDs dataset each
@@ -225,40 +233,52 @@ function updateRow (tr: HTMLTableRowElement, astRow: TableRow, align: Array<'lef
         const nodeOffset = estimateNodeOffset(selection?.anchorNode ?? td, td, cell.textContent)
         view.dispatch({ selection: { anchor: Math.min(from + nodeOffset + textOffset, cellTo) } })
       })
+
       tr.appendChild(td)
       tds.push(td)
     }
-    // At this point, there is guaranteed to be an element at i. Now let's check
-    // if there's a subview at this cell.
+
+    // At this point, there is guaranteed to be an element at i. We need to do
+    // // two update operations here. First, insert handlers to first row/col
+    // cells, and second verify if we have to simply transfer the contents, or
+    // add/remove a subview in this cell based on selection.
+    if (idx === 0 && col === i) {
+      // Selection is in this column
+      for (const elem of generateColumnModifiers(view)) {
+        tds[i].appendChild(elem)
+      }
+    }
+    
+    if (i === 0 && row === idx) {
+      // Selection is in this row
+      for (const elem of generateRowModifiers(view)) {
+        tds[i].appendChild(elem)
+      }
+    }
 
     // Save the corresponding document offsets appropriately
     tds[i].dataset.cellFrom = String(cell.from)
     tds[i].dataset.cellTo = String(cell.to)
     tds[i].style.textAlign = align[i] ?? 'left'
 
-    const subview = EditorView.findFromDOM(tds[i])
+    const contentWrapper: HTMLDivElement = tds[i].querySelector('div.content')!
+    const subview = EditorView.findFromDOM(contentWrapper)
+
     if (subview !== null && !selectionInCell) {
-      // The selection was in the cell but isn't any longer. However, this can
-      // also happen if the user adds whitespace in front of a cell's content,
-      // so IFF there is a subview, we first should check if the new selection
-      // is additionally outside of the current state of the hiddenDeco field.
-      const [ localFrom, localTo ] = subview.state.field(hiddenSpanField).cellRange
-      if (mainSel.from < localFrom || mainSel.to > localTo) {
-        subview.destroy()
-        // TODO: Enable citation rendering here
-        const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
-        tds[i].innerHTML = html.length > 0 ? html : '&nbsp;'
-      }
+      subview.destroy()
+      // TODO: Enable citation rendering here
+      const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
+      contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
     } else if (subview === null && selectionInCell) {
       // Create a new subview to represent the selection here. Ensure the cell
       // itself is empty before we mount the subview.
-      tds[i].innerHTML = ''
-      createSubviewForCell(view, tds[i], { from: cell.from, to: cell.to })
+      contentWrapper.innerHTML = ''
+      createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
     } else if (subview === null) {
       // Simply transfer the contents
       // TODO: Enable citation rendering here
       const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
-      tds[i].innerHTML = html.length > 0 ? html : '&nbsp;'
+      contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
     } // Else: The cell has a subview and the selection is still in there.
   }
 }
