@@ -17,12 +17,16 @@ import { syntaxTree } from '@codemirror/language'
 import type { EditorState, Range } from '@codemirror/state'
 import { WidgetType, EditorView, type DecorationSet, Decoration } from '@codemirror/view'
 import type { SyntaxNode } from '@lezer/common'
-import type { TableRow, Table } from '../../markdown-utils/markdown-ast'
+import type { TableRow, Table, TableCell } from '../../markdown-utils/markdown-ast'
 import { parseTableNode } from '../../markdown-utils/markdown-ast/parse-table-node'
 import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
 import { createSubviewForCell } from './subview'
 import { getCoordinatesForRange } from './commands/util'
 import { generateColumnModifiers, generateEmptyTableWidgetElement, generateRowModifiers } from './widget-dom'
+import { displayTableContextMenu } from './context-menu'
+import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCol } from './commands/columns'
+import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRow } from './commands/rows'
+import { clearTable, setAlignment } from './commands/tables'
 
 // DEBUG // TODOs:
 // DEBUG // * An empty table is difficult to fill with content because the cells
@@ -224,14 +228,69 @@ function updateRow (
       td.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        const from = parseInt(td.dataset.cellFrom ?? '0', 10)
-        const cellTo = parseInt(td.dataset.cellTo ?? '0', 10)
-        // This code attempts to set the selection as close as possible to the
-        // actual character the user has clicked.
-        const selection = getSelection()
-        const textOffset = selection?.focusOffset ?? 0
-        const nodeOffset = estimateNodeOffset(selection?.anchorNode ?? td, td, cell.textContent)
-        view.dispatch({ selection: { anchor: Math.min(from + nodeOffset + textOffset, cellTo) } })
+        setSelectionToCell(td, cell, view)
+      })
+
+      td.addEventListener('contextmenu', (event) => {
+        const ctxEvent = event instanceof PointerEvent && event.button === 2
+        if (!ctxEvent) {
+          return
+        }
+
+        setSelectionToCell(td, cell, view)
+
+        displayTableContextMenu(event, clickedID => {
+          switch (clickedID) {
+            case 'insert.row.above':
+              addRowBefore(view)
+              break
+            case 'insert.row.below':
+              addRowAfter(view)
+              break
+            case 'insert.col.right':
+              addColAfter(view)
+              break
+            case 'insert.col.left':
+              addColBefore(view)
+              break
+            case 'move.row.up':
+              swapPrevRow(view)
+              break
+            case 'move.row.down':
+              swapNextRow(view)
+              break
+            case 'move.col.left':
+              swapPrevCol(view)
+              break
+            case 'move.col.right':
+              swapNextCol(view)
+              break
+            case 'align.col.left':
+              setAlignment('left')(view)
+              break
+            case 'align.col.center':
+              setAlignment('center')(view)
+              break
+            case 'align.col.right':
+              setAlignment('right')(view)
+              break
+            case 'clear.row':
+              clearRow(view)
+              break
+            case 'clear.col':
+              clearCol(view)
+              break
+            case 'clear.table':
+              clearTable(view)
+              break
+            case 'delete.row':
+              deleteRow(view)
+              break
+            case 'delete.col':
+              deleteCol(view)
+              break
+          }
+        })
       })
 
       tr.appendChild(td)
@@ -281,6 +340,15 @@ function updateRow (
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
     } // Else: The cell has a subview and the selection is still in there.
   }
+}
+
+function setSelectionToCell (td: HTMLTableCellElement, cell: TableCell, view: EditorView): void {
+  const from = parseInt(td.dataset.cellFrom ?? '0', 10)
+  const cellTo = parseInt(td.dataset.cellTo ?? '0', 10)
+  const selection = getSelection()
+  const textOffset = selection?.focusOffset ?? 0
+  const nodeOffset = estimateNodeOffset(selection?.anchorNode ?? td, td, cell.textContent)
+  view.dispatch({ selection: { anchor: Math.min(from + nodeOffset + textOffset, cellTo) } })
 }
 
 /**
