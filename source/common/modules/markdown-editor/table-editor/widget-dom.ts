@@ -45,7 +45,7 @@ export function generateColumnModifiers (view: EditorView): HTMLElement[] {
   addButtonLeft.addEventListener('mousedown', event => {
     event.preventDefault()
     event.stopPropagation()
-    addColAfter(view)
+    addColBefore(view)
   })
 
   const addButtonRight = document.createElement('div')
@@ -54,7 +54,7 @@ export function generateColumnModifiers (view: EditorView): HTMLElement[] {
   addButtonRight.addEventListener('mousedown', event => {
     event.preventDefault()
     event.stopPropagation()
-    addColBefore(view)
+    addColAfter(view)
   })
 
   return [ handler, addButtonLeft, addButtonRight ]
