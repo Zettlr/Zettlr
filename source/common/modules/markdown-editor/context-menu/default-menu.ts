@@ -21,6 +21,7 @@ import { type SyntaxNode } from '@lezer/common'
 import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
+import { stripDuplicateSpaces } from '../util/transform-selected-text'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -250,6 +251,23 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       id: 'selectAll',
       type: 'normal',
       enabled: true
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: trans('Transform'),
+      id: 'submenuTransform',
+      type: 'submenu',
+      enabled: true,
+      submenu: [
+        {
+          label: trans('Strip duplicate spaces'),
+          id: 'stripDuplicateSpaces',
+          type: 'normal',
+          enabled: true
+        }
+      ]
     }
   ]
 
@@ -285,6 +303,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       paste(view)
     } else if (clickedID === 'pasteAsPlain') {
       pasteAsPlain(view)
+    } else if (clickedID === 'stripDuplicateSpaces') {
+      stripDuplicateSpaces(view)
     } else if (clickedID === 'selectAll') {
       view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } })
     } else if (clickedID === 'no-suggestion') {
