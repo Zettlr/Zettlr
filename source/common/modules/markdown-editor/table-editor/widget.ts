@@ -20,7 +20,7 @@ import type { SyntaxNode } from '@lezer/common'
 import type { TableRow, Table, TableCell } from '../../markdown-utils/markdown-ast'
 import { parseTableNode } from '../../markdown-utils/markdown-ast/parse-table-node'
 import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
-import { createSubviewForCell } from './subview'
+import { createSubviewForCell, hiddenSpanField } from './subview'
 import { getCoordinatesForRange } from './commands/util'
 import { generateColumnModifiers, generateEmptyTableWidgetElement, generateRowModifiers } from './widget-dom'
 import { displayTableContextMenu } from './context-menu'
@@ -323,6 +323,8 @@ function updateRow (
     const contentWrapper: HTMLDivElement = tds[i].querySelector('div.content')!
     const subview = EditorView.findFromDOM(contentWrapper)
 
+    const [ subviewFrom, subviewTo ] = subview?.state.field(hiddenSpanField).cellRange ?? [ -1, -1 ]
+
     if (subview !== null && !selectionInCell) {
       subview.destroy()
       // TODO: Enable citation rendering here
@@ -338,6 +340,14 @@ function updateRow (
       // TODO: Enable citation rendering here
       const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
+    } else if (subviewFrom !== cell.from || subviewTo !== cell.to) {
+      // Here, there is a subview in the cell and the selection is in this cell,
+      // but the subview has been "carried over" from a different column or row,
+      // which happens if the user adds or removes columns or rows. In this case
+      // we basically have to remove and recreate the subview, to ensure it
+      // grabs the correct cell's information.
+      subview.destroy()
+      createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
     } // Else: The cell has a subview and the selection is still in there.
   }
 }
