@@ -15,7 +15,7 @@
 import { stripDuplicateSpaces } from 'source/common/modules/markdown-editor/commands/transforms/strip-duplicate-spaces'
 import { fail, deepEqual, strictEqual } from 'assert'
 import { EditorSelection, EditorState, Transaction } from '@codemirror/state'
-import { selectAll } from './support'
+import { selectAll } from '../codemirror-test-utils/select-all'
 
 describe('MarkdownEditor#stripDuplicateSpaces()', function () {
   const sunnyDayTestCases = [
