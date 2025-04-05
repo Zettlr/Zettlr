@@ -16,14 +16,11 @@
  * END HEADER
  */
 
-import { defaultKeymap, redo, undo } from '@codemirror/commands'
 import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language'
 import { EditorState, Prec, StateField, Annotation, Transaction, type ChangeSpec, type Range } from '@codemirror/state'
-import { EditorView, keymap, drawSelection, type DecorationSet, Decoration, ViewPlugin, type ViewUpdate } from '@codemirror/view'
+import { EditorView, drawSelection, type DecorationSet, Decoration, ViewPlugin, type ViewUpdate } from '@codemirror/view'
 import markdownParser from '../parser/markdown-parser'
-import { moveNextRow, movePrevRow } from './commands/rows'
-import { moveNextCell, movePrevCell } from './commands/columns'
-import { setAlignment } from './commands/tables'
+import { tableEditorKeymap } from '../keymaps/table-editor'
 
 /**
  * This syncAnnotation is used to tag all transactions originating from the main
@@ -207,21 +204,6 @@ function createHiddenDecorations (state: EditorState, cellRange: { from: number,
 }
 
 /**
- * This command can be used to override the default selectAll functionality.
- * Instead of selecting the entire state (= document) it will only select the
- * cell boundaries.
- *
- * @param   {EditorView}  view  The editor view
- *
- * @return  {boolean}           Returns true
- */
-function selectAllCommand (view: EditorView): boolean {
-  const cursor = view.state.field(hiddenSpanField).cellRange
-  view.dispatch({ selection: { anchor: cursor[0], head: cursor[1] } })
-  return true
-}
-
-/**
 * Creates and mounts a sub-EditorView within the provided targetCell.
 *
 * @param  {EditorView}      mainView        The main view
@@ -244,31 +226,7 @@ export function createSubviewForCell (
     selection: mainView.state.selection,
     extensions: [
       // A minimal set of extensions
-      // TODO: Import the main editor keymap so that key bindings are the same
-      Prec.highest(keymap.of([
-        // Prevent programmatic insertion of newlines by disabling some
-        // keybindings (except Enter which should move the cursor to the next
-        // row if possible)
-        {
-          key: 'Enter',
-          // NOTE: "?? true" ensures no other keybinding will be called after this
-          run: _v => moveNextRow(mainView) ?? true,
-          shift: _v => movePrevRow(mainView) ?? true
-        },
-        { key: 'Ctrl-Enter', run: _v => true },
-        { key: 'Mod-Enter', run: _v => true },
-        // Map the undo/redo keys to the main view
-        { key: 'Mod-z', run: _v => undo(mainView), preventDefault: true },
-        { key: 'Mod-Shift-z', run: _v => redo(mainView), preventDefault: true },
-        // Override the select all command
-        { key: 'Mod-a', run: selectAllCommand, preventDefault: true },
-        // Add a few more keyboard shortcuts. TODO: Make that a bit less haphazard
-        { key: 'Tab', run: _v => moveNextCell(mainView), shift: _v => movePrevCell(mainView) },
-        { key: 'Alt+l', run: _v => setAlignment('left')(mainView) },
-        { key: 'Alt+c', run: _v => setAlignment('center')(mainView) },
-        { key: 'Alt+r', run: _v => setAlignment('right')(mainView) },
-      ])),
-      keymap.of(defaultKeymap),
+      Prec.highest(tableEditorKeymap(mainView)),
       drawSelection(),
       // TODO: Light and dark mode switch
       syntaxHighlighting(defaultHighlightStyle),
