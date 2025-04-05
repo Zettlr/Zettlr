@@ -1,5 +1,5 @@
 import {
-  acceptCompletion, closeCompletion, deleteBracketPair, moveCompletionSelection
+  acceptCompletion, closeCompletion, moveCompletionSelection
 } from '@codemirror/autocomplete'
 import {
   insertNewlineAndIndent, copyLineUp, copyLineDown
@@ -64,26 +64,18 @@ export function markdownKeymap (): Extension {
     { key: 'Enter', run: insertNewlineContinueMarkup },
     { key: 'Enter', run: insertNewlineAndIndent },
 
-    // Overload Backspace
-    { key: 'Backspace', run: deleteBracketPair },
     { key: 'Backspace', run: handleBackspace },
 
     { key: 'Esc', run: abortSnippet },
     { key: 'Space', run: handleReplacement },
 
-    // Overload the copy commands
-    { key: 'Alt-Shift-ArrowUp', run: addRowBefore }, // TODO: Shortcut not final
-    { key: 'Alt-ArrowUp', run: swapPrevRow },
+    // Overload the copy commands to infuse table-based commands
+    { key: 'Alt-ArrowUp', run: swapPrevRow, shift: addRowBefore },
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
-
-    { key: 'Alt-Shift-ArrowDown', run: addRowAfter }, // TODO: Shortcut not final
-    { key: 'Alt-ArrowDown', run: swapNextRow },
+    { key: 'Alt-ArrowDown', run: swapNextRow, shift: addRowAfter },
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
-
-    { key: 'Alt-Shift-ArrowRight', run: addColAfter }, // TODO: Shortcut not final
-    { key: 'Alt-Shift-ArrowLeft', run: addColBefore }, // TODO: Shortcut not final
-    { key: 'Alt-ArrowRight', run: swapNextCol }, // TODO: Shortcut not final
-    { key: 'Alt-ArrowLeft', run: swapPrevCol }, // TODO: Shortcut not final
+    { key: 'Alt-ArrowRight', run: swapNextCol, shift: addColAfter },
+    { key: 'Alt-ArrowLeft', run: swapPrevCol, shift: addColBefore },
     
     { key: 'Mod-t', run: applyTaskList },
     { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
