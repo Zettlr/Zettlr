@@ -12,6 +12,7 @@
 - Fix the wikilink/Zettelkasten link Lua filter (#5605).
 - Zettlr now properly retrieves attachments also for items residing in group
   libraries (#5647).
+- Updated German (`de-DE`) translation
 
 ## Under the Hood
 

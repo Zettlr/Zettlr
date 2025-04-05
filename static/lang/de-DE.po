@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2025-02-28 14:52+0000\n"
-"PO-Revision-Date: 2024-12-19 15:46+0100\n"
-"Last-Translator: Hendrik Erz <info@zettlr.com>\n"
+"PO-Revision-Date: 2025-03-28 23:15+0100\n"
+"Last-Translator: Cornelius Wilkening <mail@cornelius-wilkening.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -174,8 +174,8 @@ msgstr ""
 
 #: source/app/service-providers/updates/index.ts:594
 msgid ""
-"The downloaded file has a different checksum than the server reported. "
-"Please retry or update manually."
+"The downloaded file has a different checksum than the server reported. Please "
+"retry or update manually."
 msgstr ""
 "Die heruntergeladene Datei hat eine andere Prüfsumme als vom Server "
 "angegeben. Bitte erneut versuchen oder manuell updaten."
@@ -231,7 +231,7 @@ msgstr "Nein"
 #: source/app/service-providers/commands/rename-tag.ts:44
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr "Ersetze Schlagwort “%s” mit “%s” in %s Dateien?"
+msgstr "Ersetze Schlagwort “%s“ mit “%s“ in %s Dateien?"
 
 #. 1: Omit all changes
 #: source/app/service-providers/commands/rename-tag.ts:47
@@ -295,8 +295,8 @@ msgid ""
 "The following %s files could not be imported, because their filetype is "
 "unknown: %s"
 msgstr ""
-"Die folgenden %s Dateien konnten nicht importiert werden, da ihre "
-"Dateiendung unbekannt ist: %s"
+"Die folgenden %s Dateien konnten nicht importiert werden, da ihre Dateiendung "
+"unbekannt ist: %s"
 
 #: source/app/service-providers/commands/import.ts:84
 msgid "Import failed"
@@ -308,8 +308,8 @@ msgstr "Kann Projekt nicht exportieren"
 
 #: source/app/service-providers/commands/dir-project-export.ts:86
 msgid ""
-"There are no files selected for export. Please select files to be included "
-"in the project settings."
+"There are no files selected for export. Please select files to be included in "
+"the project settings."
 msgstr ""
 "Für den Export sind keine Dateien ausgewählt. Bitte wähle Dateien in den "
 "Projekteinstellungen aus."
@@ -320,9 +320,9 @@ msgstr "Fehlende Projektdateien"
 
 #: source/app/service-providers/commands/dir-project-export.ts:92
 msgid ""
-"One or more files specified in the project settings have not been found. "
-"They may have moved or been deleted. Please verify that all files that you "
-"would like to export are included."
+"One or more files specified in the project settings have not been found. They "
+"may have moved or been deleted. Please verify that all files that you would "
+"like to export are included."
 msgstr ""
 "Eine oder mehrere für den Export ausgewählte Dateien sind nicht mehr "
 "auffindbar. Sie könnten gelöscht oder umbenannt worden sein. Bitte "
@@ -341,7 +341,7 @@ msgstr "Ok"
 #: source/app/service-providers/commands/dir-project-export.ts:168
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
-msgstr "Projekt “%s” wurde erfolgreich exportiert. Zum Anzeigen klicken."
+msgstr "Projekt \"%s\" wurde erfolgreich exportiert. Zum Anzeigen klicken."
 
 #: source/app/service-providers/commands/dir-project-export.ts:169
 msgid "Project Export"
@@ -408,7 +408,7 @@ msgstr "Kann Arbeitsverzeichnis nicht öffnen"
 #: source/app/service-providers/commands/root-open.ts:84
 #, javascript-format
 msgid "Cannot open workspace \"%s\"."
-msgstr "Kann Arbeitsverzeichnis “%s” nicht öffnen."
+msgstr "Kann Arbeitsverzeichnis “%s“ nicht öffnen."
 
 #. We need to generate our own filename. First, attempt to just use 'copy of'
 #: source/app/service-providers/commands/file-duplicate.ts:68
@@ -494,11 +494,11 @@ msgstr "Datei ersetzen"
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:32
 #, javascript-format
 msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
+"File %s has been modified remotely. Replace the loaded version with the newer "
+"one from disk?"
 msgstr ""
-"Datei %s wurde extern verändert. Soll die angezeigte Version mit den "
-"externen Änderungen ersetzt werden?"
+"Datei %s wurde extern verändert. Soll die angezeigte Version mit den externen "
+"Änderungen ersetzt werden?"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 #: source/win-preferences/schema/general.ts:78
@@ -553,13 +553,13 @@ msgstr "Änderung in der Bibliothek entdeckt. Lade neu …"
 #: source/app/service-providers/menu/menu.win32.ts:56
 #: source/app/service-providers/menu/menu.darwin.ts:183
 msgid "Recent files"
-msgstr ""
+msgstr "Benutzte Dokumente"
 
 #: source/app/service-providers/menu/menu.win32.ts:48
 #: source/app/service-providers/menu/menu.win32.ts:60
 #: source/app/service-providers/menu/menu.darwin.ts:187
 msgid "Clear"
-msgstr ""
+msgstr "Einträge löschen"
 
 #: source/app/service-providers/menu/menu.win32.ts:87
 #: source/app/service-providers/menu/menu.darwin.ts:113
@@ -571,7 +571,7 @@ msgstr "Datei"
 #: source/win-main/file-manager/util/dir-item-context.ts:38
 #: source/tmp/win-main/App.vue.ts:290
 msgid "New file…"
-msgstr ""
+msgstr "Neue Datei…"
 
 #: source/app/service-providers/menu/menu.win32.ts:129
 #: source/app/service-providers/menu/menu.darwin.ts:155
@@ -582,13 +582,13 @@ msgstr "Neues Verzeichnis…"
 #: source/app/service-providers/menu/menu.win32.ts:139
 #: source/app/service-providers/menu/menu.darwin.ts:165
 msgid "Open file…"
-msgstr ""
+msgstr "Datei öffnen…"
 
 #: source/app/service-providers/menu/menu.win32.ts:148
 #: source/app/service-providers/menu/menu.darwin.ts:174
 #: source/tmp/win-main/App.vue.ts:264
 msgid "Open workspace…"
-msgstr ""
+msgstr "Arbeitsverzeichnis öffnen…"
 
 #: source/app/service-providers/menu/menu.win32.ts:172
 #: source/app/service-providers/menu/menu.darwin.ts:207
@@ -628,13 +628,13 @@ msgstr "Einstellungen…"
 #: source/app/service-providers/menu/menu.darwin.ts:59
 #: source/tmp/win-assets/App.vue.ts:15
 msgid "Assets Manager"
-msgstr "Assets Manager"
+msgstr "Asset-Manager"
 
 #: source/app/service-providers/menu/menu.win32.ts:241
 #: source/app/service-providers/menu/menu.darwin.ts:67
 #: source/tmp/win-tag-manager/App.vue.ts:34
 msgid "Tags Manager"
-msgstr ""
+msgstr "Schlagwort-Manager"
 
 #: source/app/service-providers/menu/menu.win32.ts:253
 #: source/app/service-providers/menu/menu.darwin.ts:259
@@ -718,12 +718,12 @@ msgstr "Alles auswählen"
 #: source/app/service-providers/menu/menu.win32.ts:372
 #: source/app/service-providers/menu/menu.darwin.ts:370
 msgid "Find in current file"
-msgstr ""
+msgstr "In aktueller Datei finden"
 
 #: source/app/service-providers/menu/menu.win32.ts:380
 #: source/app/service-providers/menu/menu.darwin.ts:378
 msgid "Search all files"
-msgstr ""
+msgstr "Alle Dateien durchsuchen"
 
 #: source/app/service-providers/menu/menu.win32.ts:388
 #: source/app/service-providers/menu/menu.darwin.ts:386
@@ -756,7 +756,7 @@ msgstr "Dunkles Thema"
 #: source/app/service-providers/menu/menu.win32.ts:432
 #: source/app/service-providers/menu/menu.darwin.ts:449
 msgid "Additional information"
-msgstr ""
+msgstr "Zusätzliche Informationen"
 
 #: source/app/service-providers/menu/menu.win32.ts:442
 #: source/app/service-providers/menu/menu.darwin.ts:459
@@ -767,13 +767,13 @@ msgstr "Ablenkungsfreier Modus"
 #: source/app/service-providers/menu/menu.win32.ts:450
 #: source/app/service-providers/menu/menu.darwin.ts:467
 msgid "Typewriter mode"
-msgstr ""
+msgstr "Schreibmaschinenmodus"
 
 #: source/app/service-providers/menu/menu.win32.ts:461
 #: source/app/service-providers/menu/menu.darwin.ts:478
 #: source/tmp/win-main/App.vue.ts:251
 msgid "Toggle File Manager"
-msgstr ""
+msgstr "Dateimanager aktivieren"
 
 #: source/app/service-providers/menu/menu.win32.ts:469
 #: source/app/service-providers/menu/menu.darwin.ts:486
@@ -819,7 +819,7 @@ msgstr "Entwicklerwerkzeuge"
 #: source/app/service-providers/menu/menu.win32.ts:535
 #: source/app/service-providers/menu/menu.darwin.ts:554
 msgid "View logs"
-msgstr ""
+msgstr "Logs anzeigen"
 
 #: source/app/service-providers/menu/menu.win32.ts:546
 #: source/app/service-providers/menu/menu.darwin.ts:565
@@ -879,27 +879,27 @@ msgstr "Nach Updates suchen"
 #: source/app/service-providers/menu/menu.win32.ts:625
 #: source/app/service-providers/menu/menu.darwin.ts:651
 msgid "Support Zettlr ↗︎"
-msgstr ""
+msgstr "Zettlr unterstützen ↗︎"
 
 #: source/app/service-providers/menu/menu.win32.ts:635
 #: source/app/service-providers/menu/menu.darwin.ts:661
 msgid "Visit website ↗︎"
-msgstr ""
+msgstr "Website besuchen ↗︎"
 
 #: source/app/service-providers/menu/menu.win32.ts:645
 #: source/app/service-providers/menu/menu.darwin.ts:671
 msgid "Open user manual ↗︎"
-msgstr ""
+msgstr "Benutzeranleitung öffnen ↗︎"
 
 #: source/app/service-providers/menu/menu.win32.ts:659
 #: source/app/service-providers/menu/menu.darwin.ts:685
 msgid "Open tutorial"
-msgstr ""
+msgstr "Tutorial öffnen"
 
 #: source/app/service-providers/menu/menu.win32.ts:667
 #: source/app/service-providers/menu/menu.darwin.ts:693
 msgid "Clear FSAL cache…"
-msgstr ""
+msgstr "FSAL-Cache leeren…"
 
 #: source/app/service-providers/menu/menu.win32.ts:671
 #: source/app/service-providers/menu/menu.darwin.ts:697
@@ -918,10 +918,9 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
-"Nach dem Neustart wird Zettlr den Cache neu erzeugen, was einen Moment "
-"dauern kann. Die Geschwindigkeit hängt von der Anzahl geladener Dateien "
-"sowie der Geschwindigkeit der Festplatte ab. Die Fenster werden im Anschluss "
-"geöffnet."
+"Nach dem Neustart wird Zettlr den Cache neu erzeugen, was einen Moment dauern "
+"kann. Die Geschwindigkeit hängt von der Anzahl geladener Dateien sowie der "
+"Geschwindigkeit der Festplatte ab. Die Fenster werden im Anschluss geöffnet."
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
@@ -987,9 +986,9 @@ msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
-"%s wurde auf der Festplatte verändert, aber der Editor enthält "
-"ungespeicherte Änderungen. Sollen die Änderungen im Editor erhalten werden, "
-"oder die Datei neu geladen werden?"
+"%s wurde auf der Festplatte verändert, aber der Editor enthält ungespeicherte "
+"Änderungen. Sollen die Änderungen im Editor erhalten werden, oder die Datei "
+"neu geladen werden?"
 
 #: source/app/service-providers/documents/index.ts:1042
 msgid ""
@@ -1025,7 +1024,7 @@ msgstr "Konnte Datei %s nicht speichern: %s"
 #: source/win-main/file-manager/util/file-item-context.ts:29
 #: source/tmp/win-main/GlobalSearch.vue.ts:54
 msgid "Open in new tab"
-msgstr ""
+msgstr "In neuem Tab öffnen"
 
 #: source/win-main/file-manager/util/file-item-context.ts:35
 #: source/win-main/file-manager/util/dir-item-context.ts:29
@@ -1085,11 +1084,11 @@ msgstr "Projekt exportieren"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:117
 msgid "Close workspace"
-msgstr ""
+msgstr "Arbeitsverzeichnis schließen"
 
 #: source/win-main/tabs-context.ts:38
 msgid "Close tab"
-msgstr ""
+msgstr "Tab schließen"
 
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
@@ -1566,7 +1565,7 @@ msgstr "Rechtschreibfehler"
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:83
 #, javascript-format
 msgid "This file is part of project \"%s\""
-msgstr "Diese Datei ist Teil von Projekt “%s”"
+msgstr "Diese Datei ist Teil von Projekt \"%s”"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
@@ -1640,19 +1639,19 @@ msgstr "Keine Syntax"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:82
 msgid "Open link"
-msgstr ""
+msgstr "Link öffnen"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:91
 msgid "Copy email address"
-msgstr ""
+msgstr "E-Mail-Adresse kopieren"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:91
 msgid "Copy link"
-msgstr ""
+msgstr "Link kopieren"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:97
 msgid "Remove link"
-msgstr ""
+msgstr "Link entfernen"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:107
 msgid "Copy image to clipboard"
@@ -1694,16 +1693,16 @@ msgstr "Numerierte Liste einfügen"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
 #: source/tmp/win-main/App.vue.ts:357
 msgid "Insert task list"
-msgstr ""
+msgstr "Aufgabenliste einfügen"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
 msgid "Insert blockquote"
-msgstr ""
+msgstr "Blockzitat einfügen"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
 #: source/tmp/win-main/App.vue.ts:364
 msgid "Insert table"
-msgstr ""
+msgstr "Tabelle einfügen"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
 msgid "Copy equation code"
@@ -1811,9 +1810,9 @@ msgid ""
 "its tile in the preview list will receive a colored indicator. The "
 "description will be shown on mouse hover."
 msgstr ""
-"In diesem Dialog kannst du Tags Farben zuweisen. Wenn ein Tag in einer Datei "
-"enthalten ist, erhält die Datei an verschiedenen Stellen einen farblichen "
-"Marker. Die Beschreibung wird beim Hovern angezeigt."
+"In diesem Dialog kannst du Schlagwörter Farben zuweisen. Wenn ein Schlagwort" 
+"in einer Datei enthalten ist, erhält die Datei an verschiedenen Stellen" 
+"einen farblichen Marker. Die Beschreibung wird beim Hovern angezeigt."
 
 #: source/tmp/win-tag-manager/App.vue.ts:35
 #: source/tmp/win-main/PopoverTags.vue.ts:47
@@ -1876,11 +1875,11 @@ msgstr "Lizenz"
 
 #: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It "
+"is Open Source, free of charge and based upon the Electron framework. Zettlr "
+"would like to thank the developers of Electron, the Node.js framework and the "
+"CodeMirror editor for their work. Without them, Zettlr would not be possible. "
+"Below you can find all projects that Zettlr uses."
 msgstr ""
 "Zettlr ist ein Projekt von Hendrik Erz, lizensiert unter der GNU GPL v3-"
 "Lizenz. Es ist Open Source, komplett kostenlos und basiert auf dem Electron-"
@@ -1903,9 +1902,9 @@ msgstr ""
 
 #: source/tmp/win-about/General-Tab.vue.ts:23
 msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
+"All logos and brand names are subject to their rightful owners. Besides using "
+"their code, Zettlr is in no way affiliated with any of these projects. Node."
+"js is a trademark of Joyent, Inc."
 msgstr ""
 "Alle Logos und Markennamen gehören ihren rechtmäßigen Besitzern. Außer durch "
 "die Nutzung ihres Codes ist Zettlr auf keine Weise mit diesen Projekten "
@@ -1936,9 +1935,9 @@ msgid ""
 "strong>"
 msgstr ""
 "Hier kannst du verschiedene Stile von Zettlr überschreiben und damit die App "
-"noch weiter anpassen. <strong>Achtung: Diese Datei überschreibt sämtliche "
-"CSS-Direktiven! Ändere daher niemals die Geometrie von Elementen, "
-"anderenfalls könnte Zettlr unerwartetes Verhalten zeigen!</strong>"
+"noch weiter anpassen. <strong>Achtung: Diese Datei überschreibt sämtliche CSS-"
+"Direktiven! Ändere daher niemals die Geometrie von Elementen, anderenfalls "
+"könnte Zettlr unerwartetes Verhalten zeigen!</strong>"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:56
 #: source/tmp/win-assets/DefaultsTab.vue.ts:177
@@ -1963,8 +1962,7 @@ msgstr "Importieren"
 msgid "Custom CSS"
 msgstr "Benutzerdefiniertes CSS"
 
-#: source/tmp/win-assets/App.vue.ts:39
-#: source/tmp/win-preferences/App.vue.ts:180
+#: source/tmp/win-assets/App.vue.ts:39 source/tmp/win-preferences/App.vue.ts:180
 #: source/win-preferences/schema/snippets.ts:24
 msgid "Snippets"
 msgstr "Snippets"
@@ -1974,16 +1972,16 @@ msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
 msgstr ""
-"Dieses Profil ist geschützt. Es wird wiederhergestellt, wenn du es "
-"umbenennst oder entfernst."
+"Dieses Profil ist geschützt. Es wird wiederhergestellt, wenn du es umbenennst "
+"oder entfernst."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:57
 msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
-"Dieses Profil ist ungültig. Es enthält Syntaxfehler oder das “writer” oder "
-"“reader”-Attribut fehlen."
+"Dieses Profil ist ungültig. Es enthält Syntaxfehler oder das \"writer” oder "
+"\"reader”-Attribut fehlen."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:59
 msgid "Open defaults folder"
@@ -2055,7 +2053,7 @@ msgstr "Lautstärke"
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
 msgid "Table of contents"
-msgstr ""
+msgstr "Inhaltsverzeichnis"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
@@ -2120,7 +2118,7 @@ msgstr "Name"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:48
 msgid "Tag Cloud"
-msgstr "Tag Cloud"
+msgstr "Schlagwortwolke"
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:99
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:101
@@ -2148,7 +2146,7 @@ msgstr "Wörter"
 #: source/tmp/win-main/file-manager/FileManager.vue.ts:46
 #: source/tmp/win-main/GlobalSearch.vue.ts:38
 msgid "Filter…"
-msgstr ""
+msgstr "Filtern…"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:31
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
@@ -2523,26 +2521,25 @@ msgstr "%s ausgewählt"
 msgid "%s selections"
 msgstr "%s Selektionen"
 
-#: source/tmp/win-main/App.vue.ts:256
-#: source/tmp/win-main/GlobalSearch.vue.ts:35
+#: source/tmp/win-main/App.vue.ts:256 source/tmp/win-main/GlobalSearch.vue.ts:35
 msgid "Search across all files"
-msgstr ""
+msgstr "In allen Dateien suchen"
 
 #: source/tmp/win-main/App.vue.ts:270
 msgid "View writing statistics"
-msgstr ""
+msgstr "Schreibstatistiken anzeigen"
 
 #: source/tmp/win-main/App.vue.ts:276
 msgid "View Tag Cloud"
-msgstr ""
+msgstr "Schlagwortwolke anzeigen"
 
 #: source/tmp/win-main/App.vue.ts:283
 msgid "Open settings"
-msgstr ""
+msgstr "Einstellungen öffnen"
 
 #: source/tmp/win-main/App.vue.ts:318
 msgid "Export current file"
-msgstr ""
+msgstr "Aktuelle Datei exportieren"
 
 #: source/tmp/win-main/App.vue.ts:324
 msgid "Toggle readability mode"
@@ -2550,19 +2547,19 @@ msgstr "Lesbarkeitsmodus umschalten"
 
 #: source/tmp/win-main/App.vue.ts:336
 msgid "Insert comment"
-msgstr ""
+msgstr "Kommentar einfügen"
 
 #: source/tmp/win-main/App.vue.ts:350
 msgid "Insert image"
-msgstr ""
+msgstr "Bild einfügen"
 
 #: source/tmp/win-main/App.vue.ts:371
 msgid "Insert footnote"
-msgstr ""
+msgstr "Fußnote einfügen"
 
 #: source/tmp/win-main/App.vue.ts:389
 msgid "Pomodoro timer"
-msgstr ""
+msgstr "Pomodoro-Uhr"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:29
 msgid "Temporary directory"
@@ -2606,7 +2603,7 @@ msgstr "Begrenze Suche auf ein Verzeichnis"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:41
 msgid "Choose directory…"
-msgstr ""
+msgstr "Verzeichnis wählen…"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:42
 #: source/tmp/win-preferences/App.vue.ts:57
@@ -2712,8 +2709,7 @@ msgid "You have not selected any files for export."
 msgstr "Du hast keine Dateien für den Export bestimmt."
 
 #: source/tmp/win-project-properties/App.vue.ts:53
-msgid ""
-"Some files are selected for export but no longer exist in the directory."
+msgid "Some files are selected for export but no longer exist in the directory."
 msgstr ""
 "Einige Dateien wurden zum Export ausgewählt, sind aber nicht mehr auffindbar."
 
@@ -2725,7 +2721,7 @@ msgstr "Allgemein"
 #: source/tmp/win-preferences/App.vue.ts:56
 #, javascript-format
 msgid "No results for \"%s\""
-msgstr "Keine Ergebnisse für “%s”"
+msgstr "Keine Ergebnisse für “%s“"
 
 #: source/tmp/win-preferences/App.vue.ts:145
 #: source/win-preferences/schema/advanced.ts:51
@@ -2905,8 +2901,8 @@ msgid ""
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
 msgstr ""
-"Du kannst optionale Titel zu internen Links hinzufügen, separiert durch "
-"einen vertikalen Strich. Hier kannst du bestimmen, was zuerst kommt."
+"Du kannst optionale Titel zu internen Links hinzufügen, separiert durch einen "
+"vertikalen Strich. Hier kannst du bestimmen, was zuerst kommt."
 
 #: source/win-preferences/schema/zettelkasten.ts:79
 msgid "[[Link|Title]]: Link first (recommended)"
@@ -2934,7 +2930,8 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
 msgstr ""
-"Das funktioniert nur, wenn der Ordner als Workspace in Zettlr geöffnet ist."
+"Das funktioniert nur, wenn der Ordner als Arbeitsverzeichnis in Zettlr "
+"geöffnet ist."
 
 #: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
@@ -2994,9 +2991,9 @@ msgid ""
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
 msgstr ""
-"Der Eingabemodus bestimmt deine Interaktion mit dem Editor. Wir empfehlen "
-"die Einstellung “Normal”. Wähle “Vim” oder “Emacs” nur, wenn du weißt, was "
-"das bedeutet."
+"Der Eingabemodus bestimmt deine Interaktion mit dem Editor. Wir empfehlen die "
+"Einstellung “Normal“. Wähle “Vim“ oder “Emacs“ nur, wenn du weißt, was das "
+"bedeutet."
 
 #: source/win-preferences/schema/editor.ts:44
 msgid "Writing direction"
@@ -3018,27 +3015,27 @@ msgstr ""
 
 #: source/win-preferences/schema/editor.ts:72
 msgid "Render citations"
-msgstr ""
+msgstr "Zitate rendern"
 
 #: source/win-preferences/schema/editor.ts:77
 msgid "Render iframes"
-msgstr ""
+msgstr "iframes rendern"
 
 #: source/win-preferences/schema/editor.ts:82
 msgid "Render images"
-msgstr ""
+msgstr "Bilder rendern"
 
 #: source/win-preferences/schema/editor.ts:87
 msgid "Render links"
-msgstr ""
+msgstr "Links rendern"
 
 #: source/win-preferences/schema/editor.ts:92
 msgid "Render formulae"
-msgstr ""
+msgstr "Formeln rendern"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Render tasks"
-msgstr ""
+msgstr "Aufgaben rendern"
 
 #: source/win-preferences/schema/editor.ts:102
 msgid "Hide heading characters"
@@ -3050,7 +3047,7 @@ msgstr "Hervorhebungen darstellen"
 
 #: source/win-preferences/schema/editor.ts:116
 msgid "Formatting characters for bold and italics"
-msgstr ""
+msgstr "Formatierungszeichen für fett und kursiv"
 
 #: source/win-preferences/schema/editor.ts:143
 msgid "Check Markdown for style issues"
@@ -3067,8 +3064,8 @@ msgid ""
 "care of Markdown formatting."
 msgstr ""
 "Der Table Editor ist ein interaktives Bedienelement für das Bearbeiten von "
-"Tabellen. Er stellt generelle Funktionalitäten bereit und formatiert "
-"Markdown-Quellcode."
+"Tabellen. Er stellt generelle Funktionalitäten bereit und formatiert Markdown-"
+"Quellcode."
 
 #: source/win-preferences/schema/editor.ts:171
 msgid "Mute non-focused lines in distraction-free mode"
@@ -3076,7 +3073,7 @@ msgstr "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab"
 
 #: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction-free mode"
-msgstr ""
+msgstr "Werkzeugleiste im Ablenkungsfreien Modus ausblenden"
 
 #: source/win-preferences/schema/editor.ts:182
 msgid "Word counter"
@@ -3169,67 +3166,67 @@ msgstr "Toolbar-Einstellungen"
 
 #: source/win-preferences/schema/appearance.ts:124
 msgid "Left section"
-msgstr ""
+msgstr "Linker Bereich"
 
 #: source/win-preferences/schema/appearance.ts:128
 msgid "Display \"Open settings\" button"
-msgstr ""
+msgstr "Zeige “Einstellungen öffnen“"
 
 #: source/win-preferences/schema/appearance.ts:133
 msgid "Display \"New file\" button"
-msgstr ""
+msgstr "Zeige “Neue Datei“"
 
 #: source/win-preferences/schema/appearance.ts:138
 msgid "Display \"Previous file\" button"
-msgstr ""
+msgstr "Zeige “Vorherige Datei“"
 
 #: source/win-preferences/schema/appearance.ts:143
 msgid "Display \"Next file\" button"
-msgstr ""
+msgstr "Zeige “Nächste Datei“"
 
 #: source/win-preferences/schema/appearance.ts:150
 msgid "Center section"
-msgstr ""
+msgstr "Mittlerer Bereich"
 
 #: source/win-preferences/schema/appearance.ts:154
 msgid "Display \"Readability mode\" button"
-msgstr ""
+msgstr "Zeige “Lesbarkeitsmodus“"
 
 #: source/win-preferences/schema/appearance.ts:159
 msgid "Display \"Insert comment\" button"
-msgstr ""
+msgstr "Zeige “Kommentar einfügen“"
 
 #: source/win-preferences/schema/appearance.ts:164
 msgid "Display \"Insert link\" button"
-msgstr ""
+msgstr "Zeige “Link einfügen“"
 
 #: source/win-preferences/schema/appearance.ts:169
 msgid "Display \"Insert image\" button"
-msgstr ""
+msgstr "Zeige “Bild einfügen“"
 
 #: source/win-preferences/schema/appearance.ts:174
 msgid "Display \"Insert task list\" button"
-msgstr ""
+msgstr "Zeige “Aufgabenliste einfügen“"
 
 #: source/win-preferences/schema/appearance.ts:179
 msgid "Display \"Insert table\" button"
-msgstr ""
+msgstr "Zeige “Tabelle einfügen“"
 
 #: source/win-preferences/schema/appearance.ts:184
 msgid "Display \"Insert footnote\" button"
-msgstr ""
+msgstr "Zeige “Fußnote einfügen“"
 
 #: source/win-preferences/schema/appearance.ts:191
 msgid "Right section"
-msgstr ""
+msgstr "Rechter Bereich"
 
 #: source/win-preferences/schema/appearance.ts:195
 msgid "Display word/character counter"
-msgstr ""
+msgstr "Zeige Wort/Zeichenanzahl"
 
 #: source/win-preferences/schema/appearance.ts:200
 msgid "Display Pomodoro timer"
-msgstr ""
+msgstr "Zeige Pomodoro-Uhr"
 
 #: source/win-preferences/schema/appearance.ts:206
 msgid "Status bar"
@@ -3237,7 +3234,7 @@ msgstr "Statusleiste"
 
 #: source/win-preferences/schema/appearance.ts:212
 msgid "Show status bar"
-msgstr ""
+msgstr "Statusleiste einblenden"
 
 #: source/win-preferences/schema/appearance.ts:223
 msgid "Open CSS editor"
@@ -3373,15 +3370,15 @@ msgstr "Kombiniert"
 
 #: source/win-preferences/schema/file-manager.ts:40
 msgid ""
-"The Thin mode shows your directories and files separately. Select a "
-"directory to have its contents displayed in the file list. Switch between "
-"file list and directory tree by clicking on directories or the arrow button "
-"which appears at the top left corner of the file list."
+"The Thin mode shows your directories and files separately. Select a directory "
+"to have its contents displayed in the file list. Switch between file list and "
+"directory tree by clicking on directories or the arrow button which appears "
+"at the top left corner of the file list."
 msgstr ""
 "Der dünne Darstellungsmodus zeigt Ordner und Dateien separat an. Wähle einen "
 "Ordner aus, um seinen Inhalt in der Dateiliste anzuzeigen. Wechsle zwischen "
-"Dateiliste und Verzeichnisbaum durch Klicken auf Verzeichnisse oder den "
-"Pfeil-Button, der in der linken oberen Ecke der Dateiliste angezeigt wird."
+"Dateiliste und Verzeichnisbaum durch Klicken auf Verzeichnisse oder den Pfeil-"
+"Button, der in der linken oberen Ecke der Dateiliste angezeigt wird."
 
 #: source/win-preferences/schema/file-manager.ts:45
 msgid "Show file information"
@@ -3466,7 +3463,7 @@ msgstr "Nutze die interne Pandoc-Bibliothek für Exporte"
 
 #: source/win-preferences/schema/import-export.ts:71
 msgid "Remove tags from files when exporting"
-msgstr "Entferne Tags aus den Dateien"
+msgstr "Entferne Schlagwörter aus den Dateien"
 
 #: source/win-preferences/schema/import-export.ts:80
 msgid "Remove internal links completely"
@@ -3604,7 +3601,7 @@ msgstr "Watchdog-Polling"
 
 #: source/win-preferences/schema/advanced.ts:126
 msgid "Activate watchdog polling"
-msgstr ""
+msgstr "Watchdog-Polling aktivieren"
 
 #: source/win-preferences/schema/advanced.ts:131
 msgid "Time to wait before writing a file is considered done (in ms)"
@@ -3619,6 +3616,7 @@ msgstr "Dateien löschen"
 #: source/win-preferences/schema/advanced.ts:144
 msgid "Delete items irreversibly if moving them to trash fails"
 msgstr ""
+"Dateien unwiderruflich löschen, wenn Verschieben in den Papierkorb fehlschlägt"
 
 #: source/win-preferences/schema/advanced.ts:150
 msgid "Debug mode"
@@ -3694,7 +3692,7 @@ msgstr "Wie soll Autocomplete Zitate einfügen?"
 
 #: source/win-preferences/schema/citations.ts:39
 msgid "Citation database (CSL JSON or BibTex)"
-msgstr ""
+msgstr "Zitationsdatenbank (CSL JSON oder BibTex)"
 
 #: source/win-preferences/schema/citations.ts:41
 #: source/win-preferences/schema/citations.ts:53
@@ -3703,7 +3701,7 @@ msgstr "Dateipfad"
 
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL style (optional)"
-msgstr ""
+msgstr "CSL-Stil (optional)"
 
 #~ msgid "Open Link"
 #~ msgstr "Link öffnen"
@@ -3814,40 +3812,40 @@ msgstr ""
 #~ msgstr "Buttons links"
 
 #~ msgid "Display \"Open Preferences\" button"
-#~ msgstr "Zeige \"Einstellungen\""
+#~ msgstr "Zeige “Einstellungen“"
 
 #~ msgid "Display \"New File\" button"
-#~ msgstr "Zeige \"Neue Datei\""
+#~ msgstr "Zeige “Neue Datei“"
 
 #~ msgid "Display \"Previous File\" button"
-#~ msgstr "Zeige \"Vorherige Datei\""
+#~ msgstr "Zeige “Vorherige Datei“"
 
 #~ msgid "Display \"Next File\" button"
-#~ msgstr "Zeige \"Nächste Datei\""
+#~ msgstr "Zeige “Nächste Datei“"
 
 #~ msgid "Center section buttons"
 #~ msgstr "Buttons Mitte"
 
 #~ msgid "Display readability button"
-#~ msgstr "Zeige \"Lesbarkeitsmodus\""
+#~ msgstr "Zeige “Lesbarkeitsmodus“"
 
 #~ msgid "Display \"Insert Comment\" button"
-#~ msgstr "Zeige \"Kommentar einfügen\""
+#~ msgstr "Zeige “Kommentar einfügen“"
 
 #~ msgid "Display link button"
-#~ msgstr "Zeige \"Link einfügen\""
+#~ msgstr "Zeige “Link einfügen“"
 
 #~ msgid "Display image button"
-#~ msgstr "Zeige \"Bild einfügen\""
+#~ msgstr "Zeige “Bild einfügen“"
 
 #~ msgid "Display task list button"
-#~ msgstr "Zeige \"Task einfügen\""
+#~ msgstr "Zeige “Task einfügen“"
 
 #~ msgid "Display \"Insert Table\" button"
-#~ msgstr "Zeige \"Tabelle einfügen\""
+#~ msgstr "Zeige “Tabelle einfügen“"
 
 #~ msgid "Display \"Insert Footnote\" button"
-#~ msgstr "Zeige \"Fußnote einfügen\""
+#~ msgstr "Zeige “Fußnote einfügen“"
 
 #~ msgid "Right section buttons"
 #~ msgstr "Buttons rechts"
@@ -3866,8 +3864,8 @@ msgstr ""
 
 #~ msgid "Delete items irreversibly, if moving them to trash fails"
 #~ msgstr ""
-#~ "Lösche Objekte unwiderruflich, wenn sie nicht in den Papierkorb "
-#~ "verschoben werden können"
+#~ "Lösche Objekte unwiderruflich, wenn sie nicht in den Papierkorb verschoben "
+#~ "werden können"
 
 #~ msgid "Close Workspace"
 #~ msgstr "Arbeitsverzeichnis schließen"
@@ -3879,7 +3877,7 @@ msgstr ""
 #~ msgstr "AutoCorrect"
 
 #~ msgid "Manage tags"
-#~ msgstr "Tags verwalten"
+#~ msgstr "Schlagwörter verwalten"
 
 #~ msgid "Table of Contents"
 #~ msgstr "Inhaltsverzeichnis"
@@ -3906,7 +3904,7 @@ msgstr ""
 #~ msgstr "Statistiken"
 
 #~ msgid "Tags"
-#~ msgstr "Tags"
+#~ msgstr "Schlagwörter"
 
 #~ msgid "Open the settings dialog"
 #~ msgstr "Einstellungen öffnen"
@@ -3956,7 +3954,7 @@ msgstr ""
 #~ msgstr "%s Treffer"
 
 #~ msgid "Suggested tags for the current file"
-#~ msgstr "Vorgeschlagene Tags für die aktuelle Datei"
+#~ msgstr "Vorgeschlagene Schlagwörter für die aktuelle Datei"
 
 #~ msgid "Add to file"
 #~ msgstr "Hinzufügen"
@@ -4022,8 +4020,7 @@ msgstr ""
 #~ msgstr "Zeige folgende Zeit in den Dateiinformationen an"
 
 #~ msgid ""
-#~ "Choose the formatting characters that the bold/emphasis commands should "
-#~ "use"
+#~ "Choose the formatting characters that the bold/emphasis commands should use"
 #~ msgstr "Wähle die Formatierungszeichen für die Fett/Kursiv-Befehle aus"
 
 #~ msgid "Default image path (relative or absolute)"
@@ -4042,9 +4039,9 @@ msgstr ""
 #~ msgstr "Zeichenkette"
 
 #~ msgid ""
-#~ "Here you can define certain strings that will be replaced when "
-#~ "AutoCorrect is on. The characters on the left side will be replaced with "
-#~ "whatever comes on the right."
+#~ "Here you can define certain strings that will be replaced when AutoCorrect "
+#~ "is on. The characters on the left side will be replaced with whatever "
+#~ "comes on the right."
 #~ msgstr ""
 #~ "Hier kannst du Zeichenketten definieren, die ersetzt werden, sobald "
 #~ "AutoCorrect eingeschaltet ist. Die Zeichen links werden mit den Zeichen "
@@ -4053,26 +4050,25 @@ msgstr ""
 #~ msgid "Search for dictionaries…"
 #~ msgstr "Suche nach Wörterbüchern…"
 
-#~ msgid ""
-#~ "Put auto-created files into this directory (must be loaded in Zettlr)"
+#~ msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 #~ msgstr ""
-#~ "Erstelle Dateien automatisch in diesem Verzeichnis (muss in Zettlr "
-#~ "geladen sein)"
+#~ "Erstelle Dateien automatisch in diesem Verzeichnis (muss in Zettlr geladen "
+#~ "sein)"
 
 #~ msgid ""
 #~ "Target directory for exported files. <em>Attention:</em> Selecting the "
 #~ "current working directory will overwrite files without warning!"
 #~ msgstr ""
 #~ "Zielverzeichnis für Exporte. <em>Vorsicht:</em> Die Auswahl &quot;"
-#~ "Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell "
-#~ "vorhandene Dateien!"
+#~ "Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell vorhandene "
+#~ "Dateien!"
 
 #~ msgid "Temporary directory: is regularly expunged"
 #~ msgstr "Temporäres Verzeichnis: wird regelmäßig geleert"
 
 #~ msgid ""
-#~ "Current working directory: exported files will be saved into the "
-#~ "currently selected directory."
+#~ "Current working directory: exported files will be saved into the currently "
+#~ "selected directory."
 #~ msgstr ""
 #~ "Aktuelles Verzeichnis: die Exporte werden im aktuell ausgewählten "
 #~ "Verzeichnis gespeichert."
@@ -4081,9 +4077,8 @@ msgstr ""
 #~ msgstr "Verzeichnis auswählen"
 
 #~ msgid ""
-#~ "Enter all file extensions that you want to see in your attachment "
-#~ "sidebar. Separate them with a comma. Changes are recognised after a "
-#~ "restart."
+#~ "Enter all file extensions that you want to see in your attachment sidebar. "
+#~ "Separate them with a comma. Changes are recognised after a restart."
 #~ msgstr ""
 #~ "Trage hier alle Dateitypen ein, die du in der Attachment-Sidebar sehen "
 #~ "möchtest. Trenne jeden Dateityp mit einem Komma. Änderungen werden nach "
