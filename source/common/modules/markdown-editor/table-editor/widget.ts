@@ -28,13 +28,6 @@ import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCo
 import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRow } from './commands/rows'
 import { clearTable, setAlignment } from './commands/tables'
 
-// DEBUG // TODOs:
-// DEBUG // * An empty table is difficult to fill with content because the cells
-// DEBUG //   are very small then
-// DEBUG // * If someone presses tab, this should bring the selection into the
-// DEBUG //   next cell
-// DEBUG // * Selections in small/almost empty cells are brittle
-
 // This widget holds a visual DOM representation of a table.
 export class TableWidget extends WidgetType {
   constructor (readonly table: string, readonly node: SyntaxNode) {
