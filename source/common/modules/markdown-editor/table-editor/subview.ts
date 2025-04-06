@@ -17,17 +17,12 @@
  */
 
 import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language'
-import { EditorState, Prec, StateField, Annotation, Transaction, type ChangeSpec, type Range } from '@codemirror/state'
+import { EditorState, Prec, StateField, type ChangeSpec, type Range } from '@codemirror/state'
 import { EditorView, drawSelection, type DecorationSet, Decoration, ViewPlugin, type ViewUpdate } from '@codemirror/view'
 import markdownParser from '../parser/markdown-parser'
 import { tableEditorKeymap } from '../keymaps/table-editor'
-
-/**
- * This syncAnnotation is used to tag all transactions originating from the main
- * EditorView when dispatching them to the subview to ensure they don't get
- * re-emitted.
- */
-const syncAnnotation = Annotation.define<boolean>()
+import { dispatchFromSubview, maybeDispatchToSubview, syncAnnotation } from './util/data-exchange'
+import { configField } from '../util/configuration'
 
 /**
  * A transaction filter that ensures that any changes made to the view that
@@ -228,6 +223,10 @@ export function createSubviewForCell (
       // A minimal set of extensions
       Prec.highest(tableEditorKeymap(mainView)),
       drawSelection(),
+      // Add the configuration and preset it with whatever is in the main view.
+      // The config field will automagically update since we forward any effects
+      // to the subview.
+      configField.init(_state => JSON.parse(JSON.stringify(mainView.state.field(configField)))),
       // TODO: Light and dark mode switch
       syntaxHighlighting(defaultHighlightStyle),
       EditorView.lineWrapping,
@@ -247,44 +246,12 @@ export function createSubviewForCell (
   const subview = new EditorView({
     state,
     parent: contentWrapper,
-    // Route any updates to the main view
-    dispatch: (tr, subview) => {
-      subview.update([tr])
-      if (!tr.changes.empty && tr.annotation(syncAnnotation) === undefined) {
-        const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
-        const userEvent = tr.annotation(Transaction.userEvent)
-        if (userEvent !== undefined) {
-          annotations.push(Transaction.userEvent.of(userEvent))
-        }
-        mainView.dispatch({ changes: tr.changes, annotations })
-      }
-    }
+    // Route any updates to the main view. Apply those coming in from the main
+    // view.
+    dispatch: dispatchFromSubview(mainView)
   })
 
   subview.focus()
-}
-
-/**
- * This function takes an EditorView that is acting as a slave to some main
- * EditorView in which the TableEditor is running and applies all provided
- * transactions one by one to the subview, ensuring to tag the transactions with
- * a syncAnnotation to signal to the subview that it should not re-emit those
- * transactions.
- *
- * @param  {EditorView}   subview  The subview to have the transaction applied to
- * @param  {Transaction}  tr       The transaction from the main view
- */
-function maybeUpdateSubview (subview: EditorView, tr: Transaction): void {
-  if (tr.changes.empty || tr.annotation(syncAnnotation) !== undefined) {
-    return
-  }
-
-  const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
-  const userEvent = tr.annotation(Transaction.userEvent)
-  if (userEvent !== undefined) {
-    annotations.push(Transaction.userEvent.of(userEvent))
-  }
-  subview.dispatch({ changes: tr.changes, annotations })
 }
 
 /**
@@ -302,7 +269,7 @@ export const subviewUpdatePlugin = ViewPlugin.define(view => ({
       const subview = EditorView.findFromDOM(cell)
       if (subview !== null) {
         for (const tr of u.transactions) {
-          maybeUpdateSubview(subview, tr)
+          maybeDispatchToSubview(subview, tr)
         }
       }
     }

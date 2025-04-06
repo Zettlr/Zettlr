@@ -27,6 +27,7 @@ import { deleteBracketPair } from '@codemirror/autocomplete'
 import { applyBold, applyItalic, insertLink, insertImage, applyComment } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
+import { handleBackspace, handleQuote } from '../commands/autocorrect'
 
 /**
  * This command can be used to override the default selectAll functionality.
@@ -82,7 +83,11 @@ export function tableEditorKeymap (mainView: EditorView): Extension {
     { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
     { key: 'Mod-C', run: applyComment },
 
+    { key: 'Backspace', run: handleBackspace },
     { key: 'Backspace', run: deleteBracketPair },
+
+    { key: '"', run: handleQuote('"') },
+    { key: "'", run: handleQuote("'") },
 
     { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
     { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
