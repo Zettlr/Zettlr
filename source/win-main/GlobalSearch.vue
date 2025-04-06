@@ -10,15 +10,18 @@
       v-bind:autocomplete-values="recentGlobalSearches"
       v-bind:placeholder="queryInputPlaceholder"
       v-on:keydown.enter="startSearch()"
+      v-on:keydown.ctrl.down="selectInput($event)"
     ></AutocompleteText>
     <AutocompleteText
-      ref="restrict-to-dir-input"
+      ref="restrictToDirInput"
       v-model="restrictToDir"
       name="restrict-to-dir-input"
       v-bind:label="restrictDirLabel"
       v-bind:autocomplete-values="directorySuggestions"
       v-bind:placeholder="restrictDirPlaceholder"
       v-on:keydown.enter="startSearch()"
+      v-on:keydown.ctrl.down="selectInput($event)"
+      v-on:keydown.ctrl.up="selectInput($event)"
     ></AutocompleteText>
     <!-- Then an always-visible search button ... -->
     <p>
@@ -105,9 +108,17 @@
             v-for="singleRes, idx2 in result.result"
             v-bind:key="idx2"
             class="result-line"
-            v-bind:class="{'active': idx==activeFileIdx && idx2==activeLineIdx}"
+            v-bind:class="{
+              'active': idx==activeFileIdx && idx2==activeLineIdx,
+              'selected': idx==selectedFileIdx && idx2==selectedLineIdx
+            }"
             v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
             v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
+            v-on:keydown.enter="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
+            v-on:keydown.ctrl.down="selectInput($event)"
+            v-on:keydown.ctrl.up="selectInput($event)"
+            v-on:keydown.down="selectInput($event)"
+            v-on:keydown.up="selectInput($event)"
           >
             <!-- NOTE how we have to increase the line number from zero-based to 1-based -->
             <span v-if="singleRes.line !== -1"><strong>{{ singleRes.line + 1 }}</strong>: </span>
@@ -207,6 +218,8 @@ const maxWeight = ref<number>(0)
 const activeFileIdx = ref<undefined|number>(undefined)
 // The result line index of the most recently clicked search result.
 const activeLineIdx = ref<undefined|number>(undefined)
+const selectedFileIdx = ref<undefined|number>(undefined)
+const selectedLineIdx = ref<undefined|number>(undefined)
 
 const workspacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
@@ -217,7 +230,9 @@ const recentGlobalSearches = computed(() => configStore.config.window.recentGlob
 const fileTree = computed(() => workspacesStore.rootDescriptors)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
-const queryInputElement = ref<HTMLInputElement|null>(null)
+// const queryInputElement = ref<HTMLInputElement|null>(null)
+const queryInputElement = ref<InstanceType<typeof AutocompleteText>|null>(null)
+const restrictToDirInput = ref<InstanceType<typeof AutocompleteText>|null>(null)
 
 const searchResults = computed(() => {
   // NOTE: Vue's reactivity can be tricky, and one thing is to sort arrays.
@@ -396,6 +411,51 @@ function startSearch (overrideQuery?: string): void {
   singleSearchRun().catch(err => console.error(err))
 }
 
+function selectInput(this: any, event: KeyboardEvent): void {
+  event.preventDefault();
+  event.stopPropagation();
+
+console.log("agus selectInput");
+// console.log(document.activeElement);
+console.log(event.target);
+// console.log(queryInputElement.value?.$el);
+// console.log(queryInputElement.value);
+
+  // Select next input
+  // const target = document.activeElement;
+  const target = event.target;
+  const queryInputElementAsHtml  = queryInputElement.value?.$el;
+  const restrictToDirInputAsHtml = restrictToDirInput.value?.$el;
+  if (event.key === 'ArrowDown') {
+    console.log("arrowdown")
+    if (queryInputElementAsHtml.contains(target)) {
+      console.log("here");
+      restrictToDirInput.value?.focus();
+    }
+    else if (restrictToDirInputAsHtml.contains(target)) {
+      console.log("here2");
+      const selectedResult = document.querySelector(".result-line.active");
+      console.log(selectedResult);
+      if (selectedResult == null) {
+        console.log("here3");
+        selectedFileIdx.value = 0;
+        selectedLineIdx.value = 0;
+        // var result = document.querySelector(".result-line.selected");
+        // result?.focus();
+      }
+    }
+    // else if (element contains result-line in his classes) {
+
+    // }
+  }
+  else {
+    console.log("arrowup")
+    if (restrictToDirInputAsHtml.contains(target)) {
+      focusQueryInput();
+    }
+  }
+}
+
 async function singleSearchRun (): Promise<void> {
   // Take the file to be searched ...
   const terms = compileSearchTerms(query.value)
@@ -439,6 +499,8 @@ function emptySearchResults (): void {
   // Clear indices of active search result
   activeFileIdx.value = -1
   activeLineIdx.value = -1
+  selectedFileIdx.value = -1
+  selectedLineIdx.value = -1
 
   // Also, for convenience, re-focus and select the input if available
   queryInputElement.value?.focus()
@@ -463,19 +525,21 @@ function fileContextMenu (event: MouseEvent, filePath: string, lineNumber: numbe
   })
 }
 
-function onResultClick (event: MouseEvent, idx: number, idx2: number, filePath: string, lineNumber: number): void {
+function onResultClick (event: MouseEvent | KeyboardEvent, idx: number, idx2: number, filePath: string, lineNumber: number): void {
   // This intermediary function is needed to make sure that jumpToLine can
   // also be called from within the context menu (see above).
-  if (event.button === 2) {
+  if (event instanceof MouseEvent && event.button === 2) {
     return // Do not handle right-clicks
   }
+
+console.log("agus onResultClick");
 
   // Update indices so we can keep track of the most recently clicked
   // search result.
   activeFileIdx.value = idx
   activeLineIdx.value = idx2
 
-  const isMiddleClick = (event.type === 'mousedown' && event.button === 1)
+  const isMiddleClick = (event instanceof MouseEvent && event.type === 'mousedown' && event.button === 1)
   jumpToLine(filePath, lineNumber, isMiddleClick)
 }
 
@@ -572,6 +636,10 @@ body div#global-search-pane {
 
     div.active {
       background-color: rgb(160, 160, 160);
+    }
+
+    div.selected {
+      background-color: rgb(0, 100, 250);
     }
   }
 }
