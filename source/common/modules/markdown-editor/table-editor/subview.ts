@@ -22,7 +22,9 @@ import { EditorView, drawSelection, type DecorationSet, Decoration, ViewPlugin, 
 import markdownParser from '../parser/markdown-parser'
 import { tableEditorKeymap } from '../keymaps/table-editor'
 import { dispatchFromSubview, maybeDispatchToSubview, syncAnnotation } from './util/data-exchange'
-import { configField } from '../util/configuration'
+import { configField, type EditorConfiguration } from '../util/configuration'
+import { getMainEditorThemes } from '../editor-extension-sets'
+import { darkMode } from '../theme/dark-mode'
 
 /**
  * A transaction filter that ensures that any changes made to the view that
@@ -209,6 +211,9 @@ export function createSubviewForCell (
   contentWrapper: HTMLDivElement,
   cellRange: { from: number, to: number }
 ): void {
+  const cfg: EditorConfiguration = JSON.parse(JSON.stringify(mainView.state.field(configField)))
+  const themes = getMainEditorThemes()
+
   const state = EditorState.create({
     // Subviews always hold the entire document. This is to make synchronizing
     // updates between main and subviews faster and simpler. This should only
@@ -222,12 +227,12 @@ export function createSubviewForCell (
     extensions: [
       // A minimal set of extensions
       Prec.highest(tableEditorKeymap(mainView)),
-      drawSelection(),
+      drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
       // Add the configuration and preset it with whatever is in the main view.
       // The config field will automagically update since we forward any effects
       // to the subview.
-      configField.init(_state => JSON.parse(JSON.stringify(mainView.state.field(configField)))),
-      // TODO: Light and dark mode switch
+      configField.init(_state => cfg),
+      darkMode({ darkMode: cfg.darkMode, ...themes[cfg.theme] }),
       syntaxHighlighting(defaultHighlightStyle),
       EditorView.lineWrapping,
       markdownParser(), // TODO: Config?
