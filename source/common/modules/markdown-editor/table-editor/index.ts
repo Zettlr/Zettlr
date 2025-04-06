@@ -81,8 +81,10 @@ export const renderTables = [
       paddingTop: '21px',
       paddingLeft: '21px',
       paddingRight: '10.5px',
+      paddingBottom: '10.5px',
       marginTop: '-21px',
       marginLeft: '-21px',
+      marginBottom: '-10.5px',
       overflow: 'auto'
     },
     'div.cm-table-editor-widget-wrapper table': {
