@@ -179,7 +179,7 @@
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-vue": "^9.32.0",
     "jsdom": "^26.0.0",
-    "less": "^4.2.1",
+    "less": "^4.3.0",
     "less-loader": "^12.2.0",
     "mocha": "^11.1.0",
     "node-loader": "^2.1.0",
