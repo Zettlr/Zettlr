@@ -68,7 +68,11 @@ defaults:
 # Global environment variables
 env:
   NODE_VERSION: '20'
-  DEBUG: '*' # DEBUG: Enable debug mode to debug macOS ARM package notarization errors
+  # Specify the branch name which will cause regular nightly builds
+  NIGHTLY_BRANCH: 'develop'
+  # Specify the branch name which will cause release drafts to be published
+  RELEASE_BRANCH: 'master'
+  # DEBUG: '*' # Uncomment to debug Electron building packages
 
 # Ensure only a single build workflow runs at any one time
 concurrency:
@@ -81,7 +85,7 @@ concurrency:
 jobs:
   # First, ensure that nothing breaks before attempting to build
   preflight:
-    name: 'Preflight: Lint/Unit tests'
+    name: 'Preflight'
     uses: ./.github/workflows/check.yml
   # If we're building a full release, we have to make sure that nobody (that is:
   # Hendrik) forgot to increment the tag version. If we already have a tag with
@@ -137,8 +141,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == 'develop'
-        # run: echo "$(cat package.json | jq --arg commit "$(git rev-parse --short HEAD)" '.version = .version + "-nightly+" + $commit')" > package.json
+        if: github.ref_name == env.NIGHTLY_BRANCH
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -183,8 +186,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == 'develop'
-        # run: echo "$(cat package.json | jq --arg commit "$(git rev-parse --short HEAD)" '.version = .version + "-nightly+" + $commit')" > package.json
+        if: github.ref_name == env.NIGHTLY_BRANCH
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -230,8 +232,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == 'develop'
-        # run: echo "$(cat package.json | jq --arg commit "$(git rev-parse --short HEAD)" '.version = .version + "-nightly+" + $commit')" > package.json
+        if: github.ref_name == env.NIGHTLY_BRANCH
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -292,8 +293,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: github.ref_name == 'develop'
-        # run: echo "$(cat package.json | jq --arg commit "$(git rev-parse --short HEAD)" '.version = .version + "-nightly+" + $commit')" > package.json
+        if: github.ref_name == env.NIGHTLY_BRANCH
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -334,8 +334,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == 'develop'
-        # run: echo "$(cat package.json | jq --arg commit "$(git rev-parse --short HEAD)" '.version = .version + "-nightly+" + $commit')" > package.json
+        if: github.ref_name == env.NIGHTLY_BRANCH
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -385,8 +384,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == 'develop'
-        # run: echo "$(cat package.json | jq --arg commit "$(git rev-parse --short HEAD)" '.version = .version + "-nightly+" + $commit')" > package.json
+        if: github.ref_name == env.NIGHTLY_BRANCH
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -443,13 +441,13 @@ jobs:
       # We must make sure to copy the three additional files
       # to the release folder because of the --delete flag in rsync below.
       - name: Copy Nightly Static Files
-        if: github.ref_name == 'develop'
+        if: github.ref_name == env.NIGHTLY_BRANCH
         run: |
           cp ./scripts/assets/nightly-index.php ./release/index.php
           cp ./scripts/assets/nightly-sm_preview.png ./release/sm_preview.png
           cp ./resources/icons/png/512x512.png ./release/logo.png
       - name: Upload nightlies to the server
-        if: github.ref_name == 'develop'
+        if: github.ref_name == env.NIGHTLY_BRANCH
         uses: easingthemes/ssh-deploy@v3.0.1
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
@@ -461,7 +459,7 @@ jobs:
           TARGET: ${{ secrets.NIGHTLY_TARGET }}
       # OTHERWISE: Create a new release draft
       - name: Create release draft
-        if: github.ref_name == 'master'
+        if: github.ref_name == env.RELEASE_BRANCH
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -484,3 +482,4 @@ jobs:
             ./release/Zettlr-${{env.version}}-x86_64.AppImage
             ./release/Zettlr-${{env.version}}-arm64.AppImage
             ./release/SHA256SUMS.txt
+      # Else: Do nothing -> keep the artifacts, but do not do anything with them.
