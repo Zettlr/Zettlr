@@ -13,6 +13,7 @@
 - Zettlr now properly retrieves attachments also for items residing in group
   libraries (#5647).
 - Updated German (`de-DE`) translation
+- Use shortcuts to navigate search results from the global search (#5718).
 
 ## Under the Hood
 
