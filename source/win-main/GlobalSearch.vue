@@ -106,8 +106,8 @@
         <div v-if="!result.hideResultSet" class="results-container">
           <div
             v-for="singleRes, idx2 in result.result"
-            tabindex="-1"
             v-bind:key="idx2"
+            tabindex="-1"
             class="result-line"
             v-bind:class="{
               'active': idx==activeFileIdx && idx2==activeLineIdx,
@@ -116,7 +116,6 @@
             v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
             v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
             v-on:keydown.enter="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
-            v-on:keydown.ctrl.up="selectInput($event)"
             v-on:keydown.down="selectInput($event)"
             v-on:keydown.up="selectInput($event)"
           >
@@ -232,7 +231,6 @@ const recentGlobalSearches = computed(() => configStore.config.window.recentGlob
 const fileTree = computed(() => workspacesStore.rootDescriptors)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
-// const queryInputElement = ref<HTMLInputElement|null>(null)
 const queryInputElement = ref<InstanceType<typeof AutocompleteText>|null>(null)
 const restrictToDirInput = ref<InstanceType<typeof AutocompleteText>|null>(null)
 
@@ -410,96 +408,88 @@ function startSearch (overrideQuery?: string): void {
   sumFilesToSearch.value = fileList.length
   filesToSearch.value = fileList
   maxWeight.value = 0
-  queryInputElement.value?.focus();
+  queryInputElement.value?.focus()
   singleSearchRun().catch(err => console.error(err))
 }
 
-async function selectInput(this: any, event: KeyboardEvent): Promise<void> {
-  event.preventDefault();
-  event.stopPropagation();
+async function selectInput (this: any, event: KeyboardEvent): Promise<void> {
+  event.preventDefault()
+  event.stopPropagation()
 
-  const target = event.target;
-  const queryInputElementAsHtml  = queryInputElement.value?.$el;
-  const restrictToDirInputAsHtml = restrictToDirInput.value?.$el;
+  const target = event.target as Node
+  const queryInputElementAsHtml  = queryInputElement.value?.$el as Node
+  const restrictToDirInputAsHtml = restrictToDirInput.value?.$el as Node
   
   if (event.key === 'ArrowDown') {
     if (queryInputElementAsHtml.contains(target)) {
-      restrictToDirInput.value?.focus();
-    }
-    else if (restrictToDirInputAsHtml.contains(target)) {
-      const activeResult = document.querySelector(".result-line.active");
-      const selectedResult = document.querySelector(".result-line.selected");
+      restrictToDirInput.value?.focus()
+    } else if (restrictToDirInputAsHtml.contains(target)) {
+      const activeResult = document.querySelector('.result-line.active')
+      const selectedResult = document.querySelector('.result-line.selected')
       if (activeResult === null && selectedResult === null) {
-        selectedFileIdx.value = 0;
-        selectedLineIdx.value = 0;
-      }
-      else if (selectedResult !== null) {
+        selectedFileIdx.value = 0
+        selectedLineIdx.value = 0
+      } else if (selectedResult !== null) {
         // no idea why this is needed
-        selectedFileIdx.value = selectedFileIdx.value;
-        selectedLineIdx.value = selectedLineIdx.value;
-      }
-      else {
-        selectedFileIdx.value = activeFileIdx.value;
-        selectedLineIdx.value = activeLineIdx.value;
+        selectedFileIdx.value = selectedFileIdx.value
+        selectedLineIdx.value = selectedLineIdx.value
+      } else {
+        selectedFileIdx.value = activeFileIdx.value
+        selectedLineIdx.value = activeLineIdx.value
       }
         
-      focusSelectedResultLine();
-    }
-    else if (document.activeElement?.classList.contains("result-line")) {
-      const filenames = Array.from(document.querySelectorAll(".filepath"));
-      const maxIndexFiles = filenames.length - 1;
-      const resultLinesContainer = (document.activeElement as HTMLElement).parentElement;
-      const maxIndexLines = resultLinesContainer!.children.length! - 1;
+      focusSelectedResultLine()
+    } else if (document.activeElement!.classList.contains('result-line')) {
+      const filenames = Array.from(document.querySelectorAll('.filepath'))
+      const maxIndexFiles = filenames.length - 1
+      const resultLinesContainer = (document.activeElement as HTMLElement).parentElement
+      const maxIndexLines = resultLinesContainer!.children.length! - 1
 
       // Logics to determine if next line should be considered, 
       // or results of next file should be considered.
       if (selectedLineIdx.value + 1 > maxIndexLines) {
         // increase file idx
         if (selectedFileIdx.value + 1 > maxIndexFiles) {
-          console.log("hit max searchResult, returning");
-          return;
+          console.log('hit max searchResult, returning')
+          return
         }
-        selectedFileIdx.value += 1;
-        selectedLineIdx.value = 0;
+        selectedFileIdx.value += 1
+        selectedLineIdx.value = 0
+      } else {
+        selectedLineIdx.value += 1
       }
-      else {
-        selectedLineIdx.value += 1;
-      }
-      console.log("increase: selectedLineIdx, selectedFileIdx= " + selectedLineIdx.value + "," + selectedFileIdx.value);
-      focusSelectedResultLine();
+      console.log('increase: selectedLineIdx, selectedFileIdx= ' + selectedLineIdx.value + ',' + selectedFileIdx.value)
+      focusSelectedResultLine()
     }
-  }
-  else {
+  } else {
     if (restrictToDirInputAsHtml.contains(target)) {
-      focusQueryInput();
-    }
-    else if (document.activeElement?.classList.contains("result-line")) {
+      focusQueryInput()
+    } else if (document.activeElement!.classList.contains('result-line')) {
       if (selectedLineIdx.value - 1 < 0) {
         // decrease file idx
         if (selectedFileIdx.value - 1 < 0) {
-          console.log("hit min searchResult, returning");
-          return;
+          restrictToDirInput.value?.focus()
+          return
         }
-        const container = (document.activeElement as HTMLElement).parentElement?.parentElement;
-        const previousSiblingContainer = (container?.previousSibling?.childNodes[2] as HTMLElement);
+        const container = (document.activeElement as HTMLElement).parentElement?.parentElement
+        const previousSiblingContainer = (container?.previousSibling?.childNodes[2] as HTMLElement)
         
-        selectedFileIdx.value -= 1;
-        selectedLineIdx.value = previousSiblingContainer!.childElementCount - 1;
+        selectedFileIdx.value -= 1
+        selectedLineIdx.value = previousSiblingContainer!.childElementCount - 1
+      } else {
+        selectedLineIdx.value -= 1
       }
-      else {
-        selectedLineIdx.value -= 1;
-      }
-      focusSelectedResultLine();
-      console.log("decrease: selectedLineIdx, selectedFileIdx= " + selectedLineIdx.value + "," + selectedFileIdx.value);
+      focusSelectedResultLine()
+      console.log('decrease: selectedLineIdx, selectedFileIdx= ' + selectedLineIdx.value + ',' + selectedFileIdx.value)
     }
   }
 }
 
-async function focusSelectedResultLine() : Promise<void> {
+async function focusSelectedResultLine () : Promise<void> {
   // wait for DOM updates
-  await nextTick();
-  const selectedResult = document.querySelector(".result-line.selected") as HTMLElement;
-  selectedResult?.focus();
+  await nextTick()
+  const selectedResult = document.querySelector('.result-line.selected')! as HTMLElement
+  selectedResult?.focus()
 }
 
 async function singleSearchRun (): Promise<void> {
@@ -577,8 +567,6 @@ function onResultClick (event: MouseEvent | KeyboardEvent, idx: number, idx2: nu
   if (event instanceof MouseEvent && event.button === 2) {
     return // Do not handle right-clicks
   }
-
-console.log("agus onResultClick");
 
   // Update indices so we can keep track of the most recently clicked
   // search result.
