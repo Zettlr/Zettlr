@@ -2581,16 +2581,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.17.14":
-  version: 20.17.14
-  resolution: "@types/node@npm:20.17.14"
-  dependencies:
-    undici-types: "npm:~6.19.2"
-  checksum: 10/517b8197d833782551bd01431321b83cc03655d7f3836c3e804f8d506eea6cc6f02768c8df078822c9583eeca4f059b7e0fd903e951587e6393bd35af22c37bb
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^22.7.7":
+"@types/node@npm:^22.14.0, @types/node@npm:^22.7.7":
   version: 22.14.0
   resolution: "@types/node@npm:22.14.0"
   dependencies:
@@ -14868,13 +14859,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.19.2":
-  version: 6.19.8
-  resolution: "undici-types@npm:6.19.8"
-  checksum: 10/cf0b48ed4fc99baf56584afa91aaffa5010c268b8842f62e02f752df209e3dea138b372a60a963b3b2576ed932f32329ce7ddb9cb5f27a6c83040d8cd74b7a70
-  languageName: node
-  linkType: hard
-
 "undici-types@npm:~6.21.0":
   version: 6.21.0
   resolution: "undici-types@npm:6.21.0"
@@ -16098,7 +16082,7 @@ __metadata:
     "@types/luxon": "npm:^3.4.2"
     "@types/md5": "npm:^2.3.5"
     "@types/mocha": "npm:^10.0.10"
-    "@types/node": "npm:^20.17.14"
+    "@types/node": "npm:^22.14.0"
     "@types/sanitize-html": "npm:^2.13.0"
     "@types/semver": "npm:^7.5.8"
     "@types/showdown": "npm:^2.0.6"

@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: '22'
 
 # Ensure only a single linter workflow runs at any one time for any event and
 # ref. This allows multiple linters to run, but at most one per ref.

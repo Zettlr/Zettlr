@@ -155,7 +155,7 @@
     "@types/luxon": "^3.4.2",
     "@types/md5": "^2.3.5",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^20.17.14",
+    "@types/node": "^22.14.0",
     "@types/sanitize-html": "^2.13.0",
     "@types/semver": "^7.5.8",
     "@types/showdown": "^2.0.6",
