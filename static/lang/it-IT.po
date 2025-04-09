@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2025-02-28 14:52+0000\n"
+"POT-Creation-Date: 2025-04-09 16:13+0000\n"
 "PO-Revision-Date: 2024-06-14 15:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -203,12 +203,12 @@ msgid "Could not create file"
 msgstr "Impossibile creare il file"
 
 #. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:113
+#: source/app/service-providers/commands/open-attachment.ts:119
 #, javascript-format
 msgid "The reference with key %s does not appear to have attachments."
 msgstr "Il riferimento con la chiave %s non sembra avere allegati."
 
-#: source/app/service-providers/commands/open-attachment.ts:118
+#: source/app/service-providers/commands/open-attachment.ts:124
 msgid "Could not open attachment. Is Zotero running?"
 msgstr "Impossibile aprire l'allegato. Zotero è in esecuzione?"
 
@@ -522,7 +522,7 @@ msgstr "Apri file"
 #: source/app/service-providers/documents/index.ts:390
 #: source/tmp/win-tag-manager/App.vue.ts:94
 #: source/tmp/win-assets/CustomCSS.vue.ts:34
-#: source/tmp/win-assets/DefaultsTab.vue.ts:110
+#: source/tmp/win-assets/DefaultsTab.vue.ts:113
 #: source/tmp/win-assets/SnippetsTab.vue.ts:47
 msgid "Unsaved changes"
 msgstr "Modifiche non salvate"
@@ -1938,7 +1938,7 @@ msgstr ""
 "maniera indesiderata</strong>"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:56
-#: source/tmp/win-assets/DefaultsTab.vue.ts:177
+#: source/tmp/win-assets/DefaultsTab.vue.ts:180
 #: source/tmp/win-assets/SnippetsTab.vue.ts:106
 msgid "Saving …"
 msgstr "Salvataggio …"
@@ -1991,7 +1991,7 @@ msgid "Edit the default settings for imports or exports here."
 msgstr ""
 "Modifica qui le impostazioni di default per importazione ed esportazione."
 
-#: source/tmp/win-assets/DefaultsTab.vue.ts:187
+#: source/tmp/win-assets/DefaultsTab.vue.ts:190
 #: source/tmp/win-assets/SnippetsTab.vue.ts:116
 msgid "Saved!"
 msgstr "Salvato!"
