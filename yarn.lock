@@ -12924,9 +12924,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-table-cell-padding@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "remark-lint-table-cell-padding@npm:5.0.0"
+"remark-lint-table-cell-padding@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "remark-lint-table-cell-padding@npm:5.1.1"
   dependencies:
     "@types/mdast": "npm:^4.0.0"
     "@types/unist": "npm:^3.0.0"
@@ -12937,7 +12937,7 @@ __metadata:
     unist-util-position: "npm:^5.0.0"
     unist-util-visit-parents: "npm:^6.0.0"
     vfile-message: "npm:^4.0.0"
-  checksum: 10/0d54fce4f3da8f0dfce7a3843c95318eac1b70ac1d1800492995286ccd1d208f1bea42132aaa0ea4636e3eff6f1362533e437a51ddf65ffff0defe16a2708b04
+  checksum: 10/4f9563ef2b8efd705aab5ac8fc5980242e5aca5f5f8515a35d843eb8694da068c24b8df1d430a4a0c2aa30fe352afb5b439dcd7f8bc0eb2d7e909bdc54472320
   languageName: node
   linkType: hard
 
@@ -16195,7 +16195,7 @@ __metadata:
     remark-lint-ordered-list-marker-style: "npm:^4.0.0"
     remark-lint-rule-style: "npm:^4.0.0"
     remark-lint-strong-marker: "npm:^4.0.0"
-    remark-lint-table-cell-padding: "npm:^5.0.0"
+    remark-lint-table-cell-padding: "npm:^5.1.1"
     remark-math: "npm:^6.0.0"
     remark-stringify: "npm:^11.0.0"
     rimraf: "npm:^6.0.1"

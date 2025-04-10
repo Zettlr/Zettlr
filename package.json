@@ -110,7 +110,7 @@
     "remark-lint-ordered-list-marker-style": "^4.0.0",
     "remark-lint-rule-style": "^4.0.0",
     "remark-lint-strong-marker": "^4.0.0",
-    "remark-lint-table-cell-padding": "^5.0.0",
+    "remark-lint-table-cell-padding": "^5.1.1",
     "remark-math": "^6.0.0",
     "remark-stringify": "^11.0.0",
     "rimraf": "^6.0.1",
