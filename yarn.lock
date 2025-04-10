@@ -12694,16 +12694,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-emphasis-marker@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "remark-lint-emphasis-marker@npm:4.0.0"
+"remark-lint-emphasis-marker@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "remark-lint-emphasis-marker@npm:4.0.1"
   dependencies:
     "@types/mdast": "npm:^4.0.0"
     unified-lint-rule: "npm:^3.0.0"
     unist-util-position: "npm:^5.0.0"
     unist-util-visit-parents: "npm:^6.0.0"
     vfile-message: "npm:^4.0.0"
-  checksum: 10/804321842f22d2328c8f10c99607b3f0ddc6a6627a9d7d5aed699c7d40d1a9d1646f8d8d8ff2608c91586e129303b708e22a76d2a45558046037e4f8957c1c10
+  checksum: 10/68b026614440f6f63ec1d965f505767ba64d44337c98479f2cfea2405e0171bbd4db6fd342ea83e1ffbd7c032ebebd6969653fc35df77fa12eecbc5ddd34e33a
   languageName: node
   linkType: hard
 
@@ -16178,7 +16178,7 @@ __metadata:
     remark-lint-blockquote-indentation: "npm:^4.0.0"
     remark-lint-checkbox-character-style: "npm:^5.0.0"
     remark-lint-code-block-style: "npm:^4.0.0"
-    remark-lint-emphasis-marker: "npm:^4.0.0"
+    remark-lint-emphasis-marker: "npm:^4.0.1"
     remark-lint-fenced-code-marker: "npm:^4.0.0"
     remark-lint-hard-break-spaces: "npm:^4.0.0"
     remark-lint-heading-style: "npm:^4.0.0"
