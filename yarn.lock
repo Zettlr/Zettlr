@@ -15626,9 +15626,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.99.2":
-  version: 5.99.2
-  resolution: "webpack@npm:5.99.2"
+"webpack@npm:^5.99.5":
+  version: 5.99.5
+  resolution: "webpack@npm:5.99.5"
   dependencies:
     "@types/eslint-scope": "npm:^3.7.7"
     "@types/estree": "npm:^1.0.6"
@@ -15658,7 +15658,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10/c0461f97b88322e4d8503b06f2b7a0982bd7634bb7e4a6e39f7389ada8918df31b95d62d08f57a24af80ef7c00ba27f451d894b43d61979d6e0398d9c6bc3581
+  checksum: 10/7ed5f931520b42063279605bcce56ac23a6880f3714e47d3ad04199d3f74da9ee0e7e7a693a0bf68543f15af8831edb63a05a251aa1047816f4784334bfe25d4
   languageName: node
   linkType: hard
 
@@ -16216,7 +16216,7 @@ __metadata:
     vue-loader: "npm:^17.4.2"
     vue-tsc: "npm:^2.2.8"
     vue-virtual-scroller: "npm:^2.0.0-beta.8"
-    webpack: "npm:^5.99.2"
+    webpack: "npm:^5.99.5"
     yaml: "npm:^2.7.1"
   dependenciesMeta:
     fsevents:
