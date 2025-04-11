@@ -12680,9 +12680,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-code-block-style@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "remark-lint-code-block-style@npm:4.0.0"
+"remark-lint-code-block-style@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "remark-lint-code-block-style@npm:4.0.1"
   dependencies:
     "@types/mdast": "npm:^4.0.0"
     mdast-util-phrasing: "npm:^4.0.0"
@@ -12690,7 +12690,7 @@ __metadata:
     unist-util-position: "npm:^5.0.0"
     unist-util-visit-parents: "npm:^6.0.0"
     vfile-message: "npm:^4.0.0"
-  checksum: 10/8bb15c71ff7cab2ff65db7a70170b9f15912527dca7ffa166fd024113882cec7e38d4ba136e2099fd4ec41ed0a5e071d605bb9c73e356a0e20f18b2ceafc22b2
+  checksum: 10/88bff6fd7265fd36161a2d35a9ebbed1cc09431acfa093b575d309d44165fed703348d05c922e483fdaac2b6e5710e988a93763eed254a677557ec55abc2dffb
   languageName: node
   linkType: hard
 
@@ -16177,7 +16177,7 @@ __metadata:
     remark-lint: "npm:^10.0.0"
     remark-lint-blockquote-indentation: "npm:^4.0.0"
     remark-lint-checkbox-character-style: "npm:^5.0.0"
-    remark-lint-code-block-style: "npm:^4.0.0"
+    remark-lint-code-block-style: "npm:^4.0.1"
     remark-lint-emphasis-marker: "npm:^4.0.0"
     remark-lint-fenced-code-marker: "npm:^4.0.0"
     remark-lint-hard-break-spaces: "npm:^4.0.0"
