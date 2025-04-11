@@ -26,6 +26,7 @@
   targeting them with Custom CSS rules (`toc-heading-X` where `X` is the level).
 - Bump Electron to `v35.1.5`.
 - Bump Node.js across the CI to v22 (LTS).
+- Bump various other dependencies.
 
 # 3.4.3
 
