@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2025-02-28 14:52+0000\n"
+"POT-Creation-Date: 2025-04-09 16:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: தமிழ்நேரம் <https://TamilNeram.github.io>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,12 +193,12 @@ msgid "Could not create file"
 msgstr "கோப்பை உருவாக்க முடியவில்லை"
 
 #. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:113
+#: source/app/service-providers/commands/open-attachment.ts:119
 #, javascript-format
 msgid "The reference with key %s does not appear to have attachments."
 msgstr "திறவுகோல் %s கொண்ட குறிப்பு இணைப்புகளைக் கொண்டிருப்பதாகத் தெரியவில்லை."
 
-#: source/app/service-providers/commands/open-attachment.ts:118
+#: source/app/service-providers/commands/open-attachment.ts:124
 msgid "Could not open attachment. Is Zotero running?"
 msgstr "இணைப்பைத் திறக்க முடியவில்லை. சோட்டெரோ இயங்குகிறதா?"
 
@@ -508,7 +508,7 @@ msgstr "கோப்பை திற"
 #: source/app/service-providers/documents/index.ts:390
 #: source/tmp/win-tag-manager/App.vue.ts:94
 #: source/tmp/win-assets/CustomCSS.vue.ts:34
-#: source/tmp/win-assets/DefaultsTab.vue.ts:110
+#: source/tmp/win-assets/DefaultsTab.vue.ts:113
 #: source/tmp/win-assets/SnippetsTab.vue.ts:47
 msgid "Unsaved changes"
 msgstr "சேமிக்கப்படாத மாற்றங்கள்"
@@ -1917,7 +1917,7 @@ msgstr ""
 "மாற்ற வேண்டாம், இல்லையெனில் பயன்பாடு தேவையற்ற நடத்தையை வெளிப்படுத்தக்கூடும்! </strong>"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:56
-#: source/tmp/win-assets/DefaultsTab.vue.ts:177
+#: source/tmp/win-assets/DefaultsTab.vue.ts:180
 #: source/tmp/win-assets/SnippetsTab.vue.ts:106
 msgid "Saving …"
 msgstr "சேமிப்பு…"
@@ -1969,7 +1969,7 @@ msgstr ""
 msgid "Edit the default settings for imports or exports here."
 msgstr "இறக்குமதி அல்லது ஏற்றுமதிக்கான இயல்புநிலை அமைப்புகளை இங்கே திருத்து."
 
-#: source/tmp/win-assets/DefaultsTab.vue.ts:187
+#: source/tmp/win-assets/DefaultsTab.vue.ts:190
 #: source/tmp/win-assets/SnippetsTab.vue.ts:116
 msgid "Saved!"
 msgstr "சேமிக்கப்பட்டது!"

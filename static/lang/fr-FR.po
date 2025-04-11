@@ -184,12 +184,12 @@ msgid "Could not create file"
 msgstr "Erreur lors de la création du fichier"
 
 #. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:113
+#: source/app/service-providers/commands/open-attachment.ts:119
 #, javascript-format
 msgid "The reference with key %s does not appear to have attachments."
 msgstr "La référence avec la clé %s ne semble pas avoir de pièces jointes."
 
-#: source/app/service-providers/commands/open-attachment.ts:118
+#: source/app/service-providers/commands/open-attachment.ts:124
 msgid "Could not open attachment. Is Zotero running?"
 msgstr "Impossible d'ouvrir la pièce jointe. Zotero fonctionne-t-il ?"
 
