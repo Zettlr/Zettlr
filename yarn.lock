@@ -12820,9 +12820,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-lint-no-duplicate-definitions@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "remark-lint-no-duplicate-definitions@npm:4.0.0"
+"remark-lint-no-duplicate-definitions@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "remark-lint-no-duplicate-definitions@npm:4.0.1"
   dependencies:
     "@types/mdast": "npm:^4.0.0"
     devlop: "npm:^1.0.0"
@@ -12830,7 +12830,7 @@ __metadata:
     unified-lint-rule: "npm:^3.0.0"
     unist-util-visit-parents: "npm:^6.0.0"
     vfile-message: "npm:^4.0.0"
-  checksum: 10/c9666507cd04245937813b3d488049a8abd845d5154cc779473a213530991a4a76db0a5500846228ea91efe864006d869924a48b0d71ab55300afbba516399a6
+  checksum: 10/39802cbb4dc67befdceed7d23db5b90a42642492e447abad8f3e8dc944e12e46e377555b40cffed11e71f0744b77fc5080e9eb0dd1b4617e1c2f85c91eb648ff
   languageName: node
   linkType: hard
 
@@ -16187,7 +16187,7 @@ __metadata:
     remark-lint-list-item-indent: "npm:^4.0.0"
     remark-lint-no-blockquote-without-marker: "npm:^6.0.0"
     remark-lint-no-consecutive-blank-lines: "npm:^5.0.0"
-    remark-lint-no-duplicate-definitions: "npm:^4.0.0"
+    remark-lint-no-duplicate-definitions: "npm:^4.0.1"
     remark-lint-no-heading-content-indent: "npm:^5.0.0"
     remark-lint-no-shortcut-reference-image: "npm:^4.0.0"
     remark-lint-no-shortcut-reference-link: "npm:^4.0.0"
