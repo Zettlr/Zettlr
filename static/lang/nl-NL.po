@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2025-02-28 14:52+0000\n"
+"POT-Creation-Date: 2025-04-09 16:13+0000\n"
 "PO-Revision-Date: 2022-12-29 23:16+0100\n"
 "Last-Translator: Marcel van den Brink <marcel.vandenbrink@gmail.com>\n"
 "Language-Team: \n"
@@ -195,12 +195,12 @@ msgid "Could not create file"
 msgstr "Kon bestand niet aanmaken"
 
 #. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:113
+#: source/app/service-providers/commands/open-attachment.ts:119
 #, javascript-format
 msgid "The reference with key %s does not appear to have attachments."
 msgstr "De referentie met sleutel %s lijkt geen bijlagen te hebben."
 
-#: source/app/service-providers/commands/open-attachment.ts:118
+#: source/app/service-providers/commands/open-attachment.ts:124
 msgid "Could not open attachment. Is Zotero running?"
 msgstr "Kan de bijlage niet openen. Draait Zotero?"
 
@@ -512,7 +512,7 @@ msgstr "Bestand openen"
 #: source/app/service-providers/documents/index.ts:390
 #: source/tmp/win-tag-manager/App.vue.ts:94
 #: source/tmp/win-assets/CustomCSS.vue.ts:34
-#: source/tmp/win-assets/DefaultsTab.vue.ts:110
+#: source/tmp/win-assets/DefaultsTab.vue.ts:113
 #: source/tmp/win-assets/SnippetsTab.vue.ts:47
 msgid "Unsaved changes"
 msgstr "Onopgeslagen wijzigingen"
@@ -1949,7 +1949,7 @@ msgstr ""
 "ongewenst gedrag vertonen!</strong>"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:56
-#: source/tmp/win-assets/DefaultsTab.vue.ts:177
+#: source/tmp/win-assets/DefaultsTab.vue.ts:180
 #: source/tmp/win-assets/SnippetsTab.vue.ts:106
 msgid "Saving …"
 msgstr "Opslaan ..."
@@ -1999,7 +1999,7 @@ msgstr ""
 msgid "Edit the default settings for imports or exports here."
 msgstr "Bewerk de standaardinstellingen voor importeren en exporteren."
 
-#: source/tmp/win-assets/DefaultsTab.vue.ts:187
+#: source/tmp/win-assets/DefaultsTab.vue.ts:190
 #: source/tmp/win-assets/SnippetsTab.vue.ts:116
 msgid "Saved!"
 msgstr "Opgeslagen!"

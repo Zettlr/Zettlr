@@ -7,11 +7,8 @@
       v-for="(entry, idx) of tableOfContents"
       v-bind:key="idx"
       v-bind:data-line="entry.line"
-      class="toc-entry-container"
+      v-bind:class="'toc-entry-container toc-heading-' + entry.level"
       draggable="true"
-      v-bind:style="{
-        'margin-left': `${(entry.level - 1) * 10}px`
-      }"
       v-on:click="emit('jump-to-line', entry.line)"
       v-on:dragstart="startDragging"
       v-on:dragover="dragOver"
@@ -210,6 +207,13 @@ function findEndOfEntry (originalToLine: number): number|undefined {
 // Add a neat little effect to the table of content entries as you drag them
 .toc-entry-container {
   border-bottom: 2px solid transparent;
+
+  &.toc-heading-1 { margin-left: 0px; }
+  &.toc-heading-2 { margin-left: 10px; }
+  &.toc-heading-3 { margin-left: 20px; }
+  &.toc-heading-4 { margin-left: 30px; }
+  &.toc-heading-5 { margin-left: 40px; }
+  &.toc-heading-6 { margin-left: 50px; }
 
   &.toc-drop-effect {
     border-bottom-color: rgb(40, 100, 255);
