@@ -12609,16 +12609,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rehype-remark@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "rehype-remark@npm:10.0.0"
+"rehype-remark@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "rehype-remark@npm:10.0.1"
   dependencies:
     "@types/hast": "npm:^3.0.0"
     "@types/mdast": "npm:^4.0.0"
     hast-util-to-mdast: "npm:^10.0.0"
     unified: "npm:^11.0.0"
     vfile: "npm:^6.0.0"
-  checksum: 10/132d8efdf5959b50a68d91865c7963b51731ac53899f6458e06b57a799b15f612ec05a48b0171938992ae33e2a2c12b2a0ce13e238b4b3544f4f6c37f441bae5
+  checksum: 10/5119de01a1cab714830fcf65b1137518792095bd9375fe08d911d3d72fdf90edff8267daeaa987b91cb72f0ab64a2e2ff5c88157a8dfb6f24dd873eddceca921
   languageName: node
   linkType: hard
 
@@ -16170,7 +16170,7 @@ __metadata:
     nodehun: "npm:^3.0.2"
     pinia: "npm:^3.0.2"
     rehype-parse: "npm:^9.0.1"
-    rehype-remark: "npm:^10.0.0"
+    rehype-remark: "npm:^10.0.1"
     rehype-remove-comments: "npm:^6.1.1"
     remark: "npm:^15.0.1"
     remark-frontmatter: "npm:^5.0.0"
