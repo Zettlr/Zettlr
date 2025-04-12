@@ -25,6 +25,7 @@ import { dispatchFromSubview, maybeDispatchToSubview, syncAnnotation } from './u
 import { configField, type EditorConfiguration } from '../util/configuration'
 import { getMainEditorThemes } from '../editor-extension-sets'
 import { darkMode } from '../theme/dark-mode'
+import { markdownSyntaxHighlighter } from '../theme/syntax'
 
 /**
  * A transaction filter that ensures that any changes made to the view that
@@ -234,6 +235,7 @@ export function createSubviewForCell (
       configField.init(_state => cfg),
       darkMode({ darkMode: cfg.darkMode, ...themes[cfg.theme] }),
       syntaxHighlighting(defaultHighlightStyle),
+      markdownSyntaxHighlighter(),
       EditorView.lineWrapping,
       markdownParser(), // TODO: Config?
       // Two custom extensions that are required for the specific use-case of
