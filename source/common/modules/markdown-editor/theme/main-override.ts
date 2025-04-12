@@ -23,14 +23,6 @@ export const mainOverride = EditorView.baseTheme({
     backgroundColor: 'transparent',
     cursor: 'auto'
   },
-  '.cm-content': {
-    // This is padding INSIDE the editor next to the gutters. Strictly speaking
-    // the content SHOULD start with zero padding, but there are some elements
-    // inside the editor that need to be positioned left to their widgets etc.
-    // Specifically, this padding is exactly the height plus padding of the
-    // buttons of the table editor.
-    paddingLeft: '21px'
-  },
   '.cm-scroller': {
     flexGrow: '1', // Ensure the content pushes possible panels towards the edge
     outline: '0' // Remove the outline
@@ -80,6 +72,9 @@ export const mainOverride = EditorView.baseTheme({
   '&dark .cm-yaml-frontmatter-start::after': {
     color: 'var(--grey-0)',
     backgroundColor: 'var(--grey-4)'
+  },
+  '.cm-heading': {
+    textDecoration: 'none'
   },
   // Highlight/mark elements
   '.cm-highlight': {
