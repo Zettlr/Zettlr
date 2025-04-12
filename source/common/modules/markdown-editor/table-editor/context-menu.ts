@@ -19,7 +19,7 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
         {
           type: 'normal',
           label: trans('Insert new row below'),
-          id: 'inert.row.below',
+          id: 'insert.row.below',
           enabled: true
         },
         { type: 'separator' },
