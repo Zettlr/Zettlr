@@ -367,12 +367,25 @@ export function deleteRow (target: EditorView): boolean {
         if (isPipeTableDelimRow(line.text)) {
           return undefined
         }
-  
-        return {
-          changes: {
-            from: line.from, to: isLastLine ? line.to : line.to + 1, insert: ''
+
+        const changes = [{
+          from: line.from, to: isLastLine ? line.to : line.to + 1, insert: ''
+        }]
+
+        if (rowIdx < ctx.tableAST.rows.length - 1) {
+          // Check if the user just deleted the header row. In that case, we
+          // need to swap the delim row with the next one.
+          const nextLine = target.state.doc.line(line.number + 1) // The delimiter would not be in the AST
+          if (isPipeTableDelimRow(nextLine.text)) {
+            const thirdLine = target.state.doc.line(line.number + 2)
+            changes.push(
+              { from: nextLine.from, to: nextLine.to + 1, insert: '' },
+              { from: thirdLine.to + 1, to: thirdLine.to + 1, insert: nextLine.text + '\n' }
+            )
           }
         }
+  
+        return { changes }
       } else {
         // Grid table
         // The user may have the cursor in a divider or a content row
