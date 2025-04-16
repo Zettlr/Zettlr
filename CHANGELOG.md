@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.4.4
+
+## GUI and Functionality
+
 - **Change**: The exporter will now forcefully enable (= if it is not yet
   enabled in the corresponding defaults file in the assets manager) the Pandoc
   extension `wikilinks_title_after_pipe` or `wikilinks_title_before_pipe`
