@@ -1,5 +1,5 @@
 import {
-  acceptCompletion, closeCompletion, deleteBracketPair, moveCompletionSelection
+  acceptCompletion, closeCompletion, moveCompletionSelection
 } from '@codemirror/autocomplete'
 import {
   insertNewlineAndIndent, copyLineUp, copyLineDown
@@ -20,6 +20,9 @@ import {
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { sharedKeymap } from './shared'
+import { addColAfter, addColBefore, clearCol, deleteCol, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
+import { addRowAfter, addRowBefore, clearRow, moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
+import { alignTables, clearTable, setAlignment } from '../table-editor/commands/tables'
 
 // Includes:
 // * completionKeymap
@@ -33,6 +36,8 @@ export function markdownKeymap (): Extension {
     { key: 'PageDown', run: moveCompletionSelection(true, 'page') },
     { key: 'PageUp', run: moveCompletionSelection(false, 'page') },
     { key: 'Enter', run: acceptCompletion },
+
+    { key: 'Shift-Enter', run: alignTables }, // TODO: Shortcut not final
 
     // customKeymap
 
@@ -49,28 +54,47 @@ export function markdownKeymap (): Extension {
     // Overload Tab, depending on context (priority high->low)
     { key: 'Tab', run: acceptCompletion },
     { key: 'Tab', run: nextSnippet },
+    { key: 'Tab', run: moveNextCell, shift: movePrevCell },
     { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
 
     // Overload Enter
     { key: 'Enter', run: handleReplacement },
     // If no replacement can be handled, the default should be newlineAndIndent
+    { key: 'Enter', run: moveNextRow, shift: movePrevRow },
     { key: 'Enter', run: insertNewlineContinueMarkup },
     { key: 'Enter', run: insertNewlineAndIndent },
 
-    // Overload Backspace
-    { key: 'Backspace', run: deleteBracketPair },
     { key: 'Backspace', run: handleBackspace },
 
     { key: 'Esc', run: abortSnippet },
     { key: 'Space', run: handleReplacement },
 
+    // Overload the copy commands to infuse table-based commands
+    { key: 'Alt-ArrowUp', run: swapPrevRow, shift: addRowBefore },
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
+    { key: 'Alt-ArrowDown', run: swapNextRow, shift: addRowAfter },
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
+    { key: 'Alt-ArrowRight', run: swapNextCol, shift: addColAfter },
+    { key: 'Alt-ArrowLeft', run: swapPrevCol, shift: addColBefore },
+    
     { key: 'Mod-t', run: applyTaskList },
     { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
     { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
     { key: '"', run: handleQuote('"') },
     { key: "'", run: handleQuote("'") },
+
+    // Delete column (inspired by delete line)
+    { key: 'Shift-Mod-k', run: deleteCol }, // TODO: Shortcut not final
+
+    // Clear column, row, and table
+    { key: 'Mod-Backspace', run: clearCol }, // TODO: Shortcut not final
+    { key: 'Shift-Mod-Backspace', run: clearRow }, // TODO: Shortcut not final
+    { key: 'Alt-Shift-Mod-Backspace', run: clearTable }, // TODO: Shortcut not final
+
+    // Table alignments
+    { key: 'Alt-c', run: setAlignment('center') }, // TODO: Shortcut not final
+    { key: 'Alt-l', run: setAlignment('left') }, // TODO: Shortcut not final
+    { key: 'Alt-r', run: setAlignment('right') }, // TODO: Shortcut not final
 
     // Include the sharedKeymap at the end to make the defaults available, but
     // with a lower priority, so that we can override anything in this keymap.
