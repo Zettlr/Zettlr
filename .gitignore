@@ -27,8 +27,9 @@ test-config.yml
 yarn-error.log
 yarn.log
 
-# Don't commit ESLint error reports
+# Don't commit ESLint stuff
 eslint_report.htm
+.eslintcache
 
 # Taken from https://www.gitignore.io/api/visualstudiocode
 
