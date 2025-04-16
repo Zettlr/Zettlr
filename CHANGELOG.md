@@ -38,6 +38,7 @@
 - Bump Pandoc to `v3.6.4`
 - Bump Node.js across the CI to v22 (LTS).
 - Bump various other dependencies.
+- Upgrade the Ubuntu runners on the CI back to Ubuntu 22.04 LTS (#5172).
 
 # 3.4.3
 
