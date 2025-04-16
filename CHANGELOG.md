@@ -25,6 +25,7 @@
 - Add additional classes to Table of Contents-headings in the sidebar to allow
   targeting them with Custom CSS rules (`toc-heading-X` where `X` is the level).
 - Bump Electron to `v35.1.5`.
+- Bump Pandoc to `v3.6.4`
 - Bump Node.js across the CI to v22 (LTS).
 - Bump various other dependencies.
 
