@@ -93,7 +93,7 @@
       height: 100vh;
       margin: 0;
       padding: 0;
-      background-image: linear-gradient(90deg, #ddd 0%, #fff 20%, #fff 80%, #ddd 100%);
+      background-color: white;
     }
 
     /* Helper highlight class */
@@ -190,7 +190,6 @@
     @media (prefers-color-scheme: dark) {
       body {
         color: white;
-        background-image: none;
         background-color: #222222;
       }
     }
@@ -207,7 +206,7 @@
       <a href="https://www.zettlr.com/" target="_blank">Homepage</a> &bullet;
       <a href="https://www.zettlr.com/download" target="_blank">Download stable releases</a> &bullet;
       <a href="https://github.com/Zettlr/Zettlr" target="_blank">GitHub</a> &bullet;
-      <a href="https://discord.gg/PcfS3DM9Xj" target="_blank">Discord</a>
+      <a href="https://go.zettlr.com/discord" target="_blank">Discord</a>
     </div>
   </div>
 
