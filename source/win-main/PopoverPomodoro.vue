@@ -9,8 +9,11 @@
         {{ currentPhaseLabel }}
       </p>
       <hr>
-      <button v-on:click="stopPomodoro">
+      <button class="timer-button" v-on:click="stopPomodoro">
         {{ stopLabel }}
+      </button>
+      <button class="timer-button" v-on:click="pausePomodoro">
+        {{ pauseLabel }}
       </button>
     </template>
     <template v-else>
@@ -52,7 +55,7 @@
         v-bind:max="100"
       ></SliderControl>
       <hr>
-      <button v-on:click="startPomodoro">
+      <button class="timer-button" v-on:click="startPomodoro">
         {{ startLabel }}
       </button>
     </template>
@@ -83,6 +86,7 @@ import { ref, computed, watch } from 'vue'
 import type { PomodoroConfig } from './App.vue'
 
 const startLabel = trans('Start')
+const pauseLabel = computed(() => props.isPaused ? trans('Resume') : trans('Pause'))
 const stopLabel = trans('Stop')
 const taskLabel = trans('Work')
 const shortLabel = trans('Short break')
@@ -93,12 +97,14 @@ const volumeLabel = trans('Volume')
 const props = defineProps<{
   target: HTMLElement
   pomodoro: PomodoroConfig
+  isPaused: boolean
   soundEffects: Array<{ label: string, file: string }>
 }>()
 
 const emit = defineEmits<{
   (e: 'close'): void
   (e: 'start'): void
+  (e: 'pause'): void
   (e: 'stop'): void
   (e: 'config', value: PomodoroConfig): void
 }>()
@@ -166,15 +172,24 @@ function startPomodoro (): void {
   emit('start')
 }
 
+function pausePomodoro (): void {
+  emit('pause')
+}
+
 function stopPomodoro (): void {
   emit('stop')
 }
 </script>
 
 <style lang="less">
-p.pomodoro-big {
-  font-size: 200%;
-  text-align: center;
-  margin: 10px;
-}
+  p.pomodoro-big {
+    font-size: 200%;
+    text-align: center;
+    margin: 10px;
+  }
+
+  //add right‑margin except on the last button
+  .timer-button:not(:last-child) {
+    margin-right: 8px;
+  }
 </style>

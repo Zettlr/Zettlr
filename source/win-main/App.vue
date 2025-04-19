@@ -111,9 +111,11 @@
     v-bind:target="pomodoroButton"
     v-bind:pomodoro="pomodoro"
     v-bind:sound-effects="SOUND_EFFECTS"
+    v-bind:is-paused="isPaused"
     v-on:close="showPomodoroPopover = false"
     v-on:config="setPomodoroConfig($event)"
     v-on:start="startPomodoro()"
+    v-on:pause="pausePomodoro()"
     v-on:stop="stopPomodoro()"
   ></PopoverPomodoro>
 </template>
@@ -532,6 +534,7 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
 const editorSidebarSplitComponent = ref<typeof SplitView|null>(null)
 const fileManagerSplitComponent = ref<typeof SplitView|null>(null)
 const globalSearchComponent = ref<typeof GlobalSearch|null>(null)
+const isPaused = ref(false)
 const paneConfiguration = computed(() => documentTreeStore.paneStructure)
 const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 const distractionFree = computed<boolean>(() => windowStateStore.distractionFreeMode !== undefined)
@@ -898,6 +901,7 @@ function handleToggle (controlState: { id?: string, state?: string | boolean }):
 }
 
 function startPomodoro (): void {
+  isPaused.value = false
   pomodoro.value.soundEffect.pause()
   pomodoro.value.soundEffect.currentTime = 0
   // Starts a new pomodoro timer
@@ -909,7 +913,12 @@ function startPomodoro (): void {
   }, 1000)
 }
 
+function pausePomodoro (): void {
+  isPaused.value = !isPaused.value
+}
+
 function pomodoroTick (): void {
+  if (isPaused.value) return
   // Progresses the pomodoro counter by one second
   pomodoro.value.phase.elapsed += 1
 
