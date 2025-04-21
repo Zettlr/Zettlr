@@ -3,11 +3,11 @@
 ## GUI and Functionality
 
 - Fixed a keymap conflict that would cause `Enter` to not accept autocomplete
-  suggestions in some contexts such as Markdown syntax elements (#5646)
+  suggestions in some contexts such as Markdown syntax elements (#5646).
 
 ## Under the Hood
 
-(nothing here)
+- Cache ESLint results to improve subsequent linter run speed (#5706).
 
 # 3.4.4
 
