@@ -33,7 +33,7 @@
     "update:citation": "node scripts/update-citation.mjs",
     "test": "mocha",
     "test-gui": "cross-env NODE_ENV=develop node scripts/test-gui/index.mjs",
-    "lint:code": "eslint",
+    "lint:code": "eslint --cache",
     "lint:types": "vue-tsc --noEmit",
     "lint:po": "node scripts/lint-po.mjs",
     "lint": "yarn lint:code && yarn lint:types",
