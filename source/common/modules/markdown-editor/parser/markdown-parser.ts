@@ -174,6 +174,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
 
       return null
     },
+    addKeymap: false,
     extensions: {
       // yamlCodeParse is a wrapper that scans the document for the existence of
       // a YAML frontmatter and then parses its contents. NOTE: Since a single
