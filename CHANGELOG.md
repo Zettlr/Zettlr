@@ -8,6 +8,7 @@
 ## Under the Hood
 
 - Cache ESLint results to improve subsequent linter run speed (#5706).
+- Spawn shell when starting test GUI on Windows (#5685).
 
 # 3.4.4
 
