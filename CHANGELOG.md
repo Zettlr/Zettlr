@@ -1,11 +1,9 @@
 # Upcoming
 
-- Fix issues #5636 and #5637 where conflicting keymaps would cause pressing
-  'Enter' to jump to a new line instead of applying autocomplete suggestions. 
-
 ## GUI and Functionality
 
-(nothing here)
+- Fixed a keymap conflict that would cause `Enter` to not accept autocomplete
+  suggestions in some contexts such as Markdown syntax elements (#5646)
 
 ## Under the Hood
 
