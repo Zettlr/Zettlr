@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Zettlr PPA</title>
-  <meta name="description" content="Install Zettlr from the official PPA repository.">
+  <title>Zettlr APT Repository</title>
+  <meta name="description" content="Install Zettlr from the official APT repository.">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@zettlr">
   <meta name="twitter:creator" content="@zettlr">
-  <meta name="twitter:title" content="Zettlr PPA">
-  <meta name="twitter:description" content="Install Zettlr from the official PPA repository.">
+  <meta name="twitter:title" content="Zettlr APT Repository">
+  <meta name="twitter:description" content="Install Zettlr from the official APT repository.">
 
   <!-- Add Highlight.js -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dark.min.css">
@@ -65,7 +65,7 @@
     div#header {
       background-color: #333;
       color: white;
-      padding-left: 30vw; /* Corresponds to the container width */
+      padding-left: 30vw;
     }
 
     h1#main-head {
@@ -82,14 +82,13 @@
     /** Main container */
 
     .container {
-      width: 40vw; /* Corresponds to the header padding-left */
+      width: min(calc(100vw - 10px), 1100px);
       margin: 0 auto;
     }
 
     /* Media query for smaller screens */
     @media (max-width: 800px) {
-      .container { width: 90vw; }
-      div#header { padding-left: 5vw; }
+      div#header { padding-left: 10px; }
     }
 
     /** Navigation */
@@ -125,7 +124,7 @@
   <div id="header">
     <h1 id="main-head">
       <img src="logo.png" alt="Zettlr" id="main-logo">
-      Zettlr PPA
+      Zettlr APT Repository
     </h1>
     <div id="navigation">
       <a href="https://www.zettlr.com/" target="_blank">Homepage</a> &bullet;
@@ -137,39 +136,39 @@
 
   <div class="container">
     <p>
-      This is the Zettlr Personal Package Archive (PPA). This PPA can be used
-      to install and update Zettlr on Debian- and Ubuntu systems.
+      This is the Zettlr APT repository. This repository can be used to install
+      and update Zettlr on Debian- and Ubuntu systems using aptitude.
     </p>
     <p>
-      By using a PPA, you can update Zettlr alongside your regular packages. Use
-      this as an alternative of downloading and installing the Zettlr Debian
-      package from our homepage.
+      By adding the Zettlr APT repository to your aptitude lists, you can update
+      Zettlr alongside your regular packages. Use this as an alternative to
+      downloading and installing the Zettlr Debian package from our homepage.
     </p>
     <p>
-      If you do not use a Debian or any APT-compatible operating system, you can
+      If you do not use a Debian and APT-compatible operating system, you can
       <a href="https://www.zettlr.com/download">find all download options on our website</a>.
     </p>
-    <h2>Using the Zettlr PPA</h2>
+    <h2>Using the Zettlr APT Repository</h2>
     <p>
-      To use the Zettlr PPA, you will first have to set it up, and then install
-      the app using <code>apt</code>.
+      To use the Zettlr APT repository, you will first have to set it up, and
+      then install the app using <code>apt</code>.
     </p>
     <p><pre><code class="language-bash"># First, add our public key to APT
-curl -s --compressed "https://ppa.zettlr.com/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/zettlr_ppa.gpg > /dev/null
+curl -s --compressed "https://apt.zettlr.com/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/zettlr_apt.gpg > /dev/null
 # Second, add this PPA to your sources
-sudo curl -s --compressed -o /etc/apt/sources.list.d/zettlr.list "https://ppa.zettlr.com/zettlr.list"
+sudo curl -s --compressed -o /etc/apt/sources.list.d/zettlr.list "https://apt.zettlr.com/zettlr.list"
 # Third, update APT so that it fetches the available files
 sudo apt update
 </code></pre></p>
-  <p>
-    Now you can install Zettlr:
-  </p>
-  <p><pre><code class="language-bash">sudo apt install zettlr</code></pre></p>
-  <p>
-    <strong>Note</strong>: If you already installed Zettlr from our website, you
-    may need to uninstall it prior to using the PPA. Please follow the
-    instructions in the documentation on how to do so.
-  </p>
+    <p>
+      Now you can install Zettlr:
+    </p>
+    <p><pre><code class="language-bash">sudo apt install zettlr</code></pre></p>
+    <p>
+      <strong>Note</strong>: If you already installed Zettlr from our website, you
+      may need to uninstall it prior to using the repository. Please follow the
+      instructions in the documentation on how to do so.
+    </p>
   </div>
 </body>
 </html>

@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# This script updates Zettlr's PPA repository. It uses a "shallow" repository
+# This script updates Zettlr's APT repository. It uses a "shallow" repository
 # style which puts all files at a single directory level. This way, the
 # repository can be added to Debian and Ubuntu installs with a line such as:
 # deb [signed-by=/etc/apt/trusted.gpg.d/zettlr_ppa.gpg] https://ppa.zettlr.com ./
@@ -9,14 +9,14 @@
 #
 # Set the following environment variables:
 #
-# $TARGET_DIR : Where the PPA is located (e.g., /var/www/ppa)
+# $TARGET_DIR : Where the APT is located (e.g., /var/www/apt)
 # $REPO       : The GitHub repository in user/repo syntax (e.g., Zettlr/Zettlr)
 # $KEY_USER   : The user for the key used to sign the files (GPG wants a user,
 #               not the key itself, e.g., the email-address for the key)
 
 # Before we do anything, switch to the correct folder.
 cd $TARGET_DIR
-echo "Starting PPA Update."
+echo "Starting APT Repository Update."
 echo ""
 # Some debug output, just in case
 echo "Working Directory: $TARGET_DIR"
@@ -68,4 +68,4 @@ gpg --default-key $KEY_USER -abs -o - Release > Release.gpg
 gpg --default-key $KEY_USER --clearsign -o - Release > InRelease
 
 echo ""
-echo "PPA Update complete."
+echo "Repository Update complete."
