@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Zettlr PPA</title>
-  <meta name="description" content="A PPA to install Zettlr from.">
+  <meta name="description" content="Install Zettlr from the official PPA repository.">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@zettlr">
   <meta name="twitter:creator" content="@zettlr">
   <meta name="twitter:title" content="Zettlr PPA">
-  <meta name="twitter:description" content="A PPA to install Zettlr from.">
+  <meta name="twitter:description" content="Install Zettlr from the official PPA repository.">
 
   <!-- Add Highlight.js -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dark.min.css">
@@ -155,7 +155,7 @@
       the app using <code>apt</code>.
     </p>
     <p><pre><code class="language-bash"># First, add our public key to APT
-curl -s --compressed "https://ppa.zettlr.com/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/zettlr.gpg > /dev/null
+curl -s --compressed "https://ppa.zettlr.com/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/zettlr_ppa.gpg > /dev/null
 # Second, add this PPA to your sources
 sudo curl -s --compressed -o /etc/apt/sources.list.d/zettlr.list "https://ppa.zettlr.com/zettlr.list"
 # Third, update APT so that it fetches the available files
