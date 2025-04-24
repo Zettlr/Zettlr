@@ -16,6 +16,7 @@
 - Spawn shell when starting test GUI on Windows (#5685).
 - Markdown commands now check whether the provided target `EditorView` is parsed
   using a Markdown parser before running.
+- Move all keymaps into a single `defaultKeymap`.
 
 # 3.4.4
 
