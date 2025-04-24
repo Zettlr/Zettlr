@@ -2,6 +2,8 @@
 
 ## GUI and Functionality
 
+- **Feature**: The code editors (in the assets manager and elsewhere) now share
+  the same keymap as the main editor.
 - Fixed a keymap conflict that would cause `Enter` to not accept autocomplete
   suggestions in some contexts such as Markdown syntax elements (#5646).
 - Enable the CodeMirror folding keymap which lets you fold and unfold code, such
