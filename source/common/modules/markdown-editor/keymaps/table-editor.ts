@@ -26,7 +26,7 @@ import { hiddenSpanField } from '../table-editor/subview'
 import { deleteBracketPair } from '@codemirror/autocomplete'
 import { applyBold, applyItalic, insertLink, insertImage, applyComment } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
-import { sharedKeymap } from './shared'
+import { defaultKeymap } from './default'
 import { handleBackspace, handleQuote } from '../commands/autocorrect'
 
 /**
@@ -49,61 +49,62 @@ export function tableEditorKeymap (mainView: EditorView): Extension {
   const alignCenter = setAlignment('center')
   const alignRight = setAlignment('right')
 
-  return keymap.of([
-    // Prevent programmatic insertion of newlines by disabling some
-    // keybindings (except Enter which should move the cursor to the next
-    // row if possible)
-    {
-      key: 'Enter',
-      // NOTE: "?? true" ensures no other keybinding will be called after this.
-      // This prevents the default behavior of inserting a newline character.
-      run: _v => moveNextRow(mainView) ?? true,
-      shift: _v => movePrevRow(mainView) ?? true
-    },
-    // Same for these two commands which disables these keybindings.
-    { key: 'Ctrl-Enter', run: _v => true },
-    { key: 'Mod-Enter', run: _v => true },
-    // Map the undo/redo keys to the main view
-    { key: 'Mod-z', run: _v => undo(mainView), preventDefault: true },
-    { key: 'Mod-Shift-z', run: _v => redo(mainView), preventDefault: true },
-    // Override the select all command
-    { key: 'Mod-a', run: selectAllCommand, preventDefault: true },
-    // Add a few more keyboard shortcuts.
-    { key: 'Tab', run: _v => moveNextCell(mainView), shift: _v => movePrevCell(mainView) },
-    { key: 'Alt+l', run: _v => alignLeft(mainView), preventDefault: true },
-    { key: 'Alt+c', run: _v => alignCenter(mainView), preventDefault: true },
-    { key: 'Alt+r', run: _v => alignRight(mainView), preventDefault: true },
+  return [
+    keymap.of([
+      // Prevent programmatic insertion of newlines by disabling some
+      // keybindings (except Enter which should move the cursor to the next
+      // row if possible)
+      {
+        key: 'Enter',
+        // NOTE: "?? true" ensures no other keybinding will be called after this.
+        // This prevents the default behavior of inserting a newline character.
+        run: _v => moveNextRow(mainView) ?? true,
+        shift: _v => movePrevRow(mainView) ?? true
+      },
+      // Same for these two commands which disables these keybindings.
+      { key: 'Ctrl-Enter', run: _v => true },
+      { key: 'Mod-Enter', run: _v => true },
+      // Map the undo/redo keys to the main view
+      { key: 'Mod-z', run: _v => undo(mainView), preventDefault: true },
+      { key: 'Mod-Shift-z', run: _v => redo(mainView), preventDefault: true },
+      // Override the select all command
+      { key: 'Mod-a', run: selectAllCommand, preventDefault: true },
+      // Add a few more keyboard shortcuts.
+      { key: 'Tab', run: _v => moveNextCell(mainView), shift: _v => movePrevCell(mainView) },
+      { key: 'Ctrl-l', run: _v => alignLeft(mainView), preventDefault: true },
+      { key: 'Ctrl-c', run: _v => alignCenter(mainView), preventDefault: true },
+      { key: 'Ctrl-r', run: _v => alignRight(mainView), preventDefault: true },
 
-    // Further (relevant) keyboard commands (taken from the `markdownKeymap`).
-    // NOTE: This is a subset of all commands, because block-based actions won't
-    // work in the editor.
-    { key: 'Mod-b', run: applyBold },
-    { key: 'Mod-i', run: applyItalic },
-    { key: 'Mod-k', run: insertLink },
-    { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
-    { key: 'Mod-C', run: applyComment },
+      // Further (relevant) keyboard commands (taken from the `markdownKeymap`).
+      // NOTE: This is a subset of all commands, because block-based actions won't
+      // work in the editor.
+      { key: 'Mod-b', run: applyBold },
+      { key: 'Mod-i', run: applyItalic },
+      { key: 'Mod-k', run: insertLink },
+      { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
+      { key: 'Mod-C', run: applyComment },
 
-    { key: 'Backspace', run: handleBackspace },
-    { key: 'Backspace', run: deleteBracketPair },
+      { key: 'Backspace', run: handleBackspace },
+      { key: 'Backspace', run: deleteBracketPair },
 
-    { key: '"', run: handleQuote('"') },
-    { key: "'", run: handleQuote("'") },
+      { key: '"', run: handleQuote('"') },
+      { key: "'", run: handleQuote("'") },
 
-    { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
-    { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
+      { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
+      { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
 
+      // These commands strictly speaking are block-based (or, rather, they go
+      // beyond the current cell), but because they are very useful, we support
+      // them here (but providing the main view which will handle them accordingly)
+      // NOTE: They are beind `sharedKeymap` since the sharedKeymap for navigation
+      // *within* the table cell needs to take precedence.
+      { key: 'Alt-ArrowUp', run: _v => swapPrevRow(mainView), shift: _v => addRowBefore(mainView) },
+      { key: 'Alt-ArrowDown', run: _v => swapNextRow(mainView), shift: _v => addRowAfter(mainView) },
+      { key: 'Alt-ArrowRight', run: _v => swapNextCol(mainView), shift: _v => addColAfter(mainView) },
+      { key: 'Alt-ArrowLeft', run: _v => swapPrevCol(mainView), shift: _v => addColBefore(mainView) },
+    ]),
     // Also include the sharedKeymap. The subview transaction filter will
     // automatically ensure that nothing spanning multiple lines will be executed.
-    ...sharedKeymap,
-
-    // These commands strictly speaking are block-based (or, rather, they go
-    // beyond the current cell), but because they are very useful, we support
-    // them here (but providing the main view which will handle them accordingly)
-    // NOTE: They are beind `sharedKeymap` since the sharedKeymap for navigation
-    // *within* the table cell needs to take precedence.
-    { key: 'Alt-ArrowUp', run: _v => swapPrevRow(mainView), shift: _v => addRowBefore(mainView) },
-    { key: 'Alt-ArrowDown', run: _v => swapNextRow(mainView), shift: _v => addRowAfter(mainView) },
-    { key: 'Alt-ArrowRight', run: _v => swapNextCol(mainView), shift: _v => addColAfter(mainView) },
-    { key: 'Alt-ArrowLeft', run: _v => swapPrevCol(mainView), shift: _v => addColBefore(mainView) },
-  ])
+    defaultKeymap()
+  ]
 }
