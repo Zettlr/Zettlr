@@ -11,6 +11,7 @@
   of the editor (#857). The shortcuts are: `Ctrl-Shift-[` (Windows/Linux) or
   `Cmd-Alt-[` (macOS) for folding code, `Ctrl-Shift-]` or `Cmd-Alt-]` for
   unfolding, `Ctrl-Alt-[` for folding all, and `Ctrl-Alt-]` for unfolding all.
+- Update `fr-FR` translation (#5738).
 
 ## Under the Hood
 
