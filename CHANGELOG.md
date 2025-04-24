@@ -2,6 +2,31 @@
 
 ## GUI and Functionality
 
+- **Feature**: The code editors (in the assets manager and elsewhere) now share
+  the same keymap as the main editor.
+- Fixed a keymap conflict that would cause `Enter` to not accept autocomplete
+  suggestions in some contexts such as Markdown syntax elements (#5646).
+- Enable the CodeMirror folding keymap which lets you fold and unfold code, such
+  as headings, with keyboard shortcuts instead of using the arrows to the left
+  of the editor (#857). The shortcuts are: `Ctrl-Shift-[` (Windows/Linux) or
+  `Cmd-Alt-[` (macOS) for folding code, `Ctrl-Shift-]` or `Cmd-Alt-]` for
+  unfolding, `Ctrl-Alt-[` for folding all, and `Ctrl-Alt-]` for unfolding all.
+- Update `fr-FR` translation (#5738).
+
+## Under the Hood
+
+- Cache ESLint results to improve subsequent linter run speed (#5706).
+- Spawn shell when starting test GUI on Windows (#5685).
+- Markdown commands now check whether the provided target `EditorView` is parsed
+  using a Markdown parser before running.
+- Move all keymaps into a single `defaultKeymap`.
+- Assume `**` as default bold and `*` as default italic formatting for Markdown
+  commands if the config field is not present.
+
+# 3.4.4
+
+## GUI and Functionality
+
 - **Change**: The exporter will now forcefully enable (= if it is not yet
   enabled in the corresponding defaults file in the assets manager) the Pandoc
   extension `wikilinks_title_after_pipe` or `wikilinks_title_before_pipe`
@@ -25,8 +50,10 @@
 - Add additional classes to Table of Contents-headings in the sidebar to allow
   targeting them with Custom CSS rules (`toc-heading-X` where `X` is the level).
 - Bump Electron to `v35.1.5`.
+- Bump Pandoc to `v3.6.4`
 - Bump Node.js across the CI to v22 (LTS).
 - Bump various other dependencies.
+- Upgrade the Ubuntu runners on the CI back to Ubuntu 22.04 LTS (#5172).
 
 # 3.4.3
 

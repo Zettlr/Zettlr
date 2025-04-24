@@ -71,8 +71,7 @@ import { mainOverride } from './theme/main-override'
 import { highlightWhitespace } from './plugins/highlight-whitespace'
 import { tagClasses } from './plugins/tag-classes'
 import { autocompleteTriggerCharacter } from './autocomplete/snippets'
-import { markdownKeymap } from './keymaps/markdown'
-import { codeKeymap } from './keymaps/code'
+import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
 
@@ -167,6 +166,8 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // Both vim and emacs modes need to be included first, before any other
     // keymap.
     inputModeCompartment.of(inputMode),
+    // Then, include the default keymap
+    defaultKeymap(),
     darkMode({ darkMode: options.initialConfig.darkMode, ...themes[options.initialConfig.theme] }),
     // CODE FOLDING
     codeFolding(),
@@ -232,7 +233,6 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
 function getGenericCodeExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getCoreExtensions(options),
-    codeKeymap(),
     lineNumbers(),
     bracketMatching(),
     indentOnInput(),
@@ -305,7 +305,6 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     // Markdown prior. Additionally, images should get preferential treatment.
     EditorView.domEventHandlers(mdPasteDropHandlers),
     // We need our custom keymaps first
-    markdownKeymap(),
     // The parser generates the AST for the document ...
     markdownParser({
       zknLinkParserConfig: { format: options.initialConfig.zknLinkFormat }
