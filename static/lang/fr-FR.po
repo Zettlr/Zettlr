@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2025-04-16 09:47+0000\n"
-"PO-Revision-Date: 2025-03-23 19:45+0100\n"
+"PO-Revision-Date: 2025-04-24 20:43+0200\n"
 "Last-Translator: Jules Bouton\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -719,7 +719,7 @@ msgstr "Coller"
 #: source/app/service-providers/menu/menu.darwin.ts:353
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
 msgid "Paste without style"
-msgstr "Coller sans format"
+msgstr "Coller sans le formatage"
 
 #: source/app/service-providers/menu/menu.win32.ts:364
 #: source/app/service-providers/menu/menu.darwin.ts:362
@@ -1825,7 +1825,7 @@ msgid ""
 "description will be shown on mouse hover."
 msgstr ""
 "Vous pouvez assigner des couleurs aux différents mots-clés. Si un mot-clé "
-"est trouvé dans un fichier, il apparaîtrait en couleur dans la liste de "
+"est trouvé dans un fichier, il apparaîtrait en couleur dans la "
 "prévisualisation. La description sera visible au survol de la souris."
 
 #: source/tmp/win-tag-manager/App.vue.ts:35
@@ -1964,11 +1964,11 @@ msgstr "Échec de l'enregistrement"
 
 #: source/tmp/win-assets/App.vue.ts:21
 msgid "Exporting"
-msgstr "Export en cours"
+msgstr "Export"
 
 #: source/tmp/win-assets/App.vue.ts:27
 msgid "Importing"
-msgstr "Import en cours"
+msgstr "Import"
 
 #: source/tmp/win-assets/App.vue.ts:33
 #: source/win-preferences/schema/appearance.ts:218
@@ -1979,7 +1979,7 @@ msgstr "CSS personnalisé"
 #: source/tmp/win-preferences/App.vue.ts:180
 #: source/win-preferences/schema/snippets.ts:24
 msgid "Snippets"
-msgstr "Snippets"
+msgstr "Fragments"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:56
 msgid ""
@@ -1994,8 +1994,8 @@ msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
-"Le profile est corrompu. Il peut contenir des erreurs, ou il manque peut-"
-"être la propriété d'écriture ou de lecture."
+"Le profil est corrompu. Il peut contenir des erreurs, ou il manque peut-être "
+"la propriété d'écriture ou de lecture."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:59
 msgid "Open defaults folder"
@@ -2003,8 +2003,7 @@ msgstr "Ouvrir le dossier par défaut"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:60
 msgid "Edit the default settings for imports or exports here."
-msgstr ""
-"Modifier les paramètres par défaut pour les importations ou les exportations."
+msgstr "Modifier les paramètres par défaut pour importer ou exporter."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:190
 #: source/tmp/win-assets/SnippetsTab.vue.ts:116
@@ -2013,17 +2012,17 @@ msgstr "Enregistré !"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:29
 msgid "Rename snippet"
-msgstr "Renommer l'extrait"
+msgstr "Renommer le fragment"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:30
 msgid "Snippets let you define reusable pieces of text with variables."
 msgstr ""
-"Les extraits vous permettent de définir des morceaux de texte "
-"réutilisablesavec des variables."
+"Les fragments vous permettent de définir des morceaux de texte réutilisables "
+"avec des variables."
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:31
 msgid "Open snippets folder"
-msgstr "Ouvrir le dossier des snippets"
+msgstr "Ouvrir le dossier des fragments"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:21
 msgid "words"
@@ -2871,7 +2870,7 @@ msgstr "IDs Zettelkasten"
 
 #: source/win-preferences/schema/zettelkasten.ts:29
 msgid "Pattern for Zettelkasten IDs"
-msgstr "Modèle de création des identifiants"
+msgstr "Modèle des IDs Zettelkasten"
 
 #: source/win-preferences/schema/zettelkasten.ts:30
 msgid "Uses ECMAScript regular expressions"
@@ -2879,7 +2878,7 @@ msgstr "Utilise des expressions régulières ECMAScript"
 
 #: source/win-preferences/schema/zettelkasten.ts:36
 msgid "Pattern used to generate new IDs"
-msgstr "Modèle de création des identifiants"
+msgstr "Modèle de création des nouveaux IDs"
 
 #: source/win-preferences/schema/zettelkasten.ts:39
 #, javascript-format
@@ -2897,7 +2896,7 @@ msgstr "Lien avec le nom de fichier seulement"
 
 #: source/win-preferences/schema/zettelkasten.ts:55
 msgid "When linking files, add the document name …"
-msgstr "Lorsque vous liez des fichiers, ajoutez le nom du fichier…"
+msgstr "Lorsque vous liez des fichiers, ajouter le nom du fichier…"
 
 #: source/win-preferences/schema/zettelkasten.ts:58
 msgid "Always"
@@ -2921,8 +2920,8 @@ msgid ""
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
 msgstr ""
-"Les liens internes vous permettent d'ajouter un titre optionnel, séparé par "
-"une barre verticale de la cible du lien. Vous pouvez choisir l'ordre entre "
+"Les liens internes vous permettent d'ajouter un titre optionnel, séparé de "
+"la cible du lien par une barre verticale. Vous pouvez choisir l'ordre entre "
 "ces deux éléments."
 
 #: source/win-preferences/schema/zettelkasten.ts:79
@@ -2962,7 +2961,7 @@ msgstr "Chemin vers le dossier"
 
 #: source/win-preferences/schema/autocorrect.ts:32
 msgid "Smart quotes"
-msgstr "Guillements intelligents"
+msgstr "Guillemets intelligents"
 
 #: source/win-preferences/schema/autocorrect.ts:45
 msgid "Double Quotes"
@@ -2979,7 +2978,7 @@ msgstr "Guillemets simples"
 
 #: source/win-preferences/schema/autocorrect.ts:95
 msgid "Text-replacement patterns"
-msgstr "Schémas de remplacement textuel"
+msgstr "Schémas de substitution de texte"
 
 #: source/win-preferences/schema/autocorrect.ts:99
 msgid "Match whole words"
@@ -3105,7 +3104,7 @@ msgstr "Nombre de mots"
 
 #: source/win-preferences/schema/editor.ts:189
 msgid "Count characters instead of words (e.g., for Chinese)"
-msgstr "Compter caractères au lieu des mots (p. ex., pour le chinois)"
+msgstr "Compter les caractères au lieu des mots (p. ex., pour le chinois)"
 
 #: source/win-preferences/schema/editor.ts:195
 msgid "Readability mode"
@@ -3401,11 +3400,11 @@ msgid ""
 "file list and directory tree by clicking on directories or the arrow button "
 "which appears at the top left corner of the file list."
 msgstr ""
-"Le mode Étroit afficher les dossiers et les fichiers séparément. "
-"Sélectionnez un dossier pour afficher son contenu dans la liste des "
-"fichiers. Vous pouvez passer de la liste des fichiers à l'arbre des dossiers "
-"en cliquant sur les dossiers ou sur la flèche qui apparaît dans l'angle "
-"supérieur de la liste des fichiers."
+"Le mode Étroit affiche les dossiers et les fichiers séparément. Sélectionnez "
+"un dossier pour afficher son contenu dans la liste des fichiers. Vous pouvez "
+"passer de la liste des fichiers à l'arbre des dossiers en cliquant sur les "
+"dossiers ou sur la flèche qui apparaît dans l'angle supérieur de la liste "
+"des fichiers."
 
 #: source/win-preferences/schema/file-manager.ts:45
 msgid "Show file information"
@@ -3433,11 +3432,11 @@ msgstr "Premier titre de niveau 1 si disponible"
 
 #: source/win-preferences/schema/file-manager.ts:67
 msgid "Title or first heading level 1 if applicable"
-msgstr "Titre ou premier titre de niveau un si disponible"
+msgstr "Titre ou premier titre de niveau 1 si disponible"
 
 #: source/win-preferences/schema/file-manager.ts:73
 msgid "Display Markdown file extensions"
-msgstr "Afficher les extensions de fichiers Markdown"
+msgstr "Afficher les extensions de fichier Markdown"
 
 #: source/win-preferences/schema/file-manager.ts:80
 msgid "Time display"
@@ -3666,7 +3665,7 @@ msgstr "Me prévenir à propos des versions bêta"
 
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
-msgstr "Ouvrir l'éditeur de snippets"
+msgstr "Ouvrir l'éditeur de fragments"
 
 #: source/win-preferences/schema/general.ts:22
 msgid "Application language"
@@ -3678,7 +3677,7 @@ msgstr "Sauvegarde automatique"
 
 #: source/win-preferences/schema/general.ts:43
 msgid "Save modifications"
-msgstr "Enregistrer modification"
+msgstr "Enregistrer les modifications"
 
 #: source/win-preferences/schema/general.ts:48
 msgid "Immediately"
@@ -3718,7 +3717,7 @@ msgstr "Vérifier automatiquement la présence de mises à jour"
 
 #: source/win-preferences/schema/citations.ts:28
 msgid "How would you like autocomplete to insert your citations?"
-msgstr "Do quelle manière doivent être insérées vos citations ?"
+msgstr "De quelle manière doivent être insérées vos citations ?"
 
 #: source/win-preferences/schema/citations.ts:39
 msgid "Citation database (CSL JSON or BibTex)"
