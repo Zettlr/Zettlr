@@ -18,6 +18,7 @@ import {
   selectSyntaxRight, simplifySelection, toggleBlockComment, toggleComment,
   toggleTabFocusMode, redo, redoSelection, undo, undoSelection
 } from '@codemirror/commands'
+import { foldAll, foldCode, unfoldAll, unfoldCode } from '@codemirror/language'
 import {
   openSearchPanel, findNext, findPrevious, closeSearchPanel,
   selectSelectionMatches, gotoLine, selectNextOccurrence
@@ -50,6 +51,12 @@ export const sharedKeymap: KeyBinding[] = [
   { key: 'Mod-Shift-l', run: selectSelectionMatches },
   { key: 'Mod-Alt-g', run: gotoLine },
   { key: 'Mod-d', run: selectNextOccurrence, preventDefault: true },
+
+  // foldKeymap
+  { key: 'Ctrl-Shift-[', mac: 'Cmd-Alt-[', run: foldCode },
+  { key: 'Ctrl-Shift-]', mac: 'Cmd-Alt-]', run: unfoldCode },
+  { key: 'Ctrl-Alt-[', run: foldAll },
+  { key: 'Ctrl-Alt-]', run: unfoldAll },
 
   // defaultKeymap
   { key: 'Alt-ArrowLeft', mac: 'Ctrl-ArrowLeft', run: cursorSyntaxLeft, shift: selectSyntaxLeft },
