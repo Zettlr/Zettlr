@@ -17,6 +17,8 @@
 - Markdown commands now check whether the provided target `EditorView` is parsed
   using a Markdown parser before running.
 - Move all keymaps into a single `defaultKeymap`.
+- Assume `**` as default bold and `*` as default italic formatting for Markdown
+  commands if the config field is not present.
 
 # 3.4.4
 

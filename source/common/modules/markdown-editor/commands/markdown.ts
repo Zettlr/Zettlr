@@ -255,7 +255,7 @@ export function applyBold (target: EditorView): boolean {
     return false
   }
 
-  const markup = target.state.field(configField).boldFormatting
+  const markup = target.state.field(configField, false)?.boldFormatting ?? '**'
   applyInlineMarkup(target, markup, markup)
   return true
 }
@@ -272,7 +272,7 @@ export function applyItalic (target: EditorView): boolean {
     return false
   }
 
-  const markup = target.state.field(configField).italicFormatting
+  const markup = target.state.field(configField, false)?.italicFormatting ?? '*'
   applyInlineMarkup(target, markup, markup)
   return true
 }
