@@ -14,6 +14,8 @@
 
 - Cache ESLint results to improve subsequent linter run speed (#5706).
 - Spawn shell when starting test GUI on Windows (#5685).
+- Markdown commands now check whether the provided target `EditorView` is parsed
+  using a Markdown parser before running.
 
 # 3.4.4
 
