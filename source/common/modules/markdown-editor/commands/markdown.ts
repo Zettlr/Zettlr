@@ -310,6 +310,22 @@ export function applyComment (target: EditorView): boolean {
 }
 
 /**
+ * Toggles highlighting for the selections.
+ *
+ * @param   {EditorView}  target  The target view
+ *
+ * @return  {boolean}             Whether the command was applicable
+ */
+export function toggleHighlight (target: EditorView): boolean {
+  if (!viewContainsMarkdown(target)) {
+    return false
+  }
+
+  applyInlineMarkup(target, '==', '==')
+  return true
+}
+
+/**
  * Inserts a horizontal rule at the main selection.
  *
  * @param   {EditorView}  target  The target view

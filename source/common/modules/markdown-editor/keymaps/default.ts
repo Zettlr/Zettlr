@@ -58,7 +58,8 @@ import {
   maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown
 } from '../commands/lists'
 import {
-  insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList
+  insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList,
+  toggleHighlight
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 
@@ -84,6 +85,7 @@ export function defaultKeymap (): Extension {
     { key: 'Mod-b', run: applyBold },
     { key: 'Mod-i', run: applyItalic },
     { key: 'Mod-k', run: insertLink },
+    { key: 'Ctrl-Shift-h', run: toggleHighlight },
     // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
     // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
     { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },

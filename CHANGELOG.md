@@ -4,6 +4,7 @@
 
 - **Feature**: The code editors (in the assets manager and elsewhere) now share
   the same keymap as the main editor.
+- Added a keyboard shortcut for highlighting text: `Ctrl-Shift-H` (#4668).
 - The Mermaid diagram renderer is now more flexible. It now renders any Mermaid
   diagram in any type of valid fenced code block with both allowed variations of
   providing the info string: the plain `mermaid` and the Pandoc-attribute style
