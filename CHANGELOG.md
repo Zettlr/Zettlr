@@ -4,6 +4,10 @@
 
 - **Feature**: The code editors (in the assets manager and elsewhere) now share
   the same keymap as the main editor.
+- The Mermaid diagram renderer is now more flexible. It now renders any Mermaid
+  diagram in any type of valid fenced code block with both allowed variations of
+  providing the info string: the plain `mermaid` and the Pandoc-attribute style
+  `{.mermaid}` class (#5734).
 - Fixed a keymap conflict that would cause `Enter` to not accept autocomplete
   suggestions in some contexts such as Markdown syntax elements (#5646).
 - Enable the CodeMirror folding keymap which lets you fold and unfold code, such
