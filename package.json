@@ -123,6 +123,7 @@
     "uuid": "^11.1.0",
     "vue": "^3.5.13",
     "vue-virtual-scroller": "^2.0.0-beta.8",
+    "w3c-keyname": "^2.2.8",
     "yaml": "^2.7.1"
   },
   "optionalDependencies": {
@@ -132,7 +133,8 @@
     "node-gyp": "10.x.x",
     "node-abi": "^3.74.0",
     "@lezer/lr": "^1.4.2",
-    "katex": "^0.16.21"
+    "katex": "^0.16.21",
+    "w3c-keyname": "^2.2.8"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.8.0",
