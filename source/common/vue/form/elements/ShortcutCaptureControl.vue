@@ -1,12 +1,36 @@
 <template>
-  <input
-    ref="inputElement"
-    v-model="shortcut"
-    type="text"
-    v-bind:placeholder="placeholderLabel"
-    v-on:keydown.prevent.stop="handleKeydown"
-    v-on:focus="handleFocus"
+  <div
+    v-bind:class="{ inline: props.inline, 'form-control': true, 'shortcut-line': true }"
   >
+    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <div
+      v-bind:class="{
+        'input-text-button-group': true,
+        'has-reset': reset !== undefined
+      }"
+      style="display: inline-grid"
+    >
+      <input
+        ref="inputElement"
+        v-model="shortcut"
+        type="text"
+        v-bind:placeholder="placeholderLabel"
+        v-on:keydown.prevent.stop="handleKeydown"
+        v-on:focus="handleFocus"
+        v-on:blur="handleBlur"
+      >
+      <button
+        v-if="reset !== undefined"
+        type="button"
+        class="input-reset-button"
+        v-bind:title="resetLabel"
+        v-on:click.prevent="typeof reset === 'boolean' ? model = '' : model = reset"
+      >
+        <cds-icon shape="times"></cds-icon>
+      </button>
+    </div>
+    <p v-if="props.info !== undefined" class="info" v-html="props.info"></p>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -25,18 +49,37 @@
  * END HEADER
  */
 import { trans } from 'source/common/i18n-renderer'
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { keyName } from 'w3c-keyname'
+
+const props = defineProps<{
+  disabled?: boolean
+  placeholder?: string
+  label?: string
+  name?: string
+  reset?: string|boolean
+  inline?: boolean
+  info?: string
+}>()
 
 const model = defineModel<string>()
 
-const placeholderLabel = trans('Click to set your shortcut')
+watch(model, () => { shortcut.value = model.value ?? '' })
 
-const shortcut = ref(model.value)
+const placeholderLabel = trans('Click to set your shortcut')
+const resetLabel = trans('Reset')
+
+const shortcut = ref<string>(model.value ?? '')
 const inputElement = ref<HTMLInputElement|null>(null)
+
+const fieldID = computed<string>(() => 'field-input-' + (props.name ?? ''))
 
 function handleFocus (event: FocusEvent) {
   shortcut.value = ''
+}
+
+function handleBlur (event: FocusEvent) {
+  shortcut.value = model.value ?? ''
 }
 
 function handleKeydown (event: KeyboardEvent): void {
@@ -76,4 +119,9 @@ function handleKeydown (event: KeyboardEvent): void {
 </script>
 
 <style lang="css" scoped>
+.shortcut-line {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 50% 50%;
+}
 </style>

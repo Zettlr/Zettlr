@@ -16,6 +16,7 @@ import { trans } from '@common/i18n-renderer'
 import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
+import { getPlatformSpecificDefaultKeybinding } from 'source/common/modules/markdown-editor/keymaps/default-map'
 
 export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
@@ -228,6 +229,27 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           min: 0,
           max: 100,
           model: 'display.imageHeight'
+        }
+      ]
+    },
+    {
+      title: trans('Keyboard shortcuts'),
+      group: PreferencesGroups.Editor,
+      help: undefined,
+      fields: [
+        {
+          type: 'shortcut',
+          label: trans('Insert Image'),
+          inline: false,
+          model: 'editor.keyboardShortcuts.insertImage',
+          reset: getPlatformSpecificDefaultKeybinding('insertImage')
+        },
+        {
+          type: 'shortcut',
+          label: trans('Add footnote'),
+          inline: false,
+          model: 'editor.keyboardShortcuts.addFootnote',
+          reset: getPlatformSpecificDefaultKeybinding('addFootnote')
         }
       ]
     },
