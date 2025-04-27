@@ -49,6 +49,8 @@ class MermaidWidget extends WidgetType {
   toDOM (view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.classList.add('mermaid-chart')
+    elem.dataset.graph = this.graph
+    elem.dataset.darkTheme = String(this.darkMode)
 
     const id = `graphDiv${Date.now()}`
     elem.innerText = trans('Rendering mermaid graph …')
@@ -62,6 +64,24 @@ class MermaidWidget extends WidgetType {
 
     elem.addEventListener('click', clickAndSelect(view))
     return elem
+  }
+
+  updateDOM (dom: HTMLElement, _view: EditorView): boolean {
+    if (dom.dataset.graph === this.graph && dom.dataset.darkTheme === String(this.darkMode)) {
+      return true // No update necessary
+    }
+
+    const id = `graphDiv${Date.now()}`
+    dom.innerText = trans('Rendering mermaid graph …')
+    mermaid.render(id, this.graph)
+      .then(result => { dom.innerHTML = result.svg })
+      .catch(err => {
+        dom.classList.add('error')
+        const msg = trans('Could not render Graph:')
+        dom.innerText = `${msg}\n\n${err.str as string}`
+      })
+
+    return true
   }
 
   ignoreEvent (event: Event): boolean {

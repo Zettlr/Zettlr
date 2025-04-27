@@ -119,6 +119,15 @@ class HeadingTagWidget extends WidgetType {
     return elem
   }
 
+  updateDOM (dom: HTMLElement, _view: EditorView): boolean {
+    if (dom.textContent === `h${this.level}`) {
+      return true // No update necessary
+    }
+
+    dom.textContent = `h${this.level}`
+    return true
+  }
+
   ignoreEvent (event: Event): boolean {
     return event instanceof MouseEvent
   }
