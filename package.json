@@ -59,7 +59,7 @@
     "@codemirror/legacy-modes": "^6.5.0",
     "@codemirror/search": "^6.5.10",
     "@codemirror/state": "^6.5.2",
-    "@codemirror/view": "^6.36.5",
+    "@codemirror/view": "^6.36.6",
     "@lezer/common": "^1.2.3",
     "@lezer/highlight": "^1.2.1",
     "@replit/codemirror-emacs": "^6.1.0",
@@ -133,8 +133,7 @@
     "node-gyp": "10.x.x",
     "node-abi": "^3.74.0",
     "@lezer/lr": "^1.4.2",
-    "katex": "^0.16.21",
-    "w3c-keyname": "^2.2.8"
+    "katex": "^0.16.21"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.8.0",
