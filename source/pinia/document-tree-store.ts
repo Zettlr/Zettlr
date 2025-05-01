@@ -200,6 +200,12 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
             case DP_EVENTS.CHANGE_FILE_STATUS:
             case DP_EVENTS.OPEN_FILE:
             case DP_EVENTS.CLOSE_FILE:
+              copyDelta(paneData, treedata, context)
+              // Immediately clear out any closed file from the “modified” list
+              ipcRenderer.invoke('documents-provider', { command: 'get-file-modification-status' })
+                .then((modifiedFiles: string[]) => { modifiedDocuments.value = modifiedFiles })
+                .catch(err => console.error(err))
+              break
             case DP_EVENTS.FILES_SORTED:
               copyDelta(paneData, treedata, context)
               break
