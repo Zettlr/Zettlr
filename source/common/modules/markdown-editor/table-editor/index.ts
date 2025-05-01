@@ -78,15 +78,12 @@ export const renderTables = [
     'div.cm-table-editor-widget-wrapper': {
       maxWidth: 'fit-content',
       // Ensure the add buttons never disappear
-      paddingTop: '21px',
-      paddingLeft: '21px',
-      paddingRight: '10.5px',
-      paddingBottom: '10.5px',
+      padding: '21px 10.5px 10.5px 21px',
+      margin: '0 2px 0 6px', // Taken from .cm-line so that tables align
       overflow: 'auto'
     },
     'div.cm-table-editor-widget-wrapper table': {
       borderCollapse: 'collapse',
-      margin: '0 2px 0 6px', // Taken from .cm-line so that tables align
       // Implement Artem's theme
       '& td, & th': {
         color: '#3a3a3a',
@@ -101,7 +98,6 @@ export const renderTables = [
           zIndex: '100',
         },
         '&:focus-within, &:focus-visible': {
-          padding: '8px 8px',
           outline: `1px solid ${COLORS.colorAccent500}`,
           outlineColor: '#1cb27e',
           boxShadow: `inset 0 0 0 1px var(${COLORS.colorAccent500})`,
