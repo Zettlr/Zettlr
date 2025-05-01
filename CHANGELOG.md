@@ -9,6 +9,10 @@
   or rename your existing ones. Specifically, removed `top-level-division`,
   whose meaning has changed which started to produce empty first pages during
   Word exports (#5645).
+- Fixed a long-standing bug that would not clear the modification marker on both
+  file tabs (#5747) and the macOS window indicator (#4724) when a modified file
+  was closed without saving changes. Acknowledges PR #5747 which is superseded
+  by this change.
 - Added a keyboard shortcut for highlighting text: `Ctrl-Shift-H` (#4668).
 - The Mermaid diagram renderer is now more flexible. It now renders any Mermaid
   diagram in any type of valid fenced code block with both allowed variations of
