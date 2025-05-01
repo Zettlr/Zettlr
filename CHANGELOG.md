@@ -4,6 +4,11 @@
 
 - **Feature**: The code editors (in the assets manager and elsewhere) now share
   the same keymap as the main editor.
+- **Change**: Removed some optional properties from the default profiles. If you
+  want to switch to the new defaults, delete those files from the assets manager
+  or rename your existing ones. Specifically, removed `top-level-division`,
+  whose meaning has changed which started to produce empty first pages during
+  Word exports (#5645).
 - Added a keyboard shortcut for highlighting text: `Ctrl-Shift-H` (#4668).
 - The Mermaid diagram renderer is now more flexible. It now renders any Mermaid
   diagram in any type of valid fenced code block with both allowed variations of
