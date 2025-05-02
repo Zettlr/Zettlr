@@ -21,6 +21,10 @@ import { type SyntaxNode } from '@lezer/common'
 import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
+// import { addNewFootnote } from '..'
+
+
+
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -173,6 +177,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       enabled: true
     },
     {
+      label: trans('Insert footnote'),
+      id: 'markdownInsertFootnote',
+      type: 'normal',
+      enabled: true
+    },
+    {
       label: trans('Insert unordered list'),
       id: 'markdownMakeUnorderedList',
       type: 'normal',
@@ -258,7 +268,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     tpl.unshift(...suggestionItems)
   }
 
-  showPopupMenu(coords, tpl, (clickedID) => {
+  showPopupMenu(coords, tpl, async (clickedID) => {
     if (clickedID === 'markdownBold') {
       applyBold(view)
     } else if (clickedID === 'markdownItalic') {
@@ -275,7 +285,10 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       applyBlockquote(view)
     } else if (clickedID === 'markdownInsertTable') {
       // TODO
-    } else if (clickedID === 'cut') {
+    }else if (clickedID === 'markdownInsertFootnote') {
+      const { addNewFootnote } = await import('../commands/footnotes')
+      addNewFootnote(view)
+    }else if (clickedID === 'cut') {
       cut(view)
     } else if (clickedID === 'copy') {
       copyAsPlain(view)
