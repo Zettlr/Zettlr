@@ -915,28 +915,28 @@ function pomodoroTick (): void {
   // Progresses the pomodoro counter by one second
   pomodoro.value.phase.elapsed += 1
 
-  if (pomodoro.value.phase.type === 'task') {
-    pomodoro.value.totalTasks += 1 //Increment only for task phases
-  }
-
-  const totalPhases =
-    pomodoro.value.counter.task +
-    pomodoro.value.counter.short +
-    pomodoro.value.counter.long
-
-  if (totalPhases >= 8) {
-    // Reset counters to restart a fresh cycle
-    pomodoro.value.counter.task = 0
-    pomodoro.value.counter.short = 0
-    pomodoro.value.counter.long = 0
-  }
-
   const currentPhaseDur = pomodoro.value.durations[pomodoro.value.phase.type]
   const phaseIsFinished = pomodoro.value.phase.elapsed === currentPhaseDur
 
   if (phaseIsFinished) {
     pomodoro.value.phase.elapsed = 0
     pomodoro.value.counter[pomodoro.value.phase.type] += 1
+
+    if (pomodoro.value.phase.type === 'task') {
+      pomodoro.value.totalTasks += 1 //Increment only for task phases
+    }
+
+    const totalPhases =
+    pomodoro.value.counter.task +
+    pomodoro.value.counter.short +
+    pomodoro.value.counter.long
+
+    if (totalPhases >= 8) {
+    // Reset counters to restart a fresh cycle
+      pomodoro.value.counter.task = 0
+      pomodoro.value.counter.short = 0
+      pomodoro.value.counter.long = 0
+    }
 
     if (pomodoro.value.phase.type === 'task' && pomodoro.value.counter.task % 4 === 0) {
       pomodoro.value.phase.type = 'long'
