@@ -1,12 +1,31 @@
 <template>
   <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
     <template v-if="isRunning">
+      <!--Display pomodoro timer progress-->
+      <div class="pomodoro-progress">
+        <span
+          v-for="(phase, index) in cycle"
+          v-bind:key="index"
+          v-bind:title="phaseTitles[phase as keyof typeof phaseTitles]"
+          class="phase-indicator"
+          v-bind:class="{
+            completed: index < currentCycleIndex,
+            task: phase === 'task',
+            short: phase === 'short',
+            long: phase === 'long'
+          }"
+        />
+      </div>
+
       <!-- Display running time -->
       <p class="pomodoro-big">
         {{ remainingTimeFormatted }}
       </p>
       <p class="pomodoro-big">
         {{ currentPhaseLabel }}
+      </p>
+      <p class="pomodoro-info">
+        Total work sessions completed: {{ props.pomodoro.totalTasks }}
       </p>
       <hr>
       <button v-on:click="stopPomodoro">
@@ -139,6 +158,21 @@ const currentPhaseLabel = computed(() => {
   }
 })
 
+// Pomodoro progress display
+const cycle = [ 'task', 'short', 'task', 'short', 'task', 'short', 'task', 'long' ]
+const currentCycleIndex = computed(() => {
+  const count = props.pomodoro.counter
+  const progress = count.task + count.short + count.long
+  return Math.min(progress, cycle.length)
+})
+  
+const phaseTitles: Record<'task' | 'short' | 'long', string> = {
+  task: 'Work Session',
+  short: 'Short Break',
+  long: 'Long Break'
+}
+
+
 watch(internalTaskDuration, updateConfig)
 watch(internalShortDuration, updateConfig)
 watch(internalLongDuration, updateConfig)
@@ -176,5 +210,43 @@ p.pomodoro-big {
   font-size: 200%;
   text-align: center;
   margin: 10px;
+}
+
+.pomodoro-progress {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+  gap: 6px;
+}
+  
+.phase-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid #555; 
+  box-sizing: border-box;
+}
+
+//Incomplete phase colours 
+.phase-indicator.task {
+  background-color: #f8d7da;
+}
+.phase-indicator.short {
+  background-color: #d4edda;
+}
+.phase-indicator.long {
+  background-color: #d1ecf1;
+}
+  
+//Completed phase colours
+.phase-indicator.completed.task {
+  background-color: #e74c3c;
+}
+.phase-indicator.completed.short {
+  background-color: #2ecc71;
+}
+.phase-indicator.completed.long {
+  background-color: #3498db;
 }
 </style>

@@ -243,6 +243,7 @@ export interface PomodoroConfig {
     short: number
     long: number
   }
+  totalTasks: number
   colour: {
     task: string
     short: string
@@ -258,6 +259,7 @@ const pomodoro = ref<PomodoroConfig>({
   durations: { task: 1500, short: 300, long: 1200 },
   phase: { type: 'task', elapsed: 0 },
   counter: { task: 0, short: 0, long: 0 },
+  totalTasks: 0,
   colour: { task: '#ff3366', short: '#ddff00', long: '#33ffcc' }
 })
 
@@ -912,6 +914,22 @@ function startPomodoro (): void {
 function pomodoroTick (): void {
   // Progresses the pomodoro counter by one second
   pomodoro.value.phase.elapsed += 1
+
+  if (pomodoro.value.phase.type === 'task') {
+    pomodoro.value.totalTasks += 1 //Increment only for task phases
+  }
+
+  const totalPhases =
+    pomodoro.value.counter.task +
+    pomodoro.value.counter.short +
+    pomodoro.value.counter.long
+
+  if (totalPhases >= 8) {
+    // Reset counters to restart a fresh cycle
+    pomodoro.value.counter.task = 0
+    pomodoro.value.counter.short = 0
+    pomodoro.value.counter.long = 0
+  }
 
   const currentPhaseDur = pomodoro.value.durations[pomodoro.value.phase.type]
   const phaseIsFinished = pomodoro.value.phase.elapsed === currentPhaseDur
