@@ -4,8 +4,8 @@ name: 'Update Transitive Dependencies'
 
 on:
   workflow_dispatch: {}
-  schedule: # Every Monday evening we run a dependency updater
-    - cron: '0 20 * * 1'
+  schedule: # Once a month, run the dependency updater
+    - cron: '0 20 1 * *'
 
 env:
   NODE_VERSION: '22'
