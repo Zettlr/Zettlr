@@ -38,7 +38,7 @@ jobs:
         # clears the cache to allow the creation of a new lockfile.
         run: |
           sudo corepack enable
-          yarn config unset enableImmutableInstalls
+          yarn config set -H enableImmutableInstalls false
           yarn cache clean --all
       - name: Create new branch `transitive-deps-${{ github.run_id }}`
         run: |
