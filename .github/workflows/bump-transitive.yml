@@ -33,6 +33,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           # No cache
+      - name: Enable Yarn
+        run: |
+          sudo corepack enable
       - name: Create new branch `transitive-deps-${{ github.run_id }}`
         run: |
           git checkout -b transitive-deps-${{ github.run_id }}
