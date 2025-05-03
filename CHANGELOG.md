@@ -4,6 +4,9 @@
 
 - **Feature**: The code editors (in the assets manager and elsewhere) now share
   the same keymap as the main editor.
+- **Feature**: The image renderer now acknowledges and respects the presence of
+  a Pandoc link attributes string behind an image to scale images using custom
+  sizes (#1328).
 - **Change**: Removed some optional properties from the default profiles. If you
   want to switch to the new defaults, delete those files from the assets manager
   or rename your existing ones. Specifically, removed `top-level-division`,
@@ -40,6 +43,7 @@
 - Move all keymaps into a single `defaultKeymap`.
 - Assume `**` as default bold and `*` as default italic formatting for Markdown
   commands if the config field is not present.
+- Added a `pandocLinkParser` for properly parsing pandoc link attribute strings.
 
 # 3.4.4
 
