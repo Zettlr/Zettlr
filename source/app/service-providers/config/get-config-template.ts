@@ -16,7 +16,7 @@ import { app } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
-import { getPlatformSpecificDefaultKeybinding, type EditorKeyboardCommand } from '@common/modules/markdown-editor/keymaps/default-map'
+import { getPlatformSpecificDefaultKeybinding, type EditorKeyboardCommand } from '@common/modules/markdown-editor/keymaps/custom-map'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
 

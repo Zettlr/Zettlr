@@ -14,7 +14,7 @@
 
 import { type ConfigOptions } from '@providers/config/get-config-template'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import _ from 'underscore'
 
 const ipcRenderer = window.ipc
@@ -30,6 +30,7 @@ function retrieveConfig (): ConfigOptions {
 
 export const useConfigStore = defineStore('config', () => {
   const config = ref<ConfigOptions>(retrieveConfig())
+  const customShortcuts = computed(() => config.value.editor.keyboardShortcuts)
 
   // Throttle the retrieve function to once a second. We want the config to
   // update some values extremely frequently, and with the throttle in place, we
@@ -52,5 +53,5 @@ export const useConfigStore = defineStore('config', () => {
     })
   }
 
-  return { config, setConfigValue }
+  return { config, customShortcuts, setConfigValue }
 })

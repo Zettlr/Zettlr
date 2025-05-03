@@ -47,6 +47,11 @@ const defaultMap: EditorCommandMap = {
 export type EditorKeyboardCommand = keyof EditorCommandMap
 
 /**
+ * A simple type to pass custom shortcut configurations around the editor.
+ */
+export type CustomShortcutConfiguration = Partial<Record<EditorKeyboardCommand, string>>
+
+/**
  * Returns the platform-specific shortcut defined for the provided command,
  * based on the runtime-determined platform (via `process.platform`). Returns
  * undefined if the command has no keyboard binding for this platform defined.

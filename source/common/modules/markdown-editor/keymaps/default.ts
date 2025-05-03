@@ -61,14 +61,14 @@ import {
   insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
-import { getPlatformSpecificDefaultKeybinding, type EditorKeyboardCommand } from './default-map'
+import { type CustomShortcutConfiguration, getPlatformSpecificDefaultKeybinding } from './custom-map'
 
 // Includes:
 // * defaultKeymap
 // * historyKeymap
 // * closeBracketsKeymap
 // * searchKeymap
-export function defaultKeymap (customKeymap?: Record<EditorKeyboardCommand, string>): Extension {
+export function generateDefaultKeymap (customKeymap?: CustomShortcutConfiguration): Extension {
   return keymap.of([
     // completionKeymap
     { key: 'Ctrl-Space', run: startCompletion },

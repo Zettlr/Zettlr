@@ -42,7 +42,7 @@ import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-
 import { useConfigStore } from 'source/pinia'
 import { darkMode, darkModeEffect } from '../modules/markdown-editor/theme/dark-mode'
 import { highlightWhitespace, highlightWhitespaceEffect } from '../modules/markdown-editor/plugins/highlight-whitespace'
-import { defaultKeymap } from '../modules/markdown-editor/keymaps/default'
+import { defaultKeymap, shortcutUpdateEffect } from '../modules/markdown-editor/keymaps'
 
 const configStore = useConfigStore()
 
@@ -62,7 +62,7 @@ const cleanFlag = ref<boolean>(true)
 
 function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
   const extensions = [
-    defaultKeymap(),
+    defaultKeymap(configStore.customShortcuts),
     search({ top: true }),
     codeFolding(),
     foldGutter(),
@@ -141,12 +141,13 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<(e: 'update:modelValue', newContents: string) => void>()
 
-// Switch the darkMode variable in the editor based on the config
+// Switch compartments via effects whenever the config updates
 configStore.$subscribe((_mutation, state) => {
   cmInstance.dispatch({
     effects: [
       darkModeEffect.of({ darkMode: state.config.darkMode }),
-      highlightWhitespaceEffect.of(state.config.editor.showWhitespace)
+      highlightWhitespaceEffect.of(state.config.editor.showWhitespace),
+      shortcutUpdateEffect.of(state.config.editor.keyboardShortcuts)
     ]
   })
 })

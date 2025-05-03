@@ -16,7 +16,7 @@ import { trans } from '@common/i18n-renderer'
 import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
-import { getPlatformSpecificDefaultKeybinding } from 'source/common/modules/markdown-editor/keymaps/default-map'
+import { getPlatformSpecificDefaultKeybinding } from 'source/common/modules/markdown-editor/keymaps/custom-map'
 
 export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
