@@ -34,8 +34,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           # No cache
       - name: Enable Yarn
+        # Additionally, this run removes the `enableImmutableInstalls` to allow
+        # the creation of a new lockfile.
         run: |
           sudo corepack enable
+          yarn config unset enableImmutableInstalls
       - name: Create new branch `transitive-deps-${{ github.run_id }}`
         run: |
           git checkout -b transitive-deps-${{ github.run_id }}
