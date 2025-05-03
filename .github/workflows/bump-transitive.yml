@@ -1,0 +1,54 @@
+# This Workflow updates the transitive dependencies of Zettlr by deleting the
+# lockfile and re-installing everything.
+name: 'Update Transitive Dependencies'
+
+on:
+  workflow_dispatch: {}
+  # schedule: # Every Monday at noon (UTC) we run a scheduled nightly build
+  #   - cron: '0 12 * * 1'
+
+env:
+  NODE_VERSION: '22'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  update_deps:
+    name: 'Update dependencies'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository (develop branch)
+        uses: actions/checkout@v4
+        with:
+          ref: 'develop'
+          fetch-depth: 0
+      - name: Setup NodeJS ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          # No cache
+      - name: Create new branch `transitive-deps-${{ github.run_id }}`
+        run: |
+          git checkout -b transitive-deps-${{ github.run_id }}
+      - name: Update transitive dependencies
+        run: |
+          rm yarn.lock
+          yarn install
+      - name: Commit Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add yarn.lock
+          git commit -m "chore: Bump transitive dependencies ($(date))"
+          git push -u origin transitive-deps-${{ github.run_id }}
+      - name: Open PR
+        run: |
+          gh pr create -B develop -H transitive-deps-${{ github.run_id }} --title 'chore: Bump transitive dependencies ($(date))' --body 'Bumps transitive dependencies of the repository.'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
