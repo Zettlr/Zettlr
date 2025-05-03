@@ -4,8 +4,8 @@ name: 'Update Transitive Dependencies'
 
 on:
   workflow_dispatch: {}
-  # schedule: # Every Monday at noon (UTC) we run a scheduled nightly build
-  #   - cron: '0 12 * * 1'
+  schedule: # Every Monday evening we run a dependency updater
+    - cron: '0 20 * * 1'
 
 env:
   NODE_VERSION: '22'
@@ -47,6 +47,9 @@ jobs:
         run: |
           rm yarn.lock
           yarn install
+      - name: Verify Changes
+        run: |
+          yarn lint && yarn test
       - name: Commit Changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -56,6 +59,6 @@ jobs:
           git push -u origin transitive-deps-${{ github.run_id }}
       - name: Open PR
         run: |
-          gh pr create -B develop -H transitive-deps-${{ github.run_id }} --title 'chore: Bump transitive dependencies ($(date))' --body 'Bumps transitive dependencies of the repository.'
+          gh pr create -B develop -H transitive-deps-${{ github.run_id }} --title "chore: Bump transitive dependencies ($(date))" --body "Bumps transitive dependencies of the repository."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
