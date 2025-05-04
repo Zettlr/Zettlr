@@ -33,7 +33,7 @@
     "update:citation": "node scripts/update-citation.mjs",
     "test": "mocha",
     "test-gui": "cross-env NODE_ENV=develop node scripts/test-gui/index.mjs",
-    "lint:code": "eslint",
+    "lint:code": "eslint --cache",
     "lint:types": "vue-tsc --noEmit",
     "lint:po": "node scripts/lint-po.mjs",
     "lint": "yarn lint:code && yarn lint:types",
@@ -59,7 +59,7 @@
     "@codemirror/legacy-modes": "^6.5.0",
     "@codemirror/search": "^6.5.10",
     "@codemirror/state": "^6.5.2",
-    "@codemirror/view": "^6.36.5",
+    "@codemirror/view": "^6.36.6",
     "@lezer/common": "^1.2.3",
     "@lezer/highlight": "^1.2.1",
     "@replit/codemirror-emacs": "^6.1.0",
@@ -123,6 +123,7 @@
     "uuid": "^11.1.0",
     "vue": "^3.5.13",
     "vue-virtual-scroller": "^2.0.0-beta.8",
+    "w3c-keyname": "^2.2.8",
     "yaml": "^2.7.1"
   },
   "optionalDependencies": {

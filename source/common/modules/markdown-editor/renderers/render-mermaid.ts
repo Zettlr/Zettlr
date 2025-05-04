@@ -49,6 +49,8 @@ class MermaidWidget extends WidgetType {
   toDOM (view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.classList.add('mermaid-chart')
+    elem.dataset.graph = this.graph
+    elem.dataset.darkTheme = String(this.darkMode)
 
     const id = `graphDiv${Date.now()}`
     elem.innerText = trans('Rendering mermaid graph …')
@@ -64,45 +66,71 @@ class MermaidWidget extends WidgetType {
     return elem
   }
 
+  updateDOM (dom: HTMLElement, _view: EditorView): boolean {
+    if (dom.dataset.graph === this.graph && dom.dataset.darkTheme === String(this.darkMode)) {
+      return true // No update necessary
+    }
+
+    const id = `graphDiv${Date.now()}`
+    dom.innerText = trans('Rendering mermaid graph …')
+    mermaid.render(id, this.graph)
+      .then(result => { dom.innerHTML = result.svg })
+      .catch(err => {
+        dom.classList.add('error')
+        const msg = trans('Could not render Graph:')
+        dom.innerText = `${msg}\n\n${err.str as string}`
+      })
+
+    return true
+  }
+
   ignoreEvent (event: Event): boolean {
     return false // By default ignore all events
   }
 }
 
 function shouldHandleNode (node: SyntaxNodeRef): boolean {
-  // This parser should look for InlineCode and FencedCode and then immediately
-  // check its first CodeMark child to ensure its contents only include $ or $$.
+  // This parser should look for FencedCode with a CodeInfo string of at least 7
   if (node.type.name !== 'FencedCode') {
     return false
   }
 
-  // We've got some code. Ensure we have an info string that happens to be 7
-  // chars long (= `mermaid`)
-  const firstChild = node.node.getChildren('CodeInfo')[0]
-  if (firstChild === undefined) {
+  // We've got some code. Ensure we have an info string
+  const codeInfo = node.node.getChild('CodeInfo')
+  if (codeInfo === null) {
     return false
   }
 
-  const markSpan = firstChild.to - firstChild.from
-
-  if (markSpan !== 7) {
+  // The span needs to be at least 7 characters (= `mermaid`) long, but may be
+  // longer (to account for, e.g., Pandoc fenced attributes)
+  if (codeInfo.to - codeInfo.from < 7) {
     return false
   }
 
-  return true // There's reason to assume we are indeed dealing with a math equation
+  return true
 }
 
 function createWidget (state: EditorState, node: SyntaxNodeRef): MermaidWidget|undefined {
-  // Get the node's text contents, determine if this is a displayMode equation,
-  // and then remove the leading and trailing dollars. Also, pass a stable node
-  // reference (SyntaxNodeRef will be dropped, but the SyntaxNode itself will
-  // stay, and keep its position updated depending on what happens in the doc)
-  const nodeText = state.sliceDoc(node.from, node.to)
-  if (!nodeText.startsWith('```mermaid') && !nodeText.startsWith('~~~mermaid')) {
+  // This function is called after the `shouldHandleNode` function, so we can
+  // disregard its checks here.
+  const codeInfo = node.node.getChild('CodeInfo')!
+  const infoString = state.sliceDoc(codeInfo.from, codeInfo.to)
+
+  // The infostring can either be plain "mermaid" or a Pandoc attribute string
+  // that includes the class `.mermaid` (see the Pandoc manual:
+  // https://pandoc.org/MANUAL.html#extension-fenced_code_attributes)
+  if (infoString !== 'mermaid' && !/^{.*\.mermaid.*}$/i.test(infoString)) {
     return undefined
   }
 
-  const graph = nodeText.replace(/^[`~]{1,3}mermaid\n(.+?)\n[`~]{1,3}$/s, '$1') // NOTE the s flag
+  const codeText = node.node.getChild('CodeText')
+
+  if (codeText === null) {
+    return undefined
+  }
+
+  const graph = state.sliceDoc(codeText.from, codeText.to)
+
   // NOTE: We have to pass the current value of the darkMode config value to
   // see in what mode the mermaid graph has actually been rendered to re-render
   // the graph if necessary
