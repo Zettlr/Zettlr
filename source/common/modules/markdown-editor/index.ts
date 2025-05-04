@@ -840,7 +840,3 @@ export default class MarkdownEditor extends EventEmitter {
     return this.representedDocument
   }
 }
-
-
-
-
