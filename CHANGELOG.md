@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.4.4
+
+## GUI and Functionality
+
 - **Change**: The exporter will now forcefully enable (= if it is not yet
   enabled in the corresponding defaults file in the assets manager) the Pandoc
   extension `wikilinks_title_after_pipe` or `wikilinks_title_before_pipe`
@@ -12,8 +22,11 @@
 - Fix the wikilink/Zettelkasten link Lua filter (#5605).
 - Zettlr now properly retrieves attachments also for items residing in group
   libraries (#5647).
-- Updated German (`de-DE`) translation
 - Use shortcuts to navigate search results from the global search (#5718).
+- Updated translations:
+  -  German (`de-DE`)
+  -  French (`fr-FR`, #5688)
+  -  Taiwanese (`zh-TW`, #5656)
 
 ## Under the Hood
 
@@ -22,6 +35,11 @@
 - Move `pandoc-maps.ts` to common `pandoc-util` location.
 - Add additional classes to Table of Contents-headings in the sidebar to allow
   targeting them with Custom CSS rules (`toc-heading-X` where `X` is the level).
+- Bump Electron to `v35.1.5`.
+- Bump Pandoc to `v3.6.4`
+- Bump Node.js across the CI to v22 (LTS).
+- Bump various other dependencies.
+- Upgrade the Ubuntu runners on the CI back to Ubuntu 22.04 LTS (#5172).
 
 # 3.4.3
 

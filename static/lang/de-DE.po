@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2025-02-28 14:52+0000\n"
+"POT-Creation-Date: 2025-04-09 16:13+0000\n"
 "PO-Revision-Date: 2025-03-28 23:15+0100\n"
 "Last-Translator: Cornelius Wilkening <mail@cornelius-wilkening.de>\n"
 "Language-Team: \n"
@@ -174,8 +174,8 @@ msgstr ""
 
 #: source/app/service-providers/updates/index.ts:594
 msgid ""
-"The downloaded file has a different checksum than the server reported. Please "
-"retry or update manually."
+"The downloaded file has a different checksum than the server reported. "
+"Please retry or update manually."
 msgstr ""
 "Die heruntergeladene Datei hat eine andere Prüfsumme als vom Server "
 "angegeben. Bitte erneut versuchen oder manuell updaten."
@@ -202,12 +202,12 @@ msgid "Could not create file"
 msgstr "Konnte Datei nicht erstellen"
 
 #. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:113
+#: source/app/service-providers/commands/open-attachment.ts:119
 #, javascript-format
 msgid "The reference with key %s does not appear to have attachments."
 msgstr "Die Referenz mit dem Schlüssel %s scheint keine Anhänge zu haben."
 
-#: source/app/service-providers/commands/open-attachment.ts:118
+#: source/app/service-providers/commands/open-attachment.ts:124
 msgid "Could not open attachment. Is Zotero running?"
 msgstr "Konnte Anhang nicht öffnen. Läuft Zotero?"
 
@@ -295,8 +295,8 @@ msgid ""
 "The following %s files could not be imported, because their filetype is "
 "unknown: %s"
 msgstr ""
-"Die folgenden %s Dateien konnten nicht importiert werden, da ihre Dateiendung "
-"unbekannt ist: %s"
+"Die folgenden %s Dateien konnten nicht importiert werden, da ihre "
+"Dateiendung unbekannt ist: %s"
 
 #: source/app/service-providers/commands/import.ts:84
 msgid "Import failed"
@@ -308,8 +308,8 @@ msgstr "Kann Projekt nicht exportieren"
 
 #: source/app/service-providers/commands/dir-project-export.ts:86
 msgid ""
-"There are no files selected for export. Please select files to be included in "
-"the project settings."
+"There are no files selected for export. Please select files to be included "
+"in the project settings."
 msgstr ""
 "Für den Export sind keine Dateien ausgewählt. Bitte wähle Dateien in den "
 "Projekteinstellungen aus."
@@ -320,9 +320,9 @@ msgstr "Fehlende Projektdateien"
 
 #: source/app/service-providers/commands/dir-project-export.ts:92
 msgid ""
-"One or more files specified in the project settings have not been found. They "
-"may have moved or been deleted. Please verify that all files that you would "
-"like to export are included."
+"One or more files specified in the project settings have not been found. "
+"They may have moved or been deleted. Please verify that all files that you "
+"would like to export are included."
 msgstr ""
 "Eine oder mehrere für den Export ausgewählte Dateien sind nicht mehr "
 "auffindbar. Sie könnten gelöscht oder umbenannt worden sein. Bitte "
@@ -494,11 +494,11 @@ msgstr "Datei ersetzen"
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:32
 #, javascript-format
 msgid ""
-"File %s has been modified remotely. Replace the loaded version with the newer "
-"one from disk?"
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
 msgstr ""
-"Datei %s wurde extern verändert. Soll die angezeigte Version mit den externen "
-"Änderungen ersetzt werden?"
+"Datei %s wurde extern verändert. Soll die angezeigte Version mit den "
+"externen Änderungen ersetzt werden?"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 #: source/win-preferences/schema/general.ts:78
@@ -523,7 +523,7 @@ msgstr "Datei öffnen"
 #: source/app/service-providers/documents/index.ts:390
 #: source/tmp/win-tag-manager/App.vue.ts:94
 #: source/tmp/win-assets/CustomCSS.vue.ts:34
-#: source/tmp/win-assets/DefaultsTab.vue.ts:110
+#: source/tmp/win-assets/DefaultsTab.vue.ts:113
 #: source/tmp/win-assets/SnippetsTab.vue.ts:47
 msgid "Unsaved changes"
 msgstr "Ungespeicherte Änderungen"
@@ -918,9 +918,10 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
-"Nach dem Neustart wird Zettlr den Cache neu erzeugen, was einen Moment dauern "
-"kann. Die Geschwindigkeit hängt von der Anzahl geladener Dateien sowie der "
-"Geschwindigkeit der Festplatte ab. Die Fenster werden im Anschluss geöffnet."
+"Nach dem Neustart wird Zettlr den Cache neu erzeugen, was einen Moment "
+"dauern kann. Die Geschwindigkeit hängt von der Anzahl geladener Dateien "
+"sowie der Geschwindigkeit der Festplatte ab. Die Fenster werden im Anschluss "
+"geöffnet."
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
@@ -986,9 +987,9 @@ msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
-"%s wurde auf der Festplatte verändert, aber der Editor enthält ungespeicherte "
-"Änderungen. Sollen die Änderungen im Editor erhalten werden, oder die Datei "
-"neu geladen werden?"
+"%s wurde auf der Festplatte verändert, aber der Editor enthält "
+"ungespeicherte Änderungen. Sollen die Änderungen im Editor erhalten werden, "
+"oder die Datei neu geladen werden?"
 
 #: source/app/service-providers/documents/index.ts:1042
 msgid ""
@@ -1810,9 +1811,9 @@ msgid ""
 "its tile in the preview list will receive a colored indicator. The "
 "description will be shown on mouse hover."
 msgstr ""
-"In diesem Dialog kannst du Schlagwörter Farben zuweisen. Wenn ein Schlagwort" 
-"in einer Datei enthalten ist, erhält die Datei an verschiedenen Stellen" 
-"einen farblichen Marker. Die Beschreibung wird beim Hovern angezeigt."
+"In diesem Dialog kannst du Schlagwörter Farben zuweisen. Wenn ein "
+"Schlagwortin einer Datei enthalten ist, erhält die Datei an verschiedenen "
+"Stelleneinen farblichen Marker. Die Beschreibung wird beim Hovern angezeigt."
 
 #: source/tmp/win-tag-manager/App.vue.ts:35
 #: source/tmp/win-main/PopoverTags.vue.ts:47
@@ -1875,11 +1876,11 @@ msgstr "Lizenz"
 
 #: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It "
-"is Open Source, free of charge and based upon the Electron framework. Zettlr "
-"would like to thank the developers of Electron, the Node.js framework and the "
-"CodeMirror editor for their work. Without them, Zettlr would not be possible. "
-"Below you can find all projects that Zettlr uses."
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
 msgstr ""
 "Zettlr ist ein Projekt von Hendrik Erz, lizensiert unter der GNU GPL v3-"
 "Lizenz. Es ist Open Source, komplett kostenlos und basiert auf dem Electron-"
@@ -1902,9 +1903,9 @@ msgstr ""
 
 #: source/tmp/win-about/General-Tab.vue.ts:23
 msgid ""
-"All logos and brand names are subject to their rightful owners. Besides using "
-"their code, Zettlr is in no way affiliated with any of these projects. Node."
-"js is a trademark of Joyent, Inc."
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
 msgstr ""
 "Alle Logos und Markennamen gehören ihren rechtmäßigen Besitzern. Außer durch "
 "die Nutzung ihres Codes ist Zettlr auf keine Weise mit diesen Projekten "
@@ -1935,12 +1936,12 @@ msgid ""
 "strong>"
 msgstr ""
 "Hier kannst du verschiedene Stile von Zettlr überschreiben und damit die App "
-"noch weiter anpassen. <strong>Achtung: Diese Datei überschreibt sämtliche CSS-"
-"Direktiven! Ändere daher niemals die Geometrie von Elementen, anderenfalls "
-"könnte Zettlr unerwartetes Verhalten zeigen!</strong>"
+"noch weiter anpassen. <strong>Achtung: Diese Datei überschreibt sämtliche "
+"CSS-Direktiven! Ändere daher niemals die Geometrie von Elementen, "
+"anderenfalls könnte Zettlr unerwartetes Verhalten zeigen!</strong>"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:56
-#: source/tmp/win-assets/DefaultsTab.vue.ts:177
+#: source/tmp/win-assets/DefaultsTab.vue.ts:180
 #: source/tmp/win-assets/SnippetsTab.vue.ts:106
 msgid "Saving …"
 msgstr "Speichere …"
@@ -1962,7 +1963,8 @@ msgstr "Importieren"
 msgid "Custom CSS"
 msgstr "Benutzerdefiniertes CSS"
 
-#: source/tmp/win-assets/App.vue.ts:39 source/tmp/win-preferences/App.vue.ts:180
+#: source/tmp/win-assets/App.vue.ts:39
+#: source/tmp/win-preferences/App.vue.ts:180
 #: source/win-preferences/schema/snippets.ts:24
 msgid "Snippets"
 msgstr "Snippets"
@@ -1972,8 +1974,8 @@ msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
 msgstr ""
-"Dieses Profil ist geschützt. Es wird wiederhergestellt, wenn du es umbenennst "
-"oder entfernst."
+"Dieses Profil ist geschützt. Es wird wiederhergestellt, wenn du es "
+"umbenennst oder entfernst."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:57
 msgid ""
@@ -1991,7 +1993,7 @@ msgstr "Öffne Profilordner"
 msgid "Edit the default settings for imports or exports here."
 msgstr "Bearbeite die Standardeinstellungen für Importe oder Exporte hier."
 
-#: source/tmp/win-assets/DefaultsTab.vue.ts:187
+#: source/tmp/win-assets/DefaultsTab.vue.ts:190
 #: source/tmp/win-assets/SnippetsTab.vue.ts:116
 msgid "Saved!"
 msgstr "Gespeichert!"
@@ -2521,7 +2523,8 @@ msgstr "%s ausgewählt"
 msgid "%s selections"
 msgstr "%s Selektionen"
 
-#: source/tmp/win-main/App.vue.ts:256 source/tmp/win-main/GlobalSearch.vue.ts:35
+#: source/tmp/win-main/App.vue.ts:256
+#: source/tmp/win-main/GlobalSearch.vue.ts:35
 msgid "Search across all files"
 msgstr "In allen Dateien suchen"
 
@@ -2709,7 +2712,8 @@ msgid "You have not selected any files for export."
 msgstr "Du hast keine Dateien für den Export bestimmt."
 
 #: source/tmp/win-project-properties/App.vue.ts:53
-msgid "Some files are selected for export but no longer exist in the directory."
+msgid ""
+"Some files are selected for export but no longer exist in the directory."
 msgstr ""
 "Einige Dateien wurden zum Export ausgewählt, sind aber nicht mehr auffindbar."
 
@@ -2901,8 +2905,8 @@ msgid ""
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
 msgstr ""
-"Du kannst optionale Titel zu internen Links hinzufügen, separiert durch einen "
-"vertikalen Strich. Hier kannst du bestimmen, was zuerst kommt."
+"Du kannst optionale Titel zu internen Links hinzufügen, separiert durch "
+"einen vertikalen Strich. Hier kannst du bestimmen, was zuerst kommt."
 
 #: source/win-preferences/schema/zettelkasten.ts:79
 msgid "[[Link|Title]]: Link first (recommended)"
@@ -2991,9 +2995,9 @@ msgid ""
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
 msgstr ""
-"Der Eingabemodus bestimmt deine Interaktion mit dem Editor. Wir empfehlen die "
-"Einstellung “Normal“. Wähle “Vim“ oder “Emacs“ nur, wenn du weißt, was das "
-"bedeutet."
+"Der Eingabemodus bestimmt deine Interaktion mit dem Editor. Wir empfehlen "
+"die Einstellung “Normal“. Wähle “Vim“ oder “Emacs“ nur, wenn du weißt, was "
+"das bedeutet."
 
 #: source/win-preferences/schema/editor.ts:44
 msgid "Writing direction"
@@ -3064,8 +3068,8 @@ msgid ""
 "care of Markdown formatting."
 msgstr ""
 "Der Table Editor ist ein interaktives Bedienelement für das Bearbeiten von "
-"Tabellen. Er stellt generelle Funktionalitäten bereit und formatiert Markdown-"
-"Quellcode."
+"Tabellen. Er stellt generelle Funktionalitäten bereit und formatiert "
+"Markdown-Quellcode."
 
 #: source/win-preferences/schema/editor.ts:171
 msgid "Mute non-focused lines in distraction-free mode"
@@ -3370,15 +3374,15 @@ msgstr "Kombiniert"
 
 #: source/win-preferences/schema/file-manager.ts:40
 msgid ""
-"The Thin mode shows your directories and files separately. Select a directory "
-"to have its contents displayed in the file list. Switch between file list and "
-"directory tree by clicking on directories or the arrow button which appears "
-"at the top left corner of the file list."
+"The Thin mode shows your directories and files separately. Select a "
+"directory to have its contents displayed in the file list. Switch between "
+"file list and directory tree by clicking on directories or the arrow button "
+"which appears at the top left corner of the file list."
 msgstr ""
 "Der dünne Darstellungsmodus zeigt Ordner und Dateien separat an. Wähle einen "
 "Ordner aus, um seinen Inhalt in der Dateiliste anzuzeigen. Wechsle zwischen "
-"Dateiliste und Verzeichnisbaum durch Klicken auf Verzeichnisse oder den Pfeil-"
-"Button, der in der linken oberen Ecke der Dateiliste angezeigt wird."
+"Dateiliste und Verzeichnisbaum durch Klicken auf Verzeichnisse oder den "
+"Pfeil-Button, der in der linken oberen Ecke der Dateiliste angezeigt wird."
 
 #: source/win-preferences/schema/file-manager.ts:45
 msgid "Show file information"
@@ -3616,7 +3620,8 @@ msgstr "Dateien löschen"
 #: source/win-preferences/schema/advanced.ts:144
 msgid "Delete items irreversibly if moving them to trash fails"
 msgstr ""
-"Dateien unwiderruflich löschen, wenn Verschieben in den Papierkorb fehlschlägt"
+"Dateien unwiderruflich löschen, wenn Verschieben in den Papierkorb "
+"fehlschlägt"
 
 #: source/win-preferences/schema/advanced.ts:150
 msgid "Debug mode"
@@ -3864,8 +3869,8 @@ msgstr "CSL-Stil (optional)"
 
 #~ msgid "Delete items irreversibly, if moving them to trash fails"
 #~ msgstr ""
-#~ "Lösche Objekte unwiderruflich, wenn sie nicht in den Papierkorb verschoben "
-#~ "werden können"
+#~ "Lösche Objekte unwiderruflich, wenn sie nicht in den Papierkorb "
+#~ "verschoben werden können"
 
 #~ msgid "Close Workspace"
 #~ msgstr "Arbeitsverzeichnis schließen"
@@ -4020,7 +4025,8 @@ msgstr "CSL-Stil (optional)"
 #~ msgstr "Zeige folgende Zeit in den Dateiinformationen an"
 
 #~ msgid ""
-#~ "Choose the formatting characters that the bold/emphasis commands should use"
+#~ "Choose the formatting characters that the bold/emphasis commands should "
+#~ "use"
 #~ msgstr "Wähle die Formatierungszeichen für die Fett/Kursiv-Befehle aus"
 
 #~ msgid "Default image path (relative or absolute)"
@@ -4039,9 +4045,9 @@ msgstr "CSL-Stil (optional)"
 #~ msgstr "Zeichenkette"
 
 #~ msgid ""
-#~ "Here you can define certain strings that will be replaced when AutoCorrect "
-#~ "is on. The characters on the left side will be replaced with whatever "
-#~ "comes on the right."
+#~ "Here you can define certain strings that will be replaced when "
+#~ "AutoCorrect is on. The characters on the left side will be replaced with "
+#~ "whatever comes on the right."
 #~ msgstr ""
 #~ "Hier kannst du Zeichenketten definieren, die ersetzt werden, sobald "
 #~ "AutoCorrect eingeschaltet ist. Die Zeichen links werden mit den Zeichen "
@@ -4050,25 +4056,26 @@ msgstr "CSL-Stil (optional)"
 #~ msgid "Search for dictionaries…"
 #~ msgstr "Suche nach Wörterbüchern…"
 
-#~ msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
+#~ msgid ""
+#~ "Put auto-created files into this directory (must be loaded in Zettlr)"
 #~ msgstr ""
-#~ "Erstelle Dateien automatisch in diesem Verzeichnis (muss in Zettlr geladen "
-#~ "sein)"
+#~ "Erstelle Dateien automatisch in diesem Verzeichnis (muss in Zettlr "
+#~ "geladen sein)"
 
 #~ msgid ""
 #~ "Target directory for exported files. <em>Attention:</em> Selecting the "
 #~ "current working directory will overwrite files without warning!"
 #~ msgstr ""
 #~ "Zielverzeichnis für Exporte. <em>Vorsicht:</em> Die Auswahl &quot;"
-#~ "Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell vorhandene "
-#~ "Dateien!"
+#~ "Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell "
+#~ "vorhandene Dateien!"
 
 #~ msgid "Temporary directory: is regularly expunged"
 #~ msgstr "Temporäres Verzeichnis: wird regelmäßig geleert"
 
 #~ msgid ""
-#~ "Current working directory: exported files will be saved into the currently "
-#~ "selected directory."
+#~ "Current working directory: exported files will be saved into the "
+#~ "currently selected directory."
 #~ msgstr ""
 #~ "Aktuelles Verzeichnis: die Exporte werden im aktuell ausgewählten "
 #~ "Verzeichnis gespeichert."
@@ -4077,8 +4084,9 @@ msgstr "CSL-Stil (optional)"
 #~ msgstr "Verzeichnis auswählen"
 
 #~ msgid ""
-#~ "Enter all file extensions that you want to see in your attachment sidebar. "
-#~ "Separate them with a comma. Changes are recognised after a restart."
+#~ "Enter all file extensions that you want to see in your attachment "
+#~ "sidebar. Separate them with a comma. Changes are recognised after a "
+#~ "restart."
 #~ msgstr ""
 #~ "Trage hier alle Dateitypen ein, die du in der Attachment-Sidebar sehen "
 #~ "möchtest. Trenne jeden Dateityp mit einem Komma. Änderungen werden nach "
