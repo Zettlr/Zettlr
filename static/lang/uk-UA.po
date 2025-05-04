@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2025-02-28 14:52+0000\n"
+"POT-Creation-Date: 2025-04-09 16:13+0000\n"
 "PO-Revision-Date: 2024-12-19 13:37+0200\n"
 "Last-Translator: Fedir Zinchuk <fedikw@gmail.com>\n"
 "Language-Team: Ukrainian translators\n"
@@ -204,12 +204,12 @@ msgid "Could not create file"
 msgstr "Неможливо створити файл"
 
 #. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:113
+#: source/app/service-providers/commands/open-attachment.ts:119
 #, javascript-format
 msgid "The reference with key %s does not appear to have attachments."
 msgstr "Посилання з ключем %s не має вкладень."
 
-#: source/app/service-providers/commands/open-attachment.ts:118
+#: source/app/service-providers/commands/open-attachment.ts:124
 msgid "Could not open attachment. Is Zotero running?"
 msgstr "Не вдається відкрити вкладення. Чи запущено Zotero?"
 
@@ -522,7 +522,7 @@ msgstr "Відкрити файл"
 #: source/app/service-providers/documents/index.ts:390
 #: source/tmp/win-tag-manager/App.vue.ts:94
 #: source/tmp/win-assets/CustomCSS.vue.ts:34
-#: source/tmp/win-assets/DefaultsTab.vue.ts:110
+#: source/tmp/win-assets/DefaultsTab.vue.ts:113
 #: source/tmp/win-assets/SnippetsTab.vue.ts:47
 msgid "Unsaved changes"
 msgstr "Незбережені зміни"
@@ -1931,7 +1931,7 @@ msgstr ""
 "strong>"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:56
-#: source/tmp/win-assets/DefaultsTab.vue.ts:177
+#: source/tmp/win-assets/DefaultsTab.vue.ts:180
 #: source/tmp/win-assets/SnippetsTab.vue.ts:106
 msgid "Saving …"
 msgstr "Збереження…"
@@ -1983,7 +1983,7 @@ msgstr "Відкрити стандартний каталог"
 msgid "Edit the default settings for imports or exports here."
 msgstr "Змінити налаштування за замовчуванням для імпорту чи експорту."
 
-#: source/tmp/win-assets/DefaultsTab.vue.ts:187
+#: source/tmp/win-assets/DefaultsTab.vue.ts:190
 #: source/tmp/win-assets/SnippetsTab.vue.ts:116
 msgid "Saved!"
 msgstr "Збережено!"

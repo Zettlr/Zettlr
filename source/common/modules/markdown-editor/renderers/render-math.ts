@@ -45,6 +45,16 @@ class MathWidget extends WidgetType {
     return elem
   }
 
+  updateDOM (dom: HTMLElement, _view: EditorView): boolean {
+    if (dom.dataset.equation === this.equation) {
+      return true // No need to update
+    }
+
+    dom.dataset.equation = this.equation
+    katex.render(this.equation, dom, { throwOnError: false, displayMode: this.displayMode })
+    return true
+  }
+
   ignoreEvent (event: Event): boolean {
     return true // By default ignore all events
   }
