@@ -23,6 +23,7 @@ import { trans } from '@common/i18n-renderer'
 import clickAndSelect from './click-and-select'
 import { pathDirname } from '@common/util/renderer-path-polyfill'
 import { syntaxTree } from '@codemirror/language'
+import debounce from 'source/common/modules/markdown-editor/util/debounce'
 
 // This variable holds a base64 encoded placeholder image.
 const img404 = 'data:image/png;base64,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'
@@ -124,7 +125,8 @@ class ImageWidget extends WidgetType {
     }
 
     // Update the image title on load to retrieve the real image size.
-    img.onload = () => {
+    img.onload = debounce(() => {
+      console.log('Debounced image load triggered')
       img.title = `${img.dataset.title!.replace(/\\"/g, '"')} (${img.naturalWidth}x${img.naturalHeight}px)`
       size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}`
 
@@ -152,7 +154,7 @@ class ImageWidget extends WidgetType {
       // inaccurate, but can be solved by the user with a simple Ctrl+A, which
       // will force-reload everything.
       IMAGE_HEIGHT_CACHE.set(this.resolvedImageUrl, height)
-    }
+    },300)
 
     //////////////////////////////////////////
     // CAPTION
@@ -230,6 +232,7 @@ class ImageWidget extends WidgetType {
     // be rebuilt.
     try {
       // First, update the image itself
+      console.log('[updateDOM] called')
       const img = dom.querySelector('img')! as HTMLImageElement
       img.dataset.from = String(this.node.from)
       img.dataset.to = String(this.node.to)
@@ -237,15 +240,31 @@ class ImageWidget extends WidgetType {
       img.dataset.originalUrl = this.imageUrl
       img.dataset.title = this.imageTitle
 
+      console.log('[updateDOM] img found:', img)
+
       // The load and onerror handlers will handle this accordingly (and also
       // update the size and title)
-      img.src = resolveImageUrl(view.state.field(configField).metadata.path, this.imageUrl)
+      const newSrc = resolveImageUrl(view.state.field(configField).metadata.path, this.imageUrl);
+
+      if (img.src !== newSrc) {
+        console.log('[updateDOM] Changing img.src to:', newSrc);
+        img.src = newSrc;
+      } else {
+        console.log('[updateDOM] img.src unchanged; skipping update');
+      }
 
       // Next, the caption
       const caption = dom.querySelector('figcaption')! as HTMLElement
+      if (!img || !caption) {
+        console.warn('Image or caption missing in updateDOM; forcing re-render')
+        return false
+      }
+      console.log('[updateDOM] caption found:', caption)
       caption.textContent = this.imageTitle.replace(/\\"/g, '"') // Un-escape title
       return true
     } catch (err) {
+
+      console.error('[updateDOM] failed:', err)
       return false
     }
   }
