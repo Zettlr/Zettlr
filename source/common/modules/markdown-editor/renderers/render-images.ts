@@ -73,7 +73,6 @@ class ImageWidget extends WidgetType {
   }
 
   toDOM (view: EditorView): HTMLElement {
-    console.log({ data: this.data })
     //////////////////////////////////////////
     // FIGURE
     //////////////////////////////////////////
@@ -235,15 +234,21 @@ class ImageWidget extends WidgetType {
       img.dataset.from = String(this.node.from)
       img.dataset.to = String(this.node.to)
       img.dataset.originalUrl = this.imageUrl
-      img.dataset.title = this.imageTitle
 
-      // The load and onerror handlers will handle this accordingly (and also
-      // update the size and title)
-      img.src = resolveImageUrl(view.state.field(configField).metadata.path, this.imageUrl)
+      if (img.dataset.title !== this.imageTitle) {
+        img.dataset.title = this.imageTitle
+        const caption = dom.querySelector('figcaption')! as HTMLElement
+        caption.textContent = this.imageTitle.replace(/\\"/g, '"') // Un-escape title
+      }
 
-      // Next, the caption
-      const caption = dom.querySelector('figcaption')! as HTMLElement
-      caption.textContent = this.imageTitle.replace(/\\"/g, '"') // Un-escape title
+      const resolvedURL = resolveImageUrl(view.state.field(configField).metadata.path, this.imageUrl)
+
+      if (resolvedURL !== img.src) {
+        // The load and onerror handlers will handle this accordingly (and also
+        // update the size and title)
+        img.src = resolvedURL
+      }
+
       return true
     } catch (err) {
       return false
@@ -291,8 +296,6 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
       // Silently ignore error
     }
   }
-
-  console.log({ data })
 
   const resolvedImageSrc = resolveImageUrl(state.field(configField).metadata.path, url)
   return new ImageWidget(node.node, title, url, resolvedImageSrc, altText, data)

@@ -23,7 +23,7 @@
   `{.mermaid}` class (#5734).
 - Fixed a keymap conflict that would cause `Enter` to not accept autocomplete
   suggestions in some contexts such as Markdown syntax elements (#5646).
-- Improved the math, mermaid, and heading renderers so that they perform
+- Improved the math, mermaid, image, and heading renderers so that they perform
   additional checks before actually updating their respective rendered elements.
   This should reduce the amount of flickering and unintentional scrolling
   especially in longer documents with many of such elements.
