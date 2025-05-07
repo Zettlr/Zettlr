@@ -9,6 +9,10 @@
       <name>Alin Andrei Bălașa</name>
       <email>alin.andrei.balasa@blsalin.dev</email>
     </translator>
+    <translator>
+      <name>Dorin Jorea</name>
+      <email>dorin.jorea@gmail.com</email>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
     <updated>2012-07-04T23:31:02+00:00</updated>
   </info>
@@ -267,8 +271,8 @@
       <multiple>figurile</multiple>
     </term>
     <term name="folio">
-      <single>foliul</single>
-      <multiple>foliile</multiple>
+      <single>folioul</single>
+      <multiple>foliourile</multiple>
     </term>
     <term name="issue">
       <single>numărul</single>
@@ -450,6 +454,10 @@
     <term name="section" form="symbol">
       <single>§</single>
       <multiple>§§</multiple>
+    </term>
+    <term name="folio" form="symbol">
+      <single>ƒ</single>
+      <multiple>ƒƒ</multiple>
     </term>
 
     <!-- LONG ROLE FORMS -->
