@@ -124,7 +124,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallback, hoo
   } else if (node.type === 'FootnoteRef') {
     return `${node.whitespaceBefore}<div class="footnote-ref"><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, getCitation, hooks, indent)}</div>`
   } else if (node.type === 'Heading') {
-    return `${node.whitespaceBefore}<h${node.level}>${_.escape(node.value.value)}</h${node.level}>`
+    return `${node.whitespaceBefore}<h${node.level}>${nodeToHTML(node.children, getCitation, hooks, indent)}</h${node.level}>`
   } else if (node.type === 'Highlight') {
     return `${node.whitespaceBefore}<mark>${nodeToHTML(node.children, getCitation, hooks, indent)}</mark>`
   } else if (node.type === 'Superscript') {
@@ -135,7 +135,8 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallback, hoo
     const src = hooks.onImageSrc !== undefined ? hooks.onImageSrc(node.url) : node.url
     return `${node.whitespaceBefore}<img src="${src}" alt="${_.escape(node.alt.value)}" title="${node.title?.value ?? _.escape(node.alt.value)}">`
   } else if (node.type === 'Link') {
-    return `${node.whitespaceBefore}<a href="${node.url}" title="${node.title?.value ?? _.escape(node.url)}">${_.escape(node.alt.value)}</a>`
+    const title = _.escape(node.title?.value ?? node.alt.value)
+    return `${node.whitespaceBefore}<a href="${node.url}" title="${title}">${title}</a>`
   } else if (node.type === 'OrderedList') {
     const startsAt = node.startsAt > 1 ? ` start="${node.startsAt}"` : ''
     return `${node.whitespaceBefore}<ol${startsAt}>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ol>`
@@ -200,7 +201,7 @@ function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallback, hoo
     // NOTE: We count a ZettelkastenLink's title as a TextNode for various
     // purposes, such as spellchecking it, but it should not contain any syntax
     // which is why we directly access its value here.
-    return `${node.whitespaceBefore}[[${node.title.value}]]`
+    return `${node.whitespaceBefore}[[${node.title?.value ?? node.target}]]`
   } else if (node.type === 'ZettelkastenTag') {
     return `${node.whitespaceBefore}#${node.value}`
   }

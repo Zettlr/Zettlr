@@ -13,23 +13,12 @@ include-in-header: []
 bibliography: []
 filters:
 - type: citeproc
-top-level-division: chapter
 pdf-engine: xelatex
 wrap: none
 columns: 78
 toc: false
 toc-depth: 2
 number-sections: false
-number-offset:
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-section-divs: true
-identifier-prefix: ''
-title-prefix: ''
 eol: lf
 strip-comments: false
 indented-code-classes: []

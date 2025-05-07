@@ -73,7 +73,6 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
         {
           type: 'theme',
           model: 'display.theme',
-          label: trans('Here you can choose the theme for the app.'),
           options: {
             berlin: {
               textColor: 'white',
@@ -122,83 +121,83 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
         {
           type: 'form-text',
           display: 'sub-heading',
-          contents: trans('Left section buttons')
+          contents: trans('Left section')
         },
         {
           type: 'checkbox',
-          label: trans('Display "Open Preferences" button'),
+          label: trans('Display "Open settings" button'),
           model: 'displayToolbarButtons.showOpenPreferencesButton'
         },
         {
           type: 'checkbox',
-          label: trans('Display "New File" button'),
+          label: trans('Display "New file" button'),
           model: 'displayToolbarButtons.showNewFileButton'
         },
         {
           type: 'checkbox',
-          label: trans('Display "Previous File" button'),
+          label: trans('Display "Previous file" button'),
           model: 'displayToolbarButtons.showPreviousFileButton'
         },
         {
           type: 'checkbox',
-          label: trans('Display "Next File" button'),
+          label: trans('Display "Next file" button'),
           model: 'displayToolbarButtons.showNextFileButton'
         },
         { type: 'separator' },
         {
           type: 'form-text',
           display: 'sub-heading',
-          contents: trans('Center section buttons')
+          contents: trans('Center section')
         },
         {
           type: 'checkbox',
-          label: trans('Display readability button'),
+          label: trans('Display "Readability mode" button'),
           model: 'displayToolbarButtons.showToggleReadabilityButton'
         },
         {
           type: 'checkbox',
-          label: trans('Display "Insert Comment" button'),
+          label: trans('Display "Insert comment" button'),
           model: 'displayToolbarButtons.showMarkdownCommentButton'
         },
         {
           type: 'checkbox',
-          label: trans('Display link button'),
+          label: trans('Display "Insert link" button'),
           model: 'displayToolbarButtons.showMarkdownLinkButton'
         },
         {
           type: 'checkbox',
-          label: trans('Display image button'),
+          label: trans('Display "Insert image" button'),
           model: 'displayToolbarButtons.showMarkdownImageButton'
         },
         {
           type: 'checkbox',
-          label: trans('Display task list button'),
+          label: trans('Display "Insert task list" button'),
           model: 'displayToolbarButtons.showMarkdownMakeTaskListButton'
         },
         {
           type: 'checkbox',
-          label: trans('Display "Insert Table" button'),
+          label: trans('Display "Insert table" button'),
           model: 'displayToolbarButtons.showInsertTableButton'
         },
         {
           type: 'checkbox',
-          label: trans('Display "Insert Footnote" button'),
+          label: trans('Display "Insert footnote" button'),
           model: 'displayToolbarButtons.showInsertFootnoteButton'
         },
         { type: 'separator' },
         {
           type: 'form-text',
           display: 'sub-heading',
-          contents: trans('Right section buttons')
+          contents: trans('Right section')
         },
         {
           type: 'checkbox',
-          label: trans('Display document info'),
+          label: trans('Display word/character counter'),
           model: 'displayToolbarButtons.showDocumentInfoText'
         },
         {
           type: 'checkbox',
-          label: trans('Display Pomodoro-timer'),
+          label: trans('Display Pomodoro timer'),
           model: 'displayToolbarButtons.showPomodoroButton'
         }
       ]
@@ -210,7 +209,7 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
       fields: [
         {
           type: 'checkbox',
-          label: trans('Show statusbar'),
+          label: trans('Show status bar'),
           model: 'editor.showStatusbar'
         }
       ]

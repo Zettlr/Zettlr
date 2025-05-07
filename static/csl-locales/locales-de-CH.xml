@@ -16,6 +16,9 @@
     <translator>
       <name>Patrick O'Brien</name>
     </translator>
+    <translator>
+      <name>Nicolas Chachereau</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
     <updated>2023-03-28T23:31:02+00:00</updated>
   </info>
@@ -113,7 +116,7 @@
     <term name="review-of">review of</term>
     <term name="review-of" form="short">rev. of</term>
     <term name="retrieved">abgerufen</term>
-    <term name="scale">Maßstab</term>
+    <term name="scale">Massstab</term>
     <term name="version">Version</term>
 
     <!-- LONG ITEM TYPE FORMS -->
@@ -193,10 +196,10 @@
     <term name="ce">CE</term>
 
     <!-- PUNCTUATION -->
-    <term name="open-quote">„</term>
-    <term name="close-quote">“</term>
-    <term name="open-inner-quote">‚</term>
-    <term name="close-inner-quote">‘</term>
+    <term name="open-quote">«</term>
+    <term name="close-quote">»</term>
+    <term name="open-inner-quote">‹</term>
+    <term name="close-inner-quote">›</term>
     <term name="page-range-delimiter">–</term>
     <term name="colon">:</term>
     <term name="comma">,</term>
@@ -291,8 +294,8 @@
       <multiple>Zeilen</multiple>
     </term>
     <term name="note">
-      <single>Note</single>
-      <multiple>Noten</multiple>
+      <single>Anmerkung</single>
+      <multiple>Anmerkungen</multiple>
     </term>
     <term name="opus">
       <single>Opus</single>
@@ -401,7 +404,7 @@
     <term name="folio" form="short">Fol.</term>
     <term name="issue" form="short">Nr.</term>
     <term name="line" form="short">Z.</term>
-    <term name="note" form="short">N.</term>
+    <term name="note" form="short">Anm.</term>
     <term name="opus" form="short">op.</term>
     <term name="page" form="short">
       <single>S.</single>

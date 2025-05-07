@@ -23,9 +23,9 @@
 
 // import { trans } from '@common/i18n-renderer'
 
-import { drawSelection, dropCursor, EditorView, keymap, lineNumbers } from '@codemirror/view'
+import { drawSelection, dropCursor, EditorView, lineNumbers } from '@codemirror/view'
 import { onMounted, ref, toRef, watch } from 'vue'
-import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete'
+import { closeBrackets } from '@codemirror/autocomplete'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
 import { yaml } from '@codemirror/lang-yaml'
@@ -35,13 +35,14 @@ import markdownParser from '@common/modules/markdown-editor/parser/markdown-pars
 import { yamlLint } from '@common/modules/markdown-editor/linters/yaml-lint'
 import { lintGutter } from '@codemirror/lint'
 import { showStatusbarEffect, statusbar } from '@common/modules/markdown-editor/statusbar'
-import { search, searchKeymap } from '@codemirror/search'
-import { defaultKeymap, historyKeymap, history, indentLess, indentMore } from '@codemirror/commands'
+import { search } from '@codemirror/search'
+import { history } from '@codemirror/commands'
 import { snippetSyntaxExtension } from '@common/modules/markdown-utils/snippets-syntax-extension'
 import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-highlighter'
 import { useConfigStore } from 'source/pinia'
 import { darkMode, darkModeEffect } from '../modules/markdown-editor/theme/dark-mode'
 import { highlightWhitespace, highlightWhitespaceEffect } from '../modules/markdown-editor/plugins/highlight-whitespace'
+import { defaultKeymap } from '../modules/markdown-editor/keymaps/default'
 
 const configStore = useConfigStore()
 
@@ -61,13 +62,7 @@ const cleanFlag = ref<boolean>(true)
 
 function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
   const extensions = [
-    keymap.of([
-      ...defaultKeymap, // Minimal default keymap
-      ...historyKeymap, // , // History commands (redo/undo)
-      ...closeBracketsKeymap, // Binds Backspace to deletion of matching brackets
-      ...searchKeymap, // Search commands (Ctrl+F, etc.)
-      { key: 'Tab', run: indentMore, shift: indentLess }
-    ]),
+    defaultKeymap(),
     search({ top: true }),
     codeFolding(),
     foldGutter(),

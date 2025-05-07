@@ -6,6 +6,7 @@ import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
 import { getSorter } from '@providers/fsal/util/directory-sorter'
 import type ConfigProvider from '@providers/config'
 import { sortDirectory } from './sort-all-directories'
+import type { EventName } from 'chokidar/handler'
 
 // How many events do we keep in the change queue before merging them into the
 // file tree? This number dictates how much memory a root will use up. The root
@@ -33,7 +34,6 @@ interface UnlinkEvent {
 
 export type ChangeDescriptor = AddEvent | ChangeEvent | UnlinkEvent
 type AnyDescriptor = DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor
-type ChokidarEvents = 'add'|'addDir'|'change'|'unlink'|'unlinkDir'
 
 interface RootCallbacks {
   onChange: (rootPath: string) => void
@@ -81,7 +81,7 @@ export class Root {
 
   // State for listening to changes
   private readonly _process: FSALWatchdog
-  private readonly eventQueue: Array<{ eventName: ChokidarEvents, eventPath: string }>
+  private readonly eventQueue: Array<{ eventName: EventName, eventPath: string }>
   private readonly changeQueue: ChangeDescriptor[]
   private readonly onChangeCallback: (rootPath: string) => void
   private readonly onUnlinkCallback: (rootPath: string) => void

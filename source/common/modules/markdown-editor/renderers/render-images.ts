@@ -23,6 +23,7 @@ import { trans } from '@common/i18n-renderer'
 import clickAndSelect from './click-and-select'
 import { pathDirname } from '@common/util/renderer-path-polyfill'
 import { syntaxTree } from '@codemirror/language'
+import { parseLinkAttributes, type ParsedPandocLinkAttributes } from 'source/common/pandoc-util/parse-link-attributes'
 
 const ipcRenderer = window.ipc
 
@@ -64,7 +65,7 @@ class ImageWidget extends WidgetType {
     readonly imageUrl: string,
     readonly resolvedImageUrl: string,
     readonly altText: string,
-    readonly data: string
+    readonly data: ParsedPandocLinkAttributes
   ) {
     super()
   }
@@ -82,10 +83,10 @@ class ImageWidget extends WidgetType {
 
     // Retrieve and apply the size constraints
     const { imagePreviewHeight, imagePreviewWidth } = view.state.field(configField)
-    const width = (!Number.isNaN(imagePreviewWidth)) ? `${imagePreviewWidth}%` : '100%'
-    const height = (!Number.isNaN(imagePreviewHeight) && imagePreviewHeight < 100) ? `${imagePreviewHeight}vh` : ''
-    figure.style.maxWidth = width
-    figure.style.maxHeight = height
+    const defaultWidth = (!Number.isNaN(imagePreviewWidth)) ? `${imagePreviewWidth}%` : '100%'
+    const defaultHeight = (!Number.isNaN(imagePreviewHeight) && imagePreviewHeight < 100) ? `${imagePreviewHeight}vh` : ''
+    figure.style.maxWidth = this.data.width !== undefined ? `min(${this.data.width}, ${defaultWidth})` : defaultWidth
+    figure.style.maxHeight = this.data.height !== undefined ? `min(${this.data.height}, ${defaultHeight})` : defaultHeight
 
     // Display a context menu with the current image node
     figure.addEventListener('contextmenu', (event) => {
@@ -102,14 +103,13 @@ class ImageWidget extends WidgetType {
     // This ensures that overly tall images will not be cropped by a too-short
     // figure, and instead scale down. The figure will also become narrower,
     // accommodating only for the total width of the resized image.
-    img.style.maxHeight = height
+    img.style.maxHeight = this.data.width !== undefined ? `min(${this.data.width}, ${defaultWidth})` : defaultWidth
     img.alt = this.altText
     img.title = this.imageTitle
 
     // Store some crucial information on the node itself
     img.dataset.from = String(this.node.from)
     img.dataset.to = String(this.node.to)
-    img.dataset.attributes = this.data
     img.dataset.originalUrl = this.imageUrl
     img.dataset.title = this.imageTitle
 
@@ -250,17 +250,22 @@ class ImageWidget extends WidgetType {
       const img = dom.querySelector('img')! as HTMLImageElement
       img.dataset.from = String(this.node.from)
       img.dataset.to = String(this.node.to)
-      img.dataset.attributes = this.data
       img.dataset.originalUrl = this.imageUrl
-      img.dataset.title = this.imageTitle
 
-      // The load and onerror handlers will handle this accordingly (and also
-      // update the size and title)
-      img.src = resolveImageUrl(view.state.field(configField).metadata.path, this.imageUrl)
+      if (img.dataset.title !== this.imageTitle) {
+        img.dataset.title = this.imageTitle
+        const caption = dom.querySelector('figcaption')! as HTMLElement
+        caption.textContent = this.imageTitle.replace(/\\"/g, '"') // Un-escape title
+      }
 
-      // Next, the caption
-      const caption = dom.querySelector('figcaption')! as HTMLElement
-      caption.textContent = this.imageTitle.replace(/\\"/g, '"') // Un-escape title
+      const resolvedURL = resolveImageUrl(view.state.field(configField).metadata.path, this.imageUrl)
+
+      if (resolvedURL !== img.src) {
+        // The load and onerror handlers will handle this accordingly (and also
+        // update the size and title)
+        img.src = resolvedURL
+      }
+
       return true
     } catch (err) {
       return false
@@ -278,7 +283,7 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
   // Get the actual link contents, extract title and URL and create a
   // replacement widget
   const imgSource = state.sliceDoc(node.from, node.to)
-  const match = /(?<=\s|^)!\[(.*?)\]\((.+?(?:(?<= )"(.+)")?)\)({[^{]+})?/.exec(imgSource)
+  const match = /(?<=\s|^)!\[(.*?)\]\((.+?(?:(?<= )"(.+)")?)\)/.exec(imgSource)
   if (match === null) {
     console.error(`Could not parse image from source: "${imgSource}"`)
     return undefined
@@ -292,15 +297,25 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
   const altText = match[1] ?? '' // Everything inside the square brackets
   let url = match[2] ?? '' // The URL
   const title = match[3] ?? altText // An optional title in quotes after the image
-  const p4 = match[4] ?? ''
 
   // Remove the "title" from the surrounding URL group, if applicable.
   if (match[3] !== undefined) {
     url = url.replace(`"${match[3]}"`, '').trim()
   }
 
+  let data: ParsedPandocLinkAttributes = {}
+  const nextSibling = node.node.nextSibling
+  if (nextSibling !== null && nextSibling.name === 'PandocAttribute') {
+    try {
+      const text = state.sliceDoc(nextSibling.from, nextSibling.to)
+      data = parseLinkAttributes(text)
+    } catch (err) {
+      // Silently ignore error
+    }
+  }
+
   const resolvedImageSrc = resolveImageUrl(state.field(configField).metadata.path, url)
-  return new ImageWidget(node.node, title, url, resolvedImageSrc, altText, p4)
+  return new ImageWidget(node.node, title, url, resolvedImageSrc, altText, data)
 }
 
 export const renderImages = [

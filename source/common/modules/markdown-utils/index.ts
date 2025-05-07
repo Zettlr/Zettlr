@@ -107,9 +107,7 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
   let textNodes: TextNode[] = []
   if (ast.type === 'Text') {
     textNodes.push(ast)
-  } else if (ast.type === 'Heading') {
-    textNodes.push(ast.value)
-  } else if (ast.type === 'FootnoteRef' || ast.type === 'Highlight' || ast.type === 'ListItem') {
+  } else if (ast.type === 'Heading' || ast.type === 'FootnoteRef' || ast.type === 'Highlight' || ast.type === 'ListItem') {
     for (const child of ast.children) {
       textNodes = textNodes.concat(extractTextnodes(child, filter))
     }

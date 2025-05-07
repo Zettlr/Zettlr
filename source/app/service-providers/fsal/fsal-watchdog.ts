@@ -14,15 +14,14 @@
  * END HEADER
  */
 
-import { FSWatcher, type WatchOptions } from 'chokidar'
+import { FSWatcher, type ChokidarOptions } from 'chokidar'
 
 import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
 
 import type LogProvider from '@providers/log'
 import type ConfigProvider from '@providers/config'
 import path from 'path'
-
-type ChokidarEvents = 'add'|'addDir'|'change'|'unlink'|'unlinkDir'
+import type { EventName } from 'chokidar/handler'
 
 // chokidar's ignored-setting is compatible to anymatch, so we can
 // pass an array containing the standard dotted directory-indicators,
@@ -61,8 +60,7 @@ export default class FSALWatchdog {
     this._logger = logger
     this._config = config
 
-    const options: WatchOptions = {
-      useFsEvents: process.platform === 'darwin',
+    const options: ChokidarOptions = {
       ignored: ignoreDirs,
       persistent: true,
       ignoreInitial: true, // Do not track the initial watch as changes
@@ -93,14 +91,6 @@ export default class FSALWatchdog {
     }
 
     this.process = new FSWatcher(options)
-
-    this.process.on('ready', () => {
-      if (process.platform === 'darwin' && this.process.options.useFsEvents === false) {
-        this._logger.warning('[FSAL Watchdog] The chokidar process falls back to polling. This may lead to a high CPU usage.')
-      } else if (process.platform === 'darwin' && this.process.options.useFsEvents === true) {
-        this._logger.info('[FSAL Watchdog] The chokidar process utilizes fsevents. File changes are detected without polling.')
-      }
-    })
   }
 
   /**
@@ -109,8 +99,8 @@ export default class FSALWatchdog {
    * @param   {change}    channel  The change channel
    * @param   {Function}  report   A reporter that gets called with eventName and eventPath
    */
-  public on (channel: 'change', report: (eventName: ChokidarEvents, eventPath: string) => void): any {
-    this.process.on('all', (event: ChokidarEvents, p: string) => {
+  public on (channel: 'change', report: (eventName: EventName, eventPath: string) => void): any {
+    this.process.on('all', (event, p: string) => {
       const basename = path.basename(p)
       const dirname = path.dirname(p)
 
@@ -153,7 +143,7 @@ export default class FSALWatchdog {
    *
    * @param  {string|readonly string[]}  paths  One or more paths to watch
    */
-  public watchPath (paths: string | readonly string[]): void {
+  public watchPath (paths: string | string[]): void {
     this._logger.verbose(`Starting to watch path(s) ${String(paths)}`)
     this.process.add(paths)
   }
@@ -163,7 +153,7 @@ export default class FSALWatchdog {
    *
    * @param  {string|readonly string[]}  paths  One or more paths to unwatch
    */
-  public unwatchPath (paths: string | readonly string[]): void {
+  public unwatchPath (paths: string | string[]): void {
     this.process.unwatch(paths)
   }
 

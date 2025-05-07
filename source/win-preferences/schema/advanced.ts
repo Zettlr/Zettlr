@@ -279,7 +279,7 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
       fields: [
         {
           type: 'checkbox',
-          label: trans('Activate Watchdog polling'),
+          label: trans('Activate watchdog polling'),
           model: 'watchdog.activatePolling'
         },
         {
@@ -297,7 +297,7 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
       fields: [
         {
           type: 'checkbox',
-          label: trans('Delete items irreversibly, if moving them to trash fails'),
+          label: trans('Delete items irreversibly if moving them to trash fails'),
           model: 'system.deleteOnFail'
         }
       ]

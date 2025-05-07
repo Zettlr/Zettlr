@@ -110,7 +110,12 @@ export const autocomplete = [
     selectOnOpen: true, // But never pre-select anything
     closeOnBlur: true,
     maxRenderedOptions: 20,
-    override: [autocompleteSource]
+    override: [autocompleteSource],
+    // Do not include the default keymap. Instead, we re-define it below to
+    // avoid a specific decision by CodeMirror to remap the autocomplete toggle
+    // on macOS to Alt+\ which, on an Italian keyboard layout, will fail to
+    // produce backticks. (See issue #5517)
+    defaultKeymap: false
   }),
   // Make sure any configuration fields will be inserted into the state so that
   // the plugins can look them up and function correctly. These fields are not

@@ -127,9 +127,13 @@ export interface LinkOrImage extends MDNode {
 export interface Heading extends MDNode {
   type: 'Heading'
   /**
+   * The content of the heading, but as a plain string
+   */
+  content: string
+  /**
    * The heading's content
    */
-  value: TextNode
+  children: ASTNode[]
   /**
    * Level from 1-6
    */
@@ -356,13 +360,18 @@ export interface Table extends MDNode {
 export interface ZettelkastenLink extends MDNode {
   type: 'ZettelkastenLink'
   /**
-   * Contains the raw contents of the link
+   * Contains the actual target of the link (accounting for optional titles)
    */
-  value: string
+  target: string
   /**
-   * The link title; may be the same as value
+   * The from:to positions of the actual target range. This can be useful to
+   * access just the title range (e.g., for replacing).
    */
-  title: TextNode
+  targetRange: { from: number, to: number }
+  /**
+   * The link title; undefined if the link does not include a title.
+   */
+  title?: TextNode
 }
 
 /**
@@ -475,15 +484,19 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       return astNode
     }
     case 'URL': {
+      let url = markdown.substring(node.from, node.to)
+      if (url.startsWith('<') && url.endsWith('>')) {
+        url = url.slice(1, url.length - 1)
+      }
+
       const astNode: LinkOrImage = {
         type: 'Link',
         name: node.name,
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
-        url: markdown.substring(node.from, node.to),
-        alt: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))
+        url,
+        alt: genericTextNode(node.from, node.to, url)
       }
       return astNode
     }
@@ -501,10 +514,11 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: genericTextNode(mark?.to ?? node.from, node.to, markdown.substring(mark?.to ?? node.from, node.to).trim()),
+        content: markdown.slice(mark?.to ?? node.from, node.to).trim(),
+        children: [],
         level
       }
-      return astNode
+      return parseChildren(astNode, node, markdown)
     }
     case 'SetextHeading1':
     case 'SetextHeading2': {
@@ -516,10 +530,11 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: genericTextNode(mark?.to ?? node.from, node.to, markdown.substring(node.from, mark?.from ?? node.to).trim()),
+        content: markdown.slice(node.from, mark?.from ?? node.to),
+        children: [],
         level
       }
-      return astNode
+      return parseChildren(astNode, node, markdown)
     }
     case 'Citation': {
       const astNode: Citation = {
@@ -782,16 +797,22 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       if (content === null) {
         throw new Error('Could not parse node ZknLink: No ZknLinkContent node found within children!')
       }
-      const title = node.getChild('ZknLinkTitle') ?? content
+      const title = node.getChild('ZknLinkTitle')
       const astNode: ZettelkastenLink = {
         type: 'ZettelkastenLink',
         name: 'ZknLink',
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: markdown.substring(content.from, content.to),
-        title: genericTextNode(title.from, title.to, markdown.substring(title.from, title.to))
+        target: markdown.substring(content.from, content.to),
+        targetRange: { from: content.from, to: content.to },
+        title: undefined
       }
+
+      if (title !== null) {
+        astNode.title = genericTextNode(title.from, title.to, markdown.substring(title.from, title.to))
+      }
+
       return astNode
     }
     case 'ZknTag': {

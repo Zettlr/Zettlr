@@ -98,7 +98,7 @@ export const files: AutocompletePlugin = {
     query = query.toLowerCase()
     const entries = ctx.state.field(filesUpdateField)
     return entries.filter(entry => {
-      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query)
+      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query) === true
     })
   },
   fields: [filesUpdateField]

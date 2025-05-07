@@ -35,7 +35,7 @@ export function displayTabbarContext (event: MouseEvent, callback: (clickedID: s
 export default function displayTabsContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor, doc: OpenDocument, callback: (clickedID: string) => void): void {
   const items: AnyMenuItem[] = [
     {
-      label: trans('Close Tab'),
+      label: trans('Close tab'),
       id: 'close-this',
       type: 'normal',
       enabled: !doc.pinned
@@ -71,7 +71,7 @@ export default function displayTabsContext (event: MouseEvent, fileObject: MDFil
       enabled: true
     },
     {
-      label: trans('Copy full path'),
+      label: trans('Copy path'),
       id: 'copy-path',
       type: 'normal',
       enabled: true
