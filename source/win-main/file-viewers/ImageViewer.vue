@@ -1,11 +1,6 @@
 <template>
   <div class="image-viewer-container">
     <div class="image-toolbar">
-      <SelectControl
-        v-model="viewMode"
-        v-bind:options="viewModeSelectOptins"
-        v-bind:inline="true"
-      ></SelectControl>
       <ButtonControl
         v-bind:label="'+'"
         v-bind:disabled="viewMode !== 'zoom'"
@@ -24,6 +19,17 @@
         v-bind:inline="true"
         v-on:click="zoomLevel = Math.max(zoomLevel - ZOOM_STEP, MINIMUM_ZOOM)"
       ></ButtonControl>
+
+      <div class="vertical-divider"></div>
+
+      <SelectControl
+        v-model="viewMode"
+        v-bind:options="viewModeSelectOptins"
+        v-bind:inline="true"
+      ></SelectControl>
+
+      <div class="vertical-divider"></div>
+
       <!-- Background controls -->
       <div class="background-controls-wrapper">
         <!-- Transparent -->
@@ -156,7 +162,7 @@ const backgroundPattern = ref<BackgroundPattern>('transparent')
 type ViewMode = 'fit'|'fit-width'|'fit-height'|'zoom'
 const viewMode = ref<ViewMode>('fit')
 const viewModeSelectOptins: Record<ViewMode, string> = {
-  'fit': 'Fit image',
+  'fit': 'Fit to screen',
   'fit-height': 'Fit height',
   'fit-width': 'Fit width',
   'zoom': 'Zoom'
@@ -244,21 +250,25 @@ div.image-toolbar {
   align-items: center;
   gap: 5px;
   width: 100%;
-  padding: 5px 0;
+  padding: 5px 10px;
   /* Disallow shrinking of any items; we use flex box only for vertical alignment */
   > * { flex-shrink: 0; }
   overflow: auto;
 }
 
 div.background-controls-wrapper {
+  display: flex;
+  gap: 5px;
   height: 20px;
+  margin: 0 10px;
 }
 
 div.background-button {
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 1px solid gray;
+  border-radius: 20px;
+  border: 2px solid #ccc;
 
   &.active {
     border-color: var(--system-accent-color);
