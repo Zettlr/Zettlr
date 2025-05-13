@@ -64,17 +64,19 @@ To install Zettlr, just [download the latest release](https://www.zettlr.com/dow
 
 On our website and here on GitHub, we provide a set of installers for the most common use-cases. We provide both 64-bit installers as well as installers for ARM systems (called "Apple Silicon" in the macOS ecosystem). 32-bit is not supported. We offer the following binaries directly:
 
-* Windows (x64)
 * macOS (Intel and Apple Silicon)
-* Debian and Fedora (x64 and ARM)
+* Windows (x64)
+* Debian/Ubuntu (x64 and ARM) 
+* Fedora/Red Hat (x64 and ARM)
 * AppImage (x64 and ARM)
 
 Thanks to our community, we can also offer you a variety of other installation opportunities:
 
-* [Chocolatey (Windows)](https://community.chocolatey.org/packages/zettlr/)
 * [Homebrew (macOS)](https://formulae.brew.sh/cask/zettlr)
+* [Aptitude (Ubuntu/Debian)](https://apt.debian.com)
+* [Flathub (Linux)](https://flathub.org/apps/details/com.zettlr.Zettlr)
+* [Chocolatey (Windows)](https://community.chocolatey.org/packages/zettlr/)
 * [Arch Linux](https://wiki.archlinux.org/title/Zettlr)
-* [Flatpak (Linux)](https://flathub.org/apps/details/com.zettlr.Zettlr)
 
 All other [platforms that Electron supports](https://www.electronjs.org/docs/latest/development/build-instructions-gn#platform-prerequisites) are supported as well, but you will need to build the app yourself for this to work.
 
