@@ -73,7 +73,7 @@ On our website and here on GitHub, we provide a set of installers for the most c
 Thanks to our community, we can also offer you a variety of other installation opportunities:
 
 * [Homebrew (macOS)](https://formulae.brew.sh/cask/zettlr)
-* [Aptitude (Ubuntu/Debian)](https://apt.debian.com)
+* [Aptitude (Ubuntu/Debian)](https://apt.zettlr.com)
 * [Flathub (Linux)](https://flathub.org/apps/details/com.zettlr.Zettlr)
 * [Chocolatey (Windows)](https://community.chocolatey.org/packages/zettlr/)
 * [Arch Linux](https://wiki.archlinux.org/title/Zettlr)
