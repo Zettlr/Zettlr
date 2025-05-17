@@ -653,24 +653,21 @@ msgstr "Сөздікті импорттау…"
 #: source/win-main/file-manager/util/file-item-context.ts:44
 #: source/tmp/win-assets/DefaultsTab.vue.ts:58
 msgid "Rename file"
-msgstr ""
-
+msgstr "Файл атауын өзгерту"
 #: source/app/service-providers/menu/menu.win32.ts:291
 #: source/app/service-providers/menu/menu.darwin.ts:297
 #: source/win-main/file-manager/util/file-item-context.ts:57
 msgid "Delete file"
-msgstr ""
-
+msgstr "Файлды жою"
 #: source/app/service-providers/menu/menu.win32.ts:310
 #: source/app/service-providers/menu/menu.darwin.ts:308
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:109
 msgid "Edit"
-msgstr ""
-
+msgstr "Өңдеу"
 #: source/app/service-providers/menu/menu.win32.ts:315
 #: source/app/service-providers/menu/menu.darwin.ts:313
 msgid "Undo"
-msgstr ""
+msgstr "Болдырмау"
 
 #: source/app/service-providers/menu/menu.win32.ts:321
 #: source/app/service-providers/menu/menu.darwin.ts:319
@@ -708,175 +705,144 @@ msgstr "Қою"
 #: source/app/service-providers/menu/menu.darwin.ts:353
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
 msgid "Paste without style"
-msgstr ""
-
+msgstr "Пішімсіз қою"
 #: source/app/service-providers/menu/menu.win32.ts:364
 #: source/app/service-providers/menu/menu.darwin.ts:362
 #: source/common/modules/window-register/register-default-context.ts:100
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
 msgid "Select all"
-msgstr ""
-
+msgstr "Барлығын таңдау"
 #: source/app/service-providers/menu/menu.win32.ts:372
 #: source/app/service-providers/menu/menu.darwin.ts:370
 msgid "Find in current file"
-msgstr ""
-
+msgstr "Ағымдағы файлда табу"
 #: source/app/service-providers/menu/menu.win32.ts:380
 #: source/app/service-providers/menu/menu.darwin.ts:378
 msgid "Search all files"
-msgstr ""
-
+msgstr "Барлық файлдарды іздеу"
 #: source/app/service-providers/menu/menu.win32.ts:388
 #: source/app/service-providers/menu/menu.darwin.ts:386
 msgid "Filter files"
-msgstr ""
-
+msgstr "Файлдарды сүзу"
 #: source/app/service-providers/menu/menu.win32.ts:399
 #: source/app/service-providers/menu/menu.darwin.ts:397
 msgid "Generate new ID"
-msgstr ""
-
+msgstr "Жаңа ID жасау"
 #: source/app/service-providers/menu/menu.win32.ts:407
 #: source/app/service-providers/menu/menu.darwin.ts:405
 #: source/win-main/file-manager/util/file-item-context.ts:79
 #: source/win-main/tabs-context.ts:80
 msgid "Copy ID"
-msgstr ""
-
+msgstr "ID көшіру"
 #: source/app/service-providers/menu/menu.win32.ts:418
 #: source/app/service-providers/menu/menu.darwin.ts:435
 msgid "View"
-msgstr ""
-
+msgstr "Көрініс"
 #: source/app/service-providers/menu/menu.win32.ts:422
 #: source/app/service-providers/menu/menu.darwin.ts:439
 #: source/win-preferences/schema/appearance.ts:26
 msgid "Dark mode"
-msgstr ""
-
+msgstr "Қараңғы режим"
 #: source/app/service-providers/menu/menu.win32.ts:432
 #: source/app/service-providers/menu/menu.darwin.ts:449
 msgid "Additional information"
-msgstr ""
-
+msgstr "Қосымша ақпарат"
 #: source/app/service-providers/menu/menu.win32.ts:442
 #: source/app/service-providers/menu/menu.darwin.ts:459
 #: source/win-preferences/schema/editor.ts:165
 msgid "Distraction-free mode"
-msgstr ""
-
+msgstr "Алаңдамау режимі"
 #: source/app/service-providers/menu/menu.win32.ts:450
 #: source/app/service-providers/menu/menu.darwin.ts:467
 msgid "Typewriter mode"
-msgstr ""
-
+msgstr "Жазу машинкасы режимі"
 #: source/app/service-providers/menu/menu.win32.ts:461
 #: source/app/service-providers/menu/menu.darwin.ts:478
 #: source/tmp/win-main/App.vue.ts:251
 msgid "Toggle File Manager"
-msgstr ""
-
+msgstr "Файл менеджерін ауыстыру"
 #: source/app/service-providers/menu/menu.win32.ts:469
 #: source/app/service-providers/menu/menu.darwin.ts:486
 #: source/tmp/win-main/App.vue.ts:398
 msgid "Toggle Sidebar"
-msgstr ""
-
+msgstr "Бүйірлік панельді ауыстыру"
 #: source/app/service-providers/menu/menu.win32.ts:480
 #: source/app/service-providers/menu/menu.darwin.ts:500
 msgid "Reset zoom"
-msgstr ""
-
+msgstr "Масштабты қалпына келтіру"
 #: source/app/service-providers/menu/menu.win32.ts:489
 #: source/app/service-providers/menu/menu.darwin.ts:509
 msgid "Zoom in"
-msgstr ""
-
+msgstr "Үлкейту"
 #: source/app/service-providers/menu/menu.win32.ts:496
 #: source/app/service-providers/menu/menu.darwin.ts:516
 msgid "Zoom out"
-msgstr ""
-
+msgstr "Кішірейту"
 #: source/app/service-providers/menu/menu.win32.ts:506
 #: source/app/service-providers/menu/menu.darwin.ts:526
 msgid "Toggle fullscreen"
-msgstr ""
-
+msgstr "Толық экран режимін ауыстыру"
 #: source/app/service-providers/menu/menu.win32.ts:515
 #: source/app/service-providers/menu/menu.darwin.ts:534
 msgid "Develop"
-msgstr ""
-
+msgstr "Әзірлеу"
 #: source/app/service-providers/menu/menu.win32.ts:519
 #: source/app/service-providers/menu/menu.darwin.ts:538
 msgid "Reload"
-msgstr ""
-
+msgstr "Қайта жүктеу"
 #: source/app/service-providers/menu/menu.win32.ts:527
 #: source/app/service-providers/menu/menu.darwin.ts:546
 msgid "Toggle developer tools"
-msgstr ""
-
+msgstr "Әзірлеуші құралдарын ауыстыру"
 #: source/app/service-providers/menu/menu.win32.ts:535
 #: source/app/service-providers/menu/menu.darwin.ts:554
 msgid "View logs"
-msgstr ""
-
+msgstr "Журналдарды қарау"
 #: source/app/service-providers/menu/menu.win32.ts:546
 #: source/app/service-providers/menu/menu.darwin.ts:565
 msgid "Window"
-msgstr ""
-
+msgstr "Терезе"
 #: source/app/service-providers/menu/menu.win32.ts:551
 #: source/app/service-providers/menu/menu.darwin.ts:570
 msgid "Minimize"
-msgstr ""
-
+msgstr "Тасалау"
 #: source/app/service-providers/menu/menu.win32.ts:557
 #: source/app/service-providers/menu/menu.darwin.ts:578
 #: source/tmp/win-tag-manager/App.vue.ts:98
 msgid "Close"
-msgstr ""
-
+msgstr "Жабу"
 #: source/app/service-providers/menu/menu.win32.ts:566
 #: source/app/service-providers/menu/menu.darwin.ts:592
 msgid "Close Tab"
-msgstr ""
-
+msgstr "Қойындыны жабу"
 #: source/app/service-providers/menu/menu.win32.ts:574
 #: source/app/service-providers/menu/menu.darwin.ts:600
 msgid "Previous Tab"
-msgstr ""
-
+msgstr "Алдыңғы қойынды"
 #: source/app/service-providers/menu/menu.win32.ts:582
 #: source/app/service-providers/menu/menu.darwin.ts:608
 msgid "Next Tab"
-msgstr ""
-
+msgstr "Келесі қойынды"
 #: source/app/service-providers/menu/menu.win32.ts:590
 #: source/app/service-providers/menu/menu.darwin.ts:616
 msgid "New window"
-msgstr ""
-
+msgstr "Жаңа терезе"
 #: source/app/service-providers/menu/menu.win32.ts:601
 #: source/app/service-providers/menu/menu.darwin.ts:627
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:46
 msgid "Help"
-msgstr ""
-
+msgstr "Анықтама"
 #: source/app/service-providers/menu/menu.win32.ts:606
 #: source/app/service-providers/menu/menu.darwin.ts:46
 #: source/app/service-providers/menu/menu.darwin.ts:632
 #: source/tmp/win-about/App.vue.ts:35 source/tmp/win-about/App.vue.ts:76
 msgid "About Zettlr"
-msgstr ""
-
+msgstr "Zettlr туралы"
 #: source/app/service-providers/menu/menu.win32.ts:613
 #: source/app/service-providers/menu/menu.darwin.ts:639
 #: source/tmp/win-update/App.vue.ts:37
 msgid "Check for updates"
-msgstr ""
+msgstr "Жаңартуларды тексеру"
 
 #: source/app/service-providers/menu/menu.win32.ts:625
 #: source/app/service-providers/menu/menu.darwin.ts:651
@@ -886,32 +852,27 @@ msgstr "Zettlr-ді қолдау ↗︎"
 #: source/app/service-providers/menu/menu.win32.ts:635
 #: source/app/service-providers/menu/menu.darwin.ts:661
 msgid "Visit website ↗︎"
-msgstr ""
-
+msgstr "Веб-сайтқа кіру ↗︎"
 #: source/app/service-providers/menu/menu.win32.ts:645
 #: source/app/service-providers/menu/menu.darwin.ts:671
 msgid "Open user manual ↗︎"
-msgstr ""
-
+msgstr "Пайдаланушы нұсқаулығын ашу ↗︎"
 #: source/app/service-providers/menu/menu.win32.ts:659
 #: source/app/service-providers/menu/menu.darwin.ts:685
 msgid "Open tutorial"
-msgstr ""
-
+msgstr "Оқулықты ашу"
 #: source/app/service-providers/menu/menu.win32.ts:667
 #: source/app/service-providers/menu/menu.darwin.ts:693
 msgid "Clear FSAL cache…"
-msgstr ""
-
+msgstr "FSAL кэшін тазалау..."
 #: source/app/service-providers/menu/menu.win32.ts:671
 #: source/app/service-providers/menu/menu.darwin.ts:697
 msgid "Clear FSAL Cache"
-msgstr ""
-
+msgstr "FSAL кэшін тазалау"
 #: source/app/service-providers/menu/menu.win32.ts:672
 #: source/app/service-providers/menu/menu.darwin.ts:698
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "FSAL кэшін тазалау қайта іске қосуды қажет етеді."
 
 #: source/app/service-providers/menu/menu.win32.ts:673
 #: source/app/service-providers/menu/menu.darwin.ts:699
@@ -920,609 +881,468 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
-
+"Қайта іске қосудан кейін, Zettlr бүкіл кэшті қайта жасайды, бұл жүктелген файлдардың санына және дискіңіздің жылдамдығына байланысты біраз уақыт алуы мүмкін. Терезе(лер) содан кейін көрсетіледі."
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
-msgstr ""
-
+msgstr "Қызметтер"
 #: source/app/service-providers/menu/menu.darwin.ts:86
 msgid "Hide"
-msgstr ""
-
+msgstr "Жасыру"
 #: source/app/service-providers/menu/menu.darwin.ts:91
 msgid "Hide others"
-msgstr ""
-
+msgstr "Басқаларды жасыру"
 #: source/app/service-providers/menu/menu.darwin.ts:96
 msgid "Show"
-msgstr ""
-
+msgstr "Көрсету"
 #: source/app/service-providers/menu/menu.darwin.ts:416
 msgid "Speech"
-msgstr ""
-
+msgstr "Сөйлеу"
 #: source/app/service-providers/menu/menu.darwin.ts:420
 msgid "Start speaking"
-msgstr ""
-
+msgstr "Сөйлеуді бастау"
 #: source/app/service-providers/menu/menu.darwin.ts:425
 msgid "Stop speaking"
-msgstr ""
-
+msgstr "Сөйлеуді тоқтату"
 #: source/app/service-providers/menu/menu.darwin.ts:584
 msgid "Bring All to Front"
-msgstr ""
-
+msgstr "Барлығын алдыға шығару"
 #: source/app/service-providers/workspaces/index.ts:162
 #, javascript-format
 msgid "Loading workspace %s"
-msgstr ""
-
+msgstr "Жұмыс кеңістігі %s жүктелуде"
 #: source/app/service-providers/documents/index.ts:384
 msgid "Save changes"
-msgstr ""
-
+msgstr "Өзгерістерді сақтау"
 #: source/app/service-providers/documents/index.ts:385
 msgid "Discard changes"
-msgstr ""
-
+msgstr "Өзгерістерден бас тарту"
 #: source/app/service-providers/documents/index.ts:391
 msgid "There are unsaved changes. Do you want to save or discard them?"
-msgstr ""
-
+msgstr "Сақталмаған өзгерістер бар. Оларды сақтағыңыз келе ме немесе олардан бас тартқыңыз келе ме?"
 #: source/app/service-providers/documents/index.ts:1038
 msgid "File changed on disk"
-msgstr ""
-
+msgstr "Файл дискіде өзгертілді"
 #: source/app/service-providers/documents/index.ts:1039
 #, javascript-format
 msgid "%s changed on disk"
-msgstr ""
-
+msgstr "%s дискіде өзгертілді"
 #: source/app/service-providers/documents/index.ts:1041
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
-
+"%s дискіде өзгертілді, бірақ редакторда сақталмаған өзгерістер бар. Редактордың ағымдағы мазмұнын сақтағыңыз келе ме немесе файлды дискіден жүктегіңіз келе ме?"
 #: source/app/service-providers/documents/index.ts:1042
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
-
+"Редактордың ағымдағы мазмұнын сақтағыңыз келе ме немесе файлды дискіден жүктегіңіз келе ме?"
 #: source/app/service-providers/documents/index.ts:1045
 msgid "Keep editor contents"
-msgstr ""
-
+msgstr "Редактор мазмұнын сақтау"
 #: source/app/service-providers/documents/index.ts:1046
 msgid "Load changes from disk"
-msgstr ""
-
+msgstr "Өзгерістерді дискіден жүктеу"
 #: source/app/service-providers/documents/index.ts:1049
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
-
+"Егер редакторда сақталмаған өзгерістер болмаса, әрқашан өзгерістерді дискіден жүктеу"
 #: source/app/service-providers/documents/index.ts:1518
 msgid "Could not save file"
-msgstr ""
-
+msgstr "Файлды сақтау мүмкін болмады"
 #: source/app/service-providers/documents/index.ts:1518
 #, javascript-format
 msgid "Could not save file %s: %s"
-msgstr ""
-
+msgstr "Файлды сақтау мүмкін болмады %s: %s"
 #: source/win-main/file-manager/util/file-item-context.ts:29
 #: source/tmp/win-main/GlobalSearch.vue.ts:54
 msgid "Open in new tab"
-msgstr ""
-
+msgstr "Жаңа қойындыда ашу"
 #: source/win-main/file-manager/util/file-item-context.ts:35
 #: source/win-main/file-manager/util/dir-item-context.ts:29
 msgid "Properties"
-msgstr ""
-
+msgstr "Қасиеттері"
 #: source/win-main/file-manager/util/file-item-context.ts:51
 msgid "Duplicate file"
-msgstr ""
-
+msgstr "Файлды көшіру"
 #: source/win-main/file-manager/util/file-item-context.ts:67
 #: source/win-main/file-manager/util/dir-item-context.ts:68
 #: source/win-main/tabs-context.ts:74
 msgid "Copy path"
-msgstr ""
-
+msgstr "Жолды көшіру"
 #: source/win-main/file-manager/util/file-item-context.ts:73
 #: source/win-main/tabs-context.ts:68
 msgid "Copy filename"
-msgstr ""
-
+msgstr "Файл атауын көшіру"
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:119
 msgid "Reveal in Finder"
-msgstr ""
-
+msgstr "Finder-де көрсету"
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "Explorer-де көрсету"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in File Browser"
-msgstr ""
-
+msgstr "Файл браузерінде көрсету"
 #: source/win-main/file-manager/util/file-item-context.ts:101
 msgid "Close file"
-msgstr ""
-
+msgstr "Файлды жабу"
 #: source/win-main/file-manager/util/dir-item-context.ts:53
 msgid "Rename directory"
-msgstr ""
-
+msgstr "Каталог атауын өзгерту"
 #: source/win-main/file-manager/util/dir-item-context.ts:59
 msgid "Delete directory"
-msgstr ""
-
+msgstr "Каталогты жою"
 #: source/win-main/file-manager/util/dir-item-context.ts:88
 msgid "Check for directory …"
-msgstr ""
-
+msgstr "Каталогты тексеру …"
 #: source/win-main/file-manager/util/dir-item-context.ts:105
 msgid "Export Project"
-msgstr ""
-
+msgstr "Жобаны экспорттау"
 #: source/win-main/file-manager/util/dir-item-context.ts:117
 msgid "Close workspace"
-msgstr ""
-
+msgstr "Жұмыс кеңістігін жабу"
 #: source/win-main/tabs-context.ts:38
 msgid "Close tab"
-msgstr ""
-
+msgstr "Қойындыны жабу"
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
-msgstr ""
-
+msgstr "Басқа қойындыларды жабу"
 #: source/win-main/tabs-context.ts:50
 msgid "Close all tabs"
-msgstr ""
-
+msgstr "Барлық қойындыларды жабу"
 #: source/win-main/tabs-context.ts:59
 msgid "Unpin tab"
-msgstr ""
-
+msgstr "Қойындыны бекітуден алу"
 #: source/win-main/tabs-context.ts:59
 msgid "Pin tab"
-msgstr ""
-
+msgstr "Қойындыны бекіту"
 #: source/common/util/localise-number.ts:28
 msgid ","
 msgstr ","
-
 #: source/common/util/localise-number.ts:29
 msgid "."
 msgstr "."
-
 #: source/common/util/format-date.ts:33
 msgid "just now"
 msgstr "жаңа ғана"
-
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
-
+msgstr "Африкаанс"
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
-msgstr ""
-
+msgstr "Араб"
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
-
+msgstr "Астурия"
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
-msgstr ""
-
+msgstr "Беларус"
 #: source/common/util/map-lang-code.ts:37
 msgid "Bulgarian"
-msgstr ""
-
+msgstr "Болгар"
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
-
+msgstr "Бретон"
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
-msgstr ""
-
+msgstr "Босния"
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
-
+msgstr "Каталан"
 #: source/common/util/map-lang-code.ts:41
 msgid "Catalan (Valencia)"
-msgstr ""
-
+msgstr "Каталан (Валенсия)"
 #: source/common/util/map-lang-code.ts:42
 msgid "Czech"
-msgstr ""
-
+msgstr "Чех"
 #: source/common/util/map-lang-code.ts:43
 msgid "Danish"
-msgstr ""
-
+msgstr "Дат"
 #: source/common/util/map-lang-code.ts:44
 msgid "German (Austria)"
-msgstr ""
-
+msgstr "Неміс (Австрия)"
 #: source/common/util/map-lang-code.ts:45
 msgid "German (Switzerland)"
-msgstr ""
-
+msgstr "Неміс (Швейцария)"
 #: source/common/util/map-lang-code.ts:46
 msgid "German (simple)"
-msgstr ""
-
+msgstr "Неміс (қарапайым)"
 #: source/common/util/map-lang-code.ts:47
 msgid "German (Germany)"
-msgstr ""
-
+msgstr "Неміс (Германия)"
 #: source/common/util/map-lang-code.ts:48
 msgid "German (Luxembourg)"
-msgstr ""
-
+msgstr "Неміс (Люксембург)"
 #: source/common/util/map-lang-code.ts:49
 msgid "German"
-msgstr ""
-
+msgstr "Неміс"
 #: source/common/util/map-lang-code.ts:50
 msgid "Greek"
-msgstr ""
-
+msgstr "Грек"
 #: source/common/util/map-lang-code.ts:51
 msgid "English (Australia)"
-msgstr ""
-
+msgstr "Ағылшын (Австралия)"
 #: source/common/util/map-lang-code.ts:52
 msgid "English (Canada)"
-msgstr ""
-
+msgstr "Ағылшын (Канада)"
 #: source/common/util/map-lang-code.ts:53
 msgid "English (United Kingdom)"
-msgstr ""
-
+msgstr "Ағылшын (Ұлыбритания)"
 #: source/common/util/map-lang-code.ts:54
 msgid "English (India)"
-msgstr ""
-
+msgstr "Ағылшын (Үндістан)"
 #: source/common/util/map-lang-code.ts:55
 msgid "English (New Zealand)"
-msgstr ""
-
+msgstr "Ағылшын (Жаңа Зеландия)"
 #: source/common/util/map-lang-code.ts:56
 msgid "English (United States)"
-msgstr ""
-
+msgstr "Ағылшын (Америка Құрама Штаттары)"
 #: source/common/util/map-lang-code.ts:57
 msgid "English (South Africa)"
-msgstr ""
-
+msgstr "Ағылшын (Оңтүстік Африка)"
 #: source/common/util/map-lang-code.ts:58
 msgid "English"
-msgstr ""
-
+msgstr "Ағылшын"
 #: source/common/util/map-lang-code.ts:59
 msgid "Esperanto"
-msgstr ""
-
+msgstr "Эсперанто"
 #: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Argentina)"
-msgstr ""
-
+msgstr "Испан (Аргентина)"
 #: source/common/util/map-lang-code.ts:61
 msgid "Spanish (Spain)"
-msgstr ""
-
+msgstr "Испан (Испания)"
 #: source/common/util/map-lang-code.ts:62
 msgid "Spanish"
-msgstr ""
-
+msgstr "Испан"
 #: source/common/util/map-lang-code.ts:63
 msgid "Estonian"
-msgstr ""
-
+msgstr "Эстон"
 #: source/common/util/map-lang-code.ts:64
 msgid "Basque"
-msgstr ""
-
+msgstr "Баск"
 #: source/common/util/map-lang-code.ts:65
 msgid "Persian (Farsi)"
-msgstr ""
-
+msgstr "Парсы (Фарси)"
 #: source/common/util/map-lang-code.ts:66
 msgid "Finnish"
-msgstr ""
-
+msgstr "Фин"
 #: source/common/util/map-lang-code.ts:67
 msgid "Faroese"
-msgstr ""
-
+msgstr "Фарер"
 #: source/common/util/map-lang-code.ts:68
 msgid "French (Belgium)"
-msgstr ""
-
+msgstr "Француз (Бельгия)"
 #: source/common/util/map-lang-code.ts:69
 msgid "French (Switzerland)"
-msgstr ""
-
+msgstr "Француз (Швейцария)"
 #: source/common/util/map-lang-code.ts:70
 msgid "French (France)"
-msgstr ""
-
+msgstr "Француз (Франция)"
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Luxembourg)"
-msgstr ""
-
+msgstr "Француз (Люксембург)"
 #: source/common/util/map-lang-code.ts:72
 msgid "French (Principality of Monaco)"
-msgstr ""
-
+msgstr "Француз (Монако Княздігі)"
 #: source/common/util/map-lang-code.ts:73
 msgid "French"
-msgstr ""
-
+msgstr "Француз"
 #: source/common/util/map-lang-code.ts:74
 msgid "Irish"
-msgstr ""
-
+msgstr "Ирланд"
 #: source/common/util/map-lang-code.ts:75
 msgid "Scottish (Gaelic)"
-msgstr ""
-
+msgstr "Шотланд (Гэль)"
 #: source/common/util/map-lang-code.ts:76
 msgid "Galician"
-msgstr ""
-
+msgstr "Галисия"
 #: source/common/util/map-lang-code.ts:77
 msgid "Hebrew"
-msgstr ""
-
+msgstr "Иврит"
 #: source/common/util/map-lang-code.ts:78
 msgid "Hindi"
-msgstr ""
-
+msgstr "Хинди"
 #: source/common/util/map-lang-code.ts:79
 msgid "Croatian"
-msgstr ""
-
+msgstr "Хорват"
 #: source/common/util/map-lang-code.ts:80
 msgid "Hungarian"
-msgstr ""
-
+msgstr "Венгр"
 #: source/common/util/map-lang-code.ts:81
 msgid "Armenian"
-msgstr ""
-
+msgstr "Армян"
 #: source/common/util/map-lang-code.ts:82
 msgid "Indonesian"
-msgstr ""
-
+msgstr "Индонезия"
 #: source/common/util/map-lang-code.ts:83
 msgid "Icelandic"
-msgstr ""
-
+msgstr "Исланд"
 #: source/common/util/map-lang-code.ts:84
 msgid "Italian (Switzerland)"
-msgstr ""
-
+msgstr "Итальян (Швейцария)"
 #: source/common/util/map-lang-code.ts:85
 msgid "Italian (Italy)"
-msgstr ""
-
+msgstr "Итальян (Италия)"
 #: source/common/util/map-lang-code.ts:86
 msgid "Italian"
-msgstr ""
-
+msgstr "Итальян"
 #: source/common/util/map-lang-code.ts:87
 msgid "Japanese"
-msgstr ""
-
+msgstr "Жапон"
 #: source/common/util/map-lang-code.ts:88
 msgid "Georgian"
-msgstr ""
-
+msgstr "Грузин"
 #: source/common/util/map-lang-code.ts:89
 msgid "Khmer (Cambodia)"
-msgstr ""
-
+msgstr "Кхмер (Камбоджа)"
 #: source/common/util/map-lang-code.ts:90
 msgid "Korean"
-msgstr ""
-
+msgstr "Корей"
 #: source/common/util/map-lang-code.ts:91
 msgid "Latin"
-msgstr ""
-
+msgstr "Латын"
 #: source/common/util/map-lang-code.ts:92
 msgid "Luxembourgian"
-msgstr ""
-
+msgstr "Люксембург"
 #: source/common/util/map-lang-code.ts:93
 msgid "Lithuanian"
-msgstr ""
-
+msgstr "Литва"
 #: source/common/util/map-lang-code.ts:94
 msgid "Latvian"
-msgstr ""
-
+msgstr "Латыш"
 #: source/common/util/map-lang-code.ts:95
 msgid "Macedonian"
-msgstr ""
-
+msgstr "Македон"
 #: source/common/util/map-lang-code.ts:96
 msgid "Mongolian"
-msgstr ""
-
+msgstr "Моңғол"
 #: source/common/util/map-lang-code.ts:97
 msgid "Malaysian (Brunei Darussalam)"
-msgstr ""
-
+msgstr "Малай (Бруней Даруссалам)"
 #: source/common/util/map-lang-code.ts:98
 msgid "Malaysian (Malaysia)"
-msgstr ""
-
+msgstr "Малай (Малайзия)"
 #: source/common/util/map-lang-code.ts:99
 msgid "Malaysian"
-msgstr ""
-
+msgstr "Малай"
 #: source/common/util/map-lang-code.ts:100
 msgid "Norwegian (Bokmål)"
-msgstr ""
-
+msgstr "Норвег (Букмол)"
 #: source/common/util/map-lang-code.ts:101
 msgid "Nepalese"
-msgstr ""
-
+msgstr "Непал"
 #: source/common/util/map-lang-code.ts:102
 msgid "Dutch (Belgium)"
-msgstr ""
-
+msgstr "Голланд (Бельгия)"
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch (Netherlands)"
-msgstr ""
-
+msgstr "Голланд (Нидерланды)"
 #: source/common/util/map-lang-code.ts:104
 msgid "Dutch"
-msgstr ""
-
+msgstr "Голланд"
 #: source/common/util/map-lang-code.ts:105
 msgid "Norwegian (Nyorsk)"
-msgstr ""
-
+msgstr "Норвег (Нюнорск)"
 #: source/common/util/map-lang-code.ts:106
 msgid "Norwegian"
-msgstr ""
-
+msgstr "Норвег"
 #: source/common/util/map-lang-code.ts:107
 msgid "Polish"
-msgstr ""
-
+msgstr "Поляк"
 #: source/common/util/map-lang-code.ts:108
 msgid "Portuguese (Angola)"
-msgstr ""
-
+msgstr "Португал (Ангола)"
 #: source/common/util/map-lang-code.ts:109
 msgid "Portuguese (Brazil)"
-msgstr ""
-
+msgstr "Португал (Бразилия)"
 #: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Mozambique)"
-msgstr ""
-
+msgstr "Португал (Мозамбик)"
 #: source/common/util/map-lang-code.ts:111
 msgid "Portuguese (Portugal)"
-msgstr ""
-
+msgstr "Португал (Португалия)"
 #: source/common/util/map-lang-code.ts:112
 msgid "Portuguese"
-msgstr ""
-
+msgstr "Португал"
 #: source/common/util/map-lang-code.ts:113
 msgid "Romanian"
-msgstr ""
-
+msgstr "Румын"
 #: source/common/util/map-lang-code.ts:114
 msgid "Russian"
-msgstr ""
-
+msgstr "Орыс"
 #: source/common/util/map-lang-code.ts:115
 msgid "Rwandan (Kinyarwanda)"
-msgstr ""
-
+msgstr "Руанда (Киньяруанда)"
 #: source/common/util/map-lang-code.ts:116
 msgid "Slovakian"
-msgstr ""
-
+msgstr "Словак"
 #: source/common/util/map-lang-code.ts:117
 msgid "Slovenian"
-msgstr ""
-
+msgstr "Словен"
 #: source/common/util/map-lang-code.ts:118
 msgid "Serbian"
-msgstr ""
-
+msgstr "Серб"
 #: source/common/util/map-lang-code.ts:119
 msgid "Albanian"
-msgstr ""
-
+msgstr "Албан"
 #: source/common/util/map-lang-code.ts:120
 msgid "Albanian (Albania)"
-msgstr ""
-
+msgstr "Албан (Албания)"
 #: source/common/util/map-lang-code.ts:121
 msgid "Swedish"
-msgstr ""
-
+msgstr "Швед"
 #: source/common/util/map-lang-code.ts:122
 msgid "Tamil (India)"
-msgstr ""
-
+msgstr "Тамил (Үндістан)"
 #: source/common/util/map-lang-code.ts:123
 msgid "Thai"
-msgstr ""
-
+msgstr "Тай"
 #: source/common/util/map-lang-code.ts:124
 msgid "Tagalog (Filipino)"
-msgstr ""
-
+msgstr "Тагалог (Филиппин)"
 #: source/common/util/map-lang-code.ts:125
 msgid "Turkish"
-msgstr ""
-
+msgstr "Түрік"
 #: source/common/util/map-lang-code.ts:126
 msgid "Ukrainian"
-msgstr ""
-
+msgstr "Украин"
 #: source/common/util/map-lang-code.ts:127
 msgid "Urdu"
-msgstr ""
-
+msgstr "Урду"
 #: source/common/util/map-lang-code.ts:128
 msgid "Vietnamese"
-msgstr ""
-
+msgstr "Вьетнам"
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
 #: source/common/util/map-lang-code.ts:131
 msgid "Sorbian"
-msgstr ""
-
+msgstr "Сорб"
 #: source/common/util/map-lang-code.ts:132
 msgid "Chinese (China)"
-msgstr ""
-
+msgstr "Қытай (Қытай)"
 #: source/common/util/map-lang-code.ts:133
 msgid "Chinese (Taiwan)"
-msgstr ""
-
+msgstr "Қытай (Тайвань)"
 #: source/common/util/map-lang-code.ts:134
 msgid "Chinese"
-msgstr ""
-
+msgstr "Қытай"
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
-
+msgstr "Автоматты түрде анықтау"
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
 msgid "Disabled"
-msgstr ""
-
+msgstr "Өшірілген"
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
 msgid "Custom"
-msgstr ""
+msgstr "Арнайы"
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:54
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:78
@@ -1908,36 +1728,31 @@ msgstr ""
 #: source/tmp/win-assets/DefaultsTab.vue.ts:180
 #: source/tmp/win-assets/SnippetsTab.vue.ts:106
 msgid "Saving …"
-msgstr ""
-
+msgstr "Сақталуда …"
 #: source/tmp/win-assets/CustomCSS.vue.ts:66
 msgid "Saving failed"
-msgstr ""
-
+msgstr "Сақтау сәтсіз аяқталды"
 #: source/tmp/win-assets/App.vue.ts:21
 msgid "Exporting"
-msgstr ""
-
+msgstr "Экспорттау"
 #: source/tmp/win-assets/App.vue.ts:27
 msgid "Importing"
-msgstr ""
-
+msgstr "Импорттау"
 #: source/tmp/win-assets/App.vue.ts:33
 #: source/win-preferences/schema/appearance.ts:218
 msgid "Custom CSS"
-msgstr ""
-
+msgstr "Арнайы CSS"
 #: source/tmp/win-assets/App.vue.ts:39
 #: source/tmp/win-preferences/App.vue.ts:180
 #: source/win-preferences/schema/snippets.ts:24
 msgid "Snippets"
-msgstr ""
-
+msgstr "Үзінділер"
 #: source/tmp/win-assets/DefaultsTab.vue.ts:56
 msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
 msgstr ""
+"Бұл профиль қорғалған. Бұл оны жойғанда немесе атауын өзгерткенде қалпына келтірілетінін білдіреді."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:57
 msgid ""
