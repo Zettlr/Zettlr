@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 3.4.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2025-04-16 09:47+0000\n"
-"PO-Revision-Date: 2025-05-17 11:47+0500\n"
+"PO-Revision-Date: 2025-05-17 12:31+0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: kk_KZ\n"
@@ -491,7 +491,7 @@ msgstr "Дұрыс емес Textbundle: %s"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:31
 msgid "Replace file"
-msgstr ""
+msgstr "Файлды ауыстыру"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:32
 #, javascript-format
@@ -499,24 +499,26 @@ msgid ""
 "File %s has been modified remotely. Replace the loaded version with the "
 "newer one from disk?"
 msgstr ""
+"%s файлы қашықтан өзгертілді. Жүктелген нұсқаны дискідегі жаңарақ нұсқамен "
+"ауыстыру керек пе?"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 #: source/win-preferences/schema/general.ts:78
 msgid "Always load remote changes to the current file"
-msgstr ""
+msgstr "Әрқашан ағымдағы файлға қашықтан жасалған өзгерістерді жүктеу"
 
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
 msgid "Overwrite existing file"
-msgstr ""
+msgstr "Бар файлды қайта жазу"
 
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
 #, javascript-format
 msgid "The file %s already exists in this directory. Overwrite?"
-msgstr ""
+msgstr "%s файлы бұл каталогта бұрыннан бар. Үстінен жазу керек пе?"
 
 #: source/app/service-providers/windows/dialog/ask-file.ts:54
 msgid "Open file"
-msgstr ""
+msgstr "Файлды ашу"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
@@ -526,75 +528,75 @@ msgstr ""
 #: source/tmp/win-assets/DefaultsTab.vue.ts:113
 #: source/tmp/win-assets/SnippetsTab.vue.ts:47
 msgid "Unsaved changes"
-msgstr ""
+msgstr "Сақталмаған өзгерістер"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr ""
+msgstr "Сақталмаған өзгерістер бар. Алдымен оларды сақтағыңыз келе ме?"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
-msgstr ""
+msgstr "Файлды сақтау"
 
 #: source/app/service-providers/windows/index.ts:247
 msgid "Open project folder"
-msgstr ""
+msgstr "Жоба қалтасын ашу"
 
 #: source/app/service-providers/citeproc/index.ts:258
 #: source/app/service-providers/citeproc/index.ts:466
 msgid "The citation database could not be loaded"
-msgstr ""
+msgstr "Дәйексөз дерекқорын жүктеу мүмкін болмады"
 
 #: source/app/service-providers/citeproc/index.ts:453
 msgid "Changes to the library file detected. Reloading …"
-msgstr ""
+msgstr "Кітапхана файлындағы өзгерістер анықталды. Қайта жүктелуде..."
 
 #: source/app/service-providers/menu/menu.win32.ts:44
 #: source/app/service-providers/menu/menu.win32.ts:56
 #: source/app/service-providers/menu/menu.darwin.ts:183
 msgid "Recent files"
-msgstr ""
+msgstr "Соңғы файлдар"
 
 #: source/app/service-providers/menu/menu.win32.ts:48
 #: source/app/service-providers/menu/menu.win32.ts:60
 #: source/app/service-providers/menu/menu.darwin.ts:187
 msgid "Clear"
-msgstr ""
+msgstr "Тазалау"
 
 #: source/app/service-providers/menu/menu.win32.ts:87
 #: source/app/service-providers/menu/menu.darwin.ts:113
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 #: source/app/service-providers/menu/menu.win32.ts:90
 #: source/app/service-providers/menu/menu.darwin.ts:116
 #: source/win-main/file-manager/util/dir-item-context.ts:38
 #: source/tmp/win-main/App.vue.ts:290
 msgid "New file…"
-msgstr ""
+msgstr "Жаңа файл..."
 
 #: source/app/service-providers/menu/menu.win32.ts:129
 #: source/app/service-providers/menu/menu.darwin.ts:155
 #: source/win-main/file-manager/util/dir-item-context.ts:44
 msgid "New directory…"
-msgstr ""
+msgstr "Жаңа каталог..."
 
 #: source/app/service-providers/menu/menu.win32.ts:139
 #: source/app/service-providers/menu/menu.darwin.ts:165
 msgid "Open file…"
-msgstr ""
+msgstr "Файлды ашу..."
 
 #: source/app/service-providers/menu/menu.win32.ts:148
 #: source/app/service-providers/menu/menu.darwin.ts:174
 #: source/tmp/win-main/App.vue.ts:264
 msgid "Open workspace…"
-msgstr ""
+msgstr "Жұмыс кеңістігін ашу..."
 
 #: source/app/service-providers/menu/menu.win32.ts:172
 #: source/app/service-providers/menu/menu.darwin.ts:207
 #: source/tmp/win-main/App.vue.ts:297
 msgid "Previous file"
-msgstr ""
+msgstr "Алдыңғы файл"
 
 #: source/app/service-providers/menu/menu.win32.ts:183
 #: source/app/service-providers/menu/menu.darwin.ts:218
@@ -605,46 +607,46 @@ msgstr "Келесі файл"
 #: source/app/service-providers/menu/menu.win32.ts:197
 #: source/app/service-providers/menu/menu.darwin.ts:232
 msgid "Import files…"
-msgstr ""
+msgstr "Файлдарды импорттау..."
 
 #: source/app/service-providers/menu/menu.win32.ts:205
 #: source/app/service-providers/menu/menu.darwin.ts:240
 msgid "Export…"
-msgstr ""
+msgstr "Экспорттау..."
 
 #: source/app/service-providers/menu/menu.win32.ts:213
 #: source/app/service-providers/menu/menu.darwin.ts:248
 #: source/tmp/win-print/App.vue.ts:44 source/tmp/win-print/App.vue.ts:45
 msgid "Print…"
-msgstr ""
+msgstr "Басып шығару..."
 
 #: source/app/service-providers/menu/menu.win32.ts:221
 #: source/app/service-providers/menu/menu.win32.ts:225
 #: source/app/service-providers/menu/menu.darwin.ts:51
 msgid "Preferences…"
-msgstr ""
+msgstr "Параметрлер..."
 
 #: source/app/service-providers/menu/menu.win32.ts:233
 #: source/app/service-providers/menu/menu.darwin.ts:59
 #: source/tmp/win-assets/App.vue.ts:15
 msgid "Assets Manager"
-msgstr ""
+msgstr "Активтер менеджері"
 
 #: source/app/service-providers/menu/menu.win32.ts:241
 #: source/app/service-providers/menu/menu.darwin.ts:67
 #: source/tmp/win-tag-manager/App.vue.ts:34
 msgid "Tags Manager"
-msgstr ""
+msgstr "Тегтер менеджері"
 
 #: source/app/service-providers/menu/menu.win32.ts:253
 #: source/app/service-providers/menu/menu.darwin.ts:259
 msgid "Import translation…"
-msgstr ""
+msgstr "Аударманы импорттау..."
 
 #: source/app/service-providers/menu/menu.win32.ts:261
 #: source/app/service-providers/menu/menu.darwin.ts:267
 msgid "Import dictionary…"
-msgstr ""
+msgstr "Сөздікті импорттау…"
 
 #: source/app/service-providers/menu/menu.win32.ts:280
 #: source/app/service-providers/menu/menu.darwin.ts:286
@@ -673,7 +675,7 @@ msgstr ""
 #: source/app/service-providers/menu/menu.win32.ts:321
 #: source/app/service-providers/menu/menu.darwin.ts:319
 msgid "Redo"
-msgstr ""
+msgstr "Қайталау"
 
 #: source/app/service-providers/menu/menu.win32.ts:330
 #: source/app/service-providers/menu/menu.darwin.ts:328
