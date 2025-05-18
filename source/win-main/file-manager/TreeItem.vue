@@ -421,6 +421,7 @@ onMounted(() => {
     if (message === 'new-dir') {
       operationType.value = 'createDir'
     }
+    uncollapseIfApplicable()
   })
 })
 
