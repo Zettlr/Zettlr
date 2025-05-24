@@ -3624,7 +3624,7 @@ msgstr ""
 #: source/win-preferences/schema/advanced.ts:150
 #, fuzzy
 msgid "Debug mode"
-msgstr "Povolit vývojářský režim"
+msgstr "Vývojářský režim"
 
 #: source/win-preferences/schema/advanced.ts:156
 msgid "Enable debug mode"
@@ -3632,7 +3632,7 @@ msgstr "Povolit vývojářský režim"
 
 #: source/win-preferences/schema/advanced.ts:163
 msgid "Beta releases"
-msgstr ""
+msgstr "Beta verze"
 
 #: source/win-preferences/schema/advanced.ts:169
 msgid "Notify me about beta releases"
@@ -3640,7 +3640,7 @@ msgstr "Informovat o beta vydáních"
 
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
-msgstr ""
+msgstr "Otevřít editor útržků"
 
 #: source/win-preferences/schema/general.ts:22
 msgid "Application language"
@@ -3653,7 +3653,7 @@ msgstr "Automatické ukládání"
 #: source/win-preferences/schema/general.ts:43
 #, fuzzy
 msgid "Save modifications"
-msgstr "Čas poslední změny"
+msgstr "Uložit změny"
 
 #: source/win-preferences/schema/general.ts:48
 msgid "Immediately"
@@ -3665,18 +3665,20 @@ msgstr "Po krátké prodlevě"
 
 #: source/win-preferences/schema/general.ts:55
 msgid "Default image folder"
-msgstr ""
+msgstr "Výchozí složka pro obrázky"
 
 #: source/win-preferences/schema/general.ts:67
 msgid ""
 "Click \"Select folder…\" or type an absolute or relative path directly into "
 "the input field."
 msgstr ""
+"Klepněte na \"Vybrat složku...\" nebo zadejte absolutní či relativní cestu "
+"přímo do vstupního pole."
 
 #: source/win-preferences/schema/general.ts:72
 #, fuzzy
 msgid "Behavior"
-msgstr "Chování zvětšování"
+msgstr "Chování"
 
 #: source/win-preferences/schema/general.ts:83
 msgid "Avoid opening files in new tabs if possible"
