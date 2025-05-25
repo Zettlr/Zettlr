@@ -76,18 +76,18 @@ module.exports = {
       // macOS has Rosetta 2 built-in, so we can bundle Pandoc 64bit
       const supportsPandoc = is64Bit || (isMacOS && isArm64) || (isLinux && isArm64)
 
-      if (supportsPandoc && isWin32) {
-        // Download Pandoc beforehand, if it's not yet there.
-        try {
-          await fs.lstat(path.join(__dirname, './resources/pandoc-win32-x64.exe'))
-        } catch (err) {
-          await downloadPandoc('win32', 'x64')
-        }
+      // if (supportsPandoc && isWin32) {
+//   try {
+//     await fs.lstat(path.join(__dirname, './resources/pandoc-win32-x64.exe'))
+//   } catch (err) {
+//     await downloadPandoc('win32', 'x64')
+//   }
 
-        await fs.copyFile(path.join(__dirname, './resources/pandoc-win32-x64.exe'), path.join(__dirname, './resources/pandoc.exe'))
+//   await fs.copyFile(path.join(__dirname, './resources/pandoc-win32-x64.exe'), path.join(__dirname, './resources/pandoc.exe'))
 
-        forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc.exe'))
-      } else if (supportsPandoc && (isMacOS || isLinux)) {
+//   forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc.exe'))
+// }
+if (supportsPandoc && (isMacOS || isLinux)) {
         // Download Pandoc either for macOS or Linux ...
         const platform = isMacOS ? 'darwin' : 'linux'
         // ... and the ARM or x64 version.
