@@ -221,6 +221,14 @@ interface SliderField extends BasicInfo {
   max?: number
 }
 
+interface ShortcutField extends BasicInfo {
+  type: 'shortcut'
+  placeholder?: string
+  reset?: string|boolean
+  info?: string
+  disabled?: boolean
+}
+
 interface ThemeField extends BasicInfo {
   type: 'theme'
   options: Record<string, ThemeDescriptor>
@@ -231,7 +239,7 @@ interface ThemeField extends BasicInfo {
  */
 export type FormField = Separator|FormText|FormButton|TextField|NumberField|
 TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|
-TokenField|SliderField|ThemeField
+TokenField|SliderField|ShortcutField|ThemeField
 
 /**
  * Fields that can only occur within the title area of a fieldset
@@ -328,6 +336,7 @@ function getModelValue (model: string): any {
         font-weight: bolder;
         font-size: 15px;
         margin-top: 2px;
+        margin-bottom: 4px;
         padding: 0;
       }
 
