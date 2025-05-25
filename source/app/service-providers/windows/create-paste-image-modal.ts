@@ -20,7 +20,6 @@ import {
   type BrowserWindowConstructorOptions
 } from 'electron'
 import attachLogger from './attach-logger'
-import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
 
 /**
@@ -39,10 +38,7 @@ export default function createPasteImageModal (logger: LogProvider, config: Conf
     show: false,
     fullscreenable: false,
     webPreferences: {
-      // contextIsolation and sandbox mean: Preload scripts have access to
-      // Node modules, the renderers not
-      contextIsolation: true,
-      sandbox: false,
+      sandbox: true,
       preload: PASTE_IMAGE_PRELOAD_WEBPACK_ENTRY
     }
   }
@@ -64,9 +60,6 @@ export default function createPasteImageModal (logger: LogProvider, config: Conf
 
   // EVENT LISTENERS
 
-  // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(logger, window)
-
   // Implement main process logging
   attachLogger(logger, window, 'Paste Image Modal')
 
@@ -81,7 +74,6 @@ export default function createPasteImageModal (logger: LogProvider, config: Conf
     // Do not "clearCache" because that would only delete my own index files
     ses.clearStorageData({
       storages: [
-        'appcache',
         'cookies', // Nobody needs cookies except for downloading pandoc etc
         'localstorage',
         'shadercache', // Should never contain anything

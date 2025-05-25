@@ -14,10 +14,8 @@
  * END HEADER
  */
 
-import { contextBridge, ipcRenderer, clipboard } from 'electron'
-import path from 'path'
-
-contextBridge.exposeInMainWorld('path', path)
+import { contextBridge, ipcRenderer, webUtils } from 'electron'
+import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 
 // PREPARATION: Since we have multiple editor panes and all of them need to
 // listen to a few events, we need to ramp up some of the channels' max
@@ -28,8 +26,16 @@ ipcRenderer.setMaxListeners(100)
 
 // We need a few ipc methods
 contextBridge.exposeInMainWorld('ipc', {
+  // TODO: Instead of simply exposing the required IPC functions to the main
+  // context, we may want to create a dedicated (possibly much more type-safe)
+  // API object that JS in the renderer can call. This would get rid of the
+  // no-unsafe-argument problems we have here.
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   send: (channel: string, ...args: any[]) => ipcRenderer.send(channel, ...args),
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   sendSync: (event: string, ...args: any[]) => ipcRenderer.sendSync(event, ...args),
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   invoke: async (channel: string, ...args: any[]) => await ipcRenderer.invoke(channel, ...args),
   on: (channel: string, listener: (...args: any[]) => void) => {
     // NOTE: We're returning a stopListening() callback here since the function
@@ -37,6 +43,7 @@ contextBridge.exposeInMainWorld('ipc', {
     // it cannot be removed otherwise.
     const callback = (event: any, ...args: any[]): void => {
       // Omit the event when calling the listener
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       listener(undefined, ...args)
     }
     ipcRenderer.on(channel, callback)
@@ -70,88 +77,10 @@ contextBridge.exposeInMainWorld(
       return ipcRenderer.sendSync('citeproc-provider', {
         command: 'get-citation-sync',
         payload: { database, citations, composite }
-      })
+      } as CiteprocProviderIPCAPI)
     }
   }
 )
-
-// Expose the subset of clipboard functions which we use
-contextBridge.exposeInMainWorld('clipboard', {
-  readText: function () {
-    return clipboard.readText()
-  },
-  readHTML: function () {
-    return clipboard.readHTML()
-  },
-  readRTF: function () {
-    return clipboard.readRTF()
-  },
-  hasImage: function () {
-    // NOTE: We cannot send NativeImages across the context bridge,
-    // so we have to do it the hard way here.
-    return !clipboard.readImage().isEmpty()
-  },
-  getImageData: function () {
-    // NOTE: This function is used only in the Paste-Image dialog in order to
-    // show a preview of the image and populate the dialog with the necessary
-    // information.
-    const image = clipboard.readImage()
-    const size = image.getSize() // First get the original size
-    const aspect = image.getAspectRatio() // Then the aspect
-    const dataUrl = image.resize({ 'height': 200 }).toDataURL()
-
-    return {
-      size,
-      aspect,
-      dataUrl
-    }
-  },
-  write: function (data: Electron.Data) {
-    // We cannot transfer images, so make sure the function is safe to call
-    return clipboard.write({
-      text: data.text,
-      html: data.html,
-      rtf: data.rtf
-    })
-  },
-  writeText: function (text: string) {
-    return clipboard.writeText(text)
-  },
-  hasSelectionClipboard: function () {
-    if (process.platform !== 'linux') {
-      return false
-    }
-
-    if (clipboard.readText('selection') !== '') {
-      return true
-    }
-
-    if (clipboard.readHTML('selection') !== '') {
-      return true
-    }
-
-    return false
-  },
-  /**
-   * Returns the plain text and HTML contents of the selection clipboard on
-   * linux.
-   *
-   * @return  {{text: string, html: string}}}  Returns an object containing HTML and text contents
-   */
-  getSelectionClipboard: function () {
-    if (process.platform !== 'linux') {
-      return {
-        text: '',
-        html: ''
-      }
-    } else {
-      return {
-        text: clipboard.readText('selection'),
-        html: clipboard.readHTML('selection')
-      }
-    }
-  }
-})
 
 // Expose the subset of process properties we need
 contextBridge.exposeInMainWorld('process', {
@@ -159,8 +88,19 @@ contextBridge.exposeInMainWorld('process', {
   version: process.version,
   versions: process.versions,
   arch: process.arch,
-  uptime: process.uptime,
+  uptime: () => process.uptime(),
   getSystemVersion: process.getSystemVersion(),
   env: Object.assign({}, process.env),
   argv: process.argv
+})
+
+// Allow renderers to retrieve the absolute file path for any file object that
+// points to a file on disk
+contextBridge.exposeInMainWorld('getPathForFile', function (file: File): string|undefined {
+  try {
+    const filePath = webUtils.getPathForFile(file)
+    return filePath !== '' ? filePath : undefined
+  } catch (err) {
+    return undefined
+  }
 })

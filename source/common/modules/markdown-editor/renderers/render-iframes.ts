@@ -15,7 +15,7 @@
 
 import { renderBlockWidgets } from './base-renderer'
 import { type SyntaxNodeRef, type SyntaxNode } from '@lezer/common'
-import { WidgetType, type EditorView } from '@codemirror/view'
+import { WidgetType, EditorView } from '@codemirror/view'
 import { type EditorState } from '@codemirror/state'
 
 /**
@@ -92,7 +92,7 @@ class IFrameWidget extends WidgetType {
     return other.source === this.source
   }
 
-  toDOM (view: EditorView): HTMLElement {
+  toDOM (_view: EditorView): HTMLElement {
     const { hostname } = new URL(this.source)
 
     // Check if the hostname is part of our whitelist. If so, render it directly
@@ -135,4 +135,16 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): IFrameWidget|un
   return new IFrameWidget(source, node.node)
 }
 
-export const renderIframes = renderBlockWidgets(shouldHandleNode, createWidget)
+export const renderIframes = [
+  renderBlockWidgets(shouldHandleNode, createWidget),
+  EditorView.baseTheme({
+    '.iframe-wrapper': {
+      backgroundColor: 'rgb(240, 240, 240)',
+      borderRadius: '4px',
+      padding: '20px'
+    },
+    '&dark .iframe-wrapper': {
+      backgroundColor: 'rgb(80, 80, 90)'
+    }
+  })
+]

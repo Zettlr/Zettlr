@@ -34,7 +34,7 @@
   </WindowChrome>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -49,9 +49,9 @@
  * END HEADER
  */
 
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
+import { ref, computed } from 'vue'
 
 // Import the tabs
 import GeneralTab from './General-Tab.vue'
@@ -60,69 +60,56 @@ import SponsorsTab from './Sponsors-Tab.vue'
 import LicenseTab from './License-Tab.vue'
 import FontLicenseTab from './Font-License-Tab.vue'
 import DebugTab from './Debug-Tab.vue'
-import { WindowTab } from '@dts/renderer/window'
+import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
+import { useConfigStore } from 'source/pinia'
 
-export default defineComponent({
-  components: {
-    WindowChrome,
-    GeneralTab,
-    ProjectsTab,
-    SponsorsTab,
-    LicenseTab,
-    FontLicenseTab,
-    DebugTab
+const configStore = useConfigStore()
+
+const currentTab = ref(0)
+const tabs: WindowTab[] = [
+  {
+    label: trans('About Zettlr'),
+    controls: 'tab-general',
+    id: 'tab-general-control',
+    icon: 'info-standard'
   },
-  data: function () {
-    return {
-      currentTab: 0,
-      tabs: [
-        {
-          label: trans('About Zettlr'),
-          controls: 'tab-general',
-          id: 'tab-general-control',
-          icon: 'info-standard'
-        },
-        {
-          label: trans('Other projects'),
-          controls: 'tab-projects',
-          id: 'tab-projects-control',
-          icon: 'applications'
-        },
-        {
-          label: trans('Sponsors'),
-          controls: 'tab-sponsors',
-          id: 'tab-sponsors-control',
-          icon: 'star'
-        },
-        {
-          label: trans('License'),
-          controls: 'tab-license',
-          id: 'tab-license-control',
-          icon: 'cog'
-        },
-        {
-          label: 'SIL OFL',
-          controls: 'tab-font-license',
-          id: 'tab-font-license-control',
-          icon: 'font-size'
-        },
-        {
-          label: 'Debug Information',
-          controls: 'tab-debug',
-          id: 'tab-debug-control',
-          icon: 'dashboard'
-        }
-      ] as WindowTab[]
-    }
+  {
+    label: trans('Other projects'),
+    controls: 'tab-projects',
+    id: 'tab-projects-control',
+    icon: 'applications'
   },
-  computed: {
-    windowTitle: function (): string {
-      if (process.platform === 'darwin') {
-        return this.tabs[this.currentTab].label
-      } else {
-        return trans('About Zettlr') + ' ' + (global as any).config.get('version')
-      }
-    }
+  {
+    label: trans('Sponsors'),
+    controls: 'tab-sponsors',
+    id: 'tab-sponsors-control',
+    icon: 'star'
+  },
+  {
+    label: trans('License'),
+    controls: 'tab-license',
+    id: 'tab-license-control',
+    icon: 'cog'
+  },
+  {
+    label: 'SIL OFL',
+    controls: 'tab-font-license',
+    id: 'tab-font-license-control',
+    icon: 'font-size'
+  },
+  {
+    label: 'Debug Information',
+    controls: 'tab-debug',
+    id: 'tab-debug-control',
+    icon: 'dashboard'
+  }
+]
+
+const windowTitle = computed(() => {
+  if (process.platform === 'darwin') {
+    return tabs[currentTab.value].label
+  } else {
+    return trans('About Zettlr') + ' ' + configStore.config.version
   }
 })
 </script>

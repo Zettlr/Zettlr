@@ -19,6 +19,7 @@ import { configField } from '../util/configuration'
 import { type LanguageToolAPIResponse } from '@providers/commands/language-tool'
 import { StateEffect, StateField } from '@codemirror/state'
 import { type TextNode } from '@common/modules/markdown-utils/markdown-ast'
+import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 
 const ipcRenderer = window.ipc
 
@@ -33,12 +34,23 @@ export interface LanguageToolStateField {
 export const updateLTState = StateEffect.define<Partial<LanguageToolStateField>>()
 
 export const languageToolState = StateField.define<LanguageToolStateField>({
-  create: () => {
+  create: (state) => {
+    let overrideLanguage = 'auto'
+    // Extract YAML frontmatter "lang" property if present and correct. This is
+    // only done on startup to save code, and since users will rarely change an
+    // explicitly given language (and when they do, it won't bother them to
+    // once more change the language in the linter when not closing the doc.)
+    const { frontmatter } = extractYamlFrontmatter(state.sliceDoc())
+    // NOTE: Relatively simple Regex, nothing to write home about.
+    if (typeof frontmatter?.lang === 'string' && /^[a-z]{2,3}(-[A-Z]{2,})?/.test(frontmatter.lang)) {
+      overrideLanguage = frontmatter.lang
+    }
+
     return {
       running: false,
       lastDetectedLanguage: 'auto',
       lastError: undefined,
-      overrideLanguage: 'auto',
+      overrideLanguage,
       supportedLanguages: []
     }
   },

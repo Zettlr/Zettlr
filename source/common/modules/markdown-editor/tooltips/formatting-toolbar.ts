@@ -12,14 +12,16 @@
  * END HEADER
  */
 
-import { showTooltip, type Tooltip } from '@codemirror/view'
+import { EditorView, showTooltip, type Tooltip } from '@codemirror/view'
 import { type EditorState, StateField } from '@codemirror/state'
 import { applyBold, applyCode, applyComment, applyItalic, insertImage, insertLink } from '../commands/markdown'
 import { trans } from '@common/i18n-renderer'
+import { configField } from '../util/configuration'
 
 function getToolbar (state: EditorState): Tooltip[] {
+  const { showFormattingToolbar } = state.field(configField)
   const mainSel = state.selection.main
-  if (mainSel.empty) {
+  if (mainSel.empty || !showFormattingToolbar) {
     return []
   }
 
@@ -30,7 +32,7 @@ function getToolbar (state: EditorState): Tooltip[] {
     above: mainSel.head < mainSel.anchor,
     strictSide: false,
     arrow: true,
-    create: () => {
+    create: (view) => {
       const dom = document.createElement('div')
       dom.className = 'cm-formatting-bar'
 
@@ -69,33 +71,64 @@ function getToolbar (state: EditorState): Tooltip[] {
 
       buttonWrapper.append(bold, italic, link, image, comment, code)
       dom.append(buttonWrapper)
-      return {
-        dom,
-        mount (view) {
-          bold.onclick = function (event) { applyBold(view) }
-          italic.onclick = function (event) { applyItalic(view) }
-          link.onclick = function (event) { insertLink(view) }
-          image.onclick = function (event) { insertImage(view) }
-          comment.onclick = function (event) { applyComment(view) }
-          code.onclick = function (event) { applyCode(view) }
-        }
-      }
+
+      // NOTE: We need to use the onmousedown event here, since the click only
+      // triggers after onmouseup, and by that time the editor has gone through
+      // a transaction cycle that has re-rendered the tooltip.
+      bold.onmousedown = function (event) { applyBold(view) }
+      italic.onmousedown = function (event) { applyItalic(view) }
+      link.onmousedown = function (event) { insertLink(view) }
+      image.onmousedown = function (event) { insertImage(view) }
+      comment.onmousedown = function (event) { applyComment(view) }
+      code.onmousedown = function (event) { applyCode(view) }
+
+      return { dom }
     }
   }]
 }
 
-export const formattingToolbar = StateField.define<readonly Tooltip[]>({
+const formattingToolbarPlugin = StateField.define<readonly Tooltip[]>({
   create (state) {
     return getToolbar(state)
   },
 
   update (tooltips, transaction) {
-    if (transaction.selection === undefined) {
-      return tooltips
-    }
-
     return getToolbar(transaction.state)
   },
 
   provide: f => showTooltip.computeN([f], state => state.field(f))
 })
+
+export const formattingToolbar = [
+  formattingToolbarPlugin,
+  EditorView.baseTheme({
+    // Formatting bar
+    '.cm-tooltip.cm-formatting-bar': {
+      borderRadius: '8px',
+      maxWidth: 'initial'
+    },
+    '.cm-tooltip.cm-formatting-bar .button-wrapper': {
+      display: 'flex'
+    },
+    '.cm-tooltip.cm-formatting-bar button.formatting-toolbar-button': {
+      border: 'none',
+      margin: '0',
+      backgroundColor: 'transparent',
+      borderRadius: '0',
+      lineHeight: '30px',
+      padding: '0',
+      width: '30px'
+    },
+    '&dark .cm-tooltip.cm-formatting-bar button.formatting-toolbar-button': {
+      color: 'rgb(200, 200, 200)'
+    },
+    '.cm-tooltip.cm-formatting-bar button.formatting-toolbar-button:first-child': {
+      borderTopLeftRadius: '8px',
+      borderBottomLeftRadius: '8px'
+    },
+    '.cm-tooltip.cm-formatting-bar button.formatting-toolbar-button:last-child': {
+      borderTopRightRadius: '8px',
+      borderBottomRightRadius: '8px'
+    }
+  })
+]

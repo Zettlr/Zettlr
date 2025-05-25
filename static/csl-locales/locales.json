@@ -16,6 +16,7 @@
         "fa": "fa-IR",
         "fi": "fi-FI",
         "fr": "fr-FR",
+        "gl": "gl-GL",
         "he": "he-IL",
         "hi": "hi-IN",
         "hr": "hr-HR",
@@ -33,6 +34,7 @@
         "nb": "nb-NO",
         "nl": "nl-NL",
         "nn": "nn-NO",
+        "pa": "pa-PK",
         "pl": "pl-PL",
         "pt": "pt-PT",
         "ro": "ro-RO",
@@ -136,6 +138,10 @@
             "Français (France)",
             "French (France)"
         ],
+        "gl-ES": [
+            "Galego (Spain)",
+            "Galician (Spain)"
+        ],
         "he-IL": [
             "עברית",
             "Hebrew"
@@ -203,6 +209,10 @@
         "nn-NO": [
             "Norsk nynorsk",
             "Norwegian (Nynorsk)"
+        ],
+        "pa-PK": [
+            "پنجابی (شاہ‌مکھی)",
+            "Punjabi (Shahmukhi)"
         ],
         "pl-PL": [
             "Polski",

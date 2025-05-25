@@ -162,8 +162,10 @@
         Sum of words in all files: <strong>{{ sumWords }}</strong><br>
         Standard deviation: <strong>{{ sdChars }} characters / {{ sdWords }} words</strong><br>
         <br>
-        Your smallest file: <strong>{{ minChars }} characters / {{ minWords }} words</strong><br>
-        Your largest file: <strong>{{ maxChars }} characters / {{ maxWords }} words</strong><br>
+        Your smallest file: <strong>{{ minChars }} characters / {{ minWords }} words</strong>
+        (<a href="#" v-on:click="openFile(minCharsFile)">{{ basename(minCharsFile) }}</a>)<br>
+        Your largest file: <strong>{{ maxChars }} characters / {{ maxWords }} words</strong>
+        (<a href="#" v-on:click="openFile(maxCharsFile)">{{ basename(maxCharsFile) }}</a>)<br>
         The average file: <strong>{{ meanChars }} characters / {{ meanWords }} words</strong><br>
       </div>
       <div class="box-right">
@@ -183,7 +185,9 @@
 
 <script lang="ts">
 import localiseNumber from '@common/util/localise-number'
-import { FSALStats } from '@dts/common/fsal'
+import { pathBasename } from '@common/util/renderer-path-polyfill'
+import type { WorkspacesStatistics } from '@providers/workspaces/generate-stats'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
@@ -225,25 +229,29 @@ export default defineComponent({
 
       mdFileCount: localiseNumber(0),
       codeFileCount: localiseNumber(0),
-      dirCount: localiseNumber(0)
+      dirCount: localiseNumber(0),
+      minCharsFile: '',
+      maxCharsFile: '',
+      minWordsFile: '',
+      maxWordsFile: ''
     }
   },
   created: function () {
     ipcRenderer.invoke('application', { command: 'get-statistics-data' })
-      .then(data => {
+      .then((data: WorkspacesStatistics) => {
         this.recalculateStats(data)
       })
       .catch(e => console.error(e))
   },
   methods: {
-    recalculateStats: function (data: FSALStats) {
+    recalculateStats: function (data: WorkspacesStatistics) {
       // Approximately aspect ratio 8:1. This will be stretched and squeezed on
       // non standard compliant window sizes, but alas. We assume Zettlr will
       // -- most of the time -- be run in default maximized/full screen state on
       // landscape displays.
 
       // Helper function
-      const zTransform = (val: number) => {
+      const zTransform = (val: number): number => {
         const percent = val / (data.maxWords - data.minWords)
         return this.boxPlotData.width * percent
       }
@@ -269,12 +277,16 @@ export default defineComponent({
       this.maxWords = localiseNumber(data.maxWords)
       this.sumWords = localiseNumber(data.sumWords)
       this.sdWords = localiseNumber(data.sdWords)
+      this.minWordsFile = data.minWordsFile
+      this.maxWordsFile = data.maxWordsFile
 
       this.minChars = localiseNumber(data.minChars)
       this.meanChars = localiseNumber(data.meanChars)
       this.maxChars = localiseNumber(data.maxChars)
       this.sumChars = localiseNumber(data.sumChars)
       this.sdChars = localiseNumber(data.sdChars)
+      this.minCharsFile = data.minCharsFile
+      this.maxCharsFile = data.maxCharsFile
 
       this.words68PercentLower = localiseNumber(data.words68PercentLower)
       this.words68PercentUpper = localiseNumber(data.words68PercentUpper)
@@ -289,6 +301,15 @@ export default defineComponent({
       this.mdFileCount = localiseNumber(data.mdFileCount)
       this.codeFileCount = localiseNumber(data.codeFileCount)
       this.dirCount = localiseNumber(data.dirCount)
+    },
+    basename: function (absPath: string) {
+      return pathBasename(absPath)
+    },
+    openFile: function (absPath: string) {
+      ipcRenderer.invoke('documents-provider', {
+        command: 'open-file',
+        payload: { path: absPath, newTab: true }
+      } as DocumentManagerIPCAPI).catch(err => console.error(err))
     }
   }
 })
@@ -351,3 +372,4 @@ div#fsal-container {
   .magenta { fill: #ff00ff; }
 }
 </style>
+@common/util/renderer-path-polyfill

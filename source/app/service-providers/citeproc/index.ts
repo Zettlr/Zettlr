@@ -23,13 +23,13 @@ import { trans } from '@common/i18n-main'
 import extractBibTexAttachments from './extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
 import YAML from 'yaml'
-import ProviderContract from '../provider-contract'
-import type NotificationProvider from '../notifications'
+import ProviderContract, { type IPCAPI } from '../provider-contract'
 import type WindowProvider from '../windows'
 import type LogProvider from '../log'
 import type ConfigProvider from '@providers/config'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import { showNativeNotification } from '@common/util/show-notification'
 
 interface DatabaseRecord {
   path: string
@@ -39,6 +39,13 @@ interface DatabaseRecord {
   cslData: Record<string, CSLItem>
   bibtexAttachments: Record<string, string[]|false>
 }
+
+export type CiteprocProviderIPCAPI = IPCAPI<{
+  'get-items': { database: string }
+  'get-citation': { database: string, citations: CiteItem[], composite: boolean }
+  'get-citation-sync': { database: string, citations: CiteItem[], composite: boolean }
+  'get-bibliography': { database: string, citations: string[] }
+}>
 
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
@@ -101,7 +108,6 @@ export default class CiteprocProvider extends ProviderContract {
   constructor (
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider,
-    private readonly _notifications: NotificationProvider,
     private readonly _windows: WindowProvider
   ) {
     super()
@@ -173,7 +179,8 @@ export default class CiteprocProvider extends ProviderContract {
     /**
      * Listen for events coming from the citation renderer of the MarkdownEditor
      */
-    ipcMain.on('citeproc-provider', (event, { command, payload }) => {
+    ipcMain.on('citeproc-provider', (event, message: CiteprocProviderIPCAPI) => {
+      const { command, payload } = message
       if (command === 'get-citation-sync') {
         const { database, citations, composite } = payload
         event.returnValue = this.getCitation(database, citations, composite)
@@ -183,23 +190,32 @@ export default class CiteprocProvider extends ProviderContract {
     /**
      * Listen to renderer requests
      */
-    ipcMain.handle('citeproc-provider', (event, { command, payload }) => {
+    ipcMain.handle('citeproc-provider', async (event, message: CiteprocProviderIPCAPI) => {
+      const { command, payload } = message
+      const { database } = payload
+      // Ensure the database is loaded in any case (will throw a visible error
+      // if the database cannot be loaded)
+      try {
+        await this.loadDatabase(database)
+      } catch (err: any) {
+        this._logger.error(`[Citeproc Provider] Could not load database ${String(database)}: ${err.message as string}`, err)
+        // Proper early return based on the command
+        return command === 'get-items' ? [] : undefined
+      }
+
       if (command === 'get-items') {
-        let { database } = payload
-        if (database === CITEPROC_MAIN_DB) {
-          database = this.mainLibrary
-        }
-        const db = this.databases.get(database)
+        const dbPath = database === CITEPROC_MAIN_DB ? this.mainLibrary : database
+        const db = this.databases.get(dbPath)
         if (db === undefined) {
           return []
         } else {
           return Object.values(db.cslData)
         }
       } else if (command === 'get-citation') {
-        const { database, citations, composite } = payload
+        const { citations, composite } = payload
         return this.getCitation(database, citations, composite)
       } else if (command === 'get-bibliography') {
-        const { database, citations } = payload
+        const { citations } = payload
         // The Payload contains the items the renderer wants to have
         return this.makeBibliography(database, citations)
       }
@@ -237,8 +253,9 @@ export default class CiteprocProvider extends ProviderContract {
     try {
       await this.loadDatabase(this.mainLibrary)
     } catch (err: any) {
-      this._logger.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
-      this._windows.showErrorMessage(trans('The citation database could not be loaded'), err.message, err.message)
+      const msg = String(err.message)
+      this._logger.error(`[Citeproc Provider] Could not load main library: ${msg}`, err)
+      this._windows.showErrorMessage(trans('The citation database could not be loaded'), msg, msg)
     }
   }
 
@@ -282,7 +299,7 @@ export default class CiteprocProvider extends ProviderContract {
     )
 
     // The last parameter enforces usage of the language we provide
-    this.engine = new CSL.Engine(this.sys, style, this._config.get('appLang'), true)
+    this.engine = new CSL.Engine(this.sys, style, this._config.get().appLang, true)
     // ATTENTION: This is a development extension we're using to auto-wrap
     // links and DOIs in a-tags so that the user can click them in the
     // bibliography. Remove if it becomes unstable and implement manually.
@@ -297,6 +314,13 @@ export default class CiteprocProvider extends ProviderContract {
    * @return  {Promise<DatabaseRecord>}                Resolves with the DatabaseRecord
    */
   private async loadDatabase (databasePath: string, watch = true): Promise<void> {
+    if (databasePath === CITEPROC_MAIN_DB && !this.hasMainLibrary()) {
+      this._logger.verbose('[Citeproc Provider] Could not load main database: No main database available.')
+      return
+    } else if (databasePath === CITEPROC_MAIN_DB) {
+      databasePath = this.mainLibrary
+    }
+
     if (this.databases.has(databasePath)) {
       return // No need to load the database again
     }
@@ -426,7 +450,7 @@ export default class CiteprocProvider extends ProviderContract {
       const newValue = this._config.get('export.cslLibrary')
 
       if (newValue !== this.mainLibrary) {
-        this._notifications.show(trans('Changes to the library file detected. Reloading …'))
+        showNativeNotification(trans('Changes to the library file detected. Reloading …'))
         this.unloadDatabase(this.mainLibrary)
         broadcastIpcMessage('citeproc-database-updated', CITEPROC_MAIN_DB)
         this.mainLibrary = newValue
@@ -437,8 +461,9 @@ export default class CiteprocProvider extends ProviderContract {
         this.loadDatabase(this.mainLibrary)
           .then(() => broadcastIpcMessage('citeproc-database-updated', CITEPROC_MAIN_DB))
           .catch(err => {
-            this._logger.error(`[Citeproc Provider] Could not reload main library: ${String(err.message)}`, err)
-            this._windows.showErrorMessage(trans('The citation database could not be loaded'), err.message)
+            const msg = String(err.message)
+            this._logger.error(`[Citeproc Provider] Could not reload main library: ${msg}`, err)
+            this._windows.showErrorMessage(trans('The citation database could not be loaded'), msg)
           })
       }
     }
@@ -451,7 +476,7 @@ export default class CiteprocProvider extends ProviderContract {
    * @param   {string}          lang  The language to be loaded.
    * @return  {string|boolean}        Either the contents of the XML file, or false.
    */
-  private getLocale (lang: string): string|boolean {
+  private getLocale (lang: string): string|false {
     // Takes a lang in the format xx-XX and has to return the corresponding XML
     // file. Let's do just that!
 
@@ -544,12 +569,8 @@ export default class CiteprocProvider extends ProviderContract {
 
     try {
       this.selectDatabase(database)
-      if (!this.ensureCitekeysExist(citekeys)) {
-        this._logger.verbose(`[CiteprocProvider] Cannot render bibliography with citekeys ${citekeys.join(', ')}: At least one key does not exist in database ${database}`)
-        return undefined
-      }
-
-      this.engine.updateItems(citekeys)
+      const sanitizedCitekeys = this.filterNonExistingCitekeys(citekeys)
+      this.engine.updateItems(sanitizedCitekeys)
       return this.engine.makeBibliography()
     } catch (err: any) {
       this._logger.error(`[citeproc] makeBibliography: Could not create bibliography: ${String(err)}`, err)
@@ -585,5 +606,18 @@ export default class CiteprocProvider extends ProviderContract {
     }
 
     return true
+  }
+
+  /**
+   * In instances where a few undefined citekeys are allowed, such as generating
+   * the bibliography, this function simply removes those that don't exist
+   * instead of requiring all of them to exist.
+   *
+   * @param   {string[][]}  citekeys  The unfiltered citekeys
+   *
+   * @return  {string[]}              The list of keys that exist in the database
+   */
+  private filterNonExistingCitekeys (citekeys: string[]): string[] {
+    return citekeys.filter(key => key in this._items)
   }
 }

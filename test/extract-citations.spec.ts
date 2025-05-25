@@ -248,6 +248,40 @@ const tests = [
       }
     ],
     description: 'extracts a citations and locators with latin numbers and a suffix'
+  },
+  {
+    input: '@GrewalNetworkPower2009\n[@gallowayProtocolHowControl2004]',
+    expected: [
+      {
+        citations: [{
+          id: 'GrewalNetworkPower2009',
+          label: 'page',
+          locator: undefined,
+          prefix: undefined,
+          suffix: undefined,
+          'suppress-author': false
+        }],
+        composite: true,
+        from: 0,
+        to: 23,
+        source: '@GrewalNetworkPower2009'
+      },
+      {
+        citations: [{
+          id: 'gallowayProtocolHowControl2004',
+          label: 'page',
+          locator: undefined,
+          prefix: undefined,
+          suffix: undefined,
+          'suppress-author': false
+        }],
+        composite: false,
+        from: 24,
+        source: '[@gallowayProtocolHowControl2004]',
+        to: 57
+      }
+    ],
+    description: 'tests for an edge case of a barebones citation, followed by a newline and a bracket-citation'
   }
 ]
 

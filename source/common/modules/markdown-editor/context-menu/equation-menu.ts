@@ -17,8 +17,6 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { type AnyMenuItem } from '@dts/renderer/context'
 
-const clipboard = window.clipboard
-
 /**
  * Displays a context menu at the given coordinates, for the given equation.
  *
@@ -38,7 +36,7 @@ export function equationMenu (view: EditorView, equation: string, coords: { x: n
 
   showPopupMenu(coords, tpl, (clickedID) => {
     if (clickedID === 'copy-equation') {
-      clipboard.writeText(equation)
+      navigator.clipboard.writeText(equation).catch(err => console.error(err))
     }
   })
 }

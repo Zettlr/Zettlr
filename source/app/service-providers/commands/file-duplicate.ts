@@ -16,11 +16,7 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { codeFileExtensions, mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
-import isFile from '@common/util/is-file'
-
-const CODEFILE_TYPES = codeFileExtensions(true)
-const ALLOWED_FILETYPES = mdFileExtensions(true)
+import { hasCodeExt, hasMarkdownExt } from '@common/util/file-extention-checks'
 
 export default class FileDuplicate extends ZettlrCommand {
   constructor (app: any) {
@@ -35,7 +31,7 @@ export default class FileDuplicate extends ZettlrCommand {
    */
   async run (evt: string, arg: any): Promise<void> {
     // First, retrieve our source file
-    let file = this._app.fsal.findFile(arg.path)
+    let file = this._app.workspaces.findFile(arg.path)
     if (file === undefined) {
       this._app.log.error('Could not duplicate source file, because the source file was not found')
       this._app.windows.prompt({
@@ -47,9 +43,10 @@ export default class FileDuplicate extends ZettlrCommand {
     }
 
     // Then, the target directory.
-    let dir = this._app.fsal.findDir(file.dir) // (1) A specified directory
-    if (dir === undefined) {
-      dir = this._app.fsal.openDirectory ?? undefined // (2) The current dir
+    let dir = this._app.workspaces.findDir(file.dir) // (1) A specified directory
+    const { openDirectory } = this._app.config.get()
+    if (dir === undefined && openDirectory !== null && await this._app.fsal.isDir(openDirectory)) {
+      dir = await this._app.fsal.getAnyDirectoryDescriptor(openDirectory)
     }
 
     if (dir === undefined) { // (3) Fail
@@ -65,15 +62,15 @@ export default class FileDuplicate extends ZettlrCommand {
     let filename = ''
     if (arg.name !== undefined) {
       // We have a user-provided filename
-      filename = sanitize(arg.name.trim(), { 'replacement': '-' })
+      filename = sanitize(arg.name.trim(), { replacement: '-' })
     } else {
       // We need to generate our own filename. First, attempt to just use 'copy of'
       filename = trans('Copy of %s', file.name)
       // See if it's a file
-      if (isFile(path.join(dir.path, filename))) {
+      if (await this._app.fsal.isFile(path.join(dir.path, filename))) {
         // Filename is already given, so we need to add increasing numbers
         let duplicateNumber = 1
-        while (isFile(path.join(dir.path, `Copy (${duplicateNumber}) of ${file.name}`))) {
+        while (await this._app.fsal.isFile(path.join(dir.path, `Copy (${duplicateNumber}) of ${file.name}`))) {
           duplicateNumber++
         }
         // Now we have a unique filename
@@ -87,20 +84,15 @@ export default class FileDuplicate extends ZettlrCommand {
     }
 
     // If no valid filename is provided, assume the original file's extension
-    const newFileExtname = path.extname(filename).toLowerCase()
-    if (file.type === 'file' && !ALLOWED_FILETYPES.includes(newFileExtname)) {
+    if (file.type === 'file' && !hasMarkdownExt(filename)) {
       filename += file.ext // Assume the original file's extension
-    } else if (file.type === 'code' && !CODEFILE_TYPES.includes(newFileExtname)) {
+    } else if (file.type === 'code' && !hasCodeExt(filename)) {
       filename += file.ext // Assume the original file's extension
     }
 
     // Retrieve the file's content and create a new file with the same content
     const contents = await this._app.fsal.loadAnySupportedFile(file.path)
-    await this._app.fsal.createFile(dir, {
-      name: filename,
-      content: contents,
-      type: file.type
-    })
+    await this._app.fsal.writeTextFile(path.join(dir.path, filename), contents)
 
     // And directly thereafter, open the file
     await this._app.documents.openFile(arg.windowNumber, arg.leafId, path.join(dir.path, filename))

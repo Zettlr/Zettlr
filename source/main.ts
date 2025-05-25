@@ -69,7 +69,7 @@ if (typeof dataDir === 'string') {
     }
   }
 
-  serviceContainer?.log.info('[Application] Using custom data dir: ' + dataDir)
+  serviceContainer?.log.info(`[Application] Using custom data dir: ${dataDir}`)
   app.setPath('userData', dataDir)
   app.setAppLogsPath(path.join(dataDir, 'logs'))
 }
@@ -122,7 +122,7 @@ app.whenReady().then(() => {
   // up the providers.
   bootApplication().then((container) => {
     serviceContainer = container
-    serviceContainer.commands.run('roots-add', filesBeforeOpen)
+    serviceContainer.commands.run('roots-add', filesBeforeOpen.concat(extractFilesFromArgv(process.argv)))
       .catch(err => console.error(err))
   }).catch(err => {
     console.error(err)
@@ -139,33 +139,34 @@ app.whenReady().then(() => {
  * @param {Array} argv The arguments the second instance had received
  * @param {String} cwd The current working directory
  */
-app.on('second-instance', (event, argv, cwd) => {
+app.on('second-instance', (event, argv, _cwd) => {
   serviceContainer?.log.info('[Application] A second instance has been opened.')
 
   // openWindow calls the appropriate function of the windowManager, which deals
   // with the nitty-gritty of actually making the main window visible.
   serviceContainer?.windows.showAnyWindow()
 
-  const commands = serviceContainer?.commands
-
   // In case the user wants to open a file/folder with this running instance
-  commands?.run('roots-add', extractFilesFromArgv(argv)).catch(err => { console.error(err) })
+  serviceContainer?.commands?.run('roots-add', extractFilesFromArgv(argv))
+    .catch(err => {
+      serviceContainer?.log.error('[Application] Error while adding new roots', err)
+    })
 })
 
 /**
  * This gets executed when the user wants to open a file on macOS.
  */
-app.on('open-file', (e, p) => {
-  const commands = serviceContainer?.commands
+app.on('open-file', (e, filePath) => {
   e.preventDefault() // Need to explicitly set this b/c we're handling this
-  // The user wants to open a file -> simply handle it.
+
   if (serviceContainer !== undefined) {
-    commands?.run('roots-add', [p]).catch((err) => {
-      serviceContainer?.log.error('[Application] Error while adding new roots', err)
-    })
+    serviceContainer.commands?.run('roots-add', [filePath])
+      .catch((err) => {
+        serviceContainer?.log.error('[Application] Error while adding new roots', err)
+      })
   } else {
     // The Zettlr object has yet to be created -> cache it
-    filesBeforeOpen.push(p)
+    filesBeforeOpen.push(filePath)
   }
 })
 
@@ -179,7 +180,7 @@ app.on('window-all-closed', function () {
     return
   }
 
-  const leaveAppRunning = Boolean(config.get('system.leaveAppRunning'))
+  const { leaveAppRunning } = config.get().system
   if (!leaveAppRunning && process.platform !== 'darwin') {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q

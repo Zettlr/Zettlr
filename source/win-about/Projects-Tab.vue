@@ -111,7 +111,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -128,16 +128,8 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
 
-export default defineComponent({
-  name: 'ProjectsTab',
-  data: function () {
-    return {
-      projectsIntro: trans('Zettlr also makes use of these projects:')
-    }
-  }
-})
+const projectsIntro = trans('Zettlr also makes use of these projects:')
 </script>
 
 <style lang="less">

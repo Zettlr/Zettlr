@@ -29,6 +29,10 @@ const typewriterTheme = EditorView.theme({
   '.cm-content': {
     marginTop: '50vh',
     marginBottom: '50vh'
+  },
+  '.cm-gutters': {
+    marginTop: '50vh',
+    marginBottom: '50vh'
   }
 })
 
@@ -98,5 +102,18 @@ const typewriterLine = StateField.define<DecorationSet>({
 export const typewriter = [
   scrollAndTheme,
   typewriterLine,
-  typewriterThemeCompartment.of([])
+  typewriterThemeCompartment.of([]),
+  EditorView.baseTheme({
+    '.cm-content .typewriter-active-line': {
+      borderTop: '2px solid var(--grey-3)',
+      borderBottom: '2px solid var(--grey-3)',
+      // This is wild CSS syntax, but it works! See https://chriscoyier.net/2023/05/12/add-opacity-to-an-existing-color/
+      backgroundColor: 'rgb(from var(--grey-1) r g b / 70%)',
+      marginTop: '-2px',
+      marginBottom: '-2px'
+    },
+    '&dark .cm-content .typewriter-active-line': {
+      backgroundColor: 'rgb(from var(--grey-7) r g b / 70%)'
+    }
+  })
 ]

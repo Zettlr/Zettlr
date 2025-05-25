@@ -21,11 +21,11 @@ import {
   BrowserWindow,
   ipcMain,
   shell,
-  type FileFilter
+  type FileFilter,
+  type MessageBoxOptions
 } from 'electron'
 import EventEmitter from 'events'
 import path from 'path'
-import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createUpdateWindow from './create-update-window'
@@ -46,18 +46,37 @@ import promptDialog from './dialog/prompt'
 import type { WindowPosition } from './types'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
-import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
-import ProviderContract from '@providers/provider-contract'
+import ProviderContract, { type IPCAPI } from '@providers/provider-contract'
 import type LogProvider from '@providers/log'
-// import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import type DocumentManager from '@providers/documents'
 import { DP_EVENTS } from '@dts/common/documents'
 import { trans } from '@common/i18n-main'
 import type ConfigProvider from '@providers/config'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
+import type { PasteModalResult } from '../commands/save-image-from-clipboard'
+
+export interface RequestFilesIPCAPI {
+  filters: FileFilter[],
+  multiSelection: boolean
+}
+
+export type WindowControlsIPCAPI = IPCAPI<{
+  'win-maximise': unknown
+  'get-maximised-status': unknown
+  'win-minimise': unknown
+  'win-close': unknown
+  'get-traffic-lights-rtl': unknown
+  'cut': unknown
+  'copy': unknown
+  'paste': unknown
+  'selectAll': unknown
+  'inspect-element': { x: number, y: number }
+  'drag-start': { filePath: string }
+  'show-item-in-folder': { itemPath: string }
+}>
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: Record<string, BrowserWindow>
@@ -66,7 +85,7 @@ export default class WindowProvider extends ProviderContract {
   private _logWindow: BrowserWindow|null
   private _statsWindow: BrowserWindow|null
   private _assetsWindow: BrowserWindow|null
-  private _projectProperties: BrowserWindow|null
+  private readonly _projectProperties: Map<string, BrowserWindow>
   private _preferences: BrowserWindow|null
   private _aboutWindow: BrowserWindow|null
   private _tagManager: BrowserWindow|null
@@ -75,10 +94,11 @@ export default class WindowProvider extends ProviderContract {
   private _printWindowFile: string|undefined
   private _windowState: Map<string, WindowPosition>
   private readonly _configFile: string
-  private readonly _stateContainer: PersistentDataContainer
+  private readonly _stateContainer: PersistentDataContainer<Record<string, WindowPosition>>
   private readonly _hasRTLLocale: boolean
   private suppressWindowOpening: boolean
   private readonly _emitter: EventEmitter
+  private readonly _lastMainWindow: { windowId: string|undefined }
 
   constructor (
     private readonly _logger: LogProvider,
@@ -99,10 +119,11 @@ export default class WindowProvider extends ProviderContract {
     this._logWindow = null
     this._statsWindow = null
     this._assetsWindow = null
-    this._projectProperties = null
+    this._projectProperties = new Map()
     this._windowState = new Map()
     this._configFile = path.join(app.getPath('userData'), 'window_state.yml')
     this._stateContainer = new PersistentDataContainer(this._configFile, 'yaml', 1000)
+    this._lastMainWindow = { windowId: undefined }
 
     // If the corresponding CLI flag is passed, we should suppress opening of
     // any windows until the user has manually activated the app by utilizing
@@ -127,15 +148,13 @@ export default class WindowProvider extends ProviderContract {
     }
 
     // Listen to window control commands
-    ipcMain.on('window-controls', (event, message) => {
+    ipcMain.on('window-controls', (event, message: WindowControlsIPCAPI) => {
       const callingWindow = BrowserWindow.fromWebContents(event.sender)
       if (callingWindow === null) {
         return
       }
 
       const { command, payload } = message
-
-      let itemPath: string = payload
 
       switch (command) {
         case 'win-maximise':
@@ -188,12 +207,21 @@ export default class WindowProvider extends ProviderContract {
             .catch(err => this._logger.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
           break
         case 'show-item-in-folder':
+          let { itemPath } = payload
           if (itemPath.startsWith('safe-file://')) {
             itemPath = itemPath.replace('safe-file://', '')
           } else if (itemPath.startsWith('file://')) {
             itemPath = itemPath.replace('file://', '')
           }
-          shell.showItemInFolder(itemPath)
+
+          // Due to the colons in the drive letters on Windows, the pathname will
+          // look like this: /C:/Users/Documents/test.jpg
+          // See: https://github.com/Zettlr/Zettlr/issues/5489
+          if (/^\/[A-Z]:/i.test(itemPath)) {
+            itemPath = itemPath.slice(1)
+          }
+
+          shell.showItemInFolder(decodeURIComponent(itemPath))
           break
       }
     })
@@ -204,24 +232,22 @@ export default class WindowProvider extends ProviderContract {
      * user for files corresponding to the given filters, and then return a list
      * of those selected.
      */
-    ipcMain.handle('request-files', async (event, message) => {
+    ipcMain.handle('request-files', async (event, message: RequestFilesIPCAPI) => {
       const focusedWindow = BrowserWindow.getFocusedWindow()
       // The client only can choose what and how much it wants to get
-      let files = await this.askFile(
+      return await this.askFile(
         message.filters,
         message.multiSelection,
         focusedWindow
       )
-      return files
     })
 
-    ipcMain.handle('request-dir', async (event, message) => {
+    ipcMain.handle('request-dir', async (event, _message) => {
       const focusedWindow = BrowserWindow.getFocusedWindow()
-      let dir = await this.askDir(trans('Open project folder'), focusedWindow)
-      return dir
+      return await this.askDir(trans('Open project folder'), focusedWindow)
     })
 
-    this._documents.on(DP_EVENTS.CHANGE_FILE_STATUS, (ctx: any) => {
+    this._documents.on(DP_EVENTS.CHANGE_FILE_STATUS, (_ctx: any) => {
       // Always update the main window's flag depending on whether the document
       // manager is clean or not
       for (const key in this._mainWindows) {
@@ -261,7 +287,12 @@ export default class WindowProvider extends ProviderContract {
       await this._stateContainer.init(Object.fromEntries(this._windowState))
     }
     const tmpObject = await this._stateContainer.get()
-    this._windowState = new Map(Object.entries(tmpObject))
+    this._windowState = new Map()
+    for (const [ key, value ] of Object.entries(tmpObject)) {
+      if (value !== undefined) {
+        this._windowState.set(key, value)
+      }
+    }
     this._logger.info('[Window Manager] Window Manager started.')
   }
 
@@ -311,6 +342,13 @@ export default class WindowProvider extends ProviderContract {
    */
   private _hookMainWindow (window: BrowserWindow): void {
     // Listens to events from the window
+    window.on('focus', () => {
+      const key = this.getMainWindowKey(window)
+      if (key !== undefined) {
+        this._lastMainWindow.windowId = key
+      }
+    })
+
     window.on('close', (event) => {
       const key = this.getMainWindowKey(window)
 
@@ -361,6 +399,10 @@ export default class WindowProvider extends ProviderContract {
       if (key === undefined) {
         this._logger.error('[Window Manager] Could not dereference a main window since its key was not found!')
         return
+      } else {
+        if (this._lastMainWindow.windowId === key) {
+          this._lastMainWindow.windowId = undefined
+        }
       }
 
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -411,7 +453,8 @@ export default class WindowProvider extends ProviderContract {
    * @return  {WindowPosition}                        A sanitised WindowPosition
    */
   private _retrieveWindowPosition (stateId: string, defaultSize: Electron.Rectangle|null): WindowPosition {
-    if (!this._windowState.has(stateId)) {
+    const existingPosition = this._windowState.get(stateId)
+    if (existingPosition === undefined) {
       // Generate a default window position
       const { workArea, id } = screen.getPrimaryDisplay()
       const defaultPosition: WindowPosition = {
@@ -435,12 +478,11 @@ export default class WindowProvider extends ProviderContract {
       this._updateWindowPosition(stateId, defaultPosition)
     } else {
       // We already have a position in our map, so retrieve, sanitize, and return.
-      const existingPosition = this._windowState.get(stateId) as WindowPosition
       this._updateWindowPosition(stateId, existingPosition) // Sanitize the position
     }
 
     // At this point we will definitely have a WindowPosition for this window.
-    return this._windowState.get(stateId) as WindowPosition
+    return this._windowState.get(stateId)!
   }
 
   /**
@@ -616,9 +658,11 @@ export default class WindowProvider extends ProviderContract {
    * @return  {BrowserWindow|undefined}  The window, or undefined
    */
   getFirstMainWindow (): BrowserWindow|undefined {
-    const focusedWindow = BrowserWindow.getFocusedWindow()
-    if (focusedWindow !== null && this.getMainWindowKey(focusedWindow) !== undefined) {
-      return focusedWindow
+    if (this._lastMainWindow.windowId !== undefined) {
+      const window = this._mainWindows[this._lastMainWindow.windowId]
+      if (window !== undefined) {
+        return window
+      }
     }
 
     const allWindows = BrowserWindow.getAllWindows()
@@ -649,11 +693,14 @@ export default class WindowProvider extends ProviderContract {
 
   /**
    * Displays the defaults window
+   *
+   * @param  {string}  preselectTab  Whether to preselect one of the tabs; this
+   *                                 is effectively the URL hash fragment.
    */
-  showDefaultsWindow (): void {
+  showDefaultsWindow (preselectTab?: string): void {
     if (this._assetsWindow === null) {
       const conf = this._retrieveWindowPosition('assets', null)
-      this._assetsWindow = createAssetsWindow(this._logger, this._config, conf)
+      this._assetsWindow = createAssetsWindow(this._logger, this._config, conf, preselectTab)
       this._hookWindowResize(this._assetsWindow, 'assets')
 
       // Dereference the window as soon as it is closed
@@ -751,7 +798,7 @@ export default class WindowProvider extends ProviderContract {
   /**
    * Shows the paste image modal and, after closing, returns
    */
-  async showPasteImageModal (startPath: string): Promise<any> {
+  async showPasteImageModal (startPath: string): Promise<PasteModalResult|undefined> {
     return await new Promise((resolve, reject) => {
       const firstMainWin = this.getFirstMainWindow()
       if (firstMainWin === undefined) {
@@ -759,16 +806,20 @@ export default class WindowProvider extends ProviderContract {
       }
       this._pasteImageModal = createPasteImageModal(this._logger, this._config, firstMainWin, startPath)
 
-      ipcMain.on('paste-image-ready', (event, data) => {
+      let hasResolved = false
+      ipcMain.once('paste-image-ready', (event, data: PasteModalResult) => {
         // Resolve now
         resolve(data)
+        hasResolved = true
         this._pasteImageModal?.close()
       })
 
-      // Dereference the modal as soon as it is closed
+      // Dereference the modal as soon as it is closed.
       this._pasteImageModal.on('closed', () => {
         ipcMain.removeAllListeners('paste-image-ready') // Not to have a dangling listener hanging around
-        resolve(undefined) // Resolve with undefined to indicate that the user has aborted
+        if (!hasResolved) {
+          resolve(undefined) // Resolve with undefined to indicate that the user has aborted
+        }
         this._pasteImageModal = null
       })
     })
@@ -847,20 +898,19 @@ export default class WindowProvider extends ProviderContract {
    * @param   {string}  dirPath  The directory to load
    */
   showProjectPropertiesWindow (dirPath: string): void {
-    if (this._projectProperties === null) {
-      const conf = this._retrieveWindowPosition('print', null)
-      this._projectProperties = createProjectPropertiesWindow(this._logger, this._config, conf, dirPath)
-      this._hookWindowResize(this._projectProperties, 'project-properties')
+    const existingWindow = this._projectProperties.get(dirPath)
+    if (existingWindow === undefined) {
+      const conf = this._retrieveWindowPosition('project-properties', null)
+      const newWindow = createProjectPropertiesWindow(this._logger, this._config, conf, dirPath)
+      this._projectProperties.set(dirPath, newWindow)
+      this._hookWindowResize(newWindow, 'project-properties')
 
       // Dereference the window as soon as it is closed
-      this._projectProperties.on('closed', () => {
-        this._projectProperties = null
+      newWindow.on('closed', () => {
+        this._projectProperties.delete(dirPath)
       })
     } else {
-      // We do not re-open the window with a (possibly changed) directory
-      // because it might contain unsaved changes. The user has to manually
-      // close it.
-      this._makeVisible(this._projectProperties)
+      this._makeVisible(existingWindow)
     }
   }
 
@@ -953,15 +1003,15 @@ export default class WindowProvider extends ProviderContract {
     * Show the dialog for choosing a directory
     * @return {string[]} An array containing all selected paths.
     */
-  async askDir (title: string, win?: BrowserWindow|null, buttonLabel?: string|undefined): Promise<string[]> {
+  async askDir (title: string, win?: BrowserWindow|null, buttonLabel?: string, message?: string): Promise<string[]> {
     if (win != null) {
-      return await askDirectoryDialog(this._config, win, title, buttonLabel)
+      return await askDirectoryDialog(this._config, win, title, buttonLabel, message)
     } else {
       const firstMainWin = this.getFirstMainWindow()
       if (firstMainWin === undefined) {
         throw new Error('Could not ask user for directory: No main window open!')
       }
-      return await askDirectoryDialog(this._config, firstMainWin, title, buttonLabel)
+      return await askDirectoryDialog(this._config, firstMainWin, title, buttonLabel, message)
     }
   }
 
@@ -1017,24 +1067,11 @@ export default class WindowProvider extends ProviderContract {
     * This function prompts the user with information.
     * @param  {any} options Necessary information for displaying the prompt
     */
-  prompt (options: any): void {
+  prompt (options: Partial<MessageBoxOptions> & { message: string }|string): void {
     const firstMainWin = this.getFirstMainWindow()
     if (firstMainWin === undefined) {
       return
     }
     promptDialog(this._logger, firstMainWin, options)
-  }
-
-  /**
-    * Ask to remove the associated path for the descriptor
-    * @param  {MDFileDescriptor|DirDescriptor} descriptor The corresponding descriptor
-    * @return {boolean}                                   True if user wishes to remove it.
-    */
-  async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
-    const firstMainWin = this.getFirstMainWindow()
-    if (firstMainWin === undefined) {
-      return true
-    }
-    return await confirmRemove(firstMainWin, descriptor)
   }
 }

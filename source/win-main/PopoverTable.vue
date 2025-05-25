@@ -1,26 +1,29 @@
 <template>
-  <div class="table-generator">
-    <!-- Display a 12x12 grid -->
-    <div
-      v-for="row in 12"
-      v-bind:key="row"
-      class="row"
-    >
+  <PopoverWrapper v-bind:target="props.target" v-on:close="$emit('close')">
+    <div class="table-generator">
+      <!-- Display a 12x12 grid -->
       <div
-        v-for="col in 12"
-        v-bind:key="col"
-        v-bind:class="{
-          'cell': true,
-          'active': intermediaryTableSize.rows >= row && intermediaryTableSize.cols >= col
-        }"
-        v-on:mouseover="setIntermediarySize(row, col)"
-        v-on:click="handleClick()"
-      ></div>
+        v-for="row in 12"
+        v-bind:key="row"
+        class="row"
+      >
+        <div
+          v-for="col in 12"
+          v-bind:key="col"
+          v-bind:class="{
+            cell: true,
+            active: rows >= row && cols >= col
+          }"
+          v-on:mouseover="setIntermediarySize(row, col)"
+          v-on:click="handleClick()"
+        ></div>
+      </div>
+      <p>{{ tableSizeLabel }}</p>
     </div>
-  </div>
+  </PopoverWrapper>
 </template>
 
-<script>
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -35,39 +38,30 @@
  *
  * END HEADER
  */
-export default {
-  name: 'PopoverTable',
-  components: {
-  },
-  data: function () {
-    return {
-      tableSize: undefined,
-      intermediaryTableSize: {
-        rows: 0,
-        cols: 0
-      }
-    }
-  },
-  computed: {
-    popoverData: function () {
-      return {
-        tableSize: this.tableSize
-      }
-    }
-  },
-  methods: {
-    handleClick: function () {
-      // Write the intermediary size into our returned variable to result in a
-      // table being generated.
-      this.tableSize = this.intermediaryTableSize
-    },
-    setIntermediarySize: function (row, col) {
-      this.intermediaryTableSize = {
-        rows: row,
-        cols: col
-      }
-    }
-  }
+import { trans } from 'source/common/i18n-renderer'
+import PopoverWrapper from './PopoverWrapper.vue'
+import { ref, computed } from 'vue'
+
+const props = defineProps<{ target: HTMLElement }>()
+
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'insert-table', value: { rows: number, cols: number }): void
+}>()
+
+const rows = ref(0)
+const cols = ref(0)
+
+const tableSizeLabel = computed(() => trans('Table size: %s &times; %s', rows.value, cols.value))
+
+function handleClick (): void {
+  emit('insert-table', { rows: rows.value, cols: cols.value })
+  emit('close')
+}
+
+function setIntermediarySize (rowCount: number, colCount: number): void {
+  rows.value = rowCount
+  cols.value = colCount
 }
 </script>
 
@@ -75,6 +69,10 @@ export default {
 body {
   .table-generator {
     padding: 5px;
+  }
+
+  .table-generator p {
+    text-align: center;
   }
 
   .table-generator .row .cell {

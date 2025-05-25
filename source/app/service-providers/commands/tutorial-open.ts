@@ -13,7 +13,6 @@
  */
 
 import path from 'path'
-import { promises as fs } from 'fs'
 import ZettlrCommand from './zettlr-command'
 import { app } from 'electron'
 import isDir from '@common/util/is-dir'
@@ -29,16 +28,16 @@ export default class TutorialOpen extends ZettlrCommand {
    * @param {String} evt The event name
    * @param  {Object} arg An object containing both a hash and a sorting type
    */
-  async run (evt: string, arg: any): Promise<any> {
+  async run (event: string, _arg: any): Promise<any> {
     const tutorialPath = path.join(__dirname, 'tutorial')
     const targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
-    const availableLanguages = await fs.readdir(tutorialPath, 'utf8')
+    const availableLanguages = await this._app.fsal.readdir(tutorialPath)
 
     const candidates = availableLanguages
       .map(e => { return { tag: e, path: path.join(tutorialPath, e) } })
       .filter(e => isDir(e.path))
 
-    const { exact, close } = findLangCandidates(this._app.config.get('appLang'), candidates)
+    const { exact, close } = findLangCandidates(this._app.config.get().appLang, candidates)
 
     let tutorial = path.join(tutorialPath, 'en')
     if (exact !== undefined) {
@@ -48,29 +47,27 @@ export default class TutorialOpen extends ZettlrCommand {
     }
 
     // Now we have both a target and a language candidate, let's copy over the files!
-    try {
-      await fs.lstat(targetPath)
+    if (await this._app.fsal.pathExists(targetPath)) {
       this._app.log.info(`The directory ${targetPath} already exists. Not overwriting any files.`)
-    } catch (err) {
-      await fs.mkdir(targetPath)
-
+    } else {
+      await this._app.fsal.createDir(targetPath)
       // Now copy over every file from the directory
-      const tutorialFiles = await fs.readdir(tutorial, { 'encoding': 'utf8' })
+      const tutorialFiles = await this._app.fsal.readdir(tutorial)
       for (const file of tutorialFiles) {
-        await fs.copyFile(path.join(tutorial, file), path.join(targetPath, file))
+        await this._app.fsal.copyFile(path.join(tutorial, file), path.join(targetPath, file))
       }
       this._app.log.info('Successfully copied the tutorial files', tutorialFiles)
     }
 
     // Now the last thing to do is set it as open
     await this._app.commands.run('roots-add', [targetPath])
-    const tutorialDirectory = this._app.fsal.findDir(targetPath)
+    const tutorialDirectory = this._app.workspaces.findDir(targetPath)
     if (tutorialDirectory === undefined) {
-      this._app.log.error('[Application] Could not open tutorial files: Directory has not been added to FSAL')
+      this._app.log.error('[Application] Could not open tutorial files: Directory has not been added to Workspaces')
       return
     }
 
-    this._app.fsal.openDirectory = tutorialDirectory
+    this._app.config.set('openDirectory', tutorialDirectory.path)
     // We will pre-set the app with a three-pane layout at first. There are two
     // reference files that we will open to the right of the "main" file (welcome.md)
 

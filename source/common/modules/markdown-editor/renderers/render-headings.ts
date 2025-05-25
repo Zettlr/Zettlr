@@ -14,7 +14,7 @@
 
 import { renderInlineWidgets } from './base-renderer'
 import { type SyntaxNodeRef, type SyntaxNode } from '@lezer/common'
-import { WidgetType, type EditorView } from '@codemirror/view'
+import { WidgetType, EditorView } from '@codemirror/view'
 import { type EditorState } from '@codemirror/state'
 
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
@@ -119,8 +119,17 @@ class HeadingTagWidget extends WidgetType {
     return elem
   }
 
+  updateDOM (dom: HTMLElement, _view: EditorView): boolean {
+    if (dom.textContent === `h${this.level}`) {
+      return true // No update necessary
+    }
+
+    dom.textContent = `h${this.level}`
+    return true
+  }
+
   ignoreEvent (event: Event): boolean {
-    return false // By default ignore all events
+    return event instanceof MouseEvent
   }
 }
 
@@ -145,4 +154,16 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): HeadingTagWidge
   return new HeadingTagWidget(node.to - node.from, node.node)
 }
 
-export const renderHeadings = renderInlineWidgets(shouldHandleNode, createWidget)
+export const renderHeadings = [
+  renderInlineWidgets(shouldHandleNode, createWidget),
+  EditorView.baseTheme({
+    '.heading-tag': {
+      color: 'var(--grey-1)',
+      transition: '0.2s all ease'
+    },
+    '.heading-tag:hover': {
+      color: 'var(--grey-3)',
+      backgroundColor: 'var(--grey-1)'
+    }
+  })
+]

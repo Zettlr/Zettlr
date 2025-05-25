@@ -16,9 +16,23 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import sanitize from 'sanitize-filename'
 import path from 'path'
+import md5 from 'md5'
 import { promises as fs } from 'fs'
-import { clipboard } from 'electron'
-import isDir from '@common/util/is-dir'
+import { clipboard, ipcMain, nativeImage } from 'electron'
+import { showNativeNotification } from '@common/util/show-notification'
+
+export interface SaveImageFromClipboardAPI {
+  basePath: string
+  imageName?: string
+  imageData: string // base64 encoded image data
+}
+
+export interface PasteModalResult {
+  targetDir: string
+  name: string
+  width: string
+  height: string
+}
 
 export default class SaveImage extends ZettlrCommand {
   constructor (app: any) {
@@ -26,19 +40,54 @@ export default class SaveImage extends ZettlrCommand {
   }
 
   /**
-   * Saves the image that is currently in the clipboard to file and sends an
-   * insert command to the renderer, telling it to link the image.
-   * @param {String} evt The event name
-   * @param  {Object} target Options on the image
-   * @return {void}        Does not return.
+   * Takes an image provided for by the renderer and displays a dialog to the
+   * user asking for some settings to save the image. Afterwards, returns back
+   * to the renderer the absolute path to the image.
+   *
+   * @param   {string}  evt  The event name
+   * @param   {any}     arg  Options on the image
+   * @return  {string}       The absolute path to the saved image
    */
-  async run (evt: string, arg: any): Promise<any> {
-    if (!('startPath' in arg)) {
-      return this._app.notifications.show(trans('The requested file was not found.'))
+  async run (evt: string, arg: SaveImageFromClipboardAPI): Promise<string|undefined> {
+    const defaultPath = this._app.config.get().editor.defaultSaveImagePath
+    const startPath = path.resolve(arg.basePath, defaultPath)
+    let image = nativeImage.createFromDataURL(arg.imageData)
+
+    // When the user takes a screenshot into the clipboard and pastes that, the
+    // Chromium API sets the "file"'s name to a generic "image.png". In that
+    // case we want to provide a unique one. See #5449
+    if (arg.imageName === 'image.png') {
+      arg.imageName = undefined
     }
 
-    const defaultPath = this._app.config.get('editor.defaultSaveImagePath')
-    const startPath = path.resolve(arg.startPath, defaultPath)
+    // The paste image modal will request the image's data once after it has
+    // been loaded.
+    // NOTE: We must implement this logic here in main which will (a) save the
+    // ridiculous amount of code it takes to get that exact information with
+    // only browser APIs, and (b) circumvent permission issues (since in the
+    // browser, reading from clipboard often requires the user to do something).
+    ipcMain.handleOnce('paste-image-retrieve-data', (event) => {
+      const text = clipboard.readText()
+
+      const dataUrl = arg.imageData
+
+      let name = ''
+      if (arg.imageName !== undefined) {
+        name = arg.imageName // Caller has provided a name
+      } else if (text.length > 0) {
+        // If you copy an image from the web, the browser sometimes inserts
+        // the original URL to it as text into the clipboard. In this case
+        // we've already got a good image name!
+        const basename = path.basename(text, path.extname(text))
+        name = basename + '.png'
+      } else {
+        // In case there is no potential basename we could extract, simply
+        // hash the dataURL. This way we can magically also prevent the same
+        // image to be saved twice in the same directory. Such efficiency!
+        name = md5('img' + dataUrl) + '.png'
+      }
+      return { dataUrl, name, size: image.getSize(), aspect: image.getAspectRatio() }
+    })
 
     const target = await this._app.windows.showPasteImageModal(startPath)
     if (target === undefined) {
@@ -51,7 +100,7 @@ export default class SaveImage extends ZettlrCommand {
 
     // A file must be opened and active, and the name valid
     if (targetFile === '') {
-      return this._app.notifications.show(trans('The provided name did not contain any allowed letters.'))
+      showNativeNotification(trans('The provided name did not contain any allowed letters.'))
     }
 
     // Now check the extension of the name (some users may
@@ -71,20 +120,12 @@ export default class SaveImage extends ZettlrCommand {
     }
 
     // If something went wrong or the user did not provide a directory, abort
-    if (!isDir(target.targetDir)) {
-      return this._app.notifications.show(trans('The requested directory was not found.'))
+    if (!await this._app.fsal.isDir(target.targetDir)) {
+      showNativeNotification(trans('The requested directory was not found.'))
     }
 
     // Build the correct path
     let imagePath = path.join(target.targetDir, targetFile)
-
-    // And now save the image
-    let image = clipboard.readImage()
-
-    // Somebody may have remotely overwritten the clipboard in the meantime
-    if (image.isEmpty()) {
-      return this._app.notifications.show(trans('Could not save image'))
-    }
 
     let size = image.getSize()
     let resizeWidth = parseInt(target.width)
@@ -109,15 +150,5 @@ export default class SaveImage extends ZettlrCommand {
     }
 
     return imagePath
-    // if (path.isAbsolute(defaultPath) && target.targetDir === defaultPath) {
-    //   // The user has provided an absolute path as the default image location
-    //   // and kept this in the save image modal. In this case, it makes sense to
-    //   // return an absolute path, instead of a path which likely has thousands
-    //   // of ../../../ in front of it
-    //   return imagePath
-    // } else {
-    //   // Insert a relative path instead of an absolute one
-    //   return path.relative(startPath, imagePath)
-    // }
   }
 }

@@ -15,6 +15,7 @@
  */
 
 import got from 'got'
+import { type IncomingHttpHeaders } from 'http2'
 
 /**
  * This is the result that we
@@ -48,6 +49,68 @@ interface MediaWikiAPIResponse {
 }
 
 /**
+ * Fetches the headers of rawUrl without downloading the content itself. This
+ * keeps the data rate relatively low (albeit there is no way to prevent the
+ * download altogether, so a few chunks will possibly always be downloaded).
+ *
+ * @param   {string}                        rawUrl  The URL to fetch headers for
+ *
+ * @return  {Promise<IncomingHttpHeaders>}          Resolves with the headers
+ */
+async function fetchHeaders (rawUrl: string): Promise<IncomingHttpHeaders> {
+  return await new Promise((resolve, reject) => {
+    // Initiate request
+    const promise = got(rawUrl)
+
+    // Hook three listeners: As soon as 'response' is fired the headers are
+    // available and the download begins. At that point, resolve with the
+    // headers and cancel the request to abort the download. Add an additional
+    // then in case there is no body (because the promise resolution and the
+    // event response will be simultaneous), and finally add a catch for good
+    // measure.
+    promise
+      .on('response', response => {
+        resolve(response.headers)
+        promise.cancel()
+      })
+      .then(response => resolve(response.headers))
+      .catch(err => reject(err))
+  })
+}
+
+/**
+ * Takes the headers of a HTTP response and returns true if the content type
+ * field indicates that we can generate a preview for this.
+ *
+ * @param   {IncomingHttpHeaders}  headers  The headers
+ *
+ * @return  {boolean}                       Whether the content type is supported
+ */
+function isPreviewableContent (headers: IncomingHttpHeaders): boolean {
+  const PREVIEWABLE_CONTENT_TYPES = [
+    'text/html' // Regular HTML content
+    // TODO: Also allow images at some point (requires a larger amount of
+    // rewrite to this module) -- and maybe even other types.
+    // Full list of mime types: https://www.iana.org/assignments/media-types/media-types.xhtml
+  ]
+
+  const contentType = headers['content-type']
+  if (contentType === undefined) {
+    return false // Possibly a misconfigured webserver
+  }
+
+  // The actual contentType must be in the form of type/subtype in the beginning
+  // of the content type header.
+  for (const type of PREVIEWABLE_CONTENT_TYPES) {
+    if (contentType.startsWith(type)) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
  * Attempts to fetch a few meta infos about the given rawUrl. This includes the
  * website's title, as well as an optional summary and (social media/preview)
  * image.
@@ -65,6 +128,15 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
     summary: undefined,
     image: undefined
   }
+
+  // First, inspect the headers to see if we can even preview this piece of
+  // information.
+  const responseHeaders = await fetchHeaders(rawUrl)
+
+  if (!isPreviewableContent(responseHeaders)) {
+    throw new Error('Unsupported content type')
+  }
+
   // We will use the hostname to differentiate a few pages where we can do
   // better than just looking at the meta arguments; most prominently:
   // Wikipedia articles.
@@ -75,17 +147,27 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
   const body = result.body
 
   // Next, we can retrieve the title of the website
-  const title = body.match(/<title>(.+?)<\/title>/)
+  const title = body.match(/<title\s*>(.+?)<\/title\s*>/i)
   if (title !== null) {
     returnValue.title = title[1]
   } else {
-    throw new Error(`Could not fetch preview for URL ${rawUrl}: No title field found.`)
+    throw new Error('No title field found')
   }
 
   // Extract all meta properties where we can find some of the info we want
   const meta: Record<string, string> = {}
-  for (const match of body.matchAll(/<meta.+?(?:name|property)="(.+?)".+?content="(.+?)".*?>/gi)) {
-    meta[match[1]] = match[2]
+  for (const match of body.matchAll(/<meta .+?>/gi)) {
+    // NOTE: We have to do a two-stage extraction, because otherwise badly
+    // formatted websites can cause the entire app to lock up (catastrophic
+    // backtracking, see issue #4883)
+    const propMatches = [...match[0].matchAll(/(name|content)=(?:"(.+?)"|([^\s>]+))/gi)]
+    const name = propMatches.find(m => m[1] === 'name')
+    const content = propMatches.find(m => m[1] === 'content')
+    if (name !== undefined && content !== undefined) {
+      const key = name[2] ?? name[3]
+      const value = content[2] ?? content[3]
+      meta[key] = value
+    }
   }
 
   // Now with the meta at hand, we can fill in the image property (possibly)
@@ -105,9 +187,19 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
     const result = await got(url.href)
     const body: MediaWikiAPIResponse = JSON.parse(result.body)
     returnValue.summary = Object.values(body.query.pages)[0].extract
-  } else if ('description' in meta) {
+  } else {
     // Otherwise, regular treatment
-    returnValue.summary = meta.description
+    returnValue.summary = meta['description'] ?? meta['og:description'] ?? meta['twitter:description']
+  }
+
+  if (returnValue.summary !== undefined && returnValue.summary.length > 300) {
+    // Shorten overly long summary
+    const shortened = returnValue.summary.slice(0, 300)
+    if (shortened.includes('.')) {
+      returnValue.summary = shortened.slice(0, shortened.lastIndexOf('.') + 1) + ' […]'
+    } else {
+      returnValue.summary = shortened + ' […]'
+    }
   }
 
   return returnValue

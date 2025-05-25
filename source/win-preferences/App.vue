@@ -3,32 +3,53 @@
     v-bind:title="windowTitle"
     v-bind:titlebar="true"
     v-bind:menubar="false"
-    v-bind:show-tabbar="true"
-    v-bind:tabbar-tabs="tabs"
     v-bind:tabbar-label="'Preferences'"
     v-bind:disable-vibrancy="true"
-    v-on:tab="currentTab = $event"
   >
     <!--
       To comply with ARIA, we have to wrap the form in a tab container because
       we make use of the tabbar on the window chrome.
     -->
-    <div
-      v-bind:id="tabs[currentTab].controls"
-      role="tabpanel"
-      v-bind:aria-labelledby="tabs[currentTab].id"
+    <SplitView
+      v-bind:initial-size-percent="[ 20, 80 ]"
+      v-bind:minimum-size-percent="[ 20, 20 ]"
+      v-bind:reset-size-percent="[ 20, 80 ]"
+      v-bind:split="'horizontal'"
+      v-bind:initial-total-width="100"
     >
-      <FormBuilder
-        ref="form"
-        v-bind:model="model"
-        v-bind:schema="schema"
-        v-on:update:model-value="handleInput"
-      ></FormBuilder>
-    </div>
+      <template #view1>
+        <TextControl
+          v-model="query"
+          v-bind:placeholder="searchPlaceholder"
+          v-bind:search-icon="true"
+          v-bind:autofocus="true"
+          v-bind:reset="true"
+          style="padding: 5px 10px"
+        ></TextControl>
+        <SelectableList
+          v-bind:items="groups"
+          v-bind:editable="false"
+          v-bind:selected-item="selectedItem"
+          v-on:select="selectGroup($event)"
+        ></SelectableList>
+      </template>
+      <template #view2>
+        <FormBuilder
+          v-if="schema.fieldsets.length > 0"
+          ref="form"
+          v-bind:model="model"
+          v-bind:schema="schema"
+          v-on:update:model-value="handleInput"
+        ></FormBuilder>
+        <div v-else id="no-results-message">
+          {{ noResultsMessage }}
+        </div>
+      </template>
+    </SplitView>
   </WindowChrome>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -43,358 +64,341 @@
  * END HEADER
  */
 
-import FormBuilder from '@common/vue/form/Form.vue'
-import WindowChrome from '@common/vue/window/Chrome.vue'
+import FormBuilder, { type FormSchema, type Fieldset } from '@common/vue/form/FormBuilder.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import { trans } from '@common/i18n-renderer'
 
-import generalSchema from './schema/general'
-import editorSchema from './schema/editor'
-import exportSchema from './schema/export'
-import citationSchema from './schema/citations'
-import zettelkastenSchema from './schema/zettelkasten'
-import displaySchema from './schema/display'
-import spellcheckingSchema from './schema/spellchecking'
-import autocorrectSchema from './schema/autocorrect'
-import advancedSchema from './schema/advanced'
-import toolbarSchema from './schema/toolbar'
-import { defineComponent } from 'vue'
-import { WindowTab } from '@dts/renderer/window'
+import { getGeneralFields } from './schema/general'
+import { getEditorFields } from './schema/editor'
+import { getCitationFields } from './schema/citations'
+import { getZettelkastenFields } from './schema/zettelkasten'
+import { getSpellcheckingFields } from './schema/spellchecking'
+import { getAutocorrectFields } from './schema/autocorrect'
+import { getAdvancedFields } from './schema/advanced'
+import { ref, computed, watch, onMounted, onBeforeMount } from 'vue'
 import { resolveLangCode } from '@common/util/map-lang-code'
+import SplitView from '@common/vue/window/SplitView.vue'
+import SelectableList, { type SelectableListItem } from '@common/vue/form/elements/SelectableList.vue'
+import TextControl from '@common/vue/form/elements/TextControl.vue'
+import { getAppearanceFields } from './schema/appearance'
+import { getFileManagerFields } from './schema/file-manager'
+import { getImportExportFields } from './schema/import-export'
+import { getSnippetsFields } from './schema/snippets'
+import { useConfigStore } from 'source/pinia'
+import { PreferencesGroups } from './schema/_preferences-groups'
+
+export type PreferencesFieldset = Fieldset & { group: PreferencesGroups }
 
 const ipcRenderer = window.ipc
+const configStore = useConfigStore()
 
-/**
- * Searches the tree for a given model, traversing as necessary. Uses a depth-
- * first search.
- *
- * @param   {string}            model  The model to be searched for
- * @param   {any}               tree   The object containing a schema to search.
- *
- * @return  {Field|undefined}          The corresponding field or undefined
- */
-function modelToField (model: string, tree: any): any {
-  if (tree === undefined) {
-    throw new Error('Could not map model: tree not defined!')
-  }
+const currentGroup = ref(0)
+const query = ref('')
+// Will be populated afterwards, contains the user dict
+const userDictionaryContents = ref<any[]>([]) // TODO
+// Will be populated afterwards, contains all dictionaries
+const availableDictionaries = ref<Array<{ selected: boolean, value: string, key: string }>>([])
+// Will be populated afterwards, contains the available languages
+const appLangOptions = ref<Record<string, string>>({})
 
-  if (tree.model !== undefined && tree.model === model) {
-    return tree
-  }
+// This will return the full object
+const config = computed(() => configStore.config)
 
-  if (tree.fieldsets !== undefined) {
-    for (const fieldset of tree.fieldsets) {
-      let field = modelToField(model, fieldset)
-      if (field !== undefined) {
-        return field
+const noResultsMessage = computed(() => trans('No results for "%s"', query.value))
+const searchPlaceholder = trans('Search')
+
+const schema = computed<FormSchema>(() => {
+  return {
+    fieldsets: filteredFieldsets.value,
+    getFieldsetCategory: (fieldset: Fieldset) => {
+      if (query.value === '') {
+        return undefined
       }
-    }
-  }
 
-  if (tree.fields !== undefined) {
-    for (const fieldElement of tree.fields) {
-      let field = modelToField(model, fieldElement)
-      if (field !== undefined) {
-        return field
-      }
-    }
-  }
+      const group = groups.value.find(g => g.id === fieldset.group)
 
-  if (Array.isArray(tree)) {
-    for (const element of tree) {
-      let field = modelToField(model, element)
-      if (field !== undefined) {
-        return field
-      }
-    }
-  }
-
-  return undefined
-}
-
-export default defineComponent({
-  components: {
-    FormBuilder,
-    WindowChrome
-  },
-  data () {
-    return {
-      currentTab: 0,
-      tabs: [
-        {
-          label: trans('General'),
-          controls: 'tab-general',
-          id: 'tab-general-control',
-          icon: 'cog'
-        },
-        {
-          label: trans('Editor'),
-          controls: 'tab-editor',
-          id: 'tab-editor-control',
-          icon: 'note'
-        },
-        {
-          label: trans('Export'),
-          controls: 'tab-export',
-          id: 'tab-export-control',
-          icon: 'share'
-        },
-        {
-          label: trans('Citations'),
-          controls: 'tab-citations',
-          id: 'tab-citations-control',
-          icon: 'block-quote'
-        },
-        {
-          label: trans('Zettelkasten'),
-          controls: 'tab-zettelkasten',
-          id: 'tab-zettelkasten-control',
-          icon: 'details'
-        },
-        {
-          label: trans('Display'),
-          controls: 'tab-display',
-          id: 'tab-display-control',
-          icon: 'display'
-        },
-        {
-          label: trans('Spellchecking'),
-          controls: 'tab-spellchecking',
-          id: 'tab-spellchecking-control',
-          icon: 'text'
-        },
-        {
-          label: trans('AutoCorrect'),
-          controls: 'tab-autocorrect',
-          id: 'tab-autocorrect-control',
-          icon: 'wand' // 'block-quote'
-        },
-        {
-          label: trans('Advanced'),
-          controls: 'tab-advanced',
-          id: 'tab-advanced-control',
-          icon: 'tools'
-        },
-        {
-          label: trans('Toolbar'),
-          controls: 'tab-toolbar',
-          id: 'tab-toolbar-control',
-          icon: 'container'
-        }
-      ] as WindowTab[],
-      // Will be populated afterwards, contains the user dict
-      userDictionaryContents: [],
-      // Will be populated afterwards, contains all dictionaries
-      availableDictionaries: [],
-      // Will be populated afterwards, contains the available languages
-      appLangOptions: {} as any,
-      // This will return the full object
-      config: (global as any).config.get(),
-      schema: {}
-    }
-  },
-  computed: {
-    windowTitle: function (): string {
-      if (process.platform === 'darwin') {
-        return this.tabs[this.currentTab].label
+      if (group !== undefined && group.icon !== undefined) {
+        return { icon: group.icon, title: group.displayText }
       } else {
-        return trans('Preferences')
-      }
-    },
-    showTitlebar: function (): boolean {
-      const isDarwin = document.body.classList.contains('darwin')
-      return isDarwin || (global as any).config.get('nativeAppearance') === false
-    },
-    model: function (): any {
-      // The model to be passed on will simply be a merger of custom values
-      // and the configuration object. This way we can safely change some of
-      // these values without risking to overwrite the model (which we have
-      // done in a previous iteration of the preferences ...)
-      return {
-        userDictionaryContents: this.userDictionaryContents,
-        availableDictionaries: this.availableDictionaries,
-        ...this.config
-      }
-    }
-  },
-  watch: {
-    /**
-     * Switches out the preferences tab based on the value of currentTab.
-     */
-    currentTab: function () {
-      this.setTitle()
-      this.recreateSchema()
-    }
-  },
-  /**
-   * Initialise values during component mount
-   */
-  mounted: function () {
-    this.setTitle()
-    this.populateDynamicValues()
-    this.recreateSchema()
-  },
-  /**
-   * Listen to events in order to adapt display.
-   */
-  created: function () {
-    // Listen to config updates to propagate down
-    ipcRenderer.on('config-provider', (event, message) => {
-      const { command } = message
-      if (command === 'update') {
-        // Don't waste boilerplate, just overwrite that whole thing
-        // and let's hope the Vue algorithm of finding out what has
-        // to be re-rendered is good!
-        this.config = (global as any).config.get()
-        this.populateDynamicValues()
-        this.recreateSchema()
-      }
-    })
-
-    ipcRenderer.on('dictionary-provider', (event, message) => {
-      const { command } = message
-      if (command === 'invalidate-dict') {
-        this.populateDynamicValues()
-      }
-    })
-  },
-  methods: {
-    /**
-     * Called whenever a form value changes, and updates that specific setting.
-     *
-     * @param   {string}  prop  The property that has changed
-     * @param   {any}     val   The value of that property.
-     */
-    handleInput: function (prop: string, val: any) {
-      // We do have an easy time here
-      if (prop === 'userDictionaryContents') {
-        // The user dictionary is not handled by the config
-        ipcRenderer.invoke('dictionary-provider', {
-          command: 'set-user-dictionary',
-          payload: val
-        })
-          .catch(err => console.error(err))
-      } else if (prop === 'availableDictionaries') {
-        // We have to extract the selected dictionaries and send their keys only
-        const enabled = val.filter((elem: any) => elem.selected).map((elem: any) => elem.key)
-        ;(global as any).config.set('selectedDicts', enabled)
-        // Additionally, we have to backpropagate the new stuff down the pipe
-        // so that the list view has them again
-      } else {
-        // By default, we should have the correct value already, we just need to
-        // treat (complex) lists as special (not even token inputs).
-
-        // NOTE: Due to Vue 3 we MUST deproxy anything here. Since config values
-        // are always either dictionaries, lists, or primitives, we can safely
-        // do it the brute-force-way and stringify it. This will basically read
-        // out every value from the proxy and store it in vanilla objects/arrays
-        // again.
-        (global as any).config.set(prop, JSON.parse(JSON.stringify(val)))
-      }
-    },
-    /**
-     * Sets the window title corresponding to the current tab.
-     */
-    setTitle: function () {
-      if (process.platform === 'darwin') {
-        // Apple's Human Interface Guidelines state the window title should be
-        // the current tab.
-        document.title = this.tabs[this.currentTab].label
-      }
-    },
-    /**
-     * Populates dynamic fields (that is, those configurations that are not
-     * controlled by the configuration provider).
-     */
-    populateDynamicValues: function () {
-      // Get a list of all available languages
-      ipcRenderer.invoke('application', {
-        command: 'get-available-languages'
-      })
-        .then((languages) => {
-          const options: any = {}
-          languages.map((lang: string) => {
-            options[lang] = resolveLangCode(lang, 'name')
-            return null
-          })
-          this.appLangOptions = options
-          // Since we're setting something on the schema-side of things, we must
-          // regenerate the form here.
-          this.recreateSchema()
-        })
-        .catch(err => console.error(err))
-
-      // Also, get a list of all available dictionaries
-      ipcRenderer.invoke('application', {
-        command: 'get-available-dictionaries'
-      })
-        .then((dictionaries) => {
-          const values: any = []
-          dictionaries.map((dict: string) => {
-            values.push({
-              selected: this.model.selectedDicts.includes(dict),
-              key: dict,
-              value: resolveLangCode(dict, 'name')
-            })
-            return null
-          })
-
-          this.availableDictionaries = values
-        })
-        .catch(err => console.error(err))
-
-      // Retrieve the user dictionary
-      ipcRenderer.invoke('dictionary-provider', {
-        command: 'get-user-dictionary'
-      })
-        .then((dictionary) => {
-          this.userDictionaryContents = dictionary
-        })
-        .catch(err => console.error(err))
-    },
-    recreateSchema: function () {
-      const currentTab = this.tabs[this.currentTab].controls
-
-      switch (currentTab) {
-        case 'tab-general':
-          this.schema = generalSchema()
-          break
-        case 'tab-editor':
-          this.schema = editorSchema()
-          break
-        case 'tab-export':
-          this.schema = exportSchema()
-          break
-        case 'tab-citations':
-          this.schema = citationSchema()
-          break
-        case 'tab-zettelkasten':
-          this.schema = zettelkastenSchema()
-          break
-        case 'tab-display':
-          this.schema = displaySchema()
-          break
-        case 'tab-spellchecking':
-          this.schema = spellcheckingSchema()
-          break
-        case 'tab-autocorrect':
-          this.schema = autocorrectSchema()
-          break
-        case 'tab-advanced':
-          this.schema = advancedSchema()
-          break
-        case 'tab-toolbar':
-          this.schema = toolbarSchema()
-          break
-      }
-
-      // Populate the appLang field with available options
-      if (this.tabs[this.currentTab].controls === 'tab-general') {
-        const field = modelToField('appLang', this.schema)
-        field.options = this.appLangOptions
+        return undefined
       }
     }
   }
 })
+
+const selectedItem = computed(() => query.value === '' ? currentGroup.value : -1)
+
+const fieldsets = computed<Fieldset[]>(() => {
+  return [
+    ...getAdvancedFields(configStore.config),
+    ...getAppearanceFields(configStore.config),
+    ...getAutocorrectFields(),
+    ...getCitationFields(),
+    ...getEditorFields(configStore.config),
+    ...getFileManagerFields(configStore.config),
+    ...getGeneralFields(appLangOptions.value),
+    ...getImportExportFields(),
+    ...getSnippetsFields(),
+    ...getSpellcheckingFields(configStore.config),
+    ...getZettelkastenFields(configStore.config)
+  ]
+})
+
+const filteredFieldsets = computed(() => {
+  const q = query.value.toLowerCase().trim()
+
+  if (q === '') {
+    // No active search, so simply return the currently active group
+    const activeGroup = groups.value[currentGroup.value].id
+    return fieldsets.value.filter(f => f.group === activeGroup)
+  }
+
+  return fieldsets.value.filter(f => {
+    // BUG: Somehow TypeScript (and ESLint!) knows that everything here works
+    // out but STILL insists on explicitly casting everything to boolean. I
+    // don't know why.
+
+    // Match relevancy:
+    // 1. Search term is in card title
+    if (Boolean(f.title.toLowerCase().includes(q))) {
+      return true
+    }
+
+    if (Boolean((f.help?.toLowerCase().includes(q)))) {
+      return true
+    }
+
+    for (const field of f.fields) {
+      if ('label' in field && (Boolean((field.label?.toLowerCase().includes(q))))) {
+        return true
+      } else if ('info' in field && (Boolean((field.info?.toLowerCase().includes(q))))) {
+        return true
+      } else if (field.type === 'radio' || field.type === 'select') {
+        for (const option in field.options) {
+          if (option.toLowerCase().includes(q)) {
+            return true
+          }
+        }
+      }
+    }
+    return false
+  })
+})
+
+const groups = computed<Array<SelectableListItem & { id: PreferencesGroups }>>(() => {
+  return [
+    {
+      displayText: trans('General'),
+      icon: 'cog',
+      id: PreferencesGroups.General
+    },
+    {
+      displayText: trans('Appearance'),
+      icon: 'paint-roller',
+      id: PreferencesGroups.Appearance
+    },
+    {
+      displayText: trans('File Manager'),
+      icon: 'folder-open',
+      id: PreferencesGroups.FileManager
+    },
+    {
+      displayText: trans('Editor'),
+      icon: 'align-left-text',
+      id: PreferencesGroups.Editor
+    },
+    {
+      displayText: trans('Spellchecking'),
+      icon: 'text',
+      id: PreferencesGroups.Spellchecking
+    },
+    {
+      displayText: trans('Autocorrect'),
+      icon: 'wand', // 'block-quote'
+      id: PreferencesGroups.Autocorrect
+    },
+    {
+      displayText: trans('Citations'),
+      icon: 'chat-bubble',
+      id: PreferencesGroups.Citations
+    },
+    {
+      displayText: trans('Zettelkasten'),
+      icon: 'details',
+      id: PreferencesGroups.Zettelkasten
+    },
+    {
+      displayText: trans('Snippets'),
+      icon: 'add-text',
+      id: PreferencesGroups.Snippets
+    },
+    {
+      displayText: trans('Import and Export'),
+      icon: 'two-way-arrows',
+      id: PreferencesGroups.ImportExport
+    },
+    {
+      displayText: trans('Advanced'),
+      icon: 'cpu',
+      id: PreferencesGroups.Advanced
+    }
+  ]
+})
+
+const windowTitle = computed(() => {
+  if (query.value !== '') {
+    return trans('Searching: %s', query.value)
+  } else if (process.platform === 'darwin') {
+    return groups.value[currentGroup.value].displayText
+  } else {
+    return trans('Preferences')
+  }
+})
+
+const model = computed(() => {
+  // The model to be passed on will simply be a merger of custom values
+  // and the configuration object. This way we can safely change some of
+  // these values without risking to overwrite the model (which we have
+  // done in a previous iteration of the preferences ...)
+  return {
+    userDictionaryContents: userDictionaryContents.value,
+    availableDictionaries: availableDictionaries.value,
+    ...config.value
+  }
+})
+
+/**
+ * Switches out the preferences tab based on the value of currentTab.
+ */
+watch(currentGroup, () => {
+  setTitle()
+  location.hash = '#' + currentGroup.value
+})
+
+/**
+ * Initialise values during component mount
+ */
+onMounted(() => {
+  setTitle()
+  populateDynamicValues()
+  if (location.hash !== '') {
+    const groupId = parseInt(location.hash.substring(1), 10)
+    if (Object.values(PreferencesGroups).includes(groupId)) {
+      currentGroup.value = groupId
+    }
+  }
+})
+
+/**
+   * Listen to events in order to adapt display.
+   */
+onBeforeMount(() => {
+  ipcRenderer.on('dictionary-provider', (event, message) => {
+    const { command } = message
+    if (command === 'invalidate-dict') {
+      populateDynamicValues()
+    }
+  })
+})
+
+/**
+ * Called whenever a form value changes, and updates that specific setting.
+ *
+ * @param   {string}  prop  The property that has changed
+ * @param   {any}     val   The value of that property.
+ */
+function handleInput (prop: string, val: any): void {
+  // We do have an easy time here
+  if (prop === 'userDictionaryContents') {
+    // The user dictionary is not handled by the config
+    ipcRenderer.invoke('dictionary-provider', {
+      command: 'set-user-dictionary',
+      payload: val
+    })
+      .catch(err => console.error(err))
+  } else if (prop === 'availableDictionaries') {
+    // We have to extract the selected dictionaries and send their keys only
+    const enabled = val.filter((elem: any) => elem.selected).map((elem: any) => elem.key)
+    configStore.setConfigValue('selectedDicts', enabled)
+    // Additionally, we have to backpropagate the new stuff down the pipe
+    // so that the list view has them again
+  } else {
+    // By default, we should have the correct value already, we just need to
+    // treat (complex) lists as special (not even token inputs).
+
+    // NOTE: Due to Vue 3 we MUST deproxy anything here. Since config values
+    // are always either dictionaries, lists, or primitives, we can safely
+    // do it the brute-force-way and stringify it. This will basically read
+    // out every value from the proxy and store it in vanilla objects/arrays
+    // again.
+    configStore.setConfigValue(prop, JSON.parse(JSON.stringify(val)))
+  }
+}
+
+/**
+ * Sets the window title corresponding to the current tab.
+ */
+function setTitle (): void {
+  if (process.platform === 'darwin') {
+    // Apple's Human Interface Guidelines state the window title should be
+    // the current tab.
+    document.title = groups.value[currentGroup.value].displayText
+  }
+}
+
+/**
+ * Populates dynamic fields (that is, those configurations that are not
+ * controlled by the configuration provider).
+ */
+function populateDynamicValues (): void {
+  // Get a list of all available languages
+  ipcRenderer.invoke('application', {
+    command: 'get-available-languages'
+  })
+    .then((languages) => {
+      const options: Record<string, string> = {}
+      languages.map((lang: string) => {
+        options[lang] = resolveLangCode(lang, 'name')
+        return null
+      })
+      appLangOptions.value = options
+    })
+    .catch(err => console.error(err))
+
+  // Also, get a list of all available dictionaries
+  ipcRenderer.invoke('application', {
+    command: 'get-available-dictionaries'
+  })
+    .then((dictionaries) => {
+      const values: Array<{ selected: boolean, value: string, key: string }> = []
+      dictionaries.map((dict: string) => {
+        values.push({
+          selected: model.value.selectedDicts.includes(dict),
+          value: resolveLangCode(dict, 'name'),
+          key: dict
+        })
+        return null
+      })
+
+      availableDictionaries.value = values
+    })
+    .catch(err => console.error(err))
+
+  // Retrieve the user dictionary
+  ipcRenderer.invoke('dictionary-provider', {
+    command: 'get-user-dictionary'
+  })
+    .then((dictionary) => {
+      userDictionaryContents.value = dictionary
+    })
+    .catch(err => console.error(err))
+}
+
+function selectGroup (which: number): void {
+  if (query.value === '') {
+    currentGroup.value = which
+  }
+}
 </script>
 
 <style lang="less">
@@ -402,5 +406,12 @@ div[role="tabpanel"] {
   overflow: auto; // Enable scrolling, if necessary
   padding: 10px;
   width: 100%;
+}
+
+#no-results-message {
+  font-size: 200%;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 20vh;
 }
 </style>

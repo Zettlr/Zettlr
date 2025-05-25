@@ -32,9 +32,7 @@ work with these. So please abstain from attempting to add these as well.
 
 ## `lang`
 
-This directory contains the available translation files, downloaded periodically
-from Zettlr Translate by a CI-workflow. So please do not modify these files in
-a pull request.
+This directory contains the available translation files. You may propose changes to the translations by opening a Pull Request; for more information see [the README](https://github.com/Zettlr/Zettlr#translating) or [the contributing guide](https://github.com/Zettlr/Zettlr/blob/develop/CONTRIBUTING.md#translation).
 
 ## `reveal-js-styles` and `template.revealjs.htm`
 

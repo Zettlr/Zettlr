@@ -1,6 +1,6 @@
 <template>
   <div id="statusbar">
-    <template v-for="(item, idx) in controls">
+    <template v-for="(item, idx) in props.controls">
       <ButtonControl
         v-if="item.type === 'button'"
         v-bind:key="idx"
@@ -9,8 +9,8 @@
         v-bind:name="item.name"
         v-bind:disabled="item.disabled"
         v-bind:inline="true"
-        v-bind:primary="item.primary"
-        v-on:click="$emit('click', item.id)"
+        v-bind:primary="item.buttonClass === 'primary'"
+        v-on:click="emit('click', item.id)"
       ></ButtonControl>
       <span
         v-if="item.type === 'text'"
@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -38,40 +38,38 @@
  */
 
 // Regular form button, but a static text display
-import ButtonControl from '../form/elements/Button.vue'
+import ButtonControl from '../form/elements/ButtonControl.vue'
 
-export default {
-  name: 'WindowStatusbar',
-  components: {
-    ButtonControl
-  },
-  props: {
-    controls: {
-      type: Array,
-      default: function () { return [] }
-    }
-  },
-  emits: ['click'],
-  data: function () {
-    return {
-    }
-  }
+interface StatusbarButton {
+  type: 'button'
+  id: string
+  label?: string
+  icon?: string
+  name?: string
+  disabled?: boolean
+  buttonClass?: 'primary'
 }
+
+interface StatusbarText {
+  type: 'text'
+  label: string
+}
+
+export type StatusbarControl = StatusbarButton|StatusbarText
+
+const props = defineProps<{ controls: StatusbarControl[] }>()
+const emit = defineEmits<(e: 'click', value: string) => void>()
 </script>
 
 <style lang="less">
 div#statusbar {
   height: 60px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   padding: 0px 20px;
   line-height: 60px;
   background-color: rgb(235, 235, 235); // TODO: Enable the status bar to be "invisible" and visible
   display: flex;
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
 
   button {
     margin-right: 5px; // Increase spacing a little bit here

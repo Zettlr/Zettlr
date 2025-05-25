@@ -48,17 +48,6 @@ export function getLinkRE (global: boolean = false): RegExp {
 }
 
 /**
- * Returns a regular expression that matches Markdown files.
- *
- * @return  {RegExp}              The compiled Regular Expression
- */
-export function getMarkDownFileRE (): RegExp {
-  return RegExp(
-    /.+\.(?:md|markdown|txt|rmd)$/.source,
-    'i')
-}
-
-/**
  * Returns a regular expression that matches URL protocols (e.g. http://)
  *
  * @param   {boolean}  multiline  Whether or not the expression should be multiline

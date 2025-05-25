@@ -1,4 +1,3 @@
-/* eslint-disable no-var */
 /**
  * @ignore
  * BEGIN HEADER
@@ -23,10 +22,22 @@
  * These filetypes can be "imported" but their resolved value will be a string
  * pointing to wherever the file-loader has put these files.
  */
-declare module '*.png'
-declare module '*.svg'
-declare module '*.mp3'
-declare module '*.wav'
+declare module '*.png' {
+  const filePath: string
+  export default filePath
+}
+declare module '*.svg' {
+  const filePath: string
+  export default filePath
+}
+declare module '*.mp3' {
+  const filePath: string
+  export default filePath
+}
+declare module '*.wav' {
+  const filePath: string
+  export default filePath
+}
 
 declare module 'vue-virtual-scroller'
 declare module '@joplin/turndown'
@@ -62,6 +73,11 @@ declare const UPDATE_PRELOAD_WEBPACK_ENTRY: string
 declare const UPDATE_WEBPACK_ENTRY: string
 declare const PROJECT_PROPERTIES_PRELOAD_WEBPACK_ENTRY: string
 declare const PROJECT_PROPERTIES_WEBPACK_ENTRY: string
+declare const SPLASH_SCREEN_WEBPACK_ENTRY: string
+declare const SPLASH_SCREEN_PRELOAD_WEBPACK_ENTRY: string
+
+// Contains the git build number
+declare const __GIT_COMMIT_HASH__: string
 
 /**
  * Declare and extend the global NodeJS object to enable the globals
@@ -70,7 +86,7 @@ declare const PROJECT_PROPERTIES_WEBPACK_ENTRY: string
  * NOTE: Most service providers define these interfaces in the corresponding
  * types files in ./source/app/service-providers/assets
  */
-declare module global {
+declare namespace global {
   // Translation data necessary to facilitate internationalisation
   var i18n: any
   var i18nRawData: any
@@ -149,62 +165,14 @@ declare interface Window {
      */
     on: (channel: string, listener: (event: undefined, ...args: any) => void) => () => void
   }
-  path: RendererPath
-  clipboard: {
-    /**
-     * Returns whatever text is currently in the clipboard
-     *
-     * @return  {string}  The clipboard's plain text contents
-     */
-    readText: () => string
-    /**
-     * Returns whatever HTML is currently in the clipboard
-     *
-     * @return  {string}  The clipboard's HTML contents
-     */
-    readHTML: () => string
-    /**
-     * Returns whatever RTF is currently in the clipboard
-     *
-     * @return  {string}  The clipboard's RTF contents
-     */
-    readRTF: () => string
-    /**
-     * Is there currently image data in the clipboard?
-     *
-     * @return  {boolean}  True if the clipboard contains a non-empty image
-     */
-    hasImage: () => boolean
-    /**
-     * Returns the image data for the clipbord content
-     *
-     * @return {{ size: Electron.Size, aspect: number, dataUrl: string }} The image data
-     */
-    getImageData: () => { size: Electron.Size, aspect: number, dataUrl: string }
-    /**
-     * Writes the data into the clipboard
-     *
-     * @param {Electron.Data} data The data to be written to the clipboard
-     */
-    write: (data: Electron.Data) => void
-    /**
-     * Writes the given text into the clipboard
-     *
-     * @param   {string}  text  The text to put into the clipboard
-     */
-    writeText: (text: string) => void
-    /**
-     * Determines whether there is currently a selection clipboard (Linux)
-     *
-     * @return  {boolean}  True if there is a selection clipboard
-     */
-    hasSelectionClipboard: () => boolean
-    /**
-     * Returns the plain text and HTML contents of the selection clipboard on
-     * linux.
-     *
-     * @return  {{text: string, html: string}}}  Returns an object containing HTML and text contents
-     */
-    getSelectionClipboard: () => { text: string, html: string }
-  }
+  /**
+   * Returns the absolute path to the file on disk which this File object is
+   * representing. Returns undefined if there was either an error or the File
+   * object does not represent a file on disk.
+   *
+   * @param   {File}              file  The web File object
+   *
+   * @return  {string|undefined}        The absolute path, or undefined.
+   */
+  getPathForFile: (file: File) => string|undefined
 }

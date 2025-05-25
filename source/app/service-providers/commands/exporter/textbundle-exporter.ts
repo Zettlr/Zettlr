@@ -18,46 +18,42 @@ import {
 } from 'fs'
 import path from 'path'
 import archiver from 'archiver'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 import isFile from '@common/util/is-file'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import sanitize from 'sanitize-filename'
 
-export const plugin: ExporterPlugin = {
-  run: async function (options: ExporterOptions, sourceFiles, ctx: ExporterAPI): Promise<ExporterOutput> {
-    const output: ExporterOutput = {
-      code: 0,
-      stdout: [],
-      stderr: [],
-      targetFile: ''
-    }
+const ASSETS_FOLDER_NAME = 'assets'
 
-    if (sourceFiles.length > 1) {
-      throw new Error('Cannot export to Textbundle: Please only pass one single file.')
-    }
-
-    if (typeof options.profile !== 'string' || ![ 'textbundle', 'textpack' ].includes(options.profile)) {
-      throw new Error('Cannot run Textbundle exporter: Wrong profile given!')
-    }
-
-    const baseName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
-    const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : baseName
-    const ext = options.profile === 'textpack' ? '.textpack' : '.textbundle'
-    const targetPath = path.join(options.targetDirectory, title + ext)
-    try {
-      output.targetFile = await makeTextbundle(
-        sourceFiles[0],
-        targetPath,
-        options.profile === 'textpack',
-        path.basename(sourceFiles[0])
-      )
-    } catch (err: any) {
-      output.code = 1
-      output.stderr.push(err.message)
-    }
-
-    return output
+export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles, _ctx: ExporterAPI): Promise<ExporterOutput> {
+  const output: ExporterOutput = {
+    code: 0,
+    stdout: [],
+    stderr: [],
+    targetFile: ''
   }
+
+  if (sourceFiles.length > 1) {
+    throw new Error('Cannot export to Textbundle: Please only pass one single file.')
+  }
+
+  const baseName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
+  const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : baseName
+  const ext = options.profile.writer === 'textpack' ? '.textpack' : '.textbundle'
+  const targetPath = path.join(options.targetDirectory, title + ext)
+  try {
+    output.targetFile = await makeTextbundle(
+      sourceFiles[0],
+      targetPath,
+      options.profile.writer === 'textpack',
+      path.basename(sourceFiles[0])
+    )
+  } catch (err: any) {
+    output.code = 1
+    output.stderr.push(err.message)
+  }
+
+  return output
 }
 
 /**
@@ -89,27 +85,6 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
     targetFile = targetFile.replace('.textpack', '.textbundle')
   }
 
-  // Load in the tempfile
-  let cnt = await fs.readFile(sourceFile, 'utf8')
-  let imgRE = /!\[.*?\]\(([^)]+)\)/g
-  let match
-  let images = []
-
-  while ((match = imgRE.exec(cnt)) !== null) {
-    // We only care about images that are currently present on the filesystem.
-    if (isFile(match[1])) {
-      images.push({
-        'old': match[1],
-        'new': path.join('assets', path.basename(match[1]))
-      })
-    }
-  }
-
-  // Now replace all image filenames with the new ones
-  for (let image of images) {
-    cnt = cnt.replace(image.old, image.new)
-  }
-
   // Create the textbundle folder
   try {
     await fs.lstat(targetFile)
@@ -117,28 +92,46 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
     await fs.mkdir(targetFile)
   }
 
-  // Write the markdown file
-  await fs.writeFile(path.join(targetFile, 'text.md'), cnt, { encoding: 'utf8' })
+  const dirName = path.dirname(sourceFile)
+  const imgRE = /!\[.*?\]\(([^)]+)\)/g
+  const imagesToCopy: string[] = []
+
+  // Read in the file and replace image paths, if applicable
+  let content = await fs.readFile(sourceFile, 'utf8')
+  content = content.replace(imgRE, (match, url) => {
+    const absPath = path.resolve(dirName, url)
+
+    // We only care about images that are currently present on the filesystem.
+    if (isFile(absPath)) {
+      match = match.replace(url, path.join(ASSETS_FOLDER_NAME, path.basename(url)))
+      imagesToCopy.push(absPath)
+    }
+
+    return match
+  })
+
+  // Write the file into the target directory
+  await fs.writeFile(path.join(targetFile, 'text.md'), content, { encoding: 'utf8' })
 
   // Create the assets folder
   try {
-    await fs.lstat(path.join(targetFile, 'assets'))
+    await fs.lstat(path.join(targetFile, ASSETS_FOLDER_NAME))
   } catch (err) {
-    await fs.mkdir(path.join(targetFile, 'assets'))
+    await fs.mkdir(path.join(targetFile, ASSETS_FOLDER_NAME))
   }
 
   // Copy over all images
-  for (let image of images) {
-    await fs.copyFile(image.old, path.join(targetFile, image.new))
+  for (const image of imagesToCopy) {
+    await fs.copyFile(image, path.join(targetFile, ASSETS_FOLDER_NAME, path.basename(image)))
   }
 
   // Finally, create the info.json
   await fs.writeFile(path.join(targetFile, 'info.json'), JSON.stringify({
-    'version': 2,
-    'type': 'net.daringfireball.markdown',
-    'creatorIdentifier': 'com.zettlr.app',
-    'sourceURL': (overrideFilename !== undefined) ? overrideFilename : sourceFile
-  }), { encoding: 'utf8' })
+    version: 2,
+    type: 'net.daringfireball.markdown',
+    creatorIdentifier: 'com.zettlr.app',
+    sourceURL: overrideFilename ?? sourceFile
+  }, undefined, 4), { encoding: 'utf8' })
 
   // As a last step, check whether or not we should actually create a textpack
   if (textpack) {

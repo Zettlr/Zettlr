@@ -19,40 +19,6 @@ import showPopupMenu from '@common/modules/window-register/application-menu-help
 import type { AnyMenuItem, Point } from '@dts/renderer/context'
 const ipcRenderer = window.ipc
 
-const TEMPLATE: AnyMenuItem[] = [
-  {
-    id: 'cut',
-    label: 'menu.cut',
-    accelerator: 'CmdOrCtrl+X',
-    type: 'normal',
-    enabled: true
-  },
-  {
-    id: 'copy',
-    label: 'menu.copy',
-    accelerator: 'CmdOrCtrl+C',
-    type: 'normal',
-    enabled: true
-  },
-  {
-    id: 'paste',
-    label: 'menu.paste',
-    accelerator: 'CmdOrCtrl+V',
-    type: 'normal',
-    enabled: true
-  },
-  {
-    type: 'separator'
-  },
-  {
-    id: 'selectAll',
-    label: 'menu.select_all',
-    accelerator: 'CmdOrCtrl+A',
-    type: 'normal',
-    enabled: true
-  }
-]
-
 // The following type-attributes can receive copy and paste commands
 const TEXT_INPUT_TYPES = [
   'text',
@@ -104,40 +70,39 @@ export default function registerDefaultContextMenu (): void {
 
 function displayContextMenu (posX: number, posY: number, target: HTMLInputElement): void {
   // First build the menu
-  const items: AnyMenuItem[] = []
-
-  for (let element of TEMPLATE) {
-    const buildItem: any = {}
-    const modifies = element.type !== 'separator' && [ 'cut', 'paste' ].includes(element.id)
-
-    switch (element.type) {
-      case 'normal':
-        buildItem.id = element.id
-        buildItem.label = trans(element.label)
-        buildItem.enabled = element.enabled
-        buildItem.accelerator = element.accelerator
-        buildItem.type = element.type
-        break
-      case 'checkbox':
-      case 'radio':
-        buildItem.id = element.id
-        buildItem.label = trans(element.label)
-        buildItem.enabled = element.enabled
-        buildItem.accelerator = element.accelerator
-        buildItem.type = element.type
-        buildItem.checked = element.checked
-        break
-      case 'separator':
-        buildItem.type = element.type
-        break
+  const items: AnyMenuItem[] = [
+    {
+      id: 'cut',
+      label: trans('Cut'),
+      accelerator: 'CmdOrCtrl+X',
+      type: 'normal',
+      enabled: !target.readOnly // Only enable if target is not readonly
+    },
+    {
+      id: 'copy',
+      label: trans('Copy'),
+      accelerator: 'CmdOrCtrl+C',
+      type: 'normal',
+      enabled: true
+    },
+    {
+      id: 'paste',
+      label: trans('Paste'),
+      accelerator: 'CmdOrCtrl+V',
+      type: 'normal',
+      enabled: !target.readOnly // Only enable if target is not readonly
+    },
+    {
+      type: 'separator'
+    },
+    {
+      id: 'selectAll',
+      label: trans('Select all'),
+      accelerator: 'CmdOrCtrl+A',
+      type: 'normal',
+      enabled: true
     }
-
-    if (modifies && target.readOnly) {
-      buildItem.enabled = false
-    }
-
-    items.push(buildItem)
-  }
+  ]
 
   const point: Point = { x: posX, y: posY }
   currentCallback = showPopupMenu(point, items, (clickedID: string) => {

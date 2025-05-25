@@ -1,37 +1,39 @@
 <template>
-  <div class="tag-cloud">
-    <h3>{{ tagCloudTitle }}</h3>
-    <TabBar
-      v-bind:tabs="tabs"
-      v-bind:current-tab="sorting"
-      v-on:tab="sorting = $event"
-    ></TabBar>
+  <PopoverWrapper v-bind:target="props.target" v-on:close="emit('close')">
+    <div class="tag-cloud">
+      <h3>{{ tagCloudTitle }}</h3>
+      <TabBar
+        v-bind:tabs="tabs"
+        v-bind:current-tab="sorting"
+        v-on:tab="sorting = $event as 'count'|'name'|'idf'"
+      ></TabBar>
 
-    <TextControl
-      ref="filter"
-      v-model="query"
-      v-bind:placeholder="filterPlaceholder"
-    ></TextControl>
+      <TextControl
+        ref="filter"
+        v-model="query"
+        v-bind:placeholder="filterPlaceholder"
+      ></TextControl>
 
-    <div
-      v-for="tag, idx in filteredTags"
-      v-bind:key="idx"
-      class="tag"
-      v-bind:title="tag.desc"
-      v-on:click="handleClick(tag.name)"
-    >
-      <!-- Tags have a name, a count, and optionally a color -->
-      <span
-        v-if="tag.color !== undefined"
-        class="color-circle"
-        v-bind:style="`background-color: ${tag.color};`"
-      ></span>
-      {{ tag.name }} ({{ tag.files.length }}x)
+      <div
+        v-for="tag, idx in filteredTags"
+        v-bind:key="idx"
+        class="tag"
+        v-bind:title="tag.desc"
+        v-on:click="searchAndClose(tag.name)"
+      >
+        <!-- Tags have a name, a count, and optionally a color -->
+        <span
+          v-if="tag.color !== undefined"
+          class="color-circle"
+          v-bind:style="`background-color: ${tag.color};`"
+        ></span>
+        {{ tag.name }} ({{ tag.files.length }}x)
+      </div>
     </div>
-  </div>
+  </PopoverWrapper>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -46,95 +48,73 @@
  * END HEADER
  */
 
-import TextControl from '@common/vue/form/elements/Text.vue'
-import TabBar from '@common/vue/TabBar.vue'
+import PopoverWrapper from './PopoverWrapper.vue'
+import TextControl from '@common/vue/form/elements/TextControl.vue'
+import TabBar, { type TabbarControl } from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
-import { TabbarControl } from '@dts/renderer/window'
-import { OpenDocument } from '@dts/common/documents'
-import { TagRecord } from '@providers/tags'
+import { ref, computed, onMounted } from 'vue'
+import { useConfigStore, useTagsStore } from 'source/pinia'
 
-const ipcRenderer = window.ipc
+const props = defineProps<{
+  target: HTMLElement
+  // activeFile?: OpenDocument
+}>()
 
-export default defineComponent({
-  name: 'PopoverTags',
-  components: {
-    TextControl,
-    TabBar
-  },
-  data: function () {
-    return {
-      tags: [] as TagRecord[],
-      tabs: [
-        { id: 'name', label: trans('Name') },
-        { id: 'count', label: trans('Count') },
-        { id: 'idf', label: 'IDF' }
-      ] as TabbarControl[],
-      activeFile: null as OpenDocument|null,
-      query: '',
-      searchForTag: '',
-      sorting: 'name', // Can be "name" or "count"
-      shouldAddSuggestions: false
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'search-tag', tagName: string): void
+}>()
+
+const tagStore = useTagsStore()
+const configStore = useConfigStore()
+
+const filter = ref<typeof TextControl|null>(null)
+
+const tabs: TabbarControl[] = [
+  { id: 'name', label: trans('Name'), target: 'name' },
+  { id: 'count', label: trans('Count'), target: 'count' },
+  { id: 'idf', label: 'IDF', target: 'idf' }
+]
+
+const query = ref('')
+const sorting = ref<'name'|'count'|'idf'>('name')
+
+const filterPlaceholder = trans('Filter tags…')
+const tagCloudTitle = trans('Tag Cloud')
+// const tagSuggestionsLabel = trans('Suggested tags for the current file')
+// const addButtonLabel = trans('Add to file')
+
+const sortedTags = computed(() => {
+  // Sorts the tags based on either name or count
+  const sorted = tagStore.tags.map(elem => elem)
+  const languagePreferences = [ configStore.config.appLang, 'en' ]
+  const coll = new Intl.Collator(languagePreferences, { numeric: true })
+  sorted.sort((a, b) => {
+    if (sorting.value === 'name') {
+      return coll.compare(a.name, b.name)
+    } else if (sorting.value === 'idf') {
+      return b.idf - a.idf
+    } else {
+      return b.files.length - a.files.length
     }
-  },
-  computed: {
-    popoverData: function () {
-      return {
-        // As soon as this is !== '', the app will begin a search for the tag
-        searchForTag: this.searchForTag
-      }
-    },
-    filterPlaceholder: function () {
-      return trans('Filter tags…')
-    },
-    tagCloudTitle: function () {
-      return trans('Tag Cloud')
-    },
-    tagSuggestionsLabel: function () {
-      return trans('Suggested tags for the current file')
-    },
-    addButtonLabel: function () {
-      return trans('Add to file')
-    },
-    sortedTags: function () {
-      // Sorts the tags based on either name or count
-      const sorted = this.tags.map(elem => elem)
-      const languagePreferences = [ window.config.get('appLang'), 'en' ]
-      const coll = new Intl.Collator(languagePreferences, { 'numeric': true })
-      sorted.sort((a, b) => {
-        if (this.sorting === 'name') {
-          return coll.compare(a.name, b.name)
-        } else if (this.sorting === 'idf') {
-          return b.idf - a.idf
-        } else {
-          return b.files.length - a.files.length
-        }
-      })
-      return sorted
-    },
-    filteredTags: function () {
-      return this.sortedTags.filter(tag => {
-        return tag.name.toLowerCase().includes(this.query.toLowerCase())
-      })
-    },
-    filterInput: function () {
-      return this.$refs.filter as typeof TextControl
-    }
-  },
-  mounted: function () {
-    this.filterInput.focus()
-    ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' })
-      .then((tags: TagRecord[]) => {
-        this.tags = tags
-      })
-      .catch(err => console.error(err))
-  },
-  methods: {
-    handleClick: function (text: string) {
-      this.searchForTag = text // Handle click here means: Start a search
-    }
-  }
+  })
+  return sorted
 })
+
+const filteredTags = computed(() => {
+  return sortedTags.value.filter(tag => {
+    return tag.name.toLowerCase().includes(query.value.toLowerCase())
+  })
+})
+
+onMounted(() => {
+  filter.value?.focus()
+})
+
+function searchAndClose (tagName: string): void {
+  emit('search-tag', `#${tagName}`)
+  emit('close')
+}
 </script>
 
 <style lang="less">

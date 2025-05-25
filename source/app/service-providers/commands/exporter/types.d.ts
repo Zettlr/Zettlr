@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { type PandocProfileMetadata } from '@dts/common/assets'
+import { type PandocProfileMetadata } from '@providers/assets'
 
 // The exporter only needs a few properties, so by defining a minimal type here
 // we can make the exporter more flexible to accept also objects that only
@@ -59,11 +59,6 @@ export interface ExporterOptions {
    * This is the directory into which the exporter should put the exported file.
    */
   targetDirectory: string
-  /**
-   * This is an optional property. If set and set to true, the exporter will
-   * make sure to convert all image paths to absolute paths prior to export.
-   */
-  absoluteImagePaths?: boolean
   /**
    * The current working directory for the Pandoc executable. Should be set
    * reasonably so that relative paths can be correctly resolved (especially
@@ -123,29 +118,28 @@ export interface ExporterAPI {
    * @return  {Promise<PandocRunnerOutput>}                Any output produced by Pandoc.
    */
   runPandoc: (defaultsFile: string) => Promise<PandocRunnerOutput>
+
   /**
    * Retrieves a user-customised defaults file, adds the given properties and
    * writes the file to disk. Returns the absolute path to the file.
    *
-   * @param   {string}           filename    The filename for which the defaults apply
-   * @param   {any}              properties  Any additional properties to add to the defaults.
+   * @param   {string}               filename    The filename for which the defaults apply
+   * @param   {Record<string, any>}  properties  Any additional properties to add to the defaults.
    *
-   * @return  {Promise<string>}              Resolves with an absolute path to the written file.
+   * @return  {Promise<string>}                  Resolves with an absolute path to the written file.
    */
-  getDefaultsFor: (writer: string, properties: any = {}) => Promise<string>
+  writeDefaults: (writer: string, properties: Record<string, any> = {}) => Promise<string>
   listDefaults: () => Promise<PandocProfileMetadata[]>
 }
 
-export interface ExporterPlugin {
-  /**
-   * Called whenever this specific exporter needs to run. That is, when the
-   * requested format (see ExporterOptions) is available on this exporter.
-   *
-   * @param   {ExporterOptions}      options        The options passed to the exporter
-   * @param   {string[]}             sourceFiles    These are the actual, pre-processed source files, named <file-name>.intermediary.<file-ext>
-   * @param   {any}                  context        This is a small API that can be used to retrieve defaults and call Pandoc.
-   *
-   * @return  {Promise<ExporterOutput>}             Returns an ExporterOutput after finishing the export.
-   */
-  run: (options: ExporterOptions, sourceFiles: string[], context: ExporterAPI) => Promise<ExporterOutput>
-}
+/**
+ * Called whenever this specific exporter needs to run. That is, when the
+ * requested format (see ExporterOptions) is available on this exporter.
+ *
+ * @param   {ExporterOptions}      options        The options passed to the exporter
+ * @param   {string[]}             sourceFiles    These are the actual, pre-processed source files, named <file-name>.intermediary.<file-ext>
+ * @param   {any}                  context        This is a small API that can be used to retrieve defaults and call Pandoc.
+ *
+ * @return  {Promise<ExporterOutput>}             Returns an ExporterOutput after finishing the export.
+ */
+export type ExporterPlugin = (options: ExporterOptions, sourceFiles: string[], context: ExporterAPI) => Promise<ExporterOutput>

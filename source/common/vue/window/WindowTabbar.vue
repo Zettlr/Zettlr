@@ -3,7 +3,6 @@
     class="tab-list"
     role="tablist"
     v-bind:aria-label="label"
-    v-bind:style="{ top: marginTop }"
   >
     <button
       v-for="(tab, idx) in tabs"
@@ -34,7 +33,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -51,79 +50,85 @@
  * END HEADER
  */
 
-import { defineComponent, PropType } from 'vue'
-import { WindowTab } from '@dts/renderer/window'
+import { ref, onBeforeMount, onBeforeUnmount, watch } from 'vue'
 
-export default defineComponent({
-  name: 'WindowTabbar',
-  props: {
-    marginTop: {
-      type: String,
-      default: '0px'
-    },
-    tabs: {
-      type: Array as PropType<WindowTab[]>,
-      required: true
-    },
-    label: {
-      type: String,
-      default: 'tabs'
-    }
-  },
-  emits: ['tab'],
-  data: function () {
-    return {
-      currentTab: 0,
-      // The following are required to hide tab labels on win32 w/ narrow windows
-      currentWindowWidth: window.innerWidth,
-      platform: process.platform
-    }
-  },
-  watch: {
-    currentTab: function () {
-      this.$emit('tab', this.currentTab)
-    }
-  },
-  mounted () {
-    window.addEventListener('resize', this.onWindowResize)
-    // On mount, if the URL contains a fragment that matches a tab ID, emit an
-    // event to ensure the app actually switches to that.
-    const url = new URL(location.href)
-    const fragment = url.hash
-    if (fragment === '') {
-      return
-    }
+export interface WindowTab {
+  icon: string
+  id: string
+  controls: string
+  label: string
+}
 
-    const tabId = fragment.substring(1)
-    const idx = this.tabs.findIndex(tab => tab.id === tabId)
-    if (idx > -1) {
-      this.currentTab = idx
-    }
-  },
-  destroyed () {
-    window.removeEventListener('resize', this.onWindowResize)
-  },
-  methods: {
-    onWindowResize (event: UIEvent) {
-      this.currentWindowWidth = window.innerWidth
-    },
-    onTabClick (event: MouseEvent, id: string) {
-      // Modify history to retain active tab across reloads
-      const idx = this.tabs.findIndex(tab => tab.id === id)
-      const url = new URL(location.href)
-      url.hash = '#' + id
-      location.href = url.toString()
-      this.currentTab = idx
-    }
+/**
+ * This interface represents a Tabbar control
+ */
+export interface TabbarControl {
+  /**
+   * This should match a Clarity icon shape
+   */
+  icon: string
+  /**
+   * A unique ID for the tab
+   */
+  id: string
+  /**
+   * The target ID of whichever tab this represents (for a11y purposes)
+   */
+  target: string
+  /**
+   * A label, may be displayed.
+   */
+  label: string
+}
+
+const props = defineProps<{ tabs: WindowTab[], label?: string }>()
+
+const emit = defineEmits<(e: 'tab', value: number) => void>()
+
+const currentTab = ref<number>(0)
+// The following are required to hide tab labels on win32 w/ narrow windows
+const currentWindowWidth = ref<number>(window.innerWidth)
+const platform = ref<typeof process.platform>(process.platform)
+
+watch(currentTab, () => {
+  emit('tab', currentTab.value)
+})
+
+onBeforeMount(() => {
+  window.addEventListener('resize', onWindowResize)
+  // On mount, if the URL contains a fragment that matches a tab ID, emit an
+  // event to ensure the app actually switches to that.
+  const fragment = location.hash
+  if (fragment === '') {
+    return
+  }
+
+  const tabId = fragment.substring(1)
+  const idx = props.tabs.findIndex(tab => tab.id === tabId)
+  if (idx > -1) {
+    currentTab.value = idx
   }
 })
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onWindowResize)
+})
+
+function onTabClick (event: MouseEvent, id: string): void {
+  // Modify history to retain active tab across reloads
+  const idx = props.tabs.findIndex(tab => tab.id === id)
+  location.hash = '#' + id
+  currentTab.value = idx
+}
+
+function onWindowResize (_event: UIEvent): void {
+  currentWindowWidth.value = window.innerWidth
+}
 </script>
 
 <style lang="less">
 // General styles
 body div.tab-list {
-  position: absolute;
-  width: 100%;
   font-family: inherit;
   display: flex;
   padding: 5px;

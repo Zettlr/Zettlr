@@ -28,6 +28,7 @@ import type {
   ZettelkastenLink,
   ZettelkastenTag
 } from '@common/modules/markdown-utils/markdown-ast'
+import { extractLinefeed } from './extract-linefeed'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -62,23 +63,24 @@ export default function getMarkdownFileParser (
     // First of all, determine all the things that have nothing to do with any
     // Markdown contents.
     file.bom = extractBOM(content)
-    file.linefeed = '\n'
-    if (content.includes('\r\n')) file.linefeed = '\r\n'
-    if (content.includes('\n\r')) file.linefeed = '\n\r'
+    file.linefeed = extractLinefeed(content)
     file.id = extractFileId(file.name, content, idREPattern)
 
     // Parse the file into our AST
     const ast = md2ast(content)
 
     const tags = extractASTNodes(ast, 'ZettelkastenTag') as ZettelkastenTag[]
-    file.tags = tags.map(tag => tag.value)
+    file.tags = tags.map(tag => tag.value.toLowerCase())
 
     const links = extractASTNodes(ast, 'ZettelkastenLink') as ZettelkastenLink[]
-    file.links = links.map(link => link.value)
+    file.links = links.map(link => link.target)
 
+    file.firstHeading = null
     const headings = extractASTNodes(ast, 'Heading') as Heading[]
     const firstH1 = headings.find(h => h.level === 1)
-    file.firstHeading = firstH1 !== undefined ? firstH1.value.value : null
+    if (firstH1 !== undefined) {
+      file.firstHeading = firstH1.content
+    }
 
     file.wordCount = countWords(ast)
     file.charCount = countChars(ast)
@@ -113,6 +115,32 @@ export default function getMarkdownFileParser (
         const title = frontmatter.title.trim()
         if (title !== '') {
           file.yamlTitle = title
+        }
+      }
+
+      for (const prop of [ 'keywords', 'tags' ]) {
+        if (frontmatter[prop] != null) {
+          // The user can just write "keywords: something", in which case it won't be
+          // an array, but a simple string (or even a number <.<). I am beginning to
+          // understand why programmers despise the YAML-format.
+          if (!Array.isArray(frontmatter[prop]) && typeof frontmatter[prop] === 'string') {
+            const keys = frontmatter[prop].split(',')
+            if (keys.length > 1) {
+              // The user decided to split the tags by comma
+              frontmatter[prop] = keys.map((tag: string) => tag.trim())
+            } else {
+              frontmatter[prop] = [frontmatter[prop]]
+            }
+          } else if (!Array.isArray(frontmatter[prop])) {
+            // It's likely a Number or a Boolean
+            frontmatter[prop] = [String(frontmatter[prop]).toString()]
+          }
+
+          // If the user decides to use just numbers for the keywords (e.g. #1997),
+          // the YAML parser will obviously cast those to numbers, but we don't want
+          // this, so forcefully cast everything to string (see issue #1433).
+          const sanitizedKeywords: string[] = frontmatter[prop].map((tag: any) => String(tag).toString().toLowerCase())
+          file.tags.push(...sanitizedKeywords.filter((each) => !file.tags.includes(each)))
         }
       }
     } catch (err: any) {

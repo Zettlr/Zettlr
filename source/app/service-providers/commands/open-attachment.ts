@@ -21,7 +21,25 @@ import { trans } from '@common/i18n-main'
 import got from 'got'
 import { shell } from 'electron'
 import pdfSorter from '@common/util/sort-by-pdf'
-import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
+import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import path from 'path'
+import type { MDFileDescriptor } from '@dts/common/fsal'
+import { showNativeNotification } from '@common/util/show-notification'
+
+// This function overwrites the getBibliographyForDescriptor function to ensure
+// the library is always absolute. We have to do it this ridiculously since the
+// function is called in both main and renderer processes, and we still have the
+// issue that path-browserify is entirely unusable.
+function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
+  const library = getBibliography(descriptor)
+
+  if (library !== CITEPROC_MAIN_DB && !path.isAbsolute(library)) {
+    return path.resolve(descriptor.dir, library)
+  } else {
+    return library
+  }
+}
 
 export default class OpenAttachment extends ZettlrCommand {
   constructor (app: any) {
@@ -38,7 +56,7 @@ export default class OpenAttachment extends ZettlrCommand {
       return false
     }
 
-    const descriptor = this._app.fsal.find(arg.filePath)
+    const descriptor = this._app.workspaces.find(arg.filePath)
     if (descriptor === undefined || descriptor.type !== 'file') {
       return false
     }
@@ -65,11 +83,20 @@ export default class OpenAttachment extends ZettlrCommand {
     // Thanks to @retorquere, we can query the better bibtex JSON RPC
     // api to retrieve a full list of all attachments.
     try {
-      const res: any = await got.post('http://localhost:23119/better-bibtex/json-rpc', {
-        'json': {
-          'jsonrpc': '2.0',
-          'method': 'item.attachments',
-          'params': [arg.citekey]
+      // NOTE: We have replaced localhost with 127.0.0.1 since at some point
+      // either got or Electron stopped resolving localhost there, resulting in
+      // ECONNREFUSED errors. I have no idea how that happened, but it works now.
+      const res: any = await got.post('http://127.0.0.1:23119/better-bibtex/json-rpc', {
+        json: {
+          jsonrpc: '2.0',
+          method: 'item.attachments',
+          // NOTE: The second parameter means that we wish to search across all
+          // libraries (not just the user library, but all groups, too). This
+          // allows Zettlr to retrieve items that have been exported from a
+          // group library, too.
+          // See BBT docs: https://retorque.re/zotero-better-bibtex/exporting/json-rpc/index.html
+          // See issue #5647
+          params: [ arg.citekey, '*' ]
         }
       }).json()
 
@@ -91,10 +118,10 @@ export default class OpenAttachment extends ZettlrCommand {
         // Better error message
         let msg = trans('The reference with key %s does not appear to have attachments.', arg.citekey)
         this._app.log.info(msg)
-        this._app.notifications.show(msg)
+        showNativeNotification(msg)
       } else {
-        this._app.log.error('Could not open attachment.', err.message)
-        this._app.notifications.show(trans('Could not open attachment. Is Zotero running?'))
+        this._app.log.error(`Could not open attachment: ${err.message as string}`, err)
+        showNativeNotification(trans('Could not open attachment. Is Zotero running?'))
       }
       return false
     }

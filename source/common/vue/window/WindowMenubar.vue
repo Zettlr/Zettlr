@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="menubar"
-    v-bind:style="{ top: marginTop }"
-  >
+  <div id="menubar">
     <span
       v-for="(item, idx) in menu"
       v-bind:key="idx"
@@ -15,7 +12,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -31,128 +28,115 @@
  */
 
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem, SubmenuItem } from '@dts/renderer/context'
-import { defineComponent } from 'vue'
+import { type AnyMenuItem, type SubmenuItem } from '@dts/renderer/context'
+import { ref, onBeforeMount } from 'vue'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  name: 'WindowMenubar',
-  props: {
-    marginTop: {
-      type: String,
-      default: '0px'
+const menu = ref<SubmenuItem[]>([])
+const currentSubmenu = ref<string|null>(null)
+const menuCloseCallback = ref<null|(() => void)|null>(null)
+
+// Can contain a target if a submenu is right now being requested
+const targetElement = ref<HTMLElement|null>(null)
+
+onBeforeMount(() => {
+  // Listen to messages from the menu provider
+  ipcRenderer.on('menu-provider', (event, message) => {
+    const { command } = message
+
+    if (command === 'application-menu') {
+      const { payload } = message
+      menu.value = payload
+    } else if (command === 'application-submenu') {
+      const { payload } = message
+      showSubmenu(payload.submenu, payload.id)
     }
-  },
-  data: function () {
-    return {
-      menu: [] as SubmenuItem[],
-      currentSubMenu: null as string|null, // string|null = null
-      applicationMenu: null as SubmenuItem[]|null, // SubmenuItem[]|null = null
-      menuCloseCallback: null as Function|null, // Function|null = null
-      targetElement: null as HTMLElement|null // Can contain a target if a submenu is right now being requested
+  })
+
+  // Send an initial request
+  ipcRenderer.send('menu-provider', { command: 'get-application-menu' })
+
+  // Also make sure to reset the internal state if necessary
+  window.addEventListener('mousedown', (_event) => {
+    // The closing will be handled automatically by the menu handler
+    if (menuCloseCallback.value !== null) {
+      menuCloseCallback.value = null
+      currentSubmenu.value = null
     }
-  },
-  created: function () {
-    // Listen to messages from the menu provider
-    ipcRenderer.on('menu-provider', (event, message) => {
-      const { command } = message
-
-      if (command === 'application-menu') {
-        const { payload } = message
-        this.menu = payload
-      } else if (command === 'application-submenu') {
-        const { payload } = message
-        this.showSubmenu(payload.submenu, payload.id)
-      }
-    })
-
-    // Send an initial request
-    ipcRenderer.send('menu-provider', { command: 'get-application-menu' })
-
-    // Also make sure to reset the internal state if necessary
-    window.addEventListener('mousedown', (event) => {
-      // The closing will be handled automatically by the menu handler
-      if (this.menuCloseCallback !== null) {
-        this.menuCloseCallback = null
-        this.currentSubMenu = null
-      }
-    })
-  },
-  methods: {
-    getSubmenu: function (menuID: string, targetElement: HTMLElement) {
-      this.targetElement = targetElement
-      ipcRenderer.send('menu-provider', {
-        command: 'get-application-submenu',
-        payload: menuID
-      })
-    },
-    maybeExchangeSubmenu: function (menuID: string, targetElement: HTMLElement) {
-      if (this.currentSubMenu === null) {
-        return
-      }
-
-      if (this.currentSubMenu !== menuID) {
-        this.getSubmenu(menuID, targetElement)
-      }
-    },
-    /**
-     * Displays a submenu of a top-level menu item
-     *
-     * @param   {AnyMenuItem[]}  items     The items in serialized form
-     * @param   {string}      attachTo  The MenuItem.id of the item to attach to
-     */
-    showSubmenu: function (items: AnyMenuItem[], attachTo: string) {
-      if (this.targetElement === null) {
-        return console.error('Cannot show application menu: Target item has not been found.')
-      }
-
-      const rect = this.targetElement.getBoundingClientRect()
-      if (rect === undefined) {
-        return console.error('Cannot show application menu: Target has not been found!')
-      }
-
-      // Reset the application menu if shown
-      if (this.menuCloseCallback !== null) {
-        this.menuCloseCallback()
-        this.menuCloseCallback = null
-      }
-
-      if (this.currentSubMenu === attachTo) {
-        // Emulate a toggle by not showing the same submenu again
-        this.currentSubMenu = null
-        return
-      }
-
-      // Display a new menu
-      const point = { x: rect.left, y: rect.top + rect.height }
-      this.menuCloseCallback = showPopupMenu(point, items, (clickedID) => {
-        // Trigger a click on the "real" menu item in the back
-        ipcRenderer.send('menu-provider', {
-          command: 'click-menu-item',
-          payload: clickedID
-        })
-
-        // Reset the menu state, since the callback indicates the menu is now
-        // closed.
-        this.menuCloseCallback = null
-        this.currentSubMenu = null
-      })
-
-      // Save the original ID for easy access
-      this.currentSubMenu = attachTo
-      this.targetElement = null // Reset
-    }
-  }
+  })
 })
+
+function getSubmenu (menuID: string, target: HTMLElement): void {
+  targetElement.value = target
+  ipcRenderer.send('menu-provider', {
+    command: 'get-application-submenu',
+    payload: menuID
+  })
+}
+
+function maybeExchangeSubmenu (menuID: string, targetElement: HTMLElement): void {
+  if (currentSubmenu.value === null) {
+    return
+  }
+
+  if (currentSubmenu.value !== menuID) {
+    getSubmenu(menuID, targetElement)
+  }
+}
+
+/**
+ * Displays a submenu of a top-level menu item
+ *
+ * @param   {AnyMenuItem[]}  items     The items in serialized form
+ * @param   {string}      attachTo  The MenuItem.id of the item to attach to
+ */
+function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
+  if (targetElement.value === null) {
+    return console.error('Cannot show application menu: Target item has not been found.')
+  }
+
+  const rect = targetElement.value.getBoundingClientRect()
+  if (rect === undefined) {
+    return console.error('Cannot show application menu: Target has not been found!')
+  }
+
+  // Reset the application menu if shown
+  if (menuCloseCallback.value !== null) {
+    menuCloseCallback.value()
+    menuCloseCallback.value = null
+  }
+
+  if (currentSubmenu.value === attachTo) {
+    // Emulate a toggle by not showing the same submenu again
+    currentSubmenu.value = null
+    return
+  }
+
+  // Display a new menu
+  const point = { x: rect.left, y: rect.top + rect.height }
+  menuCloseCallback.value = showPopupMenu(point, items, (clickedID) => {
+    // Trigger a click on the "real" menu item in the back
+    ipcRenderer.send('menu-provider', {
+      command: 'click-menu-item',
+      payload: clickedID
+    })
+
+    // Reset the menu state, since the callback indicates the menu is now
+    // closed.
+    menuCloseCallback.value = null
+    currentSubmenu.value = null
+  })
+
+  // Save the original ID for easy access
+  currentSubmenu.value = attachTo
+  targetElement.value = null // Reset
+}
 </script>
 
 <style lang="less">
 // Styles for the menubar (for Windows and Linux)
 #menubar {
-  position: absolute;
-  top: 0;
-  z-index: 2000; // Make sure it always stays on top (main enemy is the distraction free main editor)
   height: 31px;
   width: 100%;
   // Use the system font with a somewhat smaller font-size

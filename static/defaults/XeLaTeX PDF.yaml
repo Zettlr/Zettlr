@@ -16,20 +16,11 @@ include-in-header: []
 bibliography: []
 filters:
 - type: citeproc
-top-level-division: default
 pdf-engine: xelatex # Change this if you want to use a different engine, e.g. pdflatex
 dpi: 72
 toc: false # Include a table of contents?
 toc-depth: 2 # 2 means to only include headings level 1 and 2 in the ToC
 number-sections: false
-number-offset:
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-shift-heading-level-by: 1
 section-divs: true
 identifier-prefix: ''
 title-prefix: ''

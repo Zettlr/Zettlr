@@ -18,7 +18,7 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { resolveLangCode } from '@common/util/map-lang-code'
 import { type AnyMenuItem } from '@dts/renderer/context'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { type StatusbarItem } from '.'
 import { configField } from '../util/configuration'
 
@@ -27,53 +27,53 @@ import { configField } from '../util/configuration'
  * Wikipedia, as always: https://de.wikipedia.org/wiki/Anf%C3%BChrungszeichen
  */
 const MAGIC_QUOTES_PAIRS: Record<string, { primary: string, secondary: string }> = {
-  'af': { primary: '“…”', secondary: '‘…’' },
-  'ar': { primary: '«…»', secondary: '‹…›' },
-  'be': { primary: '«…»', secondary: '„…“' },
-  'bg': { primary: '„…“', secondary: '‚…‘' },
-  'ca': { primary: '«…»', secondary: '“…”' },
-  'cs': { primary: '„…“', secondary: '‚…‘' },
-  'da': { primary: '„…“', secondary: '‚…‘' },
+  af: { primary: '“…”', secondary: '‘…’' },
+  ar: { primary: '«…»', secondary: '‹…›' },
+  be: { primary: '«…»', secondary: '„…“' },
+  bg: { primary: '„…“', secondary: '‚…‘' },
+  ca: { primary: '«…»', secondary: '“…”' },
+  cs: { primary: '„…“', secondary: '‚…‘' },
+  da: { primary: '„…“', secondary: '‚…‘' },
   'de-CH': { primary: '«…»', secondary: '‹…›' },
   'de-DE': { primary: '„…“', secondary: '‚…‘' },
-  'el': { primary: '«…»', secondary: '“…”' },
+  el: { primary: '«…»', secondary: '“…”' },
   'en-GB': { primary: '‘…’', secondary: '“…”' },
   'en-US': { primary: '“…”', secondary: '‘…’' },
-  'eo': { primary: '“…”', secondary: "'…'" },
-  'es': { primary: '«…»', secondary: '“…”' },
-  'et': { primary: '„…”', secondary: '„…”' },
-  'eu': { primary: '«…»', secondary: '“…”' },
+  eo: { primary: '“…”', secondary: "'…'" },
+  es: { primary: '«…»', secondary: '“…”' },
+  et: { primary: '„…”', secondary: '„…”' },
+  eu: { primary: '«…»', secondary: '“…”' },
   'fi-FI': { primary: '”…”', secondary: '’…’' },
   'fr-FR': { primary: '« … »', secondary: '‹ … ›' },
-  'ga': { primary: '“…”', secondary: '‘…’' },
-  'he': { primary: '“…”', secondary: '«…»' },
-  'hr': { primary: '„…”', secondary: "'…'" },
-  'hu': { primary: '„…”', secondary: "'…'" },
-  'hy': { primary: '«…»', secondary: '„…“' },
-  'id': { primary: '”…”', secondary: '’…’' },
-  'is': { primary: '„…“', secondary: '‚…‘' },
-  'it': { primary: '«…»', secondary: "'…'" },
+  ga: { primary: '“…”', secondary: '‘…’' },
+  he: { primary: '“…”', secondary: '«…»' },
+  hr: { primary: '„…”', secondary: "'…'" },
+  hu: { primary: '„…”', secondary: "'…'" },
+  hy: { primary: '«…»', secondary: '„…“' },
+  id: { primary: '”…”', secondary: '’…’' },
+  is: { primary: '„…“', secondary: '‚…‘' },
+  it: { primary: '«…»', secondary: "'…'" },
   'ja-JA': { primary: '「…」', secondary: '『…』' },
-  'ka': { primary: '„…“', secondary: "'…'" },
-  'ko': { primary: '“…”', secondary: '‘…’' },
-  'lt': { primary: '„…“', secondary: '‚…‘' },
-  'lv': { primary: '„…“', secondary: '‚…‘' },
-  'nl': { primary: '“…”', secondary: '‘…’' },
-  'no': { primary: '«…»', secondary: '‘…’' },
-  'pl': { primary: '„…”', secondary: "'…'" },
+  ka: { primary: '„…“', secondary: "'…'" },
+  ko: { primary: '“…”', secondary: '‘…’' },
+  lt: { primary: '„…“', secondary: '‚…‘' },
+  lv: { primary: '„…“', secondary: '‚…‘' },
+  nl: { primary: '“…”', secondary: '‘…’' },
+  no: { primary: '«…»', secondary: '‘…’' },
+  pl: { primary: '„…”', secondary: "'…'" },
   'pt-BR': { primary: '“…”', secondary: '‘…’' },
   'pt-PT': { primary: '«…»', secondary: '“…”' },
-  'ro': { primary: '„…”', secondary: '«…»' },
-  'ru': { primary: '«…»', secondary: '„…“' },
-  'sk': { primary: '„…“', secondary: '‚…‘' },
-  'sl': { primary: '„…“', secondary: '‚…‘' },
-  'sq': { primary: '«…»', secondary: '‹…›' },
-  'sr': { primary: '„…”', secondary: '‚…’' },
+  ro: { primary: '„…”', secondary: '«…»' },
+  ru: { primary: '«…»', secondary: '„…“' },
+  sk: { primary: '„…“', secondary: '‚…‘' },
+  sl: { primary: '„…“', secondary: '‚…‘' },
+  sq: { primary: '«…»', secondary: '‹…›' },
+  sr: { primary: '„…”', secondary: '‚…’' },
   'sv-SV': { primary: '”…”', secondary: '’…’' },
-  'th': { primary: '“…”', secondary: '‘…’' },
-  'tr': { primary: '“…”', secondary: '‘…’' },
-  'uk': { primary: '«…»', secondary: '„…“' },
-  'wen': { primary: '„…“', secondary: '‚…‘' },
+  th: { primary: '“…”', secondary: '‘…’' },
+  tr: { primary: '“…”', secondary: '‘…’' },
+  uk: { primary: '«…»', secondary: '„…“' },
+  wen: { primary: '„…“', secondary: '‚…‘' },
   'zh-CN': { primary: '“…”', secondary: '‘…’' },
   'zh-TW': { primary: '「…」', secondary: '『…』' }
 }
@@ -86,7 +86,7 @@ const MAGIC_QUOTES_PAIRS: Record<string, { primary: string, secondary: string }>
  *
  * @return  {StatusbarItem}         The statusbar item, or null
  */
-export function magicQuotesStatus (state: EditorState, view: EditorView): StatusbarItem|null {
+export function magicQuotesStatus (state: EditorState, _view: EditorView): StatusbarItem|null {
   const config = state.field(configField, false)
   if (config === undefined) {
     return null
@@ -121,6 +121,9 @@ export function magicQuotesStatus (state: EditorState, view: EditorView): Status
     allowHtml: true,
     title: 'MagicQuotes',
     onClick (event) {
+      // Ensure the event doesn't get propagated to the DOM root where it would
+      // be picked up by the context menu handler and closed again immediately.
+      event.stopPropagation()
       const items: AnyMenuItem[] = [
         {
           type: 'checkbox',

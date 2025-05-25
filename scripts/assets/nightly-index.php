@@ -30,11 +30,11 @@
 
     $now = time();
     $duration_minutes = round(($now - $time) / 60);
-    if ($duration_minutes < 2) {
-      // Less than two minutes ago
+    if ($duration_minutes < 5) {
+      // Less than five minutes ago
       return 'just now';
     } else if ($duration_minutes < 60) {
-      // Less than 60 minutes ago
+      // Less than an hour ago
       return round($duration_minutes) . " minutes ago";
     } else if ($duration_minutes < 120) {
       // Less than two hours ago
@@ -88,23 +88,31 @@
     }
 
     body {
+      color: black;
       width: 100vw;
       height: 100vh;
       margin: 0;
       padding: 0;
-      background-image: linear-gradient(90deg, #ddd 0%, #fff 20%, #fff 80%, #ddd 100%);
+      background-color: white;
+    }
+
+    /* Helper highlight class */
+    .highlight {
+      color:rgb(28, 100, 178);
     }
 
     /** Links */
 
     a, a:link, a:visited {
       color: #1cb27e;
+    }
+
+    table a, table a:link, table a:visited {
       text-decoration: none;
     }
 
     a:hover {
-      color: white;
-      background-color: #1cb27e;
+      text-decoration: none;
     }
 
     /** Tables */
@@ -177,6 +185,14 @@
       background-color: #1cb27e;
       color: white;
     }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      body {
+        color: white;
+        background-color: #222222;
+      }
+    }
   </style>
 </head>
 <body>
@@ -190,7 +206,7 @@
       <a href="https://www.zettlr.com/" target="_blank">Homepage</a> &bullet;
       <a href="https://www.zettlr.com/download" target="_blank">Download stable releases</a> &bullet;
       <a href="https://github.com/Zettlr/Zettlr" target="_blank">GitHub</a> &bullet;
-      <a href="https://discord.gg/PcfS3DM9Xj" target="_blank">Discord</a>
+      <a href="https://go.zettlr.com/discord" target="_blank">Discord</a>
     </div>
   </div>
 
@@ -225,10 +241,10 @@
     </p>
     <p>
     <?php
+      // Output the scriptfile's last mod date (= last build time)
       $scriptfile_mod = filemtime(__FILE__);
       $last_modified = date('D M jS, Y H:i:s', $scriptfile_mod);
-
-      echo "The nightlies have last been built on <strong>$last_modified</strong>";
+      echo "The nightlies have last been built on <strong class=\"highlight\">$last_modified</strong>.";
     ?>
     </p>
     <table>
@@ -243,6 +259,8 @@
           <?php
             $dir = scandir('.');
 
+            $assets = [];
+
             foreach ($dir as $key => $name) {
               if (is_dir('.' . DIRECTORY_SEPARATOR . $name)) {
                 continue; // No directories
@@ -253,14 +271,22 @@
               }
 
               // At this point we have a correct file. So display it.
-              $time = relative_time(filemtime('.' . DIRECTORY_SEPARATOR . $name));
-              $size = format_size(filesize('.' . DIRECTORY_SEPARATOR . $name));
+              $assets[] = $name;
+            }
 
-              echo "<tr>";
-              echo "<td><a href=\"$name\">$name</a></td>";
-              echo "<td style=\"text-align: right;\">$size</td>";
-              echo "<td style=\"text-align: right;\">$time</td>";
-              echo "</tr>";
+            if (count($assets) > 0) {
+              foreach ($assets as $name) {
+                $time = relative_time(filemtime('.' . DIRECTORY_SEPARATOR . $name));
+                $size = format_size(filesize('.' . DIRECTORY_SEPARATOR . $name));
+
+                echo "<tr>";
+                echo "<td><a href=\"$name\">$name</a></td>";
+                echo "<td style=\"text-align: right;\">$size</td>";
+                echo "<td style=\"text-align: right;\">$time</td>";
+                echo "</tr>";
+              }
+            } else {
+              echo "<tr><td colspan=\"3\">No downloadable assets found.</td></tr>";
             }
           ?>
         </tbody>

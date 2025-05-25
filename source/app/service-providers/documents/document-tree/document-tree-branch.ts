@@ -177,22 +177,17 @@ export class DTBranch {
     // If we're now left with just a single leaf, remove this branch and
     // attach the remaining node itself to the parent.
     if (this._nodes.length === 1 && this._nodes[0] instanceof DTLeaf) {
+      this._nodes[0].parent = this.parent
       if (this.parent instanceof DocumentTree) {
         this.parent.node = this._nodes[0]
       } else {
         this.parent.addNode(this._nodes[0], this, 'after')
         this.parent.removeNode(this)
       }
-      this._nodes[0].parent = this.parent
     } else if (this._nodes.length === 0) {
       // Similarly, if we've just dropped the last node, we can just remove
       // this thing from its parent.
-      if (this.parent instanceof DocumentTree) {
-        const newLeaf = new DTLeaf(this.parent)
-        this.parent.node = newLeaf
-      } else {
-        this.parent.removeNode(this)
-      }
+      this.parent.removeNode(this)
     }
 
     this.ensureProperSizes()
@@ -288,17 +283,30 @@ export class DTBranch {
    * @return  {Promise<DTBranch>}                 The new branch
    */
   static fromJSON (parent: DocumentTree|DTBranch, nodeData: any): DTBranch {
-    if (nodeData.direction === undefined) {
-      throw new Error('Could not instantiate branch: Data direction was undefined')
+    if (typeof nodeData !== 'object') {
+      throw new Error('Could not instantiate DTBranch: Provided JSON was not an object.')
     }
 
-    if (!Array.isArray(nodeData.nodes)) {
-      throw new Error('Could not instantiate branch: Nodes was not an array')
+    const { direction, id, nodes, sizes } = nodeData
+
+    if (typeof direction !== 'string' || (direction !== 'horizontal' && direction !== 'vertical')) {
+      throw new Error(`Could not instantiate DTBranch: Invalid split direction: ${direction}`)
     }
 
-    const newBranch = new DTBranch(parent, nodeData.direction, nodeData.id)
+    if (typeof id !== 'string') {
+      throw new Error(`Could not instantiate DTBranch: ID was invalid: ${String(id)}`)
+    }
 
-    for (const subNode of nodeData.nodes) {
+    if (!Array.isArray(nodes)) {
+      throw new Error(`Could not instantiate DTBranch: Nodes was not an array: ${typeof nodes}`)
+    }
+
+    // NOTE: After this point, we don't throw any more errors, since the branch
+    // can be successfully instantiated. If any of the sub-nodes experience an
+    // error, this will propagate through this function to the caller.
+    const newBranch = new DTBranch(parent, direction, id)
+
+    for (const subNode of nodes) {
       if (subNode.type === 'leaf') {
         newBranch.addNode(DTLeaf.fromJSON(newBranch, subNode))
       } else if (subNode.type === 'branch') {
@@ -306,7 +314,9 @@ export class DTBranch {
       }
     }
 
-    if (Array.isArray(nodeData.sizes)) {
+    // We don't have to throw an error if the sizes are wrong, since then the
+    // leafs/branches are simply equally large.
+    if (Array.isArray(sizes) && sizes.every(x => typeof x === 'number') && sizes.length === nodes.length) {
       newBranch.sizes = nodeData.sizes
     }
 

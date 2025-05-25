@@ -1,10 +1,30 @@
 // FSAL types available in both main process and renderer process
 
 export interface ProjectSettings {
+  /**
+   * The title of the project, will be used, e.g., as title and filename for
+   * projects.
+   */
   title: string
+  /**
+   * A list of project filenames (found in the defaults folder in the app data)
+   * to use for export.
+   */
   profiles: string[]
-  filters: string[]
+  /**
+   * A sorted (!) list of project-relative paths to the files that should be
+   * included in the export of this project, including the ordering in which
+   * they should be included.
+   */
+  files: string[]
+  /**
+   * An optional, deviating CSL Style to use for citations within this project.
+   */
   cslStyle: string
+  /**
+   * Template files for various export profiles that override any templates
+   * provided by the templates themselves.
+   */
   templates: {
     tex: string
     html: string
@@ -95,27 +115,3 @@ export interface OtherFileDescriptor extends FSMetaInfo {
 
 export type AnyDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor | OtherFileDescriptor
 export type MaybeRootDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor
-
-export interface FSALStats {
-  minChars: number
-  maxChars: number
-  minWords: number
-  maxWords: number
-  sumChars: number
-  sumWords: number
-  meanChars: number
-  meanWords: number
-  sdChars: number
-  sdWords: number
-  chars68PercentLower: number
-  chars68PercentUpper: number
-  chars95PercentLower: number
-  chars95PercentUpper: number
-  words68PercentLower: number
-  words68PercentUpper: number
-  words95PercentLower: number
-  words95PercentUpper: number
-  mdFileCount: number
-  codeFileCount: number
-  dirCount: number
-}

@@ -1,10 +1,10 @@
 <template>
   <div id="about-general">
     <h1 id="main-heading">
-      Zettlr {{ version }}
+      Zettlr {{ configStore.config.version }}
     </h1>
     <p id="uuid">
-      UUID: {{ uuid }}
+      UUID: {{ configStore.config.uuid }}
     </p>
     <p v-html="dialogIntro"></p>
 
@@ -65,7 +65,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -81,27 +81,14 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
+import { useConfigStore } from 'source/pinia'
 
-export default defineComponent({
-  name: 'GeneralTab',
-  data: function () {
-    return {
-      dialogIntro: trans('Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.'),
-      CSLInfo: trans('Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:'),
-      nodeTrademark: trans('All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.'),
-      LanguageToolInfo: trans('Zettlr offers an integration with LanguageTool.org, a service provided by LanguageTooler GmbH. Using this service requires an internet connection and is subject to the privacy policy of LanguageTooler GmbH or the corresponding server that you use.') + ' <a href="https://languagetool.org/legal/privacy">View the Privacy Policy by LanguageTooler GmbH</a>.'
-    }
-  },
-  computed: {
-    version: function () {
-      return (global as any).config.get('version')
-    },
-    uuid: function () {
-      return (global as any).config.get('uuid')
-    }
-  }
-})
+const configStore = useConfigStore()
+
+const dialogIntro = trans('Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.')
+const CSLInfo = trans('Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:')
+const nodeTrademark = trans('All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.')
+const LanguageToolInfo = trans('Zettlr offers an integration with LanguageTool.org, a service provided by LanguageTooler GmbH. Using this service requires an internet connection and is subject to the privacy policy of LanguageTooler GmbH or the corresponding server that you use.') + ' <a href="https://languagetool.org/legal/privacy">View the Privacy Policy by LanguageTooler GmbH</a>.'
 </script>
 
 <style lang="less">
@@ -117,7 +104,7 @@ div#about-general {
   }
 
   p#uuid {
-    font-family: Menlo, Monaco, 'Liberation Mono', 'Courier New', monospace;
+    font-family: Inconsolata, monospace;
     color: rgb(80, 80, 80);
     font-size: 80%;
     margin-top: 0px;

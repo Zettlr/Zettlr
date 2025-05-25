@@ -19,12 +19,14 @@ import { trans } from '@common/i18n-main'
 import type { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
-import { type PandocProfileMetadata } from '@dts/common/assets'
+import { PANDOC_WRITERS } from '@common/pandoc-util/pandoc-maps'
+import { type PandocProfileMetadata } from '@providers/assets'
+import { runShellCommand } from './exporter/run-shell-command'
+import { showNativeNotification } from '@common/util/show-notification'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
-    super(app, ['export'])
+    super(app, [ 'export', 'custom-export' ])
   }
 
   /**
@@ -35,6 +37,35 @@ export default class Export extends ZettlrCommand {
     * @return {Boolean}     Whether or not the call succeeded.
     */
   async run (evt: string, arg: any): Promise<void> {
+    // Custom export
+    if (evt === 'custom-export') {
+      const { displayName, file } = arg as { displayName: string, file: string }
+      const commands = this._app.config.get().export.customCommands
+      const foundCommand = commands.find(c => c.displayName === displayName)
+      if (foundCommand === undefined) {
+        throw new Error(`Cannot run custom command ${displayName}: Not found`)
+      }
+
+      this._app.log.info(`[Export] Running custom export command ${displayName} on file ${file} ...`)
+      const cwd = path.dirname(file)
+      const output = await runShellCommand(foundCommand.command, [`"${file}"`], cwd)
+
+      if (output.code !== 0) {
+        this._app.log.error(`[Export] Custom export ${displayName} failed with code ${output.code}`, output.stderr)
+        const title = trans('Export failed')
+        const message = trans('An error occurred during export: %s', `Custom Command exited with code ${output.code}`)
+        this._app.windows.showErrorMessage(title, message, output.stderr)
+      } else {
+        this._app.log.info(`[Export] File ${path.basename(file)} exported successfully.`)
+      }
+
+      if (output.stdout.length > 0) {
+        this._app.log.info('This custom export run produced additional output.', output.stdout)
+      }
+      return // Done
+    }
+
+    // Regular export
     const { file, profile, exportTo } = arg as { file: string, profile: PandocProfileMetadata, exportTo: string }
 
     const exporterOptions: ExporterOptions = {
@@ -57,7 +88,7 @@ export default class Export extends ZettlrCommand {
     }
 
     // We must have an absolute path given in file
-    const fileDescriptor = this._app.fsal.findFile(file)
+    const fileDescriptor = this._app.workspaces.findFile(file)
     if (fileDescriptor !== undefined) {
       // If we have a cached version, we already have a file to export.
       // Otherwise, use the regular one from disk.
@@ -69,6 +100,15 @@ export default class Export extends ZettlrCommand {
 
       // The cwd, however, is the source file one's
       exporterOptions.cwd = fileDescriptor.dir
+
+      // A user can override this default by providing in a frontmatter the
+      // key zettlr.pandoc_working_dir: /path/to/directory
+      if (fileDescriptor.type === 'file' &&
+      typeof fileDescriptor.frontmatter?.zettlr?.pandoc_working_dir === 'string' &&
+      await this._app.fsal.isDir(fileDescriptor.frontmatter.zettlr.pandoc_working_dir)) {
+        exporterOptions.cwd = fileDescriptor.frontmatter.zettlr.pandoc_working_dir
+      }
+
       switch (exportTo) {
         case 'ask': {
           const folderSelection = await this._app.windows.askDir(trans('Choose export destination'), null, trans('Save'))
@@ -102,7 +142,7 @@ export default class Export extends ZettlrCommand {
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
         const readableFormat = (profile.writer in PANDOC_WRITERS) ? PANDOC_WRITERS[profile.writer] : profile.writer
-        this._app.notifications.show(trans('Exporting to %s', readableFormat))
+        showNativeNotification(trans('Exporting to %s', readableFormat))
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {

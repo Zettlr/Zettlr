@@ -256,7 +256,7 @@ export default class MenuProvider extends ProviderContract {
    * @return  {Promise<string|undefined>}        Returns the clicked ID, or undefined
    */
   private async _displayNativeContextMenu (menu: MenuItemConstructorOptions[], x: number, y: number): Promise<string|undefined> {
-    return await new Promise((resolve, reject) => {
+    return await new Promise((resolve, _reject) => {
       let resolvedID: string|undefined
       // Define a quick'n'dirty recursive function that applies the click handler
       // to (theoretically) indefinite submenus
@@ -293,6 +293,20 @@ export default class MenuProvider extends ProviderContract {
           resolve(resolvedID)
         }, 100)
       })
+
+      // NOTE: The coordinates we receive from the renderer are scaled by the
+      // zoom scale factor, but the context menu will show up at absolute
+      // coordinates, meaning that the x/y values will diverge more and more the
+      // further the user moves down/right. By normalizing the coordinates with
+      // the scale factor, we avoid that the context menu is offset from the
+      // mouse pointer.
+      const focusedWindow = BrowserWindow.getFocusedWindow()
+      if (focusedWindow !== null && focusedWindow.webContents.getZoomLevel() !== 0) {
+        const factor = focusedWindow.webContents.getZoomFactor()
+        x *= factor
+        y *= factor
+      }
+
       // Enforce integers for the coordinates, otherwise we will get this weird
       // "conversion failure" error.
       popupMenu.popup({ x: Math.round(x), y: Math.round(y) })

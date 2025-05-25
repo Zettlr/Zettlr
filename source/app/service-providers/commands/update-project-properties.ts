@@ -12,6 +12,7 @@
  * END HEADER
  */
 
+import type { ProjectSettings } from '@dts/common/fsal'
 import ZettlrCommand from './zettlr-command'
 
 export default class UpdateProjectProperties extends ZettlrCommand {
@@ -24,12 +25,12 @@ export default class UpdateProjectProperties extends ZettlrCommand {
     * @param {String} evt The event name
     * @param  {Object} arg The hash of a directory.
     */
-  async run (evt: string, arg: any): Promise<void> {
+  async run (evt: string, arg: { path: string, properties: ProjectSettings }): Promise<void> {
     // The properties come from the renderer with dot notation, but the action
     // expects them already in their expanded state.
     // let expanded = expandOptionObject(arg.properties)
     // Find the directory, and apply the properties to it!
-    let dir = this._app.fsal.findDir(arg.path)
+    const dir = this._app.workspaces.findDir(arg.path)
     if (dir !== undefined) {
       await this._app.fsal.updateProject(dir, arg.properties)
     } else {

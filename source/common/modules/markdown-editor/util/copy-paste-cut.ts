@@ -18,48 +18,62 @@ import { type EditorView } from '@codemirror/view'
 import { md2html } from '@common/modules/markdown-utils'
 import html2md from '@common/util/html-to-md'
 import { configField } from './configuration'
+import { pathBasename, pathDirname, relativePath } from '@common/util/renderer-path-polyfill'
 
-const clipboard = window.clipboard
 const ipcRenderer = window.ipc
-const path = window.path
 
 /**
- * This function attempts to paste an image into the editor. Should be called by
- * paste handlers to ensure it has a chance of saving an image. Returns true if
- * there was an image in the clipboard and this function is handling the paste
- * event.
+ * Handles a paste event (both images and text/HTML)
  *
- * @param   {EditorView}  view  The editor view
- *
- * @return  {boolean}           True if an image has been handled, else false.
+ * @param  {EditorView}  view  The editor view
  */
-export function pasteImage (view: EditorView): boolean {
-  if (!clipboard.hasImage()) {
-    return false
-  }
+async function handlePaste (view: EditorView): Promise<void> {
+  const basePath = pathDirname(view.state.field(configField).metadata.path)
 
-  const basePath = path.dirname(view.state.field(configField).metadata.path)
+  // First step: Check for images and, if so, insert them.
+  const clipboardItems = await navigator.clipboard.read()
+  for (const item of clipboardItems) {
+    const hasPlain = item.types.includes('text/plain')
+    const hasHTML = item.types.includes('text/html')
 
-  // We've got an image. So we need to handle it.
-  ipcRenderer.invoke('application', {
-    command: 'save-image-from-clipboard',
-    payload: { startPath: basePath }
-  })
-    .then((pathToInsert: string|undefined) => {
+    if (item.types.includes('image/png')) {
+      const pathToInsert: string|undefined = await ipcRenderer.invoke('application', {
+        command: 'save-image-from-clipboard',
+        payload: { startPath: basePath }
+      })
+
       // If the user aborts the pasting process, the command will return
       // undefined, so we have to check for this.
       if (pathToInsert !== undefined) {
         // Replace backward slashes with forward slashes to make Windows
         // paths cross-platform compatible
-        const relative = path.relative(basePath, pathToInsert)
+        const relative = relativePath(basePath, pathToInsert)
         const sanitizedPath = relative.replace(/\\/g, '/')
         // We need to replace spaces, since the Markdown parser is strict here
-        const tag = `![${path.basename(sanitizedPath)}](${sanitizedPath.replace(/ /g, '%20')})`
+        const tag = `![${pathBasename(sanitizedPath)}](${sanitizedPath.replace(/ /g, '%20')})`
         view.dispatch(view.state.replaceSelection(tag))
       }
-    })
-    .catch(err => console.error(err))
-  return true // We're handling the event
+      return // NOTE: We are ignoring additional images here, because (a) this
+      // should normally not happen, and (b) it could be an avenue to block the
+      // app if a rogue app adds many items with single images.
+    } else if (hasPlain && hasHTML) {
+      // ... I understand *why* they have implemented this ... but ...
+      const plain = await (await item.getType('text/plain')).text()
+      const html = await (await item.getType('text/html')).text()
+      if (html === plain) {
+        view.dispatch(view.state.replaceSelection(plain))
+      } else {
+        const { boldFormatting, italicFormatting } = view.state.field(configField)
+        const emphasis = italicFormatting
+        const strong = boldFormatting.includes('*') ? '*' : '_'
+        const converted = await html2md(html, false, { strong, emphasis })
+        view.dispatch(view.state.replaceSelection(converted))
+      }
+    } else if (hasPlain) {
+      const plain = await (await item.getType('text/plain')).text()
+      view.dispatch(view.state.replaceSelection(plain))
+    }
+  }
 }
 
 /**
@@ -76,10 +90,20 @@ export function copyAsHTML (view: EditorView): void {
     selections.push(view.state.sliceDoc(from, to))
   }
 
-  clipboard.write({
-    text: selections.join('\n'),
-    html: md2html(selections.join('\n'), library)
-  })
+  const { zknLinkFormat } = view.state.field(configField)
+
+  const plainBlob = new Blob([selections.join('\n')], { type: 'text/plain' })
+  const htmlBlob = new Blob(
+    [md2html(selections.join('\n'), window.getCitationCallback(library), zknLinkFormat)],
+    { type: 'text/html' }
+  )
+
+  navigator.clipboard.write([
+    new ClipboardItem({
+      'text/plain': plainBlob,
+      'text/html': htmlBlob
+    })
+  ]).catch(err => console.error(err))
 }
 
 /**
@@ -94,7 +118,12 @@ export function copyAsPlain (view: EditorView): void {
     selections.push(view.state.sliceDoc(from, to))
   }
 
-  clipboard.write({ text: selections.join('\n') })
+  navigator.clipboard.write([
+    new ClipboardItem({
+      'text/plain': new Blob([selections.join('\n')], { type: 'text/plain' })
+    })
+  ])
+    .catch(err => console.error(err))
 }
 
 /**
@@ -127,23 +156,7 @@ export function cut (view: EditorView, asHTML?: boolean): void {
  * @param   {EditorView}  view  The view
  */
 export function paste (view: EditorView): void {
-  // Allow the image paster to paste an image before attempting to paste text
-  if (pasteImage(view)) {
-    return
-  }
-
-  const plain = clipboard.readText()
-  const html = clipboard.readHTML()
-
-  if (html === '' || html === plain) {
-    view.dispatch(view.state.replaceSelection(plain))
-  } else {
-    // Convert HTML to plain and insert that
-    html2md(html).then(converted => {
-      view.dispatch(view.state.replaceSelection(converted))
-    })
-      .catch(e => console.error('Could not paste HTML code', e))
-  }
+  handlePaste(view).catch(err => console.error(err))
 }
 
 /**
@@ -152,8 +165,11 @@ export function paste (view: EditorView): void {
  * @param   {EditorView}  view  The view
  */
 export function pasteAsPlain (view: EditorView): void {
-  const plain = clipboard.readText()
-  if (plain !== '') {
-    view.dispatch(view.state.replaceSelection(plain))
-  }
+  navigator.clipboard.readText()
+    .then(text => {
+      if (text !== '') {
+        view.dispatch(view.state.replaceSelection(text))
+      }
+    })
+    .catch(err => console.error(err))
 }

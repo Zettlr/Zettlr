@@ -25,6 +25,7 @@ import {
 import { syntaxTree } from '@codemirror/language'
 import { type SyntaxNodeRef } from '@lezer/common'
 import { StateField, type EditorState } from '@codemirror/state'
+import { rangeInSelection } from '../util/range-in-selection'
 
 /**
  * Renders all widgets for the provided `visibleRanges`. The function traverses
@@ -69,8 +70,6 @@ function renderWidgets (
 ): DecorationSet {
   const widgets: any[] = [] // TODO: Correct type
 
-  const selections = state.selection.ranges.map(range => [ range.from, range.to ])
-
   if (visibleRanges.length === 0) {
     // visibleRanges is empty, hence we should (re)process the whole document
     visibleRanges = [{ from: 0, to: state.doc.length }]
@@ -83,11 +82,7 @@ function renderWidgets (
       enter: (node) => {
         // Determine the number of overlapping selections. If these are non-
         // null, we must not render this widget
-        const overlaps = selections
-          .filter(([ from, to ]) => !(to <= node.from || from >= node.to))
-          .length
-
-        if (overlaps > 0) {
+        if (rangeInSelection(state, node.from, node.to)) {
           return
         }
 

@@ -57,14 +57,7 @@ export interface AutocompletePlugin {
 }
 
 const forbiddenTokens = [
-  'YAMLFrontmatterKey',
-  'YAMLFrontmatterString',
-  'YAMLFrontmatterBoolean',
-  'YAMLFrontmatterNumber',
-  'YAMLFrontmatterPlain',
-  'YAMLFrontmatterMap',
-  'YAMLFrontmatterSeq',
-  'YAMLFrontmatterPair',
+  'YAMLFrontmatter',
   'YAMLFrontmatterStart',
   'YAMLFrontmatterEnd',
   'MathEquation'
@@ -89,6 +82,7 @@ const autocompleteSource: CompletionSource = function (ctx): CompletionResult|nu
     if (res !== false) {
       plugin = p
       startpos = res
+      break
     }
   }
 
@@ -100,7 +94,7 @@ const autocompleteSource: CompletionSource = function (ctx): CompletionResult|nu
       filter: false,
       update: (current, from, to, ctx) => {
         const query = ctx.state.doc.sliceString(from, to).toLowerCase()
-        current.options = (plugin as AutocompletePlugin).entries(ctx, query)
+        current.options = plugin!.entries(ctx, query)
         return current
       }
     }
@@ -116,7 +110,12 @@ export const autocomplete = [
     selectOnOpen: true, // But never pre-select anything
     closeOnBlur: true,
     maxRenderedOptions: 20,
-    override: [autocompleteSource]
+    override: [autocompleteSource],
+    // Do not include the default keymap. Instead, we re-define it below to
+    // avoid a specific decision by CodeMirror to remap the autocomplete toggle
+    // on macOS to Alt+\ which, on an Italian keyboard layout, will fail to
+    // produce backticks. (See issue #5517)
+    defaultKeymap: false
   }),
   // Make sure any configuration fields will be inserted into the state so that
   // the plugins can look them up and function correctly. These fields are not

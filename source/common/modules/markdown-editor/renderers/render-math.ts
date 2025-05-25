@@ -14,7 +14,7 @@
 
 import { renderBlockWidgets } from './base-renderer'
 import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
-import { WidgetType, type EditorView } from '@codemirror/view'
+import { WidgetType, EditorView } from '@codemirror/view'
 
 import katex from 'katex'
 import 'katex/contrib/mhchem'
@@ -43,6 +43,16 @@ class MathWidget extends WidgetType {
       equationMenu(view, this.equation, { x: event.clientX, y: event.clientY })
     })
     return elem
+  }
+
+  updateDOM (dom: HTMLElement, _view: EditorView): boolean {
+    if (dom.dataset.equation === this.equation) {
+      return true // No need to update
+    }
+
+    dom.dataset.equation = this.equation
+    katex.render(this.equation, dom, { throwOnError: false, displayMode: this.displayMode })
+    return true
   }
 
   ignoreEvent (event: Event): boolean {
@@ -88,4 +98,17 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): MathWidget|unde
   return new MathWidget(equation, displayMode, node.node)
 }
 
-export const renderMath = renderBlockWidgets(shouldHandleNode, createWidget)
+export const renderMath = [
+  renderBlockWidgets(shouldHandleNode, createWidget),
+  EditorView.baseTheme({
+    // KaTeX overrides
+    '.katex': {
+      fontSize: '1.1em', // reduce font-size of math a bit
+      display: 'inline-block', // needed for display math to behave properly
+      userSelect: 'none' // Disable user text selection
+    },
+    '.katex-display, .katex-display > .katex > .katex-html': {
+      width: '100%' // display math should be centered
+    }
+  })
+]

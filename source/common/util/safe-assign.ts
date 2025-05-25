@@ -18,47 +18,48 @@
  */
 
 /**
- * Overwrites properties on the referenceObject, if they also occur in obj.
- * @param {any} obj The new object to be safe assigned
- * @param {any} referenceObject The reference to use the props from
+ * Merges an object with a reference, creating a new object that will contain
+ * all properties of `referenceObject`. The value of those properties will
+ * either be taken from the object, if it possesses that property, or from the
+ * `referenceObject` otherwise.
+ *
+ * @param  {Partial<A>}  obj              The object with property values to be
+ *                                        merged.
+ * @param  {A}           referenceObject  The reference to use the properties
+ *                                        and default values from.
+ * @param  {Partial<A>}  newObject        DO NOT USE -- INTERNAL! The new object
+ *                                        to be returned.
+ *
+ * @return {A}                            The cloned object with properties of
+ *                                        `referenceObject` with values of `obj`
+ *                                        merged in.
  */
-function safeAssign (obj: any, referenceObject: any): void {
-  // Overwrite all given attributes (and leave the not given in place)
-  // This will ensure sane defaults.
+export default function safeAssign <A extends object> (obj: Partial<A>, referenceObject: A, newObject: Partial<A> = {}): A {
+  // Iterate over all properties of referenceObject
   for (const prop in referenceObject) {
     if (prop in obj) {
-      // safeAssign updates even nested objects, which we'll
-      // do here. The "else" is for primitives. "Why do you
-      // check for the prop being null, when you also made
-      // sure it's an object?" you may ask. Well, because
-      // JavaScript treats "null" as type of "object".
+      // The object has the property, so now we have to decide over two cases:
+      // either it's a sub-object --> in this case we'll have to apply
+      // recursively. We perform an explicit null-check, since
+      // `typeof null === 'object'`.
       if (typeof referenceObject[prop] === 'object' &&
         !Array.isArray(referenceObject[prop]) &&
         referenceObject[prop] !== null) {
-        // Update the sub-object
-        safeAssign(obj[prop], referenceObject[prop])
+        // @ts-expect-error These properties will be filled in recursively
+        newObject[prop] = {}
+        // @ts-expect-error TypeScript wouldn't not treat this as an error.
+        // (To be fair, we do violence to the type system here.)
+        safeAssign(obj[prop], referenceObject[prop], newObject[prop])
       } else {
         // Assign the primitive
-        referenceObject[prop] = obj[prop]
+        newObject[prop] = obj[prop]
       }
-    } // Skip the prop, because the object doesn't have it
+    } else {
+      // `obj` doesn't have prop, so take the value from reference instead.
+      newObject[prop] = referenceObject[prop]
+    }
   }
-}
 
-/**
- * Returns a clone of the reference object with updated keys
- * as they also occur on the passed obj.
- *
- * @param   {any}  obj        The object to use the values from.
- * @param   {any}  reference  The reference to use the keys from.
- *
- * @return  {any}             The clone with keys from reference and values from object.
- */
-export default function <A, B> (obj: A, reference: B): B {
-  // Make sure to clone the reference object, so that users
-  // do not have to worry about doing this themselves.
-  const clone = JSON.parse(JSON.stringify(reference))
-  // After cloning, safely assign the object to the reference
-  safeAssign(obj, clone)
-  return clone
+  // Type-cast, since now newObject is of type A
+  return newObject as A
 }

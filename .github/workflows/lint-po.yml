@@ -6,12 +6,15 @@ on:
   push:
     paths:
       - static/lang/**
+  pull_request:
+    paths:
+      - static/lang/**
 
 permissions:
   contents: read
 
 env:
-  NODE_VERSION: '16'
+  NODE_VERSION: '22'
 
 # Ensure only a single linter workflow runs at any one time for any event and
 # ref. This allows multiple linters to run, but at most one per ref.
@@ -24,12 +27,12 @@ jobs:
     name: Lint PO-Files
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         # Always fetch the branch that triggered the event (develop or master)
         ref: ${{ github.ref }}
     - name: Setup NodeJS ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'yarn'

@@ -54,7 +54,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -68,11 +68,6 @@
  *
  * END HEADER
  */
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'FontLicenseTab'
-})
 </script>
 
 <style lang="less">

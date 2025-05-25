@@ -4,11 +4,8 @@
 # More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: revealjs
-self-contained: true # Must be true (unless you use a custom template)
-# If standalone is true, this will prompt Pandoc to download all required assets
-# so that your file can run while you're offline. Setting this to true is the
-# same behavior as in previous versions of Zettlr.
-standalone: true
+embed-resources: true # Embed all images, Javascript, and CSS in the presentation
+standalone: true # Add a footer and header to the file
 metadata-files: []
 include-before-body: []
 include-after-body: []
@@ -18,14 +15,6 @@ filters:
 - type: citeproc
 top-level-division: chapter
 number-sections: false
-number-offset:
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-shift-heading-level-by: 1
 section-divs: true
 identifier-prefix: ''
 eol: lf

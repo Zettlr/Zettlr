@@ -21,8 +21,13 @@ export const footnoteParser: InlineParser = {
   name: 'footnotes',
   before: 'Link', // [^1] will otherwise be detected as a link
   parse (ctx, next, pos) {
+    if (next !== 91 && next !== 94) { // [, ^
+      return -1
+    }
+
     const relativePosition = pos - ctx.offset
-    const match = /\[\^[^\s]+\]|\[\^.+\^\]/.exec(ctx.text.slice(relativePosition))
+    // Matches [^identifier] (alternative 1) and ^[inline] (alternative 2)
+    const match = /\[\^[^\s]+?\]|\^\[.+?\]/.exec(ctx.text.slice(relativePosition))
 
     if (match === null || match.index > 0) {
       return -1
@@ -36,7 +41,7 @@ export const footnoteParser: InlineParser = {
 export const footnoteRefParser: BlockParser = {
   name: 'footnote-refs',
   parse (ctx, line) {
-    const match = /^\[\^[^\s]\]:\s/.exec(line.text)
+    const match = /^\[\^[^\s]+\]:\s/.exec(line.text)
     if (match === null) {
       return false
     }
@@ -61,6 +66,13 @@ export const footnoteRefParser: BlockParser = {
     while (footnoteBody.length > 0 && footnoteBody[footnoteBody.length - 1].trim() === '') {
       const lastline = footnoteBody.pop() as string
       bodyTo = bodyTo - lastline.length - 1
+    }
+
+    // Since footnotes can be empty, the above while loop will substract one too
+    // much from empty footnotes (so that bodyTo = from - 1). Here we correct
+    // for that.
+    if (bodyTo < from) {
+      bodyTo = from
     }
 
     const treeElem = partialParse(ctx, ctx.parser, footnoteBody.join('\n'), from)

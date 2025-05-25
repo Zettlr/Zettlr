@@ -18,21 +18,23 @@ But, now: Let’s go!
 
 ## About this tutorial 🎬
 
-Several Markdown applications make use of such an interactive tutorial for a hands-on guide to using the application. In the case of Zettlr, we have created a small directory in your documents folder, named “Zettlr Tutorial” and loaded it for you. Right now, you see the contents of that directory in the left sidebar (called the “file manager”), so let us have a look! If you move your cursor into the top area of the file manager, a round arrow will appear. Click that now.
+Several Markdown applications make use of such an interactive tutorial for a hands-on guide to using the application. In the case of Zettlr, we have created a small directory in your documents folder, named “Zettlr Tutorial” and loaded it for you. Right now, you see the contents of that directory in the left sidebar (called the “file manager”), so let us have a look!
 
-What you will see is that there is one directory – the tutorial – loaded. These top-level directories are called workspaces. You can right-click the directory, and either “close” or “delete” it. When you _close_ a workspace or top-level (a.k.a. root) file in Zettlr, this means that you unload it from the application, but it will remain on your computer. If you _delete_ it, this means that Zettlr will move it into the trash bin. But don’t do that right now, as there are still new things to learn! ✍🏼
+As you can see, there is a heading called “Workspaces”, and below that is the tutorial folder – Zettlr Tutorial – with the current file highlighted. You can also see other files, for example “references.json”, which will become important in just a moment. This default mode of the file manager is called “combined”, because it shows your files and folders interleaved as you already know it from the file browser of your system. Zettlr's file manager has two other modes, “thin” and expanded, that separate your files from your folders. You can activate those in the settings.
 
-> Note: On some Linux distributions, this may not work out of the box, as Zettlr depends upon a certain package for moving files into the trash. If you experience problems removing files and folders, please [check our FAQ section](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash), which has got you covered!
+The folder “Zettlr Tutorial” is called a “Workspace” and it contains all files that are currently loaded in the app. You can open more workspaces and even standalone files (that aren't part of any workspace), and those will then show up in the file manager as well.
 
-Zettlr is built around the concept of workspaces. So you will have the best experience having open at least one workspace directory at all times, and do all your work in that. The workspaces are loaded automatically everytime you open the app, and are always displayed in the directory tree that’s visible right now. To view the file list of a directory, simply click the directory.
+You can right-click the directory, and either “close” or “delete” it. When you _close_ a workspace or top-level (a.k.a. standalone) file in Zettlr, this means that you unload it from the application, but it will remain on your computer. If you _delete_ it, this means that Zettlr will move it into the trash bin. But don’t do that right now, as there are still new things to learn! ✍🏼
 
-> There are three display modes available for the file manager which you can choose in the preferences. One displays either the file list _or_ the directory tree (the current mode), another one displays both next to each other (called expanded), and the third mode displays both files and folders interleaved like in a regular file browser. You can adapt this later in the settings.
+> Note: On some Linux distributions, moving files into the trash may not work out of the box, as Zettlr depends upon a certain package for moving files into the trash. If you experience problems removing files and folders, please [check our FAQ section](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash), which has got you covered!
 
-Click on “Zettlr Tutorial” now to switch back to its file list.
+Zettlr is built around the concept of workspaces. So you will have the best experience having open at least one workspace directory at all times, and do all your work in that. The workspaces are loaded automatically everytime you open the app, and are always displayed in the directory tree that’s visible right now.
+
+If you already have a folder in which you want to store your actual notes, or if you already have some notes, you can open it now by pressing the “Open Workspace…” button in the toolbar or via the shortcut `Cmd/Ctrl`+`O`.
 
 ## How to use Markdown 📝
 
-Zettlr is a text editor, which means that it mostly works like apps you already know, such as Microsoft Word, LibreOffice, or Apple Pages. But instead of having to click through an armada of toolbar buttons, you can apply structure to your elements using only characters, which means you never have to leave your keyboard! ✨
+Zettlr is a Markdown editor, which means that it mostly works like apps you already know, such as Microsoft Word, LibreOffice, or Apple Pages. But instead of having to click through an armada of toolbar buttons, you can apply structure to your elements using only characters, which means you never have to leave your keyboard! ✨
 
 Let’s quickly go over the most important elements:
 

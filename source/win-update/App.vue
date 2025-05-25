@@ -4,7 +4,7 @@
     v-bind:titlebar="true"
     v-bind:menubar="false"
     v-bind:show-statusbar="false"
-    v-bind:disable-vibrancy="false"
+    v-bind:disable-vibrancy="!vibrancyEnabled"
   >
     <div id="update">
       <!-- First state: There is an error -->
@@ -17,15 +17,16 @@
         ></ButtonControl>
       </template>
       <!-- Second state: There is no new update -->
-      <template v-else-if="!updateAvailable">
+      <template v-else-if="!updateState.updateAvailable">
         <div>{{ noUpdateMessage }}</div>
+        <div>{{ lastCheckedMessage }}</div>
         <ButtonControl
           v-bind:label="checkForUpdateLabel"
           v-on:click="checkForUpdate"
         ></ButtonControl>
       </template>
       <!-- Third state: An update is available -->
-      <template v-else-if="updateAvailable">
+      <template v-else-if="updateState.updateAvailable">
         <h1>{{ updateTitle }}: {{ updateState.tagName }}</h1>
         <p>{{ updateCurrentVersion }}: {{ currentVersion }}</p>
         <!-- State 3.1: An update is available for download -->
@@ -50,7 +51,7 @@
         </template>
         <!-- State 3.2: An update is currently downloading -->
         <template v-else-if="isDownloading && !isFinished">
-          <p>{{ downloadProgressLabel }}: {{ formatSize(updateState.size_downloaded) }} of {{ formatSize(updateState.size_total) }} ({{ getETA }})</p>
+          <p>{{ downloadProgressLabel }}: {{ formatSize(updateState.size_downloaded, true) }} of {{ formatSize(updateState.size_total, true) }} ({{ getETA }})</p>
           <ProgressControl
             v-bind:max="updateState.size_total"
             v-bind:value="updateState.size_downloaded"
@@ -74,7 +75,7 @@
   </WindowChrome>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -89,141 +90,130 @@
  * END HEADER
  */
 
-import WindowChrome from '@common/vue/window/Chrome.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
-import ProgressControl from '@common/vue/form/elements/Progress.vue'
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
+import ProgressControl from '@common/vue/form/elements/ProgressControl.vue'
 import { trans } from '@common/i18n-renderer'
 import formatSize from '@common/util/format-size'
 import PACKAGE_JSON from '../../package.json'
-import { defineComponent } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
+import { type UpdateState } from 'source/app/service-providers/updates'
+import { DateTime } from 'luxon'
+import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  components: {
-    WindowChrome,
-    ButtonControl,
-    ProgressControl
-  },
-  data: function () {
-    return {
-      windowTitle: trans('Updater'),
-      disableStartButton: false, // True as soon as the update starts
-      startButtonLabel: trans('Click to start update'),
-      updateState: {
-        lastErrorMessage: undefined,
-        lastErrorCode: undefined,
-        updateAvailable: false,
-        prerelease: false,
-        changelog: '',
-        tagName: '',
-        releasePage: 'https://github.com/Zettlr/Zettlr/releases',
-        // eslint-disable-next-line camelcase
-        compatibleAssets: [] as Array<{ name: string, browser_download_url: string }>,
-        name: '',
-        full_path: '',
-        size_total: 0,
-        size_downloaded: 0,
-        start_time: 0,
-        eta_seconds: 0
-      }
-    }
-  },
-  computed: {
-    hasError: function (): boolean {
-      // Sometimes, "undefined" properties do not get transferred from main so
-      // we additionally need to check for existence here, cf. #2775
-      return 'lastErrorMessage' in this.updateState &&
-        'lastErrorCode' in this.updateState &&
-        this.updateState.lastErrorMessage !== undefined &&
-        this.updateState.lastErrorCode !== undefined
-    },
-    updateAvailable: function (): boolean {
-      return this.updateState.updateAvailable
-    },
-    isDownloading: function (): boolean {
-      return this.updateState.size_downloaded > 0 && this.updateState.size_downloaded < this.updateState.size_total
-    },
-    isFinished: function (): boolean {
-      return this.updateState.size_downloaded > 0 && this.updateState.size_downloaded === this.updateState.size_total
-    },
-    updateTitle: function (): string {
-      return trans('New update available')
-    },
-    updateCurrentVersion: function (): string {
-      return trans('Your version')
-    },
-    updateNotification: function (): string {
-      return trans('There is a new version of Zettlr available to download. Please read the changelog below.')
-    },
-    downloadProgressLabel: function (): string {
-      return trans('Downloading your update')
-    },
-    noUpdateMessage: function (): string {
-      return trans('No update available. You have the most recent version.')
-    },
-    currentVersion: function (): string {
-      return PACKAGE_JSON.version
-    },
-    checkForUpdateLabel: function (): string {
-      return trans('Check for updates')
-    },
-    getETA: function (): string {
-      let seconds = this.updateState.eta_seconds
-      if (seconds > 60) {
-        return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's'
-      } else {
-        return seconds + 's'
-      }
-    }
-  },
-  created: function () {
-    // Immediately retrieve the current update status and set up a listener to
-    // retrieve any updates to the state.
-    ipcRenderer.invoke('update-provider', { command: 'update-status' })
-      .then(updateState => { this.updateState = updateState })
-      .catch(e => console.error(e))
+const configStore = useConfigStore()
 
-    // Whenever the update state changes in the provider, we must update it here
-    ipcRenderer.on('update-provider', (event, command, updateState) => {
-      if (command === 'state-changed') {
-        if (updateState !== undefined) {
-          this.updateState = updateState
-        } else {
-          console.error('ERROR: Expected an update state, received undefined!')
-        }
-      }
-    })
-  },
-  methods: {
-    requestDownload: function (url: string) {
-      ipcRenderer.invoke('update-provider', {
-        command: 'request-app-update',
-        payload: url
-      })
-        .catch(e => console.error(e))
-    },
-    startUpdate: function () {
-      this.disableStartButton = true
-      this.startButtonLabel = trans('Starting update …')
-      ipcRenderer.invoke('update-provider', { command: 'begin-update' })
-        .catch(e => {
-          this.disableStartButton = false
-          console.error(e)
-        })
-    },
-    formatSize: function (bytes: number) {
-      return formatSize(bytes, true)
-    },
-    checkForUpdate: function () {
-      ipcRenderer.invoke('update-provider', { command: 'check-for-update' })
-        .catch(e => console.error(e))
-    },
-    openReleasesPage: function () {
-      window.location.assign(this.updateState.releasePage)
+const windowTitle = trans('Updater')
+const updateTitle = trans('New update available')
+const updateCurrentVersion = trans('Your version')
+const updateNotification = trans('There is a new version of Zettlr available to download. Please read the changelog below.')
+const downloadProgressLabel = trans('Downloading your update')
+const noUpdateMessage = trans('No update available. You have the most recent version.')
+const checkForUpdateLabel = trans('Check for updates')
+
+const vibrancyEnabled = configStore.config.window.vibrancy
+const currentVersion = PACKAGE_JSON.version
+
+const startButtonLabel = ref(trans('Click to start update'))
+const lastCheckedMessage = computed(() => {
+  if (updateState.value.lastCheck === undefined) {
+    return trans('Last checked: %s', trans('never'))
+  } else {
+    const dt = DateTime.fromMillis(updateState.value.lastCheck)
+    return trans('Last checked: %s', dt.toRelative())
+  }
+})
+const disableStartButton = ref(false) // True as soon as the update starts
+const updateState = ref<UpdateState>({
+  lastErrorMessage: undefined,
+  lastErrorCode: undefined,
+  updateAvailable: false,
+  prerelease: false,
+  changelog: '',
+  tagName: '',
+  releasePage: 'https://github.com/Zettlr/Zettlr/releases',
+  compatibleAssets: [],
+  name: '',
+  full_path: '',
+  size_total: 0,
+  size_downloaded: 0,
+  start_time: 0,
+  eta_seconds: 0
+})
+
+const hasError = computed(() => {
+  // Sometimes, "undefined" properties do not get transferred from main so
+  // we additionally need to check for existence here, cf. #2775
+  return 'lastErrorMessage' in updateState.value &&
+    'lastErrorCode' in updateState.value &&
+    updateState.value.lastErrorMessage !== undefined &&
+    updateState.value.lastErrorCode !== undefined
+})
+
+const isDownloading = computed(() => {
+  return updateState.value.size_downloaded > 0 && updateState.value.size_downloaded < updateState.value.size_total
+})
+
+const isFinished = computed(() => {
+  return updateState.value.size_downloaded > 0 && updateState.value.size_downloaded === updateState.value.size_total
+})
+
+const getETA = computed(() => {
+  const seconds = updateState.value.eta_seconds
+  if (seconds > 60) {
+    return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's'
+  } else {
+    return seconds + 's'
+  }
+})
+
+// Immediately retrieve the current update status and set up a listener to
+// retrieve any updates to the state.
+ipcRenderer.invoke('update-provider', { command: 'update-status' })
+  .then(newUpdateState => { updateState.value = newUpdateState })
+  .catch(e => console.error(e))
+
+// Whenever the update state changes in the provider, we must update it here
+const offCallback = ipcRenderer.on('update-provider', (event, command, newUpdateState) => {
+  if (command === 'state-changed') {
+    if (newUpdateState !== undefined) {
+      updateState.value = newUpdateState
+    } else {
+      console.error('ERROR: Expected an update state, received undefined!')
     }
   }
 })
+
+onUnmounted(offCallback)
+
+function requestDownload (url: string): void {
+  ipcRenderer.invoke('update-provider', {
+    command: 'request-app-update',
+    payload: url
+  })
+    .catch(e => console.error(e))
+}
+
+function startUpdate (): void {
+  disableStartButton.value = true
+  startButtonLabel.value = trans('Starting update …')
+  ipcRenderer.invoke('update-provider', { command: 'begin-update' })
+    .catch(e => {
+      disableStartButton.value = false
+      console.error(e)
+    })
+}
+
+function checkForUpdate (): void {
+  ipcRenderer.invoke('update-provider', { command: 'check-for-update' })
+    .catch(e => console.error(e))
+}
+
+function openReleasesPage (): void {
+  window.location.assign(updateState.value.releasePage)
+}
 </script>
 
 <style lang="less">

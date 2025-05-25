@@ -20,13 +20,14 @@ import safeAssign from '@common/util/safe-assign'
 import type { MDFileDescriptor } from '@dts/common/fsal'
 import type FSALCache from './fsal-cache'
 import type { SearchTerm } from '@dts/common/search'
+import { getFilesystemMetadata } from './util/get-fs-metadata'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
  * @param {MDFileDescriptor} origFile The file object
  * @param {any} cachedFile The cache object to apply
  */
-function applyCache (cachedFile: any, origFile: MDFileDescriptor): MDFileDescriptor {
+function applyCache (cachedFile: MDFileDescriptor, origFile: MDFileDescriptor): MDFileDescriptor {
   return safeAssign(cachedFile, origFile)
 }
 
@@ -35,7 +36,7 @@ function applyCache (cachedFile: any, origFile: MDFileDescriptor): MDFileDescrip
  * @param {Object} origFile The file to cache
  */
 function cacheFile (origFile: MDFileDescriptor, cacheAdapter: FSALCache): void {
-  if (!cacheAdapter.set(origFile.path, JSON.stringify(origFile))) {
+  if (!cacheAdapter.set(origFile.path, structuredClone(origFile))) {
     throw new Error(`Could not cache file ${origFile.name}!`)
   }
 }
@@ -48,9 +49,9 @@ function cacheFile (origFile: MDFileDescriptor, cacheAdapter: FSALCache): void {
  */
 async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> {
   try {
-    const stat = await fs.lstat(fileObject.path)
-    fileObject.modtime = stat.mtime.getTime()
-    fileObject.size = stat.size
+    const metadata = await getFilesystemMetadata(fileObject.path)
+    fileObject.modtime = metadata.modtime
+    fileObject.size = metadata.size
   } catch (err: any) {
     err.message = `Could not update the metadata for file ${fileObject.name}: ${err.message as string}`
     throw err
@@ -99,10 +100,10 @@ export async function parse (
   // In any case, we need the most recent times.
   try {
     // Get lstat
-    const stat = await fs.lstat(filePath)
-    file.modtime = stat.mtime.getTime()
-    file.creationtime = stat.birthtime.getTime()
-    file.size = stat.size
+    const metadata = await getFilesystemMetadata(filePath)
+    file.modtime = metadata.modtime
+    file.creationtime = metadata.birthtime
+    file.size = metadata.size
   } catch (err: any) {
     err.message = 'Error reading file ' + filePath
     throw err // Re-throw
@@ -112,9 +113,9 @@ export async function parse (
   // let's check if the file has been changed
   let hasCache = false
   if (cache?.has(file.path) === true) {
-    let cachedFile = cache.get(file.path)
+    const cachedFile = cache.get(file.path)
     // If the modtime is still the same, we can apply the cache
-    if (cachedFile.modtime === file.modtime) {
+    if (cachedFile !== undefined && cachedFile.modtime === file.modtime && cachedFile.type === 'file') {
       file = applyCache(cachedFile, file)
       hasCache = true
     }
@@ -147,7 +148,9 @@ export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[])
 }
 
 /**
- * Loads the file contents for the given descriptor
+ * Loads the file contents for the given descriptor. NOTE: This always returns
+ * a document with newline feeds, normalizing the file contents, regardless of
+ * the actual linefeed the file uses.
  *
  * @param   {MDFileDescriptor}  fileObject  The file descriptor
  *
@@ -156,8 +159,14 @@ export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[])
 export async function load (fileObject: MDFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
-  // Account for an optional BOM, if present
-  return content.substring(fileObject.bom.length)
+  return content
+    // Account for an optional BOM, if present
+    .substring(fileObject.bom.length)
+    // Always split with a regular expression to ensure that mixed linefeeds
+    // don't break reading in a file. Then, on save, the linefeeds will be
+    // standardized to whatever the linefeed extractor detected.
+    .split(/\r\n|\n\r|\n|\r/g)
+    .join('\n')
 }
 
 /**
@@ -173,7 +182,8 @@ export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<b
 }
 
 /**
- * Saves the content into the given file descriptor
+ * Saves the content into the given file descriptor. NOTE: The file contents
+ * must be using exclusively newlines.
  *
  * @param   {MDFileDescriptor}  fileObject  The file descriptor
  * @param   {string}            content     The content to be written to file
@@ -187,11 +197,12 @@ export async function save (
   parser: (file: MDFileDescriptor, content: string) => void,
   cache: FSALCache|null
 ): Promise<void> {
-  // Make sure to retain the BOM if applicable
-  await fs.writeFile(fileObject.path, fileObject.bom + content)
+  // Make sure to retain the BOM if applicable, and use the correct linefeed.
+  const safeContent = fileObject.bom + content.split('\n').join(fileObject.linefeed)
+  await fs.writeFile(fileObject.path, safeContent)
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
-  parser(fileObject, content)
+  parser(fileObject, safeContent)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

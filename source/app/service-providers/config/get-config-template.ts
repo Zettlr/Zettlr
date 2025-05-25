@@ -16,7 +16,159 @@ import { app } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
-import type { ConfigOptions } from '@dts/main/config-provider'
+
+export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
+
+export interface ConfigOptions {
+  version: string
+  openPaths: string[]
+  openDirectory: string|null
+  dialogPaths: {
+    askFileDialog: string
+    askDirDialog: string
+    askLangFileDialog: string
+  }
+  window: {
+    nativeAppearance: boolean
+    vibrancy: boolean
+    sidebarVisible: boolean
+    currentSidebarTab: 'toc'|'references'|'relatedFiles'|'attachments'
+    recentGlobalSearches: string[]
+  }
+  ui: {
+    fileManagerSplitSize: [number, number]
+    editorSidebarSplitSize: [number, number]
+  }
+  attachmentExtensions: string[]
+  darkMode: boolean
+  alwaysReloadFiles: boolean
+  autoDarkMode: 'off'|'system'|'schedule'|'auto'
+  autoDarkModeStart: string
+  autoDarkModeEnd: string
+  fileMeta: boolean
+  fileMetaTime: 'modtime'|'creationtime'
+  sorting: 'natural'|'ascii'
+  sortFoldersFirst: boolean
+  muteLines: boolean
+  fileManagerMode: 'thin'|'combined'|'expanded'
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading'
+  newFileNamePattern: string
+  newFileDontPrompt: boolean
+  export: {
+    dir: 'temp'|'cwd'|'ask'
+    stripTags: boolean
+    stripLinks: 'full'|'unlink'|'no'
+    cslLibrary: string
+    cslStyle: string
+    useBundledPandoc: boolean
+    singleFileLastExporter: string
+    exportQmdWithQuarto: boolean
+    customCommands: Array<{ displayName: string, command: string }>
+  }
+  zkn: {
+    idRE: string
+    idGen: string
+    linkFilenameOnly: boolean
+    linkWithFilename: 'always'|'never'|'withID'
+    linkFormat: 'link|title'|'title|link'
+    autoSearch: boolean
+    customDirectory: string
+  }
+  editor: {
+    autocompleteSuggestEmojis: boolean
+    autoSave: 'off'|'immediately'|'delayed'
+    citeStyle: 'in-text'|'in-text-suffix'|'regular'
+    autoCloseBrackets: boolean
+    showLinkPreviews: boolean
+    showStatusbar: boolean
+    showFormattingToolbar: boolean
+    showWhitespace: boolean
+    defaultSaveImagePath: string
+    enableTableHelper: boolean
+    indentUnit: number
+    indentWithTabs: boolean
+    fontSize: number
+    countChars: boolean
+    inputMode: 'default'|'vim'|'emacs'
+    boldFormatting: '**'|'__'
+    italicFormatting: '_'|'*'
+    readabilityAlgorithm: 'dale-chall'|'gunning-fog'|'coleman-liau'|'automated-readability'
+    lint: {
+      markdown: boolean
+      languageTool: {
+        active: boolean
+        level: 'picky'|'default'
+        motherTongue: string // e.g., en-US, de-DE
+        variants: {
+          en: string
+          de: string
+          pt: string
+          ca: string
+        }
+        provider: 'official'|'custom'
+        customServer: string
+        username: string
+        apiKey: string
+      }
+    }
+    autoCorrect: {
+      active: boolean
+      magicQuotes: {
+        primary: string
+        secondary: string
+      }
+      replacements: Array<{ key: string, value: string }>
+      matchWholeWords: boolean
+    }
+  }
+  display: {
+    theme: MarkdownTheme
+    hideToolbarInDistractionFree: boolean
+    markdownFileExtensions: boolean
+    imageWidth: number
+    imageHeight: number
+    renderCitations: boolean
+    renderIframes: boolean
+    renderImages: boolean
+    renderLinks: boolean
+    renderMath: boolean
+    renderTasks: boolean
+    renderHTags: boolean
+    renderEmphasis: boolean
+  }
+  selectedDicts: string[]
+  appLang: string
+  debug: boolean
+  watchdog: {
+    activatePolling: boolean
+    stabilityThreshold: number
+  }
+  system: {
+    deleteOnFail: boolean
+    leaveAppRunning: boolean
+    avoidNewTabs: boolean
+    iframeWhitelist: string[]
+    checkForUpdates: boolean
+    zoomBehavior: 'gui'|'editor'
+  }
+  checkForBeta: boolean
+  displayToolbarButtons: {
+    showOpenPreferencesButton: boolean
+    showNewFileButton: boolean
+    showPreviousFileButton: boolean
+    showNextFileButton: boolean
+    showToggleReadabilityButton: boolean
+    showMarkdownCommentButton: boolean
+    showMarkdownLinkButton: boolean
+    showMarkdownImageButton: boolean
+    showMarkdownMakeTaskListButton: boolean
+    showInsertTableButton: boolean
+    showInsertFootnoteButton: boolean
+    showDocumentInfoText: boolean
+    showPomodoroButton: boolean
+  }
+  uuid: string
+}
 
 const ZETTLR_VERSION = app.getVersion()
 const ATTACHMENT_EXTENSIONS = [
@@ -31,7 +183,7 @@ const ATTACHMENT_EXTENSIONS = [
   '.png', '.jpg', '.jpeg', '.gif', '.tiff'
 ]
 
-export default function getConfigTemplate (): ConfigOptions {
+export function getConfigTemplate (): ConfigOptions {
   // Before returning the settings object, we have to make sure we retrieve a
   // locale that is both installed as a translation AND more or less the user's
   // wish.
@@ -59,28 +211,32 @@ export default function getConfigTemplate (): ConfigOptions {
       // Only use native window appearance by default on macOS. If this value
       // is false, this means that Zettlr will display the menu bar and window
       // controls as defined in the HTML.
-      nativeAppearance: process.platform === 'darwin',
+      nativeAppearance: process.platform === 'darwin', // Linux only
+      vibrancy: process.platform === 'darwin', // macOS only
       // Store a few GUI related settings here as well
       sidebarVisible: false,
       currentSidebarTab: 'toc',
       recentGlobalSearches: []
+    },
+    ui: {
+      fileManagerSplitSize: [ 20, 80 ],
+      editorSidebarSplitSize: [ 80, 20 ]
     },
     // Visible attachment filetypes
     attachmentExtensions: ATTACHMENT_EXTENSIONS,
     // UI related options
     darkMode: false,
     alwaysReloadFiles: true, // Should Zettlr automatically load remote changes?
-    autoDarkMode: 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
-    autoDarkModeStart: '22:00', // Switch into dark mode at this time
+    autoDarkMode: 'system', // Possible values: 'off', 'system', 'schedule', 'auto'
+    autoDarkModeStart: '21:00', // Switch into dark mode at this time
     autoDarkModeEnd: '06:00', // Switch to light mode at this time
     fileMeta: true,
     fileMetaTime: 'modtime', // The time to be displayed in file meta
     sorting: 'natural', // Can be natural or based on ASCII values
-    sortFoldersFirst: false, // should folders be shown first in combined fileview
-    sortingTime: 'modtime', // can be modtime or creationtime
+    sortFoldersFirst: true, // should folders be shown first in combined fileview
     muteLines: true, // Should the editor mute lines in distraction free mode?
-    fileManagerMode: 'thin', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
-    fileNameDisplay: 'title', // Controls what info is displayed as filenames
+    fileManagerMode: 'combined', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
+    fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files
     export: {
@@ -91,42 +247,52 @@ export default function getConfigTemplate (): ConfigOptions {
       cslStyle: '', // Path to a CSL Style file
       useBundledPandoc: true, // Whether to use the bundled Pandoc
       exportQmdWithQuarto: false, // Whether .qmd-files should be exported with Quarto
-      singleFileLastExporter: 'html' // Remembers the last chosen exporter for easy re-exporting
+      singleFileLastExporter: 'html', // Remembers the last chosen exporter for easy re-exporting
+      customCommands: [] // Custom commands that the user can use to run arbitrary exports
     },
     // Zettelkasten stuff (IDs, as well as link matchers)
     zkn: {
       idRE: '(\\d{14})',
       idGen: '%Y%M%D%h%m%s',
       linkFilenameOnly: false,
-      linkWithFilename: 'always', // can be always|never|withID
-      // If true, create files that are not found, if forceOpen is called
-      autoCreateLinkedFiles: false,
+      linkWithFilename: 'never', // can be always|never|withID
+      linkFormat: 'link|title', // Determines what internal links ([[link|title]]) look like
       autoSearch: true, // Automatically start a search upon following a link?
       customDirectory: '' // If present, saves auto-created files here
     },
     // Editor related stuff
     editor: {
-      autoSave: 'delayed',
-      autocompleteAcceptSpace: false, // Whether you can type spaces in autocorrect
+      autoSave: 'off',
+      autocompleteSuggestEmojis: true,
       autoCloseBrackets: true,
       showLinkPreviews: true, // Whether to fetch link previews in the editor
+      showWhitespace: false,
       defaultSaveImagePath: '',
       citeStyle: 'regular', // Determines how autocomplete will complete citations
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
       indentWithTabs: false,
-      fontSize: 16, // The editor's font size in pixels
+      fontSize: 18, // The editor's font size in pixels
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs
       boldFormatting: '**', // Can be ** or __
       italicFormatting: '_', // Can be * or _
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
-      showStatusbar: false,
+      showStatusbar: true,
+      showFormattingToolbar: true,
       lint: {
         markdown: true, // Should Markdown be linted?
         languageTool: {
           active: false, // Utilize languageTool?
           level: 'picky', // API: https://languagetool.org/http-api/#!/default/post_check
+          motherTongue: '', // Optional motherTongue property
+          variants: {
+            // These defaults are taken from LT's extension
+            en: 'en-US',
+            de: 'de-DE',
+            pt: 'pt-PT',
+            ca: 'ca-ES'
+          },
           provider: 'official',
           customServer: '',
           username: '',
@@ -196,13 +362,12 @@ export default function getConfigTemplate (): ConfigOptions {
           { key: '...', value: '…' },
           { key: '--', value: '–' },
           { key: '---', value: '—' }
-        ]
+        ],
+        matchWholeWords: false // Whether to only autocorrect entire words, not parts
       } // END autoCorrect options
     },
     display: {
       theme: 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux
-      // By default, macOS computers use the system accent color instead of the theme's one
-      useSystemAccentColor: process.platform === 'darwin',
       hideToolbarInDistractionFree: false,
       markdownFileExtensions: false,
       imageWidth: 100, // Maximum preview image width

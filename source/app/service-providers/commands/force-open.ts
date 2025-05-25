@@ -14,7 +14,13 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import isDir from '@common/util/is-dir'
+
+export interface ForceOpenAPI {
+  windowId?: string
+  leafId?: string
+  linkContents: string
+  newTab?: boolean
+}
 
 export default class ForceOpen extends ZettlrCommand {
   constructor (app: any) {
@@ -23,11 +29,12 @@ export default class ForceOpen extends ZettlrCommand {
 
   /**
     * Force-Opens a file, after click on internal link
-    * @param {String} evt The event name
-    * @param  {Object} payload the parameters of the file to be opened
-    * @return {Boolean} Whether the file was successfully opened.
+    *
+    * @param   {string}        evt      The event name
+    * @param   {ForceOpenAPI}  payload  the parameters of the file to be opened
+    * @return  {boolean}                Whether the file was successfully opened.
     */
-  async run (evt: string, payload: any): Promise<void> {
+  async run (evt: string, payload: ForceOpenAPI): Promise<void> {
     let { windowId, linkContents, newTab, leafId } = payload
 
     if (windowId === undefined) {
@@ -37,20 +44,19 @@ export default class ForceOpen extends ZettlrCommand {
     // Determine if the file should be created, if it can't be found. For this
     // we need both the respective preferences setting and an auto-search
     // command.
-    const autoCreate: boolean = this._app.config.get('zkn.autoCreateLinkedFiles')
-    const customDir: string = this._app.config.get('zkn.customDirectory')
+    const { customDirectory } = this._app.config.get().zkn
 
-    const file = this._app.fsal.findExact(linkContents)
+    const filename = linkContents.includes('#') ? linkContents.slice(0, linkContents.indexOf('#')) : linkContents
+
+    const file = this._app.workspaces.findExact(filename)
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file !== undefined) {
       await this._app.documents.openFile(windowId, leafId, file.path, newTab)
-    } else if (autoCreate && isDir(customDir)) {
+    } else if (await this._app.fsal.isDir(customDirectory)) {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.
-      await this._app.commands.run('file-new', { windowId, leafId, name: linkContents, path: customDir })
-    } else if (autoCreate && !isDir(customDir)) {
-      await this._app.commands.run('file-new', { windowId, leafId, name: linkContents })
+      await this._app.commands.run('file-new', { windowId, leafId, name: linkContents, path: customDirectory })
     }
   }
 }

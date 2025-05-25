@@ -6,7 +6,7 @@
   Zettlr [<em>ˈset·lər</em>]
 </h1>
 
-<p align="center"><strong>A Markdown Editor for the 21<sup>st</sup> century</strong>.</p>
+<p align="center"><strong>Your One-Stop Publication Workbench</strong>.</p>
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.2580173">
@@ -19,7 +19,7 @@
     <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/tag-date/Zettlr/Zettlr.svg?label=latest">
   </a>
   <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/Zettlr/Zettlr/total.svg">
-  <img alt="Test" src="https://github.com/Zettlr/Zettlr/workflows/Test/badge.svg?branch=master">
+  <img alt="Unit Tests / Lint" src="https://github.com/Zettlr/Zettlr/actions/workflows/check.yml/badge.svg">
   <img alt="Build" src="https://github.com/Zettlr/Zettlr/workflows/Build/badge.svg">
 </p>
 
@@ -35,20 +35,24 @@
 
 ![screenshot](/resources/screenshots/zettlr_view.png)
 
-With Zettlr, writing professional texts is easy and motivating: Whether you are a college student, a researcher, a journalist, or an author — Zettlr has the right tools for you. [Watch the video](https://www.youtube.com/watch?v=BJ27r6YGpAs) or continue reading to see what they are!
+Zettlr brings simplicity back to your texts. Open-minded writing that adapts to your style. Fast information retrieval that finds what matters to you. Versatile exporting that enables you to adapt to whatever publication pipeline your employer or school uses.
 
-[Visit our Website](https://zettlr.com/).
+Focus on what matters to you.
+
+**Publish, not perish.**
+
+> [Learn more on our website](https://zettlr.com/).
 
 ## Features
 
-- Available in over a dozen languages
-- Tight and ever-growing **integration with your favourite reference manager** (such as Zotero or JabRef)
-- **Cite with Zettlr** using `citeproc` and your existing literature database
-- Five **themes and dark mode support**
-- File-agnostic writing: Enjoy **full control over your own files**
-- Keep all your notes and texts **in one place** — searchable and accessible
+- Your Notes are your notes: Zettlr is **privacy-first**
+- **Citations** made easy: Tight and ever-growing integration with your favourite reference manager (Zotero, JabRef, and many others)
+- Available in over a **dozen languages**
+- Draft your publications in a professional environment, with **LaTeX and Word template support**
+- Simple and beautiful exports with [Pandoc](https://pandoc.org/), [LaTeX](https://www.latex-project.org/), and [Textbundle](http://textbundle.org/)
+- **Snippets** allow you to automate insertion of boilerplate code
+- Themes, dark modes, and full flexibility with **custom CSS**
 - **Code highlighting** for many languages
-- Simple and beautiful **exports** with [Pandoc](https://pandoc.org/), [LaTeX](https://www.latex-project.org/), and [Textbundle](http://textbundle.org/)
 - Support for state of the art knowledge management techniques (**Zettelkasten**)
 - A powerful **full text search** that helps you find anything, anywhere
 
@@ -60,17 +64,19 @@ To install Zettlr, just [download the latest release](https://www.zettlr.com/dow
 
 On our website and here on GitHub, we provide a set of installers for the most common use-cases. We provide both 64-bit installers as well as installers for ARM systems (called "Apple Silicon" in the macOS ecosystem). 32-bit is not supported. We offer the following binaries directly:
 
-* Windows (x64 and ARM)
 * macOS (Intel and Apple Silicon)
-* Debian and Fedora (x64 and ARM)
+* Windows (x64)
+* Debian/Ubuntu (x64 and ARM) 
+* Fedora/Red Hat (x64 and ARM)
 * AppImage (x64 and ARM)
 
 Thanks to our community, we can also offer you a variety of other installation opportunities:
 
-* [Chocolatey (Windows)](https://community.chocolatey.org/packages/zettlr/)
 * [Homebrew (macOS)](https://formulae.brew.sh/cask/zettlr)
+* [Aptitude (Ubuntu/Debian)](https://apt.zettlr.com)
+* [Flathub (Linux)](https://flathub.org/apps/details/com.zettlr.Zettlr)
+* [Chocolatey (Windows)](https://community.chocolatey.org/packages/zettlr/)
 * [Arch Linux](https://wiki.archlinux.org/title/Zettlr)
-* [FlatPack (Linux)](https://flathub.org/apps/details/com.zettlr.Zettlr)
 
 All other [platforms that Electron supports](https://www.electronjs.org/docs/latest/development/build-instructions-gn#platform-prerequisites) are supported as well, but you will need to build the app yourself for this to work.
 
@@ -100,12 +106,13 @@ As soon as you are happy with your changes, open a Pull Request here that update
 
 Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have the following installed on your computer:
 
-1. A [NodeJS](https://nodejs.org/)-stack. Make sure it's at least Node 14 (`lts/fermium`). To test what version you have, run `node -v`.
+1. [NodeJS](https://nodejs.org/). Make sure it's at least Node 20 (`lts/iron`). To test what version you have, run `node -v`.
 2. [Yarn](https://yarnpkg.com/en/). This is the package manager for the project, as we do not commit `package-lock.json`-files and many commands require yarn. You can install this globally using `npm install -g yarn` or Homebrew, if you are on macOS.
 3. On Windows, we recommend to [install the Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install), which will make many of the next steps easier.
-4. A few command-line utilities that the build script requires to download Pandoc to your development setup:
-    * [`cURL`](https://curl.se/download.html)
-    * `unzip`
+4. A few command-line utilities that various scripts require for running the development builds:
+    * [`cURL`](https://curl.se/download.html) (required by the Pandoc download script)
+    * `unzip` (required by the Pandoc download script)
+    * [`jq`](https://jqlang.github.io/jq/) (required by the i18n script)
 5. An appropriate build toolchain for your operating system, since Zettlr requires a few native C++-modules that must be compiled before running the app:
     * **macOS**: On macOS, installing the XCode command-line tools via `xcode-select --install` suffices
     * **Windows**: On Windows, you'll need the [free Visual Studio development tools](https://visualstudio.microsoft.com/free-developer-offers/) that include the required tools
@@ -116,10 +123,10 @@ Then, simply clone the repository and install the dependencies on your local com
 ```bash
 $ git clone https://github.com/Zettlr/Zettlr.git
 $ cd Zettlr
-$ yarn install --frozen-lockfile
+$ yarn install --immutable
 ```
 
-The `--frozen-lockfile` flag ensures that yarn will stick to the versions as listed in the `yarn.lock` and not attempt to update them.
+The `--immutable` flag ensures that yarn will stick to the versions as listed in the `yarn.lock` and not attempt to update them.
 
 During development, hot module reloading (HMR) is active so that you can edit the renderer's code easily and hit `F5` after the changes have been compiled by `electron-forge`. You can keep the developer tools open to see when HMR has finished loading your changes.
 
@@ -130,7 +137,7 @@ In order to provide code, you should have basic familiarity with the following t
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) (especially asynchronous code) and [TypeScript](https://www.typescriptlang.org/docs/)
 * [Node.js](https://nodejs.org/api/)
 * [Electron](https://www.electronjs.org/docs)
-* [Vue.js 3.x](https://vuejs.org/guide/introduction.html) and [Vuex](https://vuex.vuejs.org/)
+* [Vue.js 3.x](https://vuejs.org/guide/introduction.html) and [Pinia](https://pinia.vuejs.org/)
 * [CodeMirror 6.x](https://codemirror.net/docs/)
 * [ESLint](https://eslint.org/)
 * [LESS](https://lesscss.org/#)
@@ -138,7 +145,8 @@ In order to provide code, you should have basic familiarity with the following t
 * [Electron forge](https://www.electronforge.io/)
 * [Electron builder](https://www.electron.build/)
 
-> Note: See the "Directory Structure" section below to get an idea of how Zettlr specifically works.
+> [!TIP]
+> See the "Directory Structure" section below to get an idea of how Zettlr specifically works.
 
 ### Development Commands
 
@@ -146,65 +154,7 @@ This section lists all available commands that you can use during application de
 
 #### `start`
 
-Starts `electron-forge`, which will build the application and launch it in development mode. This will use the normal settings, so if you use Zettlr on the same computer in production, it will use the same configuration files as the regular application. This means: be careful when breaking things. In that case, it's better to use `test-gui`.
-
-#### `package`
-
-Packages the application, but not bundle it into an installer. Without any suffix, this command will package the application for your current platform and architecture. To create specific packages (may require running on the corresponding platform), the following suffixes are available:
-
-- `package:mac-x64` (Intel-based Macs)
-- `package:mac-arm` (Apple Silicon-based Macs)
-- `package:win-x64` (Intel-based Windows)
-- `package:win-arm` (ARM-based Windows)
-- `package:linux-x64` (Intel-based Linux)
-- `package:linux-arm` (ARM-based Linux)
-
-The resulting application packages are stored in `./out`.
-
-> This command will skip typechecking to speed up builds, so be extra cautious.
-
-#### `release:{platform-arch}`
-
-Packages the application and then bundles it into an installer for the corresponding platform and architecture. To create such a bundle (may require running on the corresponding platform), one of the following values for `{platform-arch}` is required:
-
-- `release:mac-x64` (Intel-based Macs)
-- `release:mac-arm` (Apple Silicon-based Macs)
-- `release:win-x64` (Intel-based Windows)
-- `release:win-arm` (ARM-based Windows)
-- `release:linux-x64` (Intel-based Linux)
-- `release:linux-arm` (ARM-based Linux)
-
-The resulting setup bundles are stored in `./release`.
-
-> Please note that, while you can `package` directly for your platform without any suffix, for creating a release specifying the platform is required as electron-builder would otherwise include the development-dependencies in the `app.asar`, resulting in a bloated application.
-
-#### `csl:refresh`
-
-This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) files with which the application is shipped, and places them in the `static/csl-locales`- and `static/csl-styles`-directories respectively.
-
-> Please note, that this command is intended for an automated workflow that runs from time to time on the repository to perform this action. This means: Do **not** commit updated files to the repository. Instead, the updated files will be downloaded whenever you `git fetch`.
-
-#### `lint`
-
-This simply runs [ESLint](https://eslint.org/). Apps such as [Atom](https://atom.io/) or [Visual Studio Code](https://code.visualstudio.com/) will automatically run ESLint in the background, but if you want to be extra-safe, make sure to run this command prior to submitting a Pull Request.
-
-> This command will run automatically on each Pull Request to check your code for inconsistencies.
-
-#### `reveal:build`
-
-This re-compiles the source-files needed by the exporter for building [reveal.js](https://revealjs.com/)-presentations. Due to the nature of how [Pandoc](https://pandoc.org/) creates such presentations, Zettlr needs to modify the output by Pandoc, which is why these files need to be pre-compiled.
-
-> Please note, that this command is intended for an automated workflow that runs from time to time on the repository to perform this action. This means: Do **not** commit updated files to the repository. Instead, the updated files will be downloaded whenever you `git fetch`.
-
-#### `test`
-
-This runs the unit tests in the directory `./test`. Make sure to run this command prior to submitting a Pull Request, as this will be run every time you commit to the PR, and this way you can make sure that your changes don't break any tests, making the whole PR-process easier.
-
-#### `test-gui`
-
-Use this command to carefree test any changes you make to the application. This command will start the application as if you ran `yarn start`, but will provide a custom configuration and a custom directory.
-
-> This command will skip typechecking to speed up builds, so be extra cautious.
+Use this command to carefree test any changes you make to the application. This command will start the application, but will provide a custom configuration and a custom directory. Thus, it will not touch any files that a regular Zettlr installation will use.
 
 **The first time you start this command**, pass the `--clean`-flag to copy a bunch of test-files to your `./resources`-directory, create a `test-config.yml` in your project root, and start the application with this clean configuration. Then, you can adapt the `test-config.yml` to your liking (so that certain settings which you would otherwise _always_ set will be pre-set without you having to open the preferences).
 
@@ -214,58 +164,156 @@ If you want to prevent a config-file from being created (e.g., to simulate the f
 
 You can pass additional command-line switches such as `--clear-cache` to this command as well. They will be passed to the child process.
 
+> [!WARNING]
 > Attention: Before first running the command, you **must** run it with the `--clean`-flag to create the directory in the first place!
 
 Additionally, have a look at our [full development documentation](https://docs.zettlr.com/en/get-involved).
+
+#### `package`
+
+Packages the application, but not bundle it into an installer. Without any suffix, this command will package the application for your current platform and architecture. To create specific packages (may require running on the corresponding platform), the following suffixes are available:
+
+- `package:mac-x64` (Intel-based Macs)
+- `package:mac-arm` (Apple Silicon-based Macs)
+- `package:win-x64` (Intel-based Windows)
+- `package:linux-x64` (Intel-based Linux)
+- `package:linux-arm` (ARM-based Linux)
+
+The resulting application packages are stored in `./out`.
+
+> [!IMPORTANT]
+> This command will skip typechecking to speed up builds, so we recommend running `lint` before packaging to ensure that there are no errors.
+
+#### `release:{platform-arch}`
+
+Packages the application and then bundles it into an installer for the corresponding platform and architecture. To create such a bundle (may require running on the corresponding platform), one of the following values for `{platform-arch}` is required:
+
+- `release:mac-x64` (Intel-based Macs)
+- `release:mac-arm` (Apple Silicon-based Macs)
+- `release:win-x64` (Intel-based Windows)
+- `release:linux-x64` (Intel-based Linux)
+- `release:linux-arm` (ARM-based Linux)
+
+The resulting setup bundles are stored in `./release`.
+
+> [!NOTE]
+> While you can `package` directly for your platform without any suffix, you need to specify the platform and architecture when creating a release bundle, since electron-builder would otherwise include the development-dependencies in the `app.asar`, resulting in a bloated application.
+
+#### `csl:refresh`
+
+This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) files with which the application is shipped, and places them in the `static/csl-locales`- and `static/csl-styles`-directories respectively.
+
+> [!NOTE]
+> This command is intended for an automated workflow that runs from time to time on the repository to perform this action. **Do not commit updated files to the repository**. Instead, the updated files will be downloaded whenever you `git fetch`.
+
+#### `lint:code`
+
+Runs [ESLint](https://eslint.org/) over the codebase. Apps such as [Visual Studio Code](https://code.visualstudio.com/) will automatically run ESLint in the background on your open files. This command runs it across the entire code base.
+
+> [!TIP]
+> Usually, you will want to run the `lint` command instead.
+
+#### `lint:types`
+
+Runs TypeScript's type checker via [`vue-tsc`](https://www.npmjs.com/package/vue-tsc) over the codebase. Apps such as [Visual Studio Code](https://code.visualstudio.com/) will automatically check types for your open files in the background. This command checks the entire code base.
+
+> [!TIP]
+> Usually, you will want to run the `lint` command instead.
+
+#### `lint`
+
+Runs both `lint:code` and `lint:types` in one go. This ensures that any code you add conforms to stylistic rules and can run without obvious errors. Make sure to run this command prior to submitting a Pull Request.
+
+> [!NOTE]
+> This command will run automatically on each Pull Request to check your code for inconsistencies.
+
+#### `lint:po`
+
+This command ensures all translation files in the directory `static/lang` can be parsed by the app. It does so by parsing them with the `gettext` parser that ships with Zettlr. This command does not require the `gettext` system itself to be installed on the machine, as it only uses the Node module.
+
+> [!NOTE]
+> This command will run automatically on pull requests that touch `*.po`-files.
+
+#### `shortcut:install`
+
+Creates a `.desktop`-file into your applications which enables you to quickly start an app that you have compiled from source. This requires Linux. To use new changes, simple sync the repository, run `package` again, and you're good to go.
+
+> [!WARNING]
+> We provide this command as a convenience. Unless you know what you are doing, you should not run code directly compiled from the HEAD commit of the develop branch. This command *can* be useful, however, in a few instances where you know what may go wrong and can take appropriate precautions.
+
+### `shortcut:uninstall`
+
+Removes the `.desktop`-file created by `shortcut:install`.
+
+> [!NOTE]
+> You don't have to uninstall and reinstall the shortcut whenever you compile the binary anew. Just make sure that Zettlr is closed before you recompile it. You should only have to reinstall the shortcut if the template (in `scripts/assets/zettlr-dev.desktop`) has changed.
+
+#### `test`
+
+This runs the unit tests in the directory `./test`. Make sure to run this command prior to submitting a Pull Request, as this will be run every time you commit to the PR, and this way you can make sure that your changes don't break any tests, making the whole PR-process easier.
+
+#### `test-gui`
+
+See `start`.
+
+> [!IMPORTANT]
+> This command is deprecated and only an alias for `start`. Use `start` instead.
 
 ### Directory Structure
 
 Zettlr is a mature app that has amassed hundreds of directories over the course of its development. Since it is hard to contribute to an application without any guidance, we have compiled a short description of the directories with how they interrelate.
 
+<!-- File tree generated with `tree -d -L 4 -I node_modules .` in root -->
+
 ```
 .
-├── resources                      # Contains resource files
-│   ├── NSIS                       # Images for the Windows installer
-│   ├── icons                      # Icons used to build the application
-│   ├── screenshots                # The screenshots used in this README file
-├── scripts                        # Scripts that are run by the CI and some YARN commands
-│   ├── assets                     # Asset files used by some scripts
-│   └── test-gui                   # Test files used by `yarn test-gui`
-├── source                         # Contains the actual source code for the app
-│   ├── app                        # Contains service providers and the boot/shutdown routines
-│   ├── common                     # Common files used by several or all renderer processes
-│   │   ├── fonts                  # Contains the font files (note: location will likely change)
-│   │   ├── img                    # Currently unused image files
-│   │   ├── less                   # Contains the themes (note: location will likely change)
-│   │   ├── modules                # Contains renderer modules
-│   │   │   ├── markdown-editor    # The central CodeMirror markdown editor
-│   │   │   ├── preload            # Electron preload files
-│   │   │   └── window-register    # Run by every renderer during setup
-│   │   ├── util                   # A collection of utility functions
-│   │   └── vue                    # Contains Vue components used by the graphical interface
-│   ├── main                       # Contains code for the main process
-│   │   ├── assets                 # Static files (note: location will likely change)
-│   │   ├── commands               # Commands that perform user-actions, run from within zettlr.ts
-│   │   └── modules                # Main process modules
-│   │       ├── document-manager   # The document manager handles all open files
-│   │       ├── export             # The exporter converts Markdown files into other formats
-│   │       ├── fsal               # The File System Abstraction Layer provides the file tree
-│   │       ├── import             # The importer converts other formats into Markdown files
-│   │       └── window-manager     # The window manager manages all application windows
-│   ├── win-about                  # Code for the About window
-│   ├── win-custom-css             # Code for the Custom CSS window
-│   ├── win-defaults               # Code for the defaults file editor
-│   ├── win-error                  # The error modal window
-│   ├── win-log-viewer             # Displays the running logs from the app
-│   ├── win-main                   # The main window
-│   ├── win-paste-image            # The modal displayed when pasting an image
-│   ├── win-preferences            # The preferences window
-│   ├── win-print                  # Code for the print and preview window
-│   ├── win-stats                  # Code for the general statistics window
-│   ├── win-tag-manager            # Code for the tag manager
-│   └── win-update                 # The dedicated update window
-├── static                         # Contains static files, cf. the README-file in there
-└── test                           # Unit tests
+├── out                         # Contains unpackaged binaries after running any `package` command
+├── release                     # Contains distributables after running any `release` command
+├── resources                   # General resource files
+│   ├── NSIS                    # Windows installer bitmaps
+│   ├── icons                   # Various icon formats
+│   ├── screenshots             # Contains the main screenshots
+├── scripts                     # Scripts used during the build process and CI pipeline 
+│   ├── assets                  # Assets for the script files
+│   └── test-gui                # A full file tree used with the `test-gui` command
+├── source                      # This is the actual source filetree
+│   ├── app                     # Main process components
+│   │   ├── service-providers   # Service providers that handle most of the business logic
+│   │   └── util                # Utility functions for the main process
+│   ├── common                  # Shared files between various renderer processes
+│   │   ├── img                 # Images used in various places
+│   │   ├── modules             # Shared modules
+│   │   │   ├── markdown-editor # Main Markdown editor
+│   │   │   ├── markdown-utils  # MD Utilities such as md2html converter
+│   │   │   ├── preload         # Electron preload files
+│   │   │   └── window-register # Run by every renderer during setup
+│   │   ├── util                # General utility functions
+│   │   └── vue                 # Shared Vue components
+│   ├── pinia                   # Renderer state management
+│   ├── types                   # Types-only directory; deprecated
+│   ├── win-about               # About dialog window
+│   ├── win-assets              # Assets Manager
+│   ├── win-error               # Error window
+│   ├── win-log-viewer          # Log Viewer
+│   ├── win-main                # Main window
+│   ├── win-paste-image         # Paste-Image-dialog
+│   ├── win-preferences         # Preferences window
+│   ├── win-print               # Print preview
+│   ├── win-project-properties  # Project properties
+│   ├── win-splash-screen       # The splash screen
+│   ├── win-stats               # Statistics window
+│   ├── win-tag-manager         # Tag manager
+│   └── win-update              # Updater
+├── static                      # Contains static resources
+│   ├── csl-locales             # CSL locale files
+│   ├── csl-styles              # CSL styles
+│   ├── defaults                # Default defaults/Pandoc profiles
+│   ├── dict                    # Dictionaries that ship with the app
+│   ├── fonts                   # Fonts that ship with the app
+│   ├── lang                    # Language and i18n-related files
+│   ├── lua-filter              # Default Lua-filters
+│   └── tutorial                # Tutorial files in various languages
+└── test                        # Unit tests
 ```
 
 ### On the Distinction between Modules and Service Providers
@@ -314,20 +362,23 @@ This CLI flag will instruct Zettlr not to show the main window on start. This is
 
 Since this implies the need to have the app running in the tray bar or notification area when starting the app like this, it will automatically set the corresponding setting `system.leaveAppRunning` to true.
 
-> Note: This flag will not have any effect on Linux systems which do not support displaying an icon in a tray bar or notification area.
+> [!NOTE]
+> This flag will not have any effect on Linux systems which do not support displaying an icon in a tray bar or notification area.
 
 #### `--clear-cache`
 
 This will direct the File System Abstraction Layer to fully clear its cache on boot. This can be used to mitigate issues regarding changes in the code base. To ensure compatibility with any changes to the information stored in the cache, the cache is also automatically cleared when the version field in your `config.json` does not match the one in the `package.json`, which means that, as long as you do not explicitly set the `version`-field in your `test-config.yml`, the cache will always be cleared on each run when you type `yarn test-gui`.
 
+> [!TIP]
+> If you just want to casually clear the cache for troubleshooting, you can also clear the cache by selecting the appropriate menu item in the "Help" menu, which saves you from having to dabble with anything technical.
+
 #### `--data-dir=path`
 
-Use this switch to specify custom data directory, which holds your configuration files. Without this switch data directory defaults to `%AppData%/Zettlr` (on Windows 10), `~/.config/Zettlr` (on Linux), etc. The path can be absolute or relative. Basis for the relative path will be either the binary's directory (when running a packaged app) or the repository root directory (when running an app that is not packaged). If the path contains spaces, do not forget to escape it in quotes. `~` to denote home directory does not work. Due to the bug in Electron an empty `Dictionaries` subdirectory is created in the default data directory, but it does not impact functionality.
+Use this switch to specify a custom data directory, which holds your configuration files. Without this switch, the data directory defaults to `%AppData%/Zettlr` (on Windows 10 and newer), `~/.config/Zettlr` (on Linux), or `~/Library/Application Support/Zettlr` (on macOS). The path can be absolute or relative. Basis for the relative path will be either the binary's directory (when running a packaged app) or the repository root (when running an app that is not packaged). Remember to escape spaces or quote the path, if necessary. The `~` character to denote the home directory is not expanded in this case, so make sure to pass the entire path to your home directory if necessary. Due to a minor bug in Electron, an empty `Dictionaries` subdirectory is created in the default data directory, but it does not impact functionality.
 
 #### `--disable-hardware-acceleration`
 
 This switch causes Zettlr to disable hardware acceleration, which could be necessary in certain setups. For more information on why this flag was added, see issue [#2127](https://github.com/Zettlr/Zettlr/issues/2127).
-
 
 ## VSCode Extension Recommendations
 
@@ -337,6 +388,7 @@ Since installing extensions is sometimes a matter of taste, we have added short 
 
 If you choose not to install all of the recommended extensions at once (which we recommend), VS Code will show you the recommendations in the extensions sidebar so you can first decide which of the ones you'd like to install and then manually install those you'd like to have.
 
+> [!TIP]
 > Using the same extensions as the core developer team will make the code generally more consistent since you will have the same visual feedback.
 
 ## License

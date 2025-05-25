@@ -17,14 +17,11 @@
 
 import { Tag, tags } from '@lezer/highlight'
 
+// NOTE: Changes here must be reflected in theme/syntax.ts and parser/markdown-parser.ts
 export const customTags = {
+  YAMLFrontmatter: Tag.define(tags.monospace),
   YAMLFrontmatterStart: Tag.define(tags.contentSeparator),
   YAMLFrontmatterEnd: Tag.define(tags.contentSeparator),
-  YAMLFrontmatterKey: Tag.define(tags.tagName),
-  YAMLFrontmatterString: Tag.define(tags.string),
-  YAMLFrontmatterBoolean: Tag.define(tags.bool),
-  YAMLFrontmatterNumber: Tag.define(tags.number),
-  YAMLFrontmatterPlain: Tag.define(),
   // Meta-tags only used to contain the actual values
   YAMLFrontmatterPair: Tag.define(),
   YAMLFrontmatterSeq: Tag.define(),
@@ -37,11 +34,13 @@ export const customTags = {
   // Zettelkasten links
   ZknLink: Tag.define(),
   ZknLinkContent: Tag.define(),
+  ZknLinkTitle: Tag.define(),
+  ZknLinkPipe: Tag.define(tags.processingInstruction),
   // Zettelkasten tags
   ZknTag: Tag.define(),
   ZknTagContent: Tag.define(),
   // Pandoc attributes, like: `# Heading or Title {.unnumbered}`
   PandocAttribute: Tag.define(),
-  Highlight: Tag.define(),
+  HighlightMark: Tag.define(),
   HighlightContent: Tag.define()
 }

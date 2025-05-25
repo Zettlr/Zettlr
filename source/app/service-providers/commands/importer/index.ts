@@ -12,7 +12,6 @@
  * END HEADER
  */
 
-import commandExists from 'command-exists'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { spawn } from 'child_process'
@@ -22,11 +21,12 @@ import YAML from 'yaml'
 import checkImportIntegrity from './check-import-integrity'
 import importTextbundle from './import-textbundle'
 import type { DirDescriptor } from '@dts/common/fsal'
-import { app } from 'electron'
+import { app, dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import type AssetsProvider from '@providers/assets'
-import type { PandocProfileMetadata } from '@dts/common/assets'
-import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
+import { type PandocProfileMetadata } from '@providers/assets'
+import { SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
+import { hasMarkdownExt } from '@common/util/file-extention-checks'
 
 export default async function makeImport (
   fileList: string[],
@@ -35,17 +35,6 @@ export default async function makeImport (
   errorCallback: null|((filePath: string, errorMessage: string) => void) = null,
   successCallback: null|((filePath: string) => void) = null
 ): Promise<string[]> {
-  // Determine the availability of Pandoc. As the Pandoc path is added to
-  // process.env.PATH during the environment check, this should always work
-  // if a supported Zettlr variant is being used. In other cases (e.g. custom
-  // 32 bit builds) users can manually add a path. In any case, the exporter
-  // requires Pandoc, and if it's not there we fail.
-  try {
-    await commandExists('pandoc')
-  } catch (err) {
-    throw new Error(trans('Pandoc has not been found on this system. Please install Pandoc prior to exporting or importing files.'))
-  }
-
   let files = await checkImportIntegrity(fileList)
   let failedFiles = []
 
@@ -66,7 +55,7 @@ export default async function makeImport (
           errorCallback(file.path, err.message)
         }
       }
-    } else if ([ '.markdown', '.txt' ].includes(path.extname(file.path))) {
+    } else if (hasMarkdownExt(file.path)) {
       // In this case we should just copy it over
       try {
         const newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
@@ -88,17 +77,31 @@ export default async function makeImport (
       const allDefaults = (await assetsProvider.listDefaults()).filter(e => SUPPORTED_READERS.includes(e.writer))
       const potentialProfiles: PandocProfileMetadata[] = []
       for (const profile of allDefaults) {
+        if (profile.isInvalid) {
+          continue // There's an error with this profile
+        }
         if (file.availableReaders.includes(profile.reader)) {
           potentialProfiles.push(profile)
         }
       }
 
-      // TODO If more than one profile are found, ask the user!
+      let profileToUse = potentialProfiles[0]
       if (potentialProfiles.length > 1) {
-        console.warn(`More than one applicable profile found! Using first one: ${potentialProfiles[0].name}`)
+        const fileName = path.basename(file.path)
+        const response = await dialog.showMessageBox({
+          title: trans('Select import profile'),
+          message: trans('Select import profile'),
+          detail: trans('There are multiple profiles that can import %s. Please choose one.', fileName),
+          buttons: potentialProfiles.map(profile => {
+            return `${profile.name} (${profile.writer})`
+          }),
+          defaultId: 0
+        })
+
+        profileToUse = potentialProfiles[response.response]
       }
 
-      const defaults = await assetsProvider.getDefaultsFile(potentialProfiles[0].name)
+      const defaults = await assetsProvider.getDefaultsFile(profileToUse.name)
 
       // ... supply our file paths ...
       defaults['input-files'] = [file.path]
@@ -121,10 +124,10 @@ export default async function makeImport (
 
       try {
         await new Promise<void>((resolve, reject) => {
-          pandocProcess.on('message', (message, handle) => {
-            console.log(String(message))
+          pandocProcess.on('message', (message, _handle) => {
+            console.log(message)
           })
-          pandocProcess.on('close', (code, signal) => {
+          pandocProcess.on('close', (code, _signal) => {
             if (code === 0) {
               resolve()
             } else {

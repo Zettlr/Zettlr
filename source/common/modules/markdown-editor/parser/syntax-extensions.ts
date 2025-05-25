@@ -18,12 +18,15 @@ import { syntaxTree } from '@codemirror/language'
 import { Decoration, type DecorationSet, EditorView } from '@codemirror/view'
 
 /**
- * Creates a StateField that applies the class `code` to all code block lines.
+ * Creates a StateField that applies the class `code` to all code spans. It
+ * additionally applies the class `code-block-line` to all lines which are part
+ * of an entire code block
  *
  * @return  {StateField}  The StateField
  */
-function getCodeBlockLineHighlighter (): Extension {
+function getCodeHighlighter (): Extension {
   const codeLineDecorator = Decoration.line({ class: 'code code-block-line' })
+  const codeSpanDecorator = Decoration.mark({ class: 'code' })
 
   const render = function (state: EditorState): DecorationSet {
     const widgets: any[] = []
@@ -33,16 +36,16 @@ function getCodeBlockLineHighlighter (): Extension {
       to: state.doc.length,
       enter: (node) => {
         // CodeText contains a single node that has all the code's contents
-        if (node.type.name !== 'CodeText') {
-          return
-        }
+        if (node.type.name === 'CodeText') {
+          const start = state.doc.lineAt(node.from).number
+          const end = state.doc.lineAt(node.to).number
 
-        const start = state.doc.lineAt(node.from).number
-        const end = state.doc.lineAt(node.to).number
-
-        for (let lineNo = start; lineNo <= end; lineNo++) {
-          const line = state.doc.line(lineNo)
-          widgets.push(codeLineDecorator.range(line.from))
+          for (let lineNo = start; lineNo <= end; lineNo++) {
+            const line = state.doc.line(lineNo)
+            widgets.push(codeLineDecorator.range(line.from))
+          }
+        } else if (node.type.name === 'InlineCode') {
+          widgets.push(codeSpanDecorator.range(node.from, node.to))
         }
       }
     })
@@ -138,6 +141,14 @@ function getHeadingLineHighlighter (): Extension {
  * @return  {Extension}  An extension for the markdown editor
  */
 export const syntaxExtensions = [
-  getCodeBlockLineHighlighter(),
-  getHeadingLineHighlighter()
+  getCodeHighlighter(),
+  getHeadingLineHighlighter(),
+  EditorView.baseTheme({
+    '.size-header-1': { fontWeight: 'bold' },
+    '.size-header-2': { fontWeight: 'bold' },
+    '.size-header-3': { fontWeight: 'bold' },
+    '.size-header-4': { fontWeight: 'bold' },
+    '.size-header-5': { fontWeight: 'bold' },
+    '.size-header-6': { fontWeight: 'bold' }
+  })
 ]

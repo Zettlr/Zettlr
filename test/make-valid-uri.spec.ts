@@ -27,8 +27,8 @@ const makeUriTesters = [
   // Relative files with file protocol should be converted to absolute
   { input: 'file://./relative/file.md', expected: 'safe-file:///home/foo/documents/relative/file.md' },
   // Links without protocol should receive the HTTPS protocol
-  { input: 'github.com', expected: 'https://github.com' },
-  { input: 'www.zettlr.com', expected: 'https://www.zettlr.com' },
+  { input: 'github.com', expected: 'https://github.com/' },
+  { input: 'www.zettlr.com', expected: 'https://www.zettlr.com/' },
   // Absolute file paths should be returned with the file protocol
   { input: '/home/bar/documents/absolute.md', expected: 'safe-file:///home/bar/documents/absolute.md' },
   { input: '/Users/user/Documents/test/code-file.json', expected: 'safe-file:///Users/user/Documents/test/code-file.json' },
@@ -41,7 +41,9 @@ const makeUriTesters = [
   { input: 'gov.md/', expected: 'https://gov.md/' },
   // Alleviation: Simply make it explicitly relative, either by adding the protocol or with a full stop
   { input: 'file://folder.bundle/file.md', expected: 'safe-file:///home/foo/documents/folder.bundle/file.md' },
-  { input: './folder.bundle/file.md', expected: 'safe-file:///home/foo/documents/folder.bundle/file.md' }
+  { input: './folder.bundle/file.md', expected: 'safe-file:///home/foo/documents/folder.bundle/file.md' },
+  // Finally, our utility should also leave existing, but non-standard protocols alone (see #3853)
+  { input: 'test-proto://www.example.com', expected: 'test-proto://www.example.com' }
 ]
 
 describe('Utility#makeValidUri()', function () {

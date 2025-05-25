@@ -21,6 +21,9 @@
  */
 
 import { type InlineParser, type Element } from '@lezer/markdown'
+import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
+
+const mdParser = markdown({ base: markdownLanguage }).language.parser
 
 export const sloppyParser: InlineParser = {
   name: 'sloppy-parser', // Could be a fancy restaurant name or a bad one for a photographer
@@ -59,7 +62,35 @@ export const sloppyParser: InlineParser = {
     // Alt-text
     from = to
     to = from + ctx.text.slice(from - ctx.offset).indexOf(']')
-    children.push(ctx.elt('LinkLabel', from, to))
+
+    // The ALT-text can contain inline content (cf.
+    // https://spec.commonmark.org/0.30/#example-515) so we have to run an
+    // additional inline parse on it.
+    const linkLabel = ctx.text.slice(from - ctx.offset, to - ctx.offset)
+    const tree = mdParser.parse(linkLabel)
+    const cursor = tree.cursor()
+    const labelChildren: Element[] = []
+
+    do {
+      // ALT text can only contain inline nodes, but the parser will wrap
+      // everything in both a Document and a Paragraph b/c it sees its as a
+      // standalone document. Since the ALT text can only contain inline
+      // elements, we skip the "Document" wrapper and only extract the children
+      // of the next "Paragraph" element.
+      if (cursor.name === 'Paragraph') {
+        let currentChild = cursor.node.firstChild
+        while (currentChild !== null) {
+          // ctx.elt luckily also takes in an entire Tree, saving us a recursion
+          labelChildren.push(
+            ctx.elt(currentChild.toTree(), from + currentChild.from)
+          )
+          currentChild = currentChild.nextSibling
+        }
+        break
+      }
+    } while (cursor.next())
+
+    children.push(ctx.elt('LinkLabel', from, to, labelChildren))
 
     // Code Marks: ](
     from = to
@@ -68,7 +99,6 @@ export const sloppyParser: InlineParser = {
     children.push(ctx.elt('LinkMark', ++from, ++to))
 
     // Perform our bracket matching magic ✨
-    // URL
     from = to
     let brackets = 1 // Count the opening bracket
     while (brackets > 0 && to < ctx.offset + ctx.text.length) {

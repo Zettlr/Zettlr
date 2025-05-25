@@ -17,7 +17,7 @@
 import { promises as fs, constants as FSConstants } from 'fs'
 import { parse as parseYAML, stringify as stringifyYAML } from 'yaml'
 
-export default class PersistentDataContainer {
+export default class PersistentDataContainer<T = any> {
   /**
    * The absolute path to the data file. Must include the file extension (e.g.,
    * yaml or json).
@@ -37,9 +37,9 @@ export default class PersistentDataContainer {
    * getting of the data, contains the most recent data. Will be overwritten by
    * calling set()
    *
-   * @var {string}
+   * @var {T}
    */
-  private _data: any
+  private _data: T
 
   /**
    * Holds the most recent timeout for writing the data to disk if applicable
@@ -74,9 +74,9 @@ export default class PersistentDataContainer {
   /**
    * Initializes the container with some data. Must be called before get()
    *
-   * @param   {any}      initialData  The initial data to write into the file
+   * @param   {T}      initialData  The initial data to write into the file
    */
-  public async init (initialData: any): Promise<void> {
+  public async init (initialData: T): Promise<void> {
     if (initialData === undefined || initialData === null) {
       throw new Error('Cannot initialize data storage with null or undefined!')
     }
@@ -107,9 +107,9 @@ export default class PersistentDataContainer {
    * that passing non-serializable objects such as functions will lead to data
    * loss or can throw errors.
    *
-   * @param   {any}   newData  The new data
+   * @param   {T}   newData  The new data
    */
-  public set (newData: any): void {
+  public set (newData: T): void {
     if (newData === undefined || newData === null) {
       throw new Error('Cannot set the data to "undefined" or "null"!')
     }
@@ -128,9 +128,9 @@ export default class PersistentDataContainer {
   /**
    * Reads the data file and returns the data
    *
-   * @return  {Promise<any>}  Resolves with the data contained in the file
+   * @return  {Promise<Partial<T>>}  Resolves with the data contained in the file. NOTE that the returned type is a partial T to indicate that the container does not perform a sanity check on the data
    */
-  public async get (): Promise<any> {
+  public async get (): Promise<Partial<T>> {
     if (this._timeout !== undefined) {
       // _data contains the most recent iteration, NOT the datafile. So return
       // that one instead.
@@ -187,7 +187,7 @@ export default class PersistentDataContainer {
   private stringify (): string {
     if (this._dataType === 'json') {
       // By passing a space as the third character, we make the JSON readable
-      return JSON.stringify(this._data, undefined, ' ')
+      return JSON.stringify(this._data, undefined, '  ')
     } else {
       return stringifyYAML(this._data)
     }

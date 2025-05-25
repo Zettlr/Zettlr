@@ -20,6 +20,7 @@
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
+      "source/*": ["source/*"],
       "@common/*": ["source/common/*"],
       "@providers/*": ["source/app/service-providers/*"],
       "@dts/*": ["source/types/*"]
@@ -27,16 +28,7 @@
   },
   "include": [
     // The source files need to be compiled and linted; as do the test files.
-    "source/**/*",
-    "test/**/*",
-    // The following lines include script files that do not need to be processed
-    // by TypeScript, but nevertheless should be linted. Since ESLint receives
-    // the list of files from this file, it will therefore lint them, but since
-    // none of these files are imported by the actual source code, TS won't
-    // process them and therefore everything works as expected.
-    "scripts/**/*",
-    "forge.config.js",
-    "webpack.*.js"
+    "source/**/*", "test/**/*"
   ],
   "ts-node": {
     "require": ["tsconfig-paths/register"]

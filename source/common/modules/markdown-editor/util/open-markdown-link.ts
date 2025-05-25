@@ -13,18 +13,16 @@
  * END HEADER
  */
 
-import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import makeValidUri from '@common/util/make-valid-uri'
 import { type EditorState, type Line } from '@codemirror/state'
 import { configField } from './configuration'
 import { EditorView } from '@codemirror/view'
 import { tocField } from '../plugins/toc-field'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
+import { isAbsolutePath, pathDirname } from '@common/util/renderer-path-polyfill'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
-const path = window.path
 const ipcRenderer = window.ipc
-
-const VALID_FILETYPES = mdFileExtensions(true)
 
 /**
  * Uses the ToC field within the editor state to determine the line descriptor
@@ -52,11 +50,7 @@ function findMatchingHeading (headingId: string, state: EditorState): Line|undef
  * @param   {CodeMirror.Editor}  cm   The instance to use if it's a heading link
  */
 export default function (url: string, view: EditorView): void {
-  const base = path.dirname(view.state.field(configField).metadata.path)
-  const searchParams = new URLSearchParams(window.location.search)
-  const windowId = searchParams.get('window_id') as string
-
-  if (url[0] === '#') {
+  if (url.startsWith('#')) {
     // We should open an internal link, i.e. "jump to line".
     const targetLine = findMatchingHeading(url.substring(1), view.state)
     if (targetLine !== undefined) {
@@ -65,43 +59,33 @@ export default function (url: string, view: EditorView): void {
         effects: EditorView.scrollIntoView(targetLine.from, { y: 'center' })
       })
     }
-  } else if (url.startsWith('/') || url.startsWith('\\') || url.startsWith('.')) {
-    // We are definitely dealing with a relative or absolute URL.
-    const absPath = url.startsWith('.') ? path.resolve(base, url) : url
-    if (hasMarkdownExt(absPath)) {
-      // Attempt to open internally
-      ipcRenderer.invoke('documents-provider', {
-        command: 'open-file',
-        payload: { path: absPath, newTab: false, windowId }
-      })
-        .catch(e => console.error(e))
-    } else {
-      window.location.assign(`safe-file://${absPath}`)
-    }
   } else {
-    // It is valid Markdown to surround the URL with < and >
-    url = url.replace(/^<(.+)>$/, '$1') // Looks like an Emoji!
-    // We'll be making use of a helper function here, because
-    // we cannot rely on the errors thrown by new URL(), as,
-    // e.g., file://./relative.md will not throw an error albeit
-    // we need to convert it to absolute.
+    const searchParams = new URLSearchParams(window.location.search)
+    const windowId = searchParams.get('window_id') as string
+    const base = pathDirname(view.state.field(configField).metadata.path)
     const validURI = makeValidUri(url, base)
 
-    // Now we have a valid link. Finally, let's check if we can open the file
-    // internally, without having to switch to an external program.
-    const localPath = validURI.replace('safe-file://', '')
-    const isValidFile = VALID_FILETYPES.includes(path.extname(localPath))
-    const isLocalMdFile = path.isAbsolute(localPath) && isValidFile
+    // Create a path from the URL by stripping the protocol and decoding any
+    // potential encoded characters.
+    let localPath = decodeURIComponent(validURI.replace('safe-file://', ''))
+    // Due to the colons in the drive letters on Windows, the pathname will
+    // look like this: /C:/Users/Documents/test.jpg
+    // See: https://github.com/Zettlr/Zettlr/issues/5489
+    if (/^\/[A-Z]:/i.test(localPath)) {
+      localPath = localPath.slice(1)
+    }
 
-    if (isLocalMdFile) {
-      // Attempt to open internally
+    // It's a valid file we can open if it's an absolute path to a Markdown or
+    // code file
+    if (validURI.startsWith('safe-file://') && isAbsolutePath(localPath) && hasMdOrCodeExt(localPath)) {
       ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
         payload: { path: localPath, newTab: false, windowId }
-      })
+      } as DocumentManagerIPCAPI)
         .catch(e => console.error(e))
     } else {
-      window.location.assign(validURI) // Handled by the event listener in the main process
+      // Handled by the event listener in the main process
+      window.location.assign(validURI)
     }
   }
 }

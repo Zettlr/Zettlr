@@ -70,7 +70,7 @@ export default function replaceTags (markdown: string, oldTag: string, newTag: s
   // of the tags in the new document remain valid, even after replacing the tags
   const newTagHasSpaces = /\s/.test(newTag)
   for (const tagNode of tagNodes.reverse()) {
-    if (tagNode.value.substring(1) !== oldTag) {
+    if (tagNode.value !== oldTag) {
       continue
     }
 

@@ -13,6 +13,7 @@
  */
 
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 
 import windowRegister from '@common/modules/window-register'
@@ -29,16 +30,9 @@ windowRegister()
       }
     })
 
-    const app = createApp(App).mount('#app')
-
-    // Finally, pass the correct file to the application to preview
-    const searchParams = new URLSearchParams(window.location.search)
-    const filePath = searchParams.get('file')
-
-    if (filePath === null) {
-      console.error('Could not load file to preview, since the passed file was null!')
-    } else {
-      app.$data.filePath = filePath
-    }
+    const pinia = createPinia()
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const app = createApp(App).use(pinia)
+    app.mount('#app')
   })
   .catch(e => console.error(e))

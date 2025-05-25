@@ -19,15 +19,19 @@
 import { StateEffect, StateField } from '@codemirror/state'
 import safeAssign from '@common/util/safe-assign'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import { type MarkdownTheme } from '@providers/config/get-config-template'
 
 export interface AutocorrectOptions {
   active: boolean
+  matchWholeWords: boolean
   magicQuotes: { primary: string, secondary: string }
   replacements: Array<{ key: string, value: string }>
 }
 
 export interface EditorConfiguration {
+  autocompleteSuggestEmojis: boolean
   autocorrect: AutocorrectOptions
+  autoCloseBrackets: boolean
   renderCitations: boolean
   renderIframes: boolean
   renderImages: boolean
@@ -44,6 +48,7 @@ export interface EditorConfiguration {
   indentUnit: number
   indentWithTabs: boolean
   linkPreference: 'always'|'never'|'withID'
+  zknLinkFormat: 'link|title'|'title|link'
   linkFilenameOnly: boolean
   metadata: {
     path: string
@@ -62,20 +67,27 @@ export interface EditorConfiguration {
   lintMarkdown: boolean
   lintLanguageTool: boolean
   showStatusbar: boolean
+  showFormattingToolbar: boolean
   darkMode: boolean
+  theme: MarkdownTheme
   margins: 'S'|'M'|'L'
+  highlightWhitespace: boolean
+  countChars: boolean
 }
 
 export function getDefaultConfig (): EditorConfiguration {
   return {
     autocorrect: {
       active: true,
+      matchWholeWords: false,
       magicQuotes: {
         primary: '"…"',
         secondary: "'…'"
       },
       replacements: []
     },
+    autocompleteSuggestEmojis: false,
+    autoCloseBrackets: true,
     renderCitations: true,
     renderIframes: true,
     renderImages: true,
@@ -92,6 +104,7 @@ export function getDefaultConfig (): EditorConfiguration {
     indentUnit: 4,
     indentWithTabs: false,
     linkPreference: 'always',
+    zknLinkFormat: 'link|title',
     linkFilenameOnly: false,
     metadata: {
       path: '',
@@ -110,8 +123,12 @@ export function getDefaultConfig (): EditorConfiguration {
     lintMarkdown: false,
     lintLanguageTool: false,
     showStatusbar: false,
+    showFormattingToolbar: true,
     darkMode: false,
-    margins: 'M'
+    theme: 'berlin',
+    margins: 'M',
+    highlightWhitespace: false,
+    countChars: false
   }
 }
 
@@ -119,7 +136,7 @@ export type EditorConfigOptions = Partial<EditorConfiguration>
 
 export const configUpdateEffect = StateEffect.define<EditorConfigOptions>()
 export const configField = StateField.define<EditorConfiguration>({
-  create (state) {
+  create (_state) {
     return getDefaultConfig()
   },
   update (val, transaction) {

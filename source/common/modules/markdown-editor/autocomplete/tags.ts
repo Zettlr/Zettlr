@@ -23,21 +23,24 @@ import { type AutocompletePlugin } from '.'
  */
 export const tagsUpdate = StateEffect.define<TagRecord[]>()
 export const tagsUpdateField = StateField.define<Completion[]>({
-  create (state) {
+  create (_state) {
     return []
   },
   update (val, transaction) {
     for (const effect of transaction.effects) {
       if (effect.is(tagsUpdate)) {
         // Convert the entries into completion objects
-        return effect.value.map(entry => {
-          return {
-            label: entry.name,
-            info: entry.desc,
-            type: entry.color !== undefined ? 'keyword' : undefined,
-            apply
-          }
-        })
+        return effect.value
+          // Remove tags with spaces, as they cannot be applied within documents
+          .filter(entry => !entry.name.includes(' '))
+          .map(entry => {
+            return {
+              label: entry.name,
+              info: entry.desc,
+              type: entry.color !== undefined ? 'keyword' : undefined,
+              apply
+            }
+          })
       }
     }
     return val
@@ -50,13 +53,17 @@ export const tagsUpdateField = StateField.define<Completion[]>({
 const apply = function (view: EditorView, completion: Completion, from: number, to: number): void {
   view.dispatch({
     changes: [{ from, to, insert: completion.label }],
-    selection: { anchor: to }
+    selection: { anchor: from + completion.label.length }
   })
 }
 
 export const tags: AutocompletePlugin = {
   applies (ctx) {
-    const match = ctx.matchBefore(/(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/)
+    if (ctx.pos === 0) {
+      return false
+    }
+
+    const match = ctx.matchBefore(/(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)?/)
     if (match === null || match.to < ctx.pos) {
       return false
     } else if (match.to === ctx.pos) {

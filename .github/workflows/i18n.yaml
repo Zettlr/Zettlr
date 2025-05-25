@@ -5,14 +5,19 @@ on:
     paths:
       - '.github/workflows/i18n.yaml'
   workflow_dispatch: {} # Enable manual triggers
-  schedule:
-    - cron: '17 2 * * *' # Run every night at 02:17 (random minute to avoid high loads)
+  workflow_call: {} # Enable other workflows to call this one
+  # schedule:
+    # - cron: '17 2 * * 1' # Run every night at 02:17 (random minute to avoid high loads)
 
 permissions:
   contents: write
 
 env:
-  NODE_VERSION: '16'
+  NODE_VERSION: '22'
+
+# Ensure only a single build workflow runs at any one time
+concurrency:
+  group: ${{ github.workflow }}
 
 jobs:
   refresh:
@@ -20,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: develop
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'

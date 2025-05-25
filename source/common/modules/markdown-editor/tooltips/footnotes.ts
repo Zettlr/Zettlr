@@ -83,9 +83,16 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   }
 
   const fnBody = findRefForFootnote(view.state, fn)
+  const { zknLinkFormat } = view.state.field(configField)
 
   const { library } = view.state.field(configField).metadata
-  const tooltipContent = md2html(fnBody?.text ?? trans('No footnote text found.'), library)
+  const tooltipContent = md2html(
+    (fnBody === undefined || fnBody.text === '')
+      ? trans('No footnote text found.')
+      : fnBody.text,
+    window.getCitationCallback(library),
+    zknLinkFormat
+  )
 
   return {
     pos: nodeAt.from,
@@ -102,40 +109,10 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
       editButton.textContent = trans('Edit')
       dom.appendChild(editButton)
 
-      editButton.addEventListener('click', e => {
-        // Replace the contents with the footnote's contents to allow editing
-        dom.innerHTML = ''
-        const p = document.createElement('p')
-        const textarea = document.createElement('textarea')
-        textarea.value = fnBody.text
-        textarea.style.minWidth = '250px'
-        textarea.style.minHeight = '150px'
-        p.appendChild(textarea)
-        dom.appendChild(p)
-
-        const acceptButton = document.createElement('button')
-        acceptButton.textContent = trans('Save')
-        dom.appendChild(acceptButton)
-
-        acceptButton.addEventListener('click', e => {
-          // Exchange footnote content & restore
-          view.dispatch({
-            changes: {
-              from: fnBody.from, to: fnBody.to, insert: textarea.value
-            }
-          })
-          dom.innerHTML = md2html(textarea.value, library)
-          dom.appendChild(editButton)
-        })
-
-        const cancelButton = document.createElement('button')
-        cancelButton.textContent = trans('Cancel')
-        dom.appendChild(cancelButton)
-
-        cancelButton.addEventListener('click', e => {
-          // Restore tooltip
-          dom.innerHTML = tooltipContent
-          dom.appendChild(editButton)
+      editButton.addEventListener('click', _e => {
+        view.dispatch({
+          selection: { anchor: fnBody.from, head: fnBody.to },
+          scrollIntoView: true
         })
       })
       return { dom }

@@ -1,6 +1,9 @@
 const { spawn } = require('child_process')
 const fs = require('fs').promises
 const path = require('path')
+const { FusesPlugin } = require('@electron-forge/plugin-fuses')
+const { FuseV1Options, FuseVersion } = require('@electron/fuses')
+const { getGitHash } = require('./scripts/get-git-hash.js')
 
 /**
  * This function runs the get-pandoc script in order to download the requested
@@ -31,12 +34,12 @@ async function downloadPandoc (platform, arch) {
     // To not mess with Electron forge's output, suppress this processes output.
     // But we should reject if there's any error output.
     let shouldReject = false
-    shellProcess.stderr.on('data', (data) => {
+    shellProcess.stderr.on('data', (_data) => {
       shouldReject = true
     })
 
     // Resolve or reject once the process has finished.
-    shellProcess.on('close', (code, signal) => {
+    shellProcess.on('close', (code, _signal) => {
       if (code !== 0 || shouldReject) {
         reject(new Error(`Failed to download Pandoc: Process quit with code ${code}. If the code is 0, then there was error output.`))
       } else {
@@ -58,6 +61,10 @@ module.exports = {
       // variable that is then accessible by the webpack process so that we can
       // either include or not include fsevents for macOS platforms.
       process.env.BUNDLE_FSEVENTS = (targetPlatform === 'darwin') ? '1' : '0'
+
+      // This will be baked into the binary so that we know which commit this
+      // build was based off on.
+      process.env.GIT_COMMIT_HASH = await getGitHash()
 
       // Second, we need to make sure we can bundle Pandoc.
       const isMacOS = targetPlatform === 'darwin'
@@ -82,9 +89,9 @@ module.exports = {
         forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc.exe'))
       } else if (supportsPandoc && (isMacOS || isLinux)) {
         // Download Pandoc either for macOS or Linux ...
-        const platform = (isMacOS) ? 'darwin' : 'linux'
-        // ... and the ARM version if we're downloading for Linux ARM, else x64.
-        const arch = (isLinux && isArm64) ? 'arm' : 'x64'
+        const platform = isMacOS ? 'darwin' : 'linux'
+        // ... and the ARM or x64 version.
+        const arch = isArm64 ? 'arm' : 'x64'
         try {
           await fs.lstat(path.join(__dirname, `./resources/pandoc-${platform}-${arch}`))
         } catch (err) {
@@ -97,6 +104,49 @@ module.exports = {
       } else {
         // If someone is building this on an unsupported platform, drop a warning.
         console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)
+      }
+    },
+    postMake: async (forgeConfig, makeResults) => {
+      const basePath = __dirname
+      const releaseDir = path.join(basePath, 'release')
+
+      // Ensure the output dir exists
+      try {
+        await fs.stat(releaseDir)
+      } catch (err) {
+        await fs.mkdir(releaseDir, { recursive: true })
+      }
+
+      // makeResults is an array for each maker that has the keys `artifacts`,
+      // `packageJSON`, `platform`, and `arch`.
+      for (const result of makeResults) {
+        // Get the necessary information from the object
+        const { version, productName } = result.packageJSON
+
+        // NOTE: Other makers may produce more than one artifact, but I'll have
+        // to hardcode what to do in those cases.
+        if (result.artifacts.length > 1) {
+          throw new Error(`More than one artifact generated -- please resolve ambiguity for ${result.platform} ${result.arch} in build script.`)
+        }
+
+        const sourceFile = result.artifacts[0]
+        const ext = path.extname(sourceFile)
+
+        // NOTE: Arch needs to vary depending on the target platform
+        let arch = result.arch
+        if (arch === 'x64' && ext === '.deb') {
+          arch = 'amd64' // Debian x64
+        } else if (arch === 'x64' && [ '.rpm', '.AppImage' ].includes(ext)) {
+          arch = 'x86_64' // Fedora x64 and AppImage x64
+        } else if (arch === 'arm64' && ext === '.rpm') {
+          arch = 'aarch64' // Fedora ARM
+        } // Else: Keep it at either x64 or arm64
+
+        // Now we can finally build the correct file name
+        const baseName = `${productName}-${version}-${arch}${ext}`
+
+        // Move the file
+        await fs.rename(sourceFile, path.join(releaseDir, baseName))
       }
     }
   },
@@ -147,7 +197,7 @@ module.exports = {
           tool: 'notarytool',
           appleId: process.env.APPLE_ID,
           appleIdPassword: process.env.APPLE_ID_PASS,
-          teamId: 'QS52BN8W68'
+          teamId: process.env.APPLE_TEAM_ID
         }
       : false,
     extraResource: [
@@ -270,10 +320,76 @@ module.exports = {
               preload: {
                 js: './source/common/modules/preload/index.ts'
               }
+            },
+            {
+              html: './static/index.htm',
+              js: './source/win-splash-screen/index.ts',
+              name: 'splash_screen',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             }
           ]
         }
       }
+    },
+    // When building for production, turn off a few fuses that disable certain
+    // debug controls of the app.
+    ...((process.env.NODE_ENV === 'production')
+      ? [new FusesPlugin({
+          version: FuseVersion.V1,
+          [FuseV1Options.RunAsNode]: false,
+          [FuseV1Options.EnableCookieEncryption]: true,
+          [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
+          [FuseV1Options.EnableNodeCliInspectArguments]: false,
+          [FuseV1Options.GrantFileProtocolExtraPrivileges]: true
+        })]
+      : [])
+  ],
+  makers: [
+    {
+      name: '@electron-forge/maker-deb',
+      config: {
+        options: {
+          name: 'zettlr',
+          bin: 'Zettlr', // See packagerConfig.name property,
+          categories: [ 'Office', 'Education', 'Science' ],
+          section: 'editors',
+          // size: 500, // NOTE: Estimate, need to refine
+          description: 'Your one-stop publication workbench.',
+          productDescription: 'Your one-stop publication workbench.',
+          recommends: [ 'quarto', 'pandoc', 'texlive | texlive-base | texlive-full' ],
+          genericName: 'Markdown Editor',
+          // Electron forge recommends 512px
+          icon: './resources/icons/png/512x512.png',
+          priority: 'optional',
+          mimeType: [ 'text/markdown', 'application/x-tex', 'application/json', 'application/yaml' ],
+          maintainer: 'Hendrik Erz',
+          homepage: 'https://www.zettlr.com'
+        }
+      }
+    },
+    {
+      name: '@electron-forge/maker-rpm',
+      config: {
+        options: {
+          name: 'zettlr',
+          bin: 'Zettlr', // See packagerConfig.name property,
+          categories: [ 'Office', 'Education', 'Science' ],
+          description: 'Your one-stop publication workbench.',
+          productDescription: 'Your one-stop publication workbench.',
+          productName: 'Zettlr',
+          genericName: 'Markdown Editor',
+          // Electron forge recommends 512px
+          icon: './resources/icons/png/512x512.png',
+          license: 'GPL-3.0',
+          mimeType: [ 'text/markdown', 'application/x-tex', 'application/json', 'application/yaml' ],
+          homepage: 'https://www.zettlr.com'
+        }
+      }
+    },
+    {
+      name: '@electron-forge/maker-zip'
     }
   ]
 }

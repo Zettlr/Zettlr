@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Zettlr APT Repository</title>
+  <meta name="description" content="Install Zettlr from the official APT repository.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@zettlr">
+  <meta name="twitter:creator" content="@zettlr">
+  <meta name="twitter:title" content="Zettlr APT Repository">
+  <meta name="twitter:description" content="Install Zettlr from the official APT repository.">
+
+  <!-- Add Highlight.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script defer>hljs.highlightAll();</script>
+  
+  <!-- Get the font from Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /** Generics */
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      color: black;
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+
+    /* Helper highlight class */
+    .highlight {
+      color:rgb(28, 100, 178);
+    }
+
+    /** Links */
+
+    a, a:link, a:visited {
+      color: #1cb27e;
+    }
+
+    table a, table a:link, table a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    /** IDs */
+
+    div#header {
+      background-color: #333;
+      color: white;
+      padding-left: 30vw;
+    }
+
+    h1#main-head {
+      line-height: 1.5em;
+      margin: 0px;
+      padding: 10px;
+    }
+
+    img#main-logo {
+      height: 1.5em;
+      vertical-align: top;
+    }
+
+    /** Main container */
+
+    .container {
+      width: min(calc(100vw - 10px), 1100px);
+      margin: 0 auto;
+    }
+
+    /* Media query for smaller screens */
+    @media (max-width: 800px) {
+      div#header { padding-left: 10px; }
+    }
+
+    /** Navigation */
+
+    div#navigation {
+      padding-bottom: 10px;
+    }
+
+    div#navigation a {
+      display: inline-block;
+      color: #1cb27e;
+      text-decoration: none;
+      padding: 2px;
+      border-radius: 2px;
+    }
+
+    div#navigation a:hover {
+      background-color: #1cb27e;
+      color: white;
+    }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      body {
+        color: white;
+        background-color: #222222;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Pull the main-head out of the container for a nicer visual effect -->
+  <div id="header">
+    <h1 id="main-head">
+      <img src="logo.png" alt="Zettlr" id="main-logo">
+      Zettlr APT Repository
+    </h1>
+    <div id="navigation">
+      <a href="https://www.zettlr.com/" target="_blank">Homepage</a> &bullet;
+      <a href="https://www.zettlr.com/download" target="_blank">Download</a> &bullet;
+      <a href="https://github.com/Zettlr/Zettlr" target="_blank">GitHub</a> &bullet;
+      <a href="https://go.zettlr.com/discord" target="_blank">Discord</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <p>
+      This is the Zettlr APT repository. This repository can be used to install
+      and update Zettlr on Debian- and Ubuntu systems using aptitude.
+    </p>
+    <p>
+      By adding the Zettlr APT repository to your aptitude lists, you can update
+      Zettlr alongside your regular packages. Use this as an alternative to
+      downloading and installing the Zettlr Debian package from our homepage.
+    </p>
+    <p>
+      If you do not use a Debian and APT-compatible operating system, you can
+      <a href="https://www.zettlr.com/download">find all download options on our website</a>.
+    </p>
+    <h2>Using the Zettlr APT Repository</h2>
+    <p>
+      To use the Zettlr APT repository, you will first have to set it up, and
+      then install the app using <code>apt</code>.
+    </p>
+    <p><pre><code class="language-bash"># First, add our public key to APT
+curl -s --compressed "https://apt.zettlr.com/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/zettlr_apt.gpg > /dev/null
+# Second, add this repository to your sources
+sudo curl -s --compressed -o /etc/apt/sources.list.d/zettlr.list "https://apt.zettlr.com/zettlr.list"
+# Third, update APT so that it fetches the available files
+sudo apt update
+</code></pre></p>
+    <p>
+      Now you can install Zettlr:
+    </p>
+    <p><pre><code class="language-bash">sudo apt install zettlr</code></pre></p>
+    <p>
+      <strong>Note</strong>: If you already installed Zettlr from our website, you
+      may need to uninstall it prior to using the repository. Please follow the
+      instructions in the documentation on how to do so.
+    </p>
+  </div>
+</body>
+</html>

@@ -19,13 +19,13 @@ import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
 import path from 'path'
-import commandExists from 'command-exists'
 import { getProgramVersion } from './util/get-program-version'
 
 // Developer tools
-import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-assembler'
 import AppServiceContainer from './app-service-container'
 import { app } from 'electron'
+import { attachAppNavigationHandlers } from './util/attach-app-navigation-handlers'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -60,7 +60,7 @@ export async function bootApplication (): Promise<AppServiceContainer> {
     try {
       // Load Vue developer extension
       log.info('Installing VueJS3 DevTools extension ...')
-      const name = await installExtension(VUEJS3_DEVTOOLS)
+      const name = await installExtension(VUEJS_DEVTOOLS)
       log.info(`Added DevTools extension: ${name}`)
     } catch (err: any) {
       log.error(`Could not install DevTools extension: ${String(err.message)}`, err)
@@ -68,6 +68,10 @@ export async function bootApplication (): Promise<AppServiceContainer> {
   }
 
   registerCustomProtocols(log)
+
+  // Prevent navigation away from our main windows and the creation of arbitrary
+  // browser windows with external URLs
+  attachAppNavigationHandlers(log)
 
   // Now boot up the service container
   await appServiceContainer.boot()
@@ -87,7 +91,6 @@ export async function bootApplication (): Promise<AppServiceContainer> {
   // extract the version string, since we may get any of the two but need the
   // correct version string of the version that will actually be used.
   try {
-    await commandExists('pandoc')
     const version = await getProgramVersion('pandoc')
     process.env.PANDOC_VERSION = String(version)
   } catch (err) {

@@ -16,7 +16,7 @@ import path from 'path'
 import isFile from '@common/util/is-file'
 
 import { import_files as FILES } from '@common/data.json'
-import { EXT2READER } from '@common/util/pandoc-maps'
+import { EXT2READER } from '@common/pandoc-util/pandoc-maps'
 
 /**
 * This function checks a given file list and checks how good it is at guessing

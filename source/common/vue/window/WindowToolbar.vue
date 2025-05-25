@@ -1,35 +1,35 @@
 <template>
   <div
     id="toolbar"
+    ref="element"
     role="toolbar"
-    v-bind:style="{ top: marginTop }"
     v-bind:class="{
       'has-rtl-traffic-lights': hasRTLTrafficLights
     }"
     v-on:dblclick="handleDoubleClick"
     v-on:mousedown="$event.preventDefault()"
   >
-    <template v-for="(item, idx) in controls">
+    <template v-for="(item, idx) in props.controls">
       <ButtonControl
         v-if="item.type === 'button' && item.visible !== false"
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"
-        v-on:click="$emit('click', item.id)"
+        v-on:click="emit('click', item.id)"
       ></ButtonControl>
       <ToggleControl
         v-if="item.type === 'toggle' && item.visible !== false"
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"
-        v-on:toggle="$emit('toggle', { id: item.id, state: $event })"
+        v-on:toggle="emit('toggle', { id: item.id, state: $event })"
       ></ToggleControl>
       <ThreeWayToggle
         v-if="item.type === 'three-way-toggle'"
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-labels="showLabels"
-        v-on:toggle="$emit('toggle', { id: item.id, state: $event })"
+        v-on:toggle="emit('toggle', { id: item.id, state: $event })"
       >
       </ThreeWayToggle>
       <RingControl
@@ -38,14 +38,14 @@
         v-bind:control="item"
         v-bind:show-label="showLabels"
         v-bind:progress-percent="item.progressPercent"
-        v-on:click="$emit('click', item.id)"
+        v-on:click="emit('click', item.id)"
       ></RingControl>
       <SearchControl
         v-if="item.type === 'search'"
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"
-        v-on:update:modelValue="$emit('search', $event)"
+        v-on:update:model-value="emit('search', $event)"
       ></SearchControl>
       <SpacerControl
         v-if="item.type === 'spacer'"
@@ -56,13 +56,13 @@
         v-if="item.type === 'text' && item.visible !== false"
         v-bind:key="idx"
         v-bind:control="item"
-        v-on:click="$emit('click', item.id)"
+        v-on:click="emit('click', item.id)"
       ></TextControl>
     </template>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -77,96 +77,65 @@
  * END HEADER
  */
 
-import ButtonControl from './toolbar-controls/Button.vue'
-import RingControl from './toolbar-controls/RingProgressButton.vue'
-import ToggleControl from './toolbar-controls/Toggle.vue'
-import ThreeWayToggle from './toolbar-controls/ThreeWayToggle.vue'
-import SearchControl from './toolbar-controls/Search.vue'
-import SpacerControl from './toolbar-controls/Spacer.vue'
-import TextControl from './toolbar-controls/Text.vue'
-import { defineComponent, PropType } from 'vue'
-import { ToolbarControl } from '@dts/renderer/window'
+import ButtonControl, { type ToolbarButtonControl } from './toolbar-controls/ButtonControl.vue'
+import RingControl, { type RingProgressButtonControl } from './toolbar-controls/RingProgressButton.vue'
+import ToggleControl, { type ToolbarToggleControl } from './toolbar-controls/ToggleControl.vue'
+import ThreeWayToggle, { type ToolbarThreeWayControl } from './toolbar-controls/ThreeWayToggle.vue'
+import SearchControl, { type ToolbarSearchControl } from './toolbar-controls/SearchControl.vue'
+import SpacerControl, { type ToolbarSpacerControl } from './toolbar-controls/SpacerControl.vue'
+import TextControl, { type ToolbarTextControl } from './toolbar-controls/TextControl.vue'
+import { onMounted, ref } from 'vue'
+
+export type ToolbarControl = ToolbarButtonControl|RingProgressButtonControl|
+ToolbarSearchControl|ToolbarSpacerControl|ToolbarTextControl|
+ToolbarThreeWayControl|ToolbarToggleControl
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  name: 'WindowToolbar',
-  components: {
-    ButtonControl,
-    RingControl,
-    ToggleControl,
-    ThreeWayToggle,
-    SearchControl,
-    SpacerControl,
-    TextControl
-  },
-  props: {
-    marginTop: {
-      type: String,
-      default: '0px'
-    },
-    controls: {
-      type: Array as PropType<ToolbarControl[]>,
-      default: () => []
-    },
-    showLabels: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: [ 'click', 'dblclick', 'toggle', 'search' ],
-  data: function () {
-    return {
-      hasRTLTrafficLights: false
-    }
-  },
-  computed: {
-  },
-  mounted: function () {
-    // Make sure that (on macOS) we have the correct spacing of the toolbar.
-    ipcRenderer.on('window-controls', (event, message) => {
-      const { command, payload } = message
-      if (command === 'traffic-lights-rtl') {
-        this.hasRTLTrafficLights = payload
-      }
-    })
+const props = defineProps<{ controls: ToolbarControl[], showLabels?: boolean }>()
 
-    // Also send an initial request
-    ipcRenderer.send('window-controls', { command: 'get-traffic-lights-rtl' })
-  },
-  methods: {
-    /**
-     * Handles a double click and emits an event if the target was the toolbar
-     * or one of the spacers.
-     *
-     * @param   {MouseEvent}  event  The triggering mouse event
-     */
-    handleDoubleClick: function (event: MouseEvent) {
-      // Only emit a double click event if the user double clicked on the
-      // _toolbar_ or on a spacer, and not just on any button.
-      const t = event.target as HTMLElement|null
-      if (t === this.$el || (t !== null && t.className.includes('spacer') === true)) {
-        this.$emit('dblclick')
-      }
+const element = ref<HTMLDivElement|null>(null)
+
+const emit = defineEmits<{
+  (e: 'click', value: string|undefined): void
+  (e: 'dblclick'): void
+  (e: 'toggle', value: { id: string|undefined, state: string|boolean|undefined }): void
+  (e: 'search', value: string): void
+}>()
+
+const hasRTLTrafficLights = ref<boolean>(false)
+
+onMounted(() => {
+  // Make sure that (on macOS) we have the correct spacing of the toolbar.
+  ipcRenderer.on('window-controls', (event, message) => {
+    const { command, payload } = message
+    if (command === 'traffic-lights-rtl') {
+      hasRTLTrafficLights.value = payload
     }
-  }
+  })
+
+  // Also send an initial request
+  ipcRenderer.send('window-controls', { command: 'get-traffic-lights-rtl' })
 })
+
+function handleDoubleClick (event: MouseEvent): void {
+  // Only emit a double click event if the user double clicked on the
+  // _toolbar_ or on a spacer, and not just on any button.
+  const t = event.target as HTMLElement|null
+  if (t === element.value || t?.className.includes('spacer') === true) {
+    emit('dblclick')
+  }
+}
 </script>
 
 <style lang="less">
 body div#toolbar {
-  width: 100%;
   height: 40px;
   padding: 0px 10px;
-  position: fixed;
   display: flex;
   align-items: center;
   justify-content: space-around;
-
-  button {
-    // Reset the min-width from generic.less
-    min-width: auto;
-  }
+  gap: 10px;
 
   div.spacer {
     .size-1x { flex-grow: 1; }
@@ -182,6 +151,10 @@ body div#toolbar {
       font-size: 10px;
       text-align: center;
     }
+  }
+
+  button {
+    flex-grow: 1;
   }
 }
 

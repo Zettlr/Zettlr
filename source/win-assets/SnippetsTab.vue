@@ -2,6 +2,7 @@
   <SplitView
     v-bind:initial-size-percent="[ 20, 80 ]"
     v-bind:minimum-size-percent="[ 20, 20 ]"
+    v-bind:reset-size-percent="[ 20, 80 ]"
     v-bind:split="'horizontal'"
     v-bind:initial-total-width="100"
   >
@@ -34,6 +35,12 @@
           ></ButtonControl>
         </p>
 
+        <ButtonControl
+          v-bind:label="openSnippetsFolderLabel"
+          v-bind:inline="false"
+          v-on:click="openSnippetsDirectory"
+        ></ButtonControl>
+
         <CodeEditor
           ref="code-editor"
           v-model="editorContents"
@@ -54,7 +61,7 @@
   </SplitView>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -72,202 +79,192 @@
 
 import SplitView from '@common/vue/window/SplitView.vue'
 import SelectableList from '@common/vue/form/elements/SelectableList.vue'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
-import TextControl from '@common/vue/form/elements/Text.vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
+import TextControl from '@common/vue/form/elements/TextControl.vue'
 import CodeEditor from '@common/vue/CodeEditor.vue'
 import { trans } from '@common/i18n-renderer'
-import { defineComponent } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
+import type { AssetsProviderIPCAPI } from 'source/app/service-providers/assets'
 
 const ipcRenderer = window.ipc
 
-export default defineComponent({
-  name: 'SnippetsTab',
-  components: {
-    SplitView,
-    SelectableList,
-    CodeEditor,
-    ButtonControl,
-    TextControl
-  },
-  data: function () {
-    return {
-      currentItem: -1,
-      currentSnippetText: '',
-      editorContents: '',
-      savingStatus: '',
-      availableSnippets: [] as string[]
-    }
-  },
-  computed: {
-    saveButtonLabel: function (): string {
-      return trans('Save')
-    },
-    renameSnippetLabel: function (): string {
-      return trans('Rename snippet')
-    },
-    snippetsExplanation: function (): string {
-      return trans('Snippets let you define reusable pieces of text with variables.')
-    }
-  },
-  watch: {
-    currentItem: function (newValue, oldValue) {
-      this.loadState()
-    },
-    editorContents: function () {
-      const editor = this.$refs['code-editor'] as typeof CodeEditor
-      if (editor.isClean() === true) {
-        this.savingStatus = ''
-      } else {
-        this.savingStatus = trans('Unsaved changes')
-      }
-    }
-  },
-  created: function () {
-    this.updateAvailableSnippets()
-  },
-  mounted: function () {
-    ipcRenderer.on('shortcut', (event, shortcut) => {
-      if (shortcut === 'save-file') {
-        this.saveSnippet()
-      }
-    })
-  },
-  methods: {
-    updateAvailableSnippets: function (selectAfterUpdate?: string) {
-      ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
-        .then(data => {
-          this.availableSnippets = data
-          if (typeof selectAfterUpdate === 'string' && this.availableSnippets.includes(selectAfterUpdate) === true) {
-            this.currentItem = this.availableSnippets.indexOf(selectAfterUpdate)
-          }
-          this.loadState()
-        })
-        .catch(err => console.error(err))
-    },
-    loadState: function () {
-      if (this.availableSnippets.length === 0) {
-        const editor = this.$refs['code-editor'] as typeof CodeEditor
-        this.editorContents = ''
-        editor.markClean()
-        this.savingStatus = ''
-        this.currentSnippetText = ''
-        this.currentItem = -1
-        return // No state to load, only an error to avoid
-      }
+const saveButtonLabel = trans('Save')
+const renameSnippetLabel = trans('Rename snippet')
+const snippetsExplanation = trans('Snippets let you define reusable pieces of text with variables.')
+const openSnippetsFolderLabel = trans('Open snippets folder')
 
-      if (this.currentItem >= this.availableSnippets.length) {
-        this.currentItem = this.availableSnippets.length - 1
-      } else if (this.currentItem < 0) {
-        this.currentItem = 0
-      }
+const currentItem = ref(-1)
+const currentSnippetText = ref('')
+const editorContents = ref('')
+const savingStatus = ref('')
+const availableSnippets = ref<string[]>([])
 
-      ipcRenderer.invoke('assets-provider', {
-        command: 'get-snippet',
-        payload: {
-          name: this.availableSnippets[this.currentItem]
-        }
-      })
-        .then(data => {
-          const editor = this.$refs['code-editor'] as typeof CodeEditor
-          this.editorContents = data
-          editor.markClean()
-          this.savingStatus = ''
-          this.currentSnippetText = this.availableSnippets[this.currentItem]
-        })
-        .catch(err => console.error(err))
-    },
-    saveSnippet: function () {
-      this.savingStatus = trans('Saving …')
+watch(currentItem, () => {
+  loadState()
+})
 
-      ipcRenderer.invoke('assets-provider', {
-        command: 'set-snippet',
-        payload: {
-          name: this.availableSnippets[this.currentItem],
-          contents: this.editorContents
-        }
-      })
-        .then(() => {
-          this.savingStatus = trans('Saved!')
-          setTimeout(() => {
-            this.savingStatus = ''
-          }, 1000)
-        })
-        .catch(err => console.error(err))
-    },
-    addSnippet: function () {
-      // Adds a snippet with empty contents and a generic default name
-      const newName = this.ensureUniqueName('snippet')
-
-      ipcRenderer.invoke('assets-provider', {
-        command: 'set-snippet',
-        payload: {
-          name: newName,
-          contents: ''
-        }
-      })
-        .then(() => { this.updateAvailableSnippets(newName) })
-        .catch(err => console.error(err))
-    },
-    removeSnippet: function (idx: number) {
-      if (idx > this.availableSnippets.length - 1 || idx < 0) {
-        return
-      }
-
-      // Remove the current snippet.
-      ipcRenderer.invoke('assets-provider', {
-        command: 'remove-snippet',
-        payload: { name: this.availableSnippets[idx] }
-      })
-        .then(() => { this.updateAvailableSnippets() })
-        .catch(err => console.error(err))
-    },
-    renameSnippet: function () {
-      let newVal = this.currentSnippetText
-
-      // Sanitise the name
-      newVal = newVal.replace(/[^a-zA-Z0-9_-]/g, '-')
-
-      newVal = this.ensureUniqueName(newVal)
-
-      ipcRenderer.invoke('assets-provider', {
-        command: 'rename-snippet',
-        payload: {
-          name: this.availableSnippets[this.currentItem],
-          newName: newVal
-        }
-      })
-        .then(() => { this.updateAvailableSnippets(newVal) })
-        .catch(err => console.error(err))
-    },
-    /**
-     * Ensures that the given name candidate describes a unique snippet filename
-     *
-     * @param   {string}  candidate  The candidate's name
-     *
-     * @return  {string}             The candidate's name, with a number suffix (-X) if necessary
-     */
-    ensureUniqueName: function (candidate: string): string {
-      if (!this.availableSnippets.includes(candidate)) {
-        return candidate // No duplicate detected
-      }
-
-      let count = 1
-      const match = /-(\d+)$/.exec(candidate)
-
-      if (match !== null) {
-        // The candidate name already ends with a number-suffix --> extract it
-        count = parseInt(match[1], 10)
-        candidate = candidate.substring(0, candidate.length - match[1].length - 1)
-      }
-
-      while (this.availableSnippets.includes(candidate + '-' + String(count)) === true) {
-        count++
-      }
-
-      return candidate + '-' + count
-    }
+watch(editorContents, () => {
+  if (CodeEditor.value?.isClean() === true) {
+    savingStatus.value = ''
+  } else {
+    savingStatus.value = trans('Unsaved changes')
   }
 })
+
+// Immediately update the available snippets
+updateAvailableSnippets()
+
+const offCallback = ipcRenderer.on('shortcut', (event, shortcut) => {
+  if (shortcut === 'save-file') {
+    saveSnippet()
+  }
+})
+
+onUnmounted(() => { offCallback() })
+
+function updateAvailableSnippets (selectAfterUpdate?: string): void {
+  ipcRenderer.invoke('assets-provider', { command: 'list-snippets' } as AssetsProviderIPCAPI)
+    .then(data => {
+      availableSnippets.value = data
+      if (typeof selectAfterUpdate === 'string' && availableSnippets.value.includes(selectAfterUpdate)) {
+        currentItem.value = availableSnippets.value.indexOf(selectAfterUpdate)
+      }
+      loadState()
+    })
+    .catch(err => console.error(err))
+}
+
+function loadState (): void {
+  if (availableSnippets.value.length === 0) {
+    editorContents.value = ''
+    CodeEditor.value?.markClean()
+    savingStatus.value = ''
+    currentSnippetText.value = ''
+    currentItem.value = -1
+    return // No state to load, only an error to avoid
+  }
+
+  if (currentItem.value >= availableSnippets.value.length) {
+    currentItem.value = availableSnippets.value.length - 1
+  } else if (currentItem.value < 0) {
+    currentItem.value = 0
+  }
+
+  ipcRenderer.invoke('assets-provider', {
+    command: 'get-snippet',
+    payload: {
+      name: availableSnippets.value[currentItem.value]
+    }
+  } as AssetsProviderIPCAPI)
+    .then(data => {
+      editorContents.value = data
+      CodeEditor.value?.markClean()
+      savingStatus.value = ''
+      currentSnippetText.value = availableSnippets.value[currentItem.value]
+    })
+    .catch(err => console.error(err))
+}
+
+function saveSnippet (): void {
+  savingStatus.value = trans('Saving …')
+
+  ipcRenderer.invoke('assets-provider', {
+    command: 'set-snippet',
+    payload: {
+      name: availableSnippets.value[currentItem.value],
+      contents: editorContents.value
+    }
+  } as AssetsProviderIPCAPI)
+    .then(() => {
+      savingStatus.value = trans('Saved!')
+      setTimeout(() => {
+        savingStatus.value = ''
+      }, 1000)
+    })
+    .catch(err => console.error(err))
+}
+
+function addSnippet (): void {
+  // Adds a snippet with empty contents and a generic default name
+  const newName = ensureUniqueName('snippet')
+
+  ipcRenderer.invoke('assets-provider', {
+    command: 'set-snippet',
+    payload: {
+      name: newName,
+      contents: ''
+    }
+  } as AssetsProviderIPCAPI)
+    .then(() => { updateAvailableSnippets(newName) })
+    .catch(err => console.error(err))
+}
+
+function removeSnippet (idx: number): void {
+  if (idx > availableSnippets.value.length - 1 || idx < 0) {
+    return
+  }
+
+  // Remove the current snippet.
+  ipcRenderer.invoke('assets-provider', {
+    command: 'remove-snippet',
+    payload: { name: availableSnippets.value[idx] }
+  } as AssetsProviderIPCAPI)
+    .then(() => { updateAvailableSnippets() })
+    .catch(err => console.error(err))
+}
+
+function renameSnippet (): void {
+  let newVal = currentSnippetText.value
+
+  // Sanitise the name
+  newVal = newVal.replace(/[^a-zA-Z0-9_-]/g, '-')
+
+  newVal = ensureUniqueName(newVal)
+
+  ipcRenderer.invoke('assets-provider', {
+    command: 'rename-snippet',
+    payload: {
+      name: availableSnippets.value[currentItem.value],
+      newName: newVal
+    }
+  } as AssetsProviderIPCAPI)
+    .then(() => { updateAvailableSnippets(newVal) })
+    .catch(err => console.error(err))
+}
+
+/**
+ * Ensures that the given name candidate describes a unique snippet filename
+ *
+ * @param   {string}  candidate  The candidate's name
+ *
+ * @return  {string}             The candidate's name, with a number suffix (-X) if necessary
+ */
+function ensureUniqueName (candidate: string): string {
+  if (!availableSnippets.value.includes(candidate)) {
+    return candidate // No duplicate detected
+  }
+
+  let count = 1
+  const match = /-(\d+)$/.exec(candidate)
+
+  if (match !== null) {
+    // The candidate name already ends with a number-suffix --> extract it
+    count = parseInt(match[1], 10)
+    candidate = candidate.substring(0, candidate.length - match[1].length - 1)
+  }
+
+  while (availableSnippets.value.includes(candidate + '-' + String(count))) {
+    count++
+  }
+
+  return candidate + '-' + count
+}
+
+function openSnippetsDirectory (): void {
+  ipcRenderer.invoke('assets-provider', {
+    command: 'open-snippets-directory'
+  } as AssetsProviderIPCAPI).catch(err => console.error(err))
+}
 </script>
 
 <style lang="less">

@@ -22,8 +22,9 @@
 
 import hash from '@common/util/hash'
 import type LogProvider from '@providers/log'
-import fs from 'fs'
+import fs, { promises as fsPromises } from 'fs'
 import path from 'path'
+import type { CodeFileDescriptor, MDFileDescriptor } from 'source/types/common/fsal'
 
 export default class FSALCache {
   private readonly _datadir: string
@@ -31,7 +32,7 @@ export default class FSALCache {
    * Our cache data is a map of maps. The outer map constitutes shards, which
    * themselves contain maps of key-value pairs.
    */
-  private readonly _data: Map<string, Map<string, any>>
+  private readonly _data: Map<string, Map<string, MDFileDescriptor|CodeFileDescriptor>>
   /**
    * This here is a Set which contains the keys of all values that have been
    * accessed. If a key is in here, we have accessed it. If it's not but in the
@@ -56,24 +57,29 @@ export default class FSALCache {
     } catch (err) {
       this._logger.warning(`[FSAL Cache] Cache data dir does not yet exist: ${this._datadir}.`)
       // Make sure the path exists
-      fs.mkdirSync(this._datadir, { 'recursive': true })
+      fs.mkdirSync(this._datadir, { recursive: true })
     }
   }
 
   /**
    * Returns the value associated for a key without removing it.
    *
-   * @param   {string}         key  The key to get
+   * @param   {string}                                       key  The key to get
    *
-   * @returns {any|undefined}       The key's value or undefined
+   * @returns {undefined|MDFileDescriptor|CodeFileDescriptor}     The key's value or undefined
    */
-  get (key: string): any|undefined {
+  get (key: string): undefined|MDFileDescriptor|CodeFileDescriptor {
     const shard = this._loadShard(key)
 
     if (shard.has(key)) {
       this._accessed.add(key)
     }
 
+    // NOTE for upcoming 3.1.0: I have now changed the cache setter in both
+    // fsal-code-file.ts and fsal-file.ts to no longer provide strings as the
+    // cache objects which means the cache must be cleaned before running a new
+    // version as it will otherwise throw tons of errors, but this should now
+    // improve performance.
     return shard.get(key)
   }
 
@@ -85,7 +91,7 @@ export default class FSALCache {
    *
    * @return {boolean}        True on success, false otherwise.
    */
-  set (key: string, value: any): boolean {
+  set (key: string, value: MDFileDescriptor|CodeFileDescriptor): boolean {
     try {
       JSON.stringify(value)
     } catch (err) {
@@ -172,7 +178,7 @@ export default class FSALCache {
   /**
    * Clears the cache during runtime
    */
-  clearCache (): void {
+  public async clearCache (): Promise<void> {
     // Two things need to be done:
     // First, flush everything from memory
     // Second: Remove all cache files
@@ -180,27 +186,11 @@ export default class FSALCache {
     this._accessed.clear()
 
     // We'll collect the cache clearing actions to resolve them all
-    let promises = []
-    let directoryContents = fs.readdirSync(this._datadir)
-    for (let file of directoryContents) {
-      let realPath = path.join(this._datadir, file)
-      promises.push(new Promise<void>((resolve, reject) => {
-        fs.unlink(realPath, (err) => {
-          if (err !== null) {
-            reject(err)
-          } else {
-            resolve()
-          }
-        })
-      }))
+    const directoryContents = await fsPromises.readdir(this._datadir)
+    for (const file of directoryContents) {
+      const realPath = path.join(this._datadir, file)
+      await fsPromises.unlink(realPath)
     }
-
-    // Watch how the promises do
-    Promise.all(promises).then(() => {
-      this._logger.info('[FSAL Cache] Cache cleared!')
-    }).catch((e) => {
-      this._logger.error('[FSAL Cache] Error while clearing the cache!', e)
-    })
   }
 
   /**
@@ -210,7 +200,7 @@ export default class FSALCache {
    *
    * @return {Map<string, any>} The loaded shard
    */
-  _loadShard (key: string): Map<string, any> {
+  _loadShard (key: string): Map<string, MDFileDescriptor|CodeFileDescriptor> {
     // load a shard
     const shard = this._determineShard(key)
 
@@ -224,13 +214,45 @@ export default class FSALCache {
     try {
       // Either return a persisted shard ...
       fs.lstatSync(path.join(this._datadir, shard))
-      let content = fs.readFileSync(path.join(this._datadir, shard), { encoding: 'utf8' })
-      const shardContents = new Map<string, any>(JSON.parse(content))
+      const content = fs.readFileSync(path.join(this._datadir, shard), { encoding: 'utf8' })
+      const parsedData = JSON.parse(content)
+
+      // Guard the parsed data to ensure it is the data we expect. Otherwise, we
+      // can quickly recreate the shard.
+      const thisErrorWillBeIgnored = new Error('Cannot load cache shard: Parse error')
+      if (!Array.isArray(parsedData)) {
+        throw thisErrorWillBeIgnored
+      }
+      for (const element of parsedData) {
+        if (!Array.isArray(element)) {
+          throw thisErrorWillBeIgnored
+        }
+
+        if (typeof element[0] !== 'string') {
+          throw thisErrorWillBeIgnored
+        }
+
+        if (typeof element[1] !== 'object') {
+          throw thisErrorWillBeIgnored
+        }
+
+        // NOTE: This is a basic check that only ensures that one of the common
+        // elements of both MDFileDescriptor and CodeFileDescriptor is present.
+        // There are other potential pitfalls here, but the type guard is already
+        // very long.
+        if (element[1].type === undefined) {
+          throw thisErrorWillBeIgnored
+        }
+      }
+
+      this._logger.verbose(`[FSALCache] Loading shard from disk: ${shard}`)
+      const shardContents = new Map<string, MDFileDescriptor|CodeFileDescriptor>(parsedData as Array<[string, MDFileDescriptor|CodeFileDescriptor]>)
       this._data.set(shard, shardContents)
       return shardContents
     } catch (err) {
       // ... or create a new one.
-      const shardContents = new Map()
+      this._logger.info(`[FSALCache] Creating new shard: ${shard}`)
+      const shardContents = new Map<string, MDFileDescriptor|CodeFileDescriptor>()
       this._data.set(shard, shardContents)
       return shardContents
     }

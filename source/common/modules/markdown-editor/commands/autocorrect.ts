@@ -20,7 +20,7 @@ import { type Command, type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 
 // These characters can be directly followed by a starting magic quote
-const startChars = ' ([{-–—\n\r\t\v\f'
+const startChars = ' ([{-–—\n\r\t\v\f/\\'
 
 /**
  * Given the editor state and a position, this function returns whether the
@@ -34,14 +34,27 @@ const startChars = ' ([{-–—\n\r\t\v\f'
  * @return  {boolean}             True if the position touches a protected node.
  */
 function posInProtectedNode (state: EditorState, pos: number): boolean {
-  const node = syntaxTree(state).resolve(pos, 0)
-  return [
+  const PROTECTED_NODES = [
     'InlineCode', // `code`
-    'CommentBlock', // <!-- comment -->
-    'FencedCode', // Code block
-    'CodeText', // Code block
-    'HorizontalRule'
-  ].includes(node.type.name)
+    'Comment', 'CommentBlock', // <!-- comment -->
+    'FencedCode', 'CodeText', // Code block
+    'HorizontalRule', // --- and ***
+    'YAMLFrontmatter',
+    'HTMLTag', 'HTMLBlock' // HTML elements
+  ]
+
+  let node = syntaxTree(state).resolveInner(pos, -1)
+
+  while (node.parent !== null) {
+    if (PROTECTED_NODES.includes(node.type.name)) {
+      return true
+    }
+
+    node = node.parent
+  }
+
+  // Neither the node itself, nor any of its parents, are protected.
+  return false
 }
 
 /**
@@ -53,7 +66,7 @@ function posInProtectedNode (state: EditorState, pos: number): boolean {
  * @return  {boolean}           Always returns false to make Codemirror add the Space/Enter
  */
 export function handleReplacement (view: EditorView): boolean {
-  const autocorrect = view.state.field(configField).autocorrect
+  const { autocorrect } = view.state.field(configField)
   if (!autocorrect.active || autocorrect.replacements.length === 0) {
     return false
   }
@@ -78,6 +91,8 @@ export function handleReplacement (view: EditorView): boolean {
     }
 
     // Leave --- and ... lines (YAML frontmatter as well as horizontal rules)
+    // We have investigated finding these as protected nodes. However, '---' in
+    // the first line is not parsed as any type.
     const line = view.state.doc.lineAt(range.from)
     if ([ '---', '...' ].includes(line.text)) {
       continue
@@ -89,7 +104,17 @@ export function handleReplacement (view: EditorView): boolean {
       if (slice.endsWith(key)) {
         const startOfReplacement = range.from - key.length
         if (posInProtectedNode(view.state, startOfReplacement)) {
-          break // `range.from` may not be in a protected area, but start is.
+          break // `range.from` is not in a protected area, but start is.
+        }
+
+        const charBefore = startOfReplacement === 0
+          ? ' ' // Assume a space which makes below's code simpler
+          : view.state.sliceDoc(startOfReplacement - 1, startOfReplacement)
+
+        if (autocorrect.matchWholeWords && !/\W/.test(charBefore)) {
+          // We should match whole words, but the replacement is
+          // not preceeded by a non-word character.
+          break
         }
 
         changes.push({ from: startOfReplacement, to: range.from, insert: value })

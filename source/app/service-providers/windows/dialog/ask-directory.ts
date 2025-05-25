@@ -24,7 +24,7 @@ import type ConfigProvider from '@providers/config'
  * @param buttonLabel {string|null}    Label of the Button
  * @return  {Promise<string>[]}        Resolves with an array of paths
  */
-export default async function askDirectory (config: ConfigProvider, win: BrowserWindow|null, title: string, buttonLabel: string|undefined): Promise<string[]> {
+export default async function askDirectory (config: ConfigProvider, win: BrowserWindow|null, title: string, buttonLabel?: string, message?: string): Promise<string[]> {
   let startDir = app.getPath('home')
 
   if (isDir(config.get('dialogPaths.askDirDialog'))) {
@@ -34,6 +34,7 @@ export default async function askDirectory (config: ConfigProvider, win: Browser
   const options: OpenDialogOptions = {
     title,
     buttonLabel,
+    message,
     defaultPath: startDir,
     properties: [
       'openDirectory',
@@ -42,8 +43,10 @@ export default async function askDirectory (config: ConfigProvider, win: Browser
   }
 
   let response: OpenDialogReturnValue
-  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
-  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status
+  // vs. promise awaits. UPDATE 2024-03-11: In response to #4952, removing the
+  // platform check again.
+  if (win !== null) {
     response = await dialog.showOpenDialog(win, options)
   } else {
     response = await dialog.showOpenDialog(options)

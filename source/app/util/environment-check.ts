@@ -17,15 +17,23 @@ import { app } from 'electron'
 import { promises as fs } from 'fs'
 import isFile from '../../common/util/is-file'
 import isTraySupported from './is-tray-supported'
-import commandExists from 'command-exists'
 import { getProgramVersion } from './get-program-version'
+import fixPath from 'fix-path'
 
 export default async function environmentCheck (): Promise<void> {
   console.log('[Application] Performing environment check ...')
 
+  // This is necessary on macOS and Linux, because GUI applications may not
+  // inherit the same PATH environment variable as terminal programs. This is
+  // necessary, however, to detect additional helper programs, such as quarto.
+  fixPath()
+
   /**
-   * Contains custom paths that should be present on the process.env.PATH property
-   * for the given operating system as reported by process.platform.
+   * Contains custom paths that should be present on the process.env.PATH
+   * property for the given operating system as reported by process.platform.
+   *
+   * @deprecated With the addition of `fixPath`, it is highly likely that we do
+   * not need this contraption anymore.
    */
   const CUSTOM_PATHS: { [key in NodeJS.Platform]: string[] } = {
     win32: [],
@@ -108,19 +116,20 @@ export default async function environmentCheck (): Promise<void> {
 
   // Now, let's see if there's a quarto package installed
   try {
-    await commandExists('quarto')
     const version = await getProgramVersion('quarto')
     console.log(`[Application] Found a system-wide Quarto install! Version ${String(version)}`)
+    process.env.QUARTO_SUPPORT = '1'
     process.env.QUARTO_VERSION = String(version)
   } catch (err) {
     // No system wide install
+    console.log('[Application] Quarto not found on system. *.qmd-files will be exported with Pandoc.')
+    process.env.QUARTO_SUPPORT = '0'
   }
 
   // Finally, determine if git is installed on this machine
   try {
-    await commandExists('git')
-    process.env.GIT_SUPPORT = '1'
     const version = await getProgramVersion('git')
+    process.env.GIT_SUPPORT = '1'
     process.env.GIT_VERSION = version
   } catch (err) {
     process.env.GIT_SUPPORT = '0'

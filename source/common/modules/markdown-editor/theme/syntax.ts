@@ -50,20 +50,14 @@ const markdownTheme = HighlightStyle.define([
   { tag: tags.emphasis, class: 'cm-emphasis' },
   { tag: tags.strong, class: 'cm-strong' },
   // Styling for YAML frontmatters
+  { tag: customTags.YAMLFrontmatter, class: 'cm-yaml-frontmatter' },
   { tag: customTags.YAMLFrontmatterStart, class: 'cm-yaml-frontmatter-start' },
   { tag: customTags.YAMLFrontmatterEnd, class: 'cm-yaml-frontmatter-end' },
-  { tag: customTags.YAMLFrontmatterKey, class: 'yaml-frontmatter-key' },
-  { tag: customTags.YAMLFrontmatterString, class: 'yaml-frontmatter-string' },
-  { tag: customTags.YAMLFrontmatterBoolean, class: 'yaml-frontmatter-boolean' },
-  { tag: customTags.YAMLFrontmatterNumber, class: 'yaml-frontmatter-number' },
-  { tag: customTags.YAMLFrontmatterPlain, class: 'yaml-frontmatter-plain' },
-  { tag: customTags.YAMLFrontmatterSeq, class: 'yaml-frontmatter-seq' },
-  { tag: customTags.YAMLFrontmatterMap, class: 'yaml-frontmatter-map' },
-  { tag: customTags.YAMLFrontmatterPair, class: 'yaml-frontmatter-pair' },
   // Codeblocks
   { tag: tags.labelName, class: 'cm-info-string' }, // CodeInfo (info string)
   { tag: tags.processingInstruction, class: 'cm-code-mark' }, // CodeMark (i.e. ```) but also table delimiters
   { tag: tags.monospace, class: 'cm-monospace' }, // CodeText (i.e. code block content)
+  // NOTE: Changes here must be reflected in util/custom-tags.ts and parser/markdown-parser.ts
   // Tables TODO
   // Footnotes
   { tag: customTags.Footnote, class: 'footnote' },
@@ -73,7 +67,7 @@ const markdownTheme = HighlightStyle.define([
   { tag: customTags.ZknLinkContent, class: 'cm-zkn-link' },
   { tag: customTags.ZknTagContent, class: 'cm-zkn-tag' },
   { tag: customTags.PandocAttribute, class: 'pandoc-attribute' },
-  { tag: customTags.Highlight, class: 'cm-highlight' },
+  { tag: customTags.HighlightMark, class: 'cm-highlight cm-highlight-mark' },
   { tag: customTags.HighlightContent, class: 'cm-highlight' }
 ])
 

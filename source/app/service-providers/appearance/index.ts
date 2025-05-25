@@ -35,7 +35,7 @@ export default class AppearanceProvider extends ProviderContract {
   private _startMin: number
   private _endHour: number
   private _endMin: number
-  private _tickInterval: NodeJS.Timer
+  private _tickInterval: NodeJS.Timeout
 
   /**
    * Create the instance on program start and initially load the settings.
@@ -85,19 +85,18 @@ export default class AppearanceProvider extends ProviderContract {
         this._recalculateSchedule()
       } else if (option === 'darkMode' && process.platform === 'darwin') {
         const shouldBeDark = nativeTheme.shouldUseDarkColors
-        const isDark = Boolean(this._config.get('darkMode'))
+        const isDark = this._config.get().darkMode
         if (shouldBeDark !== isDark) {
           // Explicitly set the appLevelAppearance in case the internal theme
           // differs from the operating system.
-          systemPreferences.appLevelAppearance = (isDark) ? 'dark' : 'light'
+          nativeTheme.themeSource = (isDark) ? 'dark' : 'light'
         } else {
-          // @ts-expect-error: See issue https://github.com/electron/electron/issues/30413
-          systemPreferences.appLevelAppearance = null
+          nativeTheme.themeSource = 'system'
         }
       }
     })
 
-    ipcMain.handle('appearance-provider', (event, { command, payload }) => {
+    ipcMain.handle('appearance-provider', (event, { command }) => {
       // This command returns the accent colour including a contrast colour to be used
       // as the opposite colour, if a good visible contrast is wished for.
       if (command === 'get-accent-color') {
@@ -153,7 +152,7 @@ export default class AppearanceProvider extends ProviderContract {
       this._config.set('darkMode', nativeTheme.shouldUseDarkColors)
     } else if (process.platform === 'darwin') {
       // Override the app level appearance immediately
-      systemPreferences.appLevelAppearance = this._config.get().darkMode ? 'dark' : 'light'
+      nativeTheme.themeSource = this._config.get().darkMode ? 'dark' : 'light'
     }
 
     // It may be that it was already dark when the user started the app, but the
@@ -191,8 +190,9 @@ export default class AppearanceProvider extends ProviderContract {
    * Parses the current auto dark mode start and end times for quick access.
    */
   _recalculateSchedule (): void {
-    const start = this._config.get('autoDarkModeStart').split(':')
-    const end = this._config.get('autoDarkModeEnd').split(':')
+    const { autoDarkModeStart, autoDarkModeEnd } = this._config.get()
+    const start = autoDarkModeStart.split(':')
+    const end = autoDarkModeEnd.split(':')
 
     this._startHour = parseInt(start[0], 10)
     this._startMin = parseInt(start[1], 10)

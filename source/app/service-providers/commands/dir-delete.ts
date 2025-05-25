@@ -12,7 +12,10 @@
  * END HEADER
  */
 
+import { trans } from '@common/i18n-main'
+import { type MessageBoxOptions, dialog } from 'electron'
 import ZettlrCommand from './zettlr-command'
+import path from 'path'
 
 export default class DirDelete extends ZettlrCommand {
   constructor (app: any) {
@@ -25,22 +28,26 @@ export default class DirDelete extends ZettlrCommand {
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    let dirToDelete = this._app.fsal.findDir(arg.path)
-    if (dirToDelete === undefined) {
-      this._app.log.error('Could not remove directory: Not found.')
+    const dirName = path.basename(arg.path)
+    const options: MessageBoxOptions = {
+      type: 'warning',
+      buttons: [
+        trans('Ok'),
+        trans('Cancel')
+      ],
+      defaultId: 0,
+      cancelId: 1,
+      title: trans('Really delete?'),
+      message: trans('Do you really want to remove %s?', dirName)
+    }
+
+    const response = await dialog.showMessageBox(options)
+    if (response.response !== 0) {
       return false
     }
 
-    // Now that all files are corresponding files are closed, we can
-    // proceed to remove the directory.
-
-    if (!await this._app.windows.confirmRemove(dirToDelete)) {
-      return false
-    }
-
-    // First, remove the directory
     try {
-      await this._app.fsal.removeDir(dirToDelete)
+      await this._app.fsal.removeDir(arg.path)
     } catch (err: any) {
       this._app.log.error(err.message, err)
       return false

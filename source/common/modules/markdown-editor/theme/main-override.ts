@@ -20,24 +20,16 @@ export const mainOverride = EditorView.baseTheme({
   '&.cm-editor': {
     height: '100%',
     fontFamily: 'inherit',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    cursor: 'auto'
   },
   '.cm-scroller': {
-    flexGrow: '1' // Ensure the content pushes possible panels towards the edge
+    flexGrow: '1', // Ensure the content pushes possible panels towards the edge
+    outline: '0' // Remove the outline
   },
-  '.cm-scroller .muted': {
-    opacity: '0.2'
-  },
-  // KaTeX overrides
-  '.katex': {
-    fontSize: '1.1em', // reduce font-size of math a bit
-    display: 'inline-block', // needed for display math to behave properly
-    userSelect: 'none' // Disable user text selection
-  },
-  '.katex-display, .katex-display > .katex > .katex-html': {
-    width: '100%' // display math should be centered
-  },
-  // Panel button overrides
+  // Hide overflowing text in autocompletion info panels
+  '.cm-completionInfo': { overflow: 'hidden' },
+  // PANELS
   '.cm-panels .cm-button': {
     backgroundImage: 'none',
     backgroundColor: 'inherit',
@@ -54,34 +46,40 @@ export const mainOverride = EditorView.baseTheme({
   '.cm-panel.cm-search': {
     userSelect: 'none' // prevent search panel text elements from being selected
   },
-  // Tooltips
+  // TOOLTIPS
   '.cm-tooltip': {
-    padding: '4px'
+    padding: '4px',
+    maxWidth: '800px'
   },
-  // Define the readability classes. Red, orange, and yellow indicate bad scores
-  // Purple and blue indicate average scores, and green indicates good scores
-  '&light .cm-readability-0': { backgroundColor: '#ff0000aa', color: '#444' },
-  '&light .cm-readability-1': { backgroundColor: '#f67b2baa', color: '#444' },
-  '&light .cm-readability-2': { backgroundColor: '#e5a14faa', color: '#444' },
-  '&light .cm-readability-3': { backgroundColor: '#e3e532aa', color: '#444' },
-  '&light .cm-readability-4': { backgroundColor: '#d4c1fdaa', color: '#444' },
-  '&light .cm-readability-5': { backgroundColor: '#538fe9aa', color: '#444' },
-  '&light .cm-readability-6': { backgroundColor: '#53bce9aa', color: '#444' },
-  '&light .cm-readability-7': { backgroundColor: '#53e7e9aa', color: '#444' },
-  '&light .cm-readability-8': { backgroundColor: '#4ad14caa', color: '#444' },
-  '&light .cm-readability-9': { backgroundColor: '#53e955aa', color: '#444' },
-  '&light .cm-readability-10': { backgroundColor: '#7cf87eaa', color: '#444' },
-  '&dark .cm-readability-0': { backgroundColor: '#ff0000aa', color: '#ccc' },
-  '&dark .cm-readability-1': { backgroundColor: '#f67b2baa', color: '#ccc' },
-  '&dark .cm-readability-2': { backgroundColor: '#e5a14faa', color: '#ccc' },
-  '&dark .cm-readability-3': { backgroundColor: '#e3e532aa', color: '#ccc' },
-  '&dark .cm-readability-4': { backgroundColor: '#d4c1fdaa', color: '#ccc' },
-  '&dark .cm-readability-5': { backgroundColor: '#538fe9aa', color: '#ccc' },
-  '&dark .cm-readability-6': { backgroundColor: '#53bce9aa', color: '#ccc' },
-  '&dark .cm-readability-7': { backgroundColor: '#53e7e9aa', color: '#ccc' },
-  '&dark .cm-readability-8': { backgroundColor: '#4ad14caa', color: '#ccc' },
-  '&dark .cm-readability-9': { backgroundColor: '#53e955aa', color: '#ccc' },
-  '&dark .cm-readability-10': { backgroundColor: '#7cf87eaa', color: '#ccc' }
+  // Footnotes
+  '.footnote, .footnote-ref-label': {
+    verticalAlign: 'super',
+    fontSize: '80%'
+  },
+  '.cm-emphasis': { fontStyle: 'italic' },
+  // Provide the default YAML frontmatter indicator
+  '.cm-yaml-frontmatter-start::after': {
+    content: '"YAML Frontmatter"',
+    display: 'inline-block',
+    marginLeft: '10px',
+    padding: '0px 5px',
+    fontSize: '60%',
+    fontWeight: 'normal',
+    verticalAlign: 'middle',
+    color: 'var(--grey-2)',
+    backgroundColor: 'var(--grey-0)'
+  },
+  '&dark .cm-yaml-frontmatter-start::after': {
+    color: 'var(--grey-0)',
+    backgroundColor: 'var(--grey-4)'
+  },
+  // Highlight/mark elements
+  '.cm-highlight': {
+    backgroundColor: '#ffff0080',
+  },
+  '&dark .cm-highlight': {
+    backgroundColor: '#ffff0060',
+  }
 })
 
 export const defaultLight = EditorView.theme({}, { dark: false })

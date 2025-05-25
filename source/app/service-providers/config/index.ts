@@ -18,33 +18,42 @@ import EventEmitter from 'events'
 import { ValidationRule, VALIDATE_RULES, VALIDATE_PROPERTIES } from './config-validation'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { app, dialog, ipcMain } from 'electron'
-import ignoreFile from '@common/util/ignore-file'
 import safeAssign from '@common/util/safe-assign'
 import isDir from '@common/util/is-dir'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import getConfigTemplate from './get-config-template'
+import { getConfigTemplate, type ConfigOptions } from './get-config-template'
 import enumDictFiles from '@common/util/enum-dict-files'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
-import type { ConfigOptions } from '@dts/main/config-provider'
 import { loadData, trans } from '@common/i18n-main'
+import isFile from '@common/util/is-file'
+import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
+import ignoreDir from '@common/util/ignore-dir'
 
 const ZETTLR_VERSION = app.getVersion()
 
 /**
- * The following options require a relaunch after being changed
+ * The following options require a relaunch after being changed. NOTE: These are
+ * implemented as a Map that we can access and save the state whether a dialog
+ * has already been shown for this option so that we don't pesker users.
  */
 const guardOptions = {
-  relaunch: [
-    'appLang',
-    'window.nativeAppearance',
-    'watchdog.activatePolling',
-    'export.useBundledPandoc',
-    'zkn.idRE'
-  ],
+  relaunch: new Map<string, boolean>([
+    [ 'appLang', false ],
+    [ 'window.nativeAppearance', false ],
+    [ 'window.vibrancy', false ],
+    [ 'watchdog.activatePolling', false ],
+    [ 'export.useBundledPandoc', false ],
+    [ 'zkn.idRE', false ]
+  ]),
   // The following options additionally require a clearing of the cache
-  clearCache: [
-    'zkn.idRE'
+  clearCache: new Map<string, boolean>([
+    [ 'zkn.idRE', false ]
+  ]),
+  // The following options only require the editors to reload, since they are,
+  // e.g., required by one of the extensions.
+  reloadEditors: [
+    'zkn.linkFormat' // Requires a reload since required by the parser that has no access to the editor config
   ]
 }
 
@@ -91,7 +100,7 @@ export default class ConfigProvider extends ProviderContract {
    *
    * @var {PersistentDataContainer}
    */
-  private readonly _container: PersistentDataContainer
+  private readonly _container: PersistentDataContainer<ConfigOptions>
 
   private readonly _emitter: EventEmitter
 
@@ -117,7 +126,7 @@ export default class ConfigProvider extends ProviderContract {
       const { command, payload } = message
 
       if (command === 'get-config') {
-        event.returnValue = this.get(payload.key)
+        event.returnValue = payload !== undefined ? this.get(payload.key) : this.get()
       } else if (command === 'set-config-single') {
         event.returnValue = this.set(payload.key, payload.val)
       }
@@ -261,7 +270,7 @@ export default class ConfigProvider extends ProviderContract {
     this.config.openPaths = [...new Set(this.config.openPaths)]
 
     // Now sort the paths.
-    this._sortPaths()
+    this.sortPaths()
 
     const dicts = enumDictFiles().map(item => item.tag)
 
@@ -276,16 +285,69 @@ export default class ConfigProvider extends ProviderContract {
   }
 
   /**
+   * This function ensures that all root paths are consolidated, i.e., have no
+   * overlaps. In other words, this function will remove any root paths that are
+   * contained by any of the other roots. This will help prevent any
+   * inconsistencies when a root file is part of a loaded workspace, or some
+   * workspace is loaded as part of another workspace.
+   */
+  private consolidateRootPaths (): void {
+    // First, retrieve all root files
+    for (const thisRoot of this.config.openPaths) {
+      for (const otherRoot of this.config.openPaths) {
+        if (otherRoot.startsWith(thisRoot) && otherRoot !== thisRoot) {
+          this.config.openPaths.splice(this.config.openPaths.indexOf(thisRoot), 1)
+          break
+        }
+      }
+    }
+  }
+
+  /**
+    * Sorts the paths prior to using them alphabetically and by type.
+    * @return {ZettlrConfig} Chainability.
+    */
+  private sortPaths (): void {
+    const f = []
+    const d = []
+    for (const p of this.config.openPaths) {
+      if (isDir(p)) {
+        d.push(p)
+      } else {
+        f.push(p)
+      }
+    }
+
+    // We only want to sort the paths based on rudimentary, natural order.
+    const coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
+    f.sort((a, b) => {
+      return coll.compare(path.basename(a), path.basename(b))
+    })
+    d.sort((a, b) => {
+      return coll.compare(path.basename(a), path.basename(b))
+    })
+
+    this.config.openPaths = f.concat(d)
+    this._container.set(this.config)
+  }
+
+  /**
     * Adds a path to be opened on startup
     * @param {String} p The path to be added
     * @return {Boolean} True, if the path was successfully added, else false.
     */
   addPath (p: string): boolean {
     // Only add valid and unique paths
-    if ((!ignoreFile(p) || isDir(p)) && !this.config.openPaths.includes(p)) {
+    if (this.config.openPaths.includes(p)) {
+      return false
+    }
+
+    if ((isFile(p) && hasMdOrCodeExt(p)) || (isDir(p) && !ignoreDir(p))) {
       this.config.openPaths.push(p)
-      this._sortPaths()
+      this.consolidateRootPaths()
+      this.sortPaths()
       this._container.set(this.config)
+      this._emitter.emit('update', 'openPaths')
       return true
     }
 
@@ -301,6 +363,7 @@ export default class ConfigProvider extends ProviderContract {
     if (this.config.openPaths.includes(p)) {
       this.config.openPaths.splice(this.config.openPaths.indexOf(p), 1)
       this._container.set(this.config)
+      this._emitter.emit('update', 'openPaths')
       return true
     }
     return false
@@ -379,7 +442,7 @@ export default class ConfigProvider extends ProviderContract {
       // A nested argument was requested, so iterate until we find it
       let nested = option.split('.')
       // Last one must be set manually, b/c simple attributes aren't pointers
-      let prop = nested.pop() as string // We can be sure it's not undefined
+      let prop = nested.pop()! // We can be sure it's not undefined
       let cfg = this.config
       for (let arg of nested) {
         if (arg in cfg) {
@@ -408,18 +471,28 @@ export default class ConfigProvider extends ProviderContract {
   }
 
   /**
-   * After setting an option, this function can check if the option is guarded.
-   * In that case, the app will automatically ask the user if they want to
-   * restart now.
+   * After setting an option, this function checks if the provided option is
+   * guarded. There are various layers of "guards". Some require a full restart
+   * of the app, others only require a reload cycle of the main editor(s). This
+   * function ensures that this happens, e.g., by emitting appropriate events or
+   * asking the user if they want to restart now.
    *
-   * @param   {string}  option  The option to check
+   * @param   {string}  option  The configuration option to check
    */
   private checkOptionForGuard (option: string): void {
-    if (!guardOptions.relaunch.includes(option)) {
+    // Some settings require all editors to perform a full reload
+    if (guardOptions.reloadEditors.includes(option)) {
+      broadcastIpcMessage('reload-editors')
+    }
+
+    // If the option is not guarded or the dialog has already been asked,
+    // quietly return.
+    const opt = guardOptions.relaunch.get(option)
+    if (opt === undefined || opt) {
       return
     }
 
-    console.log(process.argv)
+    guardOptions.relaunch.set(option, true)
 
     dialog.showMessageBox({
       message: trans('Changing this option requires a restart to take effect.'),
@@ -435,7 +508,7 @@ export default class ConfigProvider extends ProviderContract {
       .then(({ response }) => {
         if (response === 0) {
           // The user wants to restart now
-          if (guardOptions.clearCache.includes(option)) {
+          if (guardOptions.clearCache.has(option)) {
             // Ensure the cache is cleared on relaunch
             app.relaunch({ args: process.argv.slice(1).concat(['--clear-cache']) })
           } else {
@@ -461,36 +534,6 @@ export default class ConfigProvider extends ProviderContract {
     // Broadcast to all open windows
     broadcastIpcMessage('config-provider', { command: 'update', payload: undefined })
     this._container.set(this.config)
-  }
-
-  /**
-    * Sorts the paths prior to using them alphabetically and by type.
-    * @return {ZettlrConfig} Chainability.
-    */
-  _sortPaths (): this {
-    let f = []
-    let d = []
-    for (let p of this.config.openPaths) {
-      if (isDir(p)) {
-        d.push(p)
-      } else {
-        f.push(p)
-      }
-    }
-
-    // We only want to sort the paths based on rudimentary, natural order.
-    let coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
-    f.sort((a, b) => {
-      return coll.compare(path.basename(a), path.basename(b))
-    })
-    d.sort((a, b) => {
-      return coll.compare(path.basename(a), path.basename(b))
-    })
-
-    this.config.openPaths = f.concat(d)
-    this._container.set(this.config)
-
-    return this
   }
 
   /**

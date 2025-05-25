@@ -17,6 +17,15 @@
 import { linter, type Diagnostic } from '@codemirror/lint'
 import YAML from 'yaml'
 
+/**
+ * Include this linter in a YAML mode configuration to provide diagnostics
+ * indicating YAML syntax errors within the document.
+ *
+ * NOTE: If you need to lint only a YAML frontmatter, not an entire file,
+ * include the yamlFrontmatterLint instead!
+ *
+ * @var {Extension}
+ */
 export const yamlLint = linter(async view => {
   const diagnostics: Diagnostic[] = []
 

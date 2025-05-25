@@ -42,6 +42,10 @@ body {
 
   &.dark {
     color: white;
+
+    a {
+      color: rgb(124, 150, 255);
+    }
   }
 
   // Reset those ugly outlines
@@ -49,6 +53,14 @@ body {
     &:focus {
       outline: 0;
     }
+  }
+
+  a {
+    color: rgb(60, 88, 201);
+  }
+
+  img {
+    max-width: 100%;
   }
 
   // Fixes the non-readable blue colour of the links and prevents them from
@@ -68,22 +80,6 @@ body {
     padding: 4px;
     box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, .25);
     cursor: default;
-  }
-
-  // The table helper injects CSS that we need to override
-  .table-helper-align-button-container,
-  .table-helper-remove-button-container,
-  .table-helper-add-button {
-    color: var(--c-primary);
-    background-color: var(--grey-2); // Make it more visible
-  }
-
-  .table-helper-align-button-line {
-    background-color: var(--c-primary);
-  }
-
-  .table-helper-remove-button-line {
-    background-color: black;
   }
 
   .taglist .tagspacer:only-child .tag {
@@ -140,7 +136,8 @@ body:not(.darwin) {
 // HELPER CLASSES
 
 .columns {
-  columns: 2;
+  display: grid;
+  grid-template-columns: 50% 50%;
 }
 
 .dont-break-inside * {

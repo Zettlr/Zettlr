@@ -47,8 +47,8 @@
         >
           <cds-icon v-if="file.pinned" shape="pin"></cds-icon>
           {{ getTabText(file) }}
-          <span v-if="hasDuplicate(file)" class="deduplicate">{{ getDirBasename(file) }}</span>
         </span>
+        <span v-if="hasDuplicate(file)" class="deduplicate">{{ getDirBasename(file) }}</span>
         <span
           v-if="!file.pinned"
           class="close"
@@ -73,7 +73,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -90,655 +90,682 @@
 
 import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
-import { nextTick, defineComponent } from 'vue'
-import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { nextTick, computed, ref, watch, onMounted, onBeforeUnmount, onUpdated } from 'vue'
+import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
+import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
+import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
-const clipboard = window.clipboard
-const path = window.path
 
-export default defineComponent({
-  name: 'DocumentTabs',
-  props: {
-    leafId: {
-      type: String,
-      required: true
-    },
-    windowId: {
-      type: String,
-      required: true
+const props = defineProps<{
+  leafId: string
+  windowId: string
+}>()
+
+const showScrollers = ref<boolean>(false)
+const resizeObserver = new ResizeObserver(() => {
+  maybeActivateScrollers()
+})
+
+// Is there a document being dragged over this tabbar?
+const documentTabDragOver = ref<boolean>(false)
+// Is the document originating from here? (If so we should not display the
+// dropzone)
+const documentTabDragOverOrigin = ref<boolean>(false)
+
+const workspacesStore = useWorkspacesStore()
+const configStore = useConfigStore()
+const documentTreeStore = useDocumentTreeStore()
+
+const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
+const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
+const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
+const container = ref<HTMLDivElement|null>(null)
+const node = computed<LeafNodeJSON|undefined>(() => documentTreeStore.paneData.find((leaf: LeafNodeJSON) => leaf.id === props.leafId))
+const openFiles = computed(() => node.value?.openFiles ?? [])
+const activeFile = computed(() => node.value?.activeFile ?? null)
+const modifiedPaths = computed(() => documentTreeStore.modifiedDocuments)
+
+watch(activeFile, () => {
+  // Make sure the activeFile is in view
+  // We must wait until Vue has actually applied the active class to the
+  // new file tab so that our handler retrieves the correct one, not the old.
+  nextTick()
+    .then(scrollActiveFileIntoView)
+    .catch(err => console.error(err))
+})
+
+onMounted(() => {
+  // Listen for shortcuts so that we can switch tabs programmatically
+  ipcRenderer.on('shortcut', (event, shortcut) => {
+    if (documentTreeStore.lastLeafId !== props.leafId) {
+      return // Doesn't apply to this pane
     }
-  },
-  data () {
-    return {
-      showScrollers: false,
-      resizeObserver: new ResizeObserver(() => {
-        this.maybeActivateScrollers()
-      }),
-      // Is there a document being dragged over this tabbar?
-      documentTabDragOver: false,
-      // Is the document originating from here? (If so we should not display the
-      // dropzone)
-      documentTabDragOverOrigin: false
-    }
-  },
-  computed: {
-    useH1: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('heading')
-    },
-    useTitle: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('title')
-    },
-    displayMdExtensions: function (): boolean {
-      return this.$store.state.config['display.markdownFileExtensions']
-    },
-    container: function (): HTMLDivElement {
-      return this.$refs.container as HTMLDivElement
-    },
-    node (): LeafNodeJSON|undefined {
-      return this.$store.state.paneData.find((leaf: LeafNodeJSON) => leaf.id === this.leafId)
-    },
-    openFiles (): OpenDocument[] {
-      return this.node?.openFiles ?? []
-    },
-    activeFile (): OpenDocument|null {
-      return this.node?.activeFile ?? null
-    },
-    modifiedPaths (): string[] {
-      return this.$store.state.modifiedDocuments
-    }
-  },
-  watch: {
-    activeFile: function () {
-      // Make sure the activeFile is in view
-      // We must wait until Vue has actually applied the active class to the
-      // new file tab so that our handler retrieves the correct one, not the old.
-      nextTick()
-        .then(() => { this.scrollActiveFileIntoView() })
-        .catch(err => console.error(err))
-    }
-  },
-  mounted: function () {
-    // Listen for shortcuts so that we can switch tabs programmatically
-    ipcRenderer.on('shortcut', (event, shortcut) => {
-      const currentIdx = this.openFiles.findIndex(elem => this.activeFile !== null && elem.path === this.activeFile.path)
-      if (shortcut === 'previous-tab') {
-        if (currentIdx > 0) {
-          this.selectFile(this.openFiles[currentIdx - 1])
-        } else {
-          this.selectFile(this.openFiles[this.openFiles.length - 1])
+
+    const currentIdx = openFiles.value.findIndex(elem => activeFile.value !== null && elem.path === activeFile.value.path)
+    if (shortcut === 'previous-tab') {
+      if (currentIdx > 0) {
+        selectFile(openFiles.value[currentIdx - 1])
+      } else {
+        selectFile(openFiles.value[openFiles.value.length - 1])
+      }
+    } else if (shortcut === 'next-tab') {
+      if (currentIdx < openFiles.value.length - 1) {
+        selectFile(openFiles.value[currentIdx + 1])
+      } else {
+        selectFile(openFiles.value[0])
+      }
+    } else if (shortcut === 'close-window') {
+      if (documentTreeStore.lastLeafId !== props.leafId) {
+        return // Otherwise all document tabs would close one file at the same
+        // time
+      }
+      // The tab bar has the responsibility to first close the activeFile if
+      // there is one. If there is none, it should send a request to close
+      // this window as if the user had clicked on the close-button.
+      if (currentIdx > -1) {
+        // There's an active file, so request the closure
+        ipcRenderer.invoke('documents-provider', {
+          command: 'close-file',
+          payload: {
+            path: openFiles.value[currentIdx].path,
+            leafId: props.leafId,
+            windowId: props.windowId
+          }
+        } as DocumentManagerIPCAPI)
+          .catch(e => console.error(e))
+      } else {
+        // No more open files, so request closing of the window
+        // TODO: This must be managed centrally
+        // ipcRenderer.send('window-controls', { command: 'win-close' })
+      }
+    } else if (shortcut === 'rename-file') {
+      // Renaming via shortcut (= Cmd/Ctrl+R) works via a tooltip underneath
+      // the corresponding filetab. First, make sure the container is visible
+      scrollActiveFileIntoView()
+
+      const containerElement = container.value?.querySelector('.active')
+      if (containerElement == null) {
+        return
+      }
+
+      const wrapper = document.createElement('div')
+      wrapper.classList.add('file-rename')
+
+      const input = document.createElement('input')
+      input.style.backgroundColor = 'transparent'
+      input.style.border = 'none'
+      input.style.color = 'white'
+      input.value = pathBasename(openFiles.value[currentIdx].path)
+
+      wrapper.appendChild(input)
+
+      // Then do the magic
+      const instance = tippy(containerElement, {
+        content: wrapper,
+        allowHTML: true,
+        interactive: true,
+        placement: 'bottom',
+        showOnCreate: true, // Immediately show the tooltip
+        arrow: true, // Arrow for these tooltips
+        onShown: function () {
+          input.focus()
+          // Select from the beginning until the last dot
+          input.setSelectionRange(0, input.value.lastIndexOf('.'))
         }
-      } else if (shortcut === 'next-tab') {
-        if (currentIdx < this.openFiles.length - 1) {
-          this.selectFile(this.openFiles[currentIdx + 1])
-        } else {
-          this.selectFile(this.openFiles[0])
+      })
+
+      input.addEventListener('keydown', (event) => {
+        if (![ 'Enter', 'Escape' ].includes(event.key)) {
+          return
         }
-      } else if (shortcut === 'close-window') {
-        if (this.$store.state.lastLeafId !== this.leafId) {
-          return // Otherwise all document tabs would close one file at the same
-          // time
-        }
-        // The tab bar has the responsibility to first close the activeFile if
-        // there is one. If there is none, it should send a request to close
-        // this window as if the user had clicked on the close-button.
-        if (currentIdx > -1) {
-          // There's an active file, so request the closure
-          ipcRenderer.invoke('documents-provider', {
-            command: 'close-file',
+
+        if (event.key === 'Enter' && input.value.trim() !== '') {
+          ipcRenderer.invoke('application', {
+            command: 'file-rename',
             payload: {
-              path: this.openFiles[currentIdx].path,
-              leafId: this.leafId,
-              windowId: this.windowId
+              path: openFiles.value[currentIdx].path,
+              name: input.value
             }
           })
             .catch(e => console.error(e))
-        } else {
-          // No more open files, so request closing of the window
-          // TODO: This must be managed centrally
-          // ipcRenderer.send('window-controls', { command: 'win-close' })
         }
-      } else if (shortcut === 'rename-file') {
-        // Renaming via shortcut (= Cmd/Ctrl+R) works via a tooltip underneath
-        // the corresponding filetab. First, make sure the container is visible
-        this.scrollActiveFileIntoView()
-
-        const container = this.container.querySelector('.active')
-
-        const wrapper = document.createElement('div')
-        wrapper.classList.add('file-rename')
-
-        const input = document.createElement('input')
-        input.style.backgroundColor = 'transparent'
-        input.style.border = 'none'
-        input.style.color = 'white'
-        input.value = path.basename(this.openFiles[currentIdx].path)
-
-        wrapper.appendChild(input)
-
-        // Then do the magic
-        const instance = tippy(container as Element, {
-          content: wrapper,
-          allowHTML: true,
-          interactive: true,
-          placement: 'bottom',
-          showOnCreate: true, // Immediately show the tooltip
-          arrow: true, // Arrow for these tooltips
-          onShown: function () {
-            input.focus()
-            // Select from the beginning until the last dot
-            input.setSelectionRange(0, input.value.lastIndexOf('.'))
-          }
-        })
-
-        input.addEventListener('keydown', (event) => {
-          if (![ 'Enter', 'Escape' ].includes(event.key)) {
-            return
-          }
-
-          if (event.key === 'Enter' && input.value.trim() !== '') {
-            ipcRenderer.invoke('application', {
-              command: 'file-rename',
-              payload: {
-                path: this.openFiles[currentIdx].path,
-                name: input.value
-              }
-            })
-              .catch(e => console.error(e))
-          }
-          instance.hide()
-        })
-      }
-    })
-
-    this.resizeObserver.observe(this.container)
-  },
-  unmounted () {
-    this.resizeObserver.unobserve(this.container)
-  },
-  updated () {
-    // There are many things that could cause the amount of tabs to overflow the
-    // available width of the tabbar. With this single lifecycle hook, we can
-    // react to anything (except resizing of the window itself, which is handled
-    // by the resize observer).
-    this.maybeActivateScrollers()
-  },
-  methods: {
-    maybeActivateScrollers () {
-      // First, get the total available width for the container
-      const containerWidth = this.container.getBoundingClientRect().width
-      // Second, get the total width of all tabs
-      const tabWidth = Array.from(
-        this.container.querySelectorAll<HTMLDivElement>('[role="tab"]')
-      )
-        .map(elem => elem.getBoundingClientRect().width)
-        .reduce((width, acc) => width + acc, 0)
-
-      // If the total width of all tabs is larger, activate the scrollers, else
-      // disable them
-      this.showScrollers = tabWidth > containerWidth
-    },
-    scrollActiveFileIntoView: function () {
-      // First, we need to find the tab displaying the active file
-      const elem = this.container.querySelector('.active') as HTMLDivElement|null
-      if (elem === null) {
-        return // The container is not yet present
-      }
-      // Then, find out where the element is ...
-      const left = elem.offsetLeft
-      const right = left + elem.getBoundingClientRect().width
-      // ... with respect to the container
-      const leftEdge = this.container.scrollLeft
-      const containerWidth = this.container.getBoundingClientRect().width
-      const rightEdge = leftEdge + containerWidth
-
-      if (left < leftEdge) {
-        // The active tab is (partially) hidden to the left -> Decrease scrollLeft
-        this.container.scrollLeft -= leftEdge - left
-      } else if (right > rightEdge) {
-        // The active tab is (partially) hidden to the right -> Increase scrollLeft
-        this.container.scrollLeft += right - rightEdge
-      }
-    },
-    scrollLeft: function () {
-      if (this.container.scrollLeft === 0) {
-        return // Can't scroll further
-      }
-
-      // Get the first partially hidden file from the right. For that we first
-      // need a list of all tabs. NOTE that we have to convert the nodelist to
-      // an array manually. Also, we know every element will be a DIV.
-      const tabs = [...this.container.querySelectorAll('[role="tab"]')] as HTMLDivElement[]
-
-      // Then, get the first one for which the left edge is less than the scrollLeft
-      // property, but the right edge is bigger.
-      for (const tab of tabs) {
-        const left = tab.offsetLeft
-        const right = left + tab.getBoundingClientRect().width
-        const leftEdge = this.container.scrollLeft
-
-        if (left < leftEdge && right >= leftEdge) {
-          tab.scrollIntoView()
-          break
-        }
-      }
-    },
-    scrollRight: function () {
-      // Similar to scrollLeft, this does the same for the right hand side
-      const tabs = [...this.container.querySelectorAll('[role="tab"]')] as HTMLDivElement[]
-
-      // Then, get the first one for which the right edge is less than the scrollLeft
-      // property, but the right edge is bigger.
-      const rightEdge = this.container.scrollLeft + this.container.getBoundingClientRect().width + 1
-      for (const tab of tabs) {
-        const left = tab.offsetLeft
-        const right = left + tab.getBoundingClientRect().width
-
-        if (left <= rightEdge && right > rightEdge) {
-          tab.scrollIntoView()
-          break
-        }
-      }
-    },
-    getTabText: function (doc: OpenDocument) {
-      // Returns a more appropriate tab text based on the user settings
-      const file = this.$store.getters.file(doc.path) as MDFileDescriptor|CodeFileDescriptor|undefined
-      if (file === undefined) {
-        return path.basename(doc.path)
-      }
-
-      if (file.type !== 'file') {
-        return file.name
-      } else if (this.useTitle && file.yamlTitle !== undefined) {
-        return file.yamlTitle
-      } else if (this.useH1 && file.firstHeading != null) {
-        return file.firstHeading
-      } else if (this.displayMdExtensions) {
-        return file.name
-      } else {
-        return file.name.replace(file.ext, '')
-      }
-    },
-    hasDuplicate (doc: OpenDocument) {
-      const focalTabname = this.getTabText(doc).toLowerCase()
-      const duplicates = this.openFiles.filter(doc => {
-        return this.getTabText(doc).toLowerCase() === focalTabname
+        instance.hide()
       })
+    }
+  })
 
-      // NOTE that `doc` is also contained in `openFiles`, i.e. we should have 1
-      return duplicates.length !== 1
-    },
-    getDirBasename (doc: OpenDocument) {
-      return path.basename(path.dirname(doc.path))
-    },
-    /**
-     * Handles a click on the close button
-     *
-     * @param   {MouseEvent}  event  The triggering event
-     * @param   {any}  file   The file descriptor
-     */
-    handleClickClose: function (event: MouseEvent, file: any) {
-      if (event.button < 2) {
-        // It was either a left-click (button === 0) or an auxiliary/middle
-        // click (button === 1), so we should prevent the event from bubbling up
-        // and triggering other events. If it was a right-button click
-        // (button === 2), we should let it bubble up to the container to show
-        // the context menu.
-        // See: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button#return_value
-        event.stopPropagation()
-        event.preventDefault()
-      } else {
-        return // We don't handle this event here.
-      }
+  if (container.value !== null) {
+    resizeObserver.observe(container.value)
+  }
+})
 
+onBeforeUnmount(() => {
+  if (container.value !== null) {
+    resizeObserver.unobserve(container.value)
+  }
+})
+
+onUpdated(maybeActivateScrollers)
+
+function maybeActivateScrollers (): void {
+  if (container.value === null) {
+    return
+  }
+
+  // First, get the total available width for the container
+  const containerWidth = container.value.getBoundingClientRect().width
+  // Second, get the total width of all tabs
+  const tabWidth = Array.from(
+    container.value.querySelectorAll<HTMLDivElement>('[role="tab"]')
+  )
+    .map(elem => elem.getBoundingClientRect().width)
+    .reduce((width, acc) => width + acc, 0)
+
+  // If the total width of all tabs is larger, activate the scrollers, else
+  // disable them
+  showScrollers.value = tabWidth > containerWidth
+}
+
+function scrollActiveFileIntoView (): void {
+  if (container.value === null) {
+    return
+  }
+
+  // First, we need to find the tab displaying the active file
+  const elem = container.value.querySelector('.active')
+  if (elem === null || !(elem instanceof HTMLDivElement)) {
+    return // The container is not yet present
+  }
+  // Then, find out where the element is ...
+  const left = elem.offsetLeft
+  const right = left + elem.getBoundingClientRect().width
+  // ... with respect to the container
+  const leftEdge = container.value.scrollLeft
+  const containerWidth = container.value.getBoundingClientRect().width
+  const rightEdge = leftEdge + containerWidth
+
+  if (left < leftEdge) {
+    // The active tab is (partially) hidden to the left -> Decrease scrollLeft
+    container.value.scrollLeft -= leftEdge - left
+  } else if (right > rightEdge) {
+    // The active tab is (partially) hidden to the right -> Increase scrollLeft
+    container.value.scrollLeft += right - rightEdge
+  }
+}
+
+function scrollLeft (): void {
+  if (container.value === null || container.value.scrollLeft === 0) {
+    return // Can't scroll further
+  }
+
+  // Get the first partially hidden file from the right. For that we first
+  // need a list of all tabs. NOTE that we have to convert the nodelist to
+  // an array manually. Also, we know every element will be a DIV.
+  const tabs = [...container.value.querySelectorAll('[role="tab"]')] as HTMLDivElement[]
+
+  // Test this from the back
+  tabs.reverse()
+
+  // Find the first tab whose left border is hidden behind the left edge of
+  // the container
+  for (const tab of tabs) {
+    const left = tab.offsetLeft
+    const leftEdge = container.value.scrollLeft
+
+    if (left < leftEdge) {
+      tab.scrollIntoView({ inline: 'start' })
+      break
+    }
+  }
+}
+
+function scrollRight (): void {
+  if (container.value === null) {
+    return
+  }
+
+  // Similar to scrollLeft, this does the same for the right hand side
+  const tabs = [...container.value.querySelectorAll('[role="tab"]')] as HTMLDivElement[]
+
+  // Find the first tab whose right border is hidden behind the right edge
+  // of the container
+  const rightEdge = container.value.scrollLeft + container.value.getBoundingClientRect().width
+  for (const tab of tabs) {
+    const right = tab.offsetLeft + tab.getBoundingClientRect().width
+
+    // NOTE: This is the width of the arrow buttons; TODO: Make dynamic!
+    if (right > rightEdge + 40) {
+      tab.scrollIntoView({ inline: 'end' })
+      break
+    }
+  }
+}
+
+function getTabText (doc: OpenDocument): string {
+  // Returns a more appropriate tab text based on the user settings
+  const file = workspacesStore.getFile(doc.path)
+  if (file === undefined) {
+    return pathBasename(doc.path)
+  }
+
+  if (file.type !== 'file') {
+    return file.name
+  } else if (useTitle.value && file.yamlTitle !== undefined) {
+    return file.yamlTitle
+  } else if (useH1.value && file.firstHeading != null) {
+    return file.firstHeading
+  } else if (displayMdExtensions.value) {
+    return file.name
+  } else {
+    return file.name.replace(file.ext, '')
+  }
+}
+
+function hasDuplicate (doc: OpenDocument): boolean {
+  const focalTabname = getTabText(doc).toLowerCase()
+  const duplicates = openFiles.value.filter(doc => {
+    return getTabText(doc).toLowerCase() === focalTabname
+  })
+
+  // NOTE that `doc` is also contained in `openFiles`, i.e. we should have 1
+  return duplicates.length !== 1
+}
+
+function getDirBasename (doc: OpenDocument): string {
+  return pathBasename(pathDirname(doc.path))
+}
+
+/**
+ * Handles a click on the close button
+ *
+ * @param   {MouseEvent}    event  The triggering event
+ * @param   {OpenDocument}  file   The file descriptor
+ */
+function handleClickClose (event: MouseEvent, file: OpenDocument): void {
+  if (event.button < 2) {
+    // It was either a left-click (button === 0) or an auxiliary/middle
+    // click (button === 1), so we should prevent the event from bubbling up
+    // and triggering other events. If it was a right-button click
+    // (button === 2), we should let it bubble up to the container to show
+    // the context menu.
+    // See: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button#return_value
+    event.stopPropagation()
+    event.preventDefault()
+  } else {
+    return // We don't handle this event here.
+  }
+
+  ipcRenderer.invoke('documents-provider', {
+    command: 'close-file',
+    payload: {
+      path: file.path,
+      windowId: props.windowId,
+      leafId: props.leafId
+    }
+  } as DocumentManagerIPCAPI)
+    .catch(e => console.error(e))
+}
+
+/**
+ * Handles a click on the filename
+ *
+ * @param   {MouseEvent}    event  The triggering event
+ * @param   {OpenDocument}  file   The file descriptor
+ */
+function handleClickFilename (event: MouseEvent, file: OpenDocument): void {
+  if (event.button === 0) {
+    // It was a left-click. (We must check because otherwise we would also
+    // perform this action on a right-click (button === 2), but that event
+    // must be handled by the container).
+    selectFile(file)
+  }
+}
+
+/**
+ * Handles a middle-mouse click on the filename
+ *
+ * Middle-mouse clicks are handled separately through a `mouseup` event,
+ * to prevent unintentional pasting on Linux systems (#2663).
+ *
+ * @param   {MouseEvent}    event  The triggering event
+ * @param   {OpenDocument}  file   The file descriptor
+ */
+function handleMiddleMouseClick (event: MouseEvent, file: OpenDocument): void {
+  if (event.button === 1) {
+    // It was a middle-click (auxiliary button), so we should close
+    // the file.
+    event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
+    handleClickClose(event, file)
+  }
+}
+
+function selectFile (file: OpenDocument): void {
+  // NOTE: We're handling active file setting via the open-file command. As
+  // long as a given file is already open, the document manager will simply
+  // set it as active. That is why we don't provide the newTab property.
+  ipcRenderer.invoke('documents-provider', {
+    command: 'open-file',
+    payload: { path: file.path, windowId: props.windowId, leafId: props.leafId }
+  } as DocumentManagerIPCAPI)
+    .catch(e => console.error(e))
+}
+
+function handleTabbarContext (event: MouseEvent): void {
+  // If the person didn't click on a file, let them to close the whole leaf
+  displayTabbarContext(event, (clickedID: string) => {
+    if (clickedID === 'close-leaf') {
+      ipcRenderer.invoke('documents-provider', {
+        command: 'close-leaf',
+        payload: {
+          leafId: props.leafId,
+          windowId: props.windowId
+        }
+      } as DocumentManagerIPCAPI).catch(e => console.error(e))
+    }
+  })
+}
+
+function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
+  const file = workspacesStore.getFile(doc.path)
+  if (file === undefined || file.type === 'other') {
+    return
+  }
+
+  displayTabsContextMenu(event, file, doc, (clickedID: string) => {
+    if (clickedID === 'close-this') {
+      // Close only this
       ipcRenderer.invoke('documents-provider', {
         command: 'close-file',
         payload: {
           path: file.path,
-          windowId: this.windowId,
-          leafId: this.leafId
+          leafId: props.leafId,
+          windowId: props.windowId
         }
-      })
-        .catch(e => console.error(e))
-    },
-    /**
-     * Handles a click on the filename
-     *
-     * @param   {MouseEvent}  event  The triggering event
-     * @param   {any}         file   The file descriptor
-     */
-    handleClickFilename: function (event: MouseEvent, file: any) {
-      if (event.button === 0) {
-        // It was a left-click. (We must check because otherwise we would also
-        // perform this action on a right-click (button === 2), but that event
-        // must be handled by the container).
-        this.selectFile(file)
-      }
-    },
-    /**
-     * Handles a middle-mouse click on the filename
-     *
-     * Middle-mouse clicks are handled separately through a `mouseup` event,
-     * to prevent unintentional pasting on Linux systems (#2663).
-     *
-     * @param   {MouseEvent}  event  The triggering event
-     * @param   {any}         file   The file descriptor
-     */
-    handleMiddleMouseClick: function (event: MouseEvent, file: any) {
-      if (event.button === 1) {
-        // It was a middle-click (auxiliary button), so we should close
-        // the file.
-        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
-        this.handleClickClose(event, file)
-      }
-    },
-    selectFile: function (file: OpenDocument) {
-      // NOTE: We're handling active file setting via the open-file command. As
-      // long as a given file is already open, the document manager will simply
-      // set it as active. That is why we don't provide the newTab property.
-      ipcRenderer.invoke('documents-provider', {
-        command: 'open-file',
-        payload: { path: file.path, windowId: this.windowId, leafId: this.leafId }
-      })
-        .catch(e => console.error(e))
-    },
-    handleTabbarContext: function (event: MouseEvent) {
-      // If the person didn't click on a file, let them to close the whole leaf
-      displayTabbarContext(event, (clickedID: string) => {
-        if (clickedID === 'close-leaf') {
-          ipcRenderer.invoke('documents-provider', {
-            command: 'close-leaf',
-            payload: {
-              leafId: this.leafId,
-              windowId: this.windowId
-            }
-          }).catch(e => console.error(e))
+      } as DocumentManagerIPCAPI).catch(e => console.error(e))
+    } else if (clickedID === 'close-others') {
+      // Close all files ...
+      for (const openFile of openFiles.value) {
+        if (openFile.path === file.path) {
+          continue // ... except this
         }
-      })
-    },
-    handleContextMenu: function (event: MouseEvent, doc: OpenDocument) {
-      const file = this.$store.getters.file(doc.path) as MDFileDescriptor|CodeFileDescriptor|undefined
-      if (file === undefined) {
-        return
-      }
 
-      displayTabsContextMenu(event, file, doc, (clickedID: string) => {
-        if (clickedID === 'close-this') {
-          // Close only this
-          ipcRenderer.invoke('documents-provider', {
-            command: 'close-file',
-            payload: {
-              path: file.path,
-              leafId: this.leafId,
-              windowId: this.windowId
-            }
-          }).catch(e => console.error(e))
-        } else if (clickedID === 'close-others') {
-          // Close all files ...
-          for (const openFile of this.openFiles) {
-            if (openFile.path === file.path) {
-              continue // ... except this
-            }
-
-            ipcRenderer.invoke('documents-provider', {
-              command: 'close-file',
-              payload: {
-                path: openFile.path,
-                leafId: this.leafId,
-                windowId: this.windowId
-              }
-            }).catch(e => console.error(e))
+        ipcRenderer.invoke('documents-provider', {
+          command: 'close-file',
+          payload: {
+            path: openFile.path,
+            leafId: props.leafId,
+            windowId: props.windowId
           }
-        } else if (clickedID === 'close-all') {
-          // Close all files
-          for (const openFile of this.openFiles) {
-            ipcRenderer.invoke('documents-provider', {
-              command: 'close-file',
-              payload: {
-                path: openFile.path,
-                leafId: this.leafId,
-                windowId: this.windowId
-              }
-            }).catch(e => console.error(e))
+        } as DocumentManagerIPCAPI).catch(e => console.error(e))
+      }
+    } else if (clickedID === 'close-all') {
+      // Close all files
+      for (const openFile of openFiles.value) {
+        ipcRenderer.invoke('documents-provider', {
+          command: 'close-file',
+          payload: {
+            path: openFile.path,
+            leafId: props.leafId,
+            windowId: props.windowId
           }
-        } else if (clickedID === 'copy-filename') {
-          // Copy the filename to the clipboard
-          clipboard.writeText(file.name)
-        } else if (clickedID === 'copy-path') {
-          // Copy path to the clipboard
-          clipboard.writeText(file.path)
-        } else if (clickedID === 'copy-id' && file.type === 'file') {
-          // Copy the ID to the clipboard
-          clipboard.writeText(file.id)
-        } else if (clickedID === 'pin-tab') {
-          // Toggle the pin status
-          ipcRenderer.invoke('documents-provider', {
-            command: 'set-pinned',
-            payload: {
-              path: doc.path,
-              leafId: this.leafId,
-              windowId: this.windowId,
-              pinned: !doc.pinned
-            }
-          }).catch(e => console.error(e))
-        }
-      })
-    },
-    /**
-     * Managed the begin of a drag of one of the internal document tabs we have
-     * here on this tabbar.
-     *
-     * @param   {DragEvent}  event     The Drag event
-     * @param   {string}     filePath  The file to be dragged
-     */
-    handleDragStart: function (event: DragEvent, filePath: string) {
-      const DELIM = (process.platform === 'win32') ? ';' : ':'
-      const data = `${this.windowId}${DELIM}${this.leafId}${DELIM}${filePath}`
-      event.dataTransfer?.setData('zettlr/document-tab', data)
-      this.documentTabDragOverOrigin = true
-    },
-    /**
-     * This function handles internal document tabs (i.e. the reordering of
-     * document tabs belonging to this tabbar)
-     *
-     * @param   {DragEvent}  event  The drag event
-     */
-    handleDrag: function (event: DragEvent) {
-      const tab = event.target as Element
-      const tablist = tab.parentNode as Element
-      let coordsX = event.clientX
-      let coordsY = event.clientY
-
-      // Ensure the coords are somewhere inside the tablist. NOTE that exactly
-      // the border would only select the tablist, not the actual tab at that
-      // point. NOTE that the value of five is arbitrary and relies on the fact
-      // that the tablist only contains tabs.
-      const { left, top, right, bottom, height } = this.$el.getBoundingClientRect()
-      // Stop handling if the user drags the tab out of the document tab bar
-      // This is so that editor instances can enable splitting via drag&drop
-      if (coordsX < left - 10 || coordsX > right + 10 || coordsY < top - 10 || coordsY > bottom + 10) {
-        return
+        } as DocumentManagerIPCAPI).catch(e => console.error(e))
       }
-
-      const middle = height / 2
-      if (coordsX < left) {
-        coordsX = left + 5
-      }
-
-      if (coordsX > right) {
-        coordsX = right - 5
-      }
-
-      if (coordsY < top) {
-        coordsY = top + middle
-      }
-
-      if (coordsY > bottom) {
-        coordsY = bottom - middle
-      }
-
-      let swapItem: any = tab
-      const elemAtCoords = document.elementFromPoint(coordsX, coordsY)
-      if (elemAtCoords !== null) {
-        swapItem = elemAtCoords
-      }
-
-      // We need to make sure we got the DIV, not one of the containing spans
-      while (swapItem.getAttribute('role') !== 'tab') {
-        if (swapItem.parentNode === document) {
-          break // Don't overdo it
-        }
-        swapItem = swapItem.parentNode as Element
-      }
-
-      if (tablist === swapItem.parentNode) {
-        swapItem = swapItem !== tab.nextSibling ? swapItem : swapItem.nextSibling
-        tablist.insertBefore(tab, swapItem)
-      }
-    },
-    /**
-     * This event is solely used when the user drops a document tab onto the
-     * origin tabbar to see if something has changed and resort the document
-     * tabs as necessary.
-     *
-     * @param   {DragEvent}  event  The drag event
-     */
-    handleDragEnd: function (event: DragEvent) {
-      this.documentTabDragOverOrigin = false
-      // Here we just need to inspect the actual order and notify the main
-      // process of that order.
-      const newOrder = []
-      for (let i = 0; i < this.$el.children.length; i++) {
-        if (this.$el.children[i].getAttribute('role') !== 'tab') {
-          // There may be other children in the element, such as the scrollers
-          continue
-        }
-        const fpath = this.$el.children[i].getAttribute('data-path')
-        newOrder.push(fpath)
-      }
-
-      const originalOrdering = this.openFiles.map(file => file.path)
-
-      // Did the order change at all?
-      let somethingChanged = false
-      for (let i = 0; i < newOrder.length; i++) {
-        if (newOrder[i] !== originalOrdering[i]) {
-          somethingChanged = true
-          break
-        }
-      }
-
-      if (!somethingChanged) {
-        return
-      }
-
-      // Now that we have the correct NEW ordering, we need to temporarily
-      // restore the old ordering, because otherwise Vue will be confused since
-      // it needs to keep track of the element ordering, and we just messed with
-      // that big time.
-      const targetElement = event.target as Element|null
-      if (targetElement === null) {
-        return
-      }
-
-      const dataPath = targetElement.getAttribute('data-path')
-
-      if (dataPath === null) {
-        return
-      }
-
-      const originalIndex = originalOrdering.indexOf(dataPath)
-      if (originalIndex === 0) {
-        this.$el.insertBefore(targetElement, this.$el.children[0])
-      } else if (originalIndex === this.$el.children.length - 1) {
-        this.$el.insertBefore(targetElement, null) // null means append at the end
-      } else {
-        this.$el.insertBefore(targetElement, this.$el.children[originalIndex + 1])
-      }
-
+    } else if (clickedID === 'copy-filename') {
+      // Copy the filename to the clipboard
+      navigator.clipboard.writeText(file.name).catch(err => console.error(err))
+    } else if (clickedID === 'copy-path') {
+      // Copy path to the clipboard
+      navigator.clipboard.writeText(file.path).catch(err => console.error(err))
+    } else if (clickedID === 'copy-id' && file.type === 'file') {
+      // Copy the ID to the clipboard
+      navigator.clipboard.writeText(file.id).catch(err => console.error(err))
+    } else if (clickedID === 'pin-tab') {
+      // Toggle the pin status
       ipcRenderer.invoke('documents-provider', {
-        command: 'sort-open-files',
+        command: 'set-pinned',
         payload: {
-          newOrder,
-          windowId: this.windowId,
-          leafId: this.leafId
+          path: doc.path,
+          leafId: props.leafId,
+          windowId: props.windowId,
+          pinned: !doc.pinned
         }
-      })
-        .catch(err => console.error(err))
-    },
-    /**
-     * This function is used when something *external* has been dropped onto the
-     * tabbar. In this case, we need to execute a move command (if applicable
-     * analogously to the MainEditor component).
-     *
-     * @param   {DragEvent}  event  The drag event
-     */
-    handleExternalDrop: function (event: DragEvent) {
-      this.documentTabDragOver = false
-      const DELIM = (process.platform === 'win32') ? ';' : ':'
-      const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
-      if (documentTab === undefined || !documentTab.includes(DELIM)) {
-        return
-      }
+      } as DocumentManagerIPCAPI).catch(e => console.error(e))
+    }
+  })
+}
 
-      // The user dropped the file onto the origin (this indicates a bug as
-      // the dropzone shouldn't even be on the DOM in that case)
-      if (this.documentTabDragOverOrigin) {
-        console.error('A document tab has been dropped onto its origin, but the dropzone was in the DOM. This is a bug.')
-        this.documentTabDragOverOrigin = false
-        return
-      }
+/**
+ * Managed the begin of a drag of one of the internal document tabs we have
+ * here on this tabbar.
+ *
+ * @param   {DragEvent}  event     The Drag event
+ * @param   {string}     filePath  The file to be dragged
+ */
+function handleDragStart (event: DragEvent, filePath: string): void {
+  const DELIM = (process.platform === 'win32') ? ';' : ':'
+  // NOTE: When retrieving this data, destructure as an array and capture
+  // any remaining parts with `...filePath` and re-join with DELIM to
+  // account for the fact that Unixoid systems allow colons in paths.
+  const data = [ props.windowId, props.leafId, filePath ].join(DELIM)
+  event.dataTransfer?.setData('zettlr/document-tab', data)
+  documentTabDragOverOrigin.value = true
+}
 
-      // At this point, we have received a drop we need to handle it. The drag
-      // data contains both the origin and the path, separated by the $PATH
-      // delimiter -> window:leaf:absPath
-      const [ originWindow, originLeaf, filePath ] = documentTab.split(DELIM)
-      // Now actually perform the act
-      ipcRenderer.invoke('documents-provider', {
-        command: 'move-file',
-        payload: {
-          originWindow,
-          targetWindow: this.windowId,
-          originLeaf,
-          targetLeaf: this.leafId,
-          path: filePath
-        }
-      })
-        .catch(err => console.error(err))
-    },
-    /**
-     * This event is used to indicate to the user if they can drop a document
-     * tab onto this tabbar. This gives the tabbar a blue-ish shimmer (similarly
-     * to the dropzones in the MainEditor component) to indicate that the user
-     * can drop a document tab on here.
-     *
-     * @param   {DragEvent}  event  The drag event
-     */
-    handleExternalDragover: function (event: DragEvent) {
-      if (this.documentTabDragOverOrigin) {
-        return // The document tab is coming from this tabbar
-      }
+/**
+ * This function handles internal document tabs (i.e. the reordering of
+ * document tabs belonging to this tabbar)
+ *
+ * @param   {DragEvent}  event  The drag event
+ */
+function handleDrag (event: DragEvent): void {
+  if (container.value === null) {
+    return
+  }
 
-      const hasDocumentTab = event.dataTransfer?.types.includes('zettlr/document-tab') ?? false
-      if (hasDocumentTab) {
-        this.documentTabDragOver = true
-      } else {
-        console.log('Something else drag over.')
-        this.documentTabDragOver = false
-      }
-    },
-    /**
-     * This is being called on dragleave and some other, related external events
-     * to reset the internal state so that the dropzone disappears.
-     *
-     * @param   {DragEvent}  event  The drag event
-     */
-    handleExternalDragleave: function (event: DragEvent) {
-      this.documentTabDragOver = false
+  const tab = event.target as Element
+  const tablist = tab.parentNode as Element
+  let coordsX = event.clientX
+  let coordsY = event.clientY
+
+  // Ensure the coords are somewhere inside the tablist. NOTE that exactly
+  // the border would only select the tablist, not the actual tab at that
+  // point. NOTE that the value of five is arbitrary and relies on the fact
+  // that the tablist only contains tabs.
+  const { left, top, right, bottom, height } = container.value.getBoundingClientRect()
+  // Stop handling if the user drags the tab out of the document tab bar
+  // This is so that editor instances can enable splitting via drag&drop
+  if (coordsX < left - 10 || coordsX > right + 10 || coordsY < top - 10 || coordsY > bottom + 10) {
+    return
+  }
+
+  const middle = height / 2
+  if (coordsX < left) {
+    coordsX = left + 5
+  }
+
+  if (coordsX > right) {
+    coordsX = right - 5
+  }
+
+  if (coordsY < top) {
+    coordsY = top + middle
+  }
+
+  if (coordsY > bottom) {
+    coordsY = bottom - middle
+  }
+
+  let swapItem: Element = tab
+  const elemAtCoords = document.elementFromPoint(coordsX, coordsY)
+  if (elemAtCoords !== null) {
+    swapItem = elemAtCoords
+  }
+
+  // We need to make sure we got the DIV, not one of the containing spans
+  while (swapItem.getAttribute('role') !== 'tab') {
+    if (swapItem.parentNode === document) {
+      break // Don't overdo it
+    }
+    swapItem = swapItem.parentNode as Element
+  }
+
+  if (tablist === swapItem.parentNode) {
+    // @ts-expect-error TODO This didn't lead to a bug yet, but may
+    swapItem = swapItem !== tab.nextSibling ? swapItem : swapItem.nextSibling
+    tablist.insertBefore(tab, swapItem)
+  }
+}
+
+/**
+ * This event is solely used when the user drops a document tab onto the
+ * origin tabbar to see if something has changed and resort the document
+ * tabs as necessary.
+ *
+ * @param   {DragEvent}  event  The drag event
+ */
+function handleDragEnd (event: DragEvent): void {
+  documentTabDragOverOrigin.value = false
+  if (container.value === null) {
+    return
+  }
+
+  // Here we just need to inspect the actual order and notify the main
+  // process of that order.
+  const newOrder = []
+  for (let i = 0; i < container.value.children.length; i++) {
+    if (container.value.children[i].getAttribute('role') !== 'tab') {
+      // There may be other children in the element, such as the scrollers
+      continue
+    }
+    const fpath = container.value.children[i].getAttribute('data-path')
+    newOrder.push(fpath)
+  }
+
+  const originalOrdering = openFiles.value.map(file => file.path)
+
+  // Did the order change at all?
+  let somethingChanged = false
+  for (let i = 0; i < newOrder.length; i++) {
+    if (newOrder[i] !== originalOrdering[i]) {
+      somethingChanged = true
+      break
     }
   }
-})
+
+  if (!somethingChanged) {
+    return
+  }
+
+  // Now that we have the correct NEW ordering, we need to temporarily
+  // restore the old ordering, because otherwise Vue will be confused since
+  // it needs to keep track of the element ordering, and we just messed with
+  // that big time.
+  const targetElement = event.target as Element|null
+  if (targetElement === null) {
+    return
+  }
+
+  const dataPath = targetElement.getAttribute('data-path')
+
+  if (dataPath === null) {
+    return
+  }
+
+  const originalIndex = originalOrdering.indexOf(dataPath)
+  if (originalIndex === 0) {
+    container.value.insertBefore(targetElement, container.value.children[0])
+  } else if (originalIndex === container.value.children.length - 1) {
+    container.value.insertBefore(targetElement, null) // null means append at the end
+  } else {
+    container.value.insertBefore(targetElement, container.value.children[originalIndex + 1])
+  }
+
+  ipcRenderer.invoke('documents-provider', {
+    command: 'sort-open-files',
+    payload: {
+      newOrder,
+      windowId: props.windowId,
+      leafId: props.leafId
+    }
+  } as DocumentManagerIPCAPI)
+    .catch(err => console.error(err))
+}
+
+/**
+ * This function is used when something *external* has been dropped onto the
+ * tabbar. In this case, we need to execute a move command (if applicable
+ * analogously to the MainEditor component).
+ *
+ * @param   {DragEvent}  event  The drag event
+ */
+function handleExternalDrop (event: DragEvent): void {
+  documentTabDragOver.value = false
+  const DELIM = (process.platform === 'win32') ? ';' : ':'
+  const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
+  if (documentTab === undefined) {
+    return
+  } else if (!documentTab.includes(DELIM)) {
+    return
+  }
+
+  // The user dropped the file onto the origin (this indicates a bug as
+  // the dropzone shouldn't even be on the DOM in that case)
+  if (documentTabDragOverOrigin.value) {
+    console.error('A document tab has been dropped onto its origin, but the dropzone was in the DOM. This is a bug.')
+    documentTabDragOverOrigin.value = false
+    return
+  }
+
+  // At this point, we have received a drop we need to handle it. The drag
+  // data contains both the origin and the path, separated by the $PATH
+  // delimiter -> window:leaf:absPath
+  const [ originWindow, originLeaf, ...filePath ] = documentTab.split(DELIM)
+  // Now actually perform the act
+  ipcRenderer.invoke('documents-provider', {
+    command: 'move-file',
+    payload: {
+      originWindow,
+      targetWindow: props.windowId,
+      originLeaf,
+      targetLeaf: props.leafId,
+      path: filePath.join(DELIM)
+    }
+  } as DocumentManagerIPCAPI)
+    .catch(err => console.error(err))
+}
+
+/**
+ * This event is used to indicate to the user if they can drop a document
+ * tab onto this tabbar. This gives the tabbar a blue-ish shimmer (similarly
+ * to the dropzones in the MainEditor component) to indicate that the user
+ * can drop a document tab on here.
+ *
+ * @param   {DragEvent}  event  The drag event
+ */
+function handleExternalDragover (event: DragEvent): void {
+  if (documentTabDragOverOrigin.value) {
+    return // The document tab is coming from this tabbar
+  }
+
+  const hasDocumentTab = event.dataTransfer?.types.includes('zettlr/document-tab') ?? false
+  if (hasDocumentTab) {
+    documentTabDragOver.value = true
+  } else {
+    documentTabDragOver.value = false
+  }
+}
+
+/**
+ * This is being called on dragleave and some other, related external events
+ * to reset the internal state so that the dropzone disappears.
+ *
+ * @param   {DragEvent}  event  The drag event
+ */
+function handleExternalDragleave (event: DragEvent): void {
+  documentTabDragOver.value = false
+}
 </script>
 
 <style lang="less">
@@ -765,7 +792,7 @@ body div.document-tablist-wrapper {
 
 body div.tab-container {
   width: 100%;
-  height: 30px;
+  height: 31px;
   background-color: rgb(215, 215, 215);
   border-bottom: 1px solid grey;
   display: flex;
@@ -790,7 +817,7 @@ body div.tab-container {
     display: flex;
     position: relative;
     min-width: fit-content;
-    max-width: 250px;
+    max-width: 150px;
     line-height: @tabbar-height;
     padding: 0 10px; // Give the filenames a little more spacing
 
@@ -799,12 +826,15 @@ body div.tab-container {
     .filename {
       line-height: 30px;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
 
-      .deduplicate {
-        font-style: italic;
-        font-size: 80%;
-        opacity: 0.8;
-      }
+    .deduplicate {
+      font-style: italic;
+      font-size: 80%;
+      opacity: 0.8;
     }
 
     // Mark modification status classically
@@ -854,8 +884,11 @@ body.darwin {
 
       .filename {
         padding: 0 5px;
-        margin: 0 (@tabbar-height / 3 * 1.9);
-        overflow: hidden;
+        margin: 0 10px;
+      }
+
+      .deduplicate {
+        margin-right: 10px;
       }
 
       &.pinned .filename { margin: 0; }

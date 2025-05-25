@@ -109,7 +109,7 @@ export default function findLangCandidates<T> (lang: string, candidates: Array<T
   }
 
   return {
-    'exact': bestMatch,
-    'close': closeMatch
+    exact: bestMatch,
+    close: closeMatch
   }
 }

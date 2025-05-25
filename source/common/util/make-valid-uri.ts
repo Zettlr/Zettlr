@@ -15,14 +15,16 @@
 
 // NOTE: fileExists is called "isFile" everywhere else, we have just renamed
 // it because of a naming conflict in the function.
-import { getProtocolRE, getLinkRE, getMarkDownFileRE } from '../regular-expressions'
-
-const path = window.path
+import { getProtocolRE, getLinkRE } from '../regular-expressions'
+import { isAbsolutePath, resolvePath } from './renderer-path-polyfill'
 
 const protocolRE = getProtocolRE()
 const linkRE = getLinkRE()
 const emailRe = /^[a-z0-9-.]+@[a-z0-9-.]+\.[a-z0-9-.]{2,}$/i
-const mdFileRE = getMarkDownFileRE()
+
+// This regular expression checks whether an URI could be linking to a local file
+// const anyLocallyLinkableFileRE = /.+\.(?:md|markdown|txt|rmd)$/i
+const linkableFileRE = /.+\.(?:mdx?|markdown|txt|(?:q|r)md|jpe?g|png|gif|svg|bmp)$/i
 
 /**
  * Returns a valid URI, using the available context information
@@ -58,19 +60,50 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   // across the codebase, we can do this centrally here.
   uri = uri.replace(/^<(.+)>$/, '$1')
 
+  // To reduce the function complexity, and since Windows also works with
+  // forward slashes, let's add this normalization step here.
+  uri = uri.replace(/\\/g, '/')
+
   // Shortcut for mailto-links, as these have a protocol (mailto) but with
   // *only* a colon, not the double-slash (//).
   if (uri.startsWith('mailto:')) {
-    return uri
+    return (new URL(uri)).toString()
   } else if (emailRe.test(uri)) {
-    return 'mailto:' + uri
+    return (new URL('mailto:' + uri)).toString()
+  }
+
+  if (uri.startsWith('//')) {
+    // The URI looks like a network share. This is a complete can of worms, and
+    // the URL constructor will complain about this, so just shortcircuit here
+    // and let the recipient deal with it. NOTE that this will ensure that
+    // the URL will start with four slashes. This is important to give the main
+    // process a chance to detect that this is supposed to be a network share.
+    // For more context, please see issue #5495
+    return (new URL(`safe-file://${uri}`)).toString()
   }
 
   // Set the isFile var to undefined
   let isFile
+  let protocol = ''
+
+  try {
+    const parsed = new URL(uri)
+    if (parsed.protocol === 'file:') {
+      isFile = true
+      protocol = 'file'
+      // "file" links could be relative, and we need to tend to that possibility
+      // below, so even if this is a proper URL, we have to let the rest of the
+      // functionality take over.
+      throw new Error('Look at my smart programming lol')
+    }
+    return parsed.toString()
+  } catch (err) {
+    // We can trust the URL constructor to throw an error if it is not something
+    // that a web browser can *immediately* open. So if new URL() doesn't throw,
+    // we have a proper URL and can save us these shenanigans.
+  }
 
   // First, remove a potential protocol and save it for later use
-  let protocol = ''
   const protoMatch = protocolRE.exec(uri)
   // If there was a protocol, extract the capturing group
   if (protoMatch !== null) {
@@ -83,7 +116,7 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   } else if (uri.startsWith('//') || uri.startsWith('./') || uri.startsWith('../')) {
     // We know it's a file (shared drive, or relative to this directory)
     isFile = true
-  } else if (path.isAbsolute(uri)) {
+  } else if (isAbsolutePath(uri)) {
     // The link is already absolute
     isFile = true
   }
@@ -103,14 +136,16 @@ export default function makeValidUri (uri: string, base: string = ''): string {
       // In this case, it's not a file, but we don't care which
       // protocol it uses.
       isFile = false
-    } else if (linkRE.test(uri) && !mdFileRE.test(uri)) {
+    } else if (linkRE.test(uri) && !linkableFileRE.test(uri)) {
       // NOTE: The regular expression will also test true for
       // relative paths without ./ at the beginning and a folder
       // containing a full stop. But remedification by adding ./
       // is easy in this case for the user.
-      // NOTE: Using mdFileRE we prevent this behaviour for markdown-files
-      // BUT beware: This will treat moldovian TLD domains as Markdown
-      // files. Here, a trailing slash will remedify this.
+      // NOTE: Using linkableFileRE we prevent this behaviour for any file that
+      // users could be linking locally (Markdown files and images).
+      // BUT beware: This will treat moldovian TLD domains (or any TLD that can
+      // double as a file extension) as files. Here, a trailing slash will
+      // remedify this.
       isFile = false
     } else {
       isFile = true
@@ -139,8 +174,14 @@ export default function makeValidUri (uri: string, base: string = ''): string {
     }
 
     // We've got a relative path
-    if (!path.isAbsolute(uri)) {
-      uri = path.resolve(base, uri)
+    if (!isAbsolutePath(uri)) {
+      uri = resolvePath(base, uri)
+    }
+
+    // See https://github.com/Zettlr/Zettlr/issues/5489
+    // I was very salty.
+    if (process.platform === 'win32') {
+      uri = `/${uri}`
     }
 
     protocol = 'safe-file'
@@ -148,8 +189,8 @@ export default function makeValidUri (uri: string, base: string = ''): string {
 
   // Now we can return the correct uri, made absolute
   if (!protocolRE.test(uri)) {
-    return protocol + '://' + uri
+    return new URL(protocol + '://' + uri).toString()
   } else {
-    return uri
+    return new URL(uri).toString()
   }
 }

@@ -60,235 +60,228 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { RelatedFile } from '@dts/renderer/misc'
 import { RecycleScroller } from 'vue-virtual-scroller'
-import { defineComponent } from 'vue'
-import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { TagRecord } from '@providers/tags'
+import { ref, computed, watch } from 'vue'
+import { useConfigStore, useWorkspacesStore, useDocumentTreeStore, useTagsStore } from 'source/pinia'
+import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import { pathBasename } from '@common/util/renderer-path-polyfill'
+import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+
+export interface RelatedFile {
+  file: string
+  path: string
+  tags: string[]
+  link: 'inbound'|'outbound'|'bidirectional'|'none'
+}
 
 const ipcRenderer = window.ipc
-const path = window.path
 
-export default defineComponent({
-  name: 'RelatedFilesTab',
-  components: {
-    RecycleScroller
-  },
-  data: function () {
-    const searchParams = new URLSearchParams(window.location.search)
-    return {
-      windowId: searchParams.get('window_id') as string,
-      relatedFiles: [] as RelatedFile[]
+const workspacesStore = useWorkspacesStore()
+const configStore = useConfigStore()
+const tagStore = useTagsStore()
+const documentTreeStore = useDocumentTreeStore()
+
+const searchParams = new URLSearchParams(window.location.search)
+const windowId = searchParams.get('window_id')
+
+if (windowId === null) {
+  throw new Error('windowID was null')
+}
+
+const relatedFiles = ref<RelatedFile[]>([])
+
+const relatedFilesLabel = trans('Related files')
+const noRelatedFilesMessage = trans('No related files')
+const bidirectionalLinkLabel = trans('This relation is based on a bidirectional link.')
+const outboundLinkLabel = trans('This relation is based on an outbound link.')
+const inboundLinkLabel = trans('This relation is based on a backlink.')
+
+/**
+ * The Vue Virtual Scroller component expects an array of objects which
+ * expose two properties: id and "props". The latter contains the actual
+ * object (i.e. the RelatedFile). We may want to merge this functionality
+ * into the RelatedFiles generation later on, but this is the safest way
+ * for now.
+ *
+ * @return  {{ id: number, props: RelatedFile }}  The data for the scroller
+ */
+const scrollerRelatedFiles = computed(() => {
+  return relatedFiles.value.map((elem, idx) => {
+    return { id: idx, props: elem }
+  })
+})
+
+const lastActiveFile = computed(() => documentTreeStore.lastLeafActiveFile)
+const roots = computed(() => workspacesStore.roots)
+const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
+const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
+const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
+const lastLeafId = computed(() => documentTreeStore.lastLeafId)
+
+watch(lastActiveFile, () => {
+  recomputeRelatedFiles().catch(err => console.error('Could not recompute related files:', err))
+})
+
+watch(roots, () => {
+  recomputeRelatedFiles().catch(err => console.log('Could not recompute related files:', err))
+})
+
+async function recomputeRelatedFiles (): Promise<void> {
+  if (lastActiveFile.value === undefined) {
+    relatedFiles.value = []
+    return
+  }
+
+  const descriptor: MDFileDescriptor|CodeFileDescriptor|undefined = await ipcRenderer.invoke('application', {
+    command: 'get-descriptor',
+    payload: lastActiveFile.value.path
+  })
+
+  if (descriptor === undefined || descriptor.type === 'code') {
+    relatedFiles.value = []
+    return
+  }
+
+  const unreactiveList: RelatedFile[] = []
+
+  // Then retrieve the inbound links first, since that is the most important
+  // relation, so they should be on top of the list.
+  const { inbound, outbound } = await ipcRenderer.invoke('link-provider', {
+    command: 'get-inbound-links',
+    payload: { filePath: lastActiveFile.value.path }
+  }) as { inbound: string[], outbound: string[] }
+
+  for (const absPath of [ ...inbound, ...outbound ]) {
+    const found = unreactiveList.find(elem => elem.path === absPath)
+    if (found !== undefined) {
+      continue
     }
-  },
-  computed: {
-    relatedFilesLabel: function (): string {
-      return trans('Related files')
-    },
-    noRelatedFilesMessage: function (): string {
-      return trans('No related files')
-    },
-    bidirectionalLinkLabel: function () {
-      return trans('This relation is based on a bidirectional link.')
-    },
-    outboundLinkLabel: function () {
-      return trans('This relation is based on an outbound link.')
-    },
-    inboundLinkLabel: function () {
-      return trans('This relation is based on a backlink.')
-    },
-    /**
-     * The Vue Virtual Scroller component expects an array of objects which
-     * expose two properties: id and "props". The latter contains the actual
-     * object (i.e. the RelatedFile). We may want to merge this functionality
-     * into the RelatedFiles generation later on, but this is the safest way
-     * for now.
-     *
-     * @return  {{ id: number, props: RelatedFile }}  The data for the scroller
-     */
-    scrollerRelatedFiles: function (): any {
-      return this.relatedFiles.map((elem, idx) => {
-        return { id: idx, props: elem }
-      })
-    },
-    lastActiveFile: function (): OpenDocument|null {
-      return this.$store.getters.lastLeafActiveFile()
-    },
-    useH1: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('heading')
-    },
-    useTitle: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('title')
-    },
-    displayMdExtensions: function (): boolean {
-      return this.$store.state.config['display.markdownFileExtensions']
-    },
-    lastLeafId: function (): string {
-      return this.$store.state.lastLeafId
+
+    const related: RelatedFile = {
+      file: pathBasename(absPath),
+      path: absPath,
+      tags: [],
+      link: 'none'
     }
-  },
-  watch: {
-    lastActiveFile (oldval, newval) {
-      this.recomputeRelatedFiles().catch(err => console.error('Could not recompute related files:', err))
+
+    if (inbound.includes(absPath) && outbound.includes(absPath)) {
+      related.link = 'bidirectional'
+    } else if (inbound.includes(absPath)) {
+      related.link = 'inbound'
+    } else {
+      related.link = 'outbound'
     }
-  },
-  mounted () {
-    ipcRenderer.on('documents-update', (e, { event, context }) => {
-      if (event === DP_EVENTS.FILE_SAVED && context.filePath === this.lastActiveFile?.path) {
-        this.recomputeRelatedFiles().catch(err => console.log('Could not recompute related files:', err))
+
+    unreactiveList.push(related)
+  }
+
+  // The second way files can be related to each other is via shared tags.
+  // This relation is not as important as explicit links, so they should
+  // be below the inbound linked files.
+
+  const recommendations = tagStore.tags.filter(tag => descriptor.tags.includes(tag.name))
+
+  for (const tagRecord of recommendations) {
+    for (const filePath of tagRecord.files) {
+      if (filePath === descriptor.path) {
+        continue
       }
-    })
-  },
-  methods: {
-    recomputeRelatedFiles: async function (): Promise<void> {
-      if (this.lastActiveFile === null) {
-        this.relatedFiles = []
-        return
-      }
-
-      const unreactiveList: RelatedFile[] = []
-
-      // Then retrieve the inbound links first, since that is the most important
-      // relation, so they should be on top of the list.
-      const { inbound, outbound } = await ipcRenderer.invoke('link-provider', {
-        command: 'get-inbound-links',
-        payload: { filePath: this.lastActiveFile.path }
-      }) as { inbound: string[], outbound: string[] }
-
-      for (const absPath of [ ...inbound, ...outbound ]) {
-        const found = unreactiveList.find(elem => elem.path === absPath)
-        if (found !== undefined) {
-          continue
-        }
-
-        const related: RelatedFile = {
-          file: path.basename(absPath),
-          path: absPath,
-          tags: [],
-          link: 'none'
-        }
-
-        if (inbound.includes(absPath) && outbound.includes(absPath)) {
-          related.link = 'bidirectional'
-        } else if (inbound.includes(absPath)) {
-          related.link = 'inbound'
-        } else {
-          related.link = 'outbound'
-        }
-
-        unreactiveList.push(related)
-      }
-
-      const descriptor: MDFileDescriptor|CodeFileDescriptor|undefined = await ipcRenderer.invoke('application', {
-        command: 'get-descriptor',
-        payload: this.lastActiveFile.path
-      })
-
-      if (descriptor === undefined || descriptor.type === 'code') {
-        this.relatedFiles = []
-        return
-      }
-
-      // The second way files can be related to each other is via shared tags.
-      // This relation is not as important as explicit links, so they should
-      // be below the inbound linked files.
-
-      const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' }) as TagRecord[]
-      const recommendations = tags.filter(tag => descriptor.tags.includes(tag.name))
-
-      for (const tagRecord of recommendations) {
-        for (const filePath of tagRecord.files) {
-          if (filePath === descriptor.path) {
-            continue
-          }
-          const existingFile = unreactiveList.find(elem => elem.path === filePath)
-          if (existingFile !== undefined) {
-            // This file already links here
-            existingFile.tags.push(tagRecord.name)
-          } else {
-            // This file doesn't explicitly link here but it shares tags
-            unreactiveList.push({
-              file: path.basename(filePath),
-              path: filePath,
-              tags: [tagRecord.name],
-              link: 'none'
-            })
-          }
-        }
-      }
-
-      // Now we have all relations based on either tags or backlinks. We must
-      // now order them in such a way that the hierarchy is like that:
-      // 1. Backlinks that also share common tags
-      // 2. Backlinks that do not share common tags
-      // 3. Files that only share common tags
-      const backlinksAndTags = unreactiveList.filter(e => e.link !== 'none' && e.tags.length > 0)
-      backlinksAndTags.sort((a, b) => { return b.tags.length - a.tags.length })
-
-      const backlinksOnly = unreactiveList.filter(e => e.link !== 'none' && e.tags.length === 0)
-      // No sorting necessary
-
-      const tagsOnly = unreactiveList.filter(e => e.link === 'none')
-      const idf: Record<string, number> = {}
-      for (const tagRecord of tags) {
-        idf[tagRecord.name] = tagRecord.idf
-      }
-
-      // We sort based on the IDF frequency of shared tags, which "weighs" the tags
-      // by importance. Files with less shared tags hence can get higher counts and
-      // are listed higher than files with more shared tags, if those few tags have
-      // high IDF scores.
-      tagsOnly.sort((a, b) => b.tags.map(tag => idf[tag]).reduce((p, c) => p + c, 0) - a.tags.map(tag => idf[tag]).reduce((p, c) => p + c, 0))
-
-      this.relatedFiles = [
-        ...backlinksAndTags,
-        ...backlinksOnly,
-        ...tagsOnly
-      ]
-    },
-    beginDragRelatedFile: function (event: DragEvent, filePath: string) {
-      const descriptor = this.$store.getters.file(filePath)
-
-      event.dataTransfer?.setData('text/x-zettlr-file', JSON.stringify({
-        type: descriptor.type, // Can be file, code, or directory
-        path: descriptor.path,
-        id: descriptor.id // Convenience
-      }))
-    },
-    requestFile: function (event: MouseEvent, filePath: string) {
-      ipcRenderer.invoke('documents-provider', {
-        command: 'open-file',
-        payload: {
-          path: filePath,
-          windowId: this.windowId,
-          leafId: this.lastLeafId,
-          newTab: event.type === 'mousedown' && event.button === 1
-        }
-      })
-        .catch(e => console.error(e))
-    },
-    getRelatedFileName: function (filePath: string) {
-      const descriptor = this.$store.getters.file(filePath)
-      if (descriptor === undefined) {
-        return filePath
-      }
-
-      if (this.useTitle && descriptor.frontmatter !== null && typeof descriptor.frontmatter.title === 'string') {
-        return descriptor.frontmatter.title
-      } else if (this.useH1 && descriptor.firstHeading !== null) {
-        return descriptor.firstHeading
-      } else if (this.displayMdExtensions) {
-        return descriptor.name
+      const existingFile = unreactiveList.find(elem => elem.path === filePath)
+      if (existingFile !== undefined) {
+        // This file already links here
+        existingFile.tags.push(tagRecord.name)
       } else {
-        return descriptor.name.replace(descriptor.ext, '')
+        // This file doesn't explicitly link here but it shares tags
+        unreactiveList.push({
+          file: pathBasename(filePath),
+          path: filePath,
+          tags: [tagRecord.name],
+          link: 'none'
+        })
       }
-    },
-    getTagsLabel (tagList: string[]) {
-      return trans('This relation is based on %s shared tags: %s', tagList.length, tagList.join(', '))
     }
   }
-})
+
+  // Now we have all relations based on either tags or backlinks. We must
+  // now order them in such a way that the hierarchy is like that:
+  // 1. Backlinks that also share common tags
+  // 2. Backlinks that do not share common tags
+  // 3. Files that only share common tags
+  const backlinksAndTags = unreactiveList.filter(e => e.link !== 'none' && e.tags.length > 0)
+  backlinksAndTags.sort((a, b) => { return b.tags.length - a.tags.length })
+
+  const backlinksOnly = unreactiveList.filter(e => e.link !== 'none' && e.tags.length === 0)
+  // No sorting necessary
+
+  const tagsOnly = unreactiveList.filter(e => e.link === 'none')
+  const idf: Record<string, number> = {}
+  for (const tagRecord of tagStore.tags) {
+    idf[tagRecord.name] = tagRecord.idf
+  }
+
+  // We sort based on the IDF frequency of shared tags, which "weighs" the tags
+  // by importance. Files with less shared tags hence can get higher counts and
+  // are listed higher than files with more shared tags, if those few tags have
+  // high IDF scores.
+  tagsOnly.sort((a, b) => b.tags.map(tag => idf[tag]).reduce((p, c) => p + c, 0) - a.tags.map(tag => idf[tag]).reduce((p, c) => p + c, 0))
+
+  relatedFiles.value = [
+    ...backlinksAndTags,
+    ...backlinksOnly,
+    ...tagsOnly
+  ]
+}
+
+function beginDragRelatedFile (event: DragEvent, filePath: string): void {
+  const descriptor = workspacesStore.getFile(filePath)
+
+  if (descriptor === undefined) {
+    console.error('Cannot begin dragging related file: Descriptor not found')
+    return
+  }
+
+  event.dataTransfer?.setData('text/x-zettlr-file', JSON.stringify({
+    type: descriptor.type, // Can be file, code, or directory
+    path: descriptor.path,
+    id: descriptor.type === 'file' ? descriptor.id : '' // Convenience
+  }))
+}
+
+function requestFile (event: MouseEvent, filePath: string): void {
+  ipcRenderer.invoke('documents-provider', {
+    command: 'open-file',
+    payload: {
+      path: filePath,
+      windowId,
+      leafId: lastLeafId.value,
+      newTab: event.type === 'mousedown' && event.button === 1
+    }
+  } as DocumentManagerIPCAPI)
+    .catch(e => console.error(e))
+}
+
+function getRelatedFileName (filePath: string): string {
+  const descriptor = workspacesStore.getFile(filePath)
+  if (descriptor === undefined || descriptor.type !== 'file') {
+    return filePath
+  }
+
+  if (useTitle.value && descriptor.frontmatter !== null && typeof descriptor.frontmatter.title === 'string') {
+    return descriptor.frontmatter.title
+  } else if (useH1.value && descriptor.firstHeading !== null) {
+    return descriptor.firstHeading
+  } else if (displayMdExtensions.value) {
+    return descriptor.name
+  } else {
+    return descriptor.name.replace(descriptor.ext, '')
+  }
+}
+
+function getTagsLabel (tagList: string[]): string {
+  return trans('This relation is based on %s shared tags: %s', tagList.length, tagList.join(', '))
+}
 </script>
+@common/util/renderer-path-polyfill
+../../pinia

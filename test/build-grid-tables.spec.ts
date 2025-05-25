@@ -50,7 +50,7 @@ table.push({
 * TABLE TWO
 */
 tableResults.push(`+---------+-------+------------------+
-|   Right | Left  | Centered         |
+| Right   | Left  | Centered         |
 +========:+=======+:================:+
 | Bananas | $1.34 | built-in wrapper |
 +---------+-------+------------------+`)

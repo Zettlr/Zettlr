@@ -23,7 +23,7 @@ import { configField } from '../util/configuration'
  */
 export const filesUpdate = StateEffect.define<Array<{ filename: string, displayName: string, id: string }>>()
 export const filesUpdateField = StateField.define<Completion[]>({
-  create (state) {
+  create (_state) {
     return []
   },
   update (val, transaction) {
@@ -54,22 +54,22 @@ const apply = (filename: string, fileId: string, displayName: string) => functio
   const { linkFilenameOnly, linkPreference } = view.state.field(configField)
 
   const linkEndAfterCursor = view.state.sliceDoc(to, to + 2) === ']]'
-  const postLink = (linkEndAfterCursor) ? '' : ']]'
 
   let insert = ''
   if (linkFilenameOnly) {
     // Just dump the filename in there
-    insert = `${filename}${postLink}`
+    insert = `${filename}]]`
   } else {
     const textToInsert = fileId === '' ? filename: fileId
     if (linkPreference === 'always' || (linkPreference === 'withID' && textToInsert === fileId)) {
-      insert = `${textToInsert}]] ${displayName}` // NOTE: No postLink, but linkEnd
-      if (linkEndAfterCursor) {
-        to += 2 // Overwrite the linkEnd following the completion
-      }
+      insert = `${textToInsert}]] ${displayName}`
     } else {
-      insert = `${textToInsert}${postLink}`
+      insert = `${textToInsert}]]`
     }
+  }
+
+  if (linkEndAfterCursor) {
+    to += 2 // Overwrite the linkEnd following the completion
   }
 
   view.dispatch({
@@ -83,13 +83,13 @@ export const files: AutocompletePlugin = {
     // File autocompletion triggers as soon as we detect the start of a link
     const { text, from } = ctx.state.doc.lineAt(ctx.pos)
     const lineTextUntilPos = text.slice(0, ctx.pos - from)
-    const linkStartBefore = lineTextUntilPos.indexOf('[[') > lineTextUntilPos.indexOf(']]')
+    const linkStartBefore = lineTextUntilPos.lastIndexOf('[[') > lineTextUntilPos.lastIndexOf(']]')
     const linkStartRange = ctx.state.sliceDoc(ctx.pos - 2, ctx.pos)
 
     if (linkStartRange === '[[') {
       return ctx.pos
     } else if (linkStartBefore) {
-      return from + text.indexOf('[[') + 2
+      return from + lineTextUntilPos.lastIndexOf('[[') + 2
     } else {
       return false
     }
@@ -98,7 +98,7 @@ export const files: AutocompletePlugin = {
     query = query.toLowerCase()
     const entries = ctx.state.field(filesUpdateField)
     return entries.filter(entry => {
-      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query)
+      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query) === true
     })
   },
   fields: [filesUpdateField]

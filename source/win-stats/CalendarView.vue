@@ -20,6 +20,13 @@
         v-on:click="yearPlus()"
       >
       </ButtonControl>
+
+      <div id="calendar-legend">
+        Legend:
+        <span class="low-mid-activity" v-bind:title="lowMidLegend">&lt; &mu;</span>
+        <span class="high-mid-activity" v-bind:title="highMidLegend">&gt; &mu;</span>
+        <span class="high-activity" v-bind:title="highLegend">&gt; 2 &times; &mu;</span>
+      </div>
     </div>
 
     <!--
@@ -61,15 +68,10 @@
         </div>
       </div>
     </div>
-    <div id="calendar-legend">
-      <span class="low-mid-activity">{{ lowMidLegend }}</span><br>
-      <span class="high-mid-activity">{{ highMidLegend }}</span><br>
-      <span class="high-activity">{{ highLegend }}</span>
-    </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -86,165 +88,119 @@
 
 import { DateTime } from 'luxon'
 import { trans } from '@common/i18n-renderer'
-import ButtonControl from '@common/vue/form/elements/Button.vue'
-import { defineComponent, PropType } from 'vue'
+import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
+import { ref, computed } from 'vue'
 import localiseNumber from '@common/util/localise-number'
+import { useStatisticsStore } from '../pinia/statistics-store'
 
-export default defineComponent({
-  name: 'CalendarView',
-  components: {
-    ButtonControl
-  },
-  props: {
-    wordCounts: {
-      type: Object as PropType<{ [key: string]: number }>,
-      required: true
-    },
-    monthlyAverage: {
-      type: Number,
-      required: true
-    }
-  },
-  data: function () {
-    return {
-      // The calendar will show it year-wise. We save this variable in order to
-      // do some fancy stuff around sylvester. The thing is, people (like me)
-      // will want to test this out: if on Dec. 31st they remember "Oh wait,
-      // this one app had such a calendar view for the current year!" they will
-      // open this friggin window and sit in front of their computer until the
-      // clock hits 00:00, and then they'll expect the window to update
-      // automatically. This way we can ensure it will.
-      // Am I crazy for respecting such a weird edge case? Very likely. Does it
-      // cost me too much time to code? Luckily not, given the way Vue works.
-      now: DateTime.local()
-    }
-  },
-  computed: {
-    year: function (): number {
-      return this.now.year
-    },
-    isCurrentYear: function (): boolean {
-      return this.now.year === DateTime.local().year
-    },
-    calendarLabel: function (): string {
-      return trans('Calendar')
-    },
-    isMinimumYear: function (): boolean {
-      // Returns true if this.now holds the minimum year for which there is
-      // data available
-      const years = Object.keys(this.wordCounts).map(k => parseInt(k.substr(0, 4), 10))
-      let min = +Infinity
-      for (const year of years) {
-        if (min > year) {
-          min = year
-        }
-      }
+const statisticsStore = useStatisticsStore()
 
-      return this.now.year === min
-    },
-    months: function (): Array<{ name: string, padding: number, daysInMonth: number }> {
-      const ret = []
-      const MONTHS = [
-        trans('January'),
-        trans('February'),
-        trans('March'),
-        trans('April'),
-        trans('May'),
-        trans('June'),
-        trans('July'),
-        trans('August'),
-        trans('September'),
-        trans('October'),
-        trans('November'),
-        trans('December')
-      ]
+// STATIC VARIABLES
+const calendarLabel = trans('Calendar')
+const MONTHS = [
+  trans('January'),
+  trans('February'),
+  trans('March'),
+  trans('April'),
+  trans('May'),
+  trans('June'),
+  trans('July'),
+  trans('August'),
+  trans('September'),
+  trans('October'),
+  trans('November'),
+  trans('December')
+]
+const lowMidLegend = trans('Below the monthly average')
+const highMidLegend = trans('Over the monthly average')
+const highLegend = trans('More than twice the monthly average')
 
-      for (let i = 1; i <= 12; i++) {
-        const month = this.now.set({ month: i })
-        const beginning = month.startOf('month')
-        ret.push({
-          name: MONTHS[i - 1],
-          padding: beginning.weekday - 1,
-          daysInMonth: month.daysInMonth
-        })
-      }
+// The calendar will show it year-wise. We save this variable in order to do
+// some fancy stuff around sylvester. The thing is, people (like me) will want
+// to test this out: if on Dec. 31st they remember "Oh wait, this one app had
+// such a calendar view for the current year!" they will open this friggin
+// window and sit in front of their computer until the clock hits 00:00, and
+// then they'll expect the window to update automatically. This way we can
+// ensure it will. Am I crazy for respecting such a weird edge case? Very
+// likely. Does it cost me too much time to code? Luckily not, given the way Vue
+// works.
+const now = ref<DateTime>(DateTime.local())
 
-      return ret
-    },
-    lowMidLegend: function (): string {
-      return trans('Below the monthly average')
-    },
-    highMidLegend: function (): string {
-      return trans('Over the monthly average')
-    },
-    highLegend: function (): string {
-      return trans('More than twice the monthly average')
-    }
-  },
-  methods: {
-    /**
-     * Returns an activity percentage for the given day from 0 to 1
-     *
-     * @param   {number}  year   The year to retrieve
-     * @param   {number}  month  The month to retrieve
-     * @param   {number}  date   The day to retrieve
-     *
-     * @return  {number}         The percentage from 0 to 1
-     */
-    getActivityScore: function (year: number, month: number, date: number): number {
-      let parsedMonth = String(month)
-      let parsedDate = String(date)
-
-      if (parsedMonth.length < 2) {
-        parsedMonth = `0${month}`
-      }
-
-      if (parsedDate.length < 2) {
-        parsedDate = `0${date}`
-      }
-
-      const wordCount = this.wordCounts[`${year}-${parsedMonth}-${parsedDate}`]
-
-      if (wordCount === undefined || wordCount === 0) {
-        return -1
-      } else if (wordCount < this.monthlyAverage / 2) {
-        return 0
-      } else if (wordCount < this.monthlyAverage) {
-        return 1
-      } else if (wordCount < this.monthlyAverage * 2) {
-        return 2 // Less than twice the monthly average
-      } else {
-        return 3 // More than twice the monthly average
-      }
-    },
-    getLocalizedWordCount: function (year: number, month: number, date: number): string {
-      let parsedMonth = String(month)
-      let parsedDate = String(date)
-
-      if (parsedMonth.length < 2) {
-        parsedMonth = `0${month}`
-      }
-
-      if (parsedDate.length < 2) {
-        parsedDate = `0${date}`
-      }
-
-      const wordCount = this.wordCounts[`${year}-${parsedMonth}-${parsedDate}`]
-      return localiseNumber(wordCount || 0)
-    },
-    yearMinus: function (): void {
-      this.now = this.now.minus({ years: 1 })
-    },
-    yearPlus: function (): void {
-      // Prevent going into the future
-      if (this.now.year === DateTime.local().year) {
-        return
-      }
-
-      this.now = this.now.plus({ years: 1 })
-    }
-  }
+const year = computed<number>(() => now.value.year)
+const isCurrentYear = computed<boolean>(() => DateTime.local().year === now.value.year)
+const isMinimumYear = computed<boolean>(() => {
+  // Returns true if `now` holds the minimum year for which there is data
+  const minYear = Math.min(
+    ...Object
+      .keys(statisticsStore.stats.wordCount)
+      .map(k => parseInt(k.substring(0, 4), 10))
+  )
+  return now.value.year === minYear
 })
+
+const months = computed<Array<{ name: string, padding: number, daysInMonth: number }>>(() => {
+  const ret: Array<{ name: string, padding: number, daysInMonth: number }> = []
+
+  for (let i = 1; i <= 12; i++) {
+    const month = now.value.set({ month: i })
+    const beginning = month.startOf('month')
+    ret.push({
+      name: MONTHS[i - 1],
+      padding: beginning.weekday - 1,
+      daysInMonth: month.daysInMonth ?? 0
+    })
+  }
+
+  return ret
+})
+
+/**
+ * Returns an activity percentage for the given day from 0 to 1
+ *
+ * @param   {number}  year   The year to retrieve
+ * @param   {number}  month  The month to retrieve
+ * @param   {number}  date   The day to retrieve
+ *
+ * @return  {number}         The percentage from 0 to 1
+ */
+function getActivityScore (year: number, month: number, date: number): number {
+  const parsedMonth = String(month).padStart(2, '0')
+  const parsedDate = String(date).padStart(2, '0')
+  const wordCount = statisticsStore.stats.wordCount[`${year}-${parsedMonth}-${parsedDate}`]
+
+  if (wordCount === undefined || wordCount === 0) {
+    return -1
+  } else if (wordCount < statisticsStore.avg30DaysWords / 2) {
+    return 0
+  } else if (wordCount < statisticsStore.avg30DaysWords) {
+    return 1
+  } else if (wordCount < statisticsStore.avg30DaysWords * 2) {
+    return 2 // Less than twice the monthly average
+  } else {
+    return 3 // More than twice the monthly average
+  }
+}
+
+function getLocalizedWordCount (year: number, month: number, date: number): string {
+  const parsedMonth = String(month).padStart(2, '0')
+  const parsedDate = String(date).padStart(2, '0')
+  const wordCount = statisticsStore.stats.wordCount[`${year}-${parsedMonth}-${parsedDate}`]
+
+  return wordCount !== undefined ? localiseNumber(wordCount) : ''
+}
+
+function yearMinus (): void {
+  now.value = now.value.minus({ years: 1 })
+}
+
+function yearPlus (): void {
+  // Prevent going into the future
+  if (isCurrentYear.value) {
+    return
+  }
+
+  now.value = now.value.plus({ years: 1 })
+}
 </script>
 
 <style lang="less">
@@ -260,17 +216,22 @@ body div#calendar-container {
 
   div#calendar {
     margin-top: 20px;
-    display: inline-grid;
+    width: calc(100vw - 20px);
+    overflow: auto;
+    display: grid;
     // We have four month per quartile ...
-    grid-template-columns: repeat(4, 195px); // 10px padding left and right
+    grid-template-columns: repeat(4, auto);
     // ... and three quartiles per year.
-    grid-template-rows: repeat(3, 160px); // 10px padding top and bottom + 20px heading-size
+    grid-template-rows: repeat(3, auto);
+    grid-gap: auto;
 
-    div.month h2 {
-      font-size: 20px;
-      line-height: 20px;
-      margin: 0;
-      padding: 0;
+    div.month {
+      h2 {
+        font-size: 20px;
+        line-height: 20px;
+        margin: 0;
+        padding: 0;
+      }
     }
 
     div.day-grid {
@@ -313,13 +274,13 @@ body div#calendar-container {
   }
 
   div#calendar-legend {
-
+    font-size: 60%;
     span {
       display: inline-block;
-      font-size: 12px;
-      padding: 6px;
-      margin: 6px 0;
+      padding: 4px 8px;
+      margin: 0 6px;
       border-radius: 6px;
+      cursor: help;
 
       &.low-mid-activity {
         background-color: @low-mid-bg;

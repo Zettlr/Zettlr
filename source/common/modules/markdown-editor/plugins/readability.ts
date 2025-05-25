@@ -17,8 +17,7 @@ import {
   ViewPlugin,
   Decoration,
   type ViewUpdate,
-  type DecorationSet,
-  type EditorView
+  type DecorationSet, EditorView
 } from '@codemirror/view'
 import { configField } from '../util/configuration'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
@@ -245,7 +244,7 @@ function readabilityScores (view: EditorView): DecorationSet {
   return Decoration.set(decos, true)
 }
 
-export const readabilityMode = ViewPlugin.fromClass(class {
+const readabilityModePlugin = ViewPlugin.fromClass(class {
   decorations: DecorationSet
 
   constructor (view: EditorView) {
@@ -258,3 +257,35 @@ export const readabilityMode = ViewPlugin.fromClass(class {
 }, {
   decorations: v => v.decorations
 })
+
+export const readabilityMode = [
+  readabilityModePlugin,
+  EditorView.baseTheme({
+    // Define the readability classes based on a traffic light system. 
+    // Red indicates bad readability scores, yellow indicates average scores, 
+    // and green indicates good readability scores.
+    '&light .cm-readability-0': { backgroundColor: '#298f2baa', color: '#444' },
+    '&light .cm-readability-1': { backgroundColor: '#51c744aa', color: '#444' },
+    '&light .cm-readability-2': { backgroundColor: '#74f84baa', color: '#444' },
+    '&light .cm-readability-3': { backgroundColor: '#97f749aa', color: '#444' },
+    '&light .cm-readability-4': { backgroundColor: '#c3f749aa', color: '#444' },
+    '&light .cm-readability-5': { backgroundColor: '#ebf749aa', color: '#444' },
+    '&light .cm-readability-6': { backgroundColor: '#f8e114aa', color: '#444' },
+    '&light .cm-readability-7': { backgroundColor: '#fca625aa', color: '#444' },
+    '&light .cm-readability-8': { backgroundColor: '#ff6911aa', color: '#444' },
+    '&light .cm-readability-9': { backgroundColor: '#ff3b00aa', color: '#444' },
+    '&light .cm-readability-10': { backgroundColor: '#cc0000aa', color: '#444' },
+    // Dark styles
+    '&dark .cm-readability-0': { backgroundColor: '#298f2baa', color: '#ccc' },
+    '&dark .cm-readability-1': { backgroundColor: '#51c744aa', color: '#ccc' },
+    '&dark .cm-readability-2': { backgroundColor: '#74f84baa', color: '#ccc' },
+    '&dark .cm-readability-3': { backgroundColor: '#97f749aa', color: '#ccc' },
+    '&dark .cm-readability-4': { backgroundColor: '#c3f749aa', color: '#ccc' },
+    '&dark .cm-readability-5': { backgroundColor: '#ebf749aa', color: '#ccc' },
+    '&dark .cm-readability-6': { backgroundColor: '#f8e114aa', color: '#ccc' },
+    '&dark .cm-readability-7': { backgroundColor: '#fca625aa', color: '#ccc' },
+    '&dark .cm-readability-8': { backgroundColor: '#ff6911aa', color: '#ccc' },
+    '&dark .cm-readability-9': { backgroundColor: '#ff3b00aa', color: '#ccc' },
+    '&dark .cm-readability-10': { backgroundColor: '#cc0000aa', color: '#ccc' }
+  })
+]

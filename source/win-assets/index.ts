@@ -14,6 +14,7 @@
 
 import { createApp } from 'vue'
 import App from './App.vue'
+import { createPinia } from 'pinia'
 import windowRegister from '@common/modules/window-register'
 
 const ipcRenderer = window.ipc
@@ -21,7 +22,9 @@ const ipcRenderer = window.ipc
 // The first thing we have to do is run the window controller
 windowRegister()
   .then(() => {
-    const app = createApp(App)
+    const pinia = createPinia()
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const app = createApp(App).use(pinia)
     app.mount('#app')
 
     // This window will be closed immediately on a window-close command

@@ -14,17 +14,18 @@
  * END HEADER
  */
 
-import { StateField, type EditorState, type Transaction } from '@codemirror/state'
+import { syntaxTree } from '@codemirror/language'
+import { StateField, type EditorState } from '@codemirror/state'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import { countAll } from '@common/util/counter'
 
 export const countField = StateField.define<{ chars: number, words: number }>({
-  create (state: EditorState): { chars: number, words: number } {
+  create (state: EditorState) {
     const ast = markdownToAST(state.doc.toString())
     return countAll(ast)
   },
 
-  update (value: { chars: number, words: number }, transaction: Transaction) {
+  update (value, transaction) {
     // If someone provided the markClean effect, we'll exchange the saved doc
     // so that, when comparing documents with cleanDoc.eq(state.doc), it will
     // return true.
@@ -32,11 +33,11 @@ export const countField = StateField.define<{ chars: number, words: number }>({
       return value
     }
 
-    const ast = markdownToAST(transaction.state.doc.toString())
+    const ast = markdownToAST(transaction.state.doc.toString(), syntaxTree(transaction.state))
     return countAll(ast)
   },
 
-  compare (a: { chars: number, words: number }, b: { chars: number, words: number }): boolean {
+  compare (a, b): boolean {
     return a.chars === b.chars && a.words === b.words
   }
 })

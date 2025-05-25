@@ -1,17 +1,17 @@
 <template>
   <div class="system-tablist" role="tablist">
     <button
-      v-for="tab, idx in tabs"
+      v-for="tab, idx in props.tabs"
       v-bind:key="idx"
       role="tab"
       v-bind:aria-label="tab.label"
       v-bind:data-target="tab.target"
       v-bind:class="{
         'system-tab': true,
-        'active': currentTab === tab.id
+        active: props.currentTab === tab.id
       }"
       v-bind:title="tab.label"
-      v-on:click="$emit('tab', tab.id)"
+      v-on:click="emit('tab', tab.id)"
     >
       <!-- Display either an icon, or the title -->
       <cds-icon
@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -42,29 +42,34 @@
  * END HEADER
  */
 
-import { TabbarControl } from '@dts/renderer/window'
-import { defineComponent, PropType } from 'vue'
+/**
+ * This interface represents a Tabbar control
+ */
+export interface TabbarControl {
+  /**
+   * This should match a Clarity icon shape
+   */
+  icon?: string
+  /**
+   * A unique ID for the tab
+   */
+  id: string
+  /**
+   * The target ID of whichever tab this represents (for a11y purposes)
+   */
+  target: string
+  /**
+   * A label, may be displayed.
+   */
+  label: string
+}
 
-export default defineComponent({
-  name: 'TabBar',
-  props: {
-    // Each tab must have the following properties:
-    // * icon (matches cds-icons, if not set, title will become the content)
-    // * id (a unique string)
-    // * target (a CSS ID string)
-    // * label (a title string)
-    tabs: {
-      type: Array as PropType<TabbarControl[]>,
-      required: true
-    },
-    // This must be equal to an ID from the tabs array
-    currentTab: {
-      type: String,
-      default: ''
-    }
-  },
-  emits: ['tab']
-})
+const props = defineProps<{
+  tabs: TabbarControl[]
+  currentTab: string
+}>()
+
+const emit = defineEmits<(e: 'tab', value: string) => void>()
 </script>
 
 <style lang="less">

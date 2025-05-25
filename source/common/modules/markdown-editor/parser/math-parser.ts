@@ -25,6 +25,10 @@ export const inlineMathParser: InlineParser = {
   // This parser should only match inline-math (we have to divide that here)
   name: 'inlineMath',
   parse: (ctx, next, pos) => {
+    if (next !== 36) { // $
+      return -1
+    }
+
     const inlineMathRE = /(?<![\\$])(?<dollar>\${1,2})(?![\s$])(?<eq>.+?)(?<![\s\\])\k<dollar>(?!\d)/g
     // Set the lastIndex to the relative position where we're currently parsing ...
     const relativePosition = pos - ctx.offset
@@ -98,7 +102,7 @@ export const blockMathParser: BlockParser = {
     const wrapperNode = ctx.elt('FencedCode', startFrom, ctx.lineStart + line.text.length, [
       ctx.elt('CodeMark', startFrom, from - 1), // Ignore the newline char (to ensure the math renderer can differentiate math blocks from code blocks)
       ctx.elt('CodeText', from, from + equation.length, [treeElem]),
-      ctx.elt('CodeMark', from + equation.length, ctx.lineStart + line.text.length)
+      ctx.elt('CodeMark', Math.max(from + equation.length, ctx.lineStart), ctx.lineStart + line.text.length)
     ])
 
     ctx.addElement(wrapperNode)

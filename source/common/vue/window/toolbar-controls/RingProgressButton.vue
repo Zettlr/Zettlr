@@ -1,18 +1,20 @@
 <template>
-  <button
-    v-bind:id="`toolbar-${control.id}`"
-    role="button"
-    v-on:click="$emit('click')"
-  >
-    <RingProgress
-      v-bind:ratio="progressPercent / 100"
-      v-bind:color="trackColour"
-    ></RingProgress>
-    <span v-html="control.label"></span>
-  </button>
+  <div class="toolbar-group">
+    <button
+      v-bind:id="`toolbar-${props.control.id ?? ''}`"
+      role="button"
+      v-on:click="emit('click')"
+    >
+      <RingProgress
+        v-bind:ratio="props.control.progressPercent / 100"
+        v-bind:color="props.control.trackColour"
+      ></RingProgress>
+      <span v-html="props.control.label"></span>
+    </button>
+  </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -32,32 +34,22 @@
  */
 
 import RingProgress from './RingProgress.vue'
-import { defineComponent } from 'vue'
 
-export default defineComponent({
-  name: 'RingProgressControl',
-  components: { RingProgress },
-  props: {
-    control: {
-      type: Object,
-      default: function () { return {} }
-    },
-    progressPercent: {
-      type: Number,
-      default: 0
-    }
-  },
-  emits: ['click'],
-  computed: {
-    trackColour: function () {
-      if (this.control.colour !== undefined) {
-        return this.control.colour
-      } else {
-        return '#ff3388'
-      }
-    }
-  }
-})
+export interface RingProgressButtonControl {
+  type: 'ring'
+  id?: string
+  progressPercent: number
+  trackColour?: string
+  label?: string
+  // Allow arbitrary properties that we ignore
+  [key: string]: any
+}
+
+const props = defineProps<{
+  control: RingProgressButtonControl
+}>()
+
+const emit = defineEmits<(e: 'click') => void>()
 </script>
 
 <style lang="less">

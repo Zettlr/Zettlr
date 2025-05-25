@@ -20,7 +20,6 @@ import {
   type BrowserWindowConstructorOptions
 } from 'electron'
 import attachLogger from './attach-logger'
-import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
 import type { WindowPosition } from './types'
 
@@ -42,10 +41,7 @@ export default function createStatsWindow (logger: LogProvider, config: ConfigPr
     show: false,
     fullscreenable: false,
     webPreferences: {
-      // contextIsolation and sandbox mean: Preload scripts have access to
-      // Node modules, the renderers not
-      contextIsolation: true,
-      sandbox: false,
+      sandbox: true,
       preload: STATS_PRELOAD_WEBPACK_ENTRY
     }
   }
@@ -63,9 +59,6 @@ export default function createStatsWindow (logger: LogProvider, config: ConfigPr
 
   // EVENT LISTENERS
 
-  // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(logger, window)
-
   // Implement main process logging
   attachLogger(logger, window, 'Stats Window')
 
@@ -80,7 +73,6 @@ export default function createStatsWindow (logger: LogProvider, config: ConfigPr
     // Do not "clearCache" because that would only delete my own index files
     ses.clearStorageData({
       storages: [
-        'appcache',
         'cookies', // Nobody needs cookies except for downloading pandoc etc
         'localstorage',
         'shadercache', // Should never contain anything

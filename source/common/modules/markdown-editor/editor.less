@@ -78,8 +78,6 @@
 
   // Search results
   .cm-selectionMatch { background-color: #99ff7780; }
-  // Manual highlight/mark elements
-  .cm-highlight { background-color: #ffff0080; }
 
   // SYNTAX-HIGHLIGHTING CLASSES
   // ===========================================================================
@@ -103,9 +101,6 @@
     text-decoration: line-through;
   }
 
-  .cm-tab { display: inline; }
-  .cm-url, .cm-link { text-decoration: none; }
-
   // Make the formatting characters and escape sequences nearly invisible
   .cm-formatting-code,
   .cm-formatting-code-block,
@@ -125,7 +120,7 @@
   .cm-formatting-quote,
   .cm-formatting-list-ul,
   .cm-formatting-list-ol {
-    font-family: Consolas, 'Inconsolata', Menlo, monospace;
+    font-family: Inconsolata, monospace;
   }
 
   // ZETTLR-SPECIFIC CLASSES
@@ -199,68 +194,6 @@
     .cm-variable-2, .cm-variable-3, .cm-keyword { text-decoration: line-through !important; }
   }
 
-  // Deliver a much more fancy UX for images inserted into the editor
-  .editor-image-container {
-    display: inline-block;
-    position: relative;
-    text-align: center;
-    cursor: default;
-
-    figure {
-      display: inline-block;
-
-      img { display: inherit; }
-
-      &:hover, &:focus-within {
-        figcaption, span.image-size-info, span.open-externally-button {
-          opacity: 1;
-        }
-      }
-
-      span.image-size-info, figcaption, span.open-externally-button {
-        position: absolute;
-        opacity: 0;
-        transition: 0.2s opacity ease;
-        background-color: rgba(0, 0, 0, .7);
-        color: white;
-        font-size: 12px;
-        border-radius: 6px;
-        padding: 10px;
-        // If we have images in a list, they will inherit the textIndent applied
-        // by CodeMirror, so we have to set it explicitly
-        text-indent: 0;
-      }
-
-      span.image-size-info {
-        top: 10px;
-        left: 10px;
-      }
-
-      span.open-externally-button {
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-      }
-
-      figcaption {
-        bottom: 10px;
-        left: 10px;
-        right: 10px;
-        cursor: text; // Captions can be edited
-
-        // Codemirror 6's drawCursor plugin makes the actual cursor transparent,
-        // so we have to reset it here for the contenteditables. Same for
-        // selection backgrounds.
-        caret-color: rgb(255, 255, 255);
-        &::selection {
-          color: black;
-          // Overwrite the important by the plugin
-          background-color: rgba(255, 255, 255, 0.8) !important;
-        }
-      }
-    }
-  }
-
   // The wrapper node for the iFrames (both rendered + the warning)
   .iframe-wrapper {
     text-align: center;
@@ -285,32 +218,6 @@
     width: 480px;
     height: 270px;
     margin: 0 auto;
-  }
-
-  .editor-note-preview {
-    max-width: 300px;
-    padding: 5px;
-
-    // Style the little preview note tooltips better
-    h4.filename {
-      font-size: 120%; // Not that much larger than the rest of the text
-    }
-
-    .note-content {
-      font-family: monospace; // TODO: Better font list for all operating systems
-      line-height: 100%;
-      margin: 10px 0;
-      white-space: pre-wrap;
-    }
-
-    .metadata {
-      color: rgb(200, 200, 200);
-      font-size: 80%;
-    }
-
-    .actions {
-      margin: 5px 0;
-    }
   }
 }
 

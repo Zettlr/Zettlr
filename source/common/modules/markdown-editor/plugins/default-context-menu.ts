@@ -18,6 +18,32 @@ import { syntaxTree } from '@codemirror/language'
 import { EditorView } from '@codemirror/view'
 import { defaultMenu } from '../context-menu/default-menu'
 import { linkImageMenu } from '../context-menu/link-image-menu'
+import type { SyntaxNode } from '@lezer/common'
+
+/**
+ * Takes an EditorView and a position within it, and returns either a SyntaxNode
+ * of type URL, Link, or Image, or null. This information can be used to
+ * determine whether there is any form of Link or image at the given position.
+ *
+ * @param   {EditorView}  view  The editor view
+ * @param   {number}      pos   The position to check
+*
+ * @return  {SyntaxNode|null}   Either a Link, Image, or URL syntax node, or null.
+ */
+function getLinkOrImageNodeFromPos (view: EditorView, pos: number): SyntaxNode|null {
+  const node = syntaxTree(view.state).resolveInner(pos)
+
+  if ([ 'URL', 'Link', 'Image' ].includes(node.type.name)) {
+    return node
+  }
+
+  let nodeAt: SyntaxNode|null = node
+  while (nodeAt !== null && ![ 'Link', 'Image' ].includes(nodeAt.type.name)) {
+    nodeAt = nodeAt.parent
+  }
+
+  return nodeAt
+}
 
 export const defaultContextMenu = EditorView.domEventHandlers({
   contextmenu (event, view) {
@@ -29,25 +55,23 @@ export const defaultContextMenu = EditorView.domEventHandlers({
       return false // No context menu to show
     }
 
-    const node = syntaxTree(view.state).resolveInner(pos)
-    console.log(`Context menu at node ${node.type.name}.`)
+    const maybeLinkNode = getLinkOrImageNodeFromPos(view, pos)
 
-    switch (node.type.name) {
-      case 'Link':
-      case 'Image':
-        linkImageMenu(view, node, coords)
-        return true
-      default: {
-        // If there is nothing selected, select the word at the coords
-        const nothingSelected = view.state.selection.ranges.every(x => x.empty)
-        const wordAt = view.state.wordAt(pos)
-        if (nothingSelected && wordAt !== null) {
-          view.dispatch({ selection: wordAt })
-        }
-
-        defaultMenu(view, node, coords).catch(err => console.error(err))
-        return true
-      }
+    if (maybeLinkNode !== null) {
+      // We can show a Link/Image context menu!
+      linkImageMenu(view, maybeLinkNode, coords)
+      return true
     }
+
+    // If there is nothing selected, select the word at the coords
+    const nothingSelected = view.state.selection.ranges.every(x => x.empty)
+    const wordAt = view.state.wordAt(pos)
+    if (nothingSelected && wordAt !== null) {
+      view.dispatch({ selection: wordAt })
+    }
+
+    const node = syntaxTree(view.state).resolveInner(pos)
+    defaultMenu(view, node, coords).catch(err => console.error(err))
+    return true
   }
 })

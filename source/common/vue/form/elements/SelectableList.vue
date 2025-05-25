@@ -10,34 +10,42 @@
         v-for="item, idx in items" v-bind:key="idx"
         v-bind:class="{
           'item': true,
-          'selected': idx === selectedItem
+          'selected': idx === selectedItem,
+          'no-info': !hasInfoString(item),
+          'no-icons': !needsIconColumn
         }"
-        v-on:click="$emit('select', idx)"
+        v-on:click="emit('select', idx)"
         v-on:contextmenu="handleContextMenu($event, idx)"
       >
+        <cds-icon
+          v-if="typeof item !== 'string' && item.icon !== undefined"
+          v-bind:shape="item.icon"
+          v-bind:solid="item.solidIcon ?? false"
+          class="icon"
+        ></cds-icon>
         <span class="display-text">{{ getDisplayText(item) }}</span>
         <span
           v-if="hasInfoString(item)"
           v-bind:class="{
             'info-string': true,
-            'error': (item as any).infoStringClass === 'error'
+            'error': hasInfoStringError(item)
           }"
         >{{ (item as any).infoString }}</span>
       </div>
     </div>
     <!-- Add an optional footer -->
     <div v-if="editable" class="selectable-list-footer">
-      <div class="add" v-on:click="$emit('add')">
+      <div class="add" v-on:click="emit('add')">
         <cds-icon shape="plus"></cds-icon>
       </div>
-      <div class="remove" v-on:click="$emit('remove', selectedItem)">
+      <div v-if="selectedItem !== undefined" class="remove" v-on:click="emit('remove', selectedItem)">
         <cds-icon shape="minus"></cds-icon>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -55,90 +63,89 @@
  */
 
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
-import { defineComponent } from 'vue'
+import { type AnyMenuItem } from '@dts/renderer/context'
+import { computed } from 'vue'
 
-interface SelectableListItem {
+export interface SelectableListItem {
   displayText: string
-  infoString: string
+  infoString?: string
+  infoStringClass?: 'error'
+  icon?: string
+  solidIcon?: boolean
+  [key: string]: any // Allow arbitrary items
 }
 
-export default defineComponent({
-  name: 'SelectableList',
-  props: {
-    items: {
-      type: Object as () => Array<string|SelectableListItem>,
-      required: true
-    },
-    selectedItem: {
-      type: Number,
-      default: 0
-    },
-    // If set to true, the user can add and remove items
-    editable: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: [ 'select', 'add', 'remove' ],
-  methods: {
-    getDisplayText: function (listItem: string|SelectableListItem): string {
-      if (typeof listItem === 'string') {
-        return listItem
-      } else {
-        return listItem.displayText
-      }
-    },
-    hasInfoString: function (listItem: string|SelectableListItem): boolean {
-      return typeof listItem !== 'string'
-    },
-    handleContextMenu: function (event: MouseEvent, idx: number) {
-      if (!this.editable) {
-        return // No action possible
-      }
+const props = defineProps<{
+  items: Array<string|SelectableListItem>
+  selectedItem?: number
+  editable?: boolean
+}>()
 
-      const menu: AnyMenuItem[] = [
-        {
-          label: 'Remove',
-          id: 'remove-item',
-          type: 'normal',
-          enabled: true
-        }
-      ]
+const emit = defineEmits<{
+  (e: 'select', value: number): void
+  (e: 'add'): void
+  (e: 'remove', value: number): void
+}>()
 
-      showPopupMenu({ x: event.clientX, y: event.clientY }, menu, (clickedID) => {
-        if (clickedID === 'remove-item') {
-          this.$emit('remove', idx)
-        }
-      })
-    }
-  }
+// If there is at least one icon, we need the icon column for the entire list
+const needsIconColumn = computed<boolean>(() => {
+  return props.items
+    .find(i => typeof i !== 'string' && i.icon !== undefined) !== undefined
 })
+
+function getDisplayText (listItem: string|SelectableListItem): string {
+  if (typeof listItem === 'string') {
+    return listItem
+  } else {
+    return listItem.displayText
+  }
+}
+
+function hasInfoString (listItem: string|SelectableListItem): boolean {
+  return typeof listItem !== 'string' && listItem.infoString !== undefined
+}
+
+function hasInfoStringError (listItem: string|SelectableListItem): boolean {
+  return typeof listItem !== 'string' && listItem.infoStringClass === 'error'
+}
+
+function handleContextMenu (event: MouseEvent, idx: number): void {
+  if (!props.editable) {
+    return // No action possible
+  }
+
+  const menu: AnyMenuItem[] = [
+    {
+      label: 'Remove',
+      id: 'remove-item',
+      type: 'normal',
+      enabled: true
+    }
+  ]
+
+  showPopupMenu({ x: event.clientX, y: event.clientY }, menu, (clickedID) => {
+    if (clickedID === 'remove-item') {
+      emit('remove', idx)
+    }
+  })
+}
 </script>
 
 <style lang="less">
 body .selectable-list-wrapper {
-  padding: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  --selectable-list-border-color: rgb(230, 230, 230);
+  padding: 10px;
 
   &.has-footer { padding-bottom: 40px; }
 
   .selectable-list-footer {
-    position: absolute;
-    bottom: 18px;
-    left: 20px;
-    right: 20px;
     height: 22px;
     display: flex;
     justify-content: flex-start;
     background-color: rgb(255, 255, 255);
-    border-left: 1px solid rgb(180, 180, 180);
-    border-right: 1px solid rgb(180, 180, 180);
-    border-bottom: 1px solid rgb(180, 180, 180);
+    border-left: 1px solid var(--selectable-list-border-color);
+    border-right: 1px solid var(--selectable-list-border-color);
+    border-bottom: 1px solid var(--selectable-list-border-color);
 
     .add, .remove {
       width: 20px;
@@ -149,47 +156,110 @@ body .selectable-list-wrapper {
   }
 
   .selectable-list-container {
-    border: 1px solid rgb(180, 180, 180);
+    border: 1px solid var(--selectable-list-border-color);
     height: 100%;
     overflow: auto;
 
     div.item {
       background-color: white;
       color: rgb(33, 33, 33);
-      border-bottom: 1px solid rgb(180, 180, 180);
+      border-bottom: 1px solid var(--selectable-list-border-color);
       white-space: nowrap;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      // Default: A spacious list item with icon, label, and info areas
+      grid-template-columns: 28px auto;
+      grid-template-rows: 14px 14px;
+      grid-template-areas:
+        "icon label"
+        "icon info";
+      align-items: center;
 
-      &.selected { background-color: rgb(230, 230, 230); }
+      &.no-info {
+        // An item that has no info can be a bit narrower
+        grid-template-rows: 10px 10px;
+        grid-template-areas:
+          "icon label"
+          "icon label";
+      }
+
+      &.no-icons {
+        // An item with no icon
+        grid-template-areas:
+          "label label"
+          "info info";
+      }
+
+      &.no-icons.no-info {
+        // An item with neither icon nor info text
+        grid-template-rows: 10px 10px;
+        grid-template-areas:
+          "label label"
+          "label label";
+      }
+
+      .display-text { grid-area: label; }
+      .icon { grid-area: icon; justify-self: center; }
+
+      &.selected {
+        // background-color: rgb(230, 230, 230);
+        background-color: var(--system-accent-color);
+        color: var(--system-accent-color-contrast);
+
+        .info-string { color: inherit; }
+      }
 
       &:last-child { border-bottom: none; }
 
       .info-string {
+        grid-area: info;
         font-size: 10px;
         color: gray;
 
         &.error { color: rgb(200, 80, 100); }
       }
+
+      // Make the text clip if too less space
+      .display-text, .info-string {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
+}
+
+body.dark .selectable-list-wrapper {
+  --selectable-list-border-color-dark: rgb(120, 120, 120);
+  .selectable-list-footer, .selectable-list-container, div.item {
+    border-color: var(--selectable-list-border-color-dark);
+  }
+
 }
 
 body.darwin {
   .selectable-list-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 12px;
+    border-radius: 8px;
 
     .item {
       line-height: 20px;
       padding: 5px;
     }
+  }
 
+  .selectable-list-wrapper {
     .selectable-list-footer {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
       .add, .remove {
         border-right: 1px solid rgb(230, 230, 230);
       }
+    }
+
+    &.has-footer > .selectable-list-container {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
     }
   }
 
@@ -207,13 +277,15 @@ body.darwin {
     .selectable-list-container {
       border-color: #505050;
 
-      div.item {
+      .item {
         background-color: rgb(50, 50, 50);
         color: white;
         border-color: #505050;
 
         &.selected {
-          background-color: rgb(80, 80, 80);
+          background-color: var(--system-accent-color);
+          color: var(--system-accent-color-contrast);
+          .info-string { color: inherit; }
         }
       }
     }
@@ -226,9 +298,16 @@ body.win32, body.linux {
     .selectable-list-container {
       div.item {
         border: none;
-        // height: 30px;
+        font-size: 12px;
+        grid-template-rows: 20px 20px;
+        height: 40px;
         line-height: 20px;
-        padding: 0 5px;
+
+        &.no-info {
+          grid-template-rows: 15px 15px;
+          height: 30px;
+          line-height: 30px;
+        }
       }
     }
   }
@@ -246,12 +325,17 @@ body.win32, body.linux {
           color: white;
 
           &.selected {
-            background-color: rgb(90, 90, 90);
+            background-color: var(--system-accent-color);
+            color: var(--system-accent-color-contrast);
+            .info-string { color: inherit; }
           }
-
         }
       }
     }
   }
+}
+
+body.linux .selectable-list-wrapper .selectable-list-container {
+  border-radius: 4px;
 }
 </style>

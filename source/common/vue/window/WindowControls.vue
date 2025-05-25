@@ -2,13 +2,13 @@
   <div id="window-controls">
     <!-- Minimise icons -->
     <div class="minimise" v-on:click="requestMinimise">
-      <template v-if="platform === 'win32'">
+      <template v-if="props.platform === 'win32'">
         <!-- Windows -->
         <svg x="0px" y="0px" viewBox="0 0 10 1">
           <rect width="10" height="1"></rect>
         </svg>
       </template>
-      <template v-else-if="platform === 'linux'">
+      <template v-else-if="props.platform === 'linux'">
         <!-- Linux -->
         <svg x="0px" y="0px" viewBox="0 0 10 2">
           <rect width="10" height="2"></rect>
@@ -31,7 +31,7 @@
           <path d="M 2 0 L 10 0 L 10 8 L 8 8 L 8 10 L 0 10 L 0 2 L 2 2 L 2 0 z" mask="url(#Mask)" />
         </svg>
       </template>
-      <template v-else-if="platform === 'win32' && !isMaximised">
+      <template v-else-if="props.platform === 'win32' && !isMaximised">
         <!-- Windows (maximise) -->
         <svg
           class="fullscreen-svg" x="0px" y="0px"
@@ -40,7 +40,7 @@
           <path d="M 0 0 L 0 10 L 10 10 L 10 0 L 0 0 z M 1 1 L 9 1 L 9 9 L 1 9 L 1 1 z " />
         </svg>
       </template>
-      <template v-else-if="platform === 'linux'">
+      <template v-else-if="props.platform === 'linux'">
         <!-- Linux gets the same icon for both states. Hope that's okay. -->
         <svg x="0px" y="0px" viewBox="0 0 10 10">
           <rect
@@ -57,12 +57,12 @@
       v-on:click="requestClose"
     >
       <!-- Close icon (win32) -->
-      <template v-if="platform === 'win32'">
+      <template v-if="props.platform === 'win32'">
         <svg x="0px" y="0px" viewBox="0 0 10 10">
           <polygon points="10,1 9,0 5,4 1,0 0,1 4,5 0,9 1,10 5,6 9,10 10,9 6,5"></polygon>
         </svg>
       </template>
-      <template v-else-if="platform === 'linux'">
+      <template v-else-if="props.platform === 'linux'">
         <svg x="0px" y="0px" viewBox="0 0 10 10">
           <line
             x1="0" y1="0" x2="10"
@@ -78,7 +78,7 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -94,49 +94,41 @@
  *
  * END HEADER
  */
+import { onMounted, ref } from 'vue'
 
 const ipcRenderer = window.ipc
 
-export default {
-  name: 'WindowControls',
-  props: {
-    platform: {
-      type: String,
-      default: process.platform
-    }
-  },
-  data: function () {
-    return {
-      isMaximised: false
-    }
-  },
-  mounted: function () {
-    // Sometimes, the main process fires back a message with regard to the status
-    ipcRenderer.on('window-controls', (event, message) => {
-      const { command } = message
-      // win-size-changed is emitted by main, whereas get-maximised-status is
-      // sent from this module to initially get the status
-      if (command === 'get-maximised-status') {
-        const { payload } = message
-        // Reflect the window status (payload is true if the window is maximised)
-        this.isMaximised = payload
-      }
-    })
+const props = defineProps<{ platform?: typeof process.platform }>()
 
-    // Get the initial windowed/maximised-status
-    ipcRenderer.send('window-controls', { command: 'get-maximised-status' })
-  },
-  methods: {
-    requestMinimise: function () {
-      ipcRenderer.send('window-controls', { command: 'win-minimise' })
-    },
-    requestResize: function () {
-      ipcRenderer.send('window-controls', { command: 'win-maximise' })
-    },
-    requestClose: function () {
-      ipcRenderer.send('window-controls', { command: 'win-close' })
+const isMaximised = ref<boolean>(false)
+
+onMounted(() => {
+  // Sometimes, the main process fires back a message with regard to the status
+  ipcRenderer.on('window-controls', (event, message) => {
+    const { command } = message
+    // win-size-changed is emitted by main, whereas get-maximised-status is
+    // sent from this module to initially get the status
+    if (command === 'get-maximised-status') {
+      const { payload } = message
+      // Reflect the window status (payload is true if the window is maximised)
+      isMaximised.value = payload
     }
-  }
+  })
+
+  // Get the initial windowed/maximised-status
+  ipcRenderer.send('window-controls', { command: 'get-maximised-status' })
+})
+
+function requestMinimise (): void {
+  ipcRenderer.send('window-controls', { command: 'win-minimise' })
+}
+
+function requestResize (): void {
+  ipcRenderer.send('window-controls', { command: 'win-maximise' })
+}
+
+function requestClose (): void {
+  ipcRenderer.send('window-controls', { command: 'win-close' })
 }
 </script>
 

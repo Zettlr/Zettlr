@@ -18,8 +18,18 @@ import parsePipeTable from './parse-pipe'
 import parseSimpleTable from './parse-simple'
 import parseGridTable from './parse-grid'
 import type { TableEditorOptions } from './types'
+import { parseNode } from './parse-node'
+import type { SyntaxNode } from '@lezer/common'
 
-export default function fromMarkdown (markdownTable: string, hooks: TableEditorOptions = {}): TableEditor {
+/**
+ * Instantiates a TableEditor from Markdown source
+ *
+ * @param   {string}              markdownTable  The Markdown source
+ * @param   {TableEditorOptions}  hooks          TableEditor options
+ *
+ * @return  {TableEditor}                        The instance
+ */
+export function fromMarkdown (markdownTable: string, hooks: TableEditorOptions = {}): TableEditor {
   // We support three types of tables: Grid tables, pipe tables, and simple tables.
   // Two of those types can be determined by looking at the first row, the third
   // is then the default.
@@ -37,4 +47,18 @@ export default function fromMarkdown (markdownTable: string, hooks: TableEditorO
     const parsed = parseSimpleTable(markdownTable)
     return new TableEditor(parsed.ast, parsed.colAlignments, 'simple', hooks)
   }
+}
+
+/**
+ * Instantiates a TableEditor based on a SyntaxNode
+ *
+ * @param   {SyntaxNode}          tableNode  The syntax node
+ * @param   {string}              markdown   The Markdown source
+ * @param   {TableEditorOptions}  hooks      TableEditor options
+ *
+ * @return  {TableEditor}                    The instance
+ */
+export function fromSyntaxNode (tableNode: SyntaxNode, markdown: string, hooks: TableEditorOptions = {}): TableEditor {
+  const parsed = parseNode(tableNode, markdown)
+  return new TableEditor(parsed.ast, parsed.colAlignments, parsed.type ?? 'pipe', hooks)
 }

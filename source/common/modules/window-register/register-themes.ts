@@ -21,15 +21,6 @@ import './assets/main.less'
 const ipcRenderer = window.ipc
 
 /**
- * Webpack provides the themes as JavaScript objects with two properties, use
- * and unuse. We have to declare this to TypeScript using this handy interface.
- */
-interface ThemeLoader {
-  use: () => void
-  unuse: () => void
-}
-
-/**
  * Defines a SystemColour interface as is being returned by the appearance provider
  */
 interface SystemColour {
@@ -38,44 +29,14 @@ interface SystemColour {
 }
 
 /**
- * This type holds all available themes for the application, which are
- * present in the availableThemes variable and can be indexed using Theme.
- */
-type Theme = 'berlin'|'bielefeld'|'frankfurt'|'karl-marx-stadt'|'bordeaux'
-
-/* eslint-disable @typescript-eslint/no-var-requires */
-const availableThemes: Record<Theme, ThemeLoader> = {
-  'berlin': require('../../less/theme-berlin/theme-main.less').default as ThemeLoader,
-  'bielefeld': require('../../less/theme-bielefeld/theme-main.less').default as ThemeLoader,
-  'frankfurt': require('../../less/theme-frankfurt/theme-main.less').default as ThemeLoader,
-  'karl-marx-stadt': require('../../less/theme-karl-marx-stadt/theme-main.less').default as ThemeLoader,
-  'bordeaux': require('../../less/theme-bordeaux/theme-main.less').default as ThemeLoader
-}
-
-/**
- * Global variable which holds the current theme
- *
- * @var {ThemeLoader|null}
- */
-let currentTheme: ThemeLoader|null = null
-
-/**
  * Listens for theming changes (main theme + custom CSS) and handles dark mode
  */
 export default function registerThemes (): void {
   // Listen for configuration changes
   ipcRenderer.on('config-provider', (event, { command, payload }) => {
-    if (command === 'update') {
-      if (payload === 'display.theme') {
-        // Switch the theme based on the current configuration value
-        switchTheme(window.config.get('display.theme'))
-      } else if (payload === 'darkMode') {
-        // Switch to light/dark mode based on the configuration variable
-        document.body.classList.toggle('dark', window.config.get('darkMode'))
-      } else if (payload === 'display.useSystemAccentColor') {
-        // The accent color setting has been changed, so re-set the customCSS
-        setSystemCss()
-      }
+    if (command === 'update' && payload === 'darkMode') {
+      // Switch to light/dark mode based on the configuration variable
+      switchDarkLightTheme()
     }
   })
 
@@ -86,9 +47,8 @@ export default function registerThemes (): void {
     }
   })
 
-  // Initial theme change
-  switchTheme(window.config.get('display.theme'))
-  document.body.classList.toggle('dark', window.config.get('darkMode'))
+  // Initial theme change/setup
+  switchDarkLightTheme()
 
   // Initial rendering of the Custom CSS
   ipcRenderer.invoke('css-provider', { command: 'get-custom-css-path' })
@@ -101,21 +61,11 @@ export default function registerThemes (): void {
 }
 
 /**
- * Switches to the theme given by newTheme
- *
- * @param   {Theme}  newTheme  The new theme name
+ * Performs necessary actions when switching the theme to dark/light
  */
-function switchTheme (newTheme: Theme): void {
-  let themeToSwitchTo = availableThemes[newTheme]
-  if (themeToSwitchTo !== currentTheme) {
-    if (currentTheme != null) {
-      // Unload old theme
-      currentTheme.unuse()
-    }
-    // Load the new theme
-    themeToSwitchTo.use()
-    currentTheme = themeToSwitchTo
-  }
+function switchDarkLightTheme (): void {
+  const isDarkMode: boolean = window.config.get('darkMode')
+  document.body.classList.toggle('dark', isDarkMode)
 }
 
 /**
@@ -130,10 +80,17 @@ function setCustomCss (cssPath: string): void {
     formerCustomCSS.parentElement?.removeChild(formerCustomCSS)
   }
 
+  // Due to the colons in the drive letters on Windows, the pathname will
+  // look like this: /C:/Users/Documents/test.jpg
+  // See: https://github.com/Zettlr/Zettlr/issues/5489
+  if (/^[A-Z]:/i.test(cssPath)) {
+    cssPath = `/${cssPath}`
+  }
+
   // (Re)load the custom CSS
   let link = document.createElement('link')
   link.rel = 'stylesheet'
-  link.setAttribute('href', 'safe-file://' + cssPath)
+  link.setAttribute('href', (new URL('safe-file://' + cssPath)).toString())
   link.setAttribute('type', 'text/css')
   link.setAttribute('id', 'custom-css-link')
   document.head.appendChild(link)
@@ -154,18 +111,11 @@ function setSystemCss (): void {
       const style = document.createElement('style')
       style.setAttribute('id', 'system-css')
 
-      const useSystemAccent: boolean = window.config.get('display.useSystemAccentColor')
-
       // We can put all CSS variables we would like to output into this map. All
       // will be appended to the stylesheet below.
       const variables = new Map<string, string>()
-      if (useSystemAccent) {
-        variables.set('--system-accent-color', '#' + accentColor.accent)
-        variables.set('--system-accent-color-contrast', '#' + accentColor.contrast)
-      } else {
-        variables.set('--system-accent-color', 'var(--c-primary)')
-        variables.set('--system-accent-color-contrast', 'var(--c-primary-contrast)')
-      }
+      variables.set('--system-accent-color', '#' + accentColor.accent)
+      variables.set('--system-accent-color-contrast', '#' + accentColor.contrast)
 
       // Why do we format it nicely? I don't know, but I like to keep things tidy.
       style.textContent = ':root {\n'

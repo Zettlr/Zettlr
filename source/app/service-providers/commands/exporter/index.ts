@@ -29,8 +29,9 @@ import { plugin as PDFExporter } from './pdf-exporter'
 import { plugin as TextbundleExporter } from './textbundle-exporter'
 import type AssetsProvider from '@providers/assets'
 import type LogProvider from '@providers/log'
-import { type PandocProfileMetadata } from '@dts/common/assets'
+import { type PandocProfileMetadata } from '@providers/assets'
 import type ConfigProvider from '@providers/config'
+import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
 
 /**
  * This function returns faux metadata for the custom export formats the
@@ -64,9 +65,9 @@ export function getCustomProfiles (): PandocProfileMetadata[] {
 }
 
 const PLUGINS = {
-  'pandoc': DefaultExporter,
+  pandoc: DefaultExporter,
   'simple-pdf': PDFExporter,
-  'textbundle': TextbundleExporter
+  textbundle: TextbundleExporter
 }
 
 /**
@@ -91,8 +92,8 @@ export async function makeExport (
     runPandoc: async (defaults: string) => {
       return await runPandoc(logger, defaults, options.cwd)
     },
-    getDefaultsFor: async (filename: string, properties: any = {}) => {
-      return await writeDefaults(filename, properties, config, assets, options.defaultsOverride)
+    writeDefaults: async (filename: string, overrides: any = {}) => {
+      return await writeDefaults(filename, overrides, config, assets, options.defaultsOverride)
     },
     listDefaults: async () => {
       return await assets.listDefaults()
@@ -101,12 +102,12 @@ export async function makeExport (
 
   // Search for the correct plugin to run, and run it. First the custom ones ...
   if ([ 'textbundle', 'textpack' ].includes(options.profile.writer)) {
-    return await PLUGINS.textbundle.run(options, inputFiles, ctx)
+    return await PLUGINS.textbundle(options, inputFiles, ctx)
   } else if (options.profile.writer === 'simple-pdf') {
-    return await PLUGINS['simple-pdf'].run(options, inputFiles, ctx)
+    return await PLUGINS['simple-pdf'](options, inputFiles, ctx)
   } else {
     // ... otherwise run the regular Pandoc exporter.
-    return await PLUGINS.pandoc.run(options, inputFiles, ctx)
+    return await PLUGINS.pandoc(options, inputFiles, ctx)
   }
 }
 
@@ -133,7 +134,7 @@ async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: strin
       output.stderr.push(String(data))
     })
 
-    pandocProcess.on('close', (code: number, signal) => {
+    pandocProcess.on('close', (code: number, _signal) => {
       // Code should be 0. To check for errors, check that
       output.code = code
       resolve()
@@ -167,23 +168,42 @@ async function writeDefaults (
   defaultsOverride?: DefaultsOverride
 ): Promise<string> {
   const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
-
   const defaults: any = await assets.getDefaultsFile(filename)
+  const { cslLibrary, cslStyle, stripTags, stripLinks } = config.get().export
+
+  // The user can choose to use [[link|title]] or [[title|link]] syntax. In
+  // order for the Lua filter to work properly and respect the link removal
+  // setting upon export, we need to set the appropriate extension if it is not
+  // already set in the `reader` property.
+  const { linkFormat } = config.get().zkn
+  const requiredExtension = linkFormat === 'link|title'
+    ? 'wikilinks_title_after_pipe'
+    : 'wikilinks_title_before_pipe'
+  const parsedReader = parseReaderWriter(defaults.reader)
+  const mdReaders = [
+    'commonmark', 'commonmark_x', 'gfm', 'ipynb', 'markdown', 'markdown_mmd',
+    'markdown_phpextra', 'markdown_strict'
+  ]
+
+  if (
+    mdReaders.includes(parsedReader.name) &&
+    !parsedReader.enabledExtensions.includes(requiredExtension)
+  ) {
+    defaults.reader += `+${requiredExtension}`
+  }
 
   // In order to facilitate file-only databases, we need to get the currently
   // selected database. This could break in a lot of places, but until Pandoc
   // respects a file-defined bibliography, this is our best shot.
   // const bibliography = global.citeproc.getSelectedDatabase()
-  const bibliography: string = config.get('export.cslLibrary')
-  if (bibliography !== undefined && isFile(bibliography)) {
+  if (isFile(cslLibrary)) {
     if ('bibliography' in defaults) {
-      defaults.bibliography.push(bibliography)
+      defaults.bibliography.push(cslLibrary)
     } else {
-      defaults.bibliography = [bibliography]
+      defaults.bibliography = [cslLibrary]
     }
   }
 
-  const cslStyle: string = config.get('export.cslStyle')
   if (defaultsOverride?.csl !== undefined && isFile(defaultsOverride.csl)) {
     defaults.csl = defaultsOverride.csl
   } else if (isFile(cslStyle)) {
@@ -202,8 +222,8 @@ async function writeDefaults (
     defaults.metadata.zettlr = {}
   }
 
-  defaults.metadata.zettlr.strip_tags = Boolean(config.get('export.stripTags'))
-  defaults.metadata.zettlr.strip_links = String(config.get('export.stripLinks'))
+  defaults.metadata.zettlr.strip_tags = stripTags
+  defaults.metadata.zettlr.strip_links = stripLinks
 
   // Potentially override allowed defaults properties
   if (defaultsOverride?.title !== undefined) {
