@@ -105,7 +105,7 @@ app.whenReady().then(() => {
   // ─── NEW: wire up Zotero IPC handler ─────────────────────────────────────
   new ZoteroService().registerIpc()
   // ─────────────────────────────────────────────────────────────────────────
-
+})
 /**
  * Hook into the ready event and initialize the main object creating everything
  * else. It is necessary to wait for the ready event, because prior, some APIs

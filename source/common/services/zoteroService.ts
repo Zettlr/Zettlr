@@ -15,7 +15,7 @@ export class ZoteroService {
   private caywUrl = 'http://127.0.0.1:23119/better-bibtex/cayw?format=json'
 
   /** pop up the Zotero picker and get back an array of CSL items */
-  async searchCitations(_: string): Promise<CitationItem[]> {
+  async searchCitations (_: string): Promise<CitationItem[]> {
     try {
       const res = await fetch(this.caywUrl)
       if (!res.ok) throw new Error(`CAYW HTTP ${res.status}`)
