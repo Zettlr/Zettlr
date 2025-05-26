@@ -144,12 +144,31 @@ export const citations: AutocompletePlugin = {
       return false
     }
   },
-  entries (ctx, query) {
-    query = query.toLowerCase()
-    const entries = sortCitationKeysByUsage(ctx.state)
-    return entries.filter(entry => {
-      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query) === true
-    })
-  },
+  async entries(ctx, rawQuery) {
+    const q   = rawQuery.replace(/^@/, '').trim()
+    const cfg = ctx.state.field(configField)
+  
+    //if (cfg.citationProvider === 'zotero') {
+      if (1 === 1) {
+      // Zotero CAYW branch
+      try {
+        const items = await window.ipc.invoke('zotero:search', q)
+        return items.map(i => ({
+          label: i.citekey,
+          info:  `${i.title} — ${i.author} (${i.year})`,
+          apply
+        }))
+      } catch {
+        return []
+      }
+    } else {
+      // Built-in branch
+      const allKeys = ctx.state.field(citekeyUpdateField)
+      return allKeys.filter(c =>
+        c.label.toLowerCase().includes(q.toLowerCase()) ||
+        (c.info as string).toLowerCase().includes(q.toLowerCase())
+      )
+    }
+  }  
   fields: [citekeyUpdateField]
 }
