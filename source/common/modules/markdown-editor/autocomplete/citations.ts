@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { type Completion } from '@codemirror/autocomplete'
+import { type Completion, type CompletionContext } from '@codemirror/autocomplete'
 import { type EditorState, StateEffect, StateField } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import extractCitations from '@common/util/extract-citations'
@@ -125,34 +125,22 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
   }
 }
 
+/** — the combined plugin — */
 export const citations: AutocompletePlugin = {
   applies (ctx) {
-    // A valid citekey position is: Beginning of the line (citekey without square
-    // brackets), after a square bracket open (regular citation without prefix),
-    // or after a space (either a standalone citation or within square brackets
-    // but with a prefix). Also, the citekey can be prefixed with a -.
-    const { text, from } = ctx.state.doc.lineAt(ctx.pos)
-    const textBefore = text.slice(0, ctx.pos - from)
-    if (text.startsWith('@') && ctx.pos - from === 1) {
-      // The line starts with an @ and the cursor is directly behind it
-      return ctx.pos
-    } else if (/(?<=[-[\s(])@[^[\]]*$/.test(textBefore)) {
-      // The text immediately before the cursor matches a valid citation
-      return from + textBefore.lastIndexOf('@') + 1
-    } else {
-      // Nopey
-      return false
-    }
+    const { pos, state } = ctx
+    return pos > 0 && state.sliceDoc(pos - 1, pos) === '@' ? pos : false
   },
-  async entries(ctx, rawQuery) {
-    const q   = rawQuery.replace(/^@/, '').trim()
-    const cfg = ctx.state.field(configField)
-  
-    //if (cfg.citationProvider === 'zotero') {
-      if (1 === 1) {
-      // Zotero CAYW branch
+
+  async entries (ctx: CompletionContext, rawQuery: string) {
+    const q = rawQuery.replace(/^@/, '').trim()
+
+    // —— hard-coded to Zotero right now ——
+    if (1 === 1) {
       try {
-        const items = await window.ipc.invoke('zotero:search', q)
+        const items: Array<{ citekey: string; title: string; author: string; year: string }> =
+          await window.ipc.invoke('zotero:search', q)
+
         return items.map(i => ({
           label: i.citekey,
           info:  `${i.title} — ${i.author} (${i.year})`,
@@ -162,13 +150,13 @@ export const citations: AutocompletePlugin = {
         return []
       }
     } else {
-      // Built-in branch
-      const allKeys = ctx.state.field(citekeyUpdateField)
-      return allKeys.filter(c =>
+      // —— your old built-in branch ——
+      const all = sortCitationKeysByUsage(ctx.state)
+      return all.filter(c =>
         c.label.toLowerCase().includes(q.toLowerCase()) ||
         (c.info as string).toLowerCase().includes(q.toLowerCase())
       )
     }
-  }  
+  },
   fields: [citekeyUpdateField]
 }
