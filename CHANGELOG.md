@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.5.0
+
+## GUI and Functionality
+
 - **Feature**: The code editors (in the assets manager and elsewhere) now share
   the same keymap as the main editor.
 - **Feature**: The image renderer now acknowledges and respects the presence of
