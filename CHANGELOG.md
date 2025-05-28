@@ -2,11 +2,49 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- **Feature**: The code editors (in the assets manager and elsewhere) now share
+  the same keymap as the main editor.
+- **Feature**: The image renderer now acknowledges and respects the presence of
+  a Pandoc link attributes string behind an image to scale images using custom
+  sizes (#1328).
+- **Change**: Removed some optional properties from the default profiles. If you
+  want to switch to the new defaults, delete those files from the assets manager
+  or rename your existing ones. Specifically, removed `top-level-division`,
+  whose meaning has changed which started to produce empty first pages during
+  Word exports (#5645).
+- Fixed a long-standing bug that would not clear the modification marker on both
+  file tabs (#5747) and the macOS window indicator (#4724) when a modified file
+  was closed without saving changes. Acknowledges PR #5747 which is superseded
+  by this change.
+- Added a keyboard shortcut for highlighting text: `Ctrl-Shift-H` (#4668).
+- The Mermaid diagram renderer is now more flexible. It now renders any Mermaid
+  diagram in any type of valid fenced code block with both allowed variations of
+  providing the info string: the plain `mermaid` and the Pandoc-attribute style
+  `{.mermaid}` class (#5734).
+- Fixed a keymap conflict that would cause `Enter` to not accept autocomplete
+  suggestions in some contexts such as Markdown syntax elements (#5646).
+- Improved the math, mermaid, image, and heading renderers so that they perform
+  additional checks before actually updating their respective rendered elements.
+  This should reduce the amount of flickering and unintentional scrolling
+  especially in longer documents with many of such elements.
+- Enable the CodeMirror folding keymap which lets you fold and unfold code, such
+  as headings, with keyboard shortcuts instead of using the arrows to the left
+  of the editor (#857). The shortcuts are: `Ctrl-Shift-[` (Windows/Linux) or
+  `Cmd-Alt-[` (macOS) for folding code, `Ctrl-Shift-]` or `Cmd-Alt-]` for
+  unfolding, `Ctrl-Alt-[` for folding all, and `Ctrl-Alt-]` for unfolding all.
+- Update `fr-FR` translation (#5738).
+- Update `cs-CZ` translation (#5775).
 
 ## Under the Hood
 
-(nothing here)
+- Cache ESLint results to improve subsequent linter run speed (#5706).
+- Spawn shell when starting test GUI on Windows (#5685).
+- Markdown commands now check whether the provided target `EditorView` is parsed
+  using a Markdown parser before running.
+- Move all keymaps into a single `defaultKeymap`.
+- Assume `**` as default bold and `*` as default italic formatting for Markdown
+  commands if the config field is not present.
+- Added a `pandocLinkParser` for properly parsing pandoc link attribute strings.
 
 # 3.4.4
 

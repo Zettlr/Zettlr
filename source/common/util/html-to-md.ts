@@ -30,18 +30,14 @@ import { unified } from 'unified'
  */
 export default async function html2md (html: string, stripComments = false, stringifyOptions?: Options): Promise<string> {
   const procRetainComments = unified()
-    // @ts-expect-error The types on remark are wonky
     .use(rehypeParse)
     .use(rehypeRemark)
-    // @ts-expect-error The types on remark are wonky
     .use(remarkStringify, stringifyOptions)
 
   const procRemoveComments = unified()
-    // @ts-expect-error The types on remark are wonky
     .use(rehypeParse)
     .use(rehypeRemoveComments, { removeConditional: true })
     .use(rehypeRemark)
-    // @ts-expect-error The types on remark are wonky
     .use(remarkStringify, stringifyOptions)
 
   const proc = stripComments ? procRemoveComments : procRetainComments
