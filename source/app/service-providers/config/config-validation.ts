@@ -19,7 +19,7 @@ const RULES = {
   autoDarkMode: 'required|string|in:off,system,schedule,auto|default:off',
   fileMeta: 'required|boolean|default:true',
   sorting: 'required|string|in:natural,ascii|default:natural',
-  newFileNamePattern: 'required|string|default:%id.md',
+  newFileNamePattern: 'required|string|default:%id',
   appLang: 'required|string|min:5|max:7|default:en_US',
   fileManagerMode: 'required|string|in:thin,expanded,combined|default:thin',
   muteLines: 'required|boolean|default:false',
