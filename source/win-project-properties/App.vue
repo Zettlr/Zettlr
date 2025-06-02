@@ -43,6 +43,10 @@
       <!-- First, the files to be included in the export -->
       <p>{{ exportFilesLabel }}</p>
 
+      <button @click="toggleSelectAllFiles" style="margin-bottom: 10px">
+        {{ toggleSelectAllFilesLabel }}
+      </button>
+
       <div v-if="missingFiles.length > 0" class="export-file-list">
         <ZtrAdmonition>{{ missingFilesMessage }}</ZtrAdmonition>
         <div v-for="file in missingFiles" v-bind:key="file" class="export-file-item">
@@ -193,10 +197,24 @@ const upButtonTitle = trans('Move file up')
 const downButtonTitle = trans('Move file down')
 const noFilesSelectedMessage = trans('You have not selected any files for export.')
 const missingFilesMessage = trans('Some files are selected for export but no longer exist in the directory.')
+const toggleSelectAllFilesLabel = computed(() => {
+  return areAllFilesSelected.value
+    ? trans('Deselect All Files')
+    : trans('Select All Files')
+})
+
 
 const configStore = useConfigStore()
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
+
+const areAllFilesSelected = computed(() => {
+  const allPaths = availableFiles.value.map(file =>
+    pathToUnix(file.path.slice(dirPath.length + 1))
+  )
+  return allPaths.every(path => projectSettings.value.files.includes(path))
+})
+
 
 const tabs: WindowTab[] = [
   {
@@ -479,6 +497,22 @@ function moveFileUpInExportList (relativeFilePath: string): void {
   projectSettings.value.files.splice(idx, 1)
   projectSettings.value.files.splice(idx - 1, 0, relativeFilePath)
 }
+
+function toggleSelectAllFiles (): void {
+  const allPaths = availableFiles.value.map(file =>
+    pathToUnix(file.path.slice(dirPath.length + 1))
+  )
+
+  if (areAllFilesSelected.value) {
+    // Deselect all
+    projectSettings.value.files = []
+  } else {
+    // Select all
+    projectSettings.value.files = allPaths
+  }
+}
+
+
 </script>
 
 <style lang="less">
