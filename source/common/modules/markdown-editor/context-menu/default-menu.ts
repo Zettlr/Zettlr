@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+import { addNewFootnote } from '../commands/footnotes'
 import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
@@ -21,6 +22,9 @@ import { type SyntaxNode } from '@lezer/common'
 import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
+
+
+
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -173,6 +177,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       enabled: true
     },
     {
+      label: trans('Insert footnote'),
+      id: 'markdownInsertFootnote',
+      type: 'normal',
+      enabled: true
+    },
+    {
       label: trans('Insert unordered list'),
       id: 'markdownMakeUnorderedList',
       type: 'normal',
@@ -275,6 +285,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       applyBlockquote(view)
     } else if (clickedID === 'markdownInsertTable') {
       // TODO
+    } else if (clickedID === 'markdownInsertFootnote') {
+      addNewFootnote(view)
     } else if (clickedID === 'cut') {
       cut(view)
     } else if (clickedID === 'copy') {
