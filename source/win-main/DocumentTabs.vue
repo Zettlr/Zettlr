@@ -469,7 +469,7 @@ function handleTabbarContext (event: MouseEvent): void {
 
 function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
   const file = workspacesStore.getFile(doc.path)
-  if (file === undefined || file.type === 'other') {
+  if (file === undefined) {
     return
   }
 
