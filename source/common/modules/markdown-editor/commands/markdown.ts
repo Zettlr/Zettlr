@@ -502,3 +502,62 @@ export function applyTaskList (target: EditorView): boolean {
   applyList(target, 'task')
   return true
 }
+
+export function straightenQuotes(view: EditorView): boolean {
+ 
+  const transaction = view.state.changeByRange(range => {
+    const text = view.state.doc.sliceString(range.from, range.to)
+    const newText = text
+      .replace(/[“”]/g, '"')  
+      .replace(/[‘’]/g, "'")  
+    
+    
+    return {
+      changes: { from: range.from, to: range.to, insert: newText },  
+      range  
+    }
+  })
+
+  
+  view.dispatch(transaction)
+
+  return true
+}
+
+export function convertPairedQuotes(view: EditorView): boolean {
+  const transaction = view.state.changeByRange(range => {
+    const text = view.state.doc.sliceString(range.from, range.to)
+
+    // change `` and '' to " and ' respectively
+    const newText = text
+      .replace(/``/g, '"')   //  → "
+      .replace(/''/g, '"')   //  → "
+      .replace(/[“”]/g, '"') //  → "
+      .replace(/[‘’]/g, "'") //  → '
+
+    return {
+      changes: { from: range.from, to: range.to, insert: newText },
+      range
+    }
+  })
+
+  view.dispatch(transaction)
+  return true
+}
+
+export function convertSingleToDoubleQuotes(view: EditorView): boolean {
+  const transaction = view.state.changeByRange(range => {
+    const text = view.state.doc.sliceString(range.from, range.to)
+
+    // change every ' to "
+    const newText = text.replace(/'/g, '"')
+
+    return {
+      changes: { from: range.from, to: range.to, insert: newText },
+      range
+    }
+  })
+
+  view.dispatch(transaction)
+  return true
+}
