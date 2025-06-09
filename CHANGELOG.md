@@ -2,6 +2,17 @@
 
 ## GUI and Functionality
 
+
+### Added transform
+- Added new context menu items in the Markdown editor to transform paired and smart quotes:
+  - Convert paired backticks (``) and paired single quotes ('') to double quotes (")
+  - Convert smart double quotes (“”）to plain double quotes (")
+  - Convert smart single quotes (‘’) to plain single quotes (')
+  - Convert all single quotes (') to double quotes (") on demand
+  - Update 'Automate common text transforms. #5659
+  - Update Text transform: Paired quotes to double quotes. #5680
+  - Update Text transform: Straighten quotes. #5675
+
 - **Feature**: The code editors (in the assets manager and elsewhere) now share
   the same keymap as the main editor.
 - **Feature**: The image renderer now acknowledges and respects the presence of

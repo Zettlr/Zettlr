@@ -19,7 +19,7 @@ import showPopupMenu from '@common/modules/window-register/application-menu-help
 import { type AnyMenuItem } from '@dts/renderer/context'
 import { type SyntaxNode } from '@lezer/common'
 import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
-import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
+import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList,convertPairedQuotes,convertSingleToDoubleQuotes  } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
 
 const ipcRenderer = window.ipc
@@ -250,7 +250,31 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       id: 'selectAll',
       type: 'normal',
       enabled: true
-    }
+    },
+
+    {
+      label: trans('Transform'),
+      id: 'transformMenu',
+      type: 'submenu',
+      enabled: true,
+    submenu: [
+      {
+        label: trans('Convert paired quotes'),
+        id: 'convertPairedQuotes',
+        type: 'normal',
+        enabled: true
+      },
+      {
+        label: trans('Convert single to double quotes'),
+        id: 'convertSingleToDoubleQuotes',
+        type: 'normal',
+        enabled: true
+      }
+  ]
+},
+{
+  type: 'separator'
+},
   ]
 
   // If we found a diagnostic earlier and a word, add the suggestion items
@@ -289,10 +313,15 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } })
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
+    } else if (clickedID === 'straightenQuotes') {
+    convertPairedQuotes(view)
+    } else if (clickedID === 'convertSingleToDoubleQuotes') {
+    convertSingleToDoubleQuotes(view)
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
       ipcRenderer.invoke(
         'dictionary-provider',
         { command: 'add', terms: [word] }
+
       )
         .then(() => {
           // After we've added the word to the dictionary, we have to invalidate
