@@ -110,8 +110,6 @@ export const citations: AutocompletePlugin = {
     if (mode === 'zotero') {
       try {
         const items = await window.ipc.invoke('zotero:search', q)
-
-        // Just build and return the completions — don't update the state
         const completions = items.map(i => ({
           label: i.citekey,
           info: `${i.title} — ${i.author} (${i.year})`,
