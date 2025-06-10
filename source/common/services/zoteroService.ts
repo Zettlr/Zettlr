@@ -32,19 +32,18 @@ export class ZoteroService {
         citekey: i.citationKey,
         title:   i.title,
         author:  i.item.creators
-                     .map(c => [c.firstName, c.lastName].filter(Boolean).join(' '))
-                     .join(', '),
+          .map(c => [ c.firstName, c.lastName ].filter(Boolean).join(' '))
+          .join(', '),
         year:    i.item.date?.slice(0,4) ?? ''
       }))
-    }
-    catch (err) {
+    } catch (err) {
       console.error('Zotero CAYW failed:', err)
       return []
     }
   }
 
   /** expose it on the same channel your renderer is already invoking */
-  registerIpc() {
+  registerIpc () {
     ipcMain.handle(
       'zotero:search',
       (_: IpcMainInvokeEvent, q: string) => this.searchCitations(q)

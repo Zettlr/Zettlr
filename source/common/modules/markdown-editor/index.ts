@@ -20,6 +20,8 @@
 // Import our additional styles we need to put here since we don't have a Vue
 // component for the editor itself.
 import './editor.less'
+import { createCitationModePicker } from './autocomplete/citations'
+
 
 /**
  * APIs
@@ -415,6 +417,7 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     this._instance.focus()
+    createCitationModePicker(this._instance)
   }
 
   /**

@@ -19,78 +19,50 @@ import extractCitations from '@common/util/extract-citations'
 import { type AutocompletePlugin } from '.'
 import { configField } from '../util/configuration'
 
-/**
- * Use this effect to provide the editor state with a set of new citekeys
- */
+export type CitationMode = 'zotero' | 'original'
+
+export const citationMode = StateEffect.define<CitationMode>()
+export const citationModeField = StateField.define<CitationMode>({
+  create: () => 'zotero',
+  update (val, tr) {
+    for (const e of tr.effects) {
+      if (e.is(citationMode)) return e.value
+    }
+    return val
+  }
+})
+
 export const citekeyUpdate = StateEffect.define<Array<{ citekey: string, displayText: string }>>()
 export const citekeyUpdateField = StateField.define<Completion[]>({
-  create (_state) {
-    return []
-  },
+  create: () => [],
   update (val, transaction) {
     for (const effect of transaction.effects) {
       if (effect.is(citekeyUpdate)) {
-        // Convert the citationentries into completion objects
-        return effect.value.map(entry => {
-          return {
-            label: entry.citekey,
-            info: entry.displayText,
-            apply
-          }
-        })
+        return effect.value.map(entry => ({
+          label: entry.citekey,
+          info: entry.displayText,
+          apply
+        }))
       }
     }
     return val
   }
 })
 
-/**
- * This function takes the citations from the corresponding database and returns
- * them in a sorted fashion based on which citations occur in the document, by
- * count.
- *
- * @param   {EditorState}  state  The editor state
- *
- * @return  {Completion[]}        The sorted completions
- */
 function sortCitationKeysByUsage (state: EditorState): Completion[] {
-  // First, get our existing entries in the database, and re-transform them into
-  // what the update effect expects
   const entries = state.field(citekeyUpdateField)
-
-  // Then, retrieve the already existing citations
   const existingCitations = extractCitations(state.doc.toString())
-    .map(c => {
-      return c.citations.map(cite => cite.id)
-    })
-    .flat()
+    .flatMap(c => c.citations.map(cite => cite.id))
 
-  // Create a counter
   const citationCounts: Record<string, number> = {}
   for (const key of existingCitations) {
-    if (!(key in citationCounts)) {
-      citationCounts[key] = 0
-    }
-
-    citationCounts[key] += 1
+    citationCounts[key] = (citationCounts[key] || 0) + 1
   }
 
-  // Now sort the entries based on the existing citation counts
-  entries.sort((a, b) => {
-    const countA: number = citationCounts[a.label] ?? 0
-    const countB: number = citationCounts[b.label] ?? 0
-    return countB - countA
-  })
-
+  entries.sort((a, b) => (citationCounts[b.label] || 0) - (citationCounts[a.label] || 0))
   return entries
 }
 
-/**
- * This utility function just takes a citekey and ensures that the way the
- * completion is applied matches the settings on the editor instance.
- *
- * @param   {string}      infoString  The infostring to use
- */
 const apply = function (view: EditorView, completion: Completion, from: number, to: number): void {
   const citeStyle = view.state.field(configField).citeStyle
   const lineObject = view.state.doc.lineAt(from)
@@ -99,33 +71,32 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
   const toCh = to - lineObject.from
 
   const afterOpen = line.lastIndexOf('[', fromCh) > line.lastIndexOf(']', fromCh)
-  // Either no open and 1 close bracket or a close bracket after an open bracket
-  const beforeClose = (!line.includes('[', toCh) && line.includes(']', toCh)) || (line.indexOf(']', toCh) < line.indexOf('[', toCh))
+  const beforeClose = (!line.includes('[', toCh) && line.includes(']', toCh)) ||
+                      (line.indexOf(']', toCh) < line.indexOf('[', toCh))
   const noBrackets = !afterOpen && !beforeClose
 
+  let insert: string
   if (citeStyle === 'regular' && noBrackets) {
-    const insert = `[@${completion.label}]`
+    insert = `[@${completion.label}]`
     view.dispatch({
-      // Minus 1 is important since we have to overwrite the @-sign with [@
       changes: [{ from: from - 1, to, insert }],
-      selection: { anchor: from - 1 + insert.length - 1 } // Between citekey and ]
+      selection: { anchor: from - 1 + insert.length - 1 }
     })
   } else if (citeStyle === 'in-text-suffix' && noBrackets) {
-    // We should add square brackets after the completion text
-    const insert = `${completion.label} []`
+    insert = `${completion.label} []`
     view.dispatch({
       changes: [{ from, to, insert }],
-      selection: { anchor: from + insert.length - 1 } // Inside []
+      selection: { anchor: from + insert.length - 1 }
     })
   } else {
-    // Otherwise: citeStyle was in-text or there were brackets surrounding the
-    // citekey, so we can simply replace it
-    const insert = String(completion.label)
-    view.dispatch({ changes: [{ from, to, insert }], selection: { anchor: from + insert.length } })
+    insert = String(completion.label)
+    view.dispatch({
+      changes: [{ from, to, insert }],
+      selection: { anchor: from + insert.length }
+    })
   }
 }
 
-/** — the combined plugin — */
 export const citations: AutocompletePlugin = {
   applies (ctx) {
     const { pos, state } = ctx
@@ -134,23 +105,25 @@ export const citations: AutocompletePlugin = {
 
   async entries (ctx: CompletionContext, rawQuery: string) {
     const q = rawQuery.replace(/^@/, '').trim()
+    const mode = ctx.state.field(citationModeField)
 
-    // —— hard-coded to Zotero right now ——
-    if (1 === 1) {
+    if (mode === 'zotero') {
       try {
-        const items: Array<{ citekey: string; title: string; author: string; year: string }> =
-          await window.ipc.invoke('zotero:search', q)
+        const items = await window.ipc.invoke('zotero:search', q)
 
-        return items.map(i => ({
+        // Just build and return the completions — don't update the state
+        const completions = items.map(i => ({
           label: i.citekey,
-          info:  `${i.title} — ${i.author} (${i.year})`,
+          info: `${i.title} — ${i.author} (${i.year})`,
           apply
         }))
+
+        return completions
       } catch {
         return []
       }
     } else {
-      // —— your old built-in branch ——
+      //const entries = ctx.state.field(citekeyUpdateField)
       const all = sortCitationKeysByUsage(ctx.state)
       return all.filter(c =>
         c.label.toLowerCase().includes(q.toLowerCase()) ||
@@ -158,5 +131,42 @@ export const citations: AutocompletePlugin = {
       )
     }
   },
-  fields: [citekeyUpdateField]
+
+  fields: [ citekeyUpdateField, citationModeField ]
 }
+export function createCitationModePicker (view: EditorView): void {
+  const container = document.createElement('div')
+  container.style.position = 'fixed'
+  container.style.bottom = '40px'
+  container.style.right = '50px'
+  container.style.zIndex = '9999'
+  container.style.background = '#f0f0f0'
+  container.style.border = '1px solid #ccc'
+  container.style.borderRadius = '6px'
+  container.style.padding = '6px'
+  container.style.fontFamily = 'sans-serif'
+
+  const label = document.createElement('label')
+  label.textContent = 'Citation Mode: '
+  label.style.marginRight = '4px'
+
+  const select = document.createElement('select')
+  const modes: CitationMode[] = [ 'zotero', 'original' ]
+  for (const mode of modes) {
+    const option = document.createElement('option')
+    option.value = mode
+    option.textContent = mode[0].toUpperCase() + mode.slice(1)
+    select.appendChild(option)
+  }
+
+  select.onchange = () => {
+    const mode = select.value as CitationMode
+    view.dispatch({ effects: citationMode.of(mode) })
+    console.info(`[Citation] Mode changed to: ${mode}`)
+  }
+
+  container.appendChild(label)
+  container.appendChild(select)
+  document.body.appendChild(container)
+}
+
