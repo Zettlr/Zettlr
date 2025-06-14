@@ -68,6 +68,18 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
     })
   }
 
+  // Fallback: Manually hide [[ and ]] using RegExp
+  const docText = view.state.doc.toString()
+  const bracketPattern = /\[\[(.*?)\]\]/g
+  let match
+  while ((match = bracketPattern.exec(docText)) !== null) {
+    const start = match.index
+    const end = match.index + match[0].length
+    ranges.push(
+      hiddenDeco.range(start, start + 2),     // hide [[
+      hiddenDeco.range(end - 2, end)          // hide ]]
+    )
+  }
   return Decoration.set(ranges, true)
 }
 
