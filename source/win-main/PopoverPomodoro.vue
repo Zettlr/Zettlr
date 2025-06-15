@@ -18,7 +18,7 @@
             fill="none"
             stroke="#4caf50"
             stroke-width="8"
-            stroke-linecap="round"
+            stroke-linecap="butt"
             v-bind:stroke-dasharray="circumference"
             v-bind:stroke-dashoffset="progressOffset"
             transform="rotate(-90 60 60)"
@@ -27,7 +27,7 @@
           <!-- Inner Segmented Circle -->
           <g v-for="(phase, index) in cycle" v-bind:key="index">
             <path
-              v-bind:d="describeArc(60, 60, 40, index * 45, (index + 1) * 45)"
+              v-bind:d="describeArc(60, 60, 40, getStartAngle(index), getEndAngle(index))"
               v-bind:stroke="index < currentCycleIndex ? segmentColors[phase as 'task' | 'short' | 'long'] : 
                 dimmedSegmentColors[phase as 'task' | 'short' | 'long']"
               stroke-width="8"
@@ -38,8 +38,8 @@
 
             <circle
               v-if="index === currentCycleIndex"
-              v-bind:cx="polarToCartesian(60, 60, 44, (index + 0.5) * anglePerSegment).x"
-              v-bind:cy="polarToCartesian(60, 60, 44, (index + 0.5) * anglePerSegment).y"
+              v-bind:cx="polarToCartesian(60, 60, 44, getStartAngle(index) + (segmentAngles[index] / 2)).x"
+              v-bind:cy="polarToCartesian(60, 60, 44, getStartAngle(index) + (segmentAngles[index] / 2)).y"
               r="3"
               fill="#000"
             />
@@ -210,7 +210,14 @@ const currentCycleIndex = computed(() => {
   return Math.min(progress, cycle.length)
 })
   
-const anglePerSegment = 360 / cycle.length
+//const anglePerSegment = 360 / cycle.length
+const segmentDurations = cycle.map(phase => props.pomodoro.durations[phase as 'task' | 'short' | 'long'])
+
+const totalDuration = segmentDurations.reduce((sum, d) => sum + d, 0)
+
+// Each segment gets an angle proportional to its duration
+const segmentAngles = segmentDurations.map(d => (d / totalDuration) * 360)
+
 
 const phaseTitles: Record<'task' | 'short' | 'long', string> = {
   task: 'Work Session',
@@ -222,7 +229,9 @@ const circumference = 2 * Math.PI * 54
 const percentage = computed(() => {
   const elapsed = props.pomodoro.phase.elapsed
   const total = props.pomodoro.durations[props.pomodoro.phase.type]
-  return (elapsed / total) * 100
+  // return (elapsed / total) * 100
+  const rawPercent = (elapsed / total) * 100
+  return Math.min(Math.max(rawPercent, 0), 100)  // Clamp between 0 and 100
 })
 const progressOffset = computed(() => {
   return circumference * (1 - percentage.value / 100)
@@ -240,6 +249,15 @@ const dimmedSegmentColors: Record<'task' | 'short' | 'long', string> = {
   short: '#d4edda',
   long: '#d1ecf1'
 }
+
+function getStartAngle (index: number): number {
+  return segmentAngles.slice(0, index).reduce((sum, a) => sum + a, 0)
+}
+
+function getEndAngle (index: number): number {
+  return getStartAngle(index) + segmentAngles[index]
+}
+
 
 // Arc helpers
 function polarToCartesian (cx: number, cy: number, r: number, angle: number) {
@@ -338,6 +356,8 @@ p.pomodoro-big {
 }
 .outer-progress {
   transition: stroke-dashoffset 0.5s ease-in-out;
+  //transition: stroke-dashoffset 0.4s ease-out;
+
 }
 .pomodoro-ring {
   width: 200px;
