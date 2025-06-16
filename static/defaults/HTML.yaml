@@ -20,13 +20,6 @@ dpi: 72
 toc: false
 toc-depth: 2
 number-sections: false
-number-offset:
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
 section-divs: true
 identifier-prefix: ''
 title-prefix: ''

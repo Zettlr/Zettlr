@@ -33,20 +33,15 @@ function mockBrowser () {
   // we copy it here in order for those tests not to fail.
   window.path = path
 
-  global.window = window
-  global.document = window.document
-  Object.defineProperty(global, 'navigator', {
-    value: { userAgent: 'node.js' },
-    writable: true,
-    configurable: true,
-  });
-  global.requestAnimationFrame = function (callback) {
+  globalThis.window = window
+  globalThis.document = window.document
+  globalThis.requestAnimationFrame = function (callback) {
     return setTimeout(callback, 0)
   }
-  global.cancelAnimationFrame = function (id) {
+  globalThis.cancelAnimationFrame = function (id) {
     clearTimeout(id)
   }
-  copyProps(window, global)
+  copyProps(window, globalThis)
 }
 
 mockBrowser()

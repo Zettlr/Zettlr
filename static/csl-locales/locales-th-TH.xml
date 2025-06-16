@@ -4,6 +4,9 @@
     <translator>
       <name>Dusit Laohasinnarong</name>
     </translator>
+    <translator>
+      <name>Watcharakorn Kaobath</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
     <updated>2012-07-04T23:31:02+00:00</updated>
   </info>
@@ -52,7 +55,7 @@
     <term name="anonymous">นิรนาม</term>
     <term name="anonymous" form="short">นิรนาม</term>
     <term name="at">ที่</term>
-    <term name="available at">available at</term>
+    <term name="available at">เข้าถึงได้จาก</term>
     <term name="by">โดย</term>
     <term name="circa">โดยประมาณ</term>
     <term name="circa" form="short">ประมาณ</term>

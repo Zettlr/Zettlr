@@ -905,6 +905,7 @@ current contents from the editor somewhere else, and restart the application.`
       if (result.response === 1) {
         // Clear the modification flag
         openFile.lastSavedVersion = openFile.currentVersion
+        this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
       } else if (result.response === 0) {
         await this.saveFile(filePath) // TODO: Check return status
       } else {

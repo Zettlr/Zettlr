@@ -17,34 +17,22 @@
  */
 
 import type { Extension } from '@codemirror/state'
-import { vim, Vim, type CodeMirror } from '@replit/codemirror-vim'
+import { type ExParams, vim, Vim, type CodeMirror } from '@replit/codemirror-vim'
 import { configField } from '../util/configuration'
 import { editorMetadataFacet } from './editor-metadata'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
 
-// This seems to be the interface that the Vim plugin uses to provide args for
-// any of the commands. NOTE: I may be wrong, I didn't fully verify this.
-interface VimParams {
-  argString: string
-  args: string[]
-  commandName: string
-  input: string
-  line: any|undefined
-  selectionLine: number
-}
-
 /**
  * Sends a save-request to the main process.
  *
- * @param   {CodeMirror}       cm      Replit's CodeMirror object
- * @param   {VimParams}        params  Any params to the command
+ * @param   {CodeMirror}       cm       Replit's CodeMirror object
+ * @param   {ExParams}         _params  Any params to the command
  *
- * @return  {Promise<void>}            Returns the IPC promise
+ * @return  {Promise<void>}             Returns the IPC promise
  */
-function write (cm: CodeMirror, params: VimParams): Promise<void> {
-  console.log(params)
+function write (cm: CodeMirror, _params: ExParams): Promise<void> {
   try {
     cm.cm6.state.field(configField)
   } catch (err: any) {
@@ -71,12 +59,12 @@ function write (cm: CodeMirror, params: VimParams): Promise<void> {
 /**
  * Sends a close-file command to the main process.
  *
- * @param   {CodeMirror}       cm      Replit's CodeMirror object
- * @param   {VimParams}        params  Any params to the command
+ * @param   {CodeMirror}       cm       Replit's CodeMirror object
+ * @param   {ExParams}         _params  Any params to the command
  *
- * @return  {Promise<void>}            Returns the IPC promise
+ * @return  {Promise<void>}             Returns the IPC promise
  */
-function quit (cm: CodeMirror, _params: VimParams): Promise<void> {
+function quit (cm: CodeMirror, _params: ExParams): Promise<void> {
   // Grab the required information from the editor state
   const filePath = cm.cm6.state.field(configField).metadata.path
   const { leafId, windowId } = cm.cm6.state.facet(editorMetadataFacet)
@@ -101,7 +89,7 @@ function quit (cm: CodeMirror, _params: VimParams): Promise<void> {
 // this is because they also need to support older CM5 setups.
 Vim.defineEx('quit', 'q', quit)
 Vim.defineEx('write', 'w', write)
-Vim.defineEx('wq', 'wq', (cm: CodeMirror, params: VimParams) => {
+Vim.defineEx('wq', 'wq', (cm: CodeMirror, params: ExParams) => {
   // To prevent closing a file before it is written (and, thus, risking a prompt
   // to the user), we wait until the invocation is done and only then request a
   // close of the file.
@@ -111,10 +99,13 @@ Vim.defineEx('wq', 'wq', (cm: CodeMirror, params: VimParams) => {
 })
 
 // Remap movement keys
+// @ts-expect-error The types are not properly updated
 Vim.map('j', 'gj') // Account for line wraps when moving down
+// @ts-expect-error The types are not properly updated
 Vim.map('k', 'gk') // Account for line wraps when moving up
 
 // Unmap bindings to restore default editor behavior
+// @ts-expect-error The types are not properly updated
 Vim.unmap('<C-f>') // Allow invoking Ctrl+F search from all modes
 Vim.unmap('<C-t>', 'insert') // Allow task item shortcut in Insert mode
 Vim.unmap('<C-c>', 'insert') // Allow using Ctrl+C without exiting Insert mode

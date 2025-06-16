@@ -790,5 +790,3 @@ body.darwin {
 }
 
 </style>
-@common/util/renderer-path-polyfill
-../pinia
