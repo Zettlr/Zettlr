@@ -35,9 +35,11 @@ function mockBrowser () {
 
   global.window = window
   global.document = window.document
-  global.navigator = {
-    userAgent: 'node.js'
-  }
+  Object.defineProperty(global, 'navigator', {
+    value: { userAgent: 'node.js' },
+    writable: true,
+    configurable: true,
+  });
   global.requestAnimationFrame = function (callback) {
     return setTimeout(callback, 0)
   }
