@@ -237,7 +237,7 @@ export function getConfigTemplate (): ConfigOptions {
     muteLines: true, // Should the editor mute lines in distraction free mode?
     fileManagerMode: 'combined', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
     fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
-    newFileNamePattern: '%id',
+    newFileNamePattern: '%id.%ext',
     newFileDontPrompt: false, // If true immediately creates files
     export: {
       dir: 'temp', // Can either be "temp", "cwd" (current working directory) or "ask"
