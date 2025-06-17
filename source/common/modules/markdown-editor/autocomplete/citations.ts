@@ -23,7 +23,10 @@ export type CitationMode = 'zotero' | 'original'
 
 export const citationMode = StateEffect.define<CitationMode>()
 export const citationModeField = StateField.define<CitationMode>({
-  create: () => 'zotero',
+  create: (state) => {
+    const config = state.field(configField, false)
+    return config?.editor?.citationMode ?? 'zotero'
+  },  
   update (val, tr) {
     for (const e of tr.effects) {
       if (e.is(citationMode)) return e.value
@@ -31,6 +34,7 @@ export const citationModeField = StateField.define<CitationMode>({
     return val
   }
 })
+
 
 export const citekeyUpdate = StateEffect.define<Array<{ citekey: string, displayText: string }>>()
 export const citekeyUpdateField = StateField.define<Completion[]>({
@@ -113,7 +117,7 @@ export const citations: AutocompletePlugin = {
         const completions = items.map(i => ({
           label: i.citekey,
           info: `${i.title} — ${i.author} (${i.year})`,
-          apply
+          apply,
         }))
 
         return completions
@@ -132,39 +136,3 @@ export const citations: AutocompletePlugin = {
 
   fields: [ citekeyUpdateField, citationModeField ]
 }
-export function createCitationModePicker (view: EditorView): void {
-  const container = document.createElement('div')
-  container.style.position = 'fixed'
-  container.style.bottom = '40px'
-  container.style.right = '50px'
-  container.style.zIndex = '9999'
-  container.style.background = '#f0f0f0'
-  container.style.border = '1px solid #ccc'
-  container.style.borderRadius = '6px'
-  container.style.padding = '6px'
-  container.style.fontFamily = 'sans-serif'
-
-  const label = document.createElement('label')
-  label.textContent = 'Citation Mode: '
-  label.style.marginRight = '4px'
-
-  const select = document.createElement('select')
-  const modes: CitationMode[] = [ 'zotero', 'original' ]
-  for (const mode of modes) {
-    const option = document.createElement('option')
-    option.value = mode
-    option.textContent = mode[0].toUpperCase() + mode.slice(1)
-    select.appendChild(option)
-  }
-
-  select.onchange = () => {
-    const mode = select.value as CitationMode
-    view.dispatch({ effects: citationMode.of(mode) })
-    console.info(`[Citation] Mode changed to: ${mode}`)
-  }
-
-  container.appendChild(label)
-  container.appendChild(select)
-  document.body.appendChild(container)
-}
-

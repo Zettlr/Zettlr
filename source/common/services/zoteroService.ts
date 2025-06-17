@@ -18,7 +18,7 @@ export class ZoteroService {
   async searchCitations (_: string): Promise<CitationItem[]> {
     try {
       const res = await fetch(this.caywUrl)
-      if (!res.ok) throw new Error(`CAYW HTTP ${res.status}`)
+      if (res.ok !== true) throw new Error(`CAYW HTTP ${res.status}`)
       const items = (await res.json()) as Array<{
         citationKey: string
         title:       string

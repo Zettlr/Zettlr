@@ -244,6 +244,21 @@ export default class MarkdownEditor extends EventEmitter {
       parent: undefined
     })
 
+
+    //watches for changes in citationMode
+    //this._instance.dispatch({
+    //  effects: citationMode.of(this.config.editor.citationMode)
+    ///})
+    
+    ///watch(() => this.config.editor.citationMode, (newVal) => {
+    //  this._instance.dispatch({
+    //    effects: citationMode.of(newVal)
+    //  })
+    //})
+    
+    
+    
+
     // ... and immediately begin loading the document
     this.loadDocument().catch(err => console.error(err))
   }
@@ -399,6 +414,9 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     this._instance.setState(state)
+    this._instance.dispatch({
+      effects: citationMode.of(this.config.editor.citationMode)
+    })
     // Ensure the theme switcher picks the state change up; this somehow doesn't
     // properly work after the document has been mounted to the DOM.
     this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })

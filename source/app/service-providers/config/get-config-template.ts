@@ -269,6 +269,7 @@ export function getConfigTemplate (): ConfigOptions {
       showWhitespace: false,
       defaultSaveImagePath: '',
       citeStyle: 'regular', // Determines how autocomplete will complete citations
+      citationMode: 'original', //chooses between zotero and normal citations
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
       indentWithTabs: false,

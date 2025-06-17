@@ -49,6 +49,7 @@ import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
+import { citationMode } from '@common/modules/markdown-editor/autocomplete/citations'
 
 const ipcRenderer = window.ipc
 
@@ -513,6 +514,19 @@ async function loadDocument (): Promise<void> {
 
   wrapper.replaceWith(newEditor.dom)
   currentEditor = newEditor
+
+  currentEditor.instance.dispatch({
+    effects: citationMode.of(configStore.config.editor.citationMode)
+  })
+
+  //watch for changes in citationmode
+  watch(() => configStore.config.editor.citationMode, (newMode) => {
+    if (currentEditor !== null) {
+      currentEditor.instance.dispatch({
+        effects: citationMode.of(newMode)
+      })
+    }
+  })
 
   windowStateStore.tableOfContents = currentEditor.tableOfContents
   windowStateStore.activeDocumentInfo = currentEditor.documentInfo
