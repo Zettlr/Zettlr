@@ -25,7 +25,7 @@ export const citationMode = StateEffect.define<CitationMode>()
 export const citationModeField = StateField.define<CitationMode>({
   create: (state) => {
     const config = state.field(configField, false)
-    return config?.editor?.citationMode ?? 'zotero'
+    return config?.citationMode ?? 'zotero'
   },  
   update (val, tr) {
     for (const e of tr.effects) {
@@ -114,7 +114,7 @@ export const citations: AutocompletePlugin = {
     if (mode === 'zotero') {
       try {
         const items = await window.ipc.invoke('zotero:search', q)
-        const completions = items.map(i => ({
+        const completions = (items as any[]).map(i => ({
           label: i.citekey,
           info: `${i.title} — ${i.author} (${i.year})`,
           apply,
