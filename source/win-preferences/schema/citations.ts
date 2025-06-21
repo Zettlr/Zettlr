@@ -33,6 +33,15 @@ export function getCitationFields (): PreferencesFieldset[] {
             'in-text-suffix': '@Author2015 [p. 123] → Author (2015, 123)'
           }
         },
+        {
+          type: 'radio',
+          label: trans('Which citation engine should be used?'),
+          model: 'editor.citationMode',
+          options: {
+            original: 'Original (uses local citation database)',
+            zotero: 'Zotero (dynamic, uses citekey from Zotero app)'
+          }
+        },        
         { type: 'separator' },
         {
           type: 'file',

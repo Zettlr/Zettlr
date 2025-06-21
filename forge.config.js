@@ -56,56 +56,7 @@ async function downloadPandoc (platform, arch) {
 
 module.exports = {
   hooks: {
-    generateAssets: async (forgeConfig, targetPlatform, targetArch) => {
-      // Two steps need to be done here. First, we need to set an environment
-      // variable that is then accessible by the webpack process so that we can
-      // either include or not include fsevents for macOS platforms.
-      process.env.BUNDLE_FSEVENTS = (targetPlatform === 'darwin') ? '1' : '0'
-
-      // This will be baked into the binary so that we know which commit this
-      // build was based off on.
-      process.env.GIT_COMMIT_HASH = await getGitHash()
-
-      // Second, we need to make sure we can bundle Pandoc.
-      const isMacOS = targetPlatform === 'darwin'
-      const isLinux = targetPlatform === 'linux'
-      const isWin32 = targetPlatform === 'win32'
-      const isArm64 = targetArch === 'arm64'
-      const is64Bit = targetArch === 'x64'
-
-      // macOS has Rosetta 2 built-in, so we can bundle Pandoc 64bit
-      const supportsPandoc = is64Bit || (isMacOS && isArm64) || (isLinux && isArm64)
-
-      if (supportsPandoc && isWin32) {
-        // Download Pandoc beforehand, if it's not yet there.
-        try {
-          await fs.lstat(path.join(__dirname, './resources/pandoc-win32-x64.exe'))
-        } catch (err) {
-          await downloadPandoc('win32', 'x64')
-        }
-
-        await fs.copyFile(path.join(__dirname, './resources/pandoc-win32-x64.exe'), path.join(__dirname, './resources/pandoc.exe'))
-
-        forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc.exe'))
-      } else if (supportsPandoc && (isMacOS || isLinux)) {
-        // Download Pandoc either for macOS or Linux ...
-        const platform = isMacOS ? 'darwin' : 'linux'
-        // ... and the ARM or x64 version.
-        const arch = isArm64 ? 'arm' : 'x64'
-        try {
-          await fs.lstat(path.join(__dirname, `./resources/pandoc-${platform}-${arch}`))
-        } catch (err) {
-          await downloadPandoc(platform, arch)
-        }
-
-        await fs.copyFile(path.join(__dirname, `./resources/pandoc-${platform}-${arch}`), path.join(__dirname, './resources/pandoc'))
-
-        forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc'))
-      } else {
-        // If someone is building this on an unsupported platform, drop a warning.
-        console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)
-      }
-    },
+    
     postMake: async (forgeConfig, makeResults) => {
       const basePath = __dirname
       const releaseDir = path.join(basePath, 'release')

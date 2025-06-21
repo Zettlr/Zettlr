@@ -20,6 +20,8 @@
 // Import our additional styles we need to put here since we don't have a Vue
 // component for the editor itself.
 import './editor.less'
+import { citationMode } from './autocomplete/citations'
+
 
 /**
  * APIs
@@ -242,6 +244,21 @@ export default class MarkdownEditor extends EventEmitter {
       parent: undefined
     })
 
+
+    //watches for changes in citationMode
+    //this._instance.dispatch({
+    //  effects: citationMode.of(this.config.editor.citationMode)
+    ///})
+    
+    ///watch(() => this.config.editor.citationMode, (newVal) => {
+    //  this._instance.dispatch({
+    //    effects: citationMode.of(newVal)
+    //  })
+    //})
+    
+    
+    
+
     // ... and immediately begin loading the document
     this.loadDocument().catch(err => console.error(err))
   }
@@ -397,6 +414,9 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     this._instance.setState(state)
+    this._instance.dispatch({
+      effects: citationMode.of(this.config.citationMode)
+    })
     // Ensure the theme switcher picks the state change up; this somehow doesn't
     // properly work after the document has been mounted to the DOM.
     this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
