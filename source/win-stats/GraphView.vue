@@ -24,6 +24,12 @@
         v-bind:options="selectableComponents"
         v-bind:inline="true"
       ></SelectElement>
+      <SelectElement
+        v-model="selectedFolder"
+        v-bind:options="availableFolders"
+        v-bind:label="'Restrict to folder'"
+        v-bind:inline="true"
+      ></SelectElement>
       <TextElement
         v-model="highlightFilter"
         v-bind:placeholder="'Highlight vertices'"
@@ -73,6 +79,8 @@ const componentFilter = ref('') // Can hold the name of a specific component
 const highlightFilter = ref('')
 const includeIsolates = ref(true)
 const showLabels = ref(false)
+const selectedFolder = ref<string>('')
+const availableFolders = ref<Record<string, string>>({})
 // These two variables are required to enable scrolling, they mark an
 // offset to which the viewport will be relatively positioned
 const offsetX = ref(0)
@@ -122,6 +130,10 @@ watch(graphViewBox, setSize)
  * updates the matched elements, that is: it reduces the set of highlighted
  * vertices to the ones matching the query
  */
+watch(selectedFolder, () => {
+  buildGraph()
+})
+
 watch(highlightFilter, () => {
   if (graphElement.value === null) {
     return
@@ -185,7 +197,12 @@ onMounted(() => {
   }
 
   controlsObserver.observe(controlsElement.value, { box: 'border-box' })
-
+  availableFolders.value = {
+  'All folders': '',
+  'Zettlr Tutorial': '/zettlr-tutorial',
+  'Tutorial Notes': '/zettlr-tutorial/notes',
+  'Tutorial Research': '/zettlr-tutorial/research'
+}
   graphElement.value = d3.create('svg')
     .attr('width', graphWidth.value)
     .attr('height', graphHeight.value)
@@ -515,6 +532,10 @@ async function buildGraph (): Promise<void> {
     buildProgress.value.currentFile += 1
     // We have to specifically add the source, since isolates will have 0
     // targets, and hence we cannot rely on the Graph adding these vertices
+    // Restrict to selected folder, if one is chosen
+    if (selectedFolder.value !== '' && !sourcePath.startsWith(selectedFolder.value)) {
+    continue
+    }
     const sourceDescriptor: MDFileDescriptor|undefined = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: sourcePath })
     if (sourceDescriptor === undefined) {
       console.warn(`Could not find descriptor for ${sourcePath}. Not adding to graph.`)
