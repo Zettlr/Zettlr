@@ -86,6 +86,7 @@ export function mapLangCodeToName (): Record<string, string> {
     it: trans('Italian'),
     ja: trans('Japanese'),
     ka: trans('Georgian'),
+    kk: trans('Kazakh'),
     km: trans('Khmer (Cambodia)'),
     ko: trans('Korean'),
     la: trans('Latin'),
