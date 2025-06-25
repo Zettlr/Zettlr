@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Added Kazakh language (#5771).
 
 ## Under the Hood
 
