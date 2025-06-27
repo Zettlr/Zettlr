@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+- Added Kazakh language (#5771).
+
+## Under the Hood
+
+(nothing here)
+
+# 3.5.0
+
+## GUI and Functionality
+
 - **Feature**: The code editors (in the assets manager and elsewhere) now share
   the same keymap as the main editor.
 - **Feature**: The image renderer now acknowledges and respects the presence of
@@ -33,6 +43,7 @@
   `Cmd-Alt-[` (macOS) for folding code, `Ctrl-Shift-]` or `Cmd-Alt-]` for
   unfolding, `Ctrl-Alt-[` for folding all, and `Ctrl-Alt-]` for unfolding all.
 - Update `fr-FR` translation (#5738).
+- Update `cs-CZ` translation (#5775).
 
 ## Under the Hood
 
