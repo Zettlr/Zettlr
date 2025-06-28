@@ -417,11 +417,11 @@ watch(toRef(props, 'obj'), function (value) {
 })
 
 onMounted(() => {
+  uncollapseIfApplicable()
   ipcRenderer.on('shortcut', (_, message) => {
     if (message === 'new-dir') {
       operationType.value = 'createDir'
     }
-    uncollapseIfApplicable()
   })
 })
 
