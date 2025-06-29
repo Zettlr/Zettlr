@@ -66,7 +66,14 @@ function posInProtectedNode (state: EditorState, pos: number): boolean {
  * @return  {boolean}           Always returns false to make Codemirror add the Space/Enter
  */
 export function handleReplacement (view: EditorView): boolean {
-  const { autocorrect } = view.state.field(configField)
+  // The config field is only present in the main editor, not in the assets
+  // manager code editors or elsewhere.
+  const config = view.state.field(configField, false)
+  if (config === undefined) {
+    return false
+  }
+
+  const { autocorrect } = config
   if (!autocorrect.active || autocorrect.replacements.length === 0) {
     return false
   }
@@ -137,7 +144,14 @@ export function handleReplacement (view: EditorView): boolean {
  * @return  {boolean}           Whether the function has replaced a quote
  */
 export function handleBackspace (view: EditorView): boolean {
-  const autocorrect = view.state.field(configField).autocorrect
+  // The config field is only present in the main editor, not in the assets
+  // manager code editors or elsewhere.
+  const config = view.state.field(configField, false)
+  if (config === undefined) {
+    return false
+  }
+
+  const { autocorrect } = config
   if (!autocorrect.active) {
     return false
   }
@@ -179,7 +193,14 @@ export function handleBackspace (view: EditorView): boolean {
  */
 export function handleQuote (quote: string): Command {
   return function (view: EditorView): boolean {
-    const autocorrect = view.state.field(configField).autocorrect
+    // The config field is only present in the main editor, not in the assets
+    // manager code editors or elsewhere.
+    const config = view.state.field(configField, false)
+    if (config === undefined) {
+      return false
+    }
+
+    const { autocorrect } = config
     if (!autocorrect.active) {
       return false
     }

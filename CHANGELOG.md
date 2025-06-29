@@ -2,6 +2,8 @@
 
 ## GUI and Functionality
 
+- Fixed a bug that would make using certain keys such as `Enter`, `Backspace`,
+  or quotes in code editors in the Assets Manager unusable (#5797).
 - Added Kazakh language (#5771).
 
 ## Under the Hood
