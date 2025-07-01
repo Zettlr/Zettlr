@@ -10,6 +10,9 @@
     <translator>
       <name>xbypass</name>
     </translator>
+    <translator>
+      <name>mzaini30</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
     <updated>2015-08-05T23:31:02+00:00</updated>
   </info>
@@ -27,13 +30,13 @@
   <terms>
     <term name="advance-online-publication">advance online publication</term>
     <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
+    <term name="audio-recording">perekaman audio</term>
     <term name="film">film</term>
     <term name="henceforth">henceforth</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">no place</term>
+    <term name="no-place">tiada tempat</term>
     <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
+    <term name="no-publisher">tiada penerbit</term> <!-- sine nomine -->
     <term name="no-publisher" form="short">n.p.</term>
     <term name="on">on</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
@@ -43,15 +46,15 @@
     <term name="podcast-episode">podcast episode</term>
     <term name="preprint">preprint</term>
     <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
+    <term name="radio-series">seri radio</term>
+    <term name="radio-series-episode">episode seri radio</term>
+    <term name="special-issue">isu spesial</term>
+    <term name="special-section">bagian spesial</term>
+    <term name="television-broadcast">broadcast televisi</term>
+    <term name="television-series">seri televisi</term>
+    <term name="television-series-episode">episode seri televisi</term>
     <term name="video">video</term>
-    <term name="working-paper">working paper</term>
+    <term name="working-paper">kertas kerja</term>
     <term name="accessed">diakses</term>
     <term name="and">dan</term>
     <term name="and others">dan lainnya</term>
@@ -111,51 +114,51 @@
     <term name="version">versi</term>
 
     <!-- LONG ITEM TYPE FORMS -->
-    <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
-    <term name="bill">bill</term>
+    <term name="article">artikel</term>
+    <term name="article-journal">artikel jurnal</term>
+    <term name="article-magazine">artikel majalah</term>
+    <term name="article-newspaper">artikel koran</term>
+    <term name="bill">tagihan</term>
     <!-- book is in the list of locator terms -->
     <term name="broadcast">broadcast</term>
     <!-- chapter is in the list of locator terms -->
-    <term name="classic">classic</term>
-    <term name="collection">collection</term>
+    <term name="classic">klasik</term>
+    <term name="collection">koleksi</term>
     <term name="dataset">dataset</term>
-    <term name="document">document</term>
+    <term name="document">dokumen</term>
     <term name="entry">entry</term>
     <term name="entry-dictionary">dictionary entry</term>
     <term name="entry-encyclopedia">encyclopedia entry</term>
-    <term name="event">event</term>
+    <term name="event">acara</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic">graphic</term>
-    <term name="hearing">hearing</term>
+    <term name="graphic">grafis</term>
+    <term name="hearing">mendengarkan</term>
     <term name="interview">wawancara</term>
-    <term name="legal_case">legal case</term>
+    <term name="legal_case">kasus legal</term>
     <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
+    <term name="manuscript">manuskrip</term>
+    <term name="map">peta</term>
     <term name="motion_picture">video recording</term>
-    <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
-    <term name="paper-conference">conference paper</term>
-    <term name="patent">patent</term>
-    <term name="performance">performance</term>
-    <term name="periodical">periodical</term>
+    <term name="musical_score">skor musik</term>
+    <term name="pamphlet">pamflet</term>
+    <term name="paper-conference">kertas konferensi</term>
+    <term name="patent">paten</term>
+    <term name="performance">performa</term>
+    <term name="periodical">berdasarkan periode tertentu</term>
     <term name="personal_communication">komunikasi pribadi</term>
-    <term name="post">post</term>
-    <term name="post-weblog">blog post</term>
-    <term name="regulation">regulation</term>
-    <term name="report">report</term>
+    <term name="post">postingan</term>
+    <term name="post-weblog">postingan blog</term>
+    <term name="regulation">regulasi</term>
+    <term name="report">laporan</term>
     <term name="review">review</term>
-    <term name="review-book">book review</term>
-    <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
+    <term name="review-book">review buku</term>
+    <term name="software">perangakat lunak</term>
+    <term name="song">lagu</term>
+    <term name="speech">pidato</term>
     <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
+    <term name="thesis">tesis</term>
     <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="webpage">halaman website</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
     <term name="article-journal" form="short">journal art.</term>

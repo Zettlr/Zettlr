@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="lij-IT">
+  <info>
+    <translator>
+      <name>Jean Maillard</name>
+    </translator>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+    <updated>2025-04-22T00:10:15-07:00</updated>
+  </info>
+  <style-options punctuation-in-quote="false" limit-day-ordinals-to-day-1="true"/>
+  <date form="text" delimiter=" ">
+    <!-- "22 de arvî do 2025" -->
+    <date-part name="day" suffix="de"/>
+    <date-part name="month" suffix="do"/>
+    <date-part name="year"/>
+  </date>
+  <date form="numeric">
+    <!-- "22/04/2025" -->
+    <date-part name="day" form="numeric-leading-zeros" suffix="/"/>
+    <date-part name="month" form="numeric-leading-zeros" suffix="/"/>
+    <date-part name="year"/>
+  </date>
+  <terms>
+    <term name="advance-online-publication">pubricaçion in linia antiçipâ</term>
+    <term name="album">album</term>
+    <term name="audio-recording">registraçion audio</term>
+    <term name="film">cine</term>
+    <term name="henceforth">de chì in avanti</term>
+    <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="no-place">sine loco</term>
+    <term name="no-place" form="short">s.l.</term>
+    <term name="no-publisher">sine nomine</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">s.n.</term>
+    <term name="on">in sce</term>
+    <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="original-work-published">euvia originale pubricâ</term>
+    <term name="personal-communication">communicaçion personale</term>
+    <term name="podcast">podcast</term>
+    <term name="podcast-episode">pontâ de podcast</term>
+    <term name="preprint">preprint</term>
+    <term name="radio-broadcast">trasmiscion pe l'aradio</term>
+    <term name="radio-series">serie pe l'aradio</term>
+    <term name="radio-series-episode">pontâ de serie pe l'aradio</term>
+    <term name="special-issue">ediçion speçiale</term>
+    <term name="special-section">seçion speçiale</term>
+    <term name="television-broadcast">trasmiscion pe televixon</term>
+    <term name="television-series">serie pe televixon</term>
+    <term name="television-series-episode">pontâ de serie pe televixon</term>
+    <term name="video">video</term>
+    <term name="working-paper">documento de travaggio</term>
+    <term name="accessed">consultou</term>
+    <term name="and">e</term>
+    <term name="and others">e atri</term>
+    <term name="anonymous">anònimo</term>
+    <term name="anonymous" form="short">anòn.</term>
+    <term name="at">à</term>
+    <term name="available at">disponibile in sce</term>
+    <term name="available at" form="short">in sce</term>
+    <term name="by">de</term>
+    <term name="circa">circa</term>
+    <term name="circa" form="short">c.</term>
+    <term name="cited">çittou</term>
+    <term name="first-reference-note-number" gender="feminine">
+      <single>referensa</single>
+      <multiple>referense</multiple>
+    </term>
+    <term name="number">
+      <single>numero</single>
+      <multiple>numeri</multiple>
+    </term>
+    <term name="edition" gender="feminine">
+      <single>ediçion</single>
+      <multiple>ediçioin</multiple>
+    </term>
+    <term name="first-reference-note-number" form="short">
+      <single>ref.</single>
+      <multiple>reff.</multiple>
+    </term>
+    <term name="number" form="short">
+      <single>n.</single>
+      <multiple>nn.</multiple>
+    </term>
+    <term name="edition" form="short">ed.</term>
+    <term name="et-al">et al.</term>
+    <term name="forthcoming">in pubricaçion</term>
+    <term name="from">da</term>
+    <term name="ibid">ibidem</term>
+    <term name="ibid" form="short">ibid.</term>
+    <term name="in">inte</term>
+    <term name="in press">in stampa</term>
+    <term name="internet">internet</term>
+    <term name="letter">lettia</term>
+    <term name="no date">sine data</term>
+    <term name="no date" form="short">s.d.</term>
+    <term name="online">in linia</term>
+    <term name="presented at">presentou à</term>
+    <term name="reference">
+      <single>referensa</single>
+      <multiple>referense</multiple>
+    </term>
+    <term name="reference" form="short">
+      <single>ref.</single>
+      <multiple>reff.</multiple>
+    </term>
+    <term name="review-of">reçenscion de</term>
+    <term name="review-of" form="short">reç. de</term>
+    <term name="retrieved">ottegnuo</term>
+    <term name="scale">scâ</term>
+    <term name="version">verscion</term>
+
+    <!-- LONG ITEM TYPE FORMS -->
+    <term name="article">articolo</term>
+    <term name="article-journal">articolo de revista</term>
+    <term name="article-magazine">articolo de revista generalista</term>
+    <term name="article-newspaper">articolo de giornale</term>
+    <term name="bill">propòsta de lezze</term>
+    <!-- book is in the list of locator terms -->
+    <term name="broadcast">trasmiscion</term>
+    <!-- chapter is in the list of locator terms -->
+    <term name="classic">clascico</term>
+    <term name="collection">arrecuggeita</term>
+    <term name="dataset">dataset</term>
+    <term name="document">documento</term>
+    <term name="entry">intrâ</term>
+    <term name="entry-dictionary">intrâ de diçionäio</term>
+    <term name="entry-encyclopedia">intrâ d'ençiclopedia</term>
+    <term name="event">evento</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic">euvia d'arte</term>
+    <term name="hearing">udiensa</term>
+    <term name="interview">intervista</term>
+    <term name="legal_case">causa</term>
+    <term name="legislation">legislaçion</term>
+    <term name="manuscript">manoscrito</term>
+    <term name="map">carta</term>
+    <term name="motion_picture">cine</term>
+    <term name="musical_score">spartio de muxica</term>
+    <term name="pamphlet">volantin</term>
+    <term name="paper-conference">atto de convëgno</term>
+    <term name="patent">brevetto</term>
+    <term name="performance">esecuçion</term>
+    <term name="periodical">periòdico</term>
+    <term name="personal_communication">communicaçion personale</term>
+    <term name="post">messaggio</term>
+    <term name="post-weblog">messaggio de blog</term>
+    <term name="regulation">decretto</term>
+    <term name="report">report</term>
+    <term name="review">reçenscion</term>
+    <term name="review-book">reçenscion de libbro</term>
+    <term name="software">software</term>
+    <term name="song">registraçion audio</term>
+    <term name="speech">presentaçion</term>
+    <term name="standard">nòrma</term>
+    <term name="thesis">texi</term>
+    <term name="treaty">trattato</term>
+    <term name="webpage">pagina web</term>
+
+    <!-- SHORT ITEM TYPE FORMS -->
+    <term name="article-journal" form="short">art. de rev.</term>
+    <term name="article-magazine" form="short">art. de rev. gen.</term>
+    <term name="article-newspaper" form="short">art. de giorn.</term>
+    <!-- book is in the list of locator terms -->
+    <!-- chapter is in the list of locator terms -->
+    <term name="document" form="short">doc.</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic" form="short">euv. d'arte</term>
+    <term name="interview" form="short">interv.</term>
+    <term name="manuscript" form="short">ms.</term>
+    <term name="motion_picture" form="short">cine</term>
+    <term name="report" form="short">rep.</term>
+    <term name="review" form="short">reç.</term>
+    <term name="review-book" form="short">reç. de l.</term>
+    <term name="song" form="short">reg. audio</term>
+
+    <!-- VERB ITEM TYPE FORMS -->
+    <!-- Only where applicable -->
+    <term name="hearing" form="verb">testimoniansa de</term>
+    <term name="review" form="verb">reçenscion de</term>
+    <term name="review-book" form="verb">reçenscion do libbro</term>
+
+    <!-- HISTORICAL ERA TERMS -->
+    <term name="ad">d.C.</term>
+    <term name="bc">a.C.</term>
+    <term name="bce">AEV</term>
+    <term name="ce">EV</term>
+
+    <!-- PUNCTUATION -->
+    <term name="open-quote">«</term>
+    <term name="close-quote">»</term>
+    <term name="open-inner-quote">“</term>
+    <term name="close-inner-quote">”</term>
+    <term name="page-range-delimiter">–</term>
+    <term name="colon">:</term>
+    <term name="comma">,</term>
+    <term name="semicolon">;</term>
+
+    <!-- ORDINALS -->
+    <term name="ordinal">º</term>
+    <term name="ordinal" gender-form="masculine">º</term>
+    <term name="ordinal" gender-form="feminine">ª</term>
+
+    <!-- LONG ORDINALS -->
+    <term name="long-ordinal-01">primma</term>
+    <term name="long-ordinal-01" gender-form="masculine">primmo</term>
+    <term name="long-ordinal-01" gender-form="feminine">primma</term>
+    <term name="long-ordinal-02">segonda</term>
+    <term name="long-ordinal-02" gender-form="masculine">segondo</term>
+    <term name="long-ordinal-02" gender-form="feminine">segonda</term>
+    <term name="long-ordinal-03">tersa</term>
+    <term name="long-ordinal-03" gender-form="masculine">terso</term>
+    <term name="long-ordinal-03" gender-form="feminine">tersa</term>
+    <term name="long-ordinal-04">quarta</term>
+    <term name="long-ordinal-04" gender-form="masculine">quarto</term>
+    <term name="long-ordinal-04" gender-form="feminine">quarta</term>
+    <term name="long-ordinal-05">quinta</term>
+    <term name="long-ordinal-05" gender-form="masculine">quinto</term>
+    <term name="long-ordinal-05" gender-form="feminine">quinta</term>
+    <term name="long-ordinal-06">sesta</term>
+    <term name="long-ordinal-06" gender-form="masculine">sesto</term>
+    <term name="long-ordinal-06" gender-form="feminine">sesta</term>
+    <term name="long-ordinal-07">setteña</term>
+    <term name="long-ordinal-07" gender-form="masculine">setten</term>
+    <term name="long-ordinal-07" gender-form="feminine">setteña</term>
+    <term name="long-ordinal-08">otteña</term>
+    <term name="long-ordinal-08" gender-form="masculine">otten</term>
+    <term name="long-ordinal-08" gender-form="feminine">otteña</term>
+    <term name="long-ordinal-09">noveña</term>
+    <term name="long-ordinal-09" gender-form="masculine">noven</term>
+    <term name="long-ordinal-09" gender-form="feminine">noveña</term>
+    <term name="long-ordinal-10">dexeña</term>
+    <term name="long-ordinal-10" gender-form="masculine">dexen</term>
+    <term name="long-ordinal-10" gender-form="feminine">dexeña</term>
+
+    <!-- LONG LOCATOR FORMS -->
+    <term name="act">			 
+      <single>atto</single>
+      <multiple>atto</multiple>						 
+    </term>
+    <term name="appendix">			 
+      <single>appendixe</single>
+      <multiple>appendixe</multiple>						 
+    </term>
+    <term name="article-locator">			 
+      <single>articolo</single>
+      <multiple>articoli</multiple>						 
+    </term>
+    <term name="canon">			 
+      <single>canone</single>
+      <multiple>canoni</multiple>						 
+    </term>
+    <term name="elocation">			 
+      <single>adresso</single>
+      <multiple>adressi</multiple>						 
+    </term>
+    <term name="equation">			 
+      <single>equaçion</single>
+      <multiple>equaçioin</multiple>						 
+    </term>
+    <term name="rule">			 
+      <single>regola</single>
+      <multiple>regole</multiple>						 
+    </term>
+    <term name="scene">			 
+      <single>scena</single>
+      <multiple>scene</multiple>						 
+    </term>
+    <term name="table">			 
+      <single>töa</single>
+      <multiple>töe</multiple>						 
+    </term>
+    <term name="timestamp"> <!-- generally blank -->
+      <single></single>
+      <multiple></multiple>						 
+    </term>
+    <term name="title-locator">			 
+      <single>titolo</single>
+      <multiple>titoli</multiple>						 
+    </term>
+    <term name="book">
+      <single>libbro</single>
+      <multiple>libbri</multiple>
+    </term>
+    <term name="chapter">
+      <single>cavo</single>
+      <multiple>cavi</multiple>
+    </term>
+    <term name="column">
+      <single>colònna</single>
+      <multiple>colònne</multiple>
+    </term>
+    <term name="figure">
+      <single>figua</single>
+      <multiple>figue</multiple>
+    </term>
+    <term name="folio">
+      <single>feuggio</single>
+      <multiple>feuggi</multiple>
+    </term>
+    <term name="issue" gender="masculine">
+      <single>fascicolo</single>
+      <multiple>fascicoli</multiple>
+    </term>
+    <term name="line">
+      <single>riga</single>
+      <multiple>righe</multiple>
+    </term>
+    <term name="note">
+      <single>nòtta</single>
+      <multiple>nòtte</multiple>
+    </term>
+    <term name="opus">
+      <single>euvia</single>
+      <multiple>euvie</multiple>
+    </term>
+    <term name="page">
+      <single>pagina</single>
+      <multiple>pagine</multiple>
+    </term>
+    <term name="number-of-volumes">
+      <single>volumme</single>
+      <multiple>volummi</multiple>
+    </term>
+    <term name="page-first">
+      <single>pagina</single>
+      <multiple>pagine</multiple>
+    </term>
+    <term name="printing">
+      <single>stampa</single>
+      <multiple>stampe</multiple>
+    </term>
+
+    <term name="chapter-number" form="short">
+      <single>cav.</single>
+      <multiple>cavv.</multiple>
+    </term>
+    <term name="citation-number" form="short">
+      <single>çit.</single>
+      <multiple>çitt.</multiple>
+    </term>
+    <term name="collection-number" form="short">fasc.</term>
+    <term name="number-of-pages">
+      <single>pag.</single>
+      <multiple>pagg.</multiple>
+    </term>
+    <term name="paragraph">
+      <single>paragrafo</single>
+      <multiple>paragrafi</multiple>
+    </term>
+    <term name="part">
+      <single>parte</single>
+      <multiple>parte</multiple>
+    </term>
+    <term name="section">
+      <single>seçion</single>
+      <multiple>seçioin</multiple>
+    </term>
+    <term name="supplement">
+      <single>supplemento</single>
+      <multiple>supplementi</multiple>
+    </term>
+    <term name="sub-verbo">
+      <single>sub verbo</single>
+      <multiple>sub verbis</multiple>
+    </term>
+    <term name="verse">
+      <single>verso</single>
+      <multiple>versci</multiple>
+    </term>
+    <term name="volume" gender="masculine">
+      <single>volumme</single>
+      <multiple>volummi</multiple>
+    </term>
+
+    <!-- SHORT LOCATOR FORMS -->
+    <term name="appendix" form="short">			 
+      <single>app.</single>
+      <multiple>app.</multiple>						 
+    </term>
+    <term name="article-locator" form="short">			 
+      <single>art.</single>
+      <multiple>art.</multiple>
+    </term>
+    <term name="elocation" form="short">			 
+      <single>loc.</single>
+      <multiple>locc.</multiple>
+    </term>
+    <term name="equation" form="short">			 
+      <single>eq.</single>
+      <multiple>eqq.</multiple>
+    </term>
+    <term name="rule" form="short">			 
+      <single>r.</single>
+      <multiple>r.</multiple>						 
+    </term>
+    <term name="scene" form="short">			 
+      <single>sc.</single>
+      <multiple>sc.</multiple>						 
+    </term>
+    <term name="table" form="short">			 
+      <single>töa</single>
+      <multiple>töe</multiple>						 
+    </term>
+    <term name="timestamp" form="short"> <!-- generally blank -->
+      <single></single>
+      <multiple></multiple>						 
+    </term>
+    <term name="title-locator" form="short">			 
+      <single>tit.</single>
+      <multiple>tit.</multiple>
+    </term>
+    <term name="book" form="short">lib.</term>
+    <term name="chapter" form="short">
+      <single>cap.</single>
+      <multiple>capp.</multiple>
+    </term>
+    <term name="column" form="short">col.</term>
+    <term name="figure" form="short">fig.</term>
+    <term name="folio" form="short">fgg.</term>
+    <term name="issue" form="short">fasc.</term>
+    <term name="line" form="short">r.</term>
+    <term name="note" form="short">n.</term>
+    <term name="opus" form="short">euv.</term>
+    <term name="page" form="short">
+      <single>p.</single>
+      <multiple>pp.</multiple>
+    </term>
+    <term name="number-of-volumes" form="short">
+      <single>vol.</single>
+      <multiple>voll.</multiple>
+    </term>
+    <term name="page-first" form="short">
+      <single>p.</single>
+      <multiple>pp.</multiple>
+    </term>
+    <term name="printing" form="short">
+      <single>st.</single>
+      <multiple>stt.</multiple>
+    </term>
+    
+
+    <term name="number-of-pages" form="short">
+      <single>p.</single>
+      <multiple>pp.</multiple>
+    </term>
+    <term name="paragraph" form="short">par.</term>
+    <term name="part" form="short">pt.</term>
+    <term name="section" form="short">seç.</term>
+    <term name="supplement" form="short">
+      <single>supp.</single>
+      <multiple>supp.</multiple>
+    </term>
+    <term name="sub-verbo" form="short">
+      <single>s.v.</single>
+      <multiple>s.vv.</multiple>
+    </term>
+    <term name="verse" form="short">
+      <single>v.</single>
+      <multiple>vv.</multiple>
+    </term>
+    <term name="volume" form="short">
+      <single>vol.</single>
+      <multiple>voll.</multiple>
+    </term>
+
+    <!-- SYMBOL LOCATOR FORMS -->
+    <term name="paragraph" form="symbol">
+      <single>¶</single>
+      <multiple>¶¶</multiple>
+    </term>
+    <term name="chapter-number">
+      <single>cavo</single>
+      <multiple>cavi</multiple>
+    </term>
+    <term name="citation-number">
+      <single>çittaçion</single>
+      <multiple>çittaçioin</multiple>
+    </term>
+    <term name="collection-number">
+      <single>fascicolo</single>
+      <multiple>fascicoli</multiple>
+    </term>
+    <term name="section" form="symbol">
+      <single>§</single>
+      <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG ROLE FORMS -->
+    <term name="collection-editor">
+      <single>ed.</single>
+      <multiple>edd.</multiple>
+    </term>
+    <term name="chair">
+      <single>prescidente</single>
+      <multiple>prescidenti</multiple>
+    </term>
+    <term name="compiler">
+      <single>realizzatô</single>
+      <multiple>realizzatoî</multiple>
+    </term>
+    <term name="contributor">
+      <single>conlaboratô</single>
+      <multiple>conlaboratoî</multiple>
+    </term>
+    <term name="curator">
+      <single>cuatô</single>
+      <multiple>cuatoî</multiple>
+    </term>
+    <term name="executive-producer">
+      <single>produttô executivo</single>
+      <multiple>produttoî executivi</multiple>
+    </term>
+    <term name="guest">
+      <single>òspite</single>
+      <multiple>òspiti</multiple>
+    </term>
+    <term name="host">
+      <single>conduttô</single>
+      <multiple>conduttoî</multiple>
+    </term>
+    <term name="narrator">
+      <single>narratô</single>
+      <multiple>narratoî</multiple>
+    </term>
+    <term name="organizer">
+      <single>organizzatô</single>
+      <multiple>organizzatoî</multiple>
+    </term>
+    <term name="performer">
+      <single>executô</single>
+      <multiple>executoî</multiple>
+    </term>
+    <term name="producer">
+      <single>produttô</single>
+      <multiple>produttoî</multiple>
+    </term>
+    <term name="script-writer">
+      <single>scenezzatô</single>
+      <multiple>scenezzatoî</multiple>
+    </term>
+    <term name="series-creator">
+      <single>autô da serie</single>
+      <multiple>autoî da serie</multiple>
+    </term>
+    <term name="director">
+      <single>regista</single>
+      <multiple>registi</multiple>
+    </term>
+    <term name="editor">
+      <single>cuatô</single>
+      <multiple>cuatoî</multiple>
+    </term>
+    <term name="editorial-director">
+      <single>direttô editoriale</single>
+      <multiple>direttoî editoriali</multiple>
+    </term>
+    <term name="illustrator">
+      <single>inlustratô</single>
+      <multiple>inlustratoî</multiple>
+    </term>
+    <term name="translator">
+      <single>traduttô</single>
+      <multiple>traduttoî</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>cuatô e traduttô</single>
+      <multiple>curatoî e traduttoî</multiple>
+    </term>
+
+    <!-- SHORT ROLE FORMS -->
+    <term name="compiler" form="short">
+      <single>realizz.</single>
+      <multiple>realizz.</multiple>
+    </term>
+    <term name="contributor" form="short">
+      <single>conlab.</single>
+      <multiple>conlab.</multiple>
+    </term>
+    <term name="curator" form="short">
+      <single>cua.</single>
+      <multiple>cua.</multiple>
+    </term>
+    <term name="executive-producer" form="short">
+      <single>prod.ex.</single>
+      <multiple>prod.ex.</multiple>
+    </term>
+    <term name="narrator" form="short">
+      <single>narr.</single>
+      <multiple>narr.</multiple>
+    </term>
+    <term name="organizer" form="short">
+      <single>org.</single>
+      <multiple>org.</multiple>
+    </term>
+    <term name="performer" form="short">
+      <single>exec.</single>
+      <multiple>exec.</multiple>
+    </term>
+    <term name="producer" form="short">
+      <single>prod.</single>
+      <multiple>prod.</multiple>
+    </term>
+    <term name="script-writer" form="short">
+      <single>scen.</single>
+      <multiple>scen.</multiple>
+    </term>
+    <term name="series-creator" form="short">
+      <single>autô da serie</single>
+      <multiple>autoî da serie</multiple>
+    </term>
+    <term name="director" form="short">
+      <single>reg.</single>
+      <multiple>reg.</multiple>
+    </term>
+    <term name="editor" form="short">
+      <single>à c. de</single>
+      <multiple>à c. de</multiple>
+    </term>
+    <term name="editorial-director" form="short">
+      <single>dir. ed.</single>
+      <multiple>dir. ed.</multiple>
+    </term>
+    <term name="illustrator" form="short">
+      <single>inl.</single>
+      <multiple>inl.</multiple>
+    </term>
+    <term name="translator" form="short">
+      <single>trad.</single>
+      <multiple>trad.</multiple>
+    </term>
+    <term name="editortranslator" form="short">
+      <single>cua. e trad.</single>
+      <multiple>cua. e trad.</multiple>
+    </term>
+
+    <!-- VERB ROLE FORMS -->
+    <term name="collection-editor" form="verb">à cua de</term>
+    <term name="chair" form="verb">prescieduo da</term>
+    <term name="compiler" form="verb">realizzou da</term>
+    <term name="contributor" form="verb">con un contributo de</term>
+    <term name="curator" form="verb">à cua de</term>
+    <term name="executive-producer" form="verb">produçion executiva de</term>
+    <term name="guest" form="verb">con òspite</term>
+    <term name="host" form="verb">conduto da</term>
+    <term name="narrator" form="verb">narrou da</term>
+    <term name="organizer" form="verb">organizzou da</term>
+    <term name="performer" form="verb">execuçion de</term>
+    <term name="producer" form="verb">produto da</term>
+    <term name="script-writer" form="verb">scrito da</term>
+    <term name="series-creator" form="verb">creou da</term>
+    <term name="container-author" form="verb">de</term>
+    <term name="director" form="verb">diretto da</term>
+    <term name="editor" form="verb">à cua de</term>
+    <term name="editorial-director" form="verb">direçion editoriale de</term>
+    <term name="illustrator" form="verb">inlustrou da</term>
+    <term name="interviewer" form="verb">intervista de</term>
+    <term name="recipient" form="verb">à</term>
+    <term name="reviewed-author" form="verb">de</term>
+    <term name="collection-editor" form="verb-short">ed. da</term>
+    <term name="translator" form="verb">traduto da</term>
+    <term name="editortranslator" form="verb">à cua de e traduto da</term>
+
+    <!-- SHORT VERB ROLE FORMS -->
+    <term name="compiler" form="verb-short">realizz. da</term>
+    <term name="contributor" form="verb-short">con un contrib. de</term>
+    <term name="curator" form="verb-short">à c. de</term>
+    <term name="executive-producer" form="verb-short">prod. exec. de</term>
+    <term name="guest" form="verb-short">con òsp.</term>
+    <term name="host" form="verb-short">cond. da</term>
+    <term name="narrator" form="verb-short">narr. da</term>
+    <term name="organizer" form="verb-short">org. da</term>
+    <term name="performer" form="verb-short">exec. de</term>
+    <term name="producer" form="verb-short">prod. da</term>
+    <term name="script-writer" form="verb-short">scr. da</term>
+    <term name="series-creator" form="verb-short">cre. da</term>
+    <term name="director" form="verb-short">dir. da</term>
+    <term name="editor" form="verb-short">à c. de</term>
+    <term name="editorial-director" form="verb-short">dir. ed. de</term>
+    <term name="illustrator" form="verb-short">inl. da</term>
+    <term name="translator" form="verb-short">trad. da</term>
+    <term name="editortranslator" form="verb-short">à c. de e trad. da</term>
+
+    <!-- LONG MONTH FORMS -->
+    <term name="month-01" gender="masculine">zenâ</term>
+    <term name="month-02" gender="masculine">frevâ</term>
+    <term name="month-03" gender="masculine">marso</term>
+    <term name="month-04" gender="masculine">avrî</term>
+    <term name="month-05" gender="masculine">mazzo</term>
+    <term name="month-06" gender="masculine">zugno</term>
+    <term name="month-07" gender="masculine">luggio</term>
+    <term name="month-08" gender="masculine">agosto</term>
+    <term name="month-09" gender="masculine">settembre</term>
+    <term name="month-10" gender="masculine">ottobre</term>
+    <term name="month-11" gender="masculine">novembre</term>
+    <term name="month-12" gender="masculine">dexembre</term>
+
+    <!-- SHORT MONTH FORMS -->
+    <term name="month-01" form="short">zen.</term>
+    <term name="month-02" form="short">fre.</term>
+    <term name="month-03" form="short">mar.</term>
+    <term name="month-04" form="short">avr.</term>
+    <term name="month-05" form="short">maz.</term>
+    <term name="month-06" form="short">zug.</term>
+    <term name="month-07" form="short">lug.</term>
+    <term name="month-08" form="short">ago.</term>
+    <term name="month-09" form="short">set.</term>
+    <term name="month-10" form="short">ott.</term>
+    <term name="month-11" form="short">nov.</term>
+    <term name="month-12" form="short">dex.</term>
+
+    <!-- SEASONS -->
+    <term name="season-01">primmaveia</term>
+    <term name="season-02">estæ</term>
+    <term name="season-03">ötunno</term>
+    <term name="season-04">inverno</term>
+  </terms>
+</locale>
