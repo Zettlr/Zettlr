@@ -5,6 +5,10 @@
 - Fixed a bug that would make using certain keys such as `Enter`, `Backspace`,
   or quotes in code editors in the Assets Manager unusable (#5797).
 - Added Kazakh language (#5771).
+- Improve fenced code block language detection when using fenced code
+  attributes. Now, using the recommended Pandoc-style syntax for attribute
+  strings will correctly match the language in the info string to one of the
+  available identifiers.
 
 ## Under the Hood
 
