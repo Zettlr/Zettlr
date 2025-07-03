@@ -8,6 +8,7 @@
 ## Under the Hood
 
 - Bump Pandoc to version `3.7.0.2`.
+- Bump Electron to version `37.2.0`.
 
 # 3.5.1
 
