@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fixed a bug that would prevent the creation of new directories via the
+  shortcut (#5769).
 
 ## Under the Hood
 
