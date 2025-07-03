@@ -7,7 +7,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Bump Pandoc to version `3.7.0.2`.
 
 # 3.5.1
 
