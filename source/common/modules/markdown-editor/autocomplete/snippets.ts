@@ -88,17 +88,32 @@ class SnippetWidget extends WidgetType {
 function applySnippet (view: EditorView, completion: Completion, from: number, to: number): void {
   template2snippet(view.state, completion.info as string, from - 1)
     .then(([ textToInsert, selections ]) => {
-      // We can immediately take the first rangeset and set it as a selection, whilst
-      // committing the rest into our StateField as an effect
+      const emojiMap = Object.fromEntries(
+        gemoji.map(e => e.names.map(name => [ name, e.emoji ])).flat()
+      )
+
+      // ✅ DEBUG log
+      console.log('⛳ raw snippet text:', textToInsert)
+
+      const parsedText = textToInsert.replace(/:([a-zA-Z0-9_+.\-]+):/g, (_, name) => {
+        const emojiChar = emojiMap[name]
+        console.log(`🔍 replacing :${name}: ->`, emojiChar ?? 'NO MATCH')
+        return emojiChar != null ? emojiChar : `:${name}:`
+      })
+
+      console.log('✅ parsedText after emoji replace:', parsedText)
+
       const firstSelection = selections.shift()
       view.dispatch({
-        changes: [{ from: from - 1, to, insert: textToInsert }],
+        changes: [{ from: from - 1, to, insert: parsedText }],
         selection: firstSelection,
         effects: snippetTabsEffect.of(selections)
       })
     })
     .catch(err => console.error(err))
 }
+
+
 
 /**
  * Used internally to add ranges for the snippets to the state
