@@ -4,6 +4,8 @@
 
 - Fixed a bug that would prevent the creation of new directories via the
   shortcut (#5769).
+- Fixed the list of related files disappearing when switching sidebar tabs
+  (#5795).
 
 ## Under the Hood
 
