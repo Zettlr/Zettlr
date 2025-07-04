@@ -142,6 +142,18 @@
     v-bind:name="props.field.model"
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></SliderInput>
+  <ShortcutCaptureControl
+    v-else-if="props.field.type === 'shortcut'"
+    v-bind:disabled="props.field.disabled"
+    v-bind:placeholder="props.field.placeholder"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-bind:reset="props.field.reset"
+    v-bind:info="props.field.info"
+    v-bind:inline="props.field.inline"
+    v-bind:model-value="model"
+    v-on:update:model-value="emit('update:modelValue', $event)"
+  ></ShortcutCaptureControl>
   <ThemeInput
     v-else-if="props.field.type === 'theme'"
     v-bind:model-value="model"
@@ -168,6 +180,7 @@ import SliderInput from './elements/SliderControl.vue'
 import ListControl from './elements/ListControl.vue'
 import TokenInput from './elements/TokenList.vue'
 import ThemeInput from './elements/ThemeSelector.vue'
+import ShortcutCaptureControl from './elements/ShortcutCaptureControl.vue'
 
 /**
  * @ignore
