@@ -73,6 +73,9 @@ export const mainOverride = EditorView.baseTheme({
     color: 'var(--grey-0)',
     backgroundColor: 'var(--grey-4)'
   },
+  '.cm-heading': {
+    textDecoration: 'none'
+  },
   // Highlight/mark elements
   '.cm-highlight': {
     backgroundColor: '#ffff0080',
