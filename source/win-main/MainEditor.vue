@@ -182,24 +182,30 @@ onBeforeUnmount(() => {
   currentEditor?.unmount()
 })
 
-onUpdated(() => {
-  // We hook into the onUpdated lifecycle event since that will fire when the
-  // data for this component update, which includes visibility with the v-show
-  // directive. In case that the editor component is mounted and non-hidden, we
-  // will fire
-  const elem = mainEditorWrapper.value
-  if (elem === null || currentEditor === null) {
-    return
-  }
+let focusFrame: number | null = null
 
-  if (elem.style.display === 'none') {
-    return // Editor is hidden by v-show directive
-  }
+onUpdated(() => {
+  const elem = mainEditorWrapper.value
+  if (!elem || !currentEditor) return
+  if (elem.style.display === 'none') return
 
   if (!currentEditor.hasFocus()) {
-    currentEditor.focus()
+    if (focusFrame !== null) cancelAnimationFrame(focusFrame)
+
+    focusFrame = requestAnimationFrame(() => {
+      setTimeout(() => {
+        try {
+          if (currentEditor !== null) {
+            currentEditor.focus()
+          }
+        } catch (e) {
+          console.warn('Could not focus editor:', e)
+        }
+      }, 50)
+    })
   }
 })
+
 
 // DATA SETUP
 const showSearch = ref(false)
