@@ -107,7 +107,7 @@ As soon as you are happy with your changes, open a Pull Request here that update
 
 Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have the following installed on your computer:
 
-1. [NodeJS](https://nodejs.org/). Make sure it's at least Node 20 (`lts/iron`). To test what version you have, run `node -v`.
+1. [NodeJS](https://nodejs.org/). Make sure it's at least Node 22 (`lts/jod`). To test what version you have, run `node -v`.
 2. [Yarn](https://yarnpkg.com/en/). This is the package manager for the project, as we do not commit `package-lock.json`-files and many commands require yarn. You can install this globally using `npm install -g yarn` or Homebrew, if you are on macOS.
 3. On Windows, we recommend to [install the Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install), which will make many of the next steps easier.
 4. A few command-line utilities that various scripts require for running the development builds:
