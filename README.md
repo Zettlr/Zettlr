@@ -27,10 +27,11 @@
   <a href="https://www.zettlr.com/" target="_blank">Homepage</a> |
   <a href="https://www.zettlr.com/download">Download</a> |
   <a href="https://docs.zettlr.com/" target="_blank">Documentation</a> |
-  <a rel="me" href="https://fosstodon.org/@zettlr" target="_blank">Mastodon</a> |
-  <a href="https://discord.gg/PcfS3DM9Xj" target="_blank">Discord</a> |
+  <a href="https://forum.zettlr.com/" target="_blank">Community Forum</a> |
+  <a href="https://go.zettlr.com/discord" target="_blank">Discord</a> |
   <a href="#contributing">Contributing</a> |
-  <a href="https://www.patreon.com/zettlr" target="_blank">Support Us</a>
+  <a href="https://zettlr.com/supporters" target="_blank">Support Us</a> |
+  <a rel="me" href="https://fosstodon.org/@zettlr" target="_blank">Mastodon</a>
 </p>
 
 ![screenshot](/resources/screenshots/zettlr_view.png)
