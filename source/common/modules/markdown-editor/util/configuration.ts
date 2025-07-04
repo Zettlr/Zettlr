@@ -32,6 +32,7 @@ export interface EditorConfiguration {
   autocompleteSuggestEmojis: boolean
   autocorrect: AutocorrectOptions
   autoCloseBrackets: boolean
+  citationMode: 'zotero'|'original' //New
   renderCitations: boolean
   renderIframes: boolean
   renderImages: boolean
@@ -88,6 +89,7 @@ export function getDefaultConfig (): EditorConfiguration {
     },
     autocompleteSuggestEmojis: false,
     autoCloseBrackets: true,
+    citationMode: 'original', //New
     renderCitations: true,
     renderIframes: true,
     renderImages: true,

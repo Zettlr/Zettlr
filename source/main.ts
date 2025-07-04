@@ -27,6 +27,9 @@ import {
   handleExitArguments
 } from '@providers/cli-provider'
 
+// ─── NEW: import our ZoteroService and register IPC before anything else ───
+import { ZoteroService } from './common/services/zoteroService'
+
 handleExitArguments()
 
 // We need the service container, as long as this object is in memory, and hence
@@ -98,6 +101,11 @@ const filesBeforeOpen: string[] = []
  */
 let canQuit: boolean = false
 
+app.whenReady().then(() => {
+  // ─── NEW: wire up Zotero IPC handler ─────────────────────────────────────
+  new ZoteroService().registerIpc()
+  // ─────────────────────────────────────────────────────────────────────────
+})
 /**
  * Hook into the ready event and initialize the main object creating everything
  * else. It is necessary to wait for the ready event, because prior, some APIs
