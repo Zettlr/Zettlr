@@ -2,6 +2,13 @@
 
 ## GUI and Functionality
 
+- **Change**: Zettlr will no longer parse Markdown-like files that exceed ca.
+  10 MB in size. After some testing, we have determined that 10 MB seems to be
+  a balanced trade-off between parsing as many files as possible and preventing
+  the app to crash (especially on slower computers). Note that this only affects
+  the caching of certain pieces of metadata, such as title, heading level 1, and
+  ID. You will still be able to open and edit the file. For more context, see
+  issue #5801.
 - Fixed a bug that would prevent the creation of new directories via the
   shortcut (#5769).
 - Fixed the list of related files disappearing when switching sidebar tabs
