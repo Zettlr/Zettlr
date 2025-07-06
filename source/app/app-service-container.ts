@@ -37,7 +37,38 @@ import WindowProvider from '@providers/windows'
 import WorkspaceProvider from '@providers/workspaces'
 import { dialog } from 'electron'
 
-export default class AppServiceContainer {
+// We need module-global variables so that garbage collect won't shut down the
+// providers before the app is shut down.
+let appServiceContainer: AppServiceContainer|undefined
+
+// TODO: This function makes no sense in this module; find a better place!
+/**
+ * Retrieve the single App Service Container.
+ *
+ * @return  {AppServiceContainer}  The app service container.
+ */
+export function getAppServiceContainer (): AppServiceContainer {
+  if (appServiceContainer === undefined || !appServiceContainer.isBooted) {
+    throw new Error('Do not access the app service container before boot')
+  }
+
+  return appServiceContainer
+}
+
+/**
+ * Returns true after the app service container is booted.
+ *
+ * @return  {boolean}  Whether the app service container is booted.
+ */
+export function isAppServiceContainerReady (): boolean {
+  return appServiceContainer?.isBooted ?? false
+}
+
+export function setAppServiceContainer (container: AppServiceContainer) {
+  appServiceContainer = container
+}
+
+export class AppServiceContainer {
   private readonly _appearanceProvider: AppearanceProvider
   private readonly _assetsProvider: AssetsProvider
   private readonly _citeprocProvider: CiteprocProvider
@@ -58,10 +89,12 @@ export default class AppServiceContainer {
   private readonly _fsal: FSAL
   private readonly _documentManager: DocumentManager
   private readonly _workspaces: WorkspaceProvider
+  private _isBooted: boolean
 
   constructor () {
     // NOTE: We need to instantiate the providers according to their dependence
     // on other providers.
+    this._isBooted = false
 
     // First section: Crucial providers
     this._logProvider = new LogProvider()
@@ -138,6 +171,7 @@ export default class AppServiceContainer {
     this._menuProvider.set() // TODO
 
     this.log.info('[AppServiceContainer] Boot successful!')
+    this._isBooted = true
 
     // Now that the config provider is definitely set up, let's see if we
     // should copy the interactive tutorial to the documents directory.
@@ -150,6 +184,8 @@ export default class AppServiceContainer {
     // After everything has been booted up, show the windows
     this.windows.maybeShowWindows()
   }
+
+  public get isBooted () { return this._isBooted }
 
   /**
    * Returns the appearance provider

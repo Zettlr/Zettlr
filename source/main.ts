@@ -19,19 +19,15 @@ import { bootApplication, shutdownApplication } from './app/lifecycle'
 
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './app/util/extract-files-from-argv'
-import type AppServiceContainer from './app/app-service-container'
 import {
   DATA_DIR,
   DISABLE_HARDWARE_ACCELERATION,
   getCLIArgument,
   handleExitArguments
 } from '@providers/cli-provider'
+import { getAppServiceContainer, isAppServiceContainerReady } from './app/app-service-container'
 
 handleExitArguments()
-
-// We need the service container, as long as this object is in memory, and hence
-// not garbage collected, the app will run.
-let serviceContainer: AppServiceContainer|undefined
 
 // Immediately after launch, check if there is already another instance of
 // Zettlr running, and, if so, exit immediately. The arguments (including files)
@@ -69,7 +65,9 @@ if (typeof dataDir === 'string') {
     }
   }
 
-  serviceContainer?.log.info(`[Application] Using custom data dir: ${dataDir}`)
+  if (isAppServiceContainerReady()) {
+    getAppServiceContainer().log.info(`[Application] Using custom data dir: ${dataDir}`)
+  }
   app.setPath('userData', dataDir)
   app.setAppLogsPath(path.join(dataDir, 'logs'))
 }
@@ -120,9 +118,8 @@ app.whenReady().then(() => {
   // Immediately boot the application. This function performs some initial
   // checks to make sure the environment is as expected for Zettlr, and boots
   // up the providers.
-  bootApplication().then((container) => {
-    serviceContainer = container
-    serviceContainer.commands.run('roots-add', filesBeforeOpen.concat(extractFilesFromArgv(process.argv)))
+  bootApplication().then(() => {
+    getAppServiceContainer().commands.run('roots-add', filesBeforeOpen.concat(extractFilesFromArgv(process.argv)))
       .catch(err => console.error(err))
   }).catch(err => {
     console.error(err)
@@ -140,16 +137,22 @@ app.whenReady().then(() => {
  * @param {String} cwd The current working directory
  */
 app.on('second-instance', (event, argv, _cwd) => {
-  serviceContainer?.log.info('[Application] A second instance has been opened.')
+  if (!isAppServiceContainerReady()) {
+    return
+  }
+
+  const serviceContainer = getAppServiceContainer()
+
+  serviceContainer.log.info('[Application] A second instance has been opened.')
 
   // openWindow calls the appropriate function of the windowManager, which deals
   // with the nitty-gritty of actually making the main window visible.
-  serviceContainer?.windows.showAnyWindow()
+  serviceContainer.windows.showAnyWindow()
 
   // In case the user wants to open a file/folder with this running instance
-  serviceContainer?.commands?.run('roots-add', extractFilesFromArgv(argv))
+  serviceContainer.commands?.run('roots-add', extractFilesFromArgv(argv))
     .catch(err => {
-      serviceContainer?.log.error('[Application] Error while adding new roots', err)
+      serviceContainer.log.error('[Application] Error while adding new roots', err)
     })
 })
 
@@ -159,10 +162,11 @@ app.on('second-instance', (event, argv, _cwd) => {
 app.on('open-file', (e, filePath) => {
   e.preventDefault() // Need to explicitly set this b/c we're handling this
 
-  if (serviceContainer !== undefined) {
-    serviceContainer.commands?.run('roots-add', [filePath])
+  if (isAppServiceContainerReady()) {
+    const serviceContainer = getAppServiceContainer()
+    serviceContainer.commands.run('roots-add', [filePath])
       .catch((err) => {
-        serviceContainer?.log.error('[Application] Error while adding new roots', err)
+        serviceContainer.log.error('[Application] Error while adding new roots', err)
       })
   } else {
     // The Zettlr object has yet to be created -> cache it
@@ -175,11 +179,11 @@ app.on('open-file', (e, filePath) => {
  * `system.leaveAppRunning` is true or on macOS.
  */
 app.on('window-all-closed', function () {
-  const config = serviceContainer?.config
-  if (config === undefined) {
+  if (!isAppServiceContainerReady()) {
     return
   }
 
+  const { config } = getAppServiceContainer()
   const { leaveAppRunning } = config.get().system
   if (!leaveAppRunning && process.platform !== 'darwin') {
     // On OS X it is common for applications and their menu bar
@@ -214,7 +218,9 @@ app.on('will-quit', function (event) {
  * On macOS, open a new window as soon as the user re-activates the app.
  */
 app.on('activate', function () {
-  serviceContainer?.windows.showAnyWindow()
+  if (isAppServiceContainerReady()) {
+    getAppServiceContainer().windows.showAnyWindow()
+  }
 })
 
 /**
@@ -223,5 +229,7 @@ app.on('activate', function () {
  */
 process.on('unhandledRejection', (err: any) => {
   // Just log to console.
-  serviceContainer?.log.error('[Application] Unhandled rejection received', err)
+  if (isAppServiceContainerReady()) {
+    getAppServiceContainer().log.error('[Application] Unhandled rejection received', err)
+  }
 })

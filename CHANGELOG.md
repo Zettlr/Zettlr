@@ -11,6 +11,10 @@
 
 - Bump Pandoc to version `3.7.0.2`.
 - Bump Electron to version `37.2.0`.
+- The primary app service container can now be retrieved using the factory
+  method `getAppServiceContainer`. This makes it possible to reduce a few
+  recursive dependencies on passing the service container down and will help
+  disentangle the main process services in the future.
 
 # 3.5.1
 
