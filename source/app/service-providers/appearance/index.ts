@@ -78,18 +78,18 @@ export default class AppearanceProvider extends ProviderContract {
 
     // Subscribe to configuration updates
     this._config.on('update', (option: string) => {
+      const { autoDarkMode, darkMode } = this._config.get()
       // Set internal vars accordingly
       if (option === 'autoDarkMode') {
-        this._mode = this._config.get().autoDarkMode
+        this._mode = autoDarkMode
       } else if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
         this.recalculateSchedule()
       } else if (option === 'darkMode' && process.platform === 'darwin') {
         const shouldBeDark = nativeTheme.shouldUseDarkColors
-        const isDark = this._config.get().darkMode
-        if (shouldBeDark !== isDark) {
+        if (shouldBeDark !== darkMode) {
           // Explicitly set the appLevelAppearance in case the internal theme
           // differs from the operating system.
-          nativeTheme.themeSource = (isDark) ? 'dark' : 'light'
+          nativeTheme.themeSource = darkMode ? 'dark' : 'light'
         } else {
           nativeTheme.themeSource = 'system'
         }
@@ -143,8 +143,10 @@ export default class AppearanceProvider extends ProviderContract {
   public async boot (): Promise<void> {
     this._logger.verbose('Appearance provider booting up ...')
 
+    const { autoDarkMode, darkMode } = this._config.get()
+
     this.recalculateSchedule() // Parse the start and end times
-    this._mode = this._config.get().autoDarkMode
+    this._mode = autoDarkMode
     this.scheduleWasDark = this.scheduleIsDark() // Preset where we currently are
 
     // Initially set the dark mode after startup, if the mode is set to "system"
@@ -152,13 +154,13 @@ export default class AppearanceProvider extends ProviderContract {
       this._config.set('darkMode', nativeTheme.shouldUseDarkColors)
     } else if (process.platform === 'darwin') {
       // Override the app level appearance immediately
-      nativeTheme.themeSource = this._config.get().darkMode ? 'dark' : 'light'
+      nativeTheme.themeSource = darkMode ? 'dark' : 'light'
     }
 
     // It may be that it was already dark when the user started the app, but the
     // theme was light. This makes sure the theme gets set once after application
     // start --- But if the user decides to change it back, it'll not be altered.
-    if (this._mode === 'schedule' && this._config.get().darkMode !== this.scheduleIsDark()) {
+    if (this._mode === 'schedule' && darkMode !== this.scheduleIsDark()) {
       this._config.set('darkMode', this.scheduleIsDark())
       this.scheduleWasDark = this.scheduleIsDark()
     }
