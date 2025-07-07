@@ -20,40 +20,57 @@ import mermaid from 'mermaid'
 import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 import { trans } from '@common/i18n-renderer'
+import hash from '../../../util/hash'
+
+
+//Helper function to generate unique IDs using hash
+function generateUniqueId (content: string): string {
+  return `graphDiv_${Math.abs(hash(content)).toString(36)}`
+}
 
 //Initialize mermaid without a global theme
 mermaid.initialize({ startOnLoad: false })
 
 //Helper function to detect if a diagram has theme configuration
-const hasThemeConfig = (graphData: string): boolean => {
+/**
+ * Detects if a graph has theme configuration embedded in its content
+ * @param graphData The mermaid diagram content to check
+ * @returns True if the diagram contains theme configuration
+ */
+function hasThemeConfig (graphData: string): boolean {
   //Check for theme directive in various formats
   const themePatterns = [
-    /%%{.*theme.*}%%/i,           // %%{theme: 'dark'}%%
-    /%%{.*config.*theme.*}%%/i,   // %%{config: {theme: 'dark'}}%%
-    /%% theme:/i,                 // %% theme: dark
-    /theme\s*:/i                  // theme: dark (in config blocks)
+    /%%\{[^}]*(['"]?\btheme\b['"]?)\s*:/i,  // 'theme': or "theme": or theme: inside %%{ ... }%%
+    /%%\s*theme\s*:/i,                      // %% theme: dark
+    /^[ \t]*theme\s*:/im                    // theme: dark (anywhere at line start, multiline)
   ]
-  
   return themePatterns.some(pattern => pattern.test(graphData))
 }
 
 //Helper function to get the fallback theme based on Zettlr's mode
-const getFallbackTheme = (): 'dark' | 'default' => {
+/**
+ * Gets the fallback theme based on Zettlr's current dark mode setting
+ * @returns The appropriate theme name for mermaid
+ */
+function getFallbackTheme (): 'dark' | 'default' {
   const isDarkMode = window.config.get('darkMode') as boolean
   return isDarkMode ? 'dark' : 'default'
 }
 
 //Helper function to render with appropriate theme
-const renderWithTheme = async (id: string, graphData: string): Promise<{ svg: string }> => {
+/**
+ * Renders a mermaid diagram with appropriate theme handling
+ * @param id Unique identifier for the diagram
+ * @param graphData The mermaid diagram content
+ * @returns Promise resolving to the rendered SVG
+ */
+async function renderWithTheme (id: string, graphData: string): Promise<{ svg: string }> {
   if (hasThemeConfig(graphData)) {
     //Diagram has its own theme config, render as-is
-    console.log('Diagram has theme config, using diagram-specified theme')
     return await mermaid.render(id, graphData)
   } else {
     //No theme config in diagram, apply Zettlr's theme
     const fallbackTheme = getFallbackTheme()
-    console.log('No theme config in diagram, using fallback theme:', fallbackTheme)
-    
     //Temporarily reinitialize with the fallback theme
     mermaid.initialize({ startOnLoad: false, theme: fallbackTheme })
     
@@ -80,25 +97,22 @@ ipcRenderer.on('config-provider', (event, { command, payload }) => {
     const existingCharts = document.querySelectorAll('.mermaid-chart')
     console.log(`Found ${existingCharts.length} existing charts to update`)
     
-    existingCharts.forEach((chart, index) => {
+    existingCharts.forEach((chart) => {
       const chartElement = chart as HTMLElement
       const graphData = chartElement.dataset.graph
       
-      if (graphData != null && graphData !== '') {
-        console.log(`Re-rendering chart ${index + 1}`)
-        const id = `graphDiv${Date.now()}_${index}`
+      if (graphData  != null && graphData !== '') {
+        const id = generateUniqueId(graphData)
         chartElement.textContent = trans('Rendering mermaid graph …')
-        
+              
         renderWithTheme(id, graphData)
           .then(result => { 
             chartElement.innerHTML = result.svg 
-            console.log(`Chart ${index + 1} re-rendered successfully`)
           })
           .catch(err => {
             chartElement.classList.add('error')
             const msg = trans('Could not render Graph:')
             chartElement.textContent = `${msg}\n\n${err.str as string}`
-            console.error(`Error re-rendering chart ${index + 1}:`, err)
           })
       }
     })
@@ -123,7 +137,7 @@ class MermaidWidget extends WidgetType {
     elem.dataset.graph = this.graph
     elem.dataset.darkTheme = String(this.darkMode)
 
-    const id = `graphDiv${Date.now()}`
+    const id = generateUniqueId(this.graph)
     elem.innerText = trans('Rendering mermaid graph …')
     renderWithTheme(id, this.graph)
       .then(result => { elem.innerHTML = result.svg })
@@ -142,7 +156,7 @@ class MermaidWidget extends WidgetType {
       return true // No update necessary
     }
 
-    const id = `graphDiv${Date.now()}`
+    const id = generateUniqueId(this.graph)
     dom.innerText = trans('Rendering mermaid graph …')
     renderWithTheme(id, this.graph)
       .then(result => { dom.innerHTML = result.svg })
@@ -209,3 +223,4 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): MermaidWidget|u
 }
 
 export const renderMermaid = renderBlockWidgets(shouldHandleNode, createWidget)
+
