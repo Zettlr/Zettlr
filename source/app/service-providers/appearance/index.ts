@@ -29,7 +29,7 @@ import ProviderContract from '../provider-contract'
  * time if set to schedule.
  */
 export default class AppearanceProvider extends ProviderContract {
-  private _mode: 'off'|'system'|'schedule'|'auto'
+  private _mode: 'off'|'system'|'schedule'
   private _scheduleWasDark: boolean
   private _startHour: number
   private _startMin: number
@@ -80,7 +80,7 @@ export default class AppearanceProvider extends ProviderContract {
     this._config.on('update', (option: string) => {
       // Set internal vars accordingly
       if (option === 'autoDarkMode') {
-        this._mode = this._config.get('autoDarkMode')
+        this._mode = this._config.get().autoDarkMode
       } else if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
         this._recalculateSchedule()
       } else if (option === 'darkMode' && process.platform === 'darwin') {
