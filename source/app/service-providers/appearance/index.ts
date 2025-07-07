@@ -64,22 +64,18 @@ export default class AppearanceProvider extends ProviderContract {
      */
     nativeTheme.on('updated', () => {
       // Only react to these notifications if the schedule is set to 'system'
-      if (this._mode === 'system') {
-        this._logger.info(
-          'Switching to ' +
-          (nativeTheme.shouldUseDarkColors ? 'dark' : 'light') +
-          ' mode'
-        )
-
-        // Set the var accordingly
-        this._config.set('darkMode', nativeTheme.shouldUseDarkColors)
+      if (this._mode !== 'system') {
+        return
       }
+
+      const isDark = nativeTheme.shouldUseDarkColors
+      this._logger.info(`Switching to ${isDark ? 'dark' : 'light'} mode.`)
+      this._config.set('darkMode', isDark)
     })
 
     // Subscribe to configuration updates
     this._config.on('update', (option: string) => {
       const { autoDarkMode, darkMode } = this._config.get()
-      // Set internal vars accordingly
       if (option === 'autoDarkMode') {
         this._mode = autoDarkMode
       } else if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
@@ -162,7 +158,6 @@ export default class AppearanceProvider extends ProviderContract {
     // start --- But if the user decides to change it back, it'll not be altered.
     if (this._mode === 'schedule' && darkMode !== this.scheduleIsDark()) {
       this._config.set('darkMode', this.scheduleIsDark())
-      this.scheduleWasDark = this.scheduleIsDark()
     }
 
     this._tickInterval = setInterval(() => { this.tick() }, 1000)
@@ -180,11 +175,9 @@ export default class AppearanceProvider extends ProviderContract {
     // mode has been active or not.
     if (this.scheduleWasDark !== this.scheduleIsDark()) {
       // The schedule just changed -> change the theme
-      const mode = (this.scheduleIsDark()) ? 'dark' : 'light'
-      this._logger.info('Switching appearance to ' + mode)
-
-      this._config.set('darkMode', this.scheduleIsDark())
       this.scheduleWasDark = this.scheduleIsDark()
+      this._logger.info(`Switching appearance to ${this.scheduleWasDark ? 'dark' : 'light'}`)
+      this._config.set('darkMode', this.scheduleWasDark)
     }
   }
 
@@ -217,15 +210,15 @@ export default class AppearanceProvider extends ProviderContract {
    * @return {boolean} Whether or not time indicates it should be dark now.
    */
   private scheduleIsDark (): boolean {
-    let now = new Date()
-    let nowMin = now.getMinutes()
-    let nowHours = now.getHours()
+    const now = new Date()
+    const nowMin = now.getMinutes()
+    const nowHours = now.getHours()
 
     // Overnight is when the startHour is bigger than the endHour
     // (or the startMinutes bigger than the endMinutes, even only by one)
-    let isOvernight = this._startHour > this._endHour || (this._startHour === this._endHour && this._startMin > this._endMin)
-    let nowLaterThanStart = nowHours > this._startHour || (nowHours === this._startHour && nowMin >= this._startMin)
-    let nowEarlierThanEnd = nowHours < this._endHour || (nowHours === this._endHour && nowMin < this._endMin)
+    const isOvernight = this._startHour > this._endHour || (this._startHour === this._endHour && this._startMin > this._endMin)
+    const nowLaterThanStart = nowHours > this._startHour || (nowHours === this._startHour && nowMin >= this._startMin)
+    const nowEarlierThanEnd = nowHours < this._endHour || (nowHours === this._endHour && nowMin < this._endMin)
 
     if (isOvernight) {
       // In this case, now needs to be bigger than start or less than end
