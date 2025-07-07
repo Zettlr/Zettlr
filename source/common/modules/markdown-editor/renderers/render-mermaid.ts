@@ -91,11 +91,8 @@ async function renderWithTheme (id: string, graphData: string): Promise<{ svg: s
 const ipcRenderer = window.ipc
 ipcRenderer.on('config-provider', (event, { command, payload }) => {
   if (command === 'update' && payload === 'darkMode') {
-    console.log('Dark mode config changed, updating Mermaid charts without theme overrides')
-    
     //Force re-render of existing mermaid charts
     const existingCharts = document.querySelectorAll('.mermaid-chart')
-    console.log(`Found ${existingCharts.length} existing charts to update`)
     
     existingCharts.forEach((chart) => {
       const chartElement = chart as HTMLElement
