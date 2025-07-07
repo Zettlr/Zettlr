@@ -42,7 +42,7 @@ export interface ConfigOptions {
   attachmentExtensions: string[]
   darkMode: boolean
   alwaysReloadFiles: boolean
-  autoDarkMode: 'off'|'system'|'schedule'|'auto'
+  autoDarkMode: 'off'|'system'|'schedule'
   autoDarkModeStart: string
   autoDarkModeEnd: string
   fileMeta: boolean
