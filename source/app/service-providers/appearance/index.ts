@@ -148,7 +148,7 @@ export default class AppearanceProvider extends ProviderContract {
     // Initially set the dark mode after startup, if the mode is set to "system"
     if (this._mode === 'system') {
       this._config.set('darkMode', nativeTheme.shouldUseDarkColors)
-    } else if (process.platform === 'darwin') {
+    } else {
       // Override the app level appearance immediately
       nativeTheme.themeSource = darkMode ? 'dark' : 'light'
     }

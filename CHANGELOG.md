@@ -11,6 +11,8 @@
   issue #5801.
 - Fixed a bug that would prevent the creation of new directories via the
   shortcut (#5769).
+- Fixed a bug that prevented retention of user-determined dark-mode setting on
+  platforms other than macOS during application restarts (#570).
 - Fixed the list of related files disappearing when switching sidebar tabs
   (#5795).
 
