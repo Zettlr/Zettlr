@@ -218,7 +218,7 @@ function updateRow (
       // the existence of the table. Since the `view` will always be the same,
       // we only have to save the cellFrom and cellTo to the TDs dataset each
       // time around (see below).
-      td.addEventListener('click', (e) => {
+      td.addEventListener('mousedown', (e) => {
         e.preventDefault()
         e.stopPropagation()
         setSelectionToCell(td, cell, view)
@@ -320,6 +320,7 @@ function updateRow (
 
     if (subview !== null && !selectionInCell) {
       subview.destroy()
+      contentWrapper.classList.remove('editing')
       // TODO: Enable citation rendering here
       const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
@@ -328,6 +329,7 @@ function updateRow (
       // itself is empty before we mount the subview.
       contentWrapper.innerHTML = ''
       createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
+      contentWrapper.classList.add('editing')
     } else if (subview === null) {
       // Simply transfer the contents
       // TODO: Enable citation rendering here
