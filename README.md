@@ -27,10 +27,11 @@
   <a href="https://www.zettlr.com/" target="_blank">Homepage</a> |
   <a href="https://www.zettlr.com/download">Download</a> |
   <a href="https://docs.zettlr.com/" target="_blank">Documentation</a> |
-  <a rel="me" href="https://fosstodon.org/@zettlr" target="_blank">Mastodon</a> |
-  <a href="https://discord.gg/PcfS3DM9Xj" target="_blank">Discord</a> |
+  <a href="https://forum.zettlr.com/" target="_blank">Community Forum</a> |
+  <a href="https://go.zettlr.com/discord" target="_blank">Discord</a> |
   <a href="#contributing">Contributing</a> |
-  <a href="https://www.patreon.com/zettlr" target="_blank">Support Us</a>
+  <a href="https://zettlr.com/supporters" target="_blank">Support Us</a> |
+  <a rel="me" href="https://fosstodon.org/@zettlr" target="_blank">Mastodon</a>
 </p>
 
 ![screenshot](/resources/screenshots/zettlr_view.png)
@@ -64,17 +65,19 @@ To install Zettlr, just [download the latest release](https://www.zettlr.com/dow
 
 On our website and here on GitHub, we provide a set of installers for the most common use-cases. We provide both 64-bit installers as well as installers for ARM systems (called "Apple Silicon" in the macOS ecosystem). 32-bit is not supported. We offer the following binaries directly:
 
-* Windows (x64)
 * macOS (Intel and Apple Silicon)
-* Debian and Fedora (x64 and ARM)
+* Windows (x64)
+* Debian/Ubuntu (x64 and ARM) 
+* Fedora/Red Hat (x64 and ARM)
 * AppImage (x64 and ARM)
 
 Thanks to our community, we can also offer you a variety of other installation opportunities:
 
-* [Chocolatey (Windows)](https://community.chocolatey.org/packages/zettlr/)
 * [Homebrew (macOS)](https://formulae.brew.sh/cask/zettlr)
+* [Aptitude (Ubuntu/Debian)](https://apt.zettlr.com)
+* [Flathub (Linux)](https://flathub.org/apps/details/com.zettlr.Zettlr)
+* [Chocolatey (Windows)](https://community.chocolatey.org/packages/zettlr/)
 * [Arch Linux](https://wiki.archlinux.org/title/Zettlr)
-* [Flatpak (Linux)](https://flathub.org/apps/details/com.zettlr.Zettlr)
 
 All other [platforms that Electron supports](https://www.electronjs.org/docs/latest/development/build-instructions-gn#platform-prerequisites) are supported as well, but you will need to build the app yourself for this to work.
 
@@ -104,7 +107,7 @@ As soon as you are happy with your changes, open a Pull Request here that update
 
 Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have the following installed on your computer:
 
-1. [NodeJS](https://nodejs.org/). Make sure it's at least Node 20 (`lts/iron`). To test what version you have, run `node -v`.
+1. [NodeJS](https://nodejs.org/). Make sure it's at least Node 22 (`lts/jod`). To test what version you have, run `node -v`.
 2. [Yarn](https://yarnpkg.com/en/). This is the package manager for the project, as we do not commit `package-lock.json`-files and many commands require yarn. You can install this globally using `npm install -g yarn` or Homebrew, if you are on macOS.
 3. On Windows, we recommend to [install the Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install), which will make many of the next steps easier.
 4. A few command-line utilities that various scripts require for running the development builds:

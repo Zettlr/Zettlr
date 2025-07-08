@@ -155,7 +155,7 @@
     </p>
     <p><pre><code class="language-bash"># First, add our public key to APT
 curl -s --compressed "https://apt.zettlr.com/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/zettlr_apt.gpg > /dev/null
-# Second, add this PPA to your sources
+# Second, add this repository to your sources
 sudo curl -s --compressed -o /etc/apt/sources.list.d/zettlr.list "https://apt.zettlr.com/zettlr.list"
 # Third, update APT so that it fetches the available files
 sudo apt update

@@ -29,8 +29,8 @@ import ProviderContract from '../provider-contract'
  * time if set to schedule.
  */
 export default class AppearanceProvider extends ProviderContract {
-  private _mode: 'off'|'system'|'schedule'|'auto'
-  private _scheduleWasDark: boolean
+  private _mode: 'off'|'system'|'schedule'
+  private scheduleWasDark: boolean
   private _startHour: number
   private _startMin: number
   private _endHour: number
@@ -49,7 +49,7 @@ export default class AppearanceProvider extends ProviderContract {
 
     // Initiate everything
     this._mode = 'off'
-    this._scheduleWasDark = false
+    this.scheduleWasDark = false
 
     // The TypeScript linter is not clever enough to see that the function will
     // definitely set the initial values ...
@@ -64,32 +64,28 @@ export default class AppearanceProvider extends ProviderContract {
      */
     nativeTheme.on('updated', () => {
       // Only react to these notifications if the schedule is set to 'system'
-      if (this._mode === 'system') {
-        this._logger.info(
-          'Switching to ' +
-          (nativeTheme.shouldUseDarkColors ? 'dark' : 'light') +
-          ' mode'
-        )
-
-        // Set the var accordingly
-        this._config.set('darkMode', nativeTheme.shouldUseDarkColors)
+      if (this._mode !== 'system') {
+        return
       }
+
+      const isDark = nativeTheme.shouldUseDarkColors
+      this._logger.info(`Switching to ${isDark ? 'dark' : 'light'} mode.`)
+      this._config.set('darkMode', isDark)
     })
 
     // Subscribe to configuration updates
     this._config.on('update', (option: string) => {
-      // Set internal vars accordingly
+      const { autoDarkMode, darkMode } = this._config.get()
       if (option === 'autoDarkMode') {
-        this._mode = this._config.get('autoDarkMode')
+        this._mode = autoDarkMode
       } else if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
-        this._recalculateSchedule()
+        this.recalculateSchedule()
       } else if (option === 'darkMode' && process.platform === 'darwin') {
         const shouldBeDark = nativeTheme.shouldUseDarkColors
-        const isDark = this._config.get().darkMode
-        if (shouldBeDark !== isDark) {
+        if (shouldBeDark !== darkMode) {
           // Explicitly set the appLevelAppearance in case the internal theme
           // differs from the operating system.
-          nativeTheme.themeSource = (isDark) ? 'dark' : 'light'
+          nativeTheme.themeSource = darkMode ? 'dark' : 'light'
         } else {
           nativeTheme.themeSource = 'system'
         }
@@ -143,24 +139,25 @@ export default class AppearanceProvider extends ProviderContract {
   public async boot (): Promise<void> {
     this._logger.verbose('Appearance provider booting up ...')
 
-    this._recalculateSchedule() // Parse the start and end times
-    this._mode = this._config.get().autoDarkMode
-    this._scheduleWasDark = this._isItDark() // Preset where we currently are
+    const { autoDarkMode, darkMode } = this._config.get()
+
+    this.recalculateSchedule() // Parse the start and end times
+    this._mode = autoDarkMode
+    this.scheduleWasDark = this.scheduleIsDark() // Preset where we currently are
 
     // Initially set the dark mode after startup, if the mode is set to "system"
     if (this._mode === 'system') {
       this._config.set('darkMode', nativeTheme.shouldUseDarkColors)
-    } else if (process.platform === 'darwin') {
+    } else {
       // Override the app level appearance immediately
-      nativeTheme.themeSource = this._config.get().darkMode ? 'dark' : 'light'
+      nativeTheme.themeSource = darkMode ? 'dark' : 'light'
     }
 
     // It may be that it was already dark when the user started the app, but the
     // theme was light. This makes sure the theme gets set once after application
     // start --- But if the user decides to change it back, it'll not be altered.
-    if (this._mode === 'schedule' && this._config.get().darkMode !== this._isItDark()) {
-      this._config.set('darkMode', this._isItDark())
-      this._scheduleWasDark = this._isItDark()
+    if (this._mode === 'schedule' && darkMode !== this.scheduleIsDark()) {
+      this._config.set('darkMode', this.scheduleIsDark())
     }
 
     this._tickInterval = setInterval(() => { this.tick() }, 1000)
@@ -176,20 +173,18 @@ export default class AppearanceProvider extends ProviderContract {
     // time Zettlr will only trigger a theme change if we traversed from
     // daytime to nighttime, and leave out the question of whether or not dark
     // mode has been active or not.
-    if (this._scheduleWasDark !== this._isItDark()) {
+    if (this.scheduleWasDark !== this.scheduleIsDark()) {
       // The schedule just changed -> change the theme
-      const mode = (this._isItDark()) ? 'dark' : 'light'
-      this._logger.info('Switching appearance to ' + mode)
-
-      this._config.set('darkMode', this._isItDark())
-      this._scheduleWasDark = this._isItDark()
+      this.scheduleWasDark = this.scheduleIsDark()
+      this._logger.info(`Switching appearance to ${this.scheduleWasDark ? 'dark' : 'light'}`)
+      this._config.set('darkMode', this.scheduleWasDark)
     }
   }
 
   /**
    * Parses the current auto dark mode start and end times for quick access.
    */
-  _recalculateSchedule (): void {
+  private recalculateSchedule (): void {
     const { autoDarkModeStart, autoDarkModeEnd } = this._config.get()
     const start = autoDarkModeStart.split(':')
     const end = autoDarkModeEnd.split(':')
@@ -214,16 +209,16 @@ export default class AppearanceProvider extends ProviderContract {
    *
    * @return {boolean} Whether or not time indicates it should be dark now.
    */
-  _isItDark (): boolean {
-    let now = new Date()
-    let nowMin = now.getMinutes()
-    let nowHours = now.getHours()
+  private scheduleIsDark (): boolean {
+    const now = new Date()
+    const nowMin = now.getMinutes()
+    const nowHours = now.getHours()
 
     // Overnight is when the startHour is bigger than the endHour
     // (or the startMinutes bigger than the endMinutes, even only by one)
-    let isOvernight = this._startHour > this._endHour || (this._startHour === this._endHour && this._startMin > this._endMin)
-    let nowLaterThanStart = nowHours > this._startHour || (nowHours === this._startHour && nowMin >= this._startMin)
-    let nowEarlierThanEnd = nowHours < this._endHour || (nowHours === this._endHour && nowMin < this._endMin)
+    const isOvernight = this._startHour > this._endHour || (this._startHour === this._endHour && this._startMin > this._endMin)
+    const nowLaterThanStart = nowHours > this._startHour || (nowHours === this._startHour && nowMin >= this._startMin)
+    const nowEarlierThanEnd = nowHours < this._endHour || (nowHours === this._endHour && nowMin < this._endMin)
 
     if (isOvernight) {
       // In this case, now needs to be bigger than start or less than end

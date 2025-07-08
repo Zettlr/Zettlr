@@ -21,6 +21,7 @@ import type { MDFileDescriptor } from '@dts/common/fsal'
 import type FSALCache from './fsal-cache'
 import type { SearchTerm } from '@dts/common/search'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
+import { getAppServiceContainer, isAppServiceContainerReady } from '../../app-service-container'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -107,6 +108,14 @@ export async function parse (
   } catch (err: any) {
     err.message = 'Error reading file ' + filePath
     throw err // Re-throw
+  }
+
+  if (file.size > 10_000_000) {
+    if (isAppServiceContainerReady()) {
+      const logger = getAppServiceContainer().log
+      logger.warning(`Skipped parsing of file "${file.path}": Too large (>10 MB)`)
+    }
+    return file
   }
 
   // Before reading in the full file and parsing it,

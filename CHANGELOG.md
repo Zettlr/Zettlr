@@ -2,16 +2,81 @@
 
 ## GUI and Functionality
 
+- **Change**: Zettlr will no longer parse Markdown-like files that exceed ca.
+  10 MB in size. After some testing, we have determined that 10 MB seems to be
+  a balanced trade-off between parsing as many files as possible and preventing
+  the app to crash (especially on slower computers). Note that this only affects
+  the caching of certain pieces of metadata, such as title, heading level 1, and
+  ID. You will still be able to open and edit the file. For more context, see
+  issue #5801.
+- Fixed a bug that would prevent the creation of new directories via the
+  shortcut (#5769).
+- Fixed a bug that prevented retention of user-determined dark-mode setting on
+  platforms other than macOS during application restarts (#570).
+- Fixed the list of related files disappearing when switching sidebar tabs
+  (#5795).
+
+## Under the Hood
+
+- Bump Pandoc to version `3.7.0.2`.
+- Bump Electron to version `37.2.0`.
+- The primary app service container can now be retrieved using the factory
+  method `getAppServiceContainer`. This makes it possible to reduce a few
+  recursive dependencies on passing the service container down and will help
+  disentangle the main process services in the future.
+
+# 3.5.1
+
+## GUI and Functionality
+
+- Fixed a bug that would make using certain keys such as `Enter`, `Backspace`,
+  or quotes in code editors in the Assets Manager unusable (#5797).
+- Added Kazakh language (#5771).
+- Improve fenced code block language detection when using fenced code
+  attributes. Now, using the recommended Pandoc-style syntax for attribute
+  strings will correctly match the language in the info string to one of the
+  available identifiers.
+
+## Under the Hood
+
+(nothing here)
+
+# 3.5.0
+
+## GUI and Functionality
+
 - **Feature**: The code editors (in the assets manager and elsewhere) now share
   the same keymap as the main editor.
+- **Feature**: The image renderer now acknowledges and respects the presence of
+  a Pandoc link attributes string behind an image to scale images using custom
+  sizes (#1328).
+- **Change**: Removed some optional properties from the default profiles. If you
+  want to switch to the new defaults, delete those files from the assets manager
+  or rename your existing ones. Specifically, removed `top-level-division`,
+  whose meaning has changed which started to produce empty first pages during
+  Word exports (#5645).
+- Fixed a long-standing bug that would not clear the modification marker on both
+  file tabs (#5747) and the macOS window indicator (#4724) when a modified file
+  was closed without saving changes. Acknowledges PR #5747 which is superseded
+  by this change.
+- Added a keyboard shortcut for highlighting text: `Ctrl-Shift-H` (#4668).
+- The Mermaid diagram renderer is now more flexible. It now renders any Mermaid
+  diagram in any type of valid fenced code block with both allowed variations of
+  providing the info string: the plain `mermaid` and the Pandoc-attribute style
+  `{.mermaid}` class (#5734).
 - Fixed a keymap conflict that would cause `Enter` to not accept autocomplete
   suggestions in some contexts such as Markdown syntax elements (#5646).
+- Improved the math, mermaid, image, and heading renderers so that they perform
+  additional checks before actually updating their respective rendered elements.
+  This should reduce the amount of flickering and unintentional scrolling
+  especially in longer documents with many of such elements.
 - Enable the CodeMirror folding keymap which lets you fold and unfold code, such
   as headings, with keyboard shortcuts instead of using the arrows to the left
   of the editor (#857). The shortcuts are: `Ctrl-Shift-[` (Windows/Linux) or
   `Cmd-Alt-[` (macOS) for folding code, `Ctrl-Shift-]` or `Cmd-Alt-]` for
   unfolding, `Ctrl-Alt-[` for folding all, and `Ctrl-Alt-]` for unfolding all.
 - Update `fr-FR` translation (#5738).
+- Update `cs-CZ` translation (#5775).
 
 ## Under the Hood
 
@@ -22,6 +87,7 @@
 - Move all keymaps into a single `defaultKeymap`.
 - Assume `**` as default bold and `*` as default italic formatting for Markdown
   commands if the config field is not present.
+- Added a `pandocLinkParser` for properly parsing pandoc link attribute strings.
 
 # 3.4.4
 

@@ -10,48 +10,57 @@
     <translator>
       <name>Heromyth</name>
     </translator>
+    <translator>
+      <name>Zeping Lee</name>
+    </translator>
+    <translator>
+      <name>韩小土</name>
+    </translator>
+    <translator>
+      <name>韩敏义</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2014-05-15T23:31:02+00:00</updated>
+    <updated>2024-03-12T18:14:12+08:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
-    <date-part name="year" suffix="年"/>
-    <date-part name="month" form="numeric" suffix="月"/>
-    <date-part name="day" suffix="日"/>
+    <date-part name="year" suffix="年" range-delimiter="&#8212;"/>
+    <date-part name="month" form="numeric" suffix="月" range-delimiter="&#8212;"/>
+    <date-part name="day" suffix="日" range-delimiter="&#8212;"/>
   </date>
   <date form="numeric">
-    <date-part name="year"/>
-    <date-part name="month" form="numeric-leading-zeros" prefix="/"/>
-    <date-part name="day" form="numeric-leading-zeros" prefix="/"/>
+    <date-part name="year" range-delimiter="/"/>
+    <date-part name="month" form="numeric-leading-zeros" prefix="-" range-delimiter="/"/>
+    <date-part name="day" form="numeric-leading-zeros" prefix="-" range-delimiter="/"/>
   </date>
   <terms>
-    <term name="advance-online-publication">advance online publication</term>
-    <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
-    <term name="film">film</term>
-    <term name="henceforth">henceforth</term>
-    <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
-    <term name="on">on</term>
-    <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="advance-online-publication">网络首发</term>
+    <term name="album">专辑</term>
+    <term name="audio-recording">录音</term>
+    <term name="film">电影</term>
+    <term name="henceforth">从此以后</term>
+    <term name="loc-cit">同前注</term>
+    <term name="no-place">出版地不详</term>
+    <term name="no-place" form="short">出版地不详</term>
+    <term name="no-publisher">出版者不详</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">出版者不详</term>
+    <term name="on">在</term>
+    <term name="op-cit">同前注</term>
+    <term name="original-work-published">原著出版于</term>
     <term name="personal-communication">的私人交流</term>
-    <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
-    <term name="preprint">preprint</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
-    <term name="video">video</term>
-    <term name="working-paper">working paper</term>
+    <term name="podcast">播客</term>
+    <term name="podcast-episode">播客集</term>
+    <term name="preprint">预印本</term>
+    <term name="radio-broadcast">电台广播</term>
+    <term name="radio-series">广播剧</term>
+    <term name="radio-series-episode">广播剧集</term>
+    <term name="special-issue">特刊</term>
+    <term name="special-section">特稿</term>
+    <term name="television-broadcast">电视广播</term>
+    <term name="television-series">电视剧</term>
+    <term name="television-series-episode">电视剧集</term>
+    <term name="video">视频</term>
+    <term name="working-paper">工作论文</term>
     <term name="accessed">见于</term>
     <term name="and">和</term>
     <term name="and others">及其他</term>
@@ -63,24 +72,15 @@
     <term name="circa">介于</term>
     <term name="circa" form="short">约</term>
     <term name="cited">见引于</term>
-    <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
-    </term>
-    <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
-    </term>
+    <term name="first-reference-note-number">前注</term>
+    <term name="number">编号</term>
     <term name="edition">版本</term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
+    <term name="first-reference-note-number" form="short">前注</term>
     <term name="number" form="short">
       <single>no.</single>
       <multiple>nos.</multiple>
     </term>
-    <term name="edition" form="short">本</term>
+    <term name="edition" form="short">版</term>
     <term name="et-al">等</term>
     <term name="forthcoming">即将出版</term>
     <term name="from">从</term>
@@ -95,101 +95,101 @@
     <term name="presented at">发表于</term>
     <term name="reference">参考</term>
     <term name="reference" form="short">参</term>
-    <term name="review-of">review of</term>
-    <term name="review-of" form="short">rev. of</term>
+    <term name="review-of">评论</term>
+    <term name="review-of" form="short">评</term>
     <term name="retrieved">取读于</term>
     <term name="scale">比例</term>
     <term name="version">版</term>
 
     <!-- LONG ITEM TYPE FORMS -->
-    <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
-    <term name="bill">bill</term>
+    <term name="article">预印本</term>
+    <term name="article-journal">期刊文章</term>
+    <term name="article-magazine">杂志文章</term>
+    <term name="article-newspaper">报纸文章</term>
+    <term name="bill">法案</term>
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">广播</term>
     <!-- chapter is in the list of locator terms -->
-    <term name="classic">classic</term>
-    <term name="collection">collection</term>
-    <term name="dataset">dataset</term>
-    <term name="document">document</term>
-    <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
-    <term name="event">event</term>
+    <term name="classic">古籍</term>
+    <term name="collection">馆藏</term>
+    <term name="dataset">数据集</term>
+    <term name="document">文档</term>
+    <term name="entry">词条</term>
+    <term name="entry-dictionary">字典词条</term>
+    <term name="entry-encyclopedia">百科词条</term>
+    <term name="event">活动</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic">graphic</term>
-    <term name="hearing">hearing</term>
+    <term name="graphic">视觉作品</term>
+    <term name="hearing">听证会</term>
     <term name="interview">访谈</term>
-    <term name="legal_case">legal case</term>
-    <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
-    <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
-    <term name="paper-conference">conference paper</term>
-    <term name="patent">patent</term>
-    <term name="performance">performance</term>
-    <term name="periodical">periodical</term>
+    <term name="legal_case">司法案例</term>
+    <term name="legislation">法律</term>
+    <term name="manuscript">手稿</term>
+    <term name="map">地图</term>
+    <term name="motion_picture">录像</term>
+    <term name="musical_score">乐谱</term>
+    <term name="pamphlet">小册子</term>
+    <term name="paper-conference">会议论文</term>
+    <term name="patent">专利</term>
+    <term name="performance">演出</term>
+    <term name="periodical">期刊</term>
     <term name="personal_communication">的私人交流</term>
-    <term name="post">post</term>
-    <term name="post-weblog">blog post</term>
-    <term name="regulation">regulation</term>
-    <term name="report">report</term>
-    <term name="review">review</term>
-    <term name="review-book">book review</term>
-    <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
-    <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="post">帖子</term>
+    <term name="post-weblog">博客帖子</term>
+    <term name="regulation">法规</term>
+    <term name="report">报告</term>
+    <term name="review">评论</term>
+    <term name="review-book">书评</term>
+    <term name="software">软件</term>
+    <term name="song">录音</term>
+    <term name="speech">演讲</term>
+    <term name="standard">标准</term>
+    <term name="thesis">学位论文</term>
+    <term name="treaty">条约</term>
+    <term name="webpage">网页</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
-    <term name="article-magazine" form="short">mag. art.</term>
-    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="article-journal" form="short">期刊文章</term>
+    <term name="article-magazine" form="short">杂志文章</term>
+    <term name="article-newspaper" form="short">报纸文章</term>
     <!-- book is in the list of locator terms -->
     <!-- chapter is in the list of locator terms -->
-    <term name="document" form="short">doc.</term>
+    <term name="document" form="short">文档</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic" form="short">graph.</term>
-    <term name="interview" form="short">interv.</term>
-    <term name="manuscript" form="short">MS</term>
-    <term name="motion_picture" form="short">video rec.</term>
-    <term name="report" form="short">rep.</term>
-    <term name="review" form="short">rev.</term>
-    <term name="review-book" form="short">bk. rev.</term>
-    <term name="song" form="short">audio rec.</term>
+    <term name="graphic" form="short">视觉作品</term>
+    <term name="interview" form="short">采访</term>
+    <term name="manuscript" form="short">手稿</term>
+    <term name="motion_picture" form="short">录像</term>
+    <term name="report" form="short">报告</term>
+    <term name="review" form="short">评论</term>
+    <term name="review-book" form="short">书评</term>
+    <term name="song" form="short">录音</term>
 
     <!-- VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
+    <term name="hearing" form="verb">听证会</term>
+    <term name="review" form="verb">评论</term>
+    <term name="review-book" form="verb">书评</term>
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">公元</term>
     <term name="bc">公元前</term>
-    <term name="bce">BCE</term>
-    <term name="ce">CE</term>
+    <term name="bce">公元前</term>
+    <term name="ce">公元</term>
 
     <!-- PUNCTUATION -->
     <term name="open-quote">《</term>
     <term name="close-quote">》</term>
     <term name="open-inner-quote">〈</term>
     <term name="close-inner-quote">〉</term>
-    <term name="page-range-delimiter">–</term>
-    <term name="colon">:</term>
-    <term name="comma">,</term>
-    <term name="semicolon">;</term>
+    <term name="page-range-delimiter">～</term>
+    <term name="colon">：</term>
+    <term name="comma">，</term>
+    <term name="semicolon">；</term>
 
     <!-- ORDINALS -->
     <term name="ordinal"></term>
-  
+
     <!-- LONG ORDINALS -->
     <term name="long-ordinal-01">一</term>
     <term name="long-ordinal-02">二</term>
@@ -203,131 +203,58 @@
     <term name="long-ordinal-10">十</term>
 
     <!-- LONG LOCATOR FORMS -->
-    <term name="act">			 
-      <single>act</single>
-      <multiple>acts</multiple>						 
-    </term>
-    <term name="appendix">			 
-      <single>appendix</single>
-      <multiple>appendices</multiple>						 
-    </term>
-    <term name="article-locator">			 
-      <single>article</single>
-      <multiple>articles</multiple>						 
-    </term>
-    <term name="canon">			 
-      <single>canon</single>
-      <multiple>canons</multiple>						 
-    </term>
-    <term name="elocation">			 
-      <single>location</single>
-      <multiple>locations</multiple>						 
-    </term>
-    <term name="equation">			 
-      <single>equation</single>
-      <multiple>equations</multiple>						 
-    </term>
-    <term name="rule">			 
-      <single>rule</single>
-      <multiple>rules</multiple>						 
-    </term>
-    <term name="scene">			 
-      <single>scene</single>
-      <multiple>scenes</multiple>						 
-    </term>
-    <term name="table">			 
-      <single>table</single>
-      <multiple>tables</multiple>						 
-    </term>
+    <term name="act">幕</term>
+    <term name="appendix">附录</term>
+    <term name="article-locator">条</term> <!-- 用于法律，如“《公司法》第 16 条” -->
+    <term name="canon">准则</term>
+    <term name="elocation">位置</term>
+    <term name="equation">公式</term>
+    <term name="rule">规则</term>
+    <term name="scene">场</term>
+    <term name="table">表格</term>
     <term name="timestamp"> <!-- generally blank -->
       <single></single>
-      <multiple></multiple>						 
+      <multiple></multiple>
     </term>
-    <term name="title-locator">			 
-      <single>title</single>
-      <multiple>titles</multiple>						 
-    </term>
+    <term name="title-locator">编</term> <!-- 用于法律，如“《美国法典》第19编” -->
     <term name="book">册</term>
     <term name="chapter">章</term>
     <term name="column">栏</term>
-    <term name="figure">图表</term>       
+    <term name="figure">图表</term>
     <term name="folio">版</term>
     <term name="issue">期</term>
     <term name="line">行</term>
     <term name="note">注脚</term>
-    <term name="opus">作品</term>      
+    <term name="opus">作品</term>
     <term name="page">页</term>
-    <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
-    </term>
-    <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
-    </term>
-    <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
-    </term>
-
-    <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
-    </term>
-    <term name="citation-number" form="short">
-      <single>cit.</single>
-      <multiple>cits.</multiple>
-    </term>
-    <term name="collection-number" form="short">期</term>
-    <term name="number-of-pages"> 总页数</term>      
+    <term name="number-of-volumes">卷</term>
+    <term name="page-first">页</term>
+    <term name="printing">编号</term>
+    <term name="chapter-number" form="short">章</term>
+    <term name="citation-number" form="short">引用</term>
+    <term name="collection-number" form="short">册</term>
+    <term name="number-of-pages"> 总页数</term>
     <term name="paragraph">段落</term>
-    <term name="part">部分</term>     
-    <term name="section">节</term>         
-    <term name="supplement">
-      <single>supplement</single>
-      <multiple>supplements</multiple>
-    </term>
-    <term name="sub-verbo">另见</term>    
-    <term name="verse">篇</term>    
+    <term name="part">部分</term>
+    <term name="section">节</term>
+    <term name="supplement">补充</term>
+    <term name="sub-verbo">另见</term>
+    <term name="verse">篇</term>
     <term name="volume">卷</term>
-    
+
     <!-- SHORT LOCATOR FORMS -->
-    <term name="appendix" form="short">			 
-      <single>app.</single>
-      <multiple>apps.</multiple>						 
-    </term>
-    <term name="article-locator" form="short">			 
-      <single>art.</single>
-      <multiple>arts.</multiple>
-    </term>
-    <term name="elocation" form="short">			 
-      <single>loc.</single>
-      <multiple>locs.</multiple>
-    </term>
-    <term name="equation" form="short">			 
-      <single>eq.</single>
-      <multiple>eqs.</multiple>
-    </term>
-    <term name="rule" form="short">			 
-      <single>r.</single>
-      <multiple>rr.</multiple>						 
-    </term>
-    <term name="scene" form="short">			 
-      <single>sc.</single>
-      <multiple>scs.</multiple>						 
-    </term>
-    <term name="table" form="short">			 
-      <single>tbl.</single>
-      <multiple>tbls.</multiple>						 
-    </term>
+    <term name="appendix" form="short">附录</term>
+    <term name="article-locator" form="short">条</term>
+    <term name="elocation" form="short">位置</term>
+    <term name="equation" form="short">式</term>
+    <term name="rule" form="short">规则</term>
+    <term name="scene" form="short">场</term>
+    <term name="table" form="short">表</term>
     <term name="timestamp" form="short"> <!-- generally blank -->
       <single></single>
-      <multiple></multiple>						 
+      <multiple></multiple>
     </term>
-    <term name="title-locator" form="short">			 
-      <single>tit.</single>
-      <multiple>tits.</multiple>
-    </term>
+    <term name="title-locator" form="short">编</term>
     <term name="book" form="short">册</term>
     <term name="chapter" form="short">章</term>
     <term name="column" form="short">栏</term>
@@ -337,179 +264,87 @@
     <term name="line" form="short">行</term>
     <term name="note" form="short">注</term>
     <term name="opus" form="short">op.</term>
-    <term name="page" form="short">页</term>   
-    <term name="number-of-volumes" form="short">
-      <single>vol.</single>
-      <multiple>vols.</multiple>
-    </term>
-    <term name="page-first" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
-    </term>
-    <term name="printing" form="short">
-      <single>print.</single>
-      <multiple>prints.</multiple>
-    </term>
-    
-
-    <term name="number-of-pages" form="short">共</term>    
+    <term name="page" form="short">页</term>
+    <term name="number-of-volumes" form="short">卷</term>
+    <term name="page-first" form="short">页</term>
+    <term name="printing" form="short">编号</term>
+    <term name="number-of-pages" form="short">共</term>
     <term name="paragraph" form="short">段</term>
     <term name="part" form="short">部</term>
     <term name="section" form="short">节</term>
-    <term name="supplement" form="short">
-      <single>supp.</single>
-      <multiple>supps.</multiple>
-    </term>
-    <term name="sub-verbo" form="short">另见</term>   
-    <term name="verse" form="short">篇</term>      
+    <term name="supplement" form="short">补充</term>
+    <term name="sub-verbo" form="short">另见</term>
+    <term name="verse" form="short">篇</term>
     <term name="volume" form="short">卷</term>
-    
+
     <!-- SYMBOL LOCATOR FORMS -->
     <term name="paragraph" form="symbol">
       <single>¶</single>
       <multiple>¶¶</multiple>
     </term>
-    <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
-    </term>
-    <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
-    </term>
-    <term name="collection-number">期</term>
+    <term name="chapter-number">章</term>
+    <term name="citation-number">引用</term>
+    <term name="collection-number">册</term>
     <term name="section" form="symbol">
       <single>§</single>
       <multiple>§§</multiple>
     </term>
 
     <!-- LONG ROLE FORMS -->
-    <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
-    </term>
-    <term name="chair">
-      <single>chair</single>
-      <multiple>chairs</multiple>
-    </term>
-    <term name="compiler">
-      <single>compiler</single>
-      <multiple>compilers</multiple>
-    </term>
-    <term name="contributor">
-      <single>contributor</single>
-      <multiple>contributors</multiple>
-    </term>
-    <term name="curator">
-      <single>curator</single>
-      <multiple>curators</multiple>
-    </term>
-    <term name="executive-producer">
-      <single>executive producer</single>
-      <multiple>executive producers</multiple>
-    </term>
-    <term name="guest">
-      <single>guest</single>
-      <multiple>guests</multiple>
-    </term>
-    <term name="host">
-      <single>host</single>
-      <multiple>hosts</multiple>
-    </term>
-    <term name="narrator">
-      <single>narrator</single>
-      <multiple>narrators</multiple>
-    </term>
-    <term name="organizer">
-      <single>organizer</single>
-      <multiple>organizers</multiple>
-    </term>
-    <term name="performer">
-      <single>performer</single>
-      <multiple>performers</multiple>
-    </term>
-    <term name="producer">
-      <single>producer</single>
-      <multiple>producers</multiple>
-    </term>
-    <term name="script-writer">
-      <single>writer</single>
-      <multiple>writers</multiple>
-    </term>
-    <term name="series-creator">
-      <single>series creator</single>
-      <multiple>series creators</multiple>
-    </term>
-    <term name="director">导演</term>     
-    <term name="editor">编辑</term> 
-    <term name="editorial-director">主编</term>     
-    <term name="illustrator">绘图</term>     
-    <term name="translator">翻译</term>      
-    <term name="editortranslator">编译</term>     
+    <term name="collection-editor">总编辑</term>
+    <term name="chair">主席</term>
+    <term name="compiler">编撰</term>
+    <term name="contributor">贡献者</term>
+    <term name="curator">策展人</term>
+    <term name="executive-producer">监制</term>
+    <term name="guest">嘉宾</term>
+    <term name="host">主持</term>
+    <term name="narrator">朗读者</term>
+    <term name="organizer">组织者</term>
+    <term name="performer">表演</term>
+    <term name="producer">制片人</term>
+    <term name="script-writer">编剧</term>
+    <term name="series-creator">创作</term>
+    <term name="director">导演</term>
+    <term name="editor">编辑</term>
+    <term name="editorial-director">主编</term>
+    <term name="illustrator">绘图</term>
+    <term name="translator">翻译</term>
+    <term name="editortranslator">编译</term>
 
     <!-- SHORT ROLE FORMS -->
-    <term name="compiler" form="short">
-      <single>comp.</single>
-      <multiple>comps.</multiple>
-    </term>
-    <term name="contributor" form="short">
-      <single>contrib.</single>
-      <multiple>contribs.</multiple>
-    </term>
-    <term name="curator" form="short">
-      <single>cur.</single>
-      <multiple>curs.</multiple>
-    </term>
-    <term name="executive-producer" form="short">
-      <single>exec. prod.</single>
-      <multiple>exec. prods.</multiple>
-    </term>
-    <term name="narrator" form="short">
-      <single>narr.</single>
-      <multiple>narrs.</multiple>
-    </term>
-    <term name="organizer" form="short">
-      <single>org.</single>
-      <multiple>orgs.</multiple>
-    </term>
-    <term name="performer" form="short">
-      <single>perf.</single>
-      <multiple>perfs.</multiple>
-    </term>
-    <term name="producer" form="short">
-      <single>prod.</single>
-      <multiple>prods.</multiple>
-    </term>
-    <term name="script-writer" form="short">
-      <single>writ.</single>
-      <multiple>writs.</multiple>
-    </term>
-    <term name="series-creator" form="short">
-      <single>cre.</single>
-      <multiple>cres.</multiple>
-    </term>
-    <term name="director" form="short">导演</term>     
-    <term name="editor" form="short">编</term>     
-    <term name="editorial-director" form="short">主编</term>     
-    <term name="illustrator" form="short">绘</term>   
-    <term name="translator" form="short">译</term>     
-    <term name="editortranslator" form="short">编译</term>    
+    <term name="compiler" form="short">编</term>
+    <term name="contributor" form="short">贡献</term>
+    <term name="curator" form="short">策展</term>
+    <term name="executive-producer" form="short">监制</term>
+    <term name="narrator" form="short">朗读</term>
+    <term name="organizer" form="short">组织</term>
+    <term name="performer" form="short">表演</term>
+    <term name="producer" form="short">制片人</term>
+    <term name="script-writer" form="short">编剧</term>
+    <term name="series-creator" form="short">创作</term>
+    <term name="director" form="short">导演</term>
+    <term name="editor" form="short">编</term>
+    <term name="editorial-director" form="short">主编</term>
+    <term name="illustrator" form="short">绘</term>
+    <term name="translator" form="short">译</term>
+    <term name="editortranslator" form="short">编译</term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb">edited by</term>
-    <term name="chair" form="verb">chaired by</term>
-    <term name="compiler" form="verb">compiled by</term>
-    <term name="contributor" form="verb">with</term>
-    <term name="curator" form="verb">curated by</term>
-    <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
-    <term name="host" form="verb">hosted by</term>
-    <term name="narrator" form="verb">narrated by</term>
-    <term name="organizer" form="verb">organized by</term>
-    <term name="performer" form="verb">performed by</term>
-    <term name="producer" form="verb">produced by</term>
-    <term name="script-writer" form="verb">written by</term>
-    <term name="series-creator" form="verb">created by</term>
+    <term name="collection-editor" form="verb">总编辑</term>
+    <term name="chair" form="verb">主席</term>
+    <term name="compiler" form="verb">编撰</term>
+    <term name="contributor" form="verb">贡献</term>
+    <term name="curator" form="verb">策展</term>
+    <term name="executive-producer" form="verb">监制</term>
+    <term name="guest" form="verb">嘉宾</term>
+    <term name="host" form="verb">主持</term>
+    <term name="narrator" form="verb">朗读</term>
+    <term name="organizer" form="verb">组织</term>
+    <term name="performer" form="verb">表演</term>
+    <term name="producer" form="verb">制片</term>
+    <term name="script-writer" form="verb">编剧</term>
+    <term name="series-creator" form="verb">创作</term>
     <term name="container-author" form="verb">著</term>
     <term name="director" form="verb">指导</term>
     <term name="editor" form="verb">编辑</term>
@@ -518,23 +353,23 @@
     <term name="interviewer" form="verb">采访</term>
     <term name="recipient" form="verb">受函</term>
     <term name="reviewed-author" form="verb">校订</term>
-    <term name="collection-editor" form="verb-short">ed. by</term>
+    <term name="collection-editor" form="verb-short">总编</term>
     <term name="translator" form="verb">翻译</term>
     <term name="editortranslator" form="verb">编译</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="compiler" form="verb-short">comp. by</term>
-    <term name="contributor" form="verb-short">w.</term>
-    <term name="curator" form="verb-short">cur. by</term>
-    <term name="executive-producer" form="verb-short">exec. prod. by</term>
-    <term name="guest" form="verb-short">w. guest</term>
-    <term name="host" form="verb-short">hosted by</term>
-    <term name="narrator" form="verb-short">narr. by</term>
-    <term name="organizer" form="verb-short">org. by</term>
-    <term name="performer" form="verb-short">perf. by</term>
-    <term name="producer" form="verb-short">prod. by</term>
-    <term name="script-writer" form="verb-short">writ. by</term>
-    <term name="series-creator" form="verb-short">cre. by</term>
+    <term name="compiler" form="verb-short">编</term>
+    <term name="contributor" form="verb-short">贡献</term>
+    <term name="curator" form="verb-short">策展</term>
+    <term name="executive-producer" form="verb-short">监制</term>
+    <term name="guest" form="verb-short">嘉宾</term>
+    <term name="host" form="verb-short">主持</term>
+    <term name="narrator" form="verb-short">朗读</term>
+    <term name="organizer" form="verb-short">组织</term>
+    <term name="performer" form="verb-short">表演</term>
+    <term name="producer" form="verb-short">制片</term>
+    <term name="script-writer" form="verb-short">编剧</term>
+    <term name="series-creator" form="verb-short">创作</term>
     <term name="director" form="verb-short">导</term>
     <term name="editor" form="verb-short">编</term>
     <term name="editorial-director" form="verb-short">主编</term>

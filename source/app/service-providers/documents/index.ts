@@ -21,7 +21,7 @@ import { constants as FSConstants } from 'fs'
 import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract, { type IPCAPI } from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import type AppServiceContainer from 'source/app/app-service-container'
+import { type AppServiceContainer } from '../../app-service-container'
 import { ipcMain, app, dialog, type BrowserWindow, type MessageBoxOptions } from 'electron'
 import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
@@ -905,6 +905,7 @@ current contents from the editor somewhere else, and restart the application.`
       if (result.response === 1) {
         // Clear the modification flag
         openFile.lastSavedVersion = openFile.currentVersion
+        this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
       } else if (result.response === 0) {
         await this.saveFile(filePath) // TODO: Check return status
       } else {

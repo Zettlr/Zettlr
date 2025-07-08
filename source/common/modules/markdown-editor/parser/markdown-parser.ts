@@ -165,9 +165,14 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         return null
       }
 
+      // Additional check: For simple info strings, we need to use the entire
+      // match, but if the user has opted for a fenced code attribute, we need
+      // to account for the dot in the beginning.
+      const infoLang = match[1].startsWith('.') ? match[1].slice(1) : match[1]
+
       // Return an adequate language
       for (const entry of codeLanguages) {
-        if (entry.selectors.includes(match[1])) {
+        if (entry.selectors.includes(infoLang)) {
           return entry.mode
         }
       }
