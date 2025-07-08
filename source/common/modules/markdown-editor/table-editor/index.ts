@@ -102,7 +102,8 @@ export const renderTables = [
         // Handler styles
         '& .handler': {
           position: 'absolute',
-          display: 'flex',
+          // display: 'flex',
+          display: 'none',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'grab',
