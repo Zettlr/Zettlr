@@ -127,7 +127,7 @@ export const renderTables = [
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          cursor: 'copy', // Usually makes a "+" cursor
+          cursor: 'pointer',
           padding: '3px',
           width: '21px',
           height: '21px',
