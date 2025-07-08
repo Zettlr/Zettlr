@@ -219,6 +219,11 @@ function updateRow (
       // we only have to save the cellFrom and cellTo to the TDs dataset each
       // time around (see below).
       td.addEventListener('mousedown', (e) => {
+        if (contentWrapper.classList.contains('editing')) {
+          // There is already a subview inside this cell to handle selections.
+          return
+        }
+
         e.preventDefault()
         e.stopPropagation()
         setSelectionToCell(td, cell, view)
@@ -347,6 +352,15 @@ function updateRow (
   }
 }
 
+/**
+ * Sets the selection into a targeted cell in preparation for instantiating a
+ * table editor here. This utility function attempts to set the cursor position
+ * as close as possible to the actual mouse cursor click coordinates.
+ *
+ * @param   {HTMLTableCellElement}  td    The table cell element
+ * @param   {TableCell}             cell  The table cell contents
+ * @param   {EditorView}            view  The editor view
+ */
 function setSelectionToCell (td: HTMLTableCellElement, cell: TableCell, view: EditorView): void {
   const from = parseInt(td.dataset.cellFrom ?? '0', 10)
   const cellTo = parseInt(td.dataset.cellTo ?? '0', 10)
