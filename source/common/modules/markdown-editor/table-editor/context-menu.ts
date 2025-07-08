@@ -6,7 +6,7 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
   const template: AnyMenuItem[] = [
     {
       type: 'submenu',
-      label: trans('Insert'),
+      label: trans('Row'),
       id: '',
       enabled: true,
       submenu: [
@@ -25,26 +25,6 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
         { type: 'separator' },
         {
           type: 'normal',
-          label: trans('Insert new column left'),
-          id: 'insert.col.left',
-          enabled: true
-        },
-        {
-          type: 'normal',
-          label: trans('Insert new column right'),
-          id: 'insert.col.right',
-          enabled: true
-        }
-      ]
-    },
-    {
-      type: 'submenu',
-      label: trans('Move'),
-      id: '',
-      enabled: true,
-      submenu: [
-        {
-          type: 'normal',
           label: trans('Move row up'),
           id: 'move.row.up',
           enabled: true
@@ -53,6 +33,39 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
           type: 'normal',
           label: trans('Move row down'),
           id: 'move.row.down',
+          enabled: true
+        },
+        { type: 'separator' },
+        {
+          type: 'normal',
+          label: trans('Clear row'),
+          id: 'clear.row',
+          enabled: true
+        },
+        {
+          type: 'normal',
+          label: trans('Delete row'),
+          id: 'delete.row',
+          enabled: true
+        }
+      ]
+    },
+    {
+      type: 'submenu',
+      label: trans('Column'),
+      id: '',
+      enabled: true,
+      submenu: [
+        {
+          type: 'normal',
+          label: trans('Insert new column left'),
+          id: 'insert.col.left',
+          enabled: true
+        },
+        {
+          type: 'normal',
+          label: trans('Insert new column right'),
+          id: 'insert.col.right',
           enabled: true
         },
         { type: 'separator' },
@@ -67,35 +80,8 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
           label: trans('Move column right'),
           id: 'move.col.right',
           enabled: true
-        }
-      ]
-    },
-    {
-      type: 'submenu',
-      label: trans('Sort'),
-      id: '',
-      enabled: true,
-      submenu: [
-        {
-          type: 'normal',
-          label: trans('Sort column A-Z'),
-          id: 'sort.col.asc',
-          enabled: true
         },
-        {
-          type: 'normal',
-          label: trans('Sort column Z-A'),
-          id: 'sort.col.desc',
-          enabled: true
-        }
-      ]
-    },
-    {
-      type: 'submenu',
-      label: trans('Align'),
-      id: '',
-      enabled: true,
-      submenu: [
+        { type: 'separator' },
         {
           type: 'normal',
           label: trans('Align column text left'),
@@ -113,21 +99,21 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
           label: trans('Align column text right'),
           id: 'align.col.right',
           enabled: true
-        }
-      ]
-    },
-    {
-      type: 'submenu',
-      label: trans('Clear'),
-      id: '',
-      enabled: true,
-      submenu: [
+        },
+        { type: 'separator' },
         {
           type: 'normal',
-          label: trans('Clear row'),
-          id: 'clear.row',
+          label: trans('Sort column A-Z'),
+          id: 'sort.col.asc',
           enabled: true
         },
+        {
+          type: 'normal',
+          label: trans('Sort column Z-A'),
+          id: 'sort.col.desc',
+          enabled: true
+        },
+        { type: 'separator' },
         {
           type: 'normal',
           label: trans('Clear column'),
@@ -136,28 +122,22 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
         },
         {
           type: 'normal',
-          label: trans('Clear table'),
-          id: 'clear.table',
+          label: trans('Delete column'),
+          id: 'delete.col',
           enabled: true
-        },
+        }
       ]
     },
     {
       type: 'submenu',
-      label: trans('Delete'),
+      label: trans('Table'),
       id: '',
       enabled: true,
       submenu: [
         {
           type: 'normal',
-          label: trans('Delete row'),
-          id: 'delete.row',
-          enabled: true
-        },
-        {
-          type: 'normal',
-          label: trans('Delete column'),
-          id: 'delete.col',
+          label: trans('Clear table'),
+          id: 'clear.table',
           enabled: true
         },
         {
