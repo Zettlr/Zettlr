@@ -24,11 +24,11 @@ import type { SyntaxNode } from '@lezer/common'
  * argument that then applies the provided alignment to the corresponding table
  * column in which the selection resides.
  *
- * @param   {'left'|'right'|'center'}  which  Which alignment this should apply
+ * @param   {'left'|'right'|'center'}  alignTo  Which alignment this should apply
  *
- * @return  {(EditorView): boolean}           A CodeMirror compatible command function
+ * @return  {(EditorView): boolean}             A CodeMirror compatible command function
  */
-export function setAlignment (which: 'left'|'right'|'center'): (target: EditorView) => boolean {
+export function setAlignment (alignTo: 'left'|'right'|'center'): (target: EditorView) => boolean {
   return (target) => {
     const changes = mapSelectionsWithTables<ChangeSpec>(target, ctx => {
       const delimNodes = ctx.tableNode.getChildren('TableDelimiter')
@@ -54,9 +54,9 @@ export function setAlignment (which: 'left'|'right'|'center'): (target: EditorVi
       const fillChar = ctx.tableAST.tableType === 'grid' ? '=' : '-'
       const delimOffsets = getDelimiterLineCellOffsets(delimLine, delimChar)
       const [ from, to ] = delimOffsets[idx]
-      if (which === 'left') {
+      if (alignTo === 'left') {
         return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(to - from) }
-      } else if (which === 'right') {
+      } else if (alignTo === 'right') {
         return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(to - from - 1) + ':' }
       } else {
         return { from: node.from + from, to: node.from + to, insert: ':' + fillChar.repeat(to - from - 2) + ':' }
