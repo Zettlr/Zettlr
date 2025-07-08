@@ -39,11 +39,12 @@ export function dispatchFromSubview (mainView: EditorView): (tr: Transaction, su
 }
 
 /**
-* This function takes an EditorView that is acting as a slave to some main
-* EditorView in which the TableEditor is running and applies all provided
-* transactions one by one to the subview, ensuring to tag the transactions with
-* a syncAnnotation to signal to the subview that it should not re-emit those
-* transactions.
+* This function takes a transaction coming from the main EditorView (i.e., the
+* document itself), and applies that transaction to a subview (i.e., an
+* EditorView that only handles editing a single table cell). It does not apply
+* transactions marked as syncAnnotation (because those originate from the
+* subview and thus cannot be applied again), or which neither change nor add
+* effects to the document (effects are only relevant to the main editor).
 *
 * @param  {EditorView}   subview  The subview to have the transaction applied to
 * @param  {Transaction}  tr       The transaction from the main view
