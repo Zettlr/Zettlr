@@ -23,7 +23,6 @@ import type { SyntaxNode } from '@lezer/common'
 import type { Table, TableRow, TableCell, TextNode } from '../markdown-ast'
 import { genericTextNode } from './generic-text-node'
 import { parseChildren } from './parse-children'
-// import { logLezerTree } from './debug-tree-logger'
 
 /**
  * Parses a SyntaxNode of name "Table". NOTE the following caveats:
