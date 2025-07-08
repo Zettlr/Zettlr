@@ -86,29 +86,18 @@ export const renderTables = [
       borderCollapse: 'collapse',
       // Implement Artem's theme
       '& td, & th': {
+        cursor: 'text',
         color: '#3a3a3a',
         position: 'relative',
         border: `1px solid ${COLORS.colorNeutral08}`,
         padding: '0px',
         minWidth: '96px',
-        outlineOffset: '-0.5px',
-        zIndex: '0',
-        '&:hover': {
-          outline: `1px solid ${COLORS.colorNeutral17}`,
-          zIndex: '100',
-        },
-        '&:focus-within, &:focus-visible': {
-          outline: `1px solid ${COLORS.colorAccent500}`,
-          outlineColor: '#1cb27e',
-          boxShadow: `inset 0 0 0 1px var(${COLORS.colorAccent500})`,
-          '&:hover': {
-            outline: `1px solid ${COLORS.colorAccent400}`,
-            boxShadow: `inset 0 0 0 1px var(${COLORS.colorAccent400})`
-          }
-        },
         // Content wrapper styles
         '& div.content': {
-          padding: '12px 16px'
+          padding: '4px 6px',
+          '&.editing': {
+            paddingLeft: '0px'
+          }
         },
         // Handler styles
         '& .handler': {
@@ -147,9 +136,7 @@ export const renderTables = [
           '&.left': { top: '-21px', left: '-10.5px' },
           '&.right': { top: '-21px', right: '-10.5px' }
         }
-      },
-      '& th': { backgroundColor: COLORS.colorNeutral04 },
-      '& tr:nth-child(2n+1) td': { backgroundColor: COLORS.colorNeutral02 }
+      }
     },
     // Override the large margins from the main editor view
     '.cm-content .cm-table-editor-widget-wrapper .cm-scroller': { padding: '0' },
@@ -159,19 +146,8 @@ export const renderTables = [
       // Implement Artem's theme
       '& td, & th': {
         color: '#d6d6d6',
-        border: `1px solid ${COLORS.colorNeutral22}`,
-        '&:hover': { outline: `1px solid ${COLORS.colorNeutral13}`, },
-        '&:focus-within, &:focus-visible': {
-          outline: `1px solid ${COLORS.colorAccent600}`,
-          boxShadow: `inset 0 0 0 1px var(${COLORS.colorAccent600})`,
-          '&:hover': {
-            outline: `1px solid ${COLORS.colorAccent500}`,
-            boxShadow: `inset 0 0 0 1px var(${COLORS.colorAccent500})`
-          }
-        }
-      },
-      '& th': { backgroundColor: COLORS.colorNeutral24 },
-      '& tr:nth-child(2n+1) td': { backgroundColor: COLORS.colorNeutral27 }
+        border: `1px solid ${COLORS.colorNeutral22}`
+      }
     }
   }),
   subviewUpdatePlugin
