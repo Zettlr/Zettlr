@@ -99,8 +99,8 @@ export const renderTables = [
             paddingLeft: '0px'
           }
         },
-        // Handler styles
-        '& .handler': {
+        // Grab handle styles
+        '& .grab-handle': {
           position: 'absolute',
           // display: 'flex',
           display: 'none',

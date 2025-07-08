@@ -143,9 +143,9 @@ export class TableWidget extends WidgetType {
  */
 function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView): void {
   // Before we get started in updating the table, we need to find and remove all
-  // handler elements we have in the table. They will be re-inserted in the
+  // handle elements we have in the table. They will be re-inserted in the
   // updateRow function calls below.
-  table.querySelectorAll('div.handler').forEach(handler => handler.parentElement!.removeChild(handler))
+  table.querySelectorAll('div.grab-handle').forEach(handle => handle.parentElement!.removeChild(handle))
   table.querySelectorAll('div.plus').forEach(plus => plus.parentElement!.removeChild(plus))
 
   const trs = [...table.querySelectorAll('tr')]
@@ -214,7 +214,7 @@ function updateRow (
       const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
 
-      // NOTE: This handler gets attached once and then remains on the TD for
+      // NOTE: This handle gets attached once and then remains on the TD for
       // the existence of the table. Since the `view` will always be the same,
       // we only have to save the cellFrom and cellTo to the TDs dataset each
       // time around (see below).
@@ -296,7 +296,7 @@ function updateRow (
     }
 
     // At this point, there is guaranteed to be an element at i. We need to do
-    // // two update operations here. First, insert handlers to first row/col
+    // // two update operations here. First, insert handles to first row/col
     // cells, and second verify if we have to simply transfer the contents, or
     // add/remove a subview in this cell based on selection.
     if (idx === 0 && col === i) {

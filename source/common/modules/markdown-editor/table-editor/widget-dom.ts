@@ -20,18 +20,18 @@ export function generateEmptyTableWidgetElement (): { wrapper: HTMLDivElement, t
 
 /**
  * Generates the column modification buttons (add left, add right, and the grab
- * handler).
+ * handle).
  *
  * @param   {EditorView}     view  The EditorView to trigger the corresponding
  *                                 commands on.
  *
- * @return  {HTMLElement[]}        The list of handlers, need to be attached to
+ * @return  {HTMLElement[]}        The list of handles, need to be attached to
  *                                 the table cell element.
  */
 export function generateColumnModifiers (view: EditorView): HTMLElement[] {
-  const handler = document.createElement('div')
-  handler.classList.add('handler', 'column')
-  handler.innerHTML = arrowsIcon
+  const grabHandle = document.createElement('div')
+  grabHandle.classList.add('grab-handle', 'column')
+  grabHandle.innerHTML = arrowsIcon
 
   const addButtonLeft = document.createElement('div')
   addButtonLeft.classList.add('plus', 'left')
@@ -51,23 +51,23 @@ export function generateColumnModifiers (view: EditorView): HTMLElement[] {
     addColAfter(view)
   })
 
-  return [ handler, addButtonLeft, addButtonRight ]
+  return [ grabHandle, addButtonLeft, addButtonRight ]
 }
 
 /**
  * Generates the row modification buttons (add top, add bottom, and the grab
- * handler).
+ * handle).
  *
  * @param   {EditorView}     view  The EditorView to trigger the corresponding
  *                                 commands on.
  *
- * @return  {HTMLElement[]}        The list of handlers, need to be attached to
+ * @return  {HTMLElement[]}        The list of handles, need to be attached to
  *                                 the table cell element.
  */
 export function generateRowModifiers (view: EditorView): HTMLElement[] {
-  const handler = document.createElement('div')
-  handler.classList.add('handler', 'row')
-  handler.innerHTML = arrowsIcon
+  const grabHandle = document.createElement('div')
+  grabHandle.classList.add('grab-handle', 'row')
+  grabHandle.innerHTML = arrowsIcon
 
   const addButtonTop = document.createElement('div')
   addButtonTop.classList.add('plus', 'top')
@@ -87,5 +87,5 @@ export function generateRowModifiers (view: EditorView): HTMLElement[] {
     addRowAfter(view)
   })
 
-  return [ handler, addButtonTop, addButtonBottom ]
+  return [ grabHandle, addButtonTop, addButtonBottom ]
 }
