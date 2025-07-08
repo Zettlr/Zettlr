@@ -22,7 +22,7 @@ import { parseTableNode } from '../../markdown-utils/markdown-ast/parse-table-no
 import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
 import { createSubviewForCell, hiddenSpanField } from './subview'
 import { getCoordinatesForRange } from './commands/util'
-import { generateColumnModifiers, generateEmptyTableWidgetElement, generateRowModifiers } from './widget-dom'
+import { generateColumnControls, generateEmptyTableWidgetElement, generateRowControls } from './widget-dom'
 import { displayTableContextMenu } from './context-menu'
 import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCol } from './commands/columns'
 import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRow } from './commands/rows'
@@ -301,14 +301,14 @@ function updateRow (
     // add/remove a subview in this cell based on selection.
     if (idx === 0 && col === i) {
       // Selection is in this column
-      for (const elem of generateColumnModifiers(view)) {
+      for (const elem of generateColumnControls(view)) {
         tds[i].appendChild(elem)
       }
     }
     
     if (i === 0 && row === idx) {
       // Selection is in this row
-      for (const elem of generateRowModifiers(view)) {
+      for (const elem of generateRowControls(view)) {
         tds[i].appendChild(elem)
       }
     }

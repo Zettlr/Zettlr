@@ -28,7 +28,7 @@ export function generateEmptyTableWidgetElement (): { wrapper: HTMLDivElement, t
  * @return  {HTMLElement[]}        The list of handles, need to be attached to
  *                                 the table cell element.
  */
-export function generateColumnModifiers (view: EditorView): HTMLElement[] {
+export function generateColumnControls (view: EditorView): HTMLElement[] {
   const grabHandle = document.createElement('div')
   grabHandle.classList.add('grab-handle', 'column')
   grabHandle.innerHTML = arrowsIcon
@@ -64,7 +64,7 @@ export function generateColumnModifiers (view: EditorView): HTMLElement[] {
  * @return  {HTMLElement[]}        The list of handles, need to be attached to
  *                                 the table cell element.
  */
-export function generateRowModifiers (view: EditorView): HTMLElement[] {
+export function generateRowControls (view: EditorView): HTMLElement[] {
   const grabHandle = document.createElement('div')
   grabHandle.classList.add('grab-handle', 'row')
   grabHandle.innerHTML = arrowsIcon
