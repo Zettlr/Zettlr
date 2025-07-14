@@ -15,6 +15,9 @@
   platforms other than macOS during application restarts (#570).
 - Fixed the list of related files disappearing when switching sidebar tabs
   (#5795).
+- Windows will now receive black as their background color on Windows and Linux
+  if dark mode is active, preventing white flicker during window opening before
+  the UI is ready (#5809).
 
 ## Under the Hood
 
