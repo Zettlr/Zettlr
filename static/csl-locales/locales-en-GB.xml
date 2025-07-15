@@ -4,7 +4,7 @@
   <!-- Additional abbreviations are from:
         1. Oxford Dictionary for Writers and Editors (2000), https://archive.org/details/oxfordstylemanua0000unse (cited hereafter as ODWE). NODWE is an abridged version of ODWE, meaning that the earlier edition still provides useful recommendations in some specialized fields, especially law. Periods must be removed from contractions to reflect current British English usage (a convention that the dictionary adopted with NODWE in 2005).
         2. Oxford Dictionary of Abbreviations (2011), https://doi.org/10.1093/acref/9780199698295.001.0001 (cited hereafter as ODA).
-        3. The Chicago Manual of Style, 18th ed. (2024), sec. 10.48, https://www.chicagomanualofstyle.org (cited hereafter as CMOS), the foundational source for the en-US CSL locale.
+        3. The Chicago Manual of Style, 18th edn (2024), sect. 10.48, https://www.chicagomanualofstyle.org (cited hereafter as CMOS), the foundational source for the en-US CSL locale.
   -->
   <info>
     <translator>
@@ -117,7 +117,7 @@
     <term name="review-of" form="short">rev. of</term>
     <term name="scale" form="short">sc.</term> <!-- ODA -->
     <term name="special-issue" form="short">spec. iss.</term> <!-- ODA -->
-    <term name="special-section" form="short">spec. sec.</term> <!-- ODA/CMOS -->
+    <term name="special-section" form="short">spec. sect.</term> <!-- ODA/CMOS -->
     <term name="television-broadcast" form="short">TV bdcst</term> <!-- ODA -->
     <term name="television-series" form="short">TV ser.</term> <!-- ODA -->
     <term name="television-series-episode" form="short">TV ser. ep.</term> <!-- ODA -->
@@ -227,10 +227,10 @@
     <term name="review-book" form="verb-short">rev. of the bk</term>
 
     <!-- HISTORICAL ERA TERMS -->
-    <term name="ad">AD</term>
-    <term name="bc">BC</term>
-    <term name="bce">BCE</term>
-    <term name="ce">CE</term>
+    <term name="ad"> AD</term>
+    <term name="bc"> BC</term>
+    <term name="bce"> BCE</term>
+    <term name="ce"> CE</term>
 
     <!-- PUNCTUATION -->
     <term name="open-quote">‘</term>
@@ -451,7 +451,7 @@
       <multiple>pts</multiple>
     </term>
     <term name="rule" form="short">
-      <!-- legal abbreviations in the Oxford Guide to Style, sec. 13.2.1 -->
+      <!-- legal abbreviations in the Oxford Guide to Style, sect. 13.2.1 -->
       <single>r.</single>
       <multiple>rr.</multiple>
     </term>
@@ -818,7 +818,7 @@
     <term name="month-12">December</term>
 
     <!-- SHORT MONTH FORMS -->
-    <!-- New Hart's Rules, 2nd ed., sec. 10.2.6 summarizes NODWE recommendations; identical to CMOS 10.44 -->
+    <!-- New Hart's Rules, 2nd edn, sect. 10.2.6 summarizes NODWE recommendations; identical to CMOS 10.44 -->
     <term name="month-01" form="short">Jan.</term>
     <term name="month-02" form="short">Feb.</term>
     <term name="month-03" form="short">Mar.</term>

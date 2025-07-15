@@ -7,13 +7,16 @@
     <translator>
       <name>javimat</name>
     </translator>
+    <translator>
+      <name>jotaemi</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
     <updated>2012-07-04T23:31:02+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
-    <date-part name="day" suffix=" "/>
-    <date-part name="month" suffix=" "/>
+    <date-part name="day" suffix=" de "/>
+    <date-part name="month" suffix=" de "/>
     <date-part name="year"/>
   </date>
   <date form="numeric">
@@ -22,32 +25,32 @@
     <date-part name="year"/>
   </date>
   <terms>
-    <term name="advance-online-publication">advance online publication</term>
-    <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
-    <term name="film">film</term>
-    <term name="henceforth">henceforth</term>
+    <term name="advance-online-publication">avançament de publicació en línia</term>
+    <term name="album">àlbum</term>
+    <term name="audio-recording">enregistrament d'àudio</term>
+    <term name="film">pel·lícula</term>
+    <term name="henceforth">en endevant</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
-    <term name="on">on</term>
+    <term name="no-place">sense lloc</term>
+    <term name="no-place" form="short">s.l.</term>
+    <term name="no-publisher">sense nom</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">s.n.</term>
+    <term name="on">a</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="original-work-published">obra original publicada el</term>
     <term name="personal-communication">comunicació personal</term>
-    <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
+    <term name="podcast">pòdcast</term>
+    <term name="podcast-episode">capítol de pòdcast</term>
     <term name="preprint">preprint</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
-    <term name="video">video</term>
+    <term name="radio-broadcast">emissió de ràdio</term>
+    <term name="radio-series">sèrie de ràdio</term>
+    <term name="radio-series-episode">capítol de sèrie de ràdio</term>
+    <term name="special-issue">número especial</term>
+    <term name="special-section">secció especial</term>
+    <term name="television-broadcast">emissió de televisió</term>
+    <term name="television-series">sèrie de televisió</term>
+    <term name="television-series-episode">capítol de sèrie de televisió</term>
+    <term name="video">vídeo</term>
     <term name="working-paper">working paper</term>
     <term name="accessed">consulta</term>
     <term name="and">i</term>
@@ -61,14 +64,14 @@
     <term name="circa" form="short">c.</term>
     <term name="cited">citat</term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>referència</single>
+      <multiple>referències</multiple>
     </term>
-    <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
+    <term name="number" gender="masculine">
+      <single>número</single>
+      <multiple>números</multiple>
     </term>
-    <term name="edition">
+    <term name="edition" gender="feminine">
       <single>edició</single>
       <multiple>edicions</multiple>
     </term>
@@ -77,8 +80,8 @@
       <multiple>refs.</multiple>
     </term>
     <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
+      <single>núm.</single>
+      <multiple>núms.</multiple>
     </term>
     <term name="edition" form="short">ed.</term>
     <term name="et-al">et al.</term>
@@ -101,81 +104,81 @@
       <single>ref.</single>
       <multiple>ref.</multiple>
     </term>
-    <term name="review-of">review of</term>
-    <term name="review-of" form="short">rev. of</term>
+    <term name="review-of">ressenya de</term>
+    <term name="review-of" form="short">res. de</term>
     <term name="retrieved">recuperat</term>
     <term name="scale">escala</term>
     <term name="version">versió</term>
 
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
-    <term name="bill">bill</term>
+    <term name="article-journal">article de revista acadèmica</term>
+    <term name="article-magazine">article de revista</term>
+    <term name="article-newspaper">article de diari</term>
+    <term name="bill">projecte de llei</term> <!-- Caldria comprovar si és la millor traducció -->
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">emissió</term>
     <!-- chapter is in the list of locator terms -->
-    <term name="classic">classic</term>
-    <term name="collection">collection</term>
+    <term name="classic">clàssic</term>
+    <term name="collection">col·lecció</term>
     <term name="dataset">dataset</term>
     <term name="document">document</term>
-    <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
-    <term name="event">event</term>
+    <term name="entry">entrada</term>
+    <term name="entry-dictionary">entrada de diccionari</term>
+    <term name="entry-encyclopedia">entrada d'enciclopèdia</term>
+    <term name="event" >esdeveniment</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic">graphic</term>
-    <term name="hearing">hearing</term>
+    <term name="graphic">gràfic</term>
+    <term name="hearing">vista</term>
     <term name="interview">entrevista</term>
-    <term name="legal_case">legal case</term>
-    <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
-    <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
-    <term name="paper-conference">conference paper</term>
+    <term name="legal_case">causa judicial</term>
+    <term name="legislation" >legislació</term>
+    <term name="manuscript">manuscrit</term>
+    <term name="map">mapa</term>
+    <term name="motion_picture">enregistrament de vídeo</term>
+    <term name="musical_score">partitura musical</term>
+    <term name="pamphlet">fullet</term>
+    <term name="paper-conference">comunicació</term>
     <term name="patent">patent</term>
-    <term name="performance">performance</term>
-    <term name="periodical">periodical</term>
+    <term name="performance">actuació</term>
+    <term name="periodical">periòdic</term>
     <term name="personal_communication">comunicació personal</term>
     <term name="post">post</term>
-    <term name="post-weblog">blog post</term>
-    <term name="regulation">regulation</term>
-    <term name="report">report</term>
-    <term name="review">review</term>
-    <term name="review-book">book review</term>
-    <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
-    <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="post-weblog">entrada de blog</term>
+    <term name="regulation">regulació</term>
+    <term name="report">informe</term>
+    <term name="review">revisió</term>
+    <term name="review-book">ressenya de llibre</term>
+    <term name="software">programari</term>
+    <term name="song">enregistrament d'àudio</term>
+    <term name="speech">presentació</term>
+    <term name="standard">estàndard</term>
+    <term name="thesis">tesi</term>
+    <term name="treaty">tractat</term>
+    <term name="webpage">lloc web</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
-    <term name="article-magazine" form="short">mag. art.</term>
-    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="article-journal" form="short">art. acad.</term>
+    <term name="article-magazine" form="short">art. rev.</term>
+    <term name="article-newspaper" form="short">art. diari</term>
     <!-- book is in the list of locator terms -->
     <!-- chapter is in the list of locator terms -->
     <term name="document" form="short">doc.</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic" form="short">graph.</term>
-    <term name="interview" form="short">interv.</term>
-    <term name="manuscript" form="short">MS</term>
-    <term name="motion_picture" form="short">video rec.</term>
-    <term name="report" form="short">rep.</term>
+    <term name="graphic" form="short">graf.</term>
+    <term name="interview" form="short">entr.</term>
+    <term name="manuscript" form="short">manus.</term>
+    <term name="motion_picture" form="short">video</term>
+    <term name="report" form="short">inf.</term>
     <term name="review" form="short">rev.</term>
-    <term name="review-book" form="short">bk. rev.</term>
-    <term name="song" form="short">audio rec.</term>
+    <term name="review-book" form="short">res.</term>
+    <term name="song" form="short">àudio</term>
 
     <!-- VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
+    <term name="hearing" form="verb">testimoni de</term>
+    <term name="review" form="verb">revisió de</term>
+    <term name="review-book" form="verb">ressenya del llibre</term>
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">dC</term>
@@ -194,64 +197,80 @@
     <term name="semicolon">;</term>
 
     <!-- ORDINALS -->
-    <term name="ordinal">a</term>
+    <term name="ordinal" gender-form="feminine">a</term>
+    <term name="ordinal-01" gender-form="masculine">r</term>
+    <term name="ordinal-02" gender-form="masculine">n</term>
+    <term name="ordinal-03" gender-form="masculine">r</term>
+    <term name="ordinal-04" gender-form="masculine">t</term>
+    <term name="ordinal" gender-form="masculine">è</term>
 
     <!-- LONG ORDINALS -->
-    <term name="long-ordinal-01">primera</term>
-    <term name="long-ordinal-02">segona</term>
-    <term name="long-ordinal-03">tercera</term>
-    <term name="long-ordinal-04">quarta</term>
-    <term name="long-ordinal-05">cinquena</term>
-    <term name="long-ordinal-06">sisena</term>
-    <term name="long-ordinal-07">setena</term>
-    <term name="long-ordinal-08">vuitena</term>
-    <term name="long-ordinal-09">novena</term>
-    <term name="long-ordinal-10">desena</term>
+    <term name="long-ordinal-01" gender-form="feminine">primera</term>
+    <term name="long-ordinal-02" gender-form="feminine">segona</term>
+    <term name="long-ordinal-03" gender-form="feminine">tercera</term>
+    <term name="long-ordinal-04" gender-form="feminine">quarta</term>
+    <term name="long-ordinal-05" gender-form="feminine">cinquena</term>
+    <term name="long-ordinal-06" gender-form="feminine">sisena</term>
+    <term name="long-ordinal-07" gender-form="feminine">setena</term>
+    <term name="long-ordinal-08" gender-form="feminine">vuitena</term>
+    <term name="long-ordinal-09" gender-form="feminine">novena</term>
+    <term name="long-ordinal-10" gender-form="feminine">desena</term>
+    
+    <term name="long-ordinal-01" gender-form="masculine">primer</term>
+    <term name="long-ordinal-02" gender-form="masculine">segon</term>
+    <term name="long-ordinal-03" gender-form="masculine">tercer</term>
+    <term name="long-ordinal-04" gender-form="masculine">quart</term>
+    <term name="long-ordinal-05" gender-form="masculine">cinquè</term>
+    <term name="long-ordinal-06" gender-form="masculine">sisè</term>
+    <term name="long-ordinal-07" gender-form="masculine">setè</term>
+    <term name="long-ordinal-08" gender-form="masculine">vuitè</term>
+    <term name="long-ordinal-09" gender-form="masculine">novè</term>
+    <term name="long-ordinal-10" gender-form="masculine">desè</term>
 
     <!-- LONG LOCATOR FORMS -->
     <term name="act">			 
-      <single>act</single>
-      <multiple>acts</multiple>						 
+      <single>acte</single>
+      <multiple>actes</multiple>						 
     </term>
     <term name="appendix">			 
-      <single>appendix</single>
-      <multiple>appendices</multiple>						 
+      <single>apèndix</single>
+      <multiple>apèndixs</multiple>						 
     </term>
     <term name="article-locator">			 
       <single>article</single>
       <multiple>articles</multiple>						 
     </term>
     <term name="canon">			 
-      <single>canon</single>
-      <multiple>canons</multiple>						 
+      <single>cànon</single>
+      <multiple>cànons</multiple>						 
     </term>
     <term name="elocation">			 
-      <single>location</single>
-      <multiple>locations</multiple>						 
+      <single>localització</single>
+      <multiple>localitzacions</multiple>						 
     </term>
     <term name="equation">			 
-      <single>equation</single>
-      <multiple>equations</multiple>						 
+      <single>equació</single>
+      <multiple>equacions</multiple>						 
     </term>
-    <term name="rule">			 
-      <single>rule</single>
-      <multiple>rules</multiple>						 
+    <term name="rule"> <!-- Caldria comprovar si és la millor traducció -->		 
+      <single>norma</single>
+      <multiple>normes</multiple>						 
     </term>
     <term name="scene">			 
-      <single>scene</single>
-      <multiple>scenes</multiple>						 
+      <single>escena</single>
+      <multiple>escenes</multiple>						 
     </term>
     <term name="table">			 
-      <single>table</single>
-      <multiple>tables</multiple>						 
+      <single>taula</single>
+      <multiple>taules</multiple>						 
     </term>
     <term name="timestamp"> <!-- generally blank -->
       <single></single>
       <multiple></multiple>						 
     </term>
     <term name="title-locator">			 
-      <single>title</single>
-      <multiple>titles</multiple>						 
+      <single>títol</single>
+      <multiple>títols</multiple>						 
     </term>
     <term name="book">
       <single>llibre</single>
@@ -294,21 +313,21 @@
       <multiple>pàgines</multiple>
     </term>
     <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
+      <single>volum</single>
+      <multiple>volums</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>pàgina</single>
+      <multiple>pàgines</multiple>
     </term>
     <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
+      <single>impressió</single>
+      <multiple>impressions</multiple>
     </term>
 
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>cap.</single>
+      <multiple>caps.</multiple>
     </term>
     <term name="citation-number" form="short">
       <single>cit.</single>
@@ -332,8 +351,8 @@
       <multiple>seccions</multiple>
     </term>
     <term name="supplement">
-      <single>supplement</single>
-      <multiple>supplements</multiple>
+      <single>suplement</single>
+      <multiple>suplements</multiple>
     </term>
     <term name="sub-verbo">
       <single>sub voce</single>
@@ -343,15 +362,15 @@
       <single>vers</single>
       <multiple>versos</multiple>
     </term>
-    <term name="volume">
+    <term name="volume" gender="masculine">
       <single>volum</single>
       <multiple>volums</multiple>
     </term>
 
     <!-- SHORT LOCATOR FORMS -->
     <term name="appendix" form="short">			 
-      <single>app.</single>
-      <multiple>apps.</multiple>						 
+      <single>ap.</single>
+      <multiple>aps.</multiple>						 
     </term>
     <term name="article-locator" form="short">			 
       <single>art.</single>
@@ -404,7 +423,7 @@
     </term>
     <term name="page-first" form="short">
       <single>p.</single>
-      <multiple>pp.</multiple>
+      <multiple>p.</multiple>
     </term>
     <term name="printing" form="short">
       <single>print.</single>
@@ -420,8 +439,8 @@
     <term name="part" form="short">pt.</term>
     <term name="section" form="short">sec.</term>
     <term name="supplement" form="short">
-      <single>supp.</single>
-      <multiple>supps.</multiple>
+      <single>sup.</single>
+      <multiple>sups.</multiple>
     </term>
     <term name="sub-verbo" form="short">
       <single>s.v.</single>
@@ -442,12 +461,12 @@
       <multiple>§</multiple>
     </term>
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>capítol</single>
+      <multiple>capítols</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>cita</single>
+      <multiple>cites</multiple>
     </term>
     <term name="collection-number">
       <single>número</single>
@@ -458,7 +477,7 @@
       <multiple>§</multiple>
     </term>
 
-    <!-- LONG ROLE FORMS -->
+    <!-- LONG ROLE FORMS --> <!-- Pendents de traducció a manca de solucions sense marca de gènere -->
     <term name="collection-editor">
       <single>ed.</single>
       <multiple>eds.</multiple>
@@ -607,20 +626,20 @@
     </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb">edited by</term>
-    <term name="chair" form="verb">chaired by</term>
-    <term name="compiler" form="verb">compiled by</term>
-    <term name="contributor" form="verb">with</term>
-    <term name="curator" form="verb">curated by</term>
-    <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
-    <term name="host" form="verb">hosted by</term>
-    <term name="narrator" form="verb">narrated by</term>
-    <term name="organizer" form="verb">organized by</term>
-    <term name="performer" form="verb">performed by</term>
-    <term name="producer" form="verb">produced by</term>
-    <term name="script-writer" form="verb">written by</term>
-    <term name="series-creator" form="verb">created by</term>
+    <term name="collection-editor" form="verb">editat per</term>
+    <term name="chair" form="verb">chaired by</term> <!-- Pendent de traducció per desconeixement del context -->
+    <term name="compiler" form="verb">compilat per</term>
+    <term name="contributor" form="verb">amb</term>
+    <term name="curator" form="verb">curat per</term>
+    <term name="executive-producer" form="verb">producció executiva de</term>
+    <term name="guest" form="verb">amb la participació de</term>
+    <term name="host" form="verb">presentat per</term>
+    <term name="narrator" form="verb">narrat per</term>
+    <term name="organizer" form="verb">organitzat per</term>
+    <term name="performer" form="verb">representat per</term>
+    <term name="producer" form="verb">produït per</term>
+    <term name="script-writer" form="verb">escrit per</term>
+    <term name="series-creator" form="verb">creat per</term>
     <term name="container-author" form="verb">per</term>
     <term name="director" form="verb">dirigit per</term>
     <term name="editor" form="verb">editat per</term>
@@ -629,23 +648,23 @@
     <term name="interviewer" form="verb">entrevista feta per</term>
     <term name="recipient" form="verb">a</term>
     <term name="reviewed-author" form="verb">per</term>
-    <term name="collection-editor" form="verb-short">ed. by</term>
+    <term name="collection-editor" form="verb-short">ed.</term>
     <term name="translator" form="verb">traduït per</term>
     <term name="editortranslator" form="verb">editat i traduït per</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="compiler" form="verb-short">comp. by</term>
-    <term name="contributor" form="verb-short">w.</term>
-    <term name="curator" form="verb-short">cur. by</term>
-    <term name="executive-producer" form="verb-short">exec. prod. by</term>
-    <term name="guest" form="verb-short">w. guest</term>
-    <term name="host" form="verb-short">hosted by</term>
-    <term name="narrator" form="verb-short">narr. by</term>
-    <term name="organizer" form="verb-short">org. by</term>
-    <term name="performer" form="verb-short">perf. by</term>
-    <term name="producer" form="verb-short">prod. by</term>
-    <term name="script-writer" form="verb-short">writ. by</term>
-    <term name="series-creator" form="verb-short">cre. by</term>
+    <term name="compiler" form="verb-short">comp.</term>
+    <term name="contributor" form="verb-short">amb</term>
+    <term name="curator" form="verb-short">cur.</term>
+    <term name="executive-producer" form="verb-short">prod. exec.</term>
+    <term name="guest" form="verb-short">amb</term>
+    <term name="host" form="verb-short">pres.</term>
+    <term name="narrator" form="verb-short">narr.</term>
+    <term name="organizer" form="verb-short">org.</term>
+    <term name="performer" form="verb-short">act.</term>
+    <term name="producer" form="verb-short">prod.</term>
+    <term name="script-writer" form="verb-short">escr.</term>
+    <term name="series-creator" form="verb-short">crea.</term>
     <term name="director" form="verb-short">dir.</term>
     <term name="editor" form="verb-short">ed.</term>
     <term name="editorial-director" form="verb-short">ed.</term>
@@ -654,18 +673,18 @@
     <term name="editortranslator" form="verb-short">ed. i trad. per</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="month-01">gener</term>
-    <term name="month-02">febrer</term>
-    <term name="month-03">març</term>
-    <term name="month-04">abril</term>
-    <term name="month-05">maig</term>
-    <term name="month-06">juny</term>
-    <term name="month-07">juliol</term>
-    <term name="month-08">agost</term>
-    <term name="month-09">setembre</term>
-    <term name="month-10">octubre</term>
-    <term name="month-11">novembre</term>
-    <term name="month-12">desembre</term>
+    <term name="month-01" gender="masculine">gener</term>
+    <term name="month-02" gender="masculine">febrer</term>
+    <term name="month-03" gender="masculine">març</term>
+    <term name="month-04" gender="masculine">abril</term>
+    <term name="month-05" gender="masculine">maig</term>
+    <term name="month-06" gender="masculine">juny</term>
+    <term name="month-07" gender="masculine">juliol</term>
+    <term name="month-08" gender="masculine">agost</term>
+    <term name="month-09" gender="masculine">setembre</term>
+    <term name="month-10" gender="masculine">octubre</term>
+    <term name="month-11" gender="masculine">novembre</term>
+    <term name="month-12" gender="masculine">desembre</term>
 
     <!-- SHORT MONTH FORMS -->
     <term name="month-01" form="short">gen.</term>

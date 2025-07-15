@@ -234,10 +234,10 @@
     <term name="review-book" form="verb-short">rev. of the bk.</term>
 
     <!-- HISTORICAL ERA TERMS -->
-    <term name="ad">AD</term>
-    <term name="bc">BC</term>
-    <term name="bce">BCE</term>
-    <term name="ce">CE</term>
+    <term name="ad"> AD</term>
+    <term name="bc"> BC</term>
+    <term name="bce"> BCE</term>
+    <term name="ce"> CE</term>
 
     <!-- PUNCTUATION -->
     <term name="open-quote">“</term>
