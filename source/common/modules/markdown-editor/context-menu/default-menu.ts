@@ -21,6 +21,7 @@ import { type SyntaxNode } from '@lezer/common'
 import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
+import { italicsToQuotes } from 'source/common/modules/markdown-editor/commands/transforms/italics-to-quotes'
 import { stripDuplicateSpaces } from 'source/common/modules/markdown-editor/commands/transforms/strip-duplicate-spaces'
 
 const ipcRenderer = window.ipc
@@ -266,7 +267,13 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
           id: 'stripDuplicateSpaces',
           type: 'normal',
           enabled: true
-        }
+        },
+        {
+          label: trans('Italics to quotes'),
+          id: 'italicsToQuotes',
+          type: 'normal',
+          enabled: true
+        },
       ]
     }
   ]
@@ -307,6 +314,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } })
     } else if (clickedID === 'stripDuplicateSpaces') {
       stripDuplicateSpaces(view)
+    } else if (clickedID === 'italicsToQuotes') {
+      italicsToQuotes(view)
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
