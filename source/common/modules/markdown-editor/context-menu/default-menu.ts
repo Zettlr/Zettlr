@@ -32,6 +32,7 @@ import { straightenQuotes } from 'source/common/modules/markdown-editor/commands
 import { quotesToItalics } from 'source/common/modules/markdown-editor/commands/transforms/quotes-to-italics'
 import { toDoubleQuotes } from 'source/common/modules/markdown-editor/commands/transforms/to-double-quotes'
 import { toSentenceCase } from 'source/common/modules/markdown-editor/commands/transforms/to-sentence-case'
+import { toTitleCase } from 'source/common/modules/markdown-editor/commands/transforms/to-title-case'
 import { zapGremlins } from 'source/common/modules/markdown-editor/commands/transforms/zap-gremlins'
 import { configField } from '../util/configuration'
 
@@ -353,6 +354,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
           id: 'toSentenceCase',
           type: 'normal',
           enabled: true
+        },
+        {
+          label: trans('To title case'),
+          id: 'toTitleCase',
+          type: 'normal',
+          enabled: true
         }
       ]
     }
@@ -414,6 +421,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       toDoubleQuotes(view)
     } else if (clickedID === 'toSentenceCase') {
       toSentenceCase(window.config.get('appLang'))(view)
+    } else if (clickedID === 'toTitleCase') {
+      toTitleCase(window.config.get('appLang'))(view)
     } else if (clickedID === 'zapGremlins') {
       zapGremlins(view)
     } else if (clickedID === 'no-suggestion') {
