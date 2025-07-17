@@ -1,4 +1,4 @@
-import { transformSelectedText } from "./transform-selected-text";
+import { transformSelectedText } from './transform-selected-text'
 
 const SEPARATOR_WORD = ' '
 const SEPARATOR_PARAGRAPH = '\n\n'

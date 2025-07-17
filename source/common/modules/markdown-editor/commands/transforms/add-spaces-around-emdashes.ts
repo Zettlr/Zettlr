@@ -1,4 +1,4 @@
-import { transformSelectedText } from "./transform-selected-text";
+import { transformSelectedText } from './transform-selected-text'
 
 /**
  * Add spaces, as necessary, to ensure spaces exist around any emdashes in the
