@@ -31,6 +31,7 @@ import { singleQuotesToDouble } from 'source/common/modules/markdown-editor/comm
 import { straightenQuotes } from 'source/common/modules/markdown-editor/commands/transforms/straighten-quotes'
 import { quotesToItalics } from 'source/common/modules/markdown-editor/commands/transforms/quotes-to-italics'
 import { toDoubleQuotes } from 'source/common/modules/markdown-editor/commands/transforms/to-double-quotes'
+import { toSentenceCase } from 'source/common/modules/markdown-editor/commands/transforms/to-sentence-case'
 import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
@@ -337,6 +338,15 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
           type: 'normal',
           enabled: true
         },
+        {
+          type: 'separator'
+        },
+        {
+          label: trans('To sentence case'),
+          id: 'toSentenceCase',
+          type: 'normal',
+          enabled: true
+        }
       ]
     }
   ]
@@ -395,6 +405,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       straightenQuotes(view)
     } else if (clickedID === 'toDoubleQuotes') {
       toDoubleQuotes(view)
+    } else if (clickedID === 'toSentenceCase') {
+      toSentenceCase(window.config.get('appLang'))(view)
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
