@@ -24,6 +24,7 @@ import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-
 import { italicsToQuotes } from 'source/common/modules/markdown-editor/commands/transforms/italics-to-quotes'
 import { stripDuplicateSpaces } from 'source/common/modules/markdown-editor/commands/transforms/strip-duplicate-spaces'
 import { removeLineBreaks } from 'source/common/modules/markdown-editor/commands/transforms/remove-line-breaks'
+import { addSpacesAroundEmdashes } from 'source/common/modules/markdown-editor/commands/transforms/add-spaces-around-emdashes'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -281,6 +282,15 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
           type: 'normal',
           enabled: true
         },
+        {
+          type: 'separator'
+        },
+        {
+          label: trans('Emdash — Add spaces around'),
+          id: 'addSpacesAroundEmdashes',
+          type: 'normal',
+          enabled: true
+        },
       ]
     }
   ]
@@ -325,6 +335,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       italicsToQuotes(view)
     } else if (clickedID === 'removeLineBreaks') {
       removeLineBreaks(view)
+    } else if (clickedID === 'addSpacesAroundEmdashes') {
+      addSpacesAroundEmdashes(view)
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
