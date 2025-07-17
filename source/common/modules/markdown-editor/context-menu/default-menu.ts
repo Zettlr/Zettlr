@@ -28,6 +28,7 @@ import { addSpacesAroundEmdashes } from 'source/common/modules/markdown-editor/c
 import { removeSpacesAroundEmdashes } from 'source/common/modules/markdown-editor/commands/transforms/remove-spaces-around-emdashes'
 import { doubleQuotesToSingle } from 'source/common/modules/markdown-editor/commands/transforms/double-quotes-to-single-quotes'
 import { singleQuotesToDouble } from 'source/common/modules/markdown-editor/commands/transforms/single-quotes-to-double-quotes'
+import { straightenQuotes } from 'source/common/modules/markdown-editor/commands/transforms/straighten-quotes'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -286,6 +287,15 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
           enabled: true
         },
         {
+          type: 'separator'
+        },
+        {
+          label: trans('Straighten quotes'),
+          id: 'straightenQuotes',
+          type: 'normal',
+          enabled: true
+        },
+        {
           label: trans('Double quotes to single'),
           id: 'doubleQuotesToSingle',
           type: 'normal',
@@ -364,6 +374,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       doubleQuotesToSingle(view)
     } else if (clickedID === 'singleQuotesToDouble') {
       singleQuotesToDouble(view)
+    } else if (clickedID === 'straightenQuotes') {
+      straightenQuotes(view)
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
