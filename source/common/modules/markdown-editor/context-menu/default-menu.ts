@@ -23,6 +23,7 @@ import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, 
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
 import { italicsToQuotes } from 'source/common/modules/markdown-editor/commands/transforms/italics-to-quotes'
 import { stripDuplicateSpaces } from 'source/common/modules/markdown-editor/commands/transforms/strip-duplicate-spaces'
+import { removeLineBreaks } from 'source/common/modules/markdown-editor/commands/transforms/remove-line-breaks'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -274,6 +275,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
           type: 'normal',
           enabled: true
         },
+        {
+          label: trans('Remove line breaks'),
+          id: 'removeLineBreaks',
+          type: 'normal',
+          enabled: true
+        },
       ]
     }
   ]
@@ -316,6 +323,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       stripDuplicateSpaces(view)
     } else if (clickedID === 'italicsToQuotes') {
       italicsToQuotes(view)
+    } else if (clickedID === 'removeLineBreaks') {
+      removeLineBreaks(view)
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
