@@ -30,6 +30,7 @@ import { doubleQuotesToSingle } from 'source/common/modules/markdown-editor/comm
 import { singleQuotesToDouble } from 'source/common/modules/markdown-editor/commands/transforms/single-quotes-to-double-quotes'
 import { straightenQuotes } from 'source/common/modules/markdown-editor/commands/transforms/straighten-quotes'
 import { quotesToItalics } from 'source/common/modules/markdown-editor/commands/transforms/quotes-to-italics'
+import { toDoubleQuotes } from 'source/common/modules/markdown-editor/commands/transforms/to-double-quotes'
 import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
@@ -304,6 +305,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
           enabled: true
         },
         {
+          label: trans('Ensure double quotes'),
+          id: 'toDoubleQuotes',
+          type: 'normal',
+          enabled: true
+        },
+        {
           label: trans('Double quotes to single'),
           id: 'doubleQuotesToSingle',
           type: 'normal',
@@ -386,6 +393,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       singleQuotesToDouble(view)
     } else if (clickedID === 'straightenQuotes') {
       straightenQuotes(view)
+    } else if (clickedID === 'toDoubleQuotes') {
+      toDoubleQuotes(view)
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {

@@ -95,3 +95,24 @@ export function delimit (delimiter: string) {
     return texts as NonEmptyArray<MaybeDelimitedText>
   }
 }
+
+export function replaceWith (replacement: string) {
+  return (chunks: Readonly<NonEmptyArray<MaybeDelimitedText>>) => {
+    return chunks.reduce((changedText, chunk) => {
+      switch (chunk.kind) {
+        case 'not-delimited-text': {
+          return changedText + chunk.text
+        }
+
+        case 'delimited-text': {
+          return changedText +
+              replacement + chunk.text + replacement
+        }
+
+        default: {
+          return ((_: never) => changedText)(chunk)
+        }
+      }
+    }, '')
+  }
+}
