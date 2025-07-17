@@ -29,6 +29,8 @@ import { removeSpacesAroundEmdashes } from 'source/common/modules/markdown-edito
 import { doubleQuotesToSingle } from 'source/common/modules/markdown-editor/commands/transforms/double-quotes-to-single-quotes'
 import { singleQuotesToDouble } from 'source/common/modules/markdown-editor/commands/transforms/single-quotes-to-double-quotes'
 import { straightenQuotes } from 'source/common/modules/markdown-editor/commands/transforms/straighten-quotes'
+import { quotesToItalics } from 'source/common/modules/markdown-editor/commands/transforms/quotes-to-italics'
+import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -281,6 +283,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
           enabled: true
         },
         {
+          label: trans('Quotes to italics'),
+          id: 'quotesToItalics',
+          type: 'normal',
+          enabled: true
+        },
+        {
           label: trans('Remove line breaks'),
           id: 'removeLineBreaks',
           type: 'normal',
@@ -364,6 +372,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       stripDuplicateSpaces(view)
     } else if (clickedID === 'italicsToQuotes') {
       italicsToQuotes(view)
+    } else if (clickedID === 'quotesToItalics') {
+      quotesToItalics(view.state.field(configField).italicFormatting)(view)
     } else if (clickedID === 'removeLineBreaks') {
       removeLineBreaks(view)
     } else if (clickedID === 'addSpacesAroundEmdashes') {
