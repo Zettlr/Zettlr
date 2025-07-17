@@ -32,6 +32,7 @@ import { straightenQuotes } from 'source/common/modules/markdown-editor/commands
 import { quotesToItalics } from 'source/common/modules/markdown-editor/commands/transforms/quotes-to-italics'
 import { toDoubleQuotes } from 'source/common/modules/markdown-editor/commands/transforms/to-double-quotes'
 import { toSentenceCase } from 'source/common/modules/markdown-editor/commands/transforms/to-sentence-case'
+import { zapGremlins } from 'source/common/modules/markdown-editor/commands/transforms/zap-gremlins'
 import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
@@ -273,6 +274,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       enabled: true,
       submenu: [
         {
+          label: trans('Zap gremlins'),
+          id: 'zapGremlins',
+          type: 'normal',
+          enabled: true
+        },
+        {
           label: trans('Strip duplicate spaces'),
           id: 'stripDuplicateSpaces',
           type: 'normal',
@@ -407,6 +414,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       toDoubleQuotes(view)
     } else if (clickedID === 'toSentenceCase') {
       toSentenceCase(window.config.get('appLang'))(view)
+    } else if (clickedID === 'zapGremlins') {
+      zapGremlins(view)
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
