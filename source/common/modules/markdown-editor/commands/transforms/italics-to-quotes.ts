@@ -1,3 +1,16 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TextTransform
+ * CVM-Role:        CodeMirror command
+ * Maintainer:      Rich Douglas
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin contains a single text transformer.
+ *
+ * END HEADER
+ */
 import { extractASTNodes, markdownToAST } from '../../../markdown-utils'
 import type { ASTNode, Emphasis, GenericNode } from '../../../markdown-utils/markdown-ast'
 import { transformSelectedText } from './transform-selected-text'

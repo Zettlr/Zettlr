@@ -1,4 +1,19 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Text transform utilities
+ * CVM-Role:        Utility functions
+ * Maintainer:      Rich Douglas
+ * License:         GNU GPL v3
+ *
+ * Description:     These utility functions are used especially for delimiter-
+ *                  centered transform commands.
+ *
+ * END HEADER
+ */
+
+/**
  * A chunk of text not inside any delimiter.
  */
 export type NotDelimitedText = {

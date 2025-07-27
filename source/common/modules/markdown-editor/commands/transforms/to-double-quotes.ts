@@ -1,3 +1,16 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TextTransform
+ * CVM-Role:        CodeMirror command
+ * Maintainer:      Rich Douglas
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin contains a single text transformer.
+ *
+ * END HEADER
+ */
 import { delimit, replaceWith } from './support/delimit'
 import { transformSelectedText } from './transform-selected-text'
 
