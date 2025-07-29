@@ -51,7 +51,7 @@ export const toSentenceCase =
             if (character.index === 0) {
               theWord += character.segment.toLocaleUpperCase(locale)
             } else {
-              theWord += character.segment
+              theWord += character.segment.toLocaleLowerCase(locale)
             }
           }
 

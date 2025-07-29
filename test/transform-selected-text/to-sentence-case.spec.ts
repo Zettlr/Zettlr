@@ -29,6 +29,11 @@ describe('MarkdownEditor#toSentenceCase()', function () {
       expectedOutput: 'A',
       expectedLengthAfterStripping: 1
     },
+    {
+      input: 'WRITE ONE SAMPLE SENTENCE TO EXEMPLIFY THIS.',
+      expectedOutput: 'Write one sample sentence to exemplify this.',
+      expectedLengthAfterStripping: 44
+    },
   ]
 
   sunnyDayTestCases.forEach((testCase) => {
