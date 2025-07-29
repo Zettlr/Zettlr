@@ -39,26 +39,34 @@ export default function clickAndSelect (view: EditorView): (event: MouseEvent) =
     // the selection will span the *entirety* of both lines rather than just the
     // text of the rendered citation (in this example).
     //
-    // So, we need to find the *smallest* rectangle that applies in the list of
-    // all possible rectangles for the target; continuing with the citation
-    // example, clicking on a citation that has a (soft) line-wrap in the middle
-    // of the rendered text *must* only select (highlight) the rectangle of the
+    // Clicking on a citation that has a (soft) line-wrap in the middle of the
+    // rendered text *must* only select (highlight) the rectangle of the
     // citation text itself.
-    const rects = target.getClientRects()
-    let fromPos = null
-    let toPos = null
 
-    for (const rect of rects) {
-      const startPos = view.posAtCoords({ x: rect.left, y: rect.top })
-      const endPos = view.posAtCoords({ x: rect.right, y: rect.bottom })
+    const rects = Array.from(target.getClientRects())
 
-      if (startPos !== null && (fromPos === null || startPos < fromPos)) {
-        fromPos = startPos
-      }
-      if (endPos !== null && (toPos === null || endPos > toPos)) {
-        toPos = endPos
-      }
+    if (rects.length === 0) {
+      return
     }
+
+    const { top, left, bottom, right } = (rects.length === 1)
+      // when there's just the one rectangle, use it's coords
+      ? {
+        top: rects.at(0).top,
+        left: rects.at(0).left,
+        bottom: rects.at(0).bottom,
+        right: rects.at(0).right
+      }
+      // when there are multiple rectangles, use the first and last for the coords
+      : {
+        top: rects.at(0).top,
+        left: rects.at(0).left,
+        bottom: rects.at(-1).bottom,
+        right: rects.at(-1).right
+      }
+
+    const fromPos = view.posAtCoords({ x: left, y: top })
+    const toPos = view.posAtCoords({ x: right, y: bottom })
 
     if (fromPos === null || toPos === null) {
       return
