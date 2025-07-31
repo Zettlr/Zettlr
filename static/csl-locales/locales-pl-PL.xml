@@ -11,10 +11,13 @@
       <name>Pendzoncymisio</name>
     </translator>
     <translator>
+      <name>Natalia L</name>
+    </translator>
+    <translator>
       <name>Kacper Kłosowski</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-07-02T16:00:00+00:00</updated>
+    <updated>2025-07-10T16:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -663,19 +666,19 @@
     <term name="editortranslator" form="verb-short">red.tłum.</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="month-01">styczeń</term>
-    <term name="month-02">luty</term>
-    <term name="month-03">marzec</term>
-    <term name="month-04">kwiecień</term>
-    <term name="month-05">maj</term>
-    <term name="month-06">czerwiec</term>
-    <term name="month-07">lipiec</term>
-    <term name="month-08">sierpień</term>
-    <term name="month-09">wrzesień</term>
-    <term name="month-10">październik</term>
-    <term name="month-11">listopad</term>
-    <term name="month-12">grudzień</term>
-
+    <term name="month-01">stycznia</term>
+    <term name="month-02">lutego</term>
+    <term name="month-03">marca</term>
+    <term name="month-04">kwietnia</term>
+    <term name="month-05">maja</term>
+    <term name="month-06">czerwca</term>
+    <term name="month-07">lipca</term>
+    <term name="month-08">sierpnia</term>
+    <term name="month-09">września</term>
+    <term name="month-10">października</term>
+    <term name="month-11">listopada</term>
+    <term name="month-12">grudnia</term>
+    
     <!-- SHORT MONTH FORMS -->
     <term name="month-01" form="short">sty.</term>
     <term name="month-02" form="short">luty</term>

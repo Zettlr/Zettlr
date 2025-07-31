@@ -80,9 +80,9 @@
        This file interprets Chicago using APA's four basic reference elements
        (cf. CMOS18 14.2, 14.64, 14.161):
 
-        1. Author (CMOS18 13.74–86)
+        1. Author (CMOS18 13.74-86)
         2. Date (author-date system only, CMOS18 13.102)
-        3. Title and descriptions (CMOS18 13.87–101)
+        3. Title and descriptions (CMOS18 13.87-101)
             3.1. Title
             3.2. Description
             3.3. Identifiers (edition, contributors, volume)
@@ -370,7 +370,7 @@
       <text text-case="capitalize-first" variable="volume"/>
     </group>
   </macro>
-  <!-- 1. Author (CMOS18 13.74–86) -->
+  <!-- 1. Author (CMOS18 13.74-86) -->
   <macro name="author-bib">
     <names variable="composer">
       <name delimiter-precedes-last="always" name-as-sort-order="first"/>
@@ -1014,7 +1014,7 @@
       </else>
     </choose>
   </macro>
-  <!-- 3. Title and descriptions (CMOS18 13.87–101) -->
+  <!-- 3. Title and descriptions (CMOS18 13.87-101) -->
   <macro name="title-and-descriptions-bib">
     <group delimiter=". ">
       <choose>
@@ -2554,9 +2554,7 @@
         </choose>
       </else-if>
       <!-- if printing chapter page numbers:
-      <else-if variable="chapter-number page">
-        <text term="in" text-case="capitalize-first"/>
-      </else-if>
+      <else-if variable="chapter-number page"><text term="in" text-case="capitalize-first"/></else-if>
       -->
       <else-if variable="chapter-number">
         <group delimiter=" ">
@@ -3179,7 +3177,7 @@
       </choose>
       <choose>
         <if type="song">
-          <!-- Album catalogue number follows label name (CMOS18 14.163–164) -->
+          <!-- Album catalogue number follows label name (CMOS18 14.163-164) -->
           <text variable="number"/>
         </if>
       </choose>
@@ -3811,11 +3809,7 @@
   <macro name="citation-author-date">
     <!-- Usage:
     
-    <citation after-collapse-delimiter="; " collapse="year" disambiguate-add-givenname="true" disambiguate-add-names="true" disambiguate-add-year-suffix="true" et-al-min="3" et-al-use-first="1" givenname-disambiguation-rule="primary-name-with-initials">
-      <layout delimiter="; " prefix="(" suffix=")">
-        <text macro="citation-author-date"/>
-      </layout>
-    </citation>
+    <citation after-collapse-delimiter="; " collapse="year" disambiguate-add-givenname="true" disambiguate-add-names="true" disambiguate-add-year-suffix="true" et-al-min="3" et-al-use-first="1" givenname-disambiguation-rule="primary-name-with-initials"><layout delimiter="; " prefix="(" suffix=")"><text macro="citation-author-date"/></layout></citation>
     -->
     <choose>
       <if type="classic">
@@ -3928,18 +3922,7 @@
   </macro>
   <macro name="bibliography-filtered-author-date">
     <!-- usage:
-     <sort>
-      <key macro="author-sort"/>
-      <key macro="date-sort-group"/>
-      <key macro="date-sort"/>
-      <key variable="status"/>
-      <key macro="title-bib"/>
-      <key variable="part-number"/>
-      <key variable="volume"/>
-     </sort>
-     <layout suffix=".">
-       <text macro="bibliography-filtered-author-date"/>
-     </layout>
+     <sort><key macro="author-sort"/><key macro="date-sort-group"/><key macro="date-sort"/><key variable="status"/><key macro="title-bib"/><key variable="part-number"/><key variable="volume"/></sort><layout suffix="."><text macro="bibliography-filtered-author-date"/></layout>
     -->
     <choose>
       <if type="classic">

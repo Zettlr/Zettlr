@@ -784,7 +784,7 @@
 
     <!-- SHORT VERB ROLE FORMS -->
     <!-- Omitted roles:
-         author, chair, container-author, contributor, guest, host, interviewer, narrator, original-author, recipient, reviewed-author, series-creator
+         author, chair, container-author, contributor, guest, host, interviewer, original-author, recipient, reviewed-author, series-creator
     -->
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="compiler" form="verb-short">comp. by</term>
@@ -797,6 +797,7 @@
     <term name="editorial-director" form="verb-short">ed. by</term>
     <term name="executive-producer" form="verb-short">exec. prod. by</term> <!-- ODA -->
     <term name="illustrator" form="verb-short">illus. by</term>
+    <term name="narrator" form="verb-short">read by</term> <!-- repetition required to avoid fallback to en-US -->
     <term name="organizer" form="verb-short">org. by</term> <!-- ODA -->
     <term name="performer" form="verb-short">perfd by</term> <!-- ODA -->
     <term name="producer" form="verb-short">prod. by</term> <!-- ODA -->
