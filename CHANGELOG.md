@@ -1,5 +1,15 @@
 # Upcoming
 
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.6.0
+
 ## Text Transformations
 
 Zettlr now features a set of several text transformation commands in the editor.
@@ -42,7 +52,7 @@ The available transforms as of now are:
 
 - **Feature**: Zettlr now has text transformations. With these, you can change
   selected pieces of text using a quick access command menu (#5701). Special
-  thanks to Rich Evans for implementing this.
+  thanks to @richdouglasevans for implementing this.
 - **Change**: Zettlr will no longer parse Markdown-like files that exceed ca.
   10 MB in size. After some testing, we have determined that 10 MB seems to be
   a balanced trade-off between parsing as many files as possible and preventing
