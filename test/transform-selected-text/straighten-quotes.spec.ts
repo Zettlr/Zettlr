@@ -21,14 +21,34 @@ describe('MarkdownEditor#straightenQuotes()', function () {
   const sunnyDayTestCases = [
     {
       input: '“ ‘ ’ ”',
-      expectedOutput: '" \' \' "',
+      expectedOutput: `" ' ' "`,
       expectedLengthAfterStripping: 7
     },
     {
       input: ' “ ‘ ’ ”“ ‘ ’ ”“ ‘ ’ ” ',
-      expectedOutput: ' " \' \' "" \' \' "" \' \' " ',
+      expectedOutput: ` " ' ' "" ' ' "" ' ' " `,
       expectedLengthAfterStripping: 23
     },
+    {
+      input: `Ein „deutscher Testsatz mit ‚Anführungszeichen‘.“`,
+      expectedOutput: `Ein "deutscher Testsatz mit 'Anführungszeichen'."`,
+      expectedLengthAfterStripping: 49
+    },
+    {
+      input: `Un «exemple de phrase en français» avec des ‹guillemets›.`,
+      expectedOutput: `Un "exemple de phrase en français" avec des 'guillemets'.`,
+      expectedLengthAfterStripping: 57
+    },
+    {
+      input: `En svensk ”exempelmening med ’citattecken’”.`,
+      expectedOutput: `En svensk "exempelmening med 'citattecken'".`,
+      expectedLengthAfterStripping: 44
+    },
+    {
+      input: `I'm lacking the language skills, but 「Japanese」 or 『Taiwanese』 quotation marks.`,
+      expectedOutput: `I'm lacking the language skills, but "Japanese" or 'Taiwanese' quotation marks.`,
+      expectedLengthAfterStripping: 79
+    }
   ]
 
   sunnyDayTestCases.forEach((testCase) => {
