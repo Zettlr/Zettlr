@@ -32,7 +32,7 @@ export default function setWindowChrome (config: ConfigProvider, winConf: Browse
   if (process.platform !== 'darwin' || modal) {
     // It is recommended to set a background color for the windows, however, on
     // macOS we can't do so because that would render nil the vibrancy.
-    winConf.backgroundColor = '#fff'
+    winConf.backgroundColor = config.get().darkMode ? '#000' : '#fff'
   }
 
   if (process.platform === 'darwin' && !modal) {

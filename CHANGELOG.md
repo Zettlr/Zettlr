@@ -2,6 +2,57 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 3.6.0
+
+## Text Transformations
+
+Zettlr now features a set of several text transformation commands in the editor.
+Using these commands, you can transform various pieces of text in the editor
+using several strategies aimed at working with both regular text (which you can,
+e.g., transform between sentence or title case) and corrupted text (from which
+you can remove control characters, unnecessary line breaks, and clean up
+quotation marks). In total, Zettlr now ships with 13 such transform commands,
+but many more are possible.
+
+To utilize these transformations, simply select the text you wish to transform,
+open the context menu on it, and select the corresponding transformation from
+the context menu.
+
+The available transforms as of now are:
+
+* `Zap gremlins`: Removes unwanted control characters (such as form feeds,
+  vertical tabs, and others), which sometimes end up in recognized PDF text.
+* `Strip duplicate spaces`: Removes any superfluous spaces.
+* `Italics to quotes`: Turns italic markers (e.g., `*text*`) into quotes
+  (`"text"`).
+* `Quotes to italics`: Turns quotation marks (e.g., `"text"`) into italic
+  markers (`*text*`).
+* `Remove line breaks`: Removes superfluous linebreaks while retaining any
+  paragraphs (separated by two consecutive linebreaks).
+* `Straighten quotes`: Turns smart, or "magic quotes" into regular quotes.
+* `Ensure double quotes`: Turns any type of quotation (which includes backticks,
+  since those sometimes appear in text copied from PDF files!) into regular
+  double quotes.
+* `Double quotes to single`: Turns any straight double quotes to single quotes.
+* `Single quotes to double`: Turns single quotes into double quotes.
+* `Emdash — Add spaces around`: Ensures that all em-dashes (`—`) in the text are
+  surrounded by spaces.
+* `Emdash — Remove spaces around`: Ensures that no em-dashes (`—`) in the text
+  are surrounded by spaces.
+* `To sentence case`: Turns the selected text to sentence case.
+* `To title case`: Turns The Selected Text To Title Case.
+
+## GUI and Functionality
+
+- **Feature**: Zettlr now has text transformations. With these, you can change
+  selected pieces of text using a quick access command menu (#5701). Special
+  thanks to @richdouglasevans for implementing this.
 - **Change**: Zettlr will no longer parse Markdown-like files that exceed ca.
   10 MB in size. After some testing, we have determined that 10 MB seems to be
   a balanced trade-off between parsing as many files as possible and preventing
@@ -15,6 +66,9 @@
   platforms other than macOS during application restarts (#570).
 - Fixed the list of related files disappearing when switching sidebar tabs
   (#5795).
+- Windows will now receive black as their background color on Windows and Linux
+  if dark mode is active, preventing white flicker during window opening before
+  the UI is ready (#5809).
 
 ## Under the Hood
 
