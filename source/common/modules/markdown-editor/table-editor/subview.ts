@@ -37,6 +37,8 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
     return tr // Do not mess with synchronizing transactions
   }
 
+  console.log({ tr })
+
   // NOTE: There are also cell boundaries written to the TD/TH's dataset, but
   // we can't use those since they strictly exclude *any* whitespace from the
   // cell's contents. This means that, would we use those to determine the
@@ -258,7 +260,11 @@ export function createSubviewForCell (
     dispatch: dispatchFromSubview(mainView)
   })
 
-  subview.focus()
+  // We must delay the subview focusing until the DOM has been updated and any
+  // other callbacks and event listeners have been attached. We achieve this
+  // using `setTimeout` which will execute its callback once the main loop is
+  // empty.
+  setTimeout(() => subview.focus(), 0)
 }
 
 /**
