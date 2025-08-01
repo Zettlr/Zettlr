@@ -53,7 +53,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // (e.g., by accessing tr.state), we keep the computational overhead small.
   // NOTE the associations (also in the hidden state updater)
   const [ cellFrom, cellTo ] = tr.startState.field(hiddenSpanField)
-    .cellRange.map((pos, idx) => tr.changes.mapPos(pos, idx))
+    .cellRange.map((pos, idx) => tr.changes.mapPos(pos, idx - 1))
 
   // First, find the longest cell range after the transaction has been
   // applied. This is necessary to accurately figure out whether the selection
