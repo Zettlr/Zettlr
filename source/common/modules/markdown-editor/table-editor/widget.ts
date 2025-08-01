@@ -313,9 +313,12 @@ function updateRow (
       }
     }
 
-    // Save the corresponding document offsets appropriately
-    tds[i].dataset.cellFrom = String(cell.from)
-    tds[i].dataset.cellTo = String(cell.to)
+    // Save the corresponding document offsets appropriately. NOTE that we
+    // include whitespace here (minus one space padding if applicable).
+    const cellFrom = cell.from - cell.padding.from > 1 ? cell.padding.from + 1 : cell.from
+    const cellTo = cell.padding.to - cell.to > 1 ? cell.padding.to - 1 : cell.to
+    tds[i].dataset.cellFrom = String(cellFrom)
+    tds[i].dataset.cellTo = String(cellTo)
     tds[i].style.textAlign = align[i] ?? 'left'
 
     const contentWrapper: HTMLDivElement = tds[i].querySelector('div.content')!
@@ -333,21 +336,21 @@ function updateRow (
       // Create a new subview to represent the selection here. Ensure the cell
       // itself is empty before we mount the subview.
       contentWrapper.innerHTML = ''
-      createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
+      createSubviewForCell(view, contentWrapper, { from: cellFrom, to: cellTo })
       contentWrapper.classList.add('editing')
     } else if (subview === null) {
       // Simply transfer the contents
       // TODO: Enable citation rendering here
       const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
-    } else if (subviewFrom > -1 && subviewTo > -1 && (subviewFrom !== cell.from || subviewTo !== cell.to)) {
+    } else if (subviewFrom > -1 && subviewTo > -1 && (subviewFrom !== cellFrom || subviewTo !== cellTo)) {
       // Here, there is a subview in the cell and the selection is in this cell,
       // but the subview has been "carried over" from a different column or row,
       // which happens if the user adds or removes columns or rows. In this case
       // we basically have to remove and recreate the subview, to ensure it
       // grabs the correct cell's information.
       subview.destroy()
-      createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
+      createSubviewForCell(view, contentWrapper, { from: cellFrom, to: cellTo })
     } // Else: The cell has a subview and the selection is still in there.
   }
 }
