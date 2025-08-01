@@ -16,6 +16,7 @@ import { app } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
+import { getPlatformSpecificDefaultKeybinding, type EditorKeyboardCommand } from '@common/modules/markdown-editor/keymaps/custom-map'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
 
@@ -120,6 +121,7 @@ export interface ConfigOptions {
       replacements: Array<{ key: string, value: string }>
       matchWholeWords: boolean
     }
+    keyboardShortcuts: Record<EditorKeyboardCommand, string>
   }
   display: {
     theme: MarkdownTheme
@@ -364,7 +366,11 @@ export function getConfigTemplate (): ConfigOptions {
           { key: '---', value: '—' }
         ],
         matchWholeWords: false // Whether to only autocorrect entire words, not parts
-      } // END autoCorrect options
+      }, // END autoCorrect options
+      keyboardShortcuts: {
+        insertImage: getPlatformSpecificDefaultKeybinding('insertImage'),
+        addFootnote: getPlatformSpecificDefaultKeybinding('addFootnote')
+      }
     },
     display: {
       theme: 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux

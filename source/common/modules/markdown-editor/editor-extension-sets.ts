@@ -71,9 +71,9 @@ import { mainOverride } from './theme/main-override'
 import { highlightWhitespace } from './plugins/highlight-whitespace'
 import { tagClasses } from './plugins/tag-classes'
 import { autocompleteTriggerCharacter } from './autocomplete/snippets'
-import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
+import { defaultKeymap } from './keymaps'
 
 /**
  * This interface describes the required properties which the extension sets

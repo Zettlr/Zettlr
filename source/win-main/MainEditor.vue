@@ -49,6 +49,7 @@ import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
+import { shortcutUpdateEffect } from 'source/common/modules/markdown-editor/keymaps'
 
 const ipcRenderer = window.ipc
 
@@ -325,6 +326,24 @@ workspacesStore.$subscribe(_mutation => {
   }
 })
 // END: PROJECT INFO
+
+// Update the editor keyboard shortcuts whenever the config changes.
+// TODO: Do this also for various other things. This will break up this insanely
+// large config object into smaller chunks that are more separable. This here is
+// the preferred way of updating the editor config, rather than doing the large
+// config thing, that is merely due to me not fully understanding the CodeMirror
+// API back when I migrated from CM5 to CM6.
+configStore.$subscribe((_mutation, state) => {
+  if (currentEditor === null) {
+    return
+  }
+
+  currentEditor.instance.dispatch({
+    effects: [
+      shortcutUpdateEffect.of(state.config.editor.keyboardShortcuts)
+    ]
+  })
+})
 
 // External commands/"event" system
 watch(toRef(props.editorCommands, 'jumpToLine'), () => {

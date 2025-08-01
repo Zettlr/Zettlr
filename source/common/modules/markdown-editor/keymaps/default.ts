@@ -62,13 +62,14 @@ import {
   toggleHighlight
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
+import { type CustomShortcutConfiguration, getPlatformSpecificDefaultKeybinding } from './custom-map'
 
 // Includes:
 // * defaultKeymap
 // * historyKeymap
 // * closeBracketsKeymap
 // * searchKeymap
-export function defaultKeymap (): Extension {
+export function generateDefaultKeymap (customKeymap?: CustomShortcutConfiguration): Extension {
   return keymap.of([
     // completionKeymap
     { key: 'Ctrl-Space', run: startCompletion },
@@ -88,9 +89,9 @@ export function defaultKeymap (): Extension {
     { key: 'Ctrl-Shift-h', run: toggleHighlight },
     // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
     // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
-    { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
+    { key: customKeymap?.insertImage ?? getPlatformSpecificDefaultKeybinding('insertImage'), run: insertImage },
     { key: 'Mod-C', run: applyComment },
-    { key: 'Mod-Alt-f', mac: 'Mod-Alt-r', run: addNewFootnote },
+    { key: customKeymap?.addFootnote ?? getPlatformSpecificDefaultKeybinding('addFootnote'), run: addNewFootnote },
 
     // Overload Tab, depending on context (priority high->low)
     { key: 'Tab', run: acceptCompletion },
