@@ -370,10 +370,6 @@
       <single>verse</single>
       <multiple>verses</multiple>
     </term>
-    <term name="version">
-      <single>version</single>
-      <multiple>versions</multiple>
-    </term>
     <term name="volume">
       <single>volume</single>
       <multiple>volumes</multiple>
@@ -485,13 +481,17 @@
       <single>v.</single>
       <multiple>vv.</multiple>
     </term>
-    <term name="version" form="short">v.</term> <!-- no plural -->
     <term name="volume" form="short">
       <single>vol.</single>
       <multiple>vols</multiple>
     </term>
 
     <!-- SYMBOLIC LOCATOR FORMS -->
+    <term name="chapter" form="symbol">
+      <!-- caput/capita, esp. in legal works -->
+      <single>c.</single>
+      <multiple>cc.</multiple>
+    </term>
     <term name="paragraph" form="symbol">
       <single>¶</single>
       <multiple>¶¶</multiple>
@@ -542,6 +542,10 @@
       <single>printing</single>
       <multiple>printings</multiple>
     </term>
+    <term name="version">
+      <single>version</single>
+      <multiple>versions</multiple>
+    </term>
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
@@ -584,6 +588,7 @@
       <single>ptg</single>
       <multiple>ptgs</multiple>
     </term>
+    <term name="version" form="short">v.</term> <!-- no plural -->
 
     <!-- LONG ROLE FORMS -->
     <!-- Omitted roles:
@@ -784,7 +789,7 @@
 
     <!-- SHORT VERB ROLE FORMS -->
     <!-- Omitted roles:
-         author, chair, container-author, contributor, guest, host, interviewer, narrator, original-author, recipient, reviewed-author, series-creator
+         author, chair, container-author, contributor, guest, host, interviewer, original-author, recipient, reviewed-author, series-creator
     -->
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="compiler" form="verb-short">comp. by</term>
@@ -797,6 +802,7 @@
     <term name="editorial-director" form="verb-short">ed. by</term>
     <term name="executive-producer" form="verb-short">exec. prod. by</term> <!-- ODA -->
     <term name="illustrator" form="verb-short">illus. by</term>
+    <term name="narrator" form="verb-short">read by</term> <!-- repetition required to avoid fallback to en-US -->
     <term name="organizer" form="verb-short">org. by</term> <!-- ODA -->
     <term name="performer" form="verb-short">perfd by</term> <!-- ODA -->
     <term name="producer" form="verb-short">prod. by</term> <!-- ODA -->
