@@ -27,6 +27,8 @@ import { displayTableContextMenu } from './context-menu'
 import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCol } from './commands/columns'
 import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRow } from './commands/rows'
 import { clearTable, setAlignment } from './commands/tables'
+import { CITEPROC_MAIN_DB } from 'source/types/common/citeproc'
+import { configField } from '../util/configuration'
 
 // This widget holds a visual DOM representation of a table.
 export class TableWidget extends WidgetType {
@@ -333,11 +335,14 @@ function updateRow (
     const subviewText = subview?.state.sliceDoc(subviewFrom, subviewTo) ?? cell.textContent
     const subviewTextChanged = subviewText !== cell.textContent
 
+    const config = view.state.field(configField).metadata.library
+    const library = config === '' ? CITEPROC_MAIN_DB : config
+    const callback = window.getCitationCallback(library)
+
     if (subview !== null && !selectionInCell) {
       subview.destroy()
       contentWrapper.classList.remove('editing')
-      // TODO: Enable citation rendering here
-      const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
+      const html = nodeToHTML(cell.children, callback, {}, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
     } else if (subview === null && selectionInCell) {
       // Create a new subview to represent the selection here. Ensure the cell
@@ -347,8 +352,7 @@ function updateRow (
       contentWrapper.classList.add('editing')
     } else if (subview === null) {
       // Simply transfer the contents
-      // TODO: Enable citation rendering here
-      const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
+      const html = nodeToHTML(cell.children, callback, {}, 0).trim()
       if (html !== contentWrapper.innerHTML) {
         contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
       }
