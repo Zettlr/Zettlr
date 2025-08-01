@@ -33,7 +33,7 @@ export function dispatchFromSubview (mainView: EditorView): (tr: Transaction, su
       if (userEvent !== undefined) {
         annotations.push(Transaction.userEvent.of(userEvent))
       }
-      mainView.dispatch({ changes: tr.changes, annotations, effects: tr.effects })
+      mainView.dispatch({ ...tr, annotations })
     }
   }
 }
@@ -60,9 +60,5 @@ export function maybeDispatchToSubview (subview: EditorView, tr: Transaction): v
     annotations.push(Transaction.userEvent.of(userEvent))
   }
 
-  subview.dispatch({
-    changes: tr.changes,
-    annotations,
-    effects: tr.effects,
-  })
+  subview.dispatch({ ...tr, annotations })
 }

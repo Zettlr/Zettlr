@@ -53,7 +53,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // (e.g., by accessing tr.state), we keep the computational overhead small.
   // NOTE the associations (also in the hidden state updater)
   const [ cellFrom, cellTo ] = tr.startState.field(hiddenSpanField)
-    .cellRange.map(pos => tr.changes.mapPos(pos))
+    .cellRange.map((pos, idx) => tr.changes.mapPos(pos, idx))
 
   // First, find the longest cell range after the transaction has been
   // applied. This is necessary to accurately figure out whether the selection
@@ -62,7 +62,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // the very end of the table cell, the selection will be one position beyond
   // the current cell range. This check means that we account for that.
   let cellEndAfter = cellTo
-  tr.changes.iterChanges((fromA, toA, fromB, toB, _inserted) => {
+  tr.changes.iterChanges((fromA, toA, fromB, toB) => {
     if (fromA >= cellFrom && toA <= cellTo && toB > cellEndAfter) {
       cellEndAfter = toB
     }

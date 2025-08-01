@@ -340,7 +340,7 @@ function updateRow (
       // TODO: Enable citation rendering here
       const html = nodeToHTML(cell.children, (_citations, _composite) => undefined, {}, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
-    } else if (subviewFrom !== cell.from || subviewTo !== cell.to) {
+    } else if (subviewFrom > -1 && subviewTo > -1 && (subviewFrom !== cell.from || subviewTo !== cell.to)) {
       // Here, there is a subview in the cell and the selection is in this cell,
       // but the subview has been "carried over" from a different column or row,
       // which happens if the user adds or removes columns or rows. In this case
