@@ -37,8 +37,6 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
     return tr // Do not mess with synchronizing transactions
   }
 
-  console.log({ tr })
-
   // NOTE: There are also cell boundaries written to the TD/TH's dataset, but
   // we can't use those since they strictly exclude *any* whitespace from the
   // cell's contents. This means that, would we use those to determine the
@@ -55,7 +53,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // (e.g., by accessing tr.state), we keep the computational overhead small.
   // NOTE the associations (also in the hidden state updater)
   const [ cellFrom, cellTo ] = tr.startState.field(hiddenSpanField)
-    .cellRange.map((pos, idx) => tr.changes.mapPos(pos, idx === 0 ? -1 : 1))
+    .cellRange.map(pos => tr.changes.mapPos(pos))
 
   // First, find the longest cell range after the transaction has been
   // applied. This is necessary to accurately figure out whether the selection
