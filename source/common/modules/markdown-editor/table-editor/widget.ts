@@ -326,6 +326,13 @@ function updateRow (
 
     const [ subviewFrom, subviewTo ] = subview?.state.field(hiddenSpanField).cellRange ?? [ -1, -1 ]
 
+    // Add one more check since the subview recreation below will not work if
+    // the user removes a column, and the new cell contents which will be placed
+    // in its stead are the same length as the old ones, as the code would think
+    // it's still the same view and never update the cell.
+    const subviewText = subview?.state.sliceDoc(subviewFrom, subviewTo) ?? cell.textContent
+    const subviewTextChanged = subviewText !== cell.textContent
+
     if (subview !== null && !selectionInCell) {
       subview.destroy()
       contentWrapper.classList.remove('editing')
@@ -345,7 +352,7 @@ function updateRow (
       if (html !== contentWrapper.innerHTML) {
         contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
       }
-    } else if (subviewFrom > -1 && subviewTo > -1 && (subviewFrom !== cellFrom || subviewTo !== cellTo)) {
+    } else if (subviewFrom !== cellFrom || subviewTo !== cellTo || subviewTextChanged) {
       // Here, there is a subview in the cell and the selection is in this cell,
       // but the subview has been "carried over" from a different column or row,
       // which happens if the user adds or removes columns or rows. In this case
