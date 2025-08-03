@@ -151,6 +151,7 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
   table.querySelectorAll('div.plus').forEach(plus => plus.parentElement!.removeChild(plus))
 
   const trs = [...table.querySelectorAll('tr')]
+  const rowsChanged = trs.length !== tableAST.rows.length
   // Remove now-superfluous TRs. The for-loop below accounts for too few.
   while (trs.length > tableAST.rows.length) {
     const tr = trs.pop()!
@@ -166,10 +167,10 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
       const tr = document.createElement('tr')
       table.appendChild(tr)
       trs.push(tr)
-      updateRow(tr, row, i, tableAST.alignment, view, coords)
+      updateRow(tr, row, i, tableAST.alignment, view, rowsChanged, coords)
     } else {
       // Transfer the contents
-      updateRow(trs[i], row, i, tableAST.alignment, view, coords)
+      updateRow(trs[i], row, i, tableAST.alignment, view, rowsChanged, coords)
     }
   }
 }
@@ -191,9 +192,11 @@ function updateRow (
   idx: number,
   align: Array<'left'|'center'|'right'>,
   view: EditorView,
-  selectionCoords?: { col: number, row: number }
+  rowsChanged: boolean,
+  selectionCoords?: { col: number, row: number },
 ): void {
   const tds = [...tr.querySelectorAll(astRow.isHeaderOrFooter ? 'th' : 'td')]
+  const columnsChanged = tds.length !== astRow.cells.length
   // Remove now-superfluous TRs. The for-loop below accounts for too few.
   while (tds.length > astRow.cells.length) {
     const td = tds.pop()!
@@ -317,23 +320,14 @@ function updateRow (
 
     // Save the corresponding document offsets appropriately. NOTE that we
     // include whitespace here (minus one space padding if applicable).
-    const cellFrom = cell.from - cell.padding.from > 1 ? cell.padding.from + 1 : cell.from
-    const cellTo = cell.padding.to - cell.to > 1 ? cell.padding.to - 1 : cell.to
-    tds[i].dataset.cellFrom = String(cellFrom)
-    tds[i].dataset.cellTo = String(cellTo)
+    tds[i].dataset.cellFrom = String(cell.from)
+    tds[i].dataset.cellTo = String(cell.to)
     tds[i].style.textAlign = align[i] ?? 'left'
 
     const contentWrapper: HTMLDivElement = tds[i].querySelector('div.content')!
     const subview = EditorView.findFromDOM(contentWrapper)
 
     const [ subviewFrom, subviewTo ] = subview?.state.field(hiddenSpanField).cellRange ?? [ -1, -1 ]
-
-    // Add one more check since the subview recreation below will not work if
-    // the user removes a column, and the new cell contents which will be placed
-    // in its stead are the same length as the old ones, as the code would think
-    // it's still the same view and never update the cell.
-    const subviewText = subview?.state.sliceDoc(subviewFrom, subviewTo) ?? cell.textContent
-    const subviewTextChanged = subviewText !== cell.textContent
 
     const config = view.state.field(configField).metadata.library
     const library = config === '' ? CITEPROC_MAIN_DB : config
@@ -348,7 +342,7 @@ function updateRow (
       // Create a new subview to represent the selection here. Ensure the cell
       // itself is empty before we mount the subview.
       contentWrapper.innerHTML = ''
-      createSubviewForCell(view, contentWrapper, { from: cellFrom, to: cellTo })
+      createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
       contentWrapper.classList.add('editing')
     } else if (subview === null) {
       // Simply transfer the contents
@@ -356,14 +350,14 @@ function updateRow (
       if (html !== contentWrapper.innerHTML) {
         contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
       }
-    } else if (subviewFrom !== cellFrom || subviewTo !== cellTo || subviewTextChanged) {
+    } else if ((subviewFrom !== cell.from || subviewTo !== cell.to) && (columnsChanged || rowsChanged)) {
       // Here, there is a subview in the cell and the selection is in this cell,
       // but the subview has been "carried over" from a different column or row,
       // which happens if the user adds or removes columns or rows. In this case
       // we basically have to remove and recreate the subview, to ensure it
       // grabs the correct cell's information.
       subview.destroy()
-      createSubviewForCell(view, contentWrapper, { from: cellFrom, to: cellTo })
+      createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
     } // Else: The cell has a subview and the selection is still in there.
   }
 }
