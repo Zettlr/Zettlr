@@ -98,10 +98,10 @@ export function tableEditorKeymap (mainView: EditorView): Extension {
       // them here (but providing the main view which will handle them accordingly)
       // NOTE: They are beind `sharedKeymap` since the sharedKeymap for navigation
       // *within* the table cell needs to take precedence.
-      { key: 'Alt-ArrowUp', run: _v => swapPrevRow(mainView), shift: _v => addRowBefore(mainView) },
-      { key: 'Alt-ArrowDown', run: _v => swapNextRow(mainView), shift: _v => addRowAfter(mainView) },
-      { key: 'Alt-ArrowRight', run: _v => swapNextCol(mainView), shift: _v => addColAfter(mainView) },
-      { key: 'Alt-ArrowLeft', run: _v => swapPrevCol(mainView), shift: _v => addColBefore(mainView) },
+      { key: 'Alt-ArrowUp', mac: 'Ctrl-ArrowUp', run: _v => swapPrevRow(mainView), shift: _v => addRowBefore(mainView) },
+      { key: 'Alt-ArrowDown', mac: 'Ctrl-ArrowDown', run: _v => swapNextRow(mainView), shift: _v => addRowAfter(mainView) },
+      { key: 'Alt-ArrowRight', mac: 'Ctrl-ArrowRight', run: _v => swapNextCol(mainView), shift: _v => addColAfter(mainView) },
+      { key: 'Alt-ArrowLeft', mac: 'Ctrl-ArrowLeft', run: _v => swapPrevCol(mainView), shift: _v => addColBefore(mainView) },
     ]),
     // Also include the sharedKeymap. The subview transaction filter will
     // automatically ensure that nothing spanning multiple lines will be executed.
