@@ -1,8 +1,57 @@
 # Upcoming
 
+## Full TableEditor Rewrite
+
+This release contains a full rewrite of the TableEditor. The old implementation
+of the TableEditor had many bugs and inconveniences that made working with
+Markdown tables barely less cumbersome than having to deal with raw Markdown
+tables. Users criticized volatile data handling and experienced frequent data
+loss. This is why we redesigned the TableEditor from the ground up. With this
+release, we are finally able to give the new experience to you.
+
+The most important improvement is that now data loss should be a thing of the
+past. The new TableEditor makes full use of the available features of the editor
+to keep the data as safe as possible. But we didn't want to stop there. Because
+the TableEditor hadn't received a face lift in years, we asked ourselves what
+else the TableEditor was missing.
+
+From a user perspective, we have kept the design of the TableEditor as close to
+the former UX as possible, while also fixing a few oddities. Specifically, the
+buttons of the TableEditor have been fully redesigned to be more minimalist.
+Also gone is the infamous "Save" button that was not able to help prevent data
+loss. The new TableEditor now features proper syntax highlighting so that you
+can more easily verify that you are authoring proper Markdown. In addition, the
+new TableEditor is now faster, more memory efficient, and it should be simpler
+to fill entire tables with data.
+
+Lastly, one big improvement of the new TableEditor is that you don't have to use
+it to be more efficient in authoring tables. Specifically, we decided to
+implement all functionality fully keyboard-oriented. This means that for any
+modification you may want to make there is now a shortcut. Adding and removing
+rows and columns; clearing data from rows, columns, or the entire table;
+aligning column text left, right, or center; swapping rows or columns; etc.
+Anything is now possible either with the new built-in context menu, or a quick
+keyboard shortcut.
+
+There is only one thing we stopped to support: grid tables. Given that their
+structure can be much more difficult to parse we wanted to err on the side of
+caution. However, some keyboard shortcuts such as navigating between cells will
+still work with grid tables. Since users will most of the time only edit simple
+tables, we believe this to be an acceptable compromise — while not completely
+ruling out supporting grid tables, especially since Pandoc has started heavily
+investing in an improvement of their grid table support.
+
+In any case, we hope that the new TableEditor will finally fix the issues you
+experienced over the past years — and we would like to apologize that it took us
+so long to fix all of these issues at once!
+
 ## GUI and Functionality
 
-(nothing here)
+- **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
+  functionality of the previous version, with the exception of more safeguards
+  against data loss, and more ergonomic usage.
+- Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
+  footnotes).
 
 ## Under the Hood
 
