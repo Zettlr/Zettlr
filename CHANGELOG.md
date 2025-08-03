@@ -55,7 +55,7 @@ so long to fix all of these issues at once!
 
 ## Under the Hood
 
-(nothing here)
+- Update Electron to version `37.2.5`.
 
 # 3.6.0
 
