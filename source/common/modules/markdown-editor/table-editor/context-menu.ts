@@ -101,19 +101,19 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
           enabled: true
         },
         { type: 'separator' },
-        {
-          type: 'normal',
-          label: trans('Sort column A-Z'),
-          id: 'sort.col.asc',
-          enabled: true
-        },
-        {
-          type: 'normal',
-          label: trans('Sort column Z-A'),
-          id: 'sort.col.desc',
-          enabled: true
-        },
-        { type: 'separator' },
+        // {
+        //   type: 'normal',
+        //   label: trans('Sort column A-Z'),
+        //   id: 'sort.col.asc',
+        //   enabled: true
+        // },
+        // {
+        //   type: 'normal',
+        //   label: trans('Sort column Z-A'),
+        //   id: 'sort.col.desc',
+        //   enabled: true
+        // },
+        // { type: 'separator' },
         {
           type: 'normal',
           label: trans('Clear column'),
