@@ -545,6 +545,8 @@ from the default profiles: `shift-heading-level-by: 1`.
 - Zettlr now remembers the widths of file manager and sidebar
 - You can now reset the file manager and sidebar widths by double-clicking the
   corresponding resizer
+- Fixed an issue with the Markdown AST parser that would wrongly parse tables
+  with empty cells and forget some of them
 - Copying plain links in the form `<http://www.example.com>` will now remove the
   angled brackets (#5285)
 - Reverted a change from 3.1.0 which altered the process of creating new files
