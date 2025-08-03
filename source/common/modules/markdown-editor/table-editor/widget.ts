@@ -356,6 +356,12 @@ function updateRow (
       // which happens if the user adds or removes columns or rows. In this case
       // we basically have to remove and recreate the subview, to ensure it
       // grabs the correct cell's information.
+      // NOTE: This is a potential point of failure. `cell.from` and `cell.to`
+      // may not correspond to the subview range, since the user can insert
+      // spaces which the parser will not consider part of the cell. This is why
+      // we also check for whether the amount of columns or rows has changed.
+      // This is usually a good indicator that the subview may contain an
+      // outdated cell view.
       subview.destroy()
       createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
     } // Else: The cell has a subview and the selection is still in there.
