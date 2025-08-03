@@ -274,6 +274,14 @@ export interface FencedCode extends MDNode {
  */
 export interface InlineCode extends MDNode {
   type: 'InlineCode'
+
+  /**
+   * This is similar to FencedCode, in that it will be an empty string for
+   * inline code, except it is an inline MathTeX equation, in which case the
+   * info string will contain the code mark (either $ for inline, or $$ for
+   * display).
+   */
+  info: string
   /**
    * The verbatim source code. (Not represented as a TextNode since whitespace
    * is significant and it shouldn't count towards word counts, etc.)
@@ -741,11 +749,18 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     }
     case 'InlineCode': {
       const [ start, end ] = node.getChildren('CodeMark')
+      let info = ''
+      const codeMark = markdown.substring(start.from, start.to)
+      if (codeMark === '$$' || codeMark === '$') {
+        info = codeMark
+      }
+
       const astNode: InlineCode = {
         type: 'InlineCode',
         name: 'InlineCode',
         from: node.from,
         to: node.to,
+        info,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         source: markdown.substring(start.to, end.from)
       }
