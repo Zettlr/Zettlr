@@ -787,7 +787,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/notarize@npm:2.5.0, @electron/notarize@npm:^2.1.0, @electron/notarize@npm:^2.5.0":
+"@electron/notarize@npm:2.5.0, @electron/notarize@npm:^2.1.0":
   version: 2.5.0
   resolution: "@electron/notarize@npm:2.5.0"
   dependencies:
@@ -795,6 +795,16 @@ __metadata:
     fs-extra: "npm:^9.0.1"
     promise-retry: "npm:^2.0.1"
   checksum: 10/16380675e47e272d481b14a4e66326e7bbc4cb7183d40e4eb146440183bc5dc45f5bc4cf75dfeb4c7b2574919f343fc678ae20512b59427216512470c3942ab2
+  languageName: node
+  linkType: hard
+
+"@electron/notarize@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@electron/notarize@npm:3.0.2"
+  dependencies:
+    debug: "npm:^4.4.0"
+    promise-retry: "npm:^2.0.1"
+  checksum: 10/224ccbd79eaff416070ec4d86fc87d4731911e19c2221bf322d04210faa4b122bd91c3eb1dc151d76a25bb8cad42a16e8c8d6274c853662b63168b6dc1799442
   languageName: node
   linkType: hard
 
@@ -14727,7 +14737,7 @@ __metadata:
     "@electron-forge/plugin-fuses": "npm:^7.8.2"
     "@electron-forge/plugin-webpack": "npm:^7.8.2"
     "@electron/fuses": "npm:^1.8.0"
-    "@electron/notarize": "npm:^2.5.0"
+    "@electron/notarize": "npm:^3.0.2"
     "@eslint/config-inspector": "npm:^1.1.0"
     "@lezer/common": "npm:^1.2.3"
     "@lezer/highlight": "npm:^1.2.1"
