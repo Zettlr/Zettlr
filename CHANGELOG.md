@@ -55,6 +55,9 @@ so long to fix all of these issues at once!
 - **Feature**: Full-text (aka. global) search runs can now be cancelled via a
   dedicated button. You can now also trigger a new search while another search
   is already running.
+- Snippets: The `$FILENAME` variable now does not contain the file extension
+  anymore. Users who also want the extension should update their snippets to
+  `$FILENAME$EXTENSION` (#4191).
 
 ## Under the Hood
 
