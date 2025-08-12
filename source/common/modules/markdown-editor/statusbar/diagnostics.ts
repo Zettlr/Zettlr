@@ -16,7 +16,9 @@ import { type EditorState } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import { type StatusbarItem } from '.'
-import { openLintPanel, forEachDiagnostic } from '@codemirror/lint'
+import { openLintPanel, closeLintPanel, forEachDiagnostic } from '@codemirror/lint'
+
+let diagnosticsOpen = false
 
 /**
  * Displays a count of all diagnostics
@@ -45,7 +47,13 @@ export function diagnosticsStatus (state: EditorState, view: EditorView): Status
     allowHtml: true,
     title: trans('Open diagnostics panel'),
     onClick (event) {
-      openLintPanel(view)
+      if (diagnosticsOpen) {
+        closeLintPanel(view)
+        diagnosticsOpen = false
+      } else {
+        openLintPanel(view)
+        diagnosticsOpen = true
+      }
     }
   }
 }
