@@ -52,6 +52,9 @@ so long to fix all of these issues at once!
   against data loss, and more ergonomic usage.
 - Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
   footnotes).
+- **Feature**: Full-text (aka. global) search runs can now be cancelled via a
+  dedicated button. You can now also trigger a new search while another search
+  is already running.
 
 ## Under the Hood
 
