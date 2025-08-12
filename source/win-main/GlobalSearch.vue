@@ -29,7 +29,7 @@
         v-on:click="startSearch()"
       ></ButtonControl>
       <ButtonControl
-        label="Cancel"
+        v-bind:label="cancelButtonLabel"
         v-bind:inline="true"
         v-bind:disabled="!searchIsRunning"
         v-on:click="cancelSearch()"
@@ -167,6 +167,7 @@ const filterLabel = trans('Filter search results')
 const restrictDirLabel = trans('Restrict search to directory')
 const restrictDirPlaceholder = trans('Choose directory…')
 const searchButtonLabel = trans('Search')
+const cancelButtonLabel = trans('Cancel')
 const clearButtonLabel = trans('Clear search')
 const toggleButtonLabel = trans('Toggle results')
 
