@@ -56,6 +56,7 @@ so long to fix all of these issues at once!
   dedicated button. You can now also trigger a new search while another search
   is already running.
 - Fixed WebP images not rendering from relative paths (#5181).
+- Fixed incorrect cursor position after inserting IDs (#5846)
 
 ## Under the Hood
 
