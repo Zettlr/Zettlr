@@ -61,7 +61,7 @@
       During searching, display a progress bar that indicates how far we are and
       that allows to interrupt the search, if it takes too long.
     -->
-    <template v-if="filesToSearch.length > 0">
+    <template v-if="searchIsRunning">
       <div>
         <ProgressControl
           v-bind:max="sumFilesToSearch"
