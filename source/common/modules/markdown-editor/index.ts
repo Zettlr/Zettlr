@@ -619,8 +619,10 @@ export default class MarkdownEditor extends EventEmitter {
    */
   replaceSelection (text: string): void {
     const mainSel = this._instance.state.selection.main
+    const newCursorPos = mainSel.from + text.length
     this._instance.dispatch({
-      changes: { from: mainSel.from, to: mainSel.to, insert: text }
+      changes: { from: mainSel.from, to: mainSel.to, insert: text },
+      selection: { anchor: newCursorPos, head: newCursorPos }
     })
   }
 
