@@ -55,6 +55,7 @@ so long to fix all of these issues at once!
 - **Feature**: Full-text (aka. global) search runs can now be cancelled via a
   dedicated button. You can now also trigger a new search while another search
   is already running.
+- Fixed WebP images not rendering from relative paths (#5181).
 
 ## Under the Hood
 
