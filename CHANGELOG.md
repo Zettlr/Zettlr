@@ -58,6 +58,7 @@ so long to fix all of these issues at once!
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
+- Fixed WebP images not rendering from relative paths (#5181).
 
 ## Under the Hood
 
