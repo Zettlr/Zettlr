@@ -74,6 +74,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
 - Fixed WebP images not rendering from relative paths (#5181).
+- Fixed the behavior when clicking widgets (citations, etc.) to accurately
+  select only the widget's source text (#5682).
 - Update `it-IT` translation (#5831).
 
 ## Under the Hood
