@@ -305,7 +305,7 @@ async function replaceSnippetVariables (state: EditorState, text: string): Promi
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
     ZKN_ID: generateId(String(window.config.get('zkn.idGen'))),
     CURRENT_ID: config.metadata.id,
-    FILENAME: pathBasename(absPath),
+    FILENAME: pathBasename(absPath, pathExtname(absPath)),
     DIRECTORY: pathDirname(absPath),
     EXTENSION: pathExtname(absPath)
   }
