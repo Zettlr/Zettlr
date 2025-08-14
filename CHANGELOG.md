@@ -68,6 +68,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - **Feature**: Full-text (aka. global) search runs can now be cancelled via a
   dedicated button. You can now also trigger a new search while another search
   is already running.
+- **Feature**: Individual global search results can now be copied to the
+  clipboard (#2070).
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
