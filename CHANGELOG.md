@@ -45,6 +45,19 @@ In any case, we hope that the new TableEditor will finally fix the issues you
 experienced over the past years — and we would like to apologize that it took us
 so long to fix all of these issues at once!
 
+## Changes to the snippet `$FILENAME` variable
+
+In this update, we have implemented a change in which the `$FILENAME` variable
+no longer includes the filename extension. This means that, while `$FILENAME`
+has in the past resolved to `my-file.md`, it will now only include `my-file`.
+
+If you rely on the `$FILENAME`-variable in any of your snippets, please make
+sure to update it by adding the variable `$EXTENSION` behind it. In other
+words, everywhere you need only the filename without its extension, you can
+keep `$FILENAME`, but wherever you need both the file name and its file
+extension, please use `$FILENAME$EXTENSION`. (The latter variable includes
+the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
@@ -57,6 +70,9 @@ so long to fix all of these issues at once!
   is already running.
 - **Feature**: Individual global search results can now be copied to the
   clipboard (#2070).
+- **Change**: Snippets: The `$FILENAME` variable now does not contain the file
+  extension anymore. Users who also want the extension should update their
+  snippets to `$FILENAME$EXTENSION` (#4191).
 - Fixed WebP images not rendering from relative paths (#5181).
 
 ## Under the Hood
