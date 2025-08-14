@@ -226,6 +226,7 @@ The available transforms as of now are:
 - Fix the wikilink/Zettelkasten link Lua filter (#5605).
 - Zettlr now properly retrieves attachments also for items residing in group
   libraries (#5647).
+- Use shortcuts to navigate search results from the global search (#5718).
 - Updated translations:
   -  German (`de-DE`)
   -  French (`fr-FR`, #5688)
