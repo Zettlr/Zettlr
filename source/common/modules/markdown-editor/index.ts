@@ -96,7 +96,7 @@ import {
 import { markdownToAST } from '../markdown-utils'
 import { countField, updateWordCountEffect } from './plugins/statistics-fields'
 import type { SyntaxNode } from '@lezer/common'
-import { darkModeEffect } from './theme/dark-mode'
+import { useDarkModeEditor, darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
 import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
 import { moveSection } from './commands/move-section'
@@ -595,6 +595,7 @@ export default class MarkdownEditor extends EventEmitter {
   private onConfigUpdate (newOptions: Partial<EditorConfiguration>): void {
     const inputModeChanged = newOptions.inputMode !== undefined && newOptions.inputMode !== this.config.inputMode
     const darkModeChanged = newOptions.darkMode !== undefined && newOptions.darkMode !== this.config.darkMode
+    const editorModeChanged = newOptions.darkModeEditor !== undefined && newOptions.darkModeEditor !== this.config.darkModeEditor
     const themeChanged = newOptions.theme !== undefined && newOptions.theme !== this.config.theme
 
     // Third: The input mode, if applicable
@@ -609,12 +610,15 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     // Fourth: Switch theme, if applicable
-    if (darkModeChanged || themeChanged) {
+    if (darkModeChanged || editorModeChanged || themeChanged) {
       const themes = getMainEditorThemes()
+
+      const darkMode = newOptions.darkMode ?? this.config.darkMode
+      const darkModeEditor = newOptions.darkModeEditor ?? this.config.darkModeEditor
 
       this._instance.dispatch({
         effects: darkModeEffect.of({
-          darkMode: newOptions.darkMode,
+          darkMode: useDarkModeEditor(darkMode, darkModeEditor),
           ...themes[newOptions.theme ?? this.config.theme]
         })
       })

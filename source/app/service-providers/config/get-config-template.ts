@@ -60,6 +60,7 @@ export interface ConfigOptions {
   appLang: string
 
   darkMode: boolean
+  darkModeEditor: 'match'|'light'|'dark'
   autoDarkMode: 'off'|'system'|'schedule'
   autoDarkModeStart: string
   autoDarkModeEnd: string
@@ -288,6 +289,7 @@ export function getConfigTemplate (): ConfigOptions {
     attachmentExtensions: [],
     // UI related options
     darkMode: nativeTheme.shouldUseDarkColors,
+    darkModeEditor: 'match', // Possible values: 'match', 'light', 'dark'
     alwaysReloadFiles: true, // Should Zettlr automatically load remote changes?
     autoDarkMode: 'system', // Possible values: 'off', 'system', 'schedule', 'auto'
     autoDarkModeStart: '21:00', // Switch into dark mode at this time

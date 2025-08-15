@@ -229,7 +229,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   // right after setting the new configurations. Plus, the user won't update
   // everything all the time, but rather do one initial configuration, so
   // even if we incur a performance penalty, it won't be noticed that much.
-  const { editor, display, zkn, darkMode } = configStore.config
+  const { editor, display, zkn, darkMode, darkModeEditor } = configStore.config
   return {
     indentUnit: editor.indentUnit,
     indentWithTabs: editor.indentWithTabs,
@@ -278,6 +278,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     showStatusbar: editor.showStatusbar,
     showFormattingToolbar: editor.showFormattingToolbar,
     darkMode,
+    darkModeEditor,
     theme: display.theme,
     highlightWhitespace: editor.showWhitespace,
     showMarkdownLineNumbers: editor.showMarkdownLineNumbers,
@@ -707,10 +708,53 @@ function maybeHighlightSearchResults (): void {
     // Reset the margins for code files
     .cm-scroller { padding: 0px; }
   }
+
+  // Style the statusbar and formatting-bar
+  // so they adopt the main ui theme, not the editor theme
+  .cm-statusbar.cm-panel, .cm-tooltip {
+    color: black;
+    background-color: #f5f5f5;
+  }
+
+  .cm-formatting-bar {
+    background-color: #f5f5f5;
+
+    .cm-tooltip-arrow::after {
+      border-top-color: #f5f5f5;
+      border-bottom-color: #f5f5f5;
+    }
+  }
+
+  //Ellipsis (...) When a header is folded
+  .cm-foldPlaceholder {
+    background-color: transparent;
+    border-style: none;
+  }
 }
 
 body.dark .main-editor-wrapper {
   background-color: #2b2b2c;
+  .CodeMirror .CodeMirror-gutters { background-color: #2b2b2c; }
+
+  // Style the statusbar and formatting-bar
+  // so they adopt the main ui theme, not the editor theme
+  .cm-statusbar.cm-panel, .cm-tooltip {
+    color: #ddd;
+    background-color: #333333;
+  }
+
+  .cm-formatting-bar {
+    background-color: #333333;
+
+    button.formatting-toolbar-button {
+      color: #c8c8c8;
+    }
+
+    .cm-tooltip-arrow::after {
+      border-top-color: #333333;
+      border-bottom-color: #333333;
+    }
+  }
 }
 
 // CodeMirror fullscreen
