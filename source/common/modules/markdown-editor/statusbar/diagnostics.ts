@@ -45,7 +45,7 @@ export function diagnosticsStatus (state: EditorState, view: EditorView): Status
     allowHtml: true,
     title: trans('Open diagnostics panel'),
     // We try to close the panel first because
-    // closeLintPanel() returns false if the panel is already open
+    // closeLintPanel() returns false if the panel is already closed
     // but openLintPanel() only returns true.
     onClick (event) {
       if (!closeLintPanel(view)) openLintPanel(view)
