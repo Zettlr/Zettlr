@@ -681,17 +681,17 @@
     
     <!-- SHORT MONTH FORMS -->
     <term name="month-01" form="short">sty.</term>
-    <term name="month-02" form="short">luty</term>
+    <term name="month-02" form="short">lut.</term>
     <term name="month-03" form="short">mar.</term>
     <term name="month-04" form="short">kwi.</term>
-    <term name="month-05" form="short">maj</term>
+    <term name="month-05" form="short">maja</term>
     <term name="month-06" form="short">cze.</term>
     <term name="month-07" form="short">lip.</term>
     <term name="month-08" form="short">sie.</term>
     <term name="month-09" form="short">wrz.</term>
     <term name="month-10" form="short">paź.</term>
     <term name="month-11" form="short">lis.</term>
-    <term name="month-12" form="short">grudz.</term>
+    <term name="month-12" form="short">grud.</term>
 
     <!-- SEASONS -->
     <term name="season-01">wiosna</term>
