@@ -18,8 +18,6 @@ import { trans } from '@common/i18n-renderer'
 import { type StatusbarItem } from '.'
 import { openLintPanel, closeLintPanel, forEachDiagnostic } from '@codemirror/lint'
 
-let diagnosticsOpen = false
-
 /**
  * Displays a count of all diagnostics
  *
@@ -46,14 +44,11 @@ export function diagnosticsStatus (state: EditorState, view: EditorView): Status
     content: `<cds-icon shape="help-info"></cds-icon> ${info} <cds-icon shape="warning-standard"></cds-icon> ${warn} <cds-icon shape="times-circle"></cds-icon> ${error}`,
     allowHtml: true,
     title: trans('Open diagnostics panel'),
+    // We try to close the panel first because
+    // closeLintPanel() returns false if the panel is already open
+    // but openLintPanel() only returns true.
     onClick (event) {
-      if (diagnosticsOpen) {
-        closeLintPanel(view)
-        diagnosticsOpen = false
-      } else {
-        openLintPanel(view)
-        diagnosticsOpen = true
-      }
+      if (!closeLintPanel(view)) openLintPanel(view)
     }
   }
 }
