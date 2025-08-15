@@ -48,8 +48,13 @@ const makeUriTesters = [
 
 describe('Utility#makeValidUri()', function () {
   for (const test of makeUriTesters) {
+    // Adds a conditional to remove the extra '/' inserted for Windows, should be removed if that is ever changed.
+    let uriToTest = makeValidUri(test.input, base)
+      if(process.platform === 'win32' && test.expected.startsWith('safe-file') && !test.input.startsWith('//')) {
+        uriToTest = uriToTest.replace('/','')
+      }
     it(`Input "${test.input}" should return "${test.expected}"`, function () {
-      assert.strictEqual(makeValidUri(test.input, base), test.expected)
+      assert.strictEqual(uriToTest, test.expected)
     })
   }
 })

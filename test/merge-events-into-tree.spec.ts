@@ -19,17 +19,24 @@ import type { DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import type { ChangeDescriptor } from '@providers/workspaces/root'
 import _ from 'lodash'
 import { getSorter } from '@providers/fsal/util/directory-sorter'
+import path from 'path'
+
+//Define the path variables up top to avoid having to repeat fixes for platforms
+const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
+const testPathString = '/path/file.md'.replaceAll('/',PATH_SEP)
+const testPathObject = path.parse(testPathString)
+const { root, dir, base, ext } = testPathObject
 
 const infile: MDFileDescriptor = {
-  path: '/path/file.md',
-  dir: '/path',
-  name: 'file.md',
+  path: testPathString,
+  dir: dir,
+  name: base,
   root: true,
   type: 'file',
   size: 0,
   modtime: 10,
   creationtime: 10,
-  ext: '.md',
+  ext: ext,
   id: '',
   tags: [],
   links: [],
@@ -44,9 +51,9 @@ const infile: MDFileDescriptor = {
 }
 
 const outfile: MDFileDescriptor = {
-  path: '/path/file.md',
-  dir: '/path',
-  name: 'file.md',
+  path: testPathString,
+  dir: dir,
+  name: base,
   root: true,
   type: 'file',
   size: 0,
@@ -67,8 +74,8 @@ const outfile: MDFileDescriptor = {
 }
 
 const indir: DirDescriptor = {
-  path: '/path',
-  dir: '/',
+  path: dir,
+  dir: root,
   name: 'path',
   root: true,
   type: 'directory',
@@ -85,8 +92,8 @@ const indir: DirDescriptor = {
 }
 
 const outdirDescriptor: DirDescriptor = {
-  path: '/path',
-  dir: '/',
+  path: dir,
+  dir: root,
   name: 'path',
   root: true,
   type: 'directory',
@@ -103,8 +110,8 @@ const outdirDescriptor: DirDescriptor = {
 }
 
 const outdir: DirDescriptor = {
-  path: '/path',
-  dir: '/',
+  path: dir,
+  dir: root,
   name: 'path',
   root: true,
   type: 'directory',
