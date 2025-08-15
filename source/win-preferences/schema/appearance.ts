@@ -34,6 +34,17 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
         { type: 'separator' },
         {
           type: 'radio',
+          label: trans('Editor'),
+          model: 'darkModeEditor',
+          inline: true,
+          options: {
+            light: trans('Light'),
+            match: trans('Match'),
+            dark: trans('Dark')
+          }
+        },
+        {
+          type: 'radio',
           label: trans('Schedule dark mode automatically'),
           model: 'autoDarkMode',
           inline: true,
