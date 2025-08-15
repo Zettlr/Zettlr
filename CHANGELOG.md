@@ -81,6 +81,7 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 ## Under the Hood
 
 - Update Electron to version `37.2.5`.
+- Changed unit test path handling to be normalized across platforms, mainly to handle differences with win32 platforms
 
 # 3.6.0
 
