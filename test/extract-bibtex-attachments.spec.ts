@@ -83,9 +83,10 @@ describe('Utility#extractBibTexAttachments()', function () {
     // Normalizing the paths in the validResults object for proper comparison to the files object
     for (const key in validResults) {
       const validResultsValue = validResults[key]
+      //conditional to filter all 'false' validResults values
       if(validResultsValue){
         validResultsValue.forEach((element, index) => {
-          const normalized_path = path.normalize(element)
+          const normalized_path = path.normalize(element) //normalizing to avoid different results based on platform
           validResultsValue[index] = normalized_path
         })
       }

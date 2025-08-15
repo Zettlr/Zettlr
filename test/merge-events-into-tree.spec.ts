@@ -22,10 +22,10 @@ import { getSorter } from '@providers/fsal/util/directory-sorter'
 import path from 'path'
 
 //Define the path variables up top to avoid having to repeat fixes for platforms
-const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
-const testPathString = '/path/file.md'.replaceAll('/',PATH_SEP)
-const testPathObject = path.parse(testPathString)
-const { root, dir, base, ext } = testPathObject
+const PATH_SEP = process.platform === 'win32' ? '\\' : '/' // defines the path separator for the platform
+const testPathString = '/path/file.md'.replaceAll('/',PATH_SEP) // applies the path separator
+const testPathObject = path.parse(testPathString) //creates a path object to then destructure, using node:path
+const { root, dir, base, ext } = testPathObject // creates variables for each property, used in the Descriptor objects that follow
 
 const infile: MDFileDescriptor = {
   path: testPathString,
