@@ -42,14 +42,13 @@ const targetElement = ref<HTMLElement|null>(null)
 
 onBeforeMount(() => {
   // Listen to messages from the menu provider
-  ipcRenderer.on('menu-provider', (event, message) => {
-    const { command } = message
+  type MenuMessage = { command: 'application-menu', payload: SubmenuItem[] }
+  type SubmenuMessage = { command: 'application-submenu', payload: { id: string, submenu: SubmenuItem[] } }
 
+  ipcRenderer.on('menu-provider', (event, { command, payload }: MenuMessage|SubmenuMessage) => {
     if (command === 'application-menu') {
-      const { payload } = message
       menu.value = payload
     } else if (command === 'application-submenu') {
-      const { payload } = message
       showSubmenu(payload.submenu, payload.id)
     }
   })
