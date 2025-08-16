@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+import { addNewFootnote } from '../commands/footnotes'
 import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
@@ -35,6 +36,9 @@ import { toSentenceCase } from 'source/common/modules/markdown-editor/commands/t
 import { toTitleCase } from 'source/common/modules/markdown-editor/commands/transforms/to-title-case'
 import { zapGremlins } from 'source/common/modules/markdown-editor/commands/transforms/zap-gremlins'
 import { configField } from '../util/configuration'
+
+
+
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -183,6 +187,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Insert link'),
       accelerator: 'CmdOrCtrl+K',
       id: 'markdownLink',
+      type: 'normal',
+      enabled: true
+    },
+    {
+      label: trans('Insert footnote'),
+      id: 'markdownInsertFootnote',
       type: 'normal',
       enabled: true
     },
@@ -387,6 +397,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       applyBlockquote(view)
     } else if (clickedID === 'markdownInsertTable') {
       // TODO
+    } else if (clickedID === 'markdownInsertFootnote') {
+      addNewFootnote(view)
     } else if (clickedID === 'cut') {
       cut(view)
     } else if (clickedID === 'copy') {
