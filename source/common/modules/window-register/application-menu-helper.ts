@@ -59,7 +59,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
         y: targetRect.top
       }
     })
-      .then(clickedID => {
+      .then((clickedID: string|undefined) => {
         // If the user did click a menu item, notify the caller
         if (clickedID !== undefined) {
           callback(clickedID)

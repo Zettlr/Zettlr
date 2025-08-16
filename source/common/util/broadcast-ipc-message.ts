@@ -26,6 +26,7 @@ export default function broadcastIPCMessage (channel: string, ...args: any[]): v
   const allWindows = BrowserWindow.getAllWindows()
 
   for (const window of allWindows) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     window.webContents.send(channel, ...args)
   }
 }
