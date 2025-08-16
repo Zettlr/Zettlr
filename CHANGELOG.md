@@ -83,6 +83,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 ## Under the Hood
 
 - Update Electron to version `37.2.5`.
+- Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
+  declarations (`if`, `for`, `while`, etc.).
 
 # 3.6.0
 

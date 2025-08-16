@@ -30,15 +30,33 @@ const renderCompartment = new Compartment()
 
 const transactionExtender = EditorState.transactionExtender.from(configField, config => transaction => {
   const ext: Extension[] = [renderMermaid]
-  if (config.renderImages) ext.push(renderImages)
-  if (config.renderLinks) ext.push(renderLinks)
-  if (config.renderMath) ext.push(renderMath)
-  if (config.renderTasks) ext.push(renderTasks)
-  if (config.renderHeadings) ext.push(renderHeadings)
-  if (config.renderCitations) ext.push(renderCitations)
-  if (config.renderTables) ext.push(renderTables)
-  if (config.renderIframes) ext.push(renderIframes)
-  if (config.renderEmphasis) ext.push(renderEmphasis)
+  if (config.renderImages) {
+    ext.push(renderImages)
+  }
+  if (config.renderLinks) {
+    ext.push(renderLinks)
+  }
+  if (config.renderMath) {
+    ext.push(renderMath)
+  }
+  if (config.renderTasks) {
+    ext.push(renderTasks)
+  }
+  if (config.renderHeadings) {
+    ext.push(renderHeadings)
+  }
+  if (config.renderCitations) {
+    ext.push(renderCitations)
+  }
+  if (config.renderTables) {
+    ext.push(renderTables)
+  }
+  if (config.renderIframes) {
+    ext.push(renderIframes)
+  }
+  if (config.renderEmphasis) {
+    ext.push(renderEmphasis)
+  }
 
   const currentState = renderCompartment.get(transaction.state) as Extension[]|undefined
   if (currentState === undefined) {
@@ -64,14 +82,32 @@ const transactionExtender = EditorState.transactionExtender.from(configField, co
  */
 export function renderers (config?: Partial<EditorConfiguration>): Extension {
   const ext: Extension[] = [renderMermaid]
-  if (config?.renderImages === true) ext.push(renderImages)
-  if (config?.renderLinks === true) ext.push(renderLinks)
-  if (config?.renderMath === true) ext.push(renderMath)
-  if (config?.renderTasks === true) ext.push(renderTasks)
-  if (config?.renderHeadings === true) ext.push(renderHeadings)
-  if (config?.renderCitations === true) ext.push(renderCitations)
-  if (config?.renderTables === true) ext.push(renderTables)
-  if (config?.renderIframes === true) ext.push(renderIframes)
-  if (config?.renderEmphasis === true) ext.push(renderEmphasis)
+  if (config?.renderImages === true) {
+    ext.push(renderImages)
+  }
+  if (config?.renderLinks === true) {
+    ext.push(renderLinks)
+  }
+  if (config?.renderMath === true) {
+    ext.push(renderMath)
+  }
+  if (config?.renderTasks === true) {
+    ext.push(renderTasks)
+  }
+  if (config?.renderHeadings === true) {
+    ext.push(renderHeadings)
+  }
+  if (config?.renderCitations === true) {
+    ext.push(renderCitations)
+  }
+  if (config?.renderTables === true) {
+    ext.push(renderTables)
+  }
+  if (config?.renderIframes === true) {
+    ext.push(renderIframes)
+  }
+  if (config?.renderEmphasis === true) {
+    ext.push(renderEmphasis)
+  }
   return [ transactionExtender, renderCompartment.of(ext) ]
 }

@@ -277,10 +277,16 @@ const writingTargetPath = computed(() => {
   }
 
   let current = props.obj.charCount
-  if (target.mode === 'words') current = props.obj.wordCount
+  if (target.mode === 'words') {
+    current = props.obj.wordCount
+  }
+
   let progress = current / target.count
   let large = (progress > 0.5) ? 1 : 0
-  if (progress > 1) progress = 1 // Never exceed 100 %
+  if (progress > 1) {
+    progress = 1 // Never exceed 100 %
+  }
+
   let x = Math.cos(2 * Math.PI * progress)
   let y = Math.sin(2 * Math.PI * progress)
   return `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`

@@ -21,8 +21,11 @@ const MAX_FILE_PREVIEW_LENGTH = 300
 const MAX_FILE_PREVIEW_LINES = 10
 
 function previewTitleGenerator (userConfig: string, descriptor: MDFileDescriptor): string {
-  if (userConfig.includes('title')&& descriptor.yamlTitle !== undefined) return descriptor.yamlTitle
-  else if (userConfig.includes('heading') && descriptor.firstHeading !== null) return descriptor.firstHeading
+  if (userConfig.includes('title')&& descriptor.yamlTitle !== undefined) {
+    return descriptor.yamlTitle
+  } else if (userConfig.includes('heading') && descriptor.firstHeading !== null) {
+    return descriptor.firstHeading
+  }
   return descriptor.name
 }
 

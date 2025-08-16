@@ -36,7 +36,9 @@ export default abstract class ZettlrCommand {
     this._app = app
 
     // The bind event is the event that is sent from the renderer
-    if (!Array.isArray(bindEvent)) bindEvent = [bindEvent]
+    if (!Array.isArray(bindEvent)) {
+      bindEvent = [bindEvent]
+    }
     this._bind = bindEvent
   }
 

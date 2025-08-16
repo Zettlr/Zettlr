@@ -247,9 +247,15 @@ export default class LogProvider extends ProviderContract {
    */
   _toString (message: LogMessage): string {
     let level = 'Verbose'
-    if (message.level === LogLevel.info) level = 'Info'
-    if (message.level === LogLevel.warning) level = 'Warning'
-    if (message.level === LogLevel.error) level = 'Error'
+    if (message.level === LogLevel.info) {
+      level = 'Info'
+    }
+    if (message.level === LogLevel.warning) {
+      level = 'Warning'
+    }
+    if (message.level === LogLevel.error) {
+      level = 'Error'
+    }
 
     let details = ''
     if (message.details instanceof Error) {

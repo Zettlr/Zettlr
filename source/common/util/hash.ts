@@ -21,7 +21,9 @@ export default function (string: string): number {
   let hash = 0
   let i, chr
 
-  if (string.length === 0) return hash
+  if (string.length === 0) {
+    return hash
+  }
 
   for (i = 0; i < string.length; i++) {
     chr = string.charCodeAt(i)

@@ -270,7 +270,10 @@ function handleDragOver (evt: DragEvent): void {
   let scroll = elem.scrollTop
   let distanceBottom = elem.offsetHeight - y // The less the value, the closer
   let distanceTop = (scroll > 0) ? y - elem.offsetTop : 0
-  if (elem.scrollHeight - scroll === elem.clientHeight) distanceBottom = 0
+  if (elem.scrollHeight - scroll === elem.clientHeight) {
+    distanceBottom = 0
+  }
+
   // Now scroll if applicable. The calculations take care that
   // the scrolling is faster the closer to the edge the object
   // is
