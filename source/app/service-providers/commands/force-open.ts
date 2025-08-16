@@ -42,7 +42,7 @@ export default class ForceOpen extends ZettlrCommand {
     }
 
     // Determine if the file should be created, if it can't be found. For this
-    // we need both the respective preferences setting and an auto-search
+    // we need both the respective  setting and an auto-search
     // command.
     const { customDirectory } = this._app.config.get().zkn
 

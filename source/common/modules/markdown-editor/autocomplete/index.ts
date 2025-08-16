@@ -63,7 +63,7 @@ const forbiddenTokens = [
   'MathEquation'
 ]
 
-const autocompleteSource: CompletionSource = function (ctx): CompletionResult|null {
+const autocompleteSource: CompletionSource = async function (ctx): Promise<CompletionResult|null> {
   // This function is called for every keystroke and shall determine whether to
   // actually start the autocomplete.
 
@@ -87,7 +87,7 @@ const autocompleteSource: CompletionSource = function (ctx): CompletionResult|nu
   }
 
   if (plugin !== undefined) {
-    const initialOptions = plugin.entries(ctx, ctx.state.doc.sliceString(startpos, ctx.pos).toLowerCase())
+    const initialOptions = await plugin.entries(ctx, ctx.state.doc.sliceString(startpos, ctx.pos).toLowerCase())
     return {
       from: startpos,
       options: initialOptions,
