@@ -16,6 +16,7 @@
 import extractBibTexAttachments from '../source/app/service-providers/citeproc/extract-bibtex-attachments'
 import assert from 'assert'
 import 'mocha'
+import path from 'path'
 
 interface BibTexAttachments {
   [citekey: string]: string[]|false
@@ -79,6 +80,17 @@ const invalidBibTexFile = `
 describe('Utility#extractBibTexAttachments()', function () {
   it('should successfully parse a valid BibTex file', function () {
     const files = extractBibTexAttachments(validBibTexFile, '')
+    // Normalizing the paths in the validResults object for proper comparison to the files object
+    for (const key in validResults) {
+      const validResultsValue = validResults[key]
+      //conditional to filter all 'false' validResults values
+      if(validResultsValue){
+        validResultsValue.forEach((element, index) => {
+          const normalized_path = path.normalize(element) //normalizing to avoid different results based on platform
+          validResultsValue[index] = normalized_path
+        })
+      }
+    }
     assert.deepStrictEqual(Object.keys(files), Object.keys(validResults), 'The parsed results do not contain the same keys!')
     for (const key in files) {
       assert.deepStrictEqual(files[key], validResults[key], `Key ${key} differs from the expected result!`)
