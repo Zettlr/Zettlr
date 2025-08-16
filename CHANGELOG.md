@@ -73,6 +73,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
+- The diagnostics info field in the statusbar now toggles the lint panel,
+  instead of only opening the panel (#5847).
 - Fixed WebP images not rendering from relative paths (#5181).
 - Fixed the behavior when clicking widgets (citations, etc.) to accurately
   select only the widget's source text (#5682).
