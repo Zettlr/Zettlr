@@ -113,8 +113,12 @@ export class TabManager {
   private movePinnedTabsLeft (): void {
     // Also make sure that pinned tabs are all grouped to the left before sync
     this._openFiles.sort((a, b) => {
-      if (a.pinned && !b.pinned) return -1
-      if (!a.pinned && b.pinned) return 1
+      if (a.pinned && !b.pinned) {
+        return -1
+      }
+      if (!a.pinned && b.pinned) {
+        return 1
+      }
       return 0
     })
   }

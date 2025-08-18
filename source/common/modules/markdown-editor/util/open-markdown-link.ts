@@ -61,7 +61,7 @@ export default function (url: string, view: EditorView): void {
     }
   } else {
     const searchParams = new URLSearchParams(window.location.search)
-    const windowId = searchParams.get('window_id') as string
+    const windowId = searchParams.get('window_id')
     const base = pathDirname(view.state.field(configField).metadata.path)
     const validURI = makeValidUri(url, base)
 

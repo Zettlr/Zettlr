@@ -59,12 +59,17 @@ export default function moveSection (value: string, fromLine: number, toLine: nu
     // Remove the old section.
     lines.splice(sectionStart, section.length)
     // Sneak a new line into the section, if there's no padding
-    if (lines[lines.length - 1] !== '') section.unshift('')
+    if (lines[lines.length - 1] !== '') {
+      section.unshift('')
+    }
+
     // Concat the section
     lines = lines.concat(section)
 
     // Remove a trailing newline if applicable
-    if (lines[lines.length - 1] === '') lines.pop()
+    if (lines[lines.length - 1] === '') {
+      lines.pop()
+    }
   } else if (sectionEnd < toLine) {
     // The section should be moved to the back, so to not confuse line numbers,
     // we first need to insert the section (i.e. copy and paste), and only
@@ -86,7 +91,9 @@ export default function moveSection (value: string, fromLine: number, toLine: nu
     // It was in fact the last section, so let's add a newline afterwards.
     if (sectionEnd + 1 === lines.length) {
       // ... but only if it doesn't end with a newline
-      if (section[section.length - 1] !== '') section.push('')
+      if (section[section.length - 1] !== '') {
+        section.push('')
+      }
     }
 
     // Now splice out the section

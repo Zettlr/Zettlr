@@ -116,9 +116,15 @@ export async function shutdownApplication (): Promise<void> {
 
   // Now construct the message. Always include minutes, seconds, and milliseconds
   let uptimeMessage: string = `${span.minutes} minutes, and ${span.seconds}.${span.ms} seconds`
-  if (span.hours > 0) uptimeMessage = `${span.hours} hours, ${uptimeMessage}`
-  if (span.days > 0) uptimeMessage = `${span.days} days, ${uptimeMessage}`
-  if (span.weeks > 0) uptimeMessage = `${span.weeks} weeks, ${uptimeMessage}`
+  if (span.hours > 0) {
+    uptimeMessage = `${span.hours} hours, ${uptimeMessage}`
+  }
+  if (span.days > 0) {
+    uptimeMessage = `${span.days} days, ${uptimeMessage}`
+  }
+  if (span.weeks > 0) {
+    uptimeMessage = `${span.weeks} weeks, ${uptimeMessage}`
+  }
 
   log.info(`Application uptime was: ${uptimeMessage}.`)
 

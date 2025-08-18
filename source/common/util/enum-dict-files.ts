@@ -39,7 +39,9 @@ export default function enumDictFiles (paths = [ path.join(app.getPath('userData
   for (let p of paths) {
     let list = fs.readdirSync(p)
     for (let dir of list) {
-      if (!isDir(path.join(p, dir))) continue
+      if (!isDir(path.join(p, dir))) {
+        continue
+      }
       let schema = bcp47.parse(dir)
       if (schema.language !== undefined) {
         // Additional check to make sure the dictionaries are complete.
@@ -49,7 +51,9 @@ export default function enumDictFiles (paths = [ path.join(app.getPath('userData
           // Second try: index-based names
           aff = path.join(p, dir, 'index.aff')
           dic = path.join(p, dir, 'index.dic')
-          if (!isFile(aff) || !isFile(dic)) continue
+          if (!isFile(aff) || !isFile(dic)) {
+            continue
+          }
         }
         // Only add the found dictionary if it is not already present. Useful
         // to override the shipped dictionaries.

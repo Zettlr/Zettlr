@@ -146,7 +146,7 @@ setInterval(() => {
  * @return  {void}
  */
 async function fetchData (): Promise<void> {
-  const newLogs = await ipcRenderer.invoke('log-provider', {
+  const newLogs: LM[] = await ipcRenderer.invoke('log-provider', {
     command: 'retrieve-log-chunk',
     nextIndex: nextIndex.value
   })

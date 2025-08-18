@@ -48,13 +48,14 @@ export default function replaceTags (markdown: string, oldTag: string, newTag: s
     if (prop !== undefined && prop instanceof YAMLSeq) {
       for (const item of prop.items) {
         if (item.value === oldTag) {
-          const [ start, valueEnd ] = item.range
+          const [ start, valueEnd ] = item.range as [number, number]
           // Slice the correct position
           markdown = markdown.slice(0, start) + newTag + markdown.slice(valueEnd)
         }
       }
 
-      // If the old tag contained a space, we are already done
+      // If the old tag contained a space, we are already done (since tags with
+      // spaces can only occur in the frontmatter).
       if (/\s/.test(oldTag)) {
         return markdown
       }

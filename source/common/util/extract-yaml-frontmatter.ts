@@ -44,8 +44,12 @@ export default function extractYamlFrontmatter (markdown: string): ExtractYamlFr
   }
 
   let linefeed = '\n'
-  if (markdown.includes('\r\n')) linefeed = '\r\n'
-  if (markdown.includes('\n\r')) linefeed = '\n\r'
+  if (markdown.includes('\r\n')) {
+    linefeed = '\r\n'
+  }
+  if (markdown.includes('\n\r')) {
+    linefeed = '\n\r'
+  }
 
   const lines = markdown.split(linefeed)
 
