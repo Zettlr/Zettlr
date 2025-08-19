@@ -618,10 +618,8 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {string}  text  The text to replace the selection with
    */
   replaceSelection (text: string): void {
-    const mainSel = this._instance.state.selection.main
-    this._instance.dispatch({
-      changes: { from: mainSel.from, to: mainSel.to, insert: text }
-    })
+    const transaction = this._instance.state.replaceSelection(text)
+    this._instance.dispatch(transaction)
   }
 
   /**

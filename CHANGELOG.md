@@ -79,6 +79,7 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - Fixed the behavior when clicking widgets (citations, etc.) to accurately
   select only the widget's source text (#5682).
 - Update `it-IT` translation (#5831).
+- Fixed incorrect cursor position after inserting IDs (#5846)
 
 ## Under the Hood
 
