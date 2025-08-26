@@ -36,18 +36,23 @@ onBeforeUnmount(() => {
 onUpdated(place)
 
 function onClick (event: MouseEvent): void {
-  if (popupWrapper.value === null) {
+  const target = event.target as Node | null
+
+  if (popupWrapper.value === null || target === null) {
     return
   }
 
   // Clicks on the popup itself are cool
-  if (event.target === popupWrapper.value || event.target === null) {
-    return
-  }
-  // And so are any clicks on elements within this.
+  // and so are any clicks on elements within this.
   // Background for the following line:
   // https://github.com/Zettlr/Zettlr/issues/554
-  if (popupWrapper.value.contains(event.target as Node)) {
+  if (popupWrapper.value.contains(target)) {
+    return
+  }
+
+  // Ignore clicks on the popover button
+  // so that clicking it closes the popover
+  if (props.target.contains(target)) {
     return
   }
 
@@ -65,6 +70,7 @@ function onClick (event: MouseEvent): void {
     emit('close')
   }
 }
+
 function onResize (event: UIEvent): void {
   place()
 }
