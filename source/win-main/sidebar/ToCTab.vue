@@ -198,7 +198,7 @@ function findEndOfEntry (originalToLine: number): number|undefined {
   if (idx === tableOfContents.value.length - 1) {
     return -1
   } else {
-    return tableOfContents.value[idx + 1].line - 1
+    return tableOfContents.value[idx + 1].line
   }
 }
 </script>

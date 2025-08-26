@@ -541,13 +541,13 @@ export default class MarkdownEditor extends EventEmitter {
 
     for (const section of nextSections) {
       if (section.level <= entry.level) {
-        endOfStartPos = section.pos - 1
+        endOfStartPos = section.pos
         break
       }
     }
 
     const toLine = to !== -1 ? to : this._instance.state.doc.lines
-    const targetPos = this._instance.state.doc.line(toLine).to
+    const targetPos = this._instance.state.doc.line(toLine).from
     const entryContents = this._instance.state.sliceDoc(entry.pos, endOfStartPos)
 
     // Now, dispatch the updates.
