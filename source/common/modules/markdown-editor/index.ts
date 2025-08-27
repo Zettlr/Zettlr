@@ -546,8 +546,9 @@ export default class MarkdownEditor extends EventEmitter {
       }
     }
 
-    const toLine = to !== -1 ? to : this._instance.state.doc.lines
-    const targetPos = this._instance.state.doc.line(toLine).from
+    const toLineNumber = to !== -1 ? to : this._instance.state.doc.lines
+    const toLine = this._instance.state.doc.line(toLineNumber)
+    const targetPos = to !== -1 ? toLine.from : toLine.to
     const entryContents = this._instance.state.sliceDoc(entry.pos, endOfStartPos)
 
     // Now, dispatch the updates.
