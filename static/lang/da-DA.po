@@ -20,24 +20,24 @@ msgstr ""
 
 #: source/app/service-providers/config/index.ts:498
 msgid "Changing this option requires a restart to take effect."
-msgstr ""
+msgstr "Ændring af denne valgmulighed kræver en genstart for at få effekt."
 
 #: source/app/service-providers/config/index.ts:501
 #: source/app/service-providers/menu/menu.win32.ts:676
 #: source/app/service-providers/menu/menu.darwin.ts:702
 #, fuzzy
 msgid "Restart now"
-msgstr "Lige nu"
+msgstr "Genstart nu"
 
 #: source/app/service-providers/config/index.ts:502
 msgid "Restart later"
-msgstr ""
+msgstr "Genstart senere"
 
 #: source/app/service-providers/config/index.ts:506
 #: source/app/service-providers/commands/file-rename.ts:128
 #: source/app/service-providers/commands/rename-tag.ts:43
 msgid "Confirm"
-msgstr ""
+msgstr "Bekræft"
 
 #: source/app/service-providers/config/config-validation.ts:278
 #, javascript-format
@@ -85,17 +85,17 @@ msgstr "Zettlr"
 
 #: source/app/service-providers/updates/index.ts:284
 msgid "Cannot check for update"
-msgstr ""
+msgstr "Kan ikke søge efter opdatering"
 
 #: source/app/service-providers/updates/index.ts:285
 #, javascript-format
 msgid "There was an error while checking for updates. %s: %s"
-msgstr ""
+msgstr "Der opstod en fejl under søgning efter opdateringer. %s: %%s"
 
 #: source/app/service-providers/updates/index.ts:323
 #: source/tmp/win-main/App.vue.ts:405
 msgid "Update available"
-msgstr ""
+msgstr "Opdatering tilgængelig"
 
 #: source/app/service-providers/updates/index.ts:324
 #, javascript-format
@@ -107,14 +107,16 @@ msgid ""
 "Please update at your earliest convenience. You can open the updater now, or "
 "update later."
 msgstr ""
+"Opdater venligst så snart det er belejligt. Du kan åbne opdateringen nu "
+"eller opdatere senere."
 
 #: source/app/service-providers/updates/index.ts:327
 msgid "Open updater"
-msgstr ""
+msgstr "Åbn opdatering"
 
 #: source/app/service-providers/updates/index.ts:328
 msgid "Not now"
-msgstr ""
+msgstr "Ikke nu"
 
 #: source/app/service-providers/updates/index.ts:356
 #, javascript-format
@@ -153,12 +155,12 @@ msgstr "Kunne ikke søge efter opdateringer: Serveren har ikke sendt noget data"
 
 #: source/app/service-providers/updates/index.ts:464
 msgid "The SHA256 checksums file seems to be missing for this release."
-msgstr ""
+msgstr "SHA256 kontrolsumfilen ser ud til at mangle for denne udgivelse."
 
 #: source/app/service-providers/updates/index.ts:486
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
-msgstr ""
+msgstr "Kan ikke hente SHA256 kontrolsummer: %s"
 
 #: source/app/service-providers/updates/index.ts:527
 msgid "Could not accept data for application update: Write stream is gone."
