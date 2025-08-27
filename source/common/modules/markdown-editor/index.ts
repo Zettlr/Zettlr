@@ -549,7 +549,36 @@ export default class MarkdownEditor extends EventEmitter {
     const toLineNumber = to !== -1 ? to : this._instance.state.doc.lines
     const toLine = this._instance.state.doc.line(toLineNumber)
     const targetPos = to !== -1 ? toLine.from : toLine.to
-    const entryContents = this._instance.state.sliceDoc(entry.pos, endOfStartPos)
+    const sectionText = this._instance.state.doc.slice(entry.pos, endOfStartPos)
+    let entryContents = sectionText.toString()
+
+    if (to === -1) {
+      // if we are moving to the end of the document,
+      // but not a new line, we need to add two new
+      // lines before entryContents
+      const prevLine = this._instance.state.doc.line(toLineNumber - 1)
+      if (toLine.text.trim() !== '') {
+        entryContents = '\n\n' + entryContents
+      // if the last line is new, but the previous one is not,
+      // we need to add one new line before entryContents
+      } else if (prevLine.text.trim() !== '') {
+        entryContents = '\n' + entryContents
+      }
+    }
+
+    const sectionLastLine = sectionText.line(sectionText.lines)
+    const sectionPrevLine = sectionText.line(sectionText.lines - 1)
+    // if the section we are moving does not end
+    // in a new line, we need to add two new lines
+    //  after entryContents
+    if (sectionLastLine.text.trim() !== '') {
+      entryContents = entryContents + '\n\n'
+    // if the section ends in a new line, but the previous one
+    // is not a new line, then we need to add one new line
+    // after the entryContents
+    } else if (sectionPrevLine.text.trim() !== '') {
+      entryContents = entryContents + '\n'
+    }
 
     // Now, dispatch the updates.
     this._instance.dispatch({
