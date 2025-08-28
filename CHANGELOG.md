@@ -80,6 +80,7 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   select only the widget's source text (#5682).
 - Update `it-IT` translation (#5831).
 - Fixed incorrect cursor position after inserting IDs (#5846)
+- Update `da-DA` translations (#5868).
 
 ## Under the Hood
 
