@@ -205,14 +205,7 @@ body div#toolbar {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
     z-index: 1;
-    opacity: 1;
-    pointer-events: auto;
-    transition: opacity 0.25s ease;
 
     &.left {
       left: 0;
@@ -242,6 +235,7 @@ body div#toolbar {
 
   button {
     flex-grow: 1;
+    cursor: pointer;
   }
 }
 
