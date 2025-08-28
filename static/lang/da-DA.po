@@ -164,32 +164,36 @@ msgstr "Kan ikke hente SHA256 kontrolsummer: %s"
 
 #: source/app/service-providers/updates/index.ts:527
 msgid "Could not accept data for application update: Write stream is gone."
-msgstr ""
+msgstr "Kunne ikke modtage data til programopdatereingen: Skrive-strømmen er forsvundet."
 
 #: source/app/service-providers/updates/index.ts:582
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
 msgstr ""
+"Kunne ikke verificere integriteten af den downloadede opdatering. "
+"Prøv igen eller opdater manuelt."
 
 #: source/app/service-providers/updates/index.ts:594
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
 msgstr ""
+"Den downloadede fil har en anden kontrolsum end serveren rapporterede. "
+"Prøv igen eller opdater manuelt."
 
 #: source/app/service-providers/updates/index.ts:612
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
-msgstr ""
+msgstr "Kunne ikke starte opdateringen. Prøv igen eller opdater manuelt. Fejlen var: %s"
 
 #: source/app/service-providers/commands/language-tool.ts:194
 msgid "Document too long"
-msgstr ""
+msgstr "Dokumentet er for langt"
 
 #: source/app/service-providers/commands/language-tool.ts:199
 msgid "offline"
-msgstr ""
+msgstr "offline"
 
 #: source/app/service-providers/commands/file-new.ts:167
 #: source/app/service-providers/commands/file-duplicate.ts:39
@@ -210,24 +214,24 @@ msgstr "Kunne ikke åbne vedhæftning. Kører Zotero?"
 #: source/app/service-providers/commands/file-rename.ts:129
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Opdater %s interne links til filen %s?"
 
 #: source/app/service-providers/commands/file-rename.ts:131
 #: source/app/service-providers/commands/rename-tag.ts:46
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:132
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "Nej"
 
 #: source/app/service-providers/commands/rename-tag.ts:44
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Erstat mærkatet \"%s\" med \"%s\" over %s filer?"
 
 #. 1: Omit all changes
 #: source/app/service-providers/commands/rename-tag.ts:47
@@ -245,15 +249,15 @@ msgstr "Annullér"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Import directory"
-msgstr ""
+msgstr "Importer mappe"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Select folder"
-msgstr ""
+msgstr "Vælg mappe"
 
 #: source/app/service-providers/commands/import.ts:34
 msgid "Select import destination"
-msgstr ""
+msgstr "Vælg importdestination"
 
 #: source/app/service-providers/commands/import.ts:36
 msgid "You have to select a directory to import to."
@@ -308,10 +312,12 @@ msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
 msgstr ""
+"Der er ikke nogle filer valgt til eksport. Vælg de filere, der skal inkluderes, "
+"i projektindstillingerne."
 
 #: source/app/service-providers/commands/dir-project-export.ts:91
 msgid "Project File Mismatch"
-msgstr ""
+msgstr "Projektfil mismatch"
 
 #: source/app/service-providers/commands/dir-project-export.ts:92
 msgid ""
@@ -319,6 +325,9 @@ msgid ""
 "They may have moved or been deleted. Please verify that all files that you "
 "would like to export are included."
 msgstr ""
+"En eller flere filer angivet i projektindstillingerne blev ikke fundet. "
+"De kan være flyttet eller slettet. Verificer, at alle filer, du ønsker eksporteret, "
+"er inkluderet."
 
 #: source/app/service-providers/commands/dir-project-export.ts:93
 #: source/app/service-providers/commands/file-delete.ts:36
@@ -333,7 +342,7 @@ msgstr "Ok"
 #: source/app/service-providers/commands/dir-project-export.ts:168
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
-msgstr ""
+msgstr "Projektet \"%s\" blev eksporteret uden fejl. Klik for at vise."
 
 #: source/app/service-providers/commands/dir-project-export.ts:169
 #, fuzzy
@@ -382,32 +391,32 @@ msgstr "Vil du virkelig slette %s?"
 
 #: source/app/service-providers/commands/root-open.ts:59
 msgid "Markdown Files"
-msgstr ""
+msgstr "Markdown-filer"
 
 #: source/app/service-providers/commands/root-open.ts:60
 msgid "Code Files"
-msgstr ""
+msgstr "Kode-filer"
 
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:74
 msgid "Open workspace"
-msgstr ""
+msgstr "Åbn arbejdsområde"
 
 #: source/app/service-providers/commands/root-open.ts:83
 msgid "Cannot open workpace"
-msgstr ""
+msgstr "Kan ikke åbne arbejdsområde"
 
 #: source/app/service-providers/commands/root-open.ts:84
 #, javascript-format
 msgid "Cannot open workspace \"%s\"."
-msgstr ""
+msgstr "Kan ikke ånne arbejdsområde \"%s\"."
 
 #. We need to generate our own filename. First, attempt to just use 'copy of'
 #: source/app/service-providers/commands/file-duplicate.ts:68
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Kopi af %s"
 
 #: source/app/service-providers/commands/import-lang-file.ts:60
 #, javascript-format
@@ -432,7 +441,7 @@ msgstr "En fejl opstod under eksport: %s"
 
 #: source/app/service-providers/commands/export.ts:114
 msgid "Choose export destination"
-msgstr ""
+msgstr "Vælg eksportdestination"
 
 #. primary: true // It's a primary button
 #: source/app/service-providers/commands/export.ts:114
@@ -467,12 +476,12 @@ msgstr "Mappen kunne ikke findes."
 #: source/app/service-providers/commands/importer/index.ts:92
 #: source/app/service-providers/commands/importer/index.ts:93
 msgid "Select import profile"
-msgstr ""
+msgstr "Vælg importprofil"
 
 #: source/app/service-providers/commands/importer/index.ts:94
 #, javascript-format
 msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr ""
+msgstr "Der er flere profiler, som kan importere %s. Vælg en."
 
 #: source/app/service-providers/commands/importer/import-textbundle.ts:63
 #: source/app/service-providers/commands/importer/import-textbundle.ts:69
@@ -530,7 +539,7 @@ msgstr ""
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
-msgstr ""
+msgstr "Gem fil"
 
 #: source/app/service-providers/windows/index.ts:247
 msgid "Open project folder"
@@ -549,13 +558,13 @@ msgstr "Der er registreret ændringer i biblioteksfilen. Genindlæser ..."
 #: source/app/service-providers/menu/menu.win32.ts:56
 #: source/app/service-providers/menu/menu.darwin.ts:183
 msgid "Recent files"
-msgstr ""
+msgstr "Seneste filer"
 
 #: source/app/service-providers/menu/menu.win32.ts:48
 #: source/app/service-providers/menu/menu.win32.ts:60
 #: source/app/service-providers/menu/menu.darwin.ts:187
 msgid "Clear"
-msgstr ""
+msgstr "Ryd"
 
 #: source/app/service-providers/menu/menu.win32.ts:87
 #: source/app/service-providers/menu/menu.darwin.ts:113
@@ -567,58 +576,58 @@ msgstr "Fil"
 #: source/win-main/file-manager/util/dir-item-context.ts:38
 #: source/tmp/win-main/App.vue.ts:290
 msgid "New file…"
-msgstr ""
+msgstr "Ny fil…"
 
 #: source/app/service-providers/menu/menu.win32.ts:129
 #: source/app/service-providers/menu/menu.darwin.ts:155
 #: source/win-main/file-manager/util/dir-item-context.ts:44
 msgid "New directory…"
-msgstr "Ny mappe..."
+msgstr "Ny mappe…"
 
 #: source/app/service-providers/menu/menu.win32.ts:139
 #: source/app/service-providers/menu/menu.darwin.ts:165
 msgid "Open file…"
-msgstr ""
+msgstr "Åbn fil…"
 
 #: source/app/service-providers/menu/menu.win32.ts:148
 #: source/app/service-providers/menu/menu.darwin.ts:174
 #: source/tmp/win-main/App.vue.ts:264
 msgid "Open workspace…"
-msgstr ""
+msgstr "Åbn arbejdsområde…"
 
 #: source/app/service-providers/menu/menu.win32.ts:172
 #: source/app/service-providers/menu/menu.darwin.ts:207
 #: source/tmp/win-main/App.vue.ts:297
 msgid "Previous file"
-msgstr ""
+msgstr "Forrige fil"
 
 #: source/app/service-providers/menu/menu.win32.ts:183
 #: source/app/service-providers/menu/menu.darwin.ts:218
 #: source/tmp/win-main/App.vue.ts:305
 msgid "Next file"
-msgstr ""
+msgstr "Næste fil"
 
 #: source/app/service-providers/menu/menu.win32.ts:197
 #: source/app/service-providers/menu/menu.darwin.ts:232
 msgid "Import files…"
-msgstr "Importér filer..."
+msgstr "Importér filer…"
 
 #: source/app/service-providers/menu/menu.win32.ts:205
 #: source/app/service-providers/menu/menu.darwin.ts:240
 msgid "Export…"
-msgstr "Eksporter..."
+msgstr "Eksportér…"
 
 #: source/app/service-providers/menu/menu.win32.ts:213
 #: source/app/service-providers/menu/menu.darwin.ts:248
 #: source/tmp/win-print/App.vue.ts:44 source/tmp/win-print/App.vue.ts:45
 msgid "Print…"
-msgstr "Print..."
+msgstr "Udskriv…"
 
 #: source/app/service-providers/menu/menu.win32.ts:221
 #: source/app/service-providers/menu/menu.win32.ts:225
 #: source/app/service-providers/menu/menu.darwin.ts:51
 msgid "Preferences…"
-msgstr "Indstillinger..."
+msgstr "Indstillinger…"
 
 #: source/app/service-providers/menu/menu.win32.ts:233
 #: source/app/service-providers/menu/menu.darwin.ts:59
@@ -630,17 +639,17 @@ msgstr "Indholdsstyring"
 #: source/app/service-providers/menu/menu.darwin.ts:67
 #: source/tmp/win-tag-manager/App.vue.ts:34
 msgid "Tags Manager"
-msgstr ""
+msgstr "Mærkatstyring"
 
 #: source/app/service-providers/menu/menu.win32.ts:253
 #: source/app/service-providers/menu/menu.darwin.ts:259
 msgid "Import translation…"
-msgstr "Importér oversættelse..."
+msgstr "Importér oversættelse…"
 
 #: source/app/service-providers/menu/menu.win32.ts:261
 #: source/app/service-providers/menu/menu.darwin.ts:267
 msgid "Import dictionary…"
-msgstr "Importér ordbog..."
+msgstr "Importér ordbog…"
 
 #: source/app/service-providers/menu/menu.win32.ts:280
 #: source/app/service-providers/menu/menu.darwin.ts:286
@@ -714,12 +723,12 @@ msgstr "Vælg alle"
 #: source/app/service-providers/menu/menu.win32.ts:372
 #: source/app/service-providers/menu/menu.darwin.ts:370
 msgid "Find in current file"
-msgstr ""
+msgstr "Find in den nuværende fil"
 
 #: source/app/service-providers/menu/menu.win32.ts:380
 #: source/app/service-providers/menu/menu.darwin.ts:378
 msgid "Search all files"
-msgstr ""
+msgstr "Søg i alle filer"
 
 #: source/app/service-providers/menu/menu.win32.ts:388
 #: source/app/service-providers/menu/menu.darwin.ts:386
@@ -752,7 +761,7 @@ msgstr "Mørk tilstand"
 #: source/app/service-providers/menu/menu.win32.ts:432
 #: source/app/service-providers/menu/menu.darwin.ts:449
 msgid "Additional information"
-msgstr ""
+msgstr "Yderligere information"
 
 #: source/app/service-providers/menu/menu.win32.ts:442
 #: source/app/service-providers/menu/menu.darwin.ts:459
@@ -764,13 +773,13 @@ msgstr "Distraktionsfri tilstand"
 #: source/app/service-providers/menu/menu.win32.ts:450
 #: source/app/service-providers/menu/menu.darwin.ts:467
 msgid "Typewriter mode"
-msgstr ""
+msgstr "Skrivemaskine tilstand"
 
 #: source/app/service-providers/menu/menu.win32.ts:461
 #: source/app/service-providers/menu/menu.darwin.ts:478
 #: source/tmp/win-main/App.vue.ts:251
 msgid "Toggle File Manager"
-msgstr ""
+msgstr "Skift tilstand i mappeoversigt"
 
 #: source/app/service-providers/menu/menu.win32.ts:469
 #: source/app/service-providers/menu/menu.darwin.ts:486
@@ -816,7 +825,7 @@ msgstr "Vis udviklingsværktøjer"
 #: source/app/service-providers/menu/menu.win32.ts:535
 #: source/app/service-providers/menu/menu.darwin.ts:554
 msgid "View logs"
-msgstr ""
+msgstr "Vis logfiler"
 
 #: source/app/service-providers/menu/menu.win32.ts:546
 #: source/app/service-providers/menu/menu.darwin.ts:565
@@ -877,27 +886,27 @@ msgstr "Søg efter opdateringer"
 #: source/app/service-providers/menu/menu.win32.ts:625
 #: source/app/service-providers/menu/menu.darwin.ts:651
 msgid "Support Zettlr ↗︎"
-msgstr ""
+msgstr "Støt Zettlr ↗︎"
 
 #: source/app/service-providers/menu/menu.win32.ts:635
 #: source/app/service-providers/menu/menu.darwin.ts:661
 msgid "Visit website ↗︎"
-msgstr ""
+msgstr "Besøg hjemmeside ↗︎"
 
 #: source/app/service-providers/menu/menu.win32.ts:645
 #: source/app/service-providers/menu/menu.darwin.ts:671
 msgid "Open user manual ↗︎"
-msgstr ""
+msgstr "Åbn brugermanual ↗︎"
 
 #: source/app/service-providers/menu/menu.win32.ts:659
 #: source/app/service-providers/menu/menu.darwin.ts:685
 msgid "Open tutorial"
-msgstr ""
+msgstr "Åbn vejledning"
 
 #: source/app/service-providers/menu/menu.win32.ts:667
 #: source/app/service-providers/menu/menu.darwin.ts:693
 msgid "Clear FSAL cache…"
-msgstr ""
+msgstr "Ryd søgning"
 
 #: source/app/service-providers/menu/menu.win32.ts:671
 #: source/app/service-providers/menu/menu.darwin.ts:697
@@ -908,7 +917,7 @@ msgstr "Ryd søgning"
 #: source/app/service-providers/menu/menu.win32.ts:672
 #: source/app/service-providers/menu/menu.darwin.ts:698
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "Rydning af søgning kræver en genstart."
 
 #: source/app/service-providers/menu/menu.win32.ts:673
 #: source/app/service-providers/menu/menu.darwin.ts:699
@@ -917,6 +926,9 @@ msgid ""
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
 msgstr ""
+"Efter genstarten vil Zettlr genskabe hele cachen, hvilket kan tage et "
+"stykke tid afhængig af mængden af filer, du har indlæst og hastigheden af "
+"din disk. Vinduet vil blive vist efterfølgende.
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
@@ -980,7 +992,7 @@ msgstr "Fil administrations tilstand"
 #: source/app/service-providers/documents/index.ts:1039
 #, javascript-format
 msgid "%s changed on disk"
-msgstr ""
+msgstr "%s ændret på disk"
 
 #: source/app/service-providers/documents/index.ts:1041
 #, javascript-format
@@ -988,24 +1000,28 @@ msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
 msgstr ""
+"%s er ændret på disken, men editoren indeholder ikke-gemte ændringer. Ønsker "
+"du at beholde det nuværende indhold af editoren eller indlæse filen fra disk?"
 
 #: source/app/service-providers/documents/index.ts:1042
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
+"Ønsker du at beholde det nuværende indhold af editoren eller indlæse filen fra disk?"
 
 #: source/app/service-providers/documents/index.ts:1045
 msgid "Keep editor contents"
-msgstr ""
+msgstr "Behold editorens indhold"
 
 #: source/app/service-providers/documents/index.ts:1046
 msgid "Load changes from disk"
-msgstr ""
+msgstr "Indlæs ændringer fra disk"
 
 #: source/app/service-providers/documents/index.ts:1049
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
+"Indlæs altid ændringer fra disk hvis der er ikke-gemte ændringer i editoren"
 
 #: source/app/service-providers/documents/index.ts:1518
 msgid "Could not save file"
@@ -1019,7 +1035,7 @@ msgstr "Kunne ikke gemme fil"
 #: source/win-main/file-manager/util/file-item-context.ts:29
 #: source/tmp/win-main/GlobalSearch.vue.ts:54
 msgid "Open in new tab"
-msgstr ""
+msgstr "Ånd på nyt faneblad"
 
 #: source/win-main/file-manager/util/file-item-context.ts:35
 #: source/win-main/file-manager/util/dir-item-context.ts:29
@@ -1046,17 +1062,17 @@ msgstr "Kopiér filnavn"
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:119
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Vis i Finder"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "Vis i Stifinder"
 
 #: source/win-main/file-manager/util/file-item-context.ts:88
 #: source/win-main/file-manager/util/dir-item-context.ts:77
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "Vis i Filoversigt"
 
 #: source/win-main/file-manager/util/file-item-context.ts:101
 msgid "Close file"
@@ -1080,11 +1096,11 @@ msgstr "Eksportér projekt"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:117
 msgid "Close workspace"
-msgstr ""
+msgstr "Luk arbejdsområde"
 
 #: source/win-main/tabs-context.ts:38
 msgid "Close tab"
-msgstr ""
+msgstr "Luk faneblad"
 
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
@@ -1096,11 +1112,11 @@ msgstr "Luk alle faneblade"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Unpin tab"
-msgstr ""
+msgstr "Frigør faneblad"
 
 #: source/win-main/tabs-context.ts:59
 msgid "Pin tab"
-msgstr ""
+msgstr "Fastgør faneblad"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -1116,7 +1132,7 @@ msgstr "Lige nu"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Afrikaans"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -1124,7 +1140,7 @@ msgstr "Arabisk"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "Østrigsk"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -1136,7 +1152,7 @@ msgstr "Bulgarsk"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "Bretonsk"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
@@ -1144,15 +1160,15 @@ msgstr "Bosnisk"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "Catalansk"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Catalan (Valencia)"
-msgstr ""
+msgstr "Catalansk (Valendia)"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Czech"
-msgstr ""
+msgstr "Tjekkisk"
 
 #: source/common/util/map-lang-code.ts:43
 msgid "Danish"
@@ -1169,7 +1185,7 @@ msgstr "Tysk (Schweiz)"
 #: source/common/util/map-lang-code.ts:46
 #, fuzzy
 msgid "German (simple)"
-msgstr "Tysk (Østrig)"
+msgstr "Tysk (simpelt)"
 
 #: source/common/util/map-lang-code.ts:47
 msgid "German (Germany)"
@@ -1182,7 +1198,7 @@ msgstr "Tysk (Østrig)"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "German"
-msgstr ""
+msgstr "Tysk"
 
 #: source/common/util/map-lang-code.ts:50
 msgid "Greek"
@@ -1198,7 +1214,7 @@ msgstr "Engelsk (Canada)"
 
 #: source/common/util/map-lang-code.ts:53
 msgid "English (United Kingdom)"
-msgstr "Engelsk (United Kingdom)"
+msgstr "Engelsk (Storbrittanien)"
 
 #: source/common/util/map-lang-code.ts:54
 msgid "English (India)"
@@ -1206,7 +1222,7 @@ msgstr "Engelsk (Indien)"
 
 #: source/common/util/map-lang-code.ts:55
 msgid "English (New Zealand)"
-msgstr "Engelsk (Canada)"
+msgstr "Engelsk (New Zealand)"
 
 #: source/common/util/map-lang-code.ts:56
 msgid "English (United States)"
@@ -1228,7 +1244,7 @@ msgstr "Esperanto"
 #: source/common/util/map-lang-code.ts:60
 #, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "Spansk (Spanien)"
+msgstr "Spansk (Argentina)"
 
 #: source/common/util/map-lang-code.ts:61
 msgid "Spanish (Spain)"
@@ -1237,7 +1253,7 @@ msgstr "Spansk (Spanien)"
 #: source/common/util/map-lang-code.ts:62
 #, fuzzy
 msgid "Spanish"
-msgstr "Dansk"
+msgstr "Spansk"
 
 #: source/common/util/map-lang-code.ts:63
 msgid "Estonian"
@@ -1275,15 +1291,15 @@ msgstr "Fransk (Frankrig)"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Luxembourg)"
-msgstr "Luxemborgsk"
+msgstr "Fransk (Luxemborg)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Fransk (Monaco)"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "French"
-msgstr ""
+msgstr "Fransk"
 
 #: source/common/util/map-lang-code.ts:74
 msgid "Irish"
@@ -1335,7 +1351,7 @@ msgstr "Italiensk (Italien)"
 
 #: source/common/util/map-lang-code.ts:86
 msgid "Italian"
-msgstr "Kursiv"
+msgstr "Italiensk"
 
 #: source/common/util/map-lang-code.ts:87
 msgid "Japanese"
@@ -1347,7 +1363,7 @@ msgstr "Georgisk"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Khmer (Cambodia)"
 
 #: source/common/util/map-lang-code.ts:90
 msgid "Korean"
@@ -1380,7 +1396,7 @@ msgstr "Mongolsk"
 #: source/common/util/map-lang-code.ts:97
 #, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "Malaysisk (Malaysia)"
+msgstr "Malaysisk (Brunei Darussalam)"
 
 #: source/common/util/map-lang-code.ts:98
 msgid "Malaysian (Malaysia)"
@@ -1389,7 +1405,7 @@ msgstr "Malaysisk (Malaysia)"
 #: source/common/util/map-lang-code.ts:99
 #, fuzzy
 msgid "Malaysian"
-msgstr "Malaysisk (Malaysia)"
+msgstr "Malaysisk"
 
 #: source/common/util/map-lang-code.ts:100
 msgid "Norwegian (Bokmål)"
@@ -1409,7 +1425,7 @@ msgstr "Hollandsk (Holland)"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Dutch"
-msgstr ""
+msgstr "Hollandsk"
 
 #: source/common/util/map-lang-code.ts:105
 msgid "Norwegian (Nyorsk)"
@@ -1417,7 +1433,7 @@ msgstr "Norsk (Nynorsk)"
 
 #: source/common/util/map-lang-code.ts:106
 msgid "Norwegian"
-msgstr "Georgisk"
+msgstr "Norsk"
 
 #: source/common/util/map-lang-code.ts:107
 msgid "Polish"
@@ -1444,7 +1460,7 @@ msgstr "Portugisisk (Portugal)"
 #: source/common/util/map-lang-code.ts:112
 #, fuzzy
 msgid "Portuguese"
-msgstr "Portugisisk (Brazilien)"
+msgstr "Portugisisk"
 
 #: source/common/util/map-lang-code.ts:113
 msgid "Romanian"
@@ -1473,12 +1489,12 @@ msgstr "Serbisk"
 #: source/common/util/map-lang-code.ts:119
 #, fuzzy
 msgid "Albanian"
-msgstr "Rumænsk"
+msgstr "Albansk"
 
 #: source/common/util/map-lang-code.ts:120
 #, fuzzy
 msgid "Albanian (Albania)"
-msgstr "Malaysisk (Malaysia)"
+msgstr "Albansk (Albanien)"
 
 #: source/common/util/map-lang-code.ts:121
 msgid "Swedish"
@@ -1487,15 +1503,15 @@ msgstr "Svensk"
 #: source/common/util/map-lang-code.ts:122
 #, fuzzy
 msgid "Tamil (India)"
-msgstr "Engelsk (Indien)"
+msgstr "Tamil (Indien)"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Thai"
-msgstr ""
+msgstr "Thai"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Tagalog (Filipinerne)"
 
 #: source/common/util/map-lang-code.ts:125
 msgid "Turkish"
@@ -1507,7 +1523,7 @@ msgstr "Ukrainsk"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Urdu"
-msgstr ""
+msgstr "Urdu"
 
 #: source/common/util/map-lang-code.ts:128
 msgid "Vietnamese"
@@ -1527,25 +1543,25 @@ msgstr "Kinesisk (Kina)"
 #: source/common/util/map-lang-code.ts:133
 #, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "Kinesisk (Kina)"
+msgstr "Kinesisk (Taiwan)"
 
 #: source/common/util/map-lang-code.ts:134
 #, fuzzy
 msgid "Chinese"
-msgstr "Kinesisk (Kina)"
+msgstr "Kinesisk"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
 msgid "Detect automatically"
-msgstr ""
+msgstr "Registrer automatisk"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiveret"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
 #, fuzzy
 msgid "Custom"
-msgstr "Custom CSS"
+msgstr "Tilpasset CSS"
 
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:54
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:78
@@ -1571,24 +1587,24 @@ msgstr "%s karakterer"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Åbn disgnosticeringspanel"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Stavefejl"
 
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:83
 #, javascript-format
 msgid "This file is part of project \"%s\""
-msgstr ""
+msgstr "Denne fil er en del af projektet \"%s\""
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "Gå til fodnotereference"
 
 #: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:75
 msgid "Fetching link preview…"
-msgstr ""
+msgstr "Henter link-forhåndsvisning…"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
@@ -1623,12 +1639,12 @@ msgstr "Kode"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
 msgid "No footnote text found."
-msgstr ""
+msgstr "Ingen foodnotetekst fundet."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:67
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "Filen %s findes ikke."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:128
 msgid "Word count"
@@ -1642,7 +1658,7 @@ msgstr "Modificeret"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:148
 msgid "Open…"
-msgstr "Åbn..."
+msgstr "Åbn…"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:169
 msgid "Open in a new tab"
@@ -1650,23 +1666,23 @@ msgstr "Åben i et nyt faneblad"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "Ingen fremhævning"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:82
 msgid "Open link"
-msgstr ""
+msgstr "Åbn link"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:91
 msgid "Copy email address"
-msgstr ""
+msgstr "Kopier email-adresse"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:91
 msgid "Copy link"
-msgstr ""
+msgstr "Kopier link"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:97
 msgid "Remove link"
-msgstr ""
+msgstr "Fjern link"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:107
 msgid "Copy image to clipboard"
@@ -1710,16 +1726,16 @@ msgstr "Indsæt nummeret liste"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
 #: source/tmp/win-main/App.vue.ts:357
 msgid "Insert task list"
-msgstr ""
+msgstr "Indsæt opgaveliste"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
 msgid "Insert blockquote"
-msgstr ""
+msgstr "Indsæt blokcitat"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
 #: source/tmp/win-main/App.vue.ts:364
 msgid "Insert table"
-msgstr ""
+msgstr "Indsæt tabel"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
 msgid "Copy equation code"
@@ -1728,29 +1744,29 @@ msgstr "Kopier udregning"
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Læsbarhedstilstand (%s)"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:122
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Billede ikke fundet: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:197
 msgid "Open image externally"
-msgstr ""
+msgstr "Åbn billed eksternt"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Gengiver Mermaid graf …"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
 #, fuzzy
 msgid "Could not render Graph:"
-msgstr "Kunne ikke oprette fil"
+msgstr "Kunne ikke gengive Graph:"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Cmd/Ctrl-klik for at følge dette link"
 
 #: source/tmp/win-update/App.vue.ts:31
 msgid "Updater"
@@ -1792,7 +1808,7 @@ msgstr "aldrig"
 #: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
 #, javascript-format
 msgid "Last checked: %s"
-msgstr ""
+msgstr "Sidst kontrolleret: %s"
 
 #: source/tmp/win-update/App.vue.ts:124
 msgid "Starting update …"
@@ -1800,28 +1816,28 @@ msgstr "Starter opdatering ..."
 
 #: source/tmp/win-tag-manager/App.vue.ts:27
 msgid "Assign color"
-msgstr ""
+msgstr "Tildel farve"
 
 #: source/tmp/win-tag-manager/App.vue.ts:28
 msgid "Remove color"
-msgstr ""
+msgstr "Fjern farve"
 
 #: source/tmp/win-tag-manager/App.vue.ts:29
 msgid "Tag name"
-msgstr ""
+msgstr "Mærkatnavn"
 
 #: source/tmp/win-tag-manager/App.vue.ts:30
 msgid "Color"
-msgstr ""
+msgstr "Farve"
 
 #: source/tmp/win-tag-manager/App.vue.ts:31
 #: source/tmp/win-main/PopoverTags.vue.ts:40
 msgid "Count"
-msgstr ""
+msgstr "Antal"
 
 #: source/tmp/win-tag-manager/App.vue.ts:32
 msgid "A short description"
-msgstr ""
+msgstr "Kort beskrivelse"
 
 #: source/tmp/win-tag-manager/App.vue.ts:33
 msgid ""
@@ -1829,66 +1845,69 @@ msgid ""
 "its tile in the preview list will receive a colored indicator. The "
 "description will be shown on mouse hover."
 msgstr ""
+"Her kan du tildele farver til forskellige mærkater. Hvis et mærkat findes i "
+"en fil, får dets flise i forhåndsvisningslisten en farvet indikatir. "
+"Beskrivelsen vil blive vist, når musen holdes over."
 
 #: source/tmp/win-tag-manager/App.vue.ts:35
 #: source/tmp/win-main/PopoverTags.vue.ts:47
 msgid "Filter tags…"
-msgstr "Filtrer tags..."
+msgstr "Filtrer mærkater…"
 
 #: source/tmp/win-tag-manager/App.vue.ts:36
 msgid "New tag"
-msgstr ""
+msgstr "Nyt mærkat"
 
 #: source/tmp/win-tag-manager/App.vue.ts:37
 msgid "Rename"
-msgstr ""
+msgstr "Omdøb"
 
 #: source/tmp/win-tag-manager/App.vue.ts:38
 msgid "Rename tag…"
-msgstr ""
+msgstr "Omdøb mærkat…"
 
 #: source/tmp/win-paste-image/App.vue.ts:57
 msgid "Insert Image from Clipboard"
-msgstr ""
+msgstr "Indsæt Billede fra Udklipsholder"
 
 #: source/tmp/win-paste-image/App.vue.ts:58
 #: source/win-preferences/schema/editor.ts:214
 #, fuzzy
 msgid "Image size"
-msgstr "Billede"
+msgstr "Billedstørrelse"
 
 #: source/tmp/win-paste-image/App.vue.ts:59
 msgid "Retain aspect ratio"
-msgstr ""
+msgstr "Behold billetformat"
 
 #: source/tmp/win-paste-image/App.vue.ts:60
 msgid "Resize image to"
-msgstr ""
+msgstr "Skaler billede til"
 
 #: source/tmp/win-paste-image/App.vue.ts:61
 msgid "Filename"
-msgstr ""
+msgstr "Filnavn"
 
 #: source/tmp/win-paste-image/App.vue.ts:62
 #: source/tmp/win-paste-image/App.vue.ts:63
 msgid "A unique filename"
-msgstr ""
+msgstr "Et unikt filnavn"
 
 #: source/tmp/win-splash-screen/App.vue.ts:22
 msgid "Loading…"
-msgstr ""
+msgstr "Indlæser"
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
-msgstr ""
+msgstr "Andre projekter"
 
 #: source/tmp/win-about/App.vue.ts:47
 msgid "Sponsors"
-msgstr ""
+msgstr "Sponsorer"
 
 #: source/tmp/win-about/App.vue.ts:53
 msgid "License"
-msgstr ""
+msgstr "License"
 
 #: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
@@ -1932,10 +1951,14 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr tilbyder en integration med LanguageToool.org, en service leveret af "
+"LanguageTooler GmbH. Brug af denne service kræver en internetforbindelse og "
+"er underlagt privatlivspolitikken hos LanguageToooler GmbH eller den tilsvarende "
+"server, som du anvender."
 
 #: source/tmp/win-about/Projects-Tab.vue.ts:19
 msgid "Zettlr also makes use of these projects:"
-msgstr "Zettlr støtter sig også til disse projekter:"
+msgstr "Zettlr gør også brug af disse projekter:"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:23
 msgid ""
@@ -1956,7 +1979,7 @@ msgstr ""
 #: source/tmp/win-assets/DefaultsTab.vue.ts:180
 #: source/tmp/win-assets/SnippetsTab.vue.ts:106
 msgid "Saving …"
-msgstr "Gemmer ..."
+msgstr "Gemmer …"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:66
 msgid "Saving failed"
@@ -1964,42 +1987,46 @@ msgstr "Kunne ikke gemme"
 
 #: source/tmp/win-assets/App.vue.ts:21
 msgid "Exporting"
-msgstr ""
+msgstr "Eksporterer"
 
 #: source/tmp/win-assets/App.vue.ts:27
 msgid "Importing"
-msgstr ""
+msgstr "Importerer"
 
 #: source/tmp/win-assets/App.vue.ts:33
 #: source/win-preferences/schema/appearance.ts:218
 msgid "Custom CSS"
-msgstr "Custom CSS"
+msgstr "Tilpasset CSS"
 
 #: source/tmp/win-assets/App.vue.ts:39
 #: source/tmp/win-preferences/App.vue.ts:180
 #: source/win-preferences/schema/snippets.ts:24
 msgid "Snippets"
-msgstr ""
+msgstr "Snippets"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:56
 msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
 msgstr ""
+"Denne profil er beskyttet. Det betyder, at den vil blive gendannet hvis "
+"du fjerner eller omdøber den."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:57
 msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
 msgstr ""
+"Denne profil er ugyldig. Den kan indeholde fejl, eller den kan mangle "
+"skribent- eller læser-egenskaben."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:59
 msgid "Open defaults folder"
-msgstr ""
+msgstr "Åbn standardmappe"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:60
 msgid "Edit the default settings for imports or exports here."
-msgstr "Redigér standard indstillingerne for import og export her."
+msgstr "Redigér standard indstillingerne for import og eksport her."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:190
 #: source/tmp/win-assets/SnippetsTab.vue.ts:116
@@ -2012,9 +2039,7 @@ msgstr "Omdøb snippet"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:30
 msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
-"Snippets lader dig definere genbrugelige stykker af tekst med variabler."
-"Snippets lader dig definere genbrugelige stykker af tekst med variabler."
+msgstr "Snippets lader dig definere genbrugelige stykker af tekst med variabler."
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:31
 #, fuzzy
@@ -2056,17 +2081,17 @@ msgstr "Pause"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:29
 msgid "Sound Effect"
-msgstr ""
+msgstr "Lydeffekt"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:30
 msgid "Volume"
-msgstr ""
+msgstr "Lydstyrke"
 
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
 msgid "Table of contents"
-msgstr ""
+msgstr "Indholdsfortegnelse"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
@@ -2079,20 +2104,20 @@ msgstr "Ingen relaterede filer"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Dennne relation er baseret på et tovejs link."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Denne relation er baseret på et udgående link."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Denne relation er baseret på et retur-link."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Denne relation er baseret på %s delte mærkater: %s"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:16
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
@@ -2109,7 +2134,7 @@ msgstr "Ingen andre filer"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:37
 msgid "Current folder"
-msgstr ""
+msgstr "Nuværende mappe"
 
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:35
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
@@ -2123,11 +2148,11 @@ msgstr "Der er ingen citationer i dette dokument"
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:66
 #, javascript-format
 msgid "circa %s words"
-msgstr ""
+msgstr "cirka %s ord"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:39
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:48
 msgid "Tag Cloud"
@@ -2159,7 +2184,7 @@ msgstr "Ord"
 #: source/tmp/win-main/file-manager/FileManager.vue.ts:46
 #: source/tmp/win-main/GlobalSearch.vue.ts:38
 msgid "Filter…"
-msgstr ""
+msgstr "Filter…"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:31
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
@@ -2172,23 +2197,23 @@ msgstr "Projekt indstillinger"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:34
 msgid "Enable Project"
-msgstr ""
+msgstr "Aktiver Projekt"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:35
 msgid "Sort by name"
-msgstr ""
+msgstr "Sorter efter navn"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
 msgid "Sort by time"
-msgstr ""
+msgstr "Sorter efter tidspunkt"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
 msgid "ascending"
-msgstr ""
+msgstr "stigende"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
 msgid "descending"
-msgstr ""
+msgstr "faldende"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
@@ -2201,63 +2226,63 @@ msgstr "Nulstil"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
 msgid "Cog"
-msgstr ""
+msgstr "Cog"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
 msgid "Cloud"
-msgstr ""
+msgstr "Sky"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:44
 msgid "Check"
-msgstr ""
+msgstr "Kontrol"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:45
 msgid "Times"
-msgstr ""
+msgstr "Times"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:47
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:48
 msgid "Success"
-msgstr ""
+msgstr "Succes"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
 msgid "Error"
-msgstr ""
+msgstr "Fejl"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
 msgid "Warning"
-msgstr ""
+msgstr "Advarsel"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
 msgid "Bell"
-msgstr ""
+msgstr "Klokke"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:52
 msgid "Person"
-msgstr ""
+msgstr "Person"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:53
 msgid "People"
-msgstr ""
+msgstr "Folk"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
 msgid "Folder"
-msgstr ""
+msgstr "Mappe"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
 msgid "Folder (open)"
-msgstr ""
+msgstr "Mappe (åben)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
 msgid "Eye"
-msgstr ""
+msgstr "Øje"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:58
 msgid "Eye (crossed)"
-msgstr ""
+msgstr "Øje (krydset)"
 
 #. STATIC VARIABLES
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:59
@@ -2268,211 +2293,211 @@ msgstr "Kalender"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:60
 msgid "Calculator"
-msgstr ""
+msgstr "Lommeregner"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
 msgid "Store"
-msgstr ""
+msgstr "Lager"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:62
 msgid "Shopping bag"
-msgstr ""
+msgstr "Indkøbstaske"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:63
 msgid "Shopping cart"
-msgstr ""
+msgstr "Indkøbskurv"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
 msgid "Factory"
-msgstr ""
+msgstr "Fabrik"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:65
 msgid "Heart"
-msgstr ""
+msgstr "Hjerte"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
 msgid "Heart (broken)"
-msgstr ""
+msgstr "Hjerte (knust)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:67
 msgid "Bubbles"
-msgstr ""
+msgstr "Bobler"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:68
 msgid "Bubble"
-msgstr ""
+msgstr "Boble"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
 msgid "Bubble (exclamation)"
-msgstr ""
+msgstr "Boble (udtryk)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
 msgid "Colour Palette"
-msgstr ""
+msgstr "Farvepalette"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:71
 msgid "Bars"
-msgstr ""
+msgstr "Bars"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:72
 msgid "Thermometer"
-msgstr ""
+msgstr "Termometer"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:73
 msgid "Book"
-msgstr ""
+msgstr "Bog"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:74
 msgid "Library"
-msgstr ""
+msgstr "Bibliotek"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:75
 msgid "Bug"
-msgstr ""
+msgstr "Insekt"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:76
 msgid "Note"
-msgstr ""
+msgstr "Note"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:77
 msgid "Lightbulb"
-msgstr ""
+msgstr "Pære"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:78
 msgid "Trash"
-msgstr ""
+msgstr "Afflald"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
 msgid "Snowflake"
-msgstr ""
+msgstr "Snefnug"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
 msgid "Asterisk"
-msgstr ""
+msgstr "Stjerne"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
 msgid "Key"
-msgstr ""
+msgstr "Nøgle"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
 msgid "Bolt"
-msgstr ""
+msgstr "Bolt"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
 msgid "Wrench"
-msgstr ""
+msgstr "Svensknøgle"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
 msgid "Flame"
-msgstr ""
+msgstr "Flamme"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
 msgid "Hourglass"
-msgstr ""
+msgstr "Timeglas"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
 msgid "Briefcase"
-msgstr ""
+msgstr "Dokumentmappe"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
 msgid "Tools"
-msgstr ""
+msgstr "Værktøj"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
 msgid "Moon"
-msgstr ""
+msgstr "Måne"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
 msgid "Sun"
-msgstr ""
+msgstr "Sol"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
 msgid "Tree"
-msgstr ""
+msgstr "Træ"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
 msgid "Circle (dot)"
-msgstr ""
+msgstr "Cirkel (prik)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
 msgid "Circle"
-msgstr ""
+msgstr "Cirkel"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
 msgid "Video camera"
-msgstr ""
+msgstr "Videokamera"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
 msgid "Film strip"
-msgstr ""
+msgstr "Filsstribe"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
 msgid "Microphone"
-msgstr ""
+msgstr "Mikrofon"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
 msgid "Crown"
-msgstr ""
+msgstr "Klovn"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
 msgid "Star"
-msgstr ""
+msgstr "Stjerne"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
 msgid "Flag"
-msgstr ""
+msgstr "Flag"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:99
 msgid "Envelope"
-msgstr ""
+msgstr "Konvolut"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
 msgid "Airplane"
-msgstr ""
+msgstr "Fly"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
 msgid "Happy emoji"
-msgstr ""
+msgstr "Glad emoji"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:102
 msgid "Neutral emoji"
-msgstr ""
+msgstr "Neutral emoji"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
 msgid "Sad emoji"
-msgstr ""
+msgstr "Sørgelig emoje"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
 msgid "Thumbs up"
-msgstr ""
+msgstr "Tommel op"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
 msgid "Thumbs down"
-msgstr ""
+msgstr "Tommel ned"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:106
 msgid "Map"
-msgstr ""
+msgstr "Kort"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:107
 msgid "Compass"
-msgstr ""
+msgstr "Kompas"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:108
 msgid "Map marker"
-msgstr ""
+msgstr "Kortmarkør"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:109
 msgid "Flask"
-msgstr ""
+msgstr "Kolbe"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
 msgid "CD/DVD"
-msgstr ""
+msgstr "CD/DVD"
 
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:38
 msgid "Set writing target…"
-msgstr "Vælg mål for skrivning..."
+msgstr "Vælg mål for skrivning…"
 
 #: source/tmp/win-main/file-manager/FileList.vue.ts:59
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:79
@@ -2521,85 +2546,85 @@ msgstr "✍🏼 Kom igang med at skrive så du kan overgå dit daglige gennemsni
 
 #: source/tmp/win-main/PopoverStats.vue.ts:35
 msgid "More statistics …"
-msgstr "Flere statistikker ..."
+msgstr "Flere statistikker …"
 
 #: source/tmp/win-main/App.vue.ts:221
 #, javascript-format
 msgid "%s selected"
-msgstr ""
+msgstr "%s valgt"
 
 #. Multiple selections --> indicate
 #: source/tmp/win-main/App.vue.ts:230
 #, javascript-format
 msgid "%s selections"
-msgstr ""
+msgstr "%s valg"
 
 #: source/tmp/win-main/App.vue.ts:256
 #: source/tmp/win-main/GlobalSearch.vue.ts:35
 msgid "Search across all files"
-msgstr ""
+msgstr "Søg i alle filer"
 
 #: source/tmp/win-main/App.vue.ts:270
 msgid "View writing statistics"
-msgstr ""
+msgstr "Se skrivestatistik"
 
 #: source/tmp/win-main/App.vue.ts:276
 msgid "View Tag Cloud"
-msgstr ""
+msgstr "Vis Mærkatsky"
 
 #: source/tmp/win-main/App.vue.ts:283
 msgid "Open settings"
-msgstr ""
+msgstr "Åbn indstillinger"
 
 #: source/tmp/win-main/App.vue.ts:318
 msgid "Export current file"
-msgstr ""
+msgstr "Eksporter nuværende fil"
 
 #: source/tmp/win-main/App.vue.ts:324
 msgid "Toggle readability mode"
-msgstr ""
+msgstr "Slå læsbarhedstilstand til/fra"
 
 #: source/tmp/win-main/App.vue.ts:336
 msgid "Insert comment"
-msgstr ""
+msgstr "Indsæt kommentar"
 
 #: source/tmp/win-main/App.vue.ts:350
 msgid "Insert image"
-msgstr ""
+msgstr "Indsæt billede"
 
 #: source/tmp/win-main/App.vue.ts:371
 msgid "Insert footnote"
-msgstr ""
+msgstr "Indsæt fodnote"
 
 #: source/tmp/win-main/App.vue.ts:389
 msgid "Pomodoro timer"
-msgstr ""
+msgstr "Pomodore-timer"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:29
 msgid "Temporary directory"
-msgstr ""
+msgstr "Midlertidig mappe"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:30
 msgid "Current directory"
-msgstr ""
+msgstr "Nuværende mappe"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:31
 msgid "Select directory"
-msgstr ""
+msgstr "Vælg mappe"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:64
 #, fuzzy
 msgid "Exporting…"
-msgstr "Eksporter..."
+msgstr "Eksporter…"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:64
 #, fuzzy
 msgid "Export"
-msgstr "Eksporter..."
+msgstr "Eksporter…"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:77
 msgid "command"
-msgstr ""
+msgstr "kommando"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:36
 msgid "Enter your search terms below"
@@ -2607,7 +2632,7 @@ msgstr "Indtast dine søgetermer nedenfor"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:37
 msgid "Find…"
-msgstr "Find ..."
+msgstr "Find…"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:39
 msgid "Filter search results"
@@ -2615,11 +2640,11 @@ msgstr "Filtrer søge resultater"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:40
 msgid "Restrict search to directory"
-msgstr "Forbehold søgning til mappe"
+msgstr "Begræns søgning til mappe"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:41
 msgid "Choose directory…"
-msgstr ""
+msgstr "Vælg mappe…"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:42
 #: source/tmp/win-preferences/App.vue.ts:57
@@ -2637,12 +2662,12 @@ msgstr "Slå resultater til eller fra"
 #: source/tmp/win-main/GlobalSearch.vue.ts:113
 #, javascript-format
 msgid "%s matches across %s files"
-msgstr ""
+msgstr "%s match i %s filer"
 
 #: source/tmp/win-main/PopoverTable.vue.ts:30
 #, javascript-format
 msgid "Table size: %s &times; %s"
-msgstr ""
+msgstr "Tabelstørrelse: %s &times; %s"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:106
 msgid "Add"
@@ -2669,63 +2694,63 @@ msgstr "Slet fil"
 
 #: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Export project to:"
-msgstr ""
+msgstr "Eksporter projekt til:"
 
 #: source/tmp/win-project-properties/App.vue.ts:39
 msgid "Use"
-msgstr ""
+msgstr "Brug"
 
 #: source/tmp/win-project-properties/App.vue.ts:40
 msgid "Format"
-msgstr ""
+msgstr "Format"
 
 #: source/tmp/win-project-properties/App.vue.ts:41
 msgid "Conversion"
-msgstr ""
+msgstr "Konvertering"
 
 #: source/tmp/win-project-properties/App.vue.ts:42
 msgid "Files to be included in the export"
-msgstr ""
+msgstr "Filer, der skal medtages i eksporten"
 
 #: source/tmp/win-project-properties/App.vue.ts:43
 msgid "Please select at least one profile to build this project."
-msgstr ""
+msgstr "Vælg mindst en profil for at bygge dette projekt."
 
 #: source/tmp/win-project-properties/App.vue.ts:44
 msgid "Project Title"
-msgstr ""
+msgstr "Projekttitel"
 
 #: source/tmp/win-project-properties/App.vue.ts:45
 msgid "CSL Stylesheet"
-msgstr ""
+msgstr "CSL Stylesheet"
 
 #: source/tmp/win-project-properties/App.vue.ts:46
 msgid "LaTeX Template"
-msgstr ""
+msgstr "LaTeX Skabelon"
 
 #: source/tmp/win-project-properties/App.vue.ts:47
 msgid "HTML Template"
-msgstr ""
+msgstr "HTML Skabelon"
 
 #: source/tmp/win-project-properties/App.vue.ts:48
 msgid "Remove file from export"
-msgstr ""
+msgstr "Fjern fil fra eksport"
 
 #: source/tmp/win-project-properties/App.vue.ts:49
 msgid "Add file to export"
-msgstr ""
+msgstr "Tilføj fil til eksport"
 
 #: source/tmp/win-project-properties/App.vue.ts:50
 msgid "Move file up"
-msgstr ""
+msgstr "Flyt fil op"
 
 #: source/tmp/win-project-properties/App.vue.ts:51
 msgid "Move file down"
-msgstr ""
+msgstr "Flyt fil ned"
 
 #: source/tmp/win-project-properties/App.vue.ts:52
 msgid "You have not selected any files for export."
-msgstr ""
+msgstr "Du har ikke valgt nogle filer til eksport"
 
 #: source/tmp/win-project-properties/App.vue.ts:53
 msgid ""
@@ -2735,36 +2760,36 @@ msgstr ""
 #: source/tmp/win-project-properties/App.vue.ts:62
 #: source/tmp/win-preferences/App.vue.ts:140
 msgid "General"
-msgstr ""
+msgstr "Generelt"
 
 #: source/tmp/win-preferences/App.vue.ts:56
 #, javascript-format
 msgid "No results for \"%s\""
-msgstr ""
+msgstr "Ingen resultatet for \"%s\""
 
 #: source/tmp/win-preferences/App.vue.ts:145
 #: source/win-preferences/schema/advanced.ts:51
 msgid "Appearance"
-msgstr ""
+msgstr "Udseende"
 
 #: source/tmp/win-preferences/App.vue.ts:150
 msgid "File Manager"
-msgstr ""
+msgstr "Filhåndtering"
 
 #: source/tmp/win-preferences/App.vue.ts:155
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
 #: source/tmp/win-preferences/App.vue.ts:160
 #: source/win-preferences/schema/spellchecking.ts:158
 msgid "Spellchecking"
-msgstr ""
+msgstr "Stavekontrol"
 
 #: source/tmp/win-preferences/App.vue.ts:165
 #: source/win-preferences/schema/autocorrect.ts:22
 #, fuzzy
 msgid "Autocorrect"
-msgstr "Slå Auto korrektur til"
+msgstr "Slå Auto-korrektur til"
 
 #: source/tmp/win-preferences/App.vue.ts:170
 #: source/win-preferences/schema/citations.ts:22
@@ -2773,24 +2798,24 @@ msgstr "Rendér citationer"
 
 #: source/tmp/win-preferences/App.vue.ts:175
 msgid "Zettelkasten"
-msgstr ""
+msgstr "Zettelkasten"
 
 #: source/tmp/win-preferences/App.vue.ts:185
 msgid "Import and Export"
-msgstr ""
+msgstr "Import og Eksport"
 
 #: source/tmp/win-preferences/App.vue.ts:190
 msgid "Advanced"
-msgstr ""
+msgstr "Avanceret"
 
 #: source/tmp/win-preferences/App.vue.ts:199
 #, javascript-format
 msgid "Searching: %s"
-msgstr ""
+msgstr "Søger: %s"
 
 #: source/tmp/win-preferences/App.vue.ts:203
 msgid "Preferences"
-msgstr ""
+msgstr "Præferencer"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:28
 msgid "January"
@@ -2859,15 +2884,15 @@ msgstr "Diagrammer"
 
 #: source/tmp/win-stats/App.vue.ts:39
 msgid "FSAL Stats"
-msgstr ""
+msgstr "FSAL statistikker"
 
 #: source/tmp/win-stats/App.vue.ts:58
 msgid "Writing statistics"
-msgstr ""
+msgstr "Skrivestatistikker"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
-msgstr ""
+msgstr "Zettelkasten ID'er"
 
 #: source/win-preferences/schema/zettelkasten.ts:29
 #, fuzzy
@@ -2877,7 +2902,7 @@ msgstr "Mønster brugt til at generere nye ID'er"
 #: source/win-preferences/schema/zettelkasten.ts:30
 #, fuzzy
 msgid "Uses ECMAScript regular expressions"
-msgstr "ID regular expression"
+msgstr "Bruger ECMASCript regular expression"
 
 #: source/win-preferences/schema/zettelkasten.ts:36
 msgid "Pattern used to generate new IDs"
@@ -2886,21 +2911,21 @@ msgstr "Mønster brugt til at generere nye ID'er"
 #: source/win-preferences/schema/zettelkasten.ts:39
 #, javascript-format
 msgid "Available Variables: %s"
-msgstr ""
+msgstr "Tilgængelige variable: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:44
 #: source/win-preferences/schema/import-export.ts:77
 msgid "Internal links"
-msgstr "Af-link interne links"
+msgstr "Interne links"
 
 #: source/win-preferences/schema/zettelkasten.ts:50
 msgid "Link with filename only"
-msgstr ""
+msgstr "Link kun med filnavn"
 
 #: source/win-preferences/schema/zettelkasten.ts:55
 #, fuzzy
 msgid "When linking files, add the document name …"
-msgstr "Når der linkes mellem filer, tilføj da filnavnet ..."
+msgstr "Når der linkes mellem filer, tilføj da filnavnet …"
 
 #: source/win-preferences/schema/zettelkasten.ts:58
 #, fuzzy
@@ -2927,14 +2952,16 @@ msgid ""
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
 msgstr ""
+"Interne links tillader dig at tilføje en valgfri titel, adskilt af en lodret "
+"streg tegn, fra det aktuelle link-mål. Her kan du definere rækkefølgen af de to."
 
 #: source/win-preferences/schema/zettelkasten.ts:79
 msgid "[[Link|Title]]: Link first (recommended)"
-msgstr ""
+msgstr "[[Link|Titel]]: Link først (anbefalet)"
 
 #: source/win-preferences/schema/zettelkasten.ts:80
 msgid "[[Title|Link]]: Title first"
-msgstr ""
+msgstr "[[Titel|Link]]: Titel først"
 
 #: source/win-preferences/schema/zettelkasten.ts:88
 msgid "Start a full-text search when following internal links"
@@ -2942,7 +2969,7 @@ msgstr "Start en søgning når Zettelkasten-links følges"
 
 #: source/win-preferences/schema/zettelkasten.ts:89
 msgid "The search string will match the content between the brackets: [[ ]]."
-msgstr ""
+msgstr "Søgeteksten vil matche indholdet mellem parenteserne: [[ ]]."
 
 #: source/win-preferences/schema/zettelkasten.ts:96
 #, fuzzy
@@ -2953,42 +2980,42 @@ msgstr "Opret automatisk ikke-eksisterende filer når interne links følges"
 
 #: source/win-preferences/schema/zettelkasten.ts:101
 msgid "For this to work, the folder must be open as a Workspace in Zettlr."
-msgstr ""
+msgstr "For at dette skal virke, skal mappen åbnes som et Arbejdsområde i Zettlr."
 
 #: source/win-preferences/schema/zettelkasten.ts:106
 msgid "Path to folder"
-msgstr ""
+msgstr "Sti til mappe"
 
 #: source/win-preferences/schema/autocorrect.ts:32
 msgid "Smart quotes"
-msgstr ""
+msgstr "Smarte citationstegn"
 
 #: source/win-preferences/schema/autocorrect.ts:45
 #, fuzzy
 msgid "Double Quotes"
-msgstr "Ingen"
+msgstr "Dobbelte citationstegn"
 
 #: source/win-preferences/schema/autocorrect.ts:48
 #: source/win-preferences/schema/autocorrect.ts:70
 msgid "Disable Magic Quotes"
-msgstr "Ingen"
+msgstr "Deaktiver magiske citationstegn"
 
 #: source/win-preferences/schema/autocorrect.ts:67
 #, fuzzy
 msgid "Single Quotes"
-msgstr "Ingen"
+msgstr "Enkelte citationstegn"
 
 #: source/win-preferences/schema/autocorrect.ts:95
 msgid "Text-replacement patterns"
-msgstr ""
+msgstr "Tekst-erstatnings mønstre"
 
 #: source/win-preferences/schema/autocorrect.ts:99
 msgid "Match whole words"
-msgstr ""
+msgstr "Match hele ord"
 
 #: source/win-preferences/schema/autocorrect.ts:100
 msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
+msgstr "Når markeret, vil Auto korrektur aldre erstatte dele af ord"
 
 #: source/win-preferences/schema/autocorrect.ts:107
 msgid "Replace"
@@ -2996,13 +3023,13 @@ msgstr "Erstat fil"
 
 #: source/win-preferences/schema/autocorrect.ts:107
 msgid "With"
-msgstr ""
+msgstr "Med"
 
 #: source/win-preferences/schema/autocorrect.ts:112
 #: source/win-preferences/schema/spellchecking.ts:173
 #: source/win-preferences/schema/advanced.ts:115
 msgid "Filter"
-msgstr "Filtrer ..."
+msgstr "Filtrer"
 
 #: source/win-preferences/schema/editor.ts:23
 #, fuzzy
@@ -3022,7 +3049,7 @@ msgstr "Find i mappe"
 
 #: source/win-preferences/schema/editor.ts:57
 msgid "Markdown rendering"
-msgstr ""
+msgstr "Markdown gengivelse"
 
 #: source/win-preferences/schema/editor.ts:64
 msgid ""
@@ -3030,30 +3057,33 @@ msgid ""
 "appearance. This hides formatting characters (such as **text**) or renders "
 "images instead of their link."
 msgstr ""
+"Markere for at aktivere live gengivelse af forskellige Markdown elementer "
+"til formatteret udseende. Dette skjuler format-tegn (såsom **text**) eller "
+"gengiver billeder i stedet for deres link."
 
 #: source/win-preferences/schema/editor.ts:72
 msgid "Render citations"
-msgstr ""
+msgstr "Gengiv citater"
 
 #: source/win-preferences/schema/editor.ts:77
 msgid "Render iframes"
-msgstr ""
+msgstr "Gengiv iframes"
 
 #: source/win-preferences/schema/editor.ts:82
 msgid "Render images"
-msgstr ""
+msgstr "Gengiv billeder"
 
 #: source/win-preferences/schema/editor.ts:87
 msgid "Render links"
-msgstr ""
+msgstr "Gengiv links"
 
 #: source/win-preferences/schema/editor.ts:92
 msgid "Render formulae"
-msgstr ""
+msgstr "Gengiv formel"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Render tasks"
-msgstr ""
+msgstr "Gengiv opgaver"
 
 #: source/win-preferences/schema/editor.ts:102
 msgid "Hide heading characters"
@@ -3061,15 +3091,15 @@ msgstr "Skjul Overskrifts tegn"
 
 #: source/win-preferences/schema/editor.ts:107
 msgid "Render emphasis"
-msgstr ""
+msgstr "Gengiv vægt"
 
 #: source/win-preferences/schema/editor.ts:116
 msgid "Formatting characters for bold and italics"
-msgstr ""
+msgstr "Formatteringstegn for fed og kursiv"
 
 #: source/win-preferences/schema/editor.ts:143
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Kontroller Markdown for stil-problemer"
 
 #: source/win-preferences/schema/editor.ts:149
 #, fuzzy
@@ -3082,6 +3112,9 @@ msgid ""
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
 msgstr ""
+"Tabel-editoren er en interaktiv grænseflade, der simplificerer oprettelse og "
+"redigering af tabeller. Det har knapper til almindelig funktionalitet og "
+"håndterer Markdown formattering."
 
 #: source/win-preferences/schema/editor.ts:171
 msgid "Mute non-focused lines in distraction-free mode"
@@ -3089,7 +3122,7 @@ msgstr "Nedton ikke-fokuserede linjer i distraktionsfri tilstand"
 
 #: source/win-preferences/schema/editor.ts:176
 msgid "Hide toolbar in distraction-free mode"
-msgstr ""
+msgstr "Skjul værktøjslinje i distraktionsfri tilstand"
 
 #: source/win-preferences/schema/editor.ts:182
 #, fuzzy
@@ -3102,11 +3135,11 @@ msgstr "Tæl tegn i stedet for ord (f.eks. på kinesisk)"
 
 #: source/win-preferences/schema/editor.ts:195
 msgid "Readability mode"
-msgstr ""
+msgstr "Læsbarhedstilstand"
 
 #: source/win-preferences/schema/editor.ts:202
 msgid "Algorithm"
-msgstr ""
+msgstr "Algoritme"
 
 #: source/win-preferences/schema/editor.ts:220
 #, fuzzy
@@ -3131,29 +3164,29 @@ msgstr "Redigerings skriftstørrelse"
 #: source/win-preferences/schema/editor.ts:248
 #, fuzzy
 msgid "Indentation size (number of spaces)"
-msgstr "Indentér med det følgende antal mellemrum"
+msgstr "Indryk med det følgende antal mellemrum"
 
 #: source/win-preferences/schema/editor.ts:255
 #, fuzzy
 msgid "Indent using tabs instead of spaces"
-msgstr "Indentér med det følgende antal mellemrum"
+msgstr "Indryk med det følgende antal mellemrum"
 
 #: source/win-preferences/schema/editor.ts:261
 msgid "Show formatting toolbar when text is selected"
-msgstr ""
+msgstr "Vis formatteringsværktøjslinjen når tekst er valgt"
 
 #: source/win-preferences/schema/editor.ts:266
 msgid "Highlight whitespace"
-msgstr ""
+msgstr "Fremhæv mellemrum"
 
 #: source/win-preferences/schema/editor.ts:272
 #, fuzzy
 msgid "Suggest emojis during autocompletion"
-msgstr "Acceptér mellemrum ved autofuldførelse"
+msgstr "Acceptér emojis ved autofuldførelse"
 
 #: source/win-preferences/schema/editor.ts:277
 msgid "Show link previews"
-msgstr ""
+msgstr "Vis link forhåndsvisning"
 
 #: source/win-preferences/schema/editor.ts:283
 msgid "Automatically close matching character pairs"
@@ -3174,103 +3207,103 @@ msgstr "Følg styresystem"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "On"
-msgstr ""
+msgstr "Til"
 
 #: source/win-preferences/schema/appearance.ts:59
 msgid "End"
-msgstr ""
+msgstr "Slut"
 
 #: source/win-preferences/schema/appearance.ts:69
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #: source/win-preferences/schema/appearance.ts:117
 msgid "Toolbar options"
-msgstr ""
+msgstr "Værktøjslinje-indstillinger"
 
 #: source/win-preferences/schema/appearance.ts:124
 msgid "Left section"
-msgstr ""
+msgstr "Venstre sektion"
 
 #: source/win-preferences/schema/appearance.ts:128
 msgid "Display \"Open settings\" button"
-msgstr ""
+msgstr "Vis \"Åbn indstillinger\" knap"
 
 #: source/win-preferences/schema/appearance.ts:133
 msgid "Display \"New file\" button"
-msgstr ""
+msgstr "Vis \"Ny fil\" knap"
 
 #: source/win-preferences/schema/appearance.ts:138
 msgid "Display \"Previous file\" button"
-msgstr ""
+msgstr "Vis \"Forrige fil\" knap"
 
 #: source/win-preferences/schema/appearance.ts:143
 msgid "Display \"Next file\" button"
-msgstr ""
+msgstr "Vis \"Næste fil\" knap"
 
 #: source/win-preferences/schema/appearance.ts:150
 msgid "Center section"
-msgstr ""
+msgstr "Midterste sektion"
 
 #: source/win-preferences/schema/appearance.ts:154
 msgid "Display \"Readability mode\" button"
-msgstr ""
+msgstr "Vis \"Læsbarhedstilstand\" knap"
 
 #: source/win-preferences/schema/appearance.ts:159
 msgid "Display \"Insert comment\" button"
-msgstr ""
+msgstr "Vis \"Indsæt kommentar\" knap"
 
 #: source/win-preferences/schema/appearance.ts:164
 msgid "Display \"Insert link\" button"
-msgstr ""
+msgstr "Vis \"Indsæt link\" knap"
 
 #: source/win-preferences/schema/appearance.ts:169
 msgid "Display \"Insert image\" button"
-msgstr ""
+msgstr "Vis \"Indsæt billede\" knap"
 
 #: source/win-preferences/schema/appearance.ts:174
 msgid "Display \"Insert task list\" button"
-msgstr ""
+msgstr "Vis \"Indsæt opgaveliste\" knap"
 
 #: source/win-preferences/schema/appearance.ts:179
 msgid "Display \"Insert table\" button"
-msgstr ""
+msgstr "Vis \"Indsæt tabel\" knap"
 
 #: source/win-preferences/schema/appearance.ts:184
 msgid "Display \"Insert footnote\" button"
-msgstr ""
+msgstr "Vis \"Indsæt fodnote\" knap"
 
 #: source/win-preferences/schema/appearance.ts:191
 msgid "Right section"
-msgstr ""
+msgstr "Højre sektion"
 
 #: source/win-preferences/schema/appearance.ts:195
 msgid "Display word/character counter"
-msgstr ""
+msgstr "Vis ord/tegn tæller"
 
 #: source/win-preferences/schema/appearance.ts:200
 msgid "Display Pomodoro timer"
-msgstr ""
+msgstr "Vis Pomodore timer"
 
 #: source/win-preferences/schema/appearance.ts:206
 msgid "Status bar"
-msgstr "Vis Zettlr"
+msgstr "Statuslinje"
 
 #: source/win-preferences/schema/appearance.ts:212
 msgid "Show status bar"
-msgstr ""
+msgstr "Vis statuslinje"
 
 #: source/win-preferences/schema/appearance.ts:223
 msgid "Open CSS editor"
-msgstr "Åbn mappe"
+msgstr "Åbn CSS editor"
 
 #: source/win-preferences/schema/spellchecking.ts:24
 msgid "LanguageTool"
-msgstr ""
+msgstr "LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:34
 msgid "Strictness"
-msgstr ""
+msgstr "Strenghed"
 
 #: source/win-preferences/schema/spellchecking.ts:37
 #, fuzzy
@@ -3279,19 +3312,19 @@ msgstr "Kalender"
 
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "Picky"
-msgstr ""
+msgstr "Kræsen"
 
 #: source/win-preferences/schema/spellchecking.ts:47
 msgid "Mother language"
-msgstr ""
+msgstr "Modersmål"
 
 #: source/win-preferences/schema/spellchecking.ts:53
 msgid "Not set"
-msgstr ""
+msgstr "Ikke angivet"
 
 #: source/win-preferences/schema/spellchecking.ts:61
 msgid "Preferred Variants"
-msgstr ""
+msgstr "Foretrukne varianter"
 
 #: source/win-preferences/schema/spellchecking.ts:66
 msgid ""
@@ -3299,53 +3332,58 @@ msgid ""
 "will nudge LanguageTool to auto-detect your preferred variant of these "
 "languages."
 msgstr ""
+"LanguageTool kan ikke kende forskel på bestemte sprogs varianter. Disse "
+"indstillinger vil få LanguageTool til at auto-registrere dine foretrukne "
+"varianter af disse sprog."
 
 #: source/win-preferences/schema/spellchecking.ts:71
 msgid "Interpret English as"
-msgstr ""
+msgstr "Fortolk engelsk som"
 
 #: source/win-preferences/schema/spellchecking.ts:84
 msgid "Interpret German as"
-msgstr ""
+msgstr "Fortolk tysk som"
 
 #: source/win-preferences/schema/spellchecking.ts:94
 msgid "Interpret Portuguese as"
-msgstr ""
+msgstr "Fortolk portugisisk som"
 
 #: source/win-preferences/schema/spellchecking.ts:105
 msgid "Interpret Catalan as"
-msgstr ""
+msgstr "Forstå catalansk som"
 
 #: source/win-preferences/schema/spellchecking.ts:114
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "LanguageTool leverandør"
 
 #: source/win-preferences/schema/spellchecking.ts:118
 msgid "Custom server"
-msgstr "Custom CSS"
+msgstr "Brugervalgt server"
 
 #: source/win-preferences/schema/spellchecking.ts:125
 #, fuzzy
 msgid "Custom server address"
-msgstr "Custom CSS"
+msgstr "Brugervalgt serveradresse"
 
 #: source/win-preferences/schema/spellchecking.ts:134
 msgid "LanguageTool Premium"
-msgstr ""
+msgstr "LanguageTool Premium"
 
 #: source/win-preferences/schema/spellchecking.ts:139
 msgid ""
 "Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
 "credentials here."
 msgstr ""
+"Zettlr vil ignorere \"LanguageTool leverandør\" indstillingerne hvis du "
+"indtaster adgangsoplysninger her."
 
 #: source/win-preferences/schema/spellchecking.ts:143
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "LanguageTool brugernavn"
 
 #: source/win-preferences/schema/spellchecking.ts:150
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "LanguageTool API-nøgle"
 
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Active"
@@ -3353,7 +3391,7 @@ msgstr "Handlinger"
 
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Language"
-msgstr ""
+msgstr "Sprog"
 
 #: source/win-preferences/schema/spellchecking.ts:168
 msgid ""
@@ -3378,15 +3416,15 @@ msgstr "Mørk tilstand"
 
 #: source/win-preferences/schema/file-manager.ts:32
 msgid "Thin"
-msgstr ""
+msgstr "Tynd"
 
 #: source/win-preferences/schema/file-manager.ts:33
 msgid "Expanded"
-msgstr ""
+msgstr "Udfoldet"
 
 #: source/win-preferences/schema/file-manager.ts:34
 msgid "Combined"
-msgstr ""
+msgstr "Kombineret"
 
 #: source/win-preferences/schema/file-manager.ts:40
 msgid ""
@@ -3395,6 +3433,9 @@ msgid ""
 "file list and directory tree by clicking on directories or the arrow button "
 "which appears at the top left corner of the file list."
 msgstr ""
+"Tynd tilstand viser dine mapper og filer adskilt. vælgt en mappe for at "
+"få vist dens indhold i fillisten. Skift mellem filliste og mappetræet eller "
+"pile-knappen, som kommer i det øverste venstre hjørne af fillisten."
 
 #: source/win-preferences/schema/file-manager.ts:45
 msgid "Show file information"
@@ -3406,31 +3447,31 @@ msgstr "Vis mapper over filer"
 
 #: source/win-preferences/schema/file-manager.ts:56
 msgid "Markdown document name display"
-msgstr ""
+msgstr "Markdown dokumnetnavn visning"
 
 #: source/win-preferences/schema/file-manager.ts:64
 msgid "Filename only"
-msgstr ""
+msgstr "Kun filnavn"
 
 #: source/win-preferences/schema/file-manager.ts:65
 msgid "Title if applicable"
-msgstr ""
+msgstr "Titel hvis muligt"
 
 #: source/win-preferences/schema/file-manager.ts:66
 msgid "First heading level 1 if applicable"
-msgstr ""
+msgstr "Første niveau 1 overskrift hvis muligt"
 
 #: source/win-preferences/schema/file-manager.ts:67
 msgid "Title or first heading level 1 if applicable"
-msgstr ""
+msgstr "Titel eller første level 1 ovferskrift hvis muligt"
 
 #: source/win-preferences/schema/file-manager.ts:73
 msgid "Display Markdown file extensions"
-msgstr ""
+msgstr "Vis Markdown filtyper"
 
 #: source/win-preferences/schema/file-manager.ts:80
 msgid "Time display"
-msgstr ""
+msgstr "Tidsvisning"
 
 #: source/win-preferences/schema/file-manager.ts:88
 msgid "Last modification time"
@@ -3443,11 +3484,11 @@ msgstr "Dato for filoprettelse"
 #: source/win-preferences/schema/file-manager.ts:95
 #, fuzzy
 msgid "Sorting"
-msgstr "Eksporter..."
+msgstr "Sortering"
 
 #: source/win-preferences/schema/file-manager.ts:101
 msgid "When sorting documents…"
-msgstr "Nylige dokumenter"
+msgstr "Ved sortering af dokumenter…"
 
 #: source/win-preferences/schema/file-manager.ts:104
 #, fuzzy
@@ -3460,15 +3501,15 @@ msgstr "ASCII rækkefølge (2 efter 10)"
 
 #: source/win-preferences/schema/import-export.ts:24
 msgid "Import and export profiles"
-msgstr ""
+msgstr "Importer og eksporter profiler"
 
 #: source/win-preferences/schema/import-export.ts:30
 msgid "Open import profiles editor"
-msgstr ""
+msgstr "Åbn import profiler editor"
 
 #: source/win-preferences/schema/import-export.ts:44
 msgid "Open export profiles editor"
-msgstr ""
+msgstr "Åbn eksport profiler editor"
 
 #: source/win-preferences/schema/import-export.ts:59
 msgid "Export settings"
@@ -3498,20 +3539,20 @@ msgstr "Lav ingen ændringer på interne links"
 
 #: source/win-preferences/schema/import-export.ts:88
 msgid "Destination folder for exported files"
-msgstr ""
+msgstr "Destinaationsmappe for eksporterede filer"
 
 #. TODO: Add info-strings
 #: source/win-preferences/schema/import-export.ts:92
 msgid "Temporary folder"
-msgstr ""
+msgstr "Midlertidig mappe"
 
 #: source/win-preferences/schema/import-export.ts:93
 msgid "Same as file location"
-msgstr "Vis fil information"
+msgstr "Samme som fillokation"
 
 #: source/win-preferences/schema/import-export.ts:94
 msgid "Ask for folder when exporting"
-msgstr ""
+msgstr "Spørgs efter mappe ved eksport"
 
 #: source/win-preferences/schema/import-export.ts:100
 msgid ""
@@ -3519,25 +3560,30 @@ msgid ""
 "same location as the file overwrites files with identical filenames if they "
 "already exist."
 msgstr ""
+"Advarsel! Filer i den midlertidge mappe slettes regelmæssigt. Vælges den "
+"samme lokation som filen, overskrives filer med identiske filnavne hvis "
+"de allerede eksisterer."
 
 #: source/win-preferences/schema/import-export.ts:105
 msgid "Custom export commands"
-msgstr ""
+msgstr "Tilpassede eksport kommandoer"
 
 #: source/win-preferences/schema/import-export.ts:113
 msgid "Display name"
-msgstr ""
+msgstr "Vis navn"
 
 #: source/win-preferences/schema/import-export.ts:113
 #, fuzzy
 msgid "Command"
-msgstr "Kommentar"
+msgstr "Kommando"
 
 #: source/win-preferences/schema/import-export.ts:114
 msgid ""
 "Enter custom commands to run the exporter with. Each command receives as its "
 "first argument the file or project folder to be exported."
 msgstr ""
+"Indtast tilpassede kommandoer til eksportkørslen. Hver kommando modtages som "
+"dens første argument til fil eller projektmappen, der skal eksporteres."
 
 #: source/win-preferences/schema/advanced.ts:30
 #, fuzzy
@@ -3547,12 +3593,12 @@ msgstr "Mønster for nye filnavne"
 #: source/win-preferences/schema/advanced.ts:36
 #, fuzzy
 msgid "Define a pattern for new file names"
-msgstr "Mønster for nye filnavne"
+msgstr "Definer et mønster for nye filnavne"
 
 #: source/win-preferences/schema/advanced.ts:38
 #, javascript-format
 msgid "Available variables: %s"
-msgstr ""
+msgstr "Tilgængelige variable: %s"
 
 #: source/win-preferences/schema/advanced.ts:44
 msgid "Do not prompt for filename when creating new files"
@@ -3564,16 +3610,16 @@ msgstr "Brug nativ vindues udseende"
 
 #: source/win-preferences/schema/advanced.ts:58
 msgid "Only available on Linux; this is the default for macOS and Windows."
-msgstr ""
+msgstr "Kun tilgængelig på Linux; dette er standard for macOS og Windows."
 
 #: source/win-preferences/schema/advanced.ts:64
 #, fuzzy
 msgid "Enable window vibrancy"
-msgstr "Brug nativ vindues udseende"
+msgstr "Aktiver vindueslivlighed"
 
 #: source/win-preferences/schema/advanced.ts:65
 msgid "Only available on macOS; makes the window background opaque."
-msgstr ""
+msgstr "Kun tilgængelig på macOS; gør vinduesbaggrunden ugennemsigtig."
 
 #: source/win-preferences/schema/advanced.ts:72
 msgid "Show app in the notification area"
@@ -3585,24 +3631,24 @@ msgstr "Lad programmet køre i systembakken"
 
 #: source/win-preferences/schema/advanced.ts:82
 msgid "Zoom behavior"
-msgstr ""
+msgstr "Zoom-opførsel"
 
 #: source/win-preferences/schema/advanced.ts:85
 msgid "Resizes the whole GUI"
-msgstr ""
+msgstr "Skalerer hele GUI"
 
 #: source/win-preferences/schema/advanced.ts:86
 #, fuzzy
 msgid "Changes the editor font size"
-msgstr "Redigerings skriftstørrelse"
+msgstr "Ændrer editorens skriftstørrelse"
 
 #: source/win-preferences/schema/advanced.ts:92
 msgid "Attachments sidebar"
-msgstr ""
+msgstr "Vedhæftninger sidebjælke"
 
 #: source/win-preferences/schema/advanced.ts:98
 msgid "File extensions to be visible in the Attachments sidebar"
-msgstr ""
+msgstr "Filtyper, der er synlige i Vedhæftninger sidebjælken"
 
 #: source/win-preferences/schema/advanced.ts:104
 #, fuzzy
@@ -3616,11 +3662,11 @@ msgstr "Hostname"
 #: source/win-preferences/schema/advanced.ts:120
 #, fuzzy
 msgid "Watchdog polling"
-msgstr "Aktivér \"vagthunds\" overvågning"
+msgstr "\"Vagthunds\" overvågning"
 
 #: source/win-preferences/schema/advanced.ts:126
 msgid "Activate watchdog polling"
-msgstr ""
+msgstr "Aktivér \"vagthunds\" overvågning"
 
 #: source/win-preferences/schema/advanced.ts:131
 msgid "Time to wait before writing a file is considered done (in ms)"
@@ -3633,12 +3679,12 @@ msgstr "Slet fil"
 
 #: source/win-preferences/schema/advanced.ts:144
 msgid "Delete items irreversibly if moving them to trash fails"
-msgstr ""
+msgstr "Slet filer fuldstændig hvis de flytning til papirkurven mislykkes"
 
 #: source/win-preferences/schema/advanced.ts:150
 #, fuzzy
 msgid "Debug mode"
-msgstr "Aktiver debugging"
+msgstr "Debug tilstand"
 
 #: source/win-preferences/schema/advanced.ts:156
 msgid "Enable debug mode"
@@ -3646,7 +3692,7 @@ msgstr "Aktiver debugging"
 
 #: source/win-preferences/schema/advanced.ts:163
 msgid "Beta releases"
-msgstr ""
+msgstr "Beta-versioner"
 
 #: source/win-preferences/schema/advanced.ts:169
 msgid "Notify me about beta releases"
@@ -3654,11 +3700,11 @@ msgstr "Orienter om betaudgivelser"
 
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
-msgstr ""
+msgstr "Åbn snippets editor"
 
 #: source/win-preferences/schema/general.ts:22
 msgid "Application language"
-msgstr ""
+msgstr "Programsprog"
 
 #: source/win-preferences/schema/general.ts:33
 msgid "Autosave"
@@ -3679,17 +3725,19 @@ msgstr "Efter en kort forsinkelse"
 
 #: source/win-preferences/schema/general.ts:55
 msgid "Default image folder"
-msgstr ""
+msgstr "Standard billedmappe"
 
 #: source/win-preferences/schema/general.ts:67
 msgid ""
 "Click \"Select folder…\" or type an absolute or relative path directly into "
 "the input field."
 msgstr ""
+"Klik \"Vælg mappe…\" eller indtast en fuldstændig eller relativ sti direkte "
+"i indtastningsfeltet."
 
 #: source/win-preferences/schema/general.ts:72
 msgid "Behavior"
-msgstr ""
+msgstr "Opførsel"
 
 #: source/win-preferences/schema/general.ts:83
 msgid "Avoid opening files in new tabs if possible"
@@ -3702,7 +3750,7 @@ msgstr "Opdatering"
 
 #: source/win-preferences/schema/general.ts:95
 msgid "Automatically check for updates"
-msgstr ""
+msgstr "Kontroller automatisk for opdateringer"
 
 #: source/win-preferences/schema/citations.ts:28
 msgid "How would you like autocomplete to insert your citations?"
@@ -3710,7 +3758,7 @@ msgstr "Ønsker du at autofuldfør indsætter citationer for dig?"
 
 #: source/win-preferences/schema/citations.ts:39
 msgid "Citation database (CSL JSON or BibTex)"
-msgstr ""
+msgstr "Citation database (CSL JSON eller BibTex)"
 
 #: source/win-preferences/schema/citations.ts:41
 #: source/win-preferences/schema/citations.ts:53
@@ -3720,7 +3768,7 @@ msgstr "Tilføj til fil"
 
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL style (optional)"
-msgstr ""
+msgstr "CSL stil (valgfri)"
 
 #~ msgid "Open Link"
 #~ msgstr "Åbn link"
@@ -3741,16 +3789,16 @@ msgstr ""
 #~ msgstr "Indsæt tabel"
 
 #~ msgid "Manage Tags…"
-#~ msgstr "Administrér mærkater"
+#~ msgstr "Administrér mærkater…"
 
 #~ msgid "New File…"
-#~ msgstr "Ny fil.."
+#~ msgstr "Ny fil…"
 
 #~ msgid "Open Workspace …"
-#~ msgstr "Åben arbejdsområde ..."
+#~ msgstr "Åben arbejdsområde …"
 
 #~ msgid "Recent documents"
-#~ msgstr "Nylige dokumenter"
+#~ msgstr "Seneste dokumenter"
 
 #~ msgid "Empty"
 #~ msgstr "Tom"
@@ -3814,14 +3862,13 @@ msgstr ""
 #~ msgstr "Her kan du vælge et tema for programmet"
 
 #~ msgid "Show statusbar"
-#~ msgstr "Vis Zettlr"
+#~ msgstr "Vis statuslinje"
 
 #~ msgid "Activate Watchdog polling"
 #~ msgstr "Aktivér \"vagthunds\" overvågning"
 
 #~ msgid "Delete items irreversibly, if moving them to trash fails"
-#~ msgstr ""
-#~ "Slet noter fuldstændigt, hvis det fejler at flytte dem til papirskurven"
+#~ msgstr "Slet noter fuldstændigt, hvis det fejler at flytte dem til papirskurven"
 
 #~ msgid "Close Workspace"
 #~ msgstr "Luk arbejdsområde"
@@ -3830,16 +3877,16 @@ msgstr ""
 #~ msgstr "Indholdsfortegnelse"
 
 #~ msgid "Filter …"
-#~ msgstr "Filtrer ..."
+#~ msgstr "Filtrer …"
 
 #~ msgid "Full-Text Search"
 #~ msgstr "Fuld-tekst søgning"
 
 #~ msgid "Find …"
-#~ msgstr "Find ..."
+#~ msgstr "Find …"
 
 #~ msgid "Restrict to directory …"
-#~ msgstr "Forbehold til mappe ..."
+#~ msgstr "Forbehold til mappe …"
 
 #~ msgid "Cannot open directory"
 #~ msgstr "Kan ikke åbne mappe"
@@ -3875,7 +3922,7 @@ msgstr ""
 
 #, javascript-format
 #~ msgid "Opening new root %s …"
-#~ msgstr "Åbner ny rod %s ..."
+#~ msgstr "Åbner ny rod %s …"
 
 #, javascript-format
 #~ msgid "%s has been loaded."
@@ -4011,7 +4058,7 @@ msgstr ""
 #~ msgstr "Luk søgning"
 
 #~ msgid "Toggle regular expression search"
-#~ msgstr "Slå regular expression søgning til eller fra"
+#~ msgstr "Slå regular expression søgning til/fra"
 
 #~ msgid "Link ending"
 #~ msgstr "Link afslutning"
