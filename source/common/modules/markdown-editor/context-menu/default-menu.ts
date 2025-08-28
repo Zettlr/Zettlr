@@ -34,6 +34,7 @@ import { toDoubleQuotes } from 'source/common/modules/markdown-editor/commands/t
 import { toSentenceCase } from 'source/common/modules/markdown-editor/commands/transforms/to-sentence-case'
 import { toTitleCase } from 'source/common/modules/markdown-editor/commands/transforms/to-title-case'
 import { zapGremlins } from 'source/common/modules/markdown-editor/commands/transforms/zap-gremlins'
+import { substituteLigatures } from 'source/common/modules/markdown-editor/commands/transforms/substitute-ligatures'
 import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
@@ -305,6 +306,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
           enabled: true
         },
         {
+          label: trans('Substitute ligatures'),
+          id: 'substituteLigatures',
+          type: 'normal',
+          enabled: true
+        },
+        {
           type: 'separator'
         },
         {
@@ -425,6 +432,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       toTitleCase(window.config.get('appLang'))(view)
     } else if (clickedID === 'zapGremlins') {
       zapGremlins(view)
+    } else if (clickedID === 'substituteLigatures') {
+      substituteLigatures(view)
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
