@@ -209,10 +209,12 @@ body div#toolbar {
 
     &.left {
       left: 0;
+      height: auto;
       background-color: inherit;
     }
     &.right {
       right: 0;
+      height: auto;
       background-color: inherit;
     }
   }
