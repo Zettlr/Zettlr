@@ -55,9 +55,9 @@ export function setAlignment (alignTo: 'left'|'right'|'center'): (target: Editor
       const delimOffsets = getDelimiterLineCellOffsets(delimLine, delimChar)
       const [ from, to ] = delimOffsets[idx]
       if (alignTo === 'left') {
-        return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(to - from) }
+        return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(Math.max(to - from, 2)) }
       } else if (alignTo === 'right') {
-        return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(to - from - 1) + ':' }
+        return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(Math.max(to - from - 1, 2)) + ':' }
       } else {
         // we need at least one hyphen in between the colons to parse the delimiter correctly
         return { from: node.from + from, to: node.from + to, insert: ':' + fillChar.repeat(Math.max(to - from - 2, 1)) + ':' }
