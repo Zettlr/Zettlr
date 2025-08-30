@@ -36,20 +36,20 @@ export function setAlignment (alignTo: 'left'|'right'|'center'): (target: Editor
       if (delimNodes.length > 1) {
         node = delimNodes.find(node => target.state.sliceDoc(node.from, node.to).includes('='))
       }
-  
+
       if (node === undefined) {
         return undefined
       }
-  
+
       const delimLine = target.state.sliceDoc(node.from, node.to)
-  
+
       // TODO: Iterate over all ranges (but only once per row)
       const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
-  
+
       if (idx === undefined) {
         return undefined
       }
-  
+
       const delimChar = ctx.tableAST.tableType === 'grid' ? '+' : delimLine.includes('|') ? '|' : '+'
       const fillChar = ctx.tableAST.tableType === 'grid' ? '=' : '-'
       const delimOffsets = getDelimiterLineCellOffsets(delimLine, delimChar)
@@ -59,10 +59,11 @@ export function setAlignment (alignTo: 'left'|'right'|'center'): (target: Editor
       } else if (alignTo === 'right') {
         return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(to - from - 1) + ':' }
       } else {
-        return { from: node.from + from, to: node.from + to, insert: ':' + fillChar.repeat(to - from - 2) + ':' }
+        // we need at least one hyphen in between the colons to parse the delimiter correctly
+        return { from: node.from + from, to: node.from + to, insert: ':' + fillChar.repeat(Math.max(to - from - 2, 1)) + ':' }
       }
     })
-  
+
     if (changes.length > 0) {
       target.dispatch({ changes })
       return true
