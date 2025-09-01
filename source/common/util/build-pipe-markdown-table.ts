@@ -53,19 +53,19 @@ export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'ce
 
   // Then, build the table in a quick MapReduce fashion
   const rows = ast.map(row => {
-    const rowContents = row.map((col, idx) => {
+    const rowContents = row.map((cell, idx) => {
       let pad = Math.max(colSizes[idx], 1)
 
       switch (colAlignment[idx]) {
         case 'left':
-          return col.padEnd(pad, ' ')
+          return cell.padEnd(pad, ' ')
         case 'right':
-          return col.padStart(pad, ' ')
+          return cell.padStart(pad, ' ')
         case 'center':
-          pad = pad - col.length
-          return ' '.repeat(Math.floor(pad/2)) + col + ' '.repeat(Math.ceil(pad/2))
+          pad = pad - cell.length
+          return ' '.repeat(Math.floor(pad/2)) + cell + ' '.repeat(Math.ceil(pad/2))
         default:
-          return col.padEnd(pad, ' ')
+          return cell.padEnd(pad, ' ')
       }
     }).join(' | ')
     return `| ${rowContents} |`
