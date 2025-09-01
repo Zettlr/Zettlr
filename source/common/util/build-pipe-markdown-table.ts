@@ -41,7 +41,7 @@ export default function calculateColSizes (ast: string[][]): number[] {
   return sizes
 }
 
-export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'center'|'left'|'right'>): string {
+export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'center'|'left'|'right'|null>): string {
   if (ast.length < 2) {
     throw new Error('Cannot build pipe table: Must have at least two rows.')
   }
@@ -63,12 +63,15 @@ export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'ce
 
   // Finally, insert the required header row at index 2
   const headerRowContents = colSizes.map((size, idx) => {
-    if (colAlignment[idx] === 'left') {
-      return '-'.repeat(size + 2)
-    } else if (colAlignment[idx] === 'center') {
-      return ':' + '-'.repeat(size) + ':'
-    } else {
-      return '-'.repeat(size + 1) + ':'
+    switch (colAlignment[idx]) {
+      case 'left':
+        return ':' + '-'.repeat(Math.max(size - 1, 2))
+      case 'right':
+        return '-'.repeat(Math.max(size - 1, 2)) + ':'
+      case 'center':
+        return ':' + '-'.repeat(Math.max(size - 2, 1)) + ':'
+      default:
+        return '-'.repeat(Math.max(size, 3))
     }
   }).join('|')
 

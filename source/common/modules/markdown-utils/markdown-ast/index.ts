@@ -367,7 +367,7 @@ export interface Table extends MDNode {
   /**
    * A list of column alignments in the table.
    */
-  alignment: Array<'left'|'center'|'right'>
+  alignment: Array<'left'|'center'|'right'|null>
   /**
    * This property contains the table type in the source.
    */

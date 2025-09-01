@@ -109,15 +109,17 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
     .filter(c => c.length > 0)
     .map(c => {
       // Now extract the alignment characters
-      if (c.startsWith(':') && c.endsWith(':')) {
-        return 'center'
+      if (c.startsWith(':')) {
+        return 'left'
       } else if (c.endsWith(':')) {
         return 'right'
+      } else if (c.startsWith(':') && c.endsWith(':')) {
+        return 'center'
       } else {
-        return 'left'
+        return null
       }
     })
-  
+
   // Delimiter row determines alignment + correct number of columns
   const nCols = astNode.alignment.length
 
