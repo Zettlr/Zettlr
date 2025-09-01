@@ -21,11 +21,13 @@
  * @return  {number[]}       The maximum sizes for all columns
  */
 export default function calculateColSizes (ast: string[][]): number[] {
-  const sizes = []
-  for (let col = 0; col < ast[0].length; col++) {
-    let colSize = 0
-    for (let row = 0; row < ast.length; row++) {
-      const cell = ast[row][col]
+  const numCols = ast[0].length
+  const sizes: number[] = Array(numCols).fill(0)
+
+  ast.forEach((row) => {
+    row.forEach((cell, idx) => {
+      let colSize = sizes[idx]
+
       let cellLength = cell.length
       if (cell.includes('\n')) {
         // Multi-line cell -> take the longest of the containing rows
@@ -33,11 +35,11 @@ export default function calculateColSizes (ast: string[][]): number[] {
       }
 
       if (cellLength > colSize) {
-        colSize = cellLength
+        sizes[idx] = cellLength
       }
-    }
-    sizes.push(colSize)
-  }
+    })
+  })
+
   return sizes
 }
 
@@ -52,10 +54,18 @@ export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'ce
   // Then, build the table in a quick MapReduce fashion
   const rows = ast.map(row => {
     const rowContents = row.map((col, idx) => {
-      if (colAlignment[idx] === 'right') {
-        return col.padStart(colSizes[idx], ' ')
-      } else {
-        return col.padEnd(colSizes[idx], ' ')
+      let pad = Math.max(colSizes[idx], 1)
+
+      switch (colAlignment[idx]) {
+        case 'left':
+          return col.padEnd(pad, ' ')
+        case 'right':
+          return col.padStart(pad, ' ')
+        case 'center':
+          pad = pad - col.length
+          return ' '.repeat(Math.floor(pad/2)) + col + ' '.repeat(Math.ceil(pad/2))
+        default:
+          return col.padEnd(pad, ' ')
       }
     }).join(' | ')
     return `| ${rowContents} |`
@@ -65,11 +75,11 @@ export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'ce
   const headerRowContents = colSizes.map((size, idx) => {
     switch (colAlignment[idx]) {
       case 'left':
-        return ':' + '-'.repeat(Math.max(size - 1, 2))
+        return ':' + '-'.repeat(Math.max(size + 1, 2))
       case 'right':
-        return '-'.repeat(Math.max(size - 1, 2)) + ':'
+        return '-'.repeat(Math.max(size + 1, 2)) + ':'
       case 'center':
-        return ':' + '-'.repeat(Math.max(size - 2, 1)) + ':'
+        return ':' + '-'.repeat(Math.max(size, 1)) + ':'
       default:
         return '-'.repeat(Math.max(size, 3))
     }

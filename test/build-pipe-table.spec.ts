@@ -25,9 +25,10 @@ const tableResults: string[] = []
 /** * * * * * * * * * * * * * * * * * *
 * TABLE ONE
 */
-tableResults.push(`|  |  |
-|--|--|
-|  |  |`)
+tableResults.push(`\
+|   |   |
+|:--|:--|
+|   |   |`)
 
 table.push({
   ast: [
@@ -40,10 +41,11 @@ table.push({
 /** * * * * * * * * * * * * * * * * * *
 * TABLE TWO
 */
-tableResults.push(`|  |  |  |  |
-|--|--|--|--|
-|  |  |  |  |
-|  |  |  |  |`)
+tableResults.push(`\
+|   |   |   |   |
+|:--|:--|:--|:--|
+|   |   |   |   |
+|   |   |   |   |`)
 
 table.push({
   ast: [
@@ -57,16 +59,17 @@ table.push({
 /** * * * * * * * * * * * * * * * * * *
 * TABLE THREE
 */
-tableResults.push(`| Right | Left  | Centered |
-|------:|-------|:--------:|
-| Col 1 | Col 2 | Col 3    |`)
+tableResults.push(`\
+| Left   | Centered |  Right |
+|:-------|:--------:|-------:|
+| Col. 1 |  Col. 2  | Col. 3 |`)
 
 table.push({
   ast: [
-    [ 'Right', 'Left', 'Centered' ],
-    [ 'Col 1', 'Col 2', 'Col 3' ]
+    [ 'Left', 'Centered', 'Right' ],
+    [ 'Col. 1', 'Col. 2', 'Col. 3' ]
   ],
-  colAlignments: [ 'right', 'left', 'center' ]
+  colAlignments: [ 'left', 'center', 'right' ]
 })
 
 describe('TableEditor#buildGrid()', function () {
