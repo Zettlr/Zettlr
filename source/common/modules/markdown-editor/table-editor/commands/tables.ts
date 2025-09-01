@@ -55,7 +55,7 @@ export function setAlignment (alignTo: 'left'|'right'|'center'): (target: Editor
       const delimOffsets = getDelimiterLineCellOffsets(delimLine, delimChar)
       const [ from, to ] = delimOffsets[idx]
       if (alignTo === 'left') {
-        return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(Math.max(to - from, 2)) }
+        return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(Math.max(to - from, 3)) }
       } else if (alignTo === 'right') {
         return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(Math.max(to - from - 1, 2)) + ':' }
       } else {
