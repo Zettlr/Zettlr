@@ -81,7 +81,7 @@ export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'ce
       case 'center':
         return ':' + '-'.repeat(Math.max(size, 1)) + ':'
       default:
-        return '-'.repeat(Math.max(size, 3))
+        return '-'.repeat(Math.max(size + 2, 3))
     }
   }).join('|')
 

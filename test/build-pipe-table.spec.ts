@@ -19,7 +19,7 @@
 import { deepStrictEqual } from 'assert'
 import { buildPipeMarkdownTable } from 'source/common/util/build-pipe-markdown-table'
 
-const table: Array<{ ast: string[][], colAlignments: Array<'left'|'right'|'center'> }> = []
+const table: Array<{ ast: string[][], colAlignments: Array<'left'|'right'|'center'|null> }> = []
 const tableResults: string[] = []
 
 /** * * * * * * * * * * * * * * * * * *
@@ -70,6 +70,22 @@ table.push({
     [ 'Col. 1', 'Col. 2', 'Col. 3' ]
   ],
   colAlignments: [ 'left', 'center', 'right' ]
+})
+
+/** * * * * * * * * * * * * * * * * * *
+* TABLE FOUR
+*/
+tableResults.push(`\
+| One | Two | Three | Four | Five |
+|:----|-----|:-----:|------|-----:|
+| 1   | 2   |   3   | 4    |    5 |`)
+
+table.push({
+  ast: [
+    [ 'One', 'Two', 'Three', 'Four', 'Five' ],
+    [ '1', '2', '3', '4', '5' ]
+  ],
+  colAlignments: [ 'left', null, 'center', null, 'right' ]
 })
 
 describe('TableEditor#buildGrid()', function () {
