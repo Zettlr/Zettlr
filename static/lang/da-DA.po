@@ -928,7 +928,7 @@ msgid ""
 msgstr ""
 "Efter genstarten vil Zettlr genskabe hele cachen, hvilket kan tage et "
 "stykke tid afhængig af mængden af filer, du har indlæst og hastigheden af "
-"din disk. Vinduet vil blive vist efterfølgende.
+"din disk. Vinduet vil blive vist efterfølgende."
 
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
