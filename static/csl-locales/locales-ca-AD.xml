@@ -88,7 +88,7 @@
     <term name="forthcoming">previst</term>
     <term name="from">de</term>
     <term name="ibid">ibíd.</term>
-    <term name="in">en</term>
+    <term name="in">dins</term>
     <term name="in press">en impremta</term>
     <term name="internet">internet</term>
     <term name="letter">carta</term>
@@ -415,7 +415,7 @@
     <term name="opus" form="short">op.</term>
     <term name="page" form="short">
       <single>p.</single>
-      <multiple>p.</multiple>
+      <multiple>pp.</multiple>
     </term>
     <term name="number-of-volumes" form="short">
       <single>vol.</single>
@@ -423,7 +423,7 @@
     </term>
     <term name="page-first" form="short">
       <single>p.</single>
-      <multiple>p.</multiple>
+      <multiple>pp.</multiple>
     </term>
     <term name="printing" form="short">
       <single>print.</single>
@@ -433,7 +433,7 @@
 
     <term name="number-of-pages" form="short">
       <single>p.</single>
-      <multiple>p.</multiple>
+      <multiple>pp.</multiple>
     </term>
     <term name="paragraph" form="short">par.</term>
     <term name="part" form="short">pt.</term>
