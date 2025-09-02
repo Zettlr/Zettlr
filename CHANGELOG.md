@@ -70,6 +70,10 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   is already running.
 - **Feature**: Individual global search results can now be copied to the
   clipboard (#2070).
+- **Feature**: Autocomplete suggestions (links, tags, etc.) now use _fuzzy
+  matching_. You no longer need to type the exact text, but rather a few
+  letters from it will be enough to bring the best results to the top of the
+  list. (#5878)
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
