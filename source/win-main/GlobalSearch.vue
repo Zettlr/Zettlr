@@ -555,6 +555,25 @@ body div#global-search-pane {
     border-bottom: 1px solid #ccc;
   }
 
+  p {
+    margin-top: 5px;
+    display: flex;
+    gap: 5px;
+  }
+
+  .form-control {
+    input {
+      margin-top: 5px;
+    }
+  }
+
+  // hide chromium 'search-clear' element since it cannot be styled
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
+
   div.search-result-container {
     border-bottom: 1px solid rgb(180, 180, 180);
     padding: 10px;
