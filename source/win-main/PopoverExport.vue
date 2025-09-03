@@ -1,26 +1,28 @@
 <template>
   <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
-    <h4>Export</h4>
-    <p><strong>{{ filename }}</strong></p>
-    <SelectControl
-      v-model="format"
-      v-bind:label="'Format'"
-      v-bind:options="availableFormats"
-    ></SelectControl>
-    <!-- The choice of working directory vs. temporary applies to all exporters -->
-    <hr>
-    <RadioControl
-      v-model="exportDirectory"
-      v-bind:options="{
-        'temp': tempDirLabel,
-        'cwd': cwdLabel,
-        'ask': askLabel
-      }"
-    ></RadioControl>
-    <!-- Add the exporting button -->
-    <button v-bind:disabled="isExporting" v-on:click="doExport">
-      {{ exportButtonLabel }}
-    </button>
+    <div class="exporter">
+      <h3>Export</h3>
+      <p><strong>{{ filename }}</strong></p>
+      <SelectControl
+        v-model="format"
+        v-bind:label="'Format'"
+        v-bind:options="availableFormats"
+      ></SelectControl>
+      <!-- The choice of working directory vs. temporary applies to all exporters -->
+      <hr>
+      <RadioControl
+        v-model="exportDirectory"
+        v-bind:options="{
+          'temp': tempDirLabel,
+          'cwd': cwdLabel,
+          'ask': askLabel
+        }"
+      ></RadioControl>
+      <!-- Add the exporting button -->
+      <button v-bind:disabled="isExporting" v-on:click="doExport">
+        {{ exportButtonLabel }}
+      </button>
+    </div>
   </PopoverWrapper>
 </template>
 
@@ -164,6 +166,27 @@ function getDisplayText (item: PandocProfileMetadata): string {
 </script>
 
 <style lang="less">
-//
+body {
+  .exporter {
+    margin: 5px;
+
+    h3, p {
+      text-align: center;
+      padding-bottom: 5px;
+    }
+
+    .form-control {
+      padding: 5px;
+      select {
+          margin-top: 5px;
+        }
+    }
+
+    button,
+    .radio-group-container {
+      margin: 5px;
+    }
+  }
+}
 </style>
 @common/util/renderer-path-polyfill

@@ -177,4 +177,13 @@ p.pomodoro-big {
   text-align: center;
   margin: 10px;
 }
+
+.form-control {
+  padding: 5px;
+
+  input, select {
+      margin-top: 5px;
+    }
+}
+
 </style>
