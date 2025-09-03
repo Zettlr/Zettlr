@@ -119,6 +119,10 @@ export const formattingToolbar = [
       padding: '0',
       width: '30px'
     },
+    '.cm-tooltip.cm-formatting-bar button.formatting-toolbar-button cds-icon': {
+      width: '1.0rem',
+      height: '1.0rem'
+    },
     '&dark .cm-tooltip.cm-formatting-bar button.formatting-toolbar-button': {
       color: 'rgb(200, 200, 200)'
     },
