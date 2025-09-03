@@ -60,6 +60,7 @@ export const themeKarlMarxStadtLight = EditorView.theme({
   },
   '.cm-cursor-primary': { background: primaryColor },
   '.cm-cursor-secondary': { background: 'var(--red-2)' },
+  '.cm-dropCursor': { borderLeftColor: primaryColor },
   // Copied with my blood from the DOM; the example on the website is wrong.
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
     background: selectionLight
@@ -80,6 +81,7 @@ export const themeKarlMarxStadtDark = EditorView.theme({
   '.citeproc-citation.error, .mermaid-chart.error': { color: 'var(--red-2)' },
   '.cm-cursor-primary': { background: primaryColor },
   '.cm-cursor-secondary': { background: 'var(--red-2)' },
+  '.cm-dropCursor': { borderLeftColor: primaryColor },
   '.cm-tag-name': { color: 'var(--orange-2)' },
   '.cm-bracket': { color: 'var(--grey-1)' },
   '.cm-string': { color: 'var(--green-0)' },
