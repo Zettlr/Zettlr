@@ -610,6 +610,7 @@ body {
     .tree-item {
       white-space: nowrap;
       display: flex;
+      margin: 8px;
 
       .item-icon, .toggle-icon {
         display: flex;
@@ -666,7 +667,6 @@ body {
 
 body.darwin {
   .tree-item {
-    margin: 6px 0px;
     color: rgb(53, 53, 53);
 
     // On macOS, non-standard icons are normally displayed in color
@@ -699,7 +699,6 @@ body.darwin {
 
 body.win32 {
   .tree-item {
-    margin: 8px 0px;
 
     .display-text {
       font-size: 13px;
@@ -717,7 +716,6 @@ body.win32 {
 
 body.linux {
   .tree-item {
-    margin: 8px 0px;
 
     .display-text {
       font-size: 13px;
