@@ -23,6 +23,9 @@ export const mainOverride = EditorView.baseTheme({
     backgroundColor: 'transparent',
     cursor: 'auto'
   },
+  '&dark .cm-dropCursor': {
+    borderLeftColor: '#ddd'
+  },
   '.cm-scroller': {
     flexGrow: '1', // Ensure the content pushes possible panels towards the edge
     outline: '0' // Remove the outline
@@ -45,6 +48,10 @@ export const mainOverride = EditorView.baseTheme({
   },
   '.cm-panel.cm-search': {
     userSelect: 'none' // prevent search panel text elements from being selected
+  },
+  '&dark .cm-panel.cm-panel-lint ul [aria-selected]': {
+    // Fixes highlighting of unfocused selected lint panel items in dark mode.
+    backgroundColor: '#787878'
   },
   // TOOLTIPS
   '.cm-tooltip': {

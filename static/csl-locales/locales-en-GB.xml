@@ -772,7 +772,10 @@
     <term name="editortranslator" form="verb">edited &amp; translated by</term>
     <term name="editorial-director" form="verb">edited by</term>
     <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
+    <term form="verb" name="guest">
+      <single>with guest</single>
+      <multiple>with guests</multiple>
+    </term>
     <term name="host" form="verb">hosted by</term>
     <term name="illustrator" form="verb">illustrated by</term>
     <term name="interviewer" form="verb">interview by</term>
