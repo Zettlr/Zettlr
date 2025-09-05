@@ -44,6 +44,7 @@ const props = defineProps<{ control: ToolbarTextControl }>()
 <style lang="less">
 body .toolbar-text {
   font-size: 11px;
+  text-wrap: nowrap;
   padding: 0 10px;
   width: 150px; // constrain the text width to accommodate content changes.
 }
