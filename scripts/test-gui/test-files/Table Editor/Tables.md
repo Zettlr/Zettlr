@@ -3,30 +3,6 @@ Table Test File
 
 This test contains several different tables which should be rendered properly using Zettlr's Table Editor.
 
-But first of all, let us add a malformed Setext heading to test that it's not rendered as a table. Sometimes users forget that a Setext heading must be followed by an empty line, and that strictly speaking makes up for a two-row, one-column table. So we will ignore any simple table that seems to look like this.
-
-This is a malformed Setext heading
-----------------------------------
-And immediately following a paragraph
-
-Simple Table One
-----------------
-
-  Right     Left     Center     Default
--------     ------ ----------   -------
-     12     12        12            12
-    123     123       123          123
-      1     1          1             1
-
-Simple Table Two
-----------------
-
--------     ------ ----------   -------
-     12     12        12             12
-    123     123       123           123
-      1     1          1              1
--------     ------ ----------   -------
-
 Pipe Table One
 --------------
 
@@ -82,7 +58,17 @@ Grid Table Three
 | Right         | Left          | Centered           |
 +---------------+---------------+--------------------+
 
-*** *** *** ***
+## Tables with Elements
+
+A test table with math equations and other elements to test out proper table
+rendering.
+
+| Formula                                        | Description                                        |
+|------------------------------------------------|----------------------------------------------------|
+| $\tilde{m}$                                    | Mean                                               |
+| $\cos(\vec{x}, \vec{y})$                       | Cosine similarity between $\vec{x}$ and $\vec{y}$. |
+| $$\hat{y} = \beta_0 + \beta_1 X_i + \epsilon$$ | Standard OLS regression equation.                  |
+| [Zettlr Homepage](https://www.zettlr.com)      | A rendered link to zettlr.com.                     |
 
 ## Additional Test Tables
 

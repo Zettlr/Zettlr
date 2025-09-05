@@ -15,14 +15,15 @@
 
 import { syntaxTree } from '@codemirror/language'
 import type { EditorState, Range } from '@codemirror/state'
-import { WidgetType, EditorView, type DecorationSet, Decoration } from '@codemirror/view'
+import type { Rect, DecorationSet } from '@codemirror/view'
+import { WidgetType, EditorView, Decoration } from '@codemirror/view'
 import type { SyntaxNode } from '@lezer/common'
 import type { TableRow, Table, TableCell } from '../../markdown-utils/markdown-ast'
 import { parseTableNode } from '../../markdown-utils/markdown-ast/parse-table-node'
 import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
 import { createSubviewForCell, hiddenSpanField } from './subview'
 import { getCoordinatesForRange } from './commands/util'
-import { generateColumnControls, generateEmptyTableWidgetElement, generateRowControls } from './widget-dom'
+import { generateColumnControls, generateEmptyTableWidgetElement, generateRowControls, tableTD, tableTH, tableTR } from './widget-dom'
 import { displayTableContextMenu } from './context-menu'
 import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCol } from './commands/columns'
 import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRow } from './commands/rows'
@@ -32,8 +33,42 @@ import { configField } from '../util/configuration'
 
 // This widget holds a visual DOM representation of a table.
 export class TableWidget extends WidgetType {
+  // TODO: This number is literally only what I have here right now. So for
+  // other people -- especially with other themes, different zoom levels, etc.,
+  // this value will be off. The more off this is, the worse the scroll jumping
+  // will become. I will have to modify the table widgets to use a ViewPlugin
+  // instead of the current StateField so that I gain access to the view and can
+  // provide more reliable methods of measuring the average table row height.
+  private readonly meanRowHeight = 35
   constructor (readonly table: string, readonly node: SyntaxNode) {
     super()
+  }
+
+  // Okay, this is wild. So, this getter (plus the `coordsAt` overwrite below)
+  // fixes the scroll-jumping issue that many users (incl. me) have experienced
+  // and reported. It turns out that Codemirror really relies on estimates from
+  // the widgets ESPECIALLY for large block ones like tables. If you don't give
+  // it an estimated height (again, does not need to be pixel perfect), it will
+  // apparently assume a zero height for calculating viewpoint positions. This
+  // will cause scroll jumps, because Codemirror does not know how much space
+  // our widget takes up. With even a rough estimate, Codemirror will jump just
+  // a little bit the first time you select inside a cell (depending, of course,
+  // on how wrong this estimate is), but then it will actually measure it and no
+  // more jumping occurs. "Why does the jumping continue if we just don't
+  // provide an estimate here?" you may ask now. Well, as far as I'm concerned,
+  // I believe if the actual cursor position jumps out of the viewport,
+  // Codemirror will re-calculate everything once you're back at the correct
+  // position, because you changed the viewport, and only if not you but
+  // Codemirror changed the viewport will it believe (itself). Anyways, now it
+  // works -- much better than before.
+  get estimatedHeight (): number {
+    const tableAST = parseTableNode(this.node, this.table)
+    if (tableAST.type !== 'Table') {
+      return -1
+    }
+
+    // We base our height estimate off the mean row height.
+    return tableAST.rows.length * this.meanRowHeight
   }
 
   toDOM (view: EditorView): HTMLElement {
@@ -85,6 +120,41 @@ export class TableWidget extends WidgetType {
         subview.destroy()
       }
     }
+  }
+
+  // This is the second secret to preventing scroll jumping-issues: Give
+  // Codemirror approximate pixel positions of a position its requesting within
+  // the table widget.
+  coordsAt (dom: HTMLElement, pos: number, _side: number): Rect | null {
+    // We use this helper function to help Codemirror determine the exact, pixel
+    // perfect position of a given position inside our table so that it can
+    // correctly calculate viewpoint positions where necessary.
+    const cells = [...dom.querySelectorAll<HTMLDivElement>('td, th')]
+      .map(cell => {
+        return {
+          cell,
+          from: parseInt(cell.dataset.cellFrom!, 10),
+          to: parseInt(cell.dataset.cellTo!, 10)
+        }
+      })
+    
+    const realPos = pos + this.node.from // NOTE that `pos` is only an offset.
+
+    // NOTE: This code ignores the "side" parameter. Also, it ignores the offset
+    // into the table cell itself.
+    for (const cell of cells) {
+      const { from, to } = cell
+      if ((from <= realPos && to >= realPos) || realPos < from) {
+        // Found it: The pos is somewhere within this cell, or it was after the
+        // previous cell (but before this one), or in the leading formatting
+        // characters of the table. In any case, report back the correct pixel
+        // position of this cell
+        return cell.cell.getBoundingClientRect()
+      }
+    }
+
+    // Not found in the table -> fall back to the rect of the entire table
+    return dom.getBoundingClientRect()
   }
 
   ignoreEvent (event: Event): boolean {
@@ -164,7 +234,7 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
     const row = tableAST.rows[i]
     if (i === trs.length) {
       // We have to create a new TR
-      const tr = document.createElement('tr')
+      const tr = tableTR()
       table.appendChild(tr)
       trs.push(tr)
       updateRow(tr, row, i, tableAST.alignment, view, rowsChanged, coords)
@@ -210,7 +280,7 @@ function updateRow (
     const selectionInCell = row === idx && col === i
     if (i === tds.length) {
       // We have to create a new TD
-      const td = document.createElement(astRow.isHeaderOrFooter ? 'th' : 'td')
+      const td = astRow.isHeaderOrFooter ? tableTH() : tableTD()
 
       // TODO: Enable citation rendering here
       const contentWrapper = document.createElement('div')

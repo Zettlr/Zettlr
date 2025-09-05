@@ -18,6 +18,18 @@ export function generateEmptyTableWidgetElement (): { wrapper: HTMLDivElement, t
   return { table, wrapper }
 }
 
+export function tableTR (): HTMLTableRowElement {
+  return document.createElement('tr')
+}
+
+export function tableTD (): HTMLTableCellElement {
+  return document.createElement('td')
+}
+
+export function tableTH (): HTMLTableCellElement {
+  return document.createElement('th')
+}
+
 /**
  * Generates the column modification buttons (add left, add right, and the grab
  * handle).
