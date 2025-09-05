@@ -86,8 +86,12 @@ export default function registerCustomProtocols (logger: LogProvider): void {
       // File must be visible to the process and readable
       await fs.access(pathName, FSConstants.F_OK | FSConstants.R_OK)
 
+      // NOTE: This shenanigan appears to now be due to a change in TS 5.7, see
+      // https://stackoverflow.com/q/79345535
       const fileBuffer = await fs.readFile(pathName)
-      return new Response(fileBuffer, {
+      const array: ArrayBuffer = (new Uint8Array(fileBuffer)).buffer
+      const blob = new Blob([array])
+      return new Response(blob, {
         status: 200,
         // Prevent that local files are cached
         headers: {
