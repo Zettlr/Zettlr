@@ -84,6 +84,7 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - The toolbar word counter no longer wraps (#5774; #5881).
 - Improve dark mode linter panel styling (#5882).
 - Fix drop cursor styling (#5883).
+- Fix context menu entry "Insert table" not working (#5835).
 
 ## Under the Hood
 

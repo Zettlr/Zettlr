@@ -386,7 +386,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     } else if (clickedID === 'markdownBlockquote') {
       applyBlockquote(view)
     } else if (clickedID === 'markdownInsertTable') {
-      // TODO
+      view.dispatch(view.state.replaceSelection('| | |\n|-|-|\n| | |\n'))
     } else if (clickedID === 'cut') {
       cut(view)
     } else if (clickedID === 'copy') {
