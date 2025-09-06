@@ -5,6 +5,14 @@ import arrowsIcon from './icons/arrows.svg'
 import plusIcon from './icons/plus.svg'
 
 /**
+ * This is the primary class applied to the table editor widget wrappers. This
+ * allows easy identification of the rendered table widgets where necessary.
+ *
+ * @var {string}
+ */
+export const TABLE_WIDGET_WRAPPER_CLASS = 'cm-table-editor-widget-wrapper'
+
+/**
 * Generates an empty table widget element that represents a Markdown table. To
 * fill this element with content, use the updateTable function below.
 *
@@ -13,7 +21,7 @@ import plusIcon from './icons/plus.svg'
 export function generateEmptyTableWidgetElement (): { wrapper: HTMLDivElement, table: HTMLTableElement } {
   const table = document.createElement('table')
   const wrapper = document.createElement('div')
-  wrapper.classList.add('cm-table-editor-widget-wrapper')
+  wrapper.classList.add(TABLE_WIDGET_WRAPPER_CLASS)
   wrapper.appendChild(table)
   return { table, wrapper }
 }

@@ -79,6 +79,7 @@ export class TableWidget extends WidgetType {
         throw new Error('Cannot render table: Likely malformed')
       }
       updateTable(table, tableAST, view)
+      view.requestMeasure()
       return wrapper
     } catch (err: any) {
       console.log('Could not create table', err)
@@ -100,7 +101,13 @@ export class TableWidget extends WidgetType {
 
     const tableAST = parseTableNode(this.node, view.state.sliceDoc())
     if (tableAST.type === 'Table') {
+      const height = table.getBoundingClientRect().height
       updateTable(table, tableAST, view)
+      // Instruct the editor to remeasure its height; see
+      // https://discuss.codemirror.net/t/5604
+      if (height !== table.getBoundingClientRect().height) {
+        view.requestMeasure()
+      }
       return true
     }
 
