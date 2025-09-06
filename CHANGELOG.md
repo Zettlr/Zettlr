@@ -85,6 +85,9 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - Improve dark mode linter panel styling (#5882).
 - Fix drop cursor styling (#5883).
 - Fix context menu entry "Insert table" not working (#5835).
+- The keyboard shortcuts for snippets no longer require the field, thus
+  preventing errors in `EditorView`s that map the corresponding shortcuts but
+  don't have snippets installed.
 
 ## Under the Hood
 

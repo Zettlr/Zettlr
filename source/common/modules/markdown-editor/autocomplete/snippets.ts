@@ -390,7 +390,12 @@ export const snippets: AutocompletePlugin = {
 
 export function nextSnippet (target: EditorView): boolean {
   // Progresses to the next tabstop if there's one available
-  const { activeSelections } = target.state.field(snippetsUpdateField)
+  const field = target.state.field(snippetsUpdateField, false)
+  if (field === undefined) {
+    return false
+  }
+
+  const { activeSelections } = field
   if (activeSelections.length === 0) {
     return false
   }
@@ -407,7 +412,12 @@ export function nextSnippet (target: EditorView): boolean {
 
 export function abortSnippet (target: EditorView): boolean {
   // Removes all tabstops, if there are any
-  const ranges = target.state.field(snippetsUpdateField).activeSelections.length
+  const field = target.state.field(snippetsUpdateField, false)
+  if (field === undefined) {
+    return false
+  }
+
+  const ranges = field.activeSelections.length
   if (ranges > 0) {
     target.dispatch({ effects: snippetTabsEffect.of([]) })
     return true
