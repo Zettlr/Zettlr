@@ -86,7 +86,6 @@ const tagStore = useTagsStore()
 
 // UNREFFED STUFF
 let currentEditor: MarkdownEditor|null = null
-const isMarkdown = hasMarkdownExt(props.file.path)
 
 // EVENT LISTENERS
 ipcRenderer.on('citeproc-database-updated', (_event, _dbPath: string) => {
@@ -221,6 +220,7 @@ const fontSize = computed<number>(() => configStore.config.editor.fontSize)
 const globalSearchResults = computed(() => windowStateStore.searchResults)
 const snippets = computed(() => windowStateStore.snippets)
 const tags = computed(() => tagStore.tags)
+const isMarkdown = computed(() => hasMarkdownExt(props.file.path))
 
 const activeFileDescriptor = ref<undefined|MDFileDescriptor|CodeFileDescriptor>(undefined)
 
