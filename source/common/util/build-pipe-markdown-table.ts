@@ -24,9 +24,9 @@ export default function calculateColSizes (ast: string[][]): number[] {
   const numCols = ast[0].length
   const sizes: number[] = Array(numCols).fill(0)
 
-  ast.forEach((row) => {
-    row.forEach((cell, idx) => {
-      let colSize = sizes[idx]
+  for (const row of ast) {
+    for (let idx = 0; idx < numCols; idx++) {
+      const cell = row[idx]
 
       let cellLength = cell.length
       if (cell.includes('\n')) {
@@ -34,11 +34,11 @@ export default function calculateColSizes (ast: string[][]): number[] {
         cellLength = Math.max(...cell.split('\n').map(x => x.length))
       }
 
-      if (cellLength > colSize) {
+      if (cellLength > sizes[idx]) {
         sizes[idx] = cellLength
       }
-    })
-  })
+    }
+  }
 
   return sizes
 }
