@@ -124,7 +124,7 @@
     "vue": "^3.5.17",
     "vue-virtual-scroller": "^2.0.0-beta.8",
     "w3c-keyname": "^2.2.8",
-    "yaml": "^2.8.0"
+    "yaml": "^2.8.1"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.3"
@@ -136,15 +136,15 @@
     "katex": "^0.16.21"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.8.2",
-    "@electron-forge/maker-deb": "^7.8.2",
-    "@electron-forge/maker-rpm": "^7.8.2",
-    "@electron-forge/maker-zip": "^7.8.2",
-    "@electron-forge/plugin-fuses": "^7.8.2",
-    "@electron-forge/plugin-webpack": "^7.8.2",
-    "@electron/fuses": "^1.8.0",
-    "@electron/notarize": "^2.5.0",
-    "@eslint/config-inspector": "^1.1.0",
+    "@electron-forge/cli": "^7.8.3",
+    "@electron-forge/maker-deb": "^7.8.3",
+    "@electron-forge/maker-rpm": "^7.8.3",
+    "@electron-forge/maker-zip": "^7.8.3",
+    "@electron-forge/plugin-fuses": "^7.8.3",
+    "@electron-forge/plugin-webpack": "^7.8.3",
+    "@electron/fuses": "^2.0.0",
+    "@electron/notarize": "^3.1.0",
+    "@eslint/config-inspector": "^1.2.0",
     "@stylistic/eslint-plugin": "^4.2.0",
     "@types/adm-zip": "^0.5.7",
     "@types/archiver": "^6.0.3",
@@ -169,8 +169,8 @@
     "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "csso": "^5.0.5",
-    "electron": "^37.2.5",
-    "electron-builder": "^26.0.19",
+    "electron": "^37.4.0",
+    "electron-builder": "^26.0.20",
     "electron-devtools-installer": "^4.0.0",
     "eslint": "^9.24.0",
     "eslint-plugin-import": "^2.31.0",
@@ -178,9 +178,9 @@
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-vue": "^10.0.0",
     "jsdom": "^26.1.0",
-    "less": "^4.3.0",
+    "less": "^4.4.1",
     "less-loader": "^12.3.0",
-    "mocha": "^11.7.1",
+    "mocha": "^11.7.2",
     "node-loader": "^2.1.0",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.2",
@@ -190,7 +190,7 @@
     "vue-eslint-parser": "^10.2.0",
     "vue-loader": "^17.4.2",
     "vue-tsc": "^2.2.12",
-    "webpack": "^5.99.9"
+    "webpack": "^5.101.3"
   },
   "packageManager": "yarn@4.6.0"
 }
