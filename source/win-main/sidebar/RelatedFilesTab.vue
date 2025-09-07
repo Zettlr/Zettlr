@@ -65,7 +65,7 @@ import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { ref, computed, watch } from 'vue'
 import { useConfigStore, useWorkspacesStore, useDocumentTreeStore, useTagsStore } from 'source/pinia'
-import { type CodeFileDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import type { OtherFileDescriptor, CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
@@ -134,7 +134,7 @@ async function recomputeRelatedFiles (): Promise<void> {
     return
   }
 
-  const descriptor: MDFileDescriptor|CodeFileDescriptor|undefined = await ipcRenderer.invoke('application', {
+  const descriptor: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor|undefined = await ipcRenderer.invoke('application', {
     command: 'get-descriptor',
     payload: lastActiveFile.value.path
   })
@@ -181,7 +181,13 @@ async function recomputeRelatedFiles (): Promise<void> {
   // This relation is not as important as explicit links, so they should
   // be below the inbound linked files.
 
-  const recommendations = tagStore.tags.filter(tag => descriptor.tags.includes(tag.name))
+  const recommendations = tagStore.tags.filter(tag => {
+    if (descriptor.type === 'other') {
+      return false
+    }
+
+    return descriptor.tags.includes(tag.name)
+  })
 
   for (const tagRecord of recommendations) {
     for (const filePath of tagRecord.files) {
