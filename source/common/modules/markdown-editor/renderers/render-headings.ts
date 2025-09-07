@@ -36,42 +36,36 @@ export function headingMenu (view: EditorView, level: number, coords: { x: numbe
       id: '1',
       label: '#',
       type: 'checkbox',
-      enabled: true,
       checked: level === 1
     },
     {
       id: '2',
       label: '##',
       type: 'checkbox',
-      enabled: true,
       checked: level === 2
     },
     {
       id: '3',
       label: '###',
       type: 'checkbox',
-      enabled: true,
       checked: level === 3
     },
     {
       id: '4',
       label: '####',
       type: 'checkbox',
-      enabled: true,
       checked: level === 4
     },
     {
       id: '5',
       label: '#####',
       type: 'checkbox',
-      enabled: true,
       checked: level === 5
     },
     {
       id: '6',
       label: '######',
       type: 'checkbox',
-      enabled: true,
       checked: level === 6
     }
   ]

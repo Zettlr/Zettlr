@@ -96,8 +96,7 @@ export function statusbarProjectInfo (state: EditorState, _view: EditorView): St
         items.push({
           id: path,
           label: displayName,
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         })
       }
 

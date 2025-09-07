@@ -29,8 +29,7 @@ export function equationMenu (view: EditorView, equation: string, coords: { x: n
     {
       id: 'copy-equation',
       label: trans('Copy equation code'),
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     }
   ]
 

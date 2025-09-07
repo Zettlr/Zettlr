@@ -133,7 +133,6 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
   const suggestionItems: AnyMenuItem[] = suggestions.map(suggestion => {
     return {
       type: 'normal',
-      enabled: true,
       label: suggestion,
       id: '$' + suggestion // The $ helps distinguish the suggestions
     }
@@ -155,8 +154,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Add to dictionary'),
       id: 'add-to-dictionary',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     { type: 'separator' }
   )
@@ -166,15 +164,13 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Bold'),
       accelerator: 'CmdOrCtrl+B',
       id: 'markdownBold',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Italic'),
       accelerator: 'CmdOrCtrl+I',
       id: 'markdownItalic',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -183,39 +179,33 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Insert link'),
       accelerator: 'CmdOrCtrl+K',
       id: 'markdownLink',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert unordered list'),
       id: 'markdownMakeUnorderedList',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert numbered list'),
       id: 'markdownMakeOrderedList',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert task list'),
       accelerator: 'CmdOrCtrl+T',
       id: 'markdownMakeTaskList',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert blockquote'),
       id: 'markdownBlockquote',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert table'),
       id: 'markdownInsertTable',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -224,36 +214,31 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Cut'),
       accelerator: 'CmdOrCtrl+X',
       id: 'cut',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Copy'),
       accelerator: 'CmdOrCtrl+C',
       id: 'copy',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Copy as HTML'),
       accelerator: 'CmdOrCtrl+Alt+C',
       id: 'copyAsHTML',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Paste'),
       accelerator: 'CmdOrCtrl+V',
       id: 'paste',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Paste without style'),
       accelerator: 'CmdOrCtrl+Shift+V',
       id: 'pasteAsPlain',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -262,8 +247,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Select all'),
       accelerator: 'CmdOrCtrl+A',
       id: 'selectAll',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -272,37 +256,31 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Transform'),
       id: 'submenuTransform',
       type: 'submenu',
-      enabled: true,
       submenu: [
         {
           label: trans('Zap gremlins'),
           id: 'zapGremlins',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           label: trans('Strip duplicate spaces'),
           id: 'stripDuplicateSpaces',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           label: trans('Italics to quotes'),
           id: 'italicsToQuotes',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           label: trans('Quotes to italics'),
           id: 'quotesToItalics',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           label: trans('Remove line breaks'),
           id: 'removeLineBreaks',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           type: 'separator'
@@ -310,26 +288,22 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
         {
           label: trans('Straighten quotes'),
           id: 'straightenQuotes',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           label: trans('Ensure double quotes'),
           id: 'toDoubleQuotes',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           label: trans('Double quotes to single'),
           id: 'doubleQuotesToSingle',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           label: trans('Single quotes to double'),
           id: 'singleQuotesToDouble',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           type: 'separator'
@@ -337,14 +311,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
         {
           label: trans('Emdash — Add spaces around'),
           id: 'addSpacesAroundEmdashes',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           label: trans('Emdash — Remove spaces around'),
           id: 'removeSpacesAroundEmdashes',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           type: 'separator'
@@ -352,14 +324,12 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
         {
           label: trans('To sentence case'),
           id: 'toSentenceCase',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         },
         {
           label: trans('To title case'),
           id: 'toTitleCase',
-          type: 'normal',
-          enabled: true
+          type: 'normal'
         }
       ]
     }

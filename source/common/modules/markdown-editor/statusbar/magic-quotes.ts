@@ -129,7 +129,6 @@ export function magicQuotesStatus (state: EditorState, _view: EditorView): Statu
           type: 'checkbox',
           id: 'disabled',
           label: trans('Disabled'),
-          enabled: true,
           checked: currentSetting === 'disabled'
         },
         {
@@ -161,7 +160,6 @@ export function magicQuotesStatus (state: EditorState, _view: EditorView): Statu
           type: 'checkbox',
           id: key,
           label: flag + ' ' + resolveLangCode(key, 'name'),
-          enabled: true,
           checked: currentlySelected.includes(key) // Every candidate is selected
         })
       }

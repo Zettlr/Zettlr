@@ -82,8 +82,7 @@ function displayContextMenu (posX: number, posY: number, target: HTMLInputElemen
       id: 'copy',
       label: trans('Copy'),
       accelerator: 'CmdOrCtrl+C',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       id: 'paste',
@@ -99,8 +98,7 @@ function displayContextMenu (posX: number, posY: number, target: HTMLInputElemen
       id: 'selectAll',
       label: trans('Select all'),
       accelerator: 'CmdOrCtrl+A',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     }
   ]
 

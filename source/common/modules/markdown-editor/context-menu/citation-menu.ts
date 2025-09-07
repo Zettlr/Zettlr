@@ -44,8 +44,7 @@ export function citationMenu (view: EditorView, coords: { x: number, y: number }
     tpl.push({
       label: key,
       id: 'citekey-' + key,
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     })
   }
 

@@ -28,14 +28,12 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
     {
       label: trans('Open in new tab'),
       id: 'new-tab',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Properties'),
       id: 'properties',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -44,21 +42,18 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
       label: trans('Rename file'),
       id: 'menu.rename_file',
       accelerator: 'CmdOrCtrl+R',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Duplicate file'),
       id: 'menu.duplicate_file',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Delete file'),
       id: 'menu.delete_file',
       accelerator: 'CmdOrCtrl+Backspace',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -66,14 +61,12 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
     {
       label: trans('Copy path'),
       id: 'menu.copy_path',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Copy filename'),
       id: 'menu.copy_filename',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Copy ID'),
@@ -87,8 +80,7 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
     {
       label: isMac ? trans('Reveal in Finder') : isWin ? trans('Reveal in Explorer') : trans('Reveal in File Browser'),
       id: 'menu.show_file',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     }
   ]
 
@@ -98,8 +90,7 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
       {
         id: 'menu.close_file',
         type: 'normal',
-        label: trans('Close file'),
-        enabled: true
+        label: trans('Close file')
       })
   }
 

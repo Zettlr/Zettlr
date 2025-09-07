@@ -80,19 +80,16 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     {
       id: 'menu.open_link',
       label: trans('Open link'),
-      enabled: true,
       type: 'normal'
     },
     {
       // It's either "Copy Link" or "Copy Mail"
       id: 'menu.copy_link',
-      enabled: true,
       type: 'normal',
       label: (url.indexOf('mailto:') === 0) ? trans('Copy email address') : trans('Copy link')
     },
     {
       id: 'menu.remove_link',
-      enabled: true,
       type: 'normal',
       label: trans('Remove link')
     }
@@ -112,7 +109,6 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     {
       label: trans('Open image'),
       id: 'open-img-in-browser',
-      enabled: true,
       type: 'normal'
     },
     {

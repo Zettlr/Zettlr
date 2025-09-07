@@ -181,14 +181,12 @@ function getContextMenu (): AnyMenuItem[] {
     {
       label: trans('Open in new tab'),
       id: 'new-tab',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Copy'),
       id: 'copy',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     }
   ]
 }

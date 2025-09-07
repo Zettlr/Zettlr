@@ -77,7 +77,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   for (const item of items) {
     const menuItem = renderMenuItem(item)
 
-    if (item.type !== 'submenu' && item.type !== 'separator' && item.enabled) {
+    if (item.type !== 'submenu' && item.type !== 'separator' && item.enabled !== false) {
       // Trigger a click on the "real" menu item in the back
       menuItem.addEventListener('mousedown', (event) => {
         event.preventDefault()
@@ -85,7 +85,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
         callback((item as NormalItem).id)
         appMenu.parentElement?.removeChild(appMenu) // Close the menu
       })
-    } else if (item.type === 'submenu' && item.enabled) {
+    } else if (item.type === 'submenu' && item.enabled !== false) {
       // Enable displaying the sub menu
       let closeSubmenu: null|(() => void) = null
 
@@ -144,8 +144,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     const menuItem = renderMenuItem({
       id: 'inspect-element',
       label: 'Inspect Element',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     })
 
     menuItem.addEventListener('mousedown', (event) => {
@@ -199,7 +198,7 @@ function renderMenuItem (item: AnyMenuItem, elementClass?: string): HTMLElement 
   // First create the item
   const menuItem = document.createElement('div')
   menuItem.classList.add('menu-item')
-  if (item.type !== 'separator' && !item.enabled) {
+  if (item.type !== 'separator' && item.enabled === false) {
     menuItem.classList.add('disabled')
   }
 

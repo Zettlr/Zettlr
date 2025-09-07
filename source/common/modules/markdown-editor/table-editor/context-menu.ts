@@ -13,40 +13,34 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
         {
           type: 'normal',
           label: trans('Insert new row above'),
-          id: 'insert.row.above',
-          enabled: true
+          id: 'insert.row.above'
         },
         {
           type: 'normal',
           label: trans('Insert new row below'),
-          id: 'insert.row.below',
-          enabled: true
+          id: 'insert.row.below'
         },
         { type: 'separator' },
         {
           type: 'normal',
           label: trans('Move row up'),
-          id: 'move.row.up',
-          enabled: true
+          id: 'move.row.up'
         },
         {
           type: 'normal',
           label: trans('Move row down'),
-          id: 'move.row.down',
-          enabled: true
+          id: 'move.row.down'
         },
         { type: 'separator' },
         {
           type: 'normal',
           label: trans('Clear row'),
-          id: 'clear.row',
-          enabled: true
+          id: 'clear.row'
         },
         {
           type: 'normal',
           label: trans('Delete row'),
-          id: 'delete.row',
-          enabled: true
+          id: 'delete.row'
         }
       ]
     },
@@ -54,51 +48,43 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
       type: 'submenu',
       label: trans('Column'),
       id: '',
-      enabled: true,
       submenu: [
         {
           type: 'normal',
           label: trans('Insert new column left'),
-          id: 'insert.col.left',
-          enabled: true
+          id: 'insert.col.left'
         },
         {
           type: 'normal',
           label: trans('Insert new column right'),
-          id: 'insert.col.right',
-          enabled: true
+          id: 'insert.col.right'
         },
         { type: 'separator' },
         {
           type: 'normal',
           label: trans('Move column left'),
-          id: 'move.col.left',
-          enabled: true
+          id: 'move.col.left'
         },
         {
           type: 'normal',
           label: trans('Move column right'),
-          id: 'move.col.right',
-          enabled: true
+          id: 'move.col.right'
         },
         { type: 'separator' },
         {
           type: 'normal',
           label: trans('Align column text left'),
-          id: 'align.col.left',
-          enabled: true
+          id: 'align.col.left'
         },
         {
           type: 'normal',
           label: trans('Align column text center'),
-          id: 'align.col.center',
-          enabled: true
+          id: 'align.col.center'
         },
         {
           type: 'normal',
           label: trans('Align column text right'),
-          id: 'align.col.right',
-          enabled: true
+          id: 'align.col.right'
         },
         { type: 'separator' },
         // {
@@ -117,14 +103,12 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
         {
           type: 'normal',
           label: trans('Clear column'),
-          id: 'clear.col',
-          enabled: true
+          id: 'clear.col'
         },
         {
           type: 'normal',
           label: trans('Delete column'),
-          id: 'delete.col',
-          enabled: true
+          id: 'delete.col'
         }
       ]
     },
@@ -132,19 +116,16 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
       type: 'submenu',
       label: trans('Table'),
       id: '',
-      enabled: true,
       submenu: [
         {
           type: 'normal',
           label: trans('Clear table'),
-          id: 'clear.table',
-          enabled: true
+          id: 'clear.table'
         },
         {
           type: 'normal',
           label: trans('Delete table'),
-          id: 'delete.table',
-          enabled: true
+          id: 'delete.table'
         }
       ]
     }

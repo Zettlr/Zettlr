@@ -3,7 +3,7 @@ export interface CheckboxRadioItem {
   label: string
   accelerator?: string
   type: 'checkbox'|'radio'
-  enabled: boolean
+  enabled?: boolean
   checked: boolean
 }
 
@@ -15,7 +15,7 @@ export interface SubmenuItem {
   id: string
   label: string
   type: 'submenu'
-  enabled: boolean
+  enabled?: boolean
   submenu: Array<CheckboxRadioItem|SeparatorItem|SubmenuItem|NormalItem>
 }
 
@@ -24,7 +24,7 @@ export interface NormalItem {
   label: string
   accelerator?: string
   type: 'normal'
-  enabled: boolean
+  enabled?: boolean
 }
 
 export type AnyMenuItem = CheckboxRadioItem | SeparatorItem | SubmenuItem | NormalItem

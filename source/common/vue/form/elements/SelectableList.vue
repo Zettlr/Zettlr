@@ -118,8 +118,7 @@ function handleContextMenu (event: MouseEvent, idx: number): void {
     {
       label: 'Remove',
       id: 'remove-item',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     }
   ]
 

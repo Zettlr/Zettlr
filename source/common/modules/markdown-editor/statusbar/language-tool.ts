@@ -135,7 +135,6 @@ export function languageToolStatus (state: EditorState, view: EditorView): Statu
           label: `${entry.flag} ${entry.displayName}${suffix}`,
           id: entry.code,
           type: 'checkbox',
-          enabled: true,
           checked: ltState.overrideLanguage === entry.code
         }
       })
@@ -146,7 +145,6 @@ export function languageToolStatus (state: EditorState, view: EditorView): Statu
           label: trans('Detect automatically'),
           id: 'auto',
           type: 'checkbox',
-          enabled: true,
           checked: ltState.overrideLanguage === 'auto'
         },
         { type: 'separator' }

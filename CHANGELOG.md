@@ -94,6 +94,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - Update Electron to version `37.2.5`.
 - Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
   declarations (`if`, `for`, `while`, etc.).
+- The `enabled` property of context menu items is now optional, and defaults to
+  `true`.
 
 # 3.6.0
 

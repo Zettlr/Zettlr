@@ -23,8 +23,7 @@ export function displayTabbarContext (event: MouseEvent, callback: (clickedID: s
     {
       label: 'Close leaf',
       id: 'close-leaf',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     }
   ]
 
@@ -43,8 +42,7 @@ export default function displayTabsContext (event: MouseEvent, fileObject: MDFil
     {
       label: trans('Close other tabs'),
       id: 'close-others',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Close all tabs'),
@@ -58,8 +56,7 @@ export default function displayTabsContext (event: MouseEvent, fileObject: MDFil
     {
       label: doc.pinned ? trans('Unpin tab') : trans('Pin tab'),
       id: 'pin-tab',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -67,14 +64,12 @@ export default function displayTabsContext (event: MouseEvent, fileObject: MDFil
     {
       label: trans('Copy filename'),
       id: 'copy-filename',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Copy path'),
       id: 'copy-path',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Copy ID'),
