@@ -42,7 +42,7 @@ import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
 import type { AnyDescriptor, CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
-import { EditorSelection } from '@codemirror/state'
+import { EditorSelection, type StateEffect } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 import { useConfigStore, useDocumentTreeStore, useTagsStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/util/renderer-path-polyfill'
@@ -73,6 +73,7 @@ const props = defineProps<{
   editorCommands: EditorCommands
   distractionFree: boolean
   file: OpenDocument
+  scrollPositionMap: Map<string, StateEffect<any>>
 }>()
 
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
@@ -179,7 +180,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  currentEditor?.unmount()
+  if (currentEditor !== null) {
+    props.scrollPositionMap.set(props.file.path, currentEditor.instance.scrollSnapshot())
+    currentEditor.unmount()
+  }
 })
 
 onUpdated(() => {
@@ -187,13 +191,17 @@ onUpdated(() => {
   // data for this component update, which includes visibility with the v-show
   // directive. In case that the editor component is mounted and non-hidden, we
   // will fire
-  const elem = mainEditorWrapper.value
-  if (elem === null || currentEditor === null) {
+  if (currentEditor === null) {
     return
   }
 
-  if (elem.style.display === 'none') {
-    return // Editor is hidden by v-show directive
+  const currentFilePath = currentEditor.documentPath
+  if (currentFilePath !== props.activeFile?.path) {
+    // File path has changed -> unmount and remount (duplicate code from
+    // onMounted and onBeforeUnmount hooks).
+    props.scrollPositionMap.set(currentFilePath, currentEditor.instance.scrollSnapshot())
+    currentEditor.unmount()
+    loadDocument().catch(err => console.error(err))
   }
 
   if (!currentEditor.hasFocus()) {
@@ -442,7 +450,8 @@ watch(tags, (newValue) => {
  * @return  {MarkdownEditor}       The requested editor
  */
 async function getEditorFor (doc: string): Promise<MarkdownEditor> {
-  const editor = new MarkdownEditor(props.leafId, props.windowId, doc, documentAuthorityIPCAPI)
+  const snapshot = props.scrollPositionMap.get(doc)
+  const editor = new MarkdownEditor(props.leafId, props.windowId, doc, documentAuthorityIPCAPI, undefined, snapshot)
 
   // Update the document info on corresponding events
   editor.on('change', () => {
@@ -506,12 +515,7 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
 async function loadDocument (): Promise<void> {
   const newEditor = await getEditorFor(props.file.path)
 
-  const wrapper = document.getElementById(`cm-text-${props.leafId}`)
-  if (wrapper === null) {
-    throw new Error('Could not mount editor: Wrapper element not found!')
-  }
-
-  wrapper.replaceWith(newEditor.dom)
+  mainEditorWrapper.value?.appendChild(newEditor.dom)
   currentEditor = newEditor
 
   windowStateStore.tableOfContents = currentEditor.tableOfContents

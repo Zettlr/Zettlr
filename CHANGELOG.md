@@ -96,6 +96,10 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   declarations (`if`, `for`, `while`, etc.).
 - The `enabled` property of context menu items is now optional, and defaults to
   `true`.
+- `EditorPane`s will no longer load all documents at the same time, and instead
+  reuse the existing `MarkdownEditor` component for a single document. This
+  greatly reduces memory consumption, especially for very full tab bars, since
+  only a single document will be actively rendered at any one time.
 
 # 3.6.0
 
