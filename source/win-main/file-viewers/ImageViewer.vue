@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
   document.removeEventListener('mouseup', stopDragging)
 })
 
-const openExternallyLabel = trans('Open image externally')
+const openExternallyLabel = trans('Open in system viewer')
 
 type BackgroundPattern = 'transparent'|'white'|'black'|'checkerboard'
 const backgroundPattern = ref<BackgroundPattern>('transparent')
