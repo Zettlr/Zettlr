@@ -90,6 +90,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   don't have snippets installed.
 - The three-way-toggle for the file manager and global search does not wrap on
   Windows anymore (#5876).
+- The toolbar can now scroll left and right if the main window is too narrow
+  (#5873; #5022).
 
 ## Under the Hood
 
