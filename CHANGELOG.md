@@ -108,6 +108,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   remnant from a time before TypeScript supported the `type` keyword, and will
   subsequently be removed.
 - Moved the `DirectedGraph` class from the link provider to the stats window.
+- Switched back from `electron-devtools-assembler` to
+  `electron-devtools-installer`; now the Vue.js devtools extension works again.
 
 # 3.6.0
 

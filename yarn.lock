@@ -5698,15 +5698,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-devtools-assembler@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "electron-devtools-assembler@npm:1.2.0"
+"electron-devtools-installer@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "electron-devtools-installer@npm:4.0.0"
   dependencies:
-    rimraf: "npm:^3.0.2"
-    semver: "npm:^7.2.1"
-    tslib: "npm:^2.1.0"
     unzip-crx-3: "npm:^0.2.0"
-  checksum: 10/9a3acb2722b911554ab3d941c3c04d8ee45172d94e9841bd8b1d32ce98dbe65a62712f0630742fe617ae01aad819c13eebee608c0f2b1a3b69017aef392a0fbb
+  checksum: 10/3f9a69645a15bb7925d12ef1fce803d9320fa2a9d50a0e49de7786c23dd9954ea8c5c4914a81a54966e33436bf40bd61828b6844529cb1042a31a70989771397
   languageName: node
   linkType: hard
 
@@ -13469,7 +13466,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1":
+"tslib@npm:^2.0.3, tslib@npm:^2.3.0, tslib@npm:^2.3.1":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
@@ -14788,7 +14785,7 @@ __metadata:
     d3: "npm:^7.9.0"
     electron: "npm:^37.2.5"
     electron-builder: "npm:^26.0.19"
-    electron-devtools-assembler: "npm:^1.2.0"
+    electron-devtools-installer: "npm:^4.0.0"
     eslint: "npm:^9.24.0"
     eslint-plugin-import: "npm:^2.31.0"
     eslint-plugin-n: "npm:^17.17.0"

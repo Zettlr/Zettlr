@@ -22,7 +22,7 @@ import path from 'path'
 import { getProgramVersion } from './util/get-program-version'
 
 // Developer tools
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-assembler'
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { AppServiceContainer, getAppServiceContainer, setAppServiceContainer } from './app-service-container'
 import { app } from 'electron'
 import { attachAppNavigationHandlers } from './util/attach-app-navigation-handlers'
@@ -55,11 +55,11 @@ export async function bootApplication (): Promise<AppServiceContainer> {
   if (!app.isPackaged) {
     try {
       // Load Vue developer extension
-      log.info('Installing VueJS3 DevTools extension ...')
-      const name = await installExtension(VUEJS_DEVTOOLS)
-      log.info(`Added DevTools extension: ${name}`)
+      log.info('Installing developer extensions ...')
+      const extension = await installExtension(VUEJS_DEVTOOLS)
+      log.info(`Added extension: ${extension.name} v${extension.version}`)
     } catch (err: any) {
-      log.error(`Could not install DevTools extension: ${String(err.message)}`, err)
+      log.error(`Could not install extension: ${String(err.message)}`, err)
     }
   }
 
