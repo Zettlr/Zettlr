@@ -1,6 +1,5 @@
-import { type AnyMenuItem } from '@dts/renderer/context'
 import { trans } from '@common/i18n-renderer'
-import showPopupMenu from '../../window-register/application-menu-helper'
+import showPopupMenu, { type AnyMenuItem } from '../../window-register/application-menu-helper'
 
 export function displayTableContextMenu (event: MouseEvent, callback: (clickedID: string) => void): void {
   const template: AnyMenuItem[] = [

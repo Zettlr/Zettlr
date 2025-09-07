@@ -27,8 +27,7 @@
  * END HEADER
  */
 
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { type AnyMenuItem, type SubmenuItem } from '@dts/renderer/context'
+import showPopupMenu, { type AnyMenuItem, type SubmenuItem } from '@common/modules/window-register/application-menu-helper'
 import { ref, onBeforeMount } from 'vue'
 
 const ipcRenderer = window.ipc

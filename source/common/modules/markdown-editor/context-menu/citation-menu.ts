@@ -13,8 +13,7 @@
  */
 
 import { type EditorView } from '@codemirror/view'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { type AnyMenuItem } from '@dts/renderer/context'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc

@@ -20,8 +20,7 @@ import localiseNumber from 'source/common/util/localise-number'
 import { trans } from 'source/common/i18n-renderer'
 import type { EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
-import type { AnyMenuItem } from 'source/types/renderer/context'
-import showPopupMenu from '../../window-register/application-menu-helper'
+import showPopupMenu, { type AnyMenuItem } from '../../window-register/application-menu-helper'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc

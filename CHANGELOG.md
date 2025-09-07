@@ -101,6 +101,10 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   reuse the existing `MarkdownEditor` component for a single document. This
   greatly reduces memory consumption, especially for very full tab bars, since
   only a single document will be actively rendered at any one time.
+- Moved the previously shared common types for the context menu in the renderer
+  into the correct module to colocate the code. The shared types have been a
+  remnant from a time before TypeScript supported the `type` keyword, and will
+  subsequently be removed.
 
 # 3.6.0
 

@@ -13,9 +13,8 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import type { DirDescriptor } from '@dts/common/fsal'
-import type { AnyMenuItem } from '@dts/renderer/context'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 
 const ipcRenderer = window.ipc

@@ -15,8 +15,7 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import type { AnyMenuItem, Point } from '@dts/renderer/context'
+import showPopupMenu, { type AnyMenuItem, type Point } from '@common/modules/window-register/application-menu-helper'
 const ipcRenderer = window.ipc
 
 // The following type-attributes can receive copy and paste commands

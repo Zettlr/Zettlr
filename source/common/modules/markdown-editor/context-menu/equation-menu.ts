@@ -14,8 +14,7 @@
 
 import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { type AnyMenuItem } from '@dts/renderer/context'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 
 /**
  * Displays a context menu at the given coordinates, for the given equation.
