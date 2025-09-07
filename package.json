@@ -171,7 +171,7 @@
     "csso": "^5.0.5",
     "electron": "^37.2.5",
     "electron-builder": "^26.0.19",
-    "electron-devtools-assembler": "^1.2.0",
+    "electron-devtools-installer": "^4.0.0",
     "eslint": "^9.24.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-n": "^17.17.0",
