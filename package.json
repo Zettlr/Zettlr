@@ -44,7 +44,7 @@
     "forge": "./forge.config.js"
   },
   "dependencies": {
-    "@cds/core": "^6.15.1",
+    "@cds/core": "^6.16.1",
     "@codemirror/autocomplete": "^6.18.7",
     "@codemirror/collab": "^6.1.1",
     "@codemirror/commands": "^6.8.1",
@@ -169,7 +169,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "csso": "^5.0.5",
-    "electron": "^37.4.0",
+    "electron": "^38.0.0",
     "electron-builder": "^26.0.20",
     "electron-devtools-installer": "^4.0.0",
     "eslint": "^9.35.0",

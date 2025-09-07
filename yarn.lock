@@ -91,7 +91,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cds/core@npm:^6.15.1":
+"@cds/core@npm:^6.16.1":
   version: 6.16.1
   resolution: "@cds/core@npm:6.16.1"
   dependencies:
@@ -5798,16 +5798,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^37.4.0":
-  version: 37.4.0
-  resolution: "electron@npm:37.4.0"
+"electron@npm:^38.0.0":
+  version: 38.0.0
+  resolution: "electron@npm:38.0.0"
   dependencies:
     "@electron/get": "npm:^2.0.0"
     "@types/node": "npm:^22.7.7"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10/762132aa324d9bec4ab04eba9f655f9e99b3324da9afd55429f6ad9900e5df8422dc2834bed3336fc675a8875df158b8f69923f15348f511b4ac144f82540ec2
+  checksum: 10/a245bf63fae60d1db85acddbe5787750e4d07acb273a1a5058163aee427fe07e52100b0d5a1e6b41efbdc1b398b6e7ec0fb3df75672e9148e95b31309d0c8f3a
   languageName: node
   linkType: hard
 
@@ -14717,7 +14717,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "zettlr@workspace:."
   dependencies:
-    "@cds/core": "npm:^6.15.1"
+    "@cds/core": "npm:^6.16.1"
     "@codemirror/autocomplete": "npm:^6.18.7"
     "@codemirror/collab": "npm:^6.1.1"
     "@codemirror/commands": "npm:^6.8.1"
@@ -14779,7 +14779,7 @@ __metadata:
     css-loader: "npm:^7.1.2"
     csso: "npm:^5.0.5"
     d3: "npm:^7.9.0"
-    electron: "npm:^37.4.0"
+    electron: "npm:^38.0.0"
     electron-builder: "npm:^26.0.20"
     electron-devtools-installer: "npm:^4.0.0"
     eslint: "npm:^9.35.0"
