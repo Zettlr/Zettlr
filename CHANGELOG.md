@@ -105,6 +105,7 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   into the correct module to colocate the code. The shared types have been a
   remnant from a time before TypeScript supported the `type` keyword, and will
   subsequently be removed.
+- Moved the `DirectedGraph` class from the link provider to the stats window.
 
 # 3.6.0
 
