@@ -15,9 +15,8 @@
 import { type EditorState } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { resolveLangCode } from '@common/util/map-lang-code'
-import { type AnyMenuItem } from '@dts/renderer/context'
 import { type StatusbarItem } from '.'
 import { languageToolState, updateLTState } from '../linters/language-tool'
 import { configField } from '../util/configuration'
@@ -135,7 +134,6 @@ export function languageToolStatus (state: EditorState, view: EditorView): Statu
           label: `${entry.flag} ${entry.displayName}${suffix}`,
           id: entry.code,
           type: 'checkbox',
-          enabled: true,
           checked: ltState.overrideLanguage === entry.code
         }
       })
@@ -146,7 +144,6 @@ export function languageToolStatus (state: EditorState, view: EditorView): Statu
           label: trans('Detect automatically'),
           id: 'auto',
           type: 'checkbox',
-          enabled: true,
           checked: ltState.overrideLanguage === 'auto'
         },
         { type: 'separator' }

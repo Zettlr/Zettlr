@@ -15,12 +15,25 @@
 
 import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { type AnyMenuItem } from '@dts/renderer/context'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { type SyntaxNode } from '@lezer/common'
 import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
+import { italicsToQuotes } from 'source/common/modules/markdown-editor/commands/transforms/italics-to-quotes'
+import { stripDuplicateSpaces } from 'source/common/modules/markdown-editor/commands/transforms/strip-duplicate-spaces'
+import { removeLineBreaks } from 'source/common/modules/markdown-editor/commands/transforms/remove-line-breaks'
+import { addSpacesAroundEmdashes } from 'source/common/modules/markdown-editor/commands/transforms/add-spaces-around-emdashes'
+import { removeSpacesAroundEmdashes } from 'source/common/modules/markdown-editor/commands/transforms/remove-spaces-around-emdashes'
+import { doubleQuotesToSingle } from 'source/common/modules/markdown-editor/commands/transforms/double-quotes-to-single-quotes'
+import { singleQuotesToDouble } from 'source/common/modules/markdown-editor/commands/transforms/single-quotes-to-double-quotes'
+import { straightenQuotes } from 'source/common/modules/markdown-editor/commands/transforms/straighten-quotes'
+import { quotesToItalics } from 'source/common/modules/markdown-editor/commands/transforms/quotes-to-italics'
+import { toDoubleQuotes } from 'source/common/modules/markdown-editor/commands/transforms/to-double-quotes'
+import { toSentenceCase } from 'source/common/modules/markdown-editor/commands/transforms/to-sentence-case'
+import { toTitleCase } from 'source/common/modules/markdown-editor/commands/transforms/to-title-case'
+import { zapGremlins } from 'source/common/modules/markdown-editor/commands/transforms/zap-gremlins'
+import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -119,7 +132,6 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
   const suggestionItems: AnyMenuItem[] = suggestions.map(suggestion => {
     return {
       type: 'normal',
-      enabled: true,
       label: suggestion,
       id: '$' + suggestion // The $ helps distinguish the suggestions
     }
@@ -141,8 +153,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Add to dictionary'),
       id: 'add-to-dictionary',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     { type: 'separator' }
   )
@@ -152,15 +163,13 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Bold'),
       accelerator: 'CmdOrCtrl+B',
       id: 'markdownBold',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Italic'),
       accelerator: 'CmdOrCtrl+I',
       id: 'markdownItalic',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -169,39 +178,33 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Insert link'),
       accelerator: 'CmdOrCtrl+K',
       id: 'markdownLink',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert unordered list'),
       id: 'markdownMakeUnorderedList',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert numbered list'),
       id: 'markdownMakeOrderedList',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert task list'),
       accelerator: 'CmdOrCtrl+T',
       id: 'markdownMakeTaskList',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert blockquote'),
       id: 'markdownBlockquote',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Insert table'),
       id: 'markdownInsertTable',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -210,36 +213,31 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Cut'),
       accelerator: 'CmdOrCtrl+X',
       id: 'cut',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Copy'),
       accelerator: 'CmdOrCtrl+C',
       id: 'copy',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Copy as HTML'),
       accelerator: 'CmdOrCtrl+Alt+C',
       id: 'copyAsHTML',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Paste'),
       accelerator: 'CmdOrCtrl+V',
       id: 'paste',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       label: trans('Paste without style'),
       accelerator: 'CmdOrCtrl+Shift+V',
       id: 'pasteAsPlain',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -248,8 +246,91 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       label: trans('Select all'),
       accelerator: 'CmdOrCtrl+A',
       id: 'selectAll',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: trans('Transform'),
+      id: 'submenuTransform',
+      type: 'submenu',
+      submenu: [
+        {
+          label: trans('Zap gremlins'),
+          id: 'zapGremlins',
+          type: 'normal'
+        },
+        {
+          label: trans('Strip duplicate spaces'),
+          id: 'stripDuplicateSpaces',
+          type: 'normal'
+        },
+        {
+          label: trans('Italics to quotes'),
+          id: 'italicsToQuotes',
+          type: 'normal'
+        },
+        {
+          label: trans('Quotes to italics'),
+          id: 'quotesToItalics',
+          type: 'normal'
+        },
+        {
+          label: trans('Remove line breaks'),
+          id: 'removeLineBreaks',
+          type: 'normal'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: trans('Straighten quotes'),
+          id: 'straightenQuotes',
+          type: 'normal'
+        },
+        {
+          label: trans('Ensure double quotes'),
+          id: 'toDoubleQuotes',
+          type: 'normal'
+        },
+        {
+          label: trans('Double quotes to single'),
+          id: 'doubleQuotesToSingle',
+          type: 'normal'
+        },
+        {
+          label: trans('Single quotes to double'),
+          id: 'singleQuotesToDouble',
+          type: 'normal'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: trans('Emdash — Add spaces around'),
+          id: 'addSpacesAroundEmdashes',
+          type: 'normal'
+        },
+        {
+          label: trans('Emdash — Remove spaces around'),
+          id: 'removeSpacesAroundEmdashes',
+          type: 'normal'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: trans('To sentence case'),
+          id: 'toSentenceCase',
+          type: 'normal'
+        },
+        {
+          label: trans('To title case'),
+          id: 'toTitleCase',
+          type: 'normal'
+        }
+      ]
     }
   ]
 
@@ -274,7 +355,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     } else if (clickedID === 'markdownBlockquote') {
       applyBlockquote(view)
     } else if (clickedID === 'markdownInsertTable') {
-      // TODO
+      view.dispatch(view.state.replaceSelection('| | |\n|-|-|\n| | |\n'))
     } else if (clickedID === 'cut') {
       cut(view)
     } else if (clickedID === 'copy') {
@@ -287,6 +368,32 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       pasteAsPlain(view)
     } else if (clickedID === 'selectAll') {
       view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } })
+    } else if (clickedID === 'stripDuplicateSpaces') {
+      stripDuplicateSpaces(view)
+    } else if (clickedID === 'italicsToQuotes') {
+      italicsToQuotes(view)
+    } else if (clickedID === 'quotesToItalics') {
+      quotesToItalics(view.state.field(configField).italicFormatting)(view)
+    } else if (clickedID === 'removeLineBreaks') {
+      removeLineBreaks(view)
+    } else if (clickedID === 'addSpacesAroundEmdashes') {
+      addSpacesAroundEmdashes(view)
+    } else if (clickedID === 'removeSpacesAroundEmdashes') {
+      removeSpacesAroundEmdashes(view)
+    } else if (clickedID === 'doubleQuotesToSingle') {
+      doubleQuotesToSingle(view)
+    } else if (clickedID === 'singleQuotesToDouble') {
+      singleQuotesToDouble(view)
+    } else if (clickedID === 'straightenQuotes') {
+      straightenQuotes(view)
+    } else if (clickedID === 'toDoubleQuotes') {
+      toDoubleQuotes(view)
+    } else if (clickedID === 'toSentenceCase') {
+      toSentenceCase(window.config.get('appLang'))(view)
+    } else if (clickedID === 'toTitleCase') {
+      toTitleCase(window.config.get('appLang'))(view)
+    } else if (clickedID === 'zapGremlins') {
+      zapGremlins(view)
     } else if (clickedID === 'no-suggestion') {
       // Do nothing
     } else if (clickedID === 'add-to-dictionary' && word !== undefined) {

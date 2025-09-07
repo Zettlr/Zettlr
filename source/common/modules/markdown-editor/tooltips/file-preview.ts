@@ -127,7 +127,7 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
   meta.classList.add('metadata')
   meta.innerHTML = `${trans('Word count')}: ${metadata.wordCount}`
   meta.innerHTML += '<br>'
-  meta.innerHTML += `${trans('Modified')}: ${formatDate(metadata.modtime, window.config.get('appLang'))}`
+  meta.innerHTML += `${trans('Modified')}: ${formatDate(metadata.modtime, window.config.get('appLang') as string)}`
 
   const actions = document.createElement('div')
   actions.classList.add('actions')

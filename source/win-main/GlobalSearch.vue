@@ -25,8 +25,14 @@
       <ButtonControl
         v-bind:label="searchButtonLabel"
         v-bind:inline="true"
-        v-bind:disabled="filesToSearch.length > 0"
+        v-bind:disabled="false"
         v-on:click="startSearch()"
+      ></ButtonControl>
+      <ButtonControl
+        v-bind:label="cancelButtonLabel"
+        v-bind:inline="true"
+        v-bind:disabled="!searchIsRunning"
+        v-on:click="cancelSearch()"
       ></ButtonControl>
     </p>
     <!-- ... as well as two buttons to clear the results or toggle them. -->
@@ -55,13 +61,13 @@
       During searching, display a progress bar that indicates how far we are and
       that allows to interrupt the search, if it takes too long.
     -->
-    <template v-if="filesToSearch.length > 0">
+    <template v-if="searchIsRunning">
       <div>
         <ProgressControl
           v-bind:max="sumFilesToSearch"
           v-bind:value="sumFilesToSearch - filesToSearch.length"
           v-bind:interruptible="true"
-          v-on:interrupt="filesToSearch = []"
+          v-on:interrupt="cancelSearch()"
         ></ProgressControl>
       </div>
       <hr>
@@ -106,7 +112,7 @@
             v-bind:key="idx2"
             class="result-line"
             v-bind:class="{'active': idx==activeFileIdx && idx2==activeLineIdx}"
-            v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
+            v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line, singleRes.restext)"
             v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
           >
             <!-- NOTE how we have to increase the line number from zero-based to 1-based -->
@@ -143,8 +149,7 @@ import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, computed, watch, onMounted } from 'vue'
 import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@dts/common/search'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { type AnyMenuItem } from '@dts/renderer/context'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import { useConfigStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import type { MaybeRootDescriptor } from 'source/types/common/fsal'
@@ -161,6 +166,7 @@ const filterLabel = trans('Filter search results')
 const restrictDirLabel = trans('Restrict search to directory')
 const restrictDirPlaceholder = trans('Choose directory…')
 const searchButtonLabel = trans('Search')
+const cancelButtonLabel = trans('Cancel')
 const clearButtonLabel = trans('Clear search')
 const toggleButtonLabel = trans('Toggle results')
 
@@ -174,8 +180,12 @@ function getContextMenu (): AnyMenuItem[] {
     {
       label: trans('Open in new tab'),
       id: 'new-tab',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
+    },
+    {
+      label: trans('Copy'),
+      id: 'copy',
+      type: 'normal'
     }
   ]
 }
@@ -268,6 +278,9 @@ const filteredSearchResults = computed<SearchResultWrapper[]>(() => {
   })
 })
 
+const searchIsRunning = computed(() => { return filesToSearch.value.length > 0 })
+const shouldStartNewSearch = ref<boolean>(false)
+
 watch(fileTree, () => {
   recomputeDirectorySuggestions()
 })
@@ -297,14 +310,14 @@ function recomputeDirectorySuggestions (): void {
 }
 
 function startSearch (overrideQuery?: string): void {
-  if (filesToSearch.value.length > 0) {
-    console.warn('Global search in progress: Not starting a new one.')
-    return
-  }
-
   // This allows other components to inject a new query when starting a search
   if (overrideQuery !== undefined) {
     query.value = overrideQuery
+  }
+
+  if (searchIsRunning.value) {
+    cancelSearch(true)
+    return
   }
 
   // We should start a search. We need two types of information for that:
@@ -429,8 +442,17 @@ async function singleSearchRun (): Promise<void> {
   finaliseSearch()
 }
 
+function cancelSearch (startNewSearch: boolean = false): void {
+  filesToSearch.value = []
+  shouldStartNewSearch.value = startNewSearch
+}
+
 function finaliseSearch (): void {
   filesToSearch.value = [] // Reset, in case the search was aborted.
+  if (shouldStartNewSearch.value) {
+    shouldStartNewSearch.value = false
+    startSearch()
+  }
 }
 
 function emptySearchResults (): void {
@@ -452,12 +474,15 @@ function toggleIndividualResults (): void {
   }
 }
 
-function fileContextMenu (event: MouseEvent, filePath: string, lineNumber: number): void {
+function fileContextMenu (event: MouseEvent, filePath: string, lineNumber: number, restext: string): void {
   const point = { x: event.clientX, y: event.clientY }
   showPopupMenu(point, getContextMenu(), (clickedID: string) => {
     switch (clickedID) {
       case 'new-tab':
         jumpToLine(filePath, lineNumber, true)
+        break
+      case 'copy':
+        navigator.clipboard.writeText(restext).catch(err => console.error(err))
         break
     }
   })

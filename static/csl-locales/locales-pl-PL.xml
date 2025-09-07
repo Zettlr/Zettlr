@@ -10,8 +10,14 @@
     <translator>
       <name>Pendzoncymisio</name>
     </translator>
+    <translator>
+      <name>Natalia L</name>
+    </translator>
+    <translator>
+      <name>Kacper Kłosowski</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2012-07-04T23:31:02+00:00</updated>
+    <updated>2025-07-10T16:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -31,14 +37,14 @@
     <term name="film">film</term>
     <term name="henceforth">henceforth</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
+    <term name="no-place">brak miejsca wydania</term>
+    <term name="no-place" form="short">b.m.</term>
+    <term name="no-publisher">brak wydawcy</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">b.w.</term>
     <term name="on">on</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="original-work-published">original work published</term>
-    <term name="personal-communication">osobista komunikacja</term>
+    <term name="personal-communication">korespondencja prywatna</term>
     <term name="podcast">podcast</term>
     <term name="podcast-episode">podcast episode</term>
     <term name="preprint">preprint</term>
@@ -61,30 +67,30 @@
     <term name="available at">dostępne na</term>
     <term name="by">przez</term>
     <term name="circa">około</term>
-    <term name="circa" form="short">ok</term>
+    <term name="circa" form="short">ok.</term>
     <term name="cited">cytowane</term>
     <term name="first-reference-note-number">
       <single>reference</single>
       <multiple>references</multiple>
     </term>
     <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
+      <single>numer</single>
+      <multiple>numery</multiple>
     </term>
     <term name="edition">
       <single>wydanie</single>
       <multiple>wydania</multiple>
     </term>
     <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
+      <single>cyt.</single>
+      <multiple>cyt.</multiple>
     </term>
     <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
+      <single>nr</single>
+      <multiple>nr.</multiple>
     </term>
     <term name="edition" form="short">wyd.</term>
-    <term name="et-al">i in.</term>
+    <term name="et-al">et al.</term> <!-- Translated 'i in.' is used less commonly -->
     <term name="forthcoming">w przygotowaniu</term>
     <term name="from">z</term>
     <term name="ibid">ibid.</term>
@@ -104,8 +110,8 @@
       <single>ref.</single>
       <multiple>ref.</multiple>
     </term>
-    <term name="review-of">review of</term>
-    <term name="review-of" form="short">rev. of</term>
+    <term name="review-of">recenzja</term>
+    <term name="review-of" form="short">rec.</term>
     <term name="retrieved">pobrano</term>
     <term name="scale">skala</term>
     <term name="version">wersja</term>
@@ -212,49 +218,49 @@
     <term name="long-ordinal-10">dziesiąty</term>
 
     <!-- LONG LOCATOR FORMS -->
-    <term name="act">			 
-      <single>act</single>
-      <multiple>acts</multiple>						 
+    <term name="act">
+      <single>akt</single>
+      <multiple>akty</multiple>
     </term>
-    <term name="appendix">			 
-      <single>appendix</single>
-      <multiple>appendices</multiple>						 
+    <term name="appendix"> <!--see: https://sjp.pwn.pl/poradnia/haslo/Aneks-a-apendyks;22723.html-->
+      <single>załącznik</single>
+      <multiple>załączniki</multiple>						 
     </term>
-    <term name="article-locator">			 
-      <single>article</single>
-      <multiple>articles</multiple>						 
+    <term name="article-locator">
+      <single>artykuł</single>
+      <multiple>artykuły</multiple>						 
     </term>
-    <term name="canon">			 
-      <single>canon</single>
-      <multiple>canons</multiple>						 
+    <term name="canon">
+      <single>kanon</single>
+      <multiple>kanony</multiple>						 
     </term>
-    <term name="elocation">			 
-      <single>location</single>
-      <multiple>locations</multiple>						 
+    <term name="elocation">
+      <single>lokalizacja</single>
+      <multiple>lokalizacje</multiple>						 
     </term>
-    <term name="equation">			 
-      <single>equation</single>
-      <multiple>equations</multiple>						 
+    <term name="equation">
+      <single>równanie</single>
+      <multiple>równania</multiple>						 
     </term>
-    <term name="rule">			 
-      <single>rule</single>
-      <multiple>rules</multiple>						 
+    <term name="rule">
+      <single>zasada</single>
+      <multiple>zasady</multiple>						 
     </term>
-    <term name="scene">			 
-      <single>scene</single>
-      <multiple>scenes</multiple>						 
+    <term name="scene">
+      <single>scena</single>
+      <multiple>sceny</multiple>						 
     </term>
-    <term name="table">			 
-      <single>table</single>
-      <multiple>tables</multiple>						 
+    <term name="table">
+      <single>tabela</single>
+      <multiple>tabele</multiple>						 
     </term>
     <term name="timestamp"> <!-- generally blank -->
       <single></single>
       <multiple></multiple>						 
     </term>
-    <term name="title-locator">			 
-      <single>title</single>
-      <multiple>titles</multiple>						 
+    <term name="title-locator">
+      <single>tytuł</single>
+      <multiple>tytuły</multiple>						 
     </term>
     <term name="book">
       <single>książka</single>
@@ -297,27 +303,30 @@
       <multiple>strony</multiple>
     </term>
     <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
+      <single>tom</single>
+      <multiple>tomy</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>strona</single>
+      <multiple>strony</multiple>
     </term>
     <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
+      <single>druk</single>
+      <multiple>druki</multiple>
     </term>
 
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>rozdz.</single>
+      <multiple>rozdz.</multiple>
     </term>
     <term name="citation-number" form="short">
-      <single>cit.</single>
-      <multiple>cits.</multiple>
+      <single>cyt.</single>
+      <multiple>cyt.</multiple>
     </term>
-    <term name="collection-number" form="short">nr</term>
+    <term name="collection-number" form="short">
+      <single>nr</single>
+      <multiple>nr.</multiple>
+    </term>
     <term name="number-of-pages">
       <single>strona</single>
       <multiple>strony</multiple>
@@ -335,8 +344,8 @@
       <multiple>sekcje</multiple>
     </term>
     <term name="supplement">
-      <single>supplement</single>
-      <multiple>supplements</multiple>
+      <single>suplement</single>
+      <multiple>suplementy</multiple>
     </term>
     <term name="sub-verbo">
       <single>sub verbo</single>
@@ -352,41 +361,41 @@
     </term>
 
     <!-- SHORT LOCATOR FORMS -->
-    <term name="appendix" form="short">			 
-      <single>app.</single>
-      <multiple>apps.</multiple>						 
+    <term name="appendix" form="short"> <!--see: https://sjp.pwn.pl/poradnia/haslo/Aneks-a-apendyks;22723.html-->
+      <single>zał.</single>
+      <multiple>zał.</multiple>						 
     </term>
-    <term name="article-locator" form="short">			 
+    <term name="article-locator" form="short">
       <single>art.</single>
-      <multiple>arts.</multiple>
+      <multiple>art.</multiple>
     </term>
-    <term name="elocation" form="short">			 
-      <single>loc.</single>
-      <multiple>locs.</multiple>
+    <term name="elocation" form="short">
+      <single>lok.</single>
+      <multiple>lok.</multiple>
     </term>
-    <term name="equation" form="short">			 
-      <single>eq.</single>
-      <multiple>eqs.</multiple>
+    <term name="equation" form="short">
+      <single>równ.</single>
+      <multiple>równ.</multiple>
     </term>
-    <term name="rule" form="short">			 
-      <single>r.</single>
-      <multiple>rr.</multiple>						 
+    <term name="rule" form="short">
+      <single>zas.</single>
+      <multiple>zas.</multiple>						 
     </term>
-    <term name="scene" form="short">			 
+    <term name="scene" form="short">
       <single>sc.</single>
-      <multiple>scs.</multiple>						 
+      <multiple>sc.</multiple>						 
     </term>
-    <term name="table" form="short">			 
-      <single>tbl.</single>
-      <multiple>tbls.</multiple>						 
+    <term name="table" form="short">
+      <single>tab.</single>
+      <multiple>tab.</multiple>						 
     </term>
     <term name="timestamp" form="short"> <!-- generally blank -->
       <single></single>
       <multiple></multiple>						 
     </term>
-    <term name="title-locator" form="short">			 
-      <single>tit.</single>
-      <multiple>tits.</multiple>
+    <term name="title-locator" form="short">
+      <single>tyt.</single>
+      <multiple>tyt.</multiple>
     </term>
     <term name="book" form="short">książka</term>
     <term name="chapter" form="short">rozdz.</term>
@@ -402,29 +411,29 @@
       <multiple>s.</multiple>
     </term>
     <term name="number-of-volumes" form="short">
-      <single>vol.</single>
-      <multiple>vols.</multiple>
+      <single>t.</single>
+      <multiple>t.</multiple>
     </term>
     <term name="page-first" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
+      <single>s.</single>
+      <multiple>s.</multiple>
     </term>
     <term name="printing" form="short">
-      <single>print.</single>
-      <multiple>prints.</multiple>
+      <single>druk</single>
+      <multiple>druk.</multiple>
     </term>
-    
+   
 
     <term name="number-of-pages" form="short">
       <single>s.</single>
-      <multiple>ss.</multiple>
+      <multiple>s.</multiple>
     </term>
     <term name="paragraph" form="short">akap.</term>
     <term name="part" form="short">cz.</term>
     <term name="section" form="short">sekc.</term>
     <term name="supplement" form="short">
-      <single>supp.</single>
-      <multiple>supps.</multiple>
+      <single>sup.</single>
+      <multiple>sup.</multiple>
     </term>
     <term name="sub-verbo" form="short">
       <single>s.v.</single>
@@ -445,12 +454,12 @@
       <multiple>¶¶</multiple>
     </term>
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>rozdział</single>
+      <multiple>rozdziały</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>cytowanie</single>
+      <multiple>cytowania</multiple>
     </term>
     <term name="collection-number">
       <single>numer</single>
@@ -657,32 +666,32 @@
     <term name="editortranslator" form="verb-short">red.tłum.</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="month-01">styczeń</term>
-    <term name="month-02">luty</term>
-    <term name="month-03">marzec</term>
-    <term name="month-04">kwiecień</term>
-    <term name="month-05">maj</term>
-    <term name="month-06">czerwiec</term>
-    <term name="month-07">lipiec</term>
-    <term name="month-08">sierpień</term>
-    <term name="month-09">wrzesień</term>
-    <term name="month-10">październik</term>
-    <term name="month-11">listopad</term>
-    <term name="month-12">grudzień</term>
-
+    <term name="month-01">stycznia</term>
+    <term name="month-02">lutego</term>
+    <term name="month-03">marca</term>
+    <term name="month-04">kwietnia</term>
+    <term name="month-05">maja</term>
+    <term name="month-06">czerwca</term>
+    <term name="month-07">lipca</term>
+    <term name="month-08">sierpnia</term>
+    <term name="month-09">września</term>
+    <term name="month-10">października</term>
+    <term name="month-11">listopada</term>
+    <term name="month-12">grudnia</term>
+    
     <!-- SHORT MONTH FORMS -->
     <term name="month-01" form="short">sty.</term>
-    <term name="month-02" form="short">luty</term>
+    <term name="month-02" form="short">lut.</term>
     <term name="month-03" form="short">mar.</term>
     <term name="month-04" form="short">kwi.</term>
-    <term name="month-05" form="short">maj</term>
+    <term name="month-05" form="short">maja</term>
     <term name="month-06" form="short">cze.</term>
     <term name="month-07" form="short">lip.</term>
     <term name="month-08" form="short">sie.</term>
     <term name="month-09" form="short">wrz.</term>
     <term name="month-10" form="short">paź.</term>
     <term name="month-11" form="short">lis.</term>
-    <term name="month-12" form="short">grudz.</term>
+    <term name="month-12" form="short">grud.</term>
 
     <!-- SEASONS -->
     <term name="season-01">wiosna</term>

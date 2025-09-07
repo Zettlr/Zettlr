@@ -117,24 +117,36 @@ const readabilityAlgorithms: Record<string, (words: string[]) => number> = {
 
     // Now the sum of squares (SoS)
     let sos = 0
-    for (let word of words) sos += Math.pow(word.length - mean, 2)
+    for (let word of words) {
+      sos += Math.pow(word.length - mean, 2)
+    }
 
     // Then standard deviation
     std = Math.sqrt(sos / (words.length - 1))
     wordThreshold = mean + 2 * std // Tadaaa
 
-    for (let word of words) if (word.length > wordThreshold) difficultWords++
+    for (let word of words) {
+      if (word.length > wordThreshold) {
+        difficultWords++
+      }
+    }
 
     const totalSize = words.length
     let percentageOfDifficultWords = difficultWords / totalSize
 
     score = 0.1579 * percentageOfDifficultWords * 100 + (0.0496 * totalSize)
 
-    if (percentageOfDifficultWords > 0.05) score += 3.6365
+    if (percentageOfDifficultWords > 0.05) {
+      score += 3.6365
+    }
 
     score = Math.floor(score)
-    if (score < 0) score = 0
-    if (score > 9) score = 10
+    if (score < 0) {
+      score = 0
+    }
+    if (score > 9) {
+      score = 10
+    }
 
     // Dale-Chall returns values between 0 and 10
     return zTransform(score, 0, 10)
@@ -150,16 +162,26 @@ const readabilityAlgorithms: Record<string, (words: string[]) => number> = {
 
     // Now the sum of squares (SoS)
     let sos = 0
-    for (let word of words) sos += Math.pow(word.length - mean, 2)
+    for (let word of words) {
+      sos += Math.pow(word.length - mean, 2)
+    }
 
     // Then standard deviation
     let std = Math.sqrt(sos / (words.length - 1))
     let wordThreshold = mean + 2 * std // Tadaaa
-    for (let word of words) if (word.length > wordThreshold) difficultWords++
+    for (let word of words) {
+      if (word.length > wordThreshold) {
+        difficultWords++
+      }
+    }
 
     score = 0.4 * (words.length + 100 * difficultWords / words.length)
-    if (score < 0) score = 0
-    if (score > 20) score = 20
+    if (score < 0) {
+      score = 0
+    }
+    if (score > 20) {
+      score = 20
+    }
 
     // Gunning-Fog returns values between 6 and 17
     return zTransform(score, 0, 20)
@@ -170,8 +192,12 @@ const readabilityAlgorithms: Record<string, (words: string[]) => number> = {
     let mean = words.join('').length / words.length
     // Formula taken from https://en.wikipedia.org/wiki/Coleman%E2%80%93Liau_index
     score = 5.89 * mean - 0.3 / (100 * words.length) - 15.8
-    if (score < 0) score = 0
-    if (score > 30) score = 30
+    if (score < 0) {
+      score = 0
+    }
+    if (score > 30) {
+      score = 30
+    }
 
     return zTransform(score, 0, 30)
   },
@@ -184,8 +210,12 @@ const readabilityAlgorithms: Record<string, (words: string[]) => number> = {
     score = 4.71 * mean + 0.5 * words.length - 21.43
     score = Math.ceil(score) // Scores must always be rounded up
 
-    if (score < 0) score = 0
-    if (score > 50) score = 50
+    if (score < 0) {
+      score = 0
+    }
+    if (score > 50) {
+      score = 50
+    }
 
     return zTransform(score, 0, 50)
   }

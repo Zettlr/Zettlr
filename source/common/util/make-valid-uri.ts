@@ -24,7 +24,7 @@ const emailRe = /^[a-z0-9-.]+@[a-z0-9-.]+\.[a-z0-9-.]{2,}$/i
 
 // This regular expression checks whether an URI could be linking to a local file
 // const anyLocallyLinkableFileRE = /.+\.(?:md|markdown|txt|rmd)$/i
-const linkableFileRE = /.+\.(?:mdx?|markdown|txt|(?:q|r)md|jpe?g|png|gif|svg|bmp)$/i
+const linkableFileRE = /.+\.(?:mdx?|markdown|txt|(?:q|r)md|jpe?g|png|gif|svg|bmp|webp)$/i
 
 /**
  * Returns a valid URI, using the available context information

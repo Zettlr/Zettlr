@@ -17,8 +17,7 @@ import { type SyntaxNodeRef, type SyntaxNode } from '@lezer/common'
 import { WidgetType, EditorView } from '@codemirror/view'
 import { type EditorState } from '@codemirror/state'
 
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import type { AnyMenuItem } from '@dts/renderer/context'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { applyH1, applyH2, applyH3, applyH4, applyH5, applyH6 } from '../commands/markdown'
 import clickAndSelect from './click-and-select'
 
@@ -36,42 +35,36 @@ export function headingMenu (view: EditorView, level: number, coords: { x: numbe
       id: '1',
       label: '#',
       type: 'checkbox',
-      enabled: true,
       checked: level === 1
     },
     {
       id: '2',
       label: '##',
       type: 'checkbox',
-      enabled: true,
       checked: level === 2
     },
     {
       id: '3',
       label: '###',
       type: 'checkbox',
-      enabled: true,
       checked: level === 3
     },
     {
       id: '4',
       label: '####',
       type: 'checkbox',
-      enabled: true,
       checked: level === 4
     },
     {
       id: '5',
       label: '#####',
       type: 'checkbox',
-      enabled: true,
       checked: level === 5
     },
     {
       id: '6',
       label: '######',
       type: 'checkbox',
-      enabled: true,
       checked: level === 6
     }
   ]

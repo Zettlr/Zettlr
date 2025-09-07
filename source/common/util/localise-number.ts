@@ -28,8 +28,13 @@ export default function (number: number): string {
   let delim = trans(',')
   let decimal = trans('.')
   // No delimiter available -> fallback
-  if (delim === 'localise.thousand_delimiter') delim = '.'
-  if (decimal === 'localise.decimal_delimiter') decimal = ','
+  if (delim === 'localise.thousand_delimiter') {
+    delim = '.'
+  }
+
+  if (decimal === 'localise.decimal_delimiter') {
+    decimal = ','
+  }
 
   // Account for negative values
   let isNegative = false

@@ -15,9 +15,8 @@
 import { type EditorState } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { resolveLangCode } from '@common/util/map-lang-code'
-import { type AnyMenuItem } from '@dts/renderer/context'
 import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { type StatusbarItem } from '.'
 import { configField } from '../util/configuration'
@@ -129,7 +128,6 @@ export function magicQuotesStatus (state: EditorState, _view: EditorView): Statu
           type: 'checkbox',
           id: 'disabled',
           label: trans('Disabled'),
-          enabled: true,
           checked: currentSetting === 'disabled'
         },
         {
@@ -161,7 +159,6 @@ export function magicQuotesStatus (state: EditorState, _view: EditorView): Statu
           type: 'checkbox',
           id: key,
           label: flag + ' ' + resolveLangCode(key, 'name'),
-          enabled: true,
           checked: currentlySelected.includes(key) // Every candidate is selected
         })
       }

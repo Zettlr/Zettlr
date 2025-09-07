@@ -62,8 +62,7 @@
  * END HEADER
  */
 
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { type AnyMenuItem } from '@dts/renderer/context'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { computed } from 'vue'
 
 export interface SelectableListItem {
@@ -118,8 +117,7 @@ function handleContextMenu (event: MouseEvent, idx: number): void {
     {
       label: 'Remove',
       id: 'remove-item',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     }
   ]
 

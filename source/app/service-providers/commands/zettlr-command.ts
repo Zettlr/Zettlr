@@ -15,7 +15,7 @@
  * END HEADER
  */
 
-import type AppServiceContainer from '../../app-service-container'
+import { type AppServiceContainer } from '../../app-service-container'
 
 export default abstract class ZettlrCommand {
   protected readonly _app: AppServiceContainer
@@ -36,7 +36,9 @@ export default abstract class ZettlrCommand {
     this._app = app
 
     // The bind event is the event that is sent from the renderer
-    if (!Array.isArray(bindEvent)) bindEvent = [bindEvent]
+    if (!Array.isArray(bindEvent)) {
+      bindEvent = [bindEvent]
+    }
     this._bind = bindEvent
   }
 

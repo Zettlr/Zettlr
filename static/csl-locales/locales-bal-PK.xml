@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="bal-PK">
+  <info>
+    <translator>
+      <name>عثمان</name>
+    </translator>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+    <updated>2024-03-24T07:49:00+00:00</updated>
+  </info>
+  <style-options punctuation-in-quote="true"/>
+  <date form="text">
+    <date-part name="day" suffix="؍ "/>
+    <date-part name="month" suffix=" "/>
+    <date-part name="year" suffix="ء"/>
+  </date>
+  <date form="numeric">
+    <date-part name="day" form="numeric-leading-zeros" suffix="-"/>
+    <date-part name="month" form="numeric-leading-zeros" suffix="-"/>
+    <date-part name="year"/>
+  </date>
+  <terms>
+    <!-- GENERAL TERMS -->
+    <term name="accessed">رسایی کرتگ</term>
+    <term name="advance-online-publication">دیما شتگیں تندتاک</term>
+    <term name="album">البم</term>
+    <term name="and">ءُ</term>
+    <term name="and others">آ دِگه</term>
+    <term name="anonymous">گمنام</term>
+    <term name="at">پر</term>
+    <term name="audio-recording">تواربند</term>
+    <term name="available at">رسان پر</term>
+    <term name="by">گون</term>
+    <term name="circa">کم ءُ گیش</term>
+    <term name="cited">سرشون داته</term>
+    <term name="et-al">آ دِگه</term>
+    <term name="film">تامُر</term>
+    <term name="forthcoming">آیوک</term>
+    <term name="from">از</term>
+    <term name="henceforth">چد ءُ رند</term>
+    <term name="ibid">ایزن</term>
+    <term name="in">در</term>
+    <term name="in press">در چاپار</term>
+    <term name="internet">نٹ</term>
+    <term name="letter">چٹی</term>
+    <term name="loc-cit">ایزن</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="no date">بے رمس</term>
+    <term name="no-place">بے جاه</term>
+    <term name="no-publisher">بے شنگکار</term> <!-- sine nomine -->
+    <term name="on">پر</term>
+    <term name="online">تندیم</term>
+    <term name="op-cit">ایزن</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="original-work-published">اسلیں کار شنگ کرتگ</term>
+    <term name="personal-communication">زاتییں رسانک</term>
+    <term name="podcast">پاڈکسٹ</term>
+    <term name="podcast-episode">پاڈکسٹ اپیسوڈ</term>
+    <term name="preprint">پریپرنٹ</term>
+    <term name="presented at">پیش کرتگ پر</term>
+    <term name="radio-broadcast">ریڈیو براڈکسٹ</term>
+    <term name="radio-series">ریڈیو ردیگ</term>
+    <term name="radio-series-episode">ریڈیو ردیگ</term>
+    <term name="reference">
+      <single>سرشون</single>
+      <multiple>سرشون</multiple>
+    </term>
+    <term name="retrieved">هاسل کرتگ</term>
+    <term name="review-of">چمشانک از</term>
+    <term name="scale">سکیل</term>
+    <term name="special-issue">هاسیں تاک</term>
+    <term name="special-section">هاسین باب</term>
+    <term name="television-broadcast">ٹیوی براڈکسٹ</term>
+    <term name="television-series">ٹیوی ردیگ</term>
+    <term name="television-series-episode">ٹیوی اپیسوڈ</term>
+    <term name="video">ویڈیو</term>
+    <term name="working-paper">ورکنگ پیپر</term>
+
+    <!-- LONG ITEM TYPE FORMS -->
+    <term name="article">پریپرنٹ</term>
+    <term name="article-journal">نبشتانک</term>
+    <term name="article-magazine">میگزینءِ نبشتانک</term>
+    <term name="article-newspaper">اکبارءِ نبشتانک</term>
+    <term name="bill">بِل</term>
+    <!-- book is in the list of locator terms -->
+    <term name="broadcast">براڈکسٹ</term>
+    <!-- chapter is in the list of locator terms -->
+    <term name="classic">کلیسک</term>
+    <term name="collection">جمانک</term>
+    <term name="dataset">ڈیٹاسٹ</term>
+    <term name="document">مدرک</term>
+    <term name="entry">اندراج</term>
+    <term name="entry-dictionary">لبزبلدءِ اندراج</term>
+    <term name="entry-encyclopedia">زانتگنجءِ اندراج</term>
+    <term name="event">گندک</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic">نگاری</term>
+    <term name="hearing">سمایت</term>
+    <term name="interview">هالتران</term>
+    <term name="legal_case">شر</term>
+    <term name="legislation">کانودسازی</term>
+    <term name="manuscript">دزنبشت</term>
+    <term name="map">نکشه</term>
+    <term name="motion_picture">ویڈیو ریکارڈ</term>
+    <term name="musical_score">زیمرییں سکور</term>
+    <term name="pamphlet">پمپلٹ</term>
+    <term name="paper-conference">کانفرنس پیپر</term>
+    <term name="patent">پیٹنٹ</term>
+    <term name="performance">ناٹک</term>
+    <term name="periodical">تیلبند</term>
+    <term name="personal_communication">زاتییں رسانک</term>
+    <term name="post">پُسٹ</term>
+    <term name="post-weblog">بلاگ پُسٹ</term>
+    <term name="regulation">ریگولیشن</term>
+    <term name="report">اهوال</term>
+    <term name="review">چمشانک</term>
+    <term name="review-book">کتابءِ چمشانک</term>
+    <term name="software">نرم‌ابزار</term>
+    <term name="song">تواربند</term>
+    <term name="speech">گشتانک</term>
+    <term name="standard">انجار</term>
+    <term name="thesis">تهیسس</term>
+    <term name="treaty">پیمان</term>
+    <term name="webpage">تندیم</term>
+
+    <!-- VERB ITEM TYPE FORMS -->
+    <!-- Only where applicable -->
+    <term name="hearing" form="verb">سبوت داته از</term>
+    <term name="review" form="verb">چمشانک کرتگ از</term>
+    <term name="review-book" form="verb">کتابءِ چمشانک کرتگ از</term>
+
+    <!-- HISTORICAL ERA TERMS -->
+    <term name="ad">میلادی</term>
+    <term name="bc">پیشمیلاد</term>
+    <term name="bce">پیشمیلاد</term>
+    <term name="ce">میلادی</term>
+
+    <!-- PUNCTUATION -->
+    <term name="open-quote">”</term>
+    <term name="close-quote">“</term>
+    <term name="open-inner-quote">’</term>
+    <term name="close-inner-quote">‘</term>
+    <term name="page-range-delimiter">–</term>
+    <term name="colon">:</term>
+    <term name="comma">،</term>
+    <term name="semicolon">؛</term>
+
+    <!-- ORDINALS -->
+    <term name="ordinal">می</term>
+
+    <!-- LONG ORDINALS -->
+    <term name="long-ordinal-01">یکمی</term>
+    <term name="long-ordinal-02">دومی</term>
+    <term name="long-ordinal-03">سیمی</term>
+    <term name="long-ordinal-04">چارمی</term>
+    <term name="long-ordinal-05">پنچمی</term>
+    <term name="long-ordinal-06">ششمی</term>
+    <term name="long-ordinal-07">هپتمی</term>
+    <term name="long-ordinal-08">هشتمی</term>
+    <term name="long-ordinal-09">نهمی</term>
+    <term name="long-ordinal-10">دهمی</term>
+
+    <!-- LONG LOCATOR FORMS -->
+    <term name="act">			 
+      <single>ایکٹ</single>
+      <multiple>ایکٹ</multiple>						 
+    </term>
+    <term name="appendix">			 
+      <single>زمیمه</single>
+      <multiple>زمیمه</multiple>						 
+    </term>
+    <term name="article-locator">			 
+      <single>نبشتانک</single>
+      <multiple>نبشتانک</multiple>						 
+    </term>
+    <term name="book">
+      <single>کتاب</single>
+      <multiple>کتاب</multiple>
+    </term>
+    <term name="canon">			 
+      <single>کانون</single>
+      <multiple>کانون</multiple>						 
+    </term>
+    <term name="chapter">
+      <single>در</single>
+      <multiple>در</multiple>
+    </term>
+    <term name="column">
+      <single>تنب</single>
+      <multiple>تنب</multiple>
+    </term>
+    <term name="elocation">			 
+      <single>جاه</single>
+      <multiple>جاه</multiple>						 
+    </term>
+    <term name="equation">			 
+      <single>مساوات</single>
+      <multiple>مساوات</multiple>						 
+    </term>
+    <term name="figure">
+      <single>تسویر</single>
+      <multiple>تسویر</multiple>
+    </term>
+    <term name="folio">
+      <single>پولیو</single>
+      <multiple>پولیو</multiple>
+    </term>
+    <term name="issue">
+      <single>تاک</single>
+      <multiple>تاک</multiple>
+    </term>
+    <term name="line">
+      <single>بند</single>
+      <multiple>بند</multiple>
+    </term>
+    <term name="note">
+      <single>نوٹ</single>
+      <multiple>نوٹ</multiple>
+    </term>
+    <term name="opus">
+      <single>کارنامه</single>
+      <multiple>کارنامه</multiple>
+    </term>
+    <term name="page">
+      <single>تاکدیم</single>
+      <multiple>تاکدیم</multiple>
+    </term>
+    <term name="paragraph">
+      <single>بهرگ</single>
+      <multiple>بهرگ</multiple>
+    </term>
+    <term name="part">
+      <single>بهر</single>
+      <multiple>بهر</multiple>
+    </term>
+    <term name="rule">			 
+      <single>رول</single>
+      <multiple>رول</multiple>						 
+    </term>
+    <term name="scene">			 
+      <single>ندارگ</single>
+      <multiple>ندارگ</multiple>						 
+    </term>
+    <term name="section">
+      <single>باب</single>
+      <multiple>باب</multiple>
+    </term>
+    <term name="sub-verbo">
+      <single>زیر کلمه</single>
+      <multiple>زیر کلمه</multiple>
+    </term>
+    <term name="supplement">
+      <single>لاهک</single>
+      <multiple>لاهک</multiple>
+    </term>
+    <term name="table">			 
+      <single>ٹیبل</single>
+      <multiple>ٹیبل</multiple>						 
+    </term>
+    <term name="timestamp"> <!-- generally blank -->
+      <single></single>
+      <multiple></multiple>						 
+    </term>
+    <term name="title-locator">			 
+      <single>سرگال</single>
+      <multiple>سرگال</multiple>						 
+    </term>
+    <term name="verse">
+      <single>لچه</single>
+      <multiple>لچه</multiple>
+    </term>
+    <term name="version">
+      <single>ورژن</single>
+      <multiple>ورژن</multiple>
+    </term>
+    <term name="volume">
+      <single>جلد</single>
+      <multiple>جلد</multiple>
+    </term>
+
+    <!-- SYMBOL LOCATOR FORMS -->
+    <term name="paragraph" form="symbol">
+      <single>¶</single>
+      <multiple>¶¶</multiple>
+    </term>
+    <term name="section" form="symbol">
+      <single>§</single>
+      <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG NUMBER VARIABLE FORMS -->
+    <term name="chapter-number">
+      <single>در</single>
+      <multiple>در</multiple>
+    </term>
+    <term name="citation-number">
+      <single>سرشون</single>
+      <multiple>سرشون</multiple>
+    </term>
+    <term name="collection-number">
+      <single>نمبر</single>
+      <multiple>نمبر</multiple>
+    </term>
+    <term name="edition">
+      <single>چاپرد</single>
+      <multiple>چاپرد</multiple>
+    </term>
+    <term name="first-reference-note-number">
+      <single>سرشون</single>
+      <multiple>سرشون</multiple>
+    </term>
+    <term name="number">
+      <single>نمبر</single>
+      <multiple>نمبر</multiple>
+    </term>
+    <term name="number-of-pages">
+      <single>تاکدیم</single>
+      <multiple>تاکدیم</multiple>
+    </term>
+    <term name="number-of-volumes">
+      <single>جلد</single>
+      <multiple>جلد</multiple>
+    </term>
+    <term name="page-first">
+      <single>تاکدیم</single>
+      <multiple>تاکدیم</multiple>
+    </term>
+    <term name="printing">
+      <single>چاپکاری</single>
+      <multiple>چاپکاری</multiple>
+    </term>
+
+    <!-- LONG ROLE FORMS -->
+    <!-- Omitted roles: 
+         author, composer, container-author, interviewer, original-author, recipient, reviewed-author 
+    -->
+    <term name="chair">
+      <single>چیر</single>
+      <multiple>چیر</multiple>
+    </term>
+    <term name="collection-editor">
+      <single>شونکار</single>
+      <multiple>شونکار</multiple>
+    </term>
+    <term name="compiler">
+      <single>نزاروک</single>
+      <multiple>نزاروک</multiple>
+    </term>
+    <term name="contributor">
+      <single>بهرشتکار</single>
+      <multiple>بهرشتکار</multiple>
+    </term>
+    <term name="curator">
+      <single>کیوریٹر</single>
+      <multiple>کیوریٹر</multiple>
+    </term>
+    <term name="director">
+      <single>سوجکار</single>
+      <multiple>سوجکار</multiple>
+    </term>
+    <term name="editor">
+      <single>شونکار</single>
+      <multiple>شونکار</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>شونکار ءُ رجانکار</single>
+      <multiple>شونکار ءُ رجانکار</multiple>
+    </term>
+    <term name="editorial-director">
+      <single>سرشونکار</single>
+      <multiple>سرشونکار</multiple>
+    </term>
+    <term name="executive-producer">
+      <single>انتزامیه</single>
+      <multiple>انتزامیه</multiple>
+    </term>
+    <term name="guest">
+      <single>مهمان</single>
+      <multiple>مهمان</multiple>
+    </term>
+    <term name="host">
+      <single>واسیدار</single>
+      <multiple>واسیدار</multiple>
+    </term>
+    <term name="illustrator">
+      <single>مسور</single>
+      <multiple>مسور</multiple>
+    </term>
+    <term name="narrator">
+      <single>راوی</single>
+      <multiple>راوی</multiple>
+    </term>
+    <term name="organizer">
+      <single>برجمدار</single>
+      <multiple>برجمدار</multiple>
+    </term>
+    <term name="performer">
+      <single>ازمکار</single>
+      <multiple>ازمکار</multiple>
+    </term>
+    <term name="producer">
+      <single>پروڈیوسر</single>
+      <multiple>پروڈیوسر</multiple>
+    </term>
+    <term name="script-writer">
+      <single>لبزانت</single>
+      <multiple>لبزانت</multiple>
+    </term>
+    <term name="series-creator">
+      <single>ردیگءِ ساچشتکار</single>
+      <multiple>ردیگءِ ساچشتکار</multiple>
+    </term>
+    <term name="translator">
+      <single>رجانکار</single>
+      <multiple>رجانکار</multiple>
+    </term>
+
+    <!-- VERB ROLE FORMS -->
+    <term name="author" form="verb">نبشته گون</term>
+    <term name="chair" form="verb">چیر کرتگ گون</term>
+    <term name="collection-editor" form="verb">ردینته گون</term>
+    <term name="compiler" form="verb">نزآرته گون</term>
+    <term name="composer" form="verb">پربسته گون</term>
+    <term name="container-author" form="verb">نبشته گون</term>
+    <term name="contributor" form="verb">بهرشته گون</term>
+    <term name="curator" form="verb">کیوریٹ کرتگ گون</term>
+    <term name="director" form="verb">سوج داته گون</term>
+    <term name="editor" form="verb">ردینته گون</term>
+    <term name="editortranslator" form="verb">ردینته ءُ رجانک کرتگ گون</term>
+    <term name="editorial-director" form="verb">ردینته گون</term>
+    <term name="executive-producer" form="verb">انتزامیه گون</term>
+    <term name="guest" form="verb">مهمان گون</term>
+    <term name="host" form="verb">واسیدار گون</term>
+    <term name="illustrator" form="verb">مسور گون</term>
+    <term name="interviewer" form="verb">انٹرویو گون</term>
+    <term name="narrator" form="verb">راوی گون</term>
+    <term name="organizer" form="verb">واسیدار گون</term>
+    <term name="original-author" form="verb">نبشته گون</term>
+    <term name="performer" form="verb">ازمکاری گون</term>
+    <term name="producer" form="verb">پروڈیوس کرتگ گون</term>
+    <term name="recipient" form="verb">په</term>
+    <term name="reviewed-author" form="verb">نبشته گون</term>
+    <term name="script-writer" form="verb">نبشته گون</term>
+    <term name="series-creator" form="verb">ساچشته گون</term>
+    <term name="translator" form="verb">رجانک کرتگ گون</term>
+    
+<!-- LONG MONTH FORMS -->
+    <term name="month-01">جنوری</term>
+    <term name="month-02">پروری</term>
+    <term name="month-03">مارچ</term>
+    <term name="month-04">اپریل</term>
+    <term name="month-05">میی</term>
+    <term name="month-06">جون</term>
+    <term name="month-07">جلاییی</term>
+    <term name="month-08">اگست</term>
+    <term name="month-09">ستمبر</term>
+    <term name="month-10">اکتوبر</term>
+    <term name="month-11">نومبر</term>
+    <term name="month-12">دسمبر</term>
+
+    <!-- SHORT MONTH FORMS -->
+    <term name="month-01" form="short">جنو</term>
+    <term name="month-02" form="short">پرو</term>
+    <term name="month-03" form="short">مار</term>
+    <term name="month-04" form="short">اپر</term>
+    <term name="month-05" form="short">میی</term>
+    <term name="month-06" form="short">جون</term>
+    <term name="month-07" form="short">جلا</term>
+    <term name="month-08" form="short">اگس‍</term>
+    <term name="month-09" form="short">ستم‍</term>
+    <term name="month-10" form="short">اکت‍</term>
+    <term name="month-11" form="short">نوم‍</term>
+    <term name="month-12" form="short">دسم‍</term>
+
+    <!-- SEASONS -->
+    <term name="season-01">بهار</term>
+    <term name="season-02">گرماگ</term>
+    <term name="season-03">توهمشان</term>
+    <term name="season-04">زمستان</term>
+  </terms>
+</locale>

@@ -13,9 +13,8 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import type { DirDescriptor } from '@dts/common/fsal'
-import type { AnyMenuItem } from '@dts/renderer/context'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 
 const ipcRenderer = window.ipc
@@ -28,8 +27,7 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
     {
       label: trans('Properties'),
       id: 'menu.properties',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -37,14 +35,12 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
     {
       label: trans('New file…'),
       type: 'normal',
-      id: 'menu.new_file',
-      enabled: true
+      id: 'menu.new_file'
     },
     {
       label: trans('New directory…'),
       type: 'normal',
-      id: 'menu.new_dir',
-      enabled: true
+      id: 'menu.new_dir'
     },
     {
       type: 'separator'
@@ -52,14 +48,12 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
     {
       label: trans('Rename directory'),
       type: 'normal',
-      id: 'menu.rename_dir',
-      enabled: true
+      id: 'menu.rename_dir'
     },
     {
       label: trans('Delete directory'),
       type: 'normal',
-      id: 'menu.delete_dir',
-      enabled: true
+      id: 'menu.delete_dir'
     },
     {
       type: 'separator'
@@ -67,8 +61,7 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
     {
       label: trans('Copy path'),
       id: 'menu.copy_path',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       type: 'separator'
@@ -76,8 +69,7 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
     {
       label: isMac ? trans('Reveal in Finder') : isWin ? trans('Reveal in Explorer') : trans('Reveal in File Browser'),
       type: 'normal',
-      id: 'gui.attachments_open_dir',
-      enabled: true
+      id: 'gui.attachments_open_dir'
     }
   ]
 
@@ -85,8 +77,7 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
     {
       id: 'menu.rescan_dir',
       type: 'normal',
-      label: trans('Check for directory …'),
-      enabled: true
+      label: trans('Check for directory …')
     }
   ]
 
@@ -114,8 +105,7 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
     template.push({
       id: 'menu.close_workspace',
       type: 'normal',
-      label: trans('Close workspace'),
-      enabled: true
+      label: trans('Close workspace')
     })
   }
 

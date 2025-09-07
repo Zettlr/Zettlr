@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="en-US">
+  <!-- The abbreviations in this file follow the recommendations of The Chicago Manual of Style, 18th ed. (2024), sec. 10.48 (cited hereafter as CMOS), unless stated otherwise. -->
+  <!-- Additional abbreviations are from:
+        1. Oxford Dictionary for Writers and Editors (2000), https://archive.org/details/oxfordstylemanua0000unse (cited hereafter as ODWE): reference has also been made to the New Oxford Dictionary for Writers and Editors (NODWE), but periods must be added to contractions in these later editions to reflect US English usage
+        2. Oxford Dictionary of Abbreviations (2011), https://doi.org/10.1093/acref/9780199698295.001.0001 (cited hereafter as ODA)
+  -->
   <info>
     <translator>
       <name>Andrew Dunning</name>
+      <uri>https://orcid.org/0000-0003-0464-5036</uri>
     </translator>
     <translator>
       <name>Sebastian Karcher</name>
+      <uri>https://orcid.org/0000-0001-8249-7388</uri>
     </translator>
     <translator>
       <name>Rintze M. Zelle</name>
+      <uri>https://orcid.org/0000-0003-1779-8883</uri>
     </translator>
     <translator>
       <name>Denis Meier</name>
     </translator>
     <translator>
       <name>Brenton M. Wiernik</name>
+      <uri>https://orcid.org/0000-0001-9560-6336</uri>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2024-03-12T13:41:31+00:00</updated>
+    <updated>2025-06-24T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="true"/>
   <date form="text">
@@ -31,20 +40,18 @@
     <date-part name="year"/>
   </date>
   <terms>
-    <!-- GENERAL TERMS -->
+    <!-- LONG GENERAL TERMS -->
     <term name="accessed">accessed</term>
     <term name="advance-online-publication">advance online publication</term>
     <term name="album">album</term>
     <term name="and">and</term>
     <term name="and others">and others</term>
     <term name="anonymous">anonymous</term>
-    <term name="anonymous" form="short">anon.</term>
     <term name="at">at</term>
     <term name="audio-recording">audio recording</term>
     <term name="available at">available at</term>
     <term name="by">by</term>
     <term name="circa">circa</term>
-    <term name="circa" form="short">c.</term>
     <term name="cited">cited</term>
     <term name="et-al">et al.</term>
     <term name="film">film</term>
@@ -58,11 +65,8 @@
     <term name="letter">letter</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="no date">no date</term>
-    <term name="no date" form="short">n.d.</term>
     <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
+    <term name="no-publisher">no publisher</term>
     <term name="on">on</term>
     <term name="online">online</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
@@ -79,13 +83,8 @@
       <single>reference</single>
       <multiple>references</multiple>
     </term>
-    <term name="reference" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
     <term name="retrieved">retrieved</term>
     <term name="review-of">review of</term>
-    <term name="review-of" form="short">rev. of</term>
     <term name="scale">scale</term>
     <term name="special-issue">special issue</term>
     <term name="special-section">special section</term>
@@ -94,6 +93,47 @@
     <term name="television-series-episode">television series episode</term>
     <term name="video">video</term>
     <term name="working-paper">working paper</term>
+
+    <!-- SHORT GENERAL TERMS -->
+    <!-- Omitted short forms: accessed, album, and (symbol), and others, at (symbol), forthcoming, henceforth, ibid, in, in press, internet, loc-cit, on, online, op-cit, podcast, preprint, presented at -->
+    <term name="advance-online-publication" form="short">adv. online pub.</term> <!-- ODA -->
+    <term name="anonymous" form="short">anon.</term>
+    <term name="audio-recording" form="short">au. rec.</term> <!-- ODA -->
+    <term name="available at" form="short">avail. at</term> <!-- ODA -->
+    <term name="circa" form="short">c.</term>
+    <!-- CMOS 10.48 recommends "ca." for "circa" but also allows "c.", which CSL has used historically -->
+    <term name="cited" form="short">cit.</term> <!-- ODA -->
+    <term name="et-al" form="short">et al.</term>
+    <term name="film" form="short">flm.</term> <!-- ODA -->
+    <term name="from" form="short">fr.</term>
+    <term name="letter" form="short">let.</term> <!-- ODA -->
+    <term name="no date" form="short">n.d.</term>
+    <term name="no-place" form="short">n.p.</term>
+    <term name="no-publisher" form="short">n.p.</term>
+    <term name="original-work-published" form="short">orig. pub.</term> <!-- Oxford Guide to Style -->
+    <term name="personal-communication" form="short">pers. comm.</term>
+    <term name="podcast-episode" form="short">podcast ep.</term>
+    <term name="radio-broadcast" form="short">radio bdcst.</term> <!-- ODA -->
+    <term name="radio-series" form="short">radio ser.</term> <!-- ODA -->
+    <term name="radio-series-episode" form="short">radio ser. ep.</term> <!-- ODA -->
+    <term name="reference" form="short">
+      <single>ref.</single>
+      <multiple>refs.</multiple>
+    </term>
+    <term name="retrieved" form="short">rtvd.</term> <!-- ODA -->
+    <term name="review-of" form="short">rev. of</term>
+    <term name="scale" form="short">sc.</term> <!-- ODA -->
+    <term name="special-issue" form="short">spec. iss.</term> <!-- ODA -->
+    <term name="special-section" form="short">spec. sec.</term> <!-- ODA/CMOS -->
+    <term name="television-broadcast" form="short">TV bdcst.</term> <!-- ODA -->
+    <term name="television-series" form="short">TV ser.</term> <!-- ODA -->
+    <term name="television-series-episode" form="short">TV ser. ep.</term> <!-- ODA -->
+    <term name="video" form="short">vid.</term> <!-- ODA -->
+    <term name="working-paper" form="short">wkg. paper</term> <!-- ODA -->
+
+    <!-- SYMBOLIC GENERAL FORMS -->
+    <term name="and" form="symbol">&amp;</term>
+    <term name="at" form="symbol">@</term>
 
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">preprint</term>
@@ -104,8 +144,8 @@
     <!-- book is in the list of locator terms -->
     <term name="broadcast">broadcast</term>
     <!-- chapter is in the list of locator terms -->
-    <term name="classic">classic</term>
-    <term name="collection">collection</term>
+    <term name="classic">classical work</term>
+    <term name="collection">archival collection</term>
     <term name="dataset">dataset</term>
     <term name="document">document</term>
     <term name="entry">entry</term>
@@ -143,33 +183,61 @@
     <term name="webpage">webpage</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
-    <term name="article-magazine" form="short">mag. art.</term>
+    <!-- Omitted short forms: article, bill, entry, event, hearing, map, periodical, speech, treaty -->
+    <term name="article-journal" form="short">jour. art.</term> <!-- ODWE -->
+    <term name="article-magazine" form="short">mag. art.</term> <!-- ODWE -->
     <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="broadcast" form="short">bdcst.</term> <!-- ODA -->
     <!-- book is in the list of locator terms -->
     <!-- chapter is in the list of locator terms -->
+    <term name="classic" form="short">class. wk.</term> <!-- ODWE -->
+    <term name="collection" form="short">arch. coll.</term> <!-- ODA -->
     <term name="document" form="short">doc.</term>
+    <term name="entry-dictionary" form="short">dict. entry</term>
+    <term name="entry-encyclopedia" form="short">ency. entry</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic" form="short">graph.</term>
-    <term name="interview" form="short">interv.</term>
-    <term name="manuscript" form="short">MS</term>
-    <term name="motion_picture" form="short">video rec.</term>
-    <term name="report" form="short">rep.</term>
+    <term name="graphic" form="short">gr.</term> <!-- ODA -->
+    <term name="interview" form="short">int.</term> <!-- ODA -->
+    <term name="legal_case" form="short">leg. case</term> <!-- ODA -->
+    <term name="legislation" form="short">legis.</term> <!-- ODA -->
+    <term name="manuscript" form="short">
+      <single>MS</single>
+      <multiple>MSS</multiple>
+    </term>
+    <term name="motion_picture" form="short">vid. rec.</term> <!-- ODA -->
+    <term name="musical_score" form="short">mus. score</term> <!-- ODWE -->
+    <term name="pamphlet" form="short">pam.</term> <!-- ODWE -->
+    <term name="paper-conference" form="short">conf. paper</term> <!-- ODA -->
+    <term name="patent" form="short">pat.</term> <!-- ODWE -->
+    <term name="performance" form="short">prfm.</term> <!-- ODA -->
+    <term name="personal_communication" form="short">pers. comm.</term>
+    <term name="regulation" form="short">reg.</term> <!-- ODA -->
+    <term name="report" form="short">rep.</term> <!-- ODWE -->
     <term name="review" form="short">rev.</term>
     <term name="review-book" form="short">bk. rev.</term>
-    <term name="song" form="short">audio rec.</term>
+    <term name="software" form="short">sftw.</term> <!-- ODA -->
+    <term name="song" form="short">au. rec.</term> <!-- ODA -->
+    <term name="standard" form="short">std.</term> <!-- ODA -->
+    <term name="thesis" form="short">thes.</term> <!-- ODA -->
+    <term name="webpage" form="short">webpg.</term> <!-- ODA -->
 
-    <!-- VERB ITEM TYPE FORMS -->
+    <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
     <term name="hearing" form="verb">testimony of</term>
     <term name="review" form="verb">review of</term>
     <term name="review-book" form="verb">review of the book</term>
 
+    <!-- SHORT VERB ITEM TYPE FORMS -->
+    <!-- Only where applicable -->
+    <term name="hearing" form="verb-short">test. of</term> <!-- ODA -->
+    <term name="review" form="verb-short">rev. of</term>
+    <term name="review-book" form="verb-short">rev. of the bk.</term>
+
     <!-- HISTORICAL ERA TERMS -->
-    <term name="ad">AD</term>
-    <term name="bc">BC</term>
-    <term name="bce">BCE</term>
-    <term name="ce">CE</term>
+    <term name="ad"> AD</term>
+    <term name="bc"> BC</term>
+    <term name="bce"> BCE</term>
+    <term name="ce"> CE</term>
 
     <!-- PUNCTUATION -->
     <term name="open-quote">“</term>
@@ -203,25 +271,25 @@
     <term name="long-ordinal-10">tenth</term>
 
     <!-- LONG LOCATOR FORMS -->
-    <term name="act">			 
+    <term name="act">
       <single>act</single>
-      <multiple>acts</multiple>						 
+      <multiple>acts</multiple>
     </term>
-    <term name="appendix">			 
+    <term name="appendix">
       <single>appendix</single>
-      <multiple>appendices</multiple>						 
+      <multiple>appendices</multiple>
     </term>
-    <term name="article-locator">			 
+    <term name="article-locator">
       <single>article</single>
-      <multiple>articles</multiple>						 
+      <multiple>articles</multiple>
     </term>
     <term name="book">
       <single>book</single>
       <multiple>books</multiple>
     </term>
-    <term name="canon">			 
+    <term name="canon">
       <single>canon</single>
-      <multiple>canons</multiple>						 
+      <multiple>canons</multiple>
     </term>
     <term name="chapter">
       <single>chapter</single>
@@ -231,13 +299,13 @@
       <single>column</single>
       <multiple>columns</multiple>
     </term>
-    <term name="elocation">			 
+    <term name="elocation">
       <single>location</single>
-      <multiple>locations</multiple>						 
+      <multiple>locations</multiple>
     </term>
-    <term name="equation">			 
+    <term name="equation">
       <single>equation</single>
-      <multiple>equations</multiple>						 
+      <multiple>equations</multiple>
     </term>
     <term name="figure">
       <single>figure</single>
@@ -248,8 +316,8 @@
       <multiple>folios</multiple>
     </term>
     <term name="issue">
-      <single>number</single>
-      <multiple>numbers</multiple>
+      <single>issue</single>
+      <multiple>issues</multiple>
     </term>
     <term name="line">
       <single>line</single>
@@ -275,13 +343,13 @@
       <single>part</single>
       <multiple>parts</multiple>
     </term>
-    <term name="rule">			 
+    <term name="rule">
       <single>rule</single>
-      <multiple>rules</multiple>						 
+      <multiple>rules</multiple>
     </term>
-    <term name="scene">			 
+    <term name="scene">
       <single>scene</single>
-      <multiple>scenes</multiple>						 
+      <multiple>scenes</multiple>
     </term>
     <term name="section">
       <single>section</single>
@@ -295,25 +363,19 @@
       <single>supplement</single>
       <multiple>supplements</multiple>
     </term>
-    <term name="table">			 
+    <term name="table">
       <single>table</single>
-      <multiple>tables</multiple>						 
+      <multiple>tables</multiple>
     </term>
-    <term name="timestamp"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>						 
-    </term>
-    <term name="title-locator">			 
+    <!-- A timestamp is a composite of hours, minutes, etc. and therefore has no default label. -->
+    <term name="timestamp"/>
+    <term name="title-locator">
       <single>title</single>
-      <multiple>titles</multiple>						 
+      <multiple>titles</multiple>
     </term>
     <term name="verse">
       <single>verse</single>
       <multiple>verses</multiple>
-    </term>
-    <term name="version">
-      <single>version</single>
-      <multiple>versions</multiple>
     </term>
     <term name="volume">
       <single>volume</single>
@@ -322,11 +384,11 @@
 
     <!-- SHORT LOCATOR FORMS -->
     <!-- Omitted short forms: act, timestamp -->
-    <term name="appendix" form="short">			 
+    <term name="appendix" form="short">
       <single>app.</single>
-      <multiple>apps.</multiple>						 
+      <multiple>apps.</multiple>
     </term>
-    <term name="article-locator" form="short">			 
+    <term name="article-locator" form="short">
       <single>art.</single>
       <multiple>arts.</multiple>
     </term>
@@ -335,8 +397,9 @@
       <multiple>bks.</multiple>
     </term>
     <term name="canon" form="short">
-      <single>c.</single>
-      <multiple>cc.</multiple>						 
+      <!-- Oxford Dictionary for Writers and Editors -->
+      <single>can.</single>
+      <multiple>cann.</multiple>
     </term>
     <term name="chapter" form="short">
       <single>chap.</single>
@@ -346,13 +409,13 @@
       <single>col.</single>
       <multiple>cols.</multiple>
     </term>
-    <term name="elocation" form="short">			 
+    <term name="elocation" form="short">
       <single>loc.</single>
       <multiple>locs.</multiple>
     </term>
-    <term name="equation" form="short">			 
+    <term name="equation" form="short">
       <single>eq.</single>
-      <multiple>eqs.</multiple>
+      <multiple>eqq.</multiple>
     </term>
     <term name="figure" form="short">
       <single>fig.</single>
@@ -390,13 +453,14 @@
       <single>pt.</single>
       <multiple>pts.</multiple>
     </term>
-    <term name="rule" form="short">			 
+    <term name="rule" form="short">
+      <!-- legal abbreviations in the Oxford Guide to Style, sec. 13.2.1 -->
       <single>r.</single>
-      <multiple>rr.</multiple>						 
+      <multiple>rr.</multiple>
     </term>
-    <term name="scene" form="short">			 
+    <term name="scene" form="short">
       <single>sc.</single>
-      <multiple>scs.</multiple>						 
+      <multiple>scs.</multiple>
     </term>
     <term name="section" form="short">
       <single>sec.</single>
@@ -410,28 +474,31 @@
       <single>supp.</single>
       <multiple>supps.</multiple>
     </term>
-    <term name="table" form="short">			 
+    <term name="table" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
       <single>tbl.</single>
-      <multiple>tbls.</multiple>						 
+      <multiple>tbls.</multiple>
     </term>
-    <term name="title-locator" form="short">			 
+    <term name="title-locator" form="short">
+      <!-- Oxford Dictionary for Writers and Editors -->
       <single>tit.</single>
-      <multiple>tits.</multiple>
+      <multiple>titt.</multiple>
     </term>
     <term name="verse" form="short">
       <single>v.</single>
       <multiple>vv.</multiple>
-    </term>
-    <term name="version" form="short">
-      <single>v.</single>
-      <multiple>v.</multiple>
     </term>
     <term name="volume" form="short">
       <single>vol.</single>
       <multiple>vols.</multiple>
     </term>
 
-    <!-- SYMBOL LOCATOR FORMS -->
+    <!-- SYMBOLIC LOCATOR FORMS -->
+    <term name="chapter" form="symbol">
+      <!-- caput/capita, esp. in legal works; cf. CMOS 14.196 -->
+      <single>c.</single>
+      <multiple>cc.</multiple>
+    </term>
     <term name="paragraph" form="symbol">
       <single>¶</single>
       <multiple>¶¶</multiple>
@@ -482,6 +549,10 @@
       <single>printing</single>
       <multiple>printings</multiple>
     </term>
+    <term name="version">
+      <single>version</single>
+      <multiple>versions</multiple>
+    </term>
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
@@ -521,14 +592,15 @@
       <multiple>pp.</multiple>
     </term>
     <term name="printing" form="short">
-      <single>print.</single>
-      <multiple>prints.</multiple>
+      <!-- Oxford Dictionary for Writers and Editors -->
+      <single>ptg.</single>
+      <multiple>ptgs.</multiple>
     </term>
-    
+    <term name="version" form="short">v.</term> <!-- no plural -->
 
     <!-- LONG ROLE FORMS -->
-    <!-- Omitted roles: 
-         author, composer, container-author, interviewer, original-author, recipient, reviewed-author 
+    <!-- Omitted roles:
+         author, composer, container-author, interviewer, original-author, recipient, reviewed-author
     -->
     <term name="chair">
       <single>chair</single>
@@ -557,6 +629,10 @@
     <term name="editor">
       <single>editor</single>
       <multiple>editors</multiple>
+    </term>
+    <term name="editor-translator">
+      <single>editor &amp; translator</single>
+      <multiple>editors &amp; translators</multiple>
     </term>
     <term name="editortranslator">
       <single>editor &amp; translator</single>
@@ -612,8 +688,8 @@
     </term>
 
     <!-- SHORT ROLE FORMS -->
-    <!-- Omitted roles: 
-         author, chair, composer, container-author, guest, host, interviewer, original-author, recipient, reviewed-author 
+    <!-- Omitted roles:
+         author, chair, composer, container-author, guest, host, interviewer, original-author, recipient, reviewed-author
     -->
     <term name="collection-editor" form="short">
       <single>ed.</single>
@@ -624,10 +700,12 @@
       <multiple>comps.</multiple>
     </term>
     <term name="contributor" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
       <single>contrib.</single>
       <multiple>contribs.</multiple>
     </term>
     <term name="curator" form="short">
+      <!-- Oxford Art Online <https://www.oxfordartonline.com/page/1661> -->
       <single>cur.</single>
       <multiple>curs.</multiple>
     </term>
@@ -639,8 +717,12 @@
       <single>ed.</single>
       <multiple>eds.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ed. &amp; trans.</single>
+      <multiple>eds. &amp; trans.</multiple>
+    </term>
     <term name="editortranslator" form="short">
-      <single>ed. &amp; tran.</single>
+      <single>ed. &amp; trans.</single>
       <multiple>eds. &amp; trans.</multiple>
     </term>
     <term name="editorial-director" form="short">
@@ -648,6 +730,7 @@
       <multiple>eds.</multiple>
     </term>
     <term name="executive-producer" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
       <single>exec. prod.</single>
       <multiple>exec. prods.</multiple>
     </term>
@@ -656,33 +739,35 @@
       <multiple>ills.</multiple>
     </term>
     <term name="narrator" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
       <single>narr.</single>
       <multiple>narrs.</multiple>
     </term>
     <term name="organizer" form="short">
+      <!-- possibly misleading: Oxford Dictionary of Abbreviations only defines this as organization or organized -->
       <single>org.</single>
       <multiple>orgs.</multiple>
     </term>
     <term name="performer" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
       <single>perf.</single>
       <multiple>perfs.</multiple>
     </term>
     <term name="producer" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
       <single>prod.</single>
       <multiple>prods.</multiple>
     </term>
     <term name="script-writer" form="short">
-      <single>writ.</single>
-      <multiple>writs.</multiple>
+      <!-- Oxford Dictionary of Abbreviations -->
+      <single>wrtr.</single>
+      <multiple>wrtrs.</multiple>
     </term>
     <term name="series-creator" form="short">
-      <single>cre.</single>
-      <multiple>cres.</multiple>
+      <single>ser. creator</single>
+      <multiple>ser. creators</multiple>
     </term>
-    <term name="translator" form="short">
-      <single>tran.</single>
-      <multiple>trans.</multiple>
-    </term>
+    <term name="translator" form="short">trans.</term> <!-- no plural -->
 
     <!-- VERB ROLE FORMS -->
     <term name="chair" form="verb">chaired by</term>
@@ -694,10 +779,14 @@
     <term name="curator" form="verb">curated by</term>
     <term name="director" form="verb">directed by</term>
     <term name="editor" form="verb">edited by</term>
+    <term name="editor-translator" form="verb">edited &amp; translated by</term>
     <term name="editortranslator" form="verb">edited &amp; translated by</term>
     <term name="editorial-director" form="verb">edited by</term>
     <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
+    <term form="verb" name="guest">
+      <single>with guest</single>
+      <multiple>with guests</multiple>
+    </term>
     <term name="host" form="verb">hosted by</term>
     <term name="illustrator" form="verb">illustrated by</term>
     <term name="interviewer" form="verb">interview by</term>
@@ -713,27 +802,25 @@
     <term name="translator" form="verb">translated by</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <!-- Omitted roles: 
-         author, chair, container-author, host, interviewer, original-author, recipient, reviewed-author
+    <!-- Omitted roles:
+         author, chair, container-author, contributor, guest, host, interviewer, original-author, recipient, reviewed-author, series-creator
     -->
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="compiler" form="verb-short">comp. by</term>
-    <term name="composer" form="verb-short">comp. by</term>
-    <term name="contributor" form="verb-short">w.</term>
-    <term name="curator" form="verb-short">cur. by</term>
+    <term name="composer" form="verb-short">comp. by</term> <!-- ODWE -->
+    <term name="curator" form="verb-short">cur. by</term> <!-- Oxford Art Online -->
     <term name="director" form="verb-short">dir. by</term>
     <term name="editor" form="verb-short">ed. by</term>
+    <term name="editor-translator" form="verb-short">ed. &amp; trans. by</term>
     <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
     <term name="editorial-director" form="verb-short">ed. by</term>
-    <term name="executive-producer" form="verb-short">exec. prod. by</term>
-    <term name="guest" form="verb-short">w. guest</term>
-    <term name="illustrator" form="verb-short">illus. by</term>
-    <term name="narrator" form="verb-short">narr. by</term>
-    <term name="organizer" form="verb-short">org. by</term>
-    <term name="performer" form="verb-short">perf. by</term>
-    <term name="producer" form="verb-short">prod. by</term>
-    <term name="script-writer" form="verb-short">writ. by</term>
-    <term name="series-creator" form="verb-short">cre. by</term>
+    <term name="executive-producer" form="verb-short">exec. prod. by</term> <!-- ODA -->
+    <term name="illustrator" form="verb-short">ill. by</term>
+    <term name="narrator" form="verb-short">narr. by</term> <!-- ODA -->
+    <term name="organizer" form="verb-short">org. by</term> <!-- ODA -->
+    <term name="performer" form="verb-short">perf. by</term> <!-- ODA -->
+    <term name="producer" form="verb-short">prod. by</term> <!-- ODA -->
+    <term name="script-writer" form="verb-short">writ. by</term> <!-- ODA -->
     <term name="translator" form="verb-short">trans. by</term>
 
     <!-- LONG MONTH FORMS -->
@@ -751,15 +838,16 @@
     <term name="month-12">December</term>
 
     <!-- SHORT MONTH FORMS -->
+    <!-- Chicago Manual of Style, 18th ed., sec. 10.44 (identical to New Hart's Rules, 2nd ed., sec. 10.2.6) -->
     <term name="month-01" form="short">Jan.</term>
     <term name="month-02" form="short">Feb.</term>
     <term name="month-03" form="short">Mar.</term>
     <term name="month-04" form="short">Apr.</term>
     <term name="month-05" form="short">May</term>
-    <term name="month-06" form="short">Jun.</term>
-    <term name="month-07" form="short">Jul.</term>
+    <term name="month-06" form="short">June</term>
+    <term name="month-07" form="short">July</term>
     <term name="month-08" form="short">Aug.</term>
-    <term name="month-09" form="short">Sep.</term>
+    <term name="month-09" form="short">Sept.</term>
     <term name="month-10" form="short">Oct.</term>
     <term name="month-11" form="short">Nov.</term>
     <term name="month-12" form="short">Dec.</term>

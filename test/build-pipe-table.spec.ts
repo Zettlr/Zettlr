@@ -16,11 +16,10 @@
 // NOTE: This is the opposite of the parse-grid-table tester. The only difference
 // is that the grid table builder only uses up as much space as necessary, while
 // the parser can work with "too much" space well.
-import buildPipeTable from '../source/common/modules/markdown-editor/table-editor/build-pipe'
 import { deepStrictEqual } from 'assert'
-import { type ColAlignment } from '@common/modules/markdown-editor/table-editor/types'
+import { buildPipeMarkdownTable } from 'source/common/util/build-pipe-markdown-table'
 
-const table: Array<{ ast: string[][], colAlignments: ColAlignment[] }> = []
+const table: Array<{ ast: string[][], colAlignments: Array<'left'|'right'|'center'> }> = []
 const tableResults: string[] = []
 
 /** * * * * * * * * * * * * * * * * * *
@@ -74,7 +73,7 @@ describe('TableEditor#buildGrid()', function () {
   for (let i = 0; i < table.length; i++) {
     it(`Should build test table ${i + 1} correctly`, function () {
       const { ast, colAlignments } = table[i]
-      deepStrictEqual(buildPipeTable(ast, colAlignments), tableResults[i])
+      deepStrictEqual(buildPipeMarkdownTable(ast, colAlignments), tableResults[i])
     })
   }
 })

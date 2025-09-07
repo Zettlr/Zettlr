@@ -16,7 +16,51 @@
  * END HEADER
  */
 
-import type { Rect, Point, AnyMenuItem, NormalItem } from '@dts/renderer/context'
+export interface CheckboxRadioItem {
+  id: string
+  label: string
+  accelerator?: string
+  type: 'checkbox'|'radio'
+  enabled?: boolean
+  checked: boolean
+}
+
+export interface SeparatorItem {
+  type: 'separator'
+}
+
+export interface SubmenuItem {
+  id: string
+  label: string
+  type: 'submenu'
+  enabled?: boolean
+  submenu: Array<CheckboxRadioItem|SeparatorItem|SubmenuItem|NormalItem>
+}
+
+export interface NormalItem {
+  id: string
+  label: string
+  accelerator?: string
+  type: 'normal'
+  enabled?: boolean
+}
+
+export type AnyMenuItem = CheckboxRadioItem | SeparatorItem | SubmenuItem | NormalItem
+
+// Any menu item w/o separators
+export type InteractiveMenuItem = CheckboxRadioItem | SubmenuItem | NormalItem
+
+export interface Rect {
+  top: number
+  left: number
+  width: number
+  height: number
+}
+
+export interface Point {
+  x: number
+  y: number
+}
 
 const ipcRenderer = window.ipc
 
@@ -59,7 +103,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
         y: targetRect.top
       }
     })
-      .then(clickedID => {
+      .then((clickedID: string|undefined) => {
         // If the user did click a menu item, notify the caller
         if (clickedID !== undefined) {
           callback(clickedID)
@@ -77,7 +121,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   for (const item of items) {
     const menuItem = renderMenuItem(item)
 
-    if (item.type !== 'submenu' && item.type !== 'separator' && item.enabled) {
+    if (item.type !== 'submenu' && item.type !== 'separator' && item.enabled !== false) {
       // Trigger a click on the "real" menu item in the back
       menuItem.addEventListener('mousedown', (event) => {
         event.preventDefault()
@@ -85,7 +129,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
         callback((item as NormalItem).id)
         appMenu.parentElement?.removeChild(appMenu) // Close the menu
       })
-    } else if (item.type === 'submenu' && item.enabled) {
+    } else if (item.type === 'submenu' && item.enabled !== false) {
       // Enable displaying the sub menu
       let closeSubmenu: null|(() => void) = null
 
@@ -144,8 +188,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     const menuItem = renderMenuItem({
       id: 'inspect-element',
       label: 'Inspect Element',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     })
 
     menuItem.addEventListener('mousedown', (event) => {
@@ -199,7 +242,7 @@ function renderMenuItem (item: AnyMenuItem, elementClass?: string): HTMLElement 
   // First create the item
   const menuItem = document.createElement('div')
   menuItem.classList.add('menu-item')
-  if (item.type !== 'separator' && !item.enabled) {
+  if (item.type !== 'separator' && item.enabled === false) {
     menuItem.classList.add('disabled')
   }
 

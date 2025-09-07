@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import DirectedGraph from '../source/app/service-providers/links/directed-graph'
+import DirectedGraph from '../source/win-stats/directed-graph'
 import assert from 'assert'
 
 const edgeList = [

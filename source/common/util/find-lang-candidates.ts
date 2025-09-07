@@ -62,7 +62,9 @@ export default function findLangCandidates<T> (lang: string, candidates: Array<T
     let cand = bcp47.parse(candidate.tag)
 
     // Every candidate must under all circumstances match the language.
-    if (cand.language !== parsedLang.language) continue
+    if (cand.language !== parsedLang.language) {
+      continue
+    }
 
     // If given, the extended subtag must also be given.
     if (parsedLang.extendedLanguageSubtags.length > 0) {
@@ -78,7 +80,9 @@ export default function findLangCandidates<T> (lang: string, candidates: Array<T
     // wants.) We check this against the length of the original language's
     // variant, because if there are no variants requested, then we assume the
     // user does not care which variant s/he gets.
-    if (parsedLang.script !== '' && parsedLang.script !== cand.script) continue
+    if (parsedLang.script !== '' && parsedLang.script !== cand.script) {
+      continue
+    }
 
     // Now let's find out if this candidate is only close, or even "best"!
     let candidateType = 'close'

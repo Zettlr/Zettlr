@@ -15,8 +15,7 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import type { AnyMenuItem, Point } from '@dts/renderer/context'
+import showPopupMenu, { type AnyMenuItem, type Point } from '@common/modules/window-register/application-menu-helper'
 const ipcRenderer = window.ipc
 
 // The following type-attributes can receive copy and paste commands
@@ -82,8 +81,7 @@ function displayContextMenu (posX: number, posY: number, target: HTMLInputElemen
       id: 'copy',
       label: trans('Copy'),
       accelerator: 'CmdOrCtrl+C',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     },
     {
       id: 'paste',
@@ -99,8 +97,7 @@ function displayContextMenu (posX: number, posY: number, target: HTMLInputElemen
       id: 'selectAll',
       label: trans('Select all'),
       accelerator: 'CmdOrCtrl+A',
-      type: 'normal',
-      enabled: true
+      type: 'normal'
     }
   ]
 

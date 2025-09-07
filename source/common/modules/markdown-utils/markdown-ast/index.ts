@@ -274,6 +274,14 @@ export interface FencedCode extends MDNode {
  */
 export interface InlineCode extends MDNode {
   type: 'InlineCode'
+
+  /**
+   * This is similar to FencedCode, in that it will be an empty string for
+   * inline code, except it is an inline MathTeX equation, in which case the
+   * info string will contain the code mark (either $ for inline, or $$ for
+   * display).
+   */
+  info: string
   /**
    * The verbatim source code. (Not represented as a TextNode since whitespace
    * is significant and it shouldn't count towards word counts, etc.)
@@ -314,9 +322,22 @@ export interface YAMLFrontmatter extends MDNode {
 export interface TableCell extends MDNode {
   type: 'TableCell'
   /**
-   * The text content of the cell TODO: Arbitrary children!
+   * The cell's content
    */
   children: ASTNode[]
+  /**
+   * Contains the raw cell contents as a string
+   */
+  textContent: string
+  /**
+   * This property contains the "actual" from and to positions of the cell (not
+   * just the actual content, but including the whitespace) just up to the cell
+   * delimiter.
+   */
+  padding: {
+    from: number
+    to: number
+  }
 }
 
 /**
@@ -344,14 +365,13 @@ export interface Table extends MDNode {
    */
   rows: TableRow[]
   /**
-   * A list of column alignments in the table. May be undefined; the default is
-   * for all columns to be left-aligned.
+   * A list of column alignments in the table.
    */
-  alignment?: Array<'left'|'center'|'right'>
+  alignment: Array<'left'|'center'|'right'>
   /**
-   * This property can optionally contain the table type in the source.
+   * This property contains the table type in the source.
    */
-  tableType?: 'grid'|'pipe'
+  tableType: 'grid'|'pipe'
 }
 
 /**
@@ -729,11 +749,18 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     }
     case 'InlineCode': {
       const [ start, end ] = node.getChildren('CodeMark')
+      let info = ''
+      const codeMark = markdown.substring(start.from, start.to)
+      if (codeMark === '$$' || codeMark === '$') {
+        info = codeMark
+      }
+
       const astNode: InlineCode = {
         type: 'InlineCode',
         name: 'InlineCode',
         from: node.from,
         to: node.to,
+        info,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         source: markdown.substring(start.to, end.from)
       }

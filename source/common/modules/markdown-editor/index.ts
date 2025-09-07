@@ -31,6 +31,7 @@ import { EditorView } from '@codemirror/view'
 import {
   EditorState,
   Text,
+  type StateEffect,
   type Extension,
   type SelectionRange
 } from '@codemirror/state'
@@ -216,7 +217,8 @@ export default class MarkdownEditor extends EventEmitter {
     readonly windowId: string,
     representedDocument: string,
     authorityAPI: DocumentAuthorityAPI,
-    configOverride?: Partial<EditorConfiguration>
+    configOverride?: Partial<EditorConfiguration>,
+    scrollSnapshot?: StateEffect<any>
   ) {
     super() // Set up the event emitter
 
@@ -243,7 +245,7 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     // ... and immediately begin loading the document
-    this.loadDocument().catch(err => console.error(err))
+    this.loadDocument(scrollSnapshot).catch(err => console.error(err))
   }
 
   /**
@@ -383,7 +385,7 @@ export default class MarkdownEditor extends EventEmitter {
    * Loads the document from main and sets up everything required to display and
    * edit it.
    */
-  async loadDocument (): Promise<void> {
+  async loadDocument (scrollSnapshot?: StateEffect<any>): Promise<void> {
     const { content, type, startVersion } = await this.authority.fetchDoc(this.representedDocument)
 
     // The documents contents have changed, so we must recreate the state
@@ -397,6 +399,12 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     this._instance.setState(state)
+    if (scrollSnapshot !== undefined) {
+      // Now that the correct document has been loaded, there will be content
+      // and we can pass the scrollSnapshot to restore the previous scroll
+      // position
+      this._instance.dispatch({ effects: scrollSnapshot })
+    }
     // Ensure the theme switcher picks the state change up; this somehow doesn't
     // properly work after the document has been mounted to the DOM.
     this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
@@ -618,10 +626,8 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {string}  text  The text to replace the selection with
    */
   replaceSelection (text: string): void {
-    const mainSel = this._instance.state.selection.main
-    this._instance.dispatch({
-      changes: { from: mainSel.from, to: mainSel.to, insert: text }
-    })
+    const transaction = this._instance.state.replaceSelection(text)
+    this._instance.dispatch(transaction)
   }
 
   /**
@@ -641,7 +647,16 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
-   * Sets the project info field of the editor state to the provided value.
+   * Whether any element (including the editor, but also any widgets or other
+   * elements inside the entire editor DOM element) has currently focus.
+   *
+   * @return  {boolean} The focus status
+   */
+  hasFocusWithin (): boolean {
+    return this._instance.dom.contains(document.activeElement)
+  }
+
+  /* Sets the project info field of the editor state to the provided value.
    *
    * @param   {ProjectInfo|null}  info  The data
    */

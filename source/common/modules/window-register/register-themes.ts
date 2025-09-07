@@ -41,7 +41,7 @@ export default function registerThemes (): void {
   })
 
   // Listen for custom CSS changes
-  ipcRenderer.on('css-provider', (evt, { command, payload }) => {
+  ipcRenderer.on('css-provider', (evt, { command, payload }: { command: 'get-custom-css-path', payload: string }) => {
     if (command === 'get-custom-css-path') {
       setCustomCss(payload)
     }
@@ -52,7 +52,7 @@ export default function registerThemes (): void {
 
   // Initial rendering of the Custom CSS
   ipcRenderer.invoke('css-provider', { command: 'get-custom-css-path' })
-    .then(cssPath => setCustomCss(cssPath))
+    .then((cssPath: string) => setCustomCss(cssPath))
     .catch(e => console.error(e))
 
   // Create the custom stylesheet which includes certain system colours which

@@ -36,10 +36,14 @@ export default async function importTextbundle (bundle: any, target: DirDescript
     let parent = file.getEntries()[0].entryName
     // It may be that there is no extra entry for the containing textbundle
     // directory. In that case, traverse up one level
-    if (path.extname(parent) !== '.textbundle') parent = path.dirname(parent)
+    if (path.extname(parent) !== '.textbundle') {
+      parent = path.dirname(parent)
+    }
     // Second time check, in case the generating ZIP library has put an image
     // in the assets folder at entry position 0.
-    if (path.extname(parent) !== '.textbundle') parent = path.dirname(parent)
+    if (path.extname(parent) !== '.textbundle') {
+      parent = path.dirname(parent)
+    }
     bundle.path = path.join(app.getPath('temp'), parent)
     bundle.knownFormat = 'textbundle'
   }
@@ -60,7 +64,9 @@ export default async function importTextbundle (bundle: any, target: DirDescript
     }
   }
 
-  if (!foundMDFile) throw new Error(trans('Malformed Textbundle: %s', path.basename(bundle.path)))
+  if (!foundMDFile) {
+    throw new Error(trans('Malformed Textbundle: %s', path.basename(bundle.path)))
+  }
 
   // Now the assets
   try {

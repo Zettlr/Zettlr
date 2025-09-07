@@ -1,5 +1,63 @@
 # Upcoming
 
+## Full TableEditor Rewrite
+
+This release contains a full rewrite of the TableEditor. The old implementation
+of the TableEditor had many bugs and inconveniences that made working with
+Markdown tables barely less cumbersome than having to deal with raw Markdown
+tables. Users criticized volatile data handling and experienced frequent data
+loss. This is why we redesigned the TableEditor from the ground up. With this
+release, we are finally able to give the new experience to you.
+
+The most important improvement is that now data loss should be a thing of the
+past. The new TableEditor makes full use of the available features of the editor
+to keep the data as safe as possible. But we didn't want to stop there. Because
+the TableEditor hadn't received a face lift in years, we asked ourselves what
+else the TableEditor was missing.
+
+From a user perspective, we have kept the design of the TableEditor as close to
+the former UX as possible, while also fixing a few oddities. Specifically, the
+buttons of the TableEditor have been fully redesigned to be more minimalist.
+Also gone is the infamous "Save" button that was not able to help prevent data
+loss. The new TableEditor now features proper syntax highlighting so that you
+can more easily verify that you are authoring proper Markdown. In addition, the
+new TableEditor is now faster, more memory efficient, and it should be simpler
+to fill entire tables with data.
+
+Lastly, one big improvement of the new TableEditor is that you don't have to use
+it to be more efficient in authoring tables. Specifically, we decided to
+implement all functionality fully keyboard-oriented. This means that for any
+modification you may want to make there is now a shortcut. Adding and removing
+rows and columns; clearing data from rows, columns, or the entire table;
+aligning column text left, right, or center; swapping rows or columns; etc.
+Anything is now possible either with the new built-in context menu, or a quick
+keyboard shortcut.
+
+There is only one thing we stopped to support: grid tables. Given that their
+structure can be much more difficult to parse we wanted to err on the side of
+caution. However, some keyboard shortcuts such as navigating between cells will
+still work with grid tables. Since users will most of the time only edit simple
+tables, we believe this to be an acceptable compromise — while not completely
+ruling out supporting grid tables, especially since Pandoc has started heavily
+investing in an improvement of their grid table support.
+
+In any case, we hope that the new TableEditor will finally fix the issues you
+experienced over the past years — and we would like to apologize that it took us
+so long to fix all of these issues at once!
+
+## Changes to the snippet `$FILENAME` variable
+
+In this update, we have implemented a change in which the `$FILENAME` variable
+no longer includes the filename extension. This means that, while `$FILENAME`
+has in the past resolved to `my-file.md`, it will now only include `my-file`.
+
+If you rely on the `$FILENAME`-variable in any of your snippets, please make
+sure to update it by adding the variable `$EXTENSION` behind it. In other
+words, everywhere you need only the filename without its extension, you can
+keep `$FILENAME`, but wherever you need both the file name and its file
+extension, please use `$FILENAME$EXTENSION`. (The latter variable includes
+the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
+
 ## Image Viewer and PDF Viewer
 
 This update brings with it a great new feature for Zettlr: A built-in image
@@ -26,6 +84,146 @@ iframe.
 Note that both image and PDF viewers are just that: viewers. As Zettlr is a text
 app, we do not plan on implementing any ways of editing images or PDF files. To
 annotate your PDF files, please continue using your existing workflow.
+
+## GUI and Functionality
+
+- **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
+  functionality of the previous version, with the exception of more safeguards
+  against data loss, and more ergonomic usage.
+- Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
+  footnotes).
+- **Feature**: Full-text (aka. global) search runs can now be cancelled via a
+  dedicated button. You can now also trigger a new search while another search
+  is already running.
+- **Feature**: Individual global search results can now be copied to the
+  clipboard (#2070).
+- **Change**: Snippets: The `$FILENAME` variable now does not contain the file
+  extension anymore. Users who also want the extension should update their
+  snippets to `$FILENAME$EXTENSION` (#4191).
+- The diagnostics info field in the statusbar now toggles the lint panel,
+  instead of only opening the panel (#5847).
+- Fixed WebP images not rendering from relative paths (#5181).
+- Fixed the behavior when clicking widgets (citations, etc.) to accurately
+  select only the widget's source text (#5682).
+- Update `it-IT` translation (#5831).
+- Update `da-DA` translations (#5868).
+- Fixed incorrect cursor position after inserting IDs (#5846).
+- The toolbar word counter no longer wraps (#5774; #5881).
+- Improve dark mode linter panel styling (#5882).
+- Fix drop cursor styling (#5883).
+- Fix context menu entry "Insert table" not working (#5835).
+- The keyboard shortcuts for snippets no longer require the field, thus
+  preventing errors in `EditorView`s that map the corresponding shortcuts but
+  don't have snippets installed.
+- The three-way-toggle for the file manager and global search does not wrap on
+  Windows anymore (#5876).
+
+## Under the Hood
+
+- Update Electron to version `37.2.5`.
+- Update Pandoc to version `3.8`.
+- Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
+  declarations (`if`, `for`, `while`, etc.).
+- The `enabled` property of context menu items is now optional, and defaults to
+  `true`.
+- `EditorPane`s will no longer load all documents at the same time, and instead
+  reuse the existing `MarkdownEditor` component for a single document. This
+  greatly reduces memory consumption, especially for very full tab bars, since
+  only a single document will be actively rendered at any one time.
+- Moved the previously shared common types for the context menu in the renderer
+  into the correct module to colocate the code. The shared types have been a
+  remnant from a time before TypeScript supported the `type` keyword, and will
+  subsequently be removed.
+- Moved the `DirectedGraph` class from the link provider to the stats window.
+
+# 3.6.0
+
+## Text Transformations
+
+Zettlr now features a set of several text transformation commands in the editor.
+Using these commands, you can transform various pieces of text in the editor
+using several strategies aimed at working with both regular text (which you can,
+e.g., transform between sentence or title case) and corrupted text (from which
+you can remove control characters, unnecessary line breaks, and clean up
+quotation marks). In total, Zettlr now ships with 13 such transform commands,
+but many more are possible.
+
+To utilize these transformations, simply select the text you wish to transform,
+open the context menu on it, and select the corresponding transformation from
+the context menu.
+
+The available transforms as of now are:
+
+* `Zap gremlins`: Removes unwanted control characters (such as form feeds,
+  vertical tabs, and others), which sometimes end up in recognized PDF text.
+* `Strip duplicate spaces`: Removes any superfluous spaces.
+* `Italics to quotes`: Turns italic markers (e.g., `*text*`) into quotes
+  (`"text"`).
+* `Quotes to italics`: Turns quotation marks (e.g., `"text"`) into italic
+  markers (`*text*`).
+* `Remove line breaks`: Removes superfluous linebreaks while retaining any
+  paragraphs (separated by two consecutive linebreaks).
+* `Straighten quotes`: Turns smart, or "magic quotes" into regular quotes.
+* `Ensure double quotes`: Turns any type of quotation (which includes backticks,
+  since those sometimes appear in text copied from PDF files!) into regular
+  double quotes.
+* `Double quotes to single`: Turns any straight double quotes to single quotes.
+* `Single quotes to double`: Turns single quotes into double quotes.
+* `Emdash — Add spaces around`: Ensures that all em-dashes (`—`) in the text are
+  surrounded by spaces.
+* `Emdash — Remove spaces around`: Ensures that no em-dashes (`—`) in the text
+  are surrounded by spaces.
+* `To sentence case`: Turns the selected text to sentence case.
+* `To title case`: Turns The Selected Text To Title Case.
+
+## GUI and Functionality
+
+- **Feature**: Zettlr now has text transformations. With these, you can change
+  selected pieces of text using a quick access command menu (#5701). Special
+  thanks to @richdouglasevans for implementing this.
+- **Change**: Zettlr will no longer parse Markdown-like files that exceed ca.
+  10 MB in size. After some testing, we have determined that 10 MB seems to be
+  a balanced trade-off between parsing as many files as possible and preventing
+  the app to crash (especially on slower computers). Note that this only affects
+  the caching of certain pieces of metadata, such as title, heading level 1, and
+  ID. You will still be able to open and edit the file. For more context, see
+  issue #5801.
+- Fixed a bug that would prevent the creation of new directories via the
+  shortcut (#5769).
+- Fixed a bug that prevented retention of user-determined dark-mode setting on
+  platforms other than macOS during application restarts (#570).
+- Fixed the list of related files disappearing when switching sidebar tabs
+  (#5795).
+- Windows will now receive black as their background color on Windows and Linux
+  if dark mode is active, preventing white flicker during window opening before
+  the UI is ready (#5809).
+
+## Under the Hood
+
+- Bump Pandoc to version `3.7.0.2`.
+- Bump Electron to version `37.2.0`.
+- The primary app service container can now be retrieved using the factory
+  method `getAppServiceContainer`. This makes it possible to reduce a few
+  recursive dependencies on passing the service container down and will help
+  disentangle the main process services in the future.
+
+# 3.5.1
+
+## GUI and Functionality
+
+- Fixed a bug that would make using certain keys such as `Enter`, `Backspace`,
+  or quotes in code editors in the Assets Manager unusable (#5797).
+- Added Kazakh language (#5771).
+- Improve fenced code block language detection when using fenced code
+  attributes. Now, using the recommended Pandoc-style syntax for attribute
+  strings will correctly match the language in the info string to one of the
+  available identifiers.
+
+## Under the Hood
+
+(nothing here)
+
+# 3.5.0
 
 ## GUI and Functionality
 
@@ -67,6 +265,7 @@ annotate your PDF files, please continue using your existing workflow.
   `Cmd-Alt-[` (macOS) for folding code, `Ctrl-Shift-]` or `Cmd-Alt-]` for
   unfolding, `Ctrl-Alt-[` for folding all, and `Ctrl-Alt-]` for unfolding all.
 - Update `fr-FR` translation (#5738).
+- Update `cs-CZ` translation (#5775).
 
 ## Under the Hood
 
@@ -481,6 +680,8 @@ from the default profiles: `shift-heading-level-by: 1`.
 - Zettlr now remembers the widths of file manager and sidebar
 - You can now reset the file manager and sidebar widths by double-clicking the
   corresponding resizer
+- Fixed an issue with the Markdown AST parser that would wrongly parse tables
+  with empty cells and forget some of them
 - Copying plain links in the form `<http://www.example.com>` will now remove the
   angled brackets (#5285)
 - Reverted a change from 3.1.0 which altered the process of creating new files

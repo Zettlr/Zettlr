@@ -25,8 +25,13 @@ export default function sortByPDF (a: string, b: string): number {
   let isAPDF = pdfRE.test(a)
   let isBPDF = pdfRE.test(b)
 
-  if (isAPDF && isBPDF) return 0
-  if (isAPDF) return -1
-  if (isBPDF) return 1
+  if (isAPDF && isBPDF) {
+    return 0
+  } else if (isAPDF) {
+    return -1
+  } else if (isBPDF) {
+    return 1
+  }
+
   return 0
 }

@@ -19,42 +19,42 @@
       class="editor-container"
       v-on:drop="handleDrop($event, 'editor')"
     >
-      <template v-for="file in openFiles" v-bind:key="file.path">
-        <ImageViewer
-          v-if="hasImageExt(file.path)"
-          v-show="activeFile?.path === file.path"
-          v-bind:file="file"
-          v-bind:leaf-id="leafId"
-          v-bind:active-file="activeFile"
-          v-bind:window-id="windowId"
-          v-bind:editor-commands="editorCommands"
-        ></ImageViewer>
-        <PDFViewer
-          v-else-if="hasPDFExt(file.path)"
-          v-show="activeFile?.path === file.path"
-          v-bind:file="file"
-          v-bind:leaf-id="leafId"
-          v-bind:active-file="activeFile"
-          v-bind:window-id="windowId"
-          v-bind:editor-commands="editorCommands"
-        ></PDFViewer>
-
+      <template v-if="activeFileDescriptor !== undefined">
         <!--
           Teleport the correct editor that needs to be in distraction free
           outside the DOM structure to have it render on top of everything else.
         -->
-        <Teleport v-else to="div#window-content" v-bind:disabled="!distractionFree || activeFile?.path !== file.path">
-          <MainEditor
-            v-show="activeFile?.path === file.path"
-            v-bind:file="file"
-            v-bind:distraction-free="distractionFree && activeFile?.path === file.path"
+        <Teleport to="div#window-content" v-bind:disabled="!distractionFree">
+          <ImageViewer
+            v-if="hasImageExt(activeFileDescriptor.path)"
+            v-bind:file="activeFileDescriptor"
             v-bind:leaf-id="leafId"
             v-bind:active-file="activeFile"
             v-bind:window-id="windowId"
             v-bind:editor-commands="editorCommands"
+          ></ImageViewer>
+          <PDFViewer
+            v-else-if="hasPDFExt(activeFileDescriptor.path)"
+            v-bind:file="activeFileDescriptor"
+            v-bind:leaf-id="leafId"
+            v-bind:active-file="activeFile"
+            v-bind:window-id="windowId"
+            v-bind:editor-commands="editorCommands"
+          ></PDFViewer>
+          <MainEditor
+            v-else
+            v-bind:file="activeFileDescriptor"
+            v-bind:distraction-free="distractionFree"
+            v-bind:leaf-id="leafId"
+            v-bind:active-file="activeFile"
+            v-bind:window-id="windowId"
+            v-bind:editor-commands="editorCommands"
+            v-bind:scroll-position-map="scrollPositionMap"
             v-on:global-search="emit('globalSearch', $event)"
           ></MainEditor>
         </Teleport>
+      </template>
+      <template v-for="file in openFiles" v-bind:key="file.path">
       </template>
 
       <!-- Show empty pane if there are no files -->
@@ -128,6 +128,7 @@ import ImageViewer from './file-viewers/ImageViewer.vue'
 import { hasImageExt, hasPDFExt } from '@common/util/file-extention-checks'
 import PDFViewer from './file-viewers/PDFViewer.vue'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { type StateEffect } from '@codemirror/state'
 
 const ipcRenderer = window.ipc
 
@@ -146,6 +147,15 @@ type DragTargetAreas = 'editor'|'top'|'left'|'right'|'bottom'
 
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
+// UNREFFED SCROLL MAP
+// Each individual editor pane has its own scroll position map so that the
+// editors can save their scroll positions. This enables us to only display a
+// single document, thus saving lots of memory, but at the same time keep the
+// feeling of a tabbed interface. The scroll map is for each pane, since users
+// may have the same document open in two panes, and want one file to be
+// scrolled differently than the same file in a different pane.
+const scrollPositionMap = new Map<string, StateEffect<any>>()
+
 const documentTabDrag = ref<boolean>(false)
 const documentTabDragWhere = ref<DragTargetAreas|undefined>(undefined)
 
@@ -162,6 +172,14 @@ const distractionFree = computed<boolean>(() => windowStateStore.distractionFree
 const node = computed<LeafNodeJSON|undefined>(() => documentTreeStore.paneData.find((leaf: LeafNodeJSON) => leaf.id === props.leafId))
 const activeFile = computed<OpenDocument|null>(() => node.value?.activeFile ?? null)
 const openFiles = computed<OpenDocument[]>(() => node.value?.openFiles ?? [])
+const activeFileDescriptor = computed(() => {
+  const af = activeFile.value
+  if (af === null) {
+    return undefined
+  }
+
+  return openFiles.value.find(d => d.path === af.path)
+})
 const hasNoOpenFiles = computed<boolean>(() => openFiles.value.length === 0)
 
 onMounted(() => {
