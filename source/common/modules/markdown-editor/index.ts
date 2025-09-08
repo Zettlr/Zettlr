@@ -537,11 +537,11 @@ export default class MarkdownEditor extends EventEmitter {
 
     // The section ends at either the next higher or same-level heading
     const nextSections = toc.slice(toc.indexOf(entry) + 1)
-    let endOfStartPos = this._instance.state.doc.length
+    let entryEndPos = this._instance.state.doc.length
 
     for (const section of nextSections) {
       if (section.level <= entry.level) {
-        endOfStartPos = section.pos
+        entryEndPos = section.pos
         break
       }
     }
@@ -549,14 +549,14 @@ export default class MarkdownEditor extends EventEmitter {
     const toLineNumber = to !== -1 ? to : this._instance.state.doc.lines
     const toLine = this._instance.state.doc.line(toLineNumber)
     const targetPos = to !== -1 ? toLine.from : toLine.to
-    const sectionText = this._instance.state.doc.slice(entry.pos, endOfStartPos)
+    const sectionText = this._instance.state.doc.slice(entry.pos, entryEndPos)
     let entryContents = sectionText.toString()
 
     if (to === -1) {
       // if we are moving to the end of the document,
       // but not a new line, we need to add two new
       // lines before entryContents
-      const prevLine = this._instance.state.doc.line(toLineNumber - 1)
+      const prevLine = this._instance.state.doc.line(Math.max(1, toLineNumber - 1))
       if (toLine.text.trim() !== '') {
         entryContents = '\n\n' + entryContents
       // if the last line is new, but the previous one is not,
@@ -567,7 +567,7 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     const sectionLastLine = sectionText.line(sectionText.lines)
-    const sectionPrevLine = sectionText.line(sectionText.lines - 1)
+    const sectionPrevLine = sectionText.line(Math.max(1, sectionText.lines - 1))
     // if the section we are moving does not end
     // in a new line, we need to add two new lines
     //  after entryContents
@@ -584,7 +584,7 @@ export default class MarkdownEditor extends EventEmitter {
     this._instance.dispatch({
       changes: [
         // First, "cut"
-        { from: entry.pos, to: endOfStartPos, insert: '' },
+        { from: entry.pos, to: entryEndPos, insert: '' },
         // Then, "paste"
         { from: targetPos, insert: entryContents }
       ]
