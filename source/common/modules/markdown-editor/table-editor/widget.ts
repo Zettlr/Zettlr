@@ -267,7 +267,7 @@ function updateRow (
   tr: HTMLTableRowElement,
   astRow: TableRow,
   idx: number,
-  align: Array<'left'|'center'|'right'>,
+  align: Array<'left'|'center'|'right'|null>,
   view: EditorView,
   rowsChanged: boolean,
   selectionCoords?: { col: number, row: number },
@@ -387,7 +387,7 @@ function updateRow (
         tds[i].appendChild(elem)
       }
     }
-    
+
     if (i === 0 && row === idx) {
       // Selection is in this row
       for (const elem of generateRowControls(view)) {
@@ -399,7 +399,7 @@ function updateRow (
     // include whitespace here (minus one space padding if applicable).
     tds[i].dataset.cellFrom = String(cell.from)
     tds[i].dataset.cellTo = String(cell.to)
-    tds[i].style.textAlign = align[i] ?? 'left'
+    tds[i].style.textAlign = align[i] ?? ''
 
     const contentWrapper: HTMLDivElement = tds[i].querySelector('div.content')!
     const subview = EditorView.findFromDOM(contentWrapper)

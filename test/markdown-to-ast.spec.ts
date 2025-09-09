@@ -27,7 +27,7 @@ const TESTERS: Array<{ description: string, input: string, output: ASTNode }> = 
       children: [
         {
           type: 'Table', name: 'Table', from: 0, to: 54, whitespaceBefore: '',
-          tableType: 'pipe', alignment: [ 'left', 'left' ],
+          tableType: 'pipe', alignment: [ null, null ],
           rows: [
             {
               type: 'TableRow', name: 'TableHeader', from: 0, to: 16, whitespaceBefore: '', isHeaderOrFooter: true,
@@ -74,7 +74,7 @@ C|D`,
       children: [
         {
           type: 'Table', name: 'Table', tableType: 'pipe', from: 0, to: 11, whitespaceBefore: '',
-          alignment: ['left', 'left'],
+          alignment: [null, null],
           rows: [
             {
               type: 'TableRow', name: 'TableHeader', isHeaderOrFooter: true, from: 0, to: 3, whitespaceBefore: '',

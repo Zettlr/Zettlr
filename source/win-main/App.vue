@@ -692,16 +692,9 @@ function editorSidebarSplitComponentResized (sizes: [number, number]): void {
 
 function insertTable (spec: { rows: number, cols: number }): void {
   // Generate a simple table based on the info, and insert it.
-  const ast: string[][] = []
-  const align: Array<'center'|'left'|'right'> = []
-  for (let i = 0; i < spec.rows; i++) {
-    const row: string[] = []
-    align.push('left')
-    for (let k = 0; k < spec.cols; k++) {
-      row.push('')
-    }
-    ast.push(row)
-  }
+  const align: Array<'center'|'left'|'right'|null> = Array(spec.cols).fill(null)
+  const row = (): string[] => Array(spec.cols).fill('')
+  const ast: string[][] = Array.from({ length: spec.rows }, row)
 
   editorCommands.value.data = buildPipeMarkdownTable(ast, align)
   editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection

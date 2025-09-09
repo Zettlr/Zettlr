@@ -28,7 +28,7 @@ import type { SyntaxNode } from '@lezer/common'
  *
  * @return  {(EditorView): boolean}             A CodeMirror compatible command function
  */
-export function setAlignment (alignTo: 'left'|'right'|'center'): (target: EditorView) => boolean {
+export function setAlignment (alignTo?: 'left'|'right'|'center'): (target: EditorView) => boolean {
   return (target) => {
     const changes = mapSelectionsWithTables<ChangeSpec>(target, ctx => {
       const delimNodes = ctx.tableNode.getChildren('TableDelimiter')
@@ -36,33 +36,37 @@ export function setAlignment (alignTo: 'left'|'right'|'center'): (target: Editor
       if (delimNodes.length > 1) {
         node = delimNodes.find(node => target.state.sliceDoc(node.from, node.to).includes('='))
       }
-  
+
       if (node === undefined) {
         return undefined
       }
-  
+
       const delimLine = target.state.sliceDoc(node.from, node.to)
-  
+
       // TODO: Iterate over all ranges (but only once per row)
       const idx = findColumnIndexByRange(ctx.ranges[0], ctx.offsets.outer)
-  
+
       if (idx === undefined) {
         return undefined
       }
-  
+
       const delimChar = ctx.tableAST.tableType === 'grid' ? '+' : delimLine.includes('|') ? '|' : '+'
       const fillChar = ctx.tableAST.tableType === 'grid' ? '=' : '-'
       const delimOffsets = getDelimiterLineCellOffsets(delimLine, delimChar)
       const [ from, to ] = delimOffsets[idx]
-      if (alignTo === 'left') {
-        return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(to - from) }
-      } else if (alignTo === 'right') {
-        return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(to - from - 1) + ':' }
-      } else {
-        return { from: node.from + from, to: node.from + to, insert: ':' + fillChar.repeat(to - from - 2) + ':' }
+      // ensure that each delimiter contains at least 3 characters
+      switch (alignTo) {
+        case 'left':
+          return { from: node.from + from, to: node.from + to, insert: ':' + fillChar.repeat(Math.max(to - from - 1, 2)) }
+        case 'right':
+          return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(Math.max(to - from - 1, 2)) + ':' }
+        case 'center':
+          return { from: node.from + from, to: node.from + to, insert: ':' + fillChar.repeat(Math.max(to - from - 2, 1)) + ':' }
+        default:
+          return { from: node.from + from, to: node.from + to, insert: fillChar.repeat(Math.max(to - from, 3)) }
       }
     })
-  
+
     if (changes.length > 0) {
       target.dispatch({ changes })
       return true
@@ -121,14 +125,17 @@ export function alignTables (target: EditorView, pos?: number): boolean {
         const cell = cellContents[i][j]
         const pad = targetColumnSizes[j] - cell.length
         switch (ctx.tableAST.alignment[j]) {
-          case 'center':
-            newContents[i].push(' '.repeat(Math.floor(pad/2)) + cell + ' '.repeat(Math.ceil(pad/2)))
+          case 'left':
+            newContents[i].push(' ' + cell.padEnd(targetColumnSizes[j] - 1, ' '))
             break
           case 'right':
             newContents[i].push(cell.padStart(targetColumnSizes[j] - 1, ' ') + ' ')
             break
+          case 'center':
+            newContents[i].push(' '.repeat(Math.floor(pad/2)) + cell + ' '.repeat(Math.ceil(pad/2)))
+            break
           default:
-            newContents[i].push(' ' + cell.padEnd(targetColumnSizes[j] - 1, ' '))
+            newContents[i].push(' ')
             break
         }
       }
@@ -137,15 +144,19 @@ export function alignTables (target: EditorView, pos?: number): boolean {
     const delimRow: string[] = []
     for (let i = 0; i < ctx.tableAST.alignment.length; i++) {
       const size = targetColumnSizes[i]
+      // ensure that each delimiter contains at least 3 characters
       switch (ctx.tableAST.alignment[i]) {
-        case 'center':
-          delimRow.push(':' + '-'.repeat(size - 2) + ':')
+        case 'left':
+          delimRow.push(':' + '-'.repeat(Math.max(size - 1, 2)))
           break
         case 'right':
-          delimRow.push('-'.repeat(size - 1) + ':')
+          delimRow.push('-'.repeat(Math.max(size - 1, 2)) + ':')
+          break
+        case 'center':
+          delimRow.push(':' + '-'.repeat(Math.max(size - 2, 1)) + ':')
           break
         default:
-          delimRow.push(':' + '-'.repeat(size - 1))
+          delimRow.push('-'.repeat(Math.max(size, 3)))
       }
     }
 

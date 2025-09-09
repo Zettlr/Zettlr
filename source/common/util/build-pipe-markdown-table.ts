@@ -21,27 +21,29 @@
  * @return  {number[]}       The maximum sizes for all columns
  */
 export default function calculateColSizes (ast: string[][]): number[] {
-  const sizes = []
-  for (let col = 0; col < ast[0].length; col++) {
-    let colSize = 0
-    for (let row = 0; row < ast.length; row++) {
-      const cell = ast[row][col]
+  const numCols = ast[0].length
+  const sizes: number[] = Array(numCols).fill(0)
+
+  for (const row of ast) {
+    for (let idx = 0; idx < numCols; idx++) {
+      const cell = row[idx]
+
       let cellLength = cell.length
       if (cell.includes('\n')) {
         // Multi-line cell -> take the longest of the containing rows
         cellLength = Math.max(...cell.split('\n').map(x => x.length))
       }
 
-      if (cellLength > colSize) {
-        colSize = cellLength
+      if (cellLength > sizes[idx]) {
+        sizes[idx] = cellLength
       }
     }
-    sizes.push(colSize)
   }
+
   return sizes
 }
 
-export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'center'|'left'|'right'>): string {
+export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'center'|'left'|'right'|null>): string {
   if (ast.length < 2) {
     throw new Error('Cannot build pipe table: Must have at least two rows.')
   }
@@ -51,11 +53,19 @@ export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'ce
 
   // Then, build the table in a quick MapReduce fashion
   const rows = ast.map(row => {
-    const rowContents = row.map((col, idx) => {
-      if (colAlignment[idx] === 'right') {
-        return col.padStart(colSizes[idx], ' ')
-      } else {
-        return col.padEnd(colSizes[idx], ' ')
+    const rowContents = row.map((cell, idx) => {
+      let pad = Math.max(colSizes[idx], 1)
+
+      switch (colAlignment[idx]) {
+        case 'left':
+          return cell.padEnd(pad, ' ')
+        case 'right':
+          return cell.padStart(pad, ' ')
+        case 'center':
+          pad = pad - cell.length
+          return ' '.repeat(Math.floor(pad/2)) + cell + ' '.repeat(Math.ceil(pad/2))
+        default:
+          return cell.padEnd(pad, ' ')
       }
     }).join(' | ')
     return `| ${rowContents} |`
@@ -63,12 +73,15 @@ export function buildPipeMarkdownTable (ast: string[][], colAlignment: Array<'ce
 
   // Finally, insert the required header row at index 2
   const headerRowContents = colSizes.map((size, idx) => {
-    if (colAlignment[idx] === 'left') {
-      return '-'.repeat(size + 2)
-    } else if (colAlignment[idx] === 'center') {
-      return ':' + '-'.repeat(size) + ':'
-    } else {
-      return '-'.repeat(size + 1) + ':'
+    switch (colAlignment[idx]) {
+      case 'left':
+        return ':' + '-'.repeat(Math.max(size + 1, 2))
+      case 'right':
+        return '-'.repeat(Math.max(size + 1, 2)) + ':'
+      case 'center':
+        return ':' + '-'.repeat(Math.max(size, 1)) + ':'
+      default:
+        return '-'.repeat(Math.max(size + 2, 3))
     }
   }).join('|')
 
