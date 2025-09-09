@@ -248,7 +248,6 @@ body.darwin {
   div#toolbar {
     // On macOS, there is no titlebar, and as such we need to make the toolbar draggable
     -webkit-app-region: drag;
-    .toolbar-overflow > * { -webkit-app-region: no-drag; }
 
     height: @toolbar-height;
     font-size: @font-size;
@@ -275,6 +274,7 @@ body.darwin {
       background-color: transparent;
       border: none;
       padding: 4px 8px;
+      -webkit-app-region: no-drag;
 
       &:hover {
         background-color: rgb(230, 230, 230);
