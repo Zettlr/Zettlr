@@ -248,7 +248,7 @@ body.darwin {
   div#toolbar {
     // On macOS, there is no titlebar, and as such we need to make the toolbar draggable
     -webkit-app-region: drag;
-    & > * { -webkit-app-region: no-drag; }
+    .toolbar-overflow > * { -webkit-app-region: no-drag; }
 
     height: @toolbar-height;
     font-size: @font-size;
