@@ -4061,10 +4061,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^5.6.0":
-  version: 5.6.0
-  resolution: "chalk@npm:5.6.0"
-  checksum: 10/f0e0646a72adbd0f6e73441d3872d7f2f40ba98052924f08a30c10634ec6b1e2cd19cc3c40cc21081dad640e2a1a2749030418571690b89bd7782babf7f89866
+"chalk@npm:^5.6.2":
+  version: 5.6.2
+  resolution: "chalk@npm:5.6.2"
+  checksum: 10/1b2f48f6fba1370670d5610f9cd54c391d6ede28f4b7062dd38244ea5768777af72e5be6b74fb6c6d54cb84c4a2dff3f3afa9b7cb5948f7f022cfd3d087989e0
   languageName: node
   linkType: hard
 
@@ -14770,7 +14770,7 @@ __metadata:
     archiver: "npm:^7.0.1"
     astrocite: "npm:^0.16.4"
     bcp-47: "npm:^2.1.0"
-    chalk: "npm:^5.6.0"
+    chalk: "npm:^5.6.2"
     chart.js: "npm:^4.5.0"
     chokidar: "npm:^4.0.3"
     citeproc: "npm:^2.4.63"
