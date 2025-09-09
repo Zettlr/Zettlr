@@ -558,6 +558,7 @@ body div#global-search-pane {
   p {
     margin-top: 5px;
     display: flex;
+    flex-wrap: wrap;
     gap: 5px;
   }
 
