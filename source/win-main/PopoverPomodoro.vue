@@ -9,9 +9,11 @@
         {{ currentPhaseLabel }}
       </p>
       <hr>
-      <button v-on:click="stopPomodoro">
-        {{ stopLabel }}
-      </button>
+      <div class="pomodoro-button">
+        <button v-on:click="stopPomodoro">
+          {{ stopLabel }}
+        </button>
+      </div>
     </template>
     <template v-else>
       <!-- Display set up -->
@@ -52,9 +54,11 @@
         v-bind:max="100"
       ></SliderControl>
       <hr>
-      <button v-on:click="startPomodoro">
-        {{ startLabel }}
-      </button>
+      <div class="pomodoro-button">
+        <button v-on:click="startPomodoro">
+          {{ startLabel }}
+        </button>
+      </div>
     </template>
   </PopoverWrapper>
 </template>
@@ -176,6 +180,15 @@ p.pomodoro-big {
   font-size: 200%;
   text-align: center;
   margin: 10px;
+}
+
+.pomodoro-button {
+  display: flex;
+  justify-content: center;
+
+  button {
+    width: stretch;
+  }
 }
 
 .form-control {
