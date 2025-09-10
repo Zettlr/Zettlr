@@ -175,6 +175,11 @@ body {
       padding-bottom: 5px;
     }
 
+    button {
+      width: stretch;
+      margin: 5px;
+    }
+
     .form-control {
       padding: 5px;
       select {
@@ -182,7 +187,6 @@ body {
         }
     }
 
-    button,
     .radio-group-container {
       margin: 5px;
     }
