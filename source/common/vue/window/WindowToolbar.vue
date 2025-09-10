@@ -133,7 +133,7 @@ function checkOverflow () {
   if (scrollArea.value) {
     const sa = scrollArea.value
     canScrollLeft.value = sa.scrollLeft > 0
-    canScrollRight.value = sa.scrollLeft + sa.clientWidth < sa.scrollWidth
+    canScrollRight.value = Math.ceil(sa.scrollLeft + sa.clientWidth) < sa.scrollWidth
   }
 }
 
