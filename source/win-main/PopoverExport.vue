@@ -1,6 +1,6 @@
 <template>
   <PopoverWrapper v-bind:target="target" v-on:close="$emit('close')">
-    <div class="exporter">
+    <div class="toolbar-export">
       <h3>Export</h3>
       <p><strong>{{ filename }}</strong></p>
       <SelectControl
@@ -167,7 +167,7 @@ function getDisplayText (item: PandocProfileMetadata): string {
 
 <style lang="less">
 body {
-  .exporter {
+  .toolbar-export {
     margin: 5px;
 
     h3, p {

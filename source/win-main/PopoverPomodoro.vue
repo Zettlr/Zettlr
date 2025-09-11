@@ -191,6 +191,10 @@ p.pomodoro-big {
   }
 }
 
+.slider-group input {
+  margin-bottom: 5px
+}
+
 .form-control {
   padding: 5px;
 
