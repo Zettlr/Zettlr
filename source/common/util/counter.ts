@@ -14,8 +14,6 @@
 import type { ASTNode } from '@common/modules/markdown-utils/markdown-ast'
 import { extractTextnodes } from '@common/modules/markdown-utils'
 
-const interpunctionRE = /^[-–—.…:;,'%/\\_¡!¿?()[\]{}]+$/
-
 /**
  * Takes an AST, extracts the text nodes and parses them into a pre-cleaned list
  * of words within the document.
@@ -28,7 +26,7 @@ const interpunctionRE = /^[-–—.…:;,'%/\\_¡!¿?()[\]{}]+$/
  *
  * @return  {string[]}        The list of words
  */
-function getCleanedWords (ast: ASTNode, from = 0, to?: number): string[] {
+function getCleanedWords (ast: ASTNode, from = 0, to?: number, locale?: string): string[] {
   let textNodes = extractTextnodes(ast)
   if (from > 0) {
     textNodes = textNodes.filter(node => node.from >= from || node.to >= from)
@@ -49,12 +47,18 @@ function getCleanedWords (ast: ASTNode, from = 0, to?: number): string[] {
     })
   }
 
-  const plainText = textNodes.map(node => node.value)
+  locale = locale !== undefined ? locale : window.config.get('appLang')
+  const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
+  const plainText = textNodes
+    .flatMap(node => {
+      const segments = []
+      for (const { segment, isWordLike } of segmenter.segment(node.value)) {
+        if (isWordLike === true) { segments.push(segment) }
+      }
+      return segments
+    })
+
   return plainText
-    .join(' ')
-    .split(/[\s ]+/)
-    .filter(w => w.trim() !== '')
-    .filter(word => !interpunctionRE.test(word))
 }
 
 /**
@@ -68,8 +72,8 @@ function getCleanedWords (ast: ASTNode, from = 0, to?: number): string[] {
  *
  * @return  {number}         The number of words in the file.
  */
-export function countWords (ast: ASTNode, from = 0, to?: number): number {
-  return getCleanedWords(ast, from, to).length
+export function countWords (ast: ASTNode, from = 0, to?: number, locale?: string): number {
+  return getCleanedWords(ast, from, to, locale).length
 }
 
 /**
@@ -83,8 +87,8 @@ export function countWords (ast: ASTNode, from = 0, to?: number): number {
  *
  * @return  {number}         The number of characters in the file
  */
-export function countChars (ast: ASTNode, from = 0, to?: number): number {
-  return getCleanedWords(ast, from, to)
+export function countChars (ast: ASTNode, from = 0, to?: number, locale?: string): number {
+  return getCleanedWords(ast, from, to, locale)
     .map(w => w.length)
     .reduce((prev, cur) => prev + cur, 0)
 }
@@ -100,8 +104,8 @@ export function countChars (ast: ASTNode, from = 0, to?: number): number {
  *
  * @return  {{words, chars}}        Word and character counts
  */
-export function countAll (ast: ASTNode, from = 0, to?: number): { words: number, chars: number } {
-  const words = getCleanedWords(ast, from, to)
+export function countAll (ast: ASTNode, from = 0, to?: number, locale?: string): { words: number, chars: number } {
+  const words = getCleanedWords(ast, from, to, locale)
   return {
     words: words.length,
     chars: words.map(w => w.length).reduce((prev, cur) => prev + cur, 0)
