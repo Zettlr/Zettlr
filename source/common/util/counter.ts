@@ -91,8 +91,7 @@ export function countWords (ast: ASTNode, from = 0, to?: number, locale?: string
  */
 export function countChars (ast: ASTNode, from = 0, to?: number, locale?: string): number {
   return getCleanedWords(ast, from, to, locale)
-    .map(w => w.length)
-    .reduce((prev, cur) => prev + cur, 0)
+    .reduce((prev, cur) => prev + cur.length, 0)
 }
 
 /**
@@ -110,6 +109,6 @@ export function countAll (ast: ASTNode, from = 0, to?: number, locale?: string):
   const words = getCleanedWords(ast, from, to, locale)
   return {
     words: words.length,
-    chars: words.map(w => w.length).reduce((prev, cur) => prev + cur, 0)
+    chars: words.reduce((prev, cur) => prev + cur.length, 0)
   }
 }
