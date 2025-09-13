@@ -47,7 +47,9 @@ function getCleanedWords (ast: ASTNode, from = 0, to?: number, locale?: string):
     })
   }
 
-  locale = locale !== undefined ? locale : window.config.get('appLang')
+  const appLang: string | undefined =  typeof window !== 'undefined' ? window.config.get('appLang') : undefined
+  locale = locale !== undefined ? locale : appLang
+
   const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
   const plainText = textNodes
     .flatMap(node => {
