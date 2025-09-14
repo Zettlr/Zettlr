@@ -102,12 +102,12 @@ describe('Utility#countWords()', function () {
     idx++
     it(`${idx}. should return ${test.expectedWords} words (${test.locale})`, function () {
       const ast = markdownToAST(test.input)
-      strictEqual(countWords(ast, undefined, undefined, test.locale), test.expectedWords)
+      strictEqual(countWords(ast, test.locale), test.expectedWords)
     })
 
     it(`${idx}. should return ${test.expectedChars} characters (${test.locale})`, function () {
       const ast = markdownToAST(test.input)
-      strictEqual(countChars(ast, undefined, undefined, test.locale), test.expectedChars)
+      strictEqual(countChars(ast, test.locale), test.expectedChars)
     })
   }
 })

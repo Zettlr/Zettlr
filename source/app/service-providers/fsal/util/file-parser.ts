@@ -82,8 +82,9 @@ export default function getMarkdownFileParser (
       file.firstHeading = firstH1.content
     }
 
-    file.wordCount = countWords(ast)
-    file.charCount = countChars(ast)
+    const locale = undefined
+    file.wordCount = countWords(ast, locale)
+    file.charCount = countChars(ast, locale)
 
     // Reset frontmatter-related stuff
     file.yamlTitle = undefined

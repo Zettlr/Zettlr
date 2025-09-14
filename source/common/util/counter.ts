@@ -19,15 +19,15 @@ import { extractTextnodes } from '@common/modules/markdown-utils'
  * of words within the document.
  *
  * @param   {ASTNode}   ast       The AST
+ * @param   {string}    locale    A string with a BCP 47 language tag
  * @param   {number}    from      Optional. If given, this function omits any text
  *                                node before this position
  * @param   {number}    to        Optional. If given, this function omits any text
  *                                node after this position.
- * @param   {string}    locale    A string with a BCP 47 language tag
  *
  * @return  {{ words: string[], chars: number }}    The list of words and number of characters
  */
-function getCleanedWords (ast: ASTNode, from = 0, to?: number, locale?: string): { words: string[], chars: number } {
+function getCleanedWords (ast: ASTNode, locale?: string, from = 0, to?: number): { words: string[], chars: number } {
   let textNodes = extractTextnodes(ast)
   if (from > 0) {
     textNodes = textNodes.filter(node => node.from >= from || node.to >= from)
@@ -47,9 +47,6 @@ function getCleanedWords (ast: ASTNode, from = 0, to?: number, locale?: string):
       return undefined
     })
   }
-
-  const appLang: string | undefined =  typeof window !== 'undefined' ? window.config?.get('appLang') : undefined
-  locale = locale !== undefined ? locale : appLang
 
   const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
 
@@ -80,8 +77,8 @@ function getCleanedWords (ast: ASTNode, from = 0, to?: number, locale?: string):
  *
  * @return  {number}         The number of words in the file.
  */
-export function countWords (ast: ASTNode, from = 0, to?: number, locale?: string): number {
-  return getCleanedWords(ast, from, to, locale).words.length
+export function countWords (ast: ASTNode, locale: string | undefined, from = 0, to?: number): number {
+  return getCleanedWords(ast, locale, from, to).words.length
 }
 
 /**
@@ -95,8 +92,8 @@ export function countWords (ast: ASTNode, from = 0, to?: number, locale?: string
  *
  * @return  {number}         The number of characters in the file
  */
-export function countChars (ast: ASTNode, from = 0, to?: number, locale?: string): number {
-  return getCleanedWords(ast, from, to, locale).chars
+export function countChars (ast: ASTNode, locale: string | undefined, from = 0, to?: number): number {
+  return getCleanedWords(ast, locale, from, to).chars
 }
 
 /**
@@ -110,8 +107,8 @@ export function countChars (ast: ASTNode, from = 0, to?: number, locale?: string
  *
  * @return  {{words, chars}}        Word and character counts
  */
-export function countAll (ast: ASTNode, from = 0, to?: number, locale?: string): { words: number, chars: number } {
-  const { words, chars } = getCleanedWords(ast, from, to, locale)
+export function countAll (ast: ASTNode, locale: string | undefined, from = 0, to?: number): { words: number, chars: number } {
+  const { words, chars } = getCleanedWords(ast, locale, from, to)
   return {
     words: words.length,
     chars: chars

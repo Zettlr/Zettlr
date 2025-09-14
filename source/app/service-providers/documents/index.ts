@@ -1488,9 +1488,10 @@ current contents from the editor somewhere else, and restart the application.`
 
     if (doc.descriptor.type === 'file') {
       // In case of an MD File increase the word or char count
+      const locale = this._app.config.get().appLang
       const ast = markdownToAST(content)
-      const newWordCount = countWords(ast)
-      const newCharCount = countChars(ast)
+      const newWordCount = countWords(ast, locale)
+      const newCharCount = countChars(ast, locale)
 
       this._app.stats.updateCounts(
         newWordCount - doc.lastSavedWordCount,
