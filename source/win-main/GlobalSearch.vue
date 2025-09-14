@@ -568,13 +568,6 @@ body div#global-search-pane {
     }
   }
 
-  // hide chromium 'search-clear' element since it cannot be styled
-  input[type="search"]::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-    appearance: none;
-    display: none;
-  }
-
   div.search-result-container {
     border-bottom: 1px solid rgb(180, 180, 180);
     padding: 10px;
