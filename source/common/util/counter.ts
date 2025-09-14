@@ -53,10 +53,12 @@ function getCleanedWords (ast: ASTNode, locale?: string, from = 0, to?: number):
   let chars = 0
   const words = textNodes
     .flatMap(node => {
+      // this count includes non-formatting characters and whitespace.
+      chars += node.value.length
+
       const segments = []
       for (const { segment, isWordLike } of segmenter.segment(node.value)) {
         if (isWordLike === true) {
-          chars += segment.length
           segments.push(segment)
         }
       }
