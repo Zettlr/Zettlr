@@ -50,8 +50,8 @@ function onClick (event: MouseEvent): void {
     return
   }
 
-  // Ignore clicks on the popover button
-  // so that clicking it closes the popover
+  // Ignore clicks on the popover's target element
+  // so that clicking that closes the popover.
   if (props.target.contains(target)) {
     return
   }
