@@ -92,6 +92,7 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   Windows anymore (#5876).
 - The toolbar can now scroll left and right if the main window is too narrow
   (#5873; #5022).
+- Fixed some styles in the export, pomodoro, and tags popover (#5895).
 
 ## Under the Hood
 
