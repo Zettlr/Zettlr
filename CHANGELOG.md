@@ -63,8 +63,6 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
   functionality of the previous version, with the exception of more safeguards
   against data loss, and more ergonomic usage.
-- Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
-  footnotes).
 - **Feature**: Full-text (aka. global) search runs can now be cancelled via a
   dedicated button. You can now also trigger a new search while another search
   is already running.
@@ -73,6 +71,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
+- Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
+  footnotes).
 - The diagnostics info field in the statusbar now toggles the lint panel,
   instead of only opening the panel (#5847).
 - Fixed WebP images not rendering from relative paths (#5181).
@@ -82,8 +82,6 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - Update `da-DA` translations (#5868).
 - Fixed incorrect cursor position after inserting IDs (#5846).
 - The toolbar word counter no longer wraps (#5774; #5881).
-- Improve dark mode linter panel styling (#5882).
-- Fix drop cursor styling (#5883).
 - Fix context menu entry "Insert table" not working (#5835).
 - The keyboard shortcuts for snippets no longer require the field, thus
   preventing errors in `EditorView`s that map the corresponding shortcuts but
@@ -92,8 +90,9 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   Windows anymore (#5876).
 - The toolbar can now scroll left and right if the main window is too narrow
   (#5873; #5022).
-- Fixed some styles in the export, pomodoro, and tags popover (#5895).
-- Fixed spacing in the file manager tree view (#5891).
+- Style improvements: linter panel dark mode (#5882);  drop cursor (#5883);
+  export, pomodoro, and tags popover (#5895); spacing in file manager tree view
+  (#5891); global search (#5894).
 
 ## Under the Hood
 
