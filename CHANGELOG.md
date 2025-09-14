@@ -90,6 +90,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   Windows anymore (#5876).
 - The toolbar can now scroll left and right if the main window is too narrow
   (#5873; #5022).
+- Popovers (especially in the toolbar) will now properly close when clicking the
+  associated toolbar button a second time (#5870).
 - Style improvements: linter panel dark mode (#5882);  drop cursor (#5883);
   export, pomodoro, and tags popover (#5895); spacing in file manager tree view
   (#5891); global search (#5894).
