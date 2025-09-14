@@ -555,6 +555,19 @@ body div#global-search-pane {
     border-bottom: 1px solid #ccc;
   }
 
+  p {
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .form-control {
+    input {
+      margin-top: 5px;
+    }
+  }
+
   div.search-result-container {
     border-bottom: 1px solid rgb(180, 180, 180);
     padding: 10px;
