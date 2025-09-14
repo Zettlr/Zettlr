@@ -63,14 +63,7 @@ import {
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { addColAfter, addColBefore, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
-import {
-  alignTables,
-  /*********************************************************************
-   * DISABLE ALIGNMENT COMMANDS UNTIL CUSTOM KEYMAPPING IS IMPLEMENTED *
-   *********************************************************************
-  setAlignment
-   *********************************************************************/
-} from '../table-editor/commands/tables'
+import { alignTables } from '../table-editor/commands/tables'
 import { addRowAfter, addRowBefore, moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
 
 // Includes:
@@ -79,13 +72,10 @@ import { addRowAfter, addRowBefore, moveNextRow, movePrevRow, swapNextRow, swapP
 // * closeBracketsKeymap
 // * searchKeymap
 export function defaultKeymap (): Extension {
-  /*********************************************************************
-   * DISABLE ALIGNMENT COMMANDS UNTIL CUSTOM KEYMAPPING IS IMPLEMENTED *
-   *********************************************************************
-  const alignLeft = setAlignment('left')
-  const alignCenter = setAlignment('center')
-  const alignRight = setAlignment('right')
-   *********************************************************************/
+  // TODO: Disable alignment commands until custom keymapping is implemented
+  // const alignLeft = setAlignment('left')
+  // const alignCenter = setAlignment('center')
+  // const alignRight = setAlignment('right')
   return keymap.of([
     // completionKeymap
     { key: 'Ctrl-Space', run: startCompletion },
@@ -245,13 +235,10 @@ export function defaultKeymap (): Extension {
     // Table Editor Keys. These need to be the last, since they override some
     // commands and need to only run if nothing equivalently mapped can be run
     // within the corresponding cells.
-    /*********************************************************************
-     * DISABLE ALIGNMENT COMMANDS UNTIL CUSTOM KEYMAPPING IS IMPLEMENTED *
-     *********************************************************************
-    { key: 'Ctrl-l', run: alignLeft, preventDefault: true },
-    { key: 'Ctrl-c', run: alignCenter, preventDefault: true },
-    { key: 'Ctrl-r', run: alignRight, preventDefault: true },
-     *********************************************************************/
+    // TODO: Disable alignment commands until custom keymapping is implemented
+    // { key: 'Ctrl-l', run: alignLeft, preventDefault: true },
+    // { key: 'Ctrl-c', run: alignCenter, preventDefault: true },
+    // { key: 'Ctrl-r', run: alignRight, preventDefault: true },
     { key: 'Mod-Shift-a', run: v => alignTables(v, v.state.selection.main.head) },
     { key: 'Alt-ArrowUp', run: swapPrevRow, shift: addRowBefore },
     { key: 'Alt-ArrowDown', run: swapNextRow, shift: addRowAfter },
