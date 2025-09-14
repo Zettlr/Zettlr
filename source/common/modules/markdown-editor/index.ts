@@ -33,7 +33,8 @@ import {
   Text,
   type StateEffect,
   type Extension,
-  type SelectionRange
+  type SelectionRange,
+  type EditorSelection
 } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 
@@ -149,6 +150,29 @@ export interface DocumentAuthorityAPI {
   pushUpdates: PushUpdateCallback
 }
 
+/**
+ * This interface describes a persistent state for the EditorView, meaning some
+ * state that should survive destruction and re-instantiation of the same
+ * EditorView. It holds information that should be restored during, e.g.,
+ * switching tabs, which includes a scroll snapshot and the selection(s). By
+ * passing this information to a new MarkdownEditor instance, the editor can
+ * restore this quickly. The caller/manager of a set of MarkdownEditor instances
+ * should keep track of these, and extract them from the MarkdownEditor instance
+ * before unmounting it, e.g., via a Map.
+ */
+export interface EditorViewPersistentState {
+  /**
+   * A scroll snapshot from the editor. Used to properly restore the scroll
+   * position.
+   */
+  scrollSnapshot: StateEffect<any>
+  /**
+   * A selection object. Used to properly restore the cursor position and any
+   * selections within the editor.
+   */
+  selection: EditorSelection
+}
+
 export default class MarkdownEditor extends EventEmitter {
   /**
    * The underlying CodeMirror view
@@ -218,7 +242,7 @@ export default class MarkdownEditor extends EventEmitter {
     representedDocument: string,
     authorityAPI: DocumentAuthorityAPI,
     configOverride?: Partial<EditorConfiguration>,
-    scrollSnapshot?: StateEffect<any>
+    persistentState?: EditorViewPersistentState
   ) {
     super() // Set up the event emitter
 
@@ -245,7 +269,7 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     // ... and immediately begin loading the document
-    this.loadDocument(scrollSnapshot).catch(err => console.error(err))
+    this.loadDocument(persistentState).catch(err => console.error(err))
   }
 
   /**
@@ -385,7 +409,7 @@ export default class MarkdownEditor extends EventEmitter {
    * Loads the document from main and sets up everything required to display and
    * edit it.
    */
-  async loadDocument (scrollSnapshot?: StateEffect<any>): Promise<void> {
+  async loadDocument (persistentState?: EditorViewPersistentState): Promise<void> {
     const { content, type, startVersion } = await this.authority.fetchDoc(this.representedDocument)
 
     // The documents contents have changed, so we must recreate the state
@@ -399,11 +423,11 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     this._instance.setState(state)
-    if (scrollSnapshot !== undefined) {
+    if (persistentState !== undefined) {
       // Now that the correct document has been loaded, there will be content
-      // and we can pass the scrollSnapshot to restore the previous scroll
-      // position
-      this._instance.dispatch({ effects: scrollSnapshot })
+      // and we can restore the persisted information.
+      const { scrollSnapshot, selection } = persistentState
+      this._instance.dispatch({ selection, effects: scrollSnapshot })
     }
     // Ensure the theme switcher picks the state change up; this somehow doesn't
     // properly work after the document has been mounted to the DOM.
@@ -423,6 +447,21 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     this._instance.focus()
+  }
+
+  /**
+   * Returns an object containing information needed to refresh the entire
+   * editor instance after it being unmounted. Request this once before
+   * unmounting this instance, and provide it back to a new instance when you
+   * re-instantiate the same document again.
+   *
+   * @return  {EditorViewPersistentState}  The persistent state object.
+   */
+  public get persistentState (): EditorViewPersistentState {
+    return {
+      scrollSnapshot: this._instance.scrollSnapshot(),
+      selection: this._instance.state.selection
+    }
   }
 
   /**
