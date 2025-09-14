@@ -122,6 +122,15 @@ body {
   .tag-cloud {
     padding: 5px;
 
+    h3 {
+      text-align: center;
+      padding-bottom: 5px;
+    }
+    .system-tablist,
+    .form-control {
+      padding: 5px;
+    }
+
     .tag {
       display: inline-block;
       background-color: rgba(0, 0, 0, .3);
