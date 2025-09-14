@@ -610,6 +610,7 @@ body {
     .tree-item {
       white-space: nowrap;
       display: flex;
+      margin: 8px 0px;
 
       .item-icon, .toggle-icon {
         display: flex;
@@ -620,8 +621,11 @@ body {
       }
 
       .display-text {
+        font-size: 13px;
+        padding: 3px 5px;
         overflow: hidden;
         text-overflow: ellipsis;
+        margin-right: 8px;
 
         // These inputs should be more or less "invisible"
         input {
@@ -666,17 +670,13 @@ body {
 
 body.darwin {
   .tree-item {
-    margin: 6px 0px;
     color: rgb(53, 53, 53);
 
     // On macOS, non-standard icons are normally displayed in color
     clr-icon.special { color: var(--system-accent-color, --c-primary); }
 
     .display-text {
-      font-size: 13px;
-      padding: 3px 5px;
       border-radius: 4px;
-      overflow: hidden;
 
       &.highlight {
         outline-width: 2px;
@@ -699,13 +699,8 @@ body.darwin {
 
 body.win32 {
   .tree-item {
-    margin: 8px 0px;
 
     .display-text {
-      font-size: 13px;
-      padding: 3px 5px;
-      overflow: hidden;
-
       &.highlight {
         // This class is applied on drag & drop
         background-color: var(--system-accent-color, --c-primary);
@@ -717,13 +712,8 @@ body.win32 {
 
 body.linux {
   .tree-item {
-    margin: 8px 0px;
 
     .display-text {
-      font-size: 13px;
-      padding: 3px 5px;
-      overflow: hidden;
-
       &.highlight {
         // This class is applied on drag & drop
         background-color: var(--system-accent-color, --c-primary);
