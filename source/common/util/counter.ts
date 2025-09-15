@@ -27,7 +27,7 @@ import { extractTextnodes } from '@common/modules/markdown-utils'
  *
  * @return  {{ words: string[], chars: number }}    The list of words and number of characters
  */
-function getCleanedWords (ast: ASTNode, locale?: string, from = 0, to?: number): { words: string[], chars: number } {
+function prepareCounts (ast: ASTNode, locale?: string, from = 0, to?: number): { words: string[], chars: number } {
   let textNodes = extractTextnodes(ast)
   if (from > 0) {
     textNodes = textNodes.filter(node => node.from >= from || node.to >= from)
@@ -69,36 +69,6 @@ function getCleanedWords (ast: ASTNode, locale?: string, from = 0, to?: number):
 }
 
 /**
- * Returns an accurate word count based on a parsed AST.
- *
- * @param   {ASTNode}  ast   The parsed AST to use for counting
- * @param   {number}   from  Optional. If given, this function omits any text
- *                           node before this position
- * @param   {number}   to    Optional. If given, this function omits any text
- *                           node after this position.
- *
- * @return  {number}         The number of words in the file.
- */
-export function countWords (ast: ASTNode, locale: string | undefined, from = 0, to?: number): number {
-  return getCleanedWords(ast, locale, from, to).words.length
-}
-
-/**
- * Returns an accurate character count (without spaces) based on a parsed AST.
- *
- * @param   {ASTNode}  ast   The parsed AST to use for counting
- * @param   {number}   from  Optional. If given, this function omits any text
- *                           node before this position
- * @param   {number}   to    Optional. If given, this function omits any text
- *                           node after this position.
- *
- * @return  {number}         The number of characters in the file
- */
-export function countChars (ast: ASTNode, locale: string | undefined, from = 0, to?: number): number {
-  return getCleanedWords(ast, locale, from, to).chars
-}
-
-/**
  * Counts both words and characters, and characters without spaces.
  *
  * @param   {ASTNode}         ast   The parsed AST to use for counting
@@ -109,8 +79,8 @@ export function countChars (ast: ASTNode, locale: string | undefined, from = 0, 
  *
  * @return  {{words, chars}}        Word and character counts
  */
-export function countAll (ast: ASTNode, locale: string | undefined, from = 0, to?: number): { words: number, chars: number } {
-  const { words, chars } = getCleanedWords(ast, locale, from, to)
+export function countAll (ast: ASTNode, locale?: string, from = 0, to?: number): { words: number, chars: number } {
+  const { words, chars } = prepareCounts(ast, locale, from, to)
   return {
     words: words.length,
     chars: chars

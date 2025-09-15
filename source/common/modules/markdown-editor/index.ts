@@ -759,7 +759,7 @@ export default class MarkdownEditor extends EventEmitter {
     const mainOffset = this._instance.state.selection.main.head
     const line = this._instance.state.doc.lineAt(mainOffset)
     const ast = markdownToAST(this._instance.state.sliceDoc(), syntaxTree(this._instance.state))
-    const locale = window.config.get('appLang') as string | undefined
+    const locale: string = window.config.get('appLang')
     return {
       words: this.wordCount ?? 0,
       chars: this.charCount ?? 0,

@@ -13,7 +13,7 @@
  */
 
 import { markdownToAST } from '@common/modules/markdown-utils'
-import { countChars, countWords } from '../source/common/util/counter'
+import { countAll } from '../source/common/util/counter'
 import { strictEqual } from 'assert'
 
 const countWordsTesters = [
@@ -100,14 +100,16 @@ describe('Utility#countWords()', function () {
   let idx = 0
   for (let test of countWordsTesters) {
     idx++
+    const ast = markdownToAST(test.input)
+    const { words, chars } = countAll(ast, test.locale)
+
     it(`${idx}. should return ${test.expectedWords} words (${test.locale})`, function () {
-      const ast = markdownToAST(test.input)
-      strictEqual(countWords(ast, test.locale), test.expectedWords)
+      strictEqual(words, test.expectedWords)
     })
 
     it(`${idx}. should return ${test.expectedChars} characters (${test.locale})`, function () {
       const ast = markdownToAST(test.input)
-      strictEqual(countChars(ast, test.locale), test.expectedChars)
+      strictEqual(chars, test.expectedChars)
     })
   }
 })
