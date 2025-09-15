@@ -14,7 +14,7 @@
  */
 
 import { syntaxTree } from '@codemirror/language'
-import { type EditorView } from '@codemirror/view'
+import { type EditorState } from '@codemirror/state'
 import type { TreeCursor } from '@lezer/common'
 
 export type Range = { from: number, to: number }
@@ -23,7 +23,7 @@ export type Range = { from: number, to: number }
  * This function takes a range and expands it to the nearest
  * word boundary before `from` and after `to`
  *
- * @param   {EditorView}  view     The Editor View
+ * @param   {EditorState} state    The Editor State
  * @param   {number}      from     The beginning of the selection
  * @param   {number}      to       The end of the selection
  * @param   {number}      context  Expand the selection by `context`
@@ -31,14 +31,14 @@ export type Range = { from: number, to: number }
  *
  * @return  {Range}                The selection expanded to the nearest word boundaries
  */
-export function getWordPosition (view: EditorView, from: number, to: number, context: number = 0): Range {
-  const totalChars = view.state.doc.length
+export function getWordPosition (state: EditorState, from: number, to: number, context: number = 0): Range {
+  const totalChars = state.doc.length
 
   const fromWordNum = Math.max(0, from - context)
   const toWordNum = Math.min(totalChars, to + context)
 
-  const fromWord = view.state.wordAt(fromWordNum)
-  const toWord = view.state.wordAt(toWordNum)
+  const fromWord = state.wordAt(fromWordNum)
+  const toWord = state.wordAt(toWordNum)
 
   const wordFrom: number = fromWord ? fromWord.from : fromWordNum
   const wordTo: number = toWord ? toWord.to : toWordNum
@@ -50,7 +50,7 @@ export function getWordPosition (view: EditorView, from: number, to: number, con
  * This function takes a range and expands it to the nearest
  * line boundary before `from` and after `to`.
  *
- * @param   {EditorView}  view     The Editor View
+ * @param   {EditorState} state    The Editor State
  * @param   {number}      from     The beginning of the selection
  * @param   {number}      to       The end of the selection
  * @param   {number}      context  Expand the selection by `context`
@@ -58,14 +58,14 @@ export function getWordPosition (view: EditorView, from: number, to: number, con
  *
  * @return  {Range}                The selection expanded to the nearest line boundaries
  */
-export function getLinePosition (view: EditorView, from: number, to: number, context: number = 0): Range {
-  const totalLines = view.state.doc.lines
+export function getLinePosition (state: EditorState, from: number, to: number, context: number = 0): Range {
+  const totalLines = state.doc.lines
 
-  const fromLineNum = Math.max(1, view.state.doc.lineAt(from).number - context)
-  const toLineNum = Math.min(totalLines, view.state.doc.lineAt(to).number + context)
+  const fromLineNum = Math.max(1, state.doc.lineAt(from).number - context)
+  const toLineNum = Math.min(totalLines, state.doc.lineAt(to).number + context)
 
-  const fromLine = view.state.doc.line(fromLineNum)
-  const toLine = view.state.doc.line(toLineNum)
+  const fromLine = state.doc.line(fromLineNum)
+  const toLine = state.doc.line(toLineNum)
 
   return { from: fromLine.from, to: toLine.to }
 }
@@ -74,7 +74,7 @@ export function getLinePosition (view: EditorView, from: number, to: number, con
  * This function takes a range and expands it to the nearest
  * block boundary before `from` and after `to`
  *
- * @param   {EditorView}  view     The Editor View
+ * @param   {EditorState} state    The Editor State
  * @param   {number}      from     The beginning of the selection
  * @param   {number}      to       The end of the selection
  * @param   {number}      context  Expand the selection by `context`
@@ -82,10 +82,10 @@ export function getLinePosition (view: EditorView, from: number, to: number, con
  *
  * @return  {Range}                The selection expanded to the nearest block boundaries
  */
-export function getBlockPosition (view: EditorView, from: number, to: number, context: number = 0): Range {
-  const totalLines = view.state.doc.lines
-  let fromLineNum = view.state.doc.lineAt(from).number
-  let toLineNum = view.state.doc.lineAt(to).number
+export function getBlockPosition (state: EditorState, from: number, to: number, context: number = 0): Range {
+  const totalLines = state.doc.lines
+  let fromLineNum = state.doc.lineAt(from).number
+  let toLineNum = state.doc.lineAt(to).number
 
   // we expand the context to the top of the previous block
   let prevBlock: boolean = false
@@ -94,7 +94,7 @@ export function getBlockPosition (view: EditorView, from: number, to: number, co
   let blocks: number = 0
 
   while (fromLineNum > 1) {
-    if (view.state.doc.line(fromLineNum - 1).text.trim() === '') {
+    if (state.doc.line(fromLineNum - 1).text.trim() === '') {
       // we hit a newline, so we are no longer in the starting block
       currentBlock = false
       // we hit the top of the previous block
@@ -118,7 +118,7 @@ export function getBlockPosition (view: EditorView, from: number, to: number, co
   currentBlock = true
   blocks = 0
   while (toLineNum < totalLines) {
-    if (view.state.doc.line(toLineNum + 1).text.trim() === '') {
+    if (state.doc.line(toLineNum + 1).text.trim() === '') {
       // we hit a newline, so we are no longer in the starting block
       currentBlock = false
       // we hit the bottom of the next block
@@ -138,8 +138,8 @@ export function getBlockPosition (view: EditorView, from: number, to: number, co
     toLineNum++
   }
 
-  const blockFrom = view.state.doc.line(fromLineNum).from
-  const blockTo = view.state.doc.line(toLineNum).to
+  const blockFrom = state.doc.line(fromLineNum).from
+  const blockTo = state.doc.line(toLineNum).to
 
   return { from: blockFrom, to: blockTo }
 }
@@ -148,7 +148,7 @@ export function getBlockPosition (view: EditorView, from: number, to: number, co
  * This function takes a range and expands it to the nearest
  * node boundary before `from` and after `to`
  *
- * @param   {EditorView}  view     The Editor View
+ * @param   {EditorState} state    The Editor State
  * @param   {number}      from     The beginning of the selection
  * @param   {number}      to       The end of the selection
  * @param   {number}      context  Expand the selection by `context`
@@ -156,8 +156,8 @@ export function getBlockPosition (view: EditorView, from: number, to: number, co
  *
  * @return  {Range}                The selection expanded to the nearest node boundaries
  */
-export function getNodePosition (view: EditorView, from: number, to: number, context: number = 0): Range {
-  const tree = syntaxTree(view.state)
+export function getNodePosition (state: EditorState, from: number, to: number, context: number = 0): Range {
+  const tree = syntaxTree(state)
 
   let cursorFrom: TreeCursor = tree.resolve(from, -1).cursor()
   let cursorTo: TreeCursor = tree.resolve(to, 1).cursor()
