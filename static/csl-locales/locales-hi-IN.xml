@@ -591,6 +591,10 @@
       <single>सम्पादक &amp; अनुवादक</single>
       <multiple>editors &amp; translators</multiple>
     </term>
+    <term name="editor-translator">
+      <single>सम्पादक &amp; अनुवादक</single>
+      <multiple>editors &amp; translators</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -657,6 +661,10 @@
       <single>ed. &amp; tran.</single>
       <multiple>eds. &amp; trans.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ed. &amp; tran.</single>
+      <multiple>eds. &amp; trans.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -684,6 +692,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">अनुवाद </term>
     <term name="editortranslator" form="verb">सम्पादन &amp; अनुवाद</term>
+    <term name="editor-translator" form="verb">सम्पादन &amp; अनुवाद</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -704,6 +713,7 @@
     <term name="illustrator" form="verb-short">illus. by</term>
     <term name="translator" form="verb-short">trans. by</term>
     <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
+    <term name="editor-translator" form="verb-short">ed. &amp; trans. by</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">जनवरी</term>

@@ -556,6 +556,10 @@
       <single>editor &amp; translator</single>
       <multiple>editors &amp; translators</multiple>
     </term>
+    <term name="editor-translator">
+      <single>editor &amp; translator</single>
+      <multiple>editors &amp; translators</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -616,6 +620,10 @@
       <single>ред. &amp; прев.</single>
       <multiple>ред.кол. &amp; прев.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ред. &amp; прев.</single>
+      <multiple>ред.кол. &amp; прев.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -643,6 +651,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">преведен от</term>
     <term name="editortranslator" form="verb">редактирано &amp; преведено от</term>
+    <term name="editor-translator" form="verb">редактирано &amp; преведено от</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -663,6 +672,7 @@
     <term name="illustrator" form="verb-short">ил.</term>
     <term name="translator" form="verb-short">прев.</term>
     <term name="editortranslator" form="verb-short">ред. &amp; прев. от</term>
+    <term name="editor-translator" form="verb-short">ред. &amp; прев. от</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Януари</term>

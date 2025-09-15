@@ -555,6 +555,10 @@
       <single>sudarytojas ir vertėjas</single>
       <multiple>sudarytojai ir vertėjai</multiple>
     </term>
+    <term name="editor-translator">
+      <single>sudarytojas ir vertėjas</single>
+      <multiple>sudarytojai ir vertėjai</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -621,6 +625,10 @@
       <single>sud. ir vert.</single>
       <multiple>sud. ir vert.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>sud. ir vert.</single>
+      <multiple>sud. ir vert.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -648,6 +656,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">vertė</term>
     <term name="editortranslator" form="verb">sudarė ir vertė</term>
+    <term name="editor-translator" form="verb">sudarė ir vertė</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -668,6 +677,7 @@
     <term name="illustrator" form="verb-short">iliustr.</term>
     <term name="translator" form="verb-short">vert.</term>
     <term name="editortranslator" form="verb-short">sud. ir vert.</term>
+    <term name="editor-translator" form="verb-short">sud. ir vert.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">sausio</term>

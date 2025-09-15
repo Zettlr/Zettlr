@@ -521,6 +521,7 @@
     <term name="illustrator">رسوم</term>
     <term name="translator">ترجمة</term>
     <term name="editortranslator">ترجمة وتحقيق</term>
+    <term name="editor-translator">ترجمة وتحقيق</term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -570,6 +571,11 @@
     <term name="compiler" form="verb">compiled by</term>
     <term name="contributor" form="verb">with</term>
     <term name="curator" form="verb">curated by</term>
+    <term name="director" form="verb">directed by</term>
+    <term name="editor" form="verb">edited by</term>
+    <term name="editor-translator" form="verb">edited &amp; translated by</term>
+    <term name="editortranslator" form="verb">edited &amp; translated by</term>
+    <term name="editorial-director" form="verb">edited by</term>
     <term name="executive-producer" form="verb">executive produced by</term>
     <term name="guest" form="verb">with guest</term>
     <term name="host" form="verb">hosted by</term>
@@ -590,11 +596,17 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">ترجمة</term>
     <term name="editortranslator" form="verb">تحقيق وترجمة</term>
+    <term name="editor-translator" form="verb">تحقيق وترجمة</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
     <term name="contributor" form="verb-short">w.</term>
     <term name="curator" form="verb-short">cur. by</term>
+    <term name="director" form="verb-short">dir. by</term>
+    <term name="editor" form="verb-short">ed. by</term>
+    <term name="editor-translator" form="verb-short">ed. &amp; trans. by</term>
+    <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
+    <term name="editorial-director" form="verb-short">ed. by</term>
     <term name="executive-producer" form="verb-short">exec. prod. by</term>
     <term name="guest" form="verb-short">w. guest</term>
     <term name="host" form="verb-short">hosted by</term>

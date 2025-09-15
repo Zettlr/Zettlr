@@ -560,6 +560,10 @@
       <single>redakteur &amp; vertaler</single>
       <multiple>redakteurs &amp; vertalers</multiple>
     </term>
+    <term name="editor-translator">
+      <single>redakteur &amp; vertaler</single>
+      <multiple>redakteurs &amp; vertalers</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS --> 
     <term name="compiler" form="short">
@@ -626,6 +630,10 @@
       <single>red. &amp; vert.</single>
       <multiple>reds. &amp; verts.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>red. &amp; vert.</single>
+      <multiple>reds. &amp; verts.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">onder redaksie van</term>
@@ -653,6 +661,7 @@
     <term name="collection-editor" form="verb-short">geredigeer deur</term>
     <term name="translator" form="verb">vertaal deur</term>
     <term name="editortranslator" form="verb">geredigeer en vertaal deur</term>
+    <term name="editor-translator" form="verb">geredigeer en vertaal deur</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">opg. deur</term>
@@ -673,6 +682,7 @@
     <term name="illustrator" form="verb-short">geïill. deur</term>
     <term name="translator" form="verb-short">vert. deur</term>
     <term name="editortranslator" form="verb-short">gered. &amp; vert. deur</term>
+    <term name="editor-translator" form="verb-short">gered. &amp; vert. deur</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Januarie</term>

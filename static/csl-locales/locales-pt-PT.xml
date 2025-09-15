@@ -547,6 +547,10 @@
       <single>editor e tradutor</single>
       <multiple>editores e tradutores</multiple>
     </term>
+    <term name="editor-translator">
+      <single>editor e tradutor</single>
+      <multiple>editores e tradutores</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -613,6 +617,10 @@
       <single>ed. &amp; trad.</single>
       <multiple>eds. &amp; trads.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ed. &amp; trad.</single>
+      <multiple>eds. &amp; trads.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -640,6 +648,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">traduzido por</term>
     <term name="editortranslator" form="verb">editado e traduzido por</term>
+    <term name="editor-translator" form="verb">editado e traduzido por</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -660,6 +669,7 @@
     <term name="illustrator" form="verb-short">ilus.</term>
     <term name="translator" form="verb-short">trad.</term>
     <term name="editortranslator" form="verb-short">ed. &amp; trad. por</term>
+    <term name="editor-translator" form="verb-short">ed. &amp; trad. por</term>
       
    <!-- LONG MONTH FORMS -->
       <term name="month-01">janeiro</term>

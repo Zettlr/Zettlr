@@ -544,6 +544,10 @@
       <single>μεταφραστής και επιμελητής</single>
       <multiple>μεταφραστές και επιμελητές</multiple>
     </term>
+    <term name="editor-translator">
+      <single>μεταφραστής και επιμελητής</single>
+      <multiple>μεταφραστές και επιμελητές</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -610,6 +614,10 @@
       <single>μτφ. και επιμ.</single>
       <multiple>μτφ. και επιμ.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>μτφ. και επιμ.</single>
+      <multiple>μτφ. και επιμ.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -637,6 +645,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">μετάφραση</term>
     <term name="editortranslator" form="verb">μετάφραση και επιμέλεια</term>
+    <term name="editor-translator" form="verb">μετάφραση και επιμέλεια</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -657,6 +666,7 @@
     <term name="illustrator" form="verb-short">εικον.</term>
     <term name="translator" form="verb-short">μετάφρ.</term>
     <term name="editortranslator" form="verb-short">μετάφρ. και επιμέλ.</term>
+    <term name="editor-translator" form="verb-short">μετάφρ. και επιμέλ.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Ιανουάριος</term>

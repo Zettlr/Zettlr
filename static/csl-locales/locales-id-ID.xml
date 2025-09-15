@@ -551,6 +551,10 @@
       <single>editor &amp; penerjemah</single>
       <multiple>editor &amp; penerjemah</multiple>
     </term>
+    <term name="editor-translator">
+      <single>editor &amp; penerjemah</single>
+      <multiple>editor &amp; penerjemah</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -617,6 +621,10 @@
       <single>ed. &amp; penerj.</single>
       <multiple>ed. &amp; penerj.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ed. &amp; penerj.</single>
+      <multiple>ed. &amp; penerj.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -644,6 +652,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">diterjemahkan oleh</term>
     <term name="editortranslator" form="verb">disunting &amp; diterjemahkan oleh</term>
+    <term name="editor-translator" form="verb">disunting &amp; diterjemahkan oleh</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -664,6 +673,7 @@
     <term name="illustrator" form="verb-short">illus. oleh</term>
     <term name="translator" form="verb-short">trans. oleh</term>
     <term name="editortranslator" form="verb-short">ed. &amp; penerj. oleh</term>
+    <term name="editor-translator" form="verb-short">ed. &amp; penerj. oleh</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Januari</term>

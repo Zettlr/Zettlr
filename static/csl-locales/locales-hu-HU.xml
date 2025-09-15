@@ -536,6 +536,10 @@
       <single>szerkesztő &amp; fordító</single>
       <multiple>szerkesztő &amp; fordító</multiple>
     </term>
+    <term name="editor-translator">
+      <single>szerkesztő &amp; fordító</single>
+      <multiple>szerkesztő &amp; fordító</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -602,6 +606,10 @@
       <single>szerk. &amp; ford.</single>
       <multiple>szerk. &amp; ford.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>szerk. &amp; ford.</single>
+      <multiple>szerk. &amp; ford.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -629,6 +637,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">fordította</term>
     <term name="editortranslator" form="verb">szerkesztette &amp; fordította</term>
+    <term name="editor-translator" form="verb">szerkesztette &amp; fordította</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -649,6 +658,7 @@
     <term name="illustrator" form="verb-short">ill.</term>
     <term name="translator" form="verb-short">ford.</term>
     <term name="editortranslator" form="verb-short">szerk. &amp; ford.</term>
+    <term name="editor-translator" form="verb-short">szerk. &amp; ford.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">január</term>

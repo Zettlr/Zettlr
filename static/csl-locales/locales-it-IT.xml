@@ -564,6 +564,10 @@
       <single>curatore e traduttore</single>
       <multiple>curatori e tradutori</multiple>
     </term>
+    <term name="editor-translator">
+      <single>curatore e traduttore</single>
+      <multiple>curatori e tradutori</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -630,6 +634,10 @@
       <single>cur. e trad.</single>
       <multiple>cur. e trad.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>cur. e trad.</single>
+      <multiple>cur. e trad.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -657,6 +665,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">tradotto da</term>
     <term name="editortranslator" form="verb">a cura di e tradotto da</term>
+    <term name="editor-translator" form="verb">a cura di e tradotto da</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. da</term>
@@ -677,6 +686,7 @@
     <term name="illustrator" form="verb-short">ill. da</term>
     <term name="translator" form="verb-short">trad. da</term>
     <term name="editortranslator" form="verb-short">a c. di e trad. da</term>
+    <term name="editor-translator" form="verb-short">a c. di e trad. da</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01" gender="masculine">gennaio</term>
