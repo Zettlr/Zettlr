@@ -4,8 +4,11 @@
     <translator>
       <name>roypeled1</name>
     </translator>
+    <translator>
+      <name>dinkame</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2012-07-04T23:31:02+00:00</updated>
+    <updated>2025-09-02T14:48:02+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -22,7 +25,7 @@
     <term name="advance-online-publication">advance online publication</term>
     <term name="album">album</term>
     <term name="audio-recording">audio recording</term>
-    <term name="film">film</term>
+    <term name="film">סרט</term>
     <term name="henceforth">henceforth</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="no-place">no place</term>
@@ -31,20 +34,20 @@
     <term name="no-publisher" form="short">n.p.</term>
     <term name="on">on</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="original-work-published">פורסם במקור בשנת</term>
     <term name="personal-communication">תקשורת אישית</term>
-    <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
+    <term name="podcast">הסכת</term>
+    <term name="podcast-episode">פרק בהסכת</term>
     <term name="preprint">preprint</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
+    <term name="radio-broadcast">תשדיר רדיו</term>
+    <term name="radio-series">תוכנית רדיו </term>
+    <term name="radio-series-episode">פרק בתוכנית רדיו</term>
     <term name="special-issue">special issue</term>
     <term name="special-section">special section</term>
     <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
+    <term name="television-series">סדרת טלוויזיה</term>
     <term name="television-series-episode">television series episode</term>
-    <term name="video">video</term>
+    <term name="video">וידאו</term>
     <term name="working-paper">working paper</term>
     <term name="accessed">נבדק לאחרונה</term>
     <term name="and">ו</term>
@@ -74,8 +77,8 @@
       <multiple>refs.</multiple>
     </term>
     <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
+      <single>מס׳</single>
+      <multiple>מס׳</multiple>
     </term>
     <term name="edition" form="short">ed</term>
     <term name="et-al">ואחרים</term>
@@ -86,8 +89,8 @@
     <term name="in press">בהדפסה</term>
     <term name="internet">אינטרנט</term>
     <term name="letter">מכתב</term>
-    <term name="no date">אין נתונים</term>
-    <term name="no date" form="short">nd</term>
+    <term name="no date">ללא תאריך</term>
+    <term name="no date" form="short">ל.ת.</term>
     <term name="online">מקוון</term>
     <term name="presented at">הוצג ב</term>
     <term name="reference">
@@ -106,20 +109,20 @@
 
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
+    <term name="article-journal">מאמר בכתב עת</term>
     <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
+    <term name="article-newspaper">מאמר בעיתון</term>
     <term name="bill">bill</term>
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">תשדיר</term>
     <!-- chapter is in the list of locator terms -->
     <term name="classic">classic</term>
     <term name="collection">collection</term>
     <term name="dataset">dataset</term>
     <term name="document">document</term>
     <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
+    <term name="entry-dictionary">ערך מילוני</term>
+    <term name="entry-encyclopedia">ערך אנציקלופדי</term>
     <term name="event">event</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic">graphic</term>
@@ -128,7 +131,7 @@
     <term name="legal_case">legal case</term>
     <term name="legislation">legislation</term>
     <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
+    <term name="map">מפה</term>
     <term name="motion_picture">video recording</term>
     <term name="musical_score">musical score</term>
     <term name="pamphlet">pamphlet</term>
@@ -137,22 +140,22 @@
     <term name="performance">performance</term>
     <term name="periodical">periodical</term>
     <term name="personal_communication">תקשורת אישית</term>
-    <term name="post">post</term>
-    <term name="post-weblog">blog post</term>
+    <term name="post">פוסט</term>
+    <term name="post-weblog">פוסט בבלוג</term>
     <term name="regulation">regulation</term>
-    <term name="report">report</term>
+    <term name="report">דוח</term>
     <term name="review">review</term>
-    <term name="review-book">book review</term>
-    <term name="software">software</term>
+    <term name="review-book">סקירת ספר</term>
+    <term name="software">תוכנה</term>
     <term name="song">audio recording</term>
     <term name="speech">presentation</term>
     <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
+    <term name="thesis">תזה</term>
     <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="webpage">עמוד אינטרנט</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
+    <term name="article-journal" form="short">מאמר</term>
     <term name="article-magazine" form="short">mag. art.</term>
     <term name="article-newspaper" form="short">newspaper art.</term>
     <!-- book is in the list of locator terms -->
@@ -160,7 +163,7 @@
     <term name="document" form="short">doc.</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic" form="short">graph.</term>
-    <term name="interview" form="short">interv.</term>
+    <term name="interview" form="short">ראיון</term>
     <term name="manuscript" form="short">MS</term>
     <term name="motion_picture" form="short">video rec.</term>
     <term name="report" form="short">rep.</term>
@@ -177,14 +180,14 @@
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">לספירה</term>
     <term name="bc">לפני הספירה</term>
-    <term name="bce">BCE</term>
-    <term name="ce">CE</term>
+    <term name="bce">לספירה</term>
+    <term name="ce">לפני הספירה</term>
 
     <!-- PUNCTUATION -->
-    <term name="open-quote">“</term>
-    <term name="close-quote">”</term>
-    <term name="open-inner-quote">‘</term>
-    <term name="close-inner-quote">’</term>
+    <term name="open-quote">"</term>
+    <term name="close-quote">"</term>
+    <term name="open-inner-quote">'</term>
+    <term name="close-inner-quote">'</term>
     <term name="page-range-delimiter">–</term>
     <term name="colon">:</term>
     <term name="comma">,</term>
@@ -233,12 +236,12 @@
       <multiple>locations</multiple>						 
     </term>
     <term name="equation">			 
-      <single>equation</single>
-      <multiple>equations</multiple>						 
+      <single>משוואה</single>
+      <multiple>משוואות</multiple>						 
     </term>
     <term name="rule">			 
-      <single>rule</single>
-      <multiple>rules</multiple>						 
+      <single>חוק</single>
+      <multiple>חוקים</multiple>						 
     </term>
     <term name="scene">			 
       <single>scene</single>
@@ -269,8 +272,8 @@
       <multiple>טורים</multiple>
     </term>
     <term name="figure">
-      <single>figure</single>
-      <multiple>figures</multiple>
+      <single>איור</single>
+      <multiple>איורים</multiple>
     </term>
     <term name="folio">
       <single>פוליו</single>
@@ -297,12 +300,12 @@
       <multiple>עמודים</multiple>
     </term>
     <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
+      <single>כרך</single>
+      <multiple>כרכים</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>עמוד</single>
+      <multiple>עמודים</multiple>
     </term>
     <term name="printing">
       <single>printing</single>
@@ -310,8 +313,8 @@
     </term>
 
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>פרק.</single>
+      <multiple>פרקים</multiple>
     </term>
     <term name="citation-number" form="short">
       <single>cit.</single>
@@ -373,8 +376,8 @@
       <multiple>rr.</multiple>						 
     </term>
     <term name="scene" form="short">			 
-      <single>sc.</single>
-      <multiple>scs.</multiple>						 
+      <single>סצנה</single>
+      <multiple>סצנות</multiple>						 
     </term>
     <term name="table" form="short">			 
       <single>tbl.</single>
@@ -402,19 +405,17 @@
       <multiple>'עמ</multiple>
     </term>
     <term name="number-of-volumes" form="short">
-      <single>vol.</single>
-      <multiple>vols.</multiple>
+      <single>כרך</single>
+      <multiple>כרכים</multiple>
     </term>
     <term name="page-first" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
+      <single>עמ׳</single>
+      <multiple>עמ׳</multiple>
     </term>
     <term name="printing" form="short">
       <single>print.</single>
       <multiple>prints.</multiple>
     </term>
-    
-
     <term name="number-of-pages" form="short">
       <single>'עמ</single>
       <multiple>'עמ</multiple>
@@ -431,12 +432,12 @@
       <multiple>s.vv.</multiple>
     </term>
     <term name="verse" form="short">
-      <single>v</single>
-      <multiple>vv</multiple>
+      <single>פסוק</single>
+      <multiple>פסוקים</multiple>
     </term>
     <term name="volume" form="short">
-      <single>vol</single>
-      <multiple>vols</multiple>
+      <single>כרך</single>
+      <multiple>כרכים</multiple>
     </term>
 
     <!-- SYMBOL LOCATOR FORMS -->
@@ -445,12 +446,12 @@
       <multiple>¶¶</multiple>
     </term>
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>פרק</single>
+      <multiple>פרקים</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>ציטוט</single>
+      <multiple>ציטוטים</multiple>
     </term>
     <term name="collection-number">
       <single>מספר</single>
@@ -542,6 +543,10 @@
       <single>editor &amp; translator</single>
       <multiple>editors &amp; translators</multiple>
     </term>
+    <term name="editor-translator">
+      <single>editor &amp; translator</single>
+      <multiple>editors &amp; translators</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -608,6 +613,10 @@
       <single>ed. &amp; tran.</single>
       <multiple>eds. &amp; trans.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ed. &amp; tran.</single>
+      <multiple>eds. &amp; trans.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -635,6 +644,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">תורגם ע"י</term>
     <term name="editortranslator" form="verb">edited &amp; translated by</term>
+    <term name="editor-translator" form="verb">edited &amp; translated by</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -655,6 +665,7 @@
     <term name="illustrator" form="verb-short">illus.</term>
     <term name="translator" form="verb-short">trans</term>
     <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
+    <term name="editor-translator" form="verb-short">ed. &amp; trans. by</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">ינואר</term>
@@ -685,9 +696,9 @@
     <term name="month-12" form="short">Dec</term>
 
     <!-- SEASONS -->
-    <term name="season-01">Spring</term>
-    <term name="season-02">Summer</term>
-    <term name="season-03">Autumn</term>
-    <term name="season-04">Winter</term>
+    <term name="season-01">אביב</term>
+    <term name="season-02">קיץ</term>
+    <term name="season-03">סתיו</term>
+    <term name="season-04">חורף</term>
   </terms>
 </locale>

@@ -554,6 +554,10 @@
       <single>編集・翻訳者</single>
       <multiple>編集・翻訳者</multiple>
     </term>
+    <term name="editor-translator">
+      <single>編集・翻訳者</single>
+      <multiple>編集・翻訳者</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -620,6 +624,10 @@
       <single>編・訳</single>
       <multiple>編・訳</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>編・訳</single>
+      <multiple>編・訳</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -647,6 +655,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">翻訳者: </term>
     <term name="editortranslator" form="verb">編集・翻訳者: </term>
+    <term name="editor-translator" form="verb">編集・翻訳者: </term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -667,6 +676,7 @@
     <term name="illustrator" form="verb-short">図: </term>
     <term name="translator" form="verb-short">訳: </term>
     <term name="editortranslator" form="verb-short">編・訳: </term>
+    <term name="editor-translator" form="verb-short">編・訳: </term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">1月</term>

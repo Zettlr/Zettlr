@@ -539,6 +539,10 @@
       <single>บรรณาธิการและผู้แปล</single>
       <multiple>บรรณาธิการและผู้แปล</multiple>
     </term>
+    <term name="editor-translator">
+      <single>บรรณาธิการและผู้แปล</single>
+      <multiple>บรรณาธิการและผู้แปล</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -605,6 +609,10 @@
       <single>บ.ก.</single>
       <multiple>บ.ก.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>บ.ก.</single>
+      <multiple>บ.ก.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -632,6 +640,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">แปลโดย</term>
     <term name="editortranslator" form="verb">แปลและเรียบเรียงโดย</term>
+    <term name="editor-translator" form="verb">แปลและเรียบเรียงโดย</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -652,6 +661,7 @@
     <term name="illustrator" form="verb-short">illus.</term>
     <term name="translator" form="verb-short">แปล</term>
     <term name="editortranslator" form="verb-short">แปลและเรียบเรียงโดย</term>
+    <term name="editor-translator" form="verb-short">แปลและเรียบเรียงโดย</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">มกราคม</term>

@@ -7,8 +7,11 @@
     <translator>
       <name>kohafan</name>
     </translator>
+    <translator>
+      <name>Peter Kubala</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2014-03-09T22:23:31+00:00</updated>
+    <updated>2025-09-05T22:23:31+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -24,49 +27,49 @@
   <terms>
     <term name="advance-online-publication">advance online publication</term>
     <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
+    <term name="audio-recording">zvukový záznam</term>
     <term name="film">film</term>
-    <term name="henceforth">henceforth</term>
+    <term name="henceforth">ďalej</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
-    <term name="on">on</term>
+    <term name="no-place">sine loco</term>
+    <term name="no-place" form="short">s.l.</term>
+    <term name="no-publisher">sine nomine</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">s.n.</term>
+    <term name="on">na</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="original-work-published">pôvodné dielo publikované</term>
     <term name="personal-communication">osobná komunikácia</term>
     <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
+    <term name="podcast-episode">epizóda podcastu</term>
     <term name="preprint">preprint</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
+    <term name="radio-broadcast">rozhlasové vysielanie</term>
+    <term name="radio-series">rozhlasový seriál</term>
+    <term name="radio-series-episode">epizóda rozhlasového seriálu</term>
+    <term name="special-issue">osobitné vydanie</term>
+    <term name="special-section">osobitná sekcia</term>
+    <term name="television-broadcast">televízne vysielanie</term>
+    <term name="television-series">televízny seriál</term>
+    <term name="television-series-episode">epizóda televízneho seriálu</term>
     <term name="video">video</term>
-    <term name="working-paper">working paper</term>
+    <term name="working-paper">pracovný dokument</term>
     <term name="accessed">cit</term>
     <term name="and">a</term>
     <term name="and others">a ďalší</term>
     <term name="anonymous">anonym</term>
     <term name="anonymous" form="short">anon.</term>
     <term name="at">v</term>
-    <term name="available at">available at</term>
+    <term name="available at">dostupné na</term>
     <term name="by">by</term>
     <term name="circa">circa</term>
     <term name="circa" form="short">cca.</term>
     <term name="cited">cit</term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>referencia</single>
+      <multiple>referencie</multiple>
     </term>
     <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
+      <single>číslo</single>
+      <multiple>čísla</multiple>
     </term>
     <term name="edition">
       <single>vydanie</single>
@@ -77,8 +80,8 @@
       <multiple>refs.</multiple>
     </term>
     <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
+      <single>č.</single>
+      <multiple>č.</multiple>
     </term>
     <term name="edition" form="short">vyd.</term>
     <term name="et-al">et al.</term>
@@ -94,65 +97,65 @@
     <term name="online">online</term>
     <term name="presented at">prezentované na</term>
     <term name="reference">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>referencia</single>
+      <multiple>referencie</multiple>
     </term>
     <term name="reference" form="short">
       <single>ref.</single>
-      <multiple>refs.</multiple>
+      <multiple>ref.</multiple>
     </term>
-    <term name="review-of">review of</term>
-    <term name="review-of" form="short">rev. of</term>
+    <term name="review-of">recenzia</term>
+    <term name="review-of" form="short">rec.</term>
     <term name="retrieved">cit</term>
-    <term name="scale">scale</term>
-    <term name="version">version</term>
+    <term name="scale">mierka</term>
+    <term name="version">verzia</term>
 
     <!-- LONG ITEM TYPE FORMS -->
-    <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
-    <term name="bill">bill</term>
+    <term name="article">článok</term>
+    <term name="article-journal">vedecký článok</term>
+    <term name="article-magazine">článok v časopise</term>
+    <term name="article-newspaper">článok v novinách</term>
+    <term name="bill">účet</term>
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">vysielanie</term>
     <!-- chapter is in the list of locator terms -->
     <term name="classic">classic</term>
-    <term name="collection">collection</term>
+    <term name="collection">zborník</term>
     <term name="dataset">dataset</term>
-    <term name="document">document</term>
-    <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
-    <term name="event">event</term>
+    <term name="document">dokument</term>
+    <term name="entry">záznam</term>
+    <term name="entry-dictionary">slovníkové heslo</term>
+    <term name="entry-encyclopedia">encyklopedický záznam</term>
+    <term name="event">udalosť</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic">graphic</term>
-    <term name="hearing">hearing</term>
+    <term name="graphic">grafika</term>
+    <term name="hearing">pojednávanie</term>
     <term name="interview">osobná komunikácia</term>
-    <term name="legal_case">legal case</term>
-    <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
+    <term name="legal_case">právny prípad</term>
+    <term name="legislation">legislatíva</term>
+    <term name="manuscript">rukopis</term>
+    <term name="map">mapa</term>
+    <term name="motion_picture">videonahrávka</term>
     <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
-    <term name="paper-conference">conference paper</term>
+    <term name="pamphlet">brožúra</term>
+    <term name="paper-conference">konferečný príspevok</term>
     <term name="patent">patent</term>
-    <term name="performance">performance</term>
-    <term name="periodical">periodical</term>
+    <term name="performance">vystúpenie</term>
+    <term name="periodical">periodikum</term>
     <term name="personal_communication">osobná komunikácia</term>
-    <term name="post">post</term>
-    <term name="post-weblog">blog post</term>
-    <term name="regulation">regulation</term>
-    <term name="report">report</term>
-    <term name="review">review</term>
-    <term name="review-book">book review</term>
-    <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
-    <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="post">príspevok</term>
+    <term name="post-weblog">príspevok na blogu</term>
+    <term name="regulation">smernica</term>
+    <term name="report">správa</term>
+    <term name="review">recenzia</term>
+    <term name="review-book">recenzia knihy</term>
+    <term name="software">softvér</term>
+    <term name="song">pieseň</term>
+    <term name="speech">prejav</term>
+    <term name="standard">štandard</term>
+    <term name="thesis">téza</term>
+    <term name="treaty">zmluva</term>
+    <term name="webpage">webová stránka</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
     <term name="article-journal" form="short">journal art.</term>
@@ -166,7 +169,7 @@
     <term name="interview" form="short">interv.</term>
     <term name="manuscript" form="short">MS</term>
     <term name="motion_picture" form="short">video rec.</term>
-    <term name="report" form="short">rep.</term>
+    <term name="report" form="short">spr.</term>
     <term name="review" form="short">rev.</term>
     <term name="review-book" form="short">bk. rev.</term>
     <term name="song" form="short">audio rec.</term>
@@ -236,28 +239,28 @@
       <multiple>locations</multiple>						 
     </term>
     <term name="equation">			 
-      <single>equation</single>
-      <multiple>equations</multiple>						 
+      <single>rovnica</single>
+      <multiple>rovnice</multiple>						 
     </term>
     <term name="rule">			 
-      <single>rule</single>
-      <multiple>rules</multiple>						 
+      <single>pravidlo</single>
+      <multiple>pravidlá</multiple>						 
     </term>
     <term name="scene">			 
-      <single>scene</single>
-      <multiple>scenes</multiple>						 
+      <single>scéna</single>
+      <multiple>scény</multiple>						 
     </term>
     <term name="table">			 
-      <single>table</single>
-      <multiple>tables</multiple>						 
+      <single>tabuľka</single>
+      <multiple>tabuľky</multiple>						 
     </term>
     <term name="timestamp"> <!-- generally blank -->
       <single></single>
       <multiple></multiple>						 
     </term>
     <term name="title-locator">			 
-      <single>title</single>
-      <multiple>titles</multiple>						 
+      <single>názov</single>
+      <multiple>názvy</multiple>						 
     </term>
     <term name="book">
       <single>kniha</single>
@@ -300,12 +303,12 @@
       <multiple>strany</multiple>
     </term>
     <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
+      <single>zväzok</single>
+      <multiple>zväzky</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>strana</single>
+      <multiple>strany</multiple>
     </term>
     <term name="printing">
       <single>printing</single>
@@ -313,8 +316,8 @@
     </term>
 
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>kap.</single>
+      <multiple>kap.</multiple>
     </term>
     <term name="citation-number" form="short">
       <single>cit.</single>
@@ -350,8 +353,8 @@
       <multiple>verše</multiple>
     </term>
     <term name="volume">
-      <single>ročník</single>
-      <multiple>ročníky</multiple>
+      <single>zväzok</single>
+      <multiple>zväzky</multiple>
     </term>
 
     <!-- SHORT LOCATOR FORMS -->
@@ -368,8 +371,8 @@
       <multiple>locs.</multiple>
     </term>
     <term name="equation" form="short">			 
-      <single>eq.</single>
-      <multiple>eqs.</multiple>
+      <single>rov.</single>
+      <multiple>rov.</multiple>
     </term>
     <term name="rule" form="short">			 
       <single>r.</single>
@@ -380,8 +383,8 @@
       <multiple>scs.</multiple>						 
     </term>
     <term name="table" form="short">			 
-      <single>tbl.</single>
-      <multiple>tbls.</multiple>						 
+      <single>tab.</single>
+      <multiple>tab.</multiple>						 
     </term>
     <term name="timestamp" form="short"> <!-- generally blank -->
       <single></single>
@@ -405,8 +408,8 @@
       <multiple>s.</multiple>
     </term>
     <term name="number-of-volumes" form="short">
-      <single>vol.</single>
-      <multiple>vols.</multiple>
+      <single>zv.</single>
+      <multiple>zv.</multiple>
     </term>
     <term name="page-first" form="short">
       <single>p.</single>
@@ -422,7 +425,7 @@
       <single>s.</single>
       <multiple>s.</multiple>
     </term>
-    <term name="paragraph" form="short">par.</term>
+    <term name="paragraph" form="short">ods.</term>
     <term name="part" form="short">č.</term>
     <term name="section" form="short">sek.</term>
     <term name="supplement" form="short">
@@ -438,8 +441,8 @@
       <multiple>v.</multiple>
     </term>
     <term name="volume" form="short">
-      <single>roč.</single>
-      <multiple>roč.</multiple>
+      <single>zv.</single>
+      <multiple>zv.</multiple>
     </term>
 
     <!-- SYMBOL LOCATOR FORMS -->
@@ -448,8 +451,8 @@
       <multiple>¶</multiple>
     </term>
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>kapitola</single>
+      <multiple>kapitoly</multiple>
     </term>
     <term name="citation-number">
       <single>citation</single>
@@ -502,20 +505,20 @@
       <multiple>narrators</multiple>
     </term>
     <term name="organizer">
-      <single>organizer</single>
-      <multiple>organizers</multiple>
+      <single>organizátor</single>
+      <multiple>organizátori</multiple>
     </term>
     <term name="performer">
       <single>performer</single>
       <multiple>performers</multiple>
     </term>
     <term name="producer">
-      <single>producer</single>
-      <multiple>producers</multiple>
+      <single>producent</single>
+      <multiple>producenti</multiple>
     </term>
     <term name="script-writer">
-      <single>writer</single>
-      <multiple>writers</multiple>
+      <single>scenárista</single>
+      <multiple>scenáristi</multiple>
     </term>
     <term name="series-creator">
       <single>series creator</single>
@@ -534,14 +537,18 @@
       <multiple>zostavovatelia</multiple>
     </term>
     <term name="illustrator">
-      <single>illustrator</single>
-      <multiple>illustrators</multiple>
+      <single>illustrátor</single>
+      <multiple>illustrátori</multiple>
     </term>
     <term name="translator">
       <single>prekladateľ</single>
       <multiple>prekladatelia</multiple>
     </term>
     <term name="editortranslator">
+      <single>zostavovateľ &amp; prekladateľ</single>
+      <multiple>zostavovatelia &amp; prekladatelia</multiple>
+    </term>
+    <term name="editor-translator">
       <single>zostavovateľ &amp; prekladateľ</single>
       <multiple>zostavovatelia &amp; prekladatelia</multiple>
     </term>
@@ -569,7 +576,7 @@
     </term>
     <term name="organizer" form="short">
       <single>org.</single>
-      <multiple>orgs.</multiple>
+      <multiple>org.</multiple>
     </term>
     <term name="performer" form="short">
       <single>perf.</single>
@@ -577,7 +584,7 @@
     </term>
     <term name="producer" form="short">
       <single>prod.</single>
-      <multiple>prods.</multiple>
+      <multiple>prod.</multiple>
     </term>
     <term name="script-writer" form="short">
       <single>writ.</single>
@@ -611,6 +618,10 @@
       <single>ed. &amp; tran.</single>
       <multiple>eds. &amp; trans.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ed. &amp; tran.</single>
+      <multiple>eds. &amp; trans.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -638,6 +649,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">preložil</term>
     <term name="editortranslator" form="verb">zostavil &amp; preložil</term>
+    <term name="editor-translator" form="verb">zostavil &amp; preložil</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -658,6 +670,7 @@
     <term name="illustrator" form="verb-short">illus.</term>
     <term name="translator" form="verb-short">prel.</term>
     <term name="editortranslator" form="verb-short">zost. &amp; prel.</term>
+    <term name="editor-translator" form="verb-short">zost. &amp; prel.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">január</term>

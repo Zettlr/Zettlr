@@ -539,6 +539,10 @@
       <single>urednik &amp; prevajalec</single>
       <multiple>uredniki &amp; prevajalci</multiple>
     </term>
+    <term name="editor-translator">
+      <single>urednik &amp; prevajalec</single>
+      <multiple>uredniki &amp; prevajalci</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -605,6 +609,10 @@
       <single>ur. &amp; prev.</single>
       <multiple>ur. &amp; prev.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ur. &amp; prev.</single>
+      <multiple>ur. &amp; prev.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -632,6 +640,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">prevedel</term>
     <term name="editortranslator" form="verb">uredil &amp; prevedel</term>
+    <term name="editor-translator" form="verb">uredil &amp; prevedel</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -652,6 +661,7 @@
     <term name="illustrator" form="verb-short">ilus.</term>
     <term name="translator" form="verb-short">prev.</term>
     <term name="editortranslator" form="verb-short">ured. &amp; prev. by</term>
+    <term name="editor-translator" form="verb-short">ured. &amp; prev. by</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">januar</term>

@@ -390,6 +390,10 @@
       <single>سودھی &amp; مترجم</single>
       <multiple>سودھی &amp; مترجم</multiple>
     </term>
+    <term name="editor-translator">
+      <single>سودھی &amp; مترجم</single>
+      <multiple>سودھی &amp; مترجم</multiple>
+    </term>
     <term name="editorial-director">
       <single>سودھی</single>
       <multiple>سودھی</multiple>
@@ -450,6 +454,7 @@
     <term name="director" form="verb">ڈائریکٹر نال</term>
     <term name="editor" form="verb">سودھی نال</term>
     <term name="editortranslator" form="verb">سودھی &amp; مترجم نال</term>
+    <term name="editor-translator" form="verb">سودھی &amp; مترجم نال</term>
     <term name="editorial-director" form="verb">سودھی نال</term>
     <term name="executive-producer" form="verb">انتظامیے نال</term>
     <term name="guest" form="verb">مہمان نال</term>

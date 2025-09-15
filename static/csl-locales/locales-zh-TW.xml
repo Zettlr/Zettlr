@@ -441,6 +441,7 @@
     <term name="recipient">收信人</term>     
     <term name="translator">翻譯員</term>      
     <term name="editortranslator">編譯員</term>
+    <term name="editor-translator">編譯員</term>
     <term name="reviewed-author">評論人</term>
 
     <!-- SHORT ROLE FORMS -->
@@ -492,6 +493,7 @@
     <term name="recipient" form="short">收信人</term>     
     <term name="translator" form="short">翻譯員</term>      
     <term name="editortranslator" form="short">編譯員</term>
+    <term name="editor-translator" form="short">編譯員</term>
     <term name="reviewed-author" form="short">評論人</term>
 
 
@@ -520,11 +522,17 @@
     <term name="reviewed-author" form="verb">點評</term>
     <term name="translator" form="verb">翻譯</term>
     <term name="editortranslator" form="verb">編譯</term>
+    <term name="editor-translator" form="verb">編譯</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
     <term name="contributor" form="verb-short">w.</term>
     <term name="curator" form="verb-short">cur. by</term>
+    <term name="director" form="verb-short">dir. by</term>
+    <term name="editor" form="verb-short">ed. by</term>
+    <term name="editor-translator" form="verb-short">ed. &amp; trans. by</term>
+    <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
+    <term name="editorial-director" form="verb-short">ed. by</term>
     <term name="executive-producer" form="verb-short">exec. prod. by</term>
     <term name="guest" form="verb-short">w. guest</term>
     <term name="host" form="verb-short">hosted by</term>

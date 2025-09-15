@@ -542,6 +542,10 @@
       <single>biên tập viên &amp; biên dịch viên</single>
       <multiple>biên tập viên &amp; biên dịch viên</multiple>
     </term>
+    <term name="editor-translator">
+      <single>biên tập viên &amp; biên dịch viên</single>
+      <multiple>biên tập viên &amp; biên dịch viên</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -608,6 +612,10 @@
       <single>b.t.v &amp; b.d.v</single>
       <multiple>b.t.v &amp; b.d.v</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>b.t.v &amp; b.d.v</single>
+      <multiple>b.t.v &amp; b.d.v</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -635,6 +643,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">biên dịch bởi</term>
     <term name="editortranslator" form="verb">biên tập &amp; biên dịch bởi</term>
+    <term name="editor-translator" form="verb">biên tập &amp; biên dịch bởi</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -655,6 +664,7 @@
     <term name="illustrator" form="verb-short">h.s</term>
     <term name="translator" form="verb-short">b.d</term>
     <term name="editortranslator" form="verb-short">b.t &amp; b.d bởi</term>
+    <term name="editor-translator" form="verb-short">b.t &amp; b.d bởi</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Tháng Giêng</term>

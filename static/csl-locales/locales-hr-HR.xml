@@ -536,6 +536,10 @@
       <single>urednik &amp; prevoditelj</single>
       <multiple>urednici &amp; prevoditelji</multiple>
     </term>
+    <term name="editor-translator">
+      <single>urednik &amp; prevoditelj</single>
+      <multiple>urednici &amp; prevoditelji</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -602,6 +606,10 @@
       <single>ur. &amp; prev.</single>
       <multiple>ur. &amp; prev.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ur. &amp; prev.</single>
+      <multiple>ur. &amp; prev.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -629,6 +637,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">preveo</term>
     <term name="editortranslator" form="verb">uredio &amp; preveo</term>
+    <term name="editor-translator" form="verb">uredio &amp; preveo</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -649,6 +658,7 @@
     <term name="illustrator" form="verb-short">ilus.</term>
     <term name="translator" form="verb-short">prev.</term>
     <term name="editortranslator" form="verb-short">ur. &amp; prev.</term>
+    <term name="editor-translator" form="verb-short">ur. &amp; prev.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">siječanj</term>

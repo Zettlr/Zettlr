@@ -539,6 +539,10 @@
       <single>editor &amp; translator</single>
       <multiple>editors &amp; translators</multiple>
     </term>
+    <term name="editor-translator">
+      <single>editor &amp; translator</single>
+      <multiple>editors &amp; translators</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -605,6 +609,10 @@
       <single>ed. &amp; tran.</single>
       <multiple>eds. &amp; trans.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ed. &amp; tran.</single>
+      <multiple>eds. &amp; trans.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -632,6 +640,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">превео</term>
     <term name="editortranslator" form="verb">edited &amp; translated by</term>
+    <term name="editor-translator" form="verb">edited &amp; translated by</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -652,6 +661,7 @@
     <term name="illustrator" form="verb-short">illus.</term>
     <term name="translator" form="verb-short">прев.</term>
     <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
+    <term name="editor-translator" form="verb-short">ed. &amp; trans. by</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Јануар</term>

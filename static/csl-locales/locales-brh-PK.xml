@@ -365,6 +365,10 @@
       <single>ایڈٹر &amp; مترجم</single>
       <multiple>ایڈٹک &amp; مترجمک</multiple>
     </term>
+    <term name="editor-translator">
+      <single>ایڈٹر &amp; مترجم</single>
+      <multiple>ایڈٹک &amp; مترجمک</multiple>
+    </term>
     <term name="editorial-director">
       <single>ایڈٹر</single>
       <multiple>ایڈٹک</multiple>
@@ -426,6 +430,7 @@
     <term name="director" form="verb">ڈائریکٹرٹ</term>
     <term name="editor" form="verb">ایڈٹرٹ</term>
     <term name="editortranslator" form="verb">مترجمٹ &amp; ایڈٹرٹ</term>
+    <term name="editor-translator" form="verb">مترجمٹ &amp; ایڈٹرٹ</term>
     <term name="editorial-director" form="verb">ایڈٹرٹ</term>
     <term name="executive-producer" form="verb">انتظامیٹ</term>
     <term name="guest" form="verb">مہمانٹ</term>

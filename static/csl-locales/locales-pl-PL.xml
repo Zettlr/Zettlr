@@ -551,6 +551,10 @@
       <single>redaktor &amp; tłumacz</single>
       <multiple>redaktorzy &amp; tłumacze</multiple>
     </term>
+    <term name="editor-translator">
+      <single>redaktor &amp; tłumacz</single>
+      <multiple>redaktorzy &amp; tłumacze</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -617,6 +621,10 @@
       <single>red.tłum.</single>
       <multiple>red.tłum.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>red.tłum.</single>
+      <multiple>red.tłum.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -644,6 +652,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">przetłumaczone przez</term>
     <term name="editortranslator" form="verb">zredagowane i przetłumaczone przez</term>
+    <term name="editor-translator" form="verb">zredagowane i przetłumaczone przez</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -664,6 +673,7 @@
     <term name="illustrator" form="verb-short">il.</term>
     <term name="translator" form="verb-short">tłum.</term>
     <term name="editortranslator" form="verb-short">red.tłum.</term>
+    <term name="editor-translator" form="verb-short">red.tłum.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">stycznia</term>

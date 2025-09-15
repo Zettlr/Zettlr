@@ -539,6 +539,10 @@
       <single>golygydd a chyfieithydd</single>
       <multiple>golygyddion a chyfieithwyr</multiple>
     </term>
+    <term name="editor-translator">
+      <single>golygydd a chyfieithydd</single>
+      <multiple>golygyddion a chyfieithwyr</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -605,6 +609,10 @@
       <single>gol. a chyf.</single>
       <multiple>goln. a chyf.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>gol. a chyf.</single>
+      <multiple>goln. a chyf.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -632,6 +640,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">cyfieithwyd gan </term>
     <term name="editortranslator" form="verb">golygwyd a chyfieithwyd gan</term>
+    <term name="editor-translator" form="verb">golygwyd a chyfieithwyd gan</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -652,6 +661,7 @@
     <term name="illustrator" form="verb-short">darlun. gan</term>
     <term name="translator" form="verb-short">cyf. gan</term>
     <term name="editortranslator" form="verb-short">gol. a chyf. gan</term>
+    <term name="editor-translator" form="verb-short">gol. a chyf. gan</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Ionawr</term>

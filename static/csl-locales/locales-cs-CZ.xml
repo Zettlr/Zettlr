@@ -546,6 +546,10 @@
       <single>editor a překladatel</single>
       <multiple>editoři a překladatelé</multiple>
     </term>
+    <term name="editor-translator">
+      <single>editor a překladatel</single>
+      <multiple>editoři a překladatelé</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -612,6 +616,10 @@
       <single>ed. a přel.</single>
       <multiple>ed. a přel.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ed. a přel.</single>
+      <multiple>ed. a přel.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -639,6 +647,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">přeložil</term>
     <term name="editortranslator" form="verb">editoval a přeložil</term>
+    <term name="editor-translator" form="verb">editoval a přeložil</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -659,6 +668,7 @@
     <term name="illustrator" form="verb-short">ilust.</term>
     <term name="translator" form="verb-short">přel.</term>
     <term name="editortranslator" form="verb-short">ed. a přel.</term>
+    <term name="editor-translator" form="verb-short">ed. a přel.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">leden</term>

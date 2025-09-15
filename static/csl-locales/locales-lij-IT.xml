@@ -565,6 +565,10 @@
       <single>cuatô e traduttô</single>
       <multiple>curatoî e traduttoî</multiple>
     </term>
+    <term name="editor-translator">
+      <single>cuatô e traduttô</single>
+      <multiple>curatoî e traduttoî</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -631,6 +635,10 @@
       <single>cua. e trad.</single>
       <multiple>cua. e trad.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>cua. e trad.</single>
+      <multiple>cua. e trad.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">à cua de</term>
@@ -658,6 +666,7 @@
     <term name="collection-editor" form="verb-short">ed. da</term>
     <term name="translator" form="verb">traduto da</term>
     <term name="editortranslator" form="verb">à cua de e traduto da</term>
+    <term name="editor-translator" form="verb">à cua de e traduto da</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">realizz. da</term>
@@ -678,6 +687,7 @@
     <term name="illustrator" form="verb-short">inl. da</term>
     <term name="translator" form="verb-short">trad. da</term>
     <term name="editortranslator" form="verb-short">à c. de e trad. da</term>
+    <term name="editor-translator" form="verb-short">à c. de e trad. da</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01" gender="masculine">zenâ</term>

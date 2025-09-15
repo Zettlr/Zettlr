@@ -536,6 +536,10 @@
       <single>toimetaja &amp; tõlkija</single>
       <multiple>toimetajad &amp; tõlkijad</multiple>
     </term>
+    <term name="editor-translator">
+      <single>toimetaja &amp; tõlkija</single>
+      <multiple>toimetajad &amp; tõlkijad</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -602,6 +606,10 @@
       <single>toim &amp; tõlk</single>
       <multiple>toim &amp; tõlk</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>toim &amp; tõlk</single>
+      <multiple>toim &amp; tõlk</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -629,6 +637,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">tõlkinud</term>
     <term name="editortranslator" form="verb">toimetanud &amp; tõlkinud</term>
+    <term name="editor-translator" form="verb">toimetanud &amp; tõlkinud</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -649,6 +658,7 @@
     <term name="illustrator" form="verb-short">illus.</term>
     <term name="translator" form="verb-short">tõlk</term>
     <term name="editortranslator" form="verb-short">toim &amp; tõlk</term>
+    <term name="editor-translator" form="verb-short">toim &amp; tõlk</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">jaanuar</term>

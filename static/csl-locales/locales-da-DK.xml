@@ -542,6 +542,10 @@
       <single>redaktør &amp; oversætter</single>
       <multiple>redaktører &amp; oversættere</multiple>
     </term>
+    <term name="editor-translator">
+      <single>redaktør &amp; oversætter</single>
+      <multiple>redaktører &amp; oversættere</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -608,6 +612,10 @@
       <single>red. &amp; overs.</single>
       <multiple>red. &amp; overs.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>red. &amp; overs.</single>
+      <multiple>red. &amp; overs.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -635,6 +643,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">oversat af</term>
     <term name="editortranslator" form="verb">redigeret &amp; oversat af</term>
+    <term name="editor-translator" form="verb">redigeret &amp; oversat af</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -655,6 +664,7 @@
     <term name="illustrator" form="verb-short">illus.</term>
     <term name="translator" form="verb-short">overs.</term>
     <term name="editortranslator" form="verb-short">red. &amp; overs. af</term>
+    <term name="editor-translator" form="verb-short">red. &amp; overs. af</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">januar</term>

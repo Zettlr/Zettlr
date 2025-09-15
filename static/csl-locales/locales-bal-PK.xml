@@ -363,6 +363,10 @@
       <single>شونکار ءُ رجانکار</single>
       <multiple>شونکار ءُ رجانکار</multiple>
     </term>
+    <term name="editor-translator">
+      <single>شونکار ءُ رجانکار</single>
+      <multiple>شونکار ءُ رجانکار</multiple>
+    </term>
     <term name="editorial-director">
       <single>سرشونکار</single>
       <multiple>سرشونکار</multiple>
@@ -424,6 +428,7 @@
     <term name="director" form="verb">سوج داته گون</term>
     <term name="editor" form="verb">ردینته گون</term>
     <term name="editortranslator" form="verb">ردینته ءُ رجانک کرتگ گون</term>
+    <term name="editor-translator" form="verb">ردینته ءُ رجانک کرتگ گون</term>
     <term name="editorial-director" form="verb">ردینته گون</term>
     <term name="executive-producer" form="verb">انتزامیه گون</term>
     <term name="guest" form="verb">مهمان گون</term>
