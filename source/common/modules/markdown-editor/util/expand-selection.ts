@@ -15,7 +15,7 @@
 
 import { syntaxTree } from '@codemirror/language'
 import { type EditorState } from '@codemirror/state'
-import type { TreeCursor } from '@lezer/common'
+import type { Tree, TreeCursor } from '@lezer/common'
 
 export type Range = { from: number, to: number }
 
@@ -153,11 +153,12 @@ export function getBlockPosition (state: EditorState, from: number, to: number, 
  * @param   {number}      to       The end of the selection
  * @param   {number}      context  Expand the selection by `context`
  *                                 number of nodes before `from` and after `to`
+ * @param   {Tree}        [tree]   Optional. A pre-computed Tree object.
  *
  * @return  {Range}                The selection expanded to the nearest node boundaries
  */
-export function getNodePosition (state: EditorState, from: number, to: number, context: number = 0): Range {
-  const tree = syntaxTree(state)
+export function getNodePosition (state: EditorState, from: number, to: number, context: number = 0, tree?: Tree): Range {
+  tree = tree ?? syntaxTree(state)
 
   let cursorFrom: TreeCursor = tree.resolve(from, -1).cursor()
   let cursorTo: TreeCursor = tree.resolve(to, 1).cursor()
