@@ -214,7 +214,15 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         { name: 'YAMLFrontmatter' },
         { name: 'YAMLFrontmatterStart', style: customTags.YAMLFrontmatterStart },
         { name: 'YAMLFrontmatterEnd', style: customTags.YAMLFrontmatterEnd },
-        { name: 'Citation', style: customTags.Citation },
+        // Citation elements
+        { name: 'Citation', style: { 'Citation/...': customTags.Citation } },
+        { name: 'CitationMark', style: customTags.CitationMark },
+        { name: 'CitationPrefix', style: customTags.CitationPrefix },
+        { name: 'CitationSuppressAuthorFlag', style: customTags.CitationSuppressAuthorFlag },
+        { name: 'CitationAtSign', style: customTags.CitationAtSign },
+        { name: 'CitationCitekey', style: customTags.CitationCitekey },
+        { name: 'CitationLocator', style: customTags.CitationLocator },
+        { name: 'CitationSuffix', style: customTags.CitationSuffix },
         { name: 'HighlightMark', style: customTags.HighlightMark },
         // NOTE: The convention {TagName}/... means that the corresponding styles
         // from the syntax theme get assigned to all child nodes that are contained

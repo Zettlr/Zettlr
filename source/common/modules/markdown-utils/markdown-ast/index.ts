@@ -557,11 +557,22 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       return parseChildren(astNode, node, markdown)
     }
     case 'Citation': {
+      // DEBUG DEBUG DEBUG
+      // Right now, the citation parser detects more things as a citation than
+      // the extractCitations function. This can lead to there being a Citation
+      // SyntaxNode in the parse tree, but below's function will not be able to
+      // extract any citations due to syntax differences. We need to switch this
+      // to actually using the citation node for parsing.
+      const citations = extractCitations(markdown.substring(node.from, node.to))
+      if (citations.length === 0) {
+        console.log('COULD NOT PROPERLY EXTRACT CITATION FROM NODE:', markdown.substring(node.from, node.to))
+        return genericTextNode(node.from, node.to, markdown.substring(node.from, node.to), getWhitespaceBeforeNode(node, markdown))
+      }
       const astNode: Citation = {
         name: 'Citation',
         type: 'Citation',
         value: markdown.substring(node.from, node.to),
-        parsedCitation: extractCitations(markdown.substring(node.from, node.to))[0],
+        parsedCitation: citations[0],
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown)

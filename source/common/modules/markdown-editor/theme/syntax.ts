@@ -68,7 +68,15 @@ const markdownTheme = HighlightStyle.define([
   { tag: customTags.ZknTagContent, class: 'cm-zkn-tag' },
   { tag: customTags.PandocAttribute, class: 'pandoc-attribute' },
   { tag: customTags.HighlightMark, class: 'cm-highlight cm-highlight-mark' },
-  { tag: customTags.HighlightContent, class: 'cm-highlight' }
+  { tag: customTags.HighlightContent, class: 'cm-highlight' },
+  { tag: customTags.Citation, class: 'cm-citation' },
+  { tag: customTags.CitationMark, class: 'cm-citation-mark' },
+  { tag: customTags.CitationPrefix, class: 'cm-citation-prefix' },
+  { tag: customTags.CitationSuppressAuthorFlag, class: 'cm-citation-suppress-author-flag' },
+  { tag: customTags.CitationAtSign, class: 'cm-citation-at-sign' },
+  { tag: customTags.CitationCitekey, class: 'cm-citation-citekey' },
+  { tag: customTags.CitationLocator, class: 'cm-citation-locator' },
+  { tag: customTags.CitationSuffix, class: 'cm-citation-suffix' },
 ])
 
 const codeTheme = HighlightStyle.define([
