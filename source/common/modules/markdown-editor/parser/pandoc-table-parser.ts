@@ -25,8 +25,12 @@ import {
   type LeafBlockParser
 } from '@lezer/markdown'
 
-// Group 1: ^| table contents |$; Group 2: some text | with pipes in between
-const pipeRE = /^(\|.+?\|)$|(.+?\|.+?)/
+// Pipe Table Regex:
+// ^\|?         => optional leading pipe
+// [^|]*        => first cell, zero or more characters
+// (?:\|[^|]*)* => optionally, any number of cells
+// \|?$         => optional tailing pipe
+const pipeRE = /^\|?[^|]*(?:\|[^|]*)*\|?$/
 const pipeHeaderRE = /^[|+:-]+$/
 const gridLineRE = /^\+[-=+:]+\+$/
 const gridContentRE = /^\|.+\|$/
@@ -221,9 +225,9 @@ export const gridTableParser: BlockParser = {
 
 const pipeLeafParser: LeafBlockParser = {
   nextLine (_ctx, _line, _leaf) {
-    // Pipe tables are only finished on empty lines, i.e. we don't have to do
-    // any logic in here.
-    return false
+    // Pipe tables are only finished on empty lines,
+    // so if the next line fails, we can stop parsing.
+    return !pipeRE.test(_line.text)
   },
   finish (ctx, leaf) {
     // Called when there is an empty line, or something similar. At this point
