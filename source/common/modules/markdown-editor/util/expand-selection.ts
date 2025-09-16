@@ -144,6 +144,18 @@ export function getBlockPosition (state: EditorState, from: number, to: number, 
   return { from: blockFrom, to: blockTo }
 }
 
+const BLOCK_NODES = new Set([
+  'Paragraph',
+  'ATXHeading1', 'ATXHeading2', 'ATXHeading3',
+  'ATXHeading4', 'ATXHeading5', 'ATXHeading6',
+  'SetextHeading',
+  'FencedCode', 'IndentedCode',
+  'Blockquote',
+  'ListItem', 'OrderedList', 'BulletList',
+  'HorizontalRule',
+  'ThematicBreak'
+])
+
 /**
  * This function takes a range and expands it to the nearest
  * node boundary before `from` and after `to`
@@ -160,23 +172,36 @@ export function getBlockPosition (state: EditorState, from: number, to: number, 
 export function getNodePosition (state: EditorState, from: number, to: number, context: number = 0, tree?: Tree): Range {
   tree = tree ?? syntaxTree(state)
 
-  let cursorFrom: TreeCursor = tree.resolve(from, -1).cursor()
-  let cursorTo: TreeCursor = tree.resolve(to, 1).cursor()
+  const start: number = Math.min(from, to)
+  const end: number = Math.max(from, to)
 
-  let idx = 0
-  let prevCursor = cursorFrom
-  let nextCursor = cursorTo
-
-  while (idx < context) {
-    idx++
-    prevCursor.prev(false)
-    nextCursor.next(false)
+  const cursorA: TreeCursor = tree.topNode.cursor()
+  if (!cursorA.childBefore(start)) {
+    cursorA.firstChild()
+  }
+  while (!BLOCK_NODES.has(cursorA.node.name)) {
+    if (!cursorA.parent()) { break }
   }
 
-  const nodeFrom = prevCursor.node.from
-  const nodeTo = nextCursor.node.to
+  const cursorB: TreeCursor = tree.topNode.cursor()
+  if (!cursorB.childAfter(end)) {
+    cursorB.lastChild()
+  }
+  while (!BLOCK_NODES.has(cursorB.node.name)) {
+    if (!cursorB.parent()) { break }
+  }
 
-  return { from: nodeFrom, to: nodeTo }
+  let steps = context
+  while (steps-- > 0) {
+    while (cursorA.prevSibling() && !BLOCK_NODES.has(cursorA.node.name)) {
+      if (!cursorA.parent()) { break }
+    }
+    while (cursorB.nextSibling() && !BLOCK_NODES.has(cursorB.node.name)) {
+      if (!cursorB.parent()) { break }
+    }
+  }
+
+  return { from: cursorA.from, to: cursorB.to }
 }
 
 /**
