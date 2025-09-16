@@ -95,6 +95,7 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 - Style improvements: linter panel dark mode (#5882);  drop cursor (#5883);
   export, pomodoro, and tags popover (#5895); spacing in file manager tree view
   (#5891); global search (#5894).
+- Switched the icons for code and comments in the formatting toolbar (#5901).
 
 ## Under the Hood
 
