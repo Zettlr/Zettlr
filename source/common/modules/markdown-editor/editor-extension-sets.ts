@@ -40,8 +40,8 @@ import { defaultContextMenu } from './plugins/default-context-menu'
 import { readabilityMode } from './plugins/readability'
 import { hookDocumentAuthority } from './plugins/remote-doc'
 import { lintGutter, linter } from '@codemirror/lint'
-import { spellcheck } from './linters/spellcheck'
-import { mdLint } from './linters/md-lint'
+import { spellcheck, spellcheckerChangesField } from './linters/spellcheck'
+import { mdLint, mdLintChangesField } from './linters/md-lint'
 import { countField } from './plugins/statistics-fields'
 import { tocField } from './plugins/toc-field'
 import { typewriter } from './plugins/typewriter'
@@ -271,6 +271,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
   // because if that thing has an error, that thing has an error.
   const mdLinterExtensions = [
     spellcheck,
+    spellcheckerChangesField,
     yamlFrontmatterLint
   ]
 
@@ -278,7 +279,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
 
   if (options.initialConfig.lintMarkdown) {
     hasLinters = true
-    mdLinterExtensions.push(mdLint)
+    mdLinterExtensions.push(mdLint, mdLintChangesField)
   }
 
   if (options.initialConfig.lintLanguageTool) {

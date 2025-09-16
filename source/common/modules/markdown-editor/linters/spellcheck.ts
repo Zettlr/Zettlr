@@ -12,11 +12,12 @@
  *
  * END HEADER
  */
-
 import { linter, type Diagnostic } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
+import { getLinePosition } from '../util/expand-selection'
+import { changesFieldEffectFactory, prepareDiagnostics } from './utils'
 
 const ipcRenderer = window.ipc
 
@@ -151,47 +152,66 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
   }
 }
 
+export const { set: setspellcheckChanges, lint: spellcheckerChangesField } = changesFieldEffectFactory()
+
 /**
  * Defines a spellchecker that runs over the text content of the document and
  * highlights misspelled words
  */
 export const spellcheck = linter(async view => {
-  const diagnostics: Diagnostic[] = []
+  const { ranges, diagnostics } = prepareDiagnostics(view.state, spellcheckerChangesField, 'spellcheck', getLinePosition)
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
-  const ast = markdownToAST(view.state.doc.toString())
-  const textNodes = extractTextnodes(ast)
 
-  const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = textNodes
-    // First, extract all words from the node's value
-    .flatMap(node => {
-      const words: Array<{ index: number, word: string }> = []
-      for (const match of node.value.matchAll(anyLetterRE)) {
-        // Remove words that only consists, e.g., of quotes
-        if (!noneLetterRE.test(match[0])) {
-          // Remove none-letters from the beginnings and ends of words
-          let word = match[0]
-          while (nonLetters.includes(word[0])) {
-            word = word.slice(1)
+  const rangePromises: Promise<void>[] = []
+
+  for (const { from, to } of ranges) {
+    // iterChangedRanges is synchronous, so we have to work around the async functions
+    rangePromises.push((async () => {
+      const text = view.state.sliceDoc(from, to)
+
+      const ast = markdownToAST(text)
+      const textNodes = extractTextnodes(ast)
+
+      const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = textNodes
+        // First, extract all words from the node's value
+        .flatMap(node => {
+          const words: Array<{ index: number, word: string }> = []
+          for (const match of node.value.matchAll(anyLetterRE)) {
+            // Remove words that only consists, e.g., of quotes
+            if (!noneLetterRE.test(match[0])) {
+              // Remove none-letters from the beginnings and ends of words
+              let word = match[0]
+              while (nonLetters.includes(word[0])) {
+                word = word.slice(1)
+              }
+              while (nonLetters.includes(word[word.length - 1])) {
+                word = word.slice(0, word.length - 1)
+              }
+              words.push({ word, index: match.index })
+            }
           }
-          while (nonLetters.includes(word[word.length - 1])) {
-            word = word.slice(0, word.length - 1)
-          }
-          words.push({ word, index: match.index })
+
+          return words.map(x => ({ ...x, nodeStart: node.from + from }))
+        })
+
+      // Now make sure everything is cached beforehand with two IPC calls
+      await batchCheck(wordsToCheck.map(x => x.word))
+
+      for (const { word, index, nodeStart } of wordsToCheck) {
+        const diagnostic = await checkWord(word, index, nodeStart, autocorrectValues)
+        if (diagnostic !== undefined) {
+          diagnostics.push(diagnostic)
         }
       }
-
-      return words.map(x => ({ ...x, nodeStart: node.from }))
-    })
-
-  // Now make sure everything is cached beforehand with two IPC calls
-  await batchCheck(wordsToCheck.map(x => x.word))
-
-  for (const { word, index, nodeStart } of wordsToCheck) {
-    const diagnostic = await checkWord(word, index, nodeStart, autocorrectValues)
-    if (diagnostic !== undefined) {
-      diagnostics.push(diagnostic)
-    }
+    })())
   }
+
+  await Promise.all(rangePromises)
+
+  // since we've linted, we can reset the accumulated changes
+  view.dispatch({
+    effects: setspellcheckChanges.of(null)
+  })
 
   return diagnostics
 })
