@@ -144,18 +144,6 @@ export function getBlockPosition (state: EditorState, from: number, to: number, 
   return { from: blockFrom, to: blockTo }
 }
 
-const BLOCK_NODES = new Set([
-  'Paragraph',
-  'ATXHeading1', 'ATXHeading2', 'ATXHeading3',
-  'ATXHeading4', 'ATXHeading5', 'ATXHeading6',
-  'SetextHeading',
-  'FencedCode', 'IndentedCode',
-  'Blockquote',
-  'ListItem', 'OrderedList', 'BulletList',
-  'HorizontalRule',
-  'ThematicBreak'
-])
-
 /**
  * This function takes a range and expands it to the nearest
  * node boundary before `from` and after `to`
@@ -169,7 +157,7 @@ const BLOCK_NODES = new Set([
  *
  * @return  {Range}                The selection expanded to the nearest node boundaries
  */
-export function getNodePosition (state: EditorState, from: number, to: number, context: number = 0, tree?: Tree): Range {
+export function getNodePosition (state: EditorState, from: number, to: number, context: number = 0, filter?: Set<string>, tree?: Tree): Range {
   tree = tree ?? syntaxTree(state)
 
   const start: number = Math.min(from, to)
@@ -179,7 +167,7 @@ export function getNodePosition (state: EditorState, from: number, to: number, c
   if (!cursorA.childBefore(start)) {
     cursorA.firstChild()
   }
-  while (!BLOCK_NODES.has(cursorA.node.name)) {
+  while (!filter || !filter.has(cursorA.node.name)) {
     if (!cursorA.parent()) { break }
   }
 
@@ -187,16 +175,15 @@ export function getNodePosition (state: EditorState, from: number, to: number, c
   if (!cursorB.childAfter(end)) {
     cursorB.lastChild()
   }
-  while (!BLOCK_NODES.has(cursorB.node.name)) {
+  while (!filter || !filter.has(cursorB.node.name)) {
     if (!cursorB.parent()) { break }
   }
 
-  let steps = context
-  while (steps-- > 0) {
-    while (cursorA.prevSibling() && !BLOCK_NODES.has(cursorA.node.name)) {
+  while (context-- > 0) {
+    while (cursorA.prevSibling() && (!filter || !filter.has(cursorA.node.name))) {
       if (!cursorA.parent()) { break }
     }
-    while (cursorB.nextSibling() && !BLOCK_NODES.has(cursorB.node.name)) {
+    while (cursorB.nextSibling() && (!filter || !filter.has(cursorB.node.name))) {
       if (!cursorB.parent()) { break }
     }
   }
