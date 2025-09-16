@@ -29,7 +29,7 @@ import type {
   ZettelkastenTag
 } from '@common/modules/markdown-utils/markdown-ast'
 import { extractLinefeed } from './extract-linefeed'
-import { AppServiceContainer } from 'source/app/app-service-container'
+import { getAppServiceContainer, isAppServiceContainerReady } from '../../../app-service-container'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -83,8 +83,7 @@ export default function getMarkdownFileParser (
       file.firstHeading = firstH1.content
     }
 
-    const _app = new AppServiceContainer()
-    const locale: string =  _app.config.get('appLang')
+    const locale: string | undefined = isAppServiceContainerReady() ? getAppServiceContainer().config.get('appLang') : undefined
 
     const counts = countAll(ast, locale)
 

@@ -53,7 +53,9 @@ function prepareCounts (ast: ASTNode, locale?: string, from = 0, to?: number): {
   let chars = 0
   const words = textNodes
     .flatMap(node => {
-      // this count includes non-formatting characters and whitespace.
+      // this count includes non-formatting characters and whitespace,
+      // however, because the way text nodes are parsed, preceding whitespace
+      // may be excluded, such as for text following inline formatting.
       chars += node.value.length
 
       const segments = []
