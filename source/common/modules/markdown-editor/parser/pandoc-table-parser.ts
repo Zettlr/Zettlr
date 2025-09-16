@@ -225,9 +225,9 @@ export const gridTableParser: BlockParser = {
 
 const pipeLeafParser: LeafBlockParser = {
   nextLine (_ctx, _line, _leaf) {
-    // Pipe tables are only finished on empty lines,
-    // so if the next line fails, we can stop parsing.
-    return !pipeRE.test(_line.text)
+    // Pipe tables are only finished on empty lines, i.e. we don't have to do
+    // any logic in here.
+    return false
   },
   finish (ctx, leaf) {
     // Called when there is an empty line, or something similar. At this point
