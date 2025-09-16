@@ -87,7 +87,7 @@ onMounted(() => {
   ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context: DocumentsUpdateContext }) => {
     const { event, context } = payload
     // Update the bibliography if the active file has been saved
-    if (event === DP_EVENTS.CHANGE_FILE_STATUS && context.status === 'modification') {
+    if (event === DP_EVENTS.FILE_SAVED) {
       const { filePath } = context
 
       if (filePath === activeFile.value?.path) {
