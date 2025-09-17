@@ -17,6 +17,8 @@
  * END HEADER
  */
 
+import { syntaxTree } from '@codemirror/language'
+import { type EditorState } from '@codemirror/state'
 import { type SyntaxNode } from '@lezer/common'
 import { type InlineParser, type Element as MDElement } from '@lezer/markdown'
 
@@ -277,6 +279,29 @@ export function nodeToCiteItem (node: SyntaxNode, markdown: string): Citation {
     source: markdown.slice(node.from, node.to),
     composite, items
   }
+}
+
+/**
+ * Utility function that extracts all citation nodes from a provided
+ * EditorState. Use in conjunction with `nodeToCiteItem` to quickly extract all
+ * citations from a document.
+ *
+ * @param   {EditorState}  state  The EditorState
+ *
+ * @return  {SyntaxNode[]}        A list of all found Citation nodes.
+ */
+export function extractCitationNodes (state: EditorState): SyntaxNode[] {
+  const nodes: SyntaxNode[] = []
+
+  syntaxTree(state).iterate({
+    enter (node) {
+      if (node.type.name === NODES.CITATION) {
+        nodes.push(node.node)
+        return false
+      }
+    }
+  })
+  return nodes
 }
 
 // Here follows the actual parser
