@@ -108,7 +108,6 @@ function recalculateSizes (): void {
 }
 
 onMounted(() => {
-  window.addEventListener('resize', recalculateSizes)
   recalculateSizes()
   if (element.value !== null) {
     observer.observe(element.value, { box: 'border-box' })
@@ -116,7 +115,6 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', recalculateSizes)
   if (element.value !== null) {
     observer.unobserve(element.value)
   }
