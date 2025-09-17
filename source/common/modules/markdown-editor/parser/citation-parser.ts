@@ -591,6 +591,20 @@ export const citationParser: InlineParser = {
           i++
         }
 
+        if (i === citekeyStart) {
+          return -1 // Not (yet) a valid citation; this happens if the user types an @.
+        }
+
+        // If the last character at position i in the citekey is a punctuation
+        // character (i.e., not [a-zA-Z0-9]), we have to remove that one and
+        // backtrack one position. This is necessary so that inline (composite)
+        // citations that end the sentence (part) are properly rendered. I.e.,
+        // "Some sentence with @AuthorYear." should detect "AuthorYear" as the
+        // citekey, and ignore the period.
+        if (/[^a-zA-Z0-9]/.test(String.fromCharCode(ctx.char(i - 1)))) {
+          --i // TODO: Currently endless loop when the only character is an @
+        }
+
         // Note that we need not check for whether i = ctxEndPos, since the
         // citation is allowed to be the last thing within the inline context.
         parts.push(ctx.elt('CitationCitekey', citekeyStart, i))
