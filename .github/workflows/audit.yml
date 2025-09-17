@@ -67,7 +67,7 @@ jobs:
         echo "$AUDIT_CONTENT ..." >> message.txt
         echo '```' >> message.txt
         BODY=$(jq -n --arg msg "$(<message.txt)" '{ content: $msg }')
-        curl -d $BODY -H "Content-Type: application/json" -X POST $WEBHOOK
+        curl -d "$BODY" -H "Content-Type: application/json" -X POST "$WEBHOOK"
     - name: Cache JSON results as artifact
       # Run this step only if yarn npm audit exited with a non-zero code.
       if: ${{ failure() }}
