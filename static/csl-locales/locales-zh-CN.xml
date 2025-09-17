@@ -311,6 +311,7 @@
     <term name="illustrator">绘图</term>
     <term name="translator">翻译</term>
     <term name="editortranslator">编译</term>
+    <term name="editor-translator">编译</term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">编</term>
@@ -329,6 +330,7 @@
     <term name="illustrator" form="short">绘</term>
     <term name="translator" form="short">译</term>
     <term name="editortranslator" form="short">编译</term>
+    <term name="editor-translator" form="short">编译</term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">总编辑</term>
@@ -356,6 +358,7 @@
     <term name="collection-editor" form="verb-short">总编</term>
     <term name="translator" form="verb">翻译</term>
     <term name="editortranslator" form="verb">编译</term>
+    <term name="editor-translator" form="verb">编译</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">编</term>
@@ -376,6 +379,7 @@
     <term name="illustrator" form="verb-short">绘</term>
     <term name="translator" form="verb-short">译</term>
     <term name="editortranslator" form="verb-short">编译</term>
+    <term name="editor-translator" form="verb-short">编译</term>
     <term name="reviewed-author" form="verb-short">校</term>
 
     <!-- LONG MONTH FORMS -->

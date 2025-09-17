@@ -21,7 +21,6 @@ import { type Extension } from '@codemirror/state'
 import { type EditorView, keymap } from '@codemirror/view'
 import { addColAfter, addColBefore, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
 import { addRowAfter, addRowBefore, moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
-import { setAlignment } from '../table-editor/commands/tables'
 import { hiddenSpanField } from '../table-editor/subview'
 import { deleteBracketPair } from '@codemirror/autocomplete'
 import { applyBold, applyItalic, insertLink, insertImage, applyComment } from '../commands/markdown'
@@ -45,10 +44,10 @@ function selectAllCommand (view: EditorView): boolean {
 }
 
 export function tableEditorKeymap (mainView: EditorView): Extension {
-  const alignLeft = setAlignment('left')
-  const alignCenter = setAlignment('center')
-  const alignRight = setAlignment('right')
-
+  // TODO: Disable alignment commands until custom keymapping is implemented
+  // const alignLeft = setAlignment('left')
+  // const alignCenter = setAlignment('center')
+  // const alignRight = setAlignment('right')
   return [
     keymap.of([
       // Prevent programmatic insertion of newlines by disabling some
@@ -71,10 +70,10 @@ export function tableEditorKeymap (mainView: EditorView): Extension {
       { key: 'Mod-a', run: selectAllCommand, preventDefault: true },
       // Add a few more keyboard shortcuts.
       { key: 'Tab', run: _v => moveNextCell(mainView), shift: _v => movePrevCell(mainView) },
-      { key: 'Ctrl-l', run: _v => alignLeft(mainView), preventDefault: true },
-      { key: 'Ctrl-c', run: _v => alignCenter(mainView), preventDefault: true },
-      { key: 'Ctrl-r', run: _v => alignRight(mainView), preventDefault: true },
-
+      // TODO: Disable alignment commands until custom keymapping is implemented
+      // { key: 'Ctrl-l', run: _v => alignLeft(mainView), preventDefault: true },
+      // { key: 'Ctrl-c', run: _v => alignCenter(mainView), preventDefault: true },
+      // { key: 'Ctrl-r', run: _v => alignRight(mainView), preventDefault: true },
       // Further (relevant) keyboard commands (taken from the `markdownKeymap`).
       // NOTE: This is a subset of all commands, because block-based actions won't
       // work in the editor.

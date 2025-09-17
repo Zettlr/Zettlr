@@ -31,7 +31,7 @@
  * END HEADER
  */
 
-import MarkdownEditor from '@common/modules/markdown-editor'
+import MarkdownEditor, { type EditorViewPersistentState } from '@common/modules/markdown-editor'
 import objectToArray from '@common/util/object-to-array'
 
 import { ref, computed, onMounted, onBeforeUnmount, watch, toRef, onUpdated } from 'vue'
@@ -42,7 +42,7 @@ import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
 import type { AnyDescriptor, CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
-import { EditorSelection, type StateEffect } from '@codemirror/state'
+import { EditorSelection } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
 import { useConfigStore, useDocumentTreeStore, useTagsStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/util/renderer-path-polyfill'
@@ -73,7 +73,7 @@ const props = defineProps<{
   editorCommands: EditorCommands
   distractionFree: boolean
   file: OpenDocument
-  scrollPositionMap: Map<string, StateEffect<any>>
+  persistentStateMap: Map<string, EditorViewPersistentState>
 }>()
 
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
@@ -180,7 +180,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (currentEditor !== null) {
-    props.scrollPositionMap.set(props.file.path, currentEditor.instance.scrollSnapshot())
+    props.persistentStateMap.set(props.file.path, currentEditor.persistentState)
     currentEditor.unmount()
   }
 })
@@ -198,7 +198,7 @@ onUpdated(() => {
   if (currentFilePath !== props.activeFile?.path) {
     // File path has changed -> unmount and remount (duplicate code from
     // onMounted and onBeforeUnmount hooks).
-    props.scrollPositionMap.set(currentFilePath, currentEditor.instance.scrollSnapshot())
+    props.persistentStateMap.set(currentFilePath, currentEditor.persistentState)
     currentEditor.unmount()
     loadDocument().catch(err => console.error(err))
   }
@@ -450,8 +450,8 @@ watch(tags, (newValue) => {
  * @return  {MarkdownEditor}       The requested editor
  */
 async function getEditorFor (doc: string): Promise<MarkdownEditor> {
-  const snapshot = props.scrollPositionMap.get(doc)
-  const editor = new MarkdownEditor(props.leafId, props.windowId, doc, documentAuthorityIPCAPI, undefined, snapshot)
+  const persistentState = props.persistentStateMap.get(doc)
+  const editor = new MarkdownEditor(props.leafId, props.windowId, doc, documentAuthorityIPCAPI, undefined, persistentState)
 
   // Update the document info on corresponding events
   editor.on('change', () => {

@@ -499,6 +499,10 @@
       <single>redaktør &amp; omsetjar</single>
       <multiple>redaktørar &amp; omsetjarar</multiple>
     </term>
+    <term name="editor-translator">
+      <single>redaktør &amp; omsetjar</single>
+      <multiple>redaktørar &amp; omsetjarar</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="executive-producer" form="short">
@@ -537,6 +541,10 @@
       <single>red. &amp; oms.</single>
       <multiple>red. &amp; oms.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>red. &amp; oms.</single>
+      <multiple>red. &amp; oms.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -564,6 +572,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">omsett av</term>
     <term name="editortranslator" form="verb">redigert &amp; omsett av</term>
+    <term name="editor-translator" form="verb">redigert &amp; omsett av</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="host" form="verb-short">vert</term>
@@ -575,6 +584,7 @@
     <term name="illustrator" form="verb-short">ill.</term>
     <term name="translator" form="verb-short">oms.</term>
     <term name="editortranslator" form="verb-short">red. &amp; oms. av</term>
+    <term name="editor-translator" form="verb-short">red. &amp; oms. av</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">januar</term>

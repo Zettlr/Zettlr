@@ -539,6 +539,10 @@
       <single>argitaratzaile eta itzultzailea</single>
       <multiple>argitaratzaile eta itzultzaileak</multiple>
     </term>
+    <term name="editor-translator">
+      <single>argitaratzaile eta itzultzailea</single>
+      <multiple>argitaratzaile eta itzultzaileak</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -605,6 +609,10 @@
       <single>arg. eta itzul.</single>
       <multiple>arg. eta itzul.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>arg. eta itzul.</single>
+      <multiple>arg. eta itzul.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -632,6 +640,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">-(e)k itzulia</term>
     <term name="editortranslator" form="verb">-(e)k argitaratu eta itzulia</term>
+    <term name="editor-translator" form="verb">-(e)k argitaratu eta itzulia</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -652,6 +661,7 @@
     <term name="illustrator" form="verb-short">illus.</term>
     <term name="translator" form="verb-short">itzul.</term>
     <term name="editortranslator" form="verb-short">-(e)k arg. eta itzul.</term>
+    <term name="editor-translator" form="verb-short">-(e)k arg. eta itzul.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">urtarrila</term>

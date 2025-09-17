@@ -551,6 +551,10 @@
       <single>toimittaja ja kääntäjä</single>
       <multiple>toimittajat ja kääntäjät</multiple>
     </term>
+    <term name="editor-translator">
+      <single>toimittaja ja kääntäjä</single>
+      <multiple>toimittajat ja kääntäjät</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -617,6 +621,10 @@
       <single>toim. ja käänt.</single>
       <multiple>toim. ja käänt.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>toim. ja käänt.</single>
+      <multiple>toim. ja käänt.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">toimittanut</term>
@@ -644,6 +652,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">kääntänyt</term>
     <term name="editortranslator" form="verb">toimittanut ja kääntänyt</term>
+    <term name="editor-translator" form="verb">toimittanut ja kääntänyt</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -664,6 +673,7 @@
     <term name="illustrator" form="verb-short">kuv.</term>
     <term name="translator" form="verb-short">käänt.</term>
     <term name="editortranslator" form="verb-short">toim. ja käänt.</term>
+    <term name="editor-translator" form="verb-short">toim. ja käänt.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">tammikuuta</term>

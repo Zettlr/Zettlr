@@ -541,6 +541,10 @@
       <single>editor și traducător</single>
       <multiple>editori și traducători</multiple>
     </term>
+    <term name="editor-translator">
+      <single>editor și traducător</single>
+      <multiple>editori și traducători</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -607,6 +611,10 @@
       <single>ed. și trad.</single>
       <multiple>ed. și trad.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ed. și trad.</single>
+      <multiple>ed. și trad.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">editat de</term>
@@ -634,6 +642,7 @@
     <term name="collection-editor" form="verb-short">ed. de</term>
     <term name="translator" form="verb">traducere de</term>
     <term name="editortranslator" form="verb">ediție și traducere de</term>
+    <term name="editor-translator" form="verb">ediție și traducere de</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. de</term>
@@ -654,6 +663,7 @@
     <term name="illustrator" form="verb-short">ilustr. de</term>
     <term name="translator" form="verb-short">trad. de</term>
     <term name="editortranslator" form="verb-short">ed. și trad. de</term>
+    <term name="editor-translator" form="verb-short">ed. și trad. de</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">ianuarie</term>

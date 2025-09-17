@@ -536,6 +536,10 @@
       <single>curator et interpres</single>
       <multiple>curatores et interpretes</multiple>
     </term>
+    <term name="editor-translator">
+      <single>curator et interpres</single>
+      <multiple>curatores et interpretes</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -602,6 +606,10 @@
       <single>cur. et interp.</single>
       <multiple>curs. et interps.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>cur. et interp.</single>
+      <multiple>curs. et interps.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -629,6 +637,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">a interpretatione</term>
     <term name="editortranslator" form="verb">a cura et interpretatione</term>
+    <term name="editor-translator" form="verb">a cura et interpretatione</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -649,6 +658,7 @@
     <term name="illustrator" form="verb-short">illus.</term>
     <term name="translator" form="verb-short">interp.</term>
     <term name="editortranslator" form="verb-short">a cur. et interp.</term>
+    <term name="editor-translator" form="verb-short">a cur. et interp.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">ianuarius</term>

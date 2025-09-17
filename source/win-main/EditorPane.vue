@@ -49,7 +49,7 @@
             v-bind:active-file="activeFile"
             v-bind:window-id="windowId"
             v-bind:editor-commands="editorCommands"
-            v-bind:scroll-position-map="scrollPositionMap"
+            v-bind:persistent-state-map="persistentStateMap"
             v-on:global-search="emit('globalSearch', $event)"
           ></MainEditor>
         </Teleport>
@@ -128,7 +128,7 @@ import ImageViewer from './file-viewers/ImageViewer.vue'
 import { hasImageExt, hasPDFExt } from '@common/util/file-extention-checks'
 import PDFViewer from './file-viewers/PDFViewer.vue'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
-import { type StateEffect } from '@codemirror/state'
+import { type EditorViewPersistentState } from 'source/common/modules/markdown-editor'
 
 const ipcRenderer = window.ipc
 
@@ -148,13 +148,13 @@ type DragTargetAreas = 'editor'|'top'|'left'|'right'|'bottom'
 const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 // UNREFFED SCROLL MAP
-// Each individual editor pane has its own scroll position map so that the
-// editors can save their scroll positions. This enables us to only display a
-// single document, thus saving lots of memory, but at the same time keep the
-// feeling of a tabbed interface. The scroll map is for each pane, since users
-// may have the same document open in two panes, and want one file to be
-// scrolled differently than the same file in a different pane.
-const scrollPositionMap = new Map<string, StateEffect<any>>()
+// Each individual editor pane has its own persistent state map so that the
+// editors can save their scroll positions, selections, etc. This enables us to
+// only display a single document, thus saving lots of memory, but at the same
+// time keep the feeling of a tabbed interface. The map is unique for each pane,
+// since users may have the same document open in two panes, and want one file
+// to be scrolled differently than the same file in a different pane.
+const persistentStateMap = new Map<string, EditorViewPersistentState>()
 
 const documentTabDrag = ref<boolean>(false)
 const documentTabDragWhere = ref<DragTargetAreas|undefined>(undefined)

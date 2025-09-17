@@ -564,6 +564,10 @@
       <single>редактор и переводчик</single>
       <multiple>редакторы и переводчики</multiple>
     </term>
+    <term name="editor-translator">
+      <single>редактор и переводчик</single>
+      <multiple>редакторы и переводчики</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -612,6 +616,7 @@
     <term name="illustrator" form="short">ил.</term>
     <term name="translator" form="short">пер.</term>
     <term name="editortranslator" form="short">ред. и пер.</term>
+    <term name="editor-translator" form="short">ред. и пер.</term>
 
     <!-- VERB ROLE FORMS -->
     <term name="collection-editor" form="verb">edited by</term>
@@ -640,6 +645,7 @@
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">переведено</term>
     <term name="editortranslator" form="verb">под редакцией и переведено</term>
+    <term name="editor-translator" form="verb">под редакцией и переведено</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -660,6 +666,7 @@
     <term name="illustrator" form="verb-short">ил.</term>
     <term name="translator" form="verb-short">пер.</term>
     <term name="editortranslator" form="verb-short">под ред. и пер.</term>
+    <term name="editor-translator" form="verb-short">под ред. и пер.</term>
 
     <!-- LONG MONTH FORMS -->
     <!-- род месяцев не указываем, поскольку даже если использовать порядковые числительные в дате, то они должны соответствовать среднему роду, например "второе февраля" -->

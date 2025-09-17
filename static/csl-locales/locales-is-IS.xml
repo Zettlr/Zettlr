@@ -7,8 +7,11 @@
     <translator>
       <name>styrmirm</name>
     </translator>
+    <translator>
+      <name>magnimarels</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2012-07-04T23:31:02+00:00</updated>
+    <updated>2025-09-05T23:31:02+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -23,8 +26,8 @@
   </date>
   <terms>
     <term name="advance-online-publication">advance online publication</term>
-    <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
+    <term name="album">albúm</term>
+    <term name="audio-recording">hljóðupptaka</term>
     <term name="film">film</term>
     <term name="henceforth">henceforth</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
@@ -36,18 +39,18 @@
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="original-work-published">original work published</term>
     <term name="personal-communication">persónuleg samskipti</term>
-    <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
-    <term name="preprint">preprint</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
-    <term name="special-issue">special issue</term>
+    <term name="podcast">hlaðvarp</term>
+    <term name="podcast-episode">hlaðvarpsþáttur</term>
+    <term name="preprint">forprentun</term>
+    <term name="radio-broadcast">útvarpsútsending</term>
+    <term name="radio-series">útvarpssería</term>
+    <term name="radio-series-episode">útvarpsþáttur</term>
+    <term name="special-issue">sérstök útgáfa</term>
     <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
-    <term name="video">video</term>
+    <term name="television-broadcast">sjónvarpsútsending</term>
+    <term name="television-series">sjónvarpssería</term>
+    <term name="television-series-episode">sjónvarpsþáttur</term>
+    <term name="video">myndband</term>
     <term name="working-paper">working paper</term>
     <term name="accessed">sótt</term>
     <term name="and">og</term>
@@ -61,24 +64,24 @@
     <term name="circa" form="short">u.þ.b.</term>
     <term name="cited">tilvitnun</term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>tilvísun</single>
+      <multiple>tilvísanir</multiple>
     </term>
     <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
+      <single>númer</single>
+      <multiple>númer</multiple>
     </term>
     <term name="edition">
       <single>útgáfa</single>
       <multiple>útgáfur</multiple>
     </term>
     <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
+      <single>tilv.</single>
+      <multiple>tilv.</multiple>
     </term>
     <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
+      <single>nr.</single>
+      <multiple>nr.</multiple>
     </term>
     <term name="edition" form="short">útg.</term>
     <term name="et-al">o.fl.</term>
@@ -101,81 +104,81 @@
       <single>tilv.</single>
       <multiple>tilv.</multiple>
     </term>
-    <term name="review-of">review of</term>
-    <term name="review-of" form="short">rev. of</term>
+    <term name="review-of">gagnrýni á</term>
+    <term name="review-of" form="short">gagnr. á</term>
     <term name="retrieved">sótt</term>
-    <term name="scale">scale</term>
+    <term name="scale">skali</term>
     <term name="version">útgáfa</term>
 
     <!-- LONG ITEM TYPE FORMS -->
-    <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
+    <term name="article">forprentun</term>
+    <term name="article-journal">tímaritsgrein</term>
+    <term name="article-magazine">tímaritsgrein</term>
+    <term name="article-newspaper">blaðagrein</term>
     <term name="bill">bill</term>
     <!-- book is in the list of locator terms -->
     <term name="broadcast">broadcast</term>
     <!-- chapter is in the list of locator terms -->
-    <term name="classic">classic</term>
-    <term name="collection">collection</term>
-    <term name="dataset">dataset</term>
-    <term name="document">document</term>
-    <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
-    <term name="event">event</term>
+    <term name="classic">klassísk</term>
+    <term name="collection">samansafn</term>
+    <term name="dataset">gagnasafn</term>
+    <term name="document">skjal</term>
+    <term name="entry">færsla</term>
+    <term name="entry-dictionary">orðabókarfærsla</term>
+    <term name="entry-encyclopedia">alfræðiorðabókarfærsla</term>
+    <term name="event">viðburður</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic">graphic</term>
     <term name="hearing">hearing</term>
     <term name="interview">viðtal</term>
-    <term name="legal_case">legal case</term>
-    <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
-    <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
+    <term name="legal_case">réttarmál</term>
+    <term name="legislation">lagasetning</term>
+    <term name="manuscript">handrit</term>
+    <term name="map">kort</term>
+    <term name="motion_picture">myndbandsupptaka</term>
+    <term name="musical_score">söngleikur</term>
+    <term name="pamphlet">bæklingur</term>
     <term name="paper-conference">conference paper</term>
-    <term name="patent">patent</term>
-    <term name="performance">performance</term>
+    <term name="patent">einkaleyfi</term>
+    <term name="performance">flutningur</term>
     <term name="periodical">periodical</term>
     <term name="personal_communication">persónuleg samskipti</term>
-    <term name="post">post</term>
-    <term name="post-weblog">blog post</term>
-    <term name="regulation">regulation</term>
-    <term name="report">report</term>
-    <term name="review">review</term>
-    <term name="review-book">book review</term>
-    <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
-    <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="post">færsla</term>
+    <term name="post-weblog">bloggfærsla</term>
+    <term name="regulation">reglugerð</term>
+    <term name="report">skýrsla</term>
+    <term name="review">gagnrýni</term>
+    <term name="review-book">bókagagnrýni</term>
+    <term name="software">hugbúnaður</term>
+    <term name="song">hljóðupptaka</term>
+    <term name="speech">kynning</term>
+    <term name="standard">staðall</term>
+    <term name="thesis">ritgerð</term>
+    <term name="treaty">sáttmáli</term>
+    <term name="webpage">vefsíða</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
-    <term name="article-magazine" form="short">mag. art.</term>
-    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="article-journal" form="short">tímaritsgr.</term>
+    <term name="article-magazine" form="short">tímaritsgr.</term>
+    <term name="article-newspaper" form="short">blaðagr.</term>
     <!-- book is in the list of locator terms -->
     <!-- chapter is in the list of locator terms -->
-    <term name="document" form="short">doc.</term>
+    <term name="document" form="short">skj.</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic" form="short">graph.</term>
-    <term name="interview" form="short">interv.</term>
+    <term name="interview" form="short">viðt.</term>
     <term name="manuscript" form="short">MS</term>
-    <term name="motion_picture" form="short">video rec.</term>
-    <term name="report" form="short">rep.</term>
-    <term name="review" form="short">rev.</term>
-    <term name="review-book" form="short">bk. rev.</term>
-    <term name="song" form="short">audio rec.</term>
+    <term name="motion_picture" form="short">myndbandsuppt.</term>
+    <term name="report" form="short">skýrsla</term>
+    <term name="review" form="short">gagnr.</term>
+    <term name="review-book" form="short">bókagagnr..</term>
+    <term name="song" form="short">hlóðuppt.</term>
 
     <!-- VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
+    <term name="hearing" form="verb">vitnisburður um</term>
+    <term name="review" form="verb">gagnrýni á</term>
+    <term name="review-book" form="verb">gagnrýni á bók</term>
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">e.Kr.</term>
@@ -294,12 +297,12 @@
       <multiple>blaðsíður</multiple>
     </term>
     <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
+      <single>bindi</single>
+      <multiple>bindi</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>síða</single>
+      <multiple>síður</multiple>
     </term>
     <term name="printing">
       <single>printing</single>
@@ -307,12 +310,12 @@
     </term>
 
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>kafli</single>
+      <multiple>kaflar</multiple>
     </term>
     <term name="citation-number" form="short">
-      <single>cit.</single>
-      <multiple>cits.</multiple>
+      <single>tilv.</single>
+      <multiple>tilv.</multiple>
     </term>
     <term name="collection-number" form="short">tbl.</term>
     <term name="number-of-pages">
@@ -442,12 +445,12 @@
       <multiple>¶¶</multiple>
     </term>
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>kafli</single>
+      <multiple>kaflar</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>tilvitnun</single>
+      <multiple>tilvitnanir</multiple>
     </term>
     <term name="collection-number">
       <single>tölublað</single>
@@ -484,8 +487,8 @@
       <multiple>executive producers</multiple>
     </term>
     <term name="guest">
-      <single>guest</single>
-      <multiple>guests</multiple>
+      <single>gestur</single>
+      <multiple>gestir</multiple>
     </term>
     <term name="host">
       <single>host</single>
@@ -500,16 +503,16 @@
       <multiple>organizers</multiple>
     </term>
     <term name="performer">
-      <single>performer</single>
-      <multiple>performers</multiple>
+      <single>flytjandi</single>
+      <multiple>flytjendur</multiple>
     </term>
     <term name="producer">
-      <single>producer</single>
-      <multiple>producers</multiple>
+      <single>framleiðandi</single>
+      <multiple>framleiðendur</multiple>
     </term>
     <term name="script-writer">
-      <single>writer</single>
-      <multiple>writers</multiple>
+      <single>rithöfundur</single>
+      <multiple>rithöfundar</multiple>
     </term>
     <term name="series-creator">
       <single>series creator</single>
@@ -536,6 +539,10 @@
       <multiple>þýðendur</multiple>
     </term>
     <term name="editortranslator">
+      <single>ritstjóri og þýðandi</single>
+      <multiple>ritstjórar og þýðendur</multiple>
+    </term>
+    <term name="editor-translator">
       <single>ritstjóri og þýðandi</single>
       <multiple>ritstjórar og þýðendur</multiple>
     </term>
@@ -566,16 +573,16 @@
       <multiple>orgs.</multiple>
     </term>
     <term name="performer" form="short">
-      <single>perf.</single>
-      <multiple>perfs.</multiple>
+      <single>flytj.</single>
+      <multiple>flytj.</multiple>
     </term>
     <term name="producer" form="short">
-      <single>prod.</single>
-      <multiple>prods.</multiple>
+      <single>framl.</single>
+      <multiple>framl.</multiple>
     </term>
     <term name="script-writer" form="short">
-      <single>writ.</single>
-      <multiple>writs.</multiple>
+      <single>rith.</single>
+      <multiple>rith.</multiple>
     </term>
     <term name="series-creator" form="short">
       <single>cre.</single>
@@ -605,21 +612,25 @@
       <single>ritstj. og þýð.</single>
       <multiple>ritstj. og þýð.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>ritstj. og þýð.</single>
+      <multiple>ritstj. og þýð.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb">edited by</term>
+    <term name="collection-editor" form="verb">breytt af</term>
     <term name="chair" form="verb">chaired by</term>
     <term name="compiler" form="verb">compiled by</term>
-    <term name="contributor" form="verb">with</term>
+    <term name="contributor" form="verb">með</term>
     <term name="curator" form="verb">curated by</term>
     <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
-    <term name="host" form="verb">hosted by</term>
+    <term name="guest" form="verb">með gesti</term>
+    <term name="host" form="verb">haldið af</term>
     <term name="narrator" form="verb">narrated by</term>
     <term name="organizer" form="verb">organized by</term>
-    <term name="performer" form="verb">performed by</term>
-    <term name="producer" form="verb">produced by</term>
-    <term name="script-writer" form="verb">written by</term>
+    <term name="performer" form="verb">flutt af</term>
+    <term name="producer" form="verb">framleitt af</term>
+    <term name="script-writer" form="verb">skrifað</term>
     <term name="series-creator" form="verb">created by</term>
     <term name="container-author" form="verb">eftir</term>
     <term name="director" form="verb">leikstýrt af</term>
@@ -628,10 +639,11 @@
     <term name="illustrator" form="verb">myndskreytt af</term>
     <term name="interviewer" form="verb">viðtal tók</term>
     <term name="recipient" form="verb">til</term>
-    <term name="reviewed-author" form="verb">by</term>
-    <term name="collection-editor" form="verb-short">ed. by</term>
+    <term name="reviewed-author" form="verb">af</term>
+    <term name="collection-editor" form="verb-short">ristj.</term>
     <term name="translator" form="verb">þýddi</term>
     <term name="editortranslator" form="verb">ritstýrt og þýtt af</term>
+    <term name="editor-translator" form="verb">ritstýrt og þýtt af</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -652,6 +664,7 @@
     <term name="illustrator" form="verb-short">myndskr.</term>
     <term name="translator" form="verb-short">þýð.</term>
     <term name="editortranslator" form="verb-short">ritstj. og þýð.</term>
+    <term name="editor-translator" form="verb-short">ritstj. og þýð.</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">janúar</term>

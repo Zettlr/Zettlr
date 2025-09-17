@@ -558,6 +558,10 @@
       <single>Herausgeber&#160;&amp; Übersetzer</single>
       <multiple>Herausgeber&#160;&amp; Übersetzer</multiple>
     </term>
+    <term name="editor-translator">
+      <single>Herausgeber&#160;&amp; Übersetzer</single>
+      <multiple>Herausgeber&#160;&amp; Übersetzer</multiple>
+    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
@@ -628,6 +632,10 @@
       <single>Hrsg.&#160;&amp; Übers.</single>
       <multiple>Hrsg.&#160;&amp; Übers.</multiple>
     </term>
+    <term name="editor-translator" form="short">
+      <single>Hrsg.&#160;&amp; Übers.</single>
+      <multiple>Hrsg.&#160;&amp; Übers.</multiple>
+    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="chair" form="verb">chaired by</term>
@@ -654,6 +662,7 @@
     <term name="reviewed-author" form="verb">von</term>
     <term name="translator" form="verb">übersetzt von</term>
     <term name="editortranslator" form="verb">herausgegeben und übersetzt von</term>
+    <term name="editor-translator" form="verb">herausgegeben und übersetzt von</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -675,6 +684,7 @@
     <term name="illustrator" form="verb-short">illus. von</term>
     <term name="translator" form="verb-short">übers. von</term>
     <term name="editortranslator" form="verb-short">hg.&#160;&amp; übers. von</term>
+    <term name="editor-translator" form="verb-short">hg.&#160;&amp; übers. von</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Januar</term>
