@@ -77,8 +77,6 @@ jobs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "Below follow the full results from the audit report (${#AUDIT_CONTENT} characters)." >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "```" >> $GITHUB_STEP_SUMMARY
         echo "$AUDIT_CONTENT" >> $GITHUB_STEP_SUMMARY
-        echo "```" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "End of audit." >> $GITHUB_STEP_SUMMARY
