@@ -132,6 +132,8 @@ annotate your PDF files, please continue using your existing workflow.
   export, pomodoro, and tags popover (#5895); spacing in file manager tree view
   (#5891); global search (#5894).
 - Switched the icons for code and comments in the formatting toolbar (#5901).
+- The word counter now uses a proper segmenter that will make the word count
+  more accurate for languages that do not use spaces to separate words (#5898).
 
 ## Under the Hood
 
