@@ -28,7 +28,7 @@ import {
 // Pipe Table Regex (min 2 cells): `my cell | my other cell` or `| my cell | my other cell |`
 // ^\|?         => optional leading pipe
 // [^|]*        => first cell, zero or more characters
-// (?:\|[^|]*)* => one or more cells
+// (?:\|[^|]*)+ => one or more cells
 // \|?$         => optional tailing pipe
 const pipeRE = /^\|?[^|]*(?:\|[^|]*)+\|?$/
 // Pipe Table Header Regex: `|:-:+---+:--|`
@@ -41,13 +41,13 @@ const pipeRE = /^\|?[^|]*(?:\|[^|]*)+\|?$/
 // (?:[|+]\s*:?-+:?\s*)*  => optionally, any number of cells divided by pipes or crosses
 // [|+]?$                 => optional tailing pipe or cross
 const pipeHeaderRE = /^[|+]?\s*:?-+:?\s*(?:\s*:?-+:?\s*)*[|+]?$/
-// Grid Table Header Regex: `+:===:+=====+` or `+-------+------+`
+// Grid Table Line Regex: `+:===:+=====+` or `+-------+------+`
 // ^\+                => leading cross
 // (\s*-+\s*\+)+      => optional dash delimiter row
 // (\s*:?=+:?\s*\+)+  => optional equals delimiter row with optional alignment
 const gridLineRe = /^\+((\s*-+\s*\+)+|(\s*:?=+:?\s*\+)+)$/
 // Grid Table Content Regex:
-// \|        => leading pipe
+// \|          => leading pipe
 // ([^|]*\|)+  => one or more cells containing any non-pipe character
 const gridContentRE = /^\|([^|]*\|)+$/
 
