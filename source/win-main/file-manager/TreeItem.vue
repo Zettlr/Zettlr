@@ -170,7 +170,6 @@ import { useConfigStore, useWindowStateStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
 import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
-import { ClarityIcons } from '@cds/core/icon'
 
 const ipcRenderer = window.ipc
 
@@ -248,18 +247,17 @@ const primaryIcon = computed(() => {
   } else if (props.obj.type === 'code') {
     return 'code'
   } else if (props.obj.type === 'other') {
-    // @ts-expect-error We know that this thing has an outline, because we assign it in load-icons.ts
-    const fileExtIcon = ClarityIcons.registry['file-ext'].outline!
+    // const fileExtIcon = ClarityIcons.registry['file-ext'].outline!
     if (hasImageExt(props.obj.path)) {
       return 'image'
     } else if (hasPDFExt(props.obj.path)) {
       return 'pdf-file'
     } else if (hasMSOfficeExt(props.obj.path)) {
-      return fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
     } else if (hasOpenOfficeExt(props.obj.path)) {
-      return fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
     } else if (hasDataExt(props.obj.path)) {
-      return fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
     } else {
       // Generic other file (this should not happen as they get filtered out before)
       console.warn(`Encountered a file with extension ${props.obj.ext}. These should've been filtered out before reaching this point!`)
