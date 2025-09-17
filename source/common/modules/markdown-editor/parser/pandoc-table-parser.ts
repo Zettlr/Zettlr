@@ -25,15 +25,31 @@ import {
   type LeafBlockParser
 } from '@lezer/markdown'
 
-// Pipe Table Regex:
+// Pipe Table Regex (min 2 cells): `my cell | my other cell` or `| my cell | my other cell |`
 // ^\|?         => optional leading pipe
 // [^|]*        => first cell, zero or more characters
-// (?:\|[^|]*)* => optionally, any number of cells
+// (?:\|[^|]*)* => one or more cells
 // \|?$         => optional tailing pipe
-const pipeRE = /^\|?[^|]*(?:\|[^|]*)*\|?$/
-const pipeHeaderRE = /^[|+:-]+$/
-const gridLineRE = /^\+[-=+:]+\+$/
-const gridContentRE = /^\|.+\|$/
+const pipeRE = /^\|?[^|]*(?:\|[^|]*)+\|?$/
+// Pipe Table Header Regex: `|:-:+---+:--|`
+// ^[|+]?                 => optional leading pipe or cross
+// \s*                    => optional whitespace
+// :?                     => optional alignment
+// -+                     => one or more delimiters
+// :?                     => optional alignment
+// \s*                    => optional whitespace
+// (?:[|+]\s*:?-+:?\s*)*  => optionally, any number of cells divided by pipes or crosses
+// [|+]?$                 => optional tailing pipe or cross
+const pipeHeaderRE = /^[|+]?\s*:?-+:?\s*(?:\s*:?-+:?\s*)*[|+]?$/
+// Grid Table Header Regex: `+:===:+=====+` or `+-------+------+`
+// ^\+                => leading cross
+// (\s*-+\s*\+)+      => optional dash delimiter row
+// (\s*:?=+:?\s*\+)+  => optional equals delimiter row with optional alignment
+const gridLineRe = /^\+((\s*-+\s*\+)+|(\s*:?=+:?\s*\+)+)$/
+// Grid Table Content Regex:
+// \|        => leading pipe
+// ([^|]*\|)+  => one or more cells containing any non-pipe character
+const gridContentRE = /^\|([^|]*\|)+$/
 
 /**
  * Parses a grid table and returns a subtree that can be used for syntax highlighting
@@ -55,7 +71,7 @@ function parseGridTable (ctx: BlockContext, pos: number, end: number, lines: str
   let children: Element[] = []
   for (const line of lines) {
     to = lineFrom + line.length
-    if (gridLineRE.test(line)) {
+    if (gridLineRe.test(line)) {
       if (rowStart > -1) {
         rows.push(ctx.elt('TableRow', rowStart, lineFrom - 1, children))
         children = []
@@ -199,7 +215,7 @@ export const gridTableParser: BlockParser = {
   name: 'grid-table',
   parse: (ctx, line) => {
     // Let's begin with the easiest thing to detect: grid tables
-    if (!gridLineRE.test(line.text)) {
+    if (!gridLineRe.test(line.text)) {
       return false
     }
     // We have a potential grid table. The end of the table is being marked by
@@ -207,7 +223,7 @@ export const gridTableParser: BlockParser = {
     const lines: string[] = [line.text]
     const start = ctx.lineStart
     // We have alternating lines with +---+ and | cell |
-    while (ctx.nextLine() && (gridLineRE.test(line.text) || gridContentRE.test(line.text))) {
+    while (ctx.nextLine() && (gridLineRe.test(line.text) || gridContentRE.test(line.text))) {
       lines.push(line.text)
     }
 
