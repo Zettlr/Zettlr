@@ -517,8 +517,13 @@ export const citationParser: InlineParser = {
         // Code points 48-57 are digits. Implicit and explicit locators must be
         // preceded by a space, bracketed locators do not.
         if (citekeyEnd > -1 && locatorStart < 0 && prevCh === CHAR.SPACE && ((ch >= 48 && ch <= 57) || ROMAN_NUMERAL_CODES.includes(ch))) {
-          // Found a number -> begin implicit locator
-          locatorStart = i
+          // First, check if there are only punctuation marks and spaces between
+          // the citekey end and the locator start. If not, we should not detect
+          // this as a locator.
+          if (/^[\s,\.:;+-]*$/.test(ctx.slice(citekeyEnd, i - 1))) {
+            // Found a number -> begin implicit locator
+            locatorStart = i
+          }
           continue
         }
 
@@ -528,12 +533,17 @@ export const citationParser: InlineParser = {
         // NOTE that we require each label to be followed by a space
         const explicitLabel = allValidLocatorLabels.find(x => slice.startsWith(x + ' '))
         if (citekeyEnd > -1 && locatorStart < 0 && prevCh === CHAR.SPACE && explicitLabel !== undefined) {
-          // Found a valid locator label -> begin explicit locator
-          locatorStart = i
-          // Move i forward until after the space so that the implicit locator
-          // logic can take over. This way, regardless of how a locator starts,
-          // its end will be found the same way.
-          i += explicitLabel.length + 1
+          // First, check if there are only punctuation marks and spaces between
+          // the citekey end and the locator start. If not, we should not detect
+          // this as a locator.
+          if (/^[\s,\.:;+-]*$/.test(ctx.slice(citekeyEnd, i - 1))) {
+            // Found a valid locator label -> begin explicit locator
+            locatorStart = i
+            // Move i forward until after the space so that the implicit locator
+            // logic can take over. This way, regardless of how a locator starts,
+            // its end will be found the same way.
+            i += explicitLabel.length + 1
+          }
           continue
         }
         
@@ -636,14 +646,24 @@ export const citationParser: InlineParser = {
         // NOTE that we require each label to be followed by a space
         const explicitLabel = allValidLocatorLabels.find(x => slice.startsWith(x + ' '))
         if (explicitLabel !== undefined) {
-          // Found a valid locator label -> begin explicit locator
-          locatorStart = i
-          // Move i forward until after the space so that the implicit locator
-          // logic can take over
-          i += explicitLabel.length + 1
+          // First, check if there are only punctuation marks and spaces between
+          // the citekey end and the locator start. If not, we should not detect
+          // this as a locator.
+          if (/^[\s,\.:;+-]*$/.test(ctx.slice(intextSuffixStart, i - 1))) {
+            // Found a valid locator label -> begin explicit locator
+            locatorStart = i
+            // Move i forward until after the space so that the implicit locator
+            // logic can take over
+            i += explicitLabel.length + 1
+          }
         } else if (((ctx.char(i) >= 48 && ctx.char(i) <= 57) || ROMAN_NUMERAL_CODES.includes(ctx.char(i)))) {
-          // Found a valid locator character -> begin implicit locator
-          locatorStart = i
+          // First, check if there are only punctuation marks and spaces between
+          // the citekey end and the locator start. If not, we should not detect
+          // this as a locator.
+          if (/^[\s,\.:;+-]*$/.test(ctx.slice(intextSuffixStart, i - 1))) {
+            // Found a valid locator character -> begin implicit locator
+            locatorStart = i
+          }
         }
 
         if (locatorStart > -1) {
