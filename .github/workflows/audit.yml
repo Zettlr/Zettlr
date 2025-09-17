@@ -61,7 +61,7 @@ jobs:
           ## Repository Audit Results
 
           ```
-          {{ env.AUDIT_REPORT }}
+          {{ AUDIT_REPORT }}
           ```
     - name: Cache JSON results as artifact
       # Run this step only if yarn npm audit exited with a non-zero code.
