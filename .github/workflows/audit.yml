@@ -68,12 +68,13 @@ jobs:
         echo '```' >> message.txt
         BODY=$(jq -n --arg msg "$(<message.txt)" '{ content: $msg }')
         curl -d "$BODY" -H "Content-Type: application/json" -X POST "$WEBHOOK"
-    - name: Cache JSON results as artifact
+    - name: Report results in summary
       # Run this step only if yarn npm audit exited with a non-zero code.
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: audit_result
-        path: |
-          ./audit_result.json
+      run: |
+        echo "## Full Audit results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "```" >> $GITHUB_STEP_SUMMARY
+        echo "$(<audit_result.txt)" >> $GITHUB_STEP_SUMMARY
+        echo "```" >> $GITHUB_STEP_SUMMARY
 # 
