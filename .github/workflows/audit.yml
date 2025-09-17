@@ -43,6 +43,9 @@ jobs:
       # command locally once informed to get all information if necessary.
       run: |
         yarn npm audit --recursive --json > audit_result.json
+    - name: Format results
+      if: ${{ failure() }}
+      run: |
         jq --slurp '.' audit_result.json > tmp.json
         mv tmp.json audit_result.json
         jq -r '.[] | .value as $v | .children += { package: $v } | .children | ("Package: \(.package)", "  Version(s) \(."Vulnerable Versions")", "  \(.Issue) (Severity: \(.Severity))", "  URL: \(.URL)")' audit_result.json > audit_result.txt
