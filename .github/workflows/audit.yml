@@ -1,0 +1,48 @@
+name: Audit
+
+on:
+  workflow_call: {}
+  push:
+    paths:
+      - yarn.lock
+  pull_request:
+    paths:
+      - yarn.lock
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '22'
+
+concurrency:
+  group: 'audit'
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Run audit
+    runs-on: ubuntu-latest
+    steps:
+    # Setup
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref }}
+    - name: Setup NodeJS ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'yarn'
+    - name: Install packages
+      run: yarn install --immutable
+    # Run the actual audit
+    - name: Audit
+      run: yarn npm audit --recursive > audit_result.txt
+    - name: Report results
+      # Run this step only if yarn npm audit exited with a non-zero code.
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: audit_result
+        path: |
+          ./audit_result.txt
