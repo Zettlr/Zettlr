@@ -26,9 +26,10 @@
           v-bind:key="idx"
           class="attachment"
           draggable="true"
+          href="#"
           v-bind:data-link="attachment.path"
           v-bind:title="attachment.path"
-          v-bind:href="makeValidUri(attachment.path)"
+          v-on:click.prevent="handleClick(attachment.path)"
           v-on:dragstart="handleDragStart($event, attachment.path)"
         >
           <img v-if="hasPreview(attachment.path)" v-bind:src="getPreviewImageData(attachment.path)">
@@ -52,8 +53,16 @@ import { ClarityIcons } from '@cds/core/icon'
 import { computed } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
 import { pathDirname, isAbsolutePath, resolvePath } from 'source/common/util/renderer-path-polyfill'
+import { hasImageExt } from 'source/common/util/file-extention-checks'
 
-const IMAGE_RE = /\.(?:png|jpe?g|svg|bmp|webp|gif)$/
+const ipcRenderer = window.ipc
+
+const searchParams = new URLSearchParams(window.location.search)
+const windowId = searchParams.get('window_id')
+
+if (windowId === null) {
+  throw new Error('windowID was null')
+}
 
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
@@ -121,6 +130,23 @@ function getIcon (ext: string): string {
   }
 }
 
+function handleClick (filePath: string) {
+  if (hasImageExt(filePath) && configStore.config.files.images.openWith === 'zettlr') {
+    // Open this image in Zettlr
+    ipcRenderer.invoke('documents-provider', {
+      command: 'open-file',
+      // We leave leafId undefined
+      payload: { path: filePath, windowId }
+    })
+      .catch(e => console.error(e))
+  } else {
+    // Open the file externally (again, NOTE, this only works because main
+    // intercepts every navigation attempt).
+    window.location.href = makeValidUri(filePath)
+  }
+
+}
+
 /**
  * Returns true for any attachments that Zettlr can show a preview for
  *
@@ -129,7 +155,7 @@ function getIcon (ext: string): string {
  * @return  {boolean}                  Returns true for previewable attachments
  */
 function hasPreview (attachmentPath: string): boolean {
-  if (IMAGE_RE.test(attachmentPath)) {
+  if (hasImageExt(attachmentPath)) {
     return true
   }
 
@@ -145,7 +171,7 @@ function hasPreview (attachmentPath: string): boolean {
  * @return  {string}                  The image src attribute's contents
  */
 function getPreviewImageData (attachmentPath: string): string {
-  if (IMAGE_RE.test(attachmentPath)) {
+  if (hasImageExt(attachmentPath)) {
     return makeValidUri(attachmentPath) // Can be used (almost) as-is
   }
 

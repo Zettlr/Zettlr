@@ -89,10 +89,166 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
       ]
     },
     {
-      title: trans('Attachments sidebar'),
+      title: trans('File Treatment'),
       group: PreferencesGroups.Advanced,
       help: undefined, // TODO
       fields: [
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('Decide where various file types are displayed, and how to open them.')
+        },
+        {
+          type: 'separator'
+        },
+        {
+          type: 'control-grid',
+          header: [
+            '',
+            trans('Display in file manager'),
+            trans('Display in sidebar'),
+            trans('Open with'),
+          ],
+          rows: [
+            /* First row: Built-in Markdown and code files, to show how it's supposed to work */
+            [
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('Built-in Markdown and Code files')
+              },
+              {
+                type: 'checkbox',
+                disabled: true,
+                model: 'files.builtin.showInFilemanager'
+              },
+              {
+                type: 'checkbox',
+                disabled: true,
+                model: 'files.builtin.showInSidebar'
+              },
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: 'Zettlr'
+              }
+            ],
+            // Image files
+            [
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('Images')
+              },
+              {
+                type: 'checkbox',
+                model: 'files.images.showInFilemanager'
+              },
+              {
+                type: 'checkbox',
+                model: 'files.images.showInSidebar'
+              },
+              {
+                type: 'select',
+                options: {
+                  'zettlr': 'Zettlr',
+                  'system': trans('System default')
+                },
+                model: 'files.images.openWith'
+              }
+            ],
+            /* PDF files */
+            [
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('PDF documents')
+              },
+              {
+                type: 'checkbox',
+                model: 'files.pdf.showInFilemanager'
+              },
+              {
+                type: 'checkbox',
+                model: 'files.pdf.showInSidebar'
+              },
+              {
+                type: 'select',
+                options: {
+                  'zettlr': 'Zettlr',
+                  'system': trans('System default')
+                },
+                model: 'files.pdf.openWith'
+              }
+            ],
+            // Office documents
+            [
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('MS Office Documents')
+              },
+              {
+                type: 'checkbox',
+                model: 'files.msoffice.showInFilemanager'
+              },
+              {
+                type: 'checkbox',
+                model: 'files.msoffice.showInSidebar'
+              },
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('System default')
+              }
+            ],
+            // Open Office documents
+            [
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('Open Office Documents')
+              },
+              {
+                type: 'checkbox',
+                model: 'files.openOffice.showInFilemanager'
+              },
+              {
+                type: 'checkbox',
+                model: 'files.openOffice.showInSidebar'
+              },
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('System default')
+              }
+            ],
+            // Data files (tsv, csv, etc.)
+            [
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('Data files (tsv, csv, etc.)')
+              },
+              {
+                type: 'checkbox',
+                model: 'files.dataFiles.showInFilemanager'
+              },
+              {
+                type: 'checkbox',
+                model: 'files.dataFiles.showInSidebar'
+              },
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('System default')
+              }
+            ]
+          ]
+        },
+        {
+          type: 'separator'
+        },
         {
           type: 'token',
           label: trans('File extensions to be visible in the Attachments sidebar'),

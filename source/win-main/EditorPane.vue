@@ -25,7 +25,24 @@
           outside the DOM structure to have it render on top of everything else.
         -->
         <Teleport to="div#window-content" v-bind:disabled="!distractionFree">
+          <ImageViewer
+            v-if="hasImageExt(activeFileDescriptor.path)"
+            v-bind:file="activeFileDescriptor"
+            v-bind:leaf-id="leafId"
+            v-bind:active-file="activeFile"
+            v-bind:window-id="windowId"
+            v-bind:editor-commands="editorCommands"
+          ></ImageViewer>
+          <PDFViewer
+            v-else-if="hasPDFExt(activeFileDescriptor.path)"
+            v-bind:file="activeFileDescriptor"
+            v-bind:leaf-id="leafId"
+            v-bind:active-file="activeFile"
+            v-bind:window-id="windowId"
+            v-bind:editor-commands="editorCommands"
+          ></PDFViewer>
           <MainEditor
+            v-else
             v-bind:file="activeFileDescriptor"
             v-bind:distraction-free="distractionFree"
             v-bind:leaf-id="leafId"
@@ -107,6 +124,9 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'
 import { useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import ImageViewer from './file-viewers/ImageViewer.vue'
+import { hasImageExt, hasPDFExt } from '@common/util/file-extention-checks'
+import PDFViewer from './file-viewers/PDFViewer.vue'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { type EditorViewPersistentState } from 'source/common/modules/markdown-editor'
 

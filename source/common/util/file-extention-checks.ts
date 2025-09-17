@@ -17,7 +17,7 @@
 
 export const MD_EXT = [ '.md', '.rmd', '.qmd', '.markdown', '.txt', '.mdx', '.mkd' ]
 export const CODE_EXT = [ '.tex', '.json', '.yaml', '.yml' ]
-export const IMG_EXT = [ '.jpg', '.jpeg', '.png', '.svg', '.webp', '.bmp', '.tiff' ]
+export const IMG_EXT = [ '.jpg', '.jpeg', '.png', '.gif', '.svg', '.webp', '.bmp', '.tiff' ]
 export const PDF_EXT = ['.pdf']
 export const MS_OFFICE_EXT = [ '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx' ]
 export const OPEN_OFFICE_EXT = [ '.odt', '.ods', '.odp' ]
