@@ -117,13 +117,37 @@ const ROMAN_NUMERAL_CODES = [
  * Record of all valid citation node names.
  */
 const NODES = {
+  /**
+   * The containing citation node
+   */
   CITATION: 'Citation',
+  /**
+   * Any citation formatting character (brackets, etc.)
+   */
   MARK: 'CitationMark',
+  /**
+   * Citation prefix
+   */
   PREFIX: 'CitationPrefix',
+  /**
+   * "Suppress author"-flag.
+   */
   AUTHORFLAG: 'CitationSuppressAuthorFlag',
+  /**
+   * The @-sign in front of the citekey
+   */
   AT: 'CitationAtSign',
+  /**
+   * The citation key.
+   */
   KEY: 'CitationCitekey',
+  /**
+   * The locator
+   */
   LOCATOR: 'CitationLocator',
+  /**
+   * The citation suffix.
+   */
   SUFFIX: 'CitationSuffix'
 }
 
@@ -369,7 +393,7 @@ export const citationParser: InlineParser = {
       // NOTE the increment. These are used in several parts to keep the code a
       // bit cleaner. I have avoided using `i++`, and instead used only `++i` to
       // signal that we are shifting the index.
-      parts.push(ctx.elt('CitationMark', i, ++i))
+      parts.push(ctx.elt(NODES.MARK, i, ++i))
 
       // Set up the state. We have to find two elements within each citation --
       // a citekey, and an optional locator. Prefix and suffix can be computed
@@ -411,17 +435,17 @@ export const citationParser: InlineParser = {
             return -1
           } else if (locatorStart > -1 && locatorEnd < 0) {
             // Locator reaches until the end of the part
-            parts.push(ctx.elt('CitationLocator', locatorStart, i))
+            parts.push(ctx.elt(NODES.LOCATOR, locatorStart, i))
           } else if (locatorEnd > -1 && locatorEnd < i) {
             // Locator has been finalized -> suffix.
-            parts.push(ctx.elt('CitationSuffix', locatorInBrackets ? locatorEnd + 1 : locatorEnd, i))
+            parts.push(ctx.elt(NODES.SUFFIX, locatorInBrackets ? locatorEnd + 1 : locatorEnd, i))
           } else if (citekeyEnd < 0) {
             // Non-bracketed citekey with no locator and no suffix.
-            parts.push(ctx.elt('CitationCitekey', citekeyStart, i))
+            parts.push(ctx.elt(NODES.KEY, citekeyStart, i))
             citekeysFound++
           } else if (citekeyEnd < i) {
             // No locator, but there were characters after the citekey -> suffix
-            parts.push(ctx.elt('CitationSuffix', citekeyEnd, i))
+            parts.push(ctx.elt(NODES.SUFFIX, citekeyEnd, i))
           }
         }
 
@@ -435,13 +459,13 @@ export const citationParser: InlineParser = {
           locatorEnd = -1
           locatorInBrackets = false
           citationPartStart = i + 1 // Next citation starts after the semicolon.
-          parts.push(ctx.elt('CitationMark', i, i + 1))
+          parts.push(ctx.elt(NODES.MARK, i, i + 1))
           continue
         }
         
         if (ch === CHAR.BRACKET_CLOSE) {
           // End-condition -- marks the finish of the entire parsing.
-          parts.push(ctx.elt('CitationMark', i, ++i))
+          parts.push(ctx.elt(NODES.MARK, i, ++i))
           break // Stop iterating; citation is between pos and i.
         }
         
@@ -450,9 +474,9 @@ export const citationParser: InlineParser = {
           if (i > citationPartStart) {
             // Add prefix node. Note that we have to add nodes in proper sorted
             // order.
-            parts.push(ctx.elt('CitationPrefix', citationPartStart, i))
+            parts.push(ctx.elt(NODES.PREFIX, citationPartStart, i))
           } 
-          parts.push(ctx.elt('CitationSuppressAuthorFlag', i, i + 1))
+          parts.push(ctx.elt(NODES.AUTHORFLAG, i, i + 1))
           continue
         }
         
@@ -461,10 +485,10 @@ export const citationParser: InlineParser = {
           if (i > citationPartStart && prevCh !== CHAR.HYPHEN) {
             // Add prefix node. Note that we have to add nodes in proper sorted
             // order.
-            parts.push(ctx.elt('CitationPrefix', citationPartStart, i))
+            parts.push(ctx.elt(NODES.PREFIX, citationPartStart, i))
           }
 
-          parts.push(ctx.elt('CitationAtSign', i, i + 1))
+          parts.push(ctx.elt(NODES.AT, i, i + 1))
           citekeyStart = i + 1 // Key excludes the '@'
           continue
         }
@@ -473,19 +497,19 @@ export const citationParser: InlineParser = {
           // We are inside the citekey
           if (i === citekeyStart && ch === CHAR.CURLY_OPEN) {
             citekeyInBrackets = true // Citekey is in brackets
-            parts.push(ctx.elt('CitationMark', i, i + 1))
+            parts.push(ctx.elt(NODES.MARK, i, i + 1))
             citekeyStart++
           } else if (citekeyInBrackets && ch === CHAR.CURLY_CLOSE) {
             // Citekey is in brackets, and we found the closing bracket
-            parts.push(ctx.elt('CitationCitekey', citekeyStart, i))
+            parts.push(ctx.elt(NODES.KEY, citekeyStart, i))
             citekeysFound++
-            parts.push(ctx.elt('CitationMark', i, i + 1))
+            parts.push(ctx.elt(NODES.MARK, i, i + 1))
             citekeyEnd = i
           } else if (!/[\w:\.#$%&\-+?<>~/]/.test(String.fromCharCode(ch))) { // TODO: I would like to avoid string conversion here.
             // Regular citekey without brackets -> check for disallowed characters
             // Allowed according to the Pandoc manual are: starts with letter, digit, or _, and contains only a-z0-9 and (:.#$%&-+?<>~/)
             // NOTE: We are allowing trailing punctuation marks. My energy is, after all, finite.
-            parts.push(ctx.elt('CitationCitekey', citekeyStart, i))
+            parts.push(ctx.elt(NODES.KEY, citekeyStart, i))
             citekeysFound++
             citekeyEnd = i
 
@@ -493,7 +517,7 @@ export const citationParser: InlineParser = {
             // for the fact that a locator does not need to be separated from
             // the citekey with a space.
             if (ch === CHAR.CURLY_OPEN) {
-              parts.push(ctx.elt('CitationMark', i, i + 1))
+              parts.push(ctx.elt(NODES.MARK, i, i + 1))
               locatorStart = i + 1
               locatorInBrackets = true
             }
@@ -510,7 +534,7 @@ export const citationParser: InlineParser = {
           // Locator is present; contained within curly brackets.
           locatorStart = i + 1
           locatorInBrackets = true
-          parts.push(ctx.elt('CitationMark', i, i + 1))
+          parts.push(ctx.elt(NODES.MARK, i, i + 1))
           continue
         }
         
@@ -555,15 +579,15 @@ export const citationParser: InlineParser = {
             // Bracketed locators can be empty ({}) -> in that case do not add
             // it to the syntax tree.
             if (locatorEnd > locatorStart) {
-              parts.push(ctx.elt('CitationLocator', locatorStart, locatorEnd))
+              parts.push(ctx.elt(NODES.LOCATOR, locatorStart, locatorEnd))
             }
-            parts.push(ctx.elt('CitationMark', i, i + 1))
+            parts.push(ctx.elt(NODES.MARK, i, i + 1))
             continue
           } else if (((ch < 48 || ch > 57) && !ROMAN_NUMERAL_CODES.includes(ch) && ch !== CHAR.HYPHEN)) {
             // Both implicit and explicit locators end if we no longer have
             // valid (implicit) locator characters.
             locatorEnd = i
-            parts.push(ctx.elt('CitationLocator', locatorStart, locatorEnd))
+            parts.push(ctx.elt(NODES.LOCATOR, locatorStart, locatorEnd))
             continue
           }
         }
@@ -573,18 +597,18 @@ export const citationParser: InlineParser = {
       // However, until the optional locator/suffix, we can essentially move
       // linearly through the character stream.
       if (next === CHAR.HYPHEN) {
-        parts.push(ctx.elt('CitationSuppressAuthorFlag', i, ++i))
+        parts.push(ctx.elt(NODES.AUTHORFLAG, i, ++i))
       }
 
       // We know that the next character is an @
-      parts.push(ctx.elt('CitationAtSign', i, ++i))
+      parts.push(ctx.elt(NODES.AT, i, ++i))
 
       let citekeyStart = i
 
       // Now we essentially just swallow every allowed character for the citekey.
       if (ctx.char(i) === CHAR.CURLY_OPEN) {
         citekeyStart++
-        parts.push(ctx.elt('CitationMark', i, ++i))
+        parts.push(ctx.elt(NODES.MARK, i, ++i))
         while (i < ctxEndPos && ctx.char(i) !== CHAR.CURLY_CLOSE) {
           i++
         }
@@ -593,9 +617,9 @@ export const citationParser: InlineParser = {
           return -1 // Curly bracket didn't close
         }
 
-        parts.push(ctx.elt('CitationCitekey', citekeyStart, i))
+        parts.push(ctx.elt(NODES.KEY, citekeyStart, i))
         citekeysFound++
-        parts.push(ctx.elt('CitationMark', i, ++i))
+        parts.push(ctx.elt(NODES.MARK, i, ++i))
       } else {
         while (i < ctxEndPos && /[\w:\.#$%&\-+?<>~/]/.test(String.fromCharCode(ctx.char(i)))) {
           i++
@@ -617,7 +641,7 @@ export const citationParser: InlineParser = {
 
         // Note that we need not check for whether i = ctxEndPos, since the
         // citation is allowed to be the last thing within the inline context.
-        parts.push(ctx.elt('CitationCitekey', citekeyStart, i))
+        parts.push(ctx.elt(NODES.KEY, citekeyStart, i))
         citekeysFound++
       }
 
@@ -637,7 +661,7 @@ export const citationParser: InlineParser = {
         const temporaryParts: MDElement[] = []
 
         i++
-        temporaryParts.push(ctx.elt('CitationMark', i, ++i))
+        temporaryParts.push(ctx.elt(NODES.MARK, i, ++i))
         let intextSuffixStart = i
 
         // Does the remaining slice start with an explicit locator label?
@@ -673,7 +697,7 @@ export const citationParser: InlineParser = {
             i++
           }
 
-          temporaryParts.push(ctx.elt('CitationLocator', locatorStart, i))
+          temporaryParts.push(ctx.elt(NODES.LOCATOR, locatorStart, i))
           intextSuffixStart = i
         } // Else: No locator, so essentially everything is suffix.
 
@@ -687,9 +711,9 @@ export const citationParser: InlineParser = {
           // First, commit the temporary collected parts ...
           parts.push(...temporaryParts)
           // ... add the suffix (intextSuffixStart is sensitive to locator) ...
-          parts.push(ctx.elt('CitationSuffix', intextSuffixStart, i))
+          parts.push(ctx.elt(NODES.SUFFIX, intextSuffixStart, i))
           // ... and close off with the close marker
-          parts.push(ctx.elt('CitationMark', i, ++i))
+          parts.push(ctx.elt(NODES.MARK, i, ++i))
         } else {
           // Bracket did not actually close -> reset i
           i = citekeyEnd
@@ -704,7 +728,7 @@ export const citationParser: InlineParser = {
     // one citekey.
     if (parts.length > 0 && citekeysFound > 0) {
       // Final step: Compose the full citation element.
-      return ctx.addElement(ctx.elt('Citation', pos, i, parts))
+      return ctx.addElement(ctx.elt(NODES.CITATION, pos, i, parts))
     } else {
       return -1
     }
