@@ -116,7 +116,8 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
   } else if (node.type === 'YAMLFrontmatter') {
     return '' // Frontmatters must be removed upon HTML export
   } else if (node.type === 'Citation') {
-    const rendered = getCitation(node.parsedCitation.citations, node.parsedCitation.composite)
+    console.log('Rendering citation', { citation: node.parsedCitation })
+    const rendered = getCitation(node.parsedCitation.items, node.parsedCitation.composite)
     return `${node.whitespaceBefore}<span class="citation">${rendered ?? _.escape(node.value)}</span>`
   } else if (node.type === 'Footnote') {
     return `${node.whitespaceBefore}<a class="footnote" href="#fnref:${_.escape(node.label)}">${_.escape(node.label)}</a>`
