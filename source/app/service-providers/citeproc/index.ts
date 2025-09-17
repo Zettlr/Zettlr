@@ -534,9 +534,12 @@ export default class CiteprocProvider extends ProviderContract {
       } else if (composite && citations.length === 1) {
         // Mimic the composite mode
         const citation = citations[0]
+        const suffix = citation.suffix
+        citation.suffix = undefined
         citation['author-only'] = true
         citation['suppress-author'] = false
         const author = this.engine.makeCitationCluster([citation])
+        citation.suffix = suffix
         citation['author-only'] = false
         citation['suppress-author'] = true
         const rest = this.engine.makeCitationCluster([citation])
