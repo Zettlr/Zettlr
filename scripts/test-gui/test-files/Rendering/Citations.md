@@ -71,11 +71,11 @@ Lorem ipsum [invalid citepart; some prefix @Marx1962, suffix] dolor sit amet.
 
 Basic in-text citation with suffix:
 
-Lorem ipsum [@Marx1962 this is a suffix] dolor sit amet.
+Lorem ipsum [@Marx1962 very much a suffix] dolor sit amet.
 
 As you can see, a locator will be detected due to the roman literal being preceded by a space. We can avoid this using standard Pandoc rules to explicitly define a (in this case empty) locator using bracket-notation:
 
-Lorem ipsum [@Marx1962{} this is a suffix] dolor sit amet.
+Lorem ipsum [@Marx1962{} very much a suffix] dolor sit amet.
 
 This will also work for bracketed citekeys (which may contain weird characters, such as URLs, which are supported by citeproc (no, not by Zettlr, don't get your hopes up, rewriting the citation parser is already a massive pita)):
 
@@ -109,6 +109,10 @@ Explicit roman-numeral locator:
 
 Lorem ipsum [This is a prefix -@Marx1962, pp. iiim-mci, and this is a suffix] dolor sit amet.
 
+In-text citation which has no locator at the start, but one buried in the suffix which should not be detected as a locator (to avoid gobbling up meaningful information preceding it):
+
+Lorem ipsum [@Marx1962, especially figure 3, and more] dolor sit amet.
+
 Basic inline citation:
 
 Lorem ipsum @Marx1962 dolor sit amet.
@@ -123,4 +127,4 @@ Lorem ipsum @Marx1962 [23-24] dolor sit amet.
 
 Inline citation with only suffix:
 
-Lorem ipsum @Marx1962 [this is a suffix] dolor sit amet.
+Lorem ipsum @Marx1962 [this is a suffix p. 234 and more] dolor sit amet.
