@@ -90,11 +90,20 @@ annotate your PDF files, please continue using your existing workflow.
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
   functionality of the previous version, with the exception of more safeguards
   against data loss, and more ergonomic usage.
+- **Feature**: Image and PDF previews. Zettlr has now two dedicated viewers that
+  allow users to open common image types and PDF files right from within the app
+  for preview purposes (#5501).
 - **Feature**: Full-text (aka. global) search runs can now be cancelled via a
   dedicated button. You can now also trigger a new search while another search
   is already running.
 - **Feature**: Individual global search results can now be copied to the
   clipboard (#2070).
+- **Feature**: The file manager can now show and display other file types as
+  opposed to having those only in the sidebar. Images and PDF files can be
+  opened directly in Zettlr, while other files will be opened using the system
+  default application. You can use the appropriate section in the advanced
+  settings to customize this. By default, none of the new file types will be
+  displayed in the file manager (#5501).
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
