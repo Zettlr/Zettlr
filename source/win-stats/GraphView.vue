@@ -84,7 +84,11 @@ const zoomFactor = ref(1)
 const graphElement = ref<d3.Selection<SVGSVGElement, undefined, null, undefined>|null>(null)
 const simulation = ref<d3.Simulation<d3.SimulationNodeDatum, undefined>|null>(null)
 // Add an observer to resize the SVG element as necessary
-const controlsObserver = new ResizeObserver(updateGraphSize)
+const controlsObserver = new ResizeObserver(() => {
+  requestAnimationFrame(() => {
+    updateGraphSize()
+  })
+})
 
 const selectableComponents = computed(() => {
   const ret: Record<string, string> = {

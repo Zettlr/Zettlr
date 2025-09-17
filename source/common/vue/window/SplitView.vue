@@ -69,7 +69,11 @@ const view2WidthMin = ref<number>(availableSize.value * (props.minimumSizePercen
 // Properties necessary for hiding views programmatically
 const originalViewWidth = ref<[number, number]>([ 0, 0 ])
 const hasHiddenView = ref<0|1|2>(0) // Is 1 or 2 if one view is hidden
-const observer = new ResizeObserver(recalculateSizes)
+const observer = new ResizeObserver(() => {
+  requestAnimationFrame(() => {
+    recalculateSizes()
+  })
+})
 
 const element = ref<HTMLDivElement|null>(null)
 
