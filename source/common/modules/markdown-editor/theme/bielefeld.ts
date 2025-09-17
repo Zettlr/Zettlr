@@ -22,7 +22,8 @@ const commonRules: Record<string, any> = {
     fontWeight: 'bold'
   },
   // For more diversity, don't color the link marks
-  '.cm-link.cm-code-mark.cm-meta': { color: 'inherit' }
+  '.cm-link.cm-code-mark.cm-meta': { color: 'inherit' },
+  '.cm-citation-locator': { textDecoration: 'underline' }
 }
 
 export const themeBielefeldLight = EditorView.theme({
@@ -41,6 +42,10 @@ export const themeBielefeldLight = EditorView.theme({
   '.cm-url, .cm-link, .cm-code-mark, .cm-zkn-tag, .cm-zkn-link': { color: primaryColor },
   '.citeproc-citation, .code-block-line-background, .inline-code-background': { backgroundColor: 'var(--grey-0)' },
   '.citeproc-citation.error, .mermaid-chart.error': { color: 'var(--red-2)' },
+  '.cm-citation-mark': { color: 'var(--grey-1)' },
+  '.cm-citation-citekey': { color: primaryColor },
+  '.cm-citation-at-sign': { color: 'var(--grey-1)' },
+  '.cm-citation-suppress-author-flag': { color: 'var(--red-2)' },
   '.cm-escape': { color: 'var(--grey-2)' },
   '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
     color: primaryColor
@@ -66,6 +71,10 @@ export const themeBielefeldDark = EditorView.theme({
   },
   '.citeproc-citation, .code-block-line-background, .inline-code-background': { backgroundColor: 'var(--grey-7)' },
   '.citeproc-citation.error, .mermaid-chart.error': { color: 'var(--red-2)' },
+  '.cm-citation-mark': { color: 'var(--grey-4)' },
+  '.cm-citation-at-sign': { color: 'var(--grey-4)' },
+  '.cm-citation-citekey': { color: primaryColor },
+  '.cm-citation-suppress-author-flag': { color: 'var(--red-2)' },
   '.cm-cursor-primary': { background: primaryColor },
   '.cm-cursor-secondary': { background: 'var(--red-2)' },
   '.cm-dropCursor': { borderLeftColor: primaryColor },
