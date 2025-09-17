@@ -31,7 +31,7 @@ import { v4 as uuid4 } from 'uuid'
 import { type Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
 import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
-import { countChars, countWords } from '@common/util/counter'
+import { countAll } from '@common/util/counter'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import isFile from '@common/util/is-file'
 import { trans } from '@common/i18n-main'
@@ -1488,9 +1488,11 @@ current contents from the editor somewhere else, and restart the application.`
 
     if (doc.descriptor.type === 'file') {
       // In case of an MD File increase the word or char count
+      const locale: string = this._app.config.get().appLang
       const ast = markdownToAST(content)
-      const newWordCount = countWords(ast)
-      const newCharCount = countChars(ast)
+      const counts = countAll(ast, locale)
+      const newWordCount = counts.words
+      const newCharCount = counts.chars
 
       this._app.stats.updateCounts(
         newWordCount - doc.lastSavedWordCount,
