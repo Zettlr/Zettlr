@@ -46,20 +46,23 @@ jobs:
         jq --slurp '.' audit_result.json > tmp.json
         mv tmp.json audit_result.json
         jq -r '.[] | .value as $v | .children += { package: $v } | .children | ("Package: \(.package)", "  Version(s) \(."Vulnerable Versions")", "  \(.Issue) (Severity: \(.Severity))", "  URL: \(.URL)")' audit_result.json > audit_result.txt
-        { echo 'AUDIT_REPORT=<<EOF' echo "$(<audit_result.txt)" echo EOF } >> "$GITHUB_ENV"
     - name: Report results
       # Run this step only if yarn npm audit exited with a non-zero code.
+      # NOTE: Truncates the content to at most 1,500 characters to avoid
+      # Discord's character limit.
       if: ${{ failure() }}
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_AUDIT_WEBHOOK }}
-      uses: Ilshidur/action-discord@master
-      with:
-        args: |
-          ## Repository Audit Results
-
-          ```
-          ${{ env.AUDIT_REPORT }}
-          ```
+      run: |
+        AUDIT_CONTENT=$(<audit_result.txt)
+        AUDIT_CONTENT=${AUDIT_CONTENT:0:1500}
+        echo '## Repository Audit Results' > message.txt
+        echo '' >> message.txt
+        echo 'A new audit has been run on the Zettlr `yarn.lock` file. Below follow (truncated) results. For the full results, please see the run: https://github.com/Zettlr/Zettlr/actions/runs/${{ github.run_id }}.' >> message.txt
+        echo '' >> message.txt
+        echo '```' >> message.txt
+        echo "$AUDIT_CONTENT ..." >> message.txt
+        echo '```' >> message.txt
+        BODY=$(jq -n --arg msg "$(<message.txt)" '{ content: $msg }')
+        curl -d $BODY -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_AUDIT_WEBHOOK }}
     - name: Cache JSON results as artifact
       # Run this step only if yarn npm audit exited with a non-zero code.
       if: ${{ failure() }}
