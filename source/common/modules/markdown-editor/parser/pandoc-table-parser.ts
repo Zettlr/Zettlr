@@ -26,10 +26,10 @@ import {
 } from '@lezer/markdown'
 
 // Pipe Table Regex (min 2 cells): `my cell | my other cell` or `| my cell | my other cell |`
-// ^\|?         => optional leading pipe
-// [^|]*        => first cell, zero or more characters
-// (?:\|[^|]*)+ => one or more cells
-// \|?$         => optional tailing pipe
+// ^\|?           => optional leading pipe
+// [^|]*          => first cell, zero or more characters
+// (?:\|[^|]*)+   => one or more cells
+// \|?$           => optional tailing pipe
 const pipeRE = /^\|?[^|]*(?:\|[^|]*)+\|?$/
 // Pipe Table Header Regex: `|:-:+---+:--|`
 // ^[|+]?                 => optional leading pipe or cross
@@ -42,14 +42,14 @@ const pipeRE = /^\|?[^|]*(?:\|[^|]*)+\|?$/
 // [|+]?$                 => optional tailing pipe or cross
 const pipeHeaderRE = /^[|+]?\s*:?-+:?\s*(?:\s*:?-+:?\s*)*[|+]?$/
 // Grid Table Line Regex: `+:===:+=====+` or `+-------+------+`
-// ^\+                => leading cross
-// (\s*-+\s*\+)+      => optional dash delimiter row
-// (\s*:?=+:?\s*\+)+  => optional equals delimiter row with optional alignment
-const gridLineRE = /^\+((\s*-+\s*\+)+|(\s*:?=+:?\s*\+)+)$/
+// ^\+                  => leading cross
+// (?:\s*-+\s*\+)+      => optional dash delimiter row
+// (?:\s*:?=+:?\s*\+)+  => optional equals delimiter row with optional alignment
+const gridLineRE = /^\+(?:(?:\s*-+\s*\+)+|(?:\s*:?=+:?\s*\+)+)$/
 // Grid Table Content Regex:
-// \|          => leading pipe
-// ([^|]*\|)+  => one or more cells containing any non-pipe character
-const gridContentRE = /^\|([^|]*\|)+$/
+// \|            => leading pipe
+// (?:[^|]*\|)+  => one or more cells containing any non-pipe character
+const gridContentRE = /^\|(?:[^|]*\|)+$/
 
 /**
  * Parses a grid table and returns a subtree that can be used for syntax highlighting
