@@ -98,6 +98,7 @@ import type { SyntaxNode } from '@lezer/common'
 import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
 import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
+import { moveSection } from './util/move-section'
 
 export interface DocumentWrapper {
   path: string
@@ -529,66 +530,7 @@ export default class MarkdownEditor extends EventEmitter {
    */
   moveSection (from: number, to: number): void {
     const toc = this._instance.state.field(tocField)
-    const entry = toc.find(e => e.line === from)
-
-    if (entry === undefined) {
-      return // Something went wrong
-    }
-
-    // The section ends at either the next higher or same-level heading
-    const nextSections = toc.slice(toc.indexOf(entry) + 1)
-    let entryEndPos = this._instance.state.doc.length
-
-    for (const section of nextSections) {
-      if (section.level <= entry.level) {
-        entryEndPos = section.pos
-        break
-      }
-    }
-
-    const toLineNumber = to !== -1 ? to : this._instance.state.doc.lines
-    const toLine = this._instance.state.doc.line(toLineNumber)
-    const targetPos = to !== -1 ? toLine.from : toLine.to
-    const sectionText = this._instance.state.doc.slice(entry.pos, entryEndPos)
-    let entryContents = sectionText.toString()
-
-    if (to === -1) {
-      // if we are moving to the end of the document,
-      // but not a new line, we need to add two new
-      // lines before entryContents
-      const prevLine = this._instance.state.doc.line(Math.max(1, toLineNumber - 1))
-      if (toLine.text.trim() !== '') {
-        entryContents = '\n\n' + entryContents
-      // if the last line is new, but the previous one is not,
-      // we need to add one new line before entryContents
-      } else if (prevLine.text.trim() !== '') {
-        entryContents = '\n' + entryContents
-      }
-    }
-
-    const sectionLastLine = sectionText.line(sectionText.lines)
-    const sectionPrevLine = sectionText.line(Math.max(1, sectionText.lines - 1))
-    // if the section we are moving does not end
-    // in a new line, we need to add two new lines
-    //  after entryContents
-    if (sectionLastLine.text.trim() !== '') {
-      entryContents = entryContents + '\n\n'
-    // if the section ends in a new line, but the previous one
-    // is not a new line, then we need to add one new line
-    // after the entryContents
-    } else if (sectionPrevLine.text.trim() !== '') {
-      entryContents = entryContents + '\n'
-    }
-
-    // Now, dispatch the updates.
-    this._instance.dispatch({
-      changes: [
-        // First, "cut"
-        { from: entry.pos, to: entryEndPos, insert: '' },
-        // Then, "paste"
-        { from: targetPos, insert: entryContents }
-      ]
-    })
+    moveSection(this._instance, toc, from, to)
   }
 
   /**
