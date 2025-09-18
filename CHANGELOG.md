@@ -107,6 +107,8 @@ annotate your PDF files, please continue using your existing workflow.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
+- **Change**: The word and character counters in the statusbar now always show
+  both counts.
 - Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
   footnotes).
 - The diagnostics info field in the statusbar now toggles the lint panel,
