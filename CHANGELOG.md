@@ -104,6 +104,7 @@ annotate your PDF files, please continue using your existing workflow.
   default application. You can use the appropriate section in the advanced
   settings to customize this. By default, none of the new file types will be
   displayed in the file manager (#5501).
+- **Feature**: Zettlr now provides a Liquid Glass icon for macOS 26.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
