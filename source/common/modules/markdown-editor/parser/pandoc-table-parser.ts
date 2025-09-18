@@ -51,7 +51,7 @@ const gridLineRE = /^\s*\+(?:(?:-+\+)+|(?::?=+:?\+)+)\s*$/gm
 // Grid Table Content Regex:
 // \s*           => leading whitespace
 // \|            => leading pipe
-// (?:[^|]*\|)+  => one or more cells containing any non-pipe character
+// (?:[^|\n]*\|)+  => one or more cells containing any non-pipe character
 // \s*           => tailing whitespace
 const gridContentRE = /^\s*\|(?:[^|\n]*\|)+\s*$/gm
 
