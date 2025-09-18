@@ -34,38 +34,54 @@
       <div class="background-controls-wrapper">
         <!-- Transparent -->
         <div
+          tabindex="0"
+          role="radio"
+          v-bind:aria-checked="backgroundPattern === 'transparent'"
           v-bind:class="{
             'background-button': true,
             'bg-transparent': true,
             active: backgroundPattern === 'transparent'
           }"
+          v-bind:title="labelTransparent"
           v-on:click="backgroundPattern = 'transparent'"
         ></div>
         <!-- White -->
         <div
+          tabindex="0"
+          role="radio"
+          v-bind:aria-checked="backgroundPattern === 'white'"
           v-bind:class="{
             'background-button': true,
             'bg-white': true,
             active: backgroundPattern === 'white'
           }"
+          v-bind:title="labelWhite"
           v-on:click="backgroundPattern = 'white'"
         ></div>
         <!-- Black -->
         <div
+          tabindex="0"
+          role="radio"
+          v-bind:aria-checked="backgroundPattern === 'black'"
           v-bind:class="{
             'background-button': true,
             'bg-black': true,
             active: backgroundPattern === 'black'
           }"
+          v-bind:title="labelBlack"
           v-on:click="backgroundPattern = 'black'"
         ></div>
         <!-- Checkerboard -->
         <div
+          tabindex="0"
+          role="radio"
+          v-bind:aria-checked="backgroundPattern === 'checkerboard'"
           v-bind:class="{
             'background-button': true,
             'bg-checker': true,
             active: backgroundPattern === 'checkerboard'
           }"
+          v-bind:title="labelCheckerboard"
           v-on:click="backgroundPattern = 'checkerboard'"
         ></div>
       </div>
@@ -158,6 +174,10 @@ const openExternallyLabel = trans('Open in system viewer')
 
 type BackgroundPattern = 'transparent'|'white'|'black'|'checkerboard'
 const backgroundPattern = ref<BackgroundPattern>('transparent')
+const labelTransparent = trans('Use transparent background')
+const labelWhite = trans('Use white background')
+const labelBlack = trans('Use black background')
+const labelCheckerboard = trans('Use checkerboard background')
 
 type ViewMode = 'fit'|'fit-width'|'fit-height'|'zoom'
 const viewMode = ref<ViewMode>('fit')
