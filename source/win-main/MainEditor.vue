@@ -2,6 +2,8 @@
   <div
     ref="mainEditorWrapper"
     class="main-editor-wrapper"
+    role="region"
+    v-bind:aria-label="`Markdown Editor: Currently editing file ${pathBasename(props.file.path)}`"
     v-bind:style="{ 'font-size': `${fontSize}px` }"
     v-bind:class="{
       'code-file': !isMarkdown,

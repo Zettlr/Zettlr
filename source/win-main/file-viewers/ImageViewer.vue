@@ -1,5 +1,5 @@
 <template>
-  <div class="image-viewer-container">
+  <div class="image-viewer-container" role="region" v-bind:aria-label="`ImageViewer: Currently viewing file ${pathBasename(props.file.path)}`">
     <div class="image-toolbar">
       <ButtonControl
         v-bind:label="'+'"
@@ -140,6 +140,7 @@ import SelectControl from 'source/common/vue/form/elements/SelectControl.vue'
 import NumberControl from 'source/common/vue/form/elements/NumberControl.vue'
 import ButtonControl from 'source/common/vue/form/elements/ButtonControl.vue'
 import { trans } from 'source/common/i18n-renderer'
+import { pathBasename } from 'source/common/util/renderer-path-polyfill'
 
 const MINIMUM_ZOOM = 1 // Percent, not ratio
 const ZOOM_STEP = 10 // By how much the +/- buttons should affect the zoom level

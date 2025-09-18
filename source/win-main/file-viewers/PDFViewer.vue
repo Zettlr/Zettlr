@@ -2,6 +2,8 @@
   <div
     ref="pdfViewerContainer"
     class="pdf-viewer-container"
+    role="region"
+    v-bind:aria-label="`PDFViewer: Currently viewing file ${pathBasename(props.file.path)}`"
     v-on:click="acceptsClicks = true"
   >
     <iframe
@@ -39,6 +41,7 @@ import type { OpenDocument } from 'source/types/common/documents'
 import type { EditorCommands } from '../App.vue'
 import makeValidUri from 'source/common/util/make-valid-uri'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { pathBasename } from 'source/common/util/renderer-path-polyfill'
 
 const props = defineProps<{
   leafId: string
