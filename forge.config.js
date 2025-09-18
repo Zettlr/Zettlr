@@ -204,7 +204,7 @@ module.exports = {
     extraResource: process.platform === 'darwin' ? [
       'resources/icons/icon.code.icns',
       'resources/icons/Assets.car' // Contains the new Liquid Glass app icon
-    ] : undefined
+    ] : [] // NOTE: Must be an array because the generateAssets hook uses it
   },
   plugins: [
     {
