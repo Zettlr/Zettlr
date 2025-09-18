@@ -26,30 +26,34 @@ import {
 } from '@lezer/markdown'
 
 // Pipe Table Regex (min 2 cells): `my cell | my other cell` or `| my cell | my other cell |`
-// ^\|?           => optional leading pipe
-// [^|]*          => first cell, zero or more characters
-// (?:\|[^|]*)+   => one or more cells
-// \|?$           => optional tailing pipe
-const pipeRE = /^\|?[^|]*(?:\|[^|]*)+\|?$/
-// Pipe Table Header Regex: `|:-:+---+:--|`
+// ^\|?             => optional leading pipe
+// [^|\n]*          => first cell, zero or more characters
+// (?:\|[^|\n]*)+   => one or more cells
+// \|?$             => optional tailing pipe
+const pipeRE = /^\|?[^|\n]*(?:\|[^|\n]*)+\|?$/gm
+// Pipe Table Header Regex (min 2 cells): `|:-:+---+:--|`
+// \s*                    => leading whitespace
 // ^[|+]?                 => optional leading pipe or cross
-// \s*                    => optional whitespace
 // :?                     => optional alignment
 // -+                     => one or more delimiters
 // :?                     => optional alignment
-// \s*                    => optional whitespace
-// (?:[|+]\s*:?-+:?\s*)*  => optionally, any number of cells divided by pipes or crosses
+// (?:[|+]:?-+:?)+        => one or more cells divided by pipes or crosses
 // [|+]?$                 => optional tailing pipe or cross
-const pipeHeaderRE = /^[|+]?\s*:?-+:?\s*(?:\s*:?-+:?\s*)*[|+]?$/
+// \s*                    => tailing whitespace
+const pipeHeaderRE = /^\s*[|+]?:?-+:?(?:[|+]:?-+:?)+[|+]?\s*$/gm
 // Grid Table Line Regex: `+:===:+=====+` or `+-------+------+`
-// ^\+                  => leading cross
-// (?:\s*-+\s*\+)+      => optional dash delimiter row
-// (?:\s*:?=+:?\s*\+)+  => optional equals delimiter row with optional alignment
-const gridLineRE = /^\+(?:(?:\s*-+\s*\+)+|(?:\s*:?=+:?\s*\+)+)$/
+// \s*            => leading whitespace
+// ^\+            => leading cross
+// (?:-+\+)+      => optional dash delimiter row
+// (?::?=+:?\+)+  => optional equals delimiter row with optional alignment
+// \s*            => tailing whitespace
+const gridLineRE = /^\s*\+(?:(?:-+\+)+|(?::?=+:?\+)+)\s*$/gm
 // Grid Table Content Regex:
+// \s*           => leading whitespace
 // \|            => leading pipe
 // (?:[^|]*\|)+  => one or more cells containing any non-pipe character
-const gridContentRE = /^\|(?:[^|]*\|)+$/
+// \s*           => tailing whitespace
+const gridContentRE = /^\s*\|(?:[^|\n]*\|)+\s*$/gm
 
 /**
  * Parses a grid table and returns a subtree that can be used for syntax highlighting
