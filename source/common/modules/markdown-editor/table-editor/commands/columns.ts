@@ -27,7 +27,7 @@ import { findColumnIndexByRange, findRowIndexByRange, getColIndicesByRanges, get
  * @return  {boolean}             Whether the command has moved any selections
  */
 export function moveNextCell (target: EditorView): boolean {
-  const newSelections: SelectionRange[] = mapSelectionsWithTables(target, ctx => {
+  const tr = mapSelectionsWithTables<TransactionSpec[]>(target, ctx => {
     // Now with the offsets at hand, it's relatively easy: We only need to find
     // the cell in which the cursor is in, then see if there is a next one, and
     // return a cursor that points to the start of the next cell.
@@ -43,16 +43,22 @@ export function moveNextCell (target: EditorView): boolean {
   
       if (lastCol && lastRow) {
         return undefined
-      } else if (!lastCol) {
-        return EditorSelection.cursor(ctx.offsets.inner[rowIdx][colIdx + 1][0])
-      } else if (lastCol && !lastRow) {
-        return EditorSelection.cursor(ctx.offsets.inner[rowIdx + 1][0][0])
       }
+      
+      if (!lastCol) {
+        const cursor = EditorSelection.cursor(ctx.offsets.inner[rowIdx][colIdx + 1][0])
+        return { selection: EditorSelection.create([cursor]) }
+      } else if (lastCol && !lastRow) {
+        const cursor = EditorSelection.cursor(ctx.offsets.inner[rowIdx + 1][0][0])
+        return { selection: EditorSelection.create([cursor]) }
+      }
+
+      return undefined
     }).filter(i => i !== undefined)
   }).flat()
 
-  if (newSelections.length > 0) {
-    target.dispatch({ selection: EditorSelection.create(newSelections) })
+  if (tr.length > 0) {
+    target.dispatch(...tr)
     return true
   } else {
     return false
