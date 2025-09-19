@@ -42,15 +42,33 @@ export function moveNextCell (target: EditorView): boolean {
       const lastRow = rowIdx === ctx.offsets.outer.length - 1
   
       if (lastCol && lastRow) {
-        return undefined
+        if (ctx.tableAST.tableType === 'grid') {
+          return undefined // As of now, support only pipe tables.
+        }
+
+        // In this edge case, we want to not do nothing, but instead add a new
+        // row and place the cursor in there. This is going to be a bit iffy,
+        // but not impossible.
+
+        // First, get the current line ...
+        const line = target.state.doc.lineAt(range.from)
+        // ... and prepare to insert a duplicate below the table, moving the
+        // cursor to the first cell of the new row.
+        return {
+          changes: {
+            from: line.to,
+            // Taken from rows.ts
+            insert: '\n' + line.text.replace(/[^\s\|]/g, ' ')
+          },
+          // Move the new cursor to the beginning of the new line.
+          selection: { anchor: line.to + 2 }
+        }
       }
       
       if (!lastCol) {
-        const cursor = EditorSelection.cursor(ctx.offsets.inner[rowIdx][colIdx + 1][0])
-        return { selection: EditorSelection.create([cursor]) }
+        return { selection: { anchor: ctx.offsets.inner[rowIdx][colIdx + 1][0] } }
       } else if (lastCol && !lastRow) {
-        const cursor = EditorSelection.cursor(ctx.offsets.inner[rowIdx + 1][0][0])
-        return { selection: EditorSelection.create([cursor]) }
+        return { selection: { anchor: ctx.offsets.inner[rowIdx + 1][0][0] } }
       }
 
       return undefined
