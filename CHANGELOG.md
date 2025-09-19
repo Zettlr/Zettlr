@@ -85,6 +85,43 @@ Note that both image and PDF viewers are just that: viewers. As Zettlr is a text
 app, we do not plan on implementing any ways of editing images or PDF files. To
 annotate your PDF files, please continue using your existing workflow.
 
+## New Citation Parser
+
+This release of Zettlr ships with a fully rewritten citation parser. We have
+decided to do so because the existing citation parser was very coarse. It would
+only detect and indicate entire citation nodes, but it could not distinguish
+between the various parts of citations (such as prefix, citekey, and suffix). In
+addition, there were quite many inefficiencies in how Zettlr would parse
+citations.
+
+The new citation parser aims at fixing these issues. It now mounts individual
+nodes into the document for all individual parts of a citation node.
+Specifically, it now detects formatting characters, the `@`-sign, the suppress-
+author-flag (a hyphen preceding the `@`-sign), prefix, suffix, and the locator
+individually. This not just makes styling individual citation parts possible,
+but also makes all processing within Zettlr more efficient and faster.
+Especially in documents with a lot of citations, you should be able to observe a
+performance improvement.
+
+Lastly, we took this opportunity to align the parser more with how Pandoc
+Citeproc processes citations. Most notably, this includes relaxing some
+requirements such as having to place commas after the citekey, and support for
+curly brackets, which allows you more flexibility in defining citekeys (e.g.,
+`@{AuthorYear}`) and locators (e.g., `{pp. 23-24, 66-69}`),
+
+If you prefer to style Zettlr using Custom CSS, you can now style the individual
+parts of your citations, using the following CSS classes:
+
+* `cm-citation`: The entire citation node
+* `cm-citation-mark`: Formatting characters (`{}[];`) except the `@`-sign and
+  the suppress-author-flag
+* `cm-citation-prefix`: The citation prefix
+* `cm-citation-suppress-author-flag`: The suppress-author-flag
+* `cm-citation-at-sign`: The `@`-sign in front of your citekey
+* `cm-citation-citekey`: The actual cite key (sans surrounding curly brackets)
+* `cm-citation-locator`: The locator after your citekey
+* `cm-citation-suffix`: The citation suffix
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
@@ -93,6 +130,7 @@ annotate your PDF files, please continue using your existing workflow.
 - **Feature**: Image and PDF previews. Zettlr has now two dedicated viewers that
   allow users to open common image types and PDF files right from within the app
   for preview purposes (#5501).
+- **Feature**: Fully rewritten citation parser (#5902).
 - **Feature**: Full-text (aka. global) search runs can now be cancelled via a
   dedicated button. You can now also trigger a new search while another search
   is already running.
