@@ -636,7 +636,7 @@ export const citationParser: InlineParser = {
         // "Some sentence with @AuthorYear." should detect "AuthorYear" as the
         // citekey, and ignore the period.
         if (/[^a-zA-Z0-9]/.test(String.fromCharCode(ctx.char(i - 1)))) {
-          --i // TODO: Currently endless loop when the only character is an @
+          --i
         }
 
         // Note that we need not check for whether i = ctxEndPos, since the
@@ -670,24 +670,13 @@ export const citationParser: InlineParser = {
         // NOTE that we require each label to be followed by a space
         const explicitLabel = allValidLocatorLabels.find(x => slice.startsWith(x + ' '))
         if (explicitLabel !== undefined) {
-          // First, check if there are only punctuation marks and spaces between
-          // the citekey end and the locator start. If not, we should not detect
-          // this as a locator.
-          if (/^[\s,\.:;+-]*$/.test(ctx.slice(intextSuffixStart, i - 1))) {
-            // Found a valid locator label -> begin explicit locator
-            locatorStart = i
-            // Move i forward until after the space so that the implicit locator
-            // logic can take over
-            i += explicitLabel.length + 1
-          }
+          locatorStart = i
+          // Move i forward until after the space so that the implicit locator
+          // logic can take over
+          i += explicitLabel.length + 1
         } else if (((ctx.char(i) >= 48 && ctx.char(i) <= 57) || ROMAN_NUMERAL_CODES.includes(ctx.char(i)))) {
-          // First, check if there are only punctuation marks and spaces between
-          // the citekey end and the locator start. If not, we should not detect
-          // this as a locator.
-          if (/^[\s,\.:;+-]*$/.test(ctx.slice(intextSuffixStart, i - 1))) {
-            // Found a valid locator character -> begin implicit locator
-            locatorStart = i
-          }
+          // Found a valid locator character -> begin implicit locator
+          locatorStart = i
         }
 
         if (locatorStart > -1) {
@@ -711,7 +700,9 @@ export const citationParser: InlineParser = {
           // First, commit the temporary collected parts ...
           parts.push(...temporaryParts)
           // ... add the suffix (intextSuffixStart is sensitive to locator) ...
-          parts.push(ctx.elt(NODES.SUFFIX, intextSuffixStart, i))
+          if (intextSuffixStart < i) {
+            parts.push(ctx.elt(NODES.SUFFIX, intextSuffixStart, i))
+          }
           // ... and close off with the close marker
           parts.push(ctx.elt(NODES.MARK, i, ++i))
         } else {
