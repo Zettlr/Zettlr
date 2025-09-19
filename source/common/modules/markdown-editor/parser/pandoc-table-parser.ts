@@ -30,7 +30,7 @@ import {
 // [^|\n]*          => first cell, zero or more characters
 // (?:\|[^|\n]*)+   => one or more cells
 // \|?$             => optional tailing pipe
-const pipeRE = /^\|?[^|\n]*(?:\|[^|\n]*)+\|?$/gm
+const pipeRE = /^\|?[^|\n]*(?:\|[^|\n]*)+\|?$/
 // Pipe Table Header Regex (min 2 cells): `|:-:+---+:--|`
 // \s*                    => leading whitespace
 // ^[|+]?                 => optional leading pipe or cross
@@ -40,20 +40,20 @@ const pipeRE = /^\|?[^|\n]*(?:\|[^|\n]*)+\|?$/gm
 // (?:[|+]:?-+:?)+        => one or more cells divided by pipes or crosses
 // [|+]?$                 => optional tailing pipe or cross
 // \s*                    => tailing whitespace
-const pipeHeaderRE = /^\s*[|+]?:?-+:?(?:[|+]:?-+:?)+[|+]?\s*$/gm
+const pipeHeaderRE = /^\s*[|+]?:?-+:?(?:[|+]:?-+:?)+[|+]?\s*$/
 // Grid Table Line Regex: `+:===:+=====+` or `+-------+------+`
 // \s*            => leading whitespace
 // ^\+            => leading cross
 // (?:-+\+)+      => optional dash delimiter row
 // (?::?=+:?\+)+  => optional equals delimiter row with optional alignment
 // \s*            => tailing whitespace
-const gridLineRE = /^\s*\+(?:(?:-+\+)+|(?::?=+:?\+)+)\s*$/gm
+const gridLineRE = /^\s*\+(?:(?:-+\+)+|(?::?=+:?\+)+)\s*$/
 // Grid Table Content Regex:
 // \s*           => leading whitespace
 // \|            => leading pipe
 // (?:[^|\n]*\|)+  => one or more cells containing any non-pipe character
 // \s*           => tailing whitespace
-const gridContentRE = /^\s*\|(?:[^|\n]*\|)+\s*$/gm
+const gridContentRE = /^\s*\|(?:[^|\n]*\|)+\s*$/
 
 /**
  * Parses a grid table and returns a subtree that can be used for syntax highlighting
