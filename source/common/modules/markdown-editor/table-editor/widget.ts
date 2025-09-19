@@ -244,11 +244,9 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
       const tr = tableTR()
       table.appendChild(tr)
       trs.push(tr)
-      updateRow(tr, row, i, tableAST.alignment, view, rowsChanged, coords)
-    } else {
-      // Transfer the contents
-      updateRow(trs[i], row, i, tableAST.alignment, view, rowsChanged, coords)
     }
+    // Transfer the contents
+    updateRow(trs[i], row, i, tableAST.alignment, view, rowsChanged, coords)
   }
 }
 
