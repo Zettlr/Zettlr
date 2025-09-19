@@ -414,11 +414,43 @@ function updateRow (
       const html = nodeToHTML(cell.children, callback, {}, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
     } else if (subview === null && selectionInCell) {
-      // Create a new subview to represent the selection here. Ensure the cell
-      // itself is empty before we mount the subview.
-      contentWrapper.innerHTML = ''
-      createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
-      contentWrapper.classList.add('editing')
+      // Before we mount a subview, we need to normalize the selection if
+      // necessary. The table commands are allowed to place the new selection
+      // anywhere inside the table cell delimiters, and this will make
+      // `selectionInCell` turn `true` because that only checks if we are
+      // anywhere between the table cell delimiters. However, especially when
+      // the selection is inside an empty cell with more than two spaces, it is
+      // entirely arbitrary where the (synthetic) content span will end up.
+      // Our AST parser will just decide on something, so before this point we
+      // actually don't know if the selection will literally end up where the
+      // AST has placed the cell content span. But that is important, because
+      // that is where the subview will place the editable span of the cell. If
+      // the selection is inside the table cell delimiters, but outside of what
+      // the AST considers "content," this will lead to weird transactions that
+      // won't pass either the transaction filter of the subview, or, worse, add
+      // the inserted characters at completely arbitrary positions of the table.
+      // So, here we enforce that the main selection is definitely somewhere
+      // inside the table cell *content*.
+      const sel = view.state.selection.main
+      let newFrom = Math.max(sel.from, cell.from)
+      newFrom = Math.min(newFrom, cell.to)
+      let newTo = Math.max(sel.to, cell.from)
+      newTo = Math.min(newTo, cell.to)
+
+      // NOTE: This entire code runs during updates (since that's when the
+      // widget's updateDOM function will be called), so we must wait until that
+      // update is complete before we do anything.
+      requestAnimationFrame(() => {
+        if (newFrom !== sel.from || newTo !== sel.to) {
+          view.dispatch({ selection: { anchor: newFrom, head: newTo } })
+        }
+
+        // Create a new subview to represent the selection here. Ensure the cell
+        // itself is empty before we mount the subview.
+        contentWrapper.innerHTML = ''
+        createSubviewForCell(view, contentWrapper, { from: cell.from, to: cell.to })
+        contentWrapper.classList.add('editing')
+      })
     } else if (subview === null) {
       // Simply transfer the contents
       const html = nodeToHTML(cell.children, callback, {}, 0).trim()
