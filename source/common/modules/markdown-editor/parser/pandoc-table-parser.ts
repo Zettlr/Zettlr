@@ -49,11 +49,13 @@ const pipeHeaderRE = /^\s*[|+]?:?-+:?(?:[|+]:?-+:?)+[|+]?\s*$/
 // \s*            => tailing whitespace
 const gridLineRE = /^\s*\+(?:(?:-+\+)+|(?::?=+:?\+)+)\s*$/
 // Grid Table Content Regex:
-// \s*           => leading whitespace
-// \|            => leading pipe
-// (?:[^|\n]*\|)+  => one or more cells containing any non-pipe character
-// \s*           => tailing whitespace
-const gridContentRE = /^\s*\|(?:[^|\n]*\|)+\s*$/
+// (?!.*\+\s*\+)              => assert non-empty delimiter lines, `++`
+// (?!.*\+.*?[^-|+\n].*?\+)   => assert only hyphens in delimiter, `+---+`
+// \s*                        => leading whitespace
+// [|+]                       => leading pipe or cross
+// (?:[^|+\n]*[|+])+          => one or more cells containing any non pipe or cross character
+// \s*                        => tailing whitespace
+const gridContentRE = /^(?!.*\+\s*\+)(?!.*\+.*?[^-|+\n].*?\+)\s*[|+](?:[^|+\n]*[|+])+\s*$/
 
 /**
  * Parses a grid table and returns a subtree that can be used for syntax highlighting
@@ -225,6 +227,7 @@ export const gridTableParser: BlockParser = {
     // We have a potential grid table. The end of the table is being marked by
     // the last line that matches a grid line.
     const lines: string[] = [line.text]
+
     const start = ctx.lineStart
     // We have alternating lines with +---+ and | cell |
     while (ctx.nextLine() && (gridLineRE.test(line.text) || gridContentRE.test(line.text))) {
