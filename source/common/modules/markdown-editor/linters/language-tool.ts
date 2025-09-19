@@ -146,11 +146,22 @@ const ltLinter = linter(async view => {
 
   // At this point, we have only valid suggestions that we can now insert into
   // the document.
+
+  // we want to filter out any words that are in our local dictionary
+  const localDictionary: string[] = await ipcRenderer.invoke('dictionary-provider', { command: 'get-user-dictionary' })
+  // use a set for faster `.has()` lookup
+  const dictionarySet: Set<string> = new Set(localDictionary)
+
   for (const match of ltSuggestions.matches) {
+    const word = view.state.sliceDoc(match.offset, match.offset + match.length)
+    const issueType = match.rule.issueType
+    // skip matches for words in the local dictionary
+    if (issueType === 'misspelling' && dictionarySet.has(word)) { continue }
+
     const source = `language-tool(${match.rule.issueType})`
-    const severity = (match.rule.issueType === 'style')
+    const severity = (issueType === 'style')
       ? 'info'
-      : (match.rule.issueType === 'misspelling') ? 'error' : 'warning'
+      : (issueType === 'misspelling') ? 'error' : 'warning'
 
     const dia: Diagnostic = {
       from: match.offset,
