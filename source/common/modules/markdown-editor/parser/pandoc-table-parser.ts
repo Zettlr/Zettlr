@@ -42,15 +42,15 @@ const pipeRE = /^\|?[^|\n]*(?:\|[^|\n]*)+\|?$/
 // \s*                    => tailing whitespace
 const pipeHeaderRE = /^\s*[|+]?:?-+:?(?:[|+]:?-+:?)+[|+]?\s*$/
 // Grid Table Line Regex: `+:===:+=====+` or `+-------+------+`
-// \s*            => leading whitespace
-// ^\+            => leading cross
-// (?:-+\+)+      => optional dash delimiter row
-// (?::?=+:?\+)+  => optional equals delimiter row with optional alignment
-// \s*            => tailing whitespace
-const gridLineRE = /^\s*\+(?:(?:-+\+)+|(?::?=+:?\+)+)\s*$/
+// \s*              => leading whitespace
+// ^\+              => leading cross
+// (?::?-+:?\+)+    => optional dash delimiter row with optional alignment
+// (?::?=+:?\+)+    => optional equals delimiter row with optional alignment
+// \s*              => tailing whitespace
+const gridLineRE = /^\s*\+(?:(?::?-+:?\+)+|(?::?=+:?\+)+)\s*$/
 // Grid Table Content Regex:
 // (?!.*\+\s*\+)              => assert non-empty delimiter lines, `++`
-// (?!.*\+.*?[^-|+\n].*?\+)   => assert only hyphens in delimiter, `+---+`
+// (?!.*\+.*?[^-|+\n].*?\+)   => assert only dashes in delimiter, `+---+`
 // \s*                        => leading whitespace
 // [|+]                       => leading pipe or cross
 // (?:[^|+\n]*[|+])+          => one or more cells containing any non pipe or cross character
