@@ -97,12 +97,12 @@ const ltLinter = linter(async view => {
     const from = node.from - node.whitespaceBefore.length
 
     if (from - idx > 0) {
-      const markup: Annotation = { markup: view.state.sliceDoc(idx, from - 1) }
+      const markup: Annotation = { markup: view.state.sliceDoc(idx, from) }
       annotations.annotation.push(markup)
     }
     const text: Annotation = { text: view.state.sliceDoc(from, node.to) }
     annotations.annotation.push(text)
-    idx = node.to + 1
+    idx = node.to
   }
   // If the last TextNode does not extend to the end of the document,
   // add the remainder as `markup`.
@@ -153,8 +153,8 @@ const ltLinter = linter(async view => {
       : (match.rule.issueType === 'misspelling') ? 'error' : 'warning'
 
     const dia: Diagnostic = {
-      from: match.offset + 1,
-      to: match.offset + 1 + match.length,
+      from: match.offset,
+      to: match.offset + match.length,
       message: match.message,
       severity,
       source

@@ -42,6 +42,7 @@ const EMPTY_NODES = [
   'Document',
   'List',
   'ListItem',
+  'TaskMarker',
   'PandocAttribute'
 ]
 
