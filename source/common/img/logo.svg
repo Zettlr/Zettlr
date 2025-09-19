@@ -1,20 +1,28 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
- "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
- preserveAspectRatio="xMidYMid meet">
-<metadata>
-Created by potrace 1.16, written by Peter Selinger 2001-2019
-</metadata>
-<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-fill="#cccccc" stroke="none">
-<path d="M3340 3665 l0 -165 -102 -66 c-179 -116 -289 -204 -433 -349 -265 -264
--387 -498 -388 -740 -1 -138 20 -203 89 -272 70 -70 116 -83 298 -83 254 -1
-336 -23 437 -117 174 -163 186 -445 31 -709 -22 -38 -57 -88 -77 -112 l-37
--42 -224 0 c-199 0 -224 2 -224 16 0 9 31 50 70 91 96 103 134 182 134 284 1
-65 -2 81 -26 116 -46 70 -73 77 -323 84 -242 7 -290 16 -414 74 -137 65 -233
-193 -267 358 -23 105 -20 290 5 405 69 316 312 651 703 970 l58 47 -333 5
--332 5 -3 170 c-1 93 0 175 2 182 4 10 139 13 681 13 l675 0 0 -165z"/>
-</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg version="1.0" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
+   preserveAspectRatio="xMidYMid meet" id="svg1" sodipodi:docname="logo.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+   <defs id="defs1" />
+   <sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25"
+      inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1"
+      inkscape:document-units="pt" showguides="true" inkscape:zoom="5.64" inkscape:cx="385.46099"
+      inkscape:cy="286.70213" inkscape:window-width="2560" inkscape:window-height="1321" inkscape:window-x="0"
+      inkscape:window-y="31" inkscape:window-maximized="0" inkscape:current-layer="svg1">
+      <sodipodi:guide position="198.25205,359.62044" orientation="1,0" id="guide1" inkscape:locked="false" />
+      <sodipodi:guide position="195.82843,383.01938" orientation="0,-1" id="guide2" inkscape:locked="false" />
+      <sodipodi:guide position="226.85076,345.51938" orientation="0,-1" id="guide3" inkscape:locked="false" />
+      <sodipodi:guide position="333.99999,368.09661" orientation="1,0" id="guide4" inkscape:locked="false" />
+      <sodipodi:guide position="315.79999,101" orientation="0,-1" id="guide5" inkscape:locked="false" />
+      <sodipodi:guide position="270.99999,102.6" orientation="1,0" id="guide6" inkscape:locked="false" />
+   </sodipodi:namedview>
+   <metadata id="metadata1">
+      Created by potrace 1.16, written by Peter Selinger 2001-2019
+   </metadata>
+   <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" id="g1">
+      <path
+         d="m 3340,3500 -102,-66 c -179,-116 -289,-204 -433,-349 -265,-264 -387,-498 -388,-740 -1,-138 20,-203 89,-272 70,-70 116,-83 298,-83 254,-1 336,-23 437,-117 174,-163 185.7979,-444.8815 31,-709 -22.2024,-37.8821 -57,-88 -77,-112 l -37,-42 h -448 c 0,0 76.8008,69.8285 103.2447,113.6489 50.8208,84.2157 94.4664,179.1906 100.7553,277.3511 2.5335,39.545 -2,81 -26,116 -46,70 -73,77 -323,84 -242,7 -290,16 -414,74 -137,65 -233,193 -267,358 -23,105 -20,290 5,405 69,316 312,651 703,970 l 58,47.1939 -667.6439,0.1117 0.1645,374.8883 H 3340 Z"
+         id="path1" sodipodi:nodetypes="ccccsccscccaaccccccccccc" fill="#cccccc" />
+   </g>
 </svg>
