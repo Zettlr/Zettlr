@@ -119,7 +119,7 @@ export default class LanguageTool extends ZettlrCommand {
    *
    * @return  {Promise<LanguageToolAPIResponse|string|undefined>}       The result
    */
-  async run (evt: string, arg: { text: string, language: string }): Promise<[LanguageToolAPIResponse, string[]]|string|undefined> {
+  async run (evt: string, arg: { text: string, data: string, language: string }): Promise<[LanguageToolAPIResponse, string[]]|string|undefined> {
     const {
       active,
       level,
@@ -130,13 +130,13 @@ export default class LanguageTool extends ZettlrCommand {
       customServer,
       provider
     } = this._app.config.getConfig().editor.lint.languageTool
-    const { text, language } = arg
+    const { text, data, language } = arg
 
     if (!active) {
       return undefined // LanguageTool is not active
     }
 
-    const searchParams = new URLSearchParams({ language, text, level })
+    const searchParams = new URLSearchParams({ language, data, level })
 
     // If the user has set the mother tongue, add it to the params
     if (motherTongue.trim() !== '') {

@@ -85,15 +85,38 @@ const ltLinter = linter(async view => {
   const ast = markdownToAST(document)
   const textNodes = extractASTNodes(ast, 'Text') as TextNode[]
 
-  // To avoid too high loads, we have to send a "pseudo-plain text" document.
-  // That will generate a few warnings that relate towards the Markdown syntax,
-  // but we are clever: Since we can extract the textNodes, we can basically
-  // ignore any warning outside of these ranges! YAY!
+  // To avoid too high loads, we sanitize the document
+  // according to the LanguageTool API `data` parameter.
+  // By doing so, we only generate errors for TextNode regions
+  // https://languagetool.org/http-api/swagger-ui/#!/default/post_check
+  type Annotation = { text?: string, markup?: string }
+  const annotations: { annotation: Annotation[] } = { annotation: [] }
+
+  let idx = 0
+  for (const node of textNodes) {
+    const from = node.from - node.whitespaceBefore.length
+
+    if (from - idx > 0) {
+      const markup: Annotation = { markup: view.state.sliceDoc(idx, from - 1) }
+      annotations.annotation.push(markup)
+    }
+    const text: Annotation = { text: view.state.sliceDoc(from, node.to) }
+    annotations.annotation.push(text)
+    idx = node.to + 1
+  }
+  // If the last TextNode does not extend to the end of the document,
+  // add the remainder as `markup`.
+  if (idx < view.state.doc.length) {
+    const markup: Annotation = { markup: view.state.sliceDoc(idx) }
+    annotations.annotation.push(markup)
+  }
+  const data = JSON.stringify(annotations)
 
   const response: [LanguageToolAPIResponse, string[]]|undefined|string = await ipcRenderer.invoke('application', {
     command: 'run-language-tool',
     payload: {
       text: document,
+      data: data,
       language: view.state.field(languageToolState).overrideLanguage
     }
   })
@@ -121,28 +144,6 @@ const ltLinter = linter(async view => {
     return [] // Hooray, nothing wrong!
   }
 
-  // Now, we have to remove those matches that are outside any textNode in the
-  // given document.
-  for (let i = 0; i < ltSuggestions.matches.length; i++) {
-    const from = ltSuggestions.matches[i].offset
-    const to = from + ltSuggestions.matches[i].length
-    let isValid = false
-
-    for (const node of textNodes) {
-      if (from >= node.from && to <= node.to) {
-        // As soon as we find a textNode that contains the match, we are good.
-        isValid = true
-        break
-      }
-    }
-
-    // Node is not valid --> remove
-    if (!isValid) {
-      ltSuggestions.matches.splice(i, 1)
-      i--
-    }
-  }
-
   // At this point, we have only valid suggestions that we can now insert into
   // the document.
   for (const match of ltSuggestions.matches) {
@@ -152,8 +153,8 @@ const ltLinter = linter(async view => {
       : (match.rule.issueType === 'misspelling') ? 'error' : 'warning'
 
     const dia: Diagnostic = {
-      from: match.offset,
-      to: match.offset + match.length,
+      from: match.offset + 1,
+      to: match.offset + 1 + match.length,
       message: match.message,
       severity,
       source
