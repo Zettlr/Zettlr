@@ -32,12 +32,12 @@
  * END HEADER
  */
 
-import extractCitations, { type CitePosition } from '@common/util/extract-citations'
 import { type SyntaxNode } from '@lezer/common'
 import { parseTableNode } from './parse-table-node'
 import { getWhitespaceBeforeNode } from './get-whitespace-before-node'
 import { genericTextNode } from './generic-text-node'
 import { parseChildren } from './parse-children'
+import { nodeToCiteItem, type Citation } from '../../markdown-editor/parser/citation-parser'
 
 /**
  * Basic info every ASTNode needs to provide
@@ -143,7 +143,7 @@ export interface Heading extends MDNode {
 /**
  * A citation element
  */
-export interface Citation extends MDNode {
+export interface CitationNode extends MDNode {
   type: 'Citation'
   /**
    * The unparsed, raw citation code
@@ -152,7 +152,7 @@ export interface Citation extends MDNode {
   /**
    * The parsed citation code that can be used to render the citation
    */
-  parsedCitation: CitePosition
+  parsedCitation: Citation
 }
 
 /**
@@ -442,7 +442,7 @@ export interface GenericNode extends MDNode {
  * Any node that can be part of the AST is an ASTNode.
  */
 export type ASTNode = Comment | Footnote | FootnoteRef | LinkOrImage | TextNode
-| Heading | Citation | Highlight | Superscript | Subscript | OrderedList
+| Heading | CitationNode | Highlight | Superscript | Subscript | OrderedList
 | BulletList | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter
 | Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
 /**
@@ -557,11 +557,11 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       return parseChildren(astNode, node, markdown)
     }
     case 'Citation': {
-      const astNode: Citation = {
+      const astNode: CitationNode = {
         name: 'Citation',
         type: 'Citation',
         value: markdown.substring(node.from, node.to),
-        parsedCitation: extractCitations(markdown.substring(node.from, node.to))[0],
+        parsedCitation: nodeToCiteItem(node, markdown),
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown)

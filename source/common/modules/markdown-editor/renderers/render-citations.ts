@@ -17,13 +17,13 @@ import { type SyntaxNodeRef, type SyntaxNode } from '@lezer/common'
 import { WidgetType, type EditorView } from '@codemirror/view'
 import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
-import extractCitations, { type CitePosition } from '@common/util/extract-citations'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { citationMenu } from '../context-menu/citation-menu'
 import { configField } from '../util/configuration'
+import { type Citation, nodeToCiteItem } from '../parser/citation-parser'
 
 class CitationWidget extends WidgetType {
-  constructor (readonly citation: CitePosition, readonly rawCitation: string, readonly node: SyntaxNode) {
+  constructor (readonly citation: Citation, readonly rawCitation: string, readonly node: SyntaxNode) {
     super()
   }
 
@@ -35,7 +35,7 @@ class CitationWidget extends WidgetType {
     const config = view.state.field(configField).metadata.library
     const library = config === '' ? CITEPROC_MAIN_DB : config
     const callback = window.getCitationCallback(library)
-    const renderedCitation = callback(this.citation.citations, this.citation.composite)
+    const renderedCitation = callback(this.citation.items, this.citation.composite)
 
     const elem = document.createElement('span')
     elem.classList.add('citeproc-citation')
@@ -48,7 +48,7 @@ class CitationWidget extends WidgetType {
     elem.addEventListener('click', clickAndSelect(view))
 
     elem.addEventListener('contextmenu', (event) => {
-      const keys = this.citation.citations.map(x => x.id)
+      const keys = this.citation.items.map(x => x.id)
       const coords = { x: event.clientX, y: event.clientY }
       citationMenu(view, coords, keys, elem.innerText)
     })
@@ -67,14 +67,13 @@ function shouldHandleNode (node: SyntaxNodeRef): boolean {
 }
 
 function createWidget (state: EditorState, node: SyntaxNodeRef): CitationWidget|undefined {
-  // NOTE That extractCitations also works on longer texts, hence we get an
-  // array, but the widget itself only cares about one single citation.
-  const citation = extractCitations(state.sliceDoc(node.from, node.to))
-  if (citation.length !== 1) {
-    return undefined // Should not happen, but we never know.
+  try {
+    const citation = nodeToCiteItem(node.node, state.sliceDoc())
+    return new CitationWidget(citation, state.sliceDoc(node.from, node.to), node.node)
+  } catch (err) {
+    // nodeToCiteItem throws if it is unhappy
+    return undefined
   }
-
-  return new CitationWidget(citation[0], state.sliceDoc(node.from, node.to), node.node)
 }
 
 export const renderCitations = renderInlineWidgets(shouldHandleNode, createWidget)

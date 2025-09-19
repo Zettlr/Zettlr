@@ -22,7 +22,8 @@ const commonRules: Record<string, any> = {
     fontWeight: 'bold'
   },
   // For more diversity, don't color the link marks
-  '.cm-link.cm-code-mark.cm-meta': { color: 'inherit' }
+  '.cm-link.cm-code-mark.cm-meta': { color: 'inherit' },
+  '.cm-citation-locator': { textDecoration: 'underline' }
 }
 
 export const themeBordeauxLight = EditorView.theme({
@@ -45,6 +46,9 @@ export const themeBordeauxLight = EditorView.theme({
     backgroundColor: 'inherit',
     color: '#d02325'
   },
+  '.cm-citation': { color: '#d02325' },
+  '.cm-citation-mark': { color: 'var(--grey-1)' },
+  '.cm-citation-at-sign': { color: 'var(--grey-1)' },
   '.citeproc-citation.error, .mermaid-chart.error': { color: 'var(--red-2)' },
   '.cm-escape': { color: 'var(--grey-2)' },
   '.cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
@@ -74,6 +78,11 @@ export const themeBordeauxDark = EditorView.theme({
   },
   '.citeproc-citation, .code-block-line-background, .inline-code-background': { backgroundColor: '#002024' },
   '.citeproc-citation.error, .mermaid-chart.error': { color: 'var(--red-2)' },
+  '.cm-citation': { backgroundColor: '#002024' },
+  '.cm-citation-mark': { color: 'var(--grey-4)' },
+  '.cm-citation-at-sign': { color: 'var(--grey-4)' },
+  '.cm-citation-citekey': { color: '#d02325' },
+  '.cm-citation-suppress-author-flag': { color: '#d02325' },
   '.cm-cursor-primary': { background: primaryColor },
   '.cm-cursor-secondary': { background: 'var(--red-2)' },
   '.cm-dropCursor': { borderLeftColor: primaryColor },

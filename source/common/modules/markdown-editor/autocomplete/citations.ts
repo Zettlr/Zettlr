@@ -15,9 +15,9 @@
 import { type Completion } from '@codemirror/autocomplete'
 import { type EditorState, StateEffect, StateField } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
-import extractCitations from '@common/util/extract-citations'
 import { type AutocompletePlugin } from '.'
 import { configField } from '../util/configuration'
+import { extractCitationNodes, nodeToCiteItem } from '../parser/citation-parser'
 
 /**
  * Use this effect to provide the editor state with a set of new citekeys
@@ -58,12 +58,11 @@ function sortCitationKeysByUsage (state: EditorState): Completion[] {
   // what the update effect expects
   const entries = state.field(citekeyUpdateField)
 
+  const doc = state.sliceDoc()
+  const citationNodes = extractCitationNodes(state).map(node => nodeToCiteItem(node, doc))
+
   // Then, retrieve the already existing citations
-  const existingCitations = extractCitations(state.doc.toString())
-    .map(c => {
-      return c.citations.map(cite => cite.id)
-    })
-    .flat()
+  const existingCitations = citationNodes.flatMap(c => c.items.map(item => item.id))
 
   // Create a counter
   const citationCounts: Record<string, number> = {}
