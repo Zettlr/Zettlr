@@ -64,6 +64,32 @@
               ></FormFieldControl>
             </template>
           </div>
+          <!-- Display a set of related controls in a table/grid-like layout -->
+          <div
+            v-else-if="field.type === 'control-grid'"
+            class="control-grid"
+          >
+            <div v-if="field.header !== undefined" class="control-grid-row">
+              <div v-for="(header, headerIdx) in field.header" v-bind:key="headerIdx" class="control-grid-cell heading">
+                {{ header }}
+              </div>
+            </div>
+            <div v-for="(row, rowIdx) in field.rows" v-bind:key="rowIdx" class="control-grid-row">
+              <div v-for="(subField, subfieldIdx) in row" v-bind:key="`${rowIdx}${subfieldIdx}`" class="control-grid-cell">
+                <FormFieldControl
+                  v-if="'model' in subField"
+                  v-bind:field="subField"
+                  v-bind:model="getModelValue(subField.model)"
+                  v-on:update:model-value="emit('update:modelValue', subField.model, $event)"
+                ></FormFieldControl>
+                <FormFieldControl
+                  v-else
+                  v-bind:field="subField"
+                  v-bind:model="undefined"
+                ></FormFieldControl>
+              </div>
+            </div>
+          </div>
           <!-- Else for all elements that don't have a model (i.e., the separator) -->
           <FormFieldControl
             v-else
@@ -134,7 +160,7 @@ interface Separator {
 
 interface FormText {
   type: 'form-text'
-  display: 'info'|'sub-heading'
+  display: 'info'|'sub-heading'|'plain'
   contents: string
 }
 
@@ -250,6 +276,18 @@ interface StyleGroup {
   fields: FormField[]
 }
 
+/**
+ * This field can be used to display a series of repeating controls in a grid
+ * layout (e.g., when you have several elements that share the same sets of
+ * controls but that are separate of each other, and when you want to display
+ * the same control type in a single column).
+ */
+interface ControlGrid {
+  type: 'control-grid',
+  header?: string[],
+  rows: Array<FormField[]>
+}
+
 export interface Fieldset {
   /**
    * The section heading for the fieldset
@@ -267,7 +305,7 @@ export interface Fieldset {
   /**
    * The fields which are part of this formfield
    */
-  fields: Array<FormField|StyleGroup>
+  fields: Array<FormField|StyleGroup|ControlGrid>
   [key: string]: any // Allow arbitrary additional fields
 }
 
@@ -359,6 +397,19 @@ function getModelValue (model: string): any {
       .columns {
         column-count: 2;
         column-fill: balance;
+      }
+    }
+
+    .control-grid {
+      display: table;
+      .control-grid-row { display: table-row }
+      .control-grid-cell {
+        display: table-cell;
+        padding: 5px 10px;
+        &.heading {
+          font-weight: bold;
+          font-size: 13px;
+        }
       }
     }
   }

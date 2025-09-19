@@ -1,0 +1,84 @@
+name: Audit
+
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - yarn.lock
+  pull_request:
+    paths:
+      - yarn.lock
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '22'
+
+concurrency:
+  group: 'audit'
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Run audit
+    runs-on: ubuntu-latest
+    steps:
+    # Setup
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref }}
+    - name: Setup NodeJS ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'yarn'
+    - name: Install packages
+      run: yarn install --immutable
+    # Run the actual audit
+    - name: Audit
+      # NOTE: The unholy sausage in the third line essentially uses jq to
+      # condense the most important info into a human-readable txt file. This is
+      # merely meant as a canary; the maintainers should absolutely run the
+      # command locally once informed to get all information if necessary.
+      run: |
+        yarn npm audit --recursive --json > audit_result.json
+    - name: Format results
+      if: ${{ failure() }}
+      run: |
+        jq --slurp '.' audit_result.json > tmp.json
+        mv tmp.json audit_result.json
+        jq -r '.[] | .value as $v | .children += { package: $v } | .children | ("Package: \(.package)", "  Version(s) \(."Vulnerable Versions")", "  \(.Issue) (Severity: \(.Severity))", "  URL: \(.URL)")' audit_result.json > audit_result.txt
+    - name: Report results
+      # Run this step only if yarn npm audit exited with a non-zero code.
+      # NOTE: Truncates the content to at most 1,500 characters to avoid
+      # Discord's character limit.
+      if: ${{ failure() }}
+      env:
+        WEBHOOK: ${{ secrets.DISCORD_AUDIT_WEBHOOK }}
+      run: |
+        AUDIT_CONTENT=$(<audit_result.txt)
+        AUDIT_CONTENT=${AUDIT_CONTENT:0:1500}
+        echo '## Repository Audit Results' > message.txt
+        echo '' >> message.txt
+        echo 'A new audit has been run on the Zettlr `yarn.lock` file. Below follow (truncated) results. For the full results, please see the run: https://github.com/Zettlr/Zettlr/actions/runs/${{ github.run_id }}.' >> message.txt
+        echo '' >> message.txt
+        echo '```' >> message.txt
+        echo "$AUDIT_CONTENT ..." >> message.txt
+        echo '```' >> message.txt
+        BODY=$(jq -n --arg msg "$(<message.txt)" '{ content: $msg }')
+        curl -d "$BODY" -H "Content-Type: application/json" -X POST "$WEBHOOK"
+    - name: Report results in summary
+      # Run this step only if yarn npm audit exited with a non-zero code.
+      if: ${{ failure() }}
+      run: |
+        AUDIT_CONTENT=$(<audit_result.txt)
+        echo "## Full Audit results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Below follow the full results from the audit report (${#AUDIT_CONTENT} characters)." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "$AUDIT_CONTENT" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "End of audit." >> $GITHUB_STEP_SUMMARY

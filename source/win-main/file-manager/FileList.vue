@@ -100,12 +100,13 @@ import matchQuery from './util/match-query'
 
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
-import { type MaybeRootDescriptor, type AnyDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor } from '@dts/common/fsal'
+import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 interface RecycleScrollerData {
   id: number
-  props: MaybeRootDescriptor
+  props: AnyDescriptor
 }
 
 const ipcRenderer = window.ipc
@@ -150,13 +151,40 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
 
   const ret: RecycleScrollerData[] = []
   const items = objectToArray(dir, 'children') as AnyDescriptor[]
+  const { files } = configStore.config
   for (let i = 0; i < items.length; i++) {
-    if (items[i].type !== 'other') {
-      ret.push({
-        id: i, // This helps the virtual scroller to adequately position the items
-        props: items[i] as MaybeRootDescriptor // The actual item
-      })
+    if (items[i].type === 'other') {
+      // Filter other files based on our settings. Why do these ugly nested if
+      // constructs? To catch all the other "other" files in the else.
+      if (hasImageExt(items[i].path)) {
+        if (!files.images.showInFilemanager) {
+          continue
+        }
+      } else if (hasPDFExt(items[i].path)) {
+        if (!files.pdf.showInFilemanager) {
+          continue
+        }
+      } else if (hasMSOfficeExt(items[i].path)) {
+        if (!files.msoffice.showInFilemanager) {
+          continue
+        }
+      } else if (hasOpenOfficeExt(items[i].path)) {
+        if (!files.openOffice.showInFilemanager) {
+          continue
+        }
+      } else if (hasDataExt(items[i].path)) {
+        if (!files.dataFiles.showInFilemanager) {
+          continue
+        }
+      } else {
+        continue // Ignore any other "other" file
+      }
     }
+
+    ret.push({
+      id: i, // This helps the virtual scroller to adequately position the items
+      props: items[i] // The actual item
+    })
   }
   return ret
 })

@@ -46,8 +46,7 @@ export function cursorStatus (state: EditorState, _view: EditorView): StatusbarI
  */
 export function wordcountStatus (state: EditorState, _view: EditorView): StatusbarItem|null {
   const counter = state.field(countField, false)
-  const config = state.field(configField, false)
-  if (counter === undefined || config?.countChars === true) {
+  if (counter === undefined) {
     return null
   } else {
     return {
@@ -66,8 +65,7 @@ export function wordcountStatus (state: EditorState, _view: EditorView): Statusb
  */
 export function charcountStatus (state: EditorState, _view: EditorView): StatusbarItem|null {
   const counter = state.field(countField, false)
-  const config = state.field(configField, false)
-  if (counter === undefined|| config?.countChars === false) {
+  if (counter === undefined) {
     return null
   } else {
     return {

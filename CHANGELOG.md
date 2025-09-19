@@ -58,19 +58,58 @@ keep `$FILENAME`, but wherever you need both the file name and its file
 extension, please use `$FILENAME$EXTENSION`. (The latter variable includes
 the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
 
+## Image Viewer and PDF Viewer
+
+This update brings with it a great new feature for Zettlr: A built-in image
+viewer and PDF viewer. Once you have selected in the settings that you wish to
+open images or PDF files in Zettlr instead of the default behavior to open it
+externally, Zettlr will open them in editor panes just like the editors. You can
+rearrange them just like you can other files, and you have some options
+available to inspect the files.
+
+For images, the viewer offers various options to zoom and fit the images so that
+you can view every detail of them while having other files open side-by-side.
+In addition, the image viewer offers four background modes to accommodate
+transparency and difficult-to-view colors in the images better: transparent
+(the default), a black background, white background, and a translucent
+checkerboard background.
+
+The PDF viewer likewise allows you to preview PDF files using Chromium's built-
+in PDF viewer that you may already know if you have opened PDF files in Google
+Chrome or Edge. Due to restrictions in how this works, however, you will have to
+manually "enable" such a viewer before being able to scroll it by clicking into
+it. Whether an iframe is interactive is indicated by a small border around the
+iframe.
+
+Note that both image and PDF viewers are just that: viewers. As Zettlr is a text
+app, we do not plan on implementing any ways of editing images or PDF files. To
+annotate your PDF files, please continue using your existing workflow.
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
   functionality of the previous version, with the exception of more safeguards
   against data loss, and more ergonomic usage.
+- **Feature**: Image and PDF previews. Zettlr has now two dedicated viewers that
+  allow users to open common image types and PDF files right from within the app
+  for preview purposes (#5501).
 - **Feature**: Full-text (aka. global) search runs can now be cancelled via a
   dedicated button. You can now also trigger a new search while another search
   is already running.
 - **Feature**: Individual global search results can now be copied to the
   clipboard (#2070).
+- **Feature**: The file manager can now show and display other file types as
+  opposed to having those only in the sidebar. Images and PDF files can be
+  opened directly in Zettlr, while other files will be opened using the system
+  default application. You can use the appropriate section in the advanced
+  settings to customize this. By default, none of the new file types will be
+  displayed in the file manager (#5501).
+- **Feature**: Zettlr now provides a Liquid Glass icon for macOS 26.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
+- **Change**: The word and character counters in the statusbar now always show
+  both counts.
 - Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
   footnotes).
 - The diagnostics info field in the statusbar now toggles the lint panel,
@@ -96,6 +135,8 @@ the leading period of the extension, so do not write `$FILENAME.$EXTENSION`.)
   export, pomodoro, and tags popover (#5895); spacing in file manager tree view
   (#5891); global search (#5894).
 - Switched the icons for code and comments in the formatting toolbar (#5901).
+- The word counter now uses a proper segmenter that will make the word count
+  more accurate for languages that do not use spaces to separate words (#5898).
 
 ## Under the Hood
 
@@ -208,6 +249,13 @@ The available transforms as of now are:
 
 ## GUI and Functionality
 
+- **New Feature**: Zettlr can now display a set of file types not only in the
+  sidebar's "Other files" tab, but also in the file manager, which in turn makes
+  it simpler to find and open relevant plots or PDF files for reference.
+- **New Feature**: Zettlr can now open images and PDF files right next to your
+  regular files, enabling you to preview pictures of, e.g., plots, or studies to
+  reference in your text; and double-check PDF files which you need to
+  reference.
 - **Feature**: The code editors (in the assets manager and elsewhere) now share
   the same keymap as the main editor.
 - **Feature**: The image renderer now acknowledges and respects the presence of

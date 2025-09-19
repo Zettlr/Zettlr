@@ -200,9 +200,11 @@ module.exports = {
           teamId: process.env.APPLE_TEAM_ID
         }
       : false,
-    extraResource: [
-      'resources/icons/icon.code.icns'
-    ]
+    // We only need the extra resources on macOS
+    extraResource: process.platform === 'darwin' ? [
+      'resources/icons/icon.code.icns',
+      'resources/icons/Assets.car' // Contains the new Liquid Glass app icon
+    ] : [] // NOTE: Must be an array because the generateAssets hook uses it
   },
   plugins: [
     {

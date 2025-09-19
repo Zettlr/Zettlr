@@ -165,10 +165,11 @@ import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
-import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useWindowStateStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
+import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 
 const ipcRenderer = window.ipc
 
@@ -178,7 +179,7 @@ const props = defineProps<{
   // How deep is this tree item nested?
   depth: number
   hasDuplicateName: boolean
-  obj: MaybeRootDescriptor
+  obj: AnyDescriptor
   isCurrentlyFiltering: boolean
   activeItem?: string
   windowId: string
@@ -245,12 +246,29 @@ const primaryIcon = computed(() => {
     return 'markdown'
   } else if (props.obj.type === 'code') {
     return 'code'
-  } else if (props.obj.dirNotFoundFlag === true) {
+  } else if (props.obj.type === 'other') {
+    // const fileExtIcon = ClarityIcons.registry['file-ext'].outline!
+    if (hasImageExt(props.obj.path)) {
+      return 'image'
+    } else if (hasPDFExt(props.obj.path)) {
+      return 'pdf-file'
+    } else if (hasMSOfficeExt(props.obj.path)) {
+      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+    } else if (hasOpenOfficeExt(props.obj.path)) {
+      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+    } else if (hasDataExt(props.obj.path)) {
+      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+    } else {
+      // Generic other file (this should not happen as they get filtered out before)
+      console.warn(`Encountered a file with extension ${props.obj.ext}. These should've been filtered out before reaching this point!`)
+      return ''
+    }
+  } else if (props.obj.type === 'directory' && props.obj.dirNotFoundFlag === true) {
     return 'disconnect'
-  } else if (props.obj.settings.project !== null) {
+  } else if (props.obj.type === 'directory' && props.obj.settings.project !== null) {
     // Indicate that this directory has a project.
     return 'blocks-group'
-  } else if (props.obj.settings.icon != null) {
+  } else if (props.obj.type === 'directory' && props.obj.settings.icon != null) {
     // Display the custom icon
     return props.obj.settings.icon
   } else {
@@ -322,10 +340,31 @@ const filteredChildren = computed(() => {
   if (props.obj.type !== 'directory') {
     return []
   }
+
   if (combined.value) {
-    return props.obj.children.filter((child): child is MaybeRootDescriptor => child.type !== 'other')
+    return props.obj.children.filter(child => {
+      if (child.type === 'other') {
+        const { files } = configStore.config
+        // Filter other files based on our settings
+        if (hasImageExt(child.path)) {
+          return files.images.showInFilemanager
+        } else if (hasPDFExt(child.path)) {
+          return files.pdf.showInFilemanager
+        } else if (hasMSOfficeExt(child.path)) {
+          return files.msoffice.showInFilemanager
+        } else if (hasOpenOfficeExt(child.path)) {
+          return files.openOffice.showInFilemanager
+        } else if (hasDataExt(child.path)) {
+          return files.dataFiles.showInFilemanager
+        } else {
+          return false // Any other "other" file should be excluded
+        }
+      }
+
+      return true
+    })
   } else {
-    return props.obj.children.filter((child): child is DirDescriptor => child.type === 'directory')
+    return props.obj.children.filter(child => child.type === 'directory')
   }
 })
 
@@ -341,11 +380,11 @@ const projectSortedFilteredChildren = computed(() => {
   // Modify the order using the project files by first mapping the sorted
   // project file paths onto the descriptors available, sorting all other files
   // separately, and then concatenating them with the project files up top.
-  const projectFiles: MaybeRootDescriptor[] = props.obj.settings.project.files
+  const projectFiles = props.obj.settings.project.files
     .map(filePath => filteredChildren.value.find(x => x.name === filePath))
     .filter(x => x !== undefined)
 
-  const files: MaybeRootDescriptor[] = []
+  const files: AnyDescriptor[] = []
   for (const desc of filteredChildren.value) {
     if (!projectFiles.includes(desc)) {
       files.push(desc)

@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { countChars, countWords } from '@common/util/counter'
+import { countAll } from '@common/util/counter'
 import type { MDFileDescriptor } from '@dts/common/fsal'
 import extractBOM from './extract-bom'
 import extractFileId from './extract-file-id'
@@ -29,6 +29,7 @@ import type {
   ZettelkastenTag
 } from '@common/modules/markdown-utils/markdown-ast'
 import { extractLinefeed } from './extract-linefeed'
+import { getAppServiceContainer, isAppServiceContainerReady } from '../../../app-service-container'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -82,8 +83,12 @@ export default function getMarkdownFileParser (
       file.firstHeading = firstH1.content
     }
 
-    file.wordCount = countWords(ast)
-    file.charCount = countChars(ast)
+    const locale: string | undefined = isAppServiceContainerReady() ? getAppServiceContainer().config.get('appLang') : undefined
+
+    const counts = countAll(ast, locale)
+
+    file.wordCount = counts.words
+    file.charCount = counts.chars
 
     // Reset frontmatter-related stuff
     file.yamlTitle = undefined

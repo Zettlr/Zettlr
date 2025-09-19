@@ -22,7 +22,8 @@ import { countAll } from '@common/util/counter'
 export const countField = StateField.define<{ chars: number, words: number }>({
   create (state: EditorState) {
     const ast = markdownToAST(state.doc.toString())
-    return countAll(ast)
+    const locale: string = window.config.get('appLang')
+    return countAll(ast, locale)
   },
 
   update (value, transaction) {
@@ -32,9 +33,9 @@ export const countField = StateField.define<{ chars: number, words: number }>({
     if (!transaction.docChanged) {
       return value
     }
-
     const ast = markdownToAST(transaction.state.doc.toString(), syntaxTree(transaction.state))
-    return countAll(ast)
+    const locale: string = window.config.get('appLang')
+    return countAll(ast, locale)
   },
 
   compare (a, b): boolean {

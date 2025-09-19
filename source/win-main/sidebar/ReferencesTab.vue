@@ -26,6 +26,7 @@ import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citepr
 import localiseNumber from 'source/common/util/localise-number'
 import { extractASTNodes, markdownToAST } from 'source/common/modules/markdown-utils'
 import type { ASTNode, CitationNode } from 'source/common/modules/markdown-utils/markdown-ast'
+import { hasMarkdownExt } from 'source/common/util/file-extention-checks'
 
 const ipcRenderer = window.ipc
 const documentTreeStore = useDocumentTreeStore()
@@ -107,6 +108,10 @@ onMounted(() => {
 async function updateBibliography (): Promise<void> {
   if (activeFile.value === undefined) {
     bibliography.value = undefined
+    return
+  }
+
+  if (!hasMarkdownExt(activeFile.value.path)) {
     return
   }
 

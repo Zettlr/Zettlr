@@ -239,14 +239,16 @@ export function addRowAfter (target: EditorView): boolean {
         return undefined
       }
 
-      let selectionOffset = thisLine.text.length + 1
+      // Places the selection to the same column in the next line (does not yet exist)
+      let selectionOffset = thisLine.length
 
       const lineCount = target.state.doc.lines
+      let isHeader = false
       let nextLine = thisLine.number < lineCount ? target.state.doc.line(thisLine.number + 1) : undefined
       if (nextLine !== undefined && isPipeTableDelimRow(nextLine.text) && nextLine.number < lineCount) {
         // Next line is the header, so we have to add a line thereafter
-        selectionOffset += nextLine.text.length + 1
-        nextLine = target.state.doc.line(nextLine.number + 1)
+        isHeader = true
+        selectionOffset += nextLine.length + 1
       }
 
       return {
@@ -255,8 +257,8 @@ export function addRowAfter (target: EditorView): boolean {
           head: focusRange.head + selectionOffset
         },
         changes: {
-          from: nextLine !== undefined ? nextLine.from : thisLine.to,
-          insert: (nextLine !== undefined ?  '' : '\n') + thisLine.text.replace(/[^\s\|]/g, ' ') + '\n'
+          from: isHeader && nextLine !== undefined ? nextLine.to : thisLine.to,
+          insert: '\n' + thisLine.text.replace(/[^\s\|]/g, ' ')
         }
       }
     } else {
