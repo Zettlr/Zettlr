@@ -227,7 +227,6 @@ export const gridTableParser: BlockParser = {
     // We have a potential grid table. The end of the table is being marked by
     // the last line that matches a grid line.
     const lines: string[] = [line.text]
-
     const start = ctx.lineStart
     // We have alternating lines with +---+ and | cell |
     while (ctx.nextLine() && (gridLineRE.test(line.text) || gridContentRE.test(line.text))) {
