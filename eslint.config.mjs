@@ -138,6 +138,8 @@ export default [
       '@typescript-eslint/strict-boolean-expressions': 'error',
       // The following rule basically disallows use of `any`
       '@typescript-eslint/no-unsafe-argument': 1,
+      // Mark forgotten awaits as errors
+      '@typescript-eslint/no-floating-promises': 'error',
 
       /////////////////////// END TYPESCRIPT RULES /////////////////////////////
 
