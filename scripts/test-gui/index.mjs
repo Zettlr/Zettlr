@@ -9,6 +9,11 @@
  * might miss out some features/potential bugs.
  */
 
+// SUPPORTED COMMAND LINE ARGUMENTS
+// * --clean: Remove and recreate the test files. Adds a custom config.
+// * --no-config: Must be used in conjunction with --clean, does not create a
+//   config file.
+
 import { promises as fs } from 'fs'
 import path from 'path'
 import { rimraf } from 'rimraf'
