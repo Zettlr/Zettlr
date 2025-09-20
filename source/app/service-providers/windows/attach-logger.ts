@@ -27,21 +27,21 @@ import path from 'path'
  */
 export default function attachLogger (logger: LogProvider, win: BrowserWindow, id: string): void {
   // See: https://www.electronjs.org/docs/api/web-contents#event-console-message
-  win.webContents.on('console-message', (event, level, message, line, sourceId) => {
+  win.webContents.on('console-message', ({ message, sourceId, lineNumber, level }) => {
     // Prepare the generic log message and then log it using the appropriate
     // logger interface.
-    const logMessage = `[R] [${id}] ${message} (${path.basename(sourceId)}:${line})`
+    const logMessage = `[R] [${id}] ${message} (${path.basename(sourceId)}:${lineNumber})`
     switch (level) {
-      case 0: // Verbose
+      case 'debug': // Verbose
         logger.verbose(logMessage)
         break
-      case 1: // Info
+      case 'info': // Info
         logger.info(logMessage)
         break
-      case 2: // Warning
+      case 'warning': // Warning
         logger.warning(logMessage)
         break
-      case 3: // Error
+      case 'error': // Error
         logger.error(logMessage)
         break
     }
