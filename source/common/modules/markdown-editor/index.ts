@@ -29,12 +29,12 @@ import EventEmitter from 'events'
 // CodeMirror imports
 import { EditorView } from '@codemirror/view'
 import {
+  type EditorSelection,
   EditorState,
   Text,
   type StateEffect,
   type Extension,
-  type SelectionRange,
-  type EditorSelection
+  type SelectionRange
 } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 
@@ -98,7 +98,7 @@ import type { SyntaxNode } from '@lezer/common'
 import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
 import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
-import { moveSection } from './util/move-section'
+import { moveSection } from './commands/move-section'
 
 export interface DocumentWrapper {
   path: string
@@ -530,7 +530,8 @@ export default class MarkdownEditor extends EventEmitter {
    */
   moveSection (from: number, to: number): void {
     const toc = this._instance.state.field(tocField)
-    moveSection(this._instance, toc, from, to)
+    const toLineNumber = to !== -1 ? to : this._instance.state.doc.lines
+    moveSection(toc, from, toLineNumber)(this._instance)
   }
 
   /**
