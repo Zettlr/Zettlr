@@ -249,7 +249,7 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
 
       Promise.allSettled(allPromises).then(() => {
         view.dispatch({ changes: { from: pos, insert: insertions.join('\n') } })
-      })
+      }).catch(err => console.error(err))
 
       return true
     } else if (zettlrFile !== '') {

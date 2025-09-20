@@ -94,8 +94,8 @@ Vim.defineEx('wq', 'wq', (cm: CodeMirror, params: ExParams) => {
   // to the user), we wait until the invocation is done and only then request a
   // close of the file.
   write(cm, params).then(() => {
-    quit(cm, params)
-  })
+    quit(cm, params).catch(err => console.error(err))
+  }).catch(err => console.error(err))
 })
 
 // Remap movement keys
