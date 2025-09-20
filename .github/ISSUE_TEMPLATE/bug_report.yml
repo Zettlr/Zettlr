@@ -1,6 +1,7 @@
 name: Bug Report
 description: Use this user-friendly form to report bugs to us
 labels: [bug]
+type: Bug
 body:
   - type: markdown
     attributes:
