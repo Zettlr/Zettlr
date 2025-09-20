@@ -98,7 +98,7 @@ function correctOrderedList (listNode: OrderedList, offset: number): ChangeSpec[
     if (subLists.length >= 2) {
       // We have multiple same-level lists, so there is a change in list markers.
       // THE FIRST ITEM DETERMINES THE LIST MARKER!
-      const mainList = subLists.shift() as OrderedList
+      const mainList = subLists.shift()!
       for (const list of subLists) {
         if (list.delimiter === mainList.delimiter) {
           continue
@@ -143,7 +143,7 @@ function correctBulletList (listNode: BulletList, offset: number): ChangeSpec[] 
     if (subLists.length >= 2) {
       // We have multiple same-level lists, so there is a change in list markers.
       // THE FIRST ITEM DETERMINES THE LIST MARKER!
-      const mainList = subLists.shift() as BulletList
+      const mainList = subLists.shift()!
       for (const list of subLists) {
         if (list.symbol === mainList.symbol) {
           continue
