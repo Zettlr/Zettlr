@@ -175,6 +175,7 @@ parts of your citations, using the following CSS classes:
 - Switched the icons for code and comments in the formatting toolbar (#5901).
 - The word counter now uses a proper segmenter that will make the word count
   more accurate for languages that do not use spaces to separate words (#5898).
+- Fixed the tutorial pages not correctly opening on first start.
 
 ## Under the Hood
 
