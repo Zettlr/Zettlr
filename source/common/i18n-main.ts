@@ -75,7 +75,7 @@ export function trans (msgid: string, ...args: any[]): string {
   let transString = getTranslation(msgid)
 
   for (const a of args) {
-    transString = transString.replace('%s', a) // Always replace one %s with an arg
+    transString = transString.replace('%s', String(a)) // Always replace one %s with an arg
   }
 
   // Finally, before returning the translation, sanitize it. As these are only
