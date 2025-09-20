@@ -32,7 +32,8 @@ module.exports = {
         { from: 'static/defaults', to: 'assets/defaults' },
         { from: 'static/lua-filter', to: 'assets/lua-filter' },
         { from: 'resources/icons/icon.ico', to: 'assets/icons' },
-        { from: 'resources/icons/png', to: 'assets/icons/png' }
+        { from: 'resources/icons/png', to: 'assets/icons/png' },
+        { from: 'resources/icons/macOS-menubar', to: 'assets/icons/macOS-menubar' }
       ]
     }),
     new DefinePlugin({
