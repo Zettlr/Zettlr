@@ -1,6 +1,7 @@
 name: Feature Request
 description: Something missing? Come along!
 labels: [feature]
+type: Feature
 body:
   - type: markdown
     attributes:
