@@ -1,6 +1,30 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Table of Contents Commands
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Commands to modify a document and its table of contents.
+ *
+ * END HEADER
+ */
+
 import type { StateCommand } from '@codemirror/state'
 import type { ToCEntry } from '../plugins/toc-field'
 
+/**
+ * This function returns a StateCommand which can be used to
+ * move a table of contents section.
+ *
+ * @param   {ToCEntry[]}    toc   The table of contents
+ * @param   {number}        from  The start line number of the section
+ * @param   {number}        to    The line number to move the section to
+ *
+ * @return  {StateCommand}        A StateCommand which moves the section.
+ */
 export function moveSection (toc: ToCEntry[], from: number, to: number): StateCommand {
   return ({ state, dispatch }) => {
     const entry = toc.find(e => e.line === from)

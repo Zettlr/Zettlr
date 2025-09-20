@@ -2,12 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Tests for the addSpacesAroundEmdashes function
+ * Contains:        Tests for the moveSection function
  * CVM-Role:        TESTING
- * Maintainers:     Rich Douglas
+ * Maintainers:     Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file tests the addSpacesAroundEmdashes function.
+ * Description:     This file tests the moveSection function.
  *
  * END HEADER
  */
