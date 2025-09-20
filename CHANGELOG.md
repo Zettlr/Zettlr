@@ -178,6 +178,7 @@ parts of your citations, using the following CSS classes:
 - Fixed the tutorial pages not correctly opening on first start.
 - Improved the macOS tray icon display.
 - Single clicks on the tray icon now activate the app (#4267).
+- Fixed footnote placing edge cases.
 
 ## Under the Hood
 
