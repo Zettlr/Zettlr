@@ -47,6 +47,9 @@ export type CiteprocProviderIPCAPI = IPCAPI<{
   'get-bibliography': { database: string, citations: string[] }
 }>
 
+// The default style Zettlr ships with
+const DEFAULT_CHICAGO_STYLE = path.join(__dirname, './assets/csl-styles/chicago-author-date.csl')
+
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
  */
@@ -244,7 +247,7 @@ export default class CiteprocProvider extends ProviderContract {
     this._logger.verbose('Citeproc provider booting up ...')
     this.mainLibrary = this._config.get().export.cslLibrary
 
-    this.loadEngine()
+    await this.loadEngine()
 
     if (this.mainLibrary === '') {
       return
@@ -292,11 +295,8 @@ export default class CiteprocProvider extends ProviderContract {
    *
    * @return {CSL.Engine} The instantiated engine
    */
-  private loadEngine (): void {
-    const style = readFileSync(
-      path.join(__dirname, './assets/csl-styles/chicago-author-date.csl'),
-      { encoding: 'utf8' }
-    )
+  private async loadEngine (): Promise<void> {
+    const style = await fs.readFile(DEFAULT_CHICAGO_STYLE, 'utf-8')
 
     // The last parameter enforces usage of the language we provide
     this.engine = new CSL.Engine(this.sys, style, this._config.get().appLang, true)
@@ -452,7 +452,7 @@ export default class CiteprocProvider extends ProviderContract {
   onConfigUpdate (option: string): void {
     if (option === 'appLang') {
       // We have to reload the engine to reflect the new language
-      this.loadEngine()
+      this.loadEngine().catch(err => this._logger.error(`[Citeproc Provider] Could not reload engine: ${err.message}`, err))
     } else if (option === 'export.cslLibrary') {
       // Determine if we have to reload
       const newValue = this._config.get('export.cslLibrary')
