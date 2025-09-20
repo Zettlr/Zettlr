@@ -177,6 +177,7 @@ parts of your citations, using the following CSS classes:
   more accurate for languages that do not use spaces to separate words (#5898).
 - Fixed the tutorial pages not correctly opening on first start.
 - Improved the macOS tray icon display.
+- Single clicks on the tray icon now activate the app (#4267).
 
 ## Under the Hood
 

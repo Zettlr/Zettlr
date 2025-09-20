@@ -155,6 +155,10 @@ export default class TrayProvider extends ProviderContract {
 
     this._tray = new Tray(iconPath)
 
+    this._tray.on('click', () => {
+      this._windows.activateFromTray()
+    })
+
     const menu: MenuItemConstructorOptions[] = [
       {
         label: trans('Show Zettlr'),
