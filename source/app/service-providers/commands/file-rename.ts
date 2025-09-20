@@ -19,9 +19,10 @@ import { dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import replaceLinks from '@common/util/replace-links'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export default class FileRename extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'file-rename')
   }
 

@@ -19,9 +19,10 @@ import * as bcp47 from 'bcp-47'
 import { trans } from '@common/i18n-main'
 import { app } from 'electron'
 import { showNativeNotification } from '@common/util/show-notification'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export default class ImportLangFile extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'import-lang-file')
   }
 

@@ -18,9 +18,10 @@ import makeImport from './importer'
 import path from 'path'
 import { import_files as FORMATS } from '@common/data.json'
 import { showNativeNotification } from '@common/util/show-notification'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export default class ImportFiles extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'import-files')
   }
 

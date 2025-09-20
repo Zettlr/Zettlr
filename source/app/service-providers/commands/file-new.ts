@@ -19,9 +19,10 @@ import sanitize from 'sanitize-filename'
 import generateFilename from '@common/util/generate-filename'
 import { app } from 'electron'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export default class FileNew extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, ['file-new'])
   }
 

@@ -19,9 +19,10 @@ import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import { type DirDescriptor } from '@dts/common/fsal'
 import { CODE_EXT, MD_EXT } from '@common/util/file-extention-checks'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export default class RootOpen extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, [ 'root-open-files', 'root-open-workspaces', 'roots-add' ])
   }
 

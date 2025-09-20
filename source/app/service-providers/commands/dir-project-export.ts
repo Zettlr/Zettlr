@@ -23,6 +23,7 @@ import { runShellCommand } from './exporter/run-shell-command'
 import { showNativeNotification } from '@common/util/show-notification'
 import type { AnyDescriptor } from 'source/types/common/fsal'
 import path from 'path'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 /**
  * Converts a path fragment to use Windows path separators by replacing / with \
@@ -36,7 +37,7 @@ function pathToWin (pathFragment: string): string {
 }
 
 export default class DirProjectExport extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'dir-project-export')
   }
 

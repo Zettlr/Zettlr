@@ -12,10 +12,11 @@
  * END HEADER
  */
 
+import type { AppServiceContainer } from 'source/app/app-service-container'
 import ZettlrCommand from './zettlr-command'
 
 export default class DirNewProject extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'dir-new-project')
   }
 

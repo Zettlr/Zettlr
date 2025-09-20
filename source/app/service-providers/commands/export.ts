@@ -23,9 +23,10 @@ import { PANDOC_WRITERS } from '@common/pandoc-util/pandoc-maps'
 import { type PandocProfileMetadata } from '@providers/assets'
 import { runShellCommand } from './exporter/run-shell-command'
 import { showNativeNotification } from '@common/util/show-notification'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export default class Export extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, [ 'export', 'custom-export' ])
   }
 

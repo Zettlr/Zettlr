@@ -17,9 +17,10 @@ import ZettlrCommand from './zettlr-command'
 import { app } from 'electron'
 import isDir from '@common/util/is-dir'
 import findLangCandidates from '@common/util/find-lang-candidates'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export default class TutorialOpen extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'tutorial-open')
   }
 

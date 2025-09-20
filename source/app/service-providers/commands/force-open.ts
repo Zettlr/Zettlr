@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+import type { AppServiceContainer } from 'source/app/app-service-container'
 import ZettlrCommand from './zettlr-command'
 
 export interface ForceOpenAPI {
@@ -23,7 +24,7 @@ export interface ForceOpenAPI {
 }
 
 export default class ForceOpen extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, ['force-open'])
   }
 

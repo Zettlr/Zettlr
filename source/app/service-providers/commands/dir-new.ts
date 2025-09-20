@@ -16,9 +16,10 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export default class DirNew extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'dir-new')
   }
 

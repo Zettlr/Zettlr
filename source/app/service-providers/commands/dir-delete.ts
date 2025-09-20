@@ -16,9 +16,10 @@ import { trans } from '@common/i18n-main'
 import { type MessageBoxOptions, dialog } from 'electron'
 import ZettlrCommand from './zettlr-command'
 import path from 'path'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export default class DirDelete extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'dir-delete')
   }
 

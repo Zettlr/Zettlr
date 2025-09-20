@@ -26,6 +26,7 @@ import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import path from 'path'
 import type { MDFileDescriptor } from '@dts/common/fsal'
 import { showNativeNotification } from '@common/util/show-notification'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 // This function overwrites the getBibliographyForDescriptor function to ensure
 // the library is always absolute. We have to do it this ridiculously since the
@@ -42,7 +43,7 @@ function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
 }
 
 export default class OpenAttachment extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'open-attachment')
   }
 

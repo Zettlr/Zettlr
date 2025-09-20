@@ -20,6 +20,7 @@ import md5 from 'md5'
 import { promises as fs } from 'fs'
 import { clipboard, ipcMain, nativeImage } from 'electron'
 import { showNativeNotification } from '@common/util/show-notification'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export interface SaveImageFromClipboardAPI {
   basePath: string
@@ -35,7 +36,7 @@ export interface PasteModalResult {
 }
 
 export default class SaveImage extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'save-image-from-clipboard')
   }
 

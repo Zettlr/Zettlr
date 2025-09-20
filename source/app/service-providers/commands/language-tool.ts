@@ -17,6 +17,7 @@ import got, { HTTPError, RequestError } from 'got'
 import { URLSearchParams } from 'url'
 import { app } from 'electron'
 import { trans } from '@common/i18n-main'
+import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export interface LanguageToolAPIMatch {
   message: string // Long message (English)
@@ -101,7 +102,7 @@ async function fetchSupportedLanguages (server: string): Promise<string[]> {
 }
 
 export default class LanguageTool extends ZettlrCommand {
-  constructor (app: any) {
+  constructor (app: AppServiceContainer) {
     super(app, 'run-language-tool')
   }
 
