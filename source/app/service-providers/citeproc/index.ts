@@ -17,7 +17,7 @@
 import CSL from 'citeproc'
 import { FSWatcher } from 'chokidar'
 import { ipcMain } from 'electron'
-import { promises as fs, readFileSync } from 'fs'
+import { promises as fs, readFileSync, constants as FS_CONSTANTS } from 'fs'
 import path from 'path'
 import { trans } from '@common/i18n-main'
 import extractBibTexAttachments from './extract-bibtex-attachments'
@@ -325,6 +325,12 @@ export default class CiteprocProvider extends ProviderContract {
       return // No need to load the database again
     }
 
+    try {
+      await fs.access(databasePath, FS_CONSTANTS.F_OK|FS_CONSTANTS.R_OK)
+    } catch (err) {
+      throw new Error(`File "${databasePath}" does not exist or is not visible to the app.`)
+    }
+
     this._logger.info(`[Citeproc Provider] Loading database ${databasePath}`)
     const record: DatabaseRecord = {
       path: databasePath,
@@ -417,7 +423,9 @@ export default class CiteprocProvider extends ProviderContract {
       throw new Error(`Could not select database ${dbPath}: Not loaded.`)
     }
 
-    this._logger.verbose(`[Citeproc Provider] Selecting database ${dbPath}...`)
+    if (this.lastSelectedDatabase !== dbPath) {
+      this._logger.verbose(`[Citeproc Provider] Selecting database ${dbPath}...`)
+    }
 
     this._items = database.cslData
 
