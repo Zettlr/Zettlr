@@ -16,7 +16,7 @@
 import { linter, type Diagnostic, type Action } from '@codemirror/lint'
 import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
-import { type LanguageToolAPIResponse } from '@providers/commands/language-tool'
+import { type LanguageToolAPIResponse, type AnnotationData } from '@providers/commands/language-tool'
 import { StateEffect, StateField } from '@codemirror/state'
 import { type TextNode } from '@common/modules/markdown-utils/markdown-ast'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
@@ -31,10 +31,42 @@ export interface LanguageToolStateField {
   lastError: string|undefined
 }
 
+interface UserDictionaryStore {
+  value: Set<string>
+}
+
+// store the local dictionary for later filtering
+const userDictionary: UserDictionaryStore = {
+  value: new Set()
+}
+
+function updateUserDictionary (): void {
+  userDictionary.value.clear()
+
+  ipcRenderer.invoke(
+    'dictionary-provider',
+    { command: 'get-user-dictionary' }
+  ).then((dictionary: string[]) => {
+    userDictionary.value = new Set(dictionary)
+  }).catch(console.error)
+}
+
+// watch the dictionary-provider to update the user dictionary
+ipcRenderer.on('dictionary-provider', (event, message) => {
+  const { command } = message
+
+  if (command === 'invalidate-dict') {
+    updateUserDictionary()
+  }
+})
+
 export const updateLTState = StateEffect.define<Partial<LanguageToolStateField>>()
 
 export const languageToolState = StateField.define<LanguageToolStateField>({
   create: (state) => {
+    // populate the user dictionary
+    updateUserDictionary()
+
     let overrideLanguage = 'auto'
     // Extract YAML frontmatter "lang" property if present and correct. This is
     // only done on startup to save code, and since users will rarely change an
@@ -81,42 +113,35 @@ const ltLinter = linter(async view => {
 
   const diagnostics: Diagnostic[] = []
 
-  const document = view.state.doc.toString()
-  const ast = markdownToAST(document)
+  const ast = markdownToAST(view.state.doc.toString())
   const textNodes = extractASTNodes(ast, 'Text') as TextNode[]
 
   // To avoid too high loads, we sanitize the document
   // according to the LanguageTool API `data` parameter.
   // By doing so, we only generate errors for TextNode regions
   // https://languagetool.org/http-api/swagger-ui/#!/default/post_check
-  type Annotation = { text?: string, markup?: string }
-  const annotations: { annotation: Annotation[] } = { annotation: [] }
+  const annotations: AnnotationData = { annotation: [] }
 
   let idx = 0
   for (const node of textNodes) {
     const from = node.from - node.whitespaceBefore.length
-
     if (from - idx > 0) {
-      const markup: Annotation = { markup: view.state.sliceDoc(idx, from) }
-      annotations.annotation.push(markup)
+      annotations.annotation.push({ markup: view.state.sliceDoc(idx, from) })
     }
-    const text: Annotation = { text: view.state.sliceDoc(from, node.to) }
-    annotations.annotation.push(text)
+
+    annotations.annotation.push({ text: view.state.sliceDoc(from, node.to) })
     idx = node.to
   }
   // If the last TextNode does not extend to the end of the document,
   // add the remainder as `markup`.
   if (idx < view.state.doc.length) {
-    const markup: Annotation = { markup: view.state.sliceDoc(idx) }
-    annotations.annotation.push(markup)
+    annotations.annotation.push({ markup: view.state.sliceDoc(idx) })
   }
-  const data = JSON.stringify(annotations)
 
   const response: [LanguageToolAPIResponse, string[]]|undefined|string = await ipcRenderer.invoke('application', {
     command: 'run-language-tool',
     payload: {
-      text: document,
-      data: data,
+      data: annotations,
       language: view.state.field(languageToolState).overrideLanguage
     }
   })
@@ -146,17 +171,11 @@ const ltLinter = linter(async view => {
 
   // At this point, we have only valid suggestions that we can now insert into
   // the document.
-
-  // we want to filter out any words that are in our local dictionary
-  const localDictionary: string[] = await ipcRenderer.invoke('dictionary-provider', { command: 'get-user-dictionary' })
-  // use a set for faster `.has()` lookup
-  const dictionarySet: Set<string> = new Set(localDictionary)
-
   for (const match of ltSuggestions.matches) {
     const word = view.state.sliceDoc(match.offset, match.offset + match.length)
     const issueType = match.rule.issueType
     // skip matches for words in the local dictionary
-    if (issueType === 'misspelling' && dictionarySet.has(word)) { continue }
+    if (issueType === 'misspelling' && userDictionary.value.has(word)) { continue }
 
     const source = `language-tool(${match.rule.issueType})`
     const severity = (issueType === 'style')
