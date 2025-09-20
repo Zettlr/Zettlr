@@ -37,7 +37,7 @@ describe('MarkdownEditor#removeLineBreaks()', function () {
   ]
 
   sunnyDayTestCases.forEach((testCase) => {
-    it(`given "${testCase.input}" ➡️ "${testCase.expectedOutput}"`, function () {
+    it(`given "${testCase.input.replace(/\n/g, '\\n')}" ➡️ "${testCase.expectedOutput}"`, function () {
       const state = EditorState.create({
         doc: testCase.input,
         selection: selectAll(testCase.input),
