@@ -248,7 +248,6 @@ export class ValidationRule {
     } else if (this._type === 'array') {
       return Array.isArray(this._input)
     } else {
-      // eslint-disable-next-line valid-typeof
       return typeof this._input === this._type
     }
   }

@@ -64,7 +64,7 @@ export const footnoteRefParser: BlockParser = {
     // Remove trailing empty lines from the body itself
     let bodyTo = to
     while (footnoteBody.length > 0 && footnoteBody[footnoteBody.length - 1].trim() === '') {
-      const lastline = footnoteBody.pop() as string
+      const lastline = footnoteBody.pop()!
       bodyTo = bodyTo - lastline.length - 1
     }
 
