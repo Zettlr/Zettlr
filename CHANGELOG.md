@@ -176,6 +176,7 @@ parts of your citations, using the following CSS classes:
 - The word counter now uses a proper segmenter that will make the word count
   more accurate for languages that do not use spaces to separate words (#5898).
 - Fixed the tutorial pages not correctly opening on first start.
+- Improved the macOS tray icon display.
 
 ## Under the Hood
 
