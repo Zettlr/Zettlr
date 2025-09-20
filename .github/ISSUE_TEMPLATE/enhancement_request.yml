@@ -1,6 +1,7 @@
 name: Enhancement Request
 description: Do you miss that one inch of performance? Go this way!
 labels: [enhancement]
+type: Enhancement
 body:
   - type: markdown
     attributes:
