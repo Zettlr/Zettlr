@@ -1,5 +1,6 @@
 <template>
-  <div class="switch-group">
+  <div v-bind:class="{ 'switch-group': true, stretch }">
+    <label v-if="labelPosition === 'before' && label" v-bind:for="fieldID" v-html="label"></label>
     <label class="switch">
       <input
         v-bind:id="fieldID"
@@ -9,7 +10,7 @@
       >
       <div class="toggle"></div>
     </label>
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="labelPosition !== 'before' && label" v-bind:for="fieldID" v-html="label"></label>
   </div>
 </template>
 
@@ -32,9 +33,28 @@
 import { computed } from 'vue'
 
 const props = defineProps<{
+  /**
+   * The model associated with this control
+   */
   modelValue: boolean
+  /**
+   * The label associated with this control
+   */
   label?: string
+  /**
+   * The label's position. By default, it is after the switch control.
+   */
+  labelPosition?: 'before'|'after'
+  /**
+   * The name of this switch control.
+   */
   name?: string
+  /**
+   * By default, switch and label will be positioned next to each other. Setting
+   * this to true makes the label and switch move to the opposite ends of the
+   * available width.
+   */
+  stretch?: boolean
 }>()
 
 const fieldID = computed<string>(() => 'form-input-' + (props.name ?? ''))
@@ -50,6 +70,11 @@ const emit = defineEmits<(e: 'update:modelValue', value: boolean) => void>()
 body {
   div.switch-group {
     display: flex;
+    gap: 10px;
+
+    &.stretch {
+      justify-content: space-between;
+    }
 
     label {
       line-height: @input-size;
