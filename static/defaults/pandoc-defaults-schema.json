@@ -4,11 +4,13 @@
   "properties": {
     "reader": {
       "type": "string",
-      "description": "The Pandoc input format"
+      "description": "The Pandoc input format",
+      "pattern": "^[a-z_]+(?:[+-][a-z_]+)*$"
     },
     "writer": {
       "type": "string",
-      "description": "The Pandoc output format"
+      "description": "The Pandoc output format",
+      "pattern": "^[a-z_]+(?:[+-][a-z_]+)*$"
     },
     "input-file": {
       "type": "string",
@@ -32,7 +34,8 @@
     },
     "verbosity": {
       "type": "string",
-      "description": "Specify the verbosity of Pandoc"
+      "description": "Specify the verbosity of Pandoc",
+      "enum": [ "INFO", "WARNING", "ERROR" ]
     },
     "fail-if-warnings": {
       "type": "boolean",
@@ -84,7 +87,8 @@
     },
     "track-changes": {
       "type": "string",
-      "description": "Specifies what to do with insertions, deletions, and comments produced by MS Word."
+      "description": "Specifies what to do with insertions, deletions, and comments produced by MS Word.",
+      "enum": [ "accept", "reject", "all" ]
     },
     "extract-media": {
       "type": "string",
@@ -116,7 +120,8 @@
     },
     "eol": {
       "type": "string",
-      "description": "Specify line endings manually. Default is to use the line endings native to the operating system."
+      "description": "Specify line endings manually. Default is to use the line endings native to the operating system.",
+      "enum": [ "lf", "crlf", "native" ]
     },
     "dpi": {
       "type": "number",
@@ -124,7 +129,8 @@
     },
     "wrap": {
       "type": "string",
-      "description": "Determine how text is wrapped in the output. Default is auto, which attempts line wrapping at 72 columns, unless the column variable is specified."
+      "description": "Determine how text is wrapped in the output. Default is auto, which attempts line wrapping at 72 columns, unless the column variable is specified.",
+      "enum": [ "auto", "none", "preserve" ]
     },
     "columns": {
       "type": "number",
@@ -148,7 +154,8 @@
     },
     "highlight-style": {
       "type": "string",
-      "description": "Specifies the coloring style to be used in highlighted source code. Default is pygments."
+      "description": "Specifies the coloring style to be used in highlighted source code. Default is pygments.",
+      "enum": [ "pygments", "kate", "monochrome", "breezeDark", "espresso", "zenburn", "haddock", "tango" ]
     },
     "syntax-definition": {
       "type": "string",
@@ -192,11 +199,13 @@
     },
     "reference-location": {
       "type": "string",
-      "description": "Specify where to place references in the output. Options are block, section, or document."
+      "description": "Specify where to place references in the output. Options are block, section, or document.",
+      "enum": [ "block", "section", "document" ]
     },
     "markdown-headings": {
       "type": "string",
-      "description": "Specify whether to use ATX (#-prefixed) or Setext style (underlined) headings for level 1 and 2 headings in Markdown output. Default is ATX."
+      "description": "Specify whether to use ATX (#-prefixed) or Setext style (underlined) headings for level 1 and 2 headings in Markdown output. Default is ATX.",
+      "enum": [ "atx", "setext" ]
     },
     "list-tables": {
       "type": "boolean",
@@ -204,7 +213,8 @@
     },
     "top-level-division": {
       "type": "string",
-      "description": "Treat top-level headings as the given division type in LaTeX, ConTeXt, DocBook, and TEI output. Can be default, section, chapter, or part."
+      "description": "Treat top-level headings as the given division type in LaTeX, ConTeXt, DocBook, and TEI output. Can be default, section, chapter, or part.",
+      "enum": [ "default", "section", "chapter", "part" ]
     },
     "number-sections": {
       "type": "boolean",
@@ -212,7 +222,8 @@
     },
     "number-offset": {
       "type": "string",
-      "description": "Offset for section headings in HTML output (ignored in other output formats). The first number is added to the section number for top-level headings, the second for second-level headings, and so on."
+      "description": "Offset for section headings in HTML output (ignored in other output formats). The first number is added to the section number for top-level headings, the second for second-level headings, and so on.",
+      "pattern": "^\\[[0-9](?:,[0-9]){0,5}\\]$"
     },
     "listings": {
       "type": "boolean",
@@ -232,7 +243,8 @@
     },
     "email-obfuscation": {
       "type": "string",
-      "description": "Whether to obfuscate emails (default none). Can be javascript or references."
+      "description": "Whether to obfuscate emails (default none). Can be javascript or references.",
+      "enum": [ "none", "javascript", "references" ]
     },
     "id-prefix": {
       "type": "string",
@@ -284,7 +296,8 @@
     },
     "ipynb-output": {
       "type": "string",
-      "description": "Determines how Ipynb output cells are treated."
+      "description": "Determines how Ipynb output cells are treated.",
+      "enum": [ "all", "none", "best" ]
     },
     "pdf-engine": {
       "type": "string",
@@ -312,11 +325,19 @@
     },
     "cite-method": {
       "type": "string",
-      "description": "How to output citations. `citeproc` renders citations directly, `natbib` and `biblatex` produces this kind of citations in LaTeX output."
+      "description": "How to output citations. `citeproc` renders citations directly, `natbib` and `biblatex` produces this kind of citations in LaTeX output.",
+      "enum": [ "citeproc", "natbib", "biblatex" ]
     },
     "html-math-method": {
       "type": "object",
-      "description": "The key method on this field describes which Math renderer to use, e.g., `mathjax`, `mathml`, `katex`, or `plain`."
+      "description": "The key method on this field describes which Math renderer to use, e.g., `mathjax`, `mathml`, `katex`, or `plain`.",
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "Describes the math method.",
+          "enum": [ "mathjax", "mathml", "webtex", "katex", "gladtex", "plain" ]
+        }
+      }
     },
     "dump-args": {
       "type": "boolean",
@@ -325,6 +346,10 @@
     "ignore-args": {
       "type": "boolean",
       "description": "Ignore command-line arguments."
+    },
+    "request-headers": {
+      "type": "object",
+      "description": "Specify a dictionary of HTTP headers to be sent with requests."
     }
   },
   "required": []
