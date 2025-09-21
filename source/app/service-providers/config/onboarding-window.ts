@@ -47,7 +47,7 @@ export type OnboardingIPCMessage = OnboardingIPCCloseMessage |
  *
  * @param   {LogProvider}  logger  The logger for potential error messages.
  */
-export async function showOnboardingWindow (config: ConfigProvider, logger: LogProvider): Promise<void> {
+export async function showOnboardingWindow (config: ConfigProvider, logger: LogProvider, mode: 'first-start'|'update'): Promise<void> {
   const onboardingWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -72,7 +72,10 @@ export async function showOnboardingWindow (config: ConfigProvider, logger: LogP
     }
   })
 
-  onboardingWindow.loadURL(ONBOARDING_WEBPACK_ENTRY)
+  const effectiveUrl = new URL(ONBOARDING_WEBPACK_ENTRY)
+  effectiveUrl.searchParams.append('mode', mode)
+
+  onboardingWindow.loadURL(effectiveUrl.toString())
     .catch(e => {
       logger.error(`Could not load URL ${ONBOARDING_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })

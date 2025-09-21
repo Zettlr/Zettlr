@@ -1,6 +1,28 @@
 <template>
   <div id="onboarding-wrapper">
-    <Transition v-bind:name="`slide-${transitionMode}`" mode="default">
+    <!-- Show a notification -->
+    <div v-if="mode === 'update'" class="page">
+      <div class="page-wrapper" style="text-align: center;">
+        <p>
+          <img src="../../resources/icons/png/64x64.png" />
+        </p>
+        <h1>{{ updateCompleteHeading }}</h1>
+        <p>
+          {{ updateCompleteMessage }}
+        </p>
+        <p id="version-string">
+          v{{ version }}
+        </p>
+        <p>
+          <button class="active" v-on:click="loadUrl(`https://zettlr.com/changelog?to_version=${version}`)">
+            {{ whatsChangedLabel }}
+          </button>
+        </p>
+      </div>
+    </div>
+
+    <!-- Start the first-start flow -->
+    <Transition v-else v-bind:name="`slide-${transitionMode}`" mode="default">
       <div v-if="currentPage === 'welcome'" class="page">
         <div class="page-wrapper">
           <WelcomePage></WelcomePage>
@@ -48,40 +70,53 @@
       </div>
     </Transition>
   </div>
+
+  <!--
+    The nav must adapt to whether we are running the onboarding flow or the new
+    update notification
+  -->
   <nav>
-    <!-- Allow the user to always skip the onboarding. -->
-    <button v-on:click="close">
-      Skip
-    </button>
-    <div id="onboarding-progress">
-      <span
-        v-for="page, i in pages"
-        v-bind:key="i"
-        v-bind:class="{ done: currentPageIndex >= i }"
-        v-on:click="moveToPage(i)"
-      ></span>
-    </div>
-    <!-- Allow the user to go back if possible. -->
-    <button v-if="canGoBackward" v-on:click="back">
-      Previous
-    </button>
-    <!-- Provide a forward button while possible. -->
-    <button v-if="canGoForward" v-on:click="forward">
-      <template v-if="!canGoBackward">
-        <!-- On the first slide, call the button "Start setup" -->
-        Start setup
-      </template>
-      <template v-else-if="canGoForward">
-        Next
-      </template>
-    </button>
-    <!--
-      If the user cannot go forward anymore, exchange with a finish button
-      that closes the onboarding window.
-    -->
-    <button v-else v-on:click="close">
-      Finish
-    </button>
+    <template v-if="mode === 'update'">
+      <button v-on:click="close">
+        {{ getStartedLabel }}
+      </button>
+    </template>
+
+    <template v-else>
+      <!-- Allow the user to always skip the onboarding. -->
+      <button v-on:click="close">
+        {{ skipLabel }}
+      </button>
+      <div id="onboarding-progress">
+        <span
+          v-for="page, i in pages"
+          v-bind:key="i"
+          v-bind:class="{ done: currentPageIndex >= i }"
+          v-on:click="moveToPage(i)"
+        ></span>
+      </div>
+      <!-- Allow the user to go back if possible. -->
+      <button v-if="canGoBackward" v-on:click="back">
+        {{ previousLabel }}
+      </button>
+      <!-- Provide a forward button while possible. -->
+      <button v-if="canGoForward" v-on:click="forward">
+        <template v-if="!canGoBackward">
+          <!-- On the first slide, call the button "Start setup" -->
+          {{ startSetupLabel }}
+        </template>
+        <template v-else-if="canGoForward">
+          {{ nextLabel }}
+        </template>
+      </button>
+      <!--
+        If the user cannot go forward anymore, exchange with a finish button
+        that closes the onboarding window.
+      -->
+      <button v-else v-on:click="close">
+        {{ finishLabel }}
+      </button>
+    </template>
   </nav>
 </template>
 
@@ -97,6 +132,8 @@ import WritingMarkdownPage from './pages/WritingMarkdownPage.vue'
 import CitingPage from './pages/CitingPage.vue'
 import WritingCheckPage from './pages/WritingCheckPage.vue'
 import OtherFilesPage from './pages/OtherFilesPage.vue'
+import PACKAGE_JSON from '../../package.json'
+import { trans } from 'source/common/i18n-renderer'
 
 // This is required because some elements (looking at you, RadioControl) are
 // completely namespaced to platform specific values and we don't include the
@@ -104,6 +141,10 @@ import OtherFilesPage from './pages/OtherFilesPage.vue'
 document.body.classList.add(process.platform)
 
 const ipcRenderer = window.ipc
+
+const searchParams = new URLSearchParams(window.location.search)
+const mode: string|null = searchParams.get('mode')
+const version = PACKAGE_JSON.version
 
 const pages = [
   'welcome',
@@ -116,6 +157,19 @@ const pages = [
   'other-files',
   'finish'
 ] as const
+
+// Update labels
+const updateCompleteHeading = trans('Update complete!')
+const updateCompleteMessage = trans('Zettlr has been updated. You are now running Zettlr')
+const getStartedLabel = trans('Get started')
+const whatsChangedLabel = trans('See what\'s changed')
+
+// Onboarding workflow labels
+const startSetupLabel = trans('Start setup')
+const skipLabel = trans('Skip')
+const previousLabel = trans('Previous')
+const nextLabel = trans('Next')
+const finishLabel = trans('Finish')
 
 const currentPage = ref<typeof pages[number]>('welcome')
 const currentPageIndex = computed(() => pages.indexOf(currentPage.value))
@@ -162,6 +216,10 @@ function close () {
 
 function sendMessage (payload: OnboardingIPCMessage) {
   ipcRenderer.send('onboarding', payload)
+}
+
+function loadUrl (url: string) {
+  window.location.href = url
 }
 </script>
 
@@ -269,6 +327,12 @@ nav {
       background-color: #1cb27e;
     }
   }
+}
+
+p#version-string {
+  color: #1cb27e;
+  font-size: 250%;
+  font-weight: bold;
 }
 
 body.dark #onboarding-progress {

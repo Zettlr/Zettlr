@@ -217,8 +217,8 @@ export default class ConfigProvider extends ProviderContract {
     }
 
     // Now for the fun part: Show a brand new onboarding experience.
-    if (this._firstStart) {
-      await showOnboardingWindow(this, this._logger)
+    if (this._firstStart || this._newVersion) {
+      await showOnboardingWindow(this, this._logger, this._firstStart ? 'first-start' : 'update')
     }
   }
 
