@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "reader": {
+      "type": "string",
+      "description": "The Pandoc input format"
+    },
+    "writer": {
+      "type": "string",
+      "description": "The Pandoc output format"
+    },
+    "input-file": {
+      "type": "string",
+      "description": "Specifies the input file to use"
+    },
+    "input-files": {
+      "type": "array",
+      "description": "Specifies multiple input files to use"
+    },
+    "output-file": {
+      "type": "string",
+      "description": "Specify the output file location"
+    },
+    "data-dir": {
+      "type": "string",
+      "description": "Specify a data directory"
+    },
+    "defaults": {
+      "type": "array",
+      "description": "Specify one or more additional defaults files to use"
+    },
+    "verbosity": {
+      "type": "string",
+      "description": "Specify the verbosity of Pandoc"
+    },
+    "fail-if-warnings": {
+      "type": "boolean",
+      "description": "Should Pandoc error out even on warnings?"
+    },
+    "log-file": {
+      "type": "string",
+      "description": "Specify a file to log to."
+    },
+    "shift-heading-level-by": {
+      "type": "number",
+      "description": "Define a positive or negative shift for all headings in the input file(s)."
+    },
+    "indented-code-classes": {
+      "type": "array",
+      "description": "Specify classes to use for indented code blocks."
+    },
+    "default-image-extension": {
+      "type": "string",
+      "description": "Specify a default extension to use when image paths/URLs have no extension."
+    },
+    "file-scope": {
+      "type": "boolean",
+      "description": "Parse each input file individually before combining for multifile documents. This disambiguates identifiers."
+    },
+    "filters": {
+      "type": "array",
+      "description": "Specify filters to use; can be `citeproc` or a path to a Lua or JSON filter."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Specify variables that Pandoc templates will have access to as key-value pairs. Can be booleans or strings."
+    },
+    "metadata-file": {
+      "type": "string",
+      "description": "As an alternative to specifying metadata directly, you can provide a path to a single metadata file here."
+    },
+    "metadata-files": {
+      "type": "array",
+      "description": "As an alternative to specifying metadata directly, you can provide a path to one or more metadata files here."
+    },
+    "preserve-tabs": {
+      "type": "boolean",
+      "description": "Preserve tabs instead of converting them to spaces."
+    },
+    "tab-stop": {
+      "type": "number",
+      "description": "Specify the number of spaces per tab (default is 4)."
+    },
+    "track-changes": {
+      "type": "string",
+      "description": "Specifies what to do with insertions, deletions, and comments produced by MS Word."
+    },
+    "extract-media": {
+      "type": "string",
+      "description": "Extract images and other media contained in or linked from the source document to this directory."
+    },
+    "abbreviations": {
+      "type": "string",
+      "description": "Specifies a custom abbreviations file, with abbreviations one to a line."
+    },
+    "trace": {
+      "type": "boolean",
+      "description": "Print diagnostic output tracing parser progress to stderr."
+    },
+    "standalone": {
+      "type": "boolean",
+      "description": "If set, creates as output a file that can stand on its own (by, e.g., adding appropriate scaffolding in the case of HTML). If not set, will produce a stub without using a template. Some options imply this."
+    },
+    "template": {
+      "type": "string",
+      "description": "Specify a template file to use when producing the output file. Implies standalone."
+    },
+    "variables": {
+      "type": "object",
+      "description": "Variables are key-value pairs that are made available by Pandoc to templates when rendering documents in standalone mode."
+    },
+    "sandbox": {
+      "type": "boolean",
+      "description": "Run Pandoc in a sandbox, limiting IO operations in readers and writers."
+    },
+    "eol": {
+      "type": "string",
+      "description": "Specify line endings manually. Default is to use the line endings native to the operating system."
+    },
+    "dpi": {
+      "type": "number",
+      "description": "Specify DPI for conversion from pixels to inches/centimeters and vice versa. Default is 96."
+    },
+    "wrap": {
+      "type": "string",
+      "description": "Determine how text is wrapped in the output. Default is auto, which attempts line wrapping at 72 columns, unless the column variable is specified."
+    },
+    "columns": {
+      "type": "number",
+      "description": "Specify the number of columns to use for automatically wrapping text in the output. Default is 72."
+    },
+    "toc": {
+      "type": "boolean",
+      "description": "Whether to include an auto generated table of content. Requires standalone to be true."
+    },
+    "table-of-contents": {
+      "type": "boolean",
+      "description": "Whether to include an auto generated table of content. Requires standalone to be true."
+    },
+    "toc-depth": {
+      "type": "number",
+      "description": "Specifies the heading level until which to include headings in the auto generated ToC."
+    },
+    "strip-comments": {
+      "type": "boolean",
+      "description": "Strips HTML comments in Markdown or Textile sources."
+    },
+    "highlight-style": {
+      "type": "string",
+      "description": "Specifies the coloring style to be used in highlighted source code. Default is pygments."
+    },
+    "syntax-definition": {
+      "type": "string",
+      "description": "Instructs pandoc to load a KDE XML syntax definition file. This can be used to specify additional languages."
+    },
+    "syntax-definitions": {
+      "type": "array",
+      "description": "Instructs pandoc to load one or more KDE XML syntax definition files. This can be used to specify additional languages."
+    },
+    "include-in-header": {
+      "type": "array",
+      "description": "Include contents of the provided files verbatim at the end of a file's header. Implies standalone."
+    },
+    "include-before-body": {
+      "type": "array",
+      "description": "Include contents of the provided files verbatim at the beginning of a file's body. Implies standalone."
+    },
+    "include-after-body": {
+      "type": "array",
+      "description": "Include contents of the provided files verbatim at the end of a file's body. Implies standalone."
+    },
+    "no-check-certificate": {
+      "type": "boolean",
+      "description": "Disable checking for HTTPS certificates when fetching online resources."
+    },
+    "embed-resources": {
+      "type": "boolean",
+      "description": "If set, tries to include every piece of data in the output file, making it self-contained."
+    },
+    "html-q-tags": {
+      "type": "boolean",
+      "description": "Use `<q>`-tags for quotes in HTML."
+    },
+    "ascii": {
+      "type": "boolean",
+      "description": "Use only ASCII characters in output. Not supported by all writers."
+    },
+    "reference-links": {
+      "type": "boolean",
+      "description": "Use reference-style links, rather than inline links, in writing Markdown or RST."
+    },
+    "reference-location": {
+      "type": "string",
+      "description": "Specify where to place references in the output. Options are block, section, or document."
+    },
+    "markdown-headings": {
+      "type": "string",
+      "description": "Specify whether to use ATX (#-prefixed) or Setext style (underlined) headings for level 1 and 2 headings in Markdown output. Default is ATX."
+    },
+    "list-tables": {
+      "type": "boolean",
+      "description": "Render tables as list tables in RST output."
+    },
+    "top-level-division": {
+      "type": "string",
+      "description": "Treat top-level headings as the given division type in LaTeX, ConTeXt, DocBook, and TEI output. Can be default, section, chapter, or part."
+    },
+    "number-sections": {
+      "type": "boolean",
+      "description": "Number section headings in LaTeX, ConTeXt, HTML, Docx, ms, or EPUB output. By default, sections are not numbered."
+    },
+    "number-offset": {
+      "type": "string",
+      "description": "Offset for section headings in HTML output (ignored in other output formats). The first number is added to the section number for top-level headings, the second for second-level headings, and so on."
+    },
+    "listings": {
+      "type": "boolean",
+      "description": "Use the listings package for LaTeX code blocks. The package does not support multi-byte encoding for source code."
+    },
+    "incremental": {
+      "type": "boolean",
+      "description": "Make list items in slide shows display incrementally (one by one)."
+    },
+    "slide-level": {
+      "type": "number",
+      "description": "Specifies that headings with the specified level create slides (for beamer, s5, slidy, slideous, dzslides)."
+    },
+    "section-divs": {
+      "type": "boolean",
+      "description": "Wrap sections in `<section>` tags and attach identifiers to that one instead of the headings. Affects only HTML."
+    },
+    "email-obfuscation": {
+      "type": "string",
+      "description": "Whether to obfuscate emails (default none). Can be javascript or references."
+    },
+    "id-prefix": {
+      "type": "string",
+      "description": "Specify a prefix to be added to all identifiers and internal links in HTML and DocBook output, and to footnote numbers in Markdown and Haddock output."
+    },
+    "title-prefix": {
+      "type": "string",
+      "description": "Specify a prefix for the beginning of the title that appears in the HTML header. Implies standalone."
+    },
+    "css": {
+      "type": "array",
+      "description": "Specify one or more CSS files to include in the output HTML. Should be used with standalone."
+    },
+    "reference-doc": {
+      "type": "string",
+      "description": "Specify a file to use as a reference doc to be used when outputting DOCX or ODT files."
+    },
+    "split-level": {
+      "type": "number",
+      "description": "Specify a heading level at which to split up an input file into separate files."
+    },
+    "chunk-template": {
+      "type": "string",
+      "description": "Specify a filename-template for chunked HTML output. `%n` is the chunk number, `%s` the section number, `%h` the heading, `%i` the section identifier."
+    },
+    "epub-chapter-level": {
+      "type": "number",
+      "description": "Specify the level for chapters when writing Epub files."
+    },
+    "epub-cover-image": {
+      "type": "string",
+      "description": "Specify the path to an image file to use as a cover for Epubs."
+    },
+    "epub-title-page": {
+      "type": "boolean",
+      "description": "Whether to include a title page in Epubs (default is true)."
+    },
+    "epub-metadata": {
+      "type": "string",
+      "description": "Specify a file to use for Epub metadata fields."
+    },
+    "epub-fonts": {
+      "type": "array",
+      "description": "Specify fonts to embed in the epub."
+    },
+    "epub-subdirectory": {
+      "type": "string",
+      "description": "Specify the subdirectory for the file contents. Default is EPUB."
+    },
+    "ipynb-output": {
+      "type": "string",
+      "description": "Determines how Ipynb output cells are treated."
+    },
+    "pdf-engine": {
+      "type": "string",
+      "description": "Which PDF Engine to use when exporting to PDF."
+    },
+    "pdf-engine-opts": {
+      "type": "array",
+      "description": "Specify CLI arguments to be passed to the PDF engine."
+    },
+    "citeproc": {
+      "type": "boolean",
+      "description": "Whether to enable citeproc for processing citations."
+    },
+    "bibliography": {
+      "type": "array",
+      "description": "Specify CSL or Bib(La)TeX bibliography files to source citation references from."
+    },
+    "csl": {
+      "type": "string",
+      "description": "Specify a specific CSL style file to use when using citeproc."
+    },
+    "citation-abbreviations": {
+      "type": "string",
+      "description": "Set the citation-abbreviations field in the document's metadata to this file."
+    },
+    "cite-method": {
+      "type": "string",
+      "description": "How to output citations. `citeproc` renders citations directly, `natbib` and `biblatex` produces this kind of citations in LaTeX output."
+    },
+    "html-math-method": {
+      "type": "object",
+      "description": "The key method on this field describes which Math renderer to use, e.g., `mathjax`, `mathml`, `katex`, or `plain`."
+    },
+    "dump-args": {
+      "type": "boolean",
+      "description": "Print the CLI arguments of Pandoc to the command line and exit. Useful for wrapper scripts."
+    },
+    "ignore-args": {
+      "type": "boolean",
+      "description": "Ignore command-line arguments."
+    }
+  },
+  "required": []
+}

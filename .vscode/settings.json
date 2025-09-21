@@ -1,12 +1,16 @@
 {
-    "cSpell.words": [
-        "zettlr",
-        "pandoc",
-        "zotero",
-        "citeproc"
-    ],
-    "cSpell.language": "en-GB",
     "files.associations": {
         ".ztr-directory": "json"
+    },
+    "yaml.schemas": {
+        // On my machine, VSCode randomly started associating the various
+        // defaults files with Ansible, making them look like a Christmas tree.
+        // Using this explicit association of YAML files with the generic YAML
+        // schema avoids this. I get the feeling VS Code devolves into another
+        // Excel, and assumes a lot of things wrongly.
+        // "https://www.schemastore.org/yamllint.json": "*.yaml"
+        // Better: A custom schema that helps remember the correct variables to
+        // use.
+        "static/defaults/pandoc-defaults-schema.json": "static/defaults/*.yaml"
     }
 }
