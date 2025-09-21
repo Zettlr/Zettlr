@@ -21,6 +21,7 @@ import { type Candidate } from './util/find-lang-candidates'
 import { type LangFileMetadata } from './util/enum-lang-files'
 
 let i18nData: GetTextTranslations|undefined
+let handlerAttached = false
 
 /**
  * Call this function during boot to load the translation data immediately after
@@ -33,7 +34,10 @@ export async function loadData (lang: string): Promise<Candidate & LangFileMetad
   i18nData = po.parse(contents)
 
   // Also make the data available to renderers who request the i18n data
-  ipcMain.handle('i18n', (event) => { return i18nData })
+  if (!handlerAttached) {
+    ipcMain.handle('i18n', (event) => { return i18nData })
+    handlerAttached = true
+  }
 
   // We need to return the actually loaded file so that the config provider
   // knows what the app is showing.
