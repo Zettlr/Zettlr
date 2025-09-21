@@ -330,6 +330,14 @@ module.exports = {
               preload: {
                 js: './source/common/modules/preload/index.ts'
               }
+            },
+            {
+              html: './static/index.htm',
+              js: './source/win-onboarding/index.ts',
+              name: 'onboarding',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             }
           ]
         }

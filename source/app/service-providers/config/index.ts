@@ -29,6 +29,7 @@ import { loadData, trans } from '@common/i18n-main'
 import isFile from '@common/util/is-file'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import ignoreDir from '@common/util/ignore-dir'
+import { showOnboardingWindow } from './onboarding-window'
 
 const ZETTLR_VERSION = app.getVersion()
 
@@ -213,6 +214,11 @@ export default class ConfigProvider extends ProviderContract {
     // Boot up the validation rules
     for (let i = 0; i < VALIDATE_RULES.length; i++) {
       this._rules.push(new ValidationRule(VALIDATE_RULES[i], VALIDATE_PROPERTIES[i]))
+    }
+
+    // Now for the fun part: Show a brand new onboarding experience.
+    if (this._firstStart) {
+      await showOnboardingWindow(this, this._logger)
     }
   }
 
@@ -420,10 +426,11 @@ export default class ConfigProvider extends ProviderContract {
 
   /**
     * Sets a configuration option
-    * @param  {string}  option  The option to be set
-    * @param  {any}     value   The value of the config variable.
+    * @param  {string}   option      The option to be set
+    * @param  {any}      value       The value of the config variable.
+    * @param  {boolean}  skipChecks  For internal use only. Do not use.
     */
-  set (option: string, value: any): void {
+  set (option: string, value: any, skipChecks = false): void {
     // Don't add non-existent options
     if (option in this.config && this._validate(option, value)) {
       // Do not set the option if it already has the requested value
@@ -437,7 +444,9 @@ export default class ConfigProvider extends ProviderContract {
       this._container.set(this.config)
       this._emitter.emit('update', option)
       broadcastIpcMessage('config-provider', { command: 'update', payload: option })
-      this.checkOptionForGuard(option)
+      if (!skipChecks) {
+        this.checkOptionForGuard(option)
+      }
     } else if (option.indexOf('.') > 0) {
       // A nested argument was requested, so iterate until we find it
       let nested = option.split('.')
@@ -465,7 +474,9 @@ export default class ConfigProvider extends ProviderContract {
         this._container.set(this.config)
         this._emitter.emit('update', option)
         broadcastIpcMessage('config-provider', { command: 'update', payload: option })
-        this.checkOptionForGuard(option)
+        if (!skipChecks) {
+          this.checkOptionForGuard(option)
+        }
       }
     }
   }

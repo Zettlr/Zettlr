@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2025-02-28 14:52+0000\n"
+"POT-Creation-Date: 2025-09-21 20:55+0200\n"
 "PO-Revision-Date: 2025-03-04 03:36+0800\n"
 "Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
 "Language-Team: \n"
@@ -18,67 +18,67 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.5\n"
 
-#: source/app/service-providers/config/index.ts:498
+#: source/app/service-providers/config/config-validation.ts:277
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "選項 %s 必須是 %s 類型。"
+
+#: source/app/service-providers/config/config-validation.ts:280
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "選項 %s 必須是以下之一：%s。"
+
+#: source/app/service-providers/config/config-validation.ts:283
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "選項 %s 的字元數必須介於 %s 和 %s 之間。"
+
+#: source/app/service-providers/config/config-validation.ts:286
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "選項 %s 不可以超過 %s 字元。"
+
+#: source/app/service-providers/config/config-validation.ts:289
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "選項 %s 至少要有 %s 字元。"
+
+#: source/app/service-providers/config/config-validation.ts:292
+#, javascript-format
+msgid "Option %s is required."
+msgstr "選項 %s 是必需的。"
+
+#: source/app/service-providers/config/index.ts:510
 msgid "Changing this option requires a restart to take effect."
 msgstr "更改此選項需要重新啟動才能生效。"
 
-#: source/app/service-providers/config/index.ts:501
+#: source/app/service-providers/config/index.ts:513
 #: source/app/service-providers/menu/menu.win32.ts:676
 #: source/app/service-providers/menu/menu.darwin.ts:702
 msgid "Restart now"
 msgstr "立即重新啟動"
 
-#: source/app/service-providers/config/index.ts:502
+#: source/app/service-providers/config/index.ts:514
 msgid "Restart later"
 msgstr "稍後重新啟動"
 
-#: source/app/service-providers/config/index.ts:506
-#: source/app/service-providers/commands/file-rename.ts:128
-#: source/app/service-providers/commands/rename-tag.ts:43
+#: source/app/service-providers/config/index.ts:518
+#: source/app/service-providers/commands/file-rename.ts:129
+#: source/app/service-providers/commands/rename-tag.ts:44
 msgid "Confirm"
 msgstr "確認"
 
-#: source/app/service-providers/config/config-validation.ts:278
-#, javascript-format
-msgid "Option %s has to be of type %s."
-msgstr "選項 %s 必須是 %s 類型。"
-
-#: source/app/service-providers/config/config-validation.ts:281
-#, javascript-format
-msgid "Option %s must be one of: %s."
-msgstr "選項 %s 必須是以下之一：%s。"
-
-#: source/app/service-providers/config/config-validation.ts:284
-#, javascript-format
-msgid "Option %s must be between %s and %s (characters long)."
-msgstr "選項 %s 的字元數必須介於 %s 和 %s 之間。"
-
-#: source/app/service-providers/config/config-validation.ts:287
-#, javascript-format
-msgid "Option %s may not exceed %s (characters)."
-msgstr "選項 %s 不可以超過 %s 字元。"
-
-#: source/app/service-providers/config/config-validation.ts:290
-#, javascript-format
-msgid "Option %s must be at least %s (characters long)."
-msgstr "選項 %s 至少要有 %s 字元。"
-
-#: source/app/service-providers/config/config-validation.ts:293
-#, javascript-format
-msgid "Option %s is required."
-msgstr "選項 %s 是必需的。"
-
-#: source/app/service-providers/tray/index.ts:160
+#: source/app/service-providers/tray/index.ts:164
 msgid "Show Zettlr"
 msgstr "顯示 Zettlr"
 
-#: source/app/service-providers/tray/index.ts:166
+#: source/app/service-providers/tray/index.ts:170
 #: source/app/service-providers/menu/menu.win32.ts:300
 #: source/app/service-providers/menu/menu.darwin.ts:104
 msgid "Quit"
 msgstr "結束"
 
-#: source/app/service-providers/tray/index.ts:173
+#: source/app/service-providers/tray/index.ts:177
 msgid "Zettlr"
 msgstr "Zettlr"
 
@@ -178,359 +178,10 @@ msgstr "下載的檔案雜湊值與伺服器回傳的不相同。請重試或是
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr "無法開始更新。請重試或是手動更新。錯誤為：%s"
 
-#: source/app/service-providers/commands/language-tool.ts:194
-msgid "Document too long"
-msgstr "文件過長"
-
-#: source/app/service-providers/commands/language-tool.ts:199
-msgid "offline"
-msgstr "離線"
-
-#: source/app/service-providers/commands/file-new.ts:167
-#: source/app/service-providers/commands/file-duplicate.ts:39
-#: source/app/service-providers/commands/file-duplicate.ts:56
-msgid "Could not create file"
-msgstr "無法建立檔案"
-
-#. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:119
+#: source/app/service-providers/workspaces/index.ts:162
 #, javascript-format
-msgid "The reference with key %s does not appear to have attachments."
-msgstr "%s 的引用似乎沒有附件。"
-
-#: source/app/service-providers/commands/open-attachment.ts:124
-msgid "Could not open attachment. Is Zotero running?"
-msgstr "無法開啟附件。Zotero 是否正在執行？"
-
-#: source/app/service-providers/commands/file-rename.ts:129
-#, javascript-format
-msgid "Update %s internal links to file %s?"
-msgstr "更新 %s 個指向檔案 %s 的內部連結？"
-
-#: source/app/service-providers/commands/file-rename.ts:131
-#: source/app/service-providers/commands/rename-tag.ts:46
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Yes"
-msgstr "是"
-
-#. 0: Save all changes
-#: source/app/service-providers/commands/file-rename.ts:132
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
-msgid "No"
-msgstr "否"
-
-#: source/app/service-providers/commands/rename-tag.ts:44
-#, javascript-format
-msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr "在 %s 個檔案中將標籤 \"%s\" 取代為 \"%s\"？"
-
-#. 1: Omit all changes
-#: source/app/service-providers/commands/rename-tag.ts:47
-#: source/app/service-providers/commands/file-delete.ts:37
-#: source/app/service-providers/commands/dir-delete.ts:36
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
-#: source/app/service-providers/menu/menu.win32.ts:677
-#: source/app/service-providers/menu/menu.darwin.ts:703
-#: source/app/service-providers/documents/index.ts:386
-#: source/tmp/win-paste-image/App.vue.ts:67
-msgid "Cancel"
-msgstr "取消"
-
-#: source/app/service-providers/commands/import.ts:34
-msgid "Import directory"
-msgstr "匯入目錄"
-
-#: source/app/service-providers/commands/import.ts:34
-msgid "Select folder"
-msgstr "選擇資料夾"
-
-#: source/app/service-providers/commands/import.ts:34
-msgid "Select import destination"
-msgstr "選擇匯入目的地"
-
-#: source/app/service-providers/commands/import.ts:36
-msgid "You have to select a directory to import to."
-msgstr "您必須選擇要匯入的目錄。"
-
-#. Prepare the list of file filters
-#. The "All Files" filter should be at the top
-#: source/app/service-providers/commands/import.ts:44
-#: source/app/service-providers/windows/dialog/ask-file.ts:47
-#: source/tmp/common/vue/form/elements/FileControl.vue.ts:58
-msgid "All Files"
-msgstr "所有檔案"
-
-#. Now import.
-#: source/app/service-providers/commands/import.ts:61
-msgid "Importing. Please wait …"
-msgstr "匯入中，請稍候…"
-
-#. This callback gets called whenever there is an error while running pandoc.
-#: source/app/service-providers/commands/import.ts:69
-#, javascript-format
-msgid "Couldn't import %s."
-msgstr "無法匯入 %s。"
-
-#: source/app/service-providers/commands/import.ts:73
-#, javascript-format
-msgid "%s imported successfully."
-msgstr "%s 匯入成功。"
-
-#. Some files failed to import.
-#: source/app/service-providers/commands/import.ts:78
-#, javascript-format
-msgid ""
-"The following %s files could not be imported, because their filetype is "
-"unknown: %s"
-msgstr "以下 %s 個檔案無法匯入，因為其檔案類型未知：%s"
-
-#: source/app/service-providers/commands/import.ts:84
-msgid "Import failed"
-msgstr "匯入失敗"
-
-#: source/app/service-providers/commands/dir-project-export.ts:85
-msgid "Cannot export project"
-msgstr "無法匯出專案"
-
-#: source/app/service-providers/commands/dir-project-export.ts:86
-msgid ""
-"There are no files selected for export. Please select files to be included "
-"in the project settings."
-msgstr "沒有選擇要匯出的檔案。請在專案設定中選擇要包含的檔案。"
-
-#: source/app/service-providers/commands/dir-project-export.ts:91
-msgid "Project File Mismatch"
-msgstr "專案檔案不符"
-
-#: source/app/service-providers/commands/dir-project-export.ts:92
-msgid ""
-"One or more files specified in the project settings have not been found. "
-"They may have moved or been deleted. Please verify that all files that you "
-"would like to export are included."
-msgstr ""
-"找不到專案設定中指定的某些檔案，這些檔案可能已經被移動或刪除。請確認您想要匯"
-"出的所有檔案都已包含在內。"
-
-#: source/app/service-providers/commands/dir-project-export.ts:93
-#: source/app/service-providers/commands/file-delete.ts:36
-#: source/app/service-providers/commands/dir-delete.ts:35
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
-#: source/app/service-providers/windows/dialog/prompt.ts:32
-#: source/tmp/win-error/App.vue.ts:43
-msgid "Ok"
-msgstr "OK"
-
-#: source/app/service-providers/commands/dir-project-export.ts:168
-#, javascript-format
-msgid "Project \"%s\" successfully exported. Click to show."
-msgstr "專案 \"%s\" 已成功匯出。點選以顯示。"
-
-#: source/app/service-providers/commands/dir-project-export.ts:169
-msgid "Project Export"
-msgstr "專案匯出"
-
-#: source/app/service-providers/commands/request-move.ts:53
-msgid "Cannot move directory"
-msgstr "無法移動目錄"
-
-#: source/app/service-providers/commands/request-move.ts:54
-msgid "You cannot move a directory into one of its subdirectories."
-msgstr "您無法將目錄移動到其子目錄中。"
-
-#: source/app/service-providers/commands/request-move.ts:63
-msgid "Cannot move directory or file"
-msgstr "無法移動目錄或檔案"
-
-#: source/app/service-providers/commands/request-move.ts:64
-#, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "檔案/目錄 %s 已存在於目標位置。"
-
-#. Else standard val for new dirs.
-#: source/app/service-providers/commands/dir-new.ts:31
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:258
-msgid "Untitled"
-msgstr "未命名"
-
-#: source/app/service-providers/commands/dir-new.ts:37
-#: source/app/service-providers/commands/dir-new.ts:38
-#: source/app/service-providers/commands/dir-new.ts:50
-msgid "Could not create directory"
-msgstr "無法建立目錄"
-
-#: source/app/service-providers/commands/file-delete.ts:41
-#: source/app/service-providers/commands/dir-delete.ts:40
-msgid "Really delete?"
-msgstr "確定要刪除嗎？"
-
-#: source/app/service-providers/commands/file-delete.ts:42
-#: source/app/service-providers/commands/dir-delete.ts:41
-#, javascript-format
-msgid "Do you really want to remove %s?"
-msgstr "您確定要移除 %s 嗎？"
-
-#: source/app/service-providers/commands/root-open.ts:59
-msgid "Markdown Files"
-msgstr "Markdown 檔案"
-
-#: source/app/service-providers/commands/root-open.ts:60
-msgid "Code Files"
-msgstr "程式碼檔案"
-
-#. TODO: Move this to a command
-#. The user wants to open another file or directory.
-#: source/app/service-providers/commands/root-open.ts:74
-msgid "Open workspace"
-msgstr "開啟工作區"
-
-#: source/app/service-providers/commands/root-open.ts:83
-msgid "Cannot open workpace"
-msgstr "無法開啟工作區"
-
-#: source/app/service-providers/commands/root-open.ts:84
-#, javascript-format
-msgid "Cannot open workspace \"%s\"."
-msgstr "無法開啟工作區「%s」。"
-
-#. We need to generate our own filename. First, attempt to just use 'copy of'
-#: source/app/service-providers/commands/file-duplicate.ts:68
-#, javascript-format
-msgid "Copy of %s"
-msgstr "副本：%s"
-
-#: source/app/service-providers/commands/import-lang-file.ts:60
-#, javascript-format
-msgid "Language file imported: %s"
-msgstr "語言包 %s 已匯入"
-
-#: source/app/service-providers/commands/import-lang-file.ts:62
-#: source/app/service-providers/commands/import-lang-file.ts:65
-#, javascript-format
-msgid "Could not import language file %s!"
-msgstr "無法匯入語言包 %s！"
-
-#: source/app/service-providers/commands/export.ts:55
-#: source/app/service-providers/commands/export.ts:157
-msgid "Export failed"
-msgstr "匯出失敗"
-
-#: source/app/service-providers/commands/export.ts:56
-#, javascript-format
-msgid "An error occurred during export: %s"
-msgstr "匯出時發生錯誤：%s"
-
-#: source/app/service-providers/commands/export.ts:114
-msgid "Choose export destination"
-msgstr "選擇匯出目的地"
-
-#. primary: true // It's a primary button
-#: source/app/service-providers/commands/export.ts:114
-#: source/app/service-providers/menu/menu.win32.ts:161
-#: source/app/service-providers/menu/menu.darwin.ts:196
-#: source/tmp/win-tag-manager/App.vue.ts:88
-#: source/tmp/win-paste-image/App.vue.ts:66
-#: source/tmp/win-assets/CustomCSS.vue.ts:24
-#: source/tmp/win-assets/DefaultsTab.vue.ts:61
-#: source/tmp/win-assets/SnippetsTab.vue.ts:28
-msgid "Save"
-msgstr "儲存"
-
-#: source/app/service-providers/commands/export.ts:145
-#, javascript-format
-msgid "Exporting to %s"
-msgstr "正在匯出到 %s"
-
-#: source/app/service-providers/commands/export.ts:158
-#, javascript-format
-msgid "An error occurred on export: %s"
-msgstr "匯出時發生錯誤：%s"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:103
-msgid "The provided name did not contain any allowed letters."
-msgstr "提供的名稱不包含任何允許的字母。"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:124
-msgid "The requested directory was not found."
-msgstr "找不到所要求的目錄。"
-
-#: source/app/service-providers/commands/importer/index.ts:92
-#: source/app/service-providers/commands/importer/index.ts:93
-msgid "Select import profile"
-msgstr "選擇匯入設定檔"
-
-#: source/app/service-providers/commands/importer/index.ts:94
-#, javascript-format
-msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr "有多個設定檔可以匯入 %s，請選擇其中一個設定檔。"
-
-#: source/app/service-providers/commands/importer/import-textbundle.ts:63
-#: source/app/service-providers/commands/importer/import-textbundle.ts:69
-#, javascript-format
-msgid "Malformed Textbundle: %s"
-msgstr "格式錯誤的 Textbundle：%s"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "取代檔案"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
-#, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr "檔案 %s 已被遠端修改。要用磁碟上的新版本取代已載入的版本嗎？"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
-#: source/win-preferences/schema/general.ts:78
-msgid "Always load remote changes to the current file"
-msgstr "總是將遠端的修改載入到目前檔案"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
-msgid "Overwrite existing file"
-msgstr "覆蓋現有檔案"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
-#, javascript-format
-msgid "The file %s already exists in this directory. Overwrite?"
-msgstr "檔案 %s 已經存在，要覆蓋嗎？"
-
-#: source/app/service-providers/windows/dialog/ask-file.ts:54
-msgid "Open file"
-msgstr "開啟檔案"
-
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-#: source/app/service-providers/documents/index.ts:390
-#: source/tmp/win-tag-manager/App.vue.ts:94
-#: source/tmp/win-assets/CustomCSS.vue.ts:34
-#: source/tmp/win-assets/DefaultsTab.vue.ts:113
-#: source/tmp/win-assets/SnippetsTab.vue.ts:47
-msgid "Unsaved changes"
-msgstr "尚未儲存的修改"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-msgid "There are unsaved changes. Do you want to save them first?"
-msgstr "有些尚未儲存的修改。您要先儲存它們嗎？"
-
-#: source/app/service-providers/windows/dialog/save-dialog.ts:58
-msgid "Save file"
-msgstr "存檔"
-
-#: source/app/service-providers/windows/index.ts:247
-msgid "Open project folder"
-msgstr "開啟專案資料夾"
-
-#: source/app/service-providers/citeproc/index.ts:258
-#: source/app/service-providers/citeproc/index.ts:466
-msgid "The citation database could not be loaded"
-msgstr "無法載入引文資料庫"
-
-#: source/app/service-providers/citeproc/index.ts:453
-msgid "Changes to the library file detected. Reloading …"
-msgstr "偵測到資源庫檔案的變更，正在重新載入…"
+msgid "Loading workspace %s"
+msgstr "正在載入工作區 %s"
 
 #: source/app/service-providers/menu/menu.win32.ts:44
 #: source/app/service-providers/menu/menu.win32.ts:56
@@ -551,14 +202,14 @@ msgstr "檔案"
 
 #: source/app/service-providers/menu/menu.win32.ts:90
 #: source/app/service-providers/menu/menu.darwin.ts:116
-#: source/win-main/file-manager/util/dir-item-context.ts:38
+#: source/win-main/file-manager/util/dir-item-context.ts:36
 #: source/tmp/win-main/App.vue.ts:290
 msgid "New file…"
 msgstr "新增檔案…"
 
 #: source/app/service-providers/menu/menu.win32.ts:129
 #: source/app/service-providers/menu/menu.darwin.ts:155
-#: source/win-main/file-manager/util/dir-item-context.ts:44
+#: source/win-main/file-manager/util/dir-item-context.ts:41
 msgid "New directory…"
 msgstr "新目錄…"
 
@@ -572,6 +223,18 @@ msgstr "開啟檔案…"
 #: source/tmp/win-main/App.vue.ts:264
 msgid "Open workspace…"
 msgstr "開啟工作區…"
+
+#. primary: true // It's a primary button
+#: source/app/service-providers/menu/menu.win32.ts:161
+#: source/app/service-providers/menu/menu.darwin.ts:196
+#: source/app/service-providers/commands/export.ts:115
+#: source/tmp/win-assets/DefaultsTab.vue.ts:61
+#: source/tmp/win-assets/SnippetsTab.vue.ts:28
+#: source/tmp/win-assets/CustomCSS.vue.ts:24
+#: source/tmp/win-tag-manager/App.vue.ts:88
+#: source/tmp/win-paste-image/App.vue.ts:66
+msgid "Save"
+msgstr "儲存"
 
 #: source/app/service-providers/menu/menu.win32.ts:172
 #: source/app/service-providers/menu/menu.darwin.ts:207
@@ -631,14 +294,14 @@ msgstr "匯入字典…"
 
 #: source/app/service-providers/menu/menu.win32.ts:280
 #: source/app/service-providers/menu/menu.darwin.ts:286
-#: source/win-main/file-manager/util/file-item-context.ts:44
+#: source/win-main/file-manager/util/file-item-context.ts:41
 #: source/tmp/win-assets/DefaultsTab.vue.ts:58
 msgid "Rename file"
 msgstr "重新命名檔案"
 
 #: source/app/service-providers/menu/menu.win32.ts:291
 #: source/app/service-providers/menu/menu.darwin.ts:297
-#: source/win-main/file-manager/util/file-item-context.ts:57
+#: source/win-main/file-manager/util/file-item-context.ts:52
 msgid "Delete file"
 msgstr "刪除檔案"
 
@@ -660,41 +323,42 @@ msgstr "重做"
 
 #: source/app/service-providers/menu/menu.win32.ts:330
 #: source/app/service-providers/menu/menu.darwin.ts:328
-#: source/common/modules/window-register/register-default-context.ts:76
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/common/modules/window-register/register-default-context.ts:75
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:213
 msgid "Cut"
 msgstr "剪下"
 
 #: source/app/service-providers/menu/menu.win32.ts:336
 #: source/app/service-providers/menu/menu.darwin.ts:334
-#: source/common/modules/window-register/register-default-context.ts:83
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
+#: source/common/modules/window-register/register-default-context.ts:82
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:219
+#: source/tmp/win-main/GlobalSearch.vue.ts:59
 msgid "Copy"
 msgstr "複製"
 
 #: source/app/service-providers/menu/menu.win32.ts:341
 #: source/app/service-providers/menu/menu.darwin.ts:339
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:225
 msgid "Copy as HTML"
 msgstr "複製為 HTML"
 
 #: source/app/service-providers/menu/menu.win32.ts:350
 #: source/app/service-providers/menu/menu.darwin.ts:348
-#: source/common/modules/window-register/register-default-context.ts:90
+#: source/common/modules/window-register/register-default-context.ts:88
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
 msgid "Paste"
 msgstr "貼上"
 
 #: source/app/service-providers/menu/menu.win32.ts:355
 #: source/app/service-providers/menu/menu.darwin.ts:353
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:237
 msgid "Paste without style"
 msgstr "貼上（不含樣式）"
 
 #: source/app/service-providers/menu/menu.win32.ts:364
 #: source/app/service-providers/menu/menu.darwin.ts:362
-#: source/common/modules/window-register/register-default-context.ts:100
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
+#: source/common/modules/window-register/register-default-context.ts:98
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:246
 msgid "Select all"
 msgstr "全選"
 
@@ -720,8 +384,8 @@ msgstr "產生新的 ID"
 
 #: source/app/service-providers/menu/menu.win32.ts:407
 #: source/app/service-providers/menu/menu.darwin.ts:405
-#: source/win-main/file-manager/util/file-item-context.ts:79
-#: source/win-main/tabs-context.ts:80
+#: source/win-main/tabs-context.ts:74
+#: source/win-main/file-manager/util/file-item-context.ts:71
 msgid "Copy ID"
 msgstr "複製 ID"
 
@@ -743,7 +407,7 @@ msgstr "額外資訊"
 
 #: source/app/service-providers/menu/menu.win32.ts:442
 #: source/app/service-providers/menu/menu.darwin.ts:459
-#: source/win-preferences/schema/editor.ts:165
+#: source/win-preferences/schema/editor.ts:186
 msgid "Distraction-free mode"
 msgstr "專注模式"
 
@@ -904,6 +568,21 @@ msgstr ""
 "重新啟動後，Zettlr 將重建整個快取，這可能需要一些時間，具體取決於您已載入的檔"
 "案數量和硬碟速度。完成後，視窗就會顯示。"
 
+#. 1: Omit all changes
+#: source/app/service-providers/menu/menu.win32.ts:677
+#: source/app/service-providers/menu/menu.darwin.ts:703
+#: source/app/service-providers/commands/file-delete.ts:38
+#: source/app/service-providers/commands/rename-tag.ts:48
+#: source/app/service-providers/commands/dir-delete.ts:37
+#: source/app/service-providers/documents/index.ts:386
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/tmp/win-main/GlobalSearch.vue.ts:42
+#: source/tmp/win-paste-image/App.vue.ts:67
+msgid "Cancel"
+msgstr "取消"
+
 #: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
 msgstr "服務"
@@ -936,10 +615,282 @@ msgstr "停止語音"
 msgid "Bring All to Front"
 msgstr "全部移到最前方"
 
-#: source/app/service-providers/workspaces/index.ts:162
+#: source/app/service-providers/commands/file-delete.ts:37
+#: source/app/service-providers/commands/dir-delete.ts:36
+#: source/app/service-providers/commands/dir-project-export.ts:94
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/tmp/win-error/App.vue.ts:43
+msgid "Ok"
+msgstr "OK"
+
+#: source/app/service-providers/commands/file-delete.ts:42
+#: source/app/service-providers/commands/dir-delete.ts:41
+msgid "Really delete?"
+msgstr "確定要刪除嗎？"
+
+#: source/app/service-providers/commands/file-delete.ts:43
+#: source/app/service-providers/commands/dir-delete.ts:42
 #, javascript-format
-msgid "Loading workspace %s"
-msgstr "正在載入工作區 %s"
+msgid "Do you really want to remove %s?"
+msgstr "您確定要移除 %s 嗎？"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:104
+msgid "The provided name did not contain any allowed letters."
+msgstr "提供的名稱不包含任何允許的字母。"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:125
+msgid "The requested directory was not found."
+msgstr "找不到所要求的目錄。"
+
+#: source/app/service-providers/commands/file-new.ts:168
+#: source/app/service-providers/commands/file-duplicate.ts:40
+#: source/app/service-providers/commands/file-duplicate.ts:57
+msgid "Could not create file"
+msgstr "無法建立檔案"
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:68
+#: source/app/service-providers/commands/importer/import-textbundle.ts:75
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "格式錯誤的 Textbundle：%s"
+
+#: source/app/service-providers/commands/importer/index.ts:92
+#: source/app/service-providers/commands/importer/index.ts:93
+msgid "Select import profile"
+msgstr "選擇匯入設定檔"
+
+#: source/app/service-providers/commands/importer/index.ts:94
+#, javascript-format
+msgid "There are multiple profiles that can import %s. Please choose one."
+msgstr "有多個設定檔可以匯入 %s，請選擇其中一個設定檔。"
+
+#: source/app/service-providers/commands/file-rename.ts:130
+#, javascript-format
+msgid "Update %s internal links to file %s?"
+msgstr "更新 %s 個指向檔案 %s 的內部連結？"
+
+#: source/app/service-providers/commands/file-rename.ts:132
+#: source/app/service-providers/commands/rename-tag.ts:47
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+msgid "Yes"
+msgstr "是"
+
+#. 0: Save all changes
+#: source/app/service-providers/commands/file-rename.ts:133
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+msgid "No"
+msgstr "否"
+
+#: source/app/service-providers/commands/root-open.ts:60
+msgid "Markdown Files"
+msgstr "Markdown 檔案"
+
+#: source/app/service-providers/commands/root-open.ts:61
+msgid "Code Files"
+msgstr "程式碼檔案"
+
+#. TODO: Move this to a command
+#. The user wants to open another file or directory.
+#: source/app/service-providers/commands/root-open.ts:75
+msgid "Open workspace"
+msgstr "開啟工作區"
+
+#: source/app/service-providers/commands/root-open.ts:84
+msgid "Cannot open workpace"
+msgstr "無法開啟工作區"
+
+#: source/app/service-providers/commands/root-open.ts:85
+#, javascript-format
+msgid "Cannot open workspace \"%s\"."
+msgstr "無法開啟工作區「%s」。"
+
+#: source/app/service-providers/commands/request-move.ts:54
+msgid "Cannot move directory"
+msgstr "無法移動目錄"
+
+#: source/app/service-providers/commands/request-move.ts:55
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "您無法將目錄移動到其子目錄中。"
+
+#: source/app/service-providers/commands/request-move.ts:64
+msgid "Cannot move directory or file"
+msgstr "無法移動目錄或檔案"
+
+#: source/app/service-providers/commands/request-move.ts:65
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "檔案/目錄 %s 已存在於目標位置。"
+
+#: source/app/service-providers/commands/import-lang-file.ts:61
+#, javascript-format
+msgid "Language file imported: %s"
+msgstr "語言包 %s 已匯入"
+
+#: source/app/service-providers/commands/import-lang-file.ts:63
+#: source/app/service-providers/commands/import-lang-file.ts:66
+#, javascript-format
+msgid "Could not import language file %s!"
+msgstr "無法匯入語言包 %s！"
+
+#: source/app/service-providers/commands/export.ts:56
+#: source/app/service-providers/commands/export.ts:158
+msgid "Export failed"
+msgstr "匯出失敗"
+
+#: source/app/service-providers/commands/export.ts:57
+#, javascript-format
+msgid "An error occurred during export: %s"
+msgstr "匯出時發生錯誤：%s"
+
+#: source/app/service-providers/commands/export.ts:115
+msgid "Choose export destination"
+msgstr "選擇匯出目的地"
+
+#: source/app/service-providers/commands/export.ts:146
+#, javascript-format
+msgid "Exporting to %s"
+msgstr "正在匯出到 %s"
+
+#: source/app/service-providers/commands/export.ts:159
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "匯出時發生錯誤：%s"
+
+#. Else standard val for new dirs.
+#: source/app/service-providers/commands/dir-new.ts:32
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:297
+msgid "Untitled"
+msgstr "未命名"
+
+#: source/app/service-providers/commands/dir-new.ts:38
+#: source/app/service-providers/commands/dir-new.ts:39
+#: source/app/service-providers/commands/dir-new.ts:51
+msgid "Could not create directory"
+msgstr "無法建立目錄"
+
+#: source/app/service-providers/commands/rename-tag.ts:45
+#, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr "在 %s 個檔案中將標籤 \"%s\" 取代為 \"%s\"？"
+
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:120
+#, javascript-format
+msgid "The reference with key %s does not appear to have attachments."
+msgstr "%s 的引用似乎沒有附件。"
+
+#: source/app/service-providers/commands/open-attachment.ts:125
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "無法開啟附件。Zotero 是否正在執行？"
+
+#: source/app/service-providers/commands/language-tool.ts:195
+msgid "Document too long"
+msgstr "文件過長"
+
+#: source/app/service-providers/commands/language-tool.ts:200
+msgid "offline"
+msgstr "離線"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:69
+#, javascript-format
+msgid "Copy of %s"
+msgstr "副本：%s"
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "Import directory"
+msgstr "匯入目錄"
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "Select folder"
+msgstr "選擇資料夾"
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "Select import destination"
+msgstr "選擇匯入目的地"
+
+#: source/app/service-providers/commands/import.ts:37
+msgid "You have to select a directory to import to."
+msgstr "您必須選擇要匯入的目錄。"
+
+#. Prepare the list of file filters
+#. The "All Files" filter should be at the top
+#: source/app/service-providers/commands/import.ts:45
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
+#: source/tmp/common/vue/form/elements/FileControl.vue.ts:58
+msgid "All Files"
+msgstr "所有檔案"
+
+#. Now import.
+#: source/app/service-providers/commands/import.ts:62
+msgid "Importing. Please wait …"
+msgstr "匯入中，請稍候…"
+
+#. This callback gets called whenever there is an error while running pandoc.
+#: source/app/service-providers/commands/import.ts:70
+#, javascript-format
+msgid "Couldn't import %s."
+msgstr "無法匯入 %s。"
+
+#: source/app/service-providers/commands/import.ts:74
+#, javascript-format
+msgid "%s imported successfully."
+msgstr "%s 匯入成功。"
+
+#. Some files failed to import.
+#: source/app/service-providers/commands/import.ts:79
+#, javascript-format
+msgid ""
+"The following %s files could not be imported, because their filetype is "
+"unknown: %s"
+msgstr "以下 %s 個檔案無法匯入，因為其檔案類型未知：%s"
+
+#: source/app/service-providers/commands/import.ts:85
+msgid "Import failed"
+msgstr "匯入失敗"
+
+#: source/app/service-providers/commands/dir-project-export.ts:86
+msgid "Cannot export project"
+msgstr "無法匯出專案"
+
+#: source/app/service-providers/commands/dir-project-export.ts:87
+msgid ""
+"There are no files selected for export. Please select files to be included "
+"in the project settings."
+msgstr "沒有選擇要匯出的檔案。請在專案設定中選擇要包含的檔案。"
+
+#: source/app/service-providers/commands/dir-project-export.ts:92
+msgid "Project File Mismatch"
+msgstr "專案檔案不符"
+
+#: source/app/service-providers/commands/dir-project-export.ts:93
+msgid ""
+"One or more files specified in the project settings have not been found. "
+"They may have moved or been deleted. Please verify that all files that you "
+"would like to export are included."
+msgstr ""
+"找不到專案設定中指定的某些檔案，這些檔案可能已經被移動或刪除。請確認您想要匯"
+"出的所有檔案都已包含在內。"
+
+#: source/app/service-providers/commands/dir-project-export.ts:169
+#, javascript-format
+msgid "Project \"%s\" successfully exported. Click to show."
+msgstr "專案 \"%s\" 已成功匯出。點選以顯示。"
+
+#: source/app/service-providers/commands/dir-project-export.ts:170
+msgid "Project Export"
+msgstr "專案匯出"
+
+#: source/app/service-providers/citeproc/index.ts:261
+#: source/app/service-providers/citeproc/index.ts:474
+msgid "The citation database could not be loaded"
+msgstr "無法載入引文資料庫"
+
+#: source/app/service-providers/citeproc/index.ts:461
+msgid "Changes to the library file detected. Reloading …"
+msgstr "偵測到資源庫檔案的變更，正在重新載入…"
 
 #: source/app/service-providers/documents/index.ts:384
 msgid "Save changes"
@@ -949,20 +900,30 @@ msgstr "儲存變更"
 msgid "Discard changes"
 msgstr "放棄變更"
 
+#. If the user cancels, do not omit (the default) but actually cancel
+#: source/app/service-providers/documents/index.ts:390
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
+#: source/tmp/win-assets/DefaultsTab.vue.ts:113
+#: source/tmp/win-assets/SnippetsTab.vue.ts:47
+#: source/tmp/win-assets/CustomCSS.vue.ts:34
+#: source/tmp/win-tag-manager/App.vue.ts:94
+msgid "Unsaved changes"
+msgstr "尚未儲存的修改"
+
 #: source/app/service-providers/documents/index.ts:391
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr "有些尚未儲存的修改。您要放棄它們還是要存檔？"
 
-#: source/app/service-providers/documents/index.ts:1038
+#: source/app/service-providers/documents/index.ts:1039
 msgid "File changed on disk"
 msgstr "檔案在磁碟上已變更"
 
-#: source/app/service-providers/documents/index.ts:1039
+#: source/app/service-providers/documents/index.ts:1040
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s 在磁碟上已變更"
 
-#: source/app/service-providers/documents/index.ts:1041
+#: source/app/service-providers/documents/index.ts:1042
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -971,129 +932,158 @@ msgstr ""
 "%s 在磁碟上已變更，但編輯器中有尚未儲存的修改。您要保留目前的編輯器內容還是從"
 "磁碟載入檔案？"
 
-#: source/app/service-providers/documents/index.ts:1042
+#: source/app/service-providers/documents/index.ts:1043
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr "您要保留目前的編輯器內容還是從磁碟載入檔案？"
 
-#: source/app/service-providers/documents/index.ts:1045
+#: source/app/service-providers/documents/index.ts:1046
 msgid "Keep editor contents"
 msgstr "保留編輯器內容"
 
-#: source/app/service-providers/documents/index.ts:1046
+#: source/app/service-providers/documents/index.ts:1047
 msgid "Load changes from disk"
 msgstr "從磁碟載入變更"
 
-#: source/app/service-providers/documents/index.ts:1049
+#: source/app/service-providers/documents/index.ts:1050
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr "如果編輯器中沒有尚未儲存的修改，則總是從磁碟載入變更"
 
-#: source/app/service-providers/documents/index.ts:1518
+#: source/app/service-providers/documents/index.ts:1521
 msgid "Could not save file"
 msgstr "無法儲存檔案"
 
-#: source/app/service-providers/documents/index.ts:1518
+#: source/app/service-providers/documents/index.ts:1521
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "無法儲存檔案 %s：%s"
 
-#: source/win-main/file-manager/util/file-item-context.ts:29
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
+msgid "There are unsaved changes. Do you want to save them first?"
+msgstr "有些尚未儲存的修改。您要先儲存它們嗎？"
+
+#: source/app/service-providers/windows/dialog/ask-file.ts:54
+msgid "Open file"
+msgstr "開啟檔案"
+
+#: source/app/service-providers/windows/dialog/save-dialog.ts:58
+msgid "Save file"
+msgstr "存檔"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
+msgid "Overwrite existing file"
+msgstr "覆蓋現有檔案"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#, javascript-format
+msgid "The file %s already exists in this directory. Overwrite?"
+msgstr "檔案 %s 已經存在，要覆蓋嗎？"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
+msgid "Replace file"
+msgstr "取代檔案"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#, javascript-format
+msgid ""
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
+msgstr "檔案 %s 已被遠端修改。要用磁碟上的新版本取代已載入的版本嗎？"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
+#: source/win-preferences/schema/general.ts:78
+msgid "Always load remote changes to the current file"
+msgstr "總是將遠端的修改載入到目前檔案"
+
+#: source/app/service-providers/windows/index.ts:247
+msgid "Open project folder"
+msgstr "開啟專案資料夾"
+
+#: source/win-main/tabs-context.ts:36
+msgid "Close tab"
+msgstr "關閉分頁"
+
+#: source/win-main/tabs-context.ts:42
+msgid "Close other tabs"
+msgstr "關閉其他分頁"
+
+#: source/win-main/tabs-context.ts:47
+msgid "Close all tabs"
+msgstr "關閉全部分頁"
+
+#: source/win-main/tabs-context.ts:56
+msgid "Unpin tab"
+msgstr "取消固定分頁"
+
+#: source/win-main/tabs-context.ts:56
+msgid "Pin tab"
+msgstr "固定分頁"
+
+#: source/win-main/tabs-context.ts:64
+#: source/win-main/file-manager/util/file-item-context.ts:66
+msgid "Copy filename"
+msgstr "複製檔案名稱"
+
+#: source/win-main/tabs-context.ts:69
+#: source/win-main/file-manager/util/file-item-context.ts:61
+#: source/win-main/file-manager/util/dir-item-context.ts:62
+msgid "Copy path"
+msgstr "複製路徑"
+
+#: source/win-main/file-manager/util/file-item-context.ts:28
 #: source/tmp/win-main/GlobalSearch.vue.ts:54
 msgid "Open in new tab"
 msgstr "在新標籤中開啟"
 
-#: source/win-main/file-manager/util/file-item-context.ts:35
-#: source/win-main/file-manager/util/dir-item-context.ts:29
+#: source/win-main/file-manager/util/file-item-context.ts:33
+#: source/win-main/file-manager/util/dir-item-context.ts:28
 msgid "Properties"
 msgstr "內容"
 
-#: source/win-main/file-manager/util/file-item-context.ts:51
+#: source/win-main/file-manager/util/file-item-context.ts:47
 msgid "Duplicate file"
 msgstr "建立檔案複本"
 
-#: source/win-main/file-manager/util/file-item-context.ts:67
-#: source/win-main/file-manager/util/dir-item-context.ts:68
-#: source/win-main/tabs-context.ts:74
-msgid "Copy path"
-msgstr "複製路徑"
-
-#: source/win-main/file-manager/util/file-item-context.ts:73
-#: source/win-main/tabs-context.ts:68
-msgid "Copy filename"
-msgstr "複製檔案名稱"
-
-#: source/win-main/file-manager/util/file-item-context.ts:88
-#: source/win-main/file-manager/util/dir-item-context.ts:77
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:119
+#: source/win-main/file-manager/util/file-item-context.ts:80
+#: source/win-main/file-manager/util/dir-item-context.ts:70
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:114
 msgid "Reveal in Finder"
 msgstr "在 Finder 中顯示"
 
-#: source/win-main/file-manager/util/file-item-context.ts:88
-#: source/win-main/file-manager/util/dir-item-context.ts:77
+#: source/win-main/file-manager/util/file-item-context.ts:80
+#: source/win-main/file-manager/util/dir-item-context.ts:70
 msgid "Reveal in Explorer"
 msgstr "在 Explorer 中顯示"
 
-#: source/win-main/file-manager/util/file-item-context.ts:88
-#: source/win-main/file-manager/util/dir-item-context.ts:77
+#: source/win-main/file-manager/util/file-item-context.ts:80
+#: source/win-main/file-manager/util/dir-item-context.ts:70
 msgid "Reveal in File Browser"
 msgstr "在檔案瀏覽器中顯示"
 
-#: source/win-main/file-manager/util/file-item-context.ts:101
+#: source/win-main/file-manager/util/file-item-context.ts:92
 msgid "Close file"
 msgstr "關閉檔案"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:53
+#: source/win-main/file-manager/util/dir-item-context.ts:49
 msgid "Rename directory"
 msgstr "重新命名目錄"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:59
+#: source/win-main/file-manager/util/dir-item-context.ts:54
 msgid "Delete directory"
 msgstr "刪除目錄"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:88
+#: source/win-main/file-manager/util/dir-item-context.ts:80
 msgid "Check for directory …"
 msgstr "檢查目錄…"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:105
+#: source/win-main/file-manager/util/dir-item-context.ts:96
 msgid "Export Project"
 msgstr "匯出專案"
 
-#: source/win-main/file-manager/util/dir-item-context.ts:117
+#: source/win-main/file-manager/util/dir-item-context.ts:108
 msgid "Close workspace"
 msgstr "關閉工作區"
-
-#: source/win-main/tabs-context.ts:38
-msgid "Close tab"
-msgstr "關閉分頁"
-
-#: source/win-main/tabs-context.ts:44
-msgid "Close other tabs"
-msgstr "關閉其他分頁"
-
-#: source/win-main/tabs-context.ts:50
-msgid "Close all tabs"
-msgstr "關閉全部分頁"
-
-#: source/win-main/tabs-context.ts:59
-msgid "Unpin tab"
-msgstr "取消固定分頁"
-
-#: source/win-main/tabs-context.ts:59
-msgid "Pin tab"
-msgstr "固定分頁"
-
-#: source/common/util/localise-number.ts:28
-msgid ","
-msgstr ","
-
-#: source/common/util/localise-number.ts:29
-msgid "."
-msgstr "."
-
-#: source/common/util/format-date.ts:33
-msgid "just now"
-msgstr "剛剛"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
@@ -1320,226 +1310,267 @@ msgid "Georgian"
 msgstr "喬治亞語"
 
 #: source/common/util/map-lang-code.ts:89
+msgid "Kazakh"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:90
 msgid "Khmer (Cambodia)"
 msgstr "高棉語（柬埔寨）"
 
-#: source/common/util/map-lang-code.ts:90
+#: source/common/util/map-lang-code.ts:91
 msgid "Korean"
 msgstr "韓語"
 
-#: source/common/util/map-lang-code.ts:91
+#: source/common/util/map-lang-code.ts:92
 msgid "Latin"
 msgstr "拉丁語"
 
-#: source/common/util/map-lang-code.ts:92
+#: source/common/util/map-lang-code.ts:93
 msgid "Luxembourgian"
 msgstr "盧森堡語"
 
-#: source/common/util/map-lang-code.ts:93
+#: source/common/util/map-lang-code.ts:94
 msgid "Lithuanian"
 msgstr "立陶宛語"
 
-#: source/common/util/map-lang-code.ts:94
+#: source/common/util/map-lang-code.ts:95
 msgid "Latvian"
 msgstr "拉脫維亞語"
 
-#: source/common/util/map-lang-code.ts:95
+#: source/common/util/map-lang-code.ts:96
 msgid "Macedonian"
 msgstr "馬其頓語"
 
-#: source/common/util/map-lang-code.ts:96
+#: source/common/util/map-lang-code.ts:97
 msgid "Mongolian"
 msgstr "蒙古語"
 
-#: source/common/util/map-lang-code.ts:97
+#: source/common/util/map-lang-code.ts:98
 msgid "Malaysian (Brunei Darussalam)"
 msgstr "馬來語（汶萊達魯薩蘭國）"
 
-#: source/common/util/map-lang-code.ts:98
+#: source/common/util/map-lang-code.ts:99
 msgid "Malaysian (Malaysia)"
 msgstr "馬來語（馬來西亞）"
 
-#: source/common/util/map-lang-code.ts:99
+#: source/common/util/map-lang-code.ts:100
 msgid "Malaysian"
 msgstr "馬來語"
 
-#: source/common/util/map-lang-code.ts:100
+#: source/common/util/map-lang-code.ts:101
 msgid "Norwegian (Bokmål)"
 msgstr "挪威語（書面語）"
 
-#: source/common/util/map-lang-code.ts:101
+#: source/common/util/map-lang-code.ts:102
 msgid "Nepalese"
 msgstr "尼泊爾語"
 
-#: source/common/util/map-lang-code.ts:102
+#: source/common/util/map-lang-code.ts:103
 msgid "Dutch (Belgium)"
 msgstr "荷蘭語（比利時）"
 
-#: source/common/util/map-lang-code.ts:103
+#: source/common/util/map-lang-code.ts:104
 msgid "Dutch (Netherlands)"
 msgstr "荷蘭語（荷蘭）"
 
-#: source/common/util/map-lang-code.ts:104
+#: source/common/util/map-lang-code.ts:105
 msgid "Dutch"
 msgstr "荷蘭語"
 
-#: source/common/util/map-lang-code.ts:105
+#: source/common/util/map-lang-code.ts:106
 msgid "Norwegian (Nyorsk)"
 msgstr "挪威語（尼諾斯克）"
 
-#: source/common/util/map-lang-code.ts:106
+#: source/common/util/map-lang-code.ts:107
 msgid "Norwegian"
 msgstr "挪威語"
 
-#: source/common/util/map-lang-code.ts:107
+#: source/common/util/map-lang-code.ts:108
 msgid "Polish"
 msgstr "波蘭語"
 
-#: source/common/util/map-lang-code.ts:108
+#: source/common/util/map-lang-code.ts:109
 msgid "Portuguese (Angola)"
 msgstr "葡萄牙語（安哥拉）"
 
-#: source/common/util/map-lang-code.ts:109
+#: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Brazil)"
 msgstr "葡萄牙語（巴西）"
 
-#: source/common/util/map-lang-code.ts:110
+#: source/common/util/map-lang-code.ts:111
 msgid "Portuguese (Mozambique)"
 msgstr "葡萄牙語（莫三比克）"
 
-#: source/common/util/map-lang-code.ts:111
+#: source/common/util/map-lang-code.ts:112
 msgid "Portuguese (Portugal)"
 msgstr "葡萄牙語（葡萄牙）"
 
-#: source/common/util/map-lang-code.ts:112
+#: source/common/util/map-lang-code.ts:113
 msgid "Portuguese"
 msgstr "葡萄牙語"
 
-#: source/common/util/map-lang-code.ts:113
+#: source/common/util/map-lang-code.ts:114
 msgid "Romanian"
 msgstr "羅馬尼亞語"
 
-#: source/common/util/map-lang-code.ts:114
+#: source/common/util/map-lang-code.ts:115
 msgid "Russian"
 msgstr "俄語"
 
-#: source/common/util/map-lang-code.ts:115
+#: source/common/util/map-lang-code.ts:116
 msgid "Rwandan (Kinyarwanda)"
 msgstr "盧安達語（基尼亞盧安達語）"
 
-#: source/common/util/map-lang-code.ts:116
+#: source/common/util/map-lang-code.ts:117
 msgid "Slovakian"
 msgstr "斯洛伐克語"
 
-#: source/common/util/map-lang-code.ts:117
+#: source/common/util/map-lang-code.ts:118
 msgid "Slovenian"
 msgstr "斯洛維尼亞語"
 
-#: source/common/util/map-lang-code.ts:118
+#: source/common/util/map-lang-code.ts:119
 msgid "Serbian"
 msgstr "塞爾維亞語"
 
-#: source/common/util/map-lang-code.ts:119
+#: source/common/util/map-lang-code.ts:120
 msgid "Albanian"
 msgstr "阿爾巴尼亞語"
 
-#: source/common/util/map-lang-code.ts:120
+#: source/common/util/map-lang-code.ts:121
 msgid "Albanian (Albania)"
 msgstr "阿爾巴尼亞語（阿爾巴尼亞）"
 
-#: source/common/util/map-lang-code.ts:121
+#: source/common/util/map-lang-code.ts:122
 msgid "Swedish"
 msgstr "瑞典語"
 
-#: source/common/util/map-lang-code.ts:122
+#: source/common/util/map-lang-code.ts:123
 msgid "Tamil (India)"
 msgstr "泰米爾語（印度）"
 
-#: source/common/util/map-lang-code.ts:123
+#: source/common/util/map-lang-code.ts:124
 msgid "Thai"
 msgstr "泰語"
 
-#: source/common/util/map-lang-code.ts:124
+#: source/common/util/map-lang-code.ts:125
 msgid "Tagalog (Filipino)"
 msgstr "塔加路語（菲律賓語）"
 
-#: source/common/util/map-lang-code.ts:125
+#: source/common/util/map-lang-code.ts:126
 msgid "Turkish"
 msgstr "土耳其語"
 
-#: source/common/util/map-lang-code.ts:126
+#: source/common/util/map-lang-code.ts:127
 msgid "Ukrainian"
 msgstr "烏克蘭語"
 
-#: source/common/util/map-lang-code.ts:127
+#: source/common/util/map-lang-code.ts:128
 msgid "Urdu"
 msgstr "烏爾都語"
 
-#: source/common/util/map-lang-code.ts:128
+#: source/common/util/map-lang-code.ts:129
 msgid "Vietnamese"
 msgstr "越南語"
 
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
-#: source/common/util/map-lang-code.ts:131
+#: source/common/util/map-lang-code.ts:132
 msgid "Sorbian"
 msgstr "索布語"
 
-#: source/common/util/map-lang-code.ts:132
+#: source/common/util/map-lang-code.ts:133
 msgid "Chinese (China)"
 msgstr "簡體中文（中國大陸）"
 
-#: source/common/util/map-lang-code.ts:133
+#: source/common/util/map-lang-code.ts:134
 msgid "Chinese (Taiwan)"
 msgstr "正體中文（臺灣）"
 
-#: source/common/util/map-lang-code.ts:134
+#: source/common/util/map-lang-code.ts:135
 msgid "Chinese"
 msgstr "中文"
 
-#: source/common/modules/markdown-editor/statusbar/language-tool.ts:146
-msgid "Detect automatically"
-msgstr "自動偵測"
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr "剛剛"
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:131
-msgid "Disabled"
-msgstr "已停用"
+#: source/common/util/localise-number.ts:28
+msgid ","
+msgstr ","
 
-#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:138
-msgid "Custom"
-msgstr "自訂"
+#: source/common/util/localise-number.ts:29
+msgid "."
+msgstr "."
 
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:54
-#: source/common/modules/markdown-editor/plugins/project-info-field.ts:78
-#: source/tmp/win-main/PopoverDocInfo.vue.ts:53
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:124
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:187
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:145
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:56
-#: source/tmp/win-main/App.vue.ts:236
+#: source/common/modules/markdown-editor/renderers/render-images.ts:124
 #, javascript-format
-msgid "%s words"
-msgstr "%s 字"
+msgid "Image not found: %s"
+msgstr "找不到圖片：%s"
 
-#: source/common/modules/markdown-editor/statusbar/info-fields.ts:74
-#: source/common/modules/markdown-editor/plugins/project-info-field.ts:77
+#: source/common/modules/markdown-editor/renderers/render-images.ts:199
+msgid "Open image externally"
+msgstr "在外部開啟圖片"
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:56
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
+msgid "Rendering mermaid graph …"
+msgstr "正在繪製 mermaid 圖表…"
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:61
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:80
+msgid "Could not render Graph:"
+msgstr "無法繪製圖表："
+
+#: source/common/modules/markdown-editor/renderers/index.ts:137
+msgid "Preview"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/index.ts:137
+msgid "Raw"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/index.ts:136
+#, javascript-format
+msgid "Rendering: %s"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/index.ts:139
+msgid "Enable or disable the preview mode for Markdown files by clicking"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr "可讀性模式（%s）"
+
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
+msgstr "無醒目標示"
+
+#: source/common/modules/markdown-editor/plugins/project-info-field.ts:76
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:51
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:122
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:185
 #: source/tmp/win-main/App.vue.ts:235
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:122
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:191
 #, javascript-format
 msgid "%s characters"
 msgstr "%s 字元"
 
-#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
-msgid "Open diagnostics panel"
-msgstr "開啟診斷面板"
+#: source/common/modules/markdown-editor/plugins/project-info-field.ts:77
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:53
+#: source/tmp/win-main/App.vue.ts:236
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:145
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:56
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:124
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:193
+#, javascript-format
+msgid "%s words"
+msgstr "%s 字"
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
-msgid "Spelling mistake"
-msgstr "拼字錯誤"
-
-#: source/common/modules/markdown-editor/plugins/project-info-field.ts:83
+#: source/common/modules/markdown-editor/plugins/project-info-field.ts:82
 #, javascript-format
 msgid "This file is part of project \"%s\""
 msgstr "此檔案是專案「%s」的一部分"
@@ -1548,20 +1579,251 @@ msgstr "此檔案是專案「%s」的一部分"
 msgid "Go to footnote reference"
 msgstr "前往註腳參考"
 
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:144
+msgid "Detect automatically"
+msgstr "自動偵測"
+
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Toggle diagnostics panel"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:130
+msgid "Disabled"
+msgstr "已停用"
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:136
+msgid "Custom"
+msgstr "自訂"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:8
+msgid "Row"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:14
+msgid "Insert new row above"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:19
+msgid "Insert new row below"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:25
+msgid "Move row up"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:30
+msgid "Move row down"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:36
+msgid "Clear row"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:41
+msgid "Delete row"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:48
+msgid "Column"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:53
+msgid "Insert new column left"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:58
+msgid "Insert new column right"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:64
+msgid "Move column left"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:69
+msgid "Move column right"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:75
+msgid "Align column text left"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:80
+msgid "Align column text center"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:85
+msgid "Align column text right"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:104
+msgid "Clear column"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:109
+msgid "Delete column"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:116
+msgid "Table"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:121
+msgid "Clear table"
+msgstr ""
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:126
+msgid "Delete table"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:30
+msgid "Copy equation code"
+msgstr "複製方程式程式碼"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:145
+msgid "No suggestions"
+msgstr "沒有建議"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:154
+msgid "Add to dictionary"
+msgstr "新增到字典"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:163
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
+#: source/win-preferences/schema/editor.ts:147
+#: source/win-preferences/schema/editor.ts:148
+msgid "Bold"
+msgstr "粗體"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
+msgid "Italic"
+msgstr "斜體"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:178
+#: source/tmp/win-main/App.vue.ts:343
+msgid "Insert link"
+msgstr "插入連結"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:184
+msgid "Insert unordered list"
+msgstr "插入無編號列表"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:189
+msgid "Insert numbered list"
+msgstr "插入編號列表"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:194
+#: source/tmp/win-main/App.vue.ts:357
+msgid "Insert task list"
+msgstr "插入任務清單"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:200
+msgid "Insert blockquote"
+msgstr "插入引言區塊"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:205
+#: source/tmp/win-main/App.vue.ts:364
+msgid "Insert table"
+msgstr "插入表格"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:255
+msgid "Transform"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:260
+msgid "Zap gremlins"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:265
+msgid "Strip duplicate spaces"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:270
+msgid "Italics to quotes"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:275
+msgid "Quotes to italics"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:280
+msgid "Remove line breaks"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:288
+msgid "Straighten quotes"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:293
+msgid "Ensure double quotes"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:298
+msgid "Double quotes to single"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:303
+msgid "Single quotes to double"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:311
+msgid "Emdash — Add spaces around"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:316
+msgid "Emdash — Remove spaces around"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:324
+msgid "To sentence case"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:329
+msgid "To title case"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
+msgid "Open link"
+msgstr "開啟連結"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:88
+msgid "Copy email address"
+msgstr "複製 E-mail 信箱"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:88
+msgid "Copy link"
+msgstr "複製連結"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:93
+msgid "Remove link"
+msgstr "移除連結"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:103
+msgid "Copy image to clipboard"
+msgstr "複製圖片到剪貼簿"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:109
+msgid "Open image"
+msgstr "開啟圖片"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:114
+msgid "Open in File Browser"
+msgstr "在檔案瀏覽器中開啟"
+
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
+msgid "Spelling mistake"
+msgstr "拼字錯誤"
+
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
+msgid "No footnote text found."
+msgstr "找不到註腳文字。"
+
 #: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:75
 msgid "Fetching link preview…"
 msgstr "正在取得連結預覽…"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/win-preferences/schema/editor.ts:126
-#: source/win-preferences/schema/editor.ts:127
-msgid "Bold"
-msgstr "粗體"
-
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:49
-#: source/win-preferences/schema/editor.ts:134
-#: source/win-preferences/schema/editor.ts:135
+#: source/win-preferences/schema/editor.ts:155
+#: source/win-preferences/schema/editor.ts:156
 msgid "Italics"
 msgstr "斜體"
 
@@ -1582,10 +1844,6 @@ msgstr "註解"
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Code"
 msgstr "程式碼"
-
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
-msgid "No footnote text found."
-msgstr "找不到註腳文字。"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:67
 #, javascript-format
@@ -1610,329 +1868,9 @@ msgstr "開啟…"
 msgid "Open in a new tab"
 msgstr "在新分頁開啟"
 
-#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
-msgid "No highlighting"
-msgstr "無醒目標示"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:82
-msgid "Open link"
-msgstr "開啟連結"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:91
-msgid "Copy email address"
-msgstr "複製 E-mail 信箱"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:91
-msgid "Copy link"
-msgstr "複製連結"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:97
-msgid "Remove link"
-msgstr "移除連結"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:107
-msgid "Copy image to clipboard"
-msgstr "複製圖片到剪貼簿"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:113
-msgid "Open image"
-msgstr "開啟圖片"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:119
-msgid "Open in File Browser"
-msgstr "在檔案瀏覽器中開啟"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
-msgid "No suggestions"
-msgstr "沒有建議"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
-msgid "Add to dictionary"
-msgstr "新增到字典"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
-msgid "Italic"
-msgstr "斜體"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
-#: source/tmp/win-main/App.vue.ts:343
-msgid "Insert link"
-msgstr "插入連結"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
-msgid "Insert unordered list"
-msgstr "插入無編號列表"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
-msgid "Insert numbered list"
-msgstr "插入編號列表"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
-#: source/tmp/win-main/App.vue.ts:357
-msgid "Insert task list"
-msgstr "插入任務清單"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
-msgid "Insert blockquote"
-msgstr "插入引言區塊"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
-#: source/tmp/win-main/App.vue.ts:364
-msgid "Insert table"
-msgstr "插入表格"
-
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:31
-msgid "Copy equation code"
-msgstr "複製方程式程式碼"
-
-#: source/common/modules/markdown-editor/renderers/readability.ts:39
-#, javascript-format
-msgid "Readability mode (%s)"
-msgstr "可讀性模式（%s）"
-
-#: source/common/modules/markdown-editor/renderers/render-images.ts:122
-#, javascript-format
-msgid "Image not found: %s"
-msgstr "找不到圖片：%s"
-
-#: source/common/modules/markdown-editor/renderers/render-images.ts:197
-msgid "Open image externally"
-msgstr "在外部開啟圖片"
-
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:54
-msgid "Rendering mermaid graph …"
-msgstr "正在繪製 mermaid 圖表…"
-
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:59
-msgid "Could not render Graph:"
-msgstr "無法繪製圖表："
-
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
 msgstr "按下 Cmd/Ctrl 鍵並點選以跟隨連結"
-
-#: source/tmp/win-update/App.vue.ts:31
-msgid "Updater"
-msgstr "更新管理員"
-
-#: source/tmp/win-update/App.vue.ts:32
-msgid "New update available"
-msgstr "有新的更新可用"
-
-#: source/tmp/win-update/App.vue.ts:33
-msgid "Your version"
-msgstr "您的版本"
-
-#: source/tmp/win-update/App.vue.ts:34
-msgid ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
-msgstr "有新版本的 Zettlr 可供下載。請閱讀下方的更新日誌。"
-
-#: source/tmp/win-update/App.vue.ts:35
-msgid "Downloading your update"
-msgstr "正在下載更新"
-
-#: source/tmp/win-update/App.vue.ts:36
-msgid "No update available. You have the most recent version."
-msgstr "不需要更新，已經是最新版本了。"
-
-#: source/tmp/win-update/App.vue.ts:42
-msgid "Click to start update"
-msgstr "點選此處開始更新"
-
-#: source/tmp/win-update/App.vue.ts:45
-msgid "never"
-msgstr "從未"
-
-#: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
-#, javascript-format
-msgid "Last checked: %s"
-msgstr "上次檢查：%s"
-
-#: source/tmp/win-update/App.vue.ts:124
-msgid "Starting update …"
-msgstr "正在開始更新…"
-
-#: source/tmp/win-tag-manager/App.vue.ts:27
-msgid "Assign color"
-msgstr "指定顏色"
-
-#: source/tmp/win-tag-manager/App.vue.ts:28
-msgid "Remove color"
-msgstr "移除顏色"
-
-#: source/tmp/win-tag-manager/App.vue.ts:29
-msgid "Tag name"
-msgstr "標籤名稱"
-
-#: source/tmp/win-tag-manager/App.vue.ts:30
-msgid "Color"
-msgstr "顏色"
-
-#: source/tmp/win-tag-manager/App.vue.ts:31
-#: source/tmp/win-main/PopoverTags.vue.ts:40
-msgid "Count"
-msgstr "數量"
-
-#: source/tmp/win-tag-manager/App.vue.ts:32
-msgid "A short description"
-msgstr "簡短描述"
-
-#: source/tmp/win-tag-manager/App.vue.ts:33
-msgid ""
-"Here you can assign colors to different tags. If a tag is found in a file, "
-"its tile in the preview list will receive a colored indicator. The "
-"description will be shown on mouse hover."
-msgstr ""
-"在這裡您可以為不同的標籤指定顏色。如果在檔案中找到標籤，預覽列表中的標籤將顯"
-"示顏色指示。將滑鼠移到標籤上時會顯示描述。"
-
-#: source/tmp/win-tag-manager/App.vue.ts:35
-#: source/tmp/win-main/PopoverTags.vue.ts:47
-msgid "Filter tags…"
-msgstr "篩選標籤…"
-
-#: source/tmp/win-tag-manager/App.vue.ts:36
-msgid "New tag"
-msgstr "新標籤"
-
-#: source/tmp/win-tag-manager/App.vue.ts:37
-msgid "Rename"
-msgstr "重新命名"
-
-#: source/tmp/win-tag-manager/App.vue.ts:38
-msgid "Rename tag…"
-msgstr "重新命名標籤…"
-
-#: source/tmp/win-paste-image/App.vue.ts:57
-msgid "Insert Image from Clipboard"
-msgstr "從剪貼簿插入圖片"
-
-#: source/tmp/win-paste-image/App.vue.ts:58
-#: source/win-preferences/schema/editor.ts:214
-msgid "Image size"
-msgstr "圖片大小"
-
-#: source/tmp/win-paste-image/App.vue.ts:59
-msgid "Retain aspect ratio"
-msgstr "保持長寬比例"
-
-#: source/tmp/win-paste-image/App.vue.ts:60
-msgid "Resize image to"
-msgstr "調整圖片大小為"
-
-#: source/tmp/win-paste-image/App.vue.ts:61
-msgid "Filename"
-msgstr "檔案名稱"
-
-#: source/tmp/win-paste-image/App.vue.ts:62
-#: source/tmp/win-paste-image/App.vue.ts:63
-msgid "A unique filename"
-msgstr "唯一的檔案名稱"
-
-#: source/tmp/win-splash-screen/App.vue.ts:22
-msgid "Loading…"
-msgstr "載入中…"
-
-#: source/tmp/win-about/App.vue.ts:41
-msgid "Other projects"
-msgstr "其他專案"
-
-#: source/tmp/win-about/App.vue.ts:47
-msgid "Sponsors"
-msgstr "贊助者"
-
-#: source/tmp/win-about/App.vue.ts:53
-msgid "License"
-msgstr "授權"
-
-#: source/tmp/win-about/General-Tab.vue.ts:21
-msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
-msgstr ""
-"Zettlr 是由 Hendrik Erz 發起的專案，採用 GNU GPL v3 授權條款。它是開源、免費"
-"的，並且基於 Electron 框架開發。在此感謝 Electron、Node.js 和 CodeMirror 編輯"
-"器的開發者們。若沒有他們的貢獻，Zettlr 就不可能誕生。以下列出 Zettlr 使用到的"
-"所有專案。"
-
-#: source/tmp/win-about/General-Tab.vue.ts:22
-msgid ""
-"Zettlr makes use of citeproc to display citations directly in the editor. To "
-"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
-msgstr ""
-"Zettlr 使用 citeproc 直接在編輯器中顯示引用文字。Zettlr 使用 "
-"CitationStyleLanguage（CSL）語言和樣式檔案。這些檔案皆未被更動，並且保留了所"
-"有原始作者資訊。了解更多："
-
-#: source/tmp/win-about/General-Tab.vue.ts:23
-msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
-msgstr ""
-"所有商標和品牌名稱相關的權利歸其合法所有人。除了使用它們的程式碼之外，Zettlr "
-"與這些專案無任何關聯。Node.js 是 Joyent, Inc. 的商標。"
-
-#: source/tmp/win-about/General-Tab.vue.ts:24
-msgid ""
-"Zettlr offers an integration with LanguageTool.org, a service provided by "
-"LanguageTooler GmbH. Using this service requires an internet connection and "
-"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
-"server that you use."
-msgstr ""
-"Zettlr 提供了與 LanguageTool.org 的整合，LanguageTool.org 是由 "
-"LanguageTooler GmbH 提供的服務。使用此服務需要網路連線，並受到 "
-"LanguageTooler GmbH 或您對應使用伺服器的隱私政策約束。"
-
-#: source/tmp/win-about/Projects-Tab.vue.ts:19
-msgid "Zettlr also makes use of these projects:"
-msgstr "Zettlr 也使用了這些專案："
-
-#: source/tmp/win-assets/CustomCSS.vue.ts:23
-msgid ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted behaviour!</"
-"strong>"
-msgstr ""
-"在這裡您可以自訂 Zettlr 的樣式。<strong>注意：此檔案會覆蓋所有 CSS 指令！不要"
-"隨意改動元素的幾何參數，否則應用程式可能會出現無法預期的行為！</strong>"
-
-#: source/tmp/win-assets/CustomCSS.vue.ts:56
-#: source/tmp/win-assets/DefaultsTab.vue.ts:180
-#: source/tmp/win-assets/SnippetsTab.vue.ts:106
-msgid "Saving …"
-msgstr "儲存中…"
-
-#: source/tmp/win-assets/CustomCSS.vue.ts:66
-msgid "Saving failed"
-msgstr "儲存失敗"
-
-#: source/tmp/win-assets/App.vue.ts:21
-msgid "Exporting"
-msgstr "匯出中"
-
-#: source/tmp/win-assets/App.vue.ts:27
-msgid "Importing"
-msgstr "匯入中"
-
-#: source/tmp/win-assets/App.vue.ts:33
-#: source/win-preferences/schema/appearance.ts:218
-msgid "Custom CSS"
-msgstr "自訂 CSS"
-
-#: source/tmp/win-assets/App.vue.ts:39
-#: source/tmp/win-preferences/App.vue.ts:180
-#: source/win-preferences/schema/snippets.ts:24
-msgid "Snippets"
-msgstr "小片段"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:56
 msgid ""
@@ -1954,10 +1892,35 @@ msgstr "開啟預設資料夾"
 msgid "Edit the default settings for imports or exports here."
 msgstr "在這裡編輯匯入或匯出的預設設定。"
 
+#: source/tmp/win-assets/DefaultsTab.vue.ts:180
+#: source/tmp/win-assets/SnippetsTab.vue.ts:106
+#: source/tmp/win-assets/CustomCSS.vue.ts:56
+msgid "Saving …"
+msgstr "儲存中…"
+
 #: source/tmp/win-assets/DefaultsTab.vue.ts:190
 #: source/tmp/win-assets/SnippetsTab.vue.ts:116
 msgid "Saved!"
 msgstr "已儲存！"
+
+#: source/tmp/win-assets/App.vue.ts:21
+msgid "Exporting"
+msgstr "匯出中"
+
+#: source/tmp/win-assets/App.vue.ts:27
+msgid "Importing"
+msgstr "匯入中"
+
+#: source/tmp/win-assets/App.vue.ts:33
+#: source/win-preferences/schema/appearance.ts:218
+msgid "Custom CSS"
+msgstr "自訂 CSS"
+
+#: source/tmp/win-assets/App.vue.ts:39
+#: source/tmp/win-preferences/App.vue.ts:180
+#: source/win-preferences/schema/snippets.ts:24
+msgid "Snippets"
+msgstr "小片段"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:29
 msgid "Rename snippet"
@@ -1971,6 +1934,125 @@ msgstr "「小片段」讓您定義可以重複使用的文字片段，並可包
 msgid "Open snippets folder"
 msgstr "開啟小片段資料夾"
 
+#: source/tmp/win-assets/CustomCSS.vue.ts:23
+msgid ""
+"Here you can override the styles of Zettlr to customise it even further. "
+"<strong>Attention: This file overrides all CSS directives! Never alter the "
+"geometry of elements, otherwise the app may expose unwanted behaviour!</"
+"strong>"
+msgstr ""
+"在這裡您可以自訂 Zettlr 的樣式。<strong>注意：此檔案會覆蓋所有 CSS 指令！不要"
+"隨意改動元素的幾何參數，否則應用程式可能會出現無法預期的行為！</strong>"
+
+#: source/tmp/win-assets/CustomCSS.vue.ts:66
+msgid "Saving failed"
+msgstr "儲存失敗"
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
+msgid "Related files"
+msgstr "相關檔案"
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
+msgid "No related files"
+msgstr "沒有相關檔案"
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
+msgid "This relation is based on a bidirectional link."
+msgstr "此關聯基於雙向連結。"
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
+msgid "This relation is based on an outbound link."
+msgstr "此關聯基於外部連結。"
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
+msgid "This relation is based on a backlink."
+msgstr "此關聯基於反向連結。"
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:227
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr "此關聯基於 %s 個共用標籤： %s"
+
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
+#: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
+#: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
+msgid "Table of contents"
+msgstr "目次"
+
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
+#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:36
+msgid "References"
+msgstr "參考"
+
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:24
+msgid "Other files"
+msgstr "其他檔案"
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:25
+msgid "Open directory"
+msgstr "開啟目錄"
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:26
+msgid "No other files"
+msgstr "沒有其他檔案"
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:45
+msgid "Current folder"
+msgstr "目前資料夾"
+
+#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:46
+msgid "There are no citations in this document."
+msgstr "這份文件沒有引文。"
+
+#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:67
+#, javascript-format
+msgid "circa %s words"
+msgstr "大約 %s 字"
+
+#: source/tmp/win-main/PopoverTags.vue.ts:39
+msgid "Name"
+msgstr "名稱"
+
+#: source/tmp/win-main/PopoverTags.vue.ts:40
+#: source/tmp/win-tag-manager/App.vue.ts:31
+msgid "Count"
+msgstr "數量"
+
+#: source/tmp/win-main/PopoverTags.vue.ts:47
+#: source/tmp/win-tag-manager/App.vue.ts:35
+msgid "Filter tags…"
+msgstr "篩選標籤…"
+
+#: source/tmp/win-main/PopoverTags.vue.ts:48
+msgid "Tag Cloud"
+msgstr "標籤雲"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:29
+msgid "Temporary directory"
+msgstr "暫存目錄"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:30
+msgid "Current directory"
+msgstr "目前目錄"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:31
+msgid "Select directory"
+msgstr "選擇目錄"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:64
+msgid "Exporting…"
+msgstr "匯出中…"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:64
+msgid "Export"
+msgstr "匯出"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:77
+msgid "command"
+msgstr "指令"
+
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:21
 msgid "words"
 msgstr "字數"
@@ -1982,6 +2064,134 @@ msgstr "字元"
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:23
 msgid "No open document"
 msgstr "沒有開啟的文件"
+
+#: source/tmp/win-main/PopoverTable.vue.ts:30
+#, javascript-format
+msgid "Table size: %s &times; %s"
+msgstr "表格大小：%s &times; %s"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:29
+msgid "words last month"
+msgstr "上個月的字數"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:30
+msgid "daily average"
+msgstr "日平均"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:31
+msgid "words today"
+msgstr "今天的字數"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:32
+msgid "🔥 You're on fire!"
+msgstr "🔥 你狀態超好！"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:33
+msgid "💪 You're close to hitting your daily average!"
+msgstr "💪 你快要達成每日平均了！"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:34
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr "✍🏼 開始寫作，來突破每日平均吧。"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:35
+msgid "More statistics …"
+msgstr "更多統計資料…"
+
+#: source/tmp/win-main/App.vue.ts:221
+#, javascript-format
+msgid "%s selected"
+msgstr "%s 已選擇"
+
+#. Multiple selections --> indicate
+#: source/tmp/win-main/App.vue.ts:230
+#, javascript-format
+msgid "%s selections"
+msgstr "%s 選擇"
+
+#: source/tmp/win-main/App.vue.ts:256
+#: source/tmp/win-main/GlobalSearch.vue.ts:34
+msgid "Search across all files"
+msgstr "在所有的檔案之中尋找"
+
+#: source/tmp/win-main/App.vue.ts:270
+msgid "View writing statistics"
+msgstr "檢視寫作統計資訊"
+
+#: source/tmp/win-main/App.vue.ts:276
+msgid "View Tag Cloud"
+msgstr "檢視標籤雲"
+
+#: source/tmp/win-main/App.vue.ts:283
+msgid "Open settings"
+msgstr "開啟設定"
+
+#: source/tmp/win-main/App.vue.ts:318
+msgid "Export current file"
+msgstr "匯出目前檔案"
+
+#: source/tmp/win-main/App.vue.ts:324
+msgid "Toggle readability mode"
+msgstr "切換可讀性模式"
+
+#: source/tmp/win-main/App.vue.ts:336
+msgid "Insert comment"
+msgstr "插入註解"
+
+#: source/tmp/win-main/App.vue.ts:350
+msgid "Insert image"
+msgstr "插入圖片"
+
+#: source/tmp/win-main/App.vue.ts:371
+msgid "Insert footnote"
+msgstr "插入註腳"
+
+#: source/tmp/win-main/App.vue.ts:389
+msgid "Pomodoro timer"
+msgstr "番茄鐘計時器"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:35
+msgid "Enter your search terms below"
+msgstr "在下方輸入搜尋字詞"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:36
+msgid "Find…"
+msgstr "尋找…"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:37
+#: source/tmp/win-main/file-manager/FileManager.vue.ts:46
+msgid "Filter…"
+msgstr "篩選…"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:38
+msgid "Filter search results"
+msgstr "篩選搜尋結果"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:39
+msgid "Restrict search to directory"
+msgstr "限制在目錄中搜尋"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:40
+msgid "Choose directory…"
+msgstr "選擇目錄…"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:41
+#: source/tmp/win-preferences/App.vue.ts:57
+msgid "Search"
+msgstr "搜尋"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:43
+msgid "Clear search"
+msgstr "清除搜尋"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:44
+msgid "Toggle results"
+msgstr "切換結果"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:117
+#, javascript-format
+msgid "%s matches across %s files"
+msgstr "%s 個符合項目於 %s 個檔案中"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:24
 #: source/win-preferences/schema/appearance.ts:52
@@ -2012,109 +2222,23 @@ msgstr "音效"
 msgid "Volume"
 msgstr "音量"
 
-#: source/tmp/win-main/sidebar/ToCTab.vue.ts:36
-#: source/tmp/win-main/sidebar/ToCTab.vue.ts:44
-#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
-msgid "Table of contents"
-msgstr "目次"
-
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
-#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
-msgid "Related files"
-msgstr "相關檔案"
-
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
-msgid "No related files"
-msgstr "沒有相關檔案"
-
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
-msgid "This relation is based on a bidirectional link."
-msgstr "此關聯基於雙向連結。"
-
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
-msgid "This relation is based on an outbound link."
-msgstr "此關聯基於外部連結。"
-
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
-msgid "This relation is based on a backlink."
-msgstr "此關聯基於反向連結。"
-
-#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:221
-#, javascript-format
-msgid "This relation is based on %s shared tags: %s"
-msgstr "此關聯基於 %s 個共用標籤： %s"
-
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:16
-#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
-msgid "Other files"
-msgstr "其他檔案"
-
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:17
-msgid "Open directory"
-msgstr "開啟目錄"
-
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:18
-msgid "No other files"
-msgstr "沒有其他檔案"
-
-#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:37
-msgid "Current folder"
-msgstr "目前資料夾"
-
-#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:35
-#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
-msgid "References"
-msgstr "參考"
-
-#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:45
-msgid "There are no citations in this document."
-msgstr "這份文件沒有引文。"
-
-#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:66
-#, javascript-format
-msgid "circa %s words"
-msgstr "大約 %s 字"
-
-#: source/tmp/win-main/PopoverTags.vue.ts:39
-msgid "Name"
-msgstr "名稱"
-
-#: source/tmp/win-main/PopoverTags.vue.ts:48
-msgid "Tag Cloud"
-msgstr "標籤雲"
-
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:29
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:99
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:101
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:29
 msgid "Directories"
 msgstr "目錄"
-
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:106
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:108
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:32
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:76
-msgid "Files"
-msgstr "檔案"
-
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:172
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:39
-msgid "Characters"
-msgstr "字元"
-
-#: source/tmp/win-main/file-manager/FileItem.vue.ts:174
-#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:34
-msgid "Words"
-msgstr "字數"
-
-#: source/tmp/win-main/file-manager/FileManager.vue.ts:46
-#: source/tmp/win-main/GlobalSearch.vue.ts:38
-msgid "Filter…"
-msgstr "篩選…"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:31
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
 msgid "Created"
 msgstr "已建立"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:32
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:106
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:108
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:76
+msgid "Files"
+msgstr "檔案"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:33
 msgid "Project Settings…"
@@ -2142,10 +2266,10 @@ msgstr "降序"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
-#: source/tmp/common/vue/form/elements/TextControl.vue.ts:47
-#: source/tmp/common/vue/form/elements/ColorControl.vue.ts:35
-#: source/tmp/common/vue/form/elements/ShortcutChooser.vue.ts:61
 #: source/tmp/common/vue/form/elements/NumberControl.vue.ts:40
+#: source/tmp/common/vue/form/elements/TextControl.vue.ts:47
+#: source/tmp/common/vue/form/elements/ShortcutChooser.vue.ts:61
+#: source/tmp/common/vue/form/elements/ColorControl.vue.ts:35
 msgid "Reset"
 msgstr "重設"
 
@@ -2420,22 +2544,19 @@ msgstr "燒瓶"
 msgid "CD/DVD"
 msgstr "CD/DVD"
 
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:34
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:180
+msgid "Words"
+msgstr "字數"
+
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:38
 msgid "Set writing target…"
 msgstr "設定寫作目標…"
 
-#: source/tmp/win-main/file-manager/FileList.vue.ts:59
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:79
-msgid "No results"
-msgstr "沒有結果"
-
-#: source/tmp/win-main/file-manager/FileList.vue.ts:60
-msgid "No directory selected"
-msgstr "沒有選擇目錄"
-
-#: source/tmp/win-main/file-manager/FileList.vue.ts:61
-msgid "Empty directory"
-msgstr "空目錄"
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:39
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:178
+msgid "Characters"
+msgstr "字元"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:77
 msgid "Workspaces"
@@ -2445,172 +2566,325 @@ msgstr "工作區"
 msgid "No open files or folders"
 msgstr "沒有開啟的檔案或資料夾"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:29
-msgid "words last month"
-msgstr "上個月的字數"
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:79
+#: source/tmp/win-main/file-manager/FileList.vue.ts:60
+msgid "No results"
+msgstr "沒有結果"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:30
-msgid "daily average"
-msgstr "日平均"
+#: source/tmp/win-main/file-manager/FileList.vue.ts:61
+msgid "No directory selected"
+msgstr "沒有選擇目錄"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:31
-msgid "words today"
-msgstr "今天的字數"
+#: source/tmp/win-main/file-manager/FileList.vue.ts:62
+msgid "Empty directory"
+msgstr "空目錄"
 
-#: source/tmp/win-main/PopoverStats.vue.ts:32
-msgid "🔥 You're on fire!"
-msgstr "🔥 你狀態超好！"
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:58
+msgid "Open in system viewer"
+msgstr ""
 
-#: source/tmp/win-main/PopoverStats.vue.ts:33
-msgid "💪 You're close to hitting your daily average!"
-msgstr "💪 你快要達成每日平均了！"
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:62
+msgid "Use transparent background"
+msgstr ""
 
-#: source/tmp/win-main/PopoverStats.vue.ts:34
-msgid "✍🏼 Get writing to surpass your daily average."
-msgstr "✍🏼 開始寫作，來突破每日平均吧。"
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:63
+msgid "Use white background"
+msgstr ""
 
-#: source/tmp/win-main/PopoverStats.vue.ts:35
-msgid "More statistics …"
-msgstr "更多統計資料…"
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:64
+msgid "Use black background"
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:221
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:65
+msgid "Use checkerboard background"
+msgstr ""
+
+#: source/tmp/win-about/General-Tab.vue.ts:21
+msgid ""
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
+msgstr ""
+"Zettlr 是由 Hendrik Erz 發起的專案，採用 GNU GPL v3 授權條款。它是開源、免費"
+"的，並且基於 Electron 框架開發。在此感謝 Electron、Node.js 和 CodeMirror 編輯"
+"器的開發者們。若沒有他們的貢獻，Zettlr 就不可能誕生。以下列出 Zettlr 使用到的"
+"所有專案。"
+
+#: source/tmp/win-about/General-Tab.vue.ts:22
+msgid ""
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
+msgstr ""
+"Zettlr 使用 citeproc 直接在編輯器中顯示引用文字。Zettlr 使用 "
+"CitationStyleLanguage（CSL）語言和樣式檔案。這些檔案皆未被更動，並且保留了所"
+"有原始作者資訊。了解更多："
+
+#: source/tmp/win-about/General-Tab.vue.ts:23
+msgid ""
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
+msgstr ""
+"所有商標和品牌名稱相關的權利歸其合法所有人。除了使用它們的程式碼之外，Zettlr "
+"與這些專案無任何關聯。Node.js 是 Joyent, Inc. 的商標。"
+
+#: source/tmp/win-about/General-Tab.vue.ts:24
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
+"Zettlr 提供了與 LanguageTool.org 的整合，LanguageTool.org 是由 "
+"LanguageTooler GmbH 提供的服務。使用此服務需要網路連線，並受到 "
+"LanguageTooler GmbH 或您對應使用伺服器的隱私政策約束。"
+
+#: source/tmp/win-about/App.vue.ts:41
+msgid "Other projects"
+msgstr "其他專案"
+
+#: source/tmp/win-about/App.vue.ts:47
+msgid "Sponsors"
+msgstr "贊助者"
+
+#: source/tmp/win-about/App.vue.ts:53
+msgid "License"
+msgstr "授權"
+
+#: source/tmp/win-about/Projects-Tab.vue.ts:19
+msgid "Zettlr also makes use of these projects:"
+msgstr "Zettlr 也使用了這些專案："
+
+#: source/tmp/win-onboarding/pages/CitingPage.vue.ts:7
+#: source/tmp/win-preferences/App.vue.ts:170
+#: source/win-preferences/schema/citations.ts:22
+msgid "Citations"
+msgstr "引文"
+
+#: source/tmp/win-onboarding/pages/CitingPage.vue.ts:8
+msgid ""
+"If you already have a library of references, you can select it here to make "
+"all your stored reference items available to Zettlr."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/CitingPage.vue.ts:9
+msgid "Learn how to export your Zotero library"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/CitingPage.vue.ts:10
+msgid ""
+"Different academic fields have different citation styles. Here you choose "
+"which one Zettlr uses when you autocomplete citations."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:7
+msgid "Look and Feel"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:8
+msgid ""
+"Zettlr supports both light and dark mode. You can turn it on manually here."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:9
+msgid "Activate dark mode"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:10
+msgid "Most users will wish to schedule when the app will enter the dark mode."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:13
+msgid "Do not automatically change modes"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:14
+msgid "Follow the operating system"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:15
+msgid "Manually schedule"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:10
+msgid "Which Language do you speak?"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:12
 #, javascript-format
-msgid "%s selected"
-msgstr "%s 已選擇"
+msgid ""
+"Based on your operating system settings, we have selected %s as the "
+"application language. If you wish, you can select a different language here."
+msgstr ""
 
-#. Multiple selections --> indicate
-#: source/tmp/win-main/App.vue.ts:230
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:14
+msgid "The changes apply from the next slide."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:6
+msgid "Staying Up To Date"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:7
+msgid ""
+"Zettlr will from time to time check for updates. If you installed Zettlr via "
+"a package manager (e.g., APT or Pacman, Homebrew, or winget or chocolatey), "
+"you should turn this off."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:8
+msgid "Check for Updates"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:9
+msgid ""
+"From time to time, we also release beta updates. The more users test these "
+"early versions, the better the app becomes."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:10
+msgid "Test Beta Versions"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:5
+msgid "Writing Markdown"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:6
+msgid ""
+"The core of Zettlr is writing Markdown, which can be shown using either its "
+"raw syntax, or in a WYSIWYG mode. Which one do you prefer?"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:7
+msgid "Raw Syntax"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:8
+msgid ""
+"Some people prefer an app automatically saving your work; others want to "
+"manually save. Which do you prefer?"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:9
+msgid "Save manually"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:10
+msgid "Activate Autosave"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:4
+msgid "Hello!"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:5
+msgid ""
+"Thank your for choosing Zettlr as your new one-stop publication workbench."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:6
+msgid ""
+"Before we get started, let us first make sure Zettlr looks and feels as you "
+"expect it to."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:7
+msgid ""
+"On the following pages, we guide you through adjusting a set of vital "
+"settings for a great writing experience. Zettlr ships with sensible "
+"defaults, so you may skip this wizard at any time, and adjust your settings "
+"later on."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:5
+msgid "Images and PDFs in Zettlr"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:6
+msgid ""
+"Zettlr can preview images and PDF files directly in Zettlr. This allows you "
+"to reference plots or literature directly while writing. If you do not "
+"activate this, images and PDF files will only be shown in the sidebar and "
+"open with your computer's default viewer."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:7
+msgid "Activate Image and PDF Previews in Zettlr"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:7
+msgid "Check your writing"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:8
+msgid ""
+"Here you can configure how you wish to check for spelling errors. You can "
+"select a built-in dictionary, or set up LanguageTool."
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:10
 #, javascript-format
-msgid "%s selections"
-msgstr "%s 選擇"
+msgid "Set %s as a spellchecking dictionary"
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:256
-#: source/tmp/win-main/GlobalSearch.vue.ts:35
-msgid "Search across all files"
-msgstr "在所有的檔案之中尋找"
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:12
+msgid ""
+"Zettlr integrates with LanguageTool, a free grammar and spellchecker. You "
+"can turn it on with simple defaults."
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:270
-msgid "View writing statistics"
-msgstr "檢視寫作統計資訊"
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:13
+msgid "Activate LanguageTool (uses online service)"
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:276
-msgid "View Tag Cloud"
-msgstr "檢視標籤雲"
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:14
+msgid ""
+"You can choose a custom server and provide your LanguageTool username later "
+"in the settings."
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:283
-msgid "Open settings"
-msgstr "開啟設定"
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:4
+msgid "You're All Set!"
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:318
-msgid "Export current file"
-msgstr "匯出目前檔案"
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:5
+msgid ""
+"We wish you a great writing experience! Remember to take a look at the "
+"preferences to tweak Zettlr even more."
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:324
-msgid "Toggle readability mode"
-msgstr "切換可讀性模式"
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:6
+msgid ""
+"If anything comes up, and you need help, encounter a bug, or have an idea "
+"for a new feature, please get in touch with us. Zettlr is maintained by a "
+"global community of volunteers who are very helpful, excellent people who "
+"will help you out."
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:336
-msgid "Insert comment"
-msgstr "插入註解"
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:8
+msgid "Join our Discord Server"
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:350
-msgid "Insert image"
-msgstr "插入圖片"
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:9
+msgid "Join our Community Forum"
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:371
-msgid "Insert footnote"
-msgstr "插入註腳"
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:10
+msgid "Report a Bug on GitHub"
+msgstr ""
 
-#: source/tmp/win-main/App.vue.ts:389
-msgid "Pomodoro timer"
-msgstr "番茄鐘計時器"
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:11
+msgid "Suggest a new Feature on GitHub"
+msgstr ""
 
-#: source/tmp/win-main/PopoverExport.vue.ts:29
-msgid "Temporary directory"
-msgstr "暫存目錄"
-
-#: source/tmp/win-main/PopoverExport.vue.ts:30
-msgid "Current directory"
-msgstr "目前目錄"
-
-#: source/tmp/win-main/PopoverExport.vue.ts:31
-msgid "Select directory"
-msgstr "選擇目錄"
-
-#: source/tmp/win-main/PopoverExport.vue.ts:64
-msgid "Exporting…"
-msgstr "匯出中…"
-
-#: source/tmp/win-main/PopoverExport.vue.ts:64
-msgid "Export"
-msgstr "匯出"
-
-#: source/tmp/win-main/PopoverExport.vue.ts:77
-msgid "command"
-msgstr "指令"
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:36
-msgid "Enter your search terms below"
-msgstr "在下方輸入搜尋字詞"
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:37
-msgid "Find…"
-msgstr "尋找…"
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:39
-msgid "Filter search results"
-msgstr "篩選搜尋結果"
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:40
-msgid "Restrict search to directory"
-msgstr "限制在目錄中搜尋"
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:41
-msgid "Choose directory…"
-msgstr "選擇目錄…"
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:42
-#: source/tmp/win-preferences/App.vue.ts:57
-msgid "Search"
-msgstr "搜尋"
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:43
-msgid "Clear search"
-msgstr "清除搜尋"
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:44
-msgid "Toggle results"
-msgstr "切換結果"
-
-#: source/tmp/win-main/GlobalSearch.vue.ts:113
-#, javascript-format
-msgid "%s matches across %s files"
-msgstr "%s 個符合項目於 %s 個檔案中"
-
-#: source/tmp/win-main/PopoverTable.vue.ts:30
-#, javascript-format
-msgid "Table size: %s &times; %s"
-msgstr "表格大小：%s &times; %s"
-
-#: source/tmp/common/vue/form/elements/ListControl.vue.ts:106
-msgid "Add"
-msgstr "新增"
-
-#: source/tmp/common/vue/form/elements/ListControl.vue.ts:107
-msgid "Actions"
-msgstr "動作"
-
-#: source/tmp/common/vue/form/elements/ListControl.vue.ts:108
-msgid "Delete"
-msgstr "刪除"
-
-#: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
-msgid "Select folder…"
-msgstr "選擇資料夾…"
-
-#: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
-msgid "Select file…"
-msgstr "選擇檔案…"
+#: source/tmp/win-splash-screen/App.vue.ts:22
+msgid "Loading…"
+msgstr "載入中…"
 
 #: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Export project to:"
@@ -2682,59 +2956,29 @@ msgstr "有些檔案已選擇匯出，但在目錄中已不存在。"
 msgid "General"
 msgstr "一般"
 
-#: source/tmp/win-preferences/App.vue.ts:56
-#, javascript-format
-msgid "No results for \"%s\""
-msgstr "「%s」沒有結果"
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:106
+msgid "Add"
+msgstr "新增"
 
-#: source/tmp/win-preferences/App.vue.ts:145
-#: source/win-preferences/schema/advanced.ts:51
-msgid "Appearance"
-msgstr "外觀"
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:107
+msgid "Actions"
+msgstr "動作"
 
-#: source/tmp/win-preferences/App.vue.ts:150
-msgid "File Manager"
-msgstr "檔案管理器"
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:108
+msgid "Delete"
+msgstr "刪除"
 
-#: source/tmp/win-preferences/App.vue.ts:155
-msgid "Editor"
-msgstr "編輯器"
+#: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
+msgid "Select folder…"
+msgstr "選擇資料夾…"
 
-#: source/tmp/win-preferences/App.vue.ts:160
-#: source/win-preferences/schema/spellchecking.ts:158
-msgid "Spellchecking"
-msgstr "拼字檢查"
+#: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
+msgid "Select file…"
+msgstr "選擇檔案…"
 
-#: source/tmp/win-preferences/App.vue.ts:165
-#: source/win-preferences/schema/autocorrect.ts:22
-msgid "Autocorrect"
-msgstr "自動更正"
-
-#: source/tmp/win-preferences/App.vue.ts:170
-#: source/win-preferences/schema/citations.ts:22
-msgid "Citations"
-msgstr "引文"
-
-#: source/tmp/win-preferences/App.vue.ts:175
-msgid "Zettelkasten"
-msgstr "Zettelkasten"
-
-#: source/tmp/win-preferences/App.vue.ts:185
-msgid "Import and Export"
-msgstr "匯入與匯出"
-
-#: source/tmp/win-preferences/App.vue.ts:190
-msgid "Advanced"
-msgstr "進階"
-
-#: source/tmp/win-preferences/App.vue.ts:199
-#, javascript-format
-msgid "Searching: %s"
-msgstr "搜尋中：%s"
-
-#: source/tmp/win-preferences/App.vue.ts:203
-msgid "Preferences"
-msgstr "偏好設定"
+#: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:22
+msgid "Click to set your shortcut"
+msgstr ""
 
 #: source/tmp/win-stats/CalendarView.vue.ts:28
 msgid "January"
@@ -2809,288 +3053,164 @@ msgstr "FSAL 統計"
 msgid "Writing statistics"
 msgstr "寫作統計"
 
-#: source/win-preferences/schema/zettelkasten.ts:23
-msgid "Zettelkasten IDs"
-msgstr "Zettelkasten IDs"
+#: source/tmp/win-tag-manager/App.vue.ts:27
+msgid "Assign color"
+msgstr "指定顏色"
 
-#: source/win-preferences/schema/zettelkasten.ts:29
-msgid "Pattern for Zettelkasten IDs"
-msgstr "Zettelkasten IDs 的模式"
+#: source/tmp/win-tag-manager/App.vue.ts:28
+msgid "Remove color"
+msgstr "移除顏色"
 
-#: source/win-preferences/schema/zettelkasten.ts:30
-msgid "Uses ECMAScript regular expressions"
-msgstr "使用 ECMAScript 正規表達式"
+#: source/tmp/win-tag-manager/App.vue.ts:29
+msgid "Tag name"
+msgstr "標籤名稱"
 
-#: source/win-preferences/schema/zettelkasten.ts:36
-msgid "Pattern used to generate new IDs"
-msgstr "用於產生新 ID 的模式"
+#: source/tmp/win-tag-manager/App.vue.ts:30
+msgid "Color"
+msgstr "顏色"
 
-#: source/win-preferences/schema/zettelkasten.ts:39
-#, javascript-format
-msgid "Available Variables: %s"
-msgstr "可用變數：%s"
+#: source/tmp/win-tag-manager/App.vue.ts:32
+msgid "A short description"
+msgstr "簡短描述"
 
-#: source/win-preferences/schema/zettelkasten.ts:44
-#: source/win-preferences/schema/import-export.ts:77
-msgid "Internal links"
-msgstr "內部連結"
-
-#: source/win-preferences/schema/zettelkasten.ts:50
-msgid "Link with filename only"
-msgstr "僅使用檔案名稱連結"
-
-#: source/win-preferences/schema/zettelkasten.ts:55
-msgid "When linking files, add the document name …"
-msgstr "連結檔案時，加入文件名稱…"
-
-#: source/win-preferences/schema/zettelkasten.ts:58
-msgid "Always"
-msgstr "總是"
-
-#: source/win-preferences/schema/zettelkasten.ts:59
-msgid "Only when linking using the ID"
-msgstr "僅在使用 ID 連結時"
-
-#: source/win-preferences/schema/zettelkasten.ts:60
-msgid "Never"
-msgstr "從不"
-
-#: source/win-preferences/schema/zettelkasten.ts:68
-msgid "Link format"
-msgstr "連結格式"
-
-#: source/win-preferences/schema/zettelkasten.ts:73
+#: source/tmp/win-tag-manager/App.vue.ts:33
 msgid ""
-"Internal links allow you to add an optional title, separated by a vertical "
-"bar character from the actual link target. Here you can define the ordering "
-"of the two."
+"Here you can assign colors to different tags. If a tag is found in a file, "
+"its tile in the preview list will receive a colored indicator. The "
+"description will be shown on mouse hover."
 msgstr ""
-"內部連結允許您新增一個非必要的標題，並用垂直條分隔符號與實際連結目標分開。在"
-"這裡您可以定義兩者的順序。"
+"在這裡您可以為不同的標籤指定顏色。如果在檔案中找到標籤，預覽列表中的標籤將顯"
+"示顏色指示。將滑鼠移到標籤上時會顯示描述。"
 
-#: source/win-preferences/schema/zettelkasten.ts:79
-msgid "[[Link|Title]]: Link first (recommended)"
-msgstr "[[連結|標題]]：連結優先（推薦）"
+#: source/tmp/win-tag-manager/App.vue.ts:36
+msgid "New tag"
+msgstr "新標籤"
 
-#: source/win-preferences/schema/zettelkasten.ts:80
-msgid "[[Title|Link]]: Title first"
-msgstr "[[標題|連結]]：標題優先"
+#: source/tmp/win-tag-manager/App.vue.ts:37
+msgid "Rename"
+msgstr "重新命名"
 
-#: source/win-preferences/schema/zettelkasten.ts:88
-msgid "Start a full-text search when following internal links"
-msgstr "追蹤內部連結時啟動全文搜尋"
+#: source/tmp/win-tag-manager/App.vue.ts:38
+msgid "Rename tag…"
+msgstr "重新命名標籤…"
 
-#: source/win-preferences/schema/zettelkasten.ts:89
-msgid "The search string will match the content between the brackets: [[ ]]."
-msgstr "搜尋字串將對應括號中的內容：[[ ]]。"
+#: source/tmp/win-paste-image/App.vue.ts:57
+msgid "Insert Image from Clipboard"
+msgstr "從剪貼簿插入圖片"
 
-#: source/win-preferences/schema/zettelkasten.ts:96
-msgid ""
-"Automatically create non-existing files in this folder when following "
-"internal links"
-msgstr "追蹤內部連結時，自動在此資料夾中建立不存在的檔案"
-
-#: source/win-preferences/schema/zettelkasten.ts:101
-msgid "For this to work, the folder must be open as a Workspace in Zettlr."
-msgstr "要使其生效，資料夾必須以工作區的形式在 Zettlr 中開啟。"
-
-#: source/win-preferences/schema/zettelkasten.ts:106
-msgid "Path to folder"
-msgstr "資料夾路徑"
-
-#: source/win-preferences/schema/autocorrect.ts:32
-msgid "Smart quotes"
-msgstr "智慧引號"
-
-#: source/win-preferences/schema/autocorrect.ts:45
-msgid "Double Quotes"
-msgstr "雙引號"
-
-#: source/win-preferences/schema/autocorrect.ts:48
-#: source/win-preferences/schema/autocorrect.ts:70
-msgid "Disable Magic Quotes"
-msgstr "停用 Magic Quotes"
-
-#: source/win-preferences/schema/autocorrect.ts:67
-msgid "Single Quotes"
-msgstr "單引號"
-
-#: source/win-preferences/schema/autocorrect.ts:95
-msgid "Text-replacement patterns"
-msgstr "文字取代模式"
-
-#: source/win-preferences/schema/autocorrect.ts:99
-msgid "Match whole words"
-msgstr "符合整個單字"
-
-#: source/win-preferences/schema/autocorrect.ts:100
-msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr "勾選時，自動更正將不會取代單字的一部分"
-
-#: source/win-preferences/schema/autocorrect.ts:107
-msgid "Replace"
-msgstr "取代"
-
-#: source/win-preferences/schema/autocorrect.ts:107
-msgid "With"
-msgstr "取代為"
-
-#: source/win-preferences/schema/autocorrect.ts:112
-#: source/win-preferences/schema/spellchecking.ts:173
-#: source/win-preferences/schema/advanced.ts:115
-msgid "Filter"
-msgstr "篩選"
-
-#: source/win-preferences/schema/editor.ts:23
-msgid "Input mode"
-msgstr "輸入模式"
-
-#: source/win-preferences/schema/editor.ts:39
-msgid ""
-"The input mode determines how you interact with the editor. We recommend "
-"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
-"know what this implies."
-msgstr ""
-"輸入模式決定您如何與編輯器互動。我們建議將此設定保持在「普通」模式。只有在您"
-"了解其含義時才選擇「Vim」或「Emacs」。"
-
-#: source/win-preferences/schema/editor.ts:44
-msgid "Writing direction"
-msgstr "書寫方向"
-
-#: source/win-preferences/schema/editor.ts:57
-msgid "Markdown rendering"
-msgstr "Markdown 繪製"
-
-#: source/win-preferences/schema/editor.ts:64
-msgid ""
-"Check to enable live rendering of various Markdown elements to formatted "
-"appearance. This hides formatting characters (such as **text**) or renders "
-"images instead of their link."
-msgstr ""
-"勾選以啟用各種 Markdown 元素的即時繪製為格式化外觀。這會隱藏格式字元（例如 **"
-"文字**）或繪製圖片而非其連結。"
-
-#: source/win-preferences/schema/editor.ts:72
-msgid "Render citations"
-msgstr "繪製引文"
-
-#: source/win-preferences/schema/editor.ts:77
-msgid "Render iframes"
-msgstr "繪製 iframe"
-
-#: source/win-preferences/schema/editor.ts:82
-msgid "Render images"
-msgstr "繪製圖片"
-
-#: source/win-preferences/schema/editor.ts:87
-msgid "Render links"
-msgstr "繪製連結"
-
-#: source/win-preferences/schema/editor.ts:92
-msgid "Render formulae"
-msgstr "繪製方程式"
-
-#: source/win-preferences/schema/editor.ts:97
-msgid "Render tasks"
-msgstr "繪製任務"
-
-#: source/win-preferences/schema/editor.ts:102
-msgid "Hide heading characters"
-msgstr "隱藏標題字元"
-
-#: source/win-preferences/schema/editor.ts:107
-msgid "Render emphasis"
-msgstr "繪製強調部份"
-
-#: source/win-preferences/schema/editor.ts:116
-msgid "Formatting characters for bold and italics"
-msgstr "粗體和斜體的格式字元"
-
-#: source/win-preferences/schema/editor.ts:143
-msgid "Check Markdown for style issues"
-msgstr "檢查 Markdown 的樣式問題"
-
-#: source/win-preferences/schema/editor.ts:149
-msgid "Table Editor"
-msgstr "表格編輯器"
-
-#: source/win-preferences/schema/editor.ts:160
-msgid ""
-"The Table Editor is an interactive interface that simplifies creation and "
-"editing of tables. It provides buttons for common functionality, and takes "
-"care of Markdown formatting."
-msgstr ""
-"表格編輯器是一個互動介面，簡化了表格的建立和編輯。它提供了常用功能的按鈕，並"
-"處理 Markdown 格式。"
-
-#: source/win-preferences/schema/editor.ts:171
-msgid "Mute non-focused lines in distraction-free mode"
-msgstr "在專注模式時，讓周遭的文字顏色變淺"
-
-#: source/win-preferences/schema/editor.ts:176
-msgid "Hide toolbar in distraction-free mode"
-msgstr "在專注模式時隱藏工具列"
-
-#: source/win-preferences/schema/editor.ts:182
-msgid "Word counter"
-msgstr "字數統計"
-
-#: source/win-preferences/schema/editor.ts:189
-msgid "Count characters instead of words (e.g., for Chinese)"
-msgstr "統計字元數，而非字數（例如中文）"
-
-#: source/win-preferences/schema/editor.ts:195
-msgid "Readability mode"
-msgstr "可讀性模式"
-
-#: source/win-preferences/schema/editor.ts:202
-msgid "Algorithm"
-msgstr "演算法"
-
-#: source/win-preferences/schema/editor.ts:220
-msgid "Maximum width of images (%s %)"
-msgstr "最大圖片寬度（%s %）"
-
-#: source/win-preferences/schema/editor.ts:227
-msgid "Maximum height of images (%s %)"
-msgstr "最大圖片高度（%s %）"
-
+#: source/tmp/win-paste-image/App.vue.ts:58
 #: source/win-preferences/schema/editor.ts:235
-msgid "Other settings"
-msgstr "其他設定"
+msgid "Image size"
+msgstr "圖片大小"
 
-#: source/win-preferences/schema/editor.ts:241
-msgid "Font size"
-msgstr "字型大小"
+#: source/tmp/win-paste-image/App.vue.ts:59
+msgid "Retain aspect ratio"
+msgstr "保持長寬比例"
 
-#: source/win-preferences/schema/editor.ts:248
-msgid "Indentation size (number of spaces)"
-msgstr "縮排時使用幾個空格"
+#: source/tmp/win-paste-image/App.vue.ts:60
+msgid "Resize image to"
+msgstr "調整圖片大小為"
 
-#: source/win-preferences/schema/editor.ts:255
-msgid "Indent using tabs instead of spaces"
-msgstr "使用 Tab 縮排而非空格"
+#: source/tmp/win-paste-image/App.vue.ts:61
+msgid "Filename"
+msgstr "檔案名稱"
 
-#: source/win-preferences/schema/editor.ts:261
-msgid "Show formatting toolbar when text is selected"
-msgstr "當選取文字時顯示格式工作列"
+#: source/tmp/win-paste-image/App.vue.ts:62
+#: source/tmp/win-paste-image/App.vue.ts:63
+msgid "A unique filename"
+msgstr "唯一的檔案名稱"
 
-#: source/win-preferences/schema/editor.ts:266
-msgid "Highlight whitespace"
-msgstr "醒目顯示空白"
+#: source/tmp/win-preferences/App.vue.ts:56
+#, javascript-format
+msgid "No results for \"%s\""
+msgstr "「%s」沒有結果"
 
-#: source/win-preferences/schema/editor.ts:272
-msgid "Suggest emojis during autocompletion"
-msgstr "自動完成（AutoComplete）時建議表情符號"
+#: source/tmp/win-preferences/App.vue.ts:145
+#: source/win-preferences/schema/advanced.ts:51
+msgid "Appearance"
+msgstr "外觀"
 
-#: source/win-preferences/schema/editor.ts:277
-msgid "Show link previews"
-msgstr "顯示連結預覽"
+#: source/tmp/win-preferences/App.vue.ts:150
+msgid "File Manager"
+msgstr "檔案管理器"
 
-#: source/win-preferences/schema/editor.ts:283
-msgid "Automatically close matching character pairs"
-msgstr "括號自動配對"
+#: source/tmp/win-preferences/App.vue.ts:155
+msgid "Editor"
+msgstr "編輯器"
+
+#: source/tmp/win-preferences/App.vue.ts:160
+#: source/win-preferences/schema/spellchecking.ts:158
+msgid "Spellchecking"
+msgstr "拼字檢查"
+
+#: source/tmp/win-preferences/App.vue.ts:165
+#: source/win-preferences/schema/autocorrect.ts:22
+msgid "Autocorrect"
+msgstr "自動更正"
+
+#: source/tmp/win-preferences/App.vue.ts:175
+msgid "Zettelkasten"
+msgstr "Zettelkasten"
+
+#: source/tmp/win-preferences/App.vue.ts:185
+msgid "Import and Export"
+msgstr "匯入與匯出"
+
+#: source/tmp/win-preferences/App.vue.ts:190
+msgid "Advanced"
+msgstr "進階"
+
+#: source/tmp/win-preferences/App.vue.ts:199
+#, javascript-format
+msgid "Searching: %s"
+msgstr "搜尋中：%s"
+
+#: source/tmp/win-preferences/App.vue.ts:203
+msgid "Preferences"
+msgstr "偏好設定"
+
+#: source/tmp/win-update/App.vue.ts:31
+msgid "Updater"
+msgstr "更新管理員"
+
+#: source/tmp/win-update/App.vue.ts:32
+msgid "New update available"
+msgstr "有新的更新可用"
+
+#: source/tmp/win-update/App.vue.ts:33
+msgid "Your version"
+msgstr "您的版本"
+
+#: source/tmp/win-update/App.vue.ts:34
+msgid ""
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr "有新版本的 Zettlr 可供下載。請閱讀下方的更新日誌。"
+
+#: source/tmp/win-update/App.vue.ts:35
+msgid "Downloading your update"
+msgstr "正在下載更新"
+
+#: source/tmp/win-update/App.vue.ts:36
+msgid "No update available. You have the most recent version."
+msgstr "不需要更新，已經是最新版本了。"
+
+#: source/tmp/win-update/App.vue.ts:42
+msgid "Click to start update"
+msgstr "點選此處開始更新"
+
+#: source/tmp/win-update/App.vue.ts:45
+msgid "never"
+msgstr "從未"
+
+#: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
+#, javascript-format
+msgid "Last checked: %s"
+msgstr "上次檢查：%s"
+
+#: source/tmp/win-update/App.vue.ts:124
+msgid "Starting update …"
+msgstr "正在開始更新…"
 
 #: source/win-preferences/schema/appearance.ts:37
 msgid "Schedule"
@@ -3196,6 +3316,523 @@ msgstr "顯示狀態列"
 #: source/win-preferences/schema/appearance.ts:223
 msgid "Open CSS editor"
 msgstr "開啟 CSS 編輯器"
+
+#: source/win-preferences/schema/general.ts:22
+msgid "Application language"
+msgstr "應用程式語言"
+
+#: source/win-preferences/schema/general.ts:33
+msgid "Autosave"
+msgstr "自動存檔"
+
+#: source/win-preferences/schema/general.ts:43
+msgid "Save modifications"
+msgstr "儲存修改"
+
+#: source/win-preferences/schema/general.ts:48
+msgid "Immediately"
+msgstr "立即"
+
+#: source/win-preferences/schema/general.ts:49
+msgid "After a short delay"
+msgstr "短暫延遲後"
+
+#: source/win-preferences/schema/general.ts:55
+msgid "Default image folder"
+msgstr "預設圖片資料夾"
+
+#: source/win-preferences/schema/general.ts:67
+msgid ""
+"Click \"Select folder…\" or type an absolute or relative path directly into "
+"the input field."
+msgstr "點選「選擇資料夾…」或直接在輸入欄中輸入絕對或相對路徑。"
+
+#: source/win-preferences/schema/general.ts:72
+msgid "Behavior"
+msgstr "行為"
+
+#: source/win-preferences/schema/general.ts:83
+msgid "Avoid opening files in new tabs if possible"
+msgstr "盡量避免在新分頁中開啟檔案"
+
+#: source/win-preferences/schema/general.ts:89
+msgid "Updates"
+msgstr "更新"
+
+#: source/win-preferences/schema/general.ts:95
+msgid "Automatically check for updates"
+msgstr "自動檢查更新"
+
+#: source/win-preferences/schema/file-manager.ts:23
+msgid "Display mode"
+msgstr "顯示模式"
+
+#: source/win-preferences/schema/file-manager.ts:32
+msgid "Thin"
+msgstr "精簡"
+
+#: source/win-preferences/schema/file-manager.ts:33
+msgid "Expanded"
+msgstr "展開"
+
+#: source/win-preferences/schema/file-manager.ts:34
+msgid "Combined"
+msgstr "合併"
+
+#: source/win-preferences/schema/file-manager.ts:40
+msgid ""
+"The Thin mode shows your directories and files separately. Select a "
+"directory to have its contents displayed in the file list. Switch between "
+"file list and directory tree by clicking on directories or the arrow button "
+"which appears at the top left corner of the file list."
+msgstr ""
+"精簡模式會將您的目錄和檔案分開顯示。選擇目錄即可在檔案清單中顯示其內容。您可"
+"以透過點選目錄或檔案清單左上角的箭頭按鈕，在檔案清單和目錄樹狀結構之間切換。"
+
+#: source/win-preferences/schema/file-manager.ts:45
+msgid "Show file information"
+msgstr "顯示檔案資訊"
+
+#: source/win-preferences/schema/file-manager.ts:50
+msgid "Show folders above files"
+msgstr "在檔案上方顯示資料夾"
+
+#: source/win-preferences/schema/file-manager.ts:56
+msgid "Markdown document name display"
+msgstr "Markdown 文件名稱顯示"
+
+#: source/win-preferences/schema/file-manager.ts:64
+msgid "Filename only"
+msgstr "僅檔案名稱"
+
+#: source/win-preferences/schema/file-manager.ts:65
+msgid "Title if applicable"
+msgstr "標題（如果適用）"
+
+#: source/win-preferences/schema/file-manager.ts:66
+msgid "First heading level 1 if applicable"
+msgstr "第一個一級標題（如果適用）"
+
+#: source/win-preferences/schema/file-manager.ts:67
+msgid "Title or first heading level 1 if applicable"
+msgstr "標題或第一個一級標題（如果適用）"
+
+#: source/win-preferences/schema/file-manager.ts:73
+msgid "Display Markdown file extensions"
+msgstr "顯示 Markdown 檔案的副檔名"
+
+#: source/win-preferences/schema/file-manager.ts:80
+msgid "Time display"
+msgstr "時間顯示"
+
+#: source/win-preferences/schema/file-manager.ts:88
+msgid "Last modification time"
+msgstr "最後修改時間"
+
+#: source/win-preferences/schema/file-manager.ts:89
+msgid "File creation time"
+msgstr "檔案建立時間"
+
+#: source/win-preferences/schema/file-manager.ts:95
+msgid "Sorting"
+msgstr "排序"
+
+#: source/win-preferences/schema/file-manager.ts:101
+msgid "When sorting documents…"
+msgstr "排序文件時…"
+
+#: source/win-preferences/schema/file-manager.ts:104
+msgid "Use natural order (2 comes before 10)"
+msgstr "使用自然順序（2 在 10 之前）"
+
+#: source/win-preferences/schema/file-manager.ts:105
+msgid "Use ASCII order (2 comes after 10)"
+msgstr "使用 ASCII 順序（2 在 10 之後）"
+
+#: source/win-preferences/schema/editor.ts:23
+msgid "Input mode"
+msgstr "輸入模式"
+
+#: source/win-preferences/schema/editor.ts:39
+msgid ""
+"The input mode determines how you interact with the editor. We recommend "
+"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
+"know what this implies."
+msgstr ""
+"輸入模式決定您如何與編輯器互動。我們建議將此設定保持在「普通」模式。只有在您"
+"了解其含義時才選擇「Vim」或「Emacs」。"
+
+#: source/win-preferences/schema/editor.ts:44
+msgid "Writing direction"
+msgstr "書寫方向"
+
+#: source/win-preferences/schema/editor.ts:57
+msgid "Markdown rendering"
+msgstr "Markdown 繪製"
+
+#: source/win-preferences/schema/editor.ts:64
+msgid ""
+"Check to enable live rendering of various Markdown elements to formatted "
+"appearance. This hides formatting characters (such as **text**) or renders "
+"images instead of their link."
+msgstr ""
+"勾選以啟用各種 Markdown 元素的即時繪製為格式化外觀。這會隱藏格式字元（例如 **"
+"文字**）或繪製圖片而非其連結。"
+
+#: source/win-preferences/schema/editor.ts:69
+msgid "Choose between preview mode (\"WYSIWYG) or raw mode (\"WYSIWYM\")."
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:73
+msgid "Preview mode"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:74
+msgid "Raw mode"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:81
+msgid "When preview mode is active, the following renderers will be enabled:"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:85
+msgid "Render citations"
+msgstr "繪製引文"
+
+#: source/win-preferences/schema/editor.ts:91
+msgid "Render iframes"
+msgstr "繪製 iframe"
+
+#: source/win-preferences/schema/editor.ts:97
+msgid "Render images"
+msgstr "繪製圖片"
+
+#: source/win-preferences/schema/editor.ts:103
+msgid "Render links"
+msgstr "繪製連結"
+
+#: source/win-preferences/schema/editor.ts:109
+msgid "Render formulae"
+msgstr "繪製方程式"
+
+#: source/win-preferences/schema/editor.ts:115
+msgid "Render tasks"
+msgstr "繪製任務"
+
+#: source/win-preferences/schema/editor.ts:121
+msgid "Hide heading characters"
+msgstr "隱藏標題字元"
+
+#: source/win-preferences/schema/editor.ts:127
+msgid "Render emphasis"
+msgstr "繪製強調部份"
+
+#: source/win-preferences/schema/editor.ts:137
+msgid "Formatting characters for bold and italics"
+msgstr "粗體和斜體的格式字元"
+
+#: source/win-preferences/schema/editor.ts:164
+msgid "Check Markdown for style issues"
+msgstr "檢查 Markdown 的樣式問題"
+
+#: source/win-preferences/schema/editor.ts:170
+msgid "Table Editor"
+msgstr "表格編輯器"
+
+#: source/win-preferences/schema/editor.ts:181
+msgid ""
+"The Table Editor is an interactive interface that simplifies creation and "
+"editing of tables. It provides buttons for common functionality, and takes "
+"care of Markdown formatting."
+msgstr ""
+"表格編輯器是一個互動介面，簡化了表格的建立和編輯。它提供了常用功能的按鈕，並"
+"處理 Markdown 格式。"
+
+#: source/win-preferences/schema/editor.ts:192
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr "在專注模式時，讓周遭的文字顏色變淺"
+
+#: source/win-preferences/schema/editor.ts:197
+msgid "Hide toolbar in distraction-free mode"
+msgstr "在專注模式時隱藏工具列"
+
+#: source/win-preferences/schema/editor.ts:203
+msgid "Word counter"
+msgstr "字數統計"
+
+#: source/win-preferences/schema/editor.ts:210
+msgid "Count characters instead of words (e.g., for Chinese)"
+msgstr "統計字元數，而非字數（例如中文）"
+
+#: source/win-preferences/schema/editor.ts:216
+msgid "Readability mode"
+msgstr "可讀性模式"
+
+#: source/win-preferences/schema/editor.ts:223
+msgid "Algorithm"
+msgstr "演算法"
+
+#: source/win-preferences/schema/editor.ts:241
+msgid "Maximum width of images (%s %)"
+msgstr "最大圖片寬度（%s %）"
+
+#: source/win-preferences/schema/editor.ts:248
+msgid "Maximum height of images (%s %)"
+msgstr "最大圖片高度（%s %）"
+
+#: source/win-preferences/schema/editor.ts:256
+msgid "Other settings"
+msgstr "其他設定"
+
+#: source/win-preferences/schema/editor.ts:262
+msgid "Font size"
+msgstr "字型大小"
+
+#: source/win-preferences/schema/editor.ts:269
+msgid "Indentation size (number of spaces)"
+msgstr "縮排時使用幾個空格"
+
+#: source/win-preferences/schema/editor.ts:276
+msgid "Indent using tabs instead of spaces"
+msgstr "使用 Tab 縮排而非空格"
+
+#: source/win-preferences/schema/editor.ts:282
+msgid "Show formatting toolbar when text is selected"
+msgstr "當選取文字時顯示格式工作列"
+
+#: source/win-preferences/schema/editor.ts:287
+msgid "Highlight whitespace"
+msgstr "醒目顯示空白"
+
+#: source/win-preferences/schema/editor.ts:293
+msgid "Suggest emojis during autocompletion"
+msgstr "自動完成（AutoComplete）時建議表情符號"
+
+#: source/win-preferences/schema/editor.ts:298
+msgid "Show link previews"
+msgstr "顯示連結預覽"
+
+#: source/win-preferences/schema/editor.ts:304
+msgid "Automatically close matching character pairs"
+msgstr "括號自動配對"
+
+#: source/win-preferences/schema/autocorrect.ts:32
+msgid "Smart quotes"
+msgstr "智慧引號"
+
+#: source/win-preferences/schema/autocorrect.ts:45
+msgid "Double Quotes"
+msgstr "雙引號"
+
+#: source/win-preferences/schema/autocorrect.ts:48
+#: source/win-preferences/schema/autocorrect.ts:70
+msgid "Disable Magic Quotes"
+msgstr "停用 Magic Quotes"
+
+#: source/win-preferences/schema/autocorrect.ts:67
+msgid "Single Quotes"
+msgstr "單引號"
+
+#: source/win-preferences/schema/autocorrect.ts:95
+msgid "Text-replacement patterns"
+msgstr "文字取代模式"
+
+#: source/win-preferences/schema/autocorrect.ts:99
+msgid "Match whole words"
+msgstr "符合整個單字"
+
+#: source/win-preferences/schema/autocorrect.ts:100
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr "勾選時，自動更正將不會取代單字的一部分"
+
+#: source/win-preferences/schema/autocorrect.ts:107
+msgid "Replace"
+msgstr "取代"
+
+#: source/win-preferences/schema/autocorrect.ts:107
+msgid "With"
+msgstr "取代為"
+
+#: source/win-preferences/schema/autocorrect.ts:112
+#: source/win-preferences/schema/spellchecking.ts:173
+#: source/win-preferences/schema/advanced.ts:271
+msgid "Filter"
+msgstr "篩選"
+
+#: source/win-preferences/schema/snippets.ts:30
+msgid "Open snippets editor"
+msgstr "開啟小片段編輯器"
+
+#: source/win-preferences/schema/import-export.ts:24
+msgid "Import and export profiles"
+msgstr "匯入和匯出設定檔"
+
+#: source/win-preferences/schema/import-export.ts:30
+msgid "Open import profiles editor"
+msgstr "開啟匯入設定檔編輯器"
+
+#: source/win-preferences/schema/import-export.ts:44
+msgid "Open export profiles editor"
+msgstr "開啟匯出設定檔編輯器"
+
+#: source/win-preferences/schema/import-export.ts:59
+msgid "Export settings"
+msgstr "匯出設定"
+
+#. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
+#: source/win-preferences/schema/import-export.ts:65
+msgid "Use Zettlr's internal Pandoc for exports"
+msgstr "使用 Zettlr 的內部 Pandoc 進行匯出"
+
+#: source/win-preferences/schema/import-export.ts:71
+msgid "Remove tags from files when exporting"
+msgstr "匯出時從檔案中移除標籤"
+
+#: source/win-preferences/schema/import-export.ts:77
+#: source/win-preferences/schema/zettelkasten.ts:44
+msgid "Internal links"
+msgstr "內部連結"
+
+#: source/win-preferences/schema/import-export.ts:80
+msgid "Remove internal links completely"
+msgstr "徹底移除內部連結"
+
+#: source/win-preferences/schema/import-export.ts:81
+msgid "Unlink internal links"
+msgstr "取消內部連結"
+
+#: source/win-preferences/schema/import-export.ts:82
+msgid "Don't touch internal links"
+msgstr "不要改變內部連結"
+
+#: source/win-preferences/schema/import-export.ts:88
+msgid "Destination folder for exported files"
+msgstr "匯出檔案的目的地資料夾"
+
+#. TODO: Add info-strings
+#: source/win-preferences/schema/import-export.ts:92
+msgid "Temporary folder"
+msgstr "暫存資料夾"
+
+#: source/win-preferences/schema/import-export.ts:93
+msgid "Same as file location"
+msgstr "與檔案位置相同"
+
+#: source/win-preferences/schema/import-export.ts:94
+msgid "Ask for folder when exporting"
+msgstr "匯出時詢問資料夾"
+
+#: source/win-preferences/schema/import-export.ts:100
+msgid ""
+"Warning! Files in the temporary folder are regularly deleted. Choosing the "
+"same location as the file overwrites files with identical filenames if they "
+"already exist."
+msgstr ""
+"警告！暫存資料夾中的檔案會定期刪除。選擇與檔案相同的位置會覆蓋已存在的同名檔"
+"案。"
+
+#: source/win-preferences/schema/import-export.ts:105
+msgid "Custom export commands"
+msgstr "自訂匯出命令"
+
+#: source/win-preferences/schema/import-export.ts:113
+msgid "Display name"
+msgstr "顯示名稱"
+
+#: source/win-preferences/schema/import-export.ts:113
+msgid "Command"
+msgstr "命令"
+
+#: source/win-preferences/schema/import-export.ts:114
+msgid ""
+"Enter custom commands to run the exporter with. Each command receives as its "
+"first argument the file or project folder to be exported."
+msgstr ""
+"輸入自訂命令以執行匯出器。每個命令的第一個參數是要匯出的檔案或專案資料夾。"
+
+#: source/win-preferences/schema/zettelkasten.ts:23
+msgid "Zettelkasten IDs"
+msgstr "Zettelkasten IDs"
+
+#: source/win-preferences/schema/zettelkasten.ts:29
+msgid "Pattern for Zettelkasten IDs"
+msgstr "Zettelkasten IDs 的模式"
+
+#: source/win-preferences/schema/zettelkasten.ts:30
+msgid "Uses ECMAScript regular expressions"
+msgstr "使用 ECMAScript 正規表達式"
+
+#: source/win-preferences/schema/zettelkasten.ts:36
+msgid "Pattern used to generate new IDs"
+msgstr "用於產生新 ID 的模式"
+
+#: source/win-preferences/schema/zettelkasten.ts:39
+#, javascript-format
+msgid "Available Variables: %s"
+msgstr "可用變數：%s"
+
+#: source/win-preferences/schema/zettelkasten.ts:50
+msgid "Link with filename only"
+msgstr "僅使用檔案名稱連結"
+
+#: source/win-preferences/schema/zettelkasten.ts:55
+msgid "When linking files, add the document name …"
+msgstr "連結檔案時，加入文件名稱…"
+
+#: source/win-preferences/schema/zettelkasten.ts:58
+msgid "Always"
+msgstr "總是"
+
+#: source/win-preferences/schema/zettelkasten.ts:59
+msgid "Only when linking using the ID"
+msgstr "僅在使用 ID 連結時"
+
+#: source/win-preferences/schema/zettelkasten.ts:60
+msgid "Never"
+msgstr "從不"
+
+#: source/win-preferences/schema/zettelkasten.ts:68
+msgid "Link format"
+msgstr "連結格式"
+
+#: source/win-preferences/schema/zettelkasten.ts:73
+msgid ""
+"Internal links allow you to add an optional title, separated by a vertical "
+"bar character from the actual link target. Here you can define the ordering "
+"of the two."
+msgstr ""
+"內部連結允許您新增一個非必要的標題，並用垂直條分隔符號與實際連結目標分開。在"
+"這裡您可以定義兩者的順序。"
+
+#: source/win-preferences/schema/zettelkasten.ts:79
+msgid "[[Link|Title]]: Link first (recommended)"
+msgstr "[[連結|標題]]：連結優先（推薦）"
+
+#: source/win-preferences/schema/zettelkasten.ts:80
+msgid "[[Title|Link]]: Title first"
+msgstr "[[標題|連結]]：標題優先"
+
+#: source/win-preferences/schema/zettelkasten.ts:88
+msgid "Start a full-text search when following internal links"
+msgstr "追蹤內部連結時啟動全文搜尋"
+
+#: source/win-preferences/schema/zettelkasten.ts:89
+msgid "The search string will match the content between the brackets: [[ ]]."
+msgstr "搜尋字串將對應括號中的內容：[[ ]]。"
+
+#: source/win-preferences/schema/zettelkasten.ts:96
+msgid ""
+"Automatically create non-existing files in this folder when following "
+"internal links"
+msgstr "追蹤內部連結時，自動在此資料夾中建立不存在的檔案"
+
+#: source/win-preferences/schema/zettelkasten.ts:101
+msgid "For this to work, the folder must be open as a Workspace in Zettlr."
+msgstr "要使其生效，資料夾必須以工作區的形式在 Zettlr 中開啟。"
+
+#: source/win-preferences/schema/zettelkasten.ts:106
+msgid "Path to folder"
+msgstr "資料夾路徑"
 
 #: source/win-preferences/schema/spellchecking.ts:24
 msgid "LanguageTool"
@@ -3305,174 +3942,6 @@ msgstr "字典條目"
 msgid "Search for entries …"
 msgstr "搜尋條目…"
 
-#: source/win-preferences/schema/file-manager.ts:23
-msgid "Display mode"
-msgstr "顯示模式"
-
-#: source/win-preferences/schema/file-manager.ts:32
-msgid "Thin"
-msgstr "精簡"
-
-#: source/win-preferences/schema/file-manager.ts:33
-msgid "Expanded"
-msgstr "展開"
-
-#: source/win-preferences/schema/file-manager.ts:34
-msgid "Combined"
-msgstr "合併"
-
-#: source/win-preferences/schema/file-manager.ts:40
-msgid ""
-"The Thin mode shows your directories and files separately. Select a "
-"directory to have its contents displayed in the file list. Switch between "
-"file list and directory tree by clicking on directories or the arrow button "
-"which appears at the top left corner of the file list."
-msgstr ""
-"精簡模式會將您的目錄和檔案分開顯示。選擇目錄即可在檔案清單中顯示其內容。您可"
-"以透過點選目錄或檔案清單左上角的箭頭按鈕，在檔案清單和目錄樹狀結構之間切換。"
-
-#: source/win-preferences/schema/file-manager.ts:45
-msgid "Show file information"
-msgstr "顯示檔案資訊"
-
-#: source/win-preferences/schema/file-manager.ts:50
-msgid "Show folders above files"
-msgstr "在檔案上方顯示資料夾"
-
-#: source/win-preferences/schema/file-manager.ts:56
-msgid "Markdown document name display"
-msgstr "Markdown 文件名稱顯示"
-
-#: source/win-preferences/schema/file-manager.ts:64
-msgid "Filename only"
-msgstr "僅檔案名稱"
-
-#: source/win-preferences/schema/file-manager.ts:65
-msgid "Title if applicable"
-msgstr "標題（如果適用）"
-
-#: source/win-preferences/schema/file-manager.ts:66
-msgid "First heading level 1 if applicable"
-msgstr "第一個一級標題（如果適用）"
-
-#: source/win-preferences/schema/file-manager.ts:67
-msgid "Title or first heading level 1 if applicable"
-msgstr "標題或第一個一級標題（如果適用）"
-
-#: source/win-preferences/schema/file-manager.ts:73
-msgid "Display Markdown file extensions"
-msgstr "顯示 Markdown 檔案的副檔名"
-
-#: source/win-preferences/schema/file-manager.ts:80
-msgid "Time display"
-msgstr "時間顯示"
-
-#: source/win-preferences/schema/file-manager.ts:88
-msgid "Last modification time"
-msgstr "最後修改時間"
-
-#: source/win-preferences/schema/file-manager.ts:89
-msgid "File creation time"
-msgstr "檔案建立時間"
-
-#: source/win-preferences/schema/file-manager.ts:95
-msgid "Sorting"
-msgstr "排序"
-
-#: source/win-preferences/schema/file-manager.ts:101
-msgid "When sorting documents…"
-msgstr "排序文件時…"
-
-#: source/win-preferences/schema/file-manager.ts:104
-msgid "Use natural order (2 comes before 10)"
-msgstr "使用自然順序（2 在 10 之前）"
-
-#: source/win-preferences/schema/file-manager.ts:105
-msgid "Use ASCII order (2 comes after 10)"
-msgstr "使用 ASCII 順序（2 在 10 之後）"
-
-#: source/win-preferences/schema/import-export.ts:24
-msgid "Import and export profiles"
-msgstr "匯入和匯出設定檔"
-
-#: source/win-preferences/schema/import-export.ts:30
-msgid "Open import profiles editor"
-msgstr "開啟匯入設定檔編輯器"
-
-#: source/win-preferences/schema/import-export.ts:44
-msgid "Open export profiles editor"
-msgstr "開啟匯出設定檔編輯器"
-
-#: source/win-preferences/schema/import-export.ts:59
-msgid "Export settings"
-msgstr "匯出設定"
-
-#. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
-#: source/win-preferences/schema/import-export.ts:65
-msgid "Use Zettlr's internal Pandoc for exports"
-msgstr "使用 Zettlr 的內部 Pandoc 進行匯出"
-
-#: source/win-preferences/schema/import-export.ts:71
-msgid "Remove tags from files when exporting"
-msgstr "匯出時從檔案中移除標籤"
-
-#: source/win-preferences/schema/import-export.ts:80
-msgid "Remove internal links completely"
-msgstr "徹底移除內部連結"
-
-#: source/win-preferences/schema/import-export.ts:81
-msgid "Unlink internal links"
-msgstr "取消內部連結"
-
-#: source/win-preferences/schema/import-export.ts:82
-msgid "Don't touch internal links"
-msgstr "不要改變內部連結"
-
-#: source/win-preferences/schema/import-export.ts:88
-msgid "Destination folder for exported files"
-msgstr "匯出檔案的目的地資料夾"
-
-#. TODO: Add info-strings
-#: source/win-preferences/schema/import-export.ts:92
-msgid "Temporary folder"
-msgstr "暫存資料夾"
-
-#: source/win-preferences/schema/import-export.ts:93
-msgid "Same as file location"
-msgstr "與檔案位置相同"
-
-#: source/win-preferences/schema/import-export.ts:94
-msgid "Ask for folder when exporting"
-msgstr "匯出時詢問資料夾"
-
-#: source/win-preferences/schema/import-export.ts:100
-msgid ""
-"Warning! Files in the temporary folder are regularly deleted. Choosing the "
-"same location as the file overwrites files with identical filenames if they "
-"already exist."
-msgstr ""
-"警告！暫存資料夾中的檔案會定期刪除。選擇與檔案相同的位置會覆蓋已存在的同名檔"
-"案。"
-
-#: source/win-preferences/schema/import-export.ts:105
-msgid "Custom export commands"
-msgstr "自訂匯出命令"
-
-#: source/win-preferences/schema/import-export.ts:113
-msgid "Display name"
-msgstr "顯示名稱"
-
-#: source/win-preferences/schema/import-export.ts:113
-msgid "Command"
-msgstr "命令"
-
-#: source/win-preferences/schema/import-export.ts:114
-msgid ""
-"Enter custom commands to run the exporter with. Each command receives as its "
-"first argument the file or project folder to be exported."
-msgstr ""
-"輸入自訂命令以執行匯出器。每個命令的第一個參數是要匯出的檔案或專案資料夾。"
-
 #: source/win-preferences/schema/advanced.ts:30
 msgid "Pattern for new file names"
 msgstr "新檔案名稱的模式"
@@ -3527,106 +3996,104 @@ msgid "Changes the editor font size"
 msgstr "更改編輯器字型大小"
 
 #: source/win-preferences/schema/advanced.ts:92
-msgid "Attachments sidebar"
-msgstr "附件側邊欄"
+msgid "File Treatment"
+msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:98
+#: source/win-preferences/schema/advanced.ts:99
+msgid "Decide where various file types are displayed, and how to open them."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:108
+msgid "Display in file manager"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:109
+msgid "Display in sidebar"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:110
+msgid "Open with"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:118
+msgid "Built-in Markdown and Code files"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:141
+msgid "Images"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:155
+#: source/win-preferences/schema/advanced.ts:179
+#: source/win-preferences/schema/advanced.ts:202
+#: source/win-preferences/schema/advanced.ts:223
+#: source/win-preferences/schema/advanced.ts:244
+msgid "System default"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:165
+msgid "PDF documents"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:189
+msgid "MS Office Documents"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:210
+msgid "Open Office Documents"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:231
+msgid "Data files (tsv, csv, etc.)"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:254
 msgid "File extensions to be visible in the Attachments sidebar"
 msgstr "在附件側邊欄中可見的檔案副檔名"
 
-#: source/win-preferences/schema/advanced.ts:104
+#: source/win-preferences/schema/advanced.ts:260
 msgid "Iframe rendering whitelist"
 msgstr "Iframe 顯示白名單"
 
-#: source/win-preferences/schema/advanced.ts:113
+#: source/win-preferences/schema/advanced.ts:269
 msgid "Hostname"
 msgstr "主機名"
 
-#: source/win-preferences/schema/advanced.ts:120
+#: source/win-preferences/schema/advanced.ts:276
 msgid "Watchdog polling"
 msgstr "看門狗輪詢"
 
-#: source/win-preferences/schema/advanced.ts:126
+#: source/win-preferences/schema/advanced.ts:282
 msgid "Activate watchdog polling"
 msgstr "啟用看門狗輪詢"
 
-#: source/win-preferences/schema/advanced.ts:131
+#: source/win-preferences/schema/advanced.ts:287
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "判斷一個檔案寫入完成前的等待時間（毫秒）"
 
-#: source/win-preferences/schema/advanced.ts:138
+#: source/win-preferences/schema/advanced.ts:294
 msgid "Deleting items"
 msgstr "刪除項目"
 
-#: source/win-preferences/schema/advanced.ts:144
+#: source/win-preferences/schema/advanced.ts:300
 msgid "Delete items irreversibly if moving them to trash fails"
 msgstr "如果移動到垃圾桶失敗，就直接刪除檔案"
 
-#: source/win-preferences/schema/advanced.ts:150
+#: source/win-preferences/schema/advanced.ts:306
 msgid "Debug mode"
 msgstr "除錯模式"
 
-#: source/win-preferences/schema/advanced.ts:156
+#: source/win-preferences/schema/advanced.ts:312
 msgid "Enable debug mode"
 msgstr "啟用除錯模式"
 
-#: source/win-preferences/schema/advanced.ts:163
+#: source/win-preferences/schema/advanced.ts:319
 msgid "Beta releases"
 msgstr "Beta 版本"
 
-#: source/win-preferences/schema/advanced.ts:169
+#: source/win-preferences/schema/advanced.ts:325
 msgid "Notify me about beta releases"
 msgstr "當有新 Beta 版本發布時通知我"
-
-#: source/win-preferences/schema/snippets.ts:30
-msgid "Open snippets editor"
-msgstr "開啟小片段編輯器"
-
-#: source/win-preferences/schema/general.ts:22
-msgid "Application language"
-msgstr "應用程式語言"
-
-#: source/win-preferences/schema/general.ts:33
-msgid "Autosave"
-msgstr "自動存檔"
-
-#: source/win-preferences/schema/general.ts:43
-msgid "Save modifications"
-msgstr "儲存修改"
-
-#: source/win-preferences/schema/general.ts:48
-msgid "Immediately"
-msgstr "立即"
-
-#: source/win-preferences/schema/general.ts:49
-msgid "After a short delay"
-msgstr "短暫延遲後"
-
-#: source/win-preferences/schema/general.ts:55
-msgid "Default image folder"
-msgstr "預設圖片資料夾"
-
-#: source/win-preferences/schema/general.ts:67
-msgid ""
-"Click \"Select folder…\" or type an absolute or relative path directly into "
-"the input field."
-msgstr "點選「選擇資料夾…」或直接在輸入欄中輸入絕對或相對路徑。"
-
-#: source/win-preferences/schema/general.ts:72
-msgid "Behavior"
-msgstr "行為"
-
-#: source/win-preferences/schema/general.ts:83
-msgid "Avoid opening files in new tabs if possible"
-msgstr "盡量避免在新分頁中開啟檔案"
-
-#: source/win-preferences/schema/general.ts:89
-msgid "Updates"
-msgstr "更新"
-
-#: source/win-preferences/schema/general.ts:95
-msgid "Automatically check for updates"
-msgstr "自動檢查更新"
 
 #: source/win-preferences/schema/citations.ts:28
 msgid "How would you like autocomplete to insert your citations?"
@@ -3644,6 +4111,12 @@ msgstr "檔案路徑"
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL style (optional)"
 msgstr "CSL 樣式（選擇性的）"
+
+#~ msgid "Open diagnostics panel"
+#~ msgstr "開啟診斷面板"
+
+#~ msgid "Attachments sidebar"
+#~ msgstr "附件側邊欄"
 
 #~ msgid "Open Link"
 #~ msgstr "開啟連結"

@@ -75,6 +75,8 @@ declare const PROJECT_PROPERTIES_PRELOAD_WEBPACK_ENTRY: string
 declare const PROJECT_PROPERTIES_WEBPACK_ENTRY: string
 declare const SPLASH_SCREEN_WEBPACK_ENTRY: string
 declare const SPLASH_SCREEN_PRELOAD_WEBPACK_ENTRY: string
+declare const ONBOARDING_WEBPACK_ENTRY: string
+declare const ONBOARDING_PRELOAD_WEBPACK_ENTRY: string
 
 // Contains the git build number
 declare const __GIT_COMMIT_HASH__: string

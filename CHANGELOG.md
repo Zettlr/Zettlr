@@ -148,6 +148,9 @@ parts of your citations, using the following CSS classes:
   and in the statusbar. Clicking it will toggle Markdown files between a pure
   syntax view, and a mode in which those items which you have selected will be
   pre-rendered/previewed (#4514).
+- **Feature**: Zettlr now ships with a brand-new onboarding wizard that helps
+  new users tweak some central settings immediately without having to scour the
+  preferences.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
