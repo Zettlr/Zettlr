@@ -139,6 +139,7 @@ export interface ConfigOptions {
     markdownFileExtensions: boolean
     imageWidth: number
     imageHeight: number
+    renderingMode: 'preview'|'raw'
     renderCitations: boolean
     renderIframes: boolean
     renderImages: boolean
@@ -384,6 +385,7 @@ export function getConfigTemplate (): ConfigOptions {
       markdownFileExtensions: false,
       imageWidth: 100, // Maximum preview image width
       imageHeight: 50, // Maximum preview image height
+      renderingMode: 'preview',
       renderCitations: true,
       renderIframes: true,
       renderImages: true,

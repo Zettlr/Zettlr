@@ -21,6 +21,7 @@ import { cursorStatus, wordcountStatus, charcountStatus, inputModeStatus } from 
 import { languageToolStatus } from './language-tool'
 import { diagnosticsStatus } from './diagnostics'
 import { statusbarProjectInfo } from '../plugins/project-info-field'
+import { renderingModeToggle } from '../renderers'
 
 /**
  * The interface each item on the statusbar must conform to.
@@ -73,6 +74,7 @@ function createStatusbar (_view: EditorView): Panel {
       const items = [
         statusbarProjectInfo,
         magicQuotesStatus,
+        renderingModeToggle,
         readabilityStatus,
         cursorStatus,
         wordcountStatus,

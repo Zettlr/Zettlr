@@ -256,6 +256,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     idRE: zkn.idRE,
     idGen: zkn.idGen,
     renderCitations: display.renderCitations,
+    renderingMode: display.renderingMode,
     renderIframes: display.renderIframes,
     renderImages: display.renderImages,
     renderLinks: display.renderLinks,

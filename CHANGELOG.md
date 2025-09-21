@@ -143,6 +143,11 @@ parts of your citations, using the following CSS classes:
   settings to customize this. By default, none of the new file types will be
   displayed in the file manager (#5501).
 - **Feature**: Zettlr now provides a Liquid Glass icon for macOS 26.
+- **Feature**: A new option has been added to allow a simple switching between a
+  raw Markdown syntax mode and a preview mode ("WYSIWYG"), both in the settings
+  and in the statusbar. Clicking it will toggle Markdown files between a pure
+  syntax view, and a mode in which those items which you have selected will be
+  pre-rendered/previewed (#4514).
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
@@ -199,6 +204,8 @@ parts of your citations, using the following CSS classes:
 - Moved the `DirectedGraph` class from the link provider to the stats window.
 - Switched back from `electron-devtools-assembler` to
   `electron-devtools-installer`; now the Vue.js devtools extension works again.
+- Style groups in form builder fields now support a label that will be rendered
+  atop of these groups.
 
 # 3.6.0
 

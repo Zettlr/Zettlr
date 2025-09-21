@@ -63,49 +63,70 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           display: 'info',
           contents: trans('Check to enable live rendering of various Markdown elements to formatted appearance. This hides formatting characters (such as **text**) or renders images instead of their link.')
         },
+        { type: 'separator' },
+        {
+          type: 'radio',
+          label: trans('Choose between preview mode ("WYSIWYG) or raw mode ("WYSIWYM").'),
+          model: 'display.renderingMode',
+          inline: true,
+          options: {
+            preview: trans('Preview mode'),
+            raw: trans('Raw mode')
+          }
+        },
+        { type: 'separator' },
         {
           type: 'style-group',
           style: 'columns',
+          label: trans('When preview mode is active, the following renderers will be enabled:'),
           fields: [
             {
               type: 'checkbox',
               label: trans('Render citations'),
-              model: 'display.renderCitations'
+              model: 'display.renderCitations',
+              disabled: config.display.renderingMode === 'raw'
             },
             {
               type: 'checkbox',
               label: trans('Render iframes'),
-              model: 'display.renderIframes'
+              model: 'display.renderIframes',
+              disabled: config.display.renderingMode === 'raw'
             },
             {
               type: 'checkbox',
               label: trans('Render images'),
-              model: 'display.renderImages'
+              model: 'display.renderImages',
+              disabled: config.display.renderingMode === 'raw'
             },
             {
               type: 'checkbox',
               label: trans('Render links'),
-              model: 'display.renderLinks'
+              model: 'display.renderLinks',
+              disabled: config.display.renderingMode === 'raw'
             },
             {
               type: 'checkbox',
               label: trans('Render formulae'),
-              model: 'display.renderMath'
+              model: 'display.renderMath',
+              disabled: config.display.renderingMode === 'raw'
             },
             {
               type: 'checkbox',
               label: trans('Render tasks'),
-              model: 'display.renderTasks'
+              model: 'display.renderTasks',
+              disabled: config.display.renderingMode === 'raw'
             },
             {
               type: 'checkbox',
               label: trans('Hide heading characters'),
-              model: 'display.renderHTags'
+              model: 'display.renderHTags',
+              disabled: config.display.renderingMode === 'raw'
             },
             {
               type: 'checkbox',
               label: trans('Render emphasis'),
-              model: 'display.renderEmphasis'
+              model: 'display.renderEmphasis',
+              disabled: config.display.renderingMode === 'raw'
             }
           ]
         },

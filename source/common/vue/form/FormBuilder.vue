@@ -45,24 +45,29 @@
           ></FormFieldControl>
           <div
             v-else-if="field.type === 'style-group'"
-            v-bind:class="{
-              'style-group': true,
-              columns: field.style === 'columns'
-            }"
+            class="style-group"
           >
-            <template v-for="(subField, subfieldIdx) in field.fields" v-bind:key="subfieldIdx">
-              <FormFieldControl
-                v-if="'model' in subField"
-                v-bind:field="subField"
-                v-bind:model="getModelValue(subField.model)"
-                v-on:update:model-value="emit('update:modelValue', subField.model, $event)"
-              ></FormFieldControl>
-              <FormFieldControl
-                v-else
-                v-bind:field="subField"
-                v-bind:model="undefined"
-              ></FormFieldControl>
-            </template>
+            <p
+              v-if="field.label !== undefined"
+              class="form-field-plain-text"
+            >
+              {{ field.label }}
+            </p>
+            <div v-bind:class="{ columns: field.style === 'columns' }">
+              <template v-for="(subField, subfieldIdx) in field.fields" v-bind:key="subfieldIdx">
+                <FormFieldControl
+                  v-if="'model' in subField"
+                  v-bind:field="subField"
+                  v-bind:model="getModelValue(subField.model)"
+                  v-on:update:model-value="emit('update:modelValue', subField.model, $event)"
+                ></FormFieldControl>
+                <FormFieldControl
+                  v-else
+                  v-bind:field="subField"
+                  v-bind:model="undefined"
+                ></FormFieldControl>
+              </template>
+            </div>
           </div>
           <!-- Display a set of related controls in a table/grid-like layout -->
           <div
@@ -273,6 +278,7 @@ SliderField
 interface StyleGroup {
   type: 'style-group'
   style: 'columns'
+  label?: string
   fields: FormField[]
 }
 
