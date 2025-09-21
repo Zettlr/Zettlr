@@ -52,7 +52,7 @@ export async function showOnboardingWindow (config: ConfigProvider, logger: LogP
     width: 800,
     height: 600,
     center: true,
-    resizable: true, // DEBUG: Must be false
+    resizable: false,
     movable: true,
     minimizable: false,
     maximizable: false,
