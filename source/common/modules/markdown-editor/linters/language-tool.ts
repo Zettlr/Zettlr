@@ -14,11 +14,10 @@
  */
 
 import { linter, type Diagnostic, type Action } from '@codemirror/lint'
-import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
+import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
-import { type LanguageToolAPIResponse, type AnnotationData } from '@providers/commands/language-tool'
+import { type LanguageToolAPIResponse, type AnnotationData, type Annotation } from '@providers/commands/language-tool'
 import { StateEffect, StateField } from '@codemirror/state'
-import { type TextNode } from '@common/modules/markdown-utils/markdown-ast'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 
 const ipcRenderer = window.ipc
@@ -101,6 +100,46 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
 })
 
 /**
+ * Adjust tailing and leading whitespace between two strings.
+ *
+ * @param   {string}    string1  The leading string. Tailing whitespace will be adjusted.
+ * @param   {string}    string2  The tailing string. Leading whitespace will be adjusted.
+ *
+ * @return  {{ string1: string, string2: string, adjust: [ number, number ] }}  The strings with adjusted whitespace along
+ *                                                                              with the tailing and leading index adjustments.
+ */
+function adjustWhitespace (string1: string, string2: string): { string1: string, string2: string, adjust: [ number, number ] } {
+  const string1Trimmed = string1.trimEnd()
+  const tailingWhitespace = string1.length - string1Trimmed.length
+
+  const string2Trimmed = string2.trimStart()
+  const leadingWhitespace = string2.length - string2Trimmed.length
+
+  // Eventually, this may need to be expanded to handle other
+  // spacing constraints if they may arise. Currently, this
+  // will only handle cases where there is an equal amount of non-zero
+  // whitespace between the strings.
+  if (tailingWhitespace === 0 || leadingWhitespace === 0 || tailingWhitespace !== leadingWhitespace) {
+    return { string1, string2, adjust: [ 0, 0 ] }
+  }
+
+  const whiteSpace = Math.max(tailingWhitespace, leadingWhitespace)
+
+  // In case of an odd number of spaces, we bias towards the first string
+  //
+  // The end index of the first string:
+  const string1Padding = string1Trimmed.length + Math.ceil(whiteSpace / 2)
+  // The start index of the second string:
+  const string2Padding = leadingWhitespace - Math.floor(whiteSpace / 2)
+
+  return {
+    string1: string1.slice(0, string1Padding),
+    string2: string2.slice(string2Padding),
+    adjust: [ string1.length - string1Padding, string2Padding ]
+  }
+}
+
+/**
  * Defines a spellchecker that runs over the text content of the document and
  * highlights misspelled words
  */
@@ -114,7 +153,7 @@ const ltLinter = linter(async view => {
   const diagnostics: Diagnostic[] = []
 
   const ast = markdownToAST(view.state.doc.toString())
-  const textNodes = extractASTNodes(ast, 'Text') as TextNode[]
+  const textNodes = extractTextnodes(ast)
 
   // To avoid too high loads, we sanitize the document
   // according to the LanguageTool API `data` parameter.
@@ -123,15 +162,68 @@ const ltLinter = linter(async view => {
   const annotations: AnnotationData = { annotation: [] }
 
   let idx = 0
+  let prevNode
+
   for (const node of textNodes) {
-    const from = node.from - node.whitespaceBefore.length
-    if (from - idx > 0) {
-      annotations.annotation.push({ markup: view.state.sliceDoc(idx, from) })
+    const markup: Annotation = {}
+    const text: Annotation = {}
+
+    let from = node.from - node.whitespaceBefore.length
+    let to = node.to
+
+    text.text = view.state.sliceDoc(from, to)
+    const prevText = prevNode?.text ?? ''
+
+    // This function is meant to handle one following edge case with inline code.
+    // When we parse a string with inline code, we get the following structure:
+    //
+    // String: 'sample text with `inline` formatting.'
+    // Parse: [
+    //   { text: 'sample text with ' },
+    //   { markup: '`inline`' },
+    //   { text: ' formatting.'},
+    // ]
+    //
+    // And LT processes the strings as `sample text with[..]formatting.`,
+    // which duplicates the spacing. We need to detect instances where
+    // two text nodes have equal spacing between them, and adjust the spacing
+    // accordingly. We can ignore instances where only one side has spacing,
+    // or with mismatched spacing, assuming that spacing should be balanced.
+    //
+    // When the spacing is equal between the strings, we drop half of the spacing
+    // then distribute the remaining spaces across the strings so that any detected
+    // spacing errors have a wider context.
+    const { string1, adjust } = adjustWhitespace(prevText, text.text)
+    idx -= adjust[0]
+    from += adjust[1]
+
+    if (prevNode !== undefined) {
+      prevNode.text = string1
     }
 
-    annotations.annotation.push({ text: view.state.sliceDoc(from, node.to) })
-    idx = node.to
+    if (from - idx > 0) {
+      markup.markup = view.state.sliceDoc(idx, from)
+      if (markup.markup.trim() === '') {
+        from = idx
+      } else {
+        // Sometimes markup includes newlines,
+        // so to interpret the spacing correctly,
+        // we need to tell LT that this markup should be
+        // seen as at least one newline.
+        if (markup.markup.indexOf('\n') !== -1) {
+          markup.interpretAs = '\n'
+        }
+        annotations.annotation.push(markup)
+      }
+    }
+
+    text.text = view.state.sliceDoc(from, to)
+    annotations.annotation.push(text)
+
+    prevNode = text
+    idx = to
   }
+
   // If the last TextNode does not extend to the end of the document,
   // add the remainder as `markup`.
   if (idx < view.state.doc.length) {

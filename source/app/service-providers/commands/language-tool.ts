@@ -21,7 +21,8 @@ import type { AppServiceContainer } from 'source/app/app-service-container'
 
 export interface Annotation {
   text?: string,
-  markup?: string
+  markup?: string,
+  interpretAs?: string
 }
 
 export interface AnnotationData {
