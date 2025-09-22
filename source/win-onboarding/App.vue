@@ -18,6 +18,8 @@
             {{ whatsChangedLabel }}
           </button>
         </p>
+
+        <SupportLogos></SupportLogos>
       </div>
     </div>
 
@@ -134,6 +136,7 @@ import WritingCheckPage from './pages/WritingCheckPage.vue'
 import OtherFilesPage from './pages/OtherFilesPage.vue'
 import PACKAGE_JSON from '../../package.json'
 import { trans } from 'source/common/i18n-renderer'
+import SupportLogos from './SupportLogos.vue'
 
 // This is required because some elements (looking at you, RadioControl) are
 // completely namespaced to platform specific values and we don't include the
