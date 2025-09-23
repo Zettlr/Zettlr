@@ -34,6 +34,7 @@ const EMPTY_NODES = [
   'SubscriptMark',
   'HighlightMark',
   'HeaderMark',
+  'Blockquote',
   'QuoteMark',
   'ListMark',
   'TaskMarker',
