@@ -25,11 +25,37 @@ import {
   type LeafBlockParser
 } from '@lezer/markdown'
 
-// Group 1: ^| table contents |$; Group 2: some text | with pipes in between
-const pipeRE = /^(\|.+?\|)$|(.+?\|.+?)/
-const pipeHeaderRE = /^[|+:-]+$/
-const gridLineRE = /^\+[-=+:]+\+$/
-const gridContentRE = /^\|.+\|$/
+// Pipe Table Regex (min 2 cells): `my cell | my other cell` or `| my cell | my other cell |`
+// ^\|?             => optional leading pipe
+// [^|\n]*          => first cell, zero or more characters
+// (?:\|[^|\n]*)+   => one or more cells
+// \|?$             => optional tailing pipe
+const pipeRE = /^\|?[^|\n]*(?:\|[^|\n]*)+\|?$/
+// Pipe Table Header Regex (min 2 cells): `|:-:+---+:--|`
+// \s*                    => leading whitespace
+// ^[|+]?                 => optional leading pipe or cross
+// :?                     => optional alignment
+// -+                     => one or more delimiters
+// :?                     => optional alignment
+// (?:[|+]:?-+:?)+        => one or more cells divided by pipes or crosses
+// [|+]?$                 => optional tailing pipe or cross
+// \s*                    => tailing whitespace
+const pipeHeaderRE = /^\s*[|+]?:?-+:?(?:[|+]:?-+:?)+[|+]?\s*$/
+// Grid Table Line Regex: `+:===:+=====+` or `+-------+------+`
+// \s*              => leading whitespace
+// ^\+              => leading cross
+// (?::?-+:?\+)+    => optional dash delimiter row with optional alignment
+// (?::?=+:?\+)+    => optional equals delimiter row with optional alignment
+// \s*              => tailing whitespace
+const gridLineRE = /^\s*\+(?:(?::?-+:?\+)+|(?::?=+:?\+)+)\s*$/
+// Grid Table Content Regex:
+// (?!.*\+\s*\+)              => assert non-empty delimiter lines, `++`
+// (?!.*\+.*?[^-|+\n].*?\+)   => assert only dashes in delimiter, `+---+`
+// \s*                        => leading whitespace
+// [|+]                       => leading pipe or cross
+// (?:[^|+\n]*[|+])+          => one or more cells containing any non pipe or cross character
+// \s*                        => tailing whitespace
+const gridContentRE = /^(?!.*\+\s*\+)(?!.*\+.*?[^-|+\n].*?\+)\s*[|+](?:[^|+\n]*[|+])+\s*$/
 
 /**
  * Parses a grid table and returns a subtree that can be used for syntax highlighting
