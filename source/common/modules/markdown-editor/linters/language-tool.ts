@@ -214,12 +214,10 @@ const ltLinter = linter(async view => {
     prevNode = text
     idx = to
   }
-
-  // If the last TextNode does not extend to the end of the document,
-  // add the remainder as `markup`.
-  if (idx < view.state.doc.length) {
-    annotations.annotation.push({ markup: view.state.sliceDoc(idx) })
-  }
+  // Note: Since the iteration ends on a text node, any markup
+  // at the end of the document will be excluded from what is
+  // sent to the LT API server. This can potentially reduce the
+  // amount of data sent.
 
   const response: [LanguageToolAPIResponse, string[]]|undefined|string = await ipcRenderer.invoke('application', {
     command: 'run-language-tool',
