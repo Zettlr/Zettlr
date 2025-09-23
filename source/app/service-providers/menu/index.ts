@@ -263,14 +263,6 @@ export default class MenuProvider extends ProviderContract {
       const applyClickHandler = (item: MenuItemConstructorOptions): void => {
         item.click = () => { resolvedID = item.id }
 
-        // Apple's Human Interface Guidelines state that context menus should
-        // not feature any keyboard shortcuts, so we should remove any potential
-        // accelerator here
-        // cf. https://developer.apple.com/design/human-interface-guidelines/macos/menus/contextual-menus/
-        if (process.platform === 'darwin' && 'accelerator' in item) {
-          item.accelerator = undefined
-        }
-
         // Recurse into a potential submenu
         if (item.submenu !== undefined) {
           for (const subItem of item.submenu as MenuItemConstructorOptions[]) {

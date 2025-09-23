@@ -189,6 +189,8 @@ parts of your citations, using the following CSS classes:
 - Improved the macOS tray icon display.
 - Single clicks on the tray icon now activate the app (#4267).
 - Fixed footnote placing edge cases.
+- Due to updates in Apple's Human Interface Guidelines, the main process now no
+  longer removes accelerators/keyboard shortcuts from the menus.
 
 ## Under the Hood
 
