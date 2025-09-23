@@ -1,5 +1,5 @@
 <template>
-  <p style="text-align: center;">
+  <p style="text-align: center; font-weight: bold;">
     {{ supportMessage }}
   </p>
 
@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { trans } from 'source/common/i18n-renderer'
 
-const supportMessage = trans('Support the development of Zettlr:')
+const supportMessage = trans('Support the development of Zettlr')
 
 function loadUrl (url: string) {
   window.location.href = url
