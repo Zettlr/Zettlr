@@ -33,6 +33,7 @@ interface FileTypeSettings<F = boolean, S = boolean, O = 'zettlr'|'system'> {
 
 export interface ConfigOptions {
   version: string
+  buildDate: string
   openPaths: string[]
   openDirectory: string|null
   dialogPaths: {
@@ -213,6 +214,7 @@ export function getConfigTemplate (): ConfigOptions {
   // Return the complete configuration object
   return {
     version: app.getVersion(), // Useful for migrating
+    buildDate: __BUILD_DATE__,
     openPaths: [], // Array to include all opened root paths
     openDirectory: null, // Save last opened dir path here
     dialogPaths: {
