@@ -16,7 +16,7 @@
 import { linter, type Diagnostic, type Action } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
-import { type LanguageToolAPIResponse, type AnnotationData, type Annotation } from '@providers/commands/language-tool'
+import type { LanguageToolAPIResponse, AnnotationData, Annotation } from '@providers/commands/language-tool'
 import { StateEffect, StateField } from '@codemirror/state'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 
@@ -39,7 +39,7 @@ const userDictionary: UserDictionaryStore = {
   value: new Set()
 }
 
-function updateUserDictionary (): void {
+function refreshUserDictionary (): void {
   userDictionary.value.clear()
 
   ipcRenderer.invoke(
@@ -55,7 +55,7 @@ ipcRenderer.on('dictionary-provider', (event, message) => {
   const { command } = message
 
   if (command === 'invalidate-dict') {
-    updateUserDictionary()
+    refreshUserDictionary()
   }
 })
 
@@ -64,7 +64,7 @@ export const updateLTState = StateEffect.define<Partial<LanguageToolStateField>>
 export const languageToolState = StateField.define<LanguageToolStateField>({
   create: (state) => {
     // populate the user dictionary
-    updateUserDictionary()
+    refreshUserDictionary()
 
     let overrideLanguage = 'auto'
     // Extract YAML frontmatter "lang" property if present and correct. This is
@@ -105,10 +105,9 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
  * @param   {string}    string1  The leading string. Tailing whitespace will be adjusted.
  * @param   {string}    string2  The tailing string. Leading whitespace will be adjusted.
  *
- * @return  {{ string1: string, string2: string, adjust: [ number, number ] }}  The strings with adjusted whitespace along
- *                                                                              with the tailing and leading index adjustments.
+ * @return  {[ number, number ]}  The tailing and leading index adjustments.
  */
-function adjustWhitespace (string1: string, string2: string): { string1: string, string2: string, adjust: [ number, number ] } {
+function adjustWhitespace (string1: string, string2: string): [ number, number ] {
   const string1Trimmed = string1.trimEnd()
   const tailingWhitespace = string1.length - string1Trimmed.length
 
@@ -120,23 +119,16 @@ function adjustWhitespace (string1: string, string2: string): { string1: string,
   // will only handle cases where there is an equal amount of non-zero
   // whitespace between the strings.
   if (tailingWhitespace === 0 || leadingWhitespace === 0 || tailingWhitespace !== leadingWhitespace) {
-    return { string1, string2, adjust: [ 0, 0 ] }
+    return [ 0, 0 ]
   }
-
-  const whiteSpace = Math.max(tailingWhitespace, leadingWhitespace)
-
   // In case of an odd number of spaces, we bias towards the first string
   //
   // The end index of the first string:
-  const string1Padding = string1Trimmed.length + Math.ceil(whiteSpace / 2)
+  const string1Padding = string1Trimmed.length + Math.ceil(tailingWhitespace / 2)
   // The start index of the second string:
-  const string2Padding = leadingWhitespace - Math.floor(whiteSpace / 2)
+  const string2Padding = leadingWhitespace - Math.floor(leadingWhitespace / 2)
 
-  return {
-    string1: string1.slice(0, string1Padding),
-    string2: string2.slice(string2Padding),
-    adjust: [ string1.length - string1Padding, string2Padding ]
-  }
+  return [ string1.length - string1Padding, string2Padding ]
 }
 
 /**
@@ -171,9 +163,6 @@ const ltLinter = linter(async view => {
     let from = node.from - node.whitespaceBefore.length
     let to = node.to
 
-    text.text = view.state.sliceDoc(from, to)
-    const prevText = prevNode?.text ?? ''
-
     // This function is meant to handle one following edge case with inline code.
     // When we parse a string with inline code, we get the following structure:
     //
@@ -193,12 +182,14 @@ const ltLinter = linter(async view => {
     // When the spacing is equal between the strings, we drop half of the spacing
     // then distribute the remaining spaces across the strings so that any detected
     // spacing errors have a wider context.
-    const { string1, adjust } = adjustWhitespace(prevText, text.text)
-    idx -= adjust[0]
-    from += adjust[1]
+    const prevText: string = prevNode?.text ?? ''
+
+    const [ tailing, leading ] = adjustWhitespace(prevText, view.state.sliceDoc(from, to))
+    idx -= tailing
+    from += leading
 
     if (prevNode !== undefined) {
-      prevNode.text = string1
+      prevNode.text = prevText.slice(0, prevText.length - tailing)
     }
 
     if (from - idx > 0) {
