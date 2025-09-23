@@ -153,7 +153,9 @@ export default class TrayProvider extends ProviderContract {
       iconPath = path.join(__dirname, 'assets/icons/icon.ico')
     }
 
-    this._tray = new Tray(iconPath)
+    // Provide the app's UUID so that, on Windows and macOS, the tray icon will
+    // remain at its correct position.
+    this._tray = new Tray(iconPath, this._config.get().uuid)
 
     this._tray.on('click', () => {
       this._windows.activateFromTray()
