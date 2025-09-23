@@ -18,6 +18,9 @@
             {{ whatsChangedLabel }}
           </button>
         </p>
+        <p class="small">
+          {{ buildDateLabel }}
+        </p>
 
         <SupportLogos></SupportLogos>
       </div>
@@ -137,6 +140,7 @@ import OtherFilesPage from './pages/OtherFilesPage.vue'
 import PACKAGE_JSON from '../../package.json'
 import { trans } from 'source/common/i18n-renderer'
 import SupportLogos from './SupportLogos.vue'
+import { DateTime } from 'luxon'
 
 // This is required because some elements (looking at you, RadioControl) are
 // completely namespaced to platform specific values and we don't include the
@@ -166,6 +170,8 @@ const updateCompleteHeading = trans('Update complete!')
 const updateCompleteMessage = trans('Zettlr has been updated. You are now running Zettlr')
 const getStartedLabel = trans('Get started')
 const whatsChangedLabel = trans('See what\'s changed')
+const buildDate = DateTime.fromISO(__BUILD_DATE__).toLocaleString({ dateStyle: 'full' })
+const buildDateLabel = trans('Build date: %s', buildDate)
 
 // Onboarding workflow labels
 const startSetupLabel = trans('Start setup')
@@ -357,6 +363,10 @@ h1, h2, h3, h4, h5, h6 {
 p {
   margin-bottom: 15px;
   line-height: 140%;
+
+  &.small {
+    font-size: 80%;
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

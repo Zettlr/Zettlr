@@ -7,7 +7,7 @@
     <h2>General Information</h2>
     <ul>
       <li>Zettlr Version: <strong>{{ configStore.config.version }}</strong></li>
-      <li>Build number: <strong><code>{{ commit }}</code></strong></li>
+      <li>Build number: <strong><code>{{ commit }}</code></strong> ({{ buildDate }})</li>
       <li>UUID: <strong><code>{{ configStore.config.uuid }}</code></strong></li>
       <li>
         System: <strong>{{ platform }} {{ platformVersion }}</strong>
@@ -48,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { DateTime } from 'luxon'
 import { useConfigStore } from 'source/pinia'
 
 /**
@@ -72,6 +73,7 @@ const arch = process.arch
 const env = Object.assign({}, process.env)
 const platform = process.platform
 const commit = __GIT_COMMIT_HASH__
+const buildDate = DateTime.fromISO(__BUILD_DATE__).toLocaleString({ dateStyle: 'full' })
 // DEBUG: getSystemVersion is a simple property in the renderer, not a function
 const platformVersion = process.getSystemVersion as unknown as string
 // Add version strings for external helper programs Zettlr can use
