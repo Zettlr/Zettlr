@@ -193,6 +193,8 @@ parts of your citations, using the following CSS classes:
 - Fixed footnote placing edge cases.
 - Due to updates in Apple's Human Interface Guidelines, the main process now no
   longer removes accelerators/keyboard shortcuts from the menus.
+- The recent documents provider now uses the OS API to return a list of recent
+  documents. The provider is only retained for Linux at this point.
 
 ## Under the Hood
 

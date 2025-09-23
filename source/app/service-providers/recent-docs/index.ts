@@ -91,7 +91,7 @@ export default class RecentDocumentsProvider extends ProviderContract {
    */
   get (): string[] {
     // Return a copy
-    return this._recentDocs.map(elem => elem)
+    return [ 'darwin', 'win32' ].includes(process.platform) ? app.getRecentDocuments() : this._recentDocs.map(elem => elem)
   }
 
   /**
