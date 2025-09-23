@@ -17,7 +17,8 @@ import {
   ipcMain,
   BrowserWindow,
   type MenuItemConstructorOptions,
-  app
+  app,
+  type WebFrameMain
 } from 'electron'
 
 import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
@@ -232,7 +233,7 @@ export default class MenuProvider extends ProviderContract {
     ipcMain.handle('menu-provider', async (event, message) => {
       const { command, payload } = message
       if (command === 'display-native-context-menu') {
-        return await this._displayNativeContextMenu(payload.menu, payload.x, payload.y)
+        return await this._displayNativeContextMenu(payload.menu, payload.x, payload.y, event.senderFrame ?? undefined)
       }
     })
   }
@@ -249,13 +250,14 @@ export default class MenuProvider extends ProviderContract {
   /**
    * Displays a native context menu with the given menu items
    *
-   * @param   {MenuItem[]}                 menu  The menu to display
-   * @param   {number}                     x     X-coordinate of the menu
-   * @param   {number}                     y     Y-coordinate of the menu
+   * @param   {MenuItem[]}                 menu   The menu to display
+   * @param   {number}                     x      X-coordinate of the menu
+   * @param   {number}                     y      Y-coordinate of the menu
+   * @param   {WebFrameMain}               frame  The calling frame
    *
-   * @return  {Promise<string|undefined>}        Returns the clicked ID, or undefined
+   * @return  {Promise<string|undefined>}         Returns the clicked ID, or undefined
    */
-  private async _displayNativeContextMenu (menu: MenuItemConstructorOptions[], x: number, y: number): Promise<string|undefined> {
+  private async _displayNativeContextMenu (menu: MenuItemConstructorOptions[], x: number, y: number, frame?: WebFrameMain): Promise<string|undefined> {
     return await new Promise((resolve, _reject) => {
       let resolvedID: string|undefined
       // Define a quick'n'dirty recursive function that applies the click handler
@@ -300,8 +302,9 @@ export default class MenuProvider extends ProviderContract {
       }
 
       // Enforce integers for the coordinates, otherwise we will get this weird
-      // "conversion failure" error.
-      popupMenu.popup({ x: Math.round(x), y: Math.round(y) })
+      // "conversion failure" error. We pass the `frame` here to access
+      // WritingTools and a few other things on macOS.
+      popupMenu.popup({ x: Math.round(x), y: Math.round(y), frame })
     })
   }
 

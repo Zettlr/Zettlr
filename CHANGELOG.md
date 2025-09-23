@@ -151,6 +151,8 @@ parts of your citations, using the following CSS classes:
 - **Feature**: Zettlr now ships with a brand-new onboarding wizard that helps
   new users tweak some central settings immediately without having to scour the
   preferences.
+- **Feature**: macOS users with an Apple Silicon chip can now access Writing
+  Tools from context menus.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
