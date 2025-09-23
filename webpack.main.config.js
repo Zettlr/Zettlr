@@ -37,7 +37,8 @@ module.exports = {
       ]
     }),
     new DefinePlugin({
-      __GIT_COMMIT_HASH__: JSON.stringify(process.env.GIT_COMMIT_HASH)
+      __GIT_COMMIT_HASH__: JSON.stringify(process.env.GIT_COMMIT_HASH),
+      __BUILD_DATE__: JSON.stringify((new Date()).toISOString())
     })
   ],
   resolve: {

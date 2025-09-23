@@ -17,7 +17,8 @@ const plugins = [
     // replacement, the value given to it must include actual quotes inside of
     // the string itself. Typically, this is done either with alternate quotes,
     // such as '"production"', or by using JSON.stringify('production')."
-    __GIT_COMMIT_HASH__: JSON.stringify(process.env.GIT_COMMIT_HASH)
+    __GIT_COMMIT_HASH__: JSON.stringify(process.env.GIT_COMMIT_HASH),
+    __BUILD_DATE__: JSON.stringify((new Date()).toISOString())
   })
 ]
 
