@@ -54,6 +54,32 @@ async function downloadPandoc (platform, arch) {
   })
 }
 
+/**
+ * Since all our renderers share the same static HTML file and the same preload
+ * script, we can save on a LOT of repeated code by just generating the entry
+ * points with a tiny utility function.
+ * 
+ * NOTE:
+ * 
+ * * This function assumes that the entry point lives in a folder and has an
+ * `index.ts` entry point file.
+ *
+ * @param   {string}  name    The name of the entry point (this determines, e.g., folder names in the app)
+ * @param   {string}  folder  The containing folder's name (e.g., `win-about`).
+ *
+ * @return  {any}             The generated entrypoint
+ */
+function generateRendererEntrypoint (name, folder) {
+  return {
+    html: './static/index.htm',
+    js: `./source/${folder}/index.ts`,
+    name,
+    preload: {
+      js: './source/common/modules/preload/index.ts'
+    }
+  }
+}
+
 module.exports = {
   hooks: {
     generateAssets: async (forgeConfig, targetPlatform, targetArch) => {
@@ -227,118 +253,23 @@ module.exports = {
         renderer: {
           config: './webpack.renderer.config.js',
           entryPoints: [
-            {
-              html: './static/index.htm',
-              js: './source/win-main/index.ts',
-              name: 'main_window',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-print/index.ts',
-              name: 'print',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-log-viewer/index.ts',
-              name: 'log_viewer',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-preferences/index.ts',
-              name: 'preferences',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-tag-manager/index.ts',
-              name: 'tag_manager',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-paste-image/index.ts',
-              name: 'paste_image',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-error/index.ts',
-              name: 'error',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-about/index.ts',
-              name: 'about',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-stats/index.ts',
-              name: 'stats',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-assets/index.ts',
-              name: 'assets',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-update/index.ts',
-              name: 'update',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-project-properties/index.ts',
-              name: 'project_properties',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-splash-screen/index.ts',
-              name: 'splash_screen',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
-              js: './source/win-onboarding/index.ts',
-              name: 'onboarding',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            }
+            // These are all the individual windows the app uses. NOTE that the
+            // entry point names are not arbitrary but determine the variable
+            // names (see declarations in global.d.ts).
+            generateRendererEntrypoint('main_window', 'win-main'),
+            generateRendererEntrypoint('print', 'win-print'),
+            generateRendererEntrypoint('log_viewer', 'win-log-viewer'),
+            generateRendererEntrypoint('preferences', 'win-preferences'),
+            generateRendererEntrypoint('tag_manager', 'win-tag-manager'),
+            generateRendererEntrypoint('paste_image', 'win-paste-image'),
+            generateRendererEntrypoint('error', 'win-error'),
+            generateRendererEntrypoint('about', 'win-about'),
+            generateRendererEntrypoint('stats', 'win-stats'),
+            generateRendererEntrypoint('assets', 'win-assets'),
+            generateRendererEntrypoint('update', 'win-update'),
+            generateRendererEntrypoint('project_properties', 'win-project-properties'),
+            generateRendererEntrypoint('splash_screen', 'win-splash-screen'),
+            generateRendererEntrypoint('onboarding', 'win-onboarding')
           ]
         }
       }
