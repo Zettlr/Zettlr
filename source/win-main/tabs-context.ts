@@ -31,6 +31,9 @@ export function displayTabbarContext (event: MouseEvent, callback: (clickedID: s
 }
 
 export default function displayTabsContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor, doc: OpenDocument, callback: (clickedID: string) => void): void {
+  const isMac = process.platform === 'darwin'
+  const isWin = process.platform === 'win32'
+
   const items: AnyMenuItem[] = [
     {
       label: trans('Close tab'),
@@ -68,6 +71,11 @@ export default function displayTabsContext (event: MouseEvent, fileObject: MDFil
     {
       label: trans('Copy path'),
       id: 'copy-path',
+      type: 'normal'
+    },
+    {
+      label: isMac ? trans('Reveal in Finder') : isWin ? trans('Reveal in Explorer') : trans('Reveal in File Browser'),
+      id: 'show-in-folder',
       type: 'normal'
     },
     {

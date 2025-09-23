@@ -95,6 +95,7 @@ import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source
 import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 
 const ipcRenderer = window.ipc
 
@@ -518,6 +519,11 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
     } else if (clickedID === 'copy-path') {
       // Copy path to the clipboard
       navigator.clipboard.writeText(file.path).catch(err => console.error(err))
+    } else if (clickedID === 'show-in-folder') {
+      ipcRenderer.send('window-controls', {
+        command: 'show-item-in-folder',
+        payload: { itemPath: file.path }
+      } as WindowControlsIPCAPI)
     } else if (clickedID === 'copy-id' && file.type === 'file') {
       // Copy the ID to the clipboard
       navigator.clipboard.writeText(file.id).catch(err => console.error(err))

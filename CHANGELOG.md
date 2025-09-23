@@ -156,6 +156,8 @@ parts of your citations, using the following CSS classes:
   snippets to `$FILENAME$EXTENSION` (#4191).
 - **Change**: The word and character counters in the statusbar now always show
   both counts.
+- You can now show an item in Finder/Explorer/file browser when right-clicking a
+  document tab (#5914).
 - Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
   footnotes).
 - The diagnostics info field in the statusbar now toggles the lint panel,
@@ -209,6 +211,11 @@ parts of your citations, using the following CSS classes:
   `electron-devtools-installer`; now the Vue.js devtools extension works again.
 - Style groups in form builder fields now support a label that will be rendered
   atop of these groups.
+- Zettlr now records and remembers the binary's build date. This information is
+  shown in the debug info to help pinpoint from when a version is. In addition,
+  this information is now used to disambiguate nightly versions so that both the
+  FSAL cache will be cleared more regularly, and you get a visual indicator that
+  you did update your nightly release.
 
 # 3.6.0
 
