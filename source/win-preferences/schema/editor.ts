@@ -284,6 +284,11 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
         },
         {
           type: 'checkbox',
+          label: trans('Show Line Numbers'),
+          model: 'editor.showLineNumbers'
+        },
+        {
+          type: 'checkbox',
           label: trans('Highlight whitespace'),
           model: 'editor.showWhitespace'
         },

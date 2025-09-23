@@ -73,6 +73,7 @@ export interface EditorConfiguration {
   theme: MarkdownTheme
   margins: 'S'|'M'|'L'
   highlightWhitespace: boolean
+  showLineNumbers: boolean
   countChars: boolean
 }
 
@@ -130,6 +131,7 @@ export function getDefaultConfig (): EditorConfiguration {
     theme: 'berlin',
     margins: 'M',
     highlightWhitespace: false,
+    showLineNumbers: false,
     countChars: false
   }
 }

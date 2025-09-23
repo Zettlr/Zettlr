@@ -96,6 +96,7 @@ export interface ConfigOptions {
     showStatusbar: boolean
     showFormattingToolbar: boolean
     showWhitespace: boolean
+    showLineNumbers: boolean
     defaultSaveImagePath: string
     enableTableHelper: boolean
     indentUnit: number
@@ -282,6 +283,7 @@ export function getConfigTemplate (): ConfigOptions {
       autoCloseBrackets: true,
       showLinkPreviews: true, // Whether to fetch link previews in the editor
       showWhitespace: false,
+      showLineNumbers: false,
       defaultSaveImagePath: '',
       citeStyle: 'regular', // Determines how autocomplete will complete citations
       enableTableHelper: true, // Enable the table helper plugin
