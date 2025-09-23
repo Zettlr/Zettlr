@@ -41,8 +41,10 @@ export default class DictionaryProvider extends ProviderContract {
   private readonly hunspell: Nodehun[]
   private readonly _loadedDicts: string[]
   private readonly _userDictionaryPath: string
+  private readonly _userAffixPath: string
   private readonly _emitter: EventEmitter
   private _userDictionary: string[]
+  private _userHunspell: Nodehun | undefined
   private _fileLock: boolean
   private _unwrittenChanges: boolean
   private _cachedAutocorrect: string[]
@@ -57,8 +59,11 @@ export default class DictionaryProvider extends ProviderContract {
     this._loadedDicts = []
     // Path to the user dictionary
     this._userDictionaryPath = path.join(app.getPath('userData'), 'user.dic')
+    this._userAffixPath = path.join(app.getPath('userData'), 'user.aff')
+
     // The user dictionary
     this._userDictionary = ['Zettlr']
+    this._userHunspell = undefined
 
     this._cachedAutocorrect = []
 
@@ -76,7 +81,8 @@ export default class DictionaryProvider extends ProviderContract {
       const terms: string[] = message.terms
       const { command } = message
       if (command === 'get-user-dictionary') {
-        return this._userDictionary.map(elem => elem)
+        // strip off any hunspell flags to return only the words.
+        return this._userDictionary.map(elem => elem.split('/', 1)[0])
       } else if (command === 'set-user-dictionary') {
         const dict = message.payload
         if (!Array.isArray(dict) || !dict.every(d => typeof d === 'string')) {
@@ -84,11 +90,12 @@ export default class DictionaryProvider extends ProviderContract {
         }
         this.setUserDictionary(dict)
       } else if (command === 'check') {
-        return terms.map(t => this.check(t))
+        return Promise.all(terms.map(t => this.check(t)))
       } else if (command === 'suggest') {
-        return terms.map(t => this.suggest(t))
+        const limit: number = message.limit
+        return Promise.all(terms.map(t => this.suggest(t, limit)))
       } else if (command === 'add') {
-        return terms.map(t => this.add(t))
+        return Promise.all(terms.map(t => this.add(t)))
       }
     })
 
@@ -129,9 +136,7 @@ export default class DictionaryProvider extends ProviderContract {
       return false
     }
 
-    this._userDictionary = dict
-    this._userDictionary = [...new Set(this._userDictionary)]
-    this._userDictionary = this._userDictionary.filter(word => word.trim() !== '')
+    this._userDictionary = [...new Set(dict)].filter(word => word.trim() !== '')
     this.persistUserDictionary()
       .catch(err => {
         this._logger.error(`[Dictionary Provider] Could not persist user dictionary: ${String(err.message)}`, err)
@@ -268,6 +273,9 @@ export default class DictionaryProvider extends ProviderContract {
    * @return {Promise} Will resolve after the dictionary has been loaded.
    */
   async loadUserDictionary (): Promise<void> {
+    let aff: null|Buffer = null
+    let dic: null|Buffer = null
+
     try {
       await fs.lstat(this._userDictionaryPath)
     } catch (err) {
@@ -275,14 +283,27 @@ export default class DictionaryProvider extends ProviderContract {
       await this.persistUserDictionary()
     }
 
-    const fileContents = await fs.readFile(this._userDictionaryPath, 'utf8')
-    this._userDictionary = fileContents.split('\n')
+    try {
+      dic = await fs.readFile(this._userDictionaryPath)
+    } catch (err: any) {
+      this._logger.error('[Dictionary Provider] Could not load .dic-file for the user dictionary.', err)
+      return
+    }
 
-    // String.split() returns an array with one empty string if the file is
-    // empty, so we need to perform in total two operations: Make a set out of
-    // it (remove duplicates) and remove empty strings
-    this._userDictionary = [...new Set(this._userDictionary)]
-    this._userDictionary = this._userDictionary.filter(elem => elem.trim() !== '')
+    try {
+      aff = await fs.readFile(this._userAffixPath)
+    } catch (err: any) {
+      this._logger.error('[Dictionary Provider] Could not load affix file for the user dictionary', err)
+      return
+    }
+
+    const fileContents = await fs.readFile(this._userDictionaryPath, 'utf8')
+    // Omit the first line, which contains an approximate number of terms
+    // according to the hunspell format, and filter out any blank lines.
+    const filteredContents = fileContents.split('\n').slice(1).filter(elem => elem.trim() !== '')
+    this._userDictionary = [...new Set(filteredContents)]
+
+    this._userHunspell = new Nodehun(aff, dic)
 
     // If the user dictionary is empty, the split will not create an array
     // Send an invalidation message to the renderer so that it reloads all words
@@ -301,15 +322,24 @@ export default class DictionaryProvider extends ProviderContract {
 
     // Initiate the filelock, write, release the lock
     const data = this._userDictionary.join('\n')
+    // The first line has to contain an approximate number of terms in the dictionary.
+    const fileContents = this._userDictionary.length + '\n' + data
     this._fileLock = true
     this._unwrittenChanges = false // NOTE that this has to come before the writing
-    await fs.writeFile(this._userDictionaryPath, data)
+    await fs.writeFile(this._userDictionaryPath, fileContents)
     this._fileLock = false
 
     // After we're done, check if someone tried to call the function in the
     // meantime. If so, the flag will be true by now: immediately call it again.
     if (this._unwrittenChanges) {
       return await this.persistUserDictionary()
+    }
+
+    try {
+      await fs.lstat(this._userAffixPath)
+    } catch (err) {
+      // Create a new base affix file.
+      await fs.writeFile(this._userAffixPath, 'SET UTF-8\n')
     }
   }
 
@@ -319,7 +349,7 @@ export default class DictionaryProvider extends ProviderContract {
    * @param  {String} term The word/term to check
    * @return {Boolean}      True if the word was confirmed by any dictionary, or false.
    */
-  check (term: string): boolean {
+  async check (term: string): Promise<boolean> {
     // Don't check until all are loaded
     if (this._config.get().selectedDicts.length !== this.hunspell.length) {
       return true
@@ -338,12 +368,14 @@ export default class DictionaryProvider extends ProviderContract {
       return true
     }
 
-    if (this._userDictionary.includes(term)) {
-      return true
+    if (this._userHunspell !== undefined) {
+      if (await this._userHunspell.spell(term)) {
+        return true
+      }
     }
 
     for (const dictionary of this.hunspell) {
-      if (dictionary.spellSync(term)) {
+      if (await dictionary.spell(term)) {
         return true
       }
     }
@@ -356,19 +388,26 @@ export default class DictionaryProvider extends ProviderContract {
    * @param  {String} term The term or word to check for.
    * @return {Array}      An array containing all returned possible alternatives.
    */
-  suggest (term: string): string[] {
-    if (this.hunspell.length === 0) {
-      return []
-    }
-
-    // Return no suggestions
-    if (this._config.get().selectedDicts.length !== this.hunspell.length) {
-      return []
-    }
-
+  async suggest (term: string, limit?: number): Promise<string[] >{
     const suggestions: string[] = []
+
+    // Wait for all dictionaries to load.
+    if (this._config.get().selectedDicts.length !== this.hunspell.length) {
+      return suggestions
+    }
+
+    if (this.hunspell.length === 0) {
+      return suggestions
+    }
+
+    if (this._userHunspell !== undefined) {
+      const userSuggestions = await this._userHunspell?.suggest(term) ?? []
+      suggestions.push(...userSuggestions.slice(0, limit))
+    }
+
     for (const dictionary of this.hunspell) {
-      suggestions.push(...(dictionary.suggestSync(term) ?? []))
+      const values = await dictionary.suggest(term) ?? []
+      suggestions.push(...values.slice(0, limit))
     }
 
     return suggestions
@@ -378,7 +417,7 @@ export default class DictionaryProvider extends ProviderContract {
    * Adds the given term to the user dictionary
    * @param {String} term The term to add
    */
-  add (term: string): boolean {
+  async add (term: string): Promise<boolean> {
     term = term.trim()
     if (term === '') {
       return false
@@ -387,6 +426,8 @@ export default class DictionaryProvider extends ProviderContract {
     // Adds the given term to the user dictionary
     if (!this._userDictionary.includes(term)) {
       this._userDictionary.push(term)
+      await this._userHunspell?.add(term)
+
       this.persistUserDictionary()
         .catch(err => {
           this._logger.error(`[Dictionary Provider] Could not persist user dictionary: ${String(err.message)}`, err)

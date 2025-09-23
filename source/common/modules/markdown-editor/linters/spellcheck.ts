@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { linter, type Diagnostic } from '@codemirror/lint'
+import { linter, type Diagnostic, type Action } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
@@ -142,12 +142,30 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
     return undefined
   }
 
+  const saneTerm = sanitizeTerm(word)
+
+  const suggestions = await ipcRenderer.invoke(
+    'dictionary-provider',
+    { command: 'suggest', terms: [saneTerm], limit: 3 }
+  )
+
+  const actions: Action[] = []
+  for (const value of suggestions[0]) {
+    actions.push({
+      name: value,
+      apply (view, from, to) {
+        view.dispatch({ changes: { from, to, insert: value } })
+      }
+    })
+  }
+
   return {
     from: nodeStart + index,
     to: nodeStart + index + word.length,
     message: trans('Spelling mistake'),
     severity: 'error',
-    source: 'spellcheck' // Useful for later filtering of all diagnostics present
+    source: 'spellcheck', // Useful for later filtering of all diagnostics present
+    actions: actions
   }
 }
 
