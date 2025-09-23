@@ -30,6 +30,7 @@ import isFile from '@common/util/is-file'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import ignoreDir from '@common/util/ignore-dir'
 import { showOnboardingWindow } from './onboarding-window'
+import { DateTime } from 'luxon'
 
 const ZETTLR_VERSION = app.getVersion()
 
@@ -185,6 +186,19 @@ export default class ConfigProvider extends ProviderContract {
 
       // Determine if this is a different version
       this._newVersion = readConfig.version !== this.config.version
+
+      // Additional check for nightlies, because these do not differ in terms of
+      // build version, but rather in terms of build date.
+      const isNightly = this.config.version.endsWith('-nightly')
+      const buildDatesDiffer = __BUILD_DATE__ !== readConfig.buildDate
+      if (!this._newVersion && isNightly && buildDatesDiffer) {
+        // Below's check errs on the side of caution and assigns newVersion true
+        // if unsure.
+        const oldDate = DateTime.fromISO(readConfig.buildDate ?? __BUILD_DATE__)
+        const newDate = DateTime.fromISO(__BUILD_DATE__)
+        this._newVersion = newDate >= oldDate
+      }
+
       // NOTE: We cannot use "update" here because we cannot yet broadcast any
       // events, so we have to use safeAssign directly.
       this.config = safeAssign(readConfig, this.config)
