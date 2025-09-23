@@ -1,16 +1,25 @@
 <template>
   <!-- Barebones window that only includes limited things -->
   <div id="splash-screen-wrapper">
-    <img src="../../resources/icons/png/256x256.png">
-    <ProgressControl
-      v-bind:max="100"
-      v-bind:min="0"
-      v-bind:value="stepPercentage"
-      v-bind:interruptible="false"
-    ></ProgressControl>
-    <p>
-      {{ stepLabel }}
-    </p>
+    <div id="logo">
+      <img src="../../resources/icons/png/128x128.png">
+    </div>
+    <div id="info">
+      <h1>Zettlr</h1>
+      <p>Your One-Stop Publication Workbench</p>
+      <p>&copy; 2017&ndash;{{ year }} Hendrik Erz</p>
+    </div>
+    <div id="progress">
+      <ProgressControl
+        v-bind:max="100"
+        v-bind:min="0"
+        v-bind:value="stepPercentage"
+        v-bind:interruptible="false"
+      ></ProgressControl>
+      <p>
+        {{ stepLabel }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -37,6 +46,7 @@ const ipcRenderer = window.ipc
 
 const stepLabel = ref(trans('Loading…'))
 const stepPercentage = ref(0)
+const year = (new Date()).getFullYear()
 
 ipcRenderer.on('step-update', (event, { currentStepMessage, currentStepPercentage }) => {
   stepLabel.value = currentStepMessage
@@ -62,7 +72,34 @@ body {
 
 #splash-screen-wrapper {
   text-align: center;
-  width: 500px;
-  margin: 20px auto;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  padding: 20px;
+  grid-template-areas:
+    "logo info"
+    "progress progress";
+  grid-template-columns: 150px auto;
+  grid-template-rows: 150px auto;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+
+  #logo { grid-area: logo; }
+  #info {
+    grid-area: info;
+    text-align: left;
+
+    h1 {
+      font-size: 48px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+  }
+  #progress { grid-area: progress; }
 }
 </style>
