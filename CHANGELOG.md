@@ -197,6 +197,7 @@ parts of your citations, using the following CSS classes:
   longer removes accelerators/keyboard shortcuts from the menus.
 - The recent documents provider now uses the OS API to return a list of recent
   documents. The provider is only retained for Linux at this point.
+- Improved performance for documents with many and/or large tables (#5903).
 
 ## Under the Hood
 
