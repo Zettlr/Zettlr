@@ -16,7 +16,8 @@ import {
   type Extension,
   Compartment,
   StateEffect,
-  EditorState
+  EditorState,
+  RangeSetBuilder
 } from '@codemirror/state'
 import {
   highlightWhitespace as hw,
@@ -52,15 +53,15 @@ class PilcrowWidget extends WidgetType {
 const pilcrowDeco = Decoration.widget({ widget: new PilcrowWidget(), side: 1 })
 
 function showLineEndings (view: EditorView): DecorationSet {
-  const decos: any[] = []
+  const builder = new RangeSetBuilder<Decoration>()
   for (const { from, to } of view.visibleRanges) {
     for (let pos = from; pos <= to;) {
       const line = view.state.doc.lineAt(pos)
-      decos.push(pilcrowDeco.range(line.to))
+      builder.add(line.to, line.to, pilcrowDeco)
       pos = line.to + 1
     }
   }
-  return Decoration.set(decos, true)
+  return builder.finish()
 }
 
 /**
@@ -74,7 +75,9 @@ const pilcrowPlugin = ViewPlugin.fromClass(class {
   }
 
   update (update: ViewUpdate) {
-    this.decorations = showLineEndings(update.view)
+    if (update.docChanged || update.viewportChanged) {
+      this.decorations = showLineEndings(update.view)
+    }
   }
 }, {
   decorations: v => v.decorations
