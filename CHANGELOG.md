@@ -158,6 +158,8 @@ parts of your citations, using the following CSS classes:
   snippets to `$FILENAME$EXTENSION` (#4191).
 - **Change**: The word and character counters in the statusbar now always show
   both counts.
+- **A11y**: Zettlr now respects if you choose to reduce transparency in system
+  settings and no longer add window vibrancy on macOS.
 - You can now show an item in Finder/Explorer/file browser when right-clicking a
   document tab (#5914).
 - Fixed inline math not rendering when transforming Markdown to HTML (e.g., in

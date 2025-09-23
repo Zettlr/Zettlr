@@ -14,7 +14,7 @@
  */
 
 import type ConfigProvider from '@providers/config'
-import { type BrowserWindowConstructorOptions } from 'electron'
+import { type BrowserWindowConstructorOptions, nativeTheme } from 'electron'
 import path from 'path'
 
 /**
@@ -26,8 +26,8 @@ import path from 'path'
  * @param  {boolean}                          [modal=false]  If set to true, will assign a modal chrome
  */
 export default function setWindowChrome (config: ConfigProvider, winConf: BrowserWindowConstructorOptions, modal: boolean = false): void {
-  const shouldUseNativeAppearance: boolean = config.get('window.nativeAppearance')
-  const shouldUseVibrancy: boolean = config.get('window.vibrancy')
+  const shouldUseNativeAppearance = config.get().window.nativeAppearance
+  const shouldUseVibrancy = config.get().window.vibrancy
 
   if (process.platform !== 'darwin' || modal) {
     // It is recommended to set a background color for the windows, however, on
@@ -40,7 +40,7 @@ export default function setWindowChrome (config: ConfigProvider, winConf: Browse
     // chrome. Additionally, we'll be setting the window's vibrancy so that the
     // app looks even more native.
     winConf.titleBarStyle = 'hiddenInset'
-    if (shouldUseVibrancy) {
+    if (shouldUseVibrancy && !nativeTheme.prefersReducedTransparency) {
       // See https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/translucency/
       winConf.vibrancy = 'under-window'
       winConf.visualEffectState = 'followWindow'
