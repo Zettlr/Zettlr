@@ -30,23 +30,19 @@ export interface LanguageToolStateField {
   lastError: string|undefined
 }
 
-interface UserDictionaryStore {
-  value: Set<string>
-}
-
 // store the local dictionary for later filtering
-const userDictionary: UserDictionaryStore = {
-  value: new Set()
-}
+const userDictionary: Set<string> = new Set()
 
 function refreshUserDictionary (): void {
-  userDictionary.value.clear()
+  userDictionary.clear()
 
   ipcRenderer.invoke(
     'dictionary-provider',
     { command: 'get-user-dictionary' }
   ).then((dictionary: string[]) => {
-    userDictionary.value = new Set(dictionary)
+    for (const word of dictionary) {
+      userDictionary.add(word)
+    }
   }).catch(console.error)
 }
 
@@ -256,7 +252,7 @@ const ltLinter = linter(async view => {
     const word = view.state.sliceDoc(match.offset, match.offset + match.length)
     const issueType = match.rule.issueType
     // skip matches for words in the local dictionary
-    if (issueType === 'misspelling' && userDictionary.value.has(word)) { continue }
+    if (issueType === 'misspelling' && userDictionary.has(word)) { continue }
 
     const source = `language-tool(${match.rule.issueType})`
     const severity = (issueType === 'style')
