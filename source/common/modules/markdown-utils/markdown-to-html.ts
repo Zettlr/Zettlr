@@ -94,6 +94,59 @@ function getTagInfo (node: GenericNode): HTMLTag {
 }
 
 /**
+ * Returns a ready-to-use HTML attribute string for the provided node.
+ *
+ * @param   {ASTNode}  node  The node.
+ *
+ * @return  {string}         The attribute string. Includes leading space if necessary.
+ */
+function renderNodeAttributes (node: ASTNode): string {
+  if (node.attributes === undefined) {
+    return ''
+  }
+
+  const attr: string[] = []
+
+  for (const [ key, value ] of Object.entries(node.attributes)) {
+    let sanitizedValue = value
+    if (Array.isArray(sanitizedValue)) {
+      switch (key) {
+        case 'class':
+          sanitizedValue = sanitizedValue.join(' ')
+          break
+        default:
+          // Default: Simply retain the last value.
+          sanitizedValue = sanitizedValue.toReversed()[0]
+      }
+    }
+
+    attr.push(`${key}="${sanitizedValue}"`)
+  }
+
+  return ' ' + attr.join(' ')
+}
+
+/**
+ * Adds any arbitrary attributes to the provided node. NOTE: Will turn any
+ * strings into an array of strings where applicable. Later array contents may
+ * override earlier ones.
+ *
+ * @param   {ASTNode}   node    The AST node
+ * @param   {string[]}  values  A series of values to add
+ *
+ * @return  {void}              Modifies in place.
+ */
+function addAttribute (node: ASTNode, attributeName: string, ...values: string[]): void {
+  const attr = node.attributes
+  attr[attributeName] = attr[attributeName] ?? []
+
+  if (!Array.isArray(attr[attributeName])) {
+    attr[attributeName] = [attr[attributeName]]
+  }
+  attr[attributeName].push(...values)
+}
+
+/**
  * Takes a Markdown AST node and turns it to an HTML string
  *
  * @param   {ASTNode}  node         The node
@@ -116,44 +169,70 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
   } else if (node.type === 'YAMLFrontmatter') {
     return '' // Frontmatters must be removed upon HTML export
   } else if (node.type === 'Citation') {
+    addAttribute(node, 'class', 'citation')
+    const attr = renderNodeAttributes(node)
     const rendered = getCitation(node.parsedCitation.items, node.parsedCitation.composite)
-    return `${node.whitespaceBefore}<span class="citation">${rendered ?? _.escape(node.value)}</span>`
+    return `${node.whitespaceBefore}<span${attr}>${rendered ?? _.escape(node.value)}</span>`
   } else if (node.type === 'Footnote') {
-    return `${node.whitespaceBefore}<a class="footnote" href="#fnref:${_.escape(node.label)}">${_.escape(node.label)}</a>`
+    addAttribute(node, 'class', 'footnote')
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<a${attr} href="#fnref:${_.escape(node.label)}">${_.escape(node.label)}</a>`
   } else if (node.type === 'FootnoteRef') {
-    return `${node.whitespaceBefore}<div class="footnote-ref"><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, getCitation, hooks, indent)}</div>`
+    addAttribute(node, 'class', 'footnote-ref')
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<div${attr}><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, getCitation, hooks, indent)}</div>`
   } else if (node.type === 'Heading') {
-    return `${node.whitespaceBefore}<h${node.level}>${nodeToHTML(node.children, getCitation, hooks, indent)}</h${node.level}>`
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<h${node.level}${attr}>${nodeToHTML(node.children, getCitation, hooks, indent)}</h${node.level}>`
   } else if (node.type === 'Highlight') {
-    return `${node.whitespaceBefore}<mark>${nodeToHTML(node.children, getCitation, hooks, indent)}</mark>`
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<mark${attr}>${nodeToHTML(node.children, getCitation, hooks, indent)}</mark>`
   } else if (node.type === 'Superscript') {
-    return `${node.whitespaceBefore}<sup>${nodeToHTML(node.children, getCitation, hooks, indent)}</sup>`
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<sup${attr}>${nodeToHTML(node.children, getCitation, hooks, indent)}</sup>`
   } else if (node.type === 'Subscript') {
-    return `${node.whitespaceBefore}<sub>${nodeToHTML(node.children, getCitation, hooks, indent)}</sub>`
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<sub${attr}>${nodeToHTML(node.children, getCitation, hooks, indent)}</sub>`
   } else if (node.type === 'Image') {
-    const src = hooks.onImageSrc !== undefined ? hooks.onImageSrc(node.url) : node.url
-    return `${node.whitespaceBefore}<img src="${src}" alt="${_.escape(node.alt.value)}" title="${node.title?.value ?? _.escape(node.alt.value)}">`
+    addAttribute(node, 'src', hooks.onImageSrc !== undefined ? hooks.onImageSrc(node.url) : node.url)
+    addAttribute(node, 'alt', _.escape(node.alt.value))
+    addAttribute(node, 'title', node.title?.value ?? _.escape(node.alt.value))
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<img${attr} />`
   } else if (node.type === 'Link') {
     const title = _.escape(node.title?.value ?? node.alt.value)
-    return `${node.whitespaceBefore}<a href="${node.url}" title="${title}">${title}</a>`
+    addAttribute(node, 'href', node.url)
+    addAttribute(node, 'title', title)
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<a${attr}>${title}</a>`
   } else if (node.type === 'OrderedList') {
-    let startsAt = node.startsAt > 1 ? ` start="${node.startsAt}"` : ''
-    startsAt += node.isTaskList ? ' class="task-list"' : ''
-    return `${node.whitespaceBefore}<ol${startsAt}>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ol>`
+    if (node.startsAt > 1) {
+      addAttribute(node, 'start', String(node.startsAt))
+    }
+    if (node.isTaskList) {
+      addAttribute(node, 'class', 'task-list')
+    }
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<ol${attr}>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ol>`
   } else if (node.type === 'BulletList') {
-    const attr = node.isTaskList ? ' class="task-list"' : ''
+    if (node.isTaskList) {
+      addAttribute(node, 'class', 'task-list')
+    }
+    const attr = renderNodeAttributes(node)
     return `${node.whitespaceBefore}<ul${attr}>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ul>`
   } else if (node.type === 'ListItem') {
+    const attr = renderNodeAttributes(node)
     const task = node.checked !== undefined ? `<input type="checkbox" disabled="disabled" ${node.checked ? 'checked="checked"' : ''}>` : ''
-    return `${node.whitespaceBefore}<li>${task}${nodeToHTML(node.children, getCitation, hooks, indent + 1)}</li>`
+    return `${node.whitespaceBefore}<li${attr}>${task}${nodeToHTML(node.children, getCitation, hooks, indent + 1)}</li>`
   } else if (node.type === 'Emphasis') {
     const body = nodeToHTML(node.children, getCitation, hooks, indent)
+    const attr = renderNodeAttributes(node)
 
     switch (node.which) {
       case 'bold':
-        return `${node.whitespaceBefore}<strong>${body}</strong>`
+        return `${node.whitespaceBefore}<strong${attr}>${body}</strong>`
       case 'italic':
-        return `${node.whitespaceBefore}<em>${body}</em>`
+        return `${node.whitespaceBefore}<em${attr}>${body}</em>`
     }
   } else if (node.type === 'Table') {
     const rows: string[] = []
@@ -164,26 +243,31 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
       }
       const tag = row.isHeaderOrFooter ? 'th' : 'td'
       const content = cells.map(c => `<${tag}>${c}</${tag}>`).join('\n')
+      const attr = renderNodeAttributes(row)
       if (row.isHeaderOrFooter) {
-        rows.push(`${row.whitespaceBefore}<thead>\n<tr>\n${content}\n</tr>\n</thead>`)
+        rows.push(`${row.whitespaceBefore}<thead>\n<tr${attr}>\n${content}\n</tr>\n</thead>`)
       } else {
-        rows.push(`${row.whitespaceBefore}<tr>\n${content}\n</tr>`)
+        rows.push(`${row.whitespaceBefore}<tr${attr}>\n${content}\n</tr>`)
       }
     }
-    return `${node.whitespaceBefore}<table>\n${rows.join('\n')}\n</table>`
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<table${attr}>\n${rows.join('\n')}\n</table>`
   } else if (node.type === 'Text') {
     return node.whitespaceBefore + node.value // Plain text
   } else if (node.type === 'FencedCode') {
     if (node.info === '$$') {
       return node.whitespaceBefore + katexToHTML(node.source, true)
     } else {
-      return `${node.whitespaceBefore}<pre><code class="language-${node.info}">${_.escape(node.source)}</code></pre>`
+      addAttribute(node, 'class', `language-${node.info}`)
+      const attr = renderNodeAttributes(node)
+      return `${node.whitespaceBefore}<pre><code${attr}>${_.escape(node.source)}</code></pre>`
     }
   } else if (node.type === 'InlineCode') {
     if (node.info === '$' || node.info === '$$') {
       return node.whitespaceBefore + katexToHTML(node.source, node.info === '$$')
     } else {
-      return `${node.whitespaceBefore}<code>${_.escape(node.source)}</code>`
+      const attr = renderNodeAttributes(node)
+      return `${node.whitespaceBefore}<code${attr}>${_.escape(node.source)}</code>`
     }
   } else if (node.type === 'Generic') {
     // Generic nodes are differentiated by name. There are a few we can support,
@@ -194,9 +278,10 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
       return '' // Simplify the resulting HTML by removing empty elements
     }
 
+    const nodeAttr = renderNodeAttributes(node)
     const attr = tagInfo.attributes.length > 0
-      ? ' ' + tagInfo.attributes.map(a => `${a[0]}="${a[1]}"`).join(' ')
-      : ''
+      ? ' ' + tagInfo.attributes.map(a => `${a[0]}="${a[1]}"`).join(' ') + nodeAttr
+      : nodeAttr
 
     const open = `${node.whitespaceBefore}<${tagInfo.tagName}${attr}${tagInfo.selfClosing ? '/' : ''}>`
     const close = tagInfo.selfClosing ? '' : `</${tagInfo.tagName}>`

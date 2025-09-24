@@ -66,7 +66,7 @@ export interface MDNode {
    * Can be used to store arbitrary attributes (e.g. Pandoc-style attributes
    * such as {.className})
    */
-  attributes?: Record<string, string>
+  attributes: Record<string, string|string[]>
 }
 
 /**
@@ -480,6 +480,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         return {
           type: 'Generic',
           name: node.name,
+          attributes: {},
           from: node.from,
           to: node.to,
           whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -490,6 +491,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: LinkOrImage = {
         type: node.name,
         name: node.name,
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -519,6 +521,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
 
       const astNode: LinkOrImage = {
         type: 'Link',
+        attributes: {},
         name: node.name,
         from: node.from,
         to: node.to,
@@ -538,6 +541,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const level = mark !== null ? mark.to - mark.from : 0
       const astNode: Heading = {
         type: 'Heading',
+        attributes: {},
         name: node.name,
         from: node.from,
         to: node.to,
@@ -554,6 +558,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const level = mark !== null && markdown.substring(mark.from, mark.to).includes('-') ? 2 : 1
       const astNode: Heading = {
         type: 'Heading',
+        attributes: {},
         name: node.name,
         from: node.from,
         to: node.to,
@@ -568,6 +573,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: CitationNode = {
         name: 'Citation',
         type: 'Citation',
+        attributes: {},
         value: markdown.substring(node.from, node.to),
         parsedCitation: nodeToCiteItem(node, markdown),
         from: node.from,
@@ -581,6 +587,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: Footnote = {
         type: 'Footnote',
         name: 'Footnote',
+        attributes: {},
         from: node.from,
         inline: contents.endsWith('^'),
         to: node.to,
@@ -595,6 +602,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: FootnoteRef = {
         type: 'FootnoteRef',
         name: 'FootnoteRef',
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -612,6 +620,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: Highlight = {
         type: 'Highlight',
         name: 'Highlight',
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -622,6 +631,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     case 'OrderedList': {
       const astNode: OrderedList = {
         type: 'OrderedList',
+        attributes: {},
         startsAt: 0,
         isTaskList: false,
         delimiter: '.',
@@ -637,6 +647,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         const listItem: ListItem = {
           type: 'ListItem',
           name: 'ListItem',
+          attributes: {},
           from: item.from,
           to: item.to,
           whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -688,6 +699,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     case 'BulletList': {
       const astNode: BulletList = {
         type: 'BulletList',
+        attributes: {},
         isTaskList: false,
         symbol: '-',
         loose: false, // TODO
@@ -702,6 +714,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         const listItem: ListItem = {
           type: 'ListItem',
           name: 'ListItem',
+          attributes: {},
           from: item.from,
           to: item.to,
           whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -761,6 +774,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: FencedCode = {
         type: 'FencedCode',
         name: 'FencedCode',
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -774,6 +788,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: YAMLFrontmatter = {
         type: 'YAMLFrontmatter',
         name: 'YAMLFrontmatter',
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -792,6 +807,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: InlineCode = {
         type: 'InlineCode',
         name: 'InlineCode',
+        attributes: {},
         from: node.from,
         to: node.to,
         info,
@@ -804,6 +820,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     case 'CommentBlock': {
       const astNode: Comment = {
         type: 'Comment',
+        attributes: {},
         name: node.name,
         from: node.from,
         to: node.to,
@@ -817,6 +834,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: Emphasis = {
         type: 'Emphasis',
         name: 'Emphasis',
+        attributes: {},
         which: node.name === 'Emphasis' ? 'italic' : 'bold',
         from: node.from,
         to: node.to,
@@ -830,6 +848,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: Superscript = {
         type: 'Superscript',
         name: 'Superscript',
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -842,6 +861,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: Subscript = {
         type: 'Subscript',
         name: 'Subscript',
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -862,6 +882,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: ZettelkastenLink = {
         type: 'ZettelkastenLink',
         name: 'ZknLink',
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -880,6 +901,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: ZettelkastenTag = {
         type: 'ZettelkastenTag',
         name: 'ZknTag',
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
@@ -891,6 +913,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: GenericNode = {
         type: 'Generic',
         name: node.name,
+        attributes: {},
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),

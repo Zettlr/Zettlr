@@ -198,6 +198,8 @@ parts of your citations, using the following CSS classes:
 - The recent documents provider now uses the OS API to return a list of recent
   documents. The provider is only retained for Linux at this point.
 - Improved performance for documents with many and/or large tables (#5903).
+- Fixes print functionality by completely abandoning the `iframe` approach and
+  switching to the built-in Markdown-to-HTML parser.
 
 ## Under the Hood
 
