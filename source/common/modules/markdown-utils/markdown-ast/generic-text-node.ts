@@ -27,5 +27,5 @@ import { type TextNode } from '../markdown-ast'
  * @return  {TextNode}                    The rendered TextNode
  */
 export function genericTextNode (from: number, to: number, value: string, whitespaceBefore = ''): TextNode {
-  return { type: 'Text', name: 'text', from, to, value, whitespaceBefore }
+  return { type: 'Text', name: 'text', from, to, value, whitespaceBefore, attributes: {} }
 }

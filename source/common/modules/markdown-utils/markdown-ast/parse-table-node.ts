@@ -88,7 +88,8 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
     to: node.to,
     whitespaceBefore: '',
     alignment: [],
-    rows: []
+    rows: [],
+    attributes: {}
   }
 
   // TODO: Create two sub-functions; one which does the same as below to parse
@@ -139,7 +140,8 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
       to: row.to,
       cells: [],
       isHeaderOrFooter: row.name === 'TableHeader',
-      whitespaceBefore: ''
+      whitespaceBefore: '',
+      attributes: {}
     }
 
     astNode.rows.push(tableRow)
@@ -178,7 +180,8 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
           from: row.from,
           to: child.from
         },
-        textContent: ''
+        textContent: '',
+        attributes: {}
       })
     }
 
@@ -207,7 +210,8 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
             from: prev.to,
             to: child.from
           },
-          textContent: ''
+          textContent: '',
+          attributes: {}
         }
         tableRow.cells.push(cellNode)
       } else if (child.name === 'TableCell') {
@@ -225,7 +229,8 @@ export function parseTableNode (node: SyntaxNode, markdown: string): Table|TextN
             from: child.prevSibling !== null ? child.prevSibling.to : row.from,
             to: child.nextSibling !== null ? child.nextSibling.from : row.to
           },
-          textContent: markdown.slice(child.from, child.to)
+          textContent: markdown.slice(child.from, child.to),
+          attributes: {}
         }
         parseChildren(cellNode, child, markdown)
         tableRow.cells.push(cellNode)
