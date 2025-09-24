@@ -36,6 +36,7 @@ const EMPTY_NODES = [
   'HeaderMark',
   'QuoteMark',
   'ListMark',
+  'TaskMarker',
   'YAMLFrontmatterStart',
   'YAMLFrontmatterEnd',
   'Document',
