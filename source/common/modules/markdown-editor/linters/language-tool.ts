@@ -17,18 +17,11 @@ import { linter, type Diagnostic, type Action } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import type { LanguageToolAPIResponse, AnnotationData, Annotation } from '@providers/commands/language-tool'
-import { StateEffect, StateField } from '@codemirror/state'
+import { StateEffect, StateField, type Transaction } from '@codemirror/state'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
+import type { ViewUpdate } from '@codemirror/view'
 
 const ipcRenderer = window.ipc
-
-export interface LanguageToolStateField {
-  running: boolean
-  lastDetectedLanguage: string
-  supportedLanguages: string[]
-  overrideLanguage: 'auto'|string
-  lastError: string|undefined
-}
 
 // store the local dictionary for later filtering
 const userDictionary: Set<string> = new Set()
@@ -55,6 +48,15 @@ ipcRenderer.on('dictionary-provider', (event, message) => {
   }
 })
 
+export interface LanguageToolStateField {
+  running: boolean
+  lastDetectedLanguage: string
+  supportedLanguages: string[]
+  overrideLanguage: 'auto'|string
+  lastError: string|undefined
+  disabledRules: string[]
+}
+
 export const updateLTState = StateEffect.define<Partial<LanguageToolStateField>>()
 
 export const languageToolState = StateField.define<LanguageToolStateField>({
@@ -78,7 +80,8 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
       lastDetectedLanguage: 'auto',
       lastError: undefined,
       overrideLanguage,
-      supportedLanguages: []
+      supportedLanguages: [],
+      disabledRules: []
     }
   },
   update (value, transaction) {
@@ -89,6 +92,7 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
         value.lastError = e.value.lastError
         value.supportedLanguages = e.value.supportedLanguages ?? value.supportedLanguages
         value.overrideLanguage = e.value.overrideLanguage ?? value.overrideLanguage
+        value.disabledRules = e.value.disabledRules ?? value.disabledRules
       }
     }
     return value
@@ -125,6 +129,34 @@ function adjustWhitespace (string1: string, string2: string): [ number, number ]
   const string2Padding = leadingWhitespace - Math.floor(leadingWhitespace / 2)
 
   return [ string1.length - string1Padding, string2Padding ]
+}
+
+// Hide the tooltip when the `Ignore Rule` action is selected.
+function hideOn (tr: Transaction): boolean | null {
+  for (const e of tr.effects) {
+    if (e.is(updateLTState)) {
+      if (e.value.disabledRules) {
+        return true
+      }
+    }
+  }
+
+  return null
+}
+
+// Re-run the linter when `ignoreRules` are updated.
+function needsRefresh (update: ViewUpdate): boolean {
+  for (const tr of update.transactions) {
+    for (const e of tr.effects) {
+      if (e.is(updateLTState)) {
+        if (e.value.disabledRules) {
+          return true
+        }
+      }
+    }
+  }
+
+  return false
 }
 
 /**
@@ -219,7 +251,8 @@ const ltLinter = linter(async view => {
     command: 'run-language-tool',
     payload: {
       data: annotations,
-      language: view.state.field(languageToolState).overrideLanguage
+      language: view.state.field(languageToolState).overrideLanguage,
+      disabledRules: view.state.field(languageToolState).disabledRules
     }
   })
 
@@ -267,9 +300,18 @@ const ltLinter = linter(async view => {
       source
     }
 
-    if (match.replacements.length > 0) {
-      const actions: Action[] = []
+    const actions: Action[] = []
+    actions.push({
+      name: 'Ignore Rule',
+      apply (view) {
+        const disabledRules = [...view.state.field(languageToolState).disabledRules]
+        disabledRules.push(match.rule.id)
 
+        view.dispatch({ effects: updateLTState.of({ disabledRules: disabledRules }) })
+      }
+    })
+
+    if (match.replacements.length > 0) {
       // Show at most 10 actions to not overload those messages
       let i = 0
       for (const { value } of match.replacements) {
@@ -292,7 +334,11 @@ const ltLinter = linter(async view => {
   }
 
   return diagnostics
-}, { delay: 2000 }) // Increase the delay to reduce server strain
+}, {
+  delay: 2000, // Increase the delay to reduce server strain
+  hideOn,
+  needsRefresh
+})
 
 export const languageTool = [
   ltLinter,
