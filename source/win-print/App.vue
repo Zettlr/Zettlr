@@ -106,7 +106,7 @@ function handleClick (buttonID?: string): void {
 #print-container {
   width: 100%;
   border: none;
-  
+
   // Styles primarily copied from the Pandoc default HTML template to emulate
   // the old print preview:
   // https://github.com/jgm/pandoc/blob/main/data/templates/styles.html
@@ -124,7 +124,9 @@ function handleClick (buttonID?: string): void {
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 12pt;
   overflow-y: auto;
-  line-height: 120%;
+  // minimum recommended height for accessibility
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#accessibility
+  line-height: 1.5;
 
   p {
     margin: 1em 0;
@@ -139,7 +141,7 @@ function handleClick (buttonID?: string): void {
     height: auto;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  :is(h1, h2, h3, h4, h5, h6):not(:first-child) {
     margin-top: 1.4em;
   }
 
