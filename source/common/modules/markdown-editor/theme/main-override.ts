@@ -76,9 +76,6 @@ export const mainOverride = EditorView.baseTheme({
     color: 'var(--grey-2)',
     backgroundColor: 'var(--grey-0)'
   },
-  '.cm-diagnostic button[aria-label*="Ignore Rule"]': {
-    backgroundColor: 'orangered',
-  },
   '&dark .cm-yaml-frontmatter-start::after': {
     color: 'var(--grey-0)',
     backgroundColor: 'var(--grey-4)'

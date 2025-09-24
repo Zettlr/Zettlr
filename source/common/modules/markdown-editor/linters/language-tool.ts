@@ -20,6 +20,7 @@ import type { LanguageToolAPIResponse, AnnotationData, Annotation } from '@provi
 import { StateEffect, StateField, type Transaction } from '@codemirror/state'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 import type { ViewUpdate } from '@codemirror/view'
+import { trans } from 'source/common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -287,7 +288,7 @@ const ltLinter = linter(async view => {
     // skip matches for words in the local dictionary
     if (issueType === 'misspelling' && userDictionary.has(word)) { continue }
 
-    const source = `language-tool(${match.rule.issueType})`
+    const source = `language-tool(${issueType})`
     const severity = (issueType === 'style')
       ? 'info'
       : (issueType === 'misspelling') ? 'error' : 'warning'
@@ -301,16 +302,6 @@ const ltLinter = linter(async view => {
     }
 
     const actions: Action[] = []
-    actions.push({
-      name: 'Ignore Rule',
-      apply (view) {
-        const disabledRules = [...view.state.field(languageToolState).disabledRules]
-        disabledRules.push(match.rule.id)
-
-        view.dispatch({ effects: updateLTState.of({ disabledRules: disabledRules }) })
-      }
-    })
-
     if (match.replacements.length > 0) {
       // Show at most 10 actions to not overload those messages
       let i = 0
@@ -327,9 +318,20 @@ const ltLinter = linter(async view => {
           }
         })
       }
-
-      dia.actions = actions
     }
+
+    actions.push({
+      name: trans('Ignore: %s', match.rule.id),
+      apply (view) {
+        const disabledRules = [...view.state.field(languageToolState).disabledRules]
+        disabledRules.push(match.rule.id)
+
+        view.dispatch({ effects: updateLTState.of({ disabledRules: disabledRules }) })
+      }
+    })
+
+    dia.actions = actions
+
     diagnostics.push(dia)
   }
 
