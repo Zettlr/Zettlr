@@ -137,10 +137,12 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
     const title = _.escape(node.title?.value ?? node.alt.value)
     return `${node.whitespaceBefore}<a href="${node.url}" title="${title}">${title}</a>`
   } else if (node.type === 'OrderedList') {
-    const startsAt = node.startsAt > 1 ? ` start="${node.startsAt}"` : ''
+    let startsAt = node.startsAt > 1 ? ` start="${node.startsAt}"` : ''
+    startsAt += node.isTaskList ? ' class="task-list"' : ''
     return `${node.whitespaceBefore}<ol${startsAt}>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ol>`
   } else if (node.type === 'BulletList') {
-    return `${node.whitespaceBefore}<ul>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ul>`
+    const attr = node.isTaskList ? ' class="task-list"' : ''
+    return `${node.whitespaceBefore}<ul${attr}>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ul>`
   } else if (node.type === 'ListItem') {
     const task = node.checked !== undefined ? `<input type="checkbox" disabled="disabled" ${node.checked ? 'checked="checked"' : ''}>` : ''
     return `${node.whitespaceBefore}<li>${task}${nodeToHTML(node.children, getCitation, hooks, indent + 1)}</li>`

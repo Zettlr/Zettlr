@@ -222,6 +222,10 @@ export interface OrderedList extends MDNode {
    */
   startsAt: number
   /**
+   * Identifies this as a task list, if applicable
+   */
+  isTaskList: boolean
+  /**
    * The delimiter used by this list, can be either ) or .
    */
   delimiter: ')'|'.'
@@ -238,6 +242,10 @@ export interface OrderedList extends MDNode {
 
 export interface BulletList extends MDNode {
   type: 'BulletList'
+  /**
+   * Identifies this as a task list, if applicable
+   */
+  isTaskList: boolean
   /**
    * The symbol this list uses
    */
@@ -615,6 +623,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: OrderedList = {
         type: 'OrderedList',
         startsAt: 0,
+        isTaskList: false,
         delimiter: '.',
         loose: false, // TODO
         name: node.name,
@@ -655,11 +664,23 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         const task = item.getChild('Task')
         const taskMarker = task !== null ? task.getChild('TaskMarker') : null
         if (taskMarker !== null) {
+          astNode.isTaskList = true
           const text = markdown.substring(taskMarker.from, taskMarker.to)
           listItem.checked = text === '[x]'
         }
 
-        astNode.items.push(parseChildren(listItem, item, markdown))
+        // In addition, the MarkdownParser wraps the entire task list item into
+        // a "Task" node. We can't skip it automagically because there is no
+        // mechanism for it (TODO), but we can manually pry it out of the tree
+        // here. We first need to parse the node's children here.
+        parseChildren(listItem, item, markdown)
+        const taskNode = listItem.children.find(child => child.type === 'Generic' && child.name === 'Task')
+        if (taskNode !== undefined && taskNode.type === 'Generic') {
+          const idx = listItem.children.indexOf(taskNode)
+          listItem.children.splice(idx, 1, ...taskNode.children)
+        }
+
+        astNode.items.push(listItem)
       }
 
       return astNode
@@ -667,6 +688,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     case 'BulletList': {
       const astNode: BulletList = {
         type: 'BulletList',
+        isTaskList: false,
         symbol: '-',
         loose: false, // TODO
         name: node.name,
@@ -702,11 +724,23 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         const task = item.getChild('Task')
         const taskMarker = task !== null ? task.getChild('TaskMarker') : null
         if (taskMarker !== null) {
+          astNode.isTaskList = true
           const text = markdown.substring(taskMarker.from, taskMarker.to)
           listItem.checked = text === '[x]'
         }
 
-        astNode.items.push(parseChildren(listItem, item, markdown))
+        // In addition, the MarkdownParser wraps the entire task list item into
+        // a "Task" node. We can't skip it automagically because there is no
+        // mechanism for it (TODO), but we can manually pry it out of the tree
+        // here. We first need to parse the node's children here.
+        parseChildren(listItem, item, markdown)
+        const taskNode = listItem.children.find(child => child.type === 'Generic' && child.name === 'Task')
+        if (taskNode !== undefined && taskNode.type === 'Generic') {
+          const idx = listItem.children.indexOf(taskNode)
+          listItem.children.splice(idx, 1, ...taskNode.children)
+        }
+
+        astNode.items.push(listItem)
       }
 
       return astNode

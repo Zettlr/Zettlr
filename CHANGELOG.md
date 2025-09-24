@@ -225,6 +225,8 @@ parts of your citations, using the following CSS classes:
   this information is now used to disambiguate nightly versions so that both the
   FSAL cache will be cleared more regularly, and you get a visual indicator that
   you did update your nightly release.
+- The AST parser now properly detects task lists, and the Markdown-to-HTML
+  converter appropriately handles them.
 
 # 3.6.0
 
