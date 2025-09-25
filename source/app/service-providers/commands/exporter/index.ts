@@ -31,7 +31,7 @@ import type AssetsProvider from '@providers/assets'
 import type LogProvider from '@providers/log'
 import { type PandocProfileMetadata } from '@providers/assets'
 import type ConfigProvider from '@providers/config'
-import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
+import { enableExtension, parseReaderWriter, readerWriterToString } from '@common/pandoc-util/parse-reader-writer'
 import { EXT2READER } from '@common/pandoc-util/pandoc-maps'
 
 /**
@@ -175,22 +175,27 @@ async function writeDefaults (
   const { cslLibrary, cslStyle, stripTags, stripLinks, enforceMarkSupport } = cfg.export
   const { linkFormat } = cfg.zkn
 
-  const parsedReader = parseReaderWriter(defaults.reader)
+  // First step: Reader treatment. Zettlr can modify the reader to align with
+  // the user preferences.
+  const parsedReader = parseReaderWriter(defaults.reader as string)
   const readsMarkdown = EXT2READER['md'].includes(parsedReader.name)
   
   // The user can choose to use [[link|title]] or [[title|link]] syntax. In
   // order for the Lua filter to work properly and respect the link removal
   // setting upon export, we need to set the appropriate extension if it is not
   // already set in the `reader` property.
-  const linkExt = linkFormat === 'link|title' ? 'wikilinks_title_after_pipe' : 'wikilinks_title_before_pipe'
-  if (readsMarkdown && !parsedReader.enabledExtensions.includes(linkExt)) {
-    defaults.reader += `+${linkExt}`
-  }
+  const linkExt = linkFormat === 'link|title'
+    ? 'wikilinks_title_after_pipe'
+    : 'wikilinks_title_before_pipe'
+  enableExtension(parsedReader, linkExt)
 
   // Same for the `mark` extension which makes Pandoc correctly parse `==mark==`
-  if (readsMarkdown && enforceMarkSupport && !parsedReader.enabledExtensions.includes('mark')) {
-    defaults.reader += '+mark'
+  if (readsMarkdown && enforceMarkSupport) {
+    enableExtension(parsedReader, 'mark')
   }
+
+  // Finally, write the modified reader
+  defaults.reader = readerWriterToString(parsedReader)
 
   // In order to facilitate file-only databases, we need to get the currently
   // selected database. This could break in a lot of places, but until Pandoc
