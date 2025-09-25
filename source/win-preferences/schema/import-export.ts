@@ -65,6 +65,11 @@ export function getImportExportFields (): PreferencesFieldset[] {
           label: trans('Use Zettlr\'s internal Pandoc for exports'),
           model: 'export.useBundledPandoc'
         },
+        {
+          type: 'checkbox',
+          label: trans('Automatically open successfully exported files'),
+          model: 'export.autoOpenExportedFiles'
+        },
         { type: 'separator' },
         {
           type: 'checkbox',

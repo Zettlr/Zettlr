@@ -70,6 +70,7 @@ export interface ConfigOptions {
   export: {
     dir: 'temp'|'cwd'|'ask'
     stripTags: boolean
+    autoOpenExportedFiles: boolean
     stripLinks: 'full'|'unlink'|'no'
     cslLibrary: string
     cslStyle: string
@@ -257,6 +258,7 @@ export function getConfigTemplate (): ConfigOptions {
     export: {
       dir: 'temp', // Can either be "temp", "cwd" (current working directory) or "ask"
       stripTags: false, // Strip tags a.k.a. #tag
+      autoOpenExportedFiles: true,
       stripLinks: 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
       cslLibrary: '', // Path to a CSL JSON library file
       cslStyle: '', // Path to a CSL Style file

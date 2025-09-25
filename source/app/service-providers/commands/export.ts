@@ -146,12 +146,14 @@ export default class Export extends ZettlrCommand {
         showNativeNotification(trans('Exporting to %s', readableFormat))
 
         // In case of a textbundle/pack it's a folder, else it's a file
-        if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {
-          shell.showItemInFolder(output.targetFile)
-        } else {
-          const potentialError = await shell.openPath(output.targetFile)
-          if (potentialError !== '') {
-            throw new Error('Could not open exported file: ' + potentialError)
+        if (this._app.config.get().export.autoOpenExportedFiles) {
+          if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {
+            shell.showItemInFolder(output.targetFile)
+          } else {
+            const potentialError = await shell.openPath(output.targetFile)
+            if (potentialError !== '') {
+              throw new Error('Could not open exported file: ' + potentialError)
+            }
           }
         }
       } else {
