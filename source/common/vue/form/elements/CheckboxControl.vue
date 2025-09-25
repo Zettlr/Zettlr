@@ -92,7 +92,7 @@ body {
     // Some space for the checkbox itself, and then only as much as necessary to
     // fit in the label (this prevents checking/unchecking the checkbox if the
     // user clicks far beyond the label string)
-    grid-template-columns: @input-size * 2 max-content;
+    grid-template-columns: @input-size * 2 auto;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
     align-items: center;
