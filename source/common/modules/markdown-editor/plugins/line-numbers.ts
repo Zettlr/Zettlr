@@ -67,7 +67,7 @@ const modeSwitcher = EditorState.transactionExtender.of(transaction => {
  * @return  {Extension[]}             The extension.
  */
 export function showLineNumbers (show?: boolean): Extension[] {
-  const initialSetting = show === true ? extensionCompartment.of([lineNumbers()]) : extensionCompartment.of([])
+  const lineNumbersExtension = extensionCompartment.of(show ?? true ? [lineNumbers()] : [])
 
-  return [ initialSetting, modeSwitcher ]
+  return [ lineNumbersExtension, modeSwitcher ]
 }

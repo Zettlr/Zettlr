@@ -20,13 +20,13 @@ import {
   RangeSetBuilder
 } from '@codemirror/state'
 import {
+  EditorView,
   highlightWhitespace as hw,
   highlightTrailingWhitespace as htw,
   Decoration,
   ViewPlugin,
   type ViewUpdate,
   type DecorationSet,
-  type EditorView,
   WidgetType
 } from '@codemirror/view'
 import { configUpdateEffect } from '../util/configuration'
@@ -41,7 +41,6 @@ class PilcrowWidget extends WidgetType {
     const span = document.createElement('span')
     span.className = 'cm-pilcrow'
     span.textContent = '¶'
-    span.style = 'color: #666'
     return span
   }
 
@@ -83,6 +82,13 @@ const pilcrowPlugin = ViewPlugin.fromClass(class {
   decorations: v => v.decorations
 })
 
+const pilcrowTheme = EditorView.baseTheme({
+  '.cm-pilcrow': {
+    color: '#aaa',
+    opacity: '0.5'
+  }
+})
+
 /**
  * A highlight whitespace configuration effect. Pass this to the editor whenever you want
  * to toggle whether whitespace should be highlighted.
@@ -108,7 +114,7 @@ const modeSwitcher = EditorState.transactionExtender.of(transaction => {
   }
 
   if (highlight === true) {
-    return { effects: extensionCompartment.reconfigure([ hw(), htw(), pilcrowPlugin ]) }
+    return { effects: extensionCompartment.reconfigure([ hw(), htw(), pilcrowPlugin, pilcrowTheme ]) }
   } else if (highlight === false) {
     return { effects: extensionCompartment.reconfigure([]) }
   } else {
@@ -125,7 +131,7 @@ const modeSwitcher = EditorState.transactionExtender.of(transaction => {
  * @return  {Extension[]}             The extension.
  */
 export function highlightWhitespace (highlight?: boolean): Extension[] {
-  const initialSetting = highlight === true ? extensionCompartment.of([ hw(), htw(), pilcrowPlugin ]) : extensionCompartment.of([])
+  const initialSetting = extensionCompartment.of(highlight ?? true ? [ hw(), htw(), pilcrowPlugin, pilcrowTheme ] : [])
 
   return [ initialSetting, modeSwitcher ]
 }
