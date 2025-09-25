@@ -70,6 +70,12 @@ export function getImportExportFields (): PreferencesFieldset[] {
           label: trans('Automatically open successfully exported files'),
           model: 'export.autoOpenExportedFiles'
         },
+        {
+          type: 'checkbox',
+          label: trans('Enforce highlight extension on export'),
+          info: trans('When enabled, Zettlr will automatically enable the "mark"-extension when exporting Markdown files.'),
+          model: 'export.enforceMarkSupport'
+        },
         { type: 'separator' },
         {
           type: 'checkbox',

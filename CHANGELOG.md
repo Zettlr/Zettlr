@@ -155,6 +155,10 @@ parts of your citations, using the following CSS classes:
   Tools from context menus.
 - **Feature**: Allow turning off the behavior of Zettlr to automatically open
   files upon successful export (#5609).
+- **Feature**: Added a simple setting that forcefully enables Pandoc's `mark`-
+  extension when exporting from Markdown if that is not already enabled. This
+  ensures that `==highlighted==` spans are properly considered in any output
+  format.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
