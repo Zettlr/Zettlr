@@ -124,9 +124,7 @@ function handleClick (buttonID?: string): void {
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 12pt;
   overflow-y: auto;
-  // minimum recommended height for accessibility
-  // https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#accessibility
-  line-height: 1.5;
+  line-height: 1.2;
 
   p {
     margin: 1em 0;
