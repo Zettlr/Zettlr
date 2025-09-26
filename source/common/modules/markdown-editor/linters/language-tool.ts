@@ -320,6 +320,9 @@ const ltLinter = linter(async view => {
       }
     }
 
+    // TODO: Add a class and styling once
+    // https://github.com/codemirror/lint/commit/50bd1188fe15d92b03cc5c1ea4ffbee44f28a090
+    // lands in a release
     actions.push({
       name: trans('Ignore: %s', match.rule.id),
       apply (view) {
