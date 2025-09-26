@@ -25,6 +25,10 @@ export default function (number: number): string {
     return number.toString()
   }
 
+  if (!Number.isFinite(number)) {
+    return number.toString()
+  }
+
   let delim = trans(',')
   let decimal = trans('.')
   // No delimiter available -> fallback
