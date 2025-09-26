@@ -206,6 +206,8 @@ parts of your citations, using the following CSS classes:
 - Improved performance for documents with many and/or large tables (#5903).
 - Fixes print functionality by completely abandoning the `iframe` approach and
   switching to the built-in Markdown-to-HTML parser.
+- Fixed the user dictionary not persisting to disk under certain conditions
+  (#5922).
 
 ## Under the Hood
 
