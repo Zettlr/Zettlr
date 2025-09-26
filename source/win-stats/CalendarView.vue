@@ -20,13 +20,28 @@
         v-on:click="yearPlus()"
       >
       </ButtonControl>
+    </div>
 
-      <div id="calendar-legend">
-        Legend:
-        <span class="low-mid-activity" v-bind:title="lowMidLegend">&lt; &mu;</span>
-        <span class="high-mid-activity" v-bind:title="highMidLegend">&gt; &mu;</span>
-        <span class="high-activity" v-bind:title="highLegend">&gt; 2 &times; &mu;</span>
+    <div id="calendar-legend">
+      <span class="label">
+        {{ localiseNumber(distributiveStatistics.min) }}
+      </span>
+      <div style="display: flex;">
+        <span class="box percentile-00"></span>
+        <span class="box percentile-01"></span>
+        <span class="box percentile-02"></span>
+        <span class="box percentile-03"></span>
+        <span class="box percentile-04"></span>
+        <span class="box percentile-05"></span>
+        <span class="box percentile-06"></span>
+        <span class="box percentile-07"></span>
+        <span class="box percentile-08"></span>
+        <span class="box percentile-09"></span>
+        <span class="box percentile-10"></span>
       </div>
+      <span class="label">
+        {{ localiseNumber(distributiveStatistics.max) }}
+      </span>
     </div>
 
     <!--
@@ -55,11 +70,7 @@
             v-bind:key="key"
             v-bind:class="{
               'weekday': true,
-              'no-activity': getActivityScore(year, monthIndex + 1, day) === -1,
-              'low-activity': getActivityScore(year, monthIndex + 1, day) === 0,
-              'low-mid-activity': getActivityScore(year, monthIndex + 1, day) === 1,
-              'high-mid-activity': getActivityScore(year, monthIndex + 1, day) === 2,
-              'high-activity': getActivityScore(year, monthIndex + 1, day) === 3
+              [activityPercentileClass(year, monthIndex + 1, day)]: true
             }"
             v-bind:title="getLocalizedWordCount(year, monthIndex + 1, day)"
           >
@@ -98,22 +109,10 @@ const statisticsStore = useStatisticsStore()
 // STATIC VARIABLES
 const calendarLabel = trans('Calendar')
 const MONTHS = [
-  trans('January'),
-  trans('February'),
-  trans('March'),
-  trans('April'),
-  trans('May'),
-  trans('June'),
-  trans('July'),
-  trans('August'),
-  trans('September'),
-  trans('October'),
-  trans('November'),
-  trans('December')
+  trans('January'), trans('February'), trans('March'), trans('April'),
+  trans('May'), trans('June'), trans('July'), trans('August'),
+  trans('September'), trans('October'), trans('November'), trans('December')
 ]
-const lowMidLegend = trans('Below the monthly average')
-const highMidLegend = trans('Over the monthly average')
-const highLegend = trans('More than twice the monthly average')
 
 // The calendar will show it year-wise. We save this variable in order to do
 // some fancy stuff around sylvester. The thing is, people (like me) will want
@@ -154,31 +153,51 @@ const months = computed<Array<{ name: string, padding: number, daysInMonth: numb
   return ret
 })
 
-/**
- * Returns an activity percentage for the given day from 0 to 1
- *
- * @param   {number}  year   The year to retrieve
- * @param   {number}  month  The month to retrieve
- * @param   {number}  date   The day to retrieve
- *
- * @return  {number}         The percentage from 0 to 1
- */
-function getActivityScore (year: number, month: number, date: number): number {
+const distributiveStatistics = computed(() => {
+  let max = 0
+  let min = Infinity
+  const yearStr = String(year.value)
+  // For the calendar view, we only consider the current year
+  const entries = Object.entries(statisticsStore.stats.wordCount)
+    .filter(([ date, count ]) => {
+      return date.startsWith(yearStr)
+    })
+  const count = entries.length
+  const sum = entries.reduce((prev, [ date, words ]) => {
+    if (words > max) {
+      max = words
+    }
+    if (words < min) {
+      min = words
+    }
+
+    return prev + words
+  }, 0)
+
+  return {
+    sum, mean: sum / count,
+    min, max,
+    maxLog: Math.log(max),
+    count }
+})
+
+function activityPercentileClass (year: number, month: number, date: number): string {
   const parsedMonth = String(month).padStart(2, '0')
   const parsedDate = String(date).padStart(2, '0')
-  const wordCount = statisticsStore.stats.wordCount[`${year}-${parsedMonth}-${parsedDate}`]
+  const wordCount = statisticsStore.stats.wordCount[`${year}-${parsedMonth}-${parsedDate}`] ?? 0
 
-  if (wordCount === undefined || wordCount === 0) {
-    return -1
-  } else if (wordCount < statisticsStore.avg30DaysWords / 2) {
-    return 0
-  } else if (wordCount < statisticsStore.avg30DaysWords) {
-    return 1
-  } else if (wordCount < statisticsStore.avg30DaysWords * 2) {
-    return 2 // Less than twice the monthly average
-  } else {
-    return 3 // More than twice the monthly average
+  // Edge cases
+  if (wordCount === 0) {
+    return 'no-activity'
+  } else if (wordCount === distributiveStatistics.value.max) {
+    return 'percentile-10'
   }
+
+  // Statistics 101: We are logging the percentiles. This way, we can smooth out
+  // the distribution, especially if there are only a few strong outliers. This
+  // ensures that we make use of more of the available classes.
+  const percentile = Math.floor(Math.log(wordCount) / distributiveStatistics.value.maxLog * 10)
+  return `percentile-0${percentile}` // ranges from 00 to 09
 }
 
 function getLocalizedWordCount (year: number, month: number, date: number): string {
@@ -204,15 +223,35 @@ function yearPlus (): void {
 </script>
 
 <style lang="less">
-@low-mid-bg: rgba(151, 170, 255, 0.6);
-@low-mid-fg: rgb(8, 5, 167);
-@high-mid-bg: rgba(192, 60, 152, 0.6);
-@high-mid-fg: rgb(77, 2, 60);
-@high-bg: rgba(214, 54, 54, 0.6);
-@high-fg: rgb(87, 0, 0);
+// Sequential color gradient
+@color-00: #298f2b52;
+@color-01: #51c744aa;
+@color-02: #74f84baa;
+@color-03: #97f749aa;
+@color-04: #c3f749aa;
+@color-05: #ebf749aa;
+@color-06: #f8e114aa;
+@color-07: #fca625aa;
+@color-08: #ff6911aa;
+@color-09: #ff3b00aa;
+@color-10: #cc0000aa;
 
 body div#calendar-container {
   padding: 10px; // Shift the contents a little bit from the edges
+
+  div#calendar, div#calendar-legend {
+  .percentile-00 { background-color: @color-00; }
+  .percentile-01 { background-color: @color-01; }
+  .percentile-02 { background-color: @color-02; }
+  .percentile-03 { background-color: @color-03; }
+  .percentile-04 { background-color: @color-04; }
+  .percentile-05 { background-color: @color-05; }
+  .percentile-06 { background-color: @color-06; }
+  .percentile-07 { background-color: @color-07; }
+  .percentile-08 { background-color: @color-08; }
+  .percentile-09 { background-color: @color-09; }
+  .percentile-10 { background-color: @color-10; }
+}
 
   div#calendar {
     margin-top: 20px;
@@ -237,6 +276,7 @@ body div#calendar-container {
     div.day-grid {
       display: inline-grid;
       padding: 10px;
+      gap: 2px; // A little bit of a gap between the days
       /* We have seven days ... */
       grid-template-columns: repeat(7, 25px);
       /* ... and at most 6 partial weeks */
@@ -249,50 +289,40 @@ body div#calendar-container {
         text-align: center;
         line-height: 20px;
         font-size: 10px;
+        border-radius: 4px;
 
         // Fade these days a little bit
         &.no-activity {
           opacity: 0.5;
-        }
-        &.low-mid-activity {
-          // Slightly blue-ish
-          background-color: @low-mid-bg;
-          color: @low-mid-fg;
-        }
-        &.high-mid-activity {
-          // Slightly purple
-          background-color: @high-mid-bg;
-          color: @high-mid-fg;
-        }
-        &.high-activity {
-          // Reddish
-          background-color: @high-bg;
-          color: @high-fg;
         }
       }
     }
   }
 
   div#calendar-legend {
-    font-size: 60%;
-    span {
-      display: inline-block;
-      padding: 4px 8px;
-      margin: 0 6px;
-      border-radius: 6px;
-      cursor: help;
+    margin: 10px 0;
+    display: inline-flex;
+    padding: 5px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    align-items: center;
+    gap: 10px;
+    font-size: 80%;
+    font-weight: bold;
 
-      &.low-mid-activity {
-        background-color: @low-mid-bg;
-        color: @low-mid-fg;
+    span.box {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+
+      &:first-child {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
       }
-      &.high-mid-activity {
-        background-color: @high-mid-bg;
-        color: @high-mid-fg;
-      }
-      &.high-activity {
-        background-color: @high-bg;
-        color: @high-fg;
+
+      &:last-child {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
       }
     }
   }

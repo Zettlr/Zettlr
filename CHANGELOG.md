@@ -159,6 +159,10 @@ parts of your citations, using the following CSS classes:
   extension when exporting from Markdown if that is not already enabled. This
   ensures that `==highlighted==` spans are properly considered in any output
   format.
+- **Feature**: Improved the calendar view in the statistics window to better
+  convey the numbers. It now features a gradient heatmap, only considers the
+  numbers from the visible year, and logs the numbers to spread out the
+  distribution across the new, ten activity levels.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
