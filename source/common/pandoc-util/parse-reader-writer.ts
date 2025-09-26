@@ -97,8 +97,8 @@ export function parseReaderWriter (readerWriter: string): PandocReaderWriter {
  */
 export function readerWriterToString (readerWriter: PandocReaderWriter): string {
   return readerWriter.name
-    + readerWriter.enabledExtensions.map(e => '+' + e)
-    + readerWriter.disabledExtensions.map(e => '-' + e)
+    + readerWriter.enabledExtensions.map(e => '+' + e).join('')
+    + readerWriter.disabledExtensions.map(e => '-' + e).join('')
 }
 
 /**
