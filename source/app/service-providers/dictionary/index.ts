@@ -78,7 +78,11 @@ export default class DictionaryProvider extends ProviderContract {
       if (command === 'get-user-dictionary') {
         return this._userDictionary.map(elem => elem)
       } else if (command === 'set-user-dictionary') {
-        this.setUserDictionary(message.payload)
+        const dict = message.payload
+        if (!Array.isArray(dict) || !dict.every(d => typeof d === 'string')) {
+          throw new Error('[Dictionary Provider] Cannot set user dictionary: Argument was not a string array.')
+        }
+        this.setUserDictionary(dict)
       } else if (command === 'check') {
         return terms.map(t => this.check(t))
       } else if (command === 'suggest') {
