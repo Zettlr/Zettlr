@@ -184,6 +184,7 @@ body div#chart-container {
           border-top-right-radius: 4px;
           border-top-left-radius: 4px;
           background-color: gray;
+          box-shadow: inset 4px 4px 4px 0px rgb(180 180 180 / 28%);
         }
       }
   
