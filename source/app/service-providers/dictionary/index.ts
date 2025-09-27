@@ -400,14 +400,14 @@ export default class DictionaryProvider extends ProviderContract {
       return suggestions
     }
 
-    if (this._userHunspell !== undefined) {
-      const userSuggestions = await this._userHunspell?.suggest(term) ?? []
-      suggestions.push(...userSuggestions.slice(0, limit))
-    }
-
     for (const dictionary of this.hunspell) {
       const values = await dictionary.suggest(term) ?? []
       suggestions.push(...values.slice(0, limit))
+    }
+
+    if (this._userHunspell !== undefined) {
+      const userSuggestions = await this._userHunspell?.suggest(term) ?? []
+      suggestions.push(...userSuggestions.slice(0, limit))
     }
 
     return suggestions
