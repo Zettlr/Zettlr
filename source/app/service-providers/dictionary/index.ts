@@ -96,6 +96,8 @@ export default class DictionaryProvider extends ProviderContract {
         return Promise.all(terms.map(t => this.suggest(t, limit)))
       } else if (command === 'add') {
         return Promise.all(terms.map(t => this.add(t)))
+      } else if (command === 'remove') {
+        return Promise.all(terms.map(t => this.remove(t)))
       }
     })
 
