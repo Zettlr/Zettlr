@@ -14,14 +14,40 @@
  */
 
 import { linter, type Diagnostic, type Action } from '@codemirror/lint'
-import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
+import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
-import { type LanguageToolAPIResponse } from '@providers/commands/language-tool'
-import { StateEffect, StateField } from '@codemirror/state'
-import { type TextNode } from '@common/modules/markdown-utils/markdown-ast'
+import type { LanguageToolAPIResponse, AnnotationData, Annotation } from '@providers/commands/language-tool'
+import { StateEffect, StateField, type Transaction } from '@codemirror/state'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
+import type { ViewUpdate } from '@codemirror/view'
+import { trans } from 'source/common/i18n-renderer'
 
 const ipcRenderer = window.ipc
+
+// store the local dictionary for later filtering
+const userDictionary: Set<string> = new Set()
+
+function refreshUserDictionary (): void {
+  userDictionary.clear()
+
+  ipcRenderer.invoke(
+    'dictionary-provider',
+    { command: 'get-user-dictionary' }
+  ).then((dictionary: string[]) => {
+    for (const word of dictionary) {
+      userDictionary.add(word)
+    }
+  }).catch(console.error)
+}
+
+// watch the dictionary-provider to update the user dictionary
+ipcRenderer.on('dictionary-provider', (event, message) => {
+  const { command } = message
+
+  if (command === 'invalidate-dict') {
+    refreshUserDictionary()
+  }
+})
 
 export interface LanguageToolStateField {
   running: boolean
@@ -29,12 +55,16 @@ export interface LanguageToolStateField {
   supportedLanguages: string[]
   overrideLanguage: 'auto'|string
   lastError: string|undefined
+  disabledRules: string[]
 }
 
 export const updateLTState = StateEffect.define<Partial<LanguageToolStateField>>()
 
 export const languageToolState = StateField.define<LanguageToolStateField>({
   create: (state) => {
+    // populate the user dictionary
+    refreshUserDictionary()
+
     let overrideLanguage = 'auto'
     // Extract YAML frontmatter "lang" property if present and correct. This is
     // only done on startup to save code, and since users will rarely change an
@@ -51,7 +81,8 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
       lastDetectedLanguage: 'auto',
       lastError: undefined,
       overrideLanguage,
-      supportedLanguages: []
+      supportedLanguages: [],
+      disabledRules: []
     }
   },
   update (value, transaction) {
@@ -62,11 +93,72 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
         value.lastError = e.value.lastError
         value.supportedLanguages = e.value.supportedLanguages ?? value.supportedLanguages
         value.overrideLanguage = e.value.overrideLanguage ?? value.overrideLanguage
+        value.disabledRules = e.value.disabledRules ?? value.disabledRules
       }
     }
     return value
   }
 })
+
+/**
+ * Adjust tailing and leading whitespace between two strings.
+ *
+ * @param   {string}    string1  The leading string. Tailing whitespace will be adjusted.
+ * @param   {string}    string2  The tailing string. Leading whitespace will be adjusted.
+ *
+ * @return  {[ number, number ]}  The tailing and leading index adjustments.
+ */
+function adjustWhitespace (string1: string, string2: string): [ number, number ] {
+  const string1Trimmed = string1.trimEnd()
+  const tailingWhitespace = string1.length - string1Trimmed.length
+
+  const string2Trimmed = string2.trimStart()
+  const leadingWhitespace = string2.length - string2Trimmed.length
+
+  // Eventually, this may need to be expanded to handle other
+  // spacing constraints if they may arise. Currently, this
+  // will only handle cases where there is an equal amount of non-zero
+  // whitespace between the strings.
+  if (tailingWhitespace === 0 || leadingWhitespace === 0 || tailingWhitespace !== leadingWhitespace) {
+    return [ 0, 0 ]
+  }
+  // In case of an odd number of spaces, we bias towards the first string
+  //
+  // The end index of the first string:
+  const string1Padding = string1Trimmed.length + Math.ceil(tailingWhitespace / 2)
+  // The start index of the second string:
+  const string2Padding = leadingWhitespace - Math.floor(leadingWhitespace / 2)
+
+  return [ string1.length - string1Padding, string2Padding ]
+}
+
+// Hide the tooltip when the `Ignore Rule` action is selected.
+function hideOn (tr: Transaction): boolean | null {
+  for (const e of tr.effects) {
+    if (e.is(updateLTState)) {
+      if (e.value.disabledRules) {
+        return true
+      }
+    }
+  }
+
+  return null
+}
+
+// Re-run the linter when `ignoreRules` are updated.
+function needsRefresh (update: ViewUpdate): boolean {
+  for (const tr of update.transactions) {
+    for (const e of tr.effects) {
+      if (e.is(updateLTState)) {
+        if (e.value.disabledRules) {
+          return true
+        }
+      }
+    }
+  }
+
+  return false
+}
 
 /**
  * Defines a spellchecker that runs over the text content of the document and
@@ -81,20 +173,87 @@ const ltLinter = linter(async view => {
 
   const diagnostics: Diagnostic[] = []
 
-  const document = view.state.doc.toString()
-  const ast = markdownToAST(document)
-  const textNodes = extractASTNodes(ast, 'Text') as TextNode[]
+  const ast = markdownToAST(view.state.doc.toString())
+  const textNodes = extractTextnodes(ast)
 
-  // To avoid too high loads, we have to send a "pseudo-plain text" document.
-  // That will generate a few warnings that relate towards the Markdown syntax,
-  // but we are clever: Since we can extract the textNodes, we can basically
-  // ignore any warning outside of these ranges! YAY!
+  // To avoid too high loads, we sanitize the document
+  // according to the LanguageTool API `data` parameter.
+  // By doing so, we only generate errors for TextNode regions
+  // https://languagetool.org/http-api/swagger-ui/#!/default/post_check
+  const annotations: AnnotationData = { annotation: [] }
+
+  let idx = 0
+  let prevNode
+
+  for (const node of textNodes) {
+    const markup: Annotation = {}
+    const text: Annotation = {}
+
+    let from = node.from - node.whitespaceBefore.length
+    let to = node.to
+
+    // This function is meant to handle one following edge case with inline code.
+    // When we parse a string with inline code, we get the following structure:
+    //
+    // String: 'sample text with `inline` formatting.'
+    // Parse: [
+    //   { text: 'sample text with ' },
+    //   { markup: '`inline`' },
+    //   { text: ' formatting.'},
+    // ]
+    //
+    // And LT processes the strings as `sample text with[..]formatting.`,
+    // which duplicates the spacing. We need to detect instances where
+    // two text nodes have equal spacing between them, and adjust the spacing
+    // accordingly. We can ignore instances where only one side has spacing,
+    // or with mismatched spacing, assuming that spacing should be balanced.
+    //
+    // When the spacing is equal between the strings, we drop half of the spacing
+    // then distribute the remaining spaces across the strings so that any detected
+    // spacing errors have a wider context.
+    const prevText: string = prevNode?.text ?? ''
+
+    const [ tailing, leading ] = adjustWhitespace(prevText, view.state.sliceDoc(from, to))
+    idx -= tailing
+    from += leading
+
+    if (prevNode !== undefined) {
+      prevNode.text = prevText.slice(0, prevText.length - tailing)
+    }
+
+    if (from - idx > 0) {
+      markup.markup = view.state.sliceDoc(idx, from)
+      if (markup.markup.trim() === '') {
+        from = idx
+      } else {
+        // Sometimes markup includes newlines,
+        // so to interpret the spacing correctly,
+        // we need to tell LT that this markup should be
+        // seen as at least one newline.
+        if (markup.markup.indexOf('\n') !== -1) {
+          markup.interpretAs = '\n'
+        }
+        annotations.annotation.push(markup)
+      }
+    }
+
+    text.text = view.state.sliceDoc(from, to)
+    annotations.annotation.push(text)
+
+    prevNode = text
+    idx = to
+  }
+  // Note: Since the iteration ends on a text node, any markup
+  // at the end of the document will be excluded from what is
+  // sent to the LT API server. This can potentially reduce the
+  // amount of data sent.
 
   const response: [LanguageToolAPIResponse, string[]]|undefined|string = await ipcRenderer.invoke('application', {
     command: 'run-language-tool',
     payload: {
-      text: document,
-      language: view.state.field(languageToolState).overrideLanguage
+      data: annotations,
+      language: view.state.field(languageToolState).overrideLanguage,
+      disabledRules: view.state.field(languageToolState).disabledRules
     }
   })
 
@@ -121,35 +280,18 @@ const ltLinter = linter(async view => {
     return [] // Hooray, nothing wrong!
   }
 
-  // Now, we have to remove those matches that are outside any textNode in the
-  // given document.
-  for (let i = 0; i < ltSuggestions.matches.length; i++) {
-    const from = ltSuggestions.matches[i].offset
-    const to = from + ltSuggestions.matches[i].length
-    let isValid = false
-
-    for (const node of textNodes) {
-      if (from >= node.from && to <= node.to) {
-        // As soon as we find a textNode that contains the match, we are good.
-        isValid = true
-        break
-      }
-    }
-
-    // Node is not valid --> remove
-    if (!isValid) {
-      ltSuggestions.matches.splice(i, 1)
-      i--
-    }
-  }
-
   // At this point, we have only valid suggestions that we can now insert into
   // the document.
   for (const match of ltSuggestions.matches) {
-    const source = `language-tool(${match.rule.issueType})`
-    const severity = (match.rule.issueType === 'style')
+    const word = view.state.sliceDoc(match.offset, match.offset + match.length)
+    const issueType = match.rule.issueType
+    // skip matches for words in the local dictionary
+    if (issueType === 'misspelling' && userDictionary.has(word)) { continue }
+
+    const source = `language-tool(${issueType})`
+    const severity = (issueType === 'style')
       ? 'info'
-      : (match.rule.issueType === 'misspelling') ? 'error' : 'warning'
+      : (issueType === 'misspelling') ? 'error' : 'warning'
 
     const dia: Diagnostic = {
       from: match.offset,
@@ -159,9 +301,8 @@ const ltLinter = linter(async view => {
       source
     }
 
+    const actions: Action[] = []
     if (match.replacements.length > 0) {
-      const actions: Action[] = []
-
       // Show at most 10 actions to not overload those messages
       let i = 0
       for (const { value } of match.replacements) {
@@ -177,14 +318,32 @@ const ltLinter = linter(async view => {
           }
         })
       }
-
-      dia.actions = actions
     }
+
+    // TODO: Add a class and styling once
+    // https://github.com/codemirror/lint/commit/50bd1188fe15d92b03cc5c1ea4ffbee44f28a090
+    // lands in a release
+    actions.push({
+      name: trans('Ignore: %s', match.rule.id),
+      apply (view) {
+        const disabledRules = [...view.state.field(languageToolState).disabledRules]
+        disabledRules.push(match.rule.id)
+
+        view.dispatch({ effects: updateLTState.of({ disabledRules: disabledRules }) })
+      }
+    })
+
+    dia.actions = actions
+
     diagnostics.push(dia)
   }
 
   return diagnostics
-}, { delay: 2000 }) // Increase the delay to reduce server strain
+}, {
+  delay: 2000, // Increase the delay to reduce server strain
+  hideOn,
+  needsRefresh
+})
 
 export const languageTool = [
   ltLinter,

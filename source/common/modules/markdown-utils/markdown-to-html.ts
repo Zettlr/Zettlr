@@ -80,6 +80,8 @@ function getTagInfo (node: GenericNode): HTMLTag {
     ret.selfClosing = true
   } else if (node.name === 'Paragraph') {
     ret.tagName = 'p'
+  } else if (node.name === 'Blockquote') {
+    ret.tagName = 'blockquote'
   } else if (node.name === 'FencedCode' || node.name === 'InlineCode') {
     ret.tagName = 'code'
   } else if (node.children.length === 1) {

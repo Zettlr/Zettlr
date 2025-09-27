@@ -34,6 +34,7 @@ const EMPTY_NODES = [
   'SubscriptMark',
   'HighlightMark',
   'HeaderMark',
+  'Blockquote',
   'QuoteMark',
   'ListMark',
   'TaskMarker',
@@ -42,6 +43,7 @@ const EMPTY_NODES = [
   'Document',
   'List',
   'ListItem',
+  'TaskMarker',
   'PandocAttribute'
 ]
 

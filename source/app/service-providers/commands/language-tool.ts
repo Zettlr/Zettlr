@@ -19,6 +19,16 @@ import { app } from 'electron'
 import { trans } from '@common/i18n-main'
 import type { AppServiceContainer } from 'source/app/app-service-container'
 
+export interface Annotation {
+  text?: string,
+  markup?: string,
+  interpretAs?: string
+}
+
+export interface AnnotationData {
+  annotation: Annotation[]
+}
+
 export interface LanguageToolAPIMatch {
   message: string // Long message (English)
   shortMessage: string
@@ -119,7 +129,7 @@ export default class LanguageTool extends ZettlrCommand {
    *
    * @return  {Promise<LanguageToolAPIResponse|string|undefined>}       The result
    */
-  async run (evt: string, arg: { text: string, language: string }): Promise<[LanguageToolAPIResponse, string[]]|string|undefined> {
+  async run (evt: string, arg: { data: AnnotationData, language: string, disabledRules: string[] }): Promise<[LanguageToolAPIResponse, string[]]|string|undefined> {
     const {
       active,
       level,
@@ -130,13 +140,13 @@ export default class LanguageTool extends ZettlrCommand {
       customServer,
       provider
     } = this._app.config.getConfig().editor.lint.languageTool
-    const { text, language } = arg
+    const { data, language, disabledRules } = arg
 
     if (!active) {
       return undefined // LanguageTool is not active
     }
 
-    const searchParams = new URLSearchParams({ language, text, level })
+    const searchParams = new URLSearchParams({ language, data: JSON.stringify(data), level, disabledRules: disabledRules.join(',') })
 
     // If the user has set the mother tongue, add it to the params
     if (motherTongue.trim() !== '') {
@@ -171,6 +181,8 @@ export default class LanguageTool extends ZettlrCommand {
       server = server.substring(0, server.length - 1)
     }
 
+    const numCharacters = data.annotation.reduce((a, b) => a + (b.text?.length ?? b.markup?.length ?? 0), 0)
+
     const headers = {
       // NOTE: For debugging purposes, we send a custom User-Agent string. This
       // should help figure out potential problems in case Zettlr causes large
@@ -179,7 +191,7 @@ export default class LanguageTool extends ZettlrCommand {
     }
 
     try {
-      this._app.log.verbose(`[Application] Contacting LanguageTool at ${server} (using credentials: ${String(useCredentials)}); payload: ${text.length} characters`)
+      this._app.log.verbose(`[Application] Contacting LanguageTool at ${server} (using credentials: ${String(useCredentials)}); payload: ${numCharacters} characters`)
       const languages = await fetchSupportedLanguages(server)
       // NOTE: Documentation at https://languagetool.org/http-api/#!/default/post_check
       const result = await got(`${server}/v2/check`, { method: 'post', body: searchParams.toString(), headers })
