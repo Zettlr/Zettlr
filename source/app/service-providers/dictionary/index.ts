@@ -77,7 +77,7 @@ export default class DictionaryProvider extends ProviderContract {
     this._fileLock = false
     this._unwrittenChanges = false
 
-    ipcMain.handle('dictionary-provider', (event, message) => {
+    ipcMain.handle('dictionary-provider', async (event, message) => {
       const terms: string[] = message.terms
       const { command } = message
       if (command === 'get-user-dictionary') {
@@ -88,7 +88,7 @@ export default class DictionaryProvider extends ProviderContract {
         if (!Array.isArray(dict) || !dict.every(d => typeof d === 'string')) {
           throw new Error('[Dictionary Provider] Cannot set user dictionary: Argument was not a string array.')
         }
-        this.setUserDictionary(dict)
+        await this.setUserDictionary(dict)
       } else if (command === 'check') {
         return Promise.all(terms.map(t => this.check(t)))
       } else if (command === 'suggest') {
@@ -131,16 +131,22 @@ export default class DictionaryProvider extends ProviderContract {
      * @param {Array} dict The new dictionary.
      * @return {Boolean} Whether or not the call succeeded.
      */
-  setUserDictionary (dict: string[]): boolean {
+  async setUserDictionary (dict: string[]): Promise<boolean> {
     if (!Array.isArray(dict)) {
       return false
     }
 
-    this._userDictionary = [...new Set(dict)].filter(word => word.trim() !== '')
-    this.persistUserDictionary()
-      .catch(err => {
-        this._logger.error(`[Dictionary Provider] Could not persist user dictionary: ${String(err.message)}`, err)
-      })
+    const newDictionary = [...new Set(dict)].filter(word => word.trim() !== '')
+    const addedWords = newDictionary.filter(x => !this._userDictionary.includes(x))
+    const removedWords = this._userDictionary.filter(x => !newDictionary.includes(x))
+
+    for (const word of addedWords) {
+      await this.add(word)
+    }
+
+    for (const word of removedWords) {
+      await this.remove(word)
+    }
 
     // Send an invalidation message to the renderer
     broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
@@ -385,7 +391,8 @@ export default class DictionaryProvider extends ProviderContract {
 
   /**
    * Returns an array of possible suggestions for the given word.
-   * @param  {String} term The term or word to check for.
+   * @param  {String} term  The term or word to check for.
+   * @param  {number} limit Limit the number of suggestions per dictionary to this number
    * @return {Array}      An array containing all returned possible alternatives.
    */
   async suggest (term: string, limit?: number): Promise<string[] >{
@@ -427,6 +434,35 @@ export default class DictionaryProvider extends ProviderContract {
     if (!this._userDictionary.includes(term)) {
       this._userDictionary.push(term)
       await this._userHunspell?.add(term)
+
+      this.persistUserDictionary()
+        .catch(err => {
+          this._logger.error(`[Dictionary Provider] Could not persist user dictionary: ${String(err.message)}`, err)
+        })
+      // Send an invalidation message to the renderer so that it reloads all words
+      broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
+
+      return true
+    }
+
+    return false
+  }
+
+  /**
+   * Remove the given term from the user dictionary
+   * @param {String} term The term to remove
+   */
+  async remove (term: string): Promise<boolean> {
+    term = term.trim()
+    if (term === '') {
+      return false
+    }
+
+    if (this._userDictionary.includes(term)) {
+      const idx = this._userDictionary.indexOf(term)
+
+      this._userDictionary.splice(idx, 1)
+      await this._userHunspell?.remove(term)
 
       this.persistUserDictionary()
         .catch(err => {
