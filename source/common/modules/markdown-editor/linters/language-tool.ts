@@ -282,7 +282,7 @@ const ltLinter = linter(async view => {
     // https://github.com/codemirror/lint/commit/50bd1188fe15d92b03cc5c1ea4ffbee44f28a090
     // lands in a release
     actions.push({
-      name: trans('Disable: %s', match.rule.id),
+      name: trans('Disable Rule'),
       apply (view) {
         // In order to ignore a rule, we do two things. First, we keep the
         // local ignoring-mechanism from @benniekiss, because that will allow us
