@@ -16,11 +16,12 @@
 import { linter, type Diagnostic, type Action } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
-import type { LanguageToolAPIResponse, AnnotationData, Annotation } from '@providers/commands/language-tool'
+import type { AnnotationData, Annotation, LanguageToolLinterRequest, LanguageToolLinterResponse } from '@providers/commands/language-tool'
 import { StateEffect, StateField, type Transaction } from '@codemirror/state'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 import type { ViewUpdate } from '@codemirror/view'
 import { trans } from 'source/common/i18n-renderer'
+import type { LanguageToolIgnoredRuleEntry } from '@providers/config/get-config-template'
 
 const ipcRenderer = window.ipc
 
@@ -248,13 +249,12 @@ const ltLinter = linter(async view => {
   // sent to the LT API server. This can potentially reduce the
   // amount of data sent.
 
-  const response: [LanguageToolAPIResponse, string[]]|undefined|string = await ipcRenderer.invoke('application', {
+  const response: LanguageToolLinterResponse = await ipcRenderer.invoke('application', {
     command: 'run-language-tool',
     payload: {
       data: annotations,
-      language: view.state.field(languageToolState).overrideLanguage,
-      disabledRules: view.state.field(languageToolState).disabledRules
-    }
+      language: view.state.field(languageToolState).overrideLanguage
+    } satisfies LanguageToolLinterRequest
   })
 
   view.dispatch({ effects: updateLTState.of({ running: false }) })
@@ -326,6 +326,27 @@ const ltLinter = linter(async view => {
     actions.push({
       name: trans('Ignore: %s', match.rule.id),
       apply (view) {
+        // In order to ignore a rule, we do two things. First, we keep the
+        // local ignoring-mechanism from @benniekiss, because that will allow us
+        // to programmatically re-run the linter and properly hide the
+        // corresponding linter match as soon as the user ignores the rule. At
+        // the same time, we add the list to the global ignore list so that from
+        // the next call to the API, that rule won't even show up. As soon as
+        // the user switches files (and thus, our local ignore list cache is
+        // cleared), we don't even need that info anymore, so we should be
+        // golden.
+
+        const payload: LanguageToolIgnoredRuleEntry = {
+          description: match.rule.description,
+          id: match.rule.id,
+          category: match.rule.category.name
+        }
+
+        ipcRenderer.invoke('application', {
+          command: 'add-language-tool-ignore-rule',
+          payload
+        }).catch(err => console.error(err))
+
         const disabledRules = [...view.state.field(languageToolState).disabledRules]
         disabledRules.push(match.rule.id)
 

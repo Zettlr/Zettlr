@@ -155,6 +155,28 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
       ]
     },
     {
+      title: trans('LanguageTool: Ignored rules'),
+      group: PreferencesGroups.Spellchecking,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'list',
+          valueType: 'record',
+          keyNames: [ 'name', 'id', 'category' ],
+          columnLabels: [ trans('Name'), trans('Rule ID'), trans('Category') ],
+          label: trans('These are LanguageTool rules that you have disabled. You can re-enable them here.'),
+          model: 'editor.lint.languageTool.ignoredRules',
+          deletable: true,
+          deleteLabel: trans('Re-enable'),
+          editable: false,
+          searchable: true,
+          searchLabel: trans('Filter'),
+          striped: true,
+          emptyMessage: trans('No ignored rules.')
+        }
+      ]
+    },
+    {
       title: trans('Spellchecking'),
       group: PreferencesGroups.Spellchecking,
       help: undefined, // TODO

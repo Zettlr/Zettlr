@@ -238,8 +238,10 @@ interface ListField extends BasicInfo {
   addable?: boolean
   editable?: boolean | number[]
   deletable?: boolean
+  deleteLabel?: string
   searchable?: boolean
   searchLabel?: string
+  emptyMessage?: string
 }
 
 interface TokenField extends BasicInfo {

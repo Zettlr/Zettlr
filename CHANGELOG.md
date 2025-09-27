@@ -169,7 +169,10 @@ parts of your citations, using the following CSS classes:
 - **Change**: The word and character counters in the statusbar now always show
   both counts.
 - **Feature**: The LanguageTool integration is now more performant and allows
-  ignoring of certain rules (#5910).
+  ignoring of certain rules (#5910). Whenever you ignore a rule, it shows up in
+  the spellchecking preferences section alongside some additional info. From
+  this section you can re-enable it by removing it from the list of ignored
+  rules.
 - **A11y**: Zettlr now respects if you choose to reduce transparency in system
   settings and no longer add window vibrancy on macOS.
 - You can now show an item in Finder/Explorer/file browser when right-clicking a
@@ -243,6 +246,8 @@ parts of your citations, using the following CSS classes:
   you did update your nightly release.
 - The AST parser now properly detects task lists, and the Markdown-to-HTML
   converter appropriately handles them.
+- Improved list form controls. They now allow customizing the delete label and
+  provide a custom "No records" message.
 
 # 3.6.0
 

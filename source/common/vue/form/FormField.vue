@@ -125,11 +125,13 @@
     v-bind:key-names="props.field.keyNames"
     v-bind:name="props.field.model"
     v-bind:deletable="props.field.deletable"
+    v-bind:delete-label="props.field.deleteLabel"
     v-bind:editable="props.field.editable"
     v-bind:striped="props.field.striped"
     v-bind:addable="props.field.addable"
     v-bind:searchable="props.field.searchable"
     v-bind:search-label="props.field.searchLabel"
+    v-bind:empty-message="props.field.emptyMessage"
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></ListControl>
   <TokenInput

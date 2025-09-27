@@ -31,6 +31,28 @@ interface FileTypeSettings<F = boolean, S = boolean, O = 'zettlr'|'system'> {
   openWith: O
 }
 
+/**
+ * This type describes an entry of the ignored rules array in the config. We
+ * define this type here, and not in the LanguageTool command, because if we
+ * change its structure, bad things could happen. By colocating it with the
+ * config, it is harder for us to forget to write a migration rule if we ever
+ * change this structure.
+ */
+export interface LanguageToolIgnoredRuleEntry {
+  /**
+   * The description of the rule (usually localized).
+   */
+  description: string
+  /**
+   * The unique ID of this rule.
+   */
+  id: string
+  /**
+   * The category for this rule.
+   */
+  category: string
+}
+
 export interface ConfigOptions {
   version: string
   buildDate: string
@@ -120,6 +142,7 @@ export interface ConfigOptions {
           pt: string
           ca: string
         }
+        ignoredRules: LanguageToolIgnoredRuleEntry[]
         provider: 'official'|'custom'
         customServer: string
         username: string
@@ -312,6 +335,9 @@ export function getConfigTemplate (): ConfigOptions {
             pt: 'pt-PT',
             ca: 'ca-ES'
           },
+          // This is an (initially empty) array of rules the user chose to
+          // ignore globally.
+          ignoredRules: [],
           provider: 'official',
           customServer: '',
           username: '',

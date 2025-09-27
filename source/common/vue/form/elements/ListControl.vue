@@ -30,71 +30,80 @@
       </thead>
       <!-- Table body -->
       <tbody>
-        <tr
-          v-for="(item, rowIdx) in filteredValue"
-          v-bind:key="rowIdx"
-          class="list-input-item"
-        >
-          <!-- Here we output the actual contents -->
-          <td
-            v-for="(column, colIdx) in columnValues(item)"
-            v-bind:key="colIdx"
-            v-on:dblclick="handleDoubleClick(rowIdx, colIdx)"
+        <template v-if="filteredValue.length > 0">
+          <tr
+            v-for="(item, rowIdx) in filteredValue"
+            v-bind:key="rowIdx"
+            class="list-input-item"
           >
-            <template v-if="editing.row === rowIdx && editing.col === colIdx">
-              <!-- We are currently editing this cell -->
-              <Checkbox
-                v-if="typeof column === 'boolean'"
-                v-bind:model-value="column"
-                v-bind:inline="true"
-                v-bind:name="`${name}-checkbox-${rowIdx}-${colIdx}`"
-                v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
-              >
-              </Checkbox>
-              <NumberControl
-                v-else-if="typeof column === 'number'"
-                v-bind:model-value="column"
-                v-bind:inline="true"
-                v-on:escape="finishEditing()"
-                v-on:blur="handleInput(rowIdx, colIdx, $event)"
-                v-on:confirm="handleInput(rowIdx, colIdx, $event)"
-              >
-              </NumberControl>
-              <TextControl
-                v-else
-                v-bind:model-value="column"
-                v-bind:inline="true"
-                v-on:escape="finishEditing()"
-                v-on:blur="handleInput(rowIdx, colIdx, $event)"
-                v-on:confirm="handleInput(rowIdx, colIdx, $event)"
-              >
-              </TextControl>
-            </template>
-            <template v-else>
-              <!-- Display booleans as checkboxes ... -->
-              <Checkbox
-                v-if="typeof column === 'boolean'"
-                v-bind:model-value="column"
-                v-bind:inline="true"
-                v-bind:disabled="!isColumnEditable(colIdx)"
-                v-bind:name="`${name}-action-${rowIdx}-${colIdx}`"
-                v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
-              >
-              </Checkbox>
-              <!-- ... and everything else as normal text -->
-              <span v-else>{{ column }}</span>
-            </template>
-          </td>
-          <!-- The list items are deletable -->
-          <td v-if="deletable" style="text-align: center">
-            <button v-on:click="handleDeletion(rowIdx)">
-              {{ deleteLabel }}
-            </button>
-          </td>
-          <td v-else-if="addable" style="text-align: center">
-            <!-- Empty column to maintain alignment -->
-          </td>
-        </tr>
+            <!-- Here we output the actual contents -->
+            <td
+              v-for="(column, colIdx) in columnValues(item)"
+              v-bind:key="colIdx"
+              v-on:dblclick="handleDoubleClick(rowIdx, colIdx)"
+            >
+              <template v-if="editing.row === rowIdx && editing.col === colIdx">
+                <!-- We are currently editing this cell -->
+                <Checkbox
+                  v-if="typeof column === 'boolean'"
+                  v-bind:model-value="column"
+                  v-bind:inline="true"
+                  v-bind:name="`${name}-checkbox-${rowIdx}-${colIdx}`"
+                  v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
+                >
+                </Checkbox>
+                <NumberControl
+                  v-else-if="typeof column === 'number'"
+                  v-bind:model-value="column"
+                  v-bind:inline="true"
+                  v-on:escape="finishEditing()"
+                  v-on:blur="handleInput(rowIdx, colIdx, $event)"
+                  v-on:confirm="handleInput(rowIdx, colIdx, $event)"
+                >
+                </NumberControl>
+                <TextControl
+                  v-else
+                  v-bind:model-value="column"
+                  v-bind:inline="true"
+                  v-on:escape="finishEditing()"
+                  v-on:blur="handleInput(rowIdx, colIdx, $event)"
+                  v-on:confirm="handleInput(rowIdx, colIdx, $event)"
+                >
+                </TextControl>
+              </template>
+              <template v-else>
+                <!-- Display booleans as checkboxes ... -->
+                <Checkbox
+                  v-if="typeof column === 'boolean'"
+                  v-bind:model-value="column"
+                  v-bind:inline="true"
+                  v-bind:disabled="!isColumnEditable(colIdx)"
+                  v-bind:name="`${name}-action-${rowIdx}-${colIdx}`"
+                  v-on:update:model-value="handleInput(rowIdx, colIdx, $event)"
+                >
+                </Checkbox>
+                <!-- ... and everything else as normal text -->
+                <span v-else>{{ column }}</span>
+              </template>
+            </td>
+            <!-- The list items are deletable -->
+            <td v-if="deletable" style="text-align: center">
+              <button v-on:click="handleDeletion(rowIdx)">
+                {{ deleteButtonLabel }}
+              </button>
+            </td>
+            <td v-else-if="addable" style="text-align: center">
+              <!-- Empty column to maintain alignment -->
+            </td>
+          </tr>
+        </template>
+        <template v-else>
+          <tr>
+            <td v-bind:colspan="columnCount" style="text-align: center;">
+              {{ emptyListLabel }}
+            </td>
+          </tr>
+        </template>
         <!-- If users may add something, allow them to do so here -->
         <tr v-if="addable">
           <td v-for="(colLabel, colIdx) in columnLabels" v-bind:key="colIdx">
@@ -171,7 +180,7 @@ export type SupportedRecord = Record<string, SupportedValues>
 
 const props = defineProps<{
   /**
-   * The actual data, can be a 1D or xD array, or a record of values.
+   * The actual data, can be a 1D or 2D array, or a record of values.
    */
   modelValue: SupportedValues[]|SupportedValues[][]|SupportedRecord[]
   /**
@@ -187,7 +196,8 @@ const props = defineProps<{
    */
   label?: string
   /**
-   * User-defined, human-readable labels for the columns
+   * User-defined, human-readable labels for the columns. This must correspond
+   * to the amount of columns present in your data.
    */
   columnLabels: string[]
   /**
@@ -213,6 +223,10 @@ const props = defineProps<{
    */
   deletable?: boolean
   /**
+   * An optional label for the delete button
+   */
+  deleteLabel?: string
+  /**
    * Whether users can filter the table (default: false)
    */
   searchable?: boolean
@@ -220,6 +234,10 @@ const props = defineProps<{
    * An optional search label, defaults to `trans('Find…')`
    */
   searchLabel?: string
+  /**
+   * An optional message to show when the (filtered) list is empty.
+   */
+  emptyMessage?: string
 }>()
 
 const emit = defineEmits(['update:modelValue'])
@@ -244,8 +262,18 @@ const valuesToAdd = ref<SupportedValues[]>([])
 
 const addButtonLabel = computed<string>(() => trans('Add'))
 const actionsLabel = computed<string>(() => trans('Actions'))
-const deleteLabel = computed<string>(() => trans('Delete'))
+const deleteButtonLabel = computed<string>(() => props.deleteLabel ?? trans('Delete'))
+const emptyListLabel = computed<string>(() => props.emptyMessage ?? trans('No records.'))
 const isStriped = computed<boolean>(() => props.striped ?? true)
+
+const columnCount = computed<number>(() => {
+  const baseCount = props.columnLabels.length
+  if (props.deletable || props.addable) {
+    return baseCount + 1
+  } else {
+    return baseCount
+  }
+})
 
 /**
  * Returns modelValue coerced to a simpleArray, or undefined if it is not.
