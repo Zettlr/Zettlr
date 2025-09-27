@@ -22,7 +22,6 @@ import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 import type { ViewUpdate } from '@codemirror/view'
 import { trans } from 'source/common/i18n-renderer'
 import type { LanguageToolIgnoredRuleEntry } from '@providers/config/get-config-template'
-import type { InlineCode } from '../../markdown-utils/markdown-ast'
 
 const ipcRenderer = window.ipc
 
@@ -145,6 +144,13 @@ const ltLinter = linter(async view => {
 
   const ast = markdownToAST(view.state.doc.toString())
   const textNodes = extractTextnodes(ast)
+  // We have special handling for inline code nodes, including math,
+  // to address spacing errors that occur when these nodes are included
+  // as markup.
+  const codeNodes = extractASTNodes(ast, 'InlineCode')
+  const filterRegions: { from: number, to: number }[] = codeNodes.map(node => { return { from: node.from, to: node.to } })
+
+  const combinedNodes = codeNodes.concat(textNodes).sort((a, b) => a.from - b.from)
 
   // To avoid too high loads, we sanitize the document
   // according to the LanguageTool API `data` parameter.
@@ -152,48 +158,29 @@ const ltLinter = linter(async view => {
   // https://languagetool.org/http-api/swagger-ui/#!/default/post_check
   const annotations: AnnotationData = { annotation: [] }
 
-  // There are some nodes, such as inline code or math, which we
-  // need to keep within the text context for continuity, but
-  // which should be excluded from showing diagnostics.
-  // So we keep a list of those regions, and later, we filter
-  // out any overlapping diagnostics.
-  const filterRegions: { from: number, to: number }[] = []
-
   let idx = 0
-  for (const node of textNodes) {
+  for (const node of combinedNodes) {
     const markup: Annotation = {}
     const text: Annotation = {}
-
-    let from = node.from - node.whitespaceBefore.length
+    // Ignore `whitespaceBefore` for InlineCode to avoid duplicating spaces.
+    let from = node.type === 'InlineCode' ? node.from : node.from - node.whitespaceBefore.length
     let to = node.to
 
     if (from - idx > 0) {
       markup.markup = view.state.sliceDoc(idx, from)
-      const mdAst = markdownToAST(markup.markup)
-      // We have special handling for inline code nodes, including math,
-      // to address spacing errors that occur when these nodes are included
-      // as markup.
-      const codeNodes = extractASTNodes(mdAst, 'InlineCode') as InlineCode[]
-
-      if (codeNodes.length > 0) {
-        filterRegions.push({ from: idx, to: from })
-        from = idx
-      } else {
-        // Sometimes markup includes newlines,
-        // so to interpret the spacing correctly,
-        // we need to tell LT that this markup should be
-        // seen as at least one newline.
-        if (markup.markup.indexOf('\n') !== -1) {
-          markup.interpretAs = '\n'
-        }
-
-        annotations.annotation.push(markup)
+      // Sometimes markup includes newlines,
+      // so to interpret the spacing correctly,
+      // we need to tell LT that this markup should be
+      // seen as at least one newline.
+      if (markup.markup.indexOf('\n') !== -1) {
+        markup.interpretAs = '\n'
       }
+
+      annotations.annotation.push(markup)
     }
 
     text.text = view.state.sliceDoc(from, to)
     annotations.annotation.push(text)
-
     idx = to
   }
   // Note: Since the iteration ends on a text node, any markup
