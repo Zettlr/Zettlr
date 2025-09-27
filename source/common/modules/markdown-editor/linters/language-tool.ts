@@ -14,7 +14,7 @@
  */
 
 import { linter, type Diagnostic, type Action } from '@codemirror/lint'
-import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
+import { extractASTNodes, extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import type { AnnotationData, Annotation, LanguageToolLinterRequest, LanguageToolLinterResponse } from '@providers/commands/language-tool'
 import { StateEffect, StateField, type Transaction } from '@codemirror/state'
@@ -22,6 +22,7 @@ import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 import type { ViewUpdate } from '@codemirror/view'
 import { trans } from 'source/common/i18n-renderer'
 import type { LanguageToolIgnoredRuleEntry } from '@providers/config/get-config-template'
+import type { InlineCode } from '../../markdown-utils/markdown-ast'
 
 const ipcRenderer = window.ipc
 
@@ -101,38 +102,6 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
   }
 })
 
-/**
- * Adjust tailing and leading whitespace between two strings.
- *
- * @param   {string}    string1  The leading string. Tailing whitespace will be adjusted.
- * @param   {string}    string2  The tailing string. Leading whitespace will be adjusted.
- *
- * @return  {[ number, number ]}  The tailing and leading index adjustments.
- */
-function adjustWhitespace (string1: string, string2: string): [ number, number ] {
-  const string1Trimmed = string1.trimEnd()
-  const tailingWhitespace = string1.length - string1Trimmed.length
-
-  const string2Trimmed = string2.trimStart()
-  const leadingWhitespace = string2.length - string2Trimmed.length
-
-  // Eventually, this may need to be expanded to handle other
-  // spacing constraints if they may arise. Currently, this
-  // will only handle cases where there is an equal amount of non-zero
-  // whitespace between the strings.
-  if (tailingWhitespace === 0 || leadingWhitespace === 0 || tailingWhitespace !== leadingWhitespace) {
-    return [ 0, 0 ]
-  }
-  // In case of an odd number of spaces, we bias towards the first string
-  //
-  // The end index of the first string:
-  const string1Padding = string1Trimmed.length + Math.ceil(tailingWhitespace / 2)
-  // The start index of the second string:
-  const string2Padding = leadingWhitespace - Math.floor(leadingWhitespace / 2)
-
-  return [ string1.length - string1Padding, string2Padding ]
-}
-
 // Hide the tooltip when the `Ignore Rule` action is selected.
 function hideOn (tr: Transaction): boolean | null {
   for (const e of tr.effects) {
@@ -183,9 +152,14 @@ const ltLinter = linter(async view => {
   // https://languagetool.org/http-api/swagger-ui/#!/default/post_check
   const annotations: AnnotationData = { annotation: [] }
 
-  let idx = 0
-  let prevNode
+  // There are some nodes, such as inline code or math, which we
+  // need to keep within the text context for continuity, but
+  // which should be excluded from showing diagnostics.
+  // So we keep a list of those regions, and later, we filter
+  // out any overlapping diagnostics.
+  const filterRegions: { from: number, to: number }[] = []
 
+  let idx = 0
   for (const node of textNodes) {
     const markup: Annotation = {}
     const text: Annotation = {}
@@ -193,38 +167,16 @@ const ltLinter = linter(async view => {
     let from = node.from - node.whitespaceBefore.length
     let to = node.to
 
-    // This function is meant to handle one following edge case with inline code.
-    // When we parse a string with inline code, we get the following structure:
-    //
-    // String: 'sample text with `inline` formatting.'
-    // Parse: [
-    //   { text: 'sample text with ' },
-    //   { markup: '`inline`' },
-    //   { text: ' formatting.'},
-    // ]
-    //
-    // And LT processes the strings as `sample text with[..]formatting.`,
-    // which duplicates the spacing. We need to detect instances where
-    // two text nodes have equal spacing between them, and adjust the spacing
-    // accordingly. We can ignore instances where only one side has spacing,
-    // or with mismatched spacing, assuming that spacing should be balanced.
-    //
-    // When the spacing is equal between the strings, we drop half of the spacing
-    // then distribute the remaining spaces across the strings so that any detected
-    // spacing errors have a wider context.
-    const prevText: string = prevNode?.text ?? ''
-
-    const [ tailing, leading ] = adjustWhitespace(prevText, view.state.sliceDoc(from, to))
-    idx -= tailing
-    from += leading
-
-    if (prevNode !== undefined) {
-      prevNode.text = prevText.slice(0, prevText.length - tailing)
-    }
-
     if (from - idx > 0) {
       markup.markup = view.state.sliceDoc(idx, from)
-      if (markup.markup.trim() === '') {
+      const mdAst = markdownToAST(markup.markup)
+      // We have special handling for inline code nodes, including math,
+      // to address spacing errors that occur when these nodes are included
+      // as markup.
+      const codeNodes = extractASTNodes(mdAst, 'InlineCode') as InlineCode[]
+
+      if (codeNodes.length > 0) {
+        filterRegions.push({ from: idx, to: from })
         from = idx
       } else {
         // Sometimes markup includes newlines,
@@ -234,6 +186,7 @@ const ltLinter = linter(async view => {
         if (markup.markup.indexOf('\n') !== -1) {
           markup.interpretAs = '\n'
         }
+
         annotations.annotation.push(markup)
       }
     }
@@ -241,7 +194,6 @@ const ltLinter = linter(async view => {
     text.text = view.state.sliceDoc(from, to)
     annotations.annotation.push(text)
 
-    prevNode = text
     idx = to
   }
   // Note: Since the iteration ends on a text node, any markup
@@ -283,7 +235,13 @@ const ltLinter = linter(async view => {
   // At this point, we have only valid suggestions that we can now insert into
   // the document.
   for (const match of ltSuggestions.matches) {
-    const word = view.state.sliceDoc(match.offset, match.offset + match.length)
+    const matchFrom: number = match.offset
+    const matchTo: number = match.offset + match.length
+
+    // Exclude diagnostics overlapping with our filtered regions
+    if (filterRegions.some(range => !(matchTo <= range.from || matchFrom >= range.to))) { continue }
+
+    const word = view.state.sliceDoc(matchFrom, matchTo)
     const issueType = match.rule.issueType
     // skip matches for words in the local dictionary
     if (issueType === 'misspelling' && userDictionary.has(word)) { continue }
@@ -294,8 +252,8 @@ const ltLinter = linter(async view => {
       : (issueType === 'misspelling') ? 'error' : 'warning'
 
     const dia: Diagnostic = {
-      from: match.offset,
-      to: match.offset + match.length,
+      from: matchFrom,
+      to: matchTo,
       message: match.message,
       severity,
       source
@@ -324,7 +282,7 @@ const ltLinter = linter(async view => {
     // https://github.com/codemirror/lint/commit/50bd1188fe15d92b03cc5c1ea4ffbee44f28a090
     // lands in a release
     actions.push({
-      name: trans('Ignore: %s', match.rule.id),
+      name: trans('Disable: %s', match.rule.id),
       apply (view) {
         // In order to ignore a rule, we do two things. First, we keep the
         // local ignoring-mechanism from @benniekiss, because that will allow us
