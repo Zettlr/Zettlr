@@ -224,17 +224,27 @@ function yearPlus (): void {
 
 <style lang="less">
 // Sequential color gradient
-@color-00: #298f2b52;
-@color-01: #51c744aa;
-@color-02: #74f84baa;
-@color-03: #97f749aa;
-@color-04: #c3f749aa;
-@color-05: #ebf749aa;
-@color-06: #f8e114aa;
-@color-07: #fca625aa;
-@color-08: #ff6911aa;
-@color-09: #ff3b00aa;
-@color-10: #cc0000aa;
+// @color-00: #0ca70f9e;
+// @color-01: #51c744aa;
+// @color-02: #74f84baa;
+// @color-03: #97f749aa;
+// @color-04: #c3f749aa;
+// @color-05: #ebf749aa;
+// @color-06: #f8e114aa;
+// @color-07: #fca625aa;
+
+// Blue->Orange heatmap gradient
+@color-00: #00eeff;
+@color-01: #00b7ff;
+@color-02: #488eff;
+@color-03: #8867ff;
+@color-04: #b458ff;
+@color-05: #cb3bff;
+@color-06: #ec00b4;
+@color-07: #f02230;
+@color-08: #ff6645;
+@color-09: #ff9e00;
+@color-10: #ffcc00;
 
 body div#calendar-container {
   padding: 10px; // Shift the contents a little bit from the edges

@@ -163,6 +163,9 @@ parts of your citations, using the following CSS classes:
   convey the numbers. It now features a gradient heatmap, only considers the
   numbers from the visible year, and logs the numbers to spread out the
   distribution across the new, ten activity levels.
+- **Feature**: Improved the statistics chart to better help you contextualize
+  your writing flow. It now shows you your current word count for this week, and
+  compares it to this and last years's averages.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
