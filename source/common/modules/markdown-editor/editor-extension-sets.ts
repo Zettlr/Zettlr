@@ -23,7 +23,7 @@ import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, St
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/lang-yaml'
 import { search } from '@codemirror/search'
-import { Compartment, EditorState, type Extension } from '@codemirror/state'
+import { Compartment, EditorState, Prec, type Extension } from '@codemirror/state'
 import {
   drawSelection,
   EditorView,
@@ -74,6 +74,7 @@ import { autocompleteTriggerCharacter } from './autocomplete/snippets'
 import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
+import { headingGutter } from './renderers/render-headings'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -171,7 +172,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     darkMode({ darkMode: options.initialConfig.darkMode, ...themes[options.initialConfig.theme] }),
     // CODE FOLDING
     codeFolding(),
-    foldGutter(),
+    Prec.low(foldGutter()), // The fold gutter should appear next to the text content
     // HISTORY
     history(),
     // SELECTIONS
@@ -314,6 +315,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     syntaxExtensions, // Add our own specific syntax plugin
     renderers(options.initialConfig),
     mdLinterExtensions,
+    headingGutter,
     languageTool,
     // Some statistics we need for Markdown documents
     countField,

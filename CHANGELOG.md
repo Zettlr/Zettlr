@@ -166,16 +166,20 @@ parts of your citations, using the following CSS classes:
 - **Feature**: Improved the statistics chart to better help you contextualize
   your writing flow. It now shows you your current word count for this week, and
   compares it to this and last years's averages.
-- **Change**: Snippets: The `$FILENAME` variable now does not contain the file
-  extension anymore. Users who also want the extension should update their
-  snippets to `$FILENAME$EXTENSION` (#4191).
-- **Change**: The word and character counters in the statusbar now always show
-  both counts.
 - **Feature**: The LanguageTool integration is now more performant and allows
   ignoring of certain rules (#5910). Whenever you ignore a rule, it shows up in
   the spellchecking preferences section alongside some additional info. From
   this section you can re-enable it by removing it from the list of ignored
   rules.
+- **Feature**: "Hide heading characters" now properly hides the characters
+  instead of replacing them with another element, bringing Zettlr's renderer
+  closer to a true WYSIWYG experience. The heading level is now indicated to the
+  left side in its own gutter element.
+- **Change**: Snippets: The `$FILENAME` variable now does not contain the file
+  extension anymore. Users who also want the extension should update their
+  snippets to `$FILENAME$EXTENSION` (#4191).
+- **Change**: The word and character counters in the statusbar now always show
+  both counts.
 - **A11y**: Zettlr now respects if you choose to reduce transparency in system
   settings and no longer add window vibrancy on macOS.
 - You can now show an item in Finder/Explorer/file browser when right-clicking a
