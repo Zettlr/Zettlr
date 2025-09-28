@@ -251,6 +251,10 @@ parts of your citations, using the following CSS classes:
   converter appropriately handles them.
 - Improved list form controls. They now allow customizing the delete label and
   provide a custom "No records" message.
+- The `rangeInSelection` utility function now accepts an optional parameter that
+  allows inclusion of adjacent selection ranges in calculating the result. This
+  allows, e.g., renderers to detect whether a selection touches a node-to-be-
+  rendered.
 
 # 3.6.0
 
