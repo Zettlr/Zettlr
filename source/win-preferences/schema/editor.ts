@@ -284,8 +284,8 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
         },
         {
           type: 'checkbox',
-          label: trans('Show Line Numbers'),
-          model: 'editor.showLineNumbers'
+          label: trans('Show line numbers for Markdown files'),
+          model: 'editor.showMarkdownLineNumbers'
         },
         {
           type: 'checkbox',

@@ -18,17 +18,11 @@ import {
 import {
   type Extension,
   Compartment,
-  StateEffect,
   EditorState
 } from '@codemirror/state'
 import { configUpdateEffect } from '../util/configuration'
 
 const extensionCompartment = new Compartment()
-
-/**
- * Toggle whether to show line numbers
- */
-export const showLineNumbersEffect = StateEffect.define<boolean>()
 
 /**
  * A TransactionExtender that reconfigures the line number compartment in response
@@ -41,11 +35,9 @@ const modeSwitcher = EditorState.transactionExtender.of(transaction => {
   for (const effect of transaction.effects) {
     // Allow updating both via the main config and a dedicated effect.
     if (effect.is(configUpdateEffect)) {
-      if (effect.value.showLineNumbers !== undefined) {
-        showLineNumbers = effect.value.showLineNumbers
+      if (effect.value.showMarkdownLineNumbers !== undefined) {
+        showLineNumbers = effect.value.showMarkdownLineNumbers
       }
-    } else if (effect.is(showLineNumbersEffect)) {
-      showLineNumbers = effect.value
     }
   }
 

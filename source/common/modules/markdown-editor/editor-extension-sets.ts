@@ -314,7 +314,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     markdownSyntaxHighlighter(),
     syntaxExtensions, // Add our own specific syntax plugin
     renderers(options.initialConfig),
-    showLineNumbers(options.initialConfig.showLineNumbers),
+    showLineNumbers(options.initialConfig.showMarkdownLineNumbers),
     mdLinterExtensions,
     languageTool,
     // Some statistics we need for Markdown documents
