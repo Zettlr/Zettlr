@@ -148,7 +148,6 @@ const ltLinter = linter(async view => {
   // to address spacing errors that occur when these nodes are included
   // as markup.
   const codeNodes = extractASTNodes(ast, 'InlineCode')
-  const filterRegions: { from: number, to: number }[] = codeNodes.map(node => { return { from: node.from, to: node.to } })
 
   const combinedNodes = codeNodes.concat(textNodes).sort((a, b) => a.from - b.from)
 
@@ -225,8 +224,8 @@ const ltLinter = linter(async view => {
     const matchFrom: number = match.offset
     const matchTo: number = match.offset + match.length
 
-    // Exclude diagnostics overlapping with our filtered regions
-    if (filterRegions.some(range => !(matchTo <= range.from || matchFrom >= range.to))) { continue }
+    // Exclude diagnostics overlapping with InlineCode nodes.
+    if (codeNodes.some(node => !(matchTo <= node.from || matchFrom >= node.to))) { continue }
 
     const word = view.state.sliceDoc(matchFrom, matchTo)
     const issueType = match.rule.issueType
