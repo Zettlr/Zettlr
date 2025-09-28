@@ -13,6 +13,7 @@
  */
 
 import {
+  EditorView,
   lineNumbers
 } from '@codemirror/view'
 import {
@@ -54,12 +55,23 @@ const modeSwitcher = EditorState.transactionExtender.of(transaction => {
  * A configurable line number renderer.
  *
  * @param   {boolean}      show  Initial setting for the highlighter
- *                                    (default: false)
+ *                                    (default: true)
  *
  * @return  {Extension[]}             The extension.
  */
-export function showLineNumbers (show?: boolean): Extension[] {
-  const lineNumbersExtension = extensionCompartment.of(show ?? true ? [lineNumbers()] : [])
+export function showLineNumbers (show: boolean = true): Extension[] {
+  const lineNumbersExtension = extensionCompartment.of(show ? [lineNumbers()] : [])
 
-  return [ lineNumbersExtension, modeSwitcher ]
+  return [
+    lineNumbersExtension,
+    modeSwitcher,
+    EditorView.baseTheme({
+      // Ensure the line numbers are vertically aligned due to the wrapping
+      '.cm-lineNumbers .cm-gutterElement': {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'end'
+      }
+    })
+  ]
 }
