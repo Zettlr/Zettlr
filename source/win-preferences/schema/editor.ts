@@ -284,6 +284,11 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
         },
         {
           type: 'checkbox',
+          label: trans('Show line numbers for Markdown files'),
+          model: 'editor.showMarkdownLineNumbers'
+        },
+        {
+          type: 'checkbox',
           label: trans('Highlight whitespace'),
           model: 'editor.showWhitespace'
         },

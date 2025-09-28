@@ -69,6 +69,7 @@ import { themeFrankfurtLight, themeFrankfurtDark } from './theme/frankfurt'
 import { themeKarlMarxStadtLight, themeKarlMarxStadtDark } from './theme/karl-marx-stadt'
 import { mainOverride } from './theme/main-override'
 import { highlightWhitespace } from './plugins/highlight-whitespace'
+import { showLineNumbers } from './plugins/line-numbers'
 import { tagClasses } from './plugins/tag-classes'
 import { autocompleteTriggerCharacter } from './autocomplete/snippets'
 import { defaultKeymap } from './keymaps/default'
@@ -314,6 +315,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     markdownSyntaxHighlighter(),
     syntaxExtensions, // Add our own specific syntax plugin
     renderers(options.initialConfig),
+    showLineNumbers(options.initialConfig.showMarkdownLineNumbers),
     mdLinterExtensions,
     headingGutter,
     languageTool,
