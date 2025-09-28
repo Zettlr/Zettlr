@@ -175,6 +175,8 @@ parts of your citations, using the following CSS classes:
   instead of replacing them with another element, bringing Zettlr's renderer
   closer to a true WYSIWYG experience. The heading level is now indicated to the
   left side in its own gutter element.
+- **Feature**: You can now show line numbers in Markdown files via a new setting
+  (#5917).
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
