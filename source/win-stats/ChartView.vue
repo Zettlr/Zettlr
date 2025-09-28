@@ -37,12 +37,12 @@
         </div>
       </div>
       <div class="x-axis">
-        <p v-for="day in weekdays" v-bind:key="day">
+        <p v-for="day in weekdays" v-bind:key="day" class="tick">
           {{ day }}
         </p>
       </div>
       <div class="y-axis">
-        <p v-for="val in yTicks" v-bind:key="val">
+        <p v-for="val in yTicks" v-bind:key="val" class="tick">
           {{ val }}
         </p>
       </div>
@@ -152,10 +152,13 @@ const meansByWeekday = computed(() => {
 <style lang="less">
 body div#chart-container {
   padding: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   .chart {
     margin: 20px 0;
-    height: 400px;
+    height: 100%;
     width: 100%;
     display: grid;
     gap: 5px;
@@ -174,7 +177,12 @@ body div#chart-container {
 
       .bar-group {
         height: 100%;
+        // Enforce even width of all elements
+        flex-grow: 1;
+        flex-basis: 0;
+
         display: flex;
+        justify-content: center;
         align-items: end;
         gap: 5px;
   
@@ -194,7 +202,8 @@ body div#chart-container {
         align-items: center;
         gap: 10px;
         border: 2px solid gray;
-        padding: 2px;
+        padding: 4px;
+        border-radius: 4px;
         top: 4px;
         left: 4px;
   
@@ -217,6 +226,13 @@ body div#chart-container {
     display: flex;
     justify-content: space-evenly;
     grid-area: x-axis;
+
+    .tick {
+      // Enforce even width of all elements
+      flex-grow: 1;
+      flex-basis: 0;
+      text-align: center;
+    }
   }
 
   .y-axis {
@@ -225,6 +241,16 @@ body div#chart-container {
     flex-direction: column;
     justify-content: space-between;
     padding: 5% 0;
+
+    .tick {
+      // Enforce even width of all elements
+      flex-grow: 1;
+      flex-basis: 0;
+      text-align: right;
+      display: flex;
+      justify-content: end;
+      align-items: center;
+    }
   }
 }
 </style>
