@@ -73,6 +73,7 @@
               [activityPercentileClass(year, monthIndex + 1, day)]: true
             }"
             v-bind:title="getLocalizedWordCount(year, monthIndex + 1, day)"
+            v-on:mouseenter="showTippy"
           >
             {{ day }}
           </div>
@@ -103,6 +104,7 @@ import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import { ref, computed } from 'vue'
 import localiseNumber from '@common/util/localise-number'
 import { useStatisticsStore } from '../pinia/statistics-store'
+import tippy from 'tippy.js'
 
 const statisticsStore = useStatisticsStore()
 
@@ -205,7 +207,7 @@ function getLocalizedWordCount (year: number, month: number, date: number): stri
   const parsedDate = String(date).padStart(2, '0')
   const wordCount = statisticsStore.stats.wordCount[`${year}-${parsedMonth}-${parsedDate}`]
 
-  return wordCount !== undefined ? localiseNumber(wordCount) : ''
+  return wordCount !== undefined ? localiseNumber(wordCount) : '0'
 }
 
 function yearMinus (): void {
@@ -220,6 +222,21 @@ function yearPlus (): void {
 
   now.value = now.value.plus({ years: 1 })
 }
+
+function showTippy (event: MouseEvent) {
+  if (event.target === null || !(event.target instanceof HTMLElement)) {
+    return
+  }
+
+  const content = event.target.getAttribute('title')
+  if (content === null) {
+    return
+  }
+
+  const instance = tippy(event.target, { content, onHidden:  (i) => i.destroy() })
+  instance.show()
+}
+
 </script>
 
 <style lang="less">
