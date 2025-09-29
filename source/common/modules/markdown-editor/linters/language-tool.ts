@@ -14,9 +14,9 @@
  */
 
 import { linter, type Diagnostic, type Action } from '@codemirror/lint'
-import { extractASTNodes, extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
+import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
-import type { AnnotationData, Annotation, LanguageToolLinterRequest, LanguageToolLinterResponse } from '@providers/commands/language-tool'
+import type { LanguageToolLinterRequest, LanguageToolLinterResponse } from '@providers/commands/language-tool'
 import { StateEffect, StateField, type Transaction } from '@codemirror/state'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 import type { ViewUpdate } from '@codemirror/view'
@@ -143,54 +143,14 @@ const ltLinter = linter(async view => {
   const diagnostics: Diagnostic[] = []
 
   const ast = markdownToAST(view.state.doc.toString())
+  // Extract TextNodes to later filter diagnostics that only cover these nodes.
   const textNodes = extractTextnodes(ast)
-  // We have special handling for inline code nodes, including math,
-  // to address spacing errors that occur when these nodes are included
-  // as markup.
-  const codeNodes = extractASTNodes(ast, 'InlineCode')
-
-  const combinedNodes = codeNodes.concat(textNodes).sort((a, b) => a.from - b.from)
-
-  // To avoid too high loads, we sanitize the document
-  // according to the LanguageTool API `data` parameter.
-  // By doing so, we only generate errors for TextNode regions
-  // https://languagetool.org/http-api/swagger-ui/#!/default/post_check
-  const annotations: AnnotationData = { annotation: [] }
-
-  let idx = 0
-  for (const node of combinedNodes) {
-    const markup: Annotation = {}
-    const text: Annotation = {}
-    // Ignore `whitespaceBefore` for InlineCode to avoid duplicating spaces.
-    let from = node.type === 'InlineCode' ? node.from : node.from - node.whitespaceBefore.length
-    let to = node.to
-
-    if (from - idx > 0) {
-      markup.markup = view.state.sliceDoc(idx, from)
-      // Sometimes markup includes newlines,
-      // so to interpret the spacing correctly,
-      // we need to tell LT that this markup should be
-      // seen as at least one newline.
-      if (markup.markup.indexOf('\n') !== -1) {
-        markup.interpretAs = '\n'
-      }
-
-      annotations.annotation.push(markup)
-    }
-
-    text.text = view.state.sliceDoc(from, to)
-    annotations.annotation.push(text)
-    idx = to
-  }
-  // Note: Since the iteration ends on a text node, any markup
-  // at the end of the document will be excluded from what is
-  // sent to the LT API server. This can potentially reduce the
-  // amount of data sent.
 
   const response: LanguageToolLinterResponse = await ipcRenderer.invoke('application', {
     command: 'run-language-tool',
     payload: {
-      data: annotations,
+      // Send the entire document to the API as `text`
+      data: { annotation: [{ text: view.state.sliceDoc() }] },
       language: view.state.field(languageToolState).overrideLanguage
     } satisfies LanguageToolLinterRequest
   })
@@ -224,8 +184,8 @@ const ltLinter = linter(async view => {
     const matchFrom: number = match.offset
     const matchTo: number = match.offset + match.length
 
-    // Exclude diagnostics overlapping with InlineCode nodes.
-    if (codeNodes.some(node => !(matchTo <= node.from || matchFrom >= node.to))) { continue }
+    // Only include diagnostics overlapping with TextNodes.
+    if (!textNodes.some(node => (matchFrom >= node.from && matchTo <= node.to))) { continue }
 
     const word = view.state.sliceDoc(matchFrom, matchTo)
     const issueType = match.rule.issueType
