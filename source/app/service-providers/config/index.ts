@@ -190,12 +190,12 @@ export default class ConfigProvider extends ProviderContract {
       // Additional check for nightlies, because these do not differ in terms of
       // build version, but rather in terms of build date.
       const isNightly = this.config.version.endsWith('-nightly')
-      const buildDatesDiffer = __BUILD_DATE__ !== readConfig.buildDate
+      const buildDatesDiffer = this.config.buildDate !== readConfig.buildDate
       if (!this._newVersion && isNightly && buildDatesDiffer) {
         // Below's check errs on the side of caution and assigns newVersion true
         // if unsure.
-        const oldDate = DateTime.fromISO(readConfig.buildDate ?? __BUILD_DATE__)
-        const newDate = DateTime.fromISO(__BUILD_DATE__)
+        const oldDate = DateTime.fromISO(readConfig.buildDate ?? this.config.buildDate)
+        const newDate = DateTime.fromISO(this.config.buildDate)
         this._newVersion = newDate >= oldDate
       }
 
@@ -207,6 +207,7 @@ export default class ConfigProvider extends ProviderContract {
       if (this._newVersion) {
         this._logger.info(`Migrating from ${String(readConfig.version)} to ${String(this.config.version)}!`)
         this.config.version = ZETTLR_VERSION // We should not emit events here, so manually set the value
+        this.config.buildDate = __BUILD_DATE__
       }
     }
 
