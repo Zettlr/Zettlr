@@ -22,6 +22,7 @@ import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 import type { ViewUpdate } from '@codemirror/view'
 import { trans } from 'source/common/i18n-renderer'
 import type { LanguageToolIgnoredRuleEntry } from '@providers/config/get-config-template'
+import { changesFieldEffectFactory, prepareDiagnostics, TEXTNODE_FILTER } from './utils'
 
 const ipcRenderer = window.ipc
 
@@ -101,6 +102,8 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
   }
 })
 
+export const { effect: ltChangesEffect, field: ltChangesField } = changesFieldEffectFactory()
+
 // Hide the tooltip when the `Ignore Rule` action is selected.
 function hideOn (tr: Transaction): boolean | null {
   for (const e of tr.effects) {
@@ -140,128 +143,133 @@ const ltLinter = linter(async view => {
 
   view.dispatch({ effects: updateLTState.of({ running: true }) })
 
-  const diagnostics: Diagnostic[] = []
+  const { ranges, diagnostics } = prepareDiagnostics(view.state, ltChangesField, 'language-tool', 1, TEXTNODE_FILTER)
+  const ast = markdownToAST(view.state.sliceDoc())
 
-  const ast = markdownToAST(view.state.doc.toString())
-  // Extract TextNodes to later filter diagnostics that only cover these nodes.
-  const textNodes = extractTextnodes(ast)
+  for (const { from, to } of ranges) {
+    // Extract TextNodes that fall within our range to later filter diagnostics that only cover these nodes.
+    const textNodes = extractTextnodes(ast, (node) => { return !(node.from > to || node.to < from) })
 
-  const response: LanguageToolLinterResponse = await ipcRenderer.invoke('application', {
-    command: 'run-language-tool',
-    payload: {
-      // Send the entire document to the API as `text`
-      data: { annotation: [{ text: view.state.sliceDoc() }] },
-      language: view.state.field(languageToolState).overrideLanguage
-    } satisfies LanguageToolLinterRequest
-  })
-
-  view.dispatch({ effects: updateLTState.of({ running: false }) })
-
-  if (response === undefined) {
-    return [] // Could not fetch a response, but it's benign
-  } else if (typeof response === 'string') {
-    view.dispatch({ effects: updateLTState.of({ running: false, lastError: response }) })
-    return [] // There was an error
-  }
-
-  const [ ltSuggestions, supportedLanguages ] = response
-
-  view.dispatch({
-    effects: updateLTState.of({
-      running: false,
-      lastDetectedLanguage: ltSuggestions.language.detectedLanguage.code,
-      supportedLanguages
+    const response: LanguageToolLinterResponse = await ipcRenderer.invoke('application', {
+      command: 'run-language-tool',
+      payload: {
+        // Send the entire document to the API as `text`
+        data: { annotation: [{ text: view.state.sliceDoc(from, to) }] },
+        language: view.state.field(languageToolState).overrideLanguage
+      } satisfies LanguageToolLinterRequest
     })
-  })
 
-  if (ltSuggestions.matches.length === 0) {
-    return [] // Hooray, nothing wrong!
-  }
+    view.dispatch({ effects: updateLTState.of({ running: false }) })
 
-  // At this point, we have only valid suggestions that we can now insert into
-  // the document.
-  for (const match of ltSuggestions.matches) {
-    const matchFrom: number = match.offset
-    const matchTo: number = match.offset + match.length
-
-    // Only include diagnostics overlapping with TextNodes.
-    if (!textNodes.some(node => (matchFrom >= node.from && matchTo <= node.to))) { continue }
-
-    const word = view.state.sliceDoc(matchFrom, matchTo)
-    const issueType = match.rule.issueType
-    // skip matches for words in the local dictionary
-    if (issueType === 'misspelling' && userDictionary.has(word)) { continue }
-
-    const source = `language-tool(${issueType})`
-    const severity = (issueType === 'style')
-      ? 'info'
-      : (issueType === 'misspelling') ? 'error' : 'warning'
-
-    const dia: Diagnostic = {
-      from: matchFrom,
-      to: matchTo,
-      message: match.message,
-      severity,
-      source
+    if (response === undefined) {
+      return [] // Could not fetch a response, but it's benign
+    } else if (typeof response === 'string') {
+      view.dispatch({ effects: updateLTState.of({ running: false, lastError: response }) })
+      return [] // There was an error
     }
 
-    const actions: Action[] = []
-    if (match.replacements.length > 0) {
-      // Show at most 10 actions to not overload those messages
-      let i = 0
-      for (const { value } of match.replacements) {
-        if (i === 10) {
-          break
-        }
-        i++
+    const [ ltSuggestions, supportedLanguages ] = response
 
-        actions.push({
-          name: value,
-          apply (view, from, to) {
-            view.dispatch({ changes: { from, to, insert: value } })
+    view.dispatch({
+      effects: updateLTState.of({
+        running: false,
+        lastDetectedLanguage: ltSuggestions.language.detectedLanguage.code,
+        supportedLanguages
+      })
+    })
+
+    if (ltSuggestions.matches.length === 0) {
+      return [] // Hooray, nothing wrong!
+    }
+
+    // At this point, we have only valid suggestions that we can now insert into
+    // the document.
+    for (const match of ltSuggestions.matches) {
+      const matchFrom: number = from + match.offset
+      const matchTo: number = from + match.offset + match.length
+
+      // Only include diagnostics overlapping with TextNodes.
+      if (!textNodes.some(node => (matchFrom >= node.from && matchTo <= node.to))) { continue }
+
+      const word = view.state.sliceDoc(matchFrom, matchTo)
+      const issueType = match.rule.issueType
+      // skip matches for words in the local dictionary
+      if (issueType === 'misspelling' && userDictionary.has(word)) { continue }
+
+      const source = `language-tool(${issueType})`
+      const severity = (issueType === 'style')
+        ? 'info'
+        : (issueType === 'misspelling') ? 'error' : 'warning'
+
+      const dia: Diagnostic = {
+        from: matchFrom,
+        to: matchTo,
+        message: match.message,
+        severity,
+        source
+      }
+
+      const actions: Action[] = []
+      if (match.replacements.length > 0) {
+        // Show at most 10 actions to not overload those messages
+        let i = 0
+        for (const { value } of match.replacements) {
+          if (i === 10) {
+            break
           }
-        })
-      }
-    }
+          i++
 
-    // TODO: Add a class and styling once
-    // https://github.com/codemirror/lint/commit/50bd1188fe15d92b03cc5c1ea4ffbee44f28a090
-    // lands in a release
-    actions.push({
-      name: trans('Disable Rule'),
-      apply (view) {
-        // In order to ignore a rule, we do two things. First, we keep the
-        // local ignoring-mechanism from @benniekiss, because that will allow us
-        // to programmatically re-run the linter and properly hide the
-        // corresponding linter match as soon as the user ignores the rule. At
-        // the same time, we add the list to the global ignore list so that from
-        // the next call to the API, that rule won't even show up. As soon as
-        // the user switches files (and thus, our local ignore list cache is
-        // cleared), we don't even need that info anymore, so we should be
-        // golden.
-
-        const payload: LanguageToolIgnoredRuleEntry = {
-          description: match.rule.description,
-          id: match.rule.id,
-          category: match.rule.category.name
+          actions.push({
+            name: value,
+            apply (view, from, to) {
+              view.dispatch({ changes: { from, to, insert: value } })
+            }
+          })
         }
-
-        ipcRenderer.invoke('application', {
-          command: 'add-language-tool-ignore-rule',
-          payload
-        }).catch(err => console.error(err))
-
-        const disabledRules = [...view.state.field(languageToolState).disabledRules]
-        disabledRules.push(match.rule.id)
-
-        view.dispatch({ effects: updateLTState.of({ disabledRules: disabledRules }) })
       }
-    })
 
-    dia.actions = actions
+      // TODO: Add a class and styling once
+      // https://github.com/codemirror/lint/commit/50bd1188fe15d92b03cc5c1ea4ffbee44f28a090
+      // lands in a release
+      actions.push({
+        name: trans('Disable Rule'),
+        apply (view) {
+          // In order to ignore a rule, we do two things. First, we keep the
+          // local ignoring-mechanism from @benniekiss, because that will allow us
+          // to programmatically re-run the linter and properly hide the
+          // corresponding linter match as soon as the user ignores the rule. At
+          // the same time, we add the list to the global ignore list so that from
+          // the next call to the API, that rule won't even show up. As soon as
+          // the user switches files (and thus, our local ignore list cache is
+          // cleared), we don't even need that info anymore, so we should be
+          // golden.
 
-    diagnostics.push(dia)
+          const payload: LanguageToolIgnoredRuleEntry = {
+            description: match.rule.description,
+            id: match.rule.id,
+            category: match.rule.category.name
+          }
+
+          ipcRenderer.invoke('application', {
+            command: 'add-language-tool-ignore-rule',
+            payload
+          }).catch(err => console.error(err))
+
+          const disabledRules = [...view.state.field(languageToolState).disabledRules]
+          disabledRules.push(match.rule.id)
+          // Relint the entire document when rules are updated.
+          view.dispatch({ effects: [ updateLTState.of({ disabledRules: disabledRules }), ltChangesEffect.of({ from: 0 }) ] })
+        }
+      })
+
+      dia.actions = actions
+
+      diagnostics.push(dia)
+    }
   }
+
+  // Reset the accumulated changes.
+  view.dispatch({ effects: ltChangesEffect.of(null) })
 
   return diagnostics
 }, {
@@ -272,5 +280,6 @@ const ltLinter = linter(async view => {
 
 export const languageTool = [
   ltLinter,
-  languageToolState
+  languageToolState,
+  ltChangesField
 ]
