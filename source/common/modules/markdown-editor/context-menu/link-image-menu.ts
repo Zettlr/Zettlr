@@ -18,12 +18,12 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { type SyntaxNode } from '@lezer/common'
 import openMarkdownLink from '../util/open-markdown-link'
-import { removeMarkdownLink } from '../util/remove-markdown-link'
 import { shortenUrlVisually } from '@common/util/shorten-url-visually'
 import makeValidUri from 'source/common/util/make-valid-uri'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import { configField } from '../util/configuration'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
+import { findReferenceForLinkLabel, removeMarkdownLink } from '../util/links'
 
 const ipcRenderer = window.ipc
 
@@ -43,11 +43,32 @@ function getURLForNode (node: SyntaxNode, state: EditorState): string|undefined 
 
   const child = node.getChild('URL')
 
-  if (child === null) {
-    return undefined
-  } else {
+  if (child !== null) {
     return state.sliceDoc(child.from, child.to)
   }
+
+  // No URL child, which might indicate a reference-style link. For reference
+  // style links, URL nodes are in the reference, so above's construct will have
+  // by now found it. If we're here, we might be dealing with a link ref, which
+  // has the tree structure [text content][LinkLabel].
+  const label = node.type.name === 'Link' ? node.getChild('LinkLabel') : node
+  if (label === null || label.type.name !== 'LinkLabel') {
+    return undefined
+  }
+
+  // We have the link label. Now we just have to scour the rest of the
+  // document for the reference. We use a helper function for that.
+  const labelString = state.sliceDoc(label.from, label.to) // e.g., `[link]`
+  const ref = findReferenceForLinkLabel(state, labelString)
+
+  if (ref !== null) {
+    const url = ref.getChild('URL')
+    if (url !== null) {
+      return state.sliceDoc(url.from, url.to)
+    }
+  }
+
+  return undefined
 }
 
 /**

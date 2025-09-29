@@ -177,6 +177,11 @@ parts of your citations, using the following CSS classes:
   left side in its own gutter element.
 - **Feature**: You can now show line numbers in Markdown files via a new setting
   (#5917).
+- **Feature**: Zettlr has now improved support for reference-style links. This
+  support extends to the link context-menu (which now supports handling links
+  from both link and link reference), the tooltips (which accurately show link
+  previews), rendering (which accounts for link labels), to any action (such as
+  copying or removing a link) (#5142).
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).

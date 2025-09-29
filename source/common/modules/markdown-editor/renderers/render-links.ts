@@ -48,10 +48,13 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
         } else {
           // It's a regular Markdown Link
           const marks = node.node.getChildren('LinkMark')
+          const linkLabel = node.node.getChild('LinkLabel')
 
-          // We need at least three LinkMarks: [, ], and ( since the parser will
-          // also parse ellipses as Links (a.k.a. reference style links)
-          if (marks.length < 3) {
+          // We need at least three LinkMarks for regular links: [, ], and (
+          // since the parser will also parse ellipses as Links (a.k.a.
+          // reference style links). Alternatively, it needs to have a LinkLabel
+          // child node
+          if (marks.length < 3 && linkLabel === null) {
             return false
           }
 
@@ -59,10 +62,18 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
             return false // Empty link title -> would hide the entire link
           }
 
-          ranges.push(
-            hiddenDeco.range(marks[0].from, marks[0].to),
-            hiddenDeco.range(marks[1].from, marks[marks.length - 1].to)
-          )
+          if (linkLabel !== null && marks.length === 2) {
+            ranges.push(
+              hiddenDeco.range(marks[0].from, marks[0].to),
+              hiddenDeco.range(marks[1].from, linkLabel.to)
+            )
+          } else {
+            ranges.push(
+              hiddenDeco.range(marks[0].from, marks[0].to),
+              hiddenDeco.range(marks[1].from, marks[marks.length - 1].to)
+            )
+          }
+
         }
       }
     })

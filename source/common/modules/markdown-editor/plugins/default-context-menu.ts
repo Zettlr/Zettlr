@@ -38,7 +38,7 @@ function getLinkOrImageNodeFromPos (view: EditorView, pos: number): SyntaxNode|n
   }
 
   let nodeAt: SyntaxNode|null = node
-  while (nodeAt !== null && ![ 'Link', 'Image' ].includes(nodeAt.type.name)) {
+  while (nodeAt !== null && ![ 'Link', 'Image', 'LinkReference' ].includes(nodeAt.type.name)) {
     nodeAt = nodeAt.parent
   }
 

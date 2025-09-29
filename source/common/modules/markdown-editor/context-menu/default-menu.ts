@@ -389,9 +389,9 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     } else if (clickedID === 'toDoubleQuotes') {
       toDoubleQuotes(view)
     } else if (clickedID === 'toSentenceCase') {
-      toSentenceCase(window.config.get('appLang'))(view)
+      toSentenceCase(String(window.config.get('appLang')))(view)
     } else if (clickedID === 'toTitleCase') {
-      toTitleCase(window.config.get('appLang'))(view)
+      toTitleCase(String(window.config.get('appLang')))(view)
     } else if (clickedID === 'zapGremlins') {
       zapGremlins(view)
     } else if (clickedID === 'no-suggestion') {
