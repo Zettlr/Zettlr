@@ -231,6 +231,8 @@ parts of your citations, using the following CSS classes:
   switching to the built-in Markdown-to-HTML parser.
 - Fixed the user dictionary not persisting to disk under certain conditions
   (#5922).
+- The toolbar update button now includes a clearly visible label indicating that
+  an update is available, making it less likely to miss it.
 
 ## Under the Hood
 

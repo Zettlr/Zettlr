@@ -523,6 +523,8 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       type: 'button',
       id: 'open-updater',
       title: trans('Update available'),
+      showLabel: true,
+      buttonText: trans('Update available'),
       icon: 'download',
       visible: isUpdateAvailable.value
     }

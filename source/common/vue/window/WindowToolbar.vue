@@ -27,6 +27,7 @@
           v-bind:key="idx"
           v-bind:control="item"
           v-bind:show-label="showLabels"
+          v-bind:button-text="item.buttonText"
           v-on:click="emit('click', item.id)"
         ></ButtonControl>
         <ToggleControl

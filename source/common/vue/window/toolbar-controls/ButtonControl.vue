@@ -10,6 +10,9 @@
         v-bind:shape="control.icon"
         v-bind:direction="control.direction"
       ></cds-icon>
+      <template v-if="buttonText !== undefined">
+        {{ buttonText }}
+      </template>
     </button>
     <span v-if="showLabel === true" class="toolbar-label" v-html="labelWithFallback"></span>
   </div>
@@ -46,6 +49,7 @@ export interface ToolbarButtonControl {
 const props = defineProps<{
   control: ToolbarButtonControl
   showLabel?: boolean
+  buttonText?: string
 }>()
 
 const titleWithFallback = computed<string>(() => {
@@ -58,5 +62,11 @@ const labelWithFallback = computed<string>(() => {
 </script>
 
 <style lang="less">
-//
+.toolbar-group button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
 </style>
