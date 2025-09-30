@@ -236,7 +236,7 @@ parts of your citations, using the following CSS classes:
 
 ## Under the Hood
 
-- Update Electron to version `38.1.2`.
+- Update Electron to version `38.2.0`.
 - Update Pandoc to version `3.8`.
 - Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
   declarations (`if`, `for`, `while`, etc.).
