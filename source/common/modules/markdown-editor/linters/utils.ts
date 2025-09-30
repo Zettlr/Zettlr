@@ -28,6 +28,25 @@ import type { Tree, TreeCursor } from '@lezer/common'
 export type Range = { from: number, to: number }
 
 /**
+ * This function moves a cursor to the next node, and if `filter`
+ * is provided, it will move it to the next node matching one in `filter`.
+ *
+ * @param   {TreeCursor}   cursor  The TreeCursor
+ * @param   {Set<string>}  filter  A set of strings with node names
+ *
+ * @return  {boolean}              Whether the node was moved successfully.
+ */
+export function filterCursor (cursor: TreeCursor, direction: -1 | 1, filter?: Set<string>): boolean {
+  const moveCursor = direction === -1 ? cursor.prev.bind(cursor) : cursor.next.bind(cursor)
+
+  while (filter && !filter.has(cursor.name)) {
+    if (!moveCursor(false)) { return false }
+  }
+
+  return true
+}
+
+/**
  * This function takes a range and expands it to the nearest
  * node boundary before `from` and after `to`
  *
@@ -53,28 +72,22 @@ export function getNodePosition (state: EditorState, from: number, to: number, c
   if (!cursorA.childBefore(from)) {
     cursorA.firstChild()
   }
-  while (filter && !filter.has(cursorA.name)) {
-    if (!cursorA.prev(false)) { break }
-  }
+  filterCursor(cursorA, -1, filter)
 
   const cursorB: TreeCursor = tree.topNode.cursor()
   if (!cursorB.childAfter(to)) {
     cursorB.lastChild()
   }
-  while (filter && !filter.has(cursorB.name)) {
-    if (!cursorB.next(false)) { break }
-  }
+  filterCursor(cursorB, 1, filter)
 
   while (context-- > 0) {
+    const hasPrev = cursorA.prev(false)
+    const hasNext = cursorB.next(false)
     // if we are at the end in both directions, fail early
-    if (!cursorA.prev(false) && !cursorB.next(false)) { break }
+    if (!hasPrev && !hasNext) { break }
 
-    while (filter && !filter.has(cursorA.name)) {
-      if (!cursorA.prev(false)) { break }
-    }
-    while (filter && !filter.has(cursorB.name)) {
-      if (!cursorB.next(false)) { break }
-    }
+    filterCursor(cursorA, -1, filter)
+    filterCursor(cursorB, 1, filter)
   }
 
   return { from: cursorA.from, to: cursorB.to }
@@ -215,7 +228,7 @@ export function prepareDiagnostics (
         // we need to expand the context to include the entire diagnostic
         // to ensure we lint correctly, and we need to ensure that the
         // range is on a node-boundary
-        ranges.push(getNodePosition(state, from, to, 1, filter))
+        ranges.push(getNodePosition(state, from, to, 0, filter))
       }
     }
   })
