@@ -149,6 +149,8 @@ const ltLinter = linter(async view => {
   for (const { from, to } of ranges) {
     // Extract TextNodes that fall within our range to later filter diagnostics that only cover these nodes.
     const textNodes = extractTextnodes(ast, (node) => { return !(node.from > to || node.to < from) })
+    // If there are no TextNodes in this region, move on to the next.
+    if (!(textNodes.length > 0)) { continue }
 
     const response: LanguageToolLinterResponse = await ipcRenderer.invoke('application', {
       command: 'run-language-tool',
