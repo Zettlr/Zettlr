@@ -22,6 +22,7 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
   return [
     {
       title: trans('LanguageTool'),
+      infoString: trans('Zettlr offers an integration with LanguageTool, an advanced typography tool that goes beyond simple spell checking, and checks for stylistic and grammatical issues, too. By default, it uses an online service, but you can install LanguageTool locally. Refer to the documentation for more info.'),
       group: PreferencesGroups.Spellchecking,
       titleField: {
         type: 'switch',

@@ -35,6 +35,11 @@
             ?
           </div>
         </div>
+        <!-- Info String, if applicable -->
+        <p v-if="fieldset.infoString" style="margin: 10px 0;" class="form-field-info-text">
+          {{ fieldset.infoString }}
+        </p>
+
         <!-- Now to the contents of the fieldset -->
         <template v-for="(field, fieldIdx) in fieldset.fields" v-bind:key="fieldIdx">
           <FormFieldControl
@@ -301,6 +306,10 @@ export interface Fieldset {
    * The section heading for the fieldset
    */
   title: string
+  /**
+   * An optional info string detailing what this fieldset does or contains.
+   */
+  infoString?: string
   /**
    * An optional help string that can be shown in a questionmark tooltip
    */
