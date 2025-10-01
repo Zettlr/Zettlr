@@ -53,12 +53,12 @@
     <term name="and">ו</term>
     <term name="and others">ואחרים</term>
     <term name="anonymous">אלמוני</term>
-    <term name="anonymous" form="short">anon</term>
+    <term name="anonymous" form="short"></term>
     <term name="at">-ב</term>
     <term name="available at">זמין ב</term>
     <term name="by">על-ידי</term>
     <term name="circa">לערך</term>
-    <term name="circa" form="short">c.</term>
+    <term name="circa" form="short">~</term>
     <term name="cited">מצוטט ב</term>
     <term name="first-reference-note-number">
       <single>reference</single>
@@ -80,17 +80,17 @@
       <single>מס׳</single>
       <multiple>מס׳</multiple>
     </term>
-    <term name="edition" form="short">ed</term>
+    <term name="edition" form="short">מהדורה</term>
     <term name="et-al">ואחרים</term>
     <term name="forthcoming">צפוי</term>
     <term name="from">מתוך</term>
     <term name="ibid">שם</term>
     <term name="in">בתוך</term>
-    <term name="in press">בהדפסה</term>
-    <term name="internet">אינטרנט</term>
+    <term name="in press">בדפוס</term>
+    <term name="internet">אתר</term>
     <term name="letter">מכתב</term>
-    <term name="no date">ללא תאריך</term>
-    <term name="no date" form="short">ל.ת.</term>
+    <term name="no date">לא ידוע</term>
+    <term name="no date" form="short"></term>
     <term name="online">מקוון</term>
     <term name="presented at">הוצג ב</term>
     <term name="reference">
@@ -104,7 +104,7 @@
     <term name="review-of">review of</term>
     <term name="review-of" form="short">rev. of</term>
     <term name="retrieved">אוחזר</term>
-    <term name="scale">scale</term>
+    <term name="scale">קנ"מ</term>
     <term name="version">גירסה</term>
 
     <!-- LONG ITEM TYPE FORMS -->
@@ -188,19 +188,22 @@
     <term name="close-quote">"</term>
     <term name="open-inner-quote">'</term>
     <term name="close-inner-quote">'</term>
-    <term name="page-range-delimiter">–</term>
+    <term name="page-range-delimiter">-</term>
     <term name="colon">:</term>
     <term name="comma">,</term>
     <term name="semicolon">;</term>
 
     <!-- ORDINALS -->
-    <term name="ordinal">th</term>
-    <term name="ordinal-01">st</term>
-    <term name="ordinal-02">nd</term>
-    <term name="ordinal-03">rd</term>
-    <term name="ordinal-11">th</term>
-    <term name="ordinal-12">th</term>
-    <term name="ordinal-13">th</term>
+    <term name="ordinal-01">1</term>
+    <term name="ordinal-02">2</term>
+    <term name="ordinal-03">3</term>
+    <term name="ordinal-04">4</term>
+    <term name="ordinal-05">5</term>
+    <term name="ordinal-06">6</term>
+    <term name="ordinal-07">7</term>
+    <term name="ordinal-08">8</term>
+    <term name="ordinal-09">9</term>
+    <term name="ordinal-10">10</term>
 
     <!-- LONG ORDINALS -->
     <term name="long-ordinal-01">ראשון</term>
@@ -346,8 +349,8 @@
       <multiple>sub verbis</multiple>
     </term>
     <term name="verse">
-      <single>בית</single>
-      <multiple>בתים</multiple>
+      <single>פסוק</single>
+      <multiple>פסוקים</multiple>
     </term>
     <term name="volume">
       <single>כרך</single>
@@ -391,15 +394,15 @@
       <single>tit.</single>
       <multiple>tits.</multiple>
     </term>
-    <term name="book" form="short">bk</term>
-    <term name="chapter" form="short">chap</term>
-    <term name="column" form="short">col</term>
-    <term name="figure" form="short">fig</term>
-    <term name="folio" form="short">f</term>
-    <term name="issue" form="short">no</term>
-    <term name="line" form="short">l.</term>
-    <term name="note" form="short">n.</term>
-    <term name="opus" form="short">op</term>
+    <term name="book" form="short"></term>
+    <term name="chapter" form="short">פ'</term>
+    <term name="column" form="short">ט'</term>
+    <term name="figure" form="short">א.</term>
+    <term name="folio" form="short">פול'</term>
+    <term name="issue" form="short">מס'</term>
+    <term name="line" form="short">ש'</term>
+    <term name="note" form="short">הע'</term>
+    <term name="opus" form="short">אופ'</term>
     <term name="page" form="short">
       <single>'עמ</single>
       <multiple>'עמ</multiple>
@@ -420,9 +423,9 @@
       <single>'עמ</single>
       <multiple>'עמ</multiple>
     </term>
-    <term name="paragraph" form="short">para</term>
-    <term name="part" form="short">pt</term>
-    <term name="section" form="short">ס'</term>
+    <term name="paragraph" form="short">פ.</term>
+    <term name="part" form="short">חלק</term>
+    <term name="section" form="short">סע'</term>
     <term name="supplement" form="short">
       <single>supp.</single>
       <multiple>supps.</multiple>
@@ -432,8 +435,8 @@
       <multiple>s.vv.</multiple>
     </term>
     <term name="verse" form="short">
-      <single>פסוק</single>
-      <multiple>פסוקים</multiple>
+      <single>פס'</single>
+      <multiple>פס'</multiple>
     </term>
     <term name="volume" form="short">
       <single>כרך</single>
@@ -532,16 +535,16 @@
       <multiple>עורכים ראשיים</multiple>
     </term>
     <term name="illustrator">
-      <single>מאייר</single>
-      <multiple>מאיירים</multiple>
+      <single>איור</single>
+      <multiple>איור</multiple>
     </term>
     <term name="translator">
-      <single>מתרגם</single>
-      <multiple>מתרגמים</multiple>
+      <single>תרגום</single>
+      <multiple>תרגום</multiple>
     </term>
     <term name="editortranslator">
-      <single>editor &amp; translator</single>
-      <multiple>editors &amp; translators</multiple>
+      <single>בתרגום ועריכת</single>
+      <multiple>בתרגום ועריכת:</multiple>
     </term>
     <term name="editor-translator">
       <single>editor &amp; translator</single>
@@ -590,28 +593,28 @@
       <multiple>cres.</multiple>
     </term>
     <term name="director" form="short">
-      <single>dir.</single>
-      <multiple>dirs.</multiple>
+      <single>בימוי</single>
+      <multiple>בימוי:</multiple>
     </term>
     <term name="editor" form="short">
-      <single>ed</single>
-      <multiple>eds</multiple>
+      <single>בעריכת</single>
+      <multiple>בעריכת:</multiple>
     </term>
     <term name="editorial-director" form="short">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
+      <single>ע.ר.</single>
+      <multiple>עריכה ראשית:</multiple>
     </term>
     <term name="illustrator" form="short">
-      <single>ill.</single>
-      <multiple>ills.</multiple>
+      <single>איור</single>
+      <multiple>איור:</multiple>
     </term>
     <term name="translator" form="short">
-      <single>tran</single>
-      <multiple>trans</multiple>
+      <single>בתרגום</single>
+      <multiple>בתרגום:</multiple>
     </term>
     <term name="editortranslator" form="short">
-      <single>ed. &amp; tran.</single>
-      <multiple>eds. &amp; trans.</multiple>
+      <single>עריכה ותרגום</single>
+      <multiple>עריכה ותרגום:</multiple>
     </term>
     <term name="editor-translator" form="short">
       <single>ed. &amp; tran.</single>
@@ -633,7 +636,7 @@
     <term name="producer" form="verb">produced by</term>
     <term name="script-writer" form="verb">written by</term>
     <term name="series-creator" form="verb">created by</term>
-    <term name="container-author" form="verb">by</term>
+    <term name="container-author" form="verb">על ידי</term>
     <term name="director" form="verb">בוים ע"י</term>
     <term name="editor" form="verb">נערך ע"י</term>
     <term name="editorial-director" form="verb">בוים ע"י</term>
@@ -643,8 +646,8 @@
     <term name="reviewed-author" form="verb">ע"י</term>
     <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="translator" form="verb">תורגם ע"י</term>
-    <term name="editortranslator" form="verb">edited &amp; translated by</term>
-    <term name="editor-translator" form="verb">edited &amp; translated by</term>
+    <term name="editortranslator" form="verb">תורגם ונכרך על ידי:</term>
+    <term name="editor-translator" form="verb">תורגם ונכרך על ידי:</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. by</term>
@@ -659,13 +662,13 @@
     <term name="producer" form="verb-short">prod. by</term>
     <term name="script-writer" form="verb-short">writ. by</term>
     <term name="series-creator" form="verb-short">cre. by</term>
-    <term name="director" form="verb-short">dir.</term>
-    <term name="editor" form="verb-short">ed</term>
-    <term name="editorial-director" form="verb-short">ed.</term>
-    <term name="illustrator" form="verb-short">illus.</term>
-    <term name="translator" form="verb-short">trans</term>
-    <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
-    <term name="editor-translator" form="verb-short">ed. &amp; trans. by</term>
+    <term name="director" form="verb-short">בימוי</term>
+    <term name="editor" form="verb-short">עריכה:</term>
+    <term name="editorial-director" form="verb-short">עריכה ראשית:</term>
+    <term name="illustrator" form="verb-short">מאיירים:</term>
+    <term name="translator" form="verb-short">תרגום: </term>
+    <term name="editortranslator" form="verb-short">עריכה ותרגום:</term>
+    <term name="editor-translator" form="verb-short">עריכה ותרגום:</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">ינואר</term>
@@ -682,18 +685,18 @@
     <term name="month-12">דצמבר</term>
 
     <!-- SHORT MONTH FORMS -->
-    <term name="month-01" form="short">Jan</term>
-    <term name="month-02" form="short">Feb</term>
-    <term name="month-03" form="short">Mar</term>
-    <term name="month-04" form="short">Apr</term>
-    <term name="month-05" form="short">May</term>
-    <term name="month-06" form="short">Jun</term>
-    <term name="month-07" form="short">Jul</term>
-    <term name="month-08" form="short">Aug</term>
-    <term name="month-09" form="short">Sep</term>
-    <term name="month-10" form="short">Oct</term>
-    <term name="month-11" form="short">Nov</term>
-    <term name="month-12" form="short">Dec</term>
+    <term name="month-01" form="short">ינו'</term>
+    <term name="month-02" form="short">פב'</term>
+    <term name="month-03" form="short">מרץ</term>
+    <term name="month-04" form="short">אפר'</term>
+    <term name="month-05" form="short">מאי</term>
+    <term name="month-06" form="short">יונ'</term>
+    <term name="month-07" form="short">יול'</term>
+    <term name="month-08" form="short">אוג'</term>
+    <term name="month-09" form="short">ספט'</term>
+    <term name="month-10" form="short">אוק'</term>
+    <term name="month-11" form="short">נוב'</term>
+    <term name="month-12" form="short">דצמ'</term>
 
     <!-- SEASONS -->
     <term name="season-01">אביב</term>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="pt-BR">
+  <!-- The terms and abbreviations in this file follow the recommendations of The Brazilian National Standards Association (ABNT), particularly the ones presented at standard ABNT NBR 6023:2025. -->
+  <!-- Additional abbreviations are from:
+        1. Reduções, Academia Brasileira de Letras (2025), https://www.academia.org.br/nossa-lingua/reducoes.
+  -->
   <info>
     <translator>
       <name>José Antonio Meira da Rocha</name>
@@ -7,14 +11,12 @@
     <translator>
       <name>Meira da Rocha</name>
     </translator>
-        <translator>
+    <translator>
       <name>Renato Cirino</name>
     </translator>
     <translator>
       <name>André Luiz Appel</name>
-    </translator>
-    <translator>
-      <name>Renato Cirino</name>
+      <uri>https://orcid.org/0000-0002-9608-803X</uri>
     </translator>
     <translator>
       <name>Isabelly Silva</name>
@@ -40,10 +42,10 @@
     <term name="film">filme</term>
     <term name="henceforth">daqui em diante</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">sine loco</term> <!-- sine loco -->
-    <term name="no-place" form="short">s. l.</term>
-    <term name="no-publisher">sine nomine</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">s. n.</term>
+    <term name="no-place">sem local</term> <!-- sine loco -->
+    <term name="no-place" form="short">s.l.</term>
+    <term name="no-publisher">sem editor</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">s.e.</term>
     <term name="on">em</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="original-work-published">trabalho original publicado</term>
@@ -65,7 +67,7 @@
     <term name="and">e</term>
     <term name="and others">e outros</term>
     <term name="anonymous">anônimo</term>
-    <term name="anonymous" form="short">anon</term>
+    <term name="anonymous" form="short">anôn.</term>
     <term name="at">em</term>
     <term name="available at">disponível em</term>
     <term name="by">por</term>
@@ -103,7 +105,7 @@
     <term name="interview">entrevista</term>
     <term name="letter">carta</term>
     <term name="no date">sem data</term>
-    <term name="no date" form="short">s. d.</term>
+    <term name="no date" form="short">s.d.</term>
     <term name="online">online</term>
     <term name="presented at">apresentado em</term>
     <term name="reference">
@@ -114,14 +116,14 @@
       <single>ref.</single>
       <multiple>refs.</multiple>
     </term>
-    <term name="review-of">review of</term>
-    <term name="review-of" form="short">rev. of</term>
+    <term name="review-of">revisão de</term>
+    <term name="review-of" form="short">rev. de</term>
     <term name="retrieved">recuperado</term>
     <term name="scale">escala</term>
     <term name="version">versão</term>
 
     <!-- LONG ITEM TYPE FORMS -->
-    <term name="article">preprint</term>
+    <term name="article">pré-impressão</term>
     <term name="article-journal">artigo de periódico</term>
     <term name="article-magazine">artigo de revista</term>
     <term name="article-newspaper">artigo de jornal</term>
@@ -177,7 +179,7 @@
     <!-- figure is in the list of locator terms -->
     <term name="graphic" form="short">iconog.</term>
     <term name="interview" form="short">entrev.</term>
-    <term name="manuscript" form="short">MS</term>
+    <term name="manuscript" form="short">ms.</term>
     <term name="motion_picture" form="short">grav. vídeo</term>
     <term name="report" form="short">rel.</term>
     <term name="review" form="short">rev.</term>
@@ -186,9 +188,9 @@
 
     <!-- VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
+    <term name="hearing" form="verb">audiência de</term>
+    <term name="review" form="verb">revisão de</term>
+    <term name="review-book" form="verb">revisão do livro</term>
     
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">depois de Cristo</term>
@@ -323,12 +325,12 @@
       <multiple>volumes</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>página inicial</single>
+      <multiple>páginas iniciais</multiple>
     </term>
     <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
+      <single>impressão</single>
+      <multiple>impressões</multiple>
     </term>
 
     <term name="chapter-number" form="short">
@@ -390,6 +392,10 @@
       <single>eq.</single>
       <multiple>eqs.</multiple>
     </term>
+    <term name="part" form="short">			 
+      <single>pt.</single>
+      <multiple>pt.</multiple>						 
+    </term>
     <term name="rule" form="short">			 
       <single>norma</single>
       <multiple>normas</multiple>						 
@@ -432,8 +438,8 @@
       <multiple>p.</multiple>
     </term>
     <term name="printing" form="short">
-      <single>print.</single>
-      <multiple>prints.</multiple>
+      <single>impr.</single>
+      <multiple>imprs.</multiple>
     </term>
     
 
@@ -599,8 +605,8 @@
       <multiple>narrs.</multiple>
     </term>
     <term name="organizer" form="short">
-      <single>org.</single>
-      <multiple>orgs.</multiple>
+      <single>org.</single> <!-- no variation for ABNT -->
+      <multiple>org.</multiple> <!-- no variation for ABNT -->
     </term>
     <term name="performer" form="short">
       <single>intérp.</single>
@@ -653,11 +659,11 @@
 
     <!-- VERB ROLE FORMS -->
     <term name="chair" form="verb">presidido por</term>
-    <term name="compiler" form="verb">compiled by</term>
-    <term name="contributor" form="verb">com</term>
+    <term name="compiler" form="verb">compilado por</term>
+    <term name="contributor" form="verb">contribuição de</term>
     <term name="curator" form="verb">curadoria de</term>
-    <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
+    <term name="executive-producer" form="verb">produção executiva de</term>
+    <term name="guest" form="verb">com participação de</term>
     <term name="host" form="verb">apresentado por</term>
     <term name="narrator" form="verb">narração de</term>
     <term name="organizer" form="verb">organizado por</term>
@@ -673,29 +679,29 @@
     <term name="interviewer" form="verb">entrevista cedida a</term>
     <term name="recipient" form="verb">destinado a</term>
     <term name="reviewed-author" form="verb">por</term>
-    <term name="collection-editor" form="verb-short">ed. by</term>
+    <term name="collection-editor" form="verb-short">editorado por</term>
     <term name="translator" form="verb">traduzido por</term>
     <term name="editortranslator" form="verb">editado e traduzido por</term>
     <term name="editor-translator" form="verb">editado e traduzido por</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="compiler" form="verb-short">comp. por</term>
-    <term name="contributor" form="verb-short">w.</term>
-    <term name="curator" form="verb-short">cur. by</term>
-    <term name="executive-producer" form="verb-short">prod. exec. por</term>
-    <term name="guest" form="verb-short">c/ conv.</term>
-    <term name="host" form="verb-short">ofer. por</term>
+    <term name="contributor" form="verb-short">com contrib. de</term>
+    <term name="curator" form="verb-short">cur. de</term>
+    <term name="executive-producer" form="verb-short">prod. exec. de</term>
+    <term name="guest" form="verb-short">com part. de</term>
+    <term name="host" form="verb-short">apres. por</term>
     <term name="narrator" form="verb-short">narr. por</term>
     <term name="organizer" form="verb-short">org. por</term>
-    <term name="performer" form="verb-short">perf. por</term>
+    <term name="performer" form="verb-short">interp. por</term>
     <term name="producer" form="verb-short">prod. por</term>
     <term name="script-writer" form="verb-short">escr. por</term>
-    <term name="series-creator" form="verb-short">criad. por</term>
-    <term name="director" form="verb-short">dir.</term>
-    <term name="editor" form="verb-short">org.</term>
-    <term name="editorial-director" form="verb-short">ed.</term>
-    <term name="illustrator" form="verb-short">ilus.</term>
-    <term name="translator" form="verb-short">trad.</term>
+    <term name="series-creator" form="verb-short">criado por</term>
+    <term name="director" form="verb-short">dir. por</term>
+    <term name="editor" form="verb-short">org. por</term>
+    <term name="editorial-director" form="verb-short">ed. por</term>
+    <term name="illustrator" form="verb-short">ilus. por</term>
+    <term name="translator" form="verb-short">trad. por</term>
     <term name="editortranslator" form="verb-short">ed. e trad. por</term>
     <term name="editor-translator" form="verb-short">ed. e trad. por</term>
 
