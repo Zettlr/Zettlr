@@ -57,13 +57,13 @@ jobs:
         WEBHOOK: ${{ secrets.DISCORD_AUDIT_WEBHOOK }}
       run: |
         AUDIT_CONTENT=$(<audit_result.txt)
-        AUDIT_CONTENT=${AUDIT_CONTENT:0:1500}
         echo '## Repository Audit Results' > message.txt
         echo '' >> message.txt
-        echo "A new audit has been run against Zettlr‘s `yarn.lock` file. This happens automatically if dependencies have changed, or if a maintainer has manually requested an audit. There have been **${{env.count}} results**." >> message.txt
+        echo "A new audit has been run against Zettlr’s `yarn.lock` file. This happens automatically if dependencies have changed, or if a maintainer has manually requested an audit. There have been **${{env.count}} results**." >> message.txt
+        echo '' >> message.txt
         echo "For the full results (${#AUDIT_CONTENT} characters), please see the summary of the run: https://github.com/Zettlr/Zettlr/actions/runs/${{ github.run_id }}." >> message.txt
         echo '' >> message.txt
-        echo '**Disclaimer**: Many results are not relevant for the app‘s security, and the pure number of results cannot be used to infer whether there exists a security risk for Zettlr and its users. The maintainers are able to infer whether a result indicates a critical issue that needs fixing.' >> message.txt
+        echo '**Disclaimer**: Many results are not relevant for the app’s security, and the pure number of results cannot be used to infer whether there exists a security risk for Zettlr and its users. The maintainers are able to infer whether a result indicates a critical issue that needs fixing.' >> message.txt
         BODY=$(jq -n --arg msg "$(<message.txt)" '{ content: $msg }')
         curl -d "$BODY" -H "Content-Type: application/json" -X POST "$WEBHOOK"
     - name: Report results in summary
