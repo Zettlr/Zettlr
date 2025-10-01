@@ -161,8 +161,6 @@ const ltLinter = linter(async view => {
       } satisfies LanguageToolLinterRequest
     })
 
-    view.dispatch({ effects: updateLTState.of({ running: false }) })
-
     if (response === undefined) {
       return [] // Could not fetch a response, but it's benign
     } else if (typeof response === 'string') {
@@ -271,7 +269,7 @@ const ltLinter = linter(async view => {
   }
 
   // Reset the accumulated changes.
-  view.dispatch({ effects: ltChangesEffect.of(null) })
+  view.dispatch({ effects: [ updateLTState.of({ running: false }), ltChangesEffect.of(null) ] })
 
   return diagnostics
 }, {
