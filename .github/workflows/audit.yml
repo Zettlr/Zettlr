@@ -67,8 +67,6 @@ jobs:
         BODY=$(jq -n --arg msg "$(<message.txt)" '{ content: $msg }')
         curl -d "$BODY" -H "Content-Type: application/json" -X POST "$WEBHOOK"
     - name: Report results in summary
-      # Run this step only if yarn npm audit exited with a non-zero code.
-      if: ${{ failure() }}
       run: |
         AUDIT_CONTENT=$(<audit_result.txt)
         echo "## Full Audit results" >> $GITHUB_STEP_SUMMARY
