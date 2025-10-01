@@ -228,6 +228,7 @@ body div#toolbar {
 
   div.toolbar-group {
     text-align: center;
+    display: flex;
 
     span.toolbar-label {
       display: block;
