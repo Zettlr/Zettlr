@@ -20,7 +20,7 @@ import { ipcMain } from 'electron'
 import { promises as fs, readFileSync, constants as FS_CONSTANTS } from 'fs'
 import path from 'path'
 import { trans } from '@common/i18n-main'
-import extractBibTexAttachments from './extract-bibtex-attachments'
+import extractBibTexAttachments from './util/extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
 import YAML from 'yaml'
 import ProviderContract, { type IPCAPI } from '../provider-contract'
@@ -31,7 +31,7 @@ import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { showNativeNotification } from '@common/util/show-notification'
 
-interface DatabaseRecord {
+export interface DatabaseRecord {
   path: string
   // We basically have CSL databases (do not contain attachments) or BibTex
   // (contain attachments).
