@@ -20,9 +20,6 @@ import { ipcMain } from 'electron'
 import { promises as fs, readFileSync, constants as FS_CONSTANTS } from 'fs'
 import path from 'path'
 import { trans } from '@common/i18n-main'
-import extractBibTexAttachments from './util/extract-bibtex-attachments'
-import { parse as parseBibTex } from 'astrocite-bibtex'
-import YAML from 'yaml'
 import ProviderContract, { type IPCAPI } from '../provider-contract'
 import type WindowProvider from '../windows'
 import type LogProvider from '../log'
@@ -30,12 +27,13 @@ import type ConfigProvider from '@providers/config'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { showNativeNotification } from '@common/util/show-notification'
+import { loadDatabase } from './util/database-loader'
 
 export interface DatabaseRecord {
   path: string
   // We basically have CSL databases (do not contain attachments) or BibTex
   // (contain attachments).
-  type: 'csl'|'bibtex'
+  type: 'csl'|'bibtex'|'biblatex'
   cslData: Record<string, CSLItem>
   bibtexAttachments: Record<string, string[]|false>
 }
@@ -331,53 +329,7 @@ export default class CiteprocProvider extends ProviderContract {
       throw new Error(`File "${databasePath}" does not exist or is not visible to the app.`)
     }
 
-    this._logger.info(`[Citeproc Provider] Loading database ${databasePath}`)
-    const record: DatabaseRecord = {
-      path: databasePath,
-      type: 'csl',
-      cslData: {},
-      bibtexAttachments: Object.create(null)
-    }
-
-    // First read in the database file
-    const data = await fs.readFile(databasePath, 'utf8')
-
-    switch (path.extname(databasePath).toLowerCase()) {
-      case '.json': {
-        for (const item of JSON.parse(data) as CSLItem[]) {
-          record.cslData[item.id] = item
-        }
-        break
-      }
-      case '.yml':
-      case '.yaml': {
-        let yamlData = YAML.parse(data)
-        if ('references' in yamlData) {
-          yamlData = yamlData.references // CSL YAML is stored in `references`
-        } else if (!Array.isArray(yamlData)) {
-          throw new Error('The CSL YAML file did not contain valid contents.')
-        }
-        for (const item of yamlData) {
-          record.cslData[item.id] = item
-        }
-        break
-      }
-      case '.bib': {
-        for (const item of parseBibTex(data)) {
-          record.cslData[item.id] = item
-        }
-        record.type = 'bibtex'
-
-        // If we're here, we had a BibTex library --> extract the attachments
-        const attachments = extractBibTexAttachments(data, path.dirname(databasePath), this._logger)
-        record.bibtexAttachments = attachments
-        break
-      }
-      default:
-        throw new Error(`Could not load database ${databasePath}: Unknown extension`)
-    }
-
-    this._logger.info(`[Citeproc Provider] Database ${record.path} loaded (${Object.keys(record.cslData).length} items).`)
+    const record = await loadDatabase(databasePath, this._logger)
 
     // Add the database to the list of available databases
     this.databases.set(databasePath, record)
