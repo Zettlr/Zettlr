@@ -25,33 +25,33 @@
     <date-part name="year"/>
   </date>
   <terms>
-    <term name="advance-online-publication">advance online publication</term>
+        <term name="advance-online-publication">online forhåndsvisning</term>
     <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
+    <term name="audio-recording">lydoptagelse</term>
     <term name="film">film</term>
-    <term name="henceforth">henceforth</term>
+    <term name="henceforth">fra nu af</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
+    <term name="no-place">uden sted</term>
+    <term name="no-place" form="short">u.s.</term>
+    <term name="no-publisher">uden forlag</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">u.f.</term>
     <term name="on">on</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="original-work-published">originalt værk udgivet</term>
     <term name="personal-communication">personlig kommunikation</term>
     <term name="podcast">podcast</term>
     <term name="podcast-episode">podcast episode</term>
     <term name="preprint">preprint</term>
     <term name="radio-broadcast">radio broadcast</term>
     <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
+    <term name="radio-series-episode">radioudsendelse</term>
+    <term name="special-issue">temanummer</term>
+    <term name="special-section">særafsnit</term>
+    <term name="television-broadcast">tv-udsendelse</term>
+    <term name="television-series">tv-serie</term>
+    <term name="television-series-episode">tv-serie episode</term>
     <term name="video">video</term>
-    <term name="working-paper">working paper</term>
+    <term name="working-paper">arbejdspapir</term>
     <term name="accessed">set</term>
     <term name="and">og</term>
     <term name="and others">med flere</term>
@@ -68,8 +68,8 @@
       <multiple>references</multiple>
     </term>
     <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
+      <single>nummer</single>
+      <multiple>numre</multiple>
     </term>
     <term name="edition">
       <single>udgave</single>
@@ -111,68 +111,68 @@
     <term name="version">version</term>
 
     <!-- LONG ITEM TYPE FORMS -->
-    <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
-    <term name="bill">bill</term>
+    <term name="article">artikel</term>
+    <term name="article-journal">tidsskriftsartikel</term>
+    <term name="article-magazine">magasinartikel</term>
+    <term name="article-newspaper">avisartikel</term>
+    <term name="bill">lovforslag</term>
     <!-- book is in the list of locator terms -->
     <term name="broadcast">broadcast</term>
     <!-- chapter is in the list of locator terms -->
     <term name="classic">classic</term>
     <term name="collection">collection</term>
     <term name="dataset">dataset</term>
-    <term name="document">document</term>
+    <term name="document">dokument</term>
     <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
-    <term name="event">event</term>
+    <term name="entry-dictionary">ordbog opslag</term>
+    <term name="entry-encyclopedia">encyklopædi opslag</term>
+    <term name="event">begivenhed</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic">graphic</term>
-    <term name="hearing">hearing</term>
+    <term name="graphic">figur</term>
+    <term name="hearing">høring</term>
     <term name="interview">interview</term>
-    <term name="legal_case">legal case</term>
-    <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
-    <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
-    <term name="paper-conference">conference paper</term>
+    <term name="legal_case">dom</term>
+    <term name="legislation">lovforslag</term>
+    <term name="manuscript">manuskript</term>
+    <term name="map">kort</term>
+    <term name="motion_picture">film</term>
+    <term name="musical_score">partitur</term>
+    <term name="pamphlet">pamflet</term>
+    <term name="paper-conference">konferencepapir</term>
     <term name="patent">patent</term>
     <term name="performance">performance</term>
-    <term name="periodical">periodical</term>
+    <term name="periodical">tidsskriftsartikel</term>
     <term name="personal_communication">personlig kommunikation</term>
     <term name="post">post</term>
     <term name="post-weblog">blog post</term>
     <term name="regulation">regulation</term>
     <term name="report">report</term>
-    <term name="review">review</term>
-    <term name="review-book">book review</term>
+    <term name="review">anmeldelse</term>
+    <term name="review-book">boganmeldelse</term>
     <term name="software">software</term>
-    <term name="song">audio recording</term>
+    <term name="song">sang</term>
     <term name="speech">presentation</term>
     <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="thesis">afhandling</term>
+    <term name="treaty">traktat</term>
+    <term name="webpage">hjemmeside</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
-    <term name="article-magazine" form="short">mag. art.</term>
-    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="article-journal" form="short">tss.art.</term>
+    <term name="article-magazine" form="short">mag.art.</term>
+    <term name="article-newspaper" form="short">avisart.</term>
     <!-- book is in the list of locator terms -->
     <!-- chapter is in the list of locator terms -->
     <term name="document" form="short">doc.</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic" form="short">graph.</term>
+    <term name="graphic" form="short">fig.</term>
     <term name="interview" form="short">interv.</term>
     <term name="manuscript" form="short">MS</term>
-    <term name="motion_picture" form="short">video rec.</term>
+    <term name="motion_picture" form="short">film</term>
     <term name="report" form="short">rep.</term>
     <term name="review" form="short">rev.</term>
-    <term name="review-book" form="short">bk. rev.</term>
-    <term name="song" form="short">audio rec.</term>
+    <term name="review-book" form="short">bog anm.</term>
+    <term name="song" form="short">sang</term>
 
     <!-- VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
