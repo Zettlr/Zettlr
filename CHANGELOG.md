@@ -183,6 +183,7 @@ parts of your citations, using the following CSS classes:
   previews), rendering (which accounts for link labels), to any action (such as
   copying or removing a link) (#5142).
 - **Feature**: Zettlr now supports loading BibLaTeX libraries as well (#460).
+- **Feature**: Zettlr now correctly displays crossref-style citations (#248).
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).

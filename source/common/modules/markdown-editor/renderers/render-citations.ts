@@ -32,6 +32,33 @@ class CitationWidget extends WidgetType {
   }
 
   toDOM (view: EditorView): HTMLElement {
+    const { items } = this.citation
+    const hasCrossref = items.every(i => /^fig:|tbl:|eq:|sec:/.test(i.id))
+
+    if (hasCrossref) {
+      // We're not dealing with a citation, but rather with a crossref-style
+      // cross-reference. So we can render it directly. NOTE: We're only
+      // supporting all-crossref citations here, not mixed.
+      const elem = document.createElement('span')
+      elem.classList.add('citeproc-citation')
+      const citationTexts = []
+      for (const item of items) {
+        const parts = item.id.split(':')
+        const type = parts[0]
+        const label = parts.slice(1).join(':')
+        if (item.prefix !== undefined) {
+          citationTexts.push(`${item.prefix.trimEnd()} #${label}`)
+        } else {
+          citationTexts.push(`${type}. ${label}`)
+        }
+      }
+
+      elem.textContent = citationTexts.join('; ')
+      elem.addEventListener('click', clickAndSelect(view))
+
+      return elem
+    }
+
     const config = view.state.field(configField).metadata.library
     const library = config === '' ? CITEPROC_MAIN_DB : config
     const callback = window.getCitationCallback(library)
