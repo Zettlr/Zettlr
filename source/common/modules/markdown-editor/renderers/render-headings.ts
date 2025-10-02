@@ -88,6 +88,7 @@ export const headingGutter: Extension[] = [
   gutter({
     class: 'cm-heading-gutter',
     renderEmptyElements: false,
+    initialSpacer: () => new HeadingMarkGutter(1),
     lineMarker (view, line, _otherMarkers) {
       const node = syntaxTree(view.state).resolve(line.from, 1)
       if (node.name !== 'HeaderMark') {
