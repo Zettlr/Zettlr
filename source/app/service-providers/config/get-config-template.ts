@@ -56,39 +56,39 @@ export interface LanguageToolIgnoredRuleEntry {
 export interface ConfigOptions {
   version: string
   buildDate: string
+  uuid: string
+  appLang: string
+
+  darkMode: boolean
+  autoDarkMode: 'off'|'system'|'schedule'
+  autoDarkModeStart: string
+  autoDarkModeEnd: string
+
   openPaths: string[]
   openDirectory: string|null
+  attachmentExtensions: string[]
+  alwaysReloadFiles: boolean
+  muteLines: boolean
+
+  fileManagerMode: 'thin'|'combined'|'expanded'
+  fileMeta: boolean
+  fileMetaTime: 'modtime'|'creationtime'
+  sorting: 'natural'|'ascii'
+  sortFoldersFirst: boolean
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading'
+
+  newFileNamePattern: string
+  newFileDontPrompt: boolean
+  selectedDicts: string[]
+
+  debug: boolean
+  checkForBeta: boolean
+
   dialogPaths: {
     askFileDialog: string
     askDirDialog: string
     askLangFileDialog: string
   }
-  window: {
-    nativeAppearance: boolean
-    vibrancy: boolean
-    sidebarVisible: boolean
-    currentSidebarTab: 'toc'|'references'|'relatedFiles'|'attachments'
-    recentGlobalSearches: string[]
-  }
-  ui: {
-    fileManagerSplitSize: [number, number]
-    editorSidebarSplitSize: [number, number]
-  }
-  attachmentExtensions: string[]
-  darkMode: boolean
-  alwaysReloadFiles: boolean
-  autoDarkMode: 'off'|'system'|'schedule'
-  autoDarkModeStart: string
-  autoDarkModeEnd: string
-  fileMeta: boolean
-  fileMetaTime: 'modtime'|'creationtime'
-  sorting: 'natural'|'ascii'
-  sortFoldersFirst: boolean
-  muteLines: boolean
-  fileManagerMode: 'thin'|'combined'|'expanded'
-  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading'
-  newFileNamePattern: string
-  newFileDontPrompt: boolean
   export: {
     dir: 'temp'|'cwd'|'ask'
     stripTags: boolean
@@ -189,12 +189,20 @@ export interface ConfigOptions {
     openOffice: FileTypeSettings<boolean, boolean, 'system'>
     dataFiles: FileTypeSettings<boolean, boolean, 'system'>
   }
-  selectedDicts: string[]
-  appLang: string
-  debug: boolean
   watchdog: {
     activatePolling: boolean
     stabilityThreshold: number
+  }
+  window: {
+    nativeAppearance: boolean
+    vibrancy: boolean
+    sidebarVisible: boolean
+    currentSidebarTab: 'toc'|'references'|'relatedFiles'|'attachments'
+    recentGlobalSearches: string[]
+  }
+  ui: {
+    fileManagerSplitSize: [number, number]
+    editorSidebarSplitSize: [number, number]
   }
   system: {
     deleteOnFail: boolean
@@ -204,7 +212,6 @@ export interface ConfigOptions {
     checkForUpdates: boolean
     zoomBehavior: 'gui'|'editor'
   }
-  checkForBeta: boolean
   displayToolbarButtons: {
     showOpenPreferencesButton: boolean
     showNewFileButton: boolean
@@ -220,7 +227,6 @@ export interface ConfigOptions {
     showDocumentInfoText: boolean
     showPomodoroButton: boolean
   }
-  uuid: string
 }
 
 export function getConfigTemplate (): ConfigOptions {
