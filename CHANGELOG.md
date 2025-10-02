@@ -184,6 +184,9 @@ parts of your citations, using the following CSS classes:
   copying or removing a link) (#5142).
 - **Feature**: Zettlr now supports loading BibLaTeX libraries as well (#460).
 - **Feature**: Zettlr now correctly displays crossref-style citations (#248).
+- **Feature**: You can now collapse and un-collapse the files and workspace
+  sections in the file manager. This can be helpful if you are working with both
+  a lot of individual files and workspaces. Your choice is remembered (#5916).
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).

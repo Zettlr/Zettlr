@@ -71,6 +71,8 @@ export interface ConfigOptions {
   muteLines: boolean
 
   fileManagerMode: 'thin'|'combined'|'expanded'
+  fileManagerShowFiles: boolean
+  fileManagerShowWorkspaces: boolean
   fileMeta: boolean
   fileMetaTime: 'modtime'|'creationtime'
   sorting: 'natural'|'ascii'
@@ -283,6 +285,8 @@ export function getConfigTemplate (): ConfigOptions {
     sortFoldersFirst: true, // should folders be shown first in combined fileview
     muteLines: true, // Should the editor mute lines in distraction free mode?
     fileManagerMode: 'combined', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
+    fileManagerShowFiles: true, // Allow users to persistently collapse or uncollapse the files and workspaces sections.
+    fileManagerShowWorkspaces: true,
     fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files

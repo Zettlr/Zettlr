@@ -14,44 +14,77 @@
         </div>
       </div>
 
-      <div v-show="getFiles.length > 0" id="directories-files-header">
-        <cds-icon
-          v-if="platform !== 'darwin'"
-          shape="file"
-          role="presentation"
-        ></cds-icon>{{ fileSectionHeading }}
-      </div>
-      <TreeItem
-        v-for="item in getFiles"
-        v-bind:key="item.path"
-        v-bind:obj="item"
-        v-bind:depth="0"
-        v-bind:active-item="activeTreeItem?.[0]"
-        v-bind:is-currently-filtering="filterQuery.trim() !== ''"
-        v-bind:has-duplicate-name="getFiles.filter(i => i.name === item.name).length > 1"
-        v-bind:window-id="props.windowId"
-        v-on:toggle-file-list="emit('toggle-file-list')"
-      >
-      </TreeItem>
-      <div v-show="getDirectories.length > 0" id="directories-dirs-header">
-        <cds-icon
-          v-if="platform !== 'darwin'"
-          shape="tree-view"
-          role="presentation"
-        ></cds-icon>{{ workspaceSectionHeading }}
-      </div>
-      <TreeItem
-        v-for="item in getDirectories"
-        v-bind:key="item.path"
-        v-bind:obj="item"
-        v-bind:is-currently-filtering="filterQuery.length > 0"
-        v-bind:depth="0"
-        v-bind:active-item="activeTreeItem?.[0]"
-        v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
-        v-bind:window-id="props.windowId"
-        v-on:toggle-file-list="emit('toggle-file-list')"
-      >
-      </TreeItem>
+      <template v-if="getFiles.length > 0">
+        <div
+          id="directories-files-header"
+          v-on:click="configStore.setConfigValue('fileManagerShowFiles', !showFilesSection)"
+        >
+          <cds-icon
+            shape="angle"
+            v-bind:direction="showFilesSection ? 'down' : 'right'"
+            role="presentation"
+          ></cds-icon>
+
+          <cds-icon
+            v-if="platform !== 'darwin'"
+            shape="file"
+            role="presentation"
+          ></cds-icon>
+          
+          {{ fileSectionHeading }}
+        </div>
+
+        <template v-if="showFilesSection">
+          <TreeItem
+            v-for="item in getFiles"
+            v-bind:key="item.path"
+            v-bind:obj="item"
+            v-bind:depth="0"
+            v-bind:active-item="activeTreeItem?.[0]"
+            v-bind:is-currently-filtering="filterQuery.trim() !== ''"
+            v-bind:has-duplicate-name="getFiles.filter(i => i.name === item.name).length > 1"
+            v-bind:window-id="props.windowId"
+            v-on:toggle-file-list="emit('toggle-file-list')"
+          >
+          </TreeItem>
+        </template>
+      </template>
+
+      <template v-if="getDirectories.length > 0">
+        <div
+          id="directories-dirs-header"
+          v-on:click="configStore.setConfigValue('fileManagerShowWorkspaces', !showWorkspacesSection)"
+        >
+          <cds-icon
+            shape="angle"
+            v-bind:direction="showWorkspacesSection ? 'down' : 'right'"
+            role="presentation"
+          ></cds-icon>
+
+          <cds-icon
+            v-if="platform !== 'darwin'"
+            shape="tree-view"
+            role="presentation"
+          ></cds-icon>
+          
+          {{ workspaceSectionHeading }}
+        </div>
+
+        <template v-if="showWorkspacesSection">
+          <TreeItem
+            v-for="item in getDirectories"
+            v-bind:key="item.path"
+            v-bind:obj="item"
+            v-bind:is-currently-filtering="filterQuery.length > 0"
+            v-bind:depth="0"
+            v-bind:active-item="activeTreeItem?.[0]"
+            v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
+            v-bind:window-id="props.windowId"
+            v-on:toggle-file-list="emit('toggle-file-list')"
+          >
+          </TreeItem>
+        </template>
+      </template>
     </template>
     <template v-else>
       <div class="empty-tree" v-on:click="requestOpenRoot">
@@ -136,6 +169,9 @@ const workSpacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
+
+const showFilesSection = computed(() => configStore.config.fileManagerShowFiles)
+const showWorkspacesSection = computed(() => configStore.config.fileManagerShowWorkspaces)
 
 const platform = process.platform
 const fileSectionHeading = trans('Files')
@@ -325,6 +361,10 @@ body {
     &.hidden { left:-100%; }
 
     #directories-dirs-header, #directories-files-header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+
       clr-icon {
         width: 12px;
         height: 12px;
