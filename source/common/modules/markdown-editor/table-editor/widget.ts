@@ -139,7 +139,7 @@ export class TableWidget extends WidgetType {
     const cells = [...dom.querySelectorAll<HTMLDivElement>('td, th')]
       .map(cell => {
         return {
-          cell,
+          td: cell,
           from: parseInt(cell.dataset.cellFrom!, 10),
           to: parseInt(cell.dataset.cellTo!, 10)
         }
@@ -150,13 +150,22 @@ export class TableWidget extends WidgetType {
     // NOTE: This code ignores the "side" parameter. Also, it ignores the offset
     // into the table cell itself.
     for (const cell of cells) {
-      const { from, to } = cell
+      const { from, to, td } = cell
       if ((from <= realPos && to >= realPos) || realPos < from) {
         // Found it: The pos is somewhere within this cell, or it was after the
         // previous cell (but before this one), or in the leading formatting
         // characters of the table. In any case, report back the correct pixel
         // position of this cell
-        return cell.cell.getBoundingClientRect()
+        const content = td.querySelector('.content')
+        if (content !== null) {
+          // Found via https://github.com/codemirror/view/blob/45268f0eb62d1c6a0d70952ebdeb2e5ac898109d/src/dom.ts#L89
+          // This seems to improve the situation marginally.
+          const { left, top, bottom } = content.getBoundingClientRect()
+          return { left, right: left, top, bottom }
+        } else {
+          console.warn('[TableEditor] Cannot provide accurate client rect: no `.content`-element found in table cell.')
+          return td.getBoundingClientRect()
+        }
       }
     }
 
