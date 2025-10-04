@@ -52,8 +52,8 @@ import { type OtherFileDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@cds/core/icon'
 import { computed } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
-import { pathDirname, isAbsolutePath, resolvePath } from 'source/common/util/renderer-path-polyfill'
-import { hasImageExt } from 'source/common/util/file-extention-checks'
+import { pathDirname, isAbsolutePath, resolvePath, pathExtname } from 'source/common/util/renderer-path-polyfill'
+import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 
 const ipcRenderer = window.ipc
 
@@ -75,7 +75,7 @@ const noAttachmentsMessage = trans('No other files')
 const attachments = computed<Array<{ path: string, files: OtherFileDescriptor[] }>>(() => {
   const activeFile = documentTreeStore.lastLeafActiveFile
   if (activeFile === undefined) {
-    return [] as any
+    return []
   }
 
   const currentDir = workspacesStore.getDir(pathDirname(activeFile.path))
@@ -83,15 +83,32 @@ const attachments = computed<Array<{ path: string, files: OtherFileDescriptor[] 
     return []
   }
 
-  const extensions = configStore.config.attachmentExtensions
+  const { files, attachmentExtensions, editor } = configStore.config
+  
+  const assetsDir = editor.defaultSaveImagePath.trim()
+  const showImages = files.images.showInSidebar
+  const showDataFiles = files.dataFiles.showInSidebar
+  const showOfficeFiles = files.msoffice.showInSidebar
+  const showOpenOffice = files.openOffice.showInSidebar
+  const showPDF = files.pdf.showInSidebar
 
-  const files = currentDir.children
+  // Quick helper function that tests whether the provided attachment should be
+  // shown in the sidebar. This essentially tests the file's extension and
+  // returns true if it shuld shown in the sidebar.
+  const shouldShowAttachment = (filePath: string): boolean => {
+    return attachmentExtensions.includes(pathExtname(filePath).toLowerCase()) ||
+      (showImages && hasImageExt(filePath)) ||
+      (showDataFiles && hasDataExt(filePath)) ||
+      (showOfficeFiles && hasMSOfficeExt(filePath)) ||
+      (showOpenOffice && hasOpenOfficeExt(filePath)) ||
+      (showPDF && hasPDFExt(filePath))
+  }
+
+  const dirAttachments = currentDir.children
     .filter((child): child is OtherFileDescriptor => child.type === 'other')
-    .filter(attachment => extensions.includes(attachment.ext))
+    .filter(attachment => shouldShowAttachment(attachment.path))
 
-  const att = [{ path: trans('Current folder'), files }]
-
-  const assetsDir = configStore.config.editor.defaultSaveImagePath.trim()
+  const att = [{ path: trans('Current folder'), files: dirAttachments }]
 
   const assetsDescriptor = isAbsolutePath(assetsDir)
     ? workspacesStore.getDir(assetsDir)
@@ -100,7 +117,7 @@ const attachments = computed<Array<{ path: string, files: OtherFileDescriptor[] 
   if (assetsDescriptor !== undefined) {
     const files = assetsDescriptor.children
       .filter((child): child is OtherFileDescriptor => child.type === 'other')
-      .filter(attachment => extensions.includes(attachment.ext))
+      .filter(attachment => shouldShowAttachment(attachment.path))
 
     att.push({ path: assetsDir, files })
   }
