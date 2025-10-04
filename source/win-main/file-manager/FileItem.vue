@@ -27,9 +27,6 @@
     >
       <div class="filename">
         <!-- Display the date in the top-right corner -->
-        <div class="date">
-          {{ getDate }}
-        </div>
         <cds-icon
           v-if="isProject"
           aria-label="Project"
@@ -49,6 +46,9 @@
         <span v-else>
           {{ basename }}
         </span>
+        <div class="date">
+          {{ getDate }}
+        </div>
       </div>
       <div v-if="fileMeta" class="meta-info">
         <div v-if="isDirectory">
@@ -423,31 +423,39 @@ body {
         // before and after
         font-size: 13px;
         white-space: nowrap;
-        display: block;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 4px;
         width: 100%;
         overflow: hidden;
         position: relative;
         margin: 5px 0px 0px 0px;
 
+        span {
+          display: block;
+          overflow: auto;
+          text-overflow: ellipsis;
+        }
+
         // These inputs should be more or less "invisible"
         input {
           border: none;
-          width: 100%;
+          max-width: 100%;
           color: inherit;
           font-family: inherit;
           font-size: inherit;
+          field-sizing: content;
           background-color: transparent;
           padding: 0;
         }
 
         div.date {
-          position: absolute;
+          flex-shrink: 0;
           font-size: 11px;
           color: rgb(130, 130, 130);
           background-color: inherit;
-          top: 0;
-          right: 0;
-          padding: 2px 5px;
+          padding: 2px 0px;
         }
       }
 

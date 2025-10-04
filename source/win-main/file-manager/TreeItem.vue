@@ -79,6 +79,8 @@
           <input
             ref="nameEditingInput"
             type="text"
+            class="filename-input"
+            v-bind:placeholder="filenameInputPlaceholder"
             v-bind:value="obj.name"
             v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
             v-on:keyup.esc="nameEditing = false"
@@ -102,9 +104,10 @@
       }"
     >
       <input
-        v-if="operationType !== undefined"
         ref="newObjectInput"
+        class="filename-input"
         type="text"
+        v-bind:placeholder="filenameInputPlaceholder"
         v-on:keyup.enter="handleOperationFinish(($event.target as HTMLInputElement).value)"
         v-on:keyup.esc="operationType = undefined"
         v-on:keydown.stop=""
@@ -209,6 +212,8 @@ const {
   selectedDir,
   updateObject
 } = useItemComposable(props.obj, displayText, props.windowId, nameEditingInput)
+
+const filenameInputPlaceholder = trans('Enter a name')
 
 function sel (event: MouseEvent): void {
   requestSelection(event)
@@ -646,6 +651,20 @@ function maybeUncollapse (): void {
 <style lang="less">
 body {
   div.tree-item-container {
+    font-size: 13px;
+
+    // These inputs should be more or less "invisible"
+    input.filename-input {
+      border: none;
+      color: inherit;
+      font-family: inherit;
+      font-size: inherit;
+      background-color: transparent;
+      width: auto;
+      field-sizing: content;
+      padding: 0;
+    }
+
     .tree-item {
       white-space: nowrap;
       display: flex;
@@ -660,21 +679,11 @@ body {
       }
 
       .display-text {
-        font-size: 13px;
         padding: 3px 5px;
         overflow: hidden;
         text-overflow: ellipsis;
         margin-right: 8px;
 
-        // These inputs should be more or less "invisible"
-        input {
-          border: none;
-          color: inherit;
-          font-family: inherit;
-          font-size: inherit;
-          background-color: transparent;
-          padding: 0;
-        }
       }
 
       &.project {

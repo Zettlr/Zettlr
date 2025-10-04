@@ -110,9 +110,8 @@ body {
       font-family: inherit;
       color: inherit;
       border: none;
-      width: 250px;
+      field-sizing: content;
       margin: 0;
-      width: auto;
     }
   }
   &.dark {
