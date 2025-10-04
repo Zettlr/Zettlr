@@ -50,7 +50,8 @@ export interface EditorConfiguration {
   indentWithTabs: boolean
   linkPreference: 'always'|'never'|'withID'
   zknLinkFormat: 'link|title'|'title|link'
-  linkFilenameOnly: boolean
+  zknAddFileTitle: boolean
+  linkWithIDIfPossible: boolean
   metadata: {
     path: string
     id: string
@@ -108,7 +109,8 @@ export function getDefaultConfig (): EditorConfiguration {
     indentWithTabs: false,
     linkPreference: 'always',
     zknLinkFormat: 'link|title',
-    linkFilenameOnly: false,
+    linkWithIDIfPossible: false,
+    zknAddFileTitle: true,
     metadata: {
       path: '',
       id: '',

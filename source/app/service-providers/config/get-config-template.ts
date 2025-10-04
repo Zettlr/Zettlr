@@ -107,8 +107,8 @@ export interface ConfigOptions {
   zkn: {
     idRE: string
     idGen: string
-    linkFilenameOnly: boolean
-    linkWithFilename: 'always'|'never'|'withID'
+    linkAddFileTitle: boolean
+    linkWithIDIfPossible: boolean
     linkFormat: 'link|title'|'title|link'
     autoSearch: boolean
     customDirectory: string
@@ -307,8 +307,8 @@ export function getConfigTemplate (): ConfigOptions {
     zkn: {
       idRE: '(\\d{14})',
       idGen: '%Y%M%D%h%m%s',
-      linkFilenameOnly: false,
-      linkWithFilename: 'never', // can be always|never|withID
+      linkAddFileTitle: true,
+      linkWithIDIfPossible: false,
       linkFormat: 'link|title', // Determines what internal links ([[link|title]]) look like
       autoSearch: true, // Automatically start a search upon following a link?
       customDirectory: '' // If present, saves auto-created files here

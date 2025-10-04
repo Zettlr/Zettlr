@@ -217,7 +217,6 @@ const mainEditorWrapper = ref<HTMLDivElement|null>(null)
 // COMPUTED PROPERTIES
 const useH1 = computed<boolean>(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed<boolean>(() => configStore.config.fileNameDisplay.includes('title'))
-const filenameOnly = computed<boolean>(() => configStore.config.zkn.linkFilenameOnly)
 const fontSize = computed<number>(() => configStore.config.editor.fontSize)
 const globalSearchResults = computed(() => windowStateStore.searchResults)
 const snippets = computed(() => windowStateStore.snippets)
@@ -265,9 +264,9 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     renderHeadings: display.renderHTags,
     renderTables: editor.enableTableHelper,
     renderEmphasis: display.renderEmphasis,
-    linkPreference: zkn.linkWithFilename,
     zknLinkFormat: zkn.linkFormat,
-    linkFilenameOnly: zkn.linkFilenameOnly,
+    zknAddFileTitle: zkn.linkAddFileTitle,
+    linkWithIDIfPossible: zkn.linkWithIDIfPossible,
     inputMode: editor.inputMode,
     lintMarkdown: editor.lint.markdown,
     // The editor only needs to know if it should use languageTool
@@ -425,7 +424,6 @@ const fsalFiles = computed<MDFileDescriptor[]>(() => {
 // WATCHERS
 watch(useH1, () => { updateFileDatabase().catch(err => console.error('Could not update file database', err)) })
 watch(useTitle, () => { updateFileDatabase().catch(err => console.error('Could not update file database', err)) })
-watch(filenameOnly, () => { updateFileDatabase().catch(err => console.error('Could not update file database', err)) })
 watch(fsalFiles, () => { updateFileDatabase().catch(err => console.error('Could not update file database', err)) })
 
 watch(editorConfiguration, (newValue) => {

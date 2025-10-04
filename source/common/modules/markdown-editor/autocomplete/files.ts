@@ -51,30 +51,43 @@ export const filesUpdateField = StateField.define<Completion[]>({
  */
 const apply = (filename: string, fileId: string, displayName: string) => function (view: EditorView, completion: Completion, from: number, to: number) {
   // Applies a filename insertion
-  const { linkFilenameOnly, linkPreference } = view.state.field(configField)
+  const { zknLinkFormat, linkWithIDIfPossible, zknAddFileTitle } = view.state.field(configField)
 
   const linkEndAfterCursor = view.state.sliceDoc(to, to + 2) === ']]'
 
-  let insert = ''
-  if (linkFilenameOnly) {
-    // Just dump the filename in there
-    insert = `${filename}]]`
-  } else {
-    const textToInsert = fileId === '' ? filename: fileId
-    if (linkPreference === 'always' || (linkPreference === 'withID' && textToInsert === fileId)) {
-      insert = `${textToInsert}]] ${displayName}`
+  const linkTarget = linkWithIDIfPossible && fileId !== '' ? fileId : filename
+  const linkLabel = zknAddFileTitle ? displayName : ''
+
+  let insert = `${linkTarget}`
+  if (linkLabel !== '') {
+    if (zknLinkFormat === 'link|title') {
+      insert = `${linkTarget}|${linkLabel}`
     } else {
-      insert = `${textToInsert}]]`
+      insert = `${linkLabel}|${linkTarget}`
     }
   }
 
-  if (linkEndAfterCursor) {
-    to += 2 // Overwrite the linkEnd following the completion
+  if (!linkEndAfterCursor) {
+    insert += ']]'
+  }
+
+  // By default, place the cursor after the inserted part
+  let anchor = from + insert.length + (linkEndAfterCursor ? 2 : 0)
+  let head = anchor
+
+  // However, if the link label was present, preselect it so that the user can
+  // overwrite it.
+  if (linkLabel !== '' && zknLinkFormat === 'link|title') {
+    anchor = from + linkTarget.length + 1
+    head = anchor + linkLabel.length
+  } else if (linkLabel !== '' && zknLinkFormat === 'title|link') {
+    anchor = from
+    head = anchor + linkLabel.length
   }
 
   view.dispatch({
     changes: [{ from, to, insert }],
-    selection: { anchor: from + insert.length }
+    selection: { anchor, head }
   })
 }
 

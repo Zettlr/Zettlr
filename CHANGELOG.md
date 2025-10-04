@@ -122,6 +122,24 @@ parts of your citations, using the following CSS classes:
 * `cm-citation-locator`: The locator after your citekey
 * `cm-citation-suffix`: The citation suffix
 
+## Modified Zettelkasten Link Workflow
+
+With this update, we have updated the Zettelkasten link insertion workflow. This
+is due to the new capabilities of Zettlr to understand link labels. To do so, we
+have removed the previous settings "Link with filename only" and "When linking
+files, add the document name …". Instead, we have added two new settings,
+"Always use the file title as label for internal links" and "Use the file ID as
+link target if possible."
+
+The new workflow applies when you autocomplete a filename, and works as follows:
+
+1. If "Use the file ID" is enabled, Zettlr will use a file's ID, if the file has
+   one, and fall back to the filename only where no ID is available. If it is
+   disabled, Zettlr will always use the filename to generate internal Wikilinks.
+2. If "Always use the file title" is enabled, Zettlr will add the file's title
+   (YAML frontmatter title; first heading level 1; filename) as the link label.
+   If it is disabled, Zettlr will never add a link label automatically.
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
@@ -192,6 +210,15 @@ parts of your citations, using the following CSS classes:
   snippets to `$FILENAME$EXTENSION` (#4191).
 - **Change**: The word and character counters in the statusbar now always show
   both counts.
+- **Change**: Modified the Zettelkasten link insertion workflow. The previous
+  settings "Link with filename only" and "When linking files, add the document
+  name …" have been removed. Instead, there are two new settings, "Always use
+  the file title as label for internal links" and "Use the file ID as link
+  target if possible." The first new setting will always insert the detected
+  file title (YAML frontmatter title; first heading level 1; filename) as the
+  link label. If disabled, Zettlr will always create links without labels. The
+  second setting controls whether Zettlr will always use filenames to link to
+  files, or use IDs where available.
 - **A11y**: Zettlr now respects if you choose to reduce transparency in system
   settings and no longer add window vibrancy on macOS.
 - You can now show an item in Finder/Explorer/file browser when right-clicking a

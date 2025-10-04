@@ -17,7 +17,7 @@ import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
-export function getZettelkastenFields (config: ConfigOptions): PreferencesFieldset[] {
+export function getZettelkastenFields (_config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
       title: trans('Zettelkasten IDs'),
@@ -47,19 +47,13 @@ export function getZettelkastenFields (config: ConfigOptions): PreferencesFields
       fields: [
         {
           type: 'checkbox',
-          label: trans('Link with filename only'),
-          model: 'zkn.linkFilenameOnly'
+          label: trans('Always use the file title as label for internal links'),
+          model: 'zkn.linkAddFileTitle'
         },
         {
-          type: 'radio',
-          label: trans('When linking files, add the document name …'),
-          model: 'zkn.linkWithFilename',
-          options: {
-            always: trans('Always'),
-            withID: trans('Only when linking using the ID'),
-            never: trans('Never')
-          },
-          disabled: config.zkn.linkFilenameOnly
+          type: 'checkbox',
+          label: trans('Use the file ID as link target if possible'),
+          model: 'zkn.linkWithIDIfPossible'
         },
         { type: 'separator' },
         {
