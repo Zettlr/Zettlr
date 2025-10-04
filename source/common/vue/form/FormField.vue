@@ -139,6 +139,7 @@
     v-bind:model-value="model"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
+    v-bind:placeholder="props.field.placeholder"
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></TokenInput>
   <!-- NOTE: For sliders we only listen to change events -->

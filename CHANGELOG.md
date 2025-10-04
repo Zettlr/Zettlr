@@ -238,6 +238,8 @@ parts of your citations, using the following CSS classes:
   (#5922).
 - The toolbar update button now includes a clearly visible label indicating that
   an update is available, making it less likely to miss it.
+- Improved the styling and labelling of the additional attachment extensions
+  setting in the advanced settings.
 
 ## Under the Hood
 

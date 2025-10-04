@@ -16,6 +16,7 @@
         v-bind:id="fieldID"
         ref="input"
         v-model="inputValue"
+        v-bind:placeholder="props.placeholder"
         class="inline"
         type="text"
         v-on:keydown="handleKey"
@@ -44,6 +45,7 @@ const props = defineProps<{
   modelValue: string[]
   label?: string
   name?: string
+  placeholder?: string
 }>()
 
 const emit = defineEmits<(e: 'update:modelValue', value: string[]) => void>()
@@ -84,7 +86,10 @@ body {
   div.token-list {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 12px;
-    padding: 6px;
+    padding: 6px 0px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
     cursor: text;
 
     .token {
@@ -92,8 +97,7 @@ body {
       background-color: rgba(90, 90, 90, 0.5);
       color: white;
       border-radius: 4px;
-      margin: 2px;
-      padding: 2px;
+      padding: 4px;
       cursor: default;
 
       &:hover {
@@ -106,14 +110,17 @@ body {
       font-family: inherit;
       color: inherit;
       border: none;
+      width: 250px;
+      margin: 0;
+      width: auto;
     }
   }
   &.dark {
     div.token-list {
       .token {
-        background-color: rgb(70, 70, 70);
+        background-color: #7c7c7c;
         &:hover {
-          background-color: rgb(110, 30, 30);
+          background-color: #af5151;
         }
       }
 

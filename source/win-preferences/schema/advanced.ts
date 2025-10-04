@@ -251,7 +251,8 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
         },
         {
           type: 'token',
-          label: trans('File extensions to be visible in the Attachments sidebar'),
+          label: trans('Add filename extensions for any additional files you wish to see in the sidebar below. Include the leading period, e.g., ".xml".'),
+          placeholder: trans('Enter an extension and press enter'),
           model: 'attachmentExtensions'
         }
       ]
