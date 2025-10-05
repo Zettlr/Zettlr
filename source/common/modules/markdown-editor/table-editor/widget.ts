@@ -30,6 +30,22 @@ import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRo
 import { clearTable, setAlignment } from './commands/tables'
 import { CITEPROC_MAIN_DB } from 'source/types/common/citeproc'
 import { configField } from '../util/configuration'
+import { applyBold, applyItalic, insertLink } from '../commands/markdown'
+import { copyAsHTML, copyAsPlain, cut, paste, pasteAsPlain } from '../util/copy-paste-cut'
+import { selectAllCommand } from '../keymaps/table-editor'
+import { stripDuplicateSpaces } from '../commands/transforms/strip-duplicate-spaces'
+import { italicsToQuotes } from '../commands/transforms/italics-to-quotes'
+import { quotesToItalics } from '../commands/transforms/quotes-to-italics'
+import { removeLineBreaks } from '../commands/transforms/remove-line-breaks'
+import { addSpacesAroundEmdashes } from '../commands/transforms/add-spaces-around-emdashes'
+import { removeSpacesAroundEmdashes } from '../commands/transforms/remove-spaces-around-emdashes'
+import { doubleQuotesToSingle } from '../commands/transforms/double-quotes-to-single-quotes'
+import { singleQuotesToDouble } from '../commands/transforms/single-quotes-to-double-quotes'
+import { straightenQuotes } from '../commands/transforms/straighten-quotes'
+import { toDoubleQuotes } from '../commands/transforms/to-double-quotes'
+import { toSentenceCase } from '../commands/transforms/to-sentence-case'
+import { toTitleCase } from '../commands/transforms/to-title-case'
+import { zapGremlins } from '../commands/transforms/zap-gremlins'
 
 // This widget holds a visual DOM representation of a table.
 export class TableWidget extends WidgetType {
@@ -324,7 +340,11 @@ function updateRow (
           return
         }
 
-        setSelectionToCell(td, cell, view)
+        const subview = EditorView.findFromDOM(td)
+
+        if (subview === null) {
+          setSelectionToCell(td, cell, view)
+        }
 
         displayTableContextMenu(event, clickedID => {
           switch (clickedID) {
@@ -375,6 +395,72 @@ function updateRow (
               break
             case 'delete.col':
               deleteCol(view)
+              break
+            case 'markdownBold':
+              applyBold(subview ?? view)
+              break
+            case 'markdownItalic':
+              applyItalic(subview ?? view)
+              break
+            case 'markdownLink':
+              insertLink(subview ?? view)
+              break
+            case 'cut':
+              cut(subview ?? view)
+              break
+            case 'copy':
+              copyAsPlain(subview ?? view)
+              break
+            case 'copyAsHTML':
+              copyAsHTML(subview ?? view)
+              break
+            case 'paste':
+              paste(subview ?? view)
+              break
+            case 'pasteAsPlain':
+              pasteAsPlain(subview ?? view)
+              break
+            case 'selectAll':
+              selectAllCommand(subview ?? view)
+              break
+            case 'stripDuplicateSpaces':
+              stripDuplicateSpaces(subview ?? view)
+              break
+            case 'italicsToQuotes':
+              italicsToQuotes(subview ?? view)
+              break
+            case 'quotesToItalics':
+              quotesToItalics(view.state.field(configField).italicFormatting)(subview ?? view)
+              break
+            case 'removeLineBreaks':
+              removeLineBreaks(subview ?? view)
+              break
+            case 'addSpacesAroundEmdashes':
+              addSpacesAroundEmdashes(subview ?? view)
+              break
+            case 'removeSpacesAroundEmdashes':
+              removeSpacesAroundEmdashes(subview ?? view)
+              break
+            case 'doubleQuotesToSingle':
+              doubleQuotesToSingle(subview ?? view)
+              break
+            case 'singleQuotesToDouble':
+              singleQuotesToDouble(subview ?? view)
+              break
+            case 'straightenQuotes':
+              straightenQuotes(subview ?? view)
+              break
+            case 'toDoubleQuotes':
+              toDoubleQuotes(subview ?? view)
+              break
+            case 'toSentenceCase':
+              toSentenceCase(String(window.config.get('appLang')))(subview ?? view)
+              break
+            case 'toTitleCase':
+              toTitleCase(String(window.config.get('appLang')))(subview ?? view)
+              break
+            case 'zapGremlins':
+              zapGremlins(subview ?? view)
               break
           }
         })

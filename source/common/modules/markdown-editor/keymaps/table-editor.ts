@@ -37,7 +37,7 @@ import { handleBackspace, handleQuote } from '../commands/autocorrect'
  *
  * @return  {boolean}           Returns true
  */
-function selectAllCommand (view: EditorView): boolean {
+export function selectAllCommand (view: EditorView): boolean {
   const cursor = view.state.field(hiddenSpanField).cellRange
   view.dispatch({ selection: { anchor: cursor[0], head: cursor[1] } })
   return true
