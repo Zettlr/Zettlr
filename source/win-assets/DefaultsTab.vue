@@ -7,22 +7,29 @@
     v-bind:initial-total-width="100"
   >
     <template #view1>
-      <SelectableList
-        v-bind:items="listItems"
-        v-bind:editable="true"
-        v-bind:selected-item="currentItem"
-        v-on:select="currentItem = $event"
-        v-on:add="newDefaultsFile()"
-        v-on:remove="removeFile($event)"
-      ></SelectableList>
+      <div id="defaults-container-list">
+        <SelectableList
+          v-bind:items="listItems"
+          v-bind:editable="true"
+          v-bind:selected-item="currentItem"
+          v-on:select="currentItem = $event"
+          v-on:add="newDefaultsFile()"
+          v-on:remove="removeFile($event)"
+        ></SelectableList>
+        <ButtonControl
+          v-bind:label="openDefaultsFolderLabel"
+          v-bind:inline="false"
+          v-on:click="openDefaultsDirectory"
+        ></ButtonControl>
+      </div>
     </template>
     <template #view2>
       <div id="defaults-container">
         <p>{{ defaultsExplanation }}</p>
-
         <p>
           <TextControl
             v-model="currentFilename"
+            class="default-name-input"
             v-bind:inline="false"
             v-bind:disabled="currentItem < 0"
             v-on:confirm="renameFile()"
@@ -34,13 +41,6 @@
             v-on:click="renameFile()"
           ></ButtonControl>
         </p>
-
-        <ButtonControl
-          v-bind:label="openDefaultsFolderLabel"
-          v-bind:inline="false"
-          v-on:click="openDefaultsDirectory"
-        ></ButtonControl>
-
         <ZtrAdmonition v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" type="info">
           {{ protectedProfileWarning }}
         </ZtrAdmonition>
@@ -56,8 +56,9 @@
         ></CodeEditor>
 
         <!-- This div is used to keep the buttons in a line despite the flex -->
-        <div>
+        <div class="save-default-file">
           <ButtonControl
+            class="save-button"
             v-bind:primary="true"
             v-bind:label="saveButtonLabel"
             v-bind:inline="true"
@@ -228,7 +229,6 @@ async function loadDefaultsForState (): Promise<void> {
   lastLoadedEditorContents.value = data
   editorContents.value = data
   currentFilename.value = visibleItems.value[currentItem.value].name
-  savingStatus.value = ''
 }
 
 async function retrieveDefaultsFiles (): Promise<void> {
@@ -259,9 +259,9 @@ function saveDefaultsFile (): void {
   } as AssetsProviderIPCAPI)
     .then(async () => {
       lastLoadedEditorContents.value = editorContents.value
-      savingStatus.value = trans('Saved!')
+      setTimeout(() => { savingStatus.value = trans('Saved!') }, 1000)
       await retrieveDefaultsFiles() // Always make sure to pull in any changes
-      setTimeout(() => { savingStatus.value = '' }, 1000)
+      setTimeout(() => { savingStatus.value = '' }, 2000)
     })
     .catch(err => console.error(err))
 }
@@ -330,11 +330,56 @@ function openDefaultsDirectory (): void {
 </script>
 
 <style lang="less">
+#defaults-container-list {
+  display: flex;
+  flex-direction: column;
+  height: stretch;
+
+  .form-control {
+    display: flex;
+    padding: 10px;
+
+    button {
+      flex: 1;
+    }
+  }
+}
+
 #defaults-container {
-  padding: 10px;
+  padding: 0px 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  .admonition {
+    margin-top: 15px;
+  }
+
+  .default-name-input {
+    flex: 1;
+  }
+
+  .save-default-file {
+    padding: 10px 0px;
+    display: flex;
+    gap: 15px;
+
+    button {
+      width: 50px;
+    }
+  }
+
+  .form-control {
+    button:not(.input-reset-button) {
+      height: stretch;
+    }
+  }
+
+  p {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+  }
 
   .CodeMirror {
     flex-grow: 1;

@@ -18,20 +18,22 @@
       v-bind:initial-total-width="100"
     >
       <template #view1>
-        <TextControl
-          v-model="query"
-          v-bind:placeholder="searchPlaceholder"
-          v-bind:search-icon="true"
-          v-bind:autofocus="true"
-          v-bind:reset="true"
-          style="padding: 10px 10px 0px 10px;"
-        ></TextControl>
-        <SelectableList
-          v-bind:items="groups"
-          v-bind:editable="false"
-          v-bind:selected-item="selectedItem"
-          v-on:select="selectGroup($event)"
-        ></SelectableList>
+        <div id="preferences-container-list">
+          <TextControl
+            v-model="query"
+            v-bind:placeholder="searchPlaceholder"
+            v-bind:search-icon="true"
+            v-bind:autofocus="true"
+            v-bind:reset="true"
+            style="padding: 10px 10px 0px 10px;"
+          ></TextControl>
+          <SelectableList
+            v-bind:items="groups"
+            v-bind:editable="false"
+            v-bind:selected-item="selectedItem"
+            v-on:select="selectGroup($event)"
+          ></SelectableList>
+        </div>
       </template>
       <template #view2>
         <FormBuilder
@@ -406,6 +408,13 @@ div[role="tabpanel"] {
   overflow: auto; // Enable scrolling, if necessary
   padding: 10px;
   width: 100%;
+}
+
+#preferences-container-list {
+  display: flex;
+  flex-direction: column;
+  max-height: stretch;
+  margin-bottom: 20px;
 }
 
 #no-results-message {

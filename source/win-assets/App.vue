@@ -73,16 +73,16 @@ const tabs: WindowTab[] = [
     icon: 'import'
   },
   {
-    label: trans('Custom CSS'),
-    controls: 'tab-custom-css',
-    id: 'tab-custom-css-control',
-    icon: 'code'
-  },
-  {
     label: trans('Snippets'),
     controls: 'tab-snippets',
     id: 'tab-snippets-control',
     icon: 'pinboard'
+  },
+  {
+    label: trans('Custom CSS'),
+    controls: 'tab-custom-css',
+    id: 'tab-custom-css-control',
+    icon: 'code'
   }
 ]
 </script>

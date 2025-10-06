@@ -132,9 +132,13 @@ function handleContextMenu (event: MouseEvent, idx: number): void {
 <style lang="less">
 body .selectable-list-wrapper {
   --selectable-list-border-color: rgb(230, 230, 230);
-  padding: 10px;
+  height: 100%;
+  min-height: 0;
+  padding: 10px 10px 0px 10px;
+  display: flex;
+  flex-direction: column;
 
-  &.has-footer { padding-bottom: 40px; }
+  &.has-footer { margin-bottom: 20px; }
 
   .selectable-list-footer {
     height: 22px;
@@ -155,7 +159,8 @@ body .selectable-list-wrapper {
 
   .selectable-list-container {
     border: 1px solid var(--selectable-list-border-color);
-    height: 100%;
+    flex: 1;
+    min-height: 50px;
     overflow: auto;
 
     div.item {
