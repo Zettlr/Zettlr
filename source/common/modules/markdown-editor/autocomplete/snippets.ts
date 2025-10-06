@@ -25,7 +25,8 @@ import {
   EditorSelection,
   Facet,
   type SelectionRange,
-  type EditorState
+  type EditorState,
+  MapMode,
 } from '@codemirror/state'
 import { Decoration, EditorView, WidgetType } from '@codemirror/view'
 import { type AutocompletePlugin } from '.'
@@ -161,9 +162,16 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
     }
 
     // This monstrosity ensures that our ranges stay in sync while the user types
-    val.activeSelections = val.activeSelections.map(selection => {
-      return selection.map(transaction.changes)
-    })
+    val.activeSelections = val.activeSelections
+      .filter(selection => selection.ranges.some(r => {
+        if (transaction.changes.mapPos(r.from, -1, MapMode.TrackBefore) === null) {
+          return false
+        }
+        return true
+      }))
+      .map(selection => {
+        return selection.map(transaction.changes)
+      })
 
     return { ...val }
   },
