@@ -163,12 +163,9 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
 
     // This monstrosity ensures that our ranges stay in sync while the user types
     val.activeSelections = val.activeSelections
-      .filter(selection => selection.ranges.some(r => {
-        if (transaction.changes.mapPos(r.from, -1, MapMode.TrackBefore) === null) {
-          return false
-        }
-        return true
-      }))
+      .filter(selection => {
+        return selection.ranges.some(r => transaction.changes.mapPos(r.from, -1, MapMode.TrackBefore) !== null)
+      })
       .map(selection => {
         return selection.map(transaction.changes)
       })
