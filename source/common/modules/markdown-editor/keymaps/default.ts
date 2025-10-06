@@ -118,7 +118,7 @@ export function defaultKeymap (): Extension {
     { key: 'Backspace', run: deleteBracketPair },
     { key: 'Backspace', run: handleBackspace },
 
-    { key: 'Esc', run: abortSnippet },
+    { key: 'Escape', run: abortSnippet },
     { key: 'Space', run: handleReplacement },
 
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
