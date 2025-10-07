@@ -281,7 +281,7 @@ function parsePlaceholders (template: string, offset = 0): { text: string, range
  * @return  {[string, EditorSelection[]]}  The final text as well as tabstop
  *                                          ranges (if any)
  */
-async function template2snippet (state: EditorState, template: string, rangeOffset: number): Promise<[string, EditorSelection[]]> {
+export async function template2snippet (state: EditorState, template: string, rangeOffset: number): Promise<[string, EditorSelection[]]> {
   let replacedText = await replaceSnippetVariables(state, template)
 
   const { text, ranges } = parsePlaceholders(replacedText, rangeOffset)
@@ -342,7 +342,7 @@ async function replaceSnippetVariables (state: EditorState, text: string): Promi
   const hour = now.hour
   const minute = now.minute
   const second = now.second
-  const clipboard = await navigator.clipboard.readText()
+  const clipboard = await navigator.clipboard?.readText()
 
   const config = state.field(configField)
   const absPath = config.metadata.path
@@ -360,7 +360,7 @@ async function replaceSnippetVariables (state: EditorState, text: string): Promi
     CURRENT_SECONDS_UNIX: now.toSeconds(),
     UUID: uuid(),
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
-    ZKN_ID: generateId(String(window.config.get('zkn.idGen'))),
+    ZKN_ID: generateId(String(window.config?.get('zkn.idGen'))),
     CURRENT_ID: config.metadata.id,
     FILENAME: pathBasename(absPath, pathExtname(absPath)),
     DIRECTORY: pathDirname(absPath),
