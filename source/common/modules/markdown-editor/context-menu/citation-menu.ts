@@ -15,6 +15,7 @@
 import { type EditorView } from '@codemirror/view'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { configField } from '../util/configuration'
+import { trans } from 'source/common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -26,7 +27,7 @@ const ipcRenderer = window.ipc
  * @param   {string[]}                  keys    The citation keys
  * @param   {string}                    label   An optional label
  */
-export function citationMenu (view: EditorView, coords: { x: number, y: number }, keys: string[], label?: string): void {
+export function citationMenu (view: EditorView, coords: { x: number, y: number }, items: Record<string, string>, label?: string): void {
   const tpl: AnyMenuItem[] = []
 
   if (label !== undefined && label.trim() !== '') {
@@ -39,9 +40,10 @@ export function citationMenu (view: EditorView, coords: { x: number, y: number }
     { type: 'separator' })
   }
 
-  for (const key of keys) {
+  for (const [ key, label ] of Object.entries(items)) {
     tpl.push({
-      label: key,
+      label,
+      sublabel: process.platform === 'darwin' ? trans('Open PDF for %s', label) : undefined,
       id: 'citekey-' + key,
       type: 'normal'
     })

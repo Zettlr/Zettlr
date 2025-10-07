@@ -266,7 +266,10 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - The toolbar update button now includes a clearly visible label indicating that
   an update is available, making it less likely to miss it.
 - Improved the styling and labelling of the additional attachment extensions
-  setting in the advanced settings.
+  setting in the advanced settings
+- The citation context menu now shows rendered citations instead of the raw
+  citation keys, and utilizes macOS's `sublabel` feature to describe the context
+  menu items.
 
 ## Under the Hood
 

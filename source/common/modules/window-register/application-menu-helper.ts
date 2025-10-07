@@ -40,6 +40,7 @@ export interface SubmenuItem {
 export interface NormalItem {
   id: string
   label: string
+  sublabel?: string
   accelerator?: string
   type: 'normal'
   enabled?: boolean

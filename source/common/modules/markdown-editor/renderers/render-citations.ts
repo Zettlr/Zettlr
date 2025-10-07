@@ -74,10 +74,16 @@ class CitationWidget extends WidgetType {
     }
     elem.addEventListener('click', clickAndSelect(view))
 
+    // Render each individual item as a composite citation for the user to
+    // select.
+    const keys = items.map(x => x.id)
+    const renderedItems: Record<string, string> = Object.fromEntries(keys.map(key => {
+      return [ key, callback([{ id: key }], true) ?? key ]
+    }))
+
     elem.addEventListener('contextmenu', (event) => {
-      const keys = this.citation.items.map(x => x.id)
       const coords = { x: event.clientX, y: event.clientY }
-      citationMenu(view, coords, keys, elem.innerText)
+      citationMenu(view, coords, renderedItems, elem.innerText)
     })
 
     return elem
