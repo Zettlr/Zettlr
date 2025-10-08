@@ -49,13 +49,14 @@ import { zapGremlins } from '../commands/transforms/zap-gremlins'
 
 // This widget holds a visual DOM representation of a table.
 export class TableWidget extends WidgetType {
-  // TODO: This number is literally only what I have here right now. So for
-  // other people -- especially with other themes, different zoom levels, etc.,
-  // this value will be off. The more off this is, the worse the scroll jumping
-  // will become. I will have to modify the table widgets to use a ViewPlugin
-  // instead of the current StateField so that I gain access to the view and can
-  // provide more reliable methods of measuring the average table row height.
-  private readonly meanRowHeight = 35
+  // TODO: This number appears to be highly important to preventing sudden
+  // jumping behavior in editors with large tables that have wrapped lines. What
+  // we have found so far is that this number simply needs to be larger than the
+  // highest wrapped cell in a table to prevent any jumping. But I'll keep the
+  // TODO here for as long as we don't really know why this works.
+  // For more background, see issue #5940.
+  private readonly meanRowHeight = 500
+
   constructor (readonly table: string, readonly node: SyntaxNode) {
     super()
   }
