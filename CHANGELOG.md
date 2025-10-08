@@ -230,8 +230,9 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - Fixed WebP images not rendering from relative paths (#5181).
 - Fixed the behavior when clicking widgets (citations, etc.) to accurately
   select only the widget's source text (#5682).
-- Update `it-IT` translation (#5831).
+- Update `it-IT` translations (#5831).
 - Update `da-DA` translations (#5868).
+- Update `de-DE` translations.
 - Fixed incorrect cursor position after inserting IDs (#5846).
 - The toolbar word counter no longer wraps (#5774; #5881).
 - Fix context menu entry "Insert table" not working (#5835).
