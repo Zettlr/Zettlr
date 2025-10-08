@@ -275,6 +275,7 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   - Dark mode is now preset to true if the OS reports that it uses dark colors.
   - Vibrancy on macOS is now set to true only if the user does not prefer
     reduced transparency.
+- Improved drag-and-drop behavior in the table of contents (#5871).
 
 ## Under the Hood
 
