@@ -4,8 +4,11 @@
     <translator>
       <name>dowens76</name>
     </translator>
+    <translator>
+      <name>Tran Quang Cuong</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2012-07-04T23:31:02+00:00</updated>
+    <updated>2025-09-17T23:31:02+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -49,8 +52,8 @@
     <term name="accessed">truy cập</term>
     <term name="and">và</term>
     <term name="and others">and others</term>
-    <term name="anonymous">vô danh</term>
-    <term name="anonymous" form="short">v.d</term>
+    <term name="anonymous">khuyết danh</term>
+    <term name="anonymous" form="short">k.d</term>
     <term name="at">tại</term>
     <term name="available at">available at</term>
     <term name="by">bởi</term>
@@ -265,8 +268,8 @@
       <multiple>chương</multiple>
     </term>
     <term name="column">
-      <single>column</single>
-      <multiple>columns</multiple>
+      <single>cột</single>
+      <multiple>cột</multiple>
     </term>
     <term name="figure">
       <single>figure</single>
@@ -323,16 +326,16 @@
       <multiple>trang</multiple>
     </term>
     <term name="paragraph">
-      <single>đoạn văn</single>
-      <multiple>đoạn văn</multiple>
+      <single>đoạn</single>
+      <multiple>đoạn</multiple>
     </term>
     <term name="part">
       <single>phần</single>
       <multiple>phần</multiple>
     </term>
     <term name="section">
-      <single>section</single>
-      <multiple>sections</multiple>
+      <single>mục</single>
+      <multiple>mục</multiple>
     </term>
     <term name="supplement">
       <single>supplement</single>
@@ -390,10 +393,10 @@
     </term>
     <term name="book" form="short">sách</term>
     <term name="chapter" form="short">ch</term>
-    <term name="column" form="short">col</term>
+    <term name="column" form="short">c.</term>
     <term name="figure" form="short">fig</term>
     <term name="folio" form="short">f</term>
-    <term name="issue" form="short">số p.h</term>
+    <term name="issue" form="short">số</term>
     <term name="line" form="short">d.</term>
     <term name="note" form="short">gc.</term>
     <term name="opus" form="short">op</term>
@@ -413,15 +416,13 @@
       <single>print.</single>
       <multiple>prints.</multiple>
     </term>
-    
-
     <term name="number-of-pages" form="short">
       <single>tr</single>
       <multiple>tr</multiple>
     </term>
-    <term name="paragraph" form="short">para</term>
-    <term name="part" form="short">ph</term>
-    <term name="section" form="short">sec</term>
+    <term name="paragraph" form="short">đ.</term>
+    <term name="part" form="short">ph.</term>
+    <term name="section" form="short">sec.</term>
     <term name="supplement" form="short">
       <single>supp.</single>
       <multiple>supps.</multiple>
@@ -435,8 +436,8 @@
       <multiple>vv</multiple>
     </term>
     <term name="volume" form="short">
-      <single>vol</single>
-      <multiple>vols</multiple>
+      <single>tập</single>
+      <multiple>tập</multiple>
     </term>
 
     <!-- SYMBOL LOCATOR FORMS -->
@@ -519,16 +520,16 @@
       <multiple>series creators</multiple>
     </term>
     <term name="director">
-      <single>director</single>
-      <multiple>directors</multiple>
+      <single>chủ biênr</single>
+      <multiple>chủ biên</multiple>
     </term>
     <term name="editor">
       <single>biên tập viên</single>
       <multiple>biên tập viên</multiple>
     </term>
     <term name="editorial-director">
-      <single>biên tập viên</single>
-      <multiple>biên tập viên</multiple>
+      <single>chịu trách nhiệm xuất bản</single>
+      <multiple>chịu trách nhiệm xuất bản</multiple>
     </term>
     <term name="illustrator">
       <single>họa sĩ</single>
@@ -589,28 +590,28 @@
       <multiple>cres.</multiple>
     </term>
     <term name="director" form="short">
-      <single>dir.</single>
-      <multiple>dirs.</multiple>
+      <single>cb</single>
+      <multiple>cb</multiple>
     </term>
     <term name="editor" form="short">
-      <single>b.t.v</single>
-      <multiple>b.t.v</multiple>
+      <single>btv</single>
+      <multiple>btv</multiple>
     </term>
     <term name="editorial-director" form="short">
-      <single>b.t.v</single>
-      <multiple>b.t.v</multiple>
+      <single>ctnxb</single>
+      <multiple>ctnxb</multiple>
     </term>
     <term name="illustrator" form="short">
-      <single>h.s</single>
-      <multiple>h.s</multiple>
+      <single>hs</single>
+      <multiple>hs</multiple>
     </term>
     <term name="translator" form="short">
-      <single>b.d.v</single>
-      <multiple>b.d.v</multiple>
+      <single>bdv</single>
+      <multiple>bdv</multiple>
     </term>
     <term name="editortranslator" form="short">
-      <single>b.t.v &amp; b.d.v</single>
-      <multiple>b.t.v &amp; b.d.v</multiple>
+      <single>btv &amp; bdv</single>
+      <multiple>btv &amp; bdv</multiple>
     </term>
     <term name="editor-translator" form="short">
       <single>b.t.v &amp; b.d.v</single>
@@ -667,18 +668,18 @@
     <term name="editor-translator" form="verb-short">b.t &amp; b.d bởi</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="month-01">Tháng Giêng</term>
-    <term name="month-02">Tháng Hai</term>
-    <term name="month-03">Tháng Ba</term>
-    <term name="month-04">Tháng Tư</term>
-    <term name="month-05">Tháng Năm</term>
-    <term name="month-06">Tháng Sáu</term>
-    <term name="month-07">Tháng Bảy</term>
-    <term name="month-08">Tháng Tám</term>
-    <term name="month-09">Tháng Chín</term>
-    <term name="month-10">Tháng Mười</term>
-    <term name="month-11">Tháng Mười-Một</term>
-    <term name="month-12">Tháng Chạp</term>
+    <term name="month-01">tháng một</term>
+    <term name="month-02">tháng hai</term>
+    <term name="month-03">tháng ba</term>
+    <term name="month-04">tháng tư</term>
+    <term name="month-05">tháng năm</term>
+    <term name="month-06">tháng sáu</term>
+    <term name="month-07">tháng bảy</term>
+    <term name="month-08">tháng tám</term>
+    <term name="month-09">tháng chín</term>
+    <term name="month-10">tháng mười</term>
+    <term name="month-11">tháng mười một</term>
+    <term name="month-12">tháng mười hai</term>
 
     <!-- SHORT MONTH FORMS -->
     <term name="month-01" form="short">tháng 1</term>
