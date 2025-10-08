@@ -276,6 +276,7 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   - Vibrancy on macOS is now set to true only if the user does not prefer
     reduced transparency.
 - Improved drag-and-drop behavior in the table of contents (#5871).
+- Improved the layout of the assets window (#5942).
 
 ## Under the Hood
 
