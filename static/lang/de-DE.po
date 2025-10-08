@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2025-10-08 16:06+0200\n"
-"PO-Revision-Date: 2025-10-08 16:05+0200\n"
+"PO-Revision-Date: 2025-10-08 16:23+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -1650,152 +1650,152 @@ msgstr "Link einfügen"
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:73
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:255
 msgid "Transform"
-msgstr ""
+msgstr "Transformationen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:78
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:260
 msgid "Zap gremlins"
-msgstr ""
+msgstr "Zap gremlins"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:83
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:265
 msgid "Strip duplicate spaces"
-msgstr ""
+msgstr "Überzählige Leerzeichen entfernen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:88
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:270
 msgid "Italics to quotes"
-msgstr ""
+msgstr "Kursiv zu Anführungszeichen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:93
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:275
 msgid "Quotes to italics"
-msgstr ""
+msgstr "Anführungszeichen zu kursiv"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:98
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:280
 msgid "Remove line breaks"
-msgstr ""
+msgstr "Entferne überschüssige Zeilenumbrüche"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:106
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:288
 msgid "Straighten quotes"
-msgstr ""
+msgstr "Anführungszeichen begradigen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:111
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:293
 msgid "Ensure double quotes"
-msgstr ""
+msgstr "Zu doppelten Anführungszeichen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:116
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:298
 msgid "Double quotes to single"
-msgstr ""
+msgstr "Zu einfachen Anführungszeichen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:121
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:303
 msgid "Single quotes to double"
-msgstr ""
+msgstr "Einfache zu doppelten Anführungszeichen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:129
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:311
 msgid "Emdash — Add spaces around"
-msgstr ""
+msgstr "Erzwinge Leerzeichen um Geviertstriche"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:134
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:316
 msgid "Emdash — Remove spaces around"
-msgstr ""
+msgstr "Entferne Leerzeichen um Geviertstriche"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:142
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:324
 msgid "To sentence case"
-msgstr ""
+msgstr "Kapitalisiere das erste Wort"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:147
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:329
 msgid "To title case"
-msgstr ""
+msgstr "Kapitalisiere als Titel"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:158
 msgid "Row"
-msgstr ""
+msgstr "Zeile"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:164
 msgid "Insert new row above"
-msgstr ""
+msgstr "Neue Zeile darüber einfügen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:170
 msgid "Insert new row below"
-msgstr ""
+msgstr "Neue Zeile darunter einfügen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:177
 msgid "Move row up"
-msgstr ""
+msgstr "Zeile nach oben"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:183
 msgid "Move row down"
-msgstr ""
+msgstr "Zeile nach unten"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:190
 msgid "Clear row"
-msgstr ""
+msgstr "Zeile leeren"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:195
 msgid "Delete row"
-msgstr ""
+msgstr "Zeile entfernen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:202
 msgid "Column"
-msgstr ""
+msgstr "Spalte"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:207
 msgid "Insert new column left"
-msgstr ""
+msgstr "Neue Spalte links"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:213
 msgid "Insert new column right"
-msgstr ""
+msgstr "Neue Spalte rechts"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:220
 msgid "Move column left"
-msgstr ""
+msgstr "Zeile nach links"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:226
 msgid "Move column right"
-msgstr ""
+msgstr "Zeile nach rechts"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:233
 msgid "Align column text left"
-msgstr ""
+msgstr "Zeile linksbündig"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:238
 msgid "Align column text center"
-msgstr ""
+msgstr "Zeile zentriert ausrichten"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:243
 msgid "Align column text right"
-msgstr ""
+msgstr "Zeile rechtsbündig"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:262
 msgid "Clear column"
-msgstr ""
+msgstr "Zeile leeren"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:267
 msgid "Delete column"
-msgstr ""
+msgstr "Zeile löschen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:274
 msgid "Table"
-msgstr ""
+msgstr "Tabelle"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:279
 msgid "Clear table"
-msgstr ""
+msgstr "Tabelle leeren"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:284
 msgid "Delete table"
-msgstr ""
+msgstr "Tabelle löschen"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:30
 msgid "Copy equation code"
@@ -1834,7 +1834,7 @@ msgstr "Tabelle einfügen"
 #: source/common/modules/markdown-editor/context-menu/citation-menu.ts:46
 #, javascript-format
 msgid "Open PDF for %s"
-msgstr ""
+msgstr "Öffne PDF für %s"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
 msgid "Open link"
@@ -1870,7 +1870,7 @@ msgstr "Rechtschreibfehler"
 
 #: source/common/modules/markdown-editor/linters/language-tool.ts:231
 msgid "Disable Rule"
-msgstr ""
+msgstr "Regel deaktivieren"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:91
 msgid "No footnote text found."
@@ -2626,7 +2626,7 @@ msgstr "Zeichen"
 
 #: source/tmp/win-main/file-manager/TreeItem.vue.ts:68
 msgid "Enter a name"
-msgstr ""
+msgstr "Namen eingeben"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:80
 msgid "Workspaces"
@@ -2651,23 +2651,23 @@ msgstr "Leeres Verzeichnis"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:58
 msgid "Open in system viewer"
-msgstr ""
+msgstr "In Standardanwendung öffnen"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:62
 msgid "Use transparent background"
-msgstr ""
+msgstr "Transparenten Hintergrund verwenden"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:63
 msgid "Use white background"
-msgstr ""
+msgstr "Weißen Hintergrund verwenden"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:64
 msgid "Use black background"
-msgstr ""
+msgstr "Schwarzen Hintergrund verwenden"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:65
 msgid "Use checkerboard background"
-msgstr ""
+msgstr "Schachbrett-Hintergrund verwenden"
 
 #: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
@@ -2737,50 +2737,50 @@ msgstr "Zettlr nutzt auch die folgenden Projekte:"
 
 #: source/tmp/win-onboarding/SupportLogos.vue.ts:4
 msgid "Support the development of Zettlr"
-msgstr ""
+msgstr "Unterstütze die Entwicklung von Zettlr"
 
 #. Update labels
 #: source/tmp/win-onboarding/App.vue.ts:42
 msgid "Update complete!"
-msgstr ""
+msgstr "Aktualisierung erfolgreich!"
 
 #: source/tmp/win-onboarding/App.vue.ts:43
 msgid "Zettlr has been updated. You are now running Zettlr"
-msgstr ""
+msgstr "Zettlr wurde aktualisiert. Du arbeitest nun mit Zettlr"
 
 #: source/tmp/win-onboarding/App.vue.ts:44
 msgid "Get started"
-msgstr ""
+msgstr "Starten"
 
 #: source/tmp/win-onboarding/App.vue.ts:45
 msgid "See what's changed"
-msgstr ""
+msgstr "Änderungen ansehen"
 
 #: source/tmp/win-onboarding/App.vue.ts:47
 #, javascript-format
 msgid "Build date: %s"
-msgstr ""
+msgstr "Erstellt am: %s"
 
 #. Onboarding workflow labels
 #: source/tmp/win-onboarding/App.vue.ts:50
 msgid "Start setup"
-msgstr ""
+msgstr "Setup starten"
 
 #: source/tmp/win-onboarding/App.vue.ts:51
 msgid "Skip"
-msgstr ""
+msgstr "Überspringen"
 
 #: source/tmp/win-onboarding/App.vue.ts:52
 msgid "Previous"
-msgstr ""
+msgstr "Vorheriger Schritt"
 
 #: source/tmp/win-onboarding/App.vue.ts:53
 msgid "Next"
-msgstr ""
+msgstr "Nächster Schritt"
 
 #: source/tmp/win-onboarding/App.vue.ts:54
 msgid "Finish"
-msgstr ""
+msgstr "Fertigstellen"
 
 #: source/tmp/win-onboarding/pages/CitingPage.vue.ts:7
 #: source/tmp/win-preferences/App.vue.ts:170
@@ -3026,6 +3026,10 @@ msgid ""
 "for a new feature, please get in touch with us. Zettlr is maintained by a "
 "global community of excellent volunteers who will help you out."
 msgstr ""
+"Falls irgendetwas nicht richtig funktionieren sollte, du einen Fehler "
+"findest oder eine Idee für ein neues Feature haben solltest, trete bitte mit "
+"uns in Kontakt. Zettlr wird von einer globalen Gemeinschaft hilfsbereiter "
+"Freiwilliger entwickelt, welche dir gerne helfen."
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:9
 msgid "Join our Discord Server"
@@ -3037,7 +3041,7 @@ msgstr "Forum öffnen"
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:11
 msgid "View Source Code on GitHub"
-msgstr ""
+msgstr "Quellcode auf GitHub ansehen"
 
 #: source/tmp/win-splash-screen/App.vue.ts:22
 msgid "Loading…"
@@ -3128,7 +3132,7 @@ msgstr "Löschen"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:118
 msgid "No records."
-msgstr ""
+msgstr "Keine Einträge"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
 msgid "Select folder…"
@@ -3140,7 +3144,7 @@ msgstr "Datei auswählen…"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:22
 msgid "Click to set your shortcut"
-msgstr ""
+msgstr "Klicken um Tastaturkürzel zu setzen"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "January"
@@ -3205,49 +3209,51 @@ msgstr "Schreibstatistiken"
 
 #: source/tmp/win-stats/ChartView.vue.ts:24
 msgid "Monday"
-msgstr ""
+msgstr "Montag"
 
 #: source/tmp/win-stats/ChartView.vue.ts:25
 msgid "Tuesday"
-msgstr ""
+msgstr "Dienstag"
 
 #: source/tmp/win-stats/ChartView.vue.ts:26
 msgid "Wednesday"
-msgstr ""
+msgstr "Mittwoch"
 
 #: source/tmp/win-stats/ChartView.vue.ts:27
 msgid "Thursday"
-msgstr ""
+msgstr "Donnerstag"
 
 #: source/tmp/win-stats/ChartView.vue.ts:28
 msgid "Friday"
-msgstr ""
+msgstr "Freitag"
 
 #: source/tmp/win-stats/ChartView.vue.ts:29
 msgid "Saturday"
-msgstr ""
+msgstr "Samstag"
 
 #: source/tmp/win-stats/ChartView.vue.ts:30
 msgid "Sunday"
-msgstr ""
+msgstr "Sonntag"
 
 #: source/tmp/win-stats/ChartView.vue.ts:35
 msgid ""
 "This chart shows your current word count and compares it to the average of "
 "this and the previous year(s)."
 msgstr ""
+"Dieses Diagramm zeigt deine Wörter diese Woche und vergleicht sie mit den "
+"Durchschnitten diesen und letzten Jahres."
 
 #: source/tmp/win-stats/ChartView.vue.ts:36
 msgid "This week"
-msgstr ""
+msgstr "Diese Woche"
 
 #: source/tmp/win-stats/ChartView.vue.ts:37
 msgid "This year"
-msgstr ""
+msgstr "Dieses Jahr"
 
 #: source/tmp/win-stats/ChartView.vue.ts:38
 msgid "Last year"
-msgstr ""
+msgstr "Letztes Jahr"
 
 #: source/tmp/win-tag-manager/App.vue.ts:27
 msgid "Assign color"
@@ -3686,19 +3692,19 @@ msgstr ""
 
 #: source/win-preferences/schema/editor.ts:69
 msgid "Choose between preview mode (\"WYSIWYG) or raw mode (\"WYSIWYM\")."
-msgstr ""
+msgstr "Wähle zwischen Vorschaumodus (“WYSIWYG”) und Codemodus (“WYSIWYM”)"
 
 #: source/win-preferences/schema/editor.ts:73
 msgid "Preview mode"
-msgstr ""
+msgstr "Vorschaumodus"
 
 #: source/win-preferences/schema/editor.ts:74
 msgid "Raw mode"
-msgstr ""
+msgstr "Codemodus"
 
 #: source/win-preferences/schema/editor.ts:81
 msgid "When preview mode is active, the following renderers will be enabled:"
-msgstr ""
+msgstr "Mit aktivem Vorschaumodus sind folgende Darstellungsmodule aktiv:"
 
 #: source/win-preferences/schema/editor.ts:85
 msgid "Render citations"
@@ -3808,7 +3814,7 @@ msgstr "Zeige Formatierungsleiste für Textauswahl"
 
 #: source/win-preferences/schema/editor.ts:287
 msgid "Show line numbers for Markdown files"
-msgstr ""
+msgstr "Zeige Zeilennummern für Markdown-Dateien"
 
 #: source/win-preferences/schema/editor.ts:292
 msgid "Highlight whitespace"
@@ -3898,17 +3904,19 @@ msgstr "Nutze die interne Pandoc-Bibliothek für Exporte"
 
 #: source/win-preferences/schema/import-export.ts:70
 msgid "Automatically open successfully exported files"
-msgstr ""
+msgstr "Öffne exportierte Dateien automatisch"
 
 #: source/win-preferences/schema/import-export.ts:75
 msgid "Enforce highlight extension on export"
-msgstr ""
+msgstr "Erzwinge Hervorhebungsunterstützung beim Export"
 
 #: source/win-preferences/schema/import-export.ts:76
 msgid ""
 "When enabled, Zettlr will automatically enable the \"mark\"-extension when "
 "exporting Markdown files."
 msgstr ""
+"Soll Zettlr die Pandoc “mark”-Erweiterung für Markdown-Exporte automatisch "
+"aktivieren?"
 
 #: source/win-preferences/schema/import-export.ts:82
 msgid "Remove tags from files when exporting"
@@ -4001,11 +4009,11 @@ msgstr "Verfügbare Variablen: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:50
 msgid "Always use the file title as label for internal links"
-msgstr ""
+msgstr "Beim Verlinken von Dateien immer den Dateititel als Linktext verwenden"
 
 #: source/win-preferences/schema/zettelkasten.ts:55
 msgid "Use the file ID as link target if possible"
-msgstr ""
+msgstr "Wenn möglich, verlinke Dateien via ID"
 
 #: source/win-preferences/schema/zettelkasten.ts:62
 msgid "Link format"
@@ -4062,6 +4070,9 @@ msgid ""
 "Turning this setting on will send your texts to LanguageTool. The default "
 "are the official servers, but you can also self-host the software."
 msgstr ""
+"Wenn diese Einstellung aktiv ist, werden deine Texte an LanguageTool "
+"übermittelt. Standardmäßig sind das die offiziellen Server, aber du kannst "
+"die Software auch privat installieren."
 
 #: source/win-preferences/schema/spellchecking.ts:35
 msgid "Strictness"
@@ -4146,29 +4157,31 @@ msgstr "LanguageTool API key"
 
 #: source/win-preferences/schema/spellchecking.ts:159
 msgid "LanguageTool: Ignored rules"
-msgstr ""
+msgstr "LanguageTool: Deaktivierte Regeln"
 
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Rule ID"
-msgstr ""
+msgstr "Regel-ID"
 
 #: source/win-preferences/schema/spellchecking.ts:167
 msgid "Category"
-msgstr ""
+msgstr "Kategorie"
 
 #: source/win-preferences/schema/spellchecking.ts:168
 msgid ""
 "These are LanguageTool rules that you have disabled. You can re-enable them "
 "here."
 msgstr ""
+"Hier findest du LanguageTool-Regeln, welche du deaktiviert hast. Du kannst "
+"sie hier wieder aktivieren."
 
 #: source/win-preferences/schema/spellchecking.ts:171
 msgid "Re-enable"
-msgstr ""
+msgstr "Reaktivieren"
 
 #: source/win-preferences/schema/spellchecking.ts:176
 msgid "No ignored rules."
-msgstr ""
+msgstr "Keine ignorierten Regeln"
 
 #: source/win-preferences/schema/spellchecking.ts:190
 msgid "Active"
@@ -4254,31 +4267,33 @@ msgstr "Ändert nur die Editor-Schriftgröße"
 
 #: source/win-preferences/schema/advanced.ts:92
 msgid "File Treatment"
-msgstr ""
+msgstr "Dateidarstellung"
 
 #: source/win-preferences/schema/advanced.ts:99
 msgid "Decide where various file types are displayed, and how to open them."
 msgstr ""
+"Wähle aus, welche Dateitypen wo dargestellt werden, und wie sie geöffnet "
+"werden sollen."
 
 #: source/win-preferences/schema/advanced.ts:108
 msgid "Display in file manager"
-msgstr ""
+msgstr "Im Dateimanager anzeigen"
 
 #: source/win-preferences/schema/advanced.ts:109
 msgid "Display in sidebar"
-msgstr ""
+msgstr "In der Seitenleiste anzeigen"
 
 #: source/win-preferences/schema/advanced.ts:110
 msgid "Open with"
-msgstr ""
+msgstr "Öffnen mit"
 
 #: source/win-preferences/schema/advanced.ts:118
 msgid "Built-in Markdown and Code files"
-msgstr ""
+msgstr "Markdown und unterstützte Code-Dateien"
 
 #: source/win-preferences/schema/advanced.ts:141
 msgid "Images"
-msgstr ""
+msgstr "Bilder"
 
 #: source/win-preferences/schema/advanced.ts:155
 #: source/win-preferences/schema/advanced.ts:179
@@ -4286,33 +4301,36 @@ msgstr ""
 #: source/win-preferences/schema/advanced.ts:223
 #: source/win-preferences/schema/advanced.ts:244
 msgid "System default"
-msgstr ""
+msgstr "Standardanwendung"
 
 #: source/win-preferences/schema/advanced.ts:165
 msgid "PDF documents"
-msgstr ""
+msgstr "PDF-Dokumente"
 
 #: source/win-preferences/schema/advanced.ts:189
 msgid "MS Office Documents"
-msgstr ""
+msgstr "MS Office-Dokumente"
 
 #: source/win-preferences/schema/advanced.ts:210
 msgid "Open Office Documents"
-msgstr ""
+msgstr "Open Office-Dokumente"
 
 #: source/win-preferences/schema/advanced.ts:231
 msgid "Data files (tsv, csv, etc.)"
-msgstr ""
+msgstr "Datendateien (TSV, CSV, usw.)"
 
 #: source/win-preferences/schema/advanced.ts:254
 msgid ""
 "Add filename extensions for any additional files you wish to see in the "
 "sidebar below. Include the leading period, e.g., \".xml\"."
 msgstr ""
+"Füge hier all jene Dateinamenerweiterungen hinzu, welche du ebenfalls in der "
+"Seitenleiste anzeigen möchtest, beginnend mit einem Punkt. Zum Beispiel: "
+"“.xml”."
 
 #: source/win-preferences/schema/advanced.ts:255
 msgid "Enter an extension and press enter"
-msgstr ""
+msgstr "Erweiterung eingeben und mit Enter bestätigen"
 
 #: source/win-preferences/schema/advanced.ts:261
 msgid "Iframe rendering whitelist"
