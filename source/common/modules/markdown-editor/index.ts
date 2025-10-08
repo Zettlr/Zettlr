@@ -29,12 +29,12 @@ import EventEmitter from 'events'
 // CodeMirror imports
 import { EditorView } from '@codemirror/view'
 import {
+  type EditorSelection,
   EditorState,
   Text,
   type StateEffect,
   type Extension,
-  type SelectionRange,
-  type EditorSelection
+  type SelectionRange
 } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 
@@ -98,6 +98,7 @@ import type { SyntaxNode } from '@lezer/common'
 import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
 import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
+import { moveSection } from './commands/move-section'
 
 export interface DocumentWrapper {
   path: string
@@ -529,36 +530,8 @@ export default class MarkdownEditor extends EventEmitter {
    */
   moveSection (from: number, to: number): void {
     const toc = this._instance.state.field(tocField)
-    const entry = toc.find(e => e.line === from)
-
-    if (entry === undefined) {
-      return // Something went wrong
-    }
-
-    // The section ends at either the next higher or same-level heading
-    const nextSections = toc.slice(toc.indexOf(entry) + 1)
-    let endOfStartPos = this._instance.state.doc.length
-
-    for (const section of nextSections) {
-      if (section.level <= entry.level) {
-        endOfStartPos = section.pos - 1
-        break
-      }
-    }
-
-    const toLine = to !== -1 ? to : this._instance.state.doc.lines
-    const targetPos = this._instance.state.doc.line(toLine).to
-    const entryContents = this._instance.state.sliceDoc(entry.pos, endOfStartPos)
-
-    // Now, dispatch the updates.
-    this._instance.dispatch({
-      changes: [
-        // First, "cut"
-        { from: entry.pos, to: endOfStartPos, insert: '' },
-        // Then, "paste"
-        { from: targetPos, insert: entryContents }
-      ]
-    })
+    const toLineNumber = to !== -1 ? to : this._instance.state.doc.lines
+    moveSection(toc, from, toLineNumber)(this._instance)
   }
 
   /**
