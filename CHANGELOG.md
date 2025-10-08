@@ -205,6 +205,7 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - **Feature**: You can now collapse and un-collapse the files and workspace
   sections in the file manager. This can be helpful if you are working with both
   a lot of individual files and workspaces. Your choice is remembered (#5916).
+- **Feature**: Extended the scope and application of vibrancy on macOS.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).

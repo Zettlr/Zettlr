@@ -1,5 +1,5 @@
 <template>
-  <div id="titlebar">
+  <div id="titlebar" v-bind:class="{ 'has-vibrancy': props.hasVibrancy }">
     {{ props.titleContent }}
   </div>
 </template>
@@ -23,6 +23,7 @@
 
 const props = defineProps<{
   titleContent: string
+  hasVibrancy: boolean
 }>()
 </script>
 
@@ -46,11 +47,19 @@ body.darwin {
     color: var(--grey-4);
     text-align: center;
     font-weight: bold;
+
+    &.has-vibrancy {
+      background-color: rgba(240, 240, 240, 0.5);
+    }
   }
 
   &.dark div#titlebar {
     background-color: rgb(52, 52, 52);
     color: rgb(172, 172, 172);
+
+    &.has-vibrancy {
+      background-color: rgba(52, 52, 52, 0.3);
+    }
   }
 }
 

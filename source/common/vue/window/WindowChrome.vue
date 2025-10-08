@@ -11,6 +11,7 @@
       -->
       <WindowTitlebar
         v-if="showTitlebar"
+        v-bind:has-vibrancy="!disableVibrancy"
         v-bind:title-content="title ?? 'Zettlr'"
         v-on:dblclick="handleDoubleClick('titlebar')"
       ></WindowTitlebar>
@@ -29,6 +30,7 @@
       <WindowTabbar
         v-if="showTabbar && tabbarTabs !== undefined"
         v-bind:tabs="tabbarTabs"
+        v-bind:has-vibrancy="!disableVibrancy"
         v-bind:label="tabbarLabel"
         v-on:tab="emit('tab', $event)"
       ></WindowTabbar>
