@@ -44,7 +44,6 @@ export default function setWindowChrome (config: ConfigProvider, winConf: Browse
       // See https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/translucency/
       winConf.vibrancy = 'under-window'
       winConf.visualEffectState = 'followWindow'
-      winConf.transparent = true
     }
   } else if ((process.platform === 'linux' && !shouldUseNativeAppearance) || process.platform === 'win32') {
     // On Windows, we need a frameless window. On Linux, only if the
