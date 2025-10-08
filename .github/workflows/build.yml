@@ -53,10 +53,8 @@ name: Build
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 on:
-  push:
-    branches:
-      - master
-  workflow_dispatch: {} # Used to manually trigger a nightly build.
+  # Releases must be manually started.
+  workflow_dispatch: {}
   schedule: # Every Monday at noon (UTC) we run a scheduled nightly build
     - cron: '0 12 * * 1'
 
@@ -70,6 +68,8 @@ env:
   NODE_VERSION: '22'
   # Specify the branch name which will cause regular nightly builds
   NIGHTLY_BRANCH: 'develop'
+  # Specify the branch name which will cause beta releases to be published
+  RC_BRANCH: 'release-candidate'
   # Specify the branch name which will cause release drafts to be published
   RELEASE_BRANCH: 'master'
   # DEBUG: '*' # Uncomment to debug Electron building packages
@@ -96,10 +96,10 @@ jobs:
     name: 'Preflight: Verify version tag'
     runs-on: ubuntu-22.04
     steps:
-      - name: Clone repository (master branch)
+      - name: Clone repository (${{ github.ref_name }} branch)
         uses: actions/checkout@v4
         with:
-          ref: 'master'
+          ref: ${{ github.ref_name }}
           fetch-depth: 0 # Required for the tag verification step.
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
@@ -110,7 +110,7 @@ jobs:
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
       - name: Verify the corresponding tag does not yet exist
-        if: github.ref_name == 'master'
+        if: ${{ github.ref_name == env.RELEASE_BRANCH || github.ref_name == env.RC_BRANCH }}
         # NOTE: the ! will return 0 if the command fails, and 1 otherwise
         run: '! git rev-parse "v${{env.version}}"'
 
@@ -141,7 +141,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == env.NIGHTLY_BRANCH
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -186,7 +186,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == env.NIGHTLY_BRANCH
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -232,7 +232,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == env.NIGHTLY_BRANCH
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -293,7 +293,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: github.ref_name == env.NIGHTLY_BRANCH
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -334,7 +334,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == env.NIGHTLY_BRANCH
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -384,7 +384,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: github.ref_name == env.NIGHTLY_BRANCH
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
@@ -441,13 +441,13 @@ jobs:
       # We must make sure to copy the three additional files
       # to the release folder because of the --delete flag in rsync below.
       - name: Copy Nightly Static Files
-        if: github.ref_name == env.NIGHTLY_BRANCH
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: |
           cp ./scripts/assets/nightly-index.php ./release/index.php
           cp ./scripts/assets/nightly-sm_preview.png ./release/sm_preview.png
           cp ./resources/icons/png/512x512.png ./release/logo.png
       - name: Upload nightlies to the server
-        if: github.ref_name == env.NIGHTLY_BRANCH
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         uses: easingthemes/ssh-deploy@v3.0.1
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
@@ -459,16 +459,17 @@ jobs:
           TARGET: ${{ secrets.NIGHTLY_TARGET }}
       # OTHERWISE: Create a new release draft
       - name: Create release draft
-        if: github.ref_name == env.RELEASE_BRANCH
+        if: ${{ github.ref_name == env.RELEASE_BRANCH || github.ref_name == env.RC_BRANCH }}
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # Populate the inputs of the release we already know
-          tag_name: v${{env.version}}
-          name: Release v${{env.version}}
+          tag_name: v${{ env.version }}
+          name: Release v${{ env.version }}
           body: If you can read this, we have forgotten to fill in the changelog. Sorry!
           draft: true # Always create as draft, so that we can populate the remaining values easily
+          prerelease: ${{ github.ref_name == env.RC_BRANCH }}
           # Gosh, is that convenient as opposed to earlier!
           files: |
             ./release/Zettlr-${{env.version}}-x64.exe
