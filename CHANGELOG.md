@@ -271,6 +271,10 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - The citation context menu now shows rendered citations instead of the raw
   citation keys, and utilizes macOS's `sublabel` feature to describe the context
   menu items.
+- Changed default config settings for new installations:
+  - Dark mode is now preset to true if the OS reports that it uses dark colors.
+  - Vibrancy on macOS is now set to true only if the user does not prefer
+    reduced transparency.
 
 ## Under the Hood
 
