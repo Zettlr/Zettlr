@@ -6,7 +6,7 @@
     v-bind:show-tabbar="true"
     v-bind:tabbar-tabs="tabs"
     v-bind:tabbar-label="'Defaults'"
-    v-bind:disable-vibrancy="true"
+    v-bind:disable-vibrancy="!hasVibrancy"
     v-on:tab="currentTab = $event"
   >
     <!--
@@ -49,6 +49,7 @@ import SnippetsTab from './SnippetsTab.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, computed } from 'vue'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
+import { useConfigStore } from 'source/pinia'
 
 const currentTab = ref(0)
 const windowTitle = computed(() => {
@@ -58,6 +59,9 @@ const windowTitle = computed(() => {
     return trans('Assets Manager')
   }
 })
+
+const configStore = useConfigStore()
+const hasVibrancy = computed(() => configStore.config.window.vibrancy && process.platform === 'darwin')
 
 const tabs: WindowTab[] = [
   {

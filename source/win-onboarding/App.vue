@@ -141,6 +141,7 @@ import PACKAGE_JSON from '../../package.json'
 import { trans } from 'source/common/i18n-renderer'
 import SupportLogos from './SupportLogos.vue'
 import { DateTime } from 'luxon'
+import { useConfigStore } from 'source/pinia'
 
 // This is required because some elements (looking at you, RadioControl) are
 // completely namespaced to platform specific values and we don't include the
@@ -152,6 +153,12 @@ const ipcRenderer = window.ipc
 const searchParams = new URLSearchParams(window.location.search)
 const mode: string|null = searchParams.get('mode')
 const version = PACKAGE_JSON.version
+
+const configStore = useConfigStore()
+
+if (configStore.config.window.vibrancy && process.platform === 'darwin') {
+  document.body.classList.add('has-vibrancy')
+}
 
 const pages = [
   'welcome',
@@ -236,11 +243,16 @@ function loadUrl (url: string) {
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   color: #333;
+  background-color: white;
   -webkit-app-region: drag;
 
   &.dark {
-    background-color: #333;
     color: white;
+    background-color: #333;
+  }
+
+  &.has-vibrancy, &.dark.has-vibrancy {
+    background-color: transparent;
   }
 }
 

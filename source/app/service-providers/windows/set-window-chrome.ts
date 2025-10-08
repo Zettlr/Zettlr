@@ -29,9 +29,12 @@ export default function setWindowChrome (config: ConfigProvider, winConf: Browse
   const shouldUseNativeAppearance = config.get().window.nativeAppearance
   const shouldUseVibrancy = config.get().window.vibrancy
 
-  if (process.platform !== 'darwin' || modal) {
+  const macOSVibrancyEnabled = process.platform === 'darwin' && shouldUseNativeAppearance && !nativeTheme.prefersReducedTransparency
+
+  if (!macOSVibrancyEnabled || modal) {
     // It is recommended to set a background color for the windows, however, on
-    // macOS we can't do so because that would render nil the vibrancy.
+    // macOS we can only do so if vibrancy is off, because that would render nil
+    // the vibrancy.
     winConf.backgroundColor = config.get().darkMode ? '#000' : '#fff'
   }
 

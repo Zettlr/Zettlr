@@ -306,6 +306,7 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   allows inclusion of adjacent selection ranges in calculating the result. This
   allows, e.g., renderers to detect whether a selection touches a node-to-be-
   rendered.
+- Fixed vibrancy on macOS, and use it for more windows, if enabled.
 
 # 3.6.0
 

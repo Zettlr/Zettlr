@@ -6,7 +6,7 @@
     v-bind:show-toolbar="shouldShowToolbar"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
-    v-bind:disable-vibrancy="!vibrancyEnabled"
+    v-bind:disable-vibrancy="!hasVibrancy"
     v-on:toolbar-toggle="handleToggle($event)"
     v-on:toolbar-click="handleClick($event)"
   >
@@ -200,7 +200,7 @@ const windowId = searchParams.get('window_id')!
 const fileManagerVisible = ref(true)
 const mainSplitViewVisibleComponent = ref<'fileManager'|'globalSearch'>('fileManager')
 const isUpdateAvailable = ref(false)
-const vibrancyEnabled = ref(configStore.config.window.vibrancy)
+const hasVibrancy = computed(() => configStore.config.window.vibrancy && process.platform === 'darwin')
 
 // Ensure the app remembers the previous sidebar sizes
 const fileManagerSplitComponentInitialSize = ref<[number, number]>([ 20, 80 ])

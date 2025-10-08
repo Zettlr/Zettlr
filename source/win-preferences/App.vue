@@ -4,7 +4,7 @@
     v-bind:titlebar="true"
     v-bind:menubar="false"
     v-bind:tabbar-label="'Preferences'"
-    v-bind:disable-vibrancy="true"
+    v-bind:disable-vibrancy="!hasVibrancy"
   >
     <!--
       To comply with ARIA, we have to wrap the form in a tab container because
@@ -91,6 +91,8 @@ export type PreferencesFieldset = Fieldset & { group: PreferencesGroups }
 
 const ipcRenderer = window.ipc
 const configStore = useConfigStore()
+
+const hasVibrancy = computed(() => configStore.config.window.vibrancy && process.platform === 'darwin')
 
 const currentGroup = ref(0)
 const query = ref('')
