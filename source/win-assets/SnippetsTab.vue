@@ -7,14 +7,21 @@
     v-bind:initial-total-width="100"
   >
     <template #view1>
-      <SelectableList
-        v-bind:items="availableSnippets"
-        v-bind:selected-item="currentItem"
-        v-bind:editable="true"
-        v-on:select="currentItem = $event"
-        v-on:add="addSnippet()"
-        v-on:remove="removeSnippet($event)"
-      ></SelectableList>
+      <div id="snippets-container-list">
+        <SelectableList
+          v-bind:items="availableSnippets"
+          v-bind:selected-item="currentItem"
+          v-bind:editable="true"
+          v-on:select="currentItem = $event"
+          v-on:add="addSnippet()"
+          v-on:remove="removeSnippet($event)"
+        ></SelectableList>
+        <ButtonControl
+          v-bind:label="openSnippetsFolderLabel"
+          v-bind:inline="false"
+          v-on:click="openSnippetsDirectory"
+        ></ButtonControl>
+      </div>
     </template>
     <template #view2>
       <div id="snippets-container">
@@ -23,7 +30,8 @@
         <p>
           <TextControl
             v-model="currentSnippetText"
-            v-bind:inline="true"
+            class="snippet-name-input"
+            v-bind:inline="false"
             v-bind:disabled="currentItem < 0"
             v-on:confirm="renameSnippet()"
           ></TextControl>
@@ -35,27 +43,22 @@
           ></ButtonControl>
         </p>
 
-        <ButtonControl
-          v-bind:label="openSnippetsFolderLabel"
-          v-bind:inline="false"
-          v-on:click="openSnippetsDirectory"
-        ></ButtonControl>
-
         <CodeEditor
           ref="code-editor"
           v-model="editorContents"
           v-bind:mode="'markdown-snippets'"
           v-bind:readonly="currentItem < 0"
         ></CodeEditor>
-
-        <ButtonControl
-          v-bind:primary="true"
-          v-bind:label="saveButtonLabel"
-          v-bind:inline="true"
-          v-bind:disabled="currentItem < 0 || ($refs['code-editor'] as any).isClean()"
-          v-on:click="saveSnippet()"
-        ></ButtonControl>
-        <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
+        <div class="save-snippet-file">
+          <ButtonControl
+            v-bind:primary="true"
+            v-bind:label="saveButtonLabel"
+            v-bind:inline="true"
+            v-bind:disabled="currentItem < 0 || ($refs['code-editor'] as any).isClean()"
+            v-on:click="saveSnippet()"
+          ></ButtonControl>
+          <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
+        </div>
       </div>
     </template>
   </SplitView>
@@ -176,10 +179,8 @@ function saveSnippet (): void {
     }
   } as AssetsProviderIPCAPI)
     .then(() => {
-      savingStatus.value = trans('Saved!')
-      setTimeout(() => {
-        savingStatus.value = ''
-      }, 1000)
+      setTimeout(() => { savingStatus.value = trans('Saved!') }, 1000)
+      setTimeout(() => { savingStatus.value = '' }, 2000)
     })
     .catch(err => console.error(err))
 }
@@ -268,11 +269,52 @@ function openSnippetsDirectory (): void {
 </script>
 
 <style lang="less">
+#snippets-container-list {
+  display: flex;
+  flex-direction: column;
+  height: stretch;
+
+  .form-control {
+    display: flex;
+    padding: 10px;
+
+    button {
+      flex: 1;
+    }
+  }
+}
+
 #snippets-container {
-  padding: 10px;
+  padding: 0px 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  .snippet-name-input {
+    flex: 1;
+  }
+
+  .save-snippet-file {
+    padding: 10px 0px;
+    display: flex;
+    gap: 15px;
+
+    button {
+      width: 50px;
+    }
+  }
+
+  .form-control {
+    button:not(.input-reset-button) {
+      height: stretch;
+    }
+  }
+
+  p {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+  }
 
   .CodeMirror {
     flex-grow: 1;
