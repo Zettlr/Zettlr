@@ -16,6 +16,12 @@
 import type ConfigProvider from '@providers/config'
 import { type BrowserWindowConstructorOptions, nativeTheme } from 'electron'
 import path from 'path'
+import { getSystemColors } from '@common/util/get-system-colors'
+
+// This variable controls the height (in px) of the custom window controls on
+// Windows. This will be picked up by the titlebar and menubar via CSS
+// environment variables to match this size.
+const CUSTOM_WINDOW_CONTROLS_HEIGHT = 35
 
 /**
  * This function modifies the provided window configuration in-place to match
@@ -53,6 +59,17 @@ export default function setWindowChrome (config: ConfigProvider, winConf: Browse
     // shouldUseNativeAppearance flag is set to false.
     winConf.frame = false
   } // Else: We have Linux with native appearance.
+
+  if (process.platform === 'win32') {
+    const { accent, contrast } = getSystemColors()
+    winConf.titleBarStyle = 'hidden'
+    winConf.titleBarOverlay = {
+      color: `#${accent}`,
+      symbolColor: `#${contrast}`,
+      height: CUSTOM_WINDOW_CONTROLS_HEIGHT
+    }
+    winConf.frame = false
+  }
 
   // Application icon for Linux. Cannot be embedded in the executable.
   if (process.platform === 'linux') {

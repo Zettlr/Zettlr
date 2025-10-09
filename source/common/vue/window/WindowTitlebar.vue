@@ -28,6 +28,10 @@ const props = defineProps<{
 </script>
 
 <style lang="less">
+:root {
+  --fallback-title-bar-height: 40px;
+}
+
 // General styles
 div#titlebar {
   -webkit-app-region: drag;
@@ -65,8 +69,8 @@ body.darwin {
 
 body.win32 {
   div#titlebar {
-    height: 30px;
-    line-height: 30px;
+    height: env(titlebar-area-height, var(--fallback-title-bar-height));
+    line-height: env(titlebar-area-height, var(--fallback-title-bar-height));
     padding-left: 20px; // Some padding left
     padding-right: 138px; // Sufficient padding for the window controls right
     background-color: var(--system-accent-color, --c-primary);

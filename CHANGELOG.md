@@ -281,6 +281,9 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - Improved performance impact of references tab by only updating the
   bibliography on save, not on every keystroke (#5518).
 - Fixed images with brackets in the filename from not showing up (#3825).
+- Switched the window controls on Windows computers to the native controls. This
+  will enable a set of additional OS-level functionality (such as hovering over
+  the maximize-button to show a split-screen menu).
 
 ## Under the Hood
 

@@ -161,11 +161,13 @@ const showMenubar = computed<boolean>(() => {
 })
 
 const showWindowControls = computed<boolean>(() => {
-  // Shows the window control buttons only if we are on Windows
-  // or on Linux without native appearance.
-  if (platform.value === 'linux' && useNativeAppearance.value) {
+  if ([ 'win32', 'darwin' ].includes(platform.value)) {
     return false
-  } else if (platform.value === 'darwin') {
+  }
+
+  // Shows the window control buttons only if we are on Linux without native
+  // appearance.
+  if (platform.value === 'linux' && useNativeAppearance.value) {
     return false
   } else {
     return true
