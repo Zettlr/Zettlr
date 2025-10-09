@@ -274,7 +274,7 @@ const ltLinter = linter(async view => {
 
 const languagetoolTheme = EditorView.theme({
   '.cm-diagnosticAction.cm-ltDisableAction': {
-    backgroundColor: '#FF4500'
+    backgroundColor: '#af5151'
   }
 })
 
