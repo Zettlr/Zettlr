@@ -280,6 +280,7 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - Improved the layout of the assets window (#5942).
 - Improved performance impact of references tab by only updating the
   bibliography on save, not on every keystroke (#5518).
+- Fixed images with brackets in the filename from not showing up (#3825).
 
 ## Under the Hood
 
