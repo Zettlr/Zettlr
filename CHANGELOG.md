@@ -278,6 +278,8 @@ The new workflow applies when you autocomplete a filename, and works as follows:
     reduced transparency.
 - Improved drag-and-drop behavior in the table of contents (#5871).
 - Improved the layout of the assets window (#5942).
+- Improved performance impact of references tab by only updating the
+  bibliography on save, not on every keystroke (#5518).
 
 ## Under the Hood
 
