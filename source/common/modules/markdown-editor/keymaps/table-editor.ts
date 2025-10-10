@@ -64,8 +64,7 @@ export function tableEditorKeymap (mainView: EditorView): Extension {
       { key: 'Ctrl-Enter', run: _v => true },
       { key: 'Mod-Enter', run: _v => true },
       // Map the undo/redo keys to the main view
-      { key: 'Mod-z', run: _v => undo(mainView), preventDefault: true },
-      { key: 'Mod-Shift-z', run: _v => redo(mainView), preventDefault: true },
+      { key: 'Mod-z', run: _v => undo(mainView), shift: _v => redo(mainView), preventDefault: true },
       // Override the select all command
       { key: 'Mod-a', run: selectAllCommand, preventDefault: true },
       // Add a few more keyboard shortcuts.
