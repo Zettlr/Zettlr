@@ -21,6 +21,10 @@
   <p>
     {{ caveatLabel }}
   </p>
+
+  <div style="text-align: center; height: 20px">
+    <LoadingSpinner v-if="isLoading"></LoadingSpinner>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -29,8 +33,17 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { resolveLangCode } from 'source/common/util/map-lang-code'
 import type { OnboardingIPCSetAppLangMessage } from 'source/app/service-providers/config/onboarding-window'
 import { loadData } from '@common/i18n-renderer'
+import LoadingSpinner from 'source/common/vue/LoadingSpinner.vue'
 
 const ipcRenderer = window.ipc
+
+const isLoading = ref(false)
+
+const emit = defineEmits<{
+  (e: 'app-lang-changed'): void
+  (e: 'disable-navigation'): void
+  (e: 'enable-navigation'): void
+}>()
 
 const pageHeading = trans('Which Language do you speak?')
 const langIntro = computed(() => {
@@ -64,14 +77,22 @@ onMounted(async () => {
 })
 
 function changeAppLang () {
+  emit('disable-navigation')
+  isLoading.value = true
   const msg = { command: 'set-app-lang', language: appLang.value } as OnboardingIPCSetAppLangMessage
   ipcRenderer.invoke('onboarding', msg)
     .then(() => {
-      loadData().catch(err => console.error(err))
+      loadData()
+        .then(() => emit('app-lang-changed'))
+        .catch(err => console.error(err))
     })
     .catch(err => {
       appLang.value = originalLanguage
       console.error(err)
+    })
+    .finally(() => {
+      emit('enable-navigation')
+      isLoading.value = false
     })
 }
 </script>
