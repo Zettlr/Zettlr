@@ -4,8 +4,8 @@
       v-for="(item, idx) in menu"
       v-bind:key="idx"
       class="top-level-item"
-      v-on:mousedown.stop.prevent="getSubmenu(item.id, $event.target as HTMLElement)"
-      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id, $event.target as HTMLElement)"
+      v-on:mousedown.stop.prevent="getSubmenu(item.id!, $event.target as HTMLElement)"
+      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id!, $event.target as HTMLElement)"
     >
       {{ item.label }}
     </span>

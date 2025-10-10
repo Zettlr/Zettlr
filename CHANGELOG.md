@@ -322,6 +322,10 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - Fixed vibrancy on macOS, and use it for more windows, if enabled.
 - Added a loading spinner component that can be used to indicate that something
   is loading.
+- Context menu items now can have an `action` property, which is a simple
+  function that will be called when the item is clicked. Those items do not have
+  to have an ID (which is now an optional property). Items with IDs and without
+  actions will still call the provided callback function.
 
 # 3.6.0
 
