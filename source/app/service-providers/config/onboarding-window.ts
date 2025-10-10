@@ -29,6 +29,7 @@ import { BrowserWindow, type BrowserWindowConstructorOptions, ipcMain } from 'el
 import type ConfigProvider from '.'
 import { loadData } from '@common/i18n-main'
 import setWindowChrome from '../windows/set-window-chrome'
+import attachLogger from '../windows/attach-logger'
 
 export interface OnboardingIPCCloseMessage {
   command: 'close'
@@ -74,6 +75,7 @@ export async function showOnboardingWindow (config: ConfigProvider, logger: LogP
   }
   setWindowChrome(config, conf, false)
   const onboardingWindow = new BrowserWindow(conf)
+  attachLogger(logger, onboardingWindow, 'Onboarding Window')
 
   const effectiveUrl = new URL(ONBOARDING_WEBPACK_ENTRY)
   effectiveUrl.searchParams.append('mode', mode)
