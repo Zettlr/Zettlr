@@ -320,6 +320,8 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   allows, e.g., renderers to detect whether a selection touches a node-to-be-
   rendered.
 - Fixed vibrancy on macOS, and use it for more windows, if enabled.
+- Added a loading spinner component that can be used to indicate that something
+  is loading.
 
 # 3.6.0
 
