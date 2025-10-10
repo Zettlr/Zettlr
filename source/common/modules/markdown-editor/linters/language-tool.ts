@@ -19,7 +19,7 @@ import { configField } from '../util/configuration'
 import type { LanguageToolLinterRequest, LanguageToolLinterResponse } from '@providers/commands/language-tool'
 import { StateEffect, StateField, type Transaction } from '@codemirror/state'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
-import type { ViewUpdate } from '@codemirror/view'
+import { EditorView, type ViewUpdate } from '@codemirror/view'
 import { trans } from 'source/common/i18n-renderer'
 import type { LanguageToolIgnoredRuleEntry } from '@providers/config/get-config-template'
 
@@ -217,6 +217,7 @@ const ltLinter = linter(async view => {
 
         actions.push({
           name: value,
+          markClass: 'cm-ltSuggestAction',
           apply (view, from, to) {
             view.dispatch({ changes: { from, to, insert: value } })
           }
@@ -229,6 +230,7 @@ const ltLinter = linter(async view => {
     // lands in a release
     actions.push({
       name: trans('Disable Rule'),
+      markClass: 'cm-ltDisableAction',
       apply (view) {
         // In order to ignore a rule, we do two things. First, we keep the
         // local ignoring-mechanism from @benniekiss, because that will allow us
@@ -270,7 +272,14 @@ const ltLinter = linter(async view => {
   needsRefresh
 })
 
+const languagetoolTheme = EditorView.theme({
+  '.cm-diagnosticAction.cm-ltDisableAction': {
+    backgroundColor: '#af5151'
+  }
+})
+
 export const languageTool = [
   ltLinter,
-  languageToolState
+  languageToolState,
+  languagetoolTheme
 ]
