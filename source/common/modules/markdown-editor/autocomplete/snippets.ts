@@ -164,10 +164,10 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
     // This monstrosity ensures that our ranges stay in sync while the user types
     val.activeSelections = val.activeSelections
       .filter(selection => {
-        return selection.ranges.some(r => transaction.changes.mapPos(r.from, -1, MapMode.TrackBefore) !== null)
+        return selection.ranges.some(r => transaction.changes.mapPos(r.from, 1, r.empty ? MapMode.TrackAfter : MapMode.TrackDel) !== null)
       })
       .map(selection => {
-        return selection.map(transaction.changes)
+        return selection.map(transaction.changes, 1)
       })
 
     return { ...val }
@@ -186,7 +186,7 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         for (const range of selection.ranges) {
           if (range.empty) {
             const widget = new SnippetWidget(`$${position}`, range)
-            decorations.push(Decoration.widget({ widget }).range(range.from))
+            decorations.push(Decoration.widget({ widget, side: position }).range(range.from))
           } else {
             decorations.push(tabstopDeco.range(range.from, range.to))
           }
