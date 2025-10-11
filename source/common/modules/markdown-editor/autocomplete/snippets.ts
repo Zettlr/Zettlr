@@ -342,7 +342,7 @@ async function replaceSnippetVariables (state: EditorState, text: string): Promi
   const hour = now.hour
   const minute = now.minute
   const second = now.second
-  const clipboard = await navigator.clipboard?.readText()
+  const clipboard = await navigator.clipboard.readText()
 
   const config = state.field(configField)
   const absPath = config.metadata.path
@@ -360,7 +360,7 @@ async function replaceSnippetVariables (state: EditorState, text: string): Promi
     CURRENT_SECONDS_UNIX: now.toSeconds(),
     UUID: uuid(),
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
-    ZKN_ID: generateId(String(window.config?.get('zkn.idGen'))),
+    ZKN_ID: generateId(String(window.config.get('zkn.idGen'))),
     CURRENT_ID: config.metadata.id,
     FILENAME: pathBasename(absPath, pathExtname(absPath)),
     DIRECTORY: pathDirname(absPath),
