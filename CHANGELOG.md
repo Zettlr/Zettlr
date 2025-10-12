@@ -216,6 +216,11 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   if you delete characters and reach a footnote, Zettlr will first select the
   entire footnote to visually indicate that you are about to delete a footnote,
   then a second deletion will remove the entire footnote at once.
+- **Change**: Zettlr now monitors your documents and will automatically remove
+  footnotes and references without the corresponding reference or footnote. If
+  you have any documents in which you have un-referenced footnotes, or
+  references that are currently unused, please make sure to change this before
+  updating.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
