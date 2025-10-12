@@ -98,20 +98,31 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
       type: 'separator'
     },
     {
-      id: 'menu.open_link',
       label: trans('Open link'),
-      type: 'normal'
+      type: 'normal',
+      action () { openMarkdownLink(url, view) }
     },
     {
       // It's either "Copy Link" or "Copy Mail"
-      id: 'menu.copy_link',
       type: 'normal',
-      label: (url.indexOf('mailto:') === 0) ? trans('Copy email address') : trans('Copy link')
+      label: (url.indexOf('mailto:') === 0) ? trans('Copy email address') : trans('Copy link'),
+      action () {
+        const sanitizedUrl = url.replace(/^<|>$/g, '') // Remove markdown characters
+        navigator.clipboard.writeText(sanitizedUrl).catch(err => console.error(err))
+      }
     },
     {
-      id: 'menu.remove_link',
       type: 'normal',
-      label: trans('Remove link')
+      label: trans('Remove link'),
+      action () {
+        if (node.type.name === 'URL' && node.parent?.type.name === 'Link') {
+          // Handles when user clicks on (url) node in the [text](url) type link
+          removeMarkdownLink(node.parent, view)
+        } else {
+          // Handles when user clicks on [text] part of [text](url) type link or <url> part of <url> type link
+          removeMarkdownLink(node, view)
+        }
+      }
     }
   ]
 
@@ -129,37 +140,21 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     {
       label: trans('Open image'),
       id: 'open-img-in-browser',
-      type: 'normal'
+      type: 'normal',
+      action () { window.location.href = validAbsoluteURI }
     },
     {
       label: process.platform === 'darwin' ? trans('Reveal in Finder') : trans('Open in File Browser'),
-      id: 'show-img-in-folder',
       enabled: isFileLink,
-      type: 'normal'
+      type: 'normal',
+      action () {
+        ipcRenderer.send('window-controls', {
+          command: 'show-item-in-folder',
+          payload: { itemPath: validAbsoluteURI }
+        } as WindowControlsIPCAPI)
+      }
     }
   ]
 
-  showPopupMenu(coords, isLink ? linkTpl : imgTpl, (clickedID) => {
-    if (clickedID === 'menu.copy_link') {
-      const sanitizedUrl = url.replace(/^<|>$/g, '') // Remove markdown characters
-      navigator.clipboard.writeText(sanitizedUrl).catch(err => console.error(err))
-    } else if (clickedID === 'menu.open_link') {
-      openMarkdownLink(url, view)
-    } else if (clickedID === 'show-img-in-folder') {
-      ipcRenderer.send('window-controls', {
-        command: 'show-item-in-folder',
-        payload: { itemPath: validAbsoluteURI }
-      } as WindowControlsIPCAPI)
-    } else if (clickedID === 'open-img-in-browser') {
-      window.location.href = validAbsoluteURI
-    } else if (clickedID === 'menu.remove_link') {
-      if (node.type.name === 'URL' && node.parent?.type.name === 'Link') {
-        // Handles when user clicks on (url) node in the [text](url) type link
-        removeMarkdownLink(node.parent, view)
-      } else {
-        // Handles when user clicks on [text] part of [text](url) type link or <url> part of <url> type link
-        removeMarkdownLink(node, view)
-      }
-    }
-  })
+  showPopupMenu(coords, isLink ? linkTpl : imgTpl)
 }

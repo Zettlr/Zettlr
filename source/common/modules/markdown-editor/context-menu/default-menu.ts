@@ -120,7 +120,16 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     return {
       type: 'normal',
       label: suggestion,
-      id: '$' + suggestion // The $ helps distinguish the suggestions
+      action () {
+        if (diagnostic === undefined) {
+          console.warn('Could not apply suggestion: No diagnostic found')
+          return
+        }
+
+        view.dispatch({
+          changes: { from: diagnostic.from, to: diagnostic.to, insert: suggestion }
+        })
+      }
     }
   })
 
@@ -139,8 +148,28 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
   suggestionItems.unshift(
     {
       label: trans('Add to dictionary'),
-      id: 'add-to-dictionary',
-      type: 'normal'
+      type: 'normal',
+      action () {
+        ipcRenderer.invoke(
+          'dictionary-provider',
+          { command: 'add', terms: [word] }
+        )
+          .then(() => {
+            // After we've added the word to the dictionary, we have to invalidate
+            // the spellcheck linter errors that mark this specific word as wrong.
+            const filteredDiagnostics: Diagnostic[] = []
+            forEachDiagnostic(view.state, (d, from, to) => {
+              if (d.source !== 'spellcheck') {
+                filteredDiagnostics.push(d)
+              } else if (view.state.sliceDoc(from, to) !== word) {
+                filteredDiagnostics.push(d)
+              }
+            })
+            view.dispatch(setDiagnostics(view.state, filteredDiagnostics))
+            forceLinting(view)
+          })
+          .catch(e => console.error(e))
+      }
     },
     { type: 'separator' }
   )
@@ -149,14 +178,14 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Bold'),
       accelerator: 'CmdOrCtrl+B',
-      id: 'markdownBold',
-      type: 'normal'
+      type: 'normal',
+      action () { applyBold(view) }
     },
     {
       label: trans('Italic'),
       accelerator: 'CmdOrCtrl+I',
-      id: 'markdownItalic',
-      type: 'normal'
+      type: 'normal',
+      action () { applyItalic(view) }
     },
     {
       type: 'separator'
@@ -164,34 +193,34 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Insert link'),
       accelerator: 'CmdOrCtrl+K',
-      id: 'markdownLink',
-      type: 'normal'
+      type: 'normal',
+      action () { insertLink(view) }
     },
     {
       label: trans('Insert unordered list'),
-      id: 'markdownMakeUnorderedList',
-      type: 'normal'
+      type: 'normal',
+      action () { applyBulletList(view) }
     },
     {
       label: trans('Insert numbered list'),
-      id: 'markdownMakeOrderedList',
-      type: 'normal'
+      type: 'normal',
+      action () { applyOrderedList(view) }
     },
     {
       label: trans('Insert task list'),
       accelerator: 'CmdOrCtrl+T',
-      id: 'markdownMakeTaskList',
-      type: 'normal'
+      type: 'normal',
+      action () { applyTaskList(view) }
     },
     {
       label: trans('Insert blockquote'),
-      id: 'markdownBlockquote',
-      type: 'normal'
+      type: 'normal',
+      action () { applyBlockquote(view) }
     },
     {
       label: trans('Insert table'),
-      id: 'markdownInsertTable',
-      type: 'normal'
+      type: 'normal',
+      action () { view.dispatch(view.state.replaceSelection('| | |\n|-|-|\n| | |\n')) }
     },
     {
       type: 'separator'
@@ -199,32 +228,32 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Cut'),
       accelerator: 'CmdOrCtrl+X',
-      id: 'cut',
-      type: 'normal'
+      type: 'normal',
+      action () { cut(view) }
     },
     {
       label: trans('Copy'),
       accelerator: 'CmdOrCtrl+C',
-      id: 'copy',
-      type: 'normal'
+      type: 'normal',
+      action () { copyAsPlain(view) }
     },
     {
       label: trans('Copy as HTML'),
       accelerator: 'CmdOrCtrl+Alt+C',
-      id: 'copyAsHTML',
-      type: 'normal'
+      type: 'normal',
+      action () { copyAsHTML(view) }
     },
     {
       label: trans('Paste'),
       accelerator: 'CmdOrCtrl+V',
-      id: 'paste',
-      type: 'normal'
+      type: 'normal',
+      action () { paste(view) }
     },
     {
       label: trans('Paste without style'),
       accelerator: 'CmdOrCtrl+Shift+V',
-      id: 'pasteAsPlain',
-      type: 'normal'
+      type: 'normal',
+      action () { pasteAsPlain(view) }
     },
     {
       type: 'separator'
@@ -232,8 +261,8 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Select all'),
       accelerator: 'CmdOrCtrl+A',
-      id: 'selectAll',
-      type: 'normal'
+      type: 'normal',
+      action () { view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } }) }
     },
     {
       type: 'separator'
@@ -246,61 +275,5 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     tpl.unshift(...suggestionItems)
   }
 
-  showPopupMenu(coords, tpl, (clickedID) => {
-    if (clickedID === 'markdownBold') {
-      applyBold(view)
-    } else if (clickedID === 'markdownItalic') {
-      applyItalic(view)
-    } else if (clickedID === 'markdownLink') {
-      insertLink(view)
-    } else if (clickedID === 'markdownMakeOrderedList') {
-      applyOrderedList(view)
-    } else if (clickedID === 'markdownMakeUnorderedList') {
-      applyBulletList(view)
-    } else if (clickedID === 'markdownMakeTaskList') {
-      applyTaskList(view)
-    } else if (clickedID === 'markdownBlockquote') {
-      applyBlockquote(view)
-    } else if (clickedID === 'markdownInsertTable') {
-      view.dispatch(view.state.replaceSelection('| | |\n|-|-|\n| | |\n'))
-    } else if (clickedID === 'cut') {
-      cut(view)
-    } else if (clickedID === 'copy') {
-      copyAsPlain(view)
-    } else if (clickedID === 'copyAsHTML') {
-      copyAsHTML(view)
-    } else if (clickedID === 'paste') {
-      paste(view)
-    } else if (clickedID === 'pasteAsPlain') {
-      pasteAsPlain(view)
-    } else if (clickedID === 'selectAll') {
-      view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } })
-    } else if (clickedID === 'no-suggestion') {
-      // Do nothing
-    } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
-      ipcRenderer.invoke(
-        'dictionary-provider',
-        { command: 'add', terms: [word] }
-      )
-        .then(() => {
-          // After we've added the word to the dictionary, we have to invalidate
-          // the spellcheck linter errors that mark this specific word as wrong.
-          const filteredDiagnostics: Diagnostic[] = []
-          forEachDiagnostic(view.state, (d, from, to) => {
-            if (d.source !== 'spellcheck') {
-              filteredDiagnostics.push(d)
-            } else if (view.state.sliceDoc(from, to) !== word) {
-              filteredDiagnostics.push(d)
-            }
-          })
-          view.dispatch(setDiagnostics(view.state, filteredDiagnostics))
-          forceLinting(view)
-        })
-        .catch(e => console.error(e))
-    } else if (clickedID.startsWith('$') && diagnostic !== undefined) {
-      view.dispatch({
-        changes: { from: diagnostic.from, to: diagnostic.to, insert: clickedID.slice(1) }
-      })
-    }
-  })
+  showPopupMenu(coords, tpl)
 }

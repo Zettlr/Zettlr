@@ -145,7 +145,7 @@ function findItemById (items: AnyMenuItem[], id: string): AnyMenuItem|undefined 
 }
 
 // This function displays a custom styled popup menu at the given coordinates
-export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: (clickedID: string) => void, cleanup = true): () => void {
+export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback?: (clickedID: string) => void, cleanup = true): () => void {
   // Before we do anything, we first must make sure any rogue old context menus
   // are gone.
   if (cleanup) { // NOTE: we need a flag because of submenus
@@ -206,8 +206,10 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
           return
         } else if (foundItem.action !== undefined) {
           foundItem.action()
-        } else if (clickedID !== undefined) {
+        } else if (callback !== undefined) {
           callback(clickedID)
+        } else {
+          console.warn(`Could not trigger action for context menu item ${clickedID}: Neither action nor callback provided.`)
         }
       })
       .catch(err => { console.error(err) })
@@ -229,7 +231,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
         event.stopPropagation()
         if (item.action !== undefined) {
           item.action()
-        } else if (item.id !== undefined) {
+        } else if (item.id !== undefined && callback !== undefined) {
           callback(item.id)
         } else {
           console.warn(`Registered click on menu item "${item.label}", but it had neither an action, nor an ID attached to it.`)
@@ -256,7 +258,9 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
 
           const subCB = (clickedID: string): void => {
             // Call the regular callback to basically "bubble up" the event
-            callback(clickedID)
+            if (callback !== undefined) {
+              callback(clickedID)
+            }
             // Furthermore, we need to close the parent menu
             appMenu.parentElement?.removeChild(appMenu)
           }

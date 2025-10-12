@@ -40,26 +40,22 @@ export function citationMenu (view: EditorView, coords: { x: number, y: number }
     { type: 'separator' })
   }
 
+  const filePath = view.state.field(configField).metadata.path
+
   for (const [ key, label ] of Object.entries(items)) {
     tpl.push({
       label,
       sublabel: process.platform === 'darwin' ? trans('Open PDF for %s', label) : undefined,
-      id: 'citekey-' + key,
-      type: 'normal'
+      type: 'normal',
+      action () {
+        ipcRenderer.invoke('application', {
+          command: 'open-attachment',
+          payload: { citekey: key, filePath }
+        })
+          .catch((err: any) => console.error(err))
+      }
     })
   }
 
-  const filePath = view.state.field(configField).metadata.path
-
-  showPopupMenu(coords, tpl, (clickedID) => {
-    if (!clickedID.startsWith('citekey-')) {
-      return
-    }
-
-    ipcRenderer.invoke('application', {
-      command: 'open-attachment',
-      payload: { citekey: clickedID.substring(8), filePath }
-    })
-      .catch((err: any) => console.error(err))
-  })
+  showPopupMenu(coords, tpl)
 }

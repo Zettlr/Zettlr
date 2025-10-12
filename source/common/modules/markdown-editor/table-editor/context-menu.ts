@@ -214,5 +214,5 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
   ]
 
   const point = { x: event.clientX, y: event.clientY }
-  showPopupMenu(point, template, () => {/* no-op callback */})
+  showPopupMenu(point, template)
 }
