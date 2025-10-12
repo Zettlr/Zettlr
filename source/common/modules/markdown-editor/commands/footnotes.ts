@@ -182,10 +182,15 @@ export function selectFootnoteBeforeDelete (target: EditorView): boolean {
 }
 
 /**
- * This transaction filter checks each incoming transaction and does two things.
- * First, it checks if the user removed either a footnote or its ref, and
- * removes the counterpart automatically. Then, it looks through the remaining,
- * valid footnotes and adapts the numbering so that they are sorted ascending.
+ * This transaction filter checks each incoming transaction and does three
+ * things (for numbered footnotes; ignores footnotes with non-numeric labels):
+ * 
+ * 1. It ensures that footnotes and their references are balanced. Dangling
+ *    footnotes (without matching reference) and references (without matching
+ *    footnote) are removed.
+ * 2. It re-numbers footnotes and their references in order to ensure that the
+ *    numbered footnotes are numbered ascending.
+ * 3. It re-sorts footnote references in case they are not sorted.
  *
  * @param   {Transaction}  tr  The transaction
  *
@@ -288,6 +293,43 @@ export const cleanupFootnotesAndNumbering = EditorState.transactionFilter.of(tr 
       }
     }
     fnIdx++
+  }
+
+  // Step 3: Re-sort footnote references if applicable.
+  let isSorted = true
+  for (let i = 0; i < refs.length - 1; i++) {
+    const a = refs[i]
+    const b = refs[i+1]
+    if (!/^\d+$/.test(a.label) || !/^\d+$/.test(b.label)) {
+      continue
+    }
+
+    const aLabel = parseInt(a.label, 10)
+    const bLabel = parseInt(b.label, 10)
+
+    if (aLabel >= bLabel) {
+      isSorted = false
+      break
+    }
+  }
+
+  if (!isSorted) {
+    const sortedRefs = refs
+      .toSorted((a, b) => {
+        if (!/^\d+$/.test(a.label) || !/^\d+$/.test(b.label)) {
+          return 0 // Keep sorting for interleaved non-numeric references
+        }
+
+        return parseInt(a.label, 10) - parseInt(b.label, 10)
+      })
+      .map(ref => {
+        return newDoc.slice(ref.from, ref.to)
+      })
+
+    const fnRefSectionFrom = Math.min(...refs.map(r => r.from))
+    const fnRefSectionTo = Math.max(...refs.map(r => r.to))
+
+    changes.push({ from: fnRefSectionFrom, to: fnRefSectionTo, insert: sortedRefs.join('\n') })
   }
 
   if (changes.length === 0) {
