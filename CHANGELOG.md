@@ -140,6 +140,42 @@ The new workflow applies when you autocomplete a filename, and works as follows:
    (YAML frontmatter title; first heading level 1; filename) as the link label.
    If it is disabled, Zettlr will never add a link label automatically.
 
+## Footnote Workflow Improvements
+
+This update improves the footnote handling workflow a lot. Until now, Zettlr was
+only able to properly insert new footnotes. However, the footnote deletion
+process still required you to manually delete both the footnote label and its
+accompanying reference.
+
+We have now implemented a few new functions that help you manage footnotes.
+First, when you delete text by pressing `Backspace`, and you reach a footnote
+label, Zettlr will now select the entire footnote label instead of deleting the
+closing bracket of the label. When you press `Backspace` a second time, it will
+remove the entire label at once. This gives you both a visual indication that
+you are about to delete a footnote, and make it easier (since it requires you to
+press `Backspace` only twice, instead of at least four times).
+
+A second improvement involves automatic footnote management. Zettlr now checks
+every change you make. If a change involves either a footnote or a footnote
+label, an automatic filter will run that performs two things: On the one hand,
+it will remove any footnote label or reference without a matching reference or
+label. This means that, when you delete a footnote label in your text, Zettlr
+will automatically also remove the accompanying reference. Likewise, if you
+remove a footnote reference, Zettlr also removes the accompanying label. On the
+other hand, Zettlr will go through all your footnotes and ensure that the
+numbering remains consistent (starting from `1` and increasing monotonically).
+
+> **Important**: In the past, those dangling references or labels would not be
+>  removed, but this might mean that your files contain some of these. Whenever
+>  you edit a file using this new Zettlr version, these will be removed. We
+> believe that such dangling references are no longer needed (since they would
+> already be removed by Pandoc upon exports), but you may come to a different
+> conclusion, so we include this warning so that you can double check your files
+> before updating.
+
+Note that some functionality does not apply to footnote labels that contain text
+other than numbers.
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
