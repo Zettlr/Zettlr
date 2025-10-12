@@ -56,27 +56,35 @@ export const footnoteRefParser: BlockParser = {
     const footnoteBody: string[] = [line.text.slice(match[0].length)]
 
     // Everything at least indented by 4 spaces OR empty lines belong to this paragraph
-    while (ctx.nextLine() && /^\s{4,}|^\s*$/.test(line.text)) {
-      footnoteBody.push(line.text)
-      to += line.text.length + 1
-    }
+    while (ctx.nextLine()) {
+      const isIndented = /^\s{4,}/.test(line.text)
+      const isEmpty = /^\s*$/.test(line.text)
 
-    // Remove trailing empty lines from the body itself
-    let bodyTo = to
-    while (footnoteBody.length > 0 && footnoteBody[footnoteBody.length - 1].trim() === '') {
-      const lastline = footnoteBody.pop()!
-      bodyTo = bodyTo - lastline.length - 1
-    }
-
-    // Since footnotes can be empty, the above while loop will substract one too
-    // much from empty footnotes (so that bodyTo = from - 1). Here we correct
-    // for that.
-    if (bodyTo < from) {
-      bodyTo = from
+      if (!isIndented && !isEmpty) {
+        break // Footnote is over
+      } else if (isEmpty) {
+        const nextLine = ctx.peekLine()
+        const nextIndented = /^\s{4,}/.test(nextLine)
+        const nextEmpty = /^\s*$/.test(nextLine)
+        // The following line may not be empty
+        if (nextEmpty || !nextIndented) {
+          break // Footnote is over
+        } else if (nextIndented) {
+          footnoteBody.push(line.text)
+          to += line.text.length + 1
+        } else {
+          break // Not empty but also not indented
+        }
+      } else if (isIndented) {
+        footnoteBody.push(line.text)
+        to += line.text.length + 1
+      } else {
+        break
+      }
     }
 
     const treeElem = partialParse(ctx, ctx.parser, footnoteBody.join('\n'), from)
-    const body = ctx.elt('FootnoteRefBody', from, bodyTo, [treeElem])
+    const body = ctx.elt('FootnoteRefBody', from, to, [treeElem])
 
     const wrapper = ctx.elt('FootnoteRef', refFrom, to, [ label, body ])
     ctx.addElement(wrapper)
