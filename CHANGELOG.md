@@ -299,6 +299,9 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - Switched the window controls on Windows computers to the native controls. This
   will enable a set of additional OS-level functionality (such as hovering over
   the maximize-button to show a split-screen menu).
+- Fixed a bug that would not assign the correct footnote body class to footnote
+  bodies. Now, footnotes will be rendered in a smaller font size and can be
+  styled as a block.
 
 ## Under the Hood
 
