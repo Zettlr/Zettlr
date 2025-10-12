@@ -326,6 +326,12 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   function that will be called when the item is clicked. Those items do not have
   to have an ID (which is now an optional property). Items with IDs and without
   actions will still call the provided callback function.
+- When you progressively delete characters, and reach a footnote, the editor
+  will now first select the entire footnote, meaning that footnotes are now
+  treated less like their individual characters, and more as an entire semantic
+  span. In addition, this gives you an early warning that you are about to
+  delete a footnote, since you will have to press `Backspace` twice to actually
+  delete it.
 
 # 3.6.0
 

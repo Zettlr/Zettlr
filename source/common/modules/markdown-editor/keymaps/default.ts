@@ -53,7 +53,7 @@ import { nextSnippet, abortSnippet } from '../autocomplete/snippets'
 import {
   handleReplacement, handleBackspace, handleQuote
 } from '../commands/autocorrect'
-import { addNewFootnote } from '../commands/footnotes'
+import { addNewFootnote, selectFootnoteBeforeDelete } from '../commands/footnotes'
 import {
   maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown
 } from '../commands/lists'
@@ -113,6 +113,7 @@ export function defaultKeymap (): Extension {
     { key: 'Enter', run: insertNewlineAndIndent },
 
     // Overload Backspace
+    { key: 'Backspace', run: selectFootnoteBeforeDelete },
     { key: 'Backspace', run: deleteMarkupBackward },
     // closeBracketsKeymap
     { key: 'Backspace', run: deleteBracketPair },
