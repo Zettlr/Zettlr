@@ -149,7 +149,8 @@ export function addNewFootnote (target: EditorView): boolean {
     // 3 = [^] (the identifier)
     // 2x the new number length
     // Any offset chars, since the selection must be in terms of characters AFTER the update
-    selection: { anchor: whereRef + 5 + prefix.length + 3 + String(newIdentifier).length * 2 + offsetChars }
+    selection: { anchor: whereRef + 5 + prefix.length + 3 + String(newIdentifier).length * 2 + offsetChars },
+    scrollIntoView: true
   })
   return true
 }
@@ -300,5 +301,8 @@ export const cleanupFootnotesAndNumbering = EditorState.transactionFilter.of(tr 
   // We overwrite the existing changeset with the new one.
   const changeSetBtoC = tr.state.changes(changes)
   const changeSetAtoC = tr.changes.compose(changeSetBtoC)
-  return { ...tr, changes: changeSetAtoC }
+  // NOTE: We also remove the selection, since deletion at the end of the
+  // document can cause errors. This might cause unwanted selections, but that's
+  // better than having cryptic errors in the console.
+  return { ...tr, changes: changeSetAtoC, selection: undefined }
 })
