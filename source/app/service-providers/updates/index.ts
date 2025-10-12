@@ -298,9 +298,23 @@ export default class UpdateProvider extends ProviderContract {
 
     try {
       this._logger.info(`[Update Provider] Checking ${REPO_URL} for application updates ...`)
+      let platformString = ''
+      if (process.platform === 'win32') {
+        platformString = `Windows NT 10.0; ${process.arch}`
+      }
+      if (process.platform === 'darwin') {
+        platformString = `Macintosh; Intel Mac OS X ${process.getSystemVersion()}; ${process.arch}`
+      }
+      if (process.platform === 'linux') {
+        platformString = `Linux ${process.arch === 'x64' ? 'x86_64' : process.arch}`
+      }
+
       const response: Response<string> = await got(REPO_URL, {
         timeout: { request: 5000 },
         method: 'GET',
+        headers: {
+          'User-Agent': `Zettlr/${CUR_VER} (${platformString})`
+        },
         searchParams: new URLSearchParams([
           [ 'accept-beta', this._config.get('checkForBeta') ]
         ])
