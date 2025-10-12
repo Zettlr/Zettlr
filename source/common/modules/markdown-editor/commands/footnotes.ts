@@ -18,7 +18,7 @@
 // 3. And, obviously, add and remove them
 
 import { syntaxTree } from '@codemirror/language'
-import { type ChangeSpec } from '@codemirror/state'
+import { EditorState, type ChangeSpec } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
 import { type Footnote, type FootnoteRef } from '@common/modules/markdown-utils/markdown-ast'
@@ -179,3 +179,126 @@ export function selectFootnoteBeforeDelete (target: EditorView): boolean {
 
   return false
 }
+
+/**
+ * This transaction filter checks each incoming transaction and does two things.
+ * First, it checks if the user removed either a footnote or its ref, and
+ * removes the counterpart automatically. Then, it looks through the remaining,
+ * valid footnotes and adapts the numbering so that they are sorted ascending.
+ *
+ * @param   {Transaction}  tr  The transaction
+ *
+ * @return  {Transaction}      The original or modified transaction
+ */
+export const cleanupFootnotesAndNumbering = EditorState.transactionFilter.of(tr => {
+  // Only runs on document changes
+  if (!tr.docChanged) {
+    return tr
+  }
+
+  // NOTE: The documentation states that accessing the new state is not advised
+  // since this will effectively perform two transaction for every individual
+  // one that the user starts. However, using the new state and then start
+  // basing our changes on that makes the entire code much simpler. This is why
+  // we double-check first that the footnotes are in any way affected by this
+  // change. This way, a second transaction will only be created when there was
+  // a probable change in the footnotes. Below's change tries to be as
+  // conservative as possible, meaning that some false positives are possible.
+  const oldAst = markdownToAST(tr.startState.sliceDoc())
+  const relevantNodes = extractASTNodes(oldAst, 'Footnote')
+    .concat(extractASTNodes(oldAst, 'FootnoteRef'))
+
+  let possiblyChanged = false
+  tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
+    if (possiblyChanged) {
+      return
+    }
+
+    // Condition 1: Any existing footnote or ref is touched by a change.
+    if (!relevantNodes.every(fn => fn.from > toA || fn.to < fromA)) {
+      possiblyChanged = true
+      return
+    }
+
+    // Condition 2: The inserted text contains text that even remotely appears
+    // to be part of a footnote or ref.
+    if (inserted.length > 0 && inserted.sliceString(0).includes('[^')) {
+      possiblyChanged = true
+    }
+  })
+
+  if (!possiblyChanged) {
+    return tr
+  }
+  
+  // NOTE: Calculates the new state.
+  const newDoc = tr.state.sliceDoc()
+  const ast = markdownToAST(newDoc)
+  const identifiers = extractASTNodes(ast, 'Footnote') as Footnote[]
+  const refs = extractASTNodes(ast, 'FootnoteRef') as FootnoteRef[]
+
+  const changes: ChangeSpec[] = []
+
+  // Step 1: Cleanup.
+
+  // Find any footnote references whose matching footnote is missing.
+  for (const ref of refs) {
+    if (!/^\d+$/.test(ref.label)) {
+      continue // A non-numeric footnote label
+    }
+
+    const matchingFootnote = identifiers.find(fn => fn.label === ref.label)
+    if (matchingFootnote === undefined) {
+      // No matching footnote found
+      changes.push({ from: ref.from, to: newDoc.length > ref.to ? ref.to + 1 : ref.to, insert: '' })
+      // Remove this ID from the identifier set so that it isn't accounted for
+      // in the second step.
+      refs.splice(refs.indexOf(ref), 1)
+    }
+  }
+
+  // Next, do the same for rogue footnotes.
+  for (const fn of identifiers) {
+    if (!/^\d+$/.test(fn.label)) {
+      continue // A non-numeric footnote label
+    }
+
+    const matchingRef = refs.find(r => r.label === fn.label)
+    if (matchingRef === undefined) {
+      changes.push({ from: fn.from, to: fn.to, insert: '' })
+      identifiers.splice(identifiers.indexOf(fn), 1)
+    }
+  }
+
+  // Step 2: Adjust the numbering for the remaining, valid footnotes.
+
+  let fnIdx = 1
+  for (const fn of identifiers) {
+    if (!/^\d+$/.test(fn.label)) {
+      continue // A non-numeric footnote label
+    }
+
+    if (parseInt(fn.label, 10) !== fnIdx) {
+      // Footnote index is wrong -> adapt
+      changes.push({ from: fn.from, to: fn.to, insert: `[^${fnIdx}]` })
+      const matchingRef = refs.find(r => r.label === fn.label)
+      if (matchingRef !== undefined) {
+        changes.push({ from: matchingRef.labelFrom, to: matchingRef.labelTo, insert: String(fnIdx) })
+      }
+    }
+    fnIdx++
+  }
+
+  if (changes.length === 0) {
+    return tr // Nothing changed
+  }
+
+  // Now we have changes that describe a change from doc B to doc C, based on a
+  // state produced by changes from doc A to doc B. Here we turn the changes
+  // into a changeset, and then compose both to get a set from doc A directly to
+  // doc C that can then be applied.
+  // We overwrite the existing changeset with the new one.
+  const changeSetBtoC = tr.state.changes(changes)
+  const changeSetAtoC = tr.changes.compose(changeSetBtoC)
+  return { ...tr, changes: changeSetAtoC }
+})

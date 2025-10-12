@@ -206,6 +206,16 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   sections in the file manager. This can be helpful if you are working with both
   a lot of individual files and workspaces. Your choice is remembered (#5916).
 - **Feature**: Extended the scope and application of vibrancy on macOS.
+- **Feature**: Working with footnotes is now more convenient than ever. Zettlr
+  now has an update listener that constantly scans the document for any rogue
+  footnotes and references (which are missing their corresponding reference or
+  footnote), and ensures that the numbering is always correct. This means that
+  you can delete a footnote, and be certain that Zettlr will have removed the
+  now-dangling reference, too. The same applies if you remove a reference that
+  you no longer need. Lastly, deleting footnotes becomes more convenient. Now,
+  if you delete characters and reach a footnote, Zettlr will first select the
+  entire footnote to visually indicate that you are about to delete a footnote,
+  then a second deletion will remove the entire footnote at once.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
@@ -319,19 +329,14 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   allows inclusion of adjacent selection ranges in calculating the result. This
   allows, e.g., renderers to detect whether a selection touches a node-to-be-
   rendered.
-- Fixed vibrancy on macOS, and use it for more windows, if enabled.
 - Added a loading spinner component that can be used to indicate that something
   is loading.
 - Context menu items now can have an `action` property, which is a simple
   function that will be called when the item is clicked. Those items do not have
   to have an ID (which is now an optional property). Items with IDs and without
   actions will still call the provided callback function.
-- When you progressively delete characters, and reach a footnote, the editor
-  will now first select the entire footnote, meaning that footnotes are now
-  treated less like their individual characters, and more as an entire semantic
-  span. In addition, this gives you an early warning that you are about to
-  delete a footnote, since you will have to press `Backspace` twice to actually
-  delete it.
+- The Markdown AST parser now also emits `labelFrom` and `labelTo`-properties
+  for footnote references for easy access to the reference label.
 
 # 3.6.0
 

@@ -96,6 +96,14 @@ export interface FootnoteRef extends MDNode {
    */
   label: string
   /**
+   * Start of the label, for easy access.
+   */
+  labelFrom: number
+  /**
+   * End of the label, for easy access.
+   */
+  labelTo: number
+  /**
    * A list of children representing the footnote's body
    */
   children: ASTNode[]
@@ -598,6 +606,10 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     }
     case 'FootnoteRef': {
       const label = node.getChild('FootnoteRefLabel')
+      if (label === null) {
+        return genericTextNode(node.from, node.to, markdown.substring(node.from, node.to), getWhitespaceBeforeNode(node, markdown))
+      }
+
       const body = node.getChild('FootnoteRefBody')
       const astNode: FootnoteRef = {
         type: 'FootnoteRef',
@@ -606,7 +618,9 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        label: label !== null ? markdown.substring(label.from + 2, label.to - 2) : '',
+        label: markdown.substring(label.from + 2, label.to - 2),
+        labelFrom: label.from + 2,
+        labelTo: label.to - 2,
         children: []
       }
 
