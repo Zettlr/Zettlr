@@ -1,0 +1,125 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        renderPandoc
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This renderer displays Pandoc divs and spans
+ *
+ * END HEADER
+ */
+
+import { syntaxTree } from '@codemirror/language'
+import type { Range, RangeSet } from '@codemirror/state'
+import { Decoration, EditorView, ViewPlugin, type DecorationSet, type ViewUpdate } from '@codemirror/view'
+import { parseLinkAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { rangeInSelection } from '../util/range-in-selection'
+
+function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
+  const ranges: Range<Decoration>[] = []
+
+  for (const { from, to } of view.visibleRanges) {
+    syntaxTree(view.state).iterate({
+      from, to,
+      enter: (node) => {
+        if (rangeInSelection(view.state, node.from, node.to, true)) { return }
+
+        let marks
+        let attrs
+        let info
+
+        let from
+        let to
+
+        switch (node.name) {
+          case 'PandocSpan': {
+            marks = node.node.getChildren('PandocSpanMark')
+            attrs = node.node.getChild('PandocAttribute')
+
+            // Pandoc spans must have an attribute node
+            if (!attrs) { return }
+
+            // Something went wrong
+            if (marks.length !== 2) { return }
+
+            from = marks[0].to
+            to = marks[1].from
+            break
+          }
+
+          case 'PandocDiv': {
+            marks = node.node.getChildren('PandocDivMark')
+            attrs = node.node.getChild('PandocAttribute')
+            info = node.node.getChild('PandocDivInfo')
+
+            // Pandoc divs must have at least a class or an attribute node
+            if (!attrs && !info) { return }
+
+            // Something went wrong
+            if (marks.length !== 2) { return }
+
+            from = view.state.doc.line(view.state.doc.lineAt(node.from).number).to
+            to = view.state.doc.line(view.state.doc.lineAt(node.to).number).from
+            break
+          }
+
+          default: return
+        }
+
+        const attributes = attrs ? parseLinkAttributes(view.state.sliceDoc(attrs.from, attrs.to)) : {}
+        const classes = attributes.classes ?? []
+        const id = attributes.id ?? ''
+
+        if (info) { classes.unshift(view.state.sliceDoc(info.from, info.to)) }
+
+        const deco = Decoration.mark({
+          attributes: {
+            id,
+            class: classes.join(' '),
+            ...attributes.properties,
+          },
+        })
+
+        ranges.push(deco.range(from, to))
+      },
+    })
+  }
+
+  return Decoration.set(ranges, true)
+}
+
+const pandocDivSpanPlugin = ViewPlugin.fromClass(class {
+  decorations: DecorationSet
+
+  constructor (view: EditorView) {
+    this.decorations = showDivSpanDecorations(view)
+  }
+
+  update (update: ViewUpdate) {
+    this.decorations = showDivSpanDecorations(update.view)
+  }
+
+}, {
+  decorations: v => v.decorations
+})
+
+export const renderPandoc = [
+  pandocDivSpanPlugin,
+  EditorView.baseTheme({
+    '.mark': {
+      backgroundColor: '#ffff0080',
+    },
+    '&dark .mark': {
+      backgroundColor: '#ffff0060',
+    },
+    '.underline': {
+      textDecoration: 'underline',
+    },
+    '.smallcaps': {
+      fontVariantCaps: 'small-caps',
+    }
+  })
+]

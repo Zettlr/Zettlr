@@ -191,21 +191,21 @@ function addAttribute (node: ASTNode, attributeName: string, ...values: string[]
  *
  * @return  {string}                The HTML string
  */
-export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, indent: number = 0): string {
+export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, indent: number = 0, isChild?: boolean): string {
   const HIDDEN_GENERIC_NODES = ['Document']
 
   // Convenience to convert a list of child nodes to HTML
   if (Array.isArray(node)) {
     const body: string[] = []
     for (const child of node) {
-      body.push(nodeToHTML(child, options, indent))
+      body.push(nodeToHTML(child, options, indent, isChild))
     }
     return body.join('')
   } else if (node.type === 'Generic' && HIDDEN_GENERIC_NODES.includes(node.name)) {
     // Some nodes emitted from the AST serve as mere containers and should not
     // be actually emitted by the HTML parser. We do so by converting only its
     // children to HTML, omitting the node entirely.
-    return nodeToHTML(node.children, options, indent)
+    return nodeToHTML(node.children, options, indent, isChild)
   } else if (node.type === 'YAMLFrontmatter') {
     return '' // Frontmatters must be removed upon HTML export
   } else if (node.type === 'Citation') {
@@ -224,19 +224,19 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
   } else if (node.type === 'FootnoteRef') {
     addAttribute(node, 'class', 'footnote-ref')
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<div${attr}>${nodeToHTML(node.children, options, indent)}</div>`
+    return `${node.whitespaceBefore}<div${attr}>${nodeToHTML(node.children, options, indent, isChild)}</div>`
   } else if (node.type === 'Heading') {
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<h${node.level}${attr}>${nodeToHTML(node.children, options, indent)}</h${node.level}>`
+    return `${node.whitespaceBefore}<h${node.level}${attr}>${nodeToHTML(node.children, options, indent, isChild)}</h${node.level}>`
   } else if (node.type === 'Highlight') {
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<mark${attr}>${nodeToHTML(node.children, options, indent)}</mark>`
+    return `${node.whitespaceBefore}<mark${attr}>${nodeToHTML(node.children, options, indent, isChild)}</mark>`
   } else if (node.type === 'Superscript') {
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<sup${attr}>${nodeToHTML(node.children, options, indent)}</sup>`
+    return `${node.whitespaceBefore}<sup${attr}>${nodeToHTML(node.children, options, indent, isChild)}</sup>`
   } else if (node.type === 'Subscript') {
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<sub${attr}>${nodeToHTML(node.children, options, indent)}</sub>`
+    return `${node.whitespaceBefore}<sub${attr}>${nodeToHTML(node.children, options, indent, isChild)}</sub>`
   } else if (node.type === 'Image') {
     addAttribute(node, 'src', options.onImageSrc !== undefined ? options.onImageSrc(node.url) : node.url)
     addAttribute(node, 'alt', _.escape(node.alt.value))
@@ -257,19 +257,19 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
       addAttribute(node, 'class', 'task-list')
     }
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<ol${attr}>\n${nodeToHTML(node.items, options, indent)}\n</ol>`
+    return `${node.whitespaceBefore}<ol${attr}>\n${nodeToHTML(node.items, options, indent, isChild)}\n</ol>`
   } else if (node.type === 'BulletList') {
     if (node.isTaskList) {
       addAttribute(node, 'class', 'task-list')
     }
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<ul${attr}>\n${nodeToHTML(node.items, options, indent)}\n</ul>`
+    return `${node.whitespaceBefore}<ul${attr}>\n${nodeToHTML(node.items, options, indent, isChild)}\n</ul>`
   } else if (node.type === 'ListItem') {
     const attr = renderNodeAttributes(node)
     const task = node.checked !== undefined ? `<input type="checkbox" disabled="disabled" ${node.checked ? 'checked="checked"' : ''}>` : ''
-    return `${node.whitespaceBefore}<li${attr}>${task}${nodeToHTML(node.children, options, indent + 1)}</li>`
+    return `${node.whitespaceBefore}<li${attr}>${task}${nodeToHTML(node.children, options, indent + 1, isChild)}</li>`
   } else if (node.type === 'Emphasis') {
-    const body = nodeToHTML(node.children, options, indent)
+    const body = nodeToHTML(node.children, options, indent, isChild)
     const attr = renderNodeAttributes(node)
 
     switch (node.which) {
@@ -283,7 +283,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
     for (const row of node.rows) {
       const cells: string[] = []
       for (const cell of row.cells) {
-        cells.push(nodeToHTML(cell.children, options, indent))
+        cells.push(nodeToHTML(cell.children, options, indent, isChild))
       }
       const tag = row.isHeaderOrFooter ? 'th' : 'td'
       const content = cells.map(c => `<${tag}>${c}</${tag}>`).join('\n')
@@ -313,6 +313,12 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
       const attr = renderNodeAttributes(node)
       return `${node.whitespaceBefore}<code${attr}>${_.escape(node.source)}</code>`
     }
+  } else if (node.type === 'PandocDiv') {
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<div${attr}>${nodeToHTML(node.children, options, indent)}</div>`
+  } else if (node.type === 'PandocSpan') {
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<span${attr}>${nodeToHTML(node.children, options, indent)}</span>`
   } else if (node.type === 'Generic') {
     // Generic nodes are differentiated by name. There are a few we can support,
     // but most we wrap in a div.
@@ -329,7 +335,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
 
     const open = `${node.whitespaceBefore}<${tagInfo.tagName}${attr}${tagInfo.selfClosing ? '/' : ''}>`
     const close = tagInfo.selfClosing ? '' : `</${tagInfo.tagName}>`
-    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, options)
+    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, options, indent, isChild)
     return `${open}${body}${close}`
   } else if (node.type === 'ZettelkastenLink') {
     // NOTE: We count a ZettelkastenLink's title as a TextNode for various

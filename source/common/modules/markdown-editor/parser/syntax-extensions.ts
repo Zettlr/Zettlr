@@ -85,13 +85,12 @@ function getHeadingLineHighlighter (): Extension {
       from: 0,
       to: state.doc.length,
       enter: (node) => {
-        // We can return "false" to prevent the iterator from descending further
-        // into the tree
-        if (node.type.name === 'Document') {
-          return // Don't return false because headings are children of Document
+        const parentNodes = [ 'Document', 'PandocDiv', 'PandocDivContent', 'PandocSpan', 'PandocSpanContent' ]
+        if (parentNodes.includes(node.name)) {
+          return // Don't return false because headings may be children
         }
 
-        if (!node.type.name.startsWith('ATX') && !node.type.name.startsWith('Setext')) {
+        if (!node.name.startsWith('ATX') && !node.name.startsWith('Setext')) {
           return false
         }
 

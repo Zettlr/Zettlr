@@ -38,6 +38,7 @@ import { getWhitespaceBeforeNode } from './get-whitespace-before-node'
 import { genericTextNode } from './generic-text-node'
 import { parseChildren } from './parse-children'
 import { nodeToCiteItem, type Citation } from '../../markdown-editor/parser/citation-parser'
+import { parseLinkAttributes } from '@common/pandoc-util/parse-link-attributes'
 
 /**
  * Basic info every ASTNode needs to provide
@@ -449,6 +450,36 @@ export interface Comment extends MDNode {
 }
 
 /**
+ * Represents a pandoc fenced div (`::: {.class}`)
+ */
+export interface PandocDiv extends MDNode {
+  type: 'PandocDiv'
+  /**
+   * The string value of the content node.
+   */
+  value: string
+  /**
+   * The children of this node
+   */
+  children: ASTNode[]
+}
+
+/**
+ * Represents a pandoc bracketed span (`[my text]{.class}`)
+ */
+export interface PandocSpan extends MDNode {
+  type: 'PandocSpan'
+  /**
+   * The string value of the content node.
+   */
+  value: string
+  /**
+   * The children of this node
+   */
+  children: ASTNode[]
+}
+
+/**
  * A generic text node that can represent a string of content. Most nodes
  * contain at least one TextNode as its content (e.g. emphasis).
  */
@@ -480,7 +511,7 @@ export type ASTNode = Document | Comment | Footnote | FootnoteRef | FootnoteRefL
 | LinkOrImage | TextNode | Heading | CitationNode | Highlight | Superscript
 | Subscript | OrderedList | BulletList | ListItem | GenericNode | FencedCode
 | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow
-| ZettelkastenLink | ZettelkastenTag
+| ZettelkastenLink | ZettelkastenTag | PandocDiv | PandocSpan
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -827,6 +858,65 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         source: source !== null ? markdown.substring(source.from, source.to) : ''
       }
       return astNode
+    }
+    case 'PandocDiv': {
+      const marks = node.getChildren('PandocDivMark')
+      const content = marks.length === 2 ? markdown.substring(marks[0].to, marks[1].from) : ''
+
+      const attr = node.getChild('PandocAttribute')
+      const attributes = attr ? parseLinkAttributes(markdown.substring(attr.from, attr.to)) : {}
+
+      const info = node.getChild('PandocDivInfo')
+      const divName = info ? markdown.substring(info.from, info.to) : ''
+
+      const id = attributes.id ?? ''
+      const classes = attributes.classes ?? []
+
+      if (info) { classes.push(divName) }
+
+      const astNode: PandocDiv = {
+        type: 'PandocDiv',
+        name: 'PandocDiv',
+        attributes: {
+          id: id,
+          class: classes,
+          ...attributes.properties
+        },
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+        value: content,
+        children: [],
+      }
+
+      return parseChildren(astNode, node, markdown)
+    }
+    case 'PandocSpan': {
+      const marks = node.getChildren('PandocSpanMark')
+      const content = marks.length === 2 ? markdown.substring(marks[0].to, marks[1].from) : ''
+
+      const attr = node.getChild('PandocAttribute')
+      const attributes = attr ? parseLinkAttributes(markdown.substring(attr.from, attr.to)) : {}
+
+      const id = attributes.id ?? ''
+      const classes = attributes.classes ?? ''
+
+      const astNode: PandocSpan = {
+        type: 'PandocSpan',
+        name: 'PandocSpan',
+        attributes: {
+          id: id,
+          class: classes,
+          ...attributes.properties
+        },
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+        value: content,
+        children: [],
+      }
+
+      return parseChildren(astNode, node, markdown)
     }
     case 'YAMLFrontmatter': {
       const source = node.getChild('CodeText')

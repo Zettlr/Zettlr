@@ -66,7 +66,7 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
       to,
       enter (node) {
         // Do not hide any characters if a selection is inside here
-        if (rangeInSelection(view.state, node.from, node.to)) {
+        if (rangeInSelection(view.state, node.from, node.to, true)) {
           return
         }
 
@@ -108,6 +108,25 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
             const marks = node.node.getChildren('CodeMark')
             const infos = node.node.getChildren('CodeInfo')
             for (const mark of marks.concat(infos)) {
+              ranges.push(hiddenDeco.range(mark.from, mark.to))
+            }
+            break
+          }
+          // For fenced divs
+          case 'PandocDiv': {
+            const marks = node.node.getChildren('PandocDivMark')
+            const name = node.node.getChildren('PandocDivName')
+            const attrs = node.node.getChildren('PandocAttribute')
+            for (const mark of marks.concat(attrs, name)) {
+              ranges.push(hiddenDeco.range(mark.from, mark.to))
+            }
+            break
+          }
+          // For bracketed spans
+          case 'PandocSpan': {
+            const marks = node.node.getChildren('PandocSpanMark')
+            const attrs = node.node.getChildren('PandocAttribute')
+            for (const mark of marks.concat(attrs)) {
               ranges.push(hiddenDeco.range(mark.from, mark.to))
             }
             break
