@@ -41,13 +41,17 @@ const EMPTY_NODES = new Set([
   'HeaderMark',
   'HighlightMark',
   'ListMark',
-  'PandocAttributeMark',
   'QuoteMark',
   'SubscriptMark',
   'SuperscriptMark',
   'TaskMarker',
   'YAMLFrontmatterStart',
   'YAMLFrontmatterEnd',
+  'PandocAttribute',
+  'PandocAttributeMark',
+  'PandocDivInfo',
+  'PandocDivMark',
+  'PandocSpanMark',
 ])
 
 /**
@@ -65,7 +69,7 @@ function parseAttributeNode (oldAttributes: Record<string, string|string[]> = {}
     return oldAttributes
   }
 
-  const attributes = parseLinkAttributes( markdown.substring(node.from, node.to))
+  const attributes = parseLinkAttributes(markdown.substring(node.from, node.to))
 
   if (attributes.id !== undefined) {
     oldAttributes.id = attributes.id

@@ -257,6 +257,23 @@ function handleClick (buttonID?: string): void {
       }
     }
   }
+
+  span {
+    &.mark {
+      background-color: #ffff0080;
+    }
+    &dark .mark {
+      background-color: #ffff0060;
+    }
+
+    &.underline {
+      text-decoration: underline;
+    }
+
+    &.smallcaps {
+      font-variant-caps: small-caps;
+    }
+  }
 }
 
 @media print {

@@ -25,6 +25,7 @@ import { renderTables } from '../table-editor'
 import { renderIframes } from './render-iframes'
 import { renderEmphasis } from './render-emphasis'
 import { renderCode } from './render-code'
+import { renderPandoc } from './render-pandoc-div-span'
 import { configField, configUpdateEffect, type EditorConfiguration } from '../util/configuration'
 import type { EditorView } from '@codemirror/view'
 import { hasMarkdownExt } from 'source/common/util/file-extention-checks'
@@ -67,6 +68,7 @@ function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extensi
     updateExtension(renderTables, config.renderTables, ext)
     updateExtension(renderIframes, config.renderIframes, ext)
     updateExtension(renderEmphasis, config.renderEmphasis, ext)
+    updateExtension(renderPandoc, config.renderPandoc, ext)
   }
 
   return ext
@@ -90,6 +92,7 @@ const modeSwitcher = EditorState.transactionExtender.from(configField, config =>
         renderTables: effect.value.renderTables ?? config.renderTables,
         renderIframes: effect.value.renderIframes ?? config.renderIframes,
         renderEmphasis: effect.value.renderEmphasis ?? config.renderEmphasis,
+        renderPandoc: effect.value.renderPandoc ?? config.renderPandoc,
       }
 
       const ext = renderCompartment.get(transaction.state) as Extension[]|undefined
