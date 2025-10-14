@@ -15,7 +15,7 @@ import { EditorView } from '@codemirror/view'
 
 const primaryColor = 'rgba(220, 45, 45, 1)'
 const selectionLight = 'rgb(251, 206, 177)'
-const selectionDark = 'rgb(80, 15, 15)'
+const selectionDark = 'rgba(163, 35, 35, 0.7)'
 
 const commonRules: Record<string, any> = {
   // Monospaced elements (quite a lot)

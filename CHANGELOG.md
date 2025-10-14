@@ -338,6 +338,8 @@ other than numbers.
 - Fixed a bug that would not assign the correct footnote body class to footnote
   bodies. Now, footnotes will be rendered in a smaller font size and can be
   styled as a block.
+- Made the dark editor background less black, and increase contrast of the dark
+  selection background for the Karl-Marx-Stadt theme.
 
 ## Under the Hood
 
