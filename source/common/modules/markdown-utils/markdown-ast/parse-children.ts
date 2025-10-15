@@ -87,7 +87,6 @@ function parseAttributeNode (oldAttributes: Record<string, string|string[]> = {}
   }
 }
 
-
 /**
  * Parses the children of ASTNodes who can have children.
  *

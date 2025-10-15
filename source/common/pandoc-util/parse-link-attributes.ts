@@ -59,12 +59,16 @@ export function parseLinkAttributes (attributes: string): ParsedPandocLinkAttrib
 
     if (match.groups.id) {
       parsed.id = match.groups.id
-    } else if (match.groups.class) {
+    }
+
+    if (match.groups.class) {
       if (parsed.classes === undefined) {
         parsed.classes = []
       }
       parsed.classes.push(match.groups.class)
-    } else if (match.groups.attr) {
+    }
+
+    if (match.groups.attr) {
       const key = match.groups.key
       const value = match.groups.unquoted ?? match.groups.quoted
 
