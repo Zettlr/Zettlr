@@ -14,6 +14,7 @@
  */
 
 import type { SyntaxNode } from '@lezer/common'
+import { parseLinkAttributes } from '@common/pandoc-util/parse-link-attributes'
 import { type ASTNode, parseNode, type MDNode } from '../markdown-ast'
 import { getWhitespaceBeforeNode } from './get-whitespace-before-node'
 import { genericTextNode } from './generic-text-node'
@@ -51,42 +52,41 @@ const EMPTY_NODES = [
  * Parses an attribute node (PandocAttribute), according to the Pandoc rules
  * (mostly). cf.: https://pandoc.org/MANUAL.html#extension-attributes
  *
- * @param   {Record<string, string>}  oldAttributes  Attribute nodes are merged.
+ * @param   {Record<string, string|string[]>}  oldAttributes  Attribute nodes are merged.
  * @param   {SyntaxNode}              node           The SyntaxNode
  * @param   {string}                  markdown       The original markdown
  *
- * @return  {Record<string, string>}                 A map of the attributes
+ * @return  {Record<string, string|string[]>}                 A map of the attributes
  */
 function parseAttributeNode (oldAttributes: Record<string, string|string[]> = {}, node: SyntaxNode, markdown: string): Record<string, string|string[]> {
   if (node.name !== 'PandocAttribute') {
     return oldAttributes
   }
 
-  const rawString: string = markdown.substring(node.from + 1, node.to - 1) // Remove { and }
-  const rawAttributes: string[] = rawString.split(/\s+/)
-  // General syntax: {#identifier .class .class key=value key=value}
-  for (const attribute of rawAttributes) {
-    if (attribute.startsWith('.')) {
-      // It's a class
-      if ('class' in oldAttributes) {
-        oldAttributes.class = oldAttributes.class + ' ' + attribute.substring(1)
-      } else {
-        oldAttributes.class = attribute.substring(1)
-      }
-    } else if (attribute.startsWith('#') && !('id' in oldAttributes)) {
-      // It's an ID, but only the *first* one found counts
-      oldAttributes.id = attribute.substring(1)
-    } else if (attribute.includes('=')) {
-      // It's a key=value attribute. NOTE: Later generic attributes override
-      // earlier ones!
-      const parts: string[] = attribute.split('=')
-      if (parts.length === 2) {
-        oldAttributes[parts[0]] = parts[1]
-      } // Else: Invalid
-    }
+  const attributes = parseLinkAttributes( markdown.substring(node.from, node.to))
+
+  if (attributes.id !== undefined) {
+    oldAttributes.id = attributes.id
   }
-  return oldAttributes
+
+  if (attributes.classes !== undefined) {
+    oldAttributes.class = attributes.classes
+  }
+
+  if (attributes.width !== undefined) {
+    oldAttributes.width = attributes.width
+  }
+
+  if (attributes.height !== undefined) {
+    oldAttributes.height = attributes.height
+  }
+
+  return {
+    ...oldAttributes,
+    ...attributes.properties,
+  }
 }
+
 
 /**
  * Parses the children of ASTNodes who can have children.
