@@ -29,17 +29,17 @@ export interface ParsedPandocLinkAttributes {
  * Parses a Pandoc link attribute string, as defined in
  * https://pandoc.org/MANUAL.html#extension-link_attributes.
  *
- * @param   {string}  attributes  The attribute string (e.g., `{width=50%}`)
+ * @param   {string}  attrString  The attribute string (e.g., `{width=50%}`)
  *
  * @return  {ParsedPandocLinkAttributes}  The parsed string
  */
-export function parseLinkAttributes (attributes: string): ParsedPandocLinkAttributes {
-  attributes = attributes.trim()
-  if (!attributes.startsWith('{') || !attributes.endsWith('}')) {
+export function parseLinkAttributes (attrString: string): ParsedPandocLinkAttributes {
+  attrString = attrString.trim()
+  if (!attrString.startsWith('{') || !attrString.endsWith('}')) {
     throw new Error('Invalid Pandoc link attributes string: Not surrounded by curly braces')
   }
 
-  attributes = attributes.substring(1, attributes.length - 1)
+  attrString = attrString.substring(1, attrString.length - 1)
 
   // Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value"}
   //
@@ -53,7 +53,7 @@ export function parseLinkAttributes (attributes: string): ParsedPandocLinkAttrib
   const parsed: ParsedPandocLinkAttributes = {}
 
   let match
-  while ((match = pandocAttributeRe.exec(attributes)) !== null) {
+  while ((match = pandocAttributeRe.exec(attrString)) !== null) {
     // If there are no groups, then something went wrong
     if (!match.groups) { break }
 
