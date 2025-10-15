@@ -5,7 +5,7 @@
       <p><strong>{{ filename }}</strong></p>
       <SelectControl
         v-model="format"
-        v-bind:label="'Format'"
+        v-bind:label="formatLabel"
         v-bind:options="availableFormats"
       ></SelectControl>
       <!-- The choice of working directory vs. temporary applies to all exporters -->
@@ -18,6 +18,11 @@
           'ask': askLabel
         }"
       ></RadioControl>
+      <hr>
+      <CheckboxControl
+        v-model="autoOpenExport"
+        v-bind:label="autoOpenLabel"
+      ></CheckboxControl>
       <!-- Add the exporting button -->
       <button v-bind:disabled="isExporting" v-on:click="doExport">
         {{ exportButtonLabel }}
@@ -44,6 +49,7 @@
 import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import RadioControl from '@common/vue/form/elements/RadioControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
+import CheckboxControl from '@common/vue/form/elements/CheckboxControl.vue'
 import { ref, computed, watch } from 'vue'
 import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
@@ -54,6 +60,8 @@ import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer
 
 const ipcRenderer = window.ipc
 
+const formatLabel = trans('Format')
+const autoOpenLabel = trans('Open after export')
 const tempDirLabel = trans('Temporary directory')
 const cwdLabel = trans('Current directory')
 const askLabel = trans('Select directory')
@@ -86,6 +94,7 @@ const emit = defineEmits<(e: 'close') => void>()
 const isExporting = ref(false)
 const format = ref('')
 const exportDirectory = ref(configStore.config.export.dir)
+const autoOpenExport = ref(configStore.config.export.autoOpenExportedFiles)
 const profileMetadata = ref<PandocProfileMetadata[]>([])
 const customCommands = computed(() => configStore.config.export.customCommands)
 
@@ -108,6 +117,12 @@ const availableFormats = computed(() => {
   }
 
   return selectOptions
+})
+
+watch(autoOpenExport, function (value) {
+  // This watcher allows the user to control whether
+  // the exported document is automatically opened
+  configStore.setConfigValue('export.autoOpenExportedFiles', value)
 })
 
 watch(exportDirectory, function (value) {
