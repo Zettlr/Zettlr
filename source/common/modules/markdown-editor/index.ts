@@ -93,7 +93,7 @@ import {
   type PushUpdateCallback
 } from './plugins/remote-doc'
 import { markdownToAST } from '../markdown-utils'
-import { countField } from './plugins/statistics-fields'
+import { countField, updateWordCountEffect } from './plugins/statistics-fields'
 import type { SyntaxNode } from '@lezer/common'
 import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
@@ -298,21 +298,30 @@ export default class MarkdownEditor extends EventEmitter {
         // Listen for changes and emit events appropriately
         if (update.docChanged) {
           this.emit('change')
+          this.emit('docUpdate')
         }
+
         if (update.focusChanged && this._instance.hasFocus) {
           this.emit('focus')
         }
+
         if (update.selectionSet) {
           this.emit('cursorActivity')
+          this.emit('docUpdate')
         }
 
-        // Listen for config updates, and parse them into the internal cache. We
-        // do it this way, because the editor itself is also capable of changing
-        // its configuration (e.g., via the statusbar). This way we ensure that
-        // both external updates (via setOptions) as well as internal updates
-        // both end up in our cache.
         for (const transaction of update.transactions) {
           for (const effect of transaction.effects) {
+            // Listen for word count updates
+            if (effect.is(updateWordCountEffect)) {
+              this.emit('docUpdate')
+            }
+
+            // Listen for config updates, and parse them into the internal cache. We
+            // do it this way, because the editor itself is also capable of changing
+            // its configuration (e.g., via the statusbar). This way we ensure that
+            // both external updates (via setOptions) as well as internal updates
+            // both end up in our cache.
             if (effect.is(reloadStateEffect)) {
               // ATTENTION: The document state is out of sync with the document
               // authority, so we must reload it.
