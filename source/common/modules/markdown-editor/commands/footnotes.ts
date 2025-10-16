@@ -17,31 +17,31 @@
 // 2. Cmd-Click them to edit them in place
 // 3. And, obviously, add and remove them
 
-import { syntaxTree } from '@codemirror/language'
-import { type ChangeSpec } from '@codemirror/state'
-import { type EditorView } from '@codemirror/view'
+import { ensureSyntaxTree, syntaxTree } from '@codemirror/language'
+import { ChangeSet, type ChangeSpec, type StateCommand } from '@codemirror/state'
 import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
 import { type Footnote, type FootnoteRef } from '@common/modules/markdown-utils/markdown-ast'
 
 /**
  * A command that adds a new footnote at the current main selection.
  *
- * @param   {EditorView}  target  The editor view.
- *
- * @return  {boolean}             Whether the command ran.
+ * @return  {boolean}    Whether the command executed
  */
-export function addNewFootnote (target: EditorView): boolean {
-  const ast = markdownToAST(target.state.sliceDoc())
+export const addNewFootnote: StateCommand = ({ state, dispatch }): boolean => {
+  // Reuse syntax tree if available
+  const tree = ensureSyntaxTree(state, state.doc.length) ?? undefined
+
+  const ast = markdownToAST(state.sliceDoc(), tree)
   const identifiers = extractASTNodes(ast, 'Footnote') as Footnote[]
   const refs = extractASTNodes(ast, 'FootnoteRef') as FootnoteRef[]
   const changes: ChangeSpec[] = []
 
   // This is where our new footnote should be inserted
-  let where = target.state.selection.main.from
-  const doc = target.state.doc
+  let where = state.selection.main.from
+  const doc = state.doc
 
   // Check that the user isn't accidentally within a footnote.
-  const nodeAt = syntaxTree(target.state).resolve(where, 0)
+  const nodeAt = syntaxTree(state).resolve(where, 0)
   if (nodeAt.name === 'Footnote') {
     where = nodeAt.to
   }
@@ -142,7 +142,7 @@ export function addNewFootnote (target: EditorView): boolean {
   }
 
   // And go.
-  target.dispatch({
+  dispatch(state.update({
     changes,
     // Offset like this:
     // 5 = [^]:\s\n (the ref, NOTE we exclude the newline)
@@ -151,7 +151,7 @@ export function addNewFootnote (target: EditorView): boolean {
     // Any offset chars, since the selection must be in terms of characters AFTER the update
     selection: { anchor: whereRef + 5 + prefix.length + 3 + String(newIdentifier).length * 2 + offsetChars },
     scrollIntoView: true
-  })
+  }))
   return true
 }
 
@@ -162,21 +162,138 @@ export function addNewFootnote (target: EditorView): boolean {
  * entire node, and (b) a double-check to visually tell the user they are about
  * to delete a footnote now.
  *
- * @param   {EditorView}  target  The editor view.
- *
- * @return  {boolean}             Whether the command did something.
+ * @return  {boolean}    Whether the command executed
  */
-export function selectFootnoteBeforeDelete (target: EditorView): boolean {
-  if (!target.state.selection.main.empty) {
+export const selectFootnoteBeforeDelete: StateCommand = ({ state, dispatch }): boolean => {
+  if (!state.selection.main.empty) {
     return false
   }
 
-  const pos = target.state.selection.main.head
-  const node = syntaxTree(target.state).resolveInner(pos, -1)
+  const pos = state.selection.main.head
+  const node = syntaxTree(state).resolveInner(pos, -1)
   if (node.type.name === 'Footnote' && node.to === pos) {
-    target.dispatch({ selection: { anchor: node.to, head: node.from } })
+    dispatch(state.update({ selection: { anchor: node.to, head: node.from } }))
     return true
   }
 
   return false
+}
+
+/**
+ * This StateCommand cleans up numbered footnotes and their references by:
+ *
+ * 1. Ensuring that footnotes and their references are balanced. Dangling
+ *    footnotes (without matching reference) and references (without matching
+ *    footnote) are removed.
+ *
+ * 2. Renumbering footnotes and their references in order to ensure that the
+ *    numbered footnotes are in ascending order.
+ *
+ * 3. Moving all references to the end of the document
+ *
+ */
+export const cleanupFootnotes: StateCommand = ({ state, dispatch }): boolean => {
+  // Reuse syntax tree if available
+  const tree = ensureSyntaxTree(state, state.doc.length) ?? undefined
+
+  const ast = markdownToAST(state.sliceDoc(), tree)
+  const identifiers = extractASTNodes(ast, 'Footnote') as Footnote[]
+  const refs = extractASTNodes(ast, 'FootnoteRef') as FootnoteRef[]
+
+  const changes: ChangeSpec[] = []
+  const nonNumericRefs: FootnoteRef[] = []
+  const matchingRefs: FootnoteRef[] = []
+
+  for (const ref of refs) {
+    // Remove the whole line since we will be moving the ref to the end of the document
+    const nextLine = state.doc.line(Math.min(state.doc.lineAt(ref.from).number + 1, state.doc.lines))
+    // If the next line is empty, we need to remove it as well so that the spacing is cleaned up.
+    // This prevents double newlines when removing refs in between two paragraphs.
+    if (nextLine.text.trim() === '') {
+      changes.push({ from: ref.from, to: state.doc.length > nextLine.to ? nextLine.to + 1 : nextLine.to, insert: '' })
+    } else {
+      changes.push({ from: ref.from, to: state.doc.length > ref.to ? ref.to + 1 : ref.to, insert: '' })
+    }
+    // A non-numeric footnote label
+    if (!/^\d+$/.test(ref.label)) {
+      // Keep track so these can be moved to the end of the document
+      nonNumericRefs.push(ref)
+      continue
+    }
+
+    // Find footnote references with matching footnotes
+    const fn = identifiers.find(fn => fn.label === ref.label)
+    if (fn !== undefined) {
+      matchingRefs.push(ref)
+    }
+  }
+
+  let fnIdx = 1
+  const matchingRefsText: string[] = []
+
+  for (const fn of identifiers) {
+    // A non-numeric footnote label
+    if (!/^\d+$/.test(fn.label)) {
+      continue
+    }
+
+    // Find and remove footnotes with missing references
+    const ref = matchingRefs.find(r => r.label === fn.label)
+    if (ref === undefined) {
+      changes.push({ from: fn.from, to: fn.to, insert: '' })
+      continue
+    }
+
+    // Remove the ref from the list in case there are duplicate
+    // numbers. This means that the first matching ref supersedes any
+    // following ref with the same label.
+    matchingRefs.splice(matchingRefs.indexOf(ref), 1)
+
+    // Correct the footnote and footnote reference number
+    let refTtext = state.sliceDoc(ref.from, ref.to)
+    if (parseInt(fn.label, 10) !== fnIdx) {
+      changes.push({ from: fn.from, to: fn.to, insert: `[^${fnIdx}]` })
+
+      // Update the reference ID
+      // This is done outside of the transaction so that they can later
+      // be inserted in sorted order
+      refTtext = refTtext.replace(ref.label, String(fnIdx))
+    }
+
+    matchingRefsText.push(refTtext)
+
+    fnIdx++
+  }
+
+  // Move all refs to the end of the document
+  const sortedRefs = matchingRefsText.concat(nonNumericRefs.map(ref => state.sliceDoc(ref.from, ref.to)))
+  if (sortedRefs.length > 0) {
+    // We have to base the end-of-document newlines on the document after
+    // removing the refs in case there were already refs at the end of the document
+    const changedDoc = ChangeSet.of(changes, state.doc.length).apply(state.doc)
+
+    // Sanitize the end of the document for appropriate newline spacing
+    let insertContent = sortedRefs.join('\n') + '\n'
+
+    // If the last line is not empty, we add two lines
+    if (changedDoc.line(changedDoc.lines).text.trim() !== '') {
+      insertContent = '\n\n' + insertContent
+    // If the second to last line is not empty, we add one line
+    } else if (changedDoc.line(Math.max(changedDoc.lines - 1, 1)).text.trim() !== '') {
+      insertContent = '\n' + insertContent
+    }
+
+    changes.push({ from: state.doc.length, insert: insertContent })
+  }
+
+  if (changes.length === 0) {
+    return false
+  }
+
+  dispatch(state.update({
+    changes: ChangeSet.of(changes, state.doc.length),
+    selection: undefined,
+    userEvent: 'footnote-cleanup'
+  }))
+  return true
 }

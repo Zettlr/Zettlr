@@ -133,6 +133,7 @@ export interface ConfigOptions {
     boldFormatting: '**'|'__'
     italicFormatting: '_'|'*'
     readabilityAlgorithm: 'dale-chall'|'gunning-fog'|'coleman-liau'|'automated-readability'
+    cleanupFootnotes: boolean
     lint: {
       markdown: boolean
       languageTool: {
@@ -334,6 +335,7 @@ export function getConfigTemplate (): ConfigOptions {
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
       showStatusbar: true,
       showFormattingToolbar: true,
+      cleanupFootnotes: false,
       lint: {
         markdown: true, // Should Markdown be linted?
         languageTool: {

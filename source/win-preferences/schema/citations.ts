@@ -53,7 +53,13 @@ export function getCitationFields (): PreferencesFieldset[] {
           placeholder: trans('Path to file'),
           reset: '',
           filter: [{ extensions: ['csl'], name: 'CSL Style' }]
-        }
+        },
+        { type: 'separator' },
+        {
+          type: 'checkbox',
+          label: trans('Automatically cleanup footnotes'),
+          model: 'editor.cleanupFootnotes'
+        },
       ]
     }
   ]

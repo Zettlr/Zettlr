@@ -345,7 +345,7 @@ export const citationParser: InlineParser = {
       return -1
     }
 
-    
+
     // Ensure the character before `pos` is valid. NOTE: The InlineContext may
     // include newlines, since single newlines are considered part of the same
     // line due to the hard wrapping rule.
@@ -462,24 +462,24 @@ export const citationParser: InlineParser = {
           parts.push(ctx.elt(NODES.MARK, i, i + 1))
           continue
         }
-        
+
         if (ch === CHAR.BRACKET_CLOSE) {
           // End-condition -- marks the finish of the entire parsing.
           parts.push(ctx.elt(NODES.MARK, i, ++i))
           break // Stop iterating; citation is between pos and i.
         }
-        
+
         if (ch === CHAR.HYPHEN && citekeyStart < 0 && nextCh === CHAR.AT) {
           // Suppress-author-flag: Before citekey starts, must be followed by @
           if (i > citationPartStart) {
             // Add prefix node. Note that we have to add nodes in proper sorted
             // order.
             parts.push(ctx.elt(NODES.PREFIX, citationPartStart, i))
-          } 
+          }
           parts.push(ctx.elt(NODES.AUTHORFLAG, i, i + 1))
           continue
         }
-        
+
         if (ch === CHAR.AT && citekeyStart < 0 && [ CHAR.SPACE, CHAR.HYPHEN, CHAR.BRACKET_OPEN ].includes(prevCh)) {
           // Start citekey (must be preceded by [, a space, or -)
           if (i > citationPartStart && prevCh !== CHAR.HYPHEN) {
@@ -492,7 +492,7 @@ export const citationParser: InlineParser = {
           citekeyStart = i + 1 // Key excludes the '@'
           continue
         }
-        
+
         if (citekeyStart > -1 && citekeyEnd < 0) {
           // We are inside the citekey
           if (i === citekeyStart && ch === CHAR.CURLY_OPEN) {
@@ -537,7 +537,7 @@ export const citationParser: InlineParser = {
           parts.push(ctx.elt(NODES.MARK, i, i + 1))
           continue
         }
-        
+
         // Code points 48-57 are digits. Implicit and explicit locators must be
         // preceded by a space, bracketed locators do not.
         if (citekeyEnd > -1 && locatorStart < 0 && prevCh === CHAR.SPACE && ((ch >= 48 && ch <= 57) || ROMAN_NUMERAL_CODES.includes(ch))) {
@@ -570,7 +570,7 @@ export const citationParser: InlineParser = {
           }
           continue
         }
-        
+
         if (locatorStart > -1 && locatorEnd < 0) {
           // We are inside the locator
           if (locatorInBrackets && ch === CHAR.CURLY_CLOSE) {

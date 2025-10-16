@@ -98,6 +98,8 @@ export function defaultKeymap (): Extension {
     { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
     { key: 'Mod-C', run: applyComment },
     { key: 'Mod-Alt-f', mac: 'Mod-Alt-r', run: addNewFootnote },
+    // TODO: Find a good key combo
+    // { key: 'Mod-Alt-Shift-f', mac: 'Mod-Alt-Shift-r', run: cleanupFootnotes },
 
     // Overload Tab, depending on context (priority high->low)
     { key: 'Tab', run: acceptCompletion },
