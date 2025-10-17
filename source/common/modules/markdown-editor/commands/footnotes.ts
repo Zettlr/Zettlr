@@ -197,6 +197,7 @@ export function selectFootnoteBeforeDelete (target: EditorView): boolean {
  * @return  {Transaction}      The original or modified transaction
  */
 export const cleanupFootnotesAndNumbering = EditorState.transactionFilter.of(tr => {
+  return tr // DEBUG: Disable filter for now.
   // Only runs on document changes
   if (!tr.docChanged) {
     return tr
