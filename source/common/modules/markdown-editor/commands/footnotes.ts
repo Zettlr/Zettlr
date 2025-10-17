@@ -239,7 +239,7 @@ export const cleanupFootnotesAndNumbering = EditorState.transactionFilter.of(tr 
   
   // NOTE: Calculates the new state.
   const newDoc = tr.state.sliceDoc()
-  const ast = markdownToAST(newDoc)
+  const ast = markdownToAST(newDoc, syntaxTree(tr.state))
   const identifiers = extractASTNodes(ast, 'Footnote') as Footnote[]
   const refs = extractASTNodes(ast, 'FootnoteRef') as FootnoteRef[]
 
