@@ -1,3 +1,4 @@
+# A simple flake that provides the neccessary development environment to run the project. Run with `nix develop`.
 {
   description = "Zettlr markdown editor";
   inputs = {
