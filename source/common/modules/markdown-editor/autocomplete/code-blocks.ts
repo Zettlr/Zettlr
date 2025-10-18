@@ -65,6 +65,7 @@ function getEntries (): Completion[] {
     { apply: generate('lua'), label: 'Lua' },
     { apply: generate('markdown'), label: 'Markdown' },
     { apply: generate('mermaid'), label: 'Mermaid' },
+    { apply: generate('nix'), label: 'Nix' },
     { apply: generate('objectivec'), label: 'Objective-C' },
     { apply: generate('pascal'), label: 'Pascal' },
     { apply: generate('perl'), label: 'Perl' },
