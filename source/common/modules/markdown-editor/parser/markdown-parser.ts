@@ -66,7 +66,7 @@ import { diff } from '@codemirror/legacy-modes/mode/diff'
 import { octave } from '@codemirror/legacy-modes/mode/octave'
 import { lua } from '@codemirror/legacy-modes/mode/lua'
 import { pascal } from '@codemirror/legacy-modes/mode/pascal'
-import { nix } from "@replit/codemirror-lang-nix";
+import { nix } from '@replit/codemirror-lang-nix'
 
 // Additional parser
 import { citationParser } from './citation-parser'
