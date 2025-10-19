@@ -298,7 +298,6 @@ export default class MarkdownEditor extends EventEmitter {
         // Listen for changes and emit events appropriately
         if (update.docChanged) {
           this.emit('change')
-          this.emit('docUpdate')
         }
 
         if (update.focusChanged && this._instance.hasFocus) {
