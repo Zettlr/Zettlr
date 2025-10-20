@@ -1660,13 +1660,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/markdown@npm:^1.0.0, @lezer/markdown@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@lezer/markdown@npm:1.5.0"
+"@lezer/markdown@npm:^1.0.0, @lezer/markdown@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@lezer/markdown@npm:1.5.1"
   dependencies:
     "@lezer/common": "npm:^1.0.0"
     "@lezer/highlight": "npm:^1.0.0"
-  checksum: 10/be018b47de601d9be44986cca0eba898b19c9400acea12cf05a6c05b71e07acb148ee69f59b58e78059647c9b74485708f9e1508f1213c44955221e43e62b67b
+  checksum: 10/46cd7cfa3431acaf4b06deacc3393f4c113e7081c300a1b3ad11b6b409ef1681f877f5ead8caf10356b4991ab174defd34c346e5f749dfa13d43aa3d0432817a
   languageName: node
   linkType: hard
 
@@ -3485,9 +3485,9 @@ __metadata:
   linkType: hard
 
 "alien-signals@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "alien-signals@npm:3.0.1"
-  checksum: 10/f142f97d6cea56d0ac99ede8f455835cce7aa7ed7988624e67e8660e9e8514ad04472e9e7864e4509ea6322d47f7f02a5c16d37d0a4761bd8fa5cb6cd0662139
+  version: 3.0.3
+  resolution: "alien-signals@npm:3.0.3"
+  checksum: 10/9e7972602e49fcdcbe317d57aafea8f0043717f41937460e864c719b2e4e699486b8c9f51f43015e8579aefc9c45f071bf9c4fe4d336426b43866b209fdf221e
   languageName: node
   linkType: hard
 
@@ -11131,9 +11131,9 @@ __metadata:
   linkType: hard
 
 "package-manager-detector@npm:^1.3.0":
-  version: 1.4.1
-  resolution: "package-manager-detector@npm:1.4.1"
-  checksum: 10/e6f2dfd33c326cc84d8635eaf97ba0c448576112ddb179861b90a5a35a20d42ab879d94396b8c66218d908685daf991875c9893a42f998b2a26c11b958491cdd
+  version: 1.5.0
+  resolution: "package-manager-detector@npm:1.5.0"
+  checksum: 10/007b3a1a9f57128c5bf2907029307ddd8ead7aaca6c120aaa87e9298f4809e4d5ff1e81e887fe24f92b24c0aba98b62765e439f859b5a045f28f4b5a038e0226
   languageName: node
   linkType: hard
 
@@ -15159,7 +15159,7 @@ __metadata:
     "@eslint/config-inspector": "npm:^1.2.0"
     "@lezer/common": "npm:^1.2.3"
     "@lezer/highlight": "npm:^1.2.1"
-    "@lezer/markdown": "npm:^1.5.0"
+    "@lezer/markdown": "npm:^1.5.1"
     "@replit/codemirror-emacs": "npm:^6.1.0"
     "@replit/codemirror-vim": "npm:^6.3.0"
     "@stylistic/eslint-plugin": "npm:^5.3.1"
