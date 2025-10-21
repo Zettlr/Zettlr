@@ -14,14 +14,16 @@
  * END HEADER
  */
 
-import { syntaxTree } from '@codemirror/language'
+import { ensureSyntaxTree } from '@codemirror/language'
 import { StateEffect, StateField, type EditorState } from '@codemirror/state'
 import { ViewPlugin, type EditorView, type ViewUpdate } from '@codemirror/view'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import { countAll } from '@common/util/counter'
 
 function count (state: EditorState): { chars: number, words: number } {
-  const ast = markdownToAST(state.doc.toString(), syntaxTree(state))
+  const tree = ensureSyntaxTree(state, state.doc.length) ?? undefined
+
+  const ast = markdownToAST(state.sliceDoc(), tree)
   const locale: string = window.config.get('appLang')
   return countAll(ast, locale)
 }
