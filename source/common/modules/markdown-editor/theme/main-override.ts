@@ -23,6 +23,12 @@ export const mainOverride = EditorView.baseTheme({
     backgroundColor: 'transparent',
     cursor: 'auto'
   },
+  '.cm-quotemark': {
+    display: 'inline-block',
+    position: 'relative',
+    width: '1ch',
+    borderLeft: '4px solid rgba(0, 0, 0, 0.3)',
+  },
   '&dark .cm-dropCursor': {
     borderLeftColor: '#ddd'
   },
