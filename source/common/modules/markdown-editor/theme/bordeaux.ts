@@ -61,7 +61,6 @@ export const themeBordeauxLight = EditorView.theme({
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
     background: selectionLight
   },
-  '.cm-quote': { color: '#555' }
 }, { dark: false })
 
 export const themeBordeauxDark = EditorView.theme({
@@ -102,5 +101,5 @@ export const themeBordeauxDark = EditorView.theme({
   '.cm-highlight': {
     color: 'black !important',
   },
-  '.cm-quote, .cm-link, .cm-strong, .cm-emphasis': { color: '#93a1a1' }
+  '.cm-link, .cm-strong, .cm-emphasis': { color: '#93a1a1' }
 }, { dark: true })
