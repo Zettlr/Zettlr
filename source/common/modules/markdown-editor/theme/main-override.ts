@@ -114,6 +114,10 @@ export const mainOverride = EditorView.baseTheme({
   },
   '&dark .cm-highlight': {
     backgroundColor: '#ffff0060',
+  },
+  '.cm-foldPlaceholder': {
+    backgroundColor: 'transparent',
+    borderStyle: 'none',
   }
 })
 

@@ -40,6 +40,7 @@ export const themeBordeauxLight = EditorView.theme({
   '.cm-angle-bracket, .cm-definition-operator': { color: 'var(--grey-5)' },
   // Primary color
   '.cm-code-mark:not(.cm-emphasis, .cm-strong, .cm-list), .cm-zkn-tag': { color: primaryColor },
+  '.cm-quotemark': { borderLeftColor: primaryColor },
   '.cm-url, .cm-link, .cm-zkn-link': { textDecoration: 'underline' },
   '.citeproc-citation, .code-block-line-background, .inline-code-background': { backgroundColor: 'var(--grey-0)' },
   '.citeproc-citation': {
@@ -61,7 +62,6 @@ export const themeBordeauxLight = EditorView.theme({
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
     background: selectionLight
   },
-  '.cm-quote': { color: '#555' }
 }, { dark: false })
 
 export const themeBordeauxDark = EditorView.theme({
@@ -94,6 +94,7 @@ export const themeBordeauxDark = EditorView.theme({
   '.cm-angle-bracket, .cm-definition-operator': { color: 'var(--grey-5)' },
   '.cm-escape': { color: 'var(--grey-4)' },
   '.cm-code-mark:not(.cm-emphasis, .cm-strong, .cm-list), .cm-zkn-tag': { color: primaryColor },
+  '.cm-quotemark': { borderLeftColor: primaryColor },
   '.cm-url, .cm-link, .cm-zkn-link': { textDecoration: 'underline' },
   // Copied with my blood from the DOM; the example on the website is wrong.
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
@@ -102,5 +103,5 @@ export const themeBordeauxDark = EditorView.theme({
   '.cm-highlight': {
     color: 'black !important',
   },
-  '.cm-quote, .cm-link, .cm-strong, .cm-emphasis': { color: '#93a1a1' }
+  '.cm-link, .cm-strong, .cm-emphasis': { color: '#93a1a1' }
 }, { dark: true })

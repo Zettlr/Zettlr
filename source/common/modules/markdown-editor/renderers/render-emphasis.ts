@@ -15,7 +15,7 @@
 
 import { syntaxTree } from '@codemirror/language'
 import { type RangeSet, type Range } from '@codemirror/state'
-import { type ViewUpdate, type EditorView, ViewPlugin, Decoration, type DecorationSet, WidgetType } from '@codemirror/view'
+import { EditorView, type ViewUpdate, ViewPlugin, Decoration, type DecorationSet, WidgetType } from '@codemirror/view'
 import { rangeInSelection } from '../util/range-in-selection'
 import type { SyntaxNode } from '@lezer/common'
 
@@ -32,6 +32,7 @@ class BulletWidget extends WidgetType {
     const elem = document.createElement('span')
     elem.innerHTML = '&bull;'
     elem.classList.add('rendered-bullet')
+
     return elem
   }
 }
@@ -41,7 +42,7 @@ export class SpaceWidget extends WidgetType {
     super()
   }
 
-  eq (other: BulletWidget): boolean {
+  eq (other: SpaceWidget): boolean {
     if (this.node === undefined || other.node === undefined) {
       return false
     }
@@ -52,6 +53,8 @@ export class SpaceWidget extends WidgetType {
   toDOM (_view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.innerHTML = '&nbsp;'.repeat(this.numChars)
+    elem.classList.add('rendered-space')
+
     return elem
   }
 }
@@ -66,7 +69,7 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
       to,
       enter (node) {
         // Do not hide any characters if a selection is inside here
-        if (rangeInSelection(view.state, node.from, node.to)) {
+        if (rangeInSelection(view.state, node.from, node.to, true)) {
           return
         }
 
@@ -121,16 +124,25 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
             ranges.push(hiddenDeco.range(node.to - (isRef ? 2 : 1), node.to))
             break
           }
-          case 'QuoteMark': { // Blockquotes
-            // Only render QuoteMark if its parent Blockquote doesn't contain a cursor
-            let parent: SyntaxNode|undefined|null = node.node.parent
-            while (parent != null && parent.node.name !== 'Blockquote') {
-              parent = parent.parent?.node
+          case 'QuoteMark': {
+            // Blockquotes can also be contained within blockquotes, so we try
+            // to find the highest parent node.
+            let parent: SyntaxNode|null = node.node.parent
+            let parentNode
+            while (parent) {
+              if (parent.name === 'Blockquote') {
+                parentNode = parent.node
+              }
+              parent = parent.parent
             }
 
-            if (parent && !rangeInSelection(view.state, parent.from, parent.to)) {
-              ranges.push(Decoration.replace({ widget: new SpaceWidget(node.to - node.from, node.node) }).range(node.from, node.to))
+            // Only render QuoteMark if the parent does not contain a cursor.
+            if (parentNode && rangeInSelection(view.state, parentNode.from, parentNode.to, true)) {
+              return
             }
+
+            ranges.push(Decoration.replace({ widget: new SpaceWidget(node.to - node.from, node.node) }).range(node.from, node.to))
+            ranges.push(Decoration.line({ class: 'cm-quotemark' }).range(view.state.doc.lineAt(node.from).from))
             break
           }
           case 'ListItem': {
@@ -151,7 +163,7 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
   return Decoration.set(ranges, true)
 }
 
-export const renderEmphasis = ViewPlugin.fromClass(class {
+const formattingRenderer = ViewPlugin.fromClass(class {
   decorations: DecorationSet
 
   constructor (view: EditorView) {
@@ -164,3 +176,19 @@ export const renderEmphasis = ViewPlugin.fromClass(class {
 }, {
   decorations: v => v.decorations
 })
+
+const formattingCharacterTheme = EditorView.baseTheme({
+  '.cm-quotemark': {
+    borderLeft: '4px solid',
+    opacity: '0.75',
+  },
+  '.cm-quotemark .rendered-space': {
+    display: 'inline-block',
+    width: '1ch'
+  }
+})
+
+export const renderEmphasis = [
+  formattingRenderer,
+  formattingCharacterTheme
+]

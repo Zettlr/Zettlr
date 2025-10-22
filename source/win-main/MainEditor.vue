@@ -747,12 +747,6 @@ function maybeHighlightSearchResults (): void {
 body.dark .main-editor-wrapper {
   background-color: #2b2b2c;
   .CodeMirror .CodeMirror-gutters { background-color: #2b2b2c; }
-
-  //Ellipsis (...) When a header is folded
-  .cm-foldPlaceholder{
-      background-color: rgb(20, 20, 30);
-      border-style: none;
-    }
 }
 
 // CodeMirror fullscreen
