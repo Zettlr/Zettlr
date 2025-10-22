@@ -285,12 +285,12 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
   const altNode = node.node.getChild('LinkLabel')
   const titleNode = node.node.getChild('LinkTitle')
   const urlNode = node.node.getChild('URL')
-  if (urlNode === null || altNode === null) {
+  if (urlNode === null) {
     return undefined
   }
 
-  const url = state.sliceDoc(urlNode?.from, urlNode.to)
-  const alt = state.sliceDoc(altNode?.from, altNode?.to)
+  const url = state.sliceDoc(urlNode.from, urlNode.to)
+  const alt = altNode === null ? '' : state.sliceDoc(altNode.from, altNode.to)
   const title = titleNode === null ? alt : state.sliceDoc(titleNode.from, titleNode.to)
 
   let data: ParsedPandocLinkAttributes = {}
