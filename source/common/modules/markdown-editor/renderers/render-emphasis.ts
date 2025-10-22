@@ -37,11 +37,11 @@ class BulletWidget extends WidgetType {
 }
 
 export class SpaceWidget extends WidgetType {
-  constructor (readonly numChars: number, readonly node?: SyntaxNode) {
+  constructor (readonly numChars: number, readonly node?: SyntaxNode, readonly classes?: string) {
     super()
   }
 
-  eq (other: BulletWidget): boolean {
+  eq (other: SpaceWidget): boolean {
     if (this.node === undefined || other.node === undefined) {
       return false
     }
@@ -52,6 +52,7 @@ export class SpaceWidget extends WidgetType {
   toDOM (_view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.innerHTML = '&nbsp;'.repeat(this.numChars)
+    elem.classList.add(this.classes ?? '')
     return elem
   }
 }
@@ -126,8 +127,8 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
               parent = parent.parent?.node
             }
 
-            if (parent && !rangeInSelection(view.state, parent.from, parent.to)) {
-              ranges.push(Decoration.replace({ widget: new SpaceWidget(node.to - node.from, node.node) }).range(node.from, node.to))
+            if (parent && !rangeInSelection(view.state, parent.from, parent.to, true)) {
+              ranges.push(Decoration.replace({ widget: new SpaceWidget(node.to - node.from, node.node, 'cm-quotemark') }).range(node.from, node.to))
             }
             break
           }
