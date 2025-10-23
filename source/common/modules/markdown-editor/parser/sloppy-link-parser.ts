@@ -66,12 +66,13 @@ export const sloppyLinkParser: InlineParser = {
     let depth = 0
     let stop = 0
     while (stop <= url.length) {
-      if (url.charAt(stop) === '(') { depth++ }
-      if (url.charAt(stop) === ')') {
-        if ( depth === 0) { break }
+      const char = url.charAt(stop)
 
-        depth--
-      }
+      // Found the closing parenthesis
+      if (char === ')' && depth === 0) { break }
+
+      if (char === ')') { depth-- }
+      if (char === '(') { depth++ }
 
       stop++
     }
