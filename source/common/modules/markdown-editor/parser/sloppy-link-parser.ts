@@ -24,7 +24,7 @@ import type { DelimiterType, InlineParser } from '@lezer/markdown'
 
 const LinkDelimiter: DelimiterType = {}
 
-const linkClosingRe = /^\]\((?<url>[^\)]+)\)/
+const linkClosingRe = /^\]\((?<url>.+)\)/
 
 const linkTitleRe = /(?:^|[ \t]+)(?:"(.+)"|'(.+)'|\((.+)\))$/
 
@@ -56,11 +56,30 @@ export const sloppyLinkParser: InlineParser = {
 
     ctx.addDelimiter(LinkDelimiter, pos, pos + 1, false, true)
 
-    const url = match.groups.url
-    const title = linkTitleRe.exec(url)
-    const linkParts = []
+    let url = match.groups.url
+
+    // The url may contain additional parenthesis, so we need
+    // to count the internal ones to track potential matching pairs
+    // to find the external matching closing one.
+    let depth = 0
+    let stop = 0
+    while (stop <= url.length) {
+      if (url.charAt(stop) === '(') { depth++ }
+      if (url.charAt(stop) === ')') {
+        if ( depth === 0) { break }
+
+        depth--
+      }
+
+      stop++
+    }
+
+    url = url.substring(0, stop)
 
     let destination = url
+
+    const title = linkTitleRe.exec(destination)
+    const linkParts = []
 
     if (title) {
       destination = url.substring(0, title.index)
