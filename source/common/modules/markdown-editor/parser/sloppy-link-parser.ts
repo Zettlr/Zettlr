@@ -32,13 +32,7 @@ export const sloppyLinkParser: InlineParser = {
   name: 'sloppy-link-parser',
   before: 'Link',
   parse: (ctx, next, pos) => {
-    // An escaped character
-    if (ctx.char(pos - 1) === 92 ) { // 92 === '\'
-      return -1
-    }
-
-    // We have to ensure we are not parsing the interior brackets of a zkn-link as a regular link
-    if (next === 91 && ctx.char(pos - 1) !== 91 && ctx.char(pos + 1) !== 91) { // 91 === '['
+    if (next === 91) { // 91 === '['
       return ctx.addDelimiter(LinkDelimiter, pos, pos + 1, true, false)
     }
 
@@ -55,7 +49,8 @@ export const sloppyLinkParser: InlineParser = {
     const delim = ctx.getDelimiterAt(opening)
     if (delim === null) { return -1 }
 
-    const linkContents = ctx.takeContent(opening)
+    // Remove nested links, which are invalid
+    const linkContents = ctx.takeContent(opening).filter(el => el.type !== 27) // 27 === 'Link'
 
     ctx.addDelimiter(LinkDelimiter, pos, pos + 1, false, true)
 
@@ -88,14 +83,10 @@ export const sloppyLinkParser: InlineParser = {
       destination = url.substring(0, title.index)
 
       const linkTitleText = title[1] || title[2] || title[3]
-      const linkTitle = ctx.elt('LinkTitle', pos + 2 + title.index, pos + 2 + linkTitleText.length)
-      linkParts.push(linkTitle)
+      linkParts.push(ctx.elt('LinkTitle', pos + 2 + title.index, pos + 2 + linkTitleText.length))
     }
 
-    const linkDest = ctx.elt('URL', pos + 2, pos + 2 + destination.length)
-    linkParts.push(linkDest)
-
-    const isLink = delim.to - delim.from === 1
+    linkParts.push(ctx.elt('URL', pos + 2, pos + 2 + destination.length))
 
     const openingMark = ctx.elt('LinkMark', delim.from, delim.to)
     const closingMark = ctx.elt('LinkMark', pos, pos + 1)
@@ -105,6 +96,6 @@ export const sloppyLinkParser: InlineParser = {
 
     const children = [ openingMark, ...linkContents, closingMark, openingUrlMark, ...linkParts, closingUrlMark ]
 
-    return ctx.addElement(ctx.elt(isLink ? 'Link' : 'Image', delim.from, pos + 3 + url.length, children))
+    return ctx.addElement(ctx.elt(delim.to - delim.from === 1 ? 'Link' : 'Image', delim.from, pos + 3 + url.length, children))
   }
 }

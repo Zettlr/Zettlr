@@ -201,9 +201,9 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         inlineMathParser,
         footnoteParser,
         citationParser,
-        sloppyLinkParser,
         zknLinkParser(config?.zknLinkParserConfig),
         zknTagParser,
+        sloppyLinkParser, // Has to be installed after zknLinkParser
         pandocAttributesParser,
         highlightParser
       ],
