@@ -26,14 +26,18 @@ const LinkDelimiter: DelimiterType = {}
 
 const linkClosingRe = /^\]\((?<url>.+)\)/
 
-const linkTitleRe = /(?:^|[ \t]+)(?:"(.+)"|'(.+)'|\((.+)\))$/
+const linkTitleRe = /(?:^|[ \t]+)(?:"((?:\\.|[^"])+)"|'((?:\\.|[^'])+)'|\(((?:\\.|[^\)])+)\))$/
 
 export const sloppyLinkParser: InlineParser = {
   name: 'sloppy-link-parser',
   before: 'Link',
   parse: (ctx, next, pos) => {
-    // Even though we are parsing after `zkn-links`, we still have to ensure
-    // that we are not accidentally parsing the interior brackets as links
+    // An escaped character
+    if (ctx.char(pos - 1) === 92 ) { // 92 === '\'
+      return -1
+    }
+
+    // We have to ensure we are not parsing the interior brackets of a zkn-link as a regular link
     if (next === 91 && ctx.char(pos - 1) !== 91 && ctx.char(pos + 1) !== 91) { // 91 === '['
       return ctx.addDelimiter(LinkDelimiter, pos, pos + 1, true, false)
     }
