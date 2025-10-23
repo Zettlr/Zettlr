@@ -72,7 +72,7 @@ import { citationParser } from './citation-parser'
 import { footnoteParser, footnoteRefParser } from './footnote-parser'
 import { frontmatterParser, yamlCodeParse } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
-import { sloppyParser } from './sloppy-parser'
+import { sloppyLinkParser } from './sloppy-link-parser'
 import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
 import { type ZknLinkParserConfig, zknLinkParser } from './zkn-link-parser'
 import { pandocAttributesParser } from './pandoc-attributes-parser'
@@ -201,7 +201,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         inlineMathParser,
         footnoteParser,
         citationParser,
-        sloppyParser,
+        sloppyLinkParser,
         zknLinkParser(config?.zknLinkParserConfig),
         zknTagParser,
         pandocAttributesParser,
