@@ -31,7 +31,6 @@ const linkTitleRe = /(?:^|[ \t]+)(?:"(.+)"|'(.+)'|\((.+)\))$/
 export const sloppyLinkParser: InlineParser = {
   name: 'sloppy-link-parser',
   before: 'Link',
-  after: 'zkn-links',
   parse: (ctx, next, pos) => {
     // Even though we are parsing after `zkn-links`, we still have to ensure
     // that we are not accidentally parsing the interior brackets as links
@@ -52,7 +51,7 @@ export const sloppyLinkParser: InlineParser = {
     const delim = ctx.getDelimiterAt(opening)
     if (delim === null) { return -1 }
 
-    const linkLabel = ctx.elt('LinkLabel', delim.to, pos, ctx.takeContent(opening))
+    const linkContents = ctx.takeContent(opening)
 
     ctx.addDelimiter(LinkDelimiter, pos, pos + 1, false, true)
 
@@ -94,18 +93,13 @@ export const sloppyLinkParser: InlineParser = {
 
     const isLink = delim.to - delim.from === 1
 
-    const openingMarks = []
-    openingMarks.push(ctx.elt('LinkMark', delim.from, delim.from + 1))
-
-    if (!isLink) {
-      openingMarks.push(ctx.elt('LinkMark', delim.from + 1, delim.to))
-    }
-
+    const openingMark = ctx.elt('LinkMark', delim.from, delim.to)
     const closingMark = ctx.elt('LinkMark', pos, pos + 1)
+
     const urlMark = ctx.elt('LinkMark', pos + 1, pos + 2)
     const closingUrlMark = ctx.elt('LinkMark', pos + 2 + url.length, pos + 3 + url.length)
 
-    const children = [ ...openingMarks, linkLabel, closingMark, urlMark, ...linkParts, closingUrlMark ]
+    const children = [ openingMark, ...linkContents, closingMark, urlMark, ...linkParts, closingUrlMark ]
 
     return ctx.addElement(ctx.elt(isLink ? 'Link' : 'Image', delim.from, pos + 3 + url.length, children))
   }
