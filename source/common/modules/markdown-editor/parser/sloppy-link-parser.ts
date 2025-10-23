@@ -96,10 +96,10 @@ export const sloppyLinkParser: InlineParser = {
     const openingMark = ctx.elt('LinkMark', delim.from, delim.to)
     const closingMark = ctx.elt('LinkMark', pos, pos + 1)
 
-    const urlMark = ctx.elt('LinkMark', pos + 1, pos + 2)
+    const openingUrlMark = ctx.elt('LinkMark', pos + 1, pos + 2)
     const closingUrlMark = ctx.elt('LinkMark', pos + 2 + url.length, pos + 3 + url.length)
 
-    const children = [ openingMark, ...linkContents, closingMark, urlMark, ...linkParts, closingUrlMark ]
+    const children = [ openingMark, ...linkContents, closingMark, openingUrlMark, ...linkParts, closingUrlMark ]
 
     return ctx.addElement(ctx.elt(isLink ? 'Link' : 'Image', delim.from, pos + 3 + url.length, children))
   }
