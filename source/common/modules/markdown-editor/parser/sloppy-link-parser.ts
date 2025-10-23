@@ -49,8 +49,12 @@ export const sloppyLinkParser: InlineParser = {
     const delim = ctx.getDelimiterAt(opening)
     if (delim === null) { return -1 }
 
+    const isLink = delim.to - delim.from === 1
+    let linkContents = ctx.takeContent(opening)
     // Remove nested links, which are invalid
-    const linkContents = ctx.takeContent(opening).filter(el => el.type !== 27) // 27 === 'Link'
+    if (isLink) {
+      linkContents = linkContents.filter(el => el.type !== 27) // 27 === 'Link'
+    }
 
     ctx.addDelimiter(LinkDelimiter, pos, pos + 1, false, true)
 
@@ -96,6 +100,6 @@ export const sloppyLinkParser: InlineParser = {
 
     const children = [ openingMark, ...linkContents, closingMark, openingUrlMark, ...linkParts, closingUrlMark ]
 
-    return ctx.addElement(ctx.elt(delim.to - delim.from === 1 ? 'Link' : 'Image', delim.from, pos + 3 + url.length, children))
+    return ctx.addElement(ctx.elt(isLink ? 'Link' : 'Image', delim.from, pos + 3 + url.length, children))
   }
 }
