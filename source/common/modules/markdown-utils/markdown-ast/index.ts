@@ -484,6 +484,8 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     case 'Link': {
       const marks = node.getChildren('LinkMark')
       const url = node.getChild('URL')
+      const title = node.getChild('LinkTitle')
+
       if (url === null) {
         return {
           type: 'Generic',
@@ -503,7 +505,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
+        title: title === null ? undefined : genericTextNode(title.from, title.to, markdown.substring(title.from, title.to)),
         url: markdown.substring(url.from, url.to),
         alt: marks.length >= 2
           ? genericTextNode(marks[0].to, marks[1].from, markdown.substring(marks[0].to, marks[1].from))
