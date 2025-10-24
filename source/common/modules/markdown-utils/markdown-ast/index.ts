@@ -506,7 +506,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
         url: markdown.substring(url.from, url.to),
         alt: marks.length >= 2
-          ? genericTextNode(marks[0].from, marks[1].to, markdown.substring(marks[0].from, marks[1].to))
+          ? genericTextNode(marks[0].to, marks[1].from, markdown.substring(marks[0].to, marks[1].from))
           : genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
       }
 
