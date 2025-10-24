@@ -25,7 +25,7 @@ const linkTitleRe = /(?:^|[ \t]+)(?:"((?:\\.|[^"])+)"|'((?:\\.|[^'])+)'|\(((?:\\
 
 export const linkParser: InlineParser = {
   name: 'link-parser',
-  before: 'Link',
+  before: 'Autolink',
   parse: (ctx, next, pos) => {
     if (next === 91) { // 91 === '['
       return ctx.addDelimiter(LinkDelimiter, pos, pos + 1, true, false)
