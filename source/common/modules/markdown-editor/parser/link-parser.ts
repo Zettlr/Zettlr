@@ -94,6 +94,7 @@ export const linkParser: InlineParser = {
     const openingUrlMark = ctx.elt('LinkMark', pos + 1, pos + 2)
     const closingUrlMark = ctx.elt('LinkMark', pos + 2 + url.length, pos + 3 + url.length)
 
+    // This child node structure mirrors the codemirror Link structure
     const children = [ openingMark, ...linkContents, closingMark, openingUrlMark, ...linkParts, closingUrlMark ]
 
     return ctx.addElement(ctx.elt(isLink ? 'Link' : 'Image', delim.from, pos + 3 + url.length, children))
