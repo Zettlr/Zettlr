@@ -7,15 +7,10 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     A small parser that can parse images and links that,
- *                  contrary to the built-in parser, allows spaces and non-
- *                  encoded characters in URLs. While this is the correct
- *                  behavior, Markdown has to deal with many local images and
- *                  links, and in there it's quite annoying either to have to
- *                  replace all spaces with %20, or have the images not work.
- *                  Here we basically implement a more "sloppy" parser that
- *                  gives our users the ability to paste readable, non-URL-
- *                  encoded file paths.
+ * Description:     A parser for images and links that, contrary to the
+ *                  built-in parser, allows spaces and non-encoded characters
+ *                  in URLs, allowing users the ability to paste readable,
+ *                  non-URL-encoded file paths.
  *
  * END HEADER
  */
@@ -28,8 +23,8 @@ const linkClosingRe = /^\]\((?<url>.+)\)/
 
 const linkTitleRe = /(?:^|[ \t]+)(?:"((?:\\.|[^"])+)"|'((?:\\.|[^'])+)'|\(((?:\\.|[^\)])+)\))$/
 
-export const sloppyLinkParser: InlineParser = {
-  name: 'sloppy-link-parser',
+export const linkParser: InlineParser = {
+  name: 'link-parser',
   before: 'Link',
   parse: (ctx, next, pos) => {
     if (next === 91) { // 91 === '['
