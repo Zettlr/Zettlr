@@ -16,6 +16,7 @@
 
 import {
   BrowserWindow,
+  dialog,
   type BrowserWindowConstructorOptions
 } from 'electron'
 import type { WindowPosition } from './types'
@@ -66,6 +67,7 @@ export default function createMainWindow (
   window.loadURL(effectiveUrl.toString())
     .catch(e => {
       logger.error(`Could not load URL ${MAIN_WINDOW_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      dialog.showErrorBox('Could not open window', `Could not open main Window: ${e.message as string}`)
     })
 
   // EVENT LISTENERS

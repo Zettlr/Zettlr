@@ -385,6 +385,8 @@ other than numbers.
   actions will still call the provided callback function.
 - The Markdown AST parser now also emits `labelFrom` and `labelTo`-properties
   for footnote references for easy access to the reference label.
+- If loading a window fails due to whatever reason, the corresponding error will
+  now be shown to the user using an error dialog.
 
 # 3.6.0
 
