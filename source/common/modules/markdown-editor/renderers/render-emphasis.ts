@@ -114,9 +114,11 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
           }
           // Hide the square brackets of inline footnotes (keep footnote refs for
           // easier identification)
-          case 'Footnote': {
+          case 'Footnote':
+          case 'FootnoteRefLabel': {
+            const isRef = node.name === 'FootnoteRefLabel'
             ranges.push(hiddenDeco.range(node.from, node.from + 2))
-            ranges.push(hiddenDeco.range(node.to - 1, node.to))
+            ranges.push(hiddenDeco.range(node.to - (isRef ? 2 : 1), node.to))
             break
           }
           case 'QuoteMark': { // Blockquotes

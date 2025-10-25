@@ -342,6 +342,8 @@ other than numbers.
   selection background for the Karl-Marx-Stadt theme.
 - Indentation preferences from the main settings now also apply to code editors
   where applicable.
+- The emphasis renderer now also hides formatting characters for footnote
+  reference labels.
 
 ## Under the Hood
 
