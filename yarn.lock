@@ -304,7 +304,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.11.3, @codemirror/language@npm:^6.3.0, @codemirror/language@npm:^6.4.0, @codemirror/language@npm:^6.6.0, @codemirror/language@npm:^6.8.0":
+"@codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.10.3, @codemirror/language@npm:^6.11.3, @codemirror/language@npm:^6.3.0, @codemirror/language@npm:^6.4.0, @codemirror/language@npm:^6.6.0, @codemirror/language@npm:^6.8.0":
   version: 6.11.3
   resolution: "@codemirror/language@npm:6.11.3"
   dependencies:
@@ -9167,6 +9167,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lang-criticmarkup@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "lang-criticmarkup@npm:0.2.0"
+  dependencies:
+    "@codemirror/language": "npm:^6.10.3"
+    "@lezer/lr": "npm:^1.4.2"
+  checksum: 10/821be40fc057968137419a5cf9c12542ac5524da581520007ca5b99e6b1af02bddb2828f32abec3f9a7bf799018d999bec4d42ebb85bfe46248fa05461d151fa
+  languageName: node
+  linkType: hard
+
 "langium@npm:3.3.1":
   version: 3.3.1
   resolution: "langium@npm:3.3.1"
@@ -15174,6 +15184,7 @@ __metadata:
     jsdom: "npm:^26.1.0"
     katex: "npm:^0.16.22"
     ky: "npm:^1.10.0"
+    lang-criticmarkup: "npm:^0.2.0"
     less: "npm:^4.4.1"
     less-loader: "npm:^12.3.0"
     luxon: "npm:^3.7.2"
