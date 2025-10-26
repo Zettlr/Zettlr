@@ -195,7 +195,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
   } else if (node.type === 'FootnoteRef') {
     addAttribute(node, 'class', 'footnote-ref')
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<div${attr}><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, options, indent)}</div>`
+    return `${node.whitespaceBefore}<div${attr}><sup>${node.label}</sup><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, options, indent)}</div>`
   } else if (node.type === 'Heading') {
     const attr = renderNodeAttributes(node)
     return `${node.whitespaceBefore}<h${node.level}${attr}>${nodeToHTML(node.children, options, indent)}</h${node.level}>`
