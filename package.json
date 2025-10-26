@@ -170,7 +170,7 @@
     "@typescript-eslint/parser": "^8.42.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "copy-webpack-plugin": "^13.0.1",
-    "cross-env": "^7.0.3",
+    "cross-env": "^10.1.0",
     "css-loader": "^7.1.2",
     "csso": "^5.0.5",
     "electron": "^38.3.0",
