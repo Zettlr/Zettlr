@@ -86,11 +86,17 @@ onMounted(async () => {
   const base = pathDirname(filePath)
   const { frontmatter } = extractYamlFrontmatter(fileContents)
   const library = frontmatter !== null && 'bibliography' in frontmatter && typeof frontmatter.bibliography === 'string' ? frontmatter.bibliography : CITEPROC_MAIN_DB
-  printContainer.value.innerHTML = md2html(fileContents, window.getCitationCallback(library), undefined, {
+  md2html(fileContents, {
+    onCitation: window.getCitationCallback(library),
+    zknLinkFormat: window.config.get('zkn.linkFormat') ?? 'link|title',
     onImageSrc (src) {
       return 'safe-file://' + resolvePath(base, src)
     }
   })
+    .then(html => {
+      printContainer.value!.innerHTML = html
+    })
+    .catch(err => console.error(err))
 })
 
 function handleClick (buttonID?: string): void {

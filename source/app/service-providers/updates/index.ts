@@ -435,7 +435,7 @@ export default class UpdateProvider extends ProviderContract {
 
     // Adapt the rest of the state
     state.tagName = parsedResponse.tag_name
-    state.changelog = md2html(parsedResponse.body, (_c1, _c2) => undefined)
+    state.changelog = await md2html(parsedResponse.body, { onCitation: (_c1, _c2) => undefined, zknLinkFormat: 'link|title' })
     state.prerelease = parsedResponse.prerelease
     state.releasePage = parsedResponse.html_url
 
