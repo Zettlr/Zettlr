@@ -273,6 +273,7 @@ other than numbers.
   files, or use IDs where available.
 - **A11y**: Zettlr now respects if you choose to reduce transparency in system
   settings and no longer add window vibrancy on macOS.
+- Snippets can now be nested (#5939).
 - You can now show an item in Finder/Explorer/file browser when right-clicking a
   document tab (#5914).
 - Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
