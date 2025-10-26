@@ -110,6 +110,17 @@ export interface FootnoteRef extends MDNode {
 }
 
 /**
+ * A footnote reference label is the label attached to a footnote reference.
+ */
+export interface FootnoteRefLabel extends MDNode {
+  type: 'FootnoteRefLabel'
+  /**
+   * The label of the footnote label (sans the formatting, i.e., [^1]: -> 1)
+   */
+  label: string
+}
+
+/**
  * Either a link or an image, since the difference between these two nodes
  * consists of a single character.
  */
@@ -457,10 +468,11 @@ export interface GenericNode extends MDNode {
 /**
  * Any node that can be part of the AST is an ASTNode.
  */
-export type ASTNode = Comment | Footnote | FootnoteRef | LinkOrImage | TextNode
-| Heading | CitationNode | Highlight | Superscript | Subscript | OrderedList
-| BulletList | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter
-| Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
+export type ASTNode = Comment | Footnote | FootnoteRef | FootnoteRefLabel
+| LinkOrImage | TextNode | Heading | CitationNode | Highlight | Superscript
+| Subscript | OrderedList | BulletList | ListItem | GenericNode | FencedCode
+| InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow
+| ZettelkastenLink | ZettelkastenTag
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -604,13 +616,24 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       }
       return astNode
     }
+    case 'FootnoteRefLabel': {
+      const astNode: FootnoteRefLabel = {
+        type: 'FootnoteRefLabel',
+        name: 'FootnoteRefLabel',
+        attributes: {},
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+        label: markdown.substring(node.from + 2, node.to - 2)
+      }
+      return astNode
+    }
     case 'FootnoteRef': {
       const label = node.getChild('FootnoteRefLabel')
       if (label === null) {
         return genericTextNode(node.from, node.to, markdown.substring(node.from, node.to), getWhitespaceBeforeNode(node, markdown))
       }
 
-      const body = node.getChild('FootnoteRefBody')
       const astNode: FootnoteRef = {
         type: 'FootnoteRef',
         name: 'FootnoteRef',
@@ -624,11 +647,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         children: []
       }
 
-      if (body !== null) {
-        return parseChildren(astNode, body, markdown)
-      } else {
-        return astNode
-      }
+      return parseChildren(astNode, node, markdown)
     }
     case 'HighlightContent': {
       const astNode: Highlight = {

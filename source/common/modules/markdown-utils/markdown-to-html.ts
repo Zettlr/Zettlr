@@ -101,8 +101,12 @@ function getTagInfo (node: GenericNode): HTMLTag {
     ret.tagName = 'span'
   }
 
-  if ([ 'span', 'div', 'p' ].includes(ret.tagName)) {
-    ret.attributes.push([ 'class', node.name ])
+  if (ret.tagName === 'p' && node.name !== 'Paragraph') {
+    ret.attributes.push([ 'class', node.name.toLowerCase() ])
+  }
+
+  if ([ 'span', 'div' ].includes(ret.tagName)) {
+    ret.attributes.push([ 'class', node.name.toLowerCase() ])
   }
 
   return ret
@@ -171,6 +175,10 @@ function addAttribute (node: ASTNode, attributeName: string, ...values: string[]
  * @return  {string}                The HTML string
  */
 export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, indent: number = 0): string {
+  const HIDDEN_GENERIC_NODES = [
+    'Document', 'FootnoteRefBody'
+  ]
+
   // Convenience to convert a list of child nodes to HTML
   if (Array.isArray(node)) {
     const body: string[] = []
@@ -178,8 +186,10 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
       body.push(nodeToHTML(child, options, indent))
     }
     return body.join('')
-  } else if (node.type === 'Generic' && node.name === 'Document') {
-    // This ensures there's no outer div class=Document
+  } else if (node.type === 'Generic' && HIDDEN_GENERIC_NODES.includes(node.name)) {
+    // Some nodes emitted from the AST serve as mere containers and should not
+    // be actually emitted by the HTML parser. We do so by converting only its
+    // children to HTML, omitting the node entirely.
     return nodeToHTML(node.children, options, indent)
   } else if (node.type === 'YAMLFrontmatter') {
     return '' // Frontmatters must be removed upon HTML export
@@ -192,10 +202,15 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
     addAttribute(node, 'class', 'footnote')
     const attr = renderNodeAttributes(node)
     return `${node.whitespaceBefore}<sup><a${attr} href="#fnref:${_.escape(node.label)}">${_.escape(node.label)}</a></sup>`
+  } else if (node.type === 'FootnoteRefLabel') {
+    addAttribute(node, 'class', 'footnote-ref-label')
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<sup${attr}>${node.label}</sup>`
   } else if (node.type === 'FootnoteRef') {
     addAttribute(node, 'class', 'footnote-ref')
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<div${attr}><sup>${node.label}</sup><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, options, indent)}</div>`
+    console.log(node.children)
+    return `${node.whitespaceBefore}<div${attr}><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, options, indent)}</div>`
   } else if (node.type === 'Heading') {
     const attr = renderNodeAttributes(node)
     return `${node.whitespaceBefore}<h${node.level}${attr}>${nodeToHTML(node.children, options, indent)}</h${node.level}>`
