@@ -298,8 +298,8 @@ function updateRow (
       const contentWrapper = document.createElement('div')
       contentWrapper.classList.add('content')
       td.appendChild(contentWrapper)
-      // TODO: Dynamic link|title access! From Config!
-      const html = nodeToHTML(cell.children, { onCitation: (_citations, _composite) => undefined, zknLinkFormat: 'link|title' }, 0).trim()
+      const { zknLinkFormat } = view.state.field(configField)
+      const html = nodeToHTML(cell.children, { onCitation: (_citations, _composite) => undefined, zknLinkFormat }, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
 
       // NOTE: This handle gets attached once and then remains on the TD for
@@ -372,8 +372,8 @@ function updateRow (
     if (subview !== null && !selectionInCell) {
       subview.destroy()
       contentWrapper.classList.remove('editing')
-      // TODO: Dynamic link|title access! From Config!
-      const html = nodeToHTML(cell.children, { onCitation: callback, zknLinkFormat: 'link|title' }, 0).trim()
+      const { zknLinkFormat } = view.state.field(configField)
+      const html = nodeToHTML(cell.children, { onCitation: callback, zknLinkFormat }, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
     } else if (subview === null && selectionInCell) {
       // Before we mount a subview, we need to normalize the selection if
@@ -415,8 +415,8 @@ function updateRow (
       })
     } else if (subview === null) {
       // Simply transfer the contents
-      // TODO: Dynamic link|title access! From Config!
-      const html = nodeToHTML(cell.children, { onCitation: callback, zknLinkFormat: 'link|title' }, 0).trim()
+      const { zknLinkFormat } = view.state.field(configField)
+      const html = nodeToHTML(cell.children, { onCitation: callback, zknLinkFormat }, 0).trim()
       if (html !== contentWrapper.innerHTML) {
         contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
       }
