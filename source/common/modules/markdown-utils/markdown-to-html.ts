@@ -21,8 +21,8 @@
  * END HEADER
  */
 
-import { markdownToAST } from '.'
-import { type ASTNode, type GenericNode } from './markdown-ast'
+import { extractASTNodes, markdownToAST } from '.'
+import { type CitationNode, type ASTNode, type GenericNode } from './markdown-ast'
 import { type MarkdownParserConfig } from '../markdown-editor/parser/markdown-parser'
 import _ from 'underscore'
 import { katexToHTML } from '@common/util/mathtex-to-html'
@@ -53,6 +53,11 @@ export interface MD2HTMLOptions {
    */
   zknLinkFormat: 'link|title'|'title|link' // = 'link|title'
   /**
+   * An optional section heading for the reference section. Will only be used if
+   * there is a bibliography to render.
+   */
+  referenceSectionTitle?: string
+  /**
    * This is called whenever the parser finds a citation.
    *
    * @param   {CiteItem[]}  citations  The citations from the Markdown source
@@ -61,6 +66,18 @@ export interface MD2HTMLOptions {
    * @return  {[]}                     Should return the citation, or undefined.
    */
   onCitation: (citations: CiteItem[], composite: boolean) => string|undefined
+  /**
+   * If provided, this callback will be called after the Markdown-to-HTML
+   * conversion is finished to generate a bibliography. The callback should
+   * expect a set of citekeys, and use the appropriate library to generate a
+   * bibliography by making use of the citeproc provider. It should return the
+   * response from the citeproc provider appropriately.
+   *
+   * @param   {string[]}  keys  The citation keys to be included in the bibliography.
+   *
+   * @return  {any}             The citeproc responde.
+   */
+  onBibliography?: (keys: string[]) => Promise<[{ bibstart: string, bibend: string }, string[]]|undefined>
   /**
    * Can be used to hook into the image tag generation to alter the image's
    * `src` attribute from the Markdown.
@@ -344,5 +361,24 @@ export async function md2html (markdown: string, options: MD2HTMLOptions): Promi
   }
 
   const ast = markdownToAST(markdown, undefined, config)
-  return nodeToHTML(ast, options)
+
+  const html = nodeToHTML(ast, options)
+
+  if (options.onBibliography === undefined) {
+    return html // No bibliography wanted
+  }
+
+  // Prepare and include a bibliography at the end. We here essentially
+  // replicate what the references tab does.
+  const keys = extractASTNodes(ast, 'Citation')
+    .map((node: ASTNode) => (node as CitationNode).parsedCitation)
+    .flatMap(c => c.items.map(item => item.id))
+
+  const bibHTML = await options.onBibliography([...new Set(keys)])
+  if (bibHTML !== undefined) {
+    const h1 = options.referenceSectionTitle !== undefined ? `<h1>${options.referenceSectionTitle}</h1>` : ''
+    return html + h1 + [ '\n', bibHTML[0].bibstart, ...bibHTML[1], bibHTML[0].bibend ].join('\n')
+  }
+
+  return html
 }
