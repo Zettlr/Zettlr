@@ -47,7 +47,20 @@ interface HTMLTag {
 
 export type CitationCallback = (citations: CiteItem[], composite: boolean) => string|undefined
 
-export interface MD2HTMLCallbacks {
+export interface MD2HTMLOptions {
+  /**
+   * The link format used in the Markdown source
+   */
+  zknLinkFormat: 'link|title'|'title|link' // = 'link|title'
+  /**
+   * This is called whenever the parser finds a citation.
+   *
+   * @param   {CiteItem[]}  citations  The citations from the Markdown source
+   * @param   {boolean}     composite  Whether this is a composite citation
+   *
+   * @return  {[]}                     Should return the citation, or undefined.
+   */
+  onCitation: (citations: CiteItem[], composite: boolean) => string|undefined
   /**
    * Can be used to hook into the image tag generation to alter the image's
    * `src` attribute from the Markdown.
@@ -57,7 +70,7 @@ export interface MD2HTMLCallbacks {
    * @return  {string}       Returns whatever should be taken as the `src`
    *                         attribute for the resulting `<img>` tag.
    */
-  onImageSrc: (src: string) => string
+  onImageSrc?: (src: string) => string
 }
 
 /**
@@ -157,23 +170,23 @@ function addAttribute (node: ASTNode, attributeName: string, ...values: string[]
  *
  * @return  {string}                The HTML string
  */
-export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallback, hooks: Partial<MD2HTMLCallbacks>, indent: number = 0): string {
+export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, indent: number = 0): string {
   // Convenience to convert a list of child nodes to HTML
   if (Array.isArray(node)) {
     const body: string[] = []
     for (const child of node) {
-      body.push(nodeToHTML(child, getCitation, hooks, indent))
+      body.push(nodeToHTML(child, options, indent))
     }
     return body.join('')
   } else if (node.type === 'Generic' && node.name === 'Document') {
     // This ensures there's no outer div class=Document
-    return nodeToHTML(node.children, getCitation, hooks, indent)
+    return nodeToHTML(node.children, options, indent)
   } else if (node.type === 'YAMLFrontmatter') {
     return '' // Frontmatters must be removed upon HTML export
   } else if (node.type === 'Citation') {
     addAttribute(node, 'class', 'citation')
     const attr = renderNodeAttributes(node)
-    const rendered = getCitation(node.parsedCitation.items, node.parsedCitation.composite)
+    const rendered = options.onCitation(node.parsedCitation.items, node.parsedCitation.composite)
     return `${node.whitespaceBefore}<span${attr}>${rendered ?? _.escape(node.value)}</span>`
   } else if (node.type === 'Footnote') {
     addAttribute(node, 'class', 'footnote')
@@ -182,21 +195,21 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
   } else if (node.type === 'FootnoteRef') {
     addAttribute(node, 'class', 'footnote-ref')
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<div${attr}><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, getCitation, hooks, indent)}</div>`
+    return `${node.whitespaceBefore}<div${attr}><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, options, indent)}</div>`
   } else if (node.type === 'Heading') {
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<h${node.level}${attr}>${nodeToHTML(node.children, getCitation, hooks, indent)}</h${node.level}>`
+    return `${node.whitespaceBefore}<h${node.level}${attr}>${nodeToHTML(node.children, options, indent)}</h${node.level}>`
   } else if (node.type === 'Highlight') {
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<mark${attr}>${nodeToHTML(node.children, getCitation, hooks, indent)}</mark>`
+    return `${node.whitespaceBefore}<mark${attr}>${nodeToHTML(node.children, options, indent)}</mark>`
   } else if (node.type === 'Superscript') {
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<sup${attr}>${nodeToHTML(node.children, getCitation, hooks, indent)}</sup>`
+    return `${node.whitespaceBefore}<sup${attr}>${nodeToHTML(node.children, options, indent)}</sup>`
   } else if (node.type === 'Subscript') {
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<sub${attr}>${nodeToHTML(node.children, getCitation, hooks, indent)}</sub>`
+    return `${node.whitespaceBefore}<sub${attr}>${nodeToHTML(node.children, options, indent)}</sub>`
   } else if (node.type === 'Image') {
-    addAttribute(node, 'src', hooks.onImageSrc !== undefined ? hooks.onImageSrc(node.url) : node.url)
+    addAttribute(node, 'src', options.onImageSrc !== undefined ? options.onImageSrc(node.url) : node.url)
     addAttribute(node, 'alt', _.escape(node.alt.value))
     addAttribute(node, 'title', node.title?.value ?? _.escape(node.alt.value))
     const attr = renderNodeAttributes(node)
@@ -215,19 +228,19 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
       addAttribute(node, 'class', 'task-list')
     }
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<ol${attr}>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ol>`
+    return `${node.whitespaceBefore}<ol${attr}>\n${nodeToHTML(node.items, options, indent)}\n</ol>`
   } else if (node.type === 'BulletList') {
     if (node.isTaskList) {
       addAttribute(node, 'class', 'task-list')
     }
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<ul${attr}>\n${nodeToHTML(node.items, getCitation, hooks, indent)}\n</ul>`
+    return `${node.whitespaceBefore}<ul${attr}>\n${nodeToHTML(node.items, options, indent)}\n</ul>`
   } else if (node.type === 'ListItem') {
     const attr = renderNodeAttributes(node)
     const task = node.checked !== undefined ? `<input type="checkbox" disabled="disabled" ${node.checked ? 'checked="checked"' : ''}>` : ''
-    return `${node.whitespaceBefore}<li${attr}>${task}${nodeToHTML(node.children, getCitation, hooks, indent + 1)}</li>`
+    return `${node.whitespaceBefore}<li${attr}>${task}${nodeToHTML(node.children, options, indent + 1)}</li>`
   } else if (node.type === 'Emphasis') {
-    const body = nodeToHTML(node.children, getCitation, hooks, indent)
+    const body = nodeToHTML(node.children, options, indent)
     const attr = renderNodeAttributes(node)
 
     switch (node.which) {
@@ -241,7 +254,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
     for (const row of node.rows) {
       const cells: string[] = []
       for (const cell of row.cells) {
-        cells.push(nodeToHTML(cell.children, getCitation, hooks, indent))
+        cells.push(nodeToHTML(cell.children, options, indent))
       }
       const tag = row.isHeaderOrFooter ? 'th' : 'td'
       const content = cells.map(c => `<${tag}>${c}</${tag}>`).join('\n')
@@ -287,7 +300,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
 
     const open = `${node.whitespaceBefore}<${tagInfo.tagName}${attr}${tagInfo.selfClosing ? '/' : ''}>`
     const close = tagInfo.selfClosing ? '' : `</${tagInfo.tagName}>`
-    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, getCitation, hooks)
+    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, options)
     return `${open}${body}${close}`
   } else if (node.type === 'ZettelkastenLink') {
     // NOTE: We count a ZettelkastenLink's title as a TextNode for various
@@ -305,17 +318,16 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
  * Takes Markdown source and turns it into a valid HTML fragment. The citeLibrary
  * will be used to resolve citations.
  *
- * @param   {string}           markdown       The Markdown source
- * @param   {Function}         getCitation    The citation callback to use
- * @param   {string}           zknLinkFormat  (Optional) The Wikilink format
- * @param   {MD2HTMLCallbacks} hooks          Any hooks that can be used to programmatically alter the produced HTML
+ * @param   {string}           markdown   The Markdown source
+ * @param   {MD2HTMLOptions}   options    Options for the conversion
  *
- * @return  {string}                   The resulting HTML
+ * @return  {string}                      The resulting HTML
  */
-export async function md2html (markdown: string, getCitation: CitationCallback, zknLinkFormat: 'link|title'|'title|link' = 'link|title', hooks?: Partial<MD2HTMLCallbacks>): Promise<string> {
+export async function md2html (markdown: string, options: MD2HTMLOptions): Promise<string> {
   const config: MarkdownParserConfig = {
-    zknLinkParserConfig: { format: zknLinkFormat }
+    zknLinkParserConfig: { format: options.zknLinkFormat }
   }
+
   const ast = markdownToAST(markdown, undefined, config)
-  return nodeToHTML(ast, getCitation, hooks ?? {})
+  return nodeToHTML(ast, options)
 }

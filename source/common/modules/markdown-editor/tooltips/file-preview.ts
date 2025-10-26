@@ -99,9 +99,9 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
   // Start the MD->HTML conversion ...
   md2html(
     metadata.previewMarkdown,
-    window.getCitationCallback(CITEPROC_MAIN_DB),
-    zknLinkFormat,
     {
+      zknLinkFormat,
+      onCitation: window.getCitationCallback(CITEPROC_MAIN_DB),
       // Convert the image links to absolute (if necessary)
       onImageSrc (src) {
         const isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(src)

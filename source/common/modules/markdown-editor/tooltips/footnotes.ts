@@ -100,8 +100,10 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
         (fnBody === undefined || fnBody.text === '')
           ? trans('No footnote text found.')
           : fnBody.text,
-        window.getCitationCallback(library),
-        zknLinkFormat
+        {
+          onCitation: window.getCitationCallback(library),
+          zknLinkFormat
+        }
       )
         .then(tooltipContent => {
           content.innerHTML = tooltipContent

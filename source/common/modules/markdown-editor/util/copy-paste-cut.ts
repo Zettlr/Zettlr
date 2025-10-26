@@ -93,7 +93,7 @@ export function copyAsHTML (view: EditorView): void {
   const { zknLinkFormat } = view.state.field(configField)
 
   const plainText = selections.join('\n')
-  md2html(plainText, window.getCitationCallback(library), zknLinkFormat)
+  md2html(plainText, { onCitation: window.getCitationCallback(library), zknLinkFormat })
     .then(html => {
       navigator.clipboard.write([
         new ClipboardItem({
