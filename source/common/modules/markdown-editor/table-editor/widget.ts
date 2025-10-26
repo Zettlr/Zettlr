@@ -287,6 +287,11 @@ function updateRow (
 
   const { row, col } = selectionCoords !== undefined ? selectionCoords : { row: -1, col: -1 }
 
+  // Prepare the citation callback
+  let { library } = view.state.field(configField).metadata
+  library = library === '' ? CITEPROC_MAIN_DB : library
+  const onCitation = window.getCitationCallback(library)
+
   for (let i = 0; i < astRow.cells.length; i++) {
     const cell = astRow.cells[i]
     const selectionInCell = row === idx && col === i
@@ -294,12 +299,12 @@ function updateRow (
       // We have to create a new TD
       const td = astRow.isHeaderOrFooter ? tableTH() : tableTD()
 
-      // TODO: Enable citation rendering here
       const contentWrapper = document.createElement('div')
       contentWrapper.classList.add('content')
       td.appendChild(contentWrapper)
+
       const { zknLinkFormat } = view.state.field(configField)
-      const html = nodeToHTML(cell.children, { onCitation: (_citations, _composite) => undefined, zknLinkFormat }, 0).trim()
+      const html = nodeToHTML(cell.children, { onCitation, zknLinkFormat }, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
 
       // NOTE: This handle gets attached once and then remains on the TD for
@@ -365,15 +370,11 @@ function updateRow (
 
     const [ subviewFrom, subviewTo ] = subview?.state.field(hiddenSpanField).cellRange ?? [ -1, -1 ]
 
-    const config = view.state.field(configField).metadata.library
-    const library = config === '' ? CITEPROC_MAIN_DB : config
-    const callback = window.getCitationCallback(library)
-
     if (subview !== null && !selectionInCell) {
       subview.destroy()
       contentWrapper.classList.remove('editing')
       const { zknLinkFormat } = view.state.field(configField)
-      const html = nodeToHTML(cell.children, { onCitation: callback, zknLinkFormat }, 0).trim()
+      const html = nodeToHTML(cell.children, { onCitation, zknLinkFormat }, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
     } else if (subview === null && selectionInCell) {
       // Before we mount a subview, we need to normalize the selection if
@@ -416,7 +417,7 @@ function updateRow (
     } else if (subview === null) {
       // Simply transfer the contents
       const { zknLinkFormat } = view.state.field(configField)
-      const html = nodeToHTML(cell.children, { onCitation: callback, zknLinkFormat }, 0).trim()
+      const html = nodeToHTML(cell.children, { onCitation, zknLinkFormat }, 0).trim()
       if (html !== contentWrapper.innerHTML) {
         contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
       }
