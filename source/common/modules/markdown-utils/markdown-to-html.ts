@@ -312,7 +312,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], getCitation: CitationCallba
  *
  * @return  {string}                   The resulting HTML
  */
-export function md2html (markdown: string, getCitation: CitationCallback, zknLinkFormat: 'link|title'|'title|link' = 'link|title', hooks?: Partial<MD2HTMLCallbacks>): string {
+export async function md2html (markdown: string, getCitation: CitationCallback, zknLinkFormat: 'link|title'|'title|link' = 'link|title', hooks?: Partial<MD2HTMLCallbacks>): Promise<string> {
   const config: MarkdownParserConfig = {
     zknLinkParserConfig: { format: zknLinkFormat }
   }

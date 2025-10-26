@@ -86,13 +86,6 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   const { zknLinkFormat } = view.state.field(configField)
 
   const { library } = view.state.field(configField).metadata
-  const tooltipContent = md2html(
-    (fnBody === undefined || fnBody.text === '')
-      ? trans('No footnote text found.')
-      : fnBody.text,
-    window.getCitationCallback(library),
-    zknLinkFormat
-  )
 
   return {
     pos: nodeAt.from,
@@ -100,7 +93,21 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
     above: true,
     create (view) {
       const dom = document.createElement('div')
-      dom.innerHTML = tooltipContent
+      const content = document.createElement('div')
+      dom.appendChild(content)
+
+      md2html(
+        (fnBody === undefined || fnBody.text === '')
+          ? trans('No footnote text found.')
+          : fnBody.text,
+        window.getCitationCallback(library),
+        zknLinkFormat
+      )
+        .then(tooltipContent => {
+          content.innerHTML = tooltipContent
+        })
+        .catch(err => console.error(err))
+
       if (fnBody === undefined) {
         return { dom }
       }

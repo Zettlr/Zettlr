@@ -92,18 +92,18 @@ export function copyAsHTML (view: EditorView): void {
 
   const { zknLinkFormat } = view.state.field(configField)
 
-  const plainBlob = new Blob([selections.join('\n')], { type: 'text/plain' })
-  const htmlBlob = new Blob(
-    [md2html(selections.join('\n'), window.getCitationCallback(library), zknLinkFormat)],
-    { type: 'text/html' }
-  )
-
-  navigator.clipboard.write([
-    new ClipboardItem({
-      'text/plain': plainBlob,
-      'text/html': htmlBlob
+  const plainText = selections.join('\n')
+  md2html(plainText, window.getCitationCallback(library), zknLinkFormat)
+    .then(html => {
+      navigator.clipboard.write([
+        new ClipboardItem({
+          'text/plain': new Blob([plainText], { type: 'text/plain' }),
+          'text/html': new Blob([html], { type: 'text/html' })
+        })
+      ]).catch(err => console.error(err))
     })
-  ]).catch(err => console.error(err))
+    .catch(err => console.error(err))
+
 }
 
 /**
