@@ -63,6 +63,7 @@
     "@codemirror/view": "^6.38.2",
     "@lezer/common": "^1.2.3",
     "@lezer/highlight": "^1.2.1",
+    "@lezer/markdown": "^1.5.1",
     "@replit/codemirror-emacs": "^6.1.0",
     "@replit/codemirror-vim": "^6.3.0",
     "adm-zip": "^0.5.16",
