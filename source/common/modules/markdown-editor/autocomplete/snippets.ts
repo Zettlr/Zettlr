@@ -164,10 +164,10 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
     // This monstrosity ensures that our ranges stay in sync while the user types
     val.activeSelections = val.activeSelections
       .filter(selection => {
-        return selection.ranges.some(r => transaction.changes.mapPos(r.from, -1, MapMode.TrackBefore) !== null)
+        return selection.ranges.some(r => transaction.changes.mapPos(r.from, 1, r.empty ? MapMode.TrackAfter : MapMode.TrackDel) !== null)
       })
       .map(selection => {
-        return selection.map(transaction.changes)
+        return selection.map(transaction.changes, 1)
       })
 
     return { ...val }
@@ -186,7 +186,7 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         for (const range of selection.ranges) {
           if (range.empty) {
             const widget = new SnippetWidget(`$${position}`, range)
-            decorations.push(Decoration.widget({ widget }).range(range.from))
+            decorations.push(Decoration.widget({ widget, side: position }).range(range.from))
           } else {
             decorations.push(tabstopDeco.range(range.from, range.to))
           }
@@ -204,6 +204,71 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
 })
 
 /**
+ * Parses placeholders like $1, ${1:Default}, and ${1:foo ${2:bar}}. Supports arbitrary nesting.
+ */
+function parsePlaceholders (template: string, offset = 0): { text: string, ranges: { position: number, ranges: SelectionRange[] }[] } {
+  const ranges: { position: number, ranges: SelectionRange[] }[] = []
+  // Matches $[0-9] as well as ${[0-9]:default string}
+  const tabStopRE = /(?<!\\)\$(\d+)|(?<!\\)\$\{(\d+):/
+
+  let parsedText = ''
+  let i = 0
+
+  while (i < template.length) {
+    const match = tabStopRE.exec(template.slice(i))
+    if (!match) {
+      // No matches, so add the remainder of the text
+      parsedText += template.slice(i)
+      break
+    }
+
+    const position = parseInt(match[1] ?? match[2], 10)
+    parsedText += template.slice(i, i + match.index)
+    i += match.index + match[0].length
+
+    // Matches $[0-9]
+    if (match[1]) {
+      const from = offset + parsedText.length
+      ranges.push({ position, ranges: [EditorSelection.range(from, from)] })
+      continue
+    }
+
+    // Matches ${[0-9]:default string}
+    let braceDepth = 1
+    let startInner = i
+
+    // Track nested placeholders to find the
+    // top-level matching brace.
+    while (i < template.length && braceDepth > 0) {
+      if (template[i] === '{') {
+        braceDepth++
+      } else if (template[i] === '}') {
+        braceDepth--
+      }
+      i++
+    }
+
+    // Return as regular text when there are unbalanced braces (malformed placeholders)
+    if (braceDepth > 0) {
+      parsedText += template.slice(startInner - match[0].length, template.length)
+      break
+    }
+
+    // Drop the last '}' and recurse on the inner text.
+    const { text: innerText, ranges: innerRanges } = parsePlaceholders(template.slice(startInner, i - 1), offset + parsedText.length)
+
+    const from = offset + parsedText.length
+    parsedText += innerText
+    const to = offset + parsedText.length
+
+    ranges.push({ position, ranges: [EditorSelection.range(from, to)] })
+    ranges.push(...innerRanges)
+  }
+
+  return { text: parsedText, ranges }
+}
+
+/**
  * Takes a template string and returns a two-element array containing (a) the
  * template text with all variables and tabstops replaced so that it can be
  * inserted into a document, and (b) a two-dimensional list of ranges in the
@@ -216,30 +281,17 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
  * @return  {[string, EditorSelection[]]}  The final text as well as tabstop
  *                                          ranges (if any)
  */
-async function template2snippet (state: EditorState, template: string, rangeOffset: number): Promise<[string, EditorSelection[]]> {
-  const rawRanges: Array<{ position: number, ranges: SelectionRange[] }> = []
-  let finalText = await replaceSnippetVariables(state, template)
+export async function template2snippet (state: EditorState, template: string, rangeOffset: number): Promise<[string, EditorSelection[]]> {
+  let replacedText = await replaceSnippetVariables(state, template)
 
-  // Matches $[0-9] as well as ${[0-9]:default string}
-  const tabStopRE = /(?<!\\)\$(\d+)|(?<!\\)\$\{(\d+):(.+?)\}/ // NOTE: No g flag
+  const { text, ranges } = parsePlaceholders(replacedText, rangeOffset)
 
-  let match: null|RegExpExecArray = null
-  while ((match = tabStopRE.exec(finalText)) !== null) {
-    const position = parseInt(match[1] ?? match[2], 10)
-    const replacementString: string|undefined = match[3]
-    const from = rangeOffset + match.index
-    const to = (replacementString !== undefined) ? from + replacementString.length : from
-
-    finalText = finalText.replace(match[0], replacementString ?? '')
-    rawRanges.push({ position, ranges: [EditorSelection.range(from, to)] })
-  }
-
-  if (rawRanges.length === 0) {
-    return [ finalText, [] ] // Already done!
+  if (ranges.length === 0) {
+    return [ text, [] ] // Already done!
   }
 
   // Combine multiple ranges with the same position together
-  const combinedRanges = rawRanges.reduce<Array<{ position: number, ranges: SelectionRange[] }>>((acc, value) => {
+  const combinedRanges = ranges.reduce<Array<{ position: number, ranges: SelectionRange[] }>>((acc, value) => {
     const { position, ranges } = value
     const existingRange = acc.find(v => v.position === position)
     if (existingRange !== undefined) {
@@ -264,14 +316,14 @@ async function template2snippet (state: EditorState, template: string, rangeOffs
 
   // Check that there's a zero in there. If not, add one to the back.
   if (combinedRanges[combinedRanges.length - 1].position !== 0) {
-    combinedRanges.push({ position: 0, ranges: [EditorSelection.cursor(rangeOffset + finalText.length)] })
+    combinedRanges.push({ position: 0, ranges: [EditorSelection.cursor(rangeOffset + text.length)] })
   }
 
   // For the rest of the script, it's irrelevant which position the tabs had,
   // since it expects the array to be sorted anyways, so we can omit that info now.
   const slections = combinedRanges.map(v => EditorSelection.create(v.ranges))
 
-  return [ finalText, slections ]
+  return [ text, slections ]
 }
 
 /**
