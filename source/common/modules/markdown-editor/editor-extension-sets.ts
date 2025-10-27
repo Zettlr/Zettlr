@@ -76,7 +76,6 @@ import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
 import { headingGutter } from './renderers/render-headings'
-import { cleanupFootnotesAndNumbering } from './commands/footnotes'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -332,7 +331,6 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     formattingToolbar,
     footnoteHover,
     footnoteGutter, // Should be after markdownFolding
-    cleanupFootnotesAndNumbering,
     urlHover,
     filePreview,
     backgroundLayers, // Add a background behind inline code and code blocks
