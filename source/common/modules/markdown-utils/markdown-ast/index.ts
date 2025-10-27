@@ -482,8 +482,10 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     // define nodes which we can "compress" a little bit or make accessible
     case 'Image':
     case 'Link': {
-      const alt = node.getChild('LinkLabel')
+      const marks = node.getChildren('LinkMark')
       const url = node.getChild('URL')
+      const title = node.getChild('LinkTitle')
+
       if (url === null) {
         return {
           type: 'Generic',
@@ -503,21 +505,12 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        // title: genericTextNode(node.from, node.to, markdown.substring(node.from, node.to)), TODO
+        title: title === null ? undefined : genericTextNode(title.from, title.to, markdown.substring(title.from, title.to)),
         url: markdown.substring(url.from, url.to),
-        alt: alt !== null
-          ? genericTextNode(alt.from, alt.to, markdown.substring(alt.from, alt.to))
+        alt: marks.length >= 2
+          ? genericTextNode(marks[0].to, marks[1].from, markdown.substring(marks[0].to, marks[1].from))
           : genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
       }
-
-      const marks = node.getChildren('LinkMark')
-
-      if (alt === null && marks.length >= 2) {
-        // The default Markdown parser doesn't apply "LinkLabel" unfortunately.
-        // So instead we have to get whatever is in between the first and second
-        // linkMark.
-        astNode.alt = genericTextNode(marks[0].to, marks[1].from, markdown.substring(marks[0].to, marks[1].from))
-      } // Else: Somewhat malformed link.
 
       return astNode
     }
