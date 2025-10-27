@@ -22,7 +22,7 @@
  */
 
 import { extractASTNodes, markdownToAST } from '.'
-import { type CitationNode, type ASTNode, type GenericNode } from './markdown-ast'
+import { type CitationNode, type ASTNode, type GenericNode, type FootnoteRef } from './markdown-ast'
 import { type MarkdownParserConfig } from '../markdown-editor/parser/markdown-parser'
 import _ from 'underscore'
 import { katexToHTML } from '@common/util/mathtex-to-html'
@@ -216,15 +216,15 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
   } else if (node.type === 'Footnote') {
     addAttribute(node, 'class', 'footnote')
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<sup><a${attr} href="#fnref:${_.escape(node.label)}">${_.escape(node.label)}</a></sup>`
+    return `${node.whitespaceBefore}<sup><a${attr} href="#fnref:${_.escape(node.label)}" name="fn:${_.escape(node.label)}">${_.escape(node.label)}</a></sup>`
   } else if (node.type === 'FootnoteRefLabel') {
     addAttribute(node, 'class', 'footnote-ref-label')
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<sup${attr}>${node.label}</sup>`
+    return `${node.whitespaceBefore}<sup${attr}><a href="#fn:${_.escape(node.label)}" name="fnref:${_.escape(node.label)}">${node.label}</a></sup>`
   } else if (node.type === 'FootnoteRef') {
     addAttribute(node, 'class', 'footnote-ref')
     const attr = renderNodeAttributes(node)
-    return `${node.whitespaceBefore}<div${attr}><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, options, indent)}</div>`
+    return `${node.whitespaceBefore}<div${attr}>${nodeToHTML(node.children, options, indent)}</div>`
   } else if (node.type === 'Heading') {
     const attr = renderNodeAttributes(node)
     return `${node.whitespaceBefore}<h${node.level}${attr}>${nodeToHTML(node.children, options, indent)}</h${node.level}>`
@@ -344,6 +344,26 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
 }
 
 /**
+ * Turns a set of footnote refs into HTML, wrapping all of them in a wrapper
+ * that allows targeting the footnotes in total.
+ *
+ * @param   {FootnoteRef[]}   fn       The footnote ref AST nodes
+ * @param   {MD2HTMLOptions}  options  Markdown->HTML parser options.
+ *
+ * @return  {string}                   The rendered HTML.
+ */
+function footnotesToHTML (fn: FootnoteRef[], options: MD2HTMLOptions): string {
+  const fnHTML = fn.map(f => nodeToHTML(f, options, 1))
+  const html = [
+    '<div id="footnote-container">',
+    ...fnHTML,
+    '</div>'
+  ]
+
+  return html.join('\n')
+}
+
+/**
  * Takes Markdown source and turns it into a valid HTML fragment. The citeLibrary
  * will be used to resolve citations.
  *
@@ -359,11 +379,20 @@ export async function md2html (markdown: string, options: MD2HTMLOptions): Promi
 
   const ast = markdownToAST(markdown, undefined, config)
 
-  const html = nodeToHTML(ast, options)
+  if (ast.type !== 'Document') {
+    throw new Error('Could not turn Markdown to HTML: No Document top node returned from parser.')
+  }
+
   console.log({ ast })
 
+  const noFootnotes = ast.children.filter(node => node.type !== 'FootnoteRef')
+  const onlyFootnotes = ast.children.filter(node => node.type === 'FootnoteRef')
+
+  const html = nodeToHTML(noFootnotes, options)
+  const fnHTML = onlyFootnotes.length > 0 ? '\n<hr>\n' + footnotesToHTML(onlyFootnotes, options) : ''
+
   if (options.onBibliography === undefined) {
-    return html // No bibliography wanted
+    return html + fnHTML // No bibliography wanted
   }
 
   // Prepare and include a bibliography at the end. We here essentially
@@ -375,8 +404,11 @@ export async function md2html (markdown: string, options: MD2HTMLOptions): Promi
   const bibHTML = await options.onBibliography([...new Set(keys)])
   if (bibHTML !== undefined) {
     const h1 = options.referenceSectionTitle !== undefined ? `<h1>${options.referenceSectionTitle}</h1>` : ''
-    return html + h1 + [ '\n', bibHTML[0].bibstart, ...bibHTML[1], bibHTML[0].bibend ].join('\n')
+
+    return html + h1 +
+      [ '\n', bibHTML[0].bibstart, ...bibHTML[1], bibHTML[0].bibend ].join('\n') +
+      fnHTML
   }
 
-  return html
+  return html + fnHTML
 }

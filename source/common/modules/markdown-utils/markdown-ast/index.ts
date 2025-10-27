@@ -70,6 +70,14 @@ export interface MDNode {
 }
 
 /**
+ * This is the AST top node
+ */
+export interface Document extends MDNode {
+  type: 'Document'
+  children: ASTNode[]
+}
+
+/**
  * Represents a footnote (the indicator within the text itself, not the
  * reference).
  */
@@ -468,7 +476,7 @@ export interface GenericNode extends MDNode {
 /**
  * Any node that can be part of the AST is an ASTNode.
  */
-export type ASTNode = Comment | Footnote | FootnoteRef | FootnoteRefLabel
+export type ASTNode = Document | Comment | Footnote | FootnoteRef | FootnoteRefLabel
 | LinkOrImage | TextNode | Heading | CitationNode | Highlight | Superscript
 | Subscript | OrderedList | BulletList | ListItem | GenericNode | FencedCode
 | InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow
@@ -490,6 +498,17 @@ export type ASTNodeType = ASTNode['type']
  */
 export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
   switch (node.name) {
+    case 'Document':
+      const docNode: Document = {
+        type: 'Document',
+        name: 'Document',
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: '',
+        attributes: {},
+        children: []
+      }
+      return parseChildren(docNode, node, markdown)
     // NOTE: Most nodes are treated as generics (see default case); here we only
     // define nodes which we can "compress" a little bit or make accessible
     case 'Image':
