@@ -66,6 +66,7 @@ import { diff } from '@codemirror/legacy-modes/mode/diff'
 import { octave } from '@codemirror/legacy-modes/mode/octave'
 import { lua } from '@codemirror/legacy-modes/mode/lua'
 import { pascal } from '@codemirror/legacy-modes/mode/pascal'
+import { nix } from '@replit/codemirror-lang-nix'
 
 // Additional parser
 import { citationParser } from './citation-parser'
@@ -115,6 +116,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(kotlin), selectors: [ 'kotlin', 'kt' ] },
   { mode: StreamLanguage.define(less), selectors: ['less'] },
   { mode: StreamLanguage.define(lua), selectors: ['lua'] },
+  { mode: nix().language, selectors: ['nix'] },
   { mode: StreamLanguage.define(objectiveC), selectors: [ 'objective-c', 'objectivec', 'objc' ] },
   { mode: StreamLanguage.define(octave), selectors: ['octave'] },
   { mode: StreamLanguage.define(pascal), selectors: ['pascal'] },

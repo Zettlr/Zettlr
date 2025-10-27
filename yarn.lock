@@ -1906,6 +1906,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@replit/codemirror-lang-nix@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@replit/codemirror-lang-nix@npm:6.0.1"
+  peerDependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    "@lezer/common": ^1.0.0
+    "@lezer/highlight": ^1.0.0
+    "@lezer/lr": ^1.0.0
+  checksum: 10/5d98b2409cb2c794202310bd7311dc8db5c5032cd2951e7f18c17ca3fbde745125ec9c89dc63c3383a26c18dada6d7f472fb5097283f9e4005df267465fe3025
+  languageName: node
+  linkType: hard
+
 "@replit/codemirror-vim@npm:^6.3.0":
   version: 6.3.0
   resolution: "@replit/codemirror-vim@npm:6.3.0"
@@ -15179,6 +15194,7 @@ __metadata:
     "@lezer/highlight": "npm:^1.2.1"
     "@lezer/markdown": "npm:^1.5.1"
     "@replit/codemirror-emacs": "npm:^6.1.0"
+    "@replit/codemirror-lang-nix": "npm:^6.0.1"
     "@replit/codemirror-vim": "npm:^6.3.0"
     "@stylistic/eslint-plugin": "npm:^5.3.1"
     "@types/adm-zip": "npm:^0.5.7"
