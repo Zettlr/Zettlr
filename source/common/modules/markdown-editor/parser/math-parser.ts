@@ -13,68 +13,62 @@
  * END HEADER
  */
 
-import { type InlineParser, type BlockParser } from '@lezer/markdown'
+import type { DelimiterType, InlineParser, BlockParser } from '@lezer/markdown'
 import { StreamLanguage } from '@codemirror/language'
-import { Tree } from '@lezer/common'
 import { stexMath } from '@codemirror/legacy-modes/mode/stex'
-import { partialParse } from './partial-parse'
 
 const stexLang = StreamLanguage.define(stexMath)
+
+const MathDelimiter: DelimiterType = {}
 
 export const inlineMathParser: InlineParser = {
   // This parser should only match inline-math (we have to divide that here)
   name: 'inlineMath',
   parse: (ctx, next, pos) => {
-    if (next !== 36) { // $
+    if (next !== 36) { // 36 === '$'
       return -1
     }
 
-    const inlineMathRE = /(?<![\\$])(?<dollar>\${1,2})(?![\s$])(?<eq>.+?)(?<![\s\\])\k<dollar>(?!\d)/g
-    // Set the lastIndex to the relative position where we're currently parsing ...
-    const relativePosition = pos - ctx.offset
-    inlineMathRE.lastIndex = relativePosition
+    // Try to find an opening delimiter
+    let opening = ctx.findOpeningDelimiter(MathDelimiter)
 
-    // .. attempt a match ...
-    const match = inlineMathRE.exec(ctx.text)
-    // ... check that we had one, and that it is at the very start of the string ...
-    if (match === null || match.index > relativePosition) {
-      return -1 // There was either no match, or we're not yet there
+    // Since there was no opening, this is a potential opening
+    if (opening === null) {
+      return ctx.addDelimiter(MathDelimiter, pos, pos + 1, true, false)
     }
 
-    // ... and work through the match.
-    const { eq, dollar } = match.groups as Record<string, string>
+    const delim = ctx.getDelimiterAt(opening)
+    if (delim === null) { return -1 }
 
-    let curPos = pos
-    const childNodes = [ctx.elt('CodeMark', curPos, curPos + dollar.length)]
+    // Remove any elements that were parsed internally
+    ctx.takeContent(opening)
 
-    curPos += dollar.length
-    const treeElem = partialParse(ctx, stexLang.parser, eq, curPos)
-    childNodes.push(treeElem)
+    ctx.addDelimiter(MathDelimiter, pos, pos + 1, false, true)
 
-    curPos += eq.length
-    childNodes.push(ctx.elt('CodeMark', curPos, curPos + dollar.length))
-    const wrapperElem = ctx.elt('InlineCode', pos, curPos + dollar.length, childNodes)
-    return ctx.addElement(wrapperElem)
+    const contents = ctx.slice(delim.to, pos)
+    // Parse the interior content using stex
+    const innerElements = ctx.elt(stexLang.parser.parse(contents), delim.to)
+
+    const openingMark = ctx.elt('CodeMark', delim.from, delim.to)
+    const closingMark = ctx.elt('CodeMark', pos, pos + 1)
+
+    return ctx.addElement(ctx.elt('InlineCode', delim.from, pos + 1, [ openingMark, innerElements, closingMark ]))
   }
 }
 
 export const blockMathParser: BlockParser = {
-  // We need to give the parser a name. Since it should only parse YAML frontmatters,
-  // here we go.
   name: 'blockMath',
   parse: (ctx, line) => {
     const blockMathRE = /^(\s*\$\$)\s*$/
-    // This parser is inspired by the BlockParsers defined in
-    // @lezer/markdown/src/markdown.ts
     if (!blockMathRE.test(line.text)) {
       return false
     }
 
-    // We have a possible math block
     const equationLines: string[] = []
-    // We also need the position at which the block ends
-    const startFrom = ctx.lineStart
+
+    const blockStart = ctx.lineStart
     const from = ctx.lineStart + line.text.length + 1
+
     while (ctx.nextLine() && !blockMathRE.test(line.text)) {
       equationLines.push(line.text)
     }
@@ -86,30 +80,16 @@ export const blockMathParser: BlockParser = {
       return false
     }
 
-    // Let the stex mode parse the block into a tree and create a new element
-    // from that tree.
-    const equation = equationLines.join('\n')
-    const innerTree = stexLang.parser.parse(equation)
+    // Parse the interior content using stex
+    const innerElements = ctx.elt(stexLang.parser.parse(equationLines.join('\n')), from)
+    const codeText = ctx.elt('CodeText', from, ctx.prevLineEnd(), [innerElements])
 
-    // Here we detach the syntax tree from the containing `Document` node
-    const firstChild = innerTree.children[0]
-    let treeElem = ctx.elt(innerTree, from)
-    if (firstChild instanceof Tree) {
-      treeElem = ctx.elt(firstChild, from)
-    }
+    const openingMark = ctx.elt('CodeMark', blockStart, from - 1)
+    const closingMark = ctx.elt('CodeMark', ctx.lineStart, ctx.lineStart + line.text.length)
 
-    // Now create the wrapper
-    const wrapperNode = ctx.elt('FencedCode', startFrom, ctx.lineStart + line.text.length, [
-      ctx.elt('CodeMark', startFrom, from - 1), // Ignore the newline char (to ensure the math renderer can differentiate math blocks from code blocks)
-      ctx.elt('CodeText', from, from + equation.length, [treeElem]),
-      ctx.elt('CodeMark', Math.max(from + equation.length, ctx.lineStart), ctx.lineStart + line.text.length)
-    ])
-
-    ctx.addElement(wrapperNode)
-
-    // Ensure the closing code mark is also contained within this block. NOTE:
-    // Needs to be done AFTER we have used the line info to create the widget!
+    ctx.addElement(ctx.elt('FencedCode', blockStart, ctx.lineStart + line.text.length, [ openingMark, codeText, closingMark ]))
     ctx.nextLine()
-    return true // Signal that we've parsed this block
+
+    return true
   }
 }

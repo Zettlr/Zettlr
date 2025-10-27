@@ -20,6 +20,7 @@ import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 import { equationMenu } from '../context-menu/equation-menu'
 import { katexToElem } from 'source/common/util/mathtex-to-html'
+import { rangeInSelection } from '../util/range-in-selection'
 
 class MathWidget extends WidgetType {
   constructor (readonly equation: string, readonly displayMode: boolean, readonly node: SyntaxNode) {
@@ -87,6 +88,12 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): MathWidget|unde
   // and then remove the leading and trailing dollars. Also, pass a stable node
   // reference (SyntaxNodeRef will be dropped, but the SyntaxNode itself will
   // stay, and keep its position updated depending on what happens in the doc)
+
+  // Don't render if the selection is within the node
+  if (rangeInSelection(state, node.from, node.to, true)) {
+    return undefined
+  }
+
   const nodeText = state.sliceDoc(node.from, node.to)
   if (!nodeText.startsWith('$') && (!nodeText.endsWith('$\n') || nodeText.endsWith('$'))) {
     return undefined // It's regular FencedCode/InlineCode
