@@ -383,8 +383,6 @@ export async function md2html (markdown: string, options: MD2HTMLOptions): Promi
     throw new Error('Could not turn Markdown to HTML: No Document top node returned from parser.')
   }
 
-  console.log({ ast })
-
   const noFootnotes = ast.children.filter(node => node.type !== 'FootnoteRef')
   const onlyFootnotes = ast.children.filter(node => node.type === 'FootnoteRef')
 
