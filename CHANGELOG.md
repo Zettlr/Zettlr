@@ -286,6 +286,7 @@ other than numbers.
 - Update `it-IT` translations (#5831).
 - Update `da-DA` translations (#5868).
 - Update `de-DE` translations.
+- Added support for `nix` syntax highlighting (#5954).
 - Fixed incorrect cursor position after inserting IDs (#5846).
 - The toolbar word counter no longer wraps (#5774; #5881).
 - Fix context menu entry "Insert table" not working (#5835).
