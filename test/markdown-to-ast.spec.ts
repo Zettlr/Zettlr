@@ -23,7 +23,7 @@ const TESTERS: Array<{ description: string, input: string, output: ASTNode }> = 
 |--|--|
 |No padding|  More padding  |`,
     output: {
-      type: 'Generic', name: 'Document', from: 0, to: 54, whitespaceBefore: '',
+      type: 'Document', name: 'Document', from: 0, to: 54, whitespaceBefore: '',
       children: [
         {
           type: 'Table', name: 'Table', from: 0, to: 54, whitespaceBefore: '',
@@ -70,7 +70,7 @@ const TESTERS: Array<{ description: string, input: string, output: ASTNode }> = 
 -|-
 C|D`,
     output: {
-      type: 'Generic', name: 'Document', from: 0, to: 11, whitespaceBefore: '',
+      type: 'Document', name: 'Document', from: 0, to: 11, whitespaceBefore: '',
       children: [
         {
           type: 'Table', name: 'Table', tableType: 'pipe', from: 0, to: 11, whitespaceBefore: '',
@@ -113,7 +113,7 @@ C|D`,
 
 This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
     output: {
-      type: 'Generic',
+      type: 'Document',
       name: 'Document',
       from: 0,
       to: 82,

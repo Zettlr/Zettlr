@@ -41,10 +41,15 @@ function findRefForFootnote (state: EditorState, fn: string): { from: number, to
         return false // Do not traverse down
       }
 
-      const label = node.node.getChild('FootnoteRefLabel')
-      const body = node.node.getChild('FootnoteRefBody')
+      const paragraphs = node.node.getChildren('Paragraph')
 
-      if (label === null || body === null) {
+      if (paragraphs.length < 1) {
+        return false
+      }
+
+      const label = paragraphs[0].getChild('FootnoteRefLabel')
+
+      if (label === null) {
         return false // Should not happen, but you never know
       }
 
@@ -56,9 +61,9 @@ function findRefForFootnote (state: EditorState, fn: string): { from: number, to
       }
 
       text = {
-        from: body.from,
-        to: body.to,
-        text: state.sliceDoc(body.from, body.to)
+        from: label.to,
+        to: node.to,
+        text: paragraphs.map((p) => state.sliceDoc(p.from, p.to)).join('\n') // state.sliceDoc(label.to, node.to)
       }
     }
   })
@@ -86,13 +91,6 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   const { zknLinkFormat } = view.state.field(configField)
 
   const { library } = view.state.field(configField).metadata
-  const tooltipContent = md2html(
-    (fnBody === undefined || fnBody.text === '')
-      ? trans('No footnote text found.')
-      : fnBody.text,
-    window.getCitationCallback(library),
-    zknLinkFormat
-  )
 
   return {
     pos: nodeAt.from,
@@ -100,7 +98,23 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
     above: true,
     create (view) {
       const dom = document.createElement('div')
-      dom.innerHTML = tooltipContent
+      const content = document.createElement('div')
+      dom.appendChild(content)
+
+      md2html(
+        (fnBody === undefined || fnBody.text === '')
+          ? trans('No footnote text found.')
+          : fnBody.text,
+        {
+          onCitation: window.getCitationCallback(library),
+          zknLinkFormat
+        }
+      )
+        .then(tooltipContent => {
+          content.innerHTML = tooltipContent
+        })
+        .catch(err => console.error(err))
+
       if (fnBody === undefined) {
         return { dom }
       }

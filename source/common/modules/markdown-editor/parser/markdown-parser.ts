@@ -234,7 +234,6 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         { name: 'Footnote', style: customTags.Footnote },
         { name: 'FootnoteRef', style: customTags.FootnoteRef },
         { name: 'FootnoteRefLabel', style: customTags.FootnoteRefLabel },
-        { name: 'FootnoteRefBody', style: { 'FootnoteRefBody/...': customTags.FootnoteRefBody } },
         { name: 'ZknLink', style: customTags.ZknLink },
         { name: 'ZknLinkContent', style: customTags.ZknLinkContent },
         { name: 'ZknLinkTitle', style: customTags.ZknLinkTitle },

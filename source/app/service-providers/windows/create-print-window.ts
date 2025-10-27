@@ -41,8 +41,6 @@ export default function createPrintWindow (logger: LogProvider, config: ConfigPr
     show: false,
     webPreferences: {
       sandbox: true,
-      // We are loading an iFrame with a local resource, so we must disable webSecurity for this window
-      webSecurity: false,
       preload: PRINT_PRELOAD_WEBPACK_ENTRY
     }
   }

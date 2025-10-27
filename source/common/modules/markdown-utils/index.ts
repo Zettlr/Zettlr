@@ -14,7 +14,7 @@
  */
 
 import markdownParser, { type MarkdownParserConfig } from '@common/modules/markdown-editor/parser/markdown-parser'
-import { parseNode, type ASTNode, type ASTNodeType, type TextNode } from './markdown-ast'
+import { parseNode, type ASTNode, type ASTNodeType, type TextNode, type Document } from './markdown-ast'
 import { type Tree } from '@lezer/common'
 
 export { md2html } from './markdown-to-html'
@@ -35,7 +35,7 @@ export { md2html } from './markdown-to-html'
  *
  * @return  {ASTNode}            The root node of the AST
  */
-export function markdownToAST (markdown: string, tree?: Tree, parserConfig?: MarkdownParserConfig): ASTNode {
+export function markdownToAST (markdown: string, tree?: Tree, parserConfig?: MarkdownParserConfig): Document|ASTNode {
   if (tree === undefined) {
     const { parser } = markdownParser(parserConfig).language
     tree = parser.parse(markdown)
@@ -57,6 +57,10 @@ export function markdownToAST (markdown: string, tree?: Tree, parserConfig?: Mar
  * @return  {ASTNode[]}              An array of all found nodes
  */
 export function extractASTNodes (ast: ASTNode, nodeType: ASTNodeType, filter?: (node: ASTNode) => boolean): ASTNode[] {
+  if (ast.type === 'Document') {
+    return ast.children.flatMap(child => extractASTNodes(child, nodeType, filter))
+  }
+
   if (filter !== undefined && !filter(ast)) {
     return []
   }
@@ -100,6 +104,10 @@ export function extractASTNodes (ast: ASTNode, nodeType: ASTNodeType, filter?: (
  * @return  {TextNode[]}          A list of all text nodes
  */
 export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => boolean): TextNode[] {
+  if (ast.type === 'Document') {
+    return ast.children.flatMap(child => extractTextnodes(child, filter))
+  }
+
   if (filter !== undefined && !filter(ast)) {
     return []
   }
