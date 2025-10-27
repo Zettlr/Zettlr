@@ -346,6 +346,7 @@ other than numbers.
   where applicable.
 - The emphasis renderer now also hides formatting characters for footnote
   reference labels.
+- Images and links will now be detected more robustly (#5964).
 - Improved parsing footnotes (especially with multi-paragraph contents) (#5968).
 - Improved Markdown-to-HTML conversion (#5968).
 
