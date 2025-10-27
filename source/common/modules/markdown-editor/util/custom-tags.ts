@@ -37,7 +37,6 @@ export const customTags = {
   Footnote: Tag.define(),
   FootnoteRef: Tag.define(),
   FootnoteRefLabel: Tag.define(),
-  FootnoteRefBody: Tag.define(),
   // Zettelkasten links
   ZknLink: Tag.define(),
   ZknLinkContent: Tag.define(),

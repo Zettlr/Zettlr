@@ -12,8 +12,7 @@
  * END HEADER
  */
 
-import { type InlineParser, type BlockParser } from '@lezer/markdown'
-import { partialParse } from './partial-parse'
+import { type InlineParser, type BlockParser, type Element } from '@lezer/markdown'
 
 // TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser
 export const footnoteParser: InlineParser = {
@@ -47,13 +46,21 @@ export const footnoteRefParser: BlockParser = {
     }
 
     const refFrom = ctx.lineStart
+    const labelTo = ctx.lineStart + match[0].length - 1
 
-    const label = ctx.elt('FootnoteRefLabel', refFrom, ctx.lineStart + match[0].length - 1)
-
-    const from = ctx.lineStart + match[0].length
     let to = ctx.lineStart + line.text.length // One newline less here
 
-    const footnoteBody: string[] = [line.text.slice(match[0].length)]
+    const bodyElems: Element[] = [
+      ctx.elt(
+        'Paragraph',
+        ctx.lineStart,
+        ctx.lineStart + line.text.length,
+        [
+          ctx.elt('FootnoteRefLabel', refFrom, labelTo),
+          ...ctx.parser.parseInline(line.text.slice(labelTo - ctx.lineStart), labelTo)
+        ]
+      )
+    ]
 
     // Everything at least indented by 4 spaces OR empty lines belong to this paragraph
     while (ctx.nextLine()) {
@@ -70,23 +77,34 @@ export const footnoteRefParser: BlockParser = {
         if (nextEmpty || !nextIndented) {
           break // Footnote is over
         } else if (nextIndented) {
-          footnoteBody.push(line.text)
+          bodyElems.push(
+            ctx.elt(
+              'Paragraph',
+              ctx.lineStart,
+              ctx.lineStart + line.text.length,
+              ctx.parser.parseInline(line.text, ctx.lineStart)
+            )
+          )
           to += line.text.length + 1
         } else {
           break // Not empty but also not indented
         }
       } else if (isIndented) {
-        footnoteBody.push(line.text)
+        bodyElems.push(
+          ctx.elt(
+            'Paragraph',
+            ctx.lineStart,
+            ctx.lineStart + line.text.length,
+            ctx.parser.parseInline(line.text, ctx.lineStart)
+          )
+        )
         to += line.text.length + 1
       } else {
         break
       }
     }
 
-    const treeElem = partialParse(ctx, ctx.parser, footnoteBody.join('\n'), from)
-    const body = ctx.elt('FootnoteRefBody', from, to, [treeElem])
-
-    const wrapper = ctx.elt('FootnoteRef', refFrom, to, [ label, body ])
+    const wrapper = ctx.elt('FootnoteRef', refFrom, to, bodyElems)
     ctx.addElement(wrapper)
 
     return true

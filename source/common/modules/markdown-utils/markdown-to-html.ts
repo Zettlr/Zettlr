@@ -192,9 +192,7 @@ function addAttribute (node: ASTNode, attributeName: string, ...values: string[]
  * @return  {string}                The HTML string
  */
 export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, indent: number = 0): string {
-  const HIDDEN_GENERIC_NODES = [
-    'Document', 'FootnoteRefBody'
-  ]
+  const HIDDEN_GENERIC_NODES = ['Document']
 
   // Convenience to convert a list of child nodes to HTML
   if (Array.isArray(node)) {
@@ -226,7 +224,6 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
   } else if (node.type === 'FootnoteRef') {
     addAttribute(node, 'class', 'footnote-ref')
     const attr = renderNodeAttributes(node)
-    console.log(node.children)
     return `${node.whitespaceBefore}<div${attr}><a name="fnref:${_.escape(node.label)}"></a>${nodeToHTML(node.children, options, indent)}</div>`
   } else if (node.type === 'Heading') {
     const attr = renderNodeAttributes(node)
@@ -363,6 +360,7 @@ export async function md2html (markdown: string, options: MD2HTMLOptions): Promi
   const ast = markdownToAST(markdown, undefined, config)
 
   const html = nodeToHTML(ast, options)
+  console.log({ ast })
 
   if (options.onBibliography === undefined) {
     return html // No bibliography wanted

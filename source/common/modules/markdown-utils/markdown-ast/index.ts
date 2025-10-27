@@ -629,7 +629,11 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       return astNode
     }
     case 'FootnoteRef': {
-      const label = node.getChild('FootnoteRefLabel')
+      const p = node.getChild('Paragraph') // First para
+      if (p === null) {
+        return genericTextNode(node.from, node.to, markdown.substring(node.from, node.to), getWhitespaceBeforeNode(node, markdown))
+      }
+      const label = p.getChild('FootnoteRefLabel')
       if (label === null) {
         return genericTextNode(node.from, node.to, markdown.substring(node.from, node.to), getWhitespaceBeforeNode(node, markdown))
       }
