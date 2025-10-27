@@ -273,6 +273,7 @@ other than numbers.
   files, or use IDs where available.
 - **A11y**: Zettlr now respects if you choose to reduce transparency in system
   settings and no longer add window vibrancy on macOS.
+- Snippets can now be nested (#5939).
 - You can now show an item in Finder/Explorer/file browser when right-clicking a
   document tab (#5914).
 - Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
@@ -342,6 +343,8 @@ other than numbers.
   selection background for the Karl-Marx-Stadt theme.
 - Indentation preferences from the main settings now also apply to code editors
   where applicable.
+- The emphasis renderer now also hides formatting characters for footnote
+  reference labels.
 
 ## Under the Hood
 
@@ -385,6 +388,8 @@ other than numbers.
   actions will still call the provided callback function.
 - The Markdown AST parser now also emits `labelFrom` and `labelTo`-properties
   for footnote references for easy access to the reference label.
+- If loading a window fails due to whatever reason, the corresponding error will
+  now be shown to the user using an error dialog.
 
 # 3.6.0
 
