@@ -282,17 +282,16 @@ function shouldHandleNode (node: SyntaxNodeRef): boolean {
 function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|undefined {
   // Get the actual link contents, extract title and URL and create a
   // replacement widget
-  const marks = node.node.getChildren('LinkMark')
+  const altNode = node.node.getChild('LinkLabel')
   const titleNode = node.node.getChild('LinkTitle')
   const urlNode = node.node.getChild('URL')
-
-  if (urlNode === null || marks.length < 2) {
+  if (urlNode === null || altNode === null) {
     return undefined
   }
 
-  const alt = state.sliceDoc(marks[0].to, marks[1].from)
+  const url = state.sliceDoc(urlNode?.from, urlNode.to)
+  const alt = state.sliceDoc(altNode?.from, altNode?.to)
   const title = titleNode === null ? alt : state.sliceDoc(titleNode.from, titleNode.to)
-  const url = state.sliceDoc(urlNode.from, urlNode.to)
 
   let data: ParsedPandocLinkAttributes = {}
   const nextSibling = node.node.nextSibling
