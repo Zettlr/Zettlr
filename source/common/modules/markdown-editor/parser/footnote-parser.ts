@@ -12,7 +12,9 @@
  * END HEADER
  */
 
-import { type InlineParser, type BlockParser, type Element } from '@lezer/markdown'
+import type { InlineParser, BlockParser, DelimiterType, BlockContext, Line } from '@lezer/markdown'
+
+const FootnoteDelimiter: DelimiterType = {}
 
 // TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser
 export const footnoteParser: InlineParser = {
@@ -20,20 +22,35 @@ export const footnoteParser: InlineParser = {
   name: 'footnotes',
   before: 'Link', // [^1] will otherwise be detected as a link
   parse (ctx, next, pos) {
-    if (next !== 91 && next !== 94) { // [, ^
+    if (next !== 91 && next !== 94 && next !== 93) { // 91 === '[', 94 === '^', 93 === ']'
       return -1
     }
 
-    const relativePosition = pos - ctx.offset
-    // Matches [^identifier] (alternative 1) and ^[inline] (alternative 2)
-    const match = /\[\^[^\s]+?\]|\^\[.+?\]/.exec(ctx.text.slice(relativePosition))
-
-    if (match === null || match.index > 0) {
-      return -1
+    // Footnote Style: [^identifier]
+    if (next === 91 && ctx.char(pos + 1) === 94) { // 91 === '[', 94 === '^'
+      return ctx.addDelimiter(FootnoteDelimiter, pos, pos + 2, true, false)
     }
 
-    // At this point we have a footnote and it's at the current pos
-    return ctx.addElement(ctx.elt('Footnote', pos, pos + match[0].length))
+    // Footnote Style: ^[inline]
+    if (next === 94 && ctx.char(pos + 1) === 91) {
+      return ctx.addDelimiter(FootnoteDelimiter, pos, pos + 2, true, false)
+    }
+
+    let opening = null
+    if (next === 93) {  // 93 === ']'
+      opening = ctx.findOpeningDelimiter(FootnoteDelimiter)
+    }
+
+    if (opening === null) { return -1}
+
+    const delim = ctx.getDelimiterAt(opening)
+    if (delim === null) { return -1 }
+
+    const children = ctx.takeContent(opening)
+
+    ctx.addDelimiter(FootnoteDelimiter, pos, pos + 1, false, true)
+
+    return ctx.addElement(ctx.elt('Footnote', delim.from, pos + 1, children))
   }
 }
 
@@ -46,67 +63,31 @@ export const footnoteRefParser: BlockParser = {
     }
 
     const refFrom = ctx.lineStart
-    const labelTo = ctx.lineStart + match[0].length - 1
+    const refTo = ctx.lineStart + match[0].length
 
-    let to = ctx.lineStart + line.text.length // One newline less here
+    ctx.startComposite('FootnoteRef', 0)
+    ctx.addElement(ctx.elt('FootnoteRefLabel', refFrom, refTo - 1))
 
-    const bodyElems: Element[] = [
-      ctx.elt(
-        'Paragraph',
-        ctx.lineStart,
-        ctx.lineStart + line.text.length,
-        [
-          ctx.elt('FootnoteRefLabel', refFrom, labelTo),
-          ...ctx.parser.parseInline(line.text.slice(labelTo - ctx.lineStart), labelTo)
-        ]
-      )
-    ]
-
-    // Everything at least indented by 4 spaces OR empty lines belong to this paragraph
-    while (ctx.nextLine()) {
-      const isIndented = /^\s{4,}/.test(line.text)
-      const isEmpty = /^\s*$/.test(line.text)
-
-      if (!isIndented && !isEmpty) {
-        break // Footnote is over
-      } else if (isEmpty) {
-        const nextLine = ctx.peekLine()
-        const nextIndented = /^\s{4,}/.test(nextLine)
-        const nextEmpty = /^\s*$/.test(nextLine)
-        // The following line may not be empty
-        if (nextEmpty || !nextIndented) {
-          break // Footnote is over
-        } else if (nextIndented) {
-          bodyElems.push(
-            ctx.elt(
-              'Paragraph',
-              ctx.lineStart,
-              ctx.lineStart + line.text.length,
-              ctx.parser.parseInline(line.text, ctx.lineStart)
-            )
-          )
-          to += line.text.length + 1
-        } else {
-          break // Not empty but also not indented
-        }
-      } else if (isIndented) {
-        bodyElems.push(
-          ctx.elt(
-            'Paragraph',
-            ctx.lineStart,
-            ctx.lineStart + line.text.length,
-            ctx.parser.parseInline(line.text, ctx.lineStart)
-          )
-        )
-        to += line.text.length + 1
-      } else {
-        break
-      }
+    // We need to parse the rest of the line here instead of letting the block
+    // take care of it due to the `ctx.nextLine()` call at the end. Without that call, we
+    // never progress the parser and OOM.
+    const innerElements = ctx.parser.parseInline(line.text.slice(match[0].length), refTo)
+    for (const el of innerElements) {
+      ctx.addElement(el)
     }
 
-    const wrapper = ctx.elt('FootnoteRef', refFrom, to, bodyElems)
-    ctx.addElement(wrapper)
+    ctx.nextLine()
 
+    return null
+  }
+}
+
+export function footnoteComposite (ctx: BlockContext, line: Line, _value: number): boolean {
+  // If the line is indented, or the line is empty and the next line is indented.
+  if (line.indent >= 4 || (/^\s*$/.test(line.text) && /[ ]{4,}/.test(ctx.peekLine()))) {
+    line.moveBaseColumn(4)
     return true
   }
+
+  return false
 }

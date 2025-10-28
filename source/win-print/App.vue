@@ -244,6 +244,14 @@ function handleClick (buttonID?: string): void {
       text-align: center;
     }
   }
+
+  #footnote-container {
+    font-size: 80%;
+
+    :not(:first-child) {
+      text-indent: 2em;
+    }
+  }
 }
 
 @media print {

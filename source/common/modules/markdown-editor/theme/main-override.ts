@@ -58,14 +58,6 @@ export const mainOverride = EditorView.baseTheme({
     padding: '4px',
     maxWidth: '800px'
   },
-  // Footnotes
-  '.footnote, .footnote-ref-label': {
-    verticalAlign: 'super',
-    fontSize: '80%'
-  },
-  '.footnote-ref-body': {
-    fontSize: '80%'
-  },
   '.cm-emphasis': { fontStyle: 'italic' },
   // Provide the default YAML frontmatter indicator
   '.cm-yaml-frontmatter-start::after': {
