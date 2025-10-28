@@ -336,7 +336,7 @@ other than numbers.
 ## Under the Hood
 
 - Update Electron to version `38.3.0`.
-- Update Pandoc to version `3.8`.
+- Update Pandoc to version `3.8.2.1`.
 - Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
   declarations (`if`, `for`, `while`, etc.).
 - The `enabled` property of context menu items is now optional, and defaults to
