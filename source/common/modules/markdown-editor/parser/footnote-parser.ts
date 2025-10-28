@@ -57,6 +57,10 @@ export const footnoteParser: InlineParser = {
 export const footnoteRefParser: BlockParser = {
   name: 'footnote-refs',
   parse (ctx, line) {
+    // This prevents footnotes from nesting into footnotes
+    // and it prevents infinite recursion and OOM errors.
+    if (ctx.depth > 1) { return false }
+
     const match = /^\[\^[^\s]+\]:\s/.exec(line.text)
     if (match === null) {
       return false
@@ -67,24 +71,18 @@ export const footnoteRefParser: BlockParser = {
 
     ctx.startComposite('FootnoteRef', 0)
     ctx.addElement(ctx.elt('FootnoteRefLabel', refFrom, refTo - 1))
-
-    // We need to parse the rest of the line here instead of letting the block
-    // take care of it due to the `ctx.nextLine()` call at the end. Without that call, we
-    // never progress the parser and OOM.
-    const innerElements = ctx.parser.parseInline(line.text.slice(match[0].length), refTo)
-    for (const el of innerElements) {
-      ctx.addElement(el)
-    }
-
-    ctx.nextLine()
-
+    line.moveBaseColumn(match[0].length)
     return null
+  },
+
+  endLeaf (_ctx, line, _leaf) {
+    return /^\[\^[^\s]+\]:\s/.test(line.text)
   }
 }
 
 export function footnoteComposite (ctx: BlockContext, line: Line, _value: number): boolean {
   // If the line is indented, or the line is empty and the next line is indented.
-  if (line.indent >= 4 || (/^\s*$/.test(line.text) && /[ ]{4,}/.test(ctx.peekLine()))) {
+  if (line.indent >= 4 || (/^\s*$/.test(line.text) && /^[ ]{4,}/.test(ctx.peekLine()))) {
     line.moveBaseColumn(4)
     return true
   }

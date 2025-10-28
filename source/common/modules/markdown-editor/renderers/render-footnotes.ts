@@ -19,8 +19,8 @@ import { type EditorView, type ViewUpdate, ViewPlugin, Decoration, type Decorati
 import { rangeInSelection } from '../util/range-in-selection'
 
 // We have to assign style in the decoration itself since child nodes do not inherit class names
-const footnoteDeco = Decoration.mark({ attributes: { style: 'font-size: 80%; vertical-align: super;' } })
-const footnoteRefDeco = Decoration.mark({ attributes: { style: 'font-size: 80%;' } })
+const footnoteDeco = Decoration.mark({ attributes: { style: 'font-size: 0.8rem; vertical-align: super;' } })
+const footnoteRefDeco = Decoration.mark({ attributes: { style: 'font-size: 0.8rem;' } })
 
 function footnoteDecorations (view: EditorView): RangeSet<Decoration> {
   const ranges: Array<Range<Decoration>> = []

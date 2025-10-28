@@ -246,10 +246,16 @@ function handleClick (buttonID?: string): void {
   }
 
   #footnote-container {
-    font-size: 80%;
+    font-size: 0.8rem;
 
-    :not(:first-child) {
-      text-indent: 2em;
+    .footnote-ref {
+      :is(p:first-of-type) {
+        display: inline !important;
+      }
+
+      :not(:first-of-type) {
+        margin-left: 2rem;
+      }
     }
   }
 }
