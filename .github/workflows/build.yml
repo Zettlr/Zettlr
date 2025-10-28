@@ -326,8 +326,6 @@ jobs:
       - name: Rename installers
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: |
-          mv ./release/Zettlr-${{ env.old_version }}-amd64.deb ./release/Zettlr-${{ env.version }}-amd64.deb
-          mv ./release/Zettlr-${{ env.old_version }}-x86_64.rpm ./release/Zettlr-${{ env.version }}-x86_64.rpm
           mv ./release/Zettlr-${{ env.old_version }}-x86_64.AppImage ./release/Zettlr-${{ env.version }}-x86_64.AppImage
       - name: Cache installers
         uses: actions/upload-artifact@v4
@@ -375,17 +373,15 @@ jobs:
       - name: Rename installers
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: |
-          mv ./release/Zettlr-${{ env.old_version }}-arm64.deb ./release/Zettlr-${{ env.version }}-arm64.deb
-          mv ./release/Zettlr-${{ env.old_version }}-aarch64.rpm ./release/Zettlr-${{ env.version }}-aarch64.rpm
           mv ./release/Zettlr-${{ env.old_version }}-arm64.AppImage ./release/Zettlr-${{ env.version }}-arm64.AppImage
       - name: Cache installers
         uses: actions/upload-artifact@v4
         with:
           name: linux_arm64
           path: |
-            ./release/Zettlr-${{env.version}}-arm64.deb
-            ./release/Zettlr-${{env.version}}-aarch64.rpm
-            ./release/Zettlr-${{env.version}}-arm64.AppImage
+            ./release/Zettlr-${{ env.version }}-arm64.deb
+            ./release/Zettlr-${{ env.version }}-aarch64.rpm
+            ./release/Zettlr-${{ env.version }}-arm64.AppImage
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
