@@ -29,30 +29,45 @@ export const inlineMathParser: InlineParser = {
       return -1
     }
 
+    // Even though double dollars mark a display equation, it is perfectly
+    // within spec to keep it inline (it will be rendered as a block element).
+    // Since this technically (from the parser's perspective) makes this an
+    // inline-element, we implement this check here, and not in the block parser
+    // below.
+    const isInlineDisplayMath = ctx.char(pos + 1) === 36
+    const delimLength = isInlineDisplayMath ? 2 : 1
+
     // Try to find an opening delimiter
-    let opening = ctx.findOpeningDelimiter(MathDelimiter)
+    const opening = ctx.findOpeningDelimiter(MathDelimiter)
 
     // Since there was no opening, this is a potential opening
     if (opening === null) {
-      return ctx.addDelimiter(MathDelimiter, pos, pos + 1, true, false)
+      return ctx.addDelimiter(MathDelimiter, pos, pos + delimLength, true, false)
     }
 
     const delim = ctx.getDelimiterAt(opening)
-    if (delim === null) { return -1 }
+    if (delim === null) {
+      return -1
+    }
+
+    // Ensure the opening delimiter has the same length as what we have here.
+    if (delim.to - delim.from !== delimLength) {
+      return -1 // Require matching delimiters
+    }
 
     // Remove any elements that were parsed internally
     ctx.takeContent(opening)
 
-    ctx.addDelimiter(MathDelimiter, pos, pos + 1, false, true)
+    ctx.addDelimiter(MathDelimiter, pos, pos + delimLength, false, true)
 
     const contents = ctx.slice(delim.to, pos)
     // Parse the interior content using stex
     const innerElements = ctx.elt(stexLang.parser.parse(contents), delim.to)
 
     const openingMark = ctx.elt('CodeMark', delim.from, delim.to)
-    const closingMark = ctx.elt('CodeMark', pos, pos + 1)
+    const closingMark = ctx.elt('CodeMark', pos, pos + delimLength)
 
-    return ctx.addElement(ctx.elt('InlineCode', delim.from, pos + 1, [ openingMark, innerElements, closingMark ]))
+    return ctx.addElement(ctx.elt('InlineCode', delim.from, pos + delimLength, [ openingMark, innerElements, closingMark ]))
   }
 }
 
