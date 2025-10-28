@@ -142,7 +142,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -187,7 +187,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -233,7 +233,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -294,7 +294,7 @@ jobs:
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -335,7 +335,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -385,7 +385,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV

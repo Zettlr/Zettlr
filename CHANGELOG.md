@@ -378,6 +378,12 @@ other than numbers.
 - If loading a window fails due to whatever reason, the corresponding error will
   now be shown to the user using an error dialog.
 - Aligned the math parser to the internal CodeMirror APIs (#5971).
+- Zettlr now declares nightly releases via the build flags instead of prerelease
+  (e.g., `4.0.0-beta+nightly` instead of `4.0.0-beta-nightly`), since the
+  previous way of declaring betas would make the internal semver check would
+  declare `4.0.0-beta-nightly` to be the same as `4.0.0-beta.1-nightly`.
+- Zettlr now properly offers updating to a newer prerelease versions if users
+  are on a nightly version (e.g., `beta` -> `beta.1`).
 
 # 3.6.0
 
