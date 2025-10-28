@@ -331,6 +331,7 @@ other than numbers.
 - Images and links will now be detected more robustly (#5964).
 - Improved parsing footnotes (especially with multi-paragraph contents) (#5968).
 - Improved Markdown-to-HTML conversion (#5968).
+- Fixed image parsing for images with no ALT-text (#5963).
 
 ## Under the Hood
 
@@ -376,6 +377,7 @@ other than numbers.
   for footnote references for easy access to the reference label.
 - If loading a window fails due to whatever reason, the corresponding error will
   now be shown to the user using an error dialog.
+- Aligned the math parser to the internal CodeMirror APIs (#5971).
 
 # 3.6.0
 
