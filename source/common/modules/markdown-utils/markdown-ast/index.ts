@@ -70,6 +70,14 @@ export interface MDNode {
 }
 
 /**
+ * This is the AST top node
+ */
+export interface Document extends MDNode {
+  type: 'Document'
+  children: ASTNode[]
+}
+
+/**
  * Represents a footnote (the indicator within the text itself, not the
  * reference).
  */
@@ -96,9 +104,28 @@ export interface FootnoteRef extends MDNode {
    */
   label: string
   /**
+   * Start of the label, for easy access.
+   */
+  labelFrom: number
+  /**
+   * End of the label, for easy access.
+   */
+  labelTo: number
+  /**
    * A list of children representing the footnote's body
    */
   children: ASTNode[]
+}
+
+/**
+ * A footnote reference label is the label attached to a footnote reference.
+ */
+export interface FootnoteRefLabel extends MDNode {
+  type: 'FootnoteRefLabel'
+  /**
+   * The label of the footnote label (sans the formatting, i.e., [^1]: -> 1)
+   */
+  label: string
 }
 
 /**
@@ -449,10 +476,11 @@ export interface GenericNode extends MDNode {
 /**
  * Any node that can be part of the AST is an ASTNode.
  */
-export type ASTNode = Comment | Footnote | FootnoteRef | LinkOrImage | TextNode
-| Heading | CitationNode | Highlight | Superscript | Subscript | OrderedList
-| BulletList | ListItem | GenericNode | FencedCode | InlineCode | YAMLFrontmatter
-| Emphasis | Table | TableCell | TableRow | ZettelkastenLink | ZettelkastenTag
+export type ASTNode = Document | Comment | Footnote | FootnoteRef | FootnoteRefLabel
+| LinkOrImage | TextNode | Heading | CitationNode | Highlight | Superscript
+| Subscript | OrderedList | BulletList | ListItem | GenericNode | FencedCode
+| InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow
+| ZettelkastenLink | ZettelkastenTag
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -470,6 +498,17 @@ export type ASTNodeType = ASTNode['type']
  */
 export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
   switch (node.name) {
+    case 'Document':
+      const docNode: Document = {
+        type: 'Document',
+        name: 'Document',
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: '',
+        attributes: {},
+        children: []
+      }
+      return parseChildren(docNode, node, markdown)
     // NOTE: Most nodes are treated as generics (see default case); here we only
     // define nodes which we can "compress" a little bit or make accessible
     case 'Image':
@@ -596,9 +635,28 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       }
       return astNode
     }
+    case 'FootnoteRefLabel': {
+      const astNode: FootnoteRefLabel = {
+        type: 'FootnoteRefLabel',
+        name: 'FootnoteRefLabel',
+        attributes: {},
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+        label: markdown.substring(node.from + 2, node.to - 2)
+      }
+      return astNode
+    }
     case 'FootnoteRef': {
-      const label = node.getChild('FootnoteRefLabel')
-      const body = node.getChild('FootnoteRefBody')
+      const p = node.getChild('Paragraph') // First para
+      if (p === null) {
+        return genericTextNode(node.from, node.to, markdown.substring(node.from, node.to), getWhitespaceBeforeNode(node, markdown))
+      }
+      const label = p.getChild('FootnoteRefLabel')
+      if (label === null) {
+        return genericTextNode(node.from, node.to, markdown.substring(node.from, node.to), getWhitespaceBeforeNode(node, markdown))
+      }
+
       const astNode: FootnoteRef = {
         type: 'FootnoteRef',
         name: 'FootnoteRef',
@@ -606,15 +664,13 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        label: label !== null ? markdown.substring(label.from + 2, label.to - 2) : '',
+        label: markdown.substring(label.from + 2, label.to - 2),
+        labelFrom: label.from + 2,
+        labelTo: label.to - 2,
         children: []
       }
 
-      if (body !== null) {
-        return parseChildren(astNode, body, markdown)
-      } else {
-        return astNode
-      }
+      return parseChildren(astNode, node, markdown)
     }
     case 'HighlightContent': {
       const astNode: Highlight = {

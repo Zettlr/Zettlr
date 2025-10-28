@@ -26,6 +26,8 @@ import { configField, type EditorConfiguration } from '../util/configuration'
 import { getMainEditorThemes } from '../editor-extension-sets'
 import { darkMode } from '../theme/dark-mode'
 import { markdownSyntaxHighlighter } from '../theme/syntax'
+import { syntaxExtensions } from '../parser/syntax-extensions'
+import { defaultKeymap } from '../keymaps/default'
 
 /**
  * A transaction filter that ensures that any changes made to the view that
@@ -227,8 +229,10 @@ export function createSubviewForCell (
     selection: mainView.state.selection,
     extensions: [
       // A minimal set of extensions
+      defaultKeymap(),
       Prec.highest(tableEditorKeymap(mainView)),
       drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
+      EditorState.allowMultipleSelections.of(true),
       // Add the configuration and preset it with whatever is in the main view.
       // The config field will automagically update since we forward any effects
       // to the subview.
@@ -236,6 +240,7 @@ export function createSubviewForCell (
       darkMode({ darkMode: cfg.darkMode, ...themes[cfg.theme] }),
       syntaxHighlighting(defaultHighlightStyle),
       markdownSyntaxHighlighter(),
+      syntaxExtensions,
       EditorView.lineWrapping,
       markdownParser(), // TODO: Config?
       // Two custom extensions that are required for the specific use-case of

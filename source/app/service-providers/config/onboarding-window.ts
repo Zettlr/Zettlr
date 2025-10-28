@@ -25,9 +25,11 @@
  */
 
 import type LogProvider from '@providers/log'
-import { BrowserWindow, ipcMain } from 'electron'
+import { BrowserWindow, type BrowserWindowConstructorOptions, ipcMain } from 'electron'
 import type ConfigProvider from '.'
 import { loadData } from '@common/i18n-main'
+import setWindowChrome from '../windows/set-window-chrome'
+import attachLogger from '../windows/attach-logger'
 
 export interface OnboardingIPCCloseMessage {
   command: 'close'
@@ -48,7 +50,7 @@ export type OnboardingIPCMessage = OnboardingIPCCloseMessage |
  * @param   {LogProvider}  logger  The logger for potential error messages.
  */
 export async function showOnboardingWindow (config: ConfigProvider, logger: LogProvider, mode: 'first-start'|'update'): Promise<void> {
-  const onboardingWindow = new BrowserWindow({
+  const conf: BrowserWindowConstructorOptions = {
     width: 800,
     height: 600,
     center: true,
@@ -70,7 +72,10 @@ export async function showOnboardingWindow (config: ConfigProvider, logger: LogP
       sandbox: false,
       preload: ONBOARDING_PRELOAD_WEBPACK_ENTRY
     }
-  })
+  }
+  setWindowChrome(config, conf, false)
+  const onboardingWindow = new BrowserWindow(conf)
+  attachLogger(logger, onboardingWindow, 'Onboarding Window')
 
   const effectiveUrl = new URL(ONBOARDING_WEBPACK_ENTRY)
   effectiveUrl.searchParams.append('mode', mode)

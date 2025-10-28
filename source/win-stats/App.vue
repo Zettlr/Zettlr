@@ -6,7 +6,7 @@
     v-bind:show-tabbar="true"
     v-bind:tabbar-tabs="tabs"
     v-bind:tabbar-label="tabs[currentTab].label"
-    v-bind:disable-vibrancy="true"
+    v-bind:disable-vibrancy="!hasVibrancy"
     v-on:tab="currentTab = $event"
   >
     <!--
@@ -54,6 +54,7 @@ import { trans } from '@common/i18n-renderer'
 import { ref, computed } from 'vue'
 import GraphView from './GraphView.vue'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
+import { useConfigStore } from 'source/pinia'
 
 const tabs: WindowTab[] = [
   {
@@ -83,6 +84,9 @@ const tabs: WindowTab[] = [
 ]
 
 const currentTab = ref<number>(0)
+
+const configStore = useConfigStore()
+const hasVibrancy = computed(() => configStore.config.window.vibrancy && process.platform === 'darwin')
 
 const windowTitle = computed<string>(() => {
   if (process.platform === 'darwin') {

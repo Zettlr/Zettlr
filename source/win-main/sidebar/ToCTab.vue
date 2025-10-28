@@ -20,7 +20,7 @@
       <div
         v-bind:class="{ 'toc-entry': true, 'toc-entry-active': tocEntryIsActive(entry.line, idx) }"
         v-bind:data-line="entry.line"
-        v-html="toc2html(entry.text)"
+        v-html="tocEntryHTML[idx]"
       ></div>
     </div>
   </div>
@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, toRef, onMounted } from 'vue'
 import sanitizeHtml from 'sanitize-html'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type AnyDescriptor } from '@dts/common/fsal'
@@ -49,6 +49,11 @@ const activeFileDescriptor = ref<AnyDescriptor|null>(null)
 const library = ref<string>(CITEPROC_MAIN_DB)
 
 const tableOfContents = computed(() => windowStateStore.tableOfContents)
+const tocEntryHTML = ref<string[]>([])
+
+watch(toRef(tableOfContents), updateToCHTML)
+onMounted(updateToCHTML)
+
 /**
  * Returns either the title property for the active file or the generic ToC
  * label -- to be used within the ToC of the sidebar
@@ -126,18 +131,33 @@ function tocEntryIsActive (tocEntryLine: number, tocEntryIdx: number): boolean {
 }
 
 /**
- * Converts a Table of Contents-entry to (safe) HTML
- *
- * @param   {string}  entryText  The Markdown ToC entry
- *
- * @return  {string}             The safe HTML string
+ * Converts the ToC entries's texts to (safe) HTML.
  */
-function toc2html (entryText: string): string {
-  const html = md2html(entryText, window.getCitationCallback(library.value), configStore.config.zkn.linkFormat)
-  return sanitizeHtml(html, {
-    // Headings may be emphasised and contain code
-    allowedTags: [ 'em', 'kbd', 'code' ]
-  })
+function updateToCHTML () {
+  if (tableOfContents.value === undefined) {
+    return
+  }
+
+  const promises: Promise<string>[] = []
+
+  for (const entry of tableOfContents.value) {
+    promises.push(
+      md2html(entry.text, { onCitation: window.getCitationCallback(library.value), zknLinkFormat: configStore.config.zkn.linkFormat })
+    )
+  }
+
+  Promise.all(promises)
+    .then(values => {
+      values = values.map(html => {
+        return sanitizeHtml(html, {
+          // Headings may be emphasised and contain code
+          allowedTags: [ 'em', 'kbd', 'code' ]
+        })
+      })
+
+      tocEntryHTML.value = values
+    })
+    .catch(err => console.error(err))
 }
 
 function startDragging (event: DragEvent): void {
@@ -198,7 +218,7 @@ function findEndOfEntry (originalToLine: number): number|undefined {
   if (idx === tableOfContents.value.length - 1) {
     return -1
   } else {
-    return tableOfContents.value[idx + 1].line - 1
+    return tableOfContents.value[idx + 1].line
   }
 }
 </script>

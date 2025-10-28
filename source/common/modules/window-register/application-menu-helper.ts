@@ -15,13 +15,18 @@
  *
  * END HEADER
  */
+import { v4 as uuid } from 'uuid'
 
-export interface CheckboxRadioItem {
-  id: string
+interface SharedItemInfo {
+  id?: string
+  enabled?: boolean
+  action?: () => void
+}
+
+export interface CheckboxRadioItem extends SharedItemInfo {
   label: string
   accelerator?: string
   type: 'checkbox'|'radio'
-  enabled?: boolean
   checked: boolean
 }
 
@@ -30,20 +35,18 @@ export interface SeparatorItem {
 }
 
 export interface SubmenuItem {
-  id: string
+  id?: string
   label: string
   type: 'submenu'
   enabled?: boolean
   submenu: Array<CheckboxRadioItem|SeparatorItem|SubmenuItem|NormalItem>
 }
 
-export interface NormalItem {
-  id: string
+export interface NormalItem extends SharedItemInfo {
   label: string
   sublabel?: string
   accelerator?: string
   type: 'normal'
-  enabled?: boolean
 }
 
 export type AnyMenuItem = CheckboxRadioItem | SeparatorItem | SubmenuItem | NormalItem
@@ -65,8 +68,84 @@ export interface Point {
 
 const ipcRenderer = window.ipc
 
+/**
+ * Recursively removes any actions found in the provided menu item.
+ *
+ * @param   {AnyMenuItem}  item  The menu item
+ *
+ * @return  {AnyMenuItem}        The modified item
+ */
+function removeActions (item: AnyMenuItem): AnyMenuItem {
+  if (item.type === 'separator') {
+    return { ...item }
+  }
+
+  if (item.type === 'submenu') {
+    return { ...item, submenu: item.submenu.map(removeActions) }
+  }
+
+  if (item.action !== undefined) {
+    return { ...item, action: undefined }
+  }
+
+  return { ...item }
+}
+
+/**
+ * Recursively checks that each item has an ID.
+ *
+ * @param   {AnyMenuItem}  item  The menu item
+ *
+ * @return  {AnyMenuItem}        The modified item
+ */
+function ensureID (item: AnyMenuItem): AnyMenuItem {
+  if (item.type === 'separator') {
+    return { ...item }
+  }
+
+  if (item.type === 'submenu') {
+    return { ...item, submenu: item.submenu.map(ensureID) }
+  }
+
+  if (item.id === undefined) {
+    return { ...item, id: uuid() }
+  }
+
+  return { ...item }
+}
+
+/**
+ * Recursively searches the provided menu for an item.
+ *
+ * @param   {AnyMenuItem[]}  items  The menu
+ * @param   {string}         id     The ID
+ *
+ * @return  {AnyMenuItem}           Either the matching item, or undefined.
+ */
+function findItemById (items: AnyMenuItem[], id: string): AnyMenuItem|undefined {
+  for (const item of items) {
+    if (item.type === 'separator') {
+      continue
+    }
+
+    if (item.type === 'submenu') {
+      const foundItem = findItemById(item.submenu, id)
+      if (foundItem !== undefined) {
+        return foundItem
+      }
+      continue
+    }
+
+    if (item.id === id) {
+      return item
+    }
+  }
+
+  return undefined
+}
+
 // This function displays a custom styled popup menu at the given coordinates
-export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: (clickedID: string) => void, cleanup = true): () => void {
+export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback?: (clickedID: string) => void, cleanup = true): () => void {
   // Before we do anything, we first must make sure any rogue old context menus
   // are gone.
   if (cleanup) { // NOTE: we need a flag because of submenus
@@ -96,18 +175,41 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     // NOTE: On macOS, we don't want the custom styled menus, but rather we want
     // the native context menus (since the custom styled menus are only
     // necessary on those platforms where you have a menu bar we have to manage)
+
+    // Since we MUST make a round through the main process for a native context
+    // menu, we must ensure each item has an ID attached to it so that our
+    // callback can look up the action/callback.
+    items = items.map(ensureID)
+
+    // Furthermore, since the JSON stringifier whines when we try to pass
+    // functions, we have to remove them before sending the stuff over the pipe.
+    const safeItems = items.map(removeActions)
+
     ipcRenderer.invoke('menu-provider', {
       command: 'display-native-context-menu',
       payload: {
-        menu: items,
+        menu: safeItems,
         x: targetRect.left,
         y: targetRect.top
       }
     })
       .then((clickedID: string|undefined) => {
+        if (clickedID === undefined) {
+          return
+        }
+
         // If the user did click a menu item, notify the caller
-        if (clickedID !== undefined) {
+        const foundItem = findItemById(items, clickedID)
+        if (foundItem === undefined) {
+          return
+        } else if (foundItem.type === 'separator' || foundItem.type === 'submenu') {
+          return
+        } else if (foundItem.action !== undefined) {
+          foundItem.action()
+        } else if (callback !== undefined) {
           callback(clickedID)
+        } else {
+          console.warn(`Could not trigger action for context menu item ${clickedID}: Neither action nor callback provided.`)
         }
       })
       .catch(err => { console.error(err) })
@@ -127,7 +229,13 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
       menuItem.addEventListener('mousedown', (event) => {
         event.preventDefault()
         event.stopPropagation()
-        callback((item as NormalItem).id)
+        if (item.action !== undefined) {
+          item.action()
+        } else if (item.id !== undefined && callback !== undefined) {
+          callback(item.id)
+        } else {
+          console.warn(`Registered click on menu item "${item.label}", but it had neither an action, nor an ID attached to it.`)
+        }
         appMenu.parentElement?.removeChild(appMenu) // Close the menu
       })
     } else if (item.type === 'submenu' && item.enabled !== false) {
@@ -150,7 +258,9 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
 
           const subCB = (clickedID: string): void => {
             // Call the regular callback to basically "bubble up" the event
-            callback(clickedID)
+            if (callback !== undefined) {
+              callback(clickedID)
+            }
             // Furthermore, we need to close the parent menu
             appMenu.parentElement?.removeChild(appMenu)
           }

@@ -26,6 +26,9 @@
       v-bind:options="darkModeScheduleOptions"
     ></RadioControl>
   </p>
+  <p v-if="darkModeSchedule === 'schedule'">
+    {{ darkModeScheduleTimesInfo }}
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -33,16 +36,24 @@ import { trans } from 'source/common/i18n-renderer'
 import RadioControl from 'source/common/vue/form/elements/RadioControl.vue'
 import SwitchControl from 'source/common/vue/form/elements/SwitchControl.vue'
 import { ref, watch } from 'vue'
+import { DateTime } from 'luxon'
 
 const pageHeading = trans('Look and Feel')
 const darkModeLabel = trans('Zettlr supports both light and dark mode. You can turn it on manually here.')
 const darkModeControlLabel = trans('Activate dark mode')
-const darkModeScheduleLabel = trans('Most users will wish to schedule when the app will enter the dark mode.')
+const darkModeScheduleLabel = trans('Do you wish to let Zettlr automatically switch to dark mode?')
+
+const autoDarkModeStart = window.config.get('autoDarkModeStart')
+const autoDarkModeEnd = window.config.get('autoDarkModeEnd')
+const dmStart = DateTime.fromFormat(String(autoDarkModeStart), 'HH:mm', { locale: window.config.get('appLang') }).toLocaleString({ timeStyle: 'short' })
+const dmEnd = DateTime.fromFormat(String(autoDarkModeEnd), 'HH:mm', { locale: window.config.get('appLang') }).toLocaleString({ timeStyle: 'short' })
+
+const darkModeScheduleTimesInfo = trans('If you choose "schedule," Zettlr will turn on dark mode between %s and %s. You can adjust these times in the settings.', dmStart, dmEnd)
 
 const darkModeScheduleOptions = {
-  off: trans('Do not automatically change modes'),
-  system: trans('Follow the operating system'),
-  schedule: trans('Manually schedule')
+  off: trans('Do not automatically toggle light/dark mode'),
+  system: trans('Follow operating system'),
+  schedule: trans('Schedule dark mode')
 }
 
 const darkMode = ref(Boolean(window.config.get('darkMode')))

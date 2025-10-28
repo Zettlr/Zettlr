@@ -32,7 +32,7 @@ export function cursorStatus (state: EditorState, _view: EditorView): StatusbarI
   const mainOffset = state.selection.main.head
   const line = state.doc.lineAt(mainOffset)
   return {
-    content: `${line.number}:${mainOffset - line.from + 1}`
+    content: `${line.number}:${mainOffset - line.from + 1} (${mainOffset})`
   }
 }
 

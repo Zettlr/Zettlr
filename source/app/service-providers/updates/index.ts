@@ -298,9 +298,23 @@ export default class UpdateProvider extends ProviderContract {
 
     try {
       this._logger.info(`[Update Provider] Checking ${REPO_URL} for application updates ...`)
+      let platformString = ''
+      if (process.platform === 'win32') {
+        platformString = `Windows NT 10.0; ${process.arch}`
+      }
+      if (process.platform === 'darwin') {
+        platformString = `Macintosh; Intel Mac OS X ${process.getSystemVersion()}; ${process.arch}`
+      }
+      if (process.platform === 'linux') {
+        platformString = `Linux ${process.arch === 'x64' ? 'x86_64' : process.arch}`
+      }
+
       const response: Response<string> = await got(REPO_URL, {
         timeout: { request: 5000 },
         method: 'GET',
+        headers: {
+          'User-Agent': `Zettlr/${CUR_VER} (${platformString})`
+        },
         searchParams: new URLSearchParams([
           [ 'accept-beta', this._config.get('checkForBeta') ]
         ])
@@ -421,7 +435,7 @@ export default class UpdateProvider extends ProviderContract {
 
     // Adapt the rest of the state
     state.tagName = parsedResponse.tag_name
-    state.changelog = md2html(parsedResponse.body, (_c1, _c2) => undefined)
+    state.changelog = await md2html(parsedResponse.body, { onCitation: (_c1, _c2) => undefined, zknLinkFormat: 'link|title' })
     state.prerelease = parsedResponse.prerelease
     state.releasePage = parsedResponse.html_url
 

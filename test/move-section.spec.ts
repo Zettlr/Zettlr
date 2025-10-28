@@ -1,144 +1,187 @@
-/* eslint-disable no-undef */
 /**
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        extractBibTexAttachments tester
+ * Contains:        Tests for the moveSection function
  * CVM-Role:        TESTING
- * Maintainer:      Hendrik Erz
+ * Maintainers:     Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file tests a component of Zettlr.
+ * Description:     This file tests the moveSection function.
  *
  * END HEADER
  */
 
-import moveSection from '../source/common/util/move-section'
-import assert from 'assert'
+import { strictEqual } from 'assert'
+import { EditorState, Transaction } from '@codemirror/state'
+import { moveSection } from 'source/common/modules/markdown-editor/commands/move-section'
+import { tocField } from 'source/common/modules/markdown-editor/plugins/toc-field'
+import markdownParser from 'source/common/modules/markdown-editor/parser/markdown-parser'
 
-const INPUT = [
-  `# Lorem ipsum dolor sit amet
+const baseDocument = `\
+# Section 1
 
-- A list
-- second item
-- Third item
+This is the Section 1 body.
 
-## Heading Level 2
+## Section 1.2
 
-Some text here.
+This is the Section 1.2 body.
+# Section 2
 
-![Also an image](/test/image.png)
+This is the Section 2 body.
 
-## Another Heading Level 2
+# Section 3
 
-Also, here's some text. This text should end up above the first heading level 2.`,
-// * * * * * * * * * * * * * * * * *
-`# Lorem ipsum dolor sit amet
+This is the Section 3 body.
+## Section 3.1
 
-- A list
-- second item
-- Third item
+This is the Section 3.1 body.
 
-## Heading Level 2
+### Section 3.1.1
 
-Some text here.
+This is the Section 3.1.1 body.`
 
-![Also an image](/test/image.png)
+const moveSectionTests = [
+  {
+    from: 1,
+    to: 12,
+    expected: `\
+# Section 2
 
-## Another Heading Level 2
+This is the Section 2 body.
 
-Also, here's some text. This text should end up above the first heading level 2.`,
-// * * * * * * * * * * * * * * * * *
-`# 1. Section
+# Section 1
 
-## 1.1 Heading
+This is the Section 1 body.
 
-Text Section 1
+## Section 1.2
 
-# 2. Section
+This is the Section 1.2 body.
 
-Text Section 2
+# Section 3
 
-# 3. Section
+This is the Section 3 body.
+## Section 3.1
 
-Text Section 3
+This is the Section 3.1 body.
 
-## 3.1 Heading
+### Section 3.1.1
 
-More text.
+This is the Section 3.1.1 body.`,
+  },
+  {
+    from: 15,
+    to: 5,
+    expected: `\
+# Section 1
 
-# 4. Section
+This is the Section 1 body.
 
-Text Section 4`
-]
+## Section 3.1
 
-const MOVE = [
-  // Move the first example above
-  { from: 12, to: 6 }, // Move a section
-  { from: 6, to: -1 }, // -1 indicates "move to end"
-  { from: 6, to: 18 } // Swap two sections
-]
+This is the Section 3.1 body.
 
-const OUTPUT = [
-  `# Lorem ipsum dolor sit amet
+### Section 3.1.1
 
-- A list
-- second item
-- Third item
+This is the Section 3.1.1 body.
 
-## Another Heading Level 2
+## Section 1.2
 
-Also, here's some text. This text should end up above the first heading level 2.
+This is the Section 1.2 body.
+# Section 2
 
-## Heading Level 2
+This is the Section 2 body.
 
-Some text here.
+# Section 3
 
-![Also an image](/test/image.png)`,
-// * * * * * * * * * * * * * * * * *
-`# Lorem ipsum dolor sit amet
+This is the Section 3 body.
+`,
+  },
+  {
+    from: 19,
+    to: 8,
+    expected: `\
+# Section 1
 
-- A list
-- second item
-- Third item
+This is the Section 1 body.
 
-## Another Heading Level 2
+## Section 1.2
 
-Also, here's some text. This text should end up above the first heading level 2.
+This is the Section 1.2 body.
+### Section 3.1.1
 
-## Heading Level 2
+This is the Section 3.1.1 body.
 
-Some text here.
+# Section 2
 
-![Also an image](/test/image.png)`,
-// * * * * * * * * * * * * * * * * *
-`# 1. Section
+This is the Section 2 body.
 
-## 1.1 Heading
+# Section 3
 
-Text Section 1
+This is the Section 3 body.
+## Section 3.1
 
-# 3. Section
+This is the Section 3.1 body.
 
-Text Section 3
+`,
+  },
+  {
+    from: 5,
+    to: 15,
+    expected: `\
+# Section 1
 
-## 3.1 Heading
+This is the Section 1 body.
 
-More text.
+# Section 2
 
-# 2. Section
+This is the Section 2 body.
 
-Text Section 2
+# Section 3
 
-# 4. Section
+This is the Section 3 body.
+## Section 1.2
 
-Text Section 4`
-]
+This is the Section 1.2 body.
 
-describe('EditorUtility#moveSection()', function () {
-  for (let i = 0; i < INPUT.length; i++) {
-    it('should correctly move the defined section', function () {
-      assert.strictEqual(moveSection(INPUT[i], MOVE[i].from, MOVE[i].to), OUTPUT[i])
-    })
+## Section 3.1
+
+This is the Section 3.1 body.
+
+### Section 3.1.1
+
+This is the Section 3.1.1 body.`,
   }
+]
+
+describe('MarkdownEditor#moveSection()', function () {
+
+  moveSectionTests.forEach((test, idx) => {
+    it(`Move Sections: Test ${idx + 1}`, function () {
+      const state = EditorState.create({
+        doc: baseDocument,
+        extensions: [
+          tocField,
+          markdownParser(),
+        ]
+      })
+
+      const toc = state.field(tocField)
+
+      const { from, to, expected } = test
+
+      let wasDispatched = false
+
+      const dispatch = (tx: Transaction) => {
+        wasDispatched = true
+
+        const contents = tx.newDoc.toString()
+        strictEqual(contents, expected, "Sections were moved incorrectly.")
+      }
+
+      moveSection(toc, from, to)({ state, dispatch })
+
+      strictEqual(wasDispatched, true, "A transaction must have been dispatched")
+    })
+  })
 })

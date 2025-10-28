@@ -33,15 +33,34 @@ function mockBrowser () {
   // we copy it here in order for those tests not to fail.
   window.path = path
 
-  globalThis.window = window
-  globalThis.document = window.document
-  globalThis.requestAnimationFrame = function (callback) {
+  // Mock the window.config get() and set()
+  window.config = {
+    _data: new Map(),
+    get(key) {
+      if (key === undefined) return this._data
+      return this._data.get(key)
+    },
+    set(key, value) {
+      this._data.set(key, value)
+    }
+  }
+
+  // Mock the navigator.clipboard readText() and writeText()
+  navigator.clipboard = {
+    _data: '',
+    readText() { return this._data },
+    writeText(text) { this._data = text }
+  }
+
+  global.window = window
+  global.document = window.document
+  global.requestAnimationFrame = function (callback) {
     return setTimeout(callback, 0)
   }
-  globalThis.cancelAnimationFrame = function (id) {
+  global.cancelAnimationFrame = function (id) {
     clearTimeout(id)
   }
-  copyProps(window, globalThis)
+  copyProps(window, global)
 }
 
 mockBrowser()

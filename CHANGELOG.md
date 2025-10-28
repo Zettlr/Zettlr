@@ -140,6 +140,24 @@ The new workflow applies when you autocomplete a filename, and works as follows:
    (YAML frontmatter title; first heading level 1; filename) as the link label.
    If it is disabled, Zettlr will never add a link label automatically.
 
+## Footnote Workflow Improvements
+
+This update improves the footnote handling workflow a lot. Until now, Zettlr was
+only able to properly insert new footnotes. However, the footnote deletion
+process still required you to manually delete both the footnote label and its
+accompanying reference.
+
+We have now implemented a few new functions that help you manage footnotes.
+First, when you delete text by pressing `Backspace`, and you reach a footnote
+label, Zettlr will now select the entire footnote label instead of deleting the
+closing bracket of the label. When you press `Backspace` a second time, it will
+remove the entire label at once. This gives you both a visual indication that
+you are about to delete a footnote, and make it easier (since it requires you to
+press `Backspace` only twice, instead of at least four times).
+
+Note that some functionality does not apply to footnote labels that contain text
+other than numbers.
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
@@ -205,6 +223,22 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - **Feature**: You can now collapse and un-collapse the files and workspace
   sections in the file manager. This can be helpful if you are working with both
   a lot of individual files and workspaces. Your choice is remembered (#5916).
+- **Feature**: Extended the scope and application of vibrancy on macOS.
+- **Feature**: Working with footnotes is now more convenient than ever. Zettlr
+  now has an update listener that constantly scans the document for any rogue
+  footnotes and references (which are missing their corresponding reference or
+  footnote), and ensures that the numbering is always correct. This means that
+  you can delete a footnote, and be certain that Zettlr will have removed the
+  now-dangling reference, too. The same applies if you remove a reference that
+  you no longer need. Lastly, deleting footnotes becomes more convenient. Now,
+  if you delete characters and reach a footnote, Zettlr will first select the
+  entire footnote to visually indicate that you are about to delete a footnote,
+  then a second deletion will remove the entire footnote at once.
+- **Change**: Zettlr now monitors your documents and will automatically remove
+  footnotes and references without the corresponding reference or footnote. If
+  you have any documents in which you have un-referenced footnotes, or
+  references that are currently unused, please make sure to change this before
+  updating.
 - **Change**: Snippets: The `$FILENAME` variable now does not contain the file
   extension anymore. Users who also want the extension should update their
   snippets to `$FILENAME$EXTENSION` (#4191).
@@ -221,6 +255,7 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   files, or use IDs where available.
 - **A11y**: Zettlr now respects if you choose to reduce transparency in system
   settings and no longer add window vibrancy on macOS.
+- Snippets can now be nested (#5939).
 - You can now show an item in Finder/Explorer/file browser when right-clicking a
   document tab (#5914).
 - Fixed inline math not rendering when transforming Markdown to HTML (e.g., in
@@ -233,6 +268,7 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - Update `it-IT` translations (#5831).
 - Update `da-DA` translations (#5868).
 - Update `de-DE` translations.
+- Added support for `nix` syntax highlighting (#5954).
 - Fixed incorrect cursor position after inserting IDs (#5846).
 - The toolbar word counter no longer wraps (#5774; #5881).
 - Fix context menu entry "Insert table" not working (#5835).
@@ -271,10 +307,35 @@ The new workflow applies when you autocomplete a filename, and works as follows:
 - The citation context menu now shows rendered citations instead of the raw
   citation keys, and utilizes macOS's `sublabel` feature to describe the context
   menu items.
+- Changed default config settings for new installations:
+  - Dark mode is now preset to true if the OS reports that it uses dark colors.
+  - Vibrancy on macOS is now set to true only if the user does not prefer
+    reduced transparency.
+- Improved drag-and-drop behavior in the table of contents (#5871).
+- Improved the layout of the assets window (#5942).
+- Improved performance impact of references tab by only updating the
+  bibliography on save, not on every keystroke (#5518).
+- Fixed images with brackets in the filename from not showing up (#3825).
+- Switched the window controls on Windows computers to the native controls. This
+  will enable a set of additional OS-level functionality (such as hovering over
+  the maximize-button to show a split-screen menu).
+- Fixed a bug that would not assign the correct footnote body class to footnote
+  bodies. Now, footnotes will be rendered in a smaller font size and can be
+  styled as a block.
+- Made the dark editor background less black, and increase contrast of the dark
+  selection background for the Karl-Marx-Stadt theme.
+- Indentation preferences from the main settings now also apply to code editors
+  where applicable.
+- The emphasis renderer now also hides formatting characters for footnote
+  reference labels.
+- Images and links will now be detected more robustly (#5964).
+- Improved parsing footnotes (especially with multi-paragraph contents) (#5968).
+- Improved Markdown-to-HTML conversion (#5968).
+- Fixed image parsing for images with no ALT-text (#5963).
 
 ## Under the Hood
 
-- Update Electron to version `38.2.0`.
+- Update Electron to version `38.3.0`.
 - Update Pandoc to version `3.8`.
 - Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
   declarations (`if`, `for`, `while`, etc.).
@@ -306,6 +367,17 @@ The new workflow applies when you autocomplete a filename, and works as follows:
   allows inclusion of adjacent selection ranges in calculating the result. This
   allows, e.g., renderers to detect whether a selection touches a node-to-be-
   rendered.
+- Added a loading spinner component that can be used to indicate that something
+  is loading.
+- Context menu items now can have an `action` property, which is a simple
+  function that will be called when the item is clicked. Those items do not have
+  to have an ID (which is now an optional property). Items with IDs and without
+  actions will still call the provided callback function.
+- The Markdown AST parser now also emits `labelFrom` and `labelTo`-properties
+  for footnote references for easy access to the reference label.
+- If loading a window fails due to whatever reason, the corresponding error will
+  now be shown to the user using an error dialog.
+- Aligned the math parser to the internal CodeMirror APIs (#5971).
 
 # 3.6.0
 

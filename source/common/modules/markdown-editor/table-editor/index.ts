@@ -83,6 +83,25 @@ export const renderTables = [
       overflow: 'auto'
     },
     'div.cm-table-editor-widget-wrapper table': {
+      // BUG: Somehow the `drawSelection` extension does not properly override
+      // the native selections. By essentially copying out the
+      // `hideNativeSelection` theme from the extension to this place here, we
+      // can prevent that.
+      '& .cm-line': {
+        '& ::selection, &::selection': {
+          backgroundColor: 'transparent !important'
+        },
+        caretColor: 'transparent !important'
+      },
+      '& .cm-content': {
+        caretColor: 'transparent !important',
+        '& :focus': {
+          caretColor: 'initial !important',
+          '&::selection, & ::selection': {
+            backgroundColor: 'Highlight !important'
+          }
+        }
+      },
       borderCollapse: 'collapse',
       // Implement Artem's theme
       '& td, & th': {

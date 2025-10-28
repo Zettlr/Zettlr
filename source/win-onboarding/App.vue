@@ -35,7 +35,11 @@
       </div>
       <div v-else-if="currentPage === 'app-lang'" class="page">
         <div class="page-wrapper">
-          <SetAppLang></SetAppLang>
+          <SetAppLang
+            v-on:app-lang-changed="retranslateLabels"
+            v-on:disable-navigation="navigationDisabled = true"
+            v-on:enable-navigation="navigationDisabled = false"
+          ></SetAppLang>
         </div>
       </div>
       <div v-else-if="currentPage === 'updates'" class="page">
@@ -89,7 +93,7 @@
 
     <template v-else>
       <!-- Allow the user to always skip the onboarding. -->
-      <button v-on:click="close">
+      <button v-bind:disabled="navigationDisabled" v-on:click="close">
         {{ skipLabel }}
       </button>
       <div id="onboarding-progress">
@@ -101,11 +105,11 @@
         ></span>
       </div>
       <!-- Allow the user to go back if possible. -->
-      <button v-if="canGoBackward" v-on:click="back">
+      <button v-if="canGoBackward" v-bind:disabled="navigationDisabled" v-on:click="back">
         {{ previousLabel }}
       </button>
       <!-- Provide a forward button while possible. -->
-      <button v-if="canGoForward" v-on:click="forward">
+      <button v-if="canGoForward" v-bind:disabled="navigationDisabled" v-on:click="forward">
         <template v-if="!canGoBackward">
           <!-- On the first slide, call the button "Start setup" -->
           {{ startSetupLabel }}
@@ -141,6 +145,7 @@ import PACKAGE_JSON from '../../package.json'
 import { trans } from 'source/common/i18n-renderer'
 import SupportLogos from './SupportLogos.vue'
 import { DateTime } from 'luxon'
+import { useConfigStore } from 'source/pinia'
 
 // This is required because some elements (looking at you, RadioControl) are
 // completely namespaced to platform specific values and we don't include the
@@ -152,6 +157,12 @@ const ipcRenderer = window.ipc
 const searchParams = new URLSearchParams(window.location.search)
 const mode: string|null = searchParams.get('mode')
 const version = PACKAGE_JSON.version
+
+const configStore = useConfigStore()
+
+if (configStore.config.window.vibrancy && process.platform === 'darwin') {
+  document.body.classList.add('has-vibrancy')
+}
 
 const pages = [
   'welcome',
@@ -174,11 +185,23 @@ const buildDate = DateTime.fromISO(__BUILD_DATE__).toLocaleString({ dateStyle: '
 const buildDateLabel = trans('Build date: %s', buildDate)
 
 // Onboarding workflow labels
-const startSetupLabel = trans('Start setup')
-const skipLabel = trans('Skip')
-const previousLabel = trans('Previous')
-const nextLabel = trans('Next')
-const finishLabel = trans('Finish')
+const startSetupLabel = ref(trans('Start setup'))
+const skipLabel = ref(trans('Skip'))
+const previousLabel = ref(trans('Previous'))
+const nextLabel = ref(trans('Next'))
+const finishLabel = ref(trans('Finish'))
+
+// This function is called whenever the user switches the app language on the
+// app lang page. Pages will be mounted and unmounted, meaning that we get
+// re-translation for free, but the navigation will stay, so we have to manually
+// trigger a translation.
+function retranslateLabels () {
+  startSetupLabel.value = trans('Start setup')
+  skipLabel.value = trans('Skip')
+  previousLabel.value = trans('Previous')
+  nextLabel.value = trans('Next')
+  finishLabel.value = trans('Finish')
+}
 
 const currentPage = ref<typeof pages[number]>('welcome')
 const currentPageIndex = computed(() => pages.indexOf(currentPage.value))
@@ -187,6 +210,10 @@ const transitionMode = ref<'forward'|'backward'>('forward')
 
 const canGoBackward = computed(() => currentPageIndex.value > 0)
 const canGoForward = computed(() => currentPageIndex.value < pages.length - 1)
+
+// The app language page has the ability to disable navigating while the new
+// application language is being loaded.
+const navigationDisabled = ref(false)
 
 function forward () {
   if (currentPageIndex.value > -1 && currentPageIndex.value === pages.length - 1) {
@@ -207,6 +234,10 @@ function back () {
 }
 
 function moveToPage (i: number) {
+  if (navigationDisabled.value) {
+    return
+  }
+
   if (i < 0 || i >= pages.length || i === currentPageIndex.value) {
     return
   }
@@ -236,11 +267,16 @@ function loadUrl (url: string) {
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   color: #333;
+  background-color: white;
   -webkit-app-region: drag;
 
   &.dark {
-    background-color: #333;
     color: white;
+    background-color: #333;
+  }
+
+  &.has-vibrancy, &.dark.has-vibrancy {
+    background-color: transparent;
   }
 }
 

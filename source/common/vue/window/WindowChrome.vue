@@ -11,6 +11,7 @@
       -->
       <WindowTitlebar
         v-if="showTitlebar"
+        v-bind:has-vibrancy="!disableVibrancy"
         v-bind:title-content="title ?? 'Zettlr'"
         v-on:dblclick="handleDoubleClick('titlebar')"
       ></WindowTitlebar>
@@ -29,6 +30,7 @@
       <WindowTabbar
         v-if="showTabbar && tabbarTabs !== undefined"
         v-bind:tabs="tabbarTabs"
+        v-bind:has-vibrancy="!disableVibrancy"
         v-bind:label="tabbarLabel"
         v-on:tab="emit('tab', $event)"
       ></WindowTabbar>
@@ -159,11 +161,13 @@ const showMenubar = computed<boolean>(() => {
 })
 
 const showWindowControls = computed<boolean>(() => {
-  // Shows the window control buttons only if we are on Windows
-  // or on Linux without native appearance.
-  if (platform.value === 'linux' && useNativeAppearance.value) {
+  if ([ 'win32', 'darwin' ].includes(platform.value)) {
     return false
-  } else if (platform.value === 'darwin') {
+  }
+
+  // Shows the window control buttons only if we are on Linux without native
+  // appearance.
+  if (platform.value === 'linux' && useNativeAppearance.value) {
     return false
   } else {
     return true

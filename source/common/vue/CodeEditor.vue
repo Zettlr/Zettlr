@@ -26,7 +26,7 @@
 import { drawSelection, dropCursor, EditorView, lineNumbers } from '@codemirror/view'
 import { onMounted, ref, toRef, watch } from 'vue'
 import { closeBrackets } from '@codemirror/autocomplete'
-import { bracketMatching, codeFolding, foldGutter, indentOnInput } from '@codemirror/language'
+import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
 import { yaml } from '@codemirror/lang-yaml'
 import { EditorState, type Extension } from '@codemirror/state'
@@ -61,17 +61,28 @@ const wrapperId = ref<string>('code-editor')
 const cleanFlag = ref<boolean>(true)
 
 function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
+  const { editor } = configStore.config
+
+  let numSpaces = editor.indentUnit
+  let useTabs = editor.indentWithTabs
+
+  if (mode === 'yaml') {
+    useTabs = false
+  }
+
   const extensions = [
     defaultKeymap(),
     search({ top: true }),
     codeFolding(),
     foldGutter(),
     history(),
-    highlightWhitespace(configStore.config.editor.showWhitespace),
+    highlightWhitespace(editor.showWhitespace),
     drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
     dropCursor(),
     statusbar,
     EditorState.allowMultipleSelections.of(true),
+    EditorState.tabSize.of(numSpaces),
+    indentUnit.of(useTabs ? '\t' : ' '.repeat(numSpaces)),
     // Ensure the cursor never completely sticks to the top or bottom of the editor
     EditorView.scrollMargins.of(_view => { return { top: 30, bottom: 30 } }),
     lintGutter(),

@@ -12,8 +12,7 @@
  * END HEADER
  */
 
-import { type InlineParser, type BlockParser } from '@lezer/markdown'
-import { partialParse } from './partial-parse'
+import { type InlineParser, type BlockParser, type Element } from '@lezer/markdown'
 
 // TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser
 export const footnoteParser: InlineParser = {
@@ -47,38 +46,65 @@ export const footnoteRefParser: BlockParser = {
     }
 
     const refFrom = ctx.lineStart
+    const labelTo = ctx.lineStart + match[0].length - 1
 
-    const label = ctx.elt('FootnoteRefLabel', refFrom, ctx.lineStart + match[0].length - 1)
-
-    const from = ctx.lineStart + match[0].length
     let to = ctx.lineStart + line.text.length // One newline less here
 
-    const footnoteBody: string[] = [line.text.slice(match[0].length)]
+    const bodyElems: Element[] = [
+      ctx.elt(
+        'Paragraph',
+        ctx.lineStart,
+        ctx.lineStart + line.text.length,
+        [
+          ctx.elt('FootnoteRefLabel', refFrom, labelTo),
+          ...ctx.parser.parseInline(line.text.slice(labelTo - ctx.lineStart), labelTo)
+        ]
+      )
+    ]
 
     // Everything at least indented by 4 spaces OR empty lines belong to this paragraph
-    while (ctx.nextLine() && /^\s{4,}|^\s*$/.test(line.text)) {
-      footnoteBody.push(line.text)
-      to += line.text.length + 1
+    while (ctx.nextLine()) {
+      const isIndented = /^\s{4,}/.test(line.text)
+      const isEmpty = /^\s*$/.test(line.text)
+
+      if (!isIndented && !isEmpty) {
+        break // Footnote is over
+      } else if (isEmpty) {
+        const nextLine = ctx.peekLine()
+        const nextIndented = /^\s{4,}/.test(nextLine)
+        const nextEmpty = /^\s*$/.test(nextLine)
+        // The following line may not be empty
+        if (nextEmpty || !nextIndented) {
+          break // Footnote is over
+        } else if (nextIndented) {
+          bodyElems.push(
+            ctx.elt(
+              'Paragraph',
+              ctx.lineStart,
+              ctx.lineStart + line.text.length,
+              ctx.parser.parseInline(line.text, ctx.lineStart)
+            )
+          )
+          to += line.text.length + 1
+        } else {
+          break // Not empty but also not indented
+        }
+      } else if (isIndented) {
+        bodyElems.push(
+          ctx.elt(
+            'Paragraph',
+            ctx.lineStart,
+            ctx.lineStart + line.text.length,
+            ctx.parser.parseInline(line.text, ctx.lineStart)
+          )
+        )
+        to += line.text.length + 1
+      } else {
+        break
+      }
     }
 
-    // Remove trailing empty lines from the body itself
-    let bodyTo = to
-    while (footnoteBody.length > 0 && footnoteBody[footnoteBody.length - 1].trim() === '') {
-      const lastline = footnoteBody.pop()!
-      bodyTo = bodyTo - lastline.length - 1
-    }
-
-    // Since footnotes can be empty, the above while loop will substract one too
-    // much from empty footnotes (so that bodyTo = from - 1). Here we correct
-    // for that.
-    if (bodyTo < from) {
-      bodyTo = from
-    }
-
-    const treeElem = partialParse(ctx, ctx.parser, footnoteBody.join('\n'), from)
-    const body = ctx.elt('FootnoteRefBody', from, bodyTo, [treeElem])
-
-    const wrapper = ctx.elt('FootnoteRef', refFrom, to, [ label, body ])
+    const wrapper = ctx.elt('FootnoteRef', refFrom, to, bodyElems)
     ctx.addElement(wrapper)
 
     return true

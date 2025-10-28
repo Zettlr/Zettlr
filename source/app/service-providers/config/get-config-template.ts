@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { app } from 'electron'
+import { app, nativeTheme } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
@@ -261,7 +261,7 @@ export function getConfigTemplate (): ConfigOptions {
       // is false, this means that Zettlr will display the menu bar and window
       // controls as defined in the HTML.
       nativeAppearance: process.platform === 'darwin', // Linux only
-      vibrancy: process.platform === 'darwin', // macOS only
+      vibrancy: process.platform === 'darwin' && !nativeTheme.prefersReducedTransparency,
       // Store a few GUI related settings here as well
       sidebarVisible: false,
       currentSidebarTab: 'toc',
@@ -274,7 +274,7 @@ export function getConfigTemplate (): ConfigOptions {
     // Visible attachment filetypes
     attachmentExtensions: [],
     // UI related options
-    darkMode: false,
+    darkMode: nativeTheme.shouldUseDarkColors,
     alwaysReloadFiles: true, // Should Zettlr automatically load remote changes?
     autoDarkMode: 'system', // Possible values: 'off', 'system', 'schedule', 'auto'
     autoDarkModeStart: '21:00', // Switch into dark mode at this time

@@ -4,8 +4,8 @@
       v-for="(item, idx) in menu"
       v-bind:key="idx"
       class="top-level-item"
-      v-on:mousedown.stop.prevent="getSubmenu(item.id, $event.target as HTMLElement)"
-      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id, $event.target as HTMLElement)"
+      v-on:mousedown.stop.prevent="getSubmenu(item.id!, $event.target as HTMLElement)"
+      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id!, $event.target as HTMLElement)"
     >
       {{ item.label }}
     </span>
@@ -134,13 +134,18 @@ function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
 
 <style lang="less">
 // Styles for the menubar (for Windows and Linux)
+:root {
+  --fallback-title-bar-height: 31px;
+}
+
 #menubar {
-  height: 31px;
+  height: env(titlebar-area-height, var(--fallback-title-bar-height));
+  line-height: env(titlebar-area-height, var(--fallback-title-bar-height));
   width: 100%;
   // Use the system font with a somewhat smaller font-size
   font-family: inherit;
   font-size: 12px;
-  padding-left: 30px;
+  padding-left: env(titlebar-area-height, var(--fallback-title-bar-height));
   // Use the Zettlr logo as fixed background to enable branding in the menubar
   background-image: url("../../img/image-preview.png");
   background-position: left center;
@@ -154,8 +159,8 @@ function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
   span.top-level-item {
     display: inline-block;
     padding: 3px;
-    height: 31px;
-    line-height: 31px;
+    height: env(titlebar-area-height, var(--fallback-title-bar-height));
+    line-height: env(titlebar-area-height, var(--fallback-title-bar-height));
     padding: 0 10px;
     // Don't drag the top-level menubar items
     -webkit-app-region: no-drag;

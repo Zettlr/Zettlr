@@ -51,7 +51,7 @@ async function handlePaste (view: EditorView): Promise<void> {
         const sanitizedPath = relative.replace(/\\/g, '/')
         // We need to replace spaces, since the Markdown parser is strict here
         const tag = `![${pathBasename(sanitizedPath)}](${sanitizedPath.replace(/ /g, '%20')})`
-        view.dispatch(view.state.replaceSelection(tag))
+        view.dispatch(view.state.replaceSelection(tag), { scrollIntoView: true })
       }
       return // NOTE: We are ignoring additional images here, because (a) this
       // should normally not happen, and (b) it could be an avenue to block the
@@ -61,17 +61,17 @@ async function handlePaste (view: EditorView): Promise<void> {
       const plain = await (await item.getType('text/plain')).text()
       const html = await (await item.getType('text/html')).text()
       if (html === plain) {
-        view.dispatch(view.state.replaceSelection(plain))
+        view.dispatch(view.state.replaceSelection(plain), { scrollIntoView: true })
       } else {
         const { boldFormatting, italicFormatting } = view.state.field(configField)
         const emphasis = italicFormatting
         const strong = boldFormatting.includes('*') ? '*' : '_'
         const converted = await html2md(html, false, { strong, emphasis })
-        view.dispatch(view.state.replaceSelection(converted))
+        view.dispatch(view.state.replaceSelection(converted), { scrollIntoView: true })
       }
     } else if (hasPlain) {
       const plain = await (await item.getType('text/plain')).text()
-      view.dispatch(view.state.replaceSelection(plain))
+      view.dispatch(view.state.replaceSelection(plain), { scrollIntoView: true })
     }
   }
 }
@@ -92,18 +92,18 @@ export function copyAsHTML (view: EditorView): void {
 
   const { zknLinkFormat } = view.state.field(configField)
 
-  const plainBlob = new Blob([selections.join('\n')], { type: 'text/plain' })
-  const htmlBlob = new Blob(
-    [md2html(selections.join('\n'), window.getCitationCallback(library), zknLinkFormat)],
-    { type: 'text/html' }
-  )
-
-  navigator.clipboard.write([
-    new ClipboardItem({
-      'text/plain': plainBlob,
-      'text/html': htmlBlob
+  const plainText = selections.join('\n')
+  md2html(plainText, { onCitation: window.getCitationCallback(library), zknLinkFormat })
+    .then(html => {
+      navigator.clipboard.write([
+        new ClipboardItem({
+          'text/plain': new Blob([plainText], { type: 'text/plain' }),
+          'text/html': new Blob([html], { type: 'text/html' })
+        })
+      ]).catch(err => console.error(err))
     })
-  ]).catch(err => console.error(err))
+    .catch(err => console.error(err))
+
 }
 
 /**
@@ -168,7 +168,7 @@ export function pasteAsPlain (view: EditorView): void {
   navigator.clipboard.readText()
     .then(text => {
       if (text !== '') {
-        view.dispatch(view.state.replaceSelection(text))
+        view.dispatch(view.state.replaceSelection(text), { scrollIntoView: true })
       }
     })
     .catch(err => console.error(err))

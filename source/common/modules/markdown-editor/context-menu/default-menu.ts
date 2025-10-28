@@ -20,20 +20,7 @@ import { type SyntaxNode } from '@lezer/common'
 import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
-import { italicsToQuotes } from 'source/common/modules/markdown-editor/commands/transforms/italics-to-quotes'
-import { stripDuplicateSpaces } from 'source/common/modules/markdown-editor/commands/transforms/strip-duplicate-spaces'
-import { removeLineBreaks } from 'source/common/modules/markdown-editor/commands/transforms/remove-line-breaks'
-import { addSpacesAroundEmdashes } from 'source/common/modules/markdown-editor/commands/transforms/add-spaces-around-emdashes'
-import { removeSpacesAroundEmdashes } from 'source/common/modules/markdown-editor/commands/transforms/remove-spaces-around-emdashes'
-import { doubleQuotesToSingle } from 'source/common/modules/markdown-editor/commands/transforms/double-quotes-to-single-quotes'
-import { singleQuotesToDouble } from 'source/common/modules/markdown-editor/commands/transforms/single-quotes-to-double-quotes'
-import { straightenQuotes } from 'source/common/modules/markdown-editor/commands/transforms/straighten-quotes'
-import { quotesToItalics } from 'source/common/modules/markdown-editor/commands/transforms/quotes-to-italics'
-import { toDoubleQuotes } from 'source/common/modules/markdown-editor/commands/transforms/to-double-quotes'
-import { toSentenceCase } from 'source/common/modules/markdown-editor/commands/transforms/to-sentence-case'
-import { toTitleCase } from 'source/common/modules/markdown-editor/commands/transforms/to-title-case'
-import { zapGremlins } from 'source/common/modules/markdown-editor/commands/transforms/zap-gremlins'
-import { configField } from '../util/configuration'
+import { getTransformSubmenu } from './transform-items'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -133,7 +120,16 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     return {
       type: 'normal',
       label: suggestion,
-      id: '$' + suggestion // The $ helps distinguish the suggestions
+      action () {
+        if (diagnostic === undefined) {
+          console.warn('Could not apply suggestion: No diagnostic found')
+          return
+        }
+
+        view.dispatch({
+          changes: { from: diagnostic.from, to: diagnostic.to, insert: suggestion }
+        })
+      }
     }
   })
 
@@ -152,8 +148,28 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
   suggestionItems.unshift(
     {
       label: trans('Add to dictionary'),
-      id: 'add-to-dictionary',
-      type: 'normal'
+      type: 'normal',
+      action () {
+        ipcRenderer.invoke(
+          'dictionary-provider',
+          { command: 'add', terms: [word] }
+        )
+          .then(() => {
+            // After we've added the word to the dictionary, we have to invalidate
+            // the spellcheck linter errors that mark this specific word as wrong.
+            const filteredDiagnostics: Diagnostic[] = []
+            forEachDiagnostic(view.state, (d, from, to) => {
+              if (d.source !== 'spellcheck') {
+                filteredDiagnostics.push(d)
+              } else if (view.state.sliceDoc(from, to) !== word) {
+                filteredDiagnostics.push(d)
+              }
+            })
+            view.dispatch(setDiagnostics(view.state, filteredDiagnostics))
+            forceLinting(view)
+          })
+          .catch(e => console.error(e))
+      }
     },
     { type: 'separator' }
   )
@@ -162,14 +178,14 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Bold'),
       accelerator: 'CmdOrCtrl+B',
-      id: 'markdownBold',
-      type: 'normal'
+      type: 'normal',
+      action () { applyBold(view) }
     },
     {
       label: trans('Italic'),
       accelerator: 'CmdOrCtrl+I',
-      id: 'markdownItalic',
-      type: 'normal'
+      type: 'normal',
+      action () { applyItalic(view) }
     },
     {
       type: 'separator'
@@ -177,34 +193,34 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Insert link'),
       accelerator: 'CmdOrCtrl+K',
-      id: 'markdownLink',
-      type: 'normal'
+      type: 'normal',
+      action () { insertLink(view) }
     },
     {
       label: trans('Insert unordered list'),
-      id: 'markdownMakeUnorderedList',
-      type: 'normal'
+      type: 'normal',
+      action () { applyBulletList(view) }
     },
     {
       label: trans('Insert numbered list'),
-      id: 'markdownMakeOrderedList',
-      type: 'normal'
+      type: 'normal',
+      action () { applyOrderedList(view) }
     },
     {
       label: trans('Insert task list'),
       accelerator: 'CmdOrCtrl+T',
-      id: 'markdownMakeTaskList',
-      type: 'normal'
+      type: 'normal',
+      action () { applyTaskList(view) }
     },
     {
       label: trans('Insert blockquote'),
-      id: 'markdownBlockquote',
-      type: 'normal'
+      type: 'normal',
+      action () { applyBlockquote(view) }
     },
     {
       label: trans('Insert table'),
-      id: 'markdownInsertTable',
-      type: 'normal'
+      type: 'normal',
+      action () { view.dispatch(view.state.replaceSelection('| | |\n|-|-|\n| | |\n')) }
     },
     {
       type: 'separator'
@@ -212,32 +228,32 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Cut'),
       accelerator: 'CmdOrCtrl+X',
-      id: 'cut',
-      type: 'normal'
+      type: 'normal',
+      action () { cut(view) }
     },
     {
       label: trans('Copy'),
       accelerator: 'CmdOrCtrl+C',
-      id: 'copy',
-      type: 'normal'
+      type: 'normal',
+      action () { copyAsPlain(view) }
     },
     {
       label: trans('Copy as HTML'),
       accelerator: 'CmdOrCtrl+Alt+C',
-      id: 'copyAsHTML',
-      type: 'normal'
+      type: 'normal',
+      action () { copyAsHTML(view) }
     },
     {
       label: trans('Paste'),
       accelerator: 'CmdOrCtrl+V',
-      id: 'paste',
-      type: 'normal'
+      type: 'normal',
+      action () { paste(view) }
     },
     {
       label: trans('Paste without style'),
       accelerator: 'CmdOrCtrl+Shift+V',
-      id: 'pasteAsPlain',
-      type: 'normal'
+      type: 'normal',
+      action () { pasteAsPlain(view) }
     },
     {
       type: 'separator'
@@ -245,93 +261,13 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     {
       label: trans('Select all'),
       accelerator: 'CmdOrCtrl+A',
-      id: 'selectAll',
-      type: 'normal'
+      type: 'normal',
+      action () { view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } }) }
     },
     {
       type: 'separator'
     },
-    {
-      label: trans('Transform'),
-      id: 'submenuTransform',
-      type: 'submenu',
-      submenu: [
-        {
-          label: trans('Zap gremlins'),
-          id: 'zapGremlins',
-          type: 'normal'
-        },
-        {
-          label: trans('Strip duplicate spaces'),
-          id: 'stripDuplicateSpaces',
-          type: 'normal'
-        },
-        {
-          label: trans('Italics to quotes'),
-          id: 'italicsToQuotes',
-          type: 'normal'
-        },
-        {
-          label: trans('Quotes to italics'),
-          id: 'quotesToItalics',
-          type: 'normal'
-        },
-        {
-          label: trans('Remove line breaks'),
-          id: 'removeLineBreaks',
-          type: 'normal'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: trans('Straighten quotes'),
-          id: 'straightenQuotes',
-          type: 'normal'
-        },
-        {
-          label: trans('Ensure double quotes'),
-          id: 'toDoubleQuotes',
-          type: 'normal'
-        },
-        {
-          label: trans('Double quotes to single'),
-          id: 'doubleQuotesToSingle',
-          type: 'normal'
-        },
-        {
-          label: trans('Single quotes to double'),
-          id: 'singleQuotesToDouble',
-          type: 'normal'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: trans('Emdash — Add spaces around'),
-          id: 'addSpacesAroundEmdashes',
-          type: 'normal'
-        },
-        {
-          label: trans('Emdash — Remove spaces around'),
-          id: 'removeSpacesAroundEmdashes',
-          type: 'normal'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: trans('To sentence case'),
-          id: 'toSentenceCase',
-          type: 'normal'
-        },
-        {
-          label: trans('To title case'),
-          id: 'toTitleCase',
-          type: 'normal'
-        }
-      ]
-    }
+    getTransformSubmenu(view)
   ]
 
   // If we found a diagnostic earlier and a word, add the suggestion items
@@ -339,87 +275,5 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     tpl.unshift(...suggestionItems)
   }
 
-  showPopupMenu(coords, tpl, (clickedID) => {
-    if (clickedID === 'markdownBold') {
-      applyBold(view)
-    } else if (clickedID === 'markdownItalic') {
-      applyItalic(view)
-    } else if (clickedID === 'markdownLink') {
-      insertLink(view)
-    } else if (clickedID === 'markdownMakeOrderedList') {
-      applyOrderedList(view)
-    } else if (clickedID === 'markdownMakeUnorderedList') {
-      applyBulletList(view)
-    } else if (clickedID === 'markdownMakeTaskList') {
-      applyTaskList(view)
-    } else if (clickedID === 'markdownBlockquote') {
-      applyBlockquote(view)
-    } else if (clickedID === 'markdownInsertTable') {
-      view.dispatch(view.state.replaceSelection('| | |\n|-|-|\n| | |\n'))
-    } else if (clickedID === 'cut') {
-      cut(view)
-    } else if (clickedID === 'copy') {
-      copyAsPlain(view)
-    } else if (clickedID === 'copyAsHTML') {
-      copyAsHTML(view)
-    } else if (clickedID === 'paste') {
-      paste(view)
-    } else if (clickedID === 'pasteAsPlain') {
-      pasteAsPlain(view)
-    } else if (clickedID === 'selectAll') {
-      view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } })
-    } else if (clickedID === 'stripDuplicateSpaces') {
-      stripDuplicateSpaces(view)
-    } else if (clickedID === 'italicsToQuotes') {
-      italicsToQuotes(view)
-    } else if (clickedID === 'quotesToItalics') {
-      quotesToItalics(view.state.field(configField).italicFormatting)(view)
-    } else if (clickedID === 'removeLineBreaks') {
-      removeLineBreaks(view)
-    } else if (clickedID === 'addSpacesAroundEmdashes') {
-      addSpacesAroundEmdashes(view)
-    } else if (clickedID === 'removeSpacesAroundEmdashes') {
-      removeSpacesAroundEmdashes(view)
-    } else if (clickedID === 'doubleQuotesToSingle') {
-      doubleQuotesToSingle(view)
-    } else if (clickedID === 'singleQuotesToDouble') {
-      singleQuotesToDouble(view)
-    } else if (clickedID === 'straightenQuotes') {
-      straightenQuotes(view)
-    } else if (clickedID === 'toDoubleQuotes') {
-      toDoubleQuotes(view)
-    } else if (clickedID === 'toSentenceCase') {
-      toSentenceCase(String(window.config.get('appLang')))(view)
-    } else if (clickedID === 'toTitleCase') {
-      toTitleCase(String(window.config.get('appLang')))(view)
-    } else if (clickedID === 'zapGremlins') {
-      zapGremlins(view)
-    } else if (clickedID === 'no-suggestion') {
-      // Do nothing
-    } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
-      ipcRenderer.invoke(
-        'dictionary-provider',
-        { command: 'add', terms: [word] }
-      )
-        .then(() => {
-          // After we've added the word to the dictionary, we have to invalidate
-          // the spellcheck linter errors that mark this specific word as wrong.
-          const filteredDiagnostics: Diagnostic[] = []
-          forEachDiagnostic(view.state, (d, from, to) => {
-            if (d.source !== 'spellcheck') {
-              filteredDiagnostics.push(d)
-            } else if (view.state.sliceDoc(from, to) !== word) {
-              filteredDiagnostics.push(d)
-            }
-          })
-          view.dispatch(setDiagnostics(view.state, filteredDiagnostics))
-          forceLinting(view)
-        })
-        .catch(e => console.error(e))
-    } else if (clickedID.startsWith('$') && diagnostic !== undefined) {
-      view.dispatch({
-        changes: { from: diagnostic.from, to: diagnostic.to, insert: clickedID.slice(1) }
-      })
-    }
-  })
+  showPopupMenu(coords, tpl)
 }

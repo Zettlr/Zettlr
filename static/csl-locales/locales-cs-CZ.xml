@@ -14,7 +14,7 @@
       <name>Michal Hoftich</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2012-07-04T23:31:02+00:00</updated>
+    <updated>2025-10-06T23:31:02+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -28,19 +28,19 @@
     <date-part name="year" range-delimiter="-"/>
   </date>
   <terms>
-    <term name="advance-online-publication">advance online publication</term>
+    <term name="advance-online-publication">dostupné online před tiskem</term>
     <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
+    <term name="audio-recording">zvukový záznam</term>
     <term name="film">film</term>
-    <term name="henceforth">henceforth</term>
+    <term name="henceforth">dále jen</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
+    <term name="no-place">sine loco</term>
+    <term name="no-place" form="short">s.l.</term>
+    <term name="no-publisher">neuvedeno</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">neuved.</term>
     <term name="on">on</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="original-work-published">původní dílo vydáno</term>
     <term name="personal-communication">osobní komunikace</term>
     <term name="podcast">podcast</term>
     <term name="podcast-episode">podcast episode</term>

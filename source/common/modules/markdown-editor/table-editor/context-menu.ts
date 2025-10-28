@@ -1,19 +1,27 @@
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu, { type AnyMenuItem } from '../../window-register/application-menu-helper'
+import { getTransformSubmenu } from '../context-menu/transform-items'
+import { type EditorView } from '@codemirror/view'
+import { applyBold, applyItalic, insertLink } from '../commands/markdown'
+import { copyAsHTML, copyAsPlain, cut, paste, pasteAsPlain } from '../util/copy-paste-cut'
+import { selectAllCommand } from '../keymaps/table-editor'
+import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRow } from './commands/rows'
+import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCol } from './commands/columns'
+import { clearTable, setAlignment } from './commands/tables'
 
-export function displayTableContextMenu (event: MouseEvent, callback: (clickedID: string) => void): void {
+export function displayTableContextMenu (event: MouseEvent, mainView: EditorView, subviewOrView: EditorView): void {
   const template: AnyMenuItem[] = [
     {
       label: trans('Bold'),
       accelerator: 'CmdOrCtrl+B',
-      id: 'markdownBold',
-      type: 'normal'
+      type: 'normal',
+      action () { applyBold(subviewOrView) }
     },
     {
       label: trans('Italic'),
       accelerator: 'CmdOrCtrl+I',
-      id: 'markdownItalic',
-      type: 'normal'
+      type: 'normal',
+      action () { applyItalic(subviewOrView) }
     },
     {
       type: 'separator'
@@ -21,8 +29,8 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
     {
       label: trans('Insert link'),
       accelerator: 'CmdOrCtrl+K',
-      id: 'markdownLink',
-      type: 'normal'
+      type: 'normal',
+      action () { insertLink(subviewOrView) }
     },
     {
       type: 'separator'
@@ -30,32 +38,32 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
     {
       label: trans('Cut'),
       accelerator: 'CmdOrCtrl+X',
-      id: 'cut',
-      type: 'normal'
+      type: 'normal',
+      action () { cut(subviewOrView) }
     },
     {
       label: trans('Copy'),
       accelerator: 'CmdOrCtrl+C',
-      id: 'copy',
-      type: 'normal'
+      type: 'normal',
+      action () { copyAsPlain(subviewOrView) }
     },
     {
       label: trans('Copy as HTML'),
       accelerator: 'CmdOrCtrl+Alt+C',
-      id: 'copyAsHTML',
-      type: 'normal'
+      type: 'normal',
+      action () { copyAsHTML(subviewOrView) }
     },
     {
       label: trans('Paste'),
       accelerator: 'CmdOrCtrl+V',
-      id: 'paste',
-      type: 'normal'
+      type: 'normal',
+      action () { paste(subviewOrView) }
     },
     {
       label: trans('Paste without style'),
       accelerator: 'CmdOrCtrl+Shift+V',
-      id: 'pasteAsPlain',
-      type: 'normal'
+      type: 'normal',
+      action () { pasteAsPlain(subviewOrView) }
     },
     {
       type: 'separator'
@@ -63,185 +71,103 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
     {
       label: trans('Select all'),
       accelerator: 'CmdOrCtrl+A',
-      id: 'selectAll',
-      type: 'normal'
+      type: 'normal',
+      action () { selectAllCommand(subviewOrView) }
     },
     {
       type: 'separator'
     },
-    {
-      label: trans('Transform'),
-      id: 'submenuTransform',
-      type: 'submenu',
-      submenu: [
-        {
-          label: trans('Zap gremlins'),
-          id: 'zapGremlins',
-          type: 'normal'
-        },
-        {
-          label: trans('Strip duplicate spaces'),
-          id: 'stripDuplicateSpaces',
-          type: 'normal'
-        },
-        {
-          label: trans('Italics to quotes'),
-          id: 'italicsToQuotes',
-          type: 'normal'
-        },
-        {
-          label: trans('Quotes to italics'),
-          id: 'quotesToItalics',
-          type: 'normal'
-        },
-        {
-          label: trans('Remove line breaks'),
-          id: 'removeLineBreaks',
-          type: 'normal'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: trans('Straighten quotes'),
-          id: 'straightenQuotes',
-          type: 'normal'
-        },
-        {
-          label: trans('Ensure double quotes'),
-          id: 'toDoubleQuotes',
-          type: 'normal'
-        },
-        {
-          label: trans('Double quotes to single'),
-          id: 'doubleQuotesToSingle',
-          type: 'normal'
-        },
-        {
-          label: trans('Single quotes to double'),
-          id: 'singleQuotesToDouble',
-          type: 'normal'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: trans('Emdash — Add spaces around'),
-          id: 'addSpacesAroundEmdashes',
-          type: 'normal'
-        },
-        {
-          label: trans('Emdash — Remove spaces around'),
-          id: 'removeSpacesAroundEmdashes',
-          type: 'normal'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: trans('To sentence case'),
-          id: 'toSentenceCase',
-          type: 'normal'
-        },
-        {
-          label: trans('To title case'),
-          id: 'toTitleCase',
-          type: 'normal'
-        }
-      ]
-    },
+    getTransformSubmenu(subviewOrView),
     {
       type: 'separator'
     },
     {
       type: 'submenu',
       label: trans('Row'),
-      id: '',
       enabled: true,
       submenu: [
         {
           type: 'normal',
           label: trans('Insert new row above'),
-          id: 'insert.row.above',
-          accelerator: process.platform === 'darwin' ? 'Ctrl+Shift+Up' : 'Alt+Shift+Up'
+          accelerator: process.platform === 'darwin' ? 'Ctrl+Shift+Up' : 'Alt+Shift+Up',
+          action () { addRowBefore(mainView) }
         },
         {
           type: 'normal',
           label: trans('Insert new row below'),
-          id: 'insert.row.below',
-          accelerator: process.platform === 'darwin' ? 'Ctrl+Shift+Down' : 'Alt+Shift+Down'
+          accelerator: process.platform === 'darwin' ? 'Ctrl+Shift+Down' : 'Alt+Shift+Down',
+          action () { addRowAfter(mainView) }
         },
         { type: 'separator' },
         {
           type: 'normal',
           label: trans('Move row up'),
-          id: 'move.row.up',
-          accelerator: process.platform === 'darwin' ? 'Ctrl+Up' : 'Alt+Up'
+          accelerator: process.platform === 'darwin' ? 'Ctrl+Up' : 'Alt+Up',
+          action () { swapPrevRow(mainView) }
         },
         {
           type: 'normal',
           label: trans('Move row down'),
-          id: 'move.row.down',
-          accelerator: process.platform === 'darwin' ? 'Ctrl+Down' : 'Alt+Down'
+          accelerator: process.platform === 'darwin' ? 'Ctrl+Down' : 'Alt+Down',
+          action () { swapNextRow(mainView) }
         },
         { type: 'separator' },
         {
           type: 'normal',
           label: trans('Clear row'),
-          id: 'clear.row'
+          action () { clearRow(mainView) }
         },
         {
           type: 'normal',
           label: trans('Delete row'),
-          id: 'delete.row'
+          action () { deleteRow(mainView) }
         }
       ]
     },
     {
       type: 'submenu',
       label: trans('Column'),
-      id: '',
       submenu: [
         {
           type: 'normal',
           label: trans('Insert new column left'),
-          id: 'insert.col.left',
-          accelerator: process.platform === 'darwin' ? 'Ctrl+Shift+Left' : 'Alt+Shift+Left'
+          accelerator: process.platform === 'darwin' ? 'Ctrl+Shift+Left' : 'Alt+Shift+Left',
+          action () { addColBefore(mainView) }
         },
         {
           type: 'normal',
           label: trans('Insert new column right'),
-          id: 'insert.col.right',
-          accelerator: process.platform === 'darwin' ? 'Ctrl+Shift+Right' : 'Alt+Shift+Right'
+          accelerator: process.platform === 'darwin' ? 'Ctrl+Shift+Right' : 'Alt+Shift+Right',
+          action () { addColAfter(mainView) }
         },
         { type: 'separator' },
         {
           type: 'normal',
           label: trans('Move column left'),
-          id: 'move.col.left',
-          accelerator: process.platform === 'darwin' ? 'Ctrl+Left' : 'Alt+Left'
+          accelerator: process.platform === 'darwin' ? 'Ctrl+Left' : 'Alt+Left',
+          action () { swapPrevCol(mainView) }
         },
         {
           type: 'normal',
           label: trans('Move column right'),
-          id: 'move.col.right',
-          accelerator: process.platform === 'darwin' ? 'Ctrl+Right' : 'Alt+Right'
+          accelerator: process.platform === 'darwin' ? 'Ctrl+Right' : 'Alt+Right',
+          action () { swapNextCol(mainView) }
         },
         { type: 'separator' },
         {
           type: 'normal',
           label: trans('Align column text left'),
-          id: 'align.col.left'
+          action () { setAlignment('left')(mainView) }
         },
         {
           type: 'normal',
           label: trans('Align column text center'),
-          id: 'align.col.center'
+          action () { setAlignment('center')(mainView) }
         },
         {
           type: 'normal',
           label: trans('Align column text right'),
-          id: 'align.col.right'
+          action () { setAlignment('right')(mainView) }
         },
         { type: 'separator' },
         // {
@@ -260,24 +186,23 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
         {
           type: 'normal',
           label: trans('Clear column'),
-          id: 'clear.col'
+          action () { clearCol(mainView) }
         },
         {
           type: 'normal',
           label: trans('Delete column'),
-          id: 'delete.col'
+          action () { deleteCol(mainView) }
         }
       ]
     },
     {
       type: 'submenu',
       label: trans('Table'),
-      id: '',
       submenu: [
         {
           type: 'normal',
           label: trans('Clear table'),
-          id: 'clear.table'
+          action () { clearTable(mainView) }
         },
         {
           type: 'normal',
@@ -289,7 +214,5 @@ export function displayTableContextMenu (event: MouseEvent, callback: (clickedID
   ]
 
   const point = { x: event.clientX, y: event.clientY }
-  showPopupMenu(point, template, (clickedID) => {
-    callback(clickedID)
-  })
+  showPopupMenu(point, template)
 }

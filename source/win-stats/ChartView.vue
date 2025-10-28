@@ -107,6 +107,11 @@ const yTicks = computed(() => {
     const interval = range / nTicks
     ticks.push(Math.round(minValue.value + i * interval))
   }
+
+  if (ticks.every(t => Number.isNaN(t))) {
+    return ticks.map((t, idx) => idx * 100).toReversed()
+  }
+
   return ticks.toReversed()
 })
 

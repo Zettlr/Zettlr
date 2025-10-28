@@ -4,7 +4,7 @@
     v-bind:titlebar="true"
     v-bind:menubar="false"
     v-bind:tabbar-label="'Preferences'"
-    v-bind:disable-vibrancy="true"
+    v-bind:disable-vibrancy="!hasVibrancy"
   >
     <!--
       To comply with ARIA, we have to wrap the form in a tab container because
@@ -18,20 +18,22 @@
       v-bind:initial-total-width="100"
     >
       <template #view1>
-        <TextControl
-          v-model="query"
-          v-bind:placeholder="searchPlaceholder"
-          v-bind:search-icon="true"
-          v-bind:autofocus="true"
-          v-bind:reset="true"
-          style="padding: 10px 10px 0px 10px;"
-        ></TextControl>
-        <SelectableList
-          v-bind:items="groups"
-          v-bind:editable="false"
-          v-bind:selected-item="selectedItem"
-          v-on:select="selectGroup($event)"
-        ></SelectableList>
+        <div id="preferences-container-list">
+          <TextControl
+            v-model="query"
+            v-bind:placeholder="searchPlaceholder"
+            v-bind:search-icon="true"
+            v-bind:autofocus="true"
+            v-bind:reset="true"
+            style="padding: 10px 10px 0px 10px;"
+          ></TextControl>
+          <SelectableList
+            v-bind:items="groups"
+            v-bind:editable="false"
+            v-bind:selected-item="selectedItem"
+            v-on:select="selectGroup($event)"
+          ></SelectableList>
+        </div>
       </template>
       <template #view2>
         <FormBuilder
@@ -91,6 +93,8 @@ export type PreferencesFieldset = Fieldset & { group: PreferencesGroups }
 
 const ipcRenderer = window.ipc
 const configStore = useConfigStore()
+
+const hasVibrancy = computed(() => configStore.config.window.vibrancy && process.platform === 'darwin')
 
 const currentGroup = ref(0)
 const query = ref('')
@@ -406,6 +410,13 @@ div[role="tabpanel"] {
   overflow: auto; // Enable scrolling, if necessary
   padding: 10px;
   width: 100%;
+}
+
+#preferences-container-list {
+  display: flex;
+  flex-direction: column;
+  max-height: stretch;
+  margin-bottom: 20px;
 }
 
 #no-results-message {

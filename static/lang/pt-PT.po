@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2025-10-08 16:06+0200\n"
+"POT-Creation-Date: 2025-10-10 08:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -282,7 +282,7 @@ msgstr "Preferências"
 
 #: source/app/service-providers/menu/menu.win32.ts:233
 #: source/app/service-providers/menu/menu.darwin.ts:59
-#: source/tmp/win-assets/App.vue.ts:15
+#: source/tmp/win-assets/App.vue.ts:16
 msgid "Assets Manager"
 msgstr "Navegador de atributos"
 
@@ -1976,35 +1976,35 @@ msgid "Edit the default settings for imports or exports here."
 msgstr ""
 "Editar as definições pré-definidas para importações ou exportações aqui"
 
-#: source/tmp/win-assets/DefaultsTab.vue.ts:180
+#: source/tmp/win-assets/DefaultsTab.vue.ts:179
 #: source/tmp/win-assets/SnippetsTab.vue.ts:106
 #: source/tmp/win-assets/CustomCSS.vue.ts:56
 msgid "Saving …"
 msgstr "Gravando ..."
 
-#: source/tmp/win-assets/DefaultsTab.vue.ts:190
+#: source/tmp/win-assets/DefaultsTab.vue.ts:189
 #: source/tmp/win-assets/SnippetsTab.vue.ts:116
 msgid "Saved!"
 msgstr "Gravado!"
 
-#: source/tmp/win-assets/App.vue.ts:21
+#: source/tmp/win-assets/App.vue.ts:25
 msgid "Exporting"
 msgstr ""
 
-#: source/tmp/win-assets/App.vue.ts:27
+#: source/tmp/win-assets/App.vue.ts:31
 msgid "Importing"
 msgstr ""
 
-#: source/tmp/win-assets/App.vue.ts:33
-#: source/win-preferences/schema/appearance.ts:218
-msgid "Custom CSS"
-msgstr "CSS personalizado"
-
-#: source/tmp/win-assets/App.vue.ts:39
-#: source/tmp/win-preferences/App.vue.ts:180
+#: source/tmp/win-assets/App.vue.ts:37
+#: source/tmp/win-preferences/App.vue.ts:182
 #: source/win-preferences/schema/snippets.ts:24
 msgid "Snippets"
 msgstr ""
+
+#: source/tmp/win-assets/App.vue.ts:43
+#: source/win-preferences/schema/appearance.ts:218
+msgid "Custom CSS"
+msgstr "CSS personalizado"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:29
 msgid "Rename snippet"
@@ -2265,7 +2265,7 @@ msgid "Choose directory…"
 msgstr ""
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:41
-#: source/tmp/win-preferences/App.vue.ts:57
+#: source/tmp/win-preferences/App.vue.ts:59
 msgid "Search"
 msgstr "Procurar"
 
@@ -2425,7 +2425,7 @@ msgstr ""
 #. STATIC VARIABLES
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:59
 #: source/tmp/win-stats/CalendarView.vue.ts:27
-#: source/tmp/win-stats/App.vue.ts:27
+#: source/tmp/win-stats/App.vue.ts:28
 msgid "Calendar"
 msgstr "Calendário"
 
@@ -2757,50 +2757,50 @@ msgid "Support the development of Zettlr"
 msgstr ""
 
 #. Update labels
-#: source/tmp/win-onboarding/App.vue.ts:42
+#: source/tmp/win-onboarding/App.vue.ts:49
 msgid "Update complete!"
 msgstr ""
 
-#: source/tmp/win-onboarding/App.vue.ts:43
+#: source/tmp/win-onboarding/App.vue.ts:50
 msgid "Zettlr has been updated. You are now running Zettlr"
 msgstr ""
 
-#: source/tmp/win-onboarding/App.vue.ts:44
+#: source/tmp/win-onboarding/App.vue.ts:51
 msgid "Get started"
 msgstr ""
 
-#: source/tmp/win-onboarding/App.vue.ts:45
+#: source/tmp/win-onboarding/App.vue.ts:52
 msgid "See what's changed"
 msgstr ""
 
-#: source/tmp/win-onboarding/App.vue.ts:47
+#: source/tmp/win-onboarding/App.vue.ts:54
 #, javascript-format
 msgid "Build date: %s"
 msgstr ""
 
 #. Onboarding workflow labels
-#: source/tmp/win-onboarding/App.vue.ts:50
+#: source/tmp/win-onboarding/App.vue.ts:57
 msgid "Start setup"
 msgstr ""
 
-#: source/tmp/win-onboarding/App.vue.ts:51
+#: source/tmp/win-onboarding/App.vue.ts:58
 msgid "Skip"
 msgstr ""
 
-#: source/tmp/win-onboarding/App.vue.ts:52
+#: source/tmp/win-onboarding/App.vue.ts:59
 msgid "Previous"
 msgstr ""
 
-#: source/tmp/win-onboarding/App.vue.ts:53
+#: source/tmp/win-onboarding/App.vue.ts:60
 msgid "Next"
 msgstr ""
 
-#: source/tmp/win-onboarding/App.vue.ts:54
+#: source/tmp/win-onboarding/App.vue.ts:61
 msgid "Finish"
 msgstr ""
 
 #: source/tmp/win-onboarding/pages/CitingPage.vue.ts:7
-#: source/tmp/win-preferences/App.vue.ts:170
+#: source/tmp/win-preferences/App.vue.ts:172
 #: source/win-preferences/schema/citations.ts:22
 #, fuzzy
 msgid "Citations"
@@ -2822,33 +2822,40 @@ msgid ""
 "which one Zettlr uses when you autocomplete citations."
 msgstr ""
 
-#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:7
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:8
 msgid "Look and Feel"
 msgstr ""
 
-#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:8
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:9
 msgid ""
 "Zettlr supports both light and dark mode. You can turn it on manually here."
 msgstr ""
 
-#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:9
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:10
 msgid "Activate dark mode"
 msgstr ""
 
-#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:10
-msgid "Most users will wish to schedule when the app will enter the dark mode."
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:11
+msgid "Do you wish to let Zettlr automatically switch to dark mode?"
 msgstr ""
 
-#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:13
-msgid "Do not automatically change modes"
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:18
+#, javascript-format
+msgid ""
+"If you choose \"schedule,\" Zettlr will turn on dark mode between %s and %s. "
+"You can adjust these times in the settings."
 msgstr ""
 
-#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:14
-msgid "Follow the operating system"
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:21
+msgid "Do not automatically toggle light/dark mode"
 msgstr ""
 
-#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:15
-msgid "Manually schedule"
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:22
+msgid "Follow operating system"
+msgstr ""
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:23
+msgid "Schedule dark mode"
 msgstr ""
 
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:10
@@ -3087,8 +3094,8 @@ msgid ""
 "Some files are selected for export but no longer exist in the directory."
 msgstr ""
 
-#: source/tmp/win-project-properties/App.vue.ts:62
-#: source/tmp/win-preferences/App.vue.ts:140
+#: source/tmp/win-project-properties/App.vue.ts:64
+#: source/tmp/win-preferences/App.vue.ts:142
 msgid "General"
 msgstr ""
 
@@ -3172,15 +3179,15 @@ msgid "December"
 msgstr "Dezembro"
 
 #. Static properties
-#: source/tmp/win-stats/App.vue.ts:33 source/tmp/win-stats/ChartView.vue.ts:34
+#: source/tmp/win-stats/App.vue.ts:34 source/tmp/win-stats/ChartView.vue.ts:34
 msgid "Charts"
 msgstr "Gráficos"
 
-#: source/tmp/win-stats/App.vue.ts:39
+#: source/tmp/win-stats/App.vue.ts:40
 msgid "FSAL Stats"
 msgstr ""
 
-#: source/tmp/win-stats/App.vue.ts:58
+#: source/tmp/win-stats/App.vue.ts:62
 msgid "Writing statistics"
 msgstr ""
 
@@ -3296,53 +3303,53 @@ msgstr ""
 msgid "A unique filename"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:56
+#: source/tmp/win-preferences/App.vue.ts:58
 #, javascript-format
 msgid "No results for \"%s\""
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:145
+#: source/tmp/win-preferences/App.vue.ts:147
 #: source/win-preferences/schema/advanced.ts:51
 msgid "Appearance"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:150
+#: source/tmp/win-preferences/App.vue.ts:152
 msgid "File Manager"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:155
+#: source/tmp/win-preferences/App.vue.ts:157
 msgid "Editor"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:160
+#: source/tmp/win-preferences/App.vue.ts:162
 #: source/win-preferences/schema/spellchecking.ts:181
 msgid "Spellchecking"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:165
+#: source/tmp/win-preferences/App.vue.ts:167
 #: source/win-preferences/schema/autocorrect.ts:22
 #, fuzzy
 msgid "Autocorrect"
 msgstr "Ligar a Correcção Automática"
 
-#: source/tmp/win-preferences/App.vue.ts:175
+#: source/tmp/win-preferences/App.vue.ts:177
 msgid "Zettelkasten"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:185
+#: source/tmp/win-preferences/App.vue.ts:187
 msgid "Import and Export"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:190
+#: source/tmp/win-preferences/App.vue.ts:192
 msgid "Advanced"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:199
+#: source/tmp/win-preferences/App.vue.ts:201
 #, javascript-format
 msgid "Searching: %s"
 msgstr ""
 
-#: source/tmp/win-preferences/App.vue.ts:203
+#: source/tmp/win-preferences/App.vue.ts:205
 msgid "Preferences"
 msgstr ""
 

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="tab-list"
+    v-bind:class="{ 'tab-list': true, 'has-vibrancy': props.hasVibrancy }"
     role="tablist"
     v-bind:aria-label="label"
   >
@@ -81,7 +81,11 @@ export interface TabbarControl {
   label: string
 }
 
-const props = defineProps<{ tabs: WindowTab[], label?: string }>()
+const props = defineProps<{
+  tabs: WindowTab[],
+  hasVibrancy: boolean,
+  label?: string
+}>()
 
 const emit = defineEmits<(e: 'tab', value: number) => void>()
 
@@ -159,6 +163,10 @@ body.darwin {
     background-color: rgb(240, 240, 240);
     border-bottom: 1px solid rgb(150, 150, 150);
 
+    &.has-vibrancy {
+      background-color: rgba(240, 240, 240, 0.5);
+    }
+
     button[role="tab"] {
       color: var(--grey-4);
       background-color: transparent;
@@ -186,6 +194,10 @@ body.darwin {
       background-color: rgb(52, 52, 52);
       color: rgb(153, 153, 153);
       border-bottom: 1px solid rgb(0, 0, 0);
+
+      &.has-vibrancy {
+        background-color: rgba(52, 52, 52, 0.3);
+      }
 
       button[role="tab"] {
         color: rgb(172, 172, 172);

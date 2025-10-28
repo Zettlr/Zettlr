@@ -282,26 +282,16 @@ function shouldHandleNode (node: SyntaxNodeRef): boolean {
 function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|undefined {
   // Get the actual link contents, extract title and URL and create a
   // replacement widget
-  const imgSource = state.sliceDoc(node.from, node.to)
-  const match = /(?<=\s|^)!\[(.*?)\]\((.+?(?:(?<= )"(.+)")?)\)/.exec(imgSource)
-  if (match === null) {
-    console.error(`Could not parse image from source: "${imgSource}"`)
+  const altNode = node.node.getChild('LinkLabel')
+  const titleNode = node.node.getChild('LinkTitle')
+  const urlNode = node.node.getChild('URL')
+  if (urlNode === null) {
     return undefined
   }
 
-  // The image RE will give us the following groups:
-  // p1: The alternative text (in square brackets)
-  // p2: The complete contents of the round braces
-  // p3: If applicable, an image title (within round braces)
-  // p4: Anything in curly brackets (mostly commands for Pandoc)
-  const altText = match[1] ?? '' // Everything inside the square brackets
-  let url = match[2] ?? '' // The URL
-  const title = match[3] ?? altText // An optional title in quotes after the image
-
-  // Remove the "title" from the surrounding URL group, if applicable.
-  if (match[3] !== undefined) {
-    url = url.replace(`"${match[3]}"`, '').trim()
-  }
+  const url = state.sliceDoc(urlNode.from, urlNode.to)
+  const alt = altNode === null ? '' : state.sliceDoc(altNode.from, altNode.to)
+  const title = titleNode === null ? alt : state.sliceDoc(titleNode.from, titleNode.to)
 
   let data: ParsedPandocLinkAttributes = {}
   const nextSibling = node.node.nextSibling
@@ -315,7 +305,7 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
   }
 
   const resolvedImageSrc = resolveImageUrl(state.field(configField).metadata.path, url)
-  return new ImageWidget(node.node, title, url, resolvedImageSrc, altText, data)
+  return new ImageWidget(node.node, title, url, resolvedImageSrc, alt, data)
 }
 
 export const renderImages = [
