@@ -36,12 +36,19 @@ export const inlineMathParser: InlineParser = {
     // below.
     const isInlineDisplayMath = ctx.char(pos + 1) === 36
     const delimLength = isInlineDisplayMath ? 2 : 1
+    // Opening delimiters may not be followed by a space, and closing delimiters
+    // may not be preceeded by a space. We include NaN since ctx.char returns
+    // that if we're out of bounds.
+    const followedBySpace = [ 9, 32, NaN ].includes(ctx.char(pos + delimLength))
+    const preceededBySpace = [ 9, 32, NaN ].includes(ctx.char(pos - 1))
 
     // Try to find an opening delimiter
     const opening = ctx.findOpeningDelimiter(MathDelimiter)
 
-    // Since there was no opening, this is a potential opening
-    if (opening === null) {
+    // Since there was no opening delimiter, this is a potential opening
+    if (opening === null && followedBySpace) {
+      return -1
+    } else if (opening === null) {
       return ctx.addDelimiter(MathDelimiter, pos, pos + delimLength, true, false)
     }
 
@@ -50,8 +57,10 @@ export const inlineMathParser: InlineParser = {
       return -1
     }
 
-    // Ensure the opening delimiter has the same length as what we have here.
-    if (delim.to - delim.from !== delimLength) {
+    // Ensure the opening delimiter has the same length as what we have here,
+    // and that our current (potentially closing) delimiter is not preceeded by
+    // a space
+    if (delim.to - delim.from !== delimLength || preceededBySpace) {
       return -1 // Require matching delimiters
     }
 
