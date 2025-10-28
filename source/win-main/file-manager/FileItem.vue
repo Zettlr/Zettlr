@@ -434,7 +434,7 @@ body {
 
         span {
           display: block;
-          overflow: auto;
+          overflow: hidden;
           text-overflow: ellipsis;
         }
 
