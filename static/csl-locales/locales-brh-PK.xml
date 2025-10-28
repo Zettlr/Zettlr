@@ -5,7 +5,7 @@
       <name>عثمان</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2024-03-31T09:48:00+00:00</updated>
+    <updated>2025-10-18T05:53:06+00:00</updated>
   </info>
   <style-options punctuation-in-quote="true"/>
   <date form="text">
@@ -19,7 +19,7 @@
     <date-part name="year"/>
   </date>
   <terms>
-    <!-- GENERAL TERMS -->
+    <!-- LONG GENERAL TERMS -->
     <term name="accessed">رسوخ کرے</term>
     <term name="advance-online-publication">پیشگی آن لائن چھاپ</term>
     <term name="album">البم</term>
@@ -73,6 +73,10 @@
     <term name="video">ویڈیو</term>
     <term name="working-paper">ورکنگ پیپر</term>
 
+    <!-- SHORT GENERAL TERMS -->
+
+    <!-- SYMBOLIC GENERAL FORMS -->
+
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">مضمون</term>
     <term name="article-journal">جرنیل‌نا مضمون</term>
@@ -120,11 +124,15 @@
     <term name="treaty">عہد نامہ</term>
     <term name="webpage">ویب پنہ</term>
 
-    <!-- VERB ITEM TYPE FORMS -->
+    <!-- SHORT ITEM TYPE FORMS -->
+
+    <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
     <term name="hearing" form="verb">پیشی‌کہ</term>
     <term name="review" form="verb">ریویوکہ</term>
     <term name="review-book" form="verb">کتاب‌نا ریویوکہ</term>
+
+    <!-- SHORT VERB ITEM TYPE FORMS -->
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">عیسوی سن</term>
@@ -160,25 +168,25 @@
     <term name="long-ordinal-10">دہمیکو</term>
 
     <!-- LONG LOCATOR FORMS -->
-    <term name="act">			 
+    <term name="act">
       <single>ایکٹ</single>
-      <multiple>ایکٹاک</multiple>						 
+      <multiple>ایکٹاک</multiple>
     </term>
-    <term name="appendix">			 
+    <term name="appendix">
       <single>ضمیمہ</single>
-      <multiple>ضمیمہ‌غاک</multiple>						 
+      <multiple>ضمیمہ‌غاک</multiple>
     </term>
-    <term name="article-locator">			 
+    <term name="article-locator">
       <single>مضمون</single>
-      <multiple>مضمونک</multiple>						 
+      <multiple>مضمونک</multiple>
     </term>
     <term name="book">
       <single>کتاب</single>
       <multiple>کتاباک</multiple>
     </term>
-    <term name="canon">			 
+    <term name="canon">
       <single>قانود</single>
-      <multiple>قانوداک</multiple>						 
+      <multiple>قانوداک</multiple>
     </term>
     <term name="chapter">
       <single>در</single>
@@ -188,13 +196,13 @@
       <single>کالم</single>
       <multiple>کالمک</multiple>
     </term>
-    <term name="elocation">			 
+    <term name="elocation">
       <single>جاگہ</single>
-      <multiple>جاگہ‌غاک</multiple>						 
+      <multiple>جاگہ‌غاک</multiple>
     </term>
-    <term name="equation">			 
+    <term name="equation">
       <single>مساوات</single>
-      <multiple>مساواتاک</multiple>						 
+      <multiple>مساواتاک</multiple>
     </term>
     <term name="figure">
       <single>تصویر</single>
@@ -232,13 +240,13 @@
       <single>حصہ</single>
       <multiple>حصہ‌غاک</multiple>
     </term>
-    <term name="rule">			 
+    <term name="rule">
       <single>رول</single>
-      <multiple>رولک</multiple>						 
+      <multiple>رولک</multiple>
     </term>
-    <term name="scene">			 
+    <term name="scene">
       <single>سین</single>
-      <multiple>سینک</multiple>						 
+      <multiple>سینک</multiple>
     </term>
     <term name="section">
       <single>جز</single>
@@ -252,32 +260,30 @@
       <single>لاحق</single>
       <multiple>لاحقاک</multiple>
     </term>
-    <term name="table">			 
+    <term name="table">
       <single>ٹیبل</single>
-      <multiple>ٹیبلک</multiple>						 
+      <multiple>ٹیبلک</multiple>
     </term>
     <term name="timestamp"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>						 
+      <single/>
+      <multiple/>
     </term>
-    <term name="title-locator">			 
+    <term name="title-locator">
       <single>سرورق</single>
-      <multiple>سرورقاک</multiple>						 
+      <multiple>سرورقاک</multiple>
     </term>
     <term name="verse">
       <single>شعر</single>
       <multiple>شعک</multiple>
-    </term>
-    <term name="version">
-      <single>ورژن</single>
-      <multiple>ورژنک</multiple>
     </term>
     <term name="volume">
       <single>جلد</single>
       <multiple>جلداک</multiple>
     </term>
 
-    <!-- SYMBOL LOCATOR FORMS -->
+    <!-- SHORT LOCATOR FORMS -->
+
+    <!-- SYMBOLIC LOCATOR FORMS -->
     <term name="paragraph" form="symbol">
       <single>¶</single>
       <multiple>¶¶</multiple>
@@ -328,10 +334,16 @@
       <single>ٹپو</single>
       <multiple>ٹپوک</multiple>
     </term>
+    <term name="version">
+      <single>ورژن</single>
+      <multiple>ورژنک</multiple>
+    </term>
+
+    <!-- SHORT NUMBER VARIABLE FORMS -->
 
     <!-- LONG ROLE FORMS -->
-    <!-- Omitted roles: 
-         author, composer, container-author, interviewer, original-author, recipient, reviewed-author 
+    <!-- Omitted roles:
+         author, composer, container-author, interviewer, original-author, recipient, reviewed-author
     -->
     <term name="chair">
       <single>چیر</single>
@@ -361,11 +373,11 @@
       <single>ایڈٹر</single>
       <multiple>ایڈٹک</multiple>
     </term>
-    <term name="editortranslator">
+    <term name="editor-translator">
       <single>ایڈٹر &amp; مترجم</single>
       <multiple>ایڈٹک &amp; مترجمک</multiple>
     </term>
-    <term name="editor-translator">
+    <term name="editortranslator">
       <single>ایڈٹر &amp; مترجم</single>
       <multiple>ایڈٹک &amp; مترجمک</multiple>
     </term>
@@ -418,8 +430,9 @@
       <multiple>مترجمک</multiple>
     </term>
 
+    <!-- SHORT ROLE FORMS -->
+
     <!-- VERB ROLE FORMS -->
-    <term name="author" form="verb">لکھوکٹ</term>
     <term name="chair" form="verb">چیرٹ</term>
     <term name="collection-editor" form="verb">ایڈٹرٹ</term>
     <term name="compiler" form="verb">سرجم کروکٹ</term>
@@ -429,8 +442,8 @@
     <term name="curator" form="verb">کیوریٹرٹ</term>
     <term name="director" form="verb">ڈائریکٹرٹ</term>
     <term name="editor" form="verb">ایڈٹرٹ</term>
-    <term name="editortranslator" form="verb">مترجمٹ &amp; ایڈٹرٹ</term>
     <term name="editor-translator" form="verb">مترجمٹ &amp; ایڈٹرٹ</term>
+    <term name="editortranslator" form="verb">مترجمٹ &amp; ایڈٹرٹ</term>
     <term name="editorial-director" form="verb">ایڈٹرٹ</term>
     <term name="executive-producer" form="verb">انتظامیٹ</term>
     <term name="guest" form="verb">مہمانٹ</term>
@@ -447,8 +460,10 @@
     <term name="script-writer" form="verb">لکھوکٹ</term>
     <term name="series-creator" form="verb">  سلسلہ ودی کروکٹ</term>
     <term name="translator" form="verb">مترجمٹ</term>
-    
-<!-- LONG MONTH FORMS -->
+
+    <!-- SHORT VERB ROLE FORMS -->
+
+    <!-- LONG MONTH FORMS -->
     <term name="month-01">جنوری</term>
     <term name="month-02">فروری</term>
     <term name="month-03">مارچ</term>

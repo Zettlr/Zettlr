@@ -8,7 +8,7 @@
       <name>Collectif Zotero francophone</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-08T23:31:02+00:00</updated>
+    <updated>2025-10-18T05:52:35+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false" limit-day-ordinals-to-day-1="true"/>
   <date form="text">
@@ -78,14 +78,13 @@
 
     <!-- SHORT GENERAL TERMS -->
     <!-- Omitted short forms: accessed, album, and (symbol), and others, at (symbol), forthcoming, henceforth, ibid, in, in press, internet, loc-cit, on, online, op-cit, podcast, preprint, presented at -->
-	
+
     <term name="advance-online-publication" form="short">publ. en ligne antic.</term>
     <term name="anonymous" form="short">anon.</term>
     <term name="audio-recording" form="short">enr. audio</term>
     <term name="available at" form="short">dispo. sur</term>
     <term name="circa" form="short">v.</term>
     <term name="cited" form="short">cité</term>
-    <term name="et-al" form="short">et al.</term>
     <term name="film" form="short">film</term>
     <term name="from" form="short">à l'adr.</term>
     <term name="letter" form="short">let.</term>
@@ -344,8 +343,8 @@
       <multiple>tableaux</multiple>
     </term>
     <term name="timestamp"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>
+      <single/>
+      <multiple/>
     </term>
     <term name="title-locator">
       <single>titre</single>
@@ -455,8 +454,8 @@
       <multiple>tab.</multiple>
     </term>
     <term name="timestamp" form="short"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>
+      <single/>
+      <multiple/>
     </term>
     <term name="title-locator" form="short">
       <single>tit.</single>
@@ -485,7 +484,7 @@
       <single>§</single>
       <multiple>§</multiple>
     </term>
-    
+
     <!-- LONG NUMBER VARIABLE FORMS -->
     <term name="chapter-number">
       <single>chapitre</single>
@@ -531,7 +530,7 @@
       <single>version</single>
       <multiple>versions</multiple>
     </term>
-    
+
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
       <single>chap.</single>
@@ -574,7 +573,7 @@
       <multiple>impr.</multiple>
     </term>
     <term name="version" form="short">v.</term> <!-- no plural -->
-    
+
     <!-- LONG ROLE FORMS -->
     <!-- Omitted roles:
          author, composer, container-author, interviewer, original-author, recipient, reviewed-author
@@ -740,7 +739,7 @@
       <single>trad.</single>
       <multiple>trad.</multiple>
     </term>
- 
+
     <!-- VERB ROLE FORMS -->
     <term name="chair" form="verb">présidé par</term>
     <term name="collection-editor" form="verb">sous la direction de</term>
@@ -772,7 +771,7 @@
     <term name="script-writer" form="verb">scénario de</term>
     <term name="series-creator" form="verb">créé par</term>
     <term name="translator" form="verb">traduit par</term>
-    
+
     <!-- SHORT VERB ROLE FORMS -->
     <!-- Omitted roles:
          author, chair, container-author, contributor, guest, host, interviewer, original-author, recipient, reviewed-author, series-creator
@@ -798,7 +797,7 @@
     <term name="script-writer" form="verb-short">scénar. de</term>
     <term name="series-creator" form="verb-short">créé par</term>
     <term name="translator" form="verb-short">trad. par</term>
-    
+
     <!-- LONG MONTH FORMS -->
     <term name="month-01" gender="masculine">janvier</term>
     <term name="month-02" gender="masculine">février</term>

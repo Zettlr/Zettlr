@@ -9,7 +9,7 @@
   -->
   <info>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2012-07-04T23:31:02+00:00</updated>
+    <updated>2025-10-16T03:08:07+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -23,26 +23,52 @@
     <date-part name="day" form="numeric-leading-zeros" prefix="/"/>
   </date>
   <terms>
+    <!-- LONG GENERAL TERMS -->
+    <term name="accessed">geraadpleeg</term>
     <term name="advance-online-publication">aanlyn voordrukweergawe</term>
     <term name="album">album</term>
+    <term name="and">en</term>
+    <term name="and others">e.a.</term> <!-- like et al. the abbreviated form is the regular form in Afrikaans, also see LA  -->
+    <term name="anonymous">anoniem</term>
+    <term name="at">by</term>
     <term name="audio-recording">klankopname</term>
+    <term name="available at">beskikbaar by</term>
+    <term name="by">deur</term>
+    <term name="circa">circa</term>
+    <term name="cited">aangehaal</term>
+    <term name="et-al">et al.</term> <!-- unlike op.cit. the term et al. does contain a space (AWS) as explained in SAAW rule 4.3 because only second word of term is abbreviated  -->
     <term name="film">film</term>
+    <term name="forthcoming">voorhande</term>
+    <term name="from">van</term>
     <term name="henceforth">voortaan</term>
+    <term name="ibid">ibid.</term>
+    <term name="in">in</term>
+    <term name="in press">ter perse</term>
+    <term name="internet">internet</term>
+    <term name="letter">brief</term>
     <term name="loc-cit">loc.cit.</term> <!-- like ibid., the abbreviated form is the regular form, and in Afrikaans the abbreviated form contains no spaces (AWS), as explained in SAAW rule 4.3  -->
+    <term name="no date">sonder jaar</term>
     <term name="no-place">sine loco</term>
-    <term name="no-place" form="short">s.l.</term>
     <term name="no-publisher">sine nomine</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">s.n.</term>
     <term name="on">op</term>
+    <term name="online">aanlyn</term>
     <term name="op-cit">op.cit.</term> <!-- like ibid., the abbreviated form is the regular form, and in Afrikaans the abbreviated form contains no spaces (AWS) as explained in SAAW rule 4.3  -->
     <term name="original-work-published">oorspronklik gepubliseer</term>
     <term name="personal-communication">persoonlike kommunikasie</term>
     <term name="podcast">podsending</term>
     <term name="podcast-episode">podsendingepisode</term>
     <term name="preprint">voordruk</term>
+    <term name="presented at">gelewer by die</term>
     <term name="radio-broadcast">radio-uitsending</term>
     <term name="radio-series">radioreeks</term>
     <term name="radio-series-episode">radioreeksepisode</term>
+    <term name="reference">
+      <single>verwysing</single>
+      <multiple>verwysings</multiple>
+    </term>
+    <term name="retrieved">geraadpleeg</term>
+    <term name="review-of">resensie van</term>
+    <term name="scale">skaal</term>
     <term name="special-issue">spesiale uitgawe</term>
     <term name="special-section">spesiale afdeling</term>
     <term name="television-broadcast">televisie-uitsending</term>
@@ -50,63 +76,20 @@
     <term name="television-series-episode">televisiereeksepisode</term>
     <term name="video">video</term>
     <term name="working-paper">konsepdokument</term>
-    <term name="accessed">geraadpleeg</term>
-    <term name="and">en</term>
-    <term name="and others">e.a.</term> <!-- like et al. the abbreviated form is the regular form in Afrikaans, also see LA  -->
-    <term name="anonymous">anoniem</term>
+
+    <!-- SHORT GENERAL TERMS -->
     <term name="anonymous" form="short">anon.</term>
-    <term name="at">by</term>
-    <term name="available at">beskikbaar by</term>
-    <term name="by">deur</term>
-    <term name="circa">circa</term>
     <term name="circa" form="short">ca.</term> <!-- ca. is the only accepted abbreviation (AWS), not c. like in English  -->
-    <term name="cited">aangehaal</term>
-    <term name="first-reference-note-number">
-      <single>verwysing</single>
-      <multiple>verwysings</multiple>
-    </term>
-    <term name="number">
-      <single>nommer</single>
-      <multiple>nommers</multiple>
-    </term>
-    <term name="edition">
-      <single>uitgawe</single>
-      <multiple>uitgawes</multiple>
-    </term>
-    <term name="first-reference-note-number" form="short">
-      <single>verw.</single> 
-      <multiple>verws.</multiple>
-    </term>
-    <term name="number" form="short">
-      <single>nr.</single> <!-- both no. and nr. are accepted (AWS), but nr. less ambiguous due to other abbreviations using no  -->
-      <multiple>nrs.</multiple>
-    </term>
-    <term name="edition" form="short">uitg.</term>
-    <term name="et-al">et al.</term> <!-- unlike op.cit. the term et al. does contain a space (AWS) as explained in SAAW rule 4.3 because only second word of term is abbreviated  -->
-    <term name="forthcoming">voorhande</term>
-    <term name="from">van</term>
-    <term name="ibid">ibid.</term>
-    <term name="in">in</term>
-    <term name="in press">ter perse</term>
-    <term name="internet">internet</term>
-    <term name="letter">brief</term>
-    <term name="no date">sonder jaar</term>
     <term name="no date" form="short">s.j.</term>
-    <term name="online">aanlyn</term>
-    <term name="presented at">gelewer by die</term>
-    <term name="reference">
-      <single>verwysing</single>
-      <multiple>verwysings</multiple>
-    </term>
+    <term name="no-place" form="short">s.l.</term>
+    <term name="no-publisher" form="short">s.n.</term>
     <term name="reference" form="short">
-      <single>verw.</single> 
+      <single>verw.</single>
       <multiple>verws.</multiple>
     </term>
-    <term name="review-of">resensie van</term>
     <term name="review-of" form="short">resensie v.</term>
-    <term name="retrieved">geraadpleeg</term>
-    <term name="scale">skaal</term>
-    <term name="version">weergawe</term>
+
+    <!-- SYMBOLIC GENERAL FORMS -->
 
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">voordruk-artikel</term>
@@ -172,11 +155,13 @@
     <term name="review-book" form="short">bk. rev.</term> <!-- no accepted abbreviation Afrikaans  -->
     <term name="song" form="short">audio rec.</term> <!-- no accepted abbreviation Afrikaans  -->
 
-    <!-- VERB ITEM TYPE FORMS -->
+    <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
     <term name="hearing" form="verb">getuienis gelewer deur</term>
     <term name="review" form="verb">geresenseer deur</term>
     <term name="review-book" form="verb">boekresensie van</term>
+
+    <!-- SHORT VERB ITEM TYPE FORMS -->
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">AD</term> <!-- anno Domini, abbreviation has no periods (AWS rule 3.11)  -->
@@ -230,53 +215,25 @@
     <term name="long-ordinal-10">tiende</term>
 
     <!-- LONG LOCATOR FORMS -->
-    <term name="act">			 
+    <term name="act">
       <single>bedryf</single>
-      <multiple>bedrywe</multiple>						 
+      <multiple>bedrywe</multiple>
     </term>
-    <term name="appendix">			 
+    <term name="appendix">
       <single>bylaag</single>
-      <multiple>bylae</multiple>						 
+      <multiple>bylae</multiple>
     </term>
-    <term name="article-locator">			 
+    <term name="article-locator">
       <single>artikel</single>
-      <multiple>artikels</multiple>						 
-    </term>
-    <term name="canon">			 
-      <single>kanon</single>
-      <multiple>kanons</multiple>						 
-    </term>
-    <term name="elocation">			 
-      <single>posisie</single>
-      <multiple>posisies</multiple>						 
-    </term>
-    <term name="equation">			 
-      <single>vergelyking</single>
-      <multiple>vergelykings</multiple>						 
-    </term>
-    <term name="rule">			 
-      <single>bepaling</single>
-      <multiple>bepalings</multiple>						 
-    </term>
-    <term name="scene">			 
-      <single>toneel</single>
-      <multiple>tonele</multiple>						 
-    </term>
-    <term name="table">			 
-      <single>tabel</single>
-      <multiple>tabelle</multiple>						 
-    </term>
-    <term name="timestamp"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>						 
-    </term>
-    <term name="title-locator">			 
-      <single>titel</single>
-      <multiple>titels</multiple>						 
+      <multiple>artikels</multiple>
     </term>
     <term name="book">
       <single>boek</single>
       <multiple>boeke</multiple>
+    </term>
+    <term name="canon">
+      <single>kanon</single>
+      <multiple>kanons</multiple>
     </term>
     <term name="chapter">
       <single>hoofstuk</single>
@@ -285,6 +242,14 @@
     <term name="column">
       <single>kolom</single>
       <multiple>kolomme</multiple>
+    </term>
+    <term name="elocation">
+      <single>posisie</single>
+      <multiple>posisies</multiple>
+    </term>
+    <term name="equation">
+      <single>vergelyking</single>
+      <multiple>vergelykings</multiple>
     </term>
     <term name="figure">
       <single>figuur</single>
@@ -314,6 +279,164 @@
       <single>bladsy</single>
       <multiple>bladsye</multiple>
     </term>
+    <term name="paragraph">
+      <single>paragraaf</single>
+      <multiple>paragrawe</multiple>
+    </term>
+    <term name="part">
+      <single>deel</single>
+      <multiple>dele</multiple>
+    </term>
+    <term name="rule">
+      <single>bepaling</single>
+      <multiple>bepalings</multiple>
+    </term>
+    <term name="scene">
+      <single>toneel</single>
+      <multiple>tonele</multiple>
+    </term>
+    <term name="section">
+      <single>afdeling</single>
+      <multiple>afdelings</multiple>
+    </term>
+    <term name="sub-verbo">
+      <single>sub verbo</single>
+      <multiple>sub verbis</multiple>
+    </term>
+    <term name="supplement">
+      <single>bylaag</single>
+      <multiple>bylae</multiple>
+    </term>
+    <term name="table">
+      <single>tabel</single>
+      <multiple>tabelle</multiple>
+    </term>
+    <term name="timestamp"> <!-- generally blank -->
+      <single/>
+      <multiple/>
+    </term>
+    <term name="title-locator">
+      <single>titel</single>
+      <multiple>titels</multiple>
+    </term>
+    <term name="verse">
+      <single>vers</single>
+      <multiple>verse</multiple>
+    </term>
+    <term name="volume">
+      <single>volume</single>
+      <multiple>volumes</multiple>
+    </term>
+
+    <!-- SHORT LOCATOR FORMS -->
+    <term name="appendix" form="short">
+      <single>byl.</single>
+      <multiple>byl.</multiple>	<!--abbreviation remains the same for single and plural in this case (VAW)  -->
+    </term>
+    <term name="article-locator" form="short">
+      <single>art.</single>
+      <multiple>arts.</multiple>
+    </term>
+    <term name="book" form="short">bk.</term>
+    <term name="chapter" form="short">hfst.</term>
+    <term name="column" form="short">kol.</term> <!-- AWS both k. and kol. accepted abbreviations so kol. selected for disambiguation  -->
+    <term name="elocation" form="short">
+      <single>loc.</single> <!-- no accepted abbreviation Afrikaans  -->
+      <multiple>locs.</multiple>
+    </term>
+    <term name="equation" form="short">
+      <single>verg.</single>
+      <multiple>vergs.</multiple>
+    </term>
+    <term name="figure" form="short">fig.</term>
+    <term name="folio" form="short">fol.</term>
+    <term name="issue" form="short">nr.</term>
+    <term name="line" form="short">r.</term>
+    <term name="note" form="short">aant.</term>
+    <term name="opus" form="short">op.</term>
+    <term name="page" form="short">
+      <single>bl.</single>
+      <multiple>ble.</multiple> <!-- AWS rule 3.18 see also LA  -->
+    </term>
+    <term name="paragraph" form="short">par.</term>
+    <term name="part" form="short">dl.</term>
+    <term name="rule" form="short">
+      <single>bep.</single>
+      <multiple>beps.</multiple>
+    </term>
+    <term name="scene" form="short">
+      <single>sc.</single> <!-- no accepted abbreviation Afrikaans  -->
+      <multiple>scs.</multiple>
+    </term>
+    <term name="section" form="short">afd.</term>
+    <term name="sub-verbo" form="short">
+      <single>s.v.</single>
+      <multiple>s.vv.</multiple>
+    </term>
+    <term name="supplement" form="short">
+      <single>byl.</single>
+      <multiple>byl.</multiple> <!-- abbreviation remains the same for single and plural in this case (VAW)  -->
+    </term>
+    <term name="table" form="short">
+      <single>tab.</single>
+      <multiple>tabs.</multiple> <!-- AWS rule 3.18 (note that plural abbreviation is determined by the plural version of the last letter of the abbeviation and not the plural of the word itself therefore tabs. not tabe.)  -->
+    </term>
+    <term name="timestamp" form="short"> <!-- generally blank -->
+      <single/>
+      <multiple/>
+    </term>
+    <term name="title-locator" form="short">
+      <single>tit.</single> <!-- no accepted abbreviation Afrikaans  -->
+      <multiple>tits.</multiple>
+    </term>
+    <term name="verse" form="short">
+      <single>vs.</single>
+      <multiple>vse.</multiple>
+    </term>
+    <term name="volume" form="short">
+      <single>vol.</single>
+      <multiple>vols.</multiple>
+    </term>
+
+    <!-- SYMBOLIC LOCATOR FORMS -->
+    <term name="paragraph" form="symbol">
+      <single>¶</single>
+      <multiple>¶¶</multiple>
+    </term>
+    <term name="section" form="symbol">
+      <single>§</single>
+      <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG NUMBER VARIABLE FORMS -->
+    <term name="chapter-number">
+      <single>chapter</single>
+      <multiple>chapters</multiple>
+    </term>
+    <term name="citation-number">
+      <single>citation</single>
+      <multiple>citations</multiple>
+    </term>
+    <term name="collection-number">
+      <single>number</single>
+      <multiple>numbers</multiple>
+    </term>
+    <term name="edition">
+      <single>uitgawe</single>
+      <multiple>uitgawes</multiple>
+    </term>
+    <term name="first-reference-note-number">
+      <single>verwysing</single>
+      <multiple>verwysings</multiple>
+    </term>
+    <term name="number">
+      <single>nommer</single>
+      <multiple>nommers</multiple>
+    </term>
+    <term name="number-of-pages"> <!-- compare with term name pages as alternative  -->
+      <single>pagina</single>
+      <multiple>paginas</multiple>
+    </term>
     <term name="number-of-volumes">
       <single>volume</single>
       <multiple>volumes</multiple>
@@ -326,7 +449,9 @@
       <single>druk</single>
       <multiple>drukke</multiple>
     </term>
+    <term name="version">weergawe</term>
 
+    <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
       <single>hfst.</single>
       <multiple>hfste.</multiple> <!-- AWS rule 3.16  -->
@@ -336,88 +461,18 @@
       <multiple>verws.</multiple>
     </term>
     <term name="collection-number" form="short">nr.</term>
-    <term name="number-of-pages"> <!-- compare with term name pages as alternative  -->
-      <single>pagina</single>
-      <multiple>paginas</multiple>
+    <term name="edition" form="short">uitg.</term>
+    <term name="first-reference-note-number" form="short">
+      <single>verw.</single>
+      <multiple>verws.</multiple>
     </term>
-    <term name="paragraph">
-      <single>paragraaf</single>
-      <multiple>paragrawe</multiple>
+    <term name="number" form="short">
+      <single>nr.</single> <!-- both no. and nr. are accepted (AWS), but nr. less ambiguous due to other abbreviations using no  -->
+      <multiple>nrs.</multiple>
     </term>
-    <term name="part">
-      <single>deel</single>
-      <multiple>dele</multiple>
-    </term>
-    <term name="section">
-      <single>afdeling</single>
-      <multiple>afdelings</multiple>
-    </term>
-    <term name="supplement">
-      <single>bylaag</single>
-      <multiple>bylae</multiple>
-    </term>
-    <term name="sub-verbo">
-      <single>sub verbo</single>
-      <multiple>sub verbis</multiple>
-    </term>
-    <term name="verse">
-      <single>vers</single>
-      <multiple>verse</multiple>
-    </term>
-    <term name="volume">
-      <single>volume</single>
-      <multiple>volumes</multiple>
-    </term>
-
-    <!-- SHORT LOCATOR FORMS -->
-    <term name="appendix" form="short">			 
-      <single>byl.</single>
-      <multiple>byl.</multiple>	<!--abbreviation remains the same for single and plural in this case (VAW)  -->					 
-    </term>
-    <term name="article-locator" form="short">			 
-      <single>art.</single>
-      <multiple>arts.</multiple>
-    </term>
-    <term name="elocation" form="short">			 
-      <single>loc.</single> <!-- no accepted abbreviation Afrikaans  -->
-      <multiple>locs.</multiple>
-    </term>
-    <term name="equation" form="short">			 
-      <single>verg.</single> 
-      <multiple>vergs.</multiple>
-    </term>
-    <term name="rule" form="short">			 
-      <single>bep.</single>
-      <multiple>beps.</multiple>						 
-    </term>
-    <term name="scene" form="short">			 
-      <single>sc.</single> <!-- no accepted abbreviation Afrikaans  -->
-      <multiple>scs.</multiple>						 
-    </term>
-    <term name="table" form="short">			 
-      <single>tab.</single>
-      <multiple>tabs.</multiple> <!-- AWS rule 3.18 (note that plural abbreviation is determined by the plural version of the last letter of the abbeviation and not the plural of the word itself therefore tabs. not tabe.)  -->				 
-    </term>
-    <term name="timestamp" form="short"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>						 
-    </term>
-    <term name="title-locator" form="short">			 
-      <single>tit.</single> <!-- no accepted abbreviation Afrikaans  -->
-      <multiple>tits.</multiple>
-    </term>
-    <term name="book" form="short">bk.</term>
-    <term name="chapter" form="short">hfst.</term>
-    <term name="column" form="short">kol.</term> <!-- AWS both k. and kol. accepted abbreviations so kol. selected for disambiguation  -->
-    <term name="figure" form="short">fig.</term>
-    <term name="folio" form="short">fol.</term>
-    <term name="issue" form="short">nr.</term>
-    <term name="line" form="short">r.</term>
-    <term name="note" form="short">aant.</term>
-    <term name="opus" form="short">op.</term>
-    <term name="page" form="short">
-      <single>bl.</single>
-      <multiple>ble.</multiple> <!-- AWS rule 3.18 see also LA  -->
+    <term name="number-of-pages" form="short">
+      <single>p.</single> <!-- abbreviation for pagina (AWS) compare with page  -->
+      <multiple>pp.</multiple>
     </term>
     <term name="number-of-volumes" form="short">
       <single>vol.</single>
@@ -431,62 +486,15 @@
       <single>dr.</single>
       <multiple>dre.</multiple>
     </term>
-    
-
-    <term name="number-of-pages" form="short">
-      <single>p.</single> <!-- abbreviation for pagina (AWS) compare with page  -->
-      <multiple>pp.</multiple>
-    </term>
-    <term name="paragraph" form="short">par.</term>
-    <term name="part" form="short">dl.</term>
-    <term name="section" form="short">afd.</term>
-    <term name="supplement" form="short"> 
-      <single>byl.</single>
-      <multiple>byl.</multiple> <!-- abbreviation remains the same for single and plural in this case (VAW)  -->
-    </term>
-    <term name="sub-verbo" form="short">
-      <single>s.v.</single>
-      <multiple>s.vv.</multiple>
-    </term>
-    <term name="verse" form="short">
-      <single>vs.</single>
-      <multiple>vse.</multiple>
-    </term>
-    <term name="volume" form="short">
-      <single>vol.</single>
-      <multiple>vols.</multiple>
-    </term>
-
-    <!-- SYMBOL LOCATOR FORMS -->
-    <term name="paragraph" form="symbol">
-      <single>¶</single>
-      <multiple>¶¶</multiple>
-    </term>
-    <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
-    </term>
-    <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
-    </term>
-    <term name="collection-number">
-      <single>number</single>
-      <multiple>numbers</multiple>
-    </term>
-    <term name="section" form="symbol">
-      <single>§</single>
-      <multiple>§§</multiple>
-    </term>
 
     <!-- LONG ROLE FORMS -->
-    <term name="collection-editor">
-      <single>redakteur</single>
-      <multiple>redakteurs</multiple>
-    </term>
     <term name="chair">
       <single>voorsitter</single>
       <multiple>voorsitters</multiple>
+    </term>
+    <term name="collection-editor">
+      <single>redakteur</single>
+      <multiple>redakteurs</multiple>
     </term>
     <term name="compiler">
       <single>samesteller</single>
@@ -500,6 +508,26 @@
       <single>kurator</single>
       <multiple>kuratore</multiple>
     </term>
+    <term name="director">
+      <single>regisseur</single>
+      <multiple>regisseurs</multiple>
+    </term>
+    <term name="editor">
+      <single>redakteur</single>
+      <multiple>redakteurs</multiple>
+    </term>
+    <term name="editor-translator">
+      <single>redakteur &amp; vertaler</single>
+      <multiple>redakteurs &amp; vertalers</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>redakteur &amp; vertaler</single>
+      <multiple>redakteurs &amp; vertalers</multiple>
+    </term>
+    <term name="editorial-director">
+      <single>reeksredakteur</single>
+      <multiple>reeksredakteurs</multiple>
+    </term>
     <term name="executive-producer">
       <single>uitvoerende vervaardiger</single>
       <multiple>uitvoerende vervaardigers</multiple>
@@ -511,6 +539,10 @@
     <term name="host">
       <single>aanbieder</single>
       <multiple>aanbieders</multiple>
+    </term>
+    <term name="illustrator">
+      <single>illustreerder</single>
+      <multiple>illustreerders</multiple>
     </term>
     <term name="narrator">
       <single>verteller</single>
@@ -536,36 +568,12 @@
       <single>reeksskepper</single>
       <multiple>reeksskeppers</multiple>
     </term>
-    <term name="director">
-      <single>regisseur</single>
-      <multiple>regisseurs</multiple>
-    </term>
-    <term name="editor">
-      <single>redakteur</single>
-      <multiple>redakteurs</multiple>
-    </term>
-    <term name="editorial-director">
-      <single>reeksredakteur</single>
-      <multiple>reeksredakteurs</multiple>
-    </term>
-    <term name="illustrator">
-      <single>illustreerder</single>
-      <multiple>illustreerders</multiple>
-    </term>
     <term name="translator">
       <single>vertaler</single>
       <multiple>vertalers</multiple>
     </term>
-    <term name="editortranslator">
-      <single>redakteur &amp; vertaler</single>
-      <multiple>redakteurs &amp; vertalers</multiple>
-    </term>
-    <term name="editor-translator">
-      <single>redakteur &amp; vertaler</single>
-      <multiple>redakteurs &amp; vertalers</multiple>
-    </term>
 
-    <!-- SHORT ROLE FORMS --> 
+    <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
       <single>samest.</single>
       <multiple>samest.</multiple> <!-- abbreviation remains the same for single and plural in this case (see LA)  -->
@@ -578,9 +586,33 @@
       <single>cur.</single>
       <multiple>curs.</multiple>
     </term>
+    <term name="director" form="short">
+      <single>reg.</single>
+      <multiple>regs.</multiple>
+    </term>
+    <term name="editor" form="short">
+      <single>red.</single>
+      <multiple>reds.</multiple>
+    </term>
+    <term name="editor-translator" form="short">
+      <single>red. &amp; vert.</single>
+      <multiple>reds. &amp; verts.</multiple>
+    </term>
+    <term name="editortranslator" form="short">
+      <single>red. &amp; vert.</single>
+      <multiple>reds. &amp; verts.</multiple>
+    </term>
+    <term name="editorial-director" form="short">
+      <single>red.</single>
+      <multiple>reds.</multiple>
+    </term>
     <term name="executive-producer" form="short"> <!-- no accepted abbreviation in Afrikaans  -->
       <single>exec. prod.</single>
       <multiple>exec. prods.</multiple>
+    </term>
+    <term name="illustrator" form="short">
+      <single>ill.</single>
+      <multiple>ills.</multiple>
     </term>
     <term name="narrator" form="short">
       <single>vert.</single>
@@ -606,83 +638,59 @@
       <single>cre.</single>
       <multiple>cres.</multiple>
     </term>
-    <term name="director" form="short">
-      <single>reg.</single>
-      <multiple>regs.</multiple>
-    </term>
-    <term name="editor" form="short">
-      <single>red.</single>
-      <multiple>reds.</multiple>
-    </term>
-    <term name="editorial-director" form="short">
-      <single>red.</single>
-      <multiple>reds.</multiple>
-    </term>
-    <term name="illustrator" form="short">
-      <single>ill.</single>
-      <multiple>ills.</multiple>
-    </term>
     <term name="translator" form="short">
       <single>vert.</single>
       <multiple>verts.</multiple>
     </term>
-    <term name="editortranslator" form="short">
-      <single>red. &amp; vert.</single>
-      <multiple>reds. &amp; verts.</multiple>
-    </term>
-    <term name="editor-translator" form="short">
-      <single>red. &amp; vert.</single>
-      <multiple>reds. &amp; verts.</multiple>
-    </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb">onder redaksie van</term>
     <term name="chair" form="verb">onder voorsitterskap van</term>
+    <term name="collection-editor" form="verb">onder redaksie van</term>
     <term name="compiler" form="verb">saamgestel deur</term>
+    <term name="container-author" form="verb">deur</term>
     <term name="contributor" form="verb">met</term>
     <term name="curator" form="verb">onder kurasie van</term>
+    <term name="director" form="verb">onder regie van</term>
+    <term name="editor" form="verb">geredigeer deur</term>
+    <term name="editor-translator" form="verb">geredigeer en vertaal deur</term>
+    <term name="editortranslator" form="verb">geredigeer en vertaal deur</term>
+    <term name="editorial-director" form="verb">onder redaksie van</term>
     <term name="executive-producer" form="verb">uitvoerend vervaardig deur</term>
     <term name="guest" form="verb">met verskyning deur</term>
     <term name="host" form="verb">aangebied deur</term>
+    <term name="illustrator" form="verb">geïllustreer deur</term>
+    <term name="interviewer" form="verb">onderhoud gevoer deur</term>
     <term name="narrator" form="verb">vertel deur</term>
     <term name="organizer" form="verb">georganiseer deur</term>
     <term name="performer" form="verb">uitgevoer deur</term>
     <term name="producer" form="verb">vervaardig deur</term>
-    <term name="script-writer" form="verb">geskryf deur</term>
-    <term name="series-creator" form="verb">geskep deur</term>
-    <term name="container-author" form="verb">deur</term>
-    <term name="director" form="verb">onder regie van</term>
-    <term name="editor" form="verb">geredigeer deur</term>
-    <term name="editorial-director" form="verb">onder redaksie van</term>
-    <term name="illustrator" form="verb">geïllustreer deur</term>
-    <term name="interviewer" form="verb">onderhoud gevoer deur</term>
     <term name="recipient" form="verb">aan</term>
     <term name="reviewed-author" form="verb">resensie van</term>
-    <term name="collection-editor" form="verb-short">geredigeer deur</term>
+    <term name="script-writer" form="verb">geskryf deur</term>
+    <term name="series-creator" form="verb">geskep deur</term>
     <term name="translator" form="verb">vertaal deur</term>
-    <term name="editortranslator" form="verb">geredigeer en vertaal deur</term>
-    <term name="editor-translator" form="verb">geredigeer en vertaal deur</term>
 
     <!-- SHORT VERB ROLE FORMS -->
+    <term name="collection-editor" form="verb-short">geredigeer deur</term>
     <term name="compiler" form="verb-short">opg. deur</term>
     <term name="contributor" form="verb-short">met</term>
     <term name="curator" form="verb-short">gekureer deur</term>
+    <term name="director" form="verb-short">gedir. deur</term>
+    <term name="editor" form="verb-short">o.r.v.</term>
+    <term name="editor-translator" form="verb-short">gered. &amp; vert. deur</term>
+    <term name="editortranslator" form="verb-short">gered. &amp; vert. deur</term>
+    <term name="editorial-director" form="verb-short">o.r.v.</term>
     <term name="executive-producer" form="verb-short">exec. prod. by</term> <!-- no accepted abbreviation in Afrikaans  -->
     <term name="guest" form="verb-short">w. guest</term> <!-- no accepted abbreviation in Afrikaans  -->
     <term name="host" form="verb-short">hosted by</term> <!-- no accepted abbreviation in Afrikaans  -->
+    <term name="illustrator" form="verb-short">geïill. deur</term>
     <term name="narrator" form="verb-short">vertel</term>
     <term name="organizer" form="verb-short">georg. deur</term>
     <term name="performer" form="verb-short">perf. by</term> <!-- no accepted abbreviation in Afrikaans  -->
     <term name="producer" form="verb-short">prod. by</term> <!-- no accepted abbreviation in Afrikaans  -->
     <term name="script-writer" form="verb-short">geskr. deur</term>
     <term name="series-creator" form="verb-short">cre. by</term> <!-- no accepted abbreviation in Afrikaans  -->
-    <term name="director" form="verb-short">gedir. deur</term>
-    <term name="editor" form="verb-short">o.r.v.</term>
-    <term name="editorial-director" form="verb-short">o.r.v.</term>
-    <term name="illustrator" form="verb-short">geïill. deur</term>
     <term name="translator" form="verb-short">vert. deur</term>
-    <term name="editortranslator" form="verb-short">gered. &amp; vert. deur</term>
-    <term name="editor-translator" form="verb-short">gered. &amp; vert. deur</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Januarie</term>
