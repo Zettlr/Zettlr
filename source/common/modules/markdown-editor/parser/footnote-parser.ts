@@ -82,7 +82,7 @@ export const footnoteRefParser: BlockParser = {
 
 export function footnoteComposite (ctx: BlockContext, line: Line, _value: number): boolean {
   // If the line is indented, or the line is empty and the next line is indented.
-  if (line.indent >= 4 || (/^\s*$/.test(line.text) && /^[ ]{4,}/.test(ctx.peekLine()))) {
+  if (line.indent >= 4 || (/^\s*$/.test(line.text) && /^([ ]{4,}|\t)/.test(ctx.peekLine()))) {
     line.moveBaseColumn(4)
     return true
   }
