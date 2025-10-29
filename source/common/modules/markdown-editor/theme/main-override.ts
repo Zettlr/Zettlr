@@ -58,6 +58,7 @@ export const mainOverride = EditorView.baseTheme({
     padding: '4px',
     maxWidth: '800px'
   },
+  // Footnotes
   '.footnote, .footnote-ref-label': {
     verticalAlign: 'super',
     fontSize: '0.8rem',
