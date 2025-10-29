@@ -34,7 +34,6 @@ const renderCompartment = new Compartment()
 
 const transactionExtender = EditorState.transactionExtender.from(configField, config => transaction => {
   const ext: Extension[] = [renderMermaid]
-
   if (config.renderingMode === 'preview' && config.renderImages) {
     ext.push(renderImages)
   }

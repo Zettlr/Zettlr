@@ -30,13 +30,6 @@ export const mainOverride = EditorView.baseTheme({
     flexGrow: '1', // Ensure the content pushes possible panels towards the edge
     outline: '0' // Remove the outline
   },
-  '.footnote, .footnote-ref-label': {
-    fontSize: '0.8rem',
-    verticalAlign: 'super'
-  },
-  '.footnote-ref': {
-    fontSize: '0.8rem',
-  },
   // Hide overflowing text in autocompletion info panels
   '.cm-completionInfo': { overflow: 'hidden' },
   // PANELS
@@ -64,6 +57,13 @@ export const mainOverride = EditorView.baseTheme({
   '.cm-tooltip': {
     padding: '4px',
     maxWidth: '800px'
+  },
+  '.footnote, .footnote-ref-label': {
+    verticalAlign: 'super',
+    fontSize: '0.8rem',
+  },
+  '.footnote-ref': {
+    fontSize: '0.8rem',
   },
   '.cm-emphasis': { fontStyle: 'italic' },
   // Provide the default YAML frontmatter indicator
