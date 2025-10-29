@@ -248,12 +248,12 @@ function handleClick (buttonID?: string): void {
   #footnote-container {
     font-size: 0.8rem;
 
-    .footnote-ref {
+    div.footnote-ref {
       :is(p:first-of-type) {
-        display: inline !important;
+        display: inline;
       }
 
-      :not(:first-of-type) {
+      :not(sup, a, p:first-of-type) {
         margin-left: 2rem;
       }
     }
