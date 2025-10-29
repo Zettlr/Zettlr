@@ -45,14 +45,10 @@ function retrieveTagClasses (view: EditorView, tagCache: Map<string, Decoration>
           return
         }
 
-        const content = node.node.getChild('ZknTagContent')
-
-        if (content === null) {
-          return
-        }
+        const mark = node.node.getChild('ZknTagMark')
 
         // NOTE: Tag content contains the # in the main text
-        const tagName = view.state.sliceDoc(content.from + 1, content.to)
+        const tagName = view.state.sliceDoc(mark ? mark.to : node.from + 1, node.to)
 
         const deco = tagCache.get(tagName) ?? Decoration.mark({ class: `cm-zkn-tag-${tagName}` })
         if (!tagCache.has(tagName)) {
