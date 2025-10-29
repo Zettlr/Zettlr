@@ -29,12 +29,11 @@ import type { EditorView } from '@codemirror/view'
 import { hasMarkdownExt } from 'source/common/util/file-extention-checks'
 import { trans } from 'source/common/i18n-renderer'
 import type { StatusbarItem } from '../statusbar'
-import { renderFootnotes } from './render-footnotes'
 
 const renderCompartment = new Compartment()
 
 const transactionExtender = EditorState.transactionExtender.from(configField, config => transaction => {
-  const ext: Extension[] = [ renderMermaid, renderFootnotes ]
+  const ext: Extension[] = [renderMermaid]
 
   if (config.renderingMode === 'preview' && config.renderImages) {
     ext.push(renderImages)

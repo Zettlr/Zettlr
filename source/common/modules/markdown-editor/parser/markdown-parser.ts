@@ -234,7 +234,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         { name: 'Footnote', style: customTags.Footnote },
         {
           name: 'FootnoteRef',
-          style: customTags.FootnoteRef,
+          style: { 'FootnoteRef/...': customTags.FootnoteRef },
           block: true,
           composite: footnoteComposite,
         },

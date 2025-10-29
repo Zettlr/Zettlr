@@ -30,6 +30,13 @@ export const mainOverride = EditorView.baseTheme({
     flexGrow: '1', // Ensure the content pushes possible panels towards the edge
     outline: '0' // Remove the outline
   },
+  '.footnote, .footnote-ref-label': {
+    fontSize: '0.8rem',
+    verticalAlign: 'super'
+  },
+  '.footnote-ref': {
+    fontSize: '0.8rem',
+  },
   // Hide overflowing text in autocompletion info panels
   '.cm-completionInfo': { overflow: 'hidden' },
   // PANELS
