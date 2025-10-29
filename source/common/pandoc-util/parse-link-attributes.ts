@@ -25,6 +25,16 @@ export interface ParsedPandocLinkAttributes {
   properties?: Record<string, string>
 }
 
+/** Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value"}
+ *
+ *  #(?<id>[\w\-_]+)       => id
+ *  \.(?<class>[\w\-_]+)   => class
+ *  (?<key>[\w\-_]+)       => key
+ *  "(?<quoted>[^"]*)"     => quoted values
+ *  (?<unquoted>[^\s"]+)   => unquoted values
+ */
+const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|(?<unquoted>[^\s"]+)))/g
+
 /**
  * Parses a Pandoc link attribute string, as defined in
  * https://pandoc.org/MANUAL.html#extension-link_attributes.
@@ -40,15 +50,6 @@ export function parseLinkAttributes (attrString: string): ParsedPandocLinkAttrib
   }
 
   attrString = attrString.substring(1, attrString.length - 1)
-
-  // Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value"}
-  //
-  // #(?<id>[\w\-_]+)       => id
-  // \.(?<class>[\w\-_]+)   => class
-  // (?<key>[\w\-_]+)       => key
-  // "(?<quoted>[^"]*)"     => quoted values
-  // (?<unquoted>[^\s"]+)   => unquoted values
-  const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|(?<unquoted>[^\s"]+)))/g
 
   const parsed: ParsedPandocLinkAttributes = {}
 
