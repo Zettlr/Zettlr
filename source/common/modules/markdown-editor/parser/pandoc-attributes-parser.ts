@@ -46,17 +46,16 @@ export const pandocAttributesParser: InlineParser = {
     const whitespaceBefore = /^\s*$/.test(ctx.slice(delim.from - 1, delim.from))
     const whitespaceAfter = /^\s*$/.test(ctx.text.slice(pos - ctx.offset + 1))
 
-    // Final check: Pandoc attributes must be either the last thing on the line
+    // Pandoc attributes must be either the last thing on the line
     // (then they basically apply to the whole line, i.e. with code block meta),
     // or directly preceeded by a non-whitespace symbol.
     if (whitespaceBefore && !whitespaceAfter) { return - 1 }
 
     ctx.takeContent(opening)
-
     ctx.addDelimiter(PandocAttributeDelimiter, pos, pos + 1, false, true)
 
-    const openingMark = ctx.elt('CodeMark', delim.from, delim.to + 1)
-    const closingMark = ctx.elt('CodeMark', pos, pos + 1)
+    const openingMark = ctx.elt('PandocAttributeMark', delim.from, delim.to)
+    const closingMark = ctx.elt('PandocAttributeMark', pos, pos + 1)
 
     return ctx.addElement(ctx.elt('PandocAttribute', delim.from, pos + 1, [ openingMark, closingMark ]))
   }

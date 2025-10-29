@@ -245,7 +245,8 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         { name: 'ZknLinkPipe', style: customTags.ZknLinkPipe },
         { name: 'ZknTag', style: customTags.ZknTag },
         { name: 'ZknTagContent', style: customTags.ZknTagContent },
-        { name: 'PandocAttribute', style: customTags.PandocAttribute }
+        { name: 'PandocAttribute', style: customTags.PandocAttribute },
+        { name: 'PandocAttributeMark', style: customTags.PandocAttributeMark }
       ]
     }
   })
