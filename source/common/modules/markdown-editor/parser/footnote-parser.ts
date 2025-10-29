@@ -61,22 +61,19 @@ export const footnoteRefParser: BlockParser = {
     // and it prevents infinite recursion and OOM errors.
     if (ctx.depth > 1) { return false }
 
-    const match = /^\[\^[^\s]+\]:\s/.exec(line.text)
-    if (match === null) {
-      return false
-    }
-
-    const refFrom = ctx.lineStart
-    const refTo = ctx.lineStart + match[0].length
+    const match = /^\[\^[^\s\^\[\]]+\]:\s/.exec(line.text)
+    if (!match) { return false }
 
     ctx.startComposite('FootnoteRef', 0)
-    ctx.addElement(ctx.elt('FootnoteRefLabel', refFrom, refTo - 1))
+    ctx.addElement(ctx.elt('FootnoteRefLabel', ctx.lineStart, ctx.lineStart + match[0].length - 1))
+
     line.moveBaseColumn(match[0].length)
+
     return null
   },
 
   endLeaf (_ctx, line, _leaf) {
-    return /^\[\^[^\s]+\]:\s/.test(line.text)
+    return /^\[\^[^\s\^\[\]]+\]:\s/.test(line.text)
   }
 }
 
