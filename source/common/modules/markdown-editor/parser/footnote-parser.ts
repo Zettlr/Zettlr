@@ -16,6 +16,8 @@ import type { InlineParser, BlockParser, DelimiterType, BlockContext, Line } fro
 
 const FootnoteDelimiter: DelimiterType = {}
 
+const validFootnoteRe = /^[^\s\^\[\]]+$/
+
 export const footnoteParser: InlineParser = {
   name: 'footnotes',
   before: 'Link', // [^1] will otherwise be detected as a link
@@ -44,11 +46,19 @@ export const footnoteParser: InlineParser = {
     const delim = ctx.getDelimiterAt(opening)
     if (delim === null) { return -1 }
 
+    // Inline footnotes can contain markup, however, identifier footnotes cannot.
+    const isInline = ctx.char(delim.from) === 94 // 94 === '^'
+
+    // Finally, check if the identifier is valid
+    if (!isInline && !validFootnoteRe.test(ctx.slice(delim.to, pos))) {
+      return -1
+    }
+
     const children = ctx.takeContent(opening)
 
     ctx.addDelimiter(FootnoteDelimiter, pos, pos + 1, false, true)
 
-    return ctx.addElement(ctx.elt('Footnote', delim.from, pos + 1, children))
+    return ctx.addElement(ctx.elt('Footnote', delim.from, pos + 1, isInline ? children : undefined))
   }
 }
 

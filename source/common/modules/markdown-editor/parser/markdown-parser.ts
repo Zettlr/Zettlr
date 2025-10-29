@@ -231,7 +231,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         // within this node as well. The default is to only style otherwise "empty"
         // spans of plain text.
         { name: 'HighlightContent', style: { 'HighlightContent/...': customTags.HighlightContent } },
-        { name: 'Footnote', style: customTags.Footnote },
+        { name: 'Footnote', style:  { 'Footnote/...': customTags.Footnote }, },
         {
           name: 'FootnoteRef',
           style: { 'FootnoteRef/...': customTags.FootnoteRef },
