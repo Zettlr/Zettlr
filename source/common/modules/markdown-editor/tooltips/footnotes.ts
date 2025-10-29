@@ -33,24 +33,13 @@ function findRefForFootnote (state: EditorState, fn: string): { from: number, to
   // Find the corresponding ref
   syntaxTree(state).iterate({
     enter (node) {
-      if (node.type.name === 'Document') {
-        return // Ignore but traverse down
+      if (node.name !== 'FootnoteRef') {
+        return
       }
 
-      if (node.type.name !== 'FootnoteRef') {
-        return false // Do not traverse down
-      }
-
-      const paragraphs = node.node.getChildren('Paragraph')
-
-      if (paragraphs.length < 1) {
+      const label = node.node.getChild('FootnoteRefLabel')
+      if (!label) {
         return false
-      }
-
-      const label = paragraphs[0].getChild('FootnoteRefLabel')
-
-      if (label === null) {
-        return false // Should not happen, but you never know
       }
 
       // Check the contents
@@ -63,7 +52,7 @@ function findRefForFootnote (state: EditorState, fn: string): { from: number, to
       text = {
         from: label.to,
         to: node.to,
-        text: paragraphs.map((p) => state.sliceDoc(p.from, p.to)).join('\n') // state.sliceDoc(label.to, node.to)
+        text: state.sliceDoc(label.to, node.to)
       }
     }
   })
