@@ -19,7 +19,9 @@
  * END HEADER
  */
 
-import { type InlineParser } from '@lezer/markdown'
+import type { DelimiterType, InlineParser } from '@lezer/markdown'
+
+const PandocAttributeDelimiter: DelimiterType = {}
 
 /**
  * Parses Pandoc attribute strings (e.g. `{.unnumbered}`) in the code
@@ -27,35 +29,35 @@ import { type InlineParser } from '@lezer/markdown'
 export const pandocAttributesParser: InlineParser = {
   name: 'pandoc-attributes',
   parse: (ctx, next, pos) => {
-    if (next !== 123) { // 123 === {
-      return -1
+    if (next === 123) { // 123 === '{'
+      return ctx.addDelimiter(PandocAttributeDelimiter, pos, pos + 1, true, false)
     }
 
-    if (pos === ctx.offset) {
-      return -1 // Curly brackets must only *follow* something.
+    let opening = null
+    if (next === 125) { // 125 === '}'
+      opening = ctx.findOpeningDelimiter(PandocAttributeDelimiter)
     }
 
-    // Ensure a matching closing bracket.
-    const relativeOffset = pos - ctx.offset
-    if (ctx.text.indexOf('}') <= relativeOffset) {
-      return -1
-    }
+    if (opening === null) { return -1 }
 
-    const end = ctx.offset + ctx.text.indexOf('}') + 1
+    const delim = ctx.getDelimiterAt(opening)
+    if (delim === null) { return -1 }
+
+    const whitespaceBefore = /^\s*$/.test(ctx.slice(delim.from - 1, delim.from))
+    const whitespaceAfter = /^\s*$/.test(ctx.text.slice(pos - ctx.offset + 1))
 
     // Final check: Pandoc attributes must be either the last thing on the line
     // (then they basically apply to the whole line, i.e. with code block meta),
     // or directly preceeded by a non-whitespace symbol.
-    const isWhitespaceAfter = /^\s*$/.test(ctx.text.slice(ctx.text.indexOf('}') + 1))
-    if (/\s/.test(ctx.text[relativeOffset - 1]) && !isWhitespaceAfter) {
-      return -1
-    }
+    if (whitespaceBefore && !whitespaceAfter) { return - 1 }
 
-    const inlineCode = ctx.elt('InlineCode', pos, end, [
-      ctx.elt('CodeMark', pos, pos + 1),
-      ctx.elt('CodeMark', end - 1, end)
-    ])
+    ctx.takeContent(opening)
 
-    return ctx.addElement(ctx.elt('PandocAttribute', pos, end, [inlineCode]))
+    ctx.addDelimiter(PandocAttributeDelimiter, pos, pos + 1, false, true)
+
+    const openingMark = ctx.elt('CodeMark', delim.from, delim.to + 1)
+    const closingMark = ctx.elt('CodeMark', pos, pos + 1)
+
+    return ctx.addElement(ctx.elt('PandocAttribute', delim.from, pos + 1, [ openingMark, closingMark ]))
   }
 }
