@@ -16,9 +16,7 @@ import type { InlineParser, BlockParser, DelimiterType, BlockContext, Line } fro
 
 const FootnoteDelimiter: DelimiterType = {}
 
-// TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser
 export const footnoteParser: InlineParser = {
-  // This parser should only match inline footnotes
   name: 'footnotes',
   before: 'Link', // [^1] will otherwise be detected as a link
   parse (ctx, next, pos) {
