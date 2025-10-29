@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { type InlineParser } from '@lezer/markdown'
+import type { DelimiterType, InlineParser } from '@lezer/markdown'
 
 export interface ZknLinkParserConfig {
   /**
@@ -31,65 +31,60 @@ export interface ZknLinkParserConfig {
   format?: 'link|title'|'title|link'
 }
 
+const ZknLinkDelimiter: DelimiterType = {}
+
 // This parser adds Zettelkasten links to the syntax tree.
 export const zknLinkParser = function (config?: ZknLinkParserConfig): InlineParser {
   return {
-    // This parser should only match citations
+    // This parser should only match zettlekesten-style links
     name: 'zkn-links',
     before: 'Link', // In case of default [[links]], the inner brackets would be detected as links
     parse: (ctx, next, pos) => {
-      const currentOffset = pos - ctx.offset
-      const restOfLine = ctx.text.slice(currentOffset)
-      if (!restOfLine.startsWith('[[')) {
+      if (next === 91 && ctx.char(pos + 1) === 91) { // 91 === '['
+        ctx.addDelimiter(ZknLinkDelimiter, pos, pos + 2, true, false)
+
+        // Return -1 so the default link parser can add its delimiters
         return -1
       }
 
-      if (restOfLine.indexOf(']]') < 2) {
-        return -1
+      let opening = null
+      if (next === 93 && ctx.char(pos + 1) === 93) {  // 93 === ']'
+        opening = ctx.findOpeningDelimiter(ZknLinkDelimiter)
       }
+      if (opening === null) { return -1}
 
-      const from = pos
-      const to = from + restOfLine.indexOf(']]') + 2
+      const delim = ctx.getDelimiterAt(opening)
+      if (delim === null) { return -1 }
 
-      // [[
-      const startFrom = pos
-      const startTo = startFrom + 2
+      // Remove any elements that were parsed internally
+      ctx.takeContent(opening)
 
-      // ]]
-      const endFrom = pos + restOfLine.indexOf(']]')
-      const endTo = endFrom + 2
+      ctx.addDelimiter(ZknLinkDelimiter, pos, pos + 2, false, true)
 
-      // Populate the children array
-      const children = [
-        ctx.elt('CodeMark', startFrom, startTo),
-        ctx.elt('CodeMark', endFrom, endTo)
-      ]
-
-      // Link contents
-      const contentFrom = startTo
-      const contentTo = endFrom
-      const contents = ctx.text.slice(contentFrom - ctx.offset, contentTo - ctx.offset)
-
+      const contents = ctx.slice(delim.to, pos)
       const pipeIdx = contents.indexOf('|')
+
+      const children = []
       // NOTE: In order to avoid either empty links or empty titles and having
       // to deal with these edge cases, we disallow putting pipes at either the
       // beginning or the end of a link.
-      if (pipeIdx > 0 && !contents.endsWith('|')) {
+      if (pipeIdx > 0 && pipeIdx < contents.length) {
         // The link contains both a link and a title.
         const titleFirst = config?.format === 'title|link'
-        children.splice(1, 0,
-          ctx.elt(titleFirst ? 'ZknLinkTitle' : 'ZknLinkContent', contentFrom, contentFrom + pipeIdx),
-          ctx.elt('ZknLinkPipe', contentFrom + pipeIdx, contentFrom + pipeIdx + 1),
-          ctx.elt(titleFirst ? 'ZknLinkContent' : 'ZknLinkTitle', contentFrom + pipeIdx + 1, contentTo)
+        children.push(
+          ctx.elt(titleFirst ? 'ZknLinkTitle' : 'ZknLinkContent', delim.to, delim.to + pipeIdx),
+          ctx.elt('ZknLinkPipe', delim.to + pipeIdx,  delim.to + pipeIdx + 1),
+          ctx.elt(titleFirst ? 'ZknLinkContent' : 'ZknLinkTitle', delim.to + pipeIdx + 1, pos)
         )
       } else {
         // The link equals the title, no pipe found
-        children.splice(1, 0, ctx.elt('ZknLinkContent', contentFrom, contentTo))
+        children.push(ctx.elt('ZknLinkContent', delim.to, pos))
       }
 
-      const wrapper = ctx.elt('ZknLink', from, to, children)
+      const openingMark = ctx.elt('ZknLinkMark', delim.from, delim.to)
+      const closingMark = ctx.elt('ZknLinkMark', pos, pos + 2)
 
-      return ctx.addElement(wrapper)
+      return ctx.addElement(ctx.elt('ZknLink', delim.from, pos + 2, [ openingMark, ...children, closingMark ]))
     }
   }
 }

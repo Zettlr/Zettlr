@@ -52,6 +52,9 @@ const EMPTY_NODES = new Set([
   'PandocDivInfo',
   'PandocDivMark',
   'PandocSpanMark',
+  'ZknLinkMark',
+  'ZknLinkPipe',
+  'ZknTagMark'
 ])
 
 /**
