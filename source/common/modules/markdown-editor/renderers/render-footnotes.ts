@@ -2,13 +2,13 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Emphasis renderer
+ * Contains:        Footnote renderer
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     An emphasis renderer. NOTE that this renderer is DIFFERENT
- *                  from the others, in that it will only hide certain ranges.
+ * Description:     An footnote renderer. Adds styling to footnotes
+ *                  add child nodes.
  *
  * END HEADER
  */
