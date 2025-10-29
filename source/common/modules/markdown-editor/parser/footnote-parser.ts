@@ -54,8 +54,10 @@ export const footnoteParser: InlineParser = {
       return -1
     }
 
+    const children = ctx.takeContent(opening)
+
     ctx.addDelimiter(FootnoteDelimiter, pos, pos + 1, false, true)
-    return ctx.addElement(ctx.elt('Footnote', delim.from, pos + 1, isInline ? ctx.takeContent(opening) : undefined))
+    return ctx.addElement(ctx.elt('Footnote', delim.from, pos + 1, isInline ? children : undefined))
   }
 }
 
