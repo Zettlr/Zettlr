@@ -244,6 +244,20 @@ function handleClick (buttonID?: string): void {
       text-align: center;
     }
   }
+
+  #footnote-container {
+    font-size: 0.8rem;
+
+    div.footnote-ref {
+      :is(p:first-of-type) {
+        display: inline;
+      }
+
+      :not(sup, a, p:first-of-type) {
+        margin-left: 2rem;
+      }
+    }
+  }
 }
 
 @media print {

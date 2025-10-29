@@ -70,7 +70,7 @@ import { nix } from '@replit/codemirror-lang-nix'
 
 // Additional parser
 import { citationParser } from './citation-parser'
-import { footnoteParser, footnoteRefParser } from './footnote-parser'
+import { footnoteComposite, footnoteParser, footnoteRefParser } from './footnote-parser'
 import { frontmatterParser, yamlCodeParse } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
 import { sloppyParser } from './sloppy-parser'
@@ -231,8 +231,13 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         // within this node as well. The default is to only style otherwise "empty"
         // spans of plain text.
         { name: 'HighlightContent', style: { 'HighlightContent/...': customTags.HighlightContent } },
-        { name: 'Footnote', style: customTags.Footnote },
-        { name: 'FootnoteRef', style: customTags.FootnoteRef },
+        { name: 'Footnote', style:  { 'Footnote/...': customTags.Footnote }, },
+        {
+          name: 'FootnoteRef',
+          style: { 'FootnoteRef/...': customTags.FootnoteRef },
+          block: true,
+          composite: footnoteComposite,
+        },
         { name: 'FootnoteRefLabel', style: customTags.FootnoteRefLabel },
         { name: 'ZknLink', style: customTags.ZknLink },
         { name: 'ZknLinkContent', style: customTags.ZknLinkContent },

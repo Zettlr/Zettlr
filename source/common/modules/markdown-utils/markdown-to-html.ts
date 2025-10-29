@@ -353,7 +353,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
  * @return  {string}                   The rendered HTML.
  */
 function footnotesToHTML (fn: FootnoteRef[], options: MD2HTMLOptions): string {
-  const fnHTML = fn.map(f => nodeToHTML(f, options, 1))
+  const fnHTML = fn.map(f => nodeToHTML(f, options, 0))
   const html = [
     '<div id="footnote-container">',
     ...fnHTML,
