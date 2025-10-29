@@ -78,10 +78,6 @@ export const footnoteRefParser: BlockParser = {
     line.moveBaseColumn(match[0].length)
 
     return null
-  },
-
-  endLeaf (_ctx, line, _leaf) {
-    return /^\[\^[^\s\^\[\]]+\]:\s/.test(line.text)
   }
 }
 
