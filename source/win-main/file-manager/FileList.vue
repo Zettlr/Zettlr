@@ -99,10 +99,11 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
 import type { AnyDescriptor } from '@dts/common/fsal'
 import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 interface RecycleScrollerData {
   id: number
@@ -122,7 +123,7 @@ const emit = defineEmits<(e: 'lock-file-tree') => void>()
 const activeDescriptor = ref<AnyDescriptor|undefined>(undefined) // Can contain the active ("focused") item
 
 const documentTreeStore = useDocumentTreeStore()
-const workspacesStore = useWorkspacesStore()
+const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
 
 const selectedDirectory = computed(() => configStore.config.openDirectory)
@@ -131,7 +132,7 @@ const selectedDirDescriptor = computed(() => {
     return undefined
   }
 
-  return workspacesStore.getDir(selectedDirectory.value)
+  return workspaceStore.descriptorMap.get(selectedDirectory.value)
 })
 
 const noResultsMessage = trans('No results')
