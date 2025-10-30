@@ -335,9 +335,24 @@ const filteredChildren = computed(() => {
     return []
   }
 
-  if (combined.value) {
-    return children.value.filter(child => {
-      const { files } = configStore.config
+  
+
+  const { files } = configStore.config
+  return children.value
+    // Ensure we only consider filtered files
+    .filter(child => {
+      if (props.filterResults.length === 0) {
+        return true
+      }
+
+      return props.filterResults.some(res => res.startsWith(child.path))
+    })
+    // Filter based on our rules
+    .filter(child => {
+      if (!combined.value) {
+        return child.type === 'directory'
+      }
+
       // Filter files based on our settings
       if (child.type === 'directory') {
         return true
@@ -357,10 +372,6 @@ const filteredChildren = computed(() => {
         return false // Any other "other" file should be excluded
       }
     })
-  } else {
-    // TODO: Need to account for thin and wide file manager modes!
-    return children.value.filter(child => child.type === 'directory')
-  }
 })
 
 /**

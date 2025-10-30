@@ -190,8 +190,10 @@ const useH1 = computed(() => configStore.config.fileNameDisplay.includes('headin
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 
+const query = computed(() => props.filterQuery.trim().toLowerCase())
+
 const filterResults = computed<string[]>(() => {
-  const q = props.filterQuery.trim().toLowerCase()
+  const q = query.value
   if (q === '') {
     return []
   }
@@ -209,7 +211,7 @@ const filterResults = computed<string[]>(() => {
 })
 
 const getFilteredTree = computed<AnyDescriptor[]>(() => {
-  const q = props.filterQuery.trim().toLowerCase()
+  const q = query.value
 
   if (q === '') {
     return fileTree.value
@@ -237,11 +239,25 @@ const getFilteredTree = computed<AnyDescriptor[]>(() => {
 
 const getFiles = computed(() => {
   // NOTE: These are the root files. We'll only allow Markdown and code files here.
-  return rootDescriptors.value.filter(desc => desc.type === 'file' || desc.type === 'code')
+  const roots = rootDescriptors.value.filter(desc => desc.type === 'file' || desc.type === 'code')
+  const q = query.value
+  if (q === '') {
+    return roots
+  }
+
+  const filter = matchQuery(q, useTitle.value, useH1.value)
+  return roots.filter(filter)
 })
 
 const getDirectories = computed(() => {
-  return rootDescriptors.value.filter(desc => desc.type === 'directory')
+  const roots = rootDescriptors.value.filter(desc => desc.type === 'directory')
+  const q = query.value
+  if (q === '') {
+    return roots
+  }
+
+  const filter = matchQuery(q, useTitle.value, useH1.value)
+  return roots.filter(filter)
 })
 
 const uncollapsedDirectories = computed(() => {
