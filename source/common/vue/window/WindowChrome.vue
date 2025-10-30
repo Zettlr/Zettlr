@@ -34,11 +34,6 @@
         v-bind:label="tabbarLabel"
         v-on:tab="emit('tab', $event)"
       ></WindowTabbar>
-      <!-- Last but not least, the window controls -->
-      <WindowControls
-        v-if="showWindowControls"
-        v-bind:platform="platform"
-      ></WindowControls>
     </div>
     <div
       id="window-content"
@@ -79,7 +74,6 @@ import WindowMenubar from './WindowMenubar.vue'
 import WindowToolbar, { type ToolbarControl } from './WindowToolbar.vue'
 import WindowTabbar, { type WindowTab } from './WindowTabbar.vue'
 import WindowStatusbar, { type StatusbarControl } from './WindowStatusbar.vue'
-import WindowControls from './WindowControls.vue'
 
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.less'
@@ -158,20 +152,6 @@ const showMenubar = computed<boolean>(() => {
   }
 
   return props.menubar
-})
-
-const showWindowControls = computed<boolean>(() => {
-  if ([ 'win32', 'darwin' ].includes(platform.value)) {
-    return false
-  }
-
-  // Shows the window control buttons only if we are on Linux without native
-  // appearance.
-  if (platform.value === 'linux' && useNativeAppearance.value) {
-    return false
-  } else {
-    return true
-  }
 })
 
 watch(platform, () => {
