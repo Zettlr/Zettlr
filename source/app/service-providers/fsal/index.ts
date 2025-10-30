@@ -28,11 +28,12 @@ import type {
   CodeFileDescriptor,
   OtherFileDescriptor,
   SortMethod,
-  ProjectSettings
+  ProjectSettings,
+  AnyDescriptor
 } from '@dts/common/fsal'
 import type { SearchTerm } from '@dts/common/search'
 import ProviderContract from '@providers/provider-contract'
-import { app } from 'electron'
+import { app, ipcMain } from 'electron'
 import type LogProvider from '@providers/log'
 import { hasMarkdownExt, hasCodeExt } from '@common/util/file-extention-checks'
 import getMarkdownFileParser from './util/file-parser'
@@ -40,6 +41,7 @@ import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
 import { safeDelete } from './util/safe-delete'
 import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
+import ignoreDir from 'source/common/util/ignore-dir'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -64,6 +66,16 @@ export default class FSAL extends ProviderContract {
     const cachedir = app.getPath('userData')
     this._cache = new FSALCache(this._logger, path.join(cachedir, 'fsal/cache'))
     this._emitter = new EventEmitter()
+
+    ipcMain.handle('fsal', async (event, { command, payload }) => {
+      if (command === 'read-path-recursively' && typeof payload === 'string') {
+        return await this.readPathRecursively(payload)
+      } else if (command === 'get-directory-contents' && typeof payload === 'string') {
+        return await this.readDirectory(payload)
+      } else if (command === 'get-descriptor' && typeof payload === 'string') {
+        return await this.loadAnyPath(payload, true) // DEBUG: We should not need the shallow flag here anymore once the PR is done!
+      }
+    })
   } // END constructor
 
   async boot (): Promise<void> {
@@ -520,7 +532,7 @@ export default class FSAL extends ProviderContract {
    *
    * @return  {Promise}              Promise resolves with any descriptor
    */
-  public async loadAnyPath (absPath: string, shallowDir: boolean = false): Promise<DirDescriptor|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+  public async loadAnyPath (absPath: string, shallowDir: boolean = false): Promise<AnyDescriptor> {
     if (await this.isDir(absPath)) {
       return await this.getAnyDirectoryDescriptor(absPath, shallowDir)
     } else {
@@ -582,5 +594,66 @@ export default class FSAL extends ProviderContract {
    */
   public async getFilesystemMetadata (absPath: string): Promise<FilesystemMetadata> {
     return await getFilesystemMetadata(absPath)
+  }
+
+  // *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+  /**
+   * Reads `absPath` into an array of absolute paths. If `absPath` is a file,
+   * the array will only contain that, allowing you to skip any check for
+   * whether a root path is a file or folder. If it is a directory, it will read
+   * in the directory and any children recursively to construct a list of every
+   * file and folder within `absPath` and return it.
+   * 
+   * NOTE: This function will already exclude dotfiles and ignored directories,
+   * so this function is safe to consume in terms of what Zettlr should display.
+   *
+   * @param   {string}             absPath  The absolute path to parse
+   *
+   * @return  {Promise<string[]>}           Returns a list of the entire directory
+   */
+  public async readPathRecursively (absPath: string): Promise<string[]> {
+    const includedPaths: string[] = [absPath]
+
+    if (!await this.isDir(absPath)) {
+      return includedPaths
+    }
+
+    const contents = (await fs.readdir(absPath)).map(p => path.join(absPath, p))
+
+    for (const absPath of contents) {
+      const basename = path.basename(absPath)
+      const includeDir = await this.isDir(absPath) && !ignoreDir(absPath)
+      const isDotfile = basename.startsWith('.')
+      const isFile = await this.isFile(absPath)
+
+      if (includeDir || (isFile && !isDotfile)) {
+        includedPaths.push(...await this.readPathRecursively(absPath))
+      }
+    }
+
+    return includedPaths
+  }
+
+  /**
+   * Reads a single directory from disk and returns a list of its children as
+   * descriptors.
+   *
+   * @param   {string}                    absPath  The directory path.
+   *
+   * @return  {Promise<AnyDescriptor>[]}           The children.
+   */
+  public async readDirectory (absPath: string): Promise<AnyDescriptor[]> {
+    if (!await this.isDir(absPath)) {
+      throw new Error(`[FSAL] Cannot read path ${absPath}: Not a directory!`)
+    }
+
+    const children = await fs.readdir(absPath)
+
+    return await Promise.all(
+      children
+        .map(p => path.join(absPath, p))
+        .map(p => this.loadAnyPath(p))
+    )
   }
 }
