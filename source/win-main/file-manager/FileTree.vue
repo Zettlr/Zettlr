@@ -38,7 +38,7 @@
           <TreeItem
             v-for="item in getFiles"
             v-bind:key="item.path"
-            v-bind:obj="item"
+            v-bind:item="item"
             v-bind:depth="0"
             v-bind:active-item="activeTreeItem?.[0]"
             v-bind:is-currently-filtering="filterQuery.trim() !== ''"
@@ -74,7 +74,7 @@
           <TreeItem
             v-for="item in getDirectories"
             v-bind:key="item.path"
-            v-bind:obj="item"
+            v-bind:item="item"
             v-bind:is-currently-filtering="filterQuery.length > 0"
             v-bind:depth="0"
             v-bind:active-item="activeTreeItem?.[0]"
@@ -119,6 +119,7 @@ import { ref, computed } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
 import { type AnyDescriptor } from '@dts/common/fsal'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 const ipcRenderer = window.ipc
 
@@ -165,10 +166,15 @@ const emit = defineEmits<{
 // Can contain the path to a tree item that is focused
 const activeTreeItem = ref<undefined|[string, string]>(undefined)
 
+const workspaceStore = useWorkspaceStore()
 const workSpacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
+
+// const workspaceMap = computed(() => workspaceStore.workspaceMap)
+// const descriptorMap = computed(() => workspaceStore.descriptorMap)
+const rootDescriptors = computed(() => workspaceStore.rootDescriptors)
 
 const showFilesSection = computed(() => configStore.config.fileManagerShowFiles)
 const showWorkspacesSection = computed(() => configStore.config.fileManagerShowWorkspaces)
@@ -213,11 +219,15 @@ const getFilteredTree = computed<AnyDescriptor[]>(() => {
 
 const getFiles = computed(() => {
   // NOTE: These are the root files. We'll only allow Markdown and code files here.
-  return getFilteredTree.value.filter(item => item.type === 'file' || item.type === 'code')
+  // DEBUG: Not yet filtered!
+  return rootDescriptors.value.filter(desc => desc.type === 'file' || desc.type === 'code')
+  // return getFilteredTree.value.filter(item => item.type === 'file' || item.type === 'code')
 })
 
 const getDirectories = computed(() => {
-  return getFilteredTree.value.filter(item => item.type === 'directory')
+  // DEBUG: Not yet filtered!
+  return rootDescriptors.value.filter(desc => desc.type === 'directory')
+  // return getFilteredTree.value.filter(item => item.type === 'directory')
 })
 
 const uncollapsedDirectories = computed(() => {

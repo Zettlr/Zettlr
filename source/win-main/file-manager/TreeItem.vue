@@ -3,14 +3,14 @@
     <div
       v-bind:class="{
         'tree-item': true,
-        [obj.type]: true,
+        [item.type]: true,
         'selected': isSelected,
-        'active': activeItem === obj.path,
-        'project': obj.type === 'directory' && obj.settings.project != null,
+        'active': activeItem === item.path,
+        'project': item.type === 'directory' && item.settings.project != null,
         'root': isRoot
       }"
-      v-bind:data-id="obj.type === 'file' ? obj.id : ''"
-      v-bind:data-path="obj.path"
+      v-bind:data-id="item.type === 'file' ? item.id : ''"
+      v-bind:data-path="item.path"
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
@@ -66,9 +66,9 @@
           'highlight': canAcceptDraggable
         }"
         role="button"
-        v-bind:aria-label="`Select ${obj.name}`"
+        v-bind:aria-label="`Select ${item.name}`"
         v-bind:draggable="!isRoot"
-        v-bind:title="obj.path"
+        v-bind:title="item.path"
         v-on:dragstart="beginDragging"
         v-on:drag="onDragHandler"
       >
@@ -81,7 +81,7 @@
             type="text"
             class="filename-input"
             v-bind:placeholder="filenameInputPlaceholder"
-            v-bind:value="obj.name"
+            v-bind:value="item.name"
             v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
             v-on:keyup.esc="nameEditing = false"
             v-on:keydown.stop=""
@@ -119,7 +119,7 @@
       <TreeItem
         v-for="child in projectSortedFilteredChildren"
         v-bind:key="child.path"
-        v-bind:obj="child"
+        v-bind:item="child"
         v-bind:has-duplicate-name="false"
         v-bind:is-currently-filtering="isCurrentlyFiltering"
         v-bind:depth="depth + 1"
@@ -133,15 +133,15 @@
 
   <!-- Popovers -->
   <PopoverDirProps
-    v-if="showPopover && displayText !== null && obj.type === 'directory'"
+    v-if="showPopover && displayText !== null && item.type === 'directory'"
     v-bind:target="displayText"
-    v-bind:directory="obj"
+    v-bind:directory="item"
     v-on:close="showPopover = false"
   ></PopoverDirProps>
   <PopoverFileProps
-    v-if="showPopover && displayText !== null && obj.type !== 'directory'"
+    v-if="showPopover && displayText !== null && item.type !== 'directory'"
     v-bind:target="displayText"
-    v-bind:file="obj"
+    v-bind:file="item"
     v-on:close="showPopover = false"
   ></PopoverFileProps>
 </template>
@@ -172,7 +172,7 @@ import type { AnyDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useWindowStateStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
-import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import { hasCodeExt, hasDataExt, hasImageExt, hasMarkdownExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 
 const ipcRenderer = window.ipc
 
@@ -182,19 +182,21 @@ const props = defineProps<{
   // How deep is this tree item nested?
   depth: number
   hasDuplicateName: boolean
-  obj: AnyDescriptor
+  item: AnyDescriptor
   isCurrentlyFiltering: boolean
   activeItem?: string
   windowId: string
 }>()
 
 // const collapsed = ref<boolean>(true) // Initial: collapsed list (if there are children)
-const collapsed = computed(() => !windowStateStore.uncollapsedDirectories.includes(props.obj.path))
+const collapsed = computed(() => !windowStateStore.uncollapsedDirectories.includes(props.item.path))
 const canAcceptDraggable = ref<boolean>(false) // Helper var set to true while something hovers over this element
 const uncollapseTimeout = ref<undefined|ReturnType<typeof setTimeout>>(undefined) // Used to uncollapse directories during drag&drop ops
 const nameEditingInput = ref<HTMLInputElement|null>(null)
 const displayText = ref<HTMLDivElement|null>(null)
 const newObjectInput = ref<HTMLInputElement|null>(null)
+
+const children = ref<AnyDescriptor[]>([])
 
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
@@ -211,7 +213,7 @@ const {
   selectedFile,
   selectedDir,
   updateObject
-} = useItemComposable(props.obj, displayText, props.windowId, nameEditingInput)
+} = useItemComposable(props.item, displayText, props.windowId, nameEditingInput)
 
 const filenameInputPlaceholder = trans('Enter a name')
 
@@ -222,7 +224,7 @@ function sel (event: MouseEvent): void {
   // again on the already selected directory, the file manager must toggle to
   // the file list. This doesn't work by implication because the configuration
   // doesn't update if oldValue === newValue.
-  if (selectedDir.value === props.obj.path) {
+  if (selectedDir.value === props.item.path) {
     emit('toggle-file-list')
   }
 }
@@ -245,37 +247,37 @@ const secondaryIcon = computed(() => hasChildren.value ? 'angle' : false)
  * @return  {string}  The icon name (as in: cds-shape)
  */
 const primaryIcon = computed(() => {
-  if (props.obj.type === 'file' && writingTarget.value !== undefined) {
+  if (props.item.type === 'file' && writingTarget.value !== undefined) {
     return 'writing-target'
-  } else if (props.obj.type === 'file') {
+  } else if (props.item.type === 'file') {
     return 'markdown'
-  } else if (props.obj.type === 'code') {
+  } else if (props.item.type === 'code') {
     return 'code'
-  } else if (props.obj.type === 'other') {
+  } else if (props.item.type === 'other') {
     // const fileExtIcon = ClarityIcons.registry['file-ext'].outline!
-    if (hasImageExt(props.obj.path)) {
+    if (hasImageExt(props.item.path)) {
       return 'image'
-    } else if (hasPDFExt(props.obj.path)) {
+    } else if (hasPDFExt(props.item.path)) {
       return 'pdf-file'
-    } else if (hasMSOfficeExt(props.obj.path)) {
+    } else if (hasMSOfficeExt(props.item.path)) {
       return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
-    } else if (hasOpenOfficeExt(props.obj.path)) {
+    } else if (hasOpenOfficeExt(props.item.path)) {
       return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
-    } else if (hasDataExt(props.obj.path)) {
+    } else if (hasDataExt(props.item.path)) {
       return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
     } else {
       // Generic other file (this should not happen as they get filtered out before)
-      console.warn(`Encountered a file with extension ${props.obj.ext}. These should've been filtered out before reaching this point!`)
+      console.warn(`Encountered a file with extension ${props.item.ext}. These should've been filtered out before reaching this point!`)
       return ''
     }
-  } else if (props.obj.type === 'directory' && props.obj.dirNotFoundFlag === true) {
+  } else if (props.item.type === 'directory' && props.item.dirNotFoundFlag === true) {
     return 'disconnect'
-  } else if (props.obj.type === 'directory' && props.obj.settings.project !== null) {
+  } else if (props.item.type === 'directory' && props.item.settings.project !== null) {
     // Indicate that this directory has a project.
     return 'blocks-group'
-  } else if (props.obj.type === 'directory' && props.obj.settings.icon != null) {
+  } else if (props.item.type === 'directory' && props.item.settings.icon != null) {
     // Display the custom icon
-    return props.obj.settings.icon
+    return props.item.settings.icon
   } else {
     return shouldBeCollapsed.value ? 'folder' : 'folder-open'
   }
@@ -296,18 +298,18 @@ const angleDirection = computed(() => {
 })
 
 const writingTarget = computed<undefined|{ path: string, mode: 'words'|'chars', count: number }>(() => {
-  if (props.obj.type !== 'file') {
+  if (props.item.type !== 'file') {
     return undefined
   } else {
-    return windowStateStore.writingTargets.find((x: any) => x.path === props.obj.path)
+    return windowStateStore.writingTargets.find((x: any) => x.path === props.item.path)
   }
 })
 
 const writingTargetPercent = computed(() => {
-  if (writingTarget.value !== undefined && props.obj.type === 'file') {
+  if (writingTarget.value !== undefined && props.item.type === 'file') {
     const count = writingTarget.value.mode === 'words'
-      ? props.obj.wordCount
-      : props.obj.charCount
+      ? props.item.wordCount
+      : props.item.charCount
 
     let ratio = count / writingTarget.value.count
     return Math.min(1, ratio)
@@ -319,7 +321,7 @@ const writingTargetPercent = computed(() => {
 /**
  * Returns true if this item is a root item
  */
-const isRoot = computed(() => props.obj.root)
+const isRoot = computed(() => props.item.root)
 
 /**
  * Returns true if the file manager mode is set to "combined"
@@ -331,45 +333,44 @@ const combined = computed(() => configStore.config.fileManagerMode === 'combined
  *
  * @return {boolean} Whether or not this object has children.
  */
-const hasChildren = computed(() => props.obj.type === 'directory' && filteredChildren.value.length > 0)
+const hasChildren = computed(() => props.item.type === 'directory' && filteredChildren.value.length > 0)
 
 /**
  * Returns the (containing) directory name.
  */
-const dirname = computed(() => pathBasename(props.obj.dir))
+const dirname = computed(() => pathBasename(props.item.dir))
 
 /**
  * Returns a list of children that can be displayed inside the tree view
  */
 const filteredChildren = computed(() => {
-  if (props.obj.type !== 'directory') {
+  if (props.item.type !== 'directory') {
     return []
   }
 
   if (combined.value) {
-    return props.obj.children.filter(child => {
-      if (child.type === 'other') {
-        const { files } = configStore.config
-        // Filter other files based on our settings
-        if (hasImageExt(child.path)) {
-          return files.images.showInFilemanager
-        } else if (hasPDFExt(child.path)) {
-          return files.pdf.showInFilemanager
-        } else if (hasMSOfficeExt(child.path)) {
-          return files.msoffice.showInFilemanager
-        } else if (hasOpenOfficeExt(child.path)) {
-          return files.openOffice.showInFilemanager
-        } else if (hasDataExt(child.path)) {
-          return files.dataFiles.showInFilemanager
-        } else {
-          return false // Any other "other" file should be excluded
-        }
+    return children.value.filter(child => {
+      const { files } = configStore.config
+      // Filter files based on our settings
+      if (hasImageExt(child.path)) {
+        return files.images.showInFilemanager
+      } else if (hasPDFExt(child.path)) {
+        return files.pdf.showInFilemanager
+      } else if (hasMSOfficeExt(child.path)) {
+        return files.msoffice.showInFilemanager
+      } else if (hasOpenOfficeExt(child.path)) {
+        return files.openOffice.showInFilemanager
+      } else if (hasDataExt(child.path)) {
+        return files.dataFiles.showInFilemanager
+      } else if (hasMarkdownExt(child.path) || hasCodeExt(child.path)) {
+        return true
+      } else {
+        return false // Any other "other" file should be excluded
       }
-
-      return true
     })
   } else {
-    return props.obj.children.filter(child => child.type === 'directory')
+    // TODO: Need to account for thin and wide file manager modes!
+    return children.value.filter(child => child.type === 'directory')
   }
 })
 
@@ -378,14 +379,14 @@ const filteredChildren = computed(() => {
  * by project inclusion status.
  */
 const projectSortedFilteredChildren = computed(() => {
-  if (props.obj.type !== 'directory' || props.obj.settings.project === null) {
+  if (props.item.type !== 'directory' || props.item.settings.project === null) {
     return filteredChildren.value
   }
 
   // Modify the order using the project files by first mapping the sorted
   // project file paths onto the descriptors available, sorting all other files
   // separately, and then concatenating them with the project files up top.
-  const projectFiles = props.obj.settings.project.files
+  const projectFiles = props.item.settings.project.files
     .map(filePath => filteredChildren.value.find(x => x.name === filePath))
     .filter(x => x !== undefined)
 
@@ -404,26 +405,26 @@ const useTitle = computed(() => configStore.config.fileNameDisplay.includes('tit
 const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
 
 const basename = computed(() => {
-  if (props.obj.type !== 'file') {
-    return props.obj.name
+  if (props.item.type !== 'file') {
+    return props.item.name
   }
 
-  if (useTitle.value && props.obj.yamlTitle !== undefined) {
-    return props.obj.yamlTitle
-  } else if (useH1.value && props.obj.firstHeading !== null) {
-    return props.obj.firstHeading
+  if (useTitle.value && props.item.yamlTitle !== undefined) {
+    return props.item.yamlTitle
+  } else if (useH1.value && props.item.firstHeading !== null) {
+    return props.item.firstHeading
   } else if (displayMdExtensions.value) {
-    return props.obj.name
+    return props.item.name
   } else {
-    return props.obj.name.replace(props.obj.ext, '')
+    return props.item.name.replace(props.item.ext, '')
   }
 })
 
 const isSelected = computed(() => {
-  if (props.obj.type === 'directory') {
-    return selectedDir.value === props.obj.path
+  if (props.item.type === 'directory') {
+    return selectedDir.value === props.item.path
   } else {
-    return selectedFile.value?.path === props.obj.path
+    return selectedFile.value?.path === props.item.path
   }
 })
 
@@ -456,11 +457,12 @@ watch(operationType, (newVal) => {
 
 // I have no idea why passing this as a Ref to the composable doesn't work, but
 // this way it does.
-watch(toRef(props, 'obj'), function (value) {
+watch(toRef(props, 'item'), function (value) {
   updateObject(value)
 })
 
-onMounted(() => {
+onMounted(async () => {
+  children.value = await ipcRenderer.invoke('fsal', { command: 'read-dir', payload: props.item.path })
   uncollapseIfApplicable()
   ipcRenderer.on('shortcut', (_, message) => {
     if (message === 'new-dir') {
@@ -478,16 +480,16 @@ function uncollapseIfApplicable (): void {
   const dirPath = selectedDir.value ?? ''
 
   // Open the tree, if the selected file is contained in this dir somewhere
-  if (filePath.startsWith(props.obj.path)) {
-    windowStateStore.uncollapsedDirectories.push(props.obj.path)
+  if (filePath.startsWith(props.item.path)) {
+    windowStateStore.uncollapsedDirectories.push(props.item.path)
   } else {
     // we are not in the filepath of the currently open note, do not change the state!
     return
   }
 
   // If a directory within this has been selected, open up, lads!
-  if (props.obj.path.startsWith(dirPath)) {
-    windowStateStore.uncollapsedDirectories.push(props.obj.path)
+  if (props.item.path.startsWith(dirPath)) {
+    windowStateStore.uncollapsedDirectories.push(props.item.path)
   }
 }
 
@@ -502,9 +504,9 @@ function beginDragging (event: DragEvent): void {
 
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-    type: props.obj.type,
-    path: props.obj.path,
-    id: (props.obj.type === 'file') ? props.obj.id : ''
+    type: props.item.type,
+    path: props.item.path,
+    id: (props.item.type === 'file') ? props.item.id : ''
   }))
 }
 
@@ -523,7 +525,7 @@ function enterDragging (_event: DragEvent): void {
   }
 
   uncollapseTimeout.value = setTimeout(() => {
-    windowStateStore.uncollapsedDirectories.push(props.obj.path)
+    windowStateStore.uncollapsedDirectories.push(props.item.path)
     uncollapseTimeout.value = undefined
   }, 2000)
 }
@@ -581,7 +583,7 @@ function handleDrop (event: DragEvent): void {
   }
 
   // The user dropped the file onto itself
-  if (data.path === props.obj.path) {
+  if (data.path === props.item.path) {
     return
   }
 
@@ -590,7 +592,7 @@ function handleDrop (event: DragEvent): void {
     command: 'request-move',
     payload: {
       from: data.path,
-      to: props.obj.path
+      to: props.item.path
     }
   })
     .catch(err => console.error(err))
@@ -612,7 +614,7 @@ function handleOperationFinish (newName: string): void {
     ipcRenderer.invoke('application', {
       command: 'file-new',
       payload: {
-        path: props.obj.path,
+        path: props.item.path,
         name: newName.trim()
       }
     }).catch(e => console.error(e))
@@ -620,7 +622,7 @@ function handleOperationFinish (newName: string): void {
     ipcRenderer.invoke('application', {
       command: 'dir-new',
       payload: {
-        path: props.obj.path,
+        path: props.item.path,
         name: newName.trim()
       }
     }).catch(e => console.error(e))
@@ -638,9 +640,9 @@ function maybeUncollapse (): void {
   }
 
   if (collapsed.value) {
-    windowStateStore.uncollapsedDirectories.push(props.obj.path)
+    windowStateStore.uncollapsedDirectories.push(props.item.path)
   } else {
-    const idx = windowStateStore.uncollapsedDirectories.indexOf(props.obj.path)
+    const idx = windowStateStore.uncollapsedDirectories.indexOf(props.item.path)
     if (idx > -1) {
       windowStateStore.uncollapsedDirectories.splice(idx, 1)
     }
