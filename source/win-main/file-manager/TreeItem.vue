@@ -115,7 +115,7 @@
         v-on:click.stop=""
       >
     </div>
-    <div v-if="isDirectory && !shouldBeCollapsed">
+    <div v-if="item.type === 'directory' && !shouldBeCollapsed">
       <TreeItem
         v-for="child in projectSortedFilteredChildren"
         v-bind:key="child.path"
@@ -238,7 +238,7 @@ const shouldBeCollapsed = computed<boolean>(() => props.isCurrentlyFiltering ? f
  *
  * @return  {string|boolean}  False if no secondary icon
  */
-const secondaryIcon = computed(() => hasChildren.value ? 'angle' : false)
+const secondaryIcon = computed(() => filteredChildren.value.length > 0 ? 'angle' : false)
 
 /**
  * The primary icon's shape -- this is the visually SECOND icon to be
@@ -289,13 +289,7 @@ const primaryIcon = computed(() => {
  *
  * @return  {string}  Either 'right' or 'down'
  */
-const angleDirection = computed(() => {
-  if (!hasChildren.value) {
-    return undefined
-  } else {
-    return shouldBeCollapsed.value ? 'right' : 'down'
-  }
-})
+const angleDirection = computed(() => shouldBeCollapsed.value ? 'right' : 'down')
 
 const writingTarget = computed<undefined|{ path: string, mode: 'words'|'chars', count: number }>(() => {
   if (props.item.type !== 'file') {
@@ -329,13 +323,6 @@ const isRoot = computed(() => props.item.root)
 const combined = computed(() => configStore.config.fileManagerMode === 'combined')
 
 /**
- * Returns true if there are children that can be displayed
- *
- * @return {boolean} Whether or not this object has children.
- */
-const hasChildren = computed(() => props.item.type === 'directory' && filteredChildren.value.length > 0)
-
-/**
  * Returns the (containing) directory name.
  */
 const dirname = computed(() => pathBasename(props.item.dir))
@@ -352,7 +339,9 @@ const filteredChildren = computed(() => {
     return children.value.filter(child => {
       const { files } = configStore.config
       // Filter files based on our settings
-      if (hasImageExt(child.path)) {
+      if (child.type === 'directory') {
+        return true
+      } if (hasImageExt(child.path)) {
         return files.images.showInFilemanager
       } else if (hasPDFExt(child.path)) {
         return files.pdf.showInFilemanager
@@ -462,13 +451,16 @@ watch(toRef(props, 'item'), function (value) {
 })
 
 onMounted(async () => {
-  children.value = await ipcRenderer.invoke('fsal', { command: 'read-dir', payload: props.item.path })
-  uncollapseIfApplicable()
-  ipcRenderer.on('shortcut', (_, message) => {
-    if (message === 'new-dir') {
-      operationType.value = 'createDir'
-    }
-  })
+  if (props.item.type === 'directory') {
+    uncollapseIfApplicable()
+    ipcRenderer.on('shortcut', (_, message) => {
+      if (message === 'new-dir') {
+        operationType.value = 'createDir'
+      }
+    })
+
+    children.value = await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: props.item.path })
+  }
 })
 
 function uncollapseIfApplicable (): void {
@@ -635,7 +627,7 @@ function handleOperationFinish (newName: string): void {
  * Helper function to toggle the collapsed status on a directory item with children
  */
 function maybeUncollapse (): void {
-  if (!hasChildren.value) {
+  if (filteredChildren.value.length === 0) {
     return
   }
 

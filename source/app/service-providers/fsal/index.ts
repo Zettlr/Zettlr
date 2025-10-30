@@ -70,7 +70,7 @@ export default class FSAL extends ProviderContract {
     ipcMain.handle('fsal', async (event, { command, payload }) => {
       if (command === 'read-path-recursively' && typeof payload === 'string') {
         return await this.readPathRecursively(payload)
-      } else if (command === 'get-directory-contents' && typeof payload === 'string') {
+      } else if (command === 'read-directory' && typeof payload === 'string') {
         return await this.readDirectory(payload)
       } else if (command === 'get-descriptor' && typeof payload === 'string') {
         return await this.loadAnyPath(payload, true) // DEBUG: We should not need the shallow flag here anymore once the PR is done!
