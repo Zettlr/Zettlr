@@ -121,7 +121,7 @@
         v-bind:key="child.path"
         v-bind:item="child"
         v-bind:has-duplicate-name="false"
-        v-bind:is-currently-filtering="isCurrentlyFiltering"
+        v-bind:filter-results="props.filterResults"
         v-bind:depth="depth + 1"
         v-bind:active-item="activeItem"
         v-bind:window-id="windowId"
@@ -183,7 +183,7 @@ const props = defineProps<{
   depth: number
   hasDuplicateName: boolean
   item: AnyDescriptor
-  isCurrentlyFiltering: boolean
+  filterResults: string[]
   activeItem?: string
   windowId: string
 }>()
@@ -229,7 +229,7 @@ function sel (event: MouseEvent): void {
   }
 }
 
-const shouldBeCollapsed = computed<boolean>(() => props.isCurrentlyFiltering ? false : collapsed.value)
+const shouldBeCollapsed = computed<boolean>(() => props.filterResults.length === 0 && collapsed.value)
 
 /**
  * The secondary icon's shape -- this is the visually FIRST icon to be

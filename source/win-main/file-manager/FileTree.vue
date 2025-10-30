@@ -7,8 +7,8 @@
     v-bind:aria-hidden="!isVisible"
     v-on:click="clickHandler"
   >
-    <template v-if="fileTree.length > 0">
-      <div v-if="getFilteredTree.length === 0" class="empty-tree">
+    <template v-if="rootDescriptors.length > 0">
+      <div v-if="filterQuery.trim() !== '' && filterResults.length === 0" class="empty-tree">
         <div class="info">
           {{ noResultsMessage }}
         </div>
@@ -41,7 +41,7 @@
             v-bind:item="item"
             v-bind:depth="0"
             v-bind:active-item="activeTreeItem?.[0]"
-            v-bind:is-currently-filtering="filterQuery.trim() !== ''"
+            v-bind:filter-results="filterResults"
             v-bind:has-duplicate-name="getFiles.filter(i => i.name === item.name).length > 1"
             v-bind:window-id="props.windowId"
             v-on:toggle-file-list="emit('toggle-file-list')"
@@ -75,7 +75,7 @@
             v-for="item in getDirectories"
             v-bind:key="item.path"
             v-bind:item="item"
-            v-bind:is-currently-filtering="filterQuery.length > 0"
+            v-bind:filter-results="filterResults"
             v-bind:depth="0"
             v-bind:active-item="activeTreeItem?.[0]"
             v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
@@ -190,6 +190,24 @@ const useH1 = computed(() => configStore.config.fileNameDisplay.includes('headin
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 
+const filterResults = computed<string[]>(() => {
+  const q = props.filterQuery.trim().toLowerCase()
+  if (q === '') {
+    return []
+  }
+
+  const filter = matchQuery(q, useTitle.value, useH1.value)
+  const results: string[] = []
+
+  for (const [ absPath, descriptor ] of workspaceStore.descriptorMap.entries()) {
+    if (filter(descriptor)) {
+      results.push(absPath)
+    }
+  }
+
+  return results
+})
+
 const getFilteredTree = computed<AnyDescriptor[]>(() => {
   const q = props.filterQuery.trim().toLowerCase()
 
@@ -219,15 +237,11 @@ const getFilteredTree = computed<AnyDescriptor[]>(() => {
 
 const getFiles = computed(() => {
   // NOTE: These are the root files. We'll only allow Markdown and code files here.
-  // DEBUG: Not yet filtered!
   return rootDescriptors.value.filter(desc => desc.type === 'file' || desc.type === 'code')
-  // return getFilteredTree.value.filter(item => item.type === 'file' || item.type === 'code')
 })
 
 const getDirectories = computed(() => {
-  // DEBUG: Not yet filtered!
   return rootDescriptors.value.filter(desc => desc.type === 'directory')
-  // return getFilteredTree.value.filter(item => item.type === 'directory')
 })
 
 const uncollapsedDirectories = computed(() => {
