@@ -332,6 +332,8 @@ other than numbers.
 - Improved parsing footnotes (especially with multi-paragraph contents) (#5968).
 - Improved Markdown-to-HTML conversion (#5968).
 - Fixed image parsing for images with no ALT-text (#5963).
+- Horizontal scrolling in the "thin" file manager mode is no longer restricted
+  to macOS, and also available on Linux and Windows.
 
 ## Under the Hood
 

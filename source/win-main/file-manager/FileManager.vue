@@ -287,23 +287,17 @@ function handleDragOver (evt: DragEvent): void {
 
 function handleWheel (event: WheelEvent): void {
   // Determine if we can scroll back & forth
-  if (process.platform !== 'darwin') {
-    return // macOS only
-  }
-
   if (event.deltaY !== 0) {
     return // Don't interfere with vertical scrolling
   }
 
   // Toggle back and forth depending on the current state. toggleFileList
   // will make sure to catch things such as whether we are in combined mode
-  if (event.deltaX > 0) {
+  if (event.deltaX > 0 && !isFileListVisible.value) {
     // Switch to the file list
-    if (!isFileListVisible.value) {
-      event.preventDefault()
-      event.stopPropagation()
-      toggleFileList()
-    }
+    event.preventDefault()
+    event.stopPropagation()
+    toggleFileList()
   } else if (event.deltaX < 0 && isFileListVisible.value) {
     // Switch to the tree view
     event.preventDefault()
