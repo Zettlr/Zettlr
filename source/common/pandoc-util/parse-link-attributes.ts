@@ -25,6 +25,16 @@ export interface ParsedPandocLinkAttributes {
   properties?: Record<string, string>
 }
 
+/** Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value"}
+ *
+ *  #(?<id>[\w\-_]+)       => id
+ *  \.(?<class>[\w\-_]+)   => class
+ *  (?<key>[\w\-_]+)       => key
+ *  "(?<quoted>[^"]*)"     => quoted values
+ *  (?<unquoted>[^\s"]+)   => unquoted values
+ */
+const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|(?<unquoted>[^\s"]+)))/g
+
 /**
  * Parses a Pandoc link attribute string, as defined in
  * https://pandoc.org/MANUAL.html#extension-link_attributes.
@@ -41,37 +51,48 @@ export function parseLinkAttributes (attrString: string): ParsedPandocLinkAttrib
 
   attrString = attrString.substring(1, attrString.length - 1)
 
-  const elements = attrString.split(/\s+/)
   const parsed: ParsedPandocLinkAttributes = {}
 
-  for (const element of elements) {
-    if (element.startsWith('#')) {
-      parsed.id = element.substring(1)
-    } else if (element.startsWith('.')) {
+  let match
+  while ((match = pandocAttributeRe.exec(attrString)) !== null) {
+    // If there are no groups, then something went wrong
+    if (!match.groups) { break }
+
+    if (match.groups.id) {
+      parsed.id = match.groups.id
+    }
+
+    if (match.groups.class) {
       if (parsed.classes === undefined) {
         parsed.classes = []
       }
-      parsed.classes.push(element.substring(1))
-    } else if (element.includes('=') && element.length >= 3) {
-      const [ key, value ] = element.split('=', 2).map(e => e.trim())
+      parsed.classes.push(match.groups.class)
+    }
+
+    if (match.groups.attr) {
+      const key = match.groups.key
+      const value = match.groups.unquoted ?? match.groups.quoted
+
       if (key.toLowerCase() === 'width') {
         parsed.width = value
         if (/^\d+$/.test(value)) {
           parsed.width += 'px'
         }
-      } else if (key.toLowerCase() === 'height') {
+        continue
+      }
+
+      if (key.toLowerCase() === 'height') {
         parsed.height = value
         if (/^\d+$/.test(value)) {
           parsed.height += 'px'
         }
-      } else {
-        if (parsed.properties === undefined) {
-          parsed.properties = {}
-        }
-        parsed.properties[key] = value
+        continue
       }
-    } else {
-      // Wrong/unsupported attribute.
+
+      if (parsed.properties === undefined) {
+        parsed.properties = {}
+      }
+      parsed.properties[key] = value
     }
   }
 
