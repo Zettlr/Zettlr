@@ -42,15 +42,16 @@ import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
-import type { AnyDescriptor, CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
-import { useConfigStore, useDocumentTreeStore, useTagsStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useTagsStore, useWindowStateStore } from 'source/pinia'
 import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 const ipcRenderer = window.ipc
 
@@ -82,7 +83,7 @@ const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
 
 const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
-const workspacesStore = useWorkspacesStore()
+const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
 const tagStore = useTagsStore()
 
@@ -286,9 +287,10 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
 function updateProjectInfo (): ProjectInfo|null {
   // If this file is part of a project, the project must be defined in any
   // containing folder -> traverse up the file tree until we have found one.
-  let dir = workspacesStore.getDir(pathDirname(props.file.path))
+  let dir = workspaceStore.descriptorMap.get(pathDirname(props.file.path)) as DirDescriptor|undefined
+
   while (dir !== undefined && dir.settings.project === null) {
-    dir = workspacesStore.getDir(dir.dir)
+    dir = workspaceStore.descriptorMap.get(dir.dir) as DirDescriptor|undefined
   }
 
   if (dir === undefined || dir.settings.project === null) {
@@ -303,7 +305,7 @@ function updateProjectInfo (): ProjectInfo|null {
 
   const extractedMetadata = absPaths
     .map(p => {
-      return workspacesStore.getFile(p)
+      return workspaceStore.descriptorMap.get(p)
     })
     .filter (d => d !== undefined && d.type === 'file')
     .map(d => {
@@ -330,7 +332,7 @@ function updateProjectInfo (): ProjectInfo|null {
 }
 
 // Update the project info as soon as anything in the workspaces has changed.
-workspacesStore.$subscribe(_mutation => {
+workspaceStore.$subscribe(() => {
   if (currentEditor !== null) {
     currentEditor.projectInfo = updateProjectInfo()
   }
@@ -403,7 +405,7 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
 })
 
 const fsalFiles = computed<MDFileDescriptor[]>(() => {
-  const tree = workspacesStore.rootDescriptors
+  const tree = workspaceStore.rootDescriptors
   const files = []
 
   for (const item of tree) {
