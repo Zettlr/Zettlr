@@ -48,12 +48,13 @@
 <script setup lang="ts">
 import { trans } from '@common/i18n-renderer'
 import makeValidUri from '@common/util/make-valid-uri'
-import { type OtherFileDescriptor } from '@dts/common/fsal'
+import { type AnyDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@cds/core/icon'
-import { computed } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
-import { pathDirname, isAbsolutePath, resolvePath, pathExtname } from 'source/common/util/renderer-path-polyfill'
-import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import { computed, ref, toRef, watch } from 'vue'
+import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
+import { pathDirname } from 'source/common/util/renderer-path-polyfill'
+import { hasImageExt } from 'source/common/util/file-extention-checks'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 const ipcRenderer = window.ipc
 
@@ -66,64 +67,34 @@ if (windowId === null) {
 
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
-const workspacesStore = useWorkspacesStore()
+const workspaceStore = useWorkspaceStore()
 
 const otherFilesLabel = trans('Other files')
 const openDirLabel = trans('Open directory')
 const noAttachmentsMessage = trans('No other files')
 
-const attachments = computed<Array<{ path: string, files: OtherFileDescriptor[] }>>(() => {
-  const activeFile = documentTreeStore.lastLeafActiveFile
-  if (activeFile === undefined) {
-    return []
+const children = ref<AnyDescriptor[]>([])
+
+watch(toRef(documentTreeStore.lastLeafActiveFile), value => {
+  if (value === undefined) {
+    children.value = []
+    return
   }
 
-  const currentDir = workspacesStore.getDir(pathDirname(activeFile.path))
-  if (currentDir === undefined) {
-    return []
+  const descriptor = workspaceStore.descriptorMap.get(pathDirname(value.path))
+  if (descriptor === undefined) {
+    children.value = []
+    return
   }
 
-  const { files, attachmentExtensions, editor } = configStore.config
-  
-  const assetsDir = editor.defaultSaveImagePath.trim()
-  const showImages = files.images.showInSidebar
-  const showDataFiles = files.dataFiles.showInSidebar
-  const showOfficeFiles = files.msoffice.showInSidebar
-  const showOpenOffice = files.openOffice.showInSidebar
-  const showPDF = files.pdf.showInSidebar
-
-  // Quick helper function that tests whether the provided attachment should be
-  // shown in the sidebar. This essentially tests the file's extension and
-  // returns true if it shuld shown in the sidebar.
-  const shouldShowAttachment = (filePath: string): boolean => {
-    return attachmentExtensions.includes(pathExtname(filePath).toLowerCase()) ||
-      (showImages && hasImageExt(filePath)) ||
-      (showDataFiles && hasDataExt(filePath)) ||
-      (showOfficeFiles && hasMSOfficeExt(filePath)) ||
-      (showOpenOffice && hasOpenOfficeExt(filePath)) ||
-      (showPDF && hasPDFExt(filePath))
-  }
-
-  const dirAttachments = currentDir.children
-    .filter((child): child is OtherFileDescriptor => child.type === 'other')
-    .filter(attachment => shouldShowAttachment(attachment.path))
-
-  const att = [{ path: trans('Current folder'), files: dirAttachments }]
-
-  const assetsDescriptor = isAbsolutePath(assetsDir)
-    ? workspacesStore.getDir(assetsDir)
-    : workspacesStore.getDir(resolvePath(currentDir.path, assetsDir))
-
-  if (assetsDescriptor !== undefined) {
-    const files = assetsDescriptor.children
-      .filter((child): child is OtherFileDescriptor => child.type === 'other')
-      .filter(attachment => shouldShowAttachment(attachment.path))
-
-    att.push({ path: assetsDir, files })
-  }
-
-  return att
+  ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: descriptor.path })
+    .then(childDescriptors => {
+      children.value = childDescriptors
+    })
+    .catch(err => console.error(err))
 })
+
+const attachments = computed(() => workspaceStore.otherFiles)
 
 /**
  * Adds additional data to the dragevent
