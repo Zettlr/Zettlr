@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-export { useWorkspacesStore } from './workspaces'
+export { useWorkspaceStore } from './workspace-store'
 export { useConfigStore } from './config'
 export { useStatisticsStore } from './statistics-store'
 export { useWindowStateStore } from './window-state-store'

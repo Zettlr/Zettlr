@@ -151,9 +151,8 @@ import { ref, computed, watch, onMounted } from 'vue'
 import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@dts/common/search'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
-import { useConfigStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
 import type { MaybeRootDescriptor } from 'source/types/common/fsal'
-import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 const ipcRenderer = window.ipc
 

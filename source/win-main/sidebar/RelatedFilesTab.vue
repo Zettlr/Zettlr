@@ -64,11 +64,10 @@
 import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { ref, computed, watch } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useTagsStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useTagsStore, useWorkspaceStore } from 'source/pinia'
 import type { OtherFileDescriptor, CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
-import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 export interface RelatedFile {
   file: string
