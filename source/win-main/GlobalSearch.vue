@@ -151,8 +151,9 @@ import { ref, computed, watch, onMounted } from 'vue'
 import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@dts/common/search'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
-import { useConfigStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore } from 'source/pinia'
 import type { MaybeRootDescriptor } from 'source/types/common/fsal'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 const ipcRenderer = window.ipc
 
@@ -218,13 +219,13 @@ const activeFileIdx = ref<undefined|number>(undefined)
 // The result line index of the most recently clicked search result.
 const activeLineIdx = ref<undefined|number>(undefined)
 
-const workspacesStore = useWorkspacesStore()
+const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
 
 const recentGlobalSearches = computed(() => configStore.config.window.recentGlobalSearches)
 
-const fileTree = computed(() => workspacesStore.rootDescriptors)
+const fileTree = computed(() => workspaceStore.rootDescriptors)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const queryInputElement = ref<HTMLInputElement|null>(null)
