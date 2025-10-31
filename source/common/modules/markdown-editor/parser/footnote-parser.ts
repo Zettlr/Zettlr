@@ -18,6 +18,8 @@ const FootnoteDelimiter: DelimiterType = {}
 
 const validFootnoteRe = /^[^\s\^\[\]]+$/
 
+const footnoteRefRe = /^\[\^[^\s\^\[\]]+\]:\s/
+
 export const footnoteParser: InlineParser = {
   name: 'footnotes',
   before: 'Link', // [^1] will otherwise be detected as a link
@@ -28,7 +30,11 @@ export const footnoteParser: InlineParser = {
 
     // Footnote Style: [^identifier]
     if (next === 91 && ctx.char(pos + 1) === 94) { // 91 === '[', 94 === '^'
-      return ctx.addDelimiter(FootnoteDelimiter, pos, pos + 2, true, false)
+      ctx.addDelimiter(FootnoteDelimiter, pos, pos + 2, true, false)
+
+      // We return -1 here so that the link parser can add its delimiters
+      // since [^invalid id](my url) is a valid link otherwise.
+      return -1
     }
 
     // Footnote Style: ^[inline]
@@ -68,7 +74,7 @@ export const footnoteRefParser: BlockParser = {
     // and it prevents infinite recursion and OOM errors.
     if (ctx.depth > 1) { return false }
 
-    const match = /^\[\^[^\s\^\[\]]+\]:\s/.exec(line.text)
+    const match = footnoteRefRe.exec(line.text)
     if (!match) { return false }
 
     ctx.startComposite('FootnoteRef', 0)
@@ -77,6 +83,17 @@ export const footnoteRefParser: BlockParser = {
     line.moveBaseColumn(match[0].length)
 
     return null
+  },
+
+  // This is required since the composite block technically starts a `Paragraph`,
+  // so in order for stacked footnotes, we have to be able to interrupt paragraph blocks.
+  // But we only need to do this for paragraphs which are direct children of a `FootnoteRef`
+  endLeaf (ctx, line, _leaf) {
+    if (ctx.parentType().name === 'FootnoteRef') {
+      return footnoteRefRe.test(line.text)
+    }
+
+    return false
   }
 }
 
