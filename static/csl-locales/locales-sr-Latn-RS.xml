@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="hr-HR">
+<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="sr-Latn-RS">
   <info>
     <translator>
-      <name>tvrbanec</name>
+      <name>Nikola N. Grubor</name>
+      <email>nikola.n.grubor@med.bg.ac.rs</email>
+      <uri>nikola-grubor.github.io/</uri>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2025-10-18T05:50:06+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -24,34 +26,34 @@
     <term name="advance-online-publication">advance online publication</term>
     <term name="album">album</term>
     <term name="and">i</term>
-    <term name="and others">i dr.</term>
+    <term name="and others">i ostali</term>
     <term name="anonymous">anonimno</term>
     <term name="at">na</term>
-    <term name="audio-recording">audio recording</term>
+    <term name="audio-recording">audio zapis</term>
     <term name="available at">dostupno na</term>
-    <term name="by">od</term>
-    <term name="circa">oko</term>
+    <term name="by">by</term>
+    <term name="circa">circa</term>
     <term name="cited">citirano</term>
-    <term name="et-al">i sur.</term>
+    <term name="et-al">i ostali</term>
     <term name="film">film</term>
-    <term name="forthcoming">u pripremi</term>
+    <term name="forthcoming">dolazeći</term>
     <term name="from">od</term>
     <term name="henceforth">henceforth</term>
     <term name="ibid">ibid.</term>
     <term name="in">u</term>
-    <term name="in press">u tisku</term>
-    <term name="internet">internet</term>
+    <term name="in press">u štampi</term>
+    <term name="internet">Internet</term>
     <term name="letter">pismo</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="no date">bez datuma</term>
     <term name="no-place">no place</term>
     <term name="no-publisher">no publisher</term> <!-- sine nomine -->
     <term name="on">on</term>
-    <term name="online">na internetu</term>
+    <term name="online">na Internetu</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="original-work-published">original work published</term>
-    <term name="personal-communication">osobna komunikacija</term>
-    <term name="podcast">podcast</term>
+    <term name="personal-communication">lična komunikacija</term>
+    <term name="podcast">podkast</term>
     <term name="podcast-episode">podcast episode</term>
     <term name="preprint">preprint</term>
     <term name="presented at">predstavljeno na</term>
@@ -59,11 +61,10 @@
     <term name="radio-series">radio series</term>
     <term name="radio-series-episode">radio series episode</term>
     <term name="reference">
-      <single>reference</single>
+      <single>referenca</single>
       <multiple>reference</multiple>
     </term>
     <term name="retrieved">preuzeto</term>
-    <term name="review-of">review of</term>
     <term name="scale">skala</term>
     <term name="special-issue">special issue</term>
     <term name="special-section">special section</term>
@@ -75,23 +76,22 @@
 
     <!-- SHORT GENERAL TERMS -->
     <term name="anonymous" form="short">anon.</term>
-    <term name="circa" form="short">oko</term>
-    <term name="no date" form="short">bez dat.</term>
+    <term name="circa" form="short">c.</term>
+    <term name="no date" form="short">bez datuma</term>
     <term name="no-place" form="short">n.p.</term>
     <term name="no-publisher" form="short">n.p.</term>
     <term name="reference" form="short">
       <single>ref.</single>
-      <multiple>ref.</multiple>
+      <multiple>refs.</multiple>
     </term>
-    <term name="review-of" form="short">rev. of</term>
 
     <!-- SYMBOLIC GENERAL FORMS -->
 
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
+    <term name="article-journal">članak iz časopisa</term>
+    <term name="article-magazine">članak iz magazina</term>
+    <term name="article-newspaper">novinarski članak</term>
     <term name="bill">bill</term>
     <!-- book is in the list of locator terms -->
     <term name="broadcast">broadcast</term>
@@ -107,11 +107,11 @@
     <!-- figure is in the list of locator terms -->
     <term name="graphic">graphic</term>
     <term name="hearing">hearing</term>
-    <term name="interview">intervju</term>
+    <term name="interview">интервју</term>
     <term name="legal_case">legal case</term>
     <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
+    <term name="manuscript">rukopis</term>
+    <term name="map">mapa</term>
     <term name="motion_picture">video recording</term>
     <term name="musical_score">musical score</term>
     <term name="pamphlet">pamphlet</term>
@@ -119,7 +119,7 @@
     <term name="patent">patent</term>
     <term name="performance">performance</term>
     <term name="periodical">periodical</term>
-    <term name="personal_communication">osobna komunikacija</term>
+    <term name="personal_communication">лична комуникација</term>
     <term name="post">post</term>
     <term name="post-weblog">blog post</term>
     <term name="regulation">regulation</term>
@@ -130,9 +130,9 @@
     <term name="song">audio recording</term>
     <term name="speech">presentation</term>
     <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
+    <term name="thesis">teza</term>
     <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="webpage">web stranica</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
     <term name="article-journal" form="short">journal art.</term>
@@ -152,16 +152,12 @@
     <term name="song" form="short">audio rec.</term>
 
     <!-- LONG VERB ITEM TYPE FORMS -->
-    <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
 
     <!-- SHORT VERB ITEM TYPE FORMS -->
 
     <!-- HISTORICAL ERA TERMS -->
-    <term name="ad"/>
-    <term name="bc">pr. Kr.</term>
+    <term name="ad">AD</term>
+    <term name="bc">BC</term>
     <term name="bce">BCE</term>
     <term name="ce">CE</term>
 
@@ -176,7 +172,13 @@
     <term name="semicolon">;</term>
 
     <!-- ORDINALS -->
-    <term name="ordinal">.</term>
+    <term name="ordinal">th</term>
+    <term name="ordinal-01">st</term>
+    <term name="ordinal-02">nd</term>
+    <term name="ordinal-03">rd</term>
+    <term name="ordinal-11">th</term>
+    <term name="ordinal-12">th</term>
+    <term name="ordinal-13">th</term>
 
     <!-- LONG ORDINALS -->
     <term name="long-ordinal-01">prvi</term>
@@ -200,8 +202,8 @@
       <multiple>appendices</multiple>
     </term>
     <term name="article-locator">
-      <single>article</single>
-      <multiple>articles</multiple>
+      <single>članak</single>
+      <multiple>članci</multiple>
     </term>
     <term name="book">
       <single>knjiga</single>
@@ -216,8 +218,8 @@
       <multiple>poglavlja</multiple>
     </term>
     <term name="column">
-      <single>stupac</single>
-      <multiple>stupci</multiple>
+      <single>kolona</single>
+      <multiple>kolone</multiple>
     </term>
     <term name="elocation">
       <single>location</single>
@@ -228,40 +230,40 @@
       <multiple>equations</multiple>
     </term>
     <term name="figure">
-      <single>crtež</single>
-      <multiple>crteži</multiple>
+      <single>figura</single>
+      <multiple>figure</multiple>
     </term>
     <term name="folio">
-      <single>folija</single>
-      <multiple>folije</multiple>
+      <single>folio</single>
+      <multiple>foliji</multiple>
     </term>
     <term name="issue">
-      <single>izdanje</single>
-      <multiple>izdanja</multiple>
+      <single>broj</single>
+      <multiple>brojevi</multiple>
     </term>
     <term name="line">
-      <single>red</single>
-      <multiple>redovi</multiple>
+      <single>linija</single>
+      <multiple>linije</multiple>
     </term>
     <term name="note">
-      <single>bilješka</single>
-      <multiple>bilješke</multiple>
+      <single>beleška</single>
+      <multiple>beleške</multiple>
     </term>
     <term name="opus">
-      <single>djelo</single>
-      <multiple>djela</multiple>
+      <single>opus</single>
+      <multiple>opera</multiple>
     </term>
     <term name="page">
       <single>stranica</single>
       <multiple>stranice</multiple>
     </term>
     <term name="paragraph">
-      <single>pasus</single>
-      <multiple>pasusi</multiple>
+      <single>paragraf</single>
+      <multiple>paragrafi</multiple>
     </term>
     <term name="part">
-      <single>dio</single>
-      <multiple>dijelova</multiple>
+      <single>deo</single>
+      <multiple>delova</multiple>
     </term>
     <term name="rule">
       <single>rule</single>
@@ -272,16 +274,12 @@
       <multiple>scenes</multiple>
     </term>
     <term name="section">
-      <single>odjeljak</single>
-      <multiple>odjeljci</multiple>
+      <single>odeljak</single>
+      <multiple>odeljaka</multiple>
     </term>
     <term name="sub-verbo">
       <single>sub verbo</single>
       <multiple>sub verbis</multiple>
-    </term>
-    <term name="supplement">
-      <single>supplement</single>
-      <multiple>supplements</multiple>
     </term>
     <term name="table">
       <single>table</single>
@@ -296,12 +294,12 @@
       <multiple>titles</multiple>
     </term>
     <term name="verse">
-      <single>stih</single>
-      <multiple>stihovi</multiple>
+      <single>strofa</single>
+      <multiple>strofe</multiple>
     </term>
     <term name="volume">
-      <single>svezak</single>
-      <multiple>svesci</multiple>
+      <single>tom</single>
+      <multiple>tomova</multiple>
     </term>
 
     <!-- SHORT LOCATOR FORMS -->
@@ -313,9 +311,9 @@
       <single>art.</single>
       <multiple>arts.</multiple>
     </term>
-    <term name="book" form="short">knj.</term>
-    <term name="chapter" form="short">pogl.</term>
-    <term name="column" form="short">stup.</term>
+    <term name="book" form="short">knjiga</term>
+    <term name="chapter" form="short">Pog.</term>
+    <term name="column" form="short">Kol.</term>
     <term name="elocation" form="short">
       <single>loc.</single>
       <multiple>locs.</multiple>
@@ -324,18 +322,18 @@
       <single>eq.</single>
       <multiple>eqs.</multiple>
     </term>
-    <term name="figure" form="short">crt.</term>
-    <term name="folio" form="short">fol.</term>
+    <term name="figure" form="short">fig.</term>
+    <term name="folio" form="short">folio</term>
     <term name="issue" form="short">izd.</term>
-    <term name="line" form="short">red</term>
-    <term name="note" form="short">bilj.</term>
-    <term name="opus" form="short">sv.</term>
+    <term name="line" form="short">l.</term>
+    <term name="note" form="short">n.</term>
+    <term name="opus" form="short">op.</term>
     <term name="page" form="short">
       <single>str.</single>
       <multiple>str.</multiple>
     </term>
     <term name="paragraph" form="short">par.</term>
-    <term name="part" form="short">dio</term>
+    <term name="part" form="short">deo</term>
     <term name="rule" form="short">
       <single>r.</single>
       <multiple>rr.</multiple>
@@ -348,10 +346,6 @@
     <term name="sub-verbo" form="short">
       <single>s.v.</single>
       <multiple>s.vv.</multiple>
-    </term>
-    <term name="supplement" form="short">
-      <single>supp.</single>
-      <multiple>supps.</multiple>
     </term>
     <term name="table" form="short">
       <single>tbl.</single>
@@ -366,12 +360,12 @@
       <multiple>tits.</multiple>
     </term>
     <term name="verse" form="short">
-      <single>st.</single>
-      <multiple>st.</multiple>
+      <single>str.</single>
+      <multiple>str.</multiple>
     </term>
     <term name="volume" form="short">
-      <single>sv.</single>
-      <multiple>sv.</multiple>
+      <single>tom</single>
+      <multiple>tomovi</multiple>
     </term>
 
     <!-- SYMBOLIC LOCATOR FORMS -->
@@ -385,92 +379,27 @@
     </term>
 
     <!-- LONG NUMBER VARIABLE FORMS -->
-    <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
-    </term>
-    <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
-    </term>
-    <term name="collection-number">
-      <single>izdanje</single>
-      <multiple>izdanja</multiple>
-    </term>
     <term name="edition">
       <single>izdanje</single>
       <multiple>izdanja</multiple>
-    </term>
-    <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
-    </term>
-    <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
     </term>
     <term name="number-of-pages">
       <single>stranica</single>
       <multiple>stranice</multiple>
     </term>
-    <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
-    </term>
-    <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
-    </term>
-    <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
-    </term>
     <term name="version">verzija</term>
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
-    <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
-    </term>
-    <term name="citation-number" form="short">
-      <single>cit.</single>
-      <multiple>cits.</multiple>
-    </term>
-    <term name="collection-number" form="short">izd.</term>
     <term name="edition" form="short">izd.</term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
-    <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
-    </term>
     <term name="number-of-pages" form="short">
       <single>str.</single>
       <multiple>str.</multiple>
-    </term>
-    <term name="number-of-volumes" form="short">
-      <single>vol.</single>
-      <multiple>vols.</multiple>
-    </term>
-    <term name="page-first" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
-    </term>
-    <term name="printing" form="short">
-      <single>print.</single>
-      <multiple>prints.</multiple>
     </term>
 
     <!-- LONG ROLE FORMS -->
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
-    </term>
-    <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
     </term>
     <term name="compiler">
       <single>compiler</single>
@@ -485,24 +414,20 @@
       <multiple>curators</multiple>
     </term>
     <term name="director">
-      <single>voditelj</single>
-      <multiple>voditelji</multiple>
+      <single>director</single>
+      <multiple>directors</multiple>
     </term>
     <term name="editor">
       <single>urednik</single>
       <multiple>urednici</multiple>
     </term>
-    <term name="editor-translator">
-      <single>urednik &amp; prevoditelj</single>
-      <multiple>urednici &amp; prevoditelji</multiple>
-    </term>
     <term name="editortranslator">
-      <single>urednik &amp; prevoditelj</single>
-      <multiple>urednici &amp; prevoditelji</multiple>
+      <single>editor &amp; translator</single>
+      <multiple>editors &amp; translators</multiple>
     </term>
     <term name="editorial-director">
-      <single>urednik</single>
-      <multiple>urednici</multiple>
+      <single>editor</single>
+      <multiple>editors</multiple>
     </term>
     <term name="executive-producer">
       <single>executive producer</single>
@@ -517,8 +442,8 @@
       <multiple>hosts</multiple>
     </term>
     <term name="illustrator">
-      <single>ilustrator</single>
-      <multiple>ilustratori</multiple>
+      <single>illustrator</single>
+      <multiple>illustrators</multiple>
     </term>
     <term name="narrator">
       <single>narrator</single>
@@ -545,8 +470,8 @@
       <multiple>series creators</multiple>
     </term>
     <term name="translator">
-      <single>prevoditelj</single>
-      <multiple>prevoditelji</multiple>
+      <single>prevodilac</single>
+      <multiple>prevodioci</multiple>
     </term>
 
     <!-- SHORT ROLE FORMS -->
@@ -555,40 +480,36 @@
       <multiple>comps.</multiple>
     </term>
     <term name="contributor" form="short">
-      <single>contrib.</single>
-      <multiple>contribs.</multiple>
+      <single>sarad.</single>
+      <multiple>sarad.</multiple>
     </term>
     <term name="curator" form="short">
       <single>cur.</single>
       <multiple>curs.</multiple>
     </term>
     <term name="director" form="short">
-      <single>vod.</single>
-      <multiple>vod.</multiple>
+      <single>dir.</single>
+      <multiple>dirs.</multiple>
     </term>
     <term name="editor" form="short">
       <single>ur.</single>
       <multiple>ur.</multiple>
     </term>
-    <term name="editor-translator" form="short">
-      <single>ur. &amp; prev.</single>
-      <multiple>ur. &amp; prev.</multiple>
-    </term>
     <term name="editortranslator" form="short">
-      <single>ur. &amp; prev.</single>
-      <multiple>ur. &amp; prev.</multiple>
+      <single>ed. &amp; tran.</single>
+      <multiple>eds. &amp; trans.</multiple>
     </term>
     <term name="editorial-director" form="short">
-      <single>ur.-vod.</single>
-      <multiple>ur.-vod.</multiple>
+      <single>ed.</single>
+      <multiple>eds.</multiple>
     </term>
     <term name="executive-producer" form="short">
       <single>exec. prod.</single>
       <multiple>exec. prods.</multiple>
     </term>
     <term name="illustrator" form="short">
-      <single>il.</single>
-      <multiple>il.</multiple>
+      <single>ill.</single>
+      <multiple>ills.</multiple>
     </term>
     <term name="narrator" form="short">
       <single>narr.</single>
@@ -621,45 +542,41 @@
 
     <!-- VERB ROLE FORMS -->
     <term name="chair" form="verb">chaired by</term>
-    <term name="collection-editor" form="verb">edited by</term>
     <term name="compiler" form="verb">compiled by</term>
-    <term name="container-author" form="verb">od</term>
+    <term name="container-author" form="verb">by</term>
     <term name="contributor" form="verb">with</term>
     <term name="curator" form="verb">curated by</term>
-    <term name="director" form="verb">vodio</term>
+    <term name="director" form="verb">directed by</term>
     <term name="editor" form="verb">uredio</term>
-    <term name="editor-translator" form="verb">uredio &amp; preveo</term>
-    <term name="editortranslator" form="verb">uredio &amp; preveo</term>
-    <term name="editorial-director" form="verb">uredio</term>
+    <term name="editortranslator" form="verb">edited &amp; translated by</term>
+    <term name="editorial-director" form="verb">edited by</term>
     <term name="executive-producer" form="verb">executive produced by</term>
     <term name="guest" form="verb">with guest</term>
     <term name="host" form="verb">hosted by</term>
-    <term name="illustrator" form="verb">ilustrirao</term>
-    <term name="interviewer" form="verb">intervjuirao</term>
+    <term name="illustrator" form="verb">illustrated by</term>
+    <term name="interviewer" form="verb">intervjuisao</term>
     <term name="narrator" form="verb">narrated by</term>
     <term name="organizer" form="verb">organized by</term>
     <term name="performer" form="verb">performed by</term>
     <term name="producer" form="verb">produced by</term>
-    <term name="recipient" form="verb">primatelj</term>
-    <term name="reviewed-author" form="verb">pregledao</term>
+    <term name="recipient" form="verb">prima</term>
+    <term name="reviewed-author" form="verb">by</term>
     <term name="script-writer" form="verb">written by</term>
     <term name="series-creator" form="verb">created by</term>
     <term name="translator" form="verb">preveo</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="compiler" form="verb-short">comp. by</term>
     <term name="contributor" form="verb-short">w.</term>
     <term name="curator" form="verb-short">cur. by</term>
-    <term name="director" form="verb-short">vod.</term>
+    <term name="director" form="verb-short">dir.</term>
     <term name="editor" form="verb-short">ur.</term>
-    <term name="editor-translator" form="verb-short">ur. &amp; prev.</term>
-    <term name="editortranslator" form="verb-short">ur. &amp; prev.</term>
-    <term name="editorial-director" form="verb-short">ur. vod.</term>
+    <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
+    <term name="editorial-director" form="verb-short">ed.</term>
     <term name="executive-producer" form="verb-short">exec. prod. by</term>
     <term name="guest" form="verb-short">w. guest</term>
     <term name="host" form="verb-short">hosted by</term>
-    <term name="illustrator" form="verb-short">ilus.</term>
+    <term name="illustrator" form="verb-short">illus.</term>
     <term name="narrator" form="verb-short">narr. by</term>
     <term name="organizer" form="verb-short">org. by</term>
     <term name="performer" form="verb-short">perf. by</term>
@@ -669,37 +586,37 @@
     <term name="translator" form="verb-short">prev.</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="month-01">siječanj</term>
-    <term name="month-02">veljača</term>
-    <term name="month-03">ožujak</term>
-    <term name="month-04">travanj</term>
-    <term name="month-05">svibanj</term>
-    <term name="month-06">lipanj</term>
-    <term name="month-07">srpanj</term>
-    <term name="month-08">kolovoz</term>
-    <term name="month-09">rujan</term>
-    <term name="month-10">listopad</term>
-    <term name="month-11">studeni</term>
-    <term name="month-12">prosinac</term>
+    <term name="month-01">Januar</term>
+    <term name="month-02">Februar</term>
+    <term name="month-03">Mart</term>
+    <term name="month-04">April</term>
+    <term name="month-05">Maj</term>
+    <term name="month-06">Juni</term>
+    <term name="month-07">Juli</term>
+    <term name="month-08">Avgust</term>
+    <term name="month-09">Septembar</term>
+    <term name="month-10">Oktobar</term>
+    <term name="month-11">Novembar</term>
+    <term name="month-12">Decembar</term>
 
     <!-- SHORT MONTH FORMS -->
-    <term name="month-01" form="short">sij.</term>
-    <term name="month-02" form="short">velj.</term>
-    <term name="month-03" form="short">ožu.</term>
-    <term name="month-04" form="short">tra.</term>
-    <term name="month-05" form="short">svi.</term>
-    <term name="month-06" form="short">lip.</term>
-    <term name="month-07" form="short">srp.</term>
-    <term name="month-08" form="short">kol.</term>
-    <term name="month-09" form="short">ruj.</term>
-    <term name="month-10" form="short">lis.</term>
-    <term name="month-11" form="short">stu.</term>
-    <term name="month-12" form="short">pros.</term>
+    <term name="month-01" form="short">Jan.</term>
+    <term name="month-02" form="short">Feb.</term>
+    <term name="month-03" form="short">Mart</term>
+    <term name="month-04" form="short">Apr.</term>
+    <term name="month-05" form="short">Maj</term>
+    <term name="month-06" form="short">Juni</term>
+    <term name="month-07" form="short">Juli</term>
+    <term name="month-08" form="short">Avg.</term>
+    <term name="month-09" form="short">Sep.</term>
+    <term name="month-10" form="short">Okt.</term>
+    <term name="month-11" form="short">Nov.</term>
+    <term name="month-12" form="short">Dec.</term>
 
     <!-- SEASONS -->
-    <term name="season-01">proljeće</term>
-    <term name="season-02">ljeto</term>
-    <term name="season-03">jesen</term>
-    <term name="season-04">zima</term>
+    <term name="season-01">Proleće</term>
+    <term name="season-02">Leto</term>
+    <term name="season-03">Jesen</term>
+    <term name="season-04">Zima</term>
   </terms>
 </locale>
