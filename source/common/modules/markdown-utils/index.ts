@@ -124,6 +124,10 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
     if (ast.title !== undefined) {
       textNodes.push(ast.title)
     }
+  } else if (ast.type === 'ZettelkastenLink') {
+    if (ast.title !== undefined) {
+      textNodes.push(ast.title)
+    }
   } else if (ast.type === 'OrderedList' || ast.type === 'BulletList') {
     for (const item of ast.items) {
       textNodes = textNodes.concat(extractTextnodes(item, filter))

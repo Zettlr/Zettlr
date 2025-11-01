@@ -20,7 +20,8 @@ import extractFileId from './extract-file-id'
 import { parse as parseYAML } from 'yaml'
 import {
   markdownToAST as md2ast,
-  extractASTNodes
+  extractASTNodes,
+  extractTextnodes
 } from '@common/modules/markdown-utils'
 import type {
   Heading,
@@ -80,7 +81,8 @@ export default function getMarkdownFileParser (
     const headings = extractASTNodes(ast, 'Heading') as Heading[]
     const firstH1 = headings.find(h => h.level === 1)
     if (firstH1 !== undefined) {
-      file.firstHeading = firstH1.content
+      const content = extractTextnodes(firstH1)
+      file.firstHeading = content.map(node => node.whitespaceBefore + node.value).join('')
     }
 
     const locale: string | undefined = isAppServiceContainerReady() ? getAppServiceContainer().config.get('appLang') : undefined
