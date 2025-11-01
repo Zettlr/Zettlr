@@ -439,6 +439,8 @@ export interface ZettelkastenTag extends MDNode {
    * Contains the raw contents of the tag
    */
   value: string
+
+  subtags: ZettelkastenTag[]
 }
 
 export interface Comment extends MDNode {
@@ -1033,6 +1035,8 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       return astNode
     }
     case 'ZknTag': {
+      const subTags = node.getChildren('ZknTag').map(node => parseNode(node, markdown)) as ZettelkastenTag[]
+
       const astNode: ZettelkastenTag = {
         type: 'ZettelkastenTag',
         name: 'ZknTag',
@@ -1040,7 +1044,8 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         from: node.from,
         to: node.to,
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
-        value: markdown.substring(node.from + 1, node.to)
+        value: markdown.substring(node.from + 1, node.to),
+        subtags: subTags
       }
       return astNode
     }

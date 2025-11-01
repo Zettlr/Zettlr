@@ -17,7 +17,9 @@ import { type InlineParser } from '@lezer/markdown'
 // Any character allowed before a tag
 const allowedCharsBefore = /^[ \t\n\(\{\[]$/
 
-const tagRE = /^##?[\w_-]+#?/u
+const tagRE = /^(?<tag>##?[\w_-]+)#?(?:\/[\w_-]+)*/du
+
+const subTagRe = /(?<sub>\/[\w_-]+)/gdu
 
 export const zknTagParser: InlineParser = {
   name: 'zkn-tags',
@@ -31,10 +33,28 @@ export const zknTagParser: InlineParser = {
       return -1
     }
 
-    const match = tagRE.exec(ctx.text.slice(pos - ctx.offset))
-    if (match === null) { return -1 }
+    const tagText = ctx.text.slice(pos - ctx.offset)
+    const match = tagRE.exec(tagText)
+    if (!match?.indices?.groups) { return -1 }
+
+    // Tags are allowed to be namespaced using `/` to delimit tag levels.
+    // A namespaced tag is as follows: `#org/group/member`, and will be parsed
+    // into the following tags: `#org`, `#org/group`, and `#org/group/member`
+    const children = []
+
+    let sub = null
+    while ((sub = subTagRe.exec(tagText)) !== null) {
+      if (!sub.indices?.groups) { continue }
+
+      const subMark = ctx.elt('ZknTagMark', pos, pos + 1)
+      children.push(ctx.elt('ZknTag', pos, pos + sub.indices.groups.sub[1], [subMark]))
+    }
+
+    // Add the top-level tag as a child
+    const subMark = ctx.elt('ZknTagMark', pos, pos + 1)
+    children.unshift(ctx.elt('ZknTag', pos, pos + match.indices.groups.tag[1], [subMark]))
 
     const tagMark = ctx.elt('ZknTagMark', pos, pos + 1)
-    return ctx.addElement(ctx.elt('ZknTag', pos, pos + match[0].length, [tagMark]))
+    return ctx.addElement(ctx.elt('ZknTag', pos, pos + match[0].length, [ tagMark, ...children ]))
   }
 }
