@@ -90,15 +90,16 @@ export function showSplashScreen (logger: LogProvider): void {
  * @param   {number}  currentStepPercentage  The step percentage (0-100).
  */
 export function updateSplashScreen (currentStepMessage: string, currentStepPercentage: number): void {
+  initSplashScreenMessage = currentStepMessage
+  initSplashScreenPercent = currentStepPercentage
+
   if (debounceTimeout !== undefined) {
     return
   }
 
+  splashScreen?.webContents.send('step-update', { currentStepMessage, currentStepPercentage })
+
   debounceTimeout = setTimeout(() => {
-    console.log({ currentStepPercentage })
-    initSplashScreenMessage = currentStepMessage
-    initSplashScreenPercent = currentStepPercentage
-    splashScreen?.webContents.send('step-update', { currentStepMessage, currentStepPercentage })
     debounceTimeout = undefined
   }, 1000/60)
 }

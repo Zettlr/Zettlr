@@ -139,6 +139,14 @@ export class AppServiceContainer {
     // can't do this in the exact same order, because the dependencies are only
     // required for the variables, while the boot function may access them in
     // different order.
+
+    // If the booting isn't done after 1 second, begin displaying a splash
+    // screen to indicate to the user that things are happening, even if the
+    // main window(s) don't yet show.
+    const timeout = setTimeout(() => {
+      showSplashScreen(this.log)
+    }, 1000)
+
     await this._informativeBoot(this._logProvider, 'LogProvider')
     await this._informativeBoot(this._configProvider, 'ConfigProvider')
     await this._informativeBoot(this._fsal, 'FSAL')
@@ -154,20 +162,10 @@ export class AppServiceContainer {
     // Reindex every file if necessary. Needs to come after appearance provider
     // and CSS provider (due to splashscreen), and before anything that accesses
     // the FSAL.
-    // If the indexing isn't done after 1 second, begin displaying a splash
-    // screen to indicate to the user that things are happening, even if the
-    // main window(s) don't yet show.
-    const timeout = setTimeout(() => {
-      showSplashScreen(this.log)
-    }, 1000)
 
     await this.fsal.reindexFiles((absPath, currentPercent) => {
       updateSplashScreen(trans('Indexing %s…', path.basename(absPath)), currentPercent)
     })
-
-    clearTimeout(timeout)
-    closeSplashScreen()
-
 
     await this._informativeBoot(this._targetProvider, 'TargetProvider')
     await this._informativeBoot(this._linkProvider, 'LinkProvider')
@@ -197,6 +195,9 @@ export class AppServiceContainer {
       this.commands.run('tutorial-open', {})
         .catch(err => this.log.error('[AppServiceContainer] Could not open tutorial', err))
     }
+
+    clearTimeout(timeout)
+    closeSplashScreen()
 
     // After everything has been booted up, show the windows
     this.windows.maybeShowWindows()
@@ -352,6 +353,7 @@ export class AppServiceContainer {
    */
   private async _informativeBoot <T extends ProviderContract> (provider: T, displayName: string): Promise<void> {
     try {
+      updateSplashScreen(trans(`Booting ${displayName}`), 0)
       await provider.boot()
     } catch (err: any) {
       const title = `Error starting ${displayName}`

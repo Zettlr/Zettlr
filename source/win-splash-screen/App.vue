@@ -100,6 +100,16 @@ body {
       margin-bottom: 10px;
     }
   }
-  #progress { grid-area: progress; }
+
+  #progress {
+    grid-area: progress;
+
+    p {
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 </style>
