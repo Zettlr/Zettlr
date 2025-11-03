@@ -752,20 +752,6 @@ export default class FSAL extends ProviderContract {
    * Loads any given path (if it exists) into the FSAL descriptor format.
    *
    * @param   {string}   absPath     The path to load
-   * @param   {boolean}  shallowDir  If loading a directory, instructs to not
-   *                                 recursively parse the entire tree. Ignored.
-   *
-   * @return  {Promise}              Promise resolves with any descriptor
-   * @deprecated
-   */
-  public async loadAnyPath (absPath: string, _shallowDir: boolean = false): Promise<AnyDescriptor> {
-    return await this.getDescriptorFor(absPath)
-  }
-
-  /**
-   * Loads any given path (if it exists) into the FSAL descriptor format.
-   *
-   * @param   {string}   absPath     The path to load
    *
    * @return  {Promise}              Promise resolves with any descriptor
    *
@@ -894,7 +880,7 @@ export default class FSAL extends ProviderContract {
     return await Promise.all(
       children
         .map(p => path.join(absPath, p))
-        .map(p => this.loadAnyPath(p))
+        .map(p => this.getDescriptorFor(p))
     )
   }
 }
