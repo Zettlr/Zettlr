@@ -21,6 +21,7 @@ import { useDocumentTreeStore } from '.'
 import { isAbsolutePath, pathDirname, pathExtname, resolvePath } from 'source/common/util/renderer-path-polyfill'
 import { trans } from 'source/common/i18n-renderer'
 import { hasImageExt, hasDataExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -126,6 +127,16 @@ export const useWorkspaceStore = defineStore('workspace', () => {
       .filter(rootPath => value.has(rootPath))
       .map(rootPath => value.get(rootPath)!)
   }, { deep: true })
+
+  // Finally, listen to FSAL events and keep the descriptor map updated.
+  ipcRenderer.on('fsal-event', (_, payload: FSALEventPayload) => {
+    if (payload.event === 'unlink' || payload.event === 'unlinkDir') {
+      descriptorMap.value.delete(payload.path)
+    } else {
+      const { descriptor } = (payload as FSALEventPayloadChange)
+      descriptorMap.value.set(descriptor.path, descriptor)
+    }
+  })
 
   // SECTION 2: ATTACHMENTS/OTHER FILES
   const otherFiles = ref<Array<{ path: string, files: OtherFileDescriptor[] }>>([])

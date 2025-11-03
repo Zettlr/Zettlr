@@ -170,9 +170,11 @@ import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
 import type { AnyDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useWindowStateStore } from 'source/pinia'
-import { pathBasename } from '@common/util/renderer-path-polyfill'
+import { pathBasename, relativePath } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
 import { hasCodeExt, hasDataExt, hasImageExt, hasMarkdownExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
+import { getSorter } from 'source/common/util/directory-sorter'
 
 const ipcRenderer = window.ipc
 
@@ -374,24 +376,42 @@ const filteredChildren = computed(() => {
     })
 })
 
+const sortedChildren = computed(() => {
+  if (props.item.type !== 'directory') {
+    return []
+  }
+
+  const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = configStore.config
+
+  const sorter = getSorter(
+    sorting,
+    sortFoldersFirst,
+    fileNameDisplay,
+    appLang,
+    fileMetaTime
+  )
+
+  return sorter(filteredChildren.value, props.item.settings.sorting)
+})
+
 /**
  * Returns a list of children that can be displayed inside the tree view, sorted
  * by project inclusion status.
  */
 const projectSortedFilteredChildren = computed(() => {
   if (props.item.type !== 'directory' || props.item.settings.project === null) {
-    return filteredChildren.value
+    return sortedChildren.value
   }
 
   // Modify the order using the project files by first mapping the sorted
   // project file paths onto the descriptors available, sorting all other files
   // separately, and then concatenating them with the project files up top.
   const projectFiles = props.item.settings.project.files
-    .map(filePath => filteredChildren.value.find(x => x.name === filePath))
+    .map(filePath => sortedChildren.value.find(x => x.name === filePath))
     .filter(x => x !== undefined)
 
   const files: AnyDescriptor[] = []
-  for (const desc of filteredChildren.value) {
+  for (const desc of sortedChildren.value) {
     if (!projectFiles.includes(desc)) {
       files.push(desc)
     }
@@ -470,9 +490,45 @@ onMounted(async () => {
       }
     })
 
-    children.value = await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: props.item.path })
+    await fetchChildren()
   }
+
+  ipcRenderer.on('fsal-event', (_, payload: FSALEventPayload) => {
+    const affectedPath = payload.event === 'unlink' || payload.event === 'unlinkDir'
+      ? payload.path
+      : (payload as FSALEventPayloadChange).descriptor.path
+    
+    // Figure out if this event relates to us, which is only the case if the
+    // affected path is a direct descendant of this tree item. If it's itself or
+    // a parent path, another tree item takes over. If it's a nested dependent,
+    // any of the children of this tree item takes over.
+    // How can we figure this out? Easy, by resolving the path from this item
+    // to the affected path and checking if there are any additional path
+    // separators in there.
+    if (!affectedPath.startsWith(props.item.path)) {
+      return
+    }
+
+    if (affectedPath === props.item.path) {
+      return // Taken care of by the parent
+    }
+
+    const relative = relativePath(props.item.path, affectedPath)
+    const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
+    if (relative.includes(PATH_SEP)) {
+      return
+    }
+
+    // Now we can be sure that the event pertains to a direct child of this item
+    // and we need to handle it. We'll make it easy and simply re-fetch the list
+    // of children.
+    fetchChildren().catch(err => console.error(`[TreeItem] Could not fetch children for item "${props.item.path}": ${err.message}`, err))
+  })
 })
+
+async function fetchChildren (): Promise<void> {
+  children.value = await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: props.item.path })
+}
 
 function uncollapseIfApplicable (): void {
   if (!collapsed.value) {

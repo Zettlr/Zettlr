@@ -1,7 +1,7 @@
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import type { AnyDescriptor, DirDescriptor } from '@dts/common/fsal'
 import type { ChangeDescriptor } from './root'
-import { type GenericSorter } from '@providers/fsal/util/directory-sorter'
+import { type GenericSorter } from '@common/util/directory-sorter'
 
 const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
 

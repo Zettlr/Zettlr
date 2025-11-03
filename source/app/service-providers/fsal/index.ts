@@ -21,7 +21,7 @@ import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
 import FSALWatchdog from './fsal-watchdog'
 import FSALCache from './fsal-cache'
-import { type GenericSorter, getSorter } from './util/directory-sorter'
+import { type GenericSorter, getSorter } from '@common/util/directory-sorter'
 import type {
   DirDescriptor,
   MDFileDescriptor,
@@ -42,6 +42,10 @@ import { promises as fs, constants as FS_CONSTANTS } from 'fs'
 import { safeDelete } from './util/safe-delete'
 import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
 import ignoreDir from 'source/common/util/ignore-dir'
+import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
+import { closeSplashScreen, showSplashScreen, updateSplashScreen } from './util/splash-screen'
+import { trans } from 'source/common/i18n-main'
+import type { EventName } from 'chokidar/handler'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -53,9 +57,22 @@ export {
   getFilesystemMetadata
 }
 
+export interface FSALEventPayloadUnlink {
+  event: 'unlink'|'unlinkDir'
+  path: string
+}
+
+export interface FSALEventPayloadChange {
+  event: 'add'|'addDir'|'change'
+  descriptor: AnyDescriptor
+}
+
+export type FSALEventPayload = FSALEventPayloadChange|FSALEventPayloadUnlink
+
 export default class FSAL extends ProviderContract {
   private readonly _cache: FSALCache
   private readonly _emitter: EventEmitter
+  private readonly watchers: Map<string, FSALWatchdog>
 
   constructor (
     private readonly _logger: LogProvider,
@@ -66,6 +83,7 @@ export default class FSAL extends ProviderContract {
     const cachedir = app.getPath('userData')
     this._cache = new FSALCache(this._logger, path.join(cachedir, 'fsal/cache'))
     this._emitter = new EventEmitter()
+    this.watchers = new Map()
 
     ipcMain.handle('fsal', async (event, { command, payload }) => {
       if (command === 'read-path-recursively' && typeof payload === 'string') {
@@ -73,7 +91,7 @@ export default class FSAL extends ProviderContract {
       } else if (command === 'read-directory' && typeof payload === 'string') {
         return await this.readDirectory(payload)
       } else if (command === 'get-descriptor' && typeof payload === 'string') {
-        return await this.loadAnyPath(payload, true) // DEBUG: We should not need the shallow flag here anymore once the PR is done!
+        return await this.getDescriptorFor(payload)
       }
     })
   } // END constructor
@@ -92,20 +110,155 @@ export default class FSAL extends ProviderContract {
         this._logger.error(`FSAL Cache could not be cleared: ${String(err.message)}`, err)
       }
     }
+
+    await this.syncRoots()
+
+    this._config.on('update', (which: string) => {
+      if (which === 'openPaths') {
+        this.syncRoots().catch(err => {
+          this._logger.error(`[FSAL] Could not synchronize paths: ${err.message as string}`, err)
+        })
+      }
+    })
   }
 
   // Enable global event listening to updates of the config
-  on (evt: string, callback: (...args: any[]) => void): void {
+  on (evt: EventName, callback: (...args: any[]) => void): void {
     this._emitter.on(evt, callback)
   }
 
-  once (evt: string, callback: (...args: any[]) => void): void {
+  once (evt: EventName, callback: (...args: any[]) => void): void {
     this._emitter.once(evt, callback)
   }
 
   // Also do the same for the removal of listeners
-  off (evt: string, callback: (...args: any[]) => void): void {
+  off (evt: EventName, callback: (...args: any[]) => void): void {
     this._emitter.off(evt, callback)
+  }
+
+  /**
+   * Convenience function for emitting chokidar-related events from the watcher.
+   *
+   * @param   {EventName}  event    The event name
+   * @param   {string}     absPath  The absolute path for this event
+   */
+  private emitChokidarEvent (event: EventName, absPath: string): void {
+    if (event === 'all' || event === 'raw') {
+      return this._logger.error('[FSAL] Cannot emit events "all" or "raw" -- wrong chokidar setup!')
+    }
+
+    if (event === 'ready') {
+      return this._logger.verbose('[FSAL] Ignoring ready event.')
+    }
+
+    if (event === 'error') {
+      return this._logger.error(`[FSAL] Chokidar reported an error for path "${absPath}"`)
+    }
+
+    // In unlink-events, there won't be a descriptor.
+    if (event === 'unlink' || event === 'unlinkDir') {
+      this._emitter.emit('fsal-event', { event, path: absPath })
+      broadcastIPCMessage('fsal-event', { event, path: absPath })
+      return
+    }
+
+    // But in any other case (change & add), we should be able to get one.
+    this.getDescriptorFor(absPath)
+      .then(descriptor => {
+        this._emitter.emit('fsal-event', { event, descriptor })
+        broadcastIPCMessage('fsal-event', { event, descriptor })
+      })
+      .catch(err => {
+        this._logger.error(`[FSAL] Could not emit event ${event} for path "${absPath}": ${err.message}`, err)
+      })
+  }
+
+  /**
+   * Synchronizes the loaded roots with the configuration's openPaths property.
+   * This ensures that every path is always watched and events are properly
+   * emitted.
+   */
+  private async syncRoots (): Promise<void> {
+    const { openPaths } = this._config.get()
+
+    for (const rootPath of openPaths) {
+      if (this.watchers.has(rootPath)) {
+        continue // This path has already been loaded
+      }
+
+      try {
+        const descriptor = await this.getDescriptorFor(rootPath)
+        if (descriptor === undefined) {
+          // Mount a "dummy" workspace indicating an unlinked root
+          this._logger.error(`Could not load root ${rootPath}. Mounting dummy...`)
+          // TODO
+        } else {
+          // Start watching the root path.
+          const watcher = new FSALWatchdog(this._logger, this._config)
+          watcher.on('change', (event, absPath) => {
+            this.emitChokidarEvent(event, absPath)
+          })
+          watcher.watchPath(rootPath)
+          this.watchers.set(rootPath, watcher)
+        }
+      } catch (err: any) {
+        // TODO
+      }
+    }
+
+    // Before finishing up, unwatch all roots that are no longer part of the
+    // config
+    for (const [ rootPath, watcher ] of this.watchers) {
+      if (!openPaths.includes(rootPath)) {
+        await watcher.shutdown()
+        this.watchers.delete(rootPath)
+      }
+    }
+
+    // Always reindex all files
+    await this.reindexFiles()
+  }
+
+  /**
+   * This function ensures that all files anywhere within the loaded paths are
+   * properly indexed in the cache for fast access.
+   */
+  private async reindexFiles (): Promise<void> {
+    // If the indexing isn't done after 1 second, begin displaying a splash
+    // screen to indicate to the user that things are happening, even if the
+    // main window(s) don't yet show.
+    const timeout = setTimeout(() => {
+      showSplashScreen(this._logger)
+    }, 1000)
+    let currentPercent = 0
+
+    // Start a timer to measure how long the roots take to load.
+    const start = performance.now()
+
+    const { openPaths } = this._config.get()
+    const pathsToIndex: string[] = []
+    for (const rootPath of openPaths) {
+      const allPaths = await this.readPathRecursively(rootPath)
+      pathsToIndex.push(...allPaths)
+      
+    }
+
+    // Now we have one large list of files to reindex. (This also allows us to
+    // have a more precise splashscreen indicator)
+    for (const absPath of pathsToIndex) {
+      updateSplashScreen(trans('Indexing %s…', path.basename(absPath)), currentPercent)
+      currentPercent += Math.round(1 / pathsToIndex.length * 100)
+      // Requesting the descriptor will, behind the scenes, check for cache hits
+      // and automatically recache if necessary.
+      await this.getDescriptorFor(absPath)
+    }
+
+    const duration = performance.now() - start
+    // Round to max. two positions after the period
+    this._logger.info(`[FSAL] Re-indexed workspaces in ${Math.floor(duration / 1000 * 100) / 100} seconds`)
+
+    clearTimeout(timeout)
+    closeSplashScreen()
   }
 
   /**
@@ -528,13 +681,25 @@ export default class FSAL extends ProviderContract {
    *
    * @param   {string}   absPath     The path to load
    * @param   {boolean}  shallowDir  If loading a directory, instructs to not
-   *                                 recursively parse the entire tree.
+   *                                 recursively parse the entire tree. Ignored.
+   *
+   * @return  {Promise}              Promise resolves with any descriptor
+   * @deprecated
+   */
+  public async loadAnyPath (absPath: string, _shallowDir: boolean = false): Promise<AnyDescriptor> {
+    return await this.getDescriptorFor(absPath)
+  }
+
+  /**
+   * Loads any given path (if it exists) into the FSAL descriptor format.
+   *
+   * @param   {string}   absPath     The path to load
    *
    * @return  {Promise}              Promise resolves with any descriptor
    */
-  public async loadAnyPath (absPath: string, shallowDir: boolean = false): Promise<AnyDescriptor> {
+  public async getDescriptorFor (absPath: string): Promise<AnyDescriptor> {
     if (await this.isDir(absPath)) {
-      return await this.getAnyDirectoryDescriptor(absPath, shallowDir)
+      return await this.getAnyDirectoryDescriptor(absPath, true)
     } else {
       return await this.getDescriptorForAnySupportedFile(absPath)
     }

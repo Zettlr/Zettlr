@@ -114,43 +114,11 @@
 import { trans } from '@common/i18n-renderer'
 import TreeItem from './TreeItem.vue'
 import matchQuery from './util/match-query'
-import matchTree from './util/match-tree'
 import { ref, computed } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
-import { type AnyDescriptor } from '@dts/common/fsal'
-import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { useConfigStore } from 'source/pinia'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 const ipcRenderer = window.ipc
-
-/**
- * Flattens one element of the filtered directory tree into a one-dimensional
- * array, taking into account only uncollapsed (=visible) directories.
- *
- * @param   {AnyDescriptor}       elem         The element to flatten
- * @param   {string[]|undefined}  uncollapsed  A list of opened directories. Pass undefined to return all directories
- * @param   {AnyDescriptor[]}     arr          A list to append to (for recursion)
- *
- * @return  {AnyDescriptor[]}                  The flattened list
- */
-function getFlattenedVisibleFileTree (elem: AnyDescriptor, uncollapsed: string[]|undefined, arr: AnyDescriptor[] = []): AnyDescriptor[] {
-  // Add the current element
-  if (elem.type !== 'other') {
-    // TODO: Once we enable displaying of otherfiles in the file tree, we MUST
-    // replace this with a check of whether that setting is on!
-    arr.push(elem)
-  }
-
-  // Include children only when we either are filtering (uncollapsed = undefined)
-  // or if the directory is actually visible
-  if (elem.type === 'directory' && (uncollapsed === undefined || uncollapsed.includes(elem.path))) {
-    for (const child of elem.children) {
-      arr = getFlattenedVisibleFileTree(child, uncollapsed, arr)
-    }
-  }
-
-  return arr
-}
 
 const props = defineProps<{
   isVisible: boolean
@@ -167,13 +135,8 @@ const emit = defineEmits<{
 const activeTreeItem = ref<undefined|[string, string]>(undefined)
 
 const workspaceStore = useWorkspaceStore()
-const workSpacesStore = useWorkspacesStore()
 const configStore = useConfigStore()
-const windowStateStore = useWindowStateStore()
-const documentTreeStore = useDocumentTreeStore()
 
-// const workspaceMap = computed(() => workspaceStore.workspaceMap)
-// const descriptorMap = computed(() => workspaceStore.descriptorMap)
 const rootDescriptors = computed(() => workspaceStore.rootDescriptors)
 
 const showFilesSection = computed(() => configStore.config.fileManagerShowFiles)
@@ -185,10 +148,8 @@ const workspaceSectionHeading = trans('Workspaces')
 const noRootsMessage = trans('No open files or folders')
 const noResultsMessage = trans('No results')
 
-const fileTree = computed<AnyDescriptor[]>(() => workSpacesStore.roots.map(root => root.descriptor))
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
-const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 
 const query = computed(() => props.filterQuery.trim().toLowerCase())
 
@@ -208,33 +169,6 @@ const filterResults = computed<string[]>(() => {
   }
 
   return results
-})
-
-const getFilteredTree = computed<AnyDescriptor[]>(() => {
-  const q = query.value
-
-  if (q === '') {
-    return fileTree.value
-  }
-
-  const filter = matchQuery(q, useTitle.value, useH1.value)
-  // Now we can actually filter out the file tree. We have to do this recursively.
-  // We will perform a depth-first search and keep every directory which either
-  // (a) matches directly or (b) has an amount of filtered children > 0
-  const filteredTree = []
-  for (const item of fileTree.value) {
-    if (item.type === 'directory') {
-      // Recursively match the directory
-      const result = matchTree(item, filter)
-      if (result !== undefined) {
-        filteredTree.push(result)
-      }
-    } else if (filter(item)) {
-      // Add the file, since it matches
-      filteredTree.push(item)
-    }
-  }
-  return filteredTree
 })
 
 const getFiles = computed(() => {
@@ -260,27 +194,6 @@ const getDirectories = computed(() => {
   return roots.filter(filter)
 })
 
-const uncollapsedDirectories = computed(() => {
-  return windowStateStore.uncollapsedDirectories
-})
-
-const flattenedSimpleFileTree = computed<Array<[string, string]>>(() => {
-  // First, take the filtered tree and flatten it
-  let list: AnyDescriptor[] = []
-  const uncollapsedDirs: string[]|undefined = (props.filterQuery.length === 0) ? uncollapsedDirectories.value : undefined
-
-  getFilteredTree.value.forEach(elem => {
-    list = list.concat(getFlattenedVisibleFileTree(elem, uncollapsedDirs))
-  })
-
-  const flatArray: Array<[string, string]> = []
-  for (const elem of list) {
-    // We need the type to check if we can uncollapse/collapse a directory
-    flatArray.push([ elem.path, elem.type ])
-  }
-  return flatArray
-})
-
 /**
  * Called whenever the user clicks on the "No open files or folders"
  * message -- it requests to open a new folder from the main process.
@@ -298,83 +211,86 @@ function clickHandler (event: MouseEvent): void {
 }
 
 function navigate (event: KeyboardEvent): void {
+  // TODO BUG DEBUG This doesn't work anymore with the new workspaces provider. Need to reimplement!
   // The user requested to navigate into the file tree with the keyboard
   // Only capture arrow movements
-  if (![ 'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'Escape' ].includes(event.key)) {
-    return
-  }
+  throw new Error('Not yet reimplemented! If you see this message, please report that we need to reimplement tree navigation.')
 
-  event.stopPropagation()
-  event.preventDefault()
+  // if (![ 'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'Escape' ].includes(event.key)) {
+  //   return
+  // }
 
-  if (event.key === 'Escape') {
-    activeTreeItem.value = undefined
-    return
-  }
+  // event.stopPropagation()
+  // event.preventDefault()
 
-  if (flattenedSimpleFileTree.value.length === 0) {
-    return // Nothing to navigate
-  }
+  // if (event.key === 'Escape') {
+  //   activeTreeItem.value = undefined
+  //   return
+  // }
 
-  if (event.key === 'Enter' && activeTreeItem.value !== undefined) {
-    // Open the currently active item
-    if (activeTreeItem.value[1] === 'directory') {
-      configStore.setConfigValue('openDirectory', activeTreeItem.value[0])
-    } else {
-      // Select the active file (if there is one)
-      ipcRenderer.invoke('documents-provider', {
-        command: 'open-file',
-        payload: {
-          path: activeTreeItem.value[0],
-          windowId: props.windowId,
-          leafId: lastLeafId.value,
-          newTab: false
-        }
-      } as DocumentManagerIPCAPI)
-        .catch(e => console.error(e))
-    }
-  }
+  // if (flattenedSimpleFileTree.value.length === 0) {
+  //   return // Nothing to navigate
+  // }
 
-  // Get the current index of the current active file
-  let currentIndex = flattenedSimpleFileTree.value.findIndex(val => val[0] === activeTreeItem.value?.[0])
+  // if (event.key === 'Enter' && activeTreeItem.value !== undefined) {
+  //   // Open the currently active item
+  //   if (activeTreeItem.value[1] === 'directory') {
+  //     configStore.setConfigValue('openDirectory', activeTreeItem.value[0])
+  //   } else {
+  //     // Select the active file (if there is one)
+  //     ipcRenderer.invoke('documents-provider', {
+  //       command: 'open-file',
+  //       payload: {
+  //         path: activeTreeItem.value[0],
+  //         windowId: props.windowId,
+  //         leafId: lastLeafId.value,
+  //         newTab: false
+  //       }
+  //     } as DocumentManagerIPCAPI)
+  //       .catch(e => console.error(e))
+  //   }
+  // }
 
-  switch (event.key) {
-    case 'ArrowDown':
-      currentIndex++
-      break
-    case 'ArrowUp':
-      currentIndex--
-      break
-    case 'ArrowLeft':
-      // Close a directory if applicable
-      if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
-        const path = flattenedSimpleFileTree.value[currentIndex][0]
-        const idx = windowStateStore.uncollapsedDirectories.indexOf(path)
-        if (idx > -1) {
-          windowStateStore.uncollapsedDirectories.splice(idx, 1)
-        }
-      }
-      return
-    case 'ArrowRight':
-      // Open a directory if applicable
-      if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
-        const path = flattenedSimpleFileTree.value[currentIndex][0]
-        if (!windowStateStore.uncollapsedDirectories.includes(path)) {
-          windowStateStore.uncollapsedDirectories.push(path)
-        }
-      }
-      return
-  }
+  // // Get the current index of the current active file
+  // let currentIndex = flattenedSimpleFileTree.value.findIndex(val => val[0] === activeTreeItem.value?.[0])
 
-  // Sanitize the index
-  if (currentIndex > flattenedSimpleFileTree.value.length - 1) {
-    currentIndex = flattenedSimpleFileTree.value.length - 1
-  } else if (currentIndex < 0) {
-    currentIndex = 0
-  }
+  // switch (event.key) {
+  //   case 'ArrowDown':
+  //     currentIndex++
+  //     break
+  //   case 'ArrowUp':
+  //     currentIndex--
+  //     break
+  //   case 'ArrowLeft':
+  //     // Close a directory if applicable
+  //     if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
+  //       const path = flattenedSimpleFileTree.value[currentIndex][0]
+  //       const idx = windowStateStore.uncollapsedDirectories.indexOf(path)
+  //       if (idx > -1) {
+  //         windowStateStore.uncollapsedDirectories.splice(idx, 1)
+  //       }
+  //     }
+  //     return
+  //   case 'ArrowRight':
+  //     // Open a directory if applicable
+  //     if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
+  //       const path = flattenedSimpleFileTree.value[currentIndex][0]
+  //       if (!windowStateStore.uncollapsedDirectories.includes(path)) {
+  //         windowStateStore.uncollapsedDirectories.push(path)
+  //       }
+  //     }
+  //     return
+  // }
 
-  // Set the active tree item
-  activeTreeItem.value = flattenedSimpleFileTree.value[currentIndex]
+  // // Sanitize the index
+  // if (currentIndex > flattenedSimpleFileTree.value.length - 1) {
+  //   currentIndex = flattenedSimpleFileTree.value.length - 1
+  // } else if (currentIndex < 0) {
+  //   currentIndex = 0
+  // }
+
+  // // Set the active tree item
+  // activeTreeItem.value = flattenedSimpleFileTree.value[currentIndex]
 }
 
 function stopNavigate (): void {

@@ -14,7 +14,7 @@
  */
 
 import { type DirDescriptor } from '@dts/common/fsal'
-import { type GenericSorter } from '@providers/fsal/util/directory-sorter'
+import { type GenericSorter } from '@common/util/directory-sorter'
 
 /**
  * This function takes a single directory in and sorts it *as well as all of its
