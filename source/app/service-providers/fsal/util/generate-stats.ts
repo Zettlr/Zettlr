@@ -13,8 +13,7 @@
  * END HEADER
  */
 
-import objectToArray from '@common/util/object-to-array'
-import type { DirDescriptor, MDFileDescriptor, CodeFileDescriptor, AnyDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor } from '@dts/common/fsal'
 
 export interface WorkspacesStatistics {
   minChars: number
@@ -44,18 +43,9 @@ export interface WorkspacesStatistics {
   dirCount: number
 }
 
-export default function generateStats (filetree: AnyDescriptor[]): WorkspacesStatistics {
-  // First, we need ALL of our loaded paths as an array
-  let pathsArray: Array<DirDescriptor|MDFileDescriptor|CodeFileDescriptor> = []
-  for (const descriptor of filetree) {
-    if (descriptor.type === 'other') {
-      continue
-    }
-    pathsArray = pathsArray.concat(objectToArray(descriptor, 'children'))
-  }
-
+export default function generateStats (descriptors: AnyDescriptor[]): WorkspacesStatistics {
   // Now only the files
-  const mdArray = pathsArray.filter(descriptor => descriptor.type === 'file') as MDFileDescriptor[]
+  const mdArray = descriptors.filter(descriptor => descriptor.type === 'file')
 
   // So, let's first get our min, max, mean, and median word and charcount
   let minChars = Infinity
@@ -147,8 +137,8 @@ export default function generateStats (filetree: AnyDescriptor[]): WorkspacesSta
     maxCharsFile,
     minWordsFile,
     maxWordsFile,
-    mdFileCount: pathsArray.filter(d => d.type === 'file').length,
-    codeFileCount: pathsArray.filter(d => d.type === 'code').length,
-    dirCount: pathsArray.filter(d => d.type === 'directory').length
+    mdFileCount: descriptors.filter(d => d.type === 'file').length,
+    codeFileCount: descriptors.filter(d => d.type === 'code').length,
+    dirCount: descriptors.filter(d => d.type === 'directory').length
   }
 }

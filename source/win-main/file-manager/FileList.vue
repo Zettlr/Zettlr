@@ -95,7 +95,6 @@ import { trans } from '@common/i18n-renderer'
 import tippy from 'tippy.js'
 import FileItem from './FileItem.vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
-import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
@@ -146,34 +145,39 @@ const rootElement = ref<HTMLDivElement|null>(null)
 
 const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
   const dir = selectedDirDescriptor.value
-  if (dir === undefined) {
+  if (dir === undefined || dir.type !== 'directory') {
     return []
   }
 
+  // TODO: Properly generate a sorted list of the directory contents!
+  const allDescriptors = [...workspaceStore.descriptorMap.keys()]
+    .filter(absPath => absPath.startsWith(dir.path))
+    .map(absPath => workspaceStore.descriptorMap.get(absPath)!)
+    .toSorted((a, b) => { return a > b ? 1 : b > a ? -1 : 0 })
+
   const ret: RecycleScrollerData[] = []
-  const items = objectToArray(dir, 'children') as AnyDescriptor[]
   const { files } = configStore.config
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].type === 'other') {
+  for (let i = 0; i < allDescriptors.length; i++) {
+    if (allDescriptors[i].type === 'other') {
       // Filter other files based on our settings. Why do these ugly nested if
       // constructs? To catch all the other "other" files in the else.
-      if (hasImageExt(items[i].path)) {
+      if (hasImageExt(allDescriptors[i].path)) {
         if (!files.images.showInFilemanager) {
           continue
         }
-      } else if (hasPDFExt(items[i].path)) {
+      } else if (hasPDFExt(allDescriptors[i].path)) {
         if (!files.pdf.showInFilemanager) {
           continue
         }
-      } else if (hasMSOfficeExt(items[i].path)) {
+      } else if (hasMSOfficeExt(allDescriptors[i].path)) {
         if (!files.msoffice.showInFilemanager) {
           continue
         }
-      } else if (hasOpenOfficeExt(items[i].path)) {
+      } else if (hasOpenOfficeExt(allDescriptors[i].path)) {
         if (!files.openOffice.showInFilemanager) {
           continue
         }
-      } else if (hasDataExt(items[i].path)) {
+      } else if (hasDataExt(allDescriptors[i].path)) {
         if (!files.dataFiles.showInFilemanager) {
           continue
         }
@@ -184,7 +188,7 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
 
     ret.push({
       id: i, // This helps the virtual scroller to adequately position the items
-      props: items[i] // The actual item
+      props: allDescriptors[i] // The actual item
     })
   }
   return ret

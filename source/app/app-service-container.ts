@@ -34,7 +34,6 @@ import TargetProvider from '@providers/targets'
 import TrayProvider from '@providers/tray'
 import UpdateProvider from '@providers/updates'
 import WindowProvider from '@providers/windows'
-import WorkspaceProvider from '@providers/workspaces'
 import { dialog } from 'electron'
 
 // We need module-global variables so that garbage collect won't shut down the
@@ -88,7 +87,6 @@ export class AppServiceContainer {
   private readonly _windowProvider: WindowProvider
   private readonly _fsal: FSAL
   private readonly _documentManager: DocumentManager
-  private readonly _workspaces: WorkspaceProvider
   private _isBooted: boolean
 
   constructor () {
@@ -110,7 +108,6 @@ export class AppServiceContainer {
     this._appearanceProvider = new AppearanceProvider(this._logProvider, this._configProvider)
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
 
-    this._workspaces = new WorkspaceProvider(this._logProvider, this._configProvider, this._fsal)
     this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._linkProvider = new LinkProvider(this._logProvider, this._configProvider, this._fsal)
     
@@ -151,7 +148,6 @@ export class AppServiceContainer {
     await this._informativeBoot(this._appearanceProvider, 'AppearanceProvider')
     await this._informativeBoot(this._dictionaryProvider, 'DictionaryProvider')
 
-    await this._informativeBoot(this._workspaces, 'WorkspaceProvider')
     await this._informativeBoot(this._targetProvider, 'TargetProvider')
     await this._informativeBoot(this._linkProvider, 'LinkProvider')
 
@@ -283,11 +279,6 @@ export class AppServiceContainer {
   public get commands (): CommandProvider { return this._commandProvider }
 
   /**
-   * Returns the WorkspaceProvider
-   */
-  public get workspaces (): WorkspaceProvider { return this._workspaces }
-
-  /**
    * Prepares quitting the app by shutting down the service providers
    */
   async shutdown (): Promise<void> {
@@ -309,7 +300,6 @@ export class AppServiceContainer {
     await this._safeShutdown(this._citeprocProvider, 'CiteprocProvider')
     await this._safeShutdown(this._assetsProvider, 'AssetsProvider')
     await this._safeShutdown(this._appearanceProvider, 'AppearanceProvider')
-    await this._safeShutdown(this._workspaces, 'WorkspaceProvider')
     await this._safeShutdown(this._configProvider, 'ConfigProvider')
     await this._safeShutdown(this._logProvider, 'LogProvider')
   }
