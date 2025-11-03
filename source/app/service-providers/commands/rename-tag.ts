@@ -34,7 +34,7 @@ export default class RenameTag extends ZettlrCommand {
     const newName: string = arg.newName
 
     // First, retrieve all files from the FSAL
-    const allFiles = this._app.workspaces.getAllFiles()
+    const allFiles = (await this._app.fsal.getAllLoadedDescriptors())
       .filter(d => d.type === 'file') as MDFileDescriptor[]
 
     // Then, retain only the relevant files

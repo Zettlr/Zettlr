@@ -186,7 +186,7 @@
 <script lang="ts">
 import localiseNumber from '@common/util/localise-number'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
-import type { WorkspacesStatistics } from '@providers/workspaces/generate-stats'
+import type { WorkspacesStatistics } from '@providers/fsal/util/generate-stats'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { defineComponent } from 'vue'
 
