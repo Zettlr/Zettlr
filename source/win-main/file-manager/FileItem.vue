@@ -74,7 +74,7 @@
             <!-- Second line -->
             <!-- Is this a code file? -->
             <span
-              v-if="obj.type === 'code'"
+              v-if="obj.type === 'code' || obj.type === 'other'"
               aria-label="Code-file"
               class="code-indicator badge"
             >
