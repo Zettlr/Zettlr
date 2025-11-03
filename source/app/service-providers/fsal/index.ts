@@ -387,29 +387,6 @@ export default class FSAL extends ProviderContract {
     return getMarkdownFileParser(this._config.get().zkn.idRE)
   }
 
-  /**
-   * Returns true, if the haystack contains a descriptor with the same name as needle.
-   *
-   * @param   {DirDescriptor}                   haystack A dir descriptor
-   * @param   {MDFileDescriptor|DirDescriptor}  needle   A file or directory descriptor
-   *
-   * @return  {boolean}                                  Whether needle is in haystack
-   *
-   * @deprecated
-   */
-  public hasChild (haystack: DirDescriptor, needle: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): boolean {
-    // DEBUG DEPRECATED
-    // Hello, PHP
-    // If a name checks out, return true
-    for (const child of haystack.children) {
-      if (child.name.toLowerCase() === needle.name.toLowerCase()) {
-        return true
-      }
-    }
-
-    return false
-  }
-
   public async changeSorting (src: DirDescriptor, sorting?: SortMethod): Promise<void> {
     await FSALDir.changeSorting(src, sorting)
   }
@@ -762,7 +739,7 @@ export default class FSAL extends ProviderContract {
 
     const isRoot = this._config.get().openPaths.includes(absPath)
 
-    return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), isRoot, true)
+    return await FSALDir.parse(absPath, isRoot)
   }
 
   /**

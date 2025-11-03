@@ -10,13 +10,13 @@
       ref="displayText"
       v-bind:class="{
         'list-item': true,
-        project: obj.type === 'directory' && obj.settings.project !== null,
-        selected: selectedFile !== undefined && obj.path === selectedFile.path,
-        active: activeFile !== undefined && obj.path === activeFile.path,
+        project: item.type === 'directory' && item.settings.project !== null,
+        selected: selectedFile !== undefined && item.path === selectedFile.path,
+        active: activeFile !== undefined && item.path === activeFile.path,
         'has-meta-info': fileMeta,
-        directory: obj.type === 'directory'
+        directory: item.type === 'directory'
       }"
-      v-bind:data-id="obj.type === 'file' ? obj.id : ''"
+      v-bind:data-id="item.type === 'file' ? item.id : ''"
       v-bind:data-filename="getFilename"
       v-bind:draggable="isDraggable"
       v-on:click.stop="requestSelection"
@@ -37,7 +37,7 @@
           v-if="nameEditing"
           ref="nameEditingInput"
           type="text"
-          v-bind:value="obj.name"
+          v-bind:value="item.name"
           v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
           v-on:keyup.esc="nameEditing = false"
           v-on:blur="nameEditing = false"
@@ -57,7 +57,7 @@
           <span class="badge">{{ countWordsOrCharsOfDirectory }}</span>
         </div>
         <template v-else>
-          <div v-if="obj.type === 'file' && obj.tags.length > 0">
+          <div v-if="item.type === 'file' && item.tags.length > 0">
             <!-- First line -->
             <div v-for="(tag, idx) in tagsWithColor" v-bind:key="idx" class="tag badge">
               <span
@@ -74,25 +74,25 @@
             <!-- Second line -->
             <!-- Is this a code file? -->
             <span
-              v-if="obj.type === 'code' || obj.type === 'other'"
+              v-if="item.type === 'code' || item.type === 'other'"
               aria-label="Code-file"
               class="code-indicator badge"
             >
-              {{ obj.ext.substring(1) }}
+              {{ item.ext.substring(1) }}
             </span>
             <!-- Display the ID, if there is one -->
-            <span v-if="obj.type === 'file' && obj.id !== ''" class="id badge">{{ obj.id }}</span>
+            <span v-if="item.type === 'file' && item.id !== ''" class="id badge">{{ item.id }}</span>
             <!-- Display the file size if we have a code file -->
-            <span v-if="obj.type === 'code'" class="badge">{{ formattedSize }}</span>
+            <span v-if="item.type === 'code'" class="badge">{{ formattedSize }}</span>
             <!--
               Next, the user will want to know how many words are in here. To save
               space, we will either display only the words, OR the word count in
               relation to a set writing target, if there is one.
             -->
-            <span v-else-if="obj.type === 'file' && !hasWritingTarget" class="badge">
+            <span v-else-if="item.type === 'file' && !hasWritingTarget" class="badge">
               {{ formattedWordCharCountOfFile }}
             </span>
-            <span v-else-if="obj.type === 'file'" class="badge">
+            <span v-else-if="item.type === 'file'" class="badge">
               <svg
                 class="target-progress-indicator"
                 width="16"
@@ -123,15 +123,15 @@
 
   <!-- Popovers -->
   <PopoverDirProps
-    v-if="showPopover && displayText !== null && obj.type === 'directory'"
+    v-if="showPopover && displayText !== null && item.type === 'directory'"
     v-bind:target="displayText"
-    v-bind:directory="obj"
+    v-bind:directory="item"
     v-on:close="showPopover = false"
   ></PopoverDirProps>
   <PopoverFileProps
-    v-if="showPopover && displayText !== null && obj.type !== 'directory'"
+    v-if="showPopover && displayText !== null && item.type !== 'directory'"
     v-bind:target="displayText"
-    v-bind:file="obj"
+    v-bind:file="item"
     v-on:close="showPopover = false"
   ></PopoverFileProps>
 </template>
@@ -158,15 +158,17 @@ import formatSize from '@common/util/format-size'
 import PopoverDirProps from './util/PopoverDirProps.vue'
 import PopoverFileProps from './util/PopoverFileProps.vue'
 
-import { ref, computed, toRef, watch } from 'vue'
+import { ref, computed, toRef, watch, onMounted } from 'vue'
 import { type AnyDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useTagsStore, useWindowStateStore } from 'source/pinia'
 import { useItemComposable } from './util/item-composable'
+import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
+import { relativePath } from 'source/common/util/renderer-path-polyfill'
 
 const props = defineProps<{
   activeFile: AnyDescriptor|undefined
   index: number
-  obj: AnyDescriptor
+  item: AnyDescriptor
   windowId: string
 }>()
 
@@ -175,6 +177,8 @@ const emit = defineEmits<{
   (e: 'create-file'): void
   (e: 'create-dir'): void
 }>()
+
+const ipcRenderer = window.ipc
 
 const configStore = useConfigStore()
 const tagStore = useTagsStore()
@@ -189,6 +193,47 @@ const displayMdExtensions = computed(() => configStore.config.display.markdownFi
 const displayText = ref<HTMLDivElement|null>(null)
 const nameEditingInput = ref<HTMLInputElement|null>(null)
 
+const children = ref<AnyDescriptor[]>([])
+
+async function fetchChildren (): Promise<void> {
+  children.value = await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: props.item.path })
+}
+
+onMounted(async () => {
+  await fetchChildren()
+  ipcRenderer.on('fsal-event', (_, payload: FSALEventPayload) => {
+    const affectedPath = payload.event === 'unlink' || payload.event === 'unlinkDir'
+      ? payload.path
+      : (payload as FSALEventPayloadChange).descriptor.path
+    
+    // Figure out if this event relates to us, which is only the case if the
+    // affected path is a direct descendant of this tree item. If it's itself or
+    // a parent path, another tree item takes over. If it's a nested dependent,
+    // any of the children of this tree item takes over.
+    // How can we figure this out? Easy, by resolving the path from this item
+    // to the affected path and checking if there are any additional path
+    // separators in there.
+    if (!affectedPath.startsWith(props.item.path)) {
+      return
+    }
+
+    if (affectedPath === props.item.path) {
+      return // Taken care of by the parent
+    }
+
+    const relative = relativePath(props.item.path, affectedPath)
+    const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
+    if (relative.includes(PATH_SEP)) {
+      return
+    }
+
+    // Now we can be sure that the event pertains to a direct child of this item
+    // and we need to handle it. We'll make it easy and simply re-fetch the list
+    // of children.
+    fetchChildren().catch(err => console.error(`[TreeItem] Could not fetch children for item "${props.item.path}": ${err.message}`, err))
+  })
+})
+
 const {
   nameEditing,
   showPopover,
@@ -200,58 +245,58 @@ const {
   isDirectory,
   selectedFile,
   updateObject
-} = useItemComposable(props.obj, displayText, props.windowId, nameEditingInput)
+} = useItemComposable(props.item, displayText, props.windowId, nameEditingInput)
 
 // We have to explicitly transform ALL properties to computed ones for
 // the reactivity in conjunction with the recycle-scroller.
 const basename = computed(() => {
-  if (props.obj.type !== 'file') {
-    return props.obj.name
+  if (props.item.type !== 'file') {
+    return props.item.name
   }
 
-  if (useTitle.value && props.obj.yamlTitle !== undefined) {
-    return props.obj.yamlTitle
-  } else if (useH1.value && props.obj.firstHeading !== null) {
-    return props.obj.firstHeading
+  if (useTitle.value && props.item.yamlTitle !== undefined) {
+    return props.item.yamlTitle
+  } else if (useH1.value && props.item.firstHeading !== null) {
+    return props.item.firstHeading
   } else if (displayMdExtensions.value) {
-    return props.obj.name
+    return props.item.name
   } else {
-    return props.obj.name.replace(props.obj.ext, '')
+    return props.item.name.replace(props.item.ext, '')
   }
 })
 
-const getFilename = computed(() => props.obj.name)
-const isProject = computed(() => props.obj.type === 'directory' && props.obj.settings.project !== null)
+const getFilename = computed(() => props.item.name)
+const isProject = computed(() => props.item.type === 'directory' && props.item.settings.project !== null)
 const isDraggable = computed(() => !isDirectory.value)
 const fileMeta = computed(() => configStore.config.fileMeta)
 const getDate = computed(() => {
   if (configStore.config.fileMetaTime === 'modtime') {
-    return formatDate(props.obj.modtime, configStore.config.appLang, true)
+    return formatDate(props.item.modtime, configStore.config.appLang, true)
   } else {
-    return formatDate(props.obj.creationtime, configStore.config.appLang, true)
+    return formatDate(props.item.creationtime, configStore.config.appLang, true)
   }
 })
 
 const countDirs = computed(() => {
-  if (props.obj.type !== 'directory') {
+  if (props.item.type !== 'directory') {
     return '0 ' + trans('Directories')
   }
-  return props.obj.children.filter(e => e.type === 'directory').length + ' ' + trans('Directories')
+  return children.value.filter(e => e.type === 'directory').length + ' ' + trans('Directories')
 })
 
 const countFiles = computed(() => {
-  if (props.obj.type !== 'directory') {
+  if (props.item.type !== 'directory') {
     return '0 ' + trans('Files')
   }
-  return props.obj.children.filter(e => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('Files')
+  return children.value.filter(e => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('Files')
 })
 
 const countWordsOrCharsOfDirectory = computed(() => {
-  if (props.obj.type !== 'directory') {
+  if (props.item.type !== 'directory') {
     return ''
   }
 
-  const wordOrCharCount = props.obj.children
+  const wordOrCharCount = children.value
     .filter((file): file is MDFileDescriptor => file.type === 'file')
     .map(file => shouldCountChars.value ? file.charCount : file.wordCount)
     .reduce((prev: number, cur: number) => prev + cur, 0)
@@ -263,22 +308,22 @@ const countWordsOrCharsOfDirectory = computed(() => {
   }
 })
 
-const hasWritingTarget = computed(() => props.obj.type === 'file' && writingTargets.value.map(x => x.path).includes(props.obj.path))
+const hasWritingTarget = computed(() => props.item.type === 'file' && writingTargets.value.map(x => x.path).includes(props.item.path))
 
 const writingTargetPath = computed(() => {
-  if (props.obj.type !== 'file') {
+  if (props.item.type !== 'file') {
     throw new Error('Could not compute writingTargetPath: Was called on non-file object')
   }
 
-  const target = writingTargets.value.find(x => x.path === props.obj.path)
+  const target = writingTargets.value.find(x => x.path === props.item.path)
 
   if (target === undefined) {
     throw new Error('Could not compute writingTargetPath: No target found')
   }
 
-  let current = props.obj.charCount
+  let current = props.item.charCount
   if (target.mode === 'words') {
-    current = props.obj.wordCount
+    current = props.item.wordCount
   }
 
   let progress = current / target.count
@@ -293,19 +338,19 @@ const writingTargetPath = computed(() => {
 })
 
 const writingTargetInfo = computed(() => {
-  if (props.obj.type !== 'file') {
+  if (props.item.type !== 'file') {
     throw new Error('Could not compute writingTargetInfo: Was called on non-file object')
   }
 
-  const target = writingTargets.value.find(x => x.path === props.obj.path)
+  const target = writingTargets.value.find(x => x.path === props.item.path)
 
   if (target === undefined) {
     throw new Error('Could not compute writingTargetInfo: No target found')
   }
 
-  let current = props.obj.charCount
+  let current = props.item.charCount
   if (target.mode === 'words') {
-    current = props.obj.wordCount
+    current = props.item.wordCount
   }
 
   let progress = Math.round(current / target.count * 100)
@@ -322,24 +367,24 @@ const writingTargetInfo = computed(() => {
 })
 
 const formattedWordCharCountOfFile = computed(() => {
-  if (props.obj.type !== 'file') {
+  if (props.item.type !== 'file') {
     return '' // Failsafe because code files don't have a word count.
   }
   if (shouldCountChars.value) {
-    return trans('%s characters', localiseNumber(props.obj.charCount))
+    return trans('%s characters', localiseNumber(props.item.charCount))
   } else {
-    return trans('%s words', localiseNumber(props.obj.wordCount))
+    return trans('%s words', localiseNumber(props.item.wordCount))
   }
 })
 
-const formattedSize = computed(() => formatSize(props.obj.size))
+const formattedSize = computed(() => formatSize(props.item.size))
 
 const tagsWithColor = computed<Array<{ name: string, color: string|undefined }>>(() => {
-  if (props.obj.type !== 'file') {
+  if (props.item.type !== 'file') {
     return []
   }
 
-  return props.obj.tags.map(tag => {
+  return props.item.tags.map(tag => {
     return {
       name: tag,
       color: tagStore.coloredTags.find(t => t.name === tag)?.color
@@ -359,7 +404,7 @@ watch(operationType, () => {
 
 // I have no idea why passing this as a Ref to the composable doesn't work, but
 // this way it does.
-watch(toRef(props, 'obj'), function (value) {
+watch(toRef(props, 'item'), function (value) {
   updateObject(value)
 })
 
@@ -373,9 +418,9 @@ function beginDragging (event: DragEvent): void {
   // (only necessary for thin mode)
   emit('begin-dragging')
   event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-    type: props.obj.type, // Can be file, code, or directory
-    path: props.obj.path,
-    id: props.obj.type === 'file' ? props.obj.id : '' // Convenience
+    type: props.item.type, // Can be file, code, or directory
+    path: props.item.path,
+    id: props.item.type === 'file' ? props.item.id : '' // Convenience
   }))
 }
 </script>

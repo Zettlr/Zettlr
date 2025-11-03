@@ -59,7 +59,8 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Now check if there already is a directory/file with the same name
-    if (to.children.find(c => c.name === path.basename(from.name)) !== undefined) {
+    const newPath = path.join(to.path, from.name)
+    if (await this._app.fsal.pathExists(newPath)) {
       this._app.windows.prompt({
         type: 'error',
         title: trans('Cannot move directory or file'),
@@ -77,7 +78,6 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Now we can move the source to the target.
-    const newPath = path.join(to.path, from.name)
     await this._app.fsal.rename(from.path, newPath)
     // Notify the documents provider so it can exchange any files if necessary
     if (await this._app.fsal.isFile(newPath)) {

@@ -32,7 +32,7 @@
           v-on:update="updateDynamics"
         >
           <FileItem
-            v-bind:obj="item.props"
+            v-bind:item="item.props"
             v-bind:active-file="activeDescriptor"
             v-bind:index="0"
             v-bind:window-id="windowId"
@@ -52,7 +52,7 @@
         v-for="item in getDirectoryContents"
         v-bind:key="item.id"
         v-bind:index="0"
-        v-bind:obj="item.props"
+        v-bind:item="item.props"
         v-bind:window-id="windowId"
         v-bind:active-file="activeDescriptor"
         v-on:create-file="handleOperation('file-new', item.id)"
