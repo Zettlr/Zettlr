@@ -28,7 +28,6 @@ import type DocumentManager from '../documents'
 import { DP_EVENTS } from '@dts/common/documents'
 import type FSAL from '../fsal'
 import { extractFromFileDescriptors } from 'source/common/util/extract-from-file-descriptors'
-import type { MDFileDescriptor } from 'source/types/common/fsal'
 import type ConfigProvider from '../config'
 
 /**
@@ -168,23 +167,8 @@ export default class TagProvider extends ProviderContract {
    * @return  {TagRecord[]}  The database
    */
   async getAllTags (): Promise<TagRecord[]> {
-    const allDescriptors: MDFileDescriptor[] = []
-    const { openPaths } = this._config.get()
-
-    for (const path of openPaths) {
-      const contents = await this._fsal.readPathRecursively(path)
-      for (const child of contents) {
-        try {
-          const descriptor = await this._fsal.getDescriptorFor(child)
-
-          if (descriptor.type === 'file') {
-            allDescriptors.push(descriptor)
-          }
-        } catch (err: any) {
-          this._logger.error(`[LinkProvider] Could not fetch descriptor for "${child}": ${err.message}`, err)
-        }
-      }
-    }
+    const allDescriptors = (await this._fsal.getAllLoadedDescriptors())
+      .filter(descriptor => descriptor.type === 'file')
 
     const tagDb = new Map(extractFromFileDescriptors(allDescriptors, 'tags'))
 

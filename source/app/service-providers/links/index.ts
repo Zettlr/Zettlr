@@ -19,7 +19,6 @@ import type LogProvider from '@providers/log'
 import path from 'path'
 import type FSAL from '../fsal'
 import type ConfigProvider from '../config'
-import type { MDFileDescriptor } from 'source/types/common/fsal'
 import { extractFromFileDescriptors } from 'source/common/util/extract-from-file-descriptors'
 
 /**
@@ -76,23 +75,8 @@ export default class LinkProvider extends ProviderContract {
    * Reindexes the entire link database.
    */
   private async reindex () {
-    const allDescriptors: MDFileDescriptor[] = []
-    const { openPaths } = this._config.get()
-
-    for (const path of openPaths) {
-      const contents = await this._fsal.readPathRecursively(path)
-      for (const child of contents) {
-        try {
-          const descriptor = await this._fsal.getDescriptorFor(child)
-
-          if (descriptor.type === 'file') {
-            allDescriptors.push(descriptor)
-          }
-        } catch (err: any) {
-          this._logger.error(`[LinkProvider] Could not fetch descriptor for "${child}": ${err.message}`, err)
-        }
-      }
-    }
+    const allDescriptors = (await this._fsal.getAllLoadedDescriptors())
+      .filter(descriptor => descriptor.type === 'file')
 
     this._fileLinkDatabase = new Map(extractFromFileDescriptors(allDescriptors, 'links'))
     this._idDatabase = new Map(extractFromFileDescriptors(allDescriptors, 'id'))

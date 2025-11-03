@@ -263,26 +263,37 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
+   * Utility function that reads in and returns all descriptors for all loaded
+   * paths and workspaces across the app.
+   *
+   * @return  {Promise<AnyDescriptor>[]}  The descriptors
+   */
+  public async getAllLoadedDescriptors (): Promise<AnyDescriptor[]> {
+    const { openPaths } = this._config.get()
+    const allDescriptors: AnyDescriptor[] = []
+
+    for (const path of openPaths) {
+      const contents = await this.readPathRecursively(path)
+      for (const child of contents) {
+        const descriptor = await this.getDescriptorFor(child)
+        allDescriptors.push(descriptor)
+      }
+    }
+
+    return allDescriptors
+  }
+
+  /**
    * Searches for a file using the query, which can be either an ID (as
    * recognized by the RegExp pattern) or a filename (with or without extension)
    *
    * @param  {string}  query  What to search for
    */
   public async findExact (query: string): Promise<MDFileDescriptor|undefined> {
-    const { zkn, openPaths } = this._config.get()
+    const allFileDescriptors = (await this.getAllLoadedDescriptors())
+      .filter(descriptor => descriptor.type === 'file')
 
-    const allFileDescriptors: MDFileDescriptor[] = []
-
-    for (const path of openPaths) {
-      const contents = await this.readPathRecursively(path)
-      for (const child of contents) {
-        const descriptor = await this.getDescriptorFor(child)
-        if (descriptor.type === 'file') {
-          allFileDescriptors.push(descriptor)
-        }
-      }
-    }
-
+    const { zkn } = this._config.get()
     const isQueryID = getIDRE(zkn.idRE, true).test(query)
     const hasMdExt = hasMarkdownExt(query)
 
@@ -386,6 +397,8 @@ export default class FSAL extends ProviderContract {
    * @param   {MDFileDescriptor|DirDescriptor}  needle   A file or directory descriptor
    *
    * @return  {boolean}                                  Whether needle is in haystack
+   *
+   * @deprecated
    */
   public hasChild (haystack: DirDescriptor, needle: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): boolean {
     // DEBUG DEPRECATED
