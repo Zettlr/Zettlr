@@ -126,6 +126,7 @@
     v-if="showPopover && displayText !== null && item.type === 'directory'"
     v-bind:target="displayText"
     v-bind:directory="item"
+    v-bind:children="children"
     v-on:close="showPopover = false"
   ></PopoverDirProps>
   <PopoverFileProps
