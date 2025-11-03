@@ -29,7 +29,7 @@ export default class DirRename extends ZettlrCommand {
    * @param  {any}     arg An object with the path for the source dir and the new directory name.
    */
   async run (evt: string, arg: { path: string, name: string }): Promise<boolean> {
-    const sourceDir = await this._app.fsal.getAnyDirectoryDescriptor(arg.path, true)
+    const sourceDir = await this._app.fsal.getAnyDirectoryDescriptor(arg.path)
     if (sourceDir === undefined) {
       this._app.log.error('Could not rename directory: Not found.')
       return false

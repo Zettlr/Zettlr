@@ -739,7 +739,7 @@ export default class FSAL extends ProviderContract {
    */
   public async getDescriptorFor (absPath: string): Promise<AnyDescriptor> {
     if (await this.isDir(absPath)) {
-      return await this.getAnyDirectoryDescriptor(absPath, true)
+      return await this.getAnyDirectoryDescriptor(absPath)
     } else {
       return await this.getDescriptorForAnySupportedFile(absPath)
     }
@@ -750,24 +750,19 @@ export default class FSAL extends ProviderContract {
    * not assume that the `children`-list of the directory is always empty!
    *
    * @param   {string}                  absPath  The path to the directory
-   * @param   {boolean}                 shallow  Pass true to prevent the parser
-   *                                             from recursively reading in the
-   *                                             entire file tree if the
-   *                                             directory has not yet been
-   *                                             loaded.
    *
    * @return  {Promise<DirDescriptor>}           The dir descriptor
    *
    * @throws if the path is not a directory
    */
-  public async getAnyDirectoryDescriptor (absPath: string, shallow: boolean = false): Promise<DirDescriptor> {
+  public async getAnyDirectoryDescriptor (absPath: string): Promise<DirDescriptor> {
     if (!await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
     }
 
     const isRoot = this._config.get().openPaths.includes(absPath)
 
-    return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), isRoot, shallow)
+    return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), isRoot, true)
   }
 
   /**

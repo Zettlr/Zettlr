@@ -130,7 +130,7 @@ export default class RootOpen extends ZettlrCommand {
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
-        newDir = await this._app.fsal.getAnyDirectoryDescriptor(newFile.dir, true)
+        newDir = await this._app.fsal.getAnyDirectoryDescriptor(newFile.dir)
       } else if (isDir && this._app.config.get().openPaths.includes(absPath)) {
         // Do nothing
       } else {
