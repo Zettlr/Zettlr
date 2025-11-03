@@ -37,14 +37,20 @@ async function readPathRecursively (absPath: string): Promise<string[]> {
 }
 
 /**
- * Returns a single descriptor from main for the provided path.
+ * Returns a single or multiple descriptors from main for the provided path.
  *
  * @param   {string}                  absPath  The absolute path
  *
  * @return  {Promise<AnyDescriptor>}           The descriptor for path.
  */
-async function getDescriptorFor (absPath: string): Promise<AnyDescriptor> {
-  return await ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: absPath })
+async function getDescriptorFor (absPath: string): Promise<AnyDescriptor>
+async function getDescriptorFor (absPath: string[]): Promise<AnyDescriptor[]>
+async function getDescriptorFor (absPath: string|string[]): Promise<AnyDescriptor|AnyDescriptor[]> {
+  return await ipcRenderer.invoke('fsal', {
+    command: 'get-descriptor',
+    // De-proxy as necessary
+    payload: Array.isArray(absPath) ? absPath.map(p => p) : absPath
+  })
 }
 
 /**
@@ -85,7 +91,6 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   })
 
   watch(openPaths, async (value, oldValue) => {
-    console.log('OpenPaths has changed!', value.map(p => p + '\n'))
     // Retrieve all new paths to load.
     const pathsToLoad: string[] = []
     for (const newPath of value) {
@@ -115,15 +120,14 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   // Keep the descriptor map up to date
   watch(workspaceMap, value => {
     for (const root of value.keys()) {
-      const contents = value.get(root)
-      if (contents === undefined) {
-        throw new Error(`[Workspace Store] Could not retrieve contents for root path "${root}"`)
-      }
-      for (const child of contents) {
-        getDescriptorFor(child)
-          .then(descriptor => descriptorMap.value.set(child, descriptor))
-          .catch(err => console.error(`Could not fetch descriptor for pah "${child}"`, err))
-      }
+      const contents = value.get(root)!
+      getDescriptorFor(contents)
+        .then(descriptors => {
+          for (const descriptor of descriptors) {
+            descriptorMap.value.set(descriptor.path, descriptor)
+          }
+        })
+        .catch(err => console.error(`Could not fetch descriptors for path "${root}"`, err))
     }
   }, { deep: true })
 

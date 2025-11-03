@@ -92,8 +92,12 @@ export default class FSAL extends ProviderContract {
         return await this.readPathRecursively(payload)
       } else if (command === 'read-directory' && typeof payload === 'string') {
         return await this.readDirectory(payload)
-      } else if (command === 'get-descriptor' && typeof payload === 'string') {
-        return await this.getDescriptorFor(payload)
+      } else if (command === 'get-descriptor' && (typeof payload === 'string' || Array.isArray(payload) && payload.every(p => typeof p === 'string'))) {
+        if (Array.isArray(payload)) {
+          return await Promise.all(payload.map(absPath => this.getDescriptorFor(absPath)))
+        } else {
+          return await this.getDescriptorFor(payload)
+        }
       }
     })
   } // END constructor
