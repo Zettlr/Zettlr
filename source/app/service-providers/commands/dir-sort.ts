@@ -30,7 +30,7 @@ export default class DirSort extends ZettlrCommand {
   async run (evt: string, arg: { path: string, sorting: SortMethod }): Promise<boolean> {
     const dir = await this._app.fsal.getAnyDirectoryDescriptor(arg.path, true)
     if (dir !== undefined) {
-      await this._app.fsal.sortDirectory(dir, arg.sorting)
+      await this._app.fsal.changeSorting(dir, arg.sorting)
       return true
     }
 

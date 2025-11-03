@@ -148,7 +148,6 @@ export async function parse (
   currentPath: string,
   cache: FSALCache,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: AnyDescriptor[], sortingType?: SortMethod) => AnyDescriptor[],
   isRoot: boolean,
   shallow: boolean = false
 ): Promise<DirDescriptor> {
@@ -203,7 +202,7 @@ export async function parse (
     }
 
     if (isDir(absolutePath) && !ignoreDir(absolutePath)) {
-      const cDir = await parse(absolutePath, cache, parser, sorter, false)
+      const cDir = await parse(absolutePath, cache, parser, false)
       dir.children.push(cDir)
     } else if (hasMarkdownExt(absolutePath)) {
       const file = await FSALFile.parse(absolutePath, cache, parser, false)
@@ -216,8 +215,6 @@ export async function parse (
     } // Else: Probably a symlink TODO
   }
 
-  // Finally sort and return the directory object
-  sortChildren(dir, sorter)
   return dir
 }
 
@@ -264,11 +261,7 @@ export async function setSetting (dirObject: DirDescriptor, settings: Partial<Di
  * @param   {DirDescriptor}  dirObject  The directory object
  * @param   {string}         method     The sorting method
  */
-export async function sort (
-  dirObject: DirDescriptor,
-  sorter: (arr: AnyDescriptor[], sortingType?: SortMethod) => AnyDescriptor[],
-  method?: SortMethod
-): Promise<void> {
+export async function changeSorting (dirObject: DirDescriptor, method?: SortMethod): Promise<void> {
   // If the caller omits the method, it should remain unchanged
   if (method === undefined) {
     method = dirObject.settings.sorting
@@ -277,7 +270,6 @@ export async function sort (
   dirObject.settings.sorting = method
   // Persist the settings to disk
   await persistSettings(dirObject)
-  sortChildren(dirObject, sorter)
 }
 
 /**
@@ -393,7 +385,6 @@ export async function renameChild (
   oldName: string,
   newName: string,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache,
   forceOverwrite: boolean = false
 ): Promise<void> {
@@ -429,7 +420,7 @@ export async function renameChild (
   // Add the new descriptor
   if (isDir(newPath)) {
     // Rescan the new dir to get all new file information
-    const descriptor = await parse(newPath, cache, parser, sorter, false)
+    const descriptor = await parse(newPath, cache, parser, false)
     dirObject.children.push(descriptor)
   } else if (hasMarkdownExt(newPath)) {
     const descriptor = await FSALFile.parse(newPath, cache, parser, false)
@@ -441,9 +432,6 @@ export async function renameChild (
     const descriptor = await FSALAttachment.parse(newPath)
     dirObject.children.push(descriptor)
   }
-
-  // Sort the children
-  sortChildren(dirObject, sorter)
 }
 
 /**
@@ -458,7 +446,6 @@ export async function move (
   sourceObject: AnyDescriptor,
   targetDir: DirDescriptor,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache
 ): Promise<void> {
   // Moves anything into the target. We'll use fs.rename for that.
@@ -474,7 +461,7 @@ export async function move (
   // Re-read the source
   let newSource
   if (sourceObject.type === 'directory') {
-    newSource = await parse(targetPath, cache, parser, sorter, false)
+    newSource = await parse(targetPath, cache, parser, false)
   } else if (sourceObject.type === 'file') {
     newSource = await FSALFile.parse(targetPath, cache, parser, false)
   } else if (sourceObject.type === 'code') {
@@ -485,9 +472,6 @@ export async function move (
 
   // Add it to the new target
   targetDir.children.push(newSource)
-
-  // Finally resort the target. Now the state should be good to go.
-  sortChildren(targetDir, sorter)
 }
 
 export async function addAttachment (dirObject: DirDescriptor, attachmentPath: string): Promise<void> {
@@ -505,17 +489,15 @@ export async function addChild (
   dirObject: DirDescriptor,
   childPath: string,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache
 ): Promise<void> {
   if (isDir(childPath)) {
-    dirObject.children.push(await parse(childPath, cache, parser, sorter, false))
+    dirObject.children.push(await parse(childPath, cache, parser, false))
   } else if (hasCodeExt(childPath)) {
     dirObject.children.push(await FSALCodeFile.parse(childPath, cache, false))
   } else if (hasMarkdownExt(childPath)) {
     dirObject.children.push(await FSALFile.parse(childPath, cache, parser, false))
   }
-  sortChildren(dirObject, sorter)
 }
 
 export async function removeChild (dirObject: DirDescriptor, childPath: string, deleteOnFail: boolean, logger: LogProvider): Promise<void> {

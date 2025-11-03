@@ -21,7 +21,6 @@ import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
 import FSALWatchdog from './fsal-watchdog'
 import FSALCache from './fsal-cache'
-import { type GenericSorter, getSorter } from '@common/util/directory-sorter'
 import type {
   DirDescriptor,
   MDFileDescriptor,
@@ -385,24 +384,7 @@ export default class FSAL extends ProviderContract {
    * @return  {Function}  A parser that can be passed to FSAL functions involving files
    */
   public getMarkdownFileParser (): (file: MDFileDescriptor, content: string) => void {
-    const { idRE } = this._config.get().zkn
-    return getMarkdownFileParser(idRE)
-  }
-
-  /**
-   * Returns a directory sorter based on the config.
-   *
-   * @return  {GenericSorter}The sorter
-   */
-  public getDirectorySorter (): GenericSorter {
-    const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = this._config.get()
-    return getSorter(
-      sorting,
-      sortFoldersFirst,
-      fileNameDisplay,
-      appLang,
-      fileMetaTime
-    )
+    return getMarkdownFileParser(this._config.get().zkn.idRE)
   }
 
   /**
@@ -428,10 +410,8 @@ export default class FSAL extends ProviderContract {
     return false
   }
 
-  // TODO/DEBUG: MOVE TO WORKSPACES PROVIDER OR ROOT
-  public async sortDirectory (src: DirDescriptor, sorting?: SortMethod): Promise<void> {
-    const sorter = this.getDirectorySorter()
-    await FSALDir.sort(src, sorter, sorting)
+  public async changeSorting (src: DirDescriptor, sorting?: SortMethod): Promise<void> {
+    await FSALDir.changeSorting(src, sorting)
   }
 
   /**
@@ -787,7 +767,7 @@ export default class FSAL extends ProviderContract {
 
     const isRoot = this._config.get().openPaths.includes(absPath)
 
-    return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), this.getDirectorySorter(), isRoot, shallow)
+    return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), isRoot, shallow)
   }
 
   /**
