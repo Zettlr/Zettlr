@@ -16,9 +16,11 @@ import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '@providers/log'
-import type WorkspaceProvider from '@providers/workspaces'
-import { WORKSPACE_PROVIDER_EVENTS } from '@providers/workspaces'
 import path from 'path'
+import type FSAL from '../fsal'
+import type ConfigProvider from '../config'
+import type { MDFileDescriptor } from 'source/types/common/fsal'
+import { extractFromFileDescriptors } from 'source/common/util/extract-from-file-descriptors'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
@@ -31,7 +33,7 @@ export default class LinkProvider extends ProviderContract {
   /**
    * Create the instance on program start and initially load the tags.
    */
-  constructor (private readonly _logger: LogProvider, private readonly _workspaces: WorkspaceProvider) {
+  constructor (private readonly _logger: LogProvider, private readonly _config: ConfigProvider, private readonly _fsal: FSAL) {
     super()
 
     this._fileLinkDatabase = new Map()
@@ -39,7 +41,7 @@ export default class LinkProvider extends ProviderContract {
     // TODO: Add a set of duplicate IDs so we can inform the user so they can
     // fix this
 
-    ipcMain.handle('link-provider', (event, message) => {
+    ipcMain.handle('link-provider', async (event, message) => {
       const { command } = message
 
       if (command === 'get-inbound-links') {
@@ -47,7 +49,7 @@ export default class LinkProvider extends ProviderContract {
         const { filePath } = message.payload
         return {
           inbound: this.retrieveInbound(filePath),
-          outbound: this.retrieveOutbound(filePath)
+          outbound: await this.retrieveOutbound(filePath)
         }
       } else if (command === 'get-link-database') {
         // NOTE: We need to compact the Map into something JSONable
@@ -58,18 +60,42 @@ export default class LinkProvider extends ProviderContract {
 
   public async boot (): Promise<void> {
     // Listen to state changes within the Workspaces Provider
-    this._workspaces.on(WORKSPACE_PROVIDER_EVENTS.WorkspaceChanged, (_which) => {
+    this._fsal.on('fsal-event', () => {
       // Some workspace has changed, so simply pull in the new map
-      this._fileLinkDatabase = this._workspaces.getLinks()
-      this._idDatabase = this._workspaces.getIds()
+      this.reindex().catch(err => this._logger.error(`[LinkProvider] Could not update link and ID database: ${err.message}`, err))
       // TODO: That can actually be determined fully with the workspaces events
       // i.e., we don't have to emit this here!
       broadcastIpcMessage('links')
     })
 
     // Pull in the initial update
-    this._fileLinkDatabase = this._workspaces.getLinks()
-    this._idDatabase = this._workspaces.getIds()
+    await this.reindex()
+  }
+
+  /**
+   * Reindexes the entire link database.
+   */
+  private async reindex () {
+    const allDescriptors: MDFileDescriptor[] = []
+    const { openPaths } = this._config.get()
+
+    for (const path of openPaths) {
+      const contents = await this._fsal.readPathRecursively(path)
+      for (const child of contents) {
+        try {
+          const descriptor = await this._fsal.getDescriptorFor(child)
+
+          if (descriptor.type === 'file') {
+            allDescriptors.push(descriptor)
+          }
+        } catch (err: any) {
+          this._logger.error(`[LinkProvider] Could not fetch descriptor for "${child}": ${err.message}`, err)
+        }
+      }
+    }
+
+    this._fileLinkDatabase = new Map(extractFromFileDescriptors(allDescriptors, 'links'))
+    this._idDatabase = new Map(extractFromFileDescriptors(allDescriptors, 'id'))
   }
 
   /**
@@ -116,7 +142,7 @@ export default class LinkProvider extends ProviderContract {
    *
    * @return  {string[]}                  A list of outbound links from source
    */
-  retrieveOutbound (sourceFilePath: string): string[] {
+  async retrieveOutbound (sourceFilePath: string): Promise<string[]> {
     const dbLinks = this._fileLinkDatabase.get(sourceFilePath)
     if (dbLinks === undefined) {
       return []
@@ -125,8 +151,7 @@ export default class LinkProvider extends ProviderContract {
     const outboundLinks: string[] = []
 
     for (const link of dbLinks) {
-      // TODO: findExact must move into the workspaces from the FSAL
-      const descriptor = this._workspaces.findExact(link)
+      const descriptor = await this._fsal.findExact(link)
       if (descriptor !== undefined) {
         outboundLinks.push(descriptor.path)
       }

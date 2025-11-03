@@ -49,7 +49,7 @@ export default class ForceOpen extends ZettlrCommand {
 
     const filename = linkContents.includes('#') ? linkContents.slice(0, linkContents.indexOf('#')) : linkContents
 
-    const file = this._app.workspaces.findExact(filename)
+    const file = await this._app.fsal.findExact(filename)
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file !== undefined) {

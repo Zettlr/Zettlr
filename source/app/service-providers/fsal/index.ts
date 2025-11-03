@@ -35,7 +35,7 @@ import type { SearchTerm } from '@dts/common/search'
 import ProviderContract from '@providers/provider-contract'
 import { app, ipcMain } from 'electron'
 import type LogProvider from '@providers/log'
-import { hasMarkdownExt, hasCodeExt } from '@common/util/file-extention-checks'
+import { hasMarkdownExt, hasCodeExt, MD_EXT } from '@common/util/file-extention-checks'
 import getMarkdownFileParser from './util/file-parser'
 import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
@@ -46,6 +46,7 @@ import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
 import { closeSplashScreen, showSplashScreen, updateSplashScreen } from './util/splash-screen'
 import { trans } from 'source/common/i18n-main'
 import type { EventName } from 'chokidar/handler'
+import { getIDRE } from 'source/common/regular-expressions'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -123,16 +124,16 @@ export default class FSAL extends ProviderContract {
   }
 
   // Enable global event listening to updates of the config
-  on (evt: EventName, callback: (...args: any[]) => void): void {
+  on (evt: 'fsal-event', callback: (event: FSALEventPayload) => void): void {
     this._emitter.on(evt, callback)
   }
 
-  once (evt: EventName, callback: (...args: any[]) => void): void {
+  once (evt: 'fsal-event', callback: (event: FSALEventPayload) => void): void {
     this._emitter.once(evt, callback)
   }
 
   // Also do the same for the removal of listeners
-  off (evt: EventName, callback: (...args: any[]) => void): void {
+  off (evt: 'fsal-event', callback: (event: FSALEventPayload) => void): void {
     this._emitter.off(evt, callback)
   }
 
@@ -259,6 +260,47 @@ export default class FSAL extends ProviderContract {
 
     clearTimeout(timeout)
     closeSplashScreen()
+  }
+
+  /**
+   * Searches for a file using the query, which can be either an ID (as
+   * recognized by the RegExp pattern) or a filename (with or without extension)
+   *
+   * @param  {string}  query  What to search for
+   */
+  public async findExact (query: string): Promise<MDFileDescriptor|undefined> {
+    const { zkn, openPaths } = this._config.get()
+
+    const allFileDescriptors: MDFileDescriptor[] = []
+
+    for (const path of openPaths) {
+      const contents = await this.readPathRecursively(path)
+      for (const child of contents) {
+        const descriptor = await this.getDescriptorFor(child)
+        if (descriptor.type === 'file') {
+          allFileDescriptors.push(descriptor)
+        }
+      }
+    }
+
+    const isQueryID = getIDRE(zkn.idRE, true).test(query)
+    const hasMdExt = hasMarkdownExt(query)
+
+    for (const descriptor of allFileDescriptors) {
+      if (isQueryID && descriptor.id === query) {
+        return descriptor
+      }
+
+      if (hasMdExt && descriptor.name === query) {
+        return descriptor
+      }
+
+      for (const type of MD_EXT) {
+        if (descriptor.name === query + type) {
+          return descriptor
+        }
+      }
+    }
   }
 
   /**
@@ -651,6 +693,8 @@ export default class FSAL extends ProviderContract {
    * @param   {string}   absPath  The path to the file
    *
    * @return  {Promise<MDFileDescriptor>}           Resolves with the descriptor
+   *
+   * @throws if the path is not a file
    */
   public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
     if (await this.isDir(absPath)) {
@@ -696,6 +740,8 @@ export default class FSAL extends ProviderContract {
    * @param   {string}   absPath     The path to load
    *
    * @return  {Promise}              Promise resolves with any descriptor
+   *
+   * @throws if the path does not exist
    */
   public async getDescriptorFor (absPath: string): Promise<AnyDescriptor> {
     if (await this.isDir(absPath)) {
@@ -717,6 +763,8 @@ export default class FSAL extends ProviderContract {
    *                                             loaded.
    *
    * @return  {Promise<DirDescriptor>}           The dir descriptor
+   *
+   * @throws if the path is not a directory
    */
   public async getAnyDirectoryDescriptor (absPath: string, shallow: boolean = false): Promise<DirDescriptor> {
     if (!await this.isDir(absPath)) {

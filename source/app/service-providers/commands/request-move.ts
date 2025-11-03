@@ -24,14 +24,15 @@ export default class RequestMove extends ZettlrCommand {
 
   /**
    * Move a directory around. Or a file.
-   * @param {String} evt The event name
-   * @param  {Object} arg The origin and the destination
-   * @return {Boolean}     Whether or not the command succeeded.
+   *
+   * @param  {string}   evt  The event name
+   * @param  {any}      arg  The origin and the destination
+   * @return {boolean}       Whether or not the command succeeded.
    */
   async run (evt: string, arg: { from: string, to: string }): Promise<boolean> {
     // arg contains from and to. Prepare the necessary variables
-    const from = this._app.workspaces.find(arg.from)
-    const to = this._app.workspaces.findDir(arg.to)
+    const from = await this._app.fsal.getDescriptorFor(arg.from)
+    const to = await this._app.fsal.getAnyDirectoryDescriptor(arg.to)
 
     if (to === undefined || from === undefined) {
       // If findDir doesn't return anything then it's a file

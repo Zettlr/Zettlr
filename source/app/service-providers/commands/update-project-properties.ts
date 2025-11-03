@@ -31,7 +31,7 @@ export default class UpdateProjectProperties extends ZettlrCommand {
     // expects them already in their expanded state.
     // let expanded = expandOptionObject(arg.properties)
     // Find the directory, and apply the properties to it!
-    const dir = this._app.workspaces.findDir(arg.path)
+    const dir = await this._app.fsal.getAnyDirectoryDescriptor(arg.path, true)
     if (dir !== undefined) {
       await this._app.fsal.updateProject(dir, arg.properties)
     } else {

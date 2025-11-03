@@ -24,9 +24,12 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
-import type WorkspaceProvider from '@providers/workspaces'
 import type DocumentManager from '../documents'
 import { DP_EVENTS } from '@dts/common/documents'
+import type FSAL from '../fsal'
+import { extractFromFileDescriptors } from 'source/common/util/extract-from-file-descriptors'
+import type { MDFileDescriptor } from 'source/types/common/fsal'
+import type ConfigProvider from '../config'
 
 /**
  * This interface describes a single tag within the files loaded in here.
@@ -74,18 +77,19 @@ export default class TagProvider extends ProviderContract {
   constructor (
     private readonly _logger: LogProvider,
     private readonly _docs: DocumentManager,
-    private readonly _workspaces: WorkspaceProvider
+    private readonly _config: ConfigProvider,
+    private readonly _fsal: FSAL
   ) {
     super()
     this._file = path.join(app.getPath('userData'), 'tags.json')
     this._coloredTags = []
     this.container = new PersistentDataContainer(this._file, 'json')
 
-    ipcMain.handle('tag-provider', (event, message) => {
+    ipcMain.handle('tag-provider', async (event, message) => {
       const { command } = message
 
       if (command === 'get-all-tags') {
-        return this.getAllTags()
+        return await this.getAllTags()
       } else if (command === 'set-colored-tags') {
         const { payload } = message
         this.setColoredTags(payload)
@@ -163,9 +167,28 @@ export default class TagProvider extends ProviderContract {
    *
    * @return  {TagRecord[]}  The database
    */
-  getAllTags (): TagRecord[] {
+  async getAllTags (): Promise<TagRecord[]> {
+    const allDescriptors: MDFileDescriptor[] = []
+    const { openPaths } = this._config.get()
+
+    for (const path of openPaths) {
+      const contents = await this._fsal.readPathRecursively(path)
+      for (const child of contents) {
+        try {
+          const descriptor = await this._fsal.getDescriptorFor(child)
+
+          if (descriptor.type === 'file') {
+            allDescriptors.push(descriptor)
+          }
+        } catch (err: any) {
+          this._logger.error(`[LinkProvider] Could not fetch descriptor for "${child}": ${err.message}`, err)
+        }
+      }
+    }
+
+    const tagDb = new Map(extractFromFileDescriptors(allDescriptors, 'tags'))
+
     const ret: TagRecord[] = []
-    const tagDb = this._workspaces.getTags()
 
     const tagToFileMap = new Map()
     for (const [ file, tags ] of [...tagDb]) {

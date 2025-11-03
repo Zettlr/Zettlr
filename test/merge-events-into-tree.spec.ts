@@ -18,7 +18,7 @@ import { mergeEventsIntoTree } from '@providers/workspaces/merge-events-into-tre
 import type { DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import type { ChangeDescriptor } from '@providers/workspaces/root'
 import _ from 'lodash'
-import { getSorter } from '@providers/fsal/util/directory-sorter'
+import { getSorter } from '@common/util/directory-sorter'
 
 const infile: MDFileDescriptor = {
   path: '/path/file.md',

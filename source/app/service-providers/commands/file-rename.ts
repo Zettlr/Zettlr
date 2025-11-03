@@ -28,10 +28,11 @@ export default class FileRename extends ZettlrCommand {
 
   /**
    * Rename a file
-   * @param {string} evt The event name
-   * @param  {Object} arg An object containing hash of containing and name of new dir.
+   *
+   * @param  {string}  evt  The event name
+   * @param  {any}     arg  An object containing hash of containing and name of new dir.
    */
-  async run (evt: string, arg: any): Promise<void> {
+  async run (evt: string, arg: { path: string, name: string }): Promise<void> {
     // We need to prepare the name to be correct for
     // accurate checking whether or not the file
     // already exists
@@ -47,7 +48,7 @@ export default class FileRename extends ZettlrCommand {
       newName += '.md'
     }
 
-    const file = this._app.workspaces.findFile(arg.path)
+    const file = await this._app.fsal.getDescriptorForAnySupportedFile(arg.path)
     if (file === undefined) {
       return this._app.log.error(`Could not find file ${String(arg.path)}`)
     }
@@ -79,7 +80,7 @@ export default class FileRename extends ZettlrCommand {
     // Thus, we need to check two conditions: Whether the user has requested a
     // case change only, and whethere there is a DIFFERENT file at that new
     // place.
-    const newPathFile = this._app.workspaces.findFile(newPath)
+    const newPathFile = await this._app.fsal.getDescriptorForAnySupportedFile(newPath)
     const caseChangeOnly = newName.toLowerCase() === file.name.toLowerCase()
 
     if (await this._app.fsal.pathExists(newPath)) {
