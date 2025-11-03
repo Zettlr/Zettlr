@@ -122,7 +122,6 @@ export default class FSAL extends ProviderContract {
       if (which === 'openPaths') {
         this.syncRoots()
           .then(() => {
-            console.log('Reindexing after config update!')
             // Always reindex all files after config updates later on.
             this.reindexFiles().catch(err => this._logger.error(`[FSAL] Could not reindex files: ${err.message}`, err))
           })
@@ -252,7 +251,6 @@ export default class FSAL extends ProviderContract {
 
     for (const absPath of pathsToIndex) {
       currentPercent += increment
-      console.log({ increment, currentPercent, files: pathsToIndex.length })
       if (onFile !== undefined) {
         onFile(absPath, currentPercent)
       }

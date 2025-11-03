@@ -20,6 +20,7 @@ import { trans } from '@common/i18n-main'
 import replaceLinks from '@common/util/replace-links'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import type { AppServiceContainer } from 'source/app/app-service-container'
+import pathExists from 'source/common/util/path-exists'
 
 export default class FileRename extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
@@ -80,12 +81,11 @@ export default class FileRename extends ZettlrCommand {
     // Thus, we need to check two conditions: Whether the user has requested a
     // case change only, and whethere there is a DIFFERENT file at that new
     // place.
-    const newPathFile = await this._app.fsal.getDescriptorForAnySupportedFile(newPath)
     const caseChangeOnly = newName.toLowerCase() === file.name.toLowerCase()
 
     if (await this._app.fsal.pathExists(newPath)) {
       // The file system reports the newPath already exists.
-      if (caseChangeOnly && (newPathFile === undefined || newPathFile === file)) {
+      if (caseChangeOnly && await pathExists(newPath)) {
         // The user only changed the case. Based on the second check, it appears
         // that this file system is case-insensitive, which means that the
         // reason `pathExists()` has returned true is because it confirms the

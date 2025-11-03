@@ -116,7 +116,10 @@ export default class TagProvider extends ProviderContract {
       // changed. I think it's okay to do so, but in the future we may need to
       // add a sanity check before simply emitting this event, especially if we
       // do something to make the `getAllTags` method take significantly longer.
-      broadcastIpcMessage('tag-provider', 'tags-updated', this.getAllTags())
+      this.getAllTags()
+        .then(tags => broadcastIpcMessage('tag-provider', 'tags-updated', tags))
+        .catch(err => this._logger.error(`[TagProvider] Could not update tag database: ${err.message}`, err))
+      
     })
   }
 

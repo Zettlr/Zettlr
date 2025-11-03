@@ -140,10 +140,23 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   // Finally, listen to FSAL events and keep the descriptor map updated.
   ipcRenderer.on('fsal-event', (_, payload: FSALEventPayload) => {
     if (payload.event === 'unlink' || payload.event === 'unlinkDir') {
+      const root = [...workspaceMap.value.keys()].find(p => payload.path.startsWith(p))
+      if (root !== undefined) {
+        const arr = workspaceMap.value.get(root)!
+        arr.splice(arr.indexOf(payload.path), 1)
+        workspaceMap.value.set(root, arr)
+      }
+
       descriptorMap.value.delete(payload.path)
-    } else {
-      const { descriptor } = (payload as FSALEventPayloadChange)
-      descriptorMap.value.set(descriptor.path, descriptor)
+    } else if (payload.event === 'change' || payload.event === 'add' || payload.event === 'addDir') {
+      const root = [...workspaceMap.value.keys()].find(p => payload.descriptor.path.startsWith(p))
+      if (root !== undefined && payload.event !== 'change') {
+        const arr = workspaceMap.value.get(root)!
+        arr.push(payload.descriptor.path)
+        workspaceMap.value.set(root, arr)
+      }
+
+      descriptorMap.value.set(payload.descriptor.path, payload.descriptor)
     }
   })
 

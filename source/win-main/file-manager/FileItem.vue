@@ -201,7 +201,6 @@ async function fetchChildren (): Promise<void> {
 }
 
 onMounted(async () => {
-  await fetchChildren()
   ipcRenderer.on('fsal-event', (_, payload: FSALEventPayload) => {
     const affectedPath = payload.event === 'unlink' || payload.event === 'unlinkDir'
       ? payload.path
@@ -233,6 +232,10 @@ onMounted(async () => {
     // of children.
     fetchChildren().catch(err => console.error(`[TreeItem] Could not fetch children for item "${props.item.path}": ${err.message}`, err))
   })
+
+  if (props.item.type === 'directory') {
+    await fetchChildren()
+  }
 })
 
 const {
