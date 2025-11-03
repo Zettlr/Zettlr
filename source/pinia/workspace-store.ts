@@ -14,7 +14,7 @@
  */
 
 import { defineStore, storeToRefs } from 'pinia'
-import { ref, watch, computed } from 'vue'
+import { ref, watch } from 'vue'
 import { useConfigStore } from './config'
 import type { OtherFileDescriptor, AnyDescriptor } from 'source/types/common/fsal'
 import { useDocumentTreeStore } from '.'
@@ -67,7 +67,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   const { lastLeafActiveFile } = storeToRefs(documentTreeStore)
 
   // SECTION 1: WORKSPACES AND FILE DESCRIPTORS
-  const openPaths = computed(() => configStore.config.openPaths)
+  const openPaths = ref(configStore.config.openPaths)
 
   const workspaceMap = ref<Map<string, string[]>>(new Map())
   const descriptorMap = ref<Map<string, AnyDescriptor>>(new Map())
@@ -80,7 +80,12 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   }
 
   // Update the loaded workspaces as soon as the openPaths property changes.
+  configStore.$subscribe((_mutation, state) => {
+    openPaths.value = state.config.openPaths
+  })
+
   watch(openPaths, async (value, oldValue) => {
+    console.log('OpenPaths has changed!', value.map(p => p + '\n'))
     // Retrieve all new paths to load.
     const pathsToLoad: string[] = []
     for (const newPath of value) {

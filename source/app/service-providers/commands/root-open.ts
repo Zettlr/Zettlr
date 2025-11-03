@@ -131,7 +131,7 @@ export default class RootOpen extends ZettlrCommand {
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
         newDir = await this._app.fsal.getAnyDirectoryDescriptor(newFile.dir, true)
-      } else if (isDir && (newDir = await this._app.fsal.getAnyDirectoryDescriptor(absPath, true)) != null) {
+      } else if (isDir && this._app.config.get().openPaths.includes(absPath)) {
         // Do nothing
       } else {
         // The path is not yet loaded -> load it now. NOTE: Adding a path will
