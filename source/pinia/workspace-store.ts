@@ -21,7 +21,7 @@ import { useDocumentTreeStore } from '.'
 import { isAbsolutePath, pathDirname, pathExtname, resolvePath } from 'source/common/util/renderer-path-polyfill'
 import { trans } from 'source/common/i18n-renderer'
 import { hasImageExt, hasDataExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
-import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
+import type { FSALEventPayload } from 'source/app/service-providers/fsal'
 
 const ipcRenderer = window.ipc
 
