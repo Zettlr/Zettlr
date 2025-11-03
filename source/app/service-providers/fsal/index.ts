@@ -43,8 +43,6 @@ import { safeDelete } from './util/safe-delete'
 import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
 import ignoreDir from 'source/common/util/ignore-dir'
 import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
-import { closeSplashScreen, showSplashScreen, updateSplashScreen } from './util/splash-screen'
-import { trans } from 'source/common/i18n-main'
 import type { EventName } from 'chokidar/handler'
 import { getIDRE } from 'source/common/regular-expressions'
 import generateStats, { type WorkspacesStatistics } from './util/generate-stats'
@@ -117,13 +115,21 @@ export default class FSAL extends ProviderContract {
       }
     }
 
+    // No reindexing here. Since we're booting, and reindexing takes some time,
+    // we def this to the application container which can show a splash screen.
     await this.syncRoots()
 
     this._config.on('update', (which: string) => {
       if (which === 'openPaths') {
-        this.syncRoots().catch(err => {
-          this._logger.error(`[FSAL] Could not synchronize paths: ${err.message as string}`, err)
-        })
+        this.syncRoots()
+          .then(() => {
+            console.log('Reindexing after config update!')
+            // Always reindex all files after config updates later on.
+            this.reindexFiles().catch(err => this._logger.error(`[FSAL] Could not reindex files: ${err.message}`, err))
+          })
+          .catch(err => {
+            this._logger.error(`[FSAL] Could not synchronize paths: ${err.message as string}`, err)
+          })
       }
     })
   }
@@ -220,22 +226,13 @@ export default class FSAL extends ProviderContract {
         this.watchers.delete(rootPath)
       }
     }
-
-    // Always reindex all files
-    await this.reindexFiles()
   }
 
   /**
    * This function ensures that all files anywhere within the loaded paths are
    * properly indexed in the cache for fast access.
    */
-  private async reindexFiles (): Promise<void> {
-    // If the indexing isn't done after 1 second, begin displaying a splash
-    // screen to indicate to the user that things are happening, even if the
-    // main window(s) don't yet show.
-    const timeout = setTimeout(() => {
-      showSplashScreen(this._logger)
-    }, 1000)
+  public async reindexFiles (onFile?: (absPath: string, percent: number) => void): Promise<void> {
     let currentPercent = 0
 
     // Start a timer to measure how long the roots take to load.
@@ -249,11 +246,18 @@ export default class FSAL extends ProviderContract {
       
     }
 
-    // Now we have one large list of files to reindex. (This also allows us to
-    // have a more precise splashscreen indicator)
+    // Round the increment to 4 digits after the period.
+    const roundToDigits = 4
+    const factor = 10 ** roundToDigits
+    const increment = Math.round(100 / pathsToIndex.length * factor) / factor
+
     for (const absPath of pathsToIndex) {
-      updateSplashScreen(trans('Indexing %s…', path.basename(absPath)), currentPercent)
-      currentPercent += Math.round(1 / pathsToIndex.length * 100)
+      currentPercent += increment
+      console.log({ increment, currentPercent, files: pathsToIndex.length })
+      if (onFile !== undefined) {
+        onFile(absPath, currentPercent)
+      }
+
       // Requesting the descriptor will, behind the scenes, check for cache hits
       // and automatically recache if necessary.
       await this.getDescriptorFor(absPath)
@@ -262,9 +266,6 @@ export default class FSAL extends ProviderContract {
     const duration = performance.now() - start
     // Round to max. two positions after the period
     this._logger.info(`[FSAL] Re-indexed workspaces in ${Math.floor(duration / 1000 * 100) / 100} seconds`)
-
-    clearTimeout(timeout)
-    closeSplashScreen()
   }
 
   /**

@@ -35,6 +35,9 @@ import TrayProvider from '@providers/tray'
 import UpdateProvider from '@providers/updates'
 import WindowProvider from '@providers/windows'
 import { dialog } from 'electron'
+import { closeSplashScreen, showSplashScreen, updateSplashScreen } from './util/splash-screen'
+import path from 'path'
+import { trans } from 'source/common/i18n-main'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -147,6 +150,24 @@ export class AppServiceContainer {
 
     await this._informativeBoot(this._appearanceProvider, 'AppearanceProvider')
     await this._informativeBoot(this._dictionaryProvider, 'DictionaryProvider')
+
+    // Reindex every file if necessary. Needs to come after appearance provider
+    // and CSS provider (due to splashscreen), and before anything that accesses
+    // the FSAL.
+    // If the indexing isn't done after 1 second, begin displaying a splash
+    // screen to indicate to the user that things are happening, even if the
+    // main window(s) don't yet show.
+    const timeout = setTimeout(() => {
+      showSplashScreen(this.log)
+    }, 1000)
+
+    await this.fsal.reindexFiles((absPath, currentPercent) => {
+      updateSplashScreen(trans('Indexing %s…', path.basename(absPath)), currentPercent)
+    })
+
+    clearTimeout(timeout)
+    closeSplashScreen()
+
 
     await this._informativeBoot(this._targetProvider, 'TargetProvider')
     await this._informativeBoot(this._linkProvider, 'LinkProvider')
