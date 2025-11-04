@@ -34,7 +34,6 @@
  */
 
 import MarkdownEditor, { type EditorViewPersistentState } from '@common/modules/markdown-editor'
-import objectToArray from '@common/util/object-to-array'
 
 import { ref, computed, onMounted, onBeforeUnmount, watch, toRef, onUpdated } from 'vue'
 import { type EditorCommands } from './App.vue'
@@ -42,7 +41,7 @@ import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
-import type { AnyDescriptor, CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
@@ -404,22 +403,7 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
 })
 
 const fsalFiles = computed<MDFileDescriptor[]>(() => {
-  const tree = workspaceStore.rootDescriptors
-  const files = []
-
-  for (const item of tree) {
-    if (item.type === 'directory') {
-      const contents = objectToArray<AnyDescriptor>(item, 'children')
-        .filter((descriptor): descriptor is MDFileDescriptor => {
-          return descriptor.type === 'file'
-        })
-      files.push(...contents)
-    } else if (item.type === 'file') {
-      files.push(item)
-    }
-  }
-
-  return files
+  return [...workspaceStore.descriptorMap.values()].filter(d => d.type === 'file')
 })
 
 // WATCHERS
