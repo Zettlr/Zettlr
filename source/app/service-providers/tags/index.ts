@@ -119,7 +119,6 @@ export default class TagProvider extends ProviderContract {
       this.getAllTags()
         .then(tags => broadcastIpcMessage('tag-provider', 'tags-updated', tags))
         .catch(err => this._logger.error(`[TagProvider] Could not update tag database: ${err.message}`, err))
-      
     })
   }
 
@@ -152,7 +151,9 @@ export default class TagProvider extends ProviderContract {
     this._coloredTags = uniqueTags
     this.container.set(this._coloredTags)
     broadcastIpcMessage('tag-provider', 'colored-tags-updated', this.getColoredTags())
-    broadcastIpcMessage('tag-provider', 'tags-updated', this.getAllTags())
+    this.getAllTags()
+      .then(tags => broadcastIpcMessage('tag-provider', 'tags-updated', tags))
+      .catch(err => this._logger.error(`[TagProvider] Could not fetch tags: ${err.message}`, err))
   }
 
   /**
