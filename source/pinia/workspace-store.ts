@@ -14,7 +14,7 @@
  */
 
 import { defineStore, storeToRefs } from 'pinia'
-import { ref, watch } from 'vue'
+import { type Ref, ref, watch } from 'vue'
 import { useConfigStore } from './config'
 import type { OtherFileDescriptor, AnyDescriptor } from 'source/types/common/fsal'
 import { useDocumentTreeStore } from '.'
@@ -66,6 +66,29 @@ async function readDirectory (absPath: string): Promise<AnyDescriptor[]> {
   return await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: absPath })
 }
 
+// In order to avoid frequent updates of the workspaceMap on initial load, we
+// retrieve the bulk immediately on load, and then only patch where necessary.
+async function retrieveInitialUpdate (rootPaths: string[], workspaceMap: Ref<Map<string, string[]>>, descriptorMap: Ref<Map<string, AnyDescriptor>>) {
+  let start = Date.now()
+  const entries: Array<[string, string[]]> = []
+  const flatMap: string[] = []
+  for (const rootPath of rootPaths) {
+    const response = await readPathRecursively(rootPath)
+    entries.push([ rootPath, response ])
+    flatMap.push(...response)
+  }
+  console.log(`Fetched all paths in ${Date.now() - start}ms`)
+  start = Date.now()
+
+  // Now do one huge roundtrip to main to fetch every descriptor at once.
+  const descriptors = await getDescriptorFor(flatMap)
+  console.log(`Fetched all descriptors in ${Date.now() - start}ms`)
+
+  // Now we can set the stuff immediately
+  workspaceMap.value = new Map(entries)
+  descriptorMap.value = new Map(descriptors.map(d => ([ d.path, d ])))
+}
+
 export const useWorkspaceStore = defineStore('workspace', () => {
   // Dependent stores and watched variables
   const configStore = useConfigStore()
@@ -79,11 +102,38 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   const descriptorMap = ref<Map<string, AnyDescriptor>>(new Map())
   const rootDescriptors = ref<AnyDescriptor[]>([])
 
-  for (const rootPath of openPaths.value) {
-    readPathRecursively(rootPath)
-      .then(response => { workspaceMap.value.set(rootPath, response) })
-      .catch(err => console.error(`[Workspace Store] Could not retrieve path: "${rootPath}"`, err))
-  }
+  const isLoading = ref(true)
+
+  retrieveInitialUpdate(openPaths.value, workspaceMap, descriptorMap)
+    .catch(err => console.error('[Workspace Store] Could not retrieve initial set of loaded paths', err))
+    .finally(() => {
+      isLoading.value = false
+      // Now we can set up the watchers. (We need to do this afterwards to not cause a hiccup)
+      // Finally, listen to FSAL events and keep the descriptor map updated.
+      ipcRenderer.on('fsal-event', (_, payload: FSALEventPayload) => {
+        // @ts-expect-error asdasd
+        console.log(`[WorkspaceStore] Received event ${payload.event}:${payload.path ?? payload.descriptor.path}`)
+        if (payload.event === 'unlink' || payload.event === 'unlinkDir') {
+          const root = [...workspaceMap.value.keys()].find(p => payload.path.startsWith(p))
+          if (root !== undefined) {
+            const arr = workspaceMap.value.get(root)!
+            arr.splice(arr.indexOf(payload.path), 1)
+            workspaceMap.value.set(root, arr)
+          }
+
+          descriptorMap.value.delete(payload.path)
+        } else if (payload.event === 'change' || payload.event === 'add' || payload.event === 'addDir') {
+          const root = [...workspaceMap.value.keys()].find(p => payload.descriptor.path.startsWith(p))
+          if (root !== undefined && payload.event !== 'change') {
+            const arr = workspaceMap.value.get(root)!
+            arr.push(payload.descriptor.path)
+            workspaceMap.value.set(root, arr)
+          }
+
+          descriptorMap.value.set(payload.descriptor.path, payload.descriptor)
+        }
+      })
+    })
 
   // Update the loaded workspaces as soon as the openPaths property changes.
   configStore.$subscribe((_mutation, state) => {
@@ -119,14 +169,14 @@ export const useWorkspaceStore = defineStore('workspace', () => {
 
   // Keep the descriptor map up to date
   watch(workspaceMap, value => {
+    if (isLoading.value) {
+      return // The loader will update the descriptorMap once with a huge chunk of updates.
+    }
+
     for (const root of value.keys()) {
       const contents = value.get(root)!
       getDescriptorFor(contents)
-        .then(descriptors => {
-          for (const descriptor of descriptors) {
-            descriptorMap.value.set(descriptor.path, descriptor)
-          }
-        })
+        .then(descriptors => descriptors.map(d => descriptorMap.value.set(d.path, d)))
         .catch(err => console.error(`Could not fetch descriptors for path "${root}"`, err))
     }
   }, { deep: true })
@@ -136,29 +186,6 @@ export const useWorkspaceStore = defineStore('workspace', () => {
       .filter(rootPath => value.has(rootPath))
       .map(rootPath => value.get(rootPath)!)
   }, { deep: true })
-
-  // Finally, listen to FSAL events and keep the descriptor map updated.
-  ipcRenderer.on('fsal-event', (_, payload: FSALEventPayload) => {
-    if (payload.event === 'unlink' || payload.event === 'unlinkDir') {
-      const root = [...workspaceMap.value.keys()].find(p => payload.path.startsWith(p))
-      if (root !== undefined) {
-        const arr = workspaceMap.value.get(root)!
-        arr.splice(arr.indexOf(payload.path), 1)
-        workspaceMap.value.set(root, arr)
-      }
-
-      descriptorMap.value.delete(payload.path)
-    } else if (payload.event === 'change' || payload.event === 'add' || payload.event === 'addDir') {
-      const root = [...workspaceMap.value.keys()].find(p => payload.descriptor.path.startsWith(p))
-      if (root !== undefined && payload.event !== 'change') {
-        const arr = workspaceMap.value.get(root)!
-        arr.push(payload.descriptor.path)
-        workspaceMap.value.set(root, arr)
-      }
-
-      descriptorMap.value.set(payload.descriptor.path, payload.descriptor)
-    }
-  })
 
   // SECTION 2: ATTACHMENTS/OTHER FILES
   const otherFiles = ref<Array<{ path: string, files: OtherFileDescriptor[] }>>([])
