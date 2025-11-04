@@ -337,7 +337,7 @@ other than numbers.
 
 ## Under the Hood
 
-- Update Electron to version `38.3.0`.
+- Update Electron to version `39.0.0`.
 - Update Pandoc to version `3.8.2.1`.
 - Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
   declarations (`if`, `for`, `while`, etc.).
