@@ -44,7 +44,7 @@ export default class DirProjectExport extends ZettlrCommand {
     * @param {String} evt The event name
     * @param  {Object} arg The hash of a directory.
     */
-  async run (evt: string, arg: any): Promise<boolean> {
+  async run (evt: string, arg: string): Promise<boolean> {
     // First get the directory
     const dir = await this._app.fsal.getAnyDirectoryDescriptor(arg)
 

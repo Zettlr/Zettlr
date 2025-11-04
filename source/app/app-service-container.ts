@@ -140,16 +140,20 @@ export class AppServiceContainer {
     // required for the variables, while the boot function may access them in
     // different order.
 
+    await this._informativeBoot(this._logProvider, 'LogProvider')
+    await this._informativeBoot(this._configProvider, 'ConfigProvider')
+
     // If the booting isn't done after 1 second, begin displaying a splash
     // screen to indicate to the user that things are happening, even if the
-    // main window(s) don't yet show.
+    // main window(s) don't yet show. NOTE: We have to defer showing the splash
+    // screen until AFTER the config provider has been booted, as that one may
+    // show an onboarding window.
     const timeout = setTimeout(() => {
       showSplashScreen(this.log)
     }, 1000)
 
-    await this._informativeBoot(this._logProvider, 'LogProvider')
-    await this._informativeBoot(this._configProvider, 'ConfigProvider')
     await this._informativeBoot(this._fsal, 'FSAL')
+
 
     await this._informativeBoot(this._recentDocsProvider, 'RecentDocsProvider')
     await this._informativeBoot(this._assetsProvider, 'AssetsProvider')
