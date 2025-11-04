@@ -49,7 +49,7 @@
     -->
     <div
       id="box-plot-fsal-stats-words"
-      v-bind:style="`padding-top: ${boxPlotData.height/boxPlotData.width*100}%`"
+      v-bind:style="`padding-top: ${SVG_HEIGHT / SVG_WIDTH * 100}%`"
     >
       <!--
       This SVG has an aspect ratio of around 8:1. By setting preserveAspectRatio
@@ -57,7 +57,7 @@
         -->
       <svg
         id="box-plot"
-        v-bind:viewBox="`0 0 ${boxPlotData.width} ${boxPlotData.height}`"
+        v-bind:viewBox="`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`"
         preserveAspectRatio="xMidYMid"
       >
         <!-- We have a viewbox from zero to maximum, so we can calculate everything -->
@@ -186,7 +186,7 @@
 <script setup lang="ts">
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
-import { onMounted, ref } from 'vue'
+import { computed } from 'vue'
 import { generateStats } from './generate-stats'
 import { useWorkspaceStore } from 'source/pinia'
 import localiseNumber from 'source/common/util/localise-number'
@@ -195,32 +195,13 @@ const ipcRenderer = window.ipc
 
 const workspaceStore = useWorkspaceStore()
 
-const boxPlotData = ref( {
-  width: 1400,
-  height: 200,
-  mean: 0,
-  interval68Start: 0,
-  interval68End: 0,
-  interval95Start: 0,
-  interval95End: 0
-})
+const SVG_WIDTH = 1400
+const SVG_HEIGHT = 200
 
-const stats = ref(generateStats([]))
-
-onMounted(recalculateStats)
-
-async function recalculateStats () {
-  // Approximately aspect ratio 8:1. This will be stretched and squeezed on
-  // non standard compliant window sizes, but alas. We assume Zettlr will
-  // -- most of the time -- be run in default maximized/full screen state on
-  // landscape displays.
-  const allDescriptors = [...workspaceStore.descriptorMap.values()]
-  stats.value = generateStats(allDescriptors)
-
-  // Helper function
+const boxPlotData = computed(() => {
   const zTransform = (val: number): number => {
     const percent = val / (stats.value.maxWords - stats.value.minWords)
-    return boxPlotData.value.width * percent
+    return SVG_WIDTH * percent
   }
 
   // Calculate the necessary measurements for the box plot
@@ -229,17 +210,19 @@ async function recalculateStats () {
   const ninetyNineStart = zTransform(stats.value.words95PercentLower)
   const ninetyNineEnd = zTransform(stats.value.words95PercentUpper)
 
-  // Update the internal variables
-  boxPlotData.value = {
-    width: boxPlotData.value.width,
-    height: boxPlotData.value.height,
+  return {
     mean: zTransform(stats.value.meanWords),
     interval68Start: ninetyFiveStart,
     interval68End: ninetyFiveEnd - ninetyFiveStart,
     interval95Start: ninetyNineStart,
     interval95End: ninetyNineEnd - ninetyNineStart
   }
-}
+})
+
+const stats = computed(() => {
+  const allDescriptors = [...workspaceStore.descriptorMap.values()]
+  return generateStats(allDescriptors)
+})
 
 function basename (absPath: string) {
   return pathBasename(absPath)
