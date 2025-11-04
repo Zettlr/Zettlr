@@ -85,7 +85,13 @@ export default class FSAL extends ProviderContract {
 
     ipcMain.handle('fsal', async (event, { command, payload }) => {
       if (command === 'read-path-recursively' && typeof payload === 'string') {
-        return await this.readPathRecursively(payload)
+        if (await this.isFile(payload)) {
+          return [payload]
+        } else if (await this.isDir(payload) && !ignoreDir(payload)) {
+          return await this.readDirectoryRecursively(payload)
+        } else {
+          return []
+        }
       } else if (command === 'read-directory' && typeof payload === 'string') {
         return await this.readDirectory(payload)
       } else if (command === 'get-descriptor' && (typeof payload === 'string' || Array.isArray(payload) && payload.every(p => typeof p === 'string'))) {
@@ -164,6 +170,9 @@ export default class FSAL extends ProviderContract {
       return this._logger.error(`[FSAL] Chokidar reported an error for path "${absPath}"`)
     }
 
+    // Regardless of the event, it will invalidate that particular cache entry.
+    this._cache.del(absPath)
+
     // In unlink-events, there won't be a descriptor.
     if (event === 'unlink' || event === 'unlinkDir') {
       this._emitter.emit('fsal-event', { event, path: absPath })
@@ -238,10 +247,16 @@ export default class FSAL extends ProviderContract {
     const { openPaths } = this._config.get()
     const pathsToIndex: string[] = []
     for (const rootPath of openPaths) {
-      const allPaths = await this.readPathRecursively(rootPath)
-      pathsToIndex.push(...allPaths)
-      
+      if (await this.isFile(rootPath) && !path.basename(rootPath).startsWith('.')) {
+        pathsToIndex.push(rootPath)
+      } else if (await this.isDir(rootPath) && !ignoreDir(rootPath)) {
+        const allPaths = await this.readDirectoryRecursively(rootPath)
+        pathsToIndex.push(...allPaths)
+      }
     }
+
+    const duration1 = performance.now() - start
+    this._logger.info(`[FSAL] Discovered paths in ${Math.floor(duration1 / 1000 * 100) / 100} seconds`)
 
     // Round the increment to 4 digits after the period.
     const roundToDigits = 4
@@ -259,9 +274,9 @@ export default class FSAL extends ProviderContract {
       await this.getDescriptorFor(absPath)
     }
 
-    const duration = performance.now() - start
+    const duration2 = performance.now() - start
     // Round to max. two positions after the period
-    this._logger.info(`[FSAL] Re-indexed workspaces in ${Math.floor(duration / 1000 * 100) / 100} seconds`)
+    this._logger.info(`[FSAL] Re-indexed workspaces in ${Math.floor(duration2 / 1000 * 100) / 100} seconds`)
   }
 
   /**
@@ -274,11 +289,15 @@ export default class FSAL extends ProviderContract {
     const { openPaths } = this._config.get()
     const allDescriptors: AnyDescriptor[] = []
 
-    for (const path of openPaths) {
-      const contents = await this.readPathRecursively(path)
-      for (const child of contents) {
-        const descriptor = await this.getDescriptorFor(child)
-        allDescriptors.push(descriptor)
+    for (const rootPath of openPaths) {
+      if (await this.isFile(rootPath) && !path.basename(rootPath).startsWith('.')) {
+        allDescriptors.push(await this.getDescriptorFor(rootPath))
+      } else if (await this.isDir(rootPath) && !ignoreDir(rootPath)) {
+        const allPaths = await this.readDirectoryRecursively(rootPath)
+        for (const child of allPaths) {
+          const descriptor = await this.getDescriptorFor(child)
+          allDescriptors.push(descriptor)
+        }
       }
     }
 
@@ -694,7 +713,7 @@ export default class FSAL extends ProviderContract {
       const descriptor = await FSALCodeFile.parse(absPath, this._cache, isRoot)
       return descriptor
     } else {
-      const descriptor = await FSALAttachment.parse(absPath)
+      const descriptor = await FSALAttachment.parse(absPath, this._cache)
       return descriptor
     }
   }
@@ -709,6 +728,11 @@ export default class FSAL extends ProviderContract {
    * @throws if the path does not exist
    */
   public async getDescriptorFor (absPath: string): Promise<AnyDescriptor> {
+    const cacheHit = this._cache.get(absPath)
+    if (cacheHit !== undefined) {
+      return cacheHit
+    }
+
     if (await this.isDir(absPath)) {
       return await this.getAnyDirectoryDescriptor(absPath)
     } else {
@@ -781,31 +805,28 @@ export default class FSAL extends ProviderContract {
    * NOTE: This function will already exclude dotfiles and ignored directories,
    * so this function is safe to consume in terms of what Zettlr should display.
    *
-   * @param   {string}             absPath  The absolute path to parse
+   * @param   {string}             directoryPath  The absolute path to parse
    *
    * @return  {Promise<string[]>}           Returns a list of the entire directory
    */
-  public async readPathRecursively (absPath: string): Promise<string[]> {
-    const includedPaths: string[] = [absPath]
+  public async readDirectoryRecursively (directoryPath: string): Promise<string[]> {
+    const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
+      .filter(dirent => {
+        return (dirent.isFile() && !dirent.name.startsWith('.')) ||
+          (dirent.isDirectory() && !ignoreDir(dirent.name))
+      })
+      .map(dirent => {
+        const childPath = path.join(directoryPath, dirent.name)
+        if (dirent.isFile()) {
+          return Promise.resolve([childPath])
+        } else if (dirent.isDirectory()) {
+          return this.readDirectoryRecursively(childPath)
+        } else {
+          return Promise.resolve([])
+        }
+      })
 
-    if (!await this.isDir(absPath)) {
-      return includedPaths
-    }
-
-    const contents = (await fs.readdir(absPath)).map(p => path.join(absPath, p))
-
-    for (const absPath of contents) {
-      const basename = path.basename(absPath)
-      const includeDir = await this.isDir(absPath) && !ignoreDir(absPath)
-      const isDotfile = basename.startsWith('.')
-      const isFile = await this.isFile(absPath)
-
-      if (includeDir || (isFile && !isDotfile)) {
-        includedPaths.push(...await this.readPathRecursively(absPath))
-      }
-    }
-
-    return includedPaths
+    return [ directoryPath, ...(await Promise.all(contents)).flat() ]
   }
 
   /**
