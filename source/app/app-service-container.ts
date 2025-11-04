@@ -353,8 +353,10 @@ export class AppServiceContainer {
    */
   private async _informativeBoot <T extends ProviderContract> (provider: T, displayName: string): Promise<void> {
     try {
-      updateSplashScreen(trans(`Booting ${displayName}`), 0)
+      const start = performance.now()
+      updateSplashScreen(trans('Booting %s…', displayName), 0)
       await provider.boot()
+      this._logProvider.verbose(`[AppServiceContainer] Booted ${displayName} in ${Math.round(performance.now() - start)}ms`)
     } catch (err: any) {
       const title = `Error starting ${displayName}`
       const message = `Could not start ${displayName}: ${err.message as string}`
