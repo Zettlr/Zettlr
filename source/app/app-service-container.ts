@@ -154,7 +154,6 @@ export class AppServiceContainer {
 
     await this._informativeBoot(this._fsal, 'FSAL')
 
-
     await this._informativeBoot(this._recentDocsProvider, 'RecentDocsProvider')
     await this._informativeBoot(this._assetsProvider, 'AssetsProvider')
     await this._informativeBoot(this._cssProvider, 'CSSProvider')
