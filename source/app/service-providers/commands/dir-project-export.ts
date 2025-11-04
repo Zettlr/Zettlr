@@ -13,7 +13,6 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import objectToArray from '@common/util/object-to-array'
 import { makeExport } from './exporter'
 import { shell, dialog } from 'electron'
 import type { ExporterOptions } from './exporter/types'
@@ -21,7 +20,6 @@ import type LogProvider from '@providers/log'
 import { trans } from '@common/i18n-main'
 import { runShellCommand } from './exporter/run-shell-command'
 import { showNativeNotification } from '@common/util/show-notification'
-import type { AnyDescriptor } from 'source/types/common/fsal'
 import path from 'path'
 import type { AppServiceContainer } from 'source/app/app-service-container'
 
@@ -67,7 +65,7 @@ export default class DirProjectExport extends ZettlrCommand {
     // that specifies files and a sorting for export. We need to check that all
     // files specified in the config still exist. If a file is missing, display
     // a warning but export anyway.
-    const availableFiles = objectToArray<AnyDescriptor>(dir, 'children').filter(e => e.type !== 'directory' && e.type !== 'other').map(e => e.path)
+    const availableFiles = await this._app.fsal.readDirectoryRecursively(dir.path)
 
     // Since the config.files array already includes relative paths, we
     // basically just have to make them absolute relative to the directory and

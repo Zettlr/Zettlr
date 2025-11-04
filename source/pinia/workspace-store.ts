@@ -14,7 +14,7 @@
  */
 
 import { defineStore, storeToRefs } from 'pinia'
-import { type Ref, ref, watch } from 'vue'
+import { type Ref, ref, watch, computed } from 'vue'
 import { useConfigStore } from './config'
 import type { OtherFileDescriptor, AnyDescriptor } from 'source/types/common/fsal'
 import { useDocumentTreeStore } from '.'
@@ -99,6 +99,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   const openPaths = ref(configStore.config.openPaths)
 
   const workspaceMap = ref<Map<string, string[]>>(new Map())
+  const pathList = computed(() => ([...workspaceMap.value.values()].flat()))
   const descriptorMap = ref<Map<string, AnyDescriptor>>(new Map())
   const rootDescriptors = ref<AnyDescriptor[]>([])
 
@@ -248,5 +249,5 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     otherFiles.value = att
   })
 
-  return { workspaceMap, descriptorMap, rootDescriptors, otherFiles }
+  return { workspaceMap, pathList, descriptorMap, rootDescriptors, otherFiles }
 })
