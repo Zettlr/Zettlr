@@ -242,7 +242,7 @@ export default class FSAL extends ProviderContract {
     let currentPercent = 0
 
     // Start a timer to measure how long the roots take to load.
-    const start = performance.now()
+    let start = performance.now()
 
     const { openPaths } = this._config.get()
     const pathsToIndex: string[] = []
@@ -255,8 +255,13 @@ export default class FSAL extends ProviderContract {
       }
     }
 
-    const duration1 = performance.now() - start
-    this._logger.info(`[FSAL] Discovered paths in ${Math.floor(duration1 / 1000 * 100) / 100} seconds`)
+    const pathDiscoveryDuration = performance.now() - start
+    if (pathDiscoveryDuration < 1000) {
+      this._logger.info(`[FSAL] Discovered paths in ${Math.round(pathDiscoveryDuration)}ms`)
+    } else {
+      this._logger.info(`[FSAL] Discovered paths in ${Math.floor(pathDiscoveryDuration / 1000 * 100) / 100}s`)
+    }
+    start = performance.now()
 
     // Round the increment to 4 digits after the period.
     const roundToDigits = 4
@@ -274,9 +279,12 @@ export default class FSAL extends ProviderContract {
       await this.getDescriptorFor(absPath)
     }
 
-    const duration2 = performance.now() - start
-    // Round to max. two positions after the period
-    this._logger.info(`[FSAL] Re-indexed workspaces in ${Math.floor(duration2 / 1000 * 100) / 100} seconds`)
+    const reindexDuration = performance.now() - start
+    if (reindexDuration < 1000) {
+      this._logger.info(`[FSAL] Re-indexed workspaces in ${Math.round(reindexDuration)}ms`)
+    } else {
+      this._logger.info(`[FSAL] Re-indexed workspaces in ${Math.floor(reindexDuration / 1000 * 100) / 100}s`)
+    }
   }
 
   /**
