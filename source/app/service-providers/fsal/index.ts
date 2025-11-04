@@ -375,6 +375,12 @@ export default class FSAL extends ProviderContract {
     return getMarkdownFileParser(this._config.get().zkn.idRE)
   }
 
+  /**
+   * Adjusts the sorting setting of the provided directory.
+   *
+   * @param   {DirDescriptor}     src      The directory
+   * @param   {SortMethod}        sorting  The sort method.
+   */
   public async changeSorting (src: DirDescriptor, sorting?: SortMethod): Promise<void> {
     await FSALDir.changeSorting(src, sorting)
   }

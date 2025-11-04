@@ -22,7 +22,7 @@ export default class DirSort extends ZettlrCommand {
   }
 
   /**
-    * Sorts a directory according to the argument
+    * Sets the sorting setting of the provided directory accordingly.
     *
     * @param  {string}  evt  The event name
     * @param  {any}     arg  An object containing both a path and a sorting type
