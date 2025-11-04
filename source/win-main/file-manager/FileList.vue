@@ -103,6 +103,7 @@ import type { AnyDescriptor } from '@dts/common/fsal'
 import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
+import { type GenericSorter, getSorter } from 'source/common/util/directory-sorter'
 
 interface RecycleScrollerData {
   id: number
@@ -143,41 +144,69 @@ const useTitle = computed(() => configStore.config.fileNameDisplay.includes('tit
 const itemHeight = computed(() => configStore.config.fileMeta ? 70 : 30)
 const rootElement = ref<HTMLDivElement|null>(null)
 
+/**
+ * Utility function that recursively sorts the various contained directories
+ * within the base descriptor according to the correct settings and then returns
+ * them as a flat list sorted accordingly.
+ *
+ * @param   {AnyDescriptor}      descriptor      The base descriptor
+ * @param   {AnyDescriptor[][]}  allDescriptors  The registry of descriptors
+ *
+ * @return  {AnyDescriptor[]}                    The sorted list of descriptors.
+ */
+function retrieveChildrenAndSort (descriptor: AnyDescriptor, allDescriptors: AnyDescriptor[], sorter: GenericSorter): AnyDescriptor[] {
+  if (descriptor.type !== 'directory') {
+    return [descriptor]
+  }
+
+  const directDescendants = allDescriptors.filter(d => d.dir === descriptor.path)
+  const sortedDescendants = sorter(directDescendants, descriptor.settings.sorting)
+  return [
+    descriptor,
+    ...sortedDescendants.flatMap(d => retrieveChildrenAndSort(d, allDescriptors, sorter))
+  ]
+}
+
 const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
   const dir = selectedDirDescriptor.value
   if (dir === undefined || dir.type !== 'directory') {
     return []
   }
 
-  // TODO: Properly generate a sorted list of the directory contents!
+  // Fetch all descriptors ...
   const allDescriptors = [...workspaceStore.descriptorMap.keys()]
     .filter(absPath => absPath.startsWith(dir.path))
     .map(absPath => workspaceStore.descriptorMap.get(absPath)!)
-    .toSorted((a, b) => { return a > b ? 1 : b > a ? -1 : 0 })
+  
+  // ... sort them recursively ...
+  const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = configStore.config
+  const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
+  const sortedDescendants = retrieveChildrenAndSort(dir, allDescriptors, sorter)
 
+  // ... and add them to our RecycleScroller.
   const ret: RecycleScrollerData[] = []
   const { files } = configStore.config
-  for (let i = 0; i < allDescriptors.length; i++) {
-    if (allDescriptors[i].type === 'other') {
+  for (let i = 0; i < sortedDescendants.length; i++) {
+    if (sortedDescendants[i].type === 'other') {
       // Filter other files based on our settings. Why do these ugly nested if
       // constructs? To catch all the other "other" files in the else.
-      if (hasImageExt(allDescriptors[i].path)) {
+      if (hasImageExt(sortedDescendants[i].path)) {
         if (!files.images.showInFilemanager) {
           continue
         }
-      } else if (hasPDFExt(allDescriptors[i].path)) {
+      } else if (hasPDFExt(sortedDescendants[i].path)) {
         if (!files.pdf.showInFilemanager) {
           continue
         }
-      } else if (hasMSOfficeExt(allDescriptors[i].path)) {
+      } else if (hasMSOfficeExt(sortedDescendants[i].path)) {
         if (!files.msoffice.showInFilemanager) {
           continue
         }
-      } else if (hasOpenOfficeExt(allDescriptors[i].path)) {
+      } else if (hasOpenOfficeExt(sortedDescendants[i].path)) {
         if (!files.openOffice.showInFilemanager) {
           continue
         }
-      } else if (hasDataExt(allDescriptors[i].path)) {
+      } else if (hasDataExt(sortedDescendants[i].path)) {
         if (!files.dataFiles.showInFilemanager) {
           continue
         }
@@ -188,7 +217,7 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
 
     ret.push({
       id: i, // This helps the virtual scroller to adequately position the items
-      props: allDescriptors[i] // The actual item
+      props: sortedDescendants[i] // The actual item
     })
   }
   return ret
