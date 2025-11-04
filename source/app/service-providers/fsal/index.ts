@@ -44,7 +44,6 @@ import ignoreDir from 'source/common/util/ignore-dir'
 import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
 import type { EventName } from 'chokidar/handler'
 import { getIDRE } from 'source/common/regular-expressions'
-import generateStats, { type WorkspacesStatistics } from './util/generate-stats'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -315,15 +314,6 @@ export default class FSAL extends ProviderContract {
         }
       }
     }
-  }
-
-  /**
-   * Generates some interesting statistics about the workspaces.
-   *
-   * @return  {WorkspacesStatistics}  The statistics
-   */
-  public async getStatistics (): Promise<WorkspacesStatistics> {
-    return generateStats(await this.getAllLoadedDescriptors())
   }
 
   /**

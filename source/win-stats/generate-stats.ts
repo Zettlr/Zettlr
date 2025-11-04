@@ -43,7 +43,7 @@ export interface WorkspacesStatistics {
   dirCount: number
 }
 
-export default function generateStats (descriptors: AnyDescriptor[]): WorkspacesStatistics {
+export function generateStats (descriptors: AnyDescriptor[]): WorkspacesStatistics {
   // Now only the files
   const mdArray = descriptors.filter(descriptor => descriptor.type === 'file')
 
