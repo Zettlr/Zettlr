@@ -103,7 +103,8 @@ import type { AnyDescriptor } from '@dts/common/fsal'
 import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
-import { type GenericSorter, getSorter } from 'source/common/util/directory-sorter'
+import { getSorter } from 'source/common/util/directory-sorter'
+import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
 
 interface RecycleScrollerData {
   id: number
@@ -143,29 +144,6 @@ const useH1 = computed(() => configStore.config.fileNameDisplay.includes('headin
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const itemHeight = computed(() => configStore.config.fileMeta ? 70 : 30)
 const rootElement = ref<HTMLDivElement|null>(null)
-
-/**
- * Utility function that recursively sorts the various contained directories
- * within the base descriptor according to the correct settings and then returns
- * them as a flat list sorted accordingly.
- *
- * @param   {AnyDescriptor}      descriptor      The base descriptor
- * @param   {AnyDescriptor[][]}  allDescriptors  The registry of descriptors
- *
- * @return  {AnyDescriptor[]}                    The sorted list of descriptors.
- */
-function retrieveChildrenAndSort (descriptor: AnyDescriptor, allDescriptors: AnyDescriptor[], sorter: GenericSorter): AnyDescriptor[] {
-  if (descriptor.type !== 'directory') {
-    return [descriptor]
-  }
-
-  const directDescendants = allDescriptors.filter(d => d.dir === descriptor.path)
-  const sortedDescendants = sorter(directDescendants, descriptor.settings.sorting)
-  return [
-    descriptor,
-    ...sortedDescendants.flatMap(d => retrieveChildrenAndSort(d, allDescriptors, sorter))
-  ]
-}
 
 const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
   const dir = selectedDirDescriptor.value
