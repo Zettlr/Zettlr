@@ -165,17 +165,14 @@ export const useWorkspaceStore = defineStore('workspace', () => {
 
   // Update whenever the lastLeafActiveFile changes
   watch(lastLeafActiveFile, async () => {
-    console.log('lastLeafActiveFile changed! Reloading other files ...')
     const activeFile = documentTreeStore.lastLeafActiveFile
     if (activeFile === undefined) {
-      console.log('Active file is undefined')
       otherFiles.value = []
       return
     }
 
     const descriptor = descriptorMap.value.get(pathDirname(activeFile.path))
     if (descriptor === undefined || descriptor.type !== 'directory') {
-      console.log('Could not find directory descriptor')
       otherFiles.value = []
       return
     }

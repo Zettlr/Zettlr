@@ -74,7 +74,6 @@ const printContainer = ref<HTMLDivElement|null>(null)
 
 onMounted(async () => {
   if (filePath === '' || printContainer.value === null) {
-    console.log({ filePath, cont: printContainer.value })
     return
   }
 
