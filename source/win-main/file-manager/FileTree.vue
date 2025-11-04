@@ -187,8 +187,7 @@ const getFiles = computed(() => {
     return roots
   }
 
-  const filter = matchQuery(q, useTitle.value, useH1.value)
-  return roots.filter(filter)
+  return roots.filter(root => filterResults.value.includes(root.path))
 })
 
 const getDirectories = computed(() => {
@@ -198,8 +197,9 @@ const getDirectories = computed(() => {
     return roots
   }
 
-  const filter = matchQuery(q, useTitle.value, useH1.value)
-  return roots.filter(filter)
+  return roots.filter(root => {
+    return filterResults.value.some(res => res.startsWith(root.path))
+  })
 })
 
 const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, string]>>(() => {
@@ -207,7 +207,7 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
   const allDescriptors = [...workspaceStore.descriptorMap.values()]
   // Second, filter them if applicable.
     .filter(descriptor => {
-      return query.value === '' ? true : filterResults.value.includes(descriptor.path)
+      return query.value === '' ? true : filterResults.value.some(res => res.startsWith(descriptor.path))
     })
   
   const uncollapsed = windowStateStore.uncollapsedDirectories

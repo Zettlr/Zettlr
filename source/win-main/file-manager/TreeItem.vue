@@ -338,8 +338,6 @@ const filteredChildren = computed(() => {
     return []
   }
 
-  
-
   const { files } = configStore.config
   return children.value
     // Ensure we only consider filtered files
