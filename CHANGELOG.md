@@ -158,6 +158,16 @@ press `Backspace` only twice, instead of at least four times).
 Note that some functionality does not apply to footnote labels that contain text
 other than numbers.
 
+## Rewritten FSAL
+
+A change that is more subtle to note is a full rewrite of the File System
+Abstraction Layer (FSAL). For more technical details, see the "Under the hood"
+section below. For you, what should change is that Zettlr should now feel
+snappier once it's booted up. We have cleaned up *a lot* of code under he hood
+which will make changes to any file appear much faster across the app. In
+addition, Zettlr should now have no issues detecting dozens of file changes in
+quick succession; something that has not worked perfectly in the past.
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
@@ -334,11 +344,55 @@ other than numbers.
 - Fixed image parsing for images with no ALT-text (#5963).
 - Horizontal scrolling in the "thin" file manager mode is no longer restricted
   to macOS, and also available on Linux and Windows.
+- Fixed the config provider never announcing to the renderers when the user
+  added or removed a workspace/root file.
+- Fixed an issue where the sorting doesn't automatically re-apply (#5938;
+  #5184).
+- Fixed an issue where not all file-links have been reported to the file
+  autocomplete (#5920).
+- Fixed some issues with the file manager not properly reacting to changes in
+  the loaded files (#5784; #5773; #5594).
+- Fixed an issue with deleting files outside of loaded workspaces (#5345).
 
 ## Under the Hood
 
 - Update Electron to version `39.0.0`.
 - Update Pandoc to version `3.8.2.1`.
+- **Feature/Change**: Full rewrite of the File System Abstraction Layer (FSAL).
+  The rewrite has fully transformed the file abstraction logic to remove any
+  tree structures, and instead mostly treat all loaded files as a single, long
+  list of files and folders. Any type of tree structure is now purely visual and
+  left where it needs to be (that is, the file tree and file list components
+  that do show the files in a tree structure). In addition, we have implemented
+  a set of improvements that should make everything work much smoother; in no
+  particular order:
+  - Remove any tree data structures pertaining to the loaded files. This
+    includes the full removal of the `WorkspacesProvider`, whose job it
+    essentially only was to maintain those tree structures. We now treat files
+    as well as the change events emitted by the watchdog (to observe any remote
+    changes) as a flat stream of events.
+  - Rewrote the `WorkspaceStore` in the renderer to reflect this change, thus
+    reducing the store's size by a lot. The store now only maintains a big list
+    of loaded paths, as well as all descriptors in a `Map` structure.
+  - The events from the file watchers are now emitted directly from the FSAL;
+    there is no round trip through the WorkspaceProvider anymore.
+  - Notably, `DirDescriptor` structures no longer contain any reference to
+    children, since we do not read in any descriptors recursively anymore.
+    Instead, consumers of `DirDescriptor`s will now make a second roundtrip to
+    fetch any direct descendants of a directory. Recursion is now implicit in
+    the way the tree-like structures in the Vue components have been
+    implemented.
+  - Sorting has now been pushed to the edge in that the main process does no
+    longer concern itself with sorting. That only happens right where it's
+    needed from now on; that is: the file manager and the project properties.
+    This makes sorting more reactive to configuration changes (since it now
+    happens automagically due to Vue's reactivity instead of having to listen
+    for relevant events and not forget to manually do it in main), and
+    maintenance much easier.
+  - Removed the `root` property on descriptors, since this is not dependent on
+    the file system state and can easily be computed on demand.
+- Debounce the splash screen update frequency to at most 60fps to reduce the
+  load on the IPC pipe while the screen is shown.
 - Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
   declarations (`if`, `for`, `while`, etc.).
 - The `enabled` property of context menu items is now optional, and defaults to
