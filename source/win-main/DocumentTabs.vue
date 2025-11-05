@@ -107,7 +107,9 @@ const props = defineProps<{
 
 const showScrollers = ref<boolean>(false)
 const resizeObserver = new ResizeObserver(() => {
-  maybeActivateScrollers()
+  requestAnimationFrame(() => {
+    maybeActivateScrollers()
+  })
 })
 
 // Is there a document being dragged over this tabbar?
