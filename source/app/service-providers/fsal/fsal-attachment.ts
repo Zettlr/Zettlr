@@ -41,8 +41,8 @@ export async function parse (absPath: string, cache: FSALCache): Promise<OtherFi
     throw err // Rethrow
   }
 
-  if (!cache.has(attachment.path)) {
-    cache.set(attachment.path, attachment)
+  if (!await cache.has(attachment.path)) {
+    await cache.set(attachment.path, attachment)
   }
 
   return attachment
