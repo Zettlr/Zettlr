@@ -353,6 +353,8 @@ quick succession; something that has not worked perfectly in the past.
 - Fixed some issues with the file manager not properly reacting to changes in
   the loaded files (#5784; #5773; #5594).
 - Fixed an issue with deleting files outside of loaded workspaces (#5345).
+- Increased the dropzone size for moving files around and splitting/merging the
+  various editor panes.
 
 ## Under the Hood
 
