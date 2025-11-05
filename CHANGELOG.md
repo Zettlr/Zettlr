@@ -355,6 +355,8 @@ quick succession; something that has not worked perfectly in the past.
 - Fixed an issue with deleting files outside of loaded workspaces (#5345).
 - Increased the dropzone size for moving files around and splitting/merging the
   various editor panes.
+- The Update provider does not show error boxes anymore if the update check
+  failed due to a timeout (#5944).
 
 ## Under the Hood
 

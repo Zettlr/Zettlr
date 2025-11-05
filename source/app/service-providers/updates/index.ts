@@ -361,6 +361,7 @@ export default class UpdateProvider extends ProviderContract {
       // If we have an ENOTFOUND error there is no response and no statusCode
       // so we'll use TypeScript shortcuts to save us from ugly errors.
       const notFoundError = err.code === 'ENOTFOUND'
+      const timeoutError = err.code === 'ETIMEDOUT'
       const serverError = err?.response?.statusCode >= 500
       const clientError = err?.response?.statusCode >= 400
       const redirectError = err?.response?.statusCode >= 300
@@ -381,7 +382,14 @@ export default class UpdateProvider extends ProviderContract {
         // offline. In this case, no need to inform the user every hour.
         const msg = trans('Could not check for updates: Could not establish connection')
         this._reportError(err.code as string, msg, false)
-      } else {
+      } else if (timeoutError) {
+        // This can happen if the internet is either really bad or drops during the
+        // connection attempt. In any case, this can happen often with, e.g.,
+        // company VPNs and other firewalls, and would be distracting to see every
+        // hour or so. See #5944 for context.
+        const msg = trans('Could not check for updates: The connection attempt timed out.')
+        this._reportError(err.code as string, msg, false)
+      } {
         // Something else has occurred. GotError objects have a name property.
         const msg = trans('Could not check for updates. %s: %s', err.name, err.message)
         this._reportError(err.code as string, msg, true) // This is odd and should be reported
