@@ -32,15 +32,6 @@ export interface ProjectSettings {
 }
 
 /**
- * Declares an event that happens on the FSAL
- */
-export interface FSALHistoryEvent {
-  event: 'add'|'change'|'remove'
-  path: string
-  timestamp: number
-}
-
-/**
  * An interface containing meta information all
  * descriptors should provide.
  */
@@ -69,10 +60,6 @@ export interface DirDescriptor extends FSMetaInfo {
   }
   type: 'directory'
   isGitRepository: boolean
-  // NOTE: With the most recent FSAL rewrite around Zettlr 4.0, we have removed
-  // this property. To access children -- if even necessary -- another call to
-  // the FSAL is necessary.
-  // children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor|OtherFileDescriptor>
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
 }
 
@@ -92,6 +79,10 @@ export interface MDFileDescriptor extends FSMetaInfo {
   yamlTitle: string|undefined
   frontmatter: any|null
   linefeed: string
+  /**
+   * Whether the file has been modified by Zettlr.
+   * @deprecated Because this should be computed based on the documents provider.
+   */
   modified: boolean
 }
 
@@ -103,6 +94,10 @@ export interface CodeFileDescriptor extends FSMetaInfo {
   type: 'code'
   bom: string // An optional BOM
   linefeed: string
+  /**
+   * Whether the file has been modified by Zettlr.
+   * @deprecated Because this should be computed based on the documents provider.
+   */
   modified: boolean
 }
 
