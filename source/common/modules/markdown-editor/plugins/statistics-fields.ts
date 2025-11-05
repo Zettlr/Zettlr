@@ -36,7 +36,7 @@ export const countField = StateField.define<{ chars: number, words: number }>({
   },
 
   update (value, transaction) {
-    for (let e of transaction.effects) {
+    for (const e of transaction.effects) {
       if (e.is(updateWordCountEffect)) {
         return e.value
       }
