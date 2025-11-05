@@ -181,7 +181,7 @@ export default class FSAL extends ProviderContract {
     }
 
     // But in any other case (change & add), we should be able to get one.
-    this.getDescriptorFor(absPath)
+    this.getDescriptorFor(absPath, false)
       .then(descriptor => {
         this._emitter.emit('fsal-event', { event, descriptor })
         broadcastIPCMessage('fsal-event', { event, descriptor })
@@ -205,7 +205,7 @@ export default class FSAL extends ProviderContract {
       }
 
       try {
-        const descriptor = await this.getDescriptorFor(rootPath)
+        const descriptor = await this.getDescriptorFor(rootPath, false)
         if (descriptor === undefined) {
           // Mount a "dummy" workspace indicating an unlinked root
           this._logger.error(`Could not load root ${rootPath}. Mounting dummy...`)
@@ -220,7 +220,7 @@ export default class FSAL extends ProviderContract {
           this.watchers.set(rootPath, watcher)
         }
       } catch (err: any) {
-        // TODO
+        this._logger.error(`Could not load root ${rootPath}.`)
       }
     }
 
@@ -727,16 +727,26 @@ export default class FSAL extends ProviderContract {
   /**
    * Loads any given path (if it exists) into the FSAL descriptor format.
    *
-   * @param   {string}   absPath     The path to load
+   * @param   {string}   absPath          The path to load
+   * @param   {boolean}  avoidDiskAccess  If set to true (the default), attempt
+   *                                      to fetch the descriptor directly from
+   *                                      the cache, without checking the file
+   *                                      system modification status. This means
+   *                                      that the returned descriptor may be
+   *                                      outdated, but this severely speeds up
+   *                                      retrieval speed as it only requires a
+   *                                      single access to a `Map`.
    *
-   * @return  {Promise}              Promise resolves with any descriptor
+   * @return  {Promise<AnyDescriptor>}    Promise resolves with any descriptor
    *
    * @throws if the path does not exist
    */
-  public async getDescriptorFor (absPath: string): Promise<AnyDescriptor> {
-    const cacheHit = this._cache.get(absPath)
-    if (cacheHit !== undefined) {
-      return cacheHit
+  public async getDescriptorFor (absPath: string, avoidDiskAccess = true): Promise<AnyDescriptor> {
+    if (avoidDiskAccess) {
+      const cacheHit = this._cache.get(absPath)
+      if (cacheHit !== undefined) {
+        return cacheHit
+      }
     }
 
     if (await this.isDir(absPath)) {
