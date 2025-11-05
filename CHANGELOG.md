@@ -448,6 +448,8 @@ quick succession; something that has not worked perfectly in the past.
   declare `4.0.0-beta-nightly` to be the same as `4.0.0-beta.1-nightly`.
 - Zettlr now properly offers updating to a newer prerelease versions if users
   are on a nightly version (e.g., `beta` -> `beta.1`).
+- Log any error output from the Pandoc update script if the process failed
+  (#5864).
 
 # 3.6.0
 
