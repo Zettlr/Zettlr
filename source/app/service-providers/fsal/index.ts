@@ -171,7 +171,7 @@ export default class FSAL extends ProviderContract {
     }
 
     // Regardless of the event, it will invalidate that particular cache entry.
-    this._cache.del(absPath)
+    this._cache.del(absPath).catch(err => console.error(err))
 
     // In unlink-events, there won't be a descriptor.
     if (event === 'unlink' || event === 'unlinkDir') {
@@ -739,7 +739,7 @@ export default class FSAL extends ProviderContract {
    */
   public async getDescriptorFor (absPath: string, avoidDiskAccess: boolean = true): Promise<AnyDescriptor> {
     if (avoidDiskAccess) {
-      const cacheHit = this._cache.get(absPath)
+      const cacheHit = await this._cache.get(absPath)
       if (cacheHit !== undefined) {
         return cacheHit
       }

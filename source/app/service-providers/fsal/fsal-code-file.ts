@@ -39,9 +39,8 @@ function applyCache (cachedFile: CodeFileDescriptor, origFile: CodeFileDescripto
  * @param {CodeFileDescriptor} origFile The file to cache
  */
 function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache): void {
-  if (!cacheAdapter.set(origFile.path, structuredClone(origFile))) {
-    throw new Error(`Could not cache file ${origFile.name}!`)
-  }
+  cacheAdapter.set(origFile.path, structuredClone(origFile))
+    .catch(() => { throw new Error(`Could not cache file ${origFile.name}!`) })
 }
 
 /**
@@ -101,8 +100,8 @@ export async function parse (
   // Before reading in the full file and parsing it,
   // let's check if the file has been changed
   let hasCache = false
-  if (cache?.has(file.path) === true) {
-    const cachedFile = cache.get(file.path)
+  if (await cache?.has(file.path) === true) {
+    const cachedFile = await cache?.get(file.path)
     // If the modtime is still the same, we can apply the cache.
     if (cachedFile !== undefined && cachedFile.modtime === file.modtime && cachedFile.type === 'code') {
       file = applyCache(cachedFile, file)
