@@ -20,6 +20,9 @@ import { ViewPlugin, type EditorView, type ViewUpdate } from '@codemirror/view'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import { countAll } from '@common/util/counter'
 
+// The amount of time in milliseconds to wait before triggering word counting
+const WORD_COUNT_DELAY = 750
+
 function count (state: EditorState): { chars: number, words: number } {
   const tree = ensureSyntaxTree(state, state.doc.length) ?? undefined
 
@@ -52,7 +55,7 @@ export const countField = StateField.define<{ chars: number, words: number }>({
 
 export const countPlugin = ViewPlugin.fromClass(class {
   private timeout: number | null = null
-  private delay = 750
+  private delay = WORD_COUNT_DELAY
 
   update (update: ViewUpdate) {
     if (!update.docChanged) { return }
