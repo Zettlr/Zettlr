@@ -357,6 +357,9 @@ quick succession; something that has not worked perfectly in the past.
   various editor panes.
 - The Update provider does not show error boxes anymore if the update check
   failed due to a timeout (#5944).
+- Links in headers are now properly accounted for (#5983).
+- Headers level 1 will now be rendered to plain text for the purpose of
+  displaying in various places (document tabs, file manager, etc.) (#5983).
 
 ## Under the Hood
 
