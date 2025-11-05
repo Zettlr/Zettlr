@@ -233,6 +233,9 @@ export const mdPasteDropHandlers: DOMEventHandlers<any> = {
               .catch(err => reject(err))
           }))
         } else if (hasMdOrCodeExt(file.name) && filePath !== undefined) {
+          // TODO: We should absolutely here provide the leafId, because
+          // otherwise main will simply decide for us instead of us telling
+          // which editor pane the user has dropped the file onto.
           // It's a Markdown or supported code file -> tell main to open them
           ipcRenderer.invoke('documents-provider', {
             command: 'open-file',

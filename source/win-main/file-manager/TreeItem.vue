@@ -318,7 +318,7 @@ const writingTargetPercent = computed(() => {
 /**
  * Returns true if this item is a root item
  */
-const isRoot = computed(() => props.item.root)
+const isRoot = computed(() => configStore.config.openPaths.includes(props.item.path))
 
 /**
  * Returns true if the file manager mode is set to "combined"
