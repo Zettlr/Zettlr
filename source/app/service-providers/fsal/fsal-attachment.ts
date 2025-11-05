@@ -20,7 +20,6 @@ import type FSALCache from './fsal-cache'
 
 export async function parse (absPath: string, cache: FSALCache): Promise<OtherFileDescriptor> {
   let attachment: OtherFileDescriptor = {
-    root: false, // other files are never roots
     path: absPath,
     name: path.basename(absPath),
     ext: path.extname(absPath),

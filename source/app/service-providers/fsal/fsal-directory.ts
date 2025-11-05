@@ -111,19 +111,12 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
  * read in the entire sub-tree of the filesystem.
  *
  * @param   {string}              currentPath  The directory's path
- * @param   {FSALCache}           cache        The FSAL cache object
- * @param   {Function}            parser       A MD file parser
- * @param   {boolean}             isRoot       Whether this descriptor is a root
  *
  * @return  {Promise<DirDescriptor>}           Resolves with the descriptor
  */
-export async function parse (
-  currentPath: string,
-  isRoot: boolean
-): Promise<DirDescriptor> {
+export async function parse (currentPath: string): Promise<DirDescriptor> {
   // Prepopulate
   const dir: DirDescriptor = {
-    root: isRoot,
     path: currentPath,
     name: path.basename(currentPath),
     dir: path.dirname(currentPath),
@@ -176,7 +169,6 @@ export async function parse (
  */
 export function getDirNotFoundDescriptor (dirPath: string): DirDescriptor {
   return {
-    root: true, // Not found directories are always roots
     path: dirPath,
     name: path.basename(dirPath),
     dir: path.dirname(dirPath),

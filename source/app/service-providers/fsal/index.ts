@@ -711,14 +711,12 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
     }
 
-    const isRoot = this._config.get().openPaths.includes(absPath)
-
     if (hasMarkdownExt(absPath)) {
       const parser = this.getMarkdownFileParser()
-      const descriptor = await FSALFile.parse(absPath, this._cache, parser, isRoot)
+      const descriptor = await FSALFile.parse(absPath, this._cache, parser)
       return descriptor
     } else if (hasCodeExt(absPath)) {
-      const descriptor = await FSALCodeFile.parse(absPath, this._cache, isRoot)
+      const descriptor = await FSALCodeFile.parse(absPath, this._cache)
       return descriptor
     } else {
       const descriptor = await FSALAttachment.parse(absPath, this._cache)
@@ -763,9 +761,7 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
     }
 
-    const isRoot = this._config.get().openPaths.includes(absPath)
-
-    return await FSALDir.parse(absPath, isRoot)
+    return await FSALDir.parse(absPath)
   }
 
   /**

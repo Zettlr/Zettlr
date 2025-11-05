@@ -48,7 +48,6 @@ export interface FSMetaInfo {
   path: string // absolutePath
   dir: string // path.dirname(absolutePath)
   name: string // path.basename(absolutePath)
-  root: boolean // Whether the file/dir is a root (relative to Zettlr)
   type: 'file' | 'directory' | 'code' | 'other'
   size: number
   modtime: number
@@ -111,7 +110,6 @@ export interface CodeFileDescriptor extends FSMetaInfo {
  * The FSAL other (non-MD and non-Tex) file descriptor
  */
 export interface OtherFileDescriptor extends FSMetaInfo {
-  root: false // Attachments can never be roots
   type: 'other'
   ext: string
 }
