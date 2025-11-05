@@ -57,7 +57,7 @@ export default class FilePathFindMetaData extends ZettlrCommand {
     // The filename can contain a `#`, indicating a specified heading in the target file
     const filename = arg.includes('#') ? arg.slice(0, arg.indexOf('#')) : arg
     // Quick'n'dirty command to return the Meta descriptor for the given query
-    const descriptor = this._app.workspaces.findExact(filename)
+    const descriptor = await this._app.fsal.findExact(filename)
     if (descriptor === undefined) {
       return undefined
     }

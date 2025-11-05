@@ -29,6 +29,8 @@ let splashScreen: BrowserWindow|undefined
 let initSplashScreenMessage = ''
 let initSplashScreenPercent = 0
 
+let debounceTimeout: NodeJS.Timeout|undefined
+
 /**
  * Shows a splash screen for Zettlr. NOTE: Remember to call `closeSplashScreen`
  * once your startup procedure is done!
@@ -90,7 +92,16 @@ export function showSplashScreen (logger: LogProvider): void {
 export function updateSplashScreen (currentStepMessage: string, currentStepPercentage: number): void {
   initSplashScreenMessage = currentStepMessage
   initSplashScreenPercent = currentStepPercentage
+
+  if (debounceTimeout !== undefined) {
+    return
+  }
+
   splashScreen?.webContents.send('step-update', { currentStepMessage, currentStepPercentage })
+
+  debounceTimeout = setTimeout(() => {
+    debounceTimeout = undefined
+  }, 1000/60)
 }
 
 /**

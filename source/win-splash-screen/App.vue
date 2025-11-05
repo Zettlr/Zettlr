@@ -14,6 +14,7 @@
         v-bind:max="100"
         v-bind:min="0"
         v-bind:value="stepPercentage"
+        v-bind:indeterminate="stepPercentage === 0"
         v-bind:interruptible="false"
       ></ProgressControl>
       <p>
@@ -75,11 +76,11 @@ body {
   width: 100vw;
   height: 100vh;
   display: grid;
-  padding: 20px;
+  padding: 40px;
   grid-template-areas:
     "logo info"
     "progress progress";
-  grid-template-columns: 150px auto;
+  grid-template-columns: 150px calc(100vw - 80px - 150px);
   grid-template-rows: 150px auto;
   align-content: center;
   align-items: center;
@@ -100,6 +101,17 @@ body {
       margin-bottom: 10px;
     }
   }
-  #progress { grid-area: progress; }
+
+  #progress {
+    grid-area: progress;
+    overflow: hidden;
+
+    p {
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 </style>

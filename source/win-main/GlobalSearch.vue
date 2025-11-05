@@ -140,7 +140,6 @@
  * END HEADER
  */
 
-import objectToArray from '@common/util/object-to-array'
 import compileSearchTerms from '@common/util/compile-search-terms'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
@@ -150,9 +149,8 @@ import { trans } from '@common/i18n-renderer'
 import { ref, computed, watch, onMounted } from 'vue'
 import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@dts/common/search'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
-import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
-import { useConfigStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
-import type { MaybeRootDescriptor } from 'source/types/common/fsal'
+import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
+import { relativePath } from 'source/common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
 
@@ -218,13 +216,14 @@ const activeFileIdx = ref<undefined|number>(undefined)
 // The result line index of the most recently clicked search result.
 const activeLineIdx = ref<undefined|number>(undefined)
 
-const workspacesStore = useWorkspacesStore()
+const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
 
 const recentGlobalSearches = computed(() => configStore.config.window.recentGlobalSearches)
 
-const fileTree = computed(() => workspacesStore.rootDescriptors)
+const fileTree = computed(() => ([...workspaceStore.descriptorMap.values()]))
+const rootPaths = computed(() => ([...workspaceStore.workspaceMap.keys()]))
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const queryInputElement = ref<HTMLInputElement|null>(null)
@@ -291,22 +290,7 @@ onMounted(() => {
 })
 
 function recomputeDirectorySuggestions (): void {
-  let dirList: string[] = []
-
-  for (const treeItem of fileTree.value) {
-    if (treeItem.type !== 'directory') {
-      continue
-    }
-
-    let dirContents = objectToArray(treeItem, 'children')
-    dirContents = dirContents.filter(item => item.type === 'directory')
-    // Remove the workspace directory path itself so only the
-    // app-internal relative path remains. Also, we're removing the leading (back)slash
-    dirList = dirList.concat(dirContents.map(item => item.path.replace(treeItem.dir, '').substr(1)))
-  }
-
-  // Remove duplicates
-  directorySuggestions.value = [...new Set(dirList)]
+  directorySuggestions.value = fileTree.value.filter(d => d.type === 'directory').map(d => d.path)
 }
 
 function startSearch (overrideQuery?: string): void {
@@ -325,57 +309,26 @@ function startSearch (overrideQuery?: string): void {
   // 2. The compiled search terms.
   // Let's do that first.
 
-  let fileList: FileSearchDescriptor[] = []
-
-  for (const treeItem of fileTree.value) {
-    if (treeItem.type !== 'directory') {
-      let displayName = treeItem.name
-      if (treeItem.type === 'file') {
-        if (useTitle.value && typeof treeItem.frontmatter?.title === 'string') {
-          displayName = treeItem.frontmatter.title
-        } else if (useH1.value && treeItem.firstHeading !== null) {
-          displayName = treeItem.firstHeading
+  let fileList: FileSearchDescriptor[] = fileTree.value
+    .filter(d => d.type === 'file' || d.type === 'code')
+    .map(d => {
+      const root = rootPaths.value.find(p => d.path.startsWith(p))
+      let displayName = d.name
+      if (d.type === 'file') {
+        if (useTitle.value && d.frontmatter != null && typeof d.frontmatter.title === 'string') {
+          displayName = d.frontmatter.title
+        } else if (useH1.value && d.firstHeading !== null) {
+          displayName = d.firstHeading
         }
       }
 
-      fileList.push({
-        path: treeItem.path,
-        relativeDirectoryPath: '',
-        filename: treeItem.name,
-        displayName
-      })
-      continue
-    }
-
-    const dirContents = objectToArray<MaybeRootDescriptor>(treeItem, 'children')
-      .filter(item => item.type !== 'directory')
-      .map(item => {
-        let displayName = item.name
-        if (item.type === 'file') {
-          if (useTitle.value && item.frontmatter != null && typeof item.frontmatter.title === 'string') {
-            displayName = item.frontmatter.title
-          } else if (useH1.value && item.firstHeading !== null) {
-            displayName = item.firstHeading
-          }
-        }
-
-        return {
-          path: item.path,
-          // Remove the workspace directory path itself so only the
-          // app-internal relative path remains. Also, we're removing the leading (back)slash
-          relativeDirectoryPath: item.dir.replace(treeItem.dir, '').substring(1),
-          filename: item.name,
-          displayName
-        }
-      })
-
-    if (treeItem.type === 'directory') {
-      fileList = fileList.concat(dirContents)
-    }
-  }
-
-  // Filter out non-searchable files
-  fileList = fileList.filter(file => hasMdOrCodeExt(file.path))
+      return {
+        path: d.path,
+        relativeDirectoryPath: root !== undefined ? relativePath(root, d.path) : d.dir,
+        filename: d.name,
+        displayName: displayName
+      }
+    })
 
   // And also all files that are not within the selected directory
   if (restrictToDir.value.trim() !== '') {

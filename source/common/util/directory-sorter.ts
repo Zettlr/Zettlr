@@ -11,6 +11,8 @@
  * END HEADER
  */
 
+import type { SortMethod } from 'source/types/common/fsal'
+
 export interface RequiredSortingProps {
   type: string
   name: string
@@ -20,10 +22,9 @@ export interface RequiredSortingProps {
   creationtime: number
 }
 
-type SortingType = 'name-up'|'name-down'|'time-up'|'time-down'
 type FilenameDisplay = 'filename'|'title'|'heading'|'title+heading'
 
-export type GenericSorter = <T extends RequiredSortingProps>(arr: T[], type?: SortingType) => T[]
+export type GenericSorter = <T extends RequiredSortingProps>(arr: T[], type?: SortMethod) => T[]
 
 /**
  * Helper function to sort files by modification or creation time
@@ -175,7 +176,7 @@ export function getSorter (
   appLang: string,
   whichTime: 'modtime'|'creationtime'
 ): GenericSorter {
-  return function sort <T extends RequiredSortingProps> (arr: T[], type: SortingType = 'name-up'): T[] {
+  return function sort <T extends RequiredSortingProps> (arr: T[], type: SortMethod = 'name-up'): T[] {
     // First split the array based on type
     const f: T[] = []
     const d: T[] = []

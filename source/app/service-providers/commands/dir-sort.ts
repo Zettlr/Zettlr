@@ -14,6 +14,7 @@
 
 import type { AppServiceContainer } from 'source/app/app-service-container'
 import ZettlrCommand from './zettlr-command'
+import type { SortMethod } from 'source/types/common/fsal'
 
 export default class DirSort extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
@@ -21,14 +22,15 @@ export default class DirSort extends ZettlrCommand {
   }
 
   /**
-    * Sorts a directory according to the argument
-    * @param {String} evt The event name
-    * @param  {Object} arg An object containing both a hash and a sorting type
+    * Sets the sorting setting of the provided directory accordingly.
+    *
+    * @param  {string}  evt  The event name
+    * @param  {any}     arg  An object containing both a path and a sorting type
     */
-  async run (evt: string, arg: any): Promise<boolean> {
-    const dir = this._app.workspaces.findDir(arg.path)
+  async run (evt: string, arg: { path: string, sorting: SortMethod }): Promise<boolean> {
+    const dir = await this._app.fsal.getAnyDirectoryDescriptor(arg.path)
     if (dir !== undefined) {
-      await this._app.fsal.sortDirectory(dir, arg.sorting)
+      await this._app.fsal.changeSorting(dir, arg.sorting)
       return true
     }
 

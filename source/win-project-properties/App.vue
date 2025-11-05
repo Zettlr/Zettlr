@@ -161,13 +161,12 @@ import ListControl from '@common/vue/form/elements/ListControl.vue'
 import FileControl from '@common/vue/form/elements/FileControl.vue'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import ZtrAdmonition from '@common/vue/ZtrAdmonition.vue'
-import { ref, computed, watch } from 'vue'
-import type { ProjectSettings, DirDescriptor, AnyDescriptor, MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
+import { ref, computed, watch, onMounted } from 'vue'
+import type { ProjectSettings, DirDescriptor, MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
 import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
-import { useConfigStore } from 'source/pinia'
-import objectToArray from 'source/common/util/object-to-array'
+import { useConfigStore, useWorkspaceStore } from 'source/pinia'
 import { pathBasename } from 'source/common/util/renderer-path-polyfill'
 import { pathToUnix } from 'source/common/util/path-to-unix'
 import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
@@ -195,6 +194,7 @@ const noFilesSelectedMessage = trans('You have not selected any files for export
 const missingFilesMessage = trans('Some files are selected for export but no longer exist in the directory.')
 
 const configStore = useConfigStore()
+const workspaceStore = useWorkspaceStore()
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 
@@ -230,8 +230,21 @@ const projectSettings = ref<ProjectSettings>({
   templates: { tex: '', html: '' }
 })
 
+const descriptor = computed(() => workspaceStore.descriptorMap.get(dirPath))
+
 // Holds all available files inside the directory
-const availableFiles = ref<Array<MDFileDescriptor|CodeFileDescriptor>>([])
+const availableFiles = computed<Array<MDFileDescriptor|CodeFileDescriptor>>(() => {
+  if (descriptor.value === undefined || descriptor.value.type !== 'directory') {
+    return []
+  }
+
+  const absPath = descriptor.value.path
+
+  return workspaceStore.pathList
+    .filter(p => p.startsWith(absPath))
+    .map(f => workspaceStore.descriptorMap.get(f))
+    .filter(d => d !== undefined && (d.type === 'code' || d.type === 'file'))
+})
 
 // Returns a list of all files, prepared for enabling the user to add/remove
 // files from the export list
@@ -343,7 +356,7 @@ ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' } as Ass
   .catch(err => console.error(err))
 
 // On startup, fetch the properties immediately
-fetchProperties()
+onMounted(fetchProperties)
 
 function selectExportProfile (newListVal: ExportProfile[]): void {
   const newProfiles = newListVal
@@ -392,25 +405,18 @@ function updateProperties (): void {
     .catch(err => console.error(err))
 }
 
-function fetchProperties (): void {
-  ipcRenderer.invoke('application', {
-    command: 'get-descriptor',
-    payload: dirPath
-  })
-    .then((descriptor: DirDescriptor) => {
-      // Save the actually used formats.
-      if (descriptor.settings.project !== null) {
-        projectSettings.value = descriptor.settings.project
-        availableFiles.value = objectToArray<AnyDescriptor>(descriptor, 'children').filter(e => [ 'code', 'file' ].includes(e.type)) as Array<CodeFileDescriptor|MDFileDescriptor>
-      } else {
-        // Apparently the user kept the window open and removed the project
-        // state on this project. So let's close this window silently.
-        ipcRenderer.send('window-controls', { command: 'win-close' })
-      }
-      updateLock.value = false // Now the properties are fetched, so the
-      // handlers can overwrite them.
-    })
-    .catch(err => console.error(err))
+async function fetchProperties (): Promise<void> {
+  const descriptor: DirDescriptor = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: dirPath })
+  // Save the actually used formats.
+  if (descriptor.settings.project !== null) {
+    projectSettings.value = descriptor.settings.project
+  } else {
+    // Apparently the user kept the window open and removed the project
+    // state on this project. So let's close this window silently.
+    ipcRenderer.send('window-controls', { command: 'win-close' })
+  }
+  updateLock.value = false // Now the properties are fetched, so the
+  // handlers can overwrite them.
 }
 
 /**

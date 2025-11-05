@@ -132,7 +132,7 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
   const windowId = searchParams.get('window_id')
 
   if (windowId === null) {
-    throw new Error('Could not instantiate documentTreeStore: Required search param window_id not present.')
+    console.warn('Could not instantiate documentTreeStore properly: Required search param window_id not present. The store will not update properly. This can happen if another store requires this store.')
   }
 
   /**
@@ -153,9 +153,11 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
   const lastLeafActiveFile = ref<OpenDocument|undefined>(undefined)
 
   // Initial update for the pane structure ...
-  ipcRenderer.invoke('documents-provider', { command: 'retrieve-tab-config', payload: { windowId } } as DocumentManagerIPCAPI)
-    .then((treedata: LeafNodeJSON|BranchNodeJSON) => recoverState(paneStructure, paneData, lastLeafId, treedata))
-    .catch(err => console.error(err))
+  if (windowId !== null) {
+    ipcRenderer.invoke('documents-provider', { command: 'retrieve-tab-config', payload: { windowId } } as DocumentManagerIPCAPI)
+      .then((treedata: LeafNodeJSON|BranchNodeJSON) => recoverState(paneStructure, paneData, lastLeafId, treedata))
+      .catch(err => console.error(err))
+  }
 
   ipcRenderer.invoke('documents-provider', { command: 'get-file-modification-status' } as DocumentManagerIPCAPI)
     .then((modifiedFiles: string[]) => { modifiedDocuments.value = modifiedFiles })

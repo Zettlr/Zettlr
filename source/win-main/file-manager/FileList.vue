@@ -32,7 +32,7 @@
           v-on:update="updateDynamics"
         >
           <FileItem
-            v-bind:obj="item.props"
+            v-bind:item="item.props"
             v-bind:active-file="activeDescriptor"
             v-bind:index="0"
             v-bind:window-id="windowId"
@@ -52,7 +52,7 @@
         v-for="item in getDirectoryContents"
         v-bind:key="item.id"
         v-bind:index="0"
-        v-bind:obj="item.props"
+        v-bind:item="item.props"
         v-bind:window-id="windowId"
         v-bind:active-file="activeDescriptor"
         v-on:create-file="handleOperation('file-new', item.id)"
@@ -95,14 +95,16 @@ import { trans } from '@common/i18n-renderer'
 import tippy from 'tippy.js'
 import FileItem from './FileItem.vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
-import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
 import type { AnyDescriptor } from '@dts/common/fsal'
 import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
+import { getSorter } from 'source/common/util/directory-sorter'
+import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
 
 interface RecycleScrollerData {
   id: number
@@ -122,7 +124,7 @@ const emit = defineEmits<(e: 'lock-file-tree') => void>()
 const activeDescriptor = ref<AnyDescriptor|undefined>(undefined) // Can contain the active ("focused") item
 
 const documentTreeStore = useDocumentTreeStore()
-const workspacesStore = useWorkspacesStore()
+const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
 
 const selectedDirectory = computed(() => configStore.config.openDirectory)
@@ -131,7 +133,7 @@ const selectedDirDescriptor = computed(() => {
     return undefined
   }
 
-  return workspacesStore.getDir(selectedDirectory.value)
+  return workspaceStore.descriptorMap.get(selectedDirectory.value)
 })
 
 const noResultsMessage = trans('No results')
@@ -145,34 +147,44 @@ const rootElement = ref<HTMLDivElement|null>(null)
 
 const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
   const dir = selectedDirDescriptor.value
-  if (dir === undefined) {
+  if (dir === undefined || dir.type !== 'directory') {
     return []
   }
 
+  // Fetch all descriptors ...
+  const allDescriptors = [...workspaceStore.descriptorMap.keys()]
+    .filter(absPath => absPath.startsWith(dir.path))
+    .map(absPath => workspaceStore.descriptorMap.get(absPath)!)
+  
+  // ... sort them recursively ...
+  const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = configStore.config
+  const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
+  const sortedDescendants = retrieveChildrenAndSort(dir, allDescriptors, sorter)
+
+  // ... and add them to our RecycleScroller.
   const ret: RecycleScrollerData[] = []
-  const items = objectToArray(dir, 'children') as AnyDescriptor[]
   const { files } = configStore.config
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].type === 'other') {
+  for (let i = 0; i < sortedDescendants.length; i++) {
+    if (sortedDescendants[i].type === 'other') {
       // Filter other files based on our settings. Why do these ugly nested if
       // constructs? To catch all the other "other" files in the else.
-      if (hasImageExt(items[i].path)) {
+      if (hasImageExt(sortedDescendants[i].path)) {
         if (!files.images.showInFilemanager) {
           continue
         }
-      } else if (hasPDFExt(items[i].path)) {
+      } else if (hasPDFExt(sortedDescendants[i].path)) {
         if (!files.pdf.showInFilemanager) {
           continue
         }
-      } else if (hasMSOfficeExt(items[i].path)) {
+      } else if (hasMSOfficeExt(sortedDescendants[i].path)) {
         if (!files.msoffice.showInFilemanager) {
           continue
         }
-      } else if (hasOpenOfficeExt(items[i].path)) {
+      } else if (hasOpenOfficeExt(sortedDescendants[i].path)) {
         if (!files.openOffice.showInFilemanager) {
           continue
         }
-      } else if (hasDataExt(items[i].path)) {
+      } else if (hasDataExt(sortedDescendants[i].path)) {
         if (!files.dataFiles.showInFilemanager) {
           continue
         }
@@ -183,7 +195,7 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
 
     ret.push({
       id: i, // This helps the virtual scroller to adequately position the items
-      props: items[i] // The actual item
+      props: sortedDescendants[i] // The actual item
     })
   }
   return ret

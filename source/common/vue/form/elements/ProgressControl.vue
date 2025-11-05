@@ -2,9 +2,15 @@
   <div class="progress-bar-container">
     <progress
       v-bind:max="props.max ?? 100"
-      v-bind:value="props.value ?? 0"
+      v-bind:value="props.indeterminate === true ? undefined : props.value ?? 0"
     >
-      Progress: {{ props.value ?? 0 }} of {{ props.max ?? 100 }}
+      Progress:
+      <template v-if="props.indeterminate === true">
+        Indeterminate
+      </template>
+      <template v-else>
+        {{ props.value ?? 0 }} of {{ props.max ?? 100 }}
+      </template>
     </progress>
     <button
       v-if="props.interruptible === true"
@@ -35,12 +41,18 @@ const props = defineProps<{
   max?: number
   value?: number
   interruptible?: boolean
+  indeterminate?: boolean
 }>()
 
 const emit = defineEmits<(e: 'interrupt') => void>()
 </script>
 
 <style lang="less">
+@keyframes bg-movement {
+  0% { background-position: 0%; }
+  100% { background-position: 100%; }
+}
+
 body {
   .progress-bar-container {
     display: flex;
@@ -52,6 +64,13 @@ body {
       width: 100%;
       height: 6px;
       border-radius: 3px;
+
+      &:indeterminate::-webkit-progress-bar {
+        background-color: var(--system-accent-color, --c-primary);
+        background-image: linear-gradient(45deg, rgba(255,255,255,.25) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.25) 50%, rgba(255,255,255,.25) 75%, transparent 75%, transparent);
+        background-size: 1rem 1rem;
+        animation: 3s linear bg-movement infinite;
+      }
     }
 
     progress::-webkit-progress-bar {

@@ -87,13 +87,12 @@
  *
  * END HEADER
  */
-import findObject from '@common/util/find-object'
 import FileTree from './FileTree.vue'
 import FileList from './FileList.vue'
 import { trans } from '@common/i18n-renderer'
 import { nextTick, ref, computed, watch, onMounted } from 'vue'
-import { useConfigStore, useWorkspacesStore } from 'source/pinia'
-import type { AnyDescriptor } from 'source/types/common/fsal'
+import { useConfigStore } from 'source/pinia'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 const ipcRenderer = window.ipc
 
@@ -112,10 +111,9 @@ const rootElement = ref<HTMLDivElement|null>(null)
 const fileTreeComponent = ref<typeof FileTree|null>(null)
 const fileListComponent = ref<typeof FileList|null>(null)
 
-const workspacesStore = useWorkspacesStore()
+const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
 
-const fileTree = computed<AnyDescriptor[]>(() => workspacesStore.roots.map(root => root.descriptor))
 const selectedDirectory = computed(() => configStore.config.openDirectory)
 
 const filterPlaceholder = trans('Filter…')
@@ -319,9 +317,10 @@ function selectionListener (evt: MouseEvent): void {
     return
   }
 
-  const obj = findObject(fileTree.value, 'path', parseInt(target.dataset.path), 'children')
+  const descriptor = workspaceStore.descriptorMap.get(target.dataset.path)
+
   // Nothing found/type is a file? Return.
-  if (obj != null || obj.type === 'file') {
+  if (descriptor === undefined || descriptor.type !== 'directory') {
     return
   }
 

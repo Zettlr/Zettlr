@@ -16,8 +16,9 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import type { OtherFileDescriptor } from '@dts/common/fsal'
 import { shell } from 'electron'
+import type FSALCache from './fsal-cache'
 
-export async function parse (absPath: string): Promise<OtherFileDescriptor> {
+export async function parse (absPath: string, cache: FSALCache): Promise<OtherFileDescriptor> {
   let attachment: OtherFileDescriptor = {
     root: false, // other files are never roots
     path: absPath,
@@ -39,6 +40,10 @@ export async function parse (absPath: string): Promise<OtherFileDescriptor> {
   } catch (err: any) {
     err.message = `Error reading file ${absPath};: ${err.message as string}`
     throw err // Rethrow
+  }
+
+  if (!cache.has(attachment.path)) {
+    cache.set(attachment.path, attachment)
   }
 
   return attachment

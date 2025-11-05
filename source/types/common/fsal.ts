@@ -70,7 +70,10 @@ export interface DirDescriptor extends FSMetaInfo {
   }
   type: 'directory'
   isGitRepository: boolean
-  children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor|OtherFileDescriptor>
+  // NOTE: With the most recent FSAL rewrite around Zettlr 4.0, we have removed
+  // this property. To access children -- if even necessary -- another call to
+  // the FSAL is necessary.
+  // children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor|OtherFileDescriptor>
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
 }
 

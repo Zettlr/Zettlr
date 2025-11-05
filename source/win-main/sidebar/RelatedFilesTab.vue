@@ -64,7 +64,7 @@
 import { trans } from '@common/i18n-renderer'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { ref, computed, watch } from 'vue'
-import { useConfigStore, useWorkspacesStore, useDocumentTreeStore, useTagsStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useTagsStore, useWorkspaceStore } from 'source/pinia'
 import type { OtherFileDescriptor, CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
@@ -78,7 +78,7 @@ export interface RelatedFile {
 
 const ipcRenderer = window.ipc
 
-const workspacesStore = useWorkspacesStore()
+const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
 const tagStore = useTagsStore()
 const documentTreeStore = useDocumentTreeStore()
@@ -114,7 +114,7 @@ const scrollerRelatedFiles = computed(() => {
 })
 
 const lastActiveFile = computed(() => documentTreeStore.lastLeafActiveFile)
-const roots = computed(() => workspacesStore.roots)
+const roots = computed(() => workspaceStore.rootDescriptors)
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
@@ -241,7 +241,7 @@ async function recomputeRelatedFiles (): Promise<void> {
 }
 
 function beginDragRelatedFile (event: DragEvent, filePath: string): void {
-  const descriptor = workspacesStore.getFile(filePath)
+  const descriptor = workspaceStore.descriptorMap.get(filePath)
 
   if (descriptor === undefined) {
     console.error('Cannot begin dragging related file: Descriptor not found')
@@ -269,7 +269,7 @@ function requestFile (event: MouseEvent, filePath: string): void {
 }
 
 function getRelatedFileName (filePath: string): string {
-  const descriptor = workspacesStore.getFile(filePath)
+  const descriptor = workspaceStore.descriptorMap.get(filePath)
   if (descriptor === undefined || descriptor.type !== 'file') {
     return filePath
   }
