@@ -13,17 +13,17 @@
  * END HEADER
  */
 
-// KaTeX
+/* KaTeX */
 @import '~katex/dist/katex.css';
 
-// Tippy
+/* Tippy */
 @import '~tippy.js/dist/tippy.css';
 
-// App Fonts
+/* App Fonts */
 @import '../../../../../static/fonts/fonts.css';
 
-// App layout
-@import './geometry.less';
+/* App layout */
+@import './geometry.css';
 
-// Application menu
-@import './application-menu.less';
+/* Application menu */
+@import './application-menu.css';

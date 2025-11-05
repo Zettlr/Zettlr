@@ -24,12 +24,14 @@
 }
 
 html {
-  // Prevent text selection cursor throughout the app (except CodeMirror)
+  /* Prevent text selection cursor throughout the app (except CodeMirror) */
   cursor: default;
-  // The base font-size for everything (equals 1rem across the HTML)
-  // This can be overridden using the root var --base-font-size
-  // We have to set this HERE and NOT in the body, because rem-lengths look
-  // up this element, and not the body values.
+  /*
+   * The base font-size for everything (equals 1rem across the HTML)
+   * This can be overridden using the root var --base-font-size
+   * We have to set this HERE and NOT in the body, because rem-lengths look
+   * up this element, and not the body values.
+   */
   font-size: var(--base-font-size, 16px);
 }
 
@@ -48,7 +50,7 @@ body {
     }
   }
 
-  // Reset those ugly outlines
+  /* Reset those ugly outlines */
   input, select, textarea, button {
     &:focus {
       outline: 0;
@@ -63,8 +65,7 @@ body {
     max-width: 100%;
   }
 
-  // Fixes the non-readable blue colour of the links and prevents them from
-  // breaking out of the container.
+  /* Fixes the non-readable blue colour of the links and prevents them from breaking out of the container. */
   .tippy-box .tippy-content {
     a {
       color: white;
@@ -73,7 +74,7 @@ body {
   }
 
   .dragger {
-    // This class is applied to dragged elements
+    /* This class is applied to dragged elements */
     font-size: 0.9em;
     border-radius: 5px;
     background-color: var(--grey-1);
@@ -87,9 +88,9 @@ body {
   }
 }
 
-// Make sure that scrollbars look dark or light depending on the app's theme on
-// non-macOS systems. The colors and general styles have been taken very
-// professionally from a screenshot of a Windows 10 interface
+/* Make sure that scrollbars look dark or light depending on the app's theme on
+non-macOS systems. The colors and general styles have been taken very
+professionally from a screenshot of a Windows 10 interface */
 body:not(.darwin) {
   ::-webkit-scrollbar { background-color: rgb(228, 228, 228); }
   ::-webkit-scrollbar-thumb { background-color: rgb(172, 172, 172); }
@@ -126,14 +127,13 @@ body:not(.darwin) {
   }
 }
 
-// The application menu class is basically one menu that is shown both if the
-// custom menubar is shown and a top level item submenu is pulled up, as well as
-// if there is a context menu (as we don't use the remote class to display
-// context menus anymore).
+/* The application menu class is basically one menu that is shown both if the
+ * custom menubar is shown and a top level item submenu is pulled up, as well as
+ * if there is a context menu (as we don't use the remote class to display
+ * context menus anymore).
+ */
 
-@menubar-height: 31px; // The height of the menubar on Windows and Linux
-
-// HELPER CLASSES
+/* HELPER CLASSES */
 
 .columns {
   display: grid;

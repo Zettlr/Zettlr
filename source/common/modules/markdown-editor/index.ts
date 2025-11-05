@@ -19,7 +19,7 @@
 
 // Import our additional styles we need to put here since we don't have a Vue
 // component for the editor itself.
-import './editor.less'
+import './editor.css'
 
 /**
  * APIs

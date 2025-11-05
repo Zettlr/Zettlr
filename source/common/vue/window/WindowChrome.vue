@@ -76,7 +76,7 @@ import WindowTabbar, { type WindowTab } from './WindowTabbar.vue'
 import WindowStatusbar, { type StatusbarControl } from './WindowStatusbar.vue'
 
 // Import the correct styles (the platform styles are namespaced)
-import './assets/generic.less'
+import './assets/generic.css'
 import { ref, computed, watch, toRef, onBeforeMount } from 'vue'
 import { useConfigStore } from 'source/pinia'
 

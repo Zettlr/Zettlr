@@ -395,6 +395,7 @@ quick succession; something that has not worked perfectly in the past.
     maintenance much easier.
   - Removed the `root` property on descriptors, since this is not dependent on
     the file system state and can easily be computed on demand.
+- Since CSS has become quite powerful, move all LESS-files to CSS.
 - Debounce the splash screen update frequency to at most 60fps to reduce the
   load on the IPC pipe while the screen is shown.
 - Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
