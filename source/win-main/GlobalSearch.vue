@@ -146,7 +146,7 @@ import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import ProgressControl from '@common/vue/form/elements/ProgressControl.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@dts/common/search'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
@@ -200,8 +200,6 @@ const query = ref<string>('')
 const filter = ref<string>('')
 // Whether or not we should restrict search to a given directory
 const restrictToDir = ref<string>('')
-// All directories we've found in the file tree
-const directorySuggestions = ref<string[]>([])
 // All files that we need to search. Will be emptied during a search.
 const filesToSearch = ref<FileSearchDescriptor[]>([])
 // The number of files the search started with (for progress bar)
@@ -227,6 +225,8 @@ const rootPaths = computed(() => ([...workspaceStore.workspaceMap.keys()]))
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const queryInputElement = ref<HTMLInputElement|null>(null)
+// All directories we've found in the file tree
+const directorySuggestions = computed<string[]>(() => fileTree.value.filter(d => d.type === 'directory').map(d => d.path))
 
 const searchResults = computed(() => {
   // NOTE: Vue's reactivity can be tricky, and one thing is to sort arrays.
@@ -280,18 +280,9 @@ const filteredSearchResults = computed<SearchResultWrapper[]>(() => {
 const searchIsRunning = computed(() => { return filesToSearch.value.length > 0 })
 const shouldStartNewSearch = ref<boolean>(false)
 
-watch(fileTree, () => {
-  recomputeDirectorySuggestions()
-})
-
 onMounted(() => {
   queryInputElement.value?.focus()
-  recomputeDirectorySuggestions()
 })
-
-function recomputeDirectorySuggestions (): void {
-  directorySuggestions.value = fileTree.value.filter(d => d.type === 'directory').map(d => d.path)
-}
 
 function startSearch (overrideQuery?: string): void {
   // This allows other components to inject a new query when starting a search
