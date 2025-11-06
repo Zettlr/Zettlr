@@ -59,7 +59,7 @@ import {
 } from '../commands/lists'
 import {
   insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList,
-  toggleHighlight
+  applyHighlight
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { addColAfter, addColBefore, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
@@ -92,7 +92,7 @@ export function defaultKeymap (): Extension {
     { key: 'Mod-b', run: applyBold },
     { key: 'Mod-i', run: applyItalic },
     { key: 'Mod-k', run: insertLink },
-    { key: 'Ctrl-Shift-h', run: toggleHighlight },
+    { key: 'Ctrl-Shift-h', run: applyHighlight },
     // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
     // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
     { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },

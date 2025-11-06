@@ -14,7 +14,7 @@
 
 import { EditorView, showTooltip, type Tooltip } from '@codemirror/view'
 import { type EditorState, StateField } from '@codemirror/state'
-import { applyBold, applyCode, applyComment, applyItalic, insertImage, insertLink } from '../commands/markdown'
+import { applyBold, applyCode, applyComment, applyItalic, applyFenceOrBracket, insertImage, insertLink, applyHighlight, applyStrikethrough } from '../commands/markdown'
 import { trans } from '@common/i18n-renderer'
 import { configField } from '../util/configuration'
 
@@ -49,6 +49,21 @@ function getToolbar (state: EditorState): Tooltip[] {
       italic.setAttribute('title', trans('Italics'))
       italic.innerHTML = '<cds-icon shape="italic"></cds-icon>'
 
+      const underline = document.createElement('button')
+      underline.classList.add('formatting-toolbar-button')
+      underline.setAttribute('title', trans('Underline'))
+      underline.innerHTML = '<cds-icon shape="underline"></cds-icon>'
+
+      const highlight = document.createElement('button')
+      highlight.classList.add('formatting-toolbar-button')
+      highlight.setAttribute('title', trans('Highlight'))
+      highlight.innerHTML = '<cds-icon shape="highlighter"></cds-icon>'
+
+      const strikethrough = document.createElement('button')
+      strikethrough.classList.add('formatting-toolbar-button')
+      strikethrough.setAttribute('title', trans('Strikethrough'))
+      strikethrough.innerHTML = '<cds-icon shape="strikethrough"></cds-icon>'
+
       const link = document.createElement('button')
       link.classList.add('formatting-toolbar-button')
       link.setAttribute('title', trans('Link'))
@@ -69,7 +84,7 @@ function getToolbar (state: EditorState): Tooltip[] {
       code.setAttribute('title', trans('Code'))
       code.innerHTML = '<cds-icon shape="code-alt"></cds-icon>'
 
-      buttonWrapper.append(bold, italic, link, image, comment, code)
+      buttonWrapper.append(bold, italic, underline, highlight, strikethrough, link, image, comment, code)
       dom.append(buttonWrapper)
 
       // NOTE: We need to use the onmousedown event here, since the click only
@@ -77,6 +92,9 @@ function getToolbar (state: EditorState): Tooltip[] {
       // a transaction cycle that has re-rendered the tooltip.
       bold.onmousedown = function (event) { applyBold(view) }
       italic.onmousedown = function (event) { applyItalic(view) }
+      underline.onmousedown = function (event) { applyFenceOrBracket(view, 'bracket', '.underline') }
+      highlight.onmousedown = function (event) { applyHighlight(view) }
+      strikethrough.onmousedown = function (event) { applyStrikethrough(view) }
       link.onmousedown = function (event) { insertLink(view) }
       image.onmousedown = function (event) { insertImage(view) }
       comment.onmousedown = function (event) { applyComment(view) }

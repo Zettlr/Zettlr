@@ -73,6 +73,45 @@ function insertLinkOrImage (target: EditorView, type: 'link'|'image'): void {
 }
 
 /**
+ * Helper to insert pandoc fenced divs
+ *
+ * @param   {EditorView}      target        The target view
+ * @param   {'link'|'image'}  attributes    Attributes to assign to the fenced div
+ */
+function insertPandocFence (target: EditorView, attributes: string): void {
+  const transaction = target.state.changeByRange(range => {
+    let opening: string = `::: {${attributes}}`
+    let closing: string = ':::'
+
+    const startLine = target.state.doc.lineAt(range.from)
+    const endLine = target.state.doc.lineAt(range.to)
+
+    const changes: ChangeSpec[] = []
+
+    // If the startLine is not empty, insert a newline after the opening mark
+    if (!/^\s*$/.test(startLine.text)) { opening = opening + '\n' }
+
+    // If the previous line is not empty, insert a newline before the opening mark
+    const prevLine = target.state.doc.line(startLine.number - 1)
+    if (!/^\s*$/.test(prevLine.text)) { opening = '\n' + opening }
+
+    // If the endLine is not empty, insert a newline before the closing mark
+    if (!/^\s*$/.test(endLine.text)) { closing = '\n' + closing }
+
+    // If the next line is not empty, insert a newline after the closing mark
+    const nextLine = target.state.doc.line(endLine.number + 1)
+    if (!/^\s*$/.test(nextLine.text)) { closing = closing + '\n' }
+
+    changes.push({ from: startLine.from, insert: opening })
+    changes.push({ from: endLine.to, insert: closing })
+
+    return { changes, range: EditorSelection.range(range.from, range.to) }
+  })
+
+  target.dispatch(transaction)
+}
+
+/**
  * Helper function that removes block level markup from the provided line
  *
  * @param   {string}  line  The line text
@@ -310,18 +349,42 @@ export function applyComment (target: EditorView): boolean {
 }
 
 /**
- * Toggles highlighting for the selections.
+ * Applies highlighting for the selections.
  *
  * @param   {EditorView}  target  The target view
  *
  * @return  {boolean}             Whether the command was applicable
  */
-export function toggleHighlight (target: EditorView): boolean {
+export function applyHighlight (target: EditorView): boolean {
   if (!viewContainsMarkdown(target)) {
     return false
   }
 
-  applyInlineMarkup(target, '==', '==')
+  const markup: string = target.state.field(configField, false)?.highlightFormatting ?? '=='
+
+  if (markup === 'span') {
+    applyFenceOrBracket(target, 'bracket', '.mark')
+  } else {
+    applyInlineMarkup(target, markup, markup)
+  }
+
+  return true
+}
+
+/**
+ * Replaces the existing selection ranges with strikethrough formatting.
+ *
+ * @param   {EditorView}  target  The target view
+ *
+ * @return  {boolean}             Whether the command was applicable
+ */
+export function applyStrikethrough (target: EditorView): boolean {
+  if (!viewContainsMarkdown(target)) {
+    return false
+  }
+
+  applyInlineMarkup(target, '~~', '~~')
+
   return true
 }
 
@@ -500,5 +563,61 @@ export function applyTaskList (target: EditorView): boolean {
   }
 
   applyList(target, 'task')
+  return true
+}
+
+/**
+ * Format the inputs into a string to be inserted into a
+ * Pandoc attributes marker, `{#id .classes key=value}`.
+ *
+ * @param     {string}    identifier    The identifier to assign. Whitespace will
+*                                       be replaced by '-', and '#' will be prepended if
+*                                       it is not already
+ * @param     {string}    classes       The classes to include. A '.' will be prepended to
+ *                                      each word, split on whitespace, if it is not already
+ * @param     {string}    attributes    Key=Value attributes to include.
+ *
+ * @returns   {string}                  The formatted string
+ */
+export function formatPandocAttributes (identifier: string, classes: string, attributes: string): string {
+  const formatAttributes = (input: string, prefix: string, join: string = ' '): string =>
+    input
+      .trim()
+      .split(/\s+/)
+      .filter(word => word.trim() !== '')
+      .map(word => word.startsWith(prefix) ? word : prefix + word)
+      .join(join)
+
+  const pandocAttributes: string = formatAttributes(`${formatAttributes(formatAttributes(identifier, '', '-'), '#')} ${formatAttributes(classes, '.')} ${attributes}`, '')
+
+  return pandocAttributes
+}
+
+/**
+ * Insert a fenced div or bracketed span
+ *
+ * @param   {EditorView}  target      The target view
+ * @param   {string}      type        Whether to insert a fenced div or bracketed span
+ * @param   {string}      attributes  Attributes to assign to the div
+ *
+ * @return  {boolean}                 Whether the command was applicable
+*/
+export function applyFenceOrBracket (target: EditorView, type: 'fence'|'bracket', attributes: string): boolean {
+  if (!viewContainsMarkdown(target)) {
+    return false
+  }
+
+  switch (type) {
+    case 'fence': {
+      insertPandocFence(target, attributes)
+      break
+    }
+
+    case 'bracket': {
+      applyInlineMarkup(target, '[', `]{${attributes}}`)
+      break
+    }
+  }
+
   return true
 }
