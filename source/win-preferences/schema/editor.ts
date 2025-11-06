@@ -161,6 +161,14 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
                 '*': '*' + trans('Italics') + '*',
                 _: '_' + trans('Italics') + '_'
               }
+            },
+            {
+              type: 'radio',
+              model: 'editor.highlightFormatting',
+              options: {
+                'span': '[' + trans('Highlight') + ']{.mark}',
+                '==': '==' + trans('Highlight') + '=='
+              }
             }
           ]
         },
