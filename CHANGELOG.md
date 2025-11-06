@@ -360,6 +360,8 @@ quick succession; something that has not worked perfectly in the past.
 - Links in headers are now properly accounted for (#5983).
 - Headers level 1 will now be rendered to plain text for the purpose of
   displaying in various places (document tabs, file manager, etc.) (#5983).
+- Newly created defaults files will now be directly selected so that you can
+  directly start editing them.
 
 ## Under the Hood
 

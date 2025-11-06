@@ -235,17 +235,16 @@ async function retrieveDefaultsFiles (): Promise<void> {
   // NOTE: Here we are explicitly requesting only the defaults files, not
   // all export profiles, because here it's only about modifying them (which
   // does not work with the custom profiles the exporter provides).
-  ipcRenderer.invoke('assets-provider', {
+  const files: PandocProfileMetadata[] = await ipcRenderer.invoke('assets-provider', {
     command: 'list-defaults'
   } as AssetsProviderIPCAPI)
-    .then((files: PandocProfileMetadata[]) => {
-      availableDefaultsFiles.value = files
-      if (currentItem.value < 0) {
-        currentItem.value = 0
-      }
-      loadDefaultsForState().catch(e => console.error(e))
-    })
-    .catch(err => console.error(err))
+
+  availableDefaultsFiles.value = files
+  if (currentItem.value < 0) {
+    currentItem.value = 0
+  }
+
+  await loadDefaultsForState()
 }
 
 function saveDefaultsFile (): void {
@@ -281,6 +280,9 @@ function newDefaultsFile (): void {
   } as AssetsProviderIPCAPI)
     .then(async () => {
       await retrieveDefaultsFiles() // Always make sure to pull in any changes
+      const idx = visibleItems.value.findIndex(val => val.name === newName)
+      currentItem.value = idx
+      console.log({ newName, idx })
     })
     .catch(err => console.error(err))
 }
