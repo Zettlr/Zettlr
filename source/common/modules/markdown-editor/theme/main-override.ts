@@ -58,10 +58,6 @@ export const mainOverride = EditorView.baseTheme({
     padding: '4px',
     maxWidth: '800px'
   },
-  // This prevents div and span styling from styling these elements.
-  '.pandoc-attribute, cm-pandoc-span-mark, cm-pandoc-div-mark, cm-pandoc-div-info': {
-    all: 'initial',
-  },
   // Footnotes
   '.footnote, .footnote-ref-label': {
     verticalAlign: 'super',

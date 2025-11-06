@@ -49,10 +49,10 @@ export const customTags = {
   PandocAttribute: Tag.define(),
   PandocAttributeMark: Tag.define(),
   PandocDiv: Tag.define(),
-  PandocDivInfo: Tag.define(tags.monospace),
-  PandocDivMark: Tag.define(tags.monospace),
+  PandocDivInfo: Tag.define(),
+  PandocDivMark: Tag.define(),
   PandocSpan: Tag.define(),
-  PandocSpanMark: Tag.define(tags.monospace),
+  PandocSpanMark: Tag.define(),
   HighlightMark: Tag.define(),
   HighlightContent: Tag.define()
 }

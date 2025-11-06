@@ -78,10 +78,10 @@ const markdownTheme = HighlightStyle.define([
   { tag: customTags.CitationLocator, class: 'cm-citation-locator' },
   { tag: customTags.CitationSuffix, class: 'cm-citation-suffix' },
   { tag: customTags.PandocDiv, class: 'cm-pandoc-div' },
-  { tag: customTags.PandocDivInfo, class: 'cm-pandoc-div-info' },
-  { tag: customTags.PandocDivMark, class: 'cm-pandoc-div-mark' },
+  { tag: customTags.PandocDivInfo, class: 'cm-pandoc-div-info cm-code-mark cm-monospace' },
+  { tag: customTags.PandocDivMark, class: 'cm-pandoc-div-mark cm-code-mark cm-monospace' },
   { tag: customTags.PandocSpan, class: 'cm-pandoc-span' },
-  { tag: customTags.PandocSpanMark, class: 'cm-pandoc-span-mark' },
+  { tag: customTags.PandocSpanMark, class: 'cm-pandoc-span-mark cm-code-mark' },
 ])
 
 const codeTheme = HighlightStyle.define([
