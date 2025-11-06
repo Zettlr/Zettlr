@@ -74,7 +74,9 @@ import {
   applyComment,
   applyTaskList,
   insertImage,
-  insertLink
+  insertLink,
+  formatPandocAttributes,
+  applyFenceOrBracket
 } from './commands/markdown'
 import { addNewFootnote } from './commands/footnotes'
 
@@ -668,6 +670,20 @@ export default class MarkdownEditor extends EventEmitter {
     const transaction = this._instance.state.replaceSelection(text)
     this._instance.dispatch(transaction)
     this._instance.focus()
+  }
+
+  /**
+   * Insert a fenced div, `::: {#id}`,
+   * or bracketed span, `[my text]{#id}`
+   * around the main selection.
+   *
+   * @param   {string}  type        The type of div to insert
+   * @param   {string}  identifier  Identifier attribute. Spaces are replaced with a hyphen `-`
+   * @param   {string}  classes     Class attributes. Words are prepended with `.`
+   * @param   {string}  attributes  Key=Value attributes.
+   */
+  insertFence (type: 'fence'|'bracket', identifier: string, classes: string, attributes: string): void {
+    applyFenceOrBracket(this._instance, type, formatPandocAttributes(identifier, classes, attributes))
   }
 
   /**

@@ -116,6 +116,12 @@
     v-on:start="startPomodoro()"
     v-on:stop="stopPomodoro()"
   ></PopoverPomodoro>
+  <PopoverFence
+    v-if="showFencePopover && fenceButton !== null"
+    v-bind:target="fenceButton"
+    v-on:close="showFencePopover = false"
+    v-on:insert-fence="insertFence($event)"
+  ></PopoverFence>
 </template>
 
 <script setup lang="ts">
@@ -146,6 +152,7 @@ import PopoverTags from './PopoverTags.vue'
 import PopoverPomodoro from './PopoverPomodoro.vue'
 import PopoverTable from './PopoverTable.vue'
 import PopoverDocInfo from './PopoverDocInfo.vue'
+import PopoverFence from './PopoverFence.vue'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import generateId from '@common/util/generate-id'
@@ -223,6 +230,8 @@ const docInfoButton = ref<HTMLElement|null>(null)
 const showDocInfoPopover = ref<boolean>(false)
 const pomodoroButton = ref<HTMLElement|null>(null)
 const showPomodoroPopover = ref<boolean>(false)
+const fenceButton = ref<HTMLElement|null>(null)
+const showFencePopover = ref<boolean>(false)
 
 export interface PomodoroConfig {
   currentEffectFile: string
@@ -294,6 +303,7 @@ export interface EditorCommands {
   moveSection: boolean
   addKeywords: boolean
   replaceSelection: boolean
+  insertFence: boolean
   executeCommand: boolean
   data: any
 }
@@ -304,6 +314,7 @@ const editorCommands = ref<EditorCommands>({
   moveSection: false,
   addKeywords: false,
   replaceSelection: false,
+  insertFence: false,
   executeCommand: false,
   data: undefined
 })
@@ -483,6 +494,13 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
     },
     {
       type: 'button',
+      id: 'markdownFence',
+      title: trans('Insert Fence'),
+      icon: 'drag-handle',
+      visible: getToolbarButtonDisplay('showMarkdownFenceButton')
+    },
+    {
+      type: 'button',
       id: 'markdownComment',
       title: trans('Insert comment'),
       icon: 'code',
@@ -629,6 +647,7 @@ onMounted(() => {
   tableButton.value = document.querySelector('#toolbar-insert-table')
   docInfoButton.value = document.querySelector('#toolbar-document-info')
   pomodoroButton.value = document.querySelector('#toolbar-pomodoro')
+  fenceButton.value = document.querySelector('#toolbar-markdownFence')
 
   ipcRenderer.on('shortcut', (event, shortcut) => {
     if (shortcut === 'toggle-sidebar') {
@@ -731,6 +750,11 @@ function insertTable (spec: { rows: number, cols: number }): void {
 
   editorCommands.value.data = buildPipeMarkdownTable(ast, align)
   editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
+}
+
+function insertFence (spec: { type: string, identifiers: string, classes: string, attributes: string }): void {
+  editorCommands.value.data = spec
+  editorCommands.value.insertFence = !editorCommands.value.insertFence
 }
 
 function genericJtl (lineNumber: number): void {
@@ -864,6 +888,8 @@ function handleClick (clickedID?: string): void {
     showTablePopover.value = !showTablePopover.value
   } else if (clickedID === 'document-info') {
     showDocInfoPopover.value = !showDocInfoPopover.value
+  } else if (clickedID === 'markdownFence') {
+    showFencePopover.value = !showFencePopover.value
   } else if (clickedID !== undefined && clickedID.startsWith('markdown') && clickedID.length > 8) {
     // The user clicked a command button, so we just have to run that.
     editorCommands.value.data = clickedID
