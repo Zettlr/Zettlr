@@ -319,10 +319,12 @@ const sidebarVisible = computed<boolean>(() => configStore.config.window.sidebar
 const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
 const shouldCountChars = computed<boolean>(() => configStore.config.editor.countChars)
 const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || !configStore.config.display.hideToolbarInDistractionFree)
+
 // We need to display the titlebar in case the user decides to hide the toolbar.
 // The titlebar is much less distracting, but this way the user can at least
 // drag the window around.
-const shouldShowTitlebar = computed<boolean>(() => !shouldShowToolbar.value)
+const shouldShowTitlebar = computed<boolean>(() => !shouldShowToolbar.value && !windowStateStore.isFullscreen)
+
 const parsedDocumentInfo = computed<string>(() => {
   const info = windowStateStore.activeDocumentInfo
   if (info == null) {

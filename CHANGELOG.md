@@ -244,6 +244,12 @@ quick succession; something that has not worked perfectly in the past.
   if you delete characters and reach a footnote, Zettlr will first select the
   entire footnote to visually indicate that you are about to delete a footnote,
   then a second deletion will remove the entire footnote at once.
+- **Feature**: Fully hide both titlebar and toolbar if the setting "Hide
+  toolbar in distraction free" is on, the user has activated distraction free
+  and the window is in fullscreen. This means that, while Zettlr is not in
+  fullscreen, there will always be either a titlebar or toolbar to move the
+  window around, but in fullscreen, the editor can take up the entire window
+  area (#3999).
 - **Change**: Zettlr now monitors your documents and will automatically remove
   footnotes and references without the corresponding reference or footnote. If
   you have any documents in which you have un-referenced footnotes, or
