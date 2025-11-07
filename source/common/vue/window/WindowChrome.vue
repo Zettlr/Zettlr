@@ -11,42 +11,42 @@
       -->
       <WindowTitlebar
         v-if="showTitlebar"
-        v-bind:has-vibrancy="!disableVibrancy"
-        v-bind:title-content="title ?? 'Zettlr'"
+        v-bind:has-vibrancy="!props.disableVibrancy"
+        v-bind:title-content="props.title ?? 'Zettlr'"
         v-on:dblclick="handleDoubleClick('titlebar')"
       ></WindowTitlebar>
       <WindowMenubar
         v-if="showMenubar"
       ></WindowMenubar>
       <WindowToolbar
-        v-if="showToolbar && toolbarControls !== undefined"
-        v-bind:controls="toolbarControls"
-        v-bind:show-labels="toolbarLabels"
+        v-if="props.showToolbar && props.toolbarControls !== undefined"
+        v-bind:controls="props.toolbarControls"
+        v-bind:show-labels="props.toolbarLabels"
         v-on:search="emit('toolbar-search', $event)"
         v-on:toggle="emit('toolbar-toggle', $event)"
         v-on:click="emit('toolbar-click', $event)"
         v-on:dblclick="handleDoubleClick('toolbar')"
       ></WindowToolbar>
       <WindowTabbar
-        v-if="showTabbar && tabbarTabs !== undefined"
-        v-bind:tabs="tabbarTabs"
-        v-bind:has-vibrancy="!disableVibrancy"
-        v-bind:label="tabbarLabel"
+        v-if="props.showTabbar && props.tabbarTabs !== undefined"
+        v-bind:tabs="props.tabbarTabs"
+        v-bind:has-vibrancy="!props.disableVibrancy"
+        v-bind:label="props.tabbarLabel"
         v-on:tab="emit('tab', $event)"
       ></WindowTabbar>
     </div>
     <div
       id="window-content"
       v-bind:class="{
-        'disable-vibrancy': disableVibrancy
+        'disable-vibrancy': props.disableVibrancy
       }"
     >
       <!-- The actual window contents will be mounted here -->
       <slot></slot>
     </div>
     <WindowStatusbar
-      v-if="showStatusbar"
-      v-bind:controls="statusbarControls ?? []"
+      v-if="props.showStatusbar"
+      v-bind:controls="props.statusbarControls ?? []"
       v-on:click="emit('statusbar-click', $event)"
     ></WindowStatusbar>
   </div>
@@ -78,9 +78,10 @@ import WindowStatusbar, { type StatusbarControl } from './WindowStatusbar.vue'
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.css'
 import { ref, computed, watch, toRef, onBeforeMount } from 'vue'
-import { useConfigStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore } from 'source/pinia'
 
 const configStore = useConfigStore()
+const windowStateStore = useWindowStateStore()
 
 const ipcRenderer = window.ipc
 
@@ -130,6 +131,8 @@ const platform = ref<typeof process.platform>(process.platform)
 
 const useNativeAppearance = ref(configStore.config.window.nativeAppearance)
 
+const isFullscreen = computed(() => windowStateStore.isFullscreen)
+
 const showTitlebar = computed<boolean>(() => {
   // Shows a titlebar if one is requested and we are on macOS or on Windows
   // or on Linux with not native appearance.
@@ -163,6 +166,10 @@ watch(platform, () => {
 
 watch(toRef(props, 'title'), () => {
   document.title = props.title ?? 'Zettlr'
+})
+
+watch(isFullscreen, () => {
+  document.body.classList.toggle('fullscreen', isFullscreen.value)
 })
 
 onBeforeMount(() => {
