@@ -141,6 +141,11 @@ export class AppServiceContainer {
     // different order.
 
     await this._informativeBoot(this._logProvider, 'LogProvider')
+    // We boot the CSS provider very early just so that it can create the CSS
+    // file. This is not really critical, but prevents an error upon first start
+    // when the onboarding dialog is shown by the ConfigProvider, which will
+    // request the custom CSS file.
+    await this._informativeBoot(this._cssProvider, 'CSSProvider')
     await this._informativeBoot(this._configProvider, 'ConfigProvider')
 
     // If the booting isn't done after 1 second, begin displaying a splash
@@ -156,7 +161,6 @@ export class AppServiceContainer {
 
     await this._informativeBoot(this._recentDocsProvider, 'RecentDocsProvider')
     await this._informativeBoot(this._assetsProvider, 'AssetsProvider')
-    await this._informativeBoot(this._cssProvider, 'CSSProvider')
     await this._informativeBoot(this._statsProvider, 'StatsProvider')
 
     await this._informativeBoot(this._appearanceProvider, 'AppearanceProvider')
