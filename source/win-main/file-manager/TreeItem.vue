@@ -540,9 +540,6 @@ function uncollapseIfApplicable (): void {
   // Open the tree, if the selected file is contained in this dir somewhere
   if (filePath.startsWith(props.item.path)) {
     windowStateStore.uncollapsedDirectories.push(props.item.path)
-  } else {
-    // we are not in the filepath of the currently open note, do not change the state!
-    return
   }
 
   // If a directory within this has been selected, open up, lads!

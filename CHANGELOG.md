@@ -368,6 +368,7 @@ quick succession; something that has not worked perfectly in the past.
   displaying in various places (document tabs, file manager, etc.) (#5983).
 - Newly created defaults files will now be directly selected so that you can
   directly start editing them.
+- Fixed the selected directory not uncollapsing upon boot (#5156).
 
 ## Under the Hood
 
