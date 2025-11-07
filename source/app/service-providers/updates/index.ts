@@ -437,8 +437,6 @@ export default class UpdateProvider extends ProviderContract {
     // semver.lt('4.0.0-beta+nightly', '4.0.0-beta' returns false).
     state.updateAvailable = semver.lt(localVersion, remoteVersion)
 
-    console.log({ localVersion, remoteVersion })
-
     // Adapt the rest of the state
     state.tagName = parsedResponse.tag_name
     state.changelog = await md2html(parsedResponse.body, { onCitation: (_c1, _c2) => undefined, zknLinkFormat: 'link|title' })
