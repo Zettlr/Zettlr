@@ -452,6 +452,9 @@ quick succession; something that has not worked perfectly in the past.
   are on a nightly version (e.g., `beta` -> `beta.1`).
 - Log any error output from the Pandoc update script if the process failed
   (#5864).
+- The window manager now emits fullscreen state change events to the main
+  windows. This allows Custom CSS and other parts of the state to subscribe to
+  whether the `body` has the `fullscreen` class and perform changes.
 
 # 3.6.0
 

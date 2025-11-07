@@ -107,6 +107,13 @@ export default function createMainWindow (
     }
   })
 
+  window.on('enter-full-screen', () => {
+    window.webContents.send('window-controls', { command: 'fullscreen', payload: true })
+  })
+  window.on('leave-full-screen', () => {
+    window.webContents.send('window-controls', { command: 'fullscreen', payload: false })
+  })
+
   // Emitted when the user wants to close the window.
   window.on('close', (event) => {
     let ses = window.webContents.session
