@@ -141,11 +141,11 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     openPaths.value = state.config.openPaths
   })
 
-  watch(openPaths, async (value, oldValue) => {
+  watch(openPaths, async (value) => {
     // Retrieve all new paths to load.
     const pathsToLoad: string[] = []
     for (const newPath of value) {
-      if (!oldValue.includes(newPath)) {
+      if (!workspaceMap.value.has(newPath)) {
         pathsToLoad.push(newPath)
       }
     }
@@ -161,9 +161,11 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     }
 
     // Unload any path no longer part of the open paths.
-    for (const oldPath of oldValue) {
-      if (!value.includes(oldPath)) {
-        workspaceMap.value.delete(oldPath)
+    for (const existingPath of workspaceMap.value.keys()) {
+      console.log(`Checking existing path from workspace map ${existingPath}`)
+      if (!value.includes(existingPath)) {
+        console.log('No longer present -> deleting!')
+        workspaceMap.value.delete(existingPath)
       }
     }
   })
@@ -174,11 +176,28 @@ export const useWorkspaceStore = defineStore('workspace', () => {
       return // The loader will update the descriptorMap once with a huge chunk of updates.
     }
 
-    for (const root of value.keys()) {
-      const contents = value.get(root)!
-      getDescriptorFor(contents)
-        .then(descriptors => descriptors.map(d => descriptorMap.value.set(d.path, d)))
-        .catch(err => console.error(`Could not fetch descriptors for path "${root}"`, err))
+    const descriptorsToFetch: string[] = []
+    const flatMap: Set<string> = new Set()
+
+    for (const contents of value.values()) {
+      for (const absPath of contents) {
+        flatMap.add(absPath)
+        if (!descriptorMap.value.has(absPath)) {
+          descriptorsToFetch.push(absPath)
+        }
+      }
+    }
+
+    // First, start loading new descriptors
+    getDescriptorFor(descriptorsToFetch)
+      .then(descriptors => descriptors.map(d => descriptorMap.value.set(d.path, d)))
+      .catch(err => console.error('Could not fetch new descriptors from main!', err))
+    
+    // Second, check which of the descriptors are no longer loaded
+    for (const existingDescriptor of descriptorMap.value.keys()) {
+      if (!flatMap.has(existingDescriptor)) {
+        descriptorMap.value.delete(existingDescriptor)
+      }
     }
   }, { deep: true })
 
