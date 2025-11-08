@@ -16,15 +16,6 @@
  * END HEADER
  */
 
-/* Cursor blink animation */
-@keyframes soft-blink {
-  0%   { opacity: 1; }
-  40%  { opacity: 1; }
-  55%  { opacity: 0; }
-  85%  { opacity: 0; }
-  100% { opacity: 1; }
-}
-
 /* Use the default mouse cursor on the vertical scrollbar */
 .CodeMirror-vscrollbar { cursor: default; }
 
@@ -49,14 +40,13 @@
 
   /* There are both .cm-cursor-primary as well as .cm-cursor-secondary, but all
   are .cm-cursors. */
-  .cm-cursor {
-    width: 2px;
-    border: 0;
-    z-index: 1;
-    transform: translateZ(0);
-    /* With the new CodeMirror 6 implementation, this animation doesn't work
-    well anymore. */
-    /*animation: soft-blink 1s infinite;*/
+  .cm-layer.cm-cursorLayer {
+    .cm-cursor {
+      width: 2px;
+      border: 0;
+      z-index: 1;
+      transform: translateZ(0);
+    }
   }
 
   /* Implement a "fat" cursor for Windows' overwrite mode (Ins key) */
