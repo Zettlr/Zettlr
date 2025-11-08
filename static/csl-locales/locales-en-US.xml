@@ -26,7 +26,7 @@
       <uri>https://orcid.org/0000-0001-9560-6336</uri>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-06-24T00:00:00+00:00</updated>
+    <updated>2025-10-18T05:52:31+00:00</updated>
   </info>
   <style-options punctuation-in-quote="true"/>
   <date form="text">
@@ -103,7 +103,6 @@
     <term name="circa" form="short">c.</term>
     <!-- CMOS 10.48 recommends "ca." for "circa" but also allows "c.", which CSL has used historically -->
     <term name="cited" form="short">cit.</term> <!-- ODA -->
-    <term name="et-al" form="short">et al.</term>
     <term name="film" form="short">flm.</term> <!-- ODA -->
     <term name="from" form="short">fr.</term>
     <term name="letter" form="short">let.</term> <!-- ODA -->

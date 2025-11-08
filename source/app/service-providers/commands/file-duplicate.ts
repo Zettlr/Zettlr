@@ -26,13 +26,13 @@ export default class FileDuplicate extends ZettlrCommand {
 
   /**
    * Duplicate a file.
-   * @param  {String} evt The event name
-   * @param  {Object} arg An object containing all necessary information.
-   * @return {void}     This function does not return anything.
+   *
+   * @param  {string}  evt The event name
+   * @param  {any}     arg  An object containing all necessary information.
    */
-  async run (evt: string, arg: any): Promise<void> {
+  async run (evt: string, arg: { path: string, name: string, windowNumber: string, leafId: string }): Promise<void> {
     // First, retrieve our source file
-    let file = this._app.workspaces.findFile(arg.path)
+    const file = await this._app.fsal.getDescriptorForAnySupportedFile(arg.path)
     if (file === undefined) {
       this._app.log.error('Could not duplicate source file, because the source file was not found')
       this._app.windows.prompt({
@@ -44,7 +44,7 @@ export default class FileDuplicate extends ZettlrCommand {
     }
 
     // Then, the target directory.
-    let dir = this._app.workspaces.findDir(file.dir) // (1) A specified directory
+    let dir = await this._app.fsal.getAnyDirectoryDescriptor(file.dir) // (1) A specified directory
     const { openDirectory } = this._app.config.get()
     if (dir === undefined && openDirectory !== null && await this._app.fsal.isDir(openDirectory)) {
       dir = await this._app.fsal.getAnyDirectoryDescriptor(openDirectory)

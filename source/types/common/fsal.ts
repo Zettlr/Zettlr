@@ -32,15 +32,6 @@ export interface ProjectSettings {
 }
 
 /**
- * Declares an event that happens on the FSAL
- */
-export interface FSALHistoryEvent {
-  event: 'add'|'change'|'remove'
-  path: string
-  timestamp: number
-}
-
-/**
  * An interface containing meta information all
  * descriptors should provide.
  */
@@ -48,7 +39,6 @@ export interface FSMetaInfo {
   path: string // absolutePath
   dir: string // path.dirname(absolutePath)
   name: string // path.basename(absolutePath)
-  root: boolean // Whether the file/dir is a root (relative to Zettlr)
   type: 'file' | 'directory' | 'code' | 'other'
   size: number
   modtime: number
@@ -70,7 +60,6 @@ export interface DirDescriptor extends FSMetaInfo {
   }
   type: 'directory'
   isGitRepository: boolean
-  children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor|OtherFileDescriptor>
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
 }
 
@@ -90,6 +79,10 @@ export interface MDFileDescriptor extends FSMetaInfo {
   yamlTitle: string|undefined
   frontmatter: any|null
   linefeed: string
+  /**
+   * Whether the file has been modified by Zettlr.
+   * @deprecated Because this should be computed based on the documents provider.
+   */
   modified: boolean
 }
 
@@ -101,6 +94,10 @@ export interface CodeFileDescriptor extends FSMetaInfo {
   type: 'code'
   bom: string // An optional BOM
   linefeed: string
+  /**
+   * Whether the file has been modified by Zettlr.
+   * @deprecated Because this should be computed based on the documents provider.
+   */
   modified: boolean
 }
 
@@ -108,7 +105,6 @@ export interface CodeFileDescriptor extends FSMetaInfo {
  * The FSAL other (non-MD and non-Tex) file descriptor
  */
 export interface OtherFileDescriptor extends FSMetaInfo {
-  root: false // Attachments can never be roots
   type: 'other'
   ext: string
 }

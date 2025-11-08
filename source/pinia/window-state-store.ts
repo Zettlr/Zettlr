@@ -46,6 +46,7 @@ async function updateSnippets (snippets: Ref<Array<{ name: string, content: stri
 }
 
 export const useWindowStateStore = defineStore('window-state', () => {
+  const isFullscreen = ref(false)
   const uncollapsedDirectories = ref<string[]>([])
   const distractionFreeMode = ref<undefined|string>(undefined)
   const activeDocumentInfo = ref<undefined|DocumentInfo>(undefined)
@@ -79,6 +80,12 @@ export const useWindowStateStore = defineStore('window-state', () => {
   ipcRenderer.invoke('targets-provider', { command: 'get-targets' })
     .then((targets: WritingTarget[]) => { writingTargets.value = targets })
     .catch(e => console.error(e))
+  
+  ipcRenderer.on('window-controls', (event, { command, payload }) => {
+    if (command === 'fullscreen' && typeof payload === 'boolean') {
+      isFullscreen.value = payload
+    }
+  })
 
   return {
     uncollapsedDirectories,
@@ -87,6 +94,7 @@ export const useWindowStateStore = defineStore('window-state', () => {
     tableOfContents,
     searchResults,
     snippets,
-    writingTargets
+    writingTargets,
+    isFullscreen
   }
 })

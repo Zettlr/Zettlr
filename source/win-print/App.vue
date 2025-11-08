@@ -74,7 +74,6 @@ const printContainer = ref<HTMLDivElement|null>(null)
 
 onMounted(async () => {
   if (filePath === '' || printContainer.value === null) {
-    console.log({ filePath, cont: printContainer.value })
     return
   }
 
@@ -242,6 +241,20 @@ function handleClick (buttonID?: string): void {
     header {
       margin-bottom: 4em;
       text-align: center;
+    }
+  }
+
+  #footnote-container {
+    font-size: 0.8rem;
+
+    div.footnote-ref {
+      :is(p:first-of-type) {
+        display: inline;
+      }
+
+      :not(sup, a, p:first-of-type) {
+        margin-left: 2rem;
+      }
     }
   }
 }

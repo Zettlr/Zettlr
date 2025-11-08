@@ -16,10 +16,12 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import type { DirDescriptor } from '@dts/common/fsal'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
+import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
 export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
+  const configStore = useConfigStore()
   const isMac = process.platform === 'darwin'
   const isWin = process.platform === 'win32'
 
@@ -100,7 +102,7 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
   }
 
   // Finally, check for it being root
-  if (dirObject.root) {
+  if (configStore.config.openPaths.includes(dirObject.path)) {
     template.push({ type: 'separator' })
     template.push({
       id: 'menu.close_workspace',

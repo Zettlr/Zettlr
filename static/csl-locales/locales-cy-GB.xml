@@ -2,7 +2,7 @@
 <locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="cy-GB">
   <info>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2014-10-08T12:00:00+00:00</updated>
+    <updated>2025-10-16T03:08:07+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -16,26 +16,52 @@
     <date-part name="year"/>
   </date>
   <terms>
+    <!-- LONG GENERAL TERMS -->
+    <term name="accessed">gwelwyd</term>
     <term name="advance-online-publication">advance online publication</term>
     <term name="album">album</term>
+    <term name="and">a/ac</term>
+    <term name="and others">ac eraill</term>
+    <term name="anonymous">di-enw</term>
+    <term name="at">at</term>
     <term name="audio-recording">audio recording</term>
+    <term name="available at">ar gael</term>
+    <term name="by">gan</term>
+    <term name="circa">circa</term>
+    <term name="cited">dyfynnwyd</term>
+    <term name="et-al">et al.</term>
     <term name="film">film</term>
+    <term name="forthcoming">ar fin ymddangos</term>
+    <term name="from">gan</term>
     <term name="henceforth">henceforth</term>
+    <term name="ibid">ibid.</term>
+    <term name="in">yn</term>
+    <term name="in press">yn y wasg</term>
+    <term name="internet">rhyngrwyd</term>
+    <term name="letter">llythyr</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="no date">dim dyddiad</term>
     <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
     <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
     <term name="on">on</term>
+    <term name="online">arlein</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="original-work-published">original work published</term>
     <term name="personal-communication">cyfathrebu personol</term>
     <term name="podcast">podcast</term>
     <term name="podcast-episode">podcast episode</term>
     <term name="preprint">preprint</term>
+    <term name="presented at">cyflwynwyd yn</term>
     <term name="radio-broadcast">radio broadcast</term>
     <term name="radio-series">radio series</term>
     <term name="radio-series-episode">radio series episode</term>
+    <term name="reference">
+      <single>cyfeirnod</single>
+      <multiple>cyfeirnodau</multiple>
+    </term>
+    <term name="retrieved">gwelwyd</term>
+    <term name="review-of">review of</term>
+    <term name="scale">graddfa</term>
     <term name="special-issue">special issue</term>
     <term name="special-section">special section</term>
     <term name="television-broadcast">television broadcast</term>
@@ -43,63 +69,20 @@
     <term name="television-series-episode">television series episode</term>
     <term name="video">video</term>
     <term name="working-paper">working paper</term>
-    <term name="accessed">gwelwyd</term>
-    <term name="and">a/ac</term>
-    <term name="and others">ac eraill</term>
-    <term name="anonymous">di-enw</term>
+
+    <!-- SHORT GENERAL TERMS -->
     <term name="anonymous" form="short">dienw</term>
-    <term name="at">at</term>
-    <term name="available at">ar gael</term>
-    <term name="by">gan</term>
-    <term name="circa">circa</term>
     <term name="circa" form="short">c.</term>
-    <term name="cited">dyfynnwyd</term>
-    <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
-    </term>
-    <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
-    </term>
-    <term name="edition">
-      <single>argraffiad</single>
-      <multiple>argraffiadau</multiple>
-    </term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
-    <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
-    </term>
-    <term name="edition" form="short">arg.</term>
-    <term name="et-al">et al.</term>
-    <term name="forthcoming">ar fin ymddangos</term>
-    <term name="from">gan</term>
-    <term name="ibid">ibid.</term>
-    <term name="in">yn</term>
-    <term name="in press">yn y wasg</term>
-    <term name="internet">rhyngrwyd</term>
-    <term name="letter">llythyr</term>
-    <term name="no date">dim dyddiad</term>
     <term name="no date" form="short">d.d.</term>
-    <term name="online">arlein</term>
-    <term name="presented at">cyflwynwyd yn</term>
-    <term name="reference">
-      <single>cyfeirnod</single>
-      <multiple>cyfeirnodau</multiple>
-    </term>
+    <term name="no-place" form="short">n.p.</term>
+    <term name="no-publisher" form="short">n.p.</term>
     <term name="reference" form="short">
       <single>cyf.</single>
       <multiple>cyf’au.</multiple>
     </term>
-    <term name="review-of">review of</term>
     <term name="review-of" form="short">rev. of</term>
-    <term name="retrieved">gwelwyd</term>
-    <term name="scale">graddfa</term>
-    <term name="version">fersiwn</term>
+
+    <!-- SYMBOLIC GENERAL FORMS -->
 
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">preprint</term>
@@ -165,11 +148,13 @@
     <term name="review-book" form="short">bk. rev.</term>
     <term name="song" form="short">audio rec.</term>
 
-    <!-- VERB ITEM TYPE FORMS -->
+    <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
     <term name="hearing" form="verb">testimony of</term>
     <term name="review" form="verb">review of</term>
     <term name="review-book" form="verb">review of the book</term>
+
+    <!-- SHORT VERB ITEM TYPE FORMS -->
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">OC</term>
@@ -209,53 +194,25 @@
     <term name="long-ordinal-10">degfed</term>
 
     <!-- LONG LOCATOR FORMS -->
-    <term name="act">			 
+    <term name="act">
       <single>act</single>
-      <multiple>acts</multiple>						 
+      <multiple>acts</multiple>
     </term>
-    <term name="appendix">			 
+    <term name="appendix">
       <single>appendix</single>
-      <multiple>appendices</multiple>						 
+      <multiple>appendices</multiple>
     </term>
-    <term name="article-locator">			 
+    <term name="article-locator">
       <single>article</single>
-      <multiple>articles</multiple>						 
-    </term>
-    <term name="canon">			 
-      <single>canon</single>
-      <multiple>canons</multiple>						 
-    </term>
-    <term name="elocation">			 
-      <single>location</single>
-      <multiple>locations</multiple>						 
-    </term>
-    <term name="equation">			 
-      <single>equation</single>
-      <multiple>equations</multiple>						 
-    </term>
-    <term name="rule">			 
-      <single>rule</single>
-      <multiple>rules</multiple>						 
-    </term>
-    <term name="scene">			 
-      <single>scene</single>
-      <multiple>scenes</multiple>						 
-    </term>
-    <term name="table">			 
-      <single>table</single>
-      <multiple>tables</multiple>						 
-    </term>
-    <term name="timestamp"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>						 
-    </term>
-    <term name="title-locator">			 
-      <single>title</single>
-      <multiple>titles</multiple>						 
+      <multiple>articles</multiple>
     </term>
     <term name="book">
       <single>llyfr</single>
       <multiple>llyfrau</multiple>
+    </term>
+    <term name="canon">
+      <single>canon</single>
+      <multiple>canons</multiple>
     </term>
     <term name="chapter">
       <single>pennod</single>
@@ -264,6 +221,14 @@
     <term name="column">
       <single>colofn</single>
       <multiple>colofnau</multiple>
+    </term>
+    <term name="elocation">
+      <single>location</single>
+      <multiple>locations</multiple>
+    </term>
+    <term name="equation">
+      <single>equation</single>
+      <multiple>equations</multiple>
     </term>
     <term name="figure">
       <single>ffigwr</single>
@@ -293,6 +258,164 @@
       <single>tudalen</single>
       <multiple>tudalennau</multiple>
     </term>
+    <term name="paragraph">
+      <single>paragraff</single>
+      <multiple>paragraffau</multiple>
+    </term>
+    <term name="part">
+      <single>rhan</single>
+      <multiple>rhannau</multiple>
+    </term>
+    <term name="rule">
+      <single>rule</single>
+      <multiple>rules</multiple>
+    </term>
+    <term name="scene">
+      <single>scene</single>
+      <multiple>scenes</multiple>
+    </term>
+    <term name="section">
+      <single>adran</single>
+      <multiple>adrannau</multiple>
+    </term>
+    <term name="sub-verbo">
+      <single>sub verbo</single>
+      <multiple>sub verbis</multiple>
+    </term>
+    <term name="supplement">
+      <single>supplement</single>
+      <multiple>supplements</multiple>
+    </term>
+    <term name="table">
+      <single>table</single>
+      <multiple>tables</multiple>
+    </term>
+    <term name="timestamp"> <!-- generally blank -->
+      <single/>
+      <multiple/>
+    </term>
+    <term name="title-locator">
+      <single>title</single>
+      <multiple>titles</multiple>
+    </term>
+    <term name="verse">
+      <single>pennill</single>
+      <multiple>penillion</multiple>
+    </term>
+    <term name="volume">
+      <single>cyfrol</single>
+      <multiple>cyfrolau</multiple>
+    </term>
+
+    <!-- SHORT LOCATOR FORMS -->
+    <term name="appendix" form="short">
+      <single>app.</single>
+      <multiple>apps.</multiple>
+    </term>
+    <term name="article-locator" form="short">
+      <single>art.</single>
+      <multiple>arts.</multiple>
+    </term>
+    <term name="book" form="short">llyfr.</term>
+    <term name="chapter" form="short">pen.</term>
+    <term name="column" form="short">col.</term>
+    <term name="elocation" form="short">
+      <single>loc.</single>
+      <multiple>locs.</multiple>
+    </term>
+    <term name="equation" form="short">
+      <single>eq.</single>
+      <multiple>eqs.</multiple>
+    </term>
+    <term name="figure" form="short">ffig.</term>
+    <term name="folio" form="short">ff.</term>
+    <term name="issue" form="short">rhif.</term>
+    <term name="line" form="short">ll.</term>
+    <term name="note" form="short">n.</term>
+    <term name="opus" form="short">op.</term>
+    <term name="page" form="short">
+      <single>t.</single>
+      <multiple>tt.</multiple>
+    </term>
+    <term name="paragraph" form="short">para.</term>
+    <term name="part" form="short">rhan.</term>
+    <term name="rule" form="short">
+      <single>r.</single>
+      <multiple>rr.</multiple>
+    </term>
+    <term name="scene" form="short">
+      <single>sc.</single>
+      <multiple>scs.</multiple>
+    </term>
+    <term name="section" form="short">adr.</term>
+    <term name="sub-verbo" form="short">
+      <single>s.v.</single>
+      <multiple>s.vv.</multiple>
+    </term>
+    <term name="supplement" form="short">
+      <single>supp.</single>
+      <multiple>supps.</multiple>
+    </term>
+    <term name="table" form="short">
+      <single>tbl.</single>
+      <multiple>tbls.</multiple>
+    </term>
+    <term name="timestamp" form="short"> <!-- generally blank -->
+      <single/>
+      <multiple/>
+    </term>
+    <term name="title-locator" form="short">
+      <single>tit.</single>
+      <multiple>tits.</multiple>
+    </term>
+    <term name="verse" form="short">
+      <single>p.</single>
+      <multiple>pp.</multiple>
+    </term>
+    <term name="volume" form="short">
+      <single>rhif.</single>
+      <multiple>rhifu.</multiple>
+    </term>
+
+    <!-- SYMBOLIC LOCATOR FORMS -->
+    <term name="paragraph" form="symbol">
+      <single>¶</single>
+      <multiple>¶¶</multiple>
+    </term>
+    <term name="section" form="symbol">
+      <single>§</single>
+      <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG NUMBER VARIABLE FORMS -->
+    <term name="chapter-number">
+      <single>chapter</single>
+      <multiple>chapters</multiple>
+    </term>
+    <term name="citation-number">
+      <single>citation</single>
+      <multiple>citations</multiple>
+    </term>
+    <term name="collection-number">
+      <single>rhifyn</single>
+      <multiple>rhifynnau</multiple>
+    </term>
+    <term name="edition">
+      <single>argraffiad</single>
+      <multiple>argraffiadau</multiple>
+    </term>
+    <term name="first-reference-note-number">
+      <single>reference</single>
+      <multiple>references</multiple>
+    </term>
+    <term name="number">
+      <single>number</single>
+      <multiple>numbers</multiple>
+    </term>
+    <term name="number-of-pages">
+      <single>tudalen</single>
+      <multiple>tudalennau</multiple>
+    </term>
     <term name="number-of-volumes">
       <single>volume</single>
       <multiple>volumes</multiple>
@@ -305,7 +428,9 @@
       <single>printing</single>
       <multiple>printings</multiple>
     </term>
+    <term name="version">fersiwn</term>
 
+    <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
       <single>chap.</single>
       <multiple>chaps.</multiple>
@@ -315,86 +440,16 @@
       <multiple>cits.</multiple>
     </term>
     <term name="collection-number" form="short">rhif.</term>
-    <term name="number-of-pages">
-      <single>tudalen</single>
-      <multiple>tudalennau</multiple>
+    <term name="edition" form="short">arg.</term>
+    <term name="first-reference-note-number" form="short">
+      <single>ref.</single>
+      <multiple>refs.</multiple>
     </term>
-    <term name="paragraph">
-      <single>paragraff</single>
-      <multiple>paragraffau</multiple>
+    <term name="number" form="short">
+      <single>no.</single>
+      <multiple>nos.</multiple>
     </term>
-    <term name="part">
-      <single>rhan</single>
-      <multiple>rhannau</multiple>
-    </term>
-    <term name="section">
-      <single>adran</single>
-      <multiple>adrannau</multiple>
-    </term>
-    <term name="supplement">
-      <single>supplement</single>
-      <multiple>supplements</multiple>
-    </term>
-    <term name="sub-verbo">
-      <single>sub verbo</single>
-      <multiple>sub verbis</multiple>
-    </term>
-    <term name="verse">
-      <single>pennill</single>
-      <multiple>penillion</multiple>
-    </term>
-    <term name="volume">
-      <single>cyfrol</single>
-      <multiple>cyfrolau</multiple>
-    </term>
-
-    <!-- SHORT LOCATOR FORMS -->
-    <term name="appendix" form="short">			 
-      <single>app.</single>
-      <multiple>apps.</multiple>						 
-    </term>
-    <term name="article-locator" form="short">			 
-      <single>art.</single>
-      <multiple>arts.</multiple>
-    </term>
-    <term name="elocation" form="short">			 
-      <single>loc.</single>
-      <multiple>locs.</multiple>
-    </term>
-    <term name="equation" form="short">			 
-      <single>eq.</single>
-      <multiple>eqs.</multiple>
-    </term>
-    <term name="rule" form="short">			 
-      <single>r.</single>
-      <multiple>rr.</multiple>						 
-    </term>
-    <term name="scene" form="short">			 
-      <single>sc.</single>
-      <multiple>scs.</multiple>						 
-    </term>
-    <term name="table" form="short">			 
-      <single>tbl.</single>
-      <multiple>tbls.</multiple>						 
-    </term>
-    <term name="timestamp" form="short"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>						 
-    </term>
-    <term name="title-locator" form="short">			 
-      <single>tit.</single>
-      <multiple>tits.</multiple>
-    </term>
-    <term name="book" form="short">llyfr.</term>
-    <term name="chapter" form="short">pen.</term>
-    <term name="column" form="short">col.</term>
-    <term name="figure" form="short">ffig.</term>
-    <term name="folio" form="short">ff.</term>
-    <term name="issue" form="short">rhif.</term>
-    <term name="line" form="short">ll.</term>
-    <term name="note" form="short">n.</term>
-    <term name="opus" form="short">op.</term>
-    <term name="page" form="short">
+    <term name="number-of-pages" form="short">
       <single>t.</single>
       <multiple>tt.</multiple>
     </term>
@@ -410,62 +465,15 @@
       <single>print.</single>
       <multiple>prints.</multiple>
     </term>
-    
-
-    <term name="number-of-pages" form="short">
-      <single>t.</single>
-      <multiple>tt.</multiple>
-    </term>
-    <term name="paragraph" form="short">para.</term>
-    <term name="part" form="short">rhan.</term>
-    <term name="section" form="short">adr.</term>
-    <term name="supplement" form="short">
-      <single>supp.</single>
-      <multiple>supps.</multiple>
-    </term>
-    <term name="sub-verbo" form="short">
-      <single>s.v.</single>
-      <multiple>s.vv.</multiple>
-    </term>
-    <term name="verse" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
-    </term>
-    <term name="volume" form="short">
-      <single>rhif.</single>
-      <multiple>rhifu.</multiple>
-    </term>
-
-    <!-- SYMBOL LOCATOR FORMS -->
-    <term name="paragraph" form="symbol">
-      <single>¶</single>
-      <multiple>¶¶</multiple>
-    </term>
-    <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
-    </term>
-    <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
-    </term>
-    <term name="collection-number">
-      <single>rhifyn</single>
-      <multiple>rhifynnau</multiple>
-    </term>
-    <term name="section" form="symbol">
-      <single>§</single>
-      <multiple>§§</multiple>
-    </term>
 
     <!-- LONG ROLE FORMS -->
-    <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
-    </term>
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
+    </term>
+    <term name="collection-editor">
+      <single>ed.</single>
+      <multiple>eds.</multiple>
     </term>
     <term name="compiler">
       <single>compiler</single>
@@ -479,6 +487,26 @@
       <single>curator</single>
       <multiple>curators</multiple>
     </term>
+    <term name="director">
+      <single>cyfarwyddwr</single>
+      <multiple>cyfarwyddwyr</multiple>
+    </term>
+    <term name="editor">
+      <single>golygydd</single>
+      <multiple>golygyddion</multiple>
+    </term>
+    <term name="editor-translator">
+      <single>golygydd a chyfieithydd</single>
+      <multiple>golygyddion a chyfieithwyr</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>golygydd a chyfieithydd</single>
+      <multiple>golygyddion a chyfieithwyr</multiple>
+    </term>
+    <term name="editorial-director">
+      <single>cyfarwyddwr-golygyddol</single>
+      <multiple>cyfarwyddwyr-golygyddol</multiple>
+    </term>
     <term name="executive-producer">
       <single>executive producer</single>
       <multiple>executive producers</multiple>
@@ -490,6 +518,10 @@
     <term name="host">
       <single>host</single>
       <multiple>hosts</multiple>
+    </term>
+    <term name="illustrator">
+      <single>darlunydd</single>
+      <multiple>darlunwyr</multiple>
     </term>
     <term name="narrator">
       <single>narrator</single>
@@ -515,33 +547,9 @@
       <single>series creator</single>
       <multiple>series creators</multiple>
     </term>
-    <term name="director">
-      <single>cyfarwyddwr</single>
-      <multiple>cyfarwyddwyr</multiple>
-    </term>
-    <term name="editor">
-      <single>golygydd</single>
-      <multiple>golygyddion</multiple>
-    </term>
-    <term name="editorial-director">
-      <single>cyfarwyddwr-golygyddol</single>
-      <multiple>cyfarwyddwyr-golygyddol</multiple>
-    </term>
-    <term name="illustrator">
-      <single>darlunydd</single>
-      <multiple>darlunwyr</multiple>
-    </term>
     <term name="translator">
       <single>cyfieithydd</single>
       <multiple>cyfieithwyr</multiple>
-    </term>
-    <term name="editortranslator">
-      <single>golygydd a chyfieithydd</single>
-      <multiple>golygyddion a chyfieithwyr</multiple>
-    </term>
-    <term name="editor-translator">
-      <single>golygydd a chyfieithydd</single>
-      <multiple>golygyddion a chyfieithwyr</multiple>
     </term>
 
     <!-- SHORT ROLE FORMS -->
@@ -557,9 +565,33 @@
       <single>cur.</single>
       <multiple>curs.</multiple>
     </term>
+    <term name="director" form="short">
+      <single>cyf.</single>
+      <multiple>cyfy.</multiple>
+    </term>
+    <term name="editor" form="short">
+      <single>gol.</single>
+      <multiple>goln.</multiple>
+    </term>
+    <term name="editor-translator" form="short">
+      <single>gol. a chyf.</single>
+      <multiple>goln. a chyf.</multiple>
+    </term>
+    <term name="editortranslator" form="short">
+      <single>gol. a chyf.</single>
+      <multiple>goln. a chyf.</multiple>
+    </term>
+    <term name="editorial-director" form="short">
+      <single>gol.</single>
+      <multiple>goln.</multiple>
+    </term>
     <term name="executive-producer" form="short">
       <single>exec. prod.</single>
       <multiple>exec. prods.</multiple>
+    </term>
+    <term name="illustrator" form="short">
+      <single>darlun.</single>
+      <multiple>darlun.</multiple>
     </term>
     <term name="narrator" form="short">
       <single>narr.</single>
@@ -585,83 +617,59 @@
       <single>cre.</single>
       <multiple>cres.</multiple>
     </term>
-    <term name="director" form="short">
-      <single>cyf.</single>
-      <multiple>cyfy.</multiple>
-    </term>
-    <term name="editor" form="short">
-      <single>gol.</single>
-      <multiple>goln.</multiple>
-    </term>
-    <term name="editorial-director" form="short">
-      <single>gol.</single>
-      <multiple>goln.</multiple>
-    </term>
-    <term name="illustrator" form="short">
-      <single>darlun.</single>
-      <multiple>darlun.</multiple>
-    </term>
     <term name="translator" form="short">
       <single>cyf.</single>
       <multiple>cyf.</multiple>
     </term>
-    <term name="editortranslator" form="short">
-      <single>gol. a chyf.</single>
-      <multiple>goln. a chyf.</multiple>
-    </term>
-    <term name="editor-translator" form="short">
-      <single>gol. a chyf.</single>
-      <multiple>goln. a chyf.</multiple>
-    </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb">edited by</term>
     <term name="chair" form="verb">chaired by</term>
+    <term name="collection-editor" form="verb">edited by</term>
     <term name="compiler" form="verb">compiled by</term>
+    <term name="container-author" form="verb">gan</term>
     <term name="contributor" form="verb">with</term>
     <term name="curator" form="verb">curated by</term>
+    <term name="director" form="verb">cyfarwyddwyd gan</term>
+    <term name="editor" form="verb">golygwyd gan</term>
+    <term name="editor-translator" form="verb">golygwyd a chyfieithwyd gan</term>
+    <term name="editortranslator" form="verb">golygwyd a chyfieithwyd gan</term>
+    <term name="editorial-director" form="verb">cyfarwyddwyd a golygwyd gan</term>
     <term name="executive-producer" form="verb">executive produced by</term>
     <term name="guest" form="verb">with guest</term>
     <term name="host" form="verb">hosted by</term>
+    <term name="illustrator" form="verb">darlunwyd gan</term>
+    <term name="interviewer" form="verb">cyfweliad gan</term>
     <term name="narrator" form="verb">narrated by</term>
     <term name="organizer" form="verb">organized by</term>
     <term name="performer" form="verb">performed by</term>
     <term name="producer" form="verb">produced by</term>
-    <term name="script-writer" form="verb">written by</term>
-    <term name="series-creator" form="verb">created by</term>
-    <term name="container-author" form="verb">gan</term>
-    <term name="director" form="verb">cyfarwyddwyd gan</term>
-    <term name="editor" form="verb">golygwyd gan</term>
-    <term name="editorial-director" form="verb">cyfarwyddwyd a golygwyd gan</term>
-    <term name="illustrator" form="verb">darlunwyd gan</term>
-    <term name="interviewer" form="verb">cyfweliad gan</term>
     <term name="recipient" form="verb">i</term>
     <term name="reviewed-author" form="verb">gan</term>
-    <term name="collection-editor" form="verb-short">ed. by</term>
+    <term name="script-writer" form="verb">written by</term>
+    <term name="series-creator" form="verb">created by</term>
     <term name="translator" form="verb">cyfieithwyd gan </term>
-    <term name="editortranslator" form="verb">golygwyd a chyfieithwyd gan</term>
-    <term name="editor-translator" form="verb">golygwyd a chyfieithwyd gan</term>
 
     <!-- SHORT VERB ROLE FORMS -->
+    <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="compiler" form="verb-short">comp. by</term>
     <term name="contributor" form="verb-short">w.</term>
     <term name="curator" form="verb-short">cur. by</term>
+    <term name="director" form="verb-short">cyf. gan</term>
+    <term name="editor" form="verb-short">gol. gan</term>
+    <term name="editor-translator" form="verb-short">gol. a chyf. gan</term>
+    <term name="editortranslator" form="verb-short">gol. a chyf. gan</term>
+    <term name="editorial-director" form="verb-short">cyf.-gol. gan</term>
     <term name="executive-producer" form="verb-short">exec. prod. by</term>
     <term name="guest" form="verb-short">w. guest</term>
     <term name="host" form="verb-short">hosted by</term>
+    <term name="illustrator" form="verb-short">darlun. gan</term>
     <term name="narrator" form="verb-short">narr. by</term>
     <term name="organizer" form="verb-short">org. by</term>
     <term name="performer" form="verb-short">perf. by</term>
     <term name="producer" form="verb-short">prod. by</term>
     <term name="script-writer" form="verb-short">writ. by</term>
     <term name="series-creator" form="verb-short">cre. by</term>
-    <term name="director" form="verb-short">cyf. gan</term>
-    <term name="editor" form="verb-short">gol. gan</term>
-    <term name="editorial-director" form="verb-short">cyf.-gol. gan</term>
-    <term name="illustrator" form="verb-short">darlun. gan</term>
     <term name="translator" form="verb-short">cyf. gan</term>
-    <term name="editortranslator" form="verb-short">gol. a chyf. gan</term>
-    <term name="editor-translator" form="verb-short">gol. a chyf. gan</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Ionawr</term>

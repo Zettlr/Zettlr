@@ -16,10 +16,12 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import type { CodeFileDescriptor, MDFileDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
+import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
 export function displayFileContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
+  const configStore = useConfigStore()
   const isMac = process.platform === 'darwin'
   const isWin = process.platform === 'win32'
 
@@ -83,7 +85,7 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
     }
   ]
 
-  if (fileObject.root) {
+  if (configStore.config.openPaths.includes(fileObject.path)) {
     template.push(
       { type: 'separator' },
       {

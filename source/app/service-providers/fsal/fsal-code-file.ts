@@ -70,12 +70,10 @@ function parseFileContents (file: CodeFileDescriptor, content: string): void {
 
 export async function parse (
   filePath: string,
-  cache: FSALCache|null,
-  isRoot: boolean
+  cache: FSALCache|null
 ): Promise<CodeFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: CodeFileDescriptor = {
-    root: isRoot,
     dir: path.dirname(filePath), // Containing dir
     path: filePath,
     name: path.basename(filePath),

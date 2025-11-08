@@ -24,14 +24,15 @@ export default class RequestMove extends ZettlrCommand {
 
   /**
    * Move a directory around. Or a file.
-   * @param {String} evt The event name
-   * @param  {Object} arg The origin and the destination
-   * @return {Boolean}     Whether or not the command succeeded.
+   *
+   * @param  {string}   evt  The event name
+   * @param  {any}      arg  The origin and the destination
+   * @return {boolean}       Whether or not the command succeeded.
    */
   async run (evt: string, arg: { from: string, to: string }): Promise<boolean> {
     // arg contains from and to. Prepare the necessary variables
-    const from = this._app.workspaces.find(arg.from)
-    const to = this._app.workspaces.findDir(arg.to)
+    const from = await this._app.fsal.getDescriptorFor(arg.from)
+    const to = await this._app.fsal.getAnyDirectoryDescriptor(arg.to)
 
     if (to === undefined || from === undefined) {
       // If findDir doesn't return anything then it's a file
@@ -58,7 +59,8 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Now check if there already is a directory/file with the same name
-    if (to.children.find(c => c.name === path.basename(from.name)) !== undefined) {
+    const newPath = path.join(to.path, from.name)
+    if (await this._app.fsal.pathExists(newPath)) {
       this._app.windows.prompt({
         type: 'error',
         title: trans('Cannot move directory or file'),
@@ -76,7 +78,6 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Now we can move the source to the target.
-    const newPath = path.join(to.path, from.name)
     await this._app.fsal.rename(from.path, newPath)
     // Notify the documents provider so it can exchange any files if necessary
     if (await this._app.fsal.isFile(newPath)) {

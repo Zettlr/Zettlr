@@ -71,18 +71,21 @@ const locatorLabels: Record<CSL_LOCATOR_TERM, string[]> = {
   volume: [ 'Band', 'Bände', 'Bd.', 'Bde.', 'volume', 'volumes', 'vol.', 'vols.' ]
 }
 
-// Normalization: Convert everything to lowercase so that small typos don't trip
-// the parser up.
-for (const key in locatorLabels) {
-  locatorLabels[key as CSL_LOCATOR_TERM] = locatorLabels[key as CSL_LOCATOR_TERM].map(e => e.toLowerCase())
-}
+const sanitizedLocatorLabels: Partial<Record<CSL_LOCATOR_TERM, Set<string>>> = {}
+let allValidLocatorLabels: Set<string> = new Set()
 
-// Compress the locator labels into a 1d string list for easier access.
-const allValidLocatorLabels = Object.values(locatorLabels).flatMap(x => x)
+for (const key in locatorLabels) {
+  // Normalize all labels to lowercase to handle small typos and convert to sets for quicker validation
+  const setLabels = new Set(locatorLabels[key as CSL_LOCATOR_TERM].map(e => e.toLowerCase()))
+
+  sanitizedLocatorLabels[key as CSL_LOCATOR_TERM] = setLabels
+  // Flatten all labels for quick validation
+  allValidLocatorLabels = allValidLocatorLabels.union(setLabels)
+}
 
 // Determine the longest locator length (so that we know below how many
 // characters we must extract from the inline context).
-const maxLocatorLabelLength = Math.max(...allValidLocatorLabels.map(x => x.length))
+const maxLocatorLabelLength = Math.max(...allValidLocatorLabels.values().map(x => x.length))
 
 /**
  * I strongly believe that Marijn's approach of using character codepoints
@@ -253,14 +256,17 @@ export function nodeToCiteItem (node: SyntaxNode, markdown: string): Citation {
     } else if (child.type.name === NODES.LOCATOR) {
       locator = markdown.slice(child.from, child.to)
       // Check for an explicit label
-      const lcloc = locator.toLowerCase()
-      const explicitLabel = allValidLocatorLabels.find(x => lcloc.startsWith(x + ' '))
+      const lclocIndex = locator.indexOf(' ')
+      const lcloc = locator.substring(0, lclocIndex).toLowerCase()
+      // The label must be followed by a space, so `lclocIndex` must be greater than 0
+      const explicitLabel = lclocIndex > 0 && allValidLocatorLabels.has(lcloc) ? lcloc : undefined
+
       if (explicitLabel !== undefined) {
-        for (const [ key, values ] of Object.entries(locatorLabels)) {
-          if (values.some(x => lcloc.startsWith(x + ' '))) {
+        for (const [ key, values ] of Object.entries(sanitizedLocatorLabels)) {
+          if (values.has(lcloc)) {
             label = key as CSL_LOCATOR_TERM
             // Remove the label from the locator
-            locator = locator.slice(explicitLabel.length + 1)
+            locator = locator.substring(lclocIndex + 1)
             break
           }
         }
@@ -345,7 +351,6 @@ export const citationParser: InlineParser = {
       return -1
     }
 
-    
     // Ensure the character before `pos` is valid. NOTE: The InlineContext may
     // include newlines, since single newlines are considered part of the same
     // line due to the hard wrapping rule.
@@ -462,24 +467,24 @@ export const citationParser: InlineParser = {
           parts.push(ctx.elt(NODES.MARK, i, i + 1))
           continue
         }
-        
+
         if (ch === CHAR.BRACKET_CLOSE) {
           // End-condition -- marks the finish of the entire parsing.
           parts.push(ctx.elt(NODES.MARK, i, ++i))
           break // Stop iterating; citation is between pos and i.
         }
-        
+
         if (ch === CHAR.HYPHEN && citekeyStart < 0 && nextCh === CHAR.AT) {
           // Suppress-author-flag: Before citekey starts, must be followed by @
           if (i > citationPartStart) {
             // Add prefix node. Note that we have to add nodes in proper sorted
             // order.
             parts.push(ctx.elt(NODES.PREFIX, citationPartStart, i))
-          } 
+          }
           parts.push(ctx.elt(NODES.AUTHORFLAG, i, i + 1))
           continue
         }
-        
+
         if (ch === CHAR.AT && citekeyStart < 0 && [ CHAR.SPACE, CHAR.HYPHEN, CHAR.BRACKET_OPEN ].includes(prevCh)) {
           // Start citekey (must be preceded by [, a space, or -)
           if (i > citationPartStart && prevCh !== CHAR.HYPHEN) {
@@ -492,7 +497,7 @@ export const citationParser: InlineParser = {
           citekeyStart = i + 1 // Key excludes the '@'
           continue
         }
-        
+
         if (citekeyStart > -1 && citekeyEnd < 0) {
           // We are inside the citekey
           if (i === citekeyStart && ch === CHAR.CURLY_OPEN) {
@@ -537,7 +542,7 @@ export const citationParser: InlineParser = {
           parts.push(ctx.elt(NODES.MARK, i, i + 1))
           continue
         }
-        
+
         // Code points 48-57 are digits. Implicit and explicit locators must be
         // preceded by a space, bracketed locators do not.
         if (citekeyEnd > -1 && locatorStart < 0 && prevCh === CHAR.SPACE && ((ch >= 48 && ch <= 57) || ROMAN_NUMERAL_CODES.includes(ch))) {
@@ -553,9 +558,13 @@ export const citationParser: InlineParser = {
 
         // Unfortunately, for explicit locators we have to perform string
         // comparison, so we need to extract the actual text here.
-        const slice = ctx.slice(i, Math.max(i + maxLocatorLabelLength, ctxEndPos)).toLowerCase()
-        // NOTE that we require each label to be followed by a space
-        const explicitLabel = allValidLocatorLabels.find(x => slice.startsWith(x + ' '))
+        // NOTE that we require each label to be followed by a space,
+        // so `lclocIndex` must be greater than 0
+        const slice = ctx.slice(i, i + maxLocatorLabelLength + 1)
+        const lclocIndex = slice.indexOf(' ')
+        const lcloc = slice.substring(0, lclocIndex).toLowerCase()
+        const explicitLabel = lclocIndex > 0 && allValidLocatorLabels.has(lcloc) ? lcloc : undefined
+
         if (citekeyEnd > -1 && locatorStart < 0 && prevCh === CHAR.SPACE && explicitLabel !== undefined) {
           // First, check if there are only punctuation marks and spaces between
           // the citekey end and the locator start. If not, we should not detect
@@ -570,7 +579,7 @@ export const citationParser: InlineParser = {
           }
           continue
         }
-        
+
         if (locatorStart > -1 && locatorEnd < 0) {
           // We are inside the locator
           if (locatorInBrackets && ch === CHAR.CURLY_CLOSE) {
@@ -666,9 +675,12 @@ export const citationParser: InlineParser = {
 
         // Does the remaining slice start with an explicit locator label?
         let locatorStart = -1
-        const slice = ctx.slice(i, Math.max(i + maxLocatorLabelLength, ctxEndPos)).toLowerCase()
-        // NOTE that we require each label to be followed by a space
-        const explicitLabel = allValidLocatorLabels.find(x => slice.startsWith(x + ' '))
+        const slice = ctx.slice(i, i + maxLocatorLabelLength + 1)
+        const lclocIndex = slice.indexOf(' ')
+        const lcloc = slice.substring(0, lclocIndex).toLowerCase()
+        // The label must be followed by a space, so `lclocIndex` must be greater than 0
+        const explicitLabel = lclocIndex > 0 && allValidLocatorLabels.has(lcloc) ? lcloc : undefined
+
         if (explicitLabel !== undefined) {
           locatorStart = i
           // Move i forward until after the space so that the implicit locator

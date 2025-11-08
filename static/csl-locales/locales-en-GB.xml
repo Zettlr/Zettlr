@@ -20,7 +20,7 @@
       <uri>https://orcid.org/0000-0003-1779-8883</uri>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-06-24T00:00:00+00:00</updated>
+    <updated>2025-10-18T05:52:38+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -96,7 +96,6 @@
     <term name="available at" form="short">avail. at</term> <!-- ODA -->
     <term name="circa" form="short">c.</term>
     <term name="cited" form="short">cit.</term> <!-- ODA -->
-    <term name="et-al" form="short">et al.</term>
     <term name="film" form="short">flm</term> <!-- ODA -->
     <term name="from" form="short">fr.</term>
     <term name="letter" form="short">let.</term> <!-- ODA -->

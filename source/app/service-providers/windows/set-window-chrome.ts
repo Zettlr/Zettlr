@@ -58,9 +58,6 @@ export default function setWindowChrome (config: ConfigProvider, winConf: Browse
     // On Windows, we need a frameless window. On Linux, only if the
     // shouldUseNativeAppearance flag is set to false.
     winConf.frame = false
-  } // Else: We have Linux with native appearance.
-
-  if (process.platform === 'win32') {
     const { accent, contrast } = getSystemColors()
     winConf.titleBarStyle = 'hidden'
     winConf.titleBarOverlay = {
@@ -69,7 +66,7 @@ export default function setWindowChrome (config: ConfigProvider, winConf: Browse
       height: CUSTOM_WINDOW_CONTROLS_HEIGHT
     }
     winConf.frame = false
-  }
+  } // Else: We have Linux with native appearance.
 
   // Application icon for Linux. Cannot be embedded in the executable.
   if (process.platform === 'linux') {

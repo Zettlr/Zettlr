@@ -121,9 +121,7 @@ export default class CommandProvider extends ProviderContract {
   async run (command: string, payload: any): Promise<any> {
     // FIRST: Try to run a minimal command for which its own custom function
     // wouldn't make sense.
-    if (command === 'get-statistics-data') {
-      return this._app.workspaces.getStatistics()
-    } else if (command === 'get-descriptor' && typeof payload === 'string') {
+    if (command === 'get-descriptor' && typeof payload === 'string') {
       if (await this._app.fsal.isFile(payload)) {
         return await this._app.fsal.getDescriptorForAnySupportedFile(payload)
       } else if (await this._app.fsal.isDir(payload)) {

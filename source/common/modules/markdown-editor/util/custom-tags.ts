@@ -47,6 +47,7 @@ export const customTags = {
   ZknTagContent: Tag.define(),
   // Pandoc attributes, like: `# Heading or Title {.unnumbered}`
   PandocAttribute: Tag.define(),
+  PandocAttributeMark: Tag.define(),
   HighlightMark: Tag.define(),
   HighlightContent: Tag.define()
 }

@@ -163,15 +163,6 @@ export default class WindowProvider extends ProviderContract {
           } else {
             callingWindow.maximize()
           }
-        // fall through
-        case 'get-maximised-status':
-          event.reply('window-controls', {
-            command: 'get-maximised-status',
-            payload: callingWindow.isMaximized()
-          })
-          break
-        case 'win-minimise':
-          callingWindow.minimize()
           break
         case 'win-close':
           callingWindow.close()

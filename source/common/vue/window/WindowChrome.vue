@@ -11,47 +11,42 @@
       -->
       <WindowTitlebar
         v-if="showTitlebar"
-        v-bind:has-vibrancy="!disableVibrancy"
-        v-bind:title-content="title ?? 'Zettlr'"
+        v-bind:has-vibrancy="!props.disableVibrancy"
+        v-bind:title-content="props.title ?? 'Zettlr'"
         v-on:dblclick="handleDoubleClick('titlebar')"
       ></WindowTitlebar>
       <WindowMenubar
         v-if="showMenubar"
       ></WindowMenubar>
       <WindowToolbar
-        v-if="showToolbar && toolbarControls !== undefined"
-        v-bind:controls="toolbarControls"
-        v-bind:show-labels="toolbarLabels"
+        v-if="props.showToolbar && props.toolbarControls !== undefined"
+        v-bind:controls="props.toolbarControls"
+        v-bind:show-labels="props.toolbarLabels"
         v-on:search="emit('toolbar-search', $event)"
         v-on:toggle="emit('toolbar-toggle', $event)"
         v-on:click="emit('toolbar-click', $event)"
         v-on:dblclick="handleDoubleClick('toolbar')"
       ></WindowToolbar>
       <WindowTabbar
-        v-if="showTabbar && tabbarTabs !== undefined"
-        v-bind:tabs="tabbarTabs"
-        v-bind:has-vibrancy="!disableVibrancy"
-        v-bind:label="tabbarLabel"
+        v-if="props.showTabbar && props.tabbarTabs !== undefined"
+        v-bind:tabs="props.tabbarTabs"
+        v-bind:has-vibrancy="!props.disableVibrancy"
+        v-bind:label="props.tabbarLabel"
         v-on:tab="emit('tab', $event)"
       ></WindowTabbar>
-      <!-- Last but not least, the window controls -->
-      <WindowControls
-        v-if="showWindowControls"
-        v-bind:platform="platform"
-      ></WindowControls>
     </div>
     <div
       id="window-content"
       v-bind:class="{
-        'disable-vibrancy': disableVibrancy
+        'disable-vibrancy': props.disableVibrancy
       }"
     >
       <!-- The actual window contents will be mounted here -->
       <slot></slot>
     </div>
     <WindowStatusbar
-      v-if="showStatusbar"
-      v-bind:controls="statusbarControls ?? []"
+      v-if="props.showStatusbar"
+      v-bind:controls="props.statusbarControls ?? []"
       v-on:click="emit('statusbar-click', $event)"
     ></WindowStatusbar>
   </div>
@@ -79,14 +74,14 @@ import WindowMenubar from './WindowMenubar.vue'
 import WindowToolbar, { type ToolbarControl } from './WindowToolbar.vue'
 import WindowTabbar, { type WindowTab } from './WindowTabbar.vue'
 import WindowStatusbar, { type StatusbarControl } from './WindowStatusbar.vue'
-import WindowControls from './WindowControls.vue'
 
 // Import the correct styles (the platform styles are namespaced)
-import './assets/generic.less'
+import './assets/generic.css'
 import { ref, computed, watch, toRef, onBeforeMount } from 'vue'
-import { useConfigStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore } from 'source/pinia'
 
 const configStore = useConfigStore()
+const windowStateStore = useWindowStateStore()
 
 const ipcRenderer = window.ipc
 
@@ -136,6 +131,8 @@ const platform = ref<typeof process.platform>(process.platform)
 
 const useNativeAppearance = ref(configStore.config.window.nativeAppearance)
 
+const isFullscreen = computed(() => windowStateStore.isFullscreen)
+
 const showTitlebar = computed<boolean>(() => {
   // Shows a titlebar if one is requested and we are on macOS or on Windows
   // or on Linux with not native appearance.
@@ -160,20 +157,6 @@ const showMenubar = computed<boolean>(() => {
   return props.menubar
 })
 
-const showWindowControls = computed<boolean>(() => {
-  if ([ 'win32', 'darwin' ].includes(platform.value)) {
-    return false
-  }
-
-  // Shows the window control buttons only if we are on Linux without native
-  // appearance.
-  if (platform.value === 'linux' && useNativeAppearance.value) {
-    return false
-  } else {
-    return true
-  }
-})
-
 watch(platform, () => {
   // When the platform changes (only happens during debug) make sure to adapt
   // the body class
@@ -183,6 +166,10 @@ watch(platform, () => {
 
 watch(toRef(props, 'title'), () => {
   document.title = props.title ?? 'Zettlr'
+})
+
+watch(isFullscreen, () => {
+  document.body.classList.toggle('fullscreen', isFullscreen.value)
 })
 
 onBeforeMount(() => {

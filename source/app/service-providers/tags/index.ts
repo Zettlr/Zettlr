@@ -24,9 +24,11 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
-import type WorkspaceProvider from '@providers/workspaces'
 import type DocumentManager from '../documents'
 import { DP_EVENTS } from '@dts/common/documents'
+import type FSAL from '../fsal'
+import { extractFromFileDescriptors } from 'source/common/util/extract-from-file-descriptors'
+import type ConfigProvider from '../config'
 
 /**
  * This interface describes a single tag within the files loaded in here.
@@ -74,18 +76,19 @@ export default class TagProvider extends ProviderContract {
   constructor (
     private readonly _logger: LogProvider,
     private readonly _docs: DocumentManager,
-    private readonly _workspaces: WorkspaceProvider
+    private readonly _config: ConfigProvider,
+    private readonly _fsal: FSAL
   ) {
     super()
     this._file = path.join(app.getPath('userData'), 'tags.json')
     this._coloredTags = []
     this.container = new PersistentDataContainer(this._file, 'json')
 
-    ipcMain.handle('tag-provider', (event, message) => {
+    ipcMain.handle('tag-provider', async (event, message) => {
       const { command } = message
 
       if (command === 'get-all-tags') {
-        return this.getAllTags()
+        return await this.getAllTags()
       } else if (command === 'set-colored-tags') {
         const { payload } = message
         this.setColoredTags(payload)
@@ -113,7 +116,9 @@ export default class TagProvider extends ProviderContract {
       // changed. I think it's okay to do so, but in the future we may need to
       // add a sanity check before simply emitting this event, especially if we
       // do something to make the `getAllTags` method take significantly longer.
-      broadcastIpcMessage('tag-provider', 'tags-updated', this.getAllTags())
+      this.getAllTags()
+        .then(tags => broadcastIpcMessage('tag-provider', 'tags-updated', tags))
+        .catch(err => this._logger.error(`[TagProvider] Could not update tag database: ${err.message}`, err))
     })
   }
 
@@ -146,7 +151,9 @@ export default class TagProvider extends ProviderContract {
     this._coloredTags = uniqueTags
     this.container.set(this._coloredTags)
     broadcastIpcMessage('tag-provider', 'colored-tags-updated', this.getColoredTags())
-    broadcastIpcMessage('tag-provider', 'tags-updated', this.getAllTags())
+    this.getAllTags()
+      .then(tags => broadcastIpcMessage('tag-provider', 'tags-updated', tags))
+      .catch(err => this._logger.error(`[TagProvider] Could not fetch tags: ${err.message}`, err))
   }
 
   /**
@@ -163,9 +170,13 @@ export default class TagProvider extends ProviderContract {
    *
    * @return  {TagRecord[]}  The database
    */
-  getAllTags (): TagRecord[] {
+  async getAllTags (): Promise<TagRecord[]> {
+    const allDescriptors = (await this._fsal.getAllLoadedDescriptors())
+      .filter(descriptor => descriptor.type === 'file')
+
+    const tagDb = new Map(extractFromFileDescriptors(allDescriptors, 'tags'))
+
     const ret: TagRecord[] = []
-    const tagDb = this._workspaces.getTags()
 
     const tagToFileMap = new Map()
     for (const [ file, tags ] of [...tagDb]) {

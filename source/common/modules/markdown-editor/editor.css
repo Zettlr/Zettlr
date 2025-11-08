@@ -16,20 +16,11 @@
  * END HEADER
  */
 
-// Cursor blink animation
-@keyframes soft-blink {
-  0%   { opacity: 1; }
-  40%  { opacity: 1; }
-  55%  { opacity: 0; }
-  85%  { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-// Use the default mouse cursor on the vertical scrollbar
+/* Use the default mouse cursor on the vertical scrollbar */
 .CodeMirror-vscrollbar { cursor: default; }
 
 .main-editor-wrapper:not(.code-file) {
-  // Reset the gutter styling
+  /* Reset the gutter styling */
   .cm-editor .cm-gutters {
     border-right-color: transparent;
     background-color: inherit !important;
@@ -37,7 +28,6 @@
 }
 
 .cm-editor {
-  // height: 100%;
   outline: 0 !important;
   font-size: 1em;
   line-height: 1.4375;
@@ -45,23 +35,22 @@
   background-color: inherit;
   cursor: text;
 
-  // STYLING FOR THE COMMON WRAPPER ELEMENTS
-  // ===========================================================================
+  /* STYLING FOR THE COMMON WRAPPER ELEMENTS
+   * ======================================================================== */
 
-  // There are both .cm-cursor-primary as well as .cm-cursor-secondary, but all
-  // are .cm-cursors.
-  .cm-cursor {
-    width: 2px;
-    border: 0;
-    z-index: 1;
-    transform: translateZ(0);
-    // With the new CodeMirror 6 implementation, this animation doesn't work
-    // well anymore.
-    // animation: soft-blink 1s infinite; // Use the "soft-blink" animation
+  /* There are both .cm-cursor-primary as well as .cm-cursor-secondary, but all
+  are .cm-cursors. */
+  .cm-layer.cm-cursorLayer {
+    .cm-cursor {
+      width: 2px;
+      border: 0;
+      z-index: 1;
+      transform: translateZ(0);
+    }
   }
 
   /* Implement a "fat" cursor for Windows' overwrite mode (Ins key) */
-  // Also valid for vim and everything that needs a block cursor.
+  /* Also valid for vim and everything that needs a block cursor. */
   .CodeMirror-overwrite .CodeMirror-cursor, &.cm-fat-cursor .CodeMirror-cursor {
     width: auto;
     border-top: 2px solid #333;
@@ -69,25 +58,25 @@
     background-color: rgba(0, 0, 0, 0.25);
   }
 
-  // These tab stops are used by the autocomplete hook to indicate next stops.
+  /* These tab stops are used by the autocomplete hook to indicate next stops. */
   .tabstop {
     padding: 2px;
     background-color: rgba(0, 217, 225, 0.7);
     border-radius: 3px;
   }
 
-  // Search results
+  /* Search results */
   .cm-selectionMatch { background-color: #99ff7780; }
 
-  // SYNTAX-HIGHLIGHTING CLASSES
-  // ===========================================================================
+  /* SYNTAX-HIGHLIGHTING CLASSES */
+  /* ======================================================================== */
 
   pre { padding: 0; }
 
   input[type="checkbox"] {
     transform: scale(1.2);
     margin: 0.2em;
-    min-width: auto; // Reset the min-width property that applies to other checkboxes
+    min-width: auto; /* Reset the min-width property that applies to other checkboxes */
     vertical-align: middle;
   }
 
@@ -101,7 +90,7 @@
     text-decoration: line-through;
   }
 
-  // Make the formatting characters and escape sequences nearly invisible
+  /* Make the formatting characters and escape sequences nearly invisible */
   .cm-formatting-code,
   .cm-formatting-code-block,
   .cm-formatting-quote,
@@ -112,7 +101,7 @@
     opacity: 0.65;
   }
 
-  // A few elements always need to be displayed monospaced
+  /* A few elements always need to be displayed monospaced */
   .cm-comment,
   .cm-fenced-code,
   .cm-table
@@ -123,18 +112,18 @@
     font-family: Inconsolata, monospace;
   }
 
-  // ZETTLR-SPECIFIC CLASSES
-  // ===========================================================================
+  /* ZETTLR-SPECIFIC CLASSES */
+  /* ======================================================================== */
 
-  // The editor instance adds the .meta-key-class to all elements that become
-  // interactive with the Command or Control key being pressed.
+  /* The editor instance adds the .meta-key-class to all elements that become
+  interactive with the Command or Control key being pressed. */
   .meta-key:hover {
     cursor: pointer;
     text-decoration: underline;
   }
 
-  // If the user chooses to replace the heading-characters, these elements will
-  // be displayed instead.
+  /* If the user chooses to replace the heading-characters, these elements will
+  be displayed instead. */
   .heading-tag {
     display: inline-block;
     cursor: pointer;
@@ -147,23 +136,23 @@
     }
   }
 
-  // This ensures that the fold markers are hidden by default and become visible
-  // once you hover over them (similar to logseq or VSCode)
+  /* This ensures that the fold markers are hidden by default and become visible
+  once you hover over them (similar to logseq or VSCode) */
   .cm-gutters {
     .cm-gutter.cm-foldGutter {
       opacity: 0;
       transition: 0.2s opacity ease;
     }
 
-    // NOTE: We listen to hover events on the gutter container itself so that
-    // the margin of the fold gutter appearing is broader and it's easier to
-    // make it appear.
+    /* NOTE: We listen to hover events on the gutter container itself so that
+    the margin of the fold gutter appearing is broader and it's easier to
+    make it appear. */
     &:hover {
       .cm-gutter.cm-foldGutter { opacity: 1; }
     }
   }
 
-  // Ensure that elements within the gutters are centered relative to the line
+  /* Ensure that elements within the gutters are centered relative to the line */
   .cm-gutter.cm-foldGutter .cm-gutterElement,
   .cm-gutter.cm-gutter-lint .cm-gutterElement {
     display: flex;
@@ -171,14 +160,14 @@
     justify-content: center;
   }
 
-  // Those warnings are too goddamn large
+  /* Those warnings are too goddamn large */
   .cm-gutter.cm-gutter-lint .cm-lint-marker {
     width: 10px;
     cursor: help;
-    margin: 0 auto; // (Re-)center
+    margin: 0 auto; /* (Re-)center */
   }
 
-  // These classes are being applied by the heading-classes hook
+  /* These classes are being applied by the heading-classes hook */
   .size-header-1 { font-size: 2em; }
   .size-header-2 { font-size: 1.8em; }
   .size-header-3 { font-size: 1.5em; }
@@ -186,15 +175,15 @@
   .size-header-5 { font-size: 1em; }
   .size-header-6 { font-size: 1em; }
 
-  // The underlying gfm mode is funny. For top level task items, it applies the
-  // class cm-variable-2 for the full text. For second-level task items, it
-  // applies cm-variable-3, and for the third level it applies cm-keyword. And
-  // then it toggles around. Why would you do that ...?
+  /* The underlying gfm mode is funny. For top level task items, it applies the
+  class cm-variable-2 for the full text. For second-level task items, it
+  applies cm-variable-3, and for the third level it applies cm-keyword. And
+  then it toggles around. Why would you do that ...? */
   .task-item-done {
     .cm-variable-2, .cm-variable-3, .cm-keyword { text-decoration: line-through !important; }
   }
 
-  // The wrapper node for the iFrames (both rendered + the warning)
+  /* The wrapper node for the iFrames (both rendered + the warning) */
   .iframe-wrapper {
     text-align: center;
     display: flex;
@@ -202,19 +191,19 @@
     justify-content: center;
     align-items: center;
 
-    // More spacing for the buttons on the warning
+    /* More spacing for the buttons on the warning */
     button {
       display: block;
       margin: 10px auto;
     }
   }
 
-  // Apply a little bit of styling to the iframes, since we're removing all
-  // attributes due to security reasons.
+  /* Apply a little bit of styling to the iframes, since we're removing all
+  attributes due to security reasons. */
   iframe {
     display: inline-block;
     border: none;
-    // Always render them 16:9
+    /* Always render them 16:9 */
     width: 480px;
     height: 270px;
     margin: 0 auto;

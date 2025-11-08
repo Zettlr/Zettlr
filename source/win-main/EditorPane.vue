@@ -72,7 +72,10 @@
         v-on:dragenter="handleDragEnter($event, 'top')"
         v-on:dragleave="handleDragLeave($event)"
       >
-        <cds-icon v-if="documentTabDragWhere === 'top'" shape="angle" direction="up"></cds-icon>
+        <cds-icon
+          v-if="documentTabDragWhere === 'top'"
+          shape="angle" size="xl" direction="up"
+        ></cds-icon>
       </div>
       <div
         v-if="documentTabDrag"
@@ -85,7 +88,10 @@
         v-on:dragenter="handleDragEnter($event, 'left')"
         v-on:dragleave="handleDragLeave($event)"
       >
-        <cds-icon v-if="documentTabDragWhere === 'left'" shape="angle" direction="left"></cds-icon>
+        <cds-icon
+          v-if="documentTabDragWhere === 'left'"
+          shape="angle" size="xl" direction="left"
+        ></cds-icon>
       </div>
       <div
         v-if="documentTabDrag"
@@ -98,7 +104,10 @@
         v-on:dragenter="handleDragEnter($event, 'bottom')"
         v-on:dragleave="handleDragLeave($event)"
       >
-        <cds-icon v-if="documentTabDragWhere === 'bottom'" shape="angle" direction="down"></cds-icon>
+        <cds-icon
+          v-if="documentTabDragWhere === 'bottom'"
+          shape="angle" size="xl" direction="down"
+        ></cds-icon>
       </div>
       <div
         v-if="documentTabDrag"
@@ -111,7 +120,10 @@
         v-on:dragenter="handleDragEnter($event, 'right')"
         v-on:dragleave="handleDragLeave($event)"
       >
-        <cds-icon v-if="documentTabDragWhere === 'right'" shape="angle" direction="right"></cds-icon>
+        <cds-icon
+          v-if="documentTabDragWhere === 'right'"
+          shape="angle" size="xl" direction="right"
+        ></cds-icon>
       </div>
     </div>
   </div>
@@ -274,7 +286,7 @@ function finishDrag (): void {
 
 <style lang="less">
 
-@dropzone-size: 60px;
+@dropzone-size: 120px;
 
 @keyframes caretup {
   from { margin-bottom: 0; opacity: 1; }
@@ -326,7 +338,7 @@ body {
         cds-icon { margin: 0; }
 
         &.dragover {
-          background-color: rgba(21, 61, 107, 0.5);
+          background-color: rgb(94 127 166 / 50%);
           box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .2);
           backdrop-filter: blur(2px);
         }

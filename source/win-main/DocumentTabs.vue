@@ -91,11 +91,12 @@
 import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, computed, ref, watch, onMounted, onBeforeUnmount, onUpdated } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useWorkspacesStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
 import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
 
 const ipcRenderer = window.ipc
 
@@ -106,7 +107,9 @@ const props = defineProps<{
 
 const showScrollers = ref<boolean>(false)
 const resizeObserver = new ResizeObserver(() => {
-  maybeActivateScrollers()
+  requestAnimationFrame(() => {
+    maybeActivateScrollers()
+  })
 })
 
 // Is there a document being dragged over this tabbar?
@@ -115,7 +118,7 @@ const documentTabDragOver = ref<boolean>(false)
 // dropzone)
 const documentTabDragOverOrigin = ref<boolean>(false)
 
-const workspacesStore = useWorkspacesStore()
+const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 
@@ -346,7 +349,7 @@ function scrollRight (): void {
 
 function getTabText (doc: OpenDocument): string {
   // Returns a more appropriate tab text based on the user settings
-  const file = workspacesStore.getFile(doc.path)
+  const file = workspaceStore.descriptorMap.get(doc.path)
   if (file === undefined) {
     return pathBasename(doc.path)
   }
@@ -469,18 +472,18 @@ function handleTabbarContext (event: MouseEvent): void {
 }
 
 function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
-  const file = workspacesStore.getFile(doc.path)
-  if (file === undefined) {
+  const descriptor = workspaceStore.descriptorMap.get(doc.path)
+  if (descriptor === undefined || descriptor.type === 'directory') {
     return
   }
 
-  displayTabsContextMenu(event, file, doc, (clickedID: string) => {
+  displayTabsContextMenu(event, descriptor, doc, (clickedID: string) => {
     if (clickedID === 'close-this') {
       // Close only this
       ipcRenderer.invoke('documents-provider', {
         command: 'close-file',
         payload: {
-          path: file.path,
+          path: descriptor.path,
           leafId: props.leafId,
           windowId: props.windowId
         }
@@ -488,7 +491,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
     } else if (clickedID === 'close-others') {
       // Close all files ...
       for (const openFile of openFiles.value) {
-        if (openFile.path === file.path) {
+        if (openFile.path === descriptor.path) {
           continue // ... except this
         }
 
@@ -515,18 +518,18 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
       }
     } else if (clickedID === 'copy-filename') {
       // Copy the filename to the clipboard
-      navigator.clipboard.writeText(file.name).catch(err => console.error(err))
+      navigator.clipboard.writeText(descriptor.name).catch(err => console.error(err))
     } else if (clickedID === 'copy-path') {
       // Copy path to the clipboard
-      navigator.clipboard.writeText(file.path).catch(err => console.error(err))
+      navigator.clipboard.writeText(descriptor.path).catch(err => console.error(err))
     } else if (clickedID === 'show-in-folder') {
       ipcRenderer.send('window-controls', {
         command: 'show-item-in-folder',
-        payload: { itemPath: file.path }
+        payload: { itemPath: descriptor.path }
       } as WindowControlsIPCAPI)
-    } else if (clickedID === 'copy-id' && file.type === 'file') {
+    } else if (clickedID === 'copy-id' && descriptor.type === 'file') {
       // Copy the ID to the clipboard
-      navigator.clipboard.writeText(file.id).catch(err => console.error(err))
+      navigator.clipboard.writeText(descriptor.id).catch(err => console.error(err))
     } else if (clickedID === 'pin-tab') {
       // Toggle the pin status
       ipcRenderer.invoke('documents-provider', {

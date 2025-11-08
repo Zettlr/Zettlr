@@ -8,7 +8,7 @@
       <name>dinkame</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-09-02T14:48:02+00:00</updated>
+    <updated>2025-10-16T03:24:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -22,26 +22,52 @@
     <date-part name="year"/>
   </date>
   <terms>
+    <!-- LONG GENERAL TERMS -->
+    <term name="accessed">נבדק לאחרונה</term>
     <term name="advance-online-publication">advance online publication</term>
     <term name="album">album</term>
+    <term name="and">ו</term>
+    <term name="and others">ואחרים</term>
+    <term name="anonymous">אלמוני</term>
+    <term name="at">-ב</term>
     <term name="audio-recording">audio recording</term>
+    <term name="available at">זמין ב</term>
+    <term name="by">על-ידי</term>
+    <term name="circa">לערך</term>
+    <term name="cited">מצוטט ב</term>
+    <term name="et-al">ואחרים</term>
     <term name="film">סרט</term>
+    <term name="forthcoming">צפוי</term>
+    <term name="from">מתוך</term>
     <term name="henceforth">henceforth</term>
+    <term name="ibid">שם</term>
+    <term name="in">בתוך</term>
+    <term name="in press">בדפוס</term>
+    <term name="internet">אתר</term>
+    <term name="letter">מכתב</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="no date">לא ידוע</term>
     <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
     <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
     <term name="on">on</term>
+    <term name="online">מקוון</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="original-work-published">פורסם במקור בשנת</term>
     <term name="personal-communication">תקשורת אישית</term>
     <term name="podcast">הסכת</term>
     <term name="podcast-episode">פרק בהסכת</term>
     <term name="preprint">preprint</term>
+    <term name="presented at">הוצג ב</term>
     <term name="radio-broadcast">תשדיר רדיו</term>
     <term name="radio-series">תוכנית רדיו </term>
     <term name="radio-series-episode">פרק בתוכנית רדיו</term>
+    <term name="reference">
+      <single>הפניה</single>
+      <multiple>הפניות</multiple>
+    </term>
+    <term name="retrieved">אוחזר</term>
+    <term name="review-of">review of</term>
+    <term name="scale">קנ"מ</term>
     <term name="special-issue">special issue</term>
     <term name="special-section">special section</term>
     <term name="television-broadcast">television broadcast</term>
@@ -49,63 +75,20 @@
     <term name="television-series-episode">television series episode</term>
     <term name="video">וידאו</term>
     <term name="working-paper">working paper</term>
-    <term name="accessed">נבדק לאחרונה</term>
-    <term name="and">ו</term>
-    <term name="and others">ואחרים</term>
-    <term name="anonymous">אלמוני</term>
-    <term name="anonymous" form="short"></term>
-    <term name="at">-ב</term>
-    <term name="available at">זמין ב</term>
-    <term name="by">על-ידי</term>
-    <term name="circa">לערך</term>
+
+    <!-- SHORT GENERAL TERMS -->
+    <term name="anonymous" form="short"/>
     <term name="circa" form="short">~</term>
-    <term name="cited">מצוטט ב</term>
-    <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
-    </term>
-    <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
-    </term>
-    <term name="edition">
-      <single>מהדורה</single>
-      <multiple>מהדורות</multiple>
-    </term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
-    <term name="number" form="short">
-      <single>מס׳</single>
-      <multiple>מס׳</multiple>
-    </term>
-    <term name="edition" form="short">מהדורה</term>
-    <term name="et-al">ואחרים</term>
-    <term name="forthcoming">צפוי</term>
-    <term name="from">מתוך</term>
-    <term name="ibid">שם</term>
-    <term name="in">בתוך</term>
-    <term name="in press">בדפוס</term>
-    <term name="internet">אתר</term>
-    <term name="letter">מכתב</term>
-    <term name="no date">לא ידוע</term>
-    <term name="no date" form="short"></term>
-    <term name="online">מקוון</term>
-    <term name="presented at">הוצג ב</term>
-    <term name="reference">
-      <single>הפניה</single>
-      <multiple>הפניות</multiple>
-    </term>
+    <term name="no date" form="short"/>
+    <term name="no-place" form="short">n.p.</term>
+    <term name="no-publisher" form="short">n.p.</term>
     <term name="reference" form="short">
       <single>ref.</single>
       <multiple>refs.</multiple>
     </term>
-    <term name="review-of">review of</term>
     <term name="review-of" form="short">rev. of</term>
-    <term name="retrieved">אוחזר</term>
-    <term name="scale">קנ"מ</term>
-    <term name="version">גירסה</term>
+
+    <!-- SYMBOLIC GENERAL FORMS -->
 
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">preprint</term>
@@ -171,11 +154,13 @@
     <term name="review-book" form="short">bk. rev.</term>
     <term name="song" form="short">audio rec.</term>
 
-    <!-- VERB ITEM TYPE FORMS -->
+    <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
     <term name="hearing" form="verb">testimony of</term>
     <term name="review" form="verb">review of</term>
     <term name="review-book" form="verb">review of the book</term>
+
+    <!-- SHORT VERB ITEM TYPE FORMS -->
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">לספירה</term>
@@ -218,53 +203,25 @@
     <term name="long-ordinal-10">עשירי</term>
 
     <!-- LONG LOCATOR FORMS -->
-    <term name="act">			 
+    <term name="act">
       <single>act</single>
-      <multiple>acts</multiple>						 
+      <multiple>acts</multiple>
     </term>
-    <term name="appendix">			 
+    <term name="appendix">
       <single>appendix</single>
-      <multiple>appendices</multiple>						 
+      <multiple>appendices</multiple>
     </term>
-    <term name="article-locator">			 
+    <term name="article-locator">
       <single>article</single>
-      <multiple>articles</multiple>						 
-    </term>
-    <term name="canon">			 
-      <single>canon</single>
-      <multiple>canons</multiple>						 
-    </term>
-    <term name="elocation">			 
-      <single>location</single>
-      <multiple>locations</multiple>						 
-    </term>
-    <term name="equation">			 
-      <single>משוואה</single>
-      <multiple>משוואות</multiple>						 
-    </term>
-    <term name="rule">			 
-      <single>חוק</single>
-      <multiple>חוקים</multiple>						 
-    </term>
-    <term name="scene">			 
-      <single>scene</single>
-      <multiple>scenes</multiple>						 
-    </term>
-    <term name="table">			 
-      <single>table</single>
-      <multiple>tables</multiple>						 
-    </term>
-    <term name="timestamp"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>						 
-    </term>
-    <term name="title-locator">			 
-      <single>title</single>
-      <multiple>titles</multiple>						 
+      <multiple>articles</multiple>
     </term>
     <term name="book">
       <single>ספר</single>
       <multiple>ספרים</multiple>
+    </term>
+    <term name="canon">
+      <single>canon</single>
+      <multiple>canons</multiple>
     </term>
     <term name="chapter">
       <single>פרק</single>
@@ -273,6 +230,14 @@
     <term name="column">
       <single>טור</single>
       <multiple>טורים</multiple>
+    </term>
+    <term name="elocation">
+      <single>location</single>
+      <multiple>locations</multiple>
+    </term>
+    <term name="equation">
+      <single>משוואה</single>
+      <multiple>משוואות</multiple>
     </term>
     <term name="figure">
       <single>איור</single>
@@ -302,6 +267,164 @@
       <single>עמוד</single>
       <multiple>עמודים</multiple>
     </term>
+    <term name="paragraph">
+      <single>פיסקה</single>
+      <multiple>פיסקאות</multiple>
+    </term>
+    <term name="part">
+      <single>חלק</single>
+      <multiple>חלקים</multiple>
+    </term>
+    <term name="rule">
+      <single>חוק</single>
+      <multiple>חוקים</multiple>
+    </term>
+    <term name="scene">
+      <single>scene</single>
+      <multiple>scenes</multiple>
+    </term>
+    <term name="section">
+      <single>סעיף</single>
+      <multiple>סעיפים</multiple>
+    </term>
+    <term name="sub-verbo">
+      <single>sub verbo</single>
+      <multiple>sub verbis</multiple>
+    </term>
+    <term name="supplement">
+      <single>supplement</single>
+      <multiple>supplements</multiple>
+    </term>
+    <term name="table">
+      <single>table</single>
+      <multiple>tables</multiple>
+    </term>
+    <term name="timestamp"> <!-- generally blank -->
+      <single/>
+      <multiple/>
+    </term>
+    <term name="title-locator">
+      <single>title</single>
+      <multiple>titles</multiple>
+    </term>
+    <term name="verse">
+      <single>פסוק</single>
+      <multiple>פסוקים</multiple>
+    </term>
+    <term name="volume">
+      <single>כרך</single>
+      <multiple>כרכים</multiple>
+    </term>
+
+    <!-- SHORT LOCATOR FORMS -->
+    <term name="appendix" form="short">
+      <single>app.</single>
+      <multiple>apps.</multiple>
+    </term>
+    <term name="article-locator" form="short">
+      <single>art.</single>
+      <multiple>arts.</multiple>
+    </term>
+    <term name="book" form="short"/>
+    <term name="chapter" form="short">פ'</term>
+    <term name="column" form="short">ט'</term>
+    <term name="elocation" form="short">
+      <single>loc.</single>
+      <multiple>locs.</multiple>
+    </term>
+    <term name="equation" form="short">
+      <single>eq.</single>
+      <multiple>eqs.</multiple>
+    </term>
+    <term name="figure" form="short">א.</term>
+    <term name="folio" form="short">פול'</term>
+    <term name="issue" form="short">מס'</term>
+    <term name="line" form="short">ש'</term>
+    <term name="note" form="short">הע'</term>
+    <term name="opus" form="short">אופ'</term>
+    <term name="page" form="short">
+      <single>'עמ</single>
+      <multiple>'עמ</multiple>
+    </term>
+    <term name="paragraph" form="short">פ.</term>
+    <term name="part" form="short">חלק</term>
+    <term name="rule" form="short">
+      <single>r.</single>
+      <multiple>rr.</multiple>
+    </term>
+    <term name="scene" form="short">
+      <single>סצנה</single>
+      <multiple>סצנות</multiple>
+    </term>
+    <term name="section" form="short">סע'</term>
+    <term name="sub-verbo" form="short">
+      <single>s.v.</single>
+      <multiple>s.vv.</multiple>
+    </term>
+    <term name="supplement" form="short">
+      <single>supp.</single>
+      <multiple>supps.</multiple>
+    </term>
+    <term name="table" form="short">
+      <single>tbl.</single>
+      <multiple>tbls.</multiple>
+    </term>
+    <term name="timestamp" form="short"> <!-- generally blank -->
+      <single/>
+      <multiple/>
+    </term>
+    <term name="title-locator" form="short">
+      <single>tit.</single>
+      <multiple>tits.</multiple>
+    </term>
+    <term name="verse" form="short">
+      <single>פס'</single>
+      <multiple>פס'</multiple>
+    </term>
+    <term name="volume" form="short">
+      <single>כרך</single>
+      <multiple>כרכים</multiple>
+    </term>
+
+    <!-- SYMBOLIC LOCATOR FORMS -->
+    <term name="paragraph" form="symbol">
+      <single>¶</single>
+      <multiple>¶¶</multiple>
+    </term>
+    <term name="section" form="symbol">
+      <single>§</single>
+      <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG NUMBER VARIABLE FORMS -->
+    <term name="chapter-number">
+      <single>פרק</single>
+      <multiple>פרקים</multiple>
+    </term>
+    <term name="citation-number">
+      <single>ציטוט</single>
+      <multiple>ציטוטים</multiple>
+    </term>
+    <term name="collection-number">
+      <single>מספר</single>
+      <multiple>מספרים</multiple>
+    </term>
+    <term name="edition">
+      <single>מהדורה</single>
+      <multiple>מהדורות</multiple>
+    </term>
+    <term name="first-reference-note-number">
+      <single>reference</single>
+      <multiple>references</multiple>
+    </term>
+    <term name="number">
+      <single>number</single>
+      <multiple>numbers</multiple>
+    </term>
+    <term name="number-of-pages">
+      <single>עמוד</single>
+      <multiple>עמודים</multiple>
+    </term>
     <term name="number-of-volumes">
       <single>כרך</single>
       <multiple>כרכים</multiple>
@@ -314,7 +437,9 @@
       <single>printing</single>
       <multiple>printings</multiple>
     </term>
+    <term name="version">גירסה</term>
 
+    <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
       <single>פרק.</single>
       <multiple>פרקים</multiple>
@@ -324,86 +449,16 @@
       <multiple>cits.</multiple>
     </term>
     <term name="collection-number" form="short">no</term>
-    <term name="number-of-pages">
-      <single>עמוד</single>
-      <multiple>עמודים</multiple>
+    <term name="edition" form="short">מהדורה</term>
+    <term name="first-reference-note-number" form="short">
+      <single>ref.</single>
+      <multiple>refs.</multiple>
     </term>
-    <term name="paragraph">
-      <single>פיסקה</single>
-      <multiple>פיסקאות</multiple>
+    <term name="number" form="short">
+      <single>מס׳</single>
+      <multiple>מס׳</multiple>
     </term>
-    <term name="part">
-      <single>חלק</single>
-      <multiple>חלקים</multiple>
-    </term>
-    <term name="section">
-      <single>סעיף</single>
-      <multiple>סעיפים</multiple>
-    </term>
-    <term name="supplement">
-      <single>supplement</single>
-      <multiple>supplements</multiple>
-    </term>
-    <term name="sub-verbo">
-      <single>sub verbo</single>
-      <multiple>sub verbis</multiple>
-    </term>
-    <term name="verse">
-      <single>פסוק</single>
-      <multiple>פסוקים</multiple>
-    </term>
-    <term name="volume">
-      <single>כרך</single>
-      <multiple>כרכים</multiple>
-    </term>
-
-    <!-- SHORT LOCATOR FORMS -->
-    <term name="appendix" form="short">			 
-      <single>app.</single>
-      <multiple>apps.</multiple>						 
-    </term>
-    <term name="article-locator" form="short">			 
-      <single>art.</single>
-      <multiple>arts.</multiple>
-    </term>
-    <term name="elocation" form="short">			 
-      <single>loc.</single>
-      <multiple>locs.</multiple>
-    </term>
-    <term name="equation" form="short">			 
-      <single>eq.</single>
-      <multiple>eqs.</multiple>
-    </term>
-    <term name="rule" form="short">			 
-      <single>r.</single>
-      <multiple>rr.</multiple>						 
-    </term>
-    <term name="scene" form="short">			 
-      <single>סצנה</single>
-      <multiple>סצנות</multiple>						 
-    </term>
-    <term name="table" form="short">			 
-      <single>tbl.</single>
-      <multiple>tbls.</multiple>						 
-    </term>
-    <term name="timestamp" form="short"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>						 
-    </term>
-    <term name="title-locator" form="short">			 
-      <single>tit.</single>
-      <multiple>tits.</multiple>
-    </term>
-    <term name="book" form="short"></term>
-    <term name="chapter" form="short">פ'</term>
-    <term name="column" form="short">ט'</term>
-    <term name="figure" form="short">א.</term>
-    <term name="folio" form="short">פול'</term>
-    <term name="issue" form="short">מס'</term>
-    <term name="line" form="short">ש'</term>
-    <term name="note" form="short">הע'</term>
-    <term name="opus" form="short">אופ'</term>
-    <term name="page" form="short">
+    <term name="number-of-pages" form="short">
       <single>'עמ</single>
       <multiple>'עמ</multiple>
     </term>
@@ -419,60 +474,15 @@
       <single>print.</single>
       <multiple>prints.</multiple>
     </term>
-    <term name="number-of-pages" form="short">
-      <single>'עמ</single>
-      <multiple>'עמ</multiple>
-    </term>
-    <term name="paragraph" form="short">פ.</term>
-    <term name="part" form="short">חלק</term>
-    <term name="section" form="short">סע'</term>
-    <term name="supplement" form="short">
-      <single>supp.</single>
-      <multiple>supps.</multiple>
-    </term>
-    <term name="sub-verbo" form="short">
-      <single>s.v.</single>
-      <multiple>s.vv.</multiple>
-    </term>
-    <term name="verse" form="short">
-      <single>פס'</single>
-      <multiple>פס'</multiple>
-    </term>
-    <term name="volume" form="short">
-      <single>כרך</single>
-      <multiple>כרכים</multiple>
-    </term>
-
-    <!-- SYMBOL LOCATOR FORMS -->
-    <term name="paragraph" form="symbol">
-      <single>¶</single>
-      <multiple>¶¶</multiple>
-    </term>
-    <term name="chapter-number">
-      <single>פרק</single>
-      <multiple>פרקים</multiple>
-    </term>
-    <term name="citation-number">
-      <single>ציטוט</single>
-      <multiple>ציטוטים</multiple>
-    </term>
-    <term name="collection-number">
-      <single>מספר</single>
-      <multiple>מספרים</multiple>
-    </term>
-    <term name="section" form="symbol">
-      <single>§</single>
-      <multiple>§§</multiple>
-    </term>
 
     <!-- LONG ROLE FORMS -->
-    <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
-    </term>
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
+    </term>
+    <term name="collection-editor">
+      <single>ed.</single>
+      <multiple>eds.</multiple>
     </term>
     <term name="compiler">
       <single>compiler</single>
@@ -486,6 +496,26 @@
       <single>curator</single>
       <multiple>curators</multiple>
     </term>
+    <term name="director">
+      <single>במאי</single>
+      <multiple>במאים</multiple>
+    </term>
+    <term name="editor">
+      <single>עורך</single>
+      <multiple>עורכים</multiple>
+    </term>
+    <term name="editor-translator">
+      <single>editor &amp; translator</single>
+      <multiple>editors &amp; translators</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>בתרגום ועריכת</single>
+      <multiple>בתרגום ועריכת:</multiple>
+    </term>
+    <term name="editorial-director">
+      <single>עורך ראשי</single>
+      <multiple>עורכים ראשיים</multiple>
+    </term>
     <term name="executive-producer">
       <single>executive producer</single>
       <multiple>executive producers</multiple>
@@ -497,6 +527,10 @@
     <term name="host">
       <single>host</single>
       <multiple>hosts</multiple>
+    </term>
+    <term name="illustrator">
+      <single>איור</single>
+      <multiple>איור</multiple>
     </term>
     <term name="narrator">
       <single>narrator</single>
@@ -522,33 +556,9 @@
       <single>series creator</single>
       <multiple>series creators</multiple>
     </term>
-    <term name="director">
-      <single>במאי</single>
-      <multiple>במאים</multiple>
-    </term>
-    <term name="editor">
-      <single>עורך</single>
-      <multiple>עורכים</multiple>
-    </term>
-    <term name="editorial-director">
-      <single>עורך ראשי</single>
-      <multiple>עורכים ראשיים</multiple>
-    </term>
-    <term name="illustrator">
-      <single>איור</single>
-      <multiple>איור</multiple>
-    </term>
     <term name="translator">
       <single>תרגום</single>
       <multiple>תרגום</multiple>
-    </term>
-    <term name="editortranslator">
-      <single>בתרגום ועריכת</single>
-      <multiple>בתרגום ועריכת:</multiple>
-    </term>
-    <term name="editor-translator">
-      <single>editor &amp; translator</single>
-      <multiple>editors &amp; translators</multiple>
     </term>
 
     <!-- SHORT ROLE FORMS -->
@@ -564,9 +574,33 @@
       <single>cur.</single>
       <multiple>curs.</multiple>
     </term>
+    <term name="director" form="short">
+      <single>בימוי</single>
+      <multiple>בימוי:</multiple>
+    </term>
+    <term name="editor" form="short">
+      <single>בעריכת</single>
+      <multiple>בעריכת:</multiple>
+    </term>
+    <term name="editor-translator" form="short">
+      <single>ed. &amp; tran.</single>
+      <multiple>eds. &amp; trans.</multiple>
+    </term>
+    <term name="editortranslator" form="short">
+      <single>עריכה ותרגום</single>
+      <multiple>עריכה ותרגום:</multiple>
+    </term>
+    <term name="editorial-director" form="short">
+      <single>ע.ר.</single>
+      <multiple>עריכה ראשית:</multiple>
+    </term>
     <term name="executive-producer" form="short">
       <single>exec. prod.</single>
       <multiple>exec. prods.</multiple>
+    </term>
+    <term name="illustrator" form="short">
+      <single>איור</single>
+      <multiple>איור:</multiple>
     </term>
     <term name="narrator" form="short">
       <single>narr.</single>
@@ -592,83 +626,59 @@
       <single>cre.</single>
       <multiple>cres.</multiple>
     </term>
-    <term name="director" form="short">
-      <single>בימוי</single>
-      <multiple>בימוי:</multiple>
-    </term>
-    <term name="editor" form="short">
-      <single>בעריכת</single>
-      <multiple>בעריכת:</multiple>
-    </term>
-    <term name="editorial-director" form="short">
-      <single>ע.ר.</single>
-      <multiple>עריכה ראשית:</multiple>
-    </term>
-    <term name="illustrator" form="short">
-      <single>איור</single>
-      <multiple>איור:</multiple>
-    </term>
     <term name="translator" form="short">
       <single>בתרגום</single>
       <multiple>בתרגום:</multiple>
     </term>
-    <term name="editortranslator" form="short">
-      <single>עריכה ותרגום</single>
-      <multiple>עריכה ותרגום:</multiple>
-    </term>
-    <term name="editor-translator" form="short">
-      <single>ed. &amp; tran.</single>
-      <multiple>eds. &amp; trans.</multiple>
-    </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb">edited by</term>
     <term name="chair" form="verb">chaired by</term>
+    <term name="collection-editor" form="verb">edited by</term>
     <term name="compiler" form="verb">compiled by</term>
+    <term name="container-author" form="verb">על ידי</term>
     <term name="contributor" form="verb">with</term>
     <term name="curator" form="verb">curated by</term>
+    <term name="director" form="verb">בוים ע"י</term>
+    <term name="editor" form="verb">נערך ע"י</term>
+    <term name="editor-translator" form="verb">תורגם ונכרך על ידי:</term>
+    <term name="editortranslator" form="verb">תורגם ונכרך על ידי:</term>
+    <term name="editorial-director" form="verb">בוים ע"י</term>
     <term name="executive-producer" form="verb">executive produced by</term>
     <term name="guest" form="verb">with guest</term>
     <term name="host" form="verb">hosted by</term>
+    <term name="illustrator" form="verb">אויר ע"י</term>
+    <term name="interviewer" form="verb">רואיין ע"י</term>
     <term name="narrator" form="verb">narrated by</term>
     <term name="organizer" form="verb">organized by</term>
     <term name="performer" form="verb">performed by</term>
     <term name="producer" form="verb">produced by</term>
-    <term name="script-writer" form="verb">written by</term>
-    <term name="series-creator" form="verb">created by</term>
-    <term name="container-author" form="verb">על ידי</term>
-    <term name="director" form="verb">בוים ע"י</term>
-    <term name="editor" form="verb">נערך ע"י</term>
-    <term name="editorial-director" form="verb">בוים ע"י</term>
-    <term name="illustrator" form="verb">אויר ע"י</term>
-    <term name="interviewer" form="verb">רואיין ע"י</term>
     <term name="recipient" form="verb">אל</term>
     <term name="reviewed-author" form="verb">ע"י</term>
-    <term name="collection-editor" form="verb-short">ed. by</term>
+    <term name="script-writer" form="verb">written by</term>
+    <term name="series-creator" form="verb">created by</term>
     <term name="translator" form="verb">תורגם ע"י</term>
-    <term name="editortranslator" form="verb">תורגם ונכרך על ידי:</term>
-    <term name="editor-translator" form="verb">תורגם ונכרך על ידי:</term>
 
     <!-- SHORT VERB ROLE FORMS -->
+    <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="compiler" form="verb-short">comp. by</term>
     <term name="contributor" form="verb-short">w.</term>
     <term name="curator" form="verb-short">cur. by</term>
+    <term name="director" form="verb-short">בימוי</term>
+    <term name="editor" form="verb-short">עריכה:</term>
+    <term name="editor-translator" form="verb-short">עריכה ותרגום:</term>
+    <term name="editortranslator" form="verb-short">עריכה ותרגום:</term>
+    <term name="editorial-director" form="verb-short">עריכה ראשית:</term>
     <term name="executive-producer" form="verb-short">exec. prod. by</term>
     <term name="guest" form="verb-short">w. guest</term>
     <term name="host" form="verb-short">hosted by</term>
+    <term name="illustrator" form="verb-short">מאיירים:</term>
     <term name="narrator" form="verb-short">narr. by</term>
     <term name="organizer" form="verb-short">org. by</term>
     <term name="performer" form="verb-short">perf. by</term>
     <term name="producer" form="verb-short">prod. by</term>
     <term name="script-writer" form="verb-short">writ. by</term>
     <term name="series-creator" form="verb-short">cre. by</term>
-    <term name="director" form="verb-short">בימוי</term>
-    <term name="editor" form="verb-short">עריכה:</term>
-    <term name="editorial-director" form="verb-short">עריכה ראשית:</term>
-    <term name="illustrator" form="verb-short">מאיירים:</term>
     <term name="translator" form="verb-short">תרגום: </term>
-    <term name="editortranslator" form="verb-short">עריכה ותרגום:</term>
-    <term name="editor-translator" form="verb-short">עריכה ותרגום:</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">ינואר</term>

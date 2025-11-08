@@ -158,6 +158,16 @@ press `Backspace` only twice, instead of at least four times).
 Note that some functionality does not apply to footnote labels that contain text
 other than numbers.
 
+## Rewritten FSAL
+
+A change that is more subtle to note is a full rewrite of the File System
+Abstraction Layer (FSAL). For more technical details, see the "Under the hood"
+section below. For you, what should change is that Zettlr should now feel
+snappier once it's booted up. We have cleaned up *a lot* of code under he hood
+which will make changes to any file appear much faster across the app. In
+addition, Zettlr should now have no issues detecting dozens of file changes in
+quick succession; something that has not worked perfectly in the past.
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
@@ -234,6 +244,12 @@ other than numbers.
   if you delete characters and reach a footnote, Zettlr will first select the
   entire footnote to visually indicate that you are about to delete a footnote,
   then a second deletion will remove the entire footnote at once.
+- **Feature**: Fully hide both titlebar and toolbar if the setting "Hide
+  toolbar in distraction free" is on, the user has activated distraction free
+  and the window is in fullscreen. This means that, while Zettlr is not in
+  fullscreen, there will always be either a titlebar or toolbar to move the
+  window around, but in fullscreen, the editor can take up the entire window
+  area (#3999).
 - **Change**: Zettlr now monitors your documents and will automatically remove
   footnotes and references without the corresponding reference or footnote. If
   you have any documents in which you have un-referenced footnotes, or
@@ -332,11 +348,70 @@ other than numbers.
 - Improved parsing footnotes (especially with multi-paragraph contents) (#5968).
 - Improved Markdown-to-HTML conversion (#5968).
 - Fixed image parsing for images with no ALT-text (#5963).
+- Horizontal scrolling in the "thin" file manager mode is no longer restricted
+  to macOS, and also available on Linux and Windows.
+- Fixed the config provider never announcing to the renderers when the user
+  added or removed a workspace/root file.
+- Fixed an issue where the sorting doesn't automatically re-apply (#5938;
+  #5184).
+- Fixed an issue where not all file-links have been reported to the file
+  autocomplete (#5920).
+- Fixed some issues with the file manager not properly reacting to changes in
+  the loaded files (#5784; #5773; #5594).
+- Fixed an issue with deleting files outside of loaded workspaces (#5345).
+- Increased the dropzone size for moving files around and splitting/merging the
+  various editor panes.
+- The Update provider does not show error boxes anymore if the update check
+  failed due to a timeout (#5944).
+- Links in headers are now properly accounted for (#5983).
+- Headers level 1 will now be rendered to plain text for the purpose of
+  displaying in various places (document tabs, file manager, etc.) (#5983).
+- Newly created defaults files will now be directly selected so that you can
+  directly start editing them.
+- Fixed the selected directory not uncollapsing upon boot (#5156).
+- Fixed the smooth cursor animation, which stopped working in Zettlr 3.0 due to
+  the switch from CodeMirror 5 to CodeMirror 6.
 
 ## Under the Hood
 
-- Update Electron to version `38.3.0`.
-- Update Pandoc to version `3.8`.
+- Update Electron to version `39.0.0`.
+- Update Pandoc to version `3.8.2.1`.
+- **Feature/Change**: Full rewrite of the File System Abstraction Layer (FSAL).
+  The rewrite has fully transformed the file abstraction logic to remove any
+  tree structures, and instead mostly treat all loaded files as a single, long
+  list of files and folders. Any type of tree structure is now purely visual and
+  left where it needs to be (that is, the file tree and file list components
+  that do show the files in a tree structure). In addition, we have implemented
+  a set of improvements that should make everything work much smoother; in no
+  particular order:
+  - Remove any tree data structures pertaining to the loaded files. This
+    includes the full removal of the `WorkspacesProvider`, whose job it
+    essentially only was to maintain those tree structures. We now treat files
+    as well as the change events emitted by the watchdog (to observe any remote
+    changes) as a flat stream of events.
+  - Rewrote the `WorkspaceStore` in the renderer to reflect this change, thus
+    reducing the store's size by a lot. The store now only maintains a big list
+    of loaded paths, as well as all descriptors in a `Map` structure.
+  - The events from the file watchers are now emitted directly from the FSAL;
+    there is no round trip through the WorkspaceProvider anymore.
+  - Notably, `DirDescriptor` structures no longer contain any reference to
+    children, since we do not read in any descriptors recursively anymore.
+    Instead, consumers of `DirDescriptor`s will now make a second roundtrip to
+    fetch any direct descendants of a directory. Recursion is now implicit in
+    the way the tree-like structures in the Vue components have been
+    implemented.
+  - Sorting has now been pushed to the edge in that the main process does no
+    longer concern itself with sorting. That only happens right where it's
+    needed from now on; that is: the file manager and the project properties.
+    This makes sorting more reactive to configuration changes (since it now
+    happens automagically due to Vue's reactivity instead of having to listen
+    for relevant events and not forget to manually do it in main), and
+    maintenance much easier.
+  - Removed the `root` property on descriptors, since this is not dependent on
+    the file system state and can easily be computed on demand.
+- Since CSS has become quite powerful, move all LESS-files to CSS.
+- Debounce the splash screen update frequency to at most 60fps to reduce the
+  load on the IPC pipe while the screen is shown.
 - Added new `curly` rule to ESLint, enforcing curly brackets for block-statement
   declarations (`if`, `for`, `while`, etc.).
 - The `enabled` property of context menu items is now optional, and defaults to
@@ -378,6 +453,17 @@ other than numbers.
 - If loading a window fails due to whatever reason, the corresponding error will
   now be shown to the user using an error dialog.
 - Aligned the math parser to the internal CodeMirror APIs (#5971).
+- Zettlr now declares nightly releases via the build flags instead of prerelease
+  (e.g., `4.0.0-beta+nightly` instead of `4.0.0-beta-nightly`), since the
+  previous way of declaring betas would make the internal semver check would
+  declare `4.0.0-beta-nightly` to be the same as `4.0.0-beta.1-nightly`.
+- Zettlr now properly offers updating to a newer prerelease versions if users
+  are on a nightly version (e.g., `beta` -> `beta.1`).
+- Log any error output from the Pandoc update script if the process failed
+  (#5864).
+- The window manager now emits fullscreen state change events to the main
+  windows. This allows Custom CSS and other parts of the state to subscribe to
+  whether the `body` has the `fullscreen` class and perform changes.
 
 # 3.6.0
 

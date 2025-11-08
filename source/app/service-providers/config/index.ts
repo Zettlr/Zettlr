@@ -369,6 +369,7 @@ export default class ConfigProvider extends ProviderContract {
       this.sortPaths()
       this._container.set(this.config)
       this._emitter.emit('update', 'openPaths')
+      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' })
       return true
     }
 
@@ -385,6 +386,7 @@ export default class ConfigProvider extends ProviderContract {
       this.config.openPaths.splice(this.config.openPaths.indexOf(p), 1)
       this._container.set(this.config)
       this._emitter.emit('update', 'openPaths')
+      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' })
       return true
     }
     return false

@@ -142,7 +142,9 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: |
+          echo "old_version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+          echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -154,12 +156,20 @@ jobs:
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      # Electron builder unfortunately, after all these years, still swallows
+      # build information from the nightlies, and keeps only the non-nightly
+      # version string to name the file. With this small step, we rename the
+      # file so that the rest of the script works again. Implemented also in the
+      # other build steps.
+      - name: Rename installer
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
+        run: mv ./release/Zettlr-${{ env.old_version }}-x64.exe ./release/Zettlr-${{ env.version }}-x64.exe
       - name: Cache installer
         uses: actions/upload-artifact@v4
         with:
           name: win32_x64
           path: |
-            ./release/Zettlr-${{env.version}}-x64.exe
+            ./release/Zettlr-${{ env.version }}-x64.exe
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -187,7 +197,9 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: |
+          echo "old_version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+          echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -206,12 +218,15 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       - name: Release
         run: yarn release:mac-x64
+      - name: Rename image file
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
+        run: mv ./release/Zettlr-${{ env.old_version }}-x64.dmg ./release/Zettlr-${{ env.version }}-x64.dmg
       - name: Cache image file
         uses: actions/upload-artifact@v4
         with:
           name: darwin_x64
           path: |
-            ./release/Zettlr-${{env.version}}-x64.dmg
+            ./release/Zettlr-${{ env.version }}-x64.dmg
 
   build_macos_arm64:
     name: macOS (arm64)
@@ -233,7 +248,9 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: |
+          echo "old_version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+          echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -252,12 +269,15 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       - name: Release
         run: yarn release:mac-arm
+      - name: Rename image file
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
+        run: mv ./release/Zettlr-${{ env.old_version }}-arm64.dmg ./release/Zettlr-${{ env.version }}-arm64.dmg
       - name: Cache image file
         uses: actions/upload-artifact@v4
         with:
           name: darwin_arm64
           path: |
-            ./release/Zettlr-${{env.version}}-arm64.dmg
+            ./release/Zettlr-${{ env.version }}-arm64.dmg
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -292,9 +312,10 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        # If this a scheduled workflow, we know that we should build a nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: |
+          echo "old_version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+          echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -302,14 +323,18 @@ jobs:
         run: |
           yarn package:linux-x64
           yarn release:linux-x64
+      - name: Rename installers
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
+        run: |
+          mv ./release/Zettlr-${{ env.old_version }}-x86_64.AppImage ./release/Zettlr-${{ env.version }}-x86_64.AppImage
       - name: Cache installers
         uses: actions/upload-artifact@v4
         with:
           name: linux_x64
           path: |
-            ./release/Zettlr-${{env.version}}-amd64.deb
-            ./release/Zettlr-${{env.version}}-x86_64.rpm
-            ./release/Zettlr-${{env.version}}-x86_64.AppImage
+            ./release/Zettlr-${{ env.version }}-amd64.deb
+            ./release/Zettlr-${{ env.version }}-x86_64.rpm
+            ./release/Zettlr-${{ env.version }}-x86_64.AppImage
 
   build_linux_arm64:
     name: Linux (arm64)
@@ -335,7 +360,9 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: |
+          echo "old_version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+          echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -343,14 +370,18 @@ jobs:
         run: |
           yarn package:linux-arm
           yarn release:linux-arm
+      - name: Rename installers
+        if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
+        run: |
+          mv ./release/Zettlr-${{ env.old_version }}-arm64.AppImage ./release/Zettlr-${{ env.version }}-arm64.AppImage
       - name: Cache installers
         uses: actions/upload-artifact@v4
         with:
           name: linux_arm64
           path: |
-            ./release/Zettlr-${{env.version}}-arm64.deb
-            ./release/Zettlr-${{env.version}}-aarch64.rpm
-            ./release/Zettlr-${{env.version}}-arm64.AppImage
+            ./release/Zettlr-${{ env.version }}-arm64.deb
+            ./release/Zettlr-${{ env.version }}-aarch64.rpm
+            ./release/Zettlr-${{ env.version }}-arm64.AppImage
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -385,7 +416,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        run: echo "$(cat package.json | jq '.version = .version + "-nightly"')" > package.json
+        run: echo "$(cat package.json | jq '.version = .version + "+nightly"')" > package.json
       - name: Retrieve tag version
         id: ref
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
@@ -422,15 +453,15 @@ jobs:
         #  sha256sum "Zettlr-${{env.version}}-arm64.exe" >> "SHA256SUMS.txt" # DEBUG: Disable win arm for now
         run: |
           cd ./release
-          sha256sum "Zettlr-${{env.version}}-x64.exe" > "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-x64.dmg" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-arm64.dmg" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-arm64.AppImage" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-amd64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-arm64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-aarch64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ env.version }}-x64.exe" > "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ env.version }}-x64.dmg" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ env.version }}-arm64.dmg" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ env.version }}-x86_64.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ env.version }}-arm64.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ env.version }}-amd64.deb" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ env.version }}-arm64.deb" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ env.version }}-x86_64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ env.version }}-aarch64.rpm" >> "SHA256SUMS.txt"
           cd ..
       - name: Verify checksums
         run: |
@@ -471,16 +502,16 @@ jobs:
           draft: true # Always create as draft, so that we can populate the remaining values easily
           prerelease: ${{ github.ref_name == env.RC_BRANCH }}
           # Gosh, is that convenient as opposed to earlier!
+          # ./release/Zettlr-${{ env.version }}-arm64.exe # DEBUG: Disable Windows for now
           files: |
-            ./release/Zettlr-${{env.version}}-x64.exe
-            ./release/Zettlr-${{env.version}}-arm64.exe
-            ./release/Zettlr-${{env.version}}-x64.dmg
-            ./release/Zettlr-${{env.version}}-arm64.dmg
-            ./release/Zettlr-${{env.version}}-amd64.deb
-            ./release/Zettlr-${{env.version}}-arm64.deb
-            ./release/Zettlr-${{env.version}}-x86_64.rpm
-            ./release/Zettlr-${{env.version}}-aarch64.rpm
-            ./release/Zettlr-${{env.version}}-x86_64.AppImage
-            ./release/Zettlr-${{env.version}}-arm64.AppImage
+            ./release/Zettlr-${{ env.version }}-x64.exe
+            ./release/Zettlr-${{ env.version }}-x64.dmg
+            ./release/Zettlr-${{ env.version }}-arm64.dmg
+            ./release/Zettlr-${{ env.version }}-amd64.deb
+            ./release/Zettlr-${{ env.version }}-arm64.deb
+            ./release/Zettlr-${{ env.version }}-x86_64.rpm
+            ./release/Zettlr-${{ env.version }}-aarch64.rpm
+            ./release/Zettlr-${{ env.version }}-x86_64.AppImage
+            ./release/Zettlr-${{ env.version }}-arm64.AppImage
             ./release/SHA256SUMS.txt
       # Else: Do nothing -> keep the artifacts, but do not do anything with them.

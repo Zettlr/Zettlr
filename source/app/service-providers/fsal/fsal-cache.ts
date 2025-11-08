@@ -24,7 +24,7 @@ import hash from '@common/util/hash'
 import type LogProvider from '@providers/log'
 import fs, { promises as fsPromises } from 'fs'
 import path from 'path'
-import type { CodeFileDescriptor, MDFileDescriptor } from 'source/types/common/fsal'
+import type { CodeFileDescriptor, MDFileDescriptor, OtherFileDescriptor } from 'source/types/common/fsal'
 
 export default class FSALCache {
   private readonly _datadir: string
@@ -68,7 +68,7 @@ export default class FSALCache {
    *
    * @returns {undefined|MDFileDescriptor|CodeFileDescriptor}     The key's value or undefined
    */
-  get (key: string): undefined|MDFileDescriptor|CodeFileDescriptor {
+  get (key: string): undefined|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor {
     const shard = this._loadShard(key)
 
     if (shard.has(key)) {
@@ -91,7 +91,7 @@ export default class FSALCache {
    *
    * @return {boolean}        True on success, false otherwise.
    */
-  set (key: string, value: MDFileDescriptor|CodeFileDescriptor): boolean {
+  set (key: string, value: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor): boolean {
     try {
       JSON.stringify(value)
     } catch (err) {
@@ -200,7 +200,7 @@ export default class FSALCache {
    *
    * @return {Map<string, any>} The loaded shard
    */
-  _loadShard (key: string): Map<string, MDFileDescriptor|CodeFileDescriptor> {
+  _loadShard (key: string): Map<string, MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
     // load a shard
     const shard = this._determineShard(key)
 

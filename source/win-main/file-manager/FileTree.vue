@@ -7,8 +7,8 @@
     v-bind:aria-hidden="!isVisible"
     v-on:click="clickHandler"
   >
-    <template v-if="fileTree.length > 0">
-      <div v-if="getFilteredTree.length === 0" class="empty-tree">
+    <template v-if="rootDescriptors.length > 0">
+      <div v-if="filterQuery.trim() !== '' && filterResults.length === 0" class="empty-tree">
         <div class="info">
           {{ noResultsMessage }}
         </div>
@@ -38,10 +38,10 @@
           <TreeItem
             v-for="item in getFiles"
             v-bind:key="item.path"
-            v-bind:obj="item"
+            v-bind:item="item"
             v-bind:depth="0"
             v-bind:active-item="activeTreeItem?.[0]"
-            v-bind:is-currently-filtering="filterQuery.trim() !== ''"
+            v-bind:filter-results="filterResults"
             v-bind:has-duplicate-name="getFiles.filter(i => i.name === item.name).length > 1"
             v-bind:window-id="props.windowId"
             v-on:toggle-file-list="emit('toggle-file-list')"
@@ -74,8 +74,8 @@
           <TreeItem
             v-for="item in getDirectories"
             v-bind:key="item.path"
-            v-bind:obj="item"
-            v-bind:is-currently-filtering="filterQuery.length > 0"
+            v-bind:item="item"
+            v-bind:filter-results="filterResults"
             v-bind:depth="0"
             v-bind:active-item="activeTreeItem?.[0]"
             v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
@@ -114,42 +114,16 @@
 import { trans } from '@common/i18n-renderer'
 import TreeItem from './TreeItem.vue'
 import matchQuery from './util/match-query'
-import matchTree from './util/match-tree'
 import { ref, computed } from 'vue'
-import { useConfigStore, useDocumentTreeStore, useWindowStateStore, useWorkspacesStore } from 'source/pinia'
-import { type AnyDescriptor } from '@dts/common/fsal'
+import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
+import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
+import type { AnyDescriptor } from 'source/types/common/fsal'
+import { getSorter } from 'source/common/util/directory-sorter'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
-
-/**
- * Flattens one element of the filtered directory tree into a one-dimensional
- * array, taking into account only uncollapsed (=visible) directories.
- *
- * @param   {AnyDescriptor}       elem         The element to flatten
- * @param   {string[]|undefined}  uncollapsed  A list of opened directories. Pass undefined to return all directories
- * @param   {AnyDescriptor[]}     arr          A list to append to (for recursion)
- *
- * @return  {AnyDescriptor[]}                  The flattened list
- */
-function getFlattenedVisibleFileTree (elem: AnyDescriptor, uncollapsed: string[]|undefined, arr: AnyDescriptor[] = []): AnyDescriptor[] {
-  // Add the current element
-  if (elem.type !== 'other') {
-    // TODO: Once we enable displaying of otherfiles in the file tree, we MUST
-    // replace this with a check of whether that setting is on!
-    arr.push(elem)
-  }
-
-  // Include children only when we either are filtering (uncollapsed = undefined)
-  // or if the directory is actually visible
-  if (elem.type === 'directory' && (uncollapsed === undefined || uncollapsed.includes(elem.path))) {
-    for (const child of elem.children) {
-      arr = getFlattenedVisibleFileTree(child, uncollapsed, arr)
-    }
-  }
-
-  return arr
-}
 
 const props = defineProps<{
   isVisible: boolean
@@ -165,13 +139,16 @@ const emit = defineEmits<{
 // Can contain the path to a tree item that is focused
 const activeTreeItem = ref<undefined|[string, string]>(undefined)
 
-const workSpacesStore = useWorkspacesStore()
-const configStore = useConfigStore()
+const workspaceStore = useWorkspaceStore()
 const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
+const configStore = useConfigStore()
+
+const rootDescriptors = computed(() => workspaceStore.rootDescriptors)
 
 const showFilesSection = computed(() => configStore.config.fileManagerShowFiles)
 const showWorkspacesSection = computed(() => configStore.config.fileManagerShowWorkspaces)
+const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 
 const platform = process.platform
 const fileSectionHeading = trans('Files')
@@ -179,66 +156,85 @@ const workspaceSectionHeading = trans('Workspaces')
 const noRootsMessage = trans('No open files or folders')
 const noResultsMessage = trans('No results')
 
-const fileTree = computed<AnyDescriptor[]>(() => workSpacesStore.roots.map(root => root.descriptor))
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
-const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 
-const getFilteredTree = computed<AnyDescriptor[]>(() => {
-  const q = props.filterQuery.trim().toLowerCase()
+const query = computed(() => props.filterQuery.trim().toLowerCase())
 
+const filterResults = computed<string[]>(() => {
+  const q = query.value
   if (q === '') {
-    return fileTree.value
+    return []
   }
 
   const filter = matchQuery(q, useTitle.value, useH1.value)
-  // Now we can actually filter out the file tree. We have to do this recursively.
-  // We will perform a depth-first search and keep every directory which either
-  // (a) matches directly or (b) has an amount of filtered children > 0
-  const filteredTree = []
-  for (const item of fileTree.value) {
-    if (item.type === 'directory') {
-      // Recursively match the directory
-      const result = matchTree(item, filter)
-      if (result !== undefined) {
-        filteredTree.push(result)
-      }
-    } else if (filter(item)) {
-      // Add the file, since it matches
-      filteredTree.push(item)
+  const results: string[] = []
+
+  for (const [ absPath, descriptor ] of workspaceStore.descriptorMap.entries()) {
+    if (filter(descriptor)) {
+      results.push(absPath)
     }
   }
-  return filteredTree
+
+  return results
 })
 
 const getFiles = computed(() => {
   // NOTE: These are the root files. We'll only allow Markdown and code files here.
-  return getFilteredTree.value.filter(item => item.type === 'file' || item.type === 'code')
+  const roots = rootDescriptors.value.filter(desc => desc.type === 'file' || desc.type === 'code')
+  const q = query.value
+  if (q === '') {
+    return roots
+  }
+
+  return roots.filter(root => filterResults.value.includes(root.path))
 })
 
 const getDirectories = computed(() => {
-  return getFilteredTree.value.filter(item => item.type === 'directory')
-})
-
-const uncollapsedDirectories = computed(() => {
-  return windowStateStore.uncollapsedDirectories
-})
-
-const flattenedSimpleFileTree = computed<Array<[string, string]>>(() => {
-  // First, take the filtered tree and flatten it
-  let list: AnyDescriptor[] = []
-  const uncollapsedDirs: string[]|undefined = (props.filterQuery.length === 0) ? uncollapsedDirectories.value : undefined
-
-  getFilteredTree.value.forEach(elem => {
-    list = list.concat(getFlattenedVisibleFileTree(elem, uncollapsedDirs))
-  })
-
-  const flatArray: Array<[string, string]> = []
-  for (const elem of list) {
-    // We need the type to check if we can uncollapse/collapse a directory
-    flatArray.push([ elem.path, elem.type ])
+  const roots = rootDescriptors.value.filter(desc => desc.type === 'directory')
+  const q = query.value
+  if (q === '') {
+    return roots
   }
-  return flatArray
+
+  return roots.filter(root => {
+    return filterResults.value.some(res => res.startsWith(root.path))
+  })
+})
+
+const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, string]>>(() => {
+  // First, get all descriptors.
+  const allDescriptors = [...workspaceStore.descriptorMap.values()]
+  // Second, filter them if applicable.
+    .filter(descriptor => {
+      return query.value === '' ? true : filterResults.value.some(res => res.startsWith(descriptor.path))
+    })
+  
+  const uncollapsed = windowStateStore.uncollapsedDirectories
+  const collapsed = allDescriptors
+    .filter(d => d.type === 'directory')
+    .map(d => d.path)
+    .filter(absPath => !uncollapsed.includes(absPath))
+
+  const visibleDescriptors = allDescriptors
+    // Third, remove any file that is within a collapsed directory
+    .filter(descriptor => {
+      return collapsed.find(absPath => descriptor.dir.startsWith(absPath)) === undefined
+    })
+
+  // Fourth, sort them recursively so that the list is the same as what the file
+  // tree will see
+  const retValue: AnyDescriptor[] = [
+    ...getFiles.value
+  ]
+
+  const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = configStore.config
+  const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
+
+  for (const descriptor of getDirectories.value) {
+    retValue.push(...retrieveChildrenAndSort(descriptor, visibleDescriptors, sorter))
+  }
+  return retValue.map(descriptor => ([ descriptor.path, descriptor.type ]))
 })
 
 /**
@@ -272,7 +268,7 @@ function navigate (event: KeyboardEvent): void {
     return
   }
 
-  if (flattenedSimpleFileTree.value.length === 0) {
+  if (flatSortedAndFilteredVisualFileDescriptors.value.length === 0) {
     return // Nothing to navigate
   }
 
@@ -296,7 +292,7 @@ function navigate (event: KeyboardEvent): void {
   }
 
   // Get the current index of the current active file
-  let currentIndex = flattenedSimpleFileTree.value.findIndex(val => val[0] === activeTreeItem.value?.[0])
+  let currentIndex = flatSortedAndFilteredVisualFileDescriptors.value.findIndex(val => val[0] === activeTreeItem.value?.[0])
 
   switch (event.key) {
     case 'ArrowDown':
@@ -307,34 +303,44 @@ function navigate (event: KeyboardEvent): void {
       break
     case 'ArrowLeft':
       // Close a directory if applicable
-      if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
-        const path = flattenedSimpleFileTree.value[currentIndex][0]
+      if (currentIndex > -1 && flatSortedAndFilteredVisualFileDescriptors.value[currentIndex][1] === 'directory') {
+        const path = flatSortedAndFilteredVisualFileDescriptors.value[currentIndex][0]
         const idx = windowStateStore.uncollapsedDirectories.indexOf(path)
         if (idx > -1) {
           windowStateStore.uncollapsedDirectories.splice(idx, 1)
         }
+        return // No need to update activeTreeItem
+      } else if (currentIndex > -1 && flatSortedAndFilteredVisualFileDescriptors.value[currentIndex][1] !== 'directory') {
+        const path = pathDirname(flatSortedAndFilteredVisualFileDescriptors.value[currentIndex][0])
+        const idx = windowStateStore.uncollapsedDirectories.indexOf(path)
+        if (idx > -1) {
+          windowStateStore.uncollapsedDirectories.splice(idx, 1)
+          // Also, here, reset the index to the containing directory. If that was not found, currentIndex is -1
+          // meaning navigation stops.
+          currentIndex = flatSortedAndFilteredVisualFileDescriptors.value.findIndex(x => x[0] === path)
+        }
       }
-      return
+      break
     case 'ArrowRight':
       // Open a directory if applicable
-      if (currentIndex > -1 && flattenedSimpleFileTree.value[currentIndex][1] === 'directory') {
-        const path = flattenedSimpleFileTree.value[currentIndex][0]
+      if (currentIndex > -1 && flatSortedAndFilteredVisualFileDescriptors.value[currentIndex][1] === 'directory') {
+        const path = flatSortedAndFilteredVisualFileDescriptors.value[currentIndex][0]
         if (!windowStateStore.uncollapsedDirectories.includes(path)) {
           windowStateStore.uncollapsedDirectories.push(path)
         }
       }
-      return
+      return // No need to update activeTreeItem
   }
 
   // Sanitize the index
-  if (currentIndex > flattenedSimpleFileTree.value.length - 1) {
-    currentIndex = flattenedSimpleFileTree.value.length - 1
+  if (currentIndex > flatSortedAndFilteredVisualFileDescriptors.value.length - 1) {
+    currentIndex = flatSortedAndFilteredVisualFileDescriptors.value.length - 1
   } else if (currentIndex < 0) {
     currentIndex = 0
   }
 
   // Set the active tree item
-  activeTreeItem.value = flattenedSimpleFileTree.value[currentIndex]
+  activeTreeItem.value = flatSortedAndFilteredVisualFileDescriptors.value[currentIndex]
 }
 
 function stopNavigate (): void {

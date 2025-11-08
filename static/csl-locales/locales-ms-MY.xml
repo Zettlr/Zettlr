@@ -9,7 +9,7 @@
     <name>Farah Diba Abu Bakar</name>
   </translator>
   <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-  <updated>2019-01-01T12:00:00+00:00</updated>
+  <updated>2025-10-16T03:24:00+00:00</updated>
 </info>
   <style-options punctuation-in-quote="true"/>
   <date form="text">
@@ -23,22 +23,16 @@
     <date-part name="year"/>
   </date>
   <terms>
+    <!-- LONG GENERAL TERMS -->
     <term name="accessed">diakses</term>
     <term name="and">dan</term>
     <term name="and others">dan lainnya</term>
     <term name="anonymous">anon</term>
-    <term name="anonymous" form="short">anon.</term>
     <term name="at">pada</term>
     <term name="available at">tersedia pada</term>
     <term name="by">oleh</term>
     <term name="circa">lebih kurang</term>
-    <term name="circa" form="short">ca.</term>
     <term name="cited">disitasi</term>
-    <term name="edition">
-      <single>edisi</single>
-      <multiple>edisi</multiple>
-    </term>
-    <term name="edition" form="short">ed.</term>
     <term name="et-al">et al.</term>
     <term name="forthcoming">mendatang</term>
     <term name="from">dari</term>
@@ -46,25 +40,38 @@
     <term name="in">dalam</term>
     <term name="in press">dalam proses cetakan</term>
     <term name="internet">internet</term>
-    <term name="interview">wawancara</term>
     <term name="letter">surat</term>
     <term name="no date">tiada tarikh</term>
-    <term name="no date" form="short">t.th.</term>
     <term name="online">dalam talian</term>
     <term name="presented at">dibentangkan pada</term>
     <term name="reference">
       <single>rujukan</single>
       <multiple>rujukan</multiple>
     </term>
+    <term name="retrieved">diambil</term>
+    <term name="scale">skala</term>
+
+    <!-- SHORT GENERAL TERMS -->
+    <term name="anonymous" form="short">anon.</term>
+    <term name="circa" form="short">ca.</term>
+    <term name="no date" form="short">t.th.</term>
     <term name="reference" form="short">
       <single>ruj.</single>
       <multiple>ruj.</multiple>
     </term>
-    <term name="retrieved">diambil</term>
-    <term name="scale">skala</term>
-    <term name="version">versi</term>
 
-    <!-- ANNO DOMINI; BEFORE CHRIST -->
+    <!-- SYMBOLIC GENERAL FORMS -->
+
+    <!-- LONG ITEM TYPE FORMS -->
+    <term name="interview">wawancara</term>
+
+    <!-- SHORT ITEM TYPE FORMS -->
+
+    <!-- LONG VERB ITEM TYPE FORMS -->
+
+    <!-- SHORT VERB ITEM TYPE FORMS -->
+
+    <!-- HISTORICAL ERA TERMS -->
     <term name="ad">M</term>
     <term name="bc">SM</term>
 
@@ -76,13 +83,13 @@
     <term name="page-range-delimiter">–</term>
 
     <!-- ORDINALS -->
-    <term name="ordinal"></term>
-    <term name="ordinal-01"></term>
-    <term name="ordinal-02"></term>
-    <term name="ordinal-03"></term>
-    <term name="ordinal-11"></term>
-    <term name="ordinal-12"></term>
-    <term name="ordinal-13"></term>
+    <term name="ordinal"/>
+    <term name="ordinal-01"/>
+    <term name="ordinal-02"/>
+    <term name="ordinal-03"/>
+    <term name="ordinal-11"/>
+    <term name="ordinal-12"/>
+    <term name="ordinal-13"/>
 
     <!-- LONG ORDINALS -->
     <term name="long-ordinal-01">pertama</term>
@@ -137,10 +144,6 @@
       <single>halaman</single>
       <multiple>halaman</multiple>
     </term>
-    <term name="number-of-pages">
-      <single>halaman</single>
-      <multiple>halaman</multiple>
-    </term>
     <term name="paragraph">
       <single>perenggan</single>
       <multiple>perenggan</multiple>
@@ -180,10 +183,6 @@
       <single>hlm.</single>
       <multiple>hlm.</multiple>
     </term>
-    <term name="number-of-pages" form="short">
-      <single>hlm.</single>
-      <multiple>hlm.</multiple>
-    </term>
     <term name="paragraph" form="short">pgn.</term>
     <term name="part" form="short">fs.</term>
     <term name="section" form="short">bag.</term>
@@ -200,7 +199,7 @@
       <multiple>jil.</multiple>
     </term>
 
-    <!-- SYMBOL LOCATOR FORMS -->
+    <!-- SYMBOLIC LOCATOR FORMS -->
     <term name="paragraph" form="symbol">
       <single>¶</single>
       <multiple>¶¶</multiple>
@@ -208,6 +207,24 @@
     <term name="section" form="symbol">
       <single>§</single>
       <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG NUMBER VARIABLE FORMS -->
+    <term name="edition">
+      <single>edisi</single>
+      <multiple>edisi</multiple>
+    </term>
+    <term name="number-of-pages">
+      <single>halaman</single>
+      <multiple>halaman</multiple>
+    </term>
+    <term name="version">versi</term>
+
+    <!-- SHORT NUMBER VARIABLE FORMS -->
+    <term name="edition" form="short">ed.</term>
+    <term name="number-of-pages" form="short">
+      <single>hlm.</single>
+      <multiple>hlm.</multiple>
     </term>
 
     <!-- LONG ROLE FORMS -->
@@ -218,6 +235,14 @@
     <term name="editor">
       <single>penyunting</single>
       <multiple>penyunting</multiple>
+    </term>
+    <term name="editor-translator">
+      <single>editor &amp; penterjemah</single>
+      <multiple>editor &amp; penterjemah</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>editor &amp; penterjemah</single>
+      <multiple>editor &amp; penterjemah</multiple>
     </term>
     <term name="editorial-director">
       <single>pengarah penyuntingan</single>
@@ -231,14 +256,6 @@
       <single>penterjemah</single>
       <multiple>penterjemah</multiple>
     </term>
-    <term name="editortranslator">
-      <single>editor &amp; penterjemah</single>
-      <multiple>editor &amp; penterjemah</multiple>
-    </term>
-    <term name="editor-translator">
-      <single>editor &amp; penterjemah</single>
-      <multiple>editor &amp; penterjemah</multiple>
-    </term>
 
     <!-- SHORT ROLE FORMS -->
     <term name="director" form="short">
@@ -248,6 +265,14 @@
     <term name="editor" form="short">
       <single>pnyt.</single>
       <multiple>pnyt.</multiple>
+    </term>
+    <term name="editor-translator" form="short">
+      <single>pnyt. &amp; ptrj.</single>
+      <multiple>pnyt. &amp; ptrj.</multiple>
+    </term>
+    <term name="editortranslator" form="short">
+      <single>pnyt. &amp; ptrj.</single>
+      <multiple>pnyt. &amp; ptrj.</multiple>
     </term>
     <term name="editorial-director" form="short">
       <single>ed.</single>
@@ -261,36 +286,28 @@
       <single>ptrj.</single>
       <multiple>ptrj.</multiple>
     </term>
-    <term name="editortranslator" form="short">
-      <single>pnyt. &amp; ptrj.</single>
-      <multiple>pnyt. &amp; ptrj.</multiple>
-    </term>
-    <term name="editor-translator" form="short">
-      <single>pnyt. &amp; ptrj.</single>
-      <multiple>pnyt. &amp; ptrj.</multiple>
-    </term>
 
     <!-- VERB ROLE FORMS -->
     <term name="container-author" form="verb">oleh</term>
     <term name="director" form="verb">diarahkan oleh</term>
     <term name="editor" form="verb">disunting oleh</term>
+    <term name="editor-translator" form="verb">disunting &amp; diterjemahkan oleh</term>
+    <term name="editortranslator" form="verb">disunting &amp; diterjemahkan oleh</term>
     <term name="editorial-director" form="verb">disunting oleh</term>
     <term name="illustrator" form="verb">diilustrasi oleh</term>
     <term name="interviewer" form="verb">diwawancara oleh</term>
     <term name="recipient" form="verb">kepada</term>
     <term name="reviewed-author" form="verb">oleh</term>
     <term name="translator" form="verb">diterjemahkan oleh</term>
-    <term name="editortranslator" form="verb">disunting &amp; diterjemahkan oleh</term>
-    <term name="editor-translator" form="verb">disunting &amp; diterjemahkan oleh</term>
 
     <!-- SHORT VERB ROLE FORMS -->
     <term name="director" form="verb-short">dir. oleh</term>
     <term name="editor" form="verb-short">ed. oleh</term>
+    <term name="editor-translator" form="verb-short">ed. &amp; penerj. oleh</term>
+    <term name="editortranslator" form="verb-short">ed. &amp; penerj. oleh</term>
     <term name="editorial-director" form="verb-short">ed. oleh</term>
     <term name="illustrator" form="verb-short">illus. oleh</term>
     <term name="translator" form="verb-short">trans. oleh</term>
-    <term name="editortranslator" form="verb-short">ed. &amp; penerj. oleh</term>
-    <term name="editor-translator" form="verb-short">ed. &amp; penerj. oleh</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">Januari</term>

@@ -71,12 +71,10 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
 export async function parse (
   filePath: string,
   cache: FSALCache|null,
-  parser: (file: MDFileDescriptor, content: string) => void,
-  isRoot: boolean
+  parser: (file: MDFileDescriptor, content: string) => void
 ): Promise<MDFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: MDFileDescriptor = {
-    root: isRoot,
     dir: path.dirname(filePath), // Containing dir
     path: filePath,
     name: path.basename(filePath),

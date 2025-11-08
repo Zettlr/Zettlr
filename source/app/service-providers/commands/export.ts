@@ -89,7 +89,7 @@ export default class Export extends ZettlrCommand {
     }
 
     // We must have an absolute path given in file
-    const fileDescriptor = this._app.workspaces.findFile(file)
+    const fileDescriptor = await this._app.fsal.getDescriptorForAnySupportedFile(file)
     if (fileDescriptor !== undefined) {
       // If we have a cached version, we already have a file to export.
       // Otherwise, use the regular one from disk.
@@ -106,7 +106,7 @@ export default class Export extends ZettlrCommand {
       // key zettlr.pandoc_working_dir: /path/to/directory
       if (fileDescriptor.type === 'file' &&
       typeof fileDescriptor.frontmatter?.zettlr?.pandoc_working_dir === 'string' &&
-      await this._app.fsal.isDir(fileDescriptor.frontmatter.zettlr.pandoc_working_dir)) {
+      await this._app.fsal.isDir(fileDescriptor.frontmatter.zettlr.pandoc_working_dir as string)) {
         exporterOptions.cwd = fileDescriptor.frontmatter.zettlr.pandoc_working_dir
       }
 

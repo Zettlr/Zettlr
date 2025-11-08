@@ -5,7 +5,7 @@
       <name>عثمان</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2024-03-18T11:52:00+00:00</updated>
+    <updated>2025-10-16T03:24:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="true"/>
   <date form="text">
@@ -19,7 +19,7 @@
     <date-part name="year"/>
   </date>
   <terms>
-    <!-- GENERAL TERMS -->
+    <!-- LONG GENERAL TERMS -->
     <term name="accessed">پہنچیا</term>
     <term name="advance-online-publication">آن لائن اگاؤں دتی اشاعت</term>
     <term name="album">البم</term>
@@ -73,6 +73,10 @@
     <term name="video">ویڈیو</term>
     <term name="working-paper">ورکنگ پیپر</term>
 
+    <!-- SHORT GENERAL TERMS -->
+
+    <!-- SYMBOLIC GENERAL FORMS -->
+
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">پریپرنٹ</term>
     <term name="article-journal">جرنل دا لیکھ</term>
@@ -120,11 +124,15 @@
     <term name="treaty">معاہدہ</term>
     <term name="webpage">ویب صفحہ</term>
 
-    <!-- VERB ITEM TYPE FORMS -->
+    <!-- SHORT ITEM TYPE FORMS -->
+
+    <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
     <term name="hearing" form="verb">ثبوت دتا از</term>
     <term name="review" form="verb">ریویو کیتا از</term>
     <term name="review-book" form="verb">کتاب دا ریویو کیتا</term>
+
+    <!-- SHORT VERB ITEM TYPE FORMS -->
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">عیسوی</term>
@@ -144,7 +152,6 @@
 
     <!-- ORDINALS -->
     <term name="ordinal" gender-form="masculine">واں</term>
-    <term name="ordinal" gender-form="feminine">ویں</term>
     <term name="ordinal-01" gender-form="masculine">لا</term>
     <term name="ordinal-02" gender-form="masculine">جا</term>
     <term name="ordinal-03" gender-form="masculine">جا</term>
@@ -153,6 +160,7 @@
     <term name="ordinal-12" gender-form="masculine">واں</term>
     <term name="ordinal-13" gender-form="masculine">واں</term>
     <term name="ordinal-14" gender-form="masculine">واں</term>
+    <term name="ordinal" gender-form="feminine">ویں</term>
     <term name="ordinal-01" gender-form="feminine">لی</term>
     <term name="ordinal-02" gender-form="feminine">جی</term>
     <term name="ordinal-03" gender-form="feminine">جی</term>
@@ -185,25 +193,25 @@
     <term name="long-ordinal-10" gender-form="feminine">دسویں</term>
 
     <!-- LONG LOCATOR FORMS -->
-    <term name="act">			 
+    <term name="act">
       <single>ایکٹ</single>
-      <multiple>ایکٹ</multiple>						 
+      <multiple>ایکٹ</multiple>
     </term>
-    <term name="appendix">			 
+    <term name="appendix">
       <single>ضمیمہ</single>
-      <multiple>ضمیمے</multiple>						 
+      <multiple>ضمیمے</multiple>
     </term>
-    <term name="article-locator">			 
+    <term name="article-locator">
       <single>لیکھ</single>
-      <multiple>لیکھ</multiple>						 
+      <multiple>لیکھ</multiple>
     </term>
     <term name="book">
       <single>کتاب</single>
       <multiple>کتاباں</multiple>
     </term>
-    <term name="canon">			 
+    <term name="canon">
       <single>قانون</single>
-      <multiple>قانون</multiple>						 
+      <multiple>قانون</multiple>
     </term>
     <term name="chapter">
       <single>کانڈ</single>
@@ -213,13 +221,13 @@
       <single>کالم</single>
       <multiple>کالم</multiple>
     </term>
-    <term name="elocation">			 
+    <term name="elocation">
       <single>تھاں</single>
-      <multiple>تھاواں</multiple>						 
+      <multiple>تھاواں</multiple>
     </term>
-    <term name="equation">			 
+    <term name="equation">
       <single>مساوات</single>
-      <multiple>مساواتاں</multiple>						 
+      <multiple>مساواتاں</multiple>
     </term>
     <term name="figure">
       <single>تصویر</single>
@@ -257,13 +265,13 @@
       <single>حصہ</single>
       <multiple>حصے</multiple>
     </term>
-    <term name="rule">			 
+    <term name="rule">
       <single>رول</single>
-      <multiple>رول</multiple>						 
+      <multiple>رول</multiple>
     </term>
-    <term name="scene">			 
+    <term name="scene">
       <single>سین</single>
-      <multiple>سین</multiple>						 
+      <multiple>سین</multiple>
     </term>
     <term name="section" gender="masculine">
       <single>جز</single>
@@ -277,32 +285,30 @@
       <single>لاحق</single>
       <multiple>لاحق</multiple>
     </term>
-    <term name="table">			 
+    <term name="table">
       <single>ٹیبل</single>
-      <multiple>ٹیبل</multiple>						 
+      <multiple>ٹیبل</multiple>
     </term>
     <term name="timestamp"> <!-- generally blank -->
-      <single></single>
-      <multiple></multiple>						 
+      <single/>
+      <multiple/>
     </term>
-    <term name="title-locator">			 
+    <term name="title-locator">
       <single>عنوان</single>
-      <multiple>عنوان</multiple>						 
+      <multiple>عنوان</multiple>
     </term>
     <term name="verse">
       <single>شعر</single>
       <multiple>شعر</multiple>
-    </term>
-    <term name="version" gender="masculine">
-      <single>ورژن</single>
-      <multiple>ورژن</multiple>
     </term>
     <term name="volume" gender="masculine">
       <single>جلد</single>
       <multiple>جلد</multiple>
     </term>
 
-    <!-- SYMBOL LOCATOR FORMS -->
+    <!-- SHORT LOCATOR FORMS -->
+
+    <!-- SYMBOLIC LOCATOR FORMS -->
     <term name="paragraph" form="symbol">
       <single>¶</single>
       <multiple>¶¶</multiple>
@@ -353,10 +359,16 @@
       <single>چھاپ</single>
       <multiple>چھاپاں</multiple>
     </term>
+    <term name="version" gender="masculine">
+      <single>ورژن</single>
+      <multiple>ورژن</multiple>
+    </term>
+
+    <!-- SHORT NUMBER VARIABLE FORMS -->
 
     <!-- LONG ROLE FORMS -->
-    <!-- Omitted roles: 
-         author, composer, container-author, interviewer, original-author, recipient, reviewed-author 
+    <!-- Omitted roles:
+         author, composer, container-author, interviewer, original-author, recipient, reviewed-author
     -->
     <term name="chair">
       <single>چیر</single>
@@ -386,11 +398,11 @@
       <single>سودھی</single>
       <multiple>سودھی</multiple>
     </term>
-    <term name="editortranslator">
+    <term name="editor-translator">
       <single>سودھی &amp; مترجم</single>
       <multiple>سودھی &amp; مترجم</multiple>
     </term>
-    <term name="editor-translator">
+    <term name="editortranslator">
       <single>سودھی &amp; مترجم</single>
       <multiple>سودھی &amp; مترجم</multiple>
     </term>
@@ -443,6 +455,8 @@
       <multiple>مترجم</multiple>
     </term>
 
+    <!-- SHORT ROLE FORMS -->
+
     <!-- VERB ROLE FORMS -->
     <term name="chair" form="verb">چیر نال</term>
     <term name="collection-editor" form="verb">سودھی نال</term>
@@ -453,8 +467,8 @@
     <term name="curator" form="verb">کیوریٹر نال</term>
     <term name="director" form="verb">ڈائریکٹر نال</term>
     <term name="editor" form="verb">سودھی نال</term>
-    <term name="editortranslator" form="verb">سودھی &amp; مترجم نال</term>
     <term name="editor-translator" form="verb">سودھی &amp; مترجم نال</term>
+    <term name="editortranslator" form="verb">سودھی &amp; مترجم نال</term>
     <term name="editorial-director" form="verb">سودھی نال</term>
     <term name="executive-producer" form="verb">انتظامیے نال</term>
     <term name="guest" form="verb">مہمان نال</term>
@@ -471,8 +485,10 @@
     <term name="script-writer" form="verb">بقلم</term>
     <term name="series-creator" form="verb">رچنا کار نال</term>
     <term name="translator" form="verb">مترجم نال</term>
-    
-<!-- LONG MONTH FORMS -->
+
+    <!-- SHORT VERB ROLE FORMS -->
+
+    <!-- LONG MONTH FORMS -->
     <term name="month-01" gender="masculine">جنوری</term>
     <term name="month-02" gender="masculine">فروری</term>
     <term name="month-03" gender="masculine">مارچ</term>

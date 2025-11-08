@@ -95,7 +95,7 @@ import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import SwitchControl from '@common/vue/form/elements/SwitchControl.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import { trans } from '@common/i18n-renderer'
-import { type DirDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { ref, computed, watch, toRef, onBeforeMount } from 'vue'
 import { useConfigStore } from 'source/pinia'
 
@@ -187,7 +187,7 @@ const icons = [
 
 const configStore = useConfigStore()
 
-const props = defineProps<{ target: HTMLElement, directory: DirDescriptor }>()
+const props = defineProps<{ target: HTMLElement, directory: DirDescriptor, children: AnyDescriptor[] }>()
 
 const emit = defineEmits<(e: 'close') => void>()
 
@@ -204,15 +204,15 @@ const modificationTime = computed(() => {
 })
 
 const formattedFiles = computed(() => {
-  return localiseNumber(props.directory.children.filter(x => x.type !== 'directory').length)
+  return localiseNumber(props.children.filter(x => x.type !== 'directory').length)
 })
 
 const formattedDirs = computed(() => {
-  return localiseNumber(props.directory.children.filter(x => x.type === 'directory').length)
+  return localiseNumber(props.children.filter(x => x.type === 'directory').length)
 })
 
 const formattedWordCount = computed(() => {
-  const totalWords = props.directory.children
+  const totalWords = props.children
     .filter((x): x is MDFileDescriptor => x.type === 'file')
     .map(x => x.wordCount)
     .reduce((prev, cur) => { return prev + cur }, 0)

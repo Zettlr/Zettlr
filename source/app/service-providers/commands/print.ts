@@ -22,9 +22,9 @@ export default class Print extends ZettlrCommand {
 
   /**
    * Prints the current file (in: opening the print window)
-   * @param {String} evt The event name
-   * @param {Object} arg The argument
-   * @return {Boolean} Whether the command ran successful
+   *
+   * @param  {string}  evt The event name
+   * @param  {any}     arg The argument
    */
   async run (evt: string, arg?: string): Promise<void> {
     const filePath = arg
@@ -34,7 +34,7 @@ export default class Print extends ZettlrCommand {
       return
     }
 
-    const fileDescriptor = this._app.workspaces.findFile(filePath)
+    const fileDescriptor = await this._app.fsal.getDescriptorForAnySupportedFile(filePath)
 
     if (fileDescriptor === undefined) {
       this._app.log.error('[Print] Cannot print document: Not found.')

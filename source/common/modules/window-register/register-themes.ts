@@ -13,10 +13,10 @@
  * END HEADER
  */
 
-// Import the main.less file which imports CSS for KaTeX, Clarity, Tippy.JS, and
+// Import the main.css file which imports CSS for KaTeX, Clarity, Tippy.JS, and
 // the geometry for the application. This will be added to the HTML by Webpack
 // automatically
-import './assets/main.less'
+import './assets/main.css'
 
 const ipcRenderer = window.ipc
 
