@@ -36,7 +36,7 @@ const ZknLinkDelimiter: DelimiterType = {}
 // This parser adds Zettelkasten links to the syntax tree.
 export const zknLinkParser = function (config?: ZknLinkParserConfig): InlineParser {
   return {
-    // This parser should only match zettlekesten-style links
+    // This parser should only match zettelkasten-style links
     name: 'zkn-links',
     before: 'Link', // In case of default [[links]], the inner brackets would be detected as links
     parse: (ctx, next, pos) => {
