@@ -13,8 +13,11 @@
     <translator>
       <name>mzaini30</name>
     </translator>
+	<translator>
+      <name>rusli3</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:01+00:00</updated>
+    <updated>2025-10-27T03:24:01+00:00</updated>
   </info>
   <style-options punctuation-in-quote="true"/>
   <date form="text">
@@ -36,7 +39,7 @@
     <term name="and others">dan lainnya</term>
     <term name="anonymous">anonim</term>
     <term name="at">pada</term>
-    <term name="audio-recording">perekaman audio</term>
+    <term name="audio-recording">rekaman audio</term>
     <term name="available at">tersedia pada</term>
     <term name="by">oleh</term>
     <term name="circa">circa</term>
@@ -45,16 +48,16 @@
     <term name="film">film</term>
     <term name="forthcoming">mendatang</term>
     <term name="from">dari</term>
-    <term name="henceforth">henceforth</term>
+    <term name="henceforth">selanjutnya</term>
     <term name="ibid">ibid.</term>
     <term name="in">dalam</term>
-    <term name="in press">dalam proses cetakan</term>
+    <term name="in press">dalam proses cetak</term>
     <term name="internet">internet</term>
     <term name="letter">surat</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="no date">tanpa tanggal</term>
-    <term name="no-place">tiada tempat</term>
-    <term name="no-publisher">tiada penerbit</term> <!-- sine nomine -->
+    <term name="no-place">tanpa tempat</term>
+    <term name="no-publisher">tanpa penerbit</term> <!-- sine nomine -->
     <term name="on">on</term>
     <term name="online">daring</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
@@ -74,13 +77,13 @@
     <term name="retrieved">diambil</term>
     <term name="review-of">review of</term>
     <term name="scale">skala</term>
-    <term name="special-issue">isu spesial</term>
-    <term name="special-section">bagian spesial</term>
-    <term name="television-broadcast">broadcast televisi</term>
+    <term name="special-issue">edisi khusus</term>
+    <term name="special-section">bagian khusus</term>
+    <term name="television-broadcast">siaran televisi</term>
     <term name="television-series">seri televisi</term>
     <term name="television-series-episode">episode seri televisi</term>
     <term name="video">video</term>
-    <term name="working-paper">kertas kerja</term>
+    <term name="working-paper">naskah kerja</term>
 
     <!-- SHORT GENERAL TERMS -->
     <term name="anonymous" form="short">anon.</term>
@@ -101,9 +104,9 @@
     <term name="article-journal">artikel jurnal</term>
     <term name="article-magazine">artikel majalah</term>
     <term name="article-newspaper">artikel koran</term>
-    <term name="bill">tagihan</term>
+    <term name="bill">rancangan undang-undang</term>
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">siaran</term>
     <!-- chapter is in the list of locator terms -->
     <term name="classic">klasik</term>
     <term name="collection">koleksi</term>
@@ -115,7 +118,7 @@
     <term name="event">acara</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic">grafis</term>
-    <term name="hearing">mendengarkan</term>
+    <term name="hearing">dengar pendapat</term>
     <term name="interview">wawancara</term>
     <term name="legal_case">kasus legal</term>
     <term name="legislation">legislation</term>
@@ -124,24 +127,24 @@
     <term name="motion_picture">video recording</term>
     <term name="musical_score">skor musik</term>
     <term name="pamphlet">pamflet</term>
-    <term name="paper-conference">kertas konferensi</term>
+    <term name="paper-conference">makalah konferensi</term>
     <term name="patent">paten</term>
-    <term name="performance">performa</term>
-    <term name="periodical">berdasarkan periode tertentu</term>
+    <term name="performance">pertunjukan</term>
+    <term name="periodical">berkala</term>
     <term name="personal_communication">komunikasi pribadi</term>
     <term name="post">postingan</term>
     <term name="post-weblog">postingan blog</term>
     <term name="regulation">regulasi</term>
     <term name="report">laporan</term>
-    <term name="review">review</term>
-    <term name="review-book">review buku</term>
-    <term name="software">perangakat lunak</term>
+    <term name="review">ulasan</term>
+    <term name="review-book">ulasan buku</term>
+    <term name="software">perangkat lunak</term>
     <term name="song">lagu</term>
     <term name="speech">pidato</term>
-    <term name="standard">standard</term>
+    <term name="standard">standar</term>
     <term name="thesis">tesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">halaman website</term>
+    <term name="treaty">perjanjian internasional</term>
+    <term name="webpage">laman web</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
     <term name="article-journal" form="short">journal art.</term>
@@ -479,6 +482,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
@@ -491,6 +495,8 @@
       <single>compiler</single>
       <multiple>compilers</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>contributor</single>
       <multiple>contributors</multiple>
@@ -500,8 +506,8 @@
       <multiple>curators</multiple>
     </term>
     <term name="director">
-      <single>direktur</single>
-      <multiple>direktur</multiple>
+      <single>sutradara</single>
+      <multiple>sutradara</multiple>
     </term>
     <term name="editor">
       <single>editor</single>
@@ -535,6 +541,7 @@
       <single>ilustrator</single>
       <multiple>ilustrator</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>narrator</single>
       <multiple>narrators</multiple>
@@ -543,6 +550,7 @@
       <single>organizer</single>
       <multiple>organizers</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>performer</single>
       <multiple>performers</multiple>
@@ -551,6 +559,8 @@
       <single>producer</single>
       <multiple>producers</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>writer</single>
       <multiple>writers</multiple>

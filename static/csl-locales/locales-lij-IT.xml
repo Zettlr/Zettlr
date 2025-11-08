@@ -493,6 +493,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>prescidente</single>
       <multiple>prescidenti</multiple>
@@ -505,6 +506,8 @@
       <single>realizzatô</single>
       <multiple>realizzatoî</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>conlaboratô</single>
       <multiple>conlaboratoî</multiple>
@@ -549,6 +552,7 @@
       <single>inlustratô</single>
       <multiple>inlustratoî</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>narratô</single>
       <multiple>narratoî</multiple>
@@ -557,6 +561,7 @@
       <single>organizzatô</single>
       <multiple>organizzatoî</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>executô</single>
       <multiple>executoî</multiple>
@@ -565,6 +570,8 @@
       <single>produttô</single>
       <multiple>produttoî</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>scenezzatô</single>
       <multiple>scenezzatoî</multiple>

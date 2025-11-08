@@ -385,6 +385,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
@@ -397,6 +398,8 @@
       <single>compiler</single>
       <multiple>compilers</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>contributor</single>
       <multiple>contributors</multiple>
@@ -423,6 +426,8 @@
       <multiple>hosts</multiple>
     </term>
     <term name="illustrator">繪圖師</term>
+    <term name="interviewer"/> <!-- generally blank -->
+    <term name="interviewer">採訪員</term>
     <term name="narrator">
       <single>narrator</single>
       <multiple>narrators</multiple>
@@ -431,6 +436,7 @@
       <single>organizer</single>
       <multiple>organizers</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>performer</single>
       <multiple>performers</multiple>
@@ -439,6 +445,10 @@
       <single>producer</single>
       <multiple>producers</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="recipient">收信人</term>
+    <term name="reviewed-author"/> <!-- generally blank -->
+    <term name="reviewed-author">評論人</term>
     <term name="script-writer">
       <single>writer</single>
       <multiple>writers</multiple>
@@ -472,6 +482,7 @@
       <multiple>exec. prods.</multiple>
     </term>
     <term name="illustrator" form="short">繪圖師</term>
+    <term name="interviewer" form="short">採訪員</term>
     <term name="narrator" form="short">
       <single>narr.</single>
       <multiple>narrs.</multiple>
@@ -488,6 +499,8 @@
       <single>prod.</single>
       <multiple>prods.</multiple>
     </term>
+    <term name="recipient" form="short">收信人</term>
+    <term name="reviewed-author" form="short">評論人</term>
     <term name="script-writer" form="short">
       <single>writ.</single>
       <multiple>writs.</multiple>
@@ -530,13 +543,10 @@
     <term name="compiler" form="verb-short">comp. by</term>
     <term name="contributor" form="verb-short">w.</term>
     <term name="curator" form="verb-short">cur. by</term>
-    <term name="director" form="verb-short">dir. by</term>
     <term name="director" form="verb-short">導</term>
-    <term name="editor" form="verb-short">ed. by</term>
     <term name="editor" form="verb-short">編</term>
     <term name="editor-translator" form="verb-short">ed. &amp; trans. by</term>
     <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
-    <term name="editorial-director" form="verb-short">ed. by</term>
     <term name="editorial-director" form="verb-short">編</term>
     <term name="executive-producer" form="verb-short">exec. prod. by</term>
     <term name="guest" form="verb-short">w. guest</term>
@@ -552,7 +562,6 @@
     <term name="translator" form="verb-short">譯</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="interviewer">採訪員</term>
     <term name="month-01">一月</term>
     <term name="month-02">二月</term>
     <term name="month-03">三月</term>
@@ -565,11 +574,8 @@
     <term name="month-10">十月</term>
     <term name="month-11">十一月</term>
     <term name="month-12">十二月</term>
-    <term name="recipient">收信人</term>
-    <term name="reviewed-author">評論人</term>
 
     <!-- SHORT MONTH FORMS -->
-    <term name="interviewer" form="short">採訪員</term>
     <term name="month-01" form="short">1月</term>
     <term name="month-02" form="short">2月</term>
     <term name="month-03" form="short">3月</term>
@@ -582,8 +588,6 @@
     <term name="month-10" form="short">10月</term>
     <term name="month-11" form="short">11月</term>
     <term name="month-12" form="short">12月</term>
-    <term name="recipient" form="short">收信人</term>
-    <term name="reviewed-author" form="short">評論人</term>
 
     <!-- SEASONS -->
     <term name="season-01">春</term>

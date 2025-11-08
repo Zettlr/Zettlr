@@ -478,6 +478,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>başkan</single>
       <multiple>başkanlar</multiple>
@@ -490,6 +491,8 @@
       <single>derleye</single>
       <multiple>derleyenler</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>katkıda bulunan</single>
       <multiple>katkıda bulunanlar</multiple>
@@ -534,6 +537,7 @@
       <single>çizen</single>
       <multiple>çizenler</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>anlatıcı</single>
       <multiple>anlatıcılar</multiple>
@@ -542,6 +546,7 @@
       <single>düzenleyen</single>
       <multiple>düzenleyenler</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>icra eden</single>
       <multiple>icra edenler</multiple>
@@ -550,6 +555,8 @@
       <single>yapımcı</single>
       <multiple>yapımcılar</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>metin yazarı</single>
       <multiple>metin yazarları</multiple>

@@ -302,9 +302,12 @@
     <term name="printing" form="short">编号</term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">主席</term>
     <term name="collection-editor">总编辑</term>
     <term name="compiler">编撰</term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">贡献者</term>
     <term name="curator">策展人</term>
     <term name="director">导演</term>
@@ -316,10 +319,14 @@
     <term name="guest">嘉宾</term>
     <term name="host">主持</term>
     <term name="illustrator">绘图</term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">朗读者</term>
     <term name="organizer">组织者</term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">表演</term>
     <term name="producer">制片人</term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">编剧</term>
     <term name="series-creator">创作</term>
     <term name="translator">翻译</term>

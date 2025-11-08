@@ -124,7 +124,6 @@
     <term name="graphic">iconográfico</term>
     <term name="hearing">audiência</term>
     <term name="interview">entrevista</term>
-    <term name="interview">entrevista</term>
     <term name="legal_case">jurisprudência</term>
     <term name="legislation">legislação</term>
     <term name="manuscript">manuscrito</term>
@@ -257,10 +256,6 @@
       <multiple>equações</multiple>
     </term>
     <term name="figure">figura</term>
-    <term name="figure">
-      <single>figura</single>
-      <multiple>figuras</multiple>
-    </term>
     <term name="folio">
       <single>fólio</single>
       <multiple>fólios</multiple>
@@ -369,7 +364,6 @@
       <single>pt.</single>
       <multiple>pt.</multiple>
     </term>
-    <term name="part" form="short">pt.</term>
     <term name="rule" form="short">
       <single>norma</single>
       <multiple>normas</multiple>
@@ -498,13 +492,10 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>presidente</single>
       <multiple>presidentes</multiple>
-    </term>
-    <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
     </term>
     <term name="collection-editor">
       <single>editor</single>
@@ -514,6 +505,8 @@
       <single>compilador</single>
       <multiple>compiladores</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>contribuidor</single>
       <multiple>contribuidores</multiple>
@@ -558,6 +551,7 @@
       <single>ilustrador</single>
       <multiple>ilustradores</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>narrador</single>
       <multiple>narradores</multiple>
@@ -566,6 +560,7 @@
       <single>organizador</single>
       <multiple>organizadores</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>intérprete</single>
       <multiple>intérpretes</multiple>
@@ -574,6 +569,8 @@
       <single>produtor</single>
       <multiple>produtores</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>roteirista</single>
       <multiple>roteiristas</multiple>

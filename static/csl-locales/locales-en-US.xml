@@ -598,9 +598,7 @@
     <term name="version" form="short">v.</term> <!-- no plural -->
 
     <!-- LONG ROLE FORMS -->
-    <!-- Omitted roles:
-         author, composer, container-author, interviewer, original-author, recipient, reviewed-author
-    -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
@@ -613,6 +611,8 @@
       <single>compiler</single>
       <multiple>compilers</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>contributor</single>
       <multiple>contributors</multiple>
@@ -657,6 +657,7 @@
       <single>illustrator</single>
       <multiple>illustrators</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>narrator</single>
       <multiple>narrators</multiple>
@@ -665,6 +666,7 @@
       <single>organizer</single>
       <multiple>organizers</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>performer</single>
       <multiple>performers</multiple>
@@ -673,6 +675,8 @@
       <single>producer</single>
       <multiple>producers</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>writer</single>
       <multiple>writers</multiple>
