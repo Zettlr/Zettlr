@@ -30,6 +30,7 @@ import {
   WidgetType
 } from '@codemirror/view'
 import { configUpdateEffect } from '../util/configuration'
+import { syntaxTree } from '@codemirror/language'
 
 const extensionCompartment = new Compartment()
 
@@ -40,7 +41,8 @@ class PilcrowWidget extends WidgetType {
   toDOM () {
     const span = document.createElement('span')
     span.className = 'cm-pilcrow'
-    span.textContent = '¶'
+    span.setAttribute('aria-hidden', 'true')
+
     return span
   }
 
@@ -49,16 +51,30 @@ class PilcrowWidget extends WidgetType {
   }
 }
 
-const pilcrowDeco = Decoration.widget({ widget: new PilcrowWidget(), side: 1 })
+// The widget should appear last, so we set it to the highest side
+const pilcrowDeco = Decoration.widget({ widget: new PilcrowWidget(), side: 10000 })
 
 function showLineEndings (view: EditorView): DecorationSet {
   const builder = new RangeSetBuilder<Decoration>()
   for (const { from, to } of view.visibleRanges) {
-    for (let pos = from; pos <= to;) {
-      const line = view.state.doc.lineAt(pos)
-      builder.add(line.to, line.to, pilcrowDeco)
-      pos = line.to + 1
-    }
+    syntaxTree(view.state).iterate({
+      from,
+      to,
+      enter (node) {
+
+        // Don't show pilcrows in code text
+        if (node.name === 'CodeText') { return false }
+
+        if ([ 'Paragraph', 'Blockquote', 'FootnoteRef' ].includes(node.name) || node.name.includes('ATX') || node.name.includes('Setext')) {
+          for (let pos = node.from; pos <= node.to;) {
+            const line = view.state.doc.lineAt(pos)
+            builder.add(line.to, line.to, pilcrowDeco)
+            pos = line.to + 1
+          }
+          return false
+        }
+      }
+    })
   }
   return builder.finish()
 }
@@ -83,7 +99,8 @@ const pilcrowPlugin = ViewPlugin.fromClass(class {
 })
 
 const pilcrowTheme = EditorView.baseTheme({
-  '.cm-pilcrow': {
+  '.cm-pilcrow::after': {
+    content: '"¶"',
     color: '#aaa',
     opacity: '0.5'
   }
