@@ -63,7 +63,7 @@
     "@lezer/common": "^1.2.3",
     "@lezer/highlight": "^1.2.1",
     "@replit/codemirror-emacs": "^6.1.0",
-    "@replit/codemirror-vim": "^6.3.0",
+    "@replit/codemirror-vim": "github:diraneyya/codemirror-vim#fix/cursor-arabic-connected-characters",
     "adm-zip": "^0.5.16",
     "archiver": "^7.0.1",
     "astrocite": "^0.16.4",

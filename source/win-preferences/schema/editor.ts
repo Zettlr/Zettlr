@@ -37,6 +37,16 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           type: 'form-text',
           display: 'info',
           contents: trans('The input mode determines how you interact with the editor. We recommend keeping this setting at "Normal". Only choose "Vim" or "Emacs" if you know what this implies.')
+        },
+        {
+          type: 'checkbox',
+          label: trans('Use fixed keyboard layout for Vim Normal mode'),
+          model: 'editor.vimFixedKeyboardLayout'
+        },
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('When enabled, Vim commands in Normal mode will use English key mappings regardless of your active keyboard layout. This allows you to use Vim commands while typing in Arabic, Hebrew, or other non-Latin languages without switching keyboards.')
         }
       ]
     },

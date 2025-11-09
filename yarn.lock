@@ -1660,16 +1660,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replit/codemirror-vim@npm:^6.3.0":
+"@replit/codemirror-vim@github:diraneyya/codemirror-vim#fix/cursor-arabic-connected-characters":
   version: 6.3.0
-  resolution: "@replit/codemirror-vim@npm:6.3.0"
+  resolution: "@replit/codemirror-vim@https://github.com/diraneyya/codemirror-vim.git#commit=2973aecdbe454a23931a3a3d075ae07bbb764c47"
   peerDependencies:
     "@codemirror/commands": 6.x.x
     "@codemirror/language": 6.x.x
     "@codemirror/search": 6.x.x
     "@codemirror/state": 6.x.x
     "@codemirror/view": 6.x.x
-  checksum: 10/0fb1b4597ba39445e58e72128e815822b4fb5e4fd204f8cbee75191121fc9b59b74c14db84faaedcd81c8e218c0c3445018241457dbaa3d785c3ccc9e9bf34ed
+  checksum: 10/233762e17db1a1a37e0f6dcc535bc6f187af37f8b46f2bb15685858f9016023942f38e23c4d371f0712948f2dd5275ffc119aeb1cebf7c5b9559e5e949b41f21
   languageName: node
   linkType: hard
 
@@ -14743,7 +14743,7 @@ __metadata:
     "@lezer/common": "npm:^1.2.3"
     "@lezer/highlight": "npm:^1.2.1"
     "@replit/codemirror-emacs": "npm:^6.1.0"
-    "@replit/codemirror-vim": "npm:^6.3.0"
+    "@replit/codemirror-vim": "github:diraneyya/codemirror-vim#fix/cursor-arabic-connected-characters"
     "@stylistic/eslint-plugin": "npm:^4.2.0"
     "@types/adm-zip": "npm:^0.5.7"
     "@types/archiver": "npm:^6.0.3"
