@@ -456,6 +456,8 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     this._instance.focus()
+
+    this.emit('loaded')
   }
 
   /**
