@@ -59,6 +59,7 @@ export interface EditorConfiguration {
   italicFormatting: '*'|'_'
   citeStyle: 'in-text'|'in-text-suffix'|'regular'
   inputMode: 'default'|'vim'|'emacs'
+  vimFixedKeyboardLayout: boolean
   muteLines: boolean
   readabilityAlgorithm: 'dale-chall'|'gunning-fog'|'coleman-liau'|'automated-readability'
   readabilityMode: boolean
@@ -117,6 +118,7 @@ export function getDefaultConfig (): EditorConfiguration {
     muteLines: true,
     readabilityAlgorithm: 'dale-chall',
     inputMode: 'default',
+    vimFixedKeyboardLayout: false,
     readabilityMode: false,
     typewriterMode: false,
     distractionFree: false,

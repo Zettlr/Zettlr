@@ -151,11 +151,8 @@ export function vimFixedKeyboard (): Extension {
 export function shouldEnableVimFixedKeyboard (view: EditorView): boolean {
   try {
     const config = view.state.field(configField)
-    const isVimMode = config.editor.inputMode === 'vim'
-    const isFeatureEnabled = Boolean(config.editor.vimFixedKeyboardLayout)
-
-    console.log('[Vim Fixed Keyboard CM6] Config check - inputMode:', config.editor.inputMode, 'vimFixedKeyboardLayout:', config.editor.vimFixedKeyboardLayout)
-    console.log('[Vim Fixed Keyboard CM6] Should enable:', isVimMode && isFeatureEnabled)
+    const isVimMode = config.inputMode === 'vim'
+    const isFeatureEnabled = Boolean(config.vimFixedKeyboardLayout)
 
     return isVimMode && isFeatureEnabled
   } catch (error) {
