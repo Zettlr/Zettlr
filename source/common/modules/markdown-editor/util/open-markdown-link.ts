@@ -18,7 +18,6 @@ import { type EditorState, type Line } from '@codemirror/state'
 import { configField } from './configuration'
 import { EditorView } from '@codemirror/view'
 import { tocField } from '../plugins/toc-field'
-import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
 import { isAbsolutePath, pathDirname } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
@@ -50,6 +49,7 @@ function findMatchingHeading (headingId: string, state: EditorState): Line|undef
  * @param   {CodeMirror.Editor}  cm   The instance to use if it's a heading link
  */
 export default function (url: string, view: EditorView): void {
+  console.log('Opening markdown link:', url)
   if (url.startsWith('#')) {
     // We should open an internal link, i.e. "jump to line".
     const targetLine = findMatchingHeading(url.substring(1), view.state)
@@ -63,7 +63,10 @@ export default function (url: string, view: EditorView): void {
     const searchParams = new URLSearchParams(window.location.search)
     const windowId = searchParams.get('window_id')
     const base = pathDirname(view.state.field(configField).metadata.path)
+    console.log('base:', base)
+    console.log('Metadata path:', view.state.field(configField).metadata.path)
     const validURI = makeValidUri(url, base)
+    console.log('validURI:', validURI)
 
     // Create a path from the URL by stripping the protocol and decoding any
     // potential encoded characters.
@@ -77,7 +80,7 @@ export default function (url: string, view: EditorView): void {
 
     // It's a valid file we can open if it's an absolute path to a Markdown or
     // code file
-    if (validURI.startsWith('safe-file://') && isAbsolutePath(localPath) && hasMdOrCodeExt(localPath)) {
+    if (validURI.startsWith('safe-file://') && isAbsolutePath(localPath)) {
       ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
         payload: { path: localPath, newTab: false, windowId }

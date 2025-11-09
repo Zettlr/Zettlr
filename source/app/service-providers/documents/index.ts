@@ -22,7 +22,7 @@ import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract, { type IPCAPI } from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { type AppServiceContainer } from '../../app-service-container'
-import { ipcMain, app, dialog, type BrowserWindow, type MessageBoxOptions } from 'electron'
+import { ipcMain, app, dialog, type BrowserWindow, type MessageBoxOptions, shell } from 'electron'
 import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { type TabManager } from '@providers/documents/document-tree/tab-manager'
@@ -36,6 +36,7 @@ import { markdownToAST } from '@common/modules/markdown-utils'
 import isFile from '@common/util/is-file'
 import { trans } from '@common/i18n-main'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
+import { hasImageExt, hasMdOrCodeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 
 type DocumentWindows = Record<string, DocumentTree>
 type DocumentWindowsJSON = Record<string, BranchNodeJSON|LeafNodeJSON>
@@ -792,6 +793,28 @@ current contents from the editor somewhere else, and restart the application.`
   public async openFile (windowId: string|undefined, leafId: string|undefined, filePath: string, newTab?: boolean): Promise<boolean> {
     if (!isFile(filePath)) {
       throw new Error(`Could not open file ${filePath}: Not an existing file.`)
+    }
+
+    // Check if we can, and should, actually open the file in Zettlr. If not, we
+    // need to open it via the shell externally. NOTE: This check is, to varying
+    // degrees, implemented at the sources of opening-requests (read: mostly in
+    // the renderers). If you see this comment, and spot a place where we
+    // implemented this guard somewhere else, please refactor to simply attempt
+    // to open a file path with the documents provider and defer to this check
+    // here. Amend with any additional necessary checks from the other guards.
+    if (!hasMdOrCodeExt(filePath)) {
+      const { files } = this._app.config.get()
+      let shouldOpenExternally = true
+      if (hasImageExt(filePath) && files.images.openWith === 'zettlr') {
+        shouldOpenExternally = false
+      } else if (hasPDFExt(filePath) && files.pdf.openWith === 'zettlr') {
+        shouldOpenExternally = false
+      }
+
+      if (shouldOpenExternally) {
+        await shell.openPath(filePath)
+        return false
+      }
     }
 
     // If windowId is not provided, then use the last focused window

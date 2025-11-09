@@ -39,6 +39,8 @@ const makeUriTesters = [
   { input: 'folder.bundle/file.md', expected: 'safe-file:///home/foo/documents/folder.bundle/file.md' },
   // This is a moldovan TLD URI. The trailing slash indicates this is not a markdown file.
   { input: 'gov.md/', expected: 'https://gov.md/' },
+  // See for the following test: https://github.com/Zettlr/Zettlr/issues/5998
+  { input: 'assets/Cover Letter.pdf', expected: 'safe-file:///home/foo/documents/assets/Cover%20Letter.pdf' },
   // Alleviation: Simply make it explicitly relative, either by adding the protocol or with a full stop
   { input: 'file://folder.bundle/file.md', expected: 'safe-file:///home/foo/documents/folder.bundle/file.md' },
   { input: './folder.bundle/file.md', expected: 'safe-file:///home/foo/documents/folder.bundle/file.md' },

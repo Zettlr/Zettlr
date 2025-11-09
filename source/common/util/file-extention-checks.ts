@@ -123,3 +123,17 @@ export function hasOpenOfficeExt (filePath: string): boolean {
 export function hasDataExt (filePath: string): boolean {
   return hasExt(filePath, DATA_EXT)
 }
+
+/**
+ * Utility function that checks for *any* of the recognized file extensions
+ * Zettlr supports to some degree.
+ *
+ * @param   {string}   filePath  The file path
+ *
+ * @return  {boolean}            Whether the filePath has any recognized ext.
+ */
+export function hasAnyRecognizedFileExtension (filePath: string): boolean {
+  return hasMdOrCodeExt(filePath) || hasImageExt(filePath) ||
+    hasPDFExt(filePath) || hasOpenOfficeExt(filePath) ||
+    hasMSOfficeExt(filePath) || hasDataExt(filePath)
+}

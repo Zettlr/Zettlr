@@ -16,15 +16,12 @@
 // NOTE: fileExists is called "isFile" everywhere else, we have just renamed
 // it because of a naming conflict in the function.
 import { getProtocolRE, getLinkRE } from '../regular-expressions'
+import { hasAnyRecognizedFileExtension } from './file-extention-checks'
 import { isAbsolutePath, resolvePath } from './renderer-path-polyfill'
 
 const protocolRE = getProtocolRE()
 const linkRE = getLinkRE()
 const emailRe = /^[a-z0-9-.]+@[a-z0-9-.]+\.[a-z0-9-.]{2,}$/i
-
-// This regular expression checks whether an URI could be linking to a local file
-// const anyLocallyLinkableFileRE = /.+\.(?:md|markdown|txt|rmd)$/i
-const linkableFileRE = /.+\.(?:mdx?|markdown|txt|(?:q|r)md|jpe?g|png|gif|svg|bmp|webp)$/i
 
 /**
  * Returns a valid URI, using the available context information
@@ -136,13 +133,14 @@ export default function makeValidUri (uri: string, base: string = ''): string {
       // In this case, it's not a file, but we don't care which
       // protocol it uses.
       isFile = false
-    } else if (linkRE.test(uri) && !linkableFileRE.test(uri)) {
+    } else if (linkRE.test(uri) && !hasAnyRecognizedFileExtension(uri)) {
       // NOTE: The regular expression will also test true for
       // relative paths without ./ at the beginning and a folder
       // containing a full stop. But remedification by adding ./
       // is easy in this case for the user.
-      // NOTE: Using linkableFileRE we prevent this behaviour for any file that
-      // users could be linking locally (Markdown files and images).
+      // NOTE: Using hasPotentialLocalFilenameExtension, we prevent this
+      // behavior for any file that users could be linking locally (Markdown
+      // files, images, etc.).
       // BUT beware: This will treat moldovian TLD domains (or any TLD that can
       // double as a file extension) as files. Here, a trailing slash will
       // remedify this.
