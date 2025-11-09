@@ -185,9 +185,11 @@ body {
   .toolbar-export {
     margin: 5px;
 
-    h3, p {
+    h3, p, strong {
       text-align: center;
       padding-bottom: 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     button {
