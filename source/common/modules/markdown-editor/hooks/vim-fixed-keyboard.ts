@@ -47,21 +47,52 @@ interface VimAPI {
 }
 
 /**
- * Plugin value that manages custom vim key mappings
+ * Plugin value that manages custom vim key mappings and prevents character
+ * leaking in normal mode by intercepting input events
  */
 class VimCustomKeyMappingsPlugin implements PluginValue {
   private currentMode: string = 'normal'
   private processingKey: boolean = false
   private keydownHandler: (event: KeyboardEvent) => void
+  private inputHandler: (event: InputEvent) => void
+  private beforeInputHandler: (event: InputEvent) => void
 
   constructor (private view: EditorView) {
-    // Bind the keydown handler
+    // Bind event handlers
     this.keydownHandler = this.handleKeydown.bind(this)
+    this.inputHandler = this.handleInput.bind(this)
+    this.beforeInputHandler = this.handleBeforeInput.bind(this)
 
-    // Add event listener in capture phase to intercept before CM6
+    // Add event listeners in capture phase to intercept before CM6
     this.view.dom.addEventListener('keydown', this.keydownHandler, true)
+    this.view.dom.addEventListener('beforeinput', this.beforeInputHandler, true)
+    this.view.dom.addEventListener('input', this.inputHandler, true)
 
     console.log('[Vim Custom Key Mappings] Plugin initialized')
+  }
+
+  /**
+   * Prevents character insertion in normal/visual mode by canceling input events
+   */
+  private handleBeforeInput (event: InputEvent): void {
+    if (this.currentMode === 'normal' || this.currentMode === 'visual') {
+      // Prevent any text insertion in normal/visual modes
+      if (event.inputType.startsWith('insert')) {
+        event.preventDefault()
+      }
+    }
+  }
+
+  /**
+   * Additional safety net to prevent any input that slips through
+   */
+  private handleInput (event: InputEvent): void {
+    if (this.currentMode === 'normal' || this.currentMode === 'visual') {
+      // This should not happen if beforeinput is working correctly,
+      // but we'll add this as a safety net
+      event.preventDefault()
+      event.stopPropagation()
+    }
   }
 
   update (): void {
@@ -71,8 +102,10 @@ class VimCustomKeyMappingsPlugin implements PluginValue {
   }
 
   destroy (): void {
-    // Clean up the event listener
+    // Clean up event listeners
     this.view.dom.removeEventListener('keydown', this.keydownHandler, true)
+    this.view.dom.removeEventListener('beforeinput', this.beforeInputHandler, true)
+    this.view.dom.removeEventListener('input', this.inputHandler, true)
   }
 
   private handleKeydown (event: KeyboardEvent): void {
@@ -186,6 +219,9 @@ class VimCustomKeyMappingsPlugin implements PluginValue {
  * Creates the vim custom key mappings extension
  * This provides support for training custom key combinations for vim commands
  * that require modifier keys (Alt/Ctrl/Meta) on non-QWERTY keyboards.
+ *
+ * Also includes a fix for character leaking in normal mode by intercepting
+ * and preventing input events while preserving vim command functionality.
  *
  * Example: On German keyboards, "{" requires Alt+8. Users can train this
  * mapping so that pressing Alt+8 executes the "{" vim command.
