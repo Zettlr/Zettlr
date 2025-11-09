@@ -41,6 +41,7 @@ class PilcrowWidget extends WidgetType {
   toDOM () {
     const span = document.createElement('span')
     span.className = 'cm-pilcrow'
+    span.textContent = '¶'
     span.setAttribute('aria-hidden', 'true')
 
     return span
@@ -99,8 +100,7 @@ const pilcrowPlugin = ViewPlugin.fromClass(class {
 })
 
 const pilcrowTheme = EditorView.baseTheme({
-  '.cm-pilcrow::after': {
-    content: '"¶"',
+  '.cm-pilcrow': {
     color: '#aaa',
     opacity: '0.5'
   }
