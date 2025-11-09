@@ -946,7 +946,7 @@ msgstr "مساحات العمل"
 #: source/app/service-providers/documents/index.ts:384
 #, fuzzy
 msgid "Save changes"
-msgstr "حذف التغييرات غير المحفوظة؟"
+msgstr "حفظ التغييرات"
 
 #: source/app/service-providers/documents/index.ts:385
 #, fuzzy
@@ -2992,6 +2992,26 @@ msgstr "علامات التصفية"
 #, fuzzy
 msgid "Input mode"
 msgstr "وضع إدخال المحرر"
+
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:105
+msgid "Input Mode: Vim%s"
+msgstr "وضع الإدخال: Vim%s"
+
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:106
+msgid "Vim %s mode"
+msgstr "وضع Vim %s"
+
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:109
+msgid "Input Mode: Emacs"
+msgstr "وضع الإدخال: Emacs"
+
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:172
+msgid "\"%s\" executed"
+msgstr "تم تنفيذ \"%s\""
+
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:173
+msgid "Last executed vim command: %s"
+msgstr "آخر أمر Vim تم تنفيذه: %s"
 
 #: source/win-preferences/schema/editor.ts:39
 msgid ""
