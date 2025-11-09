@@ -99,6 +99,7 @@ export interface ConfigOptions {
     fontSize: number
     countChars: boolean
     inputMode: 'default'|'vim'|'emacs'
+    textDirection: 'ltr'|'rtl'|'auto'
     /** @deprecated No longer used - vim plugin handles physical keys automatically */
     vimFixedKeyboardLayout: boolean
     vimKeyMappings: Record<string, KeyMapping>
@@ -287,6 +288,7 @@ export function getConfigTemplate (): ConfigOptions {
       fontSize: 18, // The editor's font size in pixels
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs
+      textDirection: 'auto', // Text direction: ltr (left-to-right), rtl (right-to-left), auto (detect from content)
       vimFixedKeyboardLayout: false, // Enable fixed keyboard layout for Vim Normal mode
       vimKeyMappings: getDefaultVimKeyMappings(), // Custom key mappings for Vim commands
       boldFormatting: '**', // Can be ** or __

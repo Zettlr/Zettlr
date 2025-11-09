@@ -74,6 +74,7 @@ import { autocompleteTriggerCharacter } from './autocomplete/snippets'
 import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
+import { textDirection } from './plugins/text-direction'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -169,6 +170,8 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // Then, include the default keymap
     defaultKeymap(),
     darkMode({ darkMode: options.initialConfig.darkMode, ...themes[options.initialConfig.theme] }),
+    // TEXT DIRECTION
+    textDirection(),
     // CODE FOLDING
     codeFolding(),
     foldGutter(),

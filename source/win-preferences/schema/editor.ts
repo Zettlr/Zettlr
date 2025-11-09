@@ -74,13 +74,22 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
     {
       title: trans('Writing direction'),
       group: PreferencesGroups.Editor,
-      help: undefined, // TODO
+      help: undefined,
       fields: [
-        // TODO: Add field for LTR/RTL
         {
           type: 'form-text',
           display: 'info',
-          contents: 'We are currently planning on re-introducing bidirectional writing support, which will then be configurable here.'
+          contents: trans('Choose the text direction for the editor. "Auto" automatically detects the direction based on document content (recommended for mixed-language documents).')
+        },
+        {
+          type: 'select',
+          label: trans('Text direction'),
+          model: 'editor.textDirection',
+          options: {
+            'ltr': trans('Left-to-right (LTR)'),
+            'rtl': trans('Right-to-left (RTL)'),
+            'auto': trans('Auto-detect from content')
+          }
         }
       ]
     },

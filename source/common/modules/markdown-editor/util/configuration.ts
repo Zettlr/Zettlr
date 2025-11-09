@@ -77,6 +77,7 @@ export interface EditorConfiguration {
   italicFormatting: '*'|'_'
   citeStyle: 'in-text'|'in-text-suffix'|'regular'
   inputMode: 'default'|'vim'|'emacs'
+  textDirection: 'ltr'|'rtl'|'auto'
   vimFixedKeyboardLayout: boolean
   vimKeyMappings: Record<string, KeyMapping>
   muteLines: boolean
@@ -137,6 +138,7 @@ export function getDefaultConfig (): EditorConfiguration {
     muteLines: true,
     readabilityAlgorithm: 'dale-chall',
     inputMode: 'default',
+    textDirection: 'ltr',
     vimFixedKeyboardLayout: false,
     vimKeyMappings: getDefaultVimKeyMappings(),
     readabilityMode: false,

@@ -3013,6 +3013,26 @@ msgstr "تم تنفيذ \"%s\""
 msgid "Last executed vim command: %s"
 msgstr "آخر أمر Vim تم تنفيذه: %s"
 
+#: source/win-preferences/schema/editor.ts:82
+msgid "Choose the text direction for the editor. \"Auto\" automatically detects the direction based on document content (recommended for mixed-language documents)."
+msgstr "اختر اتجاه النص للمحرر. \"تلقائي\" يكتشف الاتجاه تلقائياً بناءً على محتوى المستند (مُوصى به للمستندات متعددة اللغات)."
+
+#: source/win-preferences/schema/editor.ts:86
+msgid "Text direction"
+msgstr "اتجاه النص"
+
+#: source/win-preferences/schema/editor.ts:89
+msgid "Left-to-right (LTR)"
+msgstr "من اليسار إلى اليمين (LTR)"
+
+#: source/win-preferences/schema/editor.ts:90
+msgid "Right-to-left (RTL)"
+msgstr "من اليمين إلى اليسار (RTL)"
+
+#: source/win-preferences/schema/editor.ts:91
+msgid "Auto-detect from content"
+msgstr "كشف تلقائي من المحتوى"
+
 #: source/win-preferences/schema/editor.ts:39
 msgid ""
 "The input mode determines how you interact with the editor. We recommend "

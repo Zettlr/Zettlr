@@ -258,6 +258,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     zknLinkFormat: zkn.linkFormat,
     linkFilenameOnly: zkn.linkFilenameOnly,
     inputMode: editor.inputMode,
+    textDirection: editor.textDirection,
     vimFixedKeyboardLayout: editor.vimFixedKeyboardLayout,
     vimKeyMappings: editor.vimKeyMappings,
     lintMarkdown: editor.lint.markdown,
