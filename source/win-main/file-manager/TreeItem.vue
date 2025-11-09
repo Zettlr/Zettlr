@@ -543,7 +543,7 @@ function uncollapseIfApplicable (): void {
   }
 
   // If a directory within this has been selected, open up, lads!
-  if (props.item.path.startsWith(dirPath)) {
+  if (dirPath.startsWith(props.item.path)) {
     windowStateStore.uncollapsedDirectories.push(props.item.path)
   }
 }
