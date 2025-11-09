@@ -3980,10 +3980,14 @@ msgstr "نمط CSL (اختياري)"
 #~ msgid "LibreOffice style (press Space or Enter to replace)"
 #~ msgstr "نمط LibreOffice (اضغط على Space أو Enter للاستبدال)"
 
+#: source/win-preferences/schema/editor.ts:35
+msgid "Vim commands work automatically with non-Latin keyboards (Arabic, Hebrew, etc.) thanks to physical key mapping. Basic commands (h/j/k/l/w/b) work without any configuration."
+msgstr "تعمل أوامر Vim تلقائيًا مع لوحات المفاتيح غير اللاتينية (العربية، العبرية، إلخ) بفضل تخطيط المفاتيح الفيزيائي. الأوامر الأساسية (h/j/k/l/w/b) تعمل دون الحاجة لأي إعدادات."
+
 #: source/win-preferences/schema/editor.ts:43
-msgid "Use fixed keyboard layout for Vim Normal mode"
-msgstr "استخدام تخطيط لوحة مفاتيح ثابت لوضع Vim العادي"
+msgid "Custom Vim Key Mappings"
+msgstr "تخصيص مفاتيح أوامر Vim"
 
 #: source/win-preferences/schema/editor.ts:49
-msgid "When enabled, Vim commands in Normal mode will use English key mappings regardless of your active keyboard layout. This allows you to use Vim commands while typing in Arabic, Hebrew, or other non-Latin languages without switching keyboards."
-msgstr "عند تفعيل هذا الخيار، ستستخدم أوامر Vim في الوضع العادي تخطيط المفاتيح الإنجليزي بغض النظر عن تخطيط لوحة المفاتيح النشط. يتيح لك ذلك استخدام أوامر Vim أثناء الكتابة بالعربية أو العبرية أو غيرها من اللغات غير اللاتينية دون الحاجة لتبديل لوحات المفاتيح."
+msgid "Train custom key combinations for Vim commands that require modifier keys on your keyboard layout. For example, on German keyboards \"{\" requires Alt+8. Click \"Key Combination\" and press the key combo to train it. This is optional - only needed for special characters."
+msgstr "قم بتدريب تركيبات مفاتيح مخصصة لأوامر Vim التي تتطلب مفاتيح تعديل على تخطيط لوحة المفاتيح الخاصة بك. على سبيل المثال، على لوحات المفاتيح الألمانية يتطلب \"{\" الضغط على Alt+8. انقر على \"تركيبة المفاتيح\" واضغط على التركيبة لتدريبها. هذا اختياري - مطلوب فقط للأحرف الخاصة."

@@ -18,6 +18,43 @@ import { PreferencesGroups } from './_preferences-groups'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
 export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
+  // Build input mode fields conditionally based on inputMode selection
+  const inputModeFields: any[] = [
+    {
+      type: 'form-text',
+      display: 'info',
+      contents: trans('The input mode determines how you interact with the editor. We recommend keeping this setting at "Normal". Only choose "Vim" or "Emacs" if you know what this implies.')
+    }
+  ]
+
+  // Only show Vim-specific settings when Vim mode is selected
+  if (config.editor.inputMode === 'vim') {
+    inputModeFields.push({
+      type: 'form-text',
+      display: 'info',
+      contents: trans('Vim commands work automatically with non-Latin keyboards (Arabic, Hebrew, etc.) thanks to physical key mapping. Basic commands (h/j/k/l/w/b) work without any configuration.')
+    })
+
+    inputModeFields.push({ type: 'separator' })
+
+    inputModeFields.push({
+      type: 'form-text',
+      display: 'sub-heading',
+      contents: trans('Custom Vim Key Mappings')
+    })
+
+    inputModeFields.push({
+      type: 'form-text',
+      display: 'info',
+      contents: trans('Train custom key combinations for Vim commands that require modifier keys on your keyboard layout. For example, on German keyboards "{" requires Alt+8. Click "Key Combination" and press the key combo to train it. This is optional - only needed for special characters.')
+    })
+
+    inputModeFields.push({
+      type: 'vim-key-mapping-trainer',
+      model: 'editor.vimKeyMappings'
+    })
+  }
+
   return [
     {
       title: trans('Input mode'),
@@ -32,23 +69,7 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
         }
       },
       help: undefined, // TODO
-      fields: [
-        {
-          type: 'form-text',
-          display: 'info',
-          contents: trans('The input mode determines how you interact with the editor. We recommend keeping this setting at "Normal". Only choose "Vim" or "Emacs" if you know what this implies.')
-        },
-        {
-          type: 'checkbox',
-          label: trans('Use fixed keyboard layout for Vim Normal mode'),
-          model: 'editor.vimFixedKeyboardLayout'
-        },
-        {
-          type: 'form-text',
-          display: 'info',
-          contents: trans('When enabled, Vim commands in Normal mode will use English key mappings regardless of your active keyboard layout. This allows you to use Vim commands while typing in Arabic, Hebrew, or other non-Latin languages without switching keyboards.')
-        }
-      ]
+      fields: inputModeFields
     },
     {
       title: trans('Writing direction'),

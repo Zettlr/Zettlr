@@ -21,7 +21,7 @@ import { type ExParams, vim, Vim, type CodeMirror } from '@replit/codemirror-vim
 import { configField } from '../util/configuration'
 import { editorMetadataFacet } from './editor-metadata'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
-import { vimFixedKeyboard } from '../hooks/vim-fixed-keyboard'
+import { vimCustomKeyMappings } from '../hooks/vim-fixed-keyboard'
 
 const ipcRenderer = window.ipc
 
@@ -118,6 +118,6 @@ Vim.unmap('<C-c>', 'insert') // Allow using Ctrl+C without exiting Insert mode
 export function vimPlugin (): Extension {
   return [
     vim(),
-    vimFixedKeyboard() // Add vim fixed keyboard layout support
+    vimCustomKeyMappings() // Add support for custom vim key mappings (modifier keys)
   ]
 } 

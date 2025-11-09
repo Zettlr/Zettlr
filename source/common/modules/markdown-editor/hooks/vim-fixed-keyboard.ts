@@ -2,26 +2,29 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Vim Fixed Keyboard Hook (CodeMirror 6)
+ * Contains:        Vim Custom Key Mappings Hook (CodeMirror 6)
  * CVM-Role:        Extension
  * Maintainer:      Orwa Diraneyya
  * License:         GNU GPL v3
  *
- * Description:     Enables fixed keyboard layout for Vim Normal mode using
- *                  physical key positions instead of characters. This intercepts
- *                  keydown events at the DOM level BEFORE CodeMirror processes
- *                  them, remaps physical keys to their Vim command equivalents,
- *                  and then manually triggers Vim's key handling.
+ * Description:     Provides custom key mappings for Vim commands that require
+ *                  modifier keys on non-QWERTY keyboards. For example, on German
+ *                  keyboards, "{" requires Alt+8, which this plugin maps to the
+ *                  "{" vim command.
+ *
+ *                  NOTE: Basic vim commands (h/j/k/l/w/b/etc.) work automatically
+ *                  with non-Latin keyboards thanks to @replit/codemirror-vim's
+ *                  built-in physical key mapping. This plugin ONLY handles
+ *                  characters that require modifier keys (Alt/Ctrl/Meta).
  *
  *                  CodeMirror 6 version - uses ViewPlugin and Vim API from
- *                  @replit/codemirror-vim
+ *                  @replit/codemirror-vim (fork: github:diraneyya/codemirror-vim)
  *
  * END HEADER
  */
 
 import { type Extension, EditorView, ViewPlugin, type PluginValue } from '@codemirror/view'
 import { Vim } from '@replit/codemirror-vim'
-import { getVimCommandForPhysicalKey } from '../keyboard-layout-mapper'
 import { configField } from '../util/configuration'
 
 /**
@@ -44,9 +47,9 @@ interface VimAPI {
 }
 
 /**
- * Plugin value that manages the vim fixed keyboard feature
+ * Plugin value that manages custom vim key mappings
  */
-class VimFixedKeyboardPlugin implements PluginValue {
+class VimCustomKeyMappingsPlugin implements PluginValue {
   private currentMode: string = 'normal'
   private processingKey: boolean = false
   private keydownHandler: (event: KeyboardEvent) => void
@@ -58,7 +61,7 @@ class VimFixedKeyboardPlugin implements PluginValue {
     // Add event listener in capture phase to intercept before CM6
     this.view.dom.addEventListener('keydown', this.keydownHandler, true)
 
-    console.log('[Vim Fixed Keyboard CM6] Plugin initialized')
+    console.log('[Vim Custom Key Mappings] Plugin initialized')
   }
 
   update (): void {
@@ -78,8 +81,10 @@ class VimFixedKeyboardPlugin implements PluginValue {
       return
     }
 
+    // Get the config to check for custom trained mappings
+    const config = this.view.state.field(configField)
+
     // Get the vim mode
-    // The @replit/codemirror-vim exposes getCM() which returns a CM5-compatible object
     const vimAPI = Vim as unknown as VimAPI
     const cm = vimAPI.getCM?.(this.view)
     const vimState = cm?.state?.vim
@@ -97,22 +102,19 @@ class VimFixedKeyboardPlugin implements PluginValue {
       return
     }
 
-    // Don't intercept modified keys (Ctrl, Alt, Meta)
-    if (event.ctrlKey || event.altKey || event.metaKey) {
-      return
-    }
-
     // Don't intercept special keys that vim needs
     const specialKeys = ['Escape', 'Enter', 'Tab', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']
     if (specialKeys.includes(event.key)) {
       return
     }
 
-    // Check if this physical key maps to a Vim command
-    const vimCommand = getVimCommandForPhysicalKey(event.code, event.shiftKey)
+    // Check for trained key mappings
+    // These are user-configured key combinations that map to vim commands
+    // Example: Alt+8 → "{" on German keyboards
+    const trainedCommand = this.findTrainedMapping(event)
 
-    if (vimCommand !== null) {
-      // Prevent the browser and CodeMirror from processing the original key
+    if (trainedCommand !== null) {
+      // Found a trained mapping - execute it
       event.preventDefault()
       event.stopPropagation()
       event.stopImmediatePropagation()
@@ -121,42 +123,73 @@ class VimFixedKeyboardPlugin implements PluginValue {
       this.processingKey = true
 
       try {
-        // Use Vim's handleKey API
-        // The @replit/codemirror-vim exposes Vim.handleKey
+        // Use Vim's handleKey API to execute the command
         if (cm) {
-          vimAPI.handleKey(cm, vimCommand, 'user')
+          vimAPI.handleKey(cm, trainedCommand, 'user')
         }
       } catch (error) {
-        console.error('[Vim Fixed Keyboard] Error handling vim command:', error)
+        console.error('[Vim Custom Key Mappings] Error handling vim command:', error)
       } finally {
         // Always clear the guard
         this.processingKey = false
       }
     }
+
+    // NOTE: We do NOT handle basic vim commands (h/j/k/l/w/b/etc.) here.
+    // Those are automatically handled by @replit/codemirror-vim's built-in
+    // physical key mapping for non-ASCII characters. See vimKeyFromEvent()
+    // in the vim plugin source for details.
+  }
+
+  /**
+   * Finds a trained key mapping that matches the current keyboard event
+   * @param event The keyboard event
+   * @returns The Vim command character if found, null otherwise
+   */
+  private findTrainedMapping (event: KeyboardEvent): string | null {
+    try {
+      const config = this.view.state.field(configField)
+      const mappings = config.vimKeyMappings
+
+      // Search through all trained mappings
+      for (const vimChar in mappings) {
+        const mapping = mappings[vimChar]
+
+        // Skip unmapped entries (empty code)
+        if (!mapping.code) {
+          continue
+        }
+
+        // Check if this mapping matches the current event
+        // We match on: physical key code + all modifier states
+        if (
+          mapping.code === event.code &&
+          mapping.shiftKey === event.shiftKey &&
+          mapping.altKey === event.altKey &&
+          mapping.ctrlKey === event.ctrlKey &&
+          mapping.metaKey === event.metaKey
+        ) {
+          // Found a match - return the vim command character
+          return mapping.vimChar
+        }
+      }
+
+      return null
+    } catch (error) {
+      console.error('[Vim Custom Key Mappings] Error finding trained mapping:', error)
+      return null
+    }
   }
 }
 
 /**
- * Creates the vim fixed keyboard extension
- * This will only be active when the feature is enabled in config
+ * Creates the vim custom key mappings extension
+ * This provides support for training custom key combinations for vim commands
+ * that require modifier keys (Alt/Ctrl/Meta) on non-QWERTY keyboards.
+ *
+ * Example: On German keyboards, "{" requires Alt+8. Users can train this
+ * mapping so that pressing Alt+8 executes the "{" vim command.
  */
-export function vimFixedKeyboard (): Extension {
-  return ViewPlugin.fromClass(VimFixedKeyboardPlugin)
-}
-
-/**
- * Helper function to check if the feature should be enabled
- * This is called from the editor initialization code
- */
-export function shouldEnableVimFixedKeyboard (view: EditorView): boolean {
-  try {
-    const config = view.state.field(configField)
-    const isVimMode = config.inputMode === 'vim'
-    const isFeatureEnabled = Boolean(config.vimFixedKeyboardLayout)
-
-    return isVimMode && isFeatureEnabled
-  } catch (error) {
-    console.error('[Vim Fixed Keyboard CM6] Error checking config:', error)
-    return false
-  }
+export function vimCustomKeyMappings (): Extension {
+  return ViewPlugin.fromClass(VimCustomKeyMappingsPlugin)
 }

@@ -150,6 +150,12 @@
     v-bind:name="props.field.model"
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></ThemeInput>
+  <VimKeyMappingTrainer
+    v-else-if="props.field.type === 'vim-key-mapping-trainer'"
+    v-bind:model-value="model"
+    v-bind:name="props.field.model"
+    v-on:update:model-value="emit('update:modelValue', $event)"
+  ></VimKeyMappingTrainer>
 </template>
 
 <script setup lang="ts">
@@ -168,6 +174,7 @@ import SliderInput from './elements/SliderControl.vue'
 import ListControl from './elements/ListControl.vue'
 import TokenInput from './elements/TokenList.vue'
 import ThemeInput from './elements/ThemeSelector.vue'
+import VimKeyMappingTrainer from './elements/VimKeyMappingTrainer.vue'
 
 /**
  * @ignore

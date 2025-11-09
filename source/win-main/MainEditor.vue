@@ -258,6 +258,8 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     zknLinkFormat: zkn.linkFormat,
     linkFilenameOnly: zkn.linkFilenameOnly,
     inputMode: editor.inputMode,
+    vimFixedKeyboardLayout: editor.vimFixedKeyboardLayout,
+    vimKeyMappings: editor.vimKeyMappings,
     lintMarkdown: editor.lint.markdown,
     // The editor only needs to know if it should use languageTool
     lintLanguageTool: editor.lint.languageTool.active,

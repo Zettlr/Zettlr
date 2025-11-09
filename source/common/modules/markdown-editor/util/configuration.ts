@@ -28,6 +28,24 @@ export interface AutocorrectOptions {
   replacements: Array<{ key: string, value: string }>
 }
 
+/**
+ * Represents a single custom key mapping for Vim Normal mode
+ */
+export interface KeyMapping {
+  /** The Vim command character this mapping produces (e.g., '{', '}', '[', ']') */
+  vimChar: string
+  /** The physical key code (e.g., 'Digit8', 'BracketLeft') */
+  code: string
+  /** Whether Shift key is required */
+  shiftKey: boolean
+  /** Whether Alt/Option key is required */
+  altKey: boolean
+  /** Whether Ctrl key is required */
+  ctrlKey: boolean
+  /** Whether Meta/Cmd key is required */
+  metaKey: boolean
+}
+
 export interface EditorConfiguration {
   autocompleteSuggestEmojis: boolean
   autocorrect: AutocorrectOptions
@@ -60,6 +78,7 @@ export interface EditorConfiguration {
   citeStyle: 'in-text'|'in-text-suffix'|'regular'
   inputMode: 'default'|'vim'|'emacs'
   vimFixedKeyboardLayout: boolean
+  vimKeyMappings: Record<string, KeyMapping>
   muteLines: boolean
   readabilityAlgorithm: 'dale-chall'|'gunning-fog'|'coleman-liau'|'automated-readability'
   readabilityMode: boolean
@@ -119,6 +138,7 @@ export function getDefaultConfig (): EditorConfiguration {
     readabilityAlgorithm: 'dale-chall',
     inputMode: 'default',
     vimFixedKeyboardLayout: false,
+    vimKeyMappings: getDefaultVimKeyMappings(),
     readabilityMode: false,
     typewriterMode: false,
     distractionFree: false,
@@ -132,6 +152,31 @@ export function getDefaultConfig (): EditorConfiguration {
     highlightWhitespace: false,
     countChars: false
   }
+}
+
+/**
+ * Returns default Vim key mappings pre-populated with common modifier-required characters.
+ * These are initially empty (unmapped), and users can train them via the UI.
+ */
+export function getDefaultVimKeyMappings (): Record<string, KeyMapping> {
+  // Pre-populate with common Vim characters that typically require modifiers on non-QWERTY layouts
+  const vimChars = ['{', '}', '[', ']', '(', ')', '@', '#', '$', '%', '^', '&', '*']
+
+  const mappings: Record<string, KeyMapping> = {}
+
+  for (const vimChar of vimChars) {
+    // Initialize with empty mapping (unmapped state)
+    mappings[vimChar] = {
+      vimChar,
+      code: '', // Empty = not yet mapped
+      shiftKey: false,
+      altKey: false,
+      ctrlKey: false,
+      metaKey: false
+    }
+  }
+
+  return mappings
 }
 
 export type EditorConfigOptions = Partial<EditorConfiguration>
