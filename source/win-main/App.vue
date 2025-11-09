@@ -1,15 +1,16 @@
 <template>
-  <WindowChrome
-    v-bind:title="'Zettlr'"
-    v-bind:titlebar="shouldShowTitlebar"
-    v-bind:menubar="true"
-    v-bind:show-toolbar="shouldShowToolbar"
-    v-bind:toolbar-labels="false"
-    v-bind:toolbar-controls="toolbarControls"
-    v-bind:disable-vibrancy="!vibrancyEnabled"
-    v-on:toolbar-toggle="handleToggle($event)"
-    v-on:toolbar-click="handleClick($event)"
-  >
+  <div :dir="htmlDir" :class="cssClass">
+    <WindowChrome
+      v-bind:title="'Zettlr'"
+      v-bind:titlebar="shouldShowTitlebar"
+      v-bind:menubar="true"
+      v-bind:show-toolbar="shouldShowToolbar"
+      v-bind:toolbar-labels="false"
+      v-bind:toolbar-controls="toolbarControls"
+      v-bind:disable-vibrancy="!vibrancyEnabled"
+      v-on:toolbar-toggle="handleToggle($event)"
+      v-on:toolbar-click="handleClick($event)"
+    >
     <SplitView
       ref="fileManagerSplitComponent"
       v-bind:initial-size-percent="fileManagerSplitComponentInitialSize"
@@ -116,6 +117,7 @@
     v-on:start="startPomodoro()"
     v-on:stop="stopPomodoro()"
   ></PopoverPomodoro>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -149,6 +151,7 @@ import PopoverDocInfo from './PopoverDocInfo.vue'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import generateId from '@common/util/generate-id'
+import { useRTLInterface } from '@common/use-rtl-interface'
 import {
   nextTick,
   ref,
@@ -201,6 +204,9 @@ const fileManagerVisible = ref(true)
 const mainSplitViewVisibleComponent = ref<'fileManager'|'globalSearch'>('fileManager')
 const isUpdateAvailable = ref(false)
 const vibrancyEnabled = ref(configStore.config.window.vibrancy)
+
+// RTL Interface Support
+const { htmlDir, cssClass } = useRTLInterface()
 
 // Ensure the app remembers the previous sidebar sizes
 const fileManagerSplitComponentInitialSize = ref<[number, number]>([ 20, 80 ])
@@ -968,5 +974,31 @@ function getToolbarButtonDisplay (configName: keyof ConfigOptions['displayToolba
 </script>
 
 <style lang="less">
-//
+/* RTL Interface Support */
+.rtl-interface {
+  direction: rtl;
+
+  /* Reverse flex directions for toolbars and UI elements */
+  .toolbar,
+  .titlebar,
+  .window-chrome {
+    direction: rtl;
+  }
+
+  /* Ensure icons and buttons maintain proper spacing in RTL */
+  .toolbar-button,
+  .menu-item {
+    flex-direction: row-reverse;
+  }
+
+  /* Fix text alignment in RTL */
+  .text-content,
+  .editor-content {
+    text-align: right;
+  }
+}
+
+.ltr-interface {
+  direction: ltr;
+}
 </style>

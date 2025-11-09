@@ -1,14 +1,15 @@
 <template>
-  <WindowChrome
-    v-bind:title="windowTitle"
-    v-bind:titlebar="true"
-    v-bind:menubar="false"
-    v-bind:show-tabbar="true"
-    v-bind:tabbar-tabs="tabs"
-    v-bind:tabbar-label="windowTitle"
-    v-bind:disable-vibrancy="true"
-    v-on:tab="currentTab = $event"
-  >
+  <div :dir="htmlDir" :class="cssClass">
+    <WindowChrome
+      v-bind:title="windowTitle"
+      v-bind:titlebar="true"
+      v-bind:menubar="false"
+      v-bind:show-tabbar="true"
+      v-bind:tabbar-tabs="tabs"
+      v-bind:tabbar-label="windowTitle"
+      v-bind:disable-vibrancy="true"
+      v-on:tab="currentTab = $event"
+    >
     <!--
       To comply with ARIA, we have to wrap the form in a tab container because
       we make use of the tabbar on the window chrome.
@@ -32,6 +33,7 @@
       </DebugTab>
     </div>
   </WindowChrome>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -52,6 +54,7 @@
 import WindowChrome from '@common/vue/window/WindowChrome.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, computed } from 'vue'
+import { useRTLInterface } from '@common/use-rtl-interface'
 
 // Import the tabs
 import GeneralTab from './General-Tab.vue'
@@ -66,6 +69,9 @@ import { useConfigStore } from 'source/pinia'
 const configStore = useConfigStore()
 
 const currentTab = ref(0)
+
+// RTL Interface Support
+const { htmlDir, cssClass } = useRTLInterface()
 const tabs: WindowTab[] = [
   {
     label: trans('About Zettlr'),

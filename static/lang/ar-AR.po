@@ -2634,7 +2634,7 @@ msgstr "الإجراءات"
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:108
 #, fuzzy
 msgid "Delete"
-msgstr "حذف الملف"
+msgstr "حذف القاعدة"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
 #, fuzzy
@@ -2743,7 +2743,7 @@ msgstr "التدقيق الإملائي"
 #: source/win-preferences/schema/autocorrect.ts:22
 #, fuzzy
 msgid "Autocorrect"
-msgstr "تشغيل التصحيح التلقائي"
+msgstr "التصحيح التلقائي"
 
 #: source/tmp/win-preferences/App.vue.ts:170
 #: source/win-preferences/schema/citations.ts:22
@@ -3107,6 +3107,8 @@ msgid ""
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
 msgstr ""
+"محرر الجداول هو واجهة تفاعلية تبسط إنشاء وتحرير الجداول. يوفر أزرار للوظائف "
+"الشائعة، ويتولى تنسيق Markdown."
 
 #: source/win-preferences/schema/editor.ts:171
 msgid "Mute non-focused lines in distraction-free mode"
@@ -3216,19 +3218,19 @@ msgstr "القسم الأيسر"
 
 #: source/win-preferences/schema/appearance.ts:128
 msgid "Display \"Open settings\" button"
-msgstr ""
+msgstr "عرض زر \"إعدادات الفتح\""
 
 #: source/win-preferences/schema/appearance.ts:133
 msgid "Display \"New file\" button"
-msgstr ""
+msgstr "عرض زر \"ملف جديد\""
 
 #: source/win-preferences/schema/appearance.ts:138
 msgid "Display \"Previous file\" button"
-msgstr ""
+msgstr "عرض زر \"الملف السابق\""
 
 #: source/win-preferences/schema/appearance.ts:143
 msgid "Display \"Next file\" button"
-msgstr ""
+msgstr "عرض زر \"الملف التالي\""
 
 #: source/win-preferences/schema/appearance.ts:150
 msgid "Center section"
@@ -3236,31 +3238,31 @@ msgstr "القسم الأوسط"
 
 #: source/win-preferences/schema/appearance.ts:154
 msgid "Display \"Readability mode\" button"
-msgstr ""
+msgstr "عرض زر \"وضع القراءة\""
 
 #: source/win-preferences/schema/appearance.ts:159
 msgid "Display \"Insert comment\" button"
-msgstr ""
+msgstr "عرض زر \"إدراج تعليق\""
 
 #: source/win-preferences/schema/appearance.ts:164
 msgid "Display \"Insert link\" button"
-msgstr ""
+msgstr "عرض زر \"إدراج رابط\""
 
 #: source/win-preferences/schema/appearance.ts:169
 msgid "Display \"Insert image\" button"
-msgstr ""
+msgstr "عرض زر \"إدراج صورة\""
 
 #: source/win-preferences/schema/appearance.ts:174
 msgid "Display \"Insert task list\" button"
-msgstr ""
+msgstr "عرض زر \"إدراج قائمة مهام\""
 
 #: source/win-preferences/schema/appearance.ts:179
 msgid "Display \"Insert table\" button"
-msgstr ""
+msgstr "عرض زر \"إدراج جدول\""
 
 #: source/win-preferences/schema/appearance.ts:184
 msgid "Display \"Insert footnote\" button"
-msgstr ""
+msgstr "عرض زر \"إدراج حاشية\""
 
 #: source/win-preferences/schema/appearance.ts:191
 msgid "Right section"
@@ -4007,6 +4009,15 @@ msgstr "نمط CSL (اختياري)"
 
 #~ msgid "Use left-to-right (LTR) writing direction"
 #~ msgstr "استخدم اتجاه الكتابة من اليسار إلى اليمين (LTR)"
+
+msgid "VIM CHARACTER"
+msgstr "حرف VIM"
+
+msgid "KEY COMBINATION"
+msgstr "مجموعة المفاتيح"
+
+msgid "ACTIONS"
+msgstr "الإجراءات"
 
 #~ msgid "Use right-to-left (RTL) writing direction"
 #~ msgstr "استخدم اتجاه الكتابة من اليمين إلى اليسار (RTL)"

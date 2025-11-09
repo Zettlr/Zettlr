@@ -1,11 +1,12 @@
 <template>
-  <WindowChrome
-    v-bind:title="windowTitle"
-    v-bind:titlebar="true"
-    v-bind:menubar="false"
-    v-bind:tabbar-label="'Preferences'"
-    v-bind:disable-vibrancy="true"
-  >
+  <div :dir="htmlDir" :class="[cssClass, 'preferences-window']">
+    <WindowChrome
+      v-bind:title="windowTitle"
+      v-bind:titlebar="true"
+      v-bind:menubar="false"
+      v-bind:tabbar-label="'Preferences'"
+      v-bind:disable-vibrancy="true"
+    >
     <!--
       To comply with ARIA, we have to wrap the form in a tab container because
       we make use of the tabbar on the window chrome.
@@ -47,6 +48,7 @@
       </template>
     </SplitView>
   </WindowChrome>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -86,11 +88,15 @@ import { getImportExportFields } from './schema/import-export'
 import { getSnippetsFields } from './schema/snippets'
 import { useConfigStore } from 'source/pinia'
 import { PreferencesGroups } from './schema/_preferences-groups'
+import { useRTLInterface } from '@common/use-rtl-interface'
 
 export type PreferencesFieldset = Fieldset & { group: PreferencesGroups }
 
 const ipcRenderer = window.ipc
 const configStore = useConfigStore()
+
+// RTL Interface Support
+const { htmlDir, cssClass } = useRTLInterface()
 
 const currentGroup = ref(0)
 const query = ref('')
@@ -413,5 +419,48 @@ div[role="tabpanel"] {
   text-align: center;
   font-weight: bold;
   margin-top: 20vh;
+}
+
+/* RTL Interface Support for Preferences */
+.rtl-interface {
+  direction: rtl;
+
+  /* RTL form layout */
+  .form-builder,
+  .fieldset,
+  .form-field {
+    direction: rtl;
+    text-align: right;
+  }
+
+  /* RTL split view - reverse the layout */
+  .split-view {
+    direction: rtl;
+  }
+
+  /* RTL list items */
+  .selectable-list,
+  .list-item {
+    direction: rtl;
+    text-align: right;
+  }
+
+  /* RTL labels and inputs */
+  label {
+    text-align: right;
+  }
+
+  /* RTL search box */
+  .search-control {
+    direction: rtl;
+
+    input {
+      text-align: right;
+    }
+  }
+}
+
+.ltr-interface {
+  direction: ltr;
 }
 </style>

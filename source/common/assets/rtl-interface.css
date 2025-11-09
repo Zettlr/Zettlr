@@ -1,0 +1,606 @@
+/**
+ * Global RTL Interface Styles
+ * Applied to all windows and dialogs when Arabic language is selected
+ */
+
+/* Base RTL styles */
+.rtl-interface {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.rtl-interface * {
+  direction: inherit;
+}
+
+/* Window chrome and titlebar */
+.rtl-interface .window-chrome,
+.rtl-interface .titlebar,
+.rtl-interface .toolbar {
+  direction: rtl;
+  flex-direction: row-reverse;
+}
+
+/* Window chrome specific layout fixes */
+.rtl-interface .window-chrome .toolbar-container {
+  flex-direction: row-reverse;
+}
+
+.rtl-interface .window-chrome .window-controls {
+  order: 1;
+}
+
+.rtl-interface .window-chrome .window-title {
+  order: 2;
+  text-align: right;
+}
+
+.rtl-interface .window-chrome .toolbar {
+  order: 0;
+}
+
+/* Toolbar buttons and menu items */
+.rtl-interface .toolbar-button,
+.rtl-interface .menu-item,
+.rtl-interface .tab-button {
+  flex-direction: row-reverse;
+}
+
+.rtl-interface .toolbar-button .icon,
+.rtl-interface .menu-item .icon {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+/* Split views - minimal RTL changes to avoid layout breaking */
+.rtl-interface .split-view .view {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Only reverse the main window file manager split view */
+.rtl-interface .window-chrome .split-view {
+  flex-direction: row-reverse;
+}
+
+.rtl-interface .window-chrome .split-view .view:first-child {
+  order: 2;
+}
+
+.rtl-interface .window-chrome .split-view .view:last-child {
+  order: 0;
+}
+
+.rtl-interface .window-chrome .split-view .horizontal-resizer {
+  order: 1;
+}
+
+/* Preferences window - disable all split view modifications */
+.rtl-interface.preferences-window .split-view {
+  flex-direction: row !important;
+}
+
+.rtl-interface.preferences-window .split-view .view:first-child,
+.rtl-interface.preferences-window .split-view .view:last-child {
+  order: initial !important;
+}
+
+/* Split view resizer positioning for RTL */
+.rtl-interface .horizontal-resizer {
+  direction: ltr; /* Keep resizer behavior consistent */
+}
+
+/* Form elements */
+.rtl-interface .form-builder,
+.rtl-interface .fieldset {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl-interface .form-field {
+  direction: rtl;
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.rtl-interface .form-field label {
+  text-align: right;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.rtl-interface .form-field .description {
+  text-align: right;
+  margin-bottom: 8px;
+  color: var(--grey-5);
+  font-size: 0.9em;
+}
+
+.rtl-interface input,
+.rtl-interface textarea,
+.rtl-interface select {
+  text-align: right;
+  width: 100%;
+}
+
+.rtl-interface .checkbox-wrapper,
+.rtl-interface .radio-wrapper {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.rtl-interface .checkbox-wrapper label,
+.rtl-interface .radio-wrapper label {
+  margin-right: 0;
+  margin-left: 8px;
+  text-align: right;
+  flex: 1;
+}
+
+.rtl-interface .radio-wrapper input[type="radio"],
+.rtl-interface .checkbox-wrapper input[type="checkbox"] {
+  margin-left: 0;
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+.rtl-interface .radio-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Lists and selectable items */
+.rtl-interface .selectable-list,
+.rtl-interface .list-item {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl-interface .selectable-list .list-item {
+  padding-right: 10px;
+  padding-left: 10px;
+  justify-content: flex-end;
+}
+
+.rtl-interface .list-item .icon {
+  margin-right: 0;
+  margin-left: 8px;
+  order: 1;
+}
+
+.rtl-interface .list-item .text {
+  order: 0;
+}
+
+/* Buttons and controls */
+.rtl-interface .button-group {
+  flex-direction: row-reverse;
+}
+
+.rtl-interface .button-group .button:first-child {
+  margin-left: 0;
+  margin-right: 8px;
+}
+
+.rtl-interface .button-group .button:last-child {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+/* Dialog and modal content */
+.rtl-interface .dialog,
+.rtl-interface .modal {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl-interface .dialog-content,
+.rtl-interface .modal-content {
+  text-align: right;
+}
+
+.rtl-interface .dialog-buttons {
+  flex-direction: row-reverse;
+}
+
+/* Search controls */
+.rtl-interface .search-control {
+  direction: rtl;
+}
+
+.rtl-interface .search-control input {
+  text-align: right;
+  padding-right: 32px;
+  padding-left: 8px;
+}
+
+.rtl-interface .search-control .icon {
+  right: auto;
+  left: 8px;
+}
+
+/* File manager and sidebar */
+.rtl-interface .file-manager,
+.rtl-interface .sidebar,
+.rtl-interface #file-manager {
+  direction: rtl;
+}
+
+.rtl-interface .file-tree,
+.rtl-interface .file-list {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl-interface .file-item {
+  flex-direction: row-reverse;
+}
+
+.rtl-interface .file-item .icon {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+/* File manager filter */
+.rtl-interface .file-manager-filter {
+  direction: rtl;
+}
+
+.rtl-interface .file-manager-filter input,
+.rtl-interface .file-manager-filter-input {
+  text-align: right;
+  direction: rtl;
+}
+
+/* File manager specific layout fixes */
+.rtl-interface #file-manager .file-manager-filter {
+  padding: 5px 10px 5px 0;
+  direction: rtl;
+}
+
+.rtl-interface #file-manager #component-container {
+  direction: rtl;
+  overflow: visible;
+}
+
+.rtl-interface #file-manager {
+  direction: rtl;
+  padding-right: 8px;
+  padding-left: 0;
+}
+
+/* File tree container */
+.rtl-interface .file-tree-container {
+  direction: rtl;
+  width: 100%;
+  overflow-x: visible;
+}
+
+/* Maintain proper text truncation while supporting RTL */
+.rtl-interface .tree-item .filename,
+.rtl-interface .tree-item .title,
+.rtl-interface .file-item .filename {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+  unicode-bidi: embed;
+}
+
+/* Arrow button in file manager */
+.rtl-interface #arrow-button {
+  right: auto;
+  left: 0;
+}
+
+.rtl-interface #arrow-button cds-icon {
+  transform: rotate(180deg);
+}
+
+/* Component container layout */
+.rtl-interface #component-container {
+  direction: rtl;
+}
+
+/* File tree specific styling */
+.rtl-interface #file-tree {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl-interface #directories-files-header,
+.rtl-interface #directories-dirs-header {
+  direction: rtl;
+  text-align: right;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  padding: 4px 10px 4px 0;
+}
+
+.rtl-interface #directories-files-header cds-icon,
+.rtl-interface #directories-dirs-header cds-icon {
+  margin-right: 0;
+  margin-left: 8px;
+  order: 1;
+  flex-shrink: 0;
+}
+
+/* Tree item container */
+.rtl-interface div.tree-item-container {
+  direction: rtl;
+}
+
+/* Tree item styling - work with existing flex layout */
+.rtl-interface div.tree-item-container .tree-item {
+  direction: rtl;
+  flex-direction: row-reverse;
+}
+
+/* Override text direction for RTL but maintain proper truncation */
+.rtl-interface div.tree-item-container .tree-item .display-text {
+  direction: rtl;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* Tree item elements - reverse the order for RTL */
+.rtl-interface div.tree-item-container .tree-item .display-text {
+  order: 1;
+}
+
+.rtl-interface div.tree-item-container .tree-item .toggle-icon {
+  order: 2;
+}
+
+.rtl-interface div.tree-item-container .tree-item .item-icon {
+  order: 3;
+}
+
+/* Fix RTL indentation with specific depth selectors */
+.rtl-interface div.tree-item-container .tree-item[style*="padding-left: 10px"] {
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+}
+
+.rtl-interface div.tree-item-container .tree-item[style*="padding-left: 25px"] {
+  padding-right: 25px !important;
+  padding-left: 10px !important;
+}
+
+.rtl-interface div.tree-item-container .tree-item[style*="padding-left: 40px"] {
+  padding-right: 40px !important;
+  padding-left: 10px !important;
+}
+
+.rtl-interface div.tree-item-container .tree-item[style*="padding-left: 55px"] {
+  padding-right: 55px !important;
+  padding-left: 10px !important;
+}
+
+.rtl-interface div.tree-item-container .tree-item[style*="padding-left: 70px"] {
+  padding-right: 70px !important;
+  padding-left: 10px !important;
+}
+
+.rtl-interface div.tree-item-container .tree-item[style*="padding-left: 85px"] {
+  padding-right: 85px !important;
+  padding-left: 10px !important;
+}
+
+/* Empty tree message */
+.rtl-interface .empty-tree {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Sidebar styling */
+.rtl-interface #sidebar {
+  direction: rtl;
+}
+
+.rtl-interface #sidebar-tab-container {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl-interface .toc-tab,
+.rtl-interface .references-tab,
+.rtl-interface .related-files-tab,
+.rtl-interface .other-files-tab {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Tab navigation */
+.rtl-interface .tab-navigation {
+  flex-direction: row-reverse;
+}
+
+.rtl-interface .tab {
+  border-right: 1px solid var(--border-color);
+  border-left: none;
+}
+
+.rtl-interface .tab:first-child {
+  border-right: none;
+}
+
+.rtl-interface .tab:last-child {
+  border-left: 1px solid var(--border-color);
+}
+
+/* Tooltips and popovers */
+.rtl-interface .tooltip,
+.rtl-interface .popover {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Status bar */
+.rtl-interface .status-bar {
+  flex-direction: row-reverse;
+}
+
+.rtl-interface .status-bar .status-item {
+  border-right: 1px solid var(--border-color);
+  border-left: none;
+  padding-right: 0;
+  padding-left: 8px;
+}
+
+.rtl-interface .status-bar .status-item:first-child {
+  border-right: none;
+}
+
+.rtl-interface .status-bar .status-item:last-child {
+  border-left: 1px solid var(--border-color);
+}
+
+/* Editor specific RTL (for UI, not content) */
+.rtl-interface .editor-toolbar {
+  flex-direction: row-reverse;
+}
+
+.rtl-interface .editor-gutter {
+  order: 1;
+}
+
+.rtl-interface .editor-content {
+  order: 0;
+}
+
+/* Scrollbars in RTL */
+.rtl-interface ::-webkit-scrollbar {
+  width: 12px;
+}
+
+.rtl-interface ::-webkit-scrollbar-track {
+  background: var(--grey-1);
+}
+
+.rtl-interface ::-webkit-scrollbar-thumb {
+  background: var(--grey-3);
+  border-radius: 6px;
+}
+
+/* Ensure proper text direction for specific content areas */
+.rtl-interface .text-content,
+.rtl-interface .markdown-content,
+.rtl-interface p,
+.rtl-interface .description {
+  text-align: right;
+  direction: rtl;
+}
+
+
+/* Text controls in RTL */
+.rtl-interface .text-control {
+  direction: rtl;
+}
+
+.rtl-interface .text-control input {
+  text-align: right;
+  padding-right: 32px; /* Account for search icon */
+  padding-left: 8px;
+}
+
+/* FormBuilder container improvements */
+.rtl-interface .form-builder {
+  padding: 20px;
+  max-width: 100%;
+}
+
+/* Fix button text truncation */
+.rtl-interface .form-builder button,
+.rtl-interface button {
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: none;
+  min-width: fit-content;
+}
+
+.rtl-interface .form-builder .fieldset {
+  margin-bottom: 25px;
+  border: none;
+  padding: 0;
+}
+
+.rtl-interface .form-builder .fieldset legend {
+  text-align: right;
+  padding-right: 0;
+  padding-left: 10px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Select/dropdown improvements */
+.rtl-interface select {
+  background-position: 8px center;
+  padding-right: 8px;
+  padding-left: 32px;
+}
+
+/* Table headers RTL support */
+.rtl-interface .table-view table thead th {
+  text-align: right !important;
+}
+
+.rtl-interface .table-view table tbody td {
+  text-align: right;
+}
+
+/* Vim key mapping table RTL support */
+.rtl-interface .vim-key-mapping-trainer {
+  direction: rtl;
+}
+
+.rtl-interface .vim-mapping-table {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl-interface .vim-mapping-table th,
+.rtl-interface .vim-mapping-table td {
+  text-align: right;
+}
+
+.rtl-interface .vim-mapping-table th:first-child,
+.rtl-interface .vim-mapping-table td:first-child {
+  text-align: left; /* VIM characters should align left */
+}
+
+.rtl-interface .vim-mapping-table .actions {
+  text-align: center;
+}
+
+/* LTR fallback */
+.ltr-interface {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+
+/* Responsive RTL adjustments */
+@media (max-width: 768px) {
+  .rtl-interface .split-view {
+    flex-direction: column;
+  }
+
+  .rtl-interface .button-group {
+    flex-direction: column-reverse;
+  }
+
+  .rtl-interface .button-group .button {
+    margin: 4px 0;
+  }
+}

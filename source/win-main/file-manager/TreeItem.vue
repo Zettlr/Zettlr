@@ -169,6 +169,7 @@ import { type DirDescriptor, type MaybeRootDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useWindowStateStore } from 'source/pinia'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
+import { useRTLInterface } from '@common/use-rtl-interface'
 
 const ipcRenderer = window.ipc
 
@@ -194,6 +195,9 @@ const newObjectInput = ref<HTMLInputElement|null>(null)
 
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
+
+// RTL Interface Support
+const { isRTLInterface } = useRTLInterface()
 
 const {
   nameEditing,
@@ -260,15 +264,21 @@ const primaryIcon = computed(() => {
 
 /**
  * The direction of the folder's angle icon: Right if collapsed, down if
- * uncollapsed. Can be undefined.
+ * uncollapsed. Can be undefined. In RTL mode, directions are reversed.
  *
- * @return  {string}  Either 'right' or 'down'
+ * @return  {string}  Either 'right', 'left', or 'down'
  */
 const angleDirection = computed(() => {
   if (!hasChildren.value) {
     return undefined
   } else {
-    return shouldBeCollapsed.value ? 'right' : 'down'
+    if (shouldBeCollapsed.value) {
+      // In RTL, collapsed folders should point left instead of right
+      return isRTLInterface.value ? 'left' : 'right'
+    } else {
+      // Down arrow stays the same in both directions
+      return 'down'
+    }
   }
 })
 

@@ -3,9 +3,9 @@
     <table class="vim-mapping-table">
       <thead>
         <tr>
-          <th>Vim Character</th>
-          <th>Key Combination</th>
-          <th>Actions</th>
+          <th>{{ trans('VIM CHARACTER') }}</th>
+          <th>{{ trans('KEY COMBINATION') }}</th>
+          <th>{{ trans('ACTIONS') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -72,6 +72,7 @@
  */
 
 import { ref } from 'vue'
+import { trans } from '@common/i18n-renderer'
 import type { KeyMapping } from '@common/modules/markdown-editor/util/configuration'
 
 const props = defineProps<{
