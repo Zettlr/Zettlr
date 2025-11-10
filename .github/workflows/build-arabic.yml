@@ -46,9 +46,12 @@ jobs:
 
       - name: Build vim plugin
         run: |
-          cd packages/codemirror-vim
-          yarn build
-          cd ../..
+          # Run build commands from root using npx to access workspace binaries
+          npx cm-buildhelper packages/codemirror-vim/src/index.ts
+          node packages/codemirror-vim/scripts/addVersion.cjs
+          npx tsc --project packages/codemirror-vim/tsconfig.json
+          npx dts-bundle-generator packages/codemirror-vim/out/index.ts -o packages/codemirror-vim/dist/index.d.ts
+          cp packages/codemirror-vim/dist/index.d.ts packages/codemirror-vim/dist/index.d.cts
 
       - name: Build Linux x64 packages
         run: |
@@ -85,9 +88,12 @@ jobs:
 
       - name: Build vim plugin
         run: |
-          cd packages/codemirror-vim
-          yarn build
-          cd ../..
+          # Run build commands from root using npx to access workspace binaries
+          npx cm-buildhelper packages/codemirror-vim/src/index.ts
+          node packages/codemirror-vim/scripts/addVersion.cjs
+          npx tsc --project packages/codemirror-vim/tsconfig.json
+          npx dts-bundle-generator packages/codemirror-vim/out/index.ts -o packages/codemirror-vim/dist/index.d.ts
+          cp packages/codemirror-vim/dist/index.d.ts packages/codemirror-vim/dist/index.d.cts
 
       - name: Build macOS arm64 packages (without code signing)
         run: |
@@ -126,9 +132,12 @@ jobs:
 
       - name: Build vim plugin
         run: |
-          cd packages/codemirror-vim
-          yarn build
-          cd ../..
+          # Run build commands from root using npx to access workspace binaries
+          npx cm-buildhelper packages/codemirror-vim/src/index.ts
+          node packages/codemirror-vim/scripts/addVersion.cjs
+          npx tsc --project packages/codemirror-vim/tsconfig.json
+          npx dts-bundle-generator packages/codemirror-vim/out/index.ts -o packages/codemirror-vim/dist/index.d.ts
+          cp packages/codemirror-vim/dist/index.d.ts packages/codemirror-vim/dist/index.d.cts
 
       - name: Build Windows x64 packages (without code signing)
         run: |
