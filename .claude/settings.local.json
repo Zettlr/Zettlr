@@ -14,9 +14,17 @@
       "Bash(yarn list:*)",
       "Bash(yarn info:*)",
       "Bash(yarn build)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "mcp__electron__get_electron_window_info",
+      "mcp__electron__take_screenshot",
+      "mcp__electron__send_command_to_electron",
+      "mcp__electron__read_electron_logs"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "electron",
+    "electron2"
+  ]
 }

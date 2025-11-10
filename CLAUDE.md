@@ -339,6 +339,46 @@ yarn explain peer-requirements
 # Ensure workspace uses peer dependencies, not regular dependencies
 ```
 
+## Debugging with MCP Electron Tools
+
+### Setup Remote Debugging
+
+**CRITICAL**: To use MCP Electron tools for debugging frozen/blocked keyboard issues:
+
+1. **Start script created**: `yarn start:debug` - Launches Zettlr with remote debugging on port 9222
+2. **Configuration**:
+   - Modified `package.json` to add `start:debug` script
+   - Modified `scripts/test-gui/index.mjs` to accept and pass debugging flags correctly
+   - Debugging flag must come BEFORE `--data-dir` in electron args
+
+3. **Correct argument order** (in `scripts/test-gui/index.mjs`):
+   ```javascript
+   const forgeArgs = [ 'start', '--', ...argv, `--data-dir="${CONF_DIRECTORY}"` ]
+   ```
+   This ensures `--remote-debugging-port=9222` is passed to Electron, not to the app.
+
+4. **Verify debugging is enabled**:
+   ```bash
+   lsof -i :9222  # Should show Electron listening on port 9222
+   ```
+
+5. **MCP Tools Available**:
+   - `mcp__electron__get_electron_window_info` - Get window and process info
+   - `mcp__electron__take_screenshot` - Capture app screenshot
+   - `mcp__electron__send_command_to_electron` - Send JavaScript commands to renderer
+   - `mcp__electron__read_electron_logs` - Read console logs in real-time
+
+### Key Finding: Click Events Cancelled
+
+**Critical Discovery**: When using `click_by_text`, clicks are being **cancelled by the page**:
+```
+Failed to click element: Click events were cancelled by the page
+```
+
+This suggests something is preventing ALL user interaction, not just keyboard events.
+
+**Mode Change Detected**: The vim mode DID change from `normal → visual` when attempting interaction, suggesting vim plugin IS responding but something blocks the DOM interaction.
+
 ## Common Issues
 
 ### Config Changes Not Taking Effect

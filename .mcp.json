@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "electron": {
+      "type": "stdio",
+      "command": "/Users/orwa/.asdf/installs/nodejs/22.14.0/bin/npx",
+      "args": [
+        "-y",
+        "electron-mcp-server"
+      ],
+      "env": {
+        "SCREENSHOT_ENCRYPTION_KEY": "53fc273555a8fc79fd742d69e896fefc635eb9fa9c9ddb6f274a1a6553f4ef2a"
+      }
+    },
+    "electron2": {
+      "type": "stdio",
+      "command": "/Users/orwa/.asdf/installs/nodejs/22.14.0/bin/npm",
+      "args": [
+        "-C",
+        "/Users/orwa/repos/Zettlr-official/../electron-mcp-server",
+        "run",
+        "start"
+      ],
+      "env": {}
+    }
+  }
+}

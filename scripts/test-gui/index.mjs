@@ -119,7 +119,8 @@ function startApp (argv = []) {
   // Make sure the correct command is run
   const command = (process.platform === 'win32') ? '.\\node_modules\\.bin\\electron-forge.cmd' : 'electron-forge'
   // Arguments for electron-forge
-  const forgeArgs = [ 'start', '--', `--data-dir="${CONF_DIRECTORY}"`, ...argv ]
+  // Args after '--' go to Electron itself, not the app
+  const forgeArgs = [ 'start', '--', ...argv, `--data-dir="${CONF_DIRECTORY}"` ]
   // Spawn's options: Use the root as CWD and pipe the process's stdio to the parent process.
   const spawnOptions = {
     shell: process.platform === "win32",
