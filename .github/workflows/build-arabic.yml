@@ -1,0 +1,154 @@
+name: Build Arabic Edition
+
+# Simplified build workflow for Arabic Edition fork
+# Triggers on manual dispatch or tags on v3.6.0-arabic branch
+
+on:
+  workflow_dispatch: {}
+  push:
+    tags:
+      - 'v*-arabic'
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  NODE_VERSION: '22'
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  # Skip preflight checks for fork builds
+  build-linux:
+    name: 'Build (Linux)'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive  # Important: fetch vim plugin submodule
+
+      - name: Setup NodeJS ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set up build environment
+        run: |
+          # Enable yarn
+          corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build Linux packages
+        run: yarn package:linux
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-builds
+          path: release/*.{deb,rpm,AppImage,tar.gz}
+          if-no-files-found: warn
+
+  build-macos:
+    name: 'Build (macOS)'
+    runs-on: macos-14
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup NodeJS ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set up build environment
+        run: |
+          corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build macOS packages (without code signing)
+        run: yarn package:mac
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false  # Disable code signing
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-builds
+          path: release/*.{dmg,zip}
+          if-no-files-found: warn
+
+  build-windows:
+    name: 'Build (Windows)'
+    runs-on: windows-2022
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup NodeJS ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set up build environment
+        run: |
+          corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build Windows packages (without code signing)
+        run: yarn package:win
+        env:
+          CSC_LINK: ''  # Disable code signing
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-builds
+          path: release/*.exe
+          if-no-files-found: warn
+
+  create-release:
+    name: 'Create Release Draft'
+    needs: [build-linux, build-macos, build-windows]
+    runs-on: ubuntu-22.04
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          name: Zettlr Arabic Edition ${{ github.ref_name }}
+          body: |
+            # Zettlr Arabic Edition Release
+
+            This is an automated build of the Zettlr Arabic Edition fork.
+
+            ## Features
+            - Complete Arabic UI translation
+            - RTL (Right-to-Left) interface support
+            - Fixed Keyboard Layout for Vim mode
+            - Dual-cursor system for Arabic connected scripts
+
+            ## Installation
+            Download the appropriate package for your operating system below.
+
+            **Note**: These builds are unsigned. You may need to allow installation from unidentified developers.
+          files: ./artifacts/**/*
