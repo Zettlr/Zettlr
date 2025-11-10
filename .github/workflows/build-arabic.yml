@@ -45,11 +45,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Build vim plugin
-        run: |
-          cd packages/codemirror-vim
-          yarn install
-          yarn build
-          cd ../..
+        run: yarn workspace @replit/codemirror-vim build
 
       - name: Build Linux x64 packages
         run: |
@@ -85,11 +81,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Build vim plugin
-        run: |
-          cd packages/codemirror-vim
-          yarn install
-          yarn build
-          cd ../..
+        run: yarn workspace @replit/codemirror-vim build
 
       - name: Build macOS arm64 packages (without code signing)
         run: |
@@ -127,11 +119,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Build vim plugin
-        run: |
-          cd packages/codemirror-vim
-          yarn install
-          yarn build
-          cd ../..
+        run: yarn workspace @replit/codemirror-vim build
 
       - name: Build Windows x64 packages (without code signing)
         run: |
