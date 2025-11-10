@@ -17,14 +17,29 @@ The initial implementation (commit 2973aec) used transparent text for ALL charac
 ### Visual Design
 
 #### Latin Text
-- **Focused**: Solid red background with white inverted text (standard Vim)
-- **Unfocused**: Transparent background with gray outline
+- **Focused**: Solid red background (#ff9696) with white inverted text (standard Vim)
+- **Unfocused**: Transparent background with red outline
 
-#### Arabic/Connected Text
+#### Arabic/Connected Text (2+ characters)
 - **Focused**: Dual-layer cursor
-  - **Layer 1 (Word Block)**: Semi-transparent red background covering entire connected word
-  - **Layer 2 (Character Outline)**: White 1px outline on specific character under cursor
-- **Unfocused**: Transparent background with gray outline
+  - **Layer 1 (Word Block)**: Full opacity yellow background (#ffff99) covering entire connected word
+  - **Layer 2 (Character Outline)**: 1px red outline (#ff9696) on specific character under cursor
+- **Unfocused**: Red outline on character only (word block hidden)
+
+#### Arabic Isolated Character (single character surrounded by non-Arabic)
+- **Focused**: Standard transparent cursor (no dual-cursor)
+- **Unfocused**: Red outline
+
+#### Neutral Characters (punctuation, numbers, spaces)
+- **Focused**: Standard transparent cursor (no dual-cursor)
+- **Unfocused**: Red outline
+
+**Design Rationale**:
+- Yellow word block provides clear visual indication of entire connected word
+- Red character outline precisely identifies which letter is under cursor
+- High contrast between yellow background and red outline for excellent visibility
+- Single isolated Arabic characters don't trigger dual-cursor (not a connected word)
+- Neutral characters inherit script type for text direction but use standard cursor
 
 ### Technical Architecture
 
@@ -57,8 +72,16 @@ function detectScriptType(char: string): ScriptDetectionResult
 - N'Ko: U+07C0–U+07FF
 
 **Context-Aware Detection**:
-- Neutral characters (spaces, numbers, punctuation) check surrounding context
-- If surrounded by Arabic characters, treated as Arabic context
+- Spaces and whitespace are ALWAYS word boundaries (never treated as connected script)
+- Neutral characters (punctuation, numbers) check surrounding context:
+  - Inherit script type (ARABIC_RTL) if surrounded by Arabic (for text direction)
+  - BUT: `requiresSpecialCursor: false` - they use standard cursor, not dual-cursor
+  - Example: `#` in "# أحب أبي" inherits Arabic context but uses standard cursor
+
+**Arabic Punctuation Handling**:
+- Word breakers (comma U+060C, semicolon U+061B, question mark U+061F, etc.) are excluded from connected script
+- Diacritics (U+064B-U+065F) are treated as part of letters (do NOT break connection)
+- Spaces/tabs/newlines always break word boundaries
 
 #### 2. Word Boundary Detection
 
@@ -130,7 +153,7 @@ detectScriptTypeWithContext()
 /* Standard cursor (Latin, focused) */
 .cm-fat-cursor {
   position: absolute;
-  background: #ff5555;      /* Red solid */
+  background: #ff9696;      /* Pink/red solid */
   color: #ffffff;           /* White inverted text */
   border: none;
   box-shadow: none;
@@ -138,38 +161,40 @@ detectScriptTypeWithContext()
 
 /* Standard cursor (unfocused) */
 &:not(.cm-focused) .cm-fat-cursor {
-  background: transparent;
-  color: transparent;
-  box-shadow: 0 0 0 1px #999999;  /* Gray outline */
+  background: none;
+  outline: solid 1px #ff9696;  /* Red outline */
+  color: transparent !important;
 }
 
 /* Arabic word block (focused) */
 .cm-cursor-arabic-word {
   position: absolute;
-  background: rgba(255, 85, 85, 0.3);  /* Semi-transparent red */
+  background: #ffff99;      /* Full opacity yellow */
   color: inherit;           /* Show word text in original color */
   border: none;
   box-shadow: none;
   z-index: 1;              /* Below character outline */
 }
 
+/* Arabic word block (unfocused) */
+&:not(.cm-focused) .cm-cursor-arabic-word {
+  display: none;           /* Hide word block when unfocused */
+}
+
 /* Arabic character outline (focused) */
 .cm-cursor-arabic-char {
   position: absolute;
   background: transparent;
-  color: transparent;
-  box-shadow: 0 0 0 1px #ffffff;  /* White outline */
+  color: transparent !important;
+  border: none;
+  box-shadow: 0 0 0 1px #ff9696;  /* 1px red outline */
   z-index: 2;              /* Above word block */
 }
 
-/* Arabic cursors (unfocused) */
-&:not(.cm-focused) .cm-cursor-arabic-word {
-  background: transparent;
-  box-shadow: 0 0 0 1px #999999;
-}
-
+/* Arabic character outline (unfocused) */
 &:not(.cm-focused) .cm-cursor-arabic-char {
-  display: none;           /* Hide character outline when unfocused */
+  box-shadow: none;        /* Remove red outline when unfocused */
+  outline: solid 1px #ff9696;  /* Show standard red outline instead */
 }
 ```
 
@@ -181,10 +206,15 @@ detectScriptTypeWithContext()
 | Newline character | Standard narrow cursor |
 | Mixed scripts on same line | Cursor type switches dynamically based on character under cursor |
 | Very long Arabic word (>50 chars) | Word block clamped to ±50 characters from cursor |
-| Space between Arabic words | Standard cursor (space is word boundary) |
-| Numbers/punctuation in Arabic text | Context-aware: uses Arabic cursor if surrounded by Arabic |
+| Space between Arabic words | Standard cursor (spaces are always word boundaries) |
+| Single isolated Arabic character | Standard transparent cursor (no dual-cursor - not a connected word) |
+| Connected Arabic word (2+ chars) | Dual-cursor with yellow word block + red character outline |
+| Punctuation in Arabic context | Standard cursor (# , ; etc. use standard cursor even if surrounded by Arabic) |
+| Numbers in Arabic text | Standard cursor (neutral chars inherit script type but use standard cursor) |
+| Arabic diacritics | Treated as part of letters (do not break word connection) |
 | Cursor at word boundary | Standard cursor for boundary character |
 | Surrogate pairs (emoji, etc.) | Handled correctly by existing logic |
+| RTL text positioning | Uses `coordsForChar` for accurate character-level coordinates |
 
 ## Performance Characteristics
 

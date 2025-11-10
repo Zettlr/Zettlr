@@ -289,6 +289,33 @@ yarn install
 yarn start
 ```
 
+### ⚠️ CRITICAL: Do NOT Commit tsconfig.json
+
+The vim plugin's `packages/codemirror-vim/tsconfig.json` contains a **local development only** configuration:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@codemirror/*": ["../../node_modules/@codemirror/*"]
+    }
+  }
+}
+```
+
+**This configuration is ESSENTIAL for local builds but MUST NOT be committed to the upstream PR.**
+
+- ✅ Keep it in your working tree for local development
+- ❌ **NEVER** commit it to the vim plugin repository
+- ❌ **NEVER** include it in pull requests to upstream
+
+Before committing vim plugin changes:
+```bash
+cd packages/codemirror-vim
+git status  # Verify tsconfig.json is NOT staged
+git diff tsconfig.json  # If changed, restore it after committing other files
+```
+
 ### Switching Vim Plugin Branches
 
 To test different branches of the vim plugin:
