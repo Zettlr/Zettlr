@@ -73,8 +73,8 @@ ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' } as Ass
     // on the value of "format".
     profileMetadata.value = defaults
     // Get either the last used exporter OR the first element available
-    const lastProfile = configStore.config.export.singleFileLastExporter
-    if (lastProfile in availableFormats.value) {
+    const lastProfile = selectedProfiles.value.get(props.filePath)
+    if (lastProfile !== undefined && lastProfile in availableFormats.value) {
       format.value = lastProfile
     } else {
       format.value = profileMetadata.value[0].name
@@ -97,6 +97,8 @@ const exportDirectory = ref(configStore.config.export.dir)
 const autoOpenExport = ref(configStore.config.export.autoOpenExportedFiles)
 const profileMetadata = ref<PandocProfileMetadata[]>([])
 const customCommands = computed(() => configStore.config.export.customCommands)
+const openPaths = computed(() => configStore.config.openPaths)
+const selectedProfiles = computed(() => new Map(Object.entries(configStore.config.export.selectedProfiles)))
 
 const exportButtonLabel = computed(() => isExporting.value ? trans('Exporting…') : trans('Export'))
 const filename = computed(() => pathBasename(props.filePath))
@@ -134,7 +136,23 @@ watch(format, function (value) {
   // Remember the last choice
   const prof = profileMetadata.value.find(e => e.name === value)
   const cmd = customCommands.value.find(x => x.command === value)
-  configStore.setConfigValue('export.singleFileLastExporter', prof?.name ?? cmd?.command ?? '')
+
+  const newProfiles = selectedProfiles.value
+  newProfiles.set(props.filePath, prof?.name ?? cmd?.command ?? '')
+
+  configStore.setConfigValue('export.selectedProfiles', Object.fromEntries(newProfiles))
+})
+
+watch(openPaths, function (value) {
+  // Prune any path no longer part of the open paths.
+  const newProfiles = selectedProfiles.value
+  for (const filename of newProfiles.keys()) {
+    if (!value.some(path => filename.startsWith(path))) {
+      newProfiles.delete(filename)
+    }
+  }
+
+  configStore.setConfigValue('export.selectedProfiles', Object.fromEntries(newProfiles))
 })
 
 function doExport (): void {
