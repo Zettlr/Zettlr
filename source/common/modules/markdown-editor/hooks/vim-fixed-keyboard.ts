@@ -346,7 +346,8 @@ class VimCustomKeyMappingsPlugin implements PluginValue {
         // Map physical key codes to vim command characters
         const codeMatch = event.code.match(/^Key([A-Z])$/)
         if (codeMatch) {
-          commandToShow = codeMatch[1].toLowerCase()
+          // Respect shift key for capitalization (e.g., G vs g, E vs e)
+          commandToShow = event.shiftKey ? codeMatch[1] : codeMatch[1].toLowerCase()
         }
       } else if (event.key && event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
         // Fallback to event.key for non-letter keys
