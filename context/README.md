@@ -30,8 +30,8 @@ This folder contains comprehensive documentation about the Vim Fixed Keyboard La
 ### Character Leak Issue (RESOLVED)
 - **[VIM_CHARACTER_LEAK_SOLUTION.md](VIM_CHARACTER_LEAK_SOLUTION.md)** - ✅ Complete solution for character leaking in Vim normal mode
 
-### Known Issues
-- **[VIM_CURSOR_DISPLAY_ISSUE.md](VIM_CURSOR_DISPLAY_ISSUE.md)** - ⚠️ Minor cursor visibility issue with Ctrl+A and mouse selections (low priority)
+### Cursor Display Issue (RESOLVED)
+- **[VIM_CURSOR_DISPLAY_ISSUE.md](VIM_CURSOR_DISPLAY_ISSUE.md)** - ✅ Mouse selection prevention to maintain cursor visibility
 
 ## Feature Status
 

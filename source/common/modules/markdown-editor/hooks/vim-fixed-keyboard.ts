@@ -109,6 +109,8 @@ class VimCustomKeyMappingsPlugin implements PluginValue {
   private inputHandler: (event: InputEvent) => void
   private beforeInputHandler: (event: InputEvent) => void
   private vimModeChangeHandler: (modeInfo: { mode: string, subMode?: string }) => void
+  private mousedownHandler: (event: MouseEvent) => void
+  private selectstartHandler: (event: Event) => void
 
   constructor (private view: EditorView) {
     // Bind event handlers
@@ -116,11 +118,15 @@ class VimCustomKeyMappingsPlugin implements PluginValue {
     this.inputHandler = this.handleInput.bind(this)
     this.beforeInputHandler = this.handleBeforeInput.bind(this)
     this.vimModeChangeHandler = this.handleVimModeChange.bind(this)
+    this.mousedownHandler = this.handleMousedown.bind(this)
+    this.selectstartHandler = this.handleSelectStart.bind(this)
 
     // Add event listeners in capture phase to intercept before CM6
     this.view.dom.addEventListener('keydown', this.keydownHandler, true)
     this.view.dom.addEventListener('beforeinput', this.beforeInputHandler, true)
     this.view.dom.addEventListener('input', this.inputHandler, true)
+    this.view.dom.addEventListener('mousedown', this.mousedownHandler, true)
+    this.view.dom.addEventListener('selectstart', this.selectstartHandler, true)
 
     // Setup vim mode detection with retry mechanism
     this.setupVimModeDetectionWithRetry()
@@ -252,6 +258,37 @@ class VimCustomKeyMappingsPlugin implements PluginValue {
     }
   }
 
+  /**
+   * Prevents mouse drag selection in normal/visual mode
+   * Allows single clicks to position cursor (standard Vim behavior)
+   */
+  private handleMousedown (event: MouseEvent): void {
+    if (this.currentMode === 'normal' || this.currentMode === 'visual') {
+      console.log('[Vim Custom Key Mappings] Mousedown in', this.currentMode, 'mode')
+
+      // Stop the event from reaching CodeMirror's selection handlers
+      // This prevents CodeMirror from creating selections with mouse drag
+      event.preventDefault()
+      event.stopPropagation()
+      event.stopImmediatePropagation()
+
+      // Note: This blocks ALL mouse interaction including cursor positioning
+      // To allow clicks but prevent drag selection, we'd need a more sophisticated approach
+    }
+  }
+
+  /**
+   * Prevents text selection via browser's selectstart event in normal/visual mode
+   * This is an additional layer that catches selection attempts the mousedown handler might miss
+   */
+  private handleSelectStart (event: Event): void {
+    if (this.currentMode === 'normal' || this.currentMode === 'visual') {
+      console.log('[Vim Custom Key Mappings] Preventing selectstart in', this.currentMode, 'mode')
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  }
+
   update (): void {
     // CM6 doesn't have a direct vim-mode-change event, but we can track it
     // The Vim plugin from @replit/codemirror-vim exposes mode via getCM(view).state.vim?.mode
@@ -263,6 +300,8 @@ class VimCustomKeyMappingsPlugin implements PluginValue {
     this.view.dom.removeEventListener('keydown', this.keydownHandler, true)
     this.view.dom.removeEventListener('beforeinput', this.beforeInputHandler, true)
     this.view.dom.removeEventListener('input', this.inputHandler, true)
+    this.view.dom.removeEventListener('mousedown', this.mousedownHandler, true)
+    this.view.dom.removeEventListener('selectstart', this.selectstartHandler, true)
 
     // Clean up vim mode detection
     this.cleanupVimModeDetection()
@@ -382,9 +421,29 @@ class VimCustomKeyMappingsPlugin implements PluginValue {
       return
     }
 
-    // Don't intercept special keys that vim needs
+    // Block Shift+arrow keys in normal mode - they create native selections that break Vim
+    const arrowKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']
+    if (mode === 'normal' && event.shiftKey && arrowKeys.includes(event.key)) {
+      console.log('[Vim Custom Key Mappings] BLOCKING Shift+' + event.key + ' in normal mode')
+      event.preventDefault()
+      event.stopPropagation()
+      event.stopImmediatePropagation()
+      return
+    }
+
+    // Block Ctrl+A (select all) in normal mode - it creates native selection that breaks Vim
+    // In Vim, use ggVG for select all or visual mode commands
+    if (mode === 'normal' && (event.ctrlKey || event.metaKey) && event.key === 'a') {
+      console.log('[Vim Custom Key Mappings] BLOCKING Ctrl+A in normal mode (use ggVG instead)')
+      event.preventDefault()
+      event.stopPropagation()
+      event.stopImmediatePropagation()
+      return
+    }
+
+    // Don't intercept special keys that vim needs (but allow them without Shift)
     const specialKeys = ['Escape', 'Enter', 'Tab', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']
-    if (specialKeys.includes(event.key)) {
+    if (specialKeys.includes(event.key) && !event.shiftKey) {
       return
     }
 

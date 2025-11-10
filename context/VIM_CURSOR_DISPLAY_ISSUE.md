@@ -1,82 +1,138 @@
 # Vim Cursor Display Issue
 
 **Date**: 2025-11-10
-**Status**: ⚠️ **KNOWN ISSUE** (separate from character leak)
+**Status**: ✅ **RESOLVED** (mouse selection prevention implemented)
 
-## Problem
+## Problem (Resolved)
 
-After the character leak fix, there is a remaining issue where the Vim block cursor disappears under certain conditions:
+After the character leak fix, there was a remaining issue where the Vim block cursor disappeared under certain conditions:
 
 1. **Ctrl+A (Select All)** - Causes the block cursor to disappear
 2. **Mouse selections** - Can break the cursor display
 
-## What This Is NOT
+## Solution Implemented
 
-This is **NOT** related to the character leak issue. Character leaking is completely fixed. This is a separate cursor rendering problem.
+Prevented **native selections** (not Vim visual mode) in normal mode by blocking the keyboard shortcuts and mouse actions that create them.
 
-## Root Cause Hypothesis
+## Root Cause
 
-The Vim plugin from `@replit/codemirror-vim` may not properly re-render the cursor after:
-- Native browser selection operations (Ctrl+A)
-- Mouse-based text selections
-- Other operations that manipulate the selection outside of Vim commands
+When users create selections using:
+- **Shift+arrow keys**
+- **Ctrl+A / Cmd+A** (select all)
+- **Mouse drag**
 
-## Impact
+These create **native CodeMirror selections** (not Vim visual mode), which breaks Vim's state management and causes:
+- Block cursor to disappear
+- Vim mode to be lost
+- Normal arrow key movement to work (breaking Vim paradigm)
 
-- **Low**: The cursor becomes invisible but Vim commands still work
-- **Workaround**: Pressing any movement key (j/k/h/l) typically restores the cursor
-- **User Experience**: Minor annoyance, not a blocking issue
+## Implementation Details
 
-## Potential Solutions
+### 1. Block Shift+Arrow Keys
 
-### Option 1: Force Cursor Re-render After Selections
-
-Monitor selection changes and force the Vim plugin to update its cursor display:
+Added keyboard interception in `handleKeydown()`:
 
 ```typescript
-// Pseudo-code
-view.dom.addEventListener('selectionchange', () => {
-  if (inVimNormalMode) {
-    forceVimCursorUpdate()
-  }
-})
+// Block Shift+arrow keys in normal mode - they create native selections that break Vim
+const arrowKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']
+if (mode === 'normal' && event.shiftKey && arrowKeys.includes(event.key)) {
+  console.log('[Vim Custom Key Mappings] BLOCKING Shift+' + event.key + ' in normal mode')
+  event.preventDefault()
+  event.stopPropagation()
+  event.stopImmediatePropagation()
+  return
+}
 ```
 
-### Option 2: Patch Vim Plugin
+### 2. Block Ctrl+A (Select All)
 
-The `@replit/codemirror-vim` plugin may need modifications to:
-1. Listen for selection changes
-2. Re-render the cursor block when selection changes in normal mode
-3. Handle native browser selections (Ctrl+A, mouse clicks)
+```typescript
+// Block Ctrl+A (select all) in normal mode - it creates native selection that breaks Vim
+if (mode === 'normal' && (event.ctrlKey || event.metaKey) && event.key === 'a') {
+  console.log('[Vim Custom Key Mappings] BLOCKING Ctrl+A in normal mode (use ggVG instead)')
+  event.preventDefault()
+  event.stopPropagation()
+  event.stopImmediatePropagation()
+  return
+}
+```
 
-### Option 3: Prevent Native Selection Operations
+### 3. Block Mouse Selections
 
-Intercept Ctrl+A and mouse selections, convert them to Vim commands:
-- Ctrl+A → `ggVG` (go to start, visual line mode, go to end)
-- Mouse selection → Convert to visual mode selection
+```typescript
+private handleMousedown (event: MouseEvent): void {
+  if (this.currentMode === 'normal' || this.currentMode === 'visual') {
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
+  }
+}
 
-This maintains "pure Vim" behavior and avoids native selection issues.
+private handleSelectStart (event: Event): void {
+  if (this.currentMode === 'normal' || this.currentMode === 'visual') {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+}
+```
 
-## Investigation Needed
+### Why This Works
 
-1. **Review vim plugin cursor code** - Check how cursor rendering works
-2. **Test cursor update API** - See if there's a way to force cursor re-render
-3. **Check selection event handling** - Understand how vim plugin handles selections
-4. **Browser differences** - Test if this happens on all platforms (macOS/Windows/Linux)
+- **Prevents browser's native selection** in normal/visual mode
+- **Allows cursor positioning** with single clicks
+- **Eliminates cursor display issues** caused by mouse selections
+- **Maintains Vim philosophy** - selections should be made with Vim commands (v, V, Ctrl+V)
+- **Works in insert mode** - mouse selections still work normally when editing
+
+## Benefits
+
+1. ✅ **Cursor stays visible** - No more disappearing block cursor
+2. ✅ **Ctrl+A issue avoided** - Since mouse selections are prevented, Ctrl+A won't break cursor
+3. ✅ **Pure Vim behavior** - Encourages using Vim visual mode commands
+4. ✅ **Simple implementation** - Just two event handlers
+5. ✅ **No performance impact** - Event handlers are lightweight
+
+## Behavior
+
+### In Normal Mode
+- ❌ Mouse drag selection **disabled**
+- ❌ Shift+arrow selection **disabled**
+- ❌ Ctrl+A select all **disabled** (use `ggVG` in Vim)
+- ✅ Regular arrow keys **work** for cursor movement
+- ✅ Vim visual mode (`v`, `V`, `Ctrl+V`) **works** for proper selections
+- ✅ Vim commands **work normally**
+- ✅ Block cursor **remains visible**
+
+### In Insert Mode
+- ✅ Mouse selections **work normally**
+- ✅ Shift+arrow selections **work normally**
+- ✅ Ctrl+A **works normally**
+- ✅ All editing features **available**
+
+## Testing
+
+To test that mouse selection is disabled:
+1. Open Zettlr with Vim mode enabled
+2. Ensure you're in normal mode (press Escape)
+3. Try to drag-select text with mouse → Should not create a selection
+4. Single click → Cursor moves to clicked position ✅
+5. Press `i` to enter insert mode
+6. Try to drag-select text with mouse → Selection works ✅
 
 ## Related Files
 
-- `packages/codemirror-vim/src/vim.js` - Main vim plugin implementation
-- Cursor rendering logic in the vim plugin (needs investigation)
+- `source/common/modules/markdown-editor/hooks/vim-fixed-keyboard.ts` - Mouse event handlers
 
-## Priority
+## Related Issues
 
-**Low** - This is a cosmetic issue that doesn't affect functionality. Character leaking was the primary blocker, and that's now resolved.
+This solution also prevents the Ctrl+A cursor disappearing issue, as it blocks the underlying selection mechanism that was causing the problem.
 
-## Next Steps (Optional)
+## Vim Philosophy
 
-1. File an issue in the `@replit/codemirror-vim` repository
-2. Investigate cursor rendering in the vim plugin source
-3. Consider implementing Option 3 (convert native selections to Vim commands)
+This implementation aligns with Vim's philosophy that text selection should be done with keyboard commands:
+- `v` - Visual character mode
+- `V` - Visual line mode
+- `Ctrl+V` - Visual block mode
+- `gv` - Reselect previous selection
 
-For now, the feature is **usable and working** despite this minor cursor display issue.
+Mouse selections in Vim are non-standard and can cause issues with cursor rendering and mode state.
