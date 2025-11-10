@@ -3,10 +3,10 @@
     <img src="https://raw.githubusercontent.com/Zettlr/Zettlr/master/resources/icons/png/256x256.png" alt="Zettlr"/>
   </a>
   <br/>
-  Zettlr [<em>ˈset·lər</em>]
+  Zettlr [<em>ˈset·lər</em>] - Arabic Edition
 </h1>
 
-<p align="center"><strong>Your One-Stop Publication Workbench</strong>.</p>
+<p align="center"><strong>Your One-Stop Publication Workbench - Enhanced for Arabic Writers</strong></p>
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.2580173">
@@ -19,20 +19,39 @@
     <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/tag-date/Zettlr/Zettlr.svg?label=latest">
   </a>
   <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/Zettlr/Zettlr/total.svg">
-  <img alt="Unit Tests / Lint" src="https://github.com/Zettlr/Zettlr/actions/workflows/check.yml/badge.svg">
-  <img alt="Build" src="https://github.com/Zettlr/Zettlr/workflows/Build/badge.svg">
 </p>
 
 <p align="center">
-  <a href="https://www.zettlr.com/" target="_blank">Homepage</a> |
-  <a href="https://www.zettlr.com/download">Download</a> |
+  <a href="https://www.zettlr.com/" target="_blank">Upstream Homepage</a> |
   <a href="https://docs.zettlr.com/" target="_blank">Documentation</a> |
-  <a href="https://forum.zettlr.com/" target="_blank">Community Forum</a> |
-  <a href="https://go.zettlr.com/discord" target="_blank">Discord</a> |
-  <a href="#contributing">Contributing</a> |
-  <a href="https://zettlr.com/supporters" target="_blank">Support Us</a> |
-  <a rel="me" href="https://fosstodon.org/@zettlr" target="_blank">Mastodon</a>
+  <a href="https://github.com/Zettlr/Zettlr">Upstream Repository</a>
 </p>
+
+---
+
+## About This Fork - Zettlr Arabic Edition
+
+This fork extends Zettlr 3.6.0 with comprehensive Arabic language support, including a complete Arabic user interface translation and advanced Vim mode features designed specifically for Arabic writers. The implementation provides full right-to-left (RTL) text direction support throughout the application, with native RTL interface layouts for all menus, dialogs, and settings panels.
+
+The centerpiece of this fork is the **Fixed Keyboard Layout** feature for Vim mode, which enables Vim navigation commands (h/j/k/l, etc.) to work seamlessly with non-Latin keyboards without requiring keyboard layout switching. This is complemented by an **innovative dual-cursor system** for Arabic and other connected scripts: when editing Arabic text in Vim Normal mode, a yellow word block highlights the entire connected word while a red outline precisely indicates the character under the cursor. This dual-layer visual design preserves the elegant character connections in Arabic script while providing clear cursor positioning feedback that matches Vim's philosophy.
+
+Additional enhancements include an interactive **Keyboard Mapping Trainer** in the preferences panel for training modifier-based key combinations, robust handling of RTL text in the CodeMirror 6 editor with proper cursor positioning, and comprehensive fixes for Vim mode stability including command execution preservation and keyboard input isolation. The fork maintains full compatibility with upstream Zettlr while adding these Arabic-specific features, making it a powerful tool for Arabic-speaking academics, writers, and researchers who rely on both the Zettelkasten method and Vim-style editing.
+
+### Screenshots
+
+**Arabic Interface with Dual-Cursor Vim Mode:**
+
+![Arabic Vim Mode](/resources/screenshots/zettler_arabic_vim_mode.png)
+
+*The dual-cursor system in action: yellow word block highlights the connected Arabic word "أحب" while the red outline shows the exact character position. Notice the full RTL interface with Arabic menus and proper text direction.*
+
+**Vim Settings with Keyboard Mapping Trainer:**
+
+![Vim Settings](/resources/screenshots/zettler_arabic_settings_vim.png)
+
+*The interactive keyboard mapping trainer allows users to configure modifier-based key combinations for Vim commands that require special characters (like braces, brackets, etc.) on non-Latin keyboard layouts.*
+
+---
 
 ![screenshot](/resources/screenshots/zettlr_view.png)
 
