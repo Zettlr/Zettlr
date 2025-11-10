@@ -4,7 +4,23 @@ name: Build Arabic Edition
 # Triggers on manual dispatch or tags on v3.6.0-arabic branch
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      build_linux:
+        description: 'Build Linux'
+        required: false
+        default: 'true'
+        type: boolean
+      build_macos:
+        description: 'Build macOS'
+        required: false
+        default: 'true'
+        type: boolean
+      build_windows:
+        description: 'Build Windows'
+        required: false
+        default: 'true'
+        type: boolean
   push:
     tags:
       - 'v*-arabic'
@@ -25,6 +41,7 @@ jobs:
   build-linux:
     name: 'Build (Linux)'
     runs-on: ubuntu-22.04
+    if: ${{ github.event_name == 'push' || inputs.build_linux == true }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -66,6 +83,7 @@ jobs:
   build-macos:
     name: 'Build (macOS)'
     runs-on: macos-14
+    if: ${{ github.event_name == 'push' || inputs.build_macos == true }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -108,6 +126,7 @@ jobs:
   build-windows:
     name: 'Build (Windows)'
     runs-on: windows-2022
+    if: ${{ github.event_name == 'push' || inputs.build_windows == true }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -155,7 +174,7 @@ jobs:
     name: 'Create Release Draft'
     needs: [build-linux, build-macos, build-windows]
     runs-on: ubuntu-22.04
-    if: startsWith(github.ref, 'refs/tags/')
+    if: ${{ startsWith(github.ref, 'refs/tags/') && !cancelled() }}
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
