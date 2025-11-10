@@ -109,12 +109,14 @@ jobs:
           npx cm-buildhelper packages/codemirror-vim/src/index.ts
           node packages/codemirror-vim/scripts/addVersion.cjs
 
-      - name: Build macOS arm64 packages (without code signing)
+      - name: Build macOS arm64 packages (with ad-hoc signing)
         run: |
           yarn package:mac-arm
+          # Ad-hoc sign the app to prevent code signature crashes
+          codesign --force --deep --sign - "out/Zettlr-darwin-arm64/Zettlr.app"
           yarn release:mac-arm
         env:
-          CSC_IDENTITY_AUTO_DISCOVERY: false  # Disable code signing
+          CSC_IDENTITY_AUTO_DISCOVERY: false  # Disable certificate signing
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
