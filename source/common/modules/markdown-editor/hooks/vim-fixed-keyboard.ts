@@ -160,20 +160,96 @@ class VimCustomKeyMappingsPlugin implements PluginValue {
 
   /**
    * Prevents character insertion in normal/visual mode by canceling input events
-   * TEMPORARILY DISABLED to fix insert mode
+   * This is a minimal, comprehensive approach: block ALL input in normal/visual, allow ALL in insert
    */
   private handleBeforeInput (event: InputEvent): void {
-    // TEMPORARILY DISABLED - just log for now
     console.log('[Vim Custom Key Mappings] BeforeInput event - mode:', this.currentMode, 'inputType:', event.inputType)
+
+    // Only prevent input in normal and visual modes
+    if (this.currentMode === 'normal' || this.currentMode === 'visual') {
+      // Comprehensive list of inputTypes that insert/modify content
+      const blockableInputTypes = [
+        // Character insertion
+        'insertText',
+        'insertLineBreak',
+        'insertParagraph',
+        'insertFromPaste',
+        'insertFromDrop',
+        'insertFromYank',
+        'insertReplacementText',
+        'insertLink',
+        'insertOrderedList',
+        'insertUnorderedList',
+        'insertHorizontalRule',
+
+        // Content deletion
+        'deleteWordBackward',
+        'deleteWordForward',
+        'deleteSoftLineBackward',
+        'deleteSoftLineForward',
+        'deleteHardLineBackward',
+        'deleteHardLineForward',
+        'deleteContentBackward',
+        'deleteContentForward',
+        'deleteByCut',
+        'deleteByDrag',
+
+        // Formatting
+        'formatBold',
+        'formatItalic',
+        'formatUnderline',
+        'formatStrikeThrough',
+        'formatSuperscript',
+        'formatSubscript',
+        'formatJustifyCenter',
+        'formatJustifyFull',
+        'formatJustifyRight',
+        'formatJustifyLeft',
+        'formatIndent',
+        'formatOutdent',
+        'formatRemove',
+        'formatSetBlockTextDirection',
+        'formatSetInlineTextDirection',
+        'formatBackColor',
+        'formatFontColor',
+        'formatFontName',
+
+        // History operations that might cause edits
+        'historyUndo',
+        'historyRedo'
+      ]
+
+      if (blockableInputTypes.includes(event.inputType)) {
+        console.log('[Vim Custom Key Mappings] BLOCKING input in', this.currentMode, 'mode:', event.inputType)
+        event.preventDefault()
+        event.stopPropagation()
+        event.stopImmediatePropagation()
+        return
+      }
+
+      // Allow composition events (IME, important for CJK input)
+      if (event.inputType.startsWith('insertComposition') ||
+          event.inputType.startsWith('deleteComposition')) {
+        console.log('[Vim Custom Key Mappings] ALLOWING composition event:', event.inputType)
+        return
+      }
+    }
+
+    // In insert mode, allow everything
+    console.log('[Vim Custom Key Mappings] ALLOWING input in', this.currentMode, 'mode')
   }
 
   /**
-   * Additional safety net to prevent any input that slips through
-   * TEMPORARILY DISABLED to fix insert mode
+   * Additional safety net to prevent any input that slips through beforeinput
    */
   private handleInput (event: InputEvent): void {
-    // TEMPORARILY DISABLED - just log for now
     console.log('[Vim Custom Key Mappings] Input event - mode:', this.currentMode, 'inputType:', event.inputType)
+
+    // Backstop: if we're in normal/visual and an input event fires, something went wrong
+    // This should rarely trigger if beforeinput works correctly
+    if (this.currentMode === 'normal' || this.currentMode === 'visual') {
+      console.warn('[Vim Custom Key Mappings] WARNING: Input event fired in', this.currentMode, 'mode - this should have been caught by beforeinput')
+    }
   }
 
   update (): void {

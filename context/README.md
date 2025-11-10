@@ -25,8 +25,13 @@ This folder contains comprehensive documentation about the Vim Fixed Keyboard La
 
 ### Configuration Issues
 - **[CONFIG_THROTTLING_ISSUE.md](CONFIG_THROTTLING_ISSUE.md)** - Config throttling problem and fix
-- **[DEBUGGING_ANALYSIS.md](DEBUGGING_ANALYSIS.md)** - Debug analysis for config sync issues
 - **[VIM_FIXED_KEYBOARD_FIX.md](VIM_FIXED_KEYBOARD_FIX.md)** - Implementation fixes
+
+### Character Leak Issue (RESOLVED)
+- **[VIM_CHARACTER_LEAK_SOLUTION.md](VIM_CHARACTER_LEAK_SOLUTION.md)** - ✅ Complete solution for character leaking in Vim normal mode
+
+### Known Issues
+- **[VIM_CURSOR_DISPLAY_ISSUE.md](VIM_CURSOR_DISPLAY_ISSUE.md)** - ⚠️ Minor cursor visibility issue with Ctrl+A and mouse selections (low priority)
 
 ## Feature Status
 
