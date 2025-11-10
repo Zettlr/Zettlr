@@ -44,6 +44,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Build vim plugin
+        run: |
+          cd packages/codemirror-vim
+          yarn install
+          yarn build
+          cd ../..
+
       - name: Build Linux x64 packages
         run: |
           yarn package:linux-x64
@@ -76,6 +83,13 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Build vim plugin
+        run: |
+          cd packages/codemirror-vim
+          yarn install
+          yarn build
+          cd ../..
 
       - name: Build macOS arm64 packages (without code signing)
         run: |
@@ -111,6 +125,13 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Build vim plugin
+        run: |
+          cd packages/codemirror-vim
+          yarn install
+          yarn build
+          cd ../..
 
       - name: Build Windows x64 packages (without code signing)
         run: |
