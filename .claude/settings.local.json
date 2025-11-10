@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:discuss.codemirror.net)",
+      "Read(//Users/orwa/repos/codemirror-vim-arabic/codemirror-vim/**)",
+      "WebFetch(domain:codemirror.net)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(yarn install:*)",
+      "Bash(yarn start)",
+      "Bash(yarn list:*)",
+      "Bash(yarn info:*)",
+      "Bash(yarn build)",
+      "Bash(git checkout:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

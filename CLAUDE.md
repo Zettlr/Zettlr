@@ -23,6 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Migration Guide**: [context/MIGRATION_GUIDE_3.6.0.md](context/MIGRATION_GUIDE_3.6.0.md)
 - **Config Issues**: [context/CONFIG_THROTTLING_ISSUE.md](context/CONFIG_THROTTLING_ISSUE.md)
 - **Arabic Translations**: [context/ARABIC_TRANSLATIONS_SUMMARY.md](context/ARABIC_TRANSLATIONS_SUMMARY.md)
+- **Workspace Linking**: [context/WORKSPACE_LINKING_SOLUTION.md](context/WORKSPACE_LINKING_SOLUTION.md)
 
 ## Project Overview
 
@@ -59,6 +60,22 @@ yarn test:integration
 
 # Build for production
 yarn package
+
+# Build workspace packages
+yarn workspace @replit/codemirror-vim build
+```
+
+### Local Vim Plugin Development
+
+```bash
+# Build vim plugin (runs automatically with yarn start)
+yarn workspace @replit/codemirror-vim build
+
+# Start development (auto-builds vim plugin first)
+yarn start
+
+# Manual workspace package build
+cd packages/codemirror-vim && yarn build
 ```
 
 ### Utility Commands
@@ -240,6 +257,87 @@ yarn test:unit -- --grep "vim"
    - [ ] Change language to Arabic
    - [ ] All vim setting labels display in Arabic
    - [ ] Training UI instructions in Arabic
+
+## Local Development Setup
+
+### Vim Plugin Workspace
+
+This repository includes a workspace setup for local development of the vim plugin:
+
+**Workspace Structure:**
+```
+packages/
+└── codemirror-vim/    # Git submodule of vim plugin fork
+```
+
+**Current Configuration:**
+- **Package**: `@replit/codemirror-vim` as workspace package
+- **Source**: Git submodule pointing to `github:diraneyya/codemirror-vim`
+- **Branch**: `fix/cursor-arabic-connected-characters` (stable Arabic cursor fixes)
+- **Dependency Resolution**: Proper peer dependencies using main app's CodeMirror packages
+
+### Local Development Commands
+
+```bash
+# Build the workspace vim plugin
+yarn workspace @replit/codemirror-vim build
+
+# Install workspace dependencies
+yarn install
+
+# Start development with local vim plugin
+yarn start
+```
+
+### Switching Vim Plugin Branches
+
+To test different branches of the vim plugin:
+
+```bash
+# Switch submodule to robust features branch
+cd packages/codemirror-vim
+git checkout robust-vim-mode
+
+# Rebuild the plugin
+cd ../..
+yarn workspace @replit/codemirror-vim build
+
+# Restart application
+yarn start
+```
+
+### Workspace Benefits
+
+✅ **Real-time Development** - Edit vim plugin source without git commits
+✅ **Proper Dependency Resolution** - No CodeMirror conflicts via peer dependencies
+✅ **Arabic Cursor Fixes** - Preserved from fork
+✅ **Stability Features Ready** - Can test VimStateManager and VimEventCoordinator locally
+
+### Troubleshooting Workspace
+
+**TypeScript Build Failures**: Ensure paths configuration exists
+```bash
+# Check packages/codemirror-vim/tsconfig.json has:
+# "paths": { "@codemirror/*": ["../../node_modules/@codemirror/*"] }
+```
+
+**Build Failures**: Clean and reinstall
+```bash
+rm -rf packages/codemirror-vim/node_modules
+yarn install
+yarn workspace @replit/codemirror-vim build
+```
+
+**Dependency Conflicts**: Check peer dependency resolution
+```bash
+yarn explain peer-requirements
+```
+
+**Runtime Extension Errors**: Check for duplicate CodeMirror instances
+```bash
+# Look for "Unrecognized extension value" in console
+# Ensure workspace uses peer dependencies, not regular dependencies
+```
 
 ## Common Issues
 

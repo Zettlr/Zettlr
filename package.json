@@ -14,7 +14,11 @@
   "license": "GPL-3.0",
   "description": "Your One-Stop Publication Workbench",
   "main": ".webpack/main",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
+    "prestart": "yarn workspace @replit/codemirror-vim build",
     "start": "cross-env NODE_ENV=develop node scripts/test-gui/index.mjs",
     "package": "cross-env NODE_ENV=production electron-forge package",
     "package:mac-x64": "cross-env NODE_ENV=production npm_config_arch=x64 electron-forge package --platform=darwin --arch=x64",
@@ -63,7 +67,7 @@
     "@lezer/common": "^1.2.3",
     "@lezer/highlight": "^1.2.1",
     "@replit/codemirror-emacs": "^6.1.0",
-    "@replit/codemirror-vim": "github:diraneyya/codemirror-vim#fix/cursor-arabic-connected-characters",
+    "@replit/codemirror-vim": "workspace:*",
     "adm-zip": "^0.5.16",
     "archiver": "^7.0.1",
     "astrocite": "^0.16.4",

@@ -1,0 +1,4 @@
+[submodule "packages/codemirror-vim"]
+	path = packages/codemirror-vim
+	url = https://github.com/diraneyya/codemirror-vim.git
+	branch = fix/cursor-arabic-connected-characters
