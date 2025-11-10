@@ -18,7 +18,10 @@
       "mcp__electron__get_electron_window_info",
       "mcp__electron__take_screenshot",
       "mcp__electron__send_command_to_electron",
-      "mcp__electron__read_electron_logs"
+      "mcp__electron__read_electron_logs",
+      "Bash(gh run view:*)",
+      "Bash(gh api:*)",
+      "Bash(gh run list:*)"
     ],
     "deny": [],
     "ask": []
