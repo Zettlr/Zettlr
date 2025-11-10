@@ -138,7 +138,11 @@ jobs:
           yarn package:win-x64
           yarn release:win-x64
         env:
-          CSC_LINK: ''  # Disable code signing
+          CSC_LINK: ''  # Disable certificate signing
+          WIN_CSC_LINK: ''  # Disable Windows certificate signing
+          SKIP_NOTARIZATION: true  # Skip notarization
+          # Disable Azure Trusted Signing by not providing credentials
+          # electron-builder will skip signing if these are not set
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4

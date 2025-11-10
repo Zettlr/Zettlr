@@ -49,12 +49,13 @@ win:
   - nsis
   artifactName: "Zettlr-${version}-${arch}.${ext}"
   icon: "./resources/icons/icon.ico"
-  # New signing options for use with Azure Trusted Signing
-  azureSignOptions:
-    publisherName: "Hendrik Erz"
-    endpoint: "https://neu.codesigning.azure.net/"
-    certificateProfileName: "zettlr-code-sign-cert"
-    codeSigningAccountName: "zettlr"
+  # NOTE: Azure Trusted Signing disabled for Arabic Edition fork
+  # (unsigned builds for easier distribution)
+  # azureSignOptions:
+  #   publisherName: "Hendrik Erz"
+  #   endpoint: "https://neu.codesigning.azure.net/"
+  #   certificateProfileName: "zettlr-code-sign-cert"
+  #   codeSigningAccountName: "zettlr"
 #
 # Generic Linux options
 #
