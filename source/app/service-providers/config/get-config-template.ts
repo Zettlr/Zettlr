@@ -102,7 +102,8 @@ export interface ConfigOptions {
     useBundledPandoc: boolean
     exportQmdWithQuarto: boolean
     customCommands: Array<{ displayName: string, command: string }>
-    selectedProfiles: Map<string, string>
+    selectedProfiles: Array<{ filePath: string, profile: string }>
+    lastUsedProfile: string
   }
   zkn: {
     idRE: string
@@ -301,7 +302,8 @@ export function getConfigTemplate (): ConfigOptions {
       useBundledPandoc: true, // Whether to use the bundled Pandoc
       exportQmdWithQuarto: false, // Whether .qmd-files should be exported with Quarto
       customCommands: [], // Custom commands that the user can use to run arbitrary exports
-      selectedProfiles: new Map<string, string>() // Remembers the last chosen exporter per file for easy re-exporting
+      selectedProfiles: [], // Remembers the last chosen exporter per file for easy re-exporting
+      lastUsedProfile: 'HTML.yaml' // Remembers the last chosen exporter for easy re-exporting
     },
     // Zettelkasten stuff (IDs, as well as link matchers)
     zkn: {
