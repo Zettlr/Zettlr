@@ -180,6 +180,12 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github/RELEASE_TEMPLATE.md
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
@@ -188,24 +194,11 @@ jobs:
       - name: Create or Update Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_name }}
           draft: true
           name: Zettlr Arabic Edition ${{ github.ref_name }}
-          body: |
-            # Zettlr Arabic Edition Release
-
-            This is an automated build of the Zettlr Arabic Edition fork.
-
-            ## Features
-            - Complete Arabic UI translation and Arabised app icon (ز)
-            - RTL (Right-to-Left) interface support
-            - Fixed Keyboard Layout for Vim mode
-            - Dual-cursor system for Arabic connected scripts
-
-            ## Installation
-            Download the appropriate package for your operating system below.
-
-            **Note**: These builds are unsigned. You may need to allow installation from unidentified developers.
+          body_path: .github/RELEASE_TEMPLATE.md
           files: ./artifacts/**/*
           fail_on_unmatched_files: true
-          # This will update existing release if tag exists, or create new one
-          overwrite: true
+          # This will replace existing files in the release
+          overwrite_files: true
