@@ -213,7 +213,7 @@ All builds are **unsigned** to simplify fork distribution. Users may need to:
 
 ## Release Process
 
-### Creating a Tagged Release
+### Creating a New Tagged Release
 
 ```bash
 # Update version in package.json
@@ -225,11 +225,32 @@ git tag v3.6.0-arabic-beta2
 git push fork v3.6.0-arabic-beta2
 
 # This triggers the workflow automatically
-# Wait for builds to complete
-# Manually download artifacts and create release
+# Builds complete and create draft release with all binaries
 ```
 
-**Note**: Automatic release creation via tag push doesn't work for forks. Need to create release manually and upload artifacts.
+### Updating an Existing Release
+
+When you need to update binaries for an existing tag (e.g., after fixing icons):
+
+```bash
+# Commit your changes
+git add resources/icons/
+git commit -m "feat: Update app icons"
+
+# Push to branch
+git push fork v3.6.0-arabic
+
+# Force-move the tag to the new commit
+git tag -f v3.6.0-arabic-beta1
+git push fork v3.6.0-arabic-beta1 --force
+
+# The workflow will automatically:
+# 1. Rebuild all platforms
+# 2. Update the existing release
+# 3. Replace all binaries (overwrite: true)
+```
+
+**How it works**: The workflow uses `softprops/action-gh-release@v2` with `overwrite: true`, which replaces existing release assets when the same tag is pushed again.
 
 ## Tools Used
 
