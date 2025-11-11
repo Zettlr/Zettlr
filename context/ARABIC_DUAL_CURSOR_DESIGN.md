@@ -27,8 +27,8 @@ The initial implementation (commit 2973aec) used transparent text for ALL charac
 - **Unfocused**: Red outline on character only (word block hidden)
 
 #### Arabic Isolated Character (single character surrounded by non-Arabic)
-- **Focused**: Standard transparent cursor (no dual-cursor)
-- **Unfocused**: Red outline
+- **Focused**: Standard solid red cursor with white inverted text (same as Latin - no dual-cursor)
+- **Unfocused**: Red outline (same as Latin)
 
 #### Neutral Characters (punctuation, numbers, spaces)
 - **Focused**: Standard transparent cursor (no dual-cursor)
@@ -207,7 +207,7 @@ detectScriptTypeWithContext()
 | Mixed scripts on same line | Cursor type switches dynamically based on character under cursor |
 | Very long Arabic word (>50 chars) | Word block clamped to ±50 characters from cursor |
 | Space between Arabic words | Standard cursor (spaces are always word boundaries) |
-| Single isolated Arabic character | Standard transparent cursor (no dual-cursor - not a connected word) |
+| Single isolated Arabic character | Standard solid cursor (no dual-cursor - not a connected word, same as Latin) |
 | Connected Arabic word (2+ chars) | Dual-cursor with yellow word block + red character outline |
 | Punctuation in Arabic context | Standard cursor (# , ; etc. use standard cursor even if surrounded by Arabic) |
 | Numbers in Arabic text | Standard cursor (neutral chars inherit script type but use standard cursor) |
