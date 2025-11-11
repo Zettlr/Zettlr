@@ -66,16 +66,23 @@ const tempDirLabel = trans('Temporary directory')
 const cwdLabel = trans('Current directory')
 const askLabel = trans('Select directory')
 
+// This is used to limit the number of selected
+// profile to filename mappings in the config
+const PREVIOUSLY_SELECTED_PROFILE_LIMIT = 50
+
 ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' } as AssetsProviderIPCAPI)
   .then((defaults: PandocProfileMetadata[]) => {
     // Save all the exporter information into the array. The computed
     // properties will take the info from that array and re-compute based
     // on the value of "format".
     profileMetadata.value = defaults
-    // Get either the last used exporter OR the first element available
-    const lastProfile = selectedProfiles.value.get(props.filePath)
-    if (lastProfile !== undefined && lastProfile in availableFormats.value) {
-      format.value = lastProfile
+    // Get either the last selected exporter for the open file,
+    // the last used exporter, or the first element available
+    const lastProfile = selectedProfiles.value.find(item => item.filePath === props.filePath)
+    const profile = lastProfile ? lastProfile.profile : lastUsedProfile.value
+
+    if (profile in availableFormats.value) {
+      format.value = profile
     } else {
       format.value = profileMetadata.value[0].name
     }
@@ -96,9 +103,10 @@ const format = ref('')
 const exportDirectory = ref(configStore.config.export.dir)
 const autoOpenExport = ref(configStore.config.export.autoOpenExportedFiles)
 const profileMetadata = ref<PandocProfileMetadata[]>([])
+
 const customCommands = computed(() => configStore.config.export.customCommands)
-const openPaths = computed(() => configStore.config.openPaths)
-const selectedProfiles = computed(() => new Map(Object.entries(configStore.config.export.selectedProfiles)))
+const selectedProfiles = computed(() => configStore.config.export.selectedProfiles)
+const lastUsedProfile = computed(() => configStore.config.export.lastUsedProfile)
 
 const exportButtonLabel = computed(() => isExporting.value ? trans('Exporting…') : trans('Export'))
 const filename = computed(() => pathBasename(props.filePath))
@@ -137,22 +145,19 @@ watch(format, function (value) {
   const prof = profileMetadata.value.find(e => e.name === value)
   const cmd = customCommands.value.find(x => x.command === value)
 
+  const profile: string  = prof?.name ?? cmd?.command ?? lastUsedProfile.value
+  const filePath: string = props.filePath
+
   const newProfiles = selectedProfiles.value
-  newProfiles.set(props.filePath, prof?.name ?? cmd?.command ?? '')
+    // Remove any previous items with the same path
+    .filter(item  => item.filePath !== filePath)
+    // Clamp the list to the last N - 1 items since we will be pushing one
+    .slice(-PREVIOUSLY_SELECTED_PROFILE_LIMIT - 1)
 
-  configStore.setConfigValue('export.selectedProfiles', Object.fromEntries(newProfiles))
-})
+  newProfiles.push({ filePath, profile })
 
-watch(openPaths, function (value) {
-  // Prune any path no longer part of the open paths.
-  const newProfiles = selectedProfiles.value
-  for (const filename of newProfiles.keys()) {
-    if (!value.some(path => filename.startsWith(path))) {
-      newProfiles.delete(filename)
-    }
-  }
-
-  configStore.setConfigValue('export.selectedProfiles', Object.fromEntries(newProfiles))
+  configStore.setConfigValue('export.selectedProfiles', JSON.parse(JSON.stringify(newProfiles)))
+  configStore.setConfigValue('export.lastUsedProfile', profile)
 })
 
 function doExport (): void {
