@@ -24,6 +24,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Config Issues**: [context/CONFIG_THROTTLING_ISSUE.md](context/CONFIG_THROTTLING_ISSUE.md)
 - **Arabic Translations**: [context/ARABIC_TRANSLATIONS_SUMMARY.md](context/ARABIC_TRANSLATIONS_SUMMARY.md)
 - **Workspace Linking**: [context/WORKSPACE_LINKING_SOLUTION.md](context/WORKSPACE_LINKING_SOLUTION.md)
+- **Build Automation**: [context/BUILD_AUTOMATION_SETUP.md](context/BUILD_AUTOMATION_SETUP.md)
+- **Dual Cursor Design**: [context/ARABIC_DUAL_CURSOR_DESIGN.md](context/ARABIC_DUAL_CURSOR_DESIGN.md)
 
 ## Project Overview
 

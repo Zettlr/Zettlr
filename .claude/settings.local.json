@@ -21,7 +21,8 @@
       "mcp__electron__read_electron_logs",
       "Bash(gh run view:*)",
       "Bash(gh api:*)",
-      "Bash(gh run list:*)"
+      "Bash(gh run list:*)",
+      "Bash(gh workflow run:*)"
     ],
     "deny": [],
     "ask": []
