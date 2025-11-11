@@ -173,18 +173,20 @@ jobs:
           if-no-files-found: warn
 
   create-release:
-    name: 'Create Release Draft'
+    name: 'Create or Update Release'
     needs: [build-linux, build-macos, build-windows]
     runs-on: ubuntu-22.04
     if: ${{ startsWith(github.ref, 'refs/tags/') && !cancelled() }}
+    permissions:
+      contents: write
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: ./artifacts
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - name: Create or Update Release
+        uses: softprops/action-gh-release@v2
         with:
           draft: true
           name: Zettlr Arabic Edition ${{ github.ref_name }}
@@ -194,7 +196,7 @@ jobs:
             This is an automated build of the Zettlr Arabic Edition fork.
 
             ## Features
-            - Complete Arabic UI translation
+            - Complete Arabic UI translation and Arabised app icon (ز)
             - RTL (Right-to-Left) interface support
             - Fixed Keyboard Layout for Vim mode
             - Dual-cursor system for Arabic connected scripts
@@ -204,3 +206,6 @@ jobs:
 
             **Note**: These builds are unsigned. You may need to allow installation from unidentified developers.
           files: ./artifacts/**/*
+          fail_on_unmatched_files: true
+          # This will update existing release if tag exists, or create new one
+          overwrite: true
