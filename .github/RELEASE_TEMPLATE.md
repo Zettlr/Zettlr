@@ -1,6 +1,6 @@
-# Zettlr Arabic Edition v3.6.0-beta1
+# Zettlr Arabic Edition (beta1)
 
-An Arabised fork of [Zettlr](https://github.com/Zettlr/Zettlr) - A Markdown editor for the 21st century, adapted for Arabic writers and researchers.
+An Arabised fork of [Zettlr](https://github.com/Zettlr/Zettlr) - An open-source Markdow/text editor, adapted for Arabic writers and editors.
 
 ## ✨ What's New
 
@@ -22,8 +22,7 @@ An Arabised fork of [Zettlr](https://github.com/Zettlr/Zettlr) - A Markdown edit
 
 ### Technical Improvements
 - **CodeMirror 6 Migration** - Built on Zettlr 3.6.0 with modern CM6 architecture
-- **Improved Arabic Text Rendering** - Better handling of Arabic ligatures and diacritics
-- **Performance Optimizations** - Faster text editing with large Arabic documents
+- **Improved Arabic Experience** - Better handling of Arabic in Vim mode
 
 ## 📦 Installation
 
