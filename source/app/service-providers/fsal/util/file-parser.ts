@@ -146,7 +146,7 @@ export default function getMarkdownFileParser (
           // If the user decides to use just numbers for the keywords (e.g. #1997),
           // the YAML parser will obviously cast those to numbers, but we don't want
           // this, so forcefully cast everything to string (see issue #1433).
-          const sanitizedKeywords: string[] = frontmatter[prop].map((tag: any) => String(tag).toString().toLowerCase())
+          const sanitizedKeywords: string[] = frontmatter[prop].map((tag: any) => String(tag).toString())
           file.tags.push(...sanitizedKeywords.filter((each) => !file.tags.includes(each)))
         }
       }
