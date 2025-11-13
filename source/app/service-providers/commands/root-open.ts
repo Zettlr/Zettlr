@@ -20,6 +20,7 @@ import ZettlrCommand from './zettlr-command'
 import { type DirDescriptor } from '@dts/common/fsal'
 import { CODE_EXT, MD_EXT } from '@common/util/file-extention-checks'
 import type { AppServiceContainer } from 'source/app/app-service-container'
+import type { NodeError } from '../windows/map-fs-error'
 
 export default class RootOpen extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
@@ -156,7 +157,7 @@ export default class RootOpen extends ZettlrCommand {
           // Something went wrong, so remove the path again.
           this._app.config.removePath(absPath)
           this._app.log.error(`Could not open root ${absPath}: ${err.message as string}`, err)
-          this._app.windows.reportFSError('Could not open new root', err)
+          this._app.windows.reportFSError('Could not open new root', err as NodeError)
         }
       }
     }
