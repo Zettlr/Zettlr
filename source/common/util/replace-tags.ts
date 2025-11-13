@@ -28,6 +28,8 @@ import type { ZettelkastenTag } from '@common/modules/markdown-utils/markdown-as
  * @return  {string}                  The new document
  */
 export default function replaceTags (markdown: string, oldTag: string, newTag: string): string {
+  const sanitizedOldTag = oldTag.toLowerCase()
+
   // Since tags can occur in a frontmatter as well as in the document text, we
   // have the following combinations of possibilities:
   // 1. If the oldTag contains spaces --> Can only be in the frontmatter
@@ -43,7 +45,7 @@ export default function replaceTags (markdown: string, oldTag: string, newTag: s
 
     if (prop !== undefined && prop instanceof YAMLSeq) {
       for (const item of prop.items) {
-        if (item.value.toLowerCase() === oldTag) {
+        if (item.value.toLowerCase() === sanitizedOldTag) {
           const [ start, valueEnd ] = item.range as [number, number]
           // Slice the correct position
           markdown = markdown.slice(0, start) + newTag + markdown.slice(valueEnd)
@@ -54,7 +56,7 @@ export default function replaceTags (markdown: string, oldTag: string, newTag: s
 
   // If the old tag contained a space, we are already done (since tags with
   // spaces can only occur in the frontmatter).
-  if (/\s/.test(oldTag)) { return markdown }
+  if (/\s/.test(sanitizedOldTag)) { return markdown }
 
   // Now, we can do a much simpler approach to replacing the tag in the rest of
   // the content with simple RegEx.
@@ -65,7 +67,7 @@ export default function replaceTags (markdown: string, oldTag: string, newTag: s
   // of the tags in the new document remain valid, even after replacing the tags
   const newTagHasSpaces = /\s/.test(newTag)
   for (const tagNode of tagNodes.reverse()) {
-    if (tagNode.value.toLowerCase() !== oldTag) {
+    if (tagNode.value.toLowerCase() !== sanitizedOldTag) {
       continue
     }
 
