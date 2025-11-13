@@ -339,7 +339,7 @@ export default class AssetsProvider extends ProviderContract {
         // reader or writer must be a supported Markdown format.
         const hasWriter = yaml.writer !== undefined
         const hasReader = yaml.reader !== undefined
-        const validWriter = hasWriter && SUPPORTED_READERS.includes(parseReaderWriter(yaml.writerm as string).name)
+        const validWriter = hasWriter && SUPPORTED_READERS.includes(parseReaderWriter(yaml.writer as string).name)
         const validReader = hasReader && SUPPORTED_READERS.includes(parseReaderWriter(yaml.reader as string).name)
 
         profiles.push({

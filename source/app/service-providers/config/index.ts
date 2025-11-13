@@ -126,12 +126,11 @@ export default class ConfigProvider extends ProviderContract {
     // Listen for renderer events. These must be synchronous.
     ipcMain.on('config-provider', (event, message) => {
       const { command, payload } = message
-      const key: string = payload.key
 
       if (command === 'get-config') {
-        event.returnValue = payload !== undefined ? this.get(key) : this.get()
+        event.returnValue = payload !== undefined ? this.get(payload.key as string) : this.get()
       } else if (command === 'set-config-single') {
-        event.returnValue = this.set(key, payload.val)
+        event.returnValue = this.set(payload.key as string, payload.val)
       }
     })
 
