@@ -50,7 +50,7 @@ export default class DirDelete extends ZettlrCommand {
     try {
       await this._app.fsal.removeDir(arg.path)
     } catch (err: any) {
-      this._app.log.error(err.message, err)
+      this._app.log.error(err.message as string, err)
       return false
     }
 

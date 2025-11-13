@@ -163,8 +163,9 @@ export default class Export extends ZettlrCommand {
         this._app.windows.showErrorMessage(title, message, contents)
       }
     } catch (err: any) {
-      this._app.windows.showErrorMessage(err.message, err.message)
-      this._app.log.error(err.message, err)
+      const message: string = err.message
+      this._app.windows.showErrorMessage(message, message)
+      this._app.log.error(message, err)
     }
   }
 }

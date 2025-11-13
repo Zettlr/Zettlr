@@ -50,7 +50,7 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
     )
   } catch (err: any) {
     output.code = 1
-    output.stderr.push(err.message)
+    output.stderr.push(err.message as string)
   }
 
   return output
