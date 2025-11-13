@@ -126,11 +126,12 @@ export default class ConfigProvider extends ProviderContract {
     // Listen for renderer events. These must be synchronous.
     ipcMain.on('config-provider', (event, message) => {
       const { command, payload } = message
+      const key: string = payload.key
 
       if (command === 'get-config') {
-        event.returnValue = payload !== undefined ? this.get(payload.key) : this.get()
+        event.returnValue = payload !== undefined ? this.get(key) : this.get()
       } else if (command === 'set-config-single') {
-        event.returnValue = this.set(payload.key, payload.val)
+        event.returnValue = this.set(key, payload.val)
       }
     })
 
@@ -269,7 +270,7 @@ export default class ConfigProvider extends ProviderContract {
       // Previous versions stored the replacements as objects of the form
       // { "-->": "→", ... }
       const newReplacements: Array<{ key: string, value: string }> = []
-      for (const [ key, value ] of Object.entries(replacements)) {
+      for (const [ key, value ] of Object.entries(replacements as { key: string, value: string }[])) {
         if (typeof value === 'string') {
           newReplacements.push({ key, value })
         }
@@ -553,7 +554,7 @@ export default class ConfigProvider extends ProviderContract {
     * @param  {Object} newcfg               The new object containing new props
     * @return {void}                      Does not return anything.
     */
-  update (newcfg: any): void {
+  update (newcfg: Partial<ConfigOptions>): void {
     // Use safeAssign to make sure only properties from the config
     // are retained, and no rogue values (which can also simply be
     // old deprecated values).

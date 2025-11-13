@@ -29,7 +29,7 @@ export default class FileDelete extends ZettlrCommand {
     * @param  {Object} arg the parameters of the file to be deleted
     * @return {Boolean} Whether the file was successfully deleted.
     */
-  async run (evt: string, arg: any): Promise<boolean> {
+  async run (evt: string, arg: { path: string }): Promise<boolean> {
     const fileName = path.basename(arg.path)
     const options: MessageBoxOptions = {
       type: 'warning',

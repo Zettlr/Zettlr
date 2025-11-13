@@ -107,7 +107,7 @@ export default class OpenAttachment extends ZettlrCommand {
       }
 
       // Now map the result set. It will contain ALL attachments.
-      let allAttachments = res.result.map((elem: any) => elem.path)
+      let allAttachments: string[] = res.result.map((elem: any) => elem.path)
       // Sort them with PDFs on top
       allAttachments = allAttachments.sort(pdfSorter)
       const potentialError = await shell.openPath(allAttachments[0])

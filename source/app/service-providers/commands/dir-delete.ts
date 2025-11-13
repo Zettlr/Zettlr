@@ -28,7 +28,7 @@ export default class DirDelete extends ZettlrCommand {
     * @param {String} evt The event name
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
-  async run (evt: string, arg: any): Promise<boolean> {
+  async run (evt: string, arg: { path: string }): Promise<boolean> {
     const dirName = path.basename(arg.path)
     const options: MessageBoxOptions = {
       type: 'warning',

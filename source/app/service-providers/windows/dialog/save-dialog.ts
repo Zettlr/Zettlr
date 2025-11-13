@@ -42,7 +42,7 @@ import type ConfigProvider from '@providers/config'
 export default async function saveFileDialog (logger: LogProvider, config: ConfigProvider, win: BrowserWindow|null, fileOrPathName: string): Promise<string|undefined> {
   let startDir = app.getPath('home')
 
-  if (isDir(config.get('dialogPaths.askFileDialog'))) {
+  if (isDir(config.get('dialogPaths.askFileDialog') as string)) {
     startDir = config.get('dialogPaths.askFileDialog')
   }
 

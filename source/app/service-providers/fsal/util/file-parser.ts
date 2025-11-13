@@ -110,7 +110,7 @@ export default function getMarkdownFileParser (
         file.frontmatter = frontmatter
       }
 
-      for (const [ key, value ] of Object.entries(frontmatter)) {
+      for (const [ key, value ] of Object.entries(frontmatter as { [s: string]: unknown })) {
         // Only keep those values which Zettlr can understand
         if (FRONTMATTER_VARS.includes(key)) {
           file.frontmatter[key] = value

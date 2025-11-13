@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-interface NodeError extends Error {
+export interface NodeError extends Error {
   dest?: string
   path?: string
   code: string

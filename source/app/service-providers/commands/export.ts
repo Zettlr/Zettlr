@@ -147,7 +147,7 @@ export default class Export extends ZettlrCommand {
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if (this._app.config.get().export.autoOpenExportedFiles) {
-          if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {
+          if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer as string)) {
             shell.showItemInFolder(output.targetFile)
           } else {
             const potentialError = await shell.openPath(output.targetFile)

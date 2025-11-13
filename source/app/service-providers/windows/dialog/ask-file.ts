@@ -37,7 +37,7 @@ import type ConfigProvider from '@providers/config'
 export default async function askFileDialog (config: ConfigProvider, win: BrowserWindow|null, filters: FileFilter[]|null, multiSel: boolean): Promise<string[]> {
   let startDir = app.getPath('home')
 
-  if (isDir(config.get('dialogPaths.askFileDialog'))) {
+  if (isDir(config.get('dialogPaths.askFileDialog') as string)) {
     startDir = config.get('dialogPaths.askFileDialog')
   }
 

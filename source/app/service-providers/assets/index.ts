@@ -210,7 +210,8 @@ export default class AssetsProvider extends ProviderContract {
   /**
    * Gets the defaults file for a given writer
    *
-   * @param   {string}             filename  The profile's filename
+   * @param   {string}             filename   The profile's filename
+   * @param   {boolean}            verbatim   If false, the contents will be serialized to YAML
    *
    * @return  {Promise<any>}    The defaults (parsed from YAML)
    */
@@ -224,12 +225,13 @@ export default class AssetsProvider extends ProviderContract {
   /**
    * Overwrites the defaults for a given writer.
    *
-   * @param   {string}            absPath      The file to write
-   * @param   {any}               newDefaults  The new defaults (object to be cast to YAML string)
+   * @param   {string}            filename      The file to write
+   * @param   {string}            newDefaults   The new defaults
+   * @param   {boolean}           verbatim      If false, newDefaults will be serialized to YAML
    *
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
    */
-  async setDefaultsFile (filename: string, newDefaults: any, verbatim: boolean = false): Promise<boolean> {
+  async setDefaultsFile (filename: string, newDefaults: string, verbatim: boolean = false): Promise<boolean> {
     const absPath = path.join(this._defaultsPath, filename)
 
     try {
@@ -337,8 +339,8 @@ export default class AssetsProvider extends ProviderContract {
         // reader or writer must be a supported Markdown format.
         const hasWriter = yaml.writer !== undefined
         const hasReader = yaml.reader !== undefined
-        const validWriter = hasWriter && SUPPORTED_READERS.includes(parseReaderWriter(yaml.writer).name)
-        const validReader = hasReader && SUPPORTED_READERS.includes(parseReaderWriter(yaml.reader).name)
+        const validWriter = hasWriter && SUPPORTED_READERS.includes(parseReaderWriter(yaml.writerm as string).name)
+        const validReader = hasReader && SUPPORTED_READERS.includes(parseReaderWriter(yaml.reader as string).name)
 
         profiles.push({
           name: file,

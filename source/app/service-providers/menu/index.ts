@@ -233,7 +233,10 @@ export default class MenuProvider extends ProviderContract {
     ipcMain.handle('menu-provider', async (event, message) => {
       const { command, payload } = message
       if (command === 'display-native-context-menu') {
-        return await this._displayNativeContextMenu(payload.menu, payload.x, payload.y, event.senderFrame ?? undefined)
+        const menu: Electron.MenuItemConstructorOptions[] = payload.menu
+        const x: number = payload.x
+        const y: number = payload.y
+        return await this._displayNativeContextMenu(menu, x, y, event.senderFrame ?? undefined)
       }
     })
   }

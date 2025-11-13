@@ -1231,7 +1231,7 @@ current contents from the editor somewhere else, and restart the application.`
    * concern.
    */
   private syncToConfig (): void {
-    const toSave: any = {}
+    const toSave: DocumentWindowsJSON = {}
     for (const key in this._windows) {
       toSave[key] = this._windows[key].toJSON()
     }
