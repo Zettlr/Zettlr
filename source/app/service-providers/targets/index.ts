@@ -54,7 +54,8 @@ export default class TargetProvider extends ProviderContract {
       if (command === 'get-targets') {
         return this._targets
       } else if (command === 'set-writing-target') {
-        return this.set(payload.payload)
+        const target: WritingTarget = payload.payload
+        return this.set(target)
       }
     })
   }

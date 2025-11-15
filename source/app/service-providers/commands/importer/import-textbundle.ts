@@ -27,7 +27,7 @@ import type { DirDescriptor } from '@dts/common/fsal'
  * @param  {String} target The destination directory
  * @return {void}        This thing only throws up.
  */
-export default async function importTextbundle (bundle: any, target: DirDescriptor): Promise<void> {
+export default async function importTextbundle (bundle: { path: string, knownFormat?: string }, target: DirDescriptor): Promise<void> {
   if (bundle.knownFormat === 'textpack') {
     // We need to unzip it before importing.
     let file = new ZIP(bundle.path)

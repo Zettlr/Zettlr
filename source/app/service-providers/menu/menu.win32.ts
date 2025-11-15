@@ -687,7 +687,7 @@ export default function getMenu (
                 app.relaunch({ args: process.argv.slice(1).concat(['--clear-cache']) })
                 app.quit()
               })
-              .catch(err => logger.error(err.message, err))
+              .catch(err => logger.error(err.message as string, err))
           }
         }
       ]

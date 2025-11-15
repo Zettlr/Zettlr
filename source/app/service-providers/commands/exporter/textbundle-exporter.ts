@@ -50,7 +50,7 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
     )
   } catch (err: any) {
     output.code = 1
-    output.stderr.push(err.message)
+    output.stderr.push(err.message as string)
   }
 
   return output
@@ -98,7 +98,7 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
 
   // Read in the file and replace image paths, if applicable
   let content = await fs.readFile(sourceFile, 'utf8')
-  content = content.replace(imgRE, (match, url) => {
+  content = content.replace(imgRE, (match: string, url: string) => {
     const absPath = path.resolve(dirName, url)
 
     // We only care about images that are currently present on the filesystem.

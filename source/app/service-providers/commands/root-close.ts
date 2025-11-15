@@ -25,7 +25,7 @@ export default class RootClose extends ZettlrCommand {
    * @param {String} evt The event name
    * @param  {Object} arg The hash of a root directory or file.
    */
-  async run (evt: string, arg: any): Promise<boolean> {
+  async run (evt: string, arg: string): Promise<boolean> {
     // We got a root, so now we need to unload it and remove it from config
     this._app.config.removePath(arg)
     return true

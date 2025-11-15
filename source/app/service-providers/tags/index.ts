@@ -90,8 +90,8 @@ export default class TagProvider extends ProviderContract {
       if (command === 'get-all-tags') {
         return await this.getAllTags()
       } else if (command === 'set-colored-tags') {
-        const { payload } = message
-        this.setColoredTags(payload)
+        const tags: ColoredTag[] = message.payload
+        this.setColoredTags(tags)
       } else if (command === 'get-colored-tags') {
         return this._coloredTags
       }

@@ -27,7 +27,7 @@ import type ConfigProvider from '@providers/config'
 export default async function askDirectory (config: ConfigProvider, win: BrowserWindow|null, title: string, buttonLabel?: string, message?: string): Promise<string[]> {
   let startDir = app.getPath('home')
 
-  if (isDir(config.get('dialogPaths.askDirDialog'))) {
+  if (isDir(config.get('dialogPaths.askDirDialog') as string)) {
     startDir = config.get('dialogPaths.askDirDialog')
   }
 

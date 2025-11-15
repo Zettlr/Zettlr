@@ -45,7 +45,7 @@ export default class LinkProvider extends ProviderContract {
 
       if (command === 'get-inbound-links') {
         // Return whatever links to the given file
-        const { filePath } = message.payload
+        const filePath: string = message.payload.filePath
         return {
           inbound: this.retrieveInbound(filePath),
           outbound: await this.retrieveOutbound(filePath)

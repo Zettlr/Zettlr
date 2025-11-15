@@ -52,7 +52,7 @@ export default async function makeImport (
       } catch (err: any) {
         failedFiles.push(file.path)
         if (errorCallback !== null) {
-          errorCallback(file.path, err.message)
+          errorCallback(file.path, err.message as string)
         }
       }
     } else if (hasMarkdownExt(file.path)) {
@@ -66,7 +66,7 @@ export default async function makeImport (
       } catch (err: any) {
         failedFiles.push(file.path)
         if (errorCallback !== null) {
-          errorCallback(file.path, err.message)
+          errorCallback(file.path, err.message as string)
         }
       }
     } else if (file.availableReaders.length > 0) {
@@ -143,7 +143,7 @@ export default async function makeImport (
       } catch (err: any) {
         failedFiles.push(file.path)
         if (errorCallback !== null) {
-          errorCallback(file.path, err.message)
+          errorCallback(file.path, err.message as string)
         }
       }
     } else {

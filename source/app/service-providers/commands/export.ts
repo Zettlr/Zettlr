@@ -147,7 +147,7 @@ export default class Export extends ZettlrCommand {
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if (this._app.config.get().export.autoOpenExportedFiles) {
-          if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {
+          if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer as string)) {
             shell.showItemInFolder(output.targetFile)
           } else {
             const potentialError = await shell.openPath(output.targetFile)
@@ -163,8 +163,9 @@ export default class Export extends ZettlrCommand {
         this._app.windows.showErrorMessage(title, message, contents)
       }
     } catch (err: any) {
-      this._app.windows.showErrorMessage(err.message, err.message)
-      this._app.log.error(err.message, err)
+      const message: string = err.message
+      this._app.windows.showErrorMessage(message, message)
+      this._app.log.error(message, err)
     }
   }
 }

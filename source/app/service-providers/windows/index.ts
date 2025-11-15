@@ -47,7 +47,7 @@ import type { WindowPosition } from './types'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
 import * as bcp47 from 'bcp-47'
-import mapFSError from './map-fs-error'
+import mapFSError, { type NodeError } from './map-fs-error'
 import ProviderContract, { type IPCAPI } from '@providers/provider-contract'
 import type LogProvider from '@providers/log'
 import type DocumentManager from '@providers/documents'
@@ -850,7 +850,7 @@ export default class WindowProvider extends ProviderContract {
    * @param   {string}  title  A title for the error prompt (e.g. Error opening Workspace)
    * @param   {any}     error  The error object that should be reported. Should be thrown by fs
    */
-  reportFSError (title: string, error: any): void {
+  reportFSError (title: string, error: NodeError): void {
     const { what, why } = mapFSError(error)
     this.showErrorMessage(title, `There was an error accessing "${what}"`, why)
   }

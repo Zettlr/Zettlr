@@ -147,7 +147,7 @@ export class DocumentTree {
       throw new Error('Could not instantiate tree: Data missing required property "type"')
     }
 
-    if (![ 'leaf', 'branch' ].includes(data.type)) {
+    if (![ 'leaf', 'branch' ].includes(data.type as string)) {
       throw new Error(`Could not instantiate tree: data.type contained unrecognized value ${data.type as string}`)
     }
 

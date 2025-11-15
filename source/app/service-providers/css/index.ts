@@ -39,7 +39,7 @@ export default class CssProvider extends ProviderContract {
       } else if (command === 'get-custom-css') {
         return await this.get()
       } else if (command === 'set-custom-css') {
-        const { css } = payload
+        const css: string  = payload.css
         return await this.set(css)
       }
     })
