@@ -640,6 +640,7 @@ export default class MarkdownEditor extends EventEmitter {
   replaceSelection (text: string): void {
     const transaction = this._instance.state.replaceSelection(text)
     this._instance.dispatch(transaction)
+    this._instance.focus()
   }
 
   /**
