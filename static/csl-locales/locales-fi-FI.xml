@@ -479,6 +479,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
@@ -491,6 +492,8 @@
       <single>compiler</single>
       <multiple>compilers</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>contributor</single>
       <multiple>contributors</multiple>
@@ -535,6 +538,7 @@
       <single>kuvittaja</single>
       <multiple>kuvittajat</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>narrator</single>
       <multiple>narrators</multiple>
@@ -543,6 +547,7 @@
       <single>järjestäjä</single>
       <multiple>järjestäjät</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>esittäjä</single>
       <multiple>esittäjät</multiple>
@@ -551,6 +556,8 @@
       <single>tuottaja</single>
       <multiple>tuottajat</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>käsikirjoittaja</single>
       <multiple>käsikirjoittajat</multiple>

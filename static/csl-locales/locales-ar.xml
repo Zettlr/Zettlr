@@ -467,6 +467,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
@@ -479,6 +480,8 @@
       <single>compiler</single>
       <multiple>compilers</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>contributor</single>
       <multiple>contributors</multiple>
@@ -505,6 +508,7 @@
       <multiple>hosts</multiple>
     </term>
     <term name="illustrator">رسوم</term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>narrator</single>
       <multiple>narrators</multiple>
@@ -513,6 +517,7 @@
       <single>organizer</single>
       <multiple>organizers</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>performer</single>
       <multiple>performers</multiple>
@@ -521,6 +526,8 @@
       <single>producer</single>
       <multiple>producers</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>writer</single>
       <multiple>writers</multiple>
@@ -580,15 +587,10 @@
     <term name="container-author" form="verb">إنشاء</term>
     <term name="contributor" form="verb">with</term>
     <term name="curator" form="verb">curated by</term>
-    <term name="director" form="verb">directed by</term>
     <term name="director" form="verb">إشراف</term>
-    <term name="editor" form="verb">edited by</term>
     <term name="editor" form="verb">تحقيق</term>
-    <term name="editor-translator" form="verb">edited &amp; translated by</term>
     <term name="editor-translator" form="verb">تحقيق وترجمة</term>
-    <term name="editortranslator" form="verb">edited &amp; translated by</term>
     <term name="editortranslator" form="verb">تحقيق وترجمة</term>
-    <term name="editorial-director" form="verb">edited by</term>
     <term name="editorial-director" form="verb">إعداد</term>
     <term name="executive-producer" form="verb">executive produced by</term>
     <term name="guest" form="verb">with guest</term>

@@ -356,7 +356,6 @@
       <multiple>scs.</multiple>
     </term>
     <term name="section" form="short">m.</term>
-    <term name="section" form="short">sec.</term>
     <term name="sub-verbo" form="short">
       <single>s.v.</single>
       <multiple>s.vv.</multiple>
@@ -476,6 +475,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>chủ tọa</single>
       <multiple>chủ tọa</multiple>
@@ -488,6 +488,8 @@
       <single>người tổng hợp</single>
       <multiple>người tổng hợp</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>cộng tác viên</single>
       <multiple>cộng tác viên</multiple>
@@ -532,6 +534,7 @@
       <single>họa sĩ</single>
       <multiple>họa sĩ</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>tường thuật viên</single>
       <multiple>tường thuật viên</multiple>
@@ -540,6 +543,7 @@
       <single>người tổ chức</single>
       <multiple>người tổ chức</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>nghệ sĩ</single>
       <multiple>nghệ sĩ</multiple>
@@ -548,6 +552,8 @@
       <single>nhà sản xuất</single>
       <multiple>nhà sản xuất</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>người biên soạn</single>
       <multiple>người biên soạn</multiple>

@@ -117,7 +117,6 @@
     <term name="graphic">視覚的</term>
     <term name="hearing">聴覚的</term>
     <term name="interview">面接</term>
-    <term name="interview">面接</term>
     <term name="legal_case">裁判事例</term>
     <term name="legislation">法律</term>
     <term name="manuscript">写本</term>
@@ -483,6 +482,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>議長</single>
       <multiple/>
@@ -495,6 +495,8 @@
       <single>編纂者</single>
       <multiple/>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>協力者</single>
       <multiple>協力者</multiple>
@@ -539,6 +541,7 @@
       <single>図解者</single>
       <multiple>図解者</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>語り手</single>
       <multiple>語り手</multiple>
@@ -547,6 +550,7 @@
       <single>組織者</single>
       <multiple>組織者</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>演者</single>
       <multiple>演者</multiple>
@@ -555,6 +559,8 @@
       <single>指揮者</single>
       <multiple>指揮者</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>執筆者</single>
       <multiple>執筆者</multiple>
@@ -615,7 +621,6 @@
     <term name="translator" form="verb">翻訳者: </term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="collection-editor" form="verb-short">編: </term>
     <term name="compiler" form="verb-short">纂: </term>
     <term name="contributor" form="verb-short">協力: </term>

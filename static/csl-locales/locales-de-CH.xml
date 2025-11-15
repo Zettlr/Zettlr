@@ -476,13 +476,10 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>Vorsitz</single>
       <multiple>Vorsitz</multiple>
-    </term>
-    <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
     </term>
     <term name="collection-editor">
       <single>Reihenherausgeber</single>
@@ -492,6 +489,8 @@
       <single>Bearbeiter</single>
       <multiple>Bearbeiter</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>Beitragende</single>
       <multiple>Beitragende</multiple>
@@ -536,6 +535,7 @@
       <single>Illustrator</single>
       <multiple>Illustratoren</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>Erzähler</single>
       <multiple>Erzähler</multiple>
@@ -544,6 +544,7 @@
       <single>Organisator</single>
       <multiple>Organisatoren</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>Darsteller</single>
       <multiple>Darsteller</multiple>
@@ -552,6 +553,8 @@
       <single>Produzent</single>
       <multiple>Produzenten</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>Drehbuchautor</single>
       <multiple>Drehbuchautoren</multiple>
@@ -641,7 +644,6 @@
 
     <!-- VERB ROLE FORMS -->
     <term name="chair" form="verb">Vorsitz durch</term>
-    <term name="collection-editor" form="verb">edited by</term>
     <term name="collection-editor" form="verb">herausgegeben von</term>
     <term name="compiler" form="verb">kompiliert von</term>
     <term name="container-author" form="verb">von</term>
@@ -668,7 +670,6 @@
     <term name="translator" form="verb">übersetzt von</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">ed. by</term>
     <term name="collection-editor" form="verb-short">hrsg. von</term>
     <term name="compiler" form="verb-short">komp. von</term>
     <term name="contributor" form="verb-short">m.</term>

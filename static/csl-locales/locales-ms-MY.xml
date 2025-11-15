@@ -228,6 +228,9 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="director">
       <single>pengarah</single>
       <multiple>pengarah</multiple>
@@ -252,6 +255,10 @@
       <single>ilustrator</single>
       <multiple>ilustrator</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
+    <term name="original-author"/> <!-- generally blank -->
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="translator">
       <single>penterjemah</single>
       <multiple>penterjemah</multiple>

@@ -488,6 +488,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>voorsitter</single>
       <multiple>voorsitters</multiple>
@@ -500,6 +501,8 @@
       <single>samesteller</single>
       <multiple>samestellers</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>bydraer</single>
       <multiple>bydraers</multiple>
@@ -544,6 +547,7 @@
       <single>illustreerder</single>
       <multiple>illustreerders</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>verteller</single>
       <multiple>vertellers</multiple>
@@ -552,6 +556,7 @@
       <single>organiseerder</single>
       <multiple>organiseerders</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>kunstenaar</single>
       <multiple>kunstenaars</multiple>
@@ -560,6 +565,8 @@
       <single>vervaardiger</single>
       <multiple>vervaardigers</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>draaiboekskrywer</single>
       <multiple>draaiboekskrywers</multiple>

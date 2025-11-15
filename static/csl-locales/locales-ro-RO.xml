@@ -469,6 +469,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>președinte</single>
       <multiple>președinți</multiple>
@@ -481,6 +482,8 @@
       <single>compilator</single>
       <multiple>compilatori</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>contributor</single>
       <multiple>contributori</multiple>
@@ -525,6 +528,7 @@
       <single>ilustrator</single>
       <multiple>ilustratori</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>narator</single>
       <multiple>naratori</multiple>
@@ -533,6 +537,7 @@
       <single>organizator</single>
       <multiple>organizatori</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>interpret</single>
       <multiple>interpreți</multiple>
@@ -541,6 +546,8 @@
       <single>producător</single>
       <multiple>producători</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>scriitor</single>
       <multiple>scriitori</multiple>

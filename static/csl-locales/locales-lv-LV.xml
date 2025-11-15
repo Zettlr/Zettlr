@@ -480,6 +480,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>priekšsēdētājs</single>
       <multiple>priekšsēdētāji</multiple>
@@ -491,6 +492,16 @@
     <term name="compiler">
       <single>sastādītājs</single>
       <multiple>sastādītāji</multiple>
+    </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="composer">
+      <single>sastādītājs</single>
+      <multiple>sastādītāji</multiple>
+    </term>
+    <term name="container-author"/> <!-- generally blank -->
+    <term name="container-author">
+      <single>pamatmateriāla autors</single>
+      <multiple>pamatmateriāla autori</multiple>
     </term>
     <term name="contributor">
       <single>līdzautors</single>
@@ -536,6 +547,11 @@
       <single>ilustrators</single>
       <multiple>ilustratori</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
+    <term name="interviewer">
+      <single>intervētājs</single>
+      <multiple>intervētāji</multiple>
+    </term>
     <term name="narrator">
       <single>stāstītājs</single>
       <multiple>stāstītāji</multiple>
@@ -544,6 +560,7 @@
       <single>organizators</single>
       <multiple>organizatori</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>izpildītājs</single>
       <multiple>izpildītāji</multiple>
@@ -552,6 +569,12 @@
       <single>producents</single>
       <multiple>producenti</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="recipient">
+      <single>saņēmējs</single>
+      <multiple>saņēmēji</multiple>
+    </term>
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>scenārists</single>
       <multiple>scenāristi</multiple>
@@ -573,6 +596,14 @@
     <term name="compiler" form="short">
       <single>sast.</single>
       <multiple>sast.</multiple>
+    </term>
+    <term name="composer" form="short">
+      <single>sast.</single>
+      <multiple>sast.</multiple>
+    </term>
+    <term name="container-author" form="short">
+      <single>pamatmat. aut.</single>
+      <multiple>pamatmat. aut.</multiple>
     </term>
     <term name="contributor" form="short">
       <single>līdzaut.</single>
@@ -610,6 +641,10 @@
       <single>ilustr.</single>
       <multiple>ilustr.</multiple>
     </term>
+    <term name="interviewer" form="short">
+      <single>interv.</single>
+      <multiple>interv.</multiple>
+    </term>
     <term name="narrator" form="short">
       <single>stāst.</single>
       <multiple>stāst.</multiple>
@@ -625,6 +660,10 @@
     <term name="producer" form="short">
       <single>prod.</single>
       <multiple>prod.</multiple>
+    </term>
+    <term name="recipient" form="short">
+      <single>saņ.</single>
+      <multiple>saņ.</multiple>
     </term>
     <term name="script-writer" form="short">
       <single>scen.</single>
@@ -687,18 +726,6 @@
     <term name="translator" form="verb-short">tulk.</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="composer">
-      <single>sastādītājs</single>
-      <multiple>sastādītāji</multiple>
-    </term>
-    <term name="container-author">
-      <single>pamatmateriāla autors</single>
-      <multiple>pamatmateriāla autori</multiple>
-    </term>
-    <term name="interviewer">
-      <single>intervētājs</single>
-      <multiple>intervētāji</multiple>
-    </term>
     <term name="month-01">janvārī</term>
     <term name="month-02">februārī</term>
     <term name="month-03">martā</term>
@@ -711,24 +738,8 @@
     <term name="month-10">oktobrī</term>
     <term name="month-11">novembrī</term>
     <term name="month-12">decembrī</term>
-    <term name="recipient">
-      <single>saņēmējs</single>
-      <multiple>saņēmēji</multiple>
-    </term>
 
     <!-- SHORT MONTH FORMS -->
-    <term name="composer" form="short">
-      <single>sast.</single>
-      <multiple>sast.</multiple>
-    </term>
-    <term name="container-author" form="short">
-      <single>pamatmat. aut.</single>
-      <multiple>pamatmat. aut.</multiple>
-    </term>
-    <term name="interviewer" form="short">
-      <single>interv.</single>
-      <multiple>interv.</multiple>
-    </term>
     <term name="month-01" form="short">janv.</term>
     <term name="month-02" form="short">febr.</term>
     <term name="month-03" form="short">mar.</term>
@@ -741,10 +752,6 @@
     <term name="month-10" form="short">okt.</term>
     <term name="month-11" form="short">nov.</term>
     <term name="month-12" form="short">dec.</term>
-    <term name="recipient" form="short">
-      <single>saņ.</single>
-      <multiple>saņ.</multiple>
-    </term>
 
     <!-- SEASONS -->
     <term name="season-01">pavasaris</term>

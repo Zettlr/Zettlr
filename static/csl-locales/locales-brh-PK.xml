@@ -342,9 +342,7 @@
     <!-- SHORT NUMBER VARIABLE FORMS -->
 
     <!-- LONG ROLE FORMS -->
-    <!-- Omitted roles:
-         author, composer, container-author, interviewer, original-author, recipient, reviewed-author
-    -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>چیر</single>
       <multiple>چیک</multiple>
@@ -357,6 +355,8 @@
       <single>سرجم کروک</single>
       <multiple>سرجم کروکاک</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>حصہ دار</single>
       <multiple>حصہ داک</multiple>
@@ -401,6 +401,7 @@
       <single>مصور</single>
       <multiple>مصوک</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>راوی</single>
       <multiple>راویک</multiple>
@@ -409,6 +410,7 @@
       <single>تنظیم کروک</single>
       <multiple>نظیم کروکاک</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>فنکار</single>
       <multiple>فنکاک</multiple>
@@ -417,6 +419,8 @@
       <single>پیدا کروک</single>
       <multiple>پیدا کروکاک</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>لکھوک</single>
       <multiple>لکھوکاک</multiple>

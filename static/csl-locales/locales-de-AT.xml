@@ -484,6 +484,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>Vorsitz</single>
       <multiple>Vorsitz</multiple>
@@ -496,6 +497,8 @@
       <single>Bearbeiter</single>
       <multiple>Bearbeiter</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>Beitragende</single>
       <multiple>Beitragende</multiple>
@@ -540,6 +543,7 @@
       <single>Illustrator</single>
       <multiple>Illustratoren</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>Erzähler</single>
       <multiple>Erzähler</multiple>
@@ -548,6 +552,7 @@
       <single>Organisator</single>
       <multiple>Organisatoren</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>Künstler</single>
       <multiple>Künstler</multiple>
@@ -556,6 +561,8 @@
       <single>Produzent</single>
       <multiple>Produzenten</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>Drehbuchautor</single>
       <multiple>Drehbuchautoren</multiple>

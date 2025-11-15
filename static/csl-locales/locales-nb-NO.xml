@@ -427,6 +427,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>leder</single>
       <multiple>ledere</multiple>
@@ -439,6 +440,8 @@
       <single>kompilator</single>
       <multiple>kompilatorer</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>bidragsyter</single>
       <multiple>bidragsytere</multiple>
@@ -483,6 +486,7 @@
       <single>illustratør</single>
       <multiple>illustratører</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>forteller</single>
       <multiple>fortellere</multiple>
@@ -491,6 +495,7 @@
       <single>organisator</single>
       <multiple>organisatorer</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>utøver</single>
       <multiple>utøvere</multiple>
@@ -499,6 +504,8 @@
       <single>produsent</single>
       <multiple>produsenter</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>manusforfatter</single>
       <multiple>manusforfattere</multiple>

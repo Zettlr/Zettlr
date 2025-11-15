@@ -367,9 +367,7 @@
     <!-- SHORT NUMBER VARIABLE FORMS -->
 
     <!-- LONG ROLE FORMS -->
-    <!-- Omitted roles:
-         author, composer, container-author, interviewer, original-author, recipient, reviewed-author
-    -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>چیر</single>
       <multiple>چیر</multiple>
@@ -382,6 +380,8 @@
       <single>مرتب</single>
       <multiple>مرتب</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>حصہ لاوݨ والا</single>
       <multiple>حصہ لاوݨ والے</multiple>
@@ -426,6 +426,7 @@
       <single>مصور</single>
       <multiple>مصور</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>راوی</single>
       <multiple>راوی</multiple>
@@ -434,6 +435,7 @@
       <single>تنظیم کرن والا</single>
       <multiple>تنظیم کرن والے</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>کلاکار</single>
       <multiple>کلاکار</multiple>
@@ -442,6 +444,8 @@
       <single>پروڈیوسر</single>
       <multiple>پروڈیوسر</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>لکھاری</single>
       <multiple>لکھاری</multiple>
