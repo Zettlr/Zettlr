@@ -291,8 +291,8 @@ const readabilityModePlugin = ViewPlugin.fromClass(class {
 export const readabilityMode = [
   readabilityModePlugin,
   EditorView.baseTheme({
-    // Define the readability classes based on a traffic light system. 
-    // Red indicates bad readability scores, yellow indicates average scores, 
+    // Define the readability classes based on a traffic light system.
+    // Red indicates bad readability scores, yellow indicates average scores,
     // and green indicates good readability scores.
     '&light .cm-readability-0': { backgroundColor: '#298f2baa', color: '#444' },
     '&light .cm-readability-1': { backgroundColor: '#51c744aa', color: '#444' },

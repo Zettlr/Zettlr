@@ -27,26 +27,28 @@ import { genericTextNode } from './generic-text-node'
  *
  * @var {string[]}
  */
-const EMPTY_NODES = [
-  'HeaderMark',
+const EMPTY_NODES = new Set([
+  // Top Node
+  'Document',
+  // Container nodes
+  'Blockquote',
+  'List',
+  'ListItem',
+  'PandocAttribute',
+  // Formatting marks
   'CodeMark',
   'EmphasisMark',
-  'SuperscriptMark',
-  'SubscriptMark',
-  'HighlightMark',
   'HeaderMark',
-  'Blockquote',
-  'QuoteMark',
+  'HighlightMark',
   'ListMark',
+  'PandocAttributeMark',
+  'QuoteMark',
+  'SubscriptMark',
+  'SuperscriptMark',
   'TaskMarker',
   'YAMLFrontmatterStart',
   'YAMLFrontmatterEnd',
-  'Document',
-  'List',
-  'ListItem',
-  'TaskMarker',
-  'PandocAttribute'
-]
+])
 
 /**
  * Parses an attribute node (PandocAttribute), according to the Pandoc rules
@@ -98,7 +100,7 @@ function parseAttributeNode (oldAttributes: Record<string, string|string[]> = {}
  */
 export function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNode: T, node: SyntaxNode, markdown: string): T {
   if (node.firstChild === null) {
-    if (!EMPTY_NODES.includes(node.name)) {
+    if (!EMPTY_NODES.has(node.name)) {
       const textNode = genericTextNode(node.from, node.to, markdown.substring(node.from, node.to), getWhitespaceBeforeNode(node, markdown))
       astNode.children = [textNode]
     }
@@ -113,7 +115,7 @@ export function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNo
     // NOTE: We have to account for "gaps" where a node has children that do not
     // completely cover the node's contents. In that case, we have to add text
     // nodes that just contain those strings.
-    if (currentChild.from > currentIndex && !EMPTY_NODES.includes(node.name)) {
+    if (currentChild.from > currentIndex && !EMPTY_NODES.has(node.name)) {
       const gap = markdown.substring(currentIndex, currentChild.from)
       const onlyWhitespace = /^(\s*)/m.exec(gap)
       const whitespaceBefore = onlyWhitespace !== null ? onlyWhitespace[1] : ''
@@ -141,7 +143,7 @@ export function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNo
     currentChild = currentChild.nextSibling
   }
 
-  if (currentIndex < node.to && !EMPTY_NODES.includes(node.name)) {
+  if (currentIndex < node.to && !EMPTY_NODES.has(node.name)) {
     // One final text node
     const gap = markdown.substring(currentIndex, node.to)
     const onlyWhitespace = /^(\s*)/m.exec(gap)
