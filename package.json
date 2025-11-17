@@ -60,7 +60,7 @@
     "@codemirror/lint": "^6.9.2",
     "@codemirror/search": "^6.5.11",
     "@codemirror/state": "^6.5.2",
-    "@codemirror/view": "^6.38.7",
+    "@codemirror/view": "^6.38.8",
     "@lezer/common": "^1.2.3",
     "@lezer/highlight": "^1.2.1",
     "@lezer/markdown": "^1.6.0",
