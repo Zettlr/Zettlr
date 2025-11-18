@@ -131,6 +131,7 @@
     border-radius: 3px;
     padding: 0 4px;
 
+
     span {
       font-size: 20px;
       font-weight: normal;
@@ -168,6 +169,26 @@
     margin: 0 auto; /* (Re-)center */
   }
 
+  /* Style the statusbar and formatting-bar so they adopt
+  the main ui theme, not the editor theme */
+  .cm-statusbar.cm-panel, .cm-tooltip {
+    color: #ddd;
+    background-color: #333333;
+  }
+
+  .cm-formatting-bar {
+    background-color: #333333;
+
+    button.formatting-toolbar-button {
+      color: #c8c8c8;
+    }
+
+    .cm-tooltip-arrow::after {
+      border-top-color: #333333;
+      border-bottom-color: #333333;
+    }
+  }
+
   /* The underlying gfm mode is funny. For top level task items, it applies the
   class cm-variable-2 for the full text. For second-level task items, it
   applies cm-variable-3, and for the third level it applies cm-keyword. And
@@ -203,7 +224,28 @@
   }
 }
 
-body.dark .tippy-content .editor-fn-textarea {
-  background-color: transparent;
-  border: none;
+body.dark {
+  /* Style the statusbar and formatting-bar
+  so they adopt the main ui theme, not the editor theme */
+  .cm-statusbar.cm-panel, .cm-tooltip {
+    color: #ddd;
+    background-color: #333333;
+  }
+
+  .cm-formatting-bar {
+    background-color: #333333;
+    button.formatting-toolbar-button {
+      color: #c8c8c8;
+    }
+
+    .cm-tooltip-arrow::after {
+      border-top-color: #333333;
+      border-bottom-color: #333333;
+    }
+  }
+
+  .tippy-content .editor-fn-textarea {
+    background-color: transparent;
+    border: none;
+  }
 }
