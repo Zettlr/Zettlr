@@ -24,7 +24,7 @@ import { renderMermaid } from './render-mermaid'
 import { renderTables } from '../table-editor'
 import { renderIframes } from './render-iframes'
 import { renderEmphasis } from './render-emphasis'
-import { configField, configUpdateEffect, type EditorConfiguration } from '../util/configuration'
+import { configField, type EditorConfiguration } from '../util/configuration'
 import type { EditorView } from '@codemirror/view'
 import { hasMarkdownExt } from 'source/common/util/file-extention-checks'
 import { trans } from 'source/common/i18n-renderer'
@@ -90,7 +90,7 @@ export function renderers (config: EditorConfiguration): Extension {
  *
  * @return  {StatusbarItem}         Returns the element
  */
-export function renderingModeToggle (state: EditorState, view: EditorView): StatusbarItem|null {
+export function renderingModeToggle (state: EditorState, _view: EditorView): StatusbarItem|null {
   const config = state.field(configField, false)
   if (config === undefined || !hasMarkdownExt(config.metadata.path)) {
     return null
