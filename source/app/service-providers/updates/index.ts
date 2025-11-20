@@ -23,6 +23,7 @@ import path from 'path'
 import crypto from 'crypto'
 import got, { type Response } from 'got'
 import semver from 'semver'
+import { net } from 'electron'
 
 import { ipcMain, app, shell, dialog } from 'electron'
 import { trans } from '@common/i18n-main'
@@ -293,6 +294,12 @@ export default class UpdateProvider extends ProviderContract {
    * @return {Promise} Resolves only when there is an update available.
    */
   async check (): Promise<void> {
+    if (!net.online) {
+      // Don't check if we don't have an internet connection; preserve the last
+      // state so that the user sees what the most recent result was.
+      return
+    }
+
     // First, reset the update state
     this._resetState()
 
