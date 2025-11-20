@@ -14,31 +14,73 @@
  * END HEADER
  */
 
-import { syntaxTree } from '@codemirror/language'
-import { StateField, type EditorState } from '@codemirror/state'
+import { ensureSyntaxTree } from '@codemirror/language'
+import { StateEffect, StateField, type EditorState } from '@codemirror/state'
+import { ViewPlugin, type EditorView, type ViewUpdate } from '@codemirror/view'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import { countAll } from '@common/util/counter'
 
+// The amount of time in milliseconds to wait before triggering word counting
+const WORD_COUNT_DELAY = 750
+
+function count (state: EditorState): { chars: number, words: number } {
+  const tree = ensureSyntaxTree(state, state.doc.length) ?? undefined
+
+  const ast = markdownToAST(state.sliceDoc(), tree)
+  const locale: string = window.config.get('appLang')
+  return countAll(ast, locale)
+}
+
+export const updateWordCountEffect = StateEffect.define<{ chars: number, words: number }>()
+
 export const countField = StateField.define<{ chars: number, words: number }>({
   create (state: EditorState) {
-    const ast = markdownToAST(state.doc.toString())
-    const locale: string = window.config.get('appLang')
-    return countAll(ast, locale)
+    return count(state)
   },
 
   update (value, transaction) {
-    // If someone provided the markClean effect, we'll exchange the saved doc
-    // so that, when comparing documents with cleanDoc.eq(state.doc), it will
-    // return true.
-    if (!transaction.docChanged) {
-      return value
+    for (const e of transaction.effects) {
+      if (e.is(updateWordCountEffect)) {
+        return e.value
+      }
     }
-    const ast = markdownToAST(transaction.state.doc.toString(), syntaxTree(transaction.state))
-    const locale: string = window.config.get('appLang')
-    return countAll(ast, locale)
+
+    return value
   },
 
   compare (a, b): boolean {
     return a.chars === b.chars && a.words === b.words
+  }
+})
+
+export const countPlugin = ViewPlugin.fromClass(class {
+  private timeout: number | null = null
+  private delay = WORD_COUNT_DELAY
+
+  update (update: ViewUpdate) {
+    if (!update.docChanged) { return }
+
+    this.updateCounts(update.view)
+  }
+
+  updateCounts (view: EditorView) {
+    if (this.timeout != null) {
+      window.clearTimeout(this.timeout)
+    }
+
+    this.timeout = window.setTimeout(() => {
+      this.timeout = null
+
+      const counts = count(view.state)
+
+      view.dispatch({ effects: updateWordCountEffect.of(counts) })
+    }, this.delay)
+  }
+
+  destroy () {
+    if (this.timeout != null) {
+      window.clearTimeout(this.timeout)
+      this.timeout = null
+    }
   }
 })

@@ -42,7 +42,7 @@ import { hookDocumentAuthority } from './plugins/remote-doc'
 import { lintGutter, linter } from '@codemirror/lint'
 import { spellcheck } from './linters/spellcheck'
 import { mdLint } from './linters/md-lint'
-import { countField } from './plugins/statistics-fields'
+import { countField, countPlugin } from './plugins/statistics-fields'
 import { tocField } from './plugins/toc-field'
 import { typewriter } from './plugins/typewriter'
 import { formattingToolbar, footnoteHover, filePreview, urlHover } from './tooltips'
@@ -320,6 +320,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     headingGutter,
     languageTool,
     // Some statistics we need for Markdown documents
+    countPlugin,
     countField,
     typewriter,
     distractionFree,

@@ -441,13 +441,20 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
   const editor = new MarkdownEditor(props.leafId, props.windowId, doc, documentAuthorityIPCAPI, undefined, persistentState)
 
   // Update the document info on corresponding events
+  editor.on('loaded', () => {
+    if (currentEditor === editor) {
+      windowStateStore.activeDocumentInfo = currentEditor.documentInfo
+      windowStateStore.tableOfContents = currentEditor.tableOfContents
+    }
+  })
+
   editor.on('change', () => {
     if (currentEditor === editor) {
       windowStateStore.tableOfContents = currentEditor.tableOfContents
     }
   })
 
-  editor.on('cursorActivity', () => {
+  editor.on('docUpdate', () => {
     if (currentEditor === editor) {
       windowStateStore.activeDocumentInfo = currentEditor.documentInfo
     }
@@ -504,9 +511,6 @@ async function loadDocument (): Promise<void> {
 
   mainEditorWrapper.value?.appendChild(newEditor.dom)
   currentEditor = newEditor
-
-  windowStateStore.tableOfContents = currentEditor.tableOfContents
-  windowStateStore.activeDocumentInfo = currentEditor.documentInfo
 
   currentEditor.setCompletionDatabase('tags', tags.value)
   currentEditor.setCompletionDatabase('snippets', snippets.value)
