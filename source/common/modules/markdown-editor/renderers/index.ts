@@ -24,7 +24,7 @@ import { renderMermaid } from './render-mermaid'
 import { renderTables } from '../table-editor'
 import { renderIframes } from './render-iframes'
 import { renderEmphasis } from './render-emphasis'
-import { configField, type EditorConfiguration } from '../util/configuration'
+import { configField, configUpdateEffect, type EditorConfiguration } from '../util/configuration'
 import type { EditorView } from '@codemirror/view'
 import { hasMarkdownExt } from 'source/common/util/file-extention-checks'
 import { trans } from 'source/common/i18n-renderer'
@@ -32,36 +32,70 @@ import type { StatusbarItem } from '../statusbar'
 
 const renderCompartment = new Compartment()
 
-function configureRenderers (config: EditorConfiguration) {
-  const ext: Extension[] = [renderMermaid]
+/* Adds or removes an extension from a list of extensions based on the value of enabled */
+function updateExtension (renderer: Extension, enabled: boolean|undefined, ext: Extension[]) {
+  const idx = ext.indexOf(renderer)
+
+  // Renderer is enabled and not in the list
+  if (enabled === true && idx === -1) { ext.push(renderer) }
+  // Renderer is disabled and in the list
+  if (enabled === false && idx > -1) { ext.splice(idx, 1) }
+
+  return ext
+}
+
+/* Configures the enabled renderer extensions, optionally updating an existing set of extensions */
+function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extension[]) {
+  if (ext === undefined) {
+    ext = []
+  }
+
+  if (!ext.includes(renderMermaid)) {
+    ext.push(renderMermaid)
+  }
+
+  if (config.renderingMode === 'raw') {
+    ext = [renderMermaid]
+  }
 
   if (config.renderingMode === 'preview') {
-    if (config.renderImages) { ext.push(renderImages) }
-    if (config.renderLinks) { ext.push(renderLinks) }
-    if (config.renderMath) { ext.push(renderMath) }
-    if (config.renderTasks) { ext.push(renderTasks) }
-    if (config.renderHeadings) { ext.push(renderHeadings) }
-    if (config.renderCitations) { ext.push(renderCitations) }
-    if (config.renderTables) { ext.push(renderTables) }
-    if (config.renderIframes) { ext.push(renderIframes) }
-    if (config.renderEmphasis) { ext.push(renderEmphasis) }
+    updateExtension(renderImages, config.renderImages, ext)
+    updateExtension(renderLinks, config.renderLinks, ext)
+    updateExtension(renderMath, config.renderMath, ext)
+    updateExtension(renderTasks, config.renderTasks, ext)
+    updateExtension(renderHeadings, config.renderHeadings, ext)
+    updateExtension(renderCitations, config.renderCitations, ext)
+    updateExtension(renderTables, config.renderTables, ext)
+    updateExtension(renderIframes, config.renderIframes, ext)
+    updateExtension(renderEmphasis, config.renderEmphasis, ext)
   }
 
   return ext
 }
 
-const transactionExtender = EditorState.transactionExtender.from(configField, config => transaction => {
-  const ext: Extension[] = configureRenderers(config)
-  const currentState = renderCompartment.get(transaction.state) as Extension[]|undefined
+/**
+ * A TransactionExtender that reconfigures the renderer extension compartment in response
+ * to a configUpdateEffect
+ */
+const modeSwitcher = EditorState.transactionExtender.from(configField, config => transaction => {
+  for (const effect of transaction.effects) {
+    if (effect.is(configUpdateEffect)) {
+      const overrides = {
+        renderingMode: effect.value.renderingMode ?? config.renderingMode,
+        renderImages: effect.value.renderImages ?? config.renderImages,
+        renderLinks: effect.value.renderLinks ?? config.renderLinks,
+        renderMath: effect.value.renderMath ?? config.renderMath,
+        renderTasks: effect.value.renderTasks ?? config.renderTasks,
+        renderHeadings: effect.value.renderHeadings ?? config.renderHeadings,
+        renderCitations: effect.value.renderCitations ?? config.renderCitations,
+        renderTables: effect.value.renderTables ?? config.renderTables,
+        renderIframes: effect.value.renderIframes ?? config.renderIframes,
+        renderEmphasis: effect.value.renderEmphasis ?? config.renderEmphasis,
+      }
 
-  if (currentState === undefined) {
-    return { effects: renderCompartment.reconfigure(ext) }
-  }
+      const ext = renderCompartment.get(transaction.state) as Extension[]|undefined
+      return { effects: renderCompartment.reconfigure(configureRenderers(overrides, ext)) }
 
-  // Compare the two states. Reconfigure if they differ
-  for (const extension of ext.concat(currentState)) {
-    if (currentState.includes(extension) !== ext.includes(extension)) {
-      return { effects: renderCompartment.reconfigure(ext) }
     }
   }
 
@@ -76,9 +110,7 @@ const transactionExtender = EditorState.transactionExtender.from(configField, co
  * @return  {Extension}                             The extension set
  */
 export function renderers (config: EditorConfiguration): Extension {
-  const ext: Extension[] = configureRenderers(config)
-
-  return [ transactionExtender, renderCompartment.of(ext) ]
+  return [ modeSwitcher, renderCompartment.of(configureRenderers(config)) ]
 }
 
 /**
