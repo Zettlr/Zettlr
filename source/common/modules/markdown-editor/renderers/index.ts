@@ -103,13 +103,7 @@ export function renderingModeToggle (state: EditorState, view: EditorView): Stat
     ),
     title: trans('Enable or disable the preview mode for Markdown files by clicking'),
     onClick () {
-      const mode = config.renderingMode === 'preview' ? 'raw' : 'preview'
-      view.dispatch({ effects: configUpdateEffect.of({ renderingMode: mode }) })
-      // We dispatch an empty transaction here so that the renderer
-      // update takes effect immediately when clicking. Otherwise, it would
-      // take an additional transaction, i.e. user interaction,
-      // for the renderer changes to take effect.
-      view.dispatch({})
+      window.config.set('display.renderingMode', config.renderingMode === 'preview' ? 'raw' : 'preview')
     }
   }
 }
