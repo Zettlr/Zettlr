@@ -372,6 +372,7 @@ quick succession; something that has not worked perfectly in the past.
 - Fixed the smooth cursor animation, which stopped working in Zettlr 3.0 due to
   the switch from CodeMirror 5 to CodeMirror 6.
 - Zettlr won't attempt to check for updates anymore if the device is offline.
+- Improve performance by debouncing word counts (#5952).
 
 ## Under the Hood
 
