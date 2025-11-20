@@ -562,7 +562,6 @@ export default class MarkdownEditor extends EventEmitter {
     this.config = safeAssign(newOptions, this.config)
 
     this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
-    this._instance.dispatch({})
   }
 
   /**
