@@ -18,8 +18,6 @@ import { Decoration, EditorView, ViewPlugin, type DecorationSet, type ViewUpdate
 import { parseLinkAttributes } from 'source/common/pandoc-util/parse-link-attributes'
 import { rangeInSelection } from '../util/range-in-selection'
 
-const revertDeco = Decoration.mark({ class: 'cm-remove-style' })
-
 function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
   const ranges: Range<Decoration>[] = []
 
@@ -62,9 +60,6 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
 
             // Something went wrong
             if (marks.length !== 2) { return }
-
-            ranges.push(revertDeco.range(marks[0].from, view.state.doc.lineAt(marks[0].from).to))
-            ranges.push(revertDeco.range(marks[1].from, view.state.doc.lineAt(marks[1].from).to))
 
             from = view.state.doc.line(view.state.doc.lineAt(node.from).number).to
             to = view.state.doc.line(view.state.doc.lineAt(node.to).number).from
@@ -114,9 +109,6 @@ const pandocDivSpanPlugin = ViewPlugin.fromClass(class {
 export const renderPandoc = [
   pandocDivSpanPlugin,
   EditorView.baseTheme({
-    '.cm-remove-style': {
-      all: 'initial',
-    },
     '.mark': {
       backgroundColor: '#ffff0080',
     },
