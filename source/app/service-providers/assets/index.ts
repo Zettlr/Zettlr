@@ -232,6 +232,10 @@ export default class AssetsProvider extends ProviderContract {
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
    */
   async setDefaultsFile (filename: string, newDefaults: string, verbatim: boolean = false): Promise<boolean> {
+    if (!/\.ya?ml$/i.test(filename)) {
+      filename += filename.endsWith('.') ? 'yaml' : '.yaml'
+    }
+
     const absPath = path.join(this._defaultsPath, filename)
 
     try {
@@ -254,6 +258,10 @@ export default class AssetsProvider extends ProviderContract {
    * @return  {Promise<boolean>}           True upon success
    */
   async renameDefaultsFile (oldName: string, newName: string): Promise<boolean> {
+    if (!/\.ya?ml$/i.test(newName)) {
+      newName += newName.endsWith('.') ? 'yaml' : '.yaml'
+    }
+
     const oldPath = path.join(this._defaultsPath, oldName)
     const newPath = path.join(this._defaultsPath, newName)
 
@@ -372,7 +380,11 @@ export default class AssetsProvider extends ProviderContract {
    * @return  {Promise<string>}        The file contents
    */
   async getSnippet (name: string): Promise<string> {
-    const filePath = path.join(this._snippetsPath, name + '.tpl.md')
+    if (!name.toLowerCase().endsWith('.tpl.md')) {
+      name += '.tpl.md'
+    }
+
+    const filePath = path.join(this._snippetsPath, name)
     return await fs.readFile(filePath, { encoding: 'utf-8' })
   }
 
@@ -387,7 +399,10 @@ export default class AssetsProvider extends ProviderContract {
    */
   async setSnippet (name: string, content: string): Promise<boolean> {
     try {
-      const filePath = path.join(this._snippetsPath, name + '.tpl.md')
+      if (!name.toLowerCase().endsWith('.tpl.md')) {
+        name += '.tpl.md'
+      }
+      const filePath = path.join(this._snippetsPath, name)
       await fs.writeFile(filePath, content)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
@@ -406,7 +421,10 @@ export default class AssetsProvider extends ProviderContract {
    */
   async removeSnippet (name: string): Promise<boolean> {
     try {
-      const filePath = path.join(this._snippetsPath, name + '.tpl.md')
+      if (!name.toLowerCase().endsWith('.tpl.md')) {
+        name += '.tpl.md'
+      }
+      const filePath = path.join(this._snippetsPath, name)
       await fs.unlink(filePath)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
@@ -426,8 +444,16 @@ export default class AssetsProvider extends ProviderContract {
    */
   async renameSnippet (name: string, newName: string): Promise<boolean> {
     try {
-      const oldPath = path.join(this._snippetsPath, name + '.tpl.md')
-      const newPath = path.join(this._snippetsPath, newName + '.tpl.md')
+      if (!name.endsWith('.tpl.md')) {
+        name += '.tpl.md'
+      }
+
+      if (!newName.endsWith('.tpl.md')) {
+        newName += '.tpl.md'
+      }
+
+      const oldPath = path.join(this._snippetsPath, name)
+      const newPath = path.join(this._snippetsPath, newName)
       await fs.rename(oldPath, newPath)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true

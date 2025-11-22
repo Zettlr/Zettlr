@@ -469,6 +469,8 @@ quick succession; something that has not worked perfectly in the past.
 - The window manager now emits fullscreen state change events to the main
   windows. This allows Custom CSS and other parts of the state to subscribe to
   whether the `body` has the `fullscreen` class and perform changes.
+- The Assets Provider now ensures that defaults and snippets always have the
+  correct filename extension as required.
 
 # 3.6.0
 
