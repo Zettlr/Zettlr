@@ -373,6 +373,8 @@ quick succession; something that has not worked perfectly in the past.
   the switch from CodeMirror 5 to CodeMirror 6.
 - Zettlr won't attempt to check for updates anymore if the device is offline.
 - Improve performance by debouncing word counts (#5952).
+- Empty selectable lists now show a message visually indicating that the list is
+  empty.
 
 ## Under the Hood
 

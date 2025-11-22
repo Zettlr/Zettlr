@@ -6,6 +6,9 @@
     }"
   >
     <div class="selectable-list-container">
+      <div v-if="items.length === 0" class="no-items-label">
+        {{ noItemsLabel }}
+      </div>
       <div
         v-for="item, idx in items" v-bind:key="idx"
         v-bind:class="{
@@ -63,6 +66,7 @@
  */
 
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
+import { trans } from 'source/common/i18n-renderer'
 import { computed } from 'vue'
 
 export interface SelectableListItem {
@@ -76,6 +80,7 @@ export interface SelectableListItem {
 
 const props = defineProps<{
   items: Array<string|SelectableListItem>
+  noItemsLabel?: string
   selectedItem?: number
   editable?: boolean
 }>()
@@ -85,6 +90,8 @@ const emit = defineEmits<{
   (e: 'add'): void
   (e: 'remove', value: number): void
 }>()
+
+const noItemsLabel = computed(() => props.noItemsLabel ?? trans('No items'))
 
 // If there is at least one icon, we need the icon column for the entire list
 const needsIconColumn = computed<boolean>(() => {
@@ -132,6 +139,7 @@ function handleContextMenu (event: MouseEvent, idx: number): void {
 <style lang="less">
 body .selectable-list-wrapper {
   --selectable-list-border-color: rgb(230, 230, 230);
+  --muted-color: gray;
   height: 100%;
   min-height: 0;
   padding: 10px 10px 0px 10px;
@@ -162,6 +170,16 @@ body .selectable-list-wrapper {
     flex: 1;
     min-height: 50px;
     overflow: auto;
+
+    div.no-items-label {
+      height: 100%;
+      font-size: 200%;
+      padding: 5px;
+      display: grid;
+      align-items: center;
+      text-align: center;
+      color: var(--muted-color);
+    }
 
     div.item {
       background-color: white;
@@ -217,7 +235,7 @@ body .selectable-list-wrapper {
       .info-string {
         grid-area: info;
         font-size: 10px;
-        color: gray;
+        color: var(--muted-color);
 
         &.error { color: rgb(200, 80, 100); }
       }
