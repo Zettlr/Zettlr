@@ -375,6 +375,7 @@ quick succession; something that has not worked perfectly in the past.
 - Improve performance by debouncing word counts (#5952).
 - Empty selectable lists now show a message visually indicating that the list is
   empty.
+- The snippets view now indicates better if there is no selected snippet.
 
 ## Under the Hood
 

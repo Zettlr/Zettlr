@@ -25,40 +25,49 @@
     </template>
     <template #view2>
       <div id="snippets-container">
-        <p>{{ snippetsExplanation }}</p>
+        <ZtrAdmonition v-bind:type="'info'">
+          {{ snippetsExplanation }}
+        </ZtrAdmonition>
 
-        <p>
-          <TextControl
-            v-model="currentSnippetText"
-            class="snippet-name-input"
-            v-bind:inline="false"
-            v-bind:disabled="currentItem < 0"
-            v-on:confirm="renameSnippet()"
-          ></TextControl>
-          <ButtonControl
-            v-bind:label="renameSnippetLabel"
-            v-bind:inline="true"
-            v-bind:disabled="availableSnippets.length === 0 || currentSnippetText === availableSnippets[currentItem]"
-            v-on:click="renameSnippet()"
-          ></ButtonControl>
-        </p>
+        <template v-if="currentItem < 0">
+          <ZtrAdmonition v-bind:type="'warning'" style="margin-top: 10px">
+            {{ noSnippetsMessage }}
+          </ZtrAdmonition>
+        </template>
+        <template v-else>
+          <p>
+            <TextControl
+              v-model="currentSnippetText"
+              class="snippet-name-input"
+              v-bind:inline="false"
+              v-bind:disabled="currentItem < 0"
+              v-on:confirm="renameSnippet()"
+            ></TextControl>
+            <ButtonControl
+              v-bind:label="renameSnippetLabel"
+              v-bind:inline="true"
+              v-bind:disabled="availableSnippets.length === 0 || currentSnippetText === availableSnippets[currentItem]"
+              v-on:click="renameSnippet()"
+            ></ButtonControl>
+          </p>
 
-        <CodeEditor
-          ref="code-editor"
-          v-model="editorContents"
-          v-bind:mode="'markdown-snippets'"
-          v-bind:readonly="currentItem < 0"
-        ></CodeEditor>
-        <div class="save-snippet-file">
-          <ButtonControl
-            v-bind:primary="true"
-            v-bind:label="saveButtonLabel"
-            v-bind:inline="true"
-            v-bind:disabled="currentItem < 0 || ($refs['code-editor'] as any).isClean()"
-            v-on:click="saveSnippet()"
-          ></ButtonControl>
-          <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
-        </div>
+          <CodeEditor
+            ref="code-editor"
+            v-model="editorContents"
+            v-bind:mode="'markdown-snippets'"
+            v-bind:readonly="currentItem < 0"
+          ></CodeEditor>
+          <div class="save-snippet-file">
+            <ButtonControl
+              v-bind:primary="true"
+              v-bind:label="saveButtonLabel"
+              v-bind:inline="true"
+              v-bind:disabled="currentItem < 0 || ($refs['code-editor'] as any).isClean()"
+              v-on:click="saveSnippet()"
+            ></ButtonControl>
+            <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
+          </div>
+        </template>
       </div>
     </template>
   </SplitView>
@@ -88,9 +97,11 @@ import CodeEditor from '@common/vue/CodeEditor.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, watch, onUnmounted } from 'vue'
 import type { AssetsProviderIPCAPI } from 'source/app/service-providers/assets'
+import ZtrAdmonition from 'source/common/vue/ZtrAdmonition.vue'
 
 const ipcRenderer = window.ipc
 
+const noSnippetsMessage = trans('No snippet selected.')
 const saveButtonLabel = trans('Save')
 const renameSnippetLabel = trans('Rename snippet')
 const snippetsExplanation = trans('Snippets let you define reusable pieces of text with variables.')
@@ -285,7 +296,7 @@ function openSnippetsDirectory (): void {
 }
 
 #snippets-container {
-  padding: 0px 10px;
+  padding: 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
