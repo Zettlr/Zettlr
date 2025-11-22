@@ -327,30 +327,30 @@ const shouldCountChars = computed<boolean>(() => configStore.config.editor.count
 
 | Platform | Hide Toolbar in DF? | Is DF? | Is FS? | Titlebar | Menubar | Toolbar |
 |----------|---------------------|--------|--------|----------|---------|---------|
- Linux     | False               | False  | False  | False    | !native | True    |
- Linux     | False               | False  | True   | False    | !native | True    |
- Linux     | False               | True   | False  | False    | !native | True    |
- Linux     | False               | True   | True   | False    | !native | True    |
- Linux     | True                | False  | False  | False    | !native | True    |
- Linux     | True                | False  | True   | False    | !native | True    |
- Linux     | True                | True   | False  | False    | !native | False   |
- Linux     | True                | True   | True   | False    | !native | False   |
- macOS     | False               | False  | False  | False    | False   | True    |
- macOS     | False               | False  | True   | False    | False   | True    |
- macOS     | False               | True   | False  | False    | False   | True    |
- macOS     | False               | True   | True   | False    | False   | True    |
- macOS     | True                | False  | False  | False    | False   | True    |
- macOS     | True                | False  | True   | False    | False   | True    |
- macOS     | True                | True   | False  | True     | False   | False   |
- macOS     | True                | True   | True   | False    | False   | False   |
- Windows   | False               | False  | False  | False    | True    | True    |
- Windows   | False               | False  | True   | False    | True    | True    |
- Windows   | False               | True   | False  | False    | True    | True    |
- Windows   | False               | True   | True   | False    | True    | True    |
- Windows   | True                | False  | False  | False    | True    | True    |
- Windows   | True                | False  | True   | False    | True    | True    |
- Windows   | True                | True   | False  | False    | True    | False   |
- Windows   | True                | True   | True   | False    | True    | False   |
+| Linux    | False               | False  | False  | False    | !native | True    |
+| Linux    | False               | False  | True   | False    | !native | True    |
+| Linux    | False               | True   | False  | False    | !native | True    |
+| Linux    | False               | True   | True   | False    | !native | True    |
+| Linux    | True                | False  | False  | False    | !native | True    |
+| Linux    | True                | False  | True   | False    | !native | True    |
+| Linux    | True                | True   | False  | False    | !native | False   |
+| Linux    | True                | True   | True   | False    | !native | False   |
+| macOS    | False               | False  | False  | False    | False   | True    |
+| macOS    | False               | False  | True   | False    | False   | True    |
+| macOS    | False               | True   | False  | False    | False   | True    |
+| macOS    | False               | True   | True   | False    | False   | True    |
+| macOS    | True                | False  | False  | False    | False   | True    |
+| macOS    | True                | False  | True   | False    | False   | True    |
+| macOS    | True                | True   | False  | True     | False   | False   |
+| macOS    | True                | True   | True   | False    | False   | False   |
+| Windows  | False               | False  | False  | False    | True    | True    |
+| Windows  | False               | False  | True   | False    | True    | True    |
+| Windows  | False               | True   | False  | False    | True    | True    |
+| Windows  | False               | True   | True   | False    | True    | True    |
+| Windows  | True                | False  | False  | False    | True    | True    |
+| Windows  | True                | False  | True   | False    | True    | True    |
+| Windows  | True                | True   | False  | False    | True    | False   |
+| Windows  | True                | True   | True   | False    | True    | False   |
 
 */
 
