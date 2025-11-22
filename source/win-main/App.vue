@@ -2,7 +2,7 @@
   <WindowChrome
     v-bind:title="'Zettlr'"
     v-bind:titlebar="shouldShowTitlebar"
-    v-bind:menubar="true"
+    v-bind:menubar="shouldShowMenubar"
     v-bind:show-toolbar="shouldShowToolbar"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
@@ -318,12 +318,50 @@ const sidebarsBeforeDistractionfree = ref<{ fileManager: boolean, sidebar: boole
 const sidebarVisible = computed<boolean>(() => configStore.config.window.sidebarVisible)
 const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
 const shouldCountChars = computed<boolean>(() => configStore.config.editor.countChars)
-const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || !configStore.config.display.hideToolbarInDistractionFree)
 
-// We need to display the titlebar in case the user decides to hide the toolbar.
-// The titlebar is much less distracting, but this way the user can at least
-// drag the window around.
-const shouldShowTitlebar = computed<boolean>(() => !shouldShowToolbar.value && !windowStateStore.isFullscreen)
+// Simple state machine to trigger which of the three shows up when. Below's the
+// corresponding truth table, which is relatively large, but by spotting some
+// patterns, we can see when which of the three Window Chrome elements shall be
+// shown.
+/*
+
+| Platform | Hide Toolbar in DF? | Is DF? | Is FS? | Titlebar | Menubar | Toolbar |
+|----------|---------------------|--------|--------|----------|---------|---------|
+ Linux     | False               | False  | False  | False    | !native | True    |
+ Linux     | False               | False  | True   | False    | !native | True    |
+ Linux     | False               | True   | False  | False    | !native | True    |
+ Linux     | False               | True   | True   | False    | !native | True    |
+ Linux     | True                | False  | False  | False    | !native | True    |
+ Linux     | True                | False  | True   | False    | !native | True    |
+ Linux     | True                | True   | False  | False    | !native | False   |
+ Linux     | True                | True   | True   | False    | !native | False   |
+ macOS     | False               | False  | False  | False    | False   | True    |
+ macOS     | False               | False  | True   | False    | False   | True    |
+ macOS     | False               | True   | False  | False    | False   | True    |
+ macOS     | False               | True   | True   | False    | False   | True    |
+ macOS     | True                | False  | False  | False    | False   | True    |
+ macOS     | True                | False  | True   | False    | False   | True    |
+ macOS     | True                | True   | False  | True     | False   | False   |
+ macOS     | True                | True   | True   | False    | False   | False   |
+ Windows   | False               | False  | False  | False    | True    | True    |
+ Windows   | False               | False  | True   | False    | True    | True    |
+ Windows   | False               | True   | False  | False    | True    | True    |
+ Windows   | False               | True   | True   | False    | True    | True    |
+ Windows   | True                | False  | False  | False    | True    | True    |
+ Windows   | True                | False  | True   | False    | True    | True    |
+ Windows   | True                | True   | False  | False    | True    | False   |
+ Windows   | True                | True   | True   | False    | True    | False   |
+
+*/
+
+// The titlebar shall be shown on the main window in only one single instance
+const shouldShowTitlebar = computed<boolean>(() => process.platform === 'darwin' && configStore.config.display.hideToolbarInDistractionFree && distractionFree.value)
+// The menubar is independent of other values; always shown on Windows, and on Linux only if native Appearance is off.
+const shouldShowMenubar = computed<boolean>(() => process.platform === 'win32' || (process.platform !== 'darwin' && !configStore.config.window.nativeAppearance))
+
+// Finally, the toolbar. That one is a bit more iffy. It is always shown, EXCEPT
+// Hide Toolbar is True and DistractionFree is True
+const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || !configStore.config.display.hideToolbarInDistractionFree)
 
 const parsedDocumentInfo = computed<string>(() => {
   const info = windowStateStore.activeDocumentInfo
