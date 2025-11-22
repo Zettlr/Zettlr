@@ -379,6 +379,7 @@ quick succession; something that has not worked perfectly in the past.
 - When adding either snippets or import/export profiles, you can now enter the
   new name for these directly in the list instead of having to rename a random
   file.
+- Popovers now have an improved arrow color for better visibility.
 
 ## Under the Hood
 
@@ -476,6 +477,13 @@ quick succession; something that has not worked perfectly in the past.
   correct filename extension as required.
 - Relocate the PopoverWrapper component to the common Vue directory for access
   in other windows.
+- Popovers now allow their parent element to specify placement priorities.
+  Instead of always trying to place the popover first below, then right, then
+  above the element, and never to the left, the owner of a Popover can now
+  specify a set of priorities for placement. The `PopoverWrapper` will use the
+  first priority that can be fulfilled while respecting space constraints. The
+  default priorities reproduce the existing behavior (with the added ability to
+  use the left side if necessary).
 
 # 3.6.0
 

@@ -38,7 +38,7 @@
     </div>
     <!-- Add an optional footer -->
     <div v-if="editable" class="selectable-list-footer">
-      <PopoverWrapper v-if="requestTextInput === true" v-bind:target="addButton!">
+      <PopoverWrapper v-if="requestTextInput === true" v-bind:target="addButton!" v-bind:placement-priorities="['above', 'right', 'left']">
         <TextControl
           v-model="textInput"
           v-bind:placeholder="requestTextInputPlaceholder"
