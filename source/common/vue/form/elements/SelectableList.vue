@@ -38,7 +38,17 @@
     </div>
     <!-- Add an optional footer -->
     <div v-if="editable" class="selectable-list-footer">
-      <div class="add" v-on:click="emit('add')">
+      <PopoverWrapper v-if="requestTextInput === true" v-bind:target="addButton!">
+        <TextControl
+          v-model="textInput"
+          v-bind:placeholder="requestTextInputPlaceholder"
+          v-bind:autofocus="true"
+          v-on:confirm="finishTextInput(true)"
+          v-on:escape="finishTextInput(false)"
+          v-on:blur="finishTextInput(false)"
+        ></TextControl>
+      </PopoverWrapper>
+      <div ref="addButton" class="add" v-on:click="addItem()">
         <cds-icon shape="plus"></cds-icon>
       </div>
       <div v-if="selectedItem !== undefined" class="remove" v-on:click="emit('remove', selectedItem)">
@@ -67,7 +77,9 @@
 
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { trans } from 'source/common/i18n-renderer'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import PopoverWrapper from '../../PopoverWrapper.vue'
+import TextControl from './TextControl.vue'
 
 export interface SelectableListItem {
   displayText: string
@@ -83,13 +95,20 @@ const props = defineProps<{
   noItemsLabel?: string
   selectedItem?: number
   editable?: boolean
+  addTextItem?: boolean
+  requestTextPlaceholder?: string
 }>()
 
 const emit = defineEmits<{
   (e: 'select', value: number): void
-  (e: 'add'): void
+  (e: 'add', itemText?: string): void
   (e: 'remove', value: number): void
 }>()
+
+const addButton = ref<HTMLDivElement|null>(null)
+const requestTextInput = ref<boolean>(false)
+const requestTextInputPlaceholder = computed(() => props.requestTextPlaceholder ?? trans('New item'))
+const textInput = ref('')
 
 const noItemsLabel = computed(() => props.noItemsLabel ?? trans('No items'))
 
@@ -133,6 +152,32 @@ function handleContextMenu (event: MouseEvent, idx: number): void {
       emit('remove', idx)
     }
   })
+}
+
+function addItem () {
+  if (props.addTextItem) {
+    // The parent of this list has requested the addition of a text-based item.
+    // Requesting text input from the user is something we implement here, as
+    // it makes most sense to have it implemented here from a UI flow
+    // perspective. The user simply expects text input to originate next to the
+    // plus button instead of somewhere else in the UI. Here we essentially
+    // trigger the first part of the text input, that is, show the corresponding
+    // popover, which in turn will request text input from the user and then
+    // trigger the finishTextInput button below.
+    requestTextInput.value = true
+  } else {
+    emit('add')
+  }
+}
+
+function finishTextInput (emitEvent: boolean) {
+  const name = textInput.value
+  textInput.value = ''
+  requestTextInput.value = false
+
+  if (emitEvent) {
+    emit('add', name)
+  }
 }
 </script>
 
