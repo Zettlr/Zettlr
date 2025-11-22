@@ -90,7 +90,7 @@
 
 import formatDate from '@common/util/format-date'
 import localiseNumber from '@common/util/localise-number'
-import PopoverWrapper from 'source/win-main/PopoverWrapper.vue'
+import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import SwitchControl from '@common/vue/form/elements/SwitchControl.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'

@@ -63,7 +63,7 @@
  * END HEADER
  */
 
-import PopoverWrapper from './PopoverWrapper.vue'
+import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import { useStatisticsStore } from 'source/pinia'

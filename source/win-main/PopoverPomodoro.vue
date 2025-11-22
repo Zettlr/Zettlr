@@ -81,7 +81,7 @@
 import NumberControl from '@common/vue/form/elements/NumberControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import SliderControl from '@common/vue/form/elements/SliderControl.vue'
-import PopoverWrapper from './PopoverWrapper.vue'
+import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import { trans } from '@common/i18n-renderer'
 import { ref, computed, watch } from 'vue'
 import type { PomodoroConfig } from './App.vue'

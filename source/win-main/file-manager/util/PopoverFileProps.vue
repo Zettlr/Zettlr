@@ -68,7 +68,7 @@
  * END HEADER
  */
 
-import PopoverWrapper from 'source/win-main/PopoverWrapper.vue'
+import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import NumberControl from '@common/vue/form/elements/NumberControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { trans } from '@common/i18n-renderer'

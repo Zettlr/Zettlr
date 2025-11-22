@@ -41,7 +41,7 @@
  * END HEADER
  */
 
-import PopoverWrapper from './PopoverWrapper.vue'
+import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import RadioControl from '@common/vue/form/elements/RadioControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import { ref, computed, watch } from 'vue'

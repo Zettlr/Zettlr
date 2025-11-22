@@ -471,6 +471,8 @@ quick succession; something that has not worked perfectly in the past.
   whether the `body` has the `fullscreen` class and perform changes.
 - The Assets Provider now ensures that defaults and snippets always have the
   correct filename extension as required.
+- Relocate the PopoverWrapper component to the common Vue directory for access
+  in other windows.
 
 # 3.6.0
 

@@ -57,7 +57,7 @@
  */
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
-import PopoverWrapper from './PopoverWrapper.vue'
+import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import { computed } from 'vue'
 import { type DocumentInfo } from '@common/modules/markdown-editor'
 

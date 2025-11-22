@@ -39,7 +39,7 @@
  * END HEADER
  */
 import { trans } from 'source/common/i18n-renderer'
-import PopoverWrapper from './PopoverWrapper.vue'
+import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import { ref, computed } from 'vue'
 
 const props = defineProps<{ target: HTMLElement }>()
