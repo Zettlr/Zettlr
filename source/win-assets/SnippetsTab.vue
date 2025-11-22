@@ -12,8 +12,9 @@
           v-bind:items="availableSnippets"
           v-bind:selected-item="currentItem"
           v-bind:editable="true"
+          v-bind:add-text-item="true"
+          v-on:add="addSnippet($event)"
           v-on:select="currentItem = $event"
-          v-on:add="addSnippet()"
           v-on:remove="removeSnippet($event)"
         ></SelectableList>
         <ButtonControl
@@ -62,7 +63,7 @@
               v-bind:primary="true"
               v-bind:label="saveButtonLabel"
               v-bind:inline="true"
-              v-bind:disabled="currentItem < 0 || ($refs['code-editor'] as any).isClean()"
+              v-bind:disabled="currentItem < 0 || ($refs['code-editor'] != null && ($refs['code-editor'] as any).isClean())"
               v-on:click="saveSnippet()"
             ></ButtonControl>
             <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
@@ -118,7 +119,7 @@ watch(currentItem, () => {
 })
 
 watch(editorContents, () => {
-  if (CodeEditor.value?.isClean() === true) {
+  if (CodeEditor.value != null && CodeEditor.value.isClean() === true) {
     savingStatus.value = ''
   } else {
     savingStatus.value = trans('Unsaved changes')
@@ -196,9 +197,11 @@ function saveSnippet (): void {
     .catch(err => console.error(err))
 }
 
-function addSnippet (): void {
+function addSnippet (newName?: string): void {
   // Adds a snippet with empty contents and a generic default name
-  const newName = ensureUniqueName('snippet')
+  if (newName === undefined) {
+    newName = ensureUniqueName('snippet')
+  }
 
   ipcRenderer.invoke('assets-provider', {
     command: 'set-snippet',

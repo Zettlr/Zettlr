@@ -12,8 +12,9 @@
           v-bind:items="listItems"
           v-bind:editable="true"
           v-bind:selected-item="currentItem"
+          v-bind:add-text-item="true"
           v-on:select="currentItem = $event"
-          v-on:add="newDefaultsFile()"
+          v-on:add="newDefaultsFile($event)"
           v-on:remove="removeFile($event)"
         ></SelectableList>
         <ButtonControl
@@ -265,7 +266,7 @@ function saveDefaultsFile (): void {
     .catch(err => console.error(err))
 }
 
-function newDefaultsFile (): void {
+function newDefaultsFile (newName?: string): void {
   // Create a new defaults file
   const dt = DateTime.now()
   const timeString = dt.toISOTime({
@@ -273,7 +274,10 @@ function newDefaultsFile (): void {
     suppressMilliseconds: true
   })
 
-  const newName = `New Profile ${dt.toISODate()} ${timeString}.yaml`
+  if (newName === undefined) {
+    newName = `New Profile ${dt.toISODate()} ${timeString}.yaml`
+  }
+
   ipcRenderer.invoke('assets-provider', {
     command: 'set-defaults-file',
     payload: { filename: newName, contents: NEW_DEFAULTS_FILE_CONTENTS }

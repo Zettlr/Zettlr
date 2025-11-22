@@ -376,6 +376,9 @@ quick succession; something that has not worked perfectly in the past.
 - Empty selectable lists now show a message visually indicating that the list is
   empty.
 - The snippets view now indicates better if there is no selected snippet.
+- When adding either snippets or import/export profiles, you can now enter the
+  new name for these directly in the list instead of having to rename a random
+  file.
 
 ## Under the Hood
 
