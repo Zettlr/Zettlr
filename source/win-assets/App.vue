@@ -29,16 +29,18 @@
         v-if="tabs[currentTab].id === 'tab-import-control'"
         v-bind:which="'import'"
       ></DefaultsTab>
-      <!-- Custom CSS -->
-      <CustomCSS
-        v-else-if="tabs[currentTab].id === 'tab-custom-css-control'"
-      ></CustomCSS>
+      <!-- Lua Filter editor -->
+      <FilterTab
+        v-else-if="tabs[currentTab].id === 'tab-filter-control'"
+      ></FilterTab>
       <!-- Snippets Editor -->
       <SnippetsTab
         v-else-if="tabs[currentTab].id === 'tab-snippets-control'"
       ></SnippetsTab>
-      <!-- Lua Filter editor -->
-      <FilterTab v-else-if="tabs[currentTab].id === 'tab-filter-control'"></FilterTab>
+      <!-- Custom CSS -->
+      <CustomCSS
+        v-else-if="tabs[currentTab].id === 'tab-custom-css-control'"
+      ></CustomCSS>
     </div>
   </WindowChrome>
 </template>
@@ -80,6 +82,12 @@ const tabs: WindowTab[] = [
     icon: 'import'
   },
   {
+    label: trans('Lua Filter'),
+    controls: 'tab-filter',
+    id: 'tab-filter-control',
+    icon: 'filter'
+  },
+  {
     label: trans('Snippets'),
     controls: 'tab-snippets',
     id: 'tab-snippets-control',
@@ -90,12 +98,6 @@ const tabs: WindowTab[] = [
     controls: 'tab-custom-css',
     id: 'tab-custom-css-control',
     icon: 'code'
-  },
-  {
-    label: trans('Lua Filter'),
-    controls: 'tab-filter',
-    id: 'tab-filter-control',
-    icon: 'filter'
   }
 ]
 </script>

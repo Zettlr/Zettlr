@@ -78,11 +78,12 @@ function saveCSS (): void {
   })
     .then(() => {
       lastLoadedCSS.value = editorContents.value
-      savingStatus.value = ''
+      setTimeout(() => { savingStatus.value = trans('Saved!') }, 1000)
+      setTimeout(() => { savingStatus.value = '' }, 2000)
     })
-    .catch(e => {
+    .catch(err => {
       savingStatus.value = trans('Saving failed')
-      console.error(e)
+      console.error(err)
     })
 }
 </script>

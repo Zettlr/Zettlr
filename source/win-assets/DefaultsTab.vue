@@ -263,7 +263,10 @@ function saveDefaultsFile (): void {
       await retrieveDefaultsFiles() // Always make sure to pull in any changes
       setTimeout(() => { savingStatus.value = '' }, 2000)
     })
-    .catch(err => console.error(err))
+    .catch(err => {
+      savingStatus.value = trans('Saving failed')
+      console.error(err)
+    })
 }
 
 function newDefaultsFile (newName?: string): void {
