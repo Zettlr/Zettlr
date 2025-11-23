@@ -26,9 +26,10 @@
 import { drawSelection, dropCursor, EditorView, lineNumbers } from '@codemirror/view'
 import { onMounted, ref, toRef, watch } from 'vue'
 import { closeBrackets } from '@codemirror/autocomplete'
-import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit } from '@codemirror/language'
+import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
 import { yaml } from '@codemirror/lang-yaml'
+import { lua } from '@codemirror/legacy-modes/mode/lua'
 import { EditorState, type Extension } from '@codemirror/state'
 import { cssLanguage } from '@codemirror/lang-css'
 import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
@@ -46,6 +47,8 @@ import { defaultKeymap } from '../modules/markdown-editor/keymaps/default'
 
 const configStore = useConfigStore()
 
+type SupportedLanguage = 'css'|'yaml'|'lua'|'markdown-snippets'
+
 /**
  * We have to define the CodeMirror instance outside of Vue, since the Proxy-
  * fication messes with CodeMirror. Thus, we must prevent it from falling prey
@@ -60,7 +63,7 @@ const wrapperId = ref<string>('code-editor')
 
 const cleanFlag = ref<boolean>(true)
 
-function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
+function getExtensions (mode: SupportedLanguage): Extension[] {
   const { editor } = configStore.config
 
   let numSpaces = editor.indentUnit
@@ -128,10 +131,14 @@ function getExtensions (mode: 'css'|'yaml'|'markdown-snippets'): Extension[] {
         }), // Comes from the main editor
         markdownSyntaxHighlighter() // Comes from the main editor
       ]
+    case 'lua':
+      return [
+        ...extensions, StreamLanguage.define(lua)
+      ]
   }
 }
 
-function setContents (contents: string, mode: 'css'|'yaml'|'markdown-snippets'): void {
+function setContents (contents: string, mode: SupportedLanguage): void {
   const state = EditorState.create({
     doc: contents,
     extensions: getExtensions(mode)
@@ -144,7 +151,7 @@ function setContents (contents: string, mode: 'css'|'yaml'|'markdown-snippets'):
 
 interface Props {
   modelValue: string
-  mode: 'css'|'markdown-snippets'|'yaml'
+  mode: SupportedLanguage
   readonly?: boolean
 }
 
