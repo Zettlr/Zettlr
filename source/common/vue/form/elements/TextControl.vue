@@ -16,7 +16,7 @@
         type="text"
         v-bind:class="{ inline: inline === true }"
         v-bind:placeholder="placeholder"
-        v-bind:autofocus="autofocus"
+        v-bind:autofocus="props.autofocus"
         v-bind:disabled="disabled"
         v-on:input="emit('update:modelValue', inputValue)"
         v-on:keyup.enter="emit('confirm', inputValue)"
@@ -52,7 +52,7 @@
  * END HEADER
  */
 import { trans } from '@common/i18n-renderer'
-import { computed, ref, watch, toRef } from 'vue'
+import { computed, ref, watch, toRef, onMounted } from 'vue'
 
 const props = defineProps<{
   autofocus?: boolean
@@ -81,6 +81,15 @@ const inputValue = ref<string>(props.modelValue)
 
 watch(toRef(props, 'modelValue'), () => {
   inputValue.value = props.modelValue
+})
+
+onMounted(() => {
+  if (props.autofocus) {
+    // The browser will only auto-focus the textfield natively if it is added to
+    // the DOM the first time. With this check, we ensure it always receives
+    // focus whenever it gets mounted.
+    focus()
+  }
 })
 
 const resetLabel = trans('Reset')

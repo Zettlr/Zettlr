@@ -484,6 +484,7 @@ quick succession; something that has not worked perfectly in the past.
   first priority that can be fulfilled while respecting space constraints. The
   default priorities reproduce the existing behavior (with the added ability to
   use the left side if necessary).
+- Text fields now reliably receive focus where appropriate.
 
 # 3.6.0
 
