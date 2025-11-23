@@ -112,7 +112,11 @@ export function pandocDivComposite (ctx: BlockContext, line: Line, value: number
   if (!match?.indices?.groups) { return true }
 
   const [ markFrom, markTo ] = match.indices.groups.mark
-  line.addMarker(ctx.elt('PandocDivMark', ctx.lineStart + line.pos + markFrom, ctx.lineStart + line.pos + markTo))
+  const from = ctx.lineStart + line.pos + markFrom
+  const to = ctx.lineStart + line.pos + markTo
+
+  line.addMarker(ctx.elt('PandocDivMark', from, to))
+  line.moveBase(to)
 
   return false
 }
