@@ -164,7 +164,7 @@ function addItem () {
     // trigger the first part of the text input, that is, show the corresponding
     // popover, which in turn will request text input from the user and then
     // trigger the finishTextInput button below.
-    requestTextInput.value = true
+    requestTextInput.value = !requestTextInput.value
   } else {
     emit('add')
   }
