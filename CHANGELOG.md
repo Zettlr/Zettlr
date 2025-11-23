@@ -168,6 +168,33 @@ which will make changes to any file appear much faster across the app. In
 addition, Zettlr should now have no issues detecting dozens of file changes in
 quick succession; something that has not worked perfectly in the past.
 
+## Lua Filters Interface
+
+This version exposes the Lua filters directly to you. The assets manager now has
+a new tab that allows you to create, modify, and delete existing Lua filters
+that Zettlr provides to Pandoc during exports. You can use them to modify your
+exported files before Pandoc converts them to your export target. This is useful
+to change certain syntax elements which Pandoc does not natively support. One
+very common example for this is to add a Mermaid filter to Pandoc which
+automatically converts any code block with Mermaid syntax into a rendered
+diagram upon export.
+
+Any filter present here will be run during every export. We recommend that you
+design any filter toggle-able via a YAML frontmatter. To see how, refer to the
+built-in protected filters (see below). Zettlr does not guarantee the order in
+which these filters are run.
+
+Note that there will be two filters already present when you first open the tab.
+Those filters have been part of Zettlr for a very long time already. These are
+used to remove or change Zettelkasten links and tags in your files during
+export. These two filters are marked as "protected" like the built-in defaults
+files.
+
+> A small bit of trivia: The preference settings that you can change which
+> allow you to direct Zettlr to alter links and tags accordingly effectively
+> only set a specific YAML frontmatter property in your file before it is
+> exported. These filters check for this property and behave accordingly.
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
@@ -250,6 +277,9 @@ quick succession; something that has not worked perfectly in the past.
   fullscreen, there will always be either a titlebar or toolbar to move the
   window around, but in fullscreen, the editor can take up the entire window
   area (#3999).
+- **Feature**: Zettlr now exposes the Lua filter directory to you. Now you can
+  add, remove, and modify both the built-in filters as well as your own, custom
+  ones.
 - **Change**: Zettlr now monitors your documents and will automatically remove
   footnotes and references without the corresponding reference or footnote. If
   you have any documents in which you have un-referenced footnotes, or
@@ -485,6 +515,7 @@ quick succession; something that has not worked perfectly in the past.
   default priorities reproduce the existing behavior (with the added ability to
   use the left side if necessary).
 - Text fields now reliably receive focus where appropriate.
+- The `CodeEditor` component now supports Lua syntax.
 
 # 3.6.0
 

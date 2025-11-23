@@ -244,7 +244,7 @@ async function writeDefaults (
     defaults.filters = []
   }
 
-  const filters = await assets.getAllFilters()
+  const filters = await assets.listFilters(true)
   defaults.filters = defaults.filters.concat(filters)
 
   // After we have added our default keys, let the plugin add their keys, which

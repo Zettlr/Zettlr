@@ -37,6 +37,8 @@
       <SnippetsTab
         v-else-if="tabs[currentTab].id === 'tab-snippets-control'"
       ></SnippetsTab>
+      <!-- Lua Filter editor -->
+      <FilterTab v-else-if="tabs[currentTab].id === 'tab-filter-control'"></FilterTab>
     </div>
   </WindowChrome>
 </template>
@@ -50,6 +52,7 @@ import { trans } from '@common/i18n-renderer'
 import { ref, computed } from 'vue'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
 import { useConfigStore } from 'source/pinia'
+import FilterTab from './FilterTab.vue'
 
 const currentTab = ref(0)
 const windowTitle = computed(() => {
@@ -87,6 +90,12 @@ const tabs: WindowTab[] = [
     controls: 'tab-custom-css',
     id: 'tab-custom-css-control',
     icon: 'code'
+  },
+  {
+    label: trans('Lua Filter'),
+    controls: 'tab-filter',
+    id: 'tab-filter-control',
+    icon: 'filter'
   }
 ]
 </script>

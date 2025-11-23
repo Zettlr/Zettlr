@@ -54,6 +54,12 @@ export interface PandocProfileMetadata {
 }
 
 export type AssetsProviderIPCAPI = IPCAPI<{
+  'get-filter': { filename: string },
+  'set-filter': { filename: string, contents: string },
+  'rename-filter': { oldName: string, newName: string },
+  'remove-filter': { filename: string },
+  'list-filter': unknown,
+  'list-protected-filter': unknown,
   'get-defaults-file': { filename: string }
   'set-defaults-file': { filename: string, contents: string }
   'rename-defaults-file': { oldName: string, newName: string }
@@ -66,6 +72,7 @@ export type AssetsProviderIPCAPI = IPCAPI<{
   'list-export-profiles': unknown
   'open-defaults-directory': unknown
   'open-snippets-directory': unknown
+  'open-filter-directory': unknown
   'list-snippets': unknown
 }>
 
@@ -98,6 +105,15 @@ export default class AssetsProvider extends ProviderContract {
    */
   private readonly _protectedDefaults: string[]
 
+  /**
+   * Holds a list of all protected filters. Protected filters are those that
+   * come by default with the app. Protected here implies the same as for
+   * defaults.
+   *
+   * @var {string[]}
+   */
+  private readonly _protectedFilters: string[]
+
   constructor (private readonly _logger: LogProvider) {
     super()
 
@@ -105,15 +121,30 @@ export default class AssetsProvider extends ProviderContract {
     this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
     this._filterPath = path.join(app.getPath('userData'), '/lua-filter')
     this._protectedDefaults = []
+    this._protectedFilters = []
 
     ipcMain.handle('assets-provider', async (event, message: AssetsProviderIPCAPI) => {
       const { command, payload } = message
-      // These function calls, however, treat the defaults files verbatim to
-      // retain comments. NOTE: This means that any *renderer* will always
-      // receive the text, not an Object. Renderers who need to work with the
-      // file contents programmatically should thus make use of the bundled YAML
-      // module to parse and stringify the files accordingly.
-      if (command === 'get-defaults-file') {
+      // NOTE: Any *renderer* who requests a defaults file will always receive
+      // the verbatim file contents, not a parsed object. Renderers who need to
+      // work with the file contents programmatically should thus make use of
+      // the bundled YAML module to parse and stringify the files accordingly.
+      if (command === 'get-filter') {
+        return await this.getFilter(payload.filename)
+      } else if (command === 'set-filter') {
+        return await this.setFilter(payload.filename, payload.contents)
+      } else if (command === 'rename-filter') {
+        return await this.renameFilter(payload.oldName, payload.newName)
+      } else if (command === 'remove-filter') {
+        return await this.removeFilter(payload.filename)
+      } else if (command === 'list-filter') {
+        return await this.listFilters()
+      } else if (command === 'list-protected-filter') {
+        return this.listProtectedFilters()
+      } else if (command === 'open-filter-directory') {
+        this._logger.info(`[Assets Provider] Opening path ${this._filterPath}`)
+        return await shell.openPath(this._filterPath)
+      } else if (command === 'get-defaults-file') {
         return await this.getDefaultsFile(payload.filename, true)
       } else if (command === 'set-defaults-file') {
         return await this.setDefaultsFile(payload.filename, payload.contents, true)
@@ -169,6 +200,7 @@ export default class AssetsProvider extends ProviderContract {
     const filterFiles = await fs.readdir(path.join(__dirname, './assets/lua-filter'))
     const filters = filterFiles.filter(file => /\.lua$/.test(file))
     for (const file of filters) {
+      this._protectedFilters.push(file)
       const absolutePath = path.join(this._filterPath, file)
       try {
         // If the file doesn't exist, lstat will throw an error. Otherwise, check
@@ -195,17 +227,160 @@ export default class AssetsProvider extends ProviderContract {
     this._logger.verbose('Assets provider shutting down ...')
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////  FILTERS  //////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * Lists all filters installed in the system.
+   *
+   * @param   {string}           filename  The filter name
+   *
+   * @return  {Promise<string>}            The filter contents
+   */
+  async getFilter (filename: string): Promise<string> {
+    const absPath = path.join(this._filterPath, filename)
+    const lua = await fs.readFile(absPath, { encoding: 'utf-8' })
+    return lua
+  }
+
+  /**
+   * Creates/Updates the filter with the provided filename, using the contents.
+   *
+   * @param   {string}            filename  The filter name
+   * @param   {string}            contents  The file contents
+   *
+   * @return  {Promise<boolean>}            Whether the command succeeded.
+   */
+  async setFilter (filename: string, contents: string): Promise<boolean> {
+    filename = filename.trim()
+    if (filename === '') {
+      throw new Error('Cannot set Lua filter: Filename was empty.')
+    }
+
+    if (!/\.lua$/i.test(filename)) {
+      filename += filename.endsWith('.') ? 'lua' : '.lua'
+    }
+
+    const absPath = path.join(this._filterPath, filename)
+
+    try {
+      // Stringify the new defaults according to the verbatim flag
+      await fs.writeFile(absPath, contents)
+      return true
+    } catch (err: any) {
+      this._logger.error(`[Assets Provider] Could not save lua filter: ${String(err.message)}`, err)
+      return false
+    }
+  }
+
+  /**
+   * Renames the provided filter.
+   *
+   * @param   {string}            oldName  The existing name
+   * @param   {string}            newName  The new name
+   *
+   * @return  {Promise<boolean>}           Whether the command succeeded.
+   */
+  async renameFilter (oldName: string, newName: string): Promise<boolean> {
+    newName = newName.trim()
+    oldName = oldName.trim()
+    if (newName === '' || oldName === '') {
+      throw new Error('Cannot rename lua filter: Filename was empty.')
+    }
+
+    if (!/\.lua$/i.test(newName)) {
+      newName += newName.endsWith('.') ? 'lua' : '.lua'
+    }
+
+    const oldPath = path.join(this._filterPath, oldName)
+    const newPath = path.join(this._filterPath, newName)
+
+    try {
+      await fs.rename(oldPath, newPath)
+      if (this._protectedFilters.includes(oldName)) {
+        await this.restoreFilterFor(oldName)
+      }
+      return true
+    } catch (err: any) {
+      this._logger.error(`[Assets Provider] Could not rename lua filter from ${oldPath} to ${newPath}.`, err)
+      return false
+    }
+  }
+
+  /**
+   * Removes the filter with the provided name.
+   *
+   * @param   {string}            filename  The filter name
+   *
+   * @return  {Promise<boolean>}            Whether the command succeeded.
+   */
+  async removeFilter (filename: string): Promise<boolean> {
+    const absPath = path.join(this._filterPath, filename)
+    try {
+      await fs.unlink(absPath)
+      // If removing that file removed a protected one, restore it immediately.
+      // This is effectively the same as restoring the file.
+      if (this._protectedFilters.includes(filename)) {
+        await this.restoreFilterFor(filename)
+      }
+      return true
+    } catch (err: any) {
+      this._logger.error(`[Assets Provider] Could not remove lua filter: ${absPath}`, err)
+      return false
+    }
+  }
+
+  /**
+   * Restores the file for a provided filter name.
+   *
+   * @param   {string}            filename  The filter name
+   *
+   * @return  {Promise<boolean>}            Whether the command succeeded.
+   */
+  async restoreFilterFor (filename: string): Promise<boolean> {
+    const source = path.join(__dirname, './assets/lua-filter', filename)
+    const target = path.join(this._filterPath, filename)
+
+    try {
+      await fs.copyFile(source, target)
+    } catch (err: any) {
+      this._logger.error(`[Assets Provider] Could not restore filter file ${filename}!`, err)
+      return false
+    }
+
+    return true
+  }
+
   /**
    * Returns all LUA filters that have been found at the LUA filter path
    *
-   * @return  {Promise<string>[]}  Resolves with an array of absolute paths
+   * @param   {boolean}            returnAbsolutePaths  When `true` (default:
+   *                                                    `false`), returns
+   *                                                    absolute paths.
+   *
+   * @return  {Promise<string>[]}                       Resolves with an array
+   *                                                    of filters.
    */
-  async getAllFilters (): Promise<string[]> {
+  async listFilters (returnAbsolutePaths: boolean = false): Promise<string[]> {
     const files = await fs.readdir(this._filterPath)
     return files
-      .filter(file => /\.lua$/.test(file))
-      .map(file => path.join(this._filterPath, file))
+      .filter(file => /\.lua$/i.test(file))
+      .map(file => returnAbsolutePaths ? path.join(this._filterPath, file) : file)
   }
+
+  /**
+   * Lists protected filters
+   *
+   * @return  {string[]}  A list of protected filters
+   */
+  public listProtectedFilters (): string[] {
+    return this._protectedFilters
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////  DEFAULTS  //////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
   /**
    * Gets the defaults file for a given writer
@@ -232,6 +407,11 @@ export default class AssetsProvider extends ProviderContract {
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
    */
   async setDefaultsFile (filename: string, newDefaults: string, verbatim: boolean = false): Promise<boolean> {
+    filename = filename.trim()
+    if (filename === '') {
+      throw new Error('Cannot set defaults file: Filename was empty.')
+    }
+
     if (!/\.ya?ml$/i.test(filename)) {
       filename += filename.endsWith('.') ? 'yaml' : '.yaml'
     }
@@ -258,6 +438,12 @@ export default class AssetsProvider extends ProviderContract {
    * @return  {Promise<boolean>}           True upon success
    */
   async renameDefaultsFile (oldName: string, newName: string): Promise<boolean> {
+    newName = newName.trim()
+    oldName = oldName.trim()
+    if (newName === '' || oldName === '') {
+      throw new Error('Cannot rename defaults file: Filename was empty.')
+    }
+
     if (!/\.ya?ml$/i.test(newName)) {
       newName += newName.endsWith('.') ? 'yaml' : '.yaml'
     }
@@ -372,6 +558,10 @@ export default class AssetsProvider extends ProviderContract {
     return profiles
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////  SNIPPETS  //////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+
   /**
    * Retrieves a snippet with the given name. Throws an error if the file does not exist.
    *
@@ -398,10 +588,16 @@ export default class AssetsProvider extends ProviderContract {
    * @return  {Promise<boolean>}           Returns false if there was an error
    */
   async setSnippet (name: string, content: string): Promise<boolean> {
+    name = name.trim()
+    if (name === '') {
+      throw new Error('Cannot set snippet: Name was empty.')
+    }
+
+    if (!name.toLowerCase().endsWith('.tpl.md')) {
+      name += '.tpl.md'
+    }
+
     try {
-      if (!name.toLowerCase().endsWith('.tpl.md')) {
-        name += '.tpl.md'
-      }
       const filePath = path.join(this._snippetsPath, name)
       await fs.writeFile(filePath, content)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
@@ -443,14 +639,22 @@ export default class AssetsProvider extends ProviderContract {
    * @return  {Promise<boolean>}           Returns false if there was an error.
    */
   async renameSnippet (name: string, newName: string): Promise<boolean> {
-    try {
-      if (!name.endsWith('.tpl.md')) {
-        name += '.tpl.md'
-      }
+    name = name.trim()
+    newName = newName.trim()
 
-      if (!newName.endsWith('.tpl.md')) {
-        newName += '.tpl.md'
-      }
+    if (name === '' || newName === '') {
+      throw new Error('Cannot rename snippet: Name was empty.')
+    }
+
+    if (!name.endsWith('.tpl.md')) {
+      name += '.tpl.md'
+    }
+
+    if (!newName.endsWith('.tpl.md')) {
+      newName += '.tpl.md'
+    }
+
+    try {
 
       const oldPath = path.join(this._snippetsPath, name)
       const newPath = path.join(this._snippetsPath, newName)
