@@ -48,7 +48,9 @@ const placementPriorities = computed<[Placement, Placement, Placement, Placement
 const popupWrapper = ref<HTMLDivElement|null>(null)
 const popupArrow = ref<HTMLDivElement|null>(null)
 
-const ARROW_SIZE = 20 // in pixels
+const MAX_ARROW_SIZE = 20
+const MIN_ARROW_SIZE = 5
+const DOCUMENT_MARGIN = 10
 
 onMounted(() => {
   document.addEventListener('mousedown', onClick)
@@ -126,15 +128,12 @@ function place (): void {
   arrow.style.left = ''
   arrow.style.top = ''
   arrow.style.display = ''
+  arrow.style.borderWidth = ''
   arrow.classList.remove('up', 'down', 'left', 'right')
 
   // Windows doesn't have arrows on their popovers, just as they call them
   // "flyouts" instead of PopOvers. So on Windows we shouldn't show them.
-  const showArrow = process.platform !== 'win32'
-  const arrowSize = (showArrow) ? ARROW_SIZE : 10 // Windows gets 10px margin
-  const MARGIN = 10 // 10px margins to the document
-
-  if (!showArrow) {
+  if (process.platform === 'win32') {
     arrow.style.display = 'none'
   }
 
@@ -150,13 +149,23 @@ function place (): void {
   const targetRight = targetLeft + targetWidth
   const targetBottom = targetTop + targetHeight
 
+  // Dynamically calculate the arrow size, based on the shortest side of the popover.
+  const shortSide = Math.min(wrapper.offsetHeight, wrapper.offsetWidth)
+  const wantedArrowSize = Math.round(shortSide / 4)
+  // Actual arrow size is constrained between min and max sizes.
+  const arrowSize = Math.min(Math.max(wantedArrowSize, MIN_ARROW_SIZE), MAX_ARROW_SIZE)
+
+  arrow.style.borderWidth = `${arrowSize}px`
+
+  console.log({ wantedArrowSize, shortSide, arrowSize })
+
   // Safety checks: Here we adjust the popover dimensions if necessary
   // Ensure the popover is not higher or wider than the window itself
-  if (wrapper.offsetHeight > windowHeight - 2 * MARGIN - 2 * arrowSize) {
-    wrapper.style.height = `${windowHeight - 2 * MARGIN - 2 * arrowSize}px`
+  if (wrapper.offsetHeight > windowHeight - 2 * DOCUMENT_MARGIN - 2 * arrowSize) {
+    wrapper.style.height = `${windowHeight - 2 * DOCUMENT_MARGIN - 2 * arrowSize}px`
   }
-  if (wrapper.offsetWidth > windowWidth - 2 * MARGIN - 2 * arrowSize) {
-    wrapper.style.width = `${windowWidth - 2 * MARGIN - 2 * arrowSize}px`
+  if (wrapper.offsetWidth > windowWidth - 2 * DOCUMENT_MARGIN - 2 * arrowSize) {
+    wrapper.style.width = `${windowWidth - 2 * DOCUMENT_MARGIN - 2 * arrowSize}px`
   }
 
   // Now we can safely retrieve the popover dimensions
@@ -170,10 +179,11 @@ function place (): void {
 
   // Check where we can place the popover. Usually this will yield more than one
   // `true` value.
-  const canPlaceBelow = spaceBelow > wrapperHeight + arrowSize + MARGIN || targetTop < 50
-  const canPlaceRight = spaceRight > wrapperWidth + MARGIN + arrowSize
-  const canPlaceAbove = spaceAbove > wrapperHeight + arrowSize + MARGIN || targetBottom < 50
-  const canPlaceLeft = spaceLeft > wrapperWidth + MARGIN + arrowSize
+  const placementMargins = DOCUMENT_MARGIN + arrowSize
+  const canPlaceBelow = spaceBelow > wrapperHeight + placementMargins && spaceLeft > placementMargins && spaceRight > placementMargins
+  const canPlaceRight = spaceRight > wrapperWidth + placementMargins && spaceAbove > placementMargins && spaceBelow > placementMargins
+  const canPlaceAbove = spaceAbove > wrapperHeight + placementMargins && spaceLeft > placementMargins && spaceRight > placementMargins
+  const canPlaceLeft = spaceLeft > wrapperWidth + placementMargins && spaceAbove > placementMargins && spaceBelow > placementMargins
 
   // Fallback: below, if nothing actually fits.
   let actualPlacement: Placement = 'below'
@@ -239,16 +249,16 @@ function place (): void {
   if (actualPlacement === 'right' || actualPlacement === 'left') {
     const { top, bottom } = wrapper.getBoundingClientRect() // Re-fetch the values
     if (top < 0) {
-      wrapper.style.top = `${MARGIN}px`
+      wrapper.style.top = `${DOCUMENT_MARGIN}px`
     } if (bottom > windowHeight) {
-      wrapper.style.top = `${windowHeight - MARGIN - wrapperHeight}px`
+      wrapper.style.top = `${windowHeight - DOCUMENT_MARGIN - wrapperHeight}px`
     }
   } else if (actualPlacement === 'above' || actualPlacement === 'below') {
     const { left, right } = wrapper.getBoundingClientRect() // Re-fetch the values
     if (left < 0) {
-      wrapper.style.left = `${MARGIN}px`
+      wrapper.style.left = `${DOCUMENT_MARGIN}px`
     } if (right > windowWidth) {
-      wrapper.style.left = `${windowWidth - MARGIN - wrapperWidth}px`
+      wrapper.style.left = `${windowWidth - DOCUMENT_MARGIN - wrapperWidth}px`
     }
   }
 }
