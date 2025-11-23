@@ -199,7 +199,10 @@ function saveSnippet (): void {
 
 function addSnippet (newName?: string): void {
   // Adds a snippet with empty contents and a generic default name
-  if (newName === undefined) {
+  if (newName !== undefined) {
+    newName = newName.trim()
+  }
+  if (newName === undefined || newName === '') {
     newName = ensureUniqueName('snippet')
   }
 

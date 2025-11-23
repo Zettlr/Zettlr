@@ -274,7 +274,11 @@ function newDefaultsFile (newName?: string): void {
     suppressMilliseconds: true
   })
 
-  if (newName === undefined) {
+  if (newName !== undefined) {
+    newName = newName.trim()
+  }
+
+  if (newName === undefined || newName === '') {
     newName = `New Profile ${dt.toISODate()} ${timeString}.yaml`
   }
 
