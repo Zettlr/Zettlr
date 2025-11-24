@@ -58,24 +58,14 @@ const pilcrowDeco = Decoration.widget({ widget: new PilcrowWidget(), side: 10000
 function showLineEndings (view: EditorView): DecorationSet {
   const builder = new RangeSetBuilder<Decoration>()
   for (const { from, to } of view.visibleRanges) {
-    syntaxTree(view.state).iterate({
-      from,
-      to,
-      enter (node) {
-
-        // Don't show pilcrows in code text
-        if (node.name === 'CodeText') { return false }
-
-        if ([ 'Paragraph', 'Blockquote', 'FootnoteRef' ].includes(node.name) || node.name.includes('ATX') || node.name.includes('Setext')) {
-          for (let pos = node.from; pos <= node.to;) {
-            const line = view.state.doc.lineAt(pos)
-            builder.add(line.to, line.to, pilcrowDeco)
-            pos = line.to + 1
-          }
-          return false
-        }
+    for (let pos = from; pos <= to;) {
+      const line = view.state.doc.lineAt(pos)
+      const node = syntaxTree(view.state).resolve(line.to, -1)
+      if (![ 'CodeText', 'CodeBlock', 'FencedCode' ].includes(node.name)) {
+        builder.add(line.to, line.to, pilcrowDeco)
       }
-    })
+      pos = line.to + 1
+    }        
   }
   return builder.finish()
 }
