@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { renderBlockWidgets } from './base-renderer'
+import { renderInlineWidgets } from './base-renderer'
 import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
 import { EditorView, WidgetType } from '@codemirror/view'
 import { type EditorState } from '@codemirror/state'
@@ -365,5 +365,5 @@ export const renderImages = [
       }
     }
   }),
-  renderBlockWidgets(shouldHandleNode, createWidget)
+  renderInlineWidgets(shouldHandleNode, createWidget)
 ]
