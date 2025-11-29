@@ -17,7 +17,7 @@
 // 2. Cmd-Click them to edit them in place
 // 3. And, obviously, add and remove them
 
-import { syntaxTree } from '@codemirror/language'
+import { ensureSyntaxTree, syntaxTree } from '@codemirror/language'
 import { type ChangeSpec } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { extractASTNodes, markdownToAST } from '@common/modules/markdown-utils'
@@ -31,7 +31,7 @@ import { type Footnote, type FootnoteRef } from '@common/modules/markdown-utils/
  * @return  {boolean}             Whether the command ran.
  */
 export function addNewFootnote (target: EditorView): boolean {
-  const ast = markdownToAST(target.state.sliceDoc())
+  const ast = markdownToAST(target.state.sliceDoc(), ensureSyntaxTree(target.state, target.state.doc.length))
   const identifiers = extractASTNodes(ast, 'Footnote') as Footnote[]
   const refs = extractASTNodes(ast, 'FootnoteRef') as FootnoteRef[]
   const changes: ChangeSpec[] = []

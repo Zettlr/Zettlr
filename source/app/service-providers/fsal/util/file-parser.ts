@@ -19,7 +19,7 @@ import extractBOM from './extract-bom'
 import extractFileId from './extract-file-id'
 import { parse as parseYAML } from 'yaml'
 import {
-  markdownToAST as md2ast,
+  markdownToAST,
   extractASTNodes,
   extractTextnodes
 } from '@common/modules/markdown-utils'
@@ -69,7 +69,7 @@ export default function getMarkdownFileParser (
     file.id = extractFileId(file.name, content, idREPattern)
 
     // Parse the file into our AST
-    const ast = md2ast(content)
+    const ast = markdownToAST(content)
 
     const tags = extractASTNodes(ast, 'ZettelkastenTag') as ZettelkastenTag[]
     file.tags = tags.map(tag => tag.value.toLowerCase())

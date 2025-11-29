@@ -22,6 +22,7 @@ import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 import { EditorView, type ViewUpdate } from '@codemirror/view'
 import { trans } from 'source/common/i18n-renderer'
 import type { LanguageToolIgnoredRuleEntry } from '@providers/config/get-config-template'
+import { ensureSyntaxTree } from '@codemirror/language'
 
 const ipcRenderer = window.ipc
 
@@ -142,7 +143,7 @@ const ltLinter = linter(async view => {
 
   const diagnostics: Diagnostic[] = []
 
-  const ast = markdownToAST(view.state.doc.toString())
+  const ast = markdownToAST(view.state.doc.toString(), ensureSyntaxTree(view.state, view.state.doc.length))
   // Extract TextNodes to later filter diagnostics that only cover these nodes.
   const textNodes = extractTextnodes(ast)
 

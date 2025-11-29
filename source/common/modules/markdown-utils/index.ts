@@ -35,8 +35,8 @@ export { md2html } from './markdown-to-html'
  *
  * @return  {ASTNode}            The root node of the AST
  */
-export function markdownToAST (markdown: string, tree?: Tree, parserConfig?: MarkdownParserConfig): Document|ASTNode {
-  if (tree === undefined) {
+export function markdownToAST (markdown: string, tree: Tree|null = null, parserConfig?: MarkdownParserConfig): Document|ASTNode {
+  if (tree === null) {
     const { parser } = markdownParser(parserConfig).language
     tree = parser.parse(markdown)
   }

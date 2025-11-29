@@ -17,6 +17,7 @@ import { linter, type Diagnostic } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
+import { ensureSyntaxTree } from '@codemirror/language'
 
 const ipcRenderer = window.ipc
 
@@ -158,7 +159,7 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
 export const spellcheck = linter(async view => {
   const diagnostics: Diagnostic[] = []
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
-  const ast = markdownToAST(view.state.doc.toString())
+  const ast = markdownToAST(view.state.doc.toString(), ensureSyntaxTree(view.state, view.state.doc.length))
   const textNodes = extractTextnodes(ast)
 
   const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = textNodes
