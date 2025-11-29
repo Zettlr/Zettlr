@@ -21,6 +21,9 @@ const stexLang = StreamLanguage.define(stexMath)
 
 const MathDelimiter: DelimiterType = {}
 
+const blockMathRE = /^(\s*\$\$)\s*$/
+const blankLineRe = /^\s*$/
+
 export const inlineMathParser: InlineParser = {
   // This parser should only match inline-math (we have to divide that here)
   name: 'inlineMath',
@@ -36,20 +39,17 @@ export const inlineMathParser: InlineParser = {
     // below.
     const isInlineDisplayMath = ctx.char(pos + 1) === 36
     const delimLength = isInlineDisplayMath ? 2 : 1
-    // Opening delimiters may not be followed by a space, and closing delimiters
-    // may not be preceeded by a space. We include NaN since ctx.char returns
-    // that if we're out of bounds.
-    const followedBySpace = [ 9, 32, NaN ].includes(ctx.char(pos + delimLength))
-    const preceededBySpace = [ 9, 32, NaN ].includes(ctx.char(pos - 1))
 
     // Try to find an opening delimiter
     const opening = ctx.findOpeningDelimiter(MathDelimiter)
 
     // Since there was no opening delimiter, this is a potential opening
-    if (opening === null && followedBySpace) {
-      return -1
-    } else if (opening === null) {
-      return ctx.addDelimiter(MathDelimiter, pos, pos + delimLength, true, false)
+    if (opening === null) {
+      // Inline opening delimiters cannot be followed by a space, but display math delimiters can
+      const invalidOpening = !isInlineDisplayMath && /\s/.test(ctx.slice(pos + 1, pos + 2))
+
+      // Either return -1 due to an invalid delimiter, or return the end position of the delimiter
+      return  invalidOpening ? -1 : ctx.addDelimiter(MathDelimiter, pos, pos + delimLength, true, false)
     }
 
     const delim = ctx.getDelimiterAt(opening)
@@ -57,11 +57,14 @@ export const inlineMathParser: InlineParser = {
       return -1
     }
 
-    // Ensure the opening delimiter has the same length as what we have here,
-    // and that our current (potentially closing) delimiter is not preceeded by
-    // a space
-    if (delim.to - delim.from !== delimLength || preceededBySpace) {
-      return -1 // Require matching delimiters
+    // Ensure the opening and closing delimiters are the same length
+    if (delim.to - delim.from !== delimLength) {
+      return -1
+    }
+
+    // Inline closing delimiters cannot be preceded by a space or followed by a digit, but display math delimiters can
+    if (!isInlineDisplayMath && (/\s/.test(ctx.slice(pos - 1, pos)) || /\d/.test(ctx.slice(pos + 1, pos + 2)))) {
+      return -1
     }
 
     // Remove any elements that were parsed internally
@@ -83,7 +86,6 @@ export const inlineMathParser: InlineParser = {
 export const blockMathParser: BlockParser = {
   name: 'blockMath',
   parse: (ctx, line) => {
-    const blockMathRE = /^(\s*\$\$)\s*$/
     if (!blockMathRE.test(line.text)) {
       return false
     }
@@ -93,7 +95,11 @@ export const blockMathParser: BlockParser = {
     const blockStart = ctx.lineStart
     const from = ctx.lineStart + line.text.length + 1
 
-    while (ctx.nextLine() && !blockMathRE.test(line.text)) {
+    while (ctx.nextLine()) {
+      if (blankLineRe.test(line.text) || blockMathRE.test(line.text)) {
+        break
+      }
+
       equationLines.push(line.text)
     }
 
