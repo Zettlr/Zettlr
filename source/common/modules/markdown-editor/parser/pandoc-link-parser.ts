@@ -24,7 +24,7 @@ const PandocLinkDelimiter: DelimiterType = {}
 
 const linkClosingRe = /^\]\((?<url>.+)\)/
 
-const linkTitleRe = /(?:^|[ \t]+)(?:"((?:\\.|[^"])+)"|'((?:\\.|[^'])+)'|\(((?:\\.|[^\)])+)\))$/
+const linkTitleRe = /(?:^|[ \t]+)(?:"(?<double>(?:\\.|[^"])+)"|'(?<single>(?:\\.|[^'])+)'|\((?<parens>(?:\\.|[^\)])+)\))$/d
 
 export const pandocLinkParser: InlineParser = {
   name: 'pandoc-link-parser',
@@ -95,11 +95,11 @@ export const pandocLinkParser: InlineParser = {
     const urlContents = []
     const title = linkTitleRe.exec(destination)
 
-    if (title) {
+    if (title?.indices?.groups) {
       destination = url.substring(0, title.index)
 
-      const linkTitleText = title[1] ?? title[2] ?? title[3]
-      urlContents.push(ctx.elt('LinkTitle', pos + 4 + title.index, pos + 4 + title.index + linkTitleText.length))
+      const linkTitleIndices = title.indices.groups.double ?? title.indices.groups.single ?? title.indices.groups.parens
+      urlContents.push(ctx.elt('LinkTitle', pos + 2 + linkTitleIndices[0], pos + 2 + linkTitleIndices[1]))
     }
 
     urlContents.unshift(ctx.elt('URL', pos + 2, pos + 2 + destination.length))
