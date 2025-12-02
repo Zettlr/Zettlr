@@ -529,6 +529,8 @@ async function loadDocument (): Promise<void> {
     updateCitationKeys(library).catch(e => console.error('Could not update citation keys', e))
   }
 
+  updateFileDatabase().catch(err => console.error('Could not update file database', err))
+
   // Provide the editor instance with metadata for the new file
   currentEditor.setOptions({
     metadata: {
