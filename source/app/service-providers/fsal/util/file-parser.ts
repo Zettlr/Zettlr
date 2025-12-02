@@ -82,7 +82,7 @@ export default function getMarkdownFileParser (
     const firstH1 = headings.find(h => h.level === 1)
     if (firstH1 !== undefined) {
       const content = extractTextnodes(firstH1)
-      file.firstHeading = content.map(node => node.whitespaceBefore + node.value).join('')
+      file.firstHeading = content.map(node => node.whitespaceBefore + node.value).join('').trim()
     }
 
     const locale: string | undefined = isAppServiceContainerReady() ? getAppServiceContainer().config.get('appLang') : undefined
