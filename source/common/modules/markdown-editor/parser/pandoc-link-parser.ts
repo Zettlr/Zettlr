@@ -99,7 +99,7 @@ export const pandocLinkParser: InlineParser = {
       destination = url.substring(0, title.index)
 
       const linkTitleText = title[1] ?? title[2] ?? title[3]
-      urlContents.push(ctx.elt('LinkTitle', pos + 2 + title.index, pos + 2 + title.index + linkTitleText.length))
+      urlContents.push(ctx.elt('LinkTitle', pos + 4 + title.index, pos + 4 + title.index + linkTitleText.length))
     }
 
     urlContents.unshift(ctx.elt('URL', pos + 2, pos + 2 + destination.length))
