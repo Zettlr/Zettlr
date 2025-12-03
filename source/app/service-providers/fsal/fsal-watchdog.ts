@@ -16,29 +16,11 @@
 
 import { FSWatcher, type ChokidarOptions } from 'chokidar'
 
-import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
-
 import type LogProvider from '@providers/log'
 import type ConfigProvider from '@providers/config'
 import path from 'path'
 import type { EventName } from 'chokidar/handler'
-
-// chokidar's ignored-setting is compatible to anymatch, so we can
-// pass an array containing the standard dotted directory-indicators,
-// directories that should be ignored and a function that returns true
-// for all files that are _not_ in the filetypes list (whitelisting)
-// Further reading: https://github.com/micromatch/anymatch
-const ignoreDirs = [
-  // Ignore dot-dirs/files, except .git (to detect changes to possible
-  // git-repos) and .ztr-files (which contain, e.g., directory settings)
-  // /(?:^|[/\\])\.(?!git|ztr-.+).+/ // /(^|[/\\])\../
-  /(?:^|[/\\])\.(?!git$|ztr-[^\\/]+$).+/
-]
-
-// Create new regexps from the strings
-for (let x of IGNORE_DIR_REGEXP) {
-  ignoreDirs.push(new RegExp(x, 'i'))
-}
+import ignoreDir from '@common/util/ignore-dir'
 
 /**
 * Represents an event the watchdog can work with
@@ -61,7 +43,7 @@ export default class FSALWatchdog {
     this._config = config
 
     const options: ChokidarOptions = {
-      ignored: ignoreDirs,
+      ignored: ignoreDir,
       persistent: true,
       ignoreInitial: true, // Do not track the initial watch as changes
       followSymlinks: true, // Follow symlinks

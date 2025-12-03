@@ -247,7 +247,7 @@ export default class FSAL extends ProviderContract {
     const { openPaths } = this._config.get()
     const pathsToIndex: string[] = []
     for (const rootPath of openPaths) {
-      if (await this.isFile(rootPath) && !path.basename(rootPath).startsWith('.')) {
+      if (await this.isFile(rootPath)) {
         pathsToIndex.push(rootPath)
       } else if (await this.isDir(rootPath) && !ignoreDir(rootPath)) {
         const allPaths = await this.readDirectoryRecursively(rootPath)
@@ -298,7 +298,7 @@ export default class FSAL extends ProviderContract {
     const allDescriptors: AnyDescriptor[] = []
 
     for (const rootPath of openPaths) {
-      if (await this.isFile(rootPath) && !path.basename(rootPath).startsWith('.')) {
+      if (await this.isFile(rootPath)) {
         allDescriptors.push(await this.getDescriptorFor(rootPath))
       } else if (await this.isDir(rootPath) && !ignoreDir(rootPath)) {
         const allPaths = await this.readDirectoryRecursively(rootPath)
@@ -815,7 +815,7 @@ export default class FSAL extends ProviderContract {
    * whether a root path is a file or folder. If it is a directory, it will read
    * in the directory and any children recursively to construct a list of every
    * file and folder within `absPath` and return it.
-   * 
+   *
    * NOTE: This function will already exclude dotfiles and ignored directories,
    * so this function is safe to consume in terms of what Zettlr should display.
    *
@@ -824,16 +824,19 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string[]>}           Returns a list of the entire directory
    */
   public async readDirectoryRecursively (directoryPath: string): Promise<string[]> {
+    if (!await this.isDir(directoryPath)) {
+      throw new Error(`[FSAL] Cannot read path ${directoryPath}: Not a directory!`)
+    }
+
     const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
       .filter(dirent => {
-        return (dirent.isFile() && !dirent.name.startsWith('.')) ||
-          (dirent.isDirectory() && !ignoreDir(dirent.name))
+        return (dirent.isFile()) || (dirent.isDirectory() && !/^\.git$/.test(dirent.name) && !ignoreDir(dirent.name))
       })
       .map(dirent => {
         const childPath = path.join(directoryPath, dirent.name)
         if (dirent.isFile()) {
           return Promise.resolve([childPath])
-        } else if (dirent.isDirectory()) {
+        } else if (dirent.isDirectory() && !/^\.git$/.test(dirent.name)) {
           return this.readDirectoryRecursively(childPath)
         } else {
           return Promise.resolve([])
@@ -856,12 +859,16 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot read path ${absPath}: Not a directory!`)
     }
 
-    const children = await fs.readdir(absPath)
-
+    const children = await fs.readdir(absPath, { withFileTypes: true })
     return await Promise.all(
       children
-        .map(p => path.join(absPath, p))
-        .map(p => this.getDescriptorFor(p))
+        .filter(dirent => {
+          return (dirent.isFile()) || (dirent.isDirectory() && !/^\.git$/.test(dirent.name) && !ignoreDir(dirent.name))
+        })
+        .map(dirent => {
+          const childPath = path.join(absPath, dirent.name)
+          return this.getDescriptorFor(childPath)
+        })
     )
   }
 }

@@ -16,6 +16,22 @@ import path from 'path'
 // Ignored directory patterns
 import { ignoreDirs } from '../data.json'
 
+// chokidar's ignored-setting is compatible to anymatch, so we can
+// pass an array containing the standard dotted directory-indicators,
+// directories that should be ignored and a function that returns true
+// for all files that are _not_ in the filetypes list (whitelisting)
+// Further reading: https://github.com/micromatch/anymatch
+const IGNORE_DIR_REGEXP: RegExp[] = [
+  // Ignore dot-dirs/files, except .git (to detect changes to possible
+  // git-repos) and .ztr-files (which contain, e.g., directory settings)
+  // /(?:^|[\/\\])\.(?!git[\/\\]?|ztr-directory).+/,
+]
+
+// Create new regexps from the strings
+for (let x of ignoreDirs) {
+  IGNORE_DIR_REGEXP.push(new RegExp(x, 'i'))
+}
+
 /**
 * Returns true, if a directory should be ignored, and false, if not.
 * @param  {String} p The path to the directory. It will be checked against some regexps.
@@ -23,13 +39,6 @@ import { ignoreDirs } from '../data.json'
 */
 export default function ignoreDir (p: string): boolean {
   let name = path.basename(p)
-  // Directories are ignored on a regexp basis
-  for (let re of ignoreDirs) {
-    let regexp = new RegExp(re, 'i')
-    if (regexp.test(name)) {
-      return true
-    }
-  }
 
-  return false
+  return IGNORE_DIR_REGEXP.some(re => re.test(name))
 }
