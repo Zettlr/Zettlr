@@ -249,7 +249,7 @@ export default class FSAL extends ProviderContract {
     const { openFiles, openWorkspaces } = this._config.get().app
     const pathsToIndex: string[] = []
     for (const file of openFiles) {
-      if (await this.isFile(file) && !path.basename(file).startsWith('.')) {
+      if (await this.isFile(file)) {
         pathsToIndex.push(file)
       }
     }
@@ -304,7 +304,7 @@ export default class FSAL extends ProviderContract {
     const allDescriptors: AnyDescriptor[] = []
 
     for (const file of openFiles) {
-      if (await this.isFile(file) && !path.basename(file).startsWith('.')) {
+      if (await this.isFile(file)) {
         allDescriptors.push(await this.getDescriptorFor(file))
       }
     }
@@ -823,16 +823,19 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string[]>}           Returns a list of the entire directory
    */
   public async readDirectoryRecursively (directoryPath: string): Promise<string[]> {
+    if (!await this.isDir(directoryPath)) {
+      throw new Error(`[FSAL] Cannot read path ${directoryPath}: Not a directory!`)
+    }
+
     const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
       .filter(dirent => {
-        return (dirent.isFile() && !dirent.name.startsWith('.')) ||
-          (dirent.isDirectory() && !ignoreDir(dirent.name))
+        return (dirent.isFile()) || (dirent.isDirectory() && !/^\.git$/.test(dirent.name) && !ignoreDir(dirent.name))
       })
       .map(dirent => {
         const childPath = path.join(directoryPath, dirent.name)
         if (dirent.isFile()) {
           return Promise.resolve([childPath])
-        } else if (dirent.isDirectory()) {
+        } else if (dirent.isDirectory() && !/^\.git$/.test(dirent.name)) {
           return this.readDirectoryRecursively(childPath)
         } else {
           return Promise.resolve([])
@@ -855,12 +858,16 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot read path ${absPath}: Not a directory!`)
     }
 
-    const children = await fs.readdir(absPath)
-
+    const children = await fs.readdir(absPath, { withFileTypes: true })
     return await Promise.all(
       children
-        .map(p => path.join(absPath, p))
-        .map(p => this.getDescriptorFor(p))
+        .filter(dirent => {
+          return (dirent.isFile()) || (dirent.isDirectory() && !/^\.git$/.test(dirent.name) && !ignoreDir(dirent.name))
+        })
+        .map(dirent => {
+          const childPath = path.join(absPath, dirent.name)
+          return this.getDescriptorFor(childPath)
+        })
     )
   }
 }

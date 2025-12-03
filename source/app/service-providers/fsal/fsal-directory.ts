@@ -14,7 +14,6 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import isDir from '@common/util/is-dir'
 import isFile from '@common/util/is-file'
 import safeAssign from '@common/util/safe-assign'
 
@@ -85,24 +84,33 @@ async function persistSettings (dir: DirDescriptor): Promise<void> {
  */
 async function parseSettings (dir: DirDescriptor): Promise<void> {
   const configPath = path.join(dir.path, '.ztr-directory')
+
   try {
-    let settings: string|typeof SETTINGS_TEMPLATE = await fs.readFile(configPath, { encoding: 'utf8' })
-    settings = JSON.parse(settings) as typeof SETTINGS_TEMPLATE
+    const settingsText = await fs.readFile(configPath, { encoding: 'utf8' })
+    const settings = JSON.parse(settingsText) as typeof SETTINGS_TEMPLATE
+
     dir.settings = safeAssign(settings, SETTINGS_TEMPLATE)
+
     if (settings.project !== null) {
       // We have a project, so we need to sanitize the values (in case
       // that there have been changes to the config). We'll just use
       // the code from the config provider.
       dir.settings.project = safeAssign(settings.project, PROJECT_TEMPLATE)
     }
+
     if (JSON.stringify(dir.settings) === JSON.stringify(SETTINGS_TEMPLATE)) {
       // The settings are the default, so no need to write them to file
-      await fs.unlink(configPath)
+      await fs.unlink(configPath).catch(() => {})
     }
   } catch (err: any) {
+    // Ignore file-not-found errors
+    if (err.code === 'ENOENT') {
+      return
+    }
+
     // Something went wrong. Unlink the malformed file. Do not throw an error
     // since a malformed settings file should never stop loading a directory.
-    await fs.unlink(configPath)
+    await fs.unlink(configPath).catch(() => {})
   }
 }
 
@@ -128,32 +136,20 @@ export async function parse (currentPath: string): Promise<DirDescriptor> {
     settings: JSON.parse(JSON.stringify(SETTINGS_TEMPLATE))
   }
 
+  try {
+    dir.isGitRepository = (await fs.lstat(path.join(dir.path, '.git'))).isDirectory()
+  } catch (err: any) {}
+
   // Retrieve the metadata
   try {
     const metadata = await getFilesystemMetadata(dir.path)
     dir.modtime = metadata.modtime
     dir.creationtime = metadata.birthtime
+    await parseSettings(dir)
   } catch (err: any) {
     err.message = `Error reading metadata for directory ${dir.path}!`
     // Re-throw so that the caller knows something's afoul
     throw err
-  }
-
-  // Now parse the directory contents recursively
-  const children = await fs.readdir(dir.path)
-  for (const child of children) {
-    const absolutePath = path.join(dir.path, child)
-
-    if (child === '.ztr-directory') {
-      // We got a settings file, so let's try to read it in
-      await parseSettings(dir)
-      continue // Done!
-    } else if (child === '.git' && isDir(absolutePath)) {
-      dir.isGitRepository = true
-      continue
-    } else if (child.startsWith('.')) {
-      continue // Ignore hidden files
-    }
   }
 
   return dir

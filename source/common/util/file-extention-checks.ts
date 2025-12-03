@@ -23,6 +23,16 @@ export const MS_OFFICE_EXT = [ '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'
 export const OPEN_OFFICE_EXT = [ '.odt', '.ods', '.odp' ]
 export const DATA_EXT = [ '.csv', '.tsv', '.sav', '.zsav' ]
 
+const ALL_EXT = [
+  ...MD_EXT,
+  ...CODE_EXT,
+  ...IMG_EXT,
+  ...PDF_EXT,
+  ...MS_OFFICE_EXT,
+  ...OPEN_OFFICE_EXT,
+  ...DATA_EXT,
+]
+
 /**
  * Returns true if the given path has a valid Markdown or Code extension
  *
@@ -43,7 +53,7 @@ export function hasMdOrCodeExt (p: string): boolean {
  *
  * @return  {boolean}               Whether the file has one of these extensions
  */
-function hasExt (filePath: string, extensions: string[]): boolean {
+export function hasExt (filePath: string, extensions: string[]): boolean {
   return extensions.some(ext => filePath.endsWith(ext))
 }
 
@@ -125,6 +135,17 @@ export function hasDataExt (filePath: string): boolean {
 }
 
 /**
+ * Check if the given filename is a hidden file.
+ *
+ * @param   {string}   filename  The filename to check
+ *
+ * @return  {boolean}            Whether the file is a hidden file
+ */
+export function isHiddenFile (filename: string): boolean {
+  return filename.startsWith('.')
+}
+
+/**
  * Utility function that checks for *any* of the recognized file extensions
  * Zettlr supports to some degree.
  *
@@ -132,8 +153,7 @@ export function hasDataExt (filePath: string): boolean {
  *
  * @return  {boolean}            Whether the filePath has any recognized ext.
  */
-export function hasAnyRecognizedFileExtension (filePath: string): boolean {
-  return hasMdOrCodeExt(filePath) || hasImageExt(filePath) ||
-    hasPDFExt(filePath) || hasOpenOfficeExt(filePath) ||
-    hasMSOfficeExt(filePath) || hasDataExt(filePath)
+export function hasAnyRecognizedFileExtension (filePath: string, extensions: string[] = []): boolean {
+  const ext = [ ...ALL_EXT, ...extensions ]
+  return hasExt(filePath, ext)
 }

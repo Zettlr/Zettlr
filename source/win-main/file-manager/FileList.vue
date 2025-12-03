@@ -100,7 +100,16 @@ import matchQuery from './util/match-query'
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
 import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
 import type { AnyDescriptor } from '@dts/common/fsal'
-import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import {
+  hasDataExt,
+  hasExt,
+  hasImageExt,
+  hasMdOrCodeExt,
+  hasMSOfficeExt,
+  hasOpenOfficeExt,
+  hasPDFExt,
+  isHiddenFile
+} from 'source/common/util/file-extention-checks'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
 import { getSorter } from 'source/common/util/directory-sorter'
@@ -155,7 +164,7 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
   const allDescriptors = [...workspaceStore.descriptorMap.keys()]
     .filter(absPath => absPath.startsWith(dir.path))
     .map(absPath => workspaceStore.descriptorMap.get(absPath)!)
-  
+
   // ... sort them recursively ...
   const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = configStore.config
   const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
@@ -163,33 +172,43 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
 
   // ... and add them to our RecycleScroller.
   const ret: RecycleScrollerData[] = []
-  const { files } = configStore.config
+  const { files, attachmentExtensions } = configStore.config
   for (let i = 0; i < sortedDescendants.length; i++) {
-    if (sortedDescendants[i].type === 'other') {
-      // Filter other files based on our settings. Why do these ugly nested if
-      // constructs? To catch all the other "other" files in the else.
-      if (hasImageExt(sortedDescendants[i].path)) {
-        if (!files.images.showInFilemanager) {
+    if (sortedDescendants[i].type === 'directory') {
+      if (isHiddenFile(sortedDescendants[i].name)) {
+        if (!files.hiddenFiles.showInFilemanager) {
           continue
         }
-      } else if (hasPDFExt(sortedDescendants[i].path)) {
-        if (!files.pdf.showInFilemanager) {
-          continue
-        }
-      } else if (hasMSOfficeExt(sortedDescendants[i].path)) {
-        if (!files.msoffice.showInFilemanager) {
-          continue
-        }
-      } else if (hasOpenOfficeExt(sortedDescendants[i].path)) {
-        if (!files.openOffice.showInFilemanager) {
-          continue
-        }
-      } else if (hasDataExt(sortedDescendants[i].path)) {
-        if (!files.dataFiles.showInFilemanager) {
-          continue
-        }
-      } else {
-        continue // Ignore any other "other" file
+      }
+    } else if (isHiddenFile(sortedDescendants[i].name)) {
+      // We have to check for hidden files first so they are not
+      // included if they end in one of the accepted extensions
+      if (!files.hiddenFiles.showInFilemanager) {
+        continue
+      }
+    } else if (hasImageExt(sortedDescendants[i].path)) {
+      if (!files.images.showInFilemanager) {
+        continue
+      }
+    } else if (hasPDFExt(sortedDescendants[i].path)) {
+      if (!files.pdf.showInFilemanager) {
+        continue
+      }
+    } else if (hasMSOfficeExt(sortedDescendants[i].path)) {
+      if (!files.msoffice.showInFilemanager) {
+        continue
+      }
+    } else if (hasOpenOfficeExt(sortedDescendants[i].path)) {
+      if (!files.openOffice.showInFilemanager) {
+        continue
+      }
+    } else if (hasDataExt(sortedDescendants[i].path)) {
+      if (!files.dataFiles.showInFilemanager) {
+        continue
+      }
+    } else {
+      if (!hasMdOrCodeExt(sortedDescendants[i].path) && !hasExt(sortedDescendants[i].path, attachmentExtensions)) {
+        continue
       }
     }
 

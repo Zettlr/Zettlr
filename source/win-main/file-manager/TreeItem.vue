@@ -173,7 +173,16 @@ import type { AnyDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
 import { pathBasename, relativePath } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
-import { hasCodeExt, hasDataExt, hasImageExt, hasMarkdownExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import {
+  hasDataExt,
+  hasImageExt,
+  hasMSOfficeExt,
+  hasOpenOfficeExt,
+  hasPDFExt,
+  hasExt,
+  isHiddenFile,
+  hasMdOrCodeExt
+} from 'source/common/util/file-extention-checks'
 import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
 import { getSorter } from 'source/common/util/directory-sorter'
 
@@ -251,6 +260,8 @@ const secondaryIcon = computed(() => filteredChildren.value.length > 0 ? 'angle'
  * @return  {string}  The icon name (as in: cds-shape)
  */
 const primaryIcon = computed(() => {
+  const { files, attachmentExtensions } = configStore.config
+
   if (props.item.type === 'file' && writingTarget.value !== undefined) {
     return 'writing-target'
   } else if (props.item.type === 'file') {
@@ -258,21 +269,26 @@ const primaryIcon = computed(() => {
   } else if (props.item.type === 'code') {
     return 'code'
   } else if (props.item.type === 'other') {
-    // const fileExtIcon = ClarityIcons.registry['file-ext'].outline!
     if (hasImageExt(props.item.path)) {
       return 'image'
     } else if (hasPDFExt(props.item.path)) {
       return 'pdf-file'
     } else if (hasMSOfficeExt(props.item.path)) {
-      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+      return 'file'
     } else if (hasOpenOfficeExt(props.item.path)) {
-      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+      return 'file'
     } else if (hasDataExt(props.item.path)) {
-      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+      return 'code'
+    } else if (hasExt(props.item.path, attachmentExtensions)) {
+      return 'file-group'
+    } else if (props.item.name === '.ztr-directory') {
+      return 'file-settings'
     } else {
       // Generic other file (this should not happen as they get filtered out before)
-      console.warn(`Encountered a file with extension ${props.item.ext}. These should've been filtered out before reaching this point!`)
-      return ''
+      if (!files.hiddenFiles.showInFilemanager) {
+        console.warn(`Encountered a file with extension ${props.item.ext}. These should've been filtered out before reaching this point!`)
+      }
+      return 'unknown-status'
     }
   } else if (props.item.type === 'directory' && props.item.dirNotFoundFlag === true) {
     return 'disconnect'
@@ -339,7 +355,8 @@ const filteredChildren = computed(() => {
     return []
   }
 
-  const { files } = configStore.config
+  const { files, attachmentExtensions } = configStore.config
+
   return children.value
     // Ensure we only consider filtered files
     .filter(child => {
@@ -352,13 +369,19 @@ const filteredChildren = computed(() => {
     // Filter based on our rules
     .filter(child => {
       if (!combined.value) {
-        return child.type === 'directory'
+        return child.type === 'directory' && (files.hiddenFiles.showInFilemanager || !isHiddenFile(child.name))
       }
 
       // Filter files based on our settings
       if (child.type === 'directory') {
-        return true
-      } if (hasImageExt(child.path)) {
+        return files.hiddenFiles.showInFilemanager || !isHiddenFile(child.name)
+      }
+
+      // We have to check for hidden files first so they are not
+      // included if they end in one of the accepted extensions
+      if (isHiddenFile(child.name)) {
+        return files.hiddenFiles.showInFilemanager
+      } else if (hasImageExt(child.path)) {
         return files.images.showInFilemanager
       } else if (hasPDFExt(child.path)) {
         return files.pdf.showInFilemanager
@@ -368,10 +391,10 @@ const filteredChildren = computed(() => {
         return files.openOffice.showInFilemanager
       } else if (hasDataExt(child.path)) {
         return files.dataFiles.showInFilemanager
-      } else if (hasMarkdownExt(child.path) || hasCodeExt(child.path)) {
+      } else if (hasMdOrCodeExt(child.path)) {
         return true
       } else {
-        return false // Any other "other" file should be excluded
+        return hasExt(child.path, attachmentExtensions) // Any other "other" file should be excluded
       }
     })
 })
@@ -497,7 +520,7 @@ onMounted(async () => {
     const affectedPath = payload.event === 'unlink' || payload.event === 'unlinkDir'
       ? payload.path
       : (payload as FSALEventPayloadChange).descriptor.path
-    
+
     // Figure out if this event relates to us, which is only the case if the
     // affected path is a direct descendant of this tree item. If it's itself or
     // a parent path, another tree item takes over. If it's a nested dependent,

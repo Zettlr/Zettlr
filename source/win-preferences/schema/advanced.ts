@@ -255,6 +255,26 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
                 display: 'plain',
                 contents: trans('System default')
               }
+            ],
+            [
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('Hidden Files (.ztr-directory, .dotfiles, etc.)')
+              },
+              {
+                type: 'checkbox',
+                model: 'files.hiddenFiles.showInFilemanager'
+              },
+              {
+                type: 'checkbox',
+                model: 'files.hiddenFiles.showInSidebar'
+              },
+              {
+                type: 'form-text',
+                display: 'plain',
+                contents: trans('System default')
+              }
             ]
           ]
         },
@@ -263,7 +283,7 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
         },
         {
           type: 'token',
-          label: trans('Add filename extensions for any additional files you wish to see in the sidebar below. Include the leading period, e.g., ".xml".'),
+          label: trans('Add additional file extensions you wish to see in the file manager and sidebar below. Include the leading period, e.g., ".xml".'),
           placeholder: trans('Enter an extension and press enter'),
           model: 'attachmentExtensions'
         }
