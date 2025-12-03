@@ -14,7 +14,7 @@
 
     <datalist v-bind:id="`${fieldId}-list`">
       <option
-        v-for="(option, idx) in props.autocompleteValues"
+        v-for="(option, idx) in visibleSuggestions"
         v-bind:key="idx"
         v-bind:value="option"
       >
@@ -49,6 +49,11 @@ const props = defineProps<{
   inline?: boolean
   autocompleteValues: string[]
 }>()
+
+const visibleSuggestions = computed(() => {
+  const q = thisValue.value.toLowerCase()
+  return props.autocompleteValues.filter(item => item.toLowerCase().includes(q)).slice(0, 100)
+})
 
 const emit = defineEmits<(e: 'update:modelValue', val: string) => void>()
 
