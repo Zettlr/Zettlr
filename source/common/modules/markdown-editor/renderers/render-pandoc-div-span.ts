@@ -4,7 +4,7 @@
  *
  * Contains:        renderPandoc
  * CVM-Role:        View
- * Maintainer:      Hendrik Erz
+ * Maintainer:      Bennie Milburn
  * License:         GNU GPL v3
  *
  * Description:     This renderer displays Pandoc divs and spans

@@ -4,7 +4,7 @@
  *
  * Contains:        Pandoc Span and Div Parser
  * CVM-Role:        InlineParser, BlockParser
- * Maintainer:      Hendrik Erz
+ * Maintainer:      Bennie Milburn
  * License:         GNU GPL v3
  *
  * Description:     This module provides an inline and a block parser for pandoc
