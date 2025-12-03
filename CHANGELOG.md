@@ -411,6 +411,8 @@ files.
   file.
 - Popovers now have an improved arrow color for better visibility.
 - Fix wrong display in relative directory paths during global search.
+- Replace misleading folder icons (folder and open folder) with new icon choices
+  ("Home" and "Ban").
 
 ## Under the Hood
 
