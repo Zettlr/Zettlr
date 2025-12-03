@@ -410,6 +410,7 @@ files.
   new name for these directly in the list instead of having to rename a random
   file.
 - Popovers now have an improved arrow color for better visibility.
+- Fix wrong display in relative directory paths during global search.
 
 ## Under the Hood
 

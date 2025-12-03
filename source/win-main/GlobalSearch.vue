@@ -104,7 +104,7 @@
           </div>
         </div>
         <div class="filepath">
-          {{ result.file.relativeDirectoryPath }}{{ (result.file.relativeDirectoryPath !== '') ? sep : '' }}{{ result.file.filename }}
+          {{ result.file.relativeDirectoryPath }}
         </div>
         <div v-if="!result.hideResultSet" class="results-container">
           <div
@@ -150,11 +150,9 @@ import { ref, computed, onMounted } from 'vue'
 import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@dts/common/search'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
-import { relativePath } from 'source/common/util/renderer-path-polyfill'
+import { pathDirname, relativePath } from 'source/common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
-
-const sep = process.platform === 'win32' ? '\\': '/'
 
 const searchTitle = trans('Search across all files')
 const queryInputLabel = trans('Enter your search terms below')
@@ -315,7 +313,7 @@ function startSearch (overrideQuery?: string): void {
 
       return {
         path: d.path,
-        relativeDirectoryPath: root !== undefined ? relativePath(root, d.path) : d.dir,
+        relativeDirectoryPath: root !== undefined ? relativePath(pathDirname(root), d.path) : d.dir,
         filename: d.name,
         displayName: displayName
       }
