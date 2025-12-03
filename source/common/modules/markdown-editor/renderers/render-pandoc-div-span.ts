@@ -25,7 +25,9 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
     syntaxTree(view.state).iterate({
       from, to,
       enter: (node) => {
-        if (rangeInSelection(view.state, node.from, node.to, true)) { return }
+        if (rangeInSelection(view.state, node.from, node.to, true)) {
+          return
+        }
 
         let marks
         let attrs
@@ -40,10 +42,14 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
             attrs = node.node.getChild('PandocAttribute')
 
             // Pandoc spans must have an attribute node
-            if (!attrs) { return }
+            if (!attrs) {
+              return
+            }
 
             // Something went wrong
-            if (marks.length !== 2) { return }
+            if (marks.length !== 2) {
+              return
+            }
 
             from = marks[0].to
             to = marks[1].from
@@ -56,10 +62,14 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
             info = node.node.getChild('PandocDivInfo')
 
             // Pandoc divs must have at least a class or an attribute node
-            if (!attrs && !info) { return }
+            if (!attrs && !info) {
+              return
+            }
 
             // Something went wrong
-            if (marks.length !== 2) { return }
+            if (marks.length !== 2) {
+              return
+            }
 
             from = view.state.doc.line(view.state.doc.lineAt(node.from).number).to
             to = view.state.doc.line(view.state.doc.lineAt(node.to).number).from
@@ -73,7 +83,9 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
         const classes = attributes.classes ?? []
         const id = attributes.id ?? ''
 
-        if (info) { classes.unshift(view.state.sliceDoc(info.from, info.to)) }
+        if (info) {
+          classes.unshift(view.state.sliceDoc(info.from, info.to))
+        }
 
         const deco = Decoration.mark({
           attributes: {

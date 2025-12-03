@@ -40,13 +40,19 @@ export const pandocSpanParser: InlineParser = {
 
     // There are no valid attributes, so return
     const match = pandocSpanClosingRe.exec(ctx.text.slice(pos - ctx.offset))
-    if (!match?.indices?.groups) { return -1 }
+    if (!match?.indices?.groups) {
+      return -1
+    }
 
     const opening = ctx.findOpeningDelimiter(PandocSpanDelimiter)
-    if (opening === null) { return -1 }
+    if (opening === null) {
+      return -1
+    }
 
     const delim = ctx.getDelimiterAt(opening)
-    if (delim === null) { return -1 }
+    if (delim === null) {
+      return -1
+    }
 
     const attrFrom = pos - ctx.offset + match.indices.groups.attr[0]
     const attrTo = pos - ctx.offset + match.indices.groups.attr[1]
@@ -54,7 +60,9 @@ export const pandocSpanParser: InlineParser = {
 
     // Check if a valid attribute node was found
     const nodeId = ctx.parser.nodeSet.types.find(node => node.is('PandocAttribute'))?.id
-    if (attr.length !== 1 || attr[0].type !== nodeId) { return -1 }
+    if (attr.length !== 1 || attr[0].type !== nodeId) {
+      return -1
+    }
 
     const innerElements = ctx.takeContent(opening)
     ctx.addDelimiter(PandocSpanDelimiter, pos, pos + 1, false, true)
@@ -70,10 +78,14 @@ export const pandocDivParser: BlockParser = {
   before: 'IndentedCode',
   parse: (ctx, line) => {
     const match = pandocDivOpeningRe.exec(line.text)
-    if (!match?.indices?.groups) { return false }
+    if (!match?.indices?.groups) {
+      return false
+    }
 
     // Pandoc divs require at least a class or attribute
-    if ((match.groups?.name ?? match.groups?.class ?? match.groups?.attr) === undefined) { return false }
+    if ((match.groups?.name ?? match.groups?.class ?? match.groups?.attr) === undefined) {
+      return false
+    }
 
     ctx.startComposite('PandocDiv', 0, ctx.depth + 1)
 
@@ -92,7 +104,9 @@ export const pandocDivParser: BlockParser = {
 
       // Check if a valid attribute node was found
       const nodeId = ctx.parser.nodeSet.types.find(node => node.is('PandocAttribute'))?.id
-      if (attr.length === 1 && attr[0].type === nodeId) { ctx.addElement(attr[0]) }
+      if (attr.length === 1 && attr[0].type === nodeId) {
+        ctx.addElement(attr[0])
+      }
     }
 
     // We consume the whole line since there can be no other content
@@ -106,10 +120,14 @@ export const pandocDivParser: BlockParser = {
 }
 
 export function pandocDivComposite (ctx: BlockContext, line: Line, value: number): boolean {
-  if (ctx.depth !== value) { return true }
+  if (ctx.depth !== value) {
+    return true
+  }
 
   const match = pandocDivClosingRe.exec(line.text.slice(line.pos))
-  if (!match?.indices?.groups) { return true }
+  if (!match?.indices?.groups) {
+    return true
+  }
 
   const [ markFrom, markTo ] = match.indices.groups.mark
   const from = ctx.lineStart + line.pos + markFrom
