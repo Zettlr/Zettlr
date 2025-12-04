@@ -33,7 +33,7 @@ import {
   type DOMEventHandlers
 } from '@codemirror/view'
 import { autocomplete } from './autocomplete'
-import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './theme/syntax'
+import { codeSyntaxHighlighter, markdownSyntaxHighlighter, plainTextSyntaxHighlighter } from './theme/syntax'
 import markdownParser from './parser/markdown-parser'
 import { syntaxExtensions } from './parser/syntax-extensions'
 import { defaultContextMenu } from './plugins/default-context-menu'
@@ -338,6 +338,69 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     defaultContextMenu, // A default context menu
     softwrapVisualIndent, // Always indent visually
     tagClasses(), // Apply a custom class to each tag so that users can style them (#4589)
+    EditorView.domEventHandlers(options.domEventsListeners)
+  ]
+}
+
+/**
+ * This public function returns a set of extensions for Plain Text files
+ * that still support linking, YAML, and tags, but no other Markdown syntax highlighting.
+ *
+ * @param   {CoreExtensionOptions}  options  The main config options
+ *
+ * @return  {Extension[]}                    An array of extensions
+ */
+export function getPlainTextExtensions (options: CoreExtensionOptions): Extension[] {
+  // We keep the linters the user might want (like spellcheck)
+  const linters = [
+    spellcheck,
+    yamlFrontmatterLint
+  ]
+
+  if (options.initialConfig.lintLanguageTool) {
+    linters.push(lintGutter({
+      markerFilter (diagnostics) {
+        return diagnostics.filter(d => d.source !== 'spellcheck' && d.source?.startsWith('language-tool') === false)
+      }
+    }))
+  }
+
+  return [
+    ...getCoreExtensions(options),
+    // Use mdPasteDropHandlers to allow dropping images/links
+    EditorView.domEventHandlers(mdPasteDropHandlers),
+
+    // We use the Markdown parser to detect Links, Tags, YAML, etc.
+    markdownParser({
+      zknLinkParserConfig: { format: options.initialConfig.zknLinkFormat }
+    }),
+
+    // Use the Plain Text highlighter (No bold, headers, etc.)
+    plainTextSyntaxHighlighter(),
+    syntaxExtensions,
+
+    showLineNumbers(options.initialConfig.showMarkdownLineNumbers),
+    linters,
+    languageTool,
+
+    // Keep essential plugins
+    countField,
+    typewriter,
+    distractionFree,
+    tocField, // ToC might still be useful if user uses headers for navigation, even if not highlighted
+    projectInfoField,
+
+    autocomplete, // Keep autocomplete for links/tags/refs
+
+    // Keep tooltips for functionality
+    footnoteHover,
+    urlHover,
+    filePreview,
+
+    backgroundLayers,
+    defaultContextMenu,
+    tagClasses(),
+
     EditorView.domEventHandlers(options.domEventsListeners)
   ]
 }
