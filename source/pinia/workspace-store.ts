@@ -234,7 +234,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     const showOfficeFiles = files.msoffice.showInSidebar
     const showOpenOffice = files.openOffice.showInSidebar
     const showPDF = files.pdf.showInSidebar
-    const showDotFiles = files.hiddenFiles.showInSidebar
+    const showHiddenFiles = files.hiddenFiles.showInSidebar
 
     // Quick helper function that tests whether the provided attachment should be
     // shown in the sidebar. This essentially tests the file's extension and
@@ -242,7 +242,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     const shouldShowAttachment = (filePath: string): boolean => {
       // We have to check for hidden files first so they are not
       // included if they end in one of the accepted extensions
-      return (showDotFiles || !isHiddenFile(filePath)) &&
+      return (showHiddenFiles || !isHiddenFile(filePath)) &&
         (hasExt(filePath, attachmentExtensions) ||
         (showImages && hasImageExt(filePath)) ||
         (showDataFiles && hasDataExt(filePath)) ||
