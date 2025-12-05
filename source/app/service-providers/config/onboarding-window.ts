@@ -59,7 +59,7 @@ export async function showOnboardingWindow (config: ConfigProvider, logger: LogP
     minimizable: false,
     maximizable: false,
     closable: false,
-    alwaysOnTop: true,
+    alwaysOnTop: false,
     fullscreenable: false,
     skipTaskbar: true,
     frame: false,
