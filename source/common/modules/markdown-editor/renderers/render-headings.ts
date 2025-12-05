@@ -64,7 +64,9 @@ export const renderHeadings = ViewPlugin.fromClass(class {
   }
 
   update (update: ViewUpdate): void {
-    this.decorations = hideHeadingMarks(update.view)
+    if (update.docChanged || update.viewportChanged) {
+      this.decorations = hideHeadingMarks(update.view)
+    }
   }
 }, {
   decorations: v => v.decorations

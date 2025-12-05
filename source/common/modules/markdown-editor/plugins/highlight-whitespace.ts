@@ -65,7 +65,7 @@ function showLineEndings (view: EditorView): DecorationSet {
         builder.add(line.to, line.to, pilcrowDeco)
       }
       pos = line.to + 1
-    }        
+    }
   }
   return builder.finish()
 }

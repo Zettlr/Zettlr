@@ -282,7 +282,9 @@ const readabilityModePlugin = ViewPlugin.fromClass(class {
   }
 
   update (update: ViewUpdate): void {
-    this.decorations = readabilityScores(update.view)
+    if (update.docChanged || update.viewportChanged) {
+      this.decorations = readabilityScores(update.view)
+    }
   }
 }, {
   decorations: v => v.decorations

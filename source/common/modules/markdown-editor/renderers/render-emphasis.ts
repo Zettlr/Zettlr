@@ -169,7 +169,9 @@ export const renderEmphasis = ViewPlugin.fromClass(class {
   }
 
   update (update: ViewUpdate): void {
-    this.decorations = hideFormattingCharacters(update.view)
+    if (update.docChanged || update.viewportChanged) {
+      this.decorations = hideFormattingCharacters(update.view)
+    }
   }
 }, {
   decorations: v => v.decorations

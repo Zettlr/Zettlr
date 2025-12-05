@@ -19,7 +19,7 @@ const blueSelectionDark = 'rgba(29, 55, 134, 0.8)'
 
 const commonRules: Record<string, any> = {
   // Monospaced elements (quite a lot)
-  '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math, .cm-code-mark, .cm-monospace, .cm-hr, .code-block-line': {
+  '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math, .cm-code-mark, .cm-monospace, .cm-hr': {
     fontFamily: 'Inconsolata, monospace'
   },
   '.cm-gutters': {
