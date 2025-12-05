@@ -29,7 +29,7 @@ function hideHeadingMarks (view: EditorView): RangeSet<Decoration> {
     syntaxTree(view.state).iterate({
       from, to,
       enter (node) {
-        if(rangeInSelection(view.state, node.from, node.to, true)) {
+        if(rangeInSelection(view.state.selection, node.from, node.to, true)) {
           return
         }
 
