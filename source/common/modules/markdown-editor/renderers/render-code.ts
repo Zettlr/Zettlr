@@ -2,13 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Syntax Extensions
- * CVM-Role:        Extension
+ * Contains:        Code syntax renderer
+ * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     A collection of smaller extensions that style documents
- *                  without modifying the Lezer tree. (Basically overlay modes)
+ * Description:     Apply syntax highlighting to code elements
  *
  * END HEADER
  */
