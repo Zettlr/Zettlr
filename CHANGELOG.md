@@ -413,6 +413,8 @@ files.
 - Fix wrong display in relative directory paths during global search.
 - Replace misleading folder icons (folder and open folder) with new icon choices
   ("Home" and "Ban").
+- Fix a small bug that would throw an error if a user would specify the
+  `bibliography` key in a profile as a single string, instead of a list.
 
 ## Under the Hood
 

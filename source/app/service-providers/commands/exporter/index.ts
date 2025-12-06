@@ -203,6 +203,10 @@ async function writeDefaults (
   // const bibliography = global.citeproc.getSelectedDatabase()
   if (isFile(cslLibrary)) {
     if ('bibliography' in defaults) {
+      // Ensure the bibliography is an array, not a single string.
+      if (!Array.isArray(defaults.bibliography)) {
+        defaults.bibliography = [defaults.bibliography]
+      }
       defaults.bibliography.push(cslLibrary)
     } else {
       defaults.bibliography = [cslLibrary]
