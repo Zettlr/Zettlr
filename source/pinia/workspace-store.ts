@@ -20,7 +20,7 @@ import type { OtherFileDescriptor, AnyDescriptor } from 'source/types/common/fsa
 import { useDocumentTreeStore } from '.'
 import { isAbsolutePath, pathDirname, resolvePath } from 'source/common/util/renderer-path-polyfill'
 import { trans } from 'source/common/i18n-renderer'
-import { hasImageExt, hasDataExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt, hasExt, isHiddenFile } from 'source/common/util/file-extention-checks'
+import { hasImageExt, hasDataExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt, hasExt, isDotFile } from 'source/common/util/file-extention-checks'
 import type { FSALEventPayload } from 'source/app/service-providers/fsal'
 
 const ipcRenderer = window.ipc
@@ -234,7 +234,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     const showOfficeFiles = files.msoffice.showInSidebar
     const showOpenOffice = files.openOffice.showInSidebar
     const showPDF = files.pdf.showInSidebar
-    const showHiddenFiles = files.hiddenFiles.showInSidebar
+    const showHiddenFiles = files.dotFiles.showInSidebar
 
     // Quick helper function that tests whether the provided attachment should be
     // shown in the sidebar. This essentially tests the file's extension and
@@ -242,7 +242,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     const shouldShowAttachment = (filePath: string): boolean => {
       // We have to check for hidden files first so they are not
       // included if they end in one of the accepted extensions
-      return (showHiddenFiles || !isHiddenFile(filePath)) &&
+      return (showHiddenFiles || !isDotFile(filePath)) &&
         (hasExt(filePath, attachmentExtensions) ||
         (showImages && hasImageExt(filePath)) ||
         (showDataFiles && hasDataExt(filePath)) ||

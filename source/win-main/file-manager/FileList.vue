@@ -108,7 +108,7 @@ import {
   hasMSOfficeExt,
   hasOpenOfficeExt,
   hasPDFExt,
-  isHiddenFile
+  isDotFile
 } from 'source/common/util/file-extention-checks'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
@@ -175,15 +175,15 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
   const { files, attachmentExtensions } = configStore.config
   for (let i = 0; i < sortedDescendants.length; i++) {
     if (sortedDescendants[i].type === 'directory') {
-      if (isHiddenFile(sortedDescendants[i].name)) {
-        if (!files.hiddenFiles.showInFilemanager) {
+      if (isDotFile(sortedDescendants[i].name)) {
+        if (!files.dotFiles.showInFilemanager) {
           continue
         }
       }
-    } else if (isHiddenFile(sortedDescendants[i].name)) {
+    } else if (isDotFile(sortedDescendants[i].name)) {
       // We have to check for hidden files first so they are not
       // included if they end in one of the accepted extensions
-      if (!files.hiddenFiles.showInFilemanager) {
+      if (!files.dotFiles.showInFilemanager) {
         continue
       }
     } else if (hasImageExt(sortedDescendants[i].path)) {

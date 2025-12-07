@@ -180,7 +180,7 @@ import {
   hasOpenOfficeExt,
   hasPDFExt,
   hasExt,
-  isHiddenFile,
+  isDotFile,
   hasMdOrCodeExt
 } from 'source/common/util/file-extention-checks'
 import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
@@ -285,7 +285,7 @@ const primaryIcon = computed(() => {
       return 'file-settings'
     } else {
       // Generic other file (this should not happen as they get filtered out before)
-      if (!files.hiddenFiles.showInFilemanager) {
+      if (!files.dotFiles.showInFilemanager) {
         console.warn(`Encountered a file with extension ${props.item.ext}. These should've been filtered out before reaching this point!`)
       }
       return 'unknown-status'
@@ -369,18 +369,18 @@ const filteredChildren = computed(() => {
     // Filter based on our rules
     .filter(child => {
       if (!combined.value) {
-        return child.type === 'directory' && (files.hiddenFiles.showInFilemanager || !isHiddenFile(child.name))
+        return child.type === 'directory' && (files.dotFiles.showInFilemanager || !isDotFile(child.name))
       }
 
       // Filter files based on our settings
       if (child.type === 'directory') {
-        return files.hiddenFiles.showInFilemanager || !isHiddenFile(child.name)
+        return files.dotFiles.showInFilemanager || !isDotFile(child.name)
       }
 
       // We have to check for hidden files first so they are not
       // included if they end in one of the accepted extensions
-      if (isHiddenFile(child.name)) {
-        return files.hiddenFiles.showInFilemanager
+      if (isDotFile(child.name)) {
+        return files.dotFiles.showInFilemanager
       } else if (hasImageExt(child.path)) {
         return files.images.showInFilemanager
       } else if (hasPDFExt(child.path)) {

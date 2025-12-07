@@ -135,13 +135,13 @@ export function hasDataExt (filePath: string): boolean {
 }
 
 /**
- * Check if the given filename is a hidden file.
+ * Check if the given filename is a dot file.
  *
  * @param   {string}   filename  The filename to check
  *
- * @return  {boolean}            Whether the file is a hidden file
+ * @return  {boolean}            Whether the file is a dot file
  */
-export function isHiddenFile (filename: string): boolean {
+export function isDotFile (filename: string): boolean {
   return filename.startsWith('.')
 }
 

@@ -260,15 +260,15 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
               {
                 type: 'form-text',
                 display: 'plain',
-                contents: trans('Hidden Files (.ztr-directory, .dotfiles, etc.)')
+                contents: trans('Dot Files (.ztr-directory, .gitignore, etc.)')
               },
               {
                 type: 'checkbox',
-                model: 'files.hiddenFiles.showInFilemanager'
+                model: 'files.dotFiles.showInFilemanager'
               },
               {
                 type: 'checkbox',
-                model: 'files.hiddenFiles.showInSidebar'
+                model: 'files.dotFiles.showInSidebar'
               },
               {
                 type: 'form-text',
