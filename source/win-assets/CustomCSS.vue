@@ -1,9 +1,9 @@
 <template>
-  <div id="css-container">
-    <ZtrAdmonition type="info">
+  <div class="asset-container">
+    <ZtrAdmonition type="info" class="asset-admonition">
       {{ cssExplanation }}
     </ZtrAdmonition>
-    <ZtrAdmonition type="warning">
+    <ZtrAdmonition type="warning" class="asset-admonition">
       {{ cssWarning }}
     </ZtrAdmonition>
     <CodeEditor
@@ -12,7 +12,7 @@
       v-bind:mode="'css'"
     ></CodeEditor>
     <!-- This div is used to keep the buttons in a line despite the flex -->
-    <div class="save-css-file">
+    <div class="save-asset-file">
       <ButtonControl
         class="save-button"
         v-bind:primary="true"
@@ -100,28 +100,5 @@ function saveCSS (): void {
 </script>
 
 <style lang="less">
-#css-container {
-  padding: 0px 10px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .admonition {
-    margin-top: 15px;
-  }
-
-  .save-css-file {
-    padding: 10px 0px;
-    display: flex;
-    gap: 15px;
-
-    button {
-      width: 50px;
-    }
-  }
-
-  .CodeMirror {
-    flex-grow: 1;
-  }
-}
+//
 </style>

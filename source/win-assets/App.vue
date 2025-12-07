@@ -103,5 +103,63 @@ const tabs: WindowTab[] = [
 </script>
 
 <style lang="less">
-//
+.asset-container-list {
+  display: flex;
+  flex-direction: column;
+  height: stretch;
+
+  .form-control {
+    display: flex;
+    padding: 10px;
+
+    button {
+      flex: 1;
+    }
+  }
+}
+
+.asset-container {
+  padding: 0px 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .asset-admonition {
+    margin-top: 15px;
+  }
+
+  .asset-name-input {
+    flex: 1;
+  }
+
+  .save-asset-file {
+    padding: 10px 0px;
+    display: flex;
+    gap: 15px;
+
+    button {
+      width: 50px;
+    }
+  }
+
+  .form-control {
+    button:not(.input-reset-button) {
+      height: stretch;
+    }
+  }
+
+  p {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+  }
+
+  .CodeMirror {
+    flex-grow: 1;
+  }
+
+  span.protected-info {
+    color: gray;
+  }
+}
 </style>

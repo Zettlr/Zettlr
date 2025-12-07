@@ -7,7 +7,7 @@
     v-bind:initial-total-width="100"
   >
     <template #view1>
-      <div id="filter-container-list">
+      <div class="asset-container-list">
         <SelectableList
           v-bind:items="listItems"
           v-bind:selected-item="currentItem"
@@ -25,13 +25,12 @@
       </div>
     </template>
     <template #view2>
-      <div id="filter-container">
-        <ZtrAdmonition type="info">
+      <div class="asset-container">
+        <ZtrAdmonition type="info" class="asset-admonition">
           {{ filterExplanation }}
         </ZtrAdmonition>
-
         <template v-if="currentItem < 0">
-          <ZtrAdmonition type="warning">
+          <ZtrAdmonition type="warning" class="asset-admonition">
             {{ noFilterMessage }}
           </ZtrAdmonition>
         </template>
@@ -39,7 +38,7 @@
           <p>
             <TextControl
               v-model="currentFilterText"
-              class="filter-name-input"
+              class="asset-name-input"
               v-bind:inline="false"
               v-bind:disabled="currentItem < 0"
               v-on:confirm="renameFilter()"
@@ -51,17 +50,21 @@
               v-on:click="renameFilter()"
             ></ButtonControl>
           </p>
-          <ZtrAdmonition v-if="currentItem >= 0 && protectedFilters.includes(availableFilters[currentItem])" type="warning">
+          <ZtrAdmonition
+            v-if="currentItem >= 0 && protectedFilters.includes(availableFilters[currentItem])"
+            type="warning"
+            class="asset-admonition"
+          >
             {{ protectedFilterWarning }}
           </ZtrAdmonition>
-
           <CodeEditor
             ref="code-editor"
             v-model="editorContents"
             v-bind:mode="'lua'"
             v-bind:readonly="currentItem < 0"
           ></CodeEditor>
-          <div class="save-filter-file">
+          <!-- This div is used to keep the buttons in a line despite the flex -->
+          <div class="save-asset-file">
             <ButtonControl
               v-bind:primary="true"
               v-bind:label="saveButtonLabel"
@@ -319,59 +322,5 @@ function openFilterDirectory (): void {
 </script>
 
 <style lang="less">
-#filter-container-list {
-  display: flex;
-  flex-direction: column;
-  height: stretch;
-
-  .form-control {
-    display: flex;
-    padding: 10px;
-
-    button {
-      flex: 1;
-    }
-  }
-}
-
-#filter-container {
-  padding: 0px 10px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .admonition {
-    margin-top: 15px;
-  }
-
-  .filter-name-input {
-    flex: 1;
-  }
-
-  .save-filter-file {
-    padding: 10px 0px;
-    display: flex;
-    gap: 15px;
-
-    button {
-      width: 50px;
-    }
-  }
-
-  .form-control {
-    button:not(.input-reset-button) {
-      height: stretch;
-    }
-  }
-
-  p {
-    display: flex;
-    gap: 15px;
-    margin-top: 5px;
-  }
-
-  .CodeMirror {
-    flex-grow: 1;
-  }
-}
+//
 </style>
