@@ -429,8 +429,8 @@ files.
 
 ## Under the Hood
 
-- Update Electron to version `39.0.0`.
-- Update Pandoc to version `3.8.2.1`.
+- Update Electron to version `39.2.6`.
+- Update Pandoc to version `3.8.3`.
 - **Feature/Change**: Full rewrite of the File System Abstraction Layer (FSAL).
   The rewrite has fully transformed the file abstraction logic to remove any
   tree structures, and instead mostly treat all loaded files as a single, long
