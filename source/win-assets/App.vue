@@ -119,10 +119,11 @@ const tabs: WindowTab[] = [
 }
 
 .asset-container {
-  padding: 0px 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  margin: 0px 10px;
 
   .asset-admonition {
     margin-top: 15px;
@@ -130,6 +131,11 @@ const tabs: WindowTab[] = [
 
   .asset-name-input {
     flex: 1;
+
+    .input-text-button-group {
+      padding: 0px;
+      margin: 0px;
+    }
   }
 
   .save-asset-file {
