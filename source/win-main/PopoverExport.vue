@@ -24,7 +24,10 @@
         v-bind:label="autoOpenLabel"
       ></CheckboxControl>
       <!-- Add the exporting button -->
-      <button v-bind:disabled="isExporting" v-on:click="doExport">
+      <button
+        ref="exportButton"
+        v-bind:disabled="isExporting" v-on:click="doExport"
+      >
         {{ exportButtonLabel }}
       </button>
     </div>
@@ -50,7 +53,7 @@ import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import RadioControl from '@common/vue/form/elements/RadioControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import CheckboxControl from '@common/vue/form/elements/CheckboxControl.vue'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
 import { trans } from '@common/i18n-renderer'
@@ -69,6 +72,8 @@ const askLabel = trans('Select directory')
 // This is used to limit the number of selected
 // profile to filename mappings in the config
 const PREVIOUSLY_SELECTED_PROFILE_LIMIT = 50
+
+const exportButton = ref<HTMLButtonElement|null>(null)
 
 ipcRenderer.invoke('assets-provider', { command: 'list-export-profiles' } as AssetsProviderIPCAPI)
   .then((defaults: PandocProfileMetadata[]) => {
@@ -97,6 +102,10 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<(e: 'close') => void>()
+
+onMounted(() => {
+  exportButton.value?.focus()
+})
 
 const isExporting = ref(false)
 const format = ref('')

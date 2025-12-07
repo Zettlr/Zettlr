@@ -2,7 +2,6 @@
   <Teleport to="body">
     <div ref="popupArrow" class="popover-arrow"></div>
     <div ref="popupWrapper" class="popover">
-      <!-- TODO -->
       <slot></slot>
     </div>
   </Teleport>

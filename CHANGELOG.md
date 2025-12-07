@@ -280,6 +280,9 @@ files.
 - **Feature**: Zettlr now exposes the Lua filter directory to you. Now you can
   add, remove, and modify both the built-in filters as well as your own, custom
   ones.
+- **Feature**: The exporting workflow is now smoother. The export button will be
+  focused as soon as the export popover opens, meaning you can press `Enter` to
+  start the export using the current settings.
 - **Change**: Zettlr now monitors your documents and will automatically remove
   footnotes and references without the corresponding reference or footnote. If
   you have any documents in which you have un-referenced footnotes, or
