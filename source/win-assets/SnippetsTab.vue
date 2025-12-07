@@ -191,8 +191,8 @@ function saveSnippet (): void {
     }
   } as AssetsProviderIPCAPI)
     .then(() => {
-      setTimeout(() => { savingStatus.value = trans('Saved!') }, 1000)
-      setTimeout(() => { savingStatus.value = '' }, 2000)
+      setTimeout(() => { savingStatus.value = trans('Saved!') }, 0)
+      setTimeout(() => { savingStatus.value = '' }, 1000)
     })
     .catch(err => {
       savingStatus.value = trans('Saving failed')

@@ -261,9 +261,9 @@ function saveDefaultsFile (): void {
   } as AssetsProviderIPCAPI)
     .then(async () => {
       lastLoadedEditorContents.value = editorContents.value
-      setTimeout(() => { savingStatus.value = trans('Saved!') }, 1000)
+      setTimeout(() => { savingStatus.value = trans('Saved!') }, 0)
       await retrieveDefaultsFiles() // Always make sure to pull in any changes
-      setTimeout(() => { savingStatus.value = '' }, 2000)
+      setTimeout(() => { savingStatus.value = '' }, 1000)
     })
     .catch(err => {
       savingStatus.value = trans('Saving failed')
