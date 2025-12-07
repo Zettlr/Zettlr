@@ -328,6 +328,9 @@ function updateRow (
           return
         }
 
+        event.preventDefault()
+        event.stopPropagation()
+
         const subview = EditorView.findFromDOM(td)
 
         if (subview === null) {
