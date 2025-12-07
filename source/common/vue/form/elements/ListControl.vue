@@ -87,19 +87,19 @@
               </template>
             </td>
             <!-- The list items are deletable -->
-            <td v-if="deletable" style="text-align: center">
+            <td v-if="deletable">
               <button v-on:click="handleDeletion(rowIdx)">
                 {{ deleteButtonLabel }}
               </button>
             </td>
-            <td v-else-if="addable" style="text-align: center">
+            <td v-else-if="addable">
               <!-- Empty column to maintain alignment -->
             </td>
           </tr>
         </template>
         <template v-else>
           <tr>
-            <td v-bind:colspan="columnCount" style="text-align: center;">
+            <td v-bind:colspan="columnCount">
               {{ emptyListLabel }}
             </td>
           </tr>
@@ -135,7 +135,7 @@
             >
             </TextControl>
           </td>
-          <td style="text-align: center">
+          <td>
             <button v-on:click="handleAddition()">
               {{ addButtonLabel }}
             </button>
@@ -610,6 +610,7 @@ body {
       line-height: 100%;
       overflow: auto;
       width: 100%;
+      font-size: 12px;
 
       &.striped {
         border: none;
@@ -625,7 +626,6 @@ body {
           border-bottom: 1px solid rgb(220, 220, 220);
           th {
             padding: 4px;
-            font-size: small;
             font-weight: normal;
             text-align: left;
 
