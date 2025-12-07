@@ -153,7 +153,7 @@ export const pandocDivParser: BlockParser = {
 export function pandocDivComposite (ctx: BlockContext, line: Line, value: number): boolean {
   // If the block nesting level (`value`) is not the same as the current
   // context depth, then we continue the block.
-  if (ctx.parentType().name === 'PandocDiv' && ctx.depth !== value) {
+  if (ctx.parentType().name !== 'PandocDiv' || ctx.depth !== value) {
     return true
   }
 
