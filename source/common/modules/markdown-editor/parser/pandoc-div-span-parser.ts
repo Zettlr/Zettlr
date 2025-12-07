@@ -19,9 +19,9 @@ const PandocSpanDelimiter: DelimiterType = {}
 
 const pandocSpanClosingRe = /^\](?<attr>\{[ \w\t\-.#:=;"')(]*\})/d
 
-const pandocDivOpeningRe = /^[ \t]*(?<mark>:{3,})[ \t]+(?:(?<name>[\w\-.]+)|(?:(?<class>[\w\-.]+)[ \t]+)?(?<attr>\{[ \w\t\-.#:=;"')(]*\}))\s*$/d
+const pandocDivOpeningRe = /^(?<mark>:{3,})[ \t]+(?:(?<name>[\w\-.]+)|(?:(?<class>[\w\-.]+)[ \t]+)?(?<attr>\{[ \w\t\-.#:=;"')(]*\}))\s*$/d
 
-const pandocDivClosingRe = /^[ \t]*(?<mark>:{3,})\s*$/d
+const pandocDivClosingRe = /^(?<mark>:{3,})\s*$/d
 
 export const pandocSpanParser: InlineParser = {
   name: 'pandoc-span',
@@ -54,11 +54,14 @@ export const pandocSpanParser: InlineParser = {
       return -1
     }
 
+    // Use the inline parser to generate the `PandocAttribute` node.
+    // This avoids having to reconstruct the node here and synchronize it
+    // with the other parser.
     const attrFrom = pos - ctx.offset + match.indices.groups.attr[0]
     const attrTo = pos - ctx.offset + match.indices.groups.attr[1]
     const attr = ctx.parser.parseInline(ctx.text.slice(attrFrom, attrTo), ctx.offset + attrFrom)
 
-    // Check if a valid attribute node was found
+    // Check if a valid `PandocAttribute` node was found
     const nodeId = ctx.parser.nodeSet.types.find(node => node.is('PandocAttribute'))?.id
     if (attr.length !== 1 || attr[0].type !== nodeId) {
       return -1
@@ -77,41 +80,63 @@ export const pandocDivParser: BlockParser = {
   name: 'pandoc-div',
   before: 'IndentedCode',
   parse: (ctx, line) => {
+    // Valid lines have the pattern `::: {#id .classes key=value}`.
     const match = pandocDivOpeningRe.exec(line.text)
     if (!match?.indices?.groups) {
       return false
     }
 
-    // Pandoc divs require at least a class or attribute
+    // Pandoc divs require at least a class or attribute,
+    // so if neither are present, this is either a closing mark,
+    // in which case it will be handled by the node `composite` method,
+    // or it is invalid.
     if ((match.groups?.name ?? match.groups?.class ?? match.groups?.attr) === undefined) {
       return false
     }
 
+    // Start a composite block, similar to blockquotes.
+    // This enables the node to contain other blocks as children.
+    // By setting `value` to the current depth + 1, we can track
+    // nesting level. This comes in handy in the node `composite` method
+    // when we need to decide whether a block is closed by a closing
+    // mark.
     ctx.startComposite('PandocDiv', 0, ctx.depth + 1)
 
+    // Opening mark
     const [ markFrom, markTo ] = match.indices.groups.mark
     ctx.addElement(ctx.elt('PandocDivMark', ctx.lineStart + markFrom, ctx.lineStart + markTo))
 
-    if ((match.groups?.name ?? match.groups?.class) !== undefined) {
+    // Bare class names
+    if (match.groups?.name !== undefined || match.groups?.class !== undefined) {
       const [ classFrom, classTo ] = match.indices.groups.name ?? match.indices.groups.class
 
       ctx.addElement(ctx.elt('PandocDivInfo', ctx.lineStart + classFrom, ctx.lineStart + classTo))
     }
 
+    // `PandocAttribute` nodes
     if (match.groups?.attr !== undefined) {
+      // Use the inline parser to generate the `PandocAttribute` node.
+      // This avoids having to reconstruct the node here and synchronize it
+      // with the other parser.
       const [ attrFrom, attrTo ] = match.indices.groups.attr
       const attr = ctx.parser.parseInline(line.text.slice(attrFrom, attrTo), ctx.lineStart + attrFrom)
 
-      // Check if a valid attribute node was found
-      const nodeId = ctx.parser.nodeSet.types.find(node => node.is('PandocAttribute'))?.id
-      if (attr.length === 1 && attr[0].type === nodeId) {
-        ctx.addElement(attr[0])
+      // Check if a valid attribute node was found.
+      if (attr.length === 1) {
+        // This method of finding the node id is currently the only
+        // way I have found to get the id dynamically. Hardcoding the number
+        // appears to be prone to issues if the order of node registration is changed.
+        // Since it is not really performant, we make the call only when necessary
+        const nodeId = ctx.parser.nodeSet.types.find(node => node.is('PandocAttribute'))?.id
+        if (attr[0].type === nodeId) {
+          ctx.addElement(attr[0])
+        }
       }
     }
 
     // We consume the whole line since there can be no other content
     ctx.nextLine()
-    return null
+    return null // composite blocks require returning `null` on success
   },
 
   endLeaf: (_ctx, line, _leaf) => {
@@ -119,20 +144,31 @@ export const pandocDivParser: BlockParser = {
   }
 }
 
+// This function is used in the node [composite](https://github.com/lezer-parser/markdown?tab=readme-ov-file#user-content-nodespec.composite) method:
+//
+// If this is a composite block, this should hold a function that,
+// at the start of a new line where that block is active, checks
+// whether the composite block should continue (return value) and
+// optionally adjusts the line's base position and registers nodes
+// for any markers involved in the block's syntax.
 export function pandocDivComposite (ctx: BlockContext, line: Line, value: number): boolean {
-  if (ctx.depth !== value) {
+  // If the block nesting level (`value`) is not the same as the current
+  // context depth, then we continue the block.
+  if (ctx.parentType().name === 'PandocDiv' && ctx.depth !== value) {
     return true
   }
 
-  const match = pandocDivClosingRe.exec(line.text.slice(line.pos))
+  const match = pandocDivClosingRe.exec(line.text)
   if (!match?.indices?.groups) {
     return true
   }
 
   const [ markFrom, markTo ] = match.indices.groups.mark
-  const from = ctx.lineStart + line.pos + markFrom
-  const to = ctx.lineStart + line.pos + markTo
+  const from = ctx.lineStart + markFrom
+  const to = ctx.lineStart + markTo
 
+  // Add the closing marker and move the line position
+  // up so that we do not re-parse the text.
   line.addMarker(ctx.elt('PandocDivMark', from, to))
   line.moveBase(to)
 
