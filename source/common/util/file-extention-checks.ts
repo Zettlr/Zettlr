@@ -154,6 +154,5 @@ export function isHiddenFile (filename: string): boolean {
  * @return  {boolean}            Whether the filePath has any recognized ext.
  */
 export function hasAnyRecognizedFileExtension (filePath: string, extensions: string[] = []): boolean {
-  const ext = [ ...ALL_EXT, ...extensions ]
-  return hasExt(filePath, ext)
+  return hasExt(filePath, [ ...ALL_EXT, ...extensions ])
 }
