@@ -418,6 +418,7 @@ files.
 - Replacing tags works now case-insensitive (replacing `#hello` with `#olleh`
   now also replaces `#HeLlO`) (#6009).
 - Table header cells are now aligned left by default.
+- Increase icon sizes in file manager.
 
 ## Under the Hood
 

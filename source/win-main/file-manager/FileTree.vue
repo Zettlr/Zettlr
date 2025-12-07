@@ -364,6 +364,11 @@ body {
     outline: none;
     transition: left 0.3s ease, background-color 0.2s ease;
 
+    cds-icon {
+      width: 18px;
+      height: 18px;
+    }
+
     &.hidden { left:-100%; }
 
     #directories-dirs-header, #directories-files-header {
@@ -371,9 +376,7 @@ body {
       gap: 10px;
       align-items: center;
 
-      clr-icon {
-        width: 12px;
-        height: 12px;
+      cds-icon {
         margin-left: 3px;
         margin-right: 3px;
         vertical-align: bottom;
