@@ -36,7 +36,7 @@ export async function loadData (): Promise<void> {
  * @return  {string}         The translation, or the message ID if no translations were found.
  */
 function getTranslation (msgid: string): string {
-  if (i18nData === undefined) {
+  if (i18nData === undefined || msgid === '') {
     return msgid
   }
 
