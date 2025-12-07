@@ -193,7 +193,7 @@ export interface ConfigOptions {
     msoffice: FileTypeSettings<boolean, boolean, 'system'>
     openOffice: FileTypeSettings<boolean, boolean, 'system'>
     dataFiles: FileTypeSettings<boolean, boolean, 'system'>
-    hiddenFiles: FileTypeSettings<boolean, boolean>
+    dotFiles: FileTypeSettings<boolean, boolean>
   }
   watchdog: {
     activatePolling: boolean
@@ -452,7 +452,7 @@ export function getConfigTemplate (): ConfigOptions {
       msoffice: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
       openOffice: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
       dataFiles: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
-      hiddenFiles: { showInFilemanager: false, showInSidebar: false, openWith: 'system' }
+      dotFiles: { showInFilemanager: false, showInSidebar: false, openWith: 'system' }
     },
     // Language
     selectedDicts: [], // By default no spell checking is active to speed up first start.
