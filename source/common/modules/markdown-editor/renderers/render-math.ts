@@ -90,7 +90,7 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): MathWidget|unde
   // stay, and keep its position updated depending on what happens in the doc)
 
   // Don't render if the selection is within the node
-  if (rangeInSelection(state, node.from, node.to, true)) {
+  if (rangeInSelection(state.selection, node.from, node.to, true)) {
     return undefined
   }
 

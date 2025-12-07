@@ -82,7 +82,7 @@ function renderWidgets (
       enter: (node) => {
         // Determine the number of overlapping selections. If these are non-
         // null, we must not render this widget
-        if (rangeInSelection(state, node.from, node.to)) {
+        if (rangeInSelection(state.selection, node.from, node.to)) {
           return
         }
 
