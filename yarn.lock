@@ -815,7 +815,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/notarize@npm:^3.1.0":
+"@electron/notarize@npm:^3.1.1":
   version: 3.1.1
   resolution: "@electron/notarize@npm:3.1.1"
   dependencies:
@@ -1597,7 +1597,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/highlight@npm:^1.0.0, @lezer/highlight@npm:^1.1.3, @lezer/highlight@npm:^1.2.0, @lezer/highlight@npm:^1.2.1":
+"@lezer/highlight@npm:^1.0.0, @lezer/highlight@npm:^1.1.3, @lezer/highlight@npm:^1.2.0, @lezer/highlight@npm:^1.2.3":
   version: 1.2.3
   resolution: "@lezer/highlight@npm:1.2.3"
   dependencies:
@@ -1971,7 +1971,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/archiver@npm:^6.0.3":
+"@types/archiver@npm:^6.0.4":
   version: 6.0.4
   resolution: "@types/archiver@npm:6.0.4"
   dependencies:
@@ -2496,7 +2496,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.17.20":
+"@types/lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "@types/lodash@npm:4.17.21"
   checksum: 10/34920830a3bc82ba619cda05e606fef00c148a69b4f19f770645d2587ccdb8e42ef3ddfc174b7884c0c709fc0a1aeb48f7326da969bad12a1464a03efbbe414c
@@ -2510,7 +2510,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/md5@npm:^2.3.5":
+"@types/md5@npm:^2.3.6":
   version: 2.3.6
   resolution: "@types/md5@npm:2.3.6"
   checksum: 10/88d041abea4d5509ec27ae43a5e9df9caf836f29dc393e1cee0537132f732275c2bb78350d10847c1db06d068c03cb59786502f02bf06d5c1a220c1c2e6d305d
@@ -4378,7 +4378,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^4.5.0":
+"chart.js@npm:^4.5.1":
   version: 4.5.1
   resolution: "chart.js@npm:4.5.1"
   dependencies:
@@ -9157,7 +9157,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"less@npm:^4.4.1":
+"less@npm:^4.4.2":
   version: 4.4.2
   resolution: "less@npm:4.4.2"
   dependencies:
@@ -10366,7 +10366,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mocha@npm:^11.7.2":
+"mocha@npm:^11.7.5":
   version: 11.7.5
   resolution: "mocha@npm:11.7.5"
   dependencies:
@@ -11234,7 +11234,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pinia@npm:^3.0.3":
+"pinia@npm:^3.0.4":
   version: 3.0.4
   resolution: "pinia@npm:3.0.4"
   dependencies:
@@ -12519,7 +12519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.1.1, semver@npm:^7.1.3, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.6.3, semver@npm:^7.7.2":
+"semver@npm:^7.1.1, semver@npm:^7.1.3, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.6.3, semver@npm:^7.7.3":
   version: 7.7.3
   resolution: "semver@npm:7.7.3"
   bin:
@@ -13742,7 +13742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.9.2":
+"typescript@npm:^5.9.3":
   version: 5.9.3
   resolution: "typescript@npm:5.9.3"
   bin:
@@ -13762,7 +13762,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.9.2#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.9.3#optional!builtin<compat/typescript>":
   version: 5.9.3
   resolution: "typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"
   bin:
@@ -14296,7 +14296,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue@npm:^3.5.21":
+"vue@npm:^3.5.25":
   version: 3.5.25
   resolution: "vue@npm:3.5.25"
   dependencies:
@@ -14459,7 +14459,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.101.3, webpack@npm:^5.69.1":
+"webpack@npm:^5.103.0, webpack@npm:^5.69.1":
   version: 5.103.0
   resolution: "webpack@npm:5.103.0"
   dependencies:
@@ -14830,7 +14830,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.8.1":
+"yaml@npm:^2.8.2":
   version: 2.8.2
   resolution: "yaml@npm:2.8.2"
   bin:
@@ -14954,10 +14954,10 @@ __metadata:
     "@electron-forge/plugin-fuses": "npm:^7.10.2"
     "@electron-forge/plugin-webpack": "npm:^7.10.2"
     "@electron/fuses": "npm:^2.0.0"
-    "@electron/notarize": "npm:^3.1.0"
+    "@electron/notarize": "npm:^3.1.1"
     "@eslint/config-inspector": "npm:^1.2.0"
     "@lezer/common": "npm:^1.2.3"
-    "@lezer/highlight": "npm:^1.2.1"
+    "@lezer/highlight": "npm:^1.2.3"
     "@lezer/lr": "npm:^1.4.4"
     "@lezer/markdown": "npm:^1.6.1"
     "@replit/codemirror-emacs": "npm:^6.1.0"
@@ -14965,14 +14965,14 @@ __metadata:
     "@replit/codemirror-vim": "npm:^6.3.0"
     "@stylistic/eslint-plugin": "npm:^5.3.1"
     "@types/adm-zip": "npm:^0.5.7"
-    "@types/archiver": "npm:^6.0.3"
+    "@types/archiver": "npm:^6.0.4"
     "@types/command-exists": "npm:^1.2.3"
     "@types/d3": "npm:^7.4.3"
     "@types/gettext-parser": "npm:^8.0.0"
     "@types/katex": "npm:^0.16.7"
-    "@types/lodash": "npm:^4.17.20"
+    "@types/lodash": "npm:^4.17.21"
     "@types/luxon": "npm:^3.7.1"
-    "@types/md5": "npm:^2.3.5"
+    "@types/md5": "npm:^2.3.6"
     "@types/mocha": "npm:^10.0.10"
     "@types/node": "npm:^22.18.1"
     "@types/sanitize-html": "npm:^2.16.0"
@@ -14989,7 +14989,7 @@ __metadata:
     bcp-47: "npm:^2.1.0"
     biblatex-csl-converter: "npm:^3.2.2"
     chalk: "npm:^5.6.2"
-    chart.js: "npm:^4.5.0"
+    chart.js: "npm:^4.5.1"
     chokidar: "npm:^4.0.3"
     citeproc: "npm:^2.4.63"
     copy-webpack-plugin: "npm:^13.0.1"
@@ -15011,18 +15011,18 @@ __metadata:
     gettext-parser: "npm:^8.0.0"
     got: "npm:^11.8.6"
     jsdom: "npm:^26.1.0"
-    katex: "npm:^0.16.22"
+    katex: "npm:^0.16.26"
     ky: "npm:^1.10.0"
     lang-criticmarkup: "npm:^0.2.0"
-    less: "npm:^4.4.1"
+    less: "npm:^4.4.2"
     less-loader: "npm:^12.3.0"
     luxon: "npm:^3.7.2"
     md5: "npm:^2.3.0"
     mermaid: "npm:^11.11.0"
-    mocha: "npm:^11.7.2"
+    mocha: "npm:^11.7.5"
     node-loader: "npm:^2.1.0"
     nodehun: "npm:^3.0.2"
-    pinia: "npm:^3.0.3"
+    pinia: "npm:^3.0.4"
     rehype-parse: "npm:^9.0.1"
     rehype-remark: "npm:^10.0.1"
     rehype-remove-comments: "npm:^6.1.1"
@@ -15055,24 +15055,24 @@ __metadata:
     rimraf: "npm:^6.0.1"
     sanitize-filename: "npm:^1.6.3"
     sanitize-html: "npm:^2.17.0"
-    semver: "npm:^7.7.2"
+    semver: "npm:^7.7.3"
     style-loader: "npm:^4.0.0"
     tippy.js: "npm:^6.3.7"
     ts-loader: "npm:^9.5.4"
     ts-node: "npm:^10.9.2"
     tsconfig-paths: "npm:^4.2.0"
-    typescript: "npm:^5.9.2"
+    typescript: "npm:^5.9.3"
     underscore: "npm:^1.13.7"
     unified: "npm:^11.0.5"
     uuid: "npm:^12.0.0"
-    vue: "npm:^3.5.21"
+    vue: "npm:^3.5.25"
     vue-eslint-parser: "npm:^10.2.0"
     vue-loader: "npm:^17.4.2"
     vue-tsc: "npm:3.1.5"
     vue-virtual-scroller: "npm:^2.0.0-beta.8"
     w3c-keyname: "npm:^2.2.8"
-    webpack: "npm:^5.101.3"
-    yaml: "npm:^2.8.1"
+    webpack: "npm:^5.103.0"
+    yaml: "npm:^2.8.2"
   dependenciesMeta:
     fsevents:
       optional: true
