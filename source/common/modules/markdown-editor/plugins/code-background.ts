@@ -25,8 +25,13 @@ export const codeblockBackground = layer({
             return
           }
 
-          const start = view.state.doc.lineAt(node.from).from
-          const end = view.state.doc.lineAt(node.to).to + 1
+          let start = node.from
+          let end = node.to
+
+          if (node.name === 'CodeText') {
+            start = view.state.doc.lineAt(node.from).from
+            end = view.state.doc.lineAt(node.to).to + 1
+          }
 
           // In order to get a proper styling, we have to do two things:
           // First, remove zero-width markers (that happen since we include

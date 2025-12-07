@@ -717,6 +717,7 @@ function maybeHighlightSearchResults (): void {
       .cm-variable-name  { color: @cyan; }
       .cm-variable       { color: @cyan; }
       .cm-comment        { color: @base1; }
+      .cm-block-comment  { color: @base1; }
       .cm-attribute-name { color: @orange; }
       .cm-property       { color: @magenta; }
       .cm-keyword,

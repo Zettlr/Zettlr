@@ -103,6 +103,7 @@
 
   /* A few elements always need to be displayed monospaced */
   .cm-comment,
+  .cm-block-comment,
   .cm-fenced-code,
   .cm-table
   .cm-formatting-task,
@@ -129,7 +130,7 @@
     cursor: pointer;
     border-radius: 3px;
     padding: 0 4px;
-  
+
     span {
       font-size: 20px;
       font-weight: normal;
