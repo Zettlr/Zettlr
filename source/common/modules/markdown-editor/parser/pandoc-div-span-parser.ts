@@ -78,7 +78,6 @@ export const pandocSpanParser: InlineParser = {
 
 export const pandocDivParser: BlockParser = {
   name: 'pandoc-div',
-  before: 'IndentedCode',
   parse: (ctx, line) => {
     // Valid lines have the pattern `::: {#id .classes key=value}`.
     const match = pandocDivOpeningRe.exec(line.text)
