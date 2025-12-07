@@ -116,7 +116,7 @@ const pandocDivSpanPlugin = ViewPlugin.fromClass(class {
   }
 
   update (update: ViewUpdate) {
-    if (update.docChanged || update.viewportChanged) {
+    if (update.docChanged || update.viewportChanged || update.selectionSet) {
       this.decorations = showDivSpanDecorations(update.view)
     }
   }
