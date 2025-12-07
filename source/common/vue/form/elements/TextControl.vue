@@ -113,6 +113,8 @@ body div.form-control {
     grid-template-areas: "text text text";
     justify-items: center;
     align-items: center;
+    margin-top: 2px;
+    margin-bottom: 5px;
 
     &.has-icon:not(.has-reset) { grid-template-areas: "icon text text"; }
     &.has-reset:not(.has-icon) { grid-template-areas: "text text reset"; }
