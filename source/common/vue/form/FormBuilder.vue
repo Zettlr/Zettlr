@@ -377,6 +377,7 @@ function getModelValue (model: string): any {
       justify-content: space-between;
       align-items: center;
       column-gap: 10px;
+      margin-bottom: 10px;
 
       legend {
         flex-grow: 1;
