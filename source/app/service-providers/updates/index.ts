@@ -396,7 +396,7 @@ export default class UpdateProvider extends ProviderContract {
         // hour or so. See #5944 for context.
         const msg = trans('Could not check for updates: The connection attempt timed out.')
         this._reportError(err.code as string, msg, false)
-      } {
+      } else {
         // Something else has occurred. GotError objects have a name property.
         const msg = trans('Could not check for updates. %s: %s', err.name, err.message)
         this._reportError(err.code as string, msg, true) // This is odd and should be reported
