@@ -415,6 +415,9 @@ files.
   ("Home" and "Ban").
 - Fix a small bug that would throw an error if a user would specify the
   `bibliography` key in a profile as a single string, instead of a list.
+- Replacing tags works now case-insensitive (replacing `#hello` with `#olleh`
+  now also replaces `#HeLlO`) (#6009).
+- Table header cells are now aligned left by default.
 
 ## Under the Hood
 

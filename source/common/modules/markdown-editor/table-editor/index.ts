@@ -105,6 +105,7 @@ export const renderTables = [
       borderCollapse: 'collapse',
       // Implement Artem's theme
       '& td, & th': {
+        textAlign: 'left',
         cursor: 'text',
         color: '#3a3a3a',
         position: 'relative',
