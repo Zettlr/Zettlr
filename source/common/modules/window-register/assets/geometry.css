@@ -135,11 +135,6 @@ body:not(.darwin) {
 
 /* HELPER CLASSES */
 
-.columns {
-  display: grid;
-  grid-template-columns: 50% 50%;
-}
-
 .dont-break-inside * {
   break-inside: avoid;
 }
