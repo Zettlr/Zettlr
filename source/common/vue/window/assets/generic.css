@@ -28,6 +28,8 @@ body {
     textarea:not(.inline) {
       width: 100%;
       display: block;
+      margin-bottom: 5px;
+      margin-top: 2px;
     }
 
     /* Add some margin to inline elements */
