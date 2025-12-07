@@ -55,7 +55,7 @@ function render (view: EditorView, measurements?: Map<string, number>): RangeSet
         continue
       }
 
-      // First determine count the indent based on leading whitespace
+      // First determine the indent based on leading whitespace
       const whitespaceMatch = /^[ \t]*/.exec(line.text)
       const leadingWhitespace = whitespaceMatch !== null ? whitespaceMatch[0].length : 0
 
