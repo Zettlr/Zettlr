@@ -19,7 +19,7 @@ const selectionDark = 'rgba(90, 170, 80, 0.8)'
 
 const commonRules: Record<string, any> = {
   // Monospaced elements (quite a lot)
-  '.cm-comment, .cm-fenced-code, .cm-inline-math, .cm-code-mark, .cm-monospace, .cm-hr, .code-block-line': {
+  '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math, .cm-code-mark, .cm-monospace, .cm-hr, .code-block-line': {
     fontFamily: 'Inconsolata, monospace'
   },
   '.cm-gutters': {
@@ -46,7 +46,7 @@ export const themeBerlinLight = EditorView.theme({
     color: 'var(--grey-5)',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
   },
-  '.cm-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-5)' },
+  '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-5)' },
   '.cm-tag-name': { color: 'var(--orange-2)' },
   '.cm-attribute-name': { color: 'var(--blue-0)' },
   '.cm-attribute-value': { color: 'var(--green-0)' },
@@ -79,7 +79,7 @@ export const themeBerlinDark = EditorView.theme({
     color: 'var(--grey-0)',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
   },
-  '.cm-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-0)' },
+  '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-0)' },
   '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
     color: primaryColor
   },
