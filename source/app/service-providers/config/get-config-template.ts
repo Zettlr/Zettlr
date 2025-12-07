@@ -220,7 +220,6 @@ export interface ConfigOptions {
     showNewFileButton: boolean
     showPreviousFileButton: boolean
     showNextFileButton: boolean
-    showToggleReadabilityButton: boolean
     showMarkdownCommentButton: boolean
     showMarkdownLinkButton: boolean
     showMarkdownImageButton: boolean
@@ -471,7 +470,6 @@ export function getConfigTemplate (): ConfigOptions {
       showNewFileButton: true,
       showPreviousFileButton: true,
       showNextFileButton: true,
-      showToggleReadabilityButton: true,
       showMarkdownCommentButton: true,
       showMarkdownLinkButton: true,
       showMarkdownImageButton: true,

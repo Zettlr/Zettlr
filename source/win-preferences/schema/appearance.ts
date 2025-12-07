@@ -155,11 +155,6 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
         },
         {
           type: 'checkbox',
-          label: trans('Display "Readability mode" button'),
-          model: 'displayToolbarButtons.showToggleReadabilityButton'
-        },
-        {
-          type: 'checkbox',
           label: trans('Display "Insert comment" button'),
           model: 'displayToolbarButtons.showMarkdownCommentButton'
         },

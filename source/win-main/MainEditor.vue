@@ -357,14 +357,6 @@ watch(toRef(props.editorCommands, 'moveSection'), () => {
   }
 })
 
-watch(toRef(props.editorCommands, 'readabilityMode'), () => {
-  if (currentEditor === null || props.activeFile?.path !== props.file.path) {
-    return
-  }
-
-  currentEditor.readabilityMode = !currentEditor.readabilityMode
-})
-
 watch(toRef(props, 'distractionFree'), () => {
   if (currentEditor !== null && props.activeFile?.path === props.file.path && documentTreeStore.lastLeafId === props.leafId) {
     currentEditor.distractionFree = props.distractionFree

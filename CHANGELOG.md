@@ -293,6 +293,8 @@ files.
   snippets to `$FILENAME$EXTENSION` (#4191).
 - **Change**: The word and character counters in the statusbar now always show
   both counts.
+- **Change**: Removed the readability mode toggle from the toolbar. You can now
+  trigger the readability mode via the status bar.
 - **Change**: Modified the Zettelkasten link insertion workflow. The previous
   settings "Link with filename only" and "When linking files, add the document
   name …" have been removed. Instead, there are two new settings, "Always use

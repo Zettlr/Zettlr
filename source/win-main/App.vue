@@ -292,7 +292,6 @@ const pomodoro = ref<PomodoroConfig>({
 export interface EditorCommands {
   jumpToLine: boolean
   moveSection: boolean
-  readabilityMode: boolean
   addKeywords: boolean
   replaceSelection: boolean
   executeCommand: boolean
@@ -303,7 +302,6 @@ export interface EditorCommands {
 const editorCommands = ref<EditorCommands>({
   jumpToLine: false,
   moveSection: false,
-  readabilityMode: false,
   addKeywords: false,
   replaceSelection: false,
   executeCommand: false,
@@ -477,13 +475,6 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       id: 'export',
       title: trans('Export current file'),
       icon: 'export'
-    },
-    {
-      type: 'button',
-      id: 'toggle-readability',
-      title: trans('Toggle readability mode'),
-      icon: 'eye',
-      visible: getToolbarButtonDisplay('showToggleReadabilityButton')
     },
     {
       type: 'spacer',
@@ -831,9 +822,7 @@ function toggleFileList (): void {
 }
 
 function handleClick (clickedID?: string): void {
-  if (clickedID === 'toggle-readability') {
-    editorCommands.value.readabilityMode = !editorCommands.value.readabilityMode
-  } else if (clickedID === 'root-open-workspaces') {
+  if (clickedID === 'root-open-workspaces') {
     ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
       .catch(e => console.error(e))
   } else if (clickedID === 'open-preferences') {
