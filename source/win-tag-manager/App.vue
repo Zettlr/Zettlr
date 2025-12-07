@@ -26,16 +26,20 @@
         <tbody>
           <tr>
             <th style="text-align: left;" v-on:click="changeSorting('name')">
+              <cds-icon v-if="sortBy === 'name'" shape="arrow" v-bind:direction="descending ? 'down' : 'up'"></cds-icon>
               {{ tagNameLabel }}
             </th>
             <th style="text-align: left;" v-on:click="changeSorting('color')">
+              <cds-icon v-if="sortBy === 'color'" shape="arrow" v-bind:direction="descending ? 'down' : 'up'"></cds-icon>
               {{ colorLabel }}
             </th>
             <th style="text-align: right;" v-on:click="changeSorting('count')">
               {{ countLabel }}
+              <cds-icon v-if="sortBy === 'count'" shape="arrow" v-bind:direction="descending ? 'down' : 'up'"></cds-icon>
             </th>
             <th style="text-align: right;" v-on:click="changeSorting('idf')">
               IDF
+              <cds-icon v-if="sortBy === 'idf'" shape="arrow" v-bind:direction="descending ? 'down' : 'up'"></cds-icon>
             </th>
             <th>
               Actions <!-- TODO: Translate -->
@@ -279,6 +283,11 @@ div#tag-manager {
   padding: 10px;
   margin-top: 10px;
 
+  cds-icon {
+    width: 18px;
+    height: 18px;
+  }
+
   p:first-child { margin-bottom: 10px; }
 
   table {
@@ -286,7 +295,10 @@ div#tag-manager {
     margin-top: 10px;
     border-collapse: collapse;
 
-    td, th { padding: 5px; }
+    td, th {
+      padding: 5px;
+      text-align: left;
+    }
 
     tr:nth-child(2n) {
       background-color: rgb(200, 200, 200);
@@ -295,6 +307,6 @@ div#tag-manager {
 }
 
 body.dark div#tag-manager table tr:nth-child(2n) {
-  background-color: rgb(100, 100, 100);
+  background-color: rgb(40, 40, 40);
 }
 </style>
