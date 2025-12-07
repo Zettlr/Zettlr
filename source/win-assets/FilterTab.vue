@@ -112,7 +112,7 @@ const protectedFilterWarning = trans('This filter is protected. It will be resto
 const saveButtonLabel = trans('Save')
 const renameFilterLabel = trans('Rename filter')
 const filterExplanation = trans('Lua filters allow customization of your Pandoc exports.')
-const openFilterFolderLabel = trans('Open filter folder')
+const openFilterFolderLabel = trans('Open filters folder')
 
 const currentItem = ref(-1)
 const currentFilterText = ref('')
