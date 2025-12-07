@@ -100,7 +100,7 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
 
     if (JSON.stringify(dir.settings) === JSON.stringify(SETTINGS_TEMPLATE)) {
       // The settings are the default, so no need to write them to file
-      await fs.unlink(configPath).catch(() => {})
+      await fs.unlink(configPath)
     }
   } catch (err: any) {
     // Ignore file-not-found errors
@@ -110,7 +110,7 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
 
     // Something went wrong. Unlink the malformed file. Do not throw an error
     // since a malformed settings file should never stop loading a directory.
-    await fs.unlink(configPath).catch(() => {})
+    await fs.unlink(configPath)
   }
 }
 
