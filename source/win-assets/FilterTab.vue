@@ -30,12 +30,8 @@
           {{ filterExplanation }}
         </ZtrAdmonition>
 
-        <ZtrAdmonition v-if="currentItem >= 0 && protectedFilters.includes(availableFilters[currentItem])" type="warning" style="margin-top: 10px">
-          {{ protectedFilterWarning }}
-        </ZtrAdmonition>
-
         <template v-if="currentItem < 0">
-          <ZtrAdmonition v-bind:type="'warning'" style="margin-top: 10px">
+          <ZtrAdmonition v-bind:type="'warning'">
             {{ noFilterMessage }}
           </ZtrAdmonition>
         </template>
@@ -55,6 +51,9 @@
               v-on:click="renameFilter()"
             ></ButtonControl>
           </p>
+          <ZtrAdmonition v-if="currentItem >= 0 && protectedFilters.includes(availableFilters[currentItem])" type="warning">
+            {{ protectedFilterWarning }}
+          </ZtrAdmonition>
 
           <CodeEditor
             ref="code-editor"
@@ -336,10 +335,14 @@ function openFilterDirectory (): void {
 }
 
 #filter-container {
-  padding: 10px;
+  padding: 0px 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  .admonition {
+    margin-top: 15px;
+  }
 
   .filter-name-input {
     flex: 1;

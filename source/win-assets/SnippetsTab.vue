@@ -31,7 +31,7 @@
         </ZtrAdmonition>
 
         <template v-if="currentItem < 0">
-          <ZtrAdmonition v-bind:type="'warning'" style="margin-top: 10px">
+          <ZtrAdmonition v-bind:type="'warning'">
             {{ noSnippetsMessage }}
           </ZtrAdmonition>
         </template>
@@ -305,10 +305,14 @@ function openSnippetsDirectory (): void {
 }
 
 #snippets-container {
-  padding: 10px;
+  padding: 0px 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  .admonition {
+    margin-top: 15px;
+  }
 
   .snippet-name-input {
     flex: 1;

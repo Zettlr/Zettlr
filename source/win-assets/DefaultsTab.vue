@@ -26,7 +26,9 @@
     </template>
     <template #view2>
       <div id="defaults-container">
-        <p>{{ defaultsExplanation }}</p>
+        <ZtrAdmonition v-bind:type="'info'">
+          {{ defaultsExplanation }}
+        </ZtrAdmonition>
         <p>
           <TextControl
             v-model="currentFilename"
@@ -42,7 +44,7 @@
             v-on:click="renameFile()"
           ></ButtonControl>
         </p>
-        <ZtrAdmonition v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" type="info">
+        <ZtrAdmonition v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" type="warning">
           {{ protectedProfileWarning }}
         </ZtrAdmonition>
 
