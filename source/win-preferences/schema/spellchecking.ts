@@ -18,11 +18,68 @@ import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
+const ipcRenderer = window.ipc
+
 export function getSpellcheckingFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
+      title: trans('Spellchecking'),
+      infoString: trans('The spellchecker checks your words for misspellings. It uses Hunspell-compatible dictionaries.'),
+      group: PreferencesGroups.Spellchecking,
+      help: undefined, // TODO
+      fields: [
+        // TODO: Add switch to title area later on that doesn#t exist yet
+        {
+          type: 'list',
+          valueType: 'record',
+          keyNames: [ 'selected', 'key', 'value' ],
+          columnLabels: [ trans('Active'), trans('Language'), trans('Code') ],
+          label: trans('Select the languages for which you want to enable automatic spell checking.'),
+          model: 'availableDictionaries',
+          deletable: false,
+          editable: [0], // Only the "selectable" column may be edited
+          searchable: true,
+          searchLabel: trans('Filter'),
+          striped: true
+        },
+      ]
+    },
+    {
+      title: trans('Install Dictionaries'),
+      infoString: trans('You can install new Hunspell-compatible dictionaries by placing them in the dictionary folder. Click the button below to open the dictionary folder. For more information, please see the manual.'),
+      group: PreferencesGroups.Spellchecking,
+      fields: [
+        {
+          type: 'button',
+          label: trans('Open dictionary folder'),
+          onClick: () => {
+            ipcRenderer.invoke('dictionary-provider', {
+              command: 'open-dictionary-folder'
+            }).catch(err => console.error(err))
+          }
+        },
+      ]
+    },
+    {
+      title: trans('User Dictionary'),
+      infoString: trans('Manage your user dictionary here.'),
+      group: PreferencesGroups.Spellchecking,
+      fields: [
+        {
+          type: 'list',
+          valueType: 'simpleArray',
+          model: 'userDictionaryContents',
+          columnLabels: [trans('Dictionary entry')],
+          deletable: true,
+          searchable: true,
+          searchLabel: trans('Search for entries …'),
+          striped: true
+        }
+      ]
+    },
+    {
       title: trans('LanguageTool'),
-      infoString: trans('Turning this setting on will send your texts to LanguageTool. The default are the official servers, but you can also self-host the software.'),
+      infoString: trans('LanguageTool can check your texts for typos, grammatical, and stylistic issues. By default, LanguageTool sends your texts to the official servers. You can also self-host the software.'),
       group: PreferencesGroups.Spellchecking,
       titleField: {
         type: 'switch',
@@ -30,6 +87,7 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
       },
       help: undefined, // TODO
       fields: [
+        { type: 'separator' },
         {
           type: 'radio',
           label: trans('Strictness'),
@@ -45,21 +103,22 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
         {
           type: 'form-text',
           display: 'sub-heading',
-          contents: trans('Mother language')
+          contents: trans('Select your native language')
         },
         {
           type: 'select',
-          inline: true,
+          inline: false,
           options: {
             '': trans('Not set'),
             ...mapLangCodeToName()
           },
           model: 'editor.lint.languageTool.motherTongue'
         },
+        { type: 'separator' },
         {
           type: 'form-text',
           display: 'sub-heading',
-          contents: trans('Preferred Variants')
+          contents: trans('Preferred Language Variants')
         },
         {
           type: 'form-text',
@@ -156,7 +215,8 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
       ]
     },
     {
-      title: trans('LanguageTool: Ignored rules'),
+      title: trans('LanguageTool: Disabled rules'),
+      infoString: trans('These are LanguageTool rules that you have disabled. You can re-enable them here.'),
       group: PreferencesGroups.Spellchecking,
       help: undefined, // TODO
       fields: [
@@ -165,7 +225,6 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
           valueType: 'record',
           keyNames: [ 'name', 'id', 'category' ],
           columnLabels: [ trans('Name'), trans('Rule ID'), trans('Category') ],
-          label: trans('These are LanguageTool rules that you have disabled. You can re-enable them here.'),
           model: 'editor.lint.languageTool.ignoredRules',
           deletable: true,
           deleteLabel: trans('Re-enable'),
@@ -174,39 +233,6 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
           searchLabel: trans('Filter'),
           striped: true,
           emptyMessage: trans('No ignored rules.')
-        }
-      ]
-    },
-    {
-      title: trans('Spellchecking'),
-      group: PreferencesGroups.Spellchecking,
-      help: undefined, // TODO
-      fields: [
-        // TODO: Add switch to title area later on that doesn#t exist yet
-        {
-          type: 'list',
-          valueType: 'record',
-          keyNames: [ 'selected', 'key', 'value' ],
-          columnLabels: [ trans('Active'), trans('Language'), trans('Code') ],
-          label: trans('Select the languages for which you want to enable automatic spell checking.'),
-          model: 'availableDictionaries',
-          deletable: false,
-          editable: [0], // Only the "selectable" column may be edited
-          searchable: true,
-          searchLabel: trans('Filter'),
-          striped: true
-        },
-        { type: 'separator' },
-        {
-          type: 'list',
-          valueType: 'simpleArray',
-          label: trans('User dictionary. Remove words by clicking them.'),
-          model: 'userDictionaryContents',
-          columnLabels: [trans('Dictionary entry')],
-          deletable: true,
-          searchable: true,
-          searchLabel: trans('Search for entries …'),
-          striped: true
         }
       ]
     }

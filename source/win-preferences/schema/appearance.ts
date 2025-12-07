@@ -34,13 +34,13 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
         { type: 'separator' },
         {
           type: 'radio',
-          label: trans('Schedule'),
+          label: trans('Schedule dark mode automatically'),
           model: 'autoDarkMode',
           inline: true,
           options: {
-            off: trans('Off'),
-            system: trans('Follow system'),
-            schedule: trans('On')
+            off: trans('Do not automatically switch'),
+            system: trans('Follow operating system'),
+            schedule: trans('Follow custom schedule')
           }
         },
         {
@@ -49,14 +49,14 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
           fields: [
             {
               type: 'time',
-              label: trans('Start'),
+              label: trans('Start dark mode at'),
               model: 'autoDarkModeStart',
               inline: true,
               disabled: config.autoDarkMode !== 'schedule'
             },
             {
               type: 'time',
-              label: trans('End'),
+              label: trans('End dark mode at'),
               model: 'autoDarkModeEnd',
               inline: true,
               disabled: config.autoDarkMode !== 'schedule'
@@ -66,10 +66,12 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
       ]
     },
     {
-      title: trans('Theme'),
+      title: trans('Editor Theme'),
+      infoString: trans('Select a color and font theme for the editor.'),
       group: PreferencesGroups.Appearance,
       help: undefined, // TODO
       fields: [
+        { type: 'separator' },
         {
           type: 'theme',
           model: 'display.theme',
@@ -114,10 +116,12 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
       ]
     },
     {
-      title: trans('Toolbar options'),
+      title: trans('Toolbar buttons'),
+      infoString: trans('Select which buttons should be shown on the toolbar. Some buttons cannot be hidden.'),
       group: PreferencesGroups.Appearance,
       help: undefined, // TODO
       fields: [
+        { type: 'separator' },
         {
           type: 'form-text',
           display: 'sub-heading',
@@ -199,18 +203,6 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
           type: 'checkbox',
           label: trans('Display Pomodoro timer'),
           model: 'displayToolbarButtons.showPomodoroButton'
-        }
-      ]
-    },
-    {
-      title: trans('Status bar'),
-      group: PreferencesGroups.Appearance,
-      help: undefined, // TODO
-      fields: [
-        {
-          type: 'checkbox',
-          label: trans('Show status bar'),
-          model: 'editor.showStatusbar'
         }
       ]
     },

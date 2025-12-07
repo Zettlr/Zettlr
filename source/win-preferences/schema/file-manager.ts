@@ -54,6 +54,7 @@ export function getFileManagerFields (config: ConfigOptions): PreferencesFieldse
     },
     {
       title: trans('Markdown document name display'),
+      infoString: trans('Determines how Zettlr will display files in various places such as the file manager.'),
       group: PreferencesGroups.FileManager,
       help: undefined, // TODO
       fields: [
@@ -71,13 +72,15 @@ export function getFileManagerFields (config: ConfigOptions): PreferencesFieldse
           // TODO: Checkbox onto the first line of the radio
           type: 'checkbox',
           label: trans('Display Markdown file extensions'),
+          info: trans('Only available if name display is set to "Filename only"'),
           model: 'display.markdownFileExtensions',
           disabled: config.fileNameDisplay !== 'filename'
         }
       ]
     },
     {
-      title: trans('Time display'),
+      title: trans('Time display and sorting'),
+      infoString: trans('Determine which timestamp Zettlr shows for files. This also affects sorting by time.'),
       group: PreferencesGroups.FileManager,
       help: undefined, // TODO
       fields: [
@@ -92,7 +95,8 @@ export function getFileManagerFields (config: ConfigOptions): PreferencesFieldse
       ]
     },
     {
-      title: trans('Sorting'),
+      title: trans('Filename sorting'),
+      infoString: trans('Determines how Zettlr sorts files and folders when sorting by name.'),
       group: PreferencesGroups.FileManager,
       help: undefined, // TODO
       fields: [

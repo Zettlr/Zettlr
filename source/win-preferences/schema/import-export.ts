@@ -114,6 +114,7 @@ export function getImportExportFields (): PreferencesFieldset[] {
     },
     {
       title: trans('Custom export commands'),
+      infoString: trans('Specify custom commands to run the exporter with. Each command receives as its first argument the file or project folder to be exported.'),
       group: PreferencesGroups.ImportExport,
       help: undefined, // TODO
       fields: [
@@ -122,7 +123,6 @@ export function getImportExportFields (): PreferencesFieldset[] {
           valueType: 'record',
           keyNames: [ 'displayName', 'command' ],
           columnLabels: [ trans('Display name'), trans('Command') ],
-          label: trans('Enter custom commands to run the exporter with. Each command receives as its first argument the file or project folder to be exported.'),
           model: 'export.customCommands',
           deletable: true,
           searchable: true,

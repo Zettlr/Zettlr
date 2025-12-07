@@ -28,20 +28,21 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
   return [
     {
       title: trans('Pattern for new file names'),
+      infoString: trans('Zettlr uses this pattern to generate new filenames. By default, it just uses a new Zettelkasten ID.'),
       group: PreferencesGroups.Advanced,
       help: undefined, // TODO
       fields: [
         {
           type: 'text',
-          label: trans('Define a pattern for new file names'),
           model: 'newFileNamePattern',
           info: trans('Available variables: %s', '%id, %Y, %y, %M, %D, %W, %h, %m, %s, %o, %X, %uuid4'),
           reset: '%id.md',
           group: 'advanced'
         },
+        { type: 'separator' },
         {
           type: 'checkbox',
-          label: trans('Do not prompt for filename when creating new files'),
+          label: trans('Automatically create new files without asking for confirmation.'),
           model: 'newFileDontPrompt',
           group: 'advanced'
         }
@@ -90,14 +91,10 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
     },
     {
       title: trans('File Treatment'),
+      infoString: trans('Decide where various file types are displayed, and how to open them.'),
       group: PreferencesGroups.Advanced,
       help: undefined, // TODO
       fields: [
-        {
-          type: 'form-text',
-          display: 'info',
-          contents: trans('Decide where various file types are displayed, and how to open them.')
-        },
         {
           type: 'separator'
         },
@@ -259,6 +256,7 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
     },
     {
       title: trans('Iframe rendering whitelist'),
+      infoString: trans('Iframes are potentially dangerous and can execute remote code. Each host listed here is automatically trusted. Iframes from these hosts will be automatically loaded.'),
       group: PreferencesGroups.Advanced,
       help: undefined, // TODO
       fields: [
@@ -275,6 +273,7 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
     },
     {
       title: trans('Watchdog polling'),
+      infoString: trans('In rare instances, Zettlr may be unable to check for changes to your files. In that case, you can try activating watchdog polling. Do not use this option unless necessary: Polling is very slow and resource-heavy.'),
       group: PreferencesGroups.Advanced,
       help: undefined, // TODO
       fields: [
@@ -319,12 +318,14 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
     {
       title: trans('Beta releases'),
       group: PreferencesGroups.Advanced,
+      infoString: trans('Requires that check for updates is also active.'),
       help: undefined, // TODO
       fields: [
         {
           type: 'checkbox',
           label: trans('Notify me about beta releases'),
-          model: 'checkForBeta'
+          model: 'checkForBeta',
+          disabled: !config.system.checkForUpdates
         }
       ]
     }

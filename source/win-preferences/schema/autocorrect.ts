@@ -20,18 +20,46 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
   return [
     {
       title: trans('Autocorrect'),
+      infoString: trans('Autocorrect can automatically replace certain sequences of characters with others, and use typographical quotes.'),
       group: PreferencesGroups.Autocorrect,
       titleField: {
         type: 'switch',
         model: 'editor.autoCorrect.active'
       },
       help: undefined, // TODO
+      fields: []
+    },
+    {
+      title: trans('Autocorrect: Replacement Table'),
+      infoString: trans('Configure which sequences of characters get replaced by which symbols.'),
+      group: PreferencesGroups.Autocorrect,
       fields: [
         {
-          type: 'form-text',
-          contents: trans('Smart quotes'),
-          display: 'sub-heading'
+          type: 'checkbox',
+          label: trans('Match whole words'),
+          info: trans('When checked, AutoCorrect will never replace parts of words'),
+          model: 'editor.autoCorrect.matchWholeWords'
         },
+        { type: 'separator' },
+        {
+          type: 'list',
+          valueType: 'record',
+          keyNames: [ 'key', 'value' ],
+          columnLabels: [ trans('Replace'), trans('With') ],
+          model: 'editor.autoCorrect.replacements',
+          deletable: true,
+          searchable: true,
+          addable: true,
+          searchLabel: trans('Filter'),
+          editable: true // All columns may be edited
+        }
+      ]
+    },
+    {
+      title: trans('Magic Quotes'),
+      infoString: trans('This setting allows you to pick which typographical quotes Zettlr will insert when you insert a quotation mark. Requires Autocorrect to be enabled.'),
+      group: PreferencesGroups.Autocorrect,
+      fields: [
         {
           type: 'style-group',
           style: 'columns',
@@ -42,7 +70,7 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
               // TODO: Add a general title
               type: 'select',
               inline: false,
-              label: trans('Double Quotes'),
+              label: trans('Double/Primary Quotes'),
               model: 'editor.autoCorrect.magicQuotes.primary',
               options: {
                 '"…"': trans('Disable Magic Quotes'),
@@ -64,7 +92,7 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
             {
               type: 'select',
               inline: false,
-              label: trans('Single Quotes'),
+              label: trans('Single/Secondary Quotes'),
               model: 'editor.autoCorrect.magicQuotes.secondary',
               options: {
                 '\'…\'': trans('Disable Magic Quotes'),
@@ -87,32 +115,8 @@ export function getAutocorrectFields (): PreferencesFieldset[] {
               }
             }
           ]
-        },
-        { type: 'separator' },
-        {
-          type: 'form-text',
-          display: 'sub-heading',
-          contents: trans('Text-replacement patterns')
-        },
-        {
-          type: 'checkbox',
-          label: trans('Match whole words'),
-          info: trans('When checked, AutoCorrect will never replace parts of words'),
-          model: 'editor.autoCorrect.matchWholeWords'
-        },
-        {
-          type: 'list',
-          valueType: 'record',
-          keyNames: [ 'key', 'value' ],
-          columnLabels: [ trans('Replace'), trans('With') ],
-          model: 'editor.autoCorrect.replacements',
-          deletable: true,
-          searchable: true,
-          addable: true,
-          searchLabel: trans('Filter'),
-          editable: true // All columns may be edited
         }
       ]
-    }
+    }    
   ]
 }

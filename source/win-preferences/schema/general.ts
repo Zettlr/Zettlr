@@ -31,20 +31,17 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
     },
     {
       title: trans('Autosave'),
+      infoString: trans('Should Zettlr automatically save changes to your documents?'),
       group: PreferencesGroups.General,
       help: undefined, // TODO
       fields: [
         {
-          type: 'separator'
-        },
-        {
           // TODO: Move off to switch in title
           type: 'radio',
-          label: trans('Save modifications'),
           model: 'editor.autoSave',
           inline: true,
           options: {
-            off: trans('Off'),
+            off: trans('Never'),
             immediately: trans('Immediately'),
             delayed: trans('After a short delay')
           }
@@ -53,6 +50,7 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
     },
     {
       title: trans('Default image folder'),
+      infoString: trans('Automatically suggests this folder to save images to, and searches this folder to propose "other files".'),
       group: PreferencesGroups.General,
       help: undefined, // TODO
       fields: [
@@ -87,6 +85,7 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
     },
     {
       title: trans('Updates'),
+      infoString: trans('If you installed Zettlr via a package manager, you should disable this.'),
       group: PreferencesGroups.General,
       help: undefined, // TODO
       fields: [
