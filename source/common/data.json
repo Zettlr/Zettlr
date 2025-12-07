@@ -1,12 +1,4 @@
 {
-    "filetypes": [
-        ".md",
-        ".rmd",
-        ".markdown",
-        ".txt",
-        ".tex",
-        ".mdx"
-    ],
     "ignoreDirs": [
         ".+?\\.app",
         ".+?\\.textbundle"
