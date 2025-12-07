@@ -18,14 +18,7 @@ import { Decoration, type DecorationSet, EditorView, ViewPlugin, type ViewUpdate
 
 const codeDecorator = Decoration.mark({ class: 'code' })
 
-/**
- * Creates a StateField that applies the class `code` to all code spans. It
- * additionally applies the class `code-block-line` to all lines which are part
- * of an entire code block
- *
- * @return  {StateField}  The StateField
- */
-function getCodeHighlighter (view: EditorView):  RangeSet<Decoration> {
+function getCodeHighlighter (view: EditorView): RangeSet<Decoration> {
   const ranges: Range<Decoration>[] = []
 
   for (const { from, to } of view.visibleRanges) {
@@ -60,7 +53,6 @@ const renderCodePlugin = ViewPlugin.fromClass(class {
 }, {
   decorations: v => v.decorations
 })
-
 
 /* Code Theme
  *
