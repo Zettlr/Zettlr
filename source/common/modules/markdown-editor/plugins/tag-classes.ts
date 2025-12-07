@@ -77,7 +77,9 @@ const tagClassesPlugin = ViewPlugin.fromClass(class {
   }
 
   update (update: ViewUpdate): void {
-    this.decorations = retrieveTagClasses(update.view, this.tagDecorationCache)
+    if (update.docChanged || update.viewportChanged) {
+      this.decorations = retrieveTagClasses(update.view, this.tagDecorationCache)
+    }
   }
 }, {
   decorations: v => v.decorations

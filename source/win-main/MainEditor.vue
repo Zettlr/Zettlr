@@ -675,55 +675,6 @@ function maybeHighlightSearchResults (): void {
 
   .cm-editor {
     .cm-scroller { padding: 50px 50px; }
-
-    .code { // BEGIN: CODE BLOCK/FILE THEME
-      // We're using this solarized theme here: https://ethanschoonover.com/solarized/
-      // See also the CodeEditor.vue component, which uses the same colours
-      @base03:    #002b36;
-      @base02:    #073642;
-      @base01:    #586e75;
-      @base00:    #657b83;
-      @base0:     #839496;
-      @base1:     #93a1a1;
-      @base2:     #eee8d5;
-      @base3:     #fdf6e3;
-      @yellow:    #b58900;
-      @orange:    #cb4b16;
-      @red:       #dc322f;
-      @magenta:   #d33682;
-      @violet:    #6c71c4;
-      @blue:      #268bd2;
-      @cyan:      #2aa198;
-      @green:     #859900;
-
-      color: @base01;
-      font-family: Inconsolata, monospace;
-
-      .cm-string         { color: @green; }
-      .cm-keyword        { color: @green; }
-      .cm-atom           { color: @violet; }
-      .cm-tag-name,
-      .cm-modifier       { color: @cyan; }
-      .cm-qualifier      { color: @blue; }
-      .cm-builtin        { color: @blue; }
-      .cm-variable-name  { color: @cyan; }
-      .cm-variable       { color: @cyan; }
-      .cm-comment        { color: @base1; }
-      .cm-block-comment  { color: @base1; }
-      .cm-attribute-name { color: @orange; }
-      .cm-property       { color: @magenta; }
-      .cm-keyword,
-      .cm-name,
-      .cm-type-name      { color: @yellow; }
-      .cm-number         { color: @violet; }
-      .cm-property-name  { color: @blue; }
-      .cm-deleted        { color: @orange; }
-      .cm-changed        { color: @yellow; }
-      .cm-inserted       { color: @green; }
-      .cm-positive       { color: @green; }
-      .cm-negative       { color: @red; }
-      .cm-meta           { color: @violet; }
-    } // END: Solarized code theme
   }
 
   // If a code file is loaded, we need to display the editor contents in monospace.

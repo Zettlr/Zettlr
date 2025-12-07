@@ -89,7 +89,9 @@ export const renderLinks = ViewPlugin.fromClass(class {
   }
 
   update (update: ViewUpdate): void {
-    this.decorations = hideLinkMarkers(update.view)
+    if (update.docChanged || update.viewportChanged || update.selectionSet) {
+      this.decorations = hideLinkMarkers(update.view)
+    }
   }
 }, {
   decorations: v => v.decorations

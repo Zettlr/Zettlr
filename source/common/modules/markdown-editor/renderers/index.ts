@@ -24,6 +24,7 @@ import { renderMermaid } from './render-mermaid'
 import { renderTables } from '../table-editor'
 import { renderIframes } from './render-iframes'
 import { renderEmphasis } from './render-emphasis'
+import { renderCode } from './render-code'
 import { configField, configUpdateEffect, type EditorConfiguration } from '../util/configuration'
 import type { EditorView } from '@codemirror/view'
 import { hasMarkdownExt } from 'source/common/util/file-extention-checks'
@@ -46,19 +47,17 @@ function updateExtension (renderer: Extension, enabled: boolean|undefined, ext: 
 
 /* Configures the enabled renderer extensions, optionally updating an existing set of extensions */
 function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extension[]) {
-  if (ext === undefined) {
-    ext = []
-  }
-
-  if (!ext.includes(renderMermaid)) {
-    ext.push(renderMermaid)
-  }
-
-  if (config.renderingMode === 'raw') {
-    ext = [renderMermaid]
+  if (ext === undefined || config.renderingMode === 'raw') {
+    // Default extensions to always include
+    ext = [
+      renderMermaid,
+      renderCode,
+    ]
   }
 
   if (config.renderingMode === 'preview') {
+    updateExtension(renderMermaid, true, ext)
+    updateExtension(renderCode, true, ext)
     updateExtension(renderImages, config.renderImages, ext)
     updateExtension(renderLinks, config.renderLinks, ext)
     updateExtension(renderMath, config.renderMath, ext)

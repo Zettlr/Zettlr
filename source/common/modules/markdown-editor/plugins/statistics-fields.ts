@@ -56,9 +56,9 @@ export const countPlugin = ViewPlugin.fromClass(class {
   private delay = WORD_COUNT_DELAY
 
   update (update: ViewUpdate) {
-    if (!update.docChanged) { return }
-
-    this.updateCounts(update.view)
+    if (update.docChanged) {
+      this.updateCounts(update.view)
+    }
   }
 
   updateCounts (view: EditorView) {

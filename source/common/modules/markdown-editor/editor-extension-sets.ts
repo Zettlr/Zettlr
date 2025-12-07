@@ -35,7 +35,6 @@ import {
 import { autocomplete } from './autocomplete'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './theme/syntax'
 import markdownParser from './parser/markdown-parser'
-import { syntaxExtensions } from './parser/syntax-extensions'
 import { defaultContextMenu } from './plugins/default-context-menu'
 import { readabilityMode } from './plugins/readability'
 import { hookDocumentAuthority } from './plugins/remote-doc'
@@ -313,7 +312,6 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     }),
     // ... which can then be styled with a highlighter
     markdownSyntaxHighlighter(),
-    syntaxExtensions, // Add our own specific syntax plugin
     renderers(options.initialConfig),
     showLineNumbers(options.initialConfig.showMarkdownLineNumbers),
     mdLinterExtensions,
