@@ -67,9 +67,6 @@ contextBridge.exposeInMainWorld('config', {
   }
 })
 
-// DEBUG
-contextBridge.exposeInMainWorld('__dirname', '')
-
 contextBridge.exposeInMainWorld(
   'getCitationCallback',
   function (database: string): (citations: CiteItem[], composite: boolean) => string|undefined {
