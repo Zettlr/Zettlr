@@ -51,7 +51,7 @@ function render (view: EditorView, measurements?: Map<string, number>): RangeSet
       pos = line.to + 1
 
       const node = syntaxTree(view.state).resolve(line.from, 1)
-      if (node.name === 'CodeText') {
+      if (node.name === 'CodeText' && node.parent?.name !== 'IndentedCode') {
         continue
       }
 
