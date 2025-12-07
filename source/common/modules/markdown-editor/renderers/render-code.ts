@@ -61,21 +61,59 @@ const renderCodePlugin = ViewPlugin.fromClass(class {
   decorations: v => v.decorations
 })
 
+
+/* Code Theme
+ *
+ * We're using this solarized theme here: https://ethanschoonover.com/solarized/
+ * See also the CodeEditor.vue component, which uses the same colours
+*/
+
+// const BASE_0 = '#839496'
+const BASE_1 = '#93a1a1'
+// const BASE_2 = '#eee8d5'
+// const BASE_3 = '#fdf6e3'
+// const BASE_00 = '#657b83'
+// const BASE_01 = '#586e75'
+// const BASE_02 = '#073642'
+// const BASE_03 = '#002b36'
+
+const YELLOW = '#b58900'
+const ORANGE = '#cb4b16'
+const RED = '#dc322f'
+const MAGENTA = '#d33682'
+const VIOLET = '#6c71c4'
+const BLUE = '#268bd2'
+const CYAN = '#2aa198'
+const GREEN = '#859900'
+
 const codeTheme = EditorView.baseTheme({
-  // We're using this solarized theme here: https://ethanschoonover.com/solarized/
+
   '.code': {
-    color: '#93a1a1',
+    color: BASE_1,
     fontFamily: 'Inconsolata, monospace'
   },
-  '.code :is(.cm-string, cm-keyword, .cm-inserted, .cm-positive)': { color: '#859900' },
-  '.code :is(.cm-atom, .cm-number, .cm-meta)': { color: '#6c71c4' },
-  '.code :is(.cm-tag-name, .cm-modifier, .cm-variable-name, .cm-variable)': { color: '#2aa198' },
-  '.code :is(.cm-qualifier, .cm-builtin, .cm-property-name)': { color: '#268bd2' },
-  '.code :is(.cm-attribute-name, .cm-deleted)': { color: '#cb4b16' },
-  '.code :is(.cm-keyword, .cm-name, .cm-type-name, .cm-changed)': { color: '#b58900' },
-  '.code .cm-property': { color: '#d33682' },
-  '.code .cm-comment': { color: '#93a1a1' },
-  '.code .cm-negative': { color: '#dc322f' },
+  '.code .cm-string': { color: GREEN },
+  '.code .cm-keyword': { color: GREEN },
+  '.code .cm-inserted': { color: GREEN },
+  '.code .cm-positive': { color: GREEN },
+  '.code .cm-atom': { color: VIOLET },
+  '.code .cm-number': { color: VIOLET },
+  '.code .cm-meta': { color: VIOLET },
+  '.code .cm-tag-name': { color: CYAN },
+  '.code .cm-modifier': { color: CYAN },
+  '.code .cm-variable-name': { color: CYAN },
+  '.code .cm-variable': { color: CYAN },
+  '.code .cm-qualifier': { color: BLUE },
+  '.code .cm-builtin': { color: BLUE },
+  '.code .cm-property-name': { color: BLUE },
+  '.code .cm-attribute-name': { color: ORANGE },
+  '.code .cm-deleted': { color: ORANGE },
+  '.code .cm-name': { color: YELLOW },
+  '.code .cm-type-name': { color: YELLOW },
+  '.code .cm-changed': { color: YELLOW },
+  '.code .cm-property': { color: MAGENTA },
+  '.code .cm-comment': { color: BASE_1 },
+  '.code .cm-negative': { color: RED },
 })
 
 export const renderCode = [
