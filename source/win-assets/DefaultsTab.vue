@@ -26,7 +26,7 @@
     </template>
     <template #view2>
       <div id="defaults-container">
-        <ZtrAdmonition v-bind:type="'info'">
+        <ZtrAdmonition type="info">
           {{ defaultsExplanation }}
         </ZtrAdmonition>
         <p>

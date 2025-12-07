@@ -1,9 +1,9 @@
 <template>
   <div id="css-container">
-    <ZtrAdmonition v-bind:type="'info'">
+    <ZtrAdmonition type="info">
       {{ cssExplanation }}
     </ZtrAdmonition>
-    <ZtrAdmonition v-bind:type="'warning'">
+    <ZtrAdmonition type="warning">
       {{ cssWarning }}
     </ZtrAdmonition>
     <CodeEditor
@@ -110,10 +110,6 @@ function saveCSS (): void {
     margin-top: 15px;
   }
 
-  .filter-name-input {
-    flex: 1;
-  }
-
   .save-css-file {
     padding: 10px 0px;
     display: flex;
@@ -122,18 +118,6 @@ function saveCSS (): void {
     button {
       width: 50px;
     }
-  }
-
-  .form-control {
-    button:not(.input-reset-button) {
-      height: stretch;
-    }
-  }
-
-  p {
-    display: flex;
-    gap: 15px;
-    margin-top: 5px;
   }
 
   .CodeMirror {

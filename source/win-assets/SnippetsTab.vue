@@ -26,12 +26,12 @@
     </template>
     <template #view2>
       <div id="snippets-container">
-        <ZtrAdmonition v-bind:type="'info'">
+        <ZtrAdmonition type="info">
           {{ snippetsExplanation }}
         </ZtrAdmonition>
 
         <template v-if="currentItem < 0">
-          <ZtrAdmonition v-bind:type="'warning'">
+          <ZtrAdmonition type="warning">
             {{ noSnippetsMessage }}
           </ZtrAdmonition>
         </template>

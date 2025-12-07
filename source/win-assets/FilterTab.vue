@@ -26,12 +26,12 @@
     </template>
     <template #view2>
       <div id="filter-container">
-        <ZtrAdmonition v-bind:type="'info'">
+        <ZtrAdmonition type="info">
           {{ filterExplanation }}
         </ZtrAdmonition>
 
         <template v-if="currentItem < 0">
-          <ZtrAdmonition v-bind:type="'warning'">
+          <ZtrAdmonition type="warning">
             {{ noFilterMessage }}
           </ZtrAdmonition>
         </template>
