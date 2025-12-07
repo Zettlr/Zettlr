@@ -24,7 +24,7 @@ import Nodehun from 'nodehun/build/Release/Nodehun.node'
 import path from 'path'
 import { promises as fs } from 'fs'
 
-import { ipcMain, app } from 'electron'
+import { ipcMain, app, shell } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import findLangCandidates, { type Candidate } from '@common/util/find-lang-candidates'
 import enumDictFiles, { type DictFileMetadata } from '@common/util/enum-dict-files'
@@ -89,6 +89,8 @@ export default class DictionaryProvider extends ProviderContract {
         return terms.map(t => this.suggest(t))
       } else if (command === 'add') {
         return terms.map(t => this.add(t))
+      } else if (command === 'open-dictionary-folder') {
+        shell.showItemInFolder(path.join(app.getPath('userData'), '/dict'))
       }
     })
 
