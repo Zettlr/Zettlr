@@ -89,7 +89,8 @@ body {
     &.inline {
       display: flex;
       flex-direction: row;
-      column-gap: 40px;
+      flex-wrap: wrap;
+      column-gap: 20px;
     }
   }
 
