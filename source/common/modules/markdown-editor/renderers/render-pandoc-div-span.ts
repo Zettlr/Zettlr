@@ -7,7 +7,9 @@
  * Maintainer:      Bennie Milburn
  * License:         GNU GPL v3
  *
- * Description:     This renderer displays Pandoc divs and spans
+ * Description:     This renderer displays Pandoc divs and spans,
+ *                  rendering the attributes defined for the node
+ *                  as they would be displayed by pandoc.
  *
  * END HEADER
  */
@@ -51,6 +53,7 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
               return
             }
 
+            // Only style the text within the marks
             from = marks[0].to
             to = marks[1].from
             break
@@ -61,7 +64,7 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
             attrs = node.node.getChild('PandocAttribute')
             info = node.node.getChild('PandocDivInfo')
 
-            // Pandoc divs must have at least a class or an attribute node
+            // Pandoc divs must have at least an info or an attribute node
             if (!attrs && !info) {
               return
             }
@@ -71,6 +74,7 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
               return
             }
 
+            // Only style the lines within the marks
             from = view.state.doc.line(view.state.doc.lineAt(node.from).number).to
             to = view.state.doc.line(view.state.doc.lineAt(node.to).number).from
             break
@@ -79,6 +83,7 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
           default: return
         }
 
+        // Parse the classes and other attributes to render in the decoration.
         const attributes = attrs ? parseLinkAttributes(view.state.sliceDoc(attrs.from, attrs.to)) : {}
         const classes = attributes.classes ?? []
         const id = attributes.id ?? ''
@@ -111,7 +116,9 @@ const pandocDivSpanPlugin = ViewPlugin.fromClass(class {
   }
 
   update (update: ViewUpdate) {
-    this.decorations = showDivSpanDecorations(update.view)
+    if (update.docChanged || update.viewportChanged) {
+      this.decorations = showDivSpanDecorations(update.view)
+    }
   }
 
 }, {
@@ -120,6 +127,7 @@ const pandocDivSpanPlugin = ViewPlugin.fromClass(class {
 
 export const renderPandoc = [
   pandocDivSpanPlugin,
+  // The classes `.mark`, `.underline`, and `.smallcaps` are used by pandoc
   EditorView.baseTheme({
     '.mark .cm-pandoc-span': {
       backgroundColor: '#ffff0080',
