@@ -203,6 +203,7 @@ const emit = defineEmits<(e: 'update:modelValue', newValue: any) => void>()
 .form-field-info-text {
   // This is some faint hint text
   font-size: 11px;
+  margin-bottom: 10px;
   color: rgb(150, 150, 150);
 }
 
@@ -213,5 +214,6 @@ const emit = defineEmits<(e: 'update:modelValue', newValue: any) => void>()
 
 .form-field-plain-text {
   font-size: 13px;
+  margin-bottom: 10px;
 }
 </style>
